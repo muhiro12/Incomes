@@ -16,22 +16,28 @@ struct HomeListItemView: View {
 
     var body: some View {
         HStack {
-            Text(DateConverter().convert(item.date))
+            Text(DateConverter().convertToDay(item.date))
                 .frame(width: 60)
             Divider()
             Text(item.content ?? "")
             Spacer()
             Divider()
-            Text(item.income.description)
-                .frame(width: 40)
+            Text(convert(Int(item.income)))
+                .frame(width: 80)
             Divider()
-            Text(item.expenditure.description)
-                .frame(width: 40)
-                .foregroundColor(.red)
+            Text(convert(Int(item.expenditure)))
+                .frame(width: 80)
             Divider()
-            Text(sum.description)
-                .frame(width: 60)
+            Text(convert(sum))
+                .frame(width: 100)
+                .foregroundColor(sum >= 0 ? .black : .red)
         }
+    }
+
+    private func convert(_ int: Int) -> String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .currency
+        return formatter.string(from: NSNumber(value: int)) ?? ""
     }
 }
 

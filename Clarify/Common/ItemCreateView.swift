@@ -14,39 +14,41 @@ struct ItemCreateView: View {
 
     @State private var date = Date()
     @State private var content = ""
-    @State private var income = "0"
-    @State private var expenditure = "0"
+    @State private var income = ""
+    @State private var expenditure = ""
 
     var body: some View {
         Form {
-            DatePicker(selection: $date, displayedComponents: .date) {
-                Text("Date")
-            }
-            HStack {
-                Text("Content")
-                Spacer()
-                TextField("", text: $content)
-                    .multilineTextAlignment(.trailing)
-            }
-            HStack {
-                Text("Income")
-                TextField("0", text: $income)
-                    .multilineTextAlignment(.trailing)
-                    .foregroundColor(checkIsInt32(income) ? .black : .red)
-            }
-            HStack {
-                Text("Expenditure")
-                TextField("0", text: $expenditure)
-                    .multilineTextAlignment(.trailing)
-                    .foregroundColor(checkIsInt32(expenditure) ? .black : .red)
-            }
-            Button(action: add) {
-                HStack {
-                    Spacer()
-                    Text("Add")
-                    Spacer()
+            Section(header: Text("Create")) {
+                DatePicker(selection: $date, displayedComponents: .date) {
+                    Text("Date")
                 }
-            }.disabled(disabled)
+                HStack {
+                    Text("Content")
+                    Spacer()
+                    TextField("", text: $content)
+                        .multilineTextAlignment(.trailing)
+                }
+                HStack {
+                    Text("Income")
+                    TextField("0", text: $income)
+                        .multilineTextAlignment(.trailing)
+                        .foregroundColor(checkIsInt32(income) ? .black : .red)
+                }
+                HStack {
+                    Text("Expenditure")
+                    TextField("0", text: $expenditure)
+                        .multilineTextAlignment(.trailing)
+                        .foregroundColor(checkIsInt32(expenditure) ? .black : .red)
+                }
+                Button(action: add) {
+                    HStack {
+                        Spacer()
+                        Text("Add")
+                        Spacer()
+                    }
+                }.disabled(disabled)
+            }
         }
     }
 

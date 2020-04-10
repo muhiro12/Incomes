@@ -49,19 +49,14 @@ struct HomeView: View {
     private func groupByYear(listItems: [HomeListItem]) -> [HomeListItemsPerYear] {
         var listItemsPerYears: [HomeListItemsPerYear] = []
 
-        let dict = Dictionary(grouping: listItems) { listItem -> String in
-            guard let date = listItem.item.date else {
-                return ""
-            }
-            let formatter = DateFormatter()
-            formatter.dateStyle = .short
-            return formatter.string(from: date)
+        let dictionary = Dictionary(grouping: listItems) { listItem -> String in
+            return DateConverter().convertToMonth(listItem.item.date)
         }.sorted {
             $0.key > $1.key
         }
-        dict.forEach {
-            let temp = HomeListItemsPerYear(year: $0.key, listItems: $0.value)
-            listItemsPerYears.append(temp)
+        dictionary.forEach {
+            let items = HomeListItemsPerYear(year: $0.key, listItems: $0.value)
+            listItemsPerYears.append(items)
         }
         return listItemsPerYears
     }

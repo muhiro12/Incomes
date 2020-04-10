@@ -9,12 +9,21 @@
 import Foundation
 
 struct DateConverter {
-    func convert(_ date: Date?) -> String {
+    func convertToMonth(_ date: Date?) -> String {
         guard let date = date else {
             return ""
         }
         let formatter = DateFormatter()
-        formatter.dateStyle = .short
+        formatter.dateFormat = "yyyy/MM"
+        return formatter.string(from: date)
+    }
+
+    func convertToDay(_ date: Date?) -> String {
+        guard let date = date else {
+            return ""
+        }
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MM/dd"
         return formatter.string(from: date)
     }
 }
