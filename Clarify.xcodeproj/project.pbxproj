@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AD6302F2243DFFF600C19672 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD6302F1243DFFF600C19672 /* CloudKit.framework */; };
 		ADEF79BA243DC182005E29B1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADEF79B9243DC182005E29B1 /* AppDelegate.swift */; };
 		ADEF79BC243DC182005E29B1 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADEF79BB243DC182005E29B1 /* SceneDelegate.swift */; };
 		ADEF79BF243DC182005E29B1 /* Clarify.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = ADEF79BD243DC182005E29B1 /* Clarify.xcdatamodeld */; };
@@ -16,6 +17,7 @@
 		ADEF79C9243DC184005E29B1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = ADEF79C7243DC184005E29B1 /* LaunchScreen.storyboard */; };
 		ADEF79D4243DC184005E29B1 /* ClarifyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADEF79D3243DC184005E29B1 /* ClarifyTests.swift */; };
 		ADEF79DF243DC184005E29B1 /* ClarifyUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADEF79DE243DC184005E29B1 /* ClarifyUITests.swift */; };
+		ADEF79F4243DD582005E29B1 /* DevelopListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADEF79F3243DD582005E29B1 /* DevelopListView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +38,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		AD6302EF243DFFE200C19672 /* Clarify.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Clarify.entitlements; sourceTree = "<group>"; };
+		AD6302F1243DFFF600C19672 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		ADEF79B6243DC182005E29B1 /* Clarify.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Clarify.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ADEF79B9243DC182005E29B1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		ADEF79BB243DC182005E29B1 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -51,6 +55,7 @@
 		ADEF79DA243DC184005E29B1 /* ClarifyUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ClarifyUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		ADEF79DE243DC184005E29B1 /* ClarifyUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClarifyUITests.swift; sourceTree = "<group>"; };
 		ADEF79E0243DC184005E29B1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		ADEF79F3243DD582005E29B1 /* DevelopListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevelopListView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +63,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AD6302F2243DFFF600C19672 /* CloudKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +84,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		AD6302F0243DFFF600C19672 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				AD6302F1243DFFF600C19672 /* CloudKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		ADEF79AD243DC181005E29B1 = {
 			isa = PBXGroup;
 			children = (
@@ -85,6 +99,7 @@
 				ADEF79D2243DC184005E29B1 /* ClarifyTests */,
 				ADEF79DD243DC184005E29B1 /* ClarifyUITests */,
 				ADEF79B7243DC182005E29B1 /* Products */,
+				AD6302F0243DFFF600C19672 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -101,9 +116,11 @@
 		ADEF79B8243DC182005E29B1 /* Clarify */ = {
 			isa = PBXGroup;
 			children = (
+				AD6302EF243DFFE200C19672 /* Clarify.entitlements */,
 				ADEF79B9243DC182005E29B1 /* AppDelegate.swift */,
 				ADEF79BB243DC182005E29B1 /* SceneDelegate.swift */,
 				ADEF79C0243DC182005E29B1 /* ContentView.swift */,
+				ADEF79F2243DD568005E29B1 /* Develop */,
 				ADEF79C2243DC184005E29B1 /* Assets.xcassets */,
 				ADEF79C7243DC184005E29B1 /* LaunchScreen.storyboard */,
 				ADEF79CA243DC184005E29B1 /* Info.plist */,
@@ -137,6 +154,14 @@
 				ADEF79E0243DC184005E29B1 /* Info.plist */,
 			);
 			path = ClarifyUITests;
+			sourceTree = "<group>";
+		};
+		ADEF79F2243DD568005E29B1 /* Develop */ = {
+			isa = PBXGroup;
+			children = (
+				ADEF79F3243DD582005E29B1 /* DevelopListView.swift */,
+			);
+			path = Develop;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -295,6 +320,7 @@
 				ADEF79BC243DC182005E29B1 /* SceneDelegate.swift in Sources */,
 				ADEF79C1243DC182005E29B1 /* ContentView.swift in Sources */,
 				ADEF79BF243DC182005E29B1 /* Clarify.xcdatamodeld in Sources */,
+				ADEF79F4243DD582005E29B1 /* DevelopListView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -459,6 +485,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Clarify/Clarify.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"Clarify/Preview Content\"";
 				DEVELOPMENT_TEAM = 66PKF55HK5;
@@ -479,6 +506,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Clarify/Clarify.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"Clarify/Preview Content\"";
 				DEVELOPMENT_TEAM = 66PKF55HK5;
