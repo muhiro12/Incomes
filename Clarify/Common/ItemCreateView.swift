@@ -10,51 +10,72 @@ import SwiftUI
 
 struct ItemCreateView: View {
     @Environment(\.managedObjectContext) var context
+    @Environment(\.presentationMode) var presentationMode
 
+    @State private var date = Date()
     @State private var content = ""
-    @State private var income = ""
-    @State private var expenditure = ""
+    @State private var income = "0"
+    @State private var expenditure = "0"
 
     var body: some View {
-        HStack {
-            Spacer()
-                .frame(width: 20)
-            VStack(spacing: 20) {
-                TextField("Content", text: $content)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
+        Form {
+            DatePicker(selection: $date, displayedComponents: .date) {
+                Text("Date")
+            }
+            HStack {
+                Text("Content")
+                Spacer()
+                TextField("", text: $content)
+                    .multilineTextAlignment(.trailing)
+            }
+            HStack {
+                Text("Income")
+                TextField("0", text: $income)
+                    .multilineTextAlignment(.trailing)
+                    .foregroundColor(checkIsInt32(income) ? .black : .red)
+            }
+            HStack {
+                Text("Expenditure")
+                TextField("0", text: $expenditure)
+                    .multilineTextAlignment(.trailing)
+                    .foregroundColor(checkIsInt32(expenditure) ? .black : .red)
+            }
+            Button(action: add) {
                 HStack {
-                    TextField("Income", text: $income)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                    Divider()
-                    TextField("Expenditure", text: $expenditure)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                }
-                Button(action: add) {
+                    Spacer()
                     Text("Add")
+                    Spacer()
                 }
-            }.frame(height: .leastNormalMagnitude)
-            Spacer()
-                .frame(width: 20)
+            }.disabled(disabled)
         }
     }
 
-    private func add() {
-        guard !content.isEmpty else {
-            return
-        }
+    private var disabled: Bool {
+        return content.isEmpty
+            || !checkIsInt32(income)
+            || !checkIsInt32(expenditure)
+    }
 
+    private func add() {
         let item = Item(context: context)
-        item.date = Date()
+        item.date = date
         item.content = content
         item.income = Int32(income) ?? 0
         item.expenditure = -(Int32(expenditure) ?? 0)
 
         do {
             try context.save()
-            content = "Success"
+            presentationMode.wrappedValue.dismiss()
         } catch {
             print(error)
         }
+    }
+
+    private func checkIsInt32(_ text: String) -> Bool {
+        if text.isEmpty {
+            return true
+        }
+        return Int32(text) != nil
     }
 }
 
