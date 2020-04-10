@@ -9,6 +9,8 @@
 import SwiftUI
 
 struct HomeListView: View {
+    @Environment(\.managedObjectContext) var context
+
     let listItems: [HomeListItem]
 
     var body: some View {
@@ -20,7 +22,9 @@ struct HomeListView: View {
     }
 
     private func delete(indexSet: IndexSet) {
-        print("delete")
+        indexSet.forEach {
+            context.delete(listItems[$0].item)
+        }
     }
 }
 

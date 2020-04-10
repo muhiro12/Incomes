@@ -19,34 +19,35 @@ struct HomeView: View {
     @State private var isPresented = false
 
     var body: some View {
-        NavigationView {
-            Form {
-                ForEach(
-                    groupByYear(
-                        listItems: createListItems(
-                            from: items.map { $0 }
-                        ).reversed()
-                    )
-                ) { temp in
-                    NavigationLink(destination:
-                        ZStack(alignment: .bottomTrailing) {
-                            HomeListView(listItems: temp.listItems)
-                            FloatingCircleButtonView {
-                                self.isPresented = true
-                            }
-                        }.sheet(isPresented: self.$isPresented) {
-                            CreateView()
-                                .environment(\.managedObjectContext, self.context)
-                        }.navigationBarTitle(temp.year)) {
-                            Text(temp.year)
+        ZStack(alignment: .bottomTrailing) {
+            NavigationView {
+                Form {
+                    ForEach(
+                        groupByYear(
+                            listItems: createListItems(
+                                from: items.map { $0 }
+                            ).reversed()
+                        )
+                    ) { listItemsPerYear in
+                        NavigationLink(destination:
+                            HomeListView(listItems: listItemsPerYear.listItems)
+                                .navigationBarTitle(listItemsPerYear.year)) {
+                                    Text(listItemsPerYear.year)
+                        }
                     }
-                }
-            }.navigationBarTitle("Clarify")
+                }.navigationBarTitle("Clarify")
+            }
+            FloatingCircleButtonView {
+                self.isPresented = true
+            }
+        }.sheet(isPresented: self.$isPresented) {
+            ItemCreateView()
+                .environment(\.managedObjectContext, self.context)
         }
     }
 
     private func groupByYear(listItems: [HomeListItem]) -> [HomeListItemsPerYear] {
-        var temps: [HomeListItemsPerYear] = []
+        var listItemsPerYears: [HomeListItemsPerYear] = []
 
         let dict = Dictionary(grouping: listItems) { listItem -> String in
             guard let date = listItem.item.date else {
@@ -60,9 +61,9 @@ struct HomeView: View {
         }
         dict.forEach {
             let temp = HomeListItemsPerYear(year: $0.key, listItems: $0.value)
-            temps.append(temp)
+            listItemsPerYears.append(temp)
         }
-        return temps
+        return listItemsPerYears
     }
 
     private func createListItems(from items: [Item]) -> [HomeListItem] {

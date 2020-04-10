@@ -1,5 +1,5 @@
 //
-//  CreateView.swift
+//  ItemCreateView.swift
 //  Clarify
 //
 //  Created by Hiromu Nakano on 2020/04/10.
@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct CreateView: View {
+struct ItemCreateView: View {
     @Environment(\.managedObjectContext) var context
 
     @State private var content = ""
@@ -58,8 +58,8 @@ struct CreateView: View {
     }
 }
 
-struct CreateView_Previews: PreviewProvider {
+struct ItemCreateView_Previews: PreviewProvider {
     static var previews: some View {
-        CreateView()
+        ItemCreateView()
     }
 }
