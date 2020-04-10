@@ -14,14 +14,21 @@ struct HomeView: View {
     @State private var isPresented = false
 
     var body: some View {
-        ZStack(alignment: .bottomTrailing) {
-            HomeListView()
-            FloatingCircleButtonView {
-                self.isPresented = true
-            }
-        }.sheet(isPresented: $isPresented) {
-            CreateView()
-                .environment(\.managedObjectContext, self.context)
+        NavigationView {
+            Form {
+                NavigationLink(destination:
+                    ZStack(alignment: .bottomTrailing) {
+                        HomeListView()
+                        FloatingCircleButtonView {
+                            self.isPresented = true
+                        }
+                    }.sheet(isPresented: $isPresented) {
+                        CreateView()
+                            .environment(\.managedObjectContext, self.context)
+                    }.navigationBarTitle("2020")) {
+                        Text("2020")
+                }
+            }.navigationBarTitle("Clarify")
         }
     }
 }

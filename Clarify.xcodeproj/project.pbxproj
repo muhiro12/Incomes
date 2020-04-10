@@ -15,6 +15,7 @@
 		AD781C2B2440134E0081BF8D /* CreateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD781C2A2440134E0081BF8D /* CreateView.swift */; };
 		AD781C2D2440163D0081BF8D /* HomeListItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD781C2C2440163D0081BF8D /* HomeListItemView.swift */; };
 		AD781C2F244017590081BF8D /* DateConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD781C2E244017590081BF8D /* DateConverter.swift */; };
+		AD781C31244048940081BF8D /* HomeListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD781C30244048940081BF8D /* HomeListItem.swift */; };
 		ADEF79BA243DC182005E29B1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADEF79B9243DC182005E29B1 /* AppDelegate.swift */; };
 		ADEF79BC243DC182005E29B1 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADEF79BB243DC182005E29B1 /* SceneDelegate.swift */; };
 		ADEF79BF243DC182005E29B1 /* Clarify.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = ADEF79BD243DC182005E29B1 /* Clarify.xcdatamodeld */; };
@@ -53,6 +54,7 @@
 		AD781C2A2440134E0081BF8D /* CreateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateView.swift; sourceTree = "<group>"; };
 		AD781C2C2440163D0081BF8D /* HomeListItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeListItemView.swift; sourceTree = "<group>"; };
 		AD781C2E244017590081BF8D /* DateConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateConverter.swift; sourceTree = "<group>"; };
+		AD781C30244048940081BF8D /* HomeListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeListItem.swift; sourceTree = "<group>"; };
 		ADEF79B6243DC182005E29B1 /* Clarify.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Clarify.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ADEF79B9243DC182005E29B1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		ADEF79BB243DC182005E29B1 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -121,6 +123,7 @@
 				AD781C26244012EF0081BF8D /* HomeView.swift */,
 				AD781C282440131B0081BF8D /* HomeListView.swift */,
 				AD781C2C2440163D0081BF8D /* HomeListItemView.swift */,
+				AD781C30244048940081BF8D /* HomeListItem.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -347,6 +350,7 @@
 				ADEF79BA243DC182005E29B1 /* AppDelegate.swift in Sources */,
 				ADEF79BC243DC182005E29B1 /* SceneDelegate.swift in Sources */,
 				AD781C292440131B0081BF8D /* HomeListView.swift in Sources */,
+				AD781C31244048940081BF8D /* HomeListItem.swift in Sources */,
 				AD781C2B2440134E0081BF8D /* CreateView.swift in Sources */,
 				ADEF79C1243DC182005E29B1 /* ContentView.swift in Sources */,
 				AD781C25244012A50081BF8D /* Item.swift in Sources */,

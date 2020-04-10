@@ -11,13 +11,13 @@ import SwiftUI
 struct HomeListView: View {
     @FetchRequest(
         entity: Item.entity(),
-        sortDescriptors: [NSSortDescriptor(keyPath: \Item.date, ascending: false)]
+        sortDescriptors: [NSSortDescriptor(keyPath: \Item.date, ascending: true)]
     ) var items: FetchedResults<Item>
 
     var body: some View {
         List {
-            ForEach(items) { item in
-                HomeListItemView(item: item, sum: self.sumUp(item: item))
+            ForEach(createListItem().reversed()) { item in
+                HomeListItemView(item: item.item, sum: item.balance)
             }.onDelete(perform: delete)
         }
     }
@@ -26,12 +26,20 @@ struct HomeListView: View {
         print("delete")
     }
 
-    private func sumUp(item: Item) -> Int {
-        var sum = 0
-        for index in (items.firstIndex(of: item) ?? 0).advanced(by: 0)..<items.count {
-            sum += Int(items[index].income + items[index].expenditure)
+    private func createListItem() -> [HomeListItem] {
+        var listItem: [HomeListItem] = []
+        for index in 0..<items.count {
+            let item = items[index]
+
+            var balance = 0
+            if listItem.count > 0 {
+                balance += listItem[index - 1].balance
+            }
+            balance += Int(item.income + item.expenditure)
+
+            listItem.append(HomeListItem(item: item, balance: balance))
         }
-        return sum
+        return listItem
     }
 }
 
