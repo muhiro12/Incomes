@@ -10,6 +10,11 @@ import Foundation
 
 struct HomeListItem: Identifiable {
     let id = UUID()
-    let item: Item
+    var item: Item?
+
+    let date: Date
+    let content: String
+    let income: Int
+    let expenditure: Int
     let balance: Int
 }

@@ -15,21 +15,35 @@ struct HomeListView: View {
 
     var body: some View {
         List {
-            ForEach(listItems) {
-                HomeListItemView(item: $0.item, sum: $0.balance)
+            ForEach(listItems) { listItem in
+                GeometryReader { geometry in
+                    if geometry.size.width > 500 {
+                        HomeListItemWideView(item: listItem)
+                    } else {
+                        HomeListItemNarrowView(item: listItem)
+                    }
+                }
             }.onDelete(perform: delete)
         }
     }
 
     private func delete(indexSet: IndexSet) {
         indexSet.forEach {
-            context.delete(listItems[$0].item)
+            if let item = listItems[$0].item {
+                context.delete(item)
+            }
         }
     }
 }
 
 struct HomeListView_Previews: PreviewProvider {
     static var previews: some View {
-        HomeListView(listItems: [])
+        HomeListView(listItems: [
+            HomeListItem(date: Date(),
+                         content: "Content",
+                         income: 999999,
+                         expenditure: 99999,
+                         balance: 9999999)
+        ])
     }
 }

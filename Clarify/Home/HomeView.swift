@@ -50,7 +50,7 @@ struct HomeView: View {
         var listItemsPerYears: [HomeListItemsPerYear] = []
 
         let dictionary = Dictionary(grouping: listItems) { listItem -> String in
-            return DateConverter().convertToMonth(listItem.item.date)
+            return DateConverter().convertToMonth(listItem.date)
         }.sorted {
             $0.key > $1.key
         }
@@ -72,7 +72,16 @@ struct HomeView: View {
             }
             balance += Int(item.income + item.expenditure)
 
-            listItems.append(HomeListItem(item: item, balance: balance))
+            if let date = item.date,
+                let content = item.content {
+                let listItem = HomeListItem(item: item,
+                                            date: date,
+                                            content: content,
+                                            income: Int(item.income),
+                                            expenditure: Int(item.expenditure),
+                                            balance: balance)
+                listItems.append(listItem)
+            }
         }
         return listItems
     }

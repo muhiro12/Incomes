@@ -33,13 +33,13 @@ struct ItemCreateView: View {
                     Text("Income")
                     TextField("0", text: $income)
                         .multilineTextAlignment(.trailing)
-                        .foregroundColor(checkIsInt32(income) ? .black : .red)
+                        .foregroundColor(checkIsInt32(income) ? .primary : .red)
                 }
                 HStack {
                     Text("Expenditure")
                     TextField("0", text: $expenditure)
                         .multilineTextAlignment(.trailing)
-                        .foregroundColor(checkIsInt32(expenditure) ? .black : .red)
+                        .foregroundColor(checkIsInt32(expenditure) ? .primary : .red)
                 }
                 Button(action: add) {
                     HStack {
