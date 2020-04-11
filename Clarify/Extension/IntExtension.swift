@@ -1,5 +1,5 @@
 //
-//  CurrencyConverter.swift
+//  IntExtension.swift
 //  Clarify
 //
 //  Created by Hiromu Nakano on 2020/04/11.
@@ -8,10 +8,10 @@
 
 import Foundation
 
-struct CurrencyConverter {
-    func convert(_ int: Int) -> String {
+extension Int {
+    var asCurrency: String {
         let formatter = NumberFormatter()
         formatter.numberStyle = .currency
-        return formatter.string(from: NSNumber(value: int)) ?? ""
+        return formatter.string(from: NSNumber(value: self)) ?? ""
     }
 }

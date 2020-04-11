@@ -42,13 +42,13 @@ struct ItemCreateView: View {
                     Text("Income")
                     TextField("0", text: $income)
                         .multilineTextAlignment(.trailing)
-                        .foregroundColor(checkIsInt32(income) ? .primary : .red)
+                        .foregroundColor(income.isValidAsInt32 ? .primary : .red)
                 }
                 HStack {
                     Text("Expenditure")
                     TextField("0", text: $expenditure)
                         .multilineTextAlignment(.trailing)
-                        .foregroundColor(checkIsInt32(expenditure) ? .primary : .red)
+                        .foregroundColor(expenditure.isValidAsInt32 ? .primary : .red)
                 }
                 Button(action: add) {
                     HStack {
@@ -63,8 +63,8 @@ struct ItemCreateView: View {
 
     private var disabled: Bool {
         return content.isEmpty
-            || !checkIsInt32(income)
-            || !checkIsInt32(expenditure)
+            || !income.isValidAsInt32
+            || !expenditure.isValidAsInt32
     }
 
     private func add() {
@@ -80,13 +80,6 @@ struct ItemCreateView: View {
         } catch {
             print(error)
         }
-    }
-
-    private func checkIsInt32(_ text: String) -> Bool {
-        if text.isEmpty {
-            return true
-        }
-        return Int32(text) != nil
     }
 }
 

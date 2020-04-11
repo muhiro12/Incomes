@@ -13,7 +13,7 @@ struct HomeListItemNarrowView: View {
 
     var body: some View {
         HStack {
-            Text(DateConverter().convertToDay(item.date))
+            Text(item.date.MMdd)
                 .frame(width: .conponentS)
             Divider()
             VStack(spacing: 0) {
@@ -21,10 +21,10 @@ struct HomeListItemNarrowView: View {
                     .font(.headline)
                 HStack {
                     Spacer()
-                    Text(CurrencyConverter().convert(Int(self.item.income)))
+                    Text(self.item.income.asCurrency)
                         .frame(width: .conponentS)
                     Divider()
-                    Text(CurrencyConverter().convert(Int(self.item.expenditure)))
+                    Text(self.item.expenditure.asCurrency)
                         .frame(width: .conponentS)
                     Spacer()
                 }.font(.caption)
@@ -32,7 +32,7 @@ struct HomeListItemNarrowView: View {
 
             }
             Divider()
-            Text(CurrencyConverter().convert(item.balance))
+            Text(item.balance.asCurrency)
                 .frame(width: .conponentL)
                 .foregroundColor(item.balance >= 0 ? .primary : .red)
         }

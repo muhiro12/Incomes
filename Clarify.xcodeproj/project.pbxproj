@@ -10,15 +10,16 @@
 		AD6302F2243DFFF600C19672 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD6302F1243DFFF600C19672 /* CloudKit.framework */; };
 		AD6E42302440BA1000A44408 /* HomeListItemNarrowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6E422F2440BA1000A44408 /* HomeListItemNarrowView.swift */; };
 		AD6E423524415DBE00A44408 /* CGFloatExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6E423424415DBE00A44408 /* CGFloatExtension.swift */; };
-		AD6E423824417A5400A44408 /* CurrencyConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6E423724417A5400A44408 /* CurrencyConverter.swift */; };
 		AD6E423A24417AEB00A44408 /* HomeListItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6E423924417AEB00A44408 /* HomeListItemView.swift */; };
+		AD6E42402441A9C500A44408 /* DateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6E423F2441A9C500A44408 /* DateExtension.swift */; };
+		AD6E42442441AB9A00A44408 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6E42432441AB9A00A44408 /* StringExtension.swift */; };
+		AD6E42462441ACC000A44408 /* IntExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6E42452441ACC000A44408 /* IntExtension.swift */; };
 		AD781C232440127A0081BF8D /* FloatingCircleButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD781C222440127A0081BF8D /* FloatingCircleButtonView.swift */; };
 		AD781C25244012A50081BF8D /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD781C24244012A50081BF8D /* Item.swift */; };
 		AD781C27244012EF0081BF8D /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD781C26244012EF0081BF8D /* HomeView.swift */; };
 		AD781C292440131B0081BF8D /* HomeListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD781C282440131B0081BF8D /* HomeListView.swift */; };
 		AD781C2B2440134E0081BF8D /* ItemCreateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD781C2A2440134E0081BF8D /* ItemCreateView.swift */; };
 		AD781C2D2440163D0081BF8D /* HomeListItemWideView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD781C2C2440163D0081BF8D /* HomeListItemWideView.swift */; };
-		AD781C2F244017590081BF8D /* DateConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD781C2E244017590081BF8D /* DateConverter.swift */; };
 		AD781C31244048940081BF8D /* HomeListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD781C30244048940081BF8D /* HomeListItem.swift */; };
 		AD781C33244057D10081BF8D /* HomeListItemsPerYear.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD781C32244057D10081BF8D /* HomeListItemsPerYear.swift */; };
 		ADEF79BA243DC182005E29B1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADEF79B9243DC182005E29B1 /* AppDelegate.swift */; };
@@ -54,15 +55,16 @@
 		AD6302F1243DFFF600C19672 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		AD6E422F2440BA1000A44408 /* HomeListItemNarrowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeListItemNarrowView.swift; sourceTree = "<group>"; };
 		AD6E423424415DBE00A44408 /* CGFloatExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGFloatExtension.swift; sourceTree = "<group>"; };
-		AD6E423724417A5400A44408 /* CurrencyConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyConverter.swift; sourceTree = "<group>"; };
 		AD6E423924417AEB00A44408 /* HomeListItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeListItemView.swift; sourceTree = "<group>"; };
+		AD6E423F2441A9C500A44408 /* DateExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtension.swift; sourceTree = "<group>"; };
+		AD6E42432441AB9A00A44408 /* StringExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
+		AD6E42452441ACC000A44408 /* IntExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntExtension.swift; sourceTree = "<group>"; };
 		AD781C222440127A0081BF8D /* FloatingCircleButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingCircleButtonView.swift; sourceTree = "<group>"; };
 		AD781C24244012A50081BF8D /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		AD781C26244012EF0081BF8D /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		AD781C282440131B0081BF8D /* HomeListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeListView.swift; sourceTree = "<group>"; };
 		AD781C2A2440134E0081BF8D /* ItemCreateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemCreateView.swift; sourceTree = "<group>"; };
 		AD781C2C2440163D0081BF8D /* HomeListItemWideView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeListItemWideView.swift; sourceTree = "<group>"; };
-		AD781C2E244017590081BF8D /* DateConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateConverter.swift; sourceTree = "<group>"; };
 		AD781C30244048940081BF8D /* HomeListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeListItem.swift; sourceTree = "<group>"; };
 		AD781C32244057D10081BF8D /* HomeListItemsPerYear.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeListItemsPerYear.swift; sourceTree = "<group>"; };
 		ADEF79B6243DC182005E29B1 /* Clarify.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Clarify.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -119,6 +121,9 @@
 		AD6E423324415D9300A44408 /* Extension */ = {
 			isa = PBXGroup;
 			children = (
+				AD6E42432441AB9A00A44408 /* StringExtension.swift */,
+				AD6E42452441ACC000A44408 /* IntExtension.swift */,
+				AD6E423F2441A9C500A44408 /* DateExtension.swift */,
 				AD6E423424415DBE00A44408 /* CGFloatExtension.swift */,
 			);
 			path = Extension;
@@ -127,11 +132,9 @@
 		AD781C20244012430081BF8D /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				AD781C2A2440134E0081BF8D /* ItemCreateView.swift */,
 				AD781C222440127A0081BF8D /* FloatingCircleButtonView.swift */,
 				AD781C24244012A50081BF8D /* Item.swift */,
-				AD781C2A2440134E0081BF8D /* ItemCreateView.swift */,
-				AD781C2E244017590081BF8D /* DateConverter.swift */,
-				AD6E423724417A5400A44408 /* CurrencyConverter.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -375,14 +378,15 @@
 				ADEF79BC243DC182005E29B1 /* SceneDelegate.swift in Sources */,
 				AD781C292440131B0081BF8D /* HomeListView.swift in Sources */,
 				AD6E423A24417AEB00A44408 /* HomeListItemView.swift in Sources */,
-				AD6E423824417A5400A44408 /* CurrencyConverter.swift in Sources */,
 				AD781C33244057D10081BF8D /* HomeListItemsPerYear.swift in Sources */,
 				AD781C31244048940081BF8D /* HomeListItem.swift in Sources */,
+				AD6E42462441ACC000A44408 /* IntExtension.swift in Sources */,
 				AD781C2B2440134E0081BF8D /* ItemCreateView.swift in Sources */,
 				ADEF79C1243DC182005E29B1 /* ContentView.swift in Sources */,
+				AD6E42402441A9C500A44408 /* DateExtension.swift in Sources */,
 				AD781C25244012A50081BF8D /* Item.swift in Sources */,
-				AD781C2F244017590081BF8D /* DateConverter.swift in Sources */,
 				AD781C27244012EF0081BF8D /* HomeView.swift in Sources */,
+				AD6E42442441AB9A00A44408 /* StringExtension.swift in Sources */,
 				AD6E423524415DBE00A44408 /* CGFloatExtension.swift in Sources */,
 				ADEF79BF243DC182005E29B1 /* Clarify.xcdatamodeld in Sources */,
 			);

@@ -50,7 +50,7 @@ struct HomeView: View {
         var listItemsPerYears: [HomeListItemsPerYear] = []
 
         let dictionary = Dictionary(grouping: listItems) { listItem -> String in
-            return DateConverter().convertToMonth(listItem.date)
+            return listItem.date.yyyyMM
         }.sorted {
             $0.key > $1.key
         }
