@@ -10,6 +10,7 @@
 		AD6302F2243DFFF600C19672 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD6302F1243DFFF600C19672 /* CloudKit.framework */; };
 		AD6E42302440BA1000A44408 /* HomeListItemNarrowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6E422F2440BA1000A44408 /* HomeListItemNarrowView.swift */; };
 		AD6E42322440BA2700A44408 /* HomeListItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6E42312440BA2700A44408 /* HomeListItemView.swift */; };
+		AD6E423524415DBE00A44408 /* CGFloatExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6E423424415DBE00A44408 /* CGFloatExtension.swift */; };
 		AD781C232440127A0081BF8D /* FloatingCircleButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD781C222440127A0081BF8D /* FloatingCircleButtonView.swift */; };
 		AD781C25244012A50081BF8D /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD781C24244012A50081BF8D /* Item.swift */; };
 		AD781C27244012EF0081BF8D /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD781C26244012EF0081BF8D /* HomeView.swift */; };
@@ -52,6 +53,7 @@
 		AD6302F1243DFFF600C19672 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		AD6E422F2440BA1000A44408 /* HomeListItemNarrowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeListItemNarrowView.swift; sourceTree = "<group>"; };
 		AD6E42312440BA2700A44408 /* HomeListItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeListItemView.swift; sourceTree = "<group>"; };
+		AD6E423424415DBE00A44408 /* CGFloatExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGFloatExtension.swift; sourceTree = "<group>"; };
 		AD781C222440127A0081BF8D /* FloatingCircleButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingCircleButtonView.swift; sourceTree = "<group>"; };
 		AD781C24244012A50081BF8D /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		AD781C26244012EF0081BF8D /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
@@ -112,6 +114,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		AD6E423324415D9300A44408 /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				AD6E423424415DBE00A44408 /* CGFloatExtension.swift */,
+			);
+			path = Extension;
+			sourceTree = "<group>";
+		};
 		AD781C20244012430081BF8D /* Common */ = {
 			isa = PBXGroup;
 			children = (
@@ -167,6 +177,7 @@
 				ADEF79C0243DC182005E29B1 /* ContentView.swift */,
 				AD781C20244012430081BF8D /* Common */,
 				AD781C21244012520081BF8D /* Home */,
+				AD6E423324415D9300A44408 /* Extension */,
 				ADEF79C2243DC184005E29B1 /* Assets.xcassets */,
 				ADEF79C7243DC184005E29B1 /* LaunchScreen.storyboard */,
 				ADEF79CA243DC184005E29B1 /* Info.plist */,
@@ -368,6 +379,7 @@
 				AD781C25244012A50081BF8D /* Item.swift in Sources */,
 				AD781C2F244017590081BF8D /* DateConverter.swift in Sources */,
 				AD781C27244012EF0081BF8D /* HomeView.swift in Sources */,
+				AD6E423524415DBE00A44408 /* CGFloatExtension.swift in Sources */,
 				ADEF79BF243DC182005E29B1 /* Clarify.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

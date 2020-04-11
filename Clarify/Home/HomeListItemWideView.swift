@@ -14,21 +14,22 @@ struct HomeListItemWideView: HomeListItemView {
     var body: some View {
         HStack {
             Text(DateConverter().convertToDay(item.date))
-                .frame(width: 60)
+                .frame(width: .conponentS)
             Divider()
             Text(item.content)
+                .font(.headline)
             Spacer()
             Divider()
             HStack {
                 Text(convert(Int(item.income)))
-                    .frame(width: 80)
+                    .frame(width: .conponentM)
                 Divider()
                 Text(convert(Int(item.expenditure)))
-                    .frame(width: 80)
+                    .frame(width: .conponentM)
             }.foregroundColor(.secondary)
             Divider()
             Text(convert(item.balance))
-                .frame(width: 100)
+                .frame(width: .conponentL)
                 .foregroundColor(item.balance >= 0 ? .primary : .red)
         }
     }
