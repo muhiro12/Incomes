@@ -27,37 +27,49 @@ struct ItemCreateView: View {
     }
 
     var body: some View {
-        Form {
-            Section(header: Text("Create")) {
-                DatePicker(selection: $date, displayedComponents: .date) {
-                    Text("Date")
-                }
-                HStack {
-                    Text("Content")
-                    Spacer()
-                    TextField("", text: $content)
-                        .multilineTextAlignment(.trailing)
-                }
-                HStack {
-                    Text("Income")
-                    TextField("0", text: $income)
-                        .multilineTextAlignment(.trailing)
-                        .foregroundColor(income.isValidAsInt32 ? .primary : .red)
-                }
-                HStack {
-                    Text("Expenditure")
-                    TextField("0", text: $expenditure)
-                        .multilineTextAlignment(.trailing)
-                        .foregroundColor(expenditure.isValidAsInt32 ? .primary : .red)
-                }
-                Button(action: add) {
-                    HStack {
-                        Spacer()
-                        Text("Add")
-                        Spacer()
+        NavigationView {
+            Form {
+                Section(header: Text("Information")) {
+                    DatePicker(selection: $date, displayedComponents: .date) {
+                        Text("Date")
                     }
-                }.disabled(disabled)
-            }
+                    HStack {
+                        Text("Content")
+                        Spacer()
+                        TextField("", text: $content)
+                            .multilineTextAlignment(.trailing)
+                    }
+                    HStack {
+                        Text("Income")
+                        TextField("0", text: $income)
+                            .multilineTextAlignment(.trailing)
+                            .foregroundColor(income.isValidAsInt32 ? .primary : .red)
+                    }
+                    HStack {
+                        Text("Expenditure")
+                        TextField("0", text: $expenditure)
+                            .multilineTextAlignment(.trailing)
+                            .foregroundColor(expenditure.isValidAsInt32 ? .primary : .red)
+                    }
+                }
+                Section {
+                    Button(action: add) {
+                        HStack {
+                            Spacer()
+                            Text("Create")
+                            Spacer()
+                        }
+                    }.disabled(disabled)
+                    Button(action: dismiss) {
+                        HStack {
+                            Spacer()
+                            Text("Cancel")
+                                .foregroundColor(.red)
+                            Spacer()
+                        }
+                    }
+                }
+            }.navigationBarTitle("Create")
         }
     }
 
@@ -76,10 +88,14 @@ struct ItemCreateView: View {
 
         do {
             try context.save()
-            presentationMode.wrappedValue.dismiss()
+            dismiss()
         } catch {
             print(error)
         }
+    }
+
+    private func dismiss() {
+        presentationMode.wrappedValue.dismiss()
     }
 }
 

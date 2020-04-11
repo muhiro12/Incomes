@@ -22,10 +22,10 @@ struct FloatingCircleButtonView: View {
                     }
                 }
                 Spacer()
-                    .frame(width: .spaceM)
+                    .frame(width: .spaceS)
             }
             Spacer()
-                .frame(height: .spaceM)
+                .frame(height: .spaceS)
         }
     }
 }
