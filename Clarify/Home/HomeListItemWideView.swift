@@ -8,8 +8,8 @@
 
 import SwiftUI
 
-struct HomeListItemWideView: HomeListItemView {
-    var item: HomeListItem
+struct HomeListItemWideView: View {
+    let item: HomeListItem
 
     var body: some View {
         HStack {
@@ -21,14 +21,14 @@ struct HomeListItemWideView: HomeListItemView {
             Spacer()
             Divider()
             HStack {
-                Text(convert(Int(item.income)))
+                Text(CurrencyConverter().convert(Int(item.income)))
                     .frame(width: .conponentM)
                 Divider()
-                Text(convert(Int(item.expenditure)))
+                Text(CurrencyConverter().convert(Int(item.expenditure)))
                     .frame(width: .conponentM)
             }.foregroundColor(.secondary)
             Divider()
-            Text(convert(item.balance))
+            Text(CurrencyConverter().convert(item.balance))
                 .frame(width: .conponentL)
                 .foregroundColor(item.balance >= 0 ? .primary : .red)
         }

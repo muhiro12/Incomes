@@ -16,13 +16,7 @@ struct HomeListView: View {
     var body: some View {
         List {
             ForEach(listItems) { listItem in
-                GeometryReader { geometry in
-                    if geometry.size.width > 500 {
-                        HomeListItemWideView(item: listItem)
-                    } else {
-                        HomeListItemNarrowView(item: listItem)
-                    }
-                }
+                HomeListItemView(item: listItem)
             }.onDelete(perform: delete)
         }
     }

@@ -17,6 +17,15 @@ struct ItemCreateView: View {
     @State private var income = ""
     @State private var expenditure = ""
 
+    init() {}
+
+    init(listItem: HomeListItem) {
+        _date = State(initialValue: listItem.date)
+        _content = State(initialValue: listItem.content)
+        _income = State(initialValue: listItem.income.description)
+        _expenditure = State(initialValue: listItem.expenditure.description)
+    }
+
     var body: some View {
         Form {
             Section(header: Text("Create")) {
