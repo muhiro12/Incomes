@@ -42,12 +42,14 @@ struct ItemCreateView: View {
                     HStack {
                         Text("Income")
                         TextField("0", text: $income)
+                            .keyboardType(.numberPad)
                             .multilineTextAlignment(.trailing)
                             .foregroundColor(income.isValidAsInt32 ? .primary : .red)
                     }
                     HStack {
                         Text("Expenditure")
                         TextField("0", text: $expenditure)
+                            .keyboardType(.numberPad)
                             .multilineTextAlignment(.trailing)
                             .foregroundColor(expenditure.isValidAsInt32 ? .primary : .red)
                     }
