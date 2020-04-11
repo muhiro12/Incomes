@@ -14,6 +14,9 @@
 		AD6E42402441A9C500A44408 /* DateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6E423F2441A9C500A44408 /* DateExtension.swift */; };
 		AD6E42442441AB9A00A44408 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6E42432441AB9A00A44408 /* StringExtension.swift */; };
 		AD6E42462441ACC000A44408 /* IntExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6E42452441ACC000A44408 /* IntExtension.swift */; };
+		AD6E424B2441B89D00A44408 /* DateExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6E424A2441B89D00A44408 /* DateExtensionTests.swift */; };
+		AD6E424D2441BD0A00A44408 /* StringExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6E424C2441BD0A00A44408 /* StringExtensionTests.swift */; };
+		AD6E42512441C47A00A44408 /* IntExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6E42502441C47A00A44408 /* IntExtensionTests.swift */; };
 		AD781C232440127A0081BF8D /* FloatingCircleButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD781C222440127A0081BF8D /* FloatingCircleButtonView.swift */; };
 		AD781C25244012A50081BF8D /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD781C24244012A50081BF8D /* Item.swift */; };
 		AD781C27244012EF0081BF8D /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD781C26244012EF0081BF8D /* HomeView.swift */; };
@@ -59,6 +62,9 @@
 		AD6E423F2441A9C500A44408 /* DateExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtension.swift; sourceTree = "<group>"; };
 		AD6E42432441AB9A00A44408 /* StringExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		AD6E42452441ACC000A44408 /* IntExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntExtension.swift; sourceTree = "<group>"; };
+		AD6E424A2441B89D00A44408 /* DateExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtensionTests.swift; sourceTree = "<group>"; };
+		AD6E424C2441BD0A00A44408 /* StringExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtensionTests.swift; sourceTree = "<group>"; };
+		AD6E42502441C47A00A44408 /* IntExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntExtensionTests.swift; sourceTree = "<group>"; };
 		AD781C222440127A0081BF8D /* FloatingCircleButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingCircleButtonView.swift; sourceTree = "<group>"; };
 		AD781C24244012A50081BF8D /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		AD781C26244012EF0081BF8D /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
@@ -125,6 +131,16 @@
 				AD6E42452441ACC000A44408 /* IntExtension.swift */,
 				AD6E423F2441A9C500A44408 /* DateExtension.swift */,
 				AD6E423424415DBE00A44408 /* CGFloatExtension.swift */,
+			);
+			path = Extension;
+			sourceTree = "<group>";
+		};
+		AD6E42472441B79100A44408 /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				AD6E424C2441BD0A00A44408 /* StringExtensionTests.swift */,
+				AD6E42502441C47A00A44408 /* IntExtensionTests.swift */,
+				AD6E424A2441B89D00A44408 /* DateExtensionTests.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -205,6 +221,7 @@
 			isa = PBXGroup;
 			children = (
 				ADEF79D3243DC184005E29B1 /* ClarifyTests.swift */,
+				AD6E42472441B79100A44408 /* Extension */,
 				ADEF79D5243DC184005E29B1 /* Info.plist */,
 			);
 			path = ClarifyTests;
@@ -397,6 +414,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				ADEF79D4243DC184005E29B1 /* ClarifyTests.swift in Sources */,
+				AD6E42512441C47A00A44408 /* IntExtensionTests.swift in Sources */,
+				AD6E424B2441B89D00A44408 /* DateExtensionTests.swift in Sources */,
+				AD6E424D2441BD0A00A44408 /* StringExtensionTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
