@@ -40,6 +40,7 @@ struct ContentView: View {
                 listItems.value.append(listItem)
             }
         }
+        listItems.value.reverse()
         return listItems
     }
 }

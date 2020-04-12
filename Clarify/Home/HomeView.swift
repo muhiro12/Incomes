@@ -13,6 +13,7 @@ struct HomeView: View {
 
     @State private var isPresented = false
 
+    let title: String
     let items: ListItems
     // TODO: Temp
     var isHome = true
@@ -28,7 +29,7 @@ struct HomeView: View {
                                     Text(items.key ?? "")
                         }
                     }
-                }.navigationBarTitle("Clarify")
+                }.navigationBarTitle(title)
             }
             FloatingCircleButtonView {
                 self.isPresented = true
@@ -58,7 +59,9 @@ struct HomeView: View {
         }
         groupedDictionary.forEach {
             listItemsArray.append(
-                ListItems(key: $0.key, value: $0.value)
+                // TODO: Temp
+                ListItems(key: (isHome ? $0.key : $0.value.last?.content),
+                          value: $0.value)
             )
         }
 
@@ -68,14 +71,14 @@ struct HomeView: View {
 
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
-        HomeView(items:
-            ListItems(value: [
-                ListItem(date: Date(),
-                         content: "Content",
-                         income: 999999,
-                         expenditure: 99999,
-                         balance: 9999999)]
-            )
+        HomeView(title: "Home",
+                 items: ListItems(value: [
+                    ListItem(date: Date(),
+                             content: "Content",
+                             income: 999999,
+                             expenditure: 99999,
+                             balance: 9999999)
+                 ])
         )
     }
 }

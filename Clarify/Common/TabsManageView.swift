@@ -13,11 +13,11 @@ struct TabsManageView: View {
 
     var body: some View {
         TabView {
-            HomeView(items: items)
+            HomeView(title: "Home", items: items)
                 .tabItem {
                     Image(systemName: "list.dash")
             }
-            HomeView(items: items, isHome: false)
+            HomeView(title: "Group", items: items, isHome: false)
                 .tabItem {
                     Image(systemName: "square.stack.3d.up")
             }
