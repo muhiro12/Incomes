@@ -1,5 +1,5 @@
 //
-//  HomeListItem.swift
+//  ListItem.swift
 //  Clarify
 //
 //  Created by Hiromu Nakano on 2020/04/10.
@@ -8,9 +8,9 @@
 
 import Foundation
 
-struct HomeListItem: Identifiable {
+struct ListItem: Identifiable {
     let id = UUID()
-    var item: Item?
+    var original: Item?
 
     let date: Date
     let content: String

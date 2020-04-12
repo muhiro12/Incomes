@@ -1,5 +1,5 @@
 //
-//  HomeListItemNarrowView.swift
+//  ListItemNarrowView.swift
 //  Clarify
 //
 //  Created by Hiromu Nakano on 2020/04/10.
@@ -8,8 +8,8 @@
 
 import SwiftUI
 
-struct HomeListItemNarrowView: View {
-    let item: HomeListItem
+struct ListItemNarrowView: View {
+    let item: ListItem
 
     var body: some View {
         HStack {
@@ -39,12 +39,12 @@ struct HomeListItemNarrowView: View {
     }
 }
 
-struct HomeListItemNarrowView_Previews: PreviewProvider {
+struct ListItemNarrowView_Previews: PreviewProvider {
     static var previews: some View {
-        HomeListItemNarrowView(item: HomeListItem(date: Date(),
-                                                  content: "Content",
-                                                  income: 999999,
-                                                  expenditure: 99999,
-                                                  balance: 9999999))
+        ListItemNarrowView(item: ListItem(date: Date(),
+                                          content: "Content",
+                                          income: 999999,
+                                          expenditure: 99999,
+                                          balance: 9999999))
     }
 }

@@ -1,5 +1,5 @@
 //
-//  ItemCreateView.swift
+//  ItemEditView.swift
 //  Clarify
 //
 //  Created by Hiromu Nakano on 2020/04/10.
@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct ItemCreateView: View {
+struct ItemEditView: View {
     @Environment(\.managedObjectContext) var context
     @Environment(\.presentationMode) var presentationMode
 
@@ -19,7 +19,7 @@ struct ItemCreateView: View {
 
     init() {}
 
-    init(listItem: HomeListItem) {
+    init(listItem: ListItem) {
         _date = State(initialValue: listItem.date)
         _content = State(initialValue: listItem.content)
         _income = State(initialValue: listItem.income.description)
@@ -44,14 +44,14 @@ struct ItemCreateView: View {
                         TextField("0", text: $income)
                             .keyboardType(.numberPad)
                             .multilineTextAlignment(.trailing)
-                            .foregroundColor(income.isValidAsInt32 ? .primary : .red)
+                            .foregroundColor(income.isEmptyOrInt32 ? .primary : .red)
                     }
                     HStack {
                         Text("Expenditure")
                         TextField("0", text: $expenditure)
                             .keyboardType(.numberPad)
                             .multilineTextAlignment(.trailing)
-                            .foregroundColor(expenditure.isValidAsInt32 ? .primary : .red)
+                            .foregroundColor(expenditure.isEmptyOrInt32 ? .primary : .red)
                     }
                 }
                 Section {
@@ -71,14 +71,14 @@ struct ItemCreateView: View {
                         }
                     }
                 }
-            }.navigationBarTitle("Create")
+            }.navigationBarTitle("Edit")
         }
     }
 
     private var disabled: Bool {
         return content.isEmpty
-            || !income.isValidAsInt32
-            || !expenditure.isValidAsInt32
+            || !income.isEmptyOrInt32
+            || !expenditure.isEmptyOrInt32
     }
 
     private func add() {
@@ -101,8 +101,8 @@ struct ItemCreateView: View {
     }
 }
 
-struct ItemCreateView_Previews: PreviewProvider {
+struct ItemEditView_Previews: PreviewProvider {
     static var previews: some View {
-        ItemCreateView()
+        ItemEditView()
     }
 }

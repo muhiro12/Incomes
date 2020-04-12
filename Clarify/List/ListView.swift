@@ -1,5 +1,5 @@
 //
-//  HomeListView.swift
+//  ListView.swift
 //  Clarify
 //
 //  Created by Hiromu Nakano on 2020/04/10.
@@ -8,36 +8,36 @@
 
 import SwiftUI
 
-struct HomeListView: View {
+struct ListView: View {
     @Environment(\.managedObjectContext) var context
 
-    let listItems: [HomeListItem]
+    let listItems: [ListItem]
 
     var body: some View {
         List {
             ForEach(listItems) { listItem in
-                HomeListItemView(item: listItem)
+                ListItemView(item: listItem)
             }.onDelete(perform: delete)
         }
     }
 
     private func delete(indexSet: IndexSet) {
         indexSet.forEach {
-            if let item = listItems[$0].item {
+            if let item = listItems[$0].original {
                 context.delete(item)
             }
         }
     }
 }
 
-struct HomeListView_Previews: PreviewProvider {
+struct ListView_Previews: PreviewProvider {
     static var previews: some View {
-        HomeListView(listItems: [
-            HomeListItem(date: Date(),
-                         content: "Content",
-                         income: 999999,
-                         expenditure: 99999,
-                         balance: 9999999)
+        ListView(listItems: [
+            ListItem(date: Date(),
+                     content: "Content",
+                     income: 999999,
+                     expenditure: 99999,
+                     balance: 9999999)
         ])
     }
 }

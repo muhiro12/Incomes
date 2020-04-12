@@ -1,5 +1,5 @@
 //
-//  HomeListItemWideView.swift
+//  ListItemWideView.swift
 //  Clarify
 //
 //  Created by Hiromu Nakano on 2020/04/10.
@@ -8,8 +8,8 @@
 
 import SwiftUI
 
-struct HomeListItemWideView: View {
-    let item: HomeListItem
+struct ListItemWideView: View {
+    let item: ListItem
 
     var body: some View {
         HStack {
@@ -35,12 +35,12 @@ struct HomeListItemWideView: View {
     }
 }
 
-struct HomeListItemWideView_Previews: PreviewProvider {
+struct ListItemWideView_Previews: PreviewProvider {
     static var previews: some View {
-        HomeListItemWideView(item: HomeListItem(date: Date(),
-                                                content: "Content",
-                                                income: 999999,
-                                                expenditure: 99999,
-                                                balance: 9999999))
+        ListItemWideView(item: ListItem(date: Date(),
+                                        content: "Content",
+                                        income: 999999,
+                                        expenditure: 99999,
+                                        balance: 9999999))
     }
 }

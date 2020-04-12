@@ -23,16 +23,16 @@ struct HomeView: View {
             NavigationView {
                 Form {
                     ForEach(
-                        groupByYear(
-                            listItems: createListItems(
+                        createListItemsArray(
+                            from: createListItems(
                                 from: items.map { $0 }
-                            ).reversed()
+                            ).value.reversed()
                         )
-                    ) { listItemsPerYear in
+                    ) { listItems in
                         NavigationLink(destination:
-                            HomeListView(listItems: listItemsPerYear.listItems)
-                                .navigationBarTitle(listItemsPerYear.year)) {
-                                    Text(listItemsPerYear.year)
+                            ListView(listItems: listItems.value)
+                                .navigationBarTitle(listItems.key ?? "")) {
+                                    Text(listItems.key ?? "")
                         }
                     }
                 }.navigationBarTitle("Clarify")
@@ -41,49 +41,49 @@ struct HomeView: View {
                 self.isPresented = true
             }
         }.sheet(isPresented: self.$isPresented) {
-            ItemCreateView()
+            ItemEditView()
                 .environment(\.managedObjectContext, self.context)
         }
     }
 
-    private func groupByYear(listItems: [HomeListItem]) -> [HomeListItemsPerYear] {
-        var listItemsPerYears: [HomeListItemsPerYear] = []
-
-        let dictionary = Dictionary(grouping: listItems) { listItem -> String in
-            return listItem.date.yyyyMM
-        }.sorted {
-            $0.key > $1.key
-        }
-        dictionary.forEach {
-            let items = HomeListItemsPerYear(year: $0.key, listItems: $0.value)
-            listItemsPerYears.append(items)
-        }
-        return listItemsPerYears
-    }
-
-    private func createListItems(from items: [Item]) -> [HomeListItem] {
-        var listItems: [HomeListItem] = []
+    private func createListItems(from items: [Item]) -> ListItems {
+        var listItemArray: [ListItem] = []
         for index in 0..<items.count {
             let item = items[index]
 
             var balance = 0
-            if listItems.count > 0 {
-                balance += listItems[index - 1].balance
+            if listItemArray.count > 0 {
+                balance += listItemArray[index - 1].balance
             }
             balance += Int(item.income + item.expenditure)
 
             if let date = item.date,
                 let content = item.content {
-                let listItem = HomeListItem(item: item,
-                                            date: date,
-                                            content: content,
-                                            income: Int(item.income),
-                                            expenditure: Int(item.expenditure),
-                                            balance: balance)
-                listItems.append(listItem)
+                let listItem = ListItem(original: item,
+                                        date: date,
+                                        content: content,
+                                        income: Int(item.income),
+                                        expenditure: Int(item.expenditure),
+                                        balance: balance)
+                listItemArray.append(listItem)
             }
         }
-        return listItems
+        return ListItems(value: listItemArray)
+    }
+
+    private func createListItemsArray(from listItemArray: [ListItem]) -> [ListItems] {
+        var listItemsArray: [ListItems] = []
+
+        let groupedDictionary = Dictionary(grouping: listItemArray) { listItem -> String in
+            return listItem.date.yyyyMM
+        }.sorted {
+            $0.key > $1.key
+        }
+        groupedDictionary.forEach {
+            let items = ListItems(key: $0.key, value: $0.value)
+            listItemsArray.append(items)
+        }
+        return listItemsArray
     }
 }
 

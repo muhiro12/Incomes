@@ -9,7 +9,7 @@
 import Foundation
 
 extension String {
-    var isValidAsInt32: Bool {
+    var isEmptyOrInt32: Bool {
         if isEmpty {
             return true
         }

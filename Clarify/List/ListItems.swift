@@ -1,5 +1,5 @@
 //
-//  HomeListItemsPerYear.swift
+//  ListItems.swift
 //  Clarify
 //
 //  Created by Hiromu Nakano on 2020/04/10.
@@ -8,8 +8,8 @@
 
 import Foundation
 
-struct HomeListItemsPerYear: Identifiable {
+struct ListItems: Identifiable {
     let id = UUID()
-    let year: String
-    let listItems: [HomeListItem]
+    var key: String?
+    let value: [ListItem]
 }

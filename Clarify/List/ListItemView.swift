@@ -1,5 +1,5 @@
 //
-//  HomeListItemView.swift
+//  ListItemView.swift
 //  Clarify
 //
 //  Created by Hiromu Nakano on 2020/04/11.
@@ -8,22 +8,22 @@
 
 import SwiftUI
 
-struct HomeListItemView: View {
+struct ListItemView: View {
     @Environment(\.managedObjectContext) var context
 
     @State private var isPresented = false
 
-    let item: HomeListItem
+    let item: ListItem
 
     var body: some View {
         GeometryReader { geometry in
             if geometry.size.width > 500 {
-                HomeListItemWideView(item: self.item)
+                ListItemWideView(item: self.item)
             } else {
-                HomeListItemNarrowView(item: self.item)
+                ListItemNarrowView(item: self.item)
             }
         }.sheet(isPresented: self.$isPresented) {
-            ItemCreateView(listItem: self.item)
+            ItemEditView(listItem: self.item)
                 .environment(\.managedObjectContext, self.context)
         }.onTapGesture {
             self.isPresented = true
@@ -31,12 +31,12 @@ struct HomeListItemView: View {
     }
 }
 
-struct HomeListItemView_Previews: PreviewProvider {
+struct ListItemView_Previews: PreviewProvider {
     static var previews: some View {
-        HomeListItemView(item: HomeListItem(date: Date(),
-                                            content: "Content",
-                                            income: 999999,
-                                            expenditure: 99999,
-                                            balance: 9999999))
+        ListItemView(item: ListItem(date: Date(),
+                                    content: "Content",
+                                    income: 999999,
+                                    expenditure: 99999,
+                                    balance: 9999999))
     }
 }
