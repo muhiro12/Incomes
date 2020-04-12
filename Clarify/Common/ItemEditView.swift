@@ -17,9 +17,12 @@ struct ItemEditView: View {
     @State private var income = ""
     @State private var expenditure = ""
 
+    private var listItem: ListItem?
+
     init() {}
 
     init(listItem: ListItem) {
+        self.listItem = listItem
         _date = State(initialValue: listItem.date)
         _content = State(initialValue: listItem.content)
         _income = State(initialValue: listItem.income.description)
@@ -55,14 +58,23 @@ struct ItemEditView: View {
                     }
                 }
                 Section {
-                    Button(action: add) {
+                    if isEditMode {
+                        Button(action: save) {
+                            HStack {
+                                Spacer()
+                                Text("Save")
+                                Spacer()
+                            }
+                        }.disabled(!isValid)
+                    }
+                    Button(action: create) {
                         HStack {
                             Spacer()
-                            Text("Create")
+                            Text(isEditMode ? "Duplicate" : "Create")
                             Spacer()
                         }
-                    }.disabled(disabled)
-                    Button(action: dismiss) {
+                    }.disabled(!isValid)
+                    Button(action: cancel) {
                         HStack {
                             Spacer()
                             Text("Cancel")
@@ -71,22 +83,39 @@ struct ItemEditView: View {
                         }
                     }
                 }
+                if isEditMode {
+                    Section(header: Text("Caution")) {
+                        Button(action: delete) {
+                            HStack {
+                                Spacer()
+                                Text("Delete")
+                                    .fontWeight(.bold)
+                                    .foregroundColor(.red)
+                                Spacer()
+                            }
+                        }
+                    }
+                }
             }.navigationBarTitle("Edit")
         }
     }
 
-    private var disabled: Bool {
-        return content.isEmpty
-            || !income.isEmptyOrInt32
-            || !expenditure.isEmptyOrInt32
+    private var isEditMode: Bool {
+        return listItem != nil
     }
 
-    private func add() {
-        let item = Item(context: context)
-        item.date = date
-        item.content = content
-        item.income = Int32(income) ?? 0
-        item.expenditure = -(Int32(expenditure) ?? 0)
+    private var isValid: Bool {
+        return !content.isEmpty
+            && income.isEmptyOrInt32
+            && expenditure.isEmptyOrInt32
+    }
+
+    private func save() {
+        let item = listItem?.original
+        item?.date = date
+        item?.content = content
+        item?.income = Int32(income) ?? 0
+        item?.expenditure = Int32(expenditure) ?? 0
 
         do {
             try context.save()
@@ -94,6 +123,32 @@ struct ItemEditView: View {
         } catch {
             print(error)
         }
+    }
+
+    private func create() {
+        let item = Item(context: context)
+        item.date = date
+        item.content = content
+        item.income = Int32(income) ?? 0
+        item.expenditure = Int32(expenditure) ?? 0
+
+        do {
+            try context.save()
+            dismiss()
+        } catch {
+            print(error)
+        }
+    }
+
+    private func delete() {
+        if let item = listItem?.original {
+            context.delete(item)
+            dismiss()
+        }
+    }
+
+    private func cancel() {
+        dismiss()
     }
 
     private func dismiss() {

@@ -14,4 +14,11 @@ extension Int {
         formatter.numberStyle = .currency
         return formatter.string(from: NSNumber(value: self)) ?? ""
     }
+
+    var asMinusCurrency: String {
+        if self > 0 {
+            return "-" + asCurrency
+        }
+        return asCurrency.replacingOccurrences(of: "-", with: "")
+    }
 }

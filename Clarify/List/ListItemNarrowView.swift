@@ -24,7 +24,7 @@ struct ListItemNarrowView: View {
                     Text(self.item.income.asCurrency)
                         .frame(width: .conponentS)
                     Divider()
-                    Text(self.item.expenditure.asCurrency)
+                    Text(self.item.expenditure.asMinusCurrency)
                         .frame(width: .conponentS)
                     Spacer()
                 }.font(.caption)

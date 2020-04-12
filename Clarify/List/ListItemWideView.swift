@@ -24,7 +24,7 @@ struct ListItemWideView: View {
                 Text(item.income.asCurrency)
                     .frame(width: .conponentM)
                 Divider()
-                Text(item.expenditure.asCurrency)
+                Text(item.expenditure.asMinusCurrency)
                     .frame(width: .conponentM)
             }.foregroundColor(.secondary)
             Divider()

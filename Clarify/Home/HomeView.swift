@@ -55,7 +55,7 @@ struct HomeView: View {
             if listItemArray.count > 0 {
                 balance += listItemArray[index - 1].balance
             }
-            balance += Int(item.income + item.expenditure)
+            balance += Int(item.income - item.expenditure)
 
             if let date = item.date,
                 let content = item.content {
@@ -83,6 +83,7 @@ struct HomeView: View {
             let items = ListItems(key: $0.key, value: $0.value)
             listItemsArray.append(items)
         }
+
         return listItemsArray
     }
 }
