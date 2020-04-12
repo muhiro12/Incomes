@@ -11,24 +11,17 @@ import SwiftUI
 struct HomeView: View {
     @Environment(\.managedObjectContext) var context
 
-    @FetchRequest(
-        entity: Item.entity(),
-        sortDescriptors: [NSSortDescriptor(keyPath: \Item.date, ascending: true)]
-    ) var items: FetchedResults<Item>
-
     @State private var isPresented = false
+
+    var items: ListItems?
+    // TODO: Temp
+    var isHome = true
 
     var body: some View {
         ZStack(alignment: .bottomTrailing) {
             NavigationView {
                 Form {
-                    ForEach(
-                        createListItemsArray(
-                            from: createListItems(
-                                from: items.map { $0 }
-                            ).value.reversed()
-                        )
-                    ) { listItems in
+                    ForEach(createListItemsArray(from: items?.value.reversed())) { listItems in
                         NavigationLink(destination:
                             ListView(listItems: listItems.value)
                                 .navigationBarTitle(listItems.key ?? "")) {
@@ -46,36 +39,20 @@ struct HomeView: View {
         }
     }
 
-    private func createListItems(from items: [Item]) -> ListItems {
-        var listItemArray: [ListItem] = []
-        for index in 0..<items.count {
-            let item = items[index]
-
-            var balance = 0
-            if listItemArray.count > 0 {
-                balance += listItemArray[index - 1].balance
-            }
-            balance += Int(item.income - item.expenditure)
-
-            if let date = item.date,
-                let content = item.content {
-                let listItem = ListItem(original: item,
-                                        date: date,
-                                        content: content,
-                                        income: Int(item.income),
-                                        expenditure: Int(item.expenditure),
-                                        balance: balance)
-                listItemArray.append(listItem)
-            }
+    private func createListItemsArray(from listItemArray: [ListItem]?) -> [ListItems] {
+        guard let listItemArray = listItemArray else {
+            return []
         }
-        return ListItems(value: listItemArray)
-    }
 
-    private func createListItemsArray(from listItemArray: [ListItem]) -> [ListItems] {
         var listItemsArray: [ListItems] = []
 
         let groupedDictionary = Dictionary(grouping: listItemArray) { listItem -> String in
-            return listItem.date.yyyyMM
+            // TODO: Temp
+            if isHome {
+                return listItem.date.yyyyMM
+            } else {
+                return listItem.original?.group?.uuidString ?? ""
+            }
         }.sorted {
             $0.key > $1.key
         }
@@ -90,6 +67,6 @@ struct HomeView: View {
 
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
-        HomeView()
+        HomeView(items: nil)
     }
 }

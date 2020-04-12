@@ -16,6 +16,7 @@ struct ItemEditView: View {
     @State private var content = ""
     @State private var income = ""
     @State private var expenditure = ""
+    @State private var times = 1
 
     private var listItem: ListItem?
 
@@ -55,6 +56,15 @@ struct ItemEditView: View {
                             .keyboardType(.numberPad)
                             .multilineTextAlignment(.trailing)
                             .foregroundColor(expenditure.isEmptyOrInt32 ? .primary : .red)
+                    }
+                    if !isEditMode {
+                        HStack {
+                            Stepper("Repeat", value: $times, in: 1...60)
+                            HStack {
+                                Spacer()
+                                Text(times.description)
+                            }.frame(width: .conponentS)
+                        }
                     }
                 }
                 Section {
@@ -126,11 +136,19 @@ struct ItemEditView: View {
     }
 
     private func create() {
-        let item = Item(context: context)
-        item.date = date
-        item.content = content
-        item.income = Int32(income) ?? 0
-        item.expenditure = Int32(expenditure) ?? 0
+        var uuid: UUID?
+        if times > 1 {
+            uuid = UUID()
+        }
+
+        for index in 0..<times {
+            let item = Item(context: context)
+            item.date = Calendar.current.date(byAdding: .month, value: index, to: date)
+            item.content = content
+            item.income = Int32(income) ?? 0
+            item.expenditure = Int32(expenditure) ?? 0
+            item.group = uuid
+        }
 
         do {
             try context.save()
