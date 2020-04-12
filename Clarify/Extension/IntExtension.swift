@@ -16,9 +16,6 @@ extension Int {
     }
 
     var asMinusCurrency: String {
-        if self > 0 {
-            return "-" + asCurrency
-        }
-        return asCurrency.replacingOccurrences(of: "-", with: "")
+        return (-self).asCurrency
     }
 }
