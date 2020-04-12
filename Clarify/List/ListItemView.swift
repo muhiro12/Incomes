@@ -13,17 +13,21 @@ struct ListItemView: View {
 
     @State private var isPresented = false
 
-    let item: ListItem
+    private let item: ListItem
+
+    init(of item: ListItem) {
+        self.item = item
+    }
 
     var body: some View {
         GeometryReader { geometry in
             if geometry.size.width > 500 {
-                ListItemWideView(item: self.item)
+                ListItemWideView(of: self.item)
             } else {
-                ListItemNarrowView(item: self.item)
+                ListItemNarrowView(of: self.item)
             }
         }.sheet(isPresented: self.$isPresented) {
-            ItemEditView(listItem: self.item)
+            ItemEditView(of: self.item)
                 .environment(\.managedObjectContext, self.context)
         }.onTapGesture {
             self.isPresented = true
@@ -33,10 +37,12 @@ struct ListItemView: View {
 
 struct ListItemView_Previews: PreviewProvider {
     static var previews: some View {
-        ListItemView(item: ListItem(date: Date(),
-                                    content: "Content",
-                                    income: 999999,
-                                    expenditure: 99999,
-                                    balance: 9999999))
+        ListItemView(of:
+            ListItem(date: Date(),
+                     content: "Content",
+                     income: 999999,
+                     expenditure: 99999,
+                     balance: 9999999)
+        )
     }
 }

@@ -18,14 +18,14 @@ struct ContentView: View {
         TabsManageView(items: listItems)
     }
 
-    private var listItems: ListItems? {
-        var listItemArray: [ListItem] = []
+    private var listItems: ListItems {
+        var listItems = ListItems(value: [])
         for index in 0..<items.count {
             let item = items[index]
 
             var balance = 0
-            if listItemArray.count > 0 {
-                balance += listItemArray[index - 1].balance
+            if listItems.value.count > 0 {
+                balance += listItems.value[index - 1].balance
             }
             balance += Int(item.income - item.expenditure)
 
@@ -37,10 +37,10 @@ struct ContentView: View {
                                         income: Int(item.income),
                                         expenditure: Int(item.expenditure),
                                         balance: balance)
-                listItemArray.append(listItem)
+                listItems.value.append(listItem)
             }
         }
-        return ListItems(value: listItemArray)
+        return listItems
     }
 }
 

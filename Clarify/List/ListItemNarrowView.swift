@@ -9,7 +9,11 @@
 import SwiftUI
 
 struct ListItemNarrowView: View {
-    let item: ListItem
+    private let item: ListItem
+
+    init(of item: ListItem) {
+        self.item = item
+    }
 
     var body: some View {
         HStack {
@@ -41,10 +45,12 @@ struct ListItemNarrowView: View {
 
 struct ListItemNarrowView_Previews: PreviewProvider {
     static var previews: some View {
-        ListItemNarrowView(item: ListItem(date: Date(),
-                                          content: "Content",
-                                          income: 999999,
-                                          expenditure: 99999,
-                                          balance: 9999999))
+        ListItemNarrowView(of:
+            ListItem(date: Date(),
+                     content: "Content",
+                     income: 999999,
+                     expenditure: 99999,
+                     balance: 9999999)
+        )
     }
 }

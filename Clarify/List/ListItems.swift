@@ -11,5 +11,5 @@ import Foundation
 struct ListItems: Identifiable {
     let id = UUID()
     var key: String?
-    let value: [ListItem]
+    var value: [ListItem]
 }

@@ -9,7 +9,11 @@
 import SwiftUI
 
 struct ListItemWideView: View {
-    let item: ListItem
+    private let item: ListItem
+
+    init(of item: ListItem) {
+        self.item = item
+    }
 
     var body: some View {
         HStack {
@@ -37,10 +41,12 @@ struct ListItemWideView: View {
 
 struct ListItemWideView_Previews: PreviewProvider {
     static var previews: some View {
-        ListItemWideView(item: ListItem(date: Date(),
-                                        content: "Content",
-                                        income: 999999,
-                                        expenditure: 99999,
-                                        balance: 9999999))
+        ListItemWideView(of:
+            ListItem(date: Date(),
+                     content: "Content",
+                     income: 999999,
+                     expenditure: 99999,
+                     balance: 9999999)
+        )
     }
 }

@@ -13,7 +13,7 @@ struct HomeView: View {
 
     @State private var isPresented = false
 
-    var items: ListItems?
+    let items: ListItems
     // TODO: Temp
     var isHome = true
 
@@ -21,11 +21,11 @@ struct HomeView: View {
         ZStack(alignment: .bottomTrailing) {
             NavigationView {
                 Form {
-                    ForEach(createListItemsArray(from: items?.value.reversed())) { listItems in
+                    ForEach(createListItemsArray(from: items)) { items in
                         NavigationLink(destination:
-                            ListView(listItems: listItems.value)
-                                .navigationBarTitle(listItems.key ?? "")) {
-                                    Text(listItems.key ?? "")
+                            ListView(of: items)
+                                .navigationBarTitle(items.key ?? "")) {
+                                    Text(items.key ?? "")
                         }
                     }
                 }.navigationBarTitle("Clarify")
@@ -39,26 +39,27 @@ struct HomeView: View {
         }
     }
 
-    private func createListItemsArray(from listItemArray: [ListItem]?) -> [ListItems] {
-        guard let listItemArray = listItemArray else {
+    private func createListItemsArray(from items: ListItems?) -> [ListItems] {
+        guard let items = items else {
             return []
         }
 
         var listItemsArray: [ListItems] = []
 
-        let groupedDictionary = Dictionary(grouping: listItemArray) { listItem -> String in
+        let groupedDictionary = Dictionary(grouping: items.value) { item -> String in
             // TODO: Temp
             if isHome {
-                return listItem.date.yyyyMM
+                return item.date.yyyyMM
             } else {
-                return listItem.original?.group?.uuidString ?? ""
+                return item.original?.group?.uuidString ?? ""
             }
         }.sorted {
             $0.key > $1.key
         }
         groupedDictionary.forEach {
-            let items = ListItems(key: $0.key, value: $0.value)
-            listItemsArray.append(items)
+            listItemsArray.append(
+                ListItems(key: $0.key, value: $0.value)
+            )
         }
 
         return listItemsArray
@@ -67,6 +68,14 @@ struct HomeView: View {
 
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
-        HomeView(items: nil)
+        HomeView(items:
+            ListItems(value: [
+                ListItem(date: Date(),
+                         content: "Content",
+                         income: 999999,
+                         expenditure: 99999,
+                         balance: 9999999)]
+            )
+        )
     }
 }

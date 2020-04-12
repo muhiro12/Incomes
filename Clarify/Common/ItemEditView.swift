@@ -18,16 +18,16 @@ struct ItemEditView: View {
     @State private var expenditure = ""
     @State private var times = 1
 
-    private var listItem: ListItem?
+    private var item: ListItem?
 
     init() {}
 
-    init(listItem: ListItem) {
-        self.listItem = listItem
-        _date = State(initialValue: listItem.date)
-        _content = State(initialValue: listItem.content)
-        _income = State(initialValue: listItem.income.description)
-        _expenditure = State(initialValue: listItem.expenditure.description)
+    init(of item: ListItem) {
+        self.item = item
+        _date = State(initialValue: item.date)
+        _content = State(initialValue: item.content)
+        _income = State(initialValue: item.income.description)
+        _expenditure = State(initialValue: item.expenditure.description)
     }
 
     var body: some View {
@@ -111,7 +111,7 @@ struct ItemEditView: View {
     }
 
     private var isEditMode: Bool {
-        return listItem != nil
+        return item != nil
     }
 
     private var isValid: Bool {
@@ -121,11 +121,14 @@ struct ItemEditView: View {
     }
 
     private func save() {
-        let item = listItem?.original
-        item?.date = date
-        item?.content = content
-        item?.income = Int32(income) ?? 0
-        item?.expenditure = Int32(expenditure) ?? 0
+        guard let item = item?.original else {
+            return
+        }
+
+        item.date = date
+        item.content = content
+        item.income = Int32(income) ?? 0
+        item.expenditure = Int32(expenditure) ?? 0
 
         do {
             try context.save()
@@ -159,7 +162,7 @@ struct ItemEditView: View {
     }
 
     private func delete() {
-        if let item = listItem?.original {
+        if let item = item?.original {
             context.delete(item)
             dismiss()
         }
