@@ -120,17 +120,44 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		AD553BB62442B9A000512C7C /* List */ = {
+		AD553BC02444163500512C7C /* UseCase */ = {
 			isa = PBXGroup;
 			children = (
+			);
+			path = UseCase;
+			sourceTree = "<group>";
+		};
+		AD553BC12444164000512C7C /* Entity */ = {
+			isa = PBXGroup;
+			children = (
+				AD781C30244048940081BF8D /* ListItem.swift */,
+				AD781C32244057D10081BF8D /* ListItems.swift */,
+				AD781C24244012A50081BF8D /* Item.swift */,
+			);
+			path = Entity;
+			sourceTree = "<group>";
+		};
+		AD553BC22444164A00512C7C /* View */ = {
+			isa = PBXGroup;
+			children = (
+				AD553BBA24431D0900512C7C /* TabsManageView.swift */,
+				AD781C2A2440134E0081BF8D /* ItemEditView.swift */,
+				AD781C222440127A0081BF8D /* FloatingCircleButtonView.swift */,
+				AD781C26244012EF0081BF8D /* HomeView.swift */,
 				AD781C282440131B0081BF8D /* ListView.swift */,
 				AD6E423924417AEB00A44408 /* ListItemView.swift */,
 				AD781C2C2440163D0081BF8D /* ListItemWideView.swift */,
 				AD6E422F2440BA1000A44408 /* ListItemNarrowView.swift */,
-				AD781C30244048940081BF8D /* ListItem.swift */,
-				AD781C32244057D10081BF8D /* ListItems.swift */,
 			);
-			path = List;
+			path = View;
+			sourceTree = "<group>";
+		};
+		AD553BC32444166300512C7C /* Adapter */ = {
+			isa = PBXGroup;
+			children = (
+				AD553BBE2444096900512C7C /* DataStore.swift */,
+			);
+			path = Adapter;
 			sourceTree = "<group>";
 		};
 		AD6302F0243DFFF600C19672 /* Frameworks */ = {
@@ -162,26 +189,6 @@
 			path = Extension;
 			sourceTree = "<group>";
 		};
-		AD781C20244012430081BF8D /* Common */ = {
-			isa = PBXGroup;
-			children = (
-				AD553BBA24431D0900512C7C /* TabsManageView.swift */,
-				AD781C2A2440134E0081BF8D /* ItemEditView.swift */,
-				AD553BBE2444096900512C7C /* DataStore.swift */,
-				AD781C222440127A0081BF8D /* FloatingCircleButtonView.swift */,
-				AD781C24244012A50081BF8D /* Item.swift */,
-			);
-			path = Common;
-			sourceTree = "<group>";
-		};
-		AD781C21244012520081BF8D /* Home */ = {
-			isa = PBXGroup;
-			children = (
-				AD781C26244012EF0081BF8D /* HomeView.swift */,
-			);
-			path = Home;
-			sourceTree = "<group>";
-		};
 		ADEF79AD243DC181005E29B1 = {
 			isa = PBXGroup;
 			children = (
@@ -210,9 +217,10 @@
 				ADEF79B9243DC182005E29B1 /* AppDelegate.swift */,
 				ADEF79BB243DC182005E29B1 /* SceneDelegate.swift */,
 				ADEF79C0243DC182005E29B1 /* ContentView.swift */,
-				AD781C20244012430081BF8D /* Common */,
-				AD553BB62442B9A000512C7C /* List */,
-				AD781C21244012520081BF8D /* Home */,
+				AD553BC22444164A00512C7C /* View */,
+				AD553BC32444166300512C7C /* Adapter */,
+				AD553BC02444163500512C7C /* UseCase */,
+				AD553BC12444164000512C7C /* Entity */,
 				AD6E423324415D9300A44408 /* Extension */,
 				ADEF79C2243DC184005E29B1 /* Assets.xcassets */,
 				ADEF79C7243DC184005E29B1 /* LaunchScreen.storyboard */,
