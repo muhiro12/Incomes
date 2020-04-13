@@ -9,6 +9,15 @@
 /* Begin PBXBuildFile section */
 		AD553BBB24431D0900512C7C /* TabRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD553BBA24431D0900512C7C /* TabRootView.swift */; };
 		AD553BBF2444096900512C7C /* DataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD553BBE2444096900512C7C /* DataStore.swift */; };
+		AD553BCA2444729600512C7C /* TabRootViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD553BC92444729600512C7C /* TabRootViewTests.swift */; };
+		AD553BCC244472C700512C7C /* ContentViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD553BCB244472C700512C7C /* ContentViewTests.swift */; };
+		AD553BCE2444730400512C7C /* NavigationRootViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD553BCD2444730400512C7C /* NavigationRootViewTests.swift */; };
+		AD553BD02444735C00512C7C /* FloatingCircleButtonViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD553BCF2444735C00512C7C /* FloatingCircleButtonViewTests.swift */; };
+		AD553BD22444738F00512C7C /* ItemEditViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD553BD12444738F00512C7C /* ItemEditViewTests.swift */; };
+		AD553BD4244473C500512C7C /* ListViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD553BD3244473C500512C7C /* ListViewTests.swift */; };
+		AD553BD62444740400512C7C /* ListItemViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD553BD52444740400512C7C /* ListItemViewTests.swift */; };
+		AD553BD82444743400512C7C /* ListItemWideViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD553BD72444743400512C7C /* ListItemWideViewTests.swift */; };
+		AD553BDA2444746300512C7C /* ListItemNarrowViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD553BD92444746300512C7C /* ListItemNarrowViewTests.swift */; };
 		AD6302F2243DFFF600C19672 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD6302F1243DFFF600C19672 /* CloudKit.framework */; };
 		AD6E42302440BA1000A44408 /* ListItemNarrowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6E422F2440BA1000A44408 /* ListItemNarrowView.swift */; };
 		AD6E423524415DBE00A44408 /* CGFloatExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6E423424415DBE00A44408 /* CGFloatExtension.swift */; };
@@ -58,6 +67,15 @@
 /* Begin PBXFileReference section */
 		AD553BBA24431D0900512C7C /* TabRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabRootView.swift; sourceTree = "<group>"; };
 		AD553BBE2444096900512C7C /* DataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStore.swift; sourceTree = "<group>"; };
+		AD553BC92444729600512C7C /* TabRootViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabRootViewTests.swift; sourceTree = "<group>"; };
+		AD553BCB244472C700512C7C /* ContentViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewTests.swift; sourceTree = "<group>"; };
+		AD553BCD2444730400512C7C /* NavigationRootViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationRootViewTests.swift; sourceTree = "<group>"; };
+		AD553BCF2444735C00512C7C /* FloatingCircleButtonViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingCircleButtonViewTests.swift; sourceTree = "<group>"; };
+		AD553BD12444738F00512C7C /* ItemEditViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemEditViewTests.swift; sourceTree = "<group>"; };
+		AD553BD3244473C500512C7C /* ListViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewTests.swift; sourceTree = "<group>"; };
+		AD553BD52444740400512C7C /* ListItemViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListItemViewTests.swift; sourceTree = "<group>"; };
+		AD553BD72444743400512C7C /* ListItemWideViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListItemWideViewTests.swift; sourceTree = "<group>"; };
+		AD553BD92444746300512C7C /* ListItemNarrowViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListItemNarrowViewTests.swift; sourceTree = "<group>"; };
 		AD6302EF243DFFE200C19672 /* Clarify.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Clarify.entitlements; sourceTree = "<group>"; };
 		AD6302F1243DFFF600C19672 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		AD6E422F2440BA1000A44408 /* ListItemNarrowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListItemNarrowView.swift; sourceTree = "<group>"; };
@@ -160,6 +178,21 @@
 			path = Adapter;
 			sourceTree = "<group>";
 		};
+		AD553BC82444727F00512C7C /* View */ = {
+			isa = PBXGroup;
+			children = (
+				AD553BC92444729600512C7C /* TabRootViewTests.swift */,
+				AD553BCD2444730400512C7C /* NavigationRootViewTests.swift */,
+				AD553BCF2444735C00512C7C /* FloatingCircleButtonViewTests.swift */,
+				AD553BD12444738F00512C7C /* ItemEditViewTests.swift */,
+				AD553BD3244473C500512C7C /* ListViewTests.swift */,
+				AD553BD52444740400512C7C /* ListItemViewTests.swift */,
+				AD553BD72444743400512C7C /* ListItemWideViewTests.swift */,
+				AD553BD92444746300512C7C /* ListItemNarrowViewTests.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		AD6302F0243DFFF600C19672 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -243,6 +276,8 @@
 			isa = PBXGroup;
 			children = (
 				ADEF79D3243DC184005E29B1 /* ClarifyTests.swift */,
+				AD553BCB244472C700512C7C /* ContentViewTests.swift */,
+				AD553BC82444727F00512C7C /* View */,
 				AD6E42472441B79100A44408 /* Extension */,
 				ADEF79D5243DC184005E29B1 /* Info.plist */,
 			);
@@ -437,9 +472,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AD553BD4244473C500512C7C /* ListViewTests.swift in Sources */,
+				AD553BD82444743400512C7C /* ListItemWideViewTests.swift in Sources */,
 				ADEF79D4243DC184005E29B1 /* ClarifyTests.swift in Sources */,
 				AD6E42512441C47A00A44408 /* IntExtensionTests.swift in Sources */,
+				AD553BDA2444746300512C7C /* ListItemNarrowViewTests.swift in Sources */,
+				AD553BCE2444730400512C7C /* NavigationRootViewTests.swift in Sources */,
+				AD553BCA2444729600512C7C /* TabRootViewTests.swift in Sources */,
+				AD553BCC244472C700512C7C /* ContentViewTests.swift in Sources */,
+				AD553BD02444735C00512C7C /* FloatingCircleButtonViewTests.swift in Sources */,
+				AD553BD62444740400512C7C /* ListItemViewTests.swift in Sources */,
 				AD6E424B2441B89D00A44408 /* DateExtensionTests.swift in Sources */,
+				AD553BD22444738F00512C7C /* ItemEditViewTests.swift in Sources */,
 				AD6E424D2441BD0A00A44408 /* StringExtensionTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
