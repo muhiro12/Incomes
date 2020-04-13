@@ -39,7 +39,8 @@ struct ListView_Previews: PreviewProvider {
     static var previews: some View {
         ListView(of:
             ListItems(value: [
-                ListItem(date: Date(),
+                ListItem(id: UUID(),
+                         date: Date(),
                          content: "Content",
                          income: 999999,
                          expenditure: 99999,

@@ -32,7 +32,8 @@ struct ListItems: Identifiable {
 
             if let date = item.date,
                 let content = item.content {
-                let listItem = ListItem(original: item,
+                let listItem = ListItem(id: UUID(),
+                                        original: item,
                                         date: date,
                                         content: content,
                                         income: Int(item.income),

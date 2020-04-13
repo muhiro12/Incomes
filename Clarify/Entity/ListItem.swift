@@ -9,7 +9,7 @@
 import Foundation
 
 struct ListItem: Identifiable {
-    let id = UUID()
+    let id: UUID
     var original: Item?
 
     let date: Date

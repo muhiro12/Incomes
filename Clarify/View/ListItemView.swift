@@ -38,7 +38,8 @@ struct ListItemView: View {
 struct ListItemView_Previews: PreviewProvider {
     static var previews: some View {
         ListItemView(of:
-            ListItem(date: Date(),
+            ListItem(id: UUID(),
+                     date: Date(),
                      content: "Content",
                      income: 999999,
                      expenditure: 99999,
