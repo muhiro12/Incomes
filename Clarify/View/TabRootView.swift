@@ -1,5 +1,5 @@
 //
-//  TabsManageView.swift
+//  TabRootView.swift
 //  Clarify
 //
 //  Created by Hiromu Nakano on 2020/04/12.
@@ -8,16 +8,16 @@
 
 import SwiftUI
 
-struct TabsManageView: View {
+struct TabRootView: View {
     let items: ListItems
 
     var body: some View {
         TabView {
-            HomeView(title: "Home", items: items)
+            NavigationRootView(title: "Home", items: items) { $0.date.yyyyMM }
                 .tabItem {
                     Image(systemName: "list.dash")
             }
-            HomeView(title: "Group", items: items, isHome: false)
+            NavigationRootView(title: "Group", items: items) { $0.content }
                 .tabItem {
                     Image(systemName: "square.stack.3d.up")
             }
@@ -25,9 +25,9 @@ struct TabsManageView: View {
     }
 }
 
-struct TabsManageView_Previews: PreviewProvider {
+struct TabRootView_Previews: PreviewProvider {
     static var previews: some View {
-        TabsManageView(items:
+        TabRootView(items:
             ListItems(value: [
                 ListItem(date: Date(),
                          content: "Content",

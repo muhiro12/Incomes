@@ -20,6 +20,7 @@ struct ListItems: Identifiable {
 
     init(from items: [Item]) {
         var listItems: [ListItem] = []
+
         for index in 0..<items.count {
             let item = items[index]
 
@@ -41,6 +42,22 @@ struct ListItems: Identifiable {
             }
         }
 
-        self.init(value: listItems)
+        self.init(value: listItems.reversed())
+    }
+
+    func grouped(by keyForValue: (ListItem) -> String) -> [Self] {
+        var listItemsArray: [ListItems] = []
+
+        let groupedDictionary = Dictionary(grouping: value, by: keyForValue)
+            .sorted {
+                $0.key > $1.key
+        }
+        groupedDictionary.forEach {
+            listItemsArray.append(
+                ListItems(key: $0.key, value: $0.value)
+            )
+        }
+
+        return listItemsArray
     }
 }

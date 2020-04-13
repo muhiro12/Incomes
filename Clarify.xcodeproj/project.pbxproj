@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		AD553BBB24431D0900512C7C /* TabsManageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD553BBA24431D0900512C7C /* TabsManageView.swift */; };
+		AD553BBB24431D0900512C7C /* TabRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD553BBA24431D0900512C7C /* TabRootView.swift */; };
 		AD553BBF2444096900512C7C /* DataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD553BBE2444096900512C7C /* DataStore.swift */; };
 		AD6302F2243DFFF600C19672 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD6302F1243DFFF600C19672 /* CloudKit.framework */; };
 		AD6E42302440BA1000A44408 /* ListItemNarrowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6E422F2440BA1000A44408 /* ListItemNarrowView.swift */; };
@@ -21,7 +21,7 @@
 		AD6E42512441C47A00A44408 /* IntExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6E42502441C47A00A44408 /* IntExtensionTests.swift */; };
 		AD781C232440127A0081BF8D /* FloatingCircleButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD781C222440127A0081BF8D /* FloatingCircleButtonView.swift */; };
 		AD781C25244012A50081BF8D /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD781C24244012A50081BF8D /* Item.swift */; };
-		AD781C27244012EF0081BF8D /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD781C26244012EF0081BF8D /* HomeView.swift */; };
+		AD781C27244012EF0081BF8D /* NavigationRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD781C26244012EF0081BF8D /* NavigationRootView.swift */; };
 		AD781C292440131B0081BF8D /* ListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD781C282440131B0081BF8D /* ListView.swift */; };
 		AD781C2B2440134E0081BF8D /* ItemEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD781C2A2440134E0081BF8D /* ItemEditView.swift */; };
 		AD781C2D2440163D0081BF8D /* ListItemWideView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD781C2C2440163D0081BF8D /* ListItemWideView.swift */; };
@@ -56,7 +56,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		AD553BBA24431D0900512C7C /* TabsManageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabsManageView.swift; sourceTree = "<group>"; };
+		AD553BBA24431D0900512C7C /* TabRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabRootView.swift; sourceTree = "<group>"; };
 		AD553BBE2444096900512C7C /* DataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStore.swift; sourceTree = "<group>"; };
 		AD6302EF243DFFE200C19672 /* Clarify.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Clarify.entitlements; sourceTree = "<group>"; };
 		AD6302F1243DFFF600C19672 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
@@ -71,7 +71,7 @@
 		AD6E42502441C47A00A44408 /* IntExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntExtensionTests.swift; sourceTree = "<group>"; };
 		AD781C222440127A0081BF8D /* FloatingCircleButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingCircleButtonView.swift; sourceTree = "<group>"; };
 		AD781C24244012A50081BF8D /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
-		AD781C26244012EF0081BF8D /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		AD781C26244012EF0081BF8D /* NavigationRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationRootView.swift; sourceTree = "<group>"; };
 		AD781C282440131B0081BF8D /* ListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListView.swift; sourceTree = "<group>"; };
 		AD781C2A2440134E0081BF8D /* ItemEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemEditView.swift; sourceTree = "<group>"; };
 		AD781C2C2440163D0081BF8D /* ListItemWideView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListItemWideView.swift; sourceTree = "<group>"; };
@@ -140,10 +140,10 @@
 		AD553BC22444164A00512C7C /* View */ = {
 			isa = PBXGroup;
 			children = (
-				AD553BBA24431D0900512C7C /* TabsManageView.swift */,
-				AD781C2A2440134E0081BF8D /* ItemEditView.swift */,
+				AD553BBA24431D0900512C7C /* TabRootView.swift */,
+				AD781C26244012EF0081BF8D /* NavigationRootView.swift */,
 				AD781C222440127A0081BF8D /* FloatingCircleButtonView.swift */,
-				AD781C26244012EF0081BF8D /* HomeView.swift */,
+				AD781C2A2440134E0081BF8D /* ItemEditView.swift */,
 				AD781C282440131B0081BF8D /* ListView.swift */,
 				AD6E423924417AEB00A44408 /* ListItemView.swift */,
 				AD781C2C2440163D0081BF8D /* ListItemWideView.swift */,
@@ -420,13 +420,13 @@
 				AD781C33244057D10081BF8D /* ListItems.swift in Sources */,
 				AD781C31244048940081BF8D /* ListItem.swift in Sources */,
 				AD6E42462441ACC000A44408 /* IntExtension.swift in Sources */,
-				AD553BBB24431D0900512C7C /* TabsManageView.swift in Sources */,
+				AD553BBB24431D0900512C7C /* TabRootView.swift in Sources */,
 				AD781C2B2440134E0081BF8D /* ItemEditView.swift in Sources */,
 				ADEF79C1243DC182005E29B1 /* ContentView.swift in Sources */,
 				AD553BBF2444096900512C7C /* DataStore.swift in Sources */,
 				AD6E42402441A9C500A44408 /* DateExtension.swift in Sources */,
 				AD781C25244012A50081BF8D /* Item.swift in Sources */,
-				AD781C27244012EF0081BF8D /* HomeView.swift in Sources */,
+				AD781C27244012EF0081BF8D /* NavigationRootView.swift in Sources */,
 				AD6E42442441AB9A00A44408 /* StringExtension.swift in Sources */,
 				AD6E423524415DBE00A44408 /* CGFloatExtension.swift in Sources */,
 				ADEF79BF243DC182005E29B1 /* Clarify.xcdatamodeld in Sources */,

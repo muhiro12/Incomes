@@ -15,7 +15,7 @@ struct ContentView: View {
     ) var items: FetchedResults<Item>
 
     var body: some View {
-        TabsManageView(items: ListItems(from: items.map { $0 }))
+        TabRootView(items: ListItems(from: items.map { $0 }))
     }
 }
 
