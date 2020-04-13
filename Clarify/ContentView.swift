@@ -15,33 +15,7 @@ struct ContentView: View {
     ) var items: FetchedResults<Item>
 
     var body: some View {
-        TabsManageView(items: listItems)
-    }
-
-    private var listItems: ListItems {
-        var listItems = ListItems(value: [])
-        for index in 0..<items.count {
-            let item = items[index]
-
-            var balance = 0
-            if listItems.value.count > 0 {
-                balance += listItems.value[index - 1].balance
-            }
-            balance += Int(item.income - item.expenditure)
-
-            if let date = item.date,
-                let content = item.content {
-                let listItem = ListItem(original: item,
-                                        date: date,
-                                        content: content,
-                                        income: Int(item.income),
-                                        expenditure: Int(item.expenditure),
-                                        balance: balance)
-                listItems.value.append(listItem)
-            }
-        }
-        listItems.value.reverse()
-        return listItems
+        TabsManageView(items: ListItems(from: items.map { $0 }))
     }
 }
 

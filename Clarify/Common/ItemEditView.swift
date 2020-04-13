@@ -121,51 +121,40 @@ struct ItemEditView: View {
     }
 
     private func save() {
-        guard let item = item?.original else {
-            return
+        guard let item = item?.original,
+            let income = Int(income),
+            let expenditure = Int(expenditure) else {
+                return
         }
-
-        item.date = date
-        item.content = content
-        item.income = Int32(income) ?? 0
-        item.expenditure = Int32(expenditure) ?? 0
-
-        do {
-            try context.save()
-            dismiss()
-        } catch {
-            print(error)
-        }
+        let dataStore = DataStore(context: context)
+        dataStore.save(item,
+                       date: date,
+                       content: content,
+                       income: income,
+                       expenditure: expenditure,
+                       completion: dismiss)
     }
 
     private func create() {
-        var uuid: UUID?
-        if times > 1 {
-            uuid = UUID()
+        guard let income = Int(income),
+            let expenditure = Int(expenditure) else {
+                return
         }
-
-        for index in 0..<times {
-            let item = Item(context: context)
-            item.date = Calendar.current.date(byAdding: .month, value: index, to: date)
-            item.content = content
-            item.income = Int32(income) ?? 0
-            item.expenditure = Int32(expenditure) ?? 0
-            item.group = uuid
-        }
-
-        do {
-            try context.save()
-            dismiss()
-        } catch {
-            print(error)
-        }
+        let dataStore = DataStore(context: context)
+        dataStore.create(date: date,
+                         content: content,
+                         income: income,
+                         expenditure: expenditure,
+                         times: times,
+                         completion: dismiss)
     }
 
     private func delete() {
-        if let item = item?.original {
-            context.delete(item)
-            dismiss()
+        guard let item = item?.original else {
+            return
         }
+        let dataStore = DataStore(context: context)
+        dataStore.delete(item)
     }
 
     private func cancel() {

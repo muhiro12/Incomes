@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		AD553BBB24431D0900512C7C /* TabsManageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD553BBA24431D0900512C7C /* TabsManageView.swift */; };
+		AD553BBF2444096900512C7C /* DataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD553BBE2444096900512C7C /* DataStore.swift */; };
 		AD6302F2243DFFF600C19672 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD6302F1243DFFF600C19672 /* CloudKit.framework */; };
 		AD6E42302440BA1000A44408 /* ListItemNarrowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6E422F2440BA1000A44408 /* ListItemNarrowView.swift */; };
 		AD6E423524415DBE00A44408 /* CGFloatExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6E423424415DBE00A44408 /* CGFloatExtension.swift */; };
@@ -56,6 +57,7 @@
 
 /* Begin PBXFileReference section */
 		AD553BBA24431D0900512C7C /* TabsManageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabsManageView.swift; sourceTree = "<group>"; };
+		AD553BBE2444096900512C7C /* DataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStore.swift; sourceTree = "<group>"; };
 		AD6302EF243DFFE200C19672 /* Clarify.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Clarify.entitlements; sourceTree = "<group>"; };
 		AD6302F1243DFFF600C19672 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		AD6E422F2440BA1000A44408 /* ListItemNarrowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListItemNarrowView.swift; sourceTree = "<group>"; };
@@ -165,6 +167,7 @@
 			children = (
 				AD553BBA24431D0900512C7C /* TabsManageView.swift */,
 				AD781C2A2440134E0081BF8D /* ItemEditView.swift */,
+				AD553BBE2444096900512C7C /* DataStore.swift */,
 				AD781C222440127A0081BF8D /* FloatingCircleButtonView.swift */,
 				AD781C24244012A50081BF8D /* Item.swift */,
 			);
@@ -412,6 +415,7 @@
 				AD553BBB24431D0900512C7C /* TabsManageView.swift in Sources */,
 				AD781C2B2440134E0081BF8D /* ItemEditView.swift in Sources */,
 				ADEF79C1243DC182005E29B1 /* ContentView.swift in Sources */,
+				AD553BBF2444096900512C7C /* DataStore.swift in Sources */,
 				AD6E42402441A9C500A44408 /* DateExtension.swift in Sources */,
 				AD781C25244012A50081BF8D /* Item.swift in Sources */,
 				AD781C27244012EF0081BF8D /* HomeView.swift in Sources */,

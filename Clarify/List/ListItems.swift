@@ -10,6 +10,37 @@ import Foundation
 
 struct ListItems: Identifiable {
     let id = UUID()
-    var key: String?
-    var value: [ListItem]
+    let key: String?
+    let value: [ListItem]
+
+    init(key: String? = nil, value: [ListItem]) {
+        self.key = key
+        self.value = value
+    }
+
+    init(from items: [Item]) {
+        var listItems: [ListItem] = []
+        for index in 0..<items.count {
+            let item = items[index]
+
+            var balance = 0
+            if listItems.count > 0 {
+                balance += listItems[index - 1].balance
+            }
+            balance += Int(item.income - item.expenditure)
+
+            if let date = item.date,
+                let content = item.content {
+                let listItem = ListItem(original: item,
+                                        date: date,
+                                        content: content,
+                                        income: Int(item.income),
+                                        expenditure: Int(item.expenditure),
+                                        balance: balance)
+                listItems.append(listItem)
+            }
+        }
+
+        self.init(value: listItems)
+    }
 }
