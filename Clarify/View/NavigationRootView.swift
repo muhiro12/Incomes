@@ -21,15 +21,7 @@ struct NavigationRootView: View {
             NavigationView {
                 Form {
                     ForEach(sections) { section in
-                        if section.key.isEmpty {
-                            Section {
-                                self.setUpListViews(with: section)
-                            }
-                        } else {
-                            Section(header: Text(section.key)) {
-                                self.setUpListViews(with: section)
-                            }
-                        }
+                        SectionView(section: section)
                     }
                 }.navigationBarTitle(title)
             }
@@ -39,16 +31,6 @@ struct NavigationRootView: View {
         }.sheet(isPresented: $isPresentingItemEditView) {
             ItemEditView()
                 .environment(\.managedObjectContext, self.context)
-        }
-    }
-
-    private func setUpListViews(with section: SectionItems) -> some View {
-        ForEach(section.value) { items in
-            NavigationLink(destination:
-                ListView(of: items)
-                    .navigationBarTitle(items.key)) {
-                        Text(items.key)
-            }
         }
     }
 }
