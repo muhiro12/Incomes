@@ -9,13 +9,13 @@
 import Foundation
 
 extension Int {
-    var asCurrency: String {
+    var asCurrency: String? {
         let formatter = NumberFormatter()
         formatter.numberStyle = .currency
-        return formatter.string(from: NSNumber(value: self)) ?? ""
+        return formatter.string(from: NSNumber(value: self))
     }
 
-    var asMinusCurrency: String {
+    var asMinusCurrency: String? {
         return (-self).asCurrency
     }
 }

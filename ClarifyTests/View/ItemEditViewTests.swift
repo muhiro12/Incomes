@@ -11,6 +11,10 @@ import XCTest
 
 class ItemEditViewTests: XCTestCase {
     func testPreviews() {
-        XCTAssert(ItemEditView_Previews.previews is ItemEditView)
+        XCTAssertNoThrow(ItemEditView_Previews.previews)
+    }
+
+    func testBody() {
+        XCTAssertNoThrow(ItemEditView_Previews.previews.body)
     }
 }

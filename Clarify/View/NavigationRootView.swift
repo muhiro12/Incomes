@@ -24,8 +24,8 @@ struct NavigationRootView: View {
                     ForEach(items.grouped(by: groupingKeyForValue)) { items in
                         NavigationLink(destination:
                             ListView(of: items)
-                                .navigationBarTitle(items.key ?? "")) {
-                                    Text(items.key ?? "")
+                                .navigationBarTitle(items.key.string)) {
+                                    Text(items.key.string)
                         }
                     }
                 }.navigationBarTitle(title)
@@ -41,6 +41,10 @@ struct NavigationRootView: View {
 }
 
 struct NavigationRootView_Previews: PreviewProvider {
+    static var testData: (ListItem) -> String = {
+        $0.date.yyyyMM
+    }
+
     static var previews: some View {
         NavigationRootView(title: "Home",
                            items: ListItems(value: [
@@ -50,7 +54,8 @@ struct NavigationRootView_Previews: PreviewProvider {
                                      income: 999999,
                                      expenditure: 99999,
                                      balance: 9999999)
-                           ])
-        ) { $0.date.yyyyMM }
+                           ]),
+                           groupingKeyForValue: testData
+        )
     }
 }

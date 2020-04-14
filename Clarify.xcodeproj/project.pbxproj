@@ -18,6 +18,13 @@
 		AD553BD62444740400512C7C /* ListItemViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD553BD52444740400512C7C /* ListItemViewTests.swift */; };
 		AD553BD82444743400512C7C /* ListItemWideViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD553BD72444743400512C7C /* ListItemWideViewTests.swift */; };
 		AD553BDA2444746300512C7C /* ListItemNarrowViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD553BD92444746300512C7C /* ListItemNarrowViewTests.swift */; };
+		AD553BED2445519600512C7C /* CGFloatExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD553BEC2445519600512C7C /* CGFloatExtensionTests.swift */; };
+		AD553BEF244551EF00512C7C /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD553BEE244551EF00512C7C /* HomeView.swift */; };
+		AD553BF1244551FC00512C7C /* GroupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD553BF0244551FC00512C7C /* GroupView.swift */; };
+		AD553BF324455A2F00512C7C /* HomeViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD553BF224455A2F00512C7C /* HomeViewTests.swift */; };
+		AD553BF524455A3F00512C7C /* GroupViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD553BF424455A3F00512C7C /* GroupViewTests.swift */; };
+		AD553BF724455AB500512C7C /* OptionalExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD553BF624455AB500512C7C /* OptionalExtension.swift */; };
+		AD553BF924455AD200512C7C /* OptionalExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD553BF824455AD200512C7C /* OptionalExtensionTests.swift */; };
 		AD6302F2243DFFF600C19672 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD6302F1243DFFF600C19672 /* CloudKit.framework */; };
 		AD6E42302440BA1000A44408 /* ListItemNarrowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6E422F2440BA1000A44408 /* ListItemNarrowView.swift */; };
 		AD6E423524415DBE00A44408 /* CGFloatExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6E423424415DBE00A44408 /* CGFloatExtension.swift */; };
@@ -76,6 +83,13 @@
 		AD553BD52444740400512C7C /* ListItemViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListItemViewTests.swift; sourceTree = "<group>"; };
 		AD553BD72444743400512C7C /* ListItemWideViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListItemWideViewTests.swift; sourceTree = "<group>"; };
 		AD553BD92444746300512C7C /* ListItemNarrowViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListItemNarrowViewTests.swift; sourceTree = "<group>"; };
+		AD553BEC2445519600512C7C /* CGFloatExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGFloatExtensionTests.swift; sourceTree = "<group>"; };
+		AD553BEE244551EF00512C7C /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		AD553BF0244551FC00512C7C /* GroupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupView.swift; sourceTree = "<group>"; };
+		AD553BF224455A2F00512C7C /* HomeViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewTests.swift; sourceTree = "<group>"; };
+		AD553BF424455A3F00512C7C /* GroupViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupViewTests.swift; sourceTree = "<group>"; };
+		AD553BF624455AB500512C7C /* OptionalExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionalExtension.swift; sourceTree = "<group>"; };
+		AD553BF824455AD200512C7C /* OptionalExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionalExtensionTests.swift; sourceTree = "<group>"; };
 		AD6302EF243DFFE200C19672 /* Clarify.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Clarify.entitlements; sourceTree = "<group>"; };
 		AD6302F1243DFFF600C19672 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		AD6E422F2440BA1000A44408 /* ListItemNarrowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListItemNarrowView.swift; sourceTree = "<group>"; };
@@ -159,6 +173,8 @@
 			isa = PBXGroup;
 			children = (
 				AD553BBA24431D0900512C7C /* TabRootView.swift */,
+				AD553BEE244551EF00512C7C /* HomeView.swift */,
+				AD553BF0244551FC00512C7C /* GroupView.swift */,
 				AD781C26244012EF0081BF8D /* NavigationRootView.swift */,
 				AD781C222440127A0081BF8D /* FloatingCircleButtonView.swift */,
 				AD781C2A2440134E0081BF8D /* ItemEditView.swift */,
@@ -182,6 +198,8 @@
 			isa = PBXGroup;
 			children = (
 				AD553BC92444729600512C7C /* TabRootViewTests.swift */,
+				AD553BF224455A2F00512C7C /* HomeViewTests.swift */,
+				AD553BF424455A3F00512C7C /* GroupViewTests.swift */,
 				AD553BCD2444730400512C7C /* NavigationRootViewTests.swift */,
 				AD553BCF2444735C00512C7C /* FloatingCircleButtonViewTests.swift */,
 				AD553BD12444738F00512C7C /* ItemEditViewTests.swift */,
@@ -208,6 +226,7 @@
 				AD6E42452441ACC000A44408 /* IntExtension.swift */,
 				AD6E423F2441A9C500A44408 /* DateExtension.swift */,
 				AD6E423424415DBE00A44408 /* CGFloatExtension.swift */,
+				AD553BF624455AB500512C7C /* OptionalExtension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -218,6 +237,8 @@
 				AD6E424C2441BD0A00A44408 /* StringExtensionTests.swift */,
 				AD6E42502441C47A00A44408 /* IntExtensionTests.swift */,
 				AD6E424A2441B89D00A44408 /* DateExtensionTests.swift */,
+				AD553BEC2445519600512C7C /* CGFloatExtensionTests.swift */,
+				AD553BF824455AD200512C7C /* OptionalExtensionTests.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -455,15 +476,18 @@
 				AD781C33244057D10081BF8D /* ListItems.swift in Sources */,
 				AD781C31244048940081BF8D /* ListItem.swift in Sources */,
 				AD6E42462441ACC000A44408 /* IntExtension.swift in Sources */,
+				AD553BF724455AB500512C7C /* OptionalExtension.swift in Sources */,
 				AD553BBB24431D0900512C7C /* TabRootView.swift in Sources */,
 				AD781C2B2440134E0081BF8D /* ItemEditView.swift in Sources */,
 				ADEF79C1243DC182005E29B1 /* ContentView.swift in Sources */,
 				AD553BBF2444096900512C7C /* DataStore.swift in Sources */,
 				AD6E42402441A9C500A44408 /* DateExtension.swift in Sources */,
+				AD553BEF244551EF00512C7C /* HomeView.swift in Sources */,
 				AD781C25244012A50081BF8D /* Item.swift in Sources */,
 				AD781C27244012EF0081BF8D /* NavigationRootView.swift in Sources */,
 				AD6E42442441AB9A00A44408 /* StringExtension.swift in Sources */,
 				AD6E423524415DBE00A44408 /* CGFloatExtension.swift in Sources */,
+				AD553BF1244551FC00512C7C /* GroupView.swift in Sources */,
 				ADEF79BF243DC182005E29B1 /* Clarify.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -479,12 +503,16 @@
 				AD553BDA2444746300512C7C /* ListItemNarrowViewTests.swift in Sources */,
 				AD553BCE2444730400512C7C /* NavigationRootViewTests.swift in Sources */,
 				AD553BCA2444729600512C7C /* TabRootViewTests.swift in Sources */,
+				AD553BF924455AD200512C7C /* OptionalExtensionTests.swift in Sources */,
 				AD553BCC244472C700512C7C /* ContentViewTests.swift in Sources */,
 				AD553BD02444735C00512C7C /* FloatingCircleButtonViewTests.swift in Sources */,
+				AD553BF324455A2F00512C7C /* HomeViewTests.swift in Sources */,
+				AD553BF524455A3F00512C7C /* GroupViewTests.swift in Sources */,
 				AD553BD62444740400512C7C /* ListItemViewTests.swift in Sources */,
 				AD6E424B2441B89D00A44408 /* DateExtensionTests.swift in Sources */,
 				AD553BD22444738F00512C7C /* ItemEditViewTests.swift in Sources */,
 				AD6E424D2441BD0A00A44408 /* StringExtensionTests.swift in Sources */,
+				AD553BED2445519600512C7C /* CGFloatExtensionTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -1,33 +1,26 @@
 //
-//  TabRootView.swift
+//  GroupView.swift
 //  Clarify
 //
-//  Created by Hiromu Nakano on 2020/04/12.
+//  Created by Hiromu Nakano on 2020/04/14.
 //  Copyright © 2020 Hiromu Nakano. All rights reserved.
 //
 
 import SwiftUI
 
-struct TabRootView: View {
+struct GroupView: View {
     let items: ListItems
 
     var body: some View {
-        TabView {
-            HomeView(items: items)
-                .tabItem {
-                    Image(systemName: "list.dash")
-            }
-            GroupView(items: items)
-                .tabItem {
-                    Image(systemName: "square.stack.3d.up")
-            }
+        NavigationRootView(title: "Group", items: items) {
+            $0.content
         }
     }
 }
 
-struct TabRootView_Previews: PreviewProvider {
+struct GroupView_Previews: PreviewProvider {
     static var previews: some View {
-        TabRootView(items:
+        GroupView(items:
             ListItems(value: [
                 ListItem(id: UUID(),
                          date: Date(),

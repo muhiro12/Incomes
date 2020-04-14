@@ -11,6 +11,10 @@ import XCTest
 
 class ListItemNarrowViewTests: XCTestCase {
     func testPreviews() {
-        XCTAssert(ListItemNarrowView_Previews.previews is ListItemNarrowView)
+        XCTAssertNoThrow(ListItemNarrowView_Previews.previews)
+    }
+
+    func testBody() {
+        XCTAssertNoThrow(ListItemNarrowView_Previews.previews.body)
     }
 }

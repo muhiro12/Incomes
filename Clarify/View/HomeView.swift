@@ -1,33 +1,26 @@
 //
-//  TabRootView.swift
+//  HomeView.swift
 //  Clarify
 //
-//  Created by Hiromu Nakano on 2020/04/12.
+//  Created by Hiromu Nakano on 2020/04/14.
 //  Copyright © 2020 Hiromu Nakano. All rights reserved.
 //
 
 import SwiftUI
 
-struct TabRootView: View {
+struct HomeView: View {
     let items: ListItems
 
     var body: some View {
-        TabView {
-            HomeView(items: items)
-                .tabItem {
-                    Image(systemName: "list.dash")
-            }
-            GroupView(items: items)
-                .tabItem {
-                    Image(systemName: "square.stack.3d.up")
-            }
+        NavigationRootView(title: "Home", items: items) {
+            $0.date.yyyyMM
         }
     }
 }
 
-struct TabRootView_Previews: PreviewProvider {
+struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
-        TabRootView(items:
+        HomeView(items:
             ListItems(value: [
                 ListItem(id: UUID(),
                          date: Date(),

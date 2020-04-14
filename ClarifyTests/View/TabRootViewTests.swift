@@ -11,6 +11,10 @@ import XCTest
 
 class TabRootViewTests: XCTestCase {
     func testPreviews() {
-        XCTAssert(TabRootView_Previews.previews is TabRootView)
+        XCTAssertNoThrow(TabRootView_Previews.previews)
+    }
+
+    func testBody() {
+        XCTAssertNoThrow(TabRootView_Previews.previews.body)
     }
 }

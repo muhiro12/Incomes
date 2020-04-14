@@ -25,10 +25,10 @@ struct ListItemNarrowView: View {
                     .font(.headline)
                 HStack {
                     Spacer()
-                    Text(self.item.income.asCurrency)
+                    Text(self.item.income.asCurrency.string)
                         .frame(width: .conponentS)
                     Divider()
-                    Text(self.item.expenditure.asMinusCurrency)
+                    Text(self.item.expenditure.asMinusCurrency.string)
                         .frame(width: .conponentS)
                     Spacer()
                 }.font(.caption)
@@ -36,7 +36,7 @@ struct ListItemNarrowView: View {
 
             }
             Divider()
-            Text(item.balance.asCurrency)
+            Text(item.balance.asCurrency.string)
                 .frame(width: .conponentL)
                 .foregroundColor(item.balance >= 0 ? .primary : .red)
         }

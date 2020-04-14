@@ -11,6 +11,6 @@ import XCTest
 
 class ContentViewTests: XCTestCase {
     func testPreviews() {
-        XCTAssert(ContentView_Previews.previews is ContentView)
+        XCTAssertNoThrow(ContentView_Previews.previews)
     }
 }

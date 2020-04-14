@@ -10,7 +10,21 @@ import XCTest
 @testable import Clarify
 
 class NavigationRootViewTests: XCTestCase {
+    func testTestData() {
+        let listItem = ListItem(id: UUID(),
+                                date: Date(),
+                                content: "Content",
+                                income: 999999,
+                                expenditure: 99999,
+                                balance: 9999999)
+        XCTAssertNoThrow(NavigationRootView_Previews.testData(listItem))
+    }
+
     func testPreviews() {
-        XCTAssert(NavigationRootView_Previews.previews is NavigationRootView)
+        XCTAssertNoThrow(NavigationRootView_Previews.previews)
+    }
+
+    func testBody() {
+        XCTAssertNoThrow(NavigationRootView_Previews.previews.body)
     }
 }

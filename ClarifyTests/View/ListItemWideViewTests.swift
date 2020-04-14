@@ -11,6 +11,10 @@ import XCTest
 
 class ListItemWideViewTests: XCTestCase {
     func testPreviews() {
-        XCTAssert(ListItemWideView_Previews.previews is ListItemWideView)
+        XCTAssertNoThrow(ListItemWideView_Previews.previews)
+    }
+
+    func testBody() {
+        XCTAssertNoThrow(ListItemWideView_Previews.previews.body)
     }
 }

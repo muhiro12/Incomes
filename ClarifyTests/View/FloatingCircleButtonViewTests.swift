@@ -10,7 +10,15 @@ import XCTest
 @testable import Clarify
 
 class FloatingCircleButtonViewTests: XCTestCase {
+    func testTestData() {
+        XCTAssertNoThrow(FloatingCircleButtonView_Previews.testData())
+    }
+
     func testPreviews() {
-        XCTAssert(FloatingCircleButtonView_Previews.previews is FloatingCircleButtonView)
+        XCTAssertNoThrow(FloatingCircleButtonView_Previews.previews)
+    }
+
+    func testBody() {
+        XCTAssertNoThrow(FloatingCircleButtonView_Previews.previews.body)
     }
 }

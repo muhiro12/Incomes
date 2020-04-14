@@ -31,9 +31,9 @@ struct FloatingCircleButtonView: View {
 }
 
 struct FloatingCircleButtonView_Previews: PreviewProvider {
+    static var testData = { print("debug") }
+
     static var previews: some View {
-        FloatingCircleButtonView {
-            print("debug")
-        }
+        FloatingCircleButtonView(action: testData)
     }
 }
