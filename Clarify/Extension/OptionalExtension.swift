@@ -13,6 +13,8 @@ extension Optional {
         return debugDescription
             .replacingOccurrences(of: "Optional(\"", with: "")
             .replacingOccurrences(of: "\")", with: "")
+            .replacingOccurrences(of: "Optional(", with: "")
+            .replacingOccurrences(of: ")", with: "")
             .replacingOccurrences(of: "nil", with: "")
     }
 }

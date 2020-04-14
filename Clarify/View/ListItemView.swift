@@ -26,7 +26,7 @@ struct ListItemView: View {
             } else {
                 ListItemNarrowView(of: self.item)
             }
-        }.sheet(isPresented: self.$isPresented) {
+        }.sheet(isPresented: $isPresented) {
             ItemEditView(of: self.item)
                 .environment(\.managedObjectContext, self.context)
         }.onTapGesture {

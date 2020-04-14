@@ -27,18 +27,12 @@ struct DataStore {
     }
 
     func create(date: Date, content: String, income: Int, expenditure: Int, times: Int, completion: (() -> Void)? = nil) {
-        var uuid: UUID?
-        if times > 1 {
-            uuid = UUID()
-        }
-
         for index in 0..<times {
             let item = Item(context: context)
             item.date = Calendar.current.date(byAdding: .month, value: index, to: date)
             item.content = content
             item.income = Int32(income)
             item.expenditure = Int32(expenditure)
-            item.group = uuid
         }
 
         do {

@@ -121,30 +121,24 @@ struct ItemEditView: View {
     }
 
     private func save() {
-        guard let item = item?.original,
-            let income = Int(income),
-            let expenditure = Int(expenditure) else {
-                return
+        guard let item = item?.original else {
+            return
         }
         let dataStore = DataStore(context: context)
         dataStore.save(item,
                        date: date,
                        content: content,
-                       income: income,
-                       expenditure: expenditure,
+                       income: Int(income) ?? 0,
+                       expenditure: Int(expenditure) ?? 0,
                        completion: dismiss)
     }
 
     private func create() {
-        guard let income = Int(income),
-            let expenditure = Int(expenditure) else {
-                return
-        }
         let dataStore = DataStore(context: context)
         dataStore.create(date: date,
                          content: content,
-                         income: income,
-                         expenditure: expenditure,
+                         income: Int(income) ?? 0,
+                         expenditure: Int(expenditure) ?? 0,
                          times: times,
                          completion: dismiss)
     }

@@ -17,7 +17,7 @@ struct TabRootView: View {
                 .tabItem {
                     Image(systemName: "list.dash")
             }
-            GroupView(items: items)
+            ContentsView(items: items)
                 .tabItem {
                     Image(systemName: "square.stack.3d.up")
             }
@@ -28,13 +28,14 @@ struct TabRootView: View {
 struct TabRootView_Previews: PreviewProvider {
     static var previews: some View {
         TabRootView(items:
-            ListItems(value: [
-                ListItem(id: UUID(),
-                         date: Date(),
-                         content: "Content",
-                         income: 999999,
-                         expenditure: 99999,
-                         balance: 9999999)
+            ListItems(key: "All",
+                      value: [
+                        ListItem(id: UUID(),
+                                 date: Date(),
+                                 content: "Content",
+                                 income: 999999,
+                                 expenditure: 99999,
+                                 balance: 9999999)
             ])
         )
     }

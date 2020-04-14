@@ -1,5 +1,5 @@
 //
-//  GroupViewTests.swift
+//  ContentsViewTests.swift
 //  ClarifyTests
 //
 //  Created by Hiromu Nakano on 2020/04/14.
@@ -9,12 +9,12 @@
 import XCTest
 @testable import Clarify
 
-class GroupViewTests: XCTestCase {
+class ContentsViewTests: XCTestCase {
     func testPreviews() {
-        XCTAssertNoThrow(GroupView_Previews.previews)
+        XCTAssertNoThrow(ContentsView_Previews.previews)
     }
 
     func testBody() {
-        XCTAssertNoThrow(GroupView_Previews.previews.body)
+        XCTAssertNoThrow(ContentsView_Previews.previews.body)
     }
 }

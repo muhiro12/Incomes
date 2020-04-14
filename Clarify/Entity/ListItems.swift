@@ -10,10 +10,11 @@ import Foundation
 
 struct ListItems: Identifiable {
     let id = UUID()
-    let key: String?
+
+    let key: String
     let value: [ListItem]
 
-    init(key: String? = nil, value: [ListItem]) {
+    init(key: String, value: [ListItem]) {
         self.key = key
         self.value = value
     }
@@ -43,7 +44,7 @@ struct ListItems: Identifiable {
             }
         }
 
-        self.init(value: listItems.reversed())
+        self.init(key: "All", value: listItems.reversed())
     }
 
     func grouped(by keyForValue: (ListItem) -> String) -> [Self] {

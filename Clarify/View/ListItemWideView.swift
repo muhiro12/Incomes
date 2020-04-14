@@ -17,7 +17,7 @@ struct ListItemWideView: View {
 
     var body: some View {
         HStack {
-            Text(item.date.MMdd)
+            Text(item.date.monthAndDay)
                 .frame(width: .conponentS)
             Divider()
             Text(item.content)

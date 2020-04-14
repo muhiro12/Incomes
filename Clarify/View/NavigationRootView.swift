@@ -11,51 +11,76 @@ import SwiftUI
 struct NavigationRootView: View {
     @Environment(\.managedObjectContext) var context
 
-    @State private var isPresented = false
+    @State private var isPresentingItemEditView = false
 
     let title: String
-    let items: ListItems
-    let groupingKeyForValue: (ListItem) -> String
+    let sections: [SectionItems]
 
     var body: some View {
         ZStack(alignment: .bottomTrailing) {
             NavigationView {
                 Form {
-                    ForEach(items.grouped(by: groupingKeyForValue)) { items in
-                        NavigationLink(destination:
-                            ListView(of: items)
-                                .navigationBarTitle(items.key.string)) {
-                                    Text(items.key.string)
+                    ForEach(sections) { section in
+                        if section.key.isEmpty {
+                            Section {
+                                self.setUpListViews(with: section)
+                            }
+                        } else {
+                            Section(header: Text(section.key)) {
+                                self.setUpListViews(with: section)
+                            }
                         }
                     }
                 }.navigationBarTitle(title)
             }
             FloatingCircleButtonView {
-                self.isPresented = true
+                self.isPresentingItemEditView = true
             }
-        }.sheet(isPresented: self.$isPresented) {
+        }.sheet(isPresented: $isPresentingItemEditView) {
             ItemEditView()
                 .environment(\.managedObjectContext, self.context)
+        }
+    }
+
+    private func setUpListViews(with section: SectionItems) -> some View {
+        ForEach(section.value) { items in
+            NavigationLink(destination:
+                ListView(of: items)
+                    .navigationBarTitle(items.key)) {
+                        Text(items.key)
+            }
         }
     }
 }
 
 struct NavigationRootView_Previews: PreviewProvider {
     static var testData: (ListItem) -> String = {
-        $0.date.yyyyMM
+        $0.date.yearAndMonth
     }
 
     static var previews: some View {
-        NavigationRootView(title: "Home",
-                           items: ListItems(value: [
-                            ListItem(id: UUID(),
-                                     date: Date(),
-                                     content: "Content",
-                                     income: 999999,
-                                     expenditure: 99999,
-                                     balance: 9999999)
-                           ]),
-                           groupingKeyForValue: testData
+        NavigationRootView(
+            title: "Home",
+            sections: [
+                SectionItems(
+                    key: "2020",
+                    value: [
+                        ListItems(
+                            key: "All",
+                            value: [
+                                ListItem(
+                                    id: UUID(),
+                                    date: Date(),
+                                    content: "Content",
+                                    income: 999999,
+                                    expenditure: 99999,
+                                    balance: 9999999
+                                )
+                            ]
+                        )
+                    ]
+                )
+            ]
         )
     }
 }

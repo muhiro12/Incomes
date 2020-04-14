@@ -10,13 +10,18 @@ import XCTest
 @testable import Clarify
 
 class DateExtensionTests: XCTestCase {
-    func testYyyyMMReturnsYyyyMMCase19700101() {
+    func testYearReturnsYyyyCase19700101() {
         let date = Date(timeIntervalSince1970: 0)
-        XCTAssertEqual(date.yyyyMM, "1970/01")
+        XCTAssertEqual(date.year, "1970")
     }
 
-    func testMMddReturnsMMddCase10700101() {
+    func testYearAndMonthReturnsYyyyMMCase19700101() {
         let date = Date(timeIntervalSince1970: 0)
-        XCTAssertEqual(date.MMdd, "01/01")
+        XCTAssertEqual(date.yearAndMonth, "1970/01")
+    }
+
+    func testMonthAndDayReturnsMMddCase10700101() {
+        let date = Date(timeIntervalSince1970: 0)
+        XCTAssertEqual(date.monthAndDay, "01/01")
     }
 }

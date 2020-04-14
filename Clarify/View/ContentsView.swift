@@ -1,5 +1,5 @@
 //
-//  HomeView.swift
+//  ContentsView.swift
 //  Clarify
 //
 //  Created by Hiromu Nakano on 2020/04/14.
@@ -8,29 +8,29 @@
 
 import SwiftUI
 
-struct HomeView: View {
+struct ContentsView: View {
     let items: ListItems
 
     var body: some View {
-        NavigationRootView(title: "Home",
+        NavigationRootView(title: "Contents",
                            sections: createSection(from: items))
     }
 
     private func createSection(from items: ListItems) -> [SectionItems] {
-        var sectionItemsArray: [SectionItems] = []
-        items.grouped { $0.date.year }.forEach { items in
+        var sectionItemsArray: [SectionItems] = [SectionItems(key: "", value: [items])]
+        items.grouped { $0.content.first.string.uppercased() }.reversed().forEach { items in
             sectionItemsArray.append(
                 SectionItems(key: items.key,
-                             value: items.grouped { $0.date.yearAndMonth })
+                             value: items.grouped { $0.content })
             )
         }
         return sectionItemsArray
     }
 }
 
-struct HomeView_Previews: PreviewProvider {
+struct ContentsView_Previews: PreviewProvider {
     static var previews: some View {
-        HomeView(items:
+        ContentsView(items:
             ListItems(key: "All",
                       value: [
                         ListItem(id: UUID(),
