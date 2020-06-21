@@ -94,21 +94,6 @@ struct ItemEditView: View {
                     }
                 }
             }.navigationBarTitle(String.edit)
-                .navigationBarItems(trailing:
-                    HStack {
-                        if isEditMode {
-                            Button(action: delete) {
-                                HStack {
-                                    Spacer()
-                                    Text(verbatim: .delete)
-                                        .fontWeight(.bold)
-                                        .foregroundColor(.red)
-                                    Spacer()
-                                }
-                            }
-                        }
-                    }
-            )
         }
     }
 
