@@ -20,7 +20,7 @@ struct FloatingCircleButtonView: View {
                         Image(systemName: "plus")
                             .foregroundColor(.white)
                     }
-                }
+                }.shadow(radius: .shadow)
                 Spacer()
                     .frame(width: .spaceM)
             }

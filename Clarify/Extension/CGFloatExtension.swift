@@ -20,4 +20,6 @@ extension CGFloat {
     static var conponentS: Self { 60 }
     static var conponentM: Self { 80 }
     static var conponentL: Self { 100 }
+
+    static var shadow: Self { 4 }
 }
