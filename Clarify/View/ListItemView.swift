@@ -29,8 +29,9 @@ struct ListItemView: View {
         }.sheet(isPresented: $isPresented) {
             ItemEditView(of: self.item)
                 .environment(\.managedObjectContext, self.context)
-        }.onTapGesture {
-            self.isPresented = true
+        }.contentShape(Rectangle())
+            .onTapGesture {
+                self.isPresented = true
         }
     }
 }

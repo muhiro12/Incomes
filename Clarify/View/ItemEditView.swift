@@ -33,33 +33,33 @@ struct ItemEditView: View {
     var body: some View {
         NavigationView {
             Form {
-                Section(header: Text("Information")) {
+                Section(header: Text(verbatim: .information)) {
                     DatePicker(selection: $date, displayedComponents: .date) {
-                        Text("Date")
+                        Text(verbatim: .date)
                     }
                     HStack {
-                        Text("Content")
+                        Text(verbatim: .content)
                         Spacer()
-                        TextField("", text: $content)
+                        TextField(String.empty, text: $content)
                             .multilineTextAlignment(.trailing)
                     }
                     HStack {
-                        Text("Income")
-                        TextField("0", text: $income)
+                        Text(verbatim: .income)
+                        TextField(String.zero, text: $income)
                             .keyboardType(.numberPad)
                             .multilineTextAlignment(.trailing)
                             .foregroundColor(income.isEmptyOrInt32 ? .primary : .red)
                     }
                     HStack {
-                        Text("Expenditure")
-                        TextField("0", text: $expenditure)
+                        Text(verbatim: .expenditure)
+                        TextField(String.zero, text: $expenditure)
                             .keyboardType(.numberPad)
                             .multilineTextAlignment(.trailing)
                             .foregroundColor(expenditure.isEmptyOrInt32 ? .primary : .red)
                     }
                     if !isEditMode {
                         HStack {
-                            Stepper("Repeat", value: $times, in: 1...60)
+                            Stepper(String.repeatString, value: $times, in: 1...60)
                             HStack {
                                 Spacer()
                                 Text(times.description)
@@ -72,7 +72,7 @@ struct ItemEditView: View {
                         Button(action: save) {
                             HStack {
                                 Spacer()
-                                Text("Save")
+                                Text(verbatim: .save)
                                 Spacer()
                             }
                         }.disabled(!isValid)
@@ -80,33 +80,35 @@ struct ItemEditView: View {
                     Button(action: create) {
                         HStack {
                             Spacer()
-                            Text(isEditMode ? "Duplicate" : "Create")
+                            Text(verbatim: isEditMode ? .duplicate : .create)
                             Spacer()
                         }
                     }.disabled(!isValid)
                     Button(action: cancel) {
                         HStack {
                             Spacer()
-                            Text("Cancel")
+                            Text(verbatim: .cancel)
                                 .foregroundColor(.red)
                             Spacer()
                         }
                     }
                 }
-                if isEditMode {
-                    Section(header: Text("Caution")) {
-                        Button(action: delete) {
-                            HStack {
-                                Spacer()
-                                Text("Delete")
-                                    .fontWeight(.bold)
-                                    .foregroundColor(.red)
-                                Spacer()
+            }.navigationBarTitle(String.edit)
+                .navigationBarItems(trailing:
+                    HStack {
+                        if isEditMode {
+                            Button(action: delete) {
+                                HStack {
+                                    Spacer()
+                                    Text(verbatim: .delete)
+                                        .fontWeight(.bold)
+                                        .foregroundColor(.red)
+                                    Spacer()
+                                }
                             }
                         }
                     }
-                }
-            }.navigationBarTitle("Edit")
+            )
         }
     }
 

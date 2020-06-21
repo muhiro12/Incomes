@@ -23,17 +23,9 @@ struct ListItemNarrowView: View {
             VStack(spacing: 0) {
                 Text(item.content)
                     .font(.headline)
-                HStack {
-                    Spacer()
-                    Text(self.item.income.asCurrency.string)
-                        .frame(width: .conponentS)
-                    Divider()
-                    Text(self.item.expenditure.asMinusCurrency.string)
-                        .frame(width: .conponentS)
-                    Spacer()
-                }.font(.caption)
+                Text((self.item.income - self.item.expenditure).asCurrency.string)
+                    .font(.footnote)
                     .foregroundColor(.secondary)
-
             }
             Divider()
             Text(item.balance.asCurrency.string)

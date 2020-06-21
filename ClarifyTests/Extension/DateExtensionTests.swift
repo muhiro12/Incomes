@@ -14,15 +14,4 @@ class DateExtensionTests: XCTestCase {
         let date = Date(timeIntervalSince1970: 0)
         XCTAssertEqual(date.year, "1970")
     }
-
-    // TODO: Uncomment
-    //    func testYearAndMonthReturnsYyyyMMCase19700101() {
-    //        let date = Date(timeIntervalSince1970: 0)
-    //        XCTAssertEqual(date.yearAndMonth, "1970/01")
-    //    }
-    //
-    //    func testMonthAndDayReturnsMMddCase10700101() {
-    //        let date = Date(timeIntervalSince1970: 0)
-    //        XCTAssertEqual(date.monthAndDay, "01/01")
-    //    }
 }
