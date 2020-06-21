@@ -16,11 +16,15 @@ struct FloatingCircleButtonView: View {
             HStack {
                 Button(action: action) {
                     ZStack {
-                        Circle().frame(width: .iconM, height: .iconM)
+                        Circle()
+                            .frame(width: .iconM, height: .iconM)
+                            .shadow(radius: .shadow,
+                                    x: .shadow,
+                                    y: .shadow)
                         Image(systemName: "plus")
                             .foregroundColor(.white)
                     }
-                }.shadow(radius: .shadow)
+                }
                 Spacer()
                     .frame(width: .spaceM)
             }

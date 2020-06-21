@@ -20,6 +20,7 @@ struct ListItemNarrowView: View {
             Text(item.date.monthAndDay)
                 .frame(width: .conponentS)
             Divider()
+            Spacer()
             VStack(alignment: .leading) {
                 Text(item.content)
                     .font(.headline)
@@ -33,6 +34,7 @@ struct ListItemNarrowView: View {
                         .foregroundColor(.secondary)
                 }
             }
+            Spacer()
             Divider()
             Text(item.balance.asCurrency.string)
                 .frame(width: .conponentL)
