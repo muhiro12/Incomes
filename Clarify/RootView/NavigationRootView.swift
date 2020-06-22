@@ -21,18 +21,11 @@ struct NavigationRootView: View {
             NavigationView {
                 Form {
                     ForEach(sections) { section in
-                        SectionView(section: section)
+                        SectionView(section: section, toItemEdit: self.presentItemEdit)
                     }
                 }
                 .navigationBarTitle(title)
-                .navigationBarItems(trailing:
-                    Button(action: presentItemEdit,
-                           label: {
-                            Image(systemName: .squareAndPencil)
-                                .resizable()
-                                .frame(width: .iconS, height: .iconS)
-                    })
-                )
+                .navigationBarItem(toItemEdit: presentItemEdit)
             }
         }.sheet(isPresented: $isPresentingItemEditView) {
             ItemEditView()
