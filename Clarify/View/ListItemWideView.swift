@@ -18,7 +18,7 @@ struct ListItemWideView: View {
     var body: some View {
         HStack {
             Text(item.date.monthAndDay)
-                .frame(width: .conponentS)
+                .frame(width: .componentS)
             Divider()
             Text(item.content)
                 .font(.headline)
@@ -26,15 +26,15 @@ struct ListItemWideView: View {
             Divider()
             HStack {
                 Text(item.income.asCurrency.string)
-                    .frame(width: .conponentM)
+                    .frame(width: .componentM)
                 Divider()
                 Text(item.expenditure.asMinusCurrency.string)
-                    .frame(width: .conponentM)
+                    .frame(width: .componentM)
             }.font(.footnote)
                 .foregroundColor(.secondary)
             Divider()
             Text(item.balance.asCurrency.string)
-                .frame(width: .conponentL)
+                .frame(width: .componentL)
                 .foregroundColor(item.balance >= 0 ? .primary : .red)
         }
     }

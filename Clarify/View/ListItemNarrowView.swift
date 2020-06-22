@@ -18,7 +18,7 @@ struct ListItemNarrowView: View {
     var body: some View {
         HStack {
             Text(item.date.monthAndDay)
-                .frame(width: .conponentS)
+                .frame(width: .componentS)
             Divider()
             Spacer()
             VStack(alignment: .leading) {
@@ -37,7 +37,7 @@ struct ListItemNarrowView: View {
             Spacer()
             Divider()
             Text(item.balance.asCurrency.string)
-                .frame(width: .conponentL)
+                .frame(width: .componentL)
                 .foregroundColor(item.balance >= 0 ? .primary : .red)
         }
     }

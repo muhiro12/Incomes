@@ -63,7 +63,7 @@ struct ItemEditView: View {
                             HStack {
                                 Spacer()
                                 Text(times.description)
-                            }.frame(width: .conponentS)
+                            }.frame(width: .componentS)
                         }
                     }
                 }
