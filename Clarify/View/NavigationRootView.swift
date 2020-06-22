@@ -23,15 +23,23 @@ struct NavigationRootView: View {
                     ForEach(sections) { section in
                         SectionView(section: section)
                     }
-                }.navigationBarTitle(title)
-            }
-            FloatingCircleButtonView {
-                self.isPresentingItemEditView = true
+                }
+                .navigationBarTitle(title)
+                .navigationBarItems(trailing:
+                    Button(action: presentItemEdit,
+                           label: {
+                            Image(systemName: .squareAndPencil)
+                    })
+                )
             }
         }.sheet(isPresented: $isPresentingItemEditView) {
             ItemEditView()
                 .environment(\.managedObjectContext, self.context)
         }
+    }
+
+    private func presentItemEdit() {
+        isPresentingItemEditView = true
     }
 }
 

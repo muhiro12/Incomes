@@ -7,12 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AD25861624A0E0B400755A68 /* StringConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD25861524A0E0B400755A68 /* StringConstant.swift */; };
 		AD553BBB24431D0900512C7C /* TabRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD553BBA24431D0900512C7C /* TabRootView.swift */; };
 		AD553BBF2444096900512C7C /* DataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD553BBE2444096900512C7C /* DataStore.swift */; };
 		AD553BCA2444729600512C7C /* TabRootViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD553BC92444729600512C7C /* TabRootViewTests.swift */; };
 		AD553BCC244472C700512C7C /* ContentViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD553BCB244472C700512C7C /* ContentViewTests.swift */; };
 		AD553BCE2444730400512C7C /* NavigationRootViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD553BCD2444730400512C7C /* NavigationRootViewTests.swift */; };
-		AD553BD02444735C00512C7C /* FloatingCircleButtonViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD553BCF2444735C00512C7C /* FloatingCircleButtonViewTests.swift */; };
 		AD553BD22444738F00512C7C /* ItemEditViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD553BD12444738F00512C7C /* ItemEditViewTests.swift */; };
 		AD553BD4244473C500512C7C /* ListViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD553BD3244473C500512C7C /* ListViewTests.swift */; };
 		AD553BD62444740400512C7C /* ListItemViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD553BD52444740400512C7C /* ListItemViewTests.swift */; };
@@ -36,7 +36,6 @@
 		AD6E424B2441B89D00A44408 /* DateExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6E424A2441B89D00A44408 /* DateExtensionTests.swift */; };
 		AD6E424D2441BD0A00A44408 /* StringExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6E424C2441BD0A00A44408 /* StringExtensionTests.swift */; };
 		AD6E42512441C47A00A44408 /* IntExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6E42502441C47A00A44408 /* IntExtensionTests.swift */; };
-		AD781C232440127A0081BF8D /* FloatingCircleButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD781C222440127A0081BF8D /* FloatingCircleButtonView.swift */; };
 		AD781C25244012A50081BF8D /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD781C24244012A50081BF8D /* Item.swift */; };
 		AD781C27244012EF0081BF8D /* NavigationRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD781C26244012EF0081BF8D /* NavigationRootView.swift */; };
 		AD781C292440131B0081BF8D /* ListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD781C282440131B0081BF8D /* ListView.swift */; };
@@ -75,12 +74,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		AD25861524A0E0B400755A68 /* StringConstant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringConstant.swift; sourceTree = "<group>"; };
 		AD553BBA24431D0900512C7C /* TabRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabRootView.swift; sourceTree = "<group>"; };
 		AD553BBE2444096900512C7C /* DataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStore.swift; sourceTree = "<group>"; };
 		AD553BC92444729600512C7C /* TabRootViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabRootViewTests.swift; sourceTree = "<group>"; };
 		AD553BCB244472C700512C7C /* ContentViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewTests.swift; sourceTree = "<group>"; };
 		AD553BCD2444730400512C7C /* NavigationRootViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationRootViewTests.swift; sourceTree = "<group>"; };
-		AD553BCF2444735C00512C7C /* FloatingCircleButtonViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingCircleButtonViewTests.swift; sourceTree = "<group>"; };
 		AD553BD12444738F00512C7C /* ItemEditViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemEditViewTests.swift; sourceTree = "<group>"; };
 		AD553BD3244473C500512C7C /* ListViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewTests.swift; sourceTree = "<group>"; };
 		AD553BD52444740400512C7C /* ListItemViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListItemViewTests.swift; sourceTree = "<group>"; };
@@ -105,7 +104,6 @@
 		AD6E424A2441B89D00A44408 /* DateExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtensionTests.swift; sourceTree = "<group>"; };
 		AD6E424C2441BD0A00A44408 /* StringExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtensionTests.swift; sourceTree = "<group>"; };
 		AD6E42502441C47A00A44408 /* IntExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntExtensionTests.swift; sourceTree = "<group>"; };
-		AD781C222440127A0081BF8D /* FloatingCircleButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingCircleButtonView.swift; sourceTree = "<group>"; };
 		AD781C24244012A50081BF8D /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		AD781C26244012EF0081BF8D /* NavigationRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationRootView.swift; sourceTree = "<group>"; };
 		AD781C282440131B0081BF8D /* ListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListView.swift; sourceTree = "<group>"; };
@@ -189,7 +187,6 @@
 				AD781C2C2440163D0081BF8D /* ListItemWideView.swift */,
 				AD6E422F2440BA1000A44408 /* ListItemNarrowView.swift */,
 				AD781C2A2440134E0081BF8D /* ItemEditView.swift */,
-				AD781C222440127A0081BF8D /* FloatingCircleButtonView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -215,7 +212,6 @@
 				AD553BD72444743400512C7C /* ListItemWideViewTests.swift */,
 				AD553BD92444746300512C7C /* ListItemNarrowViewTests.swift */,
 				AD553BD12444738F00512C7C /* ItemEditViewTests.swift */,
-				AD553BCF2444735C00512C7C /* FloatingCircleButtonViewTests.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -233,6 +229,7 @@
 			children = (
 				AD553BF624455AB500512C7C /* OptionalExtension.swift */,
 				AD6E42432441AB9A00A44408 /* StringExtension.swift */,
+				AD25861524A0E0B400755A68 /* StringConstant.swift */,
 				AD6E42452441ACC000A44408 /* IntExtension.swift */,
 				AD6E423F2441A9C500A44408 /* DateExtension.swift */,
 				AD6E423424415DBE00A44408 /* CGFloatExtension.swift */,
@@ -476,7 +473,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				AD553C002445950B00512C7C /* SectionItems.swift in Sources */,
-				AD781C232440127A0081BF8D /* FloatingCircleButtonView.swift in Sources */,
 				AD6E42302440BA1000A44408 /* ListItemNarrowView.swift in Sources */,
 				AD781C2D2440163D0081BF8D /* ListItemWideView.swift in Sources */,
 				ADEF79BA243DC182005E29B1 /* AppDelegate.swift in Sources */,
@@ -495,6 +491,7 @@
 				AD6E42402441A9C500A44408 /* DateExtension.swift in Sources */,
 				AD553BEF244551EF00512C7C /* HomeView.swift in Sources */,
 				AD781C25244012A50081BF8D /* Item.swift in Sources */,
+				AD25861624A0E0B400755A68 /* StringConstant.swift in Sources */,
 				AD781C27244012EF0081BF8D /* NavigationRootView.swift in Sources */,
 				AD6E42442441AB9A00A44408 /* StringExtension.swift in Sources */,
 				AD6E423524415DBE00A44408 /* CGFloatExtension.swift in Sources */,
@@ -516,7 +513,6 @@
 				AD553BCA2444729600512C7C /* TabRootViewTests.swift in Sources */,
 				AD553BF924455AD200512C7C /* OptionalExtensionTests.swift in Sources */,
 				AD553BCC244472C700512C7C /* ContentViewTests.swift in Sources */,
-				AD553BD02444735C00512C7C /* FloatingCircleButtonViewTests.swift in Sources */,
 				AD553BF324455A2F00512C7C /* HomeViewTests.swift in Sources */,
 				AD553BF524455A3F00512C7C /* ContentsViewTests.swift in Sources */,
 				ADB3343F2445EA5400C6FB75 /* SectionViewTests.swift in Sources */,
