@@ -13,10 +13,10 @@ struct ItemEditView: View {
     @Environment(\.presentationMode) var presentationMode
 
     @State private var date = Date()
-    @State private var content = ""
-    @State private var income = ""
-    @State private var expenditure = ""
-    @State private var times = 1
+    @State private var content = String.empty
+    @State private var income = String.zero
+    @State private var expenditure = String.zero
+    @State private var repeatCount = String.one
 
     private var item: ListItem?
 
@@ -59,11 +59,11 @@ struct ItemEditView: View {
                     }
                     if !isEditMode {
                         HStack {
-                            Stepper(String.repeatString, value: $times, in: 1...60)
-                            HStack {
-                                Spacer()
-                                Text(times.description)
-                            }.frame(width: .componentS)
+                            Text(verbatim: .repeatCount)
+                            TextField(String.one, text: $repeatCount)
+                                .keyboardType(.numberPad)
+                                .multilineTextAlignment(.trailing)
+                                .foregroundColor(expenditure.isEmptyOrInt32 ? .primary : .red)
                         }
                     }
                 }
@@ -105,6 +105,7 @@ struct ItemEditView: View {
         return !content.isEmpty
             && income.isEmptyOrInt32
             && expenditure.isEmptyOrInt32
+            && repeatCount.isEmptyOrInt32
     }
 
     private func save() {
@@ -115,8 +116,8 @@ struct ItemEditView: View {
         dataStore.save(item,
                        date: date,
                        content: content,
-                       income: Int(income) ?? 0,
-                       expenditure: Int(expenditure) ?? 0,
+                       income: Int(income) ?? .zero,
+                       expenditure: Int(expenditure) ?? .zero,
                        completion: dismiss)
     }
 
@@ -124,9 +125,9 @@ struct ItemEditView: View {
         let dataStore = DataStore(context: context)
         dataStore.create(date: date,
                          content: content,
-                         income: Int(income) ?? 0,
-                         expenditure: Int(expenditure) ?? 0,
-                         times: times,
+                         income: Int(income) ?? .zero,
+                         expenditure: Int(expenditure) ?? .zero,
+                         times: Int(repeatCount) ?? .one,
                          completion: dismiss)
     }
 

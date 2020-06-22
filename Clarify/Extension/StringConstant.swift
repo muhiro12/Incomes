@@ -12,6 +12,7 @@ extension String {
     // MARK: - Common
     static var empty: Self { "" }
     static var zero: Self { "0" }
+    static var one: Self { "1" }
 
     // MARK: - ItemEdit
     static var edit: Self { "Edit" }
@@ -20,7 +21,7 @@ extension String {
     static var content: Self { "Content" }
     static var income: Self { "Income" }
     static var expenditure: Self { "Expenditure" }
-    static var repeatString: Self { "Repeat" }
+    static var repeatCount: Self { "Repeat" }
     static var save: Self { "Save" }
     static var duplicate: Self { "Duplicate" }
     static var create: Self { "Create" }
