@@ -29,6 +29,8 @@ struct NavigationRootView: View {
                     Button(action: presentItemEdit,
                            label: {
                             Image(systemName: .squareAndPencil)
+                                .resizable()
+                                .frame(width: .iconS, height: .iconS)
                     })
                 )
             }
