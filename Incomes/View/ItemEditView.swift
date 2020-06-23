@@ -93,7 +93,8 @@ struct ItemEditView: View {
                         }
                     }
                 }
-            }.navigationBarTitle(String.edit)
+            }.groupedListStyle()
+                .navigationBarTitle(String.edit)
         }
     }
 

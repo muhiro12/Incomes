@@ -19,4 +19,9 @@ extension View {
             })
         )
     }
+
+    func groupedListStyle() -> some View {
+        return listStyle(GroupedListStyle())
+            .environment(\.horizontalSizeClass, .regular)
+    }
 }

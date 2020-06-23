@@ -23,9 +23,9 @@ struct NavigationRootView: View {
                     ForEach(sections) { section in
                         SectionView(section: section, toItemEdit: self.presentItemEdit)
                     }
-                }
-                .navigationBarTitle(title)
-                .navigationBarItem(toItemEdit: presentItemEdit)
+                }.groupedListStyle()
+                    .navigationBarTitle(title)
+                    .navigationBarItem(toItemEdit: presentItemEdit)
             }
         }.sheet(isPresented: $isPresentingItemEditView) {
             ItemEditView()

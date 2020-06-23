@@ -228,12 +228,12 @@
 		ADCF36E224A1D18E0011D6F5 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				ADCF36E324A1D18E0011D6F5 /* ListItemNarrowView.swift */,
 				ADCF36E424A1D18E0011D6F5 /* SectionView.swift */,
 				ADCF36E524A1D18E0011D6F5 /* ListView.swift */,
-				ADCF36E624A1D18E0011D6F5 /* ItemEditView.swift */,
-				ADCF36E724A1D18E0011D6F5 /* ListItemWideView.swift */,
 				ADCF36E824A1D18E0011D6F5 /* ListItemView.swift */,
+				ADCF36E324A1D18E0011D6F5 /* ListItemNarrowView.swift */,
+				ADCF36E724A1D18E0011D6F5 /* ListItemWideView.swift */,
+				ADCF36E624A1D18E0011D6F5 /* ItemEditView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";

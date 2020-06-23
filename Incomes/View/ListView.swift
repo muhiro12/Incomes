@@ -25,11 +25,12 @@ struct ListView: View {
             ForEach(items.value) { item in
                 ListItemView(of: item)
             }.onDelete(perform: showAlert)
-        }.alert(isPresented: $isPresentingAlert) {
-            Alert(title: Text("Caution"),
-                  message: Text("This action cannot be undone."),
-                  primaryButton: .destructive(Text("Delete"), action: delete),
-                  secondaryButton: .cancel())
+        }.groupedListStyle()
+            .alert(isPresented: $isPresentingAlert) {
+                Alert(title: Text("Caution"),
+                      message: Text("This action cannot be undone."),
+                      primaryButton: .destructive(Text("Delete"), action: delete),
+                      secondaryButton: .cancel())
         }
     }
 
