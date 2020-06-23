@@ -14,9 +14,9 @@ struct ItemEditView: View {
 
     @State private var date = Date()
     @State private var content = String.empty
-    @State private var income = String.zero
-    @State private var expenditure = String.zero
-    @State private var repeatCount = String.one
+    @State private var income = String.empty
+    @State private var expenditure = String.empty
+    @State private var repeatSelection = Int.zero
 
     private var item: ListItem?
 
@@ -60,10 +60,17 @@ struct ItemEditView: View {
                     if !isEditMode {
                         HStack {
                             Text(verbatim: .repeatCount)
-                            TextField(String.one, text: $repeatCount)
-                                .keyboardType(.numberPad)
-                                .multilineTextAlignment(.trailing)
-                                .foregroundColor(expenditure.isEmptyOrInt32 ? .primary : .red)
+                            Spacer()
+                            Picker(String.repeatCount,
+                                   selection: $repeatSelection) {
+                                    ForEach((.minRepeatCount)..<(.maxRepeatCount + .one)) {
+                                        Text($0.description)
+                                    }
+                            }.pickerStyle(WheelPickerStyle())
+                                .labelsHidden()
+                                .frame(maxWidth: .componentL,
+                                       maxHeight: .componentM)
+                                .clipped()
                         }
                     }
                 }
@@ -106,7 +113,6 @@ struct ItemEditView: View {
         return !content.isEmpty
             && income.isEmptyOrInt32
             && expenditure.isEmptyOrInt32
-            && repeatCount.isEmptyOrInt32
     }
 
     private func save() {
@@ -128,7 +134,7 @@ struct ItemEditView: View {
                          content: content,
                          income: Int(income) ?? .zero,
                          expenditure: Int(expenditure) ?? .zero,
-                         times: Int(repeatCount) ?? .one,
+                         times: repeatSelection + 1,
                          completion: dismiss)
     }
 

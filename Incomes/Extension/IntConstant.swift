@@ -9,5 +9,10 @@
 import Foundation
 
 extension Int {
+    // MARK: - Common
     static var one: Self { 1 }
+
+    // MARK: - ItemEdit
+    static var minRepeatCount: Self { 1 }
+    static var maxRepeatCount: Self { 60 }
 }
