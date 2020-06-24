@@ -34,7 +34,7 @@ struct HomeView: View {
                 ForEach(sections) { section in
                     SectionView(section: section)
                 }
-            }.groupedListStyle()
+            }.selectedListStyle()
                 .navigationBarTitle(String.homeTitle)
                 .navigationBarItems(trailing:
                     Button(action: presentToSetting) {

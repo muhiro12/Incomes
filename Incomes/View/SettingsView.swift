@@ -9,25 +9,23 @@
 import SwiftUI
 
 struct SettingsView: View {
-    class ICloudWrapper: ObservableObject {
-        var isOn = GlobalSettings.iCloud {
-            didSet {
-                GlobalSettings.iCloud = isOn
-            }
-        }
-    }
-
-    @State private var iCloud = ICloudWrapper()
+    @State private var modernStyle = ModernStyle()
+    @State private var iCloud = ICloud()
 
     var body: some View {
         NavigationView {
             Form {
+                Section {
+                    Toggle(isOn: $modernStyle.isOn) {
+                        Text(verbatim: .modernStyle)
+                    }
+                }
                 Section(footer: Text(verbatim: .limitedTime)) {
                     Toggle(isOn: $iCloud.isOn) {
                         Text(verbatim: .icloud)
                     }
                 }
-            }.groupedListStyle()
+            }.selectedListStyle()
                 .navigationBarTitle(String.settingsTitle)
         }
     }

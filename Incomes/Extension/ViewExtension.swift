@@ -9,7 +9,17 @@
 import SwiftUI
 
 extension View {
-    func groupedListStyle() -> some View {
+    func selectedListStyle() -> some View {
+        return Group {
+            if GlobalSettings.modernStyle {
+                groupedListStye()
+            } else {
+                listStyle(PlainListStyle())
+            }
+        }
+    }
+
+    func groupedListStye() -> some View {
         return listStyle(GroupedListStyle())
             .environment(\.horizontalSizeClass, .regular)
     }

@@ -25,7 +25,7 @@ struct ListView: View {
             ForEach(items.value) { item in
                 ListItemView(of: item)
             }.onDelete(perform: presentToAlert)
-        }.groupedListStyle()
+        }.selectedListStyle()
             .alert(isPresented: $isPresentedToAlert) {
                 Alert(title: Text(verbatim: .caution),
                       message: Text(verbatim: .cautionDetail),

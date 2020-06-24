@@ -34,7 +34,7 @@ struct GroupView: View {
                 ForEach(sections) { section in
                     SectionView(section: section)
                 }
-            }.groupedListStyle()
+            }.selectedListStyle()
                 .navigationBarTitle(String.groupTitle)
         }
     }

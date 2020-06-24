@@ -10,20 +10,15 @@ import Foundation
 
 @propertyWrapper
 struct UserDefault<T> {
-    let key: String
+    let key: GlobalSettings
     let defaultValue: T
 
     var wrappedValue: T {
         get {
-            return UserDefaults.standard.object(forKey: key) as? T ?? defaultValue
+            return UserDefaults.standard.object(forKey: key.rawValue) as? T ?? defaultValue
         }
         set {
-            UserDefaults.standard.set(newValue, forKey: key)
+            UserDefaults.standard.set(newValue, forKey: key.rawValue)
         }
     }
-}
-
-enum GlobalSettings {
-    @UserDefault(key: "", defaultValue: false)
-    static var iCloud: Bool
 }

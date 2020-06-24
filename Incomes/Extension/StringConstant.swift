@@ -44,6 +44,7 @@ extension String {
 
     // MARK: - Settings
     static var settingsTitle: Self { "Settings" }
+    static var modernStyle: Self { "Modern style" }
     static var icloud: Self { "iCloud" }
     static var limitedTime: Self { "for a limited time" }
 

@@ -54,6 +54,7 @@
 		ADCF376924A33F500011D6F5 /* ImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF376824A33F500011D6F5 /* ImageExtension.swift */; };
 		ADCF376B24A343C30011D6F5 /* Scene.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF376A24A343C30011D6F5 /* Scene.swift */; };
 		ADCF376D24A380B30011D6F5 /* UserDefault.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF376C24A380B30011D6F5 /* UserDefault.swift */; };
+		ADCF376F24A394220011D6F5 /* GlobalSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF376E24A394220011D6F5 /* GlobalSettings.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -128,6 +129,7 @@
 		ADCF376824A33F500011D6F5 /* ImageExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageExtension.swift; sourceTree = "<group>"; };
 		ADCF376A24A343C30011D6F5 /* Scene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scene.swift; sourceTree = "<group>"; };
 		ADCF376C24A380B30011D6F5 /* UserDefault.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefault.swift; sourceTree = "<group>"; };
+		ADCF376E24A394220011D6F5 /* GlobalSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalSettings.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -257,6 +259,7 @@
 				ADCF36EE24A1D18E0011D6F5 /* ListItems.swift */,
 				ADCF376A24A343C30011D6F5 /* Scene.swift */,
 				ADCF376C24A380B30011D6F5 /* UserDefault.swift */,
+				ADCF376E24A394220011D6F5 /* GlobalSettings.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -504,6 +507,7 @@
 				ADCF370124A1D18E0011D6F5 /* EditView.swift in Sources */,
 				ADCF375824A2C8260011D6F5 /* DecimalExtension.swift in Sources */,
 				ADCF370624A1D18E0011D6F5 /* ListItem.swift in Sources */,
+				ADCF376F24A394220011D6F5 /* GlobalSettings.swift in Sources */,
 				ADCF376324A3147B0011D6F5 /* SettingsView.swift in Sources */,
 				ADCF371424A1D18E0011D6F5 /* DateExtension.swift in Sources */,
 				ADCF36E024A1D1820011D6F5 /* ContentView.swift in Sources */,

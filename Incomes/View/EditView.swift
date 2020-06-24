@@ -109,7 +109,7 @@ struct EditView: View {
                             .foregroundColor(.red)
                     }
                 }
-            }.groupedListStyle()
+            }.selectedListStyle()
                 .navigationBarTitle(isEditMode ? String.editTitle : String.createTitle)
         }.actionSheet(isPresented: $isPresentedToActionSheet) {
             // TODO: feature/repeat
