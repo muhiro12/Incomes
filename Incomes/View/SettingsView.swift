@@ -9,13 +9,21 @@
 import SwiftUI
 
 struct SettingsView: View {
-    @State private var iCloud = false
+    class ICloudWrapper: ObservableObject {
+        var isOn = GlobalSettings.iCloud {
+            didSet {
+                GlobalSettings.iCloud = isOn
+            }
+        }
+    }
+
+    @State private var iCloud = ICloudWrapper()
 
     var body: some View {
         NavigationView {
             Form {
                 Section(footer: Text(verbatim: .limitedTime)) {
-                    Toggle(isOn: $iCloud) {
+                    Toggle(isOn: $iCloud.isOn) {
                         Text(verbatim: .icloud)
                     }
                 }
