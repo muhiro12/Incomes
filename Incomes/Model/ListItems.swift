@@ -46,8 +46,8 @@ struct ListItems: Identifiable {
                                     income: income,
                                     expenditure: expenditure,
                                     balance: balance,
-                                    label: item.label.string,
-                                    group: item.group)
+                                    group: item.group.string,
+                                    repeatId: item.repeatId)
             listItems.append(listItem)
         }
 

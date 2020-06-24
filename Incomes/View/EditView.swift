@@ -19,7 +19,7 @@ struct EditView: View {
     @State private var content: String = .empty
     @State private var income: String = .empty
     @State private var expenditure: String = .empty
-    @State private var label: String = .empty
+    @State private var group: String = .empty
     @State private var repeatSelection: Int = .zero
 
     private var item: ListItem?
@@ -42,7 +42,7 @@ struct EditView: View {
         _content = State(initialValue: item.content)
         _income = State(initialValue: item.income.description)
         _expenditure = State(initialValue: item.expenditure.description)
-        _label = State(initialValue: item.label)
+        _group = State(initialValue: item.group)
     }
 
     var body: some View {
@@ -72,14 +72,13 @@ struct EditView: View {
                             .multilineTextAlignment(.trailing)
                             .foregroundColor(expenditure.isEmptyOrDecimal ? .primary : .red)
                     }
-                    if isEditMode {
-                        HStack {
-                            Text(verbatim: .label)
-                            Spacer()
-                            TextField(String.empty, text: $label)
-                                .multilineTextAlignment(.trailing)
-                        }
-                    } else if false {
+                    HStack {
+                        Text(verbatim: .group)
+                        Spacer()
+                        TextField(String.empty, text: $group)
+                            .multilineTextAlignment(.trailing)
+                    }
+                    if false {
                         // TODO: feature/repeat
                         HStack {
                             Text(verbatim: .repeatCount)
@@ -139,7 +138,7 @@ struct EditView: View {
                        content: content,
                        income: income.decimalValue,
                        expenditure: expenditure.decimalValue,
-                       label: label,
+                       group: group,
                        completion: dismiss)
     }
 
@@ -149,7 +148,7 @@ struct EditView: View {
                          content: content,
                          income: income.decimalValue,
                          expenditure: expenditure.decimalValue,
-                         label: content,
+                         group: group,
                          repeatCount: repeatSelection + .one,
                          completion: dismiss)
     }

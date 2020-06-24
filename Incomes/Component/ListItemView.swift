@@ -47,8 +47,8 @@ struct ListItemView_Previews: PreviewProvider {
                      income: 999999,
                      expenditure: 99999,
                      balance: 9999999,
-                     label: .empty,
-                     group: nil)
+                     group: .empty,
+                     repeatId: nil)
         )
     }
 }

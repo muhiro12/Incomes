@@ -16,7 +16,7 @@ struct GroupView: View {
             SectionItems(key: .empty, value: [items])
         ]
         items.grouped {
-            $0.label.first.string.uppercased()
+            $0.group
         }.reversed().forEach { items in
             sectionItemsArray.append(
                 SectionItems(key: items.key,
@@ -51,8 +51,8 @@ struct GroupView_Previews: PreviewProvider {
                                  income: 999999,
                                  expenditure: 99999,
                                  balance: 9999999,
-                                 label: .empty,
-                                 group: nil)
+                                 group: .empty,
+                                 repeatId: nil)
             ])
         )
     }

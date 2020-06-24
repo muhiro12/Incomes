@@ -17,16 +17,8 @@ struct SectionView: View {
     let section: SectionItems
 
     var body: some View {
-        Group {
-            if section.key.isEmpty {
-                Section {
-                    navigationLinks
-                }
-            } else {
-                Section(header: Text(section.key)) {
-                    navigationLinks
-                }
-            }
+        Section(header: Text(section.key.isNotEmpty ? section.key : .others)) {
+            navigationLinks
         }
     }
 
@@ -78,8 +70,8 @@ struct SectionView_Previews: PreviewProvider {
                                  income: 999999,
                                  expenditure: 99999,
                                  balance: 9999999,
-                                 label: .empty,
-                                 group: nil)
+                                 group: .empty,
+                                 repeatId: nil)
                     ]
                 )
             ]

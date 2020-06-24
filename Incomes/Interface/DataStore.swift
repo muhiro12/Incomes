@@ -17,14 +17,14 @@ struct DataStore {
               content: String,
               income: Decimal,
               expenditure: Decimal,
-              label: String,
+              group: String,
               completion: (() -> Void)? = nil) {
 
         item.date = date
         item.content = content
         item.income = income.asNSDecimalNumber
         item.expenditure = expenditure.asNSDecimalNumber
-        item.label = label
+        item.group = group
         item.group = nil
 
         do {
@@ -39,11 +39,11 @@ struct DataStore {
                 content: String,
                 income: Decimal,
                 expenditure: Decimal,
-                label: String,
+                group: String,
                 repeatCount: Int,
                 completion: (() -> Void)? = nil) {
 
-        let group = UUID()
+        let repeatId = UUID()
 
         for index in 0..<repeatCount {
             let item = Item(context: context)
@@ -51,8 +51,8 @@ struct DataStore {
             item.content = content
             item.income = income.asNSDecimalNumber
             item.expenditure = expenditure.asNSDecimalNumber
-            item.label = label
             item.group = group
+            item.repeatId = repeatId
         }
 
         do {

@@ -22,6 +22,7 @@ extension String {
 
     // MARK: - Group
     static var groupTitle: Self { "Group" }
+    static var others: Self { "Others" }
 
     // MARK: - Edit
     static var editTitle: Self { "Edit" }
@@ -31,7 +32,7 @@ extension String {
     static var content: Self { "Content" }
     static var income: Self { "Income" }
     static var expenditure: Self { "Expenditure" }
-    static var label: Self { "Label" }
+    static var group: Self { "Group" }
     static var repeatCount: Self { "Repeat" }
     static var save: Self { "Save" }
     static var saveDetail: Self { "Update recurring item" }
@@ -48,7 +49,7 @@ extension String {
 
     // MARK: - Image SystemName
     static var homeIcon: Self { "calendar" }
-    static var groupIcon: Self { "tag" }
+    static var groupIcon: Self { "square.stack.3d.up" }
     static var settingsIcon: Self { "gear" }
     static var createIcon: Self { "square.and.pencil" }
 }
