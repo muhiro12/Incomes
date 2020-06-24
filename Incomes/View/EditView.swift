@@ -12,6 +12,7 @@ struct EditView: View {
     @Environment(\.managedObjectContext) var context
     @Environment(\.presentationMode) var presentationMode
 
+    // TODO: feature/repeat
     @State private var isPresentedToActionSheet = false
 
     @State private var date = Date()
@@ -78,7 +79,8 @@ struct EditView: View {
                             TextField(String.empty, text: $label)
                                 .multilineTextAlignment(.trailing)
                         }
-                    } else {
+                    } else if false {
+                        // TODO: feature/repeat
                         HStack {
                             Text(verbatim: .repeatCount)
                             Spacer()
@@ -96,21 +98,11 @@ struct EditView: View {
                     }
                 }
                 Section {
-                    Group {
-                        if isEditMode {
-                            Button(action: presentToActionSheet) {
-                                Text(verbatim: .save)
-                                    .frame(maxWidth: .greatestFiniteMagnitude,
-                                           alignment: .center)
-                            }.disabled(!isValid)
-                        } else {
-                            Button(action: create) {
-                                Text(verbatim: .create)
-                                    .frame(maxWidth: .greatestFiniteMagnitude,
-                                           alignment: .center)
-                            }.disabled(!isValid)
-                        }
-                    }
+                    Button(action: isEditMode ? save : create) {
+                        Text(verbatim: isEditMode ? .save : .create)
+                            .frame(maxWidth: .greatestFiniteMagnitude,
+                                   alignment: .center)
+                    }.disabled(!isValid)
                     Button(action: cancel) {
                         Text(verbatim: .cancel)
                             .frame(maxWidth: .greatestFiniteMagnitude,
@@ -121,6 +113,7 @@ struct EditView: View {
             }.groupedListStyle()
                 .navigationBarTitle(isEditMode ? String.editTitle : String.createTitle)
         }.actionSheet(isPresented: $isPresentedToActionSheet) {
+            // TODO: feature/repeat
             ActionSheet(title: Text(verbatim: .saveDetail),
                         buttons: [
                             .default(Text(verbatim: .saveThisItem), action: save),
@@ -132,6 +125,7 @@ struct EditView: View {
     }
 
     private func presentToActionSheet() {
+        // TODO: feature/repeat
         isPresentedToActionSheet = true
     }
 
@@ -156,7 +150,7 @@ struct EditView: View {
                          income: income.decimalValue,
                          expenditure: expenditure.decimalValue,
                          label: content,
-                         repeatCount: repeatSelection + 1,
+                         repeatCount: repeatSelection + .one,
                          completion: dismiss)
     }
 
