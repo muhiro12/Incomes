@@ -12,6 +12,8 @@ struct EditView: View {
     @Environment(\.managedObjectContext) var context
     @Environment(\.presentationMode) var presentationMode
 
+    @State private var isPresentedToActionSheet = false
+
     @State private var date = Date()
     @State private var content: String = .empty
     @State private var income: String = .empty
@@ -94,18 +96,21 @@ struct EditView: View {
                     }
                 }
                 Section {
-                    if isEditMode {
-                        Button(action: save) {
-                            Text(verbatim: .save)
-                                .frame(maxWidth: .greatestFiniteMagnitude,
-                                       alignment: .center)
-                        }.disabled(!isValid)
+                    Group {
+                        if isEditMode {
+                            Button(action: presentToActionSheet) {
+                                Text(verbatim: .save)
+                                    .frame(maxWidth: .greatestFiniteMagnitude,
+                                           alignment: .center)
+                            }.disabled(!isValid)
+                        } else {
+                            Button(action: create) {
+                                Text(verbatim: .create)
+                                    .frame(maxWidth: .greatestFiniteMagnitude,
+                                           alignment: .center)
+                            }.disabled(!isValid)
+                        }
                     }
-                    Button(action: create) {
-                        Text(verbatim: isEditMode ? .duplicate : .create)
-                            .frame(maxWidth: .greatestFiniteMagnitude,
-                                   alignment: .center)
-                    }.disabled(!isValid)
                     Button(action: cancel) {
                         Text(verbatim: .cancel)
                             .frame(maxWidth: .greatestFiniteMagnitude,
@@ -115,7 +120,19 @@ struct EditView: View {
                 }
             }.groupedListStyle()
                 .navigationBarTitle(isEditMode ? String.editTitle : String.createTitle)
+        }.actionSheet(isPresented: $isPresentedToActionSheet) {
+            ActionSheet(title: Text(verbatim: .saveDetail),
+                        buttons: [
+                            .default(Text(verbatim: .saveThisItem), action: save),
+                            .default(Text(verbatim: .saveFollowingItems), action: save),
+                            .default(Text(verbatim: .saveAllItems), action: save),
+                            .cancel()
+            ])
         }
+    }
+
+    private func presentToActionSheet() {
+        isPresentedToActionSheet = true
     }
 
     private func save() {

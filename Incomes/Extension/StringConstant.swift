@@ -34,7 +34,10 @@ extension String {
     static var label: Self { "Label" }
     static var repeatCount: Self { "Repeat" }
     static var save: Self { "Save" }
-    static var duplicate: Self { "Duplicate" }
+    static var saveDetail: Self { "Update recurring item" }
+    static var saveThisItem: Self { "This item" }
+    static var saveFollowingItems: Self { "This and all following items" }
+    static var saveAllItems: Self { "All items" }
     static var create: Self { "Create" }
     static var cancel: Self { "Cancel" }
 

@@ -29,7 +29,8 @@ struct ListView: View {
             .alert(isPresented: $isPresentedToAlert) {
                 Alert(title: Text(verbatim: .caution),
                       message: Text(verbatim: .cautionDetail),
-                      primaryButton: .destructive(Text(verbatim: .delete), action: delete),
+                      primaryButton: .destructive(Text(verbatim: .delete),
+                                                  action: delete),
                       secondaryButton: .cancel())
         }
     }
