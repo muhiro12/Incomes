@@ -30,7 +30,7 @@ struct ContentView: View {
                 }
             }
             FooterView(scene: $scene)
-        }
+        }.accentColor(.green)
     }
 }
 
