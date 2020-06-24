@@ -16,6 +16,7 @@ extension String {
     static var caution: Self { "Caution" }
     static var cautionDetail: Self { "This action cannot be undone." }
     static var delete: Self { "Delete" }
+    static var footerTextPrefix: Self { "Today: " }
 
     // MARK: - Home
     static var homeTitle: Self { "Home" }
