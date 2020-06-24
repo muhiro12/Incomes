@@ -17,4 +17,6 @@ struct ListItem: Identifiable {
     let income: Decimal
     let expenditure: Decimal
     let balance: Decimal
+    let label: String
+    let group: UUID?
 }

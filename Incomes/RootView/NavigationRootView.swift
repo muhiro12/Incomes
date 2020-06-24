@@ -53,14 +53,14 @@ struct NavigationRootView_Previews: PreviewProvider {
                         ListItems(
                             key: "All",
                             value: [
-                                ListItem(
-                                    id: UUID(),
-                                    date: Date(),
-                                    content: "Content",
-                                    income: 999999,
-                                    expenditure: 99999,
-                                    balance: 9999999
-                                )
+                                ListItem(id: UUID(),
+                                         date: Date(),
+                                         content: "Content",
+                                         income: 999999,
+                                         expenditure: 99999,
+                                         balance: 9999999,
+                                         label: .empty,
+                                         group: nil)
                             ]
                         )
                     ]

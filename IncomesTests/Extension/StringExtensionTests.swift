@@ -10,68 +10,68 @@ import XCTest
 @testable import Incomes
 
 class StringExtensionTests: XCTestCase {
-    func testisEmptyOrInt32ReturnsTrueCaseEmpty() {
+    func testisEmptyOrDecimalReturnsTrueCaseEmpty() {
         let string = ""
-        XCTAssertTrue(string.isEmptyOrInt32)
+        XCTAssertTrue(string.isEmptyOrDecimal)
     }
 
-    func testisEmptyOrInt32RetrunsTrueCase0() {
+    func testisEmptyOrDecimalRetrunsTrueCase0() {
         let string = "0"
-        XCTAssertTrue(string.isEmptyOrInt32)
+        XCTAssertTrue(string.isEmptyOrDecimal)
     }
 
-    func testisEmptyOrInt32ReturnsTrueCaseInt() {
+    func testisEmptyOrDecimalReturnsTrueCaseInt() {
         let string = "1000"
-        XCTAssertTrue(string.isEmptyOrInt32)
+        XCTAssertTrue(string.isEmptyOrDecimal)
     }
 
-    func testisEmptyOrInt32ReturnsFalseCaseText() {
+    func testisEmptyOrDecimalReturnsFalseCaseText() {
         let string = "text"
-        XCTAssertFalse(string.isEmptyOrInt32)
+        XCTAssertFalse(string.isEmptyOrDecimal)
     }
 
-    func testisEmptyOrInt32ReturnsTrueCaseIntStartWith0() {
+    func testisEmptyOrDecimalReturnsTrueCaseIntStartWith0() {
         let string = "01000"
-        XCTAssertTrue(string.isEmptyOrInt32)
+        XCTAssertTrue(string.isEmptyOrDecimal)
     }
 
-    func testisEmptyOrInt32ReturnsTrueCaseIntStartWithMinus() {
+    func testisEmptyOrDecimalReturnsTrueCaseIntStartWithMinus() {
         let string = "-1000"
-        XCTAssertTrue(string.isEmptyOrInt32)
+        XCTAssertTrue(string.isEmptyOrDecimal)
     }
 
-    func testisEmptyOrInt32ReturnsTrueCaseIntStartWithMinusAnd0() {
+    func testisEmptyOrDecimalReturnsTrueCaseIntStartWithMinusAnd0() {
         let string = "-01000"
-        XCTAssertTrue(string.isEmptyOrInt32)
+        XCTAssertTrue(string.isEmptyOrDecimal)
     }
 
-    func testisEmptyOrInt32ReturnsFalseCaseDouble() {
+    func testisEmptyOrDecimalReturnsTrueCaseDouble() {
         let string = "1.000"
-        XCTAssertFalse(string.isEmptyOrInt32)
+        XCTAssertTrue(string.isEmptyOrDecimal)
     }
 
-    func testisEmptyOrInt32ReturnsFalseCaseIntWithComma() {
+    func testisEmptyOrDecimalReturnsTrueCaseIntWithComma() {
         let string = "1,000"
-        XCTAssertFalse(string.isEmptyOrInt32)
+        XCTAssertTrue(string.isEmptyOrDecimal)
     }
 
-    func testisEmptyOrInt32ReturnsTrueCaseUpperLimit() {
+    func testisEmptyOrDecimalReturnsTrueCaseUpperLimitOfInt32() {
         let string = "2147483647"
-        XCTAssertTrue(string.isEmptyOrInt32)
+        XCTAssertTrue(string.isEmptyOrDecimal)
     }
 
-    func testisEmptyOrInt32ReturnsFalseCaseOverUpperLimit() {
+    func testisEmptyOrDecimalReturnsTrueCaseOverUpperLimitOfInt32() {
         let string = "2147483648"
-        XCTAssertFalse(string.isEmptyOrInt32)
+        XCTAssertTrue(string.isEmptyOrDecimal)
     }
 
-    func testisEmptyOrInt32ReturnsTrueCaseLowerLimit() {
+    func testisEmptyOrDecimalReturnsTrueCaseLowerLimitOfInt32() {
         let string = "-2147483648"
-        XCTAssertTrue(string.isEmptyOrInt32)
+        XCTAssertTrue(string.isEmptyOrDecimal)
     }
 
-    func testisEmptyOrInt32ReturnsFalseCaseUnderLowerLimit() {
+    func testisEmptyOrDecimalReturnsTrueCaseUnderLowerLimitOfInt32() {
         let string = "-2147483649"
-        XCTAssertFalse(string.isEmptyOrInt32)
+        XCTAssertTrue(string.isEmptyOrDecimal)
     }
 }

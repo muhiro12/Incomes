@@ -45,7 +45,9 @@ struct ListItems: Identifiable {
                                     content: content,
                                     income: income,
                                     expenditure: expenditure,
-                                    balance: balance)
+                                    balance: balance,
+                                    label: item.label.string,
+                                    group: item.group)
             listItems.append(listItem)
         }
 
@@ -57,7 +59,13 @@ struct ListItems: Identifiable {
 
         let groupedDictionary = Dictionary(grouping: value, by: keyForValue)
             .sorted {
-                $0.key > $1.key
+                if $0.key.isEmpty {
+                    return true
+                } else if $1.key.isEmpty {
+                    return false
+                } else {
+                    return $0.key > $1.key
+                }
         }
         groupedDictionary.forEach {
             listItemsArray.append(

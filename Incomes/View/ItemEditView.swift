@@ -16,6 +16,7 @@ struct ItemEditView: View {
     @State private var content = String.empty
     @State private var income = String.empty
     @State private var expenditure = String.empty
+    @State private var label = String.empty
     @State private var repeatSelection = Int.zero
 
     private var item: ListItem?
@@ -28,6 +29,7 @@ struct ItemEditView: View {
         _content = State(initialValue: item.content)
         _income = State(initialValue: item.income.description)
         _expenditure = State(initialValue: item.expenditure.description)
+        _label = State(initialValue: item.label)
     }
 
     var body: some View {
@@ -48,16 +50,23 @@ struct ItemEditView: View {
                         TextField(String.zero, text: $income)
                             .keyboardType(.numberPad)
                             .multilineTextAlignment(.trailing)
-                            .foregroundColor(income.isEmptyOrInt32 ? .primary : .red)
+                            .foregroundColor(income.isEmptyOrDecimal ? .primary : .red)
                     }
                     HStack {
                         Text(verbatim: .expenditure)
                         TextField(String.zero, text: $expenditure)
                             .keyboardType(.numberPad)
                             .multilineTextAlignment(.trailing)
-                            .foregroundColor(expenditure.isEmptyOrInt32 ? .primary : .red)
+                            .foregroundColor(expenditure.isEmptyOrDecimal ? .primary : .red)
                     }
-                    if !isEditMode {
+                    if isEditMode {
+                        HStack {
+                            Text(verbatim: .label)
+                            Spacer()
+                            TextField(String.empty, text: $label)
+                                .multilineTextAlignment(.trailing)
+                        }
+                    } else {
                         HStack {
                             Text(verbatim: .repeatCount)
                             Spacer()
@@ -68,8 +77,8 @@ struct ItemEditView: View {
                                     }
                             }.pickerStyle(WheelPickerStyle())
                                 .labelsHidden()
-                                .frame(maxWidth: .componentL,
-                                       maxHeight: .componentM)
+                                .frame(maxWidth: .componentS,
+                                       maxHeight: .componentS)
                                 .clipped()
                         }
                     }
@@ -110,9 +119,9 @@ struct ItemEditView: View {
     }
 
     private var isValid: Bool {
-        return !content.isEmpty
-            && income.isEmptyOrInt32
-            && expenditure.isEmptyOrInt32
+        return content.isNotEmpty
+            && income.isEmptyOrDecimal
+            && expenditure.isEmptyOrDecimal
     }
 
     private func save() {
@@ -125,6 +134,7 @@ struct ItemEditView: View {
                        content: content,
                        income: income.decimalValue,
                        expenditure: expenditure.decimalValue,
+                       label: label,
                        completion: dismiss)
     }
 
@@ -134,6 +144,7 @@ struct ItemEditView: View {
                          content: content,
                          income: income.decimalValue,
                          expenditure: expenditure.decimalValue,
+                         label: content,
                          repeatCount: repeatSelection + 1,
                          completion: dismiss)
     }

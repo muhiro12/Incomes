@@ -9,11 +9,15 @@
 import Foundation
 
 extension String {
-    var isEmptyOrInt32: Bool {
+    var isNotEmpty: Bool {
+        return !isEmpty
+    }
+
+    var isEmptyOrDecimal: Bool {
         if isEmpty {
             return true
         }
-        return Int32(self) != nil
+        return Decimal(string: self) != nil
     }
 
     var decimalValue: Decimal {

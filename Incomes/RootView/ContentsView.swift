@@ -18,7 +18,7 @@ struct ContentsView: View {
 
     private func createSection(from items: ListItems) -> [SectionItems] {
         var sectionItemsArray: [SectionItems] = [SectionItems(key: "", value: [items])]
-        items.grouped { $0.content.first.string.uppercased() }.reversed().forEach { items in
+        items.grouped { $0.label.first.string.uppercased() }.reversed().forEach { items in
             sectionItemsArray.append(
                 SectionItems(key: items.key,
                              value: items.grouped { $0.content })
@@ -38,7 +38,9 @@ struct ContentsView_Previews: PreviewProvider {
                                  content: "Content",
                                  income: 999999,
                                  expenditure: 99999,
-                                 balance: 9999999)
+                                 balance: 9999999,
+                                 label: .empty,
+                                 group: nil)
             ])
         )
     }

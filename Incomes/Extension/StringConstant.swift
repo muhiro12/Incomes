@@ -21,6 +21,7 @@ extension String {
     static var content: Self { "Content" }
     static var income: Self { "Income" }
     static var expenditure: Self { "Expenditure" }
+    static var label: Self { "Label" }
     static var repeatCount: Self { "Repeat" }
     static var save: Self { "Save" }
     static var duplicate: Self { "Duplicate" }
