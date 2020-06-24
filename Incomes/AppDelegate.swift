@@ -23,8 +23,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     // MARK: - Core Data stack
 
-    lazy var persistentContainer: NSPersistentCloudKitContainer = {
-        let container = NSPersistentCloudKitContainer(name: "Incomes")
+    lazy var persistentContainer: NSPersistentContainer = {
+        let container: NSPersistentContainer
+        if GlobalSettings.iCloud {
+            container = NSPersistentCloudKitContainer(name: "Incomes")
+        } else {
+            container = NSPersistentContainer(name: "Incomes")
+            let description = container.persistentStoreDescriptions.first
+            description?.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
+        }
         container.loadPersistentStores(completionHandler: { (_, error) in
             if let error = error as NSError? {
                 fatalError("Unresolved error \(error), \(error.userInfo)")
