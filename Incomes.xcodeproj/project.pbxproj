@@ -182,8 +182,8 @@
 				ADCF36DC24A1D1820011D6F5 /* AppDelegate.swift */,
 				ADCF36DE24A1D1820011D6F5 /* SceneDelegate.swift */,
 				ADCF36DD24A1D1820011D6F5 /* ContentView.swift */,
-				ADCF36F024A1D18E0011D6F5 /* RootView */,
-				ADCF36E224A1D18E0011D6F5 /* View */,
+				ADCF36F024A1D18E0011D6F5 /* View */,
+				ADCF36E224A1D18E0011D6F5 /* Component */,
 				ADCF36E924A1D18E0011D6F5 /* Interface */,
 				ADCF36EB24A1D18E0011D6F5 /* Model */,
 				ADCF36F524A1D18E0011D6F5 /* Extension */,
@@ -226,7 +226,7 @@
 			path = IncomesUITests;
 			sourceTree = "<group>";
 		};
-		ADCF36E224A1D18E0011D6F5 /* View */ = {
+		ADCF36E224A1D18E0011D6F5 /* Component */ = {
 			isa = PBXGroup;
 			children = (
 				ADCF36E424A1D18E0011D6F5 /* SectionView.swift */,
@@ -237,7 +237,7 @@
 				ADCF36E624A1D18E0011D6F5 /* ItemEditView.swift */,
 				ADCF376424A32E460011D6F5 /* FooterView.swift */,
 			);
-			path = View;
+			path = Component;
 			sourceTree = "<group>";
 		};
 		ADCF36E924A1D18E0011D6F5 /* Interface */ = {
@@ -259,14 +259,14 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
-		ADCF36F024A1D18E0011D6F5 /* RootView */ = {
+		ADCF36F024A1D18E0011D6F5 /* View */ = {
 			isa = PBXGroup;
 			children = (
 				ADCF36F324A1D18E0011D6F5 /* HomeView.swift */,
 				ADCF36F224A1D18E0011D6F5 /* GroupView.swift */,
 				ADCF376224A3147B0011D6F5 /* SettingsView.swift */,
 			);
-			path = RootView;
+			path = View;
 			sourceTree = "<group>";
 		};
 		ADCF36F524A1D18E0011D6F5 /* Extension */ = {

@@ -11,26 +11,32 @@ import SwiftUI
 struct GroupView: View {
     let items: ListItems
 
+    private var sections: [SectionItems] {
+        var sectionItemsArray = [
+            SectionItems(key: .empty, value: [items])
+        ]
+        items.grouped {
+            $0.label.first.string.uppercased()
+        }.reversed().forEach { items in
+            sectionItemsArray.append(
+                SectionItems(key: items.key,
+                             value: items.grouped {
+                                $0.content
+                    }
+            ))
+        }
+        return sectionItemsArray
+    }
+
     var body: some View {
         NavigationView {
             Form {
-                ForEach(createSection(from: items)) { section in
+                ForEach(sections) { section in
                     SectionView(section: section)
                 }
             }.groupedListStyle()
                 .navigationBarTitle(String.group)
         }
-    }
-
-    private func createSection(from items: ListItems) -> [SectionItems] {
-        var sectionItemsArray: [SectionItems] = [SectionItems(key: "", value: [items])]
-        items.grouped { $0.label.first.string.uppercased() }.reversed().forEach { items in
-            sectionItemsArray.append(
-                SectionItems(key: items.key,
-                             value: items.grouped { $0.content })
-            )
-        }
-        return sectionItemsArray
     }
 }
 

@@ -13,11 +13,11 @@ struct ItemEditView: View {
     @Environment(\.presentationMode) var presentationMode
 
     @State private var date = Date()
-    @State private var content = String.empty
-    @State private var income = String.empty
-    @State private var expenditure = String.empty
-    @State private var label = String.empty
-    @State private var repeatSelection = Int.zero
+    @State private var content: String = .empty
+    @State private var income: String = .empty
+    @State private var expenditure: String = .empty
+    @State private var label: String = .empty
+    @State private var repeatSelection: Int = .zero
 
     private var item: ListItem?
 

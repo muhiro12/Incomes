@@ -13,10 +13,25 @@ struct HomeView: View {
 
     let items: ListItems
 
+    private var sections: [SectionItems] {
+        var sectionItemsArray: [SectionItems] = []
+        items.grouped {
+            $0.date.year
+        }.forEach { items in
+            sectionItemsArray.append(
+                SectionItems(key: items.key,
+                             value: items.grouped {
+                                $0.date.yearAndMonth
+                    }
+            ))
+        }
+        return sectionItemsArray
+    }
+
     var body: some View {
         NavigationView {
             Form {
-                ForEach(createSection(from: items)) { section in
+                ForEach(sections) { section in
                     SectionView(section: section)
                 }
             }.groupedListStyle()
@@ -30,17 +45,6 @@ struct HomeView: View {
                 SettingsView()
             }
         }
-    }
-
-    private func createSection(from items: ListItems) -> [SectionItems] {
-        var sectionItemsArray: [SectionItems] = []
-        items.grouped { $0.date.year }.forEach { items in
-            sectionItemsArray.append(
-                SectionItems(key: items.key,
-                             value: items.grouped { $0.date.yearAndMonth })
-            )
-        }
-        return sectionItemsArray
     }
 
     private func presentSetting() {
