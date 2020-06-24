@@ -86,27 +86,21 @@ struct ItemEditView: View {
                 Section {
                     if isEditMode {
                         Button(action: save) {
-                            HStack {
-                                Spacer()
-                                Text(verbatim: .save)
-                                Spacer()
-                            }
+                            Text(verbatim: .save)
+                                .frame(maxWidth: .greatestFiniteMagnitude,
+                                       alignment: .center)
                         }.disabled(!isValid)
                     }
                     Button(action: create) {
-                        HStack {
-                            Spacer()
-                            Text(verbatim: isEditMode ? .duplicate : .create)
-                            Spacer()
-                        }
+                        Text(verbatim: isEditMode ? .duplicate : .create)
+                            .frame(maxWidth: .greatestFiniteMagnitude,
+                                   alignment: .center)
                     }.disabled(!isValid)
                     Button(action: cancel) {
-                        HStack {
-                            Spacer()
-                            Text(verbatim: .cancel)
-                                .foregroundColor(.red)
-                            Spacer()
-                        }
+                        Text(verbatim: .cancel)
+                            .frame(maxWidth: .greatestFiniteMagnitude,
+                                   alignment: .center)
+                            .foregroundColor(.red)
                     }
                 }
             }.groupedListStyle()

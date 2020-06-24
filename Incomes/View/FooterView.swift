@@ -18,11 +18,7 @@ struct FooterView: View {
     var body: some View {
         VStack {
             Divider()
-            Spacer()
-                .frame(height: .spaceM)
             HStack {
-                Spacer()
-                    .frame(width: .spaceM)
                 Button(action: toNextScene) {
                     Image(systemName: scene.isHome ? .groupIcon : .homeIcon)
                         .iconFrame()
@@ -32,11 +28,10 @@ struct FooterView: View {
                     Image(systemName: .createIcon)
                         .iconFrame()
                 }
-                Spacer()
-                    .frame(width: .spaceM)
-            }
-            Spacer()
-                .frame(height: .spaceS)
+            }.padding(EdgeInsets(top: .spaceM,
+                                 leading: .spaceM,
+                                 bottom: .spaceS,
+                                 trailing: .spaceM))
         }.sheet(isPresented: $isPresentingItemEditView) {
             ItemEditView()
                 .environment(\.managedObjectContext, self.context)
