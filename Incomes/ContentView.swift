@@ -25,7 +25,7 @@ struct ContentView: View {
             if isHome {
                 HomeView(items: listItems)
             } else {
-                ContentsView(items: listItems)
+                GroupView(items: listItems)
             }
             FooterView(isHome: $isHome)
         }

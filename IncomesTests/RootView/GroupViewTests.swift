@@ -1,5 +1,5 @@
 //
-//  ContentsViewTests.swift
+//  GroupViewTests.swift
 //  IncomesTests
 //
 //  Created by Hiromu Nakano on 2020/04/14.
@@ -9,12 +9,12 @@
 import XCTest
 @testable import Incomes
 
-class ContentsViewTests: XCTestCase {
+class GroupViewTests: XCTestCase {
     func testPreviews() {
-        XCTAssertNoThrow(ContentsView_Previews.previews)
+        XCTAssertNoThrow(GroupView_Previews.previews)
     }
 
     func testBody() {
-        XCTAssertNoThrow(ContentsView_Previews.previews.body)
+        XCTAssertNoThrow(GroupView_Previews.previews.body)
     }
 }

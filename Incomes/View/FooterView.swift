@@ -24,7 +24,7 @@ struct FooterView: View {
                 Spacer()
                     .frame(width: .spaceM)
                 Button(action: changeMainView) {
-                    Image(systemName: isHome ? .contentsIcon : .homeIcon)
+                    Image(systemName: isHome ? .groupIcon : .homeIcon)
                         .iconFrame()
                 }
                 Spacer()

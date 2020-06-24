@@ -17,8 +17,8 @@ extension String {
     // MARK: - Home
     static var home: Self { "Home" }
 
-    // MARK: - Contents
-    static var contents: Self { "Contents" }
+    // MARK: - Group
+    static var group: Self { "Group" }
 
     // MARK: - Settings
     static var settings: Self { "Settings" }
@@ -40,7 +40,7 @@ extension String {
 
     // MARK: - Image SystemName
     static var homeIcon: Self { "calendar" }
-    static var contentsIcon: Self { "tag" }
+    static var groupIcon: Self { "tag" }
     static var settingsIcon: Self { "gear" }
     static var createIcon: Self { "square.and.pencil" }
 }

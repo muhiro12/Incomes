@@ -1,5 +1,5 @@
 //
-//  ContentsView.swift
+//  GroupView.swift
 //  Incomes
 //
 //  Created by Hiromu Nakano on 2020/04/14.
@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct ContentsView: View {
+struct GroupView: View {
     let items: ListItems
 
     var body: some View {
@@ -18,7 +18,7 @@ struct ContentsView: View {
                     SectionView(section: section)
                 }
             }.groupedListStyle()
-                .navigationBarTitle(String.contents)
+                .navigationBarTitle(String.group)
         }
     }
 
@@ -34,9 +34,9 @@ struct ContentsView: View {
     }
 }
 
-struct ContentsView_Previews: PreviewProvider {
+struct GroupView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentsView(items:
+        GroupView(items:
             ListItems(key: "All",
                       value: [
                         ListItem(id: UUID(),
