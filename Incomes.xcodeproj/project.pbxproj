@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		ADCF36AF24A1D0F40011D6F5 /* Incomes.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = ADCF36AD24A1D0F40011D6F5 /* Incomes.xcdatamodeld */; };
 		ADCF36B324A1D0F70011D6F5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ADCF36B224A1D0F70011D6F5 /* Assets.xcassets */; };
 		ADCF36B624A1D0F70011D6F5 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ADCF36B524A1D0F70011D6F5 /* Preview Assets.xcassets */; };
 		ADCF36B924A1D0F70011D6F5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = ADCF36B724A1D0F70011D6F5 /* LaunchScreen.storyboard */; };
@@ -52,6 +51,8 @@
 		ADCF373424A1D1CF0011D6F5 /* HomeViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF372524A1D1CF0011D6F5 /* HomeViewTests.swift */; };
 		ADCF373524A1D1CF0011D6F5 /* ContentsViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF372624A1D1CF0011D6F5 /* ContentsViewTests.swift */; };
 		ADCF375824A2C8260011D6F5 /* DecimalExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF375724A2C8250011D6F5 /* DecimalExtension.swift */; };
+		ADCF375C24A2FBBD0011D6F5 /* Incomes.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = ADCF375A24A2FBBD0011D6F5 /* Incomes.xcdatamodeld */; };
+		ADCF375F24A2FEAF0011D6F5 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADCF375E24A2FEAF0011D6F5 /* CloudKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -73,7 +74,6 @@
 
 /* Begin PBXFileReference section */
 		ADCF36A624A1D0F40011D6F5 /* Incomes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Incomes.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		ADCF36AE24A1D0F40011D6F5 /* Incomes.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Incomes.xcdatamodel; sourceTree = "<group>"; };
 		ADCF36B224A1D0F70011D6F5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		ADCF36B524A1D0F70011D6F5 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		ADCF36B824A1D0F70011D6F5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -124,6 +124,8 @@
 		ADCF372524A1D1CF0011D6F5 /* HomeViewTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeViewTests.swift; sourceTree = "<group>"; };
 		ADCF372624A1D1CF0011D6F5 /* ContentsViewTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentsViewTests.swift; sourceTree = "<group>"; };
 		ADCF375724A2C8250011D6F5 /* DecimalExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecimalExtension.swift; sourceTree = "<group>"; };
+		ADCF375B24A2FBBD0011D6F5 /* Incomes.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Incomes.xcdatamodel; sourceTree = "<group>"; };
+		ADCF375E24A2FEAF0011D6F5 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -131,6 +133,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ADCF375F24A2FEAF0011D6F5 /* CloudKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -158,6 +161,7 @@
 				ADCF36C224A1D0F70011D6F5 /* IncomesTests */,
 				ADCF36CD24A1D0F70011D6F5 /* IncomesUITests */,
 				ADCF36A724A1D0F40011D6F5 /* Products */,
+				ADCF375D24A2FEAF0011D6F5 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -186,7 +190,7 @@
 				ADCF36B224A1D0F70011D6F5 /* Assets.xcassets */,
 				ADCF36B724A1D0F70011D6F5 /* LaunchScreen.storyboard */,
 				ADCF36BA24A1D0F70011D6F5 /* Info.plist */,
-				ADCF36AD24A1D0F40011D6F5 /* Incomes.xcdatamodeld */,
+				ADCF375A24A2FBBD0011D6F5 /* Incomes.xcdatamodeld */,
 				ADCF36B424A1D0F70011D6F5 /* Preview Content */,
 			);
 			path = Incomes;
@@ -311,6 +315,14 @@
 				ADCF372624A1D1CF0011D6F5 /* ContentsViewTests.swift */,
 			);
 			path = RootView;
+			sourceTree = "<group>";
+		};
+		ADCF375D24A2FEAF0011D6F5 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				ADCF375E24A2FEAF0011D6F5 /* CloudKit.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -481,8 +493,8 @@
 				ADCF370024A1D18E0011D6F5 /* ListView.swift in Sources */,
 				ADCF370324A1D18E0011D6F5 /* ListItemView.swift in Sources */,
 				ADCF370B24A1D18E0011D6F5 /* HomeView.swift in Sources */,
-				ADCF36AF24A1D0F40011D6F5 /* Incomes.xcdatamodeld in Sources */,
 				ADCF370524A1D18E0011D6F5 /* SectionItems.swift in Sources */,
+				ADCF375C24A2FBBD0011D6F5 /* Incomes.xcdatamodeld in Sources */,
 				ADCF370F24A1D18E0011D6F5 /* CGFloatConstant.swift in Sources */,
 				ADCF370124A1D18E0011D6F5 /* ItemEditView.swift in Sources */,
 				ADCF375824A2C8260011D6F5 /* DecimalExtension.swift in Sources */,
@@ -671,6 +683,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Incomes/Incomes.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"Incomes/Preview Content\"";
@@ -695,6 +708,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Incomes/Incomes.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"Incomes/Preview Content\"";
@@ -839,12 +853,12 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		ADCF36AD24A1D0F40011D6F5 /* Incomes.xcdatamodeld */ = {
+		ADCF375A24A2FBBD0011D6F5 /* Incomes.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				ADCF36AE24A1D0F40011D6F5 /* Incomes.xcdatamodel */,
+				ADCF375B24A2FBBD0011D6F5 /* Incomes.xcdatamodel */,
 			);
-			currentVersion = ADCF36AE24A1D0F40011D6F5 /* Incomes.xcdatamodel */;
+			currentVersion = ADCF375B24A2FBBD0011D6F5 /* Incomes.xcdatamodel */;
 			path = Incomes.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
