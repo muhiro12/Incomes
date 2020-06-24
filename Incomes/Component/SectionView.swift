@@ -16,12 +16,6 @@ struct SectionView: View {
 
     let section: SectionItems
 
-    var body: some View {
-        Section(header: Text(section.key.isNotEmpty ? section.key : .others)) {
-            navigationLinks
-        }
-    }
-
     private var navigationLinks: some View {
         return ForEach(section.value) { items in
             NavigationLink(destination:
@@ -36,6 +30,12 @@ struct SectionView: View {
                       primaryButton: .destructive(Text(verbatim: .delete),
                                                   action: delete),
                       secondaryButton: .cancel())
+        }
+    }
+
+    var body: some View {
+        Section(header: Text(section.key)) {
+            navigationLinks
         }
     }
 

@@ -18,8 +18,9 @@ struct GroupView: View {
         items.grouped {
             $0.group
         }.reversed().forEach { items in
+            let key = items.key.isNotEmpty ? items.key : .others
             sectionItemsArray.append(
-                SectionItems(key: items.key,
+                SectionItems(key: key,
                              value: items.grouped {
                                 $0.content
                     }
