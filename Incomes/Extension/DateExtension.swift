@@ -26,4 +26,10 @@ extension Date {
         formatter.dateFormat = DateFormatter.dateFormat(fromTemplate: "Md", options: 0, locale: .current)
         return formatter.string(from: self)
     }
+
+    var yearAndMonthAndDay: String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = DateFormatter.dateFormat(fromTemplate: "yMd", options: 0, locale: .current)
+        return formatter.string(from: self)
+    }
 }
