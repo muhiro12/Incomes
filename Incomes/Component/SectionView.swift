@@ -45,10 +45,10 @@ struct SectionView: View {
     }
 
     private func delete() {
+        let dataStore = DataStore(context: context)
         indexSet.forEach {
             section.value[$0].value.forEach { item in
                 if let item = item.original {
-                    let dataStore = DataStore(context: context)
                     dataStore.delete(item)
                 }
             }
