@@ -1,5 +1,5 @@
 //
-//  ItemEditViewTests.swift
+//  EditViewTests.swift
 //  IncomesTests
 //
 //  Created by Hiromu Nakano on 2020/04/13.
@@ -9,12 +9,12 @@
 import XCTest
 @testable import Incomes
 
-class ItemEditViewTests: XCTestCase {
+class EditViewTests: XCTestCase {
     func testPreviews() {
-        XCTAssertNoThrow(ItemEditView_Previews.previews)
+        XCTAssertNoThrow(EditView_Previews.previews)
     }
 
     func testBody() {
-        XCTAssertNoThrow(ItemEditView_Previews.previews.body)
+        XCTAssertNoThrow(EditView_Previews.previews.body)
     }
 }

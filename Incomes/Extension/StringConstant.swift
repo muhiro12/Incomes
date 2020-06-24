@@ -12,19 +12,20 @@ extension String {
     // MARK: - Common
     static var empty: Self { "" }
     static var zero: Self { "0" }
-    static var one: Self { "1" }
+    static var all: Self { "All" }
+    static var caution: Self { "Caution" }
+    static var cautionDetail: Self { "This action cannot be undone." }
+    static var delete: Self { "Delete" }
 
     // MARK: - Home
-    static var home: Self { "Home" }
+    static var homeTitle: Self { "Home" }
 
     // MARK: - Group
-    static var group: Self { "Group" }
+    static var groupTitle: Self { "Group" }
 
-    // MARK: - Settings
-    static var settings: Self { "Settings" }
-
-    // MARK: - ItemEdit
-    static var edit: Self { "Edit" }
+    // MARK: - Edit
+    static var editTitle: Self { "Edit" }
+    static var createTitle: Self { "Create" }
     static var information: Self { "Information" }
     static var date: Self { "Date" }
     static var content: Self { "Content" }
@@ -36,7 +37,11 @@ extension String {
     static var duplicate: Self { "Duplicate" }
     static var create: Self { "Create" }
     static var cancel: Self { "Cancel" }
-    static var delete: Self { "Delete" }
+
+    // MARK: - Settings
+    static var settingsTitle: Self { "Settings" }
+    static var icloud: Self { "iCloud" }
+    static var limitedTime: Self { "for a limited time" }
 
     // MARK: - Image SystemName
     static var homeIcon: Self { "calendar" }

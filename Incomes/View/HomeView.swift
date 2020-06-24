@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct HomeView: View {
-    @State private var isPresentedSettings = false
+    @State private var isPresentedToSettings = false
 
     let items: ListItems
 
@@ -35,20 +35,20 @@ struct HomeView: View {
                     SectionView(section: section)
                 }
             }.groupedListStyle()
-                .navigationBarTitle(String.home)
+                .navigationBarTitle(String.homeTitle)
                 .navigationBarItems(trailing:
-                    Button(action: presentSetting) {
+                    Button(action: presentToSetting) {
                         Image(systemName: .settingsIcon)
                             .iconFrame()
                     }
-            ).sheet(isPresented: $isPresentedSettings) {
+            ).sheet(isPresented: $isPresentedToSettings) {
                 SettingsView()
             }
         }
     }
 
-    private func presentSetting() {
-        isPresentedSettings = true
+    private func presentToSetting() {
+        isPresentedToSettings = true
     }
 }
 

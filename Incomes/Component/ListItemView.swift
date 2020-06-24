@@ -11,7 +11,7 @@ import SwiftUI
 struct ListItemView: View {
     @Environment(\.managedObjectContext) var context
 
-    @State private var isPresented = false
+    @State private var isPresentedToEdit = false
 
     private let item: ListItem
 
@@ -26,13 +26,15 @@ struct ListItemView: View {
             } else {
                 ListItemNarrowView(of: self.item)
             }
-        }.sheet(isPresented: $isPresented) {
-            ItemEditView(of: self.item)
+        }.sheet(isPresented: $isPresentedToEdit) {
+            EditView(of: self.item)
                 .environment(\.managedObjectContext, self.context)
         }.contentShape(Rectangle())
-            .onTapGesture {
-                self.isPresented = true
-        }
+            .onTapGesture(perform: presentToEdit)
+    }
+
+    private func presentToEdit() {
+        isPresentedToEdit = true
     }
 }
 

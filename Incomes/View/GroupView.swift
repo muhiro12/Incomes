@@ -35,7 +35,7 @@ struct GroupView: View {
                     SectionView(section: section)
                 }
             }.groupedListStyle()
-                .navigationBarTitle(String.group)
+                .navigationBarTitle(String.groupTitle)
         }
     }
 }

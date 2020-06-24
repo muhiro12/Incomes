@@ -11,7 +11,7 @@ import SwiftUI
 struct SectionView: View {
     @Environment(\.managedObjectContext) var context
 
-    @State private var isPresentingAlert = false
+    @State private var isPresentedToAlert = false
     @State private var indexSet = IndexSet()
 
     let section: SectionItems
@@ -37,18 +37,18 @@ struct SectionView: View {
                     .navigationBarTitle(items.key)) {
                         Text(items.key)
             }
-        }.onDelete(perform: showAlert)
-            .alert(isPresented: $isPresentingAlert) {
-                Alert(title: Text("Caution"),
-                      message: Text("This action cannot be undone."),
-                      primaryButton: .destructive(Text("Delete"), action: delete),
+        }.onDelete(perform: presentToAlert)
+            .alert(isPresented: $isPresentedToAlert) {
+                Alert(title: Text(verbatim: .caution),
+                      message: Text(verbatim: .cautionDetail),
+                      primaryButton: .destructive(Text(verbatim: .delete), action: delete),
                       secondaryButton: .cancel())
         }
     }
 
-    private func showAlert(indexSet: IndexSet) {
+    private func presentToAlert(indexSet: IndexSet) {
         self.indexSet = indexSet
-        isPresentingAlert = true
+        isPresentedToAlert = true
     }
 
     private func delete() {

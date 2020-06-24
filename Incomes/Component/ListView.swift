@@ -11,7 +11,7 @@ import SwiftUI
 struct ListView: View {
     @Environment(\.managedObjectContext) var context
 
-    @State private var isPresentingAlert = false
+    @State private var isPresentedToAlert = false
     @State private var indexSet = IndexSet()
 
     private let items: ListItems
@@ -24,19 +24,19 @@ struct ListView: View {
         List {
             ForEach(items.value) { item in
                 ListItemView(of: item)
-            }.onDelete(perform: showAlert)
+            }.onDelete(perform: presentToAlert)
         }.groupedListStyle()
-            .alert(isPresented: $isPresentingAlert) {
-                Alert(title: Text("Caution"),
-                      message: Text("This action cannot be undone."),
-                      primaryButton: .destructive(Text("Delete"), action: delete),
+            .alert(isPresented: $isPresentedToAlert) {
+                Alert(title: Text(verbatim: .caution),
+                      message: Text(verbatim: .cautionDetail),
+                      primaryButton: .destructive(Text(verbatim: .delete), action: delete),
                       secondaryButton: .cancel())
         }
     }
 
-    private func showAlert(indexSet: IndexSet) {
+    private func presentToAlert(indexSet: IndexSet) {
         self.indexSet = indexSet
-        isPresentingAlert = true
+        isPresentedToAlert = true
     }
 
     private func delete() {

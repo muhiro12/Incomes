@@ -9,16 +9,18 @@
 import SwiftUI
 
 struct SettingsView: View {
-    @State private var isOn = false
+    @State private var iCloud = false
 
     var body: some View {
         NavigationView {
             Form {
-                Toggle(isOn: $isOn) {
-                    Text(String.settings)
+                Section(footer: Text(verbatim: .limitedTime)) {
+                    Toggle(isOn: $iCloud) {
+                        Text(verbatim: .icloud)
+                    }
                 }
             }.groupedListStyle()
-                .navigationBarTitle(String.settings)
+                .navigationBarTitle(String.settingsTitle)
         }
     }
 }

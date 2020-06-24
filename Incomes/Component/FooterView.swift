@@ -13,7 +13,7 @@ struct FooterView: View {
 
     @Binding var scene: Scene
 
-    @State private var isPresentingItemEditView = false
+    @State private var isPresentedToEdit = false
 
     var body: some View {
         VStack {
@@ -24,16 +24,16 @@ struct FooterView: View {
                         .iconFrame()
                 }
                 Spacer()
-                Button(action: presentItemEdit) {
+                Button(action: presentToEdit) {
                     Image(systemName: .createIcon)
                         .iconFrame()
                 }
-            }.padding(EdgeInsets(top: .spaceM,
+            }.padding(EdgeInsets(top: .spaceS,
                                  leading: .spaceM,
                                  bottom: .spaceS,
                                  trailing: .spaceM))
-        }.sheet(isPresented: $isPresentingItemEditView) {
-            ItemEditView()
+        }.sheet(isPresented: $isPresentedToEdit) {
+            EditView()
                 .environment(\.managedObjectContext, self.context)
         }
     }
@@ -42,8 +42,8 @@ struct FooterView: View {
         self.scene.toNext()
     }
 
-    private func presentItemEdit() {
-        isPresentingItemEditView = true
+    private func presentToEdit() {
+        isPresentedToEdit = true
     }
 }
 

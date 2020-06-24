@@ -51,7 +51,7 @@ struct ListItems: Identifiable {
             listItems.append(listItem)
         }
 
-        self.init(key: "All", value: listItems.reversed())
+        self.init(key: .all, value: listItems.reversed())
     }
 
     func grouped(by keyForValue: (ListItem) -> String) -> [Self] {

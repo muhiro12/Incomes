@@ -1,5 +1,5 @@
 //
-//  ItemEditView.swift
+//  EditView.swift
 //  Incomes
 //
 //  Created by Hiromu Nakano on 2020/04/10.
@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct ItemEditView: View {
+struct EditView: View {
     @Environment(\.managedObjectContext) var context
     @Environment(\.presentationMode) var presentationMode
 
@@ -20,6 +20,16 @@ struct ItemEditView: View {
     @State private var repeatSelection: Int = .zero
 
     private var item: ListItem?
+
+    private var isEditMode: Bool {
+        return item != nil
+    }
+
+    private var isValid: Bool {
+        return content.isNotEmpty
+            && income.isEmptyOrDecimal
+            && expenditure.isEmptyOrDecimal
+    }
 
     init() {}
 
@@ -104,18 +114,8 @@ struct ItemEditView: View {
                     }
                 }
             }.groupedListStyle()
-                .navigationBarTitle(String.edit)
+                .navigationBarTitle(isEditMode ? String.editTitle : String.createTitle)
         }
-    }
-
-    private var isEditMode: Bool {
-        return item != nil
-    }
-
-    private var isValid: Bool {
-        return content.isNotEmpty
-            && income.isEmptyOrDecimal
-            && expenditure.isEmptyOrDecimal
     }
 
     private func save() {
@@ -160,8 +160,8 @@ struct ItemEditView: View {
     }
 }
 
-struct ItemEditView_Previews: PreviewProvider {
+struct EditView_Previews: PreviewProvider {
     static var previews: some View {
-        ItemEditView()
+        EditView()
     }
 }

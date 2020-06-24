@@ -12,7 +12,7 @@ extension Int {
     // MARK: - Common
     static var one: Self { 1 }
 
-    // MARK: - ItemEdit
+    // MARK: - Edit
     static var minRepeatCount: Self { 1 }
     static var maxRepeatCount: Self { 60 }
 }
