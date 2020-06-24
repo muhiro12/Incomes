@@ -14,7 +14,7 @@ struct ListItem: Identifiable {
 
     let date: Date
     let content: String
-    let income: Int
-    let expenditure: Int
-    let balance: Int
+    let income: Decimal
+    let expenditure: Decimal
+    let balance: Decimal
 }

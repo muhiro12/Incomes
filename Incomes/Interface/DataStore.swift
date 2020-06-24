@@ -12,11 +12,11 @@ import CoreData
 struct DataStore {
     let context: NSManagedObjectContext
 
-    func save(_ item: Item, date: Date, content: String, income: Int, expenditure: Int, completion: (() -> Void)? = nil) {
+    func save(_ item: Item, date: Date, content: String, income: Decimal, expenditure: Decimal, completion: (() -> Void)? = nil) {
         item.date = date
         item.content = content
-        item.income = Int32(income)
-        item.expenditure = Int32(expenditure)
+        item.income = income.asNSDecimalNumber
+        item.expenditure = expenditure.asNSDecimalNumber
 
         do {
             try context.save()
@@ -26,13 +26,13 @@ struct DataStore {
         }
     }
 
-    func create(date: Date, content: String, income: Int, expenditure: Int, times: Int, completion: (() -> Void)? = nil) {
-        for index in 0..<times {
+    func create(date: Date, content: String, income: Decimal, expenditure: Decimal, repeatCount: Int, completion: (() -> Void)? = nil) {
+        for index in 0..<repeatCount {
             let item = Item(context: context)
             item.date = Calendar.current.date(byAdding: .month, value: index, to: date)
             item.content = content
-            item.income = Int32(income)
-            item.expenditure = Int32(expenditure)
+            item.income = income.asNSDecimalNumber
+            item.expenditure = expenditure.asNSDecimalNumber
         }
 
         do {

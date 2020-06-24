@@ -15,4 +15,8 @@ extension String {
         }
         return Int32(self) != nil
     }
+
+    var decimalValue: Decimal {
+        return Decimal(string: self) ?? .zero
+    }
 }

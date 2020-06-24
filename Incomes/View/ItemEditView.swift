@@ -123,8 +123,8 @@ struct ItemEditView: View {
         dataStore.save(item,
                        date: date,
                        content: content,
-                       income: Int(income) ?? .zero,
-                       expenditure: Int(expenditure) ?? .zero,
+                       income: income.decimalValue,
+                       expenditure: expenditure.decimalValue,
                        completion: dismiss)
     }
 
@@ -132,9 +132,9 @@ struct ItemEditView: View {
         let dataStore = DataStore(context: context)
         dataStore.create(date: date,
                          content: content,
-                         income: Int(income) ?? .zero,
-                         expenditure: Int(expenditure) ?? .zero,
-                         times: repeatSelection + 1,
+                         income: income.decimalValue,
+                         expenditure: expenditure.decimalValue,
+                         repeatCount: repeatSelection + 1,
                          completion: dismiss)
     }
 

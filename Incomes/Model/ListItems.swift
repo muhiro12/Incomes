@@ -22,26 +22,31 @@ struct ListItems: Identifiable {
     init(from items: [Item]) {
         var listItems: [ListItem] = []
 
-        for index in 0..<items.count {
-            let item = items[index]
+        items.enumerated().forEach {
+            let index = $0.offset
+            let item = $0.element
 
-            var balance = 0
-            if listItems.count > 0 {
+            guard let date = item.date,
+                let content = item.content,
+                let income = item.income?.decimalValue,
+                let expenditure = item.expenditure?.decimalValue else {
+                    return
+            }
+
+            var balance = Decimal.zero
+            if index > 0 {
                 balance += listItems[index - 1].balance
             }
-            balance += Int(item.income - item.expenditure)
+            balance += income - expenditure
 
-            if let date = item.date,
-                let content = item.content {
-                let listItem = ListItem(id: UUID(),
-                                        original: item,
-                                        date: date,
-                                        content: content,
-                                        income: Int(item.income),
-                                        expenditure: Int(item.expenditure),
-                                        balance: balance)
-                listItems.append(listItem)
-            }
+            let listItem = ListItem(id: UUID(),
+                                    original: item,
+                                    date: date,
+                                    content: content,
+                                    income: income,
+                                    expenditure: expenditure,
+                                    balance: balance)
+            listItems.append(listItem)
         }
 
         self.init(key: "All", value: listItems.reversed())
