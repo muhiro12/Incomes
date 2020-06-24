@@ -12,8 +12,14 @@ struct ContentsView: View {
     let items: ListItems
 
     var body: some View {
-        NavigationRootView(title: "Contents",
-                           sections: createSection(from: items))
+        NavigationView {
+            Form {
+                ForEach(createSection(from: items)) { section in
+                    SectionView(section: section)
+                }
+            }.groupedListStyle()
+                .navigationBarTitle(String.contents)
+        }
     }
 
     private func createSection(from items: ListItems) -> [SectionItems] {

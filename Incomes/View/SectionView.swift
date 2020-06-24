@@ -15,7 +15,6 @@ struct SectionView: View {
     @State private var indexSet = IndexSet()
 
     let section: SectionItems
-    let toItemEdit: (() -> Void)
 
     var body: some View {
         Group {
@@ -35,8 +34,7 @@ struct SectionView: View {
         return ForEach(section.value) { items in
             NavigationLink(destination:
                 ListView(of: items)
-                    .navigationBarTitle(items.key)
-                    .navigationBarItem(toItemEdit: self.toItemEdit)) {
+                    .navigationBarTitle(items.key)) {
                         Text(items.key)
             }
         }.onDelete(perform: showAlert)
@@ -84,8 +82,6 @@ struct SectionView_Previews: PreviewProvider {
                     ]
                 )
             ]
-            ), toItemEdit: {
-                print()
-        })
+        ))
     }
 }

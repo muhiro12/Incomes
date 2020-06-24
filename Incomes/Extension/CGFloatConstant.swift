@@ -11,11 +11,13 @@ import UIKit
 extension CGFloat {
     private static var unit: Self { 8 }
 
-    static var iconS: Self { unit * 3 }
-    static var iconM: Self { unit * 6 }
-    static var iconL: Self { unit * 9 }
+    static var spaceS: Self { unit * 1 }
+    static var spaceM: Self { unit * 2 }
+    static var spaceL: Self { unit * 3 }
 
     static var componentS: Self { unit * 8 }
     static var componentM: Self { unit * 10 }
     static var componentL: Self { unit * 12 }
+
+    static var icon: Self { unit * 3 }
 }

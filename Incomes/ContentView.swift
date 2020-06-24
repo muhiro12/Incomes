@@ -14,8 +14,21 @@ struct ContentView: View {
         sortDescriptors: [NSSortDescriptor(keyPath: \Item.date, ascending: true)]
     ) var items: FetchedResults<Item>
 
+    @State private var isHome = true
+
+    private var listItems: ListItems {
+        ListItems(from: items.map { $0 })
+    }
+
     var body: some View {
-        TabRootView(items: ListItems(from: items.map { $0 }))
+        VStack(spacing: .zero) {
+            if isHome {
+                HomeView(items: listItems)
+            } else {
+                ContentsView(items: listItems)
+            }
+            FooterView(isHome: $isHome)
+        }
     }
 }
 

@@ -14,6 +14,15 @@ extension String {
     static var zero: Self { "0" }
     static var one: Self { "1" }
 
+    // MARK: - Home
+    static var home: Self { "Home" }
+
+    // MARK: - Contents
+    static var contents: Self { "Contents" }
+
+    // MARK: - Settings
+    static var settings: Self { "Settings" }
+
     // MARK: - ItemEdit
     static var edit: Self { "Edit" }
     static var information: Self { "Information" }
@@ -30,5 +39,8 @@ extension String {
     static var delete: Self { "Delete" }
 
     // MARK: - Image SystemName
-    static var squareAndPencil: Self { "square.and.pencil" }
+    static var homeIcon: Self { "calendar" }
+    static var contentsIcon: Self { "tag" }
+    static var settingsIcon: Self { "gear" }
+    static var createIcon: Self { "square.and.pencil" }
 }

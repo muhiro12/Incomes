@@ -9,11 +9,27 @@
 import SwiftUI
 
 struct HomeView: View {
+    @State private var isPresentedSettings = false
+
     let items: ListItems
 
     var body: some View {
-        NavigationRootView(title: "Home",
-                           sections: createSection(from: items))
+        NavigationView {
+            Form {
+                ForEach(createSection(from: items)) { section in
+                    SectionView(section: section)
+                }
+            }.groupedListStyle()
+                .navigationBarTitle(String.home)
+                .navigationBarItems(trailing:
+                    Button(action: presentSetting) {
+                        Image(systemName: .settingsIcon)
+                            .iconFrame()
+                    }
+            ).sheet(isPresented: $isPresentedSettings) {
+                SettingsView()
+            }
+        }
     }
 
     private func createSection(from items: ListItems) -> [SectionItems] {
@@ -25,6 +41,10 @@ struct HomeView: View {
             )
         }
         return sectionItemsArray
+    }
+
+    private func presentSetting() {
+        isPresentedSettings = true
     }
 }
 
