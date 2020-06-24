@@ -52,6 +52,7 @@
 		ADCF376324A3147B0011D6F5 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF376224A3147B0011D6F5 /* SettingsView.swift */; };
 		ADCF376524A32E460011D6F5 /* FooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF376424A32E460011D6F5 /* FooterView.swift */; };
 		ADCF376924A33F500011D6F5 /* ImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF376824A33F500011D6F5 /* ImageExtension.swift */; };
+		ADCF376B24A343C30011D6F5 /* Scene.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF376A24A343C30011D6F5 /* Scene.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -124,6 +125,7 @@
 		ADCF376224A3147B0011D6F5 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		ADCF376424A32E460011D6F5 /* FooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FooterView.swift; sourceTree = "<group>"; };
 		ADCF376824A33F500011D6F5 /* ImageExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageExtension.swift; sourceTree = "<group>"; };
+		ADCF376A24A343C30011D6F5 /* Scene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scene.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -252,6 +254,7 @@
 				ADCF36EC24A1D18E0011D6F5 /* SectionItems.swift */,
 				ADCF36ED24A1D18E0011D6F5 /* ListItem.swift */,
 				ADCF36EE24A1D18E0011D6F5 /* ListItems.swift */,
+				ADCF376A24A343C30011D6F5 /* Scene.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -476,6 +479,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				ADCF36DF24A1D1820011D6F5 /* AppDelegate.swift in Sources */,
+				ADCF376B24A343C30011D6F5 /* Scene.swift in Sources */,
 				ADCF36FE24A1D18E0011D6F5 /* ListItemNarrowView.swift in Sources */,
 				ADCF376524A32E460011D6F5 /* FooterView.swift in Sources */,
 				ADCF36FF24A1D18E0011D6F5 /* SectionView.swift in Sources */,

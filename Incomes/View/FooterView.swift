@@ -11,7 +11,7 @@ import SwiftUI
 struct FooterView: View {
     @Environment(\.managedObjectContext) var context
 
-    @Binding var isHome: Bool
+    @Binding var scene: Scene
 
     @State private var isPresentingItemEditView = false
 
@@ -23,8 +23,8 @@ struct FooterView: View {
             HStack {
                 Spacer()
                     .frame(width: .spaceM)
-                Button(action: changeMainView) {
-                    Image(systemName: isHome ? .groupIcon : .homeIcon)
+                Button(action: toNextScene) {
+                    Image(systemName: scene.isHome ? .groupIcon : .homeIcon)
                         .iconFrame()
                 }
                 Spacer()
@@ -43,8 +43,8 @@ struct FooterView: View {
         }
     }
 
-    private func changeMainView() {
-        self.isHome.toggle()
+    private func toNextScene() {
+        self.scene.toNext()
     }
 
     private func presentItemEdit() {
@@ -54,6 +54,6 @@ struct FooterView: View {
 
 struct FooterView_Previews: PreviewProvider {
     static var previews: some View {
-        FooterView(isHome: .constant(true))
+        FooterView(scene: .constant(.home))
     }
 }
