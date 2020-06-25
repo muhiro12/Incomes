@@ -417,8 +417,8 @@
 				ADCF36A224A1D0F40011D6F5 /* Sources */,
 				ADCF36A324A1D0F40011D6F5 /* Frameworks */,
 				ADCF36A424A1D0F40011D6F5 /* Resources */,
-				ADCF373624A1D5160011D6F5 /* ShellScript */,
-				ADCF391F24A550C70011D6F5 /* ShellScript */,
+				ADCF373624A1D5160011D6F5 /* SwiftLint */,
+				ADCF391F24A550C70011D6F5 /* Carthage */,
 			);
 			buildRules = (
 			);
@@ -538,7 +538,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		ADCF373624A1D5160011D6F5 /* ShellScript */ = {
+		ADCF373624A1D5160011D6F5 /* SwiftLint */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -547,6 +547,7 @@
 			);
 			inputPaths = (
 			);
+			name = SwiftLint;
 			outputFileListPaths = (
 			);
 			outputPaths = (
@@ -555,7 +556,7 @@
 			shellPath = /bin/sh;
 			shellScript = "if which swiftlint >/dev/null; then\n    swiftlint autocorrect --format\n    swiftlint\nelse\n    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
 		};
-		ADCF391F24A550C70011D6F5 /* ShellScript */ = {
+		ADCF391F24A550C70011D6F5 /* Carthage */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -564,6 +565,7 @@
 			);
 			inputPaths = (
 			);
+			name = Carthage;
 			outputFileListPaths = (
 			);
 			outputPaths = (
