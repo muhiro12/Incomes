@@ -68,8 +68,8 @@
 		ADCF391924A550260011D6F5 /* PromisesObjC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADCF38FD24A550190011D6F5 /* PromisesObjC.framework */; };
 		ADCF391D24A550910011D6F5 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = ADCF391C24A550900011D6F5 /* libsqlite3.tbd */; };
 		ADCF392124A551360011D6F5 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADCF392024A551360011D6F5 /* StoreKit.framework */; };
-		ADCF392524A552E80011D6F5 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = ADCF392424A552E80011D6F5 /* GoogleService-Info.plist */; };
 		ADCF393224A57ADC0011D6F5 /* PreviewData.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF393124A57ADB0011D6F5 /* PreviewData.swift */; };
+		ADCF393624A5B2AC0011D6F5 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = ADCF393524A5B2AC0011D6F5 /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -160,8 +160,8 @@
 		ADCF390224A550190011D6F5 /* .FirebaseAnalyticsBinary.version */ = {isa = PBXFileReference; lastKnownFileType = text; path = .FirebaseAnalyticsBinary.version; sourceTree = "<group>"; };
 		ADCF391C24A550900011D6F5 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/usr/lib/libsqlite3.tbd; sourceTree = DEVELOPER_DIR; };
 		ADCF392024A551360011D6F5 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/StoreKit.framework; sourceTree = DEVELOPER_DIR; };
-		ADCF392424A552E80011D6F5 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		ADCF393124A57ADB0011D6F5 /* PreviewData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewData.swift; sourceTree = "<group>"; };
+		ADCF393524A5B2AC0011D6F5 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -240,7 +240,7 @@
 				ADCF36B724A1D0F70011D6F5 /* LaunchScreen.storyboard */,
 				ADCF36BA24A1D0F70011D6F5 /* Info.plist */,
 				ADCF375A24A2FBBD0011D6F5 /* Incomes.xcdatamodeld */,
-				ADCF392424A552E80011D6F5 /* GoogleService-Info.plist */,
+				ADCF393524A5B2AC0011D6F5 /* GoogleService-Info.plist */,
 				ADCF36B424A1D0F70011D6F5 /* Preview Content */,
 			);
 			path = Incomes;
@@ -518,7 +518,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				ADCF36B924A1D0F70011D6F5 /* LaunchScreen.storyboard in Resources */,
-				ADCF392524A552E80011D6F5 /* GoogleService-Info.plist in Resources */,
+				ADCF393624A5B2AC0011D6F5 /* GoogleService-Info.plist in Resources */,
 				ADCF36B624A1D0F70011D6F5 /* Preview Assets.xcassets in Resources */,
 				ADCF36B324A1D0F70011D6F5 /* Assets.xcassets in Resources */,
 			);
