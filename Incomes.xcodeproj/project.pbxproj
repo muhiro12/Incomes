@@ -808,6 +808,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 0.1.0;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nakano.hiromu.Incomes;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -840,6 +841,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 0.1.0;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nakano.hiromu.Incomes;
 				PRODUCT_NAME = "$(TARGET_NAME)";
