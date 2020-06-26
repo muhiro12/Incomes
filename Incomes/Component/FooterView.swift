@@ -50,8 +50,10 @@ struct FooterView: View {
     }
 }
 
+#if DEBUG
 struct FooterView_Previews: PreviewProvider {
     static var previews: some View {
         FooterView(scene: .constant(.home))
     }
 }
+#endif

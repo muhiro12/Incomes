@@ -170,8 +170,10 @@ struct EditView: View {
     }
 }
 
+#if DEBUG
 struct EditView_Previews: PreviewProvider {
     static var previews: some View {
         EditView()
     }
 }
+#endif

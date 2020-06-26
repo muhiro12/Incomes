@@ -56,8 +56,10 @@ struct SectionView: View {
     }
 }
 
+#if DEBUG
 struct SectionView_Previews: PreviewProvider {
     static var previews: some View {
         SectionView(section: PreviewData.sectionItems)
     }
 }
+#endif

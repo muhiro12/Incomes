@@ -52,8 +52,10 @@ struct HomeView: View {
     }
 }
 
+#if DEBUG
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
         HomeView(items: PreviewData.listItems)
     }
 }
+#endif

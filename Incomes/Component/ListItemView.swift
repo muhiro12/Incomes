@@ -38,8 +38,10 @@ struct ListItemView: View {
     }
 }
 
+#if DEBUG
 struct ListItemView_Previews: PreviewProvider {
     static var previews: some View {
         ListItemView(of: PreviewData.listItem)
     }
 }
+#endif

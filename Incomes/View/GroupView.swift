@@ -41,8 +41,10 @@ struct GroupView: View {
     }
 }
 
+#if DEBUG
 struct GroupView_Previews: PreviewProvider {
     static var previews: some View {
         GroupView(items: PreviewData.listItems)
     }
 }
+#endif

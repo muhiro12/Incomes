@@ -50,8 +50,10 @@ struct ListView: View {
     }
 }
 
+#if DEBUG
 struct ListView_Previews: PreviewProvider {
     static var previews: some View {
         ListView(of: PreviewData.listItems)
     }
 }
+#endif

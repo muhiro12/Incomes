@@ -40,8 +40,10 @@ struct ListItemNarrowView: View {
     }
 }
 
+#if DEBUG
 struct ListItemNarrowView_Previews: PreviewProvider {
     static var previews: some View {
         ListItemNarrowView(of: PreviewData.listItem)
     }
 }
+#endif
