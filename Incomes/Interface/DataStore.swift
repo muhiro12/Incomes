@@ -25,7 +25,7 @@ struct DataStore {
         item.income = income.asNSDecimalNumber
         item.expenditure = expenditure.asNSDecimalNumber
         item.group = group
-        item.group = nil
+        item.repeatId = nil
 
         do {
             try context.save()
