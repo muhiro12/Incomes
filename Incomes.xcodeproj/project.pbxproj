@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -55,19 +55,19 @@
 		ADCF376B24A343C30011D6F5 /* Scene.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF376A24A343C30011D6F5 /* Scene.swift */; };
 		ADCF376D24A380B30011D6F5 /* UserDefault.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF376C24A380B30011D6F5 /* UserDefault.swift */; };
 		ADCF376F24A394220011D6F5 /* GlobalSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF376E24A394220011D6F5 /* GlobalSettings.swift */; };
-		ADCF390324A550250011D6F5 /* FIRAnalyticsConnector.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADCF390024A550190011D6F5 /* FIRAnalyticsConnector.framework */; };
-		ADCF390724A550250011D6F5 /* FirebaseAnalytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADCF38FB24A550190011D6F5 /* FirebaseAnalytics.framework */; };
-		ADCF390924A550250011D6F5 /* FirebaseCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADCF38FA24A550190011D6F5 /* FirebaseCore.framework */; };
-		ADCF390B24A550250011D6F5 /* FirebaseCoreDiagnostics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADCF390124A550190011D6F5 /* FirebaseCoreDiagnostics.framework */; };
-		ADCF390D24A550250011D6F5 /* FirebaseInstallations.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADCF38FF24A550190011D6F5 /* FirebaseInstallations.framework */; };
-		ADCF390F24A550260011D6F5 /* GoogleAppMeasurement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADCF38F924A550190011D6F5 /* GoogleAppMeasurement.framework */; };
-		ADCF391124A550260011D6F5 /* GoogleDataTransport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADCF38F624A550190011D6F5 /* GoogleDataTransport.framework */; };
-		ADCF391324A550260011D6F5 /* GoogleDataTransportCCTSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADCF38F824A550190011D6F5 /* GoogleDataTransportCCTSupport.framework */; };
-		ADCF391524A550260011D6F5 /* GoogleUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADCF38FC24A550190011D6F5 /* GoogleUtilities.framework */; };
-		ADCF391724A550260011D6F5 /* nanopb.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADCF38FE24A550190011D6F5 /* nanopb.framework */; };
-		ADCF391924A550260011D6F5 /* PromisesObjC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADCF38FD24A550190011D6F5 /* PromisesObjC.framework */; };
-		ADCF391D24A550910011D6F5 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = ADCF391C24A550900011D6F5 /* libsqlite3.tbd */; };
-		ADCF392124A551360011D6F5 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADCF392024A551360011D6F5 /* StoreKit.framework */; };
+		ADCF390324A550250011D6F5 /* FIRAnalyticsConnector.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADCF390024A550190011D6F5 /* FIRAnalyticsConnector.framework */; platformFilter = ios; };
+		ADCF390724A550250011D6F5 /* FirebaseAnalytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADCF38FB24A550190011D6F5 /* FirebaseAnalytics.framework */; platformFilter = ios; };
+		ADCF390924A550250011D6F5 /* FirebaseCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADCF38FA24A550190011D6F5 /* FirebaseCore.framework */; platformFilter = ios; };
+		ADCF390B24A550250011D6F5 /* FirebaseCoreDiagnostics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADCF390124A550190011D6F5 /* FirebaseCoreDiagnostics.framework */; platformFilter = ios; };
+		ADCF390D24A550250011D6F5 /* FirebaseInstallations.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADCF38FF24A550190011D6F5 /* FirebaseInstallations.framework */; platformFilter = ios; };
+		ADCF390F24A550260011D6F5 /* GoogleAppMeasurement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADCF38F924A550190011D6F5 /* GoogleAppMeasurement.framework */; platformFilter = ios; };
+		ADCF391124A550260011D6F5 /* GoogleDataTransport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADCF38F624A550190011D6F5 /* GoogleDataTransport.framework */; platformFilter = ios; };
+		ADCF391324A550260011D6F5 /* GoogleDataTransportCCTSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADCF38F824A550190011D6F5 /* GoogleDataTransportCCTSupport.framework */; platformFilter = ios; };
+		ADCF391524A550260011D6F5 /* GoogleUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADCF38FC24A550190011D6F5 /* GoogleUtilities.framework */; platformFilter = ios; };
+		ADCF391724A550260011D6F5 /* nanopb.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADCF38FE24A550190011D6F5 /* nanopb.framework */; platformFilter = ios; };
+		ADCF391924A550260011D6F5 /* PromisesObjC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADCF38FD24A550190011D6F5 /* PromisesObjC.framework */; platformFilter = ios; };
+		ADCF391D24A550910011D6F5 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = ADCF391C24A550900011D6F5 /* libsqlite3.tbd */; platformFilter = ios; };
+		ADCF392124A551360011D6F5 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADCF392024A551360011D6F5 /* StoreKit.framework */; platformFilter = ios; };
 		ADCF393224A57ADC0011D6F5 /* PreviewData.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF393124A57ADB0011D6F5 /* PreviewData.swift */; };
 		ADCF393624A5B2AC0011D6F5 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = ADCF393524A5B2AC0011D6F5 /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
