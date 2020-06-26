@@ -8,12 +8,16 @@
 
 import UIKit
 import CoreData
+#if !targetEnvironment(macCatalyst)
 import Firebase
+#endif
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        #if !targetEnvironment(macCatalyst)
         FirebaseApp.configure()
+        #endif
         return true
     }
 
