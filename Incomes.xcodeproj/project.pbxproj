@@ -69,6 +69,7 @@
 		ADCF391D24A550910011D6F5 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = ADCF391C24A550900011D6F5 /* libsqlite3.tbd */; };
 		ADCF392124A551360011D6F5 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADCF392024A551360011D6F5 /* StoreKit.framework */; };
 		ADCF392524A552E80011D6F5 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = ADCF392424A552E80011D6F5 /* GoogleService-Info.plist */; };
+		ADCF393224A57ADC0011D6F5 /* PreviewData.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF393124A57ADB0011D6F5 /* PreviewData.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -160,6 +161,7 @@
 		ADCF391C24A550900011D6F5 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/usr/lib/libsqlite3.tbd; sourceTree = DEVELOPER_DIR; };
 		ADCF392024A551360011D6F5 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/StoreKit.framework; sourceTree = DEVELOPER_DIR; };
 		ADCF392424A552E80011D6F5 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		ADCF393124A57ADB0011D6F5 /* PreviewData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewData.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -248,6 +250,7 @@
 			isa = PBXGroup;
 			children = (
 				ADCF36B524A1D0F70011D6F5 /* Preview Assets.xcassets */,
+				ADCF393124A57ADB0011D6F5 /* PreviewData.swift */,
 			);
 			path = "Preview Content";
 			sourceTree = "<group>";
@@ -588,6 +591,7 @@
 				ADCF376524A32E460011D6F5 /* FooterView.swift in Sources */,
 				ADCF36FF24A1D18E0011D6F5 /* SectionView.swift in Sources */,
 				ADCF371124A1D18E0011D6F5 /* ViewExtension.swift in Sources */,
+				ADCF393224A57ADC0011D6F5 /* PreviewData.swift in Sources */,
 				ADCF371224A1D18E0011D6F5 /* StringExtension.swift in Sources */,
 				ADCF370D24A1D18E0011D6F5 /* OptionalExtension.swift in Sources */,
 				ADCF370A24A1D18E0011D6F5 /* GroupView.swift in Sources */,

@@ -58,23 +58,6 @@ struct SectionView: View {
 
 struct SectionView_Previews: PreviewProvider {
     static var previews: some View {
-        SectionView(section: SectionItems(
-            key: "2020",
-            value: [
-                ListItems(
-                    key: "All",
-                    value: [
-                        ListItem(id: UUID(),
-                                 date: Date(),
-                                 content: "Content",
-                                 income: 999999,
-                                 expenditure: 99999,
-                                 balance: 9999999,
-                                 group: .empty,
-                                 repeatId: nil)
-                    ]
-                )
-            ]
-        ))
+        SectionView(section: PreviewData.sectionItems)
     }
 }

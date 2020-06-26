@@ -54,18 +54,6 @@ struct HomeView: View {
 
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
-        HomeView(items:
-            ListItems(key: "All",
-                      value: [
-                        ListItem(id: UUID(),
-                                 date: Date(),
-                                 content: "Content",
-                                 income: 999999,
-                                 expenditure: 99999,
-                                 balance: 9999999,
-                                 group: .empty,
-                                 repeatId: nil)
-            ])
-        )
+        HomeView(items: PreviewData.listItems)
     }
 }

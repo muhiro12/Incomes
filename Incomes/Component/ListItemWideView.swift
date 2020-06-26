@@ -42,15 +42,6 @@ struct ListItemWideView: View {
 
 struct ListItemWideView_Previews: PreviewProvider {
     static var previews: some View {
-        ListItemWideView(of:
-            ListItem(id: UUID(),
-                     date: Date(),
-                     content: "Content",
-                     income: 999999,
-                     expenditure: 99999,
-                     balance: 9999999,
-                     group: .empty,
-                     repeatId: nil)
-        )
+        ListItemWideView(of: PreviewData.listItem)
     }
 }

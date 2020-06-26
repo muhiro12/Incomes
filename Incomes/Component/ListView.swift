@@ -52,18 +52,6 @@ struct ListView: View {
 
 struct ListView_Previews: PreviewProvider {
     static var previews: some View {
-        ListView(of:
-            ListItems(key: "All",
-                      value: [
-                        ListItem(id: UUID(),
-                                 date: Date(),
-                                 content: "Content",
-                                 income: 999999,
-                                 expenditure: 99999,
-                                 balance: 9999999,
-                                 group: .empty,
-                                 repeatId: UUID())
-            ])
-        )
+        ListView(of: PreviewData.listItems)
     }
 }
