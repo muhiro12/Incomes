@@ -13,6 +13,7 @@ extension String {
     static var empty: Self { "" }
     static var zero: Self { "0" }
     static var all: Self { "All" }
+    static var done: Self { "Done" }
     static var caution: Self { "Caution" }
     static var cautionDetail: Self { "This action cannot be undone." }
     static var delete: Self { "Delete" }
