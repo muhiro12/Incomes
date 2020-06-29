@@ -11,6 +11,18 @@ import CoreData
 
 struct Repository {
 
+    // MARK: - Fetch
+
+    static func fetch(_ context: NSManagedObjectContext,
+                      format: String,
+                      keys: [Any]?,
+                      completion: ((ListItems) -> Void)? = nil) {
+        DataStore.fetch(context,
+                        format: format,
+                        keys: keys,
+                        completion: completion)
+    }
+
     // MARK: - Create
 
     static func create(_ context: NSManagedObjectContext,
@@ -48,38 +60,69 @@ struct Repository {
                        completion: completion)
     }
 
-    static func updateAllRecurringItem(_ context: NSManagedObjectContext,
-                                       oldItem: ListItem,
-                                       newItem: ListItem,
-                                       completion: (() -> Void)? = nil) {
-        guard let repeatId = newItem.original?.repeatId else {
-            completion?()
+    static func updateRecurringItem(_ context: NSManagedObjectContext,
+                                    format: String,
+                                    keys: [Any]?,
+                                    oldItem: ListItem,
+                                    newItem: ListItem,
+                                    completion: (() -> Void)? = nil) {
+        guard let repeatId = oldItem.original?.repeatId else {
             return
         }
-        DataStore.fetch(context,
-                        format: "repeatId = %@",
-                        key: repeatId.description) { items in
-                            let newItemList: [ListItem] = items.value.compactMap { item in
-                                let difference = Calendar.current.dateComponents([.year, .month, .day],
-                                                                                 from: oldItem.date,
-                                                                                 to: newItem.date)
-                                guard let newDate = Calendar.current.date(byAdding: difference, to: item.date) else {
-                                    return nil
-                                }
-                                return ListItem(date: newDate,
-                                                content: newItem.content,
-                                                group: newItem.group,
-                                                income: newItem.income,
-                                                expenditure: newItem.expenditure,
-                                                original: item.original)
-                            }
-                            let newItems = ListItems(key: repeatId.description,
-                                                     value: newItemList)
-                            DataStore.saveAll(context,
-                                              items: newItems,
-                                              repeatId: repeatId,
-                                              completion: completion)
+        fetch(context,
+              format: format,
+              keys: keys) { items in
+                let newItemList: [ListItem] = items.value.compactMap { item in
+                    let difference = Calendar.current.dateComponents([.year, .month, .day],
+                                                                     from: oldItem.date,
+                                                                     to: newItem.date)
+                    guard let newDate = Calendar.current.date(byAdding: difference, to: item.date) else {
+                        return nil
+                    }
+                    return ListItem(date: newDate,
+                                    content: newItem.content,
+                                    group: newItem.group,
+                                    income: newItem.income,
+                                    expenditure: newItem.expenditure,
+                                    original: item.original)
+                }
+                let newItems = ListItems(key: repeatId.description,
+                                         value: newItemList)
+                DataStore.saveAll(context,
+                                  items: newItems,
+                                  repeatId: repeatId,
+                                  completion: completion)
         }
+    }
+
+    static func updateAllFollowingItems(_ context: NSManagedObjectContext,
+                                        oldItem: ListItem,
+                                        newItem: ListItem,
+                                        completion: (() -> Void)? = nil) {
+        guard let repeatId = oldItem.original?.repeatId else {
+            return
+        }
+        updateRecurringItem(context,
+                            format: "(repeatId = %@) AND (date >= %@)",
+                            keys: [repeatId, oldItem.date],
+                            oldItem: oldItem,
+                            newItem: newItem,
+                            completion: completion)
+    }
+
+    static func updateAllRecurringItems(_ context: NSManagedObjectContext,
+                                        oldItem: ListItem,
+                                        newItem: ListItem,
+                                        completion: (() -> Void)? = nil) {
+        guard let repeatId = oldItem.original?.repeatId else {
+            return
+        }
+        updateRecurringItem(context,
+                            format: "repeatId = %@",
+                            keys: [repeatId],
+                            oldItem: oldItem,
+                            newItem: newItem,
+                            completion: completion)
     }
 
     // MARK: - Delete

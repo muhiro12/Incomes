@@ -113,8 +113,7 @@ struct EditView: View {
             ActionSheet(title: Text(verbatim: .saveDetail),
                         buttons: [
                             .default(Text(verbatim: .saveThisItem), action: saveThisItem),
-                            // TODO: saveFollowingItems
-                            //                            .default(Text(verbatim: .saveFollowingItems), action: save),
+                            .default(Text(verbatim: .saveFollowingItems), action: saveAllFollowingItems),
                             .default(Text(verbatim: .saveAllItems), action: saveAllItems),
                             .cancel()
             ])
@@ -137,6 +136,22 @@ struct EditView: View {
                           completion: dismiss)
     }
 
+    private func saveAllFollowingItems() {
+        guard let oldItem = item else {
+            return
+        }
+        let newItem = ListItem(date: date,
+                               content: content,
+                               group: group,
+                               income: income.decimalValue,
+                               expenditure: expenditure.decimalValue,
+                               original: self.item?.original)
+        Repository.updateAllFollowingItems(context,
+                                           oldItem: oldItem,
+                                           newItem: newItem,
+                                           completion: dismiss)
+    }
+
     private func saveAllItems() {
         guard let oldItem = item else {
             return
@@ -147,10 +162,10 @@ struct EditView: View {
                                income: income.decimalValue,
                                expenditure: expenditure.decimalValue,
                                original: self.item?.original)
-        Repository.updateAllRecurringItem(context,
-                                          oldItem: oldItem,
-                                          newItem: newItem,
-                                          completion: dismiss)
+        Repository.updateAllRecurringItems(context,
+                                           oldItem: oldItem,
+                                           newItem: newItem,
+                                           completion: dismiss)
     }
 
     private func create() {

@@ -12,15 +12,15 @@ import CoreData
 struct DataStore {
     static func fetch(_ context: NSManagedObjectContext,
                       format: String,
-                      key: String,
-                      completion: (ListItems) -> Void) {
+                      keys: [Any]?,
+                      completion: ((ListItems) -> Void)? = nil) {
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: .item)
-        request.predicate = NSPredicate(format: format, key)
+        request.predicate = NSPredicate(format: format, argumentArray: keys)
         request.sortDescriptors = [NSSortDescriptor(keyPath: \Item.date, ascending: true)]
 
         do {
             let result = try context.fetch(request) as? [Item] ?? []
-            completion(ListItems(from: result, for: key))
+            completion?(ListItems(from: result, for: keys.string))
         } catch {
             print(error)
         }
