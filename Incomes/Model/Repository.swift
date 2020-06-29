@@ -43,9 +43,9 @@ struct Repository {
                                          expenditure: item.expenditure)
             recurringItems.append(recurringItem)
         }
-        let repeatId = UUID()
+        let repeatId = repeatCount > .one ? UUID() : nil
         DataStore.saveAll(context,
-                          items: ListItems(key: repeatId.description, value: recurringItems),
+                          items: ListItems(key: repeatId.string, value: recurringItems),
                           repeatId: repeatId,
                           completion: completion)
     }

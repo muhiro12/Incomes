@@ -95,7 +95,7 @@ struct EditView: View {
                     }
                 }
                 Section {
-                    Button(action: isEditMode ? presentToActionSheet : create) {
+                    Button(action: isEditMode ? save : create) {
                         Text(verbatim: isEditMode ? .save : .create)
                             .frame(maxWidth: .greatestFiniteMagnitude,
                                    alignment: .center)
@@ -120,8 +120,12 @@ struct EditView: View {
         }
     }
 
-    private func presentToActionSheet() {
-        isPresentedToActionSheet = true
+    private func save() {
+        if item?.original?.repeatId == nil {
+            saveThisItem()
+        } else {
+            presentToActionSheet()
+        }
     }
 
     private func saveThisItem() {
@@ -189,6 +193,10 @@ struct EditView: View {
 
     private func cancel() {
         dismiss()
+    }
+
+    private func presentToActionSheet() {
+        isPresentedToActionSheet = true
     }
 
     private func dismiss() {
