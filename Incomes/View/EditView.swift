@@ -39,8 +39,8 @@ struct EditView: View {
         self.item = item
         _date = State(initialValue: item.date)
         _content = State(initialValue: item.content)
-        _income = State(initialValue: item.income.description)
-        _expenditure = State(initialValue: item.expenditure.description)
+        _income = State(initialValue: item.income.isZero ? .empty : item.income.description)
+        _expenditure = State(initialValue: item.expenditure.isZero ? .empty : item.expenditure.description)
         _group = State(initialValue: item.group)
     }
 
