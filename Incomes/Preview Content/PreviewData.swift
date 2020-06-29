@@ -22,9 +22,9 @@ struct PreviewData {
 
     static let listItem = ListItem(date: Date(),
                                    content: .content,
+                                   group: .empty,
                                    income: 999999,
                                    expenditure: 99999,
-                                   group: .empty,
                                    balance: 9999999)
 
     static let listItems = ListItems(key: .all,
@@ -128,10 +128,9 @@ struct PreviewData {
 
             let listItem = ListItem(date: date,
                                     content: content,
+                                    group: item.group.string,
                                     income: income,
                                     expenditure: expenditure,
-                                    group: item.group.string,
-                                    repeatId: item.repeatId,
                                     balance: balance,
                                     original: nil)
             listItems.append(listItem)

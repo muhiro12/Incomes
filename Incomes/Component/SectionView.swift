@@ -47,9 +47,7 @@ struct SectionView: View {
     private func delete() {
         indexSet.forEach {
             section.value[$0].value.forEach { item in
-                if let item = item.original {
-                    Repository.delete(context, item: item)
-                }
+                Repository.delete(context, item: item)
             }
         }
     }

@@ -19,7 +19,7 @@ struct ListItems: Identifiable {
         self.value = value
     }
 
-    init(from items: [Item]) {
+    init(from items: [Item], for key: String = .all) {
         var listItems: [ListItem] = []
 
         items.enumerated().forEach {
@@ -41,16 +41,15 @@ struct ListItems: Identifiable {
 
             let listItem = ListItem(date: date,
                                     content: content,
+                                    group: item.group.string,
                                     income: income,
                                     expenditure: expenditure,
-                                    group: item.group.string,
-                                    repeatId: item.repeatId,
                                     balance: balance,
                                     original: item)
             listItems.append(listItem)
         }
 
-        self.init(key: .all, value: listItems.reversed())
+        self.init(key: key, value: listItems.reversed())
     }
 
     func grouped(by keyForValue: (ListItem) -> String) -> [Self] {

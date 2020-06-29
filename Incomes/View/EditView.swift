@@ -12,7 +12,6 @@ struct EditView: View {
     @Environment(\.managedObjectContext) var context
     @Environment(\.presentationMode) var presentationMode
 
-    // TODO: feature/repeat
     @State private var isPresentedToActionSheet = false
 
     @State private var date = Date()
@@ -78,8 +77,7 @@ struct EditView: View {
                         TextField(String.empty, text: $group)
                             .multilineTextAlignment(.trailing)
                     }
-                    if false {
-                        // TODO: feature/repeat
+                    if !isEditMode {
                         HStack {
                             Text(verbatim: .repeatCount)
                             Spacer()
@@ -97,7 +95,7 @@ struct EditView: View {
                     }
                 }
                 Section {
-                    Button(action: isEditMode ? save : create) {
+                    Button(action: isEditMode ? presentToActionSheet : create) {
                         Text(verbatim: isEditMode ? .save : .create)
                             .frame(maxWidth: .greatestFiniteMagnitude,
                                    alignment: .center)
@@ -112,43 +110,55 @@ struct EditView: View {
             }.selectedListStyle()
                 .navigationBarTitle(isEditMode ? String.editTitle : String.createTitle)
         }.actionSheet(isPresented: $isPresentedToActionSheet) {
-            // TODO: feature/repeat
             ActionSheet(title: Text(verbatim: .saveDetail),
                         buttons: [
-                            .default(Text(verbatim: .saveThisItem), action: save),
-                            .default(Text(verbatim: .saveFollowingItems), action: save),
-                            .default(Text(verbatim: .saveAllItems), action: save),
+                            .default(Text(verbatim: .saveThisItem), action: saveThisItem),
+                            // TODO: saveFollowingItems
+                            //                            .default(Text(verbatim: .saveFollowingItems), action: save),
+                            .default(Text(verbatim: .saveAllItems), action: saveAllItems),
                             .cancel()
             ])
         }
     }
 
     private func presentToActionSheet() {
-        // TODO: feature/repeat
         isPresentedToActionSheet = true
     }
 
-    private func save() {
-        guard let original = item?.original else {
-            return
-        }
+    private func saveThisItem() {
         let item = ListItem(date: date,
                             content: content,
+                            group: group,
                             income: income.decimalValue,
                             expenditure: expenditure.decimalValue,
-                            group: group)
-        Repository.save(context,
-                        original: original,
-                        item: item,
-                        completion: dismiss)
+                            original: self.item?.original)
+        Repository.update(context,
+                          item: item,
+                          completion: dismiss)
+    }
+
+    private func saveAllItems() {
+        guard let oldItem = item else {
+            return
+        }
+        let newItem = ListItem(date: date,
+                               content: content,
+                               group: group,
+                               income: income.decimalValue,
+                               expenditure: expenditure.decimalValue,
+                               original: self.item?.original)
+        Repository.updateAllRecurringItem(context,
+                                          oldItem: oldItem,
+                                          newItem: newItem,
+                                          completion: dismiss)
     }
 
     private func create() {
         let item = ListItem(date: date,
                             content: content,
+                            group: group,
                             income: income.decimalValue,
-                            expenditure: expenditure.decimalValue,
-                            group: group)
+                            expenditure: expenditure.decimalValue)
         Repository.create(context,
                           item: item,
                           repeatCount: repeatSelection + .one,
@@ -156,7 +166,7 @@ struct EditView: View {
     }
 
     private func delete() {
-        guard let item = item?.original else {
+        guard let item = item else {
             return
         }
         Repository.delete(context, item: item)

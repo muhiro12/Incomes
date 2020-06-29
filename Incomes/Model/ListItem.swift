@@ -13,11 +13,10 @@ struct ListItem: Identifiable {
 
     let date: Date
     let content: String
+    let group: String
     let income: Decimal
     let expenditure: Decimal
-    let group: String
 
-    var repeatId: UUID?
     var balance: Decimal = .zero
     var original: Item?
 }

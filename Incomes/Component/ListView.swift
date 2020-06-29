@@ -42,9 +42,7 @@ struct ListView: View {
 
     private func delete() {
         indexSet.forEach {
-            if let item = items.value[$0].original {
-                Repository.delete(context, item: item)
-            }
+            Repository.delete(context, item: items.value[$0])
         }
     }
 }
