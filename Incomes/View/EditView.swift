@@ -109,6 +109,10 @@ struct EditView: View {
                 }
             }.selectedListStyle()
                 .navigationBarTitle(isEditMode ? String.editTitle : String.createTitle)
+                .gesture(DragGesture()
+                    .onChanged { _ in
+                        self.dismissKeyboard()
+                })
         }.actionSheet(isPresented: $isPresentedToActionSheet) {
             ActionSheet(title: Text(verbatim: .saveDetail),
                         buttons: [
@@ -201,6 +205,13 @@ struct EditView: View {
 
     private func dismiss() {
         presentationMode.wrappedValue.dismiss()
+    }
+
+    private func dismissKeyboard() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder),
+                                        to: nil,
+                                        from: nil,
+                                        for: nil)
     }
 }
 
