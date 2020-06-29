@@ -66,16 +66,16 @@ struct Repository {
                                     oldItem: ListItem,
                                     newItem: ListItem,
                                     completion: (() -> Void)? = nil) {
-        guard let repeatId = oldItem.original?.repeatId else {
-            return
-        }
         fetch(context,
               format: format,
               keys: keys) { items in
                 let newItemList: [ListItem] = items.value.compactMap { item in
-                    let difference = Calendar.current.dateComponents([.year, .month, .day],
+                    var difference = Calendar.current.dateComponents([.year, .month, .day],
                                                                      from: oldItem.date,
                                                                      to: newItem.date)
+                    if oldItem.date < newItem.date {
+                        difference.day = (difference.day ?? .zero) + .one
+                    }
                     guard let newDate = Calendar.current.date(byAdding: difference, to: item.date) else {
                         return nil
                     }
@@ -86,6 +86,7 @@ struct Repository {
                                     expenditure: newItem.expenditure,
                                     original: item.original)
                 }
+                let repeatId = UUID()
                 let newItems = ListItems(key: repeatId.description,
                                          value: newItemList)
                 DataStore.saveAll(context,
