@@ -39,15 +39,14 @@ struct ListItems: Identifiable {
             }
             balance += income - expenditure
 
-            let listItem = ListItem(id: UUID(),
-                                    original: item,
-                                    date: date,
+            let listItem = ListItem(date: date,
                                     content: content,
                                     income: income,
                                     expenditure: expenditure,
-                                    balance: balance,
                                     group: item.group.string,
-                                    repeatId: item.repeatId)
+                                    repeatId: item.repeatId,
+                                    balance: balance,
+                                    original: item)
             listItems.append(listItem)
         }
 

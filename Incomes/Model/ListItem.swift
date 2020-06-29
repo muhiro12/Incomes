@@ -9,14 +9,15 @@
 import Foundation
 
 struct ListItem: Identifiable {
-    let id: UUID
-    var original: Item?
+    let id = UUID()
 
     let date: Date
     let content: String
     let income: Decimal
     let expenditure: Decimal
-    let balance: Decimal
     let group: String
-    let repeatId: UUID?
+
+    var repeatId: UUID?
+    var balance: Decimal = .zero
+    var original: Item?
 }

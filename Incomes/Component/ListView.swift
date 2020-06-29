@@ -41,10 +41,9 @@ struct ListView: View {
     }
 
     private func delete() {
-        let dataStore = DataStore(context: context)
         indexSet.forEach {
             if let item = items.value[$0].original {
-                dataStore.delete(item)
+                Repository.delete(context, item: item)
             }
         }
     }

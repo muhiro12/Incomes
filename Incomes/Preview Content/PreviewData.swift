@@ -17,17 +17,15 @@ struct PreviewData {
         let expenditure: NSDecimalNumber?
         let balance: NSDecimalNumber?
         let group: String?
-        let repeatId: UUID?
+        let repeatId: UUID? = nil
     }
 
-    static let listItem = ListItem(id: UUID(),
-                                   date: Date(),
+    static let listItem = ListItem(date: Date(),
                                    content: .content,
                                    income: 999999,
                                    expenditure: 99999,
-                                   balance: 9999999,
                                    group: .empty,
-                                   repeatId: nil)
+                                   balance: 9999999)
 
     static let listItems = ListItems(key: .all,
                                      value: [listItem, listItem])
@@ -52,64 +50,55 @@ struct PreviewData {
                               income: 3500,
                               expenditure: 0,
                               balance: 0,
-                              group: "Salary",
-                              repeatId: nil))
+                              group: "Salary"))
             items.append(Item(date: monthLater(from: date27, value: index),
                               content: "Advertising revenue",
                               income: 485,
                               expenditure: 0,
                               balance: 0,
-                              group: "Salary",
-                              repeatId: nil))
+                              group: "Salary"))
             items.append(Item(date: monthLater(from: date10, value: index),
                               content: "Apple card",
                               income: 0,
                               expenditure: 1000,
                               balance: 0,
-                              group: "Credit",
-                              repeatId: nil))
+                              group: "Credit"))
             items.append(Item(date: monthLater(from: date5, value: index),
                               content: "Orange card",
                               income: 0,
                               expenditure: 800,
                               balance: 0,
-                              group: "Credit",
-                              repeatId: nil))
+                              group: "Credit"))
             items.append(Item(date: monthLater(from: date27, value: index),
                               content: "Lemon card",
                               income: 0,
                               expenditure: 500,
                               balance: 0,
-                              group: "Credit",
-                              repeatId: nil))
+                              group: "Credit"))
             items.append(Item(date: monthLater(from: date28, value: index),
                               content: "House",
                               income: 0,
                               expenditure: 30,
                               balance: 0,
-                              group: "Loan",
-                              repeatId: nil))
+                              group: "Loan"))
             items.append(Item(date: monthLater(from: date25, value: index),
                               content: "Car",
                               income: 0,
                               expenditure: 25,
                               balance: 0,
-                              group: "Loan",
-                              repeatId: nil))
+                              group: "Loan"))
             items.append(Item(date: monthLater(from: date5, value: index),
                               content: "Insurance",
                               income: 0,
                               expenditure: 28,
                               balance: 0,
-                              group: "Tax",
-                              repeatId: nil))
+                              group: "Tax"))
             items.append(Item(date: monthLater(from: date28, value: index),
                               content: "Pension",
                               income: 0,
                               expenditure: 36,
                               balance: 0,
-                              group: "Tax",
-                              repeatId: nil))
+                              group: "Tax"))
         }
 
         items.sort(by: { $0.date! < $1.date! })
@@ -137,15 +126,14 @@ struct PreviewData {
             }
             balance += income - expenditure
 
-            let listItem = ListItem(id: UUID(),
-                                    original: nil,
-                                    date: date,
+            let listItem = ListItem(date: date,
                                     content: content,
                                     income: income,
                                     expenditure: expenditure,
-                                    balance: balance,
                                     group: item.group.string,
-                                    repeatId: item.repeatId)
+                                    repeatId: item.repeatId,
+                                    balance: balance,
+                                    original: nil)
             listItems.append(listItem)
         }
 

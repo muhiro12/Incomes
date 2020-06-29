@@ -129,36 +129,37 @@ struct EditView: View {
     }
 
     private func save() {
-        guard let item = item?.original else {
+        guard let original = item?.original else {
             return
         }
-        let dataStore = DataStore(context: context)
-        dataStore.save(item,
-                       date: date,
-                       content: content,
-                       income: income.decimalValue,
-                       expenditure: expenditure.decimalValue,
-                       group: group,
-                       completion: dismiss)
+        let item = ListItem(date: date,
+                            content: content,
+                            income: income.decimalValue,
+                            expenditure: expenditure.decimalValue,
+                            group: group)
+        Repository.save(context,
+                        original: original,
+                        item: item,
+                        completion: dismiss)
     }
 
     private func create() {
-        let dataStore = DataStore(context: context)
-        dataStore.create(date: date,
-                         content: content,
-                         income: income.decimalValue,
-                         expenditure: expenditure.decimalValue,
-                         group: group,
-                         repeatCount: repeatSelection + .one,
-                         completion: dismiss)
+        let item = ListItem(date: date,
+                            content: content,
+                            income: income.decimalValue,
+                            expenditure: expenditure.decimalValue,
+                            group: group)
+        Repository.create(context,
+                          item: item,
+                          repeatCount: repeatSelection + .one,
+                          completion: dismiss)
     }
 
     private func delete() {
         guard let item = item?.original else {
             return
         }
-        let dataStore = DataStore(context: context)
-        dataStore.delete(item)
+        Repository.delete(context, item: item)
     }
 
     private func cancel() {
