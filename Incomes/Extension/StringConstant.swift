@@ -13,6 +13,7 @@ extension String {
     static var empty: Self { "" }
     static var zero: Self { "0" }
     static var all: Self { "All" }
+    static var done: Self { "Done" }
     static var caution: Self { "Caution" }
     static var cautionDetail: Self { "This action cannot be undone." }
     static var delete: Self { "Delete" }
@@ -54,4 +55,7 @@ extension String {
     static var groupIcon: Self { "square.stack.3d.up" }
     static var settingsIcon: Self { "gear" }
     static var createIcon: Self { "square.and.pencil" }
+
+    // MARK: - Identifier
+    static var item: Self { "Item" }
 }

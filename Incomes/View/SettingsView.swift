@@ -9,6 +9,8 @@
 import SwiftUI
 
 struct SettingsView: View {
+    @Environment(\.presentationMode) var presentationMode
+
     @State private var modernStyle = ModernStyle()
     @State private var iCloud = ICloud()
 
@@ -27,7 +29,14 @@ struct SettingsView: View {
                 }
             }.selectedListStyle()
                 .navigationBarTitle(String.settingsTitle)
+                .navigationBarItems(trailing: Button(action: dismiss) {
+                    Text(verbatim: .done)
+                })
         }
+    }
+
+    private func dismiss() {
+        presentationMode.wrappedValue.dismiss()
     }
 }
 

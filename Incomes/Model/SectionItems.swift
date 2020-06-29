@@ -9,7 +9,7 @@
 import Foundation
 
 struct SectionItems: Identifiable {
-    var id = UUID()
+    let id = UUID()
 
     let key: String
     let value: [ListItems]

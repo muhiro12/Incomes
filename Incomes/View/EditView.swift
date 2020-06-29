@@ -12,7 +12,6 @@ struct EditView: View {
     @Environment(\.managedObjectContext) var context
     @Environment(\.presentationMode) var presentationMode
 
-    // TODO: feature/repeat
     @State private var isPresentedToActionSheet = false
 
     @State private var date = Date()
@@ -40,8 +39,8 @@ struct EditView: View {
         self.item = item
         _date = State(initialValue: item.date)
         _content = State(initialValue: item.content)
-        _income = State(initialValue: item.income.description)
-        _expenditure = State(initialValue: item.expenditure.description)
+        _income = State(initialValue: item.income.isZero ? .empty : item.income.description)
+        _expenditure = State(initialValue: item.expenditure.isZero ? .empty : item.expenditure.description)
         _group = State(initialValue: item.group)
     }
 
@@ -78,8 +77,7 @@ struct EditView: View {
                         TextField(String.empty, text: $group)
                             .multilineTextAlignment(.trailing)
                     }
-                    if false {
-                        // TODO: feature/repeat
+                    if !isEditMode {
                         HStack {
                             Text(verbatim: .repeatCount)
                             Spacer()
@@ -111,62 +109,109 @@ struct EditView: View {
                 }
             }.selectedListStyle()
                 .navigationBarTitle(isEditMode ? String.editTitle : String.createTitle)
+                .gesture(DragGesture()
+                    .onChanged { _ in
+                        self.dismissKeyboard()
+                })
         }.actionSheet(isPresented: $isPresentedToActionSheet) {
-            // TODO: feature/repeat
             ActionSheet(title: Text(verbatim: .saveDetail),
                         buttons: [
-                            .default(Text(verbatim: .saveThisItem), action: save),
-                            .default(Text(verbatim: .saveFollowingItems), action: save),
-                            .default(Text(verbatim: .saveAllItems), action: save),
+                            .default(Text(verbatim: .saveThisItem), action: saveThisItem),
+                            .default(Text(verbatim: .saveFollowingItems), action: saveAllFollowingItems),
+                            .default(Text(verbatim: .saveAllItems), action: saveAllItems),
                             .cancel()
             ])
         }
     }
 
-    private func presentToActionSheet() {
-        // TODO: feature/repeat
-        isPresentedToActionSheet = true
+    private func save() {
+        if item?.original?.repeatId == nil {
+            saveThisItem()
+        } else {
+            presentToActionSheet()
+        }
     }
 
-    private func save() {
-        guard let item = item?.original else {
+    private func saveThisItem() {
+        let item = ListItem(date: date,
+                            content: content,
+                            group: group,
+                            income: income.decimalValue,
+                            expenditure: expenditure.decimalValue,
+                            original: self.item?.original)
+        Repository.update(context,
+                          item: item,
+                          completion: dismiss)
+    }
+
+    private func saveAllFollowingItems() {
+        guard let oldItem = item else {
             return
         }
-        let dataStore = DataStore(context: context)
-        dataStore.save(item,
-                       date: date,
-                       content: content,
-                       income: income.decimalValue,
-                       expenditure: expenditure.decimalValue,
-                       group: group,
-                       completion: dismiss)
+        let newItem = ListItem(date: date,
+                               content: content,
+                               group: group,
+                               income: income.decimalValue,
+                               expenditure: expenditure.decimalValue,
+                               original: self.item?.original)
+        Repository.updateAllFollowingItems(context,
+                                           oldItem: oldItem,
+                                           newItem: newItem,
+                                           completion: dismiss)
+    }
+
+    private func saveAllItems() {
+        guard let oldItem = item else {
+            return
+        }
+        let newItem = ListItem(date: date,
+                               content: content,
+                               group: group,
+                               income: income.decimalValue,
+                               expenditure: expenditure.decimalValue,
+                               original: self.item?.original)
+        Repository.updateAllRecurringItems(context,
+                                           oldItem: oldItem,
+                                           newItem: newItem,
+                                           completion: dismiss)
     }
 
     private func create() {
-        let dataStore = DataStore(context: context)
-        dataStore.create(date: date,
-                         content: content,
-                         income: income.decimalValue,
-                         expenditure: expenditure.decimalValue,
-                         group: group,
-                         repeatCount: repeatSelection + .one,
-                         completion: dismiss)
+        let item = ListItem(date: date,
+                            content: content,
+                            group: group,
+                            income: income.decimalValue,
+                            expenditure: expenditure.decimalValue)
+        Repository.create(context,
+                          item: item,
+                          repeatCount: repeatSelection + .one,
+                          completion: dismiss)
     }
 
     private func delete() {
-        guard let item = item?.original else {
+        guard let item = item else {
             return
         }
-        let dataStore = DataStore(context: context)
-        dataStore.delete(item)
+        Repository.delete(context, item: item)
     }
 
     private func cancel() {
         dismiss()
     }
 
+    private func presentToActionSheet() {
+        isPresentedToActionSheet = true
+    }
+
     private func dismiss() {
         presentationMode.wrappedValue.dismiss()
+    }
+
+    private func dismissKeyboard() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder),
+                                        to: nil,
+                                        from: nil,
+                                        for: nil)
     }
 }
 
