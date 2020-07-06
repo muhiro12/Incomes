@@ -18,7 +18,7 @@ struct GroupView: View {
         items.grouped {
             $0.group
         }.reversed().forEach { items in
-            let key = items.key.isNotEmpty ? items.key : .others
+            let key = items.key.isNotEmpty ? items.key : LocalizableStrings.others.localized
             sectionItemsArray.append(
                 SectionItems(key: key,
                              value: items.grouped {
@@ -36,7 +36,7 @@ struct GroupView: View {
                     SectionView(section: section)
                 }
             }.selectedListStyle()
-                .navigationBarTitle(String.groupTitle)
+                .navigationBarTitle(LocalizableStrings.groupTitle.localized)
         }
     }
 }

@@ -19,7 +19,7 @@ struct ListItems: Identifiable {
         self.value = value
     }
 
-    init(from items: [Item], for key: String = .all) {
+    init(from items: [Item], for key: String = LocalizableStrings.all.localized) {
         var listItems: [ListItem] = []
 
         items.enumerated().forEach {
