@@ -70,14 +70,12 @@ struct Repository {
               format: format,
               keys: keys) { items in
                 let newItemList: [ListItem] = items.value.compactMap { item in
-                    var difference = Calendar.current.dateComponents([.year, .month, .day],
+                    let components = Calendar.current.dateComponents([.year, .month, .day],
                                                                      from: oldItem.date,
                                                                      to: newItem.date)
-                    if oldItem.date < newItem.date {
-                        difference.day = (difference.day ?? .zero) + .one
-                    }
-                    guard let newDate = Calendar.current.date(byAdding: difference, to: item.date) else {
-                        return nil
+                    guard let newDate = Calendar.current.date(byAdding: components,
+                                                              to: item.date) else {
+                                                                return nil
                     }
                     return ListItem(date: newDate,
                                     content: newItem.content,
