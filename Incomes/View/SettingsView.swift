@@ -31,6 +31,7 @@ struct SettingsView: View {
                 .navigationBarTitle(LocalizableStrings.settingsTitle.localized)
                 .navigationBarItems(trailing: Button(action: dismiss) {
                     Text(LocalizableStrings.done.localized)
+                        .bold()
                 })
         }.navigationViewStyle(StackNavigationViewStyle())
     }

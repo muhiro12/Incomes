@@ -94,7 +94,6 @@
 
 /* Begin PBXFileReference section */
 		AD31CE0324A96220005B3C14 /* DataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStore.swift; sourceTree = "<group>"; };
-		AD583B5E24B301830032AA1C /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		AD583B6224B301EB0032AA1C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		AD583B6524B3032D0032AA1C /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		AD583B6824B308AB0032AA1C /* LocalizableStrings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizableStrings.swift; sourceTree = "<group>"; };
@@ -690,7 +689,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				ADCF36B824A1D0F70011D6F5 /* Base */,
-				AD583B5E24B301830032AA1C /* ja */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";

@@ -105,21 +105,16 @@ struct EditView: View {
                         }
                     }
                 }
-                Section {
-                    Button(action: isEditMode ? save : create) {
-                        Text(isEditMode ? LocalizableStrings.save.localized : LocalizableStrings.create.localized)
-                            .frame(maxWidth: .greatestFiniteMagnitude,
-                                   alignment: .center)
-                    }.disabled(!isValid)
-                    Button(action: cancel) {
-                        Text(LocalizableStrings.cancel.localized)
-                            .frame(maxWidth: .greatestFiniteMagnitude,
-                                   alignment: .center)
-                            .foregroundColor(.red)
-                    }
-                }
             }.selectedListStyle()
                 .navigationBarTitle(isEditMode ? LocalizableStrings.editTitle.localized : LocalizableStrings.createTitle.localized)
+                .navigationBarItems(
+                    leading: Button(action: cancel) {
+                        Text(LocalizableStrings.cancel.localized)
+                    },
+                    trailing: Button(action: isEditMode ? save : create) {
+                        Text(isEditMode ? LocalizableStrings.save.localized : LocalizableStrings.create.localized)
+                            .bold()
+                    }.disabled(!isValid))
                 .gesture(DragGesture()
                     .onChanged { _ in
                         self.dismissKeyboard()
