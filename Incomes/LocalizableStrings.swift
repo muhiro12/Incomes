@@ -8,13 +8,13 @@
 
 import Foundation
 
-enum LocalizableStrings: String {
+enum LocalizableStrings {
     // MARK: - Common
     case all
     case done
-    case caution
-    case cautionDetail
+    case cancel
     case delete
+    case deleteConfirm
     case footerTextPrefix
 
     // MARK: - Home
@@ -36,21 +36,20 @@ enum LocalizableStrings: String {
     case repeatCount
     case save
     case saveDetail
-    case saveThisItem
-    case saveFollowingItems
-    case saveAllItems
+    case saveForThisItem
+    case saveForFutureItems
+    case saveForAllItems
     case create
-    case cancel
 
     // MARK: - Settings
     case settingsTitle
     case modernStyle
-    case icloud
+    case iCloud
     case limitedTime
 }
 
 extension LocalizableStrings {
     var localized: String {
-        return NSLocalizedString(self.rawValue, comment: "")
+        return NSLocalizedString(String(describing: self), comment: .empty)
     }
 }

@@ -24,7 +24,7 @@ struct SettingsView: View {
                 }
                 Section(footer: Text(LocalizableStrings.limitedTime.localized)) {
                     Toggle(isOn: $iCloud.isOn) {
-                        Text(LocalizableStrings.icloud.localized)
+                        Text(LocalizableStrings.iCloud.localized)
                     }
                 }
             }.selectedListStyle()

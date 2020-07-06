@@ -9,9 +9,9 @@
 // MARK: - Common
 "all" = "All";
 "done" = "Done";
-"caution" = "Caution";
-"cautionDetail" = "This action cannot be undone.";
+"cancel" = "Cancel";
 "delete" = "Delete";
+"deleteConfirm" = "Are you sure you want to delete this item?";
 "footerTextPrefix" = "Today: ";
 
 // MARK: - Home
@@ -32,15 +32,14 @@
 "group" = "Group";
 "repeatCount" = "Repeat";
 "save" = "Save";
-"saveDetail" = "Update recurring item";
-"saveThisItem" = "This item";
-"saveFollowingItems" = "This and all following items";
-"saveAllItems" = "All items";
+"saveDetail" = "This is a repeating item.";
+"saveForThisItem" = "Save for this item only";
+"saveForFutureItems" = "Save for future items";
+"saveForAllItems" = "Save for all items";
 "create" = "Create";
-"cancel" = "Cancel";
 
 // MARK: - Settings
 "settingsTitle" = "Settings";
 "modernStyle" = "Modern style";
-"icloud" = "iCloud";
+"iCloud" = "iCloud";
 "limitedTime" = "for a limited time";

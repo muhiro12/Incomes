@@ -128,9 +128,12 @@ struct EditView: View {
             .actionSheet(isPresented: $isPresentedToActionSheet) {
                 ActionSheet(title: Text(LocalizableStrings.saveDetail.localized),
                             buttons: [
-                                .default(Text(LocalizableStrings.saveThisItem.localized), action: saveThisItem),
-                                .default(Text(LocalizableStrings.saveFollowingItems.localized), action: saveAllFollowingItems),
-                                .default(Text(LocalizableStrings.saveAllItems.localized), action: saveAllItems),
+                                .default(Text(LocalizableStrings.saveForThisItem.localized),
+                                         action: saveForThisItem),
+                                .default(Text(LocalizableStrings.saveForFutureItems.localized),
+                                         action: saveForFutureItems),
+                                .default(Text(LocalizableStrings.saveForAllItems.localized),
+                                         action: saveForAllItems),
                                 .cancel()
                 ])
         }
@@ -138,25 +141,25 @@ struct EditView: View {
 
     private func save() {
         if item?.original?.repeatId == nil {
-            saveThisItem()
+            saveForThisItem()
         } else {
             presentToActionSheet()
         }
     }
 
-    private func saveThisItem() {
+    private func saveForThisItem() {
         let item = ListItem(date: date,
                             content: content,
                             group: group,
                             income: income.decimalValue,
                             expenditure: expenditure.decimalValue,
                             original: self.item?.original)
-        Repository.update(context,
-                          item: item,
-                          completion: dismiss)
+        Repository.save(context,
+                        item: item,
+                        completion: dismiss)
     }
 
-    private func saveAllFollowingItems() {
+    private func saveForFutureItems() {
         guard let oldItem = item else {
             return
         }
@@ -166,13 +169,13 @@ struct EditView: View {
                                income: income.decimalValue,
                                expenditure: expenditure.decimalValue,
                                original: self.item?.original)
-        Repository.updateAllFollowingItems(context,
-                                           oldItem: oldItem,
-                                           newItem: newItem,
-                                           completion: dismiss)
+        Repository.saveForFutureItems(context,
+                                      oldItem: oldItem,
+                                      newItem: newItem,
+                                      completion: dismiss)
     }
 
-    private func saveAllItems() {
+    private func saveForAllItems() {
         guard let oldItem = item else {
             return
         }
@@ -182,10 +185,10 @@ struct EditView: View {
                                income: income.decimalValue,
                                expenditure: expenditure.decimalValue,
                                original: self.item?.original)
-        Repository.updateAllRecurringItems(context,
-                                           oldItem: oldItem,
-                                           newItem: newItem,
-                                           completion: dismiss)
+        Repository.saveForAllItems(context,
+                                   oldItem: oldItem,
+                                   newItem: newItem,
+                                   completion: dismiss)
     }
 
     private func create() {

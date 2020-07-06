@@ -26,12 +26,13 @@ struct ListView: View {
                 ListItemView(of: item)
             }.onDelete(perform: presentToAlert)
         }.selectedListStyle()
-            .alert(isPresented: $isPresentedToAlert) {
-                Alert(title: Text(LocalizableStrings.caution.localized),
-                      message: Text(LocalizableStrings.cautionDetail.localized),
-                      primaryButton: .destructive(Text(LocalizableStrings.delete.localized),
-                                                  action: delete),
-                      secondaryButton: .cancel())
+            .actionSheet(isPresented: $isPresentedToAlert) {
+                ActionSheet(title: Text(LocalizableStrings.deleteConfirm.localized),
+                            buttons: [
+                                .destructive(Text(LocalizableStrings.delete.localized),
+                                             action: delete),
+                                .cancel()
+                ])
         }
     }
 

@@ -9,9 +9,9 @@
 // MARK: - Common
 "all" = "全て";
 "done" = "完了";
-"caution" = "警告";
-"cautionDetail" = "この操作を取り消すことはできません。";
+"cancel" = "キャンセル";
 "delete" = "削除";
+"deleteConfirm" = "このアイテムを削除してもよろしいですか？";
 "footerTextPrefix" = "今日: ";
 
 // MARK: - Home
@@ -32,15 +32,14 @@
 "group" = "グループ";
 "repeatCount" = "繰り返し";
 "save" = "保存";
-"saveDetail" = "繰り返しアイテムの更新";
-"saveThisItem" = "このアイテムのみ";
-"saveFollowingItems" = "この後に続くアイテム";
-"saveAllItems" = "全てのアイテム";
+"saveDetail" = "これは繰り返し項目です。";
+"saveForThisItem" = "このアイテムのみ保存";
+"saveForFutureItems" = "今後のアイテムも保存";
+"saveForAllItems" = "全てのアイテムを保存";
 "create" = "新規作成";
-"cancel" = "キャンセル";
 
 // MARK: - Settings
 "settingsTitle" = "設定";
-"modernStyle" = "モダンスタイル";
-"icloud" = "iCloud";
+"modernStyle" = "モダンテーマ";
+"iCloud" = "iCloud";
 "limitedTime" = "期間限定の機能です";
