@@ -50,22 +50,22 @@ struct Repository {
                           completion: completion)
     }
 
-    // MARK: - Update
+    // MARK: - Save
 
-    static func update(_ context: NSManagedObjectContext,
-                       item: ListItem,
-                       completion: (() -> Void)? = nil) {
+    static func save(_ context: NSManagedObjectContext,
+                     item: ListItem,
+                     completion: (() -> Void)? = nil) {
         DataStore.save(context,
                        item: item,
                        completion: completion)
     }
 
-    static func updateRecurringItem(_ context: NSManagedObjectContext,
-                                    format: String,
-                                    keys: [Any]?,
-                                    oldItem: ListItem,
-                                    newItem: ListItem,
-                                    completion: (() -> Void)? = nil) {
+    static func saveForRepeatingItems(_ context: NSManagedObjectContext,
+                                      format: String,
+                                      keys: [Any]?,
+                                      oldItem: ListItem,
+                                      newItem: ListItem,
+                                      completion: (() -> Void)? = nil) {
         fetch(context,
               format: format,
               keys: keys) { items in
@@ -94,34 +94,34 @@ struct Repository {
         }
     }
 
-    static func updateAllFollowingItems(_ context: NSManagedObjectContext,
-                                        oldItem: ListItem,
-                                        newItem: ListItem,
-                                        completion: (() -> Void)? = nil) {
+    static func saveForFutureItems(_ context: NSManagedObjectContext,
+                                   oldItem: ListItem,
+                                   newItem: ListItem,
+                                   completion: (() -> Void)? = nil) {
         guard let repeatId = oldItem.original?.repeatId else {
             return
         }
-        updateRecurringItem(context,
-                            format: "(repeatId = %@) AND (date >= %@)",
-                            keys: [repeatId, oldItem.date],
-                            oldItem: oldItem,
-                            newItem: newItem,
-                            completion: completion)
+        saveForRepeatingItems(context,
+                              format: "(repeatId = %@) AND (date >= %@)",
+                              keys: [repeatId, oldItem.date],
+                              oldItem: oldItem,
+                              newItem: newItem,
+                              completion: completion)
     }
 
-    static func updateAllRecurringItems(_ context: NSManagedObjectContext,
-                                        oldItem: ListItem,
-                                        newItem: ListItem,
-                                        completion: (() -> Void)? = nil) {
+    static func saveForAllItems(_ context: NSManagedObjectContext,
+                                oldItem: ListItem,
+                                newItem: ListItem,
+                                completion: (() -> Void)? = nil) {
         guard let repeatId = oldItem.original?.repeatId else {
             return
         }
-        updateRecurringItem(context,
-                            format: "repeatId = %@",
-                            keys: [repeatId],
-                            oldItem: oldItem,
-                            newItem: newItem,
-                            completion: completion)
+        saveForRepeatingItems(context,
+                              format: "repeatId = %@",
+                              keys: [repeatId],
+                              oldItem: oldItem,
+                              newItem: newItem,
+                              completion: completion)
     }
 
     // MARK: - Delete

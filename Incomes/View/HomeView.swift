@@ -35,7 +35,7 @@ struct HomeView: View {
                     SectionView(section: section)
                 }
             }.selectedListStyle()
-                .navigationBarTitle(String.homeTitle)
+                .navigationBarTitle(LocalizableStrings.homeTitle.localized)
                 .navigationBarItems(trailing:
                     Button(action: presentToSetting) {
                         Image(systemName: .settingsIcon)
