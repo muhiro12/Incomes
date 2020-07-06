@@ -10,46 +10,46 @@ import Foundation
 
 extension String {
     // MARK: - Common
-    static var empty: Self { "" }
-    static var zero: Self { "0" }
-    static var one: Self { "1" }
-    static var all: Self { "All" }
-    static var done: Self { "Done" }
-    static var caution: Self { "Caution" }
-    static var cautionDetail: Self { "This action cannot be undone." }
-    static var delete: Self { "Delete" }
-    static var footerTextPrefix: Self { "Today: " }
+    static var empty: Self { NSLocalizedString("empty", comment: "") }
+    static var zero: Self { NSLocalizedString("zero", comment: "") }
+    static var one: Self { NSLocalizedString("one", comment: "") }
+    static var all: Self { NSLocalizedString("all", comment: "") }
+    static var done: Self { NSLocalizedString("done", comment: "") }
+    static var caution: Self { NSLocalizedString("caution", comment: "") }
+    static var cautionDetail: Self { NSLocalizedString("cautionDetail", comment: "") }
+    static var delete: Self { NSLocalizedString("delete", comment: "") }
+    static var footerTextPrefix: Self { NSLocalizedString("footerTextPrefix", comment: "") }
 
     // MARK: - Home
-    static var homeTitle: Self { "Home" }
+    static var homeTitle: Self { NSLocalizedString("homeTitle", comment: "") }
 
     // MARK: - Group
-    static var groupTitle: Self { "Group" }
-    static var others: Self { "Others" }
+    static var groupTitle: Self { NSLocalizedString("groupTitle", comment: "") }
+    static var others: Self { NSLocalizedString("others", comment: "") }
 
     // MARK: - Edit
-    static var editTitle: Self { "Edit" }
-    static var createTitle: Self { "Create" }
-    static var information: Self { "Information" }
-    static var date: Self { "Date" }
-    static var content: Self { "Content" }
-    static var income: Self { "Income" }
-    static var expenditure: Self { "Expenditure" }
-    static var group: Self { "Group" }
-    static var repeatCount: Self { "Repeat" }
-    static var save: Self { "Save" }
-    static var saveDetail: Self { "Update recurring item" }
-    static var saveThisItem: Self { "This item" }
-    static var saveFollowingItems: Self { "This and all following items" }
-    static var saveAllItems: Self { "All items" }
-    static var create: Self { "Create" }
-    static var cancel: Self { "Cancel" }
+    static var editTitle: Self { NSLocalizedString("editTitle", comment: "") }
+    static var createTitle: Self { NSLocalizedString("createTitle", comment: "") }
+    static var information: Self { NSLocalizedString("information", comment: "") }
+    static var date: Self { NSLocalizedString("date", comment: "") }
+    static var content: Self { NSLocalizedString("content", comment: "") }
+    static var income: Self { NSLocalizedString("income", comment: "") }
+    static var expenditure: Self { NSLocalizedString("expenditure", comment: "") }
+    static var group: Self { NSLocalizedString("group", comment: "") }
+    static var repeatCount: Self { NSLocalizedString("repeatCount", comment: "") }
+    static var save: Self { NSLocalizedString("save", comment: "") }
+    static var saveDetail: Self { NSLocalizedString("saveDetail", comment: "") }
+    static var saveThisItem: Self { NSLocalizedString("saveThisItem", comment: "") }
+    static var saveFollowingItems: Self { NSLocalizedString("saveFollowingItems", comment: "") }
+    static var saveAllItems: Self { NSLocalizedString("saveAllItems", comment: "") }
+    static var create: Self { NSLocalizedString("create", comment: "") }
+    static var cancel: Self { NSLocalizedString("cancel", comment: "") }
 
     // MARK: - Settings
-    static var settingsTitle: Self { "Settings" }
-    static var modernStyle: Self { "Modern style" }
-    static var icloud: Self { "iCloud" }
-    static var limitedTime: Self { "for a limited time" }
+    static var settingsTitle: Self { NSLocalizedString("settingsTitle", comment: "") }
+    static var modernStyle: Self { NSLocalizedString("modernStyle", comment: "") }
+    static var icloud: Self { NSLocalizedString("icloud", comment: "") }
+    static var limitedTime: Self { NSLocalizedString("limitedTime", comment: "") }
 
     // MARK: - Image SystemName
     static var homeIcon: Self { "calendar" }

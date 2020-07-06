@@ -1,0 +1,49 @@
+/* 
+  Localizable.strings
+  Incomes
+
+  Created by Hiromu Nakano on 2020/07/06.
+  Copyright © 2020 Hiromu Nakano. All rights reserved.
+*/
+
+// MARK: - Common
+"empty" = "";
+"zero" = "0";
+"one" = "1";
+"all" = "全て";
+"done" = "完了";
+"caution" = "警告";
+"cautionDetail" = "この操作を取り消すことはできません。";
+"delete" = "削除";
+"footerTextPrefix" = "今日: ";
+
+// MARK: - Home
+"homeTitle" = "ホーム";
+
+// MARK: - Group
+"groupTitle" = "グループ";
+"others" = "その他";
+
+// MARK: - Edit
+"editTitle" = "編集";
+"createTitle" = "新規作成";
+"information" = "情報";
+"date" = "日付";
+"content" = "内容";
+"income" = "収入";
+"expenditure" = "支出";
+"group" = "グループ";
+"repeatCount" = "繰り返し";
+"save" = "保存";
+"saveDetail" = "繰り返しアイテムの更新";
+"saveThisItem" = "このアイテムのみ";
+"saveFollowingItems" = "この後に続くアイテム";
+"saveAllItems" = "全てのアイテム";
+"create" = "新規作成";
+"cancel" = "キャンセル";
+
+// MARK: - Settings
+"settingsTitle" = "設定";
+"modernStyle" = "モダンスタイル";
+"icloud" = "iCloud";
+"limitedTime" = "期間限定の機能です";

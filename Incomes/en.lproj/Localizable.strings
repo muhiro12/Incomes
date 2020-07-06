@@ -1,0 +1,49 @@
+/* 
+  Localizable.strings
+  Incomes
+
+  Created by Hiromu Nakano on 2020/07/06.
+  Copyright © 2020 Hiromu Nakano. All rights reserved.
+*/
+
+// MARK: - Common
+"empty" = "";
+"zero" = "0";
+"one" = "1";
+"all" = "All";
+"done" = "Done";
+"caution" = "Caution";
+"cautionDetail" = "This action cannot be undone.";
+"delete" = "Delete";
+"footerTextPrefix" = "Today: ";
+
+// MARK: - Home
+"homeTitle" = "Home";
+
+// MARK: - Group
+"groupTitle" = "Group";
+"others" = "Others";
+
+// MARK: - Edit
+"editTitle" = "Edit";
+"createTitle" = "Create";
+"information" = "Information";
+"date" = "Date";
+"content" = "Content";
+"income" = "Income";
+"expenditure" = "Expenditure";
+"group" = "Group";
+"repeatCount" = "Repeat";
+"save" = "Save";
+"saveDetail" = "Update recurring item";
+"saveThisItem" = "This item";
+"saveFollowingItems" = "This and all following items";
+"saveAllItems" = "All items";
+"create" = "Create";
+"cancel" = "Cancel";
+
+// MARK: - Settings
+"settingsTitle" = "Settings";
+"modernStyle" = "Modern style";
+"icloud" = "iCloud";
+"limitedTime" = "for a limited time";
