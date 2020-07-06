@@ -32,7 +32,7 @@ struct SettingsView: View {
                 .navigationBarItems(trailing: Button(action: dismiss) {
                     Text(verbatim: .done)
                 })
-        }
+        }.navigationViewStyle(StackNavigationViewStyle())
     }
 
     private func dismiss() {

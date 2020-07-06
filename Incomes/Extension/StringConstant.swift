@@ -12,6 +12,7 @@ extension String {
     // MARK: - Common
     static var empty: Self { "" }
     static var zero: Self { "0" }
+    static var one: Self { "1" }
     static var all: Self { "All" }
     static var done: Self { "Done" }
     static var caution: Self { "Caution" }

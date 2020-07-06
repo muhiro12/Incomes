@@ -20,6 +20,8 @@ struct EditView: View {
     @State private var expenditure: String = .empty
     @State private var group: String = .empty
     @State private var repeatSelection: Int = .zero
+    // TODO: Remove when WheelPicker bus is resolved.
+    @State private var repeatSelectionForCatalyst: String = .empty
 
     private var item: ListItem?
 
@@ -31,6 +33,7 @@ struct EditView: View {
         return content.isNotEmpty
             && income.isEmptyOrDecimal
             && expenditure.isEmptyOrDecimal
+            && repeatSelectionForCatalyst.isEmptyOrNaturalNumber
     }
 
     init() {}
@@ -81,6 +84,7 @@ struct EditView: View {
                         HStack {
                             Text(verbatim: .repeatCount)
                             Spacer()
+                            #if !targetEnvironment(macCatalyst)
                             Picker(String.repeatCount,
                                    selection: $repeatSelection) {
                                     ForEach((.minRepeatCount)..<(.maxRepeatCount + .one)) {
@@ -91,6 +95,13 @@ struct EditView: View {
                                 .frame(maxWidth: .componentS,
                                        maxHeight: .componentS)
                                 .clipped()
+                            #else
+                            // TODO: Remove when WheelPicker bus is resolved.
+                            TextField(String.one, text: $repeatSelectionForCatalyst)
+                                .keyboardType(.numberPad)
+                                .multilineTextAlignment(.trailing)
+                                .foregroundColor(repeatSelectionForCatalyst.isEmptyOrNaturalNumber ? .primary : .red)
+                            #endif
                         }
                     }
                 }
@@ -113,14 +124,15 @@ struct EditView: View {
                     .onChanged { _ in
                         self.dismissKeyboard()
                 })
-        }.actionSheet(isPresented: $isPresentedToActionSheet) {
-            ActionSheet(title: Text(verbatim: .saveDetail),
-                        buttons: [
-                            .default(Text(verbatim: .saveThisItem), action: saveThisItem),
-                            .default(Text(verbatim: .saveFollowingItems), action: saveAllFollowingItems),
-                            .default(Text(verbatim: .saveAllItems), action: saveAllItems),
-                            .cancel()
-            ])
+        }.navigationViewStyle(StackNavigationViewStyle())
+            .actionSheet(isPresented: $isPresentedToActionSheet) {
+                ActionSheet(title: Text(verbatim: .saveDetail),
+                            buttons: [
+                                .default(Text(verbatim: .saveThisItem), action: saveThisItem),
+                                .default(Text(verbatim: .saveFollowingItems), action: saveAllFollowingItems),
+                                .default(Text(verbatim: .saveAllItems), action: saveAllItems),
+                                .cancel()
+                ])
         }
     }
 
@@ -182,9 +194,15 @@ struct EditView: View {
                             group: group,
                             income: income.decimalValue,
                             expenditure: expenditure.decimalValue)
+        var repeatCount: Int = .one
+        #if !targetEnvironment(macCatalyst)
+        repeatCount = repeatSelection + .one
+        #else
+        repeatCount = Int(repeatSelectionForCatalyst) ?? .one
+        #endif
         Repository.create(context,
                           item: item,
-                          repeatCount: repeatSelection + .one,
+                          repeatCount: repeatCount,
                           completion: dismiss)
     }
 
