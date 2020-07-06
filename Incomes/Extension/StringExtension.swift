@@ -13,16 +13,6 @@ extension String {
         return !isEmpty
     }
 
-    var isEmptyOrNaturalNumber: Bool {
-        if isEmpty {
-            return true
-        }
-        guard let int = Int(self) else {
-            return false
-        }
-        return int > 0
-    }
-
     var isEmptyOrDecimal: Bool {
         if isEmpty {
             return true

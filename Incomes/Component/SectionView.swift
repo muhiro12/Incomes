@@ -24,12 +24,13 @@ struct SectionView: View {
                         Text(items.key)
             }
         }.onDelete(perform: presentToAlert)
-            .alert(isPresented: $isPresentedToAlert) {
-                Alert(title: Text(verbatim: .caution),
-                      message: Text(verbatim: .cautionDetail),
-                      primaryButton: .destructive(Text(verbatim: .delete),
-                                                  action: delete),
-                      secondaryButton: .cancel())
+            .actionSheet(isPresented: $isPresentedToAlert) {
+                ActionSheet(title: Text(LocalizableStrings.deleteConfirm.localized),
+                            buttons: [
+                                .destructive(Text(LocalizableStrings.delete.localized),
+                                             action: delete),
+                                .cancel()
+                ])
         }
     }
 
