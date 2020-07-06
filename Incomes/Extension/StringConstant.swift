@@ -12,7 +12,6 @@ extension String {
     // MARK: - Common
     static var empty: Self { "" }
     static var zero: Self { "0" }
-    static var one: Self { "1" }
 
     // MARK: - Image SystemName
     static var homeIcon: Self { "calendar" }
