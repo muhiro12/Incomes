@@ -124,14 +124,15 @@ struct EditView: View {
                     .onChanged { _ in
                         self.dismissKeyboard()
                 })
-        }.actionSheet(isPresented: $isPresentedToActionSheet) {
-            ActionSheet(title: Text(verbatim: .saveDetail),
-                        buttons: [
-                            .default(Text(verbatim: .saveThisItem), action: saveThisItem),
-                            .default(Text(verbatim: .saveFollowingItems), action: saveAllFollowingItems),
-                            .default(Text(verbatim: .saveAllItems), action: saveAllItems),
-                            .cancel()
-            ])
+        }.navigationViewStyle(StackNavigationViewStyle())
+            .actionSheet(isPresented: $isPresentedToActionSheet) {
+                ActionSheet(title: Text(verbatim: .saveDetail),
+                            buttons: [
+                                .default(Text(verbatim: .saveThisItem), action: saveThisItem),
+                                .default(Text(verbatim: .saveFollowingItems), action: saveAllFollowingItems),
+                                .default(Text(verbatim: .saveAllItems), action: saveAllItems),
+                                .cancel()
+                ])
         }
     }
 
