@@ -25,9 +25,9 @@ struct SectionView: View {
             }
         }.onDelete(perform: presentToAlert)
             .alert(isPresented: $isPresentedToAlert) {
-                Alert(title: Text(verbatim: .caution),
-                      message: Text(verbatim: .cautionDetail),
-                      primaryButton: .destructive(Text(verbatim: .delete),
+                Alert(title: Text(LocalizableStrings.caution.localized),
+                      message: Text(LocalizableStrings.cautionDetail.localized),
+                      primaryButton: .destructive(Text(LocalizableStrings.delete.localized),
                                                   action: delete),
                       secondaryButton: .cancel())
         }

@@ -7,9 +7,6 @@
 */
 
 // MARK: - Common
-"empty" = "";
-"zero" = "0";
-"one" = "1";
 "all" = "全て";
 "done" = "完了";
 "caution" = "警告";

@@ -7,9 +7,6 @@
 */
 
 // MARK: - Common
-"empty" = "";
-"zero" = "0";
-"one" = "1";
 "all" = "All";
 "done" = "Done";
 "caution" = "Caution";

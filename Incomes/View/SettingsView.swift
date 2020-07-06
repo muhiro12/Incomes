@@ -19,18 +19,18 @@ struct SettingsView: View {
             Form {
                 Section {
                     Toggle(isOn: $modernStyle.isOn) {
-                        Text(verbatim: .modernStyle)
+                        Text(LocalizableStrings.modernStyle.localized)
                     }
                 }
-                Section(footer: Text(verbatim: .limitedTime)) {
+                Section(footer: Text(LocalizableStrings.limitedTime.localized)) {
                     Toggle(isOn: $iCloud.isOn) {
-                        Text(verbatim: .icloud)
+                        Text(LocalizableStrings.icloud.localized)
                     }
                 }
             }.selectedListStyle()
-                .navigationBarTitle(String.settingsTitle)
+                .navigationBarTitle(LocalizableStrings.settingsTitle.localized)
                 .navigationBarItems(trailing: Button(action: dismiss) {
-                    Text(verbatim: .done)
+                    Text(LocalizableStrings.done.localized)
                 })
         }.navigationViewStyle(StackNavigationViewStyle())
     }

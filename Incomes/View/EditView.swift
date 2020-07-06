@@ -50,42 +50,42 @@ struct EditView: View {
     var body: some View {
         NavigationView {
             Form {
-                Section(header: Text(verbatim: .information)) {
+                Section(header: Text(LocalizableStrings.information.localized)) {
                     DatePicker(selection: $date, displayedComponents: .date) {
-                        Text(verbatim: .date)
+                        Text(LocalizableStrings.date.localized)
                     }
                     HStack {
-                        Text(verbatim: .content)
+                        Text(LocalizableStrings.content.localized)
                         Spacer()
                         TextField(String.empty, text: $content)
                             .multilineTextAlignment(.trailing)
                     }
                     HStack {
-                        Text(verbatim: .income)
+                        Text(LocalizableStrings.income.localized)
                         TextField(String.zero, text: $income)
                             .keyboardType(.numberPad)
                             .multilineTextAlignment(.trailing)
                             .foregroundColor(income.isEmptyOrDecimal ? .primary : .red)
                     }
                     HStack {
-                        Text(verbatim: .expenditure)
+                        Text(LocalizableStrings.expenditure.localized)
                         TextField(String.zero, text: $expenditure)
                             .keyboardType(.numberPad)
                             .multilineTextAlignment(.trailing)
                             .foregroundColor(expenditure.isEmptyOrDecimal ? .primary : .red)
                     }
                     HStack {
-                        Text(verbatim: .group)
+                        Text(LocalizableStrings.group.localized)
                         Spacer()
                         TextField(String.empty, text: $group)
                             .multilineTextAlignment(.trailing)
                     }
                     if !isEditMode {
                         HStack {
-                            Text(verbatim: .repeatCount)
+                            Text(LocalizableStrings.repeatCount.localized)
                             Spacer()
                             #if !targetEnvironment(macCatalyst)
-                            Picker(String.repeatCount,
+                            Picker(LocalizableStrings.repeatCount.localized,
                                    selection: $repeatSelection) {
                                     ForEach((.minRepeatCount)..<(.maxRepeatCount + .one)) {
                                         Text($0.description)
@@ -107,30 +107,30 @@ struct EditView: View {
                 }
                 Section {
                     Button(action: isEditMode ? save : create) {
-                        Text(verbatim: isEditMode ? .save : .create)
+                        Text(isEditMode ? LocalizableStrings.save.localized : LocalizableStrings.create.localized)
                             .frame(maxWidth: .greatestFiniteMagnitude,
                                    alignment: .center)
                     }.disabled(!isValid)
                     Button(action: cancel) {
-                        Text(verbatim: .cancel)
+                        Text(LocalizableStrings.cancel.localized)
                             .frame(maxWidth: .greatestFiniteMagnitude,
                                    alignment: .center)
                             .foregroundColor(.red)
                     }
                 }
             }.selectedListStyle()
-                .navigationBarTitle(isEditMode ? String.editTitle : String.createTitle)
+                .navigationBarTitle(isEditMode ? LocalizableStrings.editTitle.localized : LocalizableStrings.createTitle.localized)
                 .gesture(DragGesture()
                     .onChanged { _ in
                         self.dismissKeyboard()
                 })
         }.navigationViewStyle(StackNavigationViewStyle())
             .actionSheet(isPresented: $isPresentedToActionSheet) {
-                ActionSheet(title: Text(verbatim: .saveDetail),
+                ActionSheet(title: Text(LocalizableStrings.saveDetail.localized),
                             buttons: [
-                                .default(Text(verbatim: .saveThisItem), action: saveThisItem),
-                                .default(Text(verbatim: .saveFollowingItems), action: saveAllFollowingItems),
-                                .default(Text(verbatim: .saveAllItems), action: saveAllItems),
+                                .default(Text(LocalizableStrings.saveThisItem.localized), action: saveThisItem),
+                                .default(Text(LocalizableStrings.saveFollowingItems.localized), action: saveAllFollowingItems),
+                                .default(Text(LocalizableStrings.saveAllItems.localized), action: saveAllItems),
                                 .cancel()
                 ])
         }
