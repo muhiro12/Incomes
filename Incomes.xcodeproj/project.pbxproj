@@ -97,6 +97,7 @@
 		AD583B6224B301EB0032AA1C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		AD583B6524B3032D0032AA1C /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		AD583B6824B308AB0032AA1C /* LocalizableStrings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizableStrings.swift; sourceTree = "<group>"; };
+		ADA836AE24B3EDCF001ED90D /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		ADCF36A624A1D0F40011D6F5 /* Incomes Dev.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Incomes Dev.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ADCF36B224A1D0F70011D6F5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		ADCF36B524A1D0F70011D6F5 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -510,6 +511,7 @@
 				en,
 				Base,
 				ja,
+				"zh-Hans",
 			);
 			mainGroup = ADCF369D24A1D0F40011D6F5;
 			productRefGroup = ADCF36A724A1D0F40011D6F5 /* Products */;
@@ -681,6 +683,7 @@
 			children = (
 				AD583B6224B301EB0032AA1C /* en */,
 				AD583B6524B3032D0032AA1C /* ja */,
+				ADA836AE24B3EDCF001ED90D /* zh-Hans */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
