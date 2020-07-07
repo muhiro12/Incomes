@@ -7,7 +7,7 @@
 //
 
 import XCTest
-@testable import Incomes
+@testable import Incomes_Dev
 
 class DateExtensionTests: XCTestCase {
     func testYearReturnsYyyyCase19700101() {
