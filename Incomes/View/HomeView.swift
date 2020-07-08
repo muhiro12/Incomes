@@ -38,7 +38,7 @@ struct HomeView: View {
                 .navigationBarTitle(LocalizableStrings.homeTitle.localized)
                 .navigationBarItems(trailing:
                     Button(action: presentToSetting) {
-                        Image(systemName: .settingsIcon)
+                        Image.settings
                             .iconFrameM()
                     }
             ).sheet(isPresented: $isPresentedToSettings) {

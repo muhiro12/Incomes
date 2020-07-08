@@ -20,7 +20,7 @@ struct FooterView: View {
             Divider()
             HStack {
                 Button(action: toNextScene) {
-                    Image(systemName: scene.isHome ? .groupIcon : .homeIcon)
+                    (scene.isHome ? Image.group : Image.home)
                         .iconFrameM()
                 }
                 Spacer()
@@ -28,7 +28,7 @@ struct FooterView: View {
                     .font(.footnote)
                 Spacer()
                 Button(action: presentToEdit) {
-                    Image(systemName: .createIcon)
+                    Image.create
                         .iconFrameM()
                 }
             }.padding(EdgeInsets(top: .spaceS,
