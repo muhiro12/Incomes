@@ -98,6 +98,7 @@
 		AD583B6524B3032D0032AA1C /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		AD583B6824B308AB0032AA1C /* LocalizableStrings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizableStrings.swift; sourceTree = "<group>"; };
 		ADCF36A624A1D0F40011D6F5 /* Incomes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Incomes.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		ADA836AE24B3EDCF001ED90D /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		ADCF36B224A1D0F70011D6F5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		ADCF36B524A1D0F70011D6F5 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		ADCF36B824A1D0F70011D6F5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -510,6 +511,7 @@
 				en,
 				Base,
 				ja,
+				"zh-Hans",
 			);
 			mainGroup = ADCF369D24A1D0F40011D6F5;
 			productRefGroup = ADCF36A724A1D0F40011D6F5 /* Products */;
@@ -681,6 +683,7 @@
 			children = (
 				AD583B6224B301EB0032AA1C /* en */,
 				AD583B6524B3032D0032AA1C /* ja */,
+				ADA836AE24B3EDCF001ED90D /* zh-Hans */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -820,7 +823,7 @@
 				CODE_SIGN_ENTITLEMENTS = Incomes/Incomes.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_ASSET_PATHS = "\"Incomes/Preview Content\"";
 				DEVELOPMENT_TEAM = 66PKF55HK5;
 				ENABLE_PREVIEWS = YES;
@@ -834,7 +837,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.2.0;
+				MARKETING_VERSION = 0.3.0;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nakano.hiromu.Incomes.Dev;
 				PRODUCT_DISPLAY_NAME = "$(PRODUCT_NAME) Dev";
@@ -855,7 +858,7 @@
 				CODE_SIGN_ENTITLEMENTS = Incomes/Incomes.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_ASSET_PATHS = "\"Incomes/Preview Content\"";
 				DEVELOPMENT_TEAM = 66PKF55HK5;
 				ENABLE_PREVIEWS = YES;
@@ -869,7 +872,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.2.0;
+				MARKETING_VERSION = 0.3.0;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nakano.hiromu.Incomes;
 				PRODUCT_DISPLAY_NAME = "$(PRODUCT_NAME)";
