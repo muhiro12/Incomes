@@ -7,6 +7,6 @@
 //
 
 import XCTest
-@testable import Incomes_Dev
+@testable import Incomes
 
 class DateExtensionTests: XCTestCase {}

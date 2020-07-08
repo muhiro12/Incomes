@@ -96,9 +96,9 @@
 		AD31CE0324A96220005B3C14 /* DataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStore.swift; sourceTree = "<group>"; };
 		AD583B6224B301EB0032AA1C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		AD583B6524B3032D0032AA1C /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
-		AD583B6824B308AB0032AA1C /* LocalizableStrings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizableStrings.swift; sourceTree = "<group>"; };
 		ADA836AE24B3EDCF001ED90D /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
-		ADCF36A624A1D0F40011D6F5 /* Incomes Dev.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Incomes Dev.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		AD583B6824B308AB0032AA1C /* LocalizableStrings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizableStrings.swift; sourceTree = "<group>"; };
+		ADCF36A624A1D0F40011D6F5 /* Incomes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Incomes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ADCF36B224A1D0F70011D6F5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		ADCF36B524A1D0F70011D6F5 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		ADCF36B824A1D0F70011D6F5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -225,7 +225,7 @@
 		ADCF36A724A1D0F40011D6F5 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				ADCF36A624A1D0F40011D6F5 /* Incomes Dev.app */,
+				ADCF36A624A1D0F40011D6F5 /* Incomes.app */,
 				ADCF36BF24A1D0F70011D6F5 /* IncomesTests.xctest */,
 				ADCF36CA24A1D0F70011D6F5 /* IncomesUITests.xctest */,
 			);
@@ -440,7 +440,7 @@
 			);
 			name = Incomes;
 			productName = Incomes;
-			productReference = ADCF36A624A1D0F40011D6F5 /* Incomes Dev.app */;
+			productReference = ADCF36A624A1D0F40011D6F5 /* Incomes.app */;
 			productType = "com.apple.product-type.application";
 		};
 		ADCF36BE24A1D0F70011D6F5 /* IncomesTests */ = {
@@ -840,7 +840,8 @@
 				MARKETING_VERSION = 0.3.0;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nakano.hiromu.Incomes.Dev;
-				PRODUCT_NAME = "$(TARGET_NAME) Dev";
+				PRODUCT_DISPLAY_NAME = "$(PRODUCT_NAME) Dev";
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTS_MACCATALYST = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -874,6 +875,7 @@
 				MARKETING_VERSION = 0.3.0;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nakano.hiromu.Incomes;
+				PRODUCT_DISPLAY_NAME = "$(PRODUCT_NAME)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTS_MACCATALYST = YES;
@@ -900,7 +902,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Incomes Dev.app/Incomes Dev";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Incomes.app/Incomes";
 			};
 			name = Debug;
 		};
