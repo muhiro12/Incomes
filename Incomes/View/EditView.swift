@@ -88,8 +88,8 @@ struct EditView: View {
                                     }
                             }.pickerStyle(WheelPickerStyle())
                                 .labelsHidden()
-                                .frame(maxWidth: .componentS,
-                                       maxHeight: .componentS)
+                                .frame(width: .componentS,
+                                       height: .componentS)
                                 .clipped()
                         }
                     }
