@@ -7,7 +7,7 @@
 //
 
 import XCTest
-@testable import Incomes
+@testable import Incomes_Dev
 
 class ListViewTests: XCTestCase {
     func testPreviews() {
