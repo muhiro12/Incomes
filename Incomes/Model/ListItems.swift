@@ -52,25 +52,39 @@ struct ListItems: Identifiable {
         self.init(key: key, value: listItems.reversed())
     }
 
-    func grouped(by keyForValue: (ListItem) -> String) -> [Self] {
+    func grouped(by keyForValue: (ListItem) -> String, sortOption: SortOption = .string) -> [Self] {
         var listItemsArray: [ListItems] = []
 
         let groupedDictionary = Dictionary(grouping: value, by: keyForValue)
-            .sorted {
-                if $0.key.isEmpty {
-                    return true
-                } else if $1.key.isEmpty {
-                    return false
-                } else {
-                    return $0.key > $1.key
-                }
-        }
-        groupedDictionary.forEach {
+        groupedDictionary.sorted(by: sortOption.value).forEach {
             listItemsArray.append(
                 ListItems(key: $0.key, value: $0.value)
             )
         }
 
         return listItemsArray
+    }
+
+    enum SortOption {
+        case string
+        case date
+
+        func value(left: (key: String, value: [ListItem]),
+                   right: (key: String, value: [ListItem])) -> Bool {
+            switch self {
+            case .string:
+                if left.key.isEmpty {
+                    return true
+                } else if right.key.isEmpty {
+                    return false
+                } else {
+                    return left.key > right.key
+                }
+            case .date:
+                let leftDate = (left.value.first?.date).string
+                let rightDate = (right.value.first?.date).string
+                return leftDate > rightDate
+            }
+        }
     }
 }

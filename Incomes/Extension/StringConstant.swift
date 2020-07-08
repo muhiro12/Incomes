@@ -13,12 +13,6 @@ extension String {
     static var empty: Self { "" }
     static var zero: Self { "0" }
 
-    // MARK: - Image SystemName
-    static var homeIcon: Self { "calendar" }
-    static var groupIcon: Self { "square.stack.3d.up" }
-    static var settingsIcon: Self { "gear" }
-    static var createIcon: Self { "square.and.pencil" }
-
     // MARK: - Identifier
     static var item: Self { "Item" }
 }

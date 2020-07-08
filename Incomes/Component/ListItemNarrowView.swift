@@ -17,17 +17,15 @@ struct ListItemNarrowView: View {
 
     var body: some View {
         HStack {
-            Text(item.date.monthAndDay)
+            Text(item.date.stringValue(.MMMd))
+                .truncationMode(.head)
+                .font(.subheadline)
                 .frame(width: .componentS)
             Divider()
             Spacer()
-            VStack(alignment: .leading) {
-                Text(item.content)
-                    .font(.headline)
-                Text(
-                    (self.item.income - self.item.expenditure)
-                        .asCurrency.string
-                ).frame(maxWidth: .greatestFiniteMagnitude, alignment: .trailing)
+            VStack(alignment: .trailing, spacing: .zero) {
+                ListItemTitleView(item: item)
+                Text(item.profit.asCurrency.string)
                     .font(.footnote)
                     .foregroundColor(.secondary)
             }
