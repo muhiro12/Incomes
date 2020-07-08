@@ -17,7 +17,7 @@ struct ListItemTitleView: View {
                 .font(.headline)
             Spacer()
             if item.isProfitable {
-                Image(systemName: .arrowUpIcon)
+                Image.arrowUp
                     .iconFrameS()
                     .foregroundColor(.green)
             }
