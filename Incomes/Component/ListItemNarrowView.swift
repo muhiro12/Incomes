@@ -17,7 +17,7 @@ struct ListItemNarrowView: View {
 
     var body: some View {
         HStack {
-            Text(item.date.monthAndDay)
+            Text(item.date.stringValue(.MMMd))
                 .frame(width: .componentS)
             Divider()
             Spacer()

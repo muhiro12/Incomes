@@ -12,6 +12,6 @@ import XCTest
 class DateExtensionTests: XCTestCase {
     func testYearReturnsYyyyCase19700101() {
         let date = Date(timeIntervalSince1970: 0)
-        XCTAssertEqual(date.year, "1970")
+        XCTAssertEqual(date.stringValue(.yyyy), "1970")
     }
 }
