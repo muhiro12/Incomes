@@ -294,13 +294,13 @@
 		ADCF36E224A1D18E0011D6F5 /* Component */ = {
 			isa = PBXGroup;
 			children = (
-				ADCF36E424A1D18E0011D6F5 /* SectionView.swift */,
-				ADCF36E524A1D18E0011D6F5 /* ListView.swift */,
-				ADCF36E824A1D18E0011D6F5 /* ListItemView.swift */,
-				ADCF36E324A1D18E0011D6F5 /* ListItemNarrowView.swift */,
-				ADCF36E724A1D18E0011D6F5 /* ListItemWideView.swift */,
-				ADE89DF424B5E73300BB82E9 /* ListItemTitleView.swift */,
 				ADCF376424A32E460011D6F5 /* FooterView.swift */,
+				ADCF36E324A1D18E0011D6F5 /* ListItemNarrowView.swift */,
+				ADE89DF424B5E73300BB82E9 /* ListItemTitleView.swift */,
+				ADCF36E824A1D18E0011D6F5 /* ListItemView.swift */,
+				ADCF36E724A1D18E0011D6F5 /* ListItemWideView.swift */,
+				ADCF36E524A1D18E0011D6F5 /* ListView.swift */,
+				ADCF36E424A1D18E0011D6F5 /* SectionView.swift */,
 			);
 			path = Component;
 			sourceTree = "<group>";
@@ -316,13 +316,13 @@
 		ADCF36EB24A1D18E0011D6F5 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				ADCF36EA24A1D18E0011D6F5 /* Repository.swift */,
-				ADCF36EC24A1D18E0011D6F5 /* SectionItems.swift */,
+				ADCF376E24A394220011D6F5 /* GlobalSettings.swift */,
 				ADCF36ED24A1D18E0011D6F5 /* ListItem.swift */,
 				ADCF36EE24A1D18E0011D6F5 /* ListItems.swift */,
+				ADCF36EA24A1D18E0011D6F5 /* Repository.swift */,
 				ADCF376A24A343C30011D6F5 /* Scene.swift */,
+				ADCF36EC24A1D18E0011D6F5 /* SectionItems.swift */,
 				ADCF376C24A380B30011D6F5 /* UserDefault.swift */,
-				ADCF376E24A394220011D6F5 /* GlobalSettings.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -330,9 +330,9 @@
 		ADCF36F024A1D18E0011D6F5 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				ADCF36F324A1D18E0011D6F5 /* HomeView.swift */,
-				ADCF36F224A1D18E0011D6F5 /* GroupView.swift */,
 				ADCF36E624A1D18E0011D6F5 /* EditView.swift */,
+				ADCF36F224A1D18E0011D6F5 /* GroupView.swift */,
+				ADCF36F324A1D18E0011D6F5 /* HomeView.swift */,
 				ADCF376224A3147B0011D6F5 /* SettingsView.swift */,
 			);
 			path = View;
@@ -341,16 +341,16 @@
 		ADCF36F524A1D18E0011D6F5 /* Extension */ = {
 			isa = PBXGroup;
 			children = (
-				ADCF36FA24A1D18E0011D6F5 /* ViewExtension.swift */,
-				ADCF376824A33F500011D6F5 /* ImageExtension.swift */,
-				ADCF36F624A1D18E0011D6F5 /* OptionalExtension.swift */,
-				ADCF36FB24A1D18E0011D6F5 /* StringExtension.swift */,
-				ADCF375724A2C8250011D6F5 /* DecimalExtension.swift */,
-				ADCF36FD24A1D18E0011D6F5 /* DateExtension.swift */,
-				ADCF36FC24A1D18E0011D6F5 /* StringConstant.swift */,
-				ADCF36F724A1D18E0011D6F5 /* IntConstant.swift */,
 				ADCF36F824A1D18E0011D6F5 /* CGFloatConstant.swift */,
+				ADCF36FD24A1D18E0011D6F5 /* DateExtension.swift */,
+				ADCF375724A2C8250011D6F5 /* DecimalExtension.swift */,
 				ADE89DF624B5F78200BB82E9 /* ImageConstant.swift */,
+				ADCF376824A33F500011D6F5 /* ImageExtension.swift */,
+				ADCF36F724A1D18E0011D6F5 /* IntConstant.swift */,
+				ADCF36F624A1D18E0011D6F5 /* OptionalExtension.swift */,
+				ADCF36FC24A1D18E0011D6F5 /* StringConstant.swift */,
+				ADCF36FB24A1D18E0011D6F5 /* StringExtension.swift */,
+				ADCF36FA24A1D18E0011D6F5 /* ViewExtension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -358,9 +358,9 @@
 		ADCF371724A1D1CF0011D6F5 /* Extension */ = {
 			isa = PBXGroup;
 			children = (
-				ADCF371924A1D1CF0011D6F5 /* StringExtensionTests.swift */,
-				ADCF371A24A1D1CF0011D6F5 /* OptionalExtensionTests.swift */,
 				ADCF371B24A1D1CF0011D6F5 /* DateExtensionTests.swift */,
+				ADCF371A24A1D1CF0011D6F5 /* OptionalExtensionTests.swift */,
+				ADCF371924A1D1CF0011D6F5 /* StringExtensionTests.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -368,11 +368,11 @@
 		ADCF371C24A1D1CF0011D6F5 /* Component */ = {
 			isa = PBXGroup;
 			children = (
-				ADCF371D24A1D1CF0011D6F5 /* SectionViewTests.swift */,
-				ADCF372024A1D1CF0011D6F5 /* ListViewTests.swift */,
-				ADCF371F24A1D1CF0011D6F5 /* ListItemViewTests.swift */,
 				ADCF372324A1D1CF0011D6F5 /* ListItemNarrowViewTests.swift */,
+				ADCF371F24A1D1CF0011D6F5 /* ListItemViewTests.swift */,
 				ADCF371E24A1D1CF0011D6F5 /* ListItemWideViewTests.swift */,
+				ADCF372024A1D1CF0011D6F5 /* ListViewTests.swift */,
+				ADCF371D24A1D1CF0011D6F5 /* SectionViewTests.swift */,
 			);
 			path = Component;
 			sourceTree = "<group>";
@@ -380,9 +380,9 @@
 		ADCF375924A2CCF40011D6F5 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				ADCF372524A1D1CF0011D6F5 /* HomeViewTests.swift */,
-				ADCF372624A1D1CF0011D6F5 /* GroupViewTests.swift */,
 				ADCF372424A1D1CF0011D6F5 /* EditViewTests.swift */,
+				ADCF372624A1D1CF0011D6F5 /* GroupViewTests.swift */,
+				ADCF372524A1D1CF0011D6F5 /* HomeViewTests.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
