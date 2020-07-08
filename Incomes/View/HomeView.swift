@@ -39,7 +39,7 @@ struct HomeView: View {
                 .navigationBarItems(trailing:
                     Button(action: presentToSetting) {
                         Image(systemName: .settingsIcon)
-                            .iconFrame()
+                            .iconFrameM()
                     }
             ).sheet(isPresented: $isPresentedToSettings) {
                 SettingsView()

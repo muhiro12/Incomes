@@ -21,9 +21,7 @@ struct ListItemWideView: View {
                 .font(.subheadline)
                 .frame(width: .componentS)
             Divider()
-            Text(item.content)
-                .font(.headline)
-            Spacer()
+            ListItemTitleView(item: item)
             Divider()
             HStack {
                 Text(item.income.asCurrency.string)

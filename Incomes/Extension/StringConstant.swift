@@ -18,6 +18,7 @@ extension String {
     static var groupIcon: Self { "square.stack.3d.up" }
     static var settingsIcon: Self { "gear" }
     static var createIcon: Self { "square.and.pencil" }
+    static var arrowUpIcon: Self { "arrow.up" }
 
     // MARK: - Identifier
     static var item: Self { "Item" }

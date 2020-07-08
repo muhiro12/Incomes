@@ -20,3 +20,13 @@ struct ListItem: Identifiable {
     var balance: Decimal = .zero
     var original: Item?
 }
+
+extension ListItem {
+    var profit: Decimal {
+        return income - expenditure
+    }
+
+    var isProfitable: Bool {
+        return profit > 0
+    }
+}
