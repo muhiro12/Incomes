@@ -30,7 +30,7 @@ struct HomeView: View {
 
     var body: some View {
         NavigationView {
-            Form {
+            List {
                 ForEach(sections) { section in
                     SectionView(section: section)
                 }
