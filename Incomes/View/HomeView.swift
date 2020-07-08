@@ -16,12 +16,12 @@ struct HomeView: View {
     private var sections: [SectionItems] {
         var sectionItemsArray: [SectionItems] = []
         items.grouped {
-            $0.date.year
+            $0.date.stringValue(.yyyy)
         }.forEach { items in
             sectionItemsArray.append(
                 SectionItems(key: items.key,
-                             value: items.grouped {
-                                $0.date.yearAndMonth
+                             value: items.grouped(sortOption: .date) {
+                                $0.date.stringValue(.yyyyMMM)
                     }
             ))
         }
@@ -30,7 +30,7 @@ struct HomeView: View {
 
     var body: some View {
         NavigationView {
-            Form {
+            List {
                 ForEach(sections) { section in
                     SectionView(section: section)
                 }
@@ -39,7 +39,7 @@ struct HomeView: View {
                 .navigationBarItems(trailing:
                     Button(action: presentToSetting) {
                         Image(systemName: .settingsIcon)
-                            .iconFrame()
+                            .iconFrameM()
                     }
             ).sheet(isPresented: $isPresentedToSettings) {
                 SettingsView()

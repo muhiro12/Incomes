@@ -21,15 +21,15 @@ struct FooterView: View {
             HStack {
                 Button(action: toNextScene) {
                     Image(systemName: scene.isHome ? .groupIcon : .homeIcon)
-                        .iconFrame()
+                        .iconFrameM()
                 }
                 Spacer()
-                Text(LocalizableStrings.footerTextPrefix.localized + Date().yearAndMonthAndDay)
+                Text(LocalizableStrings.footerTextPrefix.localized + Date().stringValue(.yyyyMMMd))
                     .font(.footnote)
                 Spacer()
                 Button(action: presentToEdit) {
                     Image(systemName: .createIcon)
-                        .iconFrame()
+                        .iconFrameM()
                 }
             }.padding(EdgeInsets(top: .spaceS,
                                  leading: .spaceM,

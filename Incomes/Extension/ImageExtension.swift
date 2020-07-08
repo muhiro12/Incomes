@@ -9,8 +9,18 @@
 import SwiftUI
 
 extension Image {
-    func iconFrame() -> some View {
+    func iconFrameS() -> some View {
         return resizable()
-            .frame(width: .icon, height: .icon)
+            .frame(width: .iconS, height: .iconS)
+    }
+
+    func iconFrameM() -> some View {
+        return resizable()
+            .frame(width: .iconM, height: .iconM)
+    }
+
+    func iconFrameL() -> some View {
+        return resizable()
+            .frame(width: .iconL, height: .iconL)
     }
 }

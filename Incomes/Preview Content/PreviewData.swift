@@ -30,7 +30,7 @@ struct PreviewData {
     static let listItems = ListItems(key: LocalizableStrings.all.localized,
                                      value: [listItem, listItem])
 
-    static let sectionItems = SectionItems(key: Date().year,
+    static let sectionItems = SectionItems(key: Date().stringValue(.yyyy),
                                            value: [listItems])
 
     static var screenShot: ListItems {

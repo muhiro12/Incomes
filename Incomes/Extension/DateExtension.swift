@@ -9,27 +9,19 @@
 import Foundation
 
 extension Date {
-    var year: String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = DateFormatter.dateFormat(fromTemplate: "y", options: 0, locale: nil)
-        return formatter.string(from: self)
+    enum Template: String {
+        case yyyy
+        case yyyyMMM
+        case MMMd
+        case yyyyMMMd
     }
 
-    var yearAndMonth: String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = DateFormatter.dateFormat(fromTemplate: "yM", options: 0, locale: nil)
-        return formatter.string(from: self)
-    }
+    private static let formatter = DateFormatter()
 
-    var monthAndDay: String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = DateFormatter.dateFormat(fromTemplate: "Md", options: 0, locale: nil)
-        return formatter.string(from: self)
-    }
-
-    var yearAndMonthAndDay: String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = DateFormatter.dateFormat(fromTemplate: "yMd", options: 0, locale: nil)
-        return formatter.string(from: self)
+    func stringValue(_ template: Template = .yyyyMMMd) -> String {
+        Date.formatter.dateFormat = DateFormatter.dateFormat(fromTemplate: template.rawValue,
+                                                             options: 0,
+                                                             locale: .current)
+        return Date.formatter.string(from: self)
     }
 }

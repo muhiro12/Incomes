@@ -19,5 +19,7 @@ extension CGFloat {
     static var componentM: Self { unit * 10 }
     static var componentL: Self { unit * 12 }
 
-    static var icon: Self { unit * 3 }
+    static var iconS: Self { unit * 1 }
+    static var iconM: Self { unit * 3 }
+    static var iconL: Self { unit * 5 }
 }
