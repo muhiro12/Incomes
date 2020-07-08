@@ -897,7 +897,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Incomes Dev.app/Incomes Dev";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Incomes.app/Incomes";
 			};
 			name = Debug;
 		};
