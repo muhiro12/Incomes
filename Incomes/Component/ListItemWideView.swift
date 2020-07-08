@@ -18,6 +18,7 @@ struct ListItemWideView: View {
     var body: some View {
         HStack {
             Text(item.date.stringValue(.MMMd))
+                .truncationMode(.head)
                 .font(.subheadline)
                 .frame(width: .componentS)
             Divider()
