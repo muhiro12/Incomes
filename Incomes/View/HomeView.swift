@@ -20,7 +20,7 @@ struct HomeView: View {
         }.forEach { items in
             sectionItemsArray.append(
                 SectionItems(key: items.key,
-                             value: items.grouped {
+                             value: items.grouped(sortOption: .date) {
                                 $0.date.stringValue(.yyyyMMM)
                     }
             ))

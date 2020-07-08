@@ -9,9 +9,4 @@
 import XCTest
 @testable import Incomes_Dev
 
-class DateExtensionTests: XCTestCase {
-    func testYearReturnsYyyyCase19700101() {
-        let date = Date(timeIntervalSince1970: 0)
-        XCTAssertEqual(date.stringValue(.yyyy), "1970")
-    }
-}
+class DateExtensionTests: XCTestCase {}
