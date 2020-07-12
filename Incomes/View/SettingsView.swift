@@ -35,8 +35,12 @@ struct SettingsView: View {
                 })
         }.navigationViewStyle(StackNavigationViewStyle())
     }
+}
 
-    private func dismiss() {
+// MARK: - private
+
+private extension SettingsView {
+    func dismiss() {
         presentationMode.wrappedValue.dismiss()
     }
 }

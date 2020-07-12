@@ -32,8 +32,12 @@ struct ListItemView: View {
         }.contentShape(Rectangle())
             .onTapGesture(perform: presentToEdit)
     }
+}
 
-    private func presentToEdit() {
+// MARK: - private
+
+private extension ListItemView {
+    func presentToEdit() {
         isPresentedToEdit = true
     }
 }

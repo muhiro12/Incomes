@@ -39,13 +39,17 @@ struct SectionView: View {
             navigationLinks
         }
     }
+}
 
-    private func presentToAlert(indexSet: IndexSet) {
+// MARK: - private
+
+private extension SectionView {
+    func presentToAlert(indexSet: IndexSet) {
         self.indexSet = indexSet
         isPresentedToAlert = true
     }
 
-    private func delete() {
+    func delete() {
         indexSet.forEach {
             section.value[$0].value.forEach { item in
                 Repository.delete(context, item: item)

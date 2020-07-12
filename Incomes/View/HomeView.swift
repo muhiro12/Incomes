@@ -46,8 +46,12 @@ struct HomeView: View {
             }
         }
     }
+}
 
-    private func presentToSetting() {
+// MARK: - private
+
+private extension HomeView {
+    func presentToSetting() {
         isPresentedToSettings = true
     }
 }
