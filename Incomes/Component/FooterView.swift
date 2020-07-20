@@ -40,12 +40,16 @@ struct FooterView: View {
                 .environment(\.managedObjectContext, self.context)
         }
     }
+}
 
-    private func toNextScene() {
+// MARK: - private
+
+private extension FooterView {
+    func toNextScene() {
         self.scene.toNext()
     }
 
-    private func presentToEdit() {
+    func presentToEdit() {
         isPresentedToEdit = true
     }
 }

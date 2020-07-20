@@ -35,13 +35,17 @@ struct ListView: View {
                 ])
         }
     }
+}
 
-    private func presentToAlert(indexSet: IndexSet) {
+// MARK: - private
+
+private extension ListView {
+    func presentToAlert(indexSet: IndexSet) {
         self.indexSet = indexSet
         isPresentedToAlert = true
     }
 
-    private func delete() {
+    func delete() {
         indexSet.forEach {
             Repository.delete(context, item: items.value[$0])
         }
