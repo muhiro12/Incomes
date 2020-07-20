@@ -64,10 +64,14 @@ struct DataStore {
         context.delete(original)
         completion?()
     }
+}
 
-    static private func convert(_ context: NSManagedObjectContext,
-                                item: ListItem,
-                                repeatId: UUID? = nil) {
+// MARK: - private
+
+private extension DataStore {
+    static func convert(_ context: NSManagedObjectContext,
+                        item: ListItem,
+                        repeatId: UUID? = nil) {
         let original = item.original ?? Item(context: context)
         original.date = item.date
         original.content = item.content

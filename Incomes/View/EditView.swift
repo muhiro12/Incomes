@@ -122,8 +122,12 @@ struct EditView: View {
                 ])
         }
     }
+}
 
-    private func save() {
+// MARK: - private
+
+private extension EditView {
+    func save() {
         if item?.original?.repeatId == nil {
             saveForThisItem()
         } else {
@@ -131,7 +135,7 @@ struct EditView: View {
         }
     }
 
-    private func saveForThisItem() {
+    func saveForThisItem() {
         let item = ListItem(date: date,
                             content: content,
                             group: group,
@@ -143,7 +147,7 @@ struct EditView: View {
                         completion: dismiss)
     }
 
-    private func saveForFutureItems() {
+    func saveForFutureItems() {
         guard let oldItem = item else {
             return
         }
@@ -159,7 +163,7 @@ struct EditView: View {
                                       completion: dismiss)
     }
 
-    private func saveForAllItems() {
+    func saveForAllItems() {
         guard let oldItem = item else {
             return
         }
@@ -175,7 +179,7 @@ struct EditView: View {
                                    completion: dismiss)
     }
 
-    private func create() {
+    func create() {
         let item = ListItem(date: date,
                             content: content,
                             group: group,
@@ -187,26 +191,26 @@ struct EditView: View {
                           completion: dismiss)
     }
 
-    private func delete() {
+    func delete() {
         guard let item = item else {
             return
         }
         Repository.delete(context, item: item)
     }
 
-    private func cancel() {
+    func cancel() {
         dismiss()
     }
 
-    private func presentToActionSheet() {
+    func presentToActionSheet() {
         isPresentedToActionSheet = true
     }
 
-    private func dismiss() {
+    func dismiss() {
         presentationMode.wrappedValue.dismiss()
     }
 
-    private func dismissKeyboard() {
+    func dismissKeyboard() {
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder),
                                         to: nil,
                                         from: nil,

@@ -33,6 +33,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let container: NSPersistentContainer
         if GlobalSettings.iCloud {
             container = NSPersistentCloudKitContainer(name: "Incomes")
+            container.viewContext.automaticallyMergesChangesFromParent = true
+            container.viewContext.mergePolicy = NSMergePolicy.mergeByPropertyStoreTrump
         } else {
             container = NSPersistentContainer(name: "Incomes")
             let description = container.persistentStoreDescriptions.first
