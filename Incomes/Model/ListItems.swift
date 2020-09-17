@@ -27,10 +27,10 @@ struct ListItems: Identifiable {
             let item = $0.element
 
             guard let date = item.date,
-                let content = item.content,
-                let income = item.income?.decimalValue,
-                let expenditure = item.expenditure?.decimalValue else {
-                    return
+                  let content = item.content,
+                  let income = item.income?.decimalValue,
+                  let expenditure = item.expenditure?.decimalValue else {
+                return
             }
 
             var balance = Decimal.zero

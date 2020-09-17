@@ -22,8 +22,8 @@ struct HomeView: View {
                 SectionItems(key: items.key,
                              value: items.grouped(sortOption: .date) {
                                 $0.date.stringValue(.yyyyMMM)
-                    }
-            ))
+                             }
+                ))
         }
         return sectionItemsArray
     }
@@ -35,12 +35,12 @@ struct HomeView: View {
                     SectionView(section: section)
                 }
             }.selectedListStyle()
-                .navigationBarTitle(LocalizableStrings.homeTitle.localized)
-                .navigationBarItems(trailing:
-                    Button(action: presentToSetting) {
-                        Image.settings
-                            .iconFrameM()
-                    }
+            .navigationBarTitle(LocalizableStrings.homeTitle.localized)
+            .navigationBarItems(trailing:
+                                    Button(action: presentToSetting) {
+                                        Image.settings
+                                            .iconFrameM()
+                                    }
             ).sheet(isPresented: $isPresentedToSettings) {
                 SettingsView()
             }

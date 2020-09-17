@@ -28,11 +28,11 @@ struct SettingsView: View {
                     }
                 }
             }.selectedListStyle()
-                .navigationBarTitle(LocalizableStrings.settingsTitle.localized)
-                .navigationBarItems(trailing: Button(action: dismiss) {
-                    Text(LocalizableStrings.done.localized)
-                        .bold()
-                })
+            .navigationBarTitle(LocalizableStrings.settingsTitle.localized)
+            .navigationBarItems(trailing: Button(action: dismiss) {
+                Text(LocalizableStrings.done.localized)
+                    .bold()
+            })
         }.navigationViewStyle(StackNavigationViewStyle())
     }
 }

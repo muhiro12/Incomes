@@ -83,43 +83,43 @@ struct EditView: View {
                             Spacer()
                             Picker(LocalizableStrings.repeatCount.localized,
                                    selection: $repeatSelection) {
-                                    ForEach((.minRepeatCount)..<(.maxRepeatCount + .one)) {
-                                        Text($0.description)
-                                    }
+                                ForEach((.minRepeatCount)..<(.maxRepeatCount + .one)) {
+                                    Text($0.description)
+                                }
                             }.pickerStyle(WheelPickerStyle())
-                                .labelsHidden()
-                                .frame(width: .componentS,
-                                       height: .componentS)
-                                .clipped()
+                            .labelsHidden()
+                            .frame(width: .componentS,
+                                   height: .componentS)
+                            .clipped()
                         }
                     }
                 }
             }.selectedListStyle()
-                .navigationBarTitle(isEditMode ? LocalizableStrings.editTitle.localized : LocalizableStrings.createTitle.localized)
-                .navigationBarItems(
-                    leading: Button(action: cancel) {
-                        Text(LocalizableStrings.cancel.localized)
-                    },
-                    trailing: Button(action: isEditMode ? save : create) {
-                        Text(isEditMode ? LocalizableStrings.save.localized : LocalizableStrings.create.localized)
-                            .bold()
-                    }.disabled(!isValid))
-                .gesture(DragGesture()
-                    .onChanged { _ in
-                        self.dismissKeyboard()
-                })
+            .navigationBarTitle(isEditMode ? LocalizableStrings.editTitle.localized : LocalizableStrings.createTitle.localized)
+            .navigationBarItems(
+                leading: Button(action: cancel) {
+                    Text(LocalizableStrings.cancel.localized)
+                },
+                trailing: Button(action: isEditMode ? save : create) {
+                    Text(isEditMode ? LocalizableStrings.save.localized : LocalizableStrings.create.localized)
+                        .bold()
+                }.disabled(!isValid))
+            .gesture(DragGesture()
+                        .onChanged { _ in
+                            self.dismissKeyboard()
+                        })
         }.navigationViewStyle(StackNavigationViewStyle())
-            .actionSheet(isPresented: $isPresentedToActionSheet) {
-                ActionSheet(title: Text(LocalizableStrings.saveDetail.localized),
-                            buttons: [
-                                .default(Text(LocalizableStrings.saveForThisItem.localized),
-                                         action: saveForThisItem),
-                                .default(Text(LocalizableStrings.saveForFutureItems.localized),
-                                         action: saveForFutureItems),
-                                .default(Text(LocalizableStrings.saveForAllItems.localized),
-                                         action: saveForAllItems),
-                                .cancel()
-                ])
+        .actionSheet(isPresented: $isPresentedToActionSheet) {
+            ActionSheet(title: Text(LocalizableStrings.saveDetail.localized),
+                        buttons: [
+                            .default(Text(LocalizableStrings.saveForThisItem.localized),
+                                     action: saveForThisItem),
+                            .default(Text(LocalizableStrings.saveForFutureItems.localized),
+                                     action: saveForFutureItems),
+                            .default(Text(LocalizableStrings.saveForAllItems.localized),
+                                     action: saveForAllItems),
+                            .cancel()
+                        ])
         }
     }
 }
