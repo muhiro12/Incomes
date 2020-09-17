@@ -30,7 +30,7 @@ struct ListItemView: View {
             EditView(of: self.item)
                 .environment(\.managedObjectContext, self.context)
         }.contentShape(Rectangle())
-            .onTapGesture(perform: presentToEdit)
+        .onTapGesture(perform: presentToEdit)
     }
 }
 

@@ -23,8 +23,8 @@ struct GroupView: View {
                 SectionItems(key: key,
                              value: items.grouped {
                                 $0.content
-                    }
-            ))
+                             }
+                ))
         }
         return sectionItemsArray
     }
@@ -36,7 +36,7 @@ struct GroupView: View {
                     SectionView(section: section)
                 }
             }.selectedListStyle()
-                .navigationBarTitle(LocalizableStrings.groupTitle.localized)
+            .navigationBarTitle(LocalizableStrings.groupTitle.localized)
         }
     }
 }

@@ -19,18 +19,18 @@ struct SectionView: View {
     private var navigationLinks: some View {
         return ForEach(section.value) { items in
             NavigationLink(destination:
-                ListView(of: items)
-                    .navigationBarTitle(items.key)) {
-                        Text(items.key)
+                            ListView(of: items)
+                            .navigationBarTitle(items.key)) {
+                Text(items.key)
             }
         }.onDelete(perform: presentToAlert)
-            .actionSheet(isPresented: $isPresentedToAlert) {
-                ActionSheet(title: Text(LocalizableStrings.deleteConfirm.localized),
-                            buttons: [
-                                .destructive(Text(LocalizableStrings.delete.localized),
-                                             action: delete),
-                                .cancel()
-                ])
+        .actionSheet(isPresented: $isPresentedToAlert) {
+            ActionSheet(title: Text(LocalizableStrings.deleteConfirm.localized),
+                        buttons: [
+                            .destructive(Text(LocalizableStrings.delete.localized),
+                                         action: delete),
+                            .cancel()
+                        ])
         }
     }
 
