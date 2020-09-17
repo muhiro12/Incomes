@@ -34,7 +34,7 @@ struct Repository {
             guard let date = Calendar.current.date(byAdding: .month,
                                                    value: index,
                                                    to: item.date) else {
-                                                    return
+                return
             }
             let recurringItem = ListItem(date: date,
                                          content: item.content,
@@ -69,28 +69,28 @@ struct Repository {
         fetch(context,
               format: format,
               keys: keys) { items in
-                let newItemList: [ListItem] = items.value.compactMap { item in
-                    let components = Calendar.current.dateComponents([.year, .month, .day],
-                                                                     from: oldItem.date,
-                                                                     to: newItem.date)
-                    guard let newDate = Calendar.current.date(byAdding: components,
-                                                              to: item.date) else {
-                                                                return nil
-                    }
-                    return ListItem(date: newDate,
-                                    content: newItem.content,
-                                    group: newItem.group,
-                                    income: newItem.income,
-                                    expenditure: newItem.expenditure,
-                                    original: item.original)
+            let newItemList: [ListItem] = items.value.compactMap { item in
+                let components = Calendar.current.dateComponents([.year, .month, .day],
+                                                                 from: oldItem.date,
+                                                                 to: newItem.date)
+                guard let newDate = Calendar.current.date(byAdding: components,
+                                                          to: item.date) else {
+                    return nil
                 }
-                let repeatId = UUID()
-                let newItems = ListItems(key: repeatId.description,
-                                         value: newItemList)
-                DataStore.saveAll(context,
-                                  items: newItems,
-                                  repeatId: repeatId,
-                                  completion: completion)
+                return ListItem(date: newDate,
+                                content: newItem.content,
+                                group: newItem.group,
+                                income: newItem.income,
+                                expenditure: newItem.expenditure,
+                                original: item.original)
+            }
+            let repeatId = UUID()
+            let newItems = ListItems(key: repeatId.description,
+                                     value: newItemList)
+            DataStore.saveAll(context,
+                              items: newItems,
+                              repeatId: repeatId,
+                              completion: completion)
         }
     }
 
