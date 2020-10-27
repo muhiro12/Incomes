@@ -31,7 +31,7 @@ struct ListItemWideView: View {
                 Text(item.expenditure.asMinusCurrency.string)
                     .frame(width: .componentM)
             }.font(.footnote)
-                .foregroundColor(.secondary)
+            .foregroundColor(.secondary)
             Divider()
             Text(item.balance.asCurrency.string)
                 .frame(width: .componentL)
