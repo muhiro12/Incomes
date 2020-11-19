@@ -9,9 +9,9 @@
 import Foundation
 
 enum GlobalSettings: String {
-    case modernStyleKey
-    case iCloudKey
-    case purchasedKey
+    case modernStyleKey = "11153"
+    case iCloudKey = "20690"
+    case purchasedKey = "14548"
 
     @UserDefault(key: .modernStyleKey, defaultValue: true)
     static var modernStyle: Bool
