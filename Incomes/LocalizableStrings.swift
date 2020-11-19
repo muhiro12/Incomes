@@ -45,7 +45,8 @@ enum LocalizableStrings {
     case settingsTitle
     case modernStyle
     case iCloud
-    case limitedTime
+    case subscribe
+    case subscription
 }
 
 extension LocalizableStrings {
