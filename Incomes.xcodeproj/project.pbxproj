@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AD134E1A24EA4A00006E23AB /* SwiftyStoreKit in Frameworks */ = {isa = PBXBuildFile; productRef = AD134E1924EA4A00006E23AB /* SwiftyStoreKit */; };
 		AD31CE0424A96220005B3C14 /* DataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD31CE0324A96220005B3C14 /* DataStore.swift */; };
 		AD583B6124B301EB0032AA1C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = AD583B6324B301EB0032AA1C /* Localizable.strings */; };
 		AD583B6924B308AB0032AA1C /* LocalizableStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD583B6824B308AB0032AA1C /* LocalizableStrings.swift */; };
@@ -75,6 +76,9 @@
 		ADCF393624A5B2AC0011D6F5 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = ADCF393524A5B2AC0011D6F5 /* GoogleService-Info.plist */; };
 		ADE89DF524B5E73300BB82E9 /* ListItemTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE89DF424B5E73300BB82E9 /* ListItemTitleView.swift */; };
 		ADE89DF724B5F78200BB82E9 /* ImageConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE89DF624B5F78200BB82E9 /* ImageConstant.swift */; };
+		ADEA399C2501457A00CB61D9 /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADEA399B2501457A00CB61D9 /* Store.swift */; };
+		ADEA399E25014CD700CB61D9 /* Secret.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADEA399D25014CD700CB61D9 /* Secret.swift */; };
+		ADEA39A0250150E000CB61D9 /* EnvironmentParameter.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADEA399F250150E000CB61D9 /* EnvironmentParameter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -99,6 +103,7 @@
 		AD583B6224B301EB0032AA1C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		AD583B6524B3032D0032AA1C /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		AD583B6824B308AB0032AA1C /* LocalizableStrings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizableStrings.swift; sourceTree = "<group>"; };
+		AD7C7E2B254A33E500D1F0A0 /* Configuration.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Configuration.storekit; sourceTree = "<group>"; };
 		ADA836AE24B3EDCF001ED90D /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		ADCF36A624A1D0F40011D6F5 /* Incomes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Incomes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ADCF36B224A1D0F70011D6F5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -174,6 +179,9 @@
 		ADCF393524A5B2AC0011D6F5 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		ADE89DF424B5E73300BB82E9 /* ListItemTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListItemTitleView.swift; sourceTree = "<group>"; };
 		ADE89DF624B5F78200BB82E9 /* ImageConstant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageConstant.swift; sourceTree = "<group>"; };
+		ADEA399B2501457A00CB61D9 /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
+		ADEA399D25014CD700CB61D9 /* Secret.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secret.swift; sourceTree = "<group>"; };
+		ADEA399F250150E000CB61D9 /* EnvironmentParameter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnvironmentParameter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -184,6 +192,7 @@
 				ADCF392124A551360011D6F5 /* StoreKit.framework in Frameworks */,
 				ADCF391D24A550910011D6F5 /* libsqlite3.tbd in Frameworks */,
 				ADCF391924A550260011D6F5 /* PromisesObjC.framework in Frameworks */,
+				AD134E1A24EA4A00006E23AB /* SwiftyStoreKit in Frameworks */,
 				ADCF390724A550250011D6F5 /* FirebaseAnalytics.framework in Frameworks */,
 				ADCF390924A550250011D6F5 /* FirebaseCore.framework in Frameworks */,
 				ADCF375F24A2FEAF0011D6F5 /* CloudKit.framework in Frameworks */,
@@ -248,7 +257,10 @@
 				ADCF36E924A1D18E0011D6F5 /* Interface */,
 				ADCF36EB24A1D18E0011D6F5 /* Model */,
 				ADCF36F524A1D18E0011D6F5 /* Extension */,
+				ADEA399F250150E000CB61D9 /* EnvironmentParameter.swift */,
+				ADEA399D25014CD700CB61D9 /* Secret.swift */,
 				AD583B6824B308AB0032AA1C /* LocalizableStrings.swift */,
+				AD7C7E2B254A33E500D1F0A0 /* Configuration.storekit */,
 				AD583B6324B301EB0032AA1C /* Localizable.strings */,
 				ADCF36B224A1D0F70011D6F5 /* Assets.xcassets */,
 				ADCF36B724A1D0F70011D6F5 /* LaunchScreen.storyboard */,
@@ -323,6 +335,7 @@
 				ADCF376A24A343C30011D6F5 /* Scene.swift */,
 				ADCF36EC24A1D18E0011D6F5 /* SectionItems.swift */,
 				ADCF376C24A380B30011D6F5 /* UserDefault.swift */,
+				ADEA399B2501457A00CB61D9 /* Store.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -445,6 +458,9 @@
 			dependencies = (
 			);
 			name = Incomes;
+			packageProductDependencies = (
+				AD134E1924EA4A00006E23AB /* SwiftyStoreKit */,
+			);
 			productName = Incomes;
 			productReference = ADCF36A624A1D0F40011D6F5 /* Incomes.app */;
 			productType = "com.apple.product-type.application";
@@ -492,7 +508,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1150;
-				LastUpgradeCheck = 1150;
+				LastUpgradeCheck = 1240;
 				ORGANIZATIONNAME = "Hiromu Nakano";
 				TargetAttributes = {
 					ADCF36A524A1D0F40011D6F5 = {
@@ -520,6 +536,9 @@
 				"zh-Hans",
 			);
 			mainGroup = ADCF369D24A1D0F40011D6F5;
+			packageReferences = (
+				AD134E1824EA4A00006E23AB /* XCRemoteSwiftPackageReference "SwiftyStoreKit" */,
+			);
 			productRefGroup = ADCF36A724A1D0F40011D6F5 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -612,6 +631,7 @@
 				ADCF36FF24A1D18E0011D6F5 /* SectionView.swift in Sources */,
 				ADCF371124A1D18E0011D6F5 /* ViewExtension.swift in Sources */,
 				ADCF393224A57ADC0011D6F5 /* PreviewData.swift in Sources */,
+				ADEA399E25014CD700CB61D9 /* Secret.swift in Sources */,
 				ADCF371224A1D18E0011D6F5 /* StringExtension.swift in Sources */,
 				ADCF370D24A1D18E0011D6F5 /* OptionalExtension.swift in Sources */,
 				ADCF370A24A1D18E0011D6F5 /* GroupView.swift in Sources */,
@@ -631,12 +651,14 @@
 				ADCF375824A2C8260011D6F5 /* DecimalExtension.swift in Sources */,
 				ADCF370624A1D18E0011D6F5 /* ListItem.swift in Sources */,
 				ADCF376F24A394220011D6F5 /* GlobalSettings.swift in Sources */,
+				ADEA39A0250150E000CB61D9 /* EnvironmentParameter.swift in Sources */,
 				ADCF376324A3147B0011D6F5 /* SettingsView.swift in Sources */,
 				ADE89DF724B5F78200BB82E9 /* ImageConstant.swift in Sources */,
 				ADCF371424A1D18E0011D6F5 /* DateExtension.swift in Sources */,
 				ADCF36E024A1D1820011D6F5 /* ContentView.swift in Sources */,
 				ADCF370E24A1D18E0011D6F5 /* IntConstant.swift in Sources */,
 				ADCF370724A1D18E0011D6F5 /* ListItems.swift in Sources */,
+				ADEA399C2501457A00CB61D9 /* Store.swift in Sources */,
 				ADE89DF524B5E73300BB82E9 /* ListItemTitleView.swift in Sources */,
 				ADCF36E124A1D1820011D6F5 /* SceneDelegate.swift in Sources */,
 			);
@@ -734,6 +756,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -795,6 +818,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -1016,6 +1040,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		AD134E1824EA4A00006E23AB /* XCRemoteSwiftPackageReference "SwiftyStoreKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/bizz84/SwiftyStoreKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.16.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		AD134E1924EA4A00006E23AB /* SwiftyStoreKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AD134E1824EA4A00006E23AB /* XCRemoteSwiftPackageReference "SwiftyStoreKit" */;
+			productName = SwiftyStoreKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		ADCF375A24A2FBBD0011D6F5 /* Incomes.xcdatamodeld */ = {

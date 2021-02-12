@@ -9,14 +9,18 @@
 import Foundation
 
 enum GlobalSettings: String {
-    case modernStyleKey
-    case iCloudKey
+    case modernStyleKey = "11153"
+    case iCloudKey = "20690"
+    case purchasedKey = "14548"
 
     @UserDefault(key: .modernStyleKey, defaultValue: true)
     static var modernStyle: Bool
 
     @UserDefault(key: .iCloudKey, defaultValue: false)
     static var iCloud: Bool
+
+    @UserDefault(key: .purchasedKey, defaultValue: false)
+    static var purchased: Bool
 }
 
 class ModernStyle: ObservableObject {
@@ -31,6 +35,14 @@ class ICloud: ObservableObject {
     var isOn = GlobalSettings.iCloud {
         didSet {
             GlobalSettings.iCloud = isOn
+        }
+    }
+}
+
+class Purchased: ObservableObject {
+    var isOn = GlobalSettings.purchased {
+        didSet {
+            GlobalSettings.purchased = isOn
         }
     }
 }

@@ -4,6 +4,7 @@
 
 ## Product
 GoogleService-Info.plist
+Secret.swift
 
 ## User settings
 xcuserdata/
