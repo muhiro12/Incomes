@@ -42,4 +42,6 @@
 "settingsTitle" = "Settings";
 "modernStyle" = "Modern style";
 "iCloud" = "iCloud";
-"limitedTime" = "Only subscribers be available iCloud integration feature from mid-September 2020. Thank you for your understanding.";
+"subscribe" = "Subscribe";
+// TODO: undefined
+"subscription" = "For sharing data between all device";

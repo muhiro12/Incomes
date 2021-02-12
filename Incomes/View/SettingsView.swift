@@ -13,6 +13,10 @@ struct SettingsView: View {
 
     @State private var modernStyle = ModernStyle()
     @State private var iCloud = ICloud()
+    @State private var purchased = Purchased()
+
+    private let store = Store(productId: EnvironmentParameter.productId,
+                              validator: EnvironmentParameter.appleValidator)
 
     var body: some View {
         NavigationView {
@@ -22,9 +26,15 @@ struct SettingsView: View {
                         Text(LocalizableStrings.modernStyle.localized)
                     }
                 }
-                Section(footer: Text(LocalizableStrings.limitedTime.localized)) {
-                    Toggle(isOn: $iCloud.isOn) {
-                        Text(LocalizableStrings.iCloud.localized)
+                Section(footer: purchased.isOn ? nil : Text(LocalizableStrings.subscription.localized)) {
+                    if purchased.isOn {
+                        Toggle(isOn: $iCloud.isOn) {
+                            Text(LocalizableStrings.iCloud.localized)
+                        }
+                    } else {
+                        Button(LocalizableStrings.subscribe.localized) {
+                            self.store.purchase()
+                        }
                     }
                 }
             }.selectedListStyle()

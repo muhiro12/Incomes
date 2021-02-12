@@ -42,4 +42,7 @@
 "settingsTitle" = "設定";
 "modernStyle" = "モダンテーマ";
 "iCloud" = "iCloud";
-"limitedTime" = "2020年9月中旬頃よりiCloud連携機能はサブスクライバー限定機能となります。ご理解のほどよろしくお願い致します。";
+"subscribe" = "定期購入";
+// TODO: undefined
+"subscription" = "For sharing data between all device";
+
