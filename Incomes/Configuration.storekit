@@ -21,7 +21,7 @@
           "adHocOffers" : [
 
           ],
-          "displayPrice" : "1.49",
+          "displayPrice" : "1.99",
           "familyShareable" : false,
           "groupNumber" : 1,
           "internalID" : "E504DD78",
@@ -33,9 +33,9 @@
               "locale" : "en_US"
             }
           ],
-          "productID" : "com.muhiro12.Incomes.Incomes.Dev.subscription.month",
+          "productID" : "com.muhiro12.Incomes.Dev.subscription.1month",
           "recurringSubscriptionPeriod" : "P1M",
-          "referenceName" : "Monthly",
+          "referenceName" : "Monthly Plan",
           "subscriptionGroupID" : "D8CD218D",
           "type" : "RecurringSubscription"
         }
