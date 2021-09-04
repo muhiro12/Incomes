@@ -59,17 +59,6 @@
 		ADCF376B24A343C30011D6F5 /* Scene.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF376A24A343C30011D6F5 /* Scene.swift */; };
 		ADCF376D24A380B30011D6F5 /* UserDefault.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF376C24A380B30011D6F5 /* UserDefault.swift */; };
 		ADCF376F24A394220011D6F5 /* GlobalSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF376E24A394220011D6F5 /* GlobalSettings.swift */; };
-		ADCF390324A550250011D6F5 /* FIRAnalyticsConnector.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADCF390024A550190011D6F5 /* FIRAnalyticsConnector.framework */; platformFilter = ios; };
-		ADCF390724A550250011D6F5 /* FirebaseAnalytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADCF38FB24A550190011D6F5 /* FirebaseAnalytics.framework */; platformFilter = ios; };
-		ADCF390924A550250011D6F5 /* FirebaseCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADCF38FA24A550190011D6F5 /* FirebaseCore.framework */; platformFilter = ios; };
-		ADCF390B24A550250011D6F5 /* FirebaseCoreDiagnostics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADCF390124A550190011D6F5 /* FirebaseCoreDiagnostics.framework */; platformFilter = ios; };
-		ADCF390D24A550250011D6F5 /* FirebaseInstallations.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADCF38FF24A550190011D6F5 /* FirebaseInstallations.framework */; platformFilter = ios; };
-		ADCF390F24A550260011D6F5 /* GoogleAppMeasurement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADCF38F924A550190011D6F5 /* GoogleAppMeasurement.framework */; platformFilter = ios; };
-		ADCF391124A550260011D6F5 /* GoogleDataTransport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADCF38F624A550190011D6F5 /* GoogleDataTransport.framework */; platformFilter = ios; };
-		ADCF391324A550260011D6F5 /* GoogleDataTransportCCTSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADCF38F824A550190011D6F5 /* GoogleDataTransportCCTSupport.framework */; platformFilter = ios; };
-		ADCF391524A550260011D6F5 /* GoogleUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADCF38FC24A550190011D6F5 /* GoogleUtilities.framework */; platformFilter = ios; };
-		ADCF391724A550260011D6F5 /* nanopb.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADCF38FE24A550190011D6F5 /* nanopb.framework */; platformFilter = ios; };
-		ADCF391924A550260011D6F5 /* PromisesObjC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADCF38FD24A550190011D6F5 /* PromisesObjC.framework */; platformFilter = ios; };
 		ADCF391D24A550910011D6F5 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = ADCF391C24A550900011D6F5 /* libsqlite3.tbd */; platformFilter = ios; };
 		ADCF392124A551360011D6F5 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADCF392024A551360011D6F5 /* StoreKit.framework */; platformFilter = ios; };
 		ADCF393224A57ADC0011D6F5 /* PreviewData.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF393124A57ADB0011D6F5 /* PreviewData.swift */; };
@@ -79,6 +68,7 @@
 		ADEA399C2501457A00CB61D9 /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADEA399B2501457A00CB61D9 /* Store.swift */; };
 		ADEA399E25014CD700CB61D9 /* Secret.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADEA399D25014CD700CB61D9 /* Secret.swift */; };
 		ADEA39A0250150E000CB61D9 /* EnvironmentParameter.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADEA399F250150E000CB61D9 /* EnvironmentParameter.swift */; };
+		ADEE1B07261E0956002EB18F /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = ADEE1B06261E0956002EB18F /* FirebaseAnalytics */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -191,19 +181,9 @@
 			files = (
 				ADCF392124A551360011D6F5 /* StoreKit.framework in Frameworks */,
 				ADCF391D24A550910011D6F5 /* libsqlite3.tbd in Frameworks */,
-				ADCF391924A550260011D6F5 /* PromisesObjC.framework in Frameworks */,
 				AD134E1A24EA4A00006E23AB /* SwiftyStoreKit in Frameworks */,
-				ADCF390724A550250011D6F5 /* FirebaseAnalytics.framework in Frameworks */,
-				ADCF390924A550250011D6F5 /* FirebaseCore.framework in Frameworks */,
 				ADCF375F24A2FEAF0011D6F5 /* CloudKit.framework in Frameworks */,
-				ADCF390B24A550250011D6F5 /* FirebaseCoreDiagnostics.framework in Frameworks */,
-				ADCF390324A550250011D6F5 /* FIRAnalyticsConnector.framework in Frameworks */,
-				ADCF391124A550260011D6F5 /* GoogleDataTransport.framework in Frameworks */,
-				ADCF390F24A550260011D6F5 /* GoogleAppMeasurement.framework in Frameworks */,
-				ADCF391324A550260011D6F5 /* GoogleDataTransportCCTSupport.framework in Frameworks */,
-				ADCF390D24A550250011D6F5 /* FirebaseInstallations.framework in Frameworks */,
-				ADCF391724A550260011D6F5 /* nanopb.framework in Frameworks */,
-				ADCF391524A550260011D6F5 /* GoogleUtilities.framework in Frameworks */,
+				ADEE1B07261E0956002EB18F /* FirebaseAnalytics in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -451,7 +431,6 @@
 				ADCF36A324A1D0F40011D6F5 /* Frameworks */,
 				ADCF36A424A1D0F40011D6F5 /* Resources */,
 				ADCF373624A1D5160011D6F5 /* SwiftLint */,
-				ADCF391F24A550C70011D6F5 /* Carthage */,
 			);
 			buildRules = (
 			);
@@ -460,6 +439,7 @@
 			name = Incomes;
 			packageProductDependencies = (
 				AD134E1924EA4A00006E23AB /* SwiftyStoreKit */,
+				ADEE1B06261E0956002EB18F /* FirebaseAnalytics */,
 			);
 			productName = Incomes;
 			productReference = ADCF36A624A1D0F40011D6F5 /* Incomes.app */;
@@ -538,6 +518,7 @@
 			mainGroup = ADCF369D24A1D0F40011D6F5;
 			packageReferences = (
 				AD134E1824EA4A00006E23AB /* XCRemoteSwiftPackageReference "SwiftyStoreKit" */,
+				ADEE1B05261E0956002EB18F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			productRefGroup = ADCF36A724A1D0F40011D6F5 /* Products */;
 			projectDirPath = "";
@@ -597,24 +578,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "if which swiftlint >/dev/null; then\n    swiftlint autocorrect --format\n    swiftlint\nelse\n    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
-		};
-		ADCF391F24A550C70011D6F5 /* Carthage */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = Carthage;
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "/usr/local/bin/carthage copy-frameworks\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -1050,6 +1013,14 @@
 				minimumVersion = 0.16.1;
 			};
 		};
+		ADEE1B05261E0956002EB18F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.10.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1057,6 +1028,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = AD134E1824EA4A00006E23AB /* XCRemoteSwiftPackageReference "SwiftyStoreKit" */;
 			productName = SwiftyStoreKit;
+		};
+		ADEE1B06261E0956002EB18F /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = ADEE1B05261E0956002EB18F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
 		};
 /* End XCSwiftPackageProductDependency section */
 
