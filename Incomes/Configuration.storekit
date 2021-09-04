@@ -1,4 +1,8 @@
 {
+  "identifier" : "4D6B03D4",
+  "nonRenewingSubscriptions" : [
+
+  ],
   "products" : [
 
   ],
@@ -29,7 +33,7 @@
               "locale" : "en_US"
             }
           ],
-          "productID" : "com.nakano.hiromu.Incomes.Dev.subscription.month",
+          "productID" : "com.muhiro12.Incomes.Incomes.Dev.subscription.month",
           "recurringSubscriptionPeriod" : "P1M",
           "referenceName" : "Monthly",
           "subscriptionGroupID" : "D8CD218D",
@@ -40,6 +44,6 @@
   ],
   "version" : {
     "major" : 1,
-    "minor" : 0
+    "minor" : 1
   }
 }
