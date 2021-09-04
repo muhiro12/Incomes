@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		AD134E1A24EA4A00006E23AB /* SwiftyStoreKit in Frameworks */ = {isa = PBXBuildFile; productRef = AD134E1924EA4A00006E23AB /* SwiftyStoreKit */; };
 		AD31CE0424A96220005B3C14 /* DataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD31CE0324A96220005B3C14 /* DataStore.swift */; };
 		AD583B6124B301EB0032AA1C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = AD583B6324B301EB0032AA1C /* Localizable.strings */; };
 		AD583B6924B308AB0032AA1C /* LocalizableStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD583B6824B308AB0032AA1C /* LocalizableStrings.swift */; };
@@ -181,7 +180,6 @@
 			files = (
 				ADCF392124A551360011D6F5 /* StoreKit.framework in Frameworks */,
 				ADCF391D24A550910011D6F5 /* libsqlite3.tbd in Frameworks */,
-				AD134E1A24EA4A00006E23AB /* SwiftyStoreKit in Frameworks */,
 				ADCF375F24A2FEAF0011D6F5 /* CloudKit.framework in Frameworks */,
 				ADEE1B07261E0956002EB18F /* FirebaseAnalytics in Frameworks */,
 			);
@@ -438,7 +436,6 @@
 			);
 			name = Incomes;
 			packageProductDependencies = (
-				AD134E1924EA4A00006E23AB /* SwiftyStoreKit */,
 				ADEE1B06261E0956002EB18F /* FirebaseAnalytics */,
 			);
 			productName = Incomes;
@@ -517,7 +514,6 @@
 			);
 			mainGroup = ADCF369D24A1D0F40011D6F5;
 			packageReferences = (
-				AD134E1824EA4A00006E23AB /* XCRemoteSwiftPackageReference "SwiftyStoreKit" */,
 				ADEE1B05261E0956002EB18F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			productRefGroup = ADCF36A724A1D0F40011D6F5 /* Products */;
@@ -1009,14 +1005,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		AD134E1824EA4A00006E23AB /* XCRemoteSwiftPackageReference "SwiftyStoreKit" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/bizz84/SwiftyStoreKit.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.16.1;
-			};
-		};
 		ADEE1B05261E0956002EB18F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
@@ -1028,11 +1016,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		AD134E1924EA4A00006E23AB /* SwiftyStoreKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = AD134E1824EA4A00006E23AB /* XCRemoteSwiftPackageReference "SwiftyStoreKit" */;
-			productName = SwiftyStoreKit;
-		};
 		ADEE1B06261E0956002EB18F /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = ADEE1B05261E0956002EB18F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;

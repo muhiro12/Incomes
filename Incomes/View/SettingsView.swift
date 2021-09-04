@@ -15,8 +15,7 @@ struct SettingsView: View {
     @State private var iCloud = ICloud()
     @State private var purchased = Purchased()
 
-    private let store = Store(productId: EnvironmentParameter.productId,
-                              validator: EnvironmentParameter.appleValidator)
+    private let store = Store(productId: EnvironmentParameter.productId)
 
     var body: some View {
         NavigationView {
