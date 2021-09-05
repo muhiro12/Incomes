@@ -25,13 +25,17 @@ struct SettingsView: View {
                         Text(LocalizableStrings.modernStyle.localized)
                     }
                 }
-                Section(footer: subscribe.isOn ? nil : Text(LocalizableStrings.subscription.localized)) {
-                    if subscribe.isOn {
+                if subscribe.isOn {
+                    Section {
                         Toggle(isOn: $iCloud.isOn) {
                             Text(LocalizableStrings.iCloud.localized)
                         }
-                    } else {
+                    }
+                } else {
+                    Section(header: Text(LocalizableStrings.subscriptionTitle.localized),
+                            footer: Text(LocalizableStrings.subscriptionDescription.localized)) {
                         Button(LocalizableStrings.subscribe.localized, action: purchase)
+                        Button(LocalizableStrings.restore.localized, action: restore)
                     }
                 }
             }.selectedListStyle()
@@ -71,6 +75,10 @@ private extension SettingsView {
                                 errorHandler: errorHandler,
                                 cancelHandler: cancelHandler)
         }
+    }
+
+    func restore() {
+        store.restore()
     }
 
     func dismiss() {

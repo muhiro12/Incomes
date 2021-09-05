@@ -42,6 +42,8 @@
 "settingsTitle" = "Settings";
 "modernStyle" = "Modern style";
 "iCloud" = "iCloud";
+"subscriptionTitle" = "Subscription Service";
 "subscribe" = "Subscribe";
+"restore" = "Restore";
 // TODO: undefined
-"subscription" = "For sharing data between all device";
+"subscriptionDescription" = "For sharing data between all device";
