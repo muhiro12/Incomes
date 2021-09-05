@@ -11,9 +11,12 @@ import SwiftUI
 struct SettingsView: View {
     @Environment(\.presentationMode) var presentationMode
 
-    @State private var modernStyle = ModernStyle()
-    @State private var iCloud = ICloud()
-    @State private var subscribe = Subscribe()
+    @AppStorage(wrappedValue: true, GlobalSettings.modernStyleKey.rawValue)
+    private var isModernStyleOn
+    @AppStorage(wrappedValue: false, GlobalSettings.iCloudKey.rawValue)
+    private var isICloudOn
+    @AppStorage(wrappedValue: false, GlobalSettings.subscribeKey.rawValue)
+    private var isSubscribeOn
 
     private let store = Store.shared
 
@@ -21,13 +24,13 @@ struct SettingsView: View {
         NavigationView {
             Form {
                 Section {
-                    Toggle(isOn: $modernStyle.isOn) {
+                    Toggle(isOn: $isModernStyleOn) {
                         Text(LocalizableStrings.modernStyle.localized)
                     }
                 }
-                if subscribe.isOn {
+                if isSubscribeOn {
                     Section {
-                        Toggle(isOn: $iCloud.isOn) {
+                        Toggle(isOn: $isICloudOn) {
                             Text(LocalizableStrings.iCloud.localized)
                         }
                     }
