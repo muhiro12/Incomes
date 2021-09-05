@@ -42,7 +42,10 @@
 "settingsTitle" = "设置";
 "modernStyle" = "现代风格";
 "iCloud" = "iCloud";
+// TODO: undefined
+"subscriptionTitle" = "Subscription Service";
 "subscribe" = "定期購入";
+"restore" = "復元";
 // TODO: undefined
 "subscription" = "For sharing data between all device";
 

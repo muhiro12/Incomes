@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import SwiftyStoreKit
 
 struct EnvironmentParameter {
     static var productId: String {
@@ -18,11 +17,11 @@ struct EnvironmentParameter {
         #endif
     }
 
-    static var appleValidator: AppleReceiptValidator {
+    static var revenueCatAPIKey: String {
         #if DEBUG
-        return .init(service: .sandbox, sharedSecret: Secret.sharedSecret.rawValue)
+        return Secret.revenueCatAPIKeyDev.rawValue
         #else
-        return .init(service: .production, sharedSecret: Secret.sharedSecret.rawValue)
+        return Secret.revenueCatAPIKey.rawValue
         #endif
     }
 }

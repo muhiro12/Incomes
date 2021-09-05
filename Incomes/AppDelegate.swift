@@ -18,7 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         #if !DEBUG && !targetEnvironment(macCatalyst)
         FirebaseApp.configure()
         #endif
-        Store.check()
+        Store.shared.configure()
         return true
     }
 
@@ -32,7 +32,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     lazy var persistentContainer: NSPersistentContainer = {
         let container: NSPersistentContainer
-        if Purchased().isOn && ICloud().isOn {
+        if Subscribe().isOn && ICloud().isOn {
             container = NSPersistentCloudKitContainer(name: "Incomes")
             container.viewContext.automaticallyMergesChangesFromParent = true
             container.viewContext.mergePolicy = NSMergePolicy.mergeByPropertyStoreTrump

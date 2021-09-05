@@ -7,10 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		AD134E1A24EA4A00006E23AB /* SwiftyStoreKit in Frameworks */ = {isa = PBXBuildFile; productRef = AD134E1924EA4A00006E23AB /* SwiftyStoreKit */; };
 		AD31CE0424A96220005B3C14 /* DataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD31CE0324A96220005B3C14 /* DataStore.swift */; };
 		AD583B6124B301EB0032AA1C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = AD583B6324B301EB0032AA1C /* Localizable.strings */; };
 		AD583B6924B308AB0032AA1C /* LocalizableStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD583B6824B308AB0032AA1C /* LocalizableStrings.swift */; };
+		AD82590426E3F0FB003B6792 /* Purchases in Frameworks */ = {isa = PBXBuildFile; productRef = AD82590326E3F0FB003B6792 /* Purchases */; };
+		AD98194226E43C3600C4A57C /* StoreKitTestCertificate.cer in Resources */ = {isa = PBXBuildFile; fileRef = AD98194126E43C3600C4A57C /* StoreKitTestCertificate.cer */; };
 		ADCF36B324A1D0F70011D6F5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ADCF36B224A1D0F70011D6F5 /* Assets.xcassets */; };
 		ADCF36B624A1D0F70011D6F5 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ADCF36B524A1D0F70011D6F5 /* Preview Assets.xcassets */; };
 		ADCF36B924A1D0F70011D6F5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = ADCF36B724A1D0F70011D6F5 /* LaunchScreen.storyboard */; };
@@ -94,6 +95,7 @@
 		AD583B6524B3032D0032AA1C /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		AD583B6824B308AB0032AA1C /* LocalizableStrings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizableStrings.swift; sourceTree = "<group>"; };
 		AD7C7E2B254A33E500D1F0A0 /* Configuration.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Configuration.storekit; sourceTree = "<group>"; };
+		AD98194126E43C3600C4A57C /* StoreKitTestCertificate.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = StoreKitTestCertificate.cer; sourceTree = "<group>"; };
 		ADA836AE24B3EDCF001ED90D /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		ADCF36A624A1D0F40011D6F5 /* Incomes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Incomes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ADCF36B224A1D0F70011D6F5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -181,9 +183,9 @@
 			files = (
 				ADCF392124A551360011D6F5 /* StoreKit.framework in Frameworks */,
 				ADCF391D24A550910011D6F5 /* libsqlite3.tbd in Frameworks */,
-				AD134E1A24EA4A00006E23AB /* SwiftyStoreKit in Frameworks */,
 				ADCF375F24A2FEAF0011D6F5 /* CloudKit.framework in Frameworks */,
 				ADEE1B07261E0956002EB18F /* FirebaseAnalytics in Frameworks */,
+				AD82590426E3F0FB003B6792 /* Purchases in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -241,6 +243,7 @@
 				ADEA399D25014CD700CB61D9 /* Secret.swift */,
 				AD583B6824B308AB0032AA1C /* LocalizableStrings.swift */,
 				AD7C7E2B254A33E500D1F0A0 /* Configuration.storekit */,
+				AD98194126E43C3600C4A57C /* StoreKitTestCertificate.cer */,
 				AD583B6324B301EB0032AA1C /* Localizable.strings */,
 				ADCF36B224A1D0F70011D6F5 /* Assets.xcassets */,
 				ADCF36B724A1D0F70011D6F5 /* LaunchScreen.storyboard */,
@@ -314,8 +317,8 @@
 				ADCF36EA24A1D18E0011D6F5 /* Repository.swift */,
 				ADCF376A24A343C30011D6F5 /* Scene.swift */,
 				ADCF36EC24A1D18E0011D6F5 /* SectionItems.swift */,
-				ADCF376C24A380B30011D6F5 /* UserDefault.swift */,
 				ADEA399B2501457A00CB61D9 /* Store.swift */,
+				ADCF376C24A380B30011D6F5 /* UserDefault.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -438,8 +441,8 @@
 			);
 			name = Incomes;
 			packageProductDependencies = (
-				AD134E1924EA4A00006E23AB /* SwiftyStoreKit */,
 				ADEE1B06261E0956002EB18F /* FirebaseAnalytics */,
+				AD82590326E3F0FB003B6792 /* Purchases */,
 			);
 			productName = Incomes;
 			productReference = ADCF36A624A1D0F40011D6F5 /* Incomes.app */;
@@ -517,8 +520,8 @@
 			);
 			mainGroup = ADCF369D24A1D0F40011D6F5;
 			packageReferences = (
-				AD134E1824EA4A00006E23AB /* XCRemoteSwiftPackageReference "SwiftyStoreKit" */,
 				ADEE1B05261E0956002EB18F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				AD82590226E3F0FB003B6792 /* XCRemoteSwiftPackageReference "purchases-ios" */,
 			);
 			productRefGroup = ADCF36A724A1D0F40011D6F5 /* Products */;
 			projectDirPath = "";
@@ -541,6 +544,7 @@
 				ADCF393624A5B2AC0011D6F5 /* GoogleService-Info.plist in Resources */,
 				ADCF36B624A1D0F70011D6F5 /* Preview Assets.xcassets in Resources */,
 				ADCF36B324A1D0F70011D6F5 /* Assets.xcassets in Resources */,
+				AD98194226E43C3600C4A57C /* StoreKitTestCertificate.cer in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1009,12 +1013,12 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		AD134E1824EA4A00006E23AB /* XCRemoteSwiftPackageReference "SwiftyStoreKit" */ = {
+		AD82590226E3F0FB003B6792 /* XCRemoteSwiftPackageReference "purchases-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/bizz84/SwiftyStoreKit.git";
+			repositoryURL = "https://github.com/RevenueCat/purchases-ios";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 0.16.1;
+				minimumVersion = 3.12.3;
 			};
 		};
 		ADEE1B05261E0956002EB18F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
@@ -1028,10 +1032,10 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		AD134E1924EA4A00006E23AB /* SwiftyStoreKit */ = {
+		AD82590326E3F0FB003B6792 /* Purchases */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = AD134E1824EA4A00006E23AB /* XCRemoteSwiftPackageReference "SwiftyStoreKit" */;
-			productName = SwiftyStoreKit;
+			package = AD82590226E3F0FB003B6792 /* XCRemoteSwiftPackageReference "purchases-ios" */;
+			productName = Purchases;
 		};
 		ADEE1B06261E0956002EB18F /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;

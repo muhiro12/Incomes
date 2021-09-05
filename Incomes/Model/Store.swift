@@ -7,68 +7,84 @@
 //
 
 import Foundation
-import SwiftyStoreKit
+import Purchases
 
-struct Store {
-    private var purchased = Purchased()
+struct Product {
+    fileprivate init(package: Purchases.Package) {
+        self.package = package
+        self.value = package.product
+    }
+
+    fileprivate let package: Purchases.Package
+    fileprivate let value: SKProduct
+}
+
+protocol StoreInterface {
+    func configure()
+    func loadProduct(completion: @escaping (Product?) -> Void)
+    func purchase(product: Product, errorHandler: ((Error?) -> Void)?, cancelHandler: ((Bool) -> Void)?)
+    func restore()
+}
+
+class Store: NSObject {
+    static let shared = Store()
+
+    private override init() {
+        apiKey = EnvironmentParameter.revenueCatAPIKey
+        entitlementId = "pro"
+        productId = EnvironmentParameter.productId
+        onPurchaseStatusUpdated = { isActive in
+            if isActive {
+                Subscribe().isOn = true
+            } else {
+                Subscribe().isOn = false
+                ICloud().isOn = false
+            }
+        }
+    }
+
+    private let apiKey: String
+    private let entitlementId: String
     private let productId: String
-    private let validator: AppleReceiptValidator
+    private let onPurchaseStatusUpdated: (Bool) -> Void
+}
 
-    init(productId: String, validator: AppleReceiptValidator) {
-        self.productId = productId
-        self.validator = validator
+// MARK: - Public
+
+extension Store: StoreInterface {
+    func configure() {
+        #if DEBUG
+        Purchases.logLevel = .debug
+        #endif
+        Purchases.configure(withAPIKey: apiKey)
+        Purchases.shared.delegate = self
     }
 
-    func purchase() {
-        SwiftyStoreKit.purchaseProduct(productId) { result in
-            switch result {
-            case .success:
-                verifyPurchase()
-            case .error(let error):
-                print(error)
-                purchased.isOn = false
-            }
+    func loadProduct(completion: @escaping (Product?) -> Void) {
+        Purchases.shared.offerings { offerings, error in
+            let products = offerings?.current?.availablePackages.map { Product(package: $0) }
+            let product = products?.first(where: {
+                $0.value.productIdentifier == self.productId
+            })
+            completion(product)
         }
     }
 
-    func verifyPurchase() {
-        SwiftyStoreKit.verifyReceipt(using: validator) { result in
-            switch result {
-            case .success(let receipt):
-                self.verifySubscription(receipt: receipt)
-            case .error(let error):
-                print(error)
-                purchased.isOn = false
-            }
+    func purchase(product: Product, errorHandler: ((Error?) -> Void)?, cancelHandler: ((Bool) -> Void)?) {
+        Purchases.shared.purchasePackage(product.package) { transaction, purchaserInfo, error, userCancelled in
+            errorHandler?(error)
+            cancelHandler?(userCancelled)
         }
     }
 
-    func verifySubscription(receipt: ReceiptInfo) {
-        let result = SwiftyStoreKit.verifySubscription(ofType: .autoRenewable,
-                                                       productId: productId,
-                                                       inReceipt: receipt)
-        switch result {
-        case .purchased:
-            purchased.isOn = true
-        case .notPurchased, .expired:
-            purchased.isOn = false
-        }
+    func restore() {
+        Purchases.shared.restoreTransactions()
     }
+}
 
-    static func check() {
-        SwiftyStoreKit.completeTransactions { purchases in
-            for purchase in purchases {
-                switch purchase.transaction.transactionState {
-                case .purchased, .restored:
-                    if purchase.needsFinishTransaction {
-                        SwiftyStoreKit.finishTransaction(purchase.transaction)
-                    }
-                case .failed, .purchasing, .deferred:
-                    Purchased().isOn = false
-                @unknown default:
-                    fatalError()
-                }
-            }
-        }
+extension Store: PurchasesDelegate {
+    func purchases(_ purchases: Purchases, didReceiveUpdated purchaserInfo: Purchases.PurchaserInfo) {
+        let isActive = purchaserInfo.entitlements.all[entitlementId]?.isActive ?? false
+        onPurchaseStatusUpdated(isActive)
     }
 }
