@@ -16,4 +16,12 @@ struct EnvironmentParameter {
         return Secret.productID.rawValue
         #endif
     }
+
+    static var revenueCatAPIKey: String {
+        #if DEBUG
+        return Secret.revenueCatAPIKeyDev.rawValue
+        #else
+        return Secret.revenueCatAPIKey.rawValue
+        #endif
+    }
 }

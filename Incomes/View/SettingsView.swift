@@ -13,9 +13,9 @@ struct SettingsView: View {
 
     @State private var modernStyle = ModernStyle()
     @State private var iCloud = ICloud()
-    @State private var purchased = Purchased()
+    @State private var subscribe = Subscribe()
 
-    private let store = Store(productId: EnvironmentParameter.productId)
+    private let store = Store.shared
 
     var body: some View {
         NavigationView {
@@ -25,15 +25,13 @@ struct SettingsView: View {
                         Text(LocalizableStrings.modernStyle.localized)
                     }
                 }
-                Section(footer: purchased.isOn ? nil : Text(LocalizableStrings.subscription.localized)) {
-                    if purchased.isOn {
+                Section(footer: subscribe.isOn ? nil : Text(LocalizableStrings.subscription.localized)) {
+                    if subscribe.isOn {
                         Toggle(isOn: $iCloud.isOn) {
                             Text(LocalizableStrings.iCloud.localized)
                         }
                     } else {
-                        Button(LocalizableStrings.subscribe.localized) {
-                            self.store.purchase()
-                        }
+                        Button(LocalizableStrings.subscribe.localized, action: purchase)
                     }
                 }
             }.selectedListStyle()
@@ -49,6 +47,32 @@ struct SettingsView: View {
 // MARK: - private
 
 private extension SettingsView {
+    func purchase() {
+        let errorHandler: (Error?) -> Void = { error in
+            guard let error = error else {
+                return
+            }
+            print(error)
+        }
+
+        let cancelHandler: (Bool) -> Void = { isCancelled in
+            guard isCancelled else {
+                return
+            }
+            print(isCancelled)
+        }
+
+        self.store.loadProduct { product in
+            guard let product = product else {
+                print("error")
+                return
+            }
+            self.store.purchase(product: product,
+                                errorHandler: errorHandler,
+                                cancelHandler: cancelHandler)
+        }
+    }
+
     func dismiss() {
         presentationMode.wrappedValue.dismiss()
     }

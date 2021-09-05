@@ -7,20 +7,79 @@
 //
 
 import Foundation
+import Purchases
 
-struct Store {
-    private var purchased = Purchased()
+struct Product {
+    fileprivate init(package: Purchases.Package) {
+        self.package = package
+        self.value = package.product
+    }
+
+    fileprivate let package: Purchases.Package
+    fileprivate let value: SKProduct
+}
+
+protocol StoreInterface {
+    func configure()
+    func loadProduct(completion: @escaping (Product?) -> Void)
+    func purchase(product: Product, errorHandler: ((Error?) -> Void)?, cancelHandler: ((Bool) -> Void)?)
+    func restore()
+}
+
+class Store: NSObject {
+    static let shared = Store()
+
+    private override init() {
+        apiKey = EnvironmentParameter.revenueCatAPIKey
+        entitlementId = "pro"
+        productId = EnvironmentParameter.productId
+        onPurchaseStatusUpdated = { isActive in
+            Subscribe().isOn = isActive
+        }
+    }
+
+    private let apiKey: String
+    private let entitlementId: String
     private let productId: String
-    
-    init(productId: String) {
-        self.productId = productId
+    private let onPurchaseStatusUpdated: (Bool) -> Void
+}
+
+// MARK: - Public
+
+extension Store: StoreInterface {
+    func configure() {
+        #if DEBUG
+        Purchases.logLevel = .debug
+        #endif
+        Purchases.configure(withAPIKey: apiKey)
+        Purchases.shared.delegate = self
     }
 
-    func purchase() {
-        // TODO: Subscribe
+    func loadProduct(completion: @escaping (Product?) -> Void) {
+        Purchases.shared.offerings { offerings, error in
+            let products = offerings?.current?.availablePackages.map { Product(package: $0) }
+            let product = products?.first(where: {
+                $0.value.productIdentifier == self.productId
+            })
+            completion(product)
+        }
     }
 
-    static func check() {
-        // TODO: Validate receipt
+    func purchase(product: Product, errorHandler: ((Error?) -> Void)?, cancelHandler: ((Bool) -> Void)?) {
+        Purchases.shared.purchasePackage(product.package) { transaction, purchaserInfo, error, userCancelled in
+            errorHandler?(error)
+            cancelHandler?(userCancelled)
+        }
+    }
+
+    func restore() {
+        Purchases.shared.restoreTransactions()
+    }
+}
+
+extension Store: PurchasesDelegate {
+    func purchases(_ purchases: Purchases, didReceiveUpdated purchaserInfo: Purchases.PurchaserInfo) {
+        let isActive = purchaserInfo.entitlements.all[entitlementId]?.isActive ?? false
+        onPurchaseStatusUpdated(isActive)
     }
 }
