@@ -34,7 +34,12 @@ class Store: NSObject {
         entitlementId = "pro"
         productId = EnvironmentParameter.productId
         onPurchaseStatusUpdated = { isActive in
-            Subscribe().isOn = isActive
+            if isActive {
+                Subscribe().isOn = true
+            } else {
+                Subscribe().isOn = false
+                ICloud().isOn = false
+            }
         }
     }
 
