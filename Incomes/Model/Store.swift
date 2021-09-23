@@ -61,7 +61,7 @@ extension Store: StoreInterface {
     }
 
     func loadProduct(completion: @escaping (Product?) -> Void) {
-        Purchases.shared.offerings { offerings, error in
+        Purchases.shared.offerings { offerings, _ in
             let products = offerings?.current?.availablePackages.map { Product(package: $0) }
             let product = products?.first(where: {
                 $0.value.productIdentifier == self.productId
@@ -71,7 +71,7 @@ extension Store: StoreInterface {
     }
 
     func purchase(product: Product, errorHandler: ((Error?) -> Void)?, cancelHandler: ((Bool) -> Void)?) {
-        Purchases.shared.purchasePackage(product.package) { transaction, purchaserInfo, error, userCancelled in
+        Purchases.shared.purchasePackage(product.package) { _, _, error, userCancelled in
             errorHandler?(error)
             cancelHandler?(userCancelled)
         }
