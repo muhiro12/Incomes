@@ -230,27 +230,9 @@
 		ADCF36A824A1D0F40011D6F5 /* Incomes */ = {
 			isa = PBXGroup;
 			children = (
-				ADCF371524A1D1B80011D6F5 /* Incomes.entitlements */,
-				ADCF36DC24A1D1820011D6F5 /* AppDelegate.swift */,
-				ADCF36DE24A1D1820011D6F5 /* SceneDelegate.swift */,
-				ADCF36DD24A1D1820011D6F5 /* ContentView.swift */,
-				ADCF36F024A1D18E0011D6F5 /* View */,
-				ADCF36E224A1D18E0011D6F5 /* Component */,
-				ADCF36E924A1D18E0011D6F5 /* Interface */,
-				ADCF36EB24A1D18E0011D6F5 /* Model */,
-				ADCF36F524A1D18E0011D6F5 /* Extension */,
-				ADEA399F250150E000CB61D9 /* EnvironmentParameter.swift */,
-				ADEA399D25014CD700CB61D9 /* Secret.swift */,
-				AD583B6824B308AB0032AA1C /* LocalizableStrings.swift */,
-				AD7C7E2B254A33E500D1F0A0 /* Configuration.storekit */,
-				AD98194126E43C3600C4A57C /* StoreKitTestCertificate.cer */,
-				AD583B6324B301EB0032AA1C /* Localizable.strings */,
-				ADCF36B224A1D0F70011D6F5 /* Assets.xcassets */,
-				ADCF36B724A1D0F70011D6F5 /* LaunchScreen.storyboard */,
-				ADCF36BA24A1D0F70011D6F5 /* Info.plist */,
-				ADCF375A24A2FBBD0011D6F5 /* Incomes.xcdatamodeld */,
-				ADCF393524A5B2AC0011D6F5 /* GoogleService-Info.plist */,
-				ADCF36B424A1D0F70011D6F5 /* Preview Content */,
+				ADE0587A2706E87500DF2499 /* Configuration */,
+				ADE058792706E7AE00DF2499 /* Package */,
+				ADE0587B2706E9C400DF2499 /* Source */,
 			);
 			path = Incomes;
 			sourceTree = "<group>";
@@ -258,8 +240,8 @@
 		ADCF36B424A1D0F70011D6F5 /* Preview Content */ = {
 			isa = PBXGroup;
 			children = (
-				ADCF36B524A1D0F70011D6F5 /* Preview Assets.xcassets */,
 				ADCF393124A57ADB0011D6F5 /* PreviewData.swift */,
+				ADCF36B524A1D0F70011D6F5 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
 			sourceTree = "<group>";
@@ -300,25 +282,27 @@
 			path = Component;
 			sourceTree = "<group>";
 		};
-		ADCF36E924A1D18E0011D6F5 /* Interface */ = {
+		ADCF36E924A1D18E0011D6F5 /* DataSource */ = {
 			isa = PBXGroup;
 			children = (
 				AD31CE0324A96220005B3C14 /* DataStore.swift */,
+				ADCF376C24A380B30011D6F5 /* UserDefault.swift */,
 			);
-			path = Interface;
+			path = DataSource;
 			sourceTree = "<group>";
 		};
 		ADCF36EB24A1D18E0011D6F5 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				ADCF376E24A394220011D6F5 /* GlobalSettings.swift */,
-				ADCF36ED24A1D18E0011D6F5 /* ListItem.swift */,
-				ADCF36EE24A1D18E0011D6F5 /* ListItems.swift */,
-				ADCF36EA24A1D18E0011D6F5 /* Repository.swift */,
+				ADCF36FD24A1D18E0011D6F5 /* DateExtension.swift */,
+				ADCF375724A2C8250011D6F5 /* DecimalExtension.swift */,
+				ADEA399F250150E000CB61D9 /* EnvironmentParameter.swift */,
+				ADCF36F724A1D18E0011D6F5 /* IntConstant.swift */,
+				ADCF36F624A1D18E0011D6F5 /* OptionalExtension.swift */,
 				ADCF376A24A343C30011D6F5 /* Scene.swift */,
-				ADCF36EC24A1D18E0011D6F5 /* SectionItems.swift */,
 				ADEA399B2501457A00CB61D9 /* Store.swift */,
-				ADCF376C24A380B30011D6F5 /* UserDefault.swift */,
+				ADCF36FC24A1D18E0011D6F5 /* StringConstant.swift */,
+				ADCF36FB24A1D18E0011D6F5 /* StringExtension.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -332,23 +316,6 @@
 				ADCF376224A3147B0011D6F5 /* SettingsView.swift */,
 			);
 			path = View;
-			sourceTree = "<group>";
-		};
-		ADCF36F524A1D18E0011D6F5 /* Extension */ = {
-			isa = PBXGroup;
-			children = (
-				ADCF36F824A1D18E0011D6F5 /* CGFloatConstant.swift */,
-				ADCF36FD24A1D18E0011D6F5 /* DateExtension.swift */,
-				ADCF375724A2C8250011D6F5 /* DecimalExtension.swift */,
-				ADE89DF624B5F78200BB82E9 /* ImageConstant.swift */,
-				ADCF376824A33F500011D6F5 /* ImageExtension.swift */,
-				ADCF36F724A1D18E0011D6F5 /* IntConstant.swift */,
-				ADCF36F624A1D18E0011D6F5 /* OptionalExtension.swift */,
-				ADCF36FC24A1D18E0011D6F5 /* StringConstant.swift */,
-				ADCF36FB24A1D18E0011D6F5 /* StringExtension.swift */,
-				ADCF36FA24A1D18E0011D6F5 /* ViewExtension.swift */,
-			);
-			path = Extension;
 			sourceTree = "<group>";
 		};
 		ADCF371724A1D1CF0011D6F5 /* Extension */ = {
@@ -421,6 +388,143 @@
 				ADCF390124A550190011D6F5 /* FirebaseCoreDiagnostics.framework */,
 			);
 			path = iOS;
+			sourceTree = "<group>";
+		};
+		ADE058732706E6C000DF2499 /* Presentation */ = {
+			isa = PBXGroup;
+			children = (
+				ADE0587F2706ECF800DF2499 /* Model */,
+				ADCF36E224A1D18E0011D6F5 /* Component */,
+				ADE0587C2706E9F200DF2499 /* Foundation */,
+				ADCF36B424A1D0F70011D6F5 /* Preview Content */,
+				ADCF36F024A1D18E0011D6F5 /* View */,
+			);
+			path = Presentation;
+			sourceTree = "<group>";
+		};
+		ADE058742706E6CA00DF2499 /* Business */ = {
+			isa = PBXGroup;
+			children = (
+				ADCF36EB24A1D18E0011D6F5 /* Model */,
+			);
+			path = Business;
+			sourceTree = "<group>";
+		};
+		ADE058752706E6D200DF2499 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				ADE058802706ED1D00DF2499 /* Model */,
+				ADE0587E2706EB6600DF2499 /* Entity */,
+				ADE0587D2706EAC900DF2499 /* Repository */,
+				ADCF36E924A1D18E0011D6F5 /* DataSource */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+		ADE058762706E72A00DF2499 /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
+				ADCF375A24A2FBBD0011D6F5 /* Incomes.xcdatamodeld */,
+			);
+			path = CoreData;
+			sourceTree = "<group>";
+		};
+		ADE058772706E75100DF2499 /* StoreKit */ = {
+			isa = PBXGroup;
+			children = (
+				AD98194126E43C3600C4A57C /* StoreKitTestCertificate.cer */,
+				ADCF371524A1D1B80011D6F5 /* Incomes.entitlements */,
+			);
+			path = StoreKit;
+			sourceTree = "<group>";
+		};
+		ADE058782706E76300DF2499 /* Firebase */ = {
+			isa = PBXGroup;
+			children = (
+				ADCF393524A5B2AC0011D6F5 /* GoogleService-Info.plist */,
+			);
+			path = Firebase;
+			sourceTree = "<group>";
+		};
+		ADE058792706E7AE00DF2499 /* Package */ = {
+			isa = PBXGroup;
+			children = (
+				ADE058762706E72A00DF2499 /* CoreData */,
+				ADE058782706E76300DF2499 /* Firebase */,
+				ADE058772706E75100DF2499 /* StoreKit */,
+			);
+			path = Package;
+			sourceTree = "<group>";
+		};
+		ADE0587A2706E87500DF2499 /* Configuration */ = {
+			isa = PBXGroup;
+			children = (
+				ADCF36BA24A1D0F70011D6F5 /* Info.plist */,
+				AD7C7E2B254A33E500D1F0A0 /* Configuration.storekit */,
+				ADEA399D25014CD700CB61D9 /* Secret.swift */,
+				ADCF36B224A1D0F70011D6F5 /* Assets.xcassets */,
+				ADCF36B724A1D0F70011D6F5 /* LaunchScreen.storyboard */,
+				AD583B6324B301EB0032AA1C /* Localizable.strings */,
+			);
+			path = Configuration;
+			sourceTree = "<group>";
+		};
+		ADE0587B2706E9C400DF2499 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				ADE058742706E6CA00DF2499 /* Business */,
+				ADE058752706E6D200DF2499 /* Data */,
+				ADE058732706E6C000DF2499 /* Presentation */,
+			);
+			path = Source;
+			sourceTree = "<group>";
+		};
+		ADE0587C2706E9F200DF2499 /* Foundation */ = {
+			isa = PBXGroup;
+			children = (
+				ADCF36DC24A1D1820011D6F5 /* AppDelegate.swift */,
+				ADCF36DD24A1D1820011D6F5 /* ContentView.swift */,
+				ADCF36DE24A1D1820011D6F5 /* SceneDelegate.swift */,
+			);
+			path = Foundation;
+			sourceTree = "<group>";
+		};
+		ADE0587D2706EAC900DF2499 /* Repository */ = {
+			isa = PBXGroup;
+			children = (
+				ADCF36EA24A1D18E0011D6F5 /* Repository.swift */,
+			);
+			path = Repository;
+			sourceTree = "<group>";
+		};
+		ADE0587E2706EB6600DF2499 /* Entity */ = {
+			isa = PBXGroup;
+			children = (
+				ADCF36ED24A1D18E0011D6F5 /* ListItem.swift */,
+				ADCF36EE24A1D18E0011D6F5 /* ListItems.swift */,
+				ADCF36EC24A1D18E0011D6F5 /* SectionItems.swift */,
+			);
+			path = Entity;
+			sourceTree = "<group>";
+		};
+		ADE0587F2706ECF800DF2499 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				ADCF36F824A1D18E0011D6F5 /* CGFloatConstant.swift */,
+				ADE89DF624B5F78200BB82E9 /* ImageConstant.swift */,
+				ADCF376824A33F500011D6F5 /* ImageExtension.swift */,
+				AD583B6824B308AB0032AA1C /* LocalizableStrings.swift */,
+				ADCF36FA24A1D18E0011D6F5 /* ViewExtension.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		ADE058802706ED1D00DF2499 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				ADCF376E24A394220011D6F5 /* GlobalSettings.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
