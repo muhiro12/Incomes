@@ -249,12 +249,12 @@
 		ADCF36C224A1D0F70011D6F5 /* IncomesTests */ = {
 			isa = PBXGroup;
 			children = (
-				ADCF36C324A1D0F70011D6F5 /* IncomesTests.swift */,
-				ADCF371624A1D1CF0011D6F5 /* ContentViewTests.swift */,
-				ADCF375924A2CCF40011D6F5 /* View */,
-				ADCF371C24A1D1CF0011D6F5 /* Component */,
-				ADCF371724A1D1CF0011D6F5 /* Extension */,
 				ADCF36C524A1D0F70011D6F5 /* Info.plist */,
+				ADCF371624A1D1CF0011D6F5 /* ContentViewTests.swift */,
+				ADCF36C324A1D0F70011D6F5 /* IncomesTests.swift */,
+				ADE058812706EE8600DF2499 /* Business */,
+				ADE058822706EE8C00DF2499 /* Data */,
+				ADE058832706EE9100DF2499 /* Presentation */,
 			);
 			path = IncomesTests;
 			sourceTree = "<group>";
@@ -316,16 +316,6 @@
 				ADCF376224A3147B0011D6F5 /* SettingsView.swift */,
 			);
 			path = View;
-			sourceTree = "<group>";
-		};
-		ADCF371724A1D1CF0011D6F5 /* Extension */ = {
-			isa = PBXGroup;
-			children = (
-				ADCF371B24A1D1CF0011D6F5 /* DateExtensionTests.swift */,
-				ADCF371A24A1D1CF0011D6F5 /* OptionalExtensionTests.swift */,
-				ADCF371924A1D1CF0011D6F5 /* StringExtensionTests.swift */,
-			);
-			path = Extension;
 			sourceTree = "<group>";
 		};
 		ADCF371C24A1D1CF0011D6F5 /* Component */ = {
@@ -523,6 +513,40 @@
 			isa = PBXGroup;
 			children = (
 				ADCF376E24A394220011D6F5 /* GlobalSettings.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		ADE058812706EE8600DF2499 /* Business */ = {
+			isa = PBXGroup;
+			children = (
+				ADE058842706EEB900DF2499 /* Model */,
+			);
+			path = Business;
+			sourceTree = "<group>";
+		};
+		ADE058822706EE8C00DF2499 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+		ADE058832706EE9100DF2499 /* Presentation */ = {
+			isa = PBXGroup;
+			children = (
+				ADCF371C24A1D1CF0011D6F5 /* Component */,
+				ADCF375924A2CCF40011D6F5 /* View */,
+			);
+			path = Presentation;
+			sourceTree = "<group>";
+		};
+		ADE058842706EEB900DF2499 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				ADCF371B24A1D1CF0011D6F5 /* DateExtensionTests.swift */,
+				ADCF371A24A1D1CF0011D6F5 /* OptionalExtensionTests.swift */,
+				ADCF371924A1D1CF0011D6F5 /* StringExtensionTests.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
