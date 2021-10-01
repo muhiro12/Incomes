@@ -129,7 +129,9 @@ struct EditView: View {
 private extension EditView {
     func save() {
         if item?.original?.repeatId == nil {
-            saveForThisItem()
+            Task {
+                saveForThisItem()
+            }
         } else {
             presentToActionSheet()
         }
@@ -142,9 +144,10 @@ private extension EditView {
                             income: income.decimalValue,
                             expenditure: expenditure.decimalValue,
                             original: self.item?.original)
-        Repository.save(context,
-                        item: item,
-                        completion: dismiss)
+        Task {
+            try Repository.save(context, item: item)
+            dismiss()
+        }
     }
 
     func saveForFutureItems() {
@@ -157,10 +160,12 @@ private extension EditView {
                                income: income.decimalValue,
                                expenditure: expenditure.decimalValue,
                                original: self.item?.original)
-        Repository.saveForFutureItems(context,
-                                      oldItem: oldItem,
-                                      newItem: newItem,
-                                      completion: dismiss)
+        Task {
+            try await Repository.saveForFutureItems(context,
+                                                    oldItem: oldItem,
+                                                    newItem: newItem)
+            dismiss()
+        }
     }
 
     func saveForAllItems() {
@@ -173,10 +178,12 @@ private extension EditView {
                                income: income.decimalValue,
                                expenditure: expenditure.decimalValue,
                                original: self.item?.original)
-        Repository.saveForAllItems(context,
-                                   oldItem: oldItem,
-                                   newItem: newItem,
-                                   completion: dismiss)
+        Task {
+            try await Repository.saveForAllItems(context,
+                                                 oldItem: oldItem,
+                                                 newItem: newItem)
+            dismiss()
+        }
     }
 
     func create() {
@@ -185,10 +192,14 @@ private extension EditView {
                             group: group,
                             income: income.decimalValue,
                             expenditure: expenditure.decimalValue)
-        Repository.create(context,
-                          item: item,
-                          repeatCount: repeatSelection + .one,
-                          completion: dismiss)
+        do {
+            try Repository.create(context,
+                                  item: item,
+                                  repeatCount: repeatSelection + .one)
+        } catch {
+            print(error)
+        }
+        dismiss()
     }
 
     func delete() {
