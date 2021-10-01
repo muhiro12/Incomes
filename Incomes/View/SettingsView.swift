@@ -55,28 +55,11 @@ struct SettingsView: View {
 
 private extension SettingsView {
     func purchase() {
-        let errorHandler: (Error?) -> Void = { error in
-            guard let error = error else {
+        Task {
+            guard let product = try await store.product() else {
                 return
             }
-            print(error)
-        }
-
-        let cancelHandler: (Bool) -> Void = { isCancelled in
-            guard isCancelled else {
-                return
-            }
-            print(isCancelled)
-        }
-
-        self.store.loadProduct { product in
-            guard let product = product else {
-                print("error")
-                return
-            }
-            self.store.purchase(product: product,
-                                errorHandler: errorHandler,
-                                cancelHandler: cancelHandler)
+            _ = try await store.purchase(product: product)
         }
     }
 

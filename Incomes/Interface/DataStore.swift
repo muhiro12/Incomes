@@ -10,59 +10,35 @@ import Foundation
 import CoreData
 
 struct DataStore {
-    static func fetch(_ context: NSManagedObjectContext,
-                      format: String,
-                      keys: [Any]?,
-                      completion: ((ListItems) -> Void)? = nil) {
+    static func listItems(_ context: NSManagedObjectContext,
+                          format: String,
+                          keys: [Any]?) async throws -> ListItems {
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: .item)
         request.predicate = NSPredicate(format: format, argumentArray: keys)
         request.sortDescriptors = [NSSortDescriptor(keyPath: \Item.date, ascending: true)]
-
-        do {
-            let result = try context.fetch(request) as? [Item] ?? []
-            completion?(ListItems(from: result, for: keys.string))
-        } catch {
-            print(error)
-        }
+        let result = try context.fetch(request) as? [Item] ?? []
+        return ListItems(from: result, for: keys.string)
     }
 
-    static func save(_ context: NSManagedObjectContext,
-                     item: ListItem,
-                     completion: (() -> Void)? = nil) {
+    static func save(_ context: NSManagedObjectContext, item: ListItem) throws {
         convert(context, item: item)
-        do {
-            try context.save()
-            completion?()
-        } catch {
-            print(error)
-        }
+        try context.save()
     }
 
     static func saveAll(_ context: NSManagedObjectContext,
                         items: ListItems,
-                        repeatId: UUID? = nil,
-                        completion: (() -> Void)? = nil) {
+                        repeatId: UUID? = nil) throws {
         items.value.forEach { item in
-            convert(context,
-                    item: item,
-                    repeatId: repeatId)
+            convert(context, item: item, repeatId: repeatId)
         }
-        do {
-            try context.save()
-            completion?()
-        } catch {
-            print(error)
-        }
+        try context.save()
     }
 
-    static func delete(_ context: NSManagedObjectContext,
-                       item: ListItem,
-                       completion: (() -> Void)? = nil) {
+    static func delete(_ context: NSManagedObjectContext, item: ListItem) {
         guard let original = item.original else {
             return
         }
         context.delete(original)
-        completion?()
     }
 }
 

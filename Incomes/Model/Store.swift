@@ -21,8 +21,8 @@ struct Product {
 
 protocol StoreInterface {
     func configure()
-    func loadProduct(completion: @escaping (Product?) -> Void)
-    func purchase(product: Product, errorHandler: ((Error?) -> Void)?, cancelHandler: ((Bool) -> Void)?)
+    func product() async throws -> Product?
+    func purchase(product: Product) async throws -> Bool
     func restore()
 }
 
@@ -60,21 +60,36 @@ extension Store: StoreInterface {
         Purchases.shared.delegate = self
     }
 
-    func loadProduct(completion: @escaping (Product?) -> Void) {
-        Purchases.shared.offerings { offerings, _ in
-            let products = offerings?.current?.availablePackages.map { Product(package: $0) }
-            let product = products?.first(where: {
-                $0.value.productIdentifier == self.productId
-            })
-            completion(product)
+    func product() async throws -> Product? {
+        typealias Continuation = CheckedContinuation<Purchases.Offerings?, Error>
+        let offerings = try await withCheckedThrowingContinuation { (continuation: Continuation) in
+            Purchases.shared.offerings { offerings, error in
+                if let error = error {
+                    continuation.resume(throwing: error)
+                    return
+                }
+                continuation.resume(returning: offerings)
+            }
         }
+        let products = offerings?.current?.availablePackages.map { Product(package: $0) }
+        let product = products?.first(where: {
+            $0.value.productIdentifier == self.productId
+        })
+        return product
     }
 
-    func purchase(product: Product, errorHandler: ((Error?) -> Void)?, cancelHandler: ((Bool) -> Void)?) {
-        Purchases.shared.purchasePackage(product.package) { _, _, error, userCancelled in
-            errorHandler?(error)
-            cancelHandler?(userCancelled)
+    func purchase(product: Product) async throws -> Bool {
+        typealias Continuation = CheckedContinuation<Bool, Error>
+        let completed = try await withCheckedThrowingContinuation { (continuation: Continuation) in
+            Purchases.shared.purchasePackage(product.package) { _, _, error, userCancelled in
+                if let error = error {
+                    continuation.resume(throwing: error)
+                    return
+                }
+                continuation.resume(returning: !userCancelled)
+            }
         }
+        return completed
     }
 
     func restore() {
