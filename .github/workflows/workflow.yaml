@@ -4,6 +4,7 @@ jobs:
     runs-on: macos-latest
     steps:
     - uses: actions/checkout@v2
+    - run: base64 -d -i ${{ secrets.P12_BASE64 }} -o Incomes/Configuration/Secret.swift
     - uses: yukiarrr/ios-build-action@v1.4.0
       with:
         project-path: Incomes.xcodeproj
