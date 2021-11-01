@@ -4,7 +4,9 @@ jobs:
     runs-on: macos-11
     steps:
     - uses: actions/checkout@v2
-    - run: echo '${{ secrets.GOOGLESERVICE_BASE64 }}' | base64 -d -o Incomes/Package/Firebase/GoogleService-Info.plist
+    - run: |
+        mkdir Incomes/Package/Firebase/
+        echo '${{ secrets.GOOGLESERVICE_BASE64 }}' | base64 -d -o Incomes/Package/Firebase/GoogleService-Info.plist
     - run: echo '${{ secrets.SECRET_BASE64 }}' | base64 -d -o Incomes/Configuration/Secret.swift
     - run: echo '${{ secrets.STOREKIT_BASE64 }}' | base64 -d -o Incomes/Package/StoreKit/StoreKitTestCertificate.cer
     - uses: yukiarrr/ios-build-action@v1.4.0
