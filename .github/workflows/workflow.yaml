@@ -1,31 +1,44 @@
 on:
   push:
-    branches: [main]
+    branches: [$default-branch]
+  workflow_dispatch:
+env:
+  PROJECT-PATH: Incomes.xcodeproj
 jobs:
   build:
     runs-on: macos-11
     steps:
-    - uses: actions/checkout@v2
+
+    - name: Checkout Repository
+      uses: actions/checkout@v2
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
-    - run: |
+
+    - name: Setup Ignored Files
+      run: |
         mkdir Incomes/Package/Firebase/
         echo '${{ secrets.GOOGLESERVICE_BASE64 }}' | base64 -d -o Incomes/Package/Firebase/GoogleService-Info.plist
-    - run: echo '${{ secrets.SECRET_BASE64 }}' | base64 -d -o Incomes/Configuration/Secret.swift
-    - run: echo '${{ secrets.STOREKIT_BASE64 }}' | base64 -d -o Incomes/Package/StoreKit/StoreKitTestCertificate.cer
-    - uses: yanamura/ios-bump-version@v1
+        echo '${{ secrets.SECRET_BASE64 }}' | base64 -d -o Incomes/Configuration/Secret.swift
+        echo '${{ secrets.STOREKIT_BASE64 }}' | base64 -d -o Incomes/Package/StoreKit/StoreKitTestCertificate.cer
+
+    - name: Update Build Version
+      uses: yanamura/ios-bump-version@v1
     - run: |
         git add .
-        git commit -m "Update build version"
+        git commit -m 'Update build version'
         git push origin HEAD
-    - uses: yukiarrr/ios-build-action@v1.4.0
+
+    - name: iOS Build
+      uses: yukiarrr/ios-build-action@v1.4.0
       with:
-        project-path: Incomes.xcodeproj
+        project-path: ${{ env.PROJECT-PATH }}
         p12-base64: ${{ secrets.P12_BASE64 }}
         mobileprovision-base64: ${{ secrets.MOBILEPROVISION_BASE64 }}
         code-signing-identity: Apple Distribution
         team-id: ${{ secrets.TEAM_ID }}
-    - uses: apple-actions/upload-testflight-build@v1
+
+    - name: Upload to Testflight
+      uses: apple-actions/upload-testflight-build@v1
       with:
         app-path: 'output.ipa'
         issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
