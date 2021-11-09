@@ -11,11 +11,17 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
+    - name: Get current date
+      id: date
+      run: echo "::set-output name=date::$(date +'%Y-%m-%dT%H:%M:%S')"
+
     - name: Update build number
       uses: yanamura/ios-bump-version@v1
+      with:
+        build-number: ${{ steps.date.outputs.date }}
 
     - name: Create commit about build number
       run: |
         git add .
-        git commit -m $(date +'%Y-%m-%dT%H:%M:%S')
+        git commit -m 'Build: ${{ steps.date.outputs.date }}'
         git push origin HEAD
