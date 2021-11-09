@@ -1,8 +1,7 @@
 on:
   push:
+    branches: [feature/**]
   workflow_dispatch:
-env:
-  PROJECT-PATH: Incomes.xcodeproj
 jobs:
   build:
     runs-on: macos-latest
