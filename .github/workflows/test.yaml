@@ -1,0 +1,21 @@
+on:
+  push:
+  workflow_dispatch:
+env:
+  PROJECT-PATH: Incomes.xcodeproj
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Update build number
+      uses: yanamura/ios-bump-version@v1
+
+    - name: Create commit about build number
+      run: |
+        git add .
+        git commit -m 'Update build number'
+        git push origin HEAD
