@@ -44,6 +44,7 @@
 // MARK: - Settings
 "settingsTitle" = "Settings";
 "modernStyle" = "Modern style";
+"lockApp" = "Lock the app";
 "iCloud" = "iCloud";
 "subscriptionTitle" = "Subscription Service";
 "subscribe" = "Subscribe";

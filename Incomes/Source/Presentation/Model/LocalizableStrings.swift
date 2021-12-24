@@ -46,6 +46,7 @@ enum LocalizableStrings {
     // MARK: - Settings
     case settingsTitle
     case modernStyle
+    case lockApp
     case iCloud
     case subscriptionTitle
     case subscribe

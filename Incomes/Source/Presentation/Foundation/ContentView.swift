@@ -15,7 +15,7 @@ struct ContentView: View {
     ) var items: FetchedResults<Item>
 
     @State private var scene = Scene.home
-    @State private var isUnlocked = false
+    @State private var isLocked = LockApp().isOn
 
     private var listItems: ListItems {
         ListItems(from: items.map { $0 })
@@ -23,7 +23,11 @@ struct ContentView: View {
 
     var body: some View {
         Group {
-            if isUnlocked {
+            if isLocked {
+                Button(LocalizableStrings.unlock.localized) {
+                    unlock()
+                }
+            } else {
                 VStack(spacing: .zero) {
                     Group {
                         if scene == .home {
@@ -34,12 +38,11 @@ struct ContentView: View {
                     }
                     FooterView(scene: $scene)
                 }
-            } else {
-                Button(LocalizableStrings.unlock.localized) {
-                    unlock()
-                }
             }
         }.onAppear {
+            guard LockApp().isOn else {
+                return
+            }
             unlock()
         }
     }
@@ -48,7 +51,7 @@ struct ContentView: View {
 private extension ContentView {
     func unlock() {
         Task {
-            isUnlocked = await Authenticator().authenticate()
+            isLocked = await !Authenticator().authenticate()
         }
     }
 }

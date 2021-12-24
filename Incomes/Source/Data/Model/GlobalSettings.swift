@@ -10,11 +10,15 @@ import Foundation
 
 enum GlobalSettings: String {
     case modernStyleKey = "89b736bb"
+    case lockAppKey = "d8a87635"
     case iCloudKey = "93bdfd83"
     case subscribeKey = "a018f613"
 
     @UserDefault(key: .modernStyleKey, defaultValue: true)
     static var modernStyle: Bool
+
+    @UserDefault(key: .lockAppKey, defaultValue: false)
+    static var lockApp: Bool
 
     @UserDefault(key: .iCloudKey, defaultValue: false)
     static var iCloud: Bool
@@ -27,6 +31,14 @@ class ModernStyle: ObservableObject {
     var isOn = GlobalSettings.modernStyle {
         didSet {
             GlobalSettings.modernStyle = isOn
+        }
+    }
+}
+
+class LockApp: ObservableObject {
+    var isOn = GlobalSettings.lockApp {
+        didSet {
+            GlobalSettings.lockApp = isOn
         }
     }
 }
