@@ -16,6 +16,8 @@ enum LocalizableStrings {
     case delete
     case deleteConfirm
     case footerTextPrefix
+    case unlock
+    case faceID
 
     // MARK: - Home
     case homeTitle

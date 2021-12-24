@@ -15,21 +15,40 @@ struct ContentView: View {
     ) var items: FetchedResults<Item>
 
     @State private var scene = Scene.home
+    @State private var isUnlocked = false
 
     private var listItems: ListItems {
         ListItems(from: items.map { $0 })
     }
 
     var body: some View {
-        VStack(spacing: .zero) {
-            Group {
-                if scene == .home {
-                    HomeView(items: listItems)
-                } else {
-                    GroupView(items: listItems)
+        Group {
+            if isUnlocked {
+                VStack(spacing: .zero) {
+                    Group {
+                        if scene == .home {
+                            HomeView(items: listItems)
+                        } else {
+                            GroupView(items: listItems)
+                        }
+                    }
+                    FooterView(scene: $scene)
+                }
+            } else {
+                Button(LocalizableStrings.unlock.localized) {
+                    unlock()
                 }
             }
-            FooterView(scene: $scene)
+        }.onAppear {
+            unlock()
+        }
+    }
+}
+
+private extension ContentView {
+    func unlock() {
+        Task {
+            isUnlocked = await Authenticator().authenticate()
         }
     }
 }
