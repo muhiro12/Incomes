@@ -13,6 +13,9 @@
 "delete" = "削除";
 "deleteConfirm" = "このアイテムを削除してもよろしいですか？";
 "footerTextPrefix" = "今日: ";
+// TODO: undefined
+"unlock" = "ロック解除";
+"faceID" = "アプリのロックを解除します";
 
 // MARK: - Home
 "homeTitle" = "ホーム";
@@ -41,6 +44,7 @@
 // MARK: - Settings
 "settingsTitle" = "設定";
 "modernStyle" = "モダンテーマ";
+"lockApp" = "Lock the app";
 "iCloud" = "iCloud";
 // TODO: undefined
 "subscriptionTitle" = "Subscription Service";

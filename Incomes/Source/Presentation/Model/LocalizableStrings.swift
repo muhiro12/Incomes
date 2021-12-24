@@ -16,6 +16,8 @@ enum LocalizableStrings {
     case delete
     case deleteConfirm
     case footerTextPrefix
+    case unlock
+    case faceID
 
     // MARK: - Home
     case homeTitle
@@ -44,6 +46,7 @@ enum LocalizableStrings {
     // MARK: - Settings
     case settingsTitle
     case modernStyle
+    case lockApp
     case iCloud
     case subscriptionTitle
     case subscribe

@@ -13,6 +13,8 @@ struct SettingsView: View {
 
     @AppStorage(wrappedValue: true, GlobalSettings.modernStyleKey.rawValue)
     private var isModernStyleOn
+    @AppStorage(wrappedValue: false, GlobalSettings.lockAppKey.rawValue)
+    private var isLockAppOn
     @AppStorage(wrappedValue: false, GlobalSettings.iCloudKey.rawValue)
     private var isICloudOn
     @AppStorage(wrappedValue: false, GlobalSettings.subscribeKey.rawValue)
@@ -26,6 +28,11 @@ struct SettingsView: View {
                 Section {
                     Toggle(isOn: $isModernStyleOn) {
                         Text(LocalizableStrings.modernStyle.localized)
+                    }
+                }
+                Section {
+                    Toggle(isOn: $isLockAppOn) {
+                        Text(LocalizableStrings.lockApp.localized)
                     }
                 }
                 if isSubscribeOn {

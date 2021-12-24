@@ -13,6 +13,9 @@
 "delete" = "Delete";
 "deleteConfirm" = "Are you sure you want to delete this item?";
 "footerTextPrefix" = "Today: ";
+// TODO: undefined
+"unlock" = "Unlock";
+"faceID" = "Unlock the app";
 
 // MARK: - Home
 "homeTitle" = "Home";
@@ -41,6 +44,7 @@
 // MARK: - Settings
 "settingsTitle" = "Settings";
 "modernStyle" = "Modern style";
+"lockApp" = "Lock the app";
 "iCloud" = "iCloud";
 "subscriptionTitle" = "Subscription Service";
 "subscribe" = "Subscribe";
