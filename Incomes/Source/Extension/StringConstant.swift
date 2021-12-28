@@ -9,10 +9,13 @@
 import Foundation
 
 extension String {
+
     // MARK: - Common
+
     static var empty: Self { "" }
     static var zero: Self { "0" }
 
     // MARK: - Identifier
+
     static var item: Self { "Item" }
 }
