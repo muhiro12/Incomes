@@ -32,7 +32,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     lazy var persistentContainer: NSPersistentContainer = {
         let container: NSPersistentContainer
-        if Subscribe().isOn && ICloud().isOn {
+        if UserDefaults.isSubscribeOn && UserDefaults.isICloudOn {
             container = NSPersistentCloudKitContainer(name: "Incomes")
             container.viewContext.automaticallyMergesChangesFromParent = true
             container.viewContext.mergePolicy = NSMergePolicy.mergeByPropertyStoreTrump

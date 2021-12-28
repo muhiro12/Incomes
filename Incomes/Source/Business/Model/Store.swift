@@ -35,10 +35,10 @@ class Store: NSObject {
         productId = EnvironmentParameter.productId
         onPurchaseStatusUpdated = { isActive in
             if isActive {
-                Subscribe().isOn = true
+                UserDefaults.isSubscribeOn = true
             } else {
-                Subscribe().isOn = false
-                ICloud().isOn = false
+                UserDefaults.isSubscribeOn = false
+                UserDefaults.isICloudOn = false
             }
         }
     }
