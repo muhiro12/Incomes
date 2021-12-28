@@ -9,10 +9,12 @@
 import SwiftUI
 
 struct ContentView: View {
+    @Environment(\.managedObjectContext) private var viewContext
+
     @FetchRequest(
-        entity: Item.entity(),
-        sortDescriptors: [NSSortDescriptor(keyPath: \Item.date, ascending: true)]
-    ) var items: FetchedResults<Item>
+        sortDescriptors: [NSSortDescriptor(keyPath: \Item.date, ascending: true)],
+        animation: .default)
+    var items: FetchedResults<Item>
 
     @State private var scene = Scene.home
     @State private var isLocked = UserDefaults.isLockAppOn
@@ -59,7 +61,7 @@ private extension ContentView {
 #if DEBUG
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
     }
 }
 #endif
