@@ -968,7 +968,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"Incomes/Source/Presentation/Preview Content\"";
 				DEVELOPMENT_TEAM = 66PKF55HK5;
 				ENABLE_PREVIEWS = YES;
-				INFOPLIST_FILE = "$(SRCROOT)/Incomes/Configuration/Info.plist";
+				INFOPLIST_FILE = Incomes/Configuration/Base.lproj/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1001,7 +1001,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"Incomes/Source/Presentation/Preview Content\"";
 				DEVELOPMENT_TEAM = 66PKF55HK5;
 				ENABLE_PREVIEWS = YES;
-				INFOPLIST_FILE = "$(SRCROOT)/Incomes/Configuration/Info.plist";
+				INFOPLIST_FILE = Incomes/Configuration/Base.lproj/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
