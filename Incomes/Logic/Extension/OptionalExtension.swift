@@ -10,11 +10,10 @@ import Foundation
 
 extension Optional {
     var string: String {
-        return debugDescription
-            .replacingOccurrences(of: "Optional(\"", with: "")
-            .replacingOccurrences(of: "\")", with: "")
-            .replacingOccurrences(of: "Optional(", with: "")
-            .replacingOccurrences(of: ")", with: "")
-            .replacingOccurrences(of: "nil", with: "")
+        self as? String ?? ""
+    }
+
+    var decimal: Decimal {
+        self as? Decimal ?? .zero
     }
 }
