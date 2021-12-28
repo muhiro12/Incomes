@@ -42,8 +42,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             description?.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
         }
         container.loadPersistentStores(completionHandler: { (_, error) in
-            if let error = error as NSError? {
-                fatalError("Unresolved error \(error), \(error.userInfo)")
+            if let error = error {
+                assertionFailure(error.localizedDescription)
             }
         })
         return container
@@ -57,8 +57,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             do {
                 try context.save()
             } catch {
-                let nserror = error as NSError
-                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+                assertionFailure(error.localizedDescription)
             }
         }
     }

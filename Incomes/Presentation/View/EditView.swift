@@ -145,13 +145,18 @@ private extension EditView {
                             expenditure: expenditure.decimalValue,
                             original: self.item?.original)
         Task {
-            try Repository.save(context, item: item)
+            do {
+                try Repository.save(context, item: item)
+            } catch {
+                assertionFailure(error.localizedDescription)
+            }
             dismiss()
         }
     }
 
     func saveForFutureItems() {
         guard let oldItem = item else {
+            assertionFailure()
             return
         }
         let newItem = ListItem(date: date,
@@ -161,15 +166,20 @@ private extension EditView {
                                expenditure: expenditure.decimalValue,
                                original: self.item?.original)
         Task {
-            try await Repository.saveForFutureItems(context,
-                                                    oldItem: oldItem,
-                                                    newItem: newItem)
+            do {
+                try await Repository.saveForFutureItems(context,
+                                                        oldItem: oldItem,
+                                                        newItem: newItem)
+            } catch {
+                assertionFailure(error.localizedDescription)
+            }
             dismiss()
         }
     }
 
     func saveForAllItems() {
         guard let oldItem = item else {
+            assertionFailure()
             return
         }
         let newItem = ListItem(date: date,
@@ -179,9 +189,13 @@ private extension EditView {
                                expenditure: expenditure.decimalValue,
                                original: self.item?.original)
         Task {
-            try await Repository.saveForAllItems(context,
-                                                 oldItem: oldItem,
-                                                 newItem: newItem)
+            do {
+                try await Repository.saveForAllItems(context,
+                                                     oldItem: oldItem,
+                                                     newItem: newItem)
+            } catch {
+                assertionFailure(error.localizedDescription)
+            }
             dismiss()
         }
     }
@@ -197,13 +211,14 @@ private extension EditView {
                                   item: item,
                                   repeatCount: repeatSelection + .one)
         } catch {
-            print(error)
+            assertionFailure(error.localizedDescription)
         }
         dismiss()
     }
 
     func delete() {
         guard let item = item else {
+            assertionFailure()
             return
         }
         Repository.delete(context, item: item)
