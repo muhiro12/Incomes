@@ -17,7 +17,7 @@ jobs:
 
     - name: Set ignored files
       run: |
-        mkdir Incomes/Package/Firebase/
+        mkdir Incomes/Configuration/Package/Firebase/
         echo '${{ secrets.GOOGLESERVICE_BASE64 }}' | base64 -d -o Incomes/Configuration/Package/Firebase/GoogleService-Info.plist
         echo '${{ secrets.SECRET_BASE64 }}' | base64 -d -o Incomes/Configuration/Secret.swift
         echo '${{ secrets.STOREKIT_BASE64 }}' | base64 -d -o Incomes/Configuration/Package/StoreKit/StoreKitTestCertificate.cer
