@@ -47,41 +47,41 @@ struct EditView: View {
     var body: some View {
         NavigationView {
             Form {
-                Section(header: Text(LocalizableStrings.information.localized)) {
+                Section(header: Text(.localized(.information))) {
                     DatePicker(selection: $date, displayedComponents: .date) {
-                        Text(LocalizableStrings.date.localized)
+                        Text(.localized(.date))
                     }
                     HStack {
-                        Text(LocalizableStrings.content.localized)
+                        Text(.localized(.content))
                         Spacer()
                         TextField(String.empty, text: $content)
                             .multilineTextAlignment(.trailing)
                     }
                     HStack {
-                        Text(LocalizableStrings.income.localized)
+                        Text(.localized(.income))
                         TextField(String.zero, text: $income)
                             .keyboardType(.numberPad)
                             .multilineTextAlignment(.trailing)
                             .foregroundColor(income.isEmptyOrDecimal ? .primary : .red)
                     }
                     HStack {
-                        Text(LocalizableStrings.expenditure.localized)
+                        Text(.localized(.expenditure))
                         TextField(String.zero, text: $expenditure)
                             .keyboardType(.numberPad)
                             .multilineTextAlignment(.trailing)
                             .foregroundColor(expenditure.isEmptyOrDecimal ? .primary : .red)
                     }
                     HStack {
-                        Text(LocalizableStrings.group.localized)
+                        Text(.localized(.group))
                         Spacer()
                         TextField(String.empty, text: $group)
                             .multilineTextAlignment(.trailing)
                     }
                     if !isEditMode {
                         HStack {
-                            Text(LocalizableStrings.repeatCount.localized)
+                            Text(.localized(.repeatCount))
                             Spacer()
-                            Picker(LocalizableStrings.repeatCount.localized,
+                            Picker(.localized(.repeatCount),
                                    selection: $repeatSelection) {
                                 ForEach((.minRepeatCount)..<(.maxRepeatCount + .one)) {
                                     Text($0.description)
@@ -95,13 +95,13 @@ struct EditView: View {
                     }
                 }
             }.selectedListStyle()
-            .navigationBarTitle(isEditMode ? LocalizableStrings.editTitle.localized : LocalizableStrings.createTitle.localized)
+            .navigationBarTitle(isEditMode ? .localized(.editTitle) : .localized(.createTitle))
             .navigationBarItems(
                 leading: Button(action: cancel) {
-                    Text(LocalizableStrings.cancel.localized)
+                    Text(.localized(.cancel))
                 },
                 trailing: Button(action: isEditMode ? save : create) {
-                    Text(isEditMode ? LocalizableStrings.save.localized : LocalizableStrings.create.localized)
+                    Text(isEditMode ? .localized(.save) : .localized(.create))
                         .bold()
                 }.disabled(!isValid))
             .gesture(DragGesture()
@@ -110,13 +110,13 @@ struct EditView: View {
                         })
         }.navigationViewStyle(StackNavigationViewStyle())
         .actionSheet(isPresented: $isPresentedToActionSheet) {
-            ActionSheet(title: Text(LocalizableStrings.saveDetail.localized),
+            ActionSheet(title: Text(.localized(.saveDetail)),
                         buttons: [
-                            .default(Text(LocalizableStrings.saveForThisItem.localized),
+                            .default(Text(.localized(.saveForThisItem)),
                                      action: saveForThisItem),
-                            .default(Text(LocalizableStrings.saveForFutureItems.localized),
+                            .default(Text(.localized(.saveForFutureItems)),
                                      action: saveForFutureItems),
-                            .default(Text(LocalizableStrings.saveForAllItems.localized),
+                            .default(Text(.localized(.saveForAllItems)),
                                      action: saveForAllItems),
                             .cancel()
                         ])

@@ -14,7 +14,6 @@
 "delete" = "削除";
 "deleteConfirm" = "このアイテムを削除してもよろしいですか？";
 "footerTextPrefix" = "今日: ";
-// TODO: undefined
 "unlock" = "ロック解除";
 "faceID" = "アプリのロックを解除します";
 
@@ -39,7 +38,7 @@
 "group" = "グループ";
 "repeatCount" = "繰り返し";
 "save" = "保存";
-"saveDetail" = "これは繰り返し項目です。";
+"saveDetail" = "これは繰り返し項目です";
 "saveForThisItem" = "このアイテムのみ保存";
 "saveForFutureItems" = "今後のアイテムも保存";
 "saveForAllItems" = "全てのアイテムを保存";
@@ -51,10 +50,7 @@
 "modernStyle" = "モダンテーマ";
 "lockApp" = "Lock the app";
 "iCloud" = "iCloud";
-// TODO: undefined
-"subscriptionTitle" = "Subscription Service";
+"subscriptionTitle" = "サブスクリプション";
 "subscribe" = "定期購入";
 "restore" = "復元";
-// TODO: undefined
-"subscriptionDescription" = "For sharing data between all device";
-
+"subscriptionDescription" = "全ての端末でデータを共有します";

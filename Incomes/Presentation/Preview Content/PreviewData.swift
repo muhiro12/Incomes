@@ -21,13 +21,13 @@ struct PreviewData {
     }
 
     static let listItem = ListItem(date: Date(),
-                                   content: LocalizableStrings.content.localized,
+                                   content: .localized(.content),
                                    group: .empty,
                                    income: 999999,
                                    expenditure: 99999,
                                    balance: 9999999)
 
-    static let listItems = ListItems(key: LocalizableStrings.all.localized,
+    static let listItems = ListItems(key: .localized(.all),
                                      value: [listItem, listItem])
 
     static let sectionItems = SectionItems(key: Date().stringValue(.yyyy),
@@ -136,7 +136,7 @@ struct PreviewData {
             listItems.append(listItem)
         }
 
-        return ListItems(key: LocalizableStrings.all.localized, value: listItems.reversed())
+        return ListItems(key: .localized(.all), value: listItems.reversed())
     }
 
     private static func monthLater(from date: Date = Date(), value: Int) -> Date {

@@ -1,5 +1,5 @@
 //
-//  LocalizableStrings.swift
+//  LocalizedString.swift
 //  Incomes
 //
 //  Created by Hiromu Nakano on 2020/07/06.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum LocalizableStrings {
+enum LocalizedString {
 
     // MARK: - Common
 
@@ -58,10 +58,4 @@ enum LocalizableStrings {
     case subscribe
     case restore
     case subscriptionDescription
-}
-
-extension LocalizableStrings {
-    var localized: String {
-        return NSLocalizedString(String(describing: self), comment: .empty)
-    }
 }
