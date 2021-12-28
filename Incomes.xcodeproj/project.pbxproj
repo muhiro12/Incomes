@@ -251,7 +251,6 @@
 			children = (
 				ADE0587A2706E87500DF2499 /* Configuration */,
 				ADE0587B2706E9C400DF2499 /* Logic */,
-				ADE058792706E7AE00DF2499 /* Package */,
 				ADE058732706E6C000DF2499 /* Presentation */,
 			);
 			path = Incomes;
@@ -305,8 +304,8 @@
 		ADCF36E924A1D18E0011D6F5 /* DataStore */ = {
 			isa = PBXGroup;
 			children = (
-				ADCF36EA24A1D18E0011D6F5 /* Repository.swift */,
 				AD31CE0324A96220005B3C14 /* DataStore.swift */,
+				ADCF36EA24A1D18E0011D6F5 /* Repository.swift */,
 			);
 			path = DataStore;
 			sourceTree = "<group>";
@@ -398,7 +397,6 @@
 		ADE058732706E6C000DF2499 /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
-				ADE0587F2706ECF800DF2499 /* Model */,
 				ADCF36E224A1D18E0011D6F5 /* Component */,
 				ADE0587C2706E9F200DF2499 /* Foundation */,
 				ADCF36B424A1D0F70011D6F5 /* Preview Content */,
@@ -446,11 +444,12 @@
 		ADE0587A2706E87500DF2499 /* Configuration */ = {
 			isa = PBXGroup;
 			children = (
-				ADE3A4B9277491CB0016C152 /* Info.plist */,
 				ADEA399D25014CD700CB61D9 /* Secret.swift */,
 				ADCF36B224A1D0F70011D6F5 /* Assets.xcassets */,
+				ADE3A4B9277491CB0016C152 /* Info.plist */,
 				ADCF36B724A1D0F70011D6F5 /* LaunchScreen.storyboard */,
 				AD583B6324B301EB0032AA1C /* Localizable.strings */,
+				ADE058792706E7AE00DF2499 /* Package */,
 			);
 			path = Configuration;
 			sourceTree = "<group>";
@@ -458,10 +457,10 @@
 		ADE0587B2706E9C400DF2499 /* Logic */ = {
 			isa = PBXGroup;
 			children = (
-				ADCF36EB24A1D18E0011D6F5 /* Model */,
-				ADE0587E2706EB6600DF2499 /* Entity */,
 				ADCF36E924A1D18E0011D6F5 /* DataStore */,
+				ADE0587E2706EB6600DF2499 /* Entity */,
 				ADAD3CC5277AA05A005A70E1 /* Extension */,
+				ADCF36EB24A1D18E0011D6F5 /* Model */,
 			);
 			path = Logic;
 			sourceTree = "<group>";
@@ -471,6 +470,7 @@
 			children = (
 				ADCF36DC24A1D1820011D6F5 /* AppDelegate.swift */,
 				ADCF36DD24A1D1820011D6F5 /* ContentView.swift */,
+				AD583B6824B308AB0032AA1C /* LocalizableStrings.swift */,
 				ADCF36DE24A1D1820011D6F5 /* SceneDelegate.swift */,
 			);
 			path = Foundation;
@@ -484,14 +484,6 @@
 				ADCF36EC24A1D18E0011D6F5 /* SectionItems.swift */,
 			);
 			path = Entity;
-			sourceTree = "<group>";
-		};
-		ADE0587F2706ECF800DF2499 /* Model */ = {
-			isa = PBXGroup;
-			children = (
-				AD583B6824B308AB0032AA1C /* LocalizableStrings.swift */,
-			);
-			path = Model;
 			sourceTree = "<group>";
 		};
 		ADE058812706EE8600DF2499 /* Business */ = {
@@ -932,7 +924,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = Incomes/Package/StoreKit/Incomes.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Incomes/Configuration/Package/StoreKit/Incomes.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
@@ -965,7 +957,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = Incomes/Package/StoreKit/Incomes.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Incomes/Configuration/Package/StoreKit/Incomes.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
