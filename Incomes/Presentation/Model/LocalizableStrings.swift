@@ -49,7 +49,7 @@ enum LocalizableStrings {
     case create
 
     // MARK: - Settings
-    
+
     case settingsTitle
     case modernStyle
     case lockApp
