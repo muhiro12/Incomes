@@ -6,7 +6,6 @@
 //  Copyright © 2020 Hiromu Nakano. All rights reserved.
 //
 
-import UIKit
 import SwiftUI
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {

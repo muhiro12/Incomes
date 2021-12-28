@@ -6,7 +6,6 @@
 //  Copyright © 2021 Hiromu Nakano. All rights reserved.
 //
 
-import Foundation
 import SwiftUI
 
 extension UserDefaults {
