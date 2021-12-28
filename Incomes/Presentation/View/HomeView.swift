@@ -13,7 +13,7 @@ struct HomeView: View {
 
     let items: [Item]
 
-    private var sections: [SectionItems] {
+    private var sections: [(String, [Item])] {
         //        var sectionItemsArray: [SectionItems] = []
         //        items.grouped {
         //            $0.date.unwrapped.stringValue(.yyyy)
@@ -32,9 +32,9 @@ struct HomeView: View {
     var body: some View {
         NavigationView {
             List {
-                ForEach(sections) { section in
-                    SectionView(section: section)
-                }
+                //                ForEach(sections) { section in
+                //                    SectionView(section: section)
+                //                }
             }.selectedListStyle()
             .navigationBarTitle(.localized(.homeTitle))
             .navigationBarItems(trailing:

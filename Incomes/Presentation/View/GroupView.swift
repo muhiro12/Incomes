@@ -11,7 +11,7 @@ import SwiftUI
 struct GroupView: View {
     let items: [Item]
 
-    private var sections: [SectionItems] {
+    private var sections: [(String, [Item])] {
         //        var sectionItemsArray = [
         //            SectionItems(key: .empty, value: [items])
         //        ]
@@ -30,9 +30,9 @@ struct GroupView: View {
     var body: some View {
         NavigationView {
             List {
-                ForEach(sections) { section in
-                    SectionView(section: SectionItems(key: section.key, value: section.value))
-                }
+                //                ForEach(sections) { section in
+                //                    SectionView(section: SectionItems(key: section.key, value: section.value))
+                //                }
             }.selectedListStyle()
             .navigationBarTitle(.localized(.groupTitle))
         }

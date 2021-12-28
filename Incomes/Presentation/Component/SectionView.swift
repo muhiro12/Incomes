@@ -14,7 +14,7 @@ struct SectionView: View {
     @State private var isPresentedToAlert = false
     @State private var indexSet = IndexSet()
 
-    let section: SectionItems
+    let section: (String, [Item])
 
     private var navigationLinks: some View {
         return Spacer()
@@ -36,7 +36,7 @@ struct SectionView: View {
     }
 
     var body: some View {
-        Section(header: Text(section.key)) {
+        Section(header: Text(section.0)) {
             navigationLinks
         }
     }
@@ -51,8 +51,8 @@ private extension SectionView {
     }
 
     func delete() {
-        indexSet.forEach {
-            section.value[$0].forEach { item in
+        indexSet.forEach { _ in
+            section.1.forEach { item in
                 Repository.delete(context, item: item)
             }
         }

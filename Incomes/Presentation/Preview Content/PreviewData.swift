@@ -20,8 +20,7 @@ struct PreviewData {
 
     static let listItems = (0..<10).map { _ in listItem }
 
-    static let sectionItems = SectionItems(key: Date().stringValue(.yyyy),
-                                           value: [listItems])
+    static let sectionItems = (Date().stringValue(.yyyy), listItems)
 
     static var screenShot: [Item] {
         var items: [Item] = []
