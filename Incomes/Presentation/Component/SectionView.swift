@@ -25,9 +25,9 @@ struct SectionView: View {
             }
         }.onDelete(perform: presentToAlert)
         .actionSheet(isPresented: $isPresentedToAlert) {
-            ActionSheet(title: Text(LocalizableStrings.deleteConfirm.localized),
+            ActionSheet(title: Text(.localized(.deleteConfirm)),
                         buttons: [
-                            .destructive(Text(LocalizableStrings.delete.localized),
+                            .destructive(Text(.localized(.delete)),
                                          action: delete),
                             .cancel()
                         ])

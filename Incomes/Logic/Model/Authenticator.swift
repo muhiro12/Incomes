@@ -15,7 +15,7 @@ struct Authenticator {
     func authenticate() async -> Bool {
         do {
             return try await context.evaluatePolicy(.deviceOwnerAuthentication,
-                                                    localizedReason: LocalizableStrings.faceID.localized)
+                                                    localizedReason: .localized(.faceID))
         } catch {
             return false
         }

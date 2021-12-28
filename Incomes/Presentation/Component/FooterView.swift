@@ -24,7 +24,7 @@ struct FooterView: View {
                         .iconFrameM()
                 }
                 Spacer()
-                Text(LocalizableStrings.footerTextPrefix.localized + Date().stringValue(.yyyyMMMd))
+                Text(.localized(.footerTextPrefix) + Date().stringValue(.yyyyMMMd))
                     .font(.footnote)
                 Spacer()
                 Button(action: presentToEdit) {

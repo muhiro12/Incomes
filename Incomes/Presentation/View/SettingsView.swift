@@ -27,31 +27,31 @@ struct SettingsView: View {
             Form {
                 Section {
                     Toggle(isOn: $isModernStyleOn) {
-                        Text(LocalizableStrings.modernStyle.localized)
+                        Text(.localized(.modernStyle))
                     }
                 }
                 Section {
                     Toggle(isOn: $isLockAppOn) {
-                        Text(LocalizableStrings.lockApp.localized)
+                        Text(.localized(.lockApp))
                     }
                 }
                 if isSubscribeOn {
                     Section {
                         Toggle(isOn: $isICloudOn) {
-                            Text(LocalizableStrings.iCloud.localized)
+                            Text(.localized(.iCloud))
                         }
                     }
                 } else {
-                    Section(header: Text(LocalizableStrings.subscriptionTitle.localized),
-                            footer: Text(LocalizableStrings.subscriptionDescription.localized)) {
-                        Button(LocalizableStrings.subscribe.localized, action: purchase)
-                        Button(LocalizableStrings.restore.localized, action: restore)
+                    Section(header: Text(.localized(.subscriptionTitle)),
+                            footer: Text(.localized(.subscriptionDescription))) {
+                        Button(.localized(.subscribe), action: purchase)
+                        Button(.localized(.restore), action: restore)
                     }
                 }
             }.selectedListStyle()
-            .navigationBarTitle(LocalizableStrings.settingsTitle.localized)
+            .navigationBarTitle(.localized(.settingsTitle))
             .navigationBarItems(trailing: Button(action: dismiss) {
-                Text(LocalizableStrings.done.localized)
+                Text(.localized(.done))
                     .bold()
             })
         }.navigationViewStyle(StackNavigationViewStyle())

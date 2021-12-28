@@ -24,7 +24,7 @@ struct ContentView: View {
     var body: some View {
         Group {
             if isLocked {
-                Button(LocalizableStrings.unlock.localized) {
+                Button(.localized(.unlock)) {
                     unlock()
                 }
             } else {
