@@ -63,10 +63,14 @@ struct SettingsView: View {
 private extension SettingsView {
     func purchase() {
         Task {
-            guard let product = try await store.product() else {
-                return
+            do {
+                guard let product = try await store.product() else {
+                    return
+                }
+                _ = try await store.purchase(product: product)
+            } catch {
+                assertionFailure(error.localizedDescription)
             }
-            _ = try await store.purchase(product: product)
         }
     }
 

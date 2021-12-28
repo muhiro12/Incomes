@@ -29,6 +29,7 @@ struct Repository {
             guard let date = Calendar.current.date(byAdding: .month,
                                                    value: index,
                                                    to: item.date) else {
+                assertionFailure()
                 return
             }
             let recurringItem = ListItem(date: date,
@@ -62,6 +63,7 @@ struct Repository {
                                                              to: newItem.date)
             guard let newDate = Calendar.current.date(byAdding: components,
                                                       to: item.date) else {
+                assertionFailure()
                 return nil
             }
             return ListItem(date: newDate,
@@ -81,6 +83,7 @@ struct Repository {
                                    oldItem: ListItem,
                                    newItem: ListItem) async throws {
         guard let repeatId = oldItem.original?.repeatId else {
+            assertionFailure()
             return
         }
         try await saveForRepeatingItems(context,
@@ -94,6 +97,7 @@ struct Repository {
                                 oldItem: ListItem,
                                 newItem: ListItem) async throws {
         guard let repeatId = oldItem.original?.repeatId else {
+            assertionFailure()
             return
         }
         try await saveForRepeatingItems(context,

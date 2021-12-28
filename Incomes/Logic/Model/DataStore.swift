@@ -36,6 +36,7 @@ struct DataStore {
 
     static func delete(_ context: NSManagedObjectContext, item: ListItem) {
         guard let original = item.original else {
+            assertionFailure()
             return
         }
         context.delete(original)
