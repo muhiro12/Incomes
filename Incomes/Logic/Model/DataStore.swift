@@ -54,7 +54,7 @@ private extension DataStore {
         original.content = item.content
         original.group = item.group
         original.income = item.income.asNSDecimalNumber
-        original.expenditure = item.expenditure.asNSDecimalNumber
+        original.outgo = item.expenditure.asNSDecimalNumber
         original.repeatId = repeatId
     }
 }

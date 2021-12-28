@@ -29,7 +29,7 @@ struct ListItems: Identifiable {
             guard let date = item.date,
                   let content = item.content,
                   let income = item.income?.decimalValue,
-                  let expenditure = item.expenditure?.decimalValue
+                  let expenditure = item.outgo?.decimalValue
             else {
                 assertionFailure()
                 return
