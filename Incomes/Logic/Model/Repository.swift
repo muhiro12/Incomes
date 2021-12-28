@@ -15,7 +15,7 @@ struct Repository {
 
     static func listItems(_ context: NSManagedObjectContext,
                           format: String,
-                          keys: [Any]?) async throws -> ListItems {
+                          keys: [Any]?) async throws -> [Item] {
         try await DataStore.listItems(context, format: format, keys: keys)
     }
 
@@ -42,7 +42,7 @@ struct Repository {
         }
         let repeatId = repeatCount > .one ? UUID() : nil
         try DataStore.saveAll(context,
-                              items: ListItems(key: repeatId.unwrappedString, value: recurringItems),
+                              items: recurringItems,
                               repeatId: repeatId)
     }
 
@@ -58,7 +58,7 @@ struct Repository {
                                       oldItem: Item,
                                       newItem: Item) async throws {
         let items = try await listItems(context, format: format, keys: keys)
-        let newItemList: [Item] = items.value.compactMap { item in
+        let newItemList: [Item] = items.compactMap { item in
             let components = Calendar.current.dateComponents([.year, .month, .day],
                                                              from: oldItem.date.unwrapped,
                                                              to: newItem.date.unwrapped)
@@ -75,8 +75,8 @@ struct Repository {
                         repeatID: UUID())
         }
         let repeatId = UUID()
-        let newItems = ListItems(key: repeatId.description,
-                                 value: newItemList)
+        let newItems = newItemList
+
         try DataStore.saveAll(context, items: newItems, repeatId: repeatId)
     }
 

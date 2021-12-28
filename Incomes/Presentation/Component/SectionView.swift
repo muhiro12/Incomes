@@ -17,21 +17,22 @@ struct SectionView: View {
     let section: SectionItems
 
     private var navigationLinks: some View {
-        return ForEach(section.value) { items in
-            NavigationLink(destination:
-                            ListView(of: items)
-                            .navigationBarTitle(items.key)) {
-                Text(items.key)
-            }
-        }.onDelete(perform: presentToAlert)
-        .actionSheet(isPresented: $isPresentedToAlert) {
-            ActionSheet(title: Text(.localized(.deleteConfirm)),
-                        buttons: [
-                            .destructive(Text(.localized(.delete)),
-                                         action: delete),
-                            .cancel()
-                        ])
-        }
+        return Spacer()
+        //        return ForEach(section.value) { items in
+        //            NavigationLink(destination:
+        //                            ListView(of: items)
+        //                            .navigationBarTitle(items.description)) {
+        //                Text(items.description)
+        //            }
+        //        }.onDelete(perform: presentToAlert)
+        //        .actionSheet(isPresented: $isPresentedToAlert) {
+        //            ActionSheet(title: Text(.localized(.deleteConfirm)),
+        //                        buttons: [
+        //                            .destructive(Text(.localized(.delete)),
+        //                                         action: delete),
+        //                            .cancel()
+        //                        ])
+        //        }
     }
 
     var body: some View {
@@ -51,7 +52,7 @@ private extension SectionView {
 
     func delete() {
         indexSet.forEach {
-            section.value[$0].value.forEach { item in
+            section.value[$0].forEach { item in
                 Repository.delete(context, item: item)
             }
         }

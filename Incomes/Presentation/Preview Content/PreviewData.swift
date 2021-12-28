@@ -18,13 +18,12 @@ struct PreviewData {
                                group: .empty,
                                repeatID: UUID())
 
-    static let listItems = ListItems(key: .localized(.all),
-                                     value: [listItem, listItem])
+    static let listItems = (0..<10).map { _ in listItem }
 
     static let sectionItems = SectionItems(key: Date().stringValue(.yyyy),
                                            value: [listItems])
 
-    static var screenShot: ListItems {
+    static var screenShot: [Item] {
         var items: [Item] = []
 
         let formatter = DateFormatter()
@@ -97,7 +96,7 @@ struct PreviewData {
         return create(from: items)
     }
 
-    private static func create(from items: [Item]) -> ListItems {
+    private static func create(from items: [Item]) -> [Item] {
         var listItems: [Item] = []
 
         items.enumerated().forEach {
@@ -122,7 +121,7 @@ struct PreviewData {
             listItems.append(listItem)
         }
 
-        return ListItems(key: .localized(.all), value: listItems.reversed())
+        return listItems
     }
 
     private static func monthLater(from date: Date = Date(), value: Int) -> Date {

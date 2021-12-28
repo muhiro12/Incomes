@@ -12,5 +12,5 @@ struct SectionItems: Identifiable {
     let id = UUID()
 
     let key: String
-    let value: [ListItems]
+    let value: [[Item]]
 }

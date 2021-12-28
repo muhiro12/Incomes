@@ -11,21 +11,22 @@ import SwiftUI
 struct HomeView: View {
     @State private var isPresentedToSettings = false
 
-    let items: ListItems
+    let items: [Item]
 
     private var sections: [SectionItems] {
-        var sectionItemsArray: [SectionItems] = []
-        items.grouped {
-            $0.date.unwrapped.stringValue(.yyyy)
-        }.forEach { items in
-            sectionItemsArray.append(
-                SectionItems(key: items.key,
-                             value: items.grouped(by: {
-                                $0.date.unwrapped.stringValue(.yyyyMMM)
-                             }, sortOption: .date)
-                ))
-        }
-        return sectionItemsArray
+        //        var sectionItemsArray: [SectionItems] = []
+        //        items.grouped {
+        //            $0.date.unwrapped.stringValue(.yyyy)
+        //        }.forEach { items in
+        //            sectionItemsArray.append(
+        //                SectionItems(key: items.key,
+        //                             value: items.grouped(by: {
+        //                                $0.date.unwrapped.stringValue(.yyyyMMM)
+        //                             }, sortOption: .date)
+        //                ))
+        //        }
+        //        return sectionItemsArray
+        return []
     }
 
     var body: some View {

@@ -19,8 +19,8 @@ struct ContentView: View {
     @State private var scene = Scene.home
     @State private var isLocked = UserDefaults.isLockAppOn
 
-    private var listItems: ListItems {
-        ListItems(from: items.map { $0 })
+    private var listItems: [Item] {
+        items.map { $0 }
     }
 
     var body: some View {

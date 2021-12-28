@@ -9,24 +9,22 @@
 import SwiftUI
 
 struct GroupView: View {
-    let items: ListItems
+    let items: [Item]
 
     private var sections: [SectionItems] {
-        var sectionItemsArray = [
-            SectionItems(key: .empty, value: [items])
-        ]
-        items.grouped {
-            $0.group.unwrapped
-        }.reversed().forEach { items in
-            let key = items.key.isNotEmpty ? items.key : .localized(.others)
-            sectionItemsArray.append(
-                SectionItems(key: key,
-                             value: items.grouped {
-                                $0.content.unwrapped
-                             }
-                ))
-        }
-        return sectionItemsArray
+        //        var sectionItemsArray = [
+        //            SectionItems(key: .empty, value: [items])
+        //        ]
+        //        items.reversed().forEach { items in
+        //            let key = items.key.isNotEmpty ? items.key : .localized(.others)
+        //            sectionItemsArray.append(
+        //                SectionItems(key: key,
+        //                             value: items.grouped {
+        //                                $0.content.unwrapped
+        //                             }
+        //                ))
+        //        }
+        return []
     }
 
     var body: some View {

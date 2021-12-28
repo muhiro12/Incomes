@@ -14,15 +14,15 @@ struct ListView: View {
     @State private var isPresentedToAlert = false
     @State private var indexSet = IndexSet()
 
-    private let items: ListItems
+    private let items: [Item]
 
-    init(of items: ListItems) {
+    init(of items: [Item]) {
         self.items = items
     }
 
     var body: some View {
         List {
-            ForEach(items.value) { item in
+            ForEach(items) { item in
                 ListItemView(of: item)
             }.onDelete(perform: presentToAlert)
         }.selectedListStyle()
@@ -47,7 +47,7 @@ private extension ListView {
 
     func delete() {
         indexSet.forEach {
-            Repository.delete(context, item: items.value[$0])
+            Repository.delete(context, item: items[$0])
         }
     }
 }
