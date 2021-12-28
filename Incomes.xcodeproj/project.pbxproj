@@ -301,20 +301,13 @@
 			path = Component;
 			sourceTree = "<group>";
 		};
-		ADCF36E924A1D18E0011D6F5 /* DataStore */ = {
-			isa = PBXGroup;
-			children = (
-				AD31CE0324A96220005B3C14 /* DataStore.swift */,
-				ADCF36EA24A1D18E0011D6F5 /* Repository.swift */,
-			);
-			path = DataStore;
-			sourceTree = "<group>";
-		};
 		ADCF36EB24A1D18E0011D6F5 /* Model */ = {
 			isa = PBXGroup;
 			children = (
 				ADE3A4C0277690330016C152 /* Authenticator.swift */,
+				AD31CE0324A96220005B3C14 /* DataStore.swift */,
 				ADEA399F250150E000CB61D9 /* EnvironmentParameter.swift */,
+				ADCF36EA24A1D18E0011D6F5 /* Repository.swift */,
 				ADCF376A24A343C30011D6F5 /* Scene.swift */,
 				ADEA399B2501457A00CB61D9 /* Store.swift */,
 			);
@@ -457,7 +450,6 @@
 		ADE0587B2706E9C400DF2499 /* Logic */ = {
 			isa = PBXGroup;
 			children = (
-				ADCF36E924A1D18E0011D6F5 /* DataStore */,
 				ADE0587E2706EB6600DF2499 /* Entity */,
 				ADAD3CC5277AA05A005A70E1 /* Extension */,
 				ADCF36EB24A1D18E0011D6F5 /* Model */,
