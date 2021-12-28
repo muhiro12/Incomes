@@ -20,7 +20,7 @@ extension Item {
     }
 
     var profit: Decimal {
-        income.decimal - outgo.decimal
+        income.unwrapped.decimalValue - outgo.unwrapped.decimalValue
     }
 
     var isProfitable: Bool {

@@ -43,7 +43,7 @@ struct ListItems: Identifiable {
 
             let listItem = ListItem(date: date,
                                     content: content,
-                                    group: item.group.string,
+                                    group: item.group.unwrapped,
                                     income: income,
                                     expenditure: expenditure,
                                     balance: balance,
@@ -83,8 +83,8 @@ struct ListItems: Identifiable {
                     return left.key > right.key
                 }
             case .date:
-                let leftDate = (left.value.first?.date).string
-                let rightDate = (right.value.first?.date).string
+                let leftDate = (left.value.first?.date).unwrapped
+                let rightDate = (right.value.first?.date).unwrapped
                 return leftDate > rightDate
             }
         }

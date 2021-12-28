@@ -25,15 +25,15 @@ struct ListItemWideView: View {
             ListItemTitleView(item: item)
             Divider()
             HStack {
-                Text(item.income.asCurrency.string)
+                Text(item.income.asCurrency.unwrapped)
                     .frame(width: .componentM)
                 Divider()
-                Text(item.expenditure.asMinusCurrency.string)
+                Text(item.expenditure.asMinusCurrency.unwrapped)
                     .frame(width: .componentM)
             }.font(.footnote)
             .foregroundColor(.secondary)
             Divider()
-            Text(item.balance.asCurrency.string)
+            Text(item.balance.asCurrency.unwrapped)
                 .frame(width: .componentL)
                 .foregroundColor(item.balance >= 0 ? .primary : .red)
         }

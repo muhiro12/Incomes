@@ -41,7 +41,7 @@ struct Repository {
         }
         let repeatId = repeatCount > .one ? UUID() : nil
         try DataStore.saveAll(context,
-                              items: ListItems(key: repeatId.string, value: recurringItems),
+                              items: ListItems(key: repeatId.unwrappedString, value: recurringItems),
                               repeatId: repeatId)
     }
 

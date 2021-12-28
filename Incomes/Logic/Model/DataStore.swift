@@ -17,7 +17,7 @@ struct DataStore {
         request.predicate = NSPredicate(format: format, argumentArray: keys)
         request.sortDescriptors = [NSSortDescriptor(keyPath: \Item.date, ascending: true)]
         let result = try context.fetch(request) as? [Item] ?? []
-        return ListItems(from: result, for: keys.string)
+        return ListItems(from: result, for: keys.unwrappedString)
     }
 
     static func save(_ context: NSManagedObjectContext, item: ListItem) throws {

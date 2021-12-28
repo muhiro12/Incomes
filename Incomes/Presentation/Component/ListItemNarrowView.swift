@@ -25,13 +25,13 @@ struct ListItemNarrowView: View {
             Spacer()
             VStack(alignment: .trailing, spacing: .zero) {
                 ListItemTitleView(item: item)
-                Text(item.profit.asCurrency.string)
+                Text(item.profit.asCurrency.unwrapped)
                     .font(.footnote)
                     .foregroundColor(.secondary)
             }
             Spacer()
             Divider()
-            Text(item.balance.asCurrency.string)
+            Text(item.balance.asCurrency.unwrapped)
                 .frame(width: .componentL)
                 .foregroundColor(item.balance >= 0 ? .primary : .red)
         }

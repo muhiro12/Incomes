@@ -130,7 +130,7 @@ struct PreviewData {
 
             let listItem = ListItem(date: date,
                                     content: content,
-                                    group: item.group.string,
+                                    group: item.group.unwrapped,
                                     income: income,
                                     expenditure: expenditure,
                                     balance: balance,
