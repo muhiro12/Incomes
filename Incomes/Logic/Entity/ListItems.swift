@@ -12,18 +12,17 @@ struct ListItems: Identifiable {
     let id = UUID()
 
     let key: String
-    let value: [ListItem]
+    let value: [Item]
 
-    init(key: String, value: [ListItem]) {
+    init(key: String, value: [Item]) {
         self.key = key
         self.value = value
     }
 
     init(from items: [Item], for key: String = .localized(.all)) {
-        var listItems: [ListItem] = []
+        var listItems: [Item] = []
 
         items.enumerated().forEach {
-            let index = $0.offset
             let item = $0.element
 
             guard let date = item.date,
@@ -35,26 +34,20 @@ struct ListItems: Identifiable {
                 return
             }
 
-            var balance = Decimal.zero
-            if index > 0 {
-                balance += listItems[index - 1].balance
-            }
-            balance += income - expenditure
+            let listItem = Item(date: date,
+                                content: content,
+                                income: income,
+                                outgo: expenditure,
+                                group: item.group.unwrapped,
+                                repeatID: UUID())
 
-            let listItem = ListItem(date: date,
-                                    content: content,
-                                    group: item.group.unwrapped,
-                                    income: income,
-                                    expenditure: expenditure,
-                                    balance: balance,
-                                    original: item)
             listItems.append(listItem)
         }
 
         self.init(key: key, value: listItems.reversed())
     }
 
-    func grouped(by keyForValue: (ListItem) -> String, sortOption: SortOption = .string) -> [Self] {
+    func grouped(by keyForValue: (Item) -> String, sortOption: SortOption = .string) -> [Self] {
         var listItemsArray: [ListItems] = []
 
         let groupedDictionary = Dictionary(grouping: value, by: keyForValue)
@@ -71,8 +64,8 @@ struct ListItems: Identifiable {
         case string
         case date
 
-        func value(left: (key: String, value: [ListItem]),
-                   right: (key: String, value: [ListItem])) -> Bool {
+        func value(left: (key: String, value: [Item]),
+                   right: (key: String, value: [Item])) -> Bool {
             switch self {
             case .string:
                 if left.key.isEmpty {

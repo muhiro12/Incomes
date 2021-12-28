@@ -9,11 +9,11 @@
 import SwiftUI
 
 struct ListItemTitleView: View {
-    let item: ListItem
+    let item: Item
 
     var body: some View {
         HStack {
-            Text(item.content)
+            Text(item.content.unwrapped)
                 .font(.headline)
             Spacer()
             if item.isProfitable {

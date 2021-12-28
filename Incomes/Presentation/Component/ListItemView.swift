@@ -13,9 +13,9 @@ struct ListItemView: View {
 
     @State private var isPresentedToEdit = false
 
-    private let item: ListItem
+    private let item: Item
 
-    init(of item: ListItem) {
+    init(of item: Item) {
         self.item = item
     }
 

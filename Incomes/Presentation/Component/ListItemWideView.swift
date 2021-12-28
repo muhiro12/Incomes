@@ -9,15 +9,15 @@
 import SwiftUI
 
 struct ListItemWideView: View {
-    private let item: ListItem
+    private let item: Item
 
-    init(of item: ListItem) {
+    init(of item: Item) {
         self.item = item
     }
 
     var body: some View {
         HStack {
-            Text(item.date.stringValue(.MMMd))
+            Text(item.date.unwrapped.stringValue(.MMMd))
                 .truncationMode(.head)
                 .font(.subheadline)
                 .frame(width: .componentS)
@@ -25,17 +25,17 @@ struct ListItemWideView: View {
             ListItemTitleView(item: item)
             Divider()
             HStack {
-                Text(item.income.asCurrency.unwrapped)
+                Text(item.income.unwrappedDecimal.asCurrency.unwrapped)
                     .frame(width: .componentM)
                 Divider()
-                Text(item.expenditure.asMinusCurrency.unwrapped)
+                Text(item.outgo.unwrappedDecimal.asMinusCurrency.unwrapped)
                     .frame(width: .componentM)
             }.font(.footnote)
             .foregroundColor(.secondary)
             Divider()
-            Text(item.balance.asCurrency.unwrapped)
+            Text(item.income.unwrappedDecimal.asCurrency.unwrapped)
                 .frame(width: .componentL)
-                .foregroundColor(item.balance >= 0 ? .primary : .red)
+                .foregroundColor(item.income.unwrappedDecimal >= .zero ? .primary : .red)
         }
     }
 }

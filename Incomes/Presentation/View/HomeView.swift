@@ -16,12 +16,12 @@ struct HomeView: View {
     private var sections: [SectionItems] {
         var sectionItemsArray: [SectionItems] = []
         items.grouped {
-            $0.date.stringValue(.yyyy)
+            $0.date.unwrapped.stringValue(.yyyy)
         }.forEach { items in
             sectionItemsArray.append(
                 SectionItems(key: items.key,
                              value: items.grouped(by: {
-                                $0.date.stringValue(.yyyyMMM)
+                                $0.date.unwrapped.stringValue(.yyyyMMM)
                              }, sortOption: .date)
                 ))
         }

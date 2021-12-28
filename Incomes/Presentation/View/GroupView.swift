@@ -16,13 +16,13 @@ struct GroupView: View {
             SectionItems(key: .empty, value: [items])
         ]
         items.grouped {
-            $0.group
+            $0.group.unwrapped
         }.reversed().forEach { items in
             let key = items.key.isNotEmpty ? items.key : .localized(.others)
             sectionItemsArray.append(
                 SectionItems(key: key,
                              value: items.grouped {
-                                $0.content
+                                $0.content.unwrapped
                              }
                 ))
         }
@@ -33,7 +33,7 @@ struct GroupView: View {
         NavigationView {
             List {
                 ForEach(sections) { section in
-                    SectionView(section: section)
+                    SectionView(section: SectionItems(key: section.key, value: section.value))
                 }
             }.selectedListStyle()
             .navigationBarTitle(.localized(.groupTitle))

@@ -10,22 +10,13 @@ import Foundation
 
 #if DEBUG
 struct PreviewData {
-    struct Item {
-        let date: Date?
-        let content: String?
-        let income: NSDecimalNumber?
-        let expenditure: NSDecimalNumber?
-        let balance: NSDecimalNumber?
-        let group: String?
-        let repeatId: UUID? = nil
-    }
 
-    static let listItem = ListItem(date: Date(),
-                                   content: .localized(.content),
-                                   group: .empty,
-                                   income: 999999,
-                                   expenditure: 99999,
-                                   balance: 9999999)
+    static let listItem = Item(date: Date(),
+                               content: .localized(.content),
+                               income: 999999,
+                               outgo: 99999,
+                               group: .empty,
+                               repeatID: UUID())
 
     static let listItems = ListItems(key: .localized(.all),
                                      value: [listItem, listItem])
@@ -48,57 +39,57 @@ struct PreviewData {
             items.append(Item(date: monthLater(from: date27, value: index),
                               content: "Payday",
                               income: 3500,
-                              expenditure: 0,
-                              balance: 0,
-                              group: "Salary"))
+                              outgo: 0,
+                              group: "Salary",
+                              repeatID: UUID()))
             items.append(Item(date: monthLater(from: date27, value: index),
                               content: "Advertising revenue",
                               income: 485,
-                              expenditure: 0,
-                              balance: 0,
-                              group: "Salary"))
+                              outgo: 0,
+                              group: "Salary",
+                              repeatID: UUID()))
             items.append(Item(date: monthLater(from: date10, value: index),
                               content: "Apple card",
                               income: 0,
-                              expenditure: 1000,
-                              balance: 0,
-                              group: "Credit"))
+                              outgo: 1000,
+                              group: "Credit",
+                              repeatID: UUID()))
             items.append(Item(date: monthLater(from: date5, value: index),
                               content: "Orange card",
                               income: 0,
-                              expenditure: 800,
-                              balance: 0,
-                              group: "Credit"))
+                              outgo: 800,
+                              group: "Credit",
+                              repeatID: UUID()))
             items.append(Item(date: monthLater(from: date27, value: index),
                               content: "Lemon card",
                               income: 0,
-                              expenditure: 500,
-                              balance: 0,
-                              group: "Credit"))
+                              outgo: 500,
+                              group: "Credit",
+                              repeatID: UUID()))
             items.append(Item(date: monthLater(from: date28, value: index),
                               content: "House",
                               income: 0,
-                              expenditure: 30,
-                              balance: 0,
-                              group: "Loan"))
+                              outgo: 30,
+                              group: "Loan",
+                              repeatID: UUID()))
             items.append(Item(date: monthLater(from: date25, value: index),
                               content: "Car",
                               income: 0,
-                              expenditure: 25,
-                              balance: 0,
-                              group: "Loan"))
+                              outgo: 25,
+                              group: "Loan",
+                              repeatID: UUID()))
             items.append(Item(date: monthLater(from: date5, value: index),
                               content: "Insurance",
                               income: 0,
-                              expenditure: 28,
-                              balance: 0,
-                              group: "Tax"))
+                              outgo: 28,
+                              group: "Tax",
+                              repeatID: UUID()))
             items.append(Item(date: monthLater(from: date28, value: index),
                               content: "Pension",
                               income: 0,
-                              expenditure: 36,
-                              balance: 0,
-                              group: "Tax"))
+                              outgo: 36,
+                              group: "Tax",
+                              repeatID: UUID()))
         }
 
         items.sort(by: { $0.date! < $1.date! })
@@ -107,34 +98,27 @@ struct PreviewData {
     }
 
     private static func create(from items: [Item]) -> ListItems {
-        var listItems: [ListItem] = []
+        var listItems: [Item] = []
 
         items.enumerated().forEach {
-            let index = $0.offset
             let item = $0.element
 
             guard let date = item.date,
                   let content = item.content,
                   let income = item.income?.decimalValue,
-                  let expenditure = item.expenditure?.decimalValue
+                  let expenditure = item.outgo?.decimalValue
             else {
                 assertionFailure()
                 return
             }
 
-            var balance = Decimal.zero
-            if index > 0 {
-                balance += listItems[index - 1].balance
-            }
-            balance += income - expenditure
+            let listItem = Item(date: date,
+                                content: content,
+                                income: income,
+                                outgo: expenditure,
+                                group: item.group.unwrapped,
+                                repeatID: UUID())
 
-            let listItem = ListItem(date: date,
-                                    content: content,
-                                    group: item.group.unwrapped,
-                                    income: income,
-                                    expenditure: expenditure,
-                                    balance: balance,
-                                    original: nil)
             listItems.append(listItem)
         }
 

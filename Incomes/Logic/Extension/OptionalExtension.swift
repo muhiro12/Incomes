@@ -10,7 +10,10 @@ import Foundation
 
 extension Optional {
     var unwrappedString: String {
-        (self as? String).unwrapped
+        guard let wrapped = self else {
+            return ""
+        }
+        return String(describing: wrapped)
     }
 }
 
@@ -40,5 +43,9 @@ extension Optional where Wrapped == Decimal {
 extension Optional where Wrapped == NSDecimalNumber {
     var unwrapped: Wrapped {
         self ?? .zero
+    }
+
+    var unwrappedDecimal: Decimal {
+        unwrapped.decimalValue
     }
 }

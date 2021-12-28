@@ -21,7 +21,7 @@ struct EditView: View {
     @State private var group: String = .empty
     @State private var repeatSelection: Int = .zero
 
-    private var item: ListItem?
+    private var item: Item?
 
     private var isEditMode: Bool {
         return item != nil
@@ -35,13 +35,13 @@ struct EditView: View {
 
     init() {}
 
-    init(of item: ListItem) {
+    init(of item: Item) {
         self.item = item
-        _date = State(initialValue: item.date)
-        _content = State(initialValue: item.content)
-        _income = State(initialValue: item.income.isZero ? .empty : item.income.description)
-        _expenditure = State(initialValue: item.expenditure.isZero ? .empty : item.expenditure.description)
-        _group = State(initialValue: item.group)
+        _date = State(initialValue: item.date.unwrapped)
+        _content = State(initialValue: item.content.unwrapped)
+        _income = State(initialValue: item.income.unwrappedString)
+        _expenditure = State(initialValue: item.outgo.unwrappedString)
+        _group = State(initialValue: item.group.unwrappedString)
     }
 
     var body: some View {
@@ -128,7 +128,7 @@ struct EditView: View {
 
 private extension EditView {
     func save() {
-        if item?.original?.repeatId == nil {
+        if item?.repeatId == nil {
             Task {
                 saveForThisItem()
             }
@@ -138,12 +138,12 @@ private extension EditView {
     }
 
     func saveForThisItem() {
-        let item = ListItem(date: date,
-                            content: content,
-                            group: group,
-                            income: income.decimalValue,
-                            expenditure: expenditure.decimalValue,
-                            original: self.item?.original)
+        let item = Item(date: date,
+                        content: content,
+                        income: income.decimalValue,
+                        outgo: expenditure.decimalValue,
+                        group: group,
+                        repeatID: UUID())
         Task {
             do {
                 try Repository.save(context, item: item)
@@ -159,12 +159,12 @@ private extension EditView {
             assertionFailure()
             return
         }
-        let newItem = ListItem(date: date,
-                               content: content,
-                               group: group,
-                               income: income.decimalValue,
-                               expenditure: expenditure.decimalValue,
-                               original: self.item?.original)
+        let newItem = Item(date: date,
+                           content: content,
+                           income: income.decimalValue,
+                           outgo: expenditure.decimalValue,
+                           group: group,
+                           repeatID: UUID())
         Task {
             do {
                 try await Repository.saveForFutureItems(context,
@@ -182,12 +182,12 @@ private extension EditView {
             assertionFailure()
             return
         }
-        let newItem = ListItem(date: date,
-                               content: content,
-                               group: group,
-                               income: income.decimalValue,
-                               expenditure: expenditure.decimalValue,
-                               original: self.item?.original)
+        let newItem = Item(date: date,
+                           content: content,
+                           income: income.decimalValue,
+                           outgo: expenditure.decimalValue,
+                           group: group,
+                           repeatID: UUID())
         Task {
             do {
                 try await Repository.saveForAllItems(context,
@@ -201,11 +201,12 @@ private extension EditView {
     }
 
     func create() {
-        let item = ListItem(date: date,
-                            content: content,
-                            group: group,
-                            income: income.decimalValue,
-                            expenditure: expenditure.decimalValue)
+        let item = Item(date: date,
+                        content: content,
+                        income: income.decimalValue,
+                        outgo: expenditure.decimalValue,
+                        group: group,
+                        repeatID: UUID())
         do {
             try Repository.create(context,
                                   item: item,

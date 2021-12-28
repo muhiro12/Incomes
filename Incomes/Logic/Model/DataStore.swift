@@ -20,41 +20,17 @@ struct DataStore {
         return ListItems(from: result, for: keys.unwrappedString)
     }
 
-    static func save(_ context: NSManagedObjectContext, item: ListItem) throws {
-        convert(context, item: item)
+    static func save(_ context: NSManagedObjectContext, item: Item) throws {
         try context.save()
     }
 
     static func saveAll(_ context: NSManagedObjectContext,
                         items: ListItems,
                         repeatId: UUID? = nil) throws {
-        items.value.forEach { item in
-            convert(context, item: item, repeatId: repeatId)
-        }
         try context.save()
     }
 
-    static func delete(_ context: NSManagedObjectContext, item: ListItem) {
-        guard let original = item.original else {
-            assertionFailure()
-            return
-        }
-        context.delete(original)
-    }
-}
-
-// MARK: - private
-
-private extension DataStore {
-    static func convert(_ context: NSManagedObjectContext,
-                        item: ListItem,
-                        repeatId: UUID? = nil) {
-        let original = item.original ?? Item(context: context)
-        original.date = item.date
-        original.content = item.content
-        original.group = item.group
-        original.income = item.income.asNSDecimalNumber
-        original.outgo = item.expenditure.asNSDecimalNumber
-        original.repeatId = repeatId
+    static func delete(_ context: NSManagedObjectContext, item: Item) {
+        context.delete(item)
     }
 }
