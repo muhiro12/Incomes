@@ -9,7 +9,9 @@
 import Foundation
 
 enum LocalizableStrings {
+
     // MARK: - Common
+
     case all
     case done
     case cancel
@@ -20,13 +22,16 @@ enum LocalizableStrings {
     case faceID
 
     // MARK: - Home
+
     case homeTitle
 
     // MARK: - Group
+
     case groupTitle
     case others
 
     // MARK: - Edit
+
     case editTitle
     case createTitle
     case information
@@ -44,6 +49,7 @@ enum LocalizableStrings {
     case create
 
     // MARK: - Settings
+
     case settingsTitle
     case modernStyle
     case lockApp

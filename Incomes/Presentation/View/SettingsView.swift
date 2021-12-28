@@ -11,13 +11,13 @@ import SwiftUI
 struct SettingsView: View {
     @Environment(\.presentationMode) var presentationMode
 
-    @AppStorage(wrappedValue: true, GlobalSettings.modernStyleKey.rawValue)
+    @AppStorage(wrappedValue: true, UserDefaults.Key.isModernStyleOn.rawValue)
     private var isModernStyleOn
-    @AppStorage(wrappedValue: false, GlobalSettings.lockAppKey.rawValue)
+    @AppStorage(wrappedValue: false, UserDefaults.Key.isLockAppOn.rawValue)
     private var isLockAppOn
-    @AppStorage(wrappedValue: false, GlobalSettings.iCloudKey.rawValue)
+    @AppStorage(wrappedValue: false, UserDefaults.Key.isICloudOn.rawValue)
     private var isICloudOn
-    @AppStorage(wrappedValue: false, GlobalSettings.subscribeKey.rawValue)
+    @AppStorage(wrappedValue: false, UserDefaults.Key.isSubscribeOn.rawValue)
     private var isSubscribeOn
 
     private let store = Store.shared

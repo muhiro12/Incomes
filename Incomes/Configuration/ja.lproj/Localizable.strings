@@ -7,6 +7,7 @@
 */
 
 // MARK: - Common
+
 "all" = "全て";
 "done" = "完了";
 "cancel" = "キャンセル";
@@ -18,13 +19,16 @@
 "faceID" = "アプリのロックを解除します";
 
 // MARK: - Home
+
 "homeTitle" = "ホーム";
 
 // MARK: - Group
+
 "groupTitle" = "グループ";
 "others" = "その他";
 
 // MARK: - Edit
+
 "editTitle" = "編集";
 "createTitle" = "新規作成";
 "information" = "情報";
@@ -42,6 +46,7 @@
 "create" = "新規作成";
 
 // MARK: - Settings
+
 "settingsTitle" = "設定";
 "modernStyle" = "モダンテーマ";
 "lockApp" = "Lock the app";

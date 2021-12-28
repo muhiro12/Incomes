@@ -15,7 +15,7 @@ struct ContentView: View {
     ) var items: FetchedResults<Item>
 
     @State private var scene = Scene.home
-    @State private var isLocked = LockApp().isOn
+    @State private var isLocked = UserDefaults.isLockAppOn
 
     private var listItems: ListItems {
         ListItems(from: items.map { $0 })
@@ -40,7 +40,7 @@ struct ContentView: View {
                 }
             }
         }.onAppear {
-            guard LockApp().isOn else {
+            guard UserDefaults.isLockAppOn else {
                 return
             }
             unlock()

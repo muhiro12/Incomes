@@ -11,7 +11,7 @@ import SwiftUI
 extension View {
     func selectedListStyle() -> some View {
         return Group {
-            if ModernStyle().isOn {
+            if UserDefaults.isModernStyleOn {
                 groupedListStye()
             } else {
                 listStyle(PlainListStyle())

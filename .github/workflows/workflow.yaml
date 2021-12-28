@@ -18,9 +18,9 @@ jobs:
     - name: Set ignored files
       run: |
         mkdir Incomes/Package/Firebase/
-        echo '${{ secrets.GOOGLESERVICE_BASE64 }}' | base64 -d -o Incomes/Package/Firebase/GoogleService-Info.plist
+        echo '${{ secrets.GOOGLESERVICE_BASE64 }}' | base64 -d -o Incomes/Configuration/Package/Firebase/GoogleService-Info.plist
         echo '${{ secrets.SECRET_BASE64 }}' | base64 -d -o Incomes/Configuration/Secret.swift
-        echo '${{ secrets.STOREKIT_BASE64 }}' | base64 -d -o Incomes/Package/StoreKit/StoreKitTestCertificate.cer
+        echo '${{ secrets.STOREKIT_BASE64 }}' | base64 -d -o Incomes/Configuration/Package/StoreKit/StoreKitTestCertificate.cer
 
     - name: Update build number
       uses: yanamura/ios-bump-version@v1
