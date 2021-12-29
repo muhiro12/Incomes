@@ -10,20 +10,19 @@ import Foundation
 import CoreData
 
 struct Repository {
+    let context: NSManagedObjectContext
 
     // MARK: - Fetch
 
-    static func listItems(_ context: NSManagedObjectContext,
-                          format: String,
-                          keys: [Any]?) async throws -> [Item] {
+    func listItems(format: String,
+                   keys: [Any]?) async throws -> [Item] {
         try await DataStore.listItems(context, format: format, keys: keys)
     }
 
     // MARK: - Create
 
-    static func create(_ context: NSManagedObjectContext,
-                       item: Item,
-                       repeatCount: Int = .one) throws {
+    func create(item: Item,
+                repeatCount: Int = .one) throws {
         var recurringItems: [Item] = []
         for index in 0..<repeatCount {
             guard let date = Calendar.current.date(byAdding: .month,
@@ -49,16 +48,15 @@ struct Repository {
 
     // MARK: - Save
 
-    static func save(_ context: NSManagedObjectContext, item: Item) throws {
+    func save(item: Item) throws {
         try DataStore.save(context, item: item)
     }
 
-    static func saveForRepeatingItems(_ context: NSManagedObjectContext,
-                                      format: String,
-                                      keys: [Any]?,
-                                      oldItem: Item,
-                                      newItem: Item) async throws {
-        let items = try await listItems(context, format: format, keys: keys)
+    func saveForRepeatingItems(format: String,
+                               keys: [Any]?,
+                               oldItem: Item,
+                               newItem: Item) async throws {
+        let items = try await listItems(format: format, keys: keys)
         let newItemList: [Item] = items.compactMap { item in
             let components = Calendar.current.dateComponents([.year, .month, .day],
                                                              from: oldItem.date,
@@ -82,21 +80,17 @@ struct Repository {
         try DataStore.saveAll(context, items: newItems, repeatId: repeatId)
     }
 
-    static func saveForFutureItems(_ context: NSManagedObjectContext,
-                                   oldItem: Item,
-                                   newItem: Item) async throws {
-        try await saveForRepeatingItems(context,
-                                        format: "(repeatId = %@) AND (date >= %@)",
+    func saveForFutureItems(oldItem: Item,
+                            newItem: Item) async throws {
+        try await saveForRepeatingItems(format: "(repeatId = %@) AND (date >= %@)",
                                         keys: [oldItem.repeatId, oldItem.date],
                                         oldItem: oldItem,
                                         newItem: newItem)
     }
 
-    static func saveForAllItems(_ context: NSManagedObjectContext,
-                                oldItem: Item,
-                                newItem: Item) async throws {
-        try await saveForRepeatingItems(context,
-                                        format: "repeatId = %@",
+    func saveForAllItems(oldItem: Item,
+                         newItem: Item) async throws {
+        try await saveForRepeatingItems(format: "repeatId = %@",
                                         keys: [oldItem.repeatId],
                                         oldItem: oldItem,
                                         newItem: newItem)
@@ -104,7 +98,7 @@ struct Repository {
 
     // MARK: - Delete
 
-    static func delete(_ context: NSManagedObjectContext, item: Item) {
+    func delete(item: Item) {
         DataStore.delete(context, item: item)
     }
 }

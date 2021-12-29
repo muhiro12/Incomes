@@ -9,7 +9,8 @@
 import SwiftUI
 
 struct EditView: View {
-    @Environment(\.managedObjectContext) var context
+    @Environment(\.managedObjectContext)
+    var viewContext
     @Environment(\.presentationMode) var presentationMode
 
     @State private var isPresentedToActionSheet = false
@@ -138,7 +139,7 @@ private extension EditView {
     }
 
     func saveForThisItem() {
-        let item = Item(context: context,
+        let item = Item(context: viewContext,
                         date: date,
                         content: content,
                         income: income.decimalValue,
@@ -147,7 +148,7 @@ private extension EditView {
                         repeatID: UUID())
         Task {
             do {
-                try Repository.save(context, item: item)
+                try Repository(context: viewContext).save(item: item)
             } catch {
                 assertionFailure(error.localizedDescription)
             }
@@ -160,7 +161,7 @@ private extension EditView {
             assertionFailure()
             return
         }
-        let newItem = Item(context: context,
+        let newItem = Item(context: viewContext,
                            date: date,
                            content: content,
                            income: income.decimalValue,
@@ -169,9 +170,8 @@ private extension EditView {
                            repeatID: UUID())
         Task {
             do {
-                try await Repository.saveForFutureItems(context,
-                                                        oldItem: oldItem,
-                                                        newItem: newItem)
+                try await Repository(context: viewContext).saveForFutureItems(oldItem: oldItem,
+                                                                              newItem: newItem)
             } catch {
                 assertionFailure(error.localizedDescription)
             }
@@ -184,7 +184,7 @@ private extension EditView {
             assertionFailure()
             return
         }
-        let newItem = Item(context: context,
+        let newItem = Item(context: viewContext,
                            date: date,
                            content: content,
                            income: income.decimalValue,
@@ -193,9 +193,8 @@ private extension EditView {
                            repeatID: UUID())
         Task {
             do {
-                try await Repository.saveForAllItems(context,
-                                                     oldItem: oldItem,
-                                                     newItem: newItem)
+                try await Repository(context: viewContext).saveForAllItems(oldItem: oldItem,
+                                                                           newItem: newItem)
             } catch {
                 assertionFailure(error.localizedDescription)
             }
@@ -204,7 +203,7 @@ private extension EditView {
     }
 
     func create() {
-        let item = Item(context: context,
+        let item = Item(context: viewContext,
                         date: date,
                         content: content,
                         income: income.decimalValue,
@@ -212,9 +211,8 @@ private extension EditView {
                         group: group,
                         repeatID: UUID())
         do {
-            try Repository.create(context,
-                                  item: item,
-                                  repeatCount: repeatSelection + .one)
+            try Repository(context: viewContext).create(item: item,
+                                                        repeatCount: repeatSelection + .one)
         } catch {
             assertionFailure(error.localizedDescription)
         }
@@ -226,7 +224,7 @@ private extension EditView {
             assertionFailure()
             return
         }
-        Repository.delete(context, item: item)
+        Repository(context: viewContext).delete(item: item)
     }
 
     func cancel() {
