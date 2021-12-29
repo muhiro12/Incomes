@@ -25,4 +25,12 @@ extension NSDecimalNumber {
         }
         return "-" + asCurrency
     }
+
+    var isPlus: Bool {
+        compare(.zero) == .orderedDescending
+    }
+
+    var isMinus: Bool {
+        compare(.zero) == .orderedAscending
+    }
 }

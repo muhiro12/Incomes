@@ -33,7 +33,7 @@ struct NarrowListItem: View {
             Divider()
             Text(item.income.asCurrency)
                 .frame(width: .componentL)
-                .foregroundColor(item.income.decimalValue >= .zero ? .primary : .red)
+                .foregroundColor(item.income.isMinus ? .red : .primary)
         }
     }
 }

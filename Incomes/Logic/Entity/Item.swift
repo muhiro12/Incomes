@@ -51,6 +51,6 @@ extension Item {
     }
 
     var isProfitable: Bool {
-        profit.compare(.zero) == .orderedDescending
+        profit.isPlus
     }
 }
