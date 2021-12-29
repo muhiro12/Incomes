@@ -24,9 +24,3 @@ extension String {
         return Decimal(string: self) ?? .zero
     }
 }
-
-extension StringProtocol where Self == String {
-    static func localized(_ localizedString: LocalizedString) -> String {
-        NSLocalizedString(String(describing: localizedString), comment: .empty)
-    }
-}

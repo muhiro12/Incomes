@@ -9,51 +9,23 @@
 import SwiftUI
 
 struct ContentView: View {
-    @Environment(\.managedObjectContext) private var viewContext
-
-    @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \Item.date, ascending: true)],
-        animation: .default)
-    var items: FetchedResults<Item>
-
-    @State private var scene = Scene.home
     @State private var isLocked = UserDefaults.isLockAppOn
-
-    private var listItems: ListItems {
-        ListItems(from: items.map { $0 })
-    }
+    @State private var isHome = true
 
     var body: some View {
-        Group {
-            if isLocked {
-                Button(.localized(.unlock)) {
-                    unlock()
-                }
-            } else {
-                VStack(spacing: .zero) {
-                    Group {
-                        if scene == .home {
-                            HomeView(items: listItems)
-                        } else {
-                            GroupView(items: listItems)
-                        }
+        if isLocked {
+            LockedView()
+        } else {
+            VStack(spacing: .zero) {
+                NavigationView {
+                    if isHome {
+                        HomeView()
+                    } else {
+                        GroupView()
                     }
-                    FooterView(scene: $scene)
                 }
+                IncomesFooter(isHome: $isHome)
             }
-        }.onAppear {
-            guard UserDefaults.isLockAppOn else {
-                return
-            }
-            unlock()
-        }
-    }
-}
-
-private extension ContentView {
-    func unlock() {
-        Task {
-            isLocked = await !Authenticator().authenticate()
         }
     }
 }
@@ -61,7 +33,7 @@ private extension ContentView {
 #if DEBUG
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+        ContentView()
     }
 }
 #endif

@@ -9,57 +9,44 @@
 import SwiftUI
 
 struct HomeView: View {
+    @Environment(\.managedObjectContext)
+    private var viewContext
+
+    @FetchRequest(
+        sortDescriptors: [NSSortDescriptor(keyPath: \Item.date, ascending: false)],
+        animation: .default)
+    private var items: FetchedResults<Item>
+
     @State private var isPresentedToSettings = false
 
-    let items: ListItems
-
-    private var sections: [SectionItems] {
-        var sectionItemsArray: [SectionItems] = []
-        items.grouped {
-            $0.date.stringValue(.yyyy)
-        }.forEach { items in
-            sectionItemsArray.append(
-                SectionItems(key: items.key,
-                             value: items.grouped(by: {
-                                $0.date.stringValue(.yyyyMMM)
-                             }, sortOption: .date)
-                ))
-        }
-        return sectionItemsArray
-    }
-
     var body: some View {
-        NavigationView {
-            List {
-                ForEach(sections) { section in
-                    SectionView(section: section)
-                }
-            }.selectedListStyle()
-            .navigationBarTitle(.localized(.homeTitle))
-            .navigationBarItems(trailing:
-                                    Button(action: presentToSetting) {
-                                        Image.settings
-                                            .iconFrameM()
-                                    }
-            ).sheet(isPresented: $isPresentedToSettings) {
-                SettingsView()
+        List {
+            ForEach(Dictionary(grouping: items) {
+                $0.date.stringValue(.yyyy)
+            }.sorted {
+                $0.key > $1.key
+            }.identified) {
+                YearSection(items: $0.value.value)
             }
+        }.selectedListStyle()
+        .navigationBarTitle(.localized(.homeTitle))
+        .navigationBarItems(
+            trailing: Button(action: {
+                isPresentedToSettings = true
+            }, label: {
+                Image.settings
+                    .iconFrameM()
+            }))
+        .sheet(isPresented: $isPresentedToSettings) {
+            SettingsView()
         }
-    }
-}
-
-// MARK: - private
-
-private extension HomeView {
-    func presentToSetting() {
-        isPresentedToSettings = true
     }
 }
 
 #if DEBUG
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
-        HomeView(items: PreviewData.listItems)
+        HomeView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
     }
 }
 #endif

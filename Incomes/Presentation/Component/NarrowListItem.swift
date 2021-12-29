@@ -1,5 +1,5 @@
 //
-//  ListItemNarrowView.swift
+//  NarrowListItem.swift
 //  Incomes
 //
 //  Created by Hiromu Nakano on 2020/04/10.
@@ -8,10 +8,10 @@
 
 import SwiftUI
 
-struct ListItemNarrowView: View {
-    private let item: ListItem
+struct NarrowListItem: View {
+    private let item: Item
 
-    init(of item: ListItem) {
+    init(of item: Item) {
         self.item = item
     }
 
@@ -24,24 +24,24 @@ struct ListItemNarrowView: View {
             Divider()
             Spacer()
             VStack(alignment: .trailing, spacing: .zero) {
-                ListItemTitleView(item: item)
-                Text(item.profit.asCurrency.string)
+                TitleListItem(item: item)
+                Text(item.profit.asCurrency ?? .empty)
                     .font(.footnote)
                     .foregroundColor(.secondary)
             }
             Spacer()
             Divider()
-            Text(item.balance.asCurrency.string)
+            Text(item.income.decimalValue.asCurrency ?? .empty)
                 .frame(width: .componentL)
-                .foregroundColor(item.balance >= 0 ? .primary : .red)
+                .foregroundColor(item.income.decimalValue >= .zero ? .primary : .red)
         }
     }
 }
 
 #if DEBUG
-struct ListItemNarrowView_Previews: PreviewProvider {
+struct NarrowListItem_Previews: PreviewProvider {
     static var previews: some View {
-        ListItemNarrowView(of: PreviewData.listItem)
+        NarrowListItem(of: PreviewData.listItem)
     }
 }
 #endif

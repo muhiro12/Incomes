@@ -12,49 +12,25 @@ import CoreData
 struct DataStore {
     static func listItems(_ context: NSManagedObjectContext,
                           format: String,
-                          keys: [Any]?) async throws -> ListItems {
+                          keys: [Any]?) async throws -> [Item] {
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: .item)
         request.predicate = NSPredicate(format: format, argumentArray: keys)
         request.sortDescriptors = [NSSortDescriptor(keyPath: \Item.date, ascending: true)]
         let result = try context.fetch(request) as? [Item] ?? []
-        return ListItems(from: result, for: keys.string)
+        return result
     }
 
-    static func save(_ context: NSManagedObjectContext, item: ListItem) throws {
-        convert(context, item: item)
+    static func save(_ context: NSManagedObjectContext, item: Item) throws {
         try context.save()
     }
 
     static func saveAll(_ context: NSManagedObjectContext,
-                        items: ListItems,
+                        items: [Item],
                         repeatId: UUID? = nil) throws {
-        items.value.forEach { item in
-            convert(context, item: item, repeatId: repeatId)
-        }
         try context.save()
     }
 
-    static func delete(_ context: NSManagedObjectContext, item: ListItem) {
-        guard let original = item.original else {
-            assertionFailure()
-            return
-        }
-        context.delete(original)
-    }
-}
-
-// MARK: - private
-
-private extension DataStore {
-    static func convert(_ context: NSManagedObjectContext,
-                        item: ListItem,
-                        repeatId: UUID? = nil) {
-        let original = item.original ?? Item(context: context)
-        original.date = item.date
-        original.content = item.content
-        original.group = item.group
-        original.income = item.income.asNSDecimalNumber
-        original.expenditure = item.expenditure.asNSDecimalNumber
-        original.repeatId = repeatId
+    static func delete(_ context: NSManagedObjectContext, item: Item) {
+        context.delete(item)
     }
 }

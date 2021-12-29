@@ -15,16 +15,16 @@ struct Repository {
 
     static func listItems(_ context: NSManagedObjectContext,
                           format: String,
-                          keys: [Any]?) async throws -> ListItems {
+                          keys: [Any]?) async throws -> [Item] {
         try await DataStore.listItems(context, format: format, keys: keys)
     }
 
     // MARK: - Create
 
     static func create(_ context: NSManagedObjectContext,
-                       item: ListItem,
+                       item: Item,
                        repeatCount: Int = .one) throws {
-        var recurringItems: [ListItem] = []
+        var recurringItems: [Item] = []
         for index in 0..<repeatCount {
             guard let date = Calendar.current.date(byAdding: .month,
                                                    value: index,
@@ -32,32 +32,34 @@ struct Repository {
                 assertionFailure()
                 return
             }
-            let recurringItem = ListItem(date: date,
-                                         content: item.content,
-                                         group: item.group,
-                                         income: item.income,
-                                         expenditure: item.expenditure)
+            let recurringItem = Item(context: context,
+                                     date: date,
+                                     content: item.content,
+                                     income: item.income.decimalValue,
+                                     outgo: item.outgo.decimalValue,
+                                     group: item.group,
+                                     repeatID: UUID())
             recurringItems.append(recurringItem)
         }
         let repeatId = repeatCount > .one ? UUID() : nil
         try DataStore.saveAll(context,
-                              items: ListItems(key: repeatId.string, value: recurringItems),
+                              items: recurringItems,
                               repeatId: repeatId)
     }
 
     // MARK: - Save
 
-    static func save(_ context: NSManagedObjectContext, item: ListItem) throws {
+    static func save(_ context: NSManagedObjectContext, item: Item) throws {
         try DataStore.save(context, item: item)
     }
 
     static func saveForRepeatingItems(_ context: NSManagedObjectContext,
                                       format: String,
                                       keys: [Any]?,
-                                      oldItem: ListItem,
-                                      newItem: ListItem) async throws {
+                                      oldItem: Item,
+                                      newItem: Item) async throws {
         let items = try await listItems(context, format: format, keys: keys)
-        let newItemList: [ListItem] = items.value.compactMap { item in
+        let newItemList: [Item] = items.compactMap { item in
             let components = Calendar.current.dateComponents([.year, .month, .day],
                                                              from: oldItem.date,
                                                              to: newItem.date)
@@ -66,50 +68,43 @@ struct Repository {
                 assertionFailure()
                 return nil
             }
-            return ListItem(date: newDate,
-                            content: newItem.content,
-                            group: newItem.group,
-                            income: newItem.income,
-                            expenditure: newItem.expenditure,
-                            original: item.original)
+            return Item(context: context,
+                        date: newDate,
+                        content: newItem.content,
+                        income: newItem.income.decimalValue,
+                        outgo: newItem.outgo.decimalValue,
+                        group: newItem.group,
+                        repeatID: UUID())
         }
         let repeatId = UUID()
-        let newItems = ListItems(key: repeatId.description,
-                                 value: newItemList)
+        let newItems = newItemList
+
         try DataStore.saveAll(context, items: newItems, repeatId: repeatId)
     }
 
     static func saveForFutureItems(_ context: NSManagedObjectContext,
-                                   oldItem: ListItem,
-                                   newItem: ListItem) async throws {
-        guard let repeatId = oldItem.original?.repeatId else {
-            assertionFailure()
-            return
-        }
+                                   oldItem: Item,
+                                   newItem: Item) async throws {
         try await saveForRepeatingItems(context,
                                         format: "(repeatId = %@) AND (date >= %@)",
-                                        keys: [repeatId, oldItem.date],
+                                        keys: [oldItem.repeatId, oldItem.date],
                                         oldItem: oldItem,
                                         newItem: newItem)
     }
 
     static func saveForAllItems(_ context: NSManagedObjectContext,
-                                oldItem: ListItem,
-                                newItem: ListItem) async throws {
-        guard let repeatId = oldItem.original?.repeatId else {
-            assertionFailure()
-            return
-        }
+                                oldItem: Item,
+                                newItem: Item) async throws {
         try await saveForRepeatingItems(context,
                                         format: "repeatId = %@",
-                                        keys: [repeatId],
+                                        keys: [oldItem.repeatId],
                                         oldItem: oldItem,
                                         newItem: newItem)
     }
 
     // MARK: - Delete
 
-    static func delete(_ context: NSManagedObjectContext, item: ListItem) {
+    static func delete(_ context: NSManagedObjectContext, item: Item) {
         DataStore.delete(context, item: item)
     }
 }

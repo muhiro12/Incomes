@@ -11,14 +11,14 @@ import Firebase
 
 @main
 struct IncomesApp: App {
+    let persistenceController = PersistenceController.shared
+
     init() {
         FirebaseApp.configure()
         Store.shared.configure()
     }
 
-    let persistenceController = PersistenceController.shared
-
-    var body: some SwiftUI.Scene {
+    var body: some Scene {
         WindowGroup {
             ContentView()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)

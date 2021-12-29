@@ -1,5 +1,5 @@
 //
-//  ListItemView.swift
+//  ListItem.swift
 //  Incomes
 //
 //  Created by Hiromu Nakano on 2020/04/11.
@@ -8,23 +8,23 @@
 
 import SwiftUI
 
-struct ListItemView: View {
+struct ListItem: View {
     @Environment(\.managedObjectContext) var context
 
     @State private var isPresentedToEdit = false
 
-    private let item: ListItem
+    private let item: Item
 
-    init(of item: ListItem) {
+    init(of item: Item) {
         self.item = item
     }
 
     var body: some View {
         GeometryReader { geometry in
             if geometry.size.width > 500 {
-                ListItemWideView(of: self.item)
+                WideListItem(of: self.item)
             } else {
-                ListItemNarrowView(of: self.item)
+                NarrowListItem(of: self.item)
             }
         }.sheet(isPresented: $isPresentedToEdit) {
             EditView(of: self.item)
@@ -36,16 +36,16 @@ struct ListItemView: View {
 
 // MARK: - private
 
-private extension ListItemView {
+private extension ListItem {
     func presentToEdit() {
         isPresentedToEdit = true
     }
 }
 
 #if DEBUG
-struct ListItemView_Previews: PreviewProvider {
+struct ListItem_Previews: PreviewProvider {
     static var previews: some View {
-        ListItemView(of: PreviewData.listItem)
+        ListItem(of: PreviewData.listItem)
     }
 }
 #endif
