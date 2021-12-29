@@ -139,16 +139,14 @@ private extension EditView {
     }
 
     func saveForThisItem() {
-        let item = Item(context: viewContext,
-                        date: date,
-                        content: content,
-                        income: income.decimalValue,
-                        outgo: expenditure.decimalValue,
-                        group: group,
-                        repeatID: UUID())
+        _ = Item(context: viewContext).set(date: date,
+                                           content: content,
+                                           income: income.decimalValue,
+                                           outgo: expenditure.decimalValue,
+                                           group: group)
         Task {
             do {
-                try Repository(context: viewContext).save(item: item)
+                try ItemController(context: viewContext).saveAll()
             } catch {
                 assertionFailure(error.localizedDescription)
             }
@@ -157,21 +155,19 @@ private extension EditView {
     }
 
     func saveForFutureItems() {
-        guard let oldItem = item else {
+        guard let item = item else {
             assertionFailure()
             return
         }
-        let newItem = Item(context: viewContext,
-                           date: date,
-                           content: content,
-                           income: income.decimalValue,
-                           outgo: expenditure.decimalValue,
-                           group: group,
-                           repeatID: UUID())
+        let oldDate = item.date
+        _ = item.set(date: date,
+                     content: content,
+                     income: income.decimalValue,
+                     outgo: expenditure.decimalValue,
+                     group: group)
         Task {
             do {
-                try await Repository(context: viewContext).saveForFutureItems(oldItem: oldItem,
-                                                                              newItem: newItem)
+                try ItemController(context: viewContext).saveForFutureItems(edited: item, oldDate: oldDate)
             } catch {
                 assertionFailure(error.localizedDescription)
             }
@@ -180,21 +176,19 @@ private extension EditView {
     }
 
     func saveForAllItems() {
-        guard let oldItem = item else {
+        guard let item = item else {
             assertionFailure()
             return
         }
-        let newItem = Item(context: viewContext,
-                           date: date,
-                           content: content,
-                           income: income.decimalValue,
-                           outgo: expenditure.decimalValue,
-                           group: group,
-                           repeatID: UUID())
+        let oldDate = item.date
+        _ = item.set(date: date,
+                     content: content,
+                     income: income.decimalValue,
+                     outgo: expenditure.decimalValue,
+                     group: group)
         Task {
             do {
-                try await Repository(context: viewContext).saveForAllItems(oldItem: oldItem,
-                                                                           newItem: newItem)
+                try ItemController(context: viewContext).saveForAllItems(edited: item, oldDate: oldDate)
             } catch {
                 assertionFailure(error.localizedDescription)
             }
@@ -203,16 +197,14 @@ private extension EditView {
     }
 
     func create() {
-        let item = Item(context: viewContext,
-                        date: date,
-                        content: content,
-                        income: income.decimalValue,
-                        outgo: expenditure.decimalValue,
-                        group: group,
-                        repeatID: UUID())
+        let item = Item(context: viewContext).set(date: date,
+                                                  content: content,
+                                                  income: income.decimalValue,
+                                                  outgo: expenditure.decimalValue,
+                                                  group: group)
         do {
-            try Repository(context: viewContext).create(item: item,
-                                                        repeatCount: repeatSelection + .one)
+            try ItemController(context: viewContext).create(item: item,
+                                                            repeatCount: repeatSelection + .one)
         } catch {
             assertionFailure(error.localizedDescription)
         }
@@ -224,7 +216,7 @@ private extension EditView {
             assertionFailure()
             return
         }
-        Repository(context: viewContext).delete(item: item)
+        ItemController(context: viewContext).delete(item: item)
     }
 
     func cancel() {

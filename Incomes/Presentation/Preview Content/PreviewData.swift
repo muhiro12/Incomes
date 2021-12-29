@@ -26,69 +26,51 @@ struct PreviewData {
         let date28 = formatter.date(from: "2021-06-28")!
 
         for index in 0..<24 {
-            items.append(Item(context: context,
-                              date: monthLater(from: date27, value: index),
-                              content: "Payday",
-                              income: 3500,
-                              outgo: 0,
-                              group: "Salary",
-                              repeatID: UUID()))
-            items.append(Item(context: context,
-                              date: monthLater(from: date27, value: index),
-                              content: "Advertising revenue",
-                              income: 485,
-                              outgo: 0,
-                              group: "Salary",
-                              repeatID: UUID()))
-            items.append(Item(context: context,
-                              date: monthLater(from: date10, value: index),
-                              content: "Apple card",
-                              income: 0,
-                              outgo: 1000,
-                              group: "Credit",
-                              repeatID: UUID()))
-            items.append(Item(context: context,
-                              date: monthLater(from: date5, value: index),
-                              content: "Orange card",
-                              income: 0,
-                              outgo: 800,
-                              group: "Credit",
-                              repeatID: UUID()))
-            items.append(Item(context: context,
-                              date: monthLater(from: date27, value: index),
-                              content: "Lemon card",
-                              income: 0,
-                              outgo: 500,
-                              group: "Credit",
-                              repeatID: UUID()))
-            items.append(Item(context: context,
-                              date: monthLater(from: date28, value: index),
-                              content: "House",
-                              income: 0,
-                              outgo: 30,
-                              group: "Loan",
-                              repeatID: UUID()))
-            items.append(Item(context: context,
-                              date: monthLater(from: date25, value: index),
-                              content: "Car",
-                              income: 0,
-                              outgo: 25,
-                              group: "Loan",
-                              repeatID: UUID()))
-            items.append(Item(context: context,
-                              date: monthLater(from: date5, value: index),
-                              content: "Insurance",
-                              income: 0,
-                              outgo: 28,
-                              group: "Tax",
-                              repeatID: UUID()))
-            items.append(Item(context: context,
-                              date: monthLater(from: date28, value: index),
-                              content: "Pension",
-                              income: 0,
-                              outgo: 36,
-                              group: "Tax",
-                              repeatID: UUID()))
+            items.append(Item(context: context).set(date: monthLater(from: date27, value: index),
+                                                    content: "Payday",
+                                                    income: 3500,
+                                                    outgo: 0,
+                                                    group: "Salary"))
+            items.append(Item(context: context).set(date: monthLater(from: date27, value: index),
+                                                    content: "Advertising revenue",
+                                                    income: 485,
+                                                    outgo: 0,
+                                                    group: "Salary"))
+            items.append(Item(context: context).set(date: monthLater(from: date10, value: index),
+                                                    content: "Apple card",
+                                                    income: 0,
+                                                    outgo: 1000,
+                                                    group: "Credit"))
+            items.append(Item(context: context).set(date: monthLater(from: date5, value: index),
+                                                    content: "Orange card",
+                                                    income: 0,
+                                                    outgo: 800,
+                                                    group: "Credit"))
+            items.append(Item(context: context).set(date: monthLater(from: date27, value: index),
+                                                    content: "Lemon card",
+                                                    income: 0,
+                                                    outgo: 500,
+                                                    group: "Credit"))
+            items.append(Item(context: context).set(date: monthLater(from: date28, value: index),
+                                                    content: "House",
+                                                    income: 0,
+                                                    outgo: 30,
+                                                    group: "Loan"))
+            items.append(Item(context: context).set(date: monthLater(from: date25, value: index),
+                                                    content: "Car",
+                                                    income: 0,
+                                                    outgo: 25,
+                                                    group: "Loan"))
+            items.append(Item(context: context).set(date: monthLater(from: date5, value: index),
+                                                    content: "Insurance",
+                                                    income: 0,
+                                                    outgo: 28,
+                                                    group: "Tax"))
+            items.append(Item(context: context).set(date: monthLater(from: date28, value: index),
+                                                    content: "Pension",
+                                                    income: 0,
+                                                    outgo: 36,
+                                                    group: "Tax"))
         }
 
         items.sort(by: { $0.date < $1.date })

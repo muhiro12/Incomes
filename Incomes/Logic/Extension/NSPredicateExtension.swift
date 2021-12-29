@@ -23,4 +23,15 @@ extension NSPredicate {
     convenience init(group: String) {
         self.init(format: "group == %@", group)
     }
+
+    convenience init(repeatIDFor repeatID: UUID) {
+        self.init(format: "repeatId = %@",
+                  repeatID.nsValue)
+    }
+
+    convenience init(repeatIDAndFutureFor repeatID: UUID, oldDate: Date) {
+        self.init(format: "(repeatId = %@) AND (date >= %@)",
+                  repeatID.nsValue,
+                  oldDate.nsValue)
+    }
 }

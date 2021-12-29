@@ -34,14 +34,14 @@ extension Item: Identifiable {
 }
 
 extension Item {
-    convenience init(context: NSManagedObjectContext, date: Date, content: String, income: Decimal, outgo: Decimal, group: String, repeatID: UUID = UUID()) {
-        self.init(context: context)
+    func set(date: Date, content: String, income: Decimal, outgo: Decimal, group: String, repeatID: UUID = UUID()) -> Self {
         self.date = date
         self.content = content
         self.income = income.nsValue
         self.outgo = outgo.nsValue
         self.group = group
         self.repeatId = repeatID
+        return self
     }
 
     var profit: Decimal {
