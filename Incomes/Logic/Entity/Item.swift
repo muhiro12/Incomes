@@ -10,14 +10,11 @@ import Foundation
 import CoreData
 
 @objc(Item)
-public class Item: NSManagedObject {
+public class Item: NSManagedObject {}
 
-}
-
-extension Item {
-
+extension Item: Identifiable {
     @nonobjc public class func fetchRequest() -> NSFetchRequest<Item> {
-        return NSFetchRequest<Item>(entityName: "Item")
+        return NSFetchRequest<Item>(entityName: .item)
     }
 
     @NSManaged public var content: String
@@ -27,11 +24,6 @@ extension Item {
     @NSManaged public var outgo: NSDecimalNumber
     @NSManaged public var repeatId: UUID
     @NSManaged public var year: String
-
-}
-
-extension Item: Identifiable {
-
 }
 
 extension Item {

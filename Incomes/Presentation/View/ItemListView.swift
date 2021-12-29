@@ -53,7 +53,7 @@ struct ItemListView: View {
 struct ItemListView_Previews: PreviewProvider {
     static var previews: some View {
         ItemListView(title: "Title",
-                     predicate: .init(dateBetweenMonthFor: Date()))
+                     predicate: .init(dateIsSameMonthAs: Date()))
             .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
     }
 }

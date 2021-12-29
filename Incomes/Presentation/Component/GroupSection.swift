@@ -27,7 +27,7 @@ struct GroupSection: View {
                     destination:
                         ItemListView(
                             title: element.value.value.first!.group,
-                            predicate: .init(group: element.value.value.first!.group))) {
+                            predicate: .init(groupIs: element.value.value.first!.group))) {
                     Text(element.value.key)
                 }
             }.onDelete { _ in

@@ -1,5 +1,5 @@
 //
-//  Repository.swift
+//  ItemController.swift
 //  Incomes
 //
 //  Created by Hiromu Nakano on 2020/04/13.
@@ -15,10 +15,10 @@ struct ItemController {
     // MARK: - Fetch
 
     func items(predicate: NSPredicate? = nil) throws -> [Item] {
-        let request = NSFetchRequest<NSFetchRequestResult>(entityName: .item)
+        let request = Item.fetchRequest()
         request.predicate = predicate
         request.sortDescriptors = [NSSortDescriptor(keyPath: \Item.date, ascending: true)]
-        return try context.fetch(request) as? [Item] ?? []
+        return try context.fetch(request)
     }
 
     // MARK: - Create
@@ -75,13 +75,13 @@ struct ItemController {
     func saveForAllItems(edited: Item, oldDate: Date) throws {
         try saveForRepeatingItems(edited: edited,
                                   oldDate: oldDate,
-                                  predicate: .init(repeatIDFor: edited.repeatId))
+                                  predicate: .init(repeatIDIs: edited.repeatId))
     }
 
     func saveForFutureItems(edited: Item, oldDate: Date) throws {
         try saveForRepeatingItems(edited: edited,
                                   oldDate: oldDate,
-                                  predicate: .init(repeatIDAndFutureFor: edited.repeatId, oldDate: oldDate))
+                                  predicate: .init(repeatIDIs: edited.repeatId, dateIsAfter: oldDate))
     }
 
     // MARK: - Delete

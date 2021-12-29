@@ -27,7 +27,7 @@ struct YearSection: View {
                     destination:
                         ItemListView(
                             title: element.value.value.first!.date.stringValue(.yyyyMMM),
-                            predicate: .init(dateBetweenMonthFor: element.value.value.first!.date))) {
+                            predicate: .init(dateIsSameMonthAs: element.value.value.first!.date))) {
                     Text(element.value.key)
                 }
             }.onDelete { _ in
