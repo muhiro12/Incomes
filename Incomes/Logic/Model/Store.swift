@@ -31,8 +31,8 @@ class Store: NSObject {
 
     private override init() {
         apiKey = EnvironmentParameter.revenueCatAPIKey
-        entitlementId = "pro"
-        productId = EnvironmentParameter.productId
+        entitlementID = "pro"
+        productID = EnvironmentParameter.productID
         onPurchaseStatusUpdated = { isActive in
             if isActive {
                 UserDefaults.isSubscribeOn = true
@@ -44,8 +44,8 @@ class Store: NSObject {
     }
 
     private let apiKey: String
-    private let entitlementId: String
-    private let productId: String
+    private let entitlementID: String
+    private let productID: String
     private let onPurchaseStatusUpdated: (Bool) -> Void
 }
 
@@ -73,7 +73,7 @@ extension Store: StoreInterface {
         }
         let products = offerings?.current?.availablePackages.map { Product(package: $0) }
         let product = products?.first(where: {
-            $0.value.productIdentifier == self.productId
+            $0.value.productIdentifier == self.productID
         })
         return product
     }
@@ -99,7 +99,7 @@ extension Store: StoreInterface {
 
 extension Store: PurchasesDelegate {
     func purchases(_ purchases: Purchases, didReceiveUpdated purchaserInfo: Purchases.PurchaserInfo) {
-        let isActive = purchaserInfo.entitlements.all[entitlementId]?.isActive ?? false
+        let isActive = purchaserInfo.entitlements.all[entitlementID]?.isActive ?? false
         onPurchaseStatusUpdated(isActive)
     }
 }

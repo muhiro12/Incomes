@@ -40,7 +40,7 @@ struct ItemController {
                                            income: item.income,
                                            outgo: item.outgo,
                                            group: item.group,
-                                           repeatID: item.repeatId)
+                                           repeatID: item.repeatID)
         }
         try saveAll()
     }
@@ -66,7 +66,7 @@ struct ItemController {
                        income: edited.income,
                        outgo: edited.outgo,
                        group: edited.group,
-                       repeatID: edited.repeatId)
+                       repeatID: edited.repeatID)
         }
 
         try saveAll()
@@ -75,13 +75,13 @@ struct ItemController {
     func saveForAllItems(edited: Item, oldDate: Date) throws {
         try saveForRepeatingItems(edited: edited,
                                   oldDate: oldDate,
-                                  predicate: .init(repeatIDIs: edited.repeatId))
+                                  predicate: .init(repeatIDIs: edited.repeatID))
     }
 
     func saveForFutureItems(edited: Item, oldDate: Date) throws {
         try saveForRepeatingItems(edited: edited,
                                   oldDate: oldDate,
-                                  predicate: .init(repeatIDIs: edited.repeatId, dateIsAfter: oldDate))
+                                  predicate: .init(repeatIDIs: edited.repeatID, dateIsAfter: oldDate))
     }
 
     // MARK: - Delete

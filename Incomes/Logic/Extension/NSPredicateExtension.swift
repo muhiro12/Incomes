@@ -25,12 +25,12 @@ extension NSPredicate {
     }
 
     convenience init(repeatIDIs repeatID: UUID) {
-        self.init(format: "repeatId = %@",
+        self.init(format: "repeatID = %@",
                   repeatID.nsValue)
     }
 
     convenience init(repeatIDIs repeatID: UUID, dateIsAfter date: Date) {
-        self.init(format: "(repeatId = %@) AND (date >= %@)",
+        self.init(format: "(repeatID = %@) AND (date >= %@)",
                   repeatID.nsValue,
                   date.nsValue)
     }

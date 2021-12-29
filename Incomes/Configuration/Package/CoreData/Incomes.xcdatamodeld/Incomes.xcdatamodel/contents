@@ -6,7 +6,7 @@
         <attribute name="group" optional="YES" attributeType="String"/>
         <attribute name="income" optional="YES" attributeType="Decimal" defaultValueString="0.0"/>
         <attribute name="outgo" optional="YES" attributeType="Decimal" defaultValueString="0.0"/>
-        <attribute name="repeatId" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="repeatID" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="year" attributeType="String" defaultValueString=""/>
     </entity>
     <elements>

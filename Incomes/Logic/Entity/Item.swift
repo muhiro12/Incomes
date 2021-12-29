@@ -22,7 +22,7 @@ extension Item: Identifiable {
     @NSManaged public var group: String
     @NSManaged public var income: NSDecimalNumber
     @NSManaged public var outgo: NSDecimalNumber
-    @NSManaged public var repeatId: UUID
+    @NSManaged public var repeatID: UUID
     @NSManaged public var year: String
 }
 
@@ -34,7 +34,7 @@ extension Item {
         self.income = income
         self.outgo = outgo
         self.group = group
-        self.repeatId = repeatID
+        self.repeatID = repeatID
         return self
     }
 
