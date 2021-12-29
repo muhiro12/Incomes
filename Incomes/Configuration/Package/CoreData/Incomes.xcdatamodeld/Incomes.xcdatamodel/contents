@@ -7,8 +7,9 @@
         <attribute name="income" optional="YES" attributeType="Decimal" defaultValueString="0.0"/>
         <attribute name="outgo" optional="YES" attributeType="Decimal" defaultValueString="0.0"/>
         <attribute name="repeatId" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="year" attributeType="String" defaultValueString="2000/01/01 0:00"/>
     </entity>
     <elements>
-        <element name="Item" positionX="-54" positionY="-9" width="128" height="119"/>
+        <element name="Item" positionX="-54" positionY="-9" width="128" height="134"/>
     </elements>
 </model>

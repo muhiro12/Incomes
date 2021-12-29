@@ -12,21 +12,18 @@ struct HomeView: View {
     @Environment(\.managedObjectContext)
     private var viewContext
 
-    @FetchRequest(
+    @SectionedFetchRequest(
+        sectionIdentifier: \Item.year,
         sortDescriptors: [NSSortDescriptor(keyPath: \Item.date, ascending: false)],
         animation: .default)
-    private var items: FetchedResults<Item>
+    private var sections: SectionedFetchResults<String, Item>
 
     @State private var isPresentedToSettings = false
 
     var body: some View {
         List {
-            ForEach(Dictionary(grouping: items) {
-                $0.date.stringValue(.yyyy)
-            }.sorted {
-                $0.key > $1.key
-            }.identified) {
-                YearSection(items: $0.value.value)
+            ForEach(sections) {
+                YearSection(items: $0.map { $0 })
             }
         }.selectedListStyle()
         .navigationBarTitle(.localized(.homeTitle))

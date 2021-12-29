@@ -12,22 +12,19 @@ struct GroupView: View {
     @Environment(\.managedObjectContext)
     private var viewContext
 
-    @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \Item.date, ascending: true)],
+    @SectionedFetchRequest(
+        sectionIdentifier: \Item.group,
+        sortDescriptors: [NSSortDescriptor(keyPath: \Item.date, ascending: false)],
         animation: .default)
-    private var items: FetchedResults<Item>
+    private var sections: SectionedFetchResults<String, Item>
 
     var body: some View {
         List {
-            ForEach(Dictionary(grouping: items) {
-                $0.group
-            }.sorted {
-                $0.key > $1.key
-            }.identified) {
-                GroupSection(items: $0.value.value)
-            }
-        }.selectedListStyle()
-        .navigationBarTitle(.localized(.groupTitle))
+            ForEach(sections) {
+                GroupSection(items: $0.map { $0 })
+            }.selectedListStyle()
+            .navigationBarTitle(.localized(.groupTitle))
+        }
     }
 }
 
