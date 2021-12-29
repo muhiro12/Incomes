@@ -34,7 +34,7 @@
 "date" = "日付";
 "content" = "内容";
 "income" = "収入";
-"expenditure" = "支出";
+"outgo" = "支出";
 "group" = "グループ";
 "repeatCount" = "繰り返し";
 "save" = "保存";
