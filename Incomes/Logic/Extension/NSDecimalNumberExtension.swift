@@ -20,6 +20,9 @@ extension NSDecimalNumber {
     }
 
     var asMinusCurrency: String {
+        guard asCurrency.isNotEmpty else {
+            return .empty
+        }
         return "-" + asCurrency
     }
 }
