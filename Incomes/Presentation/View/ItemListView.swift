@@ -41,7 +41,7 @@ struct ItemListView: View {
                         buttons: [
                             .destructive(Text(.localized(.delete))) {
                                 indexSet.forEach {
-                                    Repository.delete(viewContext, item: items[$0])
+                                    ItemController(context: viewContext).delete(item: items[$0])
                                 }
                             },
                             .cancel()])
