@@ -1,5 +1,5 @@
 //
-//  ListItemWideView.swift
+//  WideListItem.swift
 //  Incomes
 //
 //  Created by Hiromu Nakano on 2020/04/10.
@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct ListItemWideView: View {
+struct WideListItem: View {
     private let item: Item
 
     init(of item: Item) {
@@ -17,33 +17,33 @@ struct ListItemWideView: View {
 
     var body: some View {
         HStack {
-            Text(item.date.unwrapped.stringValue(.MMMd))
+            Text(item.date.stringValue(.MMMd))
                 .truncationMode(.head)
                 .font(.subheadline)
                 .frame(width: .componentS)
             Divider()
-            ListItemTitleView(item: item)
+            TitleListItem(item: item)
             Divider()
             HStack {
-                Text(item.income.unwrappedDecimal.asCurrency.unwrapped)
+                Text(item.income.decimalValue.asCurrency ?? .empty)
                     .frame(width: .componentM)
                 Divider()
-                Text(item.outgo.unwrappedDecimal.asMinusCurrency.unwrapped)
+                Text(item.outgo.decimalValue.asMinusCurrency ?? .empty)
                     .frame(width: .componentM)
             }.font(.footnote)
             .foregroundColor(.secondary)
             Divider()
-            Text(item.income.unwrappedDecimal.asCurrency.unwrapped)
+            Text(item.income.decimalValue.asCurrency ?? .empty)
                 .frame(width: .componentL)
-                .foregroundColor(item.income.unwrappedDecimal >= .zero ? .primary : .red)
+                .foregroundColor(item.income.decimalValue >= .zero ? .primary : .red)
         }
     }
 }
 
 #if DEBUG
-struct ListItemWideView_Previews: PreviewProvider {
+struct WideListItem_Previews: PreviewProvider {
     static var previews: some View {
-        ListItemWideView(of: PreviewData.listItem)
+        WideListItem(of: PreviewData.listItem)
     }
 }
 #endif

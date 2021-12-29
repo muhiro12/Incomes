@@ -10,13 +10,13 @@ import Foundation
 import Purchases
 
 struct Product {
+    fileprivate let package: Purchases.Package
+    fileprivate let value: SKProduct
+
     fileprivate init(package: Purchases.Package) {
         self.package = package
         self.value = package.product
     }
-
-    fileprivate let package: Purchases.Package
-    fileprivate let value: SKProduct
 }
 
 protocol StoreInterface {
@@ -54,7 +54,7 @@ class Store: NSObject {
 extension Store: StoreInterface {
     func configure() {
         #if DEBUG
-        Purchases.logLevel = .debug
+        Purchases.logLevel = .warn
         #endif
         Purchases.configure(withAPIKey: apiKey)
         Purchases.shared.delegate = self

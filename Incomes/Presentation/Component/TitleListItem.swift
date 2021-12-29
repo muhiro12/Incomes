@@ -1,5 +1,5 @@
 //
-//  ListItemTitleView.swift
+//  TitleListItem.swift
 //  Incomes
 //
 //  Created by Hiromu Nakano on 2020/07/08.
@@ -8,12 +8,12 @@
 
 import SwiftUI
 
-struct ListItemTitleView: View {
+struct TitleListItem: View {
     let item: Item
 
     var body: some View {
         HStack {
-            Text(item.content.unwrapped)
+            Text(item.content)
                 .font(.headline)
             Spacer()
             if item.isProfitable {
@@ -26,9 +26,9 @@ struct ListItemTitleView: View {
 }
 
 #if DEBUG
-struct ListItemTitleView_Previews: PreviewProvider {
+struct TitleListItem_Previews: PreviewProvider {
     static var previews: some View {
-        ListItemTitleView(item: PreviewData.listItem)
+        TitleListItem(item: PreviewData.listItem)
     }
 }
 #endif

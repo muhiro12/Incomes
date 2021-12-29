@@ -28,15 +28,16 @@ struct Repository {
         for index in 0..<repeatCount {
             guard let date = Calendar.current.date(byAdding: .month,
                                                    value: index,
-                                                   to: item.date.unwrapped) else {
+                                                   to: item.date) else {
                 assertionFailure()
                 return
             }
-            let recurringItem = Item(date: date,
-                                     content: item.content.unwrapped,
-                                     income: item.income.unwrappedDecimal,
-                                     outgo: item.outgo.unwrappedDecimal,
-                                     group: item.group.unwrapped,
+            let recurringItem = Item(context: context,
+                                     date: date,
+                                     content: item.content,
+                                     income: item.income.decimalValue,
+                                     outgo: item.outgo.decimalValue,
+                                     group: item.group,
                                      repeatID: UUID())
             recurringItems.append(recurringItem)
         }
@@ -60,18 +61,19 @@ struct Repository {
         let items = try await listItems(context, format: format, keys: keys)
         let newItemList: [Item] = items.compactMap { item in
             let components = Calendar.current.dateComponents([.year, .month, .day],
-                                                             from: oldItem.date.unwrapped,
-                                                             to: newItem.date.unwrapped)
+                                                             from: oldItem.date,
+                                                             to: newItem.date)
             guard let newDate = Calendar.current.date(byAdding: components,
-                                                      to: item.date.unwrapped) else {
+                                                      to: item.date) else {
                 assertionFailure()
                 return nil
             }
-            return Item(date: newDate,
-                        content: newItem.content.unwrapped,
-                        income: newItem.income.unwrappedDecimal,
-                        outgo: newItem.outgo.unwrappedDecimal,
-                        group: newItem.group.unwrapped,
+            return Item(context: context,
+                        date: newDate,
+                        content: newItem.content,
+                        income: newItem.income.decimalValue,
+                        outgo: newItem.outgo.decimalValue,
+                        group: newItem.group,
                         repeatID: UUID())
         }
         let repeatId = UUID()
@@ -83,13 +85,9 @@ struct Repository {
     static func saveForFutureItems(_ context: NSManagedObjectContext,
                                    oldItem: Item,
                                    newItem: Item) async throws {
-        guard let repeatId = oldItem.repeatId else {
-            assertionFailure()
-            return
-        }
         try await saveForRepeatingItems(context,
                                         format: "(repeatId = %@) AND (date >= %@)",
-                                        keys: [repeatId, oldItem.date.unwrapped],
+                                        keys: [oldItem.repeatId, oldItem.date],
                                         oldItem: oldItem,
                                         newItem: newItem)
     }
@@ -97,13 +95,9 @@ struct Repository {
     static func saveForAllItems(_ context: NSManagedObjectContext,
                                 oldItem: Item,
                                 newItem: Item) async throws {
-        guard let repeatId = oldItem.repeatId else {
-            assertionFailure()
-            return
-        }
         try await saveForRepeatingItems(context,
                                         format: "repeatId = %@",
-                                        keys: [repeatId],
+                                        keys: [oldItem.repeatId],
                                         oldItem: oldItem,
                                         newItem: newItem)
     }

@@ -9,40 +9,32 @@
 import SwiftUI
 
 struct GroupView: View {
-    let items: [Item]
+    @Environment(\.managedObjectContext)
+    private var viewContext
 
-    private var sections: [(String, [Item])] {
-        //        var sectionItemsArray = [
-        //            SectionItems(key: .empty, value: [items])
-        //        ]
-        //        items.reversed().forEach { items in
-        //            let key = items.key.isNotEmpty ? items.key : .localized(.others)
-        //            sectionItemsArray.append(
-        //                SectionItems(key: key,
-        //                             value: items.grouped {
-        //                                $0.content.unwrapped
-        //                             }
-        //                ))
-        //        }
-        return []
-    }
+    @FetchRequest(
+        sortDescriptors: [NSSortDescriptor(keyPath: \Item.date, ascending: true)],
+        animation: .default)
+    private var items: FetchedResults<Item>
 
     var body: some View {
-        NavigationView {
-            List {
-                //                ForEach(sections) { section in
-                //                    SectionView(section: SectionItems(key: section.key, value: section.value))
-                //                }
-            }.selectedListStyle()
-            .navigationBarTitle(.localized(.groupTitle))
-        }
+        List {
+            ForEach(Dictionary(grouping: items) {
+                $0.group
+            }.sorted {
+                $0.key > $1.key
+            }.identified) {
+                GroupSection(items: $0.value.value)
+            }
+        }.selectedListStyle()
+        .navigationBarTitle(.localized(.groupTitle))
     }
 }
 
 #if DEBUG
 struct GroupView_Previews: PreviewProvider {
     static var previews: some View {
-        GroupView(items: PreviewData.listItems)
+        GroupView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
     }
 }
 #endif

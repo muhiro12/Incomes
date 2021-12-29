@@ -37,11 +37,11 @@ struct EditView: View {
 
     init(of item: Item) {
         self.item = item
-        _date = State(initialValue: item.date.unwrapped)
-        _content = State(initialValue: item.content.unwrapped)
-        _income = State(initialValue: item.income.unwrappedString)
-        _expenditure = State(initialValue: item.outgo.unwrappedString)
-        _group = State(initialValue: item.group.unwrappedString)
+        _date = State(initialValue: item.date)
+        _content = State(initialValue: item.content)
+        _income = State(initialValue: item.income.stringValue)
+        _expenditure = State(initialValue: item.outgo.stringValue)
+        _group = State(initialValue: item.group)
     }
 
     var body: some View {
@@ -138,7 +138,8 @@ private extension EditView {
     }
 
     func saveForThisItem() {
-        let item = Item(date: date,
+        let item = Item(context: context,
+                        date: date,
                         content: content,
                         income: income.decimalValue,
                         outgo: expenditure.decimalValue,
@@ -159,7 +160,8 @@ private extension EditView {
             assertionFailure()
             return
         }
-        let newItem = Item(date: date,
+        let newItem = Item(context: context,
+                           date: date,
                            content: content,
                            income: income.decimalValue,
                            outgo: expenditure.decimalValue,
@@ -182,7 +184,8 @@ private extension EditView {
             assertionFailure()
             return
         }
-        let newItem = Item(date: date,
+        let newItem = Item(context: context,
+                           date: date,
                            content: content,
                            income: income.decimalValue,
                            outgo: expenditure.decimalValue,
@@ -201,7 +204,8 @@ private extension EditView {
     }
 
     func create() {
-        let item = Item(date: date,
+        let item = Item(context: context,
+                        date: date,
                         content: content,
                         income: income.decimalValue,
                         outgo: expenditure.decimalValue,

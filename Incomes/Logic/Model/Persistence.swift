@@ -16,7 +16,7 @@ struct PersistenceController {
         let viewContext = result.container.viewContext
         do {
             try DataStore.saveAll(viewContext,
-                                  items: PreviewData.listItems)
+                                  items: PreviewData.screenShot(viewContext))
         } catch {
             assertionFailure(error.localizedDescription)
         }

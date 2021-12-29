@@ -9,7 +9,7 @@
 import Foundation
 
 extension Decimal {
-    var asNSDecimalNumber: NSDecimalNumber {
+    var nsValue: NSDecimalNumber {
         NSDecimalNumber(decimal: self)
     }
 

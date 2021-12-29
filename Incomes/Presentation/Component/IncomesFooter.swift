@@ -1,5 +1,5 @@
 //
-//  FooterView.swift
+//  IncomesFooter.swift
 //  Incomes
 //
 //  Created by Hiromu Nakano on 2020/06/24.
@@ -8,10 +8,10 @@
 
 import SwiftUI
 
-struct FooterView: View {
+struct IncomesFooter: View {
     @Environment(\.managedObjectContext) var context
 
-    @Binding var scene: Scene
+    @Binding var isHome: Bool
 
     @State private var isPresentedToEdit = false
 
@@ -19,8 +19,8 @@ struct FooterView: View {
         VStack {
             Divider()
             HStack {
-                Button(action: toNextScene) {
-                    (scene.isHome ? Image.group : Image.home)
+                Button(action: toNextView) {
+                    (isHome ? Image.group : Image.home)
                         .iconFrameM()
                 }
                 Spacer()
@@ -44,9 +44,9 @@ struct FooterView: View {
 
 // MARK: - private
 
-private extension FooterView {
-    func toNextScene() {
-        self.scene.toNext()
+private extension IncomesFooter {
+    func toNextView() {
+        isHome.toggle()
     }
 
     func presentToEdit() {
@@ -55,9 +55,9 @@ private extension FooterView {
 }
 
 #if DEBUG
-struct FooterView_Previews: PreviewProvider {
+struct IncomesFooter_Previews: PreviewProvider {
     static var previews: some View {
-        FooterView(scene: .constant(.home))
+        IncomesFooter(isHome: .constant(true))
     }
 }
 #endif

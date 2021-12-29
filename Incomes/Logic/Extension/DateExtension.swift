@@ -18,10 +18,14 @@ extension Date {
 
     private static let formatter = DateFormatter()
 
-    func stringValue(_ template: Template = .yyyyMMMd) -> String {
-        Date.formatter.dateFormat = DateFormatter.dateFormat(fromTemplate: template.rawValue,
+    var nsValue: NSDate {
+        NSDate(timeIntervalSinceReferenceDate: timeIntervalSinceReferenceDate)
+    }
+
+    func stringValue(_ template: Template) -> String {
+        Self.formatter.dateFormat = DateFormatter.dateFormat(fromTemplate: template.rawValue,
                                                              options: 0,
                                                              locale: .current)
-        return Date.formatter.string(from: self)
+        return Self.formatter.string(from: self)
     }
 }
