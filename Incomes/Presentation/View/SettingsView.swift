@@ -9,6 +9,9 @@
 import SwiftUI
 
 struct SettingsView: View {
+    @Environment(\.managedObjectContext)
+    private var viewContext
+
     @Environment(\.presentationMode) var presentationMode
 
     @AppStorage(wrappedValue: true, UserDefaults.Key.isModernStyleOn.rawValue)
@@ -19,6 +22,8 @@ struct SettingsView: View {
     private var isICloudOn
     @AppStorage(wrappedValue: false, UserDefaults.Key.isSubscribeOn.rawValue)
     private var isSubscribeOn
+
+    @State private var isAlertPresented = false
 
     private let store = Store.shared
 
@@ -48,6 +53,11 @@ struct SettingsView: View {
                         Button(.localized(.restore), action: restore)
                     }
                 }
+                Section {
+                    Button(.localized(.deleteAll)) {
+                        isAlertPresented = true
+                    }
+                }
             }.selectedListStyle()
             .navigationBarTitle(.localized(.settingsTitle))
             .navigationBarItems(trailing: Button(action: dismiss) {
@@ -55,6 +65,17 @@ struct SettingsView: View {
                     .bold()
             })
         }.navigationViewStyle(StackNavigationViewStyle())
+        .alert(.localized(.deleteAllConfirm),
+               isPresented: $isAlertPresented) {
+            Button(.localized(.delete), role: .destructive) {
+                do {
+                    try ItemController(context: viewContext).deleteAll()
+                } catch {
+                    assertionFailure(error.localizedDescription)
+                }
+            }
+            Button(.localized(.cancel), role: .cancel) {}
+        }
     }
 }
 

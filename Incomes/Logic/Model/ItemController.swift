@@ -14,7 +14,7 @@ struct ItemController {
 
     // MARK: - Fetch
 
-    func items(predicate: NSPredicate) throws -> [Item] {
+    func items(predicate: NSPredicate? = nil) throws -> [Item] {
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: .item)
         request.predicate = predicate
         request.sortDescriptors = [NSSortDescriptor(keyPath: \Item.date, ascending: true)]
@@ -88,5 +88,11 @@ struct ItemController {
 
     func delete(item: Item) {
         context.delete(item)
+    }
+
+    func deleteAll() throws {
+        try items().forEach {
+            delete(item: $0)
+        }
     }
 }
