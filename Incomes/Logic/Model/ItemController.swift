@@ -37,8 +37,8 @@ struct ItemController {
             }
             _ = Item(context: context).set(date: date,
                                            content: item.content,
-                                           income: item.income.decimalValue,
-                                           outgo: item.outgo.decimalValue,
+                                           income: item.income,
+                                           outgo: item.outgo,
                                            group: item.group,
                                            repeatID: item.repeatId)
         }
@@ -63,8 +63,8 @@ struct ItemController {
             }
             _ = $0.set(date: newDate,
                        content: edited.content,
-                       income: edited.income.decimalValue,
-                       outgo: edited.outgo.decimalValue,
+                       income: edited.income,
+                       outgo: edited.outgo,
                        group: edited.group,
                        repeatID: edited.repeatId)
         }

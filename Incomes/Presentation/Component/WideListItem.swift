@@ -25,15 +25,15 @@ struct WideListItem: View {
             TitleListItem(item: item)
             Divider()
             HStack {
-                Text(item.income.decimalValue.asCurrency ?? .empty)
+                Text(item.income.asCurrency)
                     .frame(width: .componentM)
                 Divider()
-                Text(item.outgo.decimalValue.asMinusCurrency ?? .empty)
+                Text(item.outgo.asMinusCurrency)
                     .frame(width: .componentM)
             }.font(.footnote)
             .foregroundColor(.secondary)
             Divider()
-            Text(item.income.decimalValue.asCurrency ?? .empty)
+            Text(item.income.asCurrency)
                 .frame(width: .componentL)
                 .foregroundColor(item.income.decimalValue >= .zero ? .primary : .red)
         }

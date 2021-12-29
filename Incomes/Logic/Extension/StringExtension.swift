@@ -10,17 +10,21 @@ import Foundation
 
 extension String {
     var isNotEmpty: Bool {
-        return !isEmpty
+        !isEmpty
     }
 
     var isEmptyOrDecimal: Bool {
         if isEmpty {
             return true
         }
-        return Decimal(string: self) != nil
+        return NSDecimalNumber(string: self) != NSDecimalNumber.notANumber
     }
 
-    var decimalValue: Decimal {
-        return Decimal(string: self) ?? .zero
+    var decimalValue: NSDecimalNumber {
+        let value = NSDecimalNumber(string: self)
+        if value == NSDecimalNumber.notANumber {
+            return .zero
+        }
+        return value
     }
 }

@@ -34,7 +34,7 @@
 "date" = "Date";
 "content" = "Content";
 "income" = "Income";
-"expenditure" = "Expenditure";
+"outgo" = "Outgo";
 "group" = "Group";
 "repeatCount" = "Repeat";
 "save" = "Save";

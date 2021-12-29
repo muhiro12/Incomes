@@ -25,13 +25,13 @@ struct NarrowListItem: View {
             Spacer()
             VStack(alignment: .trailing, spacing: .zero) {
                 TitleListItem(item: item)
-                Text(item.profit.asCurrency ?? .empty)
+                Text(item.profit.asCurrency)
                     .font(.footnote)
                     .foregroundColor(.secondary)
             }
             Spacer()
             Divider()
-            Text(item.income.decimalValue.asCurrency ?? .empty)
+            Text(item.income.asCurrency)
                 .frame(width: .componentL)
                 .foregroundColor(item.income.decimalValue >= .zero ? .primary : .red)
         }

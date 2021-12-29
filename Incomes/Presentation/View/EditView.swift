@@ -18,7 +18,7 @@ struct EditView: View {
     @State private var date = Date()
     @State private var content: String = .empty
     @State private var income: String = .empty
-    @State private var expenditure: String = .empty
+    @State private var outgo: String = .empty
     @State private var group: String = .empty
     @State private var repeatSelection: Int = .zero
 
@@ -31,7 +31,7 @@ struct EditView: View {
     private var isValid: Bool {
         return content.isNotEmpty
             && income.isEmptyOrDecimal
-            && expenditure.isEmptyOrDecimal
+            && outgo.isEmptyOrDecimal
     }
 
     init() {}
@@ -41,7 +41,7 @@ struct EditView: View {
         _date = State(initialValue: item.date)
         _content = State(initialValue: item.content)
         _income = State(initialValue: item.income.stringValue)
-        _expenditure = State(initialValue: item.outgo.stringValue)
+        _outgo = State(initialValue: item.outgo.stringValue)
         _group = State(initialValue: item.group)
     }
 
@@ -66,11 +66,11 @@ struct EditView: View {
                             .foregroundColor(income.isEmptyOrDecimal ? .primary : .red)
                     }
                     HStack {
-                        Text(.localized(.expenditure))
-                        TextField(String.zero, text: $expenditure)
+                        Text(.localized(.outgo))
+                        TextField(String.zero, text: $outgo)
                             .keyboardType(.numberPad)
                             .multilineTextAlignment(.trailing)
-                            .foregroundColor(expenditure.isEmptyOrDecimal ? .primary : .red)
+                            .foregroundColor(outgo.isEmptyOrDecimal ? .primary : .red)
                     }
                     HStack {
                         Text(.localized(.group))
@@ -142,7 +142,7 @@ private extension EditView {
         _ = Item(context: viewContext).set(date: date,
                                            content: content,
                                            income: income.decimalValue,
-                                           outgo: expenditure.decimalValue,
+                                           outgo: outgo.decimalValue,
                                            group: group)
         Task {
             do {
@@ -163,7 +163,7 @@ private extension EditView {
         _ = item.set(date: date,
                      content: content,
                      income: income.decimalValue,
-                     outgo: expenditure.decimalValue,
+                     outgo: outgo.decimalValue,
                      group: group)
         Task {
             do {
@@ -184,7 +184,7 @@ private extension EditView {
         _ = item.set(date: date,
                      content: content,
                      income: income.decimalValue,
-                     outgo: expenditure.decimalValue,
+                     outgo: outgo.decimalValue,
                      group: group)
         Task {
             do {
@@ -200,7 +200,7 @@ private extension EditView {
         let item = Item(context: viewContext).set(date: date,
                                                   content: content,
                                                   income: income.decimalValue,
-                                                  outgo: expenditure.decimalValue,
+                                                  outgo: outgo.decimalValue,
                                                   group: group)
         do {
             try ItemController(context: viewContext).create(item: item,

@@ -34,21 +34,21 @@ extension Item: Identifiable {
 }
 
 extension Item {
-    func set(date: Date, content: String, income: Decimal, outgo: Decimal, group: String, repeatID: UUID = UUID()) -> Self {
+    func set(date: Date, content: String, income: NSDecimalNumber, outgo: NSDecimalNumber, group: String, repeatID: UUID = UUID()) -> Self {
         self.date = date
         self.content = content
-        self.income = income.nsValue
-        self.outgo = outgo.nsValue
+        self.income = income
+        self.outgo = outgo
         self.group = group
         self.repeatId = repeatID
         return self
     }
 
-    var profit: Decimal {
-        income.decimalValue - outgo.decimalValue
+    var profit: NSDecimalNumber {
+        income.subtracting(outgo)
     }
 
     var isProfitable: Bool {
-        profit > 0
+        profit.compare(.zero) == .orderedDescending
     }
 }

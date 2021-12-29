@@ -10,6 +10,7 @@
 		AD583B6124B301EB0032AA1C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = AD583B6324B301EB0032AA1C /* Localizable.strings */; };
 		AD583B6924B308AB0032AA1C /* LocalizedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD583B6824B308AB0032AA1C /* LocalizedString.swift */; };
 		AD68D6B0277C2E660040EBE2 /* UUIDExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD68D6AF277C2E660040EBE2 /* UUIDExtension.swift */; };
+		AD68D6B2277C45DA0040EBE2 /* NSNumberConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD68D6B1277C45DA0040EBE2 /* NSNumberConstant.swift */; };
 		AD82590426E3F0FB003B6792 /* Purchases in Frameworks */ = {isa = PBXBuildFile; productRef = AD82590326E3F0FB003B6792 /* Purchases */; };
 		AD98194226E43C3600C4A57C /* StoreKitTestCertificate.cer in Resources */ = {isa = PBXBuildFile; fileRef = AD98194126E43C3600C4A57C /* StoreKitTestCertificate.cer */; };
 		ADAD3CC7277AA922005A70E1 /* UserDefaultsExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADAD3CC6277AA922005A70E1 /* UserDefaultsExtension.swift */; };
@@ -46,7 +47,7 @@
 		ADCF371424A1D18E0011D6F5 /* DateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF36FD24A1D18E0011D6F5 /* DateExtension.swift */; };
 		ADCF372724A1D1CF0011D6F5 /* ContentViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF371624A1D1CF0011D6F5 /* ContentViewTests.swift */; };
 		ADCF372924A1D1CF0011D6F5 /* StringExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF371924A1D1CF0011D6F5 /* StringExtensionTests.swift */; };
-		ADCF375824A2C8260011D6F5 /* DecimalExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF375724A2C8250011D6F5 /* DecimalExtension.swift */; };
+		ADCF375824A2C8260011D6F5 /* NSDecimalNumberExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF375724A2C8250011D6F5 /* NSDecimalNumberExtension.swift */; };
 		ADCF375C24A2FBBD0011D6F5 /* Incomes.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = ADCF375A24A2FBBD0011D6F5 /* Incomes.xcdatamodeld */; };
 		ADCF375F24A2FEAF0011D6F5 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADCF375E24A2FEAF0011D6F5 /* CloudKit.framework */; };
 		ADCF376324A3147B0011D6F5 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF376224A3147B0011D6F5 /* SettingsView.swift */; };
@@ -87,6 +88,7 @@
 		AD583B6524B3032D0032AA1C /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		AD583B6824B308AB0032AA1C /* LocalizedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizedString.swift; sourceTree = "<group>"; };
 		AD68D6AF277C2E660040EBE2 /* UUIDExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UUIDExtension.swift; sourceTree = "<group>"; };
+		AD68D6B1277C45DA0040EBE2 /* NSNumberConstant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSNumberConstant.swift; sourceTree = "<group>"; };
 		AD7C7E2B254A33E500D1F0A0 /* Configuration.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Configuration.storekit; sourceTree = "<group>"; };
 		AD98194126E43C3600C4A57C /* StoreKitTestCertificate.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = StoreKitTestCertificate.cer; sourceTree = "<group>"; };
 		ADAD3CC6277AA922005A70E1 /* UserDefaultsExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsExtension.swift; sourceTree = "<group>"; };
@@ -129,7 +131,7 @@
 		ADCF371524A1D1B80011D6F5 /* Incomes.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Incomes.entitlements; sourceTree = "<group>"; };
 		ADCF371624A1D1CF0011D6F5 /* ContentViewTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentViewTests.swift; sourceTree = "<group>"; };
 		ADCF371924A1D1CF0011D6F5 /* StringExtensionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtensionTests.swift; sourceTree = "<group>"; };
-		ADCF375724A2C8250011D6F5 /* DecimalExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecimalExtension.swift; sourceTree = "<group>"; };
+		ADCF375724A2C8250011D6F5 /* NSDecimalNumberExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSDecimalNumberExtension.swift; sourceTree = "<group>"; };
 		ADCF375B24A2FBBD0011D6F5 /* Incomes.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Incomes.xcdatamodel; sourceTree = "<group>"; };
 		ADCF375E24A2FEAF0011D6F5 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		ADCF376224A3147B0011D6F5 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
@@ -200,7 +202,7 @@
 				ADCF36F824A1D18E0011D6F5 /* CGFloatConstant.swift */,
 				ADAD3D12277B3254005A70E1 /* CollectionExtension.swift */,
 				ADCF36FD24A1D18E0011D6F5 /* DateExtension.swift */,
-				ADCF375724A2C8250011D6F5 /* DecimalExtension.swift */,
+				ADCF375724A2C8250011D6F5 /* NSDecimalNumberExtension.swift */,
 				ADE89DF624B5F78200BB82E9 /* ImageConstant.swift */,
 				ADCF376824A33F500011D6F5 /* ImageExtension.swift */,
 				ADCF36F724A1D18E0011D6F5 /* IntConstant.swift */,
@@ -211,6 +213,7 @@
 				ADAD3CC6277AA922005A70E1 /* UserDefaultsExtension.swift */,
 				ADCF36FA24A1D18E0011D6F5 /* ViewExtension.swift */,
 				AD68D6AF277C2E660040EBE2 /* UUIDExtension.swift */,
+				AD68D6B1277C45DA0040EBE2 /* NSNumberConstant.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -656,7 +659,7 @@
 				ADCF370F24A1D18E0011D6F5 /* CGFloatConstant.swift in Sources */,
 				ADAD3CC7277AA922005A70E1 /* UserDefaultsExtension.swift in Sources */,
 				ADCF370124A1D18E0011D6F5 /* EditView.swift in Sources */,
-				ADCF375824A2C8260011D6F5 /* DecimalExtension.swift in Sources */,
+				ADCF375824A2C8260011D6F5 /* NSDecimalNumberExtension.swift in Sources */,
 				ADEA39A0250150E000CB61D9 /* EnvironmentParameter.swift in Sources */,
 				ADCF376324A3147B0011D6F5 /* SettingsView.swift in Sources */,
 				ADE89DF724B5F78200BB82E9 /* ImageConstant.swift in Sources */,
@@ -664,6 +667,7 @@
 				ADAD3D0F277B1790005A70E1 /* LockedView.swift in Sources */,
 				ADCF36E024A1D1820011D6F5 /* ContentView.swift in Sources */,
 				ADCF370E24A1D18E0011D6F5 /* IntConstant.swift in Sources */,
+				AD68D6B2277C45DA0040EBE2 /* NSNumberConstant.swift in Sources */,
 				ADEA399C2501457A00CB61D9 /* Store.swift in Sources */,
 				ADE89DF524B5E73300BB82E9 /* TitleListItem.swift in Sources */,
 			);

@@ -38,7 +38,7 @@ enum LocalizedString {
     case date
     case content
     case income
-    case expenditure
+    case outgo
     case group
     case repeatCount
     case save
