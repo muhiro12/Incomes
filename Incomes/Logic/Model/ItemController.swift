@@ -48,8 +48,12 @@ struct ItemController {
 
     // MARK: - Save
 
-    func saveAll() throws {
+    func save() throws {
         try context.save()
+    }
+
+    func saveAll() throws {
+        try calcurateForFutureItem()
     }
 
     func saveForRepeatingItems(edited: Item, oldDate: Date, predicate: NSPredicate) throws {
@@ -95,5 +99,35 @@ struct ItemController {
         try items().forEach {
             delete(item: $0)
         }
+    }
+
+    // MARK: - Calcurate
+
+    func calcurate(predicate: NSPredicate? = nil)  throws {
+        let items = try items(predicate: predicate)
+        items.forEach { _ in
+            guard false else {
+                return
+            }
+        }
+        for tuple in items.enumerated() {
+            let index = tuple.offset
+            let item = tuple.element
+
+            if index == .zero {
+                item.balance.adding(item.profit)
+            } else {
+                item.balance = items[index - 1].balance.adding(item.profit)
+            }
+        }
+        try save()
+    }
+
+    func calcurateForFutureItem() throws {
+        let items = context.registeredObjects.compactMap { $0 as? Item }
+        guard let oldest = items.sorted(by: { $0.date < $1.date }).first else {
+            return
+        }
+        try calcurate(predicate: .init(dateIsAfter: oldest.date))
     }
 }

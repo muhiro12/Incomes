@@ -20,6 +20,10 @@ extension NSPredicate {
                   and: Calendar.current.endOfMonth(for: date))
     }
 
+    convenience init(dateIsAfter date: Date) {
+        self.init(format: "date >= %@)", date.nsValue)
+    }
+
     convenience init(groupIs group: String) {
         self.init(format: "group == %@", group)
     }

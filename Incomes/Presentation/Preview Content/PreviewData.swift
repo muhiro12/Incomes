@@ -11,11 +11,11 @@ import CoreData
 
 #if DEBUG
 struct PreviewData {
-    static let listItem = Item().set(date: Date(),
-                                     content: "Payday",
-                                     income: 3500,
-                                     outgo: 0,
-                                     group: "Salary")
+    static let item = Item().set(date: Date(),
+                                 content: "Payday",
+                                 income: 3500,
+                                 outgo: 0,
+                                 group: "Salary")
 
     // swiftlint:disable function_body_length
     static func screenShot(_ context: NSManagedObjectContext) -> [Item] {
