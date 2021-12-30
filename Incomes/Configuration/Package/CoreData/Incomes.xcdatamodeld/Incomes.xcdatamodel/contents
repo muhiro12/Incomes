@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="19574" systemVersion="21A559" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" userDefinedModelVersionIdentifier="">
     <entity name="Item" representedClassName="Item" syncable="YES">
+        <attribute name="balance" attributeType="Decimal" defaultValueString="0.0"/>
         <attribute name="content" optional="YES" attributeType="String"/>
         <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="group" optional="YES" attributeType="String"/>
@@ -10,6 +11,6 @@
         <attribute name="year" attributeType="String" defaultValueString=""/>
     </entity>
     <elements>
-        <element name="Item" positionX="-54" positionY="-9" width="128" height="134"/>
+        <element name="Item" positionX="-54" positionY="-9" width="128" height="149"/>
     </elements>
 </model>

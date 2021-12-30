@@ -17,6 +17,7 @@ extension Item: Identifiable {
         return NSFetchRequest<Item>(entityName: .item)
     }
 
+    @NSManaged public var balance: NSDecimalNumber
     @NSManaged public var content: String
     @NSManaged public var date: Date
     @NSManaged public var group: String
