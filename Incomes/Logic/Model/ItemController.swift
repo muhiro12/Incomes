@@ -115,7 +115,7 @@ struct ItemController {
             let item = tuple.element
 
             if index == .zero {
-                item.balance.adding(item.profit)
+                item.balance = item.balance.adding(item.profit)
             } else {
                 item.balance = items[index - 1].balance.adding(item.profit)
             }

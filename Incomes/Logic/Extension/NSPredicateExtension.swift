@@ -21,7 +21,7 @@ extension NSPredicate {
     }
 
     convenience init(dateIsAfter date: Date) {
-        self.init(format: "date >= %@)", date.nsValue)
+        self.init(format: "date >= %@", date.nsValue)
     }
 
     convenience init(groupIs group: String) {
