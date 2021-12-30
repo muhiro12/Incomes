@@ -28,14 +28,18 @@ extension Item: Identifiable {
 }
 
 extension Item {
-    func set(date: Date, content: String, income: NSDecimalNumber, outgo: NSDecimalNumber, group: String, repeatID: UUID = UUID()) -> Self {
+    func set(date: Date, content: String, income: NSDecimalNumber, outgo: NSDecimalNumber, group: String) -> Self {
         self.date = date
-        self.year = date.yearString()
         self.content = content
         self.income = income
         self.outgo = outgo
         self.group = group
-        self.repeatID = repeatID
+
+        self.year = date.yearString()
+        self.repeatID = UUID()
+        // TODO: Calcurate
+        self.balance = .zero
+
         return self
     }
 

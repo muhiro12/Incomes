@@ -27,7 +27,7 @@ struct ItemController {
                 repeatCount: Int = .one) throws {
         for index in 0..<repeatCount {
             guard index > .zero else {
-                break
+                continue
             }
             guard let date = Calendar.current.date(byAdding: .month,
                                                    value: index,
@@ -35,12 +35,13 @@ struct ItemController {
                 assertionFailure()
                 return
             }
-            _ = Item(context: context).set(date: date,
-                                           content: item.content,
-                                           income: item.income,
-                                           outgo: item.outgo,
-                                           group: item.group,
-                                           repeatID: item.repeatID)
+            Item(context: context)
+                .set(date: date,
+                     content: item.content,
+                     income: item.income,
+                     outgo: item.outgo,
+                     group: item.group)
+                .repeatID = item.repeatID
         }
         try saveAll()
     }
@@ -61,12 +62,12 @@ struct ItemController {
                 assertionFailure()
                 return
             }
-            _ = $0.set(date: newDate,
-                       content: edited.content,
-                       income: edited.income,
-                       outgo: edited.outgo,
-                       group: edited.group,
-                       repeatID: edited.repeatID)
+            $0.set(date: newDate,
+                   content: edited.content,
+                   income: edited.income,
+                   outgo: edited.outgo,
+                   group: edited.group)
+                .repeatID = edited.repeatID
         }
 
         try saveAll()
