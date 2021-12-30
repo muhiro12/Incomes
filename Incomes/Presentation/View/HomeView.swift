@@ -25,16 +25,15 @@ struct HomeView: View {
             ForEach(sections) {
                 YearSection(items: $0.map { $0 })
             }
-        }.selectedListStyle()
-        .navigationBarTitle(.localized(.homeTitle))
-        .navigationBarItems(
-            trailing: Button(action: {
+        }.navigationBarTitle(.localized(.homeTitle))
+        .toolbar {
+            Button(action: {
                 isPresentedToSettings = true
             }, label: {
                 Image.settings
                     .iconFrameM()
-            }))
-        .sheet(isPresented: $isPresentedToSettings) {
+            })
+        }.sheet(isPresented: $isPresentedToSettings) {
             SettingsView()
         }
     }

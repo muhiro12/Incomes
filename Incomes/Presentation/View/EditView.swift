@@ -95,8 +95,7 @@ struct EditView: View {
                         }
                     }
                 }
-            }.selectedListStyle()
-            .navigationBarTitle(isEditMode ? .localized(.editTitle) : .localized(.createTitle))
+            }.navigationBarTitle(isEditMode ? .localized(.editTitle) : .localized(.createTitle))
             .navigationBarItems(
                 leading: Button(action: cancel) {
                     Text(.localized(.cancel))

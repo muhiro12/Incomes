@@ -25,14 +25,10 @@ extension UserDefaults {
     }
 
     enum Key: String {
-        case isModernStyleOn = "89b736bb"
         case isLockAppOn = "d8a87635"
         case isICloudOn = "93bdfd83"
         case isSubscribeOn = "a018f613"
     }
-
-    @UserDefaults.Wrapper(key: .isModernStyleOn, defaultValue: true)
-    static var isModernStyleOn: Bool
 
     @UserDefaults.Wrapper(key: .isLockAppOn, defaultValue: false)
     static var isLockAppOn: Bool

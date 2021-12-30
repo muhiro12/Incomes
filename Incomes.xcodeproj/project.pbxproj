@@ -41,7 +41,6 @@
 		ADCF370B24A1D18E0011D6F5 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF36F324A1D18E0011D6F5 /* HomeView.swift */; };
 		ADCF370E24A1D18E0011D6F5 /* IntConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF36F724A1D18E0011D6F5 /* IntConstant.swift */; };
 		ADCF370F24A1D18E0011D6F5 /* CGFloatConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF36F824A1D18E0011D6F5 /* CGFloatConstant.swift */; };
-		ADCF371124A1D18E0011D6F5 /* ViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF36FA24A1D18E0011D6F5 /* ViewExtension.swift */; };
 		ADCF371224A1D18E0011D6F5 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF36FB24A1D18E0011D6F5 /* StringExtension.swift */; };
 		ADCF371324A1D18E0011D6F5 /* StringConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF36FC24A1D18E0011D6F5 /* StringConstant.swift */; };
 		ADCF371424A1D18E0011D6F5 /* DateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF36FD24A1D18E0011D6F5 /* DateExtension.swift */; };
@@ -124,7 +123,6 @@
 		ADCF36F324A1D18E0011D6F5 /* HomeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		ADCF36F724A1D18E0011D6F5 /* IntConstant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntConstant.swift; sourceTree = "<group>"; };
 		ADCF36F824A1D18E0011D6F5 /* CGFloatConstant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CGFloatConstant.swift; sourceTree = "<group>"; };
-		ADCF36FA24A1D18E0011D6F5 /* ViewExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewExtension.swift; sourceTree = "<group>"; };
 		ADCF36FB24A1D18E0011D6F5 /* StringExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		ADCF36FC24A1D18E0011D6F5 /* StringConstant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringConstant.swift; sourceTree = "<group>"; };
 		ADCF36FD24A1D18E0011D6F5 /* DateExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateExtension.swift; sourceTree = "<group>"; };
@@ -202,18 +200,17 @@
 				ADCF36F824A1D18E0011D6F5 /* CGFloatConstant.swift */,
 				ADAD3D12277B3254005A70E1 /* CollectionExtension.swift */,
 				ADCF36FD24A1D18E0011D6F5 /* DateExtension.swift */,
-				ADCF375724A2C8250011D6F5 /* NSDecimalNumberExtension.swift */,
 				ADE89DF624B5F78200BB82E9 /* ImageConstant.swift */,
 				ADCF376824A33F500011D6F5 /* ImageExtension.swift */,
 				ADCF36F724A1D18E0011D6F5 /* IntConstant.swift */,
+				ADCF375724A2C8250011D6F5 /* NSDecimalNumberExtension.swift */,
+				AD68D6B1277C45DA0040EBE2 /* NSNumberConstant.swift */,
 				ADAD3D18277BD498005A70E1 /* NSPredicateExtension.swift */,
 				ADCF36FC24A1D18E0011D6F5 /* StringConstant.swift */,
 				ADCF36FB24A1D18E0011D6F5 /* StringExtension.swift */,
 				ADAD3D24277C1D0F005A70E1 /* StringProtocolExtension.swift */,
 				ADAD3CC6277AA922005A70E1 /* UserDefaultsExtension.swift */,
-				ADCF36FA24A1D18E0011D6F5 /* ViewExtension.swift */,
 				AD68D6AF277C2E660040EBE2 /* UUIDExtension.swift */,
-				AD68D6B1277C45DA0040EBE2 /* NSNumberConstant.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -298,8 +295,8 @@
 				ADE3A4C0277690330016C152 /* Authenticator.swift */,
 				ADEA399F250150E000CB61D9 /* EnvironmentParameter.swift */,
 				ADAD3D10277B2E83005A70E1 /* IdentifiedElement.swift */,
-				ADAD3D06277AD753005A70E1 /* Persistence.swift */,
 				ADCF36EA24A1D18E0011D6F5 /* ItemController.swift */,
+				ADAD3D06277AD753005A70E1 /* Persistence.swift */,
 				ADEA399B2501457A00CB61D9 /* Store.swift */,
 			);
 			path = Model;
@@ -634,7 +631,6 @@
 				ADCF376524A32E460011D6F5 /* IncomesFooter.swift in Sources */,
 				ADAD3D23277C1120005A70E1 /* Item.swift in Sources */,
 				ADAD3D13277B3254005A70E1 /* CollectionExtension.swift in Sources */,
-				ADCF371124A1D18E0011D6F5 /* ViewExtension.swift in Sources */,
 				ADAD3D25277C1D0F005A70E1 /* StringProtocolExtension.swift in Sources */,
 				AD68D6B0277C2E660040EBE2 /* UUIDExtension.swift in Sources */,
 				ADCF393224A57ADC0011D6F5 /* PreviewData.swift in Sources */,

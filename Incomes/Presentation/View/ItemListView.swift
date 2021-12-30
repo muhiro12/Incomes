@@ -35,8 +35,7 @@ struct ItemListView: View {
                 self.indexSet = $0
                 isPresentedToAlert = true
             }
-        }.selectedListStyle()
-        .actionSheet(isPresented: $isPresentedToAlert) {
+        }.actionSheet(isPresented: $isPresentedToAlert) {
             ActionSheet(title: Text(.localized(.deleteConfirm)),
                         buttons: [
                             .destructive(Text(.localized(.delete))) {

@@ -14,8 +14,6 @@ struct SettingsView: View {
 
     @Environment(\.presentationMode) var presentationMode
 
-    @AppStorage(wrappedValue: true, UserDefaults.Key.isModernStyleOn.rawValue)
-    private var isModernStyleOn
     @AppStorage(wrappedValue: false, UserDefaults.Key.isLockAppOn.rawValue)
     private var isLockAppOn
     @AppStorage(wrappedValue: false, UserDefaults.Key.isICloudOn.rawValue)
@@ -30,11 +28,6 @@ struct SettingsView: View {
     var body: some View {
         NavigationView {
             Form {
-                Section {
-                    Toggle(isOn: $isModernStyleOn) {
-                        Text(.localized(.modernStyle))
-                    }
-                }
                 Section {
                     Toggle(isOn: $isLockAppOn) {
                         Text(.localized(.lockApp))
@@ -58,8 +51,7 @@ struct SettingsView: View {
                         isAlertPresented = true
                     }
                 }
-            }.selectedListStyle()
-            .navigationBarTitle(.localized(.settingsTitle))
+            }.navigationBarTitle(.localized(.settingsTitle))
             .navigationBarItems(trailing: Button(action: dismiss) {
                 Text(.localized(.done))
                     .bold()
