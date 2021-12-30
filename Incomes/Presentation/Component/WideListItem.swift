@@ -33,9 +33,9 @@ struct WideListItem: View {
             }.font(.footnote)
             .foregroundColor(.secondary)
             Divider()
-            Text(item.income.asCurrency)
+            Text(item.balance.asCurrency)
                 .frame(width: .componentL)
-                .foregroundColor(item.income.decimalValue >= .zero ? .primary : .red)
+                .foregroundColor(item.balance.isMinus ? .red : .primary)
         }
     }
 }
@@ -43,7 +43,7 @@ struct WideListItem: View {
 #if DEBUG
 struct WideListItem_Previews: PreviewProvider {
     static var previews: some View {
-        WideListItem(of: PreviewData.listItem)
+        WideListItem(of: PreviewData.item)
     }
 }
 #endif

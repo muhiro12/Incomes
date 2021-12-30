@@ -35,8 +35,7 @@ struct ItemListView: View {
                 self.indexSet = $0
                 isPresentedToAlert = true
             }
-        }.selectedListStyle()
-        .actionSheet(isPresented: $isPresentedToAlert) {
+        }.actionSheet(isPresented: $isPresentedToAlert) {
             ActionSheet(title: Text(.localized(.deleteConfirm)),
                         buttons: [
                             .destructive(Text(.localized(.delete))) {
@@ -53,7 +52,7 @@ struct ItemListView: View {
 struct ItemListView_Previews: PreviewProvider {
     static var previews: some View {
         ItemListView(title: "Title",
-                     predicate: .init(dateBetweenMonthFor: Date()))
+                     predicate: .init(dateIsSameMonthAs: Date()))
             .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
     }
 }

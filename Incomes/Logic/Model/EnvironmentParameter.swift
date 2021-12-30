@@ -9,7 +9,7 @@
 import Foundation
 
 struct EnvironmentParameter {
-    static var productId: String {
+    static var productID: String {
         #if DEBUG
         return Secret.productIDDev.rawValue
         #else

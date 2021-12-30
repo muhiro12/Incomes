@@ -38,7 +38,7 @@ extension Calendar {
     }
 
     func endOfMonth(for date: Date) -> Date {
-        guard let next = self.date(byAdding: .year, value: 1, to: date),
+        guard let next = self.date(byAdding: .month, value: 1, to: date),
               let end = self.date(byAdding: .nanosecond, value: -1, to: startOfMonth(for: next))
         else {
             assertionFailure()

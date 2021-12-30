@@ -9,10 +9,11 @@
 import SwiftUI
 
 struct SettingsView: View {
+    @Environment(\.managedObjectContext)
+    private var viewContext
+
     @Environment(\.presentationMode) var presentationMode
 
-    @AppStorage(wrappedValue: true, UserDefaults.Key.isModernStyleOn.rawValue)
-    private var isModernStyleOn
     @AppStorage(wrappedValue: false, UserDefaults.Key.isLockAppOn.rawValue)
     private var isLockAppOn
     @AppStorage(wrappedValue: false, UserDefaults.Key.isICloudOn.rawValue)
@@ -20,16 +21,13 @@ struct SettingsView: View {
     @AppStorage(wrappedValue: false, UserDefaults.Key.isSubscribeOn.rawValue)
     private var isSubscribeOn
 
+    @State private var isAlertPresented = false
+
     private let store = Store.shared
 
     var body: some View {
         NavigationView {
             Form {
-                Section {
-                    Toggle(isOn: $isModernStyleOn) {
-                        Text(.localized(.modernStyle))
-                    }
-                }
                 Section {
                     Toggle(isOn: $isLockAppOn) {
                         Text(.localized(.lockApp))
@@ -48,13 +46,28 @@ struct SettingsView: View {
                         Button(.localized(.restore), action: restore)
                     }
                 }
-            }.selectedListStyle()
-            .navigationBarTitle(.localized(.settingsTitle))
+                Section {
+                    Button(.localized(.deleteAll)) {
+                        isAlertPresented = true
+                    }
+                }
+            }.navigationBarTitle(.localized(.settingsTitle))
             .navigationBarItems(trailing: Button(action: dismiss) {
                 Text(.localized(.done))
                     .bold()
             })
         }.navigationViewStyle(StackNavigationViewStyle())
+        .alert(.localized(.deleteAllConfirm),
+               isPresented: $isAlertPresented) {
+            Button(.localized(.delete), role: .destructive) {
+                do {
+                    try ItemController(context: viewContext).deleteAll()
+                } catch {
+                    assertionFailure(error.localizedDescription)
+                }
+            }
+            Button(.localized(.cancel), role: .cancel) {}
+        }
     }
 }
 

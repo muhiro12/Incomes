@@ -47,10 +47,11 @@
 // MARK: - Settings
 
 "settingsTitle" = "Settings";
-"modernStyle" = "Modern style";
 "lockApp" = "Lock the app";
 "iCloud" = "iCloud";
 "subscriptionTitle" = "Subscription Service";
 "subscribe" = "Subscribe";
 "restore" = "Restore";
 "subscriptionDescription" = "For sharing data between all device";
+"deleteAll" = "Delete all";
+"deleteAllConfirm" = "Are you sure you want to delete all items?";

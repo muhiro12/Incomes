@@ -31,9 +31,9 @@ struct NarrowListItem: View {
             }
             Spacer()
             Divider()
-            Text(item.income.asCurrency)
+            Text(item.balance.asCurrency)
                 .frame(width: .componentL)
-                .foregroundColor(item.income.decimalValue >= .zero ? .primary : .red)
+                .foregroundColor(item.income.isMinus ? .red : .primary)
         }
     }
 }
@@ -41,7 +41,7 @@ struct NarrowListItem: View {
 #if DEBUG
 struct NarrowListItem_Previews: PreviewProvider {
     static var previews: some View {
-        NarrowListItem(of: PreviewData.listItem)
+        NarrowListItem(of: PreviewData.item)
     }
 }
 #endif

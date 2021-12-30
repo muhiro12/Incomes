@@ -19,7 +19,7 @@ struct YearSection: View {
     var body: some View {
         Section(content: {
             ForEach(Dictionary(grouping: items) {
-                $0.date.stringValue(.yyyyMMM)
+                Calendar.current.startOfMonth(for: $0.date)
             }.sorted {
                 $0.key > $1.key
             } .identified) { element in
@@ -27,8 +27,8 @@ struct YearSection: View {
                     destination:
                         ItemListView(
                             title: element.value.value.first!.date.stringValue(.yyyyMMM),
-                            predicate: .init(dateBetweenMonthFor: element.value.value.first!.date))) {
-                    Text(element.value.key)
+                            predicate: .init(dateIsSameMonthAs: element.value.value.first!.date))) {
+                    Text(element.value.key.stringValue(.yyyyMMM))
                 }
             }.onDelete { _ in
                 isPresentedToAlert = true

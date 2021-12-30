@@ -10,39 +10,36 @@ import Foundation
 import CoreData
 
 @objc(Item)
-public class Item: NSManagedObject {
+public class Item: NSManagedObject {}
 
-}
-
-extension Item {
-
+extension Item: Identifiable {
     @nonobjc public class func fetchRequest() -> NSFetchRequest<Item> {
-        return NSFetchRequest<Item>(entityName: "Item")
+        return NSFetchRequest<Item>(entityName: .item)
     }
 
+    @NSManaged public var balance: NSDecimalNumber
     @NSManaged public var content: String
     @NSManaged public var date: Date
     @NSManaged public var group: String
     @NSManaged public var income: NSDecimalNumber
     @NSManaged public var outgo: NSDecimalNumber
-    @NSManaged public var repeatId: UUID
+    @NSManaged public var repeatID: UUID
     @NSManaged public var year: String
-
-}
-
-extension Item: Identifiable {
-
 }
 
 extension Item {
-    func set(date: Date, content: String, income: NSDecimalNumber, outgo: NSDecimalNumber, group: String, repeatID: UUID = UUID()) -> Self {
+    func set(date: Date, content: String, income: NSDecimalNumber, outgo: NSDecimalNumber, group: String) -> Self {
         self.date = date
-        self.year = date.yearString()
         self.content = content
         self.income = income
         self.outgo = outgo
         self.group = group
-        self.repeatId = repeatID
+
+        self.year = date.yearString()
+        self.repeatID = UUID()
+        // TODO: Calcurate
+        self.balance = .zero
+
         return self
     }
 
@@ -51,6 +48,6 @@ extension Item {
     }
 
     var isProfitable: Bool {
-        profit.compare(.zero) == .orderedDescending
+        profit.isPlus
     }
 }

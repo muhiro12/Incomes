@@ -22,9 +22,8 @@ struct GroupView: View {
         List {
             ForEach(sections) {
                 GroupSection(items: $0.map { $0 })
-            }.selectedListStyle()
-            .navigationBarTitle(.localized(.groupTitle))
-        }
+            }
+        }.navigationBarTitle(.localized(.groupTitle))
     }
 }
 

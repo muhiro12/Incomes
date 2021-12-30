@@ -95,8 +95,7 @@ struct EditView: View {
                         }
                     }
                 }
-            }.selectedListStyle()
-            .navigationBarTitle(isEditMode ? .localized(.editTitle) : .localized(.createTitle))
+            }.navigationBarTitle(isEditMode ? .localized(.editTitle) : .localized(.createTitle))
             .navigationBarItems(
                 leading: Button(action: cancel) {
                     Text(.localized(.cancel))
@@ -129,7 +128,7 @@ struct EditView: View {
 
 private extension EditView {
     func save() {
-        if item?.repeatId == nil {
+        if item?.repeatID == nil {
             Task {
                 saveForThisItem()
             }

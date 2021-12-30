@@ -47,10 +47,11 @@
 // MARK: - Settings
 
 "settingsTitle" = "設定";
-"modernStyle" = "モダンテーマ";
 "lockApp" = "Lock the app";
 "iCloud" = "iCloud";
 "subscriptionTitle" = "サブスクリプション";
 "subscribe" = "定期購入";
 "restore" = "復元";
 "subscriptionDescription" = "全ての端末でデータを共有します";
+"deleteAll" = "全て削除";
+"deleteAllConfirm" = "全てのアイテムを削除してもよろしいですか？";

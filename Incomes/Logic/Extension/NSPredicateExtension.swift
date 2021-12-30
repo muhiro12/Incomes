@@ -9,29 +9,33 @@
 import Foundation
 
 extension NSPredicate {
-    convenience init(dateBetween start: Date, and end: Date) {
+    convenience init(dateIsBetween start: Date, and end: Date) {
         self.init(format: "date BETWEEN {%@, %@}",
                   start.nsValue,
                   end.nsValue)
     }
 
-    convenience init(dateBetweenMonthFor date: Date) {
-        self.init(dateBetween: Calendar.current.startOfMonth(for: date),
+    convenience init(dateIsSameMonthAs date: Date) {
+        self.init(dateIsBetween: Calendar.current.startOfMonth(for: date),
                   and: Calendar.current.endOfMonth(for: date))
     }
 
-    convenience init(group: String) {
+    convenience init(dateIsAfter date: Date) {
+        self.init(format: "date >= %@", date.nsValue)
+    }
+
+    convenience init(groupIs group: String) {
         self.init(format: "group == %@", group)
     }
 
-    convenience init(repeatIDFor repeatID: UUID) {
-        self.init(format: "repeatId = %@",
+    convenience init(repeatIDIs repeatID: UUID) {
+        self.init(format: "repeatID = %@",
                   repeatID.nsValue)
     }
 
-    convenience init(repeatIDAndFutureFor repeatID: UUID, oldDate: Date) {
-        self.init(format: "(repeatId = %@) AND (date >= %@)",
+    convenience init(repeatIDIs repeatID: UUID, dateIsAfter date: Date) {
+        self.init(format: "(repeatID = %@) AND (date >= %@)",
                   repeatID.nsValue,
-                  oldDate.nsValue)
+                  date.nsValue)
     }
 }

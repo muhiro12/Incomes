@@ -33,10 +33,16 @@ struct PersistenceController {
             container.persistentStoreDescriptions.first!.url = URL(fileURLWithPath: "/dev/null")
         }
         container.viewContext.automaticallyMergesChangesFromParent = true
+        container.viewContext.mergePolicy = NSMergePolicy.mergeByPropertyStoreTrump
         container.loadPersistentStores(completionHandler: { (_, error) in
             if let error = error {
                 assertionFailure(error.localizedDescription)
             }
         })
+        do {
+            try ItemController(context: container.viewContext).calcurate()
+        } catch {
+            assertionFailure()
+        }
     }
 }
