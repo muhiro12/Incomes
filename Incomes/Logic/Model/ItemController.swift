@@ -9,7 +9,7 @@
 import Foundation
 import CoreData
 
-struct ItemController {
+struct ItemController { // swiftlint:disable function_parameter_count
     let context: NSManagedObjectContext
 
     // MARK: - Fetch
@@ -23,26 +23,39 @@ struct ItemController {
 
     // MARK: - Create
 
-    func create(item: Item,
+    func create(date: Date,
+                content: String,
+                income: NSDecimalNumber,
+                outgo: NSDecimalNumber,
+                group: String,
                 repeatCount: Int = .one) throws {
+        let item = Item(context: context)
+        item.set(date: date,
+                 content: content,
+                 income: income,
+                 outgo: outgo,
+                 group: group,
+                 repeatID: UUID())
+
         for index in 0..<repeatCount {
             guard index > .zero else {
                 continue
             }
-            guard let date = Calendar.current.date(byAdding: .month,
-                                                   value: index,
-                                                   to: item.date) else {
+            guard let repeatingDate = Calendar.current.date(byAdding: .month,
+                                                            value: index,
+                                                            to: item.date) else {
                 assertionFailure()
                 return
             }
-            Item(context: context)
-                .set(date: date,
-                     content: item.content,
-                     income: item.income,
-                     outgo: item.outgo,
-                     group: item.group)
-                .repeatID = item.repeatID
+            let repeatingItem = Item(context: context)
+            repeatingItem.set(date: repeatingDate,
+                              content: content,
+                              income: income,
+                              outgo: outgo,
+                              group: group,
+                              repeatID: item.repeatID)
         }
+
         try saveAll()
     }
 
@@ -53,13 +66,36 @@ struct ItemController {
     }
 
     func saveAll() throws {
-        try calcurateForFutureItem()
+        try calculateForFutureItem()
     }
 
-    func saveForRepeatingItems(edited: Item, oldDate: Date, predicate: NSPredicate) throws {
+    // MARK: - Update
+
+    func update(item: Item,
+                date: Date,
+                content: String,
+                income: NSDecimalNumber,
+                outgo: NSDecimalNumber,
+                group: String) throws {
+        item.set(date: date,
+                 content: content,
+                 income: income,
+                 outgo: outgo,
+                 group: group,
+                 repeatID: item.repeatID)
+        try saveAll()
+    }
+
+    func updateForRepeatingItems(item: Item,
+                                 date: Date,
+                                 content: String,
+                                 income: NSDecimalNumber,
+                                 outgo: NSDecimalNumber,
+                                 group: String,
+                                 predicate: NSPredicate) throws {
         let components = Calendar.current.dateComponents([.year, .month, .day],
-                                                         from: oldDate,
-                                                         to: edited.date)
+                                                         from: item.date,
+                                                         to: date)
 
         try items(predicate: predicate).forEach {
             guard let newDate = Calendar.current.date(byAdding: components, to: $0.date) else {
@@ -67,26 +103,44 @@ struct ItemController {
                 return
             }
             $0.set(date: newDate,
-                   content: edited.content,
-                   income: edited.income,
-                   outgo: edited.outgo,
-                   group: edited.group)
-                .repeatID = edited.repeatID
+                   content: content,
+                   income: income,
+                   outgo: outgo,
+                   group: group,
+                   repeatID: item.repeatID)
         }
 
         try saveAll()
     }
 
-    func saveForAllItems(edited: Item, oldDate: Date) throws {
-        try saveForRepeatingItems(edited: edited,
-                                  oldDate: oldDate,
-                                  predicate: .init(repeatIDIs: edited.repeatID))
+    func updateForFutureItems(item: Item,
+                              date: Date,
+                              content: String,
+                              income: NSDecimalNumber,
+                              outgo: NSDecimalNumber,
+                              group: String) throws {
+        try updateForRepeatingItems(item: item,
+                                    date: date,
+                                    content: content,
+                                    income: income,
+                                    outgo: outgo,
+                                    group: group,
+                                    predicate: .init(repeatIDIs: item.repeatID, dateIsAfter: item.date))
     }
 
-    func saveForFutureItems(edited: Item, oldDate: Date) throws {
-        try saveForRepeatingItems(edited: edited,
-                                  oldDate: oldDate,
-                                  predicate: .init(repeatIDIs: edited.repeatID, dateIsAfter: oldDate))
+    func updateForAllItems(item: Item,
+                           date: Date,
+                           content: String,
+                           income: NSDecimalNumber,
+                           outgo: NSDecimalNumber,
+                           group: String) throws {
+        try updateForRepeatingItems(item: item,
+                                    date: date,
+                                    content: content,
+                                    income: income,
+                                    outgo: outgo,
+                                    group: group,
+                                    predicate: .init(repeatIDIs: item.repeatID))
     }
 
     // MARK: - Delete
@@ -101,9 +155,9 @@ struct ItemController {
         }
     }
 
-    // MARK: - Calcurate
+    // MARK: - Calculate balance
 
-    func calcurate(predicate: NSPredicate? = nil)  throws {
+    func calculate(predicate: NSPredicate? = nil)  throws {
         let items = try items(predicate: predicate)
         items.forEach { _ in
             guard false else {
@@ -123,11 +177,11 @@ struct ItemController {
         try save()
     }
 
-    func calcurateForFutureItem() throws {
+    func calculateForFutureItem() throws {
         let items = context.registeredObjects.compactMap { $0 as? Item }
         guard let oldest = items.sorted(by: { $0.date < $1.date }).first else {
             return
         }
-        try calcurate(predicate: .init(dateIsAfter: oldest.date))
+        try calculate(predicate: .init(dateIsAfter: oldest.date))
     }
 }

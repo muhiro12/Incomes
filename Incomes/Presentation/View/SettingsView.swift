@@ -47,7 +47,14 @@ struct SettingsView: View {
                     }
                 }
                 Section {
-                    Button(.localized(.deleteAll)) {
+                    Button(.localized(.recalculate)) {
+                        do {
+                            try ItemController(context: viewContext).calculate()
+                        } catch {
+                            assertionFailure(error.localizedDescription)
+                        }
+                    }
+                    Button(.localized(.deleteAll), role: .destructive) {
                         isAlertPresented = true
                     }
                 }

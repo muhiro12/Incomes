@@ -39,10 +39,5 @@ struct PersistenceController {
                 assertionFailure(error.localizedDescription)
             }
         })
-        do {
-            try ItemController(context: container.viewContext).calcurate()
-        } catch {
-            assertionFailure()
-        }
     }
 }

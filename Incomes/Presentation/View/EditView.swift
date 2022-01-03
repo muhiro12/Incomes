@@ -138,14 +138,19 @@ private extension EditView {
     }
 
     func saveForThisItem() {
-        _ = Item(context: viewContext).set(date: date,
-                                           content: content,
-                                           income: income.decimalValue,
-                                           outgo: outgo.decimalValue,
-                                           group: group)
+        guard let item = item else {
+            assertionFailure()
+            return
+        }
         Task {
             do {
-                try ItemController(context: viewContext).saveAll()
+                try ItemController(context: viewContext)
+                    .update(item: item,
+                            date: date,
+                            content: content,
+                            income: income.decimalValue,
+                            outgo: outgo.decimalValue,
+                            group: group)
             } catch {
                 assertionFailure(error.localizedDescription)
             }
@@ -158,15 +163,15 @@ private extension EditView {
             assertionFailure()
             return
         }
-        let oldDate = item.date
-        _ = item.set(date: date,
-                     content: content,
-                     income: income.decimalValue,
-                     outgo: outgo.decimalValue,
-                     group: group)
         Task {
             do {
-                try ItemController(context: viewContext).saveForFutureItems(edited: item, oldDate: oldDate)
+                try ItemController(context: viewContext)
+                    .updateForFutureItems(item: item,
+                                          date: date,
+                                          content: content,
+                                          income: income.decimalValue,
+                                          outgo: outgo.decimalValue,
+                                          group: group)
             } catch {
                 assertionFailure(error.localizedDescription)
             }
@@ -179,15 +184,15 @@ private extension EditView {
             assertionFailure()
             return
         }
-        let oldDate = item.date
-        _ = item.set(date: date,
-                     content: content,
-                     income: income.decimalValue,
-                     outgo: outgo.decimalValue,
-                     group: group)
         Task {
             do {
-                try ItemController(context: viewContext).saveForAllItems(edited: item, oldDate: oldDate)
+                try ItemController(context: viewContext)
+                    .updateForAllItems(item: item,
+                                       date: date,
+                                       content: content,
+                                       income: income.decimalValue,
+                                       outgo: outgo.decimalValue,
+                                       group: group)
             } catch {
                 assertionFailure(error.localizedDescription)
             }
@@ -196,14 +201,14 @@ private extension EditView {
     }
 
     func create() {
-        let item = Item(context: viewContext).set(date: date,
-                                                  content: content,
-                                                  income: income.decimalValue,
-                                                  outgo: outgo.decimalValue,
-                                                  group: group)
         do {
-            try ItemController(context: viewContext).create(item: item,
-                                                            repeatCount: repeatSelection + .one)
+            try ItemController(context: viewContext)
+                .create(date: date,
+                        content: content,
+                        income: income.decimalValue,
+                        outgo: outgo.decimalValue,
+                        group: group,
+                        repeatCount: repeatSelection + .one)
         } catch {
             assertionFailure(error.localizedDescription)
         }

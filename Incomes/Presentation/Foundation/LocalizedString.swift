@@ -57,6 +57,7 @@ enum LocalizedString {
     case subscribe
     case restore
     case subscriptionDescription
+    case recalculate
     case deleteAll
     case deleteAllConfirm
 }

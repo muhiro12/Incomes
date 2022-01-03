@@ -53,5 +53,6 @@
 "subscribe" = "定期購入";
 "restore" = "復元";
 "subscriptionDescription" = "全ての端末でデータを共有します";
+"recalculate" = "再計算";
 "deleteAll" = "全て削除";
 "deleteAllConfirm" = "全てのアイテムを削除してもよろしいですか？";
