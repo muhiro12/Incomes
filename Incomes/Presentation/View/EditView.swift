@@ -56,7 +56,7 @@ struct EditView: View {
     var body: some View {
         NavigationView {
             Form {
-                Section(header: Text(.localized(.information))) {
+                Section(content: {
                     DatePicker(selection: $date, displayedComponents: .date) {
                         Text(.localized(.date))
                     }
@@ -102,7 +102,9 @@ struct EditView: View {
                             .clipped()
                         }
                     }
-                }
+                }, header: {
+                    Text(.localized(.information))
+                })
             }.navigationBarTitle(isEditMode ? .localized(.editTitle) : .localized(.createTitle))
             .navigationBarItems(
                 leading: Button(action: cancel) {

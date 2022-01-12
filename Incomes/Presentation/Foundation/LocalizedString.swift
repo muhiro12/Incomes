@@ -53,10 +53,11 @@ enum LocalizedString {
     case settingsTitle
     case lockApp
     case iCloud
-    case subscriptionTitle
+    case subscriptionHeader
     case subscribe
     case restore
-    case subscriptionDescription
+    case subscriptionFooter
+    case manageItemsHeader
     case recalculate
     case deleteAll
     case deleteAllConfirm

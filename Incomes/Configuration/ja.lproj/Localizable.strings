@@ -49,10 +49,11 @@
 "settingsTitle" = "設定";
 "lockApp" = "Lock the app";
 "iCloud" = "iCloud";
-"subscriptionTitle" = "サブスクリプション";
+"subscriptionHeader" = "サブスクリプション";
 "subscribe" = "定期購入";
 "restore" = "復元";
-"subscriptionDescription" = "全ての端末でデータを共有します";
+"subscriptionFooter" = "全ての端末でデータを共有します";
+"manageItemsHeader" = "アイテムを管理する";
 "recalculate" = "再計算";
 "deleteAll" = "全て削除";
 "deleteAllConfirm" = "全てのアイテムを削除してもよろしいですか？";
