@@ -9,7 +9,6 @@
 import Foundation
 import CoreData
 
-#if DEBUG
 struct PreviewData {
     let context: NSManagedObjectContext
 
@@ -96,4 +95,3 @@ struct PreviewData {
         return Calendar.current.date(byAdding: .month, value: monthLater, to: date)!
     }
 }
-#endif
