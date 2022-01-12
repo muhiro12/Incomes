@@ -9,21 +9,20 @@
 import SwiftUI
 
 struct HomeView: View {
-    @Environment(\.managedObjectContext)
-    private var viewContext
-
     @SectionedFetchRequest(
         sectionIdentifier: \Item.year,
-        sortDescriptors: [NSSortDescriptor(keyPath: \Item.date, ascending: false)],
+        sortDescriptors: [NSSortDescriptor(keyPath: \Item.year, ascending: false),
+                          NSSortDescriptor(keyPath: \Item.date, ascending: false)],
         animation: .default)
     private var sections: SectionedFetchResults<String, Item>
 
-    @State private var isPresentedToSettings = false
+    @State
+    private var isPresentedToSettings = false
 
     var body: some View {
         List {
             ForEach(sections) {
-                YearSection(items: $0.map { $0 })
+                YearSection(title: $0.id, items: $0.map { $0 })
             }
         }.navigationBarTitle(.localized(.homeTitle))
         .toolbar {

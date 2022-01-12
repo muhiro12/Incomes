@@ -9,22 +9,24 @@
 import SwiftUI
 
 struct GroupSection: View {
-    @State private var isPresentedToAlert = false
+    @State
+    private var isPresentedToAlert = false
 
+    let title: String
     let items: [Item]
 
     var body: some View {
         Section(content: {
             ForEach(Dictionary(grouping: items) {
-                $0.group
+                $0.content
             }.sorted {
-                $0.key > $1.key
-            } .identified) { element in
+                $0.key < $1.key
+            }.identified) { element in
                 NavigationLink(
                     destination:
                         ItemListView(
-                            title: element.value.value.first!.group,
-                            predicate: .init(groupIs: element.value.value.first!.group))) {
+                            title: element.value.key,
+                            predicate: .init(contentIs: element.value.key))) {
                     Text(element.value.key)
                 }
             }.onDelete { _ in
@@ -39,15 +41,20 @@ struct GroupSection: View {
                         .cancel()])
             }
         }, header: {
-            Text(items.first!.group)
+            Text(title)
         })
     }
 }
 
+#if DEBUG
 struct GroupSection_Previews: PreviewProvider {
     static var previews: some View {
         List {
-            GroupSection(items: PreviewData().items)
+            GroupSection(title: "Credit",
+                         items: PreviewData().items.filter {
+                            $0.group == "Credit"
+                         })
         }
     }
 }
+#endif

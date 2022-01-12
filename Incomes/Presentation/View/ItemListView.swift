@@ -12,16 +12,19 @@ struct ItemListView: View {
     @Environment(\.managedObjectContext)
     private var viewContext
 
-    @FetchRequest private var items: FetchedResults<Item>
+    @FetchRequest
+    private var items: FetchedResults<Item>
 
-    @State private var isPresentedToAlert = false
-    @State private var indexSet = IndexSet()
+    @State
+    private var isPresentedToAlert = false
+    @State
+    private var indexSet = IndexSet()
 
     private let title: String
 
     init(title: String, predicate: NSPredicate) {
         self.title = title
-        _items = FetchRequest<Item>(
+        _items = .init(
             sortDescriptors: [NSSortDescriptor(keyPath: \Item.date, ascending: false)],
             predicate: predicate,
             animation: .default)

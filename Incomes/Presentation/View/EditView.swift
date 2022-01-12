@@ -11,16 +11,24 @@ import SwiftUI
 struct EditView: View {
     @Environment(\.managedObjectContext)
     var viewContext
-    @Environment(\.presentationMode) var presentationMode
+    @Environment(\.presentationMode)
+    var presentationMode
 
-    @State private var isPresentedToActionSheet = false
+    @State
+    private var isPresentedToActionSheet = false
 
-    @State private var date = Date()
-    @State private var content: String = .empty
-    @State private var income: String = .empty
-    @State private var outgo: String = .empty
-    @State private var group: String = .empty
-    @State private var repeatSelection: Int = .zero
+    @State
+    private var date = Date()
+    @State
+    private var content: String = .empty
+    @State
+    private var income: String = .empty
+    @State
+    private var outgo: String = .empty
+    @State
+    private var group: String = .empty
+    @State
+    private var repeatSelection: Int = .zero
 
     private var item: Item?
 

@@ -11,8 +11,8 @@ import SwiftUI
 struct SettingsView: View {
     @Environment(\.managedObjectContext)
     private var viewContext
-
-    @Environment(\.presentationMode) var presentationMode
+    @Environment(\.presentationMode)
+    var presentationMode
 
     @AppStorage(wrappedValue: false, UserDefaults.Key.isLockAppOn.rawValue)
     private var isLockAppOn
@@ -21,7 +21,8 @@ struct SettingsView: View {
     @AppStorage(wrappedValue: false, UserDefaults.Key.isSubscribeOn.rawValue)
     private var isSubscribeOn
 
-    @State private var isAlertPresented = false
+    @State
+    private var isAlertPresented = false
 
     private let store = Store.shared
 

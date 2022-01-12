@@ -24,6 +24,10 @@ extension NSPredicate {
         self.init(format: "date >= %@", date.nsValue)
     }
 
+    convenience init(contentIs content: String) {
+        self.init(format: "content == %@", content)
+    }
+
     convenience init(groupIs group: String) {
         self.init(format: "group == %@", group)
     }
@@ -37,5 +41,9 @@ extension NSPredicate {
         self.init(format: "(repeatID = %@) AND (date >= %@)",
                   repeatID.nsValue,
                   date.nsValue)
+    }
+
+    convenience init(yearIs year: String) {
+        self.init(format: "year == %@", year)
     }
 }
