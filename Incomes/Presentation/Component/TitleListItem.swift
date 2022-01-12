@@ -19,7 +19,7 @@ struct TitleListItem: View {
             if item.isProfitable {
                 Image.arrowUp
                     .iconFrameS()
-                    .foregroundColor(.green)
+                    .foregroundColor(.accentColor)
             }
         }
     }
