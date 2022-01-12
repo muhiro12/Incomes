@@ -46,6 +46,8 @@ struct GroupSection: View {
 
 struct GroupSection_Previews: PreviewProvider {
     static var previews: some View {
-        GroupSection(items: PreviewData().items)
+        List {
+            GroupSection(items: PreviewData().items)
+        }
     }
 }

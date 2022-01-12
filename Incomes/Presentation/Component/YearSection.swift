@@ -46,6 +46,8 @@ struct YearSection: View {
 
 struct YearSection_Previews: PreviewProvider {
     static var previews: some View {
-        YearSection(items: PreviewData().items)
+        List {
+            YearSection(items: PreviewData().items)
+        }
     }
 }
