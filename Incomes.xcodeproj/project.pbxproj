@@ -859,7 +859,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Distribution";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 31;
-				DEVELOPMENT_ASSET_PATHS = "\"Incomes/Presentation/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"Incomes/Presentation/Preview Content/Preview Assets.xcassets\"";
 				DEVELOPMENT_TEAM = 66PKF55HK5;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Incomes/Configuration/Base.lproj/Info.plist;
@@ -893,7 +893,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Distribution";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 31;
-				DEVELOPMENT_ASSET_PATHS = "\"Incomes/Presentation/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"Incomes/Presentation/Preview Content/Preview Assets.xcassets\"";
 				DEVELOPMENT_TEAM = 66PKF55HK5;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Incomes/Configuration/Base.lproj/Info.plist;
