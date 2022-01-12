@@ -9,7 +9,7 @@
 import Foundation
 import CoreData
 
-struct ItemController { // swiftlint:disable function_parameter_count
+struct ItemController {
     let context: NSManagedObjectContext
 
     // MARK: - Fetch
@@ -71,7 +71,7 @@ struct ItemController { // swiftlint:disable function_parameter_count
 
     // MARK: - Update
 
-    func update(item: Item,
+    func update(item: Item, // swiftlint:disable:this function_parameter_count
                 date: Date,
                 content: String,
                 income: NSDecimalNumber,
@@ -86,7 +86,7 @@ struct ItemController { // swiftlint:disable function_parameter_count
         try saveAll()
     }
 
-    func updateForRepeatingItems(item: Item,
+    func updateForRepeatingItems(item: Item, // swiftlint:disable:this function_parameter_count
                                  date: Date,
                                  content: String,
                                  income: NSDecimalNumber,
@@ -113,7 +113,7 @@ struct ItemController { // swiftlint:disable function_parameter_count
         try saveAll()
     }
 
-    func updateForFutureItems(item: Item,
+    func updateForFutureItems(item: Item, // swiftlint:disable:this function_parameter_count
                               date: Date,
                               content: String,
                               income: NSDecimalNumber,
@@ -128,7 +128,7 @@ struct ItemController { // swiftlint:disable function_parameter_count
                                     predicate: .init(repeatIDIs: item.repeatID, dateIsAfter: item.date))
     }
 
-    func updateForAllItems(item: Item,
+    func updateForAllItems(item: Item, // swiftlint:disable:this function_parameter_count
                            date: Date,
                            content: String,
                            income: NSDecimalNumber,

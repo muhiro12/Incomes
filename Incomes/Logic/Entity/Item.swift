@@ -28,7 +28,12 @@ extension Item: Identifiable {
 }
 
 extension Item {
-    func set(date: Date, content: String, income: NSDecimalNumber, outgo: NSDecimalNumber, group: String, repeatID: UUID) {
+    func set(date: Date, // swiftlint:disable:this function_parameter_count
+             content: String,
+             income: NSDecimalNumber,
+             outgo: NSDecimalNumber,
+             group: String,
+             repeatID: UUID) {
         self.date = date
         self.content = content
         self.income = income
