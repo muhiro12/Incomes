@@ -9,9 +9,6 @@
 import SwiftUI
 
 struct YearSection: View {
-    @Environment(\.managedObjectContext)
-    private var viewContext
-
     @State private var isPresentedToAlert = false
 
     let items: [Item]
@@ -49,6 +46,6 @@ struct YearSection: View {
 
 struct YearSection_Previews: PreviewProvider {
     static var previews: some View {
-        YearSection(items: [])
+        YearSection(items: PreviewData().items)
     }
 }

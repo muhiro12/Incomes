@@ -41,7 +41,7 @@ struct NarrowListItem: View {
 #if DEBUG
 struct NarrowListItem_Previews: PreviewProvider {
     static var previews: some View {
-        NarrowListItem(of: PreviewData.item)
+        NarrowListItem(of: PreviewData().item)
     }
 }
 #endif

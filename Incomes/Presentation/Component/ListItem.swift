@@ -45,7 +45,7 @@ private extension ListItem {
 #if DEBUG
 struct ListItem_Previews: PreviewProvider {
     static var previews: some View {
-        ListItem(of: PreviewData.item)
+        ListItem(of: PreviewData().item)
     }
 }
 #endif

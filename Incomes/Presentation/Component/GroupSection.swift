@@ -9,9 +9,6 @@
 import SwiftUI
 
 struct GroupSection: View {
-    @Environment(\.managedObjectContext)
-    private var viewContext
-
     @State private var isPresentedToAlert = false
 
     let items: [Item]
@@ -49,6 +46,6 @@ struct GroupSection: View {
 
 struct GroupSection_Previews: PreviewProvider {
     static var previews: some View {
-        GroupSection(items: [])
+        GroupSection(items: PreviewData().items)
     }
 }
