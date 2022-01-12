@@ -58,6 +58,18 @@ struct SettingsView: View {
                         isAlertPresented = true
                     }
                 }
+                #if DEBUG
+                Section {
+                    Button("SET DEBUG DATA") {
+                        do {
+                            _ = PreviewData(context: viewContext).items
+                            try ItemController(context: viewContext).saveAll()
+                        } catch {
+                            assertionFailure(error.localizedDescription)
+                        }
+                    }
+                }
+                #endif
             }.navigationBarTitle(.localized(.settingsTitle))
             .navigationBarItems(trailing: Button(action: dismiss) {
                 Text(.localized(.done))
