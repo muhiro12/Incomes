@@ -9,40 +9,54 @@
 import SwiftUI
 
 struct YearSection: View {
+    typealias Element = (date: Date, items: [Item])
+
+    @Environment(\.managedObjectContext)
+    private var viewContext
+
     @State
     private var isPresentedToAlert = false
+    @State
+    private var willDeleteItems: [Item] = []
 
-    let title: String
-    let items: [Item]
+    private let title: String
+    private let elements: [Element]
+
+    init(title: String, items: [Item]) {
+        self.title = title
+        self.elements = Dictionary(grouping: items) {
+            Calendar.current.startOfMonth(for: $0.date)
+        }.map {
+            Element($0.key, $0.value)
+        }.sorted {
+            $0.date > $1.date
+        }
+    }
 
     var body: some View {
         Section(content: {
-            ForEach(Dictionary(grouping: items) {
-                Calendar.current.startOfMonth(for: $0.date)
-            }.sorted {
-                $0.key > $1.key
-            }.identified) { element in
-                NavigationLink(
-                    destination:
-                        ItemListView(
-                            title: element.value.key.stringValue(.yyyyMMM),
-                            predicate: .init(dateIsSameMonthAs: element.value.key))) {
-                    Text(element.value.key.stringValue(.yyyyMMM))
+            ForEach(0..<elements.count) { index in
+                NavigationLink(elements[index].date.stringValue(.yyyyMMM)) {
+                    ItemListView(title: elements[index].date.stringValue(.yyyyMMM),
+                                 predicate: .init(dateIsSameMonthAs: elements[index].date))
                 }
-            }.onDelete { _ in
+            }.onDelete {
                 isPresentedToAlert = true
-            }.actionSheet(isPresented: $isPresentedToAlert) {
-                ActionSheet(
-                    title: Text(.localized(.deleteConfirm)),
-                    buttons: [
-                        .destructive(Text(.localized(.delete))) {
-                            // TODO: Delete item
-                        },
-                        .cancel()])
+                willDeleteItems = $0.flatMap { elements[$0].items }
             }
         }, header: {
             Text(title)
-        })
+        }).actionSheet(isPresented: $isPresentedToAlert) {
+            ActionSheet(
+                title: Text(.localized(.deleteConfirm)),
+                buttons: [
+                    .destructive(Text(.localized(.delete))) {
+                        ItemController(context: viewContext).delete(items: willDeleteItems)
+                    },
+                    .cancel {
+                        willDeleteItems = []
+                    }])
+        }
     }
 }
 

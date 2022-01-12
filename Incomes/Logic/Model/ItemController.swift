@@ -149,10 +149,14 @@ struct ItemController { // swiftlint:disable function_parameter_count
         context.delete(item)
     }
 
-    func deleteAll() throws {
-        try items().forEach {
+    func delete(items: [Item]) {
+        items.forEach {
             delete(item: $0)
         }
+    }
+
+    func deleteAll() throws {
+        delete(items: try items())
     }
 
     // MARK: - Calculate balance

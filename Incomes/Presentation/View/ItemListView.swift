@@ -18,7 +18,7 @@ struct ItemListView: View {
     @State
     private var isPresentedToAlert = false
     @State
-    private var indexSet = IndexSet()
+    private var willDeleteItems: [Item] = []
 
     private let title: String
 
@@ -37,23 +37,25 @@ struct ItemListView: View {
                 Section(content: {
                     ForEach(section) {
                         ListItem(of: $0)
+                    }.onDelete {
+                        willDeleteItems = $0.map { section[$0] }
+                        isPresentedToAlert = true
                     }
                 }, header: {
                     if sections.count > .one {
                         Text(section.id)
                     }
                 })
-            }.onDelete {
-                self.indexSet = $0
-                isPresentedToAlert = true
             }
         }.actionSheet(isPresented: $isPresentedToAlert) {
             ActionSheet(title: Text(.localized(.deleteConfirm)),
                         buttons: [
                             .destructive(Text(.localized(.delete))) {
-                                // TODO: Delete item
+                                ItemController(context: viewContext).delete(items: willDeleteItems)
                             },
-                            .cancel()])
+                            .cancel {
+                                willDeleteItems = []
+                            }])
         }.navigationBarTitle(title)
     }
 }

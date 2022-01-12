@@ -114,7 +114,7 @@ struct EditView: View {
                 }.disabled(!isValid))
             .gesture(DragGesture()
                         .onChanged { _ in
-                            self.dismissKeyboard()
+                            dismissKeyboard()
                         })
         }.navigationViewStyle(StackNavigationViewStyle())
         .actionSheet(isPresented: $isPresentedToActionSheet) {
@@ -221,14 +221,6 @@ private extension EditView {
             assertionFailure(error.localizedDescription)
         }
         dismiss()
-    }
-
-    func delete() {
-        guard let item = item else {
-            assertionFailure()
-            return
-        }
-        ItemController(context: viewContext).delete(item: item)
     }
 
     func cancel() {
