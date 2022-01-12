@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct YearSection: View {
-    typealias Element = (date: Date, items: [Item])
+    typealias Element = (month: Date, items: [Item])
 
     @Environment(\.managedObjectContext)
     private var viewContext
@@ -24,21 +24,15 @@ struct YearSection: View {
 
     init(title: String, items: [Item]) {
         self.title = title
-        self.elements = Dictionary(grouping: items) {
-            Calendar.current.startOfMonth(for: $0.date)
-        }.map {
-            Element($0.key, $0.value)
-        }.sorted {
-            $0.date > $1.date
-        }
+        self.elements = ItemService().groupByMonth(items: items)
     }
 
     var body: some View {
         Section(content: {
             ForEach(0..<elements.count) { index in
-                NavigationLink(elements[index].date.stringValue(.yyyyMMM)) {
-                    ItemListView(title: elements[index].date.stringValue(.yyyyMMM),
-                                 predicate: .init(dateIsSameMonthAs: elements[index].date))
+                NavigationLink(elements[index].month.stringValue(.yyyyMMM)) {
+                    ItemListView(title: elements[index].month.stringValue(.yyyyMMM),
+                                 predicate: .init(dateIsSameMonthAs: elements[index].month))
                 }
             }.onDelete {
                 isPresentedToAlert = true
@@ -51,7 +45,7 @@ struct YearSection: View {
                 title: Text(.localized(.deleteConfirm)),
                 buttons: [
                     .destructive(Text(.localized(.delete))) {
-                        ItemController(context: viewContext).delete(items: willDeleteItems)
+                        ItemRepository(context: viewContext).delete(items: willDeleteItems)
                     },
                     .cancel {
                         willDeleteItems = []

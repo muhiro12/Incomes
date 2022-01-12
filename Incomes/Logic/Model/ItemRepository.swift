@@ -1,5 +1,5 @@
 //
-//  ItemController.swift
+//  ItemRepository.swift
 //  Incomes
 //
 //  Created by Hiromu Nakano on 2020/04/13.
@@ -9,7 +9,7 @@
 import Foundation
 import CoreData
 
-struct ItemController {
+struct ItemRepository {
     let context: NSManagedObjectContext
 
     // MARK: - Fetch

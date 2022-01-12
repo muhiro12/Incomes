@@ -52,7 +52,7 @@ struct ItemListView: View {
             ActionSheet(title: Text(.localized(.deleteConfirm)),
                         buttons: [
                             .destructive(Text(.localized(.delete))) {
-                                ItemController(context: viewContext).delete(items: willDeleteItems)
+                                ItemRepository(context: viewContext).delete(items: willDeleteItems)
                             },
                             .cancel {
                                 willDeleteItems = []

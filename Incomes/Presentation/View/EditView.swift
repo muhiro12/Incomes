@@ -157,7 +157,7 @@ private extension EditView {
         }
         Task {
             do {
-                try ItemController(context: viewContext)
+                try ItemRepository(context: viewContext)
                     .update(item: item,
                             date: date,
                             content: content,
@@ -178,7 +178,7 @@ private extension EditView {
         }
         Task {
             do {
-                try ItemController(context: viewContext)
+                try ItemRepository(context: viewContext)
                     .updateForFutureItems(item: item,
                                           date: date,
                                           content: content,
@@ -199,7 +199,7 @@ private extension EditView {
         }
         Task {
             do {
-                try ItemController(context: viewContext)
+                try ItemRepository(context: viewContext)
                     .updateForAllItems(item: item,
                                        date: date,
                                        content: content,
@@ -215,7 +215,7 @@ private extension EditView {
 
     func create() {
         do {
-            try ItemController(context: viewContext)
+            try ItemRepository(context: viewContext)
                 .create(date: date,
                         content: content,
                         income: income.decimalValue,

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AD09B544278F934D008F03FA /* ItemService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD09B543278F934D008F03FA /* ItemService.swift */; };
 		AD583B6124B301EB0032AA1C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = AD583B6324B301EB0032AA1C /* Localizable.strings */; };
 		AD583B6924B308AB0032AA1C /* LocalizedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD583B6824B308AB0032AA1C /* LocalizedString.swift */; };
 		AD68D6B0277C2E660040EBE2 /* UUIDExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD68D6AF277C2E660040EBE2 /* UUIDExtension.swift */; };
@@ -34,7 +35,7 @@
 		ADCF370124A1D18E0011D6F5 /* EditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF36E624A1D18E0011D6F5 /* EditView.swift */; };
 		ADCF370224A1D18E0011D6F5 /* WideListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF36E724A1D18E0011D6F5 /* WideListItem.swift */; };
 		ADCF370324A1D18E0011D6F5 /* ListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF36E824A1D18E0011D6F5 /* ListItem.swift */; };
-		ADCF370424A1D18E0011D6F5 /* ItemController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF36EA24A1D18E0011D6F5 /* ItemController.swift */; };
+		ADCF370424A1D18E0011D6F5 /* ItemRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF36EA24A1D18E0011D6F5 /* ItemRepository.swift */; };
 		ADCF370A24A1D18E0011D6F5 /* GroupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF36F224A1D18E0011D6F5 /* GroupView.swift */; };
 		ADCF370B24A1D18E0011D6F5 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF36F324A1D18E0011D6F5 /* HomeView.swift */; };
 		ADCF370E24A1D18E0011D6F5 /* IntConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF36F724A1D18E0011D6F5 /* IntConstant.swift */; };
@@ -80,6 +81,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		AD09B543278F934D008F03FA /* ItemService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemService.swift; sourceTree = "<group>"; };
 		AD583B6224B301EB0032AA1C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		AD583B6524B3032D0032AA1C /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		AD583B6824B308AB0032AA1C /* LocalizedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizedString.swift; sourceTree = "<group>"; };
@@ -113,7 +115,7 @@
 		ADCF36E624A1D18E0011D6F5 /* EditView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditView.swift; sourceTree = "<group>"; };
 		ADCF36E724A1D18E0011D6F5 /* WideListItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WideListItem.swift; sourceTree = "<group>"; };
 		ADCF36E824A1D18E0011D6F5 /* ListItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItem.swift; sourceTree = "<group>"; };
-		ADCF36EA24A1D18E0011D6F5 /* ItemController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemController.swift; sourceTree = "<group>"; };
+		ADCF36EA24A1D18E0011D6F5 /* ItemRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemRepository.swift; sourceTree = "<group>"; };
 		ADCF36F224A1D18E0011D6F5 /* GroupView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupView.swift; sourceTree = "<group>"; };
 		ADCF36F324A1D18E0011D6F5 /* HomeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		ADCF36F724A1D18E0011D6F5 /* IntConstant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntConstant.swift; sourceTree = "<group>"; };
@@ -285,7 +287,8 @@
 			children = (
 				ADE3A4C0277690330016C152 /* Authenticator.swift */,
 				ADEA399F250150E000CB61D9 /* EnvironmentParameter.swift */,
-				ADCF36EA24A1D18E0011D6F5 /* ItemController.swift */,
+				ADCF36EA24A1D18E0011D6F5 /* ItemRepository.swift */,
+				AD09B543278F934D008F03FA /* ItemService.swift */,
 				ADAD3D06277AD753005A70E1 /* Persistence.swift */,
 				ADEA399B2501457A00CB61D9 /* Store.swift */,
 			);
@@ -622,6 +625,7 @@
 				ADCF376524A32E460011D6F5 /* IncomesFooter.swift in Sources */,
 				ADAD3D23277C1120005A70E1 /* Item.swift in Sources */,
 				ADAD3D25277C1D0F005A70E1 /* StringProtocolExtension.swift in Sources */,
+				AD09B544278F934D008F03FA /* ItemService.swift in Sources */,
 				AD68D6B0277C2E660040EBE2 /* UUIDExtension.swift in Sources */,
 				ADCF393224A57ADC0011D6F5 /* PreviewData.swift in Sources */,
 				ADAD3D15277B4161005A70E1 /* CalendarExtension.swift in Sources */,
@@ -630,7 +634,7 @@
 				ADCF371224A1D18E0011D6F5 /* StringExtension.swift in Sources */,
 				ADCF370A24A1D18E0011D6F5 /* GroupView.swift in Sources */,
 				ADCF370224A1D18E0011D6F5 /* WideListItem.swift in Sources */,
-				ADCF370424A1D18E0011D6F5 /* ItemController.swift in Sources */,
+				ADCF370424A1D18E0011D6F5 /* ItemRepository.swift in Sources */,
 				ADCF371324A1D18E0011D6F5 /* StringConstant.swift in Sources */,
 				ADCF370324A1D18E0011D6F5 /* ListItem.swift in Sources */,
 				AD583B6924B308AB0032AA1C /* LocalizedString.swift in Sources */,
