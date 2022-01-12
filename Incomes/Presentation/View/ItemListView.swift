@@ -12,8 +12,8 @@ struct ItemListView: View {
     @Environment(\.managedObjectContext)
     private var viewContext
 
-    @FetchRequest
-    private var items: FetchedResults<Item>
+    @SectionedFetchRequest
+    private var sections: SectionedFetchResults<String, Item>
 
     @State
     private var isPresentedToAlert = false
@@ -24,7 +24,8 @@ struct ItemListView: View {
 
     init(title: String, predicate: NSPredicate) {
         self.title = title
-        _items = .init(
+        _sections = .init(
+            sectionIdentifier: \Item.year,
             sortDescriptors: [NSSortDescriptor(keyPath: \Item.date, ascending: false)],
             predicate: predicate,
             animation: .default)
@@ -32,8 +33,16 @@ struct ItemListView: View {
 
     var body: some View {
         List {
-            ForEach(items) {
-                ListItem(of: $0)
+            ForEach(sections) { section in
+                Section(content: {
+                    ForEach(section) {
+                        ListItem(of: $0)
+                    }
+                }, header: {
+                    if sections.count > .one {
+                        Text(section.id)
+                    }
+                })
             }.onDelete {
                 self.indexSet = $0
                 isPresentedToAlert = true
@@ -42,9 +51,7 @@ struct ItemListView: View {
             ActionSheet(title: Text(.localized(.deleteConfirm)),
                         buttons: [
                             .destructive(Text(.localized(.delete))) {
-                                indexSet.forEach {
-                                    ItemController(context: viewContext).delete(item: items[$0])
-                                }
+                                // TODO: Delete item
                             },
                             .cancel()])
         }.navigationBarTitle(title)
