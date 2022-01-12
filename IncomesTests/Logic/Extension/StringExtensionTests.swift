@@ -10,68 +10,99 @@ import XCTest
 @testable import Incomes
 
 class StringExtensionTests: XCTestCase {
-    func testisEmptyOrDecimalReturnsTrueCaseEmpty() {
-        let string = ""
-        XCTAssertTrue(string.isEmptyOrDecimal)
+    func testIsNotEmpty() {
+        XCTContext.runActivity(named: "Text returns true") { _ in
+            let string = "text"
+            XCTAssertTrue(string.isNotEmpty)
+        }
+
+        XCTContext.runActivity(named: "Empty returns false") { _ in
+            let string = ""
+            XCTAssertFalse(string.isNotEmpty)
+        }
     }
 
-    func testisEmptyOrDecimalRetrunsTrueCase0() {
-        let string = "0"
-        XCTAssertTrue(string.isEmptyOrDecimal)
+    func testIsEmptyOrDecimal() {
+        XCTContext.runActivity(named: "Empty returns true") { _ in
+            let string = ""
+            XCTAssertTrue(string.isEmptyOrDecimal)
+        }
+
+        XCTContext.runActivity(named: "0 returns true") { _ in
+            let string = "0"
+            XCTAssertTrue(string.isEmptyOrDecimal)
+        }
+
+        XCTContext.runActivity(named: "Int returns true") { _ in
+            let string = "1000"
+            XCTAssertTrue(string.isEmptyOrDecimal)
+        }
+
+        XCTContext.runActivity(named: "Text returns false") { _ in
+            let string = "text"
+            XCTAssertFalse(string.isEmptyOrDecimal)
+        }
+
+        XCTContext.runActivity(named: "Int starting with 0 returns true") { _ in
+            let string = "01000"
+            XCTAssertTrue(string.isEmptyOrDecimal)
+        }
+
+        XCTContext.runActivity(named: "Int starting with minus returns true") { _ in
+            let string = "-1000"
+            XCTAssertTrue(string.isEmptyOrDecimal)
+        }
+
+        XCTContext.runActivity(named: "Int starting with minus and 0 returns true") { _ in
+            let string = "-01000"
+            XCTAssertTrue(string.isEmptyOrDecimal)
+        }
+
+        XCTContext.runActivity(named: "Double returns true") { _ in
+            let string = "1.000"
+            XCTAssertTrue(string.isEmptyOrDecimal)
+        }
+
+        XCTContext.runActivity(named: "Int with comma returns true") { _ in
+            let string = "1,000"
+            XCTAssertTrue(string.isEmptyOrDecimal)
+        }
+
+        XCTContext.runActivity(named: "Int32 upper limit returns true") { _ in
+            let string = "2147483647"
+            XCTAssertTrue(string.isEmptyOrDecimal)
+        }
+
+        XCTContext.runActivity(named: "Numbers overing Int32 upper limit returns true") { _ in
+            let string = "2147483648"
+            XCTAssertTrue(string.isEmptyOrDecimal)
+        }
+
+        XCTContext.runActivity(named: "Int32 lower limit returns true") { _ in
+            let string = "-2147483648"
+            XCTAssertTrue(string.isEmptyOrDecimal)
+        }
+
+        XCTContext.runActivity(named: "Numbers overing Int lower limit returns true") { _ in
+            let string = "-2147483649"
+            XCTAssertTrue(string.isEmptyOrDecimal)
+        }
     }
 
-    func testisEmptyOrDecimalReturnsTrueCaseInt() {
-        let string = "1000"
-        XCTAssertTrue(string.isEmptyOrDecimal)
-    }
+    func testDecimalValue() {
+        XCTContext.runActivity(named: "Text returns 0") { _ in
+            let string = "text"
+            XCTAssertEqual(string.decimalValue, 0)
+        }
 
-    func testisEmptyOrDecimalReturnsFalseCaseText() {
-        let string = "text"
-        XCTAssertFalse(string.isEmptyOrDecimal)
-    }
+        XCTContext.runActivity(named: "0 returns 0") { _ in
+            let string = "0"
+            XCTAssertEqual(string.decimalValue, 0)
+        }
 
-    func testisEmptyOrDecimalReturnsTrueCaseIntStartWith0() {
-        let string = "01000"
-        XCTAssertTrue(string.isEmptyOrDecimal)
-    }
-
-    func testisEmptyOrDecimalReturnsTrueCaseIntStartWithMinus() {
-        let string = "-1000"
-        XCTAssertTrue(string.isEmptyOrDecimal)
-    }
-
-    func testisEmptyOrDecimalReturnsTrueCaseIntStartWithMinusAnd0() {
-        let string = "-01000"
-        XCTAssertTrue(string.isEmptyOrDecimal)
-    }
-
-    func testisEmptyOrDecimalReturnsTrueCaseDouble() {
-        let string = "1.000"
-        XCTAssertTrue(string.isEmptyOrDecimal)
-    }
-
-    func testisEmptyOrDecimalReturnsTrueCaseIntWithComma() {
-        let string = "1,000"
-        XCTAssertTrue(string.isEmptyOrDecimal)
-    }
-
-    func testisEmptyOrDecimalReturnsTrueCaseUpperLimitOfInt32() {
-        let string = "2147483647"
-        XCTAssertTrue(string.isEmptyOrDecimal)
-    }
-
-    func testisEmptyOrDecimalReturnsTrueCaseOverUpperLimitOfInt32() {
-        let string = "2147483648"
-        XCTAssertTrue(string.isEmptyOrDecimal)
-    }
-
-    func testisEmptyOrDecimalReturnsTrueCaseLowerLimitOfInt32() {
-        let string = "-2147483648"
-        XCTAssertTrue(string.isEmptyOrDecimal)
-    }
-
-    func testisEmptyOrDecimalReturnsTrueCaseUnderLowerLimitOfInt32() {
-        let string = "-2147483649"
-        XCTAssertTrue(string.isEmptyOrDecimal)
+        XCTContext.runActivity(named: "Int returns decimal") { _ in
+            let string = "1000"
+            XCTAssertEqual(string.decimalValue, 1000)
+        }
     }
 }

@@ -28,7 +28,6 @@
 		ADCF36B324A1D0F70011D6F5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ADCF36B224A1D0F70011D6F5 /* Assets.xcassets */; };
 		ADCF36B624A1D0F70011D6F5 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ADCF36B524A1D0F70011D6F5 /* Preview Assets.xcassets */; };
 		ADCF36B924A1D0F70011D6F5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = ADCF36B724A1D0F70011D6F5 /* LaunchScreen.storyboard */; };
-		ADCF36C424A1D0F70011D6F5 /* IncomesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF36C324A1D0F70011D6F5 /* IncomesTests.swift */; };
 		ADCF36CF24A1D0F70011D6F5 /* IncomesUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF36CE24A1D0F70011D6F5 /* IncomesUITests.swift */; };
 		ADCF36E024A1D1820011D6F5 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF36DD24A1D1820011D6F5 /* ContentView.swift */; };
 		ADCF36FE24A1D18E0011D6F5 /* NarrowListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF36E324A1D18E0011D6F5 /* NarrowListItem.swift */; };
@@ -43,7 +42,6 @@
 		ADCF371224A1D18E0011D6F5 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF36FB24A1D18E0011D6F5 /* StringExtension.swift */; };
 		ADCF371324A1D18E0011D6F5 /* StringConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF36FC24A1D18E0011D6F5 /* StringConstant.swift */; };
 		ADCF371424A1D18E0011D6F5 /* DateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF36FD24A1D18E0011D6F5 /* DateExtension.swift */; };
-		ADCF372724A1D1CF0011D6F5 /* ContentViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF371624A1D1CF0011D6F5 /* ContentViewTests.swift */; };
 		ADCF372924A1D1CF0011D6F5 /* StringExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF371924A1D1CF0011D6F5 /* StringExtensionTests.swift */; };
 		ADCF375824A2C8260011D6F5 /* NSDecimalNumberExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF375724A2C8250011D6F5 /* NSDecimalNumberExtension.swift */; };
 		ADCF375C24A2FBBD0011D6F5 /* Incomes.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = ADCF375A24A2FBBD0011D6F5 /* Incomes.xcdatamodeld */; };
@@ -106,7 +104,6 @@
 		ADCF36B524A1D0F70011D6F5 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		ADCF36B824A1D0F70011D6F5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		ADCF36BF24A1D0F70011D6F5 /* IncomesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = IncomesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		ADCF36C324A1D0F70011D6F5 /* IncomesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomesTests.swift; sourceTree = "<group>"; };
 		ADCF36C524A1D0F70011D6F5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		ADCF36CA24A1D0F70011D6F5 /* IncomesUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = IncomesUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		ADCF36CE24A1D0F70011D6F5 /* IncomesUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomesUITests.swift; sourceTree = "<group>"; };
@@ -125,7 +122,6 @@
 		ADCF36FC24A1D18E0011D6F5 /* StringConstant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringConstant.swift; sourceTree = "<group>"; };
 		ADCF36FD24A1D18E0011D6F5 /* DateExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateExtension.swift; sourceTree = "<group>"; };
 		ADCF371524A1D1B80011D6F5 /* Incomes.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Incomes.entitlements; sourceTree = "<group>"; };
-		ADCF371624A1D1CF0011D6F5 /* ContentViewTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentViewTests.swift; sourceTree = "<group>"; };
 		ADCF371924A1D1CF0011D6F5 /* StringExtensionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtensionTests.swift; sourceTree = "<group>"; };
 		ADCF375724A2C8250011D6F5 /* NSDecimalNumberExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSDecimalNumberExtension.swift; sourceTree = "<group>"; };
 		ADCF375B24A2FBBD0011D6F5 /* Incomes.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Incomes.xcdatamodel; sourceTree = "<group>"; };
@@ -256,8 +252,6 @@
 			isa = PBXGroup;
 			children = (
 				ADCF36C524A1D0F70011D6F5 /* Info.plist */,
-				ADCF371624A1D1CF0011D6F5 /* ContentViewTests.swift */,
-				ADCF36C324A1D0F70011D6F5 /* IncomesTests.swift */,
 				ADE058812706EE8600DF2499 /* Logic */,
 			);
 			path = IncomesTests;
@@ -670,8 +664,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				ADCF372924A1D1CF0011D6F5 /* StringExtensionTests.swift in Sources */,
-				ADCF372724A1D1CF0011D6F5 /* ContentViewTests.swift in Sources */,
-				ADCF36C424A1D0F70011D6F5 /* IncomesTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
