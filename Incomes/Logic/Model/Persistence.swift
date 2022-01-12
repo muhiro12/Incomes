@@ -16,7 +16,7 @@ struct PersistenceController {
         let result = PersistenceController(inMemory: true)
         let viewContext = result.container.viewContext
         do {
-            _ = PreviewData.screenShot(viewContext)
+            _ = PreviewData(context: viewContext).items
             try ItemController(context: viewContext).saveAll()
         } catch {
             assertionFailure(error.localizedDescription)
@@ -39,10 +39,5 @@ struct PersistenceController {
                 assertionFailure(error.localizedDescription)
             }
         })
-        do {
-            try ItemController(context: container.viewContext).calcurate()
-        } catch {
-            assertionFailure()
-        }
     }
 }

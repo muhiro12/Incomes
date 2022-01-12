@@ -22,13 +22,13 @@ struct ListItem: View {
     var body: some View {
         GeometryReader { geometry in
             if geometry.size.width > 500 {
-                WideListItem(of: self.item)
+                WideListItem(of: item)
             } else {
-                NarrowListItem(of: self.item)
+                NarrowListItem(of: item)
             }
         }.sheet(isPresented: $isPresentedToEdit) {
-            EditView(of: self.item)
-                .environment(\.managedObjectContext, self.context)
+            EditView(of: item)
+                .environment(\.managedObjectContext, context)
         }.contentShape(Rectangle())
         .onTapGesture(perform: presentToEdit)
     }
@@ -45,7 +45,7 @@ private extension ListItem {
 #if DEBUG
 struct ListItem_Previews: PreviewProvider {
     static var previews: some View {
-        ListItem(of: PreviewData.item)
+        ListItem(of: PreviewData().item)
     }
 }
 #endif

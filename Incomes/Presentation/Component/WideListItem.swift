@@ -43,7 +43,7 @@ struct WideListItem: View {
 #if DEBUG
 struct WideListItem_Previews: PreviewProvider {
     static var previews: some View {
-        WideListItem(of: PreviewData.item)
+        WideListItem(of: PreviewData().item)
     }
 }
 #endif

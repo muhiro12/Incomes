@@ -12,16 +12,20 @@ struct ItemListView: View {
     @Environment(\.managedObjectContext)
     private var viewContext
 
-    @FetchRequest private var items: FetchedResults<Item>
+    @SectionedFetchRequest
+    private var sections: SectionedFetchResults<String, Item>
 
-    @State private var isPresentedToAlert = false
-    @State private var indexSet = IndexSet()
+    @State
+    private var isPresentedToAlert = false
+    @State
+    private var willDeleteItems: [Item] = []
 
     private let title: String
 
     init(title: String, predicate: NSPredicate) {
         self.title = title
-        _items = FetchRequest<Item>(
+        _sections = .init(
+            sectionIdentifier: \Item.year,
             sortDescriptors: [NSSortDescriptor(keyPath: \Item.date, ascending: false)],
             predicate: predicate,
             animation: .default)
@@ -29,21 +33,29 @@ struct ItemListView: View {
 
     var body: some View {
         List {
-            ForEach(items) {
-                ListItem(of: $0)
-            }.onDelete {
-                self.indexSet = $0
-                isPresentedToAlert = true
+            ForEach(sections) { section in
+                Section(content: {
+                    ForEach(section) {
+                        ListItem(of: $0)
+                    }.onDelete {
+                        willDeleteItems = $0.map { section[$0] }
+                        isPresentedToAlert = true
+                    }
+                }, header: {
+                    if sections.count > .one {
+                        Text(section.id)
+                    }
+                })
             }
         }.actionSheet(isPresented: $isPresentedToAlert) {
             ActionSheet(title: Text(.localized(.deleteConfirm)),
                         buttons: [
                             .destructive(Text(.localized(.delete))) {
-                                indexSet.forEach {
-                                    ItemController(context: viewContext).delete(item: items[$0])
-                                }
+                                ItemController(context: viewContext).delete(items: willDeleteItems)
                             },
-                            .cancel()])
+                            .cancel {
+                                willDeleteItems = []
+                            }])
         }.navigationBarTitle(title)
     }
 }

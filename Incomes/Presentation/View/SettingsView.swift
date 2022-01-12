@@ -11,8 +11,8 @@ import SwiftUI
 struct SettingsView: View {
     @Environment(\.managedObjectContext)
     private var viewContext
-
-    @Environment(\.presentationMode) var presentationMode
+    @Environment(\.presentationMode)
+    var presentationMode
 
     @AppStorage(wrappedValue: false, UserDefaults.Key.isLockAppOn.rawValue)
     private var isLockAppOn
@@ -21,7 +21,8 @@ struct SettingsView: View {
     @AppStorage(wrappedValue: false, UserDefaults.Key.isSubscribeOn.rawValue)
     private var isSubscribeOn
 
-    @State private var isAlertPresented = false
+    @State
+    private var isAlertPresented = false
 
     private let store = Store.shared
 
@@ -47,10 +48,29 @@ struct SettingsView: View {
                     }
                 }
                 Section {
-                    Button(.localized(.deleteAll)) {
+                    Button(.localized(.recalculate)) {
+                        do {
+                            try ItemController(context: viewContext).calculate()
+                        } catch {
+                            assertionFailure(error.localizedDescription)
+                        }
+                    }
+                    Button(.localized(.deleteAll), role: .destructive) {
                         isAlertPresented = true
                     }
                 }
+                #if DEBUG
+                Section {
+                    Button("SET DEBUG DATA") {
+                        do {
+                            _ = PreviewData(context: viewContext).items
+                            try ItemController(context: viewContext).saveAll()
+                        } catch {
+                            assertionFailure(error.localizedDescription)
+                        }
+                    }
+                }
+                #endif
             }.navigationBarTitle(.localized(.settingsTitle))
             .navigationBarItems(trailing: Button(action: dismiss) {
                 Text(.localized(.done))

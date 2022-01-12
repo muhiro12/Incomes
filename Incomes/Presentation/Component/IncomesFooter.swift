@@ -37,7 +37,7 @@ struct IncomesFooter: View {
                                  trailing: .spaceM))
         }.sheet(isPresented: $isPresentedToEdit) {
             EditView()
-                .environment(\.managedObjectContext, self.context)
+                .environment(\.managedObjectContext, context)
         }
     }
 }

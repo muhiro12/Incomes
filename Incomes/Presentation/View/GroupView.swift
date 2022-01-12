@@ -9,19 +9,16 @@
 import SwiftUI
 
 struct GroupView: View {
-    @Environment(\.managedObjectContext)
-    private var viewContext
-
     @SectionedFetchRequest(
         sectionIdentifier: \Item.group,
-        sortDescriptors: [NSSortDescriptor(keyPath: \Item.date, ascending: false)],
+        sortDescriptors: [NSSortDescriptor(keyPath: \Item.group, ascending: true)],
         animation: .default)
     private var sections: SectionedFetchResults<String, Item>
 
     var body: some View {
         List {
             ForEach(sections) {
-                GroupSection(items: $0.map { $0 })
+                GroupSection(title: $0.id, items: $0.map { $0 })
             }
         }.navigationBarTitle(.localized(.groupTitle))
     }
@@ -30,7 +27,8 @@ struct GroupView: View {
 #if DEBUG
 struct GroupView_Previews: PreviewProvider {
     static var previews: some View {
-        GroupView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+        GroupView()
+            .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
     }
 }
 #endif
