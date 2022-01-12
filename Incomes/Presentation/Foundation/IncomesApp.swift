@@ -16,14 +16,12 @@ struct IncomesApp: App {
     init() {
         FirebaseApp.configure()
         Store.shared.configure()
-        UINavigationBar.appearance().tintColor = .systemGreen
     }
 
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
-                .tint(.green)
         }
     }
 }

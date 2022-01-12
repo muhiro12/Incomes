@@ -41,13 +41,16 @@ struct SettingsView: View {
                         }
                     }
                 } else {
-                    Section(header: Text(.localized(.subscriptionTitle)),
-                            footer: Text(.localized(.subscriptionDescription))) {
+                    Section(content: {
                         Button(.localized(.subscribe), action: purchase)
                         Button(.localized(.restore), action: restore)
-                    }
+                    }, header: {
+                        Text(.localized(.subscriptionHeader))
+                    }, footer: {
+                        Text(.localized(.subscriptionFooter))
+                    })
                 }
-                Section {
+                Section(content: {
                     Button(.localized(.recalculate)) {
                         do {
                             try ItemController(context: viewContext).calculate()
@@ -58,19 +61,9 @@ struct SettingsView: View {
                     Button(.localized(.deleteAll), role: .destructive) {
                         isAlertPresented = true
                     }
-                }
-                #if DEBUG
-                Section {
-                    Button("SET DEBUG DATA") {
-                        do {
-                            _ = PreviewData(context: viewContext).items
-                            try ItemController(context: viewContext).saveAll()
-                        } catch {
-                            assertionFailure(error.localizedDescription)
-                        }
-                    }
-                }
-                #endif
+                }, header: {
+                    Text(.localized(.manageItemsHeader))
+                })
             }.navigationBarTitle(.localized(.settingsTitle))
             .navigationBarItems(trailing: Button(action: dismiss) {
                 Text(.localized(.done))

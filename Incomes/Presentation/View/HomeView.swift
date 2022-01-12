@@ -24,8 +24,7 @@ struct HomeView: View {
             ForEach(sections) {
                 YearSection(title: $0.id, items: $0.map { $0 })
             }
-        }.navigationBarTitle(.localized(.homeTitle))
-        .toolbar {
+        }.toolbar {
             Button(action: {
                 isPresentedToSettings = true
             }, label: {
@@ -34,7 +33,8 @@ struct HomeView: View {
             })
         }.sheet(isPresented: $isPresentedToSettings) {
             SettingsView()
-        }
+        }.navigationBarTitle(.localized(.homeTitle))
+        .listStyle(.sidebar)
     }
 }
 

@@ -18,4 +18,10 @@ extension String {
     // MARK: - Identifier
 
     static var item: Self { "Item" }
+
+    // MARK: - Debug
+
+    static var debugTitle: Self { "Debug" }
+    static var debugCommand: Self { "DebugView" }
+    static var debugPreviewData: Self { "Set preview data" }
 }

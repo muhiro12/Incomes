@@ -49,10 +49,11 @@
 "settingsTitle" = "Settings";
 "lockApp" = "Lock the app";
 "iCloud" = "iCloud";
-"subscriptionTitle" = "Subscription Service";
+"subscriptionHeader" = "Subscription Service";
 "subscribe" = "Subscribe";
 "restore" = "Restore";
-"subscriptionDescription" = "For sharing data between all device";
+"subscriptionFooter" = "For sharing data between all device";
+"manageItemsHeader" = "Manage items";
 "recalculate" = "Recalculate";
 "deleteAll" = "Delete all";
 "deleteAllConfirm" = "Are you sure you want to delete all items?";

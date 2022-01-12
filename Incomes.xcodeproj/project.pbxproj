@@ -11,6 +11,7 @@
 		AD583B6924B308AB0032AA1C /* LocalizedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD583B6824B308AB0032AA1C /* LocalizedString.swift */; };
 		AD68D6B0277C2E660040EBE2 /* UUIDExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD68D6AF277C2E660040EBE2 /* UUIDExtension.swift */; };
 		AD68D6B2277C45DA0040EBE2 /* NSNumberConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD68D6B1277C45DA0040EBE2 /* NSNumberConstant.swift */; };
+		AD75E9DE278F19A5008BE905 /* DebugView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD75E9DD278F19A5008BE905 /* DebugView.swift */; };
 		AD82590426E3F0FB003B6792 /* Purchases in Frameworks */ = {isa = PBXBuildFile; productRef = AD82590326E3F0FB003B6792 /* Purchases */; };
 		AD98194226E43C3600C4A57C /* StoreKitTestCertificate.cer in Resources */ = {isa = PBXBuildFile; fileRef = AD98194126E43C3600C4A57C /* StoreKitTestCertificate.cer */; };
 		ADAD3CC7277AA922005A70E1 /* UserDefaultsExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADAD3CC6277AA922005A70E1 /* UserDefaultsExtension.swift */; };
@@ -86,6 +87,7 @@
 		AD583B6824B308AB0032AA1C /* LocalizedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizedString.swift; sourceTree = "<group>"; };
 		AD68D6AF277C2E660040EBE2 /* UUIDExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UUIDExtension.swift; sourceTree = "<group>"; };
 		AD68D6B1277C45DA0040EBE2 /* NSNumberConstant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSNumberConstant.swift; sourceTree = "<group>"; };
+		AD75E9DD278F19A5008BE905 /* DebugView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugView.swift; sourceTree = "<group>"; };
 		AD7C7E2B254A33E500D1F0A0 /* Configuration.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Configuration.storekit; sourceTree = "<group>"; };
 		AD98194126E43C3600C4A57C /* StoreKitTestCertificate.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = StoreKitTestCertificate.cer; sourceTree = "<group>"; };
 		ADAD3CC6277AA922005A70E1 /* UserDefaultsExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsExtension.swift; sourceTree = "<group>"; };
@@ -299,6 +301,7 @@
 		ADCF36F024A1D18E0011D6F5 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				AD75E9DD278F19A5008BE905 /* DebugView.swift */,
 				ADCF36E624A1D18E0011D6F5 /* EditView.swift */,
 				ADCF36F224A1D18E0011D6F5 /* GroupView.swift */,
 				ADCF36F324A1D18E0011D6F5 /* HomeView.swift */,
@@ -655,6 +658,7 @@
 				ADAD3D0F277B1790005A70E1 /* LockedView.swift in Sources */,
 				ADCF36E024A1D1820011D6F5 /* ContentView.swift in Sources */,
 				ADCF370E24A1D18E0011D6F5 /* IntConstant.swift in Sources */,
+				AD75E9DE278F19A5008BE905 /* DebugView.swift in Sources */,
 				AD68D6B2277C45DA0040EBE2 /* NSNumberConstant.swift in Sources */,
 				ADEA399C2501457A00CB61D9 /* Store.swift in Sources */,
 				ADE89DF524B5E73300BB82E9 /* TitleListItem.swift in Sources */,
@@ -729,6 +733,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -791,6 +796,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
