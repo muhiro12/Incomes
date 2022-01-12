@@ -16,6 +16,8 @@ struct EditView: View {
 
     @State
     private var isPresentedToActionSheet = false
+    @State
+    private var isDebugPresented = false
 
     @State
     private var date = Date()
@@ -118,8 +120,9 @@ struct EditView: View {
                         .onChanged { _ in
                             dismissKeyboard()
                         })
-        }.navigationViewStyle(StackNavigationViewStyle())
-        .actionSheet(isPresented: $isPresentedToActionSheet) {
+        }.sheet(isPresented: $isDebugPresented) {
+            DebugView()
+        }.actionSheet(isPresented: $isPresentedToActionSheet) {
             ActionSheet(title: Text(.localized(.saveDetail)),
                         buttons: [
                             .default(Text(.localized(.saveForThisItem)),
@@ -130,7 +133,7 @@ struct EditView: View {
                                      action: saveForAllItems),
                             .cancel()
                         ])
-        }
+        }.navigationViewStyle(StackNavigationViewStyle())
     }
 }
 
@@ -226,6 +229,11 @@ private extension EditView {
     }
 
     func cancel() {
+        if content == .debugCommand {
+            content = .empty
+            isDebugPresented = true
+            return
+        }
         dismiss()
     }
 
