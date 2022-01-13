@@ -28,9 +28,4 @@ extension Date {
                                                              locale: .current)
         return Self.formatter.string(from: self)
     }
-
-    func yearString() -> String {
-        Self.formatter.dateFormat = Template.yyyy.rawValue
-        return Self.formatter.string(from: self)
-    }
 }

@@ -27,7 +27,7 @@ struct PreviewData {
     var items: [Item] {
         var items: [Item] = []
 
-        let now = Date()
+        let now = Calendar.current.startOfYear(for: Date())
         let dateA = Calendar.current.date(byAdding: .day, value: 0, to: now)!
         let dateB = Calendar.current.date(byAdding: .day, value: 6, to: now)!
         let dateC = Calendar.current.date(byAdding: .day, value: 12, to: now)!

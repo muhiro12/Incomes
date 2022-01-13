@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct GroupSection: View {
-    typealias Element = (group: String, items: [Item])
+    typealias Element = (content: String, items: [Item])
 
     @Environment(\.managedObjectContext)
     var viewContext
@@ -24,21 +24,15 @@ struct GroupSection: View {
 
     init(title: String, items: [Item]) {
         self.title = title
-        self.elements = Dictionary(grouping: items) {
-            $0.content
-        }.map {
-            Element($0.key, $0.value)
-        }.sorted {
-            $0.group < $1.group
-        }
+        self.elements = ItemService().groupByContent(items: items)
     }
 
     var body: some View {
         Section(content: {
             ForEach(elements.indices) { index in
-                NavigationLink(elements[index].group) {
-                    ItemListView(title: elements[index].group,
-                                 predicate: .init(contentIs: elements[index].group))
+                NavigationLink(elements[index].content) {
+                    ItemListView(title: elements[index].content,
+                                 predicate: .init(contentIs: elements[index].content))
                 }
             }.onDelete {
                 isPresentedToAlert = true
@@ -51,7 +45,7 @@ struct GroupSection: View {
                 title: Text(.localized(.deleteConfirm)),
                 buttons: [
                     .destructive(Text(.localized(.delete))) {
-                        ItemController(context: viewContext).delete(items: willDeleteItems)
+                        ItemRepository(context: viewContext).delete(items: willDeleteItems)
                     },
                     .cancel {
                         willDeleteItems = []

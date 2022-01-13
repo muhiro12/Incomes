@@ -107,6 +107,14 @@ struct EditView: View {
                 }, header: {
                     Text(.localized(.information))
                 })
+                if DebugView.isDebug,
+                   let item = item {
+                    Section(content: {
+                        Text(item.description)
+                    }, header: {
+                        Text(String.debugTitle)
+                    })
+                }
             }.navigationBarTitle(isEditMode ? .localized(.editTitle) : .localized(.createTitle))
             .navigationBarItems(
                 leading: Button(action: cancel) {
@@ -157,7 +165,7 @@ private extension EditView {
         }
         Task {
             do {
-                try ItemController(context: viewContext)
+                try ItemRepository(context: viewContext)
                     .update(item: item,
                             date: date,
                             content: content,
@@ -178,7 +186,7 @@ private extension EditView {
         }
         Task {
             do {
-                try ItemController(context: viewContext)
+                try ItemRepository(context: viewContext)
                     .updateForFutureItems(item: item,
                                           date: date,
                                           content: content,
@@ -199,7 +207,7 @@ private extension EditView {
         }
         Task {
             do {
-                try ItemController(context: viewContext)
+                try ItemRepository(context: viewContext)
                     .updateForAllItems(item: item,
                                        date: date,
                                        content: content,
@@ -215,7 +223,7 @@ private extension EditView {
 
     func create() {
         do {
-            try ItemController(context: viewContext)
+            try ItemRepository(context: viewContext)
                 .create(date: date,
                         content: content,
                         income: income.decimalValue,

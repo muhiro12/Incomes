@@ -53,7 +53,7 @@ struct SettingsView: View {
                 Section(content: {
                     Button(.localized(.recalculate)) {
                         do {
-                            try ItemController(context: viewContext).calculate()
+                            try ItemRepository(context: viewContext).calculate()
                         } catch {
                             assertionFailure(error.localizedDescription)
                         }
@@ -74,7 +74,7 @@ struct SettingsView: View {
                isPresented: $isAlertPresented) {
             Button(.localized(.delete), role: .destructive) {
                 do {
-                    try ItemController(context: viewContext).deleteAll()
+                    try ItemRepository(context: viewContext).deleteAll()
                 } catch {
                     assertionFailure(error.localizedDescription)
                 }

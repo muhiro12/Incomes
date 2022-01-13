@@ -9,19 +9,34 @@
 import SwiftUI
 
 struct DebugView: View {
+    static var isDebug: Bool = {
+        #if DEBUG
+        return true
+        #else
+        return false
+        #endif
+    }()
+
     @Environment(\.managedObjectContext)
     private var viewContext
     @Environment(\.presentationMode)
-    var presentationMode
+    private var presentationMode
+
+    @State
+    private var isDebugOption = Self.isDebug
 
     var body: some View {
         NavigationView {
             Form {
                 Section {
+                    Toggle(String.debugOption, isOn: $isDebugOption)
+                        .onChange(of: isDebugOption) {
+                            Self.isDebug = $0
+                        }
                     Button(String.debugPreviewData) {
                         do {
                             _ = PreviewData(context: viewContext).items
-                            try ItemController(context: viewContext).saveAll()
+                            try ItemRepository(context: viewContext).saveAll()
                         } catch {
                             assertionFailure(error.localizedDescription)
                         }
