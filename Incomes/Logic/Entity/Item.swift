@@ -41,7 +41,7 @@ extension Item {
         self.group = group
         self.repeatID = repeatID
 
-        self.year = date.yearString()
+        self.year = date.stringValue(.yyyy)
     }
 
     var profit: NSDecimalNumber {
