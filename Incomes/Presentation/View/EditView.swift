@@ -107,6 +107,14 @@ struct EditView: View {
                 }, header: {
                     Text(.localized(.information))
                 })
+                if DebugView.isDebug,
+                   let item = item {
+                    Section(content: {
+                        Text(item.description)
+                    }, header: {
+                        Text(String.debugTitle)
+                    })
+                }
             }.navigationBarTitle(isEditMode ? .localized(.editTitle) : .localized(.createTitle))
             .navigationBarItems(
                 leading: Button(action: cancel) {
