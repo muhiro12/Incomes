@@ -11,8 +11,7 @@ import SwiftUI
 struct HomeView: View {
     @SectionedFetchRequest(
         sectionIdentifier: \Item.year,
-        sortDescriptors: [NSSortDescriptor(keyPath: \Item.year, ascending: false),
-                          NSSortDescriptor(keyPath: \Item.date, ascending: false)],
+        sortDescriptors: [.init(keyPath: \Item.year, ascending: false)],
         animation: .default)
     private var sections: SectionedFetchResults<Date, Item>
 

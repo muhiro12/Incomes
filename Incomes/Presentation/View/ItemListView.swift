@@ -26,7 +26,7 @@ struct ItemListView: View {
         self.title = title
         _sections = .init(
             sectionIdentifier: \Item.year,
-            sortDescriptors: [NSSortDescriptor(keyPath: \Item.date, ascending: false)],
+            sortDescriptors: NSSortDescriptor.standards,
             predicate: predicate,
             animation: .default)
     }
