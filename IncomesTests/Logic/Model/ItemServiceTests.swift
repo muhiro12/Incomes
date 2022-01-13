@@ -25,13 +25,27 @@ class ItemServiceTests: XCTestCase {
             XCTAssertEqual(result.first!.items[1].content, data[1].content)
             XCTAssertEqual(result.first!.items[2].content, data[2].content)
         }
+
+        XCTContext.runActivity(named: "First items are Dec.") { _ in
+            result.first!.items.forEach {
+                XCTAssertEqual(Calendar.current.component(.month, from: $0.date),
+                               12)
+            }
+        }
+
+        XCTContext.runActivity(named: "Last items are Jan.") { _ in
+            result.last!.items.forEach {
+                XCTAssertEqual(Calendar.current.component(.month, from: $0.date),
+                               1)
+            }
+        }
     }
 
     func testGroupByContent() {
         let data = PreviewData().items
         let result = ItemService().groupByContent(items: data)
 
-        XCTContext.runActivity(named: "Result is sortedin ascending by content") { _ in
+        XCTContext.runActivity(named: "Result is sorted in ascending by content") { _ in
             XCTAssertTrue(result[0].content < result[1].content)
             XCTAssertTrue(result[1].content < result[2].content)
             XCTAssertTrue(result[2].content < result[3].content)
