@@ -1,5 +1,7 @@
 on:
-  pull_request:
+  push:
+    branches:
+    - main
   workflow_dispatch:
 env:
   PROJECT-NAME: Incomes
@@ -27,15 +29,7 @@ jobs:
       run: |
         git add .
         git commit -m 'Update build number'
-
-    - name: Xcode test
-      run: xcodebuild -scheme ${{ env.PROJECT-NAME }} -destination "platform=iOS Simulator,name=iPhone 13 Pro" -resultBundlePath TestResults test
-
-    - name: Test result
-      uses: kishikawakatsumi/xcresulttool@v1
-      if: success() || failure()
-      with:
-        path: TestResults.xcresult
+        git push origin HEAD
 
     - name: iOS build
       uses: yukiarrr/ios-build-action@v1.4.0
@@ -53,11 +47,3 @@ jobs:
         issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
         api-key-id: ${{ secrets.APPSTORE_API_KEY_ID }}
         api-private-key: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
-
-    - name: Push commit about build number
-      run: |
-        git push origin HEAD:${{ github.head_ref }}
-
-    - name: Merge PR
-      if: ${{ github.event.pull_request.number }}
-      run: gh pr merge ${{ github.event.pull_request.number }}

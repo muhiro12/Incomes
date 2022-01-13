@@ -1,16 +1,15 @@
 on:
+  pull_request:
   workflow_dispatch:
 env:
   PROJECT-NAME: Incomes
 jobs:
-  build:
+  test:
     runs-on: macos-11
     steps:
 
     - name: Checkout repository
       uses: actions/checkout@v2
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Set ignored files
       run: |
@@ -18,14 +17,6 @@ jobs:
         echo '${{ secrets.GOOGLESERVICE_BASE64 }}' | base64 -d -o Incomes/Configuration/Package/Firebase/GoogleService-Info.plist
         echo '${{ secrets.SECRET_BASE64 }}' | base64 -d -o Incomes/Configuration/Secret.swift
         echo '${{ secrets.STOREKIT_BASE64 }}' | base64 -d -o Incomes/Configuration/Package/StoreKit/StoreKitTestCertificate.cer
-
-    - name: Update build number
-      uses: yanamura/ios-bump-version@v1
-
-    - name: Create commit about build number
-      run: |
-        git add .
-        git commit -m 'Update build number'
 
     - name: Xcode test
       run: xcodebuild -scheme ${{ env.PROJECT-NAME }} -destination "platform=iOS Simulator,name=iPhone 13 Pro" -resultBundlePath TestResults test
@@ -36,10 +27,8 @@ jobs:
       with:
         path: TestResults.xcresult
 
-    - name: Push commit about build number
-      run: |
-        git push
-
     - name: Merge PR
       if: ${{ github.event.pull_request.number }}
-      run: gh pr merge ${{ github.event.pull_request.number }}
+      run: gh pr merge --merge ${{ github.event.pull_request.number }}
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
