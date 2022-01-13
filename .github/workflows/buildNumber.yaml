@@ -12,13 +12,6 @@ jobs:
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Set ignored files
-      run: |
-        mkdir Incomes/Configuration/Package/Firebase/
-        echo '${{ secrets.GOOGLESERVICE_BASE64 }}' | base64 -d -o Incomes/Configuration/Package/Firebase/GoogleService-Info.plist
-        echo '${{ secrets.SECRET_BASE64 }}' | base64 -d -o Incomes/Configuration/Secret.swift
-        echo '${{ secrets.STOREKIT_BASE64 }}' | base64 -d -o Incomes/Configuration/Package/StoreKit/StoreKitTestCertificate.cer
-
     - name: Update build number
       uses: yanamura/ios-bump-version@v1
 
@@ -26,20 +19,4 @@ jobs:
       run: |
         git add .
         git commit -m 'Update build number'
-
-    - name: Xcode test
-      run: xcodebuild -scheme ${{ env.PROJECT-NAME }} -destination "platform=iOS Simulator,name=iPhone 13 Pro" -resultBundlePath TestResults test
-
-    - name: Test result
-      uses: kishikawakatsumi/xcresulttool@v1
-      if: success() || failure()
-      with:
-        path: TestResults.xcresult
-
-    - name: Push commit about build number
-      run: |
         git push
-
-    - name: Merge PR
-      if: ${{ github.event.pull_request.number }}
-      run: gh pr merge ${{ github.event.pull_request.number }}
