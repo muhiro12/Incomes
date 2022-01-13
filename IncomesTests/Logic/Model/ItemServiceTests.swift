@@ -39,6 +39,48 @@ class ItemServiceTests: XCTestCase {
                                1)
             }
         }
+
+        XCTContext.runActivity(named: "First items are Dec. in gregorian") { _ in
+            result.first!.items.forEach {
+                XCTAssertEqual(Calendar(identifier: .gregorian).component(.month, from: $0.date),
+                               12)
+            }
+        }
+
+        XCTContext.runActivity(named: "Last items are Jan. in gregorian") { _ in
+            result.last!.items.forEach {
+                XCTAssertEqual(Calendar(identifier: .gregorian).component(.month, from: $0.date),
+                               1)
+            }
+        }
+
+        XCTContext.runActivity(named: "First items are Dec. in japanese") { _ in
+            result.first!.items.forEach {
+                XCTAssertEqual(Calendar(identifier: .iso8601).component(.month, from: $0.date),
+                               12)
+            }
+        }
+
+        XCTContext.runActivity(named: "Last items are Jan. in japanese") { _ in
+            result.last!.items.forEach {
+                XCTAssertEqual(Calendar(identifier: .iso8601).component(.month, from: $0.date),
+                               1)
+            }
+        }
+
+        XCTContext.runActivity(named: "First items are Dec. in japanese") { _ in
+            result.first!.items.forEach {
+                XCTAssertEqual(Calendar(identifier: .japanese).component(.month, from: $0.date),
+                               12)
+            }
+        }
+
+        XCTContext.runActivity(named: "Last items are Jan. in japanese") { _ in
+            result.last!.items.forEach {
+                XCTAssertEqual(Calendar(identifier: .japanese).component(.month, from: $0.date),
+                               1)
+            }
+        }
     }
 
     func testGroupByContent() {
