@@ -17,7 +17,7 @@ struct ItemRepository {
     func items(predicate: NSPredicate? = nil) throws -> [Item] {
         let request = Item.fetchRequest()
         request.predicate = predicate
-        request.sortDescriptors = [NSSortDescriptor(keyPath: \Item.date, ascending: true)]
+        request.sortDescriptors = NSSortDescriptor.standards
         return try context.fetch(request)
     }
 
@@ -162,21 +162,20 @@ struct ItemRepository {
     // MARK: - Calculate balance
 
     func calculate(predicate: NSPredicate? = nil)  throws {
-        let items = try items(predicate: predicate)
-        items.forEach { _ in
-            guard false else {
-                return
-            }
-        }
+        let items = try items(predicate: predicate).reversed() as [Item]
         for tuple in items.enumerated() {
             let index = tuple.offset
             let item = tuple.element
 
-            if index == .zero {
-                item.balance = item.balance.adding(item.profit)
-            } else {
-                item.balance = items[index - 1].balance.adding(item.profit)
-            }
+            item.balance = {
+                if index > .zero {
+                    return items[index - 1].balance.adding(item.profit)
+                } else if predicate != nil {
+                    return item.balance.adding(item.profit)
+                } else {
+                    return item.profit
+                }
+            }()
         }
         try save()
     }
@@ -186,6 +185,8 @@ struct ItemRepository {
         guard let oldest = items.sorted(by: { $0.date < $1.date }).first else {
             return
         }
-        try calculate(predicate: .init(dateIsAfter: oldest.date))
+        // TODO: Fix
+        //        try calculate(predicate: .init(dateIsAfter: oldest.date))
+        try calculate()
     }
 }

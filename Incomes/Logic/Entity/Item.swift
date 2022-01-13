@@ -24,7 +24,7 @@ extension Item: Identifiable {
     @NSManaged public var income: NSDecimalNumber
     @NSManaged public var outgo: NSDecimalNumber
     @NSManaged public var repeatID: UUID
-    @NSManaged public var year: String
+    @NSManaged public var year: Date
 }
 
 extension Item {
@@ -41,7 +41,7 @@ extension Item {
         self.group = group
         self.repeatID = repeatID
 
-        self.year = date.stringValue(.yyyy)
+        self.year = Calendar(identifier: .gregorian).startOfYear(for: date)
     }
 
     var profit: NSDecimalNumber {

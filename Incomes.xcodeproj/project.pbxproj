@@ -27,6 +27,9 @@
 		ADAD3D23277C1120005A70E1 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADAD3D22277C111F005A70E1 /* Item.swift */; };
 		ADAD3D25277C1D0F005A70E1 /* StringProtocolExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADAD3D24277C1D0F005A70E1 /* StringProtocolExtension.swift */; };
 		ADCB06DE278F954600B867F4 /* ItemServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCB06DD278F954600B867F4 /* ItemServiceTests.swift */; };
+		ADCB06E02790562000B867F4 /* DateExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCB06DF2790562000B867F4 /* DateExtensionTests.swift */; };
+		ADCB06E22790635900B867F4 /* CalendarExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCB06E12790635900B867F4 /* CalendarExtensionTests.swift */; };
+		ADCB06E42790CFC600B867F4 /* NSSortDescriptorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCB06E32790CFC600B867F4 /* NSSortDescriptorExtension.swift */; };
 		ADCF36B324A1D0F70011D6F5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ADCF36B224A1D0F70011D6F5 /* Assets.xcassets */; };
 		ADCF36B624A1D0F70011D6F5 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ADCF36B524A1D0F70011D6F5 /* Preview Assets.xcassets */; };
 		ADCF36B924A1D0F70011D6F5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = ADCF36B724A1D0F70011D6F5 /* LaunchScreen.storyboard */; };
@@ -103,6 +106,9 @@
 		ADAD3D22277C111F005A70E1 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		ADAD3D24277C1D0F005A70E1 /* StringProtocolExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringProtocolExtension.swift; sourceTree = "<group>"; };
 		ADCB06DD278F954600B867F4 /* ItemServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemServiceTests.swift; sourceTree = "<group>"; };
+		ADCB06DF2790562000B867F4 /* DateExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtensionTests.swift; sourceTree = "<group>"; };
+		ADCB06E12790635900B867F4 /* CalendarExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarExtensionTests.swift; sourceTree = "<group>"; };
+		ADCB06E32790CFC600B867F4 /* NSSortDescriptorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSSortDescriptorExtension.swift; sourceTree = "<group>"; };
 		ADCF36A624A1D0F40011D6F5 /* Incomes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Incomes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ADCF36B224A1D0F70011D6F5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		ADCF36B524A1D0F70011D6F5 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -203,6 +209,7 @@
 				ADCF375724A2C8250011D6F5 /* NSDecimalNumberExtension.swift */,
 				AD68D6B1277C45DA0040EBE2 /* NSNumberConstant.swift */,
 				ADAD3D18277BD498005A70E1 /* NSPredicateExtension.swift */,
+				ADCB06E32790CFC600B867F4 /* NSSortDescriptorExtension.swift */,
 				ADCF36FC24A1D18E0011D6F5 /* StringConstant.swift */,
 				ADCF36FB24A1D18E0011D6F5 /* StringExtension.swift */,
 				ADAD3D24277C1D0F005A70E1 /* StringProtocolExtension.swift */,
@@ -459,6 +466,8 @@
 		ADE058842706EEB900DF2499 /* Extension */ = {
 			isa = PBXGroup;
 			children = (
+				ADCB06E12790635900B867F4 /* CalendarExtensionTests.swift */,
+				ADCB06DF2790562000B867F4 /* DateExtensionTests.swift */,
 				ADCF371924A1D1CF0011D6F5 /* StringExtensionTests.swift */,
 			);
 			path = Extension;
@@ -635,6 +644,7 @@
 				ADAD3D1D277BDBDE005A70E1 /* ItemListView.swift in Sources */,
 				ADCF376524A32E460011D6F5 /* IncomesFooter.swift in Sources */,
 				ADAD3D23277C1120005A70E1 /* Item.swift in Sources */,
+				ADCB06E42790CFC600B867F4 /* NSSortDescriptorExtension.swift in Sources */,
 				ADAD3D25277C1D0F005A70E1 /* StringProtocolExtension.swift in Sources */,
 				AD09B544278F934D008F03FA /* ItemService.swift in Sources */,
 				AD68D6B0277C2E660040EBE2 /* UUIDExtension.swift in Sources */,
@@ -679,6 +689,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				ADCB06DE278F954600B867F4 /* ItemServiceTests.swift in Sources */,
+				ADCB06E22790635900B867F4 /* CalendarExtensionTests.swift in Sources */,
+				ADCB06E02790562000B867F4 /* DateExtensionTests.swift in Sources */,
 				ADCF372924A1D1CF0011D6F5 /* StringExtensionTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

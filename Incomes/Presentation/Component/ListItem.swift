@@ -9,9 +9,11 @@
 import SwiftUI
 
 struct ListItem: View {
-    @Environment(\.managedObjectContext) var context
+    @Environment(\.managedObjectContext)
+    private var context
 
-    @State private var isPresentedToEdit = false
+    @State
+    private var isPresentedToEdit = false
 
     private let item: Item
 

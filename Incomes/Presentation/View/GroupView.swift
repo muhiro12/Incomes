@@ -11,7 +11,7 @@ import SwiftUI
 struct GroupView: View {
     @SectionedFetchRequest(
         sectionIdentifier: \Item.group,
-        sortDescriptors: [NSSortDescriptor(keyPath: \Item.group, ascending: true)],
+        sortDescriptors: [.init(keyPath: \Item.group, ascending: true)],
         animation: .default)
     private var sections: SectionedFetchResults<String, Item>
 
