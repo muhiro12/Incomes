@@ -9,6 +9,12 @@
 import Foundation
 
 extension Calendar {
+    static var utc: Self {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = TimeZone(secondsFromGMT: 0)!
+        return calendar
+    }
+
     func startOfYear(for date: Date) -> Date {
         let components = dateComponents([.year], from: date)
         guard let start = self.date(from: components) else {
@@ -19,12 +25,11 @@ extension Calendar {
     }
 
     func endOfYear(for date: Date) -> Date {
-        guard let next = self.date(byAdding: .year, value: 1, to: date),
-              let end = self.date(byAdding: .nanosecond, value: -1, to: startOfDay(for: next))
-        else {
+        guard let next = self.date(byAdding: .year, value: 1, to: date) else {
             assertionFailure()
             return date
         }
+        let end = startOfYear(for: next) - 1
         return end
     }
 
@@ -38,12 +43,11 @@ extension Calendar {
     }
 
     func endOfMonth(for date: Date) -> Date {
-        guard let next = self.date(byAdding: .month, value: 1, to: date),
-              let end = self.date(byAdding: .nanosecond, value: -1, to: startOfMonth(for: next))
-        else {
+        guard let next = self.date(byAdding: .month, value: 1, to: date) else {
             assertionFailure()
             return date
         }
+        let end = startOfMonth(for: next) - 1
         return end
     }
 }
