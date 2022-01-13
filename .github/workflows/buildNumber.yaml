@@ -1,5 +1,4 @@
 on:
-  pull_request:
   workflow_dispatch:
 env:
   PROJECT-NAME: Incomes
@@ -37,26 +36,9 @@ jobs:
       with:
         path: TestResults.xcresult
 
-    - name: iOS build
-      uses: yukiarrr/ios-build-action@v1.4.0
-      with:
-        project-path: ${{ env.PROJECT-NAME }}.xcodeproj
-        p12-base64: ${{ secrets.P12_BASE64 }}
-        mobileprovision-base64: ${{ secrets.MOBILEPROVISION_BASE64 }}
-        code-signing-identity: Apple Distribution
-        team-id: ${{ secrets.TEAM_ID }}
-
-    - name: Upload to TestFlight
-      uses: apple-actions/upload-testflight-build@v1
-      with:
-        app-path: 'output.ipa'
-        issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
-        api-key-id: ${{ secrets.APPSTORE_API_KEY_ID }}
-        api-private-key: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
-
     - name: Push commit about build number
       run: |
-        git push origin HEAD:${{ github.head_ref }}
+        git push
 
     - name: Merge PR
       if: ${{ github.event.pull_request.number }}
