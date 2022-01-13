@@ -29,6 +29,6 @@ jobs:
 
     - name: Merge PR
       if: ${{ github.event.pull_request.number }}
-      run: gh pr merge ${{ github.event.pull_request.number }}
+      run: gh pr merge --merge ${{ github.event.pull_request.number }}
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
