@@ -14,7 +14,7 @@ struct HomeView: View {
         sortDescriptors: [NSSortDescriptor(keyPath: \Item.year, ascending: false),
                           NSSortDescriptor(keyPath: \Item.date, ascending: false)],
         animation: .default)
-    private var sections: SectionedFetchResults<String, Item>
+    private var sections: SectionedFetchResults<Date, Item>
 
     @State
     private var isPresentedToSettings = false
@@ -22,7 +22,7 @@ struct HomeView: View {
     var body: some View {
         List {
             ForEach(sections) {
-                YearSection(title: $0.id, items: $0.map { $0 })
+                YearSection(year: $0.id, items: $0.map { $0 })
             }
         }.toolbar {
             Button(action: {

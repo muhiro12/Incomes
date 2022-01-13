@@ -13,7 +13,7 @@ struct ItemListView: View {
     private var viewContext
 
     @SectionedFetchRequest
-    private var sections: SectionedFetchResults<String, Item>
+    private var sections: SectionedFetchResults<Date, Item>
 
     @State
     private var isPresentedToAlert = false
@@ -43,7 +43,7 @@ struct ItemListView: View {
                     }
                 }, header: {
                     if sections.count > .one {
-                        Text(section.id)
+                        Text(section.id.stringValue(.yyyy))
                     }
                 })
             }
