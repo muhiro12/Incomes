@@ -56,8 +56,8 @@ jobs:
 
     - name: Push commit about build number
       run: |
-        git push origin ${{ github.head_ref }}
+        git push origin HEAD:${{ github.head_ref }}
 
-    - name: Merge PROJECT-PATH
+    - name: Merge PR
       if: ${{ github.event.pull_request.number }}
       run: gh pr merge ${{ github.event.pull_request.number }}
