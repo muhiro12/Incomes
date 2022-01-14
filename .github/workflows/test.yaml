@@ -29,7 +29,7 @@ jobs:
           path: TestResults.xcresult
 
       - name: Merge PR
-        if: ${{ github.event.pull_request.number && always() }}
+        if: ${{ github.event.pull_request.number }}
         run: gh pr merge --merge ${{ github.event.pull_request.number }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
