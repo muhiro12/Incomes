@@ -34,13 +34,13 @@ extension Item {
              outgo: NSDecimalNumber,
              group: String,
              repeatID: UUID) {
-        self.date = date
         self.content = content
         self.income = income
         self.outgo = outgo
         self.group = group
         self.repeatID = repeatID
 
+        self.date = Calendar.utc.startOfDay(for: date)
         self.year = Calendar.utc.startOfYear(for: date)
     }
 
