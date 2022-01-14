@@ -27,12 +27,12 @@ struct PreviewData {
     var items: [Item] {
         var items: [Item] = []
 
-        let now = Calendar.current.startOfYear(for: Date())
-        let dateA = Calendar.current.date(byAdding: .day, value: 0, to: now)!
-        let dateB = Calendar.current.date(byAdding: .day, value: 6, to: now)!
-        let dateC = Calendar.current.date(byAdding: .day, value: 12, to: now)!
-        let dateD = Calendar.current.date(byAdding: .day, value: 18, to: now)!
-        let dateE = Calendar.current.date(byAdding: .day, value: 24, to: now)!
+        let now = Calendar.utc.startOfYear(for: Date())
+        let dateA = Calendar.utc.date(byAdding: .day, value: 0, to: now)!
+        let dateB = Calendar.utc.date(byAdding: .day, value: 6, to: now)!
+        let dateC = Calendar.utc.date(byAdding: .day, value: 12, to: now)!
+        let dateD = Calendar.utc.date(byAdding: .day, value: 18, to: now)!
+        let dateE = Calendar.utc.date(byAdding: .day, value: 24, to: now)!
 
         for index in 0..<24 {
             items.append(item(date: date(monthLater: index, from: dateD),
@@ -90,6 +90,6 @@ struct PreviewData {
     }
 
     func date(monthLater: Int, from date: Date = Date()) -> Date {
-        return Calendar.current.date(byAdding: .month, value: monthLater, to: date)!
+        return Calendar.utc.date(byAdding: .month, value: monthLater, to: date)!
     }
 }

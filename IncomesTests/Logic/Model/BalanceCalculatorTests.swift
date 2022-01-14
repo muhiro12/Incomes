@@ -229,7 +229,7 @@ class BalanceCalculatorTests: XCTestCase {
             }
             try! calculator.calculate()
 
-            items[4].set(date: date("2000-01-01T00:00:00Z"),
+            items[4].set(date: date("1999-12-31T00:00:00Z"),
                          content: "content",
                          income: 300,
                          outgo: 100,

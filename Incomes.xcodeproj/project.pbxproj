@@ -33,6 +33,7 @@
 		ADCB06EB279149CD00B867F4 /* BalanceCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCB06EA279149CD00B867F4 /* BalanceCalculator.swift */; };
 		ADCB06ED2791556900B867F4 /* BalanceCalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCB06EC2791556900B867F4 /* BalanceCalculatorTests.swift */; };
 		ADCB06EF27915E0200B867F4 /* IncomesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCB06EE27915E0200B867F4 /* IncomesTests.swift */; };
+		ADCB06F12791A48000B867F4 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = ADCB06F02791A48000B867F4 /* GoogleService-Info.plist */; };
 		ADCF36B324A1D0F70011D6F5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ADCF36B224A1D0F70011D6F5 /* Assets.xcassets */; };
 		ADCF36B624A1D0F70011D6F5 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ADCF36B524A1D0F70011D6F5 /* Preview Assets.xcassets */; };
 		ADCF36B924A1D0F70011D6F5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = ADCF36B724A1D0F70011D6F5 /* LaunchScreen.storyboard */; };
@@ -60,7 +61,6 @@
 		ADCF391D24A550910011D6F5 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = ADCF391C24A550900011D6F5 /* libsqlite3.tbd */; platformFilter = ios; };
 		ADCF392124A551360011D6F5 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADCF392024A551360011D6F5 /* StoreKit.framework */; platformFilter = ios; };
 		ADCF393224A57ADC0011D6F5 /* PreviewData.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF393124A57ADB0011D6F5 /* PreviewData.swift */; };
-		ADCF393624A5B2AC0011D6F5 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = ADCF393524A5B2AC0011D6F5 /* GoogleService-Info.plist */; };
 		ADE3A4C1277690340016C152 /* Authenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE3A4C0277690330016C152 /* Authenticator.swift */; };
 		ADE89DF524B5E73300BB82E9 /* TitleListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE89DF424B5E73300BB82E9 /* TitleListItem.swift */; };
 		ADE89DF724B5F78200BB82E9 /* ImageConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE89DF624B5F78200BB82E9 /* ImageConstant.swift */; };
@@ -115,6 +115,7 @@
 		ADCB06EA279149CD00B867F4 /* BalanceCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceCalculator.swift; sourceTree = "<group>"; };
 		ADCB06EC2791556900B867F4 /* BalanceCalculatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceCalculatorTests.swift; sourceTree = "<group>"; };
 		ADCB06EE27915E0200B867F4 /* IncomesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomesTests.swift; sourceTree = "<group>"; };
+		ADCB06F02791A48000B867F4 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		ADCF36A624A1D0F40011D6F5 /* Incomes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Incomes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ADCF36B224A1D0F70011D6F5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		ADCF36B524A1D0F70011D6F5 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -161,7 +162,6 @@
 		ADCF391C24A550900011D6F5 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/usr/lib/libsqlite3.tbd; sourceTree = DEVELOPER_DIR; };
 		ADCF392024A551360011D6F5 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/StoreKit.framework; sourceTree = DEVELOPER_DIR; };
 		ADCF393124A57ADB0011D6F5 /* PreviewData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewData.swift; sourceTree = "<group>"; };
-		ADCF393524A5B2AC0011D6F5 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		ADE3A4BC277495270016C152 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Base; path = Base.lproj/Info.plist; sourceTree = "<group>"; };
 		ADE3A4BE27768E6C0016C152 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = en; path = en.lproj/Info.plist; sourceTree = "<group>"; };
 		ADE3A4BF27768E7B0016C152 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = ja; path = ja.lproj/Info.plist; sourceTree = "<group>"; };
@@ -406,7 +406,7 @@
 		ADE058782706E76300DF2499 /* Firebase */ = {
 			isa = PBXGroup;
 			children = (
-				ADCF393524A5B2AC0011D6F5 /* GoogleService-Info.plist */,
+				ADCB06F02791A48000B867F4 /* GoogleService-Info.plist */,
 			);
 			path = Firebase;
 			sourceTree = "<group>";
@@ -599,10 +599,10 @@
 			files = (
 				AD583B6124B301EB0032AA1C /* Localizable.strings in Resources */,
 				ADCF36B924A1D0F70011D6F5 /* LaunchScreen.storyboard in Resources */,
-				ADCF393624A5B2AC0011D6F5 /* GoogleService-Info.plist in Resources */,
 				ADCF36B624A1D0F70011D6F5 /* Preview Assets.xcassets in Resources */,
 				ADCF36B324A1D0F70011D6F5 /* Assets.xcassets in Resources */,
 				AD98194226E43C3600C4A57C /* StoreKitTestCertificate.cer in Resources */,
+				ADCB06F12791A48000B867F4 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

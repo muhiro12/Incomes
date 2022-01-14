@@ -149,12 +149,17 @@ struct EditView: View {
 
 private extension EditView {
     func save() {
-        if item?.repeatID == nil {
-            Task {
-                saveForThisItem()
+        do {
+            if let repeatID = item?.repeatID,
+               try ItemService(context: viewContext).items(predicate: .init(repeatIDIs: repeatID)).count > .one {
+                presentToActionSheet()
+            } else {
+                Task {
+                    saveForThisItem()
+                }
             }
-        } else {
-            presentToActionSheet()
+        } catch {
+            assertionFailure(error.localizedDescription)
         }
     }
 

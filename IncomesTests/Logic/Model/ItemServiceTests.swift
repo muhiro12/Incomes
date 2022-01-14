@@ -26,7 +26,7 @@ class ItemServiceTests: XCTestCase {
                                 group: "group")
             let result = try! service.items().first!
 
-            XCTAssertEqual(result.date, date("2000-01-01T12:00:00Z"))
+            XCTAssertEqual(result.date, date("2000-01-01T00:00:00Z"))
             XCTAssertEqual(result.content, "content")
             XCTAssertEqual(result.income, 200)
             XCTAssertEqual(result.outgo, 100)
@@ -47,7 +47,7 @@ class ItemServiceTests: XCTestCase {
             let first = try! service.items().first!
             let last = try! service.items().last!
 
-            XCTAssertEqual(first.date, date("2000-02-01T12:00:00Z"))
+            XCTAssertEqual(first.date, date("2000-02-01T00:00:00Z"))
             XCTAssertEqual(first.content, "content")
             XCTAssertEqual(first.income, 200)
             XCTAssertEqual(first.outgo, 100)
@@ -55,7 +55,7 @@ class ItemServiceTests: XCTestCase {
             XCTAssertEqual(first.year, date("2000-01-01T00:00:00Z"))
             XCTAssertEqual(first.balance, 200)
 
-            XCTAssertEqual(last.date, date("2000-01-01T12:00:00Z"))
+            XCTAssertEqual(last.date, date("2000-01-01T00:00:00Z"))
             XCTAssertEqual(last.content, "content")
             XCTAssertEqual(last.income, 200)
             XCTAssertEqual(last.outgo, 100)
