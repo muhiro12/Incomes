@@ -15,7 +15,7 @@ struct ItemService {
 
     init(context: NSManagedObjectContext) {
         self.context = context
-        self.repository = ItemRepository(context: context)
+        self.repository = .init(context: context)
     }
 
     // MARK: - Fetch

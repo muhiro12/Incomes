@@ -53,7 +53,7 @@ struct SettingsView: View {
                 Section(content: {
                     Button(.localized(.recalculate)) {
                         do {
-                            try ItemRepository(context: viewContext).calculate()
+                            try ItemService(context: viewContext).recalculate()
                         } catch {
                             assertionFailure(error.localizedDescription)
                         }
