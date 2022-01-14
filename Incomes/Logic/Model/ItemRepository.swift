@@ -66,7 +66,7 @@ struct ItemRepository {
     }
 
     func saveAll() throws {
-        try calculateForFutureItem()
+        try calculateForFutureItems()
     }
 
     // MARK: - Update
@@ -162,6 +162,7 @@ struct ItemRepository {
     // MARK: - Calculate balance
 
     func calculate(predicate: NSPredicate? = nil)  throws {
+        try save()
         let items = try items(predicate: predicate).reversed() as [Item]
         for tuple in items.enumerated() {
             let index = tuple.offset
@@ -180,7 +181,7 @@ struct ItemRepository {
         try save()
     }
 
-    func calculateForFutureItem() throws {
+    func calculateForFutureItems() throws {
         let items = context.registeredObjects.compactMap { $0 as? Item }
         guard let oldest = items.sorted(by: { $0.date < $1.date }).first else {
             return
