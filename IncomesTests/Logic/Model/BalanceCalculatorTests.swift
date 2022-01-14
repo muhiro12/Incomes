@@ -12,18 +12,6 @@ import CoreData
 
 // swiftlint:disable all
 class BalanceCalculatorTests: XCTestCase {
-    var context: NSManagedObjectContext {
-        PersistenceController(inMemory: true).container.viewContext
-    }
-
-    let date: (String) -> Date = { string in
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy/MM/dd HH:mm:ss"
-        formatter.locale = .init(identifier: "en_US_POSIX")
-        formatter.timeZone = .init(secondsFromGMT: 0)
-        return formatter.date(from: string)!
-    }
-
     func testCalculate() {
         XCTContext.runActivity(named: "Result is as expected when inserting") { _ in
             let context = context
@@ -31,7 +19,7 @@ class BalanceCalculatorTests: XCTestCase {
 
             for i in 1...5 {
                 let item = Item(context: context)
-                item.set(date: date("2000/0\(i)/01 12:00:00"),
+                item.set(date: date("2000-0\(i)-01T12:00:00Z"),
                          content: "content",
                          income: 200,
                          outgo: 100,
@@ -41,7 +29,7 @@ class BalanceCalculatorTests: XCTestCase {
             try! calculator.calculate()
 
             let item = Item(context: context)
-            item.set(date: date("2000/01/31 12:00:00"),
+            item.set(date: date("2000-01-31T12:00:00Z"),
                      content: "content",
                      income: 200,
                      outgo: 100,
@@ -63,7 +51,7 @@ class BalanceCalculatorTests: XCTestCase {
 
             for i in 1...5 {
                 let item = Item(context: context)
-                item.set(date: date("2000/0\(i)/01 12:00:00"),
+                item.set(date: date("2000-0\(i)-01T12:00:00Z"),
                          content: "content",
                          income: 200,
                          outgo: 100,
@@ -73,7 +61,7 @@ class BalanceCalculatorTests: XCTestCase {
             try! calculator.calculate()
 
             let item = Item(context: context)
-            item.set(date: date("2001/01/01 00:00:00"),
+            item.set(date: date("2001-01-01T00:00:00Z"),
                      content: "content",
                      income: 200,
                      outgo: 100,
@@ -95,7 +83,7 @@ class BalanceCalculatorTests: XCTestCase {
 
             for i in 1...5 {
                 let item = Item(context: context)
-                item.set(date: date("2000/0\(i)/01 12:00:00"),
+                item.set(date: date("2000-0\(i)-01T12:00:00Z"),
                          content: "content",
                          income: 200,
                          outgo: 100,
@@ -105,7 +93,7 @@ class BalanceCalculatorTests: XCTestCase {
             try! calculator.calculate()
 
             let item = Item(context: context)
-            item.set(date: date("2000/01/01 00:00:00"),
+            item.set(date: date("2000-01-01T00:00:00Z"),
                      content: "content",
                      income: 200,
                      outgo: 100,
@@ -129,7 +117,7 @@ class BalanceCalculatorTests: XCTestCase {
 
             for i in 1...5 {
                 let item = Item(context: context)
-                item.set(date: date("2000/0\(i)/01 12:00:00"),
+                item.set(date: date("2000-0\(i)-01T12:00:00Z"),
                          content: "content",
                          income: 200,
                          outgo: 100,
@@ -139,7 +127,7 @@ class BalanceCalculatorTests: XCTestCase {
             }
             try! calculator.calculate()
 
-            items[1].set(date: date("2000/02/01 12:00:00"),
+            items[1].set(date: date("2000-02-01T12:00:00Z"),
                          content: "content",
                          income: 300,
                          outgo: 100,
@@ -163,7 +151,7 @@ class BalanceCalculatorTests: XCTestCase {
 
             for i in 1...5 {
                 let item = Item(context: context)
-                item.set(date: date("2000/0\(i)/01 12:00:00"),
+                item.set(date: date("2000-0\(i)-01T12:00:00Z"),
                          content: "content",
                          income: 200,
                          outgo: 100,
@@ -173,7 +161,7 @@ class BalanceCalculatorTests: XCTestCase {
             }
             try! calculator.calculate()
 
-            items[0].set(date: date("2000/01/01 12:00:00"),
+            items[0].set(date: date("2000-01-01T12:00:00Z"),
                          content: "content",
                          income: 300,
                          outgo: 100,
@@ -197,7 +185,7 @@ class BalanceCalculatorTests: XCTestCase {
 
             for i in 1...5 {
                 let item = Item(context: context)
-                item.set(date: date("2000/0\(i)/01 12:00:00"),
+                item.set(date: date("2000-0\(i)-01T12:00:00Z"),
                          content: "content",
                          income: 200,
                          outgo: 100,
@@ -207,7 +195,7 @@ class BalanceCalculatorTests: XCTestCase {
             }
             try! calculator.calculate()
 
-            items[4].set(date: date("2000/05/01 12:00:00"),
+            items[4].set(date: date("2000-05-01T12:00:00Z"),
                          content: "content",
                          income: 300,
                          outgo: 100,
@@ -231,7 +219,7 @@ class BalanceCalculatorTests: XCTestCase {
 
             for i in 1...5 {
                 let item = Item(context: context)
-                item.set(date: date("2000/0\(i)/01 12:00:00"),
+                item.set(date: date("2000-0\(i)-01T12:00:00Z"),
                          content: "content",
                          income: 200,
                          outgo: 100,
@@ -241,7 +229,7 @@ class BalanceCalculatorTests: XCTestCase {
             }
             try! calculator.calculate()
 
-            items[4].set(date: date("2000/01/01 00:00:00"),
+            items[4].set(date: date("2000-01-01T00:00:00Z"),
                          content: "content",
                          income: 300,
                          outgo: 100,
@@ -265,7 +253,7 @@ class BalanceCalculatorTests: XCTestCase {
 
             for _ in 1...5 {
                 let item = Item(context: context)
-                item.set(date: date("2000/01/01 12:00:00"),
+                item.set(date: date("2000-01-01T12:00:00Z"),
                          content: "content",
                          income: 200,
                          outgo: 100,

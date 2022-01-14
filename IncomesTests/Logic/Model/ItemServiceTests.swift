@@ -12,18 +12,6 @@ import CoreData
 
 // swiftlint:disable all
 class ItemServiceTests: XCTestCase {
-    var context: NSManagedObjectContext {
-        PersistenceController(inMemory: true).container.viewContext
-    }
-
-    let date: (String) -> Date = { string in
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy/MM/dd HH:mm:ss"
-        formatter.locale = .init(identifier: "en_US_POSIX")
-        formatter.timeZone = .init(secondsFromGMT: 0)
-        return formatter.date(from: string)!
-    }
-
 
     // MARK: - Create
 
@@ -31,26 +19,26 @@ class ItemServiceTests: XCTestCase {
         XCTContext.runActivity(named: "Result is as expected") { _ in
             let service = ItemService(context: context)
 
-            try! service.create(date: date("2000/01/01 12:00:00"),
+            try! service.create(date: date("2000-01-01T12:00:00Z"),
                                 content: "content",
                                 income: 200,
                                 outgo: 100,
                                 group: "group")
             let result = try! service.items().first!
 
-            XCTAssertEqual(result.date, date("2000/01/01 12:00:00"))
+            XCTAssertEqual(result.date, date("2000-01-01T12:00:00Z"))
             XCTAssertEqual(result.content, "content")
             XCTAssertEqual(result.income, 200)
             XCTAssertEqual(result.outgo, 100)
             XCTAssertEqual(result.group, "group")
-            XCTAssertEqual(result.year, date("2000/01/01 00:00:00"))
+            XCTAssertEqual(result.year, date("2000-01-01T00:00:00Z"))
             XCTAssertEqual(result.balance, 100)
         }
 
         XCTContext.runActivity(named: "Result is as expected when repeatCount 2") { _ in
             let service = ItemService(context: context)
 
-            try! service.create(date: date("2000/01/01 12:00:00"),
+            try! service.create(date: date("2000-01-01T12:00:00Z"),
                                 content: "content",
                                 income: 200,
                                 outgo: 100,
@@ -59,20 +47,20 @@ class ItemServiceTests: XCTestCase {
             let first = try! service.items().first!
             let last = try! service.items().last!
 
-            XCTAssertEqual(first.date, date("2000/02/01 12:00:00"))
+            XCTAssertEqual(first.date, date("2000-02-01T12:00:00Z"))
             XCTAssertEqual(first.content, "content")
             XCTAssertEqual(first.income, 200)
             XCTAssertEqual(first.outgo, 100)
             XCTAssertEqual(first.group, "group")
-            XCTAssertEqual(first.year, date("2000/01/01 00:00:00"))
+            XCTAssertEqual(first.year, date("2000-01-01T00:00:00Z"))
             XCTAssertEqual(first.balance, 200)
 
-            XCTAssertEqual(last.date, date("2000/01/01 12:00:00"))
+            XCTAssertEqual(last.date, date("2000-01-01T12:00:00Z"))
             XCTAssertEqual(last.content, "content")
             XCTAssertEqual(last.income, 200)
             XCTAssertEqual(last.outgo, 100)
             XCTAssertEqual(last.group, "group")
-            XCTAssertEqual(last.year, date("2000/01/01 00:00:00"))
+            XCTAssertEqual(last.year, date("2000-01-01T00:00:00Z"))
             XCTAssertEqual(last.balance, 100)
 
             XCTAssertEqual(first.repeatID, last.repeatID)
