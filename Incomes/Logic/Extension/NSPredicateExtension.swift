@@ -16,8 +16,8 @@ extension NSPredicate {
     }
 
     convenience init(dateIsSameMonthAs date: Date) {
-        self.init(dateIsBetween: Calendar.current.startOfMonth(for: date),
-                  and: Calendar.current.endOfMonth(for: date))
+        self.init(dateIsBetween: Calendar.utc.startOfMonth(for: date),
+                  and: Calendar.utc.endOfMonth(for: date))
     }
 
     convenience init(dateIsAfter date: Date) {

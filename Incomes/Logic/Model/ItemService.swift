@@ -43,9 +43,9 @@ struct ItemService {
             guard index > .zero else {
                 continue
             }
-            guard let repeatingDate = Calendar.current.date(byAdding: .month,
-                                                            value: index,
-                                                            to: date) else {
+            guard let repeatingDate = Calendar.utc.date(byAdding: .month,
+                                                        value: index,
+                                                        to: date) else {
                 assertionFailure()
                 return
             }
@@ -84,12 +84,12 @@ struct ItemService {
                                  outgo: NSDecimalNumber,
                                  group: String,
                                  predicate: NSPredicate) throws {
-        let components = Calendar.current.dateComponents([.year, .month, .day],
-                                                         from: item.date,
-                                                         to: date)
+        let components = Calendar.utc.dateComponents([.year, .month, .day],
+                                                     from: item.date,
+                                                     to: date)
 
         try items(predicate: predicate).forEach {
-            guard let newDate = Calendar.current.date(byAdding: components, to: $0.date) else {
+            guard let newDate = Calendar.utc.date(byAdding: components, to: $0.date) else {
                 assertionFailure()
                 return
             }
@@ -154,7 +154,7 @@ struct ItemService {
 
     static func groupByMonth(items: [Item]) -> [(month: Date, items: [Item])] {
         Dictionary(grouping: items) {
-            Calendar.current.startOfMonth(for: $0.date)
+            Calendar.utc.startOfMonth(for: $0.date)
         }.map {
             (month: $0.0, items: $0.1)
         }.sorted {
