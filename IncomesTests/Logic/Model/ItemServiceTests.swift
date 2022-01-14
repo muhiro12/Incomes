@@ -67,6 +67,46 @@ class ItemServiceTests: XCTestCase {
         }
     }
 
+    // MARK: - Delete
+
+    func testDelete() {
+        XCTContext.runActivity(named: "") { _ in
+            let context = context
+            let service = ItemService(context: context)
+
+            let itemA = Item(context: context)
+            let itemB = Item(context: context)
+            try! context.save()
+
+            try! service.delete(items: [itemA])
+
+            let fetched = try! service.items()
+            let registered = context.registeredObjects
+
+            XCTAssertEqual(fetched, [itemB])
+            XCTAssertEqual(registered, [itemB])
+        }
+    }
+
+    func testDeleteAll() {
+        XCTContext.runActivity(named: "") { _ in
+            let context = context
+            let service = ItemService(context: context)
+
+            _ = Item(context: context)
+            _ = Item(context: context)
+            try! context.save()
+
+            try! service.deleteAll()
+
+            let fetched = try! service.items()
+            let registered = context.registeredObjects
+
+            XCTAssertEqual(fetched, [])
+            XCTAssertEqual(registered, [])
+        }
+    }
+
     // MARK: - Utilitiy
 
     func testGroupByMonth() {

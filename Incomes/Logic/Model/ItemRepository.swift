@@ -18,8 +18,6 @@ struct ItemRepository {
         self.calculator = .init(context: context)
     }
 
-    // MARK: - Fetch
-
     func items(predicate: NSPredicate? = nil) throws -> [Item] {
         let request = Item.fetchRequest()
         request.predicate = predicate
@@ -27,22 +25,25 @@ struct ItemRepository {
         return try context.fetch(request)
     }
 
-    // MARK: - Insert
-
-    func insert(items: [Item]) throws {
-        items.forEach {
-            context.insert($0)
-        }
-        try calculator.calculate()
+    func instantiate(date: Date, // swiftlint:disable:this function_parameter_count
+                     content: String,
+                     income: NSDecimalNumber,
+                     outgo: NSDecimalNumber,
+                     group: String,
+                     repeatID: UUID) -> Item {
+        let item = Item(context: context)
+        item.set(date: date,
+                 content: content,
+                 income: income,
+                 outgo: outgo,
+                 group: group,
+                 repeatID: repeatID)
+        return item
     }
 
-    // MARK: - Update
-
-    func update() throws {
+    func save() throws {
         try calculator.calculate()
     }
-
-    // MARK: - Delete
 
     func delete(items: [Item]) throws {
         items.forEach {
@@ -50,12 +51,6 @@ struct ItemRepository {
         }
         try calculator.calculate()
     }
-
-    func deleteAll() {
-        context.refreshAllObjects()
-    }
-
-    // MARK: - Calculate
 
     func recalculate() throws {
         try calculator.recalculate()

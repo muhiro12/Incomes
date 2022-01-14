@@ -86,9 +86,7 @@ struct PreviewData {
     }
 
     func item(date: Date, content: String, income: NSDecimalNumber, outgo: NSDecimalNumber, group: String) -> Item {
-        let item = Item(context: context)
-        item.set(date: date, content: content, income: income, outgo: outgo, group: group, repeatID: UUID())
-        return item
+        ItemRepository(context: context).instantiate(date: date, content: content, income: income, outgo: outgo, group: group, repeatID: UUID())
     }
 
     func date(monthLater: Int, from date: Date = Date()) -> Date {

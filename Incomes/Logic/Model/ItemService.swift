@@ -10,12 +10,10 @@ import Foundation
 import CoreData
 
 struct ItemService {
-    private let context: NSManagedObjectContext
     private let repository: ItemRepository
 
     init(context: NSManagedObjectContext) {
-        self.context = context
-        self.repository = .init(context: context)
+        repository = .init(context: context)
     }
 
     // MARK: - Fetch
@@ -32,16 +30,14 @@ struct ItemService {
                 outgo: NSDecimalNumber,
                 group: String,
                 repeatCount: Int = .one) throws {
-        var items: [Item] = []
+        let repeatID = UUID()
 
-        let item = Item(context: context)
-        item.set(date: date,
-                 content: content,
-                 income: income,
-                 outgo: outgo,
-                 group: group,
-                 repeatID: UUID())
-        items.append(item)
+        _ = repository.instantiate(date: date,
+                                   content: content,
+                                   income: income,
+                                   outgo: outgo,
+                                   group: group,
+                                   repeatID: repeatID)
 
         for index in 0..<repeatCount {
             guard index > .zero else {
@@ -49,21 +45,19 @@ struct ItemService {
             }
             guard let repeatingDate = Calendar.current.date(byAdding: .month,
                                                             value: index,
-                                                            to: item.date) else {
+                                                            to: date) else {
                 assertionFailure()
                 return
             }
-            let repeatingItem = Item(context: context)
-            repeatingItem.set(date: repeatingDate,
-                              content: content,
-                              income: income,
-                              outgo: outgo,
-                              group: group,
-                              repeatID: item.repeatID)
-            items.append(repeatingItem)
+            _ = repository.instantiate(date: repeatingDate,
+                                       content: content,
+                                       income: income,
+                                       outgo: outgo,
+                                       group: group,
+                                       repeatID: repeatID)
         }
 
-        try repository.insert(items: items)
+        try repository.save()
     }
 
     // MARK: - Update
@@ -80,7 +74,7 @@ struct ItemService {
                  outgo: outgo,
                  group: group,
                  repeatID: item.repeatID)
-        try repository.update()
+        try repository.save()
     }
 
     func updateForRepeatingItems(item: Item, // swiftlint:disable:this function_parameter_count
@@ -94,7 +88,7 @@ struct ItemService {
                                                          from: item.date,
                                                          to: date)
 
-        try repository.items(predicate: predicate).forEach {
+        try items(predicate: predicate).forEach {
             guard let newDate = Calendar.current.date(byAdding: components, to: $0.date) else {
                 assertionFailure()
                 return
@@ -107,7 +101,7 @@ struct ItemService {
                    repeatID: item.repeatID)
         }
 
-        try repository.update()
+        try repository.save()
     }
 
     func updateForFutureItems(item: Item, // swiftlint:disable:this function_parameter_count
@@ -146,8 +140,8 @@ struct ItemService {
         try repository.delete(items: items)
     }
 
-    func deleteAll() {
-        repository.deleteAll()
+    func deleteAll() throws {
+        try delete(items: items())
     }
 
     // MARK: - Calculate balance

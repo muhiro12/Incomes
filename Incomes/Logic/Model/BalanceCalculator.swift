@@ -21,11 +21,12 @@ struct BalanceCalculator {
         ].flatMap {
             $0.compactMap { $0 as? Item }
         }
+
+        try context.save()
+
         guard let oldestDate = editedItems.sorted(by: { $0.date < $1.date }).first?.date else {
             return
         }
-
-        try context.save()
 
         let allItems = try repository.items().reversed() as [Item]
         let items = try repository.items(predicate: .init(dateIsAfter: oldestDate)).reversed() as [Item]
