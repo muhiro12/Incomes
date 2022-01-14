@@ -24,83 +24,7 @@ class ItemRepositoryTests: XCTestCase {
         return formatter.date(from: string)!
     }
 
-    // MARK: - Create
-
-    func testCreate() {
-        XCTContext.runActivity(named: "Result is as expected") { _ in
-            let repository = ItemRepository(context: context)
-
-            try! repository.create(date: date("2000/01/01 12:00:00"),
-                                   content: "content",
-                                   income: 200,
-                                   outgo: 100,
-                                   group: "group")
-            let result = try! repository.items().first!
-
-            XCTAssertEqual(result.date, date("2000/01/01 12:00:00"))
-            XCTAssertEqual(result.content, "content")
-            XCTAssertEqual(result.income, 200)
-            XCTAssertEqual(result.outgo, 100)
-            XCTAssertEqual(result.group, "group")
-            XCTAssertEqual(result.year, date("2000/01/01 00:00:00"))
-            XCTAssertEqual(result.balance, 100)
-        }
-
-        XCTContext.runActivity(named: "Result is as expected when repeatCount 2") { _ in
-            let repository = ItemRepository(context: context)
-
-            try! repository.create(date: date("2000/01/01 12:00:00"),
-                                   content: "content",
-                                   income: 200,
-                                   outgo: 100,
-                                   group: "group",
-                                   repeatCount: 2)
-            let first = try! repository.items().first!
-            let last = try! repository.items().last!
-
-            XCTAssertEqual(first.date, date("2000/02/01 12:00:00"))
-            XCTAssertEqual(first.content, "content")
-            XCTAssertEqual(first.income, 200)
-            XCTAssertEqual(first.outgo, 100)
-            XCTAssertEqual(first.group, "group")
-            XCTAssertEqual(first.year, date("2000/01/01 00:00:00"))
-            XCTAssertEqual(first.balance, 200)
-
-            XCTAssertEqual(last.date, date("2000/01/01 12:00:00"))
-            XCTAssertEqual(last.content, "content")
-            XCTAssertEqual(last.income, 200)
-            XCTAssertEqual(last.outgo, 100)
-            XCTAssertEqual(last.group, "group")
-            XCTAssertEqual(last.year, date("2000/01/01 00:00:00"))
-            XCTAssertEqual(last.balance, 100)
-
-            XCTAssertEqual(first.repeatID, last.repeatID)
-        }
-    }
-
     // MARK: - Calculate balance
-
-    func testCalculate() {
-        XCTContext.runActivity(named: "Result is as expected") { _ in
-            let repository = ItemRepository(context: context)
-
-            for _ in 1...5 {
-                let item = Item(context: repository.context)
-                item.set(date: date("2000/01/01 12:00:00"),
-                         content: "content",
-                         income: 200,
-                         outgo: 100,
-                         group: "group",
-                         repeatID: UUID())
-            }
-            try! repository.calculate()
-            let first = try! repository.items().first!
-            let last = try! repository.items().last!
-
-            XCTAssertEqual(first.balance, 500)
-            XCTAssertEqual(last.balance, 100)
-        }
-    }
 
     func testCalculateForFutureItems() {
         XCTContext.runActivity(named: "Result is as expected when inserting") { _ in
@@ -125,7 +49,7 @@ class ItemRepositoryTests: XCTestCase {
                      group: "group",
                      repeatID: UUID())
 
-            try! repository.calculateForFutureItems()
+            try! repository.calculate()
             let first = try! repository.items().first!
             let last = try! repository.items().last!
 
@@ -155,7 +79,7 @@ class ItemRepositoryTests: XCTestCase {
                      group: "group",
                      repeatID: UUID())
 
-            try! repository.calculateForFutureItems()
+            try! repository.calculate()
             let first = try! repository.items().first!
             let last = try! repository.items().last!
 
@@ -185,7 +109,7 @@ class ItemRepositoryTests: XCTestCase {
                      group: "group",
                      repeatID: UUID())
 
-            try! repository.calculateForFutureItems()
+            try! repository.calculate()
             let first = try! repository.items().first!
             let last = try! repository.items().last!
 
@@ -217,7 +141,7 @@ class ItemRepositoryTests: XCTestCase {
                          group: "group",
                          repeatID: UUID())
 
-            try! repository.calculateForFutureItems()
+            try! repository.calculate()
             let first = try! repository.items().first!
             let last = try! repository.items().last!
 
@@ -249,7 +173,7 @@ class ItemRepositoryTests: XCTestCase {
                          group: "group",
                          repeatID: UUID())
 
-            try! repository.calculateForFutureItems()
+            try! repository.calculate()
             let first = try! repository.items().first!
             let last = try! repository.items().last!
 
@@ -281,7 +205,7 @@ class ItemRepositoryTests: XCTestCase {
                          group: "group",
                          repeatID: UUID())
 
-            try! repository.calculateForFutureItems()
+            try! repository.calculate()
             let first = try! repository.items().first!
             let last = try! repository.items().last!
 
@@ -313,12 +237,34 @@ class ItemRepositoryTests: XCTestCase {
                          group: "group",
                          repeatID: UUID())
 
-            try! repository.calculateForFutureItems()
+            try! repository.calculate()
             let first = try! repository.items().first!
             let last = try! repository.items().last!
 
             XCTAssertEqual(first.balance, 600)
             XCTAssertEqual(last.balance, 200)
+        }
+    }
+
+    func testRecalculate() {
+        XCTContext.runActivity(named: "Result is as expected") { _ in
+            let repository = ItemRepository(context: context)
+
+            for _ in 1...5 {
+                let item = Item(context: repository.context)
+                item.set(date: date("2000/01/01 12:00:00"),
+                         content: "content",
+                         income: 200,
+                         outgo: 100,
+                         group: "group",
+                         repeatID: UUID())
+            }
+            try! repository.recalculate()
+            let first = try! repository.items().first!
+            let last = try! repository.items().last!
+
+            XCTAssertEqual(first.balance, 500)
+            XCTAssertEqual(last.balance, 100)
         }
     }
 }

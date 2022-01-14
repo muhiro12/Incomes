@@ -24,7 +24,7 @@ struct YearSection: View {
 
     init(year: Date, items: [Item]) {
         self.year = year
-        self.elements = ItemService().groupByMonth(items: items)
+        self.elements = ItemService.groupByMonth(items: items)
     }
 
     var body: some View {
@@ -45,7 +45,11 @@ struct YearSection: View {
                 title: Text(.localized(.deleteConfirm)),
                 buttons: [
                     .destructive(Text(.localized(.delete))) {
-                        ItemRepository(context: viewContext).delete(items: willDeleteItems)
+                        do {
+                            try ItemService(context: viewContext).delete(items: willDeleteItems)
+                        } catch {
+                            assertionFailure(error.localizedDescription)
+                        }
                     },
                     .cancel {
                         willDeleteItems = []

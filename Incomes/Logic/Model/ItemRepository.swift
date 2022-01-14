@@ -21,182 +21,82 @@ struct ItemRepository {
         return try context.fetch(request)
     }
 
-    // MARK: - Create
+    // MARK: - Insert
 
-    func create(date: Date,
-                content: String,
-                income: NSDecimalNumber,
-                outgo: NSDecimalNumber,
-                group: String,
-                repeatCount: Int = .one) throws {
-        let item = Item(context: context)
-        item.set(date: date,
-                 content: content,
-                 income: income,
-                 outgo: outgo,
-                 group: group,
-                 repeatID: UUID())
-
-        for index in 0..<repeatCount {
-            guard index > .zero else {
-                continue
-            }
-            guard let repeatingDate = Calendar.current.date(byAdding: .month,
-                                                            value: index,
-                                                            to: item.date) else {
-                assertionFailure()
-                return
-            }
-            let repeatingItem = Item(context: context)
-            repeatingItem.set(date: repeatingDate,
-                              content: content,
-                              income: income,
-                              outgo: outgo,
-                              group: group,
-                              repeatID: item.repeatID)
+    func insert(items: [Item]) throws {
+        items.forEach {
+            context.insert($0)
         }
-
-        try saveAll()
-    }
-
-    // MARK: - Save
-
-    func save() throws {
-        try context.save()
-    }
-
-    func saveAll() throws {
-        try calculateForFutureItems()
+        try calculate()
     }
 
     // MARK: - Update
 
-    func update(item: Item, // swiftlint:disable:this function_parameter_count
-                date: Date,
-                content: String,
-                income: NSDecimalNumber,
-                outgo: NSDecimalNumber,
-                group: String) throws {
-        item.set(date: date,
-                 content: content,
-                 income: income,
-                 outgo: outgo,
-                 group: group,
-                 repeatID: item.repeatID)
-        try saveAll()
-    }
-
-    func updateForRepeatingItems(item: Item, // swiftlint:disable:this function_parameter_count
-                                 date: Date,
-                                 content: String,
-                                 income: NSDecimalNumber,
-                                 outgo: NSDecimalNumber,
-                                 group: String,
-                                 predicate: NSPredicate) throws {
-        let components = Calendar.current.dateComponents([.year, .month, .day],
-                                                         from: item.date,
-                                                         to: date)
-
-        try items(predicate: predicate).forEach {
-            guard let newDate = Calendar.current.date(byAdding: components, to: $0.date) else {
-                assertionFailure()
-                return
-            }
-            $0.set(date: newDate,
-                   content: content,
-                   income: income,
-                   outgo: outgo,
-                   group: group,
-                   repeatID: item.repeatID)
-        }
-
-        try saveAll()
-    }
-
-    func updateForFutureItems(item: Item, // swiftlint:disable:this function_parameter_count
-                              date: Date,
-                              content: String,
-                              income: NSDecimalNumber,
-                              outgo: NSDecimalNumber,
-                              group: String) throws {
-        try updateForRepeatingItems(item: item,
-                                    date: date,
-                                    content: content,
-                                    income: income,
-                                    outgo: outgo,
-                                    group: group,
-                                    predicate: .init(repeatIDIs: item.repeatID, dateIsAfter: item.date))
-    }
-
-    func updateForAllItems(item: Item, // swiftlint:disable:this function_parameter_count
-                           date: Date,
-                           content: String,
-                           income: NSDecimalNumber,
-                           outgo: NSDecimalNumber,
-                           group: String) throws {
-        try updateForRepeatingItems(item: item,
-                                    date: date,
-                                    content: content,
-                                    income: income,
-                                    outgo: outgo,
-                                    group: group,
-                                    predicate: .init(repeatIDIs: item.repeatID))
+    func update() throws {
+        try calculate()
     }
 
     // MARK: - Delete
 
-    func delete(item: Item) {
-        context.delete(item)
-    }
-
-    func delete(items: [Item]) {
+    func delete(items: [Item]) throws {
         items.forEach {
-            delete(item: $0)
+            context.delete($0)
         }
+        try calculate()
     }
 
-    func deleteAll() throws {
-        delete(items: try items())
+    func deleteAll() {
+        context.refreshAllObjects()
     }
 
     // MARK: - Calculate balance
 
-    func calculate(predicate: NSPredicate? = nil)  throws {
-        try save()
-        let items = try items(predicate: predicate).reversed() as [Item]
+    func calculate() throws {
+        let editedItems = [
+            context.insertedObjects,
+            context.updatedObjects
+        ].flatMap {
+            $0.compactMap { $0 as? Item }
+        }
+        guard let oldest = editedItems.sorted(by: { $0.date < $1.date }).first else {
+            return
+        }
+        try context.save()
+        let allItems = try self.items().reversed() as [Item]
+        let items = try items(predicate: .init(dateIsAfter: oldest.date)).reversed() as [Item]
         for tuple in items.enumerated() {
             let index = tuple.offset
             let item = tuple.element
 
-            item.balance = try {
-                if index > .zero {
-                    let before = items[index - 1]
-                    return before.balance.adding(item.profit)
-                } else if predicate != nil {
-                    let allItems = try self.items()
-                    guard let index = allItems.lastIndex(of: item),
-                          allItems.indices.contains(index + 1)
-                    else {
-                        return item.profit
-                    }
-                    let before = allItems[index + 1]
-                    return before.balance.adding(item.profit)
+            item.balance = {
+                if items.indices.contains(index - 1) {
+                    return items[index - 1].balance.adding(item.profit)
+                } else if let index = allItems.firstIndex(of: item),
+                          allItems.indices.contains(index - 1) {
+                    return allItems[index - 1].balance.adding(item.profit)
                 } else {
                     return item.profit
                 }
             }()
         }
-        try save()
+        try context.save()
     }
 
-    func calculateForFutureItems() throws {
-        let items = [context.insertedObjects,
-                     context.updatedObjects].flatMap {
-                        $0.compactMap { $0 as? Item }
-                     }
-        guard let oldest = items.sorted(by: { $0.date < $1.date }).first else {
-            return
+    func recalculate()  throws {
+        try context.save()
+        let items = try items().reversed() as [Item]
+        for tuple in items.enumerated() {
+            let index = tuple.offset
+            let item = tuple.element
+
+            item.balance = {
+                if items.indices.contains(index - 1) {
+                    return items[index - 1].balance.adding(item.profit)
+                } else {
+                    return item.profit
+                }
+            }()
         }
-        try calculate(predicate: .init(dateIsAfter: oldest.date))
+        try context.save()
     }
 }

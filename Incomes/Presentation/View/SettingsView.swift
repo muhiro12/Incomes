@@ -73,11 +73,7 @@ struct SettingsView: View {
         .alert(.localized(.deleteAllConfirm),
                isPresented: $isAlertPresented) {
             Button(.localized(.delete), role: .destructive) {
-                do {
-                    try ItemRepository(context: viewContext).deleteAll()
-                } catch {
-                    assertionFailure(error.localizedDescription)
-                }
+                ItemRepository(context: viewContext).deleteAll()
             }
             Button(.localized(.cancel), role: .cancel) {}
         }

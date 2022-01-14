@@ -35,8 +35,8 @@ struct DebugView: View {
                         }
                     Button(String.debugPreviewData) {
                         do {
-                            _ = PreviewData(context: viewContext).items
-                            try ItemRepository(context: viewContext).saveAll()
+                            let items = PreviewData(context: viewContext).items
+                            try ItemRepository(context: viewContext).insert(items: items)
                         } catch {
                             assertionFailure(error.localizedDescription)
                         }
