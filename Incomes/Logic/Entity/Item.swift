@@ -41,7 +41,7 @@ extension Item {
         self.group = group
         self.repeatID = repeatID
 
-        self.year = Calendar(identifier: .gregorian).startOfYear(for: date)
+        self.year = Calendar.utc.startOfYear(for: date)
     }
 
     var profit: NSDecimalNumber {

@@ -24,7 +24,7 @@ struct GroupSection: View {
 
     init(title: String, items: [Item]) {
         self.title = title
-        self.elements = ItemService().groupByContent(items: items)
+        self.elements = ItemService.groupByContent(items: items)
     }
 
     var body: some View {
@@ -45,7 +45,11 @@ struct GroupSection: View {
                 title: Text(.localized(.deleteConfirm)),
                 buttons: [
                     .destructive(Text(.localized(.delete))) {
-                        ItemRepository(context: viewContext).delete(items: willDeleteItems)
+                        do {
+                            try ItemService(context: viewContext).delete(items: willDeleteItems)
+                        } catch {
+                            assertionFailure(error.localizedDescription)
+                        }
                     },
                     .cancel {
                         willDeleteItems = []

@@ -8,11 +8,110 @@
 
 import XCTest
 @testable import Incomes
+import CoreData
 
+// swiftlint:disable all
 class ItemServiceTests: XCTestCase {
+
+    // MARK: - Create
+
+    func testCreate() {
+        XCTContext.runActivity(named: "Result is as expected") { _ in
+            let service = ItemService(context: context)
+
+            try! service.create(date: date("2000-01-01T12:00:00Z"),
+                                content: "content",
+                                income: 200,
+                                outgo: 100,
+                                group: "group")
+            let result = try! service.items().first!
+
+            XCTAssertEqual(result.date, date("2000-01-01T12:00:00Z"))
+            XCTAssertEqual(result.content, "content")
+            XCTAssertEqual(result.income, 200)
+            XCTAssertEqual(result.outgo, 100)
+            XCTAssertEqual(result.group, "group")
+            XCTAssertEqual(result.year, date("2000-01-01T00:00:00Z"))
+            XCTAssertEqual(result.balance, 100)
+        }
+
+        XCTContext.runActivity(named: "Result is as expected when repeatCount 2") { _ in
+            let service = ItemService(context: context)
+
+            try! service.create(date: date("2000-01-01T12:00:00Z"),
+                                content: "content",
+                                income: 200,
+                                outgo: 100,
+                                group: "group",
+                                repeatCount: 2)
+            let first = try! service.items().first!
+            let last = try! service.items().last!
+
+            XCTAssertEqual(first.date, date("2000-02-01T12:00:00Z"))
+            XCTAssertEqual(first.content, "content")
+            XCTAssertEqual(first.income, 200)
+            XCTAssertEqual(first.outgo, 100)
+            XCTAssertEqual(first.group, "group")
+            XCTAssertEqual(first.year, date("2000-01-01T00:00:00Z"))
+            XCTAssertEqual(first.balance, 200)
+
+            XCTAssertEqual(last.date, date("2000-01-01T12:00:00Z"))
+            XCTAssertEqual(last.content, "content")
+            XCTAssertEqual(last.income, 200)
+            XCTAssertEqual(last.outgo, 100)
+            XCTAssertEqual(last.group, "group")
+            XCTAssertEqual(last.year, date("2000-01-01T00:00:00Z"))
+            XCTAssertEqual(last.balance, 100)
+
+            XCTAssertEqual(first.repeatID, last.repeatID)
+        }
+    }
+
+    // MARK: - Delete
+
+    func testDelete() {
+        XCTContext.runActivity(named: "") { _ in
+            let context = context
+            let service = ItemService(context: context)
+
+            let itemA = Item(context: context)
+            let itemB = Item(context: context)
+            try! context.save()
+
+            try! service.delete(items: [itemA])
+
+            let fetched = try! service.items()
+            let registered = context.registeredObjects
+
+            XCTAssertEqual(fetched, [itemB])
+            XCTAssertEqual(registered, [itemB])
+        }
+    }
+
+    func testDeleteAll() {
+        XCTContext.runActivity(named: "") { _ in
+            let context = context
+            let service = ItemService(context: context)
+
+            _ = Item(context: context)
+            _ = Item(context: context)
+            try! context.save()
+
+            try! service.deleteAll()
+
+            let fetched = try! service.items()
+            let registered = context.registeredObjects
+
+            XCTAssertEqual(fetched, [])
+            XCTAssertEqual(registered, [])
+        }
+    }
+
+    // MARK: - Utilitiy
+
     func testGroupByMonth() {
         let data = PreviewData().items
-        let result = ItemService().groupByMonth(items: data)
+        let result = ItemService.groupByMonth(items: data)
 
         XCTContext.runActivity(named: "Result is sorted in descending by month") { _ in
             XCTAssertTrue(result[0].month > result[1].month)
@@ -85,7 +184,7 @@ class ItemServiceTests: XCTestCase {
 
     func testGroupByContent() {
         let data = PreviewData().items
-        let result = ItemService().groupByContent(items: data)
+        let result = ItemService.groupByContent(items: data)
 
         XCTContext.runActivity(named: "Result is sorted in ascending by content") { _ in
             XCTAssertTrue(result[0].content < result[1].content)

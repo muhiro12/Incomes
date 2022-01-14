@@ -36,7 +36,7 @@ struct DebugView: View {
                     Button(String.debugPreviewData) {
                         do {
                             _ = PreviewData(context: viewContext).items
-                            try ItemRepository(context: viewContext).saveAll()
+                            try ItemRepository(context: viewContext).save()
                         } catch {
                             assertionFailure(error.localizedDescription)
                         }

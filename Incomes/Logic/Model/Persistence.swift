@@ -16,7 +16,7 @@ struct PersistenceController {
         let viewContext = result.container.viewContext
         do {
             _ = PreviewData(context: viewContext).items
-            try ItemRepository(context: viewContext).saveAll()
+            try ItemRepository(context: viewContext).save()
         } catch {
             assertionFailure(error.localizedDescription)
         }

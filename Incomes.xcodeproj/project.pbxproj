@@ -30,6 +30,9 @@
 		ADCB06E02790562000B867F4 /* DateExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCB06DF2790562000B867F4 /* DateExtensionTests.swift */; };
 		ADCB06E22790635900B867F4 /* CalendarExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCB06E12790635900B867F4 /* CalendarExtensionTests.swift */; };
 		ADCB06E42790CFC600B867F4 /* NSSortDescriptorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCB06E32790CFC600B867F4 /* NSSortDescriptorExtension.swift */; };
+		ADCB06EB279149CD00B867F4 /* BalanceCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCB06EA279149CD00B867F4 /* BalanceCalculator.swift */; };
+		ADCB06ED2791556900B867F4 /* BalanceCalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCB06EC2791556900B867F4 /* BalanceCalculatorTests.swift */; };
+		ADCB06EF27915E0200B867F4 /* IncomesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCB06EE27915E0200B867F4 /* IncomesTests.swift */; };
 		ADCF36B324A1D0F70011D6F5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ADCF36B224A1D0F70011D6F5 /* Assets.xcassets */; };
 		ADCF36B624A1D0F70011D6F5 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ADCF36B524A1D0F70011D6F5 /* Preview Assets.xcassets */; };
 		ADCF36B924A1D0F70011D6F5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = ADCF36B724A1D0F70011D6F5 /* LaunchScreen.storyboard */; };
@@ -109,6 +112,9 @@
 		ADCB06DF2790562000B867F4 /* DateExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtensionTests.swift; sourceTree = "<group>"; };
 		ADCB06E12790635900B867F4 /* CalendarExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarExtensionTests.swift; sourceTree = "<group>"; };
 		ADCB06E32790CFC600B867F4 /* NSSortDescriptorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSSortDescriptorExtension.swift; sourceTree = "<group>"; };
+		ADCB06EA279149CD00B867F4 /* BalanceCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceCalculator.swift; sourceTree = "<group>"; };
+		ADCB06EC2791556900B867F4 /* BalanceCalculatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceCalculatorTests.swift; sourceTree = "<group>"; };
+		ADCB06EE27915E0200B867F4 /* IncomesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomesTests.swift; sourceTree = "<group>"; };
 		ADCF36A624A1D0F40011D6F5 /* Incomes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Incomes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ADCF36B224A1D0F70011D6F5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		ADCF36B524A1D0F70011D6F5 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -222,6 +228,7 @@
 		ADCB06DC278F951900B867F4 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				ADCB06EC2791556900B867F4 /* BalanceCalculatorTests.swift */,
 				ADCB06DD278F954600B867F4 /* ItemServiceTests.swift */,
 			);
 			path = Model;
@@ -303,6 +310,7 @@
 			isa = PBXGroup;
 			children = (
 				ADE3A4C0277690330016C152 /* Authenticator.swift */,
+				ADCB06EA279149CD00B867F4 /* BalanceCalculator.swift */,
 				ADEA399F250150E000CB61D9 /* EnvironmentParameter.swift */,
 				ADCF36EA24A1D18E0011D6F5 /* ItemRepository.swift */,
 				AD09B543278F934D008F03FA /* ItemService.swift */,
@@ -457,6 +465,7 @@
 		ADE058812706EE8600DF2499 /* Logic */ = {
 			isa = PBXGroup;
 			children = (
+				ADCB06EE27915E0200B867F4 /* IncomesTests.swift */,
 				ADE058842706EEB900DF2499 /* Extension */,
 				ADCB06DC278F951900B867F4 /* Model */,
 			);
@@ -668,6 +677,7 @@
 				ADAD3D21277BF53E005A70E1 /* GroupSection.swift in Sources */,
 				ADCF370F24A1D18E0011D6F5 /* CGFloatConstant.swift in Sources */,
 				ADAD3CC7277AA922005A70E1 /* UserDefaultsExtension.swift in Sources */,
+				ADCB06EB279149CD00B867F4 /* BalanceCalculator.swift in Sources */,
 				ADCF370124A1D18E0011D6F5 /* EditView.swift in Sources */,
 				ADCF375824A2C8260011D6F5 /* NSDecimalNumberExtension.swift in Sources */,
 				ADEA39A0250150E000CB61D9 /* EnvironmentParameter.swift in Sources */,
@@ -688,7 +698,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ADCB06ED2791556900B867F4 /* BalanceCalculatorTests.swift in Sources */,
 				ADCB06DE278F954600B867F4 /* ItemServiceTests.swift in Sources */,
+				ADCB06EF27915E0200B867F4 /* IncomesTests.swift in Sources */,
 				ADCB06E22790635900B867F4 /* CalendarExtensionTests.swift in Sources */,
 				ADCB06E02790562000B867F4 /* DateExtensionTests.swift in Sources */,
 				ADCF372924A1D1CF0011D6F5 /* StringExtensionTests.swift in Sources */,
