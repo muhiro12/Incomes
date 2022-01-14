@@ -24,6 +24,8 @@ class ItemRepositoryTests: XCTestCase {
         return formatter.date(from: string)!
     }
 
+    // MARK: - Create
+
     func testCreate() {
         XCTContext.runActivity(named: "Result is as expected") { _ in
             let repository = ItemRepository(context: context)
@@ -76,6 +78,8 @@ class ItemRepositoryTests: XCTestCase {
         }
     }
 
+    // MARK: - Calculate balance
+
     func testCalculate() {
         XCTContext.runActivity(named: "Result is as expected") { _ in
             let repository = ItemRepository(context: context)
@@ -99,7 +103,7 @@ class ItemRepositoryTests: XCTestCase {
     }
 
     func testCalculateForFutureItems() {
-        XCTContext.runActivity(named: "Result is as expected") { _ in
+        XCTContext.runActivity(named: "Result is as expected when inserting") { _ in
             let repository = ItemRepository(context: context)
 
             for i in 1...5 {
@@ -113,22 +117,208 @@ class ItemRepositoryTests: XCTestCase {
             }
             try! repository.calculate()
 
+            let item = Item(context: repository.context)
+            item.set(date: date("2000/01/31 12:00:00"),
+                     content: "content",
+                     income: 200,
+                     outgo: 100,
+                     group: "group",
+                     repeatID: UUID())
+
+            try! repository.calculateForFutureItems()
+            let first = try! repository.items().first!
+            let last = try! repository.items().last!
+
+            XCTAssertEqual(first.balance, 600)
+            XCTAssertEqual(last.balance, 100)
+        }
+
+        XCTContext.runActivity(named: "Result is as expected when inserting first") { _ in
+            let repository = ItemRepository(context: context)
+
             for i in 1...5 {
                 let item = Item(context: repository.context)
-                item.set(date: date("2000/02/0\(i) 12:00:00"),
+                item.set(date: date("2000/0\(i)/01 12:00:00"),
                          content: "content",
                          income: 200,
                          outgo: 100,
                          group: "group",
                          repeatID: UUID())
             }
+            try! repository.calculate()
+
+            let item = Item(context: repository.context)
+            item.set(date: date("2001/01/01 00:00:00"),
+                     content: "content",
+                     income: 200,
+                     outgo: 100,
+                     group: "group",
+                     repeatID: UUID())
 
             try! repository.calculateForFutureItems()
             let first = try! repository.items().first!
             let last = try! repository.items().last!
 
-            XCTAssertEqual(first.balance, 1000)
+            XCTAssertEqual(first.balance, 600)
             XCTAssertEqual(last.balance, 100)
+        }
+
+        XCTContext.runActivity(named: "Result is as expected when inserting last") { _ in
+            let repository = ItemRepository(context: context)
+
+            for i in 1...5 {
+                let item = Item(context: repository.context)
+                item.set(date: date("2000/0\(i)/01 12:00:00"),
+                         content: "content",
+                         income: 200,
+                         outgo: 100,
+                         group: "group",
+                         repeatID: UUID())
+            }
+            try! repository.calculate()
+
+            let item = Item(context: repository.context)
+            item.set(date: date("2000/01/01 00:00:00"),
+                     content: "content",
+                     income: 200,
+                     outgo: 100,
+                     group: "group",
+                     repeatID: UUID())
+
+            try! repository.calculateForFutureItems()
+            let first = try! repository.items().first!
+            let last = try! repository.items().last!
+
+            XCTAssertEqual(first.balance, 600)
+            XCTAssertEqual(last.balance, 100)
+        }
+
+        XCTContext.runActivity(named: "Result is as expected when updating") { _ in
+            let repository = ItemRepository(context: context)
+
+            var items: [Item] = []
+
+            for i in 1...5 {
+                let item = Item(context: repository.context)
+                item.set(date: date("2000/0\(i)/01 12:00:00"),
+                         content: "content",
+                         income: 200,
+                         outgo: 100,
+                         group: "group",
+                         repeatID: UUID())
+                items.append(item)
+            }
+            try! repository.calculate()
+
+            items[1].set(date: date("2000/02/01 12:00:00"),
+                         content: "content",
+                         income: 300,
+                         outgo: 100,
+                         group: "group",
+                         repeatID: UUID())
+
+            try! repository.calculateForFutureItems()
+            let first = try! repository.items().first!
+            let last = try! repository.items().last!
+
+            XCTAssertEqual(first.balance, 600)
+            XCTAssertEqual(last.balance, 100)
+        }
+
+        XCTContext.runActivity(named: "Result is as expected when updating first") { _ in
+            let repository = ItemRepository(context: context)
+
+            var items: [Item] = []
+
+            for i in 1...5 {
+                let item = Item(context: repository.context)
+                item.set(date: date("2000/0\(i)/01 12:00:00"),
+                         content: "content",
+                         income: 200,
+                         outgo: 100,
+                         group: "group",
+                         repeatID: UUID())
+                items.append(item)
+            }
+            try! repository.calculate()
+
+            items[0].set(date: date("2000/01/01 12:00:00"),
+                         content: "content",
+                         income: 300,
+                         outgo: 100,
+                         group: "group",
+                         repeatID: UUID())
+
+            try! repository.calculateForFutureItems()
+            let first = try! repository.items().first!
+            let last = try! repository.items().last!
+
+            XCTAssertEqual(first.balance, 600)
+            XCTAssertEqual(last.balance, 200)
+        }
+
+        XCTContext.runActivity(named: "Result is as expected when updating last") { _ in
+            let repository = ItemRepository(context: context)
+
+            var items: [Item] = []
+
+            for i in 1...5 {
+                let item = Item(context: repository.context)
+                item.set(date: date("2000/0\(i)/01 12:00:00"),
+                         content: "content",
+                         income: 200,
+                         outgo: 100,
+                         group: "group",
+                         repeatID: UUID())
+                items.append(item)
+            }
+            try! repository.calculate()
+
+            items[4].set(date: date("2000/05/01 12:00:00"),
+                         content: "content",
+                         income: 300,
+                         outgo: 100,
+                         group: "group",
+                         repeatID: UUID())
+
+            try! repository.calculateForFutureItems()
+            let first = try! repository.items().first!
+            let last = try! repository.items().last!
+
+            XCTAssertEqual(first.balance, 600)
+            XCTAssertEqual(last.balance, 100)
+        }
+
+        XCTContext.runActivity(named: "Result is as expected when changing order") { _ in
+            let repository = ItemRepository(context: context)
+
+            var items: [Item] = []
+
+            for i in 1...5 {
+                let item = Item(context: repository.context)
+                item.set(date: date("2000/0\(i)/01 12:00:00"),
+                         content: "content",
+                         income: 200,
+                         outgo: 100,
+                         group: "group",
+                         repeatID: UUID())
+                items.append(item)
+            }
+            try! repository.calculate()
+
+            items[4].set(date: date("2000/01/01 00:00:00"),
+                         content: "content",
+                         income: 300,
+                         outgo: 100,
+                         group: "group",
+                         repeatID: UUID())
+
+            try! repository.calculateForFutureItems()
+            let first = try! repository.items().first!
+            let last = try! repository.items().last!
+
+            XCTAssertEqual(first.balance, 600)
+            XCTAssertEqual(last.balance, 200)
         }
     }
 }

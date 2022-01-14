@@ -168,11 +168,19 @@ struct ItemRepository {
             let index = tuple.offset
             let item = tuple.element
 
-            item.balance = {
+            item.balance = try {
                 if index > .zero {
-                    return items[index - 1].balance.adding(item.profit)
+                    let before = items[index - 1]
+                    return before.balance.adding(item.profit)
                 } else if predicate != nil {
-                    return item.balance.adding(item.profit)
+                    let allItems = try self.items()
+                    guard let index = allItems.lastIndex(of: item),
+                          allItems.indices.contains(index + 1)
+                    else {
+                        return item.profit
+                    }
+                    let before = allItems[index + 1]
+                    return before.balance.adding(item.profit)
                 } else {
                     return item.profit
                 }
@@ -182,12 +190,13 @@ struct ItemRepository {
     }
 
     func calculateForFutureItems() throws {
-        let items = context.registeredObjects.compactMap { $0 as? Item }
+        let items = [context.insertedObjects,
+                     context.updatedObjects].flatMap {
+                        $0.compactMap { $0 as? Item }
+                     }
         guard let oldest = items.sorted(by: { $0.date < $1.date }).first else {
             return
         }
-        // TODO: Fix
-        //        try calculate(predicate: .init(dateIsAfter: oldest.date))
-        try calculate()
+        try calculate(predicate: .init(dateIsAfter: oldest.date))
     }
 }
