@@ -24,12 +24,12 @@ jobs:
 
       - name: Test result
         uses: kishikawakatsumi/xcresulttool@v1
-        if: success() || failure()
+        if: ${{ always() }}
         with:
           path: TestResults.xcresult
 
       - name: Merge PR
-        if: ${{ github.event.pull_request.number }} && (success() || failure())
+        if: ${{ github.event.pull_request.number && always() }}
         run: gh pr merge --merge ${{ github.event.pull_request.number }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
