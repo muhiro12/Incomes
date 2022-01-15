@@ -9,7 +9,12 @@
 import SwiftUI
 
 struct LockedView: View {
-    @State private var isLocked = UserDefaults.isLockAppOn
+    @Binding
+    private var isLocked: Bool
+
+    init(isLocked: Binding<Bool>) {
+        _isLocked = isLocked
+    }
 
     var body: some View {
         Button(.localized(.unlock)) {
@@ -29,7 +34,7 @@ private extension LockedView {
 #if DEBUG
 struct LockedView_Previews: PreviewProvider {
     static var previews: some View {
-        LockedView()
+        LockedView(isLocked: .constant(true))
     }
 }
 #endif
