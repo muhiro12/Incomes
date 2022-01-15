@@ -48,6 +48,7 @@ struct ItemListView: View {
                 })
                 Section {
                     NativeAdView()
+                        .listRowBackground(Color.clear)
                 }
             }
         }.listStyle(.grouped)
