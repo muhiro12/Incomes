@@ -24,8 +24,9 @@ struct ContentView: View {
                         GroupView()
                     }
                 }
+                BannerAdView()
                 IncomesFooter(isHome: $isHome)
-            }
+            }.background(Color(.systemGroupedBackground))
         }
     }
 }

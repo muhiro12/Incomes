@@ -8,6 +8,7 @@
 
 import SwiftUI
 import Firebase
+import GoogleMobileAds
 
 @main
 struct IncomesApp: App {
@@ -16,6 +17,9 @@ struct IncomesApp: App {
     init() {
         FirebaseApp.configure()
         Store.shared.configure()
+        Task {
+            GADMobileAds.sharedInstance().start()
+        }
     }
 
     var body: some Scene {

@@ -47,6 +47,24 @@
         }
       },
       {
+        "package": "GoogleMobileAds",
+        "repositoryURL": "https://github.com/quanghits/GoogleMobileAds",
+        "state": {
+          "branch": null,
+          "revision": "ef2f9a6dcd27c43aa49e66b561e9dd678b0d5618",
+          "version": "8.13.0"
+        }
+      },
+      {
+        "package": "GoogleUserMessagingPlatform",
+        "repositoryURL": "https://github.com/quanghits/GoogleUserMessagingPlatform.git",
+        "state": {
+          "branch": null,
+          "revision": "f322d91b6b0497b727b228a5fa5b9394e7886d3a",
+          "version": "1.2.0"
+        }
+      },
+      {
         "package": "GoogleUtilities",
         "repositoryURL": "https://github.com/google/GoogleUtilities.git",
         "state": {
