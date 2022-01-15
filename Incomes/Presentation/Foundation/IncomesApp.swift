@@ -12,13 +12,19 @@ import GoogleMobileAds
 
 @main
 struct IncomesApp: App {
-    let persistenceController = PersistenceController.shared
+    @AppStorage(UserDefaults.Key.isSubscribeOn.rawValue)
+    private var isSubscribeOn = false
+
+    private let persistenceController = PersistenceController.shared
 
     init() {
         FirebaseApp.configure()
         Store.shared.configure()
-        Task {
-            GADMobileAds.sharedInstance().start()
+
+        if !isSubscribeOn {
+            Task {
+                GADMobileAds.sharedInstance().start()
+            }
         }
     }
 

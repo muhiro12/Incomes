@@ -10,9 +10,14 @@ import SwiftUI
 import GoogleMobileAds
 
 struct NativeAdView: View {
+    @AppStorage(UserDefaults.Key.isSubscribeOn.rawValue)
+    private var isSubscribeOn = false
+
     var body: some View {
-        AdmobNativeView()
-            .aspectRatio(2, contentMode: .fit)
+        if !isSubscribeOn {
+            AdmobNativeView()
+                .aspectRatio(2, contentMode: .fit)
+        }
     }
 }
 
