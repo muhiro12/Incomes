@@ -9,11 +9,18 @@
 import SwiftUI
 
 struct IncomesFooter: View {
-    @Environment(\.managedObjectContext) var context
+    @Environment(\.managedObjectContext)
+    var viewContext
 
-    @Binding var isHome: Bool
+    @Binding
+    private var isHome: Bool
 
-    @State private var isPresentedToEdit = false
+    @State
+    private var isPresentedToEdit = false
+
+    init(isHome: Binding<Bool>) {
+        _isHome = isHome
+    }
 
     var body: some View {
         VStack {
@@ -37,7 +44,7 @@ struct IncomesFooter: View {
                                  trailing: .spaceM))
         }.sheet(isPresented: $isPresentedToEdit) {
             EditView()
-                .environment(\.managedObjectContext, context)
+                .environment(\.managedObjectContext, viewContext)
         }.background(.background)
     }
 }
