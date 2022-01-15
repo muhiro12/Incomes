@@ -14,7 +14,9 @@ env:
 jobs:
   build:
     runs-on: macos-11
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: >-
+      github.event.workflow_run.conclusion == 'success' ||
+      github.event.workflow_run.conclusion == 'neutral'
     steps:
 
       - name: Checkout repository
