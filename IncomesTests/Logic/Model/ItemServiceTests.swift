@@ -75,7 +75,9 @@ class ItemServiceTests: XCTestCase {
             let service = ItemService(context: context)
 
             let itemA = Item(context: context)
+            itemA.date = Date()
             let itemB = Item(context: context)
+            itemB.date = Date()
             try! context.save()
 
             try! service.delete(items: [itemA])
@@ -93,8 +95,10 @@ class ItemServiceTests: XCTestCase {
             let context = context
             let service = ItemService(context: context)
 
-            _ = Item(context: context)
-            _ = Item(context: context)
+            let itemA = Item(context: context)
+            itemA.date = Date()
+            let itemB = Item(context: context)
+            itemB.date = Date()
             try! context.save()
 
             try! service.deleteAll()

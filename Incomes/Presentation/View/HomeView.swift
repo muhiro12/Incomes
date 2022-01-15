@@ -23,6 +23,7 @@ struct HomeView: View {
             ForEach(sections) {
                 YearSection(year: $0.id, items: $0.map { $0 })
                 NativeAdView()
+                    .listRowBackground(Color.clear)
             }
         }.toolbar {
             Button(action: {
