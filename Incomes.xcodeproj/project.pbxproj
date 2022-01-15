@@ -61,6 +61,7 @@
 		ADCF391D24A550910011D6F5 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = ADCF391C24A550900011D6F5 /* libsqlite3.tbd */; platformFilter = ios; };
 		ADCF392124A551360011D6F5 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADCF392024A551360011D6F5 /* StoreKit.framework */; platformFilter = ios; };
 		ADCF393224A57ADC0011D6F5 /* PreviewData.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF393124A57ADB0011D6F5 /* PreviewData.swift */; };
+		ADDBC4582792CD4400F5E4A7 /* NativeAdView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADDBC4572792CD4400F5E4A7 /* NativeAdView.swift */; };
 		ADE3A4C1277690340016C152 /* Authenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE3A4C0277690330016C152 /* Authenticator.swift */; };
 		ADE89DF524B5E73300BB82E9 /* TitleListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE89DF424B5E73300BB82E9 /* TitleListItem.swift */; };
 		ADE89DF724B5F78200BB82E9 /* ImageConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE89DF624B5F78200BB82E9 /* ImageConstant.swift */; };
@@ -164,6 +165,7 @@
 		ADCF391C24A550900011D6F5 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/usr/lib/libsqlite3.tbd; sourceTree = DEVELOPER_DIR; };
 		ADCF392024A551360011D6F5 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/StoreKit.framework; sourceTree = DEVELOPER_DIR; };
 		ADCF393124A57ADB0011D6F5 /* PreviewData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewData.swift; sourceTree = "<group>"; };
+		ADDBC4572792CD4400F5E4A7 /* NativeAdView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeAdView.swift; sourceTree = "<group>"; };
 		ADE3A4BC277495270016C152 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Base; path = Base.lproj/Info.plist; sourceTree = "<group>"; };
 		ADE3A4BE27768E6C0016C152 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = en; path = en.lproj/Info.plist; sourceTree = "<group>"; };
 		ADE3A4BF27768E7B0016C152 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = ja; path = ja.lproj/Info.plist; sourceTree = "<group>"; };
@@ -299,14 +301,15 @@
 		ADCF36E224A1D18E0011D6F5 /* Component */ = {
 			isa = PBXGroup;
 			children = (
+				ADF068C227929EBA005B2EF2 /* BannerAdView.swift */,
 				ADAD3D20277BF53D005A70E1 /* GroupSection.swift */,
 				ADCF376424A32E460011D6F5 /* IncomesFooter.swift */,
 				ADCF36E824A1D18E0011D6F5 /* ListItem.swift */,
 				ADCF36E324A1D18E0011D6F5 /* NarrowListItem.swift */,
+				ADDBC4572792CD4400F5E4A7 /* NativeAdView.swift */,
 				ADE89DF424B5E73300BB82E9 /* TitleListItem.swift */,
 				ADCF36E724A1D18E0011D6F5 /* WideListItem.swift */,
 				ADAD3D16277BC80F005A70E1 /* YearSection.swift */,
-				ADF068C227929EBA005B2EF2 /* BannerAdView.swift */,
 			);
 			path = Component;
 			sourceTree = "<group>";
@@ -699,6 +702,7 @@
 				AD68D6B2277C45DA0040EBE2 /* NSNumberConstant.swift in Sources */,
 				ADEA399C2501457A00CB61D9 /* Store.swift in Sources */,
 				ADE89DF524B5E73300BB82E9 /* TitleListItem.swift in Sources */,
+				ADDBC4582792CD4400F5E4A7 /* NativeAdView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

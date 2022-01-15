@@ -11,22 +11,24 @@ import GoogleMobileAds
 
 struct BannerAdView: View {
     var body: some View {
-        BannerAdmobView()
+        AdmobBannerView()
             .frame(width: GADAdSizeBanner.size.width,
                    height: GADAdSizeBanner.size.height)
     }
+}
 
-    private struct BannerAdmobView: UIViewRepresentable {
-        func makeUIView(context: Context) -> GADBannerView {
-            let view = GADBannerView(adSize: GADAdSizeBanner)
-            view.adUnitID = EnvironmentParameter.admobBannerID
-            view.rootViewController = (UIApplication.shared.connectedScenes.first as? UIWindowScene)?.windows.first?.rootViewController
-            view.load(GADRequest())
-            return view
-        }
+private struct AdmobBannerView: UIViewRepresentable {
+    typealias UIViewType = GADBannerView
 
-        func updateUIView(_ uiView: GADBannerView, context: Context) {}
+    func makeUIView(context: Context) -> UIViewType {
+        let view = GADBannerView(adSize: GADAdSizeBanner)
+        view.adUnitID = EnvironmentParameter.admobBannerID
+        view.rootViewController = (UIApplication.shared.connectedScenes.first as? UIWindowScene)?.windows.first?.rootViewController
+        view.load(GADRequest())
+        return view
     }
+
+    func updateUIView(_ uiView: UIViewType, context: Context) {}
 }
 
 #if DEBUG

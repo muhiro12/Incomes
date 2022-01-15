@@ -46,6 +46,9 @@ struct ItemListView: View {
                         Text(section.id.stringValue(.yyyy))
                     }
                 })
+                Section {
+                    NativeAdView()
+                }
             }
         }.listStyle(.grouped)
         .actionSheet(isPresented: $isPresentedToAlert) {

@@ -22,6 +22,7 @@ struct HomeView: View {
         List {
             ForEach(sections) {
                 YearSection(year: $0.id, items: $0.map { $0 })
+                NativeAdView()
             }
         }.toolbar {
             Button(action: {
