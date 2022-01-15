@@ -24,4 +24,12 @@ struct EnvironmentParameter {
         return Secret.revenueCatAPIKey.rawValue
         #endif
     }
+
+    static var admobBannerID: String {
+        #if DEBUG
+        return Secret.admobBannerIDDev.rawValue
+        #else
+        return Secret.admobBannerID.rawValue
+        #endif
+    }
 }
