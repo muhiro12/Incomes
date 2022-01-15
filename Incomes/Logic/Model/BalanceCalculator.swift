@@ -15,16 +15,17 @@ struct BalanceCalculator {
     func calculate() throws {
         let repository = ItemRepository(context: context)
 
-        let editedItems = [
+        let editedDateList = [
             context.insertedObjects,
-            context.updatedObjects
+            context.updatedObjects,
+            context.deletedObjects
         ].flatMap {
-            $0.compactMap { $0 as? Item }
+            $0.compactMap { ($0 as? Item)?.date }
         }
 
         try context.save()
 
-        guard let oldestDate = editedItems.sorted(by: { $0.date < $1.date }).first?.date else {
+        guard let oldestDate = editedDateList.sorted().first else {
             return
         }
 
