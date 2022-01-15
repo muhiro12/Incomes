@@ -37,7 +37,8 @@ struct ItemListView: View {
                 Section(content: {
                     ForEach(section) {
                         ListItem(of: $0)
-                    }.onDelete {
+                    }
+                    .onDelete {
                         willDeleteItems = $0.map { section[$0] }
                         isPresentedToAlert = true
                     }
@@ -51,7 +52,10 @@ struct ItemListView: View {
                         .listRowBackground(Color.clear)
                 }
             }
-        }.listStyle(.grouped)
+        }
+        .id(UUID())
+        .navigationBarTitle(title)
+        .listStyle(.grouped)
         .actionSheet(isPresented: $isPresentedToAlert) {
             ActionSheet(title: Text(.localized(.deleteConfirm)),
                         buttons: [
@@ -65,7 +69,7 @@ struct ItemListView: View {
                             .cancel {
                                 willDeleteItems = []
                             }])
-        }.navigationBarTitle(title)
+        }
     }
 }
 
