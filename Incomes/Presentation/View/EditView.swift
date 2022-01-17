@@ -14,6 +14,9 @@ struct EditView: View {
     @Environment(\.presentationMode)
     var presentationMode
 
+    @AppStorage(UserDefaults.Key.isSubscribeOn.rawValue)
+    private var isSubscribeOn = false
+
     @State
     private var isPresentedToActionSheet = false
     @State
@@ -82,11 +85,13 @@ struct EditView: View {
                             .multilineTextAlignment(.trailing)
                             .foregroundColor(outgo.isEmptyOrDecimal ? .primary : .red)
                     }
-                    HStack {
-                        Text(.localized(.group))
-                        Spacer()
-                        TextField(String.empty, text: $group)
-                            .multilineTextAlignment(.trailing)
+                    if isSubscribeOn {
+                        HStack {
+                            Text(.localized(.group))
+                            Spacer()
+                            TextField(String.empty, text: $group)
+                                .multilineTextAlignment(.trailing)
+                        }
                     }
                     if !isEditMode {
                         HStack {

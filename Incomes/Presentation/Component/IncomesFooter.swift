@@ -10,7 +10,10 @@ import SwiftUI
 
 struct IncomesFooter: View {
     @Environment(\.managedObjectContext)
-    var viewContext
+    private var viewContext
+
+    @AppStorage(UserDefaults.Key.isSubscribeOn.rawValue)
+    private var isSubscribeOn = false
 
     @Binding
     private var isHome: Bool
@@ -26,18 +29,24 @@ struct IncomesFooter: View {
         VStack {
             Divider()
             HStack {
-                Button(action: toNextView) {
-                    (isHome ? Image.group : Image.home)
-                        .iconFrameM()
+                if isSubscribeOn {
+                    Button(action: {
+                        isHome.toggle()
+                    }, label: {
+                        (isHome ? Image.group : Image.home)
+                            .iconFrameM()
+                    })
                 }
                 Spacer()
                 Text(.localized(.footerTextPrefix) + Date().stringValue(.yyyyMMMd))
                     .font(.footnote)
                 Spacer()
-                Button(action: presentToEdit) {
+                Button(action: {
+                    isPresentedToEdit = true
+                }, label: {
                     Image.create
                         .iconFrameM()
-                }
+                })
             }.padding(EdgeInsets(top: .spaceS,
                                  leading: .spaceM,
                                  bottom: .spaceS,
@@ -46,18 +55,6 @@ struct IncomesFooter: View {
             EditView()
                 .environment(\.managedObjectContext, viewContext)
         }.background(.background)
-    }
-}
-
-// MARK: - private
-
-private extension IncomesFooter {
-    func toNextView() {
-        isHome.toggle()
-    }
-
-    func presentToEdit() {
-        isPresentedToEdit = true
     }
 }
 
