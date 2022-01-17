@@ -10,9 +10,9 @@ import SwiftUI
 
 struct EditView: View {
     @Environment(\.managedObjectContext)
-    var viewContext
+    private var viewContext
     @Environment(\.presentationMode)
-    var presentationMode
+    private var presentationMode
 
     @State
     private var isPresentedToActionSheet = false

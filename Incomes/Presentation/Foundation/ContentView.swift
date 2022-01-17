@@ -18,17 +18,19 @@ struct ContentView: View {
         if isLocked {
             LockedView(isLocked: $isLocked)
         } else {
-            VStack(spacing: .zero) {
-                NavigationView {
-                    if isHome {
-                        HomeView()
-                    } else {
-                        GroupView()
+            GeometryReader { geometry in
+                VStack(spacing: .zero) {
+                    NavigationView {
+                        if isHome {
+                            HomeView()
+                        } else {
+                            GroupView()
+                        }
                     }
+                    IncomesFooter(isHome: $isHome)
+                    AdView(type: .banner(geometry))
                 }
-                BannerAdView()
-                IncomesFooter(isHome: $isHome)
-            }.background(Color(.systemGroupedBackground))
+            }
         }
     }
 }

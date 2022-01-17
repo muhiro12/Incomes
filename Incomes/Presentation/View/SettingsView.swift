@@ -27,12 +27,14 @@ struct SettingsView: View {
     var body: some View {
         NavigationView {
             Form {
-                Section {
-                    Toggle(isOn: $isLockAppOn) {
-                        Text(.localized(.lockApp))
+                if isSubscribeOn {
+                    Section {
+                        Toggle(isOn: $isLockAppOn) {
+                            Text(.localized(.lockApp))
+                        }
                     }
-                }
-                if !isSubscribeOn {
+                } else if false {
+                    // TODO: Remove false
                     Section(content: {
                         Button(.localized(.subscribe), action: purchase)
                         Button(.localized(.restore), action: restore)
