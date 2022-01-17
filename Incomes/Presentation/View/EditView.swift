@@ -10,12 +10,9 @@ import SwiftUI
 
 struct EditView: View {
     @Environment(\.managedObjectContext)
-    var viewContext
+    private var viewContext
     @Environment(\.presentationMode)
-    var presentationMode
-
-    @AppStorage(UserDefaults.Key.isSubscribeOn.rawValue)
-    private var isSubscribeOn = false
+    private var presentationMode
 
     @State
     private var isPresentedToActionSheet = false
@@ -85,13 +82,11 @@ struct EditView: View {
                             .multilineTextAlignment(.trailing)
                             .foregroundColor(outgo.isEmptyOrDecimal ? .primary : .red)
                     }
-                    if isSubscribeOn {
-                        HStack {
-                            Text(.localized(.group))
-                            Spacer()
-                            TextField(String.empty, text: $group)
-                                .multilineTextAlignment(.trailing)
-                        }
+                    HStack {
+                        Text(.localized(.group))
+                        Spacer()
+                        TextField(String.empty, text: $group)
+                            .multilineTextAlignment(.trailing)
                     }
                     if !isEditMode {
                         HStack {
