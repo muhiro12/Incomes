@@ -15,62 +15,8 @@
                     <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Xiv-Wb-9Fo">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="862"/>
-                                <subviews>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MWf-yy-Wef">
-                                        <rect key="frame" x="0.0" y="0.0" width="414" height="815.5"/>
-                                        <color key="backgroundColor" systemColor="groupTableViewBackgroundColor"/>
-                                    </view>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ffA-g7-0Bf">
-                                        <rect key="frame" x="0.0" y="815.5" width="414" height="0.5"/>
-                                        <color key="backgroundColor" systemColor="separatorColor"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="0.5" id="ty8-2b-iug"/>
-                                        </constraints>
-                                    </view>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5dh-QC-Yew">
-                                        <rect key="frame" x="0.0" y="816" width="414" height="46"/>
-                                        <subviews>
-                                            <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="square.stack.3d.up" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="02l-BA-k0C">
-                                                <rect key="frame" x="14" y="9" width="28" height="28.5"/>
-                                                <color key="tintColor" systemColor="systemGreenColor"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="width" constant="28" id="ZUM-6p-4NR"/>
-                                                    <constraint firstAttribute="width" secondItem="02l-BA-k0C" secondAttribute="height" multiplier="1:1" id="fgj-2U-fBJ"/>
-                                                </constraints>
-                                            </imageView>
-                                            <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="square.and.pencil" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="daO-0P-KPq">
-                                                <rect key="frame" x="372" y="9" width="28" height="26.5"/>
-                                                <color key="tintColor" systemColor="systemGreenColor"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="width" secondItem="daO-0P-KPq" secondAttribute="height" multiplier="1:1" id="2df-dv-GbE"/>
-                                                    <constraint firstAttribute="width" constant="28" id="dL3-Ou-BM0"/>
-                                                </constraints>
-                                            </imageView>
-                                        </subviews>
-                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                        <constraints>
-                                            <constraint firstItem="02l-BA-k0C" firstAttribute="leading" secondItem="5dh-QC-Yew" secondAttribute="leading" constant="14" id="Dbv-dM-wPg"/>
-                                            <constraint firstAttribute="bottom" secondItem="daO-0P-KPq" secondAttribute="bottom" constant="9" id="SDZ-MH-TXJ"/>
-                                            <constraint firstAttribute="trailing" secondItem="daO-0P-KPq" secondAttribute="trailing" constant="14" id="V4o-X4-lHQ"/>
-                                            <constraint firstAttribute="bottom" secondItem="02l-BA-k0C" secondAttribute="bottom" constant="9" id="gzh-mM-b2k"/>
-                                            <constraint firstItem="daO-0P-KPq" firstAttribute="top" secondItem="5dh-QC-Yew" secondAttribute="top" constant="9" id="liY-Rn-X1Y"/>
-                                            <constraint firstItem="02l-BA-k0C" firstAttribute="top" secondItem="5dh-QC-Yew" secondAttribute="top" constant="9" id="xCa-QR-TQ9"/>
-                                        </constraints>
-                                    </view>
-                                </subviews>
-                            </stackView>
-                        </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <constraints>
-                            <constraint firstItem="Xiv-Wb-9Fo" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="2jL-Hr-G3j"/>
-                            <constraint firstItem="Xiv-Wb-9Fo" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="AxF-Y3-lH4"/>
-                            <constraint firstItem="Xiv-Wb-9Fo" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="OES-re-qde"/>
-                            <constraint firstItem="Xiv-Wb-9Fo" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="WHA-WP-PQT"/>
-                        </constraints>
+                        <color key="backgroundColor" systemColor="systemGroupedBackgroundColor"/>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -79,19 +25,8 @@
         </scene>
     </scenes>
     <resources>
-        <image name="square.and.pencil" catalog="system" width="128" height="115"/>
-        <image name="square.stack.3d.up" catalog="system" width="128" height="124"/>
-        <systemColor name="groupTableViewBackgroundColor">
+        <systemColor name="systemGroupedBackgroundColor">
             <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="separatorColor">
-            <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.28999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-        <systemColor name="systemGreenColor">
-            <color red="0.20392156862745098" green="0.7803921568627451" blue="0.34901960784313724" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
