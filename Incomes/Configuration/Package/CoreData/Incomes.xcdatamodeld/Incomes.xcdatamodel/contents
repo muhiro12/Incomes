@@ -8,7 +8,7 @@
         <attribute name="income" optional="YES" attributeType="Decimal" defaultValueString="0.0"/>
         <attribute name="outgo" optional="YES" attributeType="Decimal" defaultValueString="0.0"/>
         <attribute name="repeatID" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
-        <attribute name="year" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="startOfYear" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
     </entity>
     <elements>
         <element name="Item" positionX="-54" positionY="-9" width="128" height="149"/>

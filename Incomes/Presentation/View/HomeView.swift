@@ -10,8 +10,8 @@ import SwiftUI
 
 struct HomeView: View {
     @SectionedFetchRequest(
-        sectionIdentifier: \Item.year,
-        sortDescriptors: [.init(keyPath: \Item.year, ascending: false)],
+        sectionIdentifier: \Item.startOfYear,
+        sortDescriptors: [.init(keyPath: \Item.startOfYear, ascending: false)],
         animation: .default)
     private var sections: SectionedFetchResults<Date, Item>
 
@@ -21,7 +21,7 @@ struct HomeView: View {
     var body: some View {
         List {
             ForEach(sections) {
-                YearSection(year: $0.id, items: $0.map { $0 })
+                YearSection(startOfYear: $0.id, items: $0.map { $0 })
                 NativeAdView()
                     .listRowBackground(Color.clear)
             }

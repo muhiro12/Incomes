@@ -25,7 +25,7 @@ struct ItemListView: View {
     init(title: String, predicate: NSPredicate) {
         self.title = title
         _sections = .init(
-            sectionIdentifier: \Item.year,
+            sectionIdentifier: \Item.startOfYear,
             sortDescriptors: NSSortDescriptor.standards,
             predicate: predicate,
             animation: .default)
