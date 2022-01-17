@@ -14,28 +14,22 @@ struct NativeAdView: View {
     @AppStorage(UserDefaults.Key.isSubscribeOn.rawValue)
     private var isSubscribeOn = false
 
-    @State
-    private var size = CGSize.zero
-
     var body: some View {
         if !isSubscribeOn {
-            AdmobNativeView(size: $size)
-                .frame(width: size.width, height: size.height)
+            GeometryReader {
+                AdmobNativeView(size: $0.size)
+            }.aspectRatio(3, contentMode: .fit)
         }
     }
 }
 
 private final class AdmobNativeView: NSObject {
-    @Binding
     private var size: CGSize
-
     private var view: GADNativeAdView?
     private var loader: GADAdLoader?
 
-    private var cancellables = Set<AnyCancellable>()
-
-    init(size: Binding<CGSize>) {
-        _size = size
+    init(size: CGSize) {
+        self.size = size
     }
 }
 
@@ -51,11 +45,8 @@ extension AdmobNativeView: UIViewRepresentable {
         loader.load(GADRequest())
         self.loader = loader
 
-        let view = GADTMediumTemplateView()
-        view.widthAnchor.constraint(equalToConstant: 300).isActive = true
-        view.publisher(for: \.bounds).sink {
-            self.size = $0.size
-        }.store(in: &cancellables)
+        let view = GADTSmallTemplateView()
+        view.widthAnchor.constraint(equalToConstant: size.width).isActive = true
         self.view = view
 
         return view
