@@ -10,15 +10,10 @@ import SwiftUI
 import GoogleMobileAds
 
 struct BannerAdView: View {
-    @AppStorage(UserDefaults.Key.isSubscribeOn.rawValue)
-    private var isSubscribeOn = false
-
     var body: some View {
-        if !isSubscribeOn {
-            AdmobBannerView()
-                .frame(width: GADAdSizeBanner.size.width,
-                       height: GADAdSizeBanner.size.height)
-        }
+        AdmobBannerView()
+            .frame(width: GADAdSizeBanner.size.width,
+                   height: GADAdSizeBanner.size.height)
     }
 }
 

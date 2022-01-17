@@ -11,15 +11,10 @@ import Combine
 import GoogleMobileAds
 
 struct NativeAdView: View {
-    @AppStorage(UserDefaults.Key.isSubscribeOn.rawValue)
-    private var isSubscribeOn = false
-
     var body: some View {
-        if !isSubscribeOn {
-            GeometryReader {
-                AdmobNativeView(size: $0.size)
-            }.aspectRatio(AdmobNativeView.aspectRatio, contentMode: .fit)
-        }
+        GeometryReader {
+            AdmobNativeView(size: $0.size)
+        }.aspectRatio(AdmobNativeView.aspectRatio, contentMode: .fit)
     }
 }
 

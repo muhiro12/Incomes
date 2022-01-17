@@ -14,21 +14,26 @@ struct AdView: View {
         case native
     }
 
+    @AppStorage(UserDefaults.Key.isSubscribeOn.rawValue)
+    private var isSubscribeOn = false
+
     let type: AdType
 
     var body: some View {
-        switch type {
-        case .banner:
-            BannerAdView()
-        case .native:
-            HStack {
-                Spacer()
-                NativeAdView()
-                Spacer()
+        if !isSubscribeOn {
+            switch type {
+            case .banner:
+                BannerAdView()
+            case .native:
+                HStack {
+                    Spacer()
+                    NativeAdView()
+                    Spacer()
+                }
+                .listRowBackground(Color.clear)
+                .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
+                .listRowSeparator(.hidden)
             }
-            .listRowBackground(Color.clear)
-            .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
-            .listRowSeparator(.hidden)
         }
     }
 }
