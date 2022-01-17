@@ -52,7 +52,6 @@ enum LocalizedString {
 
     case settingsTitle
     case lockApp
-    case iCloud
     case subscriptionHeader
     case subscribe
     case restore

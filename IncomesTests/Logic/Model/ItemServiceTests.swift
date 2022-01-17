@@ -31,7 +31,7 @@ class ItemServiceTests: XCTestCase {
             XCTAssertEqual(result.income, 200)
             XCTAssertEqual(result.outgo, 100)
             XCTAssertEqual(result.group, "group")
-            XCTAssertEqual(result.year, date("2000-01-01T00:00:00Z"))
+            XCTAssertEqual(result.startOfYear, date("2000-01-01T00:00:00Z"))
             XCTAssertEqual(result.balance, 100)
         }
 
@@ -52,7 +52,7 @@ class ItemServiceTests: XCTestCase {
             XCTAssertEqual(first.income, 200)
             XCTAssertEqual(first.outgo, 100)
             XCTAssertEqual(first.group, "group")
-            XCTAssertEqual(first.year, date("2000-01-01T00:00:00Z"))
+            XCTAssertEqual(first.startOfYear, date("2000-01-01T00:00:00Z"))
             XCTAssertEqual(first.balance, 200)
 
             XCTAssertEqual(last.date, date("2000-01-01T00:00:00Z"))
@@ -60,7 +60,7 @@ class ItemServiceTests: XCTestCase {
             XCTAssertEqual(last.income, 200)
             XCTAssertEqual(last.outgo, 100)
             XCTAssertEqual(last.group, "group")
-            XCTAssertEqual(last.year, date("2000-01-01T00:00:00Z"))
+            XCTAssertEqual(last.startOfYear, date("2000-01-01T00:00:00Z"))
             XCTAssertEqual(last.balance, 100)
 
             XCTAssertEqual(first.repeatID, last.repeatID)

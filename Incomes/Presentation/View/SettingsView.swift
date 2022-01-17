@@ -16,8 +16,6 @@ struct SettingsView: View {
 
     @AppStorage(wrappedValue: false, UserDefaults.Key.isLockAppOn.rawValue)
     private var isLockAppOn
-    @AppStorage(wrappedValue: false, UserDefaults.Key.isICloudOn.rawValue)
-    private var isICloudOn
     @AppStorage(wrappedValue: false, UserDefaults.Key.isSubscribeOn.rawValue)
     private var isSubscribeOn
 
@@ -34,13 +32,7 @@ struct SettingsView: View {
                         Text(.localized(.lockApp))
                     }
                 }
-                if isSubscribeOn {
-                    Section {
-                        Toggle(isOn: $isICloudOn) {
-                            Text(.localized(.iCloud))
-                        }
-                    }
-                } else {
+                if !isSubscribeOn {
                     Section(content: {
                         Button(.localized(.subscribe), action: purchase)
                         Button(.localized(.restore), action: restore)

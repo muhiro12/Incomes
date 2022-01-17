@@ -26,15 +26,11 @@ extension UserDefaults {
 
     enum Key: String {
         case isLockAppOn = "d8a87635"
-        case isICloudOn = "93bdfd83"
         case isSubscribeOn = "a018f613"
     }
 
     @UserDefaults.Wrapper(key: .isLockAppOn, defaultValue: false)
     static var isLockAppOn: Bool
-
-    @UserDefaults.Wrapper(key: .isICloudOn, defaultValue: false)
-    static var isICloudOn: Bool
 
     @UserDefaults.Wrapper(key: .isSubscribeOn, defaultValue: false)
     static var isSubscribeOn: Bool
