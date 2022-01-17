@@ -18,12 +18,14 @@ struct NativeAdView: View {
         if !isSubscribeOn {
             GeometryReader {
                 AdmobNativeView(size: $0.size)
-            }.aspectRatio(3, contentMode: .fit)
+            }.aspectRatio(AdmobNativeView.aspectRatio, contentMode: .fit)
         }
     }
 }
 
 private final class AdmobNativeView: NSObject {
+    static let aspectRatio: CGFloat = 3
+
     private var size: CGSize
     private var view: GADNativeAdView?
     private var loader: GADAdLoader?
@@ -47,6 +49,7 @@ extension AdmobNativeView: UIViewRepresentable {
 
         let view = GADTSmallTemplateView()
         view.widthAnchor.constraint(equalToConstant: size.width).isActive = true
+        view.heightAnchor.constraint(equalToConstant: size.width / Self.aspectRatio).isActive = true
         self.view = view
 
         return view

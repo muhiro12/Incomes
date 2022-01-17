@@ -26,7 +26,7 @@ struct ContentView: View {
                         GroupView()
                     }
                 }
-                BannerAdView()
+                AdView(type: .banner)
                 IncomesFooter(isHome: $isHome)
             }.background(Color(.systemGroupedBackground))
         }
