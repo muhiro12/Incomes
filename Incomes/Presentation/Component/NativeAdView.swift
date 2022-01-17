@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import Combine
 import GoogleMobileAds
 
 struct NativeAdView: View {
@@ -15,15 +16,21 @@ struct NativeAdView: View {
 
     var body: some View {
         if !isSubscribeOn {
-            AdmobNativeView()
-                .aspectRatio(2, contentMode: .fit)
+            GeometryReader {
+                AdmobNativeView(size: $0.size)
+            }.aspectRatio(3, contentMode: .fit)
         }
     }
 }
 
 private final class AdmobNativeView: NSObject {
+    private var size: CGSize
     private var view: GADNativeAdView?
     private var loader: GADAdLoader?
+
+    init(size: CGSize) {
+        self.size = size
+    }
 }
 
 extension AdmobNativeView: UIViewRepresentable {
@@ -38,7 +45,8 @@ extension AdmobNativeView: UIViewRepresentable {
         loader.load(GADRequest())
         self.loader = loader
 
-        let view = GADNativeAdView()
+        let view = GADTSmallTemplateView()
+        view.widthAnchor.constraint(equalToConstant: size.width).isActive = true
         self.view = view
 
         return view

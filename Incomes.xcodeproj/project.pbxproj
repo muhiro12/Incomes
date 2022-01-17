@@ -8,6 +8,14 @@
 
 /* Begin PBXBuildFile section */
 		AD09B544278F934D008F03FA /* ItemService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD09B543278F934D008F03FA /* ItemService.swift */; };
+		AD2BB319279548C900258234 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = AD2BB30D279548C900258234 /* LICENSE */; };
+		AD2BB31A279548C900258234 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = AD2BB30E279548C900258234 /* README.md */; };
+		AD2BB31B279548C900258234 /* CONTRIBUTING.md in Resources */ = {isa = PBXBuildFile; fileRef = AD2BB30F279548C900258234 /* CONTRIBUTING.md */; };
+		AD2BB31C279548C900258234 /* GADTMediumTemplateView.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD2BB311279548C900258234 /* GADTMediumTemplateView.xib */; };
+		AD2BB31D279548C900258234 /* GADTSmallTemplateView.m in Sources */ = {isa = PBXBuildFile; fileRef = AD2BB314279548C900258234 /* GADTSmallTemplateView.m */; };
+		AD2BB31E279548C900258234 /* GADTSmallTemplateView.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD2BB315279548C900258234 /* GADTSmallTemplateView.xib */; };
+		AD2BB31F279548C900258234 /* GADTTemplateView.m in Sources */ = {isa = PBXBuildFile; fileRef = AD2BB316279548C900258234 /* GADTTemplateView.m */; };
+		AD2BB320279548C900258234 /* GADTMediumTemplateView.m in Sources */ = {isa = PBXBuildFile; fileRef = AD2BB317279548C900258234 /* GADTMediumTemplateView.m */; };
 		AD583B6124B301EB0032AA1C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = AD583B6324B301EB0032AA1C /* Localizable.strings */; };
 		AD583B6924B308AB0032AA1C /* LocalizedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD583B6824B308AB0032AA1C /* LocalizedString.swift */; };
 		AD68D6B0277C2E660040EBE2 /* UUIDExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD68D6AF277C2E660040EBE2 /* UUIDExtension.swift */; };
@@ -92,6 +100,18 @@
 
 /* Begin PBXFileReference section */
 		AD09B543278F934D008F03FA /* ItemService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemService.swift; sourceTree = "<group>"; };
+		AD2BB30B2795488A00258234 /* Incomes-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Incomes-Bridging-Header.h"; sourceTree = "<group>"; };
+		AD2BB30D279548C900258234 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		AD2BB30E279548C900258234 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		AD2BB30F279548C900258234 /* CONTRIBUTING.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = CONTRIBUTING.md; sourceTree = "<group>"; };
+		AD2BB311279548C900258234 /* GADTMediumTemplateView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GADTMediumTemplateView.xib; sourceTree = "<group>"; };
+		AD2BB312279548C900258234 /* GADTTemplateView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GADTTemplateView.h; sourceTree = "<group>"; };
+		AD2BB313279548C900258234 /* GADTMediumTemplateView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GADTMediumTemplateView.h; sourceTree = "<group>"; };
+		AD2BB314279548C900258234 /* GADTSmallTemplateView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GADTSmallTemplateView.m; sourceTree = "<group>"; };
+		AD2BB315279548C900258234 /* GADTSmallTemplateView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GADTSmallTemplateView.xib; sourceTree = "<group>"; };
+		AD2BB316279548C900258234 /* GADTTemplateView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GADTTemplateView.m; sourceTree = "<group>"; };
+		AD2BB317279548C900258234 /* GADTMediumTemplateView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GADTMediumTemplateView.m; sourceTree = "<group>"; };
+		AD2BB318279548C900258234 /* GADTSmallTemplateView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GADTSmallTemplateView.h; sourceTree = "<group>"; };
 		AD583B6224B301EB0032AA1C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		AD583B6524B3032D0032AA1C /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		AD583B6824B308AB0032AA1C /* LocalizedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizedString.swift; sourceTree = "<group>"; };
@@ -209,6 +229,41 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		AD2BB30A2795487900258234 /* Admob */ = {
+			isa = PBXGroup;
+			children = (
+				AD2BB30B2795488A00258234 /* Incomes-Bridging-Header.h */,
+				AD2BB30C279548C900258234 /* googleads-mobile-ios-native-templates */,
+			);
+			path = Admob;
+			sourceTree = "<group>";
+		};
+		AD2BB30C279548C900258234 /* googleads-mobile-ios-native-templates */ = {
+			isa = PBXGroup;
+			children = (
+				AD2BB30D279548C900258234 /* LICENSE */,
+				AD2BB30E279548C900258234 /* README.md */,
+				AD2BB30F279548C900258234 /* CONTRIBUTING.md */,
+				AD2BB310279548C900258234 /* nativetemplates */,
+			);
+			path = "googleads-mobile-ios-native-templates";
+			sourceTree = "<group>";
+		};
+		AD2BB310279548C900258234 /* nativetemplates */ = {
+			isa = PBXGroup;
+			children = (
+				AD2BB311279548C900258234 /* GADTMediumTemplateView.xib */,
+				AD2BB312279548C900258234 /* GADTTemplateView.h */,
+				AD2BB313279548C900258234 /* GADTMediumTemplateView.h */,
+				AD2BB314279548C900258234 /* GADTSmallTemplateView.m */,
+				AD2BB315279548C900258234 /* GADTSmallTemplateView.xib */,
+				AD2BB316279548C900258234 /* GADTTemplateView.m */,
+				AD2BB317279548C900258234 /* GADTMediumTemplateView.m */,
+				AD2BB318279548C900258234 /* GADTSmallTemplateView.h */,
+			);
+			path = nativetemplates;
+			sourceTree = "<group>";
+		};
 		ADAD3CC5277AA05A005A70E1 /* Extension */ = {
 			isa = PBXGroup;
 			children = (
@@ -422,6 +477,7 @@
 		ADE058792706E7AE00DF2499 /* Package */ = {
 			isa = PBXGroup;
 			children = (
+				AD2BB30A2795487900258234 /* Admob */,
 				ADE058762706E72A00DF2499 /* CoreData */,
 				ADE058782706E76300DF2499 /* Firebase */,
 				ADE058772706E75100DF2499 /* StoreKit */,
@@ -609,10 +665,15 @@
 			files = (
 				AD583B6124B301EB0032AA1C /* Localizable.strings in Resources */,
 				ADCF36B924A1D0F70011D6F5 /* LaunchScreen.storyboard in Resources */,
+				AD2BB31B279548C900258234 /* CONTRIBUTING.md in Resources */,
 				ADCF36B624A1D0F70011D6F5 /* Preview Assets.xcassets in Resources */,
+				AD2BB319279548C900258234 /* LICENSE in Resources */,
+				AD2BB31E279548C900258234 /* GADTSmallTemplateView.xib in Resources */,
 				ADCF36B324A1D0F70011D6F5 /* Assets.xcassets in Resources */,
 				AD98194226E43C3600C4A57C /* StoreKitTestCertificate.cer in Resources */,
+				AD2BB31A279548C900258234 /* README.md in Resources */,
 				ADCB06F12791A48000B867F4 /* GoogleService-Info.plist in Resources */,
+				AD2BB31C279548C900258234 /* GADTMediumTemplateView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -685,6 +746,7 @@
 				ADE3A4C1277690340016C152 /* Authenticator.swift in Sources */,
 				ADAD3D19277BD499005A70E1 /* NSPredicateExtension.swift in Sources */,
 				ADAD3D21277BF53E005A70E1 /* GroupSection.swift in Sources */,
+				AD2BB320279548C900258234 /* GADTMediumTemplateView.m in Sources */,
 				ADCF370F24A1D18E0011D6F5 /* CGFloatConstant.swift in Sources */,
 				ADAD3CC7277AA922005A70E1 /* UserDefaultsExtension.swift in Sources */,
 				ADCB06EB279149CD00B867F4 /* BalanceCalculator.swift in Sources */,
@@ -694,11 +756,13 @@
 				ADCF376324A3147B0011D6F5 /* SettingsView.swift in Sources */,
 				ADE89DF724B5F78200BB82E9 /* ImageConstant.swift in Sources */,
 				ADCF371424A1D18E0011D6F5 /* DateExtension.swift in Sources */,
+				AD2BB31D279548C900258234 /* GADTSmallTemplateView.m in Sources */,
 				ADAD3D0F277B1790005A70E1 /* LockedView.swift in Sources */,
 				ADCF36E024A1D1820011D6F5 /* ContentView.swift in Sources */,
 				ADCF370E24A1D18E0011D6F5 /* IntConstant.swift in Sources */,
 				ADF068C327929EBA005B2EF2 /* BannerAdView.swift in Sources */,
 				AD75E9DE278F19A5008BE905 /* DebugView.swift in Sources */,
+				AD2BB31F279548C900258234 /* GADTTemplateView.m in Sources */,
 				AD68D6B2277C45DA0040EBE2 /* NSNumberConstant.swift in Sources */,
 				ADEA399C2501457A00CB61D9 /* Store.swift in Sources */,
 				ADE89DF524B5E73300BB82E9 /* TitleListItem.swift in Sources */,
@@ -832,6 +896,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/$(PRODUCT)Incomes/Configuration/Package/Admob/Incomes-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -888,6 +953,7 @@
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/$(PRODUCT)Incomes/Configuration/Package/Admob/Incomes-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				VALIDATE_PRODUCT = YES;
 			};
