@@ -47,10 +47,14 @@ struct ItemListView: View {
                         Text(section.id.stringValue(.yyyy))
                     }
                 })
-                Section {
+                HStack {
+                    Spacer()
                     NativeAdView()
-                        .listRowBackground(Color.clear)
+                    Spacer()
                 }
+                .listRowBackground(Color.clear)
+                .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
+                .listRowSeparator(.hidden)
             }
         }
         .id(UUID())

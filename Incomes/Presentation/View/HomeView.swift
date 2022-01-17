@@ -22,8 +22,13 @@ struct HomeView: View {
         List {
             ForEach(sections) {
                 YearSection(startOfYear: $0.id, items: $0.map { $0 })
-                NativeAdView()
-                    .listRowBackground(Color.clear)
+                HStack {
+                    Spacer()
+                    NativeAdView()
+                    Spacer()
+                }
+                .listRowBackground(Color.clear)
+                .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
             }
         }.toolbar {
             Button(action: {
