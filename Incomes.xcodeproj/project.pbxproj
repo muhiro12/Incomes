@@ -718,7 +718,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [ $CONFIGURATION = \"Debug\" ]; then\n/opt/homebrew/bin/license-plist --output-path $PRODUCT_NAME/Configuration/Settings.bundle\nfi\n";
+			shellScript = "if test -d /opt/homebrew/bin; then\n    PATH=/opt/homebrew/bin/:$PATH\nfi\n\nif which license-plist >/dev/null && [ $CONFIGURATION = \"Debug\" ]; then\n    license-plist --output-path $PRODUCT_NAME/Configuration/Settings.bundle\nelse\n    echo \"warning: LicensePlist not installed\"\nfi\n";
 		};
 		ADCF373624A1D5160011D6F5 /* SwiftLint */ = {
 			isa = PBXShellScriptBuildPhase;
