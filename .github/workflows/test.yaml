@@ -22,12 +22,6 @@ jobs:
       - name: Xcode test
         run: xcodebuild -scheme ${{ env.PROJECT-NAME }} -destination "platform=iOS Simulator,name=iPhone 13 Pro" -resultBundlePath TestResults test
 
-      - name: Test result
-        uses: kishikawakatsumi/xcresulttool@v1
-        if: ${{ always() }}
-        with:
-          path: TestResults.xcresult
-
       - name: Merge PR
         if: ${{ github.event.pull_request.number }}
         run: gh pr merge --merge ${{ github.event.pull_request.number }}
