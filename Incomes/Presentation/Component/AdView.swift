@@ -33,6 +33,8 @@ struct AdView: View {
                 .listRowSeparator(.hidden)
             case .banner(let geometry):
                 if geometry.size.height > 500 {
+                    Spacer()
+                        .frame(height: .spaceS)
                     Divider()
                     Spacer()
                         .frame(height: .spaceS)
