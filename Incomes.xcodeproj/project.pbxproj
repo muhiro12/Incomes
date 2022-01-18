@@ -556,10 +556,10 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = ADCF36D324A1D0F70011D6F5 /* Build configuration list for PBXNativeTarget "Incomes" */;
 			buildPhases = (
+				ADCF373624A1D5160011D6F5 /* SwiftLint */,
 				ADCF36A224A1D0F40011D6F5 /* Sources */,
 				ADCF36A324A1D0F40011D6F5 /* Frameworks */,
 				ADCF36A424A1D0F40011D6F5 /* Resources */,
-				ADCF373624A1D5160011D6F5 /* SwiftLint */,
 			);
 			buildRules = (
 			);
