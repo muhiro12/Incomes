@@ -9,6 +9,10 @@ on:
     types:
       - completed
   workflow_dispatch:
+    inputs:
+      version:
+        description: version
+        required: false
 env:
   PROJECT-NAME: Incomes
 jobs:
@@ -33,6 +37,8 @@ jobs:
 
       - name: Update build number
         uses: yanamura/ios-bump-version@v1
+        with:
+          version: ${{ github.event.inputs.version }}
 
       - name: Create commit about build number
         run: |
