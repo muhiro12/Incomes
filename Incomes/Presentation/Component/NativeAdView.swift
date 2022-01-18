@@ -7,19 +7,18 @@
 //
 
 import SwiftUI
-import Combine
 import GoogleMobileAds
 
 struct NativeAdView: View {
     var body: some View {
         GeometryReader {
             AdmobNativeView(size: $0.size)
-        }.aspectRatio(AdmobNativeView.aspectRatio, contentMode: .fit)
+        }.frame(height: AdmobNativeView.estimatedHeight)
     }
 }
 
 private final class AdmobNativeView: NSObject {
-    static let aspectRatio: CGFloat = 3
+    static let estimatedHeight: CGFloat = 105
 
     private var size: CGSize
     private var view: GADNativeAdView?
@@ -44,7 +43,6 @@ extension AdmobNativeView: UIViewRepresentable {
 
         let view = GADTSmallTemplateView()
         view.widthAnchor.constraint(equalToConstant: size.width).isActive = true
-        view.heightAnchor.constraint(equalToConstant: size.width / Self.aspectRatio).isActive = true
         self.view = view
 
         return view
