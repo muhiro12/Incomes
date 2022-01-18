@@ -31,8 +31,7 @@ struct EnvironmentParameter {
         #if DEBUG
         return Secret.admobBannerIDDev.rawValue
         #else
-        // TODO: Use production id
-        return Secret.admobBannerIDDev.rawValue
+        return Secret.admobBannerID.rawValue
         #endif
     }()
 
@@ -40,8 +39,7 @@ struct EnvironmentParameter {
         #if DEBUG
         return Secret.admobNativeIDDev.rawValue
         #else
-        // TODO: Use production id
-        return Secret.admobNativeIDDev.rawValue
+        return Secret.admobNativeID.rawValue
         #endif
     }()
 }
