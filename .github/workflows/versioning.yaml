@@ -1,0 +1,40 @@
+name: Versioning
+on:
+  push:
+    branches:
+      - main
+  workflow_run:
+    workflows:
+      - Test
+    types:
+      - completed
+  workflow_dispatch:
+    inputs:
+      version:
+        description: version
+        required: false
+env:
+  PROJECT-NAME: Incomes
+jobs:
+  versioning:
+    runs-on: ubuntu-latest
+    if: |
+      !github.event.workflow_run ||
+      github.event.workflow_run.conclusion == 'success'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update build number
+        id: bump
+        uses: yanamura/ios-bump-version@v1
+        with:
+          version: ${{ github.event.inputs.version }}
+
+      - name: Create commit about build number
+        run: |
+          git add .
+          git commit -m '${{ env.PROJECT-NAME }} ${{ steps.bump.outputs.version }} (${{ steps.bump.outputs.build-number }})'
+          git push origin HEAD
