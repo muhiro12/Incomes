@@ -54,9 +54,12 @@ extension AdmobNativeView: UIViewRepresentable {
 extension AdmobNativeView: GADNativeAdLoaderDelegate {
     func adLoader(_ adLoader: GADAdLoader, didReceive nativeAd: GADNativeAd) {
         view?.nativeAd = nativeAd
+        view?.isHidden = false
     }
 
-    func adLoader(_ adLoader: GADAdLoader, didFailToReceiveAdWithError error: Error) {}
+    func adLoader(_ adLoader: GADAdLoader, didFailToReceiveAdWithError error: Error) {
+        view?.isHidden = true
+    }
 }
 
 #if DEBUG
