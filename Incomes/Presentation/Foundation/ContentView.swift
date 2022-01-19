@@ -28,7 +28,7 @@ struct ContentView: View {
                         }
                     }
                     IncomesFooter(isHome: $isHome)
-                    AdView(type: .banner(geometry))
+                    Advertisement(type: .banner(geometry))
                 }
             }
         }
