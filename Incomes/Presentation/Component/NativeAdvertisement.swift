@@ -43,6 +43,7 @@ extension NativeAdmob: UIViewRepresentable {
 
         let view = GADTSmallTemplateView()
         view.widthAnchor.constraint(equalToConstant: size.width).isActive = true
+        view.isHidden = true
         self.view = view
 
         return view
