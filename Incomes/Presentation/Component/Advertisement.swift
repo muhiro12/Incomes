@@ -1,5 +1,5 @@
 //
-//  AdView.swift
+//  Advertisement.swift
 //  Incomes
 //
 //  Created by Hiromu Nakano on 2022/01/17.
@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct AdView: View {
+struct Advertisement: View {
     enum AdType {
         case native
         case banner(GeometryProxy)
@@ -25,7 +25,7 @@ struct AdView: View {
             case .native:
                 HStack {
                     Spacer()
-                    NativeAdView()
+                    NativeAdvertisement()
                     Spacer()
                 }
                 .listRowBackground(Color.clear)
@@ -38,7 +38,7 @@ struct AdView: View {
                     Divider()
                     Spacer()
                         .frame(height: .spaceS)
-                    BannerAdView()
+                    BannerAdvertisement()
                 }
             }
         }
@@ -46,9 +46,9 @@ struct AdView: View {
 }
 
 #if DEBUG
-struct AdView_Previews: PreviewProvider {
+struct Advertisement_Previews: PreviewProvider {
     static var previews: some View {
-        AdView(type: .native)
+        Advertisement(type: .native)
     }
 }
 #endif

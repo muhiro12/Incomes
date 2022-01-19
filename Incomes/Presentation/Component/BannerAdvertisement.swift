@@ -1,5 +1,5 @@
 //
-//  BannerAdView.swift
+//  BannerAdvertisement.swift
 //  Incomes
 //
 //  Created by Hiromu Nakano on 2022/01/15.
@@ -9,15 +9,15 @@
 import SwiftUI
 import GoogleMobileAds
 
-struct BannerAdView: View {
+struct BannerAdvertisement: View {
     var body: some View {
-        AdmobBannerView()
+        BannerAdmob()
             .frame(width: GADAdSizeBanner.size.width,
                    height: GADAdSizeBanner.size.height)
     }
 }
 
-private struct AdmobBannerView: UIViewRepresentable {
+private struct BannerAdmob: UIViewRepresentable {
     typealias UIViewType = GADBannerView
 
     func makeUIView(context: Context) -> UIViewType {
@@ -32,9 +32,9 @@ private struct AdmobBannerView: UIViewRepresentable {
 }
 
 #if DEBUG
-struct BannerAdView_Previews: PreviewProvider {
+struct BannerAdvertisement_Previews: PreviewProvider {
     static var previews: some View {
-        BannerAdView()
+        BannerAdvertisement()
     }
 }
 #endif

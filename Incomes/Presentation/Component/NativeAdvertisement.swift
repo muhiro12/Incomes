@@ -1,5 +1,5 @@
 //
-//  NativeAdView.swift
+//  NativeAdvertisement.swift
 //  Incomes
 //
 //  Created by Hiromu Nakano on 2022/01/15.
@@ -9,15 +9,15 @@
 import SwiftUI
 import GoogleMobileAds
 
-struct NativeAdView: View {
+struct NativeAdvertisement: View {
     var body: some View {
         GeometryReader {
-            AdmobNativeView(size: $0.size)
-        }.frame(height: AdmobNativeView.estimatedHeight)
+            NativeAdmob(size: $0.size)
+        }.frame(height: NativeAdmob.estimatedHeight)
     }
 }
 
-private final class AdmobNativeView: NSObject {
+private final class NativeAdmob: NSObject {
     static let estimatedHeight: CGFloat = 105
 
     private var size: CGSize
@@ -29,7 +29,7 @@ private final class AdmobNativeView: NSObject {
     }
 }
 
-extension AdmobNativeView: UIViewRepresentable {
+extension NativeAdmob: UIViewRepresentable {
     typealias UIViewType = GADNativeAdView
 
     func makeUIView(context: Context) -> UIViewType {
@@ -51,18 +51,21 @@ extension AdmobNativeView: UIViewRepresentable {
     func updateUIView(_ uiView: UIViewType, context: Context) {}
 }
 
-extension AdmobNativeView: GADNativeAdLoaderDelegate {
+extension NativeAdmob: GADNativeAdLoaderDelegate {
     func adLoader(_ adLoader: GADAdLoader, didReceive nativeAd: GADNativeAd) {
         view?.nativeAd = nativeAd
+        view?.isHidden = false
     }
 
-    func adLoader(_ adLoader: GADAdLoader, didFailToReceiveAdWithError error: Error) {}
+    func adLoader(_ adLoader: GADAdLoader, didFailToReceiveAdWithError error: Error) {
+        view?.isHidden = true
+    }
 }
 
 #if DEBUG
-struct NativeAdView_Previews: PreviewProvider {
+struct NativeAdvertisement_Previews: PreviewProvider {
     static var previews: some View {
-        NativeAdView()
+        NativeAdvertisement()
     }
 }
 #endif

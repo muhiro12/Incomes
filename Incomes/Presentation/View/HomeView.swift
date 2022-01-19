@@ -22,7 +22,7 @@ struct HomeView: View {
         List {
             ForEach(sections) {
                 YearSection(startOfYear: $0.id, items: $0.map { $0 })
-                AdView(type: .native)
+                Advertisement(type: .native)
             }
         }.toolbar {
             Button(action: {
