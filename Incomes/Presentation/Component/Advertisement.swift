@@ -39,7 +39,7 @@ struct Advertisement: View {
 #if DEBUG
 struct Advertisement_Previews: PreviewProvider {
     static var previews: some View {
-        Advertisement(type: .native(.small))
+        Advertisement(type: .native(.medium))
     }
 }
 #endif

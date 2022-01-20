@@ -13,15 +13,12 @@ struct NativeAdvertisement: View {
     enum Size: String {
         case small = "Small"
         case medium = "Medium"
-        case large = "Large"
 
         var height: CGFloat {
             switch self {
             case .small:
-                return .componentS
-            case .medium:
                 return .componentL
-            case .large:
+            case .medium:
                 return 240
             }
         }
@@ -98,7 +95,7 @@ extension NativeAdmob: GADNativeAdLoaderDelegate {
 #if DEBUG
 struct NativeAdvertisement_Previews: PreviewProvider {
     static var previews: some View {
-        NativeAdvertisement(size: .large)
+        NativeAdvertisement(size: .medium)
     }
 }
 #endif

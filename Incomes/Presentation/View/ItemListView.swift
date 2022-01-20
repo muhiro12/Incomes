@@ -47,7 +47,7 @@ struct ItemListView: View {
                         Text(section.id.stringValue(.yyyy))
                     }
                 })
-                Advertisement(type: .native(.large))
+                Advertisement(type: .native(.small))
             }
         }
         .id(UUID())
