@@ -10,22 +10,44 @@ import SwiftUI
 import GoogleMobileAds
 
 struct NativeAdvertisement: View {
+    enum Size: String {
+        case small = "Small"
+        case medium = "Medium"
+
+        var height: CGFloat {
+            switch self {
+            case .small:
+                return .componentM
+            case .medium:
+                return 320
+            }
+        }
+    }
+
+    let size: Size
+
     var body: some View {
-        NativeAdmob()
-            .frame(minHeight: .componentL)
+        NativeAdmob(size: size)
+            .frame(maxWidth: 360,
+                   minHeight: size.height)
     }
 }
 
 private final class NativeAdmob: NSObject {
+    private let size: NativeAdvertisement.Size
     private var view: GADNativeAdView?
     private var loader: GADAdLoader?
+
+    init(size: NativeAdvertisement.Size) {
+        self.size = size
+    }
 }
 
 extension NativeAdmob: UIViewRepresentable {
     typealias UIViewType = GADNativeAdView
 
     func makeUIView(context: Context) -> UIViewType {
-        guard let view = UINib(nibName: String(describing: type(of: self)), bundle: nil)
+        guard let view = UINib(nibName: size.rawValue + String(describing: type(of: self)), bundle: nil)
                 .instantiate(withOwner: self, options: nil).first as? GADNativeAdView
         else {
             assertionFailure()
@@ -56,11 +78,14 @@ extension NativeAdmob: GADNativeAdLoaderDelegate {
                             multiplier: nativeAd.mediaContent.aspectRatio)
                 .isActive = true
         }
-        view?.mediaView?.mediaContent = nativeAd.mediaContent
+
         (view?.headlineView as? UILabel)?.text = nativeAd.headline
-        (view?.advertiserView as? UILabel)?.text = nativeAd.advertiser
         (view?.callToActionView as? UILabel)?.text = nativeAd.callToAction
+        (view?.bodyView as? UILabel)?.text = nativeAd.body
+        (view?.advertiserView as? UILabel)?.text = nativeAd.advertiser
+        view?.mediaView?.mediaContent = nativeAd.mediaContent
         view?.nativeAd = nativeAd
+
         view?.isHidden = false
     }
 
@@ -72,7 +97,7 @@ extension NativeAdmob: GADNativeAdLoaderDelegate {
 #if DEBUG
 struct NativeAdvertisement_Previews: PreviewProvider {
     static var previews: some View {
-        NativeAdvertisement()
+        NativeAdvertisement(size: .medium)
     }
 }
 #endif

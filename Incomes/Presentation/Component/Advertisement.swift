@@ -10,8 +10,7 @@ import SwiftUI
 
 struct Advertisement: View {
     enum AdType {
-        case native
-        case banner(GeometryProxy)
+        case native(NativeAdvertisement.Size)
     }
 
     @AppStorage(UserDefaults.Key.isSubscribeOn.rawValue)
@@ -22,25 +21,16 @@ struct Advertisement: View {
     var body: some View {
         if !isSubscribeOn {
             switch type {
-            case .native:
+            case .native(let size):
                 HStack {
                     Spacer()
-                    NativeAdvertisement()
+                    NativeAdvertisement(size: size)
                         .border(.secondary, width: 1)
                     Spacer()
                 }
                 .listRowBackground(Color.clear)
                 .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
                 .listRowSeparator(.hidden)
-            case .banner(let geometry):
-                if geometry.size.height > 500 {
-                    Spacer()
-                        .frame(height: .spaceS)
-                    Divider()
-                    Spacer()
-                        .frame(height: .spaceS)
-                    BannerAdvertisement()
-                }
             }
         }
     }
@@ -49,7 +39,7 @@ struct Advertisement: View {
 #if DEBUG
 struct Advertisement_Previews: PreviewProvider {
     static var previews: some View {
-        Advertisement(type: .native)
+        Advertisement(type: .native(.medium))
     }
 }
 #endif

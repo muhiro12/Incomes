@@ -27,14 +27,6 @@ struct EnvironmentParameter {
         #endif
     }()
 
-    static var admobBannerID: String = {
-        #if DEBUG
-        return Secret.admobBannerIDDev.rawValue
-        #else
-        return Secret.admobBannerID.rawValue
-        #endif
-    }()
-
     static var admobNativeID: String = {
         #if DEBUG
         return Secret.admobNativeIDDev.rawValue

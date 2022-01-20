@@ -11,13 +11,14 @@
 		AD2BB3222795925C00258234 /* Advertisement.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD2BB3212795925C00258234 /* Advertisement.swift */; };
 		AD583B6124B301EB0032AA1C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = AD583B6324B301EB0032AA1C /* Localizable.strings */; };
 		AD583B6924B308AB0032AA1C /* LocalizedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD583B6824B308AB0032AA1C /* LocalizedString.swift */; };
+		AD663132279973E700891D51 /* MediumNativeAdmob.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD663130279973E700891D51 /* MediumNativeAdmob.xib */; };
 		AD68D6B0277C2E660040EBE2 /* UUIDExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD68D6AF277C2E660040EBE2 /* UUIDExtension.swift */; };
 		AD68D6B2277C45DA0040EBE2 /* NSNumberConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD68D6B1277C45DA0040EBE2 /* NSNumberConstant.swift */; };
 		AD75E9DE278F19A5008BE905 /* DebugView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD75E9DD278F19A5008BE905 /* DebugView.swift */; };
 		AD82590426E3F0FB003B6792 /* Purchases in Frameworks */ = {isa = PBXBuildFile; productRef = AD82590326E3F0FB003B6792 /* Purchases */; };
 		AD98194226E43C3600C4A57C /* StoreKitTestCertificate.cer in Resources */ = {isa = PBXBuildFile; fileRef = AD98194126E43C3600C4A57C /* StoreKitTestCertificate.cer */; };
 		ADA900B527969687000DC872 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = ADA900B427969687000DC872 /* Settings.bundle */; };
-		ADA900C6279934EB000DC872 /* NativeAdmob.xib in Resources */ = {isa = PBXBuildFile; fileRef = ADA900C5279934EB000DC872 /* NativeAdmob.xib */; };
+		ADA900C6279934EB000DC872 /* SmallNativeAdmob.xib in Resources */ = {isa = PBXBuildFile; fileRef = ADA900C5279934EB000DC872 /* SmallNativeAdmob.xib */; };
 		ADAD3CC7277AA922005A70E1 /* UserDefaultsExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADAD3CC6277AA922005A70E1 /* UserDefaultsExtension.swift */; };
 		ADAD3D05277AD654005A70E1 /* IncomesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADAD3D04277AD654005A70E1 /* IncomesApp.swift */; };
 		ADAD3D07277AD753005A70E1 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADAD3D06277AD753005A70E1 /* Persistence.swift */; };
@@ -73,7 +74,6 @@
 		ADEA39A0250150E000CB61D9 /* EnvironmentParameter.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADEA399F250150E000CB61D9 /* EnvironmentParameter.swift */; };
 		ADEE1B07261E0956002EB18F /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = ADEE1B06261E0956002EB18F /* FirebaseAnalytics */; };
 		ADF068C127929882005B2EF2 /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = ADF068C027929882005B2EF2 /* GoogleMobileAds */; };
-		ADF068C327929EBA005B2EF2 /* BannerAdvertisement.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADF068C227929EBA005B2EF2 /* BannerAdvertisement.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -99,13 +99,14 @@
 		AD583B6224B301EB0032AA1C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		AD583B6524B3032D0032AA1C /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		AD583B6824B308AB0032AA1C /* LocalizedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizedString.swift; sourceTree = "<group>"; };
+		AD663130279973E700891D51 /* MediumNativeAdmob.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MediumNativeAdmob.xib; sourceTree = "<group>"; };
 		AD68D6AF277C2E660040EBE2 /* UUIDExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UUIDExtension.swift; sourceTree = "<group>"; };
 		AD68D6B1277C45DA0040EBE2 /* NSNumberConstant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSNumberConstant.swift; sourceTree = "<group>"; };
 		AD75E9DD278F19A5008BE905 /* DebugView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugView.swift; sourceTree = "<group>"; };
 		AD7C7E2B254A33E500D1F0A0 /* Configuration.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Configuration.storekit; sourceTree = "<group>"; };
 		AD98194126E43C3600C4A57C /* StoreKitTestCertificate.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = StoreKitTestCertificate.cer; sourceTree = "<group>"; };
 		ADA900B427969687000DC872 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
-		ADA900C5279934EB000DC872 /* NativeAdmob.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NativeAdmob.xib; sourceTree = "<group>"; };
+		ADA900C5279934EB000DC872 /* SmallNativeAdmob.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SmallNativeAdmob.xib; sourceTree = "<group>"; };
 		ADAD3CC6277AA922005A70E1 /* UserDefaultsExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsExtension.swift; sourceTree = "<group>"; };
 		ADAD3D04277AD654005A70E1 /* IncomesApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomesApp.swift; sourceTree = "<group>"; };
 		ADAD3D06277AD753005A70E1 /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
@@ -181,7 +182,6 @@
 		ADEA399B2501457A00CB61D9 /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
 		ADEA399D25014CD700CB61D9 /* Secret.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secret.swift; sourceTree = "<group>"; };
 		ADEA399F250150E000CB61D9 /* EnvironmentParameter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnvironmentParameter.swift; sourceTree = "<group>"; };
-		ADF068C227929EBA005B2EF2 /* BannerAdvertisement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerAdvertisement.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -218,7 +218,8 @@
 		AD2BB30A2795487900258234 /* Admob */ = {
 			isa = PBXGroup;
 			children = (
-				ADA900C5279934EB000DC872 /* NativeAdmob.xib */,
+				AD663130279973E700891D51 /* MediumNativeAdmob.xib */,
+				ADA900C5279934EB000DC872 /* SmallNativeAdmob.xib */,
 			);
 			path = Admob;
 			sourceTree = "<group>";
@@ -316,7 +317,6 @@
 			isa = PBXGroup;
 			children = (
 				AD2BB3212795925C00258234 /* Advertisement.swift */,
-				ADF068C227929EBA005B2EF2 /* BannerAdvertisement.swift */,
 				ADAD3D20277BF53D005A70E1 /* GroupSection.swift */,
 				ADCF376424A32E460011D6F5 /* IncomesFooter.swift */,
 				ADCF36E824A1D18E0011D6F5 /* ListItem.swift */,
@@ -626,12 +626,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				AD583B6124B301EB0032AA1C /* Localizable.strings in Resources */,
-				ADA900C6279934EB000DC872 /* NativeAdmob.xib in Resources */,
+				ADA900C6279934EB000DC872 /* SmallNativeAdmob.xib in Resources */,
 				ADCF36B924A1D0F70011D6F5 /* LaunchScreen.storyboard in Resources */,
 				ADCF36B624A1D0F70011D6F5 /* Preview Assets.xcassets in Resources */,
 				ADA900B527969687000DC872 /* Settings.bundle in Resources */,
 				ADCF36B324A1D0F70011D6F5 /* Assets.xcassets in Resources */,
 				AD98194226E43C3600C4A57C /* StoreKitTestCertificate.cer in Resources */,
+				AD663132279973E700891D51 /* MediumNativeAdmob.xib in Resources */,
 				ADCB06F12791A48000B867F4 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -736,7 +737,6 @@
 				ADAD3D0F277B1790005A70E1 /* LockedView.swift in Sources */,
 				ADCF36E024A1D1820011D6F5 /* ContentView.swift in Sources */,
 				ADCF370E24A1D18E0011D6F5 /* IntConstant.swift in Sources */,
-				ADF068C327929EBA005B2EF2 /* BannerAdvertisement.swift in Sources */,
 				AD75E9DE278F19A5008BE905 /* DebugView.swift in Sources */,
 				AD68D6B2277C45DA0040EBE2 /* NSNumberConstant.swift in Sources */,
 				ADEA399C2501457A00CB61D9 /* Store.swift in Sources */,
