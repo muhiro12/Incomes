@@ -11,28 +11,29 @@ import GoogleMobileAds
 
 struct NativeAdvertisement: View {
     var body: some View {
-        GeometryReader {
-            NativeAdmob(size: $0.size)
-        }.frame(height: NativeAdmob.estimatedHeight)
+        NativeAdmob()
+            .frame(minHeight: .componentL)
     }
 }
 
 private final class NativeAdmob: NSObject {
-    static let estimatedHeight: CGFloat = 105
-
-    private var size: CGSize
     private var view: GADNativeAdView?
     private var loader: GADAdLoader?
-
-    init(size: CGSize) {
-        self.size = size
-    }
 }
 
 extension NativeAdmob: UIViewRepresentable {
     typealias UIViewType = GADNativeAdView
 
     func makeUIView(context: Context) -> UIViewType {
+        guard let view = UINib(nibName: String(describing: type(of: self)), bundle: nil)
+                .instantiate(withOwner: self, options: nil).first as? GADNativeAdView
+        else {
+            assertionFailure()
+            return .init()
+        }
+        view.isHidden = true
+        self.view = view
+
         let loader = GADAdLoader(adUnitID: EnvironmentParameter.admobNativeID,
                                  rootViewController: (UIApplication.shared.connectedScenes.first as? UIWindowScene)?.windows.first?.rootViewController,
                                  adTypes: [.native],
@@ -40,11 +41,6 @@ extension NativeAdmob: UIViewRepresentable {
         loader.delegate = self
         loader.load(GADRequest())
         self.loader = loader
-
-        let view = GADTSmallTemplateView()
-        view.widthAnchor.constraint(equalToConstant: size.width).isActive = true
-        view.isHidden = true
-        self.view = view
 
         return view
     }
@@ -54,6 +50,16 @@ extension NativeAdmob: UIViewRepresentable {
 
 extension NativeAdmob: GADNativeAdLoaderDelegate {
     func adLoader(_ adLoader: GADAdLoader, didReceive nativeAd: GADNativeAd) {
+        if let mediaView = view?.mediaView {
+            mediaView.widthAnchor
+                .constraint(equalTo: mediaView.heightAnchor,
+                            multiplier: nativeAd.mediaContent.aspectRatio)
+                .isActive = true
+        }
+        view?.mediaView?.mediaContent = nativeAd.mediaContent
+        (view?.headlineView as? UILabel)?.text = nativeAd.headline
+        (view?.advertiserView as? UILabel)?.text = nativeAd.advertiser
+        (view?.callToActionView as? UILabel)?.text = nativeAd.callToAction
         view?.nativeAd = nativeAd
         view?.isHidden = false
     }

@@ -26,6 +26,7 @@ struct Advertisement: View {
                 HStack {
                     Spacer()
                     NativeAdvertisement()
+                        .border(.secondary, width: 1)
                     Spacer()
                 }
                 .listRowBackground(Color.clear)
