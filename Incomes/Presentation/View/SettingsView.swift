@@ -33,8 +33,7 @@ struct SettingsView: View {
                             Text(.localized(.lockApp))
                         }
                     }
-                } else if false {
-                    // TODO: Remove false
+                } else {
                     Section(content: {
                         Button(.localized(.subscribe), action: purchase)
                         Button(.localized(.restore), action: restore)
