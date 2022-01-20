@@ -18,7 +18,7 @@ struct ContentView: View {
         if isLocked {
             LockedView(isLocked: $isLocked)
         } else {
-            GeometryReader { geometry in
+            GeometryReader { _ in
                 VStack(spacing: .zero) {
                     NavigationView {
                         if isHome {
@@ -28,7 +28,7 @@ struct ContentView: View {
                         }
                     }
                     IncomesFooter(isHome: $isHome)
-                    Advertisement(type: .banner(geometry))
+                    Advertisement(type: .native(.small))
                 }
             }
         }

@@ -10,22 +10,46 @@ import SwiftUI
 import GoogleMobileAds
 
 struct NativeAdvertisement: View {
+    enum Size: String {
+        case small = "Small"
+        case medium = "Medium"
+        case large = "Large"
+
+        var height: CGFloat {
+            switch self {
+            case .small:
+                return .componentS
+            case .medium:
+                return .componentL
+            case .large:
+                return 240
+            }
+        }
+    }
+
+    let size: Size
+
     var body: some View {
-        NativeAdmob()
-            .frame(minHeight: .componentL)
+        NativeAdmob(size: size)
+            .frame(height: size.height)
     }
 }
 
 private final class NativeAdmob: NSObject {
+    private let size: NativeAdvertisement.Size
     private var view: GADNativeAdView?
     private var loader: GADAdLoader?
+
+    init(size: NativeAdvertisement.Size) {
+        self.size = size
+    }
 }
 
 extension NativeAdmob: UIViewRepresentable {
     typealias UIViewType = GADNativeAdView
 
     func makeUIView(context: Context) -> UIViewType {
-        guard let view = UINib(nibName: String(describing: type(of: self)), bundle: nil)
+        guard let view = UINib(nibName: size.rawValue + String(describing: type(of: self)), bundle: nil)
                 .instantiate(withOwner: self, options: nil).first as? GADNativeAdView
         else {
             assertionFailure()
@@ -56,11 +80,13 @@ extension NativeAdmob: GADNativeAdLoaderDelegate {
                             multiplier: nativeAd.mediaContent.aspectRatio)
                 .isActive = true
         }
+
         view?.mediaView?.mediaContent = nativeAd.mediaContent
         (view?.headlineView as? UILabel)?.text = nativeAd.headline
         (view?.advertiserView as? UILabel)?.text = nativeAd.advertiser
         (view?.callToActionView as? UILabel)?.text = nativeAd.callToAction
         view?.nativeAd = nativeAd
+
         view?.isHidden = false
     }
 
@@ -72,7 +98,7 @@ extension NativeAdmob: GADNativeAdLoaderDelegate {
 #if DEBUG
 struct NativeAdvertisement_Previews: PreviewProvider {
     static var previews: some View {
-        NativeAdvertisement()
+        NativeAdvertisement(size: .large)
     }
 }
 #endif
