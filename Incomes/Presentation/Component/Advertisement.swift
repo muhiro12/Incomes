@@ -11,7 +11,6 @@ import SwiftUI
 struct Advertisement: View {
     enum AdType {
         case native(NativeAdvertisement.Size)
-        case banner(GeometryProxy)
     }
 
     @AppStorage(UserDefaults.Key.isSubscribeOn.rawValue)
@@ -32,15 +31,6 @@ struct Advertisement: View {
                 .listRowBackground(Color.clear)
                 .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
                 .listRowSeparator(.hidden)
-            case .banner(let geometry):
-                if geometry.size.height > 500 {
-                    Spacer()
-                        .frame(height: .spaceS)
-                    Divider()
-                    Spacer()
-                        .frame(height: .spaceS)
-                    BannerAdvertisement()
-                }
             }
         }
     }

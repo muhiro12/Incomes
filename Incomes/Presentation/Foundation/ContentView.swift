@@ -28,7 +28,6 @@ struct ContentView: View {
                         }
                     }
                     IncomesFooter(isHome: $isHome)
-                    Advertisement(type: .native(.small))
                 }
             }
         }

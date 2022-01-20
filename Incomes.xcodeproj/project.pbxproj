@@ -75,7 +75,6 @@
 		ADEA39A0250150E000CB61D9 /* EnvironmentParameter.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADEA399F250150E000CB61D9 /* EnvironmentParameter.swift */; };
 		ADEE1B07261E0956002EB18F /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = ADEE1B06261E0956002EB18F /* FirebaseAnalytics */; };
 		ADF068C127929882005B2EF2 /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = ADF068C027929882005B2EF2 /* GoogleMobileAds */; };
-		ADF068C327929EBA005B2EF2 /* BannerAdvertisement.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADF068C227929EBA005B2EF2 /* BannerAdvertisement.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -185,7 +184,6 @@
 		ADEA399B2501457A00CB61D9 /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
 		ADEA399D25014CD700CB61D9 /* Secret.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secret.swift; sourceTree = "<group>"; };
 		ADEA399F250150E000CB61D9 /* EnvironmentParameter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnvironmentParameter.swift; sourceTree = "<group>"; };
-		ADF068C227929EBA005B2EF2 /* BannerAdvertisement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerAdvertisement.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -322,7 +320,6 @@
 			isa = PBXGroup;
 			children = (
 				AD2BB3212795925C00258234 /* Advertisement.swift */,
-				ADF068C227929EBA005B2EF2 /* BannerAdvertisement.swift */,
 				ADAD3D20277BF53D005A70E1 /* GroupSection.swift */,
 				ADCF376424A32E460011D6F5 /* IncomesFooter.swift */,
 				ADCF36E824A1D18E0011D6F5 /* ListItem.swift */,
@@ -744,7 +741,6 @@
 				ADAD3D0F277B1790005A70E1 /* LockedView.swift in Sources */,
 				ADCF36E024A1D1820011D6F5 /* ContentView.swift in Sources */,
 				ADCF370E24A1D18E0011D6F5 /* IntConstant.swift in Sources */,
-				ADF068C327929EBA005B2EF2 /* BannerAdvertisement.swift in Sources */,
 				AD75E9DE278F19A5008BE905 /* DebugView.swift in Sources */,
 				AD68D6B2277C45DA0040EBE2 /* NSNumberConstant.swift in Sources */,
 				ADEA399C2501457A00CB61D9 /* Store.swift in Sources */,
