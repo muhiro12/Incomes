@@ -85,7 +85,7 @@ struct EditView: View {
                     HStack {
                         Text(.localized(.group))
                         Spacer()
-                        TextField(String.empty, text: $group)
+                        TextField(.localized(.others), text: $group)
                             .multilineTextAlignment(.trailing)
                     }
                     if !isEditMode {

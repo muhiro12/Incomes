@@ -20,7 +20,9 @@ struct GroupView: View {
             ForEach(sections) {
                 GroupSection(title: $0.id, items: $0.map { $0 })
             }
-        }.listStyle(.sidebar)
+        }
+        .id(UUID())
+        .listStyle(.sidebar)
         .navigationBarTitle(.localized(.groupTitle))
     }
 }
