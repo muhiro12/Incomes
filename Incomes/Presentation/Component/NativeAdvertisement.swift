@@ -17,9 +17,9 @@ struct NativeAdvertisement: View {
         var height: CGFloat {
             switch self {
             case .small:
-                return .componentL
+                return .componentM
             case .medium:
-                return 240
+                return 320
             }
         }
     }
@@ -28,7 +28,8 @@ struct NativeAdvertisement: View {
 
     var body: some View {
         NativeAdmob(size: size)
-            .frame(height: size.height)
+            .frame(maxWidth: 360,
+                   minHeight: size.height)
     }
 }
 
@@ -78,10 +79,11 @@ extension NativeAdmob: GADNativeAdLoaderDelegate {
                 .isActive = true
         }
 
-        view?.mediaView?.mediaContent = nativeAd.mediaContent
         (view?.headlineView as? UILabel)?.text = nativeAd.headline
-        (view?.advertiserView as? UILabel)?.text = nativeAd.advertiser
         (view?.callToActionView as? UILabel)?.text = nativeAd.callToAction
+        (view?.bodyView as? UILabel)?.text = nativeAd.body
+        (view?.advertiserView as? UILabel)?.text = nativeAd.advertiser
+        view?.mediaView?.mediaContent = nativeAd.mediaContent
         view?.nativeAd = nativeAd
 
         view?.isHidden = false
