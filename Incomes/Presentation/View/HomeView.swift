@@ -33,7 +33,9 @@ struct HomeView: View {
             })
         }.sheet(isPresented: $isPresentedToSettings) {
             SettingsView()
-        }.navigationBarTitle(.localized(.homeTitle))
+        }
+        .id(UUID())
+        .navigationBarTitle(.localized(.homeTitle))
         .listStyle(.sidebar)
     }
 }
