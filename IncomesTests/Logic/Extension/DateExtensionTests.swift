@@ -11,64 +11,146 @@ import XCTest
 
 class DateExtensionTests: XCTestCase {
     func testStringValue() {
-        XCTContext.runActivity(named: "yyyy in current is as expected") { _ in
-            let result = Date(timeIntervalSince1970: 0).stringValue(.yyyy)
-            XCTAssertEqual(result, "1970")
+        XCTContext.runActivity(named: "yyyy is as expected") { _ in
+            let result = date("2000-01-01T00:00:00Z").stringValue(.yyyy)
+            XCTAssertEqual(result, "2000")
         }
 
+        XCTContext.runActivity(named: "yyyy at 15:00 is as expected") { _ in
+            let result = date("2000-01-01T15:00:00Z").stringValue(.yyyy)
+            XCTAssertEqual(result, "2000")
+        }
+
+        XCTContext.runActivity(named: "yyyyMMM is as expected") { _ in
+            let result = date("2000-01-01T00:00:00Z").stringValue(.yyyyMMM)
+            XCTAssertEqual(result, "Jan 2000")
+        }
+
+        XCTContext.runActivity(named: "yyyyMMM at 15:00 is as expected") { _ in
+            let result = date("2000-01-01T15:00:00Z").stringValue(.yyyyMMM)
+            XCTAssertEqual(result, "Jan 2000")
+        }
+
+        XCTContext.runActivity(named: "MMMd is as expected") { _ in
+            let result = date("2000-01-01T00:00:00Z").stringValue(.MMMd)
+            XCTAssertEqual(result, "Jan 1")
+        }
+
+        XCTContext.runActivity(named: "MMMd at 15:00 is as expected") { _ in
+            let result = date("2000-01-01T15:00:00Z").stringValue(.MMMd)
+            XCTAssertEqual(result, "Jan 1")
+        }
+
+        XCTContext.runActivity(named: "yyyyMMMd is as expected") { _ in
+            let result = date("2000-01-01T00:00:00Z").stringValue(.yyyyMMMd)
+            XCTAssertEqual(result, "Jan 1, 2000")
+        }
+
+        XCTContext.runActivity(named: "yyyyMMMd at 15:00 as expected") { _ in
+            let result = date("2000-01-01T15:00:00Z").stringValue(.yyyyMMMd)
+            XCTAssertEqual(result, "Jan 1, 2000")
+        }
+    }
+
+    func testStringValueLondon() {
+        NSTimeZone.default = .init(identifier: "Europe/London")!
+        testStringValue()
+        NSTimeZone.default = .current
+    }
+
+    func testStringValueNewYork() {
+        NSTimeZone.default = .init(identifier: "America/New_York")!
+        testStringValue()
+        NSTimeZone.default = .current
+    }
+
+    func testStringValueTokyo() {
+        NSTimeZone.default = .init(identifier: "Asia/Tokyo")!
+        testStringValue()
+        NSTimeZone.default = .current
+    }
+
+    func testStringValueEn() {
         XCTContext.runActivity(named: "yyyy in en is as expected") { _ in
-            let result = Date(timeIntervalSince1970: 0).stringValue(.yyyy, locale: .init(identifier: "en_US"))
-            XCTAssertEqual(result, "1970")
+            let result = date("2000-01-01T00:00:00Z").stringValue(.yyyy, locale: .init(identifier: "en_US"))
+            XCTAssertEqual(result, "2000")
         }
 
-        XCTContext.runActivity(named: "yyyy in en ja as expected") { _ in
-            let result = Date(timeIntervalSince1970: 0).stringValue(.yyyy, locale: .init(identifier: "ja_JP"))
-            XCTAssertEqual(result, "1970年")
-        }
-
-        XCTContext.runActivity(named: "yyyyMMM in current is as expected") { _ in
-            let result = Date(timeIntervalSince1970: 0).stringValue(.yyyyMMM)
-            XCTAssertEqual(result, "Jan 1970")
+        XCTContext.runActivity(named: "yyyy at 15:00 in en is as expected") { _ in
+            let result = date("2000-01-01T15:00:00Z").stringValue(.yyyy, locale: .init(identifier: "en_US"))
+            XCTAssertEqual(result, "2000")
         }
 
         XCTContext.runActivity(named: "yyyyMMM in en is as expected") { _ in
-            let result = Date(timeIntervalSince1970: 0).stringValue(.yyyyMMM, locale: .init(identifier: "en_US"))
-            XCTAssertEqual(result, "Jan 1970")
+            let result = date("2000-01-01T00:00:00Z").stringValue(.yyyyMMM, locale: .init(identifier: "en_US"))
+            XCTAssertEqual(result, "Jan 2000")
         }
 
-        XCTContext.runActivity(named: "yyyyMMM in ja is as expected") { _ in
-            let result = Date(timeIntervalSince1970: 0).stringValue(.yyyyMMM, locale: .init(identifier: "ja_JP"))
-            XCTAssertEqual(result, "1970年1月")
-        }
-
-        XCTContext.runActivity(named: "MMMd in current is as expected") { _ in
-            let result = Date(timeIntervalSince1970: 0).stringValue(.MMMd)
-            XCTAssertEqual(result, "Jan 1")
+        XCTContext.runActivity(named: "yyyyMMM at 15:00 in en is as expected") { _ in
+            let result = date("2000-01-01T15:00:00Z").stringValue(.yyyyMMM, locale: .init(identifier: "en_US"))
+            XCTAssertEqual(result, "Jan 2000")
         }
 
         XCTContext.runActivity(named: "MMMd in en is as expected") { _ in
-            let result = Date(timeIntervalSince1970: 0).stringValue(.MMMd, locale: .init(identifier: "en_US"))
+            let result = date("2000-01-01T00:00:00Z").stringValue(.MMMd, locale: .init(identifier: "en_US"))
             XCTAssertEqual(result, "Jan 1")
         }
 
-        XCTContext.runActivity(named: "MMMd in ja is as expected") { _ in
-            let result = Date(timeIntervalSince1970: 0).stringValue(.MMMd, locale: .init(identifier: "ja_JP"))
-            XCTAssertEqual(result, "1月1日")
-        }
-
-        XCTContext.runActivity(named: "yyyyMMMd in current is as expected") { _ in
-            let result = Date(timeIntervalSince1970: 0).stringValue(.yyyyMMMd)
-            XCTAssertEqual(result, "Jan 1, 1970")
+        XCTContext.runActivity(named: "MMMd at 15:00 in en is as expected") { _ in
+            let result = date("2000-01-01T15:00:00Z").stringValue(.MMMd, locale: .init(identifier: "en_US"))
+            XCTAssertEqual(result, "Jan 1")
         }
 
         XCTContext.runActivity(named: "yyyyMMMd in en is as expected") { _ in
-            let result = Date(timeIntervalSince1970: 0).stringValue(.yyyyMMMd, locale: .init(identifier: "en_US"))
-            XCTAssertEqual(result, "Jan 1, 1970")
+            let result = date("2000-01-01T00:00:00Z").stringValue(.yyyyMMMd, locale: .init(identifier: "en_US"))
+            XCTAssertEqual(result, "Jan 1, 2000")
+        }
+
+        XCTContext.runActivity(named: "yyyyMMMd at 15:00 in en is as expected") { _ in
+            let result = date("2000-01-01T00:00:00Z").stringValue(.yyyyMMMd, locale: .init(identifier: "en_US"))
+            XCTAssertEqual(result, "Jan 1, 2000")
+        }
+    }
+
+    func testStringValueJa() {
+        XCTContext.runActivity(named: "yyyy in ja as expected") { _ in
+            let result = date("2000-01-01T00:00:00Z").stringValue(.yyyy, locale: .init(identifier: "ja_JP"))
+            XCTAssertEqual(result, "2000年")
+        }
+
+        XCTContext.runActivity(named: "yyyy at 15:00 in ja as expected") { _ in
+            let result = date("2000-01-01T15:00:00Z").stringValue(.yyyy, locale: .init(identifier: "ja_JP"))
+            XCTAssertEqual(result, "2000年")
+        }
+
+        XCTContext.runActivity(named: "yyyyMMM in ja is as expected") { _ in
+            let result = date("2000-01-01T00:00:00Z").stringValue(.yyyyMMM, locale: .init(identifier: "ja_JP"))
+            XCTAssertEqual(result, "2000年1月")
+        }
+
+        XCTContext.runActivity(named: "yyyyMMM at 15:00 in ja is as expected") { _ in
+            let result = date("2000-01-01T15:00:00Z").stringValue(.yyyyMMM, locale: .init(identifier: "ja_JP"))
+            XCTAssertEqual(result, "2000年1月")
+        }
+
+        XCTContext.runActivity(named: "MMMd in ja is as expected") { _ in
+            let result = date("2000-01-01T00:00:00Z").stringValue(.MMMd, locale: .init(identifier: "ja_JP"))
+            XCTAssertEqual(result, "1月1日")
+        }
+
+        XCTContext.runActivity(named: "MMMd at 15:00 in ja is as expected") { _ in
+            let result = date("2000-01-01T15:00:00Z").stringValue(.MMMd, locale: .init(identifier: "ja_JP"))
+            XCTAssertEqual(result, "1月1日")
         }
 
         XCTContext.runActivity(named: "yyyyMMMd in ja is as expected") { _ in
-            let result = Date(timeIntervalSince1970: 0).stringValue(.yyyyMMMd, locale: .init(identifier: "ja_JP"))
-            XCTAssertEqual(result, "1970年1月1日")
+            let result = date("2000-01-01T00:00:00Z").stringValue(.yyyyMMMd, locale: .init(identifier: "ja_JP"))
+            XCTAssertEqual(result, "2000年1月1日")
+        }
+
+        XCTContext.runActivity(named: "yyyyMMMd at 15:00 in ja is as expected") { _ in
+            let result = date("2000-01-01T15:00:00Z").stringValue(.yyyyMMMd, locale: .init(identifier: "ja_JP"))
+            XCTAssertEqual(result, "2000年1月1日")
         }
     }
 }

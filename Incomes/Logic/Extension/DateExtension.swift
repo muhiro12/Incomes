@@ -16,7 +16,11 @@ extension Date {
         case yyyyMMMd
     }
 
-    private static let formatter = DateFormatter()
+    private static let formatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.timeZone = .init(secondsFromGMT: .zero)
+        return formatter
+    }()
 
     var nsValue: NSDate {
         NSDate(timeIntervalSinceReferenceDate: timeIntervalSinceReferenceDate)
