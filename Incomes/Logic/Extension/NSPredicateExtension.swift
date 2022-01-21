@@ -32,6 +32,10 @@ extension NSPredicate {
         self.init(format: "group == %@", group)
     }
 
+    convenience init(groupIsNot group: String) {
+        self.init(format: "group != %@", group)
+    }
+
     convenience init(repeatIDIs repeatID: UUID) {
         self.init(format: "repeatID = %@",
                   repeatID.nsValue)
