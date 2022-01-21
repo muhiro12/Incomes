@@ -12,15 +12,27 @@ struct GroupView: View {
     @SectionedFetchRequest(
         sectionIdentifier: \Item.group,
         sortDescriptors: [.init(keyPath: \Item.group, ascending: true)],
+        predicate: .init(groupIsNot: .empty),
         animation: .default)
     private var sections: SectionedFetchResults<String, Item>
+
+    @FetchRequest(
+        sortDescriptors: [.init(keyPath: \Item.group, ascending: true)],
+        predicate: .init(groupIs: .empty),
+        animation: .default)
+    private var othersSection: FetchedResults<Item>
 
     var body: some View {
         List {
             ForEach(sections) {
                 GroupSection(title: $0.id, items: $0.map { $0 })
             }
-        }.listStyle(.sidebar)
+            if !othersSection.isEmpty {
+                GroupSection(title: .localized(.others), items: othersSection.map { $0 })
+            }
+        }
+        .id(UUID())
+        .listStyle(.sidebar)
         .navigationBarTitle(.localized(.groupTitle))
     }
 }
