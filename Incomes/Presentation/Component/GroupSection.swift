@@ -39,7 +39,7 @@ struct GroupSection: View {
                 willDeleteItems = $0.flatMap { elements[$0].items }
             }
         }, header: {
-            Text(title.isNotEmpty ? title : .localized(.others))
+            Text(title)
         }).actionSheet(isPresented: $isPresentedToAlert) {
             ActionSheet(
                 title: Text(.localized(.deleteConfirm)),
