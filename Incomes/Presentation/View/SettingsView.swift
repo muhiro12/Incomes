@@ -86,7 +86,7 @@ private extension SettingsView {
                 guard let product = try await store.product() else {
                     return
                 }
-                _ = try await store.purchase(product: product)
+                try await store.purchase(product: product)
             } catch {
                 assertionFailure(error.localizedDescription)
             }
