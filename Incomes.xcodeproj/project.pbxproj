@@ -427,7 +427,6 @@
 			isa = PBXGroup;
 			children = (
 				AD98194126E43C3600C4A57C /* StoreKitTestCertificate.cer */,
-				ADCF371524A1D1B80011D6F5 /* Incomes.entitlements */,
 				AD7C7E2B254A33E500D1F0A0 /* Configuration.storekit */,
 			);
 			path = StoreKit;
@@ -456,6 +455,7 @@
 			isa = PBXGroup;
 			children = (
 				ADA900B427969687000DC872 /* Settings.bundle */,
+				ADCF371524A1D1B80011D6F5 /* Incomes.entitlements */,
 				ADEA399D25014CD700CB61D9 /* Secret.swift */,
 				ADCF36B224A1D0F70011D6F5 /* Assets.xcassets */,
 				ADE3A4B9277491CB0016C152 /* Info.plist */,
@@ -947,7 +947,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = Incomes/Configuration/Package/StoreKit/Incomes.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Incomes/Configuration/Incomes.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
@@ -980,7 +980,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = Incomes/Configuration/Package/StoreKit/Incomes.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Incomes/Configuration/Incomes.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;

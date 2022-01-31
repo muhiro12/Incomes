@@ -12,7 +12,7 @@ import Purchases
 class Store: NSObject {
     static let shared = Store(
         apiKey: EnvironmentParameter.revenueCatAPIKey,
-        entitlementID: "pro",
+        entitlementID: "premium",
         productID: EnvironmentParameter.productID,
         onPurchaseStatusUpdated: {
             UserDefaults.isSubscribeOn = $0
