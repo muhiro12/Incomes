@@ -20,6 +20,8 @@ struct SettingsView: View {
     private var isSubscribeOn
 
     @State
+    private var restoreAlert = AlertInformation(isPresented: false, title: .empty)
+    @State
     private var isAlertPresented = false
 
     private let store = Store.shared
@@ -36,7 +38,18 @@ struct SettingsView: View {
                 } else {
                     Section(content: {
                         Button(.localized(.subscribe), action: purchase)
-                        Button(.localized(.restore), action: restore)
+                        Button(.localized(.restore)) {
+                            Task {
+                                do {
+                                    try await store.restore()
+                                } catch {
+                                    guard let error = error as? IncomesError else {
+                                        return
+                                    }
+                                    restoreAlert = .init(isPresented: true, title: error.message)
+                                }
+                            }
+                        }
                     }, header: {
                         Text(.localized(.subscriptionHeader))
                     }, footer: {
@@ -62,7 +75,8 @@ struct SettingsView: View {
                 Text(.localized(.done))
                     .bold()
             })
-        }.navigationViewStyle(StackNavigationViewStyle())
+        }
+        .alert(restoreAlert.title, isPresented: $restoreAlert.isPresented) {}
         .alert(.localized(.deleteAllConfirm),
                isPresented: $isAlertPresented) {
             Button(.localized(.delete), role: .destructive) {
@@ -74,6 +88,7 @@ struct SettingsView: View {
             }
             Button(.localized(.cancel), role: .cancel) {}
         }
+        .navigationViewStyle(StackNavigationViewStyle())
     }
 }
 
@@ -91,10 +106,6 @@ private extension SettingsView {
                 assertionFailure(error.localizedDescription)
             }
         }
-    }
-
-    func restore() {
-        store.restore()
     }
 
     func dismiss() {

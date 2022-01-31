@@ -55,6 +55,7 @@ enum LocalizedString {
     case subscriptionHeader
     case subscribe
     case restore
+    case noPurchases
     case subscriptionFooter
     case manageItemsHeader
     case recalculate

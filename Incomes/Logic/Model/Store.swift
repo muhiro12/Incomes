@@ -73,8 +73,20 @@ extension Store {
         }
     }
 
-    func restore() {
-        Purchases.shared.restoreTransactions()
+    func restore() async throws {
+        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
+            Purchases.shared.restoreTransactions { purchaserInfo, error in
+                if let error = error {
+                    continuation.resume(throwing: error)
+                    return
+                }
+                if purchaserInfo?.entitlements.all.filter({ $0.value.isActive }).isEmpty == true {
+                    continuation.resume(throwing: StoreError.noPurchases)
+                    return
+                }
+                continuation.resume(returning: ())
+            }
+        }
     }
 }
 

@@ -51,6 +51,7 @@
 "subscriptionHeader" = "Subscription Service";
 "subscribe" = "Subscribe";
 "restore" = "Restore";
+"noPurchases" = "No purchases found";
 "subscriptionFooter" = "For using all features";
 "manageItemsHeader" = "Manage items";
 "recalculate" = "Recalculate";
