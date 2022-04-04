@@ -20,11 +20,7 @@ struct SettingsView: View {
     private var isSubscribeOn
 
     @State
-    private var restoreAlert = AlertInformation(isPresented: false, title: .empty)
-    @State
     private var isAlertPresented = false
-
-    private let store = Store.shared
 
     var body: some View {
         NavigationView {
@@ -36,25 +32,7 @@ struct SettingsView: View {
                         }
                     }
                 } else {
-                    Section(content: {
-                        Button(.localized(.subscribe), action: purchase)
-                        Button(.localized(.restore)) {
-                            Task {
-                                do {
-                                    try await store.restore()
-                                } catch {
-                                    guard let error = error as? IncomesError else {
-                                        return
-                                    }
-                                    restoreAlert = .init(isPresented: true, title: error.message)
-                                }
-                            }
-                        }
-                    }, header: {
-                        Text(.localized(.subscriptionHeader))
-                    }, footer: {
-                        Text(.localized(.subscriptionFooter))
-                    })
+                    StoreSection()
                 }
                 Section(content: {
                     Button(.localized(.recalculate)) {
@@ -70,13 +48,12 @@ struct SettingsView: View {
                 }, header: {
                     Text(.localized(.manageItemsHeader))
                 })
-            }.navigationBarTitle(.localized(.settingsTitle))
-            .navigationBarItems(trailing: Button(action: dismiss) {
-                Text(.localized(.done))
-                    .bold()
+            }
+            .navigationBarTitle(.localized(.settingsTitle))
+            .navigationBarItems(trailing: Button(.localized(.done)) {
+                presentationMode.wrappedValue.dismiss()
             })
         }
-        .alert(restoreAlert.title, isPresented: $restoreAlert.isPresented) {}
         .alert(.localized(.deleteAllConfirm),
                isPresented: $isAlertPresented) {
             Button(.localized(.delete), role: .destructive) {
@@ -89,27 +66,6 @@ struct SettingsView: View {
             Button(.localized(.cancel), role: .cancel) {}
         }
         .navigationViewStyle(StackNavigationViewStyle())
-    }
-}
-
-// MARK: - private
-
-private extension SettingsView {
-    func purchase() {
-        Task {
-            do {
-                guard let product = try await store.product() else {
-                    return
-                }
-                try await store.purchase(product: product)
-            } catch {
-                assertionFailure(error.localizedDescription)
-            }
-        }
-    }
-
-    func dismiss() {
-        presentationMode.wrappedValue.dismiss()
     }
 }
 
