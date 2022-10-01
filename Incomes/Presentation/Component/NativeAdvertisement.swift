@@ -33,27 +33,51 @@ struct NativeAdvertisement: View {
     }
 }
 
-private final class NativeAdmob: NSObject {
+#if DEBUG
+struct NativeAdvertisement_Previews: PreviewProvider {
+    static var previews: some View {
+        NativeAdvertisement(size: .medium)
+    }
+}
+#endif
+
+// MARK: - UIViewRepresentable
+
+private struct NativeAdmob {
+    let size: NativeAdvertisement.Size
+}
+
+extension NativeAdmob: UIViewRepresentable {
+    typealias UIViewType = UIView
+
+    func makeUIView(context: Context) -> UIViewType {
+        let view = NativeAdmobView(size: size)
+        return view
+    }
+
+    func updateUIView(_ uiView: UIViewType, context: Context) {}
+}
+
+// MARK: - GADNativeAdView
+
+private final class NativeAdmobView: UIView {
     private let size: NativeAdvertisement.Size
     private var view: GADNativeAdView?
     private var loader: GADAdLoader?
 
     init(size: NativeAdvertisement.Size) {
         self.size = size
-    }
-}
 
-extension NativeAdmob: UIViewRepresentable {
-    typealias UIViewType = GADNativeAdView
+        super.init(frame: .zero)
 
-    func makeUIView(context: Context) -> UIViewType {
         guard let view = UINib(nibName: size.rawValue + String(describing: type(of: self)), bundle: nil)
                 .instantiate(withOwner: self, options: nil).first as? GADNativeAdView
         else {
-            assertionFailure()
-            return .init()
+            fatalError()
         }
+        view.frame = bounds
         view.isHidden = true
+        addSubview(view)
         self.view = view
 
         let loader = GADAdLoader(adUnitID: EnvironmentParameter.admobNativeID,
@@ -63,14 +87,14 @@ extension NativeAdmob: UIViewRepresentable {
         loader.delegate = self
         loader.load(GADRequest())
         self.loader = loader
-
-        return view
     }
 
-    func updateUIView(_ uiView: UIViewType, context: Context) {}
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 }
 
-extension NativeAdmob: GADNativeAdLoaderDelegate {
+extension NativeAdmobView: GADNativeAdLoaderDelegate {
     func adLoader(_ adLoader: GADAdLoader, didReceive nativeAd: GADNativeAd) {
         if let mediaView = view?.mediaView {
             mediaView.widthAnchor
@@ -93,11 +117,3 @@ extension NativeAdmob: GADNativeAdLoaderDelegate {
         view?.isHidden = true
     }
 }
-
-#if DEBUG
-struct NativeAdvertisement_Previews: PreviewProvider {
-    static var previews: some View {
-        NativeAdvertisement(size: .medium)
-    }
-}
-#endif
