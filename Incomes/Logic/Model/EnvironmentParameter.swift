@@ -19,14 +19,6 @@ struct EnvironmentParameter {
         #endif
     }()
 
-    static var revenueCatAPIKey: String = {
-        #if DEBUG
-        return Secret.revenueCatAPIKeyDev.rawValue
-        #else
-        return Secret.revenueCatAPIKey.rawValue
-        #endif
-    }()
-
     static var admobNativeID: String = {
         #if DEBUG
         return Secret.admobNativeIDDev.rawValue
