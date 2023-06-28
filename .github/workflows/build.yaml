@@ -10,7 +10,7 @@ env:
   PROJECT-NAME: Incomes
 jobs:
   build:
-    runs-on: macos-11
+    runs-on: macos-13
     if: |
       !github.event.workflow_run ||
       github.event.workflow_run.conclusion == 'success'
