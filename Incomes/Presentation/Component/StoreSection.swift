@@ -7,45 +7,21 @@
 //
 
 import SwiftUI
+import StoreKit
 
 struct StoreSection: View {
     @State
-    private var restoreAlert = AlertInformation(isPresented: false, title: .empty)
+    private var isPresented = false
 
     private let store = Store.shared
 
     var body: some View {
-        Section(content: {
-            Button(.localized(.subscribe)) {
-                Task {
-                    do {
-                        guard let product = try await store.product() else {
-                            return
-                        }
-                        try await store.purchase(product: product)
-                    } catch {
-                        assertionFailure(error.localizedDescription)
-                    }
-                }
-            }
-            Button(.localized(.restore)) {
-                Task {
-                    do {
-                        try await store.restore()
-                    } catch {
-                        guard let error = error as? IncomesError else {
-                            return
-                        }
-                        restoreAlert = .init(isPresented: true, title: error.message)
-                    }
-                }
-            }
-        }, header: {
-            Text(.localized(.subscriptionHeader))
-        }, footer: {
-            Text(.localized(.subscriptionFooter))
-        })
-        .alert(restoreAlert.title, isPresented: $restoreAlert.isPresented) {}
+        Button(.localized(.subscribe)) {
+            isPresented = true
+        }.sheet(isPresented: $isPresented) {
+            SubscriptionStoreView(productIDs: [store.productID])
+                .storeButton(.visible, for: .restorePurchases)
+        }
     }
 }
 

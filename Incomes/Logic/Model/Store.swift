@@ -16,7 +16,8 @@ class Store: NSObject {
             UserDefaults.isSubscribeOn = $0
         })
 
-    private let productID: String
+    let productID: String
+
     private let onPurchaseStatusUpdated: ((Bool) -> Void)?
 
     private init(productID: String,
@@ -45,18 +46,5 @@ extension Store {
                 }
             }
         }
-    }
-
-    func product() async throws -> Product? {
-        let products = try await Product.products(for: [productID])
-        return products.first { $0.id == productID }
-    }
-
-    func purchase(product: Product) async throws {
-        _ = try await product.purchase()
-    }
-
-    func restore() async throws {
-        try await AppStore.sync()
     }
 }
