@@ -19,8 +19,9 @@ struct StoreSection: View {
         Button(.localized(.subscribe)) {
             isPresented = true
         }.sheet(isPresented: $isPresented) {
-            SubscriptionStoreView(productIDs: [store.productID])
-                .storeButton(.visible, for: .restorePurchases)
+            // TODO: Uncomment
+            //            SubscriptionStoreView(productIDs: [store.productID])
+            //                .storeButton(.visible, for: .restorePurchases)
         }
     }
 }
