@@ -7,94 +7,44 @@
 //
 
 import Foundation
-import Purchases
-
-struct Product {
-    fileprivate let package: Purchases.Package
-    fileprivate let value: SKProduct
-
-    fileprivate init(package: Purchases.Package) {
-        self.package = package
-        self.value = package.product
-    }
-}
-
-protocol StoreInterface {
-    func configure()
-    func product() async throws -> Product?
-    func purchase(product: Product) async throws -> Bool
-    func restore()
-}
+import StoreKit
 
 class Store: NSObject {
-    static let shared = Store()
-
-    private override init() {
-        apiKey = EnvironmentParameter.revenueCatAPIKey
-        entitlementID = "pro"
-        productID = EnvironmentParameter.productID
-        onPurchaseStatusUpdated = { isActive in
-            UserDefaults.isSubscribeOn = isActive
-        }
-    }
-
-    private let apiKey: String
-    private let entitlementID: String
-    private let productID: String
-    private let onPurchaseStatusUpdated: (Bool) -> Void
-}
-
-// MARK: - Public
-
-extension Store: StoreInterface {
-    func configure() {
-        #if DEBUG
-        Purchases.logLevel = .warn
-        #endif
-        Purchases.configure(withAPIKey: apiKey)
-        Purchases.shared.delegate = self
-    }
-
-    func product() async throws -> Product? {
-        typealias Continuation = CheckedContinuation<Purchases.Offerings?, Error>
-        let offerings = try await withCheckedThrowingContinuation { (continuation: Continuation) in
-            Purchases.shared.offerings { offerings, error in
-                if let error = error {
-                    continuation.resume(throwing: error)
-                    return
-                }
-                continuation.resume(returning: offerings)
-            }
-        }
-        let products = offerings?.current?.availablePackages.map { Product(package: $0) }
-        let product = products?.first(where: {
-            $0.value.productIdentifier == self.productID
+    static let shared = Store(
+        productID: EnvironmentParameter.productID,
+        onPurchaseStatusUpdated: {
+            UserDefaults.isSubscribeOn = $0
         })
-        return product
-    }
 
-    func purchase(product: Product) async throws -> Bool {
-        typealias Continuation = CheckedContinuation<Bool, Error>
-        let completed = try await withCheckedThrowingContinuation { (continuation: Continuation) in
-            Purchases.shared.purchasePackage(product.package) { _, _, error, userCancelled in
-                if let error = error {
-                    continuation.resume(throwing: error)
-                    return
-                }
-                continuation.resume(returning: !userCancelled)
-            }
-        }
-        return completed
-    }
+    let productID: String
 
-    func restore() {
-        Purchases.shared.restoreTransactions()
+    private let onPurchaseStatusUpdated: ((Bool) -> Void)?
+
+    private init(productID: String,
+                 onPurchaseStatusUpdated: ((Bool) -> Void)?) {
+        self.productID = productID
+        self.onPurchaseStatusUpdated = onPurchaseStatusUpdated
     }
 }
 
-extension Store: PurchasesDelegate {
-    func purchases(_ purchases: Purchases, didReceiveUpdated purchaserInfo: Purchases.PurchaserInfo) {
-        let isActive = purchaserInfo.entitlements.all[entitlementID]?.isActive ?? false
-        onPurchaseStatusUpdated(isActive)
+extension Store {
+    func open() {
+        Task.detached {
+            for await result in Transaction.updates {
+                guard case .verified(let transaction) = result else {
+                    return
+                }
+
+                if transaction.revocationDate != nil {
+                    self.onPurchaseStatusUpdated?(false)
+                } else if let expirationDate = transaction.expirationDate, expirationDate < Date() {
+                    return
+                } else if transaction.isUpgraded {
+                    return
+                } else {
+                    self.onPurchaseStatusUpdated?(true)
+                }
+            }
+        }
     }
 }

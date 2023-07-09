@@ -22,26 +22,20 @@ struct SettingsView: View {
     @State
     private var isAlertPresented = false
 
-    private let store = Store.shared
-
     var body: some View {
         NavigationView {
             Form {
-                if isSubscribeOn {
-                    Section {
-                        Toggle(isOn: $isLockAppOn) {
-                            Text(.localized(.lockApp))
+                // TODO: Remove false scope
+                if false {
+                    if isSubscribeOn {
+                        Section {
+                            Toggle(isOn: $isLockAppOn) {
+                                Text(.localized(.lockApp))
+                            }
                         }
+                    } else {
+                        StoreSection()
                     }
-                } else {
-                    Section(content: {
-                        Button(.localized(.subscribe), action: purchase)
-                        Button(.localized(.restore), action: restore)
-                    }, header: {
-                        Text(.localized(.subscriptionHeader))
-                    }, footer: {
-                        Text(.localized(.subscriptionFooter))
-                    })
                 }
                 Section(content: {
                     Button(.localized(.recalculate)) {
@@ -57,12 +51,12 @@ struct SettingsView: View {
                 }, header: {
                     Text(.localized(.manageItemsHeader))
                 })
-            }.navigationBarTitle(.localized(.settingsTitle))
-            .navigationBarItems(trailing: Button(action: dismiss) {
-                Text(.localized(.done))
-                    .bold()
+            }
+            .navigationBarTitle(.localized(.settingsTitle))
+            .navigationBarItems(trailing: Button(.localized(.done)) {
+                presentationMode.wrappedValue.dismiss()
             })
-        }.navigationViewStyle(StackNavigationViewStyle())
+        }
         .alert(.localized(.deleteAllConfirm),
                isPresented: $isAlertPresented) {
             Button(.localized(.delete), role: .destructive) {
@@ -74,31 +68,7 @@ struct SettingsView: View {
             }
             Button(.localized(.cancel), role: .cancel) {}
         }
-    }
-}
-
-// MARK: - private
-
-private extension SettingsView {
-    func purchase() {
-        Task {
-            do {
-                guard let product = try await store.product() else {
-                    return
-                }
-                _ = try await store.purchase(product: product)
-            } catch {
-                assertionFailure(error.localizedDescription)
-            }
-        }
-    }
-
-    func restore() {
-        store.restore()
-    }
-
-    func dismiss() {
-        presentationMode.wrappedValue.dismiss()
+        .navigationViewStyle(StackNavigationViewStyle())
     }
 }
 

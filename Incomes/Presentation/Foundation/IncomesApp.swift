@@ -19,7 +19,7 @@ struct IncomesApp: App {
 
     init() {
         FirebaseApp.configure()
-        Store.shared.configure()
+        Store.shared.open()
 
         if !isSubscribeOn {
             Task {

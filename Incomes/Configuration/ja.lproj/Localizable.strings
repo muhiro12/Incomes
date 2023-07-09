@@ -51,6 +51,7 @@
 "subscriptionHeader" = "サブスクリプション";
 "subscribe" = "定期購入";
 "restore" = "復元";
+"noPurchases" = "購入済みアイテムが見つかりません";
 "subscriptionFooter" = "全ての機能を利用する";
 "manageItemsHeader" = "アイテムを管理する";
 "recalculate" = "再計算";

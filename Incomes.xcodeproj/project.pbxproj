@@ -11,14 +11,16 @@
 		AD2BB3222795925C00258234 /* Advertisement.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD2BB3212795925C00258234 /* Advertisement.swift */; };
 		AD583B6124B301EB0032AA1C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = AD583B6324B301EB0032AA1C /* Localizable.strings */; };
 		AD583B6924B308AB0032AA1C /* LocalizedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD583B6824B308AB0032AA1C /* LocalizedString.swift */; };
-		AD663132279973E700891D51 /* MediumNativeAdmob.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD663130279973E700891D51 /* MediumNativeAdmob.xib */; };
+		AD663132279973E700891D51 /* MediumNativeAdmobView.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD663130279973E700891D51 /* MediumNativeAdmobView.xib */; };
 		AD68D6B0277C2E660040EBE2 /* UUIDExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD68D6AF277C2E660040EBE2 /* UUIDExtension.swift */; };
 		AD68D6B2277C45DA0040EBE2 /* NSNumberConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD68D6B1277C45DA0040EBE2 /* NSNumberConstant.swift */; };
+		AD6B704427A7A71E00A38208 /* IncomesError.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6B704327A7A71E00A38208 /* IncomesError.swift */; };
+		AD6B704627A7B11700A38208 /* AlertInformation.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6B704527A7B11600A38208 /* AlertInformation.swift */; };
+		AD6B704827A7C16100A38208 /* StoreSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6B704727A7C16100A38208 /* StoreSection.swift */; };
 		AD75E9DE278F19A5008BE905 /* DebugView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD75E9DD278F19A5008BE905 /* DebugView.swift */; };
-		AD82590426E3F0FB003B6792 /* Purchases in Frameworks */ = {isa = PBXBuildFile; productRef = AD82590326E3F0FB003B6792 /* Purchases */; };
 		AD98194226E43C3600C4A57C /* StoreKitTestCertificate.cer in Resources */ = {isa = PBXBuildFile; fileRef = AD98194126E43C3600C4A57C /* StoreKitTestCertificate.cer */; };
 		ADA900B527969687000DC872 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = ADA900B427969687000DC872 /* Settings.bundle */; };
-		ADA900C6279934EB000DC872 /* SmallNativeAdmob.xib in Resources */ = {isa = PBXBuildFile; fileRef = ADA900C5279934EB000DC872 /* SmallNativeAdmob.xib */; };
+		ADA900C6279934EB000DC872 /* SmallNativeAdmobView.xib in Resources */ = {isa = PBXBuildFile; fileRef = ADA900C5279934EB000DC872 /* SmallNativeAdmobView.xib */; };
 		ADAD3CC7277AA922005A70E1 /* UserDefaultsExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADAD3CC6277AA922005A70E1 /* UserDefaultsExtension.swift */; };
 		ADAD3D05277AD654005A70E1 /* IncomesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADAD3D04277AD654005A70E1 /* IncomesApp.swift */; };
 		ADAD3D07277AD753005A70E1 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADAD3D06277AD753005A70E1 /* Persistence.swift */; };
@@ -99,14 +101,17 @@
 		AD583B6224B301EB0032AA1C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		AD583B6524B3032D0032AA1C /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		AD583B6824B308AB0032AA1C /* LocalizedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizedString.swift; sourceTree = "<group>"; };
-		AD663130279973E700891D51 /* MediumNativeAdmob.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MediumNativeAdmob.xib; sourceTree = "<group>"; };
+		AD663130279973E700891D51 /* MediumNativeAdmobView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MediumNativeAdmobView.xib; sourceTree = "<group>"; };
 		AD68D6AF277C2E660040EBE2 /* UUIDExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UUIDExtension.swift; sourceTree = "<group>"; };
 		AD68D6B1277C45DA0040EBE2 /* NSNumberConstant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSNumberConstant.swift; sourceTree = "<group>"; };
+		AD6B704327A7A71E00A38208 /* IncomesError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomesError.swift; sourceTree = "<group>"; };
+		AD6B704527A7B11600A38208 /* AlertInformation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertInformation.swift; sourceTree = "<group>"; };
+		AD6B704727A7C16100A38208 /* StoreSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreSection.swift; sourceTree = "<group>"; };
 		AD75E9DD278F19A5008BE905 /* DebugView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugView.swift; sourceTree = "<group>"; };
 		AD7C7E2B254A33E500D1F0A0 /* Configuration.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Configuration.storekit; sourceTree = "<group>"; };
 		AD98194126E43C3600C4A57C /* StoreKitTestCertificate.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = StoreKitTestCertificate.cer; sourceTree = "<group>"; };
 		ADA900B427969687000DC872 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
-		ADA900C5279934EB000DC872 /* SmallNativeAdmob.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SmallNativeAdmob.xib; sourceTree = "<group>"; };
+		ADA900C5279934EB000DC872 /* SmallNativeAdmobView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SmallNativeAdmobView.xib; sourceTree = "<group>"; };
 		ADAD3CC6277AA922005A70E1 /* UserDefaultsExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsExtension.swift; sourceTree = "<group>"; };
 		ADAD3D04277AD654005A70E1 /* IncomesApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomesApp.swift; sourceTree = "<group>"; };
 		ADAD3D06277AD753005A70E1 /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
@@ -194,7 +199,6 @@
 				ADCF391D24A550910011D6F5 /* libsqlite3.tbd in Frameworks */,
 				ADCF375F24A2FEAF0011D6F5 /* CloudKit.framework in Frameworks */,
 				ADEE1B07261E0956002EB18F /* FirebaseAnalytics in Frameworks */,
-				AD82590426E3F0FB003B6792 /* Purchases in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -218,8 +222,8 @@
 		AD2BB30A2795487900258234 /* Admob */ = {
 			isa = PBXGroup;
 			children = (
-				AD663130279973E700891D51 /* MediumNativeAdmob.xib */,
-				ADA900C5279934EB000DC872 /* SmallNativeAdmob.xib */,
+				AD663130279973E700891D51 /* MediumNativeAdmobView.xib */,
+				ADA900C5279934EB000DC872 /* SmallNativeAdmobView.xib */,
 			);
 			path = Admob;
 			sourceTree = "<group>";
@@ -322,6 +326,7 @@
 				ADCF36E824A1D18E0011D6F5 /* ListItem.swift */,
 				ADCF36E324A1D18E0011D6F5 /* NarrowListItem.swift */,
 				ADDBC4572792CD4400F5E4A7 /* NativeAdvertisement.swift */,
+				AD6B704727A7C16100A38208 /* StoreSection.swift */,
 				ADE89DF424B5E73300BB82E9 /* TitleListItem.swift */,
 				ADCF36E724A1D18E0011D6F5 /* WideListItem.swift */,
 				ADAD3D16277BC80F005A70E1 /* YearSection.swift */,
@@ -332,11 +337,14 @@
 		ADCF36EB24A1D18E0011D6F5 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				AD6B704527A7B11600A38208 /* AlertInformation.swift */,
 				ADE3A4C0277690330016C152 /* Authenticator.swift */,
 				ADCB06EA279149CD00B867F4 /* BalanceCalculator.swift */,
 				ADEA399F250150E000CB61D9 /* EnvironmentParameter.swift */,
+				AD6B704327A7A71E00A38208 /* IncomesError.swift */,
 				ADCF36EA24A1D18E0011D6F5 /* ItemRepository.swift */,
 				AD09B543278F934D008F03FA /* ItemService.swift */,
+				AD583B6824B308AB0032AA1C /* LocalizedString.swift */,
 				ADAD3D06277AD753005A70E1 /* Persistence.swift */,
 				ADEA399B2501457A00CB61D9 /* Store.swift */,
 			);
@@ -420,7 +428,6 @@
 			isa = PBXGroup;
 			children = (
 				AD98194126E43C3600C4A57C /* StoreKitTestCertificate.cer */,
-				ADCF371524A1D1B80011D6F5 /* Incomes.entitlements */,
 				AD7C7E2B254A33E500D1F0A0 /* Configuration.storekit */,
 			);
 			path = StoreKit;
@@ -449,6 +456,7 @@
 			isa = PBXGroup;
 			children = (
 				ADA900B427969687000DC872 /* Settings.bundle */,
+				ADCF371524A1D1B80011D6F5 /* Incomes.entitlements */,
 				ADEA399D25014CD700CB61D9 /* Secret.swift */,
 				ADCF36B224A1D0F70011D6F5 /* Assets.xcassets */,
 				ADE3A4B9277491CB0016C152 /* Info.plist */,
@@ -474,7 +482,6 @@
 			children = (
 				ADCF36DD24A1D1820011D6F5 /* ContentView.swift */,
 				ADAD3D04277AD654005A70E1 /* IncomesApp.swift */,
-				AD583B6824B308AB0032AA1C /* LocalizedString.swift */,
 			);
 			path = Foundation;
 			sourceTree = "<group>";
@@ -527,7 +534,6 @@
 			name = Incomes;
 			packageProductDependencies = (
 				ADEE1B06261E0956002EB18F /* FirebaseAnalytics */,
-				AD82590326E3F0FB003B6792 /* Purchases */,
 				ADF068C027929882005B2EF2 /* GoogleMobileAds */,
 			);
 			productName = Incomes;
@@ -606,7 +612,6 @@
 			mainGroup = ADCF369D24A1D0F40011D6F5;
 			packageReferences = (
 				ADEE1B05261E0956002EB18F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
-				AD82590226E3F0FB003B6792 /* XCRemoteSwiftPackageReference "purchases-ios" */,
 				ADF068BF27929882005B2EF2 /* XCRemoteSwiftPackageReference "GoogleMobileAds" */,
 			);
 			productRefGroup = ADCF36A724A1D0F40011D6F5 /* Products */;
@@ -626,13 +631,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				AD583B6124B301EB0032AA1C /* Localizable.strings in Resources */,
-				ADA900C6279934EB000DC872 /* SmallNativeAdmob.xib in Resources */,
+				ADA900C6279934EB000DC872 /* SmallNativeAdmobView.xib in Resources */,
 				ADCF36B924A1D0F70011D6F5 /* LaunchScreen.storyboard in Resources */,
 				ADCF36B624A1D0F70011D6F5 /* Preview Assets.xcassets in Resources */,
 				ADA900B527969687000DC872 /* Settings.bundle in Resources */,
 				ADCF36B324A1D0F70011D6F5 /* Assets.xcassets in Resources */,
 				AD98194226E43C3600C4A57C /* StoreKitTestCertificate.cer in Resources */,
-				AD663132279973E700891D51 /* MediumNativeAdmob.xib in Resources */,
+				AD663132279973E700891D51 /* MediumNativeAdmobView.xib in Resources */,
 				ADCB06F12791A48000B867F4 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -698,6 +703,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				ADAD3D05277AD654005A70E1 /* IncomesApp.swift in Sources */,
+				AD6B704627A7B11700A38208 /* AlertInformation.swift in Sources */,
 				ADCF36FE24A1D18E0011D6F5 /* NarrowListItem.swift in Sources */,
 				ADAD3D1D277BDBDE005A70E1 /* ItemListView.swift in Sources */,
 				ADCF376524A32E460011D6F5 /* IncomesFooter.swift in Sources */,
@@ -730,12 +736,14 @@
 				ADCB06EB279149CD00B867F4 /* BalanceCalculator.swift in Sources */,
 				ADCF370124A1D18E0011D6F5 /* EditView.swift in Sources */,
 				ADCF375824A2C8260011D6F5 /* NSDecimalNumberExtension.swift in Sources */,
+				AD6B704827A7C16100A38208 /* StoreSection.swift in Sources */,
 				ADEA39A0250150E000CB61D9 /* EnvironmentParameter.swift in Sources */,
 				ADCF376324A3147B0011D6F5 /* SettingsView.swift in Sources */,
 				ADE89DF724B5F78200BB82E9 /* ImageConstant.swift in Sources */,
 				ADCF371424A1D18E0011D6F5 /* DateExtension.swift in Sources */,
 				ADAD3D0F277B1790005A70E1 /* LockedView.swift in Sources */,
 				ADCF36E024A1D1820011D6F5 /* ContentView.swift in Sources */,
+				AD6B704427A7A71E00A38208 /* IncomesError.swift in Sources */,
 				ADCF370E24A1D18E0011D6F5 /* IntConstant.swift in Sources */,
 				AD75E9DE278F19A5008BE905 /* DebugView.swift in Sources */,
 				AD68D6B2277C45DA0040EBE2 /* NSNumberConstant.swift in Sources */,
@@ -865,7 +873,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -923,7 +931,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -939,7 +947,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = Incomes/Configuration/Package/StoreKit/Incomes.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Incomes/Configuration/Incomes.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
@@ -948,7 +956,6 @@
 				DEVELOPMENT_TEAM = 66PKF55HK5;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Incomes/Configuration/Base.lproj/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -972,7 +979,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = Incomes/Configuration/Package/StoreKit/Incomes.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Incomes/Configuration/Incomes.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
@@ -981,7 +988,6 @@
 				DEVELOPMENT_TEAM = 66PKF55HK5;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Incomes/Configuration/Base.lproj/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1007,7 +1013,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 66PKF55HK5;
 				INFOPLIST_FILE = IncomesTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1029,7 +1034,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 66PKF55HK5;
 				INFOPLIST_FILE = IncomesTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1125,14 +1129,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		AD82590226E3F0FB003B6792 /* XCRemoteSwiftPackageReference "purchases-ios" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/RevenueCat/purchases-ios";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 3.0.0;
-			};
-		};
 		ADEE1B05261E0956002EB18F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
@@ -1152,11 +1148,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		AD82590326E3F0FB003B6792 /* Purchases */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = AD82590226E3F0FB003B6792 /* XCRemoteSwiftPackageReference "purchases-ios" */;
-			productName = Purchases;
-		};
 		ADEE1B06261E0956002EB18F /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = ADEE1B05261E0956002EB18F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
