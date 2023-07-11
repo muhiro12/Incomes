@@ -12,6 +12,13 @@ import CoreData
 
 // swiftlint:disable all
 class ItemServiceTests: XCTestCase {
+    override func setUp() {
+        NSTimeZone.default = .current
+    }
+
+    override func tearDown() {
+        NSTimeZone.default = .current
+    }
 
     // MARK: - Create
 
@@ -35,7 +42,7 @@ class ItemServiceTests: XCTestCase {
             XCTAssertEqual(result.balance, 100)
         }
 
-        XCTContext.runActivity(named: "Result is as expected when repeatCount 2") { _ in
+        XCTContext.runActivity(named: "Result is as expected when repeatCount 3") { _ in
             let service = ItemService(context: context)
 
             try! service.create(date: date("2000-01-01T12:00:00Z"),
@@ -43,17 +50,17 @@ class ItemServiceTests: XCTestCase {
                                 income: 200,
                                 outgo: 100,
                                 group: "group",
-                                repeatCount: 2)
+                                repeatCount: 3)
             let first = try! service.items().first!
             let last = try! service.items().last!
 
-            XCTAssertEqual(first.date, date("2000-02-01T00:00:00Z"))
+            XCTAssertEqual(first.date, date("2000-03-01T00:00:00Z"))
             XCTAssertEqual(first.content, "content")
             XCTAssertEqual(first.income, 200)
             XCTAssertEqual(first.outgo, 100)
             XCTAssertEqual(first.group, "group")
             XCTAssertEqual(first.startOfYear, date("2000-01-01T00:00:00Z"))
-            XCTAssertEqual(first.balance, 200)
+            XCTAssertEqual(first.balance, 300)
 
             XCTAssertEqual(last.date, date("2000-01-01T00:00:00Z"))
             XCTAssertEqual(last.content, "content")
@@ -63,6 +70,233 @@ class ItemServiceTests: XCTestCase {
             XCTAssertEqual(last.startOfYear, date("2000-01-01T00:00:00Z"))
             XCTAssertEqual(last.balance, 100)
 
+            XCTAssertEqual(first.repeatID, last.repeatID)
+        }
+    }
+
+    // MARK: - Update
+
+    func testUpdate() {
+        XCTContext.runActivity(named: "Result is as expected") { _ in
+            let service = ItemService(context: context)
+            try! service.create(date: date("2000-01-01T12:00:00Z"),
+                                content: "content",
+                                income: 200,
+                                outgo: 100,
+                                group: "group")
+
+            try! service.update(item: try! service.items().first!,
+                                date: date("2001-01-02T12:00:00Z"),
+                                content: "content2",
+                                income: 100,
+                                outgo: 200,
+                                group: "group2")
+            let result = try! service.items().first!
+
+            XCTAssertEqual(result.date, date("2001-01-02T00:00:00Z"))
+            XCTAssertEqual(result.content, "content2")
+            XCTAssertEqual(result.income, 100)
+            XCTAssertEqual(result.outgo, 200)
+            XCTAssertEqual(result.group, "group2")
+            XCTAssertEqual(result.startOfYear, date("2001-01-01T00:00:00Z"))
+            XCTAssertEqual(result.balance, -100)
+        }
+
+        XCTContext.runActivity(named: "Result is as expected when repeatCount 3") { _ in
+            let service = ItemService(context: context)
+            try! service.create(date: date("2000-01-01T12:00:00Z"),
+                                content: "content",
+                                income: 200,
+                                outgo: 100,
+                                group: "group",
+                                repeatCount: 3)
+
+            try! service.update(item: try! service.items()[1],
+                                date: date("2000-02-02T12:00:00Z"),
+                                content: "content2",
+                                income: 100,
+                                outgo: 200,
+                                group: "group2")
+
+            let first = try! service.items()[0]
+            let second = try! service.items()[1]
+            let last = try! service.items()[2]
+
+            XCTAssertEqual(first.date, date("2000-03-01T00:00:00Z"))
+            XCTAssertEqual(first.content, "content")
+            XCTAssertEqual(first.income, 200)
+            XCTAssertEqual(first.outgo, 100)
+            XCTAssertEqual(first.group, "group")
+            XCTAssertEqual(first.startOfYear, date("2000-01-01T00:00:00Z"))
+            XCTAssertEqual(first.balance, 100)
+
+            XCTAssertEqual(second.date, date("2000-02-02T00:00:00Z"))
+            XCTAssertEqual(second.content, "content2")
+            XCTAssertEqual(second.income, 100)
+            XCTAssertEqual(second.outgo, 200)
+            XCTAssertEqual(second.group, "group2")
+            XCTAssertEqual(second.startOfYear, date("2000-01-01T00:00:00Z"))
+            XCTAssertEqual(second.balance, 0)
+
+            XCTAssertEqual(last.date, date("2000-01-01T00:00:00Z"))
+            XCTAssertEqual(last.content, "content")
+            XCTAssertEqual(last.income, 200)
+            XCTAssertEqual(last.outgo, 100)
+            XCTAssertEqual(last.group, "group")
+            XCTAssertEqual(last.startOfYear, date("2000-01-01T00:00:00Z"))
+            XCTAssertEqual(last.balance, 100)
+
+            XCTAssertEqual(first.repeatID, last.repeatID)
+            XCTAssertNotEqual(first.repeatID, second.repeatID)
+        }
+    }
+
+    func testUpdateForFutureItems() {
+        XCTContext.runActivity(named: "Result is as expected") { _ in
+            let service = ItemService(context: context)
+            try! service.create(date: date("2000-01-01T12:00:00Z"),
+                                content: "content",
+                                income: 200,
+                                outgo: 100,
+                                group: "group")
+
+            try! service.updateForFutureItems(item: try! service.items().first!,
+                                              date: date("2001-01-02T12:00:00Z"),
+                                              content: "content2",
+                                              income: 100,
+                                              outgo: 200,
+                                              group: "group2")
+            let result = try! service.items().first!
+
+            XCTAssertEqual(result.date, date("2001-01-02T00:00:00Z"))
+            XCTAssertEqual(result.content, "content2")
+            XCTAssertEqual(result.income, 100)
+            XCTAssertEqual(result.outgo, 200)
+            XCTAssertEqual(result.group, "group2")
+            XCTAssertEqual(result.startOfYear, date("2001-01-01T00:00:00Z"))
+            XCTAssertEqual(result.balance, -100)
+        }
+
+        XCTContext.runActivity(named: "Result is as expected when repeatCount 3") { _ in
+            let service = ItemService(context: context)
+            try! service.create(date: date("2000-01-01T12:00:00Z"),
+                                content: "content",
+                                income: 200,
+                                outgo: 100,
+                                group: "group",
+                                repeatCount: 3)
+
+            try! service.updateForFutureItems(item: try! service.items()[1],
+                                              date: date("2000-02-02T12:00:00Z"),
+                                              content: "content2",
+                                              income: 100,
+                                              outgo: 200,
+                                              group: "group2")
+
+            let first = try! service.items()[0]
+            let second = try! service.items()[1]
+            let last = try! service.items()[2]
+
+            XCTAssertEqual(first.date, date("2000-03-02T00:00:00Z"))
+            XCTAssertEqual(first.content, "content2")
+            XCTAssertEqual(first.income, 100)
+            XCTAssertEqual(first.outgo, 200)
+            XCTAssertEqual(first.group, "group2")
+            XCTAssertEqual(first.startOfYear, date("2000-01-01T00:00:00Z"))
+            XCTAssertEqual(first.balance, -100)
+
+            XCTAssertEqual(second.date, date("2000-02-02T00:00:00Z"))
+            XCTAssertEqual(second.content, "content2")
+            XCTAssertEqual(second.income, 100)
+            XCTAssertEqual(second.outgo, 200)
+            XCTAssertEqual(second.group, "group2")
+            XCTAssertEqual(second.startOfYear, date("2000-01-01T00:00:00Z"))
+            XCTAssertEqual(second.balance, 0)
+
+            XCTAssertEqual(last.date, date("2000-01-01T00:00:00Z"))
+            XCTAssertEqual(last.content, "content")
+            XCTAssertEqual(last.income, 200)
+            XCTAssertEqual(last.outgo, 100)
+            XCTAssertEqual(last.group, "group")
+            XCTAssertEqual(last.startOfYear, date("2000-01-01T00:00:00Z"))
+            XCTAssertEqual(last.balance, 100)
+
+            XCTAssertEqual(first.repeatID, second.repeatID)
+            XCTAssertNotEqual(first.repeatID, last.repeatID)
+        }
+    }
+
+    func testUpdateForAllItems() {
+        XCTContext.runActivity(named: "Result is as expected") { _ in
+            let service = ItemService(context: context)
+            try! service.create(date: date("2000-01-01T12:00:00Z"),
+                                content: "content",
+                                income: 200,
+                                outgo: 100,
+                                group: "group")
+
+            try! service.updateForAllItems(item: try! service.items().first!,
+                                           date: date("2001-01-02T12:00:00Z"),
+                                           content: "content2",
+                                           income: 100,
+                                           outgo: 200,
+                                           group: "group2")
+            let result = try! service.items().first!
+
+            XCTAssertEqual(result.date, date("2001-01-02T00:00:00Z"))
+            XCTAssertEqual(result.content, "content2")
+            XCTAssertEqual(result.income, 100)
+            XCTAssertEqual(result.outgo, 200)
+            XCTAssertEqual(result.group, "group2")
+            XCTAssertEqual(result.startOfYear, date("2001-01-01T00:00:00Z"))
+            XCTAssertEqual(result.balance, -100)
+        }
+
+        XCTContext.runActivity(named: "Result is as expected when repeatCount 3") { _ in
+            let service = ItemService(context: context)
+            try! service.create(date: date("2000-01-01T12:00:00Z"),
+                                content: "content",
+                                income: 200,
+                                outgo: 100,
+                                group: "group",
+                                repeatCount: 3)
+
+            try! service.updateForAllItems(item: try! service.items()[1],
+                                           date: date("2000-02-02T12:00:00Z"),
+                                           content: "content2",
+                                           income: 100,
+                                           outgo: 200,
+                                           group: "group2")
+
+            let first = try! service.items()[0]
+            let second = try! service.items()[1]
+            let last = try! service.items()[2]
+
+            XCTAssertEqual(first.date, date("2000-03-02T00:00:00Z"))
+            XCTAssertEqual(first.content, "content2")
+            XCTAssertEqual(first.income, 100)
+            XCTAssertEqual(first.outgo, 200)
+            XCTAssertEqual(first.group, "group2")
+            XCTAssertEqual(first.startOfYear, date("2000-01-01T00:00:00Z"))
+            XCTAssertEqual(first.balance, -300)
+
+            XCTAssertEqual(second.date, date("2000-02-02T00:00:00Z"))
+            XCTAssertEqual(second.content, "content2")
+            XCTAssertEqual(second.income, 100)
+            XCTAssertEqual(second.outgo, 200)
+            XCTAssertEqual(second.group, "group2")
+            XCTAssertEqual(second.startOfYear, date("2000-01-01T00:00:00Z"))
+            XCTAssertEqual(second.balance, -200)
+
+            XCTAssertEqual(last.date, date("2000-01-02T00:00:00Z"))
+            XCTAssertEqual(last.content, "content2")
+            XCTAssertEqual(last.income, 100)
+            XCTAssertEqual(last.outgo, 200)
+            XCTAssertEqual(last.group, "group2")
+            XCTAssertEqual(last.startOfYear, date("2000-01-01T00:00:00Z"))
+            XCTAssertEqual(last.balance, -100)
+
+            XCTAssertEqual(first.repeatID, second.repeatID)
             XCTAssertEqual(first.repeatID, last.repeatID)
         }
     }
@@ -131,59 +365,32 @@ class ItemServiceTests: XCTestCase {
 
         XCTContext.runActivity(named: "First items are Dec.") { _ in
             result.first!.items.forEach {
-                XCTAssertEqual(Calendar.current.component(.month, from: $0.date),
+                XCTAssertEqual(Calendar.utc.component(.month, from: $0.date),
                                12)
             }
         }
 
         XCTContext.runActivity(named: "Last items are Jan.") { _ in
             result.last!.items.forEach {
-                XCTAssertEqual(Calendar.current.component(.month, from: $0.date),
+                XCTAssertEqual(Calendar.utc.component(.month, from: $0.date),
                                1)
             }
         }
+    }
 
-        XCTContext.runActivity(named: "First items are Dec. in gregorian") { _ in
-            result.first!.items.forEach {
-                XCTAssertEqual(Calendar(identifier: .gregorian).component(.month, from: $0.date),
-                               12)
-            }
-        }
+    func testGroupByMonthLondon() {
+        NSTimeZone.default = .init(identifier: "Europe/London")!
+        testGroupByMonth()
+    }
 
-        XCTContext.runActivity(named: "Last items are Jan. in gregorian") { _ in
-            result.last!.items.forEach {
-                XCTAssertEqual(Calendar(identifier: .gregorian).component(.month, from: $0.date),
-                               1)
-            }
-        }
+    func testGroupByMonthNewYork() {
+        NSTimeZone.default = .init(identifier: "America/New_York")!
+        testGroupByMonth()
+    }
 
-        XCTContext.runActivity(named: "First items are Dec. in japanese") { _ in
-            result.first!.items.forEach {
-                XCTAssertEqual(Calendar(identifier: .iso8601).component(.month, from: $0.date),
-                               12)
-            }
-        }
-
-        XCTContext.runActivity(named: "Last items are Jan. in japanese") { _ in
-            result.last!.items.forEach {
-                XCTAssertEqual(Calendar(identifier: .iso8601).component(.month, from: $0.date),
-                               1)
-            }
-        }
-
-        XCTContext.runActivity(named: "First items are Dec. in japanese") { _ in
-            result.first!.items.forEach {
-                XCTAssertEqual(Calendar(identifier: .japanese).component(.month, from: $0.date),
-                               12)
-            }
-        }
-
-        XCTContext.runActivity(named: "Last items are Jan. in japanese") { _ in
-            result.last!.items.forEach {
-                XCTAssertEqual(Calendar(identifier: .japanese).component(.month, from: $0.date),
-                               1)
-            }
-        }
+    func testGroupByMonthTokyo() {
+        NSTimeZone.default = .init(identifier: "Asia/Tokyo")!
+        testGroupByMonth()
     }
 
     func testGroupByContent() {
@@ -197,11 +404,11 @@ class ItemServiceTests: XCTestCase {
         }
 
         XCTContext.runActivity(named: "Items order is not changed") { _ in
-            XCTAssertEqual(Calendar.current.component(.month, from: result.first!.items[0].date),
+            XCTAssertEqual(Calendar.utc.component(.month, from: result.first!.items[0].date),
                            1)
-            XCTAssertEqual(Calendar.current.component(.month, from: result.first!.items[1].date),
+            XCTAssertEqual(Calendar.utc.component(.month, from: result.first!.items[1].date),
                            2)
-            XCTAssertEqual(Calendar.current.component(.month, from: result.first!.items[2].date),
+            XCTAssertEqual(Calendar.utc.component(.month, from: result.first!.items[2].date),
                            3)
         }
     }
