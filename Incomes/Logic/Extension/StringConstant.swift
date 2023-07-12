@@ -24,5 +24,6 @@ extension String {
     static var debugTitle: Self { "Debug" }
     static var debugCommand: Self { "DebugView" }
     static var debugOption: Self { "Debug option" }
+    static var debugSubscribe: Self { "Debug subscribe" }
     static var debugPreviewData: Self { "Set preview data" }
 }
