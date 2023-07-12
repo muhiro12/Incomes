@@ -9,13 +9,7 @@
 import SwiftUI
 
 struct DebugView: View {
-    static var isDebug: Bool = {
-        #if DEBUG
-        return true
-        #else
-        return false
-        #endif
-    }()
+    static var isDebug = false
 
     @Environment(\.managedObjectContext)
     private var viewContext
@@ -24,6 +18,8 @@ struct DebugView: View {
 
     @State
     private var isDebugOption = Self.isDebug
+    @AppStorage(UserDefaults.Key.isSubscribeOn.rawValue)
+    private var isSubscribeOn = false
 
     var body: some View {
         NavigationView {
@@ -33,14 +29,17 @@ struct DebugView: View {
                         .onChange(of: isDebugOption) {
                             Self.isDebug = $0
                         }
+                    Toggle(String.debugSubscribe, isOn: $isSubscribeOn)
+                        .disabled(!isDebugOption)
                     Button(String.debugPreviewData) {
+                    }.onLongPressGesture {
                         do {
                             _ = PreviewData(context: viewContext).items
                             try ItemRepository(context: viewContext).save()
                         } catch {
                             assertionFailure(error.localizedDescription)
                         }
-                    }
+                    }.disabled(!isDebugOption)
                 }
             }.toolbar {
                 Button(.localized(.done)) {
