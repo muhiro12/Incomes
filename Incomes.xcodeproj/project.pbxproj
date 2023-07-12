@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -582,8 +582,9 @@
 		ADCF369E24A1D0F40011D6F5 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				BuildIndependentTargetsInParallel = YES;
 				LastSwiftUpdateCheck = 1150;
-				LastUpgradeCheck = 1240;
+				LastUpgradeCheck = 1430;
 				ORGANIZATIONNAME = "Hiromu Nakano";
 				TargetAttributes = {
 					ADCF36A524A1D0F40011D6F5 = {
@@ -661,6 +662,7 @@
 /* Begin PBXShellScriptBuildPhase section */
 		ADA626672796892A0002A086 /* LicensePlist */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
@@ -679,6 +681,7 @@
 		};
 		ADCF373624A1D5160011D6F5 /* SwiftLint */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);

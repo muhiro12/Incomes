@@ -73,7 +73,7 @@ struct ItemService {
                  income: income,
                  outgo: outgo,
                  group: group,
-                 repeatID: item.repeatID)
+                 repeatID: UUID())
         try repository.save()
     }
 
@@ -88,6 +88,7 @@ struct ItemService {
                                                      from: item.date,
                                                      to: date)
 
+        let repeatID = UUID()
         try items(predicate: predicate).forEach {
             guard let newDate = Calendar.utc.date(byAdding: components, to: $0.date) else {
                 assertionFailure()
@@ -98,7 +99,7 @@ struct ItemService {
                    income: income,
                    outgo: outgo,
                    group: group,
-                   repeatID: item.repeatID)
+                   repeatID: repeatID)
         }
 
         try repository.save()

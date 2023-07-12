@@ -9,6 +9,11 @@
 import Foundation
 
 extension Calendar {
+    static var current: Self {
+        assertionFailure("Do not use current calendar")
+        return .utc
+    }
+
     static var utc: Self {
         var calendar = Calendar(identifier: .gregorian)
         calendar.timeZone = TimeZone(secondsFromGMT: 0)!

@@ -9,15 +9,54 @@
 import XCTest
 @testable import Incomes
 
+// swiftlint:disable all
 class DateExtensionTests: XCTestCase {
+    override func setUp() {
+        NSTimeZone.default = .current
+    }
+
+    override func tearDown() {
+        NSTimeZone.default = .current
+    }
+
     func testStringValue() {
         XCTContext.runActivity(named: "yyyy is as expected") { _ in
             let result = date("2000-01-01T00:00:00Z").stringValue(.yyyy)
             XCTAssertEqual(result, "2000")
         }
 
+        XCTContext.runActivity(named: "yyyy at 12:00 is as expected") { _ in
+            let result = date("2000-01-01T12:00:00Z").stringValue(.yyyy)
+            XCTAssertEqual(result, "2000")
+        }
+
         XCTContext.runActivity(named: "yyyy at 15:00 is as expected") { _ in
             let result = date("2000-01-01T15:00:00Z").stringValue(.yyyy)
+            XCTAssertEqual(result, "2000")
+        }
+
+        XCTContext.runActivity(named: "yyyy at 21:00 is as expected") { _ in
+            let result = date("2000-01-01T21:00:00Z").stringValue(.yyyy)
+            XCTAssertEqual(result, "2000")
+        }
+
+        XCTContext.runActivity(named: "yyyy at 12-31 is as expected") { _ in
+            let result = date("2000-12-31T00:00:00Z").stringValue(.yyyy)
+            XCTAssertEqual(result, "2000")
+        }
+
+        XCTContext.runActivity(named: "yyyy at 12:00, 12-31 is as expected") { _ in
+            let result = date("2000-12-31T12:00:00Z").stringValue(.yyyy)
+            XCTAssertEqual(result, "2000")
+        }
+
+        XCTContext.runActivity(named: "yyyy at 15:00, 12-31 is as expected") { _ in
+            let result = date("2000-12-31T15:00:00Z").stringValue(.yyyy)
+            XCTAssertEqual(result, "2000")
+        }
+
+        XCTContext.runActivity(named: "yyyy at 21:00, 12-31 is as expected") { _ in
+            let result = date("2000-12-31T21:00:00Z").stringValue(.yyyy)
             XCTAssertEqual(result, "2000")
         }
 
@@ -46,28 +85,55 @@ class DateExtensionTests: XCTestCase {
             XCTAssertEqual(result, "Jan 1, 2000")
         }
 
+        XCTContext.runActivity(named: "yyyyMMMd at 12:00 is as expected") { _ in
+            let result = date("2000-01-01T12:00:00Z").stringValue(.yyyyMMMd)
+            XCTAssertEqual(result, "Jan 1, 2000")
+        }
+
         XCTContext.runActivity(named: "yyyyMMMd at 15:00 as expected") { _ in
             let result = date("2000-01-01T15:00:00Z").stringValue(.yyyyMMMd)
             XCTAssertEqual(result, "Jan 1, 2000")
+        }
+
+        XCTContext.runActivity(named: "yyyyMMMd at 21:00 is as expected") { _ in
+            let result = date("2000-01-01T21:00:00Z").stringValue(.yyyyMMMd)
+            XCTAssertEqual(result, "Jan 1, 2000")
+        }
+
+        XCTContext.runActivity(named: "yyyyMMMd at 12-31 is as expected") { _ in
+            let result = date("2000-12-31T00:00:00Z").stringValue(.yyyyMMMd)
+            XCTAssertEqual(result, "Dec 31, 2000")
+        }
+
+        XCTContext.runActivity(named: "yyyyMMMd at 12:00, 12-31 is as expected") { _ in
+            let result = date("2000-12-31T12:00:00Z").stringValue(.yyyyMMMd)
+            XCTAssertEqual(result, "Dec 31, 2000")
+        }
+
+        XCTContext.runActivity(named: "yyyyMMMd at 15:00, 12-31 is as expected") { _ in
+            let result = date("2000-12-31T15:00:00Z").stringValue(.yyyyMMMd)
+            XCTAssertEqual(result, "Dec 31, 2000")
+        }
+
+        XCTContext.runActivity(named: "yyyyMMMd at 21:00, 12-31 is as expected") { _ in
+            let result = date("2000-12-31T21:00:00Z").stringValue(.yyyyMMMd)
+            XCTAssertEqual(result, "Dec 31, 2000")
         }
     }
 
     func testStringValueLondon() {
         NSTimeZone.default = .init(identifier: "Europe/London")!
         testStringValue()
-        NSTimeZone.default = .current
     }
 
     func testStringValueNewYork() {
         NSTimeZone.default = .init(identifier: "America/New_York")!
         testStringValue()
-        NSTimeZone.default = .current
     }
 
     func testStringValueTokyo() {
         NSTimeZone.default = .init(identifier: "Asia/Tokyo")!
         testStringValue()
-        NSTimeZone.default = .current
     }
 
     func testStringValueEn() {
@@ -106,9 +172,39 @@ class DateExtensionTests: XCTestCase {
             XCTAssertEqual(result, "Jan 1, 2000")
         }
 
-        XCTContext.runActivity(named: "yyyyMMMd at 15:00 in en is as expected") { _ in
-            let result = date("2000-01-01T00:00:00Z").stringValue(.yyyyMMMd, locale: .init(identifier: "en_US"))
+        XCTContext.runActivity(named: "yyyyMMMd at 12:00 in en is as expected") { _ in
+            let result = date("2000-01-01T12:00:00Z").stringValue(.yyyyMMMd, locale: .init(identifier: "en_US"))
             XCTAssertEqual(result, "Jan 1, 2000")
+        }
+
+        XCTContext.runActivity(named: "yyyyMMMd at 15:00 in en is as expected") { _ in
+            let result = date("2000-01-01T15:00:00Z").stringValue(.yyyyMMMd, locale: .init(identifier: "en_US"))
+            XCTAssertEqual(result, "Jan 1, 2000")
+        }
+
+        XCTContext.runActivity(named: "yyyyMMMd at 21:00 in en is as expected") { _ in
+            let result = date("2000-01-01T21:00:00Z").stringValue(.yyyyMMMd, locale: .init(identifier: "en_US"))
+            XCTAssertEqual(result, "Jan 1, 2000")
+        }
+
+        XCTContext.runActivity(named: "yyyyMMMd at 12-31 in en is as expected") { _ in
+            let result = date("2000-12-31T00:00:00Z").stringValue(.yyyyMMMd, locale: .init(identifier: "en_US"))
+            XCTAssertEqual(result, "Dec 31, 2000")
+        }
+
+        XCTContext.runActivity(named: "yyyyMMMd at 12:00, 12-31 in en is as expected") { _ in
+            let result = date("2000-12-31T12:00:00Z").stringValue(.yyyyMMMd, locale: .init(identifier: "en_US"))
+            XCTAssertEqual(result, "Dec 31, 2000")
+        }
+
+        XCTContext.runActivity(named: "yyyyMMMd at 15:00, 12-31 in en is as expected") { _ in
+            let result = date("2000-12-31T15:00:00Z").stringValue(.yyyyMMMd, locale: .init(identifier: "en_US"))
+            XCTAssertEqual(result, "Dec 31, 2000")
+        }
+
+        XCTContext.runActivity(named: "yyyyMMMd at 21:00, 12-31 in en is as expected") { _ in
+            let result = date("2000-12-31T21:00:00Z").stringValue(.yyyyMMMd, locale: .init(identifier: "en_US"))
+            XCTAssertEqual(result, "Dec 31, 2000")
         }
     }
 
@@ -151,6 +247,46 @@ class DateExtensionTests: XCTestCase {
         XCTContext.runActivity(named: "yyyyMMMd at 15:00 in ja is as expected") { _ in
             let result = date("2000-01-01T15:00:00Z").stringValue(.yyyyMMMd, locale: .init(identifier: "ja_JP"))
             XCTAssertEqual(result, "2000年1月1日")
+        }
+
+        XCTContext.runActivity(named: "yyyyMMMd in ja is as expected") { _ in
+            let result = date("2000-01-01T00:00:00Z").stringValue(.yyyyMMMd, locale: .init(identifier: "ja_JP"))
+            XCTAssertEqual(result, "2000年1月1日")
+        }
+
+        XCTContext.runActivity(named: "yyyyMMMd at 12:00 in ja is as expected") { _ in
+            let result = date("2000-01-01T12:00:00Z").stringValue(.yyyyMMMd, locale: .init(identifier: "ja_JP"))
+            XCTAssertEqual(result, "2000年1月1日")
+        }
+
+        XCTContext.runActivity(named: "yyyyMMMd at 15:00 in ja is as expected") { _ in
+            let result = date("2000-01-01T15:00:00Z").stringValue(.yyyyMMMd, locale: .init(identifier: "ja_JP"))
+            XCTAssertEqual(result, "2000年1月1日")
+        }
+
+        XCTContext.runActivity(named: "yyyyMMMd at 21:00 in ja is as expected") { _ in
+            let result = date("2000-01-01T21:00:00Z").stringValue(.yyyyMMMd, locale: .init(identifier: "ja_JP"))
+            XCTAssertEqual(result, "2000年1月1日")
+        }
+
+        XCTContext.runActivity(named: "yyyyMMMd at 12-31 in ja is as expected") { _ in
+            let result = date("2000-12-31T00:00:00Z").stringValue(.yyyyMMMd, locale: .init(identifier: "ja_JP"))
+            XCTAssertEqual(result, "2000年12月31日")
+        }
+
+        XCTContext.runActivity(named: "yyyyMMMd at 12:00, 12-31 in ja is as expected") { _ in
+            let result = date("2000-12-31T12:00:00Z").stringValue(.yyyyMMMd, locale: .init(identifier: "ja_JP"))
+            XCTAssertEqual(result, "2000年12月31日")
+        }
+
+        XCTContext.runActivity(named: "yyyyMMMd at 15:00, 12-31 in ja is as expected") { _ in
+            let result = date("2000-12-31T15:00:00Z").stringValue(.yyyyMMMd, locale: .init(identifier: "ja_JP"))
+            XCTAssertEqual(result, "2000年12月31日")
+        }
+
+        XCTContext.runActivity(named: "yyyyMMMd at 21:00, 12-31 in ja is as expected") { _ in
+            let result = date("2000-12-31T21:00:00Z").stringValue(.yyyyMMMd, locale: .init(identifier: "ja_JP"))
+            XCTAssertEqual(result, "2000年12月31日")
         }
     }
 }
