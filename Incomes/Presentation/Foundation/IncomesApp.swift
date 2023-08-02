@@ -22,9 +22,7 @@ struct IncomesApp: App {
         Store.shared.open()
 
         if !isSubscribeOn {
-            Task {
-                GADMobileAds.sharedInstance().start()
-            }
+            GADMobileAds.sharedInstance().start()
         }
     }
 
