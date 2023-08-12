@@ -6,7 +6,7 @@
 //  Copyright © 2020 Hiromu Nakano. All rights reserved.
 //
 
-import UIKit
+import SwiftUI
 
 extension CGFloat {
     private static var unit: Self { 8 }
