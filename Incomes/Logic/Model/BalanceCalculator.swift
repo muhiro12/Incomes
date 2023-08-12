@@ -11,10 +11,9 @@ import CoreData
 
 struct BalanceCalculator {
     let context: NSManagedObjectContext
+    let repository: ItemRepository
 
     func calculate() throws {
-        let repository = ItemRepository(context: context)
-
         let editedDateList = [
             context.insertedObjects,
             context.updatedObjects,
@@ -52,8 +51,6 @@ struct BalanceCalculator {
     }
 
     func recalculate()  throws {
-        let repository = ItemRepository(context: context)
-
         try context.save()
 
         let items = try repository.items().reversed() as [Item]

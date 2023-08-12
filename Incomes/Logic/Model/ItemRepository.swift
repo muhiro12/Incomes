@@ -9,13 +9,13 @@
 import Foundation
 import CoreData
 
-struct ItemRepository {
+class ItemRepository {
     private let context: NSManagedObjectContext
-    private let calculator: BalanceCalculator
+
+    private lazy var calculator = BalanceCalculator(context: context, repository: self)
 
     init(context: NSManagedObjectContext) {
         self.context = context
-        self.calculator = .init(context: context)
     }
 
     func items(predicate: NSPredicate? = nil) throws -> [Item] {
