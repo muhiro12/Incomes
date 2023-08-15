@@ -9,7 +9,9 @@
 import Foundation
 import CoreData
 
-class ItemRepository {
+class ItemRepository: Repository {
+    typealias Entity = Item
+
     private let context: NSManagedObjectContext
 
     private lazy var calculator = BalanceCalculator(context: context, repository: self)
@@ -18,41 +20,53 @@ class ItemRepository {
         self.context = context
     }
 
-    func items(predicate: NSPredicate? = nil) throws -> [Item] {
+    func fetch(predicate: NSPredicate?) throws -> Item {
+        guard let item = try fetchList(predicate: predicate).first else {
+            assertionFailure()
+            return Item()
+        }
+        return item
+    }
+
+    func fetchList(predicate: NSPredicate?) throws -> [Item] {
         let request = Item.fetchRequest()
         request.predicate = predicate
         request.sortDescriptors = NSSortDescriptor.standards
         return try context.fetch(request)
     }
 
-    func instantiate(date: Date, // swiftlint:disable:this function_parameter_count
-                     content: String,
-                     income: NSDecimalNumber,
-                     outgo: NSDecimalNumber,
-                     group: String,
-                     repeatID: UUID) -> Item {
-        let item = Item(context: context)
-        item.set(date: date,
-                 content: content,
-                 income: income,
-                 outgo: outgo,
-                 group: group,
-                 repeatID: repeatID)
-        return item
+    func add(_ entity: Item) throws {
+        try save()
     }
 
-    func save() throws {
-        try calculator.calculate()
+    func addList(_ list: [Item]) throws {
+        try save()
     }
 
-    func delete(items: [Item]) throws {
-        items.forEach {
+    func update(_ entity: Item) throws {
+        try save()
+    }
+
+    func updateList(_ list: [Item]) throws {
+        try save()
+    }
+
+    func delete(_ entity: Item) throws {
+        context.delete(entity)
+        try save()
+    }
+
+    func deleteList(_ list: [Item]) throws {
+        list.forEach {
             context.delete($0)
         }
-        try calculator.calculate()
+        try save()
     }
+}
 
-    func recalculate() throws {
-        try calculator.recalculate()
+extension ItemRepository {
+    private func save() throws {
+        try calculator.calculate()
+        try context.save()
     }
 }

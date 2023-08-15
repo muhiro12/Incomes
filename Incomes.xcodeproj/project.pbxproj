@@ -10,6 +10,7 @@
 		AD09B544278F934D008F03FA /* ItemService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD09B543278F934D008F03FA /* ItemService.swift */; };
 		AD2BB3222795925C00258234 /* Advertisement.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD2BB3212795925C00258234 /* Advertisement.swift */; };
 		AD387E4B2A8A1CE600E94623 /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = AD387E4A2A8A1CE600E94623 /* GoogleMobileAds */; };
+		AD387E4D2A8B6FFD00E94623 /* Repository.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD387E4C2A8B6FFD00E94623 /* Repository.swift */; };
 		AD583B6124B301EB0032AA1C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = AD583B6324B301EB0032AA1C /* Localizable.strings */; };
 		AD583B6924B308AB0032AA1C /* LocalizedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD583B6824B308AB0032AA1C /* LocalizedString.swift */; };
 		AD663132279973E700891D51 /* MediumNativeAdmobView.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD663130279973E700891D51 /* MediumNativeAdmobView.xib */; };
@@ -98,6 +99,7 @@
 /* Begin PBXFileReference section */
 		AD09B543278F934D008F03FA /* ItemService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemService.swift; sourceTree = "<group>"; };
 		AD2BB3212795925C00258234 /* Advertisement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Advertisement.swift; sourceTree = "<group>"; };
+		AD387E4C2A8B6FFD00E94623 /* Repository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Repository.swift; sourceTree = "<group>"; };
 		AD583B6224B301EB0032AA1C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		AD583B6524B3032D0032AA1C /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		AD583B6824B308AB0032AA1C /* LocalizedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizedString.swift; sourceTree = "<group>"; };
@@ -346,6 +348,7 @@
 				AD09B543278F934D008F03FA /* ItemService.swift */,
 				AD583B6824B308AB0032AA1C /* LocalizedString.swift */,
 				ADAD3D06277AD753005A70E1 /* Persistence.swift */,
+				AD387E4C2A8B6FFD00E94623 /* Repository.swift */,
 				ADEA399B2501457A00CB61D9 /* Store.swift */,
 			);
 			path = Model;
@@ -719,6 +722,7 @@
 				AD2BB3222795925C00258234 /* Advertisement.swift in Sources */,
 				ADAD3D15277B4161005A70E1 /* CalendarExtension.swift in Sources */,
 				ADEA399E25014CD700CB61D9 /* Secret.swift in Sources */,
+				AD387E4D2A8B6FFD00E94623 /* Repository.swift in Sources */,
 				ADAD3D07277AD753005A70E1 /* Persistence.swift in Sources */,
 				ADCF371224A1D18E0011D6F5 /* StringExtension.swift in Sources */,
 				ADCF370A24A1D18E0011D6F5 /* GroupView.swift in Sources */,

@@ -35,7 +35,7 @@ struct DebugView: View {
                     }.onLongPressGesture {
                         do {
                             _ = PreviewData(context: viewContext).items
-                            try ItemRepository(context: viewContext).save()
+                            try viewContext.save()
                         } catch {
                             assertionFailure(error.localizedDescription)
                         }

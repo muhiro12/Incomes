@@ -11,9 +11,11 @@ import CoreData
 
 struct PreviewData {
     let context: NSManagedObjectContext
+    let repository: any Repository<Item>
 
     init(context: NSManagedObjectContext = PersistenceController.preview.container.viewContext) {
         self.context = context
+        self.repository = ItemRepository(context: context)
     }
 
     var item: Item {
@@ -86,7 +88,19 @@ struct PreviewData {
     }
 
     func item(date: Date, content: String, income: NSDecimalNumber, outgo: NSDecimalNumber, group: String) -> Item {
-        ItemRepository(context: context).instantiate(date: date, content: content, income: income, outgo: outgo, group: group, repeatID: UUID())
+        let item = Item(context: context)
+        item.set(date: date,
+                 content: content,
+                 income: income,
+                 outgo: outgo,
+                 group: group,
+                 repeatID: UUID())
+        do {
+            try repository.add(item)
+        } catch {
+            assertionFailure()
+        }
+        return item
     }
 
     func date(monthLater: Int, from date: Date = Date()) -> Date {

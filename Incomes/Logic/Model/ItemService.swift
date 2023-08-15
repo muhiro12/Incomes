@@ -10,16 +10,18 @@ import Foundation
 import CoreData
 
 struct ItemService {
-    private let repository: ItemRepository
+    private let context: NSManagedObjectContext
+    private let repository: any Repository<Item>
 
     init(context: NSManagedObjectContext) {
-        repository = .init(context: context)
+        self.context = context
+        self.repository = ItemRepository(context: context)
     }
 
     // MARK: - Fetch
 
     func items(predicate: NSPredicate? = nil) throws -> [Item] {
-        try repository.items(predicate: predicate)
+        try repository.fetchList(predicate: predicate)
     }
 
     // MARK: - Create
@@ -30,14 +32,18 @@ struct ItemService {
                 outgo: NSDecimalNumber,
                 group: String,
                 repeatCount: Int = .one) throws {
+        var items = [Item]()
+
         let repeatID = UUID()
 
-        _ = repository.instantiate(date: date,
-                                   content: content,
-                                   income: income,
-                                   outgo: outgo,
-                                   group: group,
-                                   repeatID: repeatID)
+        let item = Item(context: context)
+        item.set(date: date,
+                 content: content,
+                 income: income,
+                 outgo: outgo,
+                 group: group,
+                 repeatID: repeatID)
+        items.append(item)
 
         for index in 0..<repeatCount {
             guard index > .zero else {
@@ -49,15 +55,17 @@ struct ItemService {
                 assertionFailure()
                 return
             }
-            _ = repository.instantiate(date: repeatingDate,
-                                       content: content,
-                                       income: income,
-                                       outgo: outgo,
-                                       group: group,
-                                       repeatID: repeatID)
+            let item = Item(context: context)
+            item.set(date: repeatingDate,
+                     content: content,
+                     income: income,
+                     outgo: outgo,
+                     group: group,
+                     repeatID: repeatID)
+            items.append(item)
         }
 
-        try repository.save()
+        try repository.addList(items)
     }
 
     // MARK: - Update
@@ -74,7 +82,7 @@ struct ItemService {
                  outgo: outgo,
                  group: group,
                  repeatID: UUID())
-        try repository.save()
+        try repository.update(item)
     }
 
     func updateForRepeatingItems(item: Item, // swiftlint:disable:this function_parameter_count
@@ -89,7 +97,8 @@ struct ItemService {
                                                      to: date)
 
         let repeatID = UUID()
-        try items(predicate: predicate).forEach {
+        let items = try items(predicate: predicate)
+        items.forEach {
             guard let newDate = Calendar.utc.date(byAdding: components, to: $0.date) else {
                 assertionFailure()
                 return
@@ -102,7 +111,7 @@ struct ItemService {
                    repeatID: repeatID)
         }
 
-        try repository.save()
+        try repository.updateList(items)
     }
 
     func updateForFutureItems(item: Item, // swiftlint:disable:this function_parameter_count
@@ -138,7 +147,7 @@ struct ItemService {
     // MARK: - Delete
 
     func delete(items: [Item]) throws {
-        try repository.delete(items: items)
+        try repository.deleteList(items)
     }
 
     func deleteAll() throws {
@@ -148,7 +157,15 @@ struct ItemService {
     // MARK: - Calculate balance
 
     func recalculate() throws {
-        try repository.recalculate()
+        guard let item = try repository.fetchList().last else {
+            return
+        }
+        try update(item: item,
+                   date: item.date,
+                   content: item.content,
+                   income: item.income,
+                   outgo: item.outgo,
+                   group: item.group)
     }
 
     // MARK: - Utilitiy

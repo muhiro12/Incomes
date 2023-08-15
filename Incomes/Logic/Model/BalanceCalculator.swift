@@ -11,7 +11,7 @@ import CoreData
 
 struct BalanceCalculator {
     let context: NSManagedObjectContext
-    let repository: ItemRepository
+    let repository: any Repository<Item>
 
     func calculate() throws {
         let editedDateList = [
@@ -28,8 +28,8 @@ struct BalanceCalculator {
             return
         }
 
-        let allItems = try repository.items().reversed() as [Item]
-        let items = try repository.items(predicate: .init(dateIsAfter: oldestDate)).reversed() as [Item]
+        let allItems = try repository.fetchList().reversed() as [Item]
+        let items = try repository.fetchList(predicate: .init(dateIsAfter: oldestDate)).reversed() as [Item]
 
         for tuple in items.enumerated() {
             let index = tuple.offset
@@ -53,7 +53,7 @@ struct BalanceCalculator {
     func recalculate()  throws {
         try context.save()
 
-        let items = try repository.items().reversed() as [Item]
+        let items = try repository.fetchList().reversed() as [Item]
 
         for tuple in items.enumerated() {
             let index = tuple.offset

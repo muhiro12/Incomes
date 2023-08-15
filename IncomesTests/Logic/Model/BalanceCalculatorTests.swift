@@ -39,8 +39,8 @@ class BalanceCalculatorTests: XCTestCase {
                      repeatID: UUID())
             try! calculator.calculate()
 
-            let first = try! repository.items().first!
-            let last = try! repository.items().last!
+            let first = try! repository.fetchList().first!
+            let last = try! repository.fetchList().last!
 
             XCTAssertEqual(first.balance, 600)
             XCTAssertEqual(last.balance, 100)
@@ -72,8 +72,8 @@ class BalanceCalculatorTests: XCTestCase {
                      repeatID: UUID())
             try! calculator.calculate()
 
-            let first = try! repository.items().first!
-            let last = try! repository.items().last!
+            let first = try! repository.fetchList().first!
+            let last = try! repository.fetchList().last!
 
             XCTAssertEqual(first.balance, 600)
             XCTAssertEqual(last.balance, 100)
@@ -105,8 +105,8 @@ class BalanceCalculatorTests: XCTestCase {
                      repeatID: UUID())
             try! calculator.calculate()
 
-            let first = try! repository.items().first!
-            let last = try! repository.items().last!
+            let first = try! repository.fetchList().first!
+            let last = try! repository.fetchList().last!
 
             XCTAssertEqual(first.balance, 600)
             XCTAssertEqual(last.balance, 100)
@@ -140,8 +140,8 @@ class BalanceCalculatorTests: XCTestCase {
                          repeatID: UUID())
             try! calculator.calculate()
 
-            let first = try! repository.items().first!
-            let last = try! repository.items().last!
+            let first = try! repository.fetchList().first!
+            let last = try! repository.fetchList().last!
 
             XCTAssertEqual(first.balance, 600)
             XCTAssertEqual(last.balance, 100)
@@ -175,8 +175,8 @@ class BalanceCalculatorTests: XCTestCase {
                          repeatID: UUID())
             try! calculator.calculate()
 
-            let first = try! repository.items().first!
-            let last = try! repository.items().last!
+            let first = try! repository.fetchList().first!
+            let last = try! repository.fetchList().last!
 
             XCTAssertEqual(first.balance, 600)
             XCTAssertEqual(last.balance, 200)
@@ -210,8 +210,8 @@ class BalanceCalculatorTests: XCTestCase {
                          repeatID: UUID())
             try! calculator.calculate()
 
-            let first = try! repository.items().first!
-            let last = try! repository.items().last!
+            let first = try! repository.fetchList().first!
+            let last = try! repository.fetchList().last!
 
             XCTAssertEqual(first.balance, 600)
             XCTAssertEqual(last.balance, 100)
@@ -245,8 +245,8 @@ class BalanceCalculatorTests: XCTestCase {
                          repeatID: UUID())
             try! calculator.calculate()
 
-            let first = try! repository.items().first!
-            let last = try! repository.items().last!
+            let first = try! repository.fetchList().first!
+            let last = try! repository.fetchList().last!
 
             XCTAssertEqual(first.balance, 600)
             XCTAssertEqual(last.balance, 200)
@@ -275,8 +275,8 @@ class BalanceCalculatorTests: XCTestCase {
             context.delete(items[1])
             try! calculator.calculate()
 
-            let first = try! repository.items().first!
-            let last = try! repository.items().last!
+            let first = try! repository.fetchList().first!
+            let last = try! repository.fetchList().last!
 
             XCTAssertEqual(first.balance, 400)
             XCTAssertEqual(last.balance, 100)
@@ -305,8 +305,8 @@ class BalanceCalculatorTests: XCTestCase {
             context.delete(items[0])
             try! calculator.calculate()
 
-            let first = try! repository.items().first!
-            let last = try! repository.items().last!
+            let first = try! repository.fetchList().first!
+            let last = try! repository.fetchList().last!
 
             XCTAssertEqual(first.balance, 400)
             XCTAssertEqual(last.balance, 100)
@@ -335,8 +335,8 @@ class BalanceCalculatorTests: XCTestCase {
             context.delete(items[4])
             try! calculator.calculate()
 
-            let first = try! repository.items().first!
-            let last = try! repository.items().last!
+            let first = try! repository.fetchList().first!
+            let last = try! repository.fetchList().last!
 
             XCTAssertEqual(first.balance, 400)
             XCTAssertEqual(last.balance, 100)
@@ -361,8 +361,8 @@ class BalanceCalculatorTests: XCTestCase {
             }
             try! calculator.recalculate()
 
-            let first = try! repository.items().first!
-            let last = try! repository.items().last!
+            let first = try! repository.fetchList().first!
+            let last = try! repository.fetchList().last!
 
             XCTAssertEqual(first.balance, 500)
             XCTAssertEqual(last.balance, 100)
