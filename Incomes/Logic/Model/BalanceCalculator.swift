@@ -28,23 +28,26 @@ struct BalanceCalculator {
             return
         }
 
-        let allItems = try repository.fetchList().reversed() as [Item]
-        let items = try repository.fetchList(predicate: .init(dateIsAfter: oldestDate)).reversed() as [Item]
+        let allItems = try repository.fetchList().reversed()
 
-        for tuple in items.enumerated() {
-            let index = tuple.offset
-            let item = tuple.element
+        guard let separatorIndex = allItems.firstIndex(where: { $0.date >= oldestDate }) else {
+            return
+        }
 
+        let previousBalance = allItems.prefix(upTo: separatorIndex).last?.balance ?? 0
+
+        let targetList = allItems.suffix(from: separatorIndex)
+        var resultList = [Item]()
+
+        targetList.enumerated().forEach { index, item in
             item.balance = {
-                if items.indices.contains(index - 1) {
-                    return items[index - 1].balance.adding(item.profit)
-                } else if let index = allItems.firstIndex(of: item),
-                          allItems.indices.contains(index - 1) {
-                    return allItems[index - 1].balance.adding(item.profit)
+                if index == 0 {
+                    return previousBalance.adding(item.profit)
                 } else {
-                    return item.profit
+                    return resultList[index - 1].balance.adding(item.profit)
                 }
             }()
+            resultList.append(item)
         }
 
         try context.save()

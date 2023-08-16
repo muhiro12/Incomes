@@ -9,7 +9,7 @@
 import Foundation
 
 extension NSSortDescriptor {
-    static var standards: [NSSortDescriptor] = [
+    static let standards: [NSSortDescriptor] = [
         .init(keyPath: \Item.date, ascending: false),
         .init(keyPath: \Item.content, ascending: false),
         .init(keyPath: \Item.objectID, ascending: false)
