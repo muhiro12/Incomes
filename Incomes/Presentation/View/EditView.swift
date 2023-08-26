@@ -35,11 +35,11 @@ struct EditView: View {
     private var item: Item?
 
     private var isEditMode: Bool {
-        return item != nil
+        item != nil
     }
 
     private var isValid: Bool {
-        return content.isNotEmpty
+        content.isNotEmpty
             && income.isEmptyOrDecimal
             && outgo.isEmptyOrDecimal
     }
@@ -108,7 +108,7 @@ struct EditView: View {
                     Text(.localized(.information))
                 })
                 if DebugView.isDebug,
-                   let item = item {
+                   let item {
                     Section(content: {
                         Text(item.description)
                     }, header: {
@@ -164,7 +164,7 @@ private extension EditView {
     }
 
     func saveForThisItem() {
-        guard let item = item else {
+        guard let item else {
             assertionFailure()
             return
         }
@@ -185,7 +185,7 @@ private extension EditView {
     }
 
     func saveForFutureItems() {
-        guard let item = item else {
+        guard let item else {
             assertionFailure()
             return
         }
@@ -206,7 +206,7 @@ private extension EditView {
     }
 
     func saveForAllItems() {
-        guard let item = item else {
+        guard let item else {
             assertionFailure()
             return
         }

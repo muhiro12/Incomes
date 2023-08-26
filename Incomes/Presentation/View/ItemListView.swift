@@ -65,7 +65,8 @@ struct ItemListView: View {
                             },
                             .cancel {
                                 willDeleteItems = []
-                            }])
+                            }
+                        ])
         }
     }
 }

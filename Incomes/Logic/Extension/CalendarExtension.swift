@@ -34,8 +34,7 @@ extension Calendar {
             assertionFailure()
             return date
         }
-        let end = startOfYear(for: next) - 1
-        return end
+        return startOfYear(for: next) - 1
     }
 
     func startOfMonth(for date: Date) -> Date {
@@ -52,7 +51,6 @@ extension Calendar {
             assertionFailure()
             return date
         }
-        let end = startOfMonth(for: next) - 1
-        return end
+        return startOfMonth(for: next) - 1
     }
 }

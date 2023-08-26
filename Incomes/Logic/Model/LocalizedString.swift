@@ -9,7 +9,6 @@
 import Foundation
 
 enum LocalizedString {
-
     // MARK: - Common
 
     case all

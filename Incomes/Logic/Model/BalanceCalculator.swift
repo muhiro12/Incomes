@@ -6,8 +6,8 @@
 //  Copyright © 2022 Hiromu Nakano. All rights reserved.
 //
 
-import Foundation
 import CoreData
+import Foundation
 
 struct BalanceCalculator {
     let context: NSManagedObjectContext

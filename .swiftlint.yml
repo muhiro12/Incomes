@@ -1,3 +1,9 @@
+opt_in_rules:
+    - all
+
+disabled_rules:
+
 line_length: 200
+
 identifier_name:
     min_length: 2

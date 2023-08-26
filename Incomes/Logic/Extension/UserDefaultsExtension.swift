@@ -16,7 +16,7 @@ extension UserDefaults {
 
         var wrappedValue: T {
             get {
-                return UserDefaults.standard.object(forKey: key.rawValue) as? T ?? defaultValue
+                UserDefaults.standard.object(forKey: key.rawValue) as? T ?? defaultValue
             }
             set {
                 UserDefaults.standard.set(newValue, forKey: key.rawValue)

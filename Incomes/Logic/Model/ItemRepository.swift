@@ -6,8 +6,8 @@
 //  Copyright © 2020 Hiromu Nakano. All rights reserved.
 //
 
-import Foundation
 import CoreData
+import Foundation
 
 class ItemRepository: Repository {
     typealias Entity = Item

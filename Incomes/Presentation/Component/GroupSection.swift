@@ -53,8 +53,9 @@ struct GroupSection: View {
                     },
                     .cancel {
                         willDeleteItems = []
-                    }])
-        }
+                    }
+                ])
+            }
     }
 }
 

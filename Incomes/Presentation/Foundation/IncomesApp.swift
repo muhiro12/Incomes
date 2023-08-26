@@ -6,9 +6,9 @@
 //  Copyright © 2021 Hiromu Nakano. All rights reserved.
 //
 
-import SwiftUI
 import Firebase
 import GoogleMobileAds
+import SwiftUI
 
 @main
 struct IncomesApp: App {

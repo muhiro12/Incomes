@@ -53,8 +53,9 @@ struct YearSection: View {
                     },
                     .cancel {
                         willDeleteItems = []
-                    }])
-        }
+                    }
+                ])
+            }
     }
 }
 

@@ -9,10 +9,10 @@
 import CoreData
 
 struct PersistenceController {
-    static let shared = PersistenceController()
+    static let shared = Self()
 
     static var preview: PersistenceController = {
-        let result = PersistenceController(inMemory: true)
+        let result = Self(inMemory: true)
         let viewContext = result.container.viewContext
         do {
             _ = PreviewData(context: viewContext).items
@@ -32,8 +32,8 @@ struct PersistenceController {
         }
         container.viewContext.automaticallyMergesChangesFromParent = true
         container.viewContext.mergePolicy = NSMergePolicy.mergeByPropertyStoreTrump
-        container.loadPersistentStores(completionHandler: { (_, error) in
-            if let error = error {
+        container.loadPersistentStores(completionHandler: { _, error in
+            if let error {
                 assertionFailure(error.localizedDescription)
             }
         })

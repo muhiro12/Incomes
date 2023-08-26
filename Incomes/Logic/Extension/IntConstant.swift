@@ -9,7 +9,6 @@
 import Foundation
 
 extension Int {
-
     // MARK: - Common
 
     static var one: Self { 1 }

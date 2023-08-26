@@ -6,8 +6,8 @@
 //  Copyright © 2020 Hiromu Nakano. All rights reserved.
 //
 
-import XCTest
 @testable import Incomes
+import XCTest
 
 class StringExtensionTests: XCTestCase {
     func testIsNotEmpty() {
@@ -102,7 +102,7 @@ class StringExtensionTests: XCTestCase {
 
         XCTContext.runActivity(named: "Int returns decimal") { _ in
             let string = "1000"
-            XCTAssertEqual(string.decimalValue, 1000)
+            XCTAssertEqual(string.decimalValue, 1_000)
         }
     }
 }

@@ -6,9 +6,9 @@
 //  Copyright © 2022 Hiromu Nakano. All rights reserved.
 //
 
-import XCTest
-@testable import Incomes
 import CoreData
+@testable import Incomes
+import XCTest
 
 // swiftlint:disable all
 class BalanceCalculatorTests: XCTestCase {
