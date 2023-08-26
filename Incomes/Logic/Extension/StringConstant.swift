@@ -9,7 +9,6 @@
 import Foundation
 
 extension String {
-
     // MARK: - Common
 
     static var empty: Self { "" }

@@ -6,8 +6,8 @@
 //  Copyright © 2022 Hiromu Nakano. All rights reserved.
 //
 
-import SwiftUI
 import GoogleMobileAds
+import SwiftUI
 
 struct NativeAdvertisement: View {
     enum Size: String {
@@ -18,6 +18,7 @@ struct NativeAdvertisement: View {
             switch self {
             case .small:
                 return .componentM
+
             case .medium:
                 return 320
             }
@@ -51,8 +52,7 @@ extension NativeAdmob: UIViewRepresentable {
     typealias UIViewType = UIView
 
     func makeUIView(context: Context) -> UIViewType {
-        let view = NativeAdmobView(size: size)
-        return view
+        NativeAdmobView(size: size)
     }
 
     func updateUIView(_ uiView: UIViewType, context: Context) {}

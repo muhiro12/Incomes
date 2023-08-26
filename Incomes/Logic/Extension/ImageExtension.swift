@@ -10,17 +10,17 @@ import SwiftUI
 
 extension Image {
     func iconFrameS() -> some View {
-        return resizable()
+        resizable()
             .frame(width: .iconS, height: .iconS)
     }
 
     func iconFrameM() -> some View {
-        return resizable()
+        resizable()
             .frame(width: .iconM, height: .iconM)
     }
 
     func iconFrameL() -> some View {
-        return resizable()
+        resizable()
             .frame(width: .iconL, height: .iconL)
     }
 }

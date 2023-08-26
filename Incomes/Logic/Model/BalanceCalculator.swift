@@ -6,15 +6,14 @@
 //  Copyright © 2022 Hiromu Nakano. All rights reserved.
 //
 
-import Foundation
 import CoreData
+import Foundation
 
 struct BalanceCalculator {
     let context: NSManagedObjectContext
+    let repository: any Repository<Item>
 
     func calculate() throws {
-        let repository = ItemRepository(context: context)
-
         let editedDateList = [
             context.insertedObjects,
             context.updatedObjects,
@@ -29,34 +28,35 @@ struct BalanceCalculator {
             return
         }
 
-        let allItems = try repository.items().reversed() as [Item]
-        let items = try repository.items(predicate: .init(dateIsAfter: oldestDate)).reversed() as [Item]
+        let allItems = try repository.fetchList().reversed()
 
-        for tuple in items.enumerated() {
-            let index = tuple.offset
-            let item = tuple.element
+        guard let separatorIndex = allItems.firstIndex(where: { $0.date >= oldestDate }) else {
+            return
+        }
 
+        let previousBalance = allItems.prefix(upTo: separatorIndex).last?.balance ?? 0
+
+        let targetList = allItems.suffix(from: separatorIndex)
+        var resultList = [Item]()
+
+        targetList.enumerated().forEach { index, item in
             item.balance = {
-                if items.indices.contains(index - 1) {
-                    return items[index - 1].balance.adding(item.profit)
-                } else if let index = allItems.firstIndex(of: item),
-                          allItems.indices.contains(index - 1) {
-                    return allItems[index - 1].balance.adding(item.profit)
+                if index == 0 {
+                    return previousBalance.adding(item.profit)
                 } else {
-                    return item.profit
+                    return resultList[index - 1].balance.adding(item.profit)
                 }
             }()
+            resultList.append(item)
         }
 
         try context.save()
     }
 
     func recalculate()  throws {
-        let repository = ItemRepository(context: context)
-
         try context.save()
 
-        let items = try repository.items().reversed() as [Item]
+        let items = try repository.fetchList().reversed() as [Item]
 
         for tuple in items.enumerated() {
             let index = tuple.offset

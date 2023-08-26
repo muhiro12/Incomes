@@ -6,9 +6,9 @@
 //  Copyright © 2021 Hiromu Nakano. All rights reserved.
 //
 
-import SwiftUI
 import Firebase
 import GoogleMobileAds
+import SwiftUI
 
 @main
 struct IncomesApp: App {
@@ -22,9 +22,7 @@ struct IncomesApp: App {
         Store.shared.open()
 
         if !isSubscribeOn {
-            Task {
-                GADMobileAds.sharedInstance().start()
-            }
+            GADMobileAds.sharedInstance().start()
         }
     }
 

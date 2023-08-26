@@ -6,16 +6,18 @@
 //  Copyright © 2022 Hiromu Nakano. All rights reserved.
 //
 
-import XCTest
-@testable import Incomes
 import CoreData
+@testable import Incomes
+import XCTest
 
 // swiftlint:disable all
 class BalanceCalculatorTests: XCTestCase {
     func testCalculate() {
         XCTContext.runActivity(named: "Result is as expected when inserting") { _ in
             let context = context
-            let calculator = BalanceCalculator(context: context)
+            let repository = ItemRepository(context: context)
+            let calculator = BalanceCalculator(context: context,
+                                               repository: repository)
 
             for i in 1...5 {
                 let item = Item(context: context)
@@ -37,9 +39,8 @@ class BalanceCalculatorTests: XCTestCase {
                      repeatID: UUID())
             try! calculator.calculate()
 
-            let repository = ItemRepository(context: context)
-            let first = try! repository.items().first!
-            let last = try! repository.items().last!
+            let first = try! repository.fetchList().first!
+            let last = try! repository.fetchList().last!
 
             XCTAssertEqual(first.balance, 600)
             XCTAssertEqual(last.balance, 100)
@@ -47,7 +48,9 @@ class BalanceCalculatorTests: XCTestCase {
 
         XCTContext.runActivity(named: "Result is as expected when inserting first") { _ in
             let context = context
-            let calculator = BalanceCalculator(context: context)
+            let repository = ItemRepository(context: context)
+            let calculator = BalanceCalculator(context: context,
+                                               repository: repository)
 
             for i in 1...5 {
                 let item = Item(context: context)
@@ -69,9 +72,8 @@ class BalanceCalculatorTests: XCTestCase {
                      repeatID: UUID())
             try! calculator.calculate()
 
-            let repository = ItemRepository(context: context)
-            let first = try! repository.items().first!
-            let last = try! repository.items().last!
+            let first = try! repository.fetchList().first!
+            let last = try! repository.fetchList().last!
 
             XCTAssertEqual(first.balance, 600)
             XCTAssertEqual(last.balance, 100)
@@ -79,7 +81,9 @@ class BalanceCalculatorTests: XCTestCase {
 
         XCTContext.runActivity(named: "Result is as expected when inserting last") { _ in
             let context = context
-            let calculator = BalanceCalculator(context: context)
+            let repository = ItemRepository(context: context)
+            let calculator = BalanceCalculator(context: context,
+                                               repository: repository)
 
             for i in 1...5 {
                 let item = Item(context: context)
@@ -101,9 +105,8 @@ class BalanceCalculatorTests: XCTestCase {
                      repeatID: UUID())
             try! calculator.calculate()
 
-            let repository = ItemRepository(context: context)
-            let first = try! repository.items().first!
-            let last = try! repository.items().last!
+            let first = try! repository.fetchList().first!
+            let last = try! repository.fetchList().last!
 
             XCTAssertEqual(first.balance, 600)
             XCTAssertEqual(last.balance, 100)
@@ -111,7 +114,9 @@ class BalanceCalculatorTests: XCTestCase {
 
         XCTContext.runActivity(named: "Result is as expected when updating") { _ in
             let context = context
-            let calculator = BalanceCalculator(context: context)
+            let repository = ItemRepository(context: context)
+            let calculator = BalanceCalculator(context: context,
+                                               repository: repository)
 
             var items: [Item] = []
 
@@ -135,9 +140,8 @@ class BalanceCalculatorTests: XCTestCase {
                          repeatID: UUID())
             try! calculator.calculate()
 
-            let repository = ItemRepository(context: context)
-            let first = try! repository.items().first!
-            let last = try! repository.items().last!
+            let first = try! repository.fetchList().first!
+            let last = try! repository.fetchList().last!
 
             XCTAssertEqual(first.balance, 600)
             XCTAssertEqual(last.balance, 100)
@@ -145,7 +149,9 @@ class BalanceCalculatorTests: XCTestCase {
 
         XCTContext.runActivity(named: "Result is as expected when updating first") { _ in
             let context = context
-            let calculator = BalanceCalculator(context: context)
+            let repository = ItemRepository(context: context)
+            let calculator = BalanceCalculator(context: context,
+                                               repository: repository)
 
             var items: [Item] = []
 
@@ -169,9 +175,8 @@ class BalanceCalculatorTests: XCTestCase {
                          repeatID: UUID())
             try! calculator.calculate()
 
-            let repository = ItemRepository(context: context)
-            let first = try! repository.items().first!
-            let last = try! repository.items().last!
+            let first = try! repository.fetchList().first!
+            let last = try! repository.fetchList().last!
 
             XCTAssertEqual(first.balance, 600)
             XCTAssertEqual(last.balance, 200)
@@ -179,7 +184,9 @@ class BalanceCalculatorTests: XCTestCase {
 
         XCTContext.runActivity(named: "Result is as expected when updating last") { _ in
             let context = context
-            let calculator = BalanceCalculator(context: context)
+            let repository = ItemRepository(context: context)
+            let calculator = BalanceCalculator(context: context,
+                                               repository: repository)
 
             var items: [Item] = []
 
@@ -203,9 +210,8 @@ class BalanceCalculatorTests: XCTestCase {
                          repeatID: UUID())
             try! calculator.calculate()
 
-            let repository = ItemRepository(context: context)
-            let first = try! repository.items().first!
-            let last = try! repository.items().last!
+            let first = try! repository.fetchList().first!
+            let last = try! repository.fetchList().last!
 
             XCTAssertEqual(first.balance, 600)
             XCTAssertEqual(last.balance, 100)
@@ -213,7 +219,9 @@ class BalanceCalculatorTests: XCTestCase {
 
         XCTContext.runActivity(named: "Result is as expected when changing order") { _ in
             let context = context
-            let calculator = BalanceCalculator(context: context)
+            let repository = ItemRepository(context: context)
+            let calculator = BalanceCalculator(context: context,
+                                               repository: repository)
 
             var items: [Item] = []
 
@@ -237,9 +245,8 @@ class BalanceCalculatorTests: XCTestCase {
                          repeatID: UUID())
             try! calculator.calculate()
 
-            let repository = ItemRepository(context: context)
-            let first = try! repository.items().first!
-            let last = try! repository.items().last!
+            let first = try! repository.fetchList().first!
+            let last = try! repository.fetchList().last!
 
             XCTAssertEqual(first.balance, 600)
             XCTAssertEqual(last.balance, 200)
@@ -247,7 +254,9 @@ class BalanceCalculatorTests: XCTestCase {
 
         XCTContext.runActivity(named: "Result is as expected when deleting") { _ in
             let context = context
-            let calculator = BalanceCalculator(context: context)
+            let repository = ItemRepository(context: context)
+            let calculator = BalanceCalculator(context: context,
+                                               repository: repository)
 
             var items: [Item] = []
 
@@ -266,9 +275,8 @@ class BalanceCalculatorTests: XCTestCase {
             context.delete(items[1])
             try! calculator.calculate()
 
-            let repository = ItemRepository(context: context)
-            let first = try! repository.items().first!
-            let last = try! repository.items().last!
+            let first = try! repository.fetchList().first!
+            let last = try! repository.fetchList().last!
 
             XCTAssertEqual(first.balance, 400)
             XCTAssertEqual(last.balance, 100)
@@ -276,7 +284,9 @@ class BalanceCalculatorTests: XCTestCase {
 
         XCTContext.runActivity(named: "Result is as expected when deleting first") { _ in
             let context = context
-            let calculator = BalanceCalculator(context: context)
+            let repository = ItemRepository(context: context)
+            let calculator = BalanceCalculator(context: context,
+                                               repository: repository)
 
             var items: [Item] = []
 
@@ -295,9 +305,8 @@ class BalanceCalculatorTests: XCTestCase {
             context.delete(items[0])
             try! calculator.calculate()
 
-            let repository = ItemRepository(context: context)
-            let first = try! repository.items().first!
-            let last = try! repository.items().last!
+            let first = try! repository.fetchList().first!
+            let last = try! repository.fetchList().last!
 
             XCTAssertEqual(first.balance, 400)
             XCTAssertEqual(last.balance, 100)
@@ -305,7 +314,9 @@ class BalanceCalculatorTests: XCTestCase {
 
         XCTContext.runActivity(named: "Result is as expected when deleting last") { _ in
             let context = context
-            let calculator = BalanceCalculator(context: context)
+            let repository = ItemRepository(context: context)
+            let calculator = BalanceCalculator(context: context,
+                                               repository: repository)
 
             var items: [Item] = []
 
@@ -324,9 +335,8 @@ class BalanceCalculatorTests: XCTestCase {
             context.delete(items[4])
             try! calculator.calculate()
 
-            let repository = ItemRepository(context: context)
-            let first = try! repository.items().first!
-            let last = try! repository.items().last!
+            let first = try! repository.fetchList().first!
+            let last = try! repository.fetchList().last!
 
             XCTAssertEqual(first.balance, 400)
             XCTAssertEqual(last.balance, 100)
@@ -336,7 +346,9 @@ class BalanceCalculatorTests: XCTestCase {
     func testRecalculate() {
         XCTContext.runActivity(named: "Result is as expected") { _ in
             let context = context
-            let calculator = BalanceCalculator(context: context)
+            let repository = ItemRepository(context: context)
+            let calculator = BalanceCalculator(context: context,
+                                               repository: repository)
 
             for _ in 1...5 {
                 let item = Item(context: context)
@@ -349,9 +361,8 @@ class BalanceCalculatorTests: XCTestCase {
             }
             try! calculator.recalculate()
 
-            let repository = ItemRepository(context: context)
-            let first = try! repository.items().first!
-            let last = try! repository.items().last!
+            let first = try! repository.fetchList().first!
+            let last = try! repository.fetchList().last!
 
             XCTAssertEqual(first.balance, 500)
             XCTAssertEqual(last.balance, 100)

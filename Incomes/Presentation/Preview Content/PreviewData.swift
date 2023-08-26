@@ -6,20 +6,22 @@
 //  Copyright © 2020 Hiromu Nakano. All rights reserved.
 //
 
-import Foundation
 import CoreData
+import Foundation
 
 struct PreviewData {
     let context: NSManagedObjectContext
+    let repository: any Repository<Item>
 
     init(context: NSManagedObjectContext = PersistenceController.preview.container.viewContext) {
         self.context = context
+        self.repository = ItemRepository(context: context)
     }
 
     var item: Item {
         item(date: Date(),
              content: "Payday",
-             income: 3500,
+             income: 3_500,
              outgo: 0,
              group: "Salary")
     }
@@ -37,7 +39,7 @@ struct PreviewData {
         for index in 0..<24 {
             items.append(item(date: date(monthLater: index, from: dateD),
                               content: "Payday",
-                              income: 3500,
+                              income: 3_500,
                               outgo: 0,
                               group: "Salary"))
             items.append(item(date: date(monthLater: index, from: dateD),
@@ -48,7 +50,7 @@ struct PreviewData {
             items.append(item(date: date(monthLater: index, from: dateB),
                               content: "Apple card",
                               income: 0,
-                              outgo: 1000,
+                              outgo: 1_000,
                               group: "Credit"))
             items.append(item(date: date(monthLater: index, from: dateA),
                               content: "Orange card",
@@ -86,10 +88,22 @@ struct PreviewData {
     }
 
     func item(date: Date, content: String, income: NSDecimalNumber, outgo: NSDecimalNumber, group: String) -> Item {
-        ItemRepository(context: context).instantiate(date: date, content: content, income: income, outgo: outgo, group: group, repeatID: UUID())
+        let item = Item(context: context)
+        item.set(date: date,
+                 content: content,
+                 income: income,
+                 outgo: outgo,
+                 group: group,
+                 repeatID: UUID())
+        do {
+            try repository.add(item)
+        } catch {
+            assertionFailure()
+        }
+        return item
     }
 
     func date(monthLater: Int, from date: Date = Date()) -> Date {
-        return Calendar.utc.date(byAdding: .month, value: monthLater, to: date)!
+        Calendar.utc.date(byAdding: .month, value: monthLater, to: date)!
     }
 }

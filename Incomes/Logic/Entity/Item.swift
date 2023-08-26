@@ -6,15 +6,15 @@
 //  Copyright © 2021 Hiromu Nakano. All rights reserved.
 //
 
-import Foundation
 import CoreData
+import Foundation
 
 @objc(Item)
 public class Item: NSManagedObject {}
 
 extension Item: Identifiable {
     @nonobjc public class func fetchRequest() -> NSFetchRequest<Item> {
-        return NSFetchRequest<Item>(entityName: .item)
+        NSFetchRequest<Item>(entityName: .item)
     }
 
     @NSManaged public var balance: NSDecimalNumber
