@@ -6,40 +6,39 @@
 //  Copyright © 2020 Hiromu Nakano. All rights reserved.
 //
 
-import CoreData
 import Foundation
+import SwiftData
 
 class ItemRepository: Repository {
     typealias Entity = Item
 
-    private let context: NSManagedObjectContext
+    private let context: ModelContext
 
     private lazy var calculator = BalanceCalculator(context: context, repository: self)
 
-    init(context: NSManagedObjectContext) {
+    init(context: ModelContext) {
         self.context = context
     }
 
-    func fetch(predicate: NSPredicate?) throws -> Item {
-        guard let item = try fetchList(predicate: predicate).first else {
-            assertionFailure()
-            return Item()
-        }
-        return item
+    func fetch(predicate: Predicate<Item>?) throws -> Item? {
+        try fetchList(predicate: predicate).first
     }
 
-    func fetchList(predicate: NSPredicate?) throws -> [Item] {
-        let request = Item.fetchRequest()
-        request.predicate = predicate
-        request.sortDescriptors = NSSortDescriptor.standards
-        return try context.fetch(request)
+    func fetchList(predicate: Predicate<Item>?) throws -> [Item] {
+        let descriptor = FetchDescriptor(
+            predicate: predicate,
+            sortBy: Item.sortDescriptors()
+        )
+        return try context.fetch(descriptor)
     }
 
     func add(_ entity: Item) throws {
+        context.insert(entity)
         try save()
     }
 
     func addList(_ list: [Item]) throws {
+        list.forEach(context.insert)
         try save()
     }
 
@@ -57,9 +56,7 @@ class ItemRepository: Repository {
     }
 
     func deleteList(_ list: [Item]) throws {
-        list.forEach {
-            context.delete($0)
-        }
+        list.forEach(context.delete)
         try save()
     }
 }

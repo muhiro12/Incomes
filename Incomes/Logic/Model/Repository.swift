@@ -10,8 +10,8 @@ import Foundation
 
 protocol Repository<Entity> {
     associatedtype Entity
-    func fetch(predicate: NSPredicate?) throws -> Entity
-    func fetchList(predicate: NSPredicate?) throws -> [Entity]
+    func fetch(predicate: Predicate<Entity>?) throws -> Entity?
+    func fetchList(predicate: Predicate<Entity>?) throws -> [Entity]
     func add(_ entity: Entity) throws
     func addList(_ list: [Entity]) throws
     func update(_ entity: Entity) throws
@@ -21,7 +21,7 @@ protocol Repository<Entity> {
 }
 
 extension Repository {
-    func fetch() throws -> Entity {
+    func fetch() throws -> Entity? {
         try fetch(predicate: nil)
     }
 

@@ -6,14 +6,18 @@
 //  Copyright © 2021 Hiromu Nakano. All rights reserved.
 //
 
+import SwiftData
 import SwiftUI
 
 struct ItemListView: View {
-    @Environment(\.managedObjectContext)
-    private var viewContext
+    @Environment(\.modelContext)
+    private var context
 
-    @SectionedFetchRequest
-    private var sections: SectionedFetchResults<Date, Item>
+    @Query
+    private var items: [Item]
+    private var sections: [SectionedItems<Date>] {
+        ItemService.groupByYear(items: items)
+    }
 
     @State
     private var isPresentedToAlert = false
@@ -22,29 +26,25 @@ struct ItemListView: View {
 
     private let title: String
 
-    init(title: String, predicate: NSPredicate) {
+    init(title: String, predicate: Predicate<Item>) {
         self.title = title
-        _sections = .init(
-            sectionIdentifier: \Item.startOfYear,
-            sortDescriptors: NSSortDescriptor.standards,
-            predicate: predicate,
-            animation: .default)
+        _items = Query(filter: predicate, sort: Item.sortDescriptors())
     }
 
     var body: some View {
         List {
             ForEach(sections) { section in
                 Section(content: {
-                    ForEach(section) {
+                    ForEach(section.items) {
                         ListItem(of: $0)
                     }
                     .onDelete {
-                        willDeleteItems = $0.map { section[$0] }
+                        willDeleteItems = $0.map { section.items[$0] }
                         isPresentedToAlert = true
                     }
                 }, header: {
                     if sections.count > .one {
-                        Text(section.id.stringValue(.yyyy))
+                        Text(section.section.stringValue(.yyyy))
                     }
                 })
                 Advertisement(type: .native(.medium))
@@ -58,7 +58,7 @@ struct ItemListView: View {
                         buttons: [
                             .destructive(Text(.localized(.delete))) {
                                 do {
-                                    try ItemService(context: viewContext).delete(items: willDeleteItems)
+                                    try ItemService(context: context).delete(items: willDeleteItems)
                                 } catch {
                                     assertionFailure(error.localizedDescription)
                                 }
@@ -71,12 +71,9 @@ struct ItemListView: View {
     }
 }
 
-#if DEBUG
-struct ItemListView_Previews: PreviewProvider {
-    static var previews: some View {
+#Preview {
+    ModelContainerPreview(PreviewSampleData.inMemoryContainer) {
         ItemListView(title: "Title",
-                     predicate: .init(dateIsSameMonthAs: Date()))
-            .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+                     predicate: Item.predicate(dateIsSameMonthAs: Date()))
     }
 }
-#endif

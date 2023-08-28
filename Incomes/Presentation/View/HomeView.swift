@@ -6,22 +6,23 @@
 //  Copyright © 2020 Hiromu Nakano. All rights reserved.
 //
 
+import SwiftData
 import SwiftUI
 
 struct HomeView: View {
-    @SectionedFetchRequest(
-        sectionIdentifier: \Item.startOfYear,
-        sortDescriptors: [.init(keyPath: \Item.startOfYear, ascending: false)],
-        animation: .default)
-    private var sections: SectionedFetchResults<Date, Item>
-
     @State
     private var isPresentedToSettings = false
+
+    @Query
+    private var items: [Item]
+    private var sections: [SectionedItems<Date>] {
+        ItemService.groupByYear(items: items)
+    }
 
     var body: some View {
         List {
             ForEach(sections) {
-                YearSection(startOfYear: $0.id, items: $0.map { $0 })
+                YearSection(startOfYear: $0.section, items: $0.items)
                 Advertisement(type: .native(.small))
             }
         }.toolbar {
@@ -40,11 +41,8 @@ struct HomeView: View {
     }
 }
 
-#if DEBUG
-struct HomeView_Previews: PreviewProvider {
-    static var previews: some View {
+#Preview {
+    ModelContainerPreview(PreviewSampleData.inMemoryContainer) {
         HomeView()
-            .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
     }
 }
-#endif

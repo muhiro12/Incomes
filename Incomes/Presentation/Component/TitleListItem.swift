@@ -25,10 +25,6 @@ struct TitleListItem: View {
     }
 }
 
-#if DEBUG
-struct TitleListItem_Previews: PreviewProvider {
-    static var previews: some View {
-        TitleListItem(item: PreviewData().item)
-    }
+#Preview {
+    TitleListItem(item: PreviewSampleData.items.first!)
 }
-#endif

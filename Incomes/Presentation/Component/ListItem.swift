@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct ListItem: View {
-    @Environment(\.managedObjectContext)
+    @Environment(\.modelContext)
     private var context
 
     @State
@@ -30,7 +30,7 @@ struct ListItem: View {
             }
         }.sheet(isPresented: $isPresentedToEdit) {
             EditView(of: item)
-                .environment(\.managedObjectContext, context)
+                .environment(\.modelContext, context)
         }.contentShape(Rectangle())
         .onTapGesture(perform: presentToEdit)
     }
@@ -44,10 +44,6 @@ private extension ListItem {
     }
 }
 
-#if DEBUG
-struct ListItem_Previews: PreviewProvider {
-    static var previews: some View {
-        ListItem(of: PreviewData().item)
-    }
+#Preview {
+    ListItem(of: PreviewSampleData.items.first!)
 }
-#endif

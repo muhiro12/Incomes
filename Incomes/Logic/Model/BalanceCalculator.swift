@@ -6,18 +6,18 @@
 //  Copyright © 2022 Hiromu Nakano. All rights reserved.
 //
 
-import CoreData
 import Foundation
+import SwiftData
 
 struct BalanceCalculator {
-    let context: NSManagedObjectContext
+    let context: ModelContext
     let repository: any Repository<Item>
 
     func calculate() throws {
         let editedDateList = [
-            context.insertedObjects,
-            context.updatedObjects,
-            context.deletedObjects
+            context.insertedModelsArray,
+            context.changedModelsArray,
+            context.deletedModelsArray
         ].flatMap {
             $0.compactMap { ($0 as? Item)?.date }
         }
@@ -42,9 +42,9 @@ struct BalanceCalculator {
         targetList.enumerated().forEach { index, item in
             item.balance = {
                 if index == 0 {
-                    return previousBalance.adding(item.profit)
+                    return previousBalance + item.profit
                 } else {
-                    return resultList[index - 1].balance.adding(item.profit)
+                    return resultList[index - 1].balance + item.profit
                 }
             }()
             resultList.append(item)
@@ -64,7 +64,7 @@ struct BalanceCalculator {
 
             item.balance = {
                 if items.indices.contains(index - 1) {
-                    return items[index - 1].balance.adding(item.profit)
+                    return items[index - 1].balance + item.profit
                 } else {
                     return item.profit
                 }

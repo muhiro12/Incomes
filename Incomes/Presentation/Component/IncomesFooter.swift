@@ -9,8 +9,8 @@
 import SwiftUI
 
 struct IncomesFooter: View {
-    @Environment(\.managedObjectContext)
-    private var viewContext
+    @Environment(\.modelContext)
+    private var context
 
     @AppStorage(UserDefaults.Key.isSubscribeOn.rawValue)
     private var isSubscribeOn = false
@@ -53,15 +53,11 @@ struct IncomesFooter: View {
                                  trailing: .spaceM))
         }.sheet(isPresented: $isPresentedToEdit) {
             EditView()
-                .environment(\.managedObjectContext, viewContext)
+                .environment(\.modelContext, context)
         }
     }
 }
 
-#if DEBUG
-struct IncomesFooter_Previews: PreviewProvider {
-    static var previews: some View {
-        IncomesFooter(isHome: .constant(true))
-    }
+#Preview {
+    IncomesFooter(isHome: .constant(true))
 }
-#endif

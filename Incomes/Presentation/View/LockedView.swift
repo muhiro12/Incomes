@@ -31,10 +31,6 @@ private extension LockedView {
     }
 }
 
-#if DEBUG
-struct LockedView_Previews: PreviewProvider {
-    static var previews: some View {
-        LockedView(isLocked: .constant(true))
-    }
+#Preview {
+    LockedView(isLocked: .constant(true))
 }
-#endif

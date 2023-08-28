@@ -9,10 +9,8 @@
 import SwiftUI
 
 struct GroupSection: View {
-    typealias Element = (content: String, items: [Item])
-
-    @Environment(\.managedObjectContext)
-    var viewContext
+    @Environment(\.modelContext)
+    var context
 
     @State
     private var isPresentedToAlert = false
@@ -20,23 +18,23 @@ struct GroupSection: View {
     private var willDeleteItems: [Item] = []
 
     private let title: String
-    private let elements: [Element]
+    private let sections: [SectionedItems<String>]
 
     init(title: String, items: [Item]) {
         self.title = title
-        self.elements = ItemService.groupByContent(items: items)
+        self.sections = ItemService.groupByContent(items: items)
     }
 
     var body: some View {
         Section(content: {
-            ForEach(elements.indices) { index in
-                NavigationLink(elements[index].content) {
-                    ItemListView(title: elements[index].content,
-                                 predicate: .init(contentIs: elements[index].content))
+            ForEach(sections.indices) { index in
+                NavigationLink(sections[index].section) {
+                    ItemListView(title: sections[index].section,
+                                 predicate: Item.predicate(contentIs: sections[index].section))
                 }
             }.onDelete {
                 isPresentedToAlert = true
-                willDeleteItems = $0.flatMap { elements[$0].items }
+                willDeleteItems = $0.flatMap { sections[$0].items }
             }
         }, header: {
             Text(title)
@@ -46,7 +44,7 @@ struct GroupSection: View {
                 buttons: [
                     .destructive(Text(.localized(.delete))) {
                         do {
-                            try ItemService(context: viewContext).delete(items: willDeleteItems)
+                            try ItemService(context: context).delete(items: willDeleteItems)
                         } catch {
                             assertionFailure(error.localizedDescription)
                         }
@@ -59,15 +57,11 @@ struct GroupSection: View {
     }
 }
 
-#if DEBUG
-struct GroupSection_Previews: PreviewProvider {
-    static var previews: some View {
-        List {
-            GroupSection(title: "Credit",
-                         items: PreviewData().items.filter {
-                            $0.group == "Credit"
-                         })
-        }
+#Preview {
+    List {
+        GroupSection(title: "Credit",
+                     items: PreviewSampleData.items.filter {
+                        $0.group == "Credit"
+                     })
     }
 }
-#endif

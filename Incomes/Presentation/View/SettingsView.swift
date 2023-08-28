@@ -9,8 +9,8 @@
 import SwiftUI
 
 struct SettingsView: View {
-    @Environment(\.managedObjectContext)
-    private var viewContext
+    @Environment(\.modelContext)
+    private var context
     @Environment(\.presentationMode)
     var presentationMode
 
@@ -37,7 +37,7 @@ struct SettingsView: View {
                 Section(content: {
                     Button(.localized(.recalculate)) {
                         do {
-                            try ItemService(context: viewContext).recalculate()
+                            try ItemService(context: context).recalculate()
                         } catch {
                             assertionFailure(error.localizedDescription)
                         }
@@ -58,7 +58,7 @@ struct SettingsView: View {
                isPresented: $isAlertPresented) {
             Button(.localized(.delete), role: .destructive) {
                 do {
-                    try ItemService(context: viewContext).deleteAll()
+                    try ItemService(context: context).deleteAll()
                 } catch {
                     assertionFailure(error.localizedDescription)
                 }
@@ -69,10 +69,6 @@ struct SettingsView: View {
     }
 }
 
-#if DEBUG
-struct SettingsView_Previews: PreviewProvider {
-    static var previews: some View {
-        SettingsView()
-    }
+#Preview {
+    SettingsView()
 }
-#endif

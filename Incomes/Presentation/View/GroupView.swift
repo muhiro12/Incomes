@@ -6,29 +6,26 @@
 //  Copyright © 2020 Hiromu Nakano. All rights reserved.
 //
 
+import SwiftData
 import SwiftUI
 
 struct GroupView: View {
-    @SectionedFetchRequest(
-        sectionIdentifier: \Item.group,
-        sortDescriptors: [.init(keyPath: \Item.group, ascending: true)],
-        predicate: .init(groupIsNot: .empty),
-        animation: .default)
-    private var sections: SectionedFetchResults<String, Item>
+    @Query(filter: Item.predicate(groupIsNot: .empty))
+    private var groupingItems: [Item]
+    private var groupingSections: [SectionedItems<String>] {
+        ItemService.groupByGroup(items: groupingItems)
+    }
 
-    @FetchRequest(
-        sortDescriptors: [.init(keyPath: \Item.group, ascending: true)],
-        predicate: .init(groupIs: .empty),
-        animation: .default)
-    private var othersSection: FetchedResults<Item>
+    @Query(filter: Item.predicate(groupIs: .empty), sort: \.group)
+    private var othersItems: [Item]
 
     var body: some View {
         List {
-            ForEach(sections) {
-                GroupSection(title: $0.id, items: $0.map { $0 })
+            ForEach(groupingSections) {
+                GroupSection(title: $0.section, items: $0.items)
             }
-            if !othersSection.isEmpty {
-                GroupSection(title: .localized(.others), items: othersSection.map { $0 })
+            if !othersItems.isEmpty {
+                GroupSection(title: .localized(.others), items: othersItems)
             }
         }
         .id(UUID())
@@ -37,11 +34,8 @@ struct GroupView: View {
     }
 }
 
-#if DEBUG
-struct GroupView_Previews: PreviewProvider {
-    static var previews: some View {
+#Preview {
+    ModelContainerPreview(PreviewSampleData.inMemoryContainer) {
         GroupView()
-            .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
     }
 }
-#endif

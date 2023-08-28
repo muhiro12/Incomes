@@ -36,10 +36,6 @@ struct Advertisement: View {
     }
 }
 
-#if DEBUG
-struct Advertisement_Previews: PreviewProvider {
-    static var previews: some View {
-        Advertisement(type: .native(.medium))
-    }
+#Preview {
+    Advertisement(type: .native(.medium))
 }
-#endif
