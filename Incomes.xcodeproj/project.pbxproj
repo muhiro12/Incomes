@@ -699,7 +699,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if test -d /opt/homebrew/bin; then\n    PATH=/opt/homebrew/bin/:$PATH\nfi\n\nif ! which swiftlint >/dev/null; then\n    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\n    exit 1\nfi\n\nSTAGED_FILES=$(git diff --cached --name-only)\nUNSTAGED_FILES=$(git diff --name-only)\nFILES=\"$STAGED_FILES $UNSTAGED_FILES\"\n\nif echo $FILES | grep \".swiftlint.yml\"; then\n    swiftlint --fix --format\n    exit 0\nfi\n\necho \"$FILES\" | grep .swift$ | while read FILE; do\n    swiftlint --fix --format $FILE\n    swiftlint $FILE\ndone\n";
+			shellScript = "if test -d /opt/homebrew/bin; then\n    PATH=/opt/homebrew/bin/:$PATH\nfi\n\nif ! which swiftlint >/dev/null; then\n    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\n    exit 1\nfi\n\nDIFF_FILES=\"$(git diff --cached --name-only)\\n$(git diff --name-only)\"\nSWIFT_FILES=\"$(echo \"$DIFF_FILES\" | grep .swift$)\"\n\nif echo \"$DIFF_FILES\" | grep \".swiftlint.yml\"; then\n    swiftlint --fix --format\n    swiftlint\nelif [ -n \"$SWIFT_FILES\" ]; then\n    swiftlint --fix --format $SWIFT_FILES\n    swiftlint $SWIFT_FILES\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
