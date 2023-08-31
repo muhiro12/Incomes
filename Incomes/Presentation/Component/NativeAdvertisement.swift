@@ -34,13 +34,9 @@ struct NativeAdvertisement: View {
     }
 }
 
-#if DEBUG
-struct NativeAdvertisement_Previews: PreviewProvider {
-    static var previews: some View {
-        NativeAdvertisement(size: .medium)
-    }
+#Preview {
+    NativeAdvertisement(size: .medium)
 }
-#endif
 
 // MARK: - UIViewRepresentable
 

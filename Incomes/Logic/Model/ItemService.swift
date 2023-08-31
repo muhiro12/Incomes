@@ -6,21 +6,19 @@
 //  Copyright © 2022 Hiromu Nakano. All rights reserved.
 //
 
-import CoreData
 import Foundation
+import SwiftData
 
 struct ItemService {
-    private let context: NSManagedObjectContext
     private let repository: any Repository<Item>
 
-    init(context: NSManagedObjectContext) {
-        self.context = context
+    init(context: ModelContext) {
         self.repository = ItemRepository(context: context)
     }
 
     // MARK: - Fetch
 
-    func items(predicate: NSPredicate? = nil) throws -> [Item] {
+    func items(predicate: Predicate<Item>? = nil) throws -> [Item] {
         try repository.fetchList(predicate: predicate)
     }
 
@@ -28,21 +26,20 @@ struct ItemService {
 
     func create(date: Date,
                 content: String,
-                income: NSDecimalNumber,
-                outgo: NSDecimalNumber,
+                income: Decimal,
+                outgo: Decimal,
                 group: String,
                 repeatCount: Int = .one) throws {
         var items = [Item]()
 
         let repeatID = UUID()
 
-        let item = Item(context: context)
-        item.set(date: date,
-                 content: content,
-                 income: income,
-                 outgo: outgo,
-                 group: group,
-                 repeatID: repeatID)
+        let item = Item(date: date,
+                        content: content,
+                        income: income,
+                        outgo: outgo,
+                        group: group,
+                        repeatID: repeatID)
         items.append(item)
 
         for index in 0..<repeatCount {
@@ -55,13 +52,12 @@ struct ItemService {
                 assertionFailure()
                 return
             }
-            let item = Item(context: context)
-            item.set(date: repeatingDate,
-                     content: content,
-                     income: income,
-                     outgo: outgo,
-                     group: group,
-                     repeatID: repeatID)
+            let item = Item(date: repeatingDate,
+                            content: content,
+                            income: income,
+                            outgo: outgo,
+                            group: group,
+                            repeatID: repeatID)
             items.append(item)
         }
 
@@ -73,25 +69,25 @@ struct ItemService {
     func update(item: Item, // swiftlint:disable:this function_parameter_count
                 date: Date,
                 content: String,
-                income: NSDecimalNumber,
-                outgo: NSDecimalNumber,
+                income: Decimal,
+                outgo: Decimal,
                 group: String) throws {
-        item.set(date: date,
-                 content: content,
-                 income: income,
-                 outgo: outgo,
-                 group: group,
-                 repeatID: UUID())
+        item.date = date
+        item.content = content
+        item.income = income
+        item.outgo = outgo
+        item.group = group
+        item.repeatID = UUID()
         try repository.update(item)
     }
 
     func updateForRepeatingItems(item: Item, // swiftlint:disable:this function_parameter_count
                                  date: Date,
                                  content: String,
-                                 income: NSDecimalNumber,
-                                 outgo: NSDecimalNumber,
+                                 income: Decimal,
+                                 outgo: Decimal,
                                  group: String,
-                                 predicate: NSPredicate) throws {
+                                 predicate: Predicate<Item>) throws {
         let components = Calendar.utc.dateComponents([.year, .month, .day],
                                                      from: item.date,
                                                      to: date)
@@ -103,12 +99,12 @@ struct ItemService {
                 assertionFailure()
                 return
             }
-            $0.set(date: newDate,
-                   content: content,
-                   income: income,
-                   outgo: outgo,
-                   group: group,
-                   repeatID: repeatID)
+            $0.date = newDate
+            $0.content = content
+            $0.income = income
+            $0.outgo = outgo
+            $0.group = group
+            $0.repeatID = repeatID
         }
 
         try repository.updateList(items)
@@ -117,8 +113,8 @@ struct ItemService {
     func updateForFutureItems(item: Item, // swiftlint:disable:this function_parameter_count
                               date: Date,
                               content: String,
-                              income: NSDecimalNumber,
-                              outgo: NSDecimalNumber,
+                              income: Decimal,
+                              outgo: Decimal,
                               group: String) throws {
         try updateForRepeatingItems(item: item,
                                     date: date,
@@ -126,14 +122,14 @@ struct ItemService {
                                     income: income,
                                     outgo: outgo,
                                     group: group,
-                                    predicate: .init(repeatIDIs: item.repeatID, dateIsAfter: item.date))
+                                    predicate: Item.predicate(repeatIDIs: item.repeatID, dateIsAfter: item.date))
     }
 
     func updateForAllItems(item: Item, // swiftlint:disable:this function_parameter_count
                            date: Date,
                            content: String,
-                           income: NSDecimalNumber,
-                           outgo: NSDecimalNumber,
+                           income: Decimal,
+                           outgo: Decimal,
                            group: String) throws {
         try updateForRepeatingItems(item: item,
                                     date: date,
@@ -141,7 +137,7 @@ struct ItemService {
                                     income: income,
                                     outgo: outgo,
                                     group: group,
-                                    predicate: .init(repeatIDIs: item.repeatID))
+                                    predicate: Item.predicate(repeatIDIs: item.repeatID))
     }
 
     // MARK: - Delete
@@ -170,23 +166,35 @@ struct ItemService {
 
     // MARK: - Utilitiy
 
-    static func groupByMonth(items: [Item]) -> [(month: Date, items: [Item])] {
+    static func groupByYear(items: [Item]) -> [SectionedItems<Date>] {
+        Dictionary(grouping: items) {
+            Calendar.utc.startOfYear(for: $0.date)
+        }.map {
+            SectionedItems(section: $0.key, items: $0.value)
+        }.sorted().reversed()
+    }
+
+    static func groupByMonth(items: [Item]) -> [SectionedItems<Date>] {
         Dictionary(grouping: items) {
             Calendar.utc.startOfMonth(for: $0.date)
         }.map {
-            (month: $0.0, items: $0.1)
-        }.sorted {
-            $0.month > $1.month
-        }
+            SectionedItems(section: $0.key, items: $0.value)
+        }.sorted().reversed()
     }
 
-    static func groupByContent(items: [Item]) -> [(content: String, items: [Item])] {
+    static func groupByGroup(items: [Item]) -> [SectionedItems<String>] {
+        Dictionary(grouping: items) {
+            $0.group
+        }.map {
+            SectionedItems(section: $0.key, items: $0.value)
+        }.sorted()
+    }
+
+    static func groupByContent(items: [Item]) -> [SectionedItems<String>] {
         Dictionary(grouping: items) {
             $0.content
         }.map {
-            (content: $0.0, items: $0.1)
-        }.sorted {
-            $0.content < $1.content
-        }
+            SectionedItems(section: $0.key, items: $0.value)
+        }.sorted()
     }
 }

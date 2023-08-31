@@ -9,8 +9,8 @@
 import SwiftUI
 
 struct EditView: View {
-    @Environment(\.managedObjectContext)
-    private var viewContext
+    @Environment(\.modelContext)
+    private var context
     @Environment(\.presentationMode)
     private var presentationMode
 
@@ -50,8 +50,8 @@ struct EditView: View {
         self.item = item
         _date = State(initialValue: item.date)
         _content = State(initialValue: item.content)
-        _income = State(initialValue: item.income.stringValue)
-        _outgo = State(initialValue: item.outgo.stringValue)
+        _income = State(initialValue: item.income.description)
+        _outgo = State(initialValue: item.outgo.description)
         _group = State(initialValue: item.group)
     }
 
@@ -110,7 +110,7 @@ struct EditView: View {
                 if DebugView.isDebug,
                    let item {
                     Section(content: {
-                        Text(item.description)
+                        Text(String(describing: item))
                     }, header: {
                         Text(String.debugTitle)
                     })
@@ -151,7 +151,7 @@ private extension EditView {
     func save() {
         do {
             if let repeatID = item?.repeatID,
-               try ItemService(context: viewContext).items(predicate: .init(repeatIDIs: repeatID)).count > .one {
+               try ItemService(context: context).items(predicate: Item.predicate(repeatIDIs: repeatID)).count > .one {
                 presentToActionSheet()
             } else {
                 Task {
@@ -170,7 +170,7 @@ private extension EditView {
         }
         Task {
             do {
-                try ItemService(context: viewContext)
+                try ItemService(context: context)
                     .update(item: item,
                             date: date,
                             content: content,
@@ -191,7 +191,7 @@ private extension EditView {
         }
         Task {
             do {
-                try ItemService(context: viewContext)
+                try ItemService(context: context)
                     .updateForFutureItems(item: item,
                                           date: date,
                                           content: content,
@@ -212,7 +212,7 @@ private extension EditView {
         }
         Task {
             do {
-                try ItemService(context: viewContext)
+                try ItemService(context: context)
                     .updateForAllItems(item: item,
                                        date: date,
                                        content: content,
@@ -228,7 +228,7 @@ private extension EditView {
 
     func create() {
         do {
-            try ItemService(context: viewContext)
+            try ItemService(context: context)
                 .create(date: date,
                         content: content,
                         income: income.decimalValue,
@@ -266,10 +266,6 @@ private extension EditView {
     }
 }
 
-#if DEBUG
-struct EditView_Previews: PreviewProvider {
-    static var previews: some View {
-        EditView()
-    }
+#Preview {
+    EditView()
 }
-#endif

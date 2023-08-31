@@ -6,7 +6,6 @@
 //  Copyright © 2022 Hiromu Nakano. All rights reserved.
 //
 
-import CoreData
 @testable import Incomes
 import XCTest
 

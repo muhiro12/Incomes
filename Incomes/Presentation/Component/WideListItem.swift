@@ -40,10 +40,6 @@ struct WideListItem: View {
     }
 }
 
-#if DEBUG
-struct WideListItem_Previews: PreviewProvider {
-    static var previews: some View {
-        WideListItem(of: PreviewData().item)
-    }
+#Preview {
+    WideListItem(of: PreviewSampleData.items.first!)
 }
-#endif

@@ -8,6 +8,7 @@
 
 import Firebase
 import GoogleMobileAds
+import SwiftData
 import SwiftUI
 
 @main
@@ -15,7 +16,15 @@ struct IncomesApp: App {
     @AppStorage(UserDefaults.Key.isSubscribeOn.rawValue)
     private var isSubscribeOn = false
 
-    private let persistenceController = PersistenceController.shared
+    private let container = {
+        let url = URL.applicationSupportDirectory.appendingPathComponent("Incomes.sqlite")
+        let configuration = ModelConfiguration(url: url)
+        do {
+            return try ModelContainer(for: Item.self, configurations: configuration)
+        } catch {
+            fatalError("Failed to create the model container: \(error.localizedDescription)")
+        }
+    }()
 
     init() {
         FirebaseApp.configure()
@@ -29,7 +38,7 @@ struct IncomesApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .environment(\.managedObjectContext, persistenceController.container.viewContext)
+                .modelContainer(container)
         }
     }
 }

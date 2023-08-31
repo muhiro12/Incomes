@@ -348,7 +348,7 @@ class ItemServiceTests: XCTestCase {
     // MARK: - Utilitiy
 
     func testGroupByMonth() {
-        let data = PreviewData().items
+        let data = PreviewSampleData().items
         let result = ItemService.groupByMonth(items: data)
 
         XCTContext.runActivity(named: "Result is sorted in descending by month") { _ in
@@ -394,7 +394,7 @@ class ItemServiceTests: XCTestCase {
     }
 
     func testGroupByContent() {
-        let data = PreviewData().items
+        let data = PreviewSampleData().items
         let result = ItemService.groupByContent(items: data)
 
         XCTContext.runActivity(named: "Result is sorted in ascending by content") { _ in

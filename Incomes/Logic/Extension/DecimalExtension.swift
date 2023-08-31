@@ -1,5 +1,5 @@
 //
-//  NSDecimalNumberExtension.swift
+//  DecimalExtension.swift
 //  Incomes
 //
 //  Created by Hiromu Nakano on 2020/06/24.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension NSDecimalNumber {
+extension Decimal {
     var asCurrency: String {
         let formatter = NumberFormatter()
         formatter.numberStyle = .currency
@@ -27,10 +27,10 @@ extension NSDecimalNumber {
     }
 
     var isPlus: Bool {
-        compare(.zero) == .orderedDescending
+        self > .zero
     }
 
     var isMinus: Bool {
-        compare(.zero) == .orderedAscending
+        self < .zero
     }
 }

@@ -25,12 +25,8 @@ struct StoreSection: View {
     }
 }
 
-#if DEBUG
-struct StoreSection_Previews: PreviewProvider {
-    static var previews: some View {
-        List {
-            StoreSection()
-        }
+#Preview {
+    List {
+        StoreSection()
     }
 }
-#endif

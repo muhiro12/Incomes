@@ -17,12 +17,11 @@ extension String {
         if isEmpty {
             return true
         }
-        return NSDecimalNumber(string: self) != NSDecimalNumber.notANumber
+        return Decimal(string: self) != nil
     }
 
-    var decimalValue: NSDecimalNumber {
-        let value = NSDecimalNumber(string: self)
-        if value == NSDecimalNumber.notANumber {
+    var decimalValue: Decimal {
+        guard let value = Decimal(string: self) else {
             return .zero
         }
         return value

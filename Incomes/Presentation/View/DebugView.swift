@@ -11,8 +11,8 @@ import SwiftUI
 struct DebugView: View {
     static var isDebug = false
 
-    @Environment(\.managedObjectContext)
-    private var viewContext
+    @Environment(\.modelContext)
+    private var context
     @Environment(\.presentationMode)
     private var presentationMode
 
@@ -34,8 +34,8 @@ struct DebugView: View {
                     Button(String.debugPreviewData) {
                     }.onLongPressGesture {
                         do {
-                            _ = PreviewData(context: viewContext).items
-                            try viewContext.save()
+                            PreviewSampleData.items.forEach(context.insert)
+                            try context.save()
                         } catch {
                             assertionFailure(error.localizedDescription)
                         }
@@ -50,10 +50,6 @@ struct DebugView: View {
     }
 }
 
-#if DEBUG
-struct DebugView_Previews: PreviewProvider {
-    static var previews: some View {
-        DebugView()
-    }
+#Preview {
+    DebugView()
 }
-#endif

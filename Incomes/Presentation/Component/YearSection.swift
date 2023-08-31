@@ -9,10 +9,8 @@
 import SwiftUI
 
 struct YearSection: View {
-    typealias Element = (month: Date, items: [Item])
-
-    @Environment(\.managedObjectContext)
-    private var viewContext
+    @Environment(\.modelContext)
+    private var context
 
     @State
     private var isPresentedToAlert = false
@@ -20,23 +18,23 @@ struct YearSection: View {
     private var willDeleteItems: [Item] = []
 
     private let startOfYear: Date
-    private let elements: [Element]
+    private let sections: [SectionedItems<Date>]
 
     init(startOfYear: Date, items: [Item]) {
         self.startOfYear = startOfYear
-        self.elements = ItemService.groupByMonth(items: items)
+        self.sections = ItemService.groupByMonth(items: items)
     }
 
     var body: some View {
         Section(content: {
-            ForEach(0..<elements.count) { index in
-                NavigationLink(elements[index].month.stringValue(.yyyyMMM)) {
-                    ItemListView(title: elements[index].month.stringValue(.yyyyMMM),
-                                 predicate: .init(dateIsSameMonthAs: elements[index].month))
+            ForEach(0..<sections.count) { index in
+                NavigationLink(sections[index].section.stringValue(.yyyyMMM)) {
+                    ItemListView(title: sections[index].section.stringValue(.yyyyMMM),
+                                 predicate: Item.predicate(dateIsSameMonthAs: sections[index].section))
                 }
             }.onDelete {
                 isPresentedToAlert = true
-                willDeleteItems = $0.flatMap { elements[$0].items }
+                willDeleteItems = $0.flatMap { sections[$0].items }
             }
         }, header: {
             Text(startOfYear.stringValue(.yyyy))
@@ -46,7 +44,7 @@ struct YearSection: View {
                 buttons: [
                     .destructive(Text(.localized(.delete))) {
                         do {
-                            try ItemService(context: viewContext).delete(items: willDeleteItems)
+                            try ItemService(context: context).delete(items: willDeleteItems)
                         } catch {
                             assertionFailure(error.localizedDescription)
                         }
@@ -59,15 +57,11 @@ struct YearSection: View {
     }
 }
 
-#if DEBUG
-struct YearSection_Previews: PreviewProvider {
-    static var previews: some View {
-        List {
-            YearSection(startOfYear: Date(),
-                        items: PreviewData().items.filter {
-                            $0.startOfYear.stringValue(.yyyy) == "2022"
-                        })
-        }
+#Preview {
+    List {
+        YearSection(startOfYear: Date(),
+                    items: PreviewSampleData.items.filter {
+                        $0.date.stringValue(.yyyy) == "2023"
+                    })
     }
 }
-#endif
