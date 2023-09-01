@@ -8,6 +8,7 @@ disabled_rules:
     - explicit_type_interface # Omit type interface
     - indentation_width # Use Xcode indentation
     - multiline_arguments_brackets # Prioritize readability
+    - multiline_literal_brackets # Prioritize readability
     - multiline_parameters_brackets # Prioritize readability
     - no_extension_access_modifier # Use private extension
     - no_grouping_extension # Grouping by extension
