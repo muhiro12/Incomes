@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum LocalizedString {
+enum LocalizedString: String {
     // MARK: - Common
 
     case all

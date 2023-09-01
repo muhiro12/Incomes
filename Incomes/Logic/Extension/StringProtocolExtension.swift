@@ -10,6 +10,6 @@ import Foundation
 
 extension StringProtocol where Self == String {
     static func localized(_ localizedString: LocalizedString) -> String {
-        NSLocalizedString(String(describing: localizedString), comment: .empty)
+        String(localized: .init(localizedString.rawValue))
     }
 }
