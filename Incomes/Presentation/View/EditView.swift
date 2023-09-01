@@ -94,7 +94,7 @@ struct EditView: View {
                             Spacer()
                             Picker(.localized(.repeatCount),
                                    selection: $repeatSelection) {
-                                ForEach((.minRepeatCount)..<(.maxRepeatCount + .one)) {
+                                ForEach((.minRepeatCount)..<(.maxRepeatCount + .one), id: \.self) {
                                     Text($0.description)
                                 }
                             }.pickerStyle(WheelPickerStyle())
