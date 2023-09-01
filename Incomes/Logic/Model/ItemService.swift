@@ -72,12 +72,12 @@ struct ItemService {
                 income: Decimal,
                 outgo: Decimal,
                 group: String) throws {
-        item.date = date
-        item.content = content
-        item.income = income
-        item.outgo = outgo
-        item.group = group
-        item.repeatID = UUID()
+        item.set(date: date,
+                 content: content,
+                 income: income,
+                 outgo: outgo,
+                 group: group,
+                 repeatID: UUID())
         try repository.update(item)
     }
 
@@ -99,12 +99,12 @@ struct ItemService {
                 assertionFailure()
                 return
             }
-            $0.date = newDate
-            $0.content = content
-            $0.income = income
-            $0.outgo = outgo
-            $0.group = group
-            $0.repeatID = repeatID
+            $0.set(date: newDate,
+                   content: content,
+                   income: income,
+                   outgo: outgo,
+                   group: group,
+                   repeatID: repeatID)
         }
 
         try repository.updateList(items)

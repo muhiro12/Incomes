@@ -10,13 +10,13 @@ import Foundation
 import SwiftData
 
 @Model final class Item {
-    var date = Date(timeIntervalSinceReferenceDate: .zero)
-    var content = String.empty
-    var income = Decimal.zero
-    var outgo = Decimal.zero
-    var balance = Decimal.zero
-    var group = String.empty
-    var repeatID = UUID()
+    private(set) var date = Date(timeIntervalSinceReferenceDate: .zero)
+    private(set) var content = String.empty
+    private(set) var income = Decimal.zero
+    private(set) var outgo = Decimal.zero
+    private(set) var group = String.empty
+    private(set) var repeatID = UUID()
+    private(set) var balance = Decimal.zero
 
     init(date: Date,
          content: String,
@@ -24,12 +24,12 @@ import SwiftData
          outgo: Decimal,
          group: String,
          repeatID: UUID) {
-        self.date = Calendar.utc.startOfDay(for: date)
-        self.content = content
-        self.income = income
-        self.outgo = outgo
-        self.group = group
-        self.repeatID = repeatID
+        set(date: date,
+            content: content,
+            income: income,
+            outgo: outgo,
+            group: group,
+            repeatID: repeatID)
     }
 }
 
@@ -40,5 +40,23 @@ extension Item {
 
     var isProfitable: Bool {
         profit.isPlus
+    }
+
+    func set(date: Date,
+             content: String,
+             income: Decimal,
+             outgo: Decimal,
+             group: String,
+             repeatID: UUID) {
+        self.date = Calendar.utc.startOfDay(for: date)
+        self.content = content
+        self.income = income
+        self.outgo = outgo
+        self.group = group
+        self.repeatID = repeatID
+    }
+
+    func set(balance: Decimal) {
+        self.balance = balance
     }
 }

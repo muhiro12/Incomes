@@ -38,7 +38,6 @@ class ItemServiceTests: XCTestCase {
             XCTAssertEqual(result.income, 200)
             XCTAssertEqual(result.outgo, 100)
             XCTAssertEqual(result.group, "group")
-            XCTAssertEqual(result.startOfYear, date("2000-01-01T00:00:00Z"))
             XCTAssertEqual(result.balance, 100)
         }
 
@@ -59,7 +58,6 @@ class ItemServiceTests: XCTestCase {
             XCTAssertEqual(first.income, 200)
             XCTAssertEqual(first.outgo, 100)
             XCTAssertEqual(first.group, "group")
-            XCTAssertEqual(first.startOfYear, date("2000-01-01T00:00:00Z"))
             XCTAssertEqual(first.balance, 300)
 
             XCTAssertEqual(last.date, date("2000-01-01T00:00:00Z"))
@@ -67,7 +65,6 @@ class ItemServiceTests: XCTestCase {
             XCTAssertEqual(last.income, 200)
             XCTAssertEqual(last.outgo, 100)
             XCTAssertEqual(last.group, "group")
-            XCTAssertEqual(last.startOfYear, date("2000-01-01T00:00:00Z"))
             XCTAssertEqual(last.balance, 100)
 
             XCTAssertEqual(first.repeatID, last.repeatID)
@@ -98,7 +95,6 @@ class ItemServiceTests: XCTestCase {
             XCTAssertEqual(result.income, 100)
             XCTAssertEqual(result.outgo, 200)
             XCTAssertEqual(result.group, "group2")
-            XCTAssertEqual(result.startOfYear, date("2001-01-01T00:00:00Z"))
             XCTAssertEqual(result.balance, -100)
         }
 
@@ -127,7 +123,6 @@ class ItemServiceTests: XCTestCase {
             XCTAssertEqual(first.income, 200)
             XCTAssertEqual(first.outgo, 100)
             XCTAssertEqual(first.group, "group")
-            XCTAssertEqual(first.startOfYear, date("2000-01-01T00:00:00Z"))
             XCTAssertEqual(first.balance, 100)
 
             XCTAssertEqual(second.date, date("2000-02-02T00:00:00Z"))
@@ -135,7 +130,6 @@ class ItemServiceTests: XCTestCase {
             XCTAssertEqual(second.income, 100)
             XCTAssertEqual(second.outgo, 200)
             XCTAssertEqual(second.group, "group2")
-            XCTAssertEqual(second.startOfYear, date("2000-01-01T00:00:00Z"))
             XCTAssertEqual(second.balance, 0)
 
             XCTAssertEqual(last.date, date("2000-01-01T00:00:00Z"))
@@ -143,7 +137,6 @@ class ItemServiceTests: XCTestCase {
             XCTAssertEqual(last.income, 200)
             XCTAssertEqual(last.outgo, 100)
             XCTAssertEqual(last.group, "group")
-            XCTAssertEqual(last.startOfYear, date("2000-01-01T00:00:00Z"))
             XCTAssertEqual(last.balance, 100)
 
             XCTAssertEqual(first.repeatID, last.repeatID)
@@ -173,7 +166,6 @@ class ItemServiceTests: XCTestCase {
             XCTAssertEqual(result.income, 100)
             XCTAssertEqual(result.outgo, 200)
             XCTAssertEqual(result.group, "group2")
-            XCTAssertEqual(result.startOfYear, date("2001-01-01T00:00:00Z"))
             XCTAssertEqual(result.balance, -100)
         }
 
@@ -202,7 +194,6 @@ class ItemServiceTests: XCTestCase {
             XCTAssertEqual(first.income, 100)
             XCTAssertEqual(first.outgo, 200)
             XCTAssertEqual(first.group, "group2")
-            XCTAssertEqual(first.startOfYear, date("2000-01-01T00:00:00Z"))
             XCTAssertEqual(first.balance, -100)
 
             XCTAssertEqual(second.date, date("2000-02-02T00:00:00Z"))
@@ -210,7 +201,6 @@ class ItemServiceTests: XCTestCase {
             XCTAssertEqual(second.income, 100)
             XCTAssertEqual(second.outgo, 200)
             XCTAssertEqual(second.group, "group2")
-            XCTAssertEqual(second.startOfYear, date("2000-01-01T00:00:00Z"))
             XCTAssertEqual(second.balance, 0)
 
             XCTAssertEqual(last.date, date("2000-01-01T00:00:00Z"))
@@ -218,7 +208,6 @@ class ItemServiceTests: XCTestCase {
             XCTAssertEqual(last.income, 200)
             XCTAssertEqual(last.outgo, 100)
             XCTAssertEqual(last.group, "group")
-            XCTAssertEqual(last.startOfYear, date("2000-01-01T00:00:00Z"))
             XCTAssertEqual(last.balance, 100)
 
             XCTAssertEqual(first.repeatID, second.repeatID)
@@ -248,7 +237,6 @@ class ItemServiceTests: XCTestCase {
             XCTAssertEqual(result.income, 100)
             XCTAssertEqual(result.outgo, 200)
             XCTAssertEqual(result.group, "group2")
-            XCTAssertEqual(result.startOfYear, date("2001-01-01T00:00:00Z"))
             XCTAssertEqual(result.balance, -100)
         }
 
@@ -277,7 +265,6 @@ class ItemServiceTests: XCTestCase {
             XCTAssertEqual(first.income, 100)
             XCTAssertEqual(first.outgo, 200)
             XCTAssertEqual(first.group, "group2")
-            XCTAssertEqual(first.startOfYear, date("2000-01-01T00:00:00Z"))
             XCTAssertEqual(first.balance, -300)
 
             XCTAssertEqual(second.date, date("2000-02-02T00:00:00Z"))
@@ -285,7 +272,6 @@ class ItemServiceTests: XCTestCase {
             XCTAssertEqual(second.income, 100)
             XCTAssertEqual(second.outgo, 200)
             XCTAssertEqual(second.group, "group2")
-            XCTAssertEqual(second.startOfYear, date("2000-01-01T00:00:00Z"))
             XCTAssertEqual(second.balance, -200)
 
             XCTAssertEqual(last.date, date("2000-01-02T00:00:00Z"))
@@ -293,7 +279,6 @@ class ItemServiceTests: XCTestCase {
             XCTAssertEqual(last.income, 100)
             XCTAssertEqual(last.outgo, 200)
             XCTAssertEqual(last.group, "group2")
-            XCTAssertEqual(last.startOfYear, date("2000-01-01T00:00:00Z"))
             XCTAssertEqual(last.balance, -100)
 
             XCTAssertEqual(first.repeatID, second.repeatID)
@@ -308,19 +293,27 @@ class ItemServiceTests: XCTestCase {
             let context = context
             let service = ItemService(context: context)
 
-            let itemA = Item(context: context)
-            itemA.date = Date()
-            let itemB = Item(context: context)
-            itemB.date = Date()
+            let itemA = Item(date: Date(),
+                             content: "",
+                             income: 0,
+                             outgo: 0,
+                             group: "",
+                             repeatID: UUID())
+            context.insert(itemA)
+            let itemB = Item(date: Date(),
+                             content: "",
+                             income: 0,
+                             outgo: 0,
+                             group: "",
+                             repeatID: UUID())
+            context.insert(itemB)
             try! context.save()
 
             try! service.delete(items: [itemA])
 
-            let fetched = try! service.items()
-            let registered = context.registeredObjects
+            let result = try! service.items()
 
-            XCTAssertEqual(fetched, [itemB])
-            XCTAssertEqual(registered, [itemB])
+            XCTAssertEqual(result, [itemB])
         }
     }
 
@@ -329,32 +322,40 @@ class ItemServiceTests: XCTestCase {
             let context = context
             let service = ItemService(context: context)
 
-            let itemA = Item(context: context)
-            itemA.date = Date()
-            let itemB = Item(context: context)
-            itemB.date = Date()
+            let itemA = Item(date: Date(),
+                             content: "",
+                             income: 0,
+                             outgo: 0,
+                             group: "",
+                             repeatID: UUID())
+            context.insert(itemA)
+            let itemB = Item(date: Date(),
+                             content: "",
+                             income: 0,
+                             outgo: 0,
+                             group: "",
+                             repeatID: UUID())
+            context.insert(itemB)
             try! context.save()
 
             try! service.deleteAll()
 
-            let fetched = try! service.items()
-            let registered = context.registeredObjects
+            let result = try! service.items()
 
-            XCTAssertEqual(fetched, [])
-            XCTAssertEqual(registered, [])
+            XCTAssertEqual(result, [])
         }
     }
 
     // MARK: - Utilitiy
 
     func testGroupByMonth() {
-        let data = PreviewSampleData().items
+        let data = PreviewSampleData.items
         let result = ItemService.groupByMonth(items: data)
 
         XCTContext.runActivity(named: "Result is sorted in descending by month") { _ in
-            XCTAssertTrue(result[0].month > result[1].month)
-            XCTAssertTrue(result[1].month > result[2].month)
-            XCTAssertTrue(result[2].month > result[3].month)
+            XCTAssertTrue(result[0].section > result[1].section)
+            XCTAssertTrue(result[1].section > result[2].section)
+            XCTAssertTrue(result[2].section > result[3].section)
         }
 
         XCTContext.runActivity(named: "Items order is not changed") { _ in
@@ -394,13 +395,13 @@ class ItemServiceTests: XCTestCase {
     }
 
     func testGroupByContent() {
-        let data = PreviewSampleData().items
+        let data = PreviewSampleData.items
         let result = ItemService.groupByContent(items: data)
 
         XCTContext.runActivity(named: "Result is sorted in ascending by content") { _ in
-            XCTAssertTrue(result[0].content < result[1].content)
-            XCTAssertTrue(result[1].content < result[2].content)
-            XCTAssertTrue(result[2].content < result[3].content)
+            XCTAssertTrue(result[0].section < result[1].section)
+            XCTAssertTrue(result[1].section < result[2].section)
+            XCTAssertTrue(result[2].section < result[3].section)
         }
 
         XCTContext.runActivity(named: "Items order is not changed") { _ in
