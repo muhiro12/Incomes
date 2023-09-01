@@ -22,7 +22,7 @@ struct ListItem: View {
 
     var body: some View {
         GeometryReader { geometry in
-            if geometry.size.width > 500 {
+            if geometry.size.width > .portraitModeMaxWidth {
                 WideListItem(of: item)
             } else {
                 NarrowListItem(of: item)
