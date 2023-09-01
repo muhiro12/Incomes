@@ -26,8 +26,8 @@ struct DebugView: View {
             Form {
                 Section {
                     Toggle(String.debugOption, isOn: $isDebugOption)
-                        .onChange(of: isDebugOption) {
-                            Self.isDebug = $0
+                        .onChange(of: isDebugOption) { _, newValue in
+                            Self.isDebug = newValue
                         }
                     Toggle(String.debugSubscribe, isOn: $isSubscribeOn)
                         .disabled(!isDebugOption)
