@@ -12,8 +12,7 @@ struct ListItem: View {
     @Environment(\.modelContext)
     private var context
 
-    @State
-    private var isPresentedToEdit = false
+    @State private var isPresentedToEdit = false
 
     private let item: Item
 

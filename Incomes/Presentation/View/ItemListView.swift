@@ -13,16 +13,13 @@ struct ItemListView: View {
     @Environment(\.modelContext)
     private var context
 
-    @Query
-    private var items: [Item]
+    @Query private var items: [Item]
     private var sections: [SectionedItems<Date>] {
         ItemService.groupByYear(items: items)
     }
 
-    @State
-    private var isPresentedToAlert = false
-    @State
-    private var willDeleteItems: [Item] = []
+    @State private var isPresentedToAlert = false
+    @State private var willDeleteItems: [Item] = []
 
     private let title: String
 

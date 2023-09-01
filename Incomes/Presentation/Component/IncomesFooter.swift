@@ -15,11 +15,9 @@ struct IncomesFooter: View {
     @AppStorage(UserDefaults.Key.isSubscribeOn.rawValue)
     private var isSubscribeOn = false
 
-    @Binding
-    private var isHome: Bool
+    @Binding private var isHome: Bool
 
-    @State
-    private var isPresentedToEdit = false
+    @State private var isPresentedToEdit = false
 
     init(isHome: Binding<Bool>) {
         _isHome = isHome

@@ -9,8 +9,7 @@
 import SwiftUI
 
 struct LockedView: View {
-    @Binding
-    private var isLocked: Bool
+    @Binding private var isLocked: Bool
 
     init(isLocked: Binding<Bool>) {
         _isLocked = isLocked

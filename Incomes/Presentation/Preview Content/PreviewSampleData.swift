@@ -11,8 +11,7 @@ import SwiftData
 
 // swiftlint:disable force_try no_magic_numbers
 struct PreviewSampleData {
-    @MainActor
-    static var container: ModelContainer = {
+    @MainActor static var container: ModelContainer = {
         try! inMemoryContainer()
     }()
 

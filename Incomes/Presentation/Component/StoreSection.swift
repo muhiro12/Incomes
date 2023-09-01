@@ -10,8 +10,7 @@ import StoreKit
 import SwiftUI
 
 struct StoreSection: View {
-    @State
-    private var isPresented = false
+    @State private var isPresented = false
 
     private let store = Store.shared
 

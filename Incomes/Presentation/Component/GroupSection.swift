@@ -12,10 +12,8 @@ struct GroupSection: View {
     @Environment(\.modelContext)
     var context
 
-    @State
-    private var isPresentedToAlert = false
-    @State
-    private var willDeleteItems: [Item] = []
+    @State private var isPresentedToAlert = false
+    @State private var willDeleteItems: [Item] = []
 
     private let title: String
     private let sections: [SectionedItems<String>]
