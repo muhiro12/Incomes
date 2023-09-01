@@ -24,7 +24,7 @@ struct BalanceCalculator {
 
         try context.save()
 
-        guard let oldestDate = editedDateList.sorted().first else {
+        guard let oldestDate = editedDateList.min() else {
             return
         }
 
