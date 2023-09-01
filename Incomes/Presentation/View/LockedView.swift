@@ -8,13 +8,15 @@
 
 import SwiftUI
 
-struct LockedView: View {
+struct LockedView {
     @Binding private var isLocked: Bool
 
     init(isLocked: Binding<Bool>) {
         _isLocked = isLocked
     }
+}
 
+extension LockedView: View {
     var body: some View {
         Button(.localized(.unlock)) {
             unlock()

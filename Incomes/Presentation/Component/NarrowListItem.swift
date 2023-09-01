@@ -8,13 +8,15 @@
 
 import SwiftUI
 
-struct NarrowListItem: View {
+struct NarrowListItem {
     private let item: Item
 
     init(of item: Item) {
         self.item = item
     }
+}
 
+extension NarrowListItem: View {
     var body: some View {
         HStack {
             Text(item.date.stringValue(.MMMd))

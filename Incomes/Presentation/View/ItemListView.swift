@@ -9,14 +9,11 @@
 import SwiftData
 import SwiftUI
 
-struct ItemListView: View {
+struct ItemListView {
     @Environment(\.modelContext)
     private var context
 
     @Query private var items: [Item]
-    private var sections: [SectionedItems<Date>] {
-        ItemService.groupByYear(items: items)
-    }
 
     @State private var isPresentedToAlert = false
     @State private var willDeleteItems: [Item] = []
@@ -27,7 +24,9 @@ struct ItemListView: View {
         self.title = title
         _items = Query(filter: predicate, sort: Item.sortDescriptors())
     }
+}
 
+extension ItemListView: View {
     var body: some View {
         List {
             ForEach(sections) { section in
@@ -65,6 +64,12 @@ struct ItemListView: View {
                             }
                         ])
         }
+    }
+}
+
+private extension ItemListView {
+    var sections: [SectionedItems<Date>] {
+        ItemService.groupByYear(items: items)
     }
 }
 

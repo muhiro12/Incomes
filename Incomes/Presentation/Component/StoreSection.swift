@@ -9,11 +9,13 @@
 import StoreKit
 import SwiftUI
 
-struct StoreSection: View {
+struct StoreSection {
     @State private var isPresented = false
 
     private let store = Store.shared
+}
 
+extension StoreSection: View {
     var body: some View {
         Button(.localized(.subscribe)) {
             isPresented = true

@@ -163,9 +163,11 @@ struct ItemService {
                    outgo: item.outgo,
                    group: item.group)
     }
+}
 
-    // MARK: - Utilitiy
+// MARK: - Utilitiy
 
+extension ItemService {
     static func groupByYear(items: [Item]) -> [SectionedItems<Date>] {
         Dictionary(grouping: items) {
             Calendar.utc.startOfYear(for: $0.date)

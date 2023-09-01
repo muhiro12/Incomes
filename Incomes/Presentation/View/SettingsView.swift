@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct SettingsView: View {
+struct SettingsView {
     @Environment(\.modelContext)
     private var context
     @Environment(\.presentationMode)
@@ -20,7 +20,9 @@ struct SettingsView: View {
     private var isSubscribeOn
 
     @State private var isAlertPresented = false
+}
 
+extension SettingsView: View {
     var body: some View {
         NavigationView {
             Form {

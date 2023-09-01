@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct YearSection: View {
+struct YearSection {
     @Environment(\.modelContext)
     private var context
 
@@ -22,7 +22,9 @@ struct YearSection: View {
         self.startOfYear = startOfYear
         self.sections = ItemService.groupByMonth(items: items)
     }
+}
 
+extension YearSection: View {
     var body: some View {
         Section(content: {
             ForEach(0..<sections.count, id: \.self) { index in

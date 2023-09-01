@@ -9,16 +9,15 @@
 import SwiftData
 import SwiftUI
 
-struct GroupView: View {
+struct GroupView {
     @Query(filter: Item.predicate(groupIsNot: .empty))
     private var groupingItems: [Item]
-    private var groupingSections: [SectionedItems<String>] {
-        ItemService.groupByGroup(items: groupingItems)
-    }
 
     @Query(filter: Item.predicate(groupIs: .empty), sort: \.group)
     private var othersItems: [Item]
+}
 
+extension GroupView: View {
     var body: some View {
         List {
             ForEach(groupingSections) {
@@ -31,6 +30,12 @@ struct GroupView: View {
         .id(UUID())
         .listStyle(.sidebar)
         .navigationBarTitle(.localized(.groupTitle))
+    }
+}
+
+private extension GroupView {
+    var groupingSections: [SectionedItems<String>] {
+        ItemService.groupByGroup(items: groupingItems)
     }
 }
 

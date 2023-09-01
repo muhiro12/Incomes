@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct Advertisement: View {
+struct Advertisement {
     enum AdType {
         case native(NativeAdvertisement.Size)
     }
@@ -17,7 +17,9 @@ struct Advertisement: View {
     private var isSubscribeOn = false
 
     let type: AdType
+}
 
+extension Advertisement: View {
     var body: some View {
         if !isSubscribeOn {
             switch type {

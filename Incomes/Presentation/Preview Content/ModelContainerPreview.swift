@@ -10,7 +10,7 @@ import Foundation
 import SwiftData
 import SwiftUI
 
-struct ModelContainerPreview<Content: View>: View {
+struct ModelContainerPreview<Content: View> {
     var content: () -> Content
     let container: ModelContainer
 
@@ -26,7 +26,9 @@ struct ModelContainerPreview<Content: View>: View {
     init(_ modelContainer: @escaping () throws -> ModelContainer, @ViewBuilder content: @escaping () -> Content) {
         self.init(content: content, modelContainer: modelContainer)
     }
+}
 
+extension ModelContainerPreview: View {
     var body: some View {
         content()
             .modelContainer(container)

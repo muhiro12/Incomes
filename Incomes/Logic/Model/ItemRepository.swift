@@ -61,8 +61,8 @@ class ItemRepository: Repository {
     }
 }
 
-extension ItemRepository {
-    private func save() throws {
+private extension ItemRepository {
+    func save() throws {
         try calculator.calculate()
         try context.save()
     }

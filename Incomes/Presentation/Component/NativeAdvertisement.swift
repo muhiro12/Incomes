@@ -9,7 +9,7 @@
 import GoogleMobileAds
 import SwiftUI
 
-struct NativeAdvertisement: View {
+struct NativeAdvertisement {
     enum Size: String {
         case small = "Small"
         case medium = "Medium"
@@ -26,7 +26,9 @@ struct NativeAdvertisement: View {
     }
 
     let size: Size
+}
 
+extension NativeAdvertisement: View {
     var body: some View {
         NativeAdmob(size: size)
             .frame(maxWidth: .advertisementMaxWidth,
