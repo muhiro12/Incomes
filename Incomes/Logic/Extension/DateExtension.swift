@@ -22,10 +22,6 @@ extension Date {
         return formatter
     }()
 
-    var nsValue: NSDate {
-        NSDate(timeIntervalSinceReferenceDate: timeIntervalSinceReferenceDate)
-    }
-
     func stringValue(_ template: Template, locale: Locale = .current) -> String {
         Self.formatter.dateFormat = DateFormatter.dateFormat(fromTemplate: template.rawValue,
                                                              options: 0,

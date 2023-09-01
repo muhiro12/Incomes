@@ -19,7 +19,6 @@ disabled_rules:
     # TODO: Resolve the following rules
     - anonymous_argument_in_multiline_closure
     - multiline_function_chains
-    - legacy_objc_type
     - closure_body_length
     - sorted_first_last
     - superfluous_else
