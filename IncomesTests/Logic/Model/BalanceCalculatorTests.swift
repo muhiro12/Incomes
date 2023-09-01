@@ -19,23 +19,23 @@ class BalanceCalculatorTests: XCTestCase {
                                                repository: repository)
 
             for i in 1...5 {
-                let item = Item(context: context)
-                item.set(date: date("2000-0\(i)-01T12:00:00Z"),
-                         content: "content",
-                         income: 200,
-                         outgo: 100,
-                         group: "group",
-                         repeatID: UUID())
+                let item = Item(date: date("2000-0\(i)-01T12:00:00Z"),
+                                content: "content",
+                                income: 200,
+                                outgo: 100,
+                                group: "group",
+                                repeatID: UUID())
+                context.insert(item)
             }
             try! calculator.calculate()
 
-            let item = Item(context: context)
-            item.set(date: date("2000-01-31T12:00:00Z"),
-                     content: "content",
-                     income: 200,
-                     outgo: 100,
-                     group: "group",
-                     repeatID: UUID())
+            let item = Item(date: date("2000-01-31T12:00:00Z"),
+                            content: "content",
+                            income: 200,
+                            outgo: 100,
+                            group: "group",
+                            repeatID: UUID())
+            context.insert(item)
             try! calculator.calculate()
 
             let first = try! repository.fetchList().first!
@@ -52,23 +52,23 @@ class BalanceCalculatorTests: XCTestCase {
                                                repository: repository)
 
             for i in 1...5 {
-                let item = Item(context: context)
-                item.set(date: date("2000-0\(i)-01T12:00:00Z"),
-                         content: "content",
-                         income: 200,
-                         outgo: 100,
-                         group: "group",
-                         repeatID: UUID())
+                let item = Item(date: date("2000-0\(i)-01T12:00:00Z"),
+                                content: "content",
+                                income: 200,
+                                outgo: 100,
+                                group: "group",
+                                repeatID: UUID())
+                context.insert(item)
             }
             try! calculator.calculate()
 
-            let item = Item(context: context)
-            item.set(date: date("2001-01-01T00:00:00Z"),
-                     content: "content",
-                     income: 200,
-                     outgo: 100,
-                     group: "group",
-                     repeatID: UUID())
+            let item = Item(date: date("2001-01-01T00:00:00Z"),
+                            content: "content",
+                            income: 200,
+                            outgo: 100,
+                            group: "group",
+                            repeatID: UUID())
+            context.insert(item)
             try! calculator.calculate()
 
             let first = try! repository.fetchList().first!
@@ -85,23 +85,23 @@ class BalanceCalculatorTests: XCTestCase {
                                                repository: repository)
 
             for i in 1...5 {
-                let item = Item(context: context)
-                item.set(date: date("2000-0\(i)-01T12:00:00Z"),
-                         content: "content",
-                         income: 200,
-                         outgo: 100,
-                         group: "group",
-                         repeatID: UUID())
+                let item = Item(date: date("2000-0\(i)-01T12:00:00Z"),
+                                content: "content",
+                                income: 200,
+                                outgo: 100,
+                                group: "group",
+                                repeatID: UUID())
+                context.insert(item)
             }
             try! calculator.calculate()
 
-            let item = Item(context: context)
-            item.set(date: date("2000-01-01T00:00:00Z"),
-                     content: "content",
-                     income: 200,
-                     outgo: 100,
-                     group: "group",
-                     repeatID: UUID())
+            let item = Item(date: date("2000-01-01T00:00:00Z"),
+                            content: "content",
+                            income: 200,
+                            outgo: 100,
+                            group: "group",
+                            repeatID: UUID())
+            context.insert(item)
             try! calculator.calculate()
 
             let first = try! repository.fetchList().first!
@@ -120,13 +120,13 @@ class BalanceCalculatorTests: XCTestCase {
             var items: [Item] = []
 
             for i in 1...5 {
-                let item = Item(context: context)
-                item.set(date: date("2000-0\(i)-01T12:00:00Z"),
-                         content: "content",
-                         income: 200,
-                         outgo: 100,
-                         group: "group",
-                         repeatID: UUID())
+                let item = Item(date: date("2000-0\(i)-01T12:00:00Z"),
+                                content: "content",
+                                income: 200,
+                                outgo: 100,
+                                group: "group",
+                                repeatID: UUID())
+                context.insert(item)
                 items.append(item)
             }
             try! calculator.calculate()
@@ -155,13 +155,13 @@ class BalanceCalculatorTests: XCTestCase {
             var items: [Item] = []
 
             for i in 1...5 {
-                let item = Item(context: context)
-                item.set(date: date("2000-0\(i)-01T12:00:00Z"),
-                         content: "content",
-                         income: 200,
-                         outgo: 100,
-                         group: "group",
-                         repeatID: UUID())
+                let item = Item(date: date("2000-0\(i)-01T12:00:00Z"),
+                                content: "content",
+                                income: 200,
+                                outgo: 100,
+                                group: "group",
+                                repeatID: UUID())
+                context.insert(item)
                 items.append(item)
             }
             try! calculator.calculate()
@@ -190,13 +190,13 @@ class BalanceCalculatorTests: XCTestCase {
             var items: [Item] = []
 
             for i in 1...5 {
-                let item = Item(context: context)
-                item.set(date: date("2000-0\(i)-01T12:00:00Z"),
-                         content: "content",
-                         income: 200,
-                         outgo: 100,
-                         group: "group",
-                         repeatID: UUID())
+                let item = Item(date: date("2000-0\(i)-01T12:00:00Z"),
+                                content: "content",
+                                income: 200,
+                                outgo: 100,
+                                group: "group",
+                                repeatID: UUID())
+                context.insert(item)
                 items.append(item)
             }
             try! calculator.calculate()
@@ -225,13 +225,13 @@ class BalanceCalculatorTests: XCTestCase {
             var items: [Item] = []
 
             for i in 1...5 {
-                let item = Item(context: context)
-                item.set(date: date("2000-0\(i)-01T12:00:00Z"),
-                         content: "content",
-                         income: 200,
-                         outgo: 100,
-                         group: "group",
-                         repeatID: UUID())
+                let item = Item(date: date("2000-0\(i)-01T12:00:00Z"),
+                                content: "content",
+                                income: 200,
+                                outgo: 100,
+                                group: "group",
+                                repeatID: UUID())
+                context.insert(item)
                 items.append(item)
             }
             try! calculator.calculate()
@@ -260,13 +260,13 @@ class BalanceCalculatorTests: XCTestCase {
             var items: [Item] = []
 
             for i in 1...5 {
-                let item = Item(context: context)
-                item.set(date: date("2000-0\(i)-01T12:00:00Z"),
-                         content: "content",
-                         income: 200,
-                         outgo: 100,
-                         group: "group",
-                         repeatID: UUID())
+                let item = Item(date: date("2000-0\(i)-01T12:00:00Z"),
+                                content: "content",
+                                income: 200,
+                                outgo: 100,
+                                group: "group",
+                                repeatID: UUID())
+                context.insert(item)
                 items.append(item)
             }
             try! calculator.calculate()
@@ -290,13 +290,13 @@ class BalanceCalculatorTests: XCTestCase {
             var items: [Item] = []
 
             for i in 1...5 {
-                let item = Item(context: context)
-                item.set(date: date("2000-0\(i)-01T12:00:00Z"),
-                         content: "content",
-                         income: 200,
-                         outgo: 100,
-                         group: "group",
-                         repeatID: UUID())
+                let item = Item(date: date("2000-0\(i)-01T12:00:00Z"),
+                                content: "content",
+                                income: 200,
+                                outgo: 100,
+                                group: "group",
+                                repeatID: UUID())
+                context.insert(item)
                 items.append(item)
             }
             try! calculator.calculate()
@@ -320,13 +320,13 @@ class BalanceCalculatorTests: XCTestCase {
             var items: [Item] = []
 
             for i in 1...5 {
-                let item = Item(context: context)
-                item.set(date: date("2000-0\(i)-01T12:00:00Z"),
-                         content: "content",
-                         income: 200,
-                         outgo: 100,
-                         group: "group",
-                         repeatID: UUID())
+                let item = Item(date: date("2000-0\(i)-01T12:00:00Z"),
+                                content: "content",
+                                income: 200,
+                                outgo: 100,
+                                group: "group",
+                                repeatID: UUID())
+                context.insert(item)
                 items.append(item)
             }
             try! calculator.calculate()
@@ -350,13 +350,13 @@ class BalanceCalculatorTests: XCTestCase {
                                                repository: repository)
 
             for _ in 1...5 {
-                let item = Item(context: context)
-                item.set(date: date("2000-01-01T12:00:00Z"),
-                         content: "content",
-                         income: 200,
-                         outgo: 100,
-                         group: "group",
-                         repeatID: UUID())
+                let item = Item(date: date("2000-01-01T12:00:00Z"),
+                                content: "content",
+                                income: 200,
+                                outgo: 100,
+                                group: "group",
+                                repeatID: UUID())
+                context.insert(item)
             }
             try! calculator.recalculate()
 

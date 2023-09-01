@@ -40,13 +40,14 @@ struct BalanceCalculator {
         var resultList = [Item]()
 
         targetList.enumerated().forEach { index, item in
-            item.balance = {
-                if index == 0 {
+            let balance = {
+                if index == .zero {
                     return previousBalance + item.profit
                 } else {
                     return resultList[index - 1].balance + item.profit
                 }
             }()
+            item.set(balance: balance)
             resultList.append(item)
         }
 
@@ -62,13 +63,14 @@ struct BalanceCalculator {
             let index = tuple.offset
             let item = tuple.element
 
-            item.balance = {
+            let balance = {
                 if items.indices.contains(index - 1) {
                     return items[index - 1].balance + item.profit
                 } else {
                     return item.profit
                 }
             }()
+            item.set(balance: balance)
         }
 
         try context.save()

@@ -6,15 +6,15 @@
 //  Copyright © 2022 Hiromu Nakano. All rights reserved.
 //
 
-import CoreData
 @testable import Incomes
+import SwiftData
 import XCTest
 
 // swiftlint:disable all
 class IncomesTests: XCTestCase {}
 
-var context: NSManagedObjectContext {
-    PersistenceController(inMemory: true).container.viewContext
+var context: ModelContext {
+    try! ModelContext(PreviewSampleData.inMemoryContainer())
 }
 
 let date: (String) -> Date = { string in
