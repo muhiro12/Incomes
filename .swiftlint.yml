@@ -19,7 +19,6 @@ disabled_rules:
     # TODO: Resolve the following rules
     - anonymous_argument_in_multiline_closure
     - multiline_function_chains
-    - file_types_order
 
 file_header:
     required_pattern: |
