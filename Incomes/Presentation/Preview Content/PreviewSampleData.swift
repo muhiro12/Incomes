@@ -10,7 +10,7 @@ import Foundation
 import SwiftData
 
 // swiftlint:disable force_unwrapping force_try no_magic_numbers
-struct PreviewSampleData {
+enum PreviewSampleData {
     @MainActor static var container: ModelContainer = {
         try! inMemoryContainer()
     }()
