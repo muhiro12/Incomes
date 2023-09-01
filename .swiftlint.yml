@@ -13,3 +13,13 @@ disabled_rules:
     - no_grouping_extension # Grouping by extension
     - prefer_nimble # Use XCTest
     - sorted_enum_cases # Prioritize readability
+
+file_header:
+    required_pattern: |
+        \/\/
+        \/\/  .*?\.swift
+        \/\/  Incomes(Tests|UITests)?$
+        \/\/
+        \/\/  Created by .*? on \d{4}\/\d{2}\/\d{2}\.
+        \/\/  Copyright © \d{4} Hiromu Nakano\. All rights reserved\.
+        \/\/
