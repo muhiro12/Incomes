@@ -9,8 +9,6 @@
 import Foundation
 
 struct EnvironmentParameter {
-    private init() {}
-
     static var productID: String = {
         #if DEBUG
         return Secret.productIDDev.rawValue
@@ -26,4 +24,6 @@ struct EnvironmentParameter {
         return Secret.admobNativeID.rawValue
         #endif
     }()
+
+    private init() {}
 }

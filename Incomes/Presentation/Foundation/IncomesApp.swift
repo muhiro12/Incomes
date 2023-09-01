@@ -12,7 +12,7 @@ import SwiftData
 import SwiftUI
 
 @main
-struct IncomesApp: App {
+struct IncomesApp {
     @AppStorage(UserDefaults.Key.isSubscribeOn.rawValue)
     private var isSubscribeOn = false
 
@@ -34,7 +34,9 @@ struct IncomesApp: App {
             GADMobileAds.sharedInstance().start()
         }
     }
+}
 
+extension IncomesApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()

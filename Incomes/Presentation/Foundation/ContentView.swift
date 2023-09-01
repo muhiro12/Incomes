@@ -8,10 +8,12 @@
 
 import SwiftUI
 
-struct ContentView: View {
+struct ContentView {
     @State private var isLocked = UserDefaults.isLockAppOn
     @State private var isHome = true
+}
 
+extension ContentView: View {
     var body: some View {
         if isLocked {
             LockedView(isLocked: $isLocked)

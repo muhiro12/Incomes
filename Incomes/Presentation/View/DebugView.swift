@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct DebugView: View {
+struct DebugView {
     static var isDebug = false
 
     @Environment(\.modelContext)
@@ -19,7 +19,9 @@ struct DebugView: View {
     @State private var isDebugOption = Self.isDebug
     @AppStorage(UserDefaults.Key.isSubscribeOn.rawValue)
     private var isSubscribeOn = false
+}
 
+extension DebugView: View {
     var body: some View {
         NavigationView {
             Form {

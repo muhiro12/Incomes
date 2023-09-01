@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct ListItem: View {
+struct ListItem {
     @Environment(\.modelContext)
     private var context
 
@@ -19,7 +19,9 @@ struct ListItem: View {
     init(of item: Item) {
         self.item = item
     }
+}
 
+extension ListItem: View {
     var body: some View {
         GeometryReader { geometry in
             if geometry.size.width > .portraitModeMaxWidth {

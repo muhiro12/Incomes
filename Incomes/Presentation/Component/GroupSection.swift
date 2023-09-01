@@ -8,9 +8,9 @@
 
 import SwiftUI
 
-struct GroupSection: View {
+struct GroupSection {
     @Environment(\.modelContext)
-    var context
+    private var context
 
     @State private var isPresentedToAlert = false
     @State private var willDeleteItems: [Item] = []
@@ -22,7 +22,9 @@ struct GroupSection: View {
         self.title = title
         self.sections = ItemService.groupByContent(items: items)
     }
+}
 
+extension GroupSection: View {
     var body: some View {
         Section(content: {
             ForEach(sections.indices, id: \.self) { index in

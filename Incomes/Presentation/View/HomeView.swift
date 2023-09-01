@@ -9,14 +9,13 @@
 import SwiftData
 import SwiftUI
 
-struct HomeView: View {
+struct HomeView {
     @State private var isPresentedToSettings = false
 
     @Query private var items: [Item]
-    private var sections: [SectionedItems<Date>] {
-        ItemService.groupByYear(items: items)
-    }
+}
 
+extension HomeView: View {
     var body: some View {
         List {
             ForEach(sections) {
@@ -36,6 +35,12 @@ struct HomeView: View {
         .id(UUID())
         .navigationBarTitle(.localized(.homeTitle))
         .listStyle(.sidebar)
+    }
+}
+
+private extension HomeView {
+    var sections: [SectionedItems<Date>] {
+        ItemService.groupByYear(items: items)
     }
 }
 

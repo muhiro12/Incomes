@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct EditView: View {
+struct EditView {
     @Environment(\.modelContext)
     private var context
     @Environment(\.presentationMode)
@@ -26,16 +26,6 @@ struct EditView: View {
 
     private var item: Item?
 
-    private var isEditMode: Bool {
-        item != nil
-    }
-
-    private var isValid: Bool {
-        content.isNotEmpty
-            && income.isEmptyOrDecimal
-            && outgo.isEmptyOrDecimal
-    }
-
     init() {}
 
     init(of item: Item) {
@@ -46,7 +36,9 @@ struct EditView: View {
         _outgo = State(initialValue: item.outgo.description)
         _group = State(initialValue: item.group)
     }
+}
 
+extension EditView: View {
     var body: some View {
         NavigationView {
             Form {
@@ -140,6 +132,16 @@ struct EditView: View {
 // MARK: - private
 
 private extension EditView {
+    var isEditMode: Bool {
+        item != nil
+    }
+
+    var isValid: Bool {
+        content.isNotEmpty
+            && income.isEmptyOrDecimal
+            && outgo.isEmptyOrDecimal
+    }
+
     func save() {
         do {
             if let repeatID = item?.repeatID,

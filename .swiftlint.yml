@@ -17,7 +17,6 @@ disabled_rules:
     - sorted_enum_cases # Prioritize readability
 
     # TODO: Resolve the following rules
-    - type_contents_order
     - anonymous_argument_in_multiline_closure
     - multiline_function_chains
     - legacy_objc_type

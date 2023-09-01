@@ -8,9 +8,11 @@
 
 import SwiftUI
 
-struct TitleListItem: View {
+struct TitleListItem {
     let item: Item
+}
 
+extension TitleListItem: View {
     var body: some View {
         HStack {
             Text(item.content)

@@ -8,13 +8,15 @@
 
 import SwiftUI
 
-struct WideListItem: View {
+struct WideListItem {
     private let item: Item
 
     init(of item: Item) {
         self.item = item
     }
+}
 
+extension WideListItem: View {
     var body: some View {
         HStack {
             Text(item.date.stringValue(.MMMd))

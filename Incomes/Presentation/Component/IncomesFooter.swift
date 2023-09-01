@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct IncomesFooter: View {
+struct IncomesFooter {
     @Environment(\.modelContext)
     private var context
 
@@ -22,7 +22,9 @@ struct IncomesFooter: View {
     init(isHome: Binding<Bool>) {
         _isHome = isHome
     }
+}
 
+extension IncomesFooter: View {
     var body: some View {
         VStack {
             Divider()
