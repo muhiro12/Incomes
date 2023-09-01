@@ -69,7 +69,8 @@ private final class NativeAdmobView: UIView {
         guard let view = UINib(nibName: size.rawValue + String(describing: type(of: self)), bundle: nil)
                 .instantiate(withOwner: self, options: nil).first as? GADNativeAdView
         else {
-            fatalError()
+            assertionFailure("Failed to init GADNativeAdView")
+            return
         }
         view.frame = bounds
         view.isHidden = true
