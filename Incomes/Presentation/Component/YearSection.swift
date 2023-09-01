@@ -27,7 +27,7 @@ struct YearSection: View {
 
     var body: some View {
         Section(content: {
-            ForEach(0..<sections.count) { index in
+            ForEach(0..<sections.count, id: \.self) { index in
                 NavigationLink(sections[index].section.stringValue(.yyyyMMM)) {
                     ItemListView(title: sections[index].section.stringValue(.yyyyMMM),
                                  predicate: Item.predicate(dateIsSameMonthAs: sections[index].section))
