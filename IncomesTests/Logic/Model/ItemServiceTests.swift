@@ -414,3 +414,4 @@ class ItemServiceTests: XCTestCase {
         }
     }
 }
+// swiftlint:enable all

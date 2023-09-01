@@ -368,3 +368,4 @@ class BalanceCalculatorTests: XCTestCase {
         }
     }
 }
+// swiftlint:enable all
