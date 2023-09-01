@@ -26,5 +26,5 @@ struct TitleListItem: View {
 }
 
 #Preview {
-    TitleListItem(item: PreviewSampleData.items.first!)
+    TitleListItem(item: PreviewSampleData.item)
 }

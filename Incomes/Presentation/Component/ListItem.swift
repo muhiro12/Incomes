@@ -44,5 +44,5 @@ private extension ListItem {
 }
 
 #Preview {
-    ListItem(of: PreviewSampleData.items.first!)
+    ListItem(of: PreviewSampleData.item)
 }
