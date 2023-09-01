@@ -8,18 +8,23 @@
 
 import SwiftUI
 
+// swiftlint:disable no_magic_numbers
 extension CGFloat {
-    private static var unit: Self { 8 }
+    private static let unit = Self(8)
 
-    static var spaceS: Self { unit * 1 }
-    static var spaceM: Self { unit * 2 }
-    static var spaceL: Self { unit * 3 }
+    static let spaceS = unit * 1
+    static let spaceM = unit * 2
+    static let spaceL = unit * 3
 
-    static var componentS: Self { unit * 8 }
-    static var componentM: Self { unit * 10 }
-    static var componentL: Self { unit * 12 }
+    static let componentS = unit * 8
+    static let componentM = unit * 10
+    static let componentL = unit * 12
 
-    static var iconS: Self { unit * 1 }
-    static var iconM: Self { unit * 3 }
-    static var iconL: Self { unit * 5 }
+    static let iconS = unit * 1
+    static let iconM = unit * 3
+    static let iconL = unit * 5
+
+    static let advertisementMaxWidth = unit * 45
+    static let advertisementMaxHeight = unit * 40
 }
+// swiftlint:enable no_magic_numbers

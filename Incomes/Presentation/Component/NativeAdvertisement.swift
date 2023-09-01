@@ -20,7 +20,7 @@ struct NativeAdvertisement: View {
                 return .componentM
 
             case .medium:
-                return 320
+                return .advertisementMaxHeight
             }
         }
     }
@@ -29,7 +29,7 @@ struct NativeAdvertisement: View {
 
     var body: some View {
         NativeAdmob(size: size)
-            .frame(maxWidth: 360,
+            .frame(maxWidth: .advertisementMaxWidth,
                    minHeight: size.height)
     }
 }

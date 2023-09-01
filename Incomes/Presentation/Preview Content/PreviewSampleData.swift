@@ -9,7 +9,7 @@
 import Foundation
 import SwiftData
 
-// swiftlint:disable force_try
+// swiftlint:disable force_try no_magic_numbers
 struct PreviewSampleData {
     @MainActor
     static var container: ModelContainer = {
@@ -103,4 +103,4 @@ struct PreviewSampleData {
         Calendar.utc.date(byAdding: .month, value: monthLater, to: date)!
     }
 }
-// swiftlint:enable force_try
+// swiftlint:enable force_try no_magic_numbers
