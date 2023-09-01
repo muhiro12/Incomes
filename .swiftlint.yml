@@ -16,6 +16,16 @@ disabled_rules:
     - required_deinit # Omit deinit
     - sorted_enum_cases # Prioritize readability
 
+    # TODO: Resolve the following rules
+    - type_contents_order
+    - anonymous_argument_in_multiline_closure
+    - multiline_function_chains
+    - legacy_objc_type
+    - closure_body_length
+    - sorted_first_last
+    - superfluous_else
+    - file_types_order
+
 file_header:
     required_pattern: |
         \/\/
