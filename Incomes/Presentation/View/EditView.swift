@@ -146,9 +146,7 @@ private extension EditView {
                try ItemService(context: context).items(predicate: Item.predicate(repeatIDIs: repeatID)).count > .one {
                 presentToActionSheet()
             } else {
-                Task {
-                    saveForThisItem()
-                }
+                saveForThisItem()
             }
         } catch {
             assertionFailure(error.localizedDescription)
@@ -160,20 +158,18 @@ private extension EditView {
             assertionFailure()
             return
         }
-        Task {
-            do {
-                try ItemService(context: context)
-                    .update(item: item,
-                            date: date,
-                            content: content,
-                            income: income.decimalValue,
-                            outgo: outgo.decimalValue,
-                            group: group)
-            } catch {
-                assertionFailure(error.localizedDescription)
-            }
-            dismiss()
+        do {
+            try ItemService(context: context)
+                .update(item: item,
+                        date: date,
+                        content: content,
+                        income: income.decimalValue,
+                        outgo: outgo.decimalValue,
+                        group: group)
+        } catch {
+            assertionFailure(error.localizedDescription)
         }
+        dismiss()
     }
 
     func saveForFutureItems() {
@@ -181,20 +177,18 @@ private extension EditView {
             assertionFailure()
             return
         }
-        Task {
-            do {
-                try ItemService(context: context)
-                    .updateForFutureItems(item: item,
-                                          date: date,
-                                          content: content,
-                                          income: income.decimalValue,
-                                          outgo: outgo.decimalValue,
-                                          group: group)
-            } catch {
-                assertionFailure(error.localizedDescription)
-            }
-            dismiss()
+        do {
+            try ItemService(context: context)
+                .updateForFutureItems(item: item,
+                                      date: date,
+                                      content: content,
+                                      income: income.decimalValue,
+                                      outgo: outgo.decimalValue,
+                                      group: group)
+        } catch {
+            assertionFailure(error.localizedDescription)
         }
+        dismiss()
     }
 
     func saveForAllItems() {
@@ -202,20 +196,18 @@ private extension EditView {
             assertionFailure()
             return
         }
-        Task {
-            do {
-                try ItemService(context: context)
-                    .updateForAllItems(item: item,
-                                       date: date,
-                                       content: content,
-                                       income: income.decimalValue,
-                                       outgo: outgo.decimalValue,
-                                       group: group)
-            } catch {
-                assertionFailure(error.localizedDescription)
-            }
-            dismiss()
+        do {
+            try ItemService(context: context)
+                .updateForAllItems(item: item,
+                                   date: date,
+                                   content: content,
+                                   income: income.decimalValue,
+                                   outgo: outgo.decimalValue,
+                                   group: group)
+        } catch {
+            assertionFailure(error.localizedDescription)
         }
+        dismiss()
     }
 
     func create() {
