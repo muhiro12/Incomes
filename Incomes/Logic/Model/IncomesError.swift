@@ -17,7 +17,8 @@ enum StoreError: IncomesError {
 
     var message: String {
         switch self {
-        case .noPurchases: return .localized(.noPurchases)
+        case .noPurchases:
+            return .localized(.noPurchases)
         }
     }
 }
