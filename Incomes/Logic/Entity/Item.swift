@@ -43,7 +43,7 @@ extension Item {
         profit.isPlus
     }
 
-    func set(date: Date,
+    func set(date: Date, // swiftlint:disable:this function_parameter_count
              content: String,
              income: Decimal,
              outgo: Decimal,
