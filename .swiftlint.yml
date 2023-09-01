@@ -12,6 +12,7 @@ disabled_rules:
     - no_extension_access_modifier # Use private extension
     - no_grouping_extension # Grouping by extension
     - prefer_nimble # Use XCTest
+    - required_deinit # Omit deinit
     - sorted_enum_cases # Prioritize readability
 
 file_header:
