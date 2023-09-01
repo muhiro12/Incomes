@@ -32,6 +32,7 @@ struct ListItem: View {
                 .environment(\.modelContext, context)
         }.contentShape(Rectangle())
         .onTapGesture(perform: presentToEdit)
+        .accessibilityAddTraits(.isLink)
     }
 }
 
