@@ -11,10 +11,10 @@ import Foundation
 extension Int {
     // MARK: - Common
 
-    static var one: Self { 1 }
+    static let one = 1
 
     // MARK: - Edit
 
-    static var minRepeatCount: Self { 1 }
-    static var maxRepeatCount: Self { 60 }
+    static let minRepeatCount = 1
+    static let maxRepeatCount = 60
 }

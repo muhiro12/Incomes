@@ -14,23 +14,15 @@ struct EditView: View {
     @Environment(\.presentationMode)
     private var presentationMode
 
-    @State
-    private var isPresentedToActionSheet = false
-    @State
-    private var isDebugPresented = false
+    @State private var isPresentedToActionSheet = false
+    @State private var isDebugPresented = false
 
-    @State
-    private var date = Date()
-    @State
-    private var content: String = .empty
-    @State
-    private var income: String = .empty
-    @State
-    private var outgo: String = .empty
-    @State
-    private var group: String = .empty
-    @State
-    private var repeatSelection: Int = .zero
+    @State private var date = Date()
+    @State private var content: String = .empty
+    @State private var income: String = .empty
+    @State private var outgo: String = .empty
+    @State private var group: String = .empty
+    @State private var repeatSelection: Int = .zero
 
     private var item: Item?
 

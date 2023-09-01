@@ -12,8 +12,7 @@ struct ListItem: View {
     @Environment(\.modelContext)
     private var context
 
-    @State
-    private var isPresentedToEdit = false
+    @State private var isPresentedToEdit = false
 
     private let item: Item
 
@@ -23,7 +22,7 @@ struct ListItem: View {
 
     var body: some View {
         GeometryReader { geometry in
-            if geometry.size.width > 500 {
+            if geometry.size.width > .portraitModeMaxWidth {
                 WideListItem(of: item)
             } else {
                 NarrowListItem(of: item)
@@ -33,6 +32,7 @@ struct ListItem: View {
                 .environment(\.modelContext, context)
         }.contentShape(Rectangle())
         .onTapGesture(perform: presentToEdit)
+        .accessibilityAddTraits(.isLink)
     }
 }
 
@@ -45,5 +45,5 @@ private extension ListItem {
 }
 
 #Preview {
-    ListItem(of: PreviewSampleData.items.first!)
+    ListItem(of: PreviewSampleData.item)
 }

@@ -10,11 +10,9 @@ import SwiftData
 import SwiftUI
 
 struct HomeView: View {
-    @State
-    private var isPresentedToSettings = false
+    @State private var isPresentedToSettings = false
 
-    @Query
-    private var items: [Item]
+    @Query private var items: [Item]
     private var sections: [SectionedItems<Date>] {
         ItemService.groupByYear(items: items)
     }

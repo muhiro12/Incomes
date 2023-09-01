@@ -12,10 +12,8 @@ struct YearSection: View {
     @Environment(\.modelContext)
     private var context
 
-    @State
-    private var isPresentedToAlert = false
-    @State
-    private var willDeleteItems: [Item] = []
+    @State private var isPresentedToAlert = false
+    @State private var willDeleteItems: [Item] = []
 
     private let startOfYear: Date
     private let sections: [SectionedItems<Date>]

@@ -290,3 +290,4 @@ class DateExtensionTests: XCTestCase {
         }
     }
 }
+// swiftlint:enable all

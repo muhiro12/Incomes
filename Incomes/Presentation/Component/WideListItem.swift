@@ -41,5 +41,5 @@ struct WideListItem: View {
 }
 
 #Preview {
-    WideListItem(of: PreviewSampleData.items.first!)
+    WideListItem(of: PreviewSampleData.item)
 }

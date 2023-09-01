@@ -10,11 +10,9 @@ import Foundation
 import StoreKit
 
 class Store: NSObject {
-    static let shared = Store(
-        productID: EnvironmentParameter.productID,
-        onPurchaseStatusUpdated: {
-            UserDefaults.isSubscribeOn = $0
-        })
+    static let shared = Store(productID: EnvironmentParameter.productID) {
+        UserDefaults.isSubscribeOn = $0
+    }
 
     let productID: String
 

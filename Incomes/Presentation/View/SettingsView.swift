@@ -19,8 +19,7 @@ struct SettingsView: View {
     @AppStorage(wrappedValue: false, UserDefaults.Key.isSubscribeOn.rawValue)
     private var isSubscribeOn
 
-    @State
-    private var isAlertPresented = false
+    @State private var isAlertPresented = false
 
     var body: some View {
         NavigationView {

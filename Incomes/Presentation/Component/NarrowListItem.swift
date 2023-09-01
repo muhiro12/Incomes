@@ -39,5 +39,5 @@ struct NarrowListItem: View {
 }
 
 #Preview {
-    NarrowListItem(of: PreviewSampleData.items.first!)
+    NarrowListItem(of: PreviewSampleData.item)
 }

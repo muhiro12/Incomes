@@ -20,7 +20,7 @@ struct NativeAdvertisement: View {
                 return .componentM
 
             case .medium:
-                return 320
+                return .advertisementMaxHeight
             }
         }
     }
@@ -29,7 +29,7 @@ struct NativeAdvertisement: View {
 
     var body: some View {
         NativeAdmob(size: size)
-            .frame(maxWidth: 360,
+            .frame(maxWidth: .advertisementMaxWidth,
                    minHeight: size.height)
     }
 }
@@ -69,22 +69,30 @@ private final class NativeAdmobView: UIView {
         guard let view = UINib(nibName: size.rawValue + String(describing: type(of: self)), bundle: nil)
                 .instantiate(withOwner: self, options: nil).first as? GADNativeAdView
         else {
-            fatalError()
+            assertionFailure("Failed to init GADNativeAdView")
+            return
         }
         view.frame = bounds
         view.isHidden = true
         addSubview(view)
         self.view = view
 
-        let loader = GADAdLoader(adUnitID: EnvironmentParameter.admobNativeID,
-                                 rootViewController: (UIApplication.shared.connectedScenes.first as? UIWindowScene)?.windows.first?.rootViewController,
-                                 adTypes: [.native],
-                                 options: nil)
+        let rootVC = (UIApplication.shared.connectedScenes.first as? UIWindowScene)?
+            .windows
+            .first?
+            .rootViewController
+        let loader = GADAdLoader(
+            adUnitID: EnvironmentParameter.admobNativeID,
+            rootViewController: rootVC,
+            adTypes: [.native],
+            options: nil
+        )
         loader.delegate = self
         loader.load(GADRequest())
         self.loader = loader
     }
 
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

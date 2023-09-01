@@ -16,7 +16,13 @@ extension Calendar {
 
     static var utc: Self {
         var calendar = Calendar(identifier: .gregorian)
-        calendar.timeZone = TimeZone(secondsFromGMT: 0)!
+        calendar.timeZone = {
+            guard let gmt = TimeZone(secondsFromGMT: .zero) else {
+                assertionFailure("Failed to init TimeZone")
+                return .current
+            }
+            return gmt
+        }()
         return calendar
     }
 

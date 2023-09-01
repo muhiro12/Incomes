@@ -9,10 +9,8 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State
-    private var isLocked = UserDefaults.isLockAppOn
-    @State
-    private var isHome = true
+    @State private var isLocked = UserDefaults.isLockAppOn
+    @State private var isHome = true
 
     var body: some View {
         if isLocked {

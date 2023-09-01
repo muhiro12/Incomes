@@ -16,8 +16,7 @@ struct DebugView: View {
     @Environment(\.presentationMode)
     private var presentationMode
 
-    @State
-    private var isDebugOption = Self.isDebug
+    @State private var isDebugOption = Self.isDebug
     @AppStorage(UserDefaults.Key.isSubscribeOn.rawValue)
     private var isSubscribeOn = false
 

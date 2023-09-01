@@ -9,9 +9,9 @@
 import Foundation
 import SwiftData
 
-struct PreviewSampleData {
-    @MainActor
-    static var container: ModelContainer = {
+// swiftlint:disable force_unwrapping force_try no_magic_numbers
+enum PreviewSampleData {
+    @MainActor static var container: ModelContainer = {
         try! inMemoryContainer()
     }()
 
@@ -98,7 +98,12 @@ struct PreviewSampleData {
         return items
     }
 
+    static var item: Item {
+        items.first!
+    }
+
     private static func date(monthLater: Int, from date: Date = Date()) -> Date {
         Calendar.utc.date(byAdding: .month, value: monthLater, to: date)!
     }
 }
+// swiftlint:enable force_unwrapping force_try no_magic_numbers

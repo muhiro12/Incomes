@@ -20,3 +20,4 @@ var context: ModelContext {
 let date: (String) -> Date = { string in
     try! Date(string, strategy: .iso8601)
 }
+// swiftlint:enable all

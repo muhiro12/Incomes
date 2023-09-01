@@ -2,4 +2,39 @@ opt_in_rules:
     - all
 
 disabled_rules:
+    - explicit_acl # Omit ACL
+    - explicit_enum_raw_value # Omit raw values if possible
+    - explicit_top_level_acl # Omit ACL
+    - explicit_type_interface # Omit type interface
+    - indentation_width # Use Xcode indentation
+    - multiline_arguments_brackets # Prioritize readability
+    - multiline_literal_brackets # Prioritize readability
+    - multiline_parameters_brackets # Prioritize readability
     - no_extension_access_modifier # Use private extension
+    - no_grouping_extension # Grouping by extension
+    - prefer_nimble # Use XCTest
+    - required_deinit # Omit deinit
+    - sorted_enum_cases # Prioritize readability
+
+    # TODO: Resolve the following rules
+    - type_contents_order
+    - anonymous_argument_in_multiline_closure
+    - multiline_function_chains
+    - legacy_objc_type
+    - closure_body_length
+    - sorted_first_last
+    - superfluous_else
+    - file_types_order
+
+file_header:
+    required_pattern: |
+        \/\/
+        \/\/  .*?\.swift
+        \/\/  Incomes(Tests|UITests)?$
+        \/\/
+        \/\/  Created by .*? on \d{4}\/\d{2}\/\d{2}\.
+        \/\/  Copyright © \d{4} Hiromu Nakano\. All rights reserved\.
+        \/\/
+
+file_name:
+    suffix_pattern: Extension|Constant

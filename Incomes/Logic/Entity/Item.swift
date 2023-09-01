@@ -9,7 +9,8 @@
 import Foundation
 import SwiftData
 
-@Model final class Item {
+@Model
+final class Item {
     private(set) var date = Date(timeIntervalSinceReferenceDate: .zero)
     private(set) var content = String.empty
     private(set) var income = Decimal.zero
@@ -42,7 +43,7 @@ extension Item {
         profit.isPlus
     }
 
-    func set(date: Date,
+    func set(date: Date, // swiftlint:disable:this function_parameter_count
              content: String,
              income: Decimal,
              outgo: Decimal,
