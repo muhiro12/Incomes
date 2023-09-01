@@ -41,11 +41,10 @@ struct BalanceCalculator {
 
         targetList.enumerated().forEach { index, item in
             let balance = {
-                if index == .zero {
+                guard resultList.indices.contains(index - 1) else {
                     return previousBalance + item.profit
-                } else {
-                    return resultList[index - 1].balance + item.profit
                 }
+                return resultList[index - 1].balance + item.profit
             }()
             item.set(balance: balance)
             resultList.append(item)
@@ -64,11 +63,10 @@ struct BalanceCalculator {
             let item = tuple.element
 
             let balance = {
-                if items.indices.contains(index - 1) {
-                    return items[index - 1].balance + item.profit
-                } else {
+                guard items.indices.contains(index - 1) else {
                     return item.profit
                 }
+                return items[index - 1].balance + item.profit
             }()
             item.set(balance: balance)
         }
