@@ -9,6 +9,7 @@
 import Foundation
 import SwiftData
 
+// swiftlint:disable force_try
 struct PreviewSampleData {
     @MainActor
     static var container: ModelContainer = {
@@ -102,3 +103,4 @@ struct PreviewSampleData {
         Calendar.utc.date(byAdding: .month, value: monthLater, to: date)!
     }
 }
+// swiftlint:enable force_try
