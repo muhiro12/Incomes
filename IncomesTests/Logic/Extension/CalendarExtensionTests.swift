@@ -9,6 +9,7 @@
 @testable import Incomes
 import XCTest
 
+// swiftlint:disable all
 class CalendarExtensionTests: XCTestCase {
     func testUtc() {
         let expected = date("2000-01-01T00:00:00Z")
@@ -135,3 +136,4 @@ class CalendarExtensionTests: XCTestCase {
         }
     }
 }
+// swiftlint:enable all

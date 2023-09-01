@@ -9,6 +9,7 @@
 @testable import Incomes
 import XCTest
 
+// swiftlint:disable all
 class StringExtensionTests: XCTestCase {
     func testIsNotEmpty() {
         XCTContext.runActivity(named: "Text returns true") { _ in
@@ -106,3 +107,4 @@ class StringExtensionTests: XCTestCase {
         }
     }
 }
+// swiftlint:enable all
