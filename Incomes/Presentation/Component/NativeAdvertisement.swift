@@ -76,10 +76,16 @@ private final class NativeAdmobView: UIView {
         addSubview(view)
         self.view = view
 
-        let loader = GADAdLoader(adUnitID: EnvironmentParameter.admobNativeID,
-                                 rootViewController: (UIApplication.shared.connectedScenes.first as? UIWindowScene)?.windows.first?.rootViewController,
-                                 adTypes: [.native],
-                                 options: nil)
+        let rootVC = (UIApplication.shared.connectedScenes.first as? UIWindowScene)?
+            .windows
+            .first?
+            .rootViewController
+        let loader = GADAdLoader(
+            adUnitID: EnvironmentParameter.admobNativeID,
+            rootViewController: rootVC,
+            adTypes: [.native],
+            options: nil
+        )
         loader.delegate = self
         loader.load(GADRequest())
         self.loader = loader
