@@ -39,6 +39,8 @@ struct EditView {
 }
 
 extension EditView: View {
+    // TODO: Resolve SwiftLint
+    // swiftlint:disable closure_body_length
     var body: some View {
         NavigationView {
             Form {
@@ -127,6 +129,7 @@ extension EditView: View {
                         ])
         }.navigationViewStyle(StackNavigationViewStyle())
     }
+    // swiftlint:enable closure_body_length
 }
 
 // MARK: - private
