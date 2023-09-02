@@ -22,14 +22,16 @@ extension HomeView: View {
                 YearSection(startOfYear: $0.section, items: $0.items)
                 Advertisement(type: .native(.small))
             }
-        }.toolbar {
+        }
+        .toolbar {
             Button(action: {
                 isPresentedToSettings = true
             }, label: {
                 Image.settings
                     .iconFrameM()
             })
-        }.sheet(isPresented: $isPresentedToSettings) {
+        }
+        .sheet(isPresented: $isPresentedToSettings) {
             SettingsView()
         }
         .id(UUID())

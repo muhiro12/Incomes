@@ -9,6 +9,8 @@
 import GoogleMobileAds
 import SwiftUI
 
+// TODO: Resolve SwiftLint
+// swiftlint:disable file_types_order
 struct NativeAdvertisement {
     enum Size: String {
         case small = "Small"
@@ -123,3 +125,4 @@ extension NativeAdmobView: GADNativeAdLoaderDelegate {
         view?.isHidden = true
     }
 }
+// swiftlint:enable file_types_order

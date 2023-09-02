@@ -8,6 +8,8 @@
 
 import Foundation
 
+// TODO: Resolve SwiftLint
+// swiftlint:disable file_types_order
 protocol IncomesError: Error {
     var message: String { get }
 }
@@ -22,3 +24,4 @@ enum StoreError: IncomesError {
         }
     }
 }
+// swiftlint:enable file_types_order

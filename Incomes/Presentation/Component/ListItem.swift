@@ -29,10 +29,12 @@ extension ListItem: View {
             } else {
                 NarrowListItem(of: item)
             }
-        }.sheet(isPresented: $isPresentedToEdit) {
+        }
+        .sheet(isPresented: $isPresentedToEdit) {
             EditView(of: item)
                 .environment(\.modelContext, context)
-        }.contentShape(Rectangle())
+        }
+        .contentShape(Rectangle())
         .onTapGesture(perform: presentToEdit)
         .accessibilityAddTraits(.isLink)
     }

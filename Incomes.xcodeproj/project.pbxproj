@@ -14,7 +14,6 @@
 		AD583B6124B301EB0032AA1C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = AD583B6324B301EB0032AA1C /* Localizable.strings */; };
 		AD583B6924B308AB0032AA1C /* LocalizedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD583B6824B308AB0032AA1C /* LocalizedString.swift */; };
 		AD663132279973E700891D51 /* MediumNativeAdmobView.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD663130279973E700891D51 /* MediumNativeAdmobView.xib */; };
-		AD68D6B2277C45DA0040EBE2 /* NSNumberConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD68D6B1277C45DA0040EBE2 /* NSNumberConstant.swift */; };
 		AD6B704427A7A71E00A38208 /* IncomesError.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6B704327A7A71E00A38208 /* IncomesError.swift */; };
 		AD6B704627A7B11700A38208 /* AlertInformation.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6B704527A7B11600A38208 /* AlertInformation.swift */; };
 		AD6B704827A7C16100A38208 /* StoreSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6B704727A7C16100A38208 /* StoreSection.swift */; };
@@ -102,7 +101,6 @@
 		AD583B6524B3032D0032AA1C /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		AD583B6824B308AB0032AA1C /* LocalizedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizedString.swift; sourceTree = "<group>"; };
 		AD663130279973E700891D51 /* MediumNativeAdmobView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MediumNativeAdmobView.xib; sourceTree = "<group>"; };
-		AD68D6B1277C45DA0040EBE2 /* NSNumberConstant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSNumberConstant.swift; sourceTree = "<group>"; };
 		AD6B704327A7A71E00A38208 /* IncomesError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomesError.swift; sourceTree = "<group>"; };
 		AD6B704527A7B11600A38208 /* AlertInformation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertInformation.swift; sourceTree = "<group>"; };
 		AD6B704727A7C16100A38208 /* StoreSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreSection.swift; sourceTree = "<group>"; };
@@ -237,7 +235,6 @@
 				ADCF376824A33F500011D6F5 /* ImageExtension.swift */,
 				ADCF36F724A1D18E0011D6F5 /* IntConstant.swift */,
 				ADAD3D18277BD498005A70E1 /* ItemExtension.swift */,
-				AD68D6B1277C45DA0040EBE2 /* NSNumberConstant.swift */,
 				ADCF36FC24A1D18E0011D6F5 /* StringConstant.swift */,
 				ADCF36FB24A1D18E0011D6F5 /* StringExtension.swift */,
 				ADAD3D24277C1D0F005A70E1 /* StringProtocolExtension.swift */,
@@ -737,7 +734,6 @@
 				ADCF370E24A1D18E0011D6F5 /* IntConstant.swift in Sources */,
 				ADA407862A9F6EC600AB1EE5 /* SectionedItems.swift in Sources */,
 				AD75E9DE278F19A5008BE905 /* DebugView.swift in Sources */,
-				AD68D6B2277C45DA0040EBE2 /* NSNumberConstant.swift in Sources */,
 				ADEA399C2501457A00CB61D9 /* Store.swift in Sources */,
 				ADE89DF524B5E73300BB82E9 /* TitleListItem.swift in Sources */,
 				ADDBC4582792CD4400F5E4A7 /* NativeAdvertisement.swift in Sources */,
