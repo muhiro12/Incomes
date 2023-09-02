@@ -101,7 +101,8 @@ extension EditView: View {
                         Text(String.debugTitle)
                     })
                 }
-            }.navigationBarTitle(isEditMode ? .localized(.editTitle) : .localized(.createTitle))
+            }
+            .navigationBarTitle(isEditMode ? .localized(.editTitle) : .localized(.createTitle))
             .navigationBarItems(
                 leading: Button(action: cancel) {
                     Text(.localized(.cancel))
@@ -109,14 +110,17 @@ extension EditView: View {
                 trailing: Button(action: isEditMode ? save : create) {
                     Text(isEditMode ? .localized(.save) : .localized(.create))
                         .bold()
-                }.disabled(!isValid))
+                }
+                .disabled(!isValid))
             .gesture(DragGesture()
                         .onChanged { _ in
                             dismissKeyboard()
                         })
-        }.sheet(isPresented: $isDebugPresented) {
+        }
+        .sheet(isPresented: $isDebugPresented) {
             DebugView()
-        }.actionSheet(isPresented: $isPresentedToActionSheet) {
+        }
+        .actionSheet(isPresented: $isPresentedToActionSheet) {
             ActionSheet(title: Text(.localized(.saveDetail)),
                         buttons: [
                             .default(Text(.localized(.saveForThisItem)),
@@ -127,7 +131,8 @@ extension EditView: View {
                                      action: saveForAllItems),
                             .cancel()
                         ])
-        }.navigationViewStyle(StackNavigationViewStyle())
+        }
+        .navigationViewStyle(StackNavigationViewStyle())
     }
     // swiftlint:enable closure_body_length
 }

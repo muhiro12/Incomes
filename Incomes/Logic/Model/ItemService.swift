@@ -171,32 +171,42 @@ extension ItemService {
     static func groupByYear(items: [Item]) -> [SectionedItems<Date>] {
         Dictionary(grouping: items) {
             Calendar.utc.startOfYear(for: $0.date)
-        }.map {
+        }
+        .map {
             SectionedItems(section: $0.key, items: $0.value)
-        }.sorted().reversed()
+        }
+        .sorted()
+        .reversed()
     }
 
     static func groupByMonth(items: [Item]) -> [SectionedItems<Date>] {
         Dictionary(grouping: items) {
             Calendar.utc.startOfMonth(for: $0.date)
-        }.map {
+        }
+        .map {
             SectionedItems(section: $0.key, items: $0.value)
-        }.sorted().reversed()
+        }
+        .sorted()
+        .reversed()
     }
 
     static func groupByGroup(items: [Item]) -> [SectionedItems<String>] {
         Dictionary(grouping: items) {
             $0.group
-        }.map {
+        }
+        .map {
             SectionedItems(section: $0.key, items: $0.value)
-        }.sorted()
+        }
+        .sorted()
     }
 
     static func groupByContent(items: [Item]) -> [SectionedItems<String>] {
         Dictionary(grouping: items) {
             $0.content
-        }.map {
+        }
+        .map {
             SectionedItems(section: $0.key, items: $0.value)
-        }.sorted()
+        }
+        .sorted()
     }
 }

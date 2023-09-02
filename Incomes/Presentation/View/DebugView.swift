@@ -40,13 +40,16 @@ extension DebugView: View {
                         } catch {
                             assertionFailure(error.localizedDescription)
                         }
-                    }.disabled(!isDebugOption)
+                    }
+                    .disabled(!isDebugOption)
                 }
-            }.toolbar {
+            }
+            .toolbar {
                 Button(.localized(.done)) {
                     presentationMode.wrappedValue.dismiss()
                 }
-            }.navigationBarTitle(String.debugTitle)
+            }
+            .navigationBarTitle(String.debugTitle)
         }
     }
 }
