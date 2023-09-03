@@ -12,8 +12,7 @@ struct IncomesFooter {
     @Environment(\.modelContext)
     private var context
 
-    @AppStorage(UserDefaults.Key.isSubscribeOn.rawValue)
-    private var isSubscribeOn = false
+    @EnvironmentObject private var store: Store
 
     @Binding private var isHome: Bool
 
@@ -29,7 +28,7 @@ extension IncomesFooter: View {
         VStack {
             Divider()
             HStack {
-                if isSubscribeOn {
+                if store.isSubscribeOn {
                     Button(action: {
                         isHome.toggle()
                     }, label: {

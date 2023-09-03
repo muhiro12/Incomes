@@ -13,8 +13,7 @@ import SwiftUI
 
 @main
 struct IncomesApp {
-    @AppStorage(UserDefaults.Key.isSubscribeOn.rawValue)
-    private var isSubscribeOn = false
+    @StateObject private var store: Store
 
     private let container = {
         let url = URL.applicationSupportDirectory.appendingPathComponent("Incomes.sqlite")
@@ -28,9 +27,11 @@ struct IncomesApp {
 
     init() {
         FirebaseApp.configure()
-        Store.shared.open()
 
-        if !isSubscribeOn {
+        let store = Store()
+        _store = StateObject(wrappedValue: store)
+
+        if !store.isSubscribeOn {
             GADMobileAds.sharedInstance().start()
         }
     }
@@ -40,7 +41,8 @@ extension IncomesApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .modelContainer(container)
         }
+        .environmentObject(store)
+        .modelContainer(container)
     }
 }

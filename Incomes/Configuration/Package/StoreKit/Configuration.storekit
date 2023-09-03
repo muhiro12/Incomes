@@ -7,6 +7,54 @@
 
   ],
   "settings" : {
+    "_failTransactionsEnabled" : false,
+    "_storeKitErrors" : [
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Load Products"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Purchase"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Verification"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "App Store Sync"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Subscription Status"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "App Transaction"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Manage Subscriptions Sheet"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Refund Request Sheet"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Offer Code Redeem Sheet"
+      }
+    ],
     "_timeRate" : 6
   },
   "subscriptionGroups" : [
@@ -21,6 +69,9 @@
           "adHocOffers" : [
 
           ],
+          "codeOffers" : [
+
+          ],
           "displayPrice" : "1.99",
           "familyShareable" : false,
           "groupNumber" : 1,
@@ -29,7 +80,7 @@
           "localizations" : [
             {
               "description" : "",
-              "displayName" : "",
+              "displayName" : "Monthly Plan",
               "locale" : "en_US"
             }
           ],
@@ -43,7 +94,7 @@
     }
   ],
   "version" : {
-    "major" : 1,
-    "minor" : 1
+    "major" : 3,
+    "minor" : 0
   }
 }

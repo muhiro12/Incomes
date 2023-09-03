@@ -10,9 +10,9 @@ import StoreKit
 import SwiftUI
 
 struct StoreSection {
-    @State private var isPresented = false
+    @EnvironmentObject private var store: Store
 
-    private let store = Store.shared
+    @State private var isPresented = false
 }
 
 extension StoreSection: View {

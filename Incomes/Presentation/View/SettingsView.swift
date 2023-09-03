@@ -16,8 +16,8 @@ struct SettingsView {
 
     @AppStorage(wrappedValue: false, UserDefaults.Key.isLockAppOn.rawValue)
     private var isLockAppOn
-    @AppStorage(wrappedValue: false, UserDefaults.Key.isSubscribeOn.rawValue)
-    private var isSubscribeOn
+
+    @EnvironmentObject private var store: Store
 
     @State private var isAlertPresented = false
 }
@@ -26,7 +26,7 @@ extension SettingsView: View {
     var body: some View {
         NavigationView {
             Form {
-                if isSubscribeOn {
+                if store.isSubscribeOn {
                     Section {
                         Toggle(isOn: $isLockAppOn) {
                             Text(.localized(.lockApp))
