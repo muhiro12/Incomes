@@ -6,12 +6,9 @@
 //  Copyright © 2022 Hiromu Nakano. All rights reserved.
 //
 
-import StoreKit
 import SwiftUI
 
 struct StoreSection {
-    @EnvironmentObject private var store: Store
-
     @State private var isPresented = false
 }
 
@@ -20,8 +17,7 @@ extension StoreSection: View {
         Button(.localized(.subscribe)) {
             isPresented = true
         }.sheet(isPresented: $isPresented) {
-            SubscriptionStoreView(productIDs: [store.productID])
-                .storeButton(.visible, for: .restorePurchases)
+            IncomesStoreView()
         }
     }
 }
