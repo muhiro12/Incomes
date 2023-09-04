@@ -11,6 +11,8 @@ import SwiftUI
 struct LockedView {
     @Binding private var isLocked: Bool
 
+    private let authenticator = Authenticator()
+
     init(isLocked: Binding<Bool>) {
         _isLocked = isLocked
     }
@@ -18,20 +20,23 @@ struct LockedView {
 
 extension LockedView: View {
     var body: some View {
-        Button(.localized(.unlock)) {
-            unlock()
-        }
-    }
-}
-
-private extension LockedView {
-    func unlock() {
-        Task {
-            isLocked = await !Authenticator().authenticate()
+        ZStack {
+            MaskView()
+            Button(.localized(.unlock)) {
+                Task {
+                    isLocked = await !authenticator.authenticate()
+                }
+            }
+            .buttonStyle(.borderedProminent)
         }
     }
 }
 
 #Preview {
-    LockedView(isLocked: .constant(true))
+    ZStack {
+        Image.home
+            .resizable()
+            .scaledToFit()
+        LockedView(isLocked: .constant(true))
+    }
 }

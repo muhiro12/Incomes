@@ -12,7 +12,10 @@ struct SettingsView {
     @Environment(\.modelContext)
     private var context
     @Environment(\.presentationMode)
-    var presentationMode
+    private var presentationMode
+
+    @AppStorage(wrappedValue: false, UserDefaults.Key.isSubscribeOn.rawValue)
+    private var isSubscribeOn
 
     @EnvironmentObject private var store: Store
 
@@ -23,7 +26,7 @@ extension SettingsView: View {
     var body: some View {
         NavigationView {
             Form {
-                if store.isSubscribeOn {
+                if isSubscribeOn {
                     PremiumSection()
                 } else {
                     StoreSection()

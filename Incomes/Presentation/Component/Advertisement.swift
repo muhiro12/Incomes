@@ -13,14 +13,15 @@ struct Advertisement {
         case native(NativeAdvertisement.Size)
     }
 
-    @EnvironmentObject private var store: Store
+    @AppStorage(wrappedValue: false, UserDefaults.Key.isSubscribeOn.rawValue)
+    private var isSubscribeOn
 
     let type: AdType
 }
 
 extension Advertisement: View {
     var body: some View {
-        if !store.isSubscribeOn {
+        if !isSubscribeOn {
             switch type {
             case .native(let size):
                 HStack {
@@ -39,5 +40,4 @@ extension Advertisement: View {
 
 #Preview {
     Advertisement(type: .native(.medium))
-        .environmentObject(PreviewSampleData.store)
 }

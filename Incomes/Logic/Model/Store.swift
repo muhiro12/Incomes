@@ -11,7 +11,6 @@ import StoreKit
 
 final class Store: ObservableObject {
     @Published private(set) var product: Product?
-    @Published private(set) var isSubscribeOn = false
 
     @Published private var subscriptionGroupStatus: Product.SubscriptionInfo.RenewalState?
     @Published private var subscriptions: [Product] {
@@ -21,7 +20,7 @@ final class Store: ObservableObject {
     }
     @Published private var purchasedSubscriptions: [Product] = [] {
         didSet {
-            isSubscribeOn = purchasedSubscriptions.contains { $0.id == productID }
+            UserDefaults.isSubscribeOn = purchasedSubscriptions.contains { $0.id == productID }
         }
     }
 
