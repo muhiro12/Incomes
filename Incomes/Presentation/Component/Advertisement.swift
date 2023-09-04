@@ -39,4 +39,5 @@ extension Advertisement: View {
 
 #Preview {
     Advertisement(type: .native(.medium))
+        .environmentObject(PreviewSampleData.store)
 }
