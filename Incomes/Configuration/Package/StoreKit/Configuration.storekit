@@ -79,9 +79,14 @@
           "introductoryOffer" : null,
           "localizations" : [
             {
-              "description" : "",
+              "description" : "Access to all features and remove ads",
               "displayName" : "Monthly Plan",
               "locale" : "en_US"
+            },
+            {
+              "description" : "全ての機能の利用および広告の削除",
+              "displayName" : "1ヶ月プラン",
+              "locale" : "ja"
             }
           ],
           "productID" : "com.muhiro12.Incomes.Dev.subscription.1month",

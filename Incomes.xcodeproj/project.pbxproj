@@ -11,6 +11,7 @@
 		AD2BB3222795925C00258234 /* Advertisement.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD2BB3212795925C00258234 /* Advertisement.swift */; };
 		AD387E4B2A8A1CE600E94623 /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = AD387E4A2A8A1CE600E94623 /* GoogleMobileAds */; };
 		AD387E4D2A8B6FFD00E94623 /* Repository.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD387E4C2A8B6FFD00E94623 /* Repository.swift */; };
+		AD4C315A2AA581590030A17F /* PremiumSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD4C31592AA581590030A17F /* PremiumSection.swift */; };
 		AD583B6124B301EB0032AA1C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = AD583B6324B301EB0032AA1C /* Localizable.strings */; };
 		AD583B6924B308AB0032AA1C /* LocalizedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD583B6824B308AB0032AA1C /* LocalizedString.swift */; };
 		AD663132279973E700891D51 /* MediumNativeAdmobView.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD663130279973E700891D51 /* MediumNativeAdmobView.xib */; };
@@ -21,7 +22,6 @@
 		AD98194226E43C3600C4A57C /* StoreKitTestCertificate.cer in Resources */ = {isa = PBXBuildFile; fileRef = AD98194126E43C3600C4A57C /* StoreKitTestCertificate.cer */; };
 		ADA407842A9F485B00AB1EE5 /* ModelContainerPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADA407832A9F485B00AB1EE5 /* ModelContainerPreview.swift */; };
 		ADA407862A9F6EC600AB1EE5 /* SectionedItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADA407852A9F6EC600AB1EE5 /* SectionedItems.swift */; };
-		ADA407882AA54F4000AB1EE5 /* IncomesStoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADA407872AA54F4000AB1EE5 /* IncomesStoreView.swift */; };
 		ADA900B527969687000DC872 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = ADA900B427969687000DC872 /* Settings.bundle */; };
 		ADA900C6279934EB000DC872 /* SmallNativeAdmobView.xib in Resources */ = {isa = PBXBuildFile; fileRef = ADA900C5279934EB000DC872 /* SmallNativeAdmobView.xib */; };
 		ADAD3CC7277AA922005A70E1 /* UserDefaultsExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADAD3CC6277AA922005A70E1 /* UserDefaultsExtension.swift */; };
@@ -98,6 +98,7 @@
 		AD09B543278F934D008F03FA /* ItemService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemService.swift; sourceTree = "<group>"; };
 		AD2BB3212795925C00258234 /* Advertisement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Advertisement.swift; sourceTree = "<group>"; };
 		AD387E4C2A8B6FFD00E94623 /* Repository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Repository.swift; sourceTree = "<group>"; };
+		AD4C31592AA581590030A17F /* PremiumSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PremiumSection.swift; sourceTree = "<group>"; };
 		AD583B6224B301EB0032AA1C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		AD583B6524B3032D0032AA1C /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		AD583B6824B308AB0032AA1C /* LocalizedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizedString.swift; sourceTree = "<group>"; };
@@ -110,7 +111,6 @@
 		AD98194126E43C3600C4A57C /* StoreKitTestCertificate.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = StoreKitTestCertificate.cer; sourceTree = "<group>"; };
 		ADA407832A9F485B00AB1EE5 /* ModelContainerPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelContainerPreview.swift; sourceTree = "<group>"; };
 		ADA407852A9F6EC600AB1EE5 /* SectionedItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionedItems.swift; sourceTree = "<group>"; };
-		ADA407872AA54F4000AB1EE5 /* IncomesStoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomesStoreView.swift; sourceTree = "<group>"; };
 		ADA900B427969687000DC872 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		ADA900C5279934EB000DC872 /* SmallNativeAdmobView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SmallNativeAdmobView.xib; sourceTree = "<group>"; };
 		ADAD3CC6277AA922005A70E1 /* UserDefaultsExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsExtension.swift; sourceTree = "<group>"; };
@@ -322,6 +322,7 @@
 				ADCF36E824A1D18E0011D6F5 /* ListItem.swift */,
 				ADCF36E324A1D18E0011D6F5 /* NarrowListItem.swift */,
 				ADDBC4572792CD4400F5E4A7 /* NativeAdvertisement.swift */,
+				AD4C31592AA581590030A17F /* PremiumSection.swift */,
 				AD6B704727A7C16100A38208 /* StoreSection.swift */,
 				ADE89DF424B5E73300BB82E9 /* TitleListItem.swift */,
 				ADCF36E724A1D18E0011D6F5 /* WideListItem.swift */,
@@ -354,7 +355,6 @@
 				ADCF36E624A1D18E0011D6F5 /* EditView.swift */,
 				ADCF36F224A1D18E0011D6F5 /* GroupView.swift */,
 				ADCF36F324A1D18E0011D6F5 /* HomeView.swift */,
-				ADA407872AA54F4000AB1EE5 /* IncomesStoreView.swift */,
 				ADAD3D1C277BDBDE005A70E1 /* ItemListView.swift */,
 				ADAD3D0E277B1790005A70E1 /* LockedView.swift */,
 				ADCF376224A3147B0011D6F5 /* SettingsView.swift */,
@@ -713,10 +713,10 @@
 				ADCF370424A1D18E0011D6F5 /* ItemRepository.swift in Sources */,
 				ADCF371324A1D18E0011D6F5 /* StringConstant.swift in Sources */,
 				ADCF370324A1D18E0011D6F5 /* ListItem.swift in Sources */,
+				AD4C315A2AA581590030A17F /* PremiumSection.swift in Sources */,
 				AD583B6924B308AB0032AA1C /* LocalizedString.swift in Sources */,
 				ADCF370B24A1D18E0011D6F5 /* HomeView.swift in Sources */,
 				ADCF376924A33F500011D6F5 /* ImageExtension.swift in Sources */,
-				ADA407882AA54F4000AB1EE5 /* IncomesStoreView.swift in Sources */,
 				ADAD3D17277BC80F005A70E1 /* YearSection.swift in Sources */,
 				ADE3A4C1277690340016C152 /* Authenticator.swift in Sources */,
 				ADAD3D19277BD499005A70E1 /* ItemExtension.swift in Sources */,

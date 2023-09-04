@@ -6,19 +6,25 @@
 //  Copyright © 2022 Hiromu Nakano. All rights reserved.
 //
 
+import StoreKit
 import SwiftUI
 
 struct StoreSection {
-    @State private var isPresented = false
+    @EnvironmentObject private var store: Store
 }
 
 extension StoreSection: View {
     var body: some View {
-        Button(.localized(.subscribe)) {
-            isPresented = true
-        }.sheet(isPresented: $isPresented) {
-            IncomesStoreView()
-        }
+        Section(content: {
+            SubscriptionStoreView(productIDs: [store.productID])
+                .storeButton(.visible, for: .restorePurchases)
+                .storeButton(.hidden, for: .cancellation)
+                .fixedSize(horizontal: false, vertical: true)
+        }, header: {
+            Text(.localized(.subscriptionHeader))
+        }, footer: {
+            Text(store.product?.description ?? .empty)
+        })
     }
 }
 
@@ -26,4 +32,5 @@ extension StoreSection: View {
     List {
         StoreSection()
     }
+    .environmentObject(PreviewSampleData.store)
 }
