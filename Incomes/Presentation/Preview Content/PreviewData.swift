@@ -1,5 +1,5 @@
 //
-//  PreviewSampleData.swift
+//  PreviewData.swift
 //  Incomes
 //
 //  Created by Hiromu Nakano on 2020/06/26.
@@ -11,14 +11,10 @@ import SwiftData
 import SwiftUI
 
 // swiftlint:disable force_unwrapping force_try no_magic_numbers
-enum PreviewSampleData {
+enum PreviewData {
     @StateObject static var store = Store()
 
-    @MainActor static var container: ModelContainer = {
-        try! inMemoryContainer()
-    }()
-
-    static var inMemoryContainer: () throws -> ModelContainer = {
+    static var inMemoryContainer: ModelContainer {
         let schema = Schema([Item.self])
         let configuration = ModelConfiguration(isStoredInMemoryOnly: true)
         let container = try! ModelContainer(for: schema, configurations: [configuration])

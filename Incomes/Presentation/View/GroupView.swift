@@ -40,7 +40,6 @@ private extension GroupView {
 }
 
 #Preview {
-    ModelContainerPreview(PreviewSampleData.inMemoryContainer) {
-        GroupView()
-    }
+    GroupView()
+        .modelContainer(PreviewData.inMemoryContainer)
 }

@@ -31,7 +31,7 @@ extension DebugView: View {
                     Button(String.debugPreviewData) {
                     }.onLongPressGesture {
                         do {
-                            PreviewSampleData.items.forEach(context.insert)
+                            PreviewData.items.forEach(context.insert)
                             try context.save()
                         } catch {
                             assertionFailure(error.localizedDescription)

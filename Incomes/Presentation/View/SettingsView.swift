@@ -68,5 +68,5 @@ extension SettingsView: View {
 
 #Preview {
     SettingsView()
-        .environmentObject(PreviewSampleData.store)
+        .environmentObject(PreviewData.store)
 }

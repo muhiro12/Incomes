@@ -60,7 +60,7 @@ extension GroupSection: View {
 #Preview {
     List {
         GroupSection(title: "Credit",
-                     items: PreviewSampleData.items.filter {
+                     items: PreviewData.items.filter {
                         $0.group == "Credit"
                      })
     }

@@ -23,12 +23,10 @@ struct ContentView {
 
     init(isHome: Bool = true,
          isMasked: Bool = true,
-         isLocked: Bool = false) {
+         isLocked: Bool = UserDefaults.isSubscribeOn && UserDefaults.isLockAppOn) {
         self._isHome = State(initialValue: isHome)
         self._isMasked = State(initialValue: isMasked)
         self._isLocked = State(initialValue: isLocked)
-
-        self._isLocked = State(initialValue: isSubscribeOn && isLockAppOn)
     }
 }
 
@@ -63,15 +61,11 @@ extension ContentView: View {
 }
 
 #Preview {
-    ModelContainerPreview(PreviewSampleData.inMemoryContainer) {
-        ContentView(isMasked: false,
-                    isLocked: false)
-    }
+    ContentView(isMasked: false, isLocked: false)
+        .modelContainer(PreviewData.inMemoryContainer)
 }
 
 #Preview {
-    ModelContainerPreview(PreviewSampleData.inMemoryContainer) {
-        ContentView(isMasked: false,
-                    isLocked: true)
-    }
+    ContentView(isMasked: false, isLocked: true)
+        .modelContainer(PreviewData.inMemoryContainer)
 }

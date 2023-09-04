@@ -60,7 +60,7 @@ extension YearSection: View {
 #Preview {
     List {
         YearSection(startOfYear: Date(),
-                    items: PreviewSampleData.items.filter {
+                    items: PreviewData.items.filter {
                         $0.date.stringValue(.yyyy) == "2023"
                     })
     }

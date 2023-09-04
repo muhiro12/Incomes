@@ -32,5 +32,5 @@ extension StoreSection: View {
     List {
         StoreSection()
     }
-    .environmentObject(PreviewSampleData.store)
+    .environmentObject(PreviewData.store)
 }
