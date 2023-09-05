@@ -9,8 +9,8 @@
 import SwiftUI
 
 struct PremiumSection {
-    @AppStorage(wrappedValue: false, UserDefaults.Key.isLockAppOn.rawValue)
-    private var isLockAppOn
+    @AppStorage(UserDefaults.Key.isLockAppOn.rawValue)
+    private var isLockAppOn = false
 }
 
 extension PremiumSection: View {

@@ -12,10 +12,10 @@ struct ContentView {
     @Environment(\.scenePhase)
     private var scenePhase
 
-    @AppStorage(wrappedValue: false, UserDefaults.Key.isSubscribeOn.rawValue)
-    private var isSubscribeOn
-    @AppStorage(wrappedValue: false, UserDefaults.Key.isLockAppOn.rawValue)
-    private var isLockAppOn
+    @AppStorage(UserDefaults.Key.isSubscribeOn.rawValue)
+    private var isSubscribeOn = false
+    @AppStorage(UserDefaults.Key.isLockAppOn.rawValue)
+    private var isLockAppOn = false
 
     @State private var isHome: Bool
     @State private var isMasked: Bool

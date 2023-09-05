@@ -13,8 +13,8 @@ struct Advertisement {
         case native(NativeAdvertisement.Size)
     }
 
-    @AppStorage(wrappedValue: false, UserDefaults.Key.isSubscribeOn.rawValue)
-    private var isSubscribeOn
+    @AppStorage(UserDefaults.Key.isSubscribeOn.rawValue)
+    private var isSubscribeOn = false
 
     let type: AdType
 }

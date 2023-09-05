@@ -12,8 +12,8 @@ struct IncomesFooter {
     @Environment(\.modelContext)
     private var context
 
-    @AppStorage(wrappedValue: false, UserDefaults.Key.isSubscribeOn.rawValue)
-    private var isSubscribeOn
+    @AppStorage(UserDefaults.Key.isSubscribeOn.rawValue)
+    private var isSubscribeOn = false
 
     @Binding private var isHome: Bool
 

@@ -14,8 +14,8 @@ struct SettingsView {
     @Environment(\.presentationMode)
     private var presentationMode
 
-    @AppStorage(wrappedValue: false, UserDefaults.Key.isSubscribeOn.rawValue)
-    private var isSubscribeOn
+    @AppStorage(UserDefaults.Key.isSubscribeOn.rawValue)
+    private var isSubscribeOn = false
 
     @EnvironmentObject private var store: Store
 

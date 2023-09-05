@@ -13,8 +13,8 @@ import SwiftUI
 
 @main
 struct IncomesApp {
-    @AppStorage(wrappedValue: false, UserDefaults.Key.isSubscribeOn.rawValue)
-    private var isSubscribeOn
+    @AppStorage(UserDefaults.Key.isSubscribeOn.rawValue)
+    private var isSubscribeOn = false
 
     @StateObject private var store = Store()
 
