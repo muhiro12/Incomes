@@ -11,7 +11,7 @@ import SwiftUI
 
 struct HomeView {
     @AppStorage(UserDefaults.Key.isSubscribeOn.rawValue)
-    private var isSubscribeOn = false
+    private var isSubscribeOn = UserDefaults.isSubscribeOn
 
     @Query private var items: [Item]
 

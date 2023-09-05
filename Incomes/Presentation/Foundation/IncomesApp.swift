@@ -14,7 +14,11 @@ import SwiftUI
 @main
 struct IncomesApp {
     @AppStorage(UserDefaults.Key.isSubscribeOn.rawValue)
-    private var isSubscribeOn = false
+    private var isSubscribeOn = UserDefaults.isSubscribeOn
+    @AppStorage(UserDefaults.Key.isMaskAppOn.rawValue)
+    private var isMaskAppOn = UserDefaults.isMaskAppOn
+    @AppStorage(UserDefaults.Key.isLockAppOn.rawValue)
+    private var isLockAppOn = UserDefaults.isLockAppOn
 
     @StateObject private var store = Store()
 
@@ -42,7 +46,7 @@ struct IncomesApp {
 extension IncomesApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView(isMasked: isMaskAppOn, isLocked: isLockAppOn)
         }
         .environmentObject(store)
         .modelContainer(container)

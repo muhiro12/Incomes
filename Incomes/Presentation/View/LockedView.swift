@@ -22,12 +22,16 @@ extension LockedView: View {
     var body: some View {
         ZStack {
             MaskView()
-            Button(.localized(.unlock)) {
-                Task {
-                    isLocked = await !authenticator.authenticate()
-                }
-            }
-            .buttonStyle(.borderedProminent)
+            Button(.localized(.unlock), action: unlock)
+                .buttonStyle(.borderedProminent)
+        }
+    }
+}
+
+private extension LockedView {
+    private func unlock() {
+        Task {
+            isLocked = await !authenticator.authenticate()
         }
     }
 }

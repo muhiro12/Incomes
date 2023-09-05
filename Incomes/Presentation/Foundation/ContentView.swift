@@ -13,18 +13,18 @@ struct ContentView {
     private var scenePhase
 
     @AppStorage(UserDefaults.Key.isSubscribeOn.rawValue)
-    private var isSubscribeOn = false
+    private var isSubscribeOn = UserDefaults.isSubscribeOn
+    @AppStorage(UserDefaults.Key.isMaskAppOn.rawValue)
+    private var isMaskAppOn = UserDefaults.isMaskAppOn
     @AppStorage(UserDefaults.Key.isLockAppOn.rawValue)
-    private var isLockAppOn = false
+    private var isLockAppOn = UserDefaults.isLockAppOn
 
     @State private var isHome: Bool
     @State private var isMasked: Bool
     @State private var isLocked: Bool
 
-    init(isHome: Bool = true,
-         isMasked: Bool = true,
-         isLocked: Bool = UserDefaults.isSubscribeOn && UserDefaults.isLockAppOn) {
-        self._isHome = State(initialValue: isHome)
+    init(isMasked: Bool, isLocked: Bool) {
+        self._isHome = State(initialValue: true)
         self._isMasked = State(initialValue: isMasked)
         self._isLocked = State(initialValue: isLocked)
     }
@@ -46,9 +46,9 @@ extension ContentView: View {
                 }
             }
             .onChange(of: scenePhase) { _, newValue in
-                isMasked = newValue != .active
+                isMasked = isMaskAppOn && newValue != .active
                 if !isLocked {
-                    isLocked = isSubscribeOn && isLockAppOn && newValue == .background
+                    isLocked = isLockAppOn && newValue == .background
                 }
             }
             if isMasked {

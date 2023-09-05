@@ -13,7 +13,7 @@ struct IncomesFooter {
     private var context
 
     @AppStorage(UserDefaults.Key.isSubscribeOn.rawValue)
-    private var isSubscribeOn = false
+    private var isSubscribeOn = UserDefaults.isSubscribeOn
 
     @Binding private var isHome: Bool
 

@@ -16,21 +16,33 @@ extension UserDefaults {
 
         var wrappedValue: T {
             get {
-                UserDefaults.standard.object(forKey: key.rawValue) as? T ?? defaultValue
+                standard.object(forKey: key.rawValue) as? T ?? defaultValue
             }
             set {
-                UserDefaults.standard.set(newValue, forKey: key.rawValue)
+                standard.set(newValue, forKey: key.rawValue)
             }
         }
     }
 
     enum Key: String {
         case isSubscribeOn = "a018f613"
+        case isMaskAppOn = "aa9f2c8b"
         case isLockAppOn = "d8a87635"
     }
 
     @UserDefaults.Wrapper(key: .isSubscribeOn, defaultValue: false)
-    static var isSubscribeOn: Bool
+    static var isSubscribeOn: Bool {
+        didSet {
+            guard !isSubscribeOn else {
+                return
+            }
+            isMaskAppOn = true
+            isLockAppOn = false
+        }
+    }
+
+    @UserDefaults.Wrapper(key: .isMaskAppOn, defaultValue: true)
+    static var isMaskAppOn: Bool
 
     @UserDefaults.Wrapper(key: .isLockAppOn, defaultValue: false)
     static var isLockAppOn: Bool
