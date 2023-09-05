@@ -33,17 +33,13 @@ struct ContentView {
 extension ContentView: View {
     var body: some View {
         ZStack {
-            GeometryReader { _ in
-                VStack(spacing: .zero) {
-                    NavigationView {
-                        if isHome {
-                            HomeView()
-                        } else {
-                            GroupView()
-                        }
-                    }
-                    IncomesFooter(isHome: $isHome)
+            NavigationStack {
+                if isHome {
+                    HomeView()
+                } else {
+                    GroupView()
                 }
+                IncomesBottomBar(isHome: $isHome)
             }
             .onChange(of: scenePhase) { _, newValue in
                 isMasked = isMaskAppOn && newValue != .active
@@ -62,10 +58,5 @@ extension ContentView: View {
 
 #Preview {
     ContentView(isMasked: false, isLocked: false)
-        .modelContainer(PreviewData.inMemoryContainer)
-}
-
-#Preview {
-    ContentView(isMasked: false, isLocked: true)
         .modelContainer(PreviewData.inMemoryContainer)
 }
