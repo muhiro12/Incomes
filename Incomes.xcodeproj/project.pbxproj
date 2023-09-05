@@ -34,6 +34,7 @@
 		ADAD3D21277BF53E005A70E1 /* GroupSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADAD3D20277BF53D005A70E1 /* GroupSection.swift */; };
 		ADAD3D23277C1120005A70E1 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADAD3D22277C111F005A70E1 /* Item.swift */; };
 		ADAD3D25277C1D0F005A70E1 /* StringProtocolExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADAD3D24277C1D0F005A70E1 /* StringProtocolExtension.swift */; };
+		ADB3627A2AA6D7B200964CA7 /* DebugSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB362792AA6D7B200964CA7 /* DebugSection.swift */; };
 		ADCB06DE278F954600B867F4 /* ItemServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCB06DD278F954600B867F4 /* ItemServiceTests.swift */; };
 		ADCB06E02790562000B867F4 /* DateExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCB06DF2790562000B867F4 /* DateExtensionTests.swift */; };
 		ADCB06E22790635900B867F4 /* CalendarExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCB06E12790635900B867F4 /* CalendarExtensionTests.swift */; };
@@ -123,6 +124,7 @@
 		ADAD3D20277BF53D005A70E1 /* GroupSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupSection.swift; sourceTree = "<group>"; };
 		ADAD3D22277C111F005A70E1 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		ADAD3D24277C1D0F005A70E1 /* StringProtocolExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringProtocolExtension.swift; sourceTree = "<group>"; };
+		ADB362792AA6D7B200964CA7 /* DebugSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugSection.swift; sourceTree = "<group>"; };
 		ADCB06DD278F954600B867F4 /* ItemServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemServiceTests.swift; sourceTree = "<group>"; };
 		ADCB06DF2790562000B867F4 /* DateExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtensionTests.swift; sourceTree = "<group>"; };
 		ADCB06E12790635900B867F4 /* CalendarExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarExtensionTests.swift; sourceTree = "<group>"; };
@@ -316,6 +318,7 @@
 			isa = PBXGroup;
 			children = (
 				AD2BB3212795925C00258234 /* Advertisement.swift */,
+				ADB362792AA6D7B200964CA7 /* DebugSection.swift */,
 				ADAD3D20277BF53D005A70E1 /* GroupSection.swift */,
 				ADCF376424A32E460011D6F5 /* IncomesFooter.swift */,
 				ADCF36E824A1D18E0011D6F5 /* ListItem.swift */,
@@ -703,6 +706,7 @@
 				ADAD3D25277C1D0F005A70E1 /* StringProtocolExtension.swift in Sources */,
 				AD09B544278F934D008F03FA /* ItemService.swift in Sources */,
 				ADCF393224A57ADC0011D6F5 /* PreviewData.swift in Sources */,
+				ADB3627A2AA6D7B200964CA7 /* DebugSection.swift in Sources */,
 				AD2BB3222795925C00258234 /* Advertisement.swift in Sources */,
 				ADAD3D15277B4161005A70E1 /* CalendarExtension.swift in Sources */,
 				ADEA399E25014CD700CB61D9 /* Secret.swift in Sources */,

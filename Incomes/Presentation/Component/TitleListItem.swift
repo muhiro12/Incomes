@@ -23,6 +23,10 @@ extension TitleListItem: View {
                     .iconFrameS()
                     .foregroundColor(.accentColor)
             }
+            if DebugView.isDebug {
+                Text("[\(item.order)]")
+                    .font(.caption)
+            }
         }
     }
 }

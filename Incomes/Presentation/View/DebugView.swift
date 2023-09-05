@@ -16,6 +16,9 @@ struct DebugView {
     @Environment(\.presentationMode)
     private var presentationMode
 
+    @AppStorage(UserDefaults.Key.isSubscribeOn.rawValue)
+    private var isSubscribeOn = false
+
     @State private var isDebugOption = Self.isDebug
 }
 
@@ -28,6 +31,8 @@ extension DebugView: View {
                         .onChange(of: isDebugOption) { _, newValue in
                             Self.isDebug = newValue
                         }
+                    Toggle(String.debugSubscribe, isOn: $isSubscribeOn)
+                        .disabled(!isDebugOption)
                     Button(String.debugPreviewData) {
                     }.onLongPressGesture {
                         do {
