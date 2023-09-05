@@ -49,7 +49,7 @@ struct BalanceCalculator {
                 }
                 return resultList[index - 1].balance + item.profit
             }()
-            item.set(balance: balance)
+            item.set(order: .zero, balance: balance)
             resultList.append(item)
         }
 

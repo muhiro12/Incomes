@@ -17,6 +17,8 @@ final class Item {
     private(set) var outgo = Decimal.zero
     private(set) var group = String.empty
     private(set) var repeatID = UUID()
+
+    private(set) var order = Int.zero
     private(set) var balance = Decimal.zero
 
     init(date: Date,
@@ -57,7 +59,8 @@ extension Item {
         self.repeatID = repeatID
     }
 
-    func set(balance: Decimal) {
+    func set(order: Int, balance: Decimal) {
+        self.order = order
         self.balance = balance
     }
 }
