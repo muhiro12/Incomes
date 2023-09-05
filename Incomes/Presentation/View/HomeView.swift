@@ -10,9 +10,12 @@ import SwiftData
 import SwiftUI
 
 struct HomeView {
-    @State private var isPresentedToSettings = false
+    @AppStorage(UserDefaults.Key.isSubscribeOn.rawValue)
+    private var isSubscribeOn = false
 
     @Query private var items: [Item]
+
+    @State private var isPresentedToSettings = false
 }
 
 extension HomeView: View {
@@ -20,7 +23,9 @@ extension HomeView: View {
         List {
             ForEach(sections) {
                 YearSection(startOfYear: $0.section, items: $0.items)
-                Advertisement(type: .native(.small))
+                if !isSubscribeOn {
+                    Advertisement(type: .native(.small))
+                }
             }
         }
         .toolbar {

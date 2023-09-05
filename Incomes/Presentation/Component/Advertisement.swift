@@ -13,27 +13,22 @@ struct Advertisement {
         case native(NativeAdvertisement.Size)
     }
 
-    @AppStorage(UserDefaults.Key.isSubscribeOn.rawValue)
-    private var isSubscribeOn = false
-
     let type: AdType
 }
 
 extension Advertisement: View {
     var body: some View {
-        if !isSubscribeOn {
-            switch type {
-            case .native(let size):
-                HStack {
-                    Spacer()
-                    NativeAdvertisement(size: size)
-                        .border(.secondary, width: 1)
-                    Spacer()
-                }
-                .listRowBackground(Color.clear)
-                .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
-                .listRowSeparator(.hidden)
+        switch type {
+        case .native(let size):
+            HStack {
+                Spacer()
+                NativeAdvertisement(size: size)
+                    .border(.secondary, width: 1)
+                Spacer()
             }
+            .listRowBackground(Color.clear)
+            .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
+            .listRowSeparator(.hidden)
         }
     }
 }

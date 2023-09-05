@@ -13,6 +13,9 @@ struct ItemListView {
     @Environment(\.modelContext)
     private var context
 
+    @AppStorage(UserDefaults.Key.isSubscribeOn.rawValue)
+    private var isSubscribeOn = false
+
     @Query private var items: [Item]
 
     @State private var isPresentedToAlert = false
@@ -43,7 +46,9 @@ extension ItemListView: View {
                         Text(section.section.stringValue(.yyyy))
                     }
                 })
-                Advertisement(type: .native(.medium))
+                if !isSubscribeOn {
+                    Advertisement(type: .native(.medium))
+                }
             }
         }
         .id(UUID())
