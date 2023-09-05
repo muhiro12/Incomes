@@ -13,7 +13,7 @@ struct ItemListView {
     @Environment(\.modelContext)
     private var context
 
-    @AppStorage(UserDefaults.Key.isSubscribeOn.rawValue)
+    @AppStorage(.key(.isSubscribeOn))
     private var isSubscribeOn = UserDefaults.isSubscribeOn
 
     @Query private var items: [Item]

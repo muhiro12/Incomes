@@ -14,7 +14,7 @@ struct SettingsView {
     @Environment(\.presentationMode)
     private var presentationMode
 
-    @AppStorage(UserDefaults.Key.isSubscribeOn.rawValue)
+    @AppStorage(.key(.isSubscribeOn))
     private var isSubscribeOn = UserDefaults.isSubscribeOn
 
     @EnvironmentObject private var store: Store

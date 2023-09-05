@@ -13,11 +13,11 @@ import SwiftUI
 
 @main
 struct IncomesApp {
-    @AppStorage(UserDefaults.Key.isSubscribeOn.rawValue)
+    @AppStorage(.key(.isSubscribeOn))
     private var isSubscribeOn = UserDefaults.isSubscribeOn
-    @AppStorage(UserDefaults.Key.isMaskAppOn.rawValue)
+    @AppStorage(.key(.isMaskAppOn))
     private var isMaskAppOn = UserDefaults.isMaskAppOn
-    @AppStorage(UserDefaults.Key.isLockAppOn.rawValue)
+    @AppStorage(.key(.isLockAppOn))
     private var isLockAppOn = UserDefaults.isLockAppOn
 
     @StateObject private var store = Store()

@@ -9,9 +9,9 @@
 import SwiftUI
 
 struct PremiumSection {
-    @AppStorage(UserDefaults.Key.isMaskAppOn.rawValue)
+    @AppStorage(.key(.isMaskAppOn))
     private var isMaskAppOn = UserDefaults.isMaskAppOn
-    @AppStorage(UserDefaults.Key.isLockAppOn.rawValue)
+    @AppStorage(.key(.isLockAppOn))
     private var isLockAppOn = UserDefaults.isLockAppOn
 }
 

@@ -10,7 +10,7 @@ import SwiftData
 import SwiftUI
 
 struct HomeView {
-    @AppStorage(UserDefaults.Key.isSubscribeOn.rawValue)
+    @AppStorage(.key(.isSubscribeOn))
     private var isSubscribeOn = UserDefaults.isSubscribeOn
 
     @Query private var items: [Item]
