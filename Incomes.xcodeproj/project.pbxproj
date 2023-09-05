@@ -44,7 +44,6 @@
 		ADCB06F12791A48000B867F4 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = ADCB06F02791A48000B867F4 /* GoogleService-Info.plist */; };
 		ADCF36B324A1D0F70011D6F5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ADCF36B224A1D0F70011D6F5 /* Assets.xcassets */; };
 		ADCF36B624A1D0F70011D6F5 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ADCF36B524A1D0F70011D6F5 /* Preview Assets.xcassets */; };
-		ADCF36B924A1D0F70011D6F5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = ADCF36B724A1D0F70011D6F5 /* LaunchScreen.storyboard */; };
 		ADCF36CF24A1D0F70011D6F5 /* IncomesUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF36CE24A1D0F70011D6F5 /* IncomesUITests.swift */; };
 		ADCF36E024A1D1820011D6F5 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF36DD24A1D1820011D6F5 /* ContentView.swift */; };
 		ADCF36FE24A1D18E0011D6F5 /* NarrowListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF36E324A1D18E0011D6F5 /* NarrowListItem.swift */; };
@@ -135,7 +134,6 @@
 		ADCF36A624A1D0F40011D6F5 /* Incomes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Incomes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ADCF36B224A1D0F70011D6F5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		ADCF36B524A1D0F70011D6F5 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		ADCF36B824A1D0F70011D6F5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		ADCF36BF24A1D0F70011D6F5 /* IncomesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = IncomesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		ADCF36C524A1D0F70011D6F5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		ADCF36CA24A1D0F70011D6F5 /* IncomesUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = IncomesUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -451,7 +449,6 @@
 				ADEA399D25014CD700CB61D9 /* Secret.swift */,
 				ADCF36B224A1D0F70011D6F5 /* Assets.xcassets */,
 				ADE3A4B9277491CB0016C152 /* Info.plist */,
-				ADCF36B724A1D0F70011D6F5 /* LaunchScreen.storyboard */,
 				AD583B6324B301EB0032AA1C /* Localizable.strings */,
 				ADE058792706E7AE00DF2499 /* Package */,
 			);
@@ -625,7 +622,6 @@
 			files = (
 				AD583B6124B301EB0032AA1C /* Localizable.strings in Resources */,
 				ADA900C6279934EB000DC872 /* SmallNativeAdmobView.xib in Resources */,
-				ADCF36B924A1D0F70011D6F5 /* LaunchScreen.storyboard in Resources */,
 				ADCF36B624A1D0F70011D6F5 /* Preview Assets.xcassets in Resources */,
 				ADA900B527969687000DC872 /* Settings.bundle in Resources */,
 				ADCF36B324A1D0F70011D6F5 /* Assets.xcassets in Resources */,
@@ -792,14 +788,6 @@
 				AD583B6524B3032D0032AA1C /* ja */,
 			);
 			name = Localizable.strings;
-			sourceTree = "<group>";
-		};
-		ADCF36B724A1D0F70011D6F5 /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				ADCF36B824A1D0F70011D6F5 /* Base */,
-			);
-			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
 		};
 		ADE3A4B9277491CB0016C152 /* Info.plist */ = {
