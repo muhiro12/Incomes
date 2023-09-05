@@ -16,19 +16,14 @@ extension DebugSection: View {
     var body: some View {
         Section(content: {
             HStack {
-                Text("Order")
+                Text("RepeatID")
                 Spacer()
-                Text(item?.order.description ?? .empty)
+                Text(item?.repeatID.uuidString ?? .empty)
             }
             HStack {
                 Text("Balance")
                 Spacer()
                 Text(item?.balance.description ?? .empty)
-            }
-            HStack {
-                Text("RepeatID")
-                Spacer()
-                Text(item?.repeatID.uuidString ?? .empty)
             }
         }, header: {
             Text(String.debugTitle)
