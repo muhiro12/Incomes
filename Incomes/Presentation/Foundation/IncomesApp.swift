@@ -32,7 +32,9 @@ struct IncomesApp {
         FirebaseApp.configure()
 
         if !isSubscribeOn {
-            GADMobileAds.sharedInstance().start()
+            Task {
+                await GADMobileAds.sharedInstance().start()
+            }
         }
     }
 }
