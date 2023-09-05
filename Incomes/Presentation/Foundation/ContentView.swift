@@ -19,15 +19,9 @@ struct ContentView {
     @AppStorage(.key(.isLockAppOn))
     private var isLockAppOn = UserDefaults.isLockAppOn
 
-    @State private var isHome: Bool
-    @State private var isMasked: Bool
-    @State private var isLocked: Bool
-
-    init(isMasked: Bool, isLocked: Bool) {
-        self._isHome = State(initialValue: true)
-        self._isMasked = State(initialValue: isMasked)
-        self._isLocked = State(initialValue: isLocked)
-    }
+    @State private var isHome = true
+    @State private var isMasked = false
+    @State private var isLocked = UserDefaults.isLockAppOn
 }
 
 extension ContentView: View {
@@ -57,6 +51,6 @@ extension ContentView: View {
 }
 
 #Preview {
-    ContentView(isMasked: false, isLocked: false)
+    ContentView()
         .modelContainer(PreviewData.inMemoryContainer)
 }

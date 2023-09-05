@@ -46,7 +46,7 @@ struct IncomesApp {
 extension IncomesApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView(isMasked: isMaskAppOn, isLocked: isLockAppOn)
+            ContentView()
         }
         .environmentObject(store)
         .modelContainer(container)
