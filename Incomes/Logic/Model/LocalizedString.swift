@@ -11,7 +11,6 @@ import Foundation
 enum LocalizedString: String {
     // MARK: - Common
 
-    case all
     case done
     case cancel
     case delete
@@ -52,10 +51,7 @@ enum LocalizedString: String {
     case settingsTitle
     case lockApp
     case subscriptionHeader
-    case subscribe
-    case restore
     case noPurchases
-    case subscriptionFooter
     case manageItemsHeader
     case recalculate
     case deleteAll

@@ -8,7 +8,6 @@
 
 // MARK: - Common
 
-"all" = "全て";
 "done" = "完了";
 "cancel" = "キャンセル";
 "delete" = "削除";
@@ -49,10 +48,7 @@
 "settingsTitle" = "設定";
 "lockApp" = "Lock the app";
 "subscriptionHeader" = "サブスクリプション";
-"subscribe" = "定期購入";
-"restore" = "復元";
 "noPurchases" = "購入済みアイテムが見つかりません";
-"subscriptionFooter" = "全ての機能を利用する";
 "manageItemsHeader" = "アイテムを管理する";
 "recalculate" = "再計算";
 "deleteAll" = "全て削除";
