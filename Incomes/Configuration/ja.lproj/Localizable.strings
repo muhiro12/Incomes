@@ -46,7 +46,8 @@
 // MARK: - Settings
 
 "settingsTitle" = "設定";
-"lockApp" = "Lock the app";
+"lockApp" = "アプリをロックします";
+"maskApp" = "アプリをマスクします";
 "subscriptionHeader" = "サブスクリプション";
 "noPurchases" = "購入済みアイテムが見つかりません";
 "manageItemsHeader" = "アイテムを管理する";
