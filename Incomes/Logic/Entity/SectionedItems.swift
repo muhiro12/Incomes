@@ -8,13 +8,15 @@
 
 import Foundation
 
-struct SectionedItems<Section>where Section: Comparable {
+struct SectionedItems<Section>where Section: Hashable, Section: Comparable {
     let id = UUID()
     let section: Section
     let items: [Item]
 }
 
 extension SectionedItems: Identifiable {}
+
+extension SectionedItems: Hashable {}
 
 extension SectionedItems: Comparable {
     static func < (lhs: SectionedItems<Section>, rhs: SectionedItems<Section>) -> Bool {

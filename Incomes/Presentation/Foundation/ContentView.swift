@@ -19,6 +19,7 @@ struct ContentView {
     @AppStorage(.key(.isLockAppOn))
     private var isLockAppOn = UserDefaults.isLockAppOn
 
+    @State private var path = NavigationPath()
     @State private var isHome = true
     @State private var isMasked = false
     @State private var isLocked = UserDefaults.isLockAppOn
@@ -27,13 +28,25 @@ struct ContentView {
 extension ContentView: View {
     var body: some View {
         ZStack {
-            NavigationStack {
-                if isHome {
-                    HomeView()
-                } else {
-                    GroupView()
+            NavigationStack(path: $path) {
+                Group {
+                    if isHome {
+                        HomeView()
+                    } else {
+                        GroupView()
+                    }
                 }
-                IncomesBottomBar(isHome: $isHome)
+                .navigationDestination(for: SectionedItems.self) {
+                    ItemListView(title: $0.section.stringValue(.yyyyMMM),
+                                 predicate: Item.predicate(dateIsSameMonthAs: $0.section))
+                    IncomesBottomBar(path: $path, isHome: $isHome)
+                }
+                .navigationDestination(for: SectionedItems.self) {
+                    ItemListView(title: $0.section,
+                                 predicate: Item.predicate(contentIs: $0.section))
+                    IncomesBottomBar(path: $path, isHome: $isHome)
+                }
+                IncomesBottomBar(path: $path, isHome: $isHome)
             }
             .onChange(of: scenePhase) { _, newValue in
                 isMasked = isMaskAppOn && newValue != .active

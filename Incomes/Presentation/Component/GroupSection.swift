@@ -28,10 +28,7 @@ extension GroupSection: View {
     var body: some View {
         Section(content: {
             ForEach(sections.indices, id: \.self) { index in
-                NavigationLink(sections[index].section) {
-                    ItemListView(title: sections[index].section,
-                                 predicate: Item.predicate(contentIs: sections[index].section))
-                }
+                NavigationLink(sections[index].section, value: sections[index])
             }.onDelete {
                 isPresentedToAlert = true
                 willDeleteItems = $0.flatMap { sections[$0].items }
