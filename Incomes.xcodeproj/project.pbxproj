@@ -687,7 +687,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if test -d /opt/homebrew/bin; then\n    PATH=/opt/homebrew/bin/:$PATH\nfi\n\nif ! which swiftlint >/dev/null; then\n    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\n    exit 1\nfi\n\nDIFF_FILES=\"$((git diff --cached --name-only && git diff --name-only) | sort -u)\"\nSWIFT_FILES=\"$(echo \"$DIFF_FILES\" | grep .swift$)\"\n\nif echo \"$DIFF_FILES\" | grep \".swiftlint.yml\"; then\n    swiftlint --fix --format\n    swiftlint\nelif [ -n \"$SWIFT_FILES\" ]; then\n    swiftlint --fix --format $SWIFT_FILES\n    swiftlint $SWIFT_FILES\nfi\n";
+			shellScript = "if test -d /opt/homebrew/bin; then\n    PATH=/opt/homebrew/bin/:$PATH\nfi\n\nif ! which swiftlint >/dev/null; then\n    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\n    exit 1\nfi\n\nswiftlint\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
