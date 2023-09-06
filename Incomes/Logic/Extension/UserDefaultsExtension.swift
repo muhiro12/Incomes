@@ -36,8 +36,13 @@ extension UserDefaults {
             guard !isSubscribeOn else {
                 return
             }
-            isMaskAppOn = true
-            isLockAppOn = false
+
+            [Key]([
+                .isMaskAppOn,
+                .isLockAppOn
+            ])
+            .map { $0.rawValue }
+            .forEach(standard.removeObject)
         }
     }
 
