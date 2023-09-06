@@ -14,7 +14,7 @@ import XCTest
 class IncomesTests: XCTestCase {}
 
 var context: ModelContext {
-    try! ModelContext(PreviewSampleData.inMemoryContainer())
+    ModelContext(PreviewData.inMemoryContainer)
 }
 
 let date: (String) -> Date = { string in

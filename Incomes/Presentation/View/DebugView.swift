@@ -16,6 +16,9 @@ struct DebugView {
     @Environment(\.presentationMode)
     private var presentationMode
 
+    @AppStorage(.key(.isSubscribeOn))
+    private var isSubscribeOn = UserDefaults.isSubscribeOn
+
     @State private var isDebugOption = Self.isDebug
 }
 
@@ -28,10 +31,12 @@ extension DebugView: View {
                         .onChange(of: isDebugOption) { _, newValue in
                             Self.isDebug = newValue
                         }
+                    Toggle(String.debugSubscribe, isOn: $isSubscribeOn)
+                        .disabled(!isDebugOption)
                     Button(String.debugPreviewData) {
                     }.onLongPressGesture {
                         do {
-                            PreviewSampleData.items.forEach(context.insert)
+                            PreviewData.items.forEach(context.insert)
                             try context.save()
                         } catch {
                             assertionFailure(error.localizedDescription)

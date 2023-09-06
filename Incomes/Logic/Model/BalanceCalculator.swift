@@ -11,7 +11,6 @@ import SwiftData
 
 struct BalanceCalculator {
     let context: ModelContext
-    let repository: any Repository<Item>
 
     func calculate() throws {
         let editedDateList = [
@@ -28,9 +27,13 @@ struct BalanceCalculator {
             return
         }
 
-        let allItems = try repository.fetchList().reversed()
+        try calculate(after: oldestDate)
+    }
 
-        guard let separatorIndex = allItems.firstIndex(where: { $0.date >= oldestDate }) else {
+    func calculate(after date: Date) throws {
+        let allItems = try context.fetch(.init(sortBy: Item.sortDescriptors())).reversed()
+
+        guard let separatorIndex = allItems.firstIndex(where: { $0.date >= date }) else {
             return
         }
 
@@ -48,27 +51,6 @@ struct BalanceCalculator {
             }()
             item.set(balance: balance)
             resultList.append(item)
-        }
-
-        try context.save()
-    }
-
-    func recalculate()  throws {
-        try context.save()
-
-        let items = try repository.fetchList().reversed() as [Item]
-
-        for tuple in items.enumerated() {
-            let index = tuple.offset
-            let item = tuple.element
-
-            let balance = {
-                guard items.indices.contains(index - 1) else {
-                    return item.profit
-                }
-                return items[index - 1].balance + item.profit
-            }()
-            item.set(balance: balance)
         }
 
         try context.save()

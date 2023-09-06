@@ -28,10 +28,7 @@ extension YearSection: View {
     var body: some View {
         Section(content: {
             ForEach(0..<sections.count, id: \.self) { index in
-                NavigationLink(sections[index].section.stringValue(.yyyyMMM)) {
-                    ItemListView(title: sections[index].section.stringValue(.yyyyMMM),
-                                 predicate: Item.predicate(dateIsSameMonthAs: sections[index].section))
-                }
+                NavigationLink(sections[index].section.stringValue(.yyyyMMM), value: sections[index])
             }.onDelete {
                 isPresentedToAlert = true
                 willDeleteItems = $0.flatMap { sections[$0].items }
@@ -60,7 +57,7 @@ extension YearSection: View {
 #Preview {
     List {
         YearSection(startOfYear: Date(),
-                    items: PreviewSampleData.items.filter {
+                    items: PreviewData.items.filter {
                         $0.date.stringValue(.yyyy) == "2023"
                     })
     }

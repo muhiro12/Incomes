@@ -10,19 +10,23 @@ import Foundation
 import StoreKit
 
 final class Store: ObservableObject {
-    @Published private(set) var isSubscribeOn = false
+    @Published private(set) var product: Product?
 
-    @Published private(set) var subscriptionGroupStatus: Product.SubscriptionInfo.RenewalState?
-    @Published private(set) var subscriptions: [Product]
-    @Published private(set) var purchasedSubscriptions: [Product] = [] {
+    @Published private var subscriptionGroupStatus: Product.SubscriptionInfo.RenewalState?
+    @Published private var subscriptions: [Product] {
         didSet {
-            isSubscribeOn = !purchasedSubscriptions.isEmpty
+            product = subscriptions.first { $0.id == productID }
+        }
+    }
+    @Published private var purchasedSubscriptions: [Product] = [] {
+        didSet {
+            UserDefaults.isSubscribeOn = purchasedSubscriptions.contains { $0.id == productID }
         }
     }
 
-    var updateListenerTask: Task<Void, Error>?
-
     let productID = EnvironmentParameter.productID
+
+    var updateListenerTask: Task<Void, Error>?
 
     init() {
         subscriptions = []

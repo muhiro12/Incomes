@@ -1,21 +1,19 @@
 //
-//  PreviewSampleData.swift
+//  PreviewData.swift
 //  Incomes
 //
 //  Created by Hiromu Nakano on 2020/06/26.
 //  Copyright © 2020 Hiromu Nakano. All rights reserved.
 //
 
-import Foundation
 import SwiftData
+import SwiftUI
 
 // swiftlint:disable force_unwrapping force_try no_magic_numbers
-enum PreviewSampleData {
-    @MainActor static var container: ModelContainer = {
-        try! inMemoryContainer()
-    }()
+enum PreviewData {
+    @StateObject static var store = Store()
 
-    static var inMemoryContainer: () throws -> ModelContainer = {
+    static var inMemoryContainer: ModelContainer {
         let schema = Schema([Item.self])
         let configuration = ModelConfiguration(isStoredInMemoryOnly: true)
         let container = try! ModelContainer(for: schema, configurations: [configuration])

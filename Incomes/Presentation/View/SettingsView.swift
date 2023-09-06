@@ -12,10 +12,10 @@ struct SettingsView {
     @Environment(\.modelContext)
     private var context
     @Environment(\.presentationMode)
-    var presentationMode
+    private var presentationMode
 
-    @AppStorage(wrappedValue: false, UserDefaults.Key.isLockAppOn.rawValue)
-    private var isLockAppOn
+    @AppStorage(.key(.isSubscribeOn))
+    private var isSubscribeOn = UserDefaults.isSubscribeOn
 
     @EnvironmentObject private var store: Store
 
@@ -26,12 +26,8 @@ extension SettingsView: View {
     var body: some View {
         NavigationView {
             Form {
-                if store.isSubscribeOn {
-                    Section {
-                        Toggle(isOn: $isLockAppOn) {
-                            Text(.localized(.lockApp))
-                        }
-                    }
+                if isSubscribeOn {
+                    PremiumSection()
                 } else {
                     StoreSection()
                 }
@@ -72,4 +68,5 @@ extension SettingsView: View {
 
 #Preview {
     SettingsView()
+        .environmentObject(PreviewData.store)
 }

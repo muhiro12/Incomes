@@ -9,15 +9,15 @@
 import Foundation
 import SwiftData
 
-class ItemRepository: Repository {
+struct ItemRepository: Repository {
     typealias Entity = Item
 
     private let context: ModelContext
-
-    private lazy var calculator = BalanceCalculator(context: context, repository: self)
+    private let calculator: BalanceCalculator
 
     init(context: ModelContext) {
         self.context = context
+        self.calculator = BalanceCalculator(context: context)
     }
 
     func fetch(predicate: Predicate<Item>?) throws -> Item? {
@@ -64,6 +64,5 @@ class ItemRepository: Repository {
 private extension ItemRepository {
     func save() throws {
         try calculator.calculate()
-        try context.save()
     }
 }

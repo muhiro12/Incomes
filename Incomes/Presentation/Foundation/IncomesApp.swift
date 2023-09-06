@@ -13,7 +13,14 @@ import SwiftUI
 
 @main
 struct IncomesApp {
-    @StateObject private var store: Store
+    @AppStorage(.key(.isSubscribeOn))
+    private var isSubscribeOn = UserDefaults.isSubscribeOn
+    @AppStorage(.key(.isMaskAppOn))
+    private var isMaskAppOn = UserDefaults.isMaskAppOn
+    @AppStorage(.key(.isLockAppOn))
+    private var isLockAppOn = UserDefaults.isLockAppOn
+
+    @StateObject private var store = Store()
 
     private let container = {
         let url = URL.applicationSupportDirectory.appendingPathComponent("Incomes.sqlite")
@@ -28,11 +35,10 @@ struct IncomesApp {
     init() {
         FirebaseApp.configure()
 
-        let store = Store()
-        _store = StateObject(wrappedValue: store)
-
-        if !store.isSubscribeOn {
-            GADMobileAds.sharedInstance().start()
+        if !isSubscribeOn {
+            Task {
+                await GADMobileAds.sharedInstance().start()
+            }
         }
     }
 }

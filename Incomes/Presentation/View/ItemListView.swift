@@ -13,6 +13,9 @@ struct ItemListView {
     @Environment(\.modelContext)
     private var context
 
+    @AppStorage(.key(.isSubscribeOn))
+    private var isSubscribeOn = UserDefaults.isSubscribeOn
+
     @Query private var items: [Item]
 
     @State private var isPresentedToAlert = false
@@ -43,7 +46,9 @@ extension ItemListView: View {
                         Text(section.section.stringValue(.yyyy))
                     }
                 })
-                Advertisement(type: .native(.medium))
+                if !isSubscribeOn {
+                    Advertisement(type: .native(.medium))
+                }
             }
         }
         .id(UUID())
@@ -74,8 +79,7 @@ private extension ItemListView {
 }
 
 #Preview {
-    ModelContainerPreview(PreviewSampleData.inMemoryContainer) {
-        ItemListView(title: "Title",
-                     predicate: Item.predicate(dateIsSameMonthAs: Date()))
-    }
+    ItemListView(title: "Title",
+                 predicate: Item.predicate(dateIsSameMonthAs: Date()))
+        .modelContainer(PreviewData.inMemoryContainer)
 }

@@ -10,9 +10,12 @@ import SwiftData
 import SwiftUI
 
 struct HomeView {
-    @State private var isPresentedToSettings = false
+    @AppStorage(.key(.isSubscribeOn))
+    private var isSubscribeOn = UserDefaults.isSubscribeOn
 
     @Query private var items: [Item]
+
+    @State private var isPresentedToSettings = false
 }
 
 extension HomeView: View {
@@ -20,7 +23,9 @@ extension HomeView: View {
         List {
             ForEach(sections) {
                 YearSection(startOfYear: $0.section, items: $0.items)
-                Advertisement(type: .native(.small))
+                if !isSubscribeOn {
+                    Advertisement(type: .native(.small))
+                }
             }
         }
         .toolbar {
@@ -47,7 +52,6 @@ private extension HomeView {
 }
 
 #Preview {
-    ModelContainerPreview(PreviewSampleData.inMemoryContainer) {
-        HomeView()
-    }
+    HomeView()
+        .modelContainer(PreviewData.inMemoryContainer)
 }

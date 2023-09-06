@@ -93,13 +93,8 @@ extension EditView: View {
                 }, header: {
                     Text(.localized(.information))
                 })
-                if DebugView.isDebug,
-                   let item {
-                    Section(content: {
-                        Text(String(describing: item))
-                    }, header: {
-                        Text(String.debugTitle)
-                    })
+                if DebugView.isDebug {
+                    DebugSection(item: item)
                 }
             }
             .navigationBarTitle(isEditMode ? .localized(.editTitle) : .localized(.createTitle))
@@ -262,4 +257,8 @@ private extension EditView {
 
 #Preview {
     EditView()
+}
+
+#Preview {
+    EditView(of: PreviewData.item)
 }

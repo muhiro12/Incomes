@@ -8,7 +8,6 @@
 
 // MARK: - Common
 
-"all" = "All";
 "done" = "Done";
 "cancel" = "Cancel";
 "delete" = "Delete";
@@ -48,11 +47,9 @@
 
 "settingsTitle" = "Settings";
 "lockApp" = "Lock the app";
+"maskApp" = "Mask the app";
 "subscriptionHeader" = "Subscription Service";
-"subscribe" = "Subscribe";
-"restore" = "Restore";
 "noPurchases" = "No purchases found";
-"subscriptionFooter" = "For using all features";
 "manageItemsHeader" = "Manage items";
 "recalculate" = "Recalculate";
 "deleteAll" = "Delete all";

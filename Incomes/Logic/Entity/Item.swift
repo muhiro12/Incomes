@@ -19,6 +19,9 @@ final class Item {
     private(set) var repeatID = UUID()
     private(set) var balance = Decimal.zero
 
+    // TODO: Remove
+    private(set) var startOfYear = Date(timeIntervalSinceReferenceDate: .zero)
+
     init(date: Date,
          content: String,
          income: Decimal,
@@ -55,6 +58,9 @@ extension Item {
         self.outgo = outgo
         self.group = group
         self.repeatID = repeatID
+
+        // TODO: Remove
+        self.startOfYear = Calendar.utc.startOfYear(for: date)
     }
 
     func set(balance: Decimal) {

@@ -11,18 +11,20 @@ import SwiftUI
 
 struct StoreSection {
     @EnvironmentObject private var store: Store
-
-    @State private var isPresented = false
 }
 
 extension StoreSection: View {
     var body: some View {
-        Button(.localized(.subscribe)) {
-            isPresented = true
-        }.sheet(isPresented: $isPresented) {
+        Section(content: {
             SubscriptionStoreView(productIDs: [store.productID])
                 .storeButton(.visible, for: .restorePurchases)
-        }
+                .storeButton(.hidden, for: .cancellation)
+                .fixedSize(horizontal: false, vertical: true)
+        }, header: {
+            Text(.localized(.subscriptionHeader))
+        }, footer: {
+            Text(store.product?.description ?? .empty)
+        })
     }
 }
 
@@ -30,4 +32,5 @@ extension StoreSection: View {
     List {
         StoreSection()
     }
+    .environmentObject(PreviewData.store)
 }

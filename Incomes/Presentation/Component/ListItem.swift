@@ -24,10 +24,10 @@ struct ListItem {
 extension ListItem: View {
     var body: some View {
         GeometryReader { geometry in
-            if geometry.size.width > .portraitModeMaxWidth {
-                WideListItem(of: item)
-            } else {
+            if geometry.size.width < .portraitModeMaxWidth {
                 NarrowListItem(of: item)
+            } else {
+                WideListItem(of: item)
             }
         }
         .sheet(isPresented: $isPresentedToEdit) {
@@ -49,5 +49,9 @@ private extension ListItem {
 }
 
 #Preview {
-    ListItem(of: PreviewSampleData.item)
+    ListItem(of: PreviewData.item)
+}
+
+#Preview(traits: .landscapeLeft) {
+    ListItem(of: PreviewData.item)
 }
