@@ -9,7 +9,13 @@
 import SwiftUI
 
 struct DebugView {
-    static var isDebug = false
+    static var isDebug = {
+        #if DEBUG
+        return true
+        #else
+        return false
+        #endif
+    }()
 
     @Environment(\.modelContext)
     private var context
@@ -33,16 +39,16 @@ extension DebugView: View {
                         }
                     Toggle(String.debugSubscribe, isOn: $isSubscribeOn)
                         .disabled(!isDebugOption)
-                    Button(String.debugPreviewData) {
-                    }.onLongPressGesture {
-                        do {
-                            PreviewData.items.forEach(context.insert)
-                            try context.save()
-                        } catch {
-                            assertionFailure(error.localizedDescription)
+                    Button(String.debugPreviewData) {}
+                        .disabled(!isDebugOption)
+                        .onLongPressGesture {
+                            do {
+                                PreviewData.items.forEach(context.insert)
+                                try context.save()
+                            } catch {
+                                assertionFailure(error.localizedDescription)
+                            }
                         }
-                    }
-                    .disabled(!isDebugOption)
                 }
             }
             .toolbar {
@@ -56,5 +62,5 @@ extension DebugView: View {
 }
 
 #Preview {
-    DebugView()
+DebugView()
 }
