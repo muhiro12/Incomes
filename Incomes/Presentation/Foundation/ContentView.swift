@@ -33,7 +33,7 @@ extension ContentView: View {
                     if isHome {
                         HomeView()
                     } else {
-                        GroupView()
+                        CategoryView()
                     }
                 }
                 .navigationDestination(for: SectionedItems.self) {
@@ -64,6 +64,6 @@ extension ContentView: View {
 }
 
 #Preview {
-    ContentView()
-        .modelContainer(PreviewData.inMemoryContainer)
+ContentView()
+.modelContainer(PreviewData.inMemoryContainer)
 }

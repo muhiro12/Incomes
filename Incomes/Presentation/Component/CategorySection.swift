@@ -1,14 +1,14 @@
 //
-//  GroupSection.swift
+//  CategorySection.swift
 //  Incomes
 //
-//  Created by Hiromu Nakano on 2021/12/29.
-//  Copyright © 2021 Hiromu Nakano. All rights reserved.
+//  Created by Hiromu Nakano on 2023/09/10.
+//  Copyright © 2023 Hiromu Nakano. All rights reserved.
 //
 
 import SwiftUI
 
-struct GroupSection {
+struct CategorySection {
     @Environment(\.modelContext)
     private var context
 
@@ -24,7 +24,7 @@ struct GroupSection {
     }
 }
 
-extension GroupSection: View {
+extension CategorySection: View {
     var body: some View {
         Section(content: {
             ForEach(sections.indices, id: \.self) { index in
@@ -55,10 +55,10 @@ extension GroupSection: View {
 }
 
 #Preview {
-    List {
-        GroupSection(title: "Credit",
-                     items: PreviewData.items.filter {
-                        $0.group == "Credit"
-                     })
-    }
+List {
+CategorySection(title: "Credit",
+items: PreviewData.items.filter {
+$0.group == "Credit"
+})
+}
 }
