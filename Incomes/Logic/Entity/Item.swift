@@ -15,11 +15,14 @@ final class Item {
     private(set) var content = String.empty
     private(set) var income = Decimal.zero
     private(set) var outgo = Decimal.zero
-    private(set) var group = String.empty
     private(set) var repeatID = UUID()
     private(set) var balance = Decimal.zero
 
+    @Relationship(inverse: \Tag.items)
+    private(set) var tags: [Tag]?
+
     // TODO: Remove
+    private(set) var group = String.empty
     private(set) var startOfYear = Date(timeIntervalSinceReferenceDate: .zero)
 
     init(date: Date,
@@ -56,14 +59,22 @@ extension Item {
         self.content = content
         self.income = income
         self.outgo = outgo
-        self.group = group
         self.repeatID = repeatID
 
+        self.tags = [
+            // TODO: Add tags
+        ]
+
         // TODO: Remove
+        self.group = group
         self.startOfYear = Calendar.utc.startOfYear(for: date)
     }
 
     func set(balance: Decimal) {
         self.balance = balance
+    }
+
+    func set(tags: [Tag]) {
+        self.tags = tags
     }
 }

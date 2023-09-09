@@ -21,7 +21,12 @@ struct ItemRepository: Repository {
     }
 
     func fetch(predicate: Predicate<Item>?) throws -> Item? {
-        try fetchList(predicate: predicate).first
+        var descriptor = FetchDescriptor(
+            predicate: predicate,
+            sortBy: Item.sortDescriptors()
+        )
+        descriptor.fetchLimit = 1
+        return try context.fetch(descriptor).first
     }
 
     func fetchList(predicate: Predicate<Item>?) throws -> [Item] {

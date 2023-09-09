@@ -15,7 +15,7 @@ extension Item {
 
     static func predicate(dateIsBetween start: Date, and end: Date) -> Predicate {
         #Predicate {
-            start <= $0.date && $0.date <= end
+        start <= $0.date && $0.date <= end
         }
     }
 
@@ -31,37 +31,37 @@ extension Item {
 
     static func predicate(dateIsAfter date: Date) -> Predicate {
         #Predicate {
-            $0.date >= date
+        $0.date >= date
         }
     }
 
     static func predicate(contentIs content: String) -> Predicate {
         #Predicate {
-            $0.content == content
+        $0.content == content
         }
     }
 
     static func predicate(groupIs group: String) -> Predicate {
         #Predicate {
-            $0.group == group
+        $0.group == group
         }
     }
 
     static func predicate(groupIsNot group: String) -> Predicate {
         #Predicate {
-            $0.group != group
+        $0.group != group
         }
     }
 
     static func predicate(repeatIDIs repeatID: UUID) -> Predicate {
         #Predicate {
-            $0.repeatID == repeatID
+        $0.repeatID == repeatID
         }
     }
 
     static func predicate(repeatIDIs repeatID: UUID, dateIsAfter date: Date) -> Predicate {
         #Predicate {
-            $0.repeatID == repeatID && $0.date >= date
+        $0.repeatID == repeatID && $0.date >= date
         }
     }
 }

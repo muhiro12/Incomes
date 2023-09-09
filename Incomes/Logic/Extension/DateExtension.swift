@@ -11,6 +11,7 @@ import Foundation
 extension Date {
     enum Template: String {
         case yyyy
+        case yyyyMM
         case yyyyMMM
         case MMMd
         case yyyyMMMd
@@ -24,8 +25,13 @@ extension Date {
 
     func stringValue(_ template: Template, locale: Locale = .current) -> String {
         Self.formatter.dateFormat = DateFormatter.dateFormat(fromTemplate: template.rawValue,
-                                                             options: 0,
+                                                             options: .zero,
                                                              locale: locale)
+        return Self.formatter.string(from: self)
+    }
+
+    func stringValueWithoutLocale(_ template: Date.Template) -> String {
+        Self.formatter.dateFormat = template.rawValue
         return Self.formatter.string(from: self)
     }
 }

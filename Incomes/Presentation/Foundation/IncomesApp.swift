@@ -40,6 +40,12 @@ struct IncomesApp {
                 await GADMobileAds.sharedInstance().start()
             }
         }
+
+        do {
+            try TagService(context: container.mainContext).migrate()
+        } catch {
+            assertionFailure()
+        }
     }
 }
 
