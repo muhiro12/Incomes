@@ -190,16 +190,6 @@ extension ItemService {
         .reversed()
     }
 
-    static func groupByGroup(items: [Item]) -> [SectionedItems<String>] {
-        Dictionary(grouping: items) {
-            $0.group
-        }
-        .map {
-            SectionedItems(section: $0.key, items: $0.value)
-        }
-        .sorted()
-    }
-
     static func groupByContent(items: [Item]) -> [SectionedItems<String>] {
         Dictionary(grouping: items) {
             $0.content

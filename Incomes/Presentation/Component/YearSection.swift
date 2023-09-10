@@ -15,11 +15,11 @@ struct YearSection {
     @State private var isPresentedToAlert = false
     @State private var willDeleteItems: [Item] = []
 
-    private let startOfYear: Date
+    private let year: String
     private let sections: [SectionedItems<Date>]
 
-    init(startOfYear: Date, items: [Item]) {
-        self.startOfYear = startOfYear
+    init(year: String, items: [Item]) {
+        self.year = year
         self.sections = ItemService.groupByMonth(items: items)
     }
 }
@@ -34,7 +34,7 @@ extension YearSection: View {
                 willDeleteItems = $0.flatMap { sections[$0].items }
             }
         }, header: {
-            Text(startOfYear.stringValue(.yyyy))
+            Text(year)
         }).actionSheet(isPresented: $isPresentedToAlert) {
             ActionSheet(
                 title: Text(.localized(.deleteConfirm)),
@@ -55,10 +55,10 @@ extension YearSection: View {
 }
 
 #Preview {
-    List {
-        YearSection(startOfYear: Date(),
-                    items: PreviewData.items.filter {
-                        $0.date.stringValue(.yyyy) == "2023"
-                    })
-    }
+List {
+YearSection(year: "2023",
+items: PreviewData.items.filter {
+$0.date.stringValue(.yyyy) == "2023"
+})
+}
 }
