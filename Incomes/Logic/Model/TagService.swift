@@ -44,4 +44,9 @@ struct TagService {
         }
         try itemRepository.updateList(items)
     }
+
+    func deleteAll() throws {
+        let tags = try repository.fetchList()
+        try repository.deleteList(tags)
+    }
 }
