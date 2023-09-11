@@ -41,11 +41,7 @@ struct IncomesApp {
             }
         }
 
-        do {
-            try TagService(context: container.mainContext).migrate()
-        } catch {
-            assertionFailure()
-        }
+        TagService(context: container.mainContext).modify()
     }
 }
 

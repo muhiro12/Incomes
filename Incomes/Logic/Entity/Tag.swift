@@ -28,34 +28,8 @@ final class Tag {
     }
 }
 
-// MARK: - Predicate
-
-extension Tag {
-    typealias Predicate = Foundation.Predicate<Tag>
-
-    static func predicate(_ name: String, for type: Tag.TagType) -> Predicate {
-        let id = type.rawValue
-        return #Predicate {
-        $0.name == name && $0.typeID == id
-        }
-    }
-
-    static func predicate(for type: Tag.TagType) -> Predicate {
-        let id = type.rawValue
-        return #Predicate {
-        $0.typeID == id
-        }
-    }
-}
-
-// MARK: - SortDescriptor
-
-extension Tag {
-    typealias SortDescriptor = Foundation.SortDescriptor<Tag>
-
-    static func sortDescriptors() -> [SortDescriptor] {
-        [.init(\.name),
-         .init(\.typeID),
-         .init(\.persistentModelID)]
+extension Tag: Equatable {
+    static func == (lhs: Tag, rhs: Tag) -> Bool {
+        lhs.name == rhs.name && lhs.typeID == rhs.typeID
     }
 }

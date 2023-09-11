@@ -72,6 +72,7 @@
 		ADDF76C52AACAD5900CDEC7E /* TagService.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADDF76C42AACAD5800CDEC7E /* TagService.swift */; };
 		ADDF76C72AAD35AC00CDEC7E /* CategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADDF76C62AAD35AB00CDEC7E /* CategoryView.swift */; };
 		ADDF76C92AAD36AF00CDEC7E /* CategorySection.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADDF76C82AAD36AF00CDEC7E /* CategorySection.swift */; };
+		ADDF76CD2AADFAAF00CDEC7E /* TagExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADDF76CC2AADFAAE00CDEC7E /* TagExtension.swift */; };
 		ADE3A4C1277690340016C152 /* Authenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE3A4C0277690330016C152 /* Authenticator.swift */; };
 		ADE89DF524B5E73300BB82E9 /* TitleListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE89DF424B5E73300BB82E9 /* TitleListItem.swift */; };
 		ADE89DF724B5F78200BB82E9 /* ImageConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE89DF624B5F78200BB82E9 /* ImageConstant.swift */; };
@@ -184,6 +185,7 @@
 		ADDF76C42AACAD5800CDEC7E /* TagService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagService.swift; sourceTree = "<group>"; };
 		ADDF76C62AAD35AB00CDEC7E /* CategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryView.swift; sourceTree = "<group>"; };
 		ADDF76C82AAD36AF00CDEC7E /* CategorySection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategorySection.swift; sourceTree = "<group>"; };
+		ADDF76CC2AADFAAE00CDEC7E /* TagExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagExtension.swift; sourceTree = "<group>"; };
 		ADE3A4BC277495270016C152 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Base; path = Base.lproj/Info.plist; sourceTree = "<group>"; };
 		ADE3A4BE27768E6C0016C152 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = en; path = en.lproj/Info.plist; sourceTree = "<group>"; };
 		ADE3A4BF27768E7B0016C152 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = ja; path = ja.lproj/Info.plist; sourceTree = "<group>"; };
@@ -248,6 +250,7 @@
 				ADCF36FC24A1D18E0011D6F5 /* StringConstant.swift */,
 				ADCF36FB24A1D18E0011D6F5 /* StringExtension.swift */,
 				ADAD3D24277C1D0F005A70E1 /* StringProtocolExtension.swift */,
+				ADDF76CC2AADFAAE00CDEC7E /* TagExtension.swift */,
 				ADAD3CC6277AA922005A70E1 /* UserDefaultsExtension.swift */,
 			);
 			path = Extension;
@@ -729,6 +732,7 @@
 				ADB3627C2AA7890C00964CA7 /* Box.swift in Sources */,
 				ADCF370B24A1D18E0011D6F5 /* HomeView.swift in Sources */,
 				ADCF376924A33F500011D6F5 /* ImageExtension.swift in Sources */,
+				ADDF76CD2AADFAAF00CDEC7E /* TagExtension.swift in Sources */,
 				ADAD3D17277BC80F005A70E1 /* YearSection.swift in Sources */,
 				ADE3A4C1277690340016C152 /* Authenticator.swift in Sources */,
 				ADDF76C92AAD36AF00CDEC7E /* CategorySection.swift in Sources */,
