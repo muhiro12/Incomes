@@ -40,6 +40,8 @@ struct IncomesApp {
                 await GADMobileAds.sharedInstance().start()
             }
         }
+
+        SwiftDataController(context: container.mainContext).modify()
     }
 }
 

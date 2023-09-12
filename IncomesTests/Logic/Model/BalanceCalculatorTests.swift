@@ -25,7 +25,7 @@ class BalanceCalculatorTests: XCTestCase {
                                 repeatID: UUID())
                 context.insert(item)
             }
-            try! calculator.calculate()
+            try! calculator.calculateAll()
 
             let item = Item(date: date("2000-01-31T12:00:00Z"),
                             content: "content",
@@ -34,7 +34,7 @@ class BalanceCalculatorTests: XCTestCase {
                             group: "group",
                             repeatID: UUID())
             context.insert(item)
-            try! calculator.calculate()
+            try! calculator.calculate(after: item.date)
 
             let repository = ItemRepository(context: context)
             let first = try! repository.fetchList().first!
@@ -57,7 +57,7 @@ class BalanceCalculatorTests: XCTestCase {
                                 repeatID: UUID())
                 context.insert(item)
             }
-            try! calculator.calculate()
+            try! calculator.calculateAll()
 
             let item = Item(date: date("2001-01-01T00:00:00Z"),
                             content: "content",
@@ -66,7 +66,7 @@ class BalanceCalculatorTests: XCTestCase {
                             group: "group",
                             repeatID: UUID())
             context.insert(item)
-            try! calculator.calculate()
+            try! calculator.calculate(after: item.date)
 
             let repository = ItemRepository(context: context)
             let first = try! repository.fetchList().first!
@@ -89,7 +89,7 @@ class BalanceCalculatorTests: XCTestCase {
                                 repeatID: UUID())
                 context.insert(item)
             }
-            try! calculator.calculate()
+            try! calculator.calculateAll()
 
             let item = Item(date: date("2000-01-01T00:00:00Z"),
                             content: "content",
@@ -98,7 +98,7 @@ class BalanceCalculatorTests: XCTestCase {
                             group: "group",
                             repeatID: UUID())
             context.insert(item)
-            try! calculator.calculate()
+            try! calculator.calculate(after: item.date)
 
             let repository = ItemRepository(context: context)
             let first = try! repository.fetchList().first!
@@ -124,15 +124,16 @@ class BalanceCalculatorTests: XCTestCase {
                 context.insert(item)
                 items.append(item)
             }
-            try! calculator.calculate()
+            try! calculator.calculateAll()
 
-            items[1].set(date: date("2000-02-01T12:00:00Z"),
-                         content: "content",
-                         income: 300,
-                         outgo: 100,
-                         group: "group",
-                         repeatID: UUID())
-            try! calculator.calculate()
+            let item = items[1]
+            item.set(date: date("2000-02-01T12:00:00Z"),
+                     content: "content",
+                     income: 300,
+                     outgo: 100,
+                     group: "group",
+                     repeatID: UUID())
+            try! calculator.calculate(after: item.date)
 
             let repository = ItemRepository(context: context)
             let first = try! repository.fetchList().first!
@@ -158,15 +159,16 @@ class BalanceCalculatorTests: XCTestCase {
                 context.insert(item)
                 items.append(item)
             }
-            try! calculator.calculate()
+            try! calculator.calculateAll()
 
-            items[0].set(date: date("2000-01-01T12:00:00Z"),
-                         content: "content",
-                         income: 300,
-                         outgo: 100,
-                         group: "group",
-                         repeatID: UUID())
-            try! calculator.calculate()
+            let item = items[0]
+            item.set(date: date("2000-01-01T12:00:00Z"),
+                     content: "content",
+                     income: 300,
+                     outgo: 100,
+                     group: "group",
+                     repeatID: UUID())
+            try! calculator.calculate(after: item.date)
 
             let repository = ItemRepository(context: context)
             let first = try! repository.fetchList().first!
@@ -192,15 +194,16 @@ class BalanceCalculatorTests: XCTestCase {
                 context.insert(item)
                 items.append(item)
             }
-            try! calculator.calculate()
+            try! calculator.calculateAll()
 
-            items[4].set(date: date("2000-05-01T12:00:00Z"),
-                         content: "content",
-                         income: 300,
-                         outgo: 100,
-                         group: "group",
-                         repeatID: UUID())
-            try! calculator.calculate()
+            let item = items[4]
+            item.set(date: date("2000-05-01T12:00:00Z"),
+                     content: "content",
+                     income: 300,
+                     outgo: 100,
+                     group: "group",
+                     repeatID: UUID())
+            try! calculator.calculate(after: item.date)
 
             let repository = ItemRepository(context: context)
             let first = try! repository.fetchList().first!
@@ -226,15 +229,16 @@ class BalanceCalculatorTests: XCTestCase {
                 context.insert(item)
                 items.append(item)
             }
-            try! calculator.calculate()
+            try! calculator.calculateAll()
 
-            items[4].set(date: date("1999-12-31T00:00:00Z"),
-                         content: "content",
-                         income: 300,
-                         outgo: 100,
-                         group: "group",
-                         repeatID: UUID())
-            try! calculator.calculate()
+            let item = items[4]
+            item.set(date: date("1999-12-31T00:00:00Z"),
+                     content: "content",
+                     income: 300,
+                     outgo: 100,
+                     group: "group",
+                     repeatID: UUID())
+            try! calculator.calculate(after: item.date)
 
             let repository = ItemRepository(context: context)
             let first = try! repository.fetchList().first!
@@ -260,10 +264,11 @@ class BalanceCalculatorTests: XCTestCase {
                 context.insert(item)
                 items.append(item)
             }
-            try! calculator.calculate()
+            try! calculator.calculateAll()
 
-            context.delete(items[1])
-            try! calculator.calculate()
+            let item = items[1]
+            context.delete(item)
+            try! calculator.calculate(after: item.date)
 
             let repository = ItemRepository(context: context)
             let first = try! repository.fetchList().first!
@@ -289,10 +294,11 @@ class BalanceCalculatorTests: XCTestCase {
                 context.insert(item)
                 items.append(item)
             }
-            try! calculator.calculate()
+            try! calculator.calculateAll()
 
-            context.delete(items[0])
-            try! calculator.calculate()
+            let item = items[0]
+            context.delete(item)
+            try! calculator.calculate(after: item.date)
 
             let repository = ItemRepository(context: context)
             let first = try! repository.fetchList().first!
@@ -318,10 +324,11 @@ class BalanceCalculatorTests: XCTestCase {
                 context.insert(item)
                 items.append(item)
             }
-            try! calculator.calculate()
+            try! calculator.calculateAll()
 
-            context.delete(items[4])
-            try! calculator.calculate()
+            let item = items[4]
+            context.delete(item)
+            try! calculator.calculate(after: item.date)
 
             let repository = ItemRepository(context: context)
             let first = try! repository.fetchList().first!

@@ -56,6 +56,7 @@ extension SettingsView: View {
             Button(.localized(.delete), role: .destructive) {
                 do {
                     try ItemService(context: context).deleteAll()
+                    try TagService(context: context).deleteAll()
                 } catch {
                     assertionFailure(error.localizedDescription)
                 }
@@ -67,6 +68,6 @@ extension SettingsView: View {
 }
 
 #Preview {
-    SettingsView()
-        .environmentObject(PreviewData.store)
+SettingsView()
+.environmentObject(PreviewData.store)
 }

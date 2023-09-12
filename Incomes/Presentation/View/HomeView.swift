@@ -13,7 +13,8 @@ struct HomeView {
     @AppStorage(.key(.isSubscribeOn))
     private var isSubscribeOn = UserDefaults.isSubscribeOn
 
-    @Query private var items: [Item]
+    @Query(filter: Tag.predicate(for: .year), sort: Tag.sortDescriptors())
+    private var tags: [Tag]
 
     @State private var isPresentedToSettings = false
 }
@@ -21,8 +22,8 @@ struct HomeView {
 extension HomeView: View {
     var body: some View {
         List {
-            ForEach(sections) {
-                YearSection(startOfYear: $0.section, items: $0.items)
+            ForEach(tags.reversed()) {
+                YearSection(year: $0.name, items: $0.items ?? [])
                 if !isSubscribeOn {
                     Advertisement(type: .native(.small))
                 }
@@ -45,13 +46,7 @@ extension HomeView: View {
     }
 }
 
-private extension HomeView {
-    var sections: [SectionedItems<Date>] {
-        ItemService.groupByYear(items: items)
-    }
-}
-
 #Preview {
-    HomeView()
-        .modelContainer(PreviewData.inMemoryContainer)
+HomeView()
+.modelContainer(PreviewData.inMemoryContainer)
 }

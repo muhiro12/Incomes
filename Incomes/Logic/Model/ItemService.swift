@@ -11,12 +11,22 @@ import SwiftData
 
 struct ItemService {
     private let repository: any Repository<Item>
+    private let calculator: BalanceCalculator
+    private let itemFactory: ItemFactory
+    private let tagFactory: TagFactory
 
     init(context: ModelContext) {
         self.repository = ItemRepository(context: context)
+        self.calculator = BalanceCalculator(context: context)
+        self.itemFactory = ItemFactory(context: context)
+        self.tagFactory = TagFactory(context: context)
     }
 
     // MARK: - Fetch
+
+    func item(predicate: Predicate<Item>? = nil) throws -> Item? {
+        try repository.fetch(predicate: predicate)
+    }
 
     func items(predicate: Predicate<Item>? = nil) throws -> [Item] {
         try repository.fetchList(predicate: predicate)
@@ -34,12 +44,14 @@ struct ItemService {
 
         let repeatID = UUID()
 
-        let item = Item(date: date,
-                        content: content,
-                        income: income,
-                        outgo: outgo,
-                        group: group,
-                        repeatID: repeatID)
+        let item = try itemFactory(
+            date: date,
+            content: content,
+            income: income,
+            outgo: outgo,
+            group: group,
+            repeatID: repeatID
+        )
         items.append(item)
 
         for index in 0..<repeatCount {
@@ -52,19 +64,27 @@ struct ItemService {
                 assertionFailure()
                 return
             }
-            let item = Item(date: repeatingDate,
-                            content: content,
-                            income: income,
-                            outgo: outgo,
-                            group: group,
-                            repeatID: repeatID)
+            let item = try itemFactory(
+                date: repeatingDate,
+                content: content,
+                income: income,
+                outgo: outgo,
+                group: group,
+                repeatID: repeatID
+            )
             items.append(item)
         }
 
         try repository.addList(items)
+        try calculate(for: items)
     }
 
     // MARK: - Update
+
+    func update(items: [Item]) throws {
+        try repository.updateList(items)
+        try calculate(for: items)
+    }
 
     func update(item: Item, // swiftlint:disable:this function_parameter_count
                 date: Date,
@@ -78,7 +98,8 @@ struct ItemService {
                  outgo: outgo,
                  group: group,
                  repeatID: UUID())
-        try repository.update(item)
+        item.set(tags: try tags(date: date, content: content, group: group))
+        try update(items: [item])
     }
 
     func updateForRepeatingItems(item: Item, // swiftlint:disable:this function_parameter_count
@@ -94,7 +115,7 @@ struct ItemService {
 
         let repeatID = UUID()
         let items = try items(predicate: predicate)
-        items.forEach {
+        try items.forEach {
             guard let newDate = Calendar.utc.date(byAdding: components, to: $0.date) else {
                 assertionFailure()
                 return
@@ -105,9 +126,10 @@ struct ItemService {
                    outgo: outgo,
                    group: group,
                    repeatID: repeatID)
+            item.set(tags: try tags(date: newDate, content: content, group: group))
         }
 
-        try repository.updateList(items)
+        try update(items: items)
     }
 
     func updateForFutureItems(item: Item, // swiftlint:disable:this function_parameter_count
@@ -144,6 +166,7 @@ struct ItemService {
 
     func delete(items: [Item]) throws {
         try repository.deleteList(items)
+        try calculate(for: items)
     }
 
     func deleteAll() throws {
@@ -152,16 +175,25 @@ struct ItemService {
 
     // MARK: - Calculate balance
 
-    func recalculate() throws {
-        guard let item = try repository.fetchList().last else {
-            return
+    func calculate(for items: [Item]) throws {
+        if let date = items.map({ $0.date }).min() {
+            try calculator.calculate(after: date)
+        } else {
+            try recalculate()
         }
-        try update(item: item,
-                   date: item.date,
-                   content: item.content,
-                   income: item.income,
-                   outgo: item.outgo,
-                   group: item.group)
+    }
+
+    func recalculate() throws {
+        try calculator.calculateAll()
+    }
+
+    // MARK: - Tag (TODO: Remove)
+
+    func tags(date: Date, content: String, group: String) throws -> [Tag] {
+        [try tagFactory(Calendar.utc.startOfYear(for: date).stringValueWithoutLocale(.yyyy), for: .year),
+         try tagFactory(Calendar.utc.startOfMonth(for: date).stringValueWithoutLocale(.yyyyMM), for: .yearMonth),
+         try tagFactory(content, for: .content),
+         try tagFactory(group, for: .category)]
     }
 }
 
@@ -188,16 +220,6 @@ extension ItemService {
         }
         .sorted()
         .reversed()
-    }
-
-    static func groupByGroup(items: [Item]) -> [SectionedItems<String>] {
-        Dictionary(grouping: items) {
-            $0.group
-        }
-        .map {
-            SectionedItems(section: $0.key, items: $0.value)
-        }
-        .sorted()
     }
 
     static func groupByContent(items: [Item]) -> [SectionedItems<String>] {

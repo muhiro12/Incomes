@@ -12,25 +12,9 @@ import SwiftData
 struct BalanceCalculator {
     let context: ModelContext
 
-    func calculate() throws {
-        let editedDateList = [
-            context.insertedModelsArray,
-            context.changedModelsArray,
-            context.deletedModelsArray
-        ].flatMap {
-            $0.compactMap { ($0 as? Item)?.date }
-        }
-
+    func calculate(after date: Date) throws {
         try context.save()
 
-        guard let oldestDate = editedDateList.min() else {
-            return
-        }
-
-        try calculate(after: oldestDate)
-    }
-
-    func calculate(after date: Date) throws {
         let allItems = try context.fetch(.init(sortBy: Item.sortDescriptors())).reversed()
 
         guard let separatorIndex = allItems.firstIndex(where: { $0.date >= date }) else {
@@ -54,5 +38,9 @@ struct BalanceCalculator {
         }
 
         try context.save()
+    }
+
+    func calculateAll() throws {
+        try calculate(after: .init(timeIntervalSince1970: .zero))
     }
 }

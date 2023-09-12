@@ -30,26 +30,31 @@ extension IncomesBottomBar: View {
     var body: some View {
         Box()
             .toolbar {
-                ToolbarItemGroup(placement: .bottomBar) {
-                    if isSubscribeOn {
+                ToolbarItem(placement: .bottomBar) {
+                    HStack {
+                        if isSubscribeOn {
+                            Button(action: {
+                                path = .init()
+                                isHome.toggle()
+                            }, label: {
+                                (isHome ? Image.group : Image.home)
+                                    .iconFrameM()
+                            })
+                        } else {
+                            Box(width: .iconM,
+                                height: .iconM)
+                        }
+                        Spacer()
+                        Text(.localized(.footerTextPrefix) + Date().stringValue(.yyyyMMMd))
+                            .font(.footnote)
+                        Spacer()
                         Button(action: {
-                            path = .init()
-                            isHome.toggle()
+                            isPresentedToEdit = true
                         }, label: {
-                            (isHome ? Image.group : Image.home)
+                            Image.create
                                 .iconFrameM()
                         })
                     }
-                    Spacer()
-                    Text(.localized(.footerTextPrefix) + Date().stringValue(.yyyyMMMd))
-                        .font(.footnote)
-                    Spacer()
-                    Button(action: {
-                        isPresentedToEdit = true
-                    }, label: {
-                        Image.create
-                            .iconFrameM()
-                    })
                 }
             }
             .sheet(isPresented: $isPresentedToEdit) {
@@ -60,7 +65,7 @@ extension IncomesBottomBar: View {
 }
 
 #Preview {
-    NavigationStack {
-        IncomesBottomBar(path: .constant(.init()), isHome: .constant(true))
-    }
+NavigationStack {
+IncomesBottomBar(path: .constant(.init()), isHome: .constant(true))
+}
 }
