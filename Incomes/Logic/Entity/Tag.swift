@@ -14,6 +14,7 @@ final class Tag {
     enum TagType: String {
         case year = "aae8af65"
         case yearMonth = "27c9be4b"
+        case content = "e2d390d9"
         case category = "a7a130f4"
     }
 

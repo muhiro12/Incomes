@@ -11,13 +11,15 @@ import SwiftData
 
 struct ItemService {
     private let repository: any Repository<Item>
-    private let factory: ItemFactory
     private let calculator: BalanceCalculator
+    private let itemFactory: ItemFactory
+    private let tagFactory: TagFactory
 
     init(context: ModelContext) {
         self.repository = ItemRepository(context: context)
-        self.factory = ItemFactory()
         self.calculator = BalanceCalculator(context: context)
+        self.itemFactory = ItemFactory(context: context)
+        self.tagFactory = TagFactory(context: context)
     }
 
     // MARK: - Fetch
@@ -42,12 +44,14 @@ struct ItemService {
 
         let repeatID = UUID()
 
-        let item = factory(date: date,
-                           content: content,
-                           income: income,
-                           outgo: outgo,
-                           group: group,
-                           repeatID: repeatID)
+        let item = try itemFactory(
+            date: date,
+            content: content,
+            income: income,
+            outgo: outgo,
+            group: group,
+            repeatID: repeatID
+        )
         items.append(item)
 
         for index in 0..<repeatCount {
@@ -60,12 +64,14 @@ struct ItemService {
                 assertionFailure()
                 return
             }
-            let item = factory(date: repeatingDate,
-                               content: content,
-                               income: income,
-                               outgo: outgo,
-                               group: group,
-                               repeatID: repeatID)
+            let item = try itemFactory(
+                date: repeatingDate,
+                content: content,
+                income: income,
+                outgo: outgo,
+                group: group,
+                repeatID: repeatID
+            )
             items.append(item)
         }
 
@@ -92,6 +98,7 @@ struct ItemService {
                  outgo: outgo,
                  group: group,
                  repeatID: UUID())
+        item.set(tags: try tags(date: date, content: content, group: group))
         try update(items: [item])
     }
 
@@ -108,7 +115,7 @@ struct ItemService {
 
         let repeatID = UUID()
         let items = try items(predicate: predicate)
-        items.forEach {
+        try items.forEach {
             guard let newDate = Calendar.utc.date(byAdding: components, to: $0.date) else {
                 assertionFailure()
                 return
@@ -119,6 +126,7 @@ struct ItemService {
                    outgo: outgo,
                    group: group,
                    repeatID: repeatID)
+            item.set(tags: try tags(date: newDate, content: content, group: group))
         }
 
         try update(items: items)
@@ -177,6 +185,15 @@ struct ItemService {
 
     func recalculate() throws {
         try calculator.calculateAll()
+    }
+
+    // MARK: - Tag (TODO: Remove)
+
+    func tags(date: Date, content: String, group: String) throws -> [Tag] {
+        [try tagFactory(Calendar.utc.startOfYear(for: date).stringValueWithoutLocale(.yyyy), for: .year),
+         try tagFactory(Calendar.utc.startOfMonth(for: date).stringValueWithoutLocale(.yyyyMM), for: .yearMonth),
+         try tagFactory(content, for: .content),
+         try tagFactory(group, for: .category)]
     }
 }
 

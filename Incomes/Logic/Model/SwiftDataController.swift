@@ -39,9 +39,10 @@ struct SwiftDataController {
         }
         try items.forEach { item in
             item.set(tags: [
-                try tagFactory(item.group, for: .category),
-                try tagFactory(item.date.stringValueWithoutLocale(.yyyy), for: .year),
-                try tagFactory(item.date.stringValueWithoutLocale(.yyyyMM), for: .yearMonth)
+                try tagFactory(Calendar.utc.startOfYear(for: item.date).stringValueWithoutLocale(.yyyy), for: .year),
+                try tagFactory(Calendar.utc.startOfMonth(for: item.date).stringValueWithoutLocale(.yyyyMM), for: .yearMonth),
+                try tagFactory(item.content, for: .content),
+                try tagFactory(item.group, for: .category)
             ])
         }
         try itemService.update(items: items)

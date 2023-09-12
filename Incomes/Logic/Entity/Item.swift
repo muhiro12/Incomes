@@ -60,10 +60,6 @@ extension Item {
         self.outgo = outgo
         self.repeatID = repeatID
 
-        self.tags = [
-            // TODO: Add tags
-        ]
-
         // TODO: Remove
         self.group = group
         self.startOfYear = Calendar.utc.startOfYear(for: date)
