@@ -25,18 +25,17 @@ final class Item {
     private(set) var group = String.empty
     private(set) var startOfYear = Date(timeIntervalSinceReferenceDate: .zero)
 
-    init(date: Date,
-         content: String,
-         income: Decimal,
-         outgo: Decimal,
-         group: String,
-         repeatID: UUID) {
-        set(date: date,
-            content: content,
-            income: income,
-            outgo: outgo,
-            group: group,
-            repeatID: repeatID)
+    // swiftlint:disable:next line_length
+    init(date: Date = Date(timeIntervalSinceReferenceDate: .zero), content: String = String.empty, income: Decimal = Decimal.zero, outgo: Decimal = Decimal.zero, repeatID: UUID = UUID(), balance: Decimal = Decimal.zero, tags: [Tag]? = nil, group: String = String.empty, startOfYear: Date = Date(timeIntervalSinceReferenceDate: .zero)) {
+        self.date = date
+        self.content = content
+        self.income = income
+        self.outgo = outgo
+        self.repeatID = repeatID
+        self.balance = balance
+        self.tags = tags
+        self.group = group
+        self.startOfYear = startOfYear
     }
 }
 

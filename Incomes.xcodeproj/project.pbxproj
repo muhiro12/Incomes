@@ -42,6 +42,8 @@
 		ADCB06ED2791556900B867F4 /* BalanceCalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCB06EC2791556900B867F4 /* BalanceCalculatorTests.swift */; };
 		ADCB06EF27915E0200B867F4 /* IncomesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCB06EE27915E0200B867F4 /* IncomesTests.swift */; };
 		ADCB06F12791A48000B867F4 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = ADCB06F02791A48000B867F4 /* GoogleService-Info.plist */; };
+		ADCBBA282AB0E96A007DAAE4 /* TagFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCBBA272AB0E96A007DAAE4 /* TagFactory.swift */; };
+		ADCBBA2A2AB0E974007DAAE4 /* ItemFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCBBA292AB0E974007DAAE4 /* ItemFactory.swift */; };
 		ADCF36B324A1D0F70011D6F5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ADCF36B224A1D0F70011D6F5 /* Assets.xcassets */; };
 		ADCF36B624A1D0F70011D6F5 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ADCF36B524A1D0F70011D6F5 /* Preview Assets.xcassets */; };
 		ADCF36CF24A1D0F70011D6F5 /* IncomesUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF36CE24A1D0F70011D6F5 /* IncomesUITests.swift */; };
@@ -138,6 +140,8 @@
 		ADCB06EC2791556900B867F4 /* BalanceCalculatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceCalculatorTests.swift; sourceTree = "<group>"; };
 		ADCB06EE27915E0200B867F4 /* IncomesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomesTests.swift; sourceTree = "<group>"; };
 		ADCB06F02791A48000B867F4 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		ADCBBA272AB0E96A007DAAE4 /* TagFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagFactory.swift; sourceTree = "<group>"; };
+		ADCBBA292AB0E974007DAAE4 /* ItemFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemFactory.swift; sourceTree = "<group>"; };
 		ADCF36A624A1D0F40011D6F5 /* Incomes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Incomes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ADCF36B224A1D0F70011D6F5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		ADCF36B524A1D0F70011D6F5 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -355,6 +359,7 @@
 				ADCB06EA279149CD00B867F4 /* BalanceCalculator.swift */,
 				ADEA399F250150E000CB61D9 /* EnvironmentParameter.swift */,
 				AD6B704327A7A71E00A38208 /* IncomesError.swift */,
+				ADCBBA292AB0E974007DAAE4 /* ItemFactory.swift */,
 				ADCF36EA24A1D18E0011D6F5 /* ItemRepository.swift */,
 				AD09B543278F934D008F03FA /* ItemService.swift */,
 				AD583B6824B308AB0032AA1C /* LocalizedString.swift */,
@@ -362,6 +367,7 @@
 				ADEA399B2501457A00CB61D9 /* Store.swift */,
 				ADDF76CE2AAF079500CDEC7E /* SwiftDataController.swift */,
 				ADDF76D02AAF543100CDEC7E /* SwiftDataRepository.swift */,
+				ADCBBA272AB0E96A007DAAE4 /* TagFactory.swift */,
 				ADDF76C22AAC9ADC00CDEC7E /* TagRepository.swift */,
 				ADDF76C42AACAD5800CDEC7E /* TagService.swift */,
 			);
@@ -761,8 +767,10 @@
 				ADE89DF724B5F78200BB82E9 /* ImageConstant.swift in Sources */,
 				ADCF371424A1D18E0011D6F5 /* DateExtension.swift in Sources */,
 				ADAD3D0F277B1790005A70E1 /* LockedView.swift in Sources */,
+				ADCBBA282AB0E96A007DAAE4 /* TagFactory.swift in Sources */,
 				ADCF36E024A1D1820011D6F5 /* ContentView.swift in Sources */,
 				AD6B704427A7A71E00A38208 /* IncomesError.swift in Sources */,
+				ADCBBA2A2AB0E974007DAAE4 /* ItemFactory.swift in Sources */,
 				ADCF370E24A1D18E0011D6F5 /* IntConstant.swift in Sources */,
 				ADA407862A9F6EC600AB1EE5 /* SectionedItems.swift in Sources */,
 				AD75E9DE278F19A5008BE905 /* DebugView.swift in Sources */,

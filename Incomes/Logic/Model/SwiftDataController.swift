@@ -12,10 +12,12 @@ import SwiftData
 struct SwiftDataController {
     private let itemService: ItemService
     private let tagService: TagService
+    private let tagFactory: TagFactory
 
     init(context: ModelContext) {
         self.itemService = ItemService(context: context)
         self.tagService = TagService(context: context)
+        self.tagFactory = TagFactory(context: context)
     }
 
     func modify() {
@@ -37,9 +39,9 @@ struct SwiftDataController {
         }
         try items.forEach { item in
             item.set(tags: [
-                try tagService.instantiate(item.group, for: .category),
-                try tagService.instantiate(item.date.stringValueWithoutLocale(.yyyy), for: .year),
-                try tagService.instantiate(item.date.stringValueWithoutLocale(.yyyyMM), for: .yearMonth)
+                try tagFactory(item.group, for: .category),
+                try tagFactory(item.date.stringValueWithoutLocale(.yyyy), for: .year),
+                try tagFactory(item.date.stringValueWithoutLocale(.yyyyMM), for: .yearMonth)
             ])
         }
         try itemService.update(items: items)

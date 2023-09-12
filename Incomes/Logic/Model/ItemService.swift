@@ -11,10 +11,12 @@ import SwiftData
 
 struct ItemService {
     private let repository: any Repository<Item>
+    private let factory: ItemFactory
     private let calculator: BalanceCalculator
 
     init(context: ModelContext) {
         self.repository = ItemRepository(context: context)
+        self.factory = ItemFactory()
         self.calculator = BalanceCalculator(context: context)
     }
 
@@ -40,12 +42,12 @@ struct ItemService {
 
         let repeatID = UUID()
 
-        let item = Item(date: date,
-                        content: content,
-                        income: income,
-                        outgo: outgo,
-                        group: group,
-                        repeatID: repeatID)
+        let item = factory(date: date,
+                           content: content,
+                           income: income,
+                           outgo: outgo,
+                           group: group,
+                           repeatID: repeatID)
         items.append(item)
 
         for index in 0..<repeatCount {
@@ -58,12 +60,12 @@ struct ItemService {
                 assertionFailure()
                 return
             }
-            let item = Item(date: repeatingDate,
-                            content: content,
-                            income: income,
-                            outgo: outgo,
-                            group: group,
-                            repeatID: repeatID)
+            let item = factory(date: repeatingDate,
+                               content: content,
+                               income: income,
+                               outgo: outgo,
+                               group: group,
+                               repeatID: repeatID)
             items.append(item)
         }
 

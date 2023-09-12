@@ -22,9 +22,16 @@ final class Tag {
 
     private(set) var items: [Item]?
 
-    init(_ name: String, for type: TagType) {
+    init(name: String = String.empty, typeID: String = String.empty, items: [Item]? = nil) {
         self.name = name
-        self.typeID = type.rawValue
+        self.typeID = typeID
+        self.items = items
+    }
+}
+
+extension Tag {
+    var type: TagType? {
+        TagType(rawValue: typeID)
     }
 }
 
