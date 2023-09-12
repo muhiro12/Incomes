@@ -11,9 +11,11 @@ import SwiftData
 
 struct ItemService {
     private let repository: any Repository<Item>
+    private let calculator: BalanceCalculator
 
     init(context: ModelContext) {
         self.repository = ItemRepository(context: context)
+        self.calculator = BalanceCalculator(context: context)
     }
 
     // MARK: - Fetch
@@ -62,6 +64,7 @@ struct ItemService {
         }
 
         try repository.addList(items)
+        try calculate(for: items)
     }
 
     // MARK: - Update
@@ -79,6 +82,7 @@ struct ItemService {
                  group: group,
                  repeatID: UUID())
         try repository.update(item)
+        try calculate(for: [item])
     }
 
     func updateForRepeatingItems(item: Item, // swiftlint:disable:this function_parameter_count
@@ -108,6 +112,7 @@ struct ItemService {
         }
 
         try repository.updateList(items)
+        try calculate(for: items)
     }
 
     func updateForFutureItems(item: Item, // swiftlint:disable:this function_parameter_count
@@ -144,6 +149,7 @@ struct ItemService {
 
     func delete(items: [Item]) throws {
         try repository.deleteList(items)
+        try calculate(for: items)
     }
 
     func deleteAll() throws {
@@ -152,16 +158,13 @@ struct ItemService {
 
     // MARK: - Calculate balance
 
+    func calculate(for items: [Item]) throws {
+        let date = items.map { $0.date }.min()
+        try calculator.calculate(after: date ?? .init(timeIntervalSinceReferenceDate: .zero))
+    }
+
     func recalculate() throws {
-        guard let item = try repository.fetchList().last else {
-            return
-        }
-        try update(item: item,
-                   date: item.date,
-                   content: item.content,
-                   income: item.income,
-                   outgo: item.outgo,
-                   group: item.group)
+        try calculator.calculate(after: .init(timeIntervalSinceReferenceDate: .zero))
     }
 }
 
