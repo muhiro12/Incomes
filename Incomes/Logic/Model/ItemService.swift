@@ -20,6 +20,10 @@ struct ItemService {
 
     // MARK: - Fetch
 
+    func item(predicate: Predicate<Item>? = nil) throws -> Item? {
+        try repository.fetch(predicate: predicate)
+    }
+
     func items(predicate: Predicate<Item>? = nil) throws -> [Item] {
         try repository.fetchList(predicate: predicate)
     }
@@ -69,6 +73,11 @@ struct ItemService {
 
     // MARK: - Update
 
+    func update(items: [Item]) throws {
+        try repository.updateList(items)
+        try calculate(for: items)
+    }
+
     func update(item: Item, // swiftlint:disable:this function_parameter_count
                 date: Date,
                 content: String,
@@ -81,8 +90,7 @@ struct ItemService {
                  outgo: outgo,
                  group: group,
                  repeatID: UUID())
-        try repository.update(item)
-        try calculate(for: [item])
+        try update(items: [item])
     }
 
     func updateForRepeatingItems(item: Item, // swiftlint:disable:this function_parameter_count
@@ -111,8 +119,7 @@ struct ItemService {
                    repeatID: repeatID)
         }
 
-        try repository.updateList(items)
-        try calculate(for: items)
+        try update(items: items)
     }
 
     func updateForFutureItems(item: Item, // swiftlint:disable:this function_parameter_count
@@ -159,12 +166,15 @@ struct ItemService {
     // MARK: - Calculate balance
 
     func calculate(for items: [Item]) throws {
-        let date = items.map { $0.date }.min()
-        try calculator.calculate(after: date ?? .init(timeIntervalSinceReferenceDate: .zero))
+        if let date = items.map({ $0.date }).min() {
+            try calculator.calculate(after: date)
+        } else {
+            try recalculate()
+        }
     }
 
     func recalculate() throws {
-        try calculator.calculate(after: .init(timeIntervalSinceReferenceDate: .zero))
+        try calculator.calculateAll()
     }
 }
 

@@ -10,10 +10,8 @@ import Foundation
 import SwiftData
 
 protocol SwiftDataRepository<Entity>: Repository where Entity: PersistentModel {
-    var controller: SwiftDataController { get }
+    var context: ModelContext { get }
     var sortDescriptors: [SortDescriptor<Entity>] { get }
-
-    init(context: ModelContext)
 
     func fetch(predicate: Predicate<Entity>?) throws -> Entity?
     func fetchList(predicate: Predicate<Entity>?) throws -> [Entity]
@@ -27,36 +25,47 @@ protocol SwiftDataRepository<Entity>: Repository where Entity: PersistentModel {
 
 extension SwiftDataRepository {
     func fetch(predicate: Predicate<Entity>?) throws -> Entity? {
-        try controller.fetch(predicate: predicate,
-                             sortBy: sortDescriptors)
+        var descriptor = FetchDescriptor(
+            predicate: predicate,
+            sortBy: sortDescriptors
+        )
+        descriptor.fetchLimit = 1
+        return try context.fetch(descriptor).first
     }
 
     func fetchList(predicate: Predicate<Entity>?) throws -> [Entity] {
-        try controller.fetchList(predicate: predicate,
-                                 sortBy: sortDescriptors)
+        let descriptor = FetchDescriptor(
+            predicate: predicate,
+            sortBy: sortDescriptors
+        )
+        return try context.fetch(descriptor)
     }
 
     func add(_ entity: Entity) throws {
-        try controller.add(entity)
+        context.insert(entity)
+        try context.save()
     }
 
     func addList(_ list: [Entity]) throws {
-        try controller.addList(list)
+        list.forEach(context.insert)
+        try context.save()
     }
 
     func update(_ entity: Entity) throws {
-        try controller.update(entity)
+        try context.save()
     }
 
     func updateList(_ list: [Entity]) throws {
-        try controller.updateList(list)
+        try context.save()
     }
 
     func delete(_ entity: Entity) throws {
-        try controller.delete(entity)
+        context.delete(entity)
+        try context.save()
     }
 
     func deleteList(_ list: [Entity]) throws {
-        try controller.deleteList(list)
+        list.forEach(context.delete)
+        try context.save()
     }
 }

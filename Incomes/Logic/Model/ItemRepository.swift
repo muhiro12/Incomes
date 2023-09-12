@@ -12,11 +12,11 @@ import SwiftData
 struct ItemRepository: SwiftDataRepository {
     typealias Entity = Item
 
-    let controller: SwiftDataController
+    let context: ModelContext
     let sortDescriptors: [SortDescriptor<Item>]
 
     init(context: ModelContext) {
-        self.controller = SwiftDataController(context: context)
+        self.context = context
         self.sortDescriptors = Item.sortDescriptors()
     }
 }

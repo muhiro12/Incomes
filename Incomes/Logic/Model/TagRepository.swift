@@ -12,11 +12,11 @@ import SwiftData
 struct TagRepository: SwiftDataRepository {
     typealias Entity = Tag
 
-    let controller: SwiftDataController
+    let context: ModelContext
     let sortDescriptors: [SortDescriptor<Tag>]
 
     init(context: ModelContext) {
-        self.controller = SwiftDataController(context: context)
+        self.context = context
         self.sortDescriptors = Tag.sortDescriptors()
     }
 }

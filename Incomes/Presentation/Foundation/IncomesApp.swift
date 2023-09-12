@@ -41,7 +41,7 @@ struct IncomesApp {
             }
         }
 
-        TagService(context: container.mainContext).modify()
+        SwiftDataController(context: container.mainContext).modify()
     }
 }
 

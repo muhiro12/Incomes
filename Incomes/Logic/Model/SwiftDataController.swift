@@ -10,50 +10,61 @@ import Foundation
 import SwiftData
 
 struct SwiftDataController {
-    let context: ModelContext
+    private let itemService: ItemService
+    private let tagService: TagService
 
-    func fetch<T: PersistentModel>(predicate: Predicate<T>? = nil, sortBy: [SortDescriptor<T>] = []) throws -> T? {
-        var descriptor = FetchDescriptor<T>(
-            predicate: predicate,
-            sortBy: sortBy
-        )
-        descriptor.fetchLimit = 1
-        return try context.fetch(descriptor).first
+    init(context: ModelContext) {
+        self.itemService = ItemService(context: context)
+        self.tagService = TagService(context: context)
     }
 
-    func fetchList<T: PersistentModel>(predicate: Predicate<T>? = nil, sortBy: [SortDescriptor<T>] = []) throws -> [T] {
-        let descriptor = FetchDescriptor(
-            predicate: predicate,
-            sortBy: sortBy
-        )
-        return try context.fetch(descriptor)
+    func modify() {
+        do {
+            if let item = try itemService.item(),
+               item.tags?.isEmpty != false {
+                try migrateToV2()
+            } else {
+                try deleteDuplicateTags()
+            }
+        } catch {
+            assertionFailure()
+        }
     }
 
-    func add<T: PersistentModel>(_ entity: T) throws {
-        context.insert(entity)
-        try context.save()
+    func migrateToV2() throws {
+        let items = try itemService.items().filter {
+            $0.tags?.isEmpty != false
+        }
+        try items.forEach { item in
+            item.set(tags: [
+                try tagService.instantiate(item.group, for: .category),
+                try tagService.instantiate(item.date.stringValueWithoutLocale(.yyyy), for: .year),
+                try tagService.instantiate(item.date.stringValueWithoutLocale(.yyyyMM), for: .yearMonth)
+            ])
+        }
+        try itemService.update(items: items)
     }
 
-    func addList<T: PersistentModel>(_ list: [T]) throws {
-        list.forEach(context.insert)
-        try context.save()
-    }
+    func deleteDuplicateTags() throws {
+        let allTags = try tagService.tags()
 
-    func update<T: PersistentModel>(_ entity: T) throws {
-        try context.save()
-    }
+        var unique = [Tag]()
+        var duplicate = [Tag]()
 
-    func updateList<T: PersistentModel>(_ list: [T]) throws {
-        try context.save()
-    }
+        allTags.forEach { tag in
+            if unique.contains(tag) {
+                tag.items?.forEach { item in
+                    var tags = item.tags ?? []
+                    tags.removeAll { $0 == tag }
+                    tags.append(tag)
+                    item.set(tags: tags)
+                }
+                duplicate.append(tag)
+            } else {
+                unique.append(tag)
+            }
+        }
 
-    func delete<T: PersistentModel>(_ entity: T) throws {
-        context.delete(entity)
-        try context.save()
-    }
-
-    func deleteList<T: PersistentModel>(_ list: [T]) throws {
-        list.forEach(context.delete)
-        try context.save()
+        try tagService.delete(tags: duplicate)
     }
 }
