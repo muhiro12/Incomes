@@ -26,7 +26,6 @@ final class Tag {
     init(name: String = String.empty, typeID: String = String.empty, items: [Item]? = nil) {
         self.name = name
         self.typeID = typeID
-        self.items = items
     }
 }
 
