@@ -22,14 +22,15 @@ struct SwiftDataMigrator {
             var tags = try context.fetch(FetchDescriptor<Tag>(predicate: #Predicate {
                 $0.name == name && $0.typeID == typeID
             }))
+
             if let tag = tags.popLast() {
                 tags.forEach(context.delete)
                 return tag
-            } else {
-                let tag = Tag()
-                tag.set(name: name, typeID: type.rawValue)
-                return tag
             }
+
+            let tag = Tag()
+            tag.set(name: name, typeID: type.rawValue)
+            return tag
         }
 
         try items.forEach { item in
