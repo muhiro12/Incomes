@@ -8,6 +8,8 @@
   ],
   "settings" : {
     "_failTransactionsEnabled" : false,
+    "_locale" : "en_US",
+    "_storefront" : "USA",
     "_storeKitErrors" : [
       {
         "current" : null,
@@ -63,7 +65,7 @@
       "localizations" : [
 
       ],
-      "name" : "",
+      "name" : "Subscriptions",
       "subscriptions" : [
         {
           "adHocOffers" : [
@@ -73,10 +75,14 @@
 
           ],
           "displayPrice" : "1.99",
-          "familyShareable" : false,
+          "familyShareable" : true,
           "groupNumber" : 1,
           "internalID" : "E504DD78",
-          "introductoryOffer" : null,
+          "introductoryOffer" : {
+            "displayPrice" : "0.99",
+            "internalID" : "339865A9",
+            "paymentMode" : "none"
+          },
           "localizations" : [
             {
               "description" : "Access to all features and remove ads",
@@ -85,11 +91,11 @@
             },
             {
               "description" : "全ての機能の利用および広告の削除",
-              "displayName" : "1ヶ月プラン",
+              "displayName" : "月間プラン",
               "locale" : "ja"
             }
           ],
-          "productID" : "com.muhiro12.Incomes.Dev.subscription.1month",
+          "productID" : "com.muhiro12.Incomes.Dev.subscriptions.monthly",
           "recurringSubscriptionPeriod" : "P1M",
           "referenceName" : "Monthly Plan",
           "subscriptionGroupID" : "D8CD218D",
