@@ -51,7 +51,6 @@ enum LocalizedString: String {
     case settingsTitle
     case lockApp
     case maskApp
-    case subscriptionHeader
     case noPurchases
     case manageItemsHeader
     case recalculate

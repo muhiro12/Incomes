@@ -21,7 +21,7 @@ extension StoreSection: View {
                 .storeButton(.hidden, for: .cancellation)
                 .fixedSize(horizontal: false, vertical: true)
         }, header: {
-            Text(.localized(.subscriptionHeader))
+            Text(store.product?.subscription?.groupDisplayName ?? .empty)
         }, footer: {
             Text(store.product?.description ?? .empty)
         })
