@@ -43,7 +43,7 @@ extension DebugSection: View {
 }
 
 #Preview {
-List {
-DebugSection(item: PreviewData.item)
-}
+    List {
+        DebugSection(item: PreviewData.item)
+    }
 }

@@ -65,7 +65,7 @@ extension IncomesBottomBar: View {
 }
 
 #Preview {
-NavigationStack {
-IncomesBottomBar(path: .constant(.init()), isHome: .constant(true))
-}
+    NavigationStack {
+        IncomesBottomBar(path: .constant(.init()), isHome: .constant(true))
+    }
 }

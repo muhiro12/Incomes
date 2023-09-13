@@ -68,6 +68,6 @@ extension SettingsView: View {
 }
 
 #Preview {
-SettingsView()
-.environmentObject(PreviewData.store)
+    SettingsView()
+        .environmentObject(PreviewData.store)
 }

@@ -16,14 +16,14 @@ extension Tag {
     static func predicate(_ name: String, for type: Tag.TagType) -> Predicate {
         let id = type.rawValue
         return #Predicate {
-        $0.name == name && $0.typeID == id
+            $0.name == name && $0.typeID == id
         }
     }
 
     static func predicate(for type: Tag.TagType) -> Predicate {
         let id = type.rawValue
         return #Predicate {
-        $0.typeID == id
+            $0.typeID == id
         }
     }
 }

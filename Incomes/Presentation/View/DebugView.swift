@@ -62,5 +62,5 @@ extension DebugView: View {
 }
 
 #Preview {
-DebugView()
+    DebugView()
 }
