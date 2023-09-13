@@ -47,6 +47,6 @@ extension HomeView: View {
 }
 
 #Preview {
-HomeView()
-.modelContainer(PreviewData.inMemoryContainer)
+    HomeView()
+        .modelContainer(PreviewData.inMemoryContainer)
 }

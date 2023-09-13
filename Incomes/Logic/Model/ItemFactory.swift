@@ -16,8 +16,7 @@ struct ItemFactory {
         self.tagFactory = TagFactory(context: context)
     }
 
-    // swiftlint:disable:next function_parameter_count)
-    func callAsFunction(date: Date,
+    func callAsFunction(date: Date, // swiftlint:disable:this function_parameter_count
                         content: String,
                         income: Decimal,
                         outgo: Decimal,

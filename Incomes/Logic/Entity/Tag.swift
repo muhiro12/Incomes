@@ -21,17 +21,19 @@ final class Tag {
     private(set) var name = String.empty
     private(set) var typeID = String.empty
 
-    private(set) var items: [Item]?
+    private(set) var items: [Item]? // swiftlint:disable:this discouraged_optional_collection
 
-    init(name: String = String.empty, typeID: String = String.empty, items: [Item]? = nil) {
-        self.name = name
-        self.typeID = typeID
-    }
+    init() {}
 }
 
 extension Tag {
     var type: TagType? {
         TagType(rawValue: typeID)
+    }
+
+    func set(name: String, typeID: String) {
+        self.name = name
+        self.typeID = typeID
     }
 }
 
