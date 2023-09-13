@@ -45,6 +45,11 @@ extension SettingsView: View {
                 }, header: {
                     Text(.localized(.manageItemsHeader))
                 })
+                if DebugView.isDebug {
+                    NavigationLink(String.debugTitle) {
+                        DebugView()
+                    }
+                }
             }
             .navigationBarTitle(.localized(.settingsTitle))
             .navigationBarItems(trailing: Button(.localized(.done)) {
