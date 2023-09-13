@@ -9,13 +9,7 @@
 import SwiftUI
 
 struct DebugView {
-    static var isDebug = {
-        #if DEBUG
-        return true
-        #else
-        return false
-        #endif
-    }()
+    static var isDebug = EnvironmentParameter.isDebug
 
     @Environment(\.modelContext)
     private var context

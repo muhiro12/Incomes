@@ -8,22 +8,28 @@
 
 import Foundation
 
-struct EnvironmentParameter {
-    static var productID: String = {
+enum EnvironmentParameter {
+    static let isDebug = {
         #if DEBUG
-        return Secret.productIDDev.rawValue
+        true
         #else
-        return Secret.productID.rawValue
+        false
         #endif
     }()
 
-    static var admobNativeID: String = {
+    static let productID = {
         #if DEBUG
-        return Secret.admobNativeIDDev.rawValue
+        Secret.productIDDev.rawValue
         #else
-        return Secret.admobNativeID.rawValue
+        Secret.productID.rawValue
         #endif
     }()
 
-    private init() {}
+    static let admobNativeID: String = {
+        #if DEBUG
+        Secret.admobNativeIDDev.rawValue
+        #else
+        Secret.admobNativeID.rawValue
+        #endif
+    }()
 }
