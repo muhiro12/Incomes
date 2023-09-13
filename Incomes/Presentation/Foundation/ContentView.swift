@@ -26,6 +26,8 @@ struct ContentView {
 }
 
 extension ContentView: View {
+    // TODO: Resolve SwiftLint
+    // swiftlint:disable closure_body_length
     var body: some View {
         ZStack {
             NavigationStack(path: $path) {
@@ -61,9 +63,10 @@ extension ContentView: View {
             }
         }
     }
+    // swiftlint:enable closure_body_length
 }
 
 #Preview {
-ContentView()
-.modelContainer(PreviewData.inMemoryContainer)
+    ContentView()
+        .modelContainer(PreviewData.inMemoryContainer)
 }

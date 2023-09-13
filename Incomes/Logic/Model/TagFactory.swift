@@ -19,7 +19,9 @@ struct TagFactory {
     func callAsFunction(_ name: String, for type: Tag.TagType) throws -> Tag {
         var tags = try repository.fetchList(predicate: Tag.predicate(name, for: type))
         guard let tag = tags.popLast() else {
-            return .init(name: name, typeID: type.rawValue)
+            let tag = Tag()
+            tag.set(name: name, typeID: type.rawValue)
+            return tag
         }
         try repository.deleteList(tags)
         return tag

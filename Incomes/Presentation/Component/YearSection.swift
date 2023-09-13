@@ -55,10 +55,12 @@ extension YearSection: View {
 }
 
 #Preview {
-List {
-YearSection(year: "2023",
-items: PreviewData.items.filter {
-$0.date.stringValue(.yyyy) == "2023"
-})
-}
+    List {
+        YearSection(
+            year: "2023",
+            items: PreviewData.items.filter {
+                $0.date.stringValue(.yyyy) == "2023"
+            }
+        )
+    }
 }

@@ -55,10 +55,12 @@ extension CategorySection: View {
 }
 
 #Preview {
-List {
-CategorySection(title: "Credit",
-items: PreviewData.items.filter {
-$0.group == "Credit"
-})
-}
+    List {
+        CategorySection(
+            title: "Credit",
+            items: PreviewData.items.filter {
+                $0.group == "Credit"
+            }
+        )
+    }
 }

@@ -10,8 +10,7 @@ import SwiftData
 import SwiftUI
 
 struct CategoryView {
-    @Query(filter: Tag.predicate(for: .category),
-           sort: Tag.sortDescriptors())
+    @Query(filter: Tag.predicate(for: .category), sort: Tag.sortDescriptors())
     private var tags: [Tag]
 }
 
@@ -31,6 +30,6 @@ extension CategoryView: View {
 }
 
 #Preview {
-CategoryView()
-.modelContainer(PreviewData.inMemoryContainer)
+    CategoryView()
+        .modelContainer(PreviewData.inMemoryContainer)
 }
