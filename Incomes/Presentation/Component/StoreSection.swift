@@ -17,6 +17,7 @@ extension StoreSection: View {
     var body: some View {
         Section(content: {
             SubscriptionStoreView(productIDs: [store.productID])
+                .storeButton(.visible, for: .policies)
                 .storeButton(.visible, for: .restorePurchases)
                 .storeButton(.hidden, for: .cancellation)
                 .fixedSize(horizontal: false, vertical: true)
