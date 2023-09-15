@@ -12,6 +12,10 @@ import SwiftData
 struct SwiftDataMigrator {
     let context: ModelContext
 
+    func isBeforeV2() throws -> Bool {
+        try context.fetchCount(FetchDescriptor<Tag>()) <= 0
+    }
+
     func migrateToV2() throws {
         let items = try context.fetch(FetchDescriptor<Item>()).filter {
             $0.tags?.isEmpty != false

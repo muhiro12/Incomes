@@ -20,7 +20,7 @@ struct SwiftDataController {
 
     func modify() {
         do {
-            if try tagService.tags().isEmpty {
+            if try migrator.isBeforeV2() {
                 try migrator.migrateToV2()
             } else {
                 try deleteDuplicateTags()
