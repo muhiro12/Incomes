@@ -15,18 +15,19 @@ final class Store: ObservableObject {
     @Published private var subscriptionGroupStatus: Product.SubscriptionInfo.RenewalState?
     @Published private var subscriptions: [Product] {
         didSet {
-            product = subscriptions.first { $0.id == productID }
+            product = subscriptions.first { productIDs.contains($0.id) }
         }
     }
     @Published private var purchasedSubscriptions: [Product] = [] {
         didSet {
-            UserDefaults.isSubscribeOn = purchasedSubscriptions.contains { $0.id == productID }
+            UserDefaults.isSubscribeOn = purchasedSubscriptions.contains { productIDs.contains($0.id) }
         }
     }
 
-    let productID = EnvironmentParameter.productID
+    let groupID = EnvironmentParameter.groupID
+    let productIDs = [EnvironmentParameter.productID]
 
-    var updateListenerTask: Task<Void, Error>?
+    private var updateListenerTask: Task<Void, Error>?
 
     init() {
         subscriptions = []
@@ -58,7 +59,7 @@ final class Store: ObservableObject {
     @MainActor
     func requestProducts() async {
         do {
-            subscriptions = try await Product.products(for: [productID])
+            subscriptions = try await Product.products(for: productIDs)
         } catch {
             print("Failed product request from the App Store server: \(error)")
         }

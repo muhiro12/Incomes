@@ -95,7 +95,7 @@
               "locale" : "ja"
             }
           ],
-          "productID" : "com.muhiro12.Incomes.Dev.subscriptions.monthly",
+          "productID" : "com.muhiro12.Incomes.subscriptions.monthly",
           "recurringSubscriptionPeriod" : "P1M",
           "referenceName" : "Monthly Plan",
           "subscriptionGroupID" : "D8CD218D",

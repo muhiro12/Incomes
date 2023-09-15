@@ -17,19 +17,19 @@ enum EnvironmentParameter {
         #endif
     }()
 
-    static let productID = {
-        #if DEBUG
-        Secret.productIDDev.rawValue
-        #else
-        Secret.productID.rawValue
-        #endif
+    static let groupID = {
+        isDebug
+            ? Secret.groupIDDev.rawValue
+            : Secret.groupID.rawValue
     }()
 
-    static let admobNativeID: String = {
-        #if DEBUG
-        Secret.admobNativeIDDev.rawValue
-        #else
-        Secret.admobNativeID.rawValue
-        #endif
+    static let productID = {
+        Secret.productID.rawValue
+    }()
+
+    static let admobNativeID = {
+        isDebug
+            ? Secret.admobNativeIDDev.rawValue
+            : Secret.admobNativeID.rawValue
     }()
 }
