@@ -9,10 +9,6 @@
 import Foundation
 
 extension String {
-    var isNotEmpty: Bool {
-        !isEmpty
-    }
-
     var isEmptyOrDecimal: Bool {
         if isEmpty {
             return true
