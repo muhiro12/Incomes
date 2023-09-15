@@ -50,7 +50,7 @@ final class Store: ObservableObject {
 
                     await transaction.finish()
                 } catch {
-                    print("Transaction failed verification")
+                    assertionFailure("Transaction failed verification")
                 }
             }
         }
@@ -61,7 +61,7 @@ final class Store: ObservableObject {
         do {
             subscriptions = try await Product.products(for: productIDs)
         } catch {
-            print("Failed product request from the App Store server: \(error)")
+            assertionFailure("Failed product request from the App Store server: \(error)")
         }
     }
 
@@ -83,7 +83,7 @@ final class Store: ObservableObject {
                     break
                 }
             } catch {
-                print()
+                assertionFailure("Transaction failed verification")
             }
         }
 
@@ -95,9 +95,8 @@ final class Store: ObservableObject {
     func checkVerified<T>(_ result: VerificationResult<T>) throws -> T {
         switch result {
         case .unverified:
-            // TODO: Throw Custom Error
-            throw StoreError.noPurchases
-        //            throw StoreError.failedVerification
+            throw DebugError.default
+
         case .verified(let safe):
             return safe
         }

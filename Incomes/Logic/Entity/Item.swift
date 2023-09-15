@@ -21,7 +21,7 @@ final class Item {
     @Relationship(inverse: \Tag.items)
     private(set) var tags: [Tag]? // swiftlint:disable:this discouraged_optional_collection
 
-    // TODO: Remove
+    // TODO: Remove(2024/04~) // swiftlint:disable:this todo
     private(set) var group = String.empty
     private(set) var startOfYear = Date(timeIntervalSinceReferenceDate: .zero)
 
@@ -49,7 +49,7 @@ extension Item {
         self.outgo = outgo
         self.repeatID = repeatID
 
-        // TODO: Remove
+        // TODO: Remove(2024/04~) // swiftlint:disable:this todo
         self.group = group
         self.startOfYear = Calendar.utc.startOfYear(for: date)
     }

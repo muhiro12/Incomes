@@ -24,8 +24,7 @@ extension CategoryView: View {
         }
         .id(UUID())
         .listStyle(.sidebar)
-        // TODO: change name
-        .navigationBarTitle(.localized(.groupTitle))
+        .navigationBarTitle(.localized(.categoryTitle))
     }
 }
 

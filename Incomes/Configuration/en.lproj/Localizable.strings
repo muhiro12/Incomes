@@ -20,9 +20,9 @@
 
 "homeTitle" = "Home";
 
-// MARK: - Group
+// MARK: - Category
 
-"groupTitle" = "Group";
+"categoryTitle" = "Category";
 "others" = "Others";
 
 // MARK: - Edit
@@ -48,8 +48,11 @@
 "settingsTitle" = "Settings";
 "lockApp" = "Lock the app";
 "maskApp" = "Mask the app";
-"noPurchases" = "No purchases found";
 "manageItemsHeader" = "Manage items";
 "recalculate" = "Recalculate";
 "deleteAll" = "Delete all";
 "deleteAllConfirm" = "Are you sure you want to delete all items?";
+
+// MARK: - Error
+
+"errorUnknown" = "Sorry, something went wrong. We're working to fix it.";
