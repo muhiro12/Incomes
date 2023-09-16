@@ -367,6 +367,7 @@
 				AD6B704527A7B11600A38208 /* AlertInformation.swift */,
 				ADE3A4C0277690330016C152 /* Authenticator.swift */,
 				ADCB06EA279149CD00B867F4 /* BalanceCalculator.swift */,
+				AD50E09B2AB4647A005CE509 /* DebugError.swift */,
 				ADEA399F250150E000CB61D9 /* EnvironmentParameter.swift */,
 				AD6B704327A7A71E00A38208 /* IncomesError.swift */,
 				ADCBBA292AB0E974007DAAE4 /* ItemFactory.swift */,
@@ -381,7 +382,6 @@
 				ADCBBA272AB0E96A007DAAE4 /* TagFactory.swift */,
 				ADDF76C22AAC9ADC00CDEC7E /* TagRepository.swift */,
 				ADDF76C42AACAD5800CDEC7E /* TagService.swift */,
-				AD50E09B2AB4647A005CE509 /* DebugError.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
