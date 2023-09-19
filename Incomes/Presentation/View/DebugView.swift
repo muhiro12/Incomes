@@ -33,6 +33,12 @@ extension DebugView: View {
                         }
                     Toggle(String.debugSubscribe, isOn: $isSubscribeOn)
                         .disabled(!isDebugOption)
+                    NavigationLink("ItemListView") {
+                        ItemListView(
+                            title: "Item",
+                            predicate: Item.predicate(dateIsAfter: .init(timeIntervalSinceReferenceDate: .zero))
+                        )
+                    }
                     Button(String.debugPreviewData) {}
                         .disabled(!isDebugOption)
                         .onLongPressGesture {
