@@ -36,6 +36,7 @@
 		ADAD3D25277C1D0F005A70E1 /* StringProtocolExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADAD3D24277C1D0F005A70E1 /* StringProtocolExtension.swift */; };
 		ADB3627A2AA6D7B200964CA7 /* DebugSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB362792AA6D7B200964CA7 /* DebugSection.swift */; };
 		ADB3627C2AA7890C00964CA7 /* Box.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB3627B2AA7890C00964CA7 /* Box.swift */; };
+		ADBE6B182AB932970064293B /* URLConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADBE6B172AB932970064293B /* URLConstant.swift */; };
 		ADCB06DE278F954600B867F4 /* ItemServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCB06DD278F954600B867F4 /* ItemServiceTests.swift */; };
 		ADCB06E02790562000B867F4 /* DateExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCB06DF2790562000B867F4 /* DateExtensionTests.swift */; };
 		ADCB06E22790635900B867F4 /* CalendarExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCB06E12790635900B867F4 /* CalendarExtensionTests.swift */; };
@@ -135,6 +136,7 @@
 		ADAD3D24277C1D0F005A70E1 /* StringProtocolExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringProtocolExtension.swift; sourceTree = "<group>"; };
 		ADB362792AA6D7B200964CA7 /* DebugSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugSection.swift; sourceTree = "<group>"; };
 		ADB3627B2AA7890C00964CA7 /* Box.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Box.swift; sourceTree = "<group>"; };
+		ADBE6B172AB932970064293B /* URLConstant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLConstant.swift; sourceTree = "<group>"; };
 		ADCB06DD278F954600B867F4 /* ItemServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemServiceTests.swift; sourceTree = "<group>"; };
 		ADCB06DF2790562000B867F4 /* DateExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtensionTests.swift; sourceTree = "<group>"; };
 		ADCB06E12790635900B867F4 /* CalendarExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarExtensionTests.swift; sourceTree = "<group>"; };
@@ -261,6 +263,7 @@
 				ADCF36FB24A1D18E0011D6F5 /* StringExtension.swift */,
 				ADAD3D24277C1D0F005A70E1 /* StringProtocolExtension.swift */,
 				ADDF76CC2AADFAAE00CDEC7E /* TagExtension.swift */,
+				ADBE6B172AB932970064293B /* URLConstant.swift */,
 				ADAD3CC6277AA922005A70E1 /* UserDefaultsExtension.swift */,
 			);
 			path = Extension;
@@ -780,6 +783,7 @@
 				AD75E9DE278F19A5008BE905 /* DebugView.swift in Sources */,
 				ADEA399C2501457A00CB61D9 /* Store.swift in Sources */,
 				ADE89DF524B5E73300BB82E9 /* TitleListItem.swift in Sources */,
+				ADBE6B182AB932970064293B /* URLConstant.swift in Sources */,
 				ADDBC4582792CD4400F5E4A7 /* NativeAdvertisement.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
