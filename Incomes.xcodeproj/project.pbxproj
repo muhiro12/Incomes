@@ -12,6 +12,9 @@
 		AD387E4B2A8A1CE600E94623 /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = AD387E4A2A8A1CE600E94623 /* GoogleMobileAds */; };
 		AD387E4D2A8B6FFD00E94623 /* Repository.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD387E4C2A8B6FFD00E94623 /* Repository.swift */; };
 		AD4C315A2AA581590030A17F /* PremiumSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD4C31592AA581590030A17F /* PremiumSection.swift */; };
+		AD50E09C2AB4647A005CE509 /* DebugError.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD50E09B2AB4647A005CE509 /* DebugError.swift */; };
+		AD50E09E2AB46B39005CE509 /* NativeAdmob.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD50E09D2AB46B39005CE509 /* NativeAdmob.swift */; };
+		AD50E0A02AB49021005CE509 /* CollectionExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD50E09F2AB49021005CE509 /* CollectionExtension.swift */; };
 		AD583B6124B301EB0032AA1C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = AD583B6324B301EB0032AA1C /* Localizable.strings */; };
 		AD583B6924B308AB0032AA1C /* LocalizedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD583B6824B308AB0032AA1C /* LocalizedString.swift */; };
 		AD5D754A2AB17011003E16D1 /* SwiftDataMigrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD5D75492AB17011003E16D1 /* SwiftDataMigrator.swift */; };
@@ -110,6 +113,9 @@
 		AD2BB3212795925C00258234 /* Advertisement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Advertisement.swift; sourceTree = "<group>"; };
 		AD387E4C2A8B6FFD00E94623 /* Repository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Repository.swift; sourceTree = "<group>"; };
 		AD4C31592AA581590030A17F /* PremiumSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PremiumSection.swift; sourceTree = "<group>"; };
+		AD50E09B2AB4647A005CE509 /* DebugError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugError.swift; sourceTree = "<group>"; };
+		AD50E09D2AB46B39005CE509 /* NativeAdmob.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeAdmob.swift; sourceTree = "<group>"; };
+		AD50E09F2AB49021005CE509 /* CollectionExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionExtension.swift; sourceTree = "<group>"; };
 		AD583B6224B301EB0032AA1C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		AD583B6524B3032D0032AA1C /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		AD583B6824B308AB0032AA1C /* LocalizedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizedString.swift; sourceTree = "<group>"; };
@@ -265,6 +271,7 @@
 				ADDF76CC2AADFAAE00CDEC7E /* TagExtension.swift */,
 				ADBE6B172AB932970064293B /* URLConstant.swift */,
 				ADAD3CC6277AA922005A70E1 /* UserDefaultsExtension.swift */,
+				AD50E09F2AB49021005CE509 /* CollectionExtension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -352,6 +359,7 @@
 				ADE89DF424B5E73300BB82E9 /* TitleListItem.swift */,
 				ADCF36E724A1D18E0011D6F5 /* WideListItem.swift */,
 				ADAD3D16277BC80F005A70E1 /* YearSection.swift */,
+				AD50E09D2AB46B39005CE509 /* NativeAdmob.swift */,
 			);
 			path = Component;
 			sourceTree = "<group>";
@@ -362,6 +370,7 @@
 				AD6B704527A7B11600A38208 /* AlertInformation.swift */,
 				ADE3A4C0277690330016C152 /* Authenticator.swift */,
 				ADCB06EA279149CD00B867F4 /* BalanceCalculator.swift */,
+				AD50E09B2AB4647A005CE509 /* DebugError.swift */,
 				ADEA399F250150E000CB61D9 /* EnvironmentParameter.swift */,
 				AD6B704327A7A71E00A38208 /* IncomesError.swift */,
 				ADCBBA292AB0E974007DAAE4 /* ItemFactory.swift */,
@@ -728,8 +737,10 @@
 			files = (
 				ADAD3D05277AD654005A70E1 /* IncomesApp.swift in Sources */,
 				AD6B704627A7B11700A38208 /* AlertInformation.swift in Sources */,
+				AD50E09E2AB46B39005CE509 /* NativeAdmob.swift in Sources */,
 				ADCF36FE24A1D18E0011D6F5 /* NarrowListItem.swift in Sources */,
 				ADAD3D1D277BDBDE005A70E1 /* ItemListView.swift in Sources */,
+				AD50E09C2AB4647A005CE509 /* DebugError.swift in Sources */,
 				AD5D754A2AB17011003E16D1 /* SwiftDataMigrator.swift in Sources */,
 				ADCF376524A32E460011D6F5 /* IncomesBottomBar.swift in Sources */,
 				ADAD3D23277C1120005A70E1 /* Item.swift in Sources */,
@@ -760,6 +771,7 @@
 				ADAD3CC7277AA922005A70E1 /* UserDefaultsExtension.swift in Sources */,
 				ADCB06EB279149CD00B867F4 /* BalanceCalculator.swift in Sources */,
 				ADDF76C12AAC9AAE00CDEC7E /* Tag.swift in Sources */,
+				AD50E0A02AB49021005CE509 /* CollectionExtension.swift in Sources */,
 				ADCF370124A1D18E0011D6F5 /* EditView.swift in Sources */,
 				AD98987D2AA5DC8700E7DFA6 /* MaskView.swift in Sources */,
 				ADCF375824A2C8260011D6F5 /* DecimalExtension.swift in Sources */,

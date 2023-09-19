@@ -23,9 +23,9 @@ enum LocalizedString: String {
 
     case homeTitle
 
-    // MARK: - Group
+    // MARK: - Category
 
-    case groupTitle
+    case categoryTitle
     case others
 
     // MARK: - Edit
@@ -51,9 +51,12 @@ enum LocalizedString: String {
     case settingsTitle
     case lockApp
     case maskApp
-    case noPurchases
     case manageItemsHeader
     case recalculate
     case deleteAll
     case deleteAllConfirm
+
+    // MARK: - Error
+
+    case errorUnknown
 }

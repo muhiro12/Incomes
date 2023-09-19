@@ -20,9 +20,9 @@
 
 "homeTitle" = "ホーム";
 
-// MARK: - Group
+// MARK: - Category
 
-"groupTitle" = "グループ";
+"categoryTitle" = "カテゴリ";
 "others" = "その他";
 
 // MARK: - Edit
@@ -48,8 +48,11 @@
 "settingsTitle" = "設定";
 "lockApp" = "アプリをロックします";
 "maskApp" = "アプリをマスクします";
-"noPurchases" = "購入済みアイテムが見つかりません";
 "manageItemsHeader" = "アイテムを管理する";
 "recalculate" = "再計算";
 "deleteAll" = "全て削除";
 "deleteAllConfirm" = "全てのアイテムを削除してもよろしいですか？";
+
+// MARK: - Error
+
+"errorUnknown" = "申し訳ありません、問題が発生しました。修正に取り組んでいます。";

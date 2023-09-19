@@ -20,36 +20,37 @@ struct SwiftDataController {
 
     func modify() {
         do {
-            if try tagService.tags().isEmpty {
+            if try migrator.isBeforeV2() {
                 try migrator.migrateToV2()
             } else {
-                try deleteDuplicateTags()
+                try deleteInvalidTags()
             }
         } catch {
             assertionFailure()
         }
     }
 
-    func deleteDuplicateTags() throws {
+    func deleteInvalidTags() throws {
         let allTags = try tagService.tags()
 
-        var unique = [Tag]()
-        var duplicate = [Tag]()
+        var valids = [Tag]()
+        var invalids = [Tag]()
 
         allTags.forEach { tag in
-            if unique.contains(tag) {
-                tag.items?.forEach { item in
-                    var tags = item.tags ?? []
-                    tags.removeAll { $0 == tag }
-                    tags.append(tag)
-                    item.set(tags: tags)
-                }
-                duplicate.append(tag)
-            } else {
-                unique.append(tag)
+            if !valids.contains(tag),
+               tag.items?.isNotEmpty == true {
+                valids.append(tag)
+                return
             }
+            tag.items?.forEach { item in
+                var tags = item.tags ?? []
+                tags.removeAll { $0 == tag }
+                tags.append(tag)
+                item.set(tags: tags)
+            }
+            invalids.append(tag)
         }
 
-        try tagService.delete(tags: duplicate)
+        try tagService.delete(tags: invalids)
     }
 }

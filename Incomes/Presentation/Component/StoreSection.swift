@@ -16,15 +16,13 @@ struct StoreSection {
 extension StoreSection: View {
     var body: some View {
         Section(content: {
-            SubscriptionStoreView(productIDs: [store.productID])
+            SubscriptionStoreView(groupID: store.groupID)
                 .storeButton(.visible, for: .policies)
                 .storeButton(.visible, for: .restorePurchases)
                 .storeButton(.hidden, for: .cancellation)
                 .subscriptionStorePolicyDestination(url: .terms, for: .termsOfService)
                 .subscriptionStorePolicyDestination(url: .privacy, for: .privacyPolicy)
                 .fixedSize(horizontal: false, vertical: true)
-        }, header: {
-            Text(store.product?.subscription?.groupDisplayName ?? .empty)
         }, footer: {
             Text(store.product?.description ?? .empty)
         })
