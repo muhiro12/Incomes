@@ -20,6 +20,8 @@ extension StoreSection: View {
                 .storeButton(.visible, for: .policies)
                 .storeButton(.visible, for: .restorePurchases)
                 .storeButton(.hidden, for: .cancellation)
+                .subscriptionStorePolicyDestination(url: .terms, for: .termsOfService)
+                .subscriptionStorePolicyDestination(url: .privacy, for: .privacyPolicy)
                 .fixedSize(horizontal: false, vertical: true)
         }, header: {
             Text(store.product?.subscription?.groupDisplayName ?? .empty)
