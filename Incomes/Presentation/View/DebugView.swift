@@ -16,48 +16,48 @@ struct DebugView {
     @Environment(\.presentationMode)
     private var presentationMode
 
-    @AppStorage(.key(.isSubscribeOn))
-    private var isSubscribeOn = UserDefaults.isSubscribeOn
-
     @State private var isDebugOption = Self.isDebug
+    @State private var isAlertPresented = false
 }
 
 extension DebugView: View {
     var body: some View {
-        NavigationView {
-            Form {
-                Section {
-                    Toggle(String.debugOption, isOn: $isDebugOption)
-                        .onChange(of: isDebugOption) { _, newValue in
-                            Self.isDebug = newValue
-                        }
-                    Toggle(String.debugSubscribe, isOn: $isSubscribeOn)
-                        .disabled(!isDebugOption)
-                    NavigationLink("ItemListView") {
-                        ItemListView(
-                            title: "Item",
-                            predicate: Item.predicate(dateIsAfter: .init(timeIntervalSinceReferenceDate: .zero))
-                        )
+        List {
+            Section {
+                Toggle(String.debugOption, isOn: $isDebugOption)
+                    .onChange(of: isDebugOption) { _, newValue in
+                        Self.isDebug = newValue
                     }
-                    Button(String.debugPreviewData) {}
-                        .disabled(!isDebugOption)
-                        .onLongPressGesture {
-                            do {
-                                PreviewData.items.forEach(context.insert)
-                                try context.save()
-                            } catch {
-                                assertionFailure(error.localizedDescription)
-                            }
-                        }
+            }
+            Section {
+                NavigationLink(String.debugAllItems) {
+                    ItemListView(
+                        title: String.debugAllItems,
+                        predicate: Item.predicate(dateIsAfter: .init(timeIntervalSinceReferenceDate: .zero))
+                    )
                 }
             }
-            .toolbar {
-                Button(.localized(.done)) {
-                    presentationMode.wrappedValue.dismiss()
+            Section {
+                Button(String.debugSetPreviewData) {
+                    isAlertPresented = true
                 }
+                .disabled(!isDebugOption)
             }
-            .navigationBarTitle(String.debugTitle)
         }
+        .alert(String.debugSetPreviewData, isPresented: $isAlertPresented) {
+            Button(.localized(.cancel), role: .cancel) {}
+            Button(String.debugOK) {
+                do {
+                    PreviewData.items.forEach(context.insert)
+                    try context.save()
+                } catch {
+                    assertionFailure(error.localizedDescription)
+                }
+            }
+        } message: {
+            Text(String.debugSetPreviewDataMessage)
+        }
+        .navigationBarTitle(String.debugTitle)
     }
 }
 
