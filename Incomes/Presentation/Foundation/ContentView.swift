@@ -67,6 +67,7 @@ extension ContentView: View {
 }
 
 #Preview {
-    ContentView()
-        .modelContainer(PreviewData.inMemoryContainer)
+    ModelsPreview { (_: [Tag]) in
+        ContentView()
+    }
 }

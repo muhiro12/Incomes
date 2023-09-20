@@ -29,6 +29,7 @@ extension CategoryView: View {
 }
 
 #Preview {
-    CategoryView()
-        .modelContainer(PreviewData.inMemoryContainer)
+    ModelsPreview { (_: [Tag]) in
+        CategoryView()
+    }
 }

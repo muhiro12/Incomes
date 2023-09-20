@@ -47,6 +47,7 @@ extension HomeView: View {
 }
 
 #Preview {
-    HomeView()
-        .modelContainer(PreviewData.inMemoryContainer)
+    ModelsPreview { (_: [Tag]) in
+        HomeView()
+    }
 }

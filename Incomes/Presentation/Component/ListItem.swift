@@ -49,9 +49,13 @@ private extension ListItem {
 }
 
 #Preview {
-    ListItem(of: PreviewData.item)
+    ModelPreview {
+        ListItem(of: $0)
+    }
 }
 
 #Preview(traits: .landscapeLeft) {
-    ListItem(of: PreviewData.item)
+    ModelPreview {
+        ListItem(of: $0)
+    }
 }

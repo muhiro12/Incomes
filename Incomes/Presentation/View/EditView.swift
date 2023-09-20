@@ -266,5 +266,7 @@ private extension EditView {
 }
 
 #Preview {
-    EditView(of: PreviewData.item)
+    ModelPreview {
+        EditView(of: $0)
+    }
 }

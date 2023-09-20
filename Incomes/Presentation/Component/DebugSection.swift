@@ -43,7 +43,9 @@ extension DebugSection: View {
 }
 
 #Preview {
-    List {
-        DebugSection(item: PreviewData.item)
+    ModelPreview { item in
+        List {
+            DebugSection(item: item)
+        }
     }
 }

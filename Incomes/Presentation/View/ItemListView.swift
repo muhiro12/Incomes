@@ -79,7 +79,8 @@ private extension ItemListView {
 }
 
 #Preview {
-    ItemListView(title: "Title",
-                 predicate: Item.predicate(dateIsSameMonthAs: Date()))
-        .modelContainer(PreviewData.inMemoryContainer)
+    ModelsPreview { (_: [Tag]) in
+        ItemListView(title: "Title",
+                     predicate: Item.predicate(dateIsSameMonthAs: Date()))
+    }
 }

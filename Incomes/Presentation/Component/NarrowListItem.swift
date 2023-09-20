@@ -41,5 +41,7 @@ extension NarrowListItem: View {
 }
 
 #Preview {
-    NarrowListItem(of: PreviewData.item)
+    ModelPreview {
+        NarrowListItem(of: $0)
+    }
 }
