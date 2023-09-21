@@ -46,7 +46,7 @@ extension DebugView: View {
         }
         .alert(String.debugSetPreviewData, isPresented: $isAlertPresented) {
             Button(.localized(.cancel), role: .cancel) {}
-            Button(String.debugOK) {
+            Button(String.debugOK, role: .destructive) {
                 do {
                     let items = try PreviewData.items(context: context)
                     items.forEach(context.insert)
