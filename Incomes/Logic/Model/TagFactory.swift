@@ -10,16 +10,14 @@ import Foundation
 import SwiftData
 
 struct TagFactory {
-    private let repository: any Repository<Tag>
-
-    init(context: ModelContext) {
-        self.repository = TagRepository(context: context)
-    }
+    let context: ModelContext
 
     func callAsFunction(_ name: String, for type: Tag.TagType) throws -> Tag {
+        let repository = TagRepository(context: context)
         var tags = try repository.fetchList(predicate: Tag.predicate(name, for: type))
         guard let tag = tags.popLast() else {
             let tag = Tag()
+            context.insert(tag)
             tag.set(name: name, typeID: type.rawValue)
             return tag
         }

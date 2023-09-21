@@ -64,9 +64,9 @@ extension ModelsPreview: View {
 
 extension ModelsPreview {
     struct PreviewContentView: View {
-        var content: ([Model]) -> Content
-
         @Query private var models: [Model]
+
+        var content: ([Model]) -> Content
 
         var body: some View {
             content(models)
