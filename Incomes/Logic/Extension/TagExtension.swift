@@ -13,17 +13,30 @@ import Foundation
 extension Tag {
     typealias Predicate = Foundation.Predicate<Tag>
 
-    static func predicate(_ name: String, for type: Tag.TagType) -> Predicate {
+    static func predicate(id: Tag.ID) -> Predicate {
+        #Predicate {
+            $0.persistentModelID == id
+        }
+    }
+
+    static func predicate(name: String, type: Tag.TagType) -> Predicate {
         let id = type.rawValue
         return #Predicate {
             $0.name == name && $0.typeID == id
         }
     }
 
-    static func predicate(for type: Tag.TagType) -> Predicate {
+    static func predicate(type: Tag.TagType) -> Predicate {
         let id = type.rawValue
         return #Predicate {
             $0.typeID == id
+        }
+    }
+
+    static func predicate(monthIsSameYearAs year: String) -> Predicate {
+        let id = TagType.yearMonth.rawValue
+        return #Predicate {
+            $0.name.starts(with: year) && $0.typeID == id
         }
     }
 }
@@ -33,9 +46,17 @@ extension Tag {
 extension Tag {
     typealias SortDescriptor = Foundation.SortDescriptor<Tag>
 
-    static func sortDescriptors() -> [SortDescriptor] {
-        [.init(\.name),
-         .init(\.typeID),
-         .init(\.persistentModelID)]
+    static func sortDescriptors(order: SortOrder = .forward) -> [SortDescriptor] {
+        switch order {
+        case .forward:
+            return [.init(\.name),
+                    .init(\.typeID),
+                    .init(\.persistentModelID)]
+
+        case .reverse:
+            return [.init(\.persistentModelID, order: .reverse),
+                    .init(\.typeID, order: .reverse),
+                    .init(\.name, order: .reverse)]
+        }
     }
 }

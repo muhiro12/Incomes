@@ -16,6 +16,10 @@ struct TagService {
         self.repository = TagRepository(context: context)
     }
 
+    func tag(predicate: Predicate<Tag>? = nil) throws -> Tag? {
+        try repository.fetch(predicate: predicate)
+    }
+
     func tags(predicate: Predicate<Tag>? = nil) throws -> [Tag] {
         try repository.fetchList(predicate: predicate)
     }

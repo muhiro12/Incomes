@@ -54,7 +54,7 @@
 		ADCF36CF24A1D0F70011D6F5 /* IncomesUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF36CE24A1D0F70011D6F5 /* IncomesUITests.swift */; };
 		ADCF36E024A1D1820011D6F5 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF36DD24A1D1820011D6F5 /* ContentView.swift */; };
 		ADCF36FE24A1D18E0011D6F5 /* NarrowListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF36E324A1D18E0011D6F5 /* NarrowListItem.swift */; };
-		ADCF370124A1D18E0011D6F5 /* EditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF36E624A1D18E0011D6F5 /* EditView.swift */; };
+		ADCF370124A1D18E0011D6F5 /* ItemDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF36E624A1D18E0011D6F5 /* ItemDetailView.swift */; };
 		ADCF370224A1D18E0011D6F5 /* WideListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF36E724A1D18E0011D6F5 /* WideListItem.swift */; };
 		ADCF370324A1D18E0011D6F5 /* ListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF36E824A1D18E0011D6F5 /* ListItem.swift */; };
 		ADCF370424A1D18E0011D6F5 /* ItemRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF36EA24A1D18E0011D6F5 /* ItemRepository.swift */; };
@@ -74,6 +74,7 @@
 		ADCF392124A551360011D6F5 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADCF392024A551360011D6F5 /* StoreKit.framework */; platformFilter = ios; };
 		ADCF393224A57ADC0011D6F5 /* PreviewData.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF393124A57ADB0011D6F5 /* PreviewData.swift */; };
 		ADD3CCD52ABAEAEB00F60350 /* ModelPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADD3CCD42ABAEAEB00F60350 /* ModelPreview.swift */; };
+		ADD3CCDD2ABDFB3C00F60350 /* ItemListYearSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADD3CCDC2ABDFB3C00F60350 /* ItemListYearSection.swift */; };
 		ADDBC4582792CD4400F5E4A7 /* NativeAdvertisement.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADDBC4572792CD4400F5E4A7 /* NativeAdvertisement.swift */; };
 		ADDF76C12AAC9AAE00CDEC7E /* Tag.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADDF76C02AAC9AAE00CDEC7E /* Tag.swift */; };
 		ADDF76C32AAC9ADC00CDEC7E /* TagRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADDF76C22AAC9ADC00CDEC7E /* TagRepository.swift */; };
@@ -163,7 +164,7 @@
 		ADCF36D024A1D0F70011D6F5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		ADCF36DD24A1D1820011D6F5 /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		ADCF36E324A1D18E0011D6F5 /* NarrowListItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NarrowListItem.swift; sourceTree = "<group>"; };
-		ADCF36E624A1D18E0011D6F5 /* EditView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditView.swift; sourceTree = "<group>"; };
+		ADCF36E624A1D18E0011D6F5 /* ItemDetailView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemDetailView.swift; sourceTree = "<group>"; };
 		ADCF36E724A1D18E0011D6F5 /* WideListItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WideListItem.swift; sourceTree = "<group>"; };
 		ADCF36E824A1D18E0011D6F5 /* ListItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItem.swift; sourceTree = "<group>"; };
 		ADCF36EA24A1D18E0011D6F5 /* ItemRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemRepository.swift; sourceTree = "<group>"; };
@@ -197,6 +198,7 @@
 		ADCF392024A551360011D6F5 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/StoreKit.framework; sourceTree = DEVELOPER_DIR; };
 		ADCF393124A57ADB0011D6F5 /* PreviewData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewData.swift; sourceTree = "<group>"; };
 		ADD3CCD42ABAEAEB00F60350 /* ModelPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelPreview.swift; sourceTree = "<group>"; };
+		ADD3CCDC2ABDFB3C00F60350 /* ItemListYearSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemListYearSection.swift; sourceTree = "<group>"; };
 		ADDBC4572792CD4400F5E4A7 /* NativeAdvertisement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeAdvertisement.swift; sourceTree = "<group>"; };
 		ADDF76C02AAC9AAE00CDEC7E /* Tag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tag.swift; sourceTree = "<group>"; };
 		ADDF76C22AAC9ADC00CDEC7E /* TagRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagRepository.swift; sourceTree = "<group>"; };
@@ -354,15 +356,16 @@
 				ADDF76C82AAD36AF00CDEC7E /* CategorySection.swift */,
 				ADB362792AA6D7B200964CA7 /* DebugSection.swift */,
 				ADCF376424A32E460011D6F5 /* IncomesBottomBar.swift */,
+				ADD3CCDC2ABDFB3C00F60350 /* ItemListYearSection.swift */,
 				ADCF36E824A1D18E0011D6F5 /* ListItem.swift */,
 				ADCF36E324A1D18E0011D6F5 /* NarrowListItem.swift */,
+				AD50E09D2AB46B39005CE509 /* NativeAdmob.swift */,
 				ADDBC4572792CD4400F5E4A7 /* NativeAdvertisement.swift */,
 				AD4C31592AA581590030A17F /* PremiumSection.swift */,
 				AD6B704727A7C16100A38208 /* StoreSection.swift */,
 				ADE89DF424B5E73300BB82E9 /* TitleListItem.swift */,
 				ADCF36E724A1D18E0011D6F5 /* WideListItem.swift */,
 				ADAD3D16277BC80F005A70E1 /* YearSection.swift */,
-				AD50E09D2AB46B39005CE509 /* NativeAdmob.swift */,
 			);
 			path = Component;
 			sourceTree = "<group>";
@@ -397,8 +400,8 @@
 			children = (
 				ADDF76C62AAD35AB00CDEC7E /* CategoryView.swift */,
 				AD75E9DD278F19A5008BE905 /* DebugView.swift */,
-				ADCF36E624A1D18E0011D6F5 /* EditView.swift */,
 				ADCF36F324A1D18E0011D6F5 /* HomeView.swift */,
+				ADCF36E624A1D18E0011D6F5 /* ItemDetailView.swift */,
 				ADAD3D1C277BDBDE005A70E1 /* ItemListView.swift */,
 				ADAD3D0E277B1790005A70E1 /* LockedView.swift */,
 				AD98987C2AA5DC8700E7DFA6 /* MaskView.swift */,
@@ -743,6 +746,7 @@
 				AD50E09E2AB46B39005CE509 /* NativeAdmob.swift in Sources */,
 				ADCF36FE24A1D18E0011D6F5 /* NarrowListItem.swift in Sources */,
 				ADAD3D1D277BDBDE005A70E1 /* ItemListView.swift in Sources */,
+				ADD3CCDD2ABDFB3C00F60350 /* ItemListYearSection.swift in Sources */,
 				AD50E09C2AB4647A005CE509 /* DebugError.swift in Sources */,
 				AD5D754A2AB17011003E16D1 /* SwiftDataMigrator.swift in Sources */,
 				ADCF376524A32E460011D6F5 /* IncomesBottomBar.swift in Sources */,
@@ -775,7 +779,7 @@
 				ADCB06EB279149CD00B867F4 /* BalanceCalculator.swift in Sources */,
 				ADDF76C12AAC9AAE00CDEC7E /* Tag.swift in Sources */,
 				AD50E0A02AB49021005CE509 /* CollectionExtension.swift in Sources */,
-				ADCF370124A1D18E0011D6F5 /* EditView.swift in Sources */,
+				ADCF370124A1D18E0011D6F5 /* ItemDetailView.swift in Sources */,
 				AD98987D2AA5DC8700E7DFA6 /* MaskView.swift in Sources */,
 				ADCF375824A2C8260011D6F5 /* DecimalExtension.swift in Sources */,
 				ADDF76D12AAF543100CDEC7E /* SwiftDataRepository.swift in Sources */,

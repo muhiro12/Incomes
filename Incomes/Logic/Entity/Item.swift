@@ -62,3 +62,5 @@ extension Item {
         self.tags = tags
     }
 }
+
+extension Item: Identifiable {}

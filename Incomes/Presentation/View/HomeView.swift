@@ -10,39 +10,58 @@ import SwiftData
 import SwiftUI
 
 struct HomeView {
+    @Environment(\.modelContext)
+    private var context
+
     @AppStorage(.key(.isSubscribeOn))
     private var isSubscribeOn = UserDefaults.isSubscribeOn
 
-    @Query(filter: Tag.predicate(for: .year), sort: Tag.sortDescriptors())
+    @Query(filter: Tag.predicate(type: .year), sort: Tag.sortDescriptors(order: .reverse))
     private var tags: [Tag]
+
+    @State private var tagID: Tag.ID?
+    @State private var itemID: Item.ID?
 
     @State private var isPresentedToSettings = false
 }
 
 extension HomeView: View {
     var body: some View {
-        List {
-            ForEach(tags.reversed()) {
-                YearSection(year: $0.name, items: $0.items ?? [])
-                if !isSubscribeOn {
-                    Advertisement(type: .native(.small))
+        NavigationSplitView {
+            List(selection: $tagID) {
+                ForEach(tags) {
+                    YearSection(yearTag: $0)
+                    if !isSubscribeOn {
+                        Advertisement(type: .native(.small))
+                    }
                 }
             }
+            .toolbar {
+                Button(action: {
+                    isPresentedToSettings = true
+                }, label: {
+                    Image.settings
+                        .iconFrameM()
+                })
+            }
+            .sheet(isPresented: $isPresentedToSettings) {
+                SettingsView()
+            }
+            .navigationBarTitle(.localized(.homeTitle))
+        } content: {
+            if let tagID,
+               let tag = try? TagService(context: context).tag(predicate: Tag.predicate(id: tagID)),
+               let date = tag.items?.first?.date {
+                ItemListView(tag: tag,
+                             predicate: Item.predicate(dateIsSameMonthAs: date),
+                             itemID: $itemID)
+            }
+        } detail: {
+            if let itemID,
+               let item = try? ItemService(context: context).item(predicate: Item.predicate(id: itemID)) {
+                ItemDetailView(of: item)
+            }
         }
-        .toolbar {
-            Button(action: {
-                isPresentedToSettings = true
-            }, label: {
-                Image.settings
-                    .iconFrameM()
-            })
-        }
-        .sheet(isPresented: $isPresentedToSettings) {
-            SettingsView()
-        }
-        .id(UUID())
-        .navigationBarTitle(.localized(.homeTitle))
-        .listStyle(.sidebar)
     }
 }
 

@@ -1,5 +1,5 @@
 //
-//  EditView.swift
+//  ItemDetailView.swift
 //  Incomes
 //
 //  Created by Hiromu Nakano on 2020/04/10.
@@ -8,7 +8,9 @@
 
 import SwiftUI
 
-struct EditView {
+typealias ItemCreateView = ItemDetailView
+
+struct ItemDetailView {
     @Environment(\.modelContext)
     private var context
     @Environment(\.presentationMode)
@@ -38,80 +40,78 @@ struct EditView {
     }
 }
 
-extension EditView: View {
+extension ItemDetailView: View {
     // TODO: Resolve SwiftLint
     // swiftlint:disable closure_body_length
     var body: some View {
-        NavigationView {
-            Form {
-                Section(content: {
-                    DatePicker(selection: $date, displayedComponents: .date) {
-                        Text(.localized(.date))
-                    }
-                    HStack {
-                        Text(.localized(.content))
-                        Spacer()
-                        TextField(String.empty, text: $content)
-                            .multilineTextAlignment(.trailing)
-                    }
-                    HStack {
-                        Text(.localized(.income))
-                        TextField(String.zero, text: $income)
-                            .keyboardType(.numberPad)
-                            .multilineTextAlignment(.trailing)
-                            .foregroundColor(income.isEmptyOrDecimal ? .primary : .red)
-                    }
-                    HStack {
-                        Text(.localized(.outgo))
-                        TextField(String.zero, text: $outgo)
-                            .keyboardType(.numberPad)
-                            .multilineTextAlignment(.trailing)
-                            .foregroundColor(outgo.isEmptyOrDecimal ? .primary : .red)
-                    }
-                    HStack {
-                        Text(.localized(.group))
-                        Spacer()
-                        TextField(.localized(.others), text: $group)
-                            .multilineTextAlignment(.trailing)
-                    }
-                    if !isEditMode {
-                        HStack {
-                            Text(.localized(.repeatCount))
-                            Spacer()
-                            Picker(.localized(.repeatCount),
-                                   selection: $repeatSelection) {
-                                ForEach((.minRepeatCount)..<(.maxRepeatCount + .one), id: \.self) {
-                                    Text($0.description)
-                                }
-                            }.pickerStyle(WheelPickerStyle())
-                            .labelsHidden()
-                            .frame(width: .componentS,
-                                   height: .componentS)
-                            .clipped()
-                        }
-                    }
-                }, header: {
-                    Text(.localized(.information))
-                })
-                if DebugView.isDebug {
-                    DebugSection(item: item)
+        Form {
+            Section(content: {
+                DatePicker(selection: $date, displayedComponents: .date) {
+                    Text(.localized(.date))
                 }
+                HStack {
+                    Text(.localized(.content))
+                    Spacer()
+                    TextField(String.empty, text: $content)
+                        .multilineTextAlignment(.trailing)
+                }
+                HStack {
+                    Text(.localized(.income))
+                    TextField(String.zero, text: $income)
+                        .keyboardType(.numberPad)
+                        .multilineTextAlignment(.trailing)
+                        .foregroundColor(income.isEmptyOrDecimal ? .primary : .red)
+                }
+                HStack {
+                    Text(.localized(.outgo))
+                    TextField(String.zero, text: $outgo)
+                        .keyboardType(.numberPad)
+                        .multilineTextAlignment(.trailing)
+                        .foregroundColor(outgo.isEmptyOrDecimal ? .primary : .red)
+                }
+                HStack {
+                    Text(.localized(.group))
+                    Spacer()
+                    TextField(.localized(.others), text: $group)
+                        .multilineTextAlignment(.trailing)
+                }
+                if !isEditMode {
+                    HStack {
+                        Text(.localized(.repeatCount))
+                        Spacer()
+                        Picker(.localized(.repeatCount),
+                               selection: $repeatSelection) {
+                            ForEach((.minRepeatCount)..<(.maxRepeatCount + .one), id: \.self) {
+                                Text($0.description)
+                            }
+                        }.pickerStyle(WheelPickerStyle())
+                        .labelsHidden()
+                        .frame(width: .componentS,
+                               height: .componentS)
+                        .clipped()
+                    }
+                }
+            }, header: {
+                Text(.localized(.information))
+            })
+            if DebugView.isDebug {
+                DebugSection(item: item)
             }
-            .navigationBarTitle(isEditMode ? .localized(.editTitle) : .localized(.createTitle))
-            .navigationBarItems(
-                leading: Button(action: cancel) {
-                    Text(.localized(.cancel))
-                },
-                trailing: Button(action: isEditMode ? save : create) {
-                    Text(isEditMode ? .localized(.save) : .localized(.create))
-                        .bold()
-                }
-                .disabled(!isValid))
-            .gesture(DragGesture()
-                        .onChanged { _ in
-                            dismissKeyboard()
-                        })
         }
+        .navigationBarTitle(isEditMode ? .localized(.editTitle) : .localized(.createTitle))
+        .navigationBarItems(
+            leading: Button(action: cancel) {
+                Text(.localized(.cancel))
+            },
+            trailing: Button(action: isEditMode ? save : create) {
+                Text(isEditMode ? .localized(.save) : .localized(.create))
+                    .bold()
+            }
+            .disabled(!isValid))
+        .gesture(DragGesture()
+                    .onChanged { _ in
+                        dismissKeyboard()
+                    })
         .alert(String.debugTitle, isPresented: $isDebugAlertPresented) {
             Button(.localized(.cancel), role: .cancel) {}
             Button(String.debugOK) {
@@ -140,7 +140,7 @@ extension EditView: View {
 
 // MARK: - private
 
-private extension EditView {
+private extension ItemDetailView {
     var isEditMode: Bool {
         item != nil
     }
@@ -262,11 +262,11 @@ private extension EditView {
 }
 
 #Preview {
-    EditView()
+    ItemDetailView()
 }
 
 #Preview {
     ModelPreview {
-        EditView(of: $0)
+        ItemDetailView(of: $0)
     }
 }

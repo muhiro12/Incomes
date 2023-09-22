@@ -37,6 +37,8 @@ extension Tag {
     }
 }
 
+extension Tag: Identifiable {}
+
 extension Tag: Equatable {
     static func == (lhs: Tag, rhs: Tag) -> Bool {
         lhs.name == rhs.name && lhs.typeID == rhs.typeID

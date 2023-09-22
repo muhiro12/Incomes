@@ -6,36 +6,40 @@
 //  Copyright © 2021 Hiromu Nakano. All rights reserved.
 //
 
+import SwiftData
 import SwiftUI
 
 struct YearSection {
     @Environment(\.modelContext)
     private var context
 
+    @Query private var tags: [Tag]
+
     @State private var isPresentedToAlert = false
     @State private var willDeleteItems: [Item] = []
 
-    private let year: String
-    private let sections: [SectionedItems<Date>]
+    private let tag: Tag
 
-    init(year: String, items: [Item]) {
-        self.year = year
-        self.sections = ItemService.groupByMonth(items: items)
+    init(yearTag: Tag) {
+        tag = yearTag
+        _tags = Query(filter: Tag.predicate(monthIsSameYearAs: yearTag.name),
+                      sort: Tag.sortDescriptors(order: .reverse))
     }
 }
 
 extension YearSection: View {
     var body: some View {
         Section(content: {
-            ForEach(0..<sections.count, id: \.self) { index in
-                NavigationLink(sections[index].section.stringValue(.yyyyMMM), value: sections[index])
+            ForEach(tags) { tag in
+                Text(tag.items?.first?.date.stringValue(.yyyyMMM) ?? .empty)
             }.onDelete {
                 isPresentedToAlert = true
-                willDeleteItems = $0.flatMap { sections[$0].items }
+                willDeleteItems = $0.flatMap { tags[$0].items ?? [] }
             }
         }, header: {
-            Text(year)
-        }).actionSheet(isPresented: $isPresentedToAlert) {
+            Text(tag.name)
+        })
+        .actionSheet(isPresented: $isPresentedToAlert) {
             ActionSheet(
                 title: Text(.localized(.deleteConfirm)),
                 buttons: [
@@ -50,19 +54,14 @@ extension YearSection: View {
                         willDeleteItems = []
                     }
                 ])
-            }
+        }
     }
 }
 
 #Preview {
-    ModelsPreview { items in
+    ModelPreview { tag in
         List {
-            YearSection(
-                year: "2023",
-                items: items.filter {
-                    $0.date.stringValue(.yyyy) == "2023"
-                }
-            )
+            YearSection(yearTag: tag)
         }
     }
 }

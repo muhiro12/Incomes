@@ -10,7 +10,7 @@ import SwiftData
 import SwiftUI
 
 struct CategoryView {
-    @Query(filter: Tag.predicate(for: .category), sort: Tag.sortDescriptors())
+    @Query(filter: Tag.predicate(type: .category), sort: Tag.sortDescriptors())
     private var tags: [Tag]
 }
 
