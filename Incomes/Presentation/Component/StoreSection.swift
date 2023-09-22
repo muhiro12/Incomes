@@ -20,7 +20,7 @@ extension StoreSection: View {
                 .storeButton(.visible, for: .policies)
                 .storeButton(.visible, for: .restorePurchases)
                 .storeButton(.hidden, for: .cancellation)
-                //                .subscriptionStorePolicyDestination(url: .terms, for: .termsOfService)
+                .subscriptionStorePolicyDestination(url: .terms, for: .termsOfService)
                 .fixedSize(horizontal: false, vertical: true)
         }, footer: {
             Text(store.product?.description ?? .empty)
