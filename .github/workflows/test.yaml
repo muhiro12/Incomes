@@ -19,7 +19,7 @@ jobs:
           echo '${{ secrets.STOREKIT_BASE64 }}' | base64 -d -o Incomes/Configuration/Package/StoreKit/StoreKitTestCertificate.cer
 
       - name: Xcode test
-        run: xcodebuild -scheme ${{ env.PROJECT-NAME }} -destination "platform=iOS Simulator,name=iPhone 14 Pro" -resultBundlePath TestResults test
+        run: xcodebuild -scheme ${{ env.PROJECT-NAME }} -destination "platform=iOS Simulator,name=iPhone 15 Pro" -resultBundlePath TestResults test
 
       - name: Merge PR
         if: ${{ github.event.pull_request.number }}
