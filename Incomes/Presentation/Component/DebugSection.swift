@@ -17,17 +17,17 @@ extension DebugSection: View {
         if let item {
             Section(content: {
                 HStack {
-                    Text("RepeatID")
+                    Text(String.debugRepeatID)
                     Spacer()
                     Text(item.repeatID.uuidString)
                 }
                 HStack {
-                    Text("Balance")
+                    Text(String.debugBalance)
                     Spacer()
                     Text(item.balance.description)
                 }
                 HStack {
-                    Text("Tags")
+                    Text(String.debugTags)
                     Spacer()
                     VStack {
                         ForEach(item.tags ?? []) {
@@ -43,7 +43,9 @@ extension DebugSection: View {
 }
 
 #Preview {
-    List {
-        DebugSection(item: PreviewData.item)
+    ModelPreview { item in
+        List {
+            DebugSection(item: item)
+        }
     }
 }

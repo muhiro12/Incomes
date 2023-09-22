@@ -15,7 +15,7 @@ struct EditView {
     private var presentationMode
 
     @State private var isPresentedToActionSheet = false
-    @State private var isDebugPresented = false
+    @State private var isDebugAlertPresented = false
 
     @State private var date = Date()
     @State private var content: String = .empty
@@ -112,8 +112,14 @@ extension EditView: View {
                             dismissKeyboard()
                         })
         }
-        .sheet(isPresented: $isDebugPresented) {
-            DebugView()
+        .alert(String.debugTitle, isPresented: $isDebugAlertPresented) {
+            Button(.localized(.cancel), role: .cancel) {}
+            Button(String.debugOK) {
+                DebugView.isDebug = true
+                dismiss()
+            }
+        } message: {
+            Text(String.debugMessage)
         }
         .actionSheet(isPresented: $isPresentedToActionSheet) {
             ActionSheet(title: Text(.localized(.saveDetail)),
@@ -233,7 +239,7 @@ private extension EditView {
     func cancel() {
         if content == .debugCommand {
             content = .empty
-            isDebugPresented = true
+            isDebugAlertPresented = true
             return
         }
         dismiss()
@@ -260,5 +266,7 @@ private extension EditView {
 }
 
 #Preview {
-    EditView(of: PreviewData.item)
+    ModelPreview {
+        EditView(of: $0)
+    }
 }

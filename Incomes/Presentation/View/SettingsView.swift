@@ -62,6 +62,7 @@ extension SettingsView: View {
                 do {
                     try ItemService(context: context).deleteAll()
                     try TagService(context: context).deleteAll()
+                    presentationMode.wrappedValue.dismiss()
                 } catch {
                     assertionFailure(error.localizedDescription)
                 }

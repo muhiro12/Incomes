@@ -55,12 +55,14 @@ extension CategorySection: View {
 }
 
 #Preview {
-    List {
-        CategorySection(
-            title: "Credit",
-            items: PreviewData.items.filter {
-                $0.group == "Credit"
-            }
-        )
+    ModelsPreview { items in
+        List {
+            CategorySection(
+                title: "Credit",
+                items: items.filter {
+                    $0.group == "Credit"
+                }
+            )
+        }
     }
 }
