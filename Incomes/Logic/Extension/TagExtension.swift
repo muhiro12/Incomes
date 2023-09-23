@@ -33,10 +33,17 @@ extension Tag {
         }
     }
 
-    static func predicate(monthIsSameYearAs year: String) -> Predicate {
+    static func predicate(year: String) -> Predicate {
         let id = TagType.yearMonth.rawValue
         return #Predicate {
             $0.name.starts(with: year) && $0.typeID == id
+        }
+    }
+
+    static func predicate(contents: [String]) -> Predicate {
+        let id = TagType.content.rawValue
+        return #Predicate {
+            contents.contains($0.name) && $0.typeID == id
         }
     }
 }

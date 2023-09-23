@@ -34,7 +34,7 @@ extension DebugView: View {
                     ItemListView(
                         tag: .init(),
                         predicate: .true,
-                        itemID: .constant(nil)
+                        detailID: .constant(nil)
                     )
                 }
             }

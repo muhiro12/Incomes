@@ -13,13 +13,13 @@ struct ItemListView {
     @AppStorage(.key(.isSubscribeOn))
     private var isSubscribeOn = UserDefaults.isSubscribeOn
 
-    @Binding private var itemID: Item.ID?
+    @Binding private var detailID: Item.ID?
 
     private let title: String
     private let yearTags: [Tag]
     private let predicate: Predicate<Item>
 
-    init(tag: Tag, predicate: Predicate<Item>, itemID: Binding<Item.ID?>) {
+    init(tag: Tag, predicate: Predicate<Item>, detailID: Binding<Item.ID?>) {
         self.title = tag.name
         self.yearTags = Set(
             tag.items?.compactMap {
@@ -31,13 +31,13 @@ struct ItemListView {
             $0.name > $1.name
         }
         self.predicate = predicate
-        _itemID = itemID
+        _detailID = detailID
     }
 }
 
 extension ItemListView: View {
     var body: some View {
-        List(selection: $itemID) {
+        List(selection: $detailID) {
             ForEach(yearTags, id: \.self) {
                 ItemListYearSection(yearTag: $0, predicate: predicate)
                 if !isSubscribeOn {
@@ -54,7 +54,7 @@ extension ItemListView: View {
         NavigationStack {
             ItemListView(tag: tag,
                          predicate: .true,
-                         itemID: .constant(nil))
+                         detailID: .constant(nil))
         }
     }
 }

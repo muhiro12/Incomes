@@ -6,36 +6,48 @@
 //  Copyright © 2023 Hiromu Nakano. All rights reserved.
 //
 
+import SwiftData
 import SwiftUI
 
 struct CategorySection {
     @Environment(\.modelContext)
     private var context
 
+    @Query private var tags: [Tag]
+
     @State private var isPresentedToAlert = false
     @State private var willDeleteItems: [Item] = []
 
-    private let title: String
-    private let sections: [SectionedItems<String>]
+    private let tag: Tag
 
-    init(title: String, items: [Item]) {
-        self.title = title
-        self.sections = ItemService.groupByContent(items: items)
+    init(categoryTag: Tag) {
+        tag = categoryTag
+
+        let contents = Array(
+            Set(
+                categoryTag.items?.map {
+                    $0.content
+                } ?? []
+            )
+        )
+        _tags = Query(filter: Tag.predicate(contents: contents),
+                      sort: Tag.sortDescriptors())
     }
 }
 
 extension CategorySection: View {
     var body: some View {
         Section(content: {
-            ForEach(sections.indices, id: \.self) { index in
-                NavigationLink(sections[index].section, value: sections[index])
+            ForEach(tags) {
+                Text($0.name)
             }.onDelete {
                 isPresentedToAlert = true
-                willDeleteItems = $0.flatMap { sections[$0].items }
+                willDeleteItems = $0.flatMap { tags[$0].items ?? [] }
             }
         }, header: {
-            Text(title)
-        }).actionSheet(isPresented: $isPresentedToAlert) {
+            Text(tag.name.isNotEmpty ? tag.name : .localized(.others))
+        })
+        .actionSheet(isPresented: $isPresentedToAlert) {
             ActionSheet(
                 title: Text(.localized(.deleteConfirm)),
                 buttons: [
@@ -50,19 +62,14 @@ extension CategorySection: View {
                         willDeleteItems = []
                     }
                 ])
-            }
+        }
     }
 }
 
 #Preview {
-    ModelsPreview { items in
+    ModelPreview { tag in
         List {
-            CategorySection(
-                title: "Credit",
-                items: items.filter {
-                    $0.group == "Credit"
-                }
-            )
+            CategorySection(categoryTag: tag)
         }
     }
 }

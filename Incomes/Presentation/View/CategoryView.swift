@@ -12,24 +12,27 @@ import SwiftUI
 struct CategoryView {
     @Query(filter: Tag.predicate(type: .category), sort: Tag.sortDescriptors())
     private var tags: [Tag]
+
+    @Binding private var contentID: Tag.ID?
+
+    init(contentID: Binding<Tag.ID?>) {
+        _contentID = contentID
+    }
 }
 
 extension CategoryView: View {
     var body: some View {
-        List {
+        List(selection: $contentID) {
             ForEach(tags) {
-                CategorySection(title: $0.name.isNotEmpty ? $0.name : .localized(.others),
-                                items: $0.items ?? [])
+                CategorySection(categoryTag: $0)
             }
         }
-        .id(UUID())
-        .listStyle(.sidebar)
         .navigationBarTitle(.localized(.categoryTitle))
     }
 }
 
 #Preview {
     ModelsPreview { (_: [Tag]) in
-        CategoryView()
+        CategoryView(contentID: .constant(nil))
     }
 }

@@ -15,13 +15,11 @@ struct IncomesBottomBar {
     @AppStorage(.key(.isSubscribeOn))
     private var isSubscribeOn = UserDefaults.isSubscribeOn
 
-    @Binding private var path: NavigationPath
     @Binding private var isHome: Bool
 
     @State private var isPresentedToEdit = false
 
-    init(path: Binding<NavigationPath>, isHome: Binding<Bool>) {
-        _path = path
+    init(isHome: Binding<Bool>) {
         _isHome = isHome
     }
 }
@@ -34,7 +32,6 @@ extension IncomesBottomBar: View {
                     HStack {
                         if isSubscribeOn {
                             Button(action: {
-                                path = .init()
                                 isHome.toggle()
                             }, label: {
                                 (isHome ? Image.group : Image.home)
@@ -66,6 +63,6 @@ extension IncomesBottomBar: View {
 
 #Preview {
     NavigationStack {
-        IncomesBottomBar(path: .constant(.init()), isHome: .constant(true))
+        IncomesBottomBar(isHome: .constant(true))
     }
 }

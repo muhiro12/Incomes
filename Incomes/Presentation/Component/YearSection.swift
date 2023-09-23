@@ -22,7 +22,7 @@ struct YearSection {
 
     init(yearTag: Tag) {
         tag = yearTag
-        _tags = Query(filter: Tag.predicate(monthIsSameYearAs: yearTag.name),
+        _tags = Query(filter: Tag.predicate(year: yearTag.name),
                       sort: Tag.sortDescriptors(order: .reverse))
     }
 }
@@ -30,8 +30,8 @@ struct YearSection {
 extension YearSection: View {
     var body: some View {
         Section(content: {
-            ForEach(tags) { tag in
-                Text(tag.items?.first?.date.stringValue(.yyyyMMM) ?? .empty)
+            ForEach(tags) {
+                Text($0.items?.first?.date.stringValue(.yyyyMMM) ?? .empty)
             }.onDelete {
                 isPresentedToAlert = true
                 willDeleteItems = $0.flatMap { tags[$0].items ?? [] }

@@ -9,6 +9,8 @@
 import SwiftUI
 
 struct ContentView {
+    @Environment(\.modelContext)
+    private var context
     @Environment(\.scenePhase)
     private var scenePhase
 
@@ -19,6 +21,8 @@ struct ContentView {
     @AppStorage(.key(.isLockAppOn))
     private var isLockAppOn = UserDefaults.isLockAppOn
 
+    @State private var contentID: Tag.ID?
+    @State private var detailID: Item.ID?
     @State private var isHome = true
     @State private var isMasked = false
     @State private var isLocked = UserDefaults.isLockAppOn
@@ -27,11 +31,34 @@ struct ContentView {
 extension ContentView: View {
     var body: some View {
         ZStack {
-            Group {
+            NavigationSplitView {
                 if isHome {
-                    HomeView()
+                    HomeView(contentID: $contentID)
                 } else {
-                    CategoryView()
+                    CategoryView(contentID: $contentID)
+                }
+                IncomesBottomBar(isHome: $isHome)
+            } content: {
+                if let contentID,
+                   let tag = try? TagService(context: context).tag(predicate: Tag.predicate(id: contentID)) {
+                    ItemListView(
+                        tag: tag,
+                        predicate: {
+                            if tag.type == .yearMonth,
+                               let date = tag.items?.first?.date {
+                                return Item.predicate(dateIsSameMonthAs: date)
+                            }
+                            if tag.type == .content {
+                                return Item.predicate(contentIs: tag.name)
+                            }
+                            return .false
+                        }(),
+                        detailID: $detailID)
+                }
+            } detail: {
+                if let detailID,
+                   let item = try? ItemService(context: context).item(predicate: Item.predicate(id: detailID)) {
+                    ItemDetailView(of: item)
                 }
             }
             .onChange(of: scenePhase) { _, newValue in
