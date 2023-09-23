@@ -9,8 +9,6 @@
 import SwiftUI
 
 struct ContentView {
-    @Environment(\.modelContext)
-    private var context
     @Environment(\.scenePhase)
     private var scenePhase
 
@@ -31,35 +29,13 @@ struct ContentView {
 extension ContentView: View {
     var body: some View {
         ZStack {
-            NavigationSplitView {
+            IncomesNavigationSplitView(contentID: $contentID, detailID: $detailID) {
                 if isHome {
                     HomeView(contentID: $contentID)
                 } else {
                     CategoryView(contentID: $contentID)
                 }
                 IncomesBottomBar(isHome: $isHome)
-            } content: {
-                if let contentID,
-                   let tag = try? TagService(context: context).tag(predicate: Tag.predicate(id: contentID)) {
-                    ItemListView(
-                        tag: tag,
-                        predicate: {
-                            if tag.type == .yearMonth,
-                               let date = tag.items?.first?.date {
-                                return Item.predicate(dateIsSameMonthAs: date)
-                            }
-                            if tag.type == .content {
-                                return Item.predicate(contentIs: tag.name)
-                            }
-                            return .false
-                        }(),
-                        detailID: $detailID)
-                }
-            } detail: {
-                if let detailID,
-                   let item = try? ItemService(context: context).item(predicate: Item.predicate(id: detailID)) {
-                    ItemDetailView(of: item)
-                }
             }
             .onChange(of: scenePhase) { _, newValue in
                 isMasked = isMaskAppOn && newValue != .active
