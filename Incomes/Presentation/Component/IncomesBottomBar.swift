@@ -55,7 +55,7 @@ extension IncomesBottomBar: View {
                 }
             }
             .sheet(isPresented: $isPresentedToEdit) {
-                ItemCreateView()
+                ItemFormView(create: ())
                     .environment(\.modelContext, context)
             }
     }

@@ -1,5 +1,5 @@
 //
-//  ItemDetailView.swift
+//  ItemFormView.swift
 //  Incomes
 //
 //  Created by Hiromu Nakano on 2020/04/10.
@@ -8,15 +8,20 @@
 
 import SwiftUI
 
-typealias ItemCreateView = ItemDetailView
+struct ItemFormView {
+    enum Mode {
+        case create
+        case edit
+        case detail
+    }
 
-struct ItemDetailView {
     @Environment(\.modelContext)
     private var context
     @Environment(\.presentationMode)
     private var presentationMode
 
-    @State private var isPresentedToActionSheet = false
+    @State private var mode = Mode.create
+    @State private var isActionSheetPresented = false
     @State private var isDebugAlertPresented = false
 
     @State private var date = Date()
@@ -26,21 +31,20 @@ struct ItemDetailView {
     @State private var group: String = .empty
     @State private var repeatSelection: Int = .zero
 
-    private var item: Item?
+    private let item: Item?
 
-    init() {}
+    init(create: Void) {
+        self.item = nil
+        _mode = State(initialValue: .create)
+    }
 
-    init(of item: Item) {
+    init(detail item: Item) {
         self.item = item
-        _date = State(initialValue: item.date)
-        _content = State(initialValue: item.content)
-        _income = State(initialValue: item.income.description)
-        _outgo = State(initialValue: item.outgo.description)
-        _group = State(initialValue: item.group)
+        _mode = State(initialValue: .detail)
     }
 }
 
-extension ItemDetailView: View {
+extension ItemFormView: View {
     // TODO: Resolve SwiftLint
     // swiftlint:disable closure_body_length
     var body: some View {
@@ -48,16 +52,18 @@ extension ItemDetailView: View {
             Section(content: {
                 DatePicker(selection: $date, displayedComponents: .date) {
                     Text(.localized(.date))
-                }
+                }.disabled(isEditable)
                 HStack {
                     Text(.localized(.content))
                     Spacer()
                     TextField(String.empty, text: $content)
+                        .disabled(isEditable)
                         .multilineTextAlignment(.trailing)
                 }
                 HStack {
                     Text(.localized(.income))
                     TextField(String.zero, text: $income)
+                        .disabled(isEditable)
                         .keyboardType(.numberPad)
                         .multilineTextAlignment(.trailing)
                         .foregroundColor(income.isEmptyOrDecimal ? .primary : .red)
@@ -65,6 +71,7 @@ extension ItemDetailView: View {
                 HStack {
                     Text(.localized(.outgo))
                     TextField(String.zero, text: $outgo)
+                        .disabled(isEditable)
                         .keyboardType(.numberPad)
                         .multilineTextAlignment(.trailing)
                         .foregroundColor(outgo.isEmptyOrDecimal ? .primary : .red)
@@ -73,9 +80,10 @@ extension ItemDetailView: View {
                     Text(.localized(.group))
                     Spacer()
                     TextField(.localized(.others), text: $group)
+                        .disabled(isEditable)
                         .multilineTextAlignment(.trailing)
                 }
-                if !isEditMode {
+                if mode == .create {
                     HStack {
                         Text(.localized(.repeatCount))
                         Spacer()
@@ -84,7 +92,8 @@ extension ItemDetailView: View {
                             ForEach((.minRepeatCount)..<(.maxRepeatCount + .one), id: \.self) {
                                 Text($0.description)
                             }
-                        }.pickerStyle(WheelPickerStyle())
+                        }
+                        .pickerStyle(WheelPickerStyle())
                         .labelsHidden()
                         .frame(width: .componentS,
                                height: .componentS)
@@ -98,13 +107,25 @@ extension ItemDetailView: View {
                 DebugSection(item: item)
             }
         }
-        .navigationBarTitle(isEditMode ? .localized(.editTitle) : .localized(.createTitle))
+        .navigationBarTitle({ () -> String in
+            switch mode {
+            case .create:
+                return .localized(.createTitle)
+
+            case .edit:
+                return .localized(.editTitle)
+
+            case .detail:
+                // TODO: Localized
+                return "Detail"
+            }
+        }())
         .navigationBarItems(
             leading: Button(action: cancel) {
                 Text(.localized(.cancel))
             },
-            trailing: Button(action: isEditMode ? save : create) {
-                Text(isEditMode ? .localized(.save) : .localized(.create))
+            trailing: Button(action: mode == .edit ? save : create) {
+                Text(mode == .edit ? .localized(.save) : .localized(.create))
                     .bold()
             }
             .disabled(!isValid))
@@ -121,7 +142,17 @@ extension ItemDetailView: View {
         } message: {
             Text(String.debugMessage)
         }
-        .actionSheet(isPresented: $isPresentedToActionSheet) {
+        .onAppear {
+            guard let item else {
+                return
+            }
+            date = item.date
+            content = item.content
+            income = item.income.description
+            outgo = item.outgo.description
+            group = item.group
+        }
+        .actionSheet(isPresented: $isActionSheetPresented) {
             ActionSheet(title: Text(.localized(.saveDetail)),
                         buttons: [
                             .default(Text(.localized(.saveForThisItem)),
@@ -140,9 +171,9 @@ extension ItemDetailView: View {
 
 // MARK: - private
 
-private extension ItemDetailView {
-    var isEditMode: Bool {
-        item != nil
+private extension ItemFormView {
+    var isEditable: Bool {
+        mode != .detail
     }
 
     var isValid: Bool {
@@ -246,7 +277,7 @@ private extension ItemDetailView {
     }
 
     func presentToActionSheet() {
-        isPresentedToActionSheet = true
+        isActionSheetPresented = true
     }
 
     func dismiss() {
@@ -262,11 +293,5 @@ private extension ItemDetailView {
 }
 
 #Preview {
-    ItemDetailView()
-}
-
-#Preview {
-    ModelPreview {
-        ItemDetailView(of: $0)
-    }
+    ItemFormView(create: ())
 }

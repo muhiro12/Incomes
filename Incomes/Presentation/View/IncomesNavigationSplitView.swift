@@ -43,12 +43,15 @@ extension IncomesNavigationSplitView: View {
                         }
                         return .false
                     }(),
-                    detailID: $detailID)
+                    detailID: $detailID
+                )
+                .id(contentID)
             }
         } detail: {
             if let detailID,
                let item = try? ItemService(context: context).item(predicate: Item.predicate(id: detailID)) {
-                ItemDetailView(of: item)
+                ItemFormView(detail: item)
+                    .id(detailID)
             }
         }
     }
