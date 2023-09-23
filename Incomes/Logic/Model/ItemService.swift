@@ -196,39 +196,3 @@ struct ItemService {
          try tagFactory(group, for: .category)]
     }
 }
-
-// MARK: - Utilitiy
-
-extension ItemService {
-    static func groupByYear(items: [Item]) -> [SectionedItems<Date>] {
-        Dictionary(grouping: items) {
-            Calendar.utc.startOfYear(for: $0.date)
-        }
-        .map {
-            SectionedItems(section: $0.key, items: $0.value)
-        }
-        .sorted()
-        .reversed()
-    }
-
-    static func groupByMonth(items: [Item]) -> [SectionedItems<Date>] {
-        Dictionary(grouping: items) {
-            Calendar.utc.startOfMonth(for: $0.date)
-        }
-        .map {
-            SectionedItems(section: $0.key, items: $0.value)
-        }
-        .sorted()
-        .reversed()
-    }
-
-    static func groupByContent(items: [Item]) -> [SectionedItems<String>] {
-        Dictionary(grouping: items) {
-            $0.content
-        }
-        .map {
-            SectionedItems(section: $0.key, items: $0.value)
-        }
-        .sorted()
-    }
-}
