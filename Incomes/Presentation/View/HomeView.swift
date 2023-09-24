@@ -19,42 +19,30 @@ struct HomeView {
     @Query(filter: Tag.predicate(type: .year), sort: Tag.sortDescriptors(order: .reverse))
     private var tags: [Tag]
 
-    @Binding private var contentID: Tag.ID?
+    @Binding private var selection: Tag.ID?
 
-    @State private var isPresentedToSettings = false
-
-    init(contentID: Binding<Tag.ID?>) {
-        _contentID = contentID
+    init(selection: Binding<Tag.ID?>) {
+        _selection = selection
     }
 }
 
 extension HomeView: View {
     var body: some View {
-        List(selection: $contentID) {
-            ForEach(tags) {
-                YearSection(yearTag: $0)
-                if !isSubscribeOn {
-                    Advertisement(type: .native(.small))
-                }
+        List(tags, selection: $selection) {
+            YearSection(yearTag: $0)
+            if !isSubscribeOn {
+                Advertisement(type: .native(.small))
             }
         }
-        .toolbar {
-            Button(action: {
-                isPresentedToSettings = true
-            }, label: {
-                Image.settings
-                    .iconFrameM()
-            })
-        }
-        .sheet(isPresented: $isPresentedToSettings) {
-            SettingsView()
-        }
         .navigationBarTitle(.localized(.homeTitle))
+        .listStyle(.sidebar)
     }
 }
 
 #Preview {
     ModelsPreview { (_: [Tag]) in
-        HomeView(contentID: .constant(nil))
+        NavigationStack {
+            HomeView(selection: .constant(nil))
+        }
     }
 }

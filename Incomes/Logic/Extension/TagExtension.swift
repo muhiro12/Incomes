@@ -40,6 +40,14 @@ extension Tag {
         }
     }
 
+    static func predicate(dateIsSameMonthAs date: Date) -> Predicate {
+        let name = date.stringValueWithoutLocale(.yyyyMM)
+        let id = TagType.yearMonth.rawValue
+        return #Predicate {
+            $0.name == name && $0.typeID == id
+        }
+    }
+
     static func predicate(contents: [String]) -> Predicate {
         let id = TagType.content.rawValue
         return #Predicate {

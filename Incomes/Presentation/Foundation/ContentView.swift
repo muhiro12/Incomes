@@ -19,9 +19,6 @@ struct ContentView {
     @AppStorage(.key(.isLockAppOn))
     private var isLockAppOn = UserDefaults.isLockAppOn
 
-    @State private var contentID: Tag.ID?
-    @State private var detailID: Item.ID?
-    @State private var isHome = true
     @State private var isMasked = false
     @State private var isLocked = UserDefaults.isLockAppOn
 }
@@ -29,20 +26,13 @@ struct ContentView {
 extension ContentView: View {
     var body: some View {
         ZStack {
-            IncomesNavigationSplitView(contentID: $contentID, detailID: $detailID) {
-                if isHome {
-                    HomeView(contentID: $contentID)
-                } else {
-                    CategoryView(contentID: $contentID)
+            IncomesRootView()
+                .onChange(of: scenePhase) { _, newValue in
+                    isMasked = isMaskAppOn && newValue != .active
+                    if !isLocked {
+                        isLocked = isLockAppOn && newValue == .background
+                    }
                 }
-                IncomesBottomBar(isHome: $isHome)
-            }
-            .onChange(of: scenePhase) { _, newValue in
-                isMasked = isMaskAppOn && newValue != .active
-                if !isLocked {
-                    isLocked = isLockAppOn && newValue == .background
-                }
-            }
             if isMasked {
                 MaskView()
             } else if isLocked {

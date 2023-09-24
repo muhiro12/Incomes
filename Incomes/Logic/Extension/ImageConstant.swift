@@ -9,9 +9,7 @@
 import SwiftUI
 
 extension Image {
-    static var home: Self { Image(systemName: "calendar") }
-    static var group: Self { Image(systemName: "square.stack.3d.up") }
-    static var settings: Self { Image(systemName: "gear") }
-    static var create: Self { Image(systemName: "square.and.pencil") }
-    static var arrowUp: Self { Image(systemName: "arrow.up") }
+    static let settings = Image(systemName: "gear")
+    static let create = Image(systemName: "square.and.pencil")
+    static let arrowUp = Image(systemName: "arrow.up")
 }

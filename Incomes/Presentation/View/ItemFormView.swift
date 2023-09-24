@@ -12,7 +12,6 @@ struct ItemFormView {
     enum Mode {
         case create
         case edit
-        case detail
     }
 
     @Environment(\.modelContext)
@@ -33,14 +32,9 @@ struct ItemFormView {
 
     private let item: Item?
 
-    init(create: Void) {
-        self.item = nil
-        _mode = State(initialValue: .create)
-    }
-
-    init(detail item: Item) {
+    init(mode: Mode, item: Item?) {
         self.item = item
-        _mode = State(initialValue: .detail)
+        _mode = State(initialValue: mode)
     }
 }
 
@@ -52,18 +46,16 @@ extension ItemFormView: View {
             Section(content: {
                 DatePicker(selection: $date, displayedComponents: .date) {
                     Text(.localized(.date))
-                }.disabled(isEditable)
+                }
                 HStack {
                     Text(.localized(.content))
                     Spacer()
                     TextField(String.empty, text: $content)
-                        .disabled(isEditable)
                         .multilineTextAlignment(.trailing)
                 }
                 HStack {
                     Text(.localized(.income))
                     TextField(String.zero, text: $income)
-                        .disabled(isEditable)
                         .keyboardType(.numberPad)
                         .multilineTextAlignment(.trailing)
                         .foregroundColor(income.isEmptyOrDecimal ? .primary : .red)
@@ -71,7 +63,6 @@ extension ItemFormView: View {
                 HStack {
                     Text(.localized(.outgo))
                     TextField(String.zero, text: $outgo)
-                        .disabled(isEditable)
                         .keyboardType(.numberPad)
                         .multilineTextAlignment(.trailing)
                         .foregroundColor(outgo.isEmptyOrDecimal ? .primary : .red)
@@ -80,7 +71,6 @@ extension ItemFormView: View {
                     Text(.localized(.group))
                     Spacer()
                     TextField(.localized(.others), text: $group)
-                        .disabled(isEditable)
                         .multilineTextAlignment(.trailing)
                 }
                 if mode == .create {
@@ -114,21 +104,22 @@ extension ItemFormView: View {
 
             case .edit:
                 return .localized(.editTitle)
-
-            case .detail:
-                // TODO: Localized
-                return "Detail"
             }
         }())
-        .navigationBarItems(
-            leading: Button(action: cancel) {
-                Text(.localized(.cancel))
-            },
-            trailing: Button(action: mode == .edit ? save : create) {
-                Text(mode == .edit ? .localized(.save) : .localized(.create))
-                    .bold()
+        .toolbar {
+            ToolbarItem(placement: .cancellationAction) {
+                Button(action: cancel) {
+                    Text(.localized(.cancel))
+                }
             }
-            .disabled(!isValid))
+            ToolbarItem(placement: .primaryAction) {
+                Button(action: mode == .edit ? save : create) {
+                    Text(mode == .edit ? .localized(.save) : .localized(.create))
+                        .bold()
+                }
+                .disabled(!isValid)
+            }
+        }
         .gesture(DragGesture()
                     .onChanged { _ in
                         dismissKeyboard()
@@ -172,10 +163,6 @@ extension ItemFormView: View {
 // MARK: - private
 
 private extension ItemFormView {
-    var isEditable: Bool {
-        mode != .detail
-    }
-
     var isValid: Bool {
         content.isNotEmpty
             && income.isEmptyOrDecimal
@@ -293,5 +280,7 @@ private extension ItemFormView {
 }
 
 #Preview {
-    ItemFormView(create: ())
+    NavigationStack {
+        ItemFormView(mode: .create, item: nil)
+    }
 }

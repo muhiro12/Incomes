@@ -38,7 +38,7 @@ private extension LockedView {
 
 #Preview {
     ZStack {
-        Image.home
+        Image.settings
             .resizable()
             .scaledToFit()
         LockedView(isLocked: .constant(true))

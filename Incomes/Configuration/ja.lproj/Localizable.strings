@@ -8,6 +8,7 @@
 
 // MARK: - Common
 
+"incomes" = "Incomes";
 "done" = "完了";
 "cancel" = "キャンセル";
 "delete" = "削除";

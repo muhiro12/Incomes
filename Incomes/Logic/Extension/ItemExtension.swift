@@ -13,12 +13,6 @@ import Foundation
 extension Item {
     typealias Predicate = Foundation.Predicate<Item>
 
-    static func predicate(id: Item.ID) -> Predicate {
-        #Predicate {
-            $0.persistentModelID == id
-        }
-    }
-
     static func predicate(dateIsBetween start: Date, and end: Date) -> Predicate {
         #Predicate {
             start <= $0.date && $0.date <= end

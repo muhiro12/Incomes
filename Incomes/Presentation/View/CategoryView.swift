@@ -13,26 +13,27 @@ struct CategoryView {
     @Query(filter: Tag.predicate(type: .category), sort: Tag.sortDescriptors())
     private var tags: [Tag]
 
-    @Binding private var contentID: Tag.ID?
+    @Binding private var selection: Tag.ID?
 
-    init(contentID: Binding<Tag.ID?>) {
-        _contentID = contentID
+    init(selection: Binding<Tag.ID?>) {
+        _selection = selection
     }
 }
 
 extension CategoryView: View {
     var body: some View {
-        List(selection: $contentID) {
-            ForEach(tags) {
-                CategorySection(categoryTag: $0)
-            }
+        List(tags, selection: $selection) {
+            CategorySection(categoryTag: $0)
         }
         .navigationBarTitle(.localized(.categoryTitle))
+        .listStyle(.sidebar)
     }
 }
 
 #Preview {
     ModelsPreview { (_: [Tag]) in
-        CategoryView(contentID: .constant(nil))
+        NavigationStack {
+            CategoryView(selection: .constant(nil))
+        }
     }
 }

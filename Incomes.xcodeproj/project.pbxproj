@@ -22,6 +22,7 @@
 		AD6B704427A7A71E00A38208 /* IncomesError.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6B704327A7A71E00A38208 /* IncomesError.swift */; };
 		AD6B704627A7B11700A38208 /* AlertInformation.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6B704527A7B11600A38208 /* AlertInformation.swift */; };
 		AD6B704827A7C16100A38208 /* StoreSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6B704727A7C16100A38208 /* StoreSection.swift */; };
+		AD6ED9482AC13BF1008EE239 /* SidebarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6ED9472AC13BF1008EE239 /* SidebarItem.swift */; };
 		AD75E9DE278F19A5008BE905 /* DebugView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD75E9DD278F19A5008BE905 /* DebugView.swift */; };
 		AD98194226E43C3600C4A57C /* StoreKitTestCertificate.cer in Resources */ = {isa = PBXBuildFile; fileRef = AD98194126E43C3600C4A57C /* StoreKitTestCertificate.cer */; };
 		AD98987D2AA5DC8700E7DFA6 /* MaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD98987C2AA5DC8700E7DFA6 /* MaskView.swift */; };
@@ -67,14 +68,15 @@
 		ADCF375824A2C8260011D6F5 /* DecimalExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF375724A2C8250011D6F5 /* DecimalExtension.swift */; };
 		ADCF375F24A2FEAF0011D6F5 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADCF375E24A2FEAF0011D6F5 /* CloudKit.framework */; };
 		ADCF376324A3147B0011D6F5 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF376224A3147B0011D6F5 /* SettingsView.swift */; };
-		ADCF376524A32E460011D6F5 /* IncomesBottomBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF376424A32E460011D6F5 /* IncomesBottomBar.swift */; };
+		ADCF376524A32E460011D6F5 /* CreateButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF376424A32E460011D6F5 /* CreateButton.swift */; };
 		ADCF376924A33F500011D6F5 /* ImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF376824A33F500011D6F5 /* ImageExtension.swift */; };
 		ADCF391D24A550910011D6F5 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = ADCF391C24A550900011D6F5 /* libsqlite3.tbd */; platformFilter = ios; };
 		ADCF392124A551360011D6F5 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADCF392024A551360011D6F5 /* StoreKit.framework */; platformFilter = ios; };
 		ADCF393224A57ADC0011D6F5 /* PreviewData.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF393124A57ADB0011D6F5 /* PreviewData.swift */; };
 		ADD3CCD52ABAEAEB00F60350 /* ModelPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADD3CCD42ABAEAEB00F60350 /* ModelPreview.swift */; };
 		ADD3CCDD2ABDFB3C00F60350 /* ItemListYearSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADD3CCDC2ABDFB3C00F60350 /* ItemListYearSection.swift */; };
-		ADD3CCDF2ABE739600F60350 /* IncomesNavigationSplitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADD3CCDE2ABE739600F60350 /* IncomesNavigationSplitView.swift */; };
+		ADD3CCDF2ABE739600F60350 /* IncomesRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADD3CCDE2ABE739600F60350 /* IncomesRootView.swift */; };
+		ADD3CCE12ABFD89F00F60350 /* SidebarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADD3CCE02ABFD89F00F60350 /* SidebarView.swift */; };
 		ADDBC4582792CD4400F5E4A7 /* NativeAdvertisement.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADDBC4572792CD4400F5E4A7 /* NativeAdvertisement.swift */; };
 		ADDF76C12AAC9AAE00CDEC7E /* Tag.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADDF76C02AAC9AAE00CDEC7E /* Tag.swift */; };
 		ADDF76C32AAC9ADC00CDEC7E /* TagRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADDF76C22AAC9ADC00CDEC7E /* TagRepository.swift */; };
@@ -126,6 +128,7 @@
 		AD6B704327A7A71E00A38208 /* IncomesError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomesError.swift; sourceTree = "<group>"; };
 		AD6B704527A7B11600A38208 /* AlertInformation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertInformation.swift; sourceTree = "<group>"; };
 		AD6B704727A7C16100A38208 /* StoreSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreSection.swift; sourceTree = "<group>"; };
+		AD6ED9472AC13BF1008EE239 /* SidebarItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarItem.swift; sourceTree = "<group>"; };
 		AD75E9DD278F19A5008BE905 /* DebugView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugView.swift; sourceTree = "<group>"; };
 		AD7C7E2B254A33E500D1F0A0 /* Configuration.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Configuration.storekit; sourceTree = "<group>"; };
 		AD98194126E43C3600C4A57C /* StoreKitTestCertificate.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = StoreKitTestCertificate.cer; sourceTree = "<group>"; };
@@ -178,7 +181,7 @@
 		ADCF375724A2C8250011D6F5 /* DecimalExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecimalExtension.swift; sourceTree = "<group>"; };
 		ADCF375E24A2FEAF0011D6F5 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		ADCF376224A3147B0011D6F5 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
-		ADCF376424A32E460011D6F5 /* IncomesBottomBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomesBottomBar.swift; sourceTree = "<group>"; };
+		ADCF376424A32E460011D6F5 /* CreateButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateButton.swift; sourceTree = "<group>"; };
 		ADCF376824A33F500011D6F5 /* ImageExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageExtension.swift; sourceTree = "<group>"; };
 		ADCF38F624A550190011D6F5 /* GoogleDataTransport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleDataTransport.framework; sourceTree = "<group>"; };
 		ADCF38F724A550190011D6F5 /* Firebase.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Firebase.framework; sourceTree = "<group>"; };
@@ -198,7 +201,8 @@
 		ADCF393124A57ADB0011D6F5 /* PreviewData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewData.swift; sourceTree = "<group>"; };
 		ADD3CCD42ABAEAEB00F60350 /* ModelPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelPreview.swift; sourceTree = "<group>"; };
 		ADD3CCDC2ABDFB3C00F60350 /* ItemListYearSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemListYearSection.swift; sourceTree = "<group>"; };
-		ADD3CCDE2ABE739600F60350 /* IncomesNavigationSplitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomesNavigationSplitView.swift; sourceTree = "<group>"; };
+		ADD3CCDE2ABE739600F60350 /* IncomesRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomesRootView.swift; sourceTree = "<group>"; };
+		ADD3CCE02ABFD89F00F60350 /* SidebarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarView.swift; sourceTree = "<group>"; };
 		ADDBC4572792CD4400F5E4A7 /* NativeAdvertisement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeAdvertisement.swift; sourceTree = "<group>"; };
 		ADDF76C02AAC9AAE00CDEC7E /* Tag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tag.swift; sourceTree = "<group>"; };
 		ADDF76C22AAC9ADC00CDEC7E /* TagRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagRepository.swift; sourceTree = "<group>"; };
@@ -355,7 +359,7 @@
 				ADB3627B2AA7890C00964CA7 /* Box.swift */,
 				ADDF76C82AAD36AF00CDEC7E /* CategorySection.swift */,
 				ADB362792AA6D7B200964CA7 /* DebugSection.swift */,
-				ADCF376424A32E460011D6F5 /* IncomesBottomBar.swift */,
+				ADCF376424A32E460011D6F5 /* CreateButton.swift */,
 				ADD3CCDC2ABDFB3C00F60350 /* ItemListYearSection.swift */,
 				ADCF36E824A1D18E0011D6F5 /* ListItem.swift */,
 				ADCF36E324A1D18E0011D6F5 /* NarrowListItem.swift */,
@@ -384,6 +388,7 @@
 				AD09B543278F934D008F03FA /* ItemService.swift */,
 				AD583B6824B308AB0032AA1C /* LocalizedString.swift */,
 				AD387E4C2A8B6FFD00E94623 /* Repository.swift */,
+				AD6ED9472AC13BF1008EE239 /* SidebarItem.swift */,
 				ADEA399B2501457A00CB61D9 /* Store.swift */,
 				ADDF76CE2AAF079500CDEC7E /* SwiftDataController.swift */,
 				AD5D75492AB17011003E16D1 /* SwiftDataMigrator.swift */,
@@ -401,12 +406,13 @@
 				ADDF76C62AAD35AB00CDEC7E /* CategoryView.swift */,
 				AD75E9DD278F19A5008BE905 /* DebugView.swift */,
 				ADCF36F324A1D18E0011D6F5 /* HomeView.swift */,
-				ADD3CCDE2ABE739600F60350 /* IncomesNavigationSplitView.swift */,
+				ADD3CCDE2ABE739600F60350 /* IncomesRootView.swift */,
 				ADCF36E624A1D18E0011D6F5 /* ItemFormView.swift */,
 				ADAD3D1C277BDBDE005A70E1 /* ItemListView.swift */,
 				ADAD3D0E277B1790005A70E1 /* LockedView.swift */,
 				AD98987C2AA5DC8700E7DFA6 /* MaskView.swift */,
 				ADCF376224A3147B0011D6F5 /* SettingsView.swift */,
+				ADD3CCE02ABFD89F00F60350 /* SidebarView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -749,7 +755,7 @@
 				ADD3CCDD2ABDFB3C00F60350 /* ItemListYearSection.swift in Sources */,
 				AD50E09C2AB4647A005CE509 /* DebugError.swift in Sources */,
 				AD5D754A2AB17011003E16D1 /* SwiftDataMigrator.swift in Sources */,
-				ADCF376524A32E460011D6F5 /* IncomesBottomBar.swift in Sources */,
+				ADCF376524A32E460011D6F5 /* CreateButton.swift in Sources */,
 				ADAD3D23277C1120005A70E1 /* Item.swift in Sources */,
 				ADAD3D25277C1D0F005A70E1 /* StringProtocolExtension.swift in Sources */,
 				AD09B544278F934D008F03FA /* ItemService.swift in Sources */,
@@ -768,6 +774,7 @@
 				AD583B6924B308AB0032AA1C /* LocalizedString.swift in Sources */,
 				ADB3627C2AA7890C00964CA7 /* Box.swift in Sources */,
 				ADCF370B24A1D18E0011D6F5 /* HomeView.swift in Sources */,
+				AD6ED9482AC13BF1008EE239 /* SidebarItem.swift in Sources */,
 				ADCF376924A33F500011D6F5 /* ImageExtension.swift in Sources */,
 				ADDF76CD2AADFAAF00CDEC7E /* TagExtension.swift in Sources */,
 				ADAD3D17277BC80F005A70E1 /* YearSection.swift in Sources */,
@@ -794,11 +801,12 @@
 				ADCF371424A1D18E0011D6F5 /* DateExtension.swift in Sources */,
 				ADAD3D0F277B1790005A70E1 /* LockedView.swift in Sources */,
 				ADCBBA282AB0E96A007DAAE4 /* TagFactory.swift in Sources */,
-				ADD3CCDF2ABE739600F60350 /* IncomesNavigationSplitView.swift in Sources */,
+				ADD3CCDF2ABE739600F60350 /* IncomesRootView.swift in Sources */,
 				ADCF36E024A1D1820011D6F5 /* ContentView.swift in Sources */,
 				AD6B704427A7A71E00A38208 /* IncomesError.swift in Sources */,
 				ADCBBA2A2AB0E974007DAAE4 /* ItemFactory.swift in Sources */,
 				ADCF370E24A1D18E0011D6F5 /* IntConstant.swift in Sources */,
+				ADD3CCE12ABFD89F00F60350 /* SidebarView.swift in Sources */,
 				AD75E9DE278F19A5008BE905 /* DebugView.swift in Sources */,
 				ADEA399C2501457A00CB61D9 /* Store.swift in Sources */,
 				ADD3CCD52ABAEAEB00F60350 /* ModelPreview.swift in Sources */,

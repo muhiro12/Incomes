@@ -20,7 +20,7 @@ extension MaskView: View {
 
 #Preview {
     ZStack {
-        Image.home
+        Image.settings
             .resizable()
             .scaledToFit()
         MaskView()

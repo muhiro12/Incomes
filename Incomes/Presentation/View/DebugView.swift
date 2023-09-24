@@ -33,8 +33,7 @@ extension DebugView: View {
                 NavigationLink(String.debugAllItems) {
                     ItemListView(
                         tag: .init(),
-                        predicate: .true,
-                        detailID: .constant(nil)
+                        predicate: .true
                     )
                 }
             }

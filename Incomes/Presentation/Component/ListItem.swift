@@ -12,6 +12,8 @@ struct ListItem {
     @Environment(\.modelContext)
     private var context
 
+    @State private var isEditPresented = false
+
     private let item: Item
 
     init(of item: Item) {
@@ -28,8 +30,15 @@ extension ListItem: View {
                 WideListItem(of: item)
             }
         }
+        .sheet(isPresented: $isEditPresented) {
+            NavigationStack {
+                ItemFormView(mode: .edit, item: item)
+            }
+        }
         .contentShape(Rectangle())
-        .accessibilityAddTraits(.isLink)
+        .onTapGesture {
+            isEditPresented = true
+        }
     }
 }
 
