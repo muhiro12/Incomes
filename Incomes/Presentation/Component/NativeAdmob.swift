@@ -55,7 +55,7 @@ private final class NativeAdmobView: UIView {
             adUnitID: EnvironmentParameter.admobNativeID,
             rootViewController: rootVC,
             adTypes: [.native],
-            options: size == .small ? [GADNativeAdImageAdLoaderOptions()] : nil
+            options: nil
         )
         loader.delegate = self
         loader.load(GADRequest())

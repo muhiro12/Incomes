@@ -10,12 +10,6 @@ import SwiftData
 import SwiftUI
 
 struct HomeView {
-    @Environment(\.modelContext)
-    private var context
-
-    @AppStorage(.key(.isSubscribeOn))
-    private var isSubscribeOn = UserDefaults.isSubscribeOn
-
     @Query(filter: Tag.predicate(type: .year), sort: Tag.sortDescriptors(order: .reverse))
     private var tags: [Tag]
 
@@ -30,9 +24,6 @@ extension HomeView: View {
     var body: some View {
         List(tags, selection: $selection) {
             YearSection(yearTag: $0)
-            if !isSubscribeOn {
-                Advertisement(type: .native(.small))
-            }
         }
         .navigationBarTitle(.localized(.homeTitle))
         .listStyle(.sidebar)
