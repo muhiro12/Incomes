@@ -31,9 +31,7 @@ extension ListItem: View {
             }
         }
         .sheet(isPresented: $isEditPresented) {
-            NavigationStack {
-                ItemFormView(mode: .edit, item: item)
-            }
+            ItemFormNavigationView(mode: .edit, item: item)
         }
         .contentShape(Rectangle())
         .onTapGesture {

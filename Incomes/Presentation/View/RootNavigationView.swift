@@ -1,5 +1,5 @@
 //
-//  IncomesRootView.swift
+//  RootNavigationView.swift
 //  Incomes
 //
 //  Created by Hiromu Nakano on 2023/09/23.
@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct IncomesRootView {
+struct RootNavigationView {
     @Environment(\.modelContext)
     private var context
 
@@ -16,7 +16,7 @@ struct IncomesRootView {
     @State private var detailID: Tag.ID?
 }
 
-extension IncomesRootView: View {
+extension RootNavigationView: View {
     var body: some View {
         NavigationSplitView {
             SidebarView(selection: $contentID)
@@ -82,6 +82,6 @@ extension IncomesRootView: View {
 
 #Preview {
     ModelPreview { (_: Item) in
-        IncomesRootView()
+        RootNavigationView()
     }
 }

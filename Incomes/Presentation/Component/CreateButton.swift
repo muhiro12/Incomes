@@ -23,9 +23,7 @@ extension CreateButton: View {
             Image.create
         })
         .sheet(isPresented: $isCreatePresented) {
-            NavigationStack {
-                ItemFormView(mode: .create, item: nil)
-            }
+            ItemFormNavigationView(mode: .create, item: nil)
         }
     }
 }
