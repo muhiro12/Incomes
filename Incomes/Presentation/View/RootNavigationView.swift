@@ -22,9 +22,8 @@ extension RootNavigationView: View {
             SidebarView(selection: $contentID)
         } content: {
             Group {
-                if let contentID,
-                   let item = SidebarItem(rawValue: contentID) {
-                    switch item {
+                if let content {
+                    switch content {
                     case .home:
                         HomeView(selection: $detailID)
 
@@ -44,17 +43,16 @@ extension RootNavigationView: View {
             }
         } detail: {
             Group {
-                if let detailID,
-                   let tag = try? TagService(context: context).tag(predicate: Tag.predicate(id: detailID)) {
+                if let detail {
                     ItemListView(
-                        tag: tag,
+                        tag: detail,
                         predicate: {
-                            if tag.type == .yearMonth,
-                               let date = tag.items?.first?.date {
+                            if detail.type == .yearMonth,
+                               let date = detail.items?.first?.date {
                                 return Item.predicate(dateIsSameMonthAs: date)
                             }
-                            if tag.type == .content {
-                                return Item.predicate(contentIs: tag.name)
+                            if detail.type == .content {
+                                return Item.predicate(contentIs: detail.name)
                             }
                             return .false
                         }()
@@ -66,13 +64,8 @@ extension RootNavigationView: View {
                     CreateButton()
                 }
                 ToolbarItem(placement: .status) {
-                    Text({ () -> Int in
-                        guard let detailID,
-                              let tag = try? TagService(context: context).tag(predicate: Tag.predicate(id: detailID)),
-                              let count = tag.items?.count else {
-                            return .zero
-                        }
-                        return count
+                    Text({
+                        detail?.items?.count ?? .zero
                     }().description + .localized(.footerCountSuffix))
                     .font(.footnote)
                 }
@@ -84,6 +77,22 @@ extension RootNavigationView: View {
                 .tag(predicate: Tag.predicate(dateIsSameMonthAs: .now))?
                 .id
         }
+    }
+}
+
+private extension RootNavigationView {
+    var content: SidebarItem? {
+        guard let contentID else {
+            return nil
+        }
+        return SidebarItem(rawValue: contentID)
+    }
+
+    var detail: Tag? {
+        guard let detailID else {
+            return nil
+        }
+        return try? TagService(context: context).tag(predicate: Tag.predicate(id: detailID))
     }
 }
 
