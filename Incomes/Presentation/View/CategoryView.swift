@@ -32,7 +32,7 @@ extension CategoryView: View {
 
 #Preview {
     ModelsPreview { (_: [Tag]) in
-        NavigationStack {
+        NavigationStackPreview {
             CategoryView(selection: .constant(nil))
         }
     }

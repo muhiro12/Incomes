@@ -46,7 +46,7 @@ extension ItemListView: View {
 
 #Preview {
     ModelPreview { tag in
-        NavigationStack {
+        NavigationStackPreview {
             ItemListView(tag: tag,
                          predicate: .true)
         }

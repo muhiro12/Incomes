@@ -67,7 +67,7 @@ extension CategorySection: View {
 
 #Preview {
     ModelPreview { tag in
-        List {
+        ListPreview {
             CategorySection(categoryTag: tag)
         }
     }

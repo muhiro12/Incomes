@@ -44,7 +44,7 @@ extension DebugSection: View {
 
 #Preview {
     ModelPreview { item in
-        List {
+        ListPreview {
             DebugSection(item: item)
         }
     }

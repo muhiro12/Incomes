@@ -49,7 +49,7 @@ extension SidebarView: View {
 }
 
 #Preview {
-    NavigationStack {
+    NavigationStackPreview {
         SidebarView(selection: .constant(nil))
     }
 }

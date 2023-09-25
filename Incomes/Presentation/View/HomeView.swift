@@ -41,7 +41,7 @@ extension HomeView: View {
 
 #Preview {
     ModelsPreview { (_: [Tag]) in
-        NavigationStack {
+        NavigationStackPreview {
             HomeView(selection: .constant(nil))
         }
     }

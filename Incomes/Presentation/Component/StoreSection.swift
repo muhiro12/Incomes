@@ -29,7 +29,7 @@ extension StoreSection: View {
 }
 
 #Preview {
-    List {
+    ListPreview {
         StoreSection()
     }
     .environmentObject(PreviewData.store)

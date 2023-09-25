@@ -62,7 +62,7 @@ extension YearSection: View {
 
 #Preview {
     ModelPreview { tag in
-        List {
+        ListPreview {
             YearSection(yearTag: tag)
         }
     }

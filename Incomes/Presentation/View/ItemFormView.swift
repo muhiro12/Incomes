@@ -280,7 +280,7 @@ private extension ItemFormView {
 }
 
 #Preview {
-    NavigationStack {
+    NavigationStackPreview {
         ItemFormView(mode: .create, item: nil)
     }
 }
