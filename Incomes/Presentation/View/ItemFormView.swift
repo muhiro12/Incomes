@@ -34,7 +34,7 @@ struct ItemFormView {
 
     init(mode: Mode, item: Item?) {
         self.item = item
-        _mode = State(initialValue: mode)
+        _mode = .init(initialValue: mode)
     }
 }
 
