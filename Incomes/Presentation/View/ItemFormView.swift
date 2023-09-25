@@ -19,6 +19,8 @@ struct ItemFormView {
     @Environment(\.presentationMode)
     private var presentationMode
 
+    @FocusState private var isGroupFocused
+
     @State private var mode = Mode.create
     @State private var isActionSheetPresented = false
     @State private var isDebugAlertPresented = false
@@ -71,7 +73,11 @@ extension ItemFormView: View {
                     Text(.localized(.group))
                     Spacer()
                     TextField(.localized(.others), text: $group)
+                        .focused($isGroupFocused)
                         .multilineTextAlignment(.trailing)
+                }
+                if isGroupFocused {
+                    FilteredCategoryList(category: $group)
                 }
                 if mode == .create {
                     HStack {
@@ -120,10 +126,15 @@ extension ItemFormView: View {
                 .disabled(!isValid)
             }
         }
-        .gesture(DragGesture()
-                    .onChanged { _ in
-                        dismissKeyboard()
-                    })
+        .gesture(
+            DragGesture()
+                .onChanged { value in
+                    guard value.translation.height > .spaceS else {
+                        return
+                    }
+                    dismissKeyboard()
+                }
+        )
         .alert(String.debugTitle, isPresented: $isDebugAlertPresented) {
             Button(.localized(.cancel), role: .cancel) {}
             Button(String.debugOK) {
