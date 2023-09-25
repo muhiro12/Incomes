@@ -19,6 +19,7 @@ struct ItemFormView {
     @Environment(\.presentationMode)
     private var presentationMode
 
+    @FocusState private var isContentFocused
     @FocusState private var isGroupFocused
 
     @State private var mode = Mode.create
@@ -53,7 +54,11 @@ extension ItemFormView: View {
                     Text(.localized(.content))
                     Spacer()
                     TextField(String.empty, text: $content)
+                        .focused($isContentFocused)
                         .multilineTextAlignment(.trailing)
+                }
+                if isContentFocused {
+                    FilteredTagList(content: $content)
                 }
                 HStack {
                     Text(.localized(.income))
@@ -77,7 +82,7 @@ extension ItemFormView: View {
                         .multilineTextAlignment(.trailing)
                 }
                 if isGroupFocused {
-                    FilteredCategoryList(category: $group)
+                    FilteredTagList(category: $group)
                 }
                 if mode == .create {
                     HStack {
