@@ -12,7 +12,7 @@ struct ListItem {
     @Environment(\.modelContext)
     private var context
 
-    @State private var isPresentedToEdit = false
+    @State private var isEditPresented = false
 
     private let item: Item
 
@@ -30,21 +30,15 @@ extension ListItem: View {
                 WideListItem(of: item)
             }
         }
-        .sheet(isPresented: $isPresentedToEdit) {
-            EditView(of: item)
-                .environment(\.modelContext, context)
+        .sheet(isPresented: $isEditPresented) {
+            NavigationStack {
+                ItemFormView(mode: .edit, item: item)
+            }
         }
         .contentShape(Rectangle())
-        .onTapGesture(perform: presentToEdit)
-        .accessibilityAddTraits(.isLink)
-    }
-}
-
-// MARK: - private
-
-private extension ListItem {
-    func presentToEdit() {
-        isPresentedToEdit = true
+        .onTapGesture {
+            isEditPresented = true
+        }
     }
 }
 

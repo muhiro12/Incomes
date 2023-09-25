@@ -10,26 +10,30 @@ import SwiftData
 import SwiftUI
 
 struct CategoryView {
-    @Query(filter: Tag.predicate(for: .category), sort: Tag.sortDescriptors())
+    @Query(filter: Tag.predicate(type: .category), sort: Tag.sortDescriptors())
     private var tags: [Tag]
+
+    @Binding private var selection: Tag.ID?
+
+    init(selection: Binding<Tag.ID?>) {
+        _selection = selection
+    }
 }
 
 extension CategoryView: View {
     var body: some View {
-        List {
-            ForEach(tags) {
-                CategorySection(title: $0.name.isNotEmpty ? $0.name : .localized(.others),
-                                items: $0.items ?? [])
-            }
+        List(tags, selection: $selection) {
+            CategorySection(categoryTag: $0)
         }
-        .id(UUID())
-        .listStyle(.sidebar)
         .navigationBarTitle(.localized(.categoryTitle))
+        .listStyle(.sidebar)
     }
 }
 
 #Preview {
     ModelsPreview { (_: [Tag]) in
-        CategoryView()
+        NavigationStack {
+            CategoryView(selection: .constant(nil))
+        }
     }
 }

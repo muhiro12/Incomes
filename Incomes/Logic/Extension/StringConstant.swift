@@ -18,6 +18,11 @@ extension String {
 
     static let item: Self = "Item"
 
+    // MARK: - Image
+
+    static let imageHome = "calendar"
+    static let imageCategory = "square.stack.3d.up"
+
     // MARK: - Debug
 
     static let debugTitle: Self = "Debug"

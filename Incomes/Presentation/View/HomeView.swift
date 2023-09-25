@@ -10,37 +10,30 @@ import SwiftData
 import SwiftUI
 
 struct HomeView {
+    @Environment(\.modelContext)
+    private var context
+
     @AppStorage(.key(.isSubscribeOn))
     private var isSubscribeOn = UserDefaults.isSubscribeOn
 
-    @Query(filter: Tag.predicate(for: .year), sort: Tag.sortDescriptors())
+    @Query(filter: Tag.predicate(type: .year), sort: Tag.sortDescriptors(order: .reverse))
     private var tags: [Tag]
 
-    @State private var isPresentedToSettings = false
+    @Binding private var selection: Tag.ID?
+
+    init(selection: Binding<Tag.ID?>) {
+        _selection = selection
+    }
 }
 
 extension HomeView: View {
     var body: some View {
-        List {
-            ForEach(tags.reversed()) {
-                YearSection(year: $0.name, items: $0.items ?? [])
-                if !isSubscribeOn {
-                    Advertisement(type: .native(.small))
-                }
+        List(tags, selection: $selection) {
+            YearSection(yearTag: $0)
+            if !isSubscribeOn {
+                Advertisement(type: .native(.small))
             }
         }
-        .toolbar {
-            Button(action: {
-                isPresentedToSettings = true
-            }, label: {
-                Image.settings
-                    .iconFrameM()
-            })
-        }
-        .sheet(isPresented: $isPresentedToSettings) {
-            SettingsView()
-        }
-        .id(UUID())
         .navigationBarTitle(.localized(.homeTitle))
         .listStyle(.sidebar)
     }
@@ -48,6 +41,8 @@ extension HomeView: View {
 
 #Preview {
     ModelsPreview { (_: [Tag]) in
-        HomeView()
+        NavigationStack {
+            HomeView(selection: .constant(nil))
+        }
     }
 }

@@ -11,6 +11,7 @@ import Foundation
 enum LocalizedString: String {
     // MARK: - Common
 
+    case incomes
     case done
     case cancel
     case delete

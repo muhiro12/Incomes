@@ -8,6 +8,7 @@
 
 // MARK: - Common
 
+"incomes" = "Incomes";
 "done" = "Done";
 "cancel" = "Cancel";
 "delete" = "Delete";

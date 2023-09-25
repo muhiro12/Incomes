@@ -19,43 +19,20 @@ struct ContentView {
     @AppStorage(.key(.isLockAppOn))
     private var isLockAppOn = UserDefaults.isLockAppOn
 
-    @State private var path = NavigationPath()
-    @State private var isHome = true
     @State private var isMasked = false
     @State private var isLocked = UserDefaults.isLockAppOn
 }
 
 extension ContentView: View {
-    // TODO: Resolve SwiftLint
-    // swiftlint:disable closure_body_length
     var body: some View {
         ZStack {
-            NavigationStack(path: $path) {
-                Group {
-                    if isHome {
-                        HomeView()
-                    } else {
-                        CategoryView()
+            IncomesRootView()
+                .onChange(of: scenePhase) { _, newValue in
+                    isMasked = isMaskAppOn && newValue != .active
+                    if !isLocked {
+                        isLocked = isLockAppOn && newValue == .background
                     }
                 }
-                .navigationDestination(for: SectionedItems.self) {
-                    ItemListView(title: $0.section.stringValue(.yyyyMMM),
-                                 predicate: Item.predicate(dateIsSameMonthAs: $0.section))
-                    IncomesBottomBar(path: $path, isHome: $isHome)
-                }
-                .navigationDestination(for: SectionedItems.self) {
-                    ItemListView(title: $0.section,
-                                 predicate: Item.predicate(contentIs: $0.section))
-                    IncomesBottomBar(path: $path, isHome: $isHome)
-                }
-                IncomesBottomBar(path: $path, isHome: $isHome)
-            }
-            .onChange(of: scenePhase) { _, newValue in
-                isMasked = isMaskAppOn && newValue != .active
-                if !isLocked {
-                    isLocked = isLockAppOn && newValue == .background
-                }
-            }
             if isMasked {
                 MaskView()
             } else if isLocked {
@@ -63,7 +40,6 @@ extension ContentView: View {
             }
         }
     }
-    // swiftlint:enable closure_body_length
 }
 
 #Preview {

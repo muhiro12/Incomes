@@ -1,5 +1,5 @@
 //
-//  EditView.swift
+//  ItemFormView.swift
 //  Incomes
 //
 //  Created by Hiromu Nakano on 2020/04/10.
@@ -8,13 +8,19 @@
 
 import SwiftUI
 
-struct EditView {
+struct ItemFormView {
+    enum Mode {
+        case create
+        case edit
+    }
+
     @Environment(\.modelContext)
     private var context
     @Environment(\.presentationMode)
     private var presentationMode
 
-    @State private var isPresentedToActionSheet = false
+    @State private var mode = Mode.create
+    @State private var isActionSheetPresented = false
     @State private var isDebugAlertPresented = false
 
     @State private var date = Date()
@@ -24,94 +30,100 @@ struct EditView {
     @State private var group: String = .empty
     @State private var repeatSelection: Int = .zero
 
-    private var item: Item?
+    private let item: Item?
 
-    init() {}
-
-    init(of item: Item) {
+    init(mode: Mode, item: Item?) {
         self.item = item
-        _date = State(initialValue: item.date)
-        _content = State(initialValue: item.content)
-        _income = State(initialValue: item.income.description)
-        _outgo = State(initialValue: item.outgo.description)
-        _group = State(initialValue: item.group)
+        _mode = State(initialValue: mode)
     }
 }
 
-extension EditView: View {
+extension ItemFormView: View {
     // TODO: Resolve SwiftLint
     // swiftlint:disable closure_body_length
     var body: some View {
-        NavigationView {
-            Form {
-                Section(content: {
-                    DatePicker(selection: $date, displayedComponents: .date) {
-                        Text(.localized(.date))
-                    }
+        Form {
+            Section(content: {
+                DatePicker(selection: $date, displayedComponents: .date) {
+                    Text(.localized(.date))
+                }
+                HStack {
+                    Text(.localized(.content))
+                    Spacer()
+                    TextField(String.empty, text: $content)
+                        .multilineTextAlignment(.trailing)
+                }
+                HStack {
+                    Text(.localized(.income))
+                    TextField(String.zero, text: $income)
+                        .keyboardType(.numberPad)
+                        .multilineTextAlignment(.trailing)
+                        .foregroundColor(income.isEmptyOrDecimal ? .primary : .red)
+                }
+                HStack {
+                    Text(.localized(.outgo))
+                    TextField(String.zero, text: $outgo)
+                        .keyboardType(.numberPad)
+                        .multilineTextAlignment(.trailing)
+                        .foregroundColor(outgo.isEmptyOrDecimal ? .primary : .red)
+                }
+                HStack {
+                    Text(.localized(.group))
+                    Spacer()
+                    TextField(.localized(.others), text: $group)
+                        .multilineTextAlignment(.trailing)
+                }
+                if mode == .create {
                     HStack {
-                        Text(.localized(.content))
+                        Text(.localized(.repeatCount))
                         Spacer()
-                        TextField(String.empty, text: $content)
-                            .multilineTextAlignment(.trailing)
-                    }
-                    HStack {
-                        Text(.localized(.income))
-                        TextField(String.zero, text: $income)
-                            .keyboardType(.numberPad)
-                            .multilineTextAlignment(.trailing)
-                            .foregroundColor(income.isEmptyOrDecimal ? .primary : .red)
-                    }
-                    HStack {
-                        Text(.localized(.outgo))
-                        TextField(String.zero, text: $outgo)
-                            .keyboardType(.numberPad)
-                            .multilineTextAlignment(.trailing)
-                            .foregroundColor(outgo.isEmptyOrDecimal ? .primary : .red)
-                    }
-                    HStack {
-                        Text(.localized(.group))
-                        Spacer()
-                        TextField(.localized(.others), text: $group)
-                            .multilineTextAlignment(.trailing)
-                    }
-                    if !isEditMode {
-                        HStack {
-                            Text(.localized(.repeatCount))
-                            Spacer()
-                            Picker(.localized(.repeatCount),
-                                   selection: $repeatSelection) {
-                                ForEach((.minRepeatCount)..<(.maxRepeatCount + .one), id: \.self) {
-                                    Text($0.description)
-                                }
-                            }.pickerStyle(WheelPickerStyle())
-                            .labelsHidden()
-                            .frame(width: .componentS,
-                                   height: .componentS)
-                            .clipped()
+                        Picker(.localized(.repeatCount),
+                               selection: $repeatSelection) {
+                            ForEach((.minRepeatCount)..<(.maxRepeatCount + .one), id: \.self) {
+                                Text($0.description)
+                            }
                         }
+                        .pickerStyle(WheelPickerStyle())
+                        .labelsHidden()
+                        .frame(width: .componentS,
+                               height: .componentS)
+                        .clipped()
                     }
-                }, header: {
-                    Text(.localized(.information))
-                })
-                if DebugView.isDebug {
-                    DebugSection(item: item)
+                }
+            }, header: {
+                Text(.localized(.information))
+            })
+            if DebugView.isDebug {
+                DebugSection(item: item)
+            }
+        }
+        .navigationBarTitle({ () -> String in
+            switch mode {
+            case .create:
+                return .localized(.createTitle)
+
+            case .edit:
+                return .localized(.editTitle)
+            }
+        }())
+        .toolbar {
+            ToolbarItem(placement: .cancellationAction) {
+                Button(action: cancel) {
+                    Text(.localized(.cancel))
                 }
             }
-            .navigationBarTitle(isEditMode ? .localized(.editTitle) : .localized(.createTitle))
-            .navigationBarItems(
-                leading: Button(action: cancel) {
-                    Text(.localized(.cancel))
-                },
-                trailing: Button(action: isEditMode ? save : create) {
-                    Text(isEditMode ? .localized(.save) : .localized(.create))
+            ToolbarItem(placement: .primaryAction) {
+                Button(action: mode == .edit ? save : create) {
+                    Text(mode == .edit ? .localized(.save) : .localized(.create))
                         .bold()
                 }
-                .disabled(!isValid))
-            .gesture(DragGesture()
-                        .onChanged { _ in
-                            dismissKeyboard()
-                        })
+                .disabled(!isValid)
+            }
         }
+        .gesture(DragGesture()
+                    .onChanged { _ in
+                        dismissKeyboard()
+                    })
         .alert(String.debugTitle, isPresented: $isDebugAlertPresented) {
             Button(.localized(.cancel), role: .cancel) {}
             Button(String.debugOK) {
@@ -121,7 +133,17 @@ extension EditView: View {
         } message: {
             Text(String.debugMessage)
         }
-        .actionSheet(isPresented: $isPresentedToActionSheet) {
+        .onAppear {
+            guard let item else {
+                return
+            }
+            date = item.date
+            content = item.content
+            income = item.income.description
+            outgo = item.outgo.description
+            group = item.group
+        }
+        .actionSheet(isPresented: $isActionSheetPresented) {
             ActionSheet(title: Text(.localized(.saveDetail)),
                         buttons: [
                             .default(Text(.localized(.saveForThisItem)),
@@ -140,11 +162,7 @@ extension EditView: View {
 
 // MARK: - private
 
-private extension EditView {
-    var isEditMode: Bool {
-        item != nil
-    }
-
+private extension ItemFormView {
     var isValid: Bool {
         content.isNotEmpty
             && income.isEmptyOrDecimal
@@ -246,7 +264,7 @@ private extension EditView {
     }
 
     func presentToActionSheet() {
-        isPresentedToActionSheet = true
+        isActionSheetPresented = true
     }
 
     func dismiss() {
@@ -262,11 +280,7 @@ private extension EditView {
 }
 
 #Preview {
-    EditView()
-}
-
-#Preview {
-    ModelPreview {
-        EditView(of: $0)
+    NavigationStack {
+        ItemFormView(mode: .create, item: nil)
     }
 }

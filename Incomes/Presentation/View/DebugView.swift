@@ -32,8 +32,8 @@ extension DebugView: View {
             Section {
                 NavigationLink(String.debugAllItems) {
                     ItemListView(
-                        title: String.debugAllItems,
-                        predicate: Item.predicate(dateIsAfter: .init(timeIntervalSinceReferenceDate: .zero))
+                        tag: .init(),
+                        predicate: .true
                     )
                 }
             }
