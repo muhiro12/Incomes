@@ -62,16 +62,8 @@ extension Tag {
     typealias SortDescriptor = Foundation.SortDescriptor<Tag>
 
     static func sortDescriptors(order: SortOrder = .forward) -> [SortDescriptor] {
-        switch order {
-        case .forward:
-            return [.init(\.name),
-                    .init(\.typeID),
-                    .init(\.persistentModelID)]
-
-        case .reverse:
-            return [.init(\.persistentModelID, order: .reverse),
-                    .init(\.typeID, order: .reverse),
-                    .init(\.name, order: .reverse)]
-        }
+        [.init(\.name, order: order),
+         .init(\.typeID, order: order),
+         .init(\.persistentModelID, order: order)]
     }
 }
