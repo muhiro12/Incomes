@@ -15,6 +15,7 @@ struct YearSection {
 
     @Query private var tags: [Tag]
 
+    @State private var isExpanded = true
     @State private var isPresentedToAlert = false
     @State private var willDeleteItems: [Item] = []
 
@@ -24,21 +25,22 @@ struct YearSection {
         tag = yearTag
         _tags = Query(filter: Tag.predicate(year: yearTag.name),
                       sort: Tag.sortDescriptors(order: .reverse))
+        _isExpanded = .init(
+            initialValue: tag.name == Date.now.stringValueWithoutLocale(.yyyy)
+        )
     }
 }
 
 extension YearSection: View {
     var body: some View {
-        Section(content: {
+        Section(tag.name, isExpanded: $isExpanded) {
             ForEach(tags) {
                 Text($0.items?.first?.date.stringValue(.yyyyMMM) ?? .empty)
             }.onDelete {
                 isPresentedToAlert = true
                 willDeleteItems = $0.flatMap { tags[$0].items ?? [] }
             }
-        }, header: {
-            Text(tag.name)
-        })
+        }
         .actionSheet(isPresented: $isPresentedToAlert) {
             ActionSheet(
                 title: Text(.localized(.deleteConfirm)),
@@ -60,7 +62,7 @@ extension YearSection: View {
 
 #Preview {
     ModelPreview { tag in
-        List {
+        ListPreview {
             YearSection(yearTag: tag)
         }
     }

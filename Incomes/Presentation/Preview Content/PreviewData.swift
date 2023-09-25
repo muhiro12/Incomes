@@ -9,6 +9,9 @@
 import SwiftData
 import SwiftUI
 
+typealias NavigationStackPreview = NavigationStack
+typealias ListPreview = List
+
 // swiftlint:disable force_unwrapping force_try no_magic_numbers function_body_length
 enum PreviewData {
     @StateObject static var store = Store()

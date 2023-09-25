@@ -34,7 +34,7 @@ struct ItemFormView {
 
     init(mode: Mode, item: Item?) {
         self.item = item
-        _mode = State(initialValue: mode)
+        _mode = .init(initialValue: mode)
     }
 }
 
@@ -280,7 +280,7 @@ private extension ItemFormView {
 }
 
 #Preview {
-    NavigationStack {
+    NavigationStackPreview {
         ItemFormView(mode: .create, item: nil)
     }
 }

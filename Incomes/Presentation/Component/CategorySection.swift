@@ -15,6 +15,7 @@ struct CategorySection {
 
     @Query private var tags: [Tag]
 
+    @State private var isExpanded = true
     @State private var isPresentedToAlert = false
     @State private var willDeleteItems: [Item] = []
 
@@ -37,16 +38,14 @@ struct CategorySection {
 
 extension CategorySection: View {
     var body: some View {
-        Section(content: {
+        Section(tag.name.isNotEmpty ? tag.name : .localized(.others), isExpanded: $isExpanded) {
             ForEach(tags) {
                 Text($0.name)
             }.onDelete {
                 isPresentedToAlert = true
                 willDeleteItems = $0.flatMap { tags[$0].items ?? [] }
             }
-        }, header: {
-            Text(tag.name.isNotEmpty ? tag.name : .localized(.others))
-        })
+        }
         .actionSheet(isPresented: $isPresentedToAlert) {
             ActionSheet(
                 title: Text(.localized(.deleteConfirm)),
@@ -68,7 +67,7 @@ extension CategorySection: View {
 
 #Preview {
     ModelPreview { tag in
-        List {
+        ListPreview {
             CategorySection(categoryTag: tag)
         }
     }

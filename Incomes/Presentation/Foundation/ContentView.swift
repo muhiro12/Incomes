@@ -26,7 +26,7 @@ struct ContentView {
 extension ContentView: View {
     var body: some View {
         ZStack {
-            IncomesRootView()
+            RootNavigationView()
                 .onChange(of: scenePhase) { _, newValue in
                     isMasked = isMaskAppOn && newValue != .active
                     if !isLocked {

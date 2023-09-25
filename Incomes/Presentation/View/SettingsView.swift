@@ -11,6 +11,8 @@ import SwiftUI
 struct SettingsView {
     @Environment(\.modelContext)
     private var context
+    @Environment(\.dismiss)
+    private var dismiss
 
     @AppStorage(.key(.isSubscribeOn))
     private var isSubscribeOn = UserDefaults.isSubscribeOn
@@ -49,6 +51,16 @@ extension SettingsView: View {
             }
         }
         .navigationBarTitle(.localized(.settingsTitle))
+        .toolbar {
+            ToolbarItem {
+                Button(action: {
+                    dismiss()
+                }, label: {
+                    Image(systemName: .imageClose)
+                        .symbolRenderingMode(.hierarchical)
+                })
+            }
+        }
         .alert(.localized(.deleteAllConfirm),
                isPresented: $isAlertPresented) {
             Button(.localized(.delete), role: .destructive) {
@@ -65,7 +77,7 @@ extension SettingsView: View {
 }
 
 #Preview {
-    NavigationStack {
+    NavigationStackPreview {
         SettingsView()
     }
     .environmentObject(PreviewData.store)

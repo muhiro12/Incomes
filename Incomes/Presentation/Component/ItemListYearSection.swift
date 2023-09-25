@@ -59,7 +59,7 @@ extension ItemListYearSection: View {
 
 #Preview {
     ModelPreview { tag in
-        List {
+        ListPreview {
             ItemListYearSection(yearTag: tag, predicate: .true)
         }
     }

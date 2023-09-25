@@ -40,16 +40,14 @@ extension SidebarView: View {
             }
         }
         .sheet(isPresented: $isSettingsPresented) {
-            NavigationStack {
-                SettingsView()
-            }
+            SettingsNavigationView()
         }
         .navigationTitle(.localized(.incomes))
     }
 }
 
 #Preview {
-    NavigationStack {
+    NavigationStackPreview {
         SidebarView(selection: .constant(nil))
     }
 }

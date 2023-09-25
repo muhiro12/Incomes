@@ -29,7 +29,7 @@ extension PremiumSection: View {
 }
 
 #Preview {
-    List {
+    ListPreview {
         PremiumSection()
     }
 }
