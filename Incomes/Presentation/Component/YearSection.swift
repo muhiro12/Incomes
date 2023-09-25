@@ -13,6 +13,9 @@ struct YearSection {
     @Environment(\.modelContext)
     private var context
 
+    @AppStorage(.key(.isSubscribeOn))
+    private var isSubscribeOn = UserDefaults.isSubscribeOn
+
     @Query private var tags: [Tag]
 
     @State private var isExpanded = true
@@ -33,12 +36,19 @@ struct YearSection {
 
 extension YearSection: View {
     var body: some View {
-        Section(tag.name, isExpanded: $isExpanded) {
-            ForEach(tags) {
-                Text($0.items?.first?.date.stringValue(.yyyyMMM) ?? .empty)
-            }.onDelete {
-                isPresentedToAlert = true
-                willDeleteItems = $0.flatMap { tags[$0].items ?? [] }
+        Group {
+            Section(tag.name, isExpanded: $isExpanded) {
+                ForEach(tags) {
+                    Text($0.items?.first?.date.stringValue(.yyyyMMM) ?? .empty)
+                }.onDelete {
+                    isPresentedToAlert = true
+                    willDeleteItems = $0.flatMap { tags[$0].items ?? [] }
+                }
+            }
+            if !isSubscribeOn && isExpanded {
+                Section {
+                    Advertisement(type: .native(.small))
+                }
             }
         }
         .actionSheet(isPresented: $isPresentedToAlert) {
