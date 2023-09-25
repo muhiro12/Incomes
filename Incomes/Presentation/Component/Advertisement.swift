@@ -23,16 +23,16 @@ extension Advertisement: View {
             HStack {
                 Spacer()
                 NativeAdvertisement(size: size)
-                    .border(.secondary, width: 1)
+                    .border(Color(UIColor.separator))
                 Spacer()
             }
             .listRowBackground(Color.clear)
-            .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
-            .listRowSeparator(.hidden)
         }
     }
 }
 
 #Preview {
-    Advertisement(type: .native(.medium))
+    ListPreview {
+        Advertisement(type: .native(.medium))
+    }
 }
