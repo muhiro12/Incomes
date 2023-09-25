@@ -13,7 +13,8 @@
 "cancel" = "キャンセル";
 "delete" = "削除";
 "deleteConfirm" = "このアイテムを削除してもよろしいですか？";
-"footerTextPrefix" = "今日: ";
+"footerDatePrefix" = "今日: ";
+"footerCountSuffix" = " アイテム";
 "unlock" = "ロック解除";
 "faceID" = "アプリのロックを解除します";
 

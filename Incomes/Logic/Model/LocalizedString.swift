@@ -16,7 +16,8 @@ enum LocalizedString: String {
     case cancel
     case delete
     case deleteConfirm
-    case footerTextPrefix
+    case footerDatePrefix
+    case footerCountSuffix
     case unlock
     case faceID
 

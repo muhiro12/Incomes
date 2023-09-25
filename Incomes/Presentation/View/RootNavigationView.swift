@@ -38,7 +38,7 @@ extension RootNavigationView: View {
                     CreateButton()
                 }
                 ToolbarItem(placement: .status) {
-                    Text(.localized(.footerTextPrefix) + Date().stringValue(.yyyyMMMd))
+                    Text(.localized(.footerDatePrefix) + Date().stringValue(.yyyyMMMd))
                         .font(.footnote)
                 }
             }
@@ -66,8 +66,15 @@ extension RootNavigationView: View {
                     CreateButton()
                 }
                 ToolbarItem(placement: .status) {
-                    Text(.localized(.footerTextPrefix) + Date().stringValue(.yyyyMMMd))
-                        .font(.footnote)
+                    Text({ () -> Int in
+                        guard let detailID,
+                              let tag = try? TagService(context: context).tag(predicate: Tag.predicate(id: detailID)),
+                              let count = tag.items?.count else {
+                            return .zero
+                        }
+                        return count
+                    }().description + .localized(.footerCountSuffix))
+                    .font(.footnote)
                 }
             }
         }
