@@ -21,10 +21,7 @@ enum PreviewData {
         let configuration = ModelConfiguration(isStoredInMemoryOnly: true)
         let container = try! ModelContainer(for: schema, configurations: [configuration])
         Task { @MainActor in
-            let sampleData = try! items(context: container.mainContext)
-            sampleData.forEach {
-                container.mainContext.insert($0)
-            }
+            try! items(context: container.mainContext)
         }
         return container
     }
@@ -33,6 +30,7 @@ enum PreviewData {
         var items: [Item] = []
 
         let factory = ItemFactory(context: context)
+        let service = ItemService(context: context)
 
         let now = Calendar.utc.startOfYear(for: Date())
         let dateA = Calendar.utc.date(byAdding: .day, value: 0, to: now)!
@@ -97,6 +95,8 @@ enum PreviewData {
                                      group: "Tax",
                                      repeatID: UUID()))
         }
+
+        try service.calculate(for: items)
 
         return items
     }
