@@ -14,15 +14,23 @@ struct ItemFormView {
         case edit
     }
 
+    enum Field {
+        case content
+        case income
+        case outgo
+        case category
+    }
+
     @Environment(\.modelContext)
     private var context
     @Environment(\.presentationMode)
     private var presentationMode
 
-    @FocusState private var isContentFocused
-    @FocusState private var isGroupFocused
+    @FocusState private var focusedField: Field?
 
     @State private var mode = Mode.create
+    @State private var isContentSuggestionShowing = false
+    @State private var isCategorySuggestionShowing = false
     @State private var isActionSheetPresented = false
     @State private var isDebugAlertPresented = false
 
@@ -54,16 +62,17 @@ extension ItemFormView: View {
                     Text(.localized(.content))
                     Spacer()
                     TextField(String.empty, text: $content)
-                        .focused($isContentFocused)
+                        .focused($focusedField, equals: .content)
                         .multilineTextAlignment(.trailing)
                 }
-                if isContentFocused {
+                if isContentSuggestionShowing {
                     FilteredTagList(content: $content)
                 }
                 HStack {
                     Text(.localized(.income))
                     TextField(String.zero, text: $income)
                         .keyboardType(.numberPad)
+                        .focused($focusedField, equals: .income)
                         .multilineTextAlignment(.trailing)
                         .foregroundColor(income.isEmptyOrDecimal ? .primary : .red)
                 }
@@ -71,6 +80,7 @@ extension ItemFormView: View {
                     Text(.localized(.outgo))
                     TextField(String.zero, text: $outgo)
                         .keyboardType(.numberPad)
+                        .focused($focusedField, equals: .outgo)
                         .multilineTextAlignment(.trailing)
                         .foregroundColor(outgo.isEmptyOrDecimal ? .primary : .red)
                 }
@@ -78,10 +88,10 @@ extension ItemFormView: View {
                     Text(.localized(.group))
                     Spacer()
                     TextField(.localized(.others), text: $group)
-                        .focused($isGroupFocused)
+                        .focused($focusedField, equals: .category)
                         .multilineTextAlignment(.trailing)
                 }
-                if isGroupFocused {
+                if isCategorySuggestionShowing {
                     FilteredTagList(category: $group)
                 }
                 if mode == .create {
@@ -134,10 +144,10 @@ extension ItemFormView: View {
         .gesture(
             DragGesture()
                 .onChanged { value in
-                    guard value.translation.height > .spaceS else {
+                    guard abs(value.translation.height) > .spaceS else {
                         return
                     }
-                    dismissKeyboard()
+                    focusedField = nil
                 }
         )
         .alert(String.debugTitle, isPresented: $isDebugAlertPresented) {
@@ -158,6 +168,12 @@ extension ItemFormView: View {
             income = item.income.description
             outgo = item.outgo.description
             group = item.group
+        }
+        .onChange(of: focusedField) { _, newValue in
+            withAnimation(.easeInOut) {
+                isContentSuggestionShowing = newValue == .content
+                isCategorySuggestionShowing = newValue == .category
+            }
         }
         .actionSheet(isPresented: $isActionSheetPresented) {
             ActionSheet(title: Text(.localized(.saveDetail)),
@@ -285,13 +301,6 @@ private extension ItemFormView {
 
     func dismiss() {
         presentationMode.wrappedValue.dismiss()
-    }
-
-    func dismissKeyboard() {
-        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder),
-                                        to: nil,
-                                        from: nil,
-                                        for: nil)
     }
 }
 
