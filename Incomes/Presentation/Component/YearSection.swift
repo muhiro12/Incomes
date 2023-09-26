@@ -22,14 +22,14 @@ struct YearSection {
     @State private var isPresentedToAlert = false
     @State private var willDeleteItems: [Item] = []
 
-    private let tag: Tag
+    private let title: String
 
     init(yearTag: Tag) {
-        tag = yearTag
+        title = yearTag.displayName
         _tags = Query(filter: Tag.predicate(year: yearTag.name),
                       sort: Tag.sortDescriptors(order: .reverse))
         _isExpanded = .init(
-            initialValue: tag.name == Date.now.stringValueWithoutLocale(.yyyy)
+            initialValue: yearTag.name == Date.now.stringValueWithoutLocale(.yyyy)
         )
     }
 }
@@ -37,7 +37,7 @@ struct YearSection {
 extension YearSection: View {
     var body: some View {
         Group {
-            Section(tag.name, isExpanded: $isExpanded) {
+            Section(title, isExpanded: $isExpanded) {
                 ForEach(tags) {
                     Text($0.items?.first?.date.stringValue(.yyyyMMM) ?? .empty)
                 }.onDelete {
@@ -71,9 +71,14 @@ extension YearSection: View {
 }
 
 #Preview {
-    ModelPreview { tag in
+    ModelPreview { (_: Tag) in
         ListPreview {
-            YearSection(yearTag: tag)
+            YearSection(yearTag: {
+                let tag = Tag()
+                tag.set(name: Date.now.stringValueWithoutLocale(.yyyy),
+                        typeID: Tag.TagType.year.rawValue)
+                return tag
+            }())
         }
     }
 }

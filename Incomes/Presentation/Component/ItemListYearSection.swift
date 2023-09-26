@@ -18,10 +18,10 @@ struct ItemListYearSection {
     @State private var isPresentedToAlert = false
     @State private var willDeleteItems: [Item] = []
 
-    private let yearTag: Tag
+    private let title: String
 
     init(yearTag: Tag, predicate: Predicate<Item>) {
-        self.yearTag = yearTag
+        title = yearTag.displayName
         _items = Query(filter: predicate, sort: Item.sortDescriptors())
     }
 }
@@ -37,7 +37,7 @@ extension ItemListYearSection: View {
                 isPresentedToAlert = true
             }
         }, header: {
-            Text(yearTag.name)
+            Text(title)
         })
         .actionSheet(isPresented: $isPresentedToAlert) {
             ActionSheet(title: Text(.localized(.deleteConfirm)),

@@ -35,9 +35,16 @@ extension Item {
         }
     }
 
-    static func predicate(contentIs content: String) -> Predicate {
-        #Predicate {
+    static func predicate(content: String, year: String) -> Predicate {
+        guard let date = year.dateValueWithoutLocale(.yyyy) else {
+            assertionFailure()
+            return .false
+        }
+        let start = Calendar.utc.startOfYear(for: date)
+        let end = Calendar.utc.endOfYear(for: date)
+        return #Predicate {
             $0.content == content
+                && start <= $0.date && $0.date <= end
         }
     }
 

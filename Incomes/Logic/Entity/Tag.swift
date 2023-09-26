@@ -31,6 +31,19 @@ extension Tag {
         TagType(rawValue: typeID)
     }
 
+    var displayName: String {
+        switch type {
+        case .year:
+            return name.dateValueWithoutLocale(.yyyy)?.stringValue(.yyyy) ?? name
+
+        case .yearMonth:
+            return name.dateValueWithoutLocale(.yyyyMM)?.stringValue(.yyyyMMM) ?? name
+
+        default:
+            return name
+        }
+    }
+
     func set(name: String, typeID: String) {
         self.name = name
         self.typeID = typeID

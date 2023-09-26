@@ -32,6 +32,7 @@ extension ListItem: View {
         }
         .sheet(isPresented: $isEditPresented) {
             ItemFormNavigationView(mode: .edit, item: item)
+                .presentationDetents([.medium, .large])
         }
         .contentShape(Rectangle())
         .onTapGesture {

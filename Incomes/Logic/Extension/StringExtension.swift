@@ -22,4 +22,12 @@ extension String {
         }
         return value
     }
+
+    func dateValue(_ template: DateFormatter.Template, locale: Locale = .current) -> Date? {
+        DateFormatter.formatter(template, locale: locale).date(from: self)
+    }
+
+    func dateValueWithoutLocale(_ template: DateFormatter.Template) -> Date? {
+        DateFormatter.formatterWithoutLocale(template).date(from: self)
+    }
 }

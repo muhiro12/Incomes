@@ -15,12 +15,14 @@ struct FilteredTagList {
     @Binding private var name: String
 
     init(content: Binding<String>) {
-        _tags = Query(filter: Tag.predicate(type: .content))
+        _tags = Query(filter: Tag.predicate(type: .content),
+                      sort: Tag.sortDescriptors(order: .reverse))
         _name = content
     }
 
     init(category: Binding<String>) {
-        _tags = Query(filter: Tag.predicate(type: .category))
+        _tags = Query(filter: Tag.predicate(type: .category),
+                      sort: Tag.sortDescriptors(order: .reverse))
         _name = category
     }
 }
@@ -47,7 +49,10 @@ private extension FilteredTagList {
         let filtered = tags.filter {
             $0.name.lowercased().contains(name.lowercased())
         }
-        return filtered.isNotEmpty ? filtered : tags
+        let result = filtered.isNotEmpty ? filtered : tags
+        return result.sorted {
+            ($0.items?.count ?? .zero) > ($1.items?.count ?? .zero)
+        }
     }
 }
 

@@ -15,10 +15,10 @@ struct ItemListView {
 
     private let title: String
     private let yearTags: [Tag]
-    private let predicate: Predicate<Item>
+    private let predicateBuilder: (Tag) -> Predicate<Item>
 
-    init(tag: Tag, predicate: Predicate<Item>) {
-        self.title = tag.name
+    init(tag: Tag, predicateBuilder: @escaping (Tag) -> Predicate<Item>) {
+        self.title = tag.displayName
         self.yearTags = Set(
             tag.items?.compactMap {
                 $0.tags?.first {
@@ -28,14 +28,15 @@ struct ItemListView {
         ).sorted {
             $0.name > $1.name
         }
-        self.predicate = predicate
+        self.predicateBuilder = predicateBuilder
     }
 }
 
 extension ItemListView: View {
     var body: some View {
         List(yearTags) {
-            ItemListYearSection(yearTag: $0, predicate: predicate)
+            ItemListYearSection(yearTag: $0,
+                                predicate: predicateBuilder($0))
             if !isSubscribeOn {
                 Advertisement(type: .native(.medium))
             }
@@ -47,8 +48,7 @@ extension ItemListView: View {
 #Preview {
     ModelPreview { tag in
         NavigationStackPreview {
-            ItemListView(tag: tag,
-                         predicate: .true)
+            ItemListView(tag: tag) { _ in .true }
         }
     }
 }
