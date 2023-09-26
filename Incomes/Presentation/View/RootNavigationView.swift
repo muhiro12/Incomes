@@ -44,19 +44,17 @@ extension RootNavigationView: View {
         } detail: {
             Group {
                 if let detail {
-                    ItemListView(
-                        tag: detail,
-                        predicate: {
-                            if detail.type == .yearMonth,
-                               let date = detail.items?.first?.date {
-                                return Item.predicate(dateIsSameMonthAs: date)
-                            }
-                            if detail.type == .content {
-                                return Item.predicate(contentIs: detail.name)
-                            }
-                            return .false
-                        }()
-                    )
+                    ItemListView(tag: detail) { yearTag in
+                        if detail.type == .yearMonth,
+                           let date = detail.items?.first?.date {
+                            return Item.predicate(dateIsSameMonthAs: date)
+                        }
+                        if detail.type == .content {
+                            return Item.predicate(content: detail.name,
+                                                  year: yearTag.name)
+                        }
+                        return .false
+                    }
                 }
             }
             .toolbar {

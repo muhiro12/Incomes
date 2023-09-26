@@ -31,10 +31,7 @@ extension DebugView: View {
             }
             Section {
                 NavigationLink(String.debugAllItems) {
-                    ItemListView(
-                        tag: .init(),
-                        predicate: .true
-                    )
+                    ItemListView(tag: .init()) { _ in .true }
                 }
             }
             Section {

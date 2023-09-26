@@ -9,29 +9,11 @@
 import Foundation
 
 extension Date {
-    enum Template: String {
-        case yyyy
-        case yyyyMM
-        case yyyyMMM
-        case MMMd
-        case yyyyMMMd
+    func stringValue(_ template: DateFormatter.Template, locale: Locale = .current) -> String {
+        DateFormatter.formatter(template, locale: locale).string(from: self)
     }
 
-    private static let formatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.timeZone = .init(secondsFromGMT: .zero)
-        return formatter
-    }()
-
-    func stringValue(_ template: Template, locale: Locale = .current) -> String {
-        Self.formatter.dateFormat = DateFormatter.dateFormat(fromTemplate: template.rawValue,
-                                                             options: .zero,
-                                                             locale: locale)
-        return Self.formatter.string(from: self)
-    }
-
-    func stringValueWithoutLocale(_ template: Date.Template) -> String {
-        Self.formatter.dateFormat = template.rawValue
-        return Self.formatter.string(from: self)
+    func stringValueWithoutLocale(_ template: DateFormatter.Template) -> String {
+        DateFormatter.formatterWithoutLocale(template).string(from: self)
     }
 }
