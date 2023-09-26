@@ -27,7 +27,7 @@ struct FilteredTagList {
 
 extension FilteredTagList: View {
     var body: some View {
-        ScrollView(.horizontal) {
+        ScrollView(.horizontal, showsIndicators: false) {
             LazyHStack {
                 ForEach(filteredTags) { tag in
                     Button(tag.name) {
@@ -38,6 +38,7 @@ extension FilteredTagList: View {
                 }
             }
         }
+        .environment(\.layoutDirection, .rightToLeft)
     }
 }
 
