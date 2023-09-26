@@ -15,12 +15,12 @@ struct FilteredTagList {
     @Binding private var name: String
 
     init(content: Binding<String>) {
-        _tags = Query(filter: Tag.predicate(type: .content), sort: Tag.sortDescriptors())
+        _tags = Query(filter: Tag.predicate(type: .content))
         _name = content
     }
 
     init(category: Binding<String>) {
-        _tags = Query(filter: Tag.predicate(type: .category), sort: Tag.sortDescriptors())
+        _tags = Query(filter: Tag.predicate(type: .category))
         _name = category
     }
 }
