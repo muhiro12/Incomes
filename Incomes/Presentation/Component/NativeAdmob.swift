@@ -27,13 +27,9 @@ extension NativeAdmob: UIViewRepresentable {
 // MARK: - GADNativeAdView
 
 private final class NativeAdmobView: UIView {
-    private let size: NativeAdvertisement.Size
     private var view: GADNativeAdView?
-    private var loader: GADAdLoader?
 
     init(size: NativeAdvertisement.Size) {
-        self.size = size
-
         super.init(frame: .zero)
 
         guard let view = UINib(nibName: size.rawValue + String(describing: type(of: self)), bundle: nil)
@@ -59,7 +55,6 @@ private final class NativeAdmobView: UIView {
         )
         loader.delegate = self
         loader.load(GADRequest())
-        self.loader = loader
     }
 
     @available(*, unavailable)

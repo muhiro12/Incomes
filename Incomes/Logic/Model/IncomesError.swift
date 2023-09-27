@@ -8,6 +8,12 @@
 
 import Foundation
 
-protocol IncomesError: Error {
+protocol IncomesError: LocalizedError {
     var message: String { get }
+}
+
+extension IncomesError {
+    var errorDescription: String? {
+        message
+    }
 }

@@ -9,6 +9,7 @@
 import Foundation
 import SwiftData
 
+// periphery:ignore
 protocol SwiftDataRepository<Entity>: Repository where Entity: PersistentModel {
     var context: ModelContext { get }
     var sortDescriptors: [SortDescriptor<Entity>] { get }

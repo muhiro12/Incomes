@@ -20,7 +20,8 @@ extension TitleListItem: View {
             Spacer()
             if item.isProfitable {
                 Image.arrowUp
-                    .iconFrameS()
+                    .resizable()
+                    .frame(width: .iconS, height: .iconS)
                     .foregroundColor(.accentColor)
             }
         }
@@ -28,7 +29,9 @@ extension TitleListItem: View {
 }
 
 #Preview {
-    ModelPreview {
-        TitleListItem(item: $0)
+    ListPreview {
+        ModelPreview {
+            TitleListItem(item: $0)
+        }
     }
 }

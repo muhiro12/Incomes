@@ -12,7 +12,6 @@ import StoreKit
 final class Store: ObservableObject {
     @Published private(set) var product: Product?
 
-    @Published private var subscriptionGroupStatus: Product.SubscriptionInfo.RenewalState?
     @Published private var subscriptions: [Product] {
         didSet {
             product = subscriptions.first { productIDs.contains($0.id) }
@@ -50,7 +49,7 @@ final class Store: ObservableObject {
 
                     await transaction.finish()
                 } catch {
-                    assertionFailure("Transaction failed verification")
+                    assertionFailure("Transaction failed verification: \(error.localizedDescription)")
                 }
             }
         }
@@ -83,13 +82,11 @@ final class Store: ObservableObject {
                     break
                 }
             } catch {
-                assertionFailure("Transaction failed verification")
+                assertionFailure("Transaction failed verification: \(error.localizedDescription)")
             }
         }
 
         self.purchasedSubscriptions = purchasedSubscriptions
-
-        subscriptionGroupStatus = try? await subscriptions.first?.subscription?.status.first?.state
     }
 
     func checkVerified<T>(_ result: VerificationResult<T>) throws -> T {

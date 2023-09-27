@@ -17,10 +17,6 @@ var context: ModelContext {
     ModelContext(PreviewData.inMemoryContainer)
 }
 
-var items: [Item] {
-    try! PreviewData.items(context: context)
-}
-
 let date: (String) -> Date = { string in
     try! Date(string, strategy: .iso8601)
 }
