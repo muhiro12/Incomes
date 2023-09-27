@@ -10,9 +10,6 @@ import SwiftData
 import SwiftUI
 
 struct ItemListView {
-    @AppStorage(.key(.isSubscribeOn))
-    private var isSubscribeOn = UserDefaults.isSubscribeOn
-
     private let title: String
     private let yearTags: [Tag]
     private let predicateBuilder: (Tag) -> Predicate<Item>
@@ -37,9 +34,6 @@ extension ItemListView: View {
         List(yearTags) {
             ItemListYearSection(yearTag: $0,
                                 predicate: predicateBuilder($0))
-            if !isSubscribeOn {
-                Advertisement(type: .native(.medium))
-            }
         }
         .navigationBarTitle(title)
     }
