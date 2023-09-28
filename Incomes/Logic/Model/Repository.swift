@@ -20,6 +20,7 @@ protocol Repository<Entity> {
     func deleteList(_ list: [Entity]) throws
 }
 
+// periphery:ignore
 extension Repository {
     func fetch() throws -> Entity? {
         try fetch(predicate: nil)

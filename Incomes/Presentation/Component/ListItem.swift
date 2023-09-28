@@ -9,9 +9,6 @@
 import SwiftUI
 
 struct ListItem {
-    @Environment(\.modelContext)
-    private var context
-
     @State private var isEditPresented = false
 
     private let item: Item

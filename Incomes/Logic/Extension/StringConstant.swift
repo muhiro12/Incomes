@@ -14,10 +14,6 @@ extension String {
     static let empty: Self = ""
     static let zero: Self = "0"
 
-    // MARK: - Identifier
-
-    static let item: Self = "Item"
-
     // MARK: - Image
 
     static let imageHome = "calendar"

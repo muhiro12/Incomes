@@ -12,8 +12,6 @@ struct ContentView {
     @Environment(\.scenePhase)
     private var scenePhase
 
-    @AppStorage(.key(.isSubscribeOn))
-    private var isSubscribeOn = UserDefaults.isSubscribeOn
     @AppStorage(.key(.isMaskAppOn))
     private var isMaskAppOn = UserDefaults.isMaskAppOn
     @AppStorage(.key(.isLockAppOn))

@@ -13,8 +13,6 @@ struct DebugView {
 
     @Environment(\.modelContext)
     private var context
-    @Environment(\.presentationMode)
-    private var presentationMode
 
     @State private var isDebugOption = Self.isDebug
     @State private var isAlertPresented = false

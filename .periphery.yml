@@ -1,0 +1,9 @@
+project: Incomes.xcodeproj
+schemes:
+  - Incomes
+targets:
+  - Incomes
+  - IncomesTests
+index_exclude:
+  - "**/Item.swift"
+  - "**/Tag.swift"

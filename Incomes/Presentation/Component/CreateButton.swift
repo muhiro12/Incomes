@@ -9,9 +9,6 @@
 import SwiftUI
 
 struct CreateButton {
-    @Environment(\.modelContext)
-    private var context
-
     @State private var isCreatePresented = false
 }
 

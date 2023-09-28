@@ -24,10 +24,6 @@ struct ItemService {
 
     // MARK: - Fetch
 
-    func item(predicate: Predicate<Item>? = nil) throws -> Item? {
-        try repository.fetch(predicate: predicate)
-    }
-
     func items(predicate: Predicate<Item>? = nil) throws -> [Item] {
         try repository.fetchList(predicate: predicate)
     }

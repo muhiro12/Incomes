@@ -17,8 +17,6 @@ struct SettingsView {
     @AppStorage(.key(.isSubscribeOn))
     private var isSubscribeOn = UserDefaults.isSubscribeOn
 
-    @EnvironmentObject private var store: Store
-
     @State private var isAlertPresented = false
 }
 

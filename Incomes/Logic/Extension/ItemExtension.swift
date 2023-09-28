@@ -24,17 +24,6 @@ extension Item {
                   and: Calendar.utc.endOfMonth(for: date))
     }
 
-    static func predicate(dateIsSameYearAs date: Date) -> Predicate {
-        predicate(dateIsBetween: Calendar.utc.startOfYear(for: date),
-                  and: Calendar.utc.endOfYear(for: date))
-    }
-
-    static func predicate(dateIsAfter date: Date) -> Predicate {
-        #Predicate {
-            $0.date >= date
-        }
-    }
-
     static func predicate(content: String, year: String) -> Predicate {
         guard let date = year.dateValueWithoutLocale(.yyyy) else {
             assertionFailure()
@@ -45,18 +34,6 @@ extension Item {
         return #Predicate {
             $0.content == content
                 && start <= $0.date && $0.date <= end
-        }
-    }
-
-    static func predicate(groupIs group: String) -> Predicate {
-        #Predicate {
-            $0.group == group
-        }
-    }
-
-    static func predicate(groupIsNot group: String) -> Predicate {
-        #Predicate {
-            $0.group != group
         }
     }
 
