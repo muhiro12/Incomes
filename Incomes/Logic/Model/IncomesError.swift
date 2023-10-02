@@ -9,11 +9,11 @@
 import Foundation
 
 protocol IncomesError: LocalizedError {
-    var message: String { get }
+    var resource: LocalizedStringResource { get }
 }
 
 extension IncomesError {
     var errorDescription: String? {
-        message
+        .init(localized: resource)
     }
 }

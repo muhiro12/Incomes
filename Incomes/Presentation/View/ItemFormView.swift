@@ -56,10 +56,10 @@ extension ItemFormView: View {
         Form {
             Section(content: {
                 DatePicker(selection: $date, displayedComponents: .date) {
-                    Text(.localized(.date))
+                    Text("Date")
                 }
                 HStack {
-                    Text(.localized(.content))
+                    Text("Content")
                     Spacer()
                     TextField(String.empty, text: $content)
                         .focused($focusedField, equals: .content)
@@ -69,7 +69,7 @@ extension ItemFormView: View {
                     FilteredTagList(content: $content)
                 }
                 HStack {
-                    Text(.localized(.income))
+                    Text("Income")
                     TextField(String.zero, text: $income)
                         .keyboardType(.numberPad)
                         .focused($focusedField, equals: .income)
@@ -77,7 +77,7 @@ extension ItemFormView: View {
                         .foregroundColor(income.isEmptyOrDecimal ? .primary : .red)
                 }
                 HStack {
-                    Text(.localized(.outgo))
+                    Text("Outgo")
                     TextField(String.zero, text: $outgo)
                         .keyboardType(.numberPad)
                         .focused($focusedField, equals: .outgo)
@@ -85,9 +85,9 @@ extension ItemFormView: View {
                         .foregroundColor(outgo.isEmptyOrDecimal ? .primary : .red)
                 }
                 HStack {
-                    Text(.localized(.group))
+                    Text("Group")
                     Spacer()
-                    TextField(.localized(.others), text: $group)
+                    TextField("Others", text: $group)
                         .focused($focusedField, equals: .category)
                         .multilineTextAlignment(.trailing)
                 }
@@ -96,9 +96,9 @@ extension ItemFormView: View {
                 }
                 if mode == .create {
                     HStack {
-                        Text(.localized(.repeatCount))
+                        Text("Repeat")
                         Spacer()
-                        Picker(.localized(.repeatCount),
+                        Picker("Repeat",
                                selection: $repeatSelection) {
                             ForEach((.minRepeatCount)..<(.maxRepeatCount + .one), id: \.self) {
                                 Text($0.description)
@@ -112,30 +112,22 @@ extension ItemFormView: View {
                     }
                 }
             }, header: {
-                Text(.localized(.information))
+                Text("Information")
             })
             if DebugView.isDebug {
                 DebugSection(item: item)
             }
         }
-        .navigationBarTitle({ () -> String in
-            switch mode {
-            case .create:
-                return .localized(.createTitle)
-
-            case .edit:
-                return .localized(.editTitle)
-            }
-        }())
+        .navigationBarTitle(mode == .create ? "Create" : "Edit")
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {
                 Button(action: cancel) {
-                    Text(.localized(.cancel))
+                    Text("Cancel")
                 }
             }
             ToolbarItem(placement: .primaryAction) {
-                Button(action: mode == .edit ? save : create) {
-                    Text(mode == .edit ? .localized(.save) : .localized(.create))
+                Button(action: mode == .create ? create : save) {
+                    Text(mode == .create ? "Create" : "Save")
                         .bold()
                 }
                 .disabled(!isValid)
@@ -151,7 +143,7 @@ extension ItemFormView: View {
                 }
         )
         .alert(String.debugTitle, isPresented: $isDebugAlertPresented) {
-            Button(.localized(.cancel), role: .cancel) {}
+            Button("Cancel", role: .cancel) {}
             Button(String.debugOK) {
                 DebugView.isDebug = true
                 dismiss()
@@ -176,13 +168,13 @@ extension ItemFormView: View {
             }
         }
         .actionSheet(isPresented: $isActionSheetPresented) {
-            ActionSheet(title: Text(.localized(.saveDetail)),
+            ActionSheet(title: Text("This is a repeating item."),
                         buttons: [
-                            .default(Text(.localized(.saveForThisItem)),
+                            .default(Text("Save for this item only"),
                                      action: saveForThisItem),
-                            .default(Text(.localized(.saveForFutureItems)),
+                            .default(Text("Save for future items"),
                                      action: saveForFutureItems),
-                            .default(Text(.localized(.saveForAllItems)),
+                            .default(Text("Save for all items"),
                                      action: saveForAllItems),
                             .cancel()
                         ])

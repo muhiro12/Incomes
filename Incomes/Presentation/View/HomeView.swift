@@ -25,7 +25,7 @@ extension HomeView: View {
         List(tags, selection: $selection) {
             YearSection(yearTag: $0)
         }
-        .navigationBarTitle(.localized(.homeTitle))
+        .navigationBarTitle("Home")
         .listStyle(.sidebar)
     }
 }

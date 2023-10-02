@@ -12,8 +12,4 @@ extension StringProtocol where Self == String {
     static func key(_ key: UserDefaults.Key) -> String {
         key.rawValue
     }
-
-    static func localized(_ localizedString: LocalizedString) -> String {
-        String(localized: .init(localizedString.rawValue))
-    }
 }

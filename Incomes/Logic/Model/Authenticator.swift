@@ -13,9 +13,10 @@ struct Authenticator {
     private let context = LAContext()
 
     func authenticate() async -> Bool {
+        let localizedReason = String(localized: "Unlock the app")
         do {
             return try await context.evaluatePolicy(.deviceOwnerAuthentication,
-                                                    localizedReason: .localized(.faceID))
+                                                    localizedReason: localizedReason)
         } catch {
             return false
         }

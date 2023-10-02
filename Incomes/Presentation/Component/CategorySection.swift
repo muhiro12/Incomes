@@ -38,7 +38,7 @@ struct CategorySection {
 
 extension CategorySection: View {
     var body: some View {
-        Section(tag.name.isNotEmpty ? tag.name : .localized(.others), isExpanded: $isExpanded) {
+        Section(tag.name.isNotEmpty ? tag.name : "Others", isExpanded: $isExpanded) {
             ForEach(tags) {
                 Text($0.name)
             }.onDelete {
@@ -48,9 +48,9 @@ extension CategorySection: View {
         }
         .actionSheet(isPresented: $isPresentedToAlert) {
             ActionSheet(
-                title: Text(.localized(.deleteConfirm)),
+                title: Text("Are you sure you want to delete this item?"),
                 buttons: [
-                    .destructive(Text(.localized(.delete))) {
+                    .destructive(Text("Delete")) {
                         do {
                             try ItemService(context: context).delete(items: willDeleteItems)
                         } catch {

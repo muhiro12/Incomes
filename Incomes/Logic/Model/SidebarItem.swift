@@ -16,13 +16,13 @@ enum SidebarItem: String, Identifiable {
         rawValue
     }
 
-    var title: String {
+    var title: LocalizedStringResource {
         switch self {
         case .home:
-            return .localized(.homeTitle)
+            return "Home"
 
         case .category:
-            return .localized(.categoryTitle)
+            return "Category"
         }
     }
 

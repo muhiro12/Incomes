@@ -11,12 +11,12 @@ import Foundation
 enum DebugError: IncomesError {
     case `default`
 
-    var message: String {
+    var resource: LocalizedStringResource {
         switch self {
         case .default:
-            let message = String.localized(.errorUnknown)
+            let message = "Sorry, something went wrong. We're working to fix it."
             assertionFailure(message)
-            return message
+            return .init(stringLiteral: message)
         }
     }
 }
