@@ -71,14 +71,11 @@ extension YearSection: View {
 }
 
 #Preview {
-    ModelPreview { (_: Tag) in
-        ListPreview {
-            YearSection(yearTag: {
-                let tag = Tag()
-                tag.set(name: Date.now.stringValueWithoutLocale(.yyyy),
-                        typeID: Tag.TagType.year.rawValue)
-                return tag
-            }())
-        }
-    }
+    YearSection(
+        yearTag: PreviewData.tags.filter {
+            $0.type == .year
+        }[0]
+    )
+    .previewList()
+    .previewQuery()
 }

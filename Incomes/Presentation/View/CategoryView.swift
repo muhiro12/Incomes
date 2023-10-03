@@ -31,9 +31,7 @@ extension CategoryView: View {
 }
 
 #Preview {
-    ModelsPreview { (_: [Tag]) in
-        NavigationStackPreview {
-            CategoryView(selection: .constant(nil))
-        }
-    }
+    CategoryView(selection: .constant(nil))
+        .previewNavigation()
+        .previewQuery()
 }

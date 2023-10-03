@@ -40,9 +40,13 @@ extension ItemListView: View {
 }
 
 #Preview {
-    ModelPreview { tag in
-        NavigationStackPreview {
-            ItemListView(tag: tag) { _ in .true }
-        }
+    ItemListView(
+        tag: PreviewData.tags.filter {
+            $0.name == Date.now.stringValueWithoutLocale(.yyyy)
+        }[0]
+    ) { _ in
+        Item.predicate(dateIsSameMonthAs: .now)
     }
+    .previewNavigation()
+    .previewQuery()
 }

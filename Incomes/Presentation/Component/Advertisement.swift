@@ -32,7 +32,6 @@ extension Advertisement: View {
 }
 
 #Preview {
-    ListPreview {
-        Advertisement(type: .native(.medium))
-    }
+    Advertisement(type: .native(.medium))
+        .previewList()
 }

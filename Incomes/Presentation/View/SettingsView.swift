@@ -75,8 +75,7 @@ extension SettingsView: View {
 }
 
 #Preview {
-    NavigationStackPreview {
-        SettingsView()
-    }
-    .environmentObject(PreviewData.store)
+    SettingsView()
+        .previewNavigation()
+        .previewStore()
 }

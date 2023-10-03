@@ -43,7 +43,5 @@ extension WideListItem: View {
 }
 
 #Preview {
-    ModelPreview {
-        WideListItem(of: $0)
-    }
+    WideListItem(of: PreviewData.items[0])
 }

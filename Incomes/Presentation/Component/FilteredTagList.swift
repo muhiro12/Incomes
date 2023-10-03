@@ -57,7 +57,6 @@ private extension FilteredTagList {
 }
 
 #Preview {
-    ModelPreview { (_: Tag) in
-        FilteredTagList(category: .constant(.empty))
-    }
+    FilteredTagList(category: .constant(.empty))
+        .previewQuery()
 }

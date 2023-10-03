@@ -93,7 +93,6 @@ private extension RootNavigationView {
 }
 
 #Preview {
-    ModelPreview { (_: Item) in
-        RootNavigationView()
-    }
+    RootNavigationView()
+        .previewQuery()
 }
