@@ -36,12 +36,12 @@ extension WideListItem: View {
             .foregroundColor(.secondary)
             Divider()
             Text(item.balance.asCurrency)
-                .frame(width: .componentL)
+                .frame(width: .componentM)
                 .foregroundColor(item.balance.isMinus ? .red : .primary)
         }
     }
 }
 
-#Preview {
+#Preview(traits: .landscapeRight) {
     WideListItem(of: PreviewData.items[0])
 }

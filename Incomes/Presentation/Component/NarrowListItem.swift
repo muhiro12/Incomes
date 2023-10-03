@@ -34,7 +34,7 @@ extension NarrowListItem: View {
             Spacer()
             Divider()
             Text(item.balance.asCurrency)
-                .frame(width: .componentL)
+                .frame(width: .componentM)
                 .foregroundColor(item.income.isMinus ? .red : .primary)
         }
     }

@@ -19,7 +19,7 @@ struct NativeAdvertisement {
                 return .componentM
 
             case .medium:
-                return .advertisementMaxHeight
+                return .componentL
             }
         }
     }
