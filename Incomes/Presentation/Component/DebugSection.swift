@@ -31,7 +31,7 @@ extension DebugSection: View {
                     Spacer()
                     VStack {
                         ForEach(item.tags ?? []) {
-                            Text("[\($0.name)]")
+                            Text(verbatim: "[\($0.name)]")
                         }
                     }
                 }

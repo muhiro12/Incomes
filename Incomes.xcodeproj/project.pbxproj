@@ -9,14 +9,13 @@
 /* Begin PBXBuildFile section */
 		AD09B544278F934D008F03FA /* ItemService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD09B543278F934D008F03FA /* ItemService.swift */; };
 		AD2BB3222795925C00258234 /* Advertisement.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD2BB3212795925C00258234 /* Advertisement.swift */; };
+		AD2D58372AC7B2AA0074069B /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = AD2D58362AC7B2A90074069B /* Localizable.xcstrings */; };
 		AD387E4B2A8A1CE600E94623 /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = AD387E4A2A8A1CE600E94623 /* GoogleMobileAds */; };
 		AD387E4D2A8B6FFD00E94623 /* Repository.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD387E4C2A8B6FFD00E94623 /* Repository.swift */; };
 		AD4C315A2AA581590030A17F /* PremiumSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD4C31592AA581590030A17F /* PremiumSection.swift */; };
 		AD50E09C2AB4647A005CE509 /* DebugError.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD50E09B2AB4647A005CE509 /* DebugError.swift */; };
 		AD50E09E2AB46B39005CE509 /* NativeAdmob.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD50E09D2AB46B39005CE509 /* NativeAdmob.swift */; };
 		AD50E0A02AB49021005CE509 /* CollectionExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD50E09F2AB49021005CE509 /* CollectionExtension.swift */; };
-		AD583B6124B301EB0032AA1C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = AD583B6324B301EB0032AA1C /* Localizable.strings */; };
-		AD583B6924B308AB0032AA1C /* LocalizedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD583B6824B308AB0032AA1C /* LocalizedString.swift */; };
 		AD5D754A2AB17011003E16D1 /* SwiftDataMigrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD5D75492AB17011003E16D1 /* SwiftDataMigrator.swift */; };
 		AD663132279973E700891D51 /* MediumNativeAdmobView.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD663130279973E700891D51 /* MediumNativeAdmobView.xib */; };
 		AD6B704427A7A71E00A38208 /* IncomesError.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6B704327A7A71E00A38208 /* IncomesError.swift */; };
@@ -117,14 +116,12 @@
 /* Begin PBXFileReference section */
 		AD09B543278F934D008F03FA /* ItemService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemService.swift; sourceTree = "<group>"; };
 		AD2BB3212795925C00258234 /* Advertisement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Advertisement.swift; sourceTree = "<group>"; };
+		AD2D58362AC7B2A90074069B /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		AD387E4C2A8B6FFD00E94623 /* Repository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Repository.swift; sourceTree = "<group>"; };
 		AD4C31592AA581590030A17F /* PremiumSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PremiumSection.swift; sourceTree = "<group>"; };
 		AD50E09B2AB4647A005CE509 /* DebugError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugError.swift; sourceTree = "<group>"; };
 		AD50E09D2AB46B39005CE509 /* NativeAdmob.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeAdmob.swift; sourceTree = "<group>"; };
 		AD50E09F2AB49021005CE509 /* CollectionExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionExtension.swift; sourceTree = "<group>"; };
-		AD583B6224B301EB0032AA1C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
-		AD583B6524B3032D0032AA1C /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
-		AD583B6824B308AB0032AA1C /* LocalizedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizedString.swift; sourceTree = "<group>"; };
 		AD5D75492AB17011003E16D1 /* SwiftDataMigrator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftDataMigrator.swift; sourceTree = "<group>"; };
 		AD663130279973E700891D51 /* MediumNativeAdmobView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MediumNativeAdmobView.xib; sourceTree = "<group>"; };
 		AD6B704327A7A71E00A38208 /* IncomesError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomesError.swift; sourceTree = "<group>"; };
@@ -392,7 +389,6 @@
 				ADCBBA292AB0E974007DAAE4 /* ItemFactory.swift */,
 				ADCF36EA24A1D18E0011D6F5 /* ItemRepository.swift */,
 				AD09B543278F934D008F03FA /* ItemService.swift */,
-				AD583B6824B308AB0032AA1C /* LocalizedString.swift */,
 				AD387E4C2A8B6FFD00E94623 /* Repository.swift */,
 				AD6ED9472AC13BF1008EE239 /* SidebarItem.swift */,
 				ADEA399B2501457A00CB61D9 /* Store.swift */,
@@ -510,8 +506,8 @@
 				ADCF371524A1D1B80011D6F5 /* Incomes.entitlements */,
 				ADEA399D25014CD700CB61D9 /* Secret.swift */,
 				ADCF36B224A1D0F70011D6F5 /* Assets.xcassets */,
+				AD2D58362AC7B2A90074069B /* Localizable.xcstrings */,
 				ADE3A4B9277491CB0016C152 /* Info.plist */,
-				AD583B6324B301EB0032AA1C /* Localizable.strings */,
 				ADE058792706E7AE00DF2499 /* Package */,
 			);
 			path = Configuration;
@@ -682,7 +678,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AD583B6124B301EB0032AA1C /* Localizable.strings in Resources */,
 				ADA900C6279934EB000DC872 /* SmallNativeAdmobView.xib in Resources */,
 				ADCF36B624A1D0F70011D6F5 /* Preview Assets.xcassets in Resources */,
 				ADA900B527969687000DC872 /* Settings.bundle in Resources */,
@@ -690,6 +685,7 @@
 				AD98194226E43C3600C4A57C /* StoreKitTestCertificate.cer in Resources */,
 				AD663132279973E700891D51 /* MediumNativeAdmobView.xib in Resources */,
 				ADCB06F12791A48000B867F4 /* GoogleService-Info.plist in Resources */,
+				AD2D58372AC7B2AA0074069B /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -780,7 +776,6 @@
 				ADCF371324A1D18E0011D6F5 /* StringConstant.swift in Sources */,
 				ADCF370324A1D18E0011D6F5 /* ListItem.swift in Sources */,
 				AD4C315A2AA581590030A17F /* PremiumSection.swift in Sources */,
-				AD583B6924B308AB0032AA1C /* LocalizedString.swift in Sources */,
 				ADB3627C2AA7890C00964CA7 /* Box.swift in Sources */,
 				ADCF370B24A1D18E0011D6F5 /* HomeView.swift in Sources */,
 				AD6ED9482AC13BF1008EE239 /* SidebarItem.swift in Sources */,
@@ -863,15 +858,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		AD583B6324B301EB0032AA1C /* Localizable.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				AD583B6224B301EB0032AA1C /* en */,
-				AD583B6524B3032D0032AA1C /* ja */,
-			);
-			name = Localizable.strings;
-			sourceTree = "<group>";
-		};
 		ADE3A4B9277491CB0016C152 /* Info.plist */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -939,6 +925,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -997,6 +984,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -1034,6 +1022,7 @@
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1067,6 +1056,7 @@
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

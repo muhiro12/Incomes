@@ -28,7 +28,8 @@ struct SidebarView {
 extension SidebarView: View {
     var body: some View {
         List(isSubscribeOn ? subscriber : user, selection: $selection) {
-            Label($0.title, systemImage: $0.image)
+            Label(.init($0.title.key),
+                  systemImage: $0.image)
         }
         .toolbar {
             ToolbarItem {
@@ -42,7 +43,7 @@ extension SidebarView: View {
         .sheet(isPresented: $isSettingsPresented) {
             SettingsNavigationView()
         }
-        .navigationTitle(.localized(.incomes))
+        .navigationTitle("Incomes")
     }
 }
 

@@ -29,18 +29,18 @@ extension SettingsView: View {
                 StoreSection()
             }
             Section(content: {
-                Button(.localized(.recalculate)) {
+                Button("Recalculate") {
                     do {
                         try ItemService(context: context).recalculate()
                     } catch {
                         assertionFailure(error.localizedDescription)
                     }
                 }
-                Button(.localized(.deleteAll), role: .destructive) {
+                Button("Delete all", role: .destructive) {
                     isAlertPresented = true
                 }
             }, header: {
-                Text(.localized(.manageItemsHeader))
+                Text("Manage items")
             })
             if DebugView.isDebug {
                 NavigationLink(String.debugTitle) {
@@ -48,7 +48,7 @@ extension SettingsView: View {
                 }
             }
         }
-        .navigationBarTitle(.localized(.settingsTitle))
+        .navigationBarTitle("Settings")
         .toolbar {
             ToolbarItem {
                 Button(action: {
@@ -59,9 +59,9 @@ extension SettingsView: View {
                 })
             }
         }
-        .alert(.localized(.deleteAllConfirm),
+        .alert("Are you sure you want to delete all items?",
                isPresented: $isAlertPresented) {
-            Button(.localized(.delete), role: .destructive) {
+            Button("Delete", role: .destructive) {
                 do {
                     try ItemService(context: context).deleteAll()
                     try TagService(context: context).deleteAll()
@@ -69,7 +69,7 @@ extension SettingsView: View {
                     assertionFailure(error.localizedDescription)
                 }
             }
-            Button(.localized(.cancel), role: .cancel) {}
+            Button("Cancel", role: .cancel) {}
         }
     }
 }

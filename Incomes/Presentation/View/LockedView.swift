@@ -22,7 +22,7 @@ extension LockedView: View {
     var body: some View {
         ZStack {
             MaskView()
-            Button(.localized(.unlock), action: unlock)
+            Button("Unlock", action: unlock)
                 .buttonStyle(.borderedProminent)
         }
     }

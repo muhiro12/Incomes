@@ -37,7 +37,7 @@ extension RootNavigationView: View {
                     CreateButton()
                 }
                 ToolbarItem(placement: .status) {
-                    Text(.localized(.footerDatePrefix) + Date().stringValue(.yyyyMMMd))
+                    Text("Today: \(Date().stringValue(.yyyyMMMd))")
                         .font(.footnote)
                 }
             }
@@ -62,10 +62,8 @@ extension RootNavigationView: View {
                     CreateButton()
                 }
                 ToolbarItem(placement: .status) {
-                    Text({
-                        detail?.items?.count ?? .zero
-                    }().description + .localized(.footerCountSuffix))
-                    .font(.footnote)
+                    Text("\(detail?.items?.count ?? .zero) Items")
+                        .font(.footnote)
                 }
             }
         }

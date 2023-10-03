@@ -19,10 +19,10 @@ extension PremiumSection: View {
     var body: some View {
         Section {
             Toggle(isOn: $isMaskAppOn) {
-                Text(.localized(.maskApp))
+                Text("Mask the app")
             }
             Toggle(isOn: $isLockAppOn) {
-                Text(.localized(.lockApp))
+                Text("Lock the app")
             }
         }
     }
