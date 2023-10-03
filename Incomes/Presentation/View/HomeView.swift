@@ -31,9 +31,7 @@ extension HomeView: View {
 }
 
 #Preview {
-    ModelsPreview { (_: [Tag]) in
-        NavigationStackPreview {
-            HomeView(selection: .constant(nil))
-        }
-    }
+    HomeView(selection: .constant(nil))
+        .previewNavigation()
+        .previewQuery()
 }

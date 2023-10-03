@@ -48,7 +48,6 @@ extension SidebarView: View {
 }
 
 #Preview {
-    NavigationStackPreview {
-        SidebarView(selection: .constant(nil))
-    }
+    SidebarView(selection: .constant(nil))
+        .previewNavigation()
 }

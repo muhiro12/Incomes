@@ -9,24 +9,28 @@
 import SwiftData
 import SwiftUI
 
-typealias NavigationStackPreview = NavigationStack
-typealias ListPreview = List
-
 // swiftlint:disable force_unwrapping force_try no_magic_numbers function_body_length
 enum PreviewData {
     @StateObject static var store = Store()
 
-    static var inMemoryContainer: ModelContainer {
-        let schema = Schema([Item.self])
-        let configuration = ModelConfiguration(isStoredInMemoryOnly: true)
-        let container = try! ModelContainer(for: schema, configurations: [configuration])
-        Task { @MainActor in
-            try! items(context: container.mainContext)
-        }
-        return container
+    static var context: ModelContext {
+        let context = try! ModelContext(
+            .init(for: Item.self,
+                  configurations: .init(isStoredInMemoryOnly: true))
+        )
+        _ = try! items(context: context)
+        return context
     }
 
-    static func items(context: ModelContext) throws -> [Item] {
+    static var items: [Item] {
+        try! ItemService(context: context).items()
+    }
+
+    static var tags: [Tag] {
+        try! TagService(context: context).tags()
+    }
+
+    private static func items(context: ModelContext) throws -> [Item] {
         var items: [Item] = []
 
         let factory = ItemFactory(context: context)
@@ -106,3 +110,38 @@ enum PreviewData {
     }
 }
 // swiftlint:enable force_unwrapping force_try no_magic_numbers function_body_length
+
+// MARK: - Preview modifier
+
+// periphery:ignore
+extension View {
+    func previewNavigation() -> some View {
+        NavigationStack {
+            self
+        }
+    }
+
+    func previewList() -> some View {
+        List {
+            self
+        }
+    }
+
+    func previewQuery() -> some View {
+        modelContext(PreviewData.context)
+    }
+
+    func previewStore() -> some View {
+        environmentObject(PreviewData.store)
+    }
+
+    func previewJapanese() -> some View {
+        environment(\.locale, .init(identifier: "ja"))
+    }
+
+    func previewIsSubscribeOn(_ value: Bool) -> some View {
+        onAppear {
+            UserDefaults.isSubscribeOn = value
+        }
+    }
+}

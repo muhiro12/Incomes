@@ -41,7 +41,6 @@ extension ContentView: View {
 }
 
 #Preview {
-    ModelsPreview { (_: [Tag]) in
-        ContentView()
-    }
+    ContentView()
+        .previewQuery()
 }

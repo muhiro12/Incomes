@@ -103,10 +103,12 @@ private extension ItemListYearSection {
 }
 
 #Preview {
-    ModelPreview { tag in
-        ListPreview {
-            ItemListYearSection(yearTag: tag,
-                                predicate: Item.predicate(dateIsSameMonthAs: .now))
-        }
-    }
+    ItemListYearSection(
+        yearTag: PreviewData.tags.filter {
+            $0.type == .year
+        }[0],
+        predicate: Item.predicate(dateIsSameMonthAs: .now)
+    )
+    .previewList()
+    .previewQuery()
 }

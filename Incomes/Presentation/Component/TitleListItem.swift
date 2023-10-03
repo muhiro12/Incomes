@@ -29,9 +29,6 @@ extension TitleListItem: View {
 }
 
 #Preview {
-    ListPreview {
-        ModelPreview {
-            TitleListItem(item: $0)
-        }
-    }
+    TitleListItem(item: PreviewData.items[0])
+        .previewList()
 }

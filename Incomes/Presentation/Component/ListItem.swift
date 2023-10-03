@@ -39,13 +39,5 @@ extension ListItem: View {
 }
 
 #Preview {
-    ModelPreview {
-        ListItem(of: $0)
-    }
-}
-
-#Preview(traits: .landscapeLeft) {
-    ModelPreview {
-        ListItem(of: $0)
-    }
+    ListItem(of: PreviewData.items[0])
 }

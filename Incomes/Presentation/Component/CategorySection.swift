@@ -66,9 +66,11 @@ extension CategorySection: View {
 }
 
 #Preview {
-    ModelPreview { tag in
-        ListPreview {
-            CategorySection(categoryTag: tag)
-        }
-    }
+    CategorySection(
+        categoryTag: PreviewData.tags.filter {
+            $0.type == .category
+        }[0]
+    )
+    .previewList()
+    .previewQuery()
 }
