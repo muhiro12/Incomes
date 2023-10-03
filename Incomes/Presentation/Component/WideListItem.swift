@@ -20,28 +20,32 @@ extension WideListItem: View {
     var body: some View {
         HStack {
             Text(item.date.stringValue(.MMMd))
-                .truncationMode(.head)
                 .font(.subheadline)
+                .minimumScaleFactor(.high)
+                .truncationMode(.head)
                 .frame(width: .componentS)
             Divider()
             TitleListItem(item: item)
             Divider()
             HStack {
                 Text(item.income.asCurrency)
-                    .frame(width: .componentM)
+                    .frame(width: .componentS)
                 Divider()
                 Text(item.outgo.asMinusCurrency)
-                    .frame(width: .componentM)
-            }.font(.footnote)
+                    .frame(width: .componentS)
+            }
+            .font(.footnote)
+            .minimumScaleFactor(.medium)
             .foregroundColor(.secondary)
             Divider()
             Text(item.balance.asCurrency)
-                .frame(width: .componentL)
+                .minimumScaleFactor(.medium)
+                .frame(width: .componentM)
                 .foregroundColor(item.balance.isMinus ? .red : .primary)
         }
     }
 }
 
-#Preview {
+#Preview(traits: .landscapeRight) {
     WideListItem(of: PreviewData.items[0])
 }

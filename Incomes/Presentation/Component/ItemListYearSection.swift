@@ -33,7 +33,7 @@ struct ItemListYearSection {
 extension ItemListYearSection: View {
     // TODO: Resolve SwiftLint and remove static Strings
     var body: some View {
-        Group {
+        Group { // swiftlint:disable:this closure_body_length
             Section(content: {
                 ForEach(items) {
                     ListItem(of: $0)
@@ -51,6 +51,7 @@ extension ItemListYearSection: View {
                         buildChartContent(date: $0.date,
                                           value: $0.balance)
                     }
+                    .frame(height: .componentM)
                     .padding()
                 }
                 Section("Income and Outgo") {
@@ -60,6 +61,7 @@ extension ItemListYearSection: View {
                         buildChartContent(date: $0.date,
                                           value: $0.outgo * -1)
                     }
+                    .frame(height: .componentM)
                     .padding()
                 }
             } else {
@@ -94,7 +96,7 @@ private extension ItemListYearSection {
                     y: .value("Amount", value),
                     stacking: .unstacked)
                 .foregroundStyle(value.isPlus ? Color.accentColor : Color.red)
-                .opacity(0.5)
+                .opacity(.medium)
             RectangleMark(x: .value("Date", date),
                           y: .value("Amount", value))
                 .foregroundStyle(value.isPlus ? Color.accentColor : Color.red)

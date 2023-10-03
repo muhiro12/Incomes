@@ -36,6 +36,7 @@ extension ItemListView: View {
                                 predicate: predicateBuilder($0))
         }
         .navigationBarTitle(title)
+        .listStyle(.grouped)
     }
 }
 

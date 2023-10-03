@@ -17,6 +17,7 @@ extension TitleListItem: View {
         HStack {
             Text(item.content)
                 .font(.headline)
+                .minimumScaleFactor(.high)
             Spacer()
             if item.isProfitable {
                 Image.arrowUp
