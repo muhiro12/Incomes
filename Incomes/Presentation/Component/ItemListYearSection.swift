@@ -96,7 +96,7 @@ private extension ItemListYearSection {
                     y: .value("Amount", value),
                     stacking: .unstacked)
                 .foregroundStyle(value.isPlus ? Color.accentColor : Color.red)
-                .opacity(0.5) // swiftlint:disable:this no_magic_numbers
+                .opacity(.medium)
             RectangleMark(x: .value("Date", date),
                           y: .value("Amount", value))
                 .foregroundStyle(value.isPlus ? Color.accentColor : Color.red)

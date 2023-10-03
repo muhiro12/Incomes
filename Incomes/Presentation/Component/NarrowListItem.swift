@@ -20,8 +20,9 @@ extension NarrowListItem: View {
     var body: some View {
         HStack {
             Text(item.date.stringValue(.MMMd))
-                .truncationMode(.head)
                 .font(.subheadline)
+                .minimumScaleFactor(.high)
+                .truncationMode(.head)
                 .frame(width: .componentS)
             Divider()
             Spacer()
@@ -29,11 +30,13 @@ extension NarrowListItem: View {
                 TitleListItem(item: item)
                 Text(item.profit.asCurrency)
                     .font(.footnote)
+                    .minimumScaleFactor(.medium)
                     .foregroundColor(.secondary)
             }
             Spacer()
             Divider()
             Text(item.balance.asCurrency)
+                .minimumScaleFactor(.medium)
                 .frame(width: .componentM)
                 .foregroundColor(item.income.isMinus ? .red : .primary)
         }

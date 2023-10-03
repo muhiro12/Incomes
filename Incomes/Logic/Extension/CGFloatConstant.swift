@@ -28,5 +28,11 @@ extension CGFloat {
     static let portraitModeMaxWidth = unit * 60
 
     static let advertisementMaxWidth = unit * 45
+
+    // MARK: - Ratio
+
+    static let low = Self(Double.low)
+    static let medium = Self(Double.medium)
+    static let high = Self(Double.high)
 }
 // swiftlint:enable no_magic_numbers
