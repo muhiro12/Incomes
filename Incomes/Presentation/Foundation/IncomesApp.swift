@@ -45,6 +45,7 @@ extension IncomesApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .onOpenURL { _ in }
         }
         .environmentObject(store)
         .modelContainer(container)
