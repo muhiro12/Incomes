@@ -16,7 +16,7 @@ jobs:
       github.event.workflow_run.conclusion == 'success'
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Set ignored files
         run: |
@@ -26,7 +26,7 @@ jobs:
           echo '${{ secrets.STOREKIT_BASE64 }}' | base64 -d -o Incomes/Configuration/Package/StoreKit/StoreKitTestCertificate.cer
 
       - name: iOS build
-        uses: yukiarrr/ios-build-action@v1.4.0
+        uses: yukiarrr/ios-build-action@v1.11.0
         with:
           project-path: ${{ env.PROJECT-NAME }}.xcodeproj
           p12-base64: ${{ secrets.P12_BASE64 }}
