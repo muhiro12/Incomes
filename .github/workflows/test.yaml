@@ -6,10 +6,10 @@ env:
   PROJECT-NAME: Incomes
 jobs:
   test:
-    runs-on: macos-13
+    runs-on: macos-14
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Set ignored files
         run: |
