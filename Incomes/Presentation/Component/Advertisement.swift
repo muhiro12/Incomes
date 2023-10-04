@@ -27,6 +27,7 @@ extension Advertisement: View {
                 Spacer()
             }
             .listRowBackground(Color.clear)
+            .listSectionSeparator(.hidden)
         }
     }
 }
