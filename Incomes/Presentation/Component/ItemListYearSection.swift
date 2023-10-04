@@ -51,7 +51,7 @@ extension ItemListYearSection: View {
                         buildChartContent(date: $0.date,
                                           value: $0.balance)
                     }
-                    .frame(height: .componentM)
+                    .frame(height: .componentL)
                     .padding()
                 }
                 Section("Income and Outgo") {
@@ -61,7 +61,7 @@ extension ItemListYearSection: View {
                         buildChartContent(date: $0.date,
                                           value: $0.outgo * -1)
                     }
-                    .frame(height: .componentM)
+                    .frame(height: .componentL)
                     .padding()
                 }
             } else {
