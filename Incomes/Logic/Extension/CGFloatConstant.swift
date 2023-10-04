@@ -18,16 +18,19 @@ extension CGFloat {
     static let spaceL = unit * 3
 
     static let componentS = unit * 8
-    static let componentM = unit * 16
-    static let componentL = unit * 24
+    static let componentM = unit * 12
+    static let componentL = unit * 16
 
     static let iconS = unit * 1
     static let iconM = unit * 3
     static let iconL = unit * 5
 
-    static let portraitModeMaxWidth = unit * 60
+    static let portraitModeMaxWidth = unit * 80
 
-    static let advertisementMaxWidth = unit * 45
+    static let advertisementSmallWidth = unit * 45
+    static let advertisementSmallHeight = unit * 10
+    static let advertisementMediumWidth = unit * 45
+    static let advertisementMediumHeight = unit * 40
 
     // MARK: - Ratio
 

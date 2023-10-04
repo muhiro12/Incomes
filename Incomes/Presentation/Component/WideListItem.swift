@@ -29,10 +29,10 @@ extension WideListItem: View {
             Divider()
             HStack {
                 Text(item.income.asCurrency)
-                    .frame(width: .componentS)
+                    .frame(width: .componentM)
                 Divider()
                 Text(item.outgo.asMinusCurrency)
-                    .frame(width: .componentS)
+                    .frame(width: .componentM)
             }
             .font(.footnote)
             .minimumScaleFactor(.medium)
@@ -40,7 +40,7 @@ extension WideListItem: View {
             Divider()
             Text(item.balance.asCurrency)
                 .minimumScaleFactor(.medium)
-                .frame(width: .componentM)
+                .frame(width: .componentL)
                 .foregroundColor(item.balance.isMinus ? .red : .primary)
         }
     }

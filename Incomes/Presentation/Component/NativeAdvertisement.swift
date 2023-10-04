@@ -13,13 +13,23 @@ struct NativeAdvertisement {
         case small = "Small"
         case medium = "Medium"
 
+        var width: CGFloat {
+            switch self {
+            case .small:
+                return .advertisementSmallWidth
+
+            case .medium:
+                return .advertisementMediumWidth
+            }
+        }
+
         var height: CGFloat {
             switch self {
             case .small:
-                return .componentM
+                return .advertisementSmallHeight
 
             case .medium:
-                return .componentL
+                return .advertisementMediumHeight
             }
         }
     }
@@ -30,7 +40,7 @@ struct NativeAdvertisement {
 extension NativeAdvertisement: View {
     var body: some View {
         NativeAdmob(size: size)
-            .frame(maxWidth: .advertisementMaxWidth,
+            .frame(maxWidth: size.width,
                    minHeight: size.height)
     }
 }

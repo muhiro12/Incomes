@@ -27,6 +27,8 @@ extension NativeAdmob: UIViewRepresentable {
 // MARK: - GADNativeAdView
 
 private final class NativeAdmobView: UIView {
+    // periphery:ignore
+    private var loader: GADAdLoader?
     private var view: GADNativeAdView?
 
     init(size: NativeAdvertisement.Size) {
@@ -55,6 +57,7 @@ private final class NativeAdmobView: UIView {
         )
         loader.delegate = self
         loader.load(GADRequest())
+        self.loader = loader
     }
 
     @available(*, unavailable)
