@@ -16,7 +16,7 @@ struct NativeAdvertisement {
         var height: CGFloat {
             switch self {
             case .small:
-                return .componentM
+                return .componentS
 
             case .medium:
                 return .componentL
