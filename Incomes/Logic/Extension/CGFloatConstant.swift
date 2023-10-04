@@ -27,7 +27,10 @@ extension CGFloat {
 
     static let portraitModeMaxWidth = unit * 60
 
-    static let advertisementMaxWidth = unit * 40
+    static let advertisementSmallWidth = unit * 45
+    static let advertisementSmallHeight = unit * 10
+    static let advertisementMediumWidth = unit * 45
+    static let advertisementMediumHeight = unit * 40
 
     // MARK: - Ratio
 
