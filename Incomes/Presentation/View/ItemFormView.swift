@@ -25,6 +25,8 @@ struct ItemFormView {
     private var context
     @Environment(\.presentationMode)
     private var presentationMode
+    @Environment(\.requestReview)
+    private var requestReview
 
     @FocusState private var focusedField: Field?
 
@@ -126,10 +128,19 @@ extension ItemFormView: View {
                 }
             }
             ToolbarItem(placement: .primaryAction) {
-                Button(action: mode == .create ? create : save) {
-                    Text(mode == .create ? "Create" : "Save")
-                        .bold()
+                Button(mode == .create ? "Create" : "Save") {
+                    if mode == .create {
+                        create()
+                    } else {
+                        save()
+                    }
+                    // TODO: Do not use context
+                    if let count = try? context.fetchCount(.init(sortBy: Item.sortDescriptors())),
+                       count.isMultiple(of: 10) { // swiftlint:disable:this no_magic_numbers
+                        requestReview()
+                    }
                 }
+                .bold()
                 .disabled(!isValid)
             }
         }
