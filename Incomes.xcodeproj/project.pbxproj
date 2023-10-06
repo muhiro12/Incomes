@@ -150,7 +150,6 @@
 		ADB3627B2AA7890C00964CA7 /* Box.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Box.swift; sourceTree = "<group>"; };
 		ADBE6B172AB932970064293B /* URLConstant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLConstant.swift; sourceTree = "<group>"; };
 		ADC26F982AC2AA8D009843FE /* DateFormatterExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatterExtension.swift; sourceTree = "<group>"; };
-		ADC26F9A2AC52245009843FE /* IncomesRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = IncomesRelease.entitlements; sourceTree = "<group>"; };
 		ADCB06DD278F954600B867F4 /* ItemServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemServiceTests.swift; sourceTree = "<group>"; };
 		ADCB06DF2790562000B867F4 /* DateExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtensionTests.swift; sourceTree = "<group>"; };
 		ADCB06E12790635900B867F4 /* CalendarExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarExtensionTests.swift; sourceTree = "<group>"; };
@@ -320,7 +319,6 @@
 		ADCF36A824A1D0F40011D6F5 /* Incomes */ = {
 			isa = PBXGroup;
 			children = (
-				ADC26F9A2AC52245009843FE /* IncomesRelease.entitlements */,
 				ADE0587A2706E87500DF2499 /* Configuration */,
 				ADE0587B2706E9C400DF2499 /* Logic */,
 				ADE058732706E6C000DF2499 /* Presentation */,
@@ -1034,7 +1032,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = Incomes/IncomesRelease.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Incomes/Configuration/Incomes.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;

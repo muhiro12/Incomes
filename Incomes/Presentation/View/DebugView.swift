@@ -43,7 +43,7 @@ extension DebugView: View {
             Button("Cancel", role: .cancel) {}
             Button(String.debugOK, role: .destructive) {
                 do {
-                    PreviewData.items.forEach(context.insert)
+                    _ = try PreviewData.items(context: context)
                     try context.save()
                 } catch {
                     assertionFailure(error.localizedDescription)

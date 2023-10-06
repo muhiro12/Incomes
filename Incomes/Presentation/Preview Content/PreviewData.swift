@@ -30,7 +30,7 @@ enum PreviewData {
         try! TagService(context: context).tags()
     }
 
-    private static func items(context: ModelContext) throws -> [Item] {
+    static func items(context: ModelContext) throws -> [Item] {
         var items: [Item] = []
 
         let factory = ItemFactory(context: context)

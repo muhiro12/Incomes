@@ -68,7 +68,6 @@ extension ItemListYearSection: View {
                 Section {
                     Advertisement(type: .native(.medium))
                 }
-                .listSectionSeparator(.hidden)
             }
         }
         .actionSheet(isPresented: $isPresentedToAlert) {

@@ -31,7 +31,7 @@ extension ListItem: View {
             ItemFormNavigationView(mode: .edit, item: item)
                 .presentationDetents([.medium, .large])
         }
-        .contentShape(Rectangle())
+        .contentShape(.rect)
         .onTapGesture {
             isEditPresented = true
         }
