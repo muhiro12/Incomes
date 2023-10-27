@@ -6,25 +6,25 @@
 //  Copyright © 2020 Hiromu Nakano. All rights reserved.
 //
 
-import Foundation
 import StoreKit
 
-final class Store: ObservableObject {
-    @Published private(set) var product: Product?
+@Observable
+final class Store {
+    let groupID = EnvironmentParameter.groupID
+    let productIDs = [EnvironmentParameter.productID]
 
-    @Published private var subscriptions: [Product] {
+    private(set) var product: Product?
+
+    private var subscriptions: [Product] {
         didSet {
             product = subscriptions.first { productIDs.contains($0.id) }
         }
     }
-    @Published private var purchasedSubscriptions: [Product] = [] {
+    private var purchasedSubscriptions: [Product] = [] {
         didSet {
             UserDefaults.isSubscribeOn = purchasedSubscriptions.contains { productIDs.contains($0.id) }
         }
     }
-
-    let groupID = EnvironmentParameter.groupID
-    let productIDs = [EnvironmentParameter.productID]
 
     private var updateListenerTask: Task<Void, Error>?
 

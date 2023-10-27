@@ -10,7 +10,8 @@ import StoreKit
 import SwiftUI
 
 struct StoreSection {
-    @EnvironmentObject private var store: Store
+    @Environment(Store.self)
+    private var store
 }
 
 extension StoreSection: View {
