@@ -10,7 +10,9 @@ import Foundation
 import SwiftData
 
 // periphery:ignore
-protocol SwiftDataRepository<Entity>: Repository where Entity: PersistentModel {
+protocol SwiftDataRepository<Entity> where Entity: PersistentModel {
+    associatedtype Entity
+
     var context: ModelContext { get }
     var sortDescriptors: [SortDescriptor<Entity>] { get }
 
@@ -25,7 +27,7 @@ protocol SwiftDataRepository<Entity>: Repository where Entity: PersistentModel {
 }
 
 extension SwiftDataRepository {
-    func fetch(predicate: Predicate<Entity>?) throws -> Entity? {
+    func fetch(predicate: Predicate<Entity>? = nil) throws -> Entity? {
         var descriptor = FetchDescriptor(
             predicate: predicate,
             sortBy: sortDescriptors
@@ -34,7 +36,7 @@ extension SwiftDataRepository {
         return try context.fetch(descriptor).first
     }
 
-    func fetchList(predicate: Predicate<Entity>?) throws -> [Entity] {
+    func fetchList(predicate: Predicate<Entity>? = nil) throws -> [Entity] {
         let descriptor = FetchDescriptor(
             predicate: predicate,
             sortBy: sortDescriptors

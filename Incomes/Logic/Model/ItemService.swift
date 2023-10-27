@@ -10,7 +10,7 @@ import Foundation
 import SwiftData
 
 struct ItemService {
-    private let repository: any Repository<Item>
+    private let repository: ItemRepository
     private let calculator: BalanceCalculator
     private let itemFactory: ItemFactory
     private let tagFactory: TagFactory
