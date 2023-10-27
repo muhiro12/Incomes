@@ -8,6 +8,7 @@
 
 import Foundation
 
+// periphery:ignore
 enum EnvironmentParameter {
     static let isDebug = {
         #if DEBUG
