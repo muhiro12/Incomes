@@ -10,22 +10,28 @@ import Foundation
 import SwiftData
 
 struct ItemService {
-    private let repository: ItemRepository
-    private let calculator: BalanceCalculator
-    private let itemFactory: ItemFactory
-    private let tagFactory: TagFactory
+    private let fetcher: ItemFetcher
+    private let adder: ItemAdder
+    private let updater: ItemUpdater
+    private let deleter: ItemDeleter
+    private let calculator: ItemBalanceCalculator
 
     init(context: ModelContext) {
-        self.repository = ItemRepository(context: context)
-        self.calculator = BalanceCalculator(context: context)
-        self.itemFactory = ItemFactory(context: context)
-        self.tagFactory = TagFactory(context: context)
+        self.fetcher = ItemFetcher(context: context)
+        self.adder = ItemAdder(context: context)
+        self.updater = ItemUpdater(context: context)
+        self.deleter = ItemDeleter(context: context)
+        self.calculator = ItemBalanceCalculator(context: context)
     }
 
     // MARK: - Fetch
 
     func items(predicate: Predicate<Item>? = nil) throws -> [Item] {
-        try repository.fetchList(predicate: predicate)
+        try fetcher.fetch(predicate: predicate)
+    }
+
+    func itemsCount(predicate: Predicate<Item>? = nil) throws -> Int {
+        try fetcher.fetchCount(predicate: predicate)
     }
 
     // MARK: - Create
@@ -36,51 +42,15 @@ struct ItemService {
                 outgo: Decimal,
                 group: String,
                 repeatCount: Int = .one) throws {
-        var items = [Item]()
-
-        let repeatID = UUID()
-
-        let item = try itemFactory(
-            date: date,
-            content: content,
-            income: income,
-            outgo: outgo,
-            group: group,
-            repeatID: repeatID
-        )
-        items.append(item)
-
-        for index in 0..<repeatCount {
-            guard index > .zero else {
-                continue
-            }
-            guard let repeatingDate = Calendar.utc.date(byAdding: .month,
-                                                        value: index,
-                                                        to: date) else {
-                assertionFailure()
-                return
-            }
-            let item = try itemFactory(
-                date: repeatingDate,
-                content: content,
-                income: income,
-                outgo: outgo,
-                group: group,
-                repeatID: repeatID
-            )
-            items.append(item)
-        }
-
-        try repository.addList(items)
-        try calculate(for: items)
+        try adder.add(date: date,
+                      content: content,
+                      income: income,
+                      outgo: outgo,
+                      group: group,
+                      repeatCount: repeatCount)
     }
 
     // MARK: - Update
-
-    func update(items: [Item]) throws {
-        try repository.updateList(items)
-        try calculate(for: items)
-    }
 
     func update(item: Item, // swiftlint:disable:this function_parameter_count
                 date: Date,
@@ -88,44 +58,12 @@ struct ItemService {
                 income: Decimal,
                 outgo: Decimal,
                 group: String) throws {
-        item.set(date: date,
-                 content: content,
-                 income: income,
-                 outgo: outgo,
-                 group: group,
-                 repeatID: UUID())
-        item.set(tags: try tags(date: date, content: content, group: group))
-        try update(items: [item])
-    }
-
-    func updateForRepeatingItems(item: Item, // swiftlint:disable:this function_parameter_count
-                                 date: Date,
-                                 content: String,
-                                 income: Decimal,
-                                 outgo: Decimal,
-                                 group: String,
-                                 predicate: Predicate<Item>) throws {
-        let components = Calendar.utc.dateComponents([.year, .month, .day],
-                                                     from: item.date,
-                                                     to: date)
-
-        let repeatID = UUID()
-        let items = try items(predicate: predicate)
-        try items.forEach {
-            guard let newDate = Calendar.utc.date(byAdding: components, to: $0.date) else {
-                assertionFailure()
-                return
-            }
-            $0.set(date: newDate,
-                   content: content,
-                   income: income,
-                   outgo: outgo,
-                   group: group,
-                   repeatID: repeatID)
-            item.set(tags: try tags(date: newDate, content: content, group: group))
-        }
-
-        try update(items: items)
+        try updater.update(item: item,
+                           date: date,
+                           content: content,
+                           income: income,
+                           outgo: outgo,
+                           group: group)
     }
 
     func updateForFutureItems(item: Item, // swiftlint:disable:this function_parameter_count
@@ -134,13 +72,12 @@ struct ItemService {
                               income: Decimal,
                               outgo: Decimal,
                               group: String) throws {
-        try updateForRepeatingItems(item: item,
-                                    date: date,
-                                    content: content,
-                                    income: income,
-                                    outgo: outgo,
-                                    group: group,
-                                    predicate: Item.predicate(repeatIDIs: item.repeatID, dateIsAfter: item.date))
+        try updater.updateForFutureItems(item: item,
+                                         date: date,
+                                         content: content,
+                                         income: income,
+                                         outgo: outgo,
+                                         group: group)
     }
 
     func updateForAllItems(item: Item, // swiftlint:disable:this function_parameter_count
@@ -149,46 +86,31 @@ struct ItemService {
                            income: Decimal,
                            outgo: Decimal,
                            group: String) throws {
-        try updateForRepeatingItems(item: item,
-                                    date: date,
-                                    content: content,
-                                    income: income,
-                                    outgo: outgo,
-                                    group: group,
-                                    predicate: Item.predicate(repeatIDIs: item.repeatID))
+        try updater.updateForAllItems(item: item,
+                                      date: date,
+                                      content: content,
+                                      income: income,
+                                      outgo: outgo,
+                                      group: group)
     }
 
     // MARK: - Delete
 
     func delete(items: [Item]) throws {
-        try repository.deleteList(items)
-        try calculate(for: items)
+        try deleter.delete(items: items)
     }
 
     func deleteAll() throws {
-        try delete(items: items())
+        try deleter.deleteAll()
     }
 
     // MARK: - Calculate balance
 
     func calculate(for items: [Item]) throws {
-        if let date = items.map({ $0.date }).min() {
-            try calculator.calculate(after: date)
-        } else {
-            try recalculate()
-        }
+        try calculator.calculate(for: items)
     }
 
     func recalculate() throws {
         try calculator.calculateAll()
-    }
-
-    // MARK: - Tag (TODO: Remove)
-
-    func tags(date: Date, content: String, group: String) throws -> [Tag] {
-        [try tagFactory(Calendar.utc.startOfYear(for: date).stringValueWithoutLocale(.yyyy), for: .year),
-         try tagFactory(Calendar.utc.startOfMonth(for: date).stringValueWithoutLocale(.yyyyMM), for: .yearMonth),
-         try tagFactory(content, for: .content),
-         try tagFactory(group, for: .category)]
     }
 }

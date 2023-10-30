@@ -18,6 +18,7 @@ protocol SwiftDataRepository<Entity> where Entity: PersistentModel {
 
     func fetch(predicate: Predicate<Entity>?) throws -> Entity?
     func fetchList(predicate: Predicate<Entity>?) throws -> [Entity]
+    func fetchCount(predicate: Predicate<Entity>?) throws -> Int
     func add(_ entity: Entity) throws
     func addList(_ list: [Entity]) throws
     func update(_ entity: Entity) throws
@@ -42,6 +43,14 @@ extension SwiftDataRepository {
             sortBy: sortDescriptors
         )
         return try context.fetch(descriptor)
+    }
+
+    func fetchCount(predicate: Predicate<Entity>? = nil) throws -> Int {
+        let descriptor = FetchDescriptor(
+            predicate: predicate,
+            sortBy: sortDescriptors
+        )
+        return try context.fetchCount(descriptor)
     }
 
     func add(_ entity: Entity) throws {

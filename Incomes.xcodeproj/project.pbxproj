@@ -29,6 +29,10 @@
 		AD98987D2AA5DC8700E7DFA6 /* MaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD98987C2AA5DC8700E7DFA6 /* MaskView.swift */; };
 		ADA900B527969687000DC872 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = ADA900B427969687000DC872 /* Settings.bundle */; };
 		ADA900C6279934EB000DC872 /* SmallNativeAdmobView.xib in Resources */ = {isa = PBXBuildFile; fileRef = ADA900C5279934EB000DC872 /* SmallNativeAdmobView.xib */; };
+		ADA9F6112AEF55A400C145BE /* ItemAdder.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADA9F6102AEF55A400C145BE /* ItemAdder.swift */; };
+		ADA9F6132AEF55AF00C145BE /* ItemUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADA9F6122AEF55AF00C145BE /* ItemUpdater.swift */; };
+		ADA9F6152AEF56B400C145BE /* ItemFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADA9F6142AEF56B400C145BE /* ItemFetcher.swift */; };
+		ADA9F6172AEF56BF00C145BE /* ItemDeleter.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADA9F6162AEF56BF00C145BE /* ItemDeleter.swift */; };
 		ADAD3CC7277AA922005A70E1 /* UserDefaultsExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADAD3CC6277AA922005A70E1 /* UserDefaultsExtension.swift */; };
 		ADAD3D05277AD654005A70E1 /* IncomesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADAD3D04277AD654005A70E1 /* IncomesApp.swift */; };
 		ADAD3D0F277B1790005A70E1 /* LockedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADAD3D0E277B1790005A70E1 /* LockedView.swift */; };
@@ -45,7 +49,7 @@
 		ADCB06DE278F954600B867F4 /* ItemServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCB06DD278F954600B867F4 /* ItemServiceTests.swift */; };
 		ADCB06E02790562000B867F4 /* DateExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCB06DF2790562000B867F4 /* DateExtensionTests.swift */; };
 		ADCB06E22790635900B867F4 /* CalendarExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCB06E12790635900B867F4 /* CalendarExtensionTests.swift */; };
-		ADCB06EB279149CD00B867F4 /* BalanceCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCB06EA279149CD00B867F4 /* BalanceCalculator.swift */; };
+		ADCB06EB279149CD00B867F4 /* ItemBalanceCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCB06EA279149CD00B867F4 /* ItemBalanceCalculator.swift */; };
 		ADCB06ED2791556900B867F4 /* BalanceCalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCB06EC2791556900B867F4 /* BalanceCalculatorTests.swift */; };
 		ADCB06EF27915E0200B867F4 /* IncomesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCB06EE27915E0200B867F4 /* IncomesTests.swift */; };
 		ADCB06F12791A48000B867F4 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = ADCB06F02791A48000B867F4 /* GoogleService-Info.plist */; };
@@ -135,6 +139,10 @@
 		AD98987C2AA5DC8700E7DFA6 /* MaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaskView.swift; sourceTree = "<group>"; };
 		ADA900B427969687000DC872 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		ADA900C5279934EB000DC872 /* SmallNativeAdmobView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SmallNativeAdmobView.xib; sourceTree = "<group>"; };
+		ADA9F6102AEF55A400C145BE /* ItemAdder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemAdder.swift; sourceTree = "<group>"; };
+		ADA9F6122AEF55AF00C145BE /* ItemUpdater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemUpdater.swift; sourceTree = "<group>"; };
+		ADA9F6142AEF56B400C145BE /* ItemFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemFetcher.swift; sourceTree = "<group>"; };
+		ADA9F6162AEF56BF00C145BE /* ItemDeleter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemDeleter.swift; sourceTree = "<group>"; };
 		ADAD3CC6277AA922005A70E1 /* UserDefaultsExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsExtension.swift; sourceTree = "<group>"; };
 		ADAD3D04277AD654005A70E1 /* IncomesApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomesApp.swift; sourceTree = "<group>"; };
 		ADAD3D0E277B1790005A70E1 /* LockedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockedView.swift; sourceTree = "<group>"; };
@@ -151,7 +159,7 @@
 		ADCB06DD278F954600B867F4 /* ItemServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemServiceTests.swift; sourceTree = "<group>"; };
 		ADCB06DF2790562000B867F4 /* DateExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtensionTests.swift; sourceTree = "<group>"; };
 		ADCB06E12790635900B867F4 /* CalendarExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarExtensionTests.swift; sourceTree = "<group>"; };
-		ADCB06EA279149CD00B867F4 /* BalanceCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceCalculator.swift; sourceTree = "<group>"; };
+		ADCB06EA279149CD00B867F4 /* ItemBalanceCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemBalanceCalculator.swift; sourceTree = "<group>"; };
 		ADCB06EC2791556900B867F4 /* BalanceCalculatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceCalculatorTests.swift; sourceTree = "<group>"; };
 		ADCB06EE27915E0200B867F4 /* IncomesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomesTests.swift; sourceTree = "<group>"; };
 		ADCB06F02791A48000B867F4 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -378,13 +386,17 @@
 			isa = PBXGroup;
 			children = (
 				ADE3A4C0277690330016C152 /* Authenticator.swift */,
-				ADCB06EA279149CD00B867F4 /* BalanceCalculator.swift */,
 				AD50E09B2AB4647A005CE509 /* DebugError.swift */,
 				ADEA399F250150E000CB61D9 /* EnvironmentParameter.swift */,
 				AD6B704327A7A71E00A38208 /* IncomesError.swift */,
+				ADA9F6102AEF55A400C145BE /* ItemAdder.swift */,
+				ADCB06EA279149CD00B867F4 /* ItemBalanceCalculator.swift */,
+				ADA9F6162AEF56BF00C145BE /* ItemDeleter.swift */,
 				ADCBBA292AB0E974007DAAE4 /* ItemFactory.swift */,
+				ADA9F6142AEF56B400C145BE /* ItemFetcher.swift */,
 				ADCF36EA24A1D18E0011D6F5 /* ItemRepository.swift */,
 				AD09B543278F934D008F03FA /* ItemService.swift */,
+				ADA9F6122AEF55AF00C145BE /* ItemUpdater.swift */,
 				AD6ED9472AC13BF1008EE239 /* SidebarItem.swift */,
 				ADEA399B2501457A00CB61D9 /* Store.swift */,
 				ADDF76CE2AAF079500CDEC7E /* SwiftDataController.swift */,
@@ -759,6 +771,7 @@
 				ADAD3D23277C1120005A70E1 /* Item.swift in Sources */,
 				ADAD3D25277C1D0F005A70E1 /* StringProtocolExtension.swift in Sources */,
 				AD09B544278F934D008F03FA /* ItemService.swift in Sources */,
+				ADA9F6152AEF56B400C145BE /* ItemFetcher.swift in Sources */,
 				ADCF393224A57ADC0011D6F5 /* PreviewData.swift in Sources */,
 				AD6ED94C2AC14F8B008EE239 /* ItemFormNavigationView.swift in Sources */,
 				ADB3627A2AA6D7B200964CA7 /* DebugSection.swift in Sources */,
@@ -778,10 +791,11 @@
 				ADAD3D17277BC80F005A70E1 /* YearSection.swift in Sources */,
 				ADE3A4C1277690340016C152 /* Authenticator.swift in Sources */,
 				ADDF76C92AAD36AF00CDEC7E /* CategorySection.swift in Sources */,
+				ADA9F6132AEF55AF00C145BE /* ItemUpdater.swift in Sources */,
 				ADAD3D19277BD499005A70E1 /* ItemExtension.swift in Sources */,
 				ADCF370F24A1D18E0011D6F5 /* CGFloatConstant.swift in Sources */,
 				ADAD3CC7277AA922005A70E1 /* UserDefaultsExtension.swift in Sources */,
-				ADCB06EB279149CD00B867F4 /* BalanceCalculator.swift in Sources */,
+				ADCB06EB279149CD00B867F4 /* ItemBalanceCalculator.swift in Sources */,
 				ADDF76C12AAC9AAE00CDEC7E /* Tag.swift in Sources */,
 				AD50E0A02AB49021005CE509 /* CollectionExtension.swift in Sources */,
 				ADCF370124A1D18E0011D6F5 /* ItemFormView.swift in Sources */,
@@ -804,11 +818,13 @@
 				ADD3CCDF2ABE739600F60350 /* RootNavigationView.swift in Sources */,
 				ADCF36E024A1D1820011D6F5 /* ContentView.swift in Sources */,
 				AD6B704427A7A71E00A38208 /* IncomesError.swift in Sources */,
+				ADA9F6172AEF56BF00C145BE /* ItemDeleter.swift in Sources */,
 				ADCBBA2A2AB0E974007DAAE4 /* ItemFactory.swift in Sources */,
 				ADCF370E24A1D18E0011D6F5 /* IntConstant.swift in Sources */,
 				ADD3CCE12ABFD89F00F60350 /* SidebarView.swift in Sources */,
 				AD75E9DE278F19A5008BE905 /* DebugView.swift in Sources */,
 				ADEA399C2501457A00CB61D9 /* Store.swift in Sources */,
+				ADA9F6112AEF55A400C145BE /* ItemAdder.swift in Sources */,
 				ADE89DF524B5E73300BB82E9 /* TitleListItem.swift in Sources */,
 				ADBE6B182AB932970064293B /* URLConstant.swift in Sources */,
 				ADDBC4582792CD4400F5E4A7 /* NativeAdvertisement.swift in Sources */,

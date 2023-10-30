@@ -24,4 +24,11 @@ struct TagFactory {
         try repository.deleteList(tags)
         return tag
     }
+
+    func tags(date: Date, content: String, group: String) throws -> [Tag] {
+        [try self(Calendar.utc.startOfYear(for: date).stringValueWithoutLocale(.yyyy), for: .year),
+         try self(Calendar.utc.startOfMonth(for: date).stringValueWithoutLocale(.yyyyMM), for: .yearMonth),
+         try self(content, for: .content),
+         try self(group, for: .category)]
+    }
 }
