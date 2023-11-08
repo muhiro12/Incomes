@@ -14,7 +14,7 @@ class BalanceCalculatorTests: XCTestCase {
     func testCalculate() {
         XCTContext.runActivity(named: "Result is as expected when inserting") { _ in
             let context = context
-            let calculator = BalanceCalculator(context: context)
+            let calculator = ItemBalanceCalculator(context: context)
 
             for i in 1...5 {
                 let item = Item()
@@ -48,7 +48,7 @@ class BalanceCalculatorTests: XCTestCase {
 
         XCTContext.runActivity(named: "Result is as expected when inserting first") { _ in
             let context = context
-            let calculator = BalanceCalculator(context: context)
+            let calculator = ItemBalanceCalculator(context: context)
 
             for i in 1...5 {
                 let item = Item()
@@ -82,7 +82,7 @@ class BalanceCalculatorTests: XCTestCase {
 
         XCTContext.runActivity(named: "Result is as expected when inserting last") { _ in
             let context = context
-            let calculator = BalanceCalculator(context: context)
+            let calculator = ItemBalanceCalculator(context: context)
 
             for i in 1...5 {
                 let item = Item()
@@ -116,7 +116,7 @@ class BalanceCalculatorTests: XCTestCase {
 
         XCTContext.runActivity(named: "Result is as expected when updating") { _ in
             let context = context
-            let calculator = BalanceCalculator(context: context)
+            let calculator = ItemBalanceCalculator(context: context)
 
             var items: [Item] = []
 
@@ -152,7 +152,7 @@ class BalanceCalculatorTests: XCTestCase {
 
         XCTContext.runActivity(named: "Result is as expected when updating first") { _ in
             let context = context
-            let calculator = BalanceCalculator(context: context)
+            let calculator = ItemBalanceCalculator(context: context)
 
             var items: [Item] = []
 
@@ -188,7 +188,7 @@ class BalanceCalculatorTests: XCTestCase {
 
         XCTContext.runActivity(named: "Result is as expected when updating last") { _ in
             let context = context
-            let calculator = BalanceCalculator(context: context)
+            let calculator = ItemBalanceCalculator(context: context)
 
             var items: [Item] = []
 
@@ -224,7 +224,7 @@ class BalanceCalculatorTests: XCTestCase {
 
         XCTContext.runActivity(named: "Result is as expected when changing order") { _ in
             let context = context
-            let calculator = BalanceCalculator(context: context)
+            let calculator = ItemBalanceCalculator(context: context)
 
             var items: [Item] = []
 
@@ -260,7 +260,7 @@ class BalanceCalculatorTests: XCTestCase {
 
         XCTContext.runActivity(named: "Result is as expected when deleting") { _ in
             let context = context
-            let calculator = BalanceCalculator(context: context)
+            let calculator = ItemBalanceCalculator(context: context)
 
             var items: [Item] = []
 
@@ -291,7 +291,7 @@ class BalanceCalculatorTests: XCTestCase {
 
         XCTContext.runActivity(named: "Result is as expected when deleting first") { _ in
             let context = context
-            let calculator = BalanceCalculator(context: context)
+            let calculator = ItemBalanceCalculator(context: context)
 
             var items: [Item] = []
 
@@ -322,7 +322,7 @@ class BalanceCalculatorTests: XCTestCase {
 
         XCTContext.runActivity(named: "Result is as expected when deleting last") { _ in
             let context = context
-            let calculator = BalanceCalculator(context: context)
+            let calculator = ItemBalanceCalculator(context: context)
 
             var items: [Item] = []
 

@@ -7,3 +7,4 @@ targets:
 index_exclude:
   - "**/Item.swift"
   - "**/Tag.swift"
+  - "**/Store.swift"

@@ -16,7 +16,7 @@ struct IncomesApp {
     @AppStorage(.key(.isSubscribeOn))
     private var isSubscribeOn = UserDefaults.isSubscribeOn
 
-    @StateObject private var store = Store()
+    private var store = Store()
 
     private let container = {
         let url = URL.applicationSupportDirectory.appendingPathComponent("Incomes.sqlite")
@@ -28,6 +28,7 @@ struct IncomesApp {
         }
     }()
 
+    @MainActor
     init() {
         FirebaseApp.configure()
 
@@ -46,7 +47,7 @@ extension IncomesApp: App {
         WindowGroup {
             ContentView()
         }
-        .environmentObject(store)
+        .environment(store)
         .modelContainer(container)
     }
 }

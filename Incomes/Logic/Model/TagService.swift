@@ -10,7 +10,7 @@ import Foundation
 import SwiftData
 
 struct TagService {
-    private let repository: any Repository<Tag>
+    private let repository: TagRepository
 
     init(context: ModelContext) {
         self.repository = TagRepository(context: context)

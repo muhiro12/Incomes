@@ -10,12 +10,15 @@ import Foundation
 import SwiftData
 
 // periphery:ignore
-protocol SwiftDataRepository<Entity>: Repository where Entity: PersistentModel {
+protocol SwiftDataRepository<Entity> where Entity: PersistentModel {
+    associatedtype Entity
+
     var context: ModelContext { get }
     var sortDescriptors: [SortDescriptor<Entity>] { get }
 
     func fetch(predicate: Predicate<Entity>?) throws -> Entity?
     func fetchList(predicate: Predicate<Entity>?) throws -> [Entity]
+    func fetchCount(predicate: Predicate<Entity>?) throws -> Int
     func add(_ entity: Entity) throws
     func addList(_ list: [Entity]) throws
     func update(_ entity: Entity) throws
@@ -25,7 +28,7 @@ protocol SwiftDataRepository<Entity>: Repository where Entity: PersistentModel {
 }
 
 extension SwiftDataRepository {
-    func fetch(predicate: Predicate<Entity>?) throws -> Entity? {
+    func fetch(predicate: Predicate<Entity>? = nil) throws -> Entity? {
         var descriptor = FetchDescriptor(
             predicate: predicate,
             sortBy: sortDescriptors
@@ -34,12 +37,20 @@ extension SwiftDataRepository {
         return try context.fetch(descriptor).first
     }
 
-    func fetchList(predicate: Predicate<Entity>?) throws -> [Entity] {
+    func fetchList(predicate: Predicate<Entity>? = nil) throws -> [Entity] {
         let descriptor = FetchDescriptor(
             predicate: predicate,
             sortBy: sortDescriptors
         )
         return try context.fetch(descriptor)
+    }
+
+    func fetchCount(predicate: Predicate<Entity>? = nil) throws -> Int {
+        let descriptor = FetchDescriptor(
+            predicate: predicate,
+            sortBy: sortDescriptors
+        )
+        return try context.fetchCount(descriptor)
     }
 
     func add(_ entity: Entity) throws {

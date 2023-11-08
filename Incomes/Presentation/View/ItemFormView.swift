@@ -134,8 +134,7 @@ extension ItemFormView: View {
                     } else {
                         save()
                     }
-                    // TODO: Do not use context
-                    if let count = try? context.fetchCount(.init(sortBy: Item.sortDescriptors())),
+                    if let count = try? ItemService(context: context).itemsCount(),
                        count.isMultiple(of: 10) { // swiftlint:disable:this no_magic_numbers
                         requestReview()
                     }

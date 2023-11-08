@@ -10,7 +10,13 @@ import Foundation
 import SwiftData
 
 struct ItemFactory {
-    let context: ModelContext
+    private let context: ModelContext
+    private let tagFactory: TagFactory
+
+    init(context: ModelContext) {
+        self.context = context
+        self.tagFactory = .init(context: context)
+    }
 
     func callAsFunction(date: Date, // swiftlint:disable:this function_parameter_count
                         content: String,
@@ -27,14 +33,7 @@ struct ItemFactory {
                  outgo: outgo,
                  group: group,
                  repeatID: repeatID)
-
-        let tagFactory = TagFactory(context: context)
-        item.set(tags: [
-            try tagFactory(Calendar.utc.startOfYear(for: date).stringValueWithoutLocale(.yyyy), for: .year),
-            try tagFactory(Calendar.utc.startOfMonth(for: date).stringValueWithoutLocale(.yyyyMM), for: .yearMonth),
-            try tagFactory(content, for: .content),
-            try tagFactory(group, for: .category)
-        ])
+        item.set(tags: try tagFactory.tags(date: date, content: content, group: group))
 
         return item
     }
