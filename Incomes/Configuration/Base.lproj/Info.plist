@@ -17,9 +17,9 @@
 	<key>CFBundlePackageType</key>
 	<string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.4.2</string>
+	<string>2.5.0</string>
 	<key>CFBundleVersion</key>
-	<string>145</string>
+	<string>146</string>
 	<key>GADApplicationIdentifier</key>
 	<string>ca-app-pub-2619807738023307~1927328211</string>
 	<key>GADNativeAdValidatorEnabled</key>
