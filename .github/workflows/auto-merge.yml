@@ -4,7 +4,7 @@ on:
 jobs:
   success_pull_request:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.state == 'success'
+    if: ${{ github.event.pull_request.mergeable }}
     steps:
       - name: Merge PR
         run: gh pr merge --merge ${{ github.event.pull_request.number }}
