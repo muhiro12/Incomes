@@ -72,5 +72,5 @@ extension CategorySection: View {
         }[0]
     )
     .previewList()
-    .previewQuery()
+    .previewContext()
 }

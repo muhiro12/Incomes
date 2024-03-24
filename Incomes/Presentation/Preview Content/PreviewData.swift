@@ -127,7 +127,7 @@ extension View {
         }
     }
 
-    func previewQuery() -> some View {
+    func previewContext() -> some View {
         modelContext(PreviewData.context)
     }
 

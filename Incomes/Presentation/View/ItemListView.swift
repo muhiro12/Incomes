@@ -49,5 +49,5 @@ extension ItemListView: View {
         Item.predicate(dateIsSameMonthAs: .now)
     }
     .previewNavigation()
-    .previewQuery()
+    .previewContext()
 }

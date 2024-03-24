@@ -77,5 +77,5 @@ extension YearSection: View {
         }[0]
     )
     .previewList()
-    .previewQuery()
+    .previewContext()
 }

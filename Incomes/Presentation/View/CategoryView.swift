@@ -33,5 +33,5 @@ extension CategoryView: View {
 #Preview {
     CategoryView(selection: .constant(nil))
         .previewNavigation()
-        .previewQuery()
+        .previewContext()
 }

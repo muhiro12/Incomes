@@ -78,4 +78,5 @@ extension SettingsView: View {
     SettingsView()
         .previewNavigation()
         .previewStore()
+        .previewContext()
 }
