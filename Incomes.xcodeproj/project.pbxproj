@@ -170,10 +170,8 @@
 		ADCF36B224A1D0F70011D6F5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		ADCF36B524A1D0F70011D6F5 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		ADCF36BF24A1D0F70011D6F5 /* IncomesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = IncomesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		ADCF36C524A1D0F70011D6F5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		ADCF36CA24A1D0F70011D6F5 /* IncomesUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = IncomesUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		ADCF36CE24A1D0F70011D6F5 /* IncomesUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomesUITests.swift; sourceTree = "<group>"; };
-		ADCF36D024A1D0F70011D6F5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		ADCF36DD24A1D1820011D6F5 /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		ADCF36E324A1D18E0011D6F5 /* NarrowListItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NarrowListItem.swift; sourceTree = "<group>"; };
 		ADCF36E624A1D18E0011D6F5 /* ItemFormView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemFormView.swift; sourceTree = "<group>"; };
@@ -354,7 +352,6 @@
 		ADCF36C224A1D0F70011D6F5 /* IncomesTests */ = {
 			isa = PBXGroup;
 			children = (
-				ADCF36C524A1D0F70011D6F5 /* Info.plist */,
 				ADE058812706EE8600DF2499 /* Logic */,
 			);
 			path = IncomesTests;
@@ -364,7 +361,6 @@
 			isa = PBXGroup;
 			children = (
 				ADCF36CE24A1D0F70011D6F5 /* IncomesUITests.swift */,
-				ADCF36D024A1D0F70011D6F5 /* Info.plist */,
 			);
 			path = IncomesUITests;
 			sourceTree = "<group>";
@@ -1024,7 +1020,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 0;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Incomes/Presentation/Preview Content/Preview Assets.xcassets\"";
 				DEVELOPMENT_TEAM = 66PKF55HK5;
 				ENABLE_PREVIEWS = YES;
@@ -1058,7 +1054,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 0;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Incomes/Presentation/Preview Content/Preview Assets.xcassets\"";
 				DEVELOPMENT_TEAM = 66PKF55HK5;
 				ENABLE_PREVIEWS = YES;
