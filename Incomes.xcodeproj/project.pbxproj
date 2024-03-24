@@ -674,6 +674,7 @@
 			packageReferences = (
 				ADEE1B05261E0956002EB18F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				AD387E492A8A1CE600E94623 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */,
+				AD6528932BB0829C00D46D54 /* XCRemoteSwiftPackageReference "SwiftLint" */,
 			);
 			productRefGroup = ADCF36A724A1D0F40011D6F5 /* Products */;
 			projectDirPath = "";
@@ -755,7 +756,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if test -d /opt/homebrew/bin; then\n    PATH=/opt/homebrew/bin/:$PATH\nfi\n\nif which swiftlint >/dev/null; then    \n    swiftlint\nelse\n    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+			shellScript = "PACKAGE_PATH=${BUILD_DIR%Build/*}SourcePackages/checkouts/SwiftLint\nSWIFTLINT=$PACKAGE_PATH/.build/release/swiftlint\n\nif [ ! -f $SWIFTLINT ]; then\n    xcrun --sdk macosx swift build -c release --package-path $PACKAGE_PATH --product swiftlint\nfi\n\n$SWIFTLINT --fix --format\n$SWIFTLINT\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -1212,6 +1213,14 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 11.0.0;
+			};
+		};
+		AD6528932BB0829C00D46D54 /* XCRemoteSwiftPackageReference "SwiftLint" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/realm/SwiftLint";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.54.0;
 			};
 		};
 		ADEE1B05261E0956002EB18F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
