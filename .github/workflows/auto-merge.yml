@@ -1,13 +1,12 @@
 name: Auto merge
 on:
-  status
+  pull_request
 jobs:
   if_success:
     runs-on: ubuntu-latest
-    if: github.event.state == 'success'
+    if: github.event.pull_request.state == 'success'
     steps:
       - name: Merge PR
-        if: ${{ github.event.pull_request.number }}
         run: gh pr merge --merge ${{ github.event.pull_request.number }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
