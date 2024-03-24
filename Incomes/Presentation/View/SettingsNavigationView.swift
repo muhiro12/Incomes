@@ -19,4 +19,5 @@ struct SettingsNavigationView: View {
 #Preview {
     SettingsNavigationView()
         .previewStore()
+        .previewContext()
 }

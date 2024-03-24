@@ -42,5 +42,5 @@ extension ContentView: View {
 
 #Preview {
     ContentView()
-        .previewQuery()
+        .previewContext()
 }

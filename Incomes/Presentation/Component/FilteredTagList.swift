@@ -58,5 +58,5 @@ private extension FilteredTagList {
 
 #Preview {
     FilteredTagList(category: .constant(.empty))
-        .previewQuery()
+        .previewContext()
 }

@@ -23,4 +23,5 @@ extension ItemFormNavigationView: View {
 
 #Preview {
     ItemFormNavigationView(mode: .create, item: nil)
+        .previewContext()
 }

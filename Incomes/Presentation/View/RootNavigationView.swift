@@ -94,5 +94,5 @@ private extension RootNavigationView {
 
 #Preview {
     RootNavigationView()
-        .previewQuery()
+        .previewContext()
 }

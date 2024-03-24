@@ -112,5 +112,5 @@ private extension ItemListYearSection {
         predicate: Item.predicate(dateIsSameMonthAs: .now)
     )
     .previewList()
-    .previewQuery()
+    .previewContext()
 }

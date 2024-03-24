@@ -33,5 +33,5 @@ extension HomeView: View {
 #Preview {
     HomeView(selection: .constant(nil))
         .previewNavigation()
-        .previewQuery()
+        .previewContext()
 }

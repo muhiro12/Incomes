@@ -58,4 +58,5 @@ extension DebugView: View {
 
 #Preview {
     DebugView()
+        .previewContext()
 }
