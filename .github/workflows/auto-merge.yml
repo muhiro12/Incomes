@@ -2,7 +2,7 @@ name: Auto merge
 on:
   pull_request
 jobs:
-  if_success:
+  success_pull_request:
     runs-on: ubuntu-latest
     if: github.event.pull_request.state == 'success'
     steps:
