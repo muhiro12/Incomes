@@ -581,8 +581,8 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = ADCF36D324A1D0F70011D6F5 /* Build configuration list for PBXNativeTarget "Incomes" */;
 			buildPhases = (
-				ADA626672796892A0002A086 /* LicensePlist */,
 				ADCF373624A1D5160011D6F5 /* SwiftLint */,
+				ADA626672796892A0002A086 /* LicensePlist */,
 				ADCF36A224A1D0F40011D6F5 /* Sources */,
 				ADCF36A324A1D0F40011D6F5 /* Frameworks */,
 				ADCF36A424A1D0F40011D6F5 /* Resources */,
@@ -674,6 +674,8 @@
 			packageReferences = (
 				ADEE1B05261E0956002EB18F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				AD387E492A8A1CE600E94623 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */,
+				AD6528932BB0829C00D46D54 /* XCRemoteSwiftPackageReference "SwiftLint" */,
+				AD6528942BB0899700D46D54 /* XCRemoteSwiftPackageReference "LicensePlist" */,
 			);
 			productRefGroup = ADCF36A724A1D0F40011D6F5 /* Products */;
 			projectDirPath = "";
@@ -736,7 +738,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if test -d /opt/homebrew/bin; then\n    PATH=/opt/homebrew/bin/:$PATH\nfi\n\nif which license-plist >/dev/null && [ $CONFIGURATION = \"Debug\" ]; then\n    license-plist --output-path $PRODUCT_NAME/Configuration/Settings.bundle\nelse\n    echo \"warning: LicensePlist not installed\"\nfi\n";
+			shellScript = "PACKAGE_PATH=${BUILD_DIR%Build/*}SourcePackages/checkouts/LicensePlist\nLICENSE_PLIST=$PACKAGE_PATH/.build/release/license-plist\n\nif [ ! -f $LICENSE_PLIST ]; then\n    xcrun --sdk macosx swift build -c release --package-path $PACKAGE_PATH --product license-plist\nfi\n\nif [ $CONFIGURATION = \"Debug\" ]; then\n    $LICENSE_PLIST --output-path $PRODUCT_NAME/Configuration/Settings.bundle\nfi\n";
 		};
 		ADCF373624A1D5160011D6F5 /* SwiftLint */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -755,7 +757,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if test -d /opt/homebrew/bin; then\n    PATH=/opt/homebrew/bin/:$PATH\nfi\n\nif which swiftlint >/dev/null; then    \n    swiftlint\nelse\n    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+			shellScript = "PACKAGE_PATH=${BUILD_DIR%Build/*}SourcePackages/checkouts/SwiftLint\nSWIFTLINT=$PACKAGE_PATH/.build/release/swiftlint\n\nif [ ! -f $SWIFTLINT ]; then\n    xcrun --sdk macosx swift build -c release --package-path $PACKAGE_PATH --product swiftlint\nfi\n\n$SWIFTLINT --fix --format\n$SWIFTLINT\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -1212,6 +1214,22 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 11.0.0;
+			};
+		};
+		AD6528932BB0829C00D46D54 /* XCRemoteSwiftPackageReference "SwiftLint" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/realm/SwiftLint";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.54.0;
+			};
+		};
+		AD6528942BB0899700D46D54 /* XCRemoteSwiftPackageReference "LicensePlist" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/mono0926/LicensePlist";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.25.1;
 			};
 		};
 		ADEE1B05261E0956002EB18F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
