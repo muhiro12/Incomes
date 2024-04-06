@@ -21,10 +21,6 @@ final class Item {
     @Relationship(inverse: \Tag.items)
     private(set) var tags: [Tag]? // swiftlint:disable:this discouraged_optional_collection
 
-    // TODO: Remove(2024/04~) // swiftlint:disable:this todo
-    private(set) var group = String.empty
-    private(set) var startOfYear = Date(timeIntervalSinceReferenceDate: .zero)
-
     init() {}
 }
 
@@ -35,6 +31,10 @@ extension Item {
 
     var isProfitable: Bool {
         profit.isPlus
+    }
+
+    var group: String {
+        tags?.first { $0.type == .category }?.displayName ?? .empty
     }
 
     func set(date: Date, // swiftlint:disable:this function_parameter_count
@@ -48,10 +48,6 @@ extension Item {
         self.income = income
         self.outgo = outgo
         self.repeatID = repeatID
-
-        // TODO: Remove(2024/04~) // swiftlint:disable:this todo
-        self.group = group
-        self.startOfYear = Calendar.utc.startOfYear(for: date)
     }
 
     func set(balance: Decimal) {
