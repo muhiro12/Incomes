@@ -1,5 +1,5 @@
 //
-//  ItemBalanceCalculator.swift
+//  BalanceCalculator.swift
 //  Incomes
 //
 //  Created by Hiromu Nakano on 2022/01/14.
@@ -9,7 +9,7 @@
 import Foundation
 import SwiftData
 
-struct ItemBalanceCalculator {
+struct BalanceCalculator {
     private let context: ModelContext
 
     init(context: ModelContext) {

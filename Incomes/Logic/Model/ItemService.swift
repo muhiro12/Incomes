@@ -11,11 +11,11 @@ import SwiftData
 
 struct ItemService {
     private let context: ModelContext
-    private let calculator: ItemBalanceCalculator
+    private let calculator: BalanceCalculator
 
     init(context: ModelContext) {
         self.context = context
-        self.calculator = ItemBalanceCalculator(context: context)
+        self.calculator = BalanceCalculator(context: context)
     }
 
     // MARK: - Fetch
