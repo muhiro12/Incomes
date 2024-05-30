@@ -9,7 +9,7 @@
 import GoogleMobileAds
 import SwiftUI
 
-// swiftlint:disable file_types_order
+// swiftlint:disable file_types_order one_declaration_per_file
 struct NativeAdmob {
     let size: NativeAdvertisement.Size
 }
@@ -89,4 +89,4 @@ extension NativeAdmobView: GADNativeAdLoaderDelegate {
         view?.isHidden = true
     }
 }
-// swiftlint:enable file_types_order
+// swiftlint:enable file_types_order one_declaration_per_file

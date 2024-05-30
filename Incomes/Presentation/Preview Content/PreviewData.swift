@@ -9,7 +9,7 @@
 import SwiftData
 import SwiftUI
 
-// swiftlint:disable force_unwrapping force_try no_magic_numbers function_body_length
+// swiftlint:disable force_unwrapping force_try no_magic_numbers
 enum PreviewData {
     static var store = Store()
 
@@ -23,7 +23,7 @@ enum PreviewData {
     }
 
     static var items: [Item] {
-        try! ItemService(context: context).items()
+        try! context.fetch(.init(sortBy: Item.sortDescriptors()))
     }
 
     static var tags: [Tag] {
@@ -43,60 +43,61 @@ enum PreviewData {
         let dateE = Calendar.utc.date(byAdding: .day, value: 24, to: now)!
 
         for index in 0..<24 {
-            items.append(try service.factory(date: date(monthLater: index, from: dateD),
-                                             content: "Payday",
-                                             income: 3_500,
-                                             outgo: 0,
-                                             group: "Salary",
-                                             repeatID: UUID()))
-            items.append(try service.factory(date: date(monthLater: index, from: dateD),
-                                             content: "Advertising revenue",
-                                             income: 485,
-                                             outgo: 0,
-                                             group: "Salary",
-                                             repeatID: UUID()))
-            items.append(try service.factory(date: date(monthLater: index, from: dateB),
-                                             content: "Apple card",
-                                             income: 0,
-                                             outgo: 1_000,
-                                             group: "Credit",
-                                             repeatID: UUID()))
-            items.append(try service.factory(date: date(monthLater: index, from: dateA),
-                                             content: "Orange card",
-                                             income: 0,
-                                             outgo: 800,
-                                             group: "Credit",
-                                             repeatID: UUID()))
-            items.append(try service.factory(date: date(monthLater: index, from: dateD),
-                                             content: "Lemon card",
-                                             income: 0,
-                                             outgo: 500,
-                                             group: "Credit",
-                                             repeatID: UUID()))
-            items.append(try service.factory(date: date(monthLater: index, from: dateE),
-                                             content: "House",
-                                             income: 0,
-                                             outgo: 30,
-                                             group: "Loan",
-                                             repeatID: UUID()))
-            items.append(try service.factory(date: date(monthLater: index, from: dateC),
-                                             content: "Car",
-                                             income: 0,
-                                             outgo: 25,
-                                             group: "Loan",
-                                             repeatID: UUID()))
-            items.append(try service.factory(date: date(monthLater: index, from: dateA),
-                                             content: "Insurance",
-                                             income: 0,
-                                             outgo: 28,
-                                             group: "Tax",
-                                             repeatID: UUID()))
-            items.append(try service.factory(date: date(monthLater: index, from: dateE),
-                                             content: "Pension",
-                                             income: 0,
-                                             outgo: 36,
-                                             group: "Tax",
-                                             repeatID: UUID()))
+            // TODO: Uncomment
+            //            items.append(try service.factory(date: date(monthLater: index, from: dateD),
+            //                                             content: "Payday",
+            //                                             income: 3_500,
+            //                                             outgo: 0,
+            //                                             group: "Salary",
+            //                                             repeatID: UUID()))
+            //            items.append(try service.factory(date: date(monthLater: index, from: dateD),
+            //                                             content: "Advertising revenue",
+            //                                             income: 485,
+            //                                             outgo: 0,
+            //                                             group: "Salary",
+            //                                             repeatID: UUID()))
+            //            items.append(try service.factory(date: date(monthLater: index, from: dateB),
+            //                                             content: "Apple card",
+            //                                             income: 0,
+            //                                             outgo: 1_000,
+            //                                             group: "Credit",
+            //                                             repeatID: UUID()))
+            //            items.append(try service.factory(date: date(monthLater: index, from: dateA),
+            //                                             content: "Orange card",
+            //                                             income: 0,
+            //                                             outgo: 800,
+            //                                             group: "Credit",
+            //                                             repeatID: UUID()))
+            //            items.append(try service.factory(date: date(monthLater: index, from: dateD),
+            //                                             content: "Lemon card",
+            //                                             income: 0,
+            //                                             outgo: 500,
+            //                                             group: "Credit",
+            //                                             repeatID: UUID()))
+            //            items.append(try service.factory(date: date(monthLater: index, from: dateE),
+            //                                             content: "House",
+            //                                             income: 0,
+            //                                             outgo: 30,
+            //                                             group: "Loan",
+            //                                             repeatID: UUID()))
+            //            items.append(try service.factory(date: date(monthLater: index, from: dateC),
+            //                                             content: "Car",
+            //                                             income: 0,
+            //                                             outgo: 25,
+            //                                             group: "Loan",
+            //                                             repeatID: UUID()))
+            //            items.append(try service.factory(date: date(monthLater: index, from: dateA),
+            //                                             content: "Insurance",
+            //                                             income: 0,
+            //                                             outgo: 28,
+            //                                             group: "Tax",
+            //                                             repeatID: UUID()))
+            //            items.append(try service.factory(date: date(monthLater: index, from: dateE),
+            //                                             content: "Pension",
+            //                                             income: 0,
+            //                                             outgo: 36,
+            //                                             group: "Tax",
+            //                                             repeatID: UUID()))
         }
 
         try service.calculate(for: items)
@@ -108,7 +109,7 @@ enum PreviewData {
         Calendar.utc.date(byAdding: .month, value: monthLater, to: date)!
     }
 }
-// swiftlint:enable force_unwrapping force_try no_magic_numbers function_body_length
+// swiftlint:enable force_unwrapping force_try no_magic_numbers
 
 // MARK: - Preview modifier
 

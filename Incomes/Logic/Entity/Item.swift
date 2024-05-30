@@ -25,7 +25,82 @@ final class Item {
     private(set) var group = String.empty
     private(set) var startOfYear = Date(timeIntervalSinceReferenceDate: .zero)
 
-    init() {}
+    private init() {}
+
+    static func create(context: ModelContext, // swiftlint:disable:this function_parameter_count
+                       date: Date,
+                       content: String,
+                       income: Decimal,
+                       outgo: Decimal,
+                       group: String,
+                       repeatID: UUID) throws -> Item {
+        let item = Item()
+        context.insert(item)
+
+        item.date = Calendar.utc.startOfDay(for: date)
+        item.content = content
+        item.income = income
+        item.outgo = outgo
+        item.repeatID = repeatID
+
+        // TODO: Remove(2024/04~) // swiftlint:disable:this todo
+        item.group = group
+        item.startOfYear = Calendar.utc.startOfYear(for: date)
+
+        item.tags = [
+            try .create(context: context,
+                        name: Calendar.utc.startOfYear(for: date).stringValueWithoutLocale(.yyyy),
+                        type: .year),
+            try .create(context: context,
+                        name: Calendar.utc.startOfMonth(for: date).stringValueWithoutLocale(.yyyyMM),
+                        type: .yearMonth),
+            try .create(context: context,
+                        name: content,
+                        type: .content),
+            try .create(context: context,
+                        name: group,
+                        type: .category)
+        ]
+
+        return item
+    }
+
+    func update(date: Date,
+                content: String,
+                income: Decimal,
+                outgo: Decimal,
+                group: String) throws {
+        self.date = Calendar.utc.startOfDay(for: date)
+        self.content = content
+        self.income = income
+        self.outgo = outgo
+        self.repeatID = UUID()
+
+        // TODO: Remove(2024/04~) // swiftlint:disable:this todo
+        self.group = group
+        self.startOfYear = Calendar.utc.startOfYear(for: date)
+
+        guard let context = modelContext else {
+            return
+        }
+
+        self.tags = [
+            try .create(context: context,
+                        name: Calendar.utc.startOfYear(for: date).stringValueWithoutLocale(.yyyy),
+                        type: .year),
+            try .create(context: context,
+                        name: Calendar.utc.startOfMonth(for: date).stringValueWithoutLocale(.yyyyMM),
+                        type: .yearMonth),
+            try .create(context: context,
+                        name: content,
+                        type: .content),
+            try .create(context: context,
+                        name: group,
+                        type: .category)
+        ]
+
+        try context.save()
+    }
 }
 
 extension Item {
@@ -37,6 +112,7 @@ extension Item {
         profit.isPlus
     }
 
+    @available(*, deprecated)
     func set(date: Date, // swiftlint:disable:this function_parameter_count
              content: String,
              income: Decimal,
@@ -49,15 +125,16 @@ extension Item {
         self.outgo = outgo
         self.repeatID = repeatID
 
-        // TODO: Remove(2024/04~) // swiftlint:disable:this todo
         self.group = group
         self.startOfYear = Calendar.utc.startOfYear(for: date)
     }
 
+    @available(*, deprecated)
     func set(balance: Decimal) {
         self.balance = balance
     }
 
+    @available(*, deprecated)
     func set(tags: [Tag]) {
         self.tags = tags
     }

@@ -25,6 +25,7 @@
 		AD6ED94C2AC14F8B008EE239 /* ItemFormNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6ED94B2AC14F8B008EE239 /* ItemFormNavigationView.swift */; };
 		AD75E9DE278F19A5008BE905 /* DebugView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD75E9DD278F19A5008BE905 /* DebugView.swift */; };
 		AD7FF90D2AC2101500E8334B /* FilteredTagList.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD7FF90C2AC2101500E8334B /* FilteredTagList.swift */; };
+		AD8D2D9B2C087F1900B11FD5 /* PersistentModelExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD8D2D9A2C087F1900B11FD5 /* PersistentModelExtension.swift */; };
 		AD98194226E43C3600C4A57C /* StoreKitTestCertificate.cer in Resources */ = {isa = PBXBuildFile; fileRef = AD98194126E43C3600C4A57C /* StoreKitTestCertificate.cer */; };
 		AD98987D2AA5DC8700E7DFA6 /* MaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD98987C2AA5DC8700E7DFA6 /* MaskView.swift */; };
 		ADA900B527969687000DC872 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = ADA900B427969687000DC872 /* Settings.bundle */; };
@@ -127,6 +128,7 @@
 		AD75E9DD278F19A5008BE905 /* DebugView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugView.swift; sourceTree = "<group>"; };
 		AD7C7E2B254A33E500D1F0A0 /* Configuration.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Configuration.storekit; sourceTree = "<group>"; };
 		AD7FF90C2AC2101500E8334B /* FilteredTagList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilteredTagList.swift; sourceTree = "<group>"; };
+		AD8D2D9A2C087F1900B11FD5 /* PersistentModelExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistentModelExtension.swift; sourceTree = "<group>"; };
 		AD98194126E43C3600C4A57C /* StoreKitTestCertificate.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = StoreKitTestCertificate.cer; sourceTree = "<group>"; };
 		AD98987C2AA5DC8700E7DFA6 /* MaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaskView.swift; sourceTree = "<group>"; };
 		ADA900B427969687000DC872 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
@@ -271,6 +273,7 @@
 				ADE89DF624B5F78200BB82E9 /* ImageConstant.swift */,
 				ADCF36F724A1D18E0011D6F5 /* IntConstant.swift */,
 				ADAD3D18277BD498005A70E1 /* ItemExtension.swift */,
+				AD8D2D9A2C087F1900B11FD5 /* PersistentModelExtension.swift */,
 				ADCF36FC24A1D18E0011D6F5 /* StringConstant.swift */,
 				ADCF36FB24A1D18E0011D6F5 /* StringExtension.swift */,
 				ADAD3D24277C1D0F005A70E1 /* StringProtocolExtension.swift */,
@@ -799,6 +802,7 @@
 				ADEA399C2501457A00CB61D9 /* Store.swift in Sources */,
 				ADE89DF524B5E73300BB82E9 /* TitleListItem.swift in Sources */,
 				ADBE6B182AB932970064293B /* URLConstant.swift in Sources */,
+				AD8D2D9B2C087F1900B11FD5 /* PersistentModelExtension.swift in Sources */,
 				ADDBC4582792CD4400F5E4A7 /* NativeAdvertisement.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

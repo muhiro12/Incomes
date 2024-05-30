@@ -30,8 +30,9 @@ struct TagService {
     }
 
     func delete(tags: [Tag]) throws {
-        tags.forEach(context.delete)
-        try context.save()
+        try tags.forEach {
+            try $0.delete()
+        }
     }
 
     func deleteAll() throws {

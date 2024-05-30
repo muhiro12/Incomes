@@ -20,35 +20,11 @@ struct ItemService {
 
     // MARK: - Fetch
 
-    func items(predicate: Predicate<Item>? = nil) throws -> [Item] {
-        try context.fetch(.init(predicate: predicate, sortBy: Item.sortDescriptors()))
-    }
-
     func itemsCount(predicate: Predicate<Item>? = nil) throws -> Int {
         try context.fetchCount(.init(predicate: predicate))
     }
 
     // MARK: - Create
-
-    func factory(date: Date, // swiftlint:disable:this function_parameter_count
-                 content: String,
-                 income: Decimal,
-                 outgo: Decimal,
-                 group: String,
-                 repeatID: UUID) throws -> Item {
-        let item = Item()
-        context.insert(item)
-
-        item.set(date: date,
-                 content: content,
-                 income: income,
-                 outgo: outgo,
-                 group: group,
-                 repeatID: repeatID)
-        item.set(tags: try tags(date: date, content: content, group: group))
-
-        return item
-    }
 
     func create(date: Date,
                 content: String,
@@ -60,7 +36,8 @@ struct ItemService {
 
         let repeatID = UUID()
 
-        let item = try factory(
+        let item = try Item.create(
+            context: context,
             date: date,
             content: content,
             income: income,
@@ -80,7 +57,8 @@ struct ItemService {
                 assertionFailure()
                 return
             }
-            let item = try factory(
+            let item = try Item.create(
+                context: context,
                 date: repeatingDate,
                 content: content,
                 income: income,
@@ -99,25 +77,18 @@ struct ItemService {
 
     // MARK: - Update
 
-    private func update(items: [Item]) throws {
-        try context.save()
-        try calculator.calculate(for: items)
-    }
-
     func update(item: Item, // swiftlint:disable:this function_parameter_count
                 date: Date,
                 content: String,
                 income: Decimal,
                 outgo: Decimal,
                 group: String) throws {
-        item.set(date: date,
-                 content: content,
-                 income: income,
-                 outgo: outgo,
-                 group: group,
-                 repeatID: UUID())
-        item.set(tags: try tags(date: date, content: content, group: group))
-        try update(items: [item])
+        try item.update(date: date,
+                        content: content,
+                        income: income,
+                        outgo: outgo,
+                        group: group)
+        try calculator.calculate(for: [item])
     }
 
     private func updateForRepeatingItems(item: Item, // swiftlint:disable:this function_parameter_count
@@ -138,16 +109,34 @@ struct ItemService {
                 assertionFailure()
                 return
             }
-            $0.set(date: newDate,
-                   content: content,
-                   income: income,
-                   outgo: outgo,
-                   group: group,
-                   repeatID: repeatID)
-            item.set(tags: try tags(date: newDate, content: content, group: group))
+            $0.set(
+                date: newDate,
+                content: content,
+                income: income,
+                outgo: outgo,
+                group: group,
+                repeatID: repeatID
+            )
+            item.set(
+                tags: [
+                    try .create(context: context,
+                                name: Calendar.utc.startOfYear(for: newDate).stringValueWithoutLocale(.yyyy),
+                                type: .year),
+                    try .create(context: context,
+                                name: Calendar.utc.startOfMonth(for: newDate).stringValueWithoutLocale(.yyyyMM),
+                                type: .yearMonth),
+                    try .create(context: context,
+                                name: content,
+                                type: .content),
+                    try .create(context: context,
+                                name: group,
+                                type: .category)
+                ]
+            )
         }
 
-        try update(items: items)
+        try context.save()
+        try calculator.calculate(for: items)
     }
 
     func updateForFutureItems(item: Item, // swiftlint:disable:this function_parameter_count
@@ -183,8 +172,9 @@ struct ItemService {
     // MARK: - Delete
 
     func delete(items: [Item]) throws {
-        items.forEach(context.delete)
-        try context.save()
+        try items.forEach {
+            try $0.delete()
+        }
         try calculator.calculate(for: items)
     }
 
@@ -200,29 +190,5 @@ struct ItemService {
 
     func recalculate() throws {
         try calculator.calculateAll()
-    }
-
-    // MARK: - Tag
-
-    private func tagFactory(_ name: String, for type: Tag.TagType) throws -> Tag {
-        var tags = try context.fetch(
-            .init(predicate: Tag.predicate(name: name, type: type), sortBy: Tag.sortDescriptors())
-        )
-        guard let tag = tags.popLast() else {
-            let tag = Tag()
-            context.insert(tag)
-            tag.set(name: name, typeID: type.rawValue)
-            return tag
-        }
-        tags.forEach(context.delete)
-        try context.save()
-        return tag
-    }
-
-    private func tags(date: Date, content: String, group: String) throws -> [Tag] {
-        [try tagFactory(Calendar.utc.startOfYear(for: date).stringValueWithoutLocale(.yyyy), for: .year),
-         try tagFactory(Calendar.utc.startOfMonth(for: date).stringValueWithoutLocale(.yyyyMM), for: .yearMonth),
-         try tagFactory(content, for: .content),
-         try tagFactory(group, for: .category)]
     }
 }
