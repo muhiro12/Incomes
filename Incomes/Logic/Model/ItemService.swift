@@ -89,7 +89,7 @@ struct ItemService {
                 income: Decimal,
                 outgo: Decimal,
                 group: String) throws {
-        try item.update(date: date,
+        try item.modify(date: date,
                         content: content,
                         income: income,
                         outgo: outgo,
@@ -115,7 +115,7 @@ struct ItemService {
                 assertionFailure()
                 return
             }
-            $0.update(
+            $0.modify(
                 date: newDate,
                 content: content,
                 income: income,
@@ -123,7 +123,7 @@ struct ItemService {
                 group: group,
                 repeatID: repeatID
             )
-            item.update(
+            item.modify(
                 tags: [
                     try tagService.create(
                         name: Calendar.utc.startOfYear(for: newDate).stringValueWithoutLocale(.yyyy),
@@ -180,7 +180,7 @@ struct ItemService {
     }
 
     func update(item: Item, tags: [Tag]) {
-        item.update(tags: tags)
+        item.modify(tags: tags)
     }
 
     // MARK: - Delete

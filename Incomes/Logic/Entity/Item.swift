@@ -70,7 +70,7 @@ final class Item {
         return item
     }
 
-    func update(date: Date,
+    func modify(date: Date,
                 content: String,
                 income: Decimal,
                 outgo: Decimal,
@@ -112,7 +112,7 @@ final class Item {
         try context.save()
     }
 
-    func update(tags: [Tag]) {
+    func modify(tags: [Tag]) {
         self.tags = tags
     }
 }
@@ -127,7 +127,7 @@ extension Item {
     }
 
     @available(*, deprecated)
-    func update(date: Date, // swiftlint:disable:this function_parameter_count
+    func modify(date: Date, // swiftlint:disable:this function_parameter_count
                 content: String,
                 income: Decimal,
                 outgo: Decimal,
@@ -144,7 +144,7 @@ extension Item {
     }
 
     @available(*, deprecated)
-    func update(balance: Decimal) {
+    func modify(balance: Decimal) {
         self.balance = balance
     }
 }

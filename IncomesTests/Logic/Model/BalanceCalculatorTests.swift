@@ -134,7 +134,7 @@ class BalanceCalculatorTests: XCTestCase {
             try! calculator.calculateAll()
 
             let item = items[1]
-            item.update(date: date("2000-02-01T12:00:00Z"),
+            item.modify(date: date("2000-02-01T12:00:00Z"),
                         content: "content",
                         income: 300,
                         outgo: 100,
@@ -170,7 +170,7 @@ class BalanceCalculatorTests: XCTestCase {
             try! calculator.calculateAll()
 
             let item = items[0]
-            item.update(date: date("2000-01-01T12:00:00Z"),
+            item.modify(date: date("2000-01-01T12:00:00Z"),
                         content: "content",
                         income: 300,
                         outgo: 100,
@@ -206,7 +206,7 @@ class BalanceCalculatorTests: XCTestCase {
             try! calculator.calculateAll()
 
             let item = items[4]
-            item.update(date: date("2000-05-01T12:00:00Z"),
+            item.modify(date: date("2000-05-01T12:00:00Z"),
                         content: "content",
                         income: 300,
                         outgo: 100,
@@ -242,7 +242,7 @@ class BalanceCalculatorTests: XCTestCase {
             try! calculator.calculateAll()
 
             let item = items[4]
-            item.update(date: date("1999-12-31T00:00:00Z"),
+            item.modify(date: date("1999-12-31T00:00:00Z"),
                         content: "content",
                         income: 300,
                         outgo: 100,
