@@ -112,10 +112,6 @@ final class Item {
         try context.save()
     }
 
-    func update(balance: Decimal) {
-        self.balance = balance
-    }
-
     func update(tags: [Tag]) {
         self.tags = tags
     }
@@ -145,6 +141,11 @@ extension Item {
 
         self.group = group
         self.startOfYear = Calendar.utc.startOfYear(for: date)
+    }
+
+    @available(*, deprecated)
+    func update(balance: Decimal) {
+        self.balance = balance
     }
 }
 

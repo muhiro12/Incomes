@@ -175,6 +175,10 @@ struct ItemService {
                                     predicate: Item.predicate(repeatIDIs: item.repeatID))
     }
 
+    func update(item: Item, tags: [Tag]) {
+        item.update(tags: tags)
+    }
+
     // MARK: - Delete
 
     func delete(items: [Item]) throws {
