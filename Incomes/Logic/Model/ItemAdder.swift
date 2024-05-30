@@ -10,12 +10,12 @@ import Foundation
 import SwiftData
 
 struct ItemAdder {
-    private let repository: ItemRepository
+    private let context: ModelContext
     private let calculator: ItemBalanceCalculator
     private let factory: ItemFactory
 
     init(context: ModelContext) {
-        self.repository = .init(context: context)
+        self.context = context
         self.calculator = .init(context: context)
         self.factory = .init(context: context)
     }
@@ -61,7 +61,9 @@ struct ItemAdder {
             items.append(item)
         }
 
-        try repository.addList(items)
+        items.forEach(context.insert)
+        try context.save()
+
         try calculator.calculate(for: items)
     }
 }

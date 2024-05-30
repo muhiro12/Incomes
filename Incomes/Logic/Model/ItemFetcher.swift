@@ -10,17 +10,17 @@ import Foundation
 import SwiftData
 
 struct ItemFetcher {
-    private let repository: ItemRepository
+    private let context: ModelContext
 
     init(context: ModelContext) {
-        self.repository = .init(context: context)
+        self.context = context
     }
 
     func fetch(predicate: Predicate<Item>?) throws -> [Item] {
-        try repository.fetchList(predicate: predicate)
+        try context.fetch(.init(predicate: predicate, sortBy: Item.sortDescriptors()))
     }
 
     func fetchCount(predicate: Predicate<Item>?) throws -> Int {
-        try repository.fetchCount(predicate: predicate)
+        try context.fetchCount(.init(predicate: predicate))
     }
 }

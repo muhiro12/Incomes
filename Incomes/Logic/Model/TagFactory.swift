@@ -13,15 +13,17 @@ struct TagFactory {
     let context: ModelContext
 
     func callAsFunction(_ name: String, for type: Tag.TagType) throws -> Tag {
-        let repository = TagRepository(context: context)
-        var tags = try repository.fetchList(predicate: Tag.predicate(name: name, type: type))
+        var tags = try context.fetch(
+            .init(predicate: Tag.predicate(name: name, type: type), sortBy: Tag.sortDescriptors())
+        )
         guard let tag = tags.popLast() else {
             let tag = Tag()
             context.insert(tag)
             tag.set(name: name, typeID: type.rawValue)
             return tag
         }
-        try repository.deleteList(tags)
+        tags.forEach(context.delete)
+        try context.save()
         return tag
     }
 

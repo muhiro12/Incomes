@@ -10,20 +10,21 @@ import Foundation
 import SwiftData
 
 struct ItemDeleter {
-    private let repository: ItemRepository
+    private let context: ModelContext
     private let calculator: ItemBalanceCalculator
 
     init(context: ModelContext) {
-        self.repository = .init(context: context)
+        self.context = context
         self.calculator = .init(context: context)
     }
 
     func delete(items: [Item]) throws {
-        try repository.deleteList(items)
+        items.forEach(context.delete)
+        try context.save()
         try calculator.calculate(for: items)
     }
 
     func deleteAll() throws {
-        try delete(items: repository.fetchList())
+        try delete(items: try context.fetch(.init()))
     }
 }

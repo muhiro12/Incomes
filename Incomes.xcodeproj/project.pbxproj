@@ -63,7 +63,6 @@
 		ADCF370124A1D18E0011D6F5 /* ItemFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF36E624A1D18E0011D6F5 /* ItemFormView.swift */; };
 		ADCF370224A1D18E0011D6F5 /* WideListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF36E724A1D18E0011D6F5 /* WideListItem.swift */; };
 		ADCF370324A1D18E0011D6F5 /* ListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF36E824A1D18E0011D6F5 /* ListItem.swift */; };
-		ADCF370424A1D18E0011D6F5 /* ItemRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF36EA24A1D18E0011D6F5 /* ItemRepository.swift */; };
 		ADCF370B24A1D18E0011D6F5 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF36F324A1D18E0011D6F5 /* HomeView.swift */; };
 		ADCF370E24A1D18E0011D6F5 /* IntConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF36F724A1D18E0011D6F5 /* IntConstant.swift */; };
 		ADCF370F24A1D18E0011D6F5 /* CGFloatConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF36F824A1D18E0011D6F5 /* CGFloatConstant.swift */; };
@@ -83,13 +82,11 @@
 		ADD3CCE12ABFD89F00F60350 /* SidebarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADD3CCE02ABFD89F00F60350 /* SidebarView.swift */; };
 		ADDBC4582792CD4400F5E4A7 /* NativeAdvertisement.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADDBC4572792CD4400F5E4A7 /* NativeAdvertisement.swift */; };
 		ADDF76C12AAC9AAE00CDEC7E /* Tag.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADDF76C02AAC9AAE00CDEC7E /* Tag.swift */; };
-		ADDF76C32AAC9ADC00CDEC7E /* TagRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADDF76C22AAC9ADC00CDEC7E /* TagRepository.swift */; };
 		ADDF76C52AACAD5900CDEC7E /* TagService.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADDF76C42AACAD5800CDEC7E /* TagService.swift */; };
 		ADDF76C72AAD35AC00CDEC7E /* CategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADDF76C62AAD35AB00CDEC7E /* CategoryView.swift */; };
 		ADDF76C92AAD36AF00CDEC7E /* CategorySection.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADDF76C82AAD36AF00CDEC7E /* CategorySection.swift */; };
 		ADDF76CD2AADFAAF00CDEC7E /* TagExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADDF76CC2AADFAAE00CDEC7E /* TagExtension.swift */; };
 		ADDF76CF2AAF079500CDEC7E /* SwiftDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADDF76CE2AAF079500CDEC7E /* SwiftDataController.swift */; };
-		ADDF76D12AAF543100CDEC7E /* SwiftDataRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADDF76D02AAF543100CDEC7E /* SwiftDataRepository.swift */; };
 		ADE3A4C1277690340016C152 /* Authenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE3A4C0277690330016C152 /* Authenticator.swift */; };
 		ADE89DF524B5E73300BB82E9 /* TitleListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE89DF424B5E73300BB82E9 /* TitleListItem.swift */; };
 		ADE89DF724B5F78200BB82E9 /* ImageConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE89DF624B5F78200BB82E9 /* ImageConstant.swift */; };
@@ -177,7 +174,6 @@
 		ADCF36E624A1D18E0011D6F5 /* ItemFormView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemFormView.swift; sourceTree = "<group>"; };
 		ADCF36E724A1D18E0011D6F5 /* WideListItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WideListItem.swift; sourceTree = "<group>"; };
 		ADCF36E824A1D18E0011D6F5 /* ListItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItem.swift; sourceTree = "<group>"; };
-		ADCF36EA24A1D18E0011D6F5 /* ItemRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemRepository.swift; sourceTree = "<group>"; };
 		ADCF36F324A1D18E0011D6F5 /* HomeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		ADCF36F724A1D18E0011D6F5 /* IntConstant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntConstant.swift; sourceTree = "<group>"; };
 		ADCF36F824A1D18E0011D6F5 /* CGFloatConstant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CGFloatConstant.swift; sourceTree = "<group>"; };
@@ -211,13 +207,11 @@
 		ADD3CCE02ABFD89F00F60350 /* SidebarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarView.swift; sourceTree = "<group>"; };
 		ADDBC4572792CD4400F5E4A7 /* NativeAdvertisement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeAdvertisement.swift; sourceTree = "<group>"; };
 		ADDF76C02AAC9AAE00CDEC7E /* Tag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tag.swift; sourceTree = "<group>"; };
-		ADDF76C22AAC9ADC00CDEC7E /* TagRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagRepository.swift; sourceTree = "<group>"; };
 		ADDF76C42AACAD5800CDEC7E /* TagService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagService.swift; sourceTree = "<group>"; };
 		ADDF76C62AAD35AB00CDEC7E /* CategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryView.swift; sourceTree = "<group>"; };
 		ADDF76C82AAD36AF00CDEC7E /* CategorySection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategorySection.swift; sourceTree = "<group>"; };
 		ADDF76CC2AADFAAE00CDEC7E /* TagExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagExtension.swift; sourceTree = "<group>"; };
 		ADDF76CE2AAF079500CDEC7E /* SwiftDataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftDataController.swift; sourceTree = "<group>"; };
-		ADDF76D02AAF543100CDEC7E /* SwiftDataRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftDataRepository.swift; sourceTree = "<group>"; };
 		ADE3A4BC277495270016C152 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Base; path = Base.lproj/Info.plist; sourceTree = "<group>"; };
 		ADE3A4BE27768E6C0016C152 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = en; path = en.lproj/Info.plist; sourceTree = "<group>"; };
 		ADE3A4BF27768E7B0016C152 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = ja; path = ja.lproj/Info.plist; sourceTree = "<group>"; };
@@ -400,16 +394,13 @@
 				ADA9F6162AEF56BF00C145BE /* ItemDeleter.swift */,
 				ADCBBA292AB0E974007DAAE4 /* ItemFactory.swift */,
 				ADA9F6142AEF56B400C145BE /* ItemFetcher.swift */,
-				ADCF36EA24A1D18E0011D6F5 /* ItemRepository.swift */,
 				AD09B543278F934D008F03FA /* ItemService.swift */,
 				ADA9F6122AEF55AF00C145BE /* ItemUpdater.swift */,
 				AD6ED9472AC13BF1008EE239 /* SidebarItem.swift */,
 				ADEA399B2501457A00CB61D9 /* Store.swift */,
 				ADDF76CE2AAF079500CDEC7E /* SwiftDataController.swift */,
 				AD5D75492AB17011003E16D1 /* SwiftDataMigrator.swift */,
-				ADDF76D02AAF543100CDEC7E /* SwiftDataRepository.swift */,
 				ADCBBA272AB0E96A007DAAE4 /* TagFactory.swift */,
-				ADDF76C22AAC9ADC00CDEC7E /* TagRepository.swift */,
 				ADDF76C42AACAD5800CDEC7E /* TagService.swift */,
 			);
 			path = Model;
@@ -788,7 +779,6 @@
 				ADEA399E25014CD700CB61D9 /* Secret.swift in Sources */,
 				ADCF371224A1D18E0011D6F5 /* StringExtension.swift in Sources */,
 				ADCF370224A1D18E0011D6F5 /* WideListItem.swift in Sources */,
-				ADCF370424A1D18E0011D6F5 /* ItemRepository.swift in Sources */,
 				ADCF371324A1D18E0011D6F5 /* StringConstant.swift in Sources */,
 				ADCF370324A1D18E0011D6F5 /* ListItem.swift in Sources */,
 				AD4C315A2AA581590030A17F /* PremiumSection.swift in Sources */,
@@ -809,9 +799,7 @@
 				ADCF370124A1D18E0011D6F5 /* ItemFormView.swift in Sources */,
 				AD98987D2AA5DC8700E7DFA6 /* MaskView.swift in Sources */,
 				ADCF375824A2C8260011D6F5 /* DecimalExtension.swift in Sources */,
-				ADDF76D12AAF543100CDEC7E /* SwiftDataRepository.swift in Sources */,
 				AD6B704827A7C16100A38208 /* StoreSection.swift in Sources */,
-				ADDF76C32AAC9ADC00CDEC7E /* TagRepository.swift in Sources */,
 				ADEA39A0250150E000CB61D9 /* EnvironmentParameter.swift in Sources */,
 				ADDF76C72AAD35AC00CDEC7E /* CategoryView.swift in Sources */,
 				ADCF376324A3147B0011D6F5 /* SettingsView.swift in Sources */,

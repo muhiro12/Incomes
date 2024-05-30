@@ -10,18 +10,18 @@ import Foundation
 import SwiftData
 
 struct ItemUpdater {
-    private let repository: ItemRepository
+    private let context: ModelContext
     private let calculator: ItemBalanceCalculator
     private let tagFactory: TagFactory
 
     init(context: ModelContext) {
-        self.repository = .init(context: context)
+        self.context = context
         self.calculator = .init(context: context)
         self.tagFactory = .init(context: context)
     }
 
     func update(items: [Item]) throws {
-        try repository.updateList(items)
+        try context.save()
         try calculator.calculate(for: items)
     }
 
@@ -53,7 +53,7 @@ struct ItemUpdater {
                                                      to: date)
 
         let repeatID = UUID()
-        let items = try repository.fetchList(predicate: predicate)
+        let items = try context.fetch(.init(predicate: predicate, sortBy: Item.sortDescriptors()))
         try items.forEach {
             guard let newDate = Calendar.utc.date(byAdding: components, to: $0.date) else {
                 assertionFailure()
