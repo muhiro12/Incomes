@@ -109,7 +109,7 @@ struct ItemService {
                 assertionFailure()
                 return
             }
-            $0.set(
+            $0.update(
                 date: newDate,
                 content: content,
                 income: income,
@@ -117,7 +117,7 @@ struct ItemService {
                 group: group,
                 repeatID: repeatID
             )
-            item.set(
+            item.update(
                 tags: [
                     try .create(context: context,
                                 name: Calendar.utc.startOfYear(for: newDate).stringValueWithoutLocale(.yyyy),

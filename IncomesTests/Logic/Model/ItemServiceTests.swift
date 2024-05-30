@@ -294,20 +294,20 @@ class ItemServiceTests: XCTestCase {
             let service = ItemService(context: context)
 
             let itemA = Item()
-            itemA.set(date: Date(),
-                      content: "",
-                      income: 0,
-                      outgo: 0,
-                      group: "",
-                      repeatID: UUID())
+            itemA.update(date: Date(),
+                         content: "",
+                         income: 0,
+                         outgo: 0,
+                         group: "",
+                         repeatID: UUID())
             context.insert(itemA)
             let itemB = Item()
-            itemB.set(date: Date(),
-                      content: "",
-                      income: 0,
-                      outgo: 0,
-                      group: "",
-                      repeatID: UUID())
+            itemB.update(date: Date(),
+                         content: "",
+                         income: 0,
+                         outgo: 0,
+                         group: "",
+                         repeatID: UUID())
             context.insert(itemB)
             try! context.save()
 
@@ -325,20 +325,20 @@ class ItemServiceTests: XCTestCase {
             let service = ItemService(context: context)
 
             let itemA = Item()
-            itemA.set(date: Date(),
-                      content: "",
-                      income: 0,
-                      outgo: 0,
-                      group: "",
-                      repeatID: UUID())
+            itemA.update(date: Date(),
+                         content: "",
+                         income: 0,
+                         outgo: 0,
+                         group: "",
+                         repeatID: UUID())
             context.insert(itemA)
             let itemB = Item()
-            itemB.set(date: Date(),
-                      content: "",
-                      income: 0,
-                      outgo: 0,
-                      group: "",
-                      repeatID: UUID())
+            itemB.update(date: Date(),
+                         content: "",
+                         income: 0,
+                         outgo: 0,
+                         group: "",
+                         repeatID: UUID())
             context.insert(itemB)
             try! context.save()
 

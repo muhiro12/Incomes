@@ -46,7 +46,7 @@ struct SwiftDataController {
                 var tags = item.tags ?? []
                 tags.removeAll { $0 == tag }
                 tags.append(tag)
-                item.set(tags: tags)
+                item.update(tags: tags)
             }
             invalids.append(tag)
         }

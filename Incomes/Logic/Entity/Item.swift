@@ -101,6 +101,14 @@ final class Item {
 
         try context.save()
     }
+
+    func update(balance: Decimal) {
+        self.balance = balance
+    }
+
+    func update(tags: [Tag]) {
+        self.tags = tags
+    }
 }
 
 extension Item {
@@ -113,12 +121,12 @@ extension Item {
     }
 
     @available(*, deprecated)
-    func set(date: Date, // swiftlint:disable:this function_parameter_count
-             content: String,
-             income: Decimal,
-             outgo: Decimal,
-             group: String,
-             repeatID: UUID) {
+    func update(date: Date, // swiftlint:disable:this function_parameter_count
+                content: String,
+                income: Decimal,
+                outgo: Decimal,
+                group: String,
+                repeatID: UUID) {
         self.date = Calendar.utc.startOfDay(for: date)
         self.content = content
         self.income = income
@@ -127,16 +135,6 @@ extension Item {
 
         self.group = group
         self.startOfYear = Calendar.utc.startOfYear(for: date)
-    }
-
-    @available(*, deprecated)
-    func set(balance: Decimal) {
-        self.balance = balance
-    }
-
-    @available(*, deprecated)
-    func set(tags: [Tag]) {
-        self.tags = tags
     }
 }
 
