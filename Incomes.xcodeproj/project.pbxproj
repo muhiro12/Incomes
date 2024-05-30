@@ -733,7 +733,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "PACKAGE_PATH=${BUILD_DIR%Build/*}SourcePackages/checkouts/SwiftLint\nSWIFTLINT=$PACKAGE_PATH/.build/release/swiftlint\n\nif [ ! -f $SWIFTLINT ]; then\n    xcrun --sdk macosx swift build -c release --package-path $PACKAGE_PATH --product swiftlint\nfi\n\n$SWIFTLINT --fix --format\n$SWIFTLINT\n";
+			shellScript = "PACKAGE_PATH=${BUILD_DIR%Build/*}SourcePackages/checkouts/SwiftLint\nSWIFTLINT=$PACKAGE_PATH/.build/release/swiftlint\n\nif [ ! -f $SWIFTLINT ]; then\n    xcrun --sdk macosx swift build -c release --package-path $PACKAGE_PATH --product swiftlint\nfi\n\n$SWIFTLINT --fix --format\n$SWIFTLINT --silence-deprecation-warnings\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
