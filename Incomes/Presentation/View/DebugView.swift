@@ -30,8 +30,7 @@ extension DebugView: View {
             Section {
                 NavigationLink(String.debugAllItems) {
                     ItemListView(
-                        tag: try! .create( // swiftlint:disable:this force_try
-                            context: context,
+                        tag: try! TagService(context: context).create( // swiftlint:disable:this force_try
                             name: "name",
                             type: .year
                         )

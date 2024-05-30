@@ -11,11 +11,13 @@ import SwiftData
 
 struct ItemService {
     private let context: ModelContext
+    private let tagService: TagService
     private let calculator: BalanceCalculator
 
     init(context: ModelContext) {
         self.context = context
-        self.calculator = BalanceCalculator(context: context)
+        self.tagService = .init(context: context)
+        self.calculator = .init(context: context)
     }
 
     // MARK: - Fetch
@@ -119,18 +121,22 @@ struct ItemService {
             )
             item.update(
                 tags: [
-                    try .create(context: context,
-                                name: Calendar.utc.startOfYear(for: newDate).stringValueWithoutLocale(.yyyy),
-                                type: .year),
-                    try .create(context: context,
-                                name: Calendar.utc.startOfMonth(for: newDate).stringValueWithoutLocale(.yyyyMM),
-                                type: .yearMonth),
-                    try .create(context: context,
-                                name: content,
-                                type: .content),
-                    try .create(context: context,
-                                name: group,
-                                type: .category)
+                    try tagService.create(
+                        name: Calendar.utc.startOfYear(for: newDate).stringValueWithoutLocale(.yyyy),
+                        type: .year
+                    ),
+                    try tagService.create(
+                        name: Calendar.utc.startOfMonth(for: newDate).stringValueWithoutLocale(.yyyyMM),
+                        type: .yearMonth
+                    ),
+                    try tagService.create(
+                        name: content,
+                        type: .content
+                    ),
+                    try tagService.create(
+                        name: group,
+                        type: .category
+                    )
                 ]
             )
         }

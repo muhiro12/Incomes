@@ -16,6 +16,8 @@ struct TagService {
         self.context = context
     }
 
+    // MARK: - Fetch
+
     func tag(predicate: Predicate<Tag>? = nil) throws -> Tag? {
         var descriptor = FetchDescriptor(
             predicate: predicate,
@@ -28,6 +30,14 @@ struct TagService {
     func tags(predicate: Predicate<Tag>? = nil) throws -> [Tag] {
         try context.fetch(.init(predicate: predicate, sortBy: Tag.sortDescriptors()))
     }
+
+    // MARK: - Create
+
+    func create(name: String, type: Tag.TagType) throws -> Tag {
+        try .create(context: context, name: name, type: type)
+    }
+
+    // MARK: - Delete
 
     func delete(tags: [Tag]) throws {
         try tags.forEach {

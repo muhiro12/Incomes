@@ -47,19 +47,24 @@ final class Item {
         item.group = group
         item.startOfYear = Calendar.utc.startOfYear(for: date)
 
+        let tagService = TagService(context: context)
         item.tags = [
-            try .create(context: context,
-                        name: Calendar.utc.startOfYear(for: date).stringValueWithoutLocale(.yyyy),
-                        type: .year),
-            try .create(context: context,
-                        name: Calendar.utc.startOfMonth(for: date).stringValueWithoutLocale(.yyyyMM),
-                        type: .yearMonth),
-            try .create(context: context,
-                        name: content,
-                        type: .content),
-            try .create(context: context,
-                        name: group,
-                        type: .category)
+            try tagService.create(
+                name: Calendar.utc.startOfYear(for: date).stringValueWithoutLocale(.yyyy),
+                type: .year
+            ),
+            try tagService.create(
+                name: Calendar.utc.startOfMonth(for: date).stringValueWithoutLocale(.yyyyMM),
+                type: .yearMonth
+            ),
+            try tagService.create(
+                name: content,
+                type: .content
+            ),
+            try tagService.create(
+                name: group,
+                type: .category
+            )
         ]
 
         return item
@@ -84,19 +89,24 @@ final class Item {
             return
         }
 
+        let tagService = TagService(context: context)
         self.tags = [
-            try .create(context: context,
-                        name: Calendar.utc.startOfYear(for: date).stringValueWithoutLocale(.yyyy),
-                        type: .year),
-            try .create(context: context,
-                        name: Calendar.utc.startOfMonth(for: date).stringValueWithoutLocale(.yyyyMM),
-                        type: .yearMonth),
-            try .create(context: context,
-                        name: content,
-                        type: .content),
-            try .create(context: context,
-                        name: group,
-                        type: .category)
+            try tagService.create(
+                name: Calendar.utc.startOfYear(for: date).stringValueWithoutLocale(.yyyy),
+                type: .year
+            ),
+            try tagService.create(
+                name: Calendar.utc.startOfMonth(for: date).stringValueWithoutLocale(.yyyyMM),
+                type: .yearMonth
+            ),
+            try tagService.create(
+                name: content,
+                type: .content
+            ),
+            try tagService.create(
+                name: group,
+                type: .category
+            )
         ]
 
         try context.save()
