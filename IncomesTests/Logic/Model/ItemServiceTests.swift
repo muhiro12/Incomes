@@ -293,21 +293,21 @@ class ItemServiceTests: XCTestCase {
             let context = context
             let service = ItemService(context: context)
 
-            let itemA = Item()
-            itemA.update(date: Date(),
-                         content: "",
-                         income: 0,
-                         outgo: 0,
-                         group: "",
-                         repeatID: UUID())
+            let itemA = try! Item.create(context: context,
+                                         date: Date(),
+                                         content: "",
+                                         income: 0,
+                                         outgo: 0,
+                                         group: "",
+                                         repeatID: UUID())
             context.insert(itemA)
-            let itemB = Item()
-            itemB.update(date: Date(),
-                         content: "",
-                         income: 0,
-                         outgo: 0,
-                         group: "",
-                         repeatID: UUID())
+            let itemB = try! Item.create(context: context,
+                                         date: Date(),
+                                         content: "",
+                                         income: 0,
+                                         outgo: 0,
+                                         group: "",
+                                         repeatID: UUID())
             context.insert(itemB)
             try! context.save()
 
@@ -324,21 +324,21 @@ class ItemServiceTests: XCTestCase {
             let context = context
             let service = ItemService(context: context)
 
-            let itemA = Item()
-            itemA.update(date: Date(),
-                         content: "",
-                         income: 0,
-                         outgo: 0,
-                         group: "",
-                         repeatID: UUID())
+            let itemA = try! Item.create(context: context,
+                                         date: Date(),
+                                         content: "",
+                                         income: 0,
+                                         outgo: 0,
+                                         group: "",
+                                         repeatID: UUID())
             context.insert(itemA)
-            let itemB = Item()
-            itemB.update(date: Date(),
-                         content: "",
-                         income: 0,
-                         outgo: 0,
-                         group: "",
-                         repeatID: UUID())
+            let itemB = try! Item.create(context: context,
+                                         date: Date(),
+                                         content: "",
+                                         income: 0,
+                                         outgo: 0,
+                                         group: "",
+                                         repeatID: UUID())
             context.insert(itemB)
             try! context.save()
 

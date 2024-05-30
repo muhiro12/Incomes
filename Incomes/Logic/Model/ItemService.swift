@@ -22,6 +22,10 @@ struct ItemService {
 
     // MARK: - Fetch
 
+    func items(predicate: Predicate<Item>? = nil) throws -> [Item] {
+        try context.fetch(.init(predicate: predicate, sortBy: Item.sortDescriptors()))
+    }
+
     func itemsCount(predicate: Predicate<Item>? = nil) throws -> Int {
         try context.fetchCount(.init(predicate: predicate))
     }

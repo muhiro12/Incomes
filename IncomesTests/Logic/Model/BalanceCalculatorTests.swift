@@ -17,30 +17,30 @@ class BalanceCalculatorTests: XCTestCase {
             let calculator = BalanceCalculator(context: context)
 
             for i in 1...5 {
-                let item = Item()
-                item.set(date: date("2000-0\(i)-01T12:00:00Z"),
-                         content: "content",
-                         income: 200,
-                         outgo: 100,
-                         group: "group",
-                         repeatID: UUID())
+                let item = try! Item.create(context: context,
+                                            date: date("2000-0\(i)-01T12:00:00Z"),
+                                            content: "content",
+                                            income: 200,
+                                            outgo: 100,
+                                            group: "group",
+                                            repeatID: UUID())
                 context.insert(item)
             }
             try! calculator.calculateAll()
 
-            let item = Item()
-            item.set(date: date("2000-01-31T12:00:00Z"),
-                     content: "content",
-                     income: 200,
-                     outgo: 100,
-                     group: "group",
-                     repeatID: UUID())
+            let item = try! Item.create(context: context,
+                                        date: date("2000-01-31T12:00:00Z"),
+                                        content: "content",
+                                        income: 200,
+                                        outgo: 100,
+                                        group: "group",
+                                        repeatID: UUID())
             context.insert(item)
             try! calculator.calculate(after: item.date)
 
-            let repository = ItemRepository(context: context)
-            let first = try! repository.fetchList().first!
-            let last = try! repository.fetchList().last!
+            let service = ItemService(context: context)
+            let first = try! service.items().first!
+            let last = try! service.items().last!
 
             XCTAssertEqual(first.balance, 600)
             XCTAssertEqual(last.balance, 100)
@@ -51,30 +51,30 @@ class BalanceCalculatorTests: XCTestCase {
             let calculator = BalanceCalculator(context: context)
 
             for i in 1...5 {
-                let item = Item()
-                item.set(date: date("2000-0\(i)-01T12:00:00Z"),
-                         content: "content",
-                         income: 200,
-                         outgo: 100,
-                         group: "group",
-                         repeatID: UUID())
+                let item = try! Item.create(context: context,
+                                            date: date("2000-0\(i)-01T12:00:00Z"),
+                                            content: "content",
+                                            income: 200,
+                                            outgo: 100,
+                                            group: "group",
+                                            repeatID: UUID())
                 context.insert(item)
             }
             try! calculator.calculateAll()
 
-            let item = Item()
-            item.set(date: date("2001-01-01T00:00:00Z"),
-                     content: "content",
-                     income: 200,
-                     outgo: 100,
-                     group: "group",
-                     repeatID: UUID())
+            let item = try! Item.create(context: context,
+                                        date: date("2001-01-01T00:00:00Z"),
+                                        content: "content",
+                                        income: 200,
+                                        outgo: 100,
+                                        group: "group",
+                                        repeatID: UUID())
             context.insert(item)
             try! calculator.calculate(after: item.date)
 
-            let repository = ItemRepository(context: context)
-            let first = try! repository.fetchList().first!
-            let last = try! repository.fetchList().last!
+            let service = ItemService(context: context)
+            let first = try! service.items().first!
+            let last = try! service.items().last!
 
             XCTAssertEqual(first.balance, 600)
             XCTAssertEqual(last.balance, 100)
@@ -85,30 +85,30 @@ class BalanceCalculatorTests: XCTestCase {
             let calculator = BalanceCalculator(context: context)
 
             for i in 1...5 {
-                let item = Item()
-                item.set(date: date("2000-0\(i)-01T12:00:00Z"),
-                         content: "content",
-                         income: 200,
-                         outgo: 100,
-                         group: "group",
-                         repeatID: UUID())
+                let item = try! Item.create(context: context,
+                                            date: date("2000-0\(i)-01T12:00:00Z"),
+                                            content: "content",
+                                            income: 200,
+                                            outgo: 100,
+                                            group: "group",
+                                            repeatID: UUID())
                 context.insert(item)
             }
             try! calculator.calculateAll()
 
-            let item = Item()
-            item.set(date: date("2000-01-01T00:00:00Z"),
-                     content: "content",
-                     income: 200,
-                     outgo: 100,
-                     group: "group",
-                     repeatID: UUID())
+            let item = try! Item.create(context: context,
+                                        date: date("2000-01-01T00:00:00Z"),
+                                        content: "content",
+                                        income: 200,
+                                        outgo: 100,
+                                        group: "group",
+                                        repeatID: UUID())
             context.insert(item)
             try! calculator.calculate(after: item.date)
 
-            let repository = ItemRepository(context: context)
-            let first = try! repository.fetchList().first!
-            let last = try! repository.fetchList().last!
+            let service = ItemService(context: context)
+            let first = try! service.items().first!
+            let last = try! service.items().last!
 
             XCTAssertEqual(first.balance, 600)
             XCTAssertEqual(last.balance, 100)
@@ -121,30 +121,30 @@ class BalanceCalculatorTests: XCTestCase {
             var items: [Item] = []
 
             for i in 1...5 {
-                let item = Item()
-                item.set(date: date("2000-0\(i)-01T12:00:00Z"),
-                         content: "content",
-                         income: 200,
-                         outgo: 100,
-                         group: "group",
-                         repeatID: UUID())
+                let item = try! Item.create(context: context,
+                                            date: date("2000-0\(i)-01T12:00:00Z"),
+                                            content: "content",
+                                            income: 200,
+                                            outgo: 100,
+                                            group: "group",
+                                            repeatID: UUID())
                 context.insert(item)
                 items.append(item)
             }
             try! calculator.calculateAll()
 
             let item = items[1]
-            item.set(date: date("2000-02-01T12:00:00Z"),
-                     content: "content",
-                     income: 300,
-                     outgo: 100,
-                     group: "group",
-                     repeatID: UUID())
+            item.update(date: date("2000-02-01T12:00:00Z"),
+                        content: "content",
+                        income: 300,
+                        outgo: 100,
+                        group: "group",
+                        repeatID: UUID())
             try! calculator.calculate(after: item.date)
 
-            let repository = ItemRepository(context: context)
-            let first = try! repository.fetchList().first!
-            let last = try! repository.fetchList().last!
+            let service = ItemService(context: context)
+            let first = try! service.items().first!
+            let last = try! service.items().last!
 
             XCTAssertEqual(first.balance, 600)
             XCTAssertEqual(last.balance, 100)
@@ -157,30 +157,30 @@ class BalanceCalculatorTests: XCTestCase {
             var items: [Item] = []
 
             for i in 1...5 {
-                let item = Item()
-                item.set(date: date("2000-0\(i)-01T12:00:00Z"),
-                         content: "content",
-                         income: 200,
-                         outgo: 100,
-                         group: "group",
-                         repeatID: UUID())
+                let item = try! Item.create(context: context,
+                                            date: date("2000-0\(i)-01T12:00:00Z"),
+                                            content: "content",
+                                            income: 200,
+                                            outgo: 100,
+                                            group: "group",
+                                            repeatID: UUID())
                 context.insert(item)
                 items.append(item)
             }
             try! calculator.calculateAll()
 
             let item = items[0]
-            item.set(date: date("2000-01-01T12:00:00Z"),
-                     content: "content",
-                     income: 300,
-                     outgo: 100,
-                     group: "group",
-                     repeatID: UUID())
+            item.update(date: date("2000-01-01T12:00:00Z"),
+                        content: "content",
+                        income: 300,
+                        outgo: 100,
+                        group: "group",
+                        repeatID: UUID())
             try! calculator.calculate(after: item.date)
 
-            let repository = ItemRepository(context: context)
-            let first = try! repository.fetchList().first!
-            let last = try! repository.fetchList().last!
+            let service = ItemService(context: context)
+            let first = try! service.items().first!
+            let last = try! service.items().last!
 
             XCTAssertEqual(first.balance, 600)
             XCTAssertEqual(last.balance, 200)
@@ -193,30 +193,30 @@ class BalanceCalculatorTests: XCTestCase {
             var items: [Item] = []
 
             for i in 1...5 {
-                let item = Item()
-                item.set(date: date("2000-0\(i)-01T12:00:00Z"),
-                         content: "content",
-                         income: 200,
-                         outgo: 100,
-                         group: "group",
-                         repeatID: UUID())
+                let item = try! Item.create(context: context,
+                                            date: date("2000-0\(i)-01T12:00:00Z"),
+                                            content: "content",
+                                            income: 200,
+                                            outgo: 100,
+                                            group: "group",
+                                            repeatID: UUID())
                 context.insert(item)
                 items.append(item)
             }
             try! calculator.calculateAll()
 
             let item = items[4]
-            item.set(date: date("2000-05-01T12:00:00Z"),
-                     content: "content",
-                     income: 300,
-                     outgo: 100,
-                     group: "group",
-                     repeatID: UUID())
+            item.update(date: date("2000-05-01T12:00:00Z"),
+                        content: "content",
+                        income: 300,
+                        outgo: 100,
+                        group: "group",
+                        repeatID: UUID())
             try! calculator.calculate(after: item.date)
 
-            let repository = ItemRepository(context: context)
-            let first = try! repository.fetchList().first!
-            let last = try! repository.fetchList().last!
+            let service = ItemService(context: context)
+            let first = try! service.items().first!
+            let last = try! service.items().last!
 
             XCTAssertEqual(first.balance, 600)
             XCTAssertEqual(last.balance, 100)
@@ -229,30 +229,30 @@ class BalanceCalculatorTests: XCTestCase {
             var items: [Item] = []
 
             for i in 1...5 {
-                let item = Item()
-                item.set(date: date("2000-0\(i)-01T12:00:00Z"),
-                         content: "content",
-                         income: 200,
-                         outgo: 100,
-                         group: "group",
-                         repeatID: UUID())
+                let item = try! Item.create(context: context,
+                                            date: date("2000-0\(i)-01T12:00:00Z"),
+                                            content: "content",
+                                            income: 200,
+                                            outgo: 100,
+                                            group: "group",
+                                            repeatID: UUID())
                 context.insert(item)
                 items.append(item)
             }
             try! calculator.calculateAll()
 
             let item = items[4]
-            item.set(date: date("1999-12-31T00:00:00Z"),
-                     content: "content",
-                     income: 300,
-                     outgo: 100,
-                     group: "group",
-                     repeatID: UUID())
+            item.update(date: date("1999-12-31T00:00:00Z"),
+                        content: "content",
+                        income: 300,
+                        outgo: 100,
+                        group: "group",
+                        repeatID: UUID())
             try! calculator.calculate(after: item.date)
 
-            let repository = ItemRepository(context: context)
-            let first = try! repository.fetchList().first!
-            let last = try! repository.fetchList().last!
+            let service = ItemService(context: context)
+            let first = try! service.items().first!
+            let last = try! service.items().last!
 
             XCTAssertEqual(first.balance, 600)
             XCTAssertEqual(last.balance, 200)
@@ -265,13 +265,13 @@ class BalanceCalculatorTests: XCTestCase {
             var items: [Item] = []
 
             for i in 1...5 {
-                let item = Item()
-                item.set(date: date("2000-0\(i)-01T12:00:00Z"),
-                         content: "content",
-                         income: 200,
-                         outgo: 100,
-                         group: "group",
-                         repeatID: UUID())
+                let item = try! Item.create(context: context,
+                                            date: date("2000-0\(i)-01T12:00:00Z"),
+                                            content: "content",
+                                            income: 200,
+                                            outgo: 100,
+                                            group: "group",
+                                            repeatID: UUID())
                 context.insert(item)
                 items.append(item)
             }
@@ -281,9 +281,9 @@ class BalanceCalculatorTests: XCTestCase {
             context.delete(item)
             try! calculator.calculate(after: item.date)
 
-            let repository = ItemRepository(context: context)
-            let first = try! repository.fetchList().first!
-            let last = try! repository.fetchList().last!
+            let service = ItemService(context: context)
+            let first = try! service.items().first!
+            let last = try! service.items().last!
 
             XCTAssertEqual(first.balance, 400)
             XCTAssertEqual(last.balance, 100)
@@ -296,13 +296,13 @@ class BalanceCalculatorTests: XCTestCase {
             var items: [Item] = []
 
             for i in 1...5 {
-                let item = Item()
-                item.set(date: date("2000-0\(i)-01T12:00:00Z"),
-                         content: "content",
-                         income: 200,
-                         outgo: 100,
-                         group: "group",
-                         repeatID: UUID())
+                let item = try! Item.create(context: context,
+                                            date: date("2000-0\(i)-01T12:00:00Z"),
+                                            content: "content",
+                                            income: 200,
+                                            outgo: 100,
+                                            group: "group",
+                                            repeatID: UUID())
                 context.insert(item)
                 items.append(item)
             }
@@ -312,9 +312,9 @@ class BalanceCalculatorTests: XCTestCase {
             context.delete(item)
             try! calculator.calculate(after: item.date)
 
-            let repository = ItemRepository(context: context)
-            let first = try! repository.fetchList().first!
-            let last = try! repository.fetchList().last!
+            let service = ItemService(context: context)
+            let first = try! service.items().first!
+            let last = try! service.items().last!
 
             XCTAssertEqual(first.balance, 400)
             XCTAssertEqual(last.balance, 100)
@@ -327,13 +327,13 @@ class BalanceCalculatorTests: XCTestCase {
             var items: [Item] = []
 
             for i in 1...5 {
-                let item = Item()
-                item.set(date: date("2000-0\(i)-01T12:00:00Z"),
-                         content: "content",
-                         income: 200,
-                         outgo: 100,
-                         group: "group",
-                         repeatID: UUID())
+                let item = try! Item.create(context: context,
+                                            date: date("2000-0\(i)-01T12:00:00Z"),
+                                            content: "content",
+                                            income: 200,
+                                            outgo: 100,
+                                            group: "group",
+                                            repeatID: UUID())
                 context.insert(item)
                 items.append(item)
             }
@@ -343,9 +343,9 @@ class BalanceCalculatorTests: XCTestCase {
             context.delete(item)
             try! calculator.calculate(after: item.date)
 
-            let repository = ItemRepository(context: context)
-            let first = try! repository.fetchList().first!
-            let last = try! repository.fetchList().last!
+            let service = ItemService(context: context)
+            let first = try! service.items().first!
+            let last = try! service.items().last!
 
             XCTAssertEqual(first.balance, 400)
             XCTAssertEqual(last.balance, 100)
