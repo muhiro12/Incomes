@@ -169,7 +169,7 @@ extension ItemFormView: View {
             content = item.content
             income = item.income.description
             outgo = item.outgo.description
-            group = item.group
+            group = item.tags?.first { $0.type == .category }?.displayName ?? .empty
         }
         .onChange(of: focusedField) { _, newValue in
             withAnimation(.easeInOut) {
