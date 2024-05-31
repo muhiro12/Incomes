@@ -10,22 +10,39 @@ import Foundation
 import SwiftData
 
 struct TagService {
-    private let repository: TagRepository
+    private let context: ModelContext
 
     init(context: ModelContext) {
-        self.repository = TagRepository(context: context)
+        self.context = context
     }
 
+    // MARK: - Fetch
+
     func tag(predicate: Predicate<Tag>? = nil) throws -> Tag? {
-        try repository.fetch(predicate: predicate)
+        var descriptor = FetchDescriptor(
+            predicate: predicate,
+            sortBy: Tag.sortDescriptors()
+        )
+        descriptor.fetchLimit = 1
+        return try context.fetch(descriptor).first
     }
 
     func tags(predicate: Predicate<Tag>? = nil) throws -> [Tag] {
-        try repository.fetchList(predicate: predicate)
+        try context.fetch(.init(predicate: predicate, sortBy: Tag.sortDescriptors()))
     }
 
+    // MARK: - Create
+
+    func create(name: String, type: Tag.TagType) throws -> Tag {
+        try .create(context: context, name: name, type: type)
+    }
+
+    // MARK: - Delete
+
     func delete(tags: [Tag]) throws {
-        try repository.deleteList(tags)
+        try tags.forEach {
+            try $0.delete()
+        }
     }
 
     func deleteAll() throws {

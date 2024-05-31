@@ -10,21 +10,17 @@ import Foundation
 import SwiftData
 
 struct SwiftDataController {
-    private let migrator: SwiftDataMigrator
+    private let itemService: ItemService
     private let tagService: TagService
 
     init(context: ModelContext) {
-        self.migrator = SwiftDataMigrator(context: context)
-        self.tagService = TagService(context: context)
+        self.itemService = .init(context: context)
+        self.tagService = .init(context: context)
     }
 
     func modify() {
         do {
-            if try migrator.isBeforeV2() {
-                try migrator.migrateToV2()
-            } else {
-                try deleteInvalidTags()
-            }
+            try deleteInvalidTags()
         } catch {
             assertionFailure()
         }
@@ -46,7 +42,7 @@ struct SwiftDataController {
                 var tags = item.tags ?? []
                 tags.removeAll { $0 == tag }
                 tags.append(tag)
-                item.set(tags: tags)
+                itemService.update(item: item, tags: tags)
             }
             invalids.append(tag)
         }

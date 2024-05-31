@@ -29,7 +29,12 @@ extension DebugView: View {
             }
             Section {
                 NavigationLink(String.debugAllItems) {
-                    ItemListView(tag: .init()) { _ in .true }
+                    ItemListView(
+                        tag: try! TagService(context: context).create( // swiftlint:disable:this force_try
+                            name: "name",
+                            type: .year
+                        )
+                    ) { _ in .true }
                 }
             }
             Section {

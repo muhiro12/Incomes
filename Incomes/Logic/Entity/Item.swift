@@ -21,11 +21,88 @@ final class Item {
     @Relationship(inverse: \Tag.items)
     private(set) var tags: [Tag]? // swiftlint:disable:this discouraged_optional_collection
 
-    // TODO: Remove(2024/04~) // swiftlint:disable:this todo
-    private(set) var group = String.empty
-    private(set) var startOfYear = Date(timeIntervalSinceReferenceDate: .zero)
+    private init() {}
 
-    init() {}
+    static func create(context: ModelContext, // swiftlint:disable:this function_parameter_count
+                       date: Date,
+                       content: String,
+                       income: Decimal,
+                       outgo: Decimal,
+                       group: String,
+                       repeatID: UUID) throws -> Item {
+        let item = Item()
+        context.insert(item)
+
+        item.date = Calendar.utc.startOfDay(for: date)
+        item.content = content
+        item.income = income
+        item.outgo = outgo
+        item.repeatID = repeatID
+
+        let tagService = TagService(context: context)
+        item.tags = [
+            try tagService.create(
+                name: Calendar.utc.startOfYear(for: date).stringValueWithoutLocale(.yyyy),
+                type: .year
+            ),
+            try tagService.create(
+                name: Calendar.utc.startOfMonth(for: date).stringValueWithoutLocale(.yyyyMM),
+                type: .yearMonth
+            ),
+            try tagService.create(
+                name: content,
+                type: .content
+            ),
+            try tagService.create(
+                name: group,
+                type: .category
+            )
+        ]
+
+        return item
+    }
+
+    func modify(date: Date,
+                content: String,
+                income: Decimal,
+                outgo: Decimal,
+                group: String) throws {
+        self.date = Calendar.utc.startOfDay(for: date)
+        self.content = content
+        self.income = income
+        self.outgo = outgo
+        self.repeatID = UUID()
+
+        guard let context = modelContext else {
+            return
+        }
+
+        let tagService = TagService(context: context)
+        self.tags = [
+            try tagService.create(
+                name: Calendar.utc.startOfYear(for: date).stringValueWithoutLocale(.yyyy),
+                type: .year
+            ),
+            try tagService.create(
+                name: Calendar.utc.startOfMonth(for: date).stringValueWithoutLocale(.yyyyMM),
+                type: .yearMonth
+            ),
+            try tagService.create(
+                name: content,
+                type: .content
+            ),
+            try tagService.create(
+                name: group,
+                type: .category
+            )
+        ]
+
+        try context.save()
+    }
+
+    func modify(tags: [Tag]) {
+        self.tags = tags
+    }
 }
 
 extension Item {
@@ -37,29 +114,23 @@ extension Item {
         profit.isPlus
     }
 
-    func set(date: Date, // swiftlint:disable:this function_parameter_count
-             content: String,
-             income: Decimal,
-             outgo: Decimal,
-             group: String,
-             repeatID: UUID) {
+    @available(*, deprecated)
+    func modify(date: Date, // swiftlint:disable:this function_parameter_count
+                content: String,
+                income: Decimal,
+                outgo: Decimal,
+                group: String,
+                repeatID: UUID) {
         self.date = Calendar.utc.startOfDay(for: date)
         self.content = content
         self.income = income
         self.outgo = outgo
         self.repeatID = repeatID
-
-        // TODO: Remove(2024/04~) // swiftlint:disable:this todo
-        self.group = group
-        self.startOfYear = Calendar.utc.startOfYear(for: date)
     }
 
-    func set(balance: Decimal) {
+    @available(*, deprecated)
+    func modify(balance: Decimal) {
         self.balance = balance
-    }
-
-    func set(tags: [Tag]) {
-        self.tags = tags
     }
 }
 
