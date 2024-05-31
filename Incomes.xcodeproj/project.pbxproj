@@ -16,7 +16,6 @@
 		AD50E09C2AB4647A005CE509 /* DebugError.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD50E09B2AB4647A005CE509 /* DebugError.swift */; };
 		AD50E09E2AB46B39005CE509 /* NativeAdmob.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD50E09D2AB46B39005CE509 /* NativeAdmob.swift */; };
 		AD50E0A02AB49021005CE509 /* CollectionExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD50E09F2AB49021005CE509 /* CollectionExtension.swift */; };
-		AD5D754A2AB17011003E16D1 /* SwiftDataMigrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD5D75492AB17011003E16D1 /* SwiftDataMigrator.swift */; };
 		AD663132279973E700891D51 /* MediumNativeAdmobView.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD663130279973E700891D51 /* MediumNativeAdmobView.xib */; };
 		AD6B704427A7A71E00A38208 /* IncomesError.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6B704327A7A71E00A38208 /* IncomesError.swift */; };
 		AD6B704827A7C16100A38208 /* StoreSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6B704727A7C16100A38208 /* StoreSection.swift */; };
@@ -117,7 +116,6 @@
 		AD50E09B2AB4647A005CE509 /* DebugError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugError.swift; sourceTree = "<group>"; };
 		AD50E09D2AB46B39005CE509 /* NativeAdmob.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeAdmob.swift; sourceTree = "<group>"; };
 		AD50E09F2AB49021005CE509 /* CollectionExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionExtension.swift; sourceTree = "<group>"; };
-		AD5D75492AB17011003E16D1 /* SwiftDataMigrator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftDataMigrator.swift; sourceTree = "<group>"; };
 		AD6528842BAF2AD500D46D54 /* ci_post_clone.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = ci_post_clone.sh; sourceTree = "<group>"; };
 		AD663130279973E700891D51 /* MediumNativeAdmobView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MediumNativeAdmobView.xib; sourceTree = "<group>"; };
 		AD6B704327A7A71E00A38208 /* IncomesError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomesError.swift; sourceTree = "<group>"; };
@@ -385,7 +383,6 @@
 				AD6ED9472AC13BF1008EE239 /* SidebarItem.swift */,
 				ADEA399B2501457A00CB61D9 /* Store.swift */,
 				ADDF76CE2AAF079500CDEC7E /* SwiftDataController.swift */,
-				AD5D75492AB17011003E16D1 /* SwiftDataMigrator.swift */,
 				ADDF76C42AACAD5800CDEC7E /* TagService.swift */,
 			);
 			path = Model;
@@ -750,7 +747,6 @@
 				ADAD3D1D277BDBDE005A70E1 /* ItemListView.swift in Sources */,
 				ADD3CCDD2ABDFB3C00F60350 /* ItemListYearSection.swift in Sources */,
 				AD50E09C2AB4647A005CE509 /* DebugError.swift in Sources */,
-				AD5D754A2AB17011003E16D1 /* SwiftDataMigrator.swift in Sources */,
 				ADCF376524A32E460011D6F5 /* CreateButton.swift in Sources */,
 				ADAD3D23277C1120005A70E1 /* Item.swift in Sources */,
 				ADAD3D25277C1D0F005A70E1 /* StringProtocolExtension.swift in Sources */,

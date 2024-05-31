@@ -10,23 +10,17 @@ import Foundation
 import SwiftData
 
 struct SwiftDataController {
-    private let migrator: SwiftDataMigrator
     private let itemService: ItemService
     private let tagService: TagService
 
     init(context: ModelContext) {
-        self.migrator = .init(context: context)
         self.itemService = .init(context: context)
         self.tagService = .init(context: context)
     }
 
     func modify() {
         do {
-            if try migrator.isBeforeV2() {
-                try migrator.migrateToV2()
-            } else {
-                try deleteInvalidTags()
-            }
+            try deleteInvalidTags()
         } catch {
             assertionFailure()
         }
