@@ -14,6 +14,9 @@ struct SettingsView {
     @Environment(\.dismiss)
     private var dismiss
 
+    @Environment(NotificationService.self)
+    private var notificationService
+
     @AppStorage(.key(.isSubscribeOn))
     private var isSubscribeOn = UserDefaults.isSubscribeOn
 
@@ -88,6 +91,9 @@ extension SettingsView: View {
                 }
             }
             Button("Cancel", role: .cancel) {}
+        }
+        .task {
+            notificationService.refresh()
         }
     }
 }

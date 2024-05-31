@@ -16,7 +16,8 @@ struct IncomesApp {
     @AppStorage(.key(.isSubscribeOn))
     private var isSubscribeOn = UserDefaults.isSubscribeOn
 
-    private var store = Store()
+    private let sharedStore: Store
+    private let sharedNotificationService: NotificationService
 
     private let container = {
         let url = URL.applicationSupportDirectory.appendingPathComponent("Incomes.sqlite")
@@ -32,6 +33,9 @@ struct IncomesApp {
     init() {
         FirebaseApp.configure()
 
+        sharedStore = .init()
+        sharedNotificationService = .init()
+
         if !isSubscribeOn {
             Task {
                 await GADMobileAds.sharedInstance().start()
@@ -46,8 +50,12 @@ extension IncomesApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .task {
+                    await sharedNotificationService.register()
+                }
         }
-        .environment(store)
+        .environment(sharedStore)
+        .environment(sharedNotificationService)
         .modelContainer(container)
     }
 }
