@@ -181,6 +181,16 @@
         }
       }
     },
+    "Important Subscription Update" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "サブスクリプションプランの変更"
+          }
+        }
+      }
+    },
     "Income" : {
       "localizations" : {
         "ja" : {
@@ -357,6 +367,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "申し訳ありません、問題が発生しました。修正に取り組んでいます。"
+          }
+        }
+      }
+    },
+    "Starting August 1st, iCloud synchronization will be moved to the subscription plan. We appreciate your understanding and support." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "8月1日より、iCloud連携がサブスクリプションプランに移行します。ご理解とご支援に感謝いたします。"
           }
         }
       }

@@ -9,6 +9,12 @@
 import SwiftUI
 
 struct SidebarView {
+    @Environment(\.scenePhase)
+    private var scenePhase
+
+    @Environment(NotificationService.self)
+    private var notificationService
+
     @AppStorage(.key(.isSubscribeOn))
     private var isSubscribeOn = UserDefaults.isSubscribeOn
 
@@ -37,6 +43,13 @@ extension SidebarView: View {
                     isSettingsPresented = true
                 }, label: {
                     Image.settings
+                        .overlay(alignment: .topTrailing) {
+                            if notificationService.hasNotification {
+                                Circle()
+                                    .frame(width: .iconS)
+                                    .foregroundStyle(.red)
+                            }
+                        }
                 })
             }
         }
@@ -44,6 +57,20 @@ extension SidebarView: View {
             SettingsNavigationView()
         }
         .navigationTitle("Incomes")
+        .onChange(of: scenePhase) {
+            guard scenePhase == .active else {
+                return
+            }
+            Task {
+                await notificationService.update()
+            }
+        }
+        .onChange(of: notificationService.shouldShowNotification) {
+            guard notificationService.shouldShowNotification else {
+                return
+            }
+            isSettingsPresented = true
+        }
     }
 }
 

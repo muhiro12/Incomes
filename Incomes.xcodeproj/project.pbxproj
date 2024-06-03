@@ -16,6 +16,7 @@
 		AD50E09C2AB4647A005CE509 /* DebugError.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD50E09B2AB4647A005CE509 /* DebugError.swift */; };
 		AD50E09E2AB46B39005CE509 /* NativeAdmob.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD50E09D2AB46B39005CE509 /* NativeAdmob.swift */; };
 		AD50E0A02AB49021005CE509 /* CollectionExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD50E09F2AB49021005CE509 /* CollectionExtension.swift */; };
+		AD5FEFD02C0A04AC0090090C /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD5FEFCF2C0A04AC0090090C /* NotificationService.swift */; };
 		AD663132279973E700891D51 /* MediumNativeAdmobView.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD663130279973E700891D51 /* MediumNativeAdmobView.xib */; };
 		AD6B704427A7A71E00A38208 /* IncomesError.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6B704327A7A71E00A38208 /* IncomesError.swift */; };
 		AD6B704827A7C16100A38208 /* StoreSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6B704727A7C16100A38208 /* StoreSection.swift */; };
@@ -116,6 +117,7 @@
 		AD50E09B2AB4647A005CE509 /* DebugError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugError.swift; sourceTree = "<group>"; };
 		AD50E09D2AB46B39005CE509 /* NativeAdmob.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeAdmob.swift; sourceTree = "<group>"; };
 		AD50E09F2AB49021005CE509 /* CollectionExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionExtension.swift; sourceTree = "<group>"; };
+		AD5FEFCF2C0A04AC0090090C /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		AD6528842BAF2AD500D46D54 /* ci_post_clone.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = ci_post_clone.sh; sourceTree = "<group>"; };
 		AD663130279973E700891D51 /* MediumNativeAdmobView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MediumNativeAdmobView.xib; sourceTree = "<group>"; };
 		AD6B704327A7A71E00A38208 /* IncomesError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomesError.swift; sourceTree = "<group>"; };
@@ -384,6 +386,7 @@
 				ADEA399B2501457A00CB61D9 /* Store.swift */,
 				ADDF76CE2AAF079500CDEC7E /* SwiftDataController.swift */,
 				ADDF76C42AACAD5800CDEC7E /* TagService.swift */,
+				AD5FEFCF2C0A04AC0090090C /* NotificationService.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -761,6 +764,7 @@
 				ADCF370224A1D18E0011D6F5 /* WideListItem.swift in Sources */,
 				ADCF371324A1D18E0011D6F5 /* StringConstant.swift in Sources */,
 				ADCF370324A1D18E0011D6F5 /* ListItem.swift in Sources */,
+				AD5FEFD02C0A04AC0090090C /* NotificationService.swift in Sources */,
 				AD4C315A2AA581590030A17F /* PremiumSection.swift in Sources */,
 				ADB3627C2AA7890C00964CA7 /* Box.swift in Sources */,
 				ADCF370B24A1D18E0011D6F5 /* HomeView.swift in Sources */,
