@@ -124,24 +124,7 @@ struct ItemService {
                 repeatID: repeatID
             )
             item.modify(
-                tags: [
-                    try tagService.create(
-                        name: Calendar.utc.startOfYear(for: newDate).stringValueWithoutLocale(.yyyy),
-                        type: .year
-                    ),
-                    try tagService.create(
-                        name: Calendar.utc.startOfMonth(for: newDate).stringValueWithoutLocale(.yyyyMM),
-                        type: .yearMonth
-                    ),
-                    try tagService.create(
-                        name: content,
-                        type: .content
-                    ),
-                    try tagService.create(
-                        name: group,
-                        type: .category
-                    )
-                ]
+                tags: try tagService.createTags(date: newDate, content: content, group: group)
             )
         }
 

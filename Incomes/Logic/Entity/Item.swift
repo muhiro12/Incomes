@@ -39,25 +39,7 @@ final class Item {
         item.outgo = outgo
         item.repeatID = repeatID
 
-        let tagService = TagService(context: context)
-        item.tags = [
-            try tagService.create(
-                name: Calendar.utc.startOfYear(for: date).stringValueWithoutLocale(.yyyy),
-                type: .year
-            ),
-            try tagService.create(
-                name: Calendar.utc.startOfMonth(for: date).stringValueWithoutLocale(.yyyyMM),
-                type: .yearMonth
-            ),
-            try tagService.create(
-                name: content,
-                type: .content
-            ),
-            try tagService.create(
-                name: group,
-                type: .category
-            )
-        ]
+        item.tags = try TagService(context: context).createTags(date: date, content: content, group: group)
 
         return item
     }
@@ -77,25 +59,7 @@ final class Item {
             return
         }
 
-        let tagService = TagService(context: context)
-        self.tags = [
-            try tagService.create(
-                name: Calendar.utc.startOfYear(for: date).stringValueWithoutLocale(.yyyy),
-                type: .year
-            ),
-            try tagService.create(
-                name: Calendar.utc.startOfMonth(for: date).stringValueWithoutLocale(.yyyyMM),
-                type: .yearMonth
-            ),
-            try tagService.create(
-                name: content,
-                type: .content
-            ),
-            try tagService.create(
-                name: group,
-                type: .category
-            )
-        ]
+        self.tags = try TagService(context: context).createTags(date: date, content: content, group: group)
 
         try context.save()
     }

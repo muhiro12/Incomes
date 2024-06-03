@@ -37,6 +37,27 @@ struct TagService {
         try .create(context: context, name: name, type: type)
     }
 
+    func createTags(date: Date, content: String, group: String) throws -> [Tag] {
+        [
+            try create(
+                name: Calendar.utc.startOfYear(for: date).stringValueWithoutLocale(.yyyy),
+                type: .year
+            ),
+            try create(
+                name: Calendar.utc.startOfMonth(for: date).stringValueWithoutLocale(.yyyyMM),
+                type: .yearMonth
+            ),
+            try create(
+                name: content,
+                type: .content
+            ),
+            try create(
+                name: group,
+                type: .category
+            )
+        ]
+    }
+
     // MARK: - Delete
 
     func delete(tags: [Tag]) throws {
