@@ -658,7 +658,6 @@
 			packageReferences = (
 				ADEE1B05261E0956002EB18F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				AD387E492A8A1CE600E94623 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */,
-				AD6528932BB0829C00D46D54 /* XCRemoteSwiftPackageReference "SwiftLint" */,
 				AD6528942BB0899700D46D54 /* XCRemoteSwiftPackageReference "LicensePlist" */,
 			);
 			productRefGroup = ADCF36A724A1D0F40011D6F5 /* Products */;
@@ -1174,14 +1173,6 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 11.0.0;
-			};
-		};
-		AD6528932BB0829C00D46D54 /* XCRemoteSwiftPackageReference "SwiftLint" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/realm/SwiftLint";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.54.0;
 			};
 		};
 		AD6528942BB0899700D46D54 /* XCRemoteSwiftPackageReference "LicensePlist" */ = {
