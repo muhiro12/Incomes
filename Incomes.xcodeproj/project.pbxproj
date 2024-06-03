@@ -17,6 +17,7 @@
 		AD50E09E2AB46B39005CE509 /* NativeAdmob.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD50E09D2AB46B39005CE509 /* NativeAdmob.swift */; };
 		AD50E0A02AB49021005CE509 /* CollectionExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD50E09F2AB49021005CE509 /* CollectionExtension.swift */; };
 		AD5FEFD02C0A04AC0090090C /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD5FEFCF2C0A04AC0090090C /* NotificationService.swift */; };
+		AD5FEFD22C0D76480090090C /* NotificationSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD5FEFD12C0D76480090090C /* NotificationSection.swift */; };
 		AD663132279973E700891D51 /* MediumNativeAdmobView.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD663130279973E700891D51 /* MediumNativeAdmobView.xib */; };
 		AD6B704427A7A71E00A38208 /* IncomesError.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6B704327A7A71E00A38208 /* IncomesError.swift */; };
 		AD6B704827A7C16100A38208 /* StoreSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6B704727A7C16100A38208 /* StoreSection.swift */; };
@@ -118,6 +119,7 @@
 		AD50E09D2AB46B39005CE509 /* NativeAdmob.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeAdmob.swift; sourceTree = "<group>"; };
 		AD50E09F2AB49021005CE509 /* CollectionExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionExtension.swift; sourceTree = "<group>"; };
 		AD5FEFCF2C0A04AC0090090C /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
+		AD5FEFD12C0D76480090090C /* NotificationSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSection.swift; sourceTree = "<group>"; };
 		AD6528842BAF2AD500D46D54 /* ci_post_clone.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = ci_post_clone.sh; sourceTree = "<group>"; };
 		AD663130279973E700891D51 /* MediumNativeAdmobView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MediumNativeAdmobView.xib; sourceTree = "<group>"; };
 		AD6B704327A7A71E00A38208 /* IncomesError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomesError.swift; sourceTree = "<group>"; };
@@ -364,6 +366,7 @@
 				ADCF36E324A1D18E0011D6F5 /* NarrowListItem.swift */,
 				AD50E09D2AB46B39005CE509 /* NativeAdmob.swift */,
 				ADDBC4572792CD4400F5E4A7 /* NativeAdvertisement.swift */,
+				AD5FEFD12C0D76480090090C /* NotificationSection.swift */,
 				AD4C31592AA581590030A17F /* PremiumSection.swift */,
 				AD6B704727A7C16100A38208 /* StoreSection.swift */,
 				ADE89DF424B5E73300BB82E9 /* TitleListItem.swift */,
@@ -771,6 +774,7 @@
 				AD6ED9482AC13BF1008EE239 /* SidebarItem.swift in Sources */,
 				ADDF76CD2AADFAAF00CDEC7E /* TagExtension.swift in Sources */,
 				ADAD3D17277BC80F005A70E1 /* YearSection.swift in Sources */,
+				AD5FEFD22C0D76480090090C /* NotificationSection.swift in Sources */,
 				ADE3A4C1277690340016C152 /* Authenticator.swift in Sources */,
 				ADDF76C92AAD36AF00CDEC7E /* CategorySection.swift in Sources */,
 				ADAD3D19277BD499005A70E1 /* ItemExtension.swift in Sources */,
