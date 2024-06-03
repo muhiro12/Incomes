@@ -1,9 +1,9 @@
 //
-//  IncomesApp.swift
+//  ContentView.swift
 //  Incomes
 //
-//  Created by Hiromu Nakano on 2021/12/28.
-//  Copyright © 2021 Hiromu Nakano. All rights reserved.
+//  Created by Hiromu Nakano on 2020/04/08.
+//  Copyright © 2020 Hiromu Nakano. All rights reserved.
 //
 
 import Firebase
@@ -11,10 +11,19 @@ import GoogleMobileAds
 import SwiftData
 import SwiftUI
 
-@main
-struct IncomesApp {
+public struct ContentView {
+    @Environment(\.scenePhase)
+    private var scenePhase
+
     @AppStorage(.key(.isSubscribeOn))
     private var isSubscribeOn = UserDefaults.isSubscribeOn
+    @AppStorage(.key(.isMaskAppOn))
+    private var isMaskAppOn = UserDefaults.isMaskAppOn
+    @AppStorage(.key(.isLockAppOn))
+    private var isLockAppOn = UserDefaults.isLockAppOn
+
+    @State private var isMasked = false
+    @State private var isLocked = UserDefaults.isLockAppOn
 
     private let sharedStore: Store
     private let sharedNotificationService: NotificationService
@@ -30,7 +39,7 @@ struct IncomesApp {
     }()
 
     @MainActor
-    init() {
+    public init() {
         FirebaseApp.configure()
 
         sharedStore = .init()
@@ -46,16 +55,32 @@ struct IncomesApp {
     }
 }
 
-extension IncomesApp: App {
-    var body: some Scene {
-        WindowGroup {
-            ContentView()
-                .task {
-                    await sharedNotificationService.register()
+extension ContentView: View {
+    public var body: some View {
+        ZStack {
+            RootNavigationView()
+                .onChange(of: scenePhase) { _, newValue in
+                    isMasked = isMaskAppOn && newValue != .active
+                    if !isLocked {
+                        isLocked = isLockAppOn && newValue == .background
+                    }
                 }
+            if isMasked {
+                MaskView()
+            } else if isLocked {
+                LockedView(isLocked: $isLocked)
+            }
+        }
+        .task {
+            await sharedNotificationService.register()
         }
         .environment(sharedStore)
         .environment(sharedNotificationService)
         .modelContainer(container)
     }
+}
+
+#Preview {
+    ContentView()
+        .previewContext()
 }
