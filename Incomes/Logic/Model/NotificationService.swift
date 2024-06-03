@@ -15,6 +15,11 @@ final class NotificationService: NSObject {
     private(set) var hasNotification = false
     private(set) var shouldShowNotification = false
 
+    private let year = 2_024
+    private let months = [6, 7, 8] // swiftlint:disable:this no_magic_numbers
+    private let days = [10, 20, 30] // swiftlint:disable:this no_magic_numbers
+    private let hour = 20
+
     private var center: UNUserNotificationCenter {
         UNUserNotificationCenter.current()
     }
@@ -33,14 +38,14 @@ final class NotificationService: NSObject {
 
         let content = UNMutableNotificationContent()
         content.title = .init(localized: "Important Subscription Update")
-        content.body = .init(localized: "Starting August 1st, iCloud synchronization will be moved to the subscription plan. We appreciate your understanding and support.")
+        content.body = .init(localized: "Starting August 1st, iCloud synchronization will be moved to the subscription plan. We appreciate your understanding and support.") // swiftlint:disable:this line_length
         content.badge = 1
         content.sound = .default
 
-        for month in [6, 7, 8] {
-            for day in [10, 20, 30] {
+        for month in months {
+            for day in days {
                 let trigger = UNCalendarNotificationTrigger(
-                    dateMatching: .init(year: 2_024, month: month, day: day, hour: 20),
+                    dateMatching: .init(year: year, month: month, day: day, hour: hour),
                     repeats: false
                 )
 
@@ -68,12 +73,14 @@ final class NotificationService: NSObject {
 }
 
 extension NotificationService: UNUserNotificationCenterDelegate {
-    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification) async -> UNNotificationPresentationOptions {
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                willPresent notification: UNNotification) async -> UNNotificationPresentationOptions {
         hasNotification = true
         return [.badge, .sound, .list, .banner]
     }
 
-    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse) async {
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                didReceive response: UNNotificationResponse) async {
         shouldShowNotification = true
     }
 }
