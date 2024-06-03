@@ -16,6 +16,7 @@ struct NotificationSection: View {
         Section("Notification") {
             HStack {
                 Image(systemName: "exclamationmark.triangle")
+                    .accessibilityHidden(true)
                 Text("Upcoming Changes to the Subscription Plan")
             }
             .font(.headline)
