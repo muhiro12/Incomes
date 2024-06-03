@@ -566,7 +566,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = ADCF36D324A1D0F70011D6F5 /* Build configuration list for PBXNativeTarget "Incomes" */;
 			buildPhases = (
-				ADCF373624A1D5160011D6F5 /* SwiftLint */,
 				ADA626672796892A0002A086 /* LicensePlist */,
 				ADCF36A224A1D0F40011D6F5 /* Sources */,
 				ADCF36A324A1D0F40011D6F5 /* Frameworks */,
@@ -724,25 +723,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "PACKAGE_PATH=${BUILD_DIR%Build/*}SourcePackages/checkouts/LicensePlist\nLICENSE_PLIST=$PACKAGE_PATH/.build/release/license-plist\n\nif [ ! -f $LICENSE_PLIST ]; then\n    xcrun --sdk macosx swift build -c release --package-path $PACKAGE_PATH --product license-plist\nfi\n\nif [ $CONFIGURATION = \"Debug\" ]; then\n    $LICENSE_PLIST --output-path $PRODUCT_NAME/Configuration/Settings.bundle\nfi\n";
-		};
-		ADCF373624A1D5160011D6F5 /* SwiftLint */ = {
-			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = SwiftLint;
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "PACKAGE_PATH=${BUILD_DIR%Build/*}SourcePackages/checkouts/SwiftLint\nSWIFTLINT=$PACKAGE_PATH/.build/release/swiftlint\n\nif [ ! -f $SWIFTLINT ]; then\n    xcrun --sdk macosx swift build -c release --package-path $PACKAGE_PATH --product swiftlint\nfi\n\n$SWIFTLINT --fix --format\n$SWIFTLINT --silence-deprecation-warnings\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
