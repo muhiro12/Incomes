@@ -95,21 +95,7 @@ extension ItemFormView: View {
                     FilteredTagList(category: $group)
                 }
                 if mode == .create {
-                    HStack {
-                        Text("Repeat")
-                        Spacer()
-                        Picker("Repeat",
-                               selection: $repeatSelection) {
-                            ForEach((.minRepeatCount)..<(.maxRepeatCount + .one), id: \.self) {
-                                Text($0.description)
-                            }
-                        }
-                        .pickerStyle(WheelPickerStyle())
-                        .labelsHidden()
-                        .frame(width: .componentS,
-                               height: .componentS)
-                        .clipped()
-                    }
+                    RepeatCountPicker(selection: $repeatSelection)
                 }
             }, header: {
                 Text("Information")
