@@ -34,6 +34,7 @@ extension SettingsView: View {
                 .font(.headline)
                 .foregroundStyle(.red)
                 Text(
+                    // swiftlint:disable line_length
                     """
                     We would like to inform you that starting August 1st (tentative), the contents of the subscription plan will be updated as follows:
 
@@ -42,6 +43,7 @@ extension SettingsView: View {
 
                     We greatly appreciate your support and understanding as we make these changes to enhance your experience with our app. Thank you for being a valued member of our community.
                     """
+                    // swiftlint:enable line_length
                 )
             }
             if isSubscribeOn {

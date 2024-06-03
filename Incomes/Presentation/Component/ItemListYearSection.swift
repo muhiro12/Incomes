@@ -31,9 +31,8 @@ struct ItemListYearSection {
 }
 
 extension ItemListYearSection: View {
-    // TODO: Resolve SwiftLint and remove static Strings
     var body: some View {
-        Group { // swiftlint:disable:this closure_body_length
+        Group {
             Section(content: {
                 ForEach(items) {
                     ListItem(of: $0)

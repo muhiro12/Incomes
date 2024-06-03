@@ -52,8 +52,6 @@ struct ItemFormView {
 }
 
 extension ItemFormView: View {
-    // TODO: Resolve SwiftLint
-    // swiftlint:disable closure_body_length
     var body: some View {
         Form {
             Section(content: {
@@ -191,7 +189,6 @@ extension ItemFormView: View {
         }
         .navigationViewStyle(StackNavigationViewStyle())
     }
-    // swiftlint:enable closure_body_length
 }
 
 // MARK: - private
