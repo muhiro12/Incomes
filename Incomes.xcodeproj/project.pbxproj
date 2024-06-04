@@ -53,6 +53,7 @@
 		ADE3A4BC277495270016C152 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Base; path = Base.lproj/Info.plist; sourceTree = "<group>"; };
 		ADE3A4BE27768E6C0016C152 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = en; path = en.lproj/Info.plist; sourceTree = "<group>"; };
 		ADE3A4BF27768E7B0016C152 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = ja; path = ja.lproj/Info.plist; sourceTree = "<group>"; };
+		ADEFC5292C0EA075005600A7 /* Incomes.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = Incomes.xctestplan; path = /Users/Hiromu/Repositories/Incomes/Incomes/Configuration/Incomes.xctestplan; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -188,6 +189,7 @@
 				ADCF371524A1D1B80011D6F5 /* Incomes.entitlements */,
 				ADCF36B224A1D0F70011D6F5 /* Assets.xcassets */,
 				AD2D58362AC7B2A90074069B /* Localizable.xcstrings */,
+				ADEFC5292C0EA075005600A7 /* Incomes.xctestplan */,
 				ADE3A4B9277491CB0016C152 /* Info.plist */,
 				ADE058792706E7AE00DF2499 /* Package */,
 			);
