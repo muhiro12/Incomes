@@ -8,5 +8,5 @@
 
 mkdir ../Incomes/Configuration/Package/Firebase/
 echo $GOOGLESERVICE_BASE64 | base64 -d -o ../Incomes/Configuration/Package/Firebase/GoogleService-Info.plist
-echo $SECRET_BASE64 | base64 -d -o ../Incomes/Configuration/Secret.swift
+echo $SECRET_BASE64 | base64 -d -o ../Incomes/Sources/Configuration/Secret.swift
 echo $STOREKIT_BASE64 | base64 -d -o ../Incomes/Configuration/Package/StoreKit/StoreKitTestCertificate.cer
