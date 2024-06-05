@@ -6,7 +6,7 @@
 //  Copyright © 2023 Hiromu Nakano. All rights reserved.
 //
 
-import Foundation
+import SwiftUI
 
 enum SidebarItem: String, Identifiable {
     case home
@@ -16,11 +16,10 @@ enum SidebarItem: String, Identifiable {
         rawValue
     }
 
-    var title: LocalizedStringResource {
+    var title: LocalizedStringKey {
         switch self {
         case .home:
             return "Home"
-
         case .category:
             return "Category"
         }

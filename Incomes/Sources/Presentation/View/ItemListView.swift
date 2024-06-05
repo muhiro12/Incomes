@@ -35,7 +35,7 @@ extension ItemListView: View {
             ItemListYearSection(yearTag: $0,
                                 predicate: predicateBuilder($0))
         }
-        .navigationBarTitle(title)
+        .navigationTitle(Text(title))
         .listStyle(.grouped)
     }
 }

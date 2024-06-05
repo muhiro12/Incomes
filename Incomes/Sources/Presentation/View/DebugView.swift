@@ -38,26 +38,33 @@ extension DebugView: View {
                 }
             }
             Section {
-                Button(String.debugSetPreviewData) {
+                Button {
                     isAlertPresented = true
+                } label: {
+                    Text(String.debugSetPreviewData)
                 }
                 .disabled(!isDebugOption)
             }
         }
         .alert(String.debugSetPreviewData, isPresented: $isAlertPresented) {
-            Button("Cancel", role: .cancel) {}
-            Button(String.debugOK, role: .destructive) {
+            Button(role: .cancel) {
+            } label: {
+                Text("Cancel")
+            }
+            Button(role: .destructive) {
                 do {
                     _ = try PreviewData.items(context: context)
                     try context.save()
                 } catch {
                     assertionFailure(error.localizedDescription)
                 }
+            } label: {
+                Text(String.debugOK)
             }
         } message: {
             Text(String.debugSetPreviewDataMessage)
         }
-        .navigationBarTitle(String.debugTitle)
+        .navigationTitle(Text(String.debugTitle))
     }
 }
 

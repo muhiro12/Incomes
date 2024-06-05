@@ -30,53 +30,66 @@ extension SettingsView: View {
                 StoreSection()
             }
             Section(content: {
-                Button("Recalculate") {
+                Button {
                     do {
                         try ItemService(context: context).recalculate()
                     } catch {
                         assertionFailure(error.localizedDescription)
                     }
+                } label: {
+                    Text("Recalculate")
                 }
-                Button("Delete all", role: .destructive) {
+                Button(role: .destructive) {
                     isAlertPresented = true
+                } label: {
+                    Text("Delete all")
                 }
             }, header: {
                 Text("Manage items")
             })
             Section {
-                NavigationLink("License") {
+                NavigationLink {
                     LicenseView()
-                        .navigationTitle("License")
+                        .navigationTitle(Text("License"))
+                } label: {
+                    Text("License")
                 }
             }
             if DebugView.isDebug {
-                NavigationLink(String.debugTitle) {
+                NavigationLink {
                     DebugView()
+                } label: {
+                    Text(String.debugTitle)
                 }
             }
         }
-        .navigationBarTitle("Settings")
+        .navigationTitle(Text("Settings"))
         .toolbar {
             ToolbarItem {
-                Button(action: {
+                Button {
                     dismiss()
-                }, label: {
+                } label: {
                     Image(systemName: .imageClose)
                         .symbolRenderingMode(.hierarchical)
-                })
+                }
             }
         }
-        .alert("Are you sure you want to delete all items?",
+        .alert(Text("Are you sure you want to delete all items?"),
                isPresented: $isAlertPresented) {
-            Button("Delete", role: .destructive) {
+            Button(role: .destructive) {
                 do {
                     try ItemService(context: context).deleteAll()
                     try TagService(context: context).deleteAll()
                 } catch {
                     assertionFailure(error.localizedDescription)
                 }
+            } label: {
+                Text("Delete")
             }
-            Button("Cancel", role: .cancel) {}
+            Button(role: .cancel) {
+            } label: {
+                Text("Cancel")
+            }
         }
     }
 }

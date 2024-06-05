@@ -104,7 +104,7 @@ extension ItemFormView: View {
                 DebugSection(item: item)
             }
         }
-        .navigationBarTitle(mode == .create ? "Create" : "Edit")
+        .navigationTitle(Text(mode == .create ? "Create" : "Edit"))
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {
                 Button(action: cancel) {
@@ -112,7 +112,7 @@ extension ItemFormView: View {
                 }
             }
             ToolbarItem(placement: .primaryAction) {
-                Button(mode == .create ? "Create" : "Save") {
+                Button {
                     if mode == .create {
                         create()
                     } else {
@@ -122,6 +122,8 @@ extension ItemFormView: View {
                        count.isMultiple(of: 10) { // swiftlint:disable:this no_magic_numbers
                         requestReview()
                     }
+                } label: {
+                    Text(mode == .create ? "Create" : "Save")
                 }
                 .bold()
                 .disabled(!isValid)
@@ -137,10 +139,15 @@ extension ItemFormView: View {
                 }
         )
         .alert(String.debugTitle, isPresented: $isDebugAlertPresented) {
-            Button("Cancel", role: .cancel) {}
-            Button(String.debugOK) {
+            Button(role: .cancel) {
+            } label: {
+                Text("Cancel")
+            }
+            Button {
                 DebugView.isDebug = true
                 dismiss()
+            } label: {
+                Text(String.debugOK)
             }
         } message: {
             Text(String.debugMessage)

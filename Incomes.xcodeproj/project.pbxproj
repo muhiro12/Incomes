@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		AD2D58372AC7B2AA0074069B /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = AD2D58362AC7B2A90074069B /* Localizable.xcstrings */; };
 		AD663132279973E700891D51 /* MediumNativeAdmobView.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD663130279973E700891D51 /* MediumNativeAdmobView.xib */; };
 		AD85E34F2C0E80C1005A33A2 /* IncomesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD85E34E2C0E80C1005A33A2 /* IncomesApp.swift */; };
 		AD85E3512C0E814E005A33A2 /* Incomes in Frameworks */ = {isa = PBXBuildFile; productRef = AD85E3502C0E814E005A33A2 /* Incomes */; };
@@ -21,7 +20,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		AD2D58362AC7B2A90074069B /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		AD6528842BAF2AD500D46D54 /* ci_post_clone.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = ci_post_clone.sh; sourceTree = "<group>"; };
 		AD663130279973E700891D51 /* MediumNativeAdmobView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MediumNativeAdmobView.xib; sourceTree = "<group>"; };
 		AD7C7E2B254A33E500D1F0A0 /* Configuration.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Configuration.storekit; sourceTree = "<group>"; };
@@ -185,7 +183,6 @@
 			children = (
 				ADCF371524A1D1B80011D6F5 /* Incomes.entitlements */,
 				ADCF36B224A1D0F70011D6F5 /* Assets.xcassets */,
-				AD2D58362AC7B2A90074069B /* Localizable.xcstrings */,
 				ADEFC5292C0EA075005600A7 /* Incomes.xctestplan */,
 				ADE3A4B9277491CB0016C152 /* Info.plist */,
 				ADE058792706E7AE00DF2499 /* Package */,
@@ -264,7 +261,6 @@
 				AD98194226E43C3600C4A57C /* StoreKitTestCertificate.cer in Resources */,
 				AD663132279973E700891D51 /* MediumNativeAdmobView.xib in Resources */,
 				ADCB06F12791A48000B867F4 /* GoogleService-Info.plist in Resources */,
-				AD2D58372AC7B2AA0074069B /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

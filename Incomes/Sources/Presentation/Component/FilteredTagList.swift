@@ -32,8 +32,10 @@ extension FilteredTagList: View {
         ScrollView(.horizontal, showsIndicators: false) {
             LazyHStack {
                 ForEach(filteredTags) { tag in
-                    Button(tag.name) {
+                    Button {
                         name = tag.name
+                    } label: {
+                        Text(tag.name)
                     }
                     .buttonStyle(.bordered)
                     .controlSize(.mini)

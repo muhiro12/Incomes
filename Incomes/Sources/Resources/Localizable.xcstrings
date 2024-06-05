@@ -2,7 +2,6 @@
   "sourceLanguage" : "en",
   "strings" : {
     "%lld Items" : {
-      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "variations" : {
@@ -43,7 +42,6 @@
       }
     },
     "Amount" : {
-      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -54,7 +52,6 @@
       }
     },
     "Are you sure you want to delete all items?" : {
-      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -65,7 +62,6 @@
       }
     },
     "Are you sure you want to delete this item?" : {
-      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -76,7 +72,6 @@
       }
     },
     "Balance" : {
-      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -87,7 +82,6 @@
       }
     },
     "Cancel" : {
-      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -98,7 +92,6 @@
       }
     },
     "Category" : {
-      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -109,7 +102,6 @@
       }
     },
     "Content" : {
-      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -120,7 +112,6 @@
       }
     },
     "Create" : {
-      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -131,7 +122,6 @@
       }
     },
     "Date" : {
-      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -142,7 +132,6 @@
       }
     },
     "Delete" : {
-      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -153,7 +142,6 @@
       }
     },
     "Delete all" : {
-      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -164,7 +152,6 @@
       }
     },
     "Edit" : {
-      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -175,7 +162,6 @@
       }
     },
     "Group" : {
-      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -186,7 +172,6 @@
       }
     },
     "Home" : {
-      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -197,7 +182,6 @@
       }
     },
     "Important Subscription Update" : {
-      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -208,7 +192,6 @@
       }
     },
     "Income" : {
-      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -219,7 +202,6 @@
       }
     },
     "Income and Outgo" : {
-      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -230,7 +212,6 @@
       }
     },
     "Incomes" : {
-      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -241,7 +222,6 @@
       }
     },
     "Information" : {
-      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -251,8 +231,17 @@
         }
       }
     },
+    "License" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ライセンス"
+          }
+        }
+      }
+    },
     "Lock the app" : {
-      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -263,7 +252,6 @@
       }
     },
     "Manage items" : {
-      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -274,7 +262,6 @@
       }
     },
     "Mask the app" : {
-      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -285,7 +272,6 @@
       }
     },
     "Notification" : {
-      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -296,7 +282,6 @@
       }
     },
     "Others" : {
-      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -307,7 +292,6 @@
       }
     },
     "Outgo" : {
-      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -318,7 +302,6 @@
       }
     },
     "Recalculate" : {
-      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -329,7 +312,6 @@
       }
     },
     "Repeat" : {
-      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -340,7 +322,6 @@
       }
     },
     "Save" : {
-      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -351,7 +332,6 @@
       }
     },
     "Save for all items" : {
-      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -362,7 +342,6 @@
       }
     },
     "Save for future items" : {
-      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -373,7 +352,6 @@
       }
     },
     "Save for this item only" : {
-      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -384,7 +362,6 @@
       }
     },
     "Settings" : {
-      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -395,7 +372,6 @@
       }
     },
     "Sorry, something went wrong. We're working to fix it." : {
-      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -406,7 +382,6 @@
       }
     },
     "Starting August 1st, iCloud synchronization will be moved to the subscription plan. We appreciate your understanding and support." : {
-      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -417,7 +392,6 @@
       }
     },
     "This is a repeating item." : {
-      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -428,7 +402,6 @@
       }
     },
     "Today: %@" : {
-      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -439,7 +412,6 @@
       }
     },
     "Unlock" : {
-      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -450,7 +422,6 @@
       }
     },
     "Unlock the app" : {
-      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -461,7 +432,6 @@
       }
     },
     "Upcoming Changes to the Subscription Plan" : {
-      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -472,7 +442,6 @@
       }
     },
     "We would like to inform you that starting August 1st (tentative), the contents of the subscription plan will be updated as follows:\n\n  1. iCloud synchronization and ad removal will become subscription features.\n  2. Features such as categories and graphs, which were previously part of the subscription, will now be available for free to all users.\n\nWe greatly appreciate your support and understanding as we make these changes to enhance your experience with our app. Thank you for being a valued member of our community." : {
-      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {

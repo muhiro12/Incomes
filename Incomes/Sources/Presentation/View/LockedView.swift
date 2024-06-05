@@ -22,8 +22,10 @@ extension LockedView: View {
     var body: some View {
         ZStack {
             MaskView()
-            Button("Unlock", action: unlock)
-                .buttonStyle(.borderedProminent)
+            Button(action: unlock) {
+                Text("Unlock")
+            }
+            .buttonStyle(.borderedProminent)
         }
     }
 }

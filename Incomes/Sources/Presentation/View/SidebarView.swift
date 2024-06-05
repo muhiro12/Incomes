@@ -33,15 +33,18 @@ struct SidebarView {
 
 extension SidebarView: View {
     var body: some View {
-        List(isSubscribeOn ? subscriber : user, selection: $selection) {
-            Label(.init($0.title.key),
-                  systemImage: $0.image)
+        List(isSubscribeOn ? subscriber : user, selection: $selection) { sidebar in
+            Label {
+                Text(sidebar.title)
+            } icon: {
+                Image(systemName: sidebar.image)
+            }
         }
         .toolbar {
             ToolbarItem {
-                Button(action: {
+                Button {
                     isSettingsPresented = true
-                }, label: {
+                } label: {
                     Image.settings
                         .overlay(alignment: .topTrailing) {
                             if notificationService.hasNotification {
@@ -50,13 +53,13 @@ extension SidebarView: View {
                                     .foregroundStyle(.red)
                             }
                         }
-                })
+                }
             }
         }
         .sheet(isPresented: $isSettingsPresented) {
             SettingsNavigationView()
         }
-        .navigationTitle("Incomes")
+        .navigationTitle(Text("Incomes"))
         .onChange(of: scenePhase) {
             guard scenePhase == .active else {
                 return

@@ -25,7 +25,7 @@ extension CategoryView: View {
         List(tags, selection: $selection) {
             CategorySection(categoryTag: $0)
         }
-        .navigationBarTitle("Category")
+        .navigationTitle(Text("Category"))
         .listStyle(.sidebar)
     }
 }

@@ -14,11 +14,11 @@ struct CreateButton {
 
 extension CreateButton: View {
     var body: some View {
-        Button(action: {
+        Button {
             isCreatePresented = true
-        }, label: {
+        } label: {
             Image.create
-        })
+        }
         .sheet(isPresented: $isCreatePresented) {
             ItemFormNavigationView(mode: .create, item: nil)
         }
