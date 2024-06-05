@@ -43,6 +43,12 @@ extension SettingsView: View {
             }, header: {
                 Text("Manage items")
             })
+            Section {
+                NavigationLink("License") {
+                    LicenseView()
+                        .navigationTitle("License")
+                }
+            }
             if DebugView.isDebug {
                 NavigationLink(String.debugTitle) {
                     DebugView()

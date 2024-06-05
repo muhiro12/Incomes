@@ -12,7 +12,6 @@
 		AD85E34F2C0E80C1005A33A2 /* IncomesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD85E34E2C0E80C1005A33A2 /* IncomesApp.swift */; };
 		AD85E3512C0E814E005A33A2 /* Incomes in Frameworks */ = {isa = PBXBuildFile; productRef = AD85E3502C0E814E005A33A2 /* Incomes */; };
 		AD98194226E43C3600C4A57C /* StoreKitTestCertificate.cer in Resources */ = {isa = PBXBuildFile; fileRef = AD98194126E43C3600C4A57C /* StoreKitTestCertificate.cer */; };
-		ADA900B527969687000DC872 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = ADA900B427969687000DC872 /* Settings.bundle */; };
 		ADA900C6279934EB000DC872 /* SmallNativeAdmobView.xib in Resources */ = {isa = PBXBuildFile; fileRef = ADA900C5279934EB000DC872 /* SmallNativeAdmobView.xib */; };
 		ADCB06F12791A48000B867F4 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = ADCB06F02791A48000B867F4 /* GoogleService-Info.plist */; };
 		ADCF36B324A1D0F70011D6F5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ADCF36B224A1D0F70011D6F5 /* Assets.xcassets */; };
@@ -28,7 +27,6 @@
 		AD7C7E2B254A33E500D1F0A0 /* Configuration.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Configuration.storekit; sourceTree = "<group>"; };
 		AD85E34E2C0E80C1005A33A2 /* IncomesApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IncomesApp.swift; sourceTree = "<group>"; };
 		AD98194126E43C3600C4A57C /* StoreKitTestCertificate.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = StoreKitTestCertificate.cer; sourceTree = "<group>"; };
-		ADA900B427969687000DC872 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		ADA900C5279934EB000DC872 /* SmallNativeAdmobView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SmallNativeAdmobView.xib; sourceTree = "<group>"; };
 		ADCB06F02791A48000B867F4 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		ADCF36A624A1D0F40011D6F5 /* Incomes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Incomes.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -185,7 +183,6 @@
 		ADE0587A2706E87500DF2499 /* Configuration */ = {
 			isa = PBXGroup;
 			children = (
-				ADA900B427969687000DC872 /* Settings.bundle */,
 				ADCF371524A1D1B80011D6F5 /* Incomes.entitlements */,
 				ADCF36B224A1D0F70011D6F5 /* Assets.xcassets */,
 				AD2D58362AC7B2A90074069B /* Localizable.xcstrings */,
@@ -203,7 +200,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = ADCF36D324A1D0F70011D6F5 /* Build configuration list for PBXNativeTarget "Incomes" */;
 			buildPhases = (
-				ADA626672796892A0002A086 /* LicensePlist */,
 				ADCF36A224A1D0F40011D6F5 /* Sources */,
 				ADCF36A324A1D0F40011D6F5 /* Frameworks */,
 				ADCF36A424A1D0F40011D6F5 /* Resources */,
@@ -248,7 +244,6 @@
 			);
 			mainGroup = ADCF369D24A1D0F40011D6F5;
 			packageReferences = (
-				AD6528942BB0899700D46D54 /* XCRemoteSwiftPackageReference "LicensePlist" */,
 			);
 			productRefGroup = ADCF36A724A1D0F40011D6F5 /* Products */;
 			projectDirPath = "";
@@ -265,7 +260,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				ADA900C6279934EB000DC872 /* SmallNativeAdmobView.xib in Resources */,
-				ADA900B527969687000DC872 /* Settings.bundle in Resources */,
 				ADCF36B324A1D0F70011D6F5 /* Assets.xcassets in Resources */,
 				AD98194226E43C3600C4A57C /* StoreKitTestCertificate.cer in Resources */,
 				AD663132279973E700891D51 /* MediumNativeAdmobView.xib in Resources */,
@@ -275,28 +269,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		ADA626672796892A0002A086 /* LicensePlist */ = {
-			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = LicensePlist;
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "PACKAGE_PATH=${BUILD_DIR%Build/*}SourcePackages/checkouts/LicensePlist\nLICENSE_PLIST=$PACKAGE_PATH/.build/release/license-plist\n\nif [ ! -f $LICENSE_PLIST ]; then\n    xcrun --sdk macosx swift build -c release --package-path $PACKAGE_PATH --product license-plist\nfi\n\nif [ $CONFIGURATION = \"Debug\" ]; then\n    $LICENSE_PLIST --output-path $PRODUCT_NAME/Configuration/Settings.bundle\nfi\n";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		ADCF36A224A1D0F40011D6F5 /* Sources */ = {
@@ -536,17 +508,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		AD6528942BB0899700D46D54 /* XCRemoteSwiftPackageReference "LicensePlist" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/mono0926/LicensePlist";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 3.25.1;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
 		AD85E3502C0E814E005A33A2 /* Incomes */ = {
