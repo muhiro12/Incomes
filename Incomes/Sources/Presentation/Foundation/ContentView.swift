@@ -6,7 +6,7 @@
 //  Copyright © 2020 Hiromu Nakano. All rights reserved.
 //
 
-import Firebase
+@_implementationOnly import Firebase
 import GoogleMobileAds
 import SwiftData
 import SwiftUI
