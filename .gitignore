@@ -6,6 +6,7 @@
 GoogleService-Info.plist
 Secret.swift
 StoreKitTestCertificate.cer
+Configuration.storekit
 
 ## User settings
 xcuserdata/
