@@ -10,7 +10,6 @@
 		AD663132279973E700891D51 /* MediumNativeAdmobView.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD663130279973E700891D51 /* MediumNativeAdmobView.xib */; };
 		AD85E34F2C0E80C1005A33A2 /* IncomesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD85E34E2C0E80C1005A33A2 /* IncomesApp.swift */; };
 		AD85E3512C0E814E005A33A2 /* Incomes in Frameworks */ = {isa = PBXBuildFile; productRef = AD85E3502C0E814E005A33A2 /* Incomes */; };
-		AD98194226E43C3600C4A57C /* StoreKitTestCertificate.cer in Resources */ = {isa = PBXBuildFile; fileRef = AD98194126E43C3600C4A57C /* StoreKitTestCertificate.cer */; };
 		ADA900C6279934EB000DC872 /* SmallNativeAdmobView.xib in Resources */ = {isa = PBXBuildFile; fileRef = ADA900C5279934EB000DC872 /* SmallNativeAdmobView.xib */; };
 		ADB51EBB2C109BDC00C3082D /* Configuration.storekit in Resources */ = {isa = PBXBuildFile; fileRef = ADB51EBA2C109BDC00C3082D /* Configuration.storekit */; };
 		ADCB06F12791A48000B867F4 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = ADCB06F02791A48000B867F4 /* GoogleService-Info.plist */; };
@@ -24,7 +23,6 @@
 		AD6528842BAF2AD500D46D54 /* ci_post_clone.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = ci_post_clone.sh; sourceTree = "<group>"; };
 		AD663130279973E700891D51 /* MediumNativeAdmobView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MediumNativeAdmobView.xib; sourceTree = "<group>"; };
 		AD85E34E2C0E80C1005A33A2 /* IncomesApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IncomesApp.swift; sourceTree = "<group>"; };
-		AD98194126E43C3600C4A57C /* StoreKitTestCertificate.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = StoreKitTestCertificate.cer; sourceTree = "<group>"; };
 		ADA900C5279934EB000DC872 /* SmallNativeAdmobView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SmallNativeAdmobView.xib; sourceTree = "<group>"; };
 		ADB51EBA2C109BDC00C3082D /* Configuration.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Configuration.storekit; sourceTree = "<group>"; };
 		ADCB06F02791A48000B867F4 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -155,7 +153,6 @@
 		ADE058772706E75100DF2499 /* StoreKit */ = {
 			isa = PBXGroup;
 			children = (
-				AD98194126E43C3600C4A57C /* StoreKitTestCertificate.cer */,
 				ADB51EBA2C109BDC00C3082D /* Configuration.storekit */,
 			);
 			path = StoreKit;
@@ -260,7 +257,6 @@
 				ADA900C6279934EB000DC872 /* SmallNativeAdmobView.xib in Resources */,
 				ADB51EBB2C109BDC00C3082D /* Configuration.storekit in Resources */,
 				ADCF36B324A1D0F70011D6F5 /* Assets.xcassets in Resources */,
-				AD98194226E43C3600C4A57C /* StoreKitTestCertificate.cer in Resources */,
 				AD663132279973E700891D51 /* MediumNativeAdmobView.xib in Resources */,
 				ADCB06F12791A48000B867F4 /* GoogleService-Info.plist in Resources */,
 			);
