@@ -22,7 +22,7 @@ public struct ContentView {
     @AppStorage(.key(.isLockAppOn))
     private var isLockAppOn = UserDefaults.isLockAppOn
 
-    @State private var isForceUpdatePresented = false
+    @State private var isUpdateAlertPresented = false
     @State private var isMasked = false
     @State private var isLocked = UserDefaults.isLockAppOn
 
@@ -74,7 +74,7 @@ extension ContentView: View {
                 LockedView(isLocked: $isLocked)
             }
         }
-        .alert(Text("Update Required"), isPresented: $isForceUpdatePresented) {
+        .alert(Text("Update Required"), isPresented: $isUpdateAlertPresented) {
             Button {
                 UIApplication.shared.open(
                     .init(string: "https://apps.apple.com/jp/app/incomes/id1584472982")!
@@ -87,7 +87,7 @@ extension ContentView: View {
         }
         .task {
             try? await sharedConfigurationService.load()
-            isForceUpdatePresented = sharedConfigurationService.ensureVersion()
+            isUpdateAlertPresented = sharedConfigurationService.isUpdateRequired()
 
             sharedStore.open(
                 groupID: EnvironmentParameter.groupID,
@@ -100,7 +100,7 @@ extension ContentView: View {
             guard scenePhase == .active else {
                 return
             }
-            isForceUpdatePresented = sharedConfigurationService.ensureVersion()
+            isUpdateAlertPresented = sharedConfigurationService.isUpdateRequired()
         }
         .environment(sharedConfigurationService)
         .environment(sharedStore)
