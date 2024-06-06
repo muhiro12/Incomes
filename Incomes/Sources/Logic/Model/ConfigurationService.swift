@@ -22,7 +22,7 @@ final class ConfigurationService {
         configuration = try decoder.decode(Configuration.self, from: data)
     }
 
-    func ensureVersion() -> Bool {
+    func isUpdateRequired() -> Bool {
         guard let current = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String,
               let required = configuration?.requiredVersion else {
             return false
