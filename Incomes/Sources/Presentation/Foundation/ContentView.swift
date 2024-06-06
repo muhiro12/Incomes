@@ -22,9 +22,11 @@ public struct ContentView {
     @AppStorage(.key(.isLockAppOn))
     private var isLockAppOn = UserDefaults.isLockAppOn
 
+    @State private var isForceUpdatePresented = false
     @State private var isMasked = false
     @State private var isLocked = UserDefaults.isLockAppOn
 
+    private let sharedConfigurationService: ConfigurationService
     private let sharedStore: Store
     private let sharedNotificationService: NotificationService
 
@@ -42,6 +44,7 @@ public struct ContentView {
     public init() {
         FirebaseApp.configure()
 
+        sharedConfigurationService = .init()
         sharedStore = .init()
         sharedNotificationService = .init()
 
@@ -71,13 +74,35 @@ extension ContentView: View {
                 LockedView(isLocked: $isLocked)
             }
         }
+        .alert(Text("Update Required"), isPresented: $isForceUpdatePresented) {
+            Button {
+                UIApplication.shared.open(
+                    .init(string: "https://apps.apple.com/jp/app/incomes/id1584472982")!
+                )
+            } label: {
+                Text("Open App Store")
+            }
+        } message: {
+            Text("Please update Incomes to the latest version to continue using it.")
+        }
         .task {
+            try? await sharedConfigurationService.load()
+            isForceUpdatePresented = sharedConfigurationService.ensureVersion()
+
             sharedStore.open(
                 groupID: EnvironmentParameter.groupID,
                 productIDs: [EnvironmentParameter.productID]
             )
+
             await sharedNotificationService.register()
         }
+        .onChange(of: scenePhase) {
+            guard scenePhase == .active else {
+                return
+            }
+            isForceUpdatePresented = sharedConfigurationService.ensureVersion()
+        }
+        .environment(sharedConfigurationService)
         .environment(sharedStore)
         .environment(sharedNotificationService)
         .modelContainer(container)

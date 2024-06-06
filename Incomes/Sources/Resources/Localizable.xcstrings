@@ -281,6 +281,16 @@
         }
       }
     },
+    "Open App Store" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App Storeを開く"
+          }
+        }
+      }
+    },
     "Others" : {
       "localizations" : {
         "ja" : {
@@ -297,6 +307,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "支出"
+          }
+        }
+      }
+    },
+    "Please update Incomes to the latest version to continue using it." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "引き続きIncomesを使用するには、最新バージョンにアップデートしてください。"
           }
         }
       }
@@ -437,6 +457,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "サブスクリプションプランの変更について"
+          }
+        }
+      }
+    },
+    "Update Required" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アップデートが必要です"
           }
         }
       }
