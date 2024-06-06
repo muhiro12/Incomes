@@ -16,7 +16,7 @@ final class ConfigurationService {
     func load() async throws {
         let data = try await URLSession.shared.data(
             from: .init(
-                string: "https://raw.githubusercontent.com/muhiro12/Incomes/main/.config"
+                string: "https://raw.githubusercontent.com/muhiro12/Incomes/main/.config.json"
             )!
         ).0
         configuration = try decoder.decode(Configuration.self, from: data)
