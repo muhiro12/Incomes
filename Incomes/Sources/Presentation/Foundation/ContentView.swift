@@ -72,6 +72,10 @@ extension ContentView: View {
             }
         }
         .task {
+            sharedStore.open(
+                groupID: EnvironmentParameter.groupID,
+                productIDs: [EnvironmentParameter.productID]
+            )
             await sharedNotificationService.register()
         }
         .environment(sharedStore)

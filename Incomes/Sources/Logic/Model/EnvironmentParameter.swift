@@ -19,9 +19,7 @@ enum EnvironmentParameter {
     }()
 
     static let groupID = {
-        isDebug
-            ? Secret.groupIDDev.rawValue
-            : Secret.groupID.rawValue
+        Secret.groupID.rawValue
     }()
 
     static let productID = {
