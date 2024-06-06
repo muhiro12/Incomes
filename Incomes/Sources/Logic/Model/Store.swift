@@ -10,26 +10,39 @@ import StoreKit
 
 @Observable
 final class Store {
-    let groupID = EnvironmentParameter.groupID
-    let productIDs = [EnvironmentParameter.productID]
-
+    private(set) var groupID: String
+    private(set) var productIDs: [String]
     private(set) var product: Product?
+
+    private var updateListenerTask: Task<Void, Error>?
 
     private var subscriptions: [Product] {
         didSet {
             product = subscriptions.first { productIDs.contains($0.id) }
         }
     }
-    private var purchasedSubscriptions: [Product] = [] {
+
+    private var purchasedSubscriptions: [Product] {
         didSet {
-            UserDefaults.isSubscribeOn = purchasedSubscriptions.contains { productIDs.contains($0.id) }
+            let isSubscribeOn = purchasedSubscriptions.contains {
+                productIDs.contains($0.id)
+            }
+            UserDefaults.isSubscribeOn = isSubscribeOn
         }
     }
 
-    private var updateListenerTask: Task<Void, Error>?
-
     init() {
+        groupID = ""
+        productIDs = []
+        product = nil
+        updateListenerTask = nil
         subscriptions = []
+        purchasedSubscriptions = []
+    }
+
+    func open(groupID: String, productIDs: [String]) {
+        self.groupID = groupID
+        self.productIDs = productIDs
 
         updateListenerTask = listenForTransactions()
 
@@ -39,7 +52,7 @@ final class Store {
         }
     }
 
-    func listenForTransactions() -> Task<Void, Error> {
+    private func listenForTransactions() -> Task<Void, Error> {
         Task.detached {
             for await result in Transaction.updates {
                 do {
@@ -55,8 +68,7 @@ final class Store {
         }
     }
 
-    @MainActor
-    func requestProducts() async {
+    private func requestProducts() async {
         do {
             subscriptions = try await Product.products(for: productIDs)
         } catch {
@@ -64,8 +76,7 @@ final class Store {
         }
     }
 
-    @MainActor
-    func updateCustomerProductStatus() async {
+    private func updateCustomerProductStatus() async {
         var purchasedSubscriptions: [Product] = []
 
         for await result in Transaction.currentEntitlements {
@@ -89,7 +100,7 @@ final class Store {
         self.purchasedSubscriptions = purchasedSubscriptions
     }
 
-    func checkVerified<T>(_ result: VerificationResult<T>) throws -> T {
+    private func checkVerified<T>(_ result: VerificationResult<T>) throws -> T {
         switch result {
         case .unverified:
             throw DebugError.default
