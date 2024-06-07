@@ -8,6 +8,7 @@
 
 @_implementationOnly import Firebase
 import GoogleMobileAdsWrapper
+import LicenseListWrapper
 import SwiftData
 import SwiftUI
 
@@ -117,6 +118,11 @@ extension ContentView: View {
         .environment(
             GoogleMobileAdsPackage {
                 sharedGoogleMobileAdsController.buildNativeAd($0)
+            }
+        )
+        .environment(
+            LicenseListPackage {
+                LicenseListView()
             }
         )
         .modelContainer(container)
