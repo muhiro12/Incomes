@@ -47,7 +47,7 @@ extension ItemListYearSection: View {
                 ChartSections(items: items)
             } else {
                 Section {
-                    Advertisement(type: .native(.medium))
+                    Advertisement(.medium)
                 }
             }
         }

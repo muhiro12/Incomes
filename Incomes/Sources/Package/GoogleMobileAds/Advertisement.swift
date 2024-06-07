@@ -9,20 +9,28 @@
 import SwiftUI
 
 struct Advertisement {
-    enum AdType {
-        case native(NativeAdvertisement.Size)
+    enum Size: String {
+        case small = "Small"
+        case medium = "Medium"
     }
 
-    let type: AdType
+    @Environment(GoogleMobileAdsPackage.self) private var googleMobileAds
+
+    @AppStorage(.key(.isSubscribeOn)) private var isSubscribeOn = false
+
+    private let size: Size
+
+    init(_ size: Size) {
+        self.size = size
+    }
 }
 
 extension Advertisement: View {
     var body: some View {
-        switch type {
-        case .native(let size):
+        if !isSubscribeOn {
             HStack {
                 Spacer()
-                NativeAdvertisement(size: size)
+                googleMobileAds(size.rawValue)
                     .border(Color(UIColor.separator))
                 Spacer()
             }
@@ -33,6 +41,6 @@ extension Advertisement: View {
 }
 
 #Preview {
-    Advertisement(type: .native(.medium))
+    Advertisement(.medium)
         .previewList()
 }
