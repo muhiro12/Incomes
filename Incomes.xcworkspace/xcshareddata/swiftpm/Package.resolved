@@ -1,5 +1,5 @@
 {
-  "originHash" : "8736c2dddf4a82524f9a130d0d6dcc1eb0b451422fbc8f9d92b913d675e6a78f",
+  "originHash" : "17e4e9e049bd4a4c4749e2ed43f0e0e7dc3b2ff5cb7b6120602e40c9abb29754",
   "pins" : [
     {
       "identity" : "abseil-cpp-binary",
@@ -44,6 +44,15 @@
       "state" : {
         "revision" : "a637d318ae7ae246b02d7305121275bc75ed5565",
         "version" : "9.4.0"
+      }
+    },
+    {
+      "identity" : "googlemobileadswrapper",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/muhiro12/GoogleMobileAdsWrapper.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "a0d1c83de2b4c56b0cb63a90462e727f218f9a0a"
       }
     },
     {
@@ -96,8 +105,17 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/cybozu/LicenseList.git",
       "state" : {
-        "revision" : "0828b88c1a6130d56ede2cc6c41ec50068a7ebd6",
-        "version" : "0.7.0"
+        "branch" : "main",
+        "revision" : "8749050363ceb53049befb2f93e9905298edd1f1"
+      }
+    },
+    {
+      "identity" : "licenselistwrapper",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/muhiro12/LicenseListWrapper.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "99a6f03dad771d80057644de4cdd1e162578094e"
       }
     },
     {
@@ -121,10 +139,10 @@
     {
       "identity" : "swift-package-manager-google-mobile-ads",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/googleads/swift-package-manager-google-mobile-ads",
+      "location" : "https://github.com/googleads/swift-package-manager-google-mobile-ads.git",
       "state" : {
-        "revision" : "746253bf8803826e4de14c9e619739733ea8fb3b",
-        "version" : "11.5.0"
+        "branch" : "main",
+        "revision" : "746253bf8803826e4de14c9e619739733ea8fb3b"
       }
     },
     {

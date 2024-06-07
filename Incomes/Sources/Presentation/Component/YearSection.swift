@@ -47,7 +47,7 @@ extension YearSection: View {
             }
             if !isSubscribeOn && isExpanded {
                 Section {
-                    Advertisement(type: .native(.small))
+                    Advertisement(.small)
                 }
             }
         }

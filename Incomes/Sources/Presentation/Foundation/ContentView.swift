@@ -7,7 +7,8 @@
 //
 
 @_implementationOnly import Firebase
-import GoogleMobileAds
+import GoogleMobileAdsWrapper
+import LicenseListWrapper
 import SwiftData
 import SwiftUI
 
@@ -29,6 +30,7 @@ public struct ContentView {
     private let sharedConfigurationService: ConfigurationService
     private let sharedStore: Store
     private let sharedNotificationService: NotificationService
+    private let sharedGoogleMobileAdsController: GoogleMobileAdsController
 
     private let container = {
         let url = URL.applicationSupportDirectory.appendingPathComponent("Incomes.sqlite")
@@ -48,11 +50,15 @@ public struct ContentView {
         sharedStore = .init()
         sharedNotificationService = .init()
 
-        if !isSubscribeOn {
-            Task {
-                await GADMobileAds.sharedInstance().start()
-            }
-        }
+        sharedGoogleMobileAdsController = .init(
+            adUnitID: {
+                #if DEBUG
+                Secret.admobNativeIDDev.rawValue
+                #else
+                Secret.admobNativeID.rawValue
+                #endif
+            }()
+        )
 
         SwiftDataController(context: container.mainContext).modify()
     }
@@ -95,6 +101,10 @@ extension ContentView: View {
             )
 
             await sharedNotificationService.register()
+
+            if !isSubscribeOn {
+                sharedGoogleMobileAdsController.start()
+            }
         }
         .onChange(of: scenePhase) {
             guard scenePhase == .active else {
@@ -105,6 +115,16 @@ extension ContentView: View {
         .environment(sharedConfigurationService)
         .environment(sharedStore)
         .environment(sharedNotificationService)
+        .environment(
+            GoogleMobileAdsPackage {
+                sharedGoogleMobileAdsController.buildNativeAd($0)
+            }
+        )
+        .environment(
+            LicenseListPackage {
+                LicenseListView()
+            }
+        )
         .modelContainer(container)
     }
 }
