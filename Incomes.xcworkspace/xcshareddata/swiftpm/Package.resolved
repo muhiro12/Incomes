@@ -52,7 +52,7 @@
       "location" : "https://github.com/muhiro12/GoogleMobileAdsWrapper.git",
       "state" : {
         "branch" : "main",
-        "revision" : "2110f4ed0a3a052b05b036b4c7b8de1790b764c9"
+        "revision" : "a0d1c83de2b4c56b0cb63a90462e727f218f9a0a"
       }
     },
     {
@@ -115,7 +115,7 @@
       "location" : "https://github.com/muhiro12/LicenseListWrapper.git",
       "state" : {
         "branch" : "main",
-        "revision" : "0213326ce46600b611d382e7ea083c0679e8c317"
+        "revision" : "99a6f03dad771d80057644de4cdd1e162578094e"
       }
     },
     {
