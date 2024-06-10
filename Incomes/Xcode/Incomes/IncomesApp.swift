@@ -21,9 +21,9 @@ struct IncomesApp: App {
         sharedGoogleMobileAdsController = .init(
             adUnitID: {
                 #if DEBUG
-                Secret.admobNativeIDDev.rawValue
+                Secret.admobNativeIDDev
                 #else
-                Secret.admobNativeID.rawValue
+                Secret.admobNativeID
                 #endif
             }()
         )
@@ -33,8 +33,8 @@ struct IncomesApp: App {
         WindowGroup {
             ContentView()
                 .incomesEnvironment(
-                    groupID: Secret.groupID.rawValue,
-                    productID: Secret.productID.rawValue,
+                    groupID: Secret.groupID,
+                    productID: Secret.productID,
                     googleMobileAds: {
                         sharedGoogleMobileAdsController.buildNativeAd($0)
                     },
