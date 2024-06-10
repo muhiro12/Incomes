@@ -24,7 +24,8 @@ final class ConfigurationService {
 
     func isUpdateRequired() -> Bool {
         guard let current = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String,
-              let required = configuration?.requiredVersion else {
+              let required = configuration?.requiredVersion,
+              Bundle.main.bundleIdentifier?.contains("playgrounds") == false else {
             return false
         }
         return current.compare(required, options: .numeric) == .orderedAscending

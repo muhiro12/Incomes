@@ -12,6 +12,10 @@ import SwiftUI
 public struct ContentView {
     @Environment(\.scenePhase)
     private var scenePhase
+    @Environment(\.groupID)
+    private var groupID
+    @Environment(\.productID)
+    private var productID
 
     @AppStorage(.key(.isSubscribeOn))
     private var isSubscribeOn = UserDefaults.isSubscribeOn
@@ -80,8 +84,8 @@ extension ContentView: View {
             isUpdateAlertPresented = sharedConfigurationService.isUpdateRequired()
 
             sharedStore.open(
-                groupID: EnvironmentParameter.groupID,
-                productIDs: [EnvironmentParameter.productID]
+                groupID: groupID,
+                productIDs: [productID]
             )
 
             await sharedNotificationService.register()

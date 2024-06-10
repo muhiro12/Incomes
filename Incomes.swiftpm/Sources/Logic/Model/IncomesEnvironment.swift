@@ -14,9 +14,9 @@ extension View {
         googleMobileAds: @escaping (String) -> some View,
         licenseList: @escaping () -> some View
     ) -> some View {
-        // TODO:        self.environment(\.groupID, groupID)
-        // TODO:            .environment(\.productID, productID)
-        self.environment(GoogleMobileAdsPackage(builder: googleMobileAds))
+        self.environment(\.groupID, groupID)
+            .environment(\.productID, productID)
+            .environment(GoogleMobileAdsPackage(builder: googleMobileAds))
             .environment(LicenseListPackage(builder: licenseList))
     }
 
