@@ -2,9 +2,12 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:Incomes">
+      location = "group:">
    </FileRef>
    <FileRef
-      location = "group:Incomes.xcodeproj">
+      location = "group:Incomes.swiftpm">
+   </FileRef>
+   <FileRef
+      location = "group:Incomes/Xcode/Incomes.xcodeproj">
    </FileRef>
 </Workspace>

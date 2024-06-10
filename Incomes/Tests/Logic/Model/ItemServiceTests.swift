@@ -7,7 +7,7 @@
 //
 
 import CoreData
-@testable import IncomesLibrary
+@testable import IncomesPlaygrounds
 import XCTest
 
 // swiftlint:disable all
