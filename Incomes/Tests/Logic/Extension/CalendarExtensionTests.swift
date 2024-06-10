@@ -6,7 +6,7 @@
 //  Copyright © 2022 Hiromu Nakano. All rights reserved.
 //
 
-@testable import IncomesLibrary
+@testable import IncomesPlaygrounds
 import XCTest
 
 // swiftlint:disable all

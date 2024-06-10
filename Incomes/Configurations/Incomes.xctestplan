@@ -1,0 +1,30 @@
+{
+  "configurations" : [
+    {
+      "id" : "9F5CCA91-4AEF-4B42-BFF1-55CB4B4A750D",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "language" : "en",
+    "region" : "US",
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:Incomes.xcodeproj",
+      "identifier" : "ADCF36A524A1D0F40011D6F5",
+      "name" : "Incomes"
+    }
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:..\/..",
+        "identifier" : "IncomesPlaygroundsTests",
+        "name" : "IncomesPlaygroundsTests"
+      }
+    }
+  ],
+  "version" : 1
+}
