@@ -12,7 +12,7 @@ extension EnvironmentValues {
         get { self[GroupIDKey.self] }
         set { self[GroupIDKey.self] = newValue }
     }
-    
+
     var productID: String {
         get { self[GroupIDKey.self] }
         set { self[GroupIDKey.self] = newValue }
