@@ -5,6 +5,7 @@ struct IncomesPlaygroundsApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .incomesPlaygroundsEnvironment()
         }
     }
 }
