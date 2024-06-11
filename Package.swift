@@ -49,8 +49,7 @@ let package = Package(
         .testTarget(
             name: "IncomesPlaygroundsTests",
             dependencies: [
-                "IncomesPlaygrounds",
-                "IncomesPackages"
+                "IncomesPlaygrounds"
             ],
             path: "Incomes/Tests"
         )

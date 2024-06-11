@@ -12,8 +12,6 @@ import SwiftUI
 
 // swiftlint:disable force_unwrapping force_try function_body_length no_magic_numbers
 enum PreviewData {
-    static var store = Store()
-
     static var context: ModelContext {
         let context = try! ModelContext(
             .init(for: Item.self,
@@ -138,10 +136,6 @@ extension View {
 
     func previewContext() -> some View {
         modelContext(PreviewData.context)
-    }
-
-    func previewStore() -> some View {
-        environment(PreviewData.store)
     }
 
     func previewJapanese() -> some View {
