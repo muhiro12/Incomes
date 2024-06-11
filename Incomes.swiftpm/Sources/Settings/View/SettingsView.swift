@@ -29,6 +29,13 @@ extension SettingsView: View {
             } else {
                 StoreSection()
             }
+            Section {
+                NavigationLink {
+                    DuplicatedTagsView()
+                } label: {
+                    Text("Duplicated Tags")
+                }
+            }
             Section(content: {
                 Button {
                     do {

@@ -18,6 +18,14 @@ extension Tag {
             $0.persistentModelID == id
         }
     }
+    
+    static func predicate(isSameWith tag: Tag) -> Predicate {
+        let name = tag.name
+        let typeID = tag.typeID
+        return #Predicate {
+            $0.name == name && $0.typeID == typeID
+        }
+    }
 
     static func predicate(name: String, type: Tag.TagType) -> Predicate {
         let id = type.rawValue
