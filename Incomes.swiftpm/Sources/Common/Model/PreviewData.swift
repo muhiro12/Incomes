@@ -6,6 +6,7 @@
 //  Copyright © 2020 Hiromu Nakano. All rights reserved.
 //
 
+import IncomesPackages
 import SwiftData
 import SwiftUI
 

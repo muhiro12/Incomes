@@ -136,6 +136,15 @@
       }
     },
     {
+      "identity" : "storekitwrapper",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/muhiro12/StoreKitWrapper.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "0a73e6ec9922a56359e41bde540431a7d57b2661"
+      }
+    },
+    {
       "identity" : "swift-package-manager-google-mobile-ads",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/googleads/swift-package-manager-google-mobile-ads.git",

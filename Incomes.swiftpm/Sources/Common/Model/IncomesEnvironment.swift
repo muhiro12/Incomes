@@ -9,26 +9,25 @@ import SwiftUI
 
 extension View {
     public func incomesEnvironment(
-        groupID: String,
-        productID: String,
         googleMobileAds: @escaping (String) -> some View,
-        licenseList: @escaping () -> some View
+        licenseList: @escaping () -> some View,
+        storeKit: @escaping () -> some View
     ) -> some View {
-        self.environment(\.groupID, groupID)
-            .environment(\.productID, productID)
-            .environment(GoogleMobileAdsPackage(builder: googleMobileAds))
+        self.environment(GoogleMobileAdsPackage(builder: googleMobileAds))
             .environment(LicenseListPackage(builder: licenseList))
+            .environment(StoreKitPackage(builder: storeKit))
     }
 
     func incomesPlaygroundsEnvironment() -> some View {
         incomesEnvironment(
-            groupID: "groupID",
-            productID: "productID",
             googleMobileAds: {
                 Text("GoogleMobileAds \($0)")
             },
             licenseList: {
                 Text("LicenseList")
+            },
+            storeKit: {
+                Text("StoreKit")
             }
         )
     }

@@ -13,7 +13,11 @@ import SwiftUI
 
 @main
 struct IncomesApp: App {
+    @AppStorage(UserDefaults.Key.isSubscribeOn.rawValue)
+    private var isSubscribeOn = false
+
     private let sharedGoogleMobileAdsController: GoogleMobileAdsController
+    private let sharedStore: Store
 
     init() {
         FirebaseApp.configure()
@@ -27,23 +31,35 @@ struct IncomesApp: App {
                 #endif
             }()
         )
+
+        sharedStore = .init()
     }
 
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .incomesEnvironment(
-                    groupID: Secret.groupID,
-                    productID: Secret.productID,
                     googleMobileAds: {
                         sharedGoogleMobileAdsController.buildNativeAd($0)
                     },
                     licenseList: {
                         LicenseListView()
+                    },
+                    storeKit: {
+                        sharedStore.buildSubscriptionSection()
                     }
                 )
                 .task {
                     sharedGoogleMobileAdsController.start()
+
+                    sharedStore.open(
+                        groupID: Secret.groupID,
+                        productIDs: [Secret.productID]
+                    ) {
+                        isSubscribeOn = $0.contains {
+                            $0.id == Secret.productID
+                        }
+                    }
                 }
         }
     }

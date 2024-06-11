@@ -12,10 +12,6 @@ import SwiftUI
 public struct ContentView {
     @Environment(\.scenePhase)
     private var scenePhase
-    @Environment(\.groupID)
-    private var groupID
-    @Environment(\.productID)
-    private var productID
 
     @AppStorage(.key(.isSubscribeOn))
     private var isSubscribeOn = UserDefaults.isSubscribeOn
@@ -29,7 +25,6 @@ public struct ContentView {
     @State private var isLocked = UserDefaults.isLockAppOn
 
     private let sharedConfigurationService: ConfigurationService
-    private let sharedStore: Store
     private let sharedNotificationService: NotificationService
 
     private let container = {
@@ -45,7 +40,6 @@ public struct ContentView {
     @MainActor
     public init() {
         sharedConfigurationService = .init()
-        sharedStore = .init()
         sharedNotificationService = .init()
 
         SwiftDataController(context: container.mainContext).modify()
@@ -83,11 +77,6 @@ extension ContentView: View {
             try? await sharedConfigurationService.load()
             isUpdateAlertPresented = sharedConfigurationService.isUpdateRequired()
 
-            sharedStore.open(
-                groupID: groupID,
-                productIDs: [productID]
-            )
-
             await sharedNotificationService.register()
         }
         .onChange(of: scenePhase) {
@@ -97,7 +86,6 @@ extension ContentView: View {
             isUpdateAlertPresented = sharedConfigurationService.isUpdateRequired()
         }
         .environment(sharedConfigurationService)
-        .environment(sharedStore)
         .environment(sharedNotificationService)
         .modelContainer(container)
     }

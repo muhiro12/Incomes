@@ -24,7 +24,7 @@ extension UserDefaults {
         }
     }
 
-    enum Key: String {
+    public enum Key: String {
         case isSubscribeOn = "a018f613"
         case isMaskAppOn = "aa9f2c8b"
         case isLockAppOn = "d8a87635"
