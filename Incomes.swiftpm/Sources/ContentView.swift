@@ -41,8 +41,6 @@ public struct ContentView {
     public init() {
         sharedConfigurationService = .init()
         sharedNotificationService = .init()
-
-        SwiftDataController(context: container.mainContext).modify()
     }
 }
 

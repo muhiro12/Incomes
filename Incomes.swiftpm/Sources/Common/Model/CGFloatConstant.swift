@@ -20,6 +20,7 @@ extension CGFloat {
     static let componentS = unit * 8
     static let componentM = unit * 12
     static let componentL = unit * 16
+    static let componentXL = unit * 32
 
     static let iconS = unit * 1
     static let iconM = unit * 3
