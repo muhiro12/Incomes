@@ -9,8 +9,10 @@
 import SwiftUI
 
 struct SettingsView {
-    @Environment(\.modelContext)
-    private var context
+    @Environment(ItemService.self)
+    private var itemService
+    @Environment(TagService.self)
+    private var tagService
     @Environment(\.dismiss)
     private var dismiss
 
@@ -37,7 +39,7 @@ extension SettingsView: View {
             Section(content: {
                 Button {
                     do {
-                        try ItemService(context: context).recalculate()
+                        try itemService.recalculate()
                     } catch {
                         assertionFailure(error.localizedDescription)
                     }
@@ -87,8 +89,8 @@ extension SettingsView: View {
                isPresented: $isAlertPresented) {
             Button(role: .destructive) {
                 do {
-                    try ItemService(context: context).deleteAll()
-                    try TagService(context: context).deleteAll()
+                    try itemService.deleteAll()
+                    try tagService.deleteAll()
                 } catch {
                     assertionFailure(error.localizedDescription)
                 }

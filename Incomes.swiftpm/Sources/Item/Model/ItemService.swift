@@ -9,14 +9,13 @@
 import Foundation
 import SwiftData
 
-struct ItemService {
+@Observable
+final class ItemService {
     private let context: ModelContext
-    private let tagService: TagService
     private let calculator: BalanceCalculator
 
     init(context: ModelContext) {
         self.context = context
-        self.tagService = .init(context: context)
         self.calculator = .init(context: context)
     }
 
@@ -104,6 +103,8 @@ struct ItemService {
                                          outgo: Decimal,
                                          group: String,
                                          predicate: Predicate<Item>) throws {
+        let tagService = TagService(context: context)
+        
         let components = Calendar.utc.dateComponents([.year, .month, .day],
                                                      from: item.date,
                                                      to: date)

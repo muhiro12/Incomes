@@ -10,8 +10,8 @@ import SwiftData
 import SwiftUI
 
 struct ItemListYearSection {
-    @Environment(\.modelContext)
-    private var context
+    @Environment(ItemService.self)
+    private var itemService
 
     @AppStorage(.key(.isSubscribeOn))
     private var isSubscribeOn = UserDefaults.isSubscribeOn
@@ -56,7 +56,7 @@ extension ItemListYearSection: View {
                         buttons: [
                             .destructive(Text("Delete")) {
                                 do {
-                                    try ItemService(context: context).delete(items: willDeleteItems)
+                                    try itemService.delete(items: willDeleteItems)
                                 } catch {
                                     assertionFailure(error.localizedDescription)
                                 }

@@ -9,8 +9,8 @@
 import SwiftUI
 
 struct RootNavigationView {
-    @Environment(\.modelContext)
-    private var context
+    @Environment(TagService.self)
+    private var tagService
 
     @State private var contentID: SidebarItem.ID?
     @State private var detailID: Tag.ID?
@@ -69,9 +69,9 @@ extension RootNavigationView: View {
         }
         .onAppear {
             contentID = SidebarItem.home.id
-            detailID = try? TagService(context: context)
-                .tag(predicate: Tag.predicate(dateIsSameMonthAs: .now))?
-                .id
+            detailID = try? tagService.tag(
+                predicate: Tag.predicate(dateIsSameMonthAs: .now)
+            )?.id
         }
     }
 }
@@ -88,7 +88,7 @@ private extension RootNavigationView {
         guard let detailID else {
             return nil
         }
-        return try? TagService(context: context).tag(predicate: Tag.predicate(id: detailID))
+        return try? tagService.tag(predicate: Tag.predicate(id: detailID))
     }
 }
 

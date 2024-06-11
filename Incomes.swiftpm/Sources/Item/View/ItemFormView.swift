@@ -22,8 +22,8 @@ struct ItemFormView {
         case category
     }
 
-    @Environment(\.modelContext)
-    private var context
+    @Environment(ItemService.self)
+    private var itemService
     @Environment(\.presentationMode)
     private var presentationMode
     @Environment(\.requestReview)
@@ -119,7 +119,7 @@ extension ItemFormView: View {
                     } else {
                         save()
                     }
-                    if let count = try? ItemService(context: context).itemsCount(),
+                    if let count = try? itemService.itemsCount(),
                        count.isMultiple(of: 10) { // swiftlint:disable:this no_magic_numbers
                         requestReview()
                     }
@@ -197,7 +197,7 @@ private extension ItemFormView {
     func save() {
         do {
             if let repeatID = item?.repeatID,
-               try ItemService(context: context).itemsCount(predicate: Item.predicate(repeatIDIs: repeatID)) > .one {
+               try itemService.itemsCount(predicate: Item.predicate(repeatIDIs: repeatID)) > .one {
                 presentToActionSheet()
             } else {
                 saveForThisItem()
@@ -213,13 +213,14 @@ private extension ItemFormView {
             return
         }
         do {
-            try ItemService(context: context)
-                .update(item: item,
-                        date: date,
-                        content: content,
-                        income: income.decimalValue,
-                        outgo: outgo.decimalValue,
-                        group: group)
+            try itemService.update(
+                item: item,
+                date: date,
+                content: content,
+                income: income.decimalValue,
+                outgo: outgo.decimalValue,
+                group: group
+            )
         } catch {
             assertionFailure(error.localizedDescription)
         }
@@ -232,13 +233,14 @@ private extension ItemFormView {
             return
         }
         do {
-            try ItemService(context: context)
-                .updateForFutureItems(item: item,
-                                      date: date,
-                                      content: content,
-                                      income: income.decimalValue,
-                                      outgo: outgo.decimalValue,
-                                      group: group)
+            try itemService.updateForFutureItems(
+                item: item,
+                date: date,
+                content: content,
+                income: income.decimalValue,
+                outgo: outgo.decimalValue,
+                group: group
+            )
         } catch {
             assertionFailure(error.localizedDescription)
         }
@@ -251,13 +253,14 @@ private extension ItemFormView {
             return
         }
         do {
-            try ItemService(context: context)
-                .updateForAllItems(item: item,
-                                   date: date,
-                                   content: content,
-                                   income: income.decimalValue,
-                                   outgo: outgo.decimalValue,
-                                   group: group)
+            try itemService.updateForAllItems(
+                item: item,
+                date: date,
+                content: content,
+                income: income.decimalValue,
+                outgo: outgo.decimalValue,
+                group: group
+            )
         } catch {
             assertionFailure(error.localizedDescription)
         }
@@ -266,13 +269,14 @@ private extension ItemFormView {
 
     func create() {
         do {
-            try ItemService(context: context)
-                .create(date: date,
-                        content: content,
-                        income: income.decimalValue,
-                        outgo: outgo.decimalValue,
-                        group: group,
-                        repeatCount: repeatSelection + .one)
+            try itemService.create(
+                date: date,
+                content: content,
+                income: income.decimalValue,
+                outgo: outgo.decimalValue,
+                group: group,
+                repeatCount: repeatSelection + .one
+            )
         } catch {
             assertionFailure(error.localizedDescription)
         }

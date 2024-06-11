@@ -9,7 +9,8 @@
 import Foundation
 import SwiftData
 
-struct TagService {
+@Observable
+final class TagService {
     private let context: ModelContext
 
     init(context: ModelContext) {
@@ -68,5 +69,26 @@ struct TagService {
 
     func deleteAll() throws {
         try delete(tags: tags())
+    }
+    
+    // MARK: - Merge
+    
+    func merge(tags: [Tag]) throws {      
+        let itemService = ItemService(context: context)
+        
+        guard let parent = tags.first else {
+            return
+        }
+        let children = Array(tags.dropFirst())
+        
+        children.flatMap {
+            $0.items ?? []
+        }.forEach { item in
+            var tags = item.tags ?? []
+            tags.append(parent)
+            itemService.update(item: item, tags: tags)
+        }
+        
+        try delete(tags: children)
     }
 }

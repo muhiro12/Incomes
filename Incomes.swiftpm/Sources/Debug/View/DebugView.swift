@@ -19,6 +19,8 @@ struct DebugView {
 
     @Environment(\.modelContext)
     private var context
+    @Environment(TagService.self)
+    private var tagService
 
     @State private var isDebugOption = Self.isDebug
     @State private var isAlertPresented = false
@@ -36,7 +38,7 @@ extension DebugView: View {
             Section {
                 NavigationLink(String.debugAllItems) {
                     ItemListView(
-                        tag: try! TagService(context: context).create( // swiftlint:disable:this force_try
+                        tag: try! tagService.create( // swiftlint:disable:this force_try
                             name: "name",
                             type: .year
                         )

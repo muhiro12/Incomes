@@ -10,8 +10,8 @@ import SwiftData
 import SwiftUI
 
 struct CategorySection {
-    @Environment(\.modelContext)
-    private var context
+    @Environment(ItemService.self)
+    private var itemService
 
     @Query private var tags: [Tag]
 
@@ -52,7 +52,7 @@ extension CategorySection: View {
                 buttons: [
                     .destructive(Text("Delete")) {
                         do {
-                            try ItemService(context: context).delete(items: willDeleteItems)
+                            try itemService.delete(items: willDeleteItems)
                         } catch {
                             assertionFailure(error.localizedDescription)
                         }

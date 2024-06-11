@@ -2,7 +2,10 @@ import SwiftUI
 import SwiftData
 
 struct DuplicatedTagView: View {
-    @Environment(\.modelContext) private var context
+    @Environment(ItemService.self)
+    private var itemService
+    @Environment(TagService.self)
+    private var tagService
     
     @Query private var tags: [Tag]
     
@@ -45,7 +48,7 @@ struct DuplicatedTagView: View {
         .toolbar {
             ToolbarItem {
                 Button {
-                    try? merge()
+                    try? tagService.merge(tags: tags)
                 } label: {
                     Label {
                         Text("Merge")
@@ -55,26 +58,6 @@ struct DuplicatedTagView: View {
                 }
             }
         }
-    }
-        
-    private func merge() throws {
-        let itemService = ItemService(context: context)
-        let tagService = TagService(context: context)
-        
-        guard let parent = tags.first else {
-            return
-        }
-        let children = Array(tags.dropFirst())
-        
-        children.flatMap {
-            $0.items ?? []
-        }.forEach { item in
-            var tags = item.tags ?? []
-            tags.append(parent)
-            itemService.update(item: item, tags: tags)
-        }
-        
-        try tagService.delete(tags: children)
     }
 }
 

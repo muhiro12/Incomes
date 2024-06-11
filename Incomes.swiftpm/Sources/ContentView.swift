@@ -24,6 +24,8 @@ public struct ContentView {
     @State private var isMasked = false
     @State private var isLocked = UserDefaults.isLockAppOn
 
+    private let sharedItemService: ItemService
+    private let sharedTagService: TagService
     private let sharedConfigurationService: ConfigurationService
     private let sharedNotificationService: NotificationService
 
@@ -38,7 +40,9 @@ public struct ContentView {
     }()
 
     @MainActor
-    public init() {
+    public init() {    
+        sharedItemService = .init(context: container.mainContext)
+        sharedTagService = .init(context: container.mainContext)
         sharedConfigurationService = .init()
         sharedNotificationService = .init()
     }
@@ -83,6 +87,8 @@ extension ContentView: View {
             }
             isUpdateAlertPresented = sharedConfigurationService.isUpdateRequired()
         }
+        .environment(sharedItemService)
+        .environment(sharedTagService)
         .environment(sharedConfigurationService)
         .environment(sharedNotificationService)
         .modelContainer(container)
