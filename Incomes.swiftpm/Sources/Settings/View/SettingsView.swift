@@ -22,7 +22,7 @@ struct SettingsView {
 
 extension SettingsView: View {
     var body: some View {
-        Form {
+        List {
             NotificationSection()
             if isSubscribeOn {
                 PremiumSection()
@@ -30,10 +30,8 @@ extension SettingsView: View {
                 StoreSection()
             }
             Section {
-                NavigationLink {
-                    DuplicatedTagsView()
-                } label: {
-                    Text("Duplicated Tags")
+                NavigationLink(value: "DuplicatedTags") {
+                    Text("Manage Duplicated Tags")
                 }
             }
             Section(content: {
@@ -71,6 +69,10 @@ extension SettingsView: View {
             }
         }
         .navigationTitle(Text("Settings"))
+        .navigationDestination(for: String.self) { _ in
+            DuplicatedTagsView()
+                .interactiveDismissDisabled()
+        }
         .toolbar {
             ToolbarItem {
                 Button {

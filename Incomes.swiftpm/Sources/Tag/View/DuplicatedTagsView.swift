@@ -2,28 +2,55 @@ import SwiftUI
 import SwiftData
 
 struct DuplicatedTagsView: View {
-    @Environment(\.modelContext) private var context
+    @Query(filter: Tag.predicate(type: .year)) private var years: [Tag]
+    @Query(filter: Tag.predicate(type: .yearMonth)) private var yearMonths: [Tag]
+    @Query(filter: Tag.predicate(type: .content)) private var contents: [Tag]
+    @Query(filter: Tag.predicate(type: .category)) private var categories: [Tag]
     
-    @Query private var tags: [Tag]
+    @State private var tag: Tag?
     
     var body: some View {
-        List(
+        List(selection: $tag) {
+            Section {
+                buildSectionContent(from: years)
+            } header: {
+                Text("Year")
+            }
+            Section {
+                buildSectionContent(from: yearMonths)
+            } header: {
+                Text("YearMonth")
+            }
+            Section {
+                buildSectionContent(from: contents)
+            } header: {
+                Text("Content")
+            }
+            Section {
+                buildSectionContent(from: categories)
+            } header: {
+                Text("Category")
+            }
+        }
+        .navigationDestination(item: $tag) { tag in
+            DuplicatedTagView(tag)
+        }
+    }
+
+    private func buildSectionContent(from tags: [Tag]) -> some View {
+        ForEach(
             Dictionary(grouping: tags, by: \.name)
-                .compactMap { (key, values) -> Tag? in
+                .compactMap { key, values -> Tag? in
                     guard values.count > 1 else {
                         return nil
                     }
-                    return values.first
-                }
-                .map {
-                    $0
-                }
+                    return values.first                                
+                }.sorted {
+                    $0.displayName < $1.displayName
+                },
+            id: \.self
         ) { tag in
-            NavigationLink {
-                DuplicatedTagView(tag)
-            } label: {
-                Text(tag.displayName)
-            }
+            Text(tag.displayName)
         }
     }
 }
