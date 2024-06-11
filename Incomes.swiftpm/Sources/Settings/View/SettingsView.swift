@@ -97,6 +97,5 @@ extension SettingsView: View {
 #Preview {
     SettingsView()
         .previewNavigation()
-        .previewStore()
         .previewContext()
 }
