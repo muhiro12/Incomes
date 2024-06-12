@@ -26,4 +26,8 @@ var context: ModelContext {
 let date: (String) -> Date = { string in
     try! Date(string, strategy: .iso8601)
 }
+
+func fetchItems(service: ItemService) -> [Item] {
+    try! service.itemsForTest()
+}
 // swiftlint:enable all

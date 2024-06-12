@@ -38,10 +38,7 @@ extension DebugView: View {
             Section {
                 NavigationLink(String.debugAllItems) {
                     ItemListView(
-                        tag: try! tagService.create(
-                            name: "name",
-                            type: .year
-                        )
+                        tag: try! .create(context: context, name: "name", type: .year)
                     ) { _ in .true }
                 }
             }

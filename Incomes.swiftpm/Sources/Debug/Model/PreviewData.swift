@@ -24,7 +24,7 @@ enum PreviewData {
     }
 
     static var tags: [Tag] {
-        try! TagService(context: context).tags()
+        try! context.fetch(.init( sortBy: Tag.sortDescriptors()))
     }
 
     static func items(context: ModelContext) throws -> [Item] {
@@ -105,7 +105,7 @@ enum PreviewData {
                                      repeatID: UUID()))
         }
 
-        try service.calculate(for: items)
+        try service.calculateForTest(for: items)
 
         return items
     }

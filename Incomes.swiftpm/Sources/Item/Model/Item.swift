@@ -69,12 +69,13 @@ final class Item {
                 content: String,
                 income: Decimal,
                 outgo: Decimal,
-                group: String) throws {
+                group: String,
+                repeatID: UUID) throws {
         self.date = Calendar.utc.startOfDay(for: date)
         self.content = content
         self.income = income
         self.outgo = outgo
-        self.repeatID = UUID()
+        self.repeatID = repeatID
 
         guard let context = modelContext else {
             return
@@ -106,6 +107,10 @@ final class Item {
         try context.save()
     }
 
+    func modify(balance: Decimal) {
+        self.balance = balance
+    }
+
     func modify(tags: [Tag]) {
         self.tags = tags
     }
@@ -119,25 +124,4 @@ extension Item {
     var isProfitable: Bool {
         profit.isPlus
     }
-
-    @available(*, deprecated)
-    func modify(date: Date,
-                content: String,
-                income: Decimal,
-                outgo: Decimal,
-                group: String,
-                repeatID: UUID) {
-        self.date = Calendar.utc.startOfDay(for: date)
-        self.content = content
-        self.income = income
-        self.outgo = outgo
-        self.repeatID = repeatID
-    }
-
-    @available(*, deprecated)
-    func modify(balance: Decimal) {
-        self.balance = balance
-    }
 }
-
-extension Item: Identifiable {}

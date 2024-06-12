@@ -6,8 +6,8 @@
 //  Copyright © 2022 Hiromu Nakano. All rights reserved.
 //
 
-import CoreData
 @testable import IncomesPlaygrounds
+import SwiftData
 import XCTest
 
 final class ItemServiceTests: XCTestCase {
@@ -30,7 +30,7 @@ final class ItemServiceTests: XCTestCase {
                                 income: 200,
                                 outgo: 100,
                                 group: "group")
-            let result = try! service.items().first!
+            let result = fetchItems(service: service).first!
 
             XCTAssertEqual(result.date, date("2000-01-01T00:00:00Z"))
             XCTAssertEqual(result.content, "content")
@@ -48,8 +48,8 @@ final class ItemServiceTests: XCTestCase {
                                 outgo: 100,
                                 group: "group",
                                 repeatCount: 3)
-            let first = try! service.items().first!
-            let last = try! service.items().last!
+            let first = fetchItems(service: service).first!
+            let last = fetchItems(service: service).last!
 
             XCTAssertEqual(first.date, date("2000-03-01T00:00:00Z"))
             XCTAssertEqual(first.content, "content")
@@ -78,13 +78,13 @@ final class ItemServiceTests: XCTestCase {
                                 outgo: 100,
                                 group: "group")
 
-            try! service.update(item: try! service.items().first!,
+            try! service.update(item: fetchItems(service: service).first!,
                                 date: date("2001-01-02T12:00:00Z"),
                                 content: "content2",
                                 income: 100,
                                 outgo: 200,
                                 group: "group2")
-            let result = try! service.items().first!
+            let result = fetchItems(service: service).first!
 
             XCTAssertEqual(result.date, date("2001-01-02T00:00:00Z"))
             XCTAssertEqual(result.content, "content2")
@@ -102,16 +102,16 @@ final class ItemServiceTests: XCTestCase {
                                 group: "group",
                                 repeatCount: 3)
 
-            try! service.update(item: try! service.items()[1],
+            try! service.update(item: fetchItems(service: service)[1],
                                 date: date("2000-02-02T12:00:00Z"),
                                 content: "content2",
                                 income: 100,
                                 outgo: 200,
                                 group: "group2")
 
-            let first = try! service.items()[0]
-            let second = try! service.items()[1]
-            let last = try! service.items()[2]
+            let first = fetchItems(service: service)[0]
+            let second = fetchItems(service: service)[1]
+            let last = fetchItems(service: service)[2]
 
             XCTAssertEqual(first.date, date("2000-03-01T00:00:00Z"))
             XCTAssertEqual(first.content, "content")
@@ -145,13 +145,13 @@ final class ItemServiceTests: XCTestCase {
                                 outgo: 100,
                                 group: "group")
 
-            try! service.updateForFutureItems(item: try! service.items().first!,
+            try! service.updateForFutureItems(item: fetchItems(service: service).first!,
                                               date: date("2001-01-02T12:00:00Z"),
                                               content: "content2",
                                               income: 100,
                                               outgo: 200,
                                               group: "group2")
-            let result = try! service.items().first!
+            let result = fetchItems(service: service).first!
 
             XCTAssertEqual(result.date, date("2001-01-02T00:00:00Z"))
             XCTAssertEqual(result.content, "content2")
@@ -169,16 +169,16 @@ final class ItemServiceTests: XCTestCase {
                                 group: "group",
                                 repeatCount: 3)
 
-            try! service.updateForFutureItems(item: try! service.items()[1],
+            try! service.updateForFutureItems(item: fetchItems(service: service)[1],
                                               date: date("2000-02-02T12:00:00Z"),
                                               content: "content2",
                                               income: 100,
                                               outgo: 200,
                                               group: "group2")
 
-            let first = try! service.items()[0]
-            let second = try! service.items()[1]
-            let last = try! service.items()[2]
+            let first = fetchItems(service: service)[0]
+            let second = fetchItems(service: service)[1]
+            let last = fetchItems(service: service)[2]
 
             XCTAssertEqual(first.date, date("2000-03-02T00:00:00Z"))
             XCTAssertEqual(first.content, "content2")
@@ -212,13 +212,13 @@ final class ItemServiceTests: XCTestCase {
                                 outgo: 100,
                                 group: "group")
 
-            try! service.updateForAllItems(item: try! service.items().first!,
+            try! service.updateForAllItems(item: fetchItems(service: service).first!,
                                            date: date("2001-01-02T12:00:00Z"),
                                            content: "content2",
                                            income: 100,
                                            outgo: 200,
                                            group: "group2")
-            let result = try! service.items().first!
+            let result = fetchItems(service: service).first!
 
             XCTAssertEqual(result.date, date("2001-01-02T00:00:00Z"))
             XCTAssertEqual(result.content, "content2")
@@ -236,16 +236,16 @@ final class ItemServiceTests: XCTestCase {
                                 group: "group",
                                 repeatCount: 3)
 
-            try! service.updateForAllItems(item: try! service.items()[1],
+            try! service.updateForAllItems(item: fetchItems(service: service)[1],
                                            date: date("2000-02-02T12:00:00Z"),
                                            content: "content2",
                                            income: 100,
                                            outgo: 200,
                                            group: "group2")
 
-            let first = try! service.items()[0]
-            let second = try! service.items()[1]
-            let last = try! service.items()[2]
+            let first = fetchItems(service: service)[0]
+            let second = fetchItems(service: service)[1]
+            let last = fetchItems(service: service)[2]
 
             XCTAssertEqual(first.date, date("2000-03-02T00:00:00Z"))
             XCTAssertEqual(first.content, "content2")
@@ -297,7 +297,7 @@ final class ItemServiceTests: XCTestCase {
 
             try! service.delete(items: [itemA])
 
-            let result = try! service.items()
+            let result = fetchItems(service: service)
 
             XCTAssertEqual(result, [itemB])
         }
@@ -328,7 +328,7 @@ final class ItemServiceTests: XCTestCase {
 
             try! service.deleteAll()
 
-            let result = try! service.items()
+            let result = fetchItems(service: service)
 
             XCTAssertEqual(result, [])
         }

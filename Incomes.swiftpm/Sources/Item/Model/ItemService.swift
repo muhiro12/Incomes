@@ -21,10 +21,6 @@ final class ItemService {
 
     // MARK: - Fetch
 
-    func items(predicate: Predicate<Item>? = nil) throws -> [Item] {
-        try context.fetch(.init(predicate: predicate, sortBy: Item.sortDescriptors()))
-    }
-
     func itemsCount(predicate: Predicate<Item>? = nil) throws -> Int {
         try context.fetchCount(.init(predicate: predicate))
     }
@@ -92,64 +88,9 @@ final class ItemService {
                         content: content,
                         income: income,
                         outgo: outgo,
-                        group: group)
+                        group: group,
+                        repeatID: .init())
         try calculator.calculate(for: [item])
-    }
-
-    private func updateForRepeatingItems(item: Item,
-                                         date: Date,
-                                         content: String,
-                                         income: Decimal,
-                                         outgo: Decimal,
-                                         group: String,
-                                         predicate: Predicate<Item>) throws {
-        let components = Calendar.utc.dateComponents([.year, .month, .day],
-                                                     from: item.date,
-                                                     to: date)
-
-        let repeatID = UUID()
-        let items = try context.fetch(.init(predicate: predicate, sortBy: Item.sortDescriptors()))
-        try items.forEach {
-            guard let newDate = Calendar.utc.date(byAdding: components, to: $0.date) else {
-                assertionFailure()
-                return
-            }
-            $0.modify(
-                date: newDate,
-                content: content,
-                income: income,
-                outgo: outgo,
-                group: group,
-                repeatID: repeatID
-            )
-            item.modify(
-                tags: [
-                    try .create(
-                        context: context,
-                        name: Calendar.utc.startOfYear(for: newDate).stringValueWithoutLocale(.yyyy),
-                        type: .year
-                    ),
-                    try .create(
-                        context: context,
-                        name: Calendar.utc.startOfMonth(for: newDate).stringValueWithoutLocale(.yyyyMM),
-                        type: .yearMonth
-                    ),
-                    try .create(
-                        context: context,
-                        name: content,
-                        type: .content
-                    ),
-                    try .create(
-                        context: context,
-                        name: group,
-                        type: .category
-                    )
-                ]
-            )
-        }
-
-        try context.save()
-        try calculator.calculate(for: items)
     }
 
     func updateForFutureItems(item: Item,
@@ -182,10 +123,6 @@ final class ItemService {
                                     predicate: Item.predicate(repeatIDIs: item.repeatID))
     }
 
-    func update(item: Item, tags: [Tag]) {
-        item.modify(tags: tags)
-    }
-
     // MARK: - Delete
 
     func delete(items: [Item]) throws {
@@ -201,11 +138,52 @@ final class ItemService {
 
     // MARK: - Calculate balance
 
-    func calculate(for items: [Item]) throws {
-        try calculator.calculate(for: items)
-    }
-
     func recalculate() throws {
         try calculator.calculateAll()
+    }
+}
+
+private extension ItemService {
+    func updateForRepeatingItems(item: Item,
+                                 date: Date,
+                                 content: String,
+                                 income: Decimal,
+                                 outgo: Decimal,
+                                 group: String,
+                                 predicate: Predicate<Item>) throws {
+        let components = Calendar.utc.dateComponents([.year, .month, .day],
+                                                     from: item.date,
+                                                     to: date)
+
+        let repeatID = UUID()
+        let items = try context.fetch(.init(predicate: predicate, sortBy: Item.sortDescriptors()))
+        try items.forEach {
+            guard let newDate = Calendar.utc.date(byAdding: components, to: $0.date) else {
+                assertionFailure()
+                return
+            }
+            try $0.modify(
+                date: newDate,
+                content: content,
+                income: income,
+                outgo: outgo,
+                group: group,
+                repeatID: repeatID
+            )
+        }
+
+        try context.save()
+        try calculator.calculate(for: items)
+    }
+}
+
+@available(*, deprecated)
+extension ItemService {
+    func itemsForTest(predicate: Predicate<Item>? = nil) throws -> [Item] {
+        try context.fetch(.init(predicate: predicate, sortBy: Item.sortDescriptors()))
+    }
+
+    func calculateForTest(for items: [Item]) throws {
+        try calculator.calculate(for: items)
     }
 }
