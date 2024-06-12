@@ -74,8 +74,6 @@ final class TagService {
     // MARK: - Merge
 
     func merge(tags: [Tag]) throws {
-        let itemService = ItemService(context: context)
-
         guard let parent = tags.first else {
             return
         }
@@ -86,7 +84,7 @@ final class TagService {
         }.forEach { item in
             var tags = item.tags ?? []
             tags.append(parent)
-            itemService.update(item: item, tags: tags)
+            item.modify(tags: tags)
         }
 
         try delete(tags: children)

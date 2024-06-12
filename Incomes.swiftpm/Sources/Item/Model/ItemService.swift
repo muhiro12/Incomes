@@ -103,8 +103,6 @@ final class ItemService {
                                          outgo: Decimal,
                                          group: String,
                                          predicate: Predicate<Item>) throws {
-        let tagService = TagService(context: context)
-
         let components = Calendar.utc.dateComponents([.year, .month, .day],
                                                      from: item.date,
                                                      to: date)
@@ -125,7 +123,28 @@ final class ItemService {
                 repeatID: repeatID
             )
             item.modify(
-                tags: try tagService.createTags(date: newDate, content: content, group: group)
+                tags: [
+                    try .create(
+                        context: context,
+                        name: Calendar.utc.startOfYear(for: newDate).stringValueWithoutLocale(.yyyy),
+                        type: .year
+                    ),
+                    try .create(
+                        context: context,
+                        name: Calendar.utc.startOfMonth(for: newDate).stringValueWithoutLocale(.yyyyMM),
+                        type: .yearMonth
+                    ),
+                    try .create(
+                        context: context,
+                        name: content,
+                        type: .content
+                    ),
+                    try .create(
+                        context: context,
+                        name: group,
+                        type: .category
+                    )
+                ]
             )
         }
 
