@@ -1,21 +1,21 @@
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 struct DuplicatedTagView: View {
     @Environment(ItemService.self)
     private var itemService
     @Environment(TagService.self)
     private var tagService
-    
+
     @Query private var tags: [Tag]
-    
+
     init(_ tag: Tag) {
         _tags = Query(
             filter: Tag.predicate(isSameWith: tag),
             sort: Tag.sortDescriptors()
         )
     }
-    
+
     var body: some View {
         ScrollView(.horizontal) {
             LazyHStack(spacing: .zero) {

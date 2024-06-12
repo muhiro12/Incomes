@@ -1,14 +1,14 @@
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 struct DuplicatedTagsView: View {
     @Query(filter: Tag.predicate(type: .year)) private var years: [Tag]
     @Query(filter: Tag.predicate(type: .yearMonth)) private var yearMonths: [Tag]
     @Query(filter: Tag.predicate(type: .content)) private var contents: [Tag]
     @Query(filter: Tag.predicate(type: .category)) private var categories: [Tag]
-    
+
     @State private var tag: Tag?
-    
+
     var body: some View {
         List(selection: $tag) {
             Section {
@@ -40,11 +40,11 @@ struct DuplicatedTagsView: View {
     private func buildSectionContent(from tags: [Tag]) -> some View {
         ForEach(
             Dictionary(grouping: tags, by: \.name)
-                .compactMap { key, values -> Tag? in
+                .compactMap { _, values -> Tag? in
                     guard values.count > 1 else {
                         return nil
                     }
-                    return values.first                                
+                    return values.first
                 }.sorted {
                     $0.displayName < $1.displayName
                 },

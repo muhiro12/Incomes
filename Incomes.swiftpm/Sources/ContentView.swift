@@ -40,7 +40,7 @@ public struct ContentView {
     }()
 
     @MainActor
-    public init() {    
+    public init() {
         sharedItemService = .init(context: container.mainContext)
         sharedTagService = .init(context: container.mainContext)
         sharedConfigurationService = .init()

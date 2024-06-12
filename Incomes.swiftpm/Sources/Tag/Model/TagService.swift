@@ -70,17 +70,17 @@ final class TagService {
     func deleteAll() throws {
         try delete(tags: tags())
     }
-    
+
     // MARK: - Merge
-    
-    func merge(tags: [Tag]) throws {      
+
+    func merge(tags: [Tag]) throws {
         let itemService = ItemService(context: context)
-        
+
         guard let parent = tags.first else {
             return
         }
         let children = Array(tags.dropFirst())
-        
+
         children.flatMap {
             $0.items ?? []
         }.forEach { item in
@@ -88,7 +88,7 @@ final class TagService {
             tags.append(parent)
             itemService.update(item: item, tags: tags)
         }
-        
+
         try delete(tags: children)
     }
 }

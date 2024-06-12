@@ -104,7 +104,7 @@ final class ItemService {
                                          group: String,
                                          predicate: Predicate<Item>) throws {
         let tagService = TagService(context: context)
-        
+
         let components = Calendar.utc.dateComponents([.year, .month, .day],
                                                      from: item.date,
                                                      to: date)
