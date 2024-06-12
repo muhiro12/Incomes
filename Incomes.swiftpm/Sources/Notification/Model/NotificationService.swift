@@ -16,8 +16,8 @@ final class NotificationService: NSObject {
     private(set) var shouldShowNotification = false
 
     private let year = 2_024
-    private let months = [6, 7, 8] // swiftlint:disable:this no_magic_numbers
-    private let days = [10, 20, 30] // swiftlint:disable:this no_magic_numbers
+    private let months = [6, 7, 8]
+    private let days = [10, 20, 30]
     private let hour = 20
 
     private var center: UNUserNotificationCenter {
@@ -38,7 +38,7 @@ final class NotificationService: NSObject {
 
         let content = UNMutableNotificationContent()
         content.title = .init(localized: "Important Subscription Update")
-        content.body = .init(localized: "Starting August 1st, iCloud synchronization will be moved to the subscription plan. We appreciate your understanding and support.") // swiftlint:disable:this line_length
+        content.body = .init(localized: "Starting August 1st, iCloud synchronization will be moved to the subscription plan. We appreciate your understanding and support.")
         content.badge = 1
         content.sound = .default
 

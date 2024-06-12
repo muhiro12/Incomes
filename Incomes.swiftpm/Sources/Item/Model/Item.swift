@@ -19,11 +19,11 @@ final class Item {
     private(set) var balance = Decimal.zero
 
     @Relationship(inverse: \Tag.items)
-    private(set) var tags: [Tag]? // swiftlint:disable:this discouraged_optional_collection
+    private(set) var tags: [Tag]?
 
     private init() {}
 
-    static func create(context: ModelContext, // swiftlint:disable:this function_parameter_count
+    static func create(context: ModelContext,
                        date: Date,
                        content: String,
                        income: Decimal,
@@ -79,7 +79,7 @@ extension Item {
     }
 
     @available(*, deprecated)
-    func modify(date: Date, // swiftlint:disable:this function_parameter_count
+    func modify(date: Date,
                 content: String,
                 income: Decimal,
                 outgo: Decimal,

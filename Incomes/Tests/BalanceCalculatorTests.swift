@@ -9,8 +9,7 @@
 @testable import IncomesPlaygrounds
 import XCTest
 
-// swiftlint:disable all
-class BalanceCalculatorTests: XCTestCase {
+final class BalanceCalculatorTests: XCTestCase {
     func testCalculate() {
         XCTContext.runActivity(named: "Result is as expected when inserting") { _ in
             let context = context

@@ -9,7 +9,7 @@
 import SwiftUI
 
 // periphery:ignore
-// swiftlint:disable no_magic_numbers
+
 extension CGFloat {
     private static let unit = Self(8)
 

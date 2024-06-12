@@ -22,7 +22,6 @@ struct NotificationSection: View {
             .font(.headline)
             .foregroundStyle(.red)
             Text(
-                // swiftlint:disable line_length
                 """
                 We would like to inform you that starting August 1st (tentative), the contents of the subscription plan will be updated as follows:
 

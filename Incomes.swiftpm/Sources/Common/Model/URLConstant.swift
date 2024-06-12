@@ -8,7 +8,6 @@
 
 import Foundation
 
-// swiftlint:disable force_unwrapping
 extension URL {
     static let terms = URL(string: "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/")!
 }

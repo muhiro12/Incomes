@@ -10,8 +10,7 @@
 import SwiftData
 import XCTest
 
-// swiftlint:disable all
-class IncomesTests: XCTestCase {}
+final class IncomesTests: XCTestCase {}
 
 var context: ModelContext {
     try! .init(

@@ -9,8 +9,7 @@
 @testable import IncomesPlaygrounds
 import XCTest
 
-// swiftlint:disable all
-class DateExtensionTests: XCTestCase {
+final class DateExtensionTests: XCTestCase {
     override func setUp() {
         NSTimeZone.default = .current
     }

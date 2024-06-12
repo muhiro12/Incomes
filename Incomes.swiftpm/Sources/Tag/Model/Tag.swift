@@ -21,7 +21,7 @@ final class Tag {
     private(set) var name = String.empty
     private(set) var typeID = String.empty
 
-    private(set) var items: [Item]? // swiftlint:disable:this discouraged_optional_collection
+    private(set) var items: [Item]?
 
     private init() {}
 

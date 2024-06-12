@@ -120,7 +120,7 @@ extension ItemFormView: View {
                         save()
                     }
                     if let count = try? itemService.itemsCount(),
-                       count.isMultiple(of: 10) { // swiftlint:disable:this no_magic_numbers
+                       count.isMultiple(of: 10) {
                         requestReview()
                     }
                 } label: {

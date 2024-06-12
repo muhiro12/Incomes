@@ -82,7 +82,7 @@ final class ItemService {
 
     // MARK: - Update
 
-    func update(item: Item, // swiftlint:disable:this function_parameter_count
+    func update(item: Item,
                 date: Date,
                 content: String,
                 income: Decimal,
@@ -96,7 +96,7 @@ final class ItemService {
         try calculator.calculate(for: [item])
     }
 
-    private func updateForRepeatingItems(item: Item, // swiftlint:disable:this function_parameter_count
+    private func updateForRepeatingItems(item: Item,
                                          date: Date,
                                          content: String,
                                          income: Decimal,
@@ -133,7 +133,7 @@ final class ItemService {
         try calculator.calculate(for: items)
     }
 
-    func updateForFutureItems(item: Item, // swiftlint:disable:this function_parameter_count
+    func updateForFutureItems(item: Item,
                               date: Date,
                               content: String,
                               income: Decimal,
@@ -148,7 +148,7 @@ final class ItemService {
                                     predicate: Item.predicate(repeatIDIs: item.repeatID, dateIsAfter: item.date))
     }
 
-    func updateForAllItems(item: Item, // swiftlint:disable:this function_parameter_count
+    func updateForAllItems(item: Item,
                            date: Date,
                            content: String,
                            income: Decimal,

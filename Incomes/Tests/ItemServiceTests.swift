@@ -10,8 +10,7 @@ import CoreData
 @testable import IncomesPlaygrounds
 import XCTest
 
-// swiftlint:disable all
-class ItemServiceTests: XCTestCase {
+final class ItemServiceTests: XCTestCase {
     override func setUp() {
         NSTimeZone.default = .current
     }

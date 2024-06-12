@@ -9,7 +9,6 @@
 import SwiftData
 import SwiftUI
 
-// swiftlint:disable force_unwrapping force_try function_body_length no_magic_numbers
 enum PreviewData {
     static var context: ModelContext {
         let context = try! ModelContext(
