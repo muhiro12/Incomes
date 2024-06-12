@@ -26,18 +26,15 @@ final class Tag {
     private init() {}
 
     static func create(context: ModelContext, name: String, type: Tag.TagType) throws -> Tag {
-        var tags = try context.fetch(
-            .init(predicate: Self.predicate(name: name, type: type), sortBy: Self.sortDescriptors())
-        )
-        guard let tag = tags.popLast() else {
-            let tag = Tag()
-            context.insert(tag)
-            tag.name = name
-            tag.typeID = type.rawValue
-            return tag
-        }
-        tags.forEach(context.delete)
-        try context.save()
+        let tag = try context.fetch(
+            .init(
+                predicate: Self.predicate(name: name, type: type),
+                sortBy: Self.sortDescriptors()
+            )
+        ).first ?? .init()
+        context.insert(tag)
+        tag.name = name
+        tag.typeID = type.rawValue
         return tag
     }
 }
