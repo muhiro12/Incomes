@@ -15,6 +15,7 @@ disabled_rules:
     - prefer_nimble # Use XCTest
     - required_deinit # Omit deinit
     - sorted_enum_cases # Prioritize readability
+    - vertical_whitespace_between_cases # Keep switch cases visually grouped together
 
     # TODO: Resolve the following rules
     - anonymous_argument_in_multiline_closure
