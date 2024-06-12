@@ -57,3 +57,5 @@ extension Tag {
         }
     }
 }
+
+extension Tag: Identifiable {}
