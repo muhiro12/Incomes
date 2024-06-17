@@ -59,6 +59,7 @@ private extension FilteredTagList {
 }
 
 #Preview {
-    FilteredTagList(category: .constant(.empty))
-        .previewContext()
+    IncomesPreview { _ in
+        FilteredTagList(category: .constant(.empty))
+    }
 }

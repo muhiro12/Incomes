@@ -17,6 +17,7 @@ struct SettingsNavigationView: View {
 }
 
 #Preview {
-    SettingsNavigationView()
-        .previewContext()
+    IncomesPreview { _ in
+        SettingsNavigationView()
+    }
 }

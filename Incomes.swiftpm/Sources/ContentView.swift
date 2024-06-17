@@ -96,6 +96,7 @@ extension ContentView: View {
 }
 
 #Preview {
-    ContentView()
-        .previewContext()
+    IncomesPreview { _ in
+        ContentView()
+    }
 }

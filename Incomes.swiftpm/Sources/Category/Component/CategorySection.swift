@@ -66,11 +66,11 @@ extension CategorySection: View {
 }
 
 #Preview {
-    CategorySection(
-        categoryTag: IncomesPreviewStore.tags.filter {
-            $0.type == .category
-        }[0]
-    )
-    .previewList()
-    .previewContext()
+    IncomesPreview { preview in
+        List {
+            CategorySection(
+                categoryTag: preview.tags.first { $0.type == .category }!
+            )
+        }
+    }
 }

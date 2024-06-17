@@ -71,11 +71,11 @@ extension YearSection: View {
 }
 
 #Preview {
-    YearSection(
-        yearTag: IncomesPreviewStore.tags.filter {
-            $0.type == .year
-        }[0]
-    )
-    .previewList()
-    .previewContext()
+    IncomesPreview { preview in
+        List {
+            YearSection(
+                yearTag: preview.tags.first { $0.type == .year }!
+            )
+        }
+    }
 }

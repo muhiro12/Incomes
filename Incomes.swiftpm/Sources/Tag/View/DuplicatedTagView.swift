@@ -62,6 +62,7 @@ struct DuplicatedTagView: View {
 }
 
 #Preview {
-    DuplicatedTagView(IncomesPreviewStore.tags[0])
-        .previewContext()
+    IncomesPreview { preview in
+        DuplicatedTagView(preview.tags[0])
+    }
 }

@@ -106,7 +106,9 @@ extension SettingsView: View {
 }
 
 #Preview {
-    SettingsView()
-        .previewNavigation()
-        .previewContext()
+    IncomesPreview { _ in
+        NavigationStack {
+            SettingsView()
+        }
+    }
 }

@@ -302,7 +302,9 @@ private extension ItemFormView {
 }
 
 #Preview {
-    ItemFormView(mode: .create, item: nil)
-        .previewNavigation()
-        .previewContext()
+    IncomesPreview { _ in
+        NavigationStack {
+            ItemFormView(mode: .create, item: nil)
+        }
+    }
 }

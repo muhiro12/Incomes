@@ -31,7 +31,9 @@ extension HomeView: View {
 }
 
 #Preview {
-    HomeView(selection: .constant(nil))
-        .previewNavigation()
-        .previewContext()
+    IncomesPreview { _ in
+        NavigationStack {
+            HomeView(selection: .constant(nil))
+        }
+    }
 }

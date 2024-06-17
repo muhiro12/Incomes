@@ -41,6 +41,7 @@ extension Advertisement: View {
 }
 
 #Preview {
-    Advertisement(.medium)
-        .previewList()
+    List {
+        Advertisement(.medium)
+    }
 }

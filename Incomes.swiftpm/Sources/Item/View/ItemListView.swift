@@ -41,13 +41,13 @@ extension ItemListView: View {
 }
 
 #Preview {
-    ItemListView(
-        tag: IncomesPreviewStore.tags.filter {
-            $0.name == Date.now.stringValueWithoutLocale(.yyyy)
-        }[0]
-    ) { _ in
-        Item.predicate(dateIsSameMonthAs: .now)
+    IncomesPreview { preview in
+        NavigationStack {
+            ItemListView(
+                tag: preview.tags.first { $0.name == Date.now.stringValueWithoutLocale(.yyyy) }!
+            ) { _ in
+                Item.predicate(dateIsSameMonthAs: .now)
+            }
+        }
     }
-    .previewNavigation()
-    .previewContext()
 }

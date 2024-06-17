@@ -70,12 +70,12 @@ extension ItemListYearSection: View {
 }
 
 #Preview {
-    ItemListYearSection(
-        yearTag: IncomesPreviewStore.tags.filter {
-            $0.type == .year
-        }[0],
-        predicate: Item.predicate(dateIsSameMonthAs: .now)
-    )
-    .previewList()
-    .previewContext()
+    IncomesPreview { preview in
+        List {
+            ItemListYearSection(
+                yearTag: preview.tags.first { $0.type == .year }!,
+                predicate: Item.predicate(dateIsSameMonthAs: .now)
+            )
+        }
+    }
 }

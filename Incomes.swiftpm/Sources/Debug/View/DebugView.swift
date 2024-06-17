@@ -58,11 +58,7 @@ extension DebugView: View {
             }
             Button(role: .destructive) {
                 Task {
-                    do {
-                        await IncomesPreviewStore().prepare(context)
-                    } catch {
-                        assertionFailure(error.localizedDescription)
-                    }
+                    await IncomesPreviewStore().prepare(context)
                 }
             } label: {
                 Text(String.debugOK)
@@ -75,6 +71,7 @@ extension DebugView: View {
 }
 
 #Preview {
-    DebugView()
-        .previewContext()
+    IncomesPreview { _ in
+        DebugView()
+    }
 }

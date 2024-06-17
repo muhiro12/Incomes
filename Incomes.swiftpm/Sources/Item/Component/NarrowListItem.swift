@@ -44,5 +44,7 @@ extension NarrowListItem: View {
 }
 
 #Preview {
-    NarrowListItem(of: IncomesPreviewStore.items[0])
+    IncomesPreview { preview in
+        NarrowListItem(of: preview.items[0])
+    }
 }

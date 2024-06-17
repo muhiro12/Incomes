@@ -93,6 +93,7 @@ private extension RootNavigationView {
 }
 
 #Preview {
-    RootNavigationView()
-        .previewContext()
+    IncomesPreview { _ in
+        RootNavigationView()
+    }
 }

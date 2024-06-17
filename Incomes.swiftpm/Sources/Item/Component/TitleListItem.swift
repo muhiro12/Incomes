@@ -30,6 +30,9 @@ extension TitleListItem: View {
 }
 
 #Preview {
-    TitleListItem(item: IncomesPreviewStore.items[0])
-        .previewList()
+    IncomesPreview { preview in
+        List {
+            TitleListItem(item: preview.items[0])
+        }
+    }
 }

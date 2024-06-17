@@ -39,5 +39,7 @@ extension ListItem: View {
 }
 
 #Preview {
-    ListItem(of: IncomesPreviewStore.items[0])
+    IncomesPreview { preview in
+        ListItem(of: preview.items[0])
+    }
 }

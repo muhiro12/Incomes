@@ -56,7 +56,9 @@ struct DuplicatedTagsView: View {
 }
 
 #Preview {
-    DuplicatedTagsView()
-        .previewContext()
-        .previewNavigation()
+    IncomesPreview { _ in
+        NavigationStack {
+            DuplicatedTagsView()
+        }
+    }
 }

@@ -31,7 +31,9 @@ extension CategoryView: View {
 }
 
 #Preview {
-    CategoryView(selection: .constant(nil))
-        .previewNavigation()
-        .previewContext()
+    IncomesPreview { _ in
+        NavigationStack {
+            CategoryView(selection: .constant(nil))
+        }
+    }
 }
