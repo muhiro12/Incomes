@@ -37,9 +37,9 @@ extension DebugView: View {
             }
             Section {
                 NavigationLink(String.debugAllItems) {
-                    ItemListView(
-                        tag: try! .create(context: context, name: "name", type: .year)
-                    ) { _ in .true }
+                    if let tag = try? tagService.tag() {
+                        ItemListView(tag: tag) { _ in .true }
+                    }
                 }
             }
             Section {
@@ -72,6 +72,8 @@ extension DebugView: View {
 
 #Preview {
     IncomesPreview { _ in
-        DebugView()
+        NavigationStack {
+            DebugView()
+        }
     }
 }
