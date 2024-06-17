@@ -30,6 +30,6 @@ extension TitleListItem: View {
 }
 
 #Preview {
-    TitleListItem(item: PreviewData.items[0])
+    TitleListItem(item: IncomesPreviewStore.items[0])
         .previewList()
 }

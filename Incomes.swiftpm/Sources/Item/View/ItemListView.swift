@@ -42,7 +42,7 @@ extension ItemListView: View {
 
 #Preview {
     ItemListView(
-        tag: PreviewData.tags.filter {
+        tag: IncomesPreviewStore.tags.filter {
             $0.name == Date.now.stringValueWithoutLocale(.yyyy)
         }[0]
     ) { _ in

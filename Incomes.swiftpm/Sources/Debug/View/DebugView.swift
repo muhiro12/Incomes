@@ -57,11 +57,12 @@ extension DebugView: View {
                 Text("Cancel")
             }
             Button(role: .destructive) {
-                do {
-                    _ = try PreviewData.items(context: context)
-                    try context.save()
-                } catch {
-                    assertionFailure(error.localizedDescription)
+                Task {
+                    do {
+                        await IncomesPreviewStore().prepare(context)
+                    } catch {
+                        assertionFailure(error.localizedDescription)
+                    }
                 }
             } label: {
                 Text(String.debugOK)

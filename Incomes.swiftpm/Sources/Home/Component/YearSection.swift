@@ -72,7 +72,7 @@ extension YearSection: View {
 
 #Preview {
     YearSection(
-        yearTag: PreviewData.tags.filter {
+        yearTag: IncomesPreviewStore.tags.filter {
             $0.type == .year
         }[0]
     )

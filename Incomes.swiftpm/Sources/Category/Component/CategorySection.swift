@@ -67,7 +67,7 @@ extension CategorySection: View {
 
 #Preview {
     CategorySection(
-        categoryTag: PreviewData.tags.filter {
+        categoryTag: IncomesPreviewStore.tags.filter {
             $0.type == .category
         }[0]
     )

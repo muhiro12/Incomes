@@ -47,5 +47,5 @@ extension WideListItem: View {
 }
 
 #Preview(traits: .landscapeRight) {
-    WideListItem(of: PreviewData.items[0])
+    WideListItem(of: IncomesPreviewStore.items[0])
 }

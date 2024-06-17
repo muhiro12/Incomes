@@ -43,6 +43,6 @@ extension DebugSection: View {
 }
 
 #Preview {
-    DebugSection(item: PreviewData.items[0])
+    DebugSection(item: IncomesPreviewStore.items[0])
         .previewList()
 }

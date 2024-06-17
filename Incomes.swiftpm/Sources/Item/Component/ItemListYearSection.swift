@@ -71,7 +71,7 @@ extension ItemListYearSection: View {
 
 #Preview {
     ItemListYearSection(
-        yearTag: PreviewData.tags.filter {
+        yearTag: IncomesPreviewStore.tags.filter {
             $0.type == .year
         }[0],
         predicate: Item.predicate(dateIsSameMonthAs: .now)

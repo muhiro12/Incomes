@@ -39,5 +39,5 @@ extension ListItem: View {
 }
 
 #Preview {
-    ListItem(of: PreviewData.items[0])
+    ListItem(of: IncomesPreviewStore.items[0])
 }
