@@ -20,6 +20,7 @@ struct IncomesPreview<Content: View>: View {
     private let previewConfigurationService: ConfigurationService
     private let previewNotificationService: NotificationService
 
+    @MainActor
     init(content: @escaping (IncomesPreviewStore) -> Content) {
         self.content = content
         self.preview = .init()
