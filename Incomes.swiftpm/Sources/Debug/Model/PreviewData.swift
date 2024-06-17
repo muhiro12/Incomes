@@ -117,7 +117,6 @@ enum PreviewData {
 
 // MARK: - Preview modifier
 
-// periphery:ignore
 extension View {
     func previewNavigation() -> some View {
         NavigationStack {

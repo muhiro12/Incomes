@@ -8,8 +8,6 @@
 
 import SwiftUI
 
-// periphery:ignore
-
 extension CGFloat {
     private static let unit = Self(8)
 

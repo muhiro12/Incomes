@@ -8,7 +8,6 @@
 
 import Foundation
 
-// periphery:ignore
 enum DebugError: IncomesError {
     case `default`
 

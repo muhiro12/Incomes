@@ -9,7 +9,6 @@
 import Foundation
 
 extension Calendar {
-    // periphery:ignore
     static var current: Self {
         assertionFailure("Do not use current calendar")
         return .utc
