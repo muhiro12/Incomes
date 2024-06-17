@@ -106,4 +106,3 @@ final class StringExtensionTests: XCTestCase {
         }
     }
 }
-// swiftlint:enable all

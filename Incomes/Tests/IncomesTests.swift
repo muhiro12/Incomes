@@ -30,4 +30,3 @@ let date: (String) -> Date = { string in
 func fetchItems(service: ItemService) -> [Item] {
     try! service.itemsForTest()
 }
-// swiftlint:enable all

@@ -30,7 +30,6 @@ struct NotificationSection: View {
 
                 We greatly appreciate your support and understanding as we make these changes to enhance your experience with our app. Thank you for being a valued member of our community.
                 """
-                // swiftlint:enable line_length
             )
         }
         .task {

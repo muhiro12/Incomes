@@ -34,4 +34,3 @@ extension CGFloat {
     static let medium = Self(Double.medium)
     static let high = Self(Double.high)
 }
-// swiftlint:enable no_magic_numbers

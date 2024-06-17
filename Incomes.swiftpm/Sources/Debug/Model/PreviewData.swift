@@ -114,7 +114,6 @@ enum PreviewData {
         Calendar.utc.date(byAdding: .month, value: monthLater, to: date)!
     }
 }
-// swiftlint:enable force_unwrapping force_try function_body_length no_magic_numbers
 
 // MARK: - Preview modifier
 
