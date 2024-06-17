@@ -13,30 +13,47 @@ struct IncomesPreview<Content: View>: View {
 
     private let content: (IncomesPreviewStore) -> Content
     private let preview: IncomesPreviewStore
+
     private let previewModelContainer: ModelContainer
+    private let previewItemService: ItemService
+    private let previewTagService: TagService
+    private let previewConfigurationService: ConfigurationService
+    private let previewNotificationService: NotificationService
 
     init(content: @escaping (IncomesPreviewStore) -> Content) {
         self.content = content
         self.preview = .init()
+
         self.previewModelContainer = try! .init(
             for: Item.self,
             configurations: .init(isStoredInMemoryOnly: true)
         )
+
+        self.previewItemService = .init(context: previewModelContainer.mainContext)
+        self.previewTagService = .init(context: previewModelContainer.mainContext)
+        self.previewConfigurationService = .init()
+        self.previewNotificationService = .init()
     }
 
     var body: some View {
         Group {
-            if isReady {
-                content(preview)
-                    .modelContainer(previewModelContainer)
-            } else {
-                ProgressView()
-                    .task {
-                        let context = previewModelContainer.mainContext
-                        await preview.prepare(context)
-                        isReady = true
-                    }
+            Group {
+                if isReady {
+                    content(preview)
+                } else {
+                    ProgressView()
+                        .task {
+                            let context = previewModelContainer.mainContext
+                            await preview.prepare(context)
+                            isReady = true
+                        }
+                }
             }
+            .modelContainer(previewModelContainer)
+            .environment(previewItemService)
+            .environment(previewTagService)
+            .environment(previewConfigurationService)
+            .environment(previewNotificationService)
         }
         .incomesPlaygroundsEnvironment()
     }

@@ -24,25 +24,23 @@ public struct ContentView {
     @State private var isMasked = false
     @State private var isLocked = UserDefaults.isLockAppOn
 
+    private let sharedModelContainer: ModelContainer
     private let sharedItemService: ItemService
     private let sharedTagService: TagService
     private let sharedConfigurationService: ConfigurationService
     private let sharedNotificationService: NotificationService
 
-    private let container = {
-        let url = URL.applicationSupportDirectory.appendingPathComponent("Incomes.sqlite")
-        let configuration = ModelConfiguration(url: url)
-        do {
-            return try ModelContainer(for: Item.self, configurations: configuration)
-        } catch {
-            fatalError("Failed to create the model container: \(error.localizedDescription)")
-        }
-    }()
-
     @MainActor
     public init() {
-        sharedItemService = .init(context: container.mainContext)
-        sharedTagService = .init(context: container.mainContext)
+        sharedModelContainer = try! .init(
+            for: Item.self,
+            configurations: .init(
+                url: .applicationSupportDirectory.appendingPathComponent("Incomes.sqlite")
+            )
+        )
+
+        sharedItemService = .init(context: sharedModelContainer.mainContext)
+        sharedTagService = .init(context: sharedModelContainer.mainContext)
         sharedConfigurationService = .init()
         sharedNotificationService = .init()
     }
@@ -87,11 +85,11 @@ extension ContentView: View {
             }
             isUpdateAlertPresented = sharedConfigurationService.isUpdateRequired()
         }
+        .modelContainer(sharedModelContainer)
         .environment(sharedItemService)
         .environment(sharedTagService)
         .environment(sharedConfigurationService)
         .environment(sharedNotificationService)
-        .modelContainer(container)
     }
 }
 

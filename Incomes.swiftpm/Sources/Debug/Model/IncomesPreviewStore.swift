@@ -15,8 +15,7 @@ final class IncomesPreviewStore {
     private(set) var tags = [Tag]()
 
     private var isReady: Bool {
-        !items.isEmpty
-            && tags.isEmpty
+        items.isNotEmpty && tags.isNotEmpty
     }
 
     @MainActor
