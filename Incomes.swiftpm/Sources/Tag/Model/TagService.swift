@@ -40,7 +40,9 @@ final class TagService {
         guard let parent = tags.first else {
             return
         }
-        let children = Array(tags.dropFirst())
+        let children = tags.filter {
+            $0.id != parent.id
+        }
 
         children.flatMap {
             $0.items ?? []

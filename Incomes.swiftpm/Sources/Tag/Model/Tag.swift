@@ -37,6 +37,14 @@ final class Tag {
         tag.typeID = type.rawValue
         return tag
     }
+
+    static func createIgnoringDuplicates(context: ModelContext, name: String, type: Tag.TagType) throws -> Tag {
+        let tag = Tag()
+        context.insert(tag)
+        tag.name = name
+        tag.typeID = type.rawValue
+        return tag
+    }
 }
 
 extension Tag {
