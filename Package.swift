@@ -22,7 +22,8 @@ let package = Package(
         .package(url: "https://github.com/firebase/firebase-ios-sdk.git", from: "10.0.0"),
         .package(url: "https://github.com/muhiro12/GoogleMobileAdsWrapper.git", branch: "main"),
         .package(url: "https://github.com/muhiro12/LicenseListWrapper.git", branch: "main"),
-        .package(url: "https://github.com/muhiro12/StoreKitWrapper.git", branch: "main")
+        .package(url: "https://github.com/muhiro12/StoreKitWrapper.git", branch: "main"),
+        .package(url: "https://github.com/apple/swift-testing.git", branch: "main")
     ],
     targets: [
         .target(
@@ -49,7 +50,8 @@ let package = Package(
         .testTarget(
             name: "IncomesPlaygroundsTests",
             dependencies: [
-                "IncomesPlaygrounds"
+                "IncomesPlaygrounds",
+                .product(name: "Testing", package: "swift-testing")
             ],
             path: "Incomes/Tests"
         )
