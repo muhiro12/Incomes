@@ -19,6 +19,13 @@
   },
   "testTargets" : [
     {
+      "skippedTests" : {
+        "suites" : [
+          {
+            "name" : "TagServiceTests"
+          }
+        ]
+      },
       "target" : {
         "containerPath" : "container:..\/..",
         "identifier" : "IncomesPlaygroundsTests",
@@ -26,5 +33,5 @@
       }
     }
   ],
-  "version" : 1
+  "version" : 2
 }
