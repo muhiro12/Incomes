@@ -26,6 +26,7 @@ final class IncomesPreviewStore {
             items = try! context.fetch(.init())
             tags = try! context.fetch(.init())
         }
+        try! BalanceCalculator(context: context).calculate(for: items)
     }
 
     private func createItems(_ context: ModelContext) {
