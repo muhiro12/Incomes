@@ -7,22 +7,14 @@
 //
 
 @testable import IncomesPlaygrounds
-import SwiftData
 import XCTest
 
 final class ItemServiceTests: XCTestCase {
-    override func setUp() {
-        NSTimeZone.default = .current
-    }
-
-    override func tearDown() {
-        NSTimeZone.default = .current
-    }
-
     // MARK: - Create
 
     func testCreate() {
         XCTContext.runActivity(named: "Result is as expected") { _ in
+            let context = testContext
             let service = ItemService(context: context)
 
             try! service.create(date: date("2000-01-01T12:00:00Z"),
@@ -30,7 +22,7 @@ final class ItemServiceTests: XCTestCase {
                                 income: 200,
                                 outgo: 100,
                                 group: "group")
-            let result = fetchItems(service: service).first!
+            let result = fetchItems(context).first!
 
             XCTAssertEqual(result.date, date("2000-01-01T00:00:00Z"))
             XCTAssertEqual(result.content, "content")
@@ -40,6 +32,7 @@ final class ItemServiceTests: XCTestCase {
         }
 
         XCTContext.runActivity(named: "Result is as expected when repeatCount 3") { _ in
+            let context = testContext
             let service = ItemService(context: context)
 
             try! service.create(date: date("2000-01-01T12:00:00Z"),
@@ -48,8 +41,8 @@ final class ItemServiceTests: XCTestCase {
                                 outgo: 100,
                                 group: "group",
                                 repeatCount: 3)
-            let first = fetchItems(service: service).first!
-            let last = fetchItems(service: service).last!
+            let first = fetchItems(context).first!
+            let last = fetchItems(context).last!
 
             XCTAssertEqual(first.date, date("2000-03-01T00:00:00Z"))
             XCTAssertEqual(first.content, "content")
@@ -71,6 +64,7 @@ final class ItemServiceTests: XCTestCase {
 
     func testUpdate() {
         XCTContext.runActivity(named: "Result is as expected") { _ in
+            let context = testContext
             let service = ItemService(context: context)
             try! service.create(date: date("2000-01-01T12:00:00Z"),
                                 content: "content",
@@ -78,13 +72,13 @@ final class ItemServiceTests: XCTestCase {
                                 outgo: 100,
                                 group: "group")
 
-            try! service.update(item: fetchItems(service: service).first!,
+            try! service.update(item: fetchItems(context).first!,
                                 date: date("2001-01-02T12:00:00Z"),
                                 content: "content2",
                                 income: 100,
                                 outgo: 200,
                                 group: "group2")
-            let result = fetchItems(service: service).first!
+            let result = fetchItems(context).first!
 
             XCTAssertEqual(result.date, date("2001-01-02T00:00:00Z"))
             XCTAssertEqual(result.content, "content2")
@@ -94,6 +88,7 @@ final class ItemServiceTests: XCTestCase {
         }
 
         XCTContext.runActivity(named: "Result is as expected when repeatCount 3") { _ in
+            let context = testContext
             let service = ItemService(context: context)
             try! service.create(date: date("2000-01-01T12:00:00Z"),
                                 content: "content",
@@ -102,16 +97,16 @@ final class ItemServiceTests: XCTestCase {
                                 group: "group",
                                 repeatCount: 3)
 
-            try! service.update(item: fetchItems(service: service)[1],
+            try! service.update(item: fetchItems(context)[1],
                                 date: date("2000-02-02T12:00:00Z"),
                                 content: "content2",
                                 income: 100,
                                 outgo: 200,
                                 group: "group2")
 
-            let first = fetchItems(service: service)[0]
-            let second = fetchItems(service: service)[1]
-            let last = fetchItems(service: service)[2]
+            let first = fetchItems(context)[0]
+            let second = fetchItems(context)[1]
+            let last = fetchItems(context)[2]
 
             XCTAssertEqual(first.date, date("2000-03-01T00:00:00Z"))
             XCTAssertEqual(first.content, "content")
@@ -138,6 +133,7 @@ final class ItemServiceTests: XCTestCase {
 
     func testUpdateForFutureItems() {
         XCTContext.runActivity(named: "Result is as expected") { _ in
+            let context = testContext
             let service = ItemService(context: context)
             try! service.create(date: date("2000-01-01T12:00:00Z"),
                                 content: "content",
@@ -145,13 +141,13 @@ final class ItemServiceTests: XCTestCase {
                                 outgo: 100,
                                 group: "group")
 
-            try! service.updateForFutureItems(item: fetchItems(service: service).first!,
+            try! service.updateForFutureItems(item: fetchItems(context).first!,
                                               date: date("2001-01-02T12:00:00Z"),
                                               content: "content2",
                                               income: 100,
                                               outgo: 200,
                                               group: "group2")
-            let result = fetchItems(service: service).first!
+            let result = fetchItems(context).first!
 
             XCTAssertEqual(result.date, date("2001-01-02T00:00:00Z"))
             XCTAssertEqual(result.content, "content2")
@@ -161,6 +157,7 @@ final class ItemServiceTests: XCTestCase {
         }
 
         XCTContext.runActivity(named: "Result is as expected when repeatCount 3") { _ in
+            let context = testContext
             let service = ItemService(context: context)
             try! service.create(date: date("2000-01-01T12:00:00Z"),
                                 content: "content",
@@ -169,16 +166,16 @@ final class ItemServiceTests: XCTestCase {
                                 group: "group",
                                 repeatCount: 3)
 
-            try! service.updateForFutureItems(item: fetchItems(service: service)[1],
+            try! service.updateForFutureItems(item: fetchItems(context)[1],
                                               date: date("2000-02-02T12:00:00Z"),
                                               content: "content2",
                                               income: 100,
                                               outgo: 200,
                                               group: "group2")
 
-            let first = fetchItems(service: service)[0]
-            let second = fetchItems(service: service)[1]
-            let last = fetchItems(service: service)[2]
+            let first = fetchItems(context)[0]
+            let second = fetchItems(context)[1]
+            let last = fetchItems(context)[2]
 
             XCTAssertEqual(first.date, date("2000-03-02T00:00:00Z"))
             XCTAssertEqual(first.content, "content2")
@@ -205,6 +202,7 @@ final class ItemServiceTests: XCTestCase {
 
     func testUpdateForAllItems() {
         XCTContext.runActivity(named: "Result is as expected") { _ in
+            let context = testContext
             let service = ItemService(context: context)
             try! service.create(date: date("2000-01-01T12:00:00Z"),
                                 content: "content",
@@ -212,13 +210,13 @@ final class ItemServiceTests: XCTestCase {
                                 outgo: 100,
                                 group: "group")
 
-            try! service.updateForAllItems(item: fetchItems(service: service).first!,
+            try! service.updateForAllItems(item: fetchItems(context).first!,
                                            date: date("2001-01-02T12:00:00Z"),
                                            content: "content2",
                                            income: 100,
                                            outgo: 200,
                                            group: "group2")
-            let result = fetchItems(service: service).first!
+            let result = fetchItems(context).first!
 
             XCTAssertEqual(result.date, date("2001-01-02T00:00:00Z"))
             XCTAssertEqual(result.content, "content2")
@@ -228,6 +226,7 @@ final class ItemServiceTests: XCTestCase {
         }
 
         XCTContext.runActivity(named: "Result is as expected when repeatCount 3") { _ in
+            let context = testContext
             let service = ItemService(context: context)
             try! service.create(date: date("2000-01-01T12:00:00Z"),
                                 content: "content",
@@ -236,16 +235,16 @@ final class ItemServiceTests: XCTestCase {
                                 group: "group",
                                 repeatCount: 3)
 
-            try! service.updateForAllItems(item: fetchItems(service: service)[1],
+            try! service.updateForAllItems(item: fetchItems(context)[1],
                                            date: date("2000-02-02T12:00:00Z"),
                                            content: "content2",
                                            income: 100,
                                            outgo: 200,
                                            group: "group2")
 
-            let first = fetchItems(service: service)[0]
-            let second = fetchItems(service: service)[1]
-            let last = fetchItems(service: service)[2]
+            let first = fetchItems(context)[0]
+            let second = fetchItems(context)[1]
+            let last = fetchItems(context)[2]
 
             XCTAssertEqual(first.date, date("2000-03-02T00:00:00Z"))
             XCTAssertEqual(first.content, "content2")
@@ -274,7 +273,7 @@ final class ItemServiceTests: XCTestCase {
 
     func testDelete() {
         XCTContext.runActivity(named: "") { _ in
-            let context = context
+            let context = testContext
             let service = ItemService(context: context)
 
             let itemA = try! Item.create(context: context,
@@ -297,7 +296,7 @@ final class ItemServiceTests: XCTestCase {
 
             try! service.delete(items: [itemA])
 
-            let result = fetchItems(service: service)
+            let result = fetchItems(context)
 
             XCTAssertEqual(result, [itemB])
         }
@@ -305,7 +304,7 @@ final class ItemServiceTests: XCTestCase {
 
     func testDeleteAll() {
         XCTContext.runActivity(named: "") { _ in
-            let context = context
+            let context = testContext
             let service = ItemService(context: context)
 
             let itemA = try! Item.create(context: context,
@@ -328,7 +327,7 @@ final class ItemServiceTests: XCTestCase {
 
             try! service.deleteAll()
 
-            let result = fetchItems(service: service)
+            let result = fetchItems(context)
 
             XCTAssertEqual(result, [])
         }

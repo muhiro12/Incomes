@@ -176,10 +176,3 @@ private extension ItemService {
         try calculator.calculate(for: items)
     }
 }
-
-@available(*, deprecated)
-extension ItemService {
-    func itemsForTest(predicate: Predicate<Item>? = nil) throws -> [Item] {
-        try context.fetch(.init(predicate: predicate, sortBy: Item.sortDescriptors()))
-    }
-}

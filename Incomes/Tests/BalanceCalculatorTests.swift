@@ -12,7 +12,7 @@ import XCTest
 final class BalanceCalculatorTests: XCTestCase {
     func testCalculate() {
         XCTContext.runActivity(named: "Result is as expected when inserting") { _ in
-            let context = context
+            let context = testContext
             let calculator = BalanceCalculator(context: context)
 
             for i in 1...5 {
@@ -37,16 +37,15 @@ final class BalanceCalculatorTests: XCTestCase {
             context.insert(item)
             try! calculator.calculate(after: item.date)
 
-            let service = ItemService(context: context)
-            let first = fetchItems(service: service).first!
-            let last = fetchItems(service: service).last!
+            let first = fetchItems(context).first!
+            let last = fetchItems(context).last!
 
             XCTAssertEqual(first.balance, 600)
             XCTAssertEqual(last.balance, 100)
         }
 
         XCTContext.runActivity(named: "Result is as expected when inserting first") { _ in
-            let context = context
+            let context = testContext
             let calculator = BalanceCalculator(context: context)
 
             for i in 1...5 {
@@ -71,16 +70,15 @@ final class BalanceCalculatorTests: XCTestCase {
             context.insert(item)
             try! calculator.calculate(after: item.date)
 
-            let service = ItemService(context: context)
-            let first = fetchItems(service: service).first!
-            let last = fetchItems(service: service).last!
+            let first = fetchItems(context).first!
+            let last = fetchItems(context).last!
 
             XCTAssertEqual(first.balance, 600)
             XCTAssertEqual(last.balance, 100)
         }
 
         XCTContext.runActivity(named: "Result is as expected when inserting last") { _ in
-            let context = context
+            let context = testContext
             let calculator = BalanceCalculator(context: context)
 
             for i in 1...5 {
@@ -105,16 +103,15 @@ final class BalanceCalculatorTests: XCTestCase {
             context.insert(item)
             try! calculator.calculate(after: item.date)
 
-            let service = ItemService(context: context)
-            let first = fetchItems(service: service).first!
-            let last = fetchItems(service: service).last!
+            let first = fetchItems(context).first!
+            let last = fetchItems(context).last!
 
             XCTAssertEqual(first.balance, 600)
             XCTAssertEqual(last.balance, 100)
         }
 
         XCTContext.runActivity(named: "Result is as expected when updating") { _ in
-            let context = context
+            let context = testContext
             let calculator = BalanceCalculator(context: context)
 
             var items: [Item] = []
@@ -141,16 +138,15 @@ final class BalanceCalculatorTests: XCTestCase {
                              repeatID: UUID())
             try! calculator.calculate(after: item.date)
 
-            let service = ItemService(context: context)
-            let first = fetchItems(service: service).first!
-            let last = fetchItems(service: service).last!
+            let first = fetchItems(context).first!
+            let last = fetchItems(context).last!
 
             XCTAssertEqual(first.balance, 600)
             XCTAssertEqual(last.balance, 100)
         }
 
         XCTContext.runActivity(named: "Result is as expected when updating first") { _ in
-            let context = context
+            let context = testContext
             let calculator = BalanceCalculator(context: context)
 
             var items: [Item] = []
@@ -177,16 +173,15 @@ final class BalanceCalculatorTests: XCTestCase {
                              repeatID: UUID())
             try! calculator.calculate(after: item.date)
 
-            let service = ItemService(context: context)
-            let first = fetchItems(service: service).first!
-            let last = fetchItems(service: service).last!
+            let first = fetchItems(context).first!
+            let last = fetchItems(context).last!
 
             XCTAssertEqual(first.balance, 600)
             XCTAssertEqual(last.balance, 200)
         }
 
         XCTContext.runActivity(named: "Result is as expected when updating last") { _ in
-            let context = context
+            let context = testContext
             let calculator = BalanceCalculator(context: context)
 
             var items: [Item] = []
@@ -213,16 +208,15 @@ final class BalanceCalculatorTests: XCTestCase {
                              repeatID: UUID())
             try! calculator.calculate(after: item.date)
 
-            let service = ItemService(context: context)
-            let first = fetchItems(service: service).first!
-            let last = fetchItems(service: service).last!
+            let first = fetchItems(context).first!
+            let last = fetchItems(context).last!
 
             XCTAssertEqual(first.balance, 600)
             XCTAssertEqual(last.balance, 100)
         }
 
         XCTContext.runActivity(named: "Result is as expected when changing order") { _ in
-            let context = context
+            let context = testContext
             let calculator = BalanceCalculator(context: context)
 
             var items: [Item] = []
@@ -249,16 +243,15 @@ final class BalanceCalculatorTests: XCTestCase {
                              repeatID: UUID())
             try! calculator.calculate(after: item.date)
 
-            let service = ItemService(context: context)
-            let first = fetchItems(service: service).first!
-            let last = fetchItems(service: service).last!
+            let first = fetchItems(context).first!
+            let last = fetchItems(context).last!
 
             XCTAssertEqual(first.balance, 600)
             XCTAssertEqual(last.balance, 200)
         }
 
         XCTContext.runActivity(named: "Result is as expected when deleting") { _ in
-            let context = context
+            let context = testContext
             let calculator = BalanceCalculator(context: context)
 
             var items: [Item] = []
@@ -280,16 +273,15 @@ final class BalanceCalculatorTests: XCTestCase {
             context.delete(item)
             try! calculator.calculate(after: item.date)
 
-            let service = ItemService(context: context)
-            let first = fetchItems(service: service).first!
-            let last = fetchItems(service: service).last!
+            let first = fetchItems(context).first!
+            let last = fetchItems(context).last!
 
             XCTAssertEqual(first.balance, 400)
             XCTAssertEqual(last.balance, 100)
         }
 
         XCTContext.runActivity(named: "Result is as expected when deleting first") { _ in
-            let context = context
+            let context = testContext
             let calculator = BalanceCalculator(context: context)
 
             var items: [Item] = []
@@ -311,16 +303,15 @@ final class BalanceCalculatorTests: XCTestCase {
             context.delete(item)
             try! calculator.calculate(after: item.date)
 
-            let service = ItemService(context: context)
-            let first = fetchItems(service: service).first!
-            let last = fetchItems(service: service).last!
+            let first = fetchItems(context).first!
+            let last = fetchItems(context).last!
 
             XCTAssertEqual(first.balance, 400)
             XCTAssertEqual(last.balance, 100)
         }
 
         XCTContext.runActivity(named: "Result is as expected when deleting last") { _ in
-            let context = context
+            let context = testContext
             let calculator = BalanceCalculator(context: context)
 
             var items: [Item] = []
@@ -342,9 +333,8 @@ final class BalanceCalculatorTests: XCTestCase {
             context.delete(item)
             try! calculator.calculate(after: item.date)
 
-            let service = ItemService(context: context)
-            let first = fetchItems(service: service).first!
-            let last = fetchItems(service: service).last!
+            let first = fetchItems(context).first!
+            let last = fetchItems(context).last!
 
             XCTAssertEqual(first.balance, 400)
             XCTAssertEqual(last.balance, 100)

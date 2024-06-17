@@ -12,7 +12,7 @@ import XCTest
 
 final class IncomesTests: XCTestCase {}
 
-var context: ModelContext {
+var testContext: ModelContext {
     try! .init(
         .init(
             for: Item.self,
@@ -27,6 +27,6 @@ let date: (String) -> Date = { string in
     try! Date(string, strategy: .iso8601)
 }
 
-func fetchItems(service: ItemService) -> [Item] {
-    try! service.itemsForTest()
+func fetchItems(_ context: ModelContext) -> [Item] {
+    try! context.fetch(.init(sortBy: Item.sortDescriptors()))
 }
