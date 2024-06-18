@@ -29,7 +29,7 @@ extension String {
     static let debugSetPreviewDataMessage: Self = "Are you really going to set PreviewData?"
     static let debugOK: Self = "OK"
     static let debugAllItems: Self = "All Items"
-    static let debugCommand: Self = "DebugView"
+    static let debugCommand: Self = "Enable Debug"
     static let debugRepeatID: Self = "RepeatID"
     static let debugBalance: Self = "Balance"
     static let debugTags: Self = "Tags"
