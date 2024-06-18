@@ -37,7 +37,6 @@ struct DuplicatedTagsView: View {
                 CloseButton()
             }
         }
-        .interactiveDismissDisabled()
         .navigationTitle(Text("Duplicated Tags"))
     }
 

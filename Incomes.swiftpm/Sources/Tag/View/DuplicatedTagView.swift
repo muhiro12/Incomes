@@ -51,12 +51,11 @@ struct DuplicatedTagView: View {
                 Button {
                     try? tagService.merge(tags: tags)
                 } label: {
-                    Label {
-                        Text("Merge")
-                    } icon: {
-                        Image(systemName: "arrow.trianglehead.merge")
-                    }
+                    Text("Merge")
                 }
+            }
+            ToolbarItem {
+                CloseButton()
             }
         }
         .navigationTitle(Text(tags.first?.displayName ?? ""))
