@@ -125,3 +125,49 @@ extension Item {
         profit.isPlus
     }
 }
+
+// MARK: - Test
+
+extension Item {
+    static func createIgnoringDuplicates(context: ModelContext,
+                                         date: Date,
+                                         content: String,
+                                         income: Decimal,
+                                         outgo: Decimal,
+                                         group: String,
+                                         repeatID: UUID) throws -> Item {
+        let item = Item()
+        context.insert(item)
+
+        item.date = Calendar.utc.startOfDay(for: date)
+        item.content = content
+        item.income = income
+        item.outgo = outgo
+        item.repeatID = repeatID
+
+        item.tags = [
+            try .createIgnoringDuplicates(
+                context: context,
+                name: Calendar.utc.startOfYear(for: date).stringValueWithoutLocale(.yyyy),
+                type: .year
+            ),
+            try .createIgnoringDuplicates(
+                context: context,
+                name: Calendar.utc.startOfMonth(for: date).stringValueWithoutLocale(.yyyyMM),
+                type: .yearMonth
+            ),
+            try .createIgnoringDuplicates(
+                context: context,
+                name: content,
+                type: .content
+            ),
+            try .createIgnoringDuplicates(
+                context: context,
+                name: group,
+                type: .category
+            )
+        ]
+
+        return item
+    }
+}
