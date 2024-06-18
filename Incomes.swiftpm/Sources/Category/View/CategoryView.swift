@@ -32,8 +32,6 @@ extension CategoryView: View {
 
 #Preview {
     IncomesPreview { _ in
-        NavigationStack {
-            CategoryView(selection: .constant(nil))
-        }
+        CategoryView(selection: .constant(nil))
     }
 }

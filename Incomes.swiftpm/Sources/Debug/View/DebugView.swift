@@ -72,8 +72,6 @@ extension DebugView: View {
 
 #Preview {
     IncomesPreview { _ in
-        NavigationStack {
-            DebugView()
-        }
+        DebugView()
     }
 }

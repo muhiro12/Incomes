@@ -37,7 +37,7 @@ struct IncomesPreview<Content: View>: View {
     }
 
     var body: some View {
-        Group {
+        NavigationStack {
             Group {
                 if isReady {
                     content(preview)

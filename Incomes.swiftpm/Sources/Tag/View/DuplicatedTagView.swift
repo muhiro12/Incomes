@@ -71,8 +71,6 @@ struct DuplicatedTagView: View {
 
 #Preview {
     IncomesPreview { preview in
-        NavigationStack {
-            DuplicatedTagView(preview.tags[0])
-        }
+        DuplicatedTagView(preview.tags[0])
     }
 }

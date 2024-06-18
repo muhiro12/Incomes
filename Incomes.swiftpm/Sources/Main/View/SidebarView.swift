@@ -78,7 +78,7 @@ extension SidebarView: View {
 }
 
 #Preview {
-    NavigationStack {
+    IncomesPreview { _ in
         SidebarView(selection: .constant(nil))
     }
 }

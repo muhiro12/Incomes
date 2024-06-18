@@ -303,8 +303,6 @@ private extension ItemFormView {
 
 #Preview {
     IncomesPreview { _ in
-        NavigationStack {
-            ItemFormView(mode: .create, item: nil)
-        }
+        ItemFormView(mode: .create, item: nil)
     }
 }

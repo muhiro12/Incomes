@@ -42,12 +42,10 @@ extension ItemListView: View {
 
 #Preview {
     IncomesPreview { preview in
-        NavigationStack {
-            ItemListView(
-                tag: preview.tags.first { $0.name == Date.now.stringValueWithoutLocale(.yyyy) }!
-            ) { _ in
-                Item.predicate(dateIsSameMonthAs: .now)
-            }
+        ItemListView(
+            tag: preview.tags.first { $0.name == Date.now.stringValueWithoutLocale(.yyyy) }!
+        ) { _ in
+            Item.predicate(dateIsSameMonthAs: .now)
         }
     }
 }
