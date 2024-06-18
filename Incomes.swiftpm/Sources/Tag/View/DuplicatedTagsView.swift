@@ -32,8 +32,13 @@ struct DuplicatedTagsView: View {
                 Text("Category")
             }
         }
-        .navigationTitle(Text("Duplicated Tags"))
+        .toolbar {
+            ToolbarItem {
+                CloseButton()
+            }
+        }
         .interactiveDismissDisabled()
+        .navigationTitle(Text("Duplicated Tags"))
     }
 
     private func buildSectionContent(from tags: [Tag]) -> some View {

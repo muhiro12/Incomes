@@ -10,7 +10,6 @@ import SwiftUI
 enum IncomesPath: Hashable {
     case debug
     case duplicatedTag(Tag)
-    case duplicatedTags
     case license
 }
 
@@ -22,8 +21,6 @@ extension View {
                 DebugView()
             case .duplicatedTag(let tag):
                 DuplicatedTagView(tag)
-            case .duplicatedTags:
-                DuplicatedTagsView()
             case .license:
                 LicenseView()
             }

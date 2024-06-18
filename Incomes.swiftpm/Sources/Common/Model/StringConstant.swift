@@ -18,7 +18,6 @@ extension String {
 
     static let imageHome = "calendar"
     static let imageCategory = "square.stack.3d.up"
-    static let imageClose = "xmark.circle.fill"
 
     // MARK: - Debug
 

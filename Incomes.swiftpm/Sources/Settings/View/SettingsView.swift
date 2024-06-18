@@ -9,9 +9,6 @@
 import SwiftUI
 
 struct SettingsView {
-    @Environment(\.dismiss)
-    private var dismiss
-
     @Environment(ItemService.self)
     private var itemService
     @Environment(TagService.self)
@@ -20,6 +17,7 @@ struct SettingsView {
     @AppStorage(.key(.isSubscribeOn))
     private var isSubscribeOn = UserDefaults.isSubscribeOn
 
+    @State private var isDuplicatedTagPresented = false
     @State private var isAlertPresented = false
 }
 
@@ -33,7 +31,9 @@ extension SettingsView: View {
                 StoreSection()
             }
             Section {
-                NavigationLink(path: .duplicatedTags) {
+                Button {
+                    isDuplicatedTagPresented = true
+                } label: {
                     Text("Manage Duplicated Tags")
                 }
             }
@@ -66,6 +66,9 @@ extension SettingsView: View {
                 }
             }
         }
+        .fullScreenCover(isPresented: $isDuplicatedTagPresented) {
+            DuplicatedTagNavigationView()
+        }
         .alert(Text("Are you sure you want to delete all items?"),
                isPresented: $isAlertPresented) {
             Button(role: .destructive) {
@@ -85,12 +88,7 @@ extension SettingsView: View {
         }
         .toolbar {
             ToolbarItem {
-                Button {
-                    dismiss()
-                } label: {
-                    Image(systemName: .imageClose)
-                        .symbolRenderingMode(.hierarchical)
-                }
+                CloseButton()
             }
         }
         .navigationTitle(Text("Settings"))
