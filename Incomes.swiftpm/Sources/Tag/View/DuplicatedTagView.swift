@@ -42,6 +42,10 @@ struct DuplicatedTagView: View {
                         }
                     }
                     .frame(width: .componentXL)
+                    if tag != tags.last {
+                        Divider()
+                            .padding()
+                    }
                 }
             }
         }
@@ -56,6 +60,10 @@ struct DuplicatedTagView: View {
             }
             ToolbarItem {
                 CloseButton()
+            }
+            ToolbarItem(placement: .status) {
+                Text("\(tags.count) Items")
+                    .font(.footnote)
             }
         }
         .navigationTitle(Text(tags.first?.displayName ?? ""))
