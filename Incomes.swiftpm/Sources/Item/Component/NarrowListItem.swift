@@ -38,7 +38,7 @@ extension NarrowListItem: View {
             Text(item.balance.asCurrency)
                 .minimumScaleFactor(.medium)
                 .frame(width: .componentM)
-                .foregroundColor(item.income.isMinus ? .red : .primary)
+                .foregroundColor(item.balance.isMinus ? .red : .primary)
         }
     }
 }
