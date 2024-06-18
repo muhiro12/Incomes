@@ -7,10 +7,14 @@ struct DuplicatedTagsView: View {
     @Query(filter: Tag.predicate(type: .content)) private var contents: [Tag]
     @Query(filter: Tag.predicate(type: .category)) private var categories: [Tag]
 
-    @State private var tag: Tag?
+    @Binding private var selection: Tag?
+    
+    init(selection: Binding<Tag?>) {
+        _selection = selection
+    }
 
     var body: some View {
-        List(selection: $tag) {
+        List(selection: $selection) {
             Section {
                 buildSectionContent(from: years)
             } header: {
@@ -53,9 +57,7 @@ struct DuplicatedTagsView: View {
                 },
             id: \.self
         ) { tag in
-            NavigationLink(path: .duplicatedTag(tag)) {
-                Text(tag.displayName)
-            }
+            Text(tag.displayName)
         }
     }
 }
@@ -63,7 +65,7 @@ struct DuplicatedTagsView: View {
 #Preview {
     IncomesPreview { _ in
         NavigationStack {
-            DuplicatedTagsView()
+            DuplicatedTagsView(selection: .constant(nil))
         }
     }
 }
