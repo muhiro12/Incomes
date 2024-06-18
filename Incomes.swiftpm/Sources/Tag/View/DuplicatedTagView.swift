@@ -37,6 +37,8 @@ struct DuplicatedTagView: View {
                                     } icon: {
                                         Image(systemName: "trash")
                                     }
+                                    .font(.caption)
+                                    .textCase(nil)
                                 }
                             }
                         }

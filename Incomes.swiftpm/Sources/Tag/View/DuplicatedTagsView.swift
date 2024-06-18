@@ -2,6 +2,8 @@ import SwiftData
 import SwiftUI
 
 struct DuplicatedTagsView: View {
+    @Environment(TagService.self) private var tagService
+    
     @Query(filter: Tag.predicate(type: .year)) private var years: [Tag]
     @Query(filter: Tag.predicate(type: .yearMonth)) private var yearMonths: [Tag]
     @Query(filter: Tag.predicate(type: .content)) private var contents: [Tag]
@@ -15,24 +17,16 @@ struct DuplicatedTagsView: View {
 
     var body: some View {
         List(selection: $selection) {
-            Section {
-                buildSectionContent(from: years)
-            } header: {
+            buildSection(from: years) {
                 Text("Year")
             }
-            Section {
-                buildSectionContent(from: yearMonths)
-            } header: {
+            buildSection(from: yearMonths) {
                 Text("YearMonth")
             }
-            Section {
-                buildSectionContent(from: contents)
-            } header: {
+            buildSection(from: contents) {
                 Text("Content")
             }
-            Section {
-                buildSectionContent(from: categories)
-            } header: {
+            buildSection(from: categories) {
                 Text("Category")
             }
         }
@@ -44,20 +38,28 @@ struct DuplicatedTagsView: View {
         .navigationTitle(Text("Duplicated Tags"))
     }
 
-    private func buildSectionContent(from tags: [Tag]) -> some View {
-        ForEach(
-            Dictionary(grouping: tags, by: \.name)
-                .compactMap { _, values -> Tag? in
-                    guard values.count > 1 else {
-                        return nil
+    private func buildSection<Header: View>(from tags: [Tag], header: () -> Header) -> some View {
+        Section {
+            ForEach(
+                tagService.filtered(tags: tags),
+                id: \.self
+            ) { tag in
+                Text(tag.displayName)
+            }
+        } header: {
+            HStack {
+                header()
+                Spacer()
+                Button {
+                    tagService.filtered(tags: tags).forEach { tag in
+                        try? tagService.merge(relatedWith: tag)
                     }
-                    return values.first
-                }.sorted {
-                    $0.displayName < $1.displayName
-                },
-            id: \.self
-        ) { tag in
-            Text(tag.displayName)
+                } label: {
+                    Text("Merge All")
+                        .font(.caption)
+                        .textCase(nil)
+                }
+            }
         }
     }
 }
