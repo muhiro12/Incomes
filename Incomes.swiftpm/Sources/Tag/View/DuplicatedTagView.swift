@@ -44,7 +44,6 @@ struct DuplicatedTagView: View {
                     .frame(width: .componentXL)
                     if tag != tags.last {
                         Divider()
-                            .padding()
                     }
                 }
             }
