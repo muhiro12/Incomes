@@ -27,7 +27,7 @@ struct DuplicatedTagView: View {
                             }
                         } header: {
                             HStack {
-                                Text(tag.displayName)
+                                Text("\(tag.items?.count ?? .zero) Items")
                                 Spacer()
                                 Button {
                                     try? tag.delete()
@@ -45,6 +45,7 @@ struct DuplicatedTagView: View {
                 }
             }
         }
+        .background(Color(.systemGroupedBackground))
         .toolbar {
             ToolbarItem {
                 Button {
@@ -58,11 +59,14 @@ struct DuplicatedTagView: View {
                 }
             }
         }
+        .navigationTitle(Text(tags.first?.displayName ?? ""))
     }
 }
 
 #Preview {
     IncomesPreview { preview in
-        DuplicatedTagView(preview.tags[0])
+        NavigationStack {
+            DuplicatedTagView(preview.tags[0])
+        }
     }
 }

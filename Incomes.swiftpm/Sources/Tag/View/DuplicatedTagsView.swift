@@ -32,9 +32,8 @@ struct DuplicatedTagsView: View {
                 Text("Category")
             }
         }
-        .navigationDestination(item: $tag) { tag in
-            DuplicatedTagView(tag)
-        }
+        .navigationTitle(Text("Duplicated Tags"))
+        .interactiveDismissDisabled()
     }
 
     private func buildSectionContent(from tags: [Tag]) -> some View {
@@ -50,15 +49,15 @@ struct DuplicatedTagsView: View {
                 },
             id: \.self
         ) { tag in
-            Text(tag.displayName)
+            NavigationLink(path: .duplicatedTag(tag)) {
+                Text(tag.displayName)
+            }
         }
     }
 }
 
 #Preview {
     IncomesPreview { _ in
-        NavigationStack {
-            DuplicatedTagsView()
-        }
+        DuplicatedTagsView()
     }
 }

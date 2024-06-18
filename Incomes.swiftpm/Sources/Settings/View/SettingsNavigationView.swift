@@ -12,6 +12,7 @@ struct SettingsNavigationView: View {
     var body: some View {
         NavigationStack {
             SettingsView()
+                .incomesNavigationDestination()
         }
     }
 }

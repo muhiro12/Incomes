@@ -9,12 +9,13 @@
 import SwiftUI
 
 struct SettingsView {
+    @Environment(\.dismiss)
+    private var dismiss
+
     @Environment(ItemService.self)
     private var itemService
     @Environment(TagService.self)
     private var tagService
-    @Environment(\.dismiss)
-    private var dismiss
 
     @AppStorage(.key(.isSubscribeOn))
     private var isSubscribeOn = UserDefaults.isSubscribeOn
@@ -32,11 +33,11 @@ extension SettingsView: View {
                 StoreSection()
             }
             Section {
-                NavigationLink(value: "DuplicatedTags") {
+                NavigationLink(path: .duplicatedTags) {
                     Text("Manage Duplicated Tags")
                 }
             }
-            Section(content: {
+            Section {
                 Button {
                     do {
                         try itemService.recalculate()
@@ -51,37 +52,17 @@ extension SettingsView: View {
                 } label: {
                     Text("Delete all")
                 }
-            }, header: {
+            } header: {
                 Text("Manage items")
-            })
+            }
             Section {
-                NavigationLink {
-                    LicenseView()
-                        .navigationTitle(Text("License"))
-                } label: {
+                NavigationLink(path: .license) {
                     Text("License")
                 }
             }
             if DebugView.isDebug {
-                NavigationLink {
-                    DebugView()
-                } label: {
+                NavigationLink(path: .debug) {
                     Text(String.debugTitle)
-                }
-            }
-        }
-        .navigationTitle(Text("Settings"))
-        .navigationDestination(for: String.self) { _ in
-            DuplicatedTagsView()
-                .interactiveDismissDisabled()
-        }
-        .toolbar {
-            ToolbarItem {
-                Button {
-                    dismiss()
-                } label: {
-                    Image(systemName: .imageClose)
-                        .symbolRenderingMode(.hierarchical)
                 }
             }
         }
@@ -102,13 +83,22 @@ extension SettingsView: View {
                 Text("Cancel")
             }
         }
+        .toolbar {
+            ToolbarItem {
+                Button {
+                    dismiss()
+                } label: {
+                    Image(systemName: .imageClose)
+                        .symbolRenderingMode(.hierarchical)
+                }
+            }
+        }
+        .navigationTitle(Text("Settings"))
     }
 }
 
 #Preview {
     IncomesPreview { _ in
-        NavigationStack {
-            SettingsView()
-        }
+        SettingsView()
     }
 }

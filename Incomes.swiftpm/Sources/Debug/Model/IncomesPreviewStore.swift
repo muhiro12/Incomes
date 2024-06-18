@@ -115,7 +115,7 @@ final class IncomesPreviewStore {
                 group: "Tax",
                 repeatID: .init()
             )
-            _ = try! Item.create(
+            _ = try! Item.createIgnoringDuplicates(
                 context: context,
                 date: date(index, dateE),
                 content: "Pension",
