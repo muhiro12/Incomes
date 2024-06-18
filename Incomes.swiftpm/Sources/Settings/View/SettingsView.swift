@@ -17,7 +17,7 @@ struct SettingsView {
     @AppStorage(.key(.isSubscribeOn))
     private var isSubscribeOn = UserDefaults.isSubscribeOn
 
-    @State private var isDuplicatedTagPresented = false
+    @State private var isDuplicatedTagsPresented = false
     @State private var isAlertPresented = false
 }
 
@@ -29,13 +29,6 @@ extension SettingsView: View {
                 PremiumSection()
             } else {
                 StoreSection()
-            }
-            Section {
-                Button {
-                    isDuplicatedTagPresented = true
-                } label: {
-                    Text("Manage Duplicated Tags")
-                }
             }
             Section {
                 Button {
@@ -56,6 +49,15 @@ extension SettingsView: View {
                 Text("Manage items")
             }
             Section {
+                Button {
+                    isDuplicatedTagsPresented = true
+                } label: {
+                    Text("Manage Duplicated Tags")
+                }
+            } header: {
+                Text("Manage tags")
+            }
+            Section {
                 NavigationLink(path: .license) {
                     Text("License")
                 }
@@ -66,8 +68,8 @@ extension SettingsView: View {
                 }
             }
         }
-        .fullScreenCover(isPresented: $isDuplicatedTagPresented) {
-            DuplicatedTagNavigationView()
+        .fullScreenCover(isPresented: $isDuplicatedTagsPresented) {
+            DuplicatedTagsNavigationView()
         }
         .alert(Text("Are you sure you want to delete all items?"),
                isPresented: $isAlertPresented) {

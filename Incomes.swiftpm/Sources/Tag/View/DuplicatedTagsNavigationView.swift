@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct DuplicatedTagNavigationView: View {
+struct DuplicatedTagsNavigationView: View {
     var body: some View {
         NavigationStack {
             DuplicatedTagsView()
@@ -11,6 +11,6 @@ struct DuplicatedTagNavigationView: View {
 
 #Preview {
     IncomesPreview { _ in
-        DuplicatedTagNavigationView()
+        DuplicatedTagsNavigationView()
     }
 }

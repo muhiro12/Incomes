@@ -63,6 +63,8 @@ struct DuplicatedTagsView: View {
 
 #Preview {
     IncomesPreview { _ in
-        DuplicatedTagsView()
+        NavigationStack {
+            DuplicatedTagsView()
+        }
     }
 }
