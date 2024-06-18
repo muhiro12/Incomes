@@ -6,6 +6,9 @@ struct IncomesPlaygroundsApp: App {
         WindowGroup {
             ContentView()
                 .incomesPlaygroundsEnvironment()
+                .task {
+                    DebugView.isDebug = true
+                }
         }
     }
 }
