@@ -41,7 +41,7 @@ struct DuplicatedTagsView: View {
     private func buildSection<Header: View>(from tags: [Tag], header: () -> Header) -> some View {
         Section {
             ForEach(
-                tagService.filtered(tags: tags),
+                tagService.findDuplicates(in: tags),
                 id: \.self
             ) { tag in
                 Text(tag.displayName)
@@ -51,9 +51,7 @@ struct DuplicatedTagsView: View {
                 header()
                 Spacer()
                 Button {
-                    tagService.filtered(tags: tags).forEach { tag in
-                        try? tagService.merge(relatedWith: tag)
-                    }
+                    try? tagService.mergeDuplicateTags(in: tags)
                 } label: {
                     Text("Merge All")
                         .font(.caption)

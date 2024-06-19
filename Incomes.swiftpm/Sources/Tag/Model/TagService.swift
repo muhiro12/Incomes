@@ -43,7 +43,19 @@ final class TagService {
         try delete(tags: context.fetch(.init()))
     }
 
-    // MARK: - Merge
+    // MARK: - Duplicates
+
+    func findDuplicates(in tags: [Tag]) -> [Tag] {
+        Dictionary(grouping: tags, by: \.name)
+            .compactMap { _, values -> Tag? in
+                guard values.count > 1 else {
+                    return nil
+                }
+                return values.first
+            }.sorted {
+                $0.displayName < $1.displayName
+            }
+    }
 
     func merge(tags: [Tag]) throws {
         guard let parent = tags.first else {
@@ -64,24 +76,14 @@ final class TagService {
         try delete(tags: children)
     }
 
-    func merge(relatedWith tag: Tag) throws {
-        try merge(
-            tags: tags(
-                predicate: Tag.predicate(isSameWith: tag)
+    func mergeDuplicateTags(in tags: [Tag]) throws {
+        try findDuplicates(in: tags).forEach { tag in
+            try merge(
+                tags: self.tags(
+                    predicate: Tag.predicate(isSameWith: tag)
+                )
             )
-        )
-    }
-
-    func filtered(tags: [Tag]) -> [Tag] {
-        Dictionary(grouping: tags, by: \.name)
-            .compactMap { _, values -> Tag? in
-                guard values.count > 1 else {
-                    return nil
-                }
-                return values.first
-            }.sorted {
-                $0.displayName < $1.displayName
-            }
+        }
     }
 }
 
