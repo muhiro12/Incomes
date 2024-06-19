@@ -8,8 +8,8 @@ struct CloseButton: View {
             dismiss()
         } label: {
             Image(systemName: "xmark.circle.fill")
-                .foregroundStyle(Color(.secondarySystemFill))
-                .imageScale(.large)
+                .foregroundStyle(Color(.systemFill))
+                .font(.title3)
         }
     }
 }
