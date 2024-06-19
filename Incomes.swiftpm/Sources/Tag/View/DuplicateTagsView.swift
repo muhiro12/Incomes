@@ -12,6 +12,7 @@ struct DuplicateTagsView: View {
     @Binding private var selection: Tag?
 
     @State private var isResolveAlertPresented = false
+    @State private var selectedTags = [Tag]()
 
     init(selection: Binding<Tag?>) {
         _selection = selection
@@ -32,6 +33,20 @@ struct DuplicateTagsView: View {
                 Text("Category")
             }
         }
+        .alert(
+            Text("Are you sure you want to resolve all duplicate tags? This action cannot be undone."),
+            isPresented: $isResolveAlertPresented
+        ) {
+            Button(role: .cancel) {
+            } label: {
+                Text("Cancel")
+            }
+            Button {
+                try? tagService.resolveAllDuplicates(in: selectedTags)
+            } label: {
+                Text("Resolve")
+            }
+        }
         .navigationTitle(Text("Duplicate Tags"))
         .toolbar {
             ToolbarItem {
@@ -41,9 +56,10 @@ struct DuplicateTagsView: View {
     }
 
     private func buildSection<Header: View>(from tags: [Tag], header: () -> Header) -> some View {
-        Section {
+        let duplicates = tagService.findDuplicates(in: tags)
+        return Section {
             ForEach(
-                tagService.findDuplicates(in: tags),
+                duplicates,
                 id: \.self
             ) { tag in
                 Text(tag.displayName)
@@ -54,22 +70,9 @@ struct DuplicateTagsView: View {
                 Spacer()
                 Button {
                     isResolveAlertPresented = true
+                    selectedTags = duplicates
                 } label: {
                     Text("Resolve All")
-                }
-                .alert(
-                    Text("Are you sure you want to resolve all duplicate tags? This action cannot be undone."),
-                    isPresented: $isResolveAlertPresented
-                ) {
-                    Button(role: .cancel) {
-                    } label: {
-                        Text("Cancel")
-                    }
-                    Button {
-                        try? tagService.resolveAllDuplicates(in: tags)
-                    } label: {
-                        Text("Resolve")
-                    }
                 }
                 .font(.caption)
                 .textCase(nil)

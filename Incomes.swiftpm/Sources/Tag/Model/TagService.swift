@@ -58,7 +58,7 @@ final class TagService {
     }
 
     func resolveAllDuplicates(in tags: [Tag]) throws {
-        try findDuplicates(in: tags).forEach { tag in
+        try tags.forEach { tag in
             try merge(
                 tags: self.tags(
                     predicate: Tag.predicate(isSameWith: tag)
