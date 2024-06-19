@@ -32,7 +32,7 @@ final class IncomesPreviewStore {
     @MainActor
     func prepareIgnoringDuplicates(_ context: ModelContext) async {
         for index in 0..<24 {
-            _ = try! Item.create(
+            _ = try! Item.createIgnoringDuplicates(
                 context: context,
                 date: Calendar.utc.date(
                     byAdding: .month,
