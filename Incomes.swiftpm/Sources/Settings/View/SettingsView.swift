@@ -52,7 +52,7 @@ extension SettingsView: View {
                 Button {
                     isDuplicatedTagsPresented = true
                 } label: {
-                    Text("Manage Duplicated Tags")
+                    Text("Resolve Tag Duplicates")
                 }
             } header: {
                 Text("Manage tags")
@@ -69,7 +69,7 @@ extension SettingsView: View {
             }
         }
         .fullScreenCover(isPresented: $isDuplicatedTagsPresented) {
-            DuplicatedTagsNavigationView()
+            DuplicateTagsNavigationView()
         }
         .alert(Text("Are you sure you want to delete all items?"),
                isPresented: $isAlertPresented) {

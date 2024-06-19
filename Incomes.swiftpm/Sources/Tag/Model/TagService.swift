@@ -57,6 +57,16 @@ final class TagService {
             }
     }
 
+    func resolveAllDuplicates(in tags: [Tag]) throws {
+        try findDuplicates(in: tags).forEach { tag in
+            try merge(
+                tags: self.tags(
+                    predicate: Tag.predicate(isSameWith: tag)
+                )
+            )
+        }
+    }
+
     func merge(tags: [Tag]) throws {
         guard let parent = tags.first else {
             return
@@ -74,16 +84,6 @@ final class TagService {
         }
 
         try delete(tags: children)
-    }
-
-    func mergeDuplicateTags(in tags: [Tag]) throws {
-        try findDuplicates(in: tags).forEach { tag in
-            try merge(
-                tags: self.tags(
-                    predicate: Tag.predicate(isSameWith: tag)
-                )
-            )
-        }
     }
 }
 

@@ -43,7 +43,7 @@ struct TagServiceTests {
         #expect(try service.tag() == nil)
     }
 
-    // MARK: - merge
+    // MARK: - Duplicates
 
     @Test func mergeWhenTagsAreIdentical() async throws {
         #expect(try service.tag() == nil)

@@ -151,8 +151,15 @@
         }
       }
     },
-    "Duplicated Tags" : {
-
+    "Duplicate Tags" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "重複したタグ"
+          }
+        }
+      }
     },
     "Edit" : {
       "localizations" : {
@@ -165,14 +172,7 @@
       }
     },
     "GoogleMobileAds %@" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "GoogleMobileAds %@"
-          }
-        }
-      }
+      "shouldTranslate" : false
     },
     "Group" : {
       "localizations" : {
@@ -225,14 +225,7 @@
       }
     },
     "Incomes" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Incomes"
-          }
-        }
-      }
+      "shouldTranslate" : false
     },
     "Information" : {
       "localizations" : {
@@ -255,14 +248,7 @@
       }
     },
     "LicenseList" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "LicenseList"
-          }
-        }
-      }
+      "shouldTranslate" : false
     },
     "Lock the app" : {
       "localizations" : {
@@ -273,9 +259,6 @@
           }
         }
       }
-    },
-    "Manage Duplicated Tags" : {
-
     },
     "Manage items" : {
       "localizations" : {
@@ -288,7 +271,14 @@
       }
     },
     "Manage tags" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "タグを管理する"
+          }
+        }
+      }
     },
     "Mask the app" : {
       "localizations" : {
@@ -301,10 +291,14 @@
       }
     },
     "Merge" : {
-
-    },
-    "Merge All" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "統合する"
+          }
+        }
+      }
     },
     "Notification" : {
       "localizations" : {
@@ -372,6 +366,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "繰り返し"
+          }
+        }
+      }
+    },
+    "Resolve All" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "全て解消"
+          }
+        }
+      }
+    },
+    "Resolve Tag Duplicates" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "タグの重複を解消"
           }
         }
       }
@@ -447,7 +461,7 @@
       }
     },
     "StoreKit" : {
-
+      "shouldTranslate" : false
     },
     "This is a repeating item." : {
       "localizations" : {
@@ -520,10 +534,24 @@
       }
     },
     "Year" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "年"
+          }
+        }
+      }
     },
     "YearMonth" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "年月"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

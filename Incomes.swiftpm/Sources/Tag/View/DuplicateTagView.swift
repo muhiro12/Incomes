@@ -1,7 +1,7 @@
 import SwiftData
 import SwiftUI
 
-struct DuplicatedTagView: View {
+struct DuplicateTagView: View {
     @Environment(ItemService.self)
     private var itemService
     @Environment(TagService.self)
@@ -73,6 +73,6 @@ struct DuplicatedTagView: View {
 
 #Preview {
     IncomesPreview { preview in
-        DuplicatedTagView(preview.tags[0])
+        DuplicateTagView(preview.tags[0])
     }
 }

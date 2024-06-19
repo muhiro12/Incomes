@@ -1,7 +1,7 @@
 import SwiftData
 import SwiftUI
 
-struct DuplicatedTagsView: View {
+struct DuplicateTagsView: View {
     @Environment(TagService.self) private var tagService
 
     @Query(filter: Tag.predicate(type: .year)) private var years: [Tag]
@@ -35,7 +35,7 @@ struct DuplicatedTagsView: View {
                 CloseButton()
             }
         }
-        .navigationTitle(Text("Duplicated Tags"))
+        .navigationTitle(Text("Duplicate Tags"))
     }
 
     private func buildSection<Header: View>(from tags: [Tag], header: () -> Header) -> some View {
@@ -51,9 +51,9 @@ struct DuplicatedTagsView: View {
                 header()
                 Spacer()
                 Button {
-                    try? tagService.mergeDuplicateTags(in: tags)
+                    try? tagService.resolveAllDuplicates(in: tags)
                 } label: {
-                    Text("Merge All")
+                    Text("Resolve All")
                         .font(.caption)
                         .textCase(nil)
                 }
@@ -64,6 +64,6 @@ struct DuplicatedTagsView: View {
 
 #Preview {
     IncomesPreview { _ in
-        DuplicatedTagsView(selection: .constant(nil))
+        DuplicateTagsView(selection: .constant(nil))
     }
 }
