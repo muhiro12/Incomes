@@ -40,8 +40,6 @@ struct DuplicateTagView: View {
                                     } icon: {
                                         Image(systemName: "trash")
                                     }
-                                    .font(.caption)
-                                    .textCase(nil)
                                 }
                                 .alert(
                                     Text("Are you sure you want to delete this tag? This action cannot be undone."),
@@ -57,6 +55,8 @@ struct DuplicateTagView: View {
                                         Text("Delete")
                                     }
                                 }
+                                .font(.caption)
+                                .textCase(nil)
                             }
                         }
                     }

@@ -56,8 +56,6 @@ struct DuplicateTagsView: View {
                     isResolveAlertPresented = true
                 } label: {
                     Text("Resolve All")
-                        .font(.caption)
-                        .textCase(nil)
                 }
                 .alert(
                     Text("Are you sure you want to resolve all duplicate tags? This action cannot be undone."),
@@ -73,6 +71,8 @@ struct DuplicateTagsView: View {
                         Text("Resolve")
                     }
                 }
+                .font(.caption)
+                .textCase(nil)
             }
         }
     }
