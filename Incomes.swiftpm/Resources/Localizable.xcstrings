@@ -420,12 +420,12 @@
         }
       }
     },
-    "Resolve Tag Duplicates" : {
+    "Resolve duplicate tags" : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "タグの重複を解消"
+            "value" : "タグの重複を解消する"
           }
         }
       }

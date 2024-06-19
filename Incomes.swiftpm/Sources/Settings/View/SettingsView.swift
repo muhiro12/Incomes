@@ -52,7 +52,7 @@ extension SettingsView: View {
                 Button {
                     isDuplicatedTagsPresented = true
                 } label: {
-                    Text("Resolve Tag Duplicates")
+                    Text("Resolve duplicate tags")
                 }
             } header: {
                 Text("Manage tags")
