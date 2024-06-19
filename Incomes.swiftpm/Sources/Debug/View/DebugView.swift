@@ -35,10 +35,10 @@ extension DebugView: View {
                         Self.isDebug = newValue
                     }
             }
-            Section {
-                NavigationLink(String.debugAllItems) {
-                    if let tag = try? tagService.tag() {
-                        ItemListView(tag: tag) { _ in .true }
+            if let tag = try? tagService.tag() {
+                Section {
+                    NavigationLink(path: .itemList(tag)) {
+                        Text(String.debugAllItems)
                     }
                 }
             }

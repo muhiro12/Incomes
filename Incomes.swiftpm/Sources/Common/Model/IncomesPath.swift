@@ -9,6 +9,7 @@ import SwiftUI
 
 enum IncomesPath: Hashable {
     case debug
+    case itemList(Tag)
     case license
 }
 
@@ -18,6 +19,8 @@ extension View {
             switch $0 {
             case .debug:
                 DebugView()
+            case .itemList(let tag):
+                ItemListView(tag: tag) { _ in .true }
             case .license:
                 LicenseView()
             }
