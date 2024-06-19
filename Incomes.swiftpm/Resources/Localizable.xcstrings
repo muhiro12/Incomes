@@ -71,6 +71,36 @@
         }
       }
     },
+    "Are you sure you want to delete this tag? This action cannot be undone." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "このタグを削除しますか？この操作は取り消せません。"
+          }
+        }
+      }
+    },
+    "Are you sure you want to merge these tags? This action cannot be undone." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "これらのタグを統合しますか？この操作は取り消せません。"
+          }
+        }
+      }
+    },
+    "Are you sure you want to resolve all duplicate tags? This action cannot be undone." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "全てのタグの重複を解消しますか？この操作は取り消せません。"
+          }
+        }
+      }
+    },
     "Balance" : {
       "localizations" : {
         "ja" : {
@@ -366,6 +396,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "繰り返し"
+          }
+        }
+      }
+    },
+    "Resolve" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "解消"
           }
         }
       }

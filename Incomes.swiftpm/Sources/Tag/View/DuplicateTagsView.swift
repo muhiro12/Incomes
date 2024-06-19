@@ -11,6 +11,8 @@ struct DuplicateTagsView: View {
 
     @Binding private var selection: Tag?
 
+    @State private var isResolveAlertPresented = false
+
     init(selection: Binding<Tag?>) {
         _selection = selection
     }
@@ -30,12 +32,12 @@ struct DuplicateTagsView: View {
                 Text("Category")
             }
         }
+        .navigationTitle(Text("Duplicate Tags"))
         .toolbar {
             ToolbarItem {
                 CloseButton()
             }
         }
-        .navigationTitle(Text("Duplicate Tags"))
     }
 
     private func buildSection<Header: View>(from tags: [Tag], header: () -> Header) -> some View {
@@ -51,11 +53,25 @@ struct DuplicateTagsView: View {
                 header()
                 Spacer()
                 Button {
-                    try? tagService.resolveAllDuplicates(in: tags)
+                    isResolveAlertPresented = true
                 } label: {
                     Text("Resolve All")
                         .font(.caption)
                         .textCase(nil)
+                }
+                .alert(
+                    Text("Are you sure you want to resolve all duplicate tags? This action cannot be undone."),
+                    isPresented: $isResolveAlertPresented
+                ) {
+                    Button(role: .cancel) {
+                    } label: {
+                        Text("Cancel")
+                    }
+                    Button {
+                        try? tagService.resolveAllDuplicates(in: tags)
+                    } label: {
+                        Text("Resolve")
+                    }
                 }
             }
         }

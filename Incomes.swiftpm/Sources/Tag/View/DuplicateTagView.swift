@@ -9,6 +9,9 @@ struct DuplicateTagView: View {
 
     @Query private var tags: [Tag]
 
+    @State private var isDeleteAlertPresented = false
+    @State private var isMergeAlertPresented = false
+
     init(_ tag: Tag) {
         _tags = Query(
             filter: Tag.predicate(isSameWith: tag),
@@ -30,7 +33,7 @@ struct DuplicateTagView: View {
                                 Text("\(tag.items?.count ?? .zero) Items")
                                 Spacer()
                                 Button {
-                                    try? tag.delete()
+                                    isDeleteAlertPresented = true
                                 } label: {
                                     Label {
                                         Text("Delete")
@@ -39,6 +42,20 @@ struct DuplicateTagView: View {
                                     }
                                     .font(.caption)
                                     .textCase(nil)
+                                }
+                                .alert(
+                                    Text("Are you sure you want to delete this tag? This action cannot be undone."),
+                                    isPresented: $isDeleteAlertPresented
+                                ) {
+                                    Button(role: .cancel) {
+                                    } label: {
+                                        Text("Cancel")
+                                    }
+                                    Button(role: .destructive) {
+                                        try? tag.delete()
+                                    } label: {
+                                        Text("Delete")
+                                    }
                                 }
                             }
                         }
@@ -54,9 +71,23 @@ struct DuplicateTagView: View {
         .toolbar {
             ToolbarItem {
                 Button {
-                    try? tagService.merge(tags: tags)
+                    isMergeAlertPresented = true
                 } label: {
                     Text("Merge")
+                }
+                .alert(
+                    Text("Are you sure you want to merge these tags? This action cannot be undone."),
+                    isPresented: $isMergeAlertPresented
+                ) {
+                    Button(role: .cancel) {
+                    } label: {
+                        Text("Cancel")
+                    }
+                    Button {
+                        try? tagService.merge(tags: tags)
+                    } label: {
+                        Text("Merge")
+                    }
                 }
             }
             ToolbarItem {
