@@ -151,6 +151,9 @@
         }
       }
     },
+    "Duplicated Tags" : {
+
+    },
     "Edit" : {
       "localizations" : {
         "ja" : {
@@ -271,6 +274,9 @@
         }
       }
     },
+    "Manage Duplicated Tags" : {
+
+    },
     "Manage items" : {
       "localizations" : {
         "ja" : {
@@ -281,6 +287,9 @@
         }
       }
     },
+    "Manage tags" : {
+
+    },
     "Mask the app" : {
       "localizations" : {
         "ja" : {
@@ -290,6 +299,12 @@
           }
         }
       }
+    },
+    "Merge" : {
+
+    },
+    "Merge All" : {
+
     },
     "Notification" : {
       "localizations" : {
@@ -431,6 +446,9 @@
         }
       }
     },
+    "StoreKit" : {
+
+    },
     "This is a repeating item." : {
       "localizations" : {
         "ja" : {
@@ -500,6 +518,12 @@
           }
         }
       }
+    },
+    "Year" : {
+
+    },
+    "YearMonth" : {
+
     }
   },
   "version" : "1.0"
