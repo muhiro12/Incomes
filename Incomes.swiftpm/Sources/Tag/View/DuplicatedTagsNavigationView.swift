@@ -2,7 +2,7 @@ import SwiftUI
 
 struct DuplicatedTagsNavigationView: View {
     @State private var detail: Tag?
-    
+
     var body: some View {
         NavigationSplitView {
             DuplicatedTagsView(selection: $detail)

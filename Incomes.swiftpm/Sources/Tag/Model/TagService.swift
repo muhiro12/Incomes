@@ -18,7 +18,7 @@ final class TagService {
     }
 
     // MARK: - Fetch
-    
+
     func tag(predicate: Predicate<Tag>? = nil) throws -> Tag? {
         var descriptor = FetchDescriptor(
             predicate: predicate,
@@ -27,7 +27,7 @@ final class TagService {
         descriptor.fetchLimit = 1
         return try context.fetch(descriptor).first
     }
-    
+
     func tags(predicate: Predicate<Tag>? = nil) throws -> [Tag] {
         try context.fetch(
             .init(
@@ -63,15 +63,15 @@ final class TagService {
 
         try delete(tags: children)
     }
-    
+
     func merge(relatedWith tag: Tag) throws {
         try merge(
             tags: tags(
                 predicate: Tag.predicate(isSameWith: tag)
-            ) 
+            )
         )
     }
-    
+
     func filtered(tags: [Tag]) -> [Tag] {
         Dictionary(grouping: tags, by: \.name)
             .compactMap { _, values -> Tag? in

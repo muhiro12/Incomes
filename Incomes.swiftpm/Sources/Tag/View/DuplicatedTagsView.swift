@@ -3,14 +3,14 @@ import SwiftUI
 
 struct DuplicatedTagsView: View {
     @Environment(TagService.self) private var tagService
-    
+
     @Query(filter: Tag.predicate(type: .year)) private var years: [Tag]
     @Query(filter: Tag.predicate(type: .yearMonth)) private var yearMonths: [Tag]
     @Query(filter: Tag.predicate(type: .content)) private var contents: [Tag]
     @Query(filter: Tag.predicate(type: .category)) private var categories: [Tag]
 
     @Binding private var selection: Tag?
-    
+
     init(selection: Binding<Tag?>) {
         _selection = selection
     }
