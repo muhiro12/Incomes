@@ -26,6 +26,8 @@ extension String {
     static let debugOption: Self = "Debug option"
     static let debugSetPreviewData: Self = "Set PreviewData"
     static let debugSetPreviewDataMessage: Self = "Are you really going to set PreviewData?"
+    static let debugPrepare: Self = "Prepare"
+    static let debugPrepareIgnoringDuplicates: Self = "Prepare ignoring duplicates"
     static let debugOK: Self = "OK"
     static let debugAllItems: Self = "All Items"
     static let debugCommand: Self = "Enable Debug"

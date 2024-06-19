@@ -29,6 +29,26 @@ final class IncomesPreviewStore {
         try! BalanceCalculator(context: context).calculate(for: items)
     }
 
+    @MainActor
+    func prepareIgnoringDuplicates(_ context: ModelContext) async {
+        for index in 0..<24 {
+            _ = try! Item.create(
+                context: context,
+                date: Calendar.utc.date(
+                    byAdding: .month,
+                    value: index,
+                    to: .now
+                )!,
+                content: "Pension",
+                income: 0,
+                outgo: 36,
+                group: "Tax",
+                repeatID: .init()
+            )
+        }
+        try! BalanceCalculator(context: context).calculate(for: items)
+    }
+
     private func createItems(_ context: ModelContext) {
         let now = Calendar.utc.startOfYear(for: Date())
 
@@ -115,7 +135,7 @@ final class IncomesPreviewStore {
                 group: "Tax",
                 repeatID: .init()
             )
-            _ = try! Item.createIgnoringDuplicates(
+            _ = try! Item.create(
                 context: context,
                 date: date(index, dateE),
                 content: "Pension",

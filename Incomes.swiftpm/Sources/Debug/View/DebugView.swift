@@ -52,16 +52,23 @@ extension DebugView: View {
             }
         }
         .alert(String.debugSetPreviewData, isPresented: $isAlertPresented) {
-            Button(role: .cancel) {
-            } label: {
-                Text("Cancel")
-            }
             Button(role: .destructive) {
                 Task {
                     await IncomesPreviewStore().prepare(context)
                 }
             } label: {
-                Text(String.debugOK)
+                Text(String.debugPrepare)
+            }
+            Button(role: .destructive) {
+                Task {
+                    await IncomesPreviewStore().prepareIgnoringDuplicates(context)
+                }
+            } label: {
+                Text(String.debugPrepareIgnoringDuplicates)
+            }
+            Button(role: .cancel) {
+            } label: {
+                Text("Cancel")
             }
         } message: {
             Text(String.debugSetPreviewDataMessage)
