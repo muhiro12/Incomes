@@ -12,7 +12,7 @@ import SwiftData
 @Observable
 final class TagService {
     private(set) var hasDuplicates = false
-    
+
     private let context: ModelContext
 
     init(context: ModelContext) {
@@ -30,15 +30,6 @@ final class TagService {
         return try context.fetch(descriptor).first
     }
 
-    func tags(predicate: Predicate<Tag>? = nil) throws -> [Tag] {
-        try context.fetch(
-            .init(
-                predicate: predicate,
-                sortBy: Tag.sortDescriptors()
-            )
-        )
-    }
-
     // MARK: - Delete
 
     func deleteAll() throws {
@@ -46,32 +37,6 @@ final class TagService {
     }
 
     // MARK: - Duplicates
-    
-    func updateHasDuplicates() {
-        hasDuplicates = findDuplicates(
-            in: (try? tags()) ?? []
-        ).isNotEmpty
-    }
-
-    func findDuplicates(in tags: [Tag]) -> [Tag] {
-        Dictionary(grouping: tags, by: \.name)
-            .compactMap { _, values -> Tag? in
-                guard values.count > 1 else {
-                    return nil
-                }
-                return values.first
-            }
-    }
-
-    func resolveAllDuplicates(in tags: [Tag]) throws {
-        try tags.forEach { tag in
-            try merge(
-                tags: self.tags(
-                    predicate: Tag.predicate(isSameWith: tag)
-                )
-            )
-        }
-    }
 
     func merge(tags: [Tag]) throws {
         guard let parent = tags.first else {
@@ -91,9 +56,46 @@ final class TagService {
 
         try delete(tags: children)
     }
+
+    func resolveAllDuplicates(in tags: [Tag]) throws {
+        try tags.forEach { tag in
+            try merge(
+                tags: self.tags(
+                    predicate: Tag.predicate(isSameWith: tag)
+                )
+            )
+        }
+    }
+
+    func findDuplicates(in tags: [Tag]) -> [Tag] {
+        Dictionary(grouping: tags) { tag in
+            tag.typeID + tag.name
+        }
+        .compactMap { _, values -> Tag? in
+            guard values.count > 1 else {
+                return nil
+            }
+            return values.first
+        }
+    }
+
+    func updateHasDuplicates() throws {
+        hasDuplicates = findDuplicates(
+            in: try tags()
+        ).isNotEmpty
+    }
 }
 
 private extension TagService {
+    func tags(predicate: Predicate<Tag>? = nil) throws -> [Tag] {
+        try context.fetch(
+            .init(
+                predicate: predicate,
+                sortBy: Tag.sortDescriptors()
+            )
+        )
+    }
+
     func delete(tags: [Tag]) throws {
         try tags.forEach {
             try $0.delete()

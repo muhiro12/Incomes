@@ -18,32 +18,36 @@ struct TagServiceTests {
         self.service = .init(context: context)
     }
 
-    // MARK: - tag
+    // MARK: - Fetch
 
     @Test func tag() async throws {
         #expect(try service.tag() == nil)
 
-        _ = try Tag.create(context: context, name: "name", type: .year)
+        _ = try Tag.create(context: context, name: "nameA", type: .year)
+        _ = try Tag.create(context: context, name: "nameB", type: .year)
 
-        #expect(try service.tag()?.name == "name")
+        #expect(try context.fetchCount(.init(sortBy: Tag.sortDescriptors())) == 2)
+
+        #expect(try service.tag()?.name == "nameA")
         #expect(try service.tag()?.type == .year)
     }
 
-    // MARK: - deleteAll
+    // MARK: - Delete
 
     @Test func deleteAll() async throws {
         #expect(try service.tag() == nil)
 
-        _ = try Tag.create(context: context, name: "name", type: .year)
+        _ = try Tag.create(context: context, name: "nameA", type: .year)
+        _ = try Tag.create(context: context, name: "nameB", type: .year)
 
-        #expect(try service.tag() != nil)
+        #expect(try context.fetchCount(.init(sortBy: Tag.sortDescriptors())) == 2)
 
         _ = try service.deleteAll()
 
-        #expect(try service.tag() == nil)
+        #expect(try context.fetchCount(.init(sortBy: Tag.sortDescriptors())) == 0)
     }
 
-    // MARK: - Duplicates
+    // MARK: - Duplicates - merge
 
     @Test func mergeWhenTagsAreIdentical() async throws {
         #expect(try service.tag() == nil)
@@ -209,5 +213,112 @@ struct TagServiceTests {
         #expect(item1.tags?.contains(tag1) == true)
         #expect(item2.tags?.contains(tag1) == true)
         #expect(item3.tags?.contains(tag1) == true)
+    }
+
+    // MARK: - Duplicates - resolveAllDuplicates
+
+    @Test func resolveAllDuplicatesWithExpectedUsage() async throws {
+        let tag1 = try Tag.createIgnoringDuplicates(context: context, name: "nameA", type: .year)
+        _ = try Tag.createIgnoringDuplicates(context: context, name: "nameA", type: .year)
+        _ = try Tag.createIgnoringDuplicates(context: context, name: "nameA", type: .year)
+        let tag4 = try Tag.createIgnoringDuplicates(context: context, name: "nameB", type: .yearMonth)
+        _ = try Tag.createIgnoringDuplicates(context: context, name: "nameB", type: .yearMonth)
+        _ = try Tag.createIgnoringDuplicates(context: context, name: "nameB", type: .yearMonth)
+
+        #expect(try context.fetchCount(.init(sortBy: Tag.sortDescriptors())) == 6)
+
+        try service.resolveAllDuplicates(in: [tag1, tag4])
+
+        #expect(try context.fetchCount(.init(sortBy: Tag.sortDescriptors())) == 2)
+    }
+
+    @Test func resolveAllDuplicatesWithUnexpectedUsage() async throws {
+        let tag1 = try Tag.createIgnoringDuplicates(context: context, name: "nameA", type: .year)
+        let tag2 = try Tag.createIgnoringDuplicates(context: context, name: "nameA", type: .year)
+        _ = try Tag.createIgnoringDuplicates(context: context, name: "nameA", type: .year)
+        _ = try Tag.createIgnoringDuplicates(context: context, name: "nameB", type: .yearMonth)
+        _ = try Tag.createIgnoringDuplicates(context: context, name: "nameB", type: .yearMonth)
+        _ = try Tag.createIgnoringDuplicates(context: context, name: "nameB", type: .yearMonth)
+
+        #expect(try context.fetchCount(.init(sortBy: Tag.sortDescriptors())) == 6)
+
+        try service.resolveAllDuplicates(in: [tag1, tag2])
+
+        #expect(try context.fetchCount(.init(sortBy: Tag.sortDescriptors())) == 4)
+    }
+
+    // MARK: - Duplicates - findDuplicates
+
+    @Test func findDuplicatesWithExpectedUsage() async throws {
+        let tag1 = try Tag.createIgnoringDuplicates(context: context, name: "nameA", type: .year)
+        let tag2 = try Tag.createIgnoringDuplicates(context: context, name: "nameA", type: .year)
+        let tag3 = try Tag.createIgnoringDuplicates(context: context, name: "nameA", type: .year)
+        let tag4 = try Tag.createIgnoringDuplicates(context: context, name: "nameA", type: .year)
+        let tag5 = try Tag.createIgnoringDuplicates(context: context, name: "nameB", type: .yearMonth)
+        let tag6 = try Tag.createIgnoringDuplicates(context: context, name: "nameB", type: .yearMonth)
+        let tag7 = try Tag.createIgnoringDuplicates(context: context, name: "nameB", type: .yearMonth)
+        let tag8 = try Tag.createIgnoringDuplicates(context: context, name: "nameB", type: .yearMonth)
+
+        #expect(try context.fetchCount(.init(sortBy: Tag.sortDescriptors())) == 8)
+
+        let result = service.findDuplicates(in: [tag1, tag2, tag3, tag4, tag5, tag6, tag7, tag8])
+
+        #expect(try context.fetchCount(.init(sortBy: Tag.sortDescriptors())) == 8)
+
+        #expect(result.count == 2)
+        #expect(result.contains(tag1))
+        #expect(result.contains(tag5))
+    }
+
+    @Test func findDuplicatesWithUnexpectedUsage() async throws {
+        let tag1 = try Tag.createIgnoringDuplicates(context: context, name: "nameA", type: .year)
+        let tag2 = try Tag.createIgnoringDuplicates(context: context, name: "nameA", type: .year)
+        let tag3 = try Tag.createIgnoringDuplicates(context: context, name: "nameA", type: .yearMonth)
+        let tag4 = try Tag.createIgnoringDuplicates(context: context, name: "nameA", type: .yearMonth)
+        let tag5 = try Tag.createIgnoringDuplicates(context: context, name: "nameB", type: .year)
+        let tag6 = try Tag.createIgnoringDuplicates(context: context, name: "nameB", type: .year)
+        let tag7 = try Tag.createIgnoringDuplicates(context: context, name: "nameB", type: .yearMonth)
+        let tag8 = try Tag.createIgnoringDuplicates(context: context, name: "nameB", type: .yearMonth)
+
+        #expect(try context.fetchCount(.init(sortBy: Tag.sortDescriptors())) == 8)
+
+        let result = service.findDuplicates(in: [tag1, tag2, tag3, tag4, tag5, tag6, tag7, tag8])
+
+        #expect(try context.fetchCount(.init(sortBy: Tag.sortDescriptors())) == 8)
+
+        #expect(result.count == 4)
+        #expect(result.contains(tag1))
+        #expect(result.contains(tag3))
+        #expect(result.contains(tag5))
+        #expect(result.contains(tag7))
+    }
+
+    // MARK: - Duplicates - updateHasDuplicates
+
+    @Test func updateHasDuplicates() async throws {
+        #expect(service.hasDuplicates == false)
+
+        try service.updateHasDuplicates()
+        #expect(service.hasDuplicates == false)
+
+        let tag1 = try Tag.createIgnoringDuplicates(context: context, name: "name1", type: .year)
+
+        try service.updateHasDuplicates()
+        #expect(service.hasDuplicates == false)
+
+        let tag2 = try Tag.createIgnoringDuplicates(context: context, name: "name1", type: .year)
+
+        try service.updateHasDuplicates()
+        #expect(service.hasDuplicates == true)
+
+        let tag3 = try Tag.createIgnoringDuplicates(context: context, name: "name1", type: .year)
+
+        try service.updateHasDuplicates()
+        #expect(service.hasDuplicates == true)
+
+        try service.merge(tags: [tag1, tag2, tag3])
+
+        try service.updateHasDuplicates()
+        #expect(service.hasDuplicates == false)
     }
 }

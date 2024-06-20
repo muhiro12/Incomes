@@ -102,7 +102,7 @@ extension SettingsView: View {
         }
         .navigationTitle(Text("Settings"))
         .task {
-            tagService.updateHasDuplicates()
+            try? tagService.updateHasDuplicates()
         }
     }
 }

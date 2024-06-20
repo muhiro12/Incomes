@@ -74,7 +74,7 @@ extension SidebarView: View {
             guard scenePhase == .active else {
                 return
             }
-            tagService.updateHasDuplicates()
+            try? tagService.updateHasDuplicates()
             Task {
                 await notificationService.update()
             }
