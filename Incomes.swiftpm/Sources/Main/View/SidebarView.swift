@@ -12,6 +12,8 @@ struct SidebarView {
     @Environment(\.scenePhase)
     private var scenePhase
 
+    @Environment(TagService.self)
+    private var tagService
     @Environment(NotificationService.self)
     private var notificationService
 
@@ -47,11 +49,19 @@ extension SidebarView: View {
                 } label: {
                     Image.settings
                         .overlay(alignment: .topTrailing) {
-                            if notificationService.hasNotification {
-                                Circle()
-                                    .frame(width: .iconS)
-                                    .foregroundStyle(.red)
-                            }
+                            Circle()
+                                .frame(width: .iconS)
+                                .foregroundStyle(
+                                    { () -> Color in
+                                        if notificationService.hasNotification {
+                                            .red
+                                        } else if tagService.hasDuplicates {
+                                            .orange
+                                        } else {
+                                            .clear
+                                        }
+                                    }()
+                                )
                         }
                 }
             }
@@ -64,6 +74,7 @@ extension SidebarView: View {
             guard scenePhase == .active else {
                 return
             }
+            tagService.updateHasDuplicates()
             Task {
                 await notificationService.update()
             }

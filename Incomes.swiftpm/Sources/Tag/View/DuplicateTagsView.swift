@@ -56,7 +56,9 @@ struct DuplicateTagsView: View {
     }
 
     private func buildSection<Header: View>(from tags: [Tag], header: () -> Header) -> some View {
-        let duplicates = tagService.findDuplicates(in: tags)
+        let duplicates = tagService.findDuplicates(in: tags).sorted {
+            $0.displayName < $1.displayName
+        }
         return Section {
             ForEach(
                 duplicates,

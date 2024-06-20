@@ -48,14 +48,21 @@ extension SettingsView: View {
             } header: {
                 Text("Manage items")
             }
-            Section {
-                Button {
-                    isDuplicatedTagsPresented = true
-                } label: {
-                    Text("Resolve duplicate tags")
+            if tagService.hasDuplicates {
+                Section {
+                    Button {
+                        isDuplicatedTagsPresented = true
+                    } label: {
+                        Text("Resolve duplicate tags")
+                    }
+                } header: {
+                    HStack {
+                        Text("Manage tags")
+                        Circle()
+                            .frame(width: .iconS)
+                            .foregroundStyle(.orange)
+                    }
                 }
-            } header: {
-                Text("Manage tags")
             }
             Section {
                 NavigationLink(path: .license) {
@@ -94,6 +101,9 @@ extension SettingsView: View {
             }
         }
         .navigationTitle(Text("Settings"))
+        .task {
+            tagService.updateHasDuplicates()
+        }
     }
 }
 

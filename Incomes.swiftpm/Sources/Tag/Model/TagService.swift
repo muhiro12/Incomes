@@ -11,6 +11,8 @@ import SwiftData
 
 @Observable
 final class TagService {
+    private(set) var hasDuplicates = false
+    
     private let context: ModelContext
 
     init(context: ModelContext) {
@@ -44,6 +46,12 @@ final class TagService {
     }
 
     // MARK: - Duplicates
+    
+    func updateHasDuplicates() {
+        hasDuplicates = findDuplicates(
+            in: (try? tags()) ?? []
+        ).isNotEmpty
+    }
 
     func findDuplicates(in tags: [Tag]) -> [Tag] {
         Dictionary(grouping: tags, by: \.name)
@@ -52,8 +60,6 @@ final class TagService {
                     return nil
                 }
                 return values.first
-            }.sorted {
-                $0.displayName < $1.displayName
             }
     }
 
