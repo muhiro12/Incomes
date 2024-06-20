@@ -22,12 +22,13 @@ struct ItemFormView {
         case category
     }
 
-    @Environment(ItemService.self)
-    private var itemService
     @Environment(\.presentationMode)
     private var presentationMode
     @Environment(\.requestReview)
     private var requestReview
+
+    @Environment(ItemService.self)
+    private var itemService
 
     @FocusState private var focusedField: Field?
 
@@ -120,8 +121,11 @@ extension ItemFormView: View {
                         save()
                     }
                     if let count = try? itemService.itemsCount(),
-                       count.isMultiple(of: 10) {
-                        requestReview()
+                       count.isMultiple(of: 3) {
+                        Task {
+                            try await Task.sleep(for: .seconds(2))
+                            requestReview()
+                        }
                     }
                 } label: {
                     Text(mode == .create ? "Create" : "Save")
