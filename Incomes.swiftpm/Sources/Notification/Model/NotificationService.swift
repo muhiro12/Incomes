@@ -30,9 +30,9 @@ final class NotificationService: NSObject {
     }
 
     func register() async {
-        _ = try? await UNUserNotificationCenter
-            .current()
-            .requestAuthorization(options: [.badge, .sound, .alert, .carPlay])
+        _ = try? await center.requestAuthorization(
+            options: [.badge, .sound, .alert, .carPlay]
+        )
 
         center.removeAllPendingNotificationRequests()
 
