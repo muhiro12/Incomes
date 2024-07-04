@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		AD009DB72C13EC0000682424 /* Secret.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD009DB62C13EC0000682424 /* Secret.swift */; };
+		AD693DF12C367F4E005F81D0 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = AD693DF02C367F4E005F81D0 /* Localizable.xcstrings */; };
 		AD85E34F2C0E80C1005A33A2 /* IncomesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD85E34E2C0E80C1005A33A2 /* IncomesApp.swift */; };
 		ADCF36B324A1D0F70011D6F5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ADCF36B224A1D0F70011D6F5 /* Assets.xcassets */; };
 		ADCF375F24A2FEAF0011D6F5 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADCF375E24A2FEAF0011D6F5 /* CloudKit.framework */; };
@@ -19,6 +20,7 @@
 
 /* Begin PBXFileReference section */
 		AD009DB62C13EC0000682424 /* Secret.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secret.swift; sourceTree = "<group>"; };
+		AD693DF02C367F4E005F81D0 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		AD85E34E2C0E80C1005A33A2 /* IncomesApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IncomesApp.swift; sourceTree = "<group>"; };
 		ADCF36A624A1D0F40011D6F5 /* Incomes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Incomes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ADCF36B224A1D0F70011D6F5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -76,10 +78,11 @@
 		ADCF36A824A1D0F40011D6F5 /* Incomes */ = {
 			isa = PBXGroup;
 			children = (
-				ADCF36B224A1D0F70011D6F5 /* Assets.xcassets */,
 				ADD8475B2C16B0EE006055C9 /* GoogleService-Info.plist */,
 				AD85E34E2C0E80C1005A33A2 /* IncomesApp.swift */,
 				AD009DB62C13EC0000682424 /* Secret.swift */,
+				ADCF36B224A1D0F70011D6F5 /* Assets.xcassets */,
+				AD693DF02C367F4E005F81D0 /* Localizable.xcstrings */,
 			);
 			path = Incomes;
 			sourceTree = "<group>";
@@ -192,6 +195,7 @@
 			files = (
 				ADCF36B324A1D0F70011D6F5 /* Assets.xcassets in Resources */,
 				ADD8475C2C16B0EE006055C9 /* GoogleService-Info.plist in Resources */,
+				AD693DF12C367F4E005F81D0 /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -272,6 +276,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -332,6 +337,7 @@
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				VALIDATE_PRODUCT = YES;
