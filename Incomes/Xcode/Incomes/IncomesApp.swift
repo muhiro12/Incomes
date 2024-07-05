@@ -7,8 +7,10 @@
 //
 
 import Firebase
-import IncomesPackages
+import GoogleMobileAdsWrapper
 import IncomesPlaygrounds
+import LicenseListWrapper
+import StoreKitWrapper
 import SwiftUI
 
 @main
