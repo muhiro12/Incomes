@@ -1,5 +1,6 @@
 import SwiftData
 import SwiftUI
+import SwiftUtilities
 
 struct DuplicateTagsView: View {
     @Environment(TagService.self) private var tagService

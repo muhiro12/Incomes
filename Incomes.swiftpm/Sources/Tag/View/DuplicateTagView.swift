@@ -1,5 +1,6 @@
 import SwiftData
 import SwiftUI
+import SwiftUtilities
 
 struct DuplicateTagView: View {
     @Environment(ItemService.self)
@@ -79,7 +80,7 @@ struct DuplicateTagView: View {
                 Text("Cancel")
             }
             Button(role: .destructive) {
-                try? selectedTag?.delete()
+                selectedTag?.delete()
             } label: {
                 Text("Delete")
             }

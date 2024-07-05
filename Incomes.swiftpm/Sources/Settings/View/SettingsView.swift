@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import SwiftUtilities
 
 struct SettingsView {
     @Environment(ItemService.self)

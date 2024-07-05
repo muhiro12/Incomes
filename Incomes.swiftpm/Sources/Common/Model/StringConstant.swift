@@ -11,7 +11,6 @@ import Foundation
 extension String {
     // MARK: - Common
 
-    static let empty: Self = ""
     static let zero: Self = "0"
 
     // MARK: - Image

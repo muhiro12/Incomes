@@ -126,8 +126,8 @@ final class ItemService {
     // MARK: - Delete
 
     func delete(items: [Item]) throws {
-        try items.forEach {
-            try $0.delete()
+        items.forEach {
+            $0.delete()
         }
         try calculator.calculate(for: items)
     }

@@ -97,8 +97,8 @@ private extension TagService {
     }
 
     func delete(tags: [Tag]) throws {
-        try tags.forEach {
-            try $0.delete()
+        tags.forEach {
+            $0.delete()
         }
     }
 }
