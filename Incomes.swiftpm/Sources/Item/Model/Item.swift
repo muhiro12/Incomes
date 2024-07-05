@@ -103,8 +103,6 @@ final class Item {
                 type: .category
             )
         ]
-
-        try context.save()
     }
 
     func modify(balance: Decimal) {

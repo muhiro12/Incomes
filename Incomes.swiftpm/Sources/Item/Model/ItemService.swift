@@ -71,7 +71,6 @@ final class ItemService {
         }
 
         items.forEach(context.insert)
-        try context.save()
 
         try calculator.calculate(for: items)
     }
@@ -172,7 +171,6 @@ private extension ItemService {
             )
         }
 
-        try context.save()
         try calculator.calculate(for: items)
     }
 }

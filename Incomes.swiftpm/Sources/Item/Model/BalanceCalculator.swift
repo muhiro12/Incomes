@@ -25,8 +25,6 @@ struct BalanceCalculator {
     }
 
     func calculate(after date: Date) throws {
-        try context.save()
-
         let allItems = try context.fetch(.init(sortBy: Item.sortDescriptors())).reversed()
 
         guard let separatorIndex = allItems.firstIndex(where: { $0.date >= date }) else {
@@ -48,8 +46,6 @@ struct BalanceCalculator {
             item.modify(balance: balance)
             resultList.append(item)
         }
-
-        try context.save()
     }
 
     func calculateAll() throws {
