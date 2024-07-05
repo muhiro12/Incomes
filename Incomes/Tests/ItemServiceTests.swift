@@ -292,7 +292,6 @@ final class ItemServiceTests: XCTestCase {
                                          group: "",
                                          repeatID: UUID())
             context.insert(itemB)
-            try! context.save()
 
             try! service.delete(items: [itemA])
 
@@ -323,7 +322,6 @@ final class ItemServiceTests: XCTestCase {
                                          group: "",
                                          repeatID: UUID())
             context.insert(itemB)
-            try! context.save()
 
             try! service.deleteAll()
 
