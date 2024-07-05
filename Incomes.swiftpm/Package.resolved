@@ -1,0 +1,14 @@
+{
+  "pins" : [
+    {
+      "identity" : "swiftutilities",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/muhiro12/SwiftUtilities.git",
+      "state" : {
+        "revision" : "ca77c13bb4ac0f59be0c2d0ac79e051958450910",
+        "version" : "1.2.0"
+      }
+    }
+  ],
+  "version" : 2
+}
