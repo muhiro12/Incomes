@@ -28,7 +28,7 @@ struct SidebarView {
 
 extension SidebarView: View {
     var body: some View {
-        List(SidebarItem.allCases) { sidebar in
+        List(SidebarItem.allCases, selection: $selection) { sidebar in
             Label {
                 Text(sidebar.title)
             } icon: {
