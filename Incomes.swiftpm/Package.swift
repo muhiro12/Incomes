@@ -35,7 +35,7 @@ let package = Package(
         )
     ],
     dependencies: [
-        .package(url: "https://github.com/muhiro12/SwiftUtilities.git", "1.2.0"..<"2.0.0")
+        .package(url: "https://github.com/muhiro12/SwiftUtilities.git", "1.0.0"..<"2.0.0")
     ],
     targets: [
         .executableTarget(
