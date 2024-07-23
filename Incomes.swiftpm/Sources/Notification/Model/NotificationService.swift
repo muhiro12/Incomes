@@ -15,6 +15,7 @@ final class NotificationService: NSObject {
     private(set) var hasNotification = false
     private(set) var shouldShowNotification = false
 
+    // TODO: Delete after 2024/09
     private let year = 2_024
     private let months = [6, 7, 8]
     private let days = [10, 20, 30]
