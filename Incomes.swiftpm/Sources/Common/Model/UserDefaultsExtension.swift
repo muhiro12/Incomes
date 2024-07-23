@@ -26,6 +26,7 @@ extension UserDefaults {
 
     public enum Key: String {
         case isSubscribeOn = "a018f613"
+        case isICloudOn = "X7b9C4tZ"
         case isMaskAppOn = "aa9f2c8b"
     }
 
@@ -37,12 +38,16 @@ extension UserDefaults {
             }
 
             [Key]([
+                .isICloudOn,
                 .isMaskAppOn
             ])
             .map { $0.rawValue }
             .forEach(standard.removeObject)
         }
     }
+
+    @UserDefaults.Wrapper(key: .isICloudOn, defaultValue: false)
+    static var isICloudOn: Bool
 
     @UserDefaults.Wrapper(key: .isMaskAppOn, defaultValue: true)
     static var isMaskAppOn: Bool

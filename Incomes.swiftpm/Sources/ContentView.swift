@@ -16,24 +16,27 @@ public struct ContentView {
 
     @AppStorage(.key(.isSubscribeOn))
     private var isSubscribeOn = UserDefaults.isSubscribeOn
+    @AppStorage(.key(.isICloudOn))
+    private var isICloudOn = UserDefaults.isICloudOn
     @AppStorage(.key(.isMaskAppOn))
     private var isMaskAppOn = UserDefaults.isMaskAppOn
 
     @State private var isUpdateAlertPresented = false
     @State private var isMasked = false
 
-    private let sharedModelContainer: ModelContainer
-    private let sharedItemService: ItemService
-    private let sharedTagService: TagService
-    private let sharedConfigurationService: ConfigurationService
-    private let sharedNotificationService: NotificationService
+    private var sharedModelContainer: ModelContainer!
+    private var sharedItemService: ItemService!
+    private var sharedTagService: TagService!
+    private var sharedConfigurationService: ConfigurationService!
+    private var sharedNotificationService: NotificationService!
 
     @MainActor
     public init() {
         sharedModelContainer = try! .init(
             for: Item.self,
             configurations: .init(
-                url: .applicationSupportDirectory.appendingPathComponent("Incomes.sqlite")
+                url: .applicationSupportDirectory.appendingPathComponent("Incomes.sqlite"),
+                cloudKitDatabase: isICloudOn ? .automatic : .none
             )
         )
 
@@ -83,6 +86,7 @@ extension ContentView: View {
         .environment(sharedTagService)
         .environment(sharedConfigurationService)
         .environment(sharedNotificationService)
+        .id(isICloudOn)
     }
 }
 

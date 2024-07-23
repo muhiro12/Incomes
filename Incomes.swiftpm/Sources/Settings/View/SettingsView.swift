@@ -17,6 +17,10 @@ struct SettingsView {
 
     @AppStorage(.key(.isSubscribeOn))
     private var isSubscribeOn = UserDefaults.isSubscribeOn
+    @AppStorage(.key(.isICloudOn))
+    private var isICloudOn = UserDefaults.isICloudOn
+    @AppStorage(.key(.isMaskAppOn))
+    private var isMaskAppOn = UserDefaults.isMaskAppOn
 
     @State private var isDuplicatedTagsPresented = false
     @State private var isAlertPresented = false
@@ -27,9 +31,16 @@ extension SettingsView: View {
         List {
             NotificationSection()
             if isSubscribeOn {
-                PremiumSection()
+                Toggle(isOn: $isICloudOn) {
+                    Text("iCloud On")
+                }
             } else {
                 StoreSection()
+            }
+            Section {
+                Toggle(isOn: $isMaskAppOn) {
+                    Text("Mask the app")
+                }
             }
             Section {
                 Button {
