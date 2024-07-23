@@ -16,7 +16,8 @@ struct Advertisement {
 
     @Environment(GoogleMobileAdsPackage.self) private var googleMobileAds
 
-    @AppStorage(.key(.isSubscribeOn)) private var isSubscribeOn = false
+    @AppStorage(.key(.isSubscribeOn))
+    private var isSubscribeOn = UserDefaults.isSubscribeOn
 
     private let size: Size
 

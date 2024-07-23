@@ -13,9 +13,6 @@ struct YearSection {
     @Environment(ItemService.self)
     private var itemService
 
-    @AppStorage(.key(.isSubscribeOn))
-    private var isSubscribeOn = UserDefaults.isSubscribeOn
-
     @Query private var tags: [Tag]
 
     @State private var isExpanded = true
@@ -45,7 +42,7 @@ extension YearSection: View {
                     willDeleteItems = $0.flatMap { tags[$0].items ?? [] }
                 }
             }
-            if !isSubscribeOn && isExpanded {
+            if isExpanded {
                 Section {
                     Advertisement(.small)
                 }

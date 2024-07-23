@@ -17,16 +17,9 @@ struct SidebarView {
     @Environment(NotificationService.self)
     private var notificationService
 
-    @AppStorage(.key(.isSubscribeOn))
-    private var isSubscribeOn = UserDefaults.isSubscribeOn
-
     @Binding private var selection: SidebarItem.ID?
 
     @State private var isSettingsPresented = false
-
-    private let user: [SidebarItem] = [.home]
-    private let subscriber: [SidebarItem] = [.home,
-                                             .category]
 
     init(selection: Binding<SidebarItem.ID?>) {
         _selection = selection
@@ -35,7 +28,7 @@ struct SidebarView {
 
 extension SidebarView: View {
     var body: some View {
-        List(isSubscribeOn ? subscriber : user, selection: $selection) { sidebar in
+        List(SidebarItem.allCases) { sidebar in
             Label {
                 Text(sidebar.title)
             } icon: {

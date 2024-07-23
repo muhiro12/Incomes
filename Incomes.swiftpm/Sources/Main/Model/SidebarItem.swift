@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-enum SidebarItem: String, Identifiable {
+enum SidebarItem: String, CaseIterable, Identifiable {
     case home
     case category
 
