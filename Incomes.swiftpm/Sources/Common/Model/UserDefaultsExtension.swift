@@ -27,7 +27,6 @@ extension UserDefaults {
     public enum Key: String {
         case isSubscribeOn = "a018f613"
         case isMaskAppOn = "aa9f2c8b"
-        case isLockAppOn = "d8a87635"
     }
 
     @UserDefaults.Wrapper(key: .isSubscribeOn, defaultValue: false)
@@ -38,8 +37,7 @@ extension UserDefaults {
             }
 
             [Key]([
-                .isMaskAppOn,
-                .isLockAppOn
+                .isMaskAppOn
             ])
             .map { $0.rawValue }
             .forEach(standard.removeObject)
@@ -48,7 +46,4 @@ extension UserDefaults {
 
     @UserDefaults.Wrapper(key: .isMaskAppOn, defaultValue: true)
     static var isMaskAppOn: Bool
-
-    @UserDefaults.Wrapper(key: .isLockAppOn, defaultValue: false)
-    static var isLockAppOn: Bool
 }

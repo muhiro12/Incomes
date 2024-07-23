@@ -18,12 +18,9 @@ public struct ContentView {
     private var isSubscribeOn = UserDefaults.isSubscribeOn
     @AppStorage(.key(.isMaskAppOn))
     private var isMaskAppOn = UserDefaults.isMaskAppOn
-    @AppStorage(.key(.isLockAppOn))
-    private var isLockAppOn = UserDefaults.isLockAppOn
 
     @State private var isUpdateAlertPresented = false
     @State private var isMasked = false
-    @State private var isLocked = UserDefaults.isLockAppOn
 
     private let sharedModelContainer: ModelContainer
     private let sharedItemService: ItemService
@@ -53,14 +50,9 @@ extension ContentView: View {
             RootNavigationView()
                 .onChange(of: scenePhase) { _, newValue in
                     isMasked = isMaskAppOn && newValue != .active
-                    if !isLocked {
-                        isLocked = isLockAppOn && newValue == .background
-                    }
                 }
             if isMasked {
                 MaskView()
-            } else if isLocked {
-                LockedView(isLocked: $isLocked)
             }
         }
         .alert(Text("Update Required"), isPresented: $isUpdateAlertPresented) {
