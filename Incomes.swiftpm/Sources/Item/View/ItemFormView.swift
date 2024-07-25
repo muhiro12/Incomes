@@ -194,7 +194,7 @@ private extension ItemFormView {
     func save() {
         do {
             if let repeatID = item?.repeatID,
-               try itemService.itemsCount(predicate: Item.predicate(repeatIDIs: repeatID)) > .one {
+               try itemService.itemsCount(Item.descriptor(repeatIDIs: repeatID)) > .one {
                 presentToActionSheet()
             } else {
                 saveForThisItem()

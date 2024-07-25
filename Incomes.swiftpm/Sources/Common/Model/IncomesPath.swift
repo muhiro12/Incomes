@@ -20,7 +20,7 @@ extension View {
             case .debug:
                 DebugView()
             case .itemList(let tag):
-                ItemListView(tag: tag) { _ in .true }
+                ItemListView(tag: tag) { _ in Item.descriptor() }
             case .license:
                 LicenseView()
             }

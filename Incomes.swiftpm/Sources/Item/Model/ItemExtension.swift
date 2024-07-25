@@ -7,52 +7,66 @@
 //
 
 import Foundation
+import SwiftData
 
-// MARK: - Predicate
+// MARK: - FetchDescriptor
 
 extension Item {
+    typealias FetchDescriptor = SwiftData.FetchDescriptor<Item>
     typealias Predicate = Foundation.Predicate<Item>
 
-    static func predicate(dateIsBetween start: Date, and end: Date) -> Predicate {
-        #Predicate {
-            start <= $0.date && $0.date <= end
-        }
+    static func descriptor(predicate: Predicate? = .true) -> FetchDescriptor {
+        .init(predicate: predicate, sortBy: sortDescriptors())
     }
 
-    static func predicate(dateIsSameMonthAs date: Date) -> Predicate {
-        predicate(dateIsBetween: Calendar.utc.startOfMonth(for: date),
-                  and: Calendar.utc.endOfMonth(for: date))
+    static func descriptor(dateIsBetween start: Date, and end: Date) -> FetchDescriptor {
+        descriptor(
+            predicate: #Predicate {
+                start <= $0.date && $0.date <= end
+            }
+        )
     }
 
-    static func predicate(content: String, year: String) -> Predicate {
+    static func descriptor(dateIsSameMonthAs date: Date) -> FetchDescriptor {
+        descriptor(dateIsBetween: Calendar.utc.startOfMonth(for: date),
+                   and: Calendar.utc.endOfMonth(for: date))
+    }
+
+    static func descriptor(content: String, year: String) -> FetchDescriptor {
         guard let date = year.dateValueWithoutLocale(.yyyy) else {
             assertionFailure()
-            return .false
+            return descriptor(predicate: .false)
         }
         let start = Calendar.utc.startOfYear(for: date)
         let end = Calendar.utc.endOfYear(for: date)
-        return #Predicate {
-            $0.content == content
-                && start <= $0.date && $0.date <= end
-        }
+        return descriptor(
+            predicate: #Predicate {
+                $0.content == content
+                    && start <= $0.date && $0.date <= end
+            }
+        )
     }
 
-    static func predicate(repeatIDIs repeatID: UUID) -> Predicate {
-        #Predicate {
-            $0.repeatID == repeatID
-        }
+    static func descriptor(repeatIDIs repeatID: UUID) -> FetchDescriptor {
+        descriptor(
+            predicate: #Predicate {
+                $0.repeatID == repeatID
+            }
+        )
     }
 
-    static func predicate(repeatIDIs repeatID: UUID, dateIsAfter date: Date) -> Predicate {
-        #Predicate {
-            $0.repeatID == repeatID && $0.date >= date
-        }
+    static func descriptor(repeatIDIs repeatID: UUID, dateIsAfter date: Date) -> FetchDescriptor {
+        descriptor(
+            predicate: #Predicate {
+                $0.repeatID == repeatID && $0.date >= date
+            }
+        )
     }
 }
 
 // MARK: - SortDescriptor
 
-extension Item {
+private extension Item {
     typealias SortDescriptor = Foundation.SortDescriptor<Item>
 
     static func sortDescriptors() -> [SortDescriptor] {

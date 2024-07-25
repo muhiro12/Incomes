@@ -21,8 +21,8 @@ final class ItemService {
 
     // MARK: - Fetch
 
-    func itemsCount(predicate: Predicate<Item>? = nil) throws -> Int {
-        try context.fetchCount(.init(predicate: predicate))
+    func itemsCount(_ descriptor: Item.FetchDescriptor = Item.descriptor()) throws -> Int {
+        try context.fetchCount(descriptor)
     }
 
     // MARK: - Create
@@ -104,7 +104,7 @@ final class ItemService {
                                     income: income,
                                     outgo: outgo,
                                     group: group,
-                                    predicate: Item.predicate(repeatIDIs: item.repeatID, dateIsAfter: item.date))
+                                    descriptor: Item.descriptor(repeatIDIs: item.repeatID, dateIsAfter: item.date))
     }
 
     func updateForAllItems(item: Item,
@@ -119,7 +119,7 @@ final class ItemService {
                                     income: income,
                                     outgo: outgo,
                                     group: group,
-                                    predicate: Item.predicate(repeatIDIs: item.repeatID))
+                                    descriptor: Item.descriptor(repeatIDIs: item.repeatID))
     }
 
     // MARK: - Delete
@@ -149,13 +149,13 @@ private extension ItemService {
                                  income: Decimal,
                                  outgo: Decimal,
                                  group: String,
-                                 predicate: Predicate<Item>) throws {
+                                 descriptor: Item.FetchDescriptor) throws {
         let components = Calendar.utc.dateComponents([.year, .month, .day],
                                                      from: item.date,
                                                      to: date)
 
         let repeatID = UUID()
-        let items = try context.fetch(.init(predicate: predicate, sortBy: Item.sortDescriptors()))
+        let items = try context.fetch(descriptor)
         try items.forEach {
             guard let newDate = Calendar.utc.date(byAdding: components, to: $0.date) else {
                 assertionFailure()

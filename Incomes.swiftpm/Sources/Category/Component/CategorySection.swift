@@ -31,8 +31,7 @@ struct CategorySection {
                 } ?? []
             )
         )
-        _tags = Query(filter: Tag.predicate(contents: contents),
-                      sort: Tag.sortDescriptors())
+        _tags = Query(Tag.descriptor(contents: contents))
     }
 }
 

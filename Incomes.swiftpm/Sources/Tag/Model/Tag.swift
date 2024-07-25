@@ -26,12 +26,7 @@ final class Tag {
     private init() {}
 
     static func create(context: ModelContext, name: String, type: Tag.TagType) throws -> Tag {
-        let tag = try context.fetch(
-            .init(
-                predicate: Self.predicate(name: name, type: type),
-                sortBy: Self.sortDescriptors()
-            )
-        ).first ?? .init()
+        let tag = try context.fetch(Self.descriptor(name: name, type: type)).first ?? .init()
         context.insert(tag)
         tag.name = name
         tag.typeID = type.rawValue

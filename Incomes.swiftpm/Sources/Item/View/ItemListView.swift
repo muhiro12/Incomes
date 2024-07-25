@@ -12,9 +12,9 @@ import SwiftUI
 struct ItemListView {
     private let title: String
     private let yearTags: [Tag]
-    private let predicateBuilder: (Tag) -> Predicate<Item>
+    private let descriptorBuilder: (Tag) -> Item.FetchDescriptor
 
-    init(tag: Tag, predicateBuilder: @escaping (Tag) -> Predicate<Item>) {
+    init(tag: Tag, descriptorBuilder: @escaping (Tag) -> Item.FetchDescriptor) {
         self.title = tag.displayName
         self.yearTags = Set(
             tag.items?.compactMap {
@@ -25,7 +25,7 @@ struct ItemListView {
         ).sorted {
             $0.name > $1.name
         }
-        self.predicateBuilder = predicateBuilder
+        self.descriptorBuilder = descriptorBuilder
     }
 }
 
@@ -33,7 +33,7 @@ extension ItemListView: View {
     var body: some View {
         List(yearTags) {
             ItemListYearSection(yearTag: $0,
-                                predicate: predicateBuilder($0))
+                                descriptor: descriptorBuilder($0))
         }
         .navigationTitle(Text(title))
         .listStyle(.grouped)
@@ -45,7 +45,7 @@ extension ItemListView: View {
         ItemListView(
             tag: preview.tags.first { $0.name == Date.now.stringValueWithoutLocale(.yyyy) }!
         ) { _ in
-            Item.predicate(dateIsSameMonthAs: .now)
+            Item.descriptor(dateIsSameMonthAs: .now)
         }
     }
 }

@@ -21,11 +21,8 @@ final class TagService {
 
     // MARK: - Fetch
 
-    func tag(predicate: Predicate<Tag>? = nil) throws -> Tag? {
-        var descriptor = FetchDescriptor(
-            predicate: predicate,
-            sortBy: Tag.sortDescriptors()
-        )
+    func tag(_ descriptor: Tag.FetchDescriptor = Tag.descriptor()) throws -> Tag? {
+        var descriptor = descriptor
         descriptor.fetchLimit = 1
         return try context.fetch(descriptor).first
     }
@@ -61,7 +58,7 @@ final class TagService {
         try tags.forEach { tag in
             try merge(
                 tags: self.tags(
-                    predicate: Tag.predicate(isSameWith: tag)
+                    descriptor: Tag.descriptor(isSameWith: tag)
                 )
             )
         }
@@ -87,13 +84,8 @@ final class TagService {
 }
 
 private extension TagService {
-    func tags(predicate: Predicate<Tag>? = nil) throws -> [Tag] {
-        try context.fetch(
-            .init(
-                predicate: predicate,
-                sortBy: Tag.sortDescriptors()
-            )
-        )
+    func tags(descriptor: Tag.FetchDescriptor = Tag.descriptor()) throws -> [Tag] {
+        try context.fetch(descriptor)
     }
 
     func delete(tags: [Tag]) throws {

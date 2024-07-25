@@ -47,13 +47,13 @@ extension RootNavigationView: View {
                     ItemListView(tag: detail) { yearTag in
                         if detail.type == .yearMonth,
                            let date = detail.items?.first?.date {
-                            return Item.predicate(dateIsSameMonthAs: date)
+                            return Item.descriptor(dateIsSameMonthAs: date)
                         }
                         if detail.type == .content {
-                            return Item.predicate(content: detail.name,
-                                                  year: yearTag.name)
+                            return Item.descriptor(content: detail.name,
+                                                   year: yearTag.name)
                         }
-                        return .false
+                        return Item.descriptor(predicate: .false)
                     }
                 }
             }
@@ -69,9 +69,7 @@ extension RootNavigationView: View {
         }
         .onAppear {
             contentID = SidebarItem.home.id
-            detailID = try? tagService.tag(
-                predicate: Tag.predicate(dateIsSameMonthAs: .now)
-            )?.id
+            detailID = try? tagService.tag(Tag.descriptor(dateIsSameMonthAs: .now))?.id
         }
     }
 }
@@ -88,7 +86,7 @@ private extension RootNavigationView {
         guard let detailID else {
             return nil
         }
-        return try? tagService.tag(predicate: Tag.predicate(id: detailID))
+        return try? tagService.tag(Tag.descriptor(id: detailID))
     }
 }
 

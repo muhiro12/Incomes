@@ -15,10 +15,7 @@ struct DuplicateTagView: View {
     @State private var selectedTag: Tag?
 
     init(_ tag: Tag) {
-        _tags = Query(
-            filter: Tag.predicate(isSameWith: tag),
-            sort: Tag.sortDescriptors()
-        )
+        _tags = Query(Tag.descriptor(isSameWith: tag))
     }
 
     var body: some View {

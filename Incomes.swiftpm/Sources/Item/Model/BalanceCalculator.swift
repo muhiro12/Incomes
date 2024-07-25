@@ -25,7 +25,7 @@ struct BalanceCalculator {
     }
 
     func calculate(after date: Date) throws {
-        let allItems = try context.fetch(.init(sortBy: Item.sortDescriptors())).reversed()
+        let allItems = try context.fetch(Item.descriptor()).reversed()
 
         guard let separatorIndex = allItems.firstIndex(where: { $0.date >= date }) else {
             return

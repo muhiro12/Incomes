@@ -10,7 +10,7 @@ import SwiftData
 import SwiftUI
 
 struct CategoryView {
-    @Query(filter: Tag.predicate(type: .category), sort: Tag.sortDescriptors())
+    @Query(Tag.descriptor(type: .category))
     private var tags: [Tag]
 
     @Binding private var selection: Tag.ID?

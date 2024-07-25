@@ -10,7 +10,7 @@ import SwiftData
 import SwiftUI
 
 struct HomeView {
-    @Query(filter: Tag.predicate(type: .year), sort: Tag.sortDescriptors(order: .reverse))
+    @Query(Tag.descriptor(type: .year, order: .reverse))
     private var tags: [Tag]
 
     @Binding private var selection: Tag.ID?

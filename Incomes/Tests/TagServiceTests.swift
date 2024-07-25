@@ -26,7 +26,7 @@ struct TagServiceTests {
         _ = try Tag.create(context: context, name: "nameA", type: .year)
         _ = try Tag.create(context: context, name: "nameB", type: .year)
 
-        #expect(try context.fetchCount(.init(sortBy: Tag.sortDescriptors())) == 2)
+        #expect(try context.fetchCount(Tag.descriptor()) == 2)
 
         #expect(try service.tag()?.name == "nameA")
         #expect(try service.tag()?.type == .year)
@@ -40,11 +40,11 @@ struct TagServiceTests {
         _ = try Tag.create(context: context, name: "nameA", type: .year)
         _ = try Tag.create(context: context, name: "nameB", type: .year)
 
-        #expect(try context.fetchCount(.init(sortBy: Tag.sortDescriptors())) == 2)
+        #expect(try context.fetchCount(Tag.descriptor()) == 2)
 
         _ = try service.deleteAll()
 
-        #expect(try context.fetchCount(.init(sortBy: Tag.sortDescriptors())) == 0)
+        #expect(try context.fetchCount(Tag.descriptor()) == 0)
     }
 
     // MARK: - Duplicates - merge
@@ -80,7 +80,7 @@ struct TagServiceTests {
             repeatID: .init()
         )
 
-        #expect(try context.fetchCount(.init(predicate: Tag.predicate(contents: ["contentA"]))) == 1)
+        #expect(try context.fetchCount(Tag.descriptor(contents: ["contentA"])) == 1)
 
         let tag1 = item1.tags!.first { $0.type == .content }!
         let tag2 = item2.tags!.first { $0.type == .content }!
@@ -92,7 +92,7 @@ struct TagServiceTests {
 
         try service.merge(tags: [tag1, tag2, tag3])
 
-        #expect(try context.fetchCount(.init(predicate: Tag.predicate(contents: ["contentA"]))) == 1)
+        #expect(try context.fetchCount(Tag.descriptor(contents: ["contentA"])) == 1)
 
         #expect(tag1.items?.contains(item1) == true)
         #expect(tag1.items?.contains(item2) == true)
@@ -134,9 +134,9 @@ struct TagServiceTests {
             repeatID: .init()
         )
 
-        #expect(try context.fetchCount(.init(predicate: Tag.predicate(contents: ["contentA"]))) == 1)
-        #expect(try context.fetchCount(.init(predicate: Tag.predicate(contents: ["contentB"]))) == 1)
-        #expect(try context.fetchCount(.init(predicate: Tag.predicate(contents: ["contentC"]))) == 1)
+        #expect(try context.fetchCount(Tag.descriptor(contents: ["contentA"])) == 1)
+        #expect(try context.fetchCount(Tag.descriptor(contents: ["contentB"])) == 1)
+        #expect(try context.fetchCount(Tag.descriptor(contents: ["contentC"])) == 1)
 
         let tag1 = item1.tags!.first { $0.type == .content }!
         let tag2 = item2.tags!.first { $0.type == .content }!
@@ -148,9 +148,9 @@ struct TagServiceTests {
 
         try service.merge(tags: [tag1, tag2, tag3])
 
-        #expect(try context.fetchCount(.init(predicate: Tag.predicate(contents: ["contentA"]))) == 1)
-        #expect(try context.fetchCount(.init(predicate: Tag.predicate(contents: ["contentB"]))) == 0)
-        #expect(try context.fetchCount(.init(predicate: Tag.predicate(contents: ["contentC"]))) == 0)
+        #expect(try context.fetchCount(Tag.descriptor(contents: ["contentA"])) == 1)
+        #expect(try context.fetchCount(Tag.descriptor(contents: ["contentB"])) == 0)
+        #expect(try context.fetchCount(Tag.descriptor(contents: ["contentC"])) == 0)
 
         #expect(tag1.items?.contains(item1) == true)
         #expect(tag1.items?.contains(item2) == true)
@@ -192,7 +192,7 @@ struct TagServiceTests {
             repeatID: .init()
         )
 
-        #expect(try context.fetchCount(.init(predicate: Tag.predicate(contents: ["contentA"]))) == 3)
+        #expect(try context.fetchCount(Tag.descriptor(contents: ["contentA"])) == 3)
 
         let tag1 = item1.tags!.first { $0.type == .content }!
         let tag2 = item2.tags!.first { $0.type == .content }!
@@ -204,7 +204,7 @@ struct TagServiceTests {
 
         try service.merge(tags: [tag1, tag2, tag3])
 
-        #expect(try context.fetchCount(.init(predicate: Tag.predicate(contents: ["contentA"]))) == 1)
+        #expect(try context.fetchCount(Tag.descriptor(contents: ["contentA"])) == 1)
 
         #expect(tag1.items?.contains(item1) == true)
         #expect(tag1.items?.contains(item2) == true)
@@ -225,11 +225,11 @@ struct TagServiceTests {
         _ = try Tag.createIgnoringDuplicates(context: context, name: "nameB", type: .yearMonth)
         _ = try Tag.createIgnoringDuplicates(context: context, name: "nameB", type: .yearMonth)
 
-        #expect(try context.fetchCount(.init(sortBy: Tag.sortDescriptors())) == 6)
+        #expect(try context.fetchCount(Tag.descriptor()) == 6)
 
         try service.resolveAllDuplicates(in: [tag1, tag4])
 
-        #expect(try context.fetchCount(.init(sortBy: Tag.sortDescriptors())) == 2)
+        #expect(try context.fetchCount(Tag.descriptor()) == 2)
     }
 
     @Test func resolveAllDuplicatesWithUnexpectedUsage() async throws {
@@ -240,11 +240,11 @@ struct TagServiceTests {
         _ = try Tag.createIgnoringDuplicates(context: context, name: "nameB", type: .yearMonth)
         _ = try Tag.createIgnoringDuplicates(context: context, name: "nameB", type: .yearMonth)
 
-        #expect(try context.fetchCount(.init(sortBy: Tag.sortDescriptors())) == 6)
+        #expect(try context.fetchCount(Tag.descriptor()) == 6)
 
         try service.resolveAllDuplicates(in: [tag1, tag2])
 
-        #expect(try context.fetchCount(.init(sortBy: Tag.sortDescriptors())) == 4)
+        #expect(try context.fetchCount(Tag.descriptor()) == 4)
     }
 
     // MARK: - Duplicates - findDuplicates
@@ -259,11 +259,11 @@ struct TagServiceTests {
         let tag7 = try Tag.createIgnoringDuplicates(context: context, name: "nameB", type: .yearMonth)
         let tag8 = try Tag.createIgnoringDuplicates(context: context, name: "nameB", type: .yearMonth)
 
-        #expect(try context.fetchCount(.init(sortBy: Tag.sortDescriptors())) == 8)
+        #expect(try context.fetchCount(Tag.descriptor()) == 8)
 
         let result = service.findDuplicates(in: [tag1, tag2, tag3, tag4, tag5, tag6, tag7, tag8])
 
-        #expect(try context.fetchCount(.init(sortBy: Tag.sortDescriptors())) == 8)
+        #expect(try context.fetchCount(Tag.descriptor()) == 8)
 
         #expect(result.count == 2)
         #expect(result.contains(tag1))
@@ -280,11 +280,11 @@ struct TagServiceTests {
         let tag7 = try Tag.createIgnoringDuplicates(context: context, name: "nameB", type: .yearMonth)
         let tag8 = try Tag.createIgnoringDuplicates(context: context, name: "nameB", type: .yearMonth)
 
-        #expect(try context.fetchCount(.init(sortBy: Tag.sortDescriptors())) == 8)
+        #expect(try context.fetchCount(Tag.descriptor()) == 8)
 
         let result = service.findDuplicates(in: [tag1, tag2, tag3, tag4, tag5, tag6, tag7, tag8])
 
-        #expect(try context.fetchCount(.init(sortBy: Tag.sortDescriptors())) == 8)
+        #expect(try context.fetchCount(Tag.descriptor()) == 8)
 
         #expect(result.count == 4)
         #expect(result.contains(tag1))

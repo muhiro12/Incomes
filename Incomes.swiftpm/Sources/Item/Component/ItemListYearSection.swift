@@ -20,9 +20,9 @@ struct ItemListYearSection {
 
     private let title: String
 
-    init(yearTag: Tag, predicate: Predicate<Item>) {
+    init(yearTag: Tag, descriptor: Item.FetchDescriptor) {
         title = yearTag.displayName
-        _items = Query(filter: predicate, sort: Item.sortDescriptors())
+        _items = Query(descriptor)
     }
 }
 
@@ -68,7 +68,7 @@ extension ItemListYearSection: View {
         List {
             ItemListYearSection(
                 yearTag: preview.tags.first { $0.type == .year }!,
-                predicate: Item.predicate(dateIsSameMonthAs: .now)
+                descriptor: Item.descriptor(dateIsSameMonthAs: .now)
             )
         }
     }
