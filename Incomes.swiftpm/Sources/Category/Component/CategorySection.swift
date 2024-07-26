@@ -38,8 +38,10 @@ struct CategorySection {
 extension CategorySection: View {
     var body: some View {
         Section(tag.name.isNotEmpty ? tag.name : "Others", isExpanded: $isExpanded) {
-            ForEach(tags) {
-                Text($0.name)
+            ForEach(tags) { tag in
+                if tag.items.orEmpty.isNotEmpty {
+                    Text(tag.name)
+                }
             }.onDelete {
                 isPresentedToAlert = true
                 willDeleteItems = $0.flatMap { tags[$0].items ?? [] }

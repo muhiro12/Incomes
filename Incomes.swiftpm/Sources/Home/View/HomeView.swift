@@ -22,8 +22,10 @@ struct HomeView {
 
 extension HomeView: View {
     var body: some View {
-        List(tags, selection: $selection) {
-            YearSection(yearTag: $0)
+        List(tags, selection: $selection) { tag in
+            if tag.items.orEmpty.isNotEmpty {
+                YearSection(yearTag: tag)
+            }
         }
         .navigationTitle(Text("Home"))
         .listStyle(.sidebar)

@@ -22,8 +22,10 @@ struct CategoryView {
 
 extension CategoryView: View {
     var body: some View {
-        List(tags, selection: $selection) {
-            CategorySection(categoryTag: $0)
+        List(tags, selection: $selection) { tag in
+            if tag.items.orEmpty.isNotEmpty {
+                CategorySection(categoryTag: tag)
+            }
         }
         .navigationTitle(Text("Category"))
         .listStyle(.sidebar)

@@ -30,13 +30,15 @@ extension FilteredTagList: View {
         ScrollView(.horizontal, showsIndicators: false) {
             LazyHStack {
                 ForEach(filteredTags) { tag in
-                    Button {
-                        name = tag.name
-                    } label: {
-                        Text(tag.name)
+                    if tag.items.orEmpty.isNotEmpty {
+                        Button {
+                            name = tag.name
+                        } label: {
+                            Text(tag.name)
+                        }
+                        .buttonStyle(.bordered)
+                        .controlSize(.mini)
                     }
-                    .buttonStyle(.bordered)
-                    .controlSize(.mini)
                 }
             }
         }
