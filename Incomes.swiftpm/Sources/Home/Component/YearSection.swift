@@ -34,8 +34,10 @@ extension YearSection: View {
     var body: some View {
         Group {
             Section(title, isExpanded: $isExpanded) {
-                ForEach(tags) {
-                    Text($0.items?.first?.date.stringValue(.yyyyMMM) ?? .empty)
+                ForEach(tags) { tag in
+                    if let item = tag.items?.first {
+                        Text(item.date.stringValue(.yyyyMMM))
+                    }
                 }.onDelete {
                     isPresentedToAlert = true
                     willDeleteItems = $0.flatMap { tags[$0].items ?? [] }
