@@ -16,7 +16,7 @@ extension Tag {
     typealias Predicate = Foundation.Predicate<Tag>
 
     static func descriptor(predicate: Predicate = .true, order: SortOrder = .forward) -> FetchDescriptor {
-        .init(predicate: predicate, sortBy: sortDescriptors(order: .forward))
+        .init(predicate: predicate, sortBy: sortDescriptors(order: order))
     }
 
     static func descriptor(id: Tag.ID) -> FetchDescriptor {
