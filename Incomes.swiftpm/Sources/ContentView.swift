@@ -47,44 +47,44 @@ public struct ContentView {
 
 extension ContentView: View {
     public var body: some View {
-        ZStack {
-            RootNavigationView()
-                .onChange(of: scenePhase) { _, newValue in
-                    isMasked = isMaskAppOn && newValue != .active
+        RootNavigationView()
+            .overlay {
+                if isMasked {
+                    MaskView()
                 }
-            if isMasked {
-                MaskView()
             }
-        }
-        .alert(Text("Update Required"), isPresented: $isUpdateAlertPresented) {
-            Button {
-                UIApplication.shared.open(
-                    .init(string: "https://apps.apple.com/jp/app/incomes/id1584472982")!
-                )
-            } label: {
-                Text("Open App Store")
+            .alert(Text("Update Required"), isPresented: $isUpdateAlertPresented) {
+                Button {
+                    UIApplication.shared.open(
+                        .init(string: "https://apps.apple.com/jp/app/incomes/id1584472982")!
+                    )
+                } label: {
+                    Text("Open App Store")
+                }
+            } message: {
+                Text("Please update Incomes to the latest version to continue using it.")
             }
-        } message: {
-            Text("Please update Incomes to the latest version to continue using it.")
-        }
-        .task {
-            try? await sharedConfigurationService.load()
-            isUpdateAlertPresented = sharedConfigurationService.isUpdateRequired()
-
-            await sharedNotificationService.register()
-        }
-        .onChange(of: scenePhase) {
-            guard scenePhase == .active else {
-                return
+            .task {
+                try? await sharedConfigurationService.load()
+                isUpdateAlertPresented = sharedConfigurationService.isUpdateRequired()
+                
+                await sharedNotificationService.register()
             }
-            isUpdateAlertPresented = sharedConfigurationService.isUpdateRequired()
-        }
-        .modelContainer(sharedModelContainer)
-        .environment(sharedItemService)
-        .environment(sharedTagService)
-        .environment(sharedConfigurationService)
-        .environment(sharedNotificationService)
-        .id(isICloudOn)
+            .onChange(of: scenePhase) {
+                guard scenePhase == .active else {
+                    return
+                }
+                isUpdateAlertPresented = sharedConfigurationService.isUpdateRequired()
+            }
+            .onChange(of: scenePhase) { _, newValue in
+                isMasked = isMaskAppOn && newValue != .active
+            }
+            .modelContainer(sharedModelContainer)
+            .environment(sharedItemService)
+            .environment(sharedTagService)
+            .environment(sharedConfigurationService)
+            .environment(sharedNotificationService)
+            .id(isICloudOn)
     }
 }
 
