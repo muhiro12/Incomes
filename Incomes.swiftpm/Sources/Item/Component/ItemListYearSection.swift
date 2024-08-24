@@ -40,10 +40,10 @@ extension ItemListYearSection: View {
             }, header: {
                 Text(title)
             })
-            ChartSections(items: items)
             Section {
                 Advertisement(.medium)
             }
+            ChartSections(items: items)
         }
         .actionSheet(isPresented: $isPresentedToAlert) {
             ActionSheet(title: Text("Are you sure you want to delete this item?"),
