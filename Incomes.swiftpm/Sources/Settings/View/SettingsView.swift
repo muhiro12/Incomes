@@ -14,6 +14,8 @@ struct SettingsView {
     private var itemService
     @Environment(TagService.self)
     private var tagService
+    @Environment(NotificationService.self)
+    private var notificationService
 
     @AppStorage(.isSubscribeOn)
     private var isSubscribeOn
@@ -29,7 +31,6 @@ struct SettingsView {
 extension SettingsView: View {
     var body: some View {
         List {
-            NotificationSection()
             if isSubscribeOn {
                 Toggle(isOn: $isICloudOn) {
                     Text("iCloud On")
@@ -115,6 +116,7 @@ extension SettingsView: View {
         .navigationTitle(Text("Settings"))
         .task {
             try? tagService.updateHasDuplicates()
+            notificationService.refresh()
         }
     }
 }
