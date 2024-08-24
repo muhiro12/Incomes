@@ -57,5 +57,7 @@ private extension ChartSections {
 }
 
 #Preview {
-    ChartSections(items: [])
+    IncomesPreview { preview in
+        ChartSections(items: Array(preview.items.prefix(upTo: 20)))
+    }
 }
