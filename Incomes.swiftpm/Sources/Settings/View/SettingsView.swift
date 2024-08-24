@@ -29,7 +29,6 @@ struct SettingsView {
 extension SettingsView: View {
     var body: some View {
         List {
-            NotificationSection()
             if isSubscribeOn {
                 Toggle(isOn: $isICloudOn) {
                     Text("iCloud On")
