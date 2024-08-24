@@ -23,8 +23,8 @@ final class IncomesPreviewStore {
         createItems(context)
         while !isReady {
             try! await Task.sleep(for: .seconds(0.2))
-            items = try! context.fetch(.init())
-            tags = try! context.fetch(.init())
+            items = try! context.fetch(Item.descriptor())
+            tags = try! context.fetch(Tag.descriptor())
         }
         try! BalanceCalculator(context: context).calculate(for: items)
     }

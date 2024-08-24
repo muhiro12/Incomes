@@ -21,18 +21,20 @@ extension ChartSections: View {
     var body: some View {
         Section("Balance") {
             Chart(items) {
-                buildChartContent(date: $0.date,
-                                  value: $0.balance)
+                buildAreaChartContent(date: $0.date,
+                                      value: $0.balance)
+                buildBarChartContent(date: $0.date,
+                                     value: $0.balance)
             }
             .frame(height: .componentL)
             .padding()
         }
         Section("Income and Outgo") {
             Chart(items) {
-                buildChartContent(date: $0.date,
-                                  value: $0.income)
-                buildChartContent(date: $0.date,
-                                  value: $0.outgo * -1)
+                buildBarChartContent(date: $0.date,
+                                     value: $0.income)
+                buildBarChartContent(date: $0.date,
+                                     value: $0.outgo * -1)
             }
             .frame(height: .componentL)
             .padding()
@@ -42,17 +44,34 @@ extension ChartSections: View {
 
 private extension ChartSections {
     @ChartContentBuilder
-    func buildChartContent(date: Date, value: Decimal) -> some ChartContent {
-        if value != .zero {
-            BarMark(x: .value("Date", date),
-                    y: .value("Amount", value),
-                    stacking: .unstacked)
-                .foregroundStyle(value.isPlus ? Color.accentColor : Color.red)
-                .opacity(.medium)
-            RectangleMark(x: .value("Date", date),
-                          y: .value("Amount", value))
-                .foregroundStyle(value.isPlus ? Color.accentColor : Color.red)
-        }
+    func buildAreaChartContent(date: Date, value: Decimal) -> some ChartContent {
+        AreaMark(
+            x: .value("Date", date),
+            y: .value("Amount", value),
+            stacking: .unstacked
+        )
+        .opacity(.medium)
+        LineMark(
+            x: .value("Date", date),
+            y: .value("Amount", value)
+        )
+        .opacity(.medium)
+    }
+
+    @ChartContentBuilder
+    func buildBarChartContent(date: Date, value: Decimal) -> some ChartContent {
+        BarMark(
+            x: .value("Date", date),
+            y: .value("Amount", value),
+            stacking: .unstacked
+        )
+        .foregroundStyle(value.isPlus ? Color.accentColor : Color.red)
+        .opacity(.medium)
+        RectangleMark(
+            x: .value("Date", date),
+            y: .value("Amount", value)
+        )
+        .foregroundStyle(value.isPlus ? Color.accentColor : Color.red)
     }
 }
 
