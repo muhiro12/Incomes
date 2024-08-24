@@ -35,8 +35,14 @@ extension YearSection: View {
         Group {
             Section(title, isExpanded: $isExpanded) {
                 ForEach(tags) { tag in
-                    if let item = tag.items?.first {
-                        Text(item.date.stringValue(.yyyyMMM))
+                    if let items = tag.items,
+                       let first = items.first {
+                        Text(first.date.stringValue(.yyyyMMM))
+                            .foregroundStyle(
+                                items.contains {
+                                    $0.balance.isMinus
+                                } ? .red : .primary
+                            )
                     }
                 }.onDelete {
                     isPresentedToAlert = true
