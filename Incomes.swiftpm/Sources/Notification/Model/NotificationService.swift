@@ -15,12 +15,6 @@ final class NotificationService: NSObject {
     private(set) var hasNotification = false
     private(set) var shouldShowNotification = false
 
-    // TODO: Delete after 2024/09
-    private let year = 2_024
-    private let months = [6, 7, 8]
-    private let days = [10, 20, 30]
-    private let hour = 20
-
     private var center: UNUserNotificationCenter {
         UNUserNotificationCenter.current()
     }
@@ -31,6 +25,7 @@ final class NotificationService: NSObject {
     }
 
     func register() async {
+        // Currently unused
         _ = try? await center.requestAuthorization(
             options: [.badge, .sound, .alert, .carPlay]
         )
@@ -38,27 +33,18 @@ final class NotificationService: NSObject {
         center.removeAllPendingNotificationRequests()
 
         let content = UNMutableNotificationContent()
-        content.title = .init(localized: "Important Subscription Update")
-        content.body = .init(localized: "Starting August 1st, iCloud synchronization will be moved to the subscription plan. We appreciate your understanding and support.")
+        content.title = ""
+        content.body = ""
         content.badge = 1
         content.sound = .default
 
-        for month in months {
-            for day in days {
-                let trigger = UNCalendarNotificationTrigger(
-                    dateMatching: .init(year: year, month: month, day: day, hour: hour),
-                    repeats: false
-                )
+        let request = UNNotificationRequest(
+            identifier: UUID().uuidString,
+            content: content,
+            trigger: nil
+        )
 
-                let request = UNNotificationRequest(
-                    identifier: UUID().uuidString,
-                    content: content,
-                    trigger: trigger
-                )
-
-                try? await center.add(request)
-            }
-        }
+        try? await center.add(request)
     }
 
     func update() async {
