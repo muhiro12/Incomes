@@ -14,10 +14,10 @@ public struct ContentView {
     @Environment(\.scenePhase)
     private var scenePhase
 
-    @AppStorage(.key(.isICloudOn))
-    private var isICloudOn = UserDefaults.isICloudOn
-    @AppStorage(.key(.isMaskAppOn))
-    private var isMaskAppOn = UserDefaults.isMaskAppOn
+    @AppStorage(.isICloudOn)
+    private var isICloudOn
+    @AppStorage(.isMaskAppOn)
+    private var isMaskAppOn
 
     @State private var isUpdateAlertPresented = false
     @State private var isMasked = false

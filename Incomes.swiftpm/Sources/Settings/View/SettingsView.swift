@@ -15,12 +15,12 @@ struct SettingsView {
     @Environment(TagService.self)
     private var tagService
 
-    @AppStorage(.key(.isSubscribeOn))
-    private var isSubscribeOn = UserDefaults.isSubscribeOn
-    @AppStorage(.key(.isICloudOn))
-    private var isICloudOn = UserDefaults.isICloudOn
-    @AppStorage(.key(.isMaskAppOn))
-    private var isMaskAppOn = UserDefaults.isMaskAppOn
+    @AppStorage(.isSubscribeOn)
+    private var isSubscribeOn
+    @AppStorage(.isICloudOn)
+    private var isICloudOn
+    @AppStorage(.isMaskAppOn)
+    private var isMaskAppOn
 
     @State private var isDuplicatedTagsPresented = false
     @State private var isAlertPresented = false

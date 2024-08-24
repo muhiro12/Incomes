@@ -15,8 +15,10 @@ import SwiftUI
 
 @main
 struct IncomesApp: App {
-    @AppStorage(UserDefaults.Key.isSubscribeOn.rawValue)
-    private var isSubscribeOn = false
+    @AppStorage(.isSubscribeOn)
+    private var isSubscribeOn
+    @AppStorage(.isICloudOn)
+    private var isICloudOn
 
     private let sharedGoogleMobileAdsController: GoogleMobileAdsController
     private let sharedStore: Store
@@ -60,6 +62,9 @@ struct IncomesApp: App {
                     ) {
                         isSubscribeOn = $0.contains {
                             $0.id == Secret.productID
+                        }
+                        if !isSubscribeOn {
+                            isICloudOn = false
                         }
                     }
                 }
