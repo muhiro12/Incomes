@@ -21,14 +21,24 @@ extension View {
     func incomesPlaygroundsEnvironment() -> some View {
         incomesEnvironment(
             googleMobileAds: {
-                Text("GoogleMobileAds \($0)")
+                placeholder("GoogleMobileAds \($0)")
             },
             licenseList: {
-                Text("LicenseList")
+                placeholder("LicenseList")
             },
             storeKit: {
-                Text("StoreKit")
+                placeholder("StoreKit")
             }
         )
     }
+
+    private func placeholder(_ string: String) -> some View {
+        Text(string)
+            .frame(width: 240, height: 160)
+            .font(.headline)
+            .foregroundStyle(.placeholder)
+            .background(.placeholder.quinary)
+            .clipShape(.rect(cornerRadius: 8))
+            .padding()
+    }        
 }
