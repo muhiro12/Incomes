@@ -29,20 +29,16 @@ struct Advertisement {
 extension Advertisement: View {
     var body: some View {
         if !isSubscribeOn {
-            HStack {
-                Spacer()
-                googleMobileAds(size.rawValue)
-                    .border(Color(UIColor.separator))
-                Spacer()
-            }
-            .listRowBackground(Color.clear)
-            .listSectionSeparator(.hidden)
+            googleMobileAds(size.rawValue)
         }
     }
 }
 
 #Preview {
-    List {
-        Advertisement(.medium)
+    IncomesPreview { _ in
+        List {
+            Advertisement(.medium)
+            Advertisement(.small)
+        }
     }
 }
