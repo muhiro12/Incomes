@@ -24,8 +24,8 @@ final class NotificationService: NSObject {
         center.delegate = self
     }
 
+    // Currently unused
     func register() async {
-        // Currently unused
         _ = try? await center.requestAuthorization(
             options: [.badge, .sound, .alert, .carPlay]
         )

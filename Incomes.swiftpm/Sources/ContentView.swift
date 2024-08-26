@@ -67,8 +67,9 @@ extension ContentView: View {
             .task {
                 try? await sharedConfigurationService.load()
                 isUpdateAlertPresented = sharedConfigurationService.isUpdateRequired()
-                
-                await sharedNotificationService.register()
+
+                // Currently unused
+//                await sharedNotificationService.register()
             }
             .onChange(of: scenePhase) {
                 guard scenePhase == .active else {
