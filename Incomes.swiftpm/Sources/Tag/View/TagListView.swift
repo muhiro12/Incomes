@@ -23,9 +23,10 @@ struct TagListView: View {
             }
         }
     }
-    
+
+    @ViewBuilder
     private func buildSection<Header: View>(from tags: [Tag], header: () -> Header) -> some View {
-        return Section {
+        Section {
             ForEach(
                 tags,
                 id: \.self

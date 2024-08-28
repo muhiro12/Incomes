@@ -56,32 +56,34 @@ struct DuplicateTagListView: View {
         }
     }
 
+    @ViewBuilder
     private func buildSection<Header: View>(from tags: [Tag], header: () -> Header) -> some View {
         let duplicates = tagService.findDuplicates(in: tags).sorted {
             $0.displayName < $1.displayName
         }
         if duplicates.isEmpty {
-            return EmptyView()
-        }
-        return Section {
-            ForEach(
-                duplicates,
-                id: \.self
-            ) { tag in
-                Text(tag.displayName)
-            }
-        } header: {
-            HStack {
-                header()
-                Spacer()
-                Button {
-                    isResolveAlertPresented = true
-                    selectedTags = duplicates
-                } label: {
-                    Text("Resolve All")
+            EmptyView()
+        } else {
+            Section {
+                ForEach(
+                    duplicates,
+                    id: \.self
+                ) { tag in
+                    Text(tag.displayName)
                 }
-                .font(.caption)
-                .textCase(nil)
+            } header: {
+                HStack {
+                    header()
+                    Spacer()
+                    Button {
+                        isResolveAlertPresented = true
+                        selectedTags = duplicates
+                    } label: {
+                        Text("Resolve All")
+                    }
+                    .font(.caption)
+                    .textCase(nil)
+                }
             }
         }
     }
