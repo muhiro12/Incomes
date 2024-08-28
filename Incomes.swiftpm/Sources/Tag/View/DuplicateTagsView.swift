@@ -60,6 +60,9 @@ struct DuplicateTagsView: View {
         let duplicates = tagService.findDuplicates(in: tags).sorted {
             $0.displayName < $1.displayName
         }
+        if duplicates.isEmpty {
+            return EmptyView()
+        }
         return Section {
             ForEach(
                 duplicates,
