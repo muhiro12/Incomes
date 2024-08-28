@@ -9,20 +9,14 @@
 import SwiftUI
 
 struct DebugView {
-    static var isDebug = {
-        #if DEBUG
-        true
-        #else
-        false
-        #endif
-    }()
-
     @Environment(\.modelContext)
     private var context
     @Environment(TagService.self)
     private var tagService
+    
+    @AppStorage(.isDebugOn)
+    private var isDebugOn
 
-    @State private var isDebugOption = Self.isDebug
     @State private var isAlertPresented = false
 }
 
@@ -30,10 +24,7 @@ extension DebugView: View {
     var body: some View {
         List {
             Section {
-                Toggle(String.debugOption, isOn: $isDebugOption)
-                    .onChange(of: isDebugOption) { _, newValue in
-                        Self.isDebug = newValue
-                    }
+                Toggle(String.debugOption, isOn: $isDebugOn)
             }
             if let tag = try? tagService.tag() {
                 Section {
@@ -48,7 +39,7 @@ extension DebugView: View {
                 } label: {
                     Text(String.debugSetPreviewData)
                 }
-                .disabled(!isDebugOption)
+                .disabled(!isDebugOn)
             }
             StoreSection()
             AdvertisementSection(.medium)

@@ -30,6 +30,9 @@ struct ItemFormView {
     @Environment(ItemService.self)
     private var itemService
 
+    @AppStorage(.isDebugOn)
+    private var isDebugOn
+
     @FocusState private var focusedField: Field?
 
     @State private var mode = Mode.create
@@ -102,7 +105,7 @@ extension ItemFormView: View {
             }, header: {
                 Text("Information")
             })
-            if DebugView.isDebug {
+            if isDebugOn {
                 DebugSection(item: item)
             }
         }
@@ -142,7 +145,7 @@ extension ItemFormView: View {
                 Text("Cancel")
             }
             Button {
-                DebugView.isDebug = true
+                isDebugOn = true
                 dismiss()
             } label: {
                 Text(String.debugOK)

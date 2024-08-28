@@ -12,6 +12,7 @@ public enum AppStorageKey: String {
     case isSubscribeOn = "a018f613"
     case isICloudOn = "X7b9C4tZ"
     case isMaskAppOn = "aa9f2c8b"
+    case isDebugOn = "a1B2c3D4"
 }
 
 public extension AppStorage<Bool> {
