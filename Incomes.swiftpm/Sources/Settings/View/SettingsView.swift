@@ -24,7 +24,7 @@ struct SettingsView {
     @AppStorage(.isMaskAppOn)
     private var isMaskAppOn
 
-    @State private var isDuplicatedTagsPresented = false
+    @State private var isDuplicateTagPresented = false
     @State private var isAlertPresented = false
 }
 
@@ -64,7 +64,7 @@ extension SettingsView: View {
             if tagService.hasDuplicates {
                 Section {
                     Button {
-                        isDuplicatedTagsPresented = true
+                        isDuplicateTagPresented = true
                     } label: {
                         Text("Resolve duplicate tags")
                     }
@@ -83,8 +83,8 @@ extension SettingsView: View {
                 }
             }
         }
-        .fullScreenCover(isPresented: $isDuplicatedTagsPresented) {
-            DuplicateTagsNavigationView()
+        .fullScreenCover(isPresented: $isDuplicateTagPresented) {
+            DuplicateTagNavigationView()
         }
         .alert(Text("Are you sure you want to delete all items?"),
                isPresented: $isAlertPresented) {

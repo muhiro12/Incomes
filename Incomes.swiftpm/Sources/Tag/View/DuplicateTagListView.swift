@@ -2,7 +2,7 @@ import SwiftData
 import SwiftUI
 import SwiftUtilities
 
-struct DuplicateTagsView: View {
+struct DuplicateTagListView: View {
     @Environment(TagService.self) private var tagService
 
     @Query(Tag.descriptor(type: .year)) private var years: [Tag]
@@ -89,6 +89,6 @@ struct DuplicateTagsView: View {
 
 #Preview {
     IncomesPreview { _ in
-        DuplicateTagsView(selection: .constant(nil))
+        DuplicateTagListView(selection: .constant(nil))
     }
 }

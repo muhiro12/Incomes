@@ -1,11 +1,11 @@
 import SwiftUI
 
-struct DuplicateTagsNavigationView: View {
+struct DuplicateTagNavigationView: View {
     @State private var detail: Tag?
 
     var body: some View {
         NavigationSplitView {
-            DuplicateTagsView(selection: $detail)
+            DuplicateTagListView(selection: $detail)
         } detail: {
             if let detail {
                 DuplicateTagView(detail)
@@ -16,6 +16,6 @@ struct DuplicateTagsNavigationView: View {
 
 #Preview {
     IncomesPreview { _ in
-        DuplicateTagsNavigationView()
+        DuplicateTagNavigationView()
     }
 }
