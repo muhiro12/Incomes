@@ -23,8 +23,6 @@ struct SettingsView {
     private var isICloudOn
     @AppStorage(.isMaskAppOn)
     private var isMaskAppOn
-    @AppStorage(.isDebugOn)
-    private var isDebugOn
 
     @State private var isDuplicatedTagsPresented = false
     @State private var isAlertPresented = false
@@ -82,11 +80,6 @@ extension SettingsView: View {
             Section {
                 NavigationLink(path: .license) {
                     Text("License")
-                }
-            }
-            if isDebugOn {
-                NavigationLink(path: .debug) {
-                    Text(String.debugTitle)
                 }
             }
         }

@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import SwiftUtilities
 
 struct DebugView {
     @Environment(\.modelContext)
@@ -68,6 +69,11 @@ extension DebugView: View {
             Text(String.debugSetPreviewDataMessage)
         }
         .navigationTitle(Text(String.debugTitle))
+        .toolbar {
+            ToolbarItem {
+                CloseButton()
+            }
+        }
     }
 }
 

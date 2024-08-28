@@ -17,9 +17,13 @@ struct SidebarView {
     @Environment(NotificationService.self)
     private var notificationService
 
+    @AppStorage(.isDebugOn)
+    private var isDebugOn
+
     @Binding private var selection: SidebarItem.ID?
 
     @State private var isSettingsPresented = false
+    @State private var isDebugPresented = false
 
     init(selection: Binding<SidebarItem.ID?>) {
         _selection = selection
@@ -36,6 +40,15 @@ extension SidebarView: View {
             }
         }
         .toolbar {
+            if isDebugOn {
+                ToolbarItem {
+                    Button {
+                        isDebugPresented = true
+                    } label: {
+                        Image(systemName: "flask")
+                    }
+                }
+            }
             ToolbarItem {
                 Button {
                     isSettingsPresented = true
@@ -61,6 +74,9 @@ extension SidebarView: View {
         }
         .sheet(isPresented: $isSettingsPresented) {
             SettingsNavigationView()
+        }
+        .sheet(isPresented: $isDebugPresented) {
+            DebugNavigationView()
         }
         .navigationTitle(Text("Incomes"))
         .onChange(of: scenePhase) {
