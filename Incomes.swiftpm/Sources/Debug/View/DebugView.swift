@@ -51,12 +51,8 @@ extension DebugView: View {
                 .disabled(!isDebugOption)
             }
             StoreSection()
-            Section {
-                Advertisement(.medium)
-            }
-            Section {
-                Advertisement(.small)
-            }
+            AdvertisementSection(.medium)
+            AdvertisementSection(.small)
         }
         .alert(String.debugSetPreviewData, isPresented: $isAlertPresented) {
             Button(role: .destructive) {

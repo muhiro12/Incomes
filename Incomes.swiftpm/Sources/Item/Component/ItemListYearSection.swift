@@ -13,6 +13,9 @@ struct ItemListYearSection {
     @Environment(ItemService.self)
     private var itemService
 
+    @AppStorage(.isSubscribeOn)
+    private var isSubscribeOn
+
     @Query private var items: [Item]
 
     @State private var isPresentedToAlert = false
@@ -40,8 +43,8 @@ extension ItemListYearSection: View {
             }, header: {
                 Text(title)
             })
-            Section {
-                Advertisement(.medium)
+            if !isSubscribeOn {
+                AdvertisementSection(.medium)
             }
             ChartSections(items: items)
         }

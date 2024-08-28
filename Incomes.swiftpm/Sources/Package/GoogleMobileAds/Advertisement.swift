@@ -1,5 +1,5 @@
 //
-//  Advertisement.swift
+//  AdvertisementSection.swift
 //  Incomes
 //
 //  Created by Hiromu Nakano on 2022/01/17.
@@ -8,16 +8,13 @@
 
 import SwiftUI
 
-struct Advertisement {
+struct AdvertisementSection {
     enum Size: String {
         case small = "Small"
         case medium = "Medium"
     }
 
     @Environment(GoogleMobileAdsPackage.self) private var googleMobileAds
-
-    @AppStorage(.isSubscribeOn)
-    private var isSubscribeOn
 
     private let size: Size
 
@@ -26,9 +23,9 @@ struct Advertisement {
     }
 }
 
-extension Advertisement: View {
+extension AdvertisementSection: View {
     var body: some View {
-        if !isSubscribeOn {
+        Section {
             googleMobileAds(size.rawValue)
         }
     }
@@ -37,8 +34,8 @@ extension Advertisement: View {
 #Preview {
     IncomesPreview { _ in
         List {
-            Advertisement(.medium)
-            Advertisement(.small)
+            AdvertisementSection(.medium)
+            AdvertisementSection(.small)
         }
     }
 }
