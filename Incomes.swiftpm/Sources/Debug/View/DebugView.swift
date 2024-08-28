@@ -32,6 +32,9 @@ extension DebugView: View {
                     NavigationLink(path: .itemList(tag)) {
                         Text(String.debugAllItems)
                     }
+                    NavigationLink(path: .tagList) {
+                        Text("All Tags")
+                    }
                 }
             }
             Section {
