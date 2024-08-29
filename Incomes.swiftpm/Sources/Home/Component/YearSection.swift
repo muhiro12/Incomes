@@ -22,9 +22,11 @@ struct YearSection {
     @State private var isPresentedToAlert = false
     @State private var willDeleteItems: [Item] = []
 
+    private let tag: Tag
     private let title: String
 
     init(yearTag: Tag) {
+        tag = yearTag
         title = yearTag.displayName
         _tags = Query(Tag.descriptor(year: yearTag.name, order: .reverse))
         _isExpanded = .init(
@@ -36,7 +38,7 @@ struct YearSection {
 extension YearSection: View {
     var body: some View {
         Group {
-            Section(title, isExpanded: $isExpanded) {
+            Section(isExpanded: $isExpanded) {
                 ForEach(tags) { tag in
                     if let items = tag.items,
                        let first = items.first {
@@ -52,6 +54,10 @@ extension YearSection: View {
                 }.onDelete {
                     isPresentedToAlert = true
                     willDeleteItems = $0.flatMap { tags[$0].items ?? [] }
+                }
+            } header: {
+                NavigationLink(path: .year(tag)) {
+                    Text(title)
                 }
             }
             if !isSubscribeOn, isExpanded {

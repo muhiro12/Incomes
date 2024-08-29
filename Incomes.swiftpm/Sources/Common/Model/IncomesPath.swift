@@ -11,11 +11,12 @@ enum IncomesPath: Hashable {
     case home
     case category
     case debug
+    case license
     case itemList(Tag)
     case item(Item)
     case tagList
     case tag(Tag)
-    case license
+    case year(Tag)
 }
 
 extension IncomesPath {
@@ -28,6 +29,8 @@ extension IncomesPath {
             CategoryView()
         case .debug:
             DebugView()
+        case .license:
+            LicenseView()
         case .itemList(let tag):
             ItemListView(tag: tag) { yearTag in
                 switch tag.type {
@@ -56,8 +59,9 @@ extension IncomesPath {
         case .tag(let tag):
             TagView()
                 .environment(tag)
-        case .license:
-            LicenseView()
+        case .year(let tag):
+            YearView()
+                .environment(tag)
         }
     }
 }
