@@ -13,16 +13,12 @@ struct HomeView {
     @Query(Tag.descriptor(type: .year, order: .reverse))
     private var tags: [Tag]
 
-    @Binding private var selection: Tag?
-
-    init(selection: Binding<Tag?>) {
-        _selection = selection
-    }
+    @Environment(\.pathSelection) private var selection
 }
 
 extension HomeView: View {
     var body: some View {
-        List(tags, selection: $selection) { tag in
+        List(tags, selection: selection) { tag in
             if tag.items.orEmpty.isNotEmpty {
                 YearSection(yearTag: tag)
             }
@@ -34,6 +30,6 @@ extension HomeView: View {
 
 #Preview {
     IncomesPreview { _ in
-        HomeView(selection: .constant(nil))
+        HomeView()
     }
 }

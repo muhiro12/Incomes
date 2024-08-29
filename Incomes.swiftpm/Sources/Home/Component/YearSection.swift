@@ -40,13 +40,14 @@ extension YearSection: View {
                 ForEach(tags) { tag in
                     if let items = tag.items,
                        let first = items.first {
-                        Text(first.date.stringValue(.yyyyMMM))
-                            .foregroundStyle(
-                                items.contains {
-                                    $0.balance.isMinus
-                                } ? .red : .primary
-                            )
-                            .tag(tag)
+                        NavigationLink(path: .itemList(tag)) {
+                            Text(first.date.stringValue(.yyyyMMM))
+                                .foregroundStyle(
+                                    items.contains {
+                                        $0.balance.isMinus
+                                    } ? .red : .primary
+                                )
+                        }
                     }
                 }.onDelete {
                     isPresentedToAlert = true

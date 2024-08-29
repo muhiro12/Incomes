@@ -12,22 +12,26 @@ struct MainNavigationView {
     @Environment(TagService.self)
     private var tagService
 
-    @State private var content: MainSidebarItem?
-    @State private var detail: Tag?
+    @State private var content: IncomesPath?
+    @State private var detail: IncomesPath?
 }
 
 extension MainNavigationView: View {
     var body: some View {
         NavigationSplitView {
-            MainNavigationSidebarView(selection: $content)
+            MainNavigationSidebarView()
+                .environment(\.pathSelection, $content)
         } content: {
-            MainNavigationContentView(content, selection: $detail)
+            MainNavigationContentView(content)
+                .environment(\.pathSelection, $detail)
         } detail: {
             MainNavigationDetailView(detail)
         }
         .onAppear {
             content = .home
-            detail = try? tagService.tag(Tag.descriptor(dateIsSameMonthAs: .now))
+            if let tag = try? tagService.tag(Tag.descriptor(dateIsSameMonthAs: .now)) {
+                detail = .itemList(tag)
+            }
         }
     }
 }

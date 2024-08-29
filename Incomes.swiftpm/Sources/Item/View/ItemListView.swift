@@ -35,8 +35,17 @@ extension ItemListView: View {
             ItemListYearSection(yearTag: $0,
                                 descriptor: descriptorBuilder($0))
         }
-        .navigationTitle(Text(title))
         .listStyle(.grouped)
+        .navigationTitle(Text(title))
+        .toolbar {
+            ToolbarItem {
+                CreateButton()
+            }
+            ToolbarItem(placement: .status) {
+                Text("\(yearTags.flatMap { $0.items.orEmpty }.count) Items")
+                    .font(.footnote)
+            }
+        }
     }
 }
 

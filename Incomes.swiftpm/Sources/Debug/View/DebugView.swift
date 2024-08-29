@@ -7,14 +7,15 @@
 //
 
 import SwiftUI
-import SwiftUtilities
 
 struct DebugView {
     @Environment(\.modelContext)
     private var context
     @Environment(TagService.self)
     private var tagService
-    
+
+    @Environment(\.pathSelection) private var selection
+
     @AppStorage(.isDebugOn)
     private var isDebugOn
 
@@ -23,7 +24,7 @@ struct DebugView {
 
 extension DebugView: View {
     var body: some View {
-        List {
+        List(selection: selection) {
             Section {
                 Toggle(String.debugOption, isOn: $isDebugOn)
             }
@@ -49,6 +50,7 @@ extension DebugView: View {
             AdvertisementSection(.medium)
             AdvertisementSection(.small)
         }
+        .listStyle(.insetGrouped)
         .alert(String.debugSetPreviewData, isPresented: $isAlertPresented) {
             Button(role: .destructive) {
                 Task {
@@ -72,11 +74,6 @@ extension DebugView: View {
             Text(String.debugSetPreviewDataMessage)
         }
         .navigationTitle(Text(String.debugTitle))
-        .toolbar {
-            ToolbarItem {
-                CloseButton()
-            }
-        }
     }
 }
 

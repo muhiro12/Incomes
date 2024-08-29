@@ -40,8 +40,9 @@ extension CategorySection: View {
         Section(tag.name.isNotEmpty ? tag.name : "Others", isExpanded: $isExpanded) {
             ForEach(tags) { tag in
                 if tag.items.orEmpty.isNotEmpty {
-                    Text(tag.name)
-                        .tag(tag)
+                    NavigationLink(path: .itemList(tag)) {
+                        Text(tag.name)
+                    }
                 }
             }.onDelete {
                 isPresentedToAlert = true

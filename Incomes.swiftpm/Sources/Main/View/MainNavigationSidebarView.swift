@@ -20,39 +20,38 @@ struct MainNavigationSidebarView {
     @AppStorage(.isDebugOn)
     private var isDebugOn
 
-    @Binding private var selection: MainSidebarItem?
+    @Environment(\.pathSelection) private var selection
 
     @State private var isSettingsPresented = false
-
-    init(selection: Binding<MainSidebarItem?>) {
-        _selection = selection
-    }
 }
 
 extension MainNavigationSidebarView: View {
     var body: some View {
-        List(selection: $selection) {
+        List(selection: selection) {
             Section {
-                Label {
-                    Text("Home")
-                } icon: {
-                    Image(systemName: "calendar")
+                NavigationLink(path: .home) {
+                    Label {
+                        Text("Home")
+                    } icon: {
+                        Image(systemName: "calendar")
+                    }
                 }
-                .tag(MainSidebarItem.home)
-                Label {
-                    Text("Category")
-                } icon: {
-                    Image(systemName: "square.stack.3d.up")
+                NavigationLink(path: .category) {
+                    Label {
+                        Text("Category")
+                    } icon: {
+                        Image(systemName: "square.stack.3d.up")
+                    }
                 }
-                .tag(MainSidebarItem.category)
             }
             if isDebugOn {
-                Label {
-                    Text("Debug")
-                } icon: {
-                    Image(systemName: "flask")
+                NavigationLink(path: .debug) {
+                    Label {
+                        Text("Debug")
+                    } icon: {
+                        Image(systemName: "flask")
+                    }
                 }
-                .tag(MainSidebarItem.debug)
             }
         }
         .toolbar {
@@ -103,6 +102,6 @@ extension MainNavigationSidebarView: View {
 
 #Preview {
     IncomesPreview { _ in
-        MainNavigationSidebarView(selection: .constant(nil))
+        MainNavigationSidebarView()
     }
 }
