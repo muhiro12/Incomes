@@ -11,11 +11,13 @@ import SwiftUI
 
 struct ItemListView {
     private let title: String
+    private let tag: Tag
     private let yearTags: [Tag]
     private let descriptorBuilder: (Tag) -> Item.FetchDescriptor
 
     init(tag: Tag, descriptorBuilder: @escaping (Tag) -> Item.FetchDescriptor) {
         self.title = tag.displayName
+        self.tag = tag
         self.yearTags = Set(
             tag.items?.compactMap {
                 $0.tags?.first {
@@ -42,7 +44,7 @@ extension ItemListView: View {
                 CreateButton()
             }
             ToolbarItem(placement: .status) {
-                Text("\(yearTags.flatMap { $0.items.orEmpty }.count) Items")
+                Text("\(tag.items.orEmpty.count) Items")
                     .font(.footnote)
             }
         }
