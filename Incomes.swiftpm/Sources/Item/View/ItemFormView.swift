@@ -41,7 +41,7 @@ struct ItemFormView {
     @State private var isActionSheetPresented = false
     @State private var isDebugAlertPresented = false
 
-    @State private var date = Date()
+    @State private var date: Date = .now
     @State private var content: String = .empty
     @State private var income: String = .empty
     @State private var outgo: String = .empty

@@ -21,7 +21,7 @@ struct MainNavigationContentView: View {
                     CreateButton()
                 }
                 ToolbarItem(placement: .status) {
-                    Text("Today: \(Date().stringValue(.yyyyMMMd))")
+                    Text("Today: \(Date.now.stringValue(.yyyyMMMd))")
                         .font(.footnote)
                 }
             }

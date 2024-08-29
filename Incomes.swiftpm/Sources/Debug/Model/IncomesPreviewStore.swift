@@ -50,7 +50,7 @@ final class IncomesPreviewStore {
     }
 
     private func createItems(_ context: ModelContext) {
-        let now = Calendar.utc.startOfYear(for: Date())
+        let now = Calendar.utc.startOfYear(for: .now)
 
         let dateA = Calendar.utc.date(byAdding: .day, value: 0, to: now)!
         let dateB = Calendar.utc.date(byAdding: .day, value: 6, to: now)!

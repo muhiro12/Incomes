@@ -277,7 +277,7 @@ final class ItemServiceTests: XCTestCase {
             let service = ItemService(context: context)
 
             let itemA = try! Item.create(context: context,
-                                         date: Date(),
+                                         date: .now,
                                          content: "",
                                          income: 0,
                                          outgo: 0,
@@ -285,7 +285,7 @@ final class ItemServiceTests: XCTestCase {
                                          repeatID: UUID())
             context.insert(itemA)
             let itemB = try! Item.create(context: context,
-                                         date: Date(),
+                                         date: .now,
                                          content: "",
                                          income: 0,
                                          outgo: 0,
@@ -307,7 +307,7 @@ final class ItemServiceTests: XCTestCase {
             let service = ItemService(context: context)
 
             let itemA = try! Item.create(context: context,
-                                         date: Date(),
+                                         date: .now,
                                          content: "",
                                          income: 0,
                                          outgo: 0,
@@ -315,7 +315,7 @@ final class ItemServiceTests: XCTestCase {
                                          repeatID: UUID())
             context.insert(itemA)
             let itemB = try! Item.create(context: context,
-                                         date: Date(),
+                                         date: .now,
                                          content: "",
                                          income: 0,
                                          outgo: 0,
