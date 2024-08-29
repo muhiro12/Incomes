@@ -41,6 +41,7 @@ extension CategorySection: View {
             ForEach(tags) { tag in
                 if tag.items.orEmpty.isNotEmpty {
                     Text(tag.name)
+                        .tag(tag)
                 }
             }.onDelete {
                 isPresentedToAlert = true

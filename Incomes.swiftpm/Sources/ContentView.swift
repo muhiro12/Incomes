@@ -47,7 +47,7 @@ public struct ContentView {
 
 extension ContentView: View {
     public var body: some View {
-        RootNavigationView()
+        MainNavigationView()
             .overlay {
                 if isMasked {
                     MaskView()
@@ -69,7 +69,7 @@ extension ContentView: View {
                 isUpdateAlertPresented = sharedConfigurationService.isUpdateRequired()
 
                 // Currently unused
-//                await sharedNotificationService.register()
+                //                await sharedNotificationService.register()
             }
             .onChange(of: scenePhase) {
                 guard scenePhase == .active else {

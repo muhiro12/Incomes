@@ -1,5 +1,5 @@
 //
-//  SidebarView.swift
+//  MainSidebarView.swift
 //  Incomes
 //
 //  Created by Hiromu Nakano on 2023/09/24.
@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct SidebarView {
+struct MainNavigationSidebarView {
     @Environment(\.scenePhase)
     private var scenePhase
 
@@ -20,35 +20,42 @@ struct SidebarView {
     @AppStorage(.isDebugOn)
     private var isDebugOn
 
-    @Binding private var selection: SidebarItem.ID?
+    @Binding private var selection: MainSidebarItem?
 
     @State private var isSettingsPresented = false
-    @State private var isDebugPresented = false
 
-    init(selection: Binding<SidebarItem.ID?>) {
+    init(selection: Binding<MainSidebarItem?>) {
         _selection = selection
     }
 }
 
-extension SidebarView: View {
+extension MainNavigationSidebarView: View {
     var body: some View {
-        List(SidebarItem.allCases, selection: $selection) { sidebar in
-            Label {
-                Text(sidebar.title)
-            } icon: {
-                Image(systemName: sidebar.image)
+        List(selection: $selection) {
+            Section {
+                Label {
+                    Text("Home")
+                } icon: {
+                    Image(systemName: "calendar")
+                }
+                .tag(MainSidebarItem.home)
+                Label {
+                    Text("Category")
+                } icon: {
+                    Image(systemName: "square.stack.3d.up")
+                }
+                .tag(MainSidebarItem.category)
+            }
+            if isDebugOn {
+                Label {
+                    Text("Debug")
+                } icon: {
+                    Image(systemName: "flask")
+                }
+                .tag(MainSidebarItem.debug)
             }
         }
         .toolbar {
-            if isDebugOn {
-                ToolbarItem {
-                    Button {
-                        isDebugPresented = true
-                    } label: {
-                        Image(systemName: "flask")
-                    }
-                }
-            }
             ToolbarItem {
                 Button {
                     isSettingsPresented = true
@@ -75,9 +82,6 @@ extension SidebarView: View {
         .sheet(isPresented: $isSettingsPresented) {
             SettingsNavigationView()
         }
-        .sheet(isPresented: $isDebugPresented) {
-            DebugNavigationView()
-        }
         .navigationTitle(Text("Incomes"))
         .onChange(of: scenePhase) {
             guard scenePhase == .active else {
@@ -99,6 +103,6 @@ extension SidebarView: View {
 
 #Preview {
     IncomesPreview { _ in
-        SidebarView(selection: .constant(nil))
+        MainNavigationSidebarView(selection: .constant(nil))
     }
 }

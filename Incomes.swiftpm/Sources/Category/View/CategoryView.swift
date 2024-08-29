@@ -13,9 +13,9 @@ struct CategoryView {
     @Query(Tag.descriptor(type: .category))
     private var tags: [Tag]
 
-    @Binding private var selection: Tag.ID?
+    @Binding private var selection: Tag?
 
-    init(selection: Binding<Tag.ID?>) {
+    init(selection: Binding<Tag?>) {
         _selection = selection
     }
 }

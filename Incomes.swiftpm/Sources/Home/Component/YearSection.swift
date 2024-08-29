@@ -46,6 +46,7 @@ extension YearSection: View {
                                     $0.balance.isMinus
                                 } ? .red : .primary
                             )
+                            .tag(tag)
                     }
                 }.onDelete {
                     isPresentedToAlert = true
