@@ -27,6 +27,11 @@ extension Item {
         )
     }
 
+    static func descriptor(dateIsSameYearAs date: Date) -> FetchDescriptor {
+        descriptor(dateIsBetween: Calendar.utc.startOfYear(for: date),
+                   and: Calendar.utc.endOfYear(for: date))
+    }
+
     static func descriptor(dateIsSameMonthAs date: Date) -> FetchDescriptor {
         descriptor(dateIsBetween: Calendar.utc.startOfMonth(for: date),
                    and: Calendar.utc.endOfMonth(for: date))

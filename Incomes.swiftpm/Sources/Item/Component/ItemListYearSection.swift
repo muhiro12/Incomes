@@ -32,7 +32,7 @@ struct ItemListYearSection {
 extension ItemListYearSection: View {
     var body: some View {
         Group {
-            Section(content: {
+            Section {
                 ForEach(items) {
                     ListItem(of: $0)
                 }
@@ -40,9 +40,9 @@ extension ItemListYearSection: View {
                     willDeleteItems = $0.map { items[$0] }
                     isPresentedToAlert = true
                 }
-            }, header: {
+            } header: {
                 Text(title)
-            })
+            }
             if !isSubscribeOn {
                 AdvertisementSection(.medium)
             }

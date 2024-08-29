@@ -30,13 +30,22 @@ extension IncomesPath {
             DebugView()
         case .itemList(let tag):
             ItemListView(tag: tag) { yearTag in
-                if tag.type == .yearMonth,
-                   let date = tag.items?.first?.date {
-                    return Item.descriptor(dateIsSameMonthAs: date)
-                }
-                if tag.type == .content {
+                switch tag.type {
+                case .year:
+                    if let date = tag.items?.first?.date {
+                        return Item.descriptor(dateIsSameYearAs: date)
+                    }
+                case .yearMonth:
+                    if let date = tag.items?.first?.date {
+                        return Item.descriptor(dateIsSameMonthAs: date)
+                    }
+                case .content:
                     return Item.descriptor(content: tag.name,
                                            year: yearTag.name)
+                case .category:
+                    break
+                case .none:
+                    break
                 }
                 return Item.descriptor(predicate: .false)
             }
