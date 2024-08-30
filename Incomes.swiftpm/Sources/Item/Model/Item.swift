@@ -122,6 +122,12 @@ extension Item {
     var isProfitable: Bool {
         profit.isPlus
     }
+
+    var category: Tag? {
+        tags?.first {
+            $0.type == .category
+        }
+    }
 }
 
 // MARK: - Test

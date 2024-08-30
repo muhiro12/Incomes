@@ -10,6 +10,9 @@ import Charts
 import SwiftUI
 
 struct ChartSections {
+    @AppStorage(.isSubscribeOn)
+    private var isSubscribeOn
+
     private let items: [Item]
 
     init(items: [Item]) {
@@ -37,6 +40,49 @@ extension ChartSections: View {
                                      value: $0.outgo * -1)
             }
             .frame(height: .componentL)
+            .padding()
+        }
+        if !isSubscribeOn {
+            AdvertisementSection(.medium)
+        }
+        Section("Category") {
+            Chart(
+                Array(
+                    Dictionary(
+                        grouping: items.filter {
+                            $0.isProfitable
+                        }
+                    ) {
+                        $0.category?.displayName ?? "Other"
+                    }
+                ),
+                id: \.key
+            ) {
+                buildSectorChartContent(title: $0.key, items: $0.value)
+            }
+            .chartForegroundStyleScale { (title: String) in
+                Color.accentColor.opacity(0.1 + 0.9 * Double(abs(title.hashValue % 100)) / 100)
+            }
+            .frame(height: .componentXL)
+            .padding()
+            Chart(
+                Array(
+                    Dictionary(
+                        grouping: items.filter {
+                            !$0.isProfitable
+                        }
+                    ) {
+                        $0.category?.displayName ?? "Other"
+                    }
+                ),
+                id: \.key
+            ) {
+                buildSectorChartContent(title: $0.key, items: $0.value)
+            }
+            .chartForegroundStyleScale { (title: String) in
+                Color.red.opacity(0.1 + 0.9 * Double(abs(title.hashValue % 100)) / 100)
+            }
+            .frame(height: .componentXL)
             .padding()
         }
     }
@@ -73,10 +119,25 @@ private extension ChartSections {
         )
         .foregroundStyle(value.isPlus ? Color.accentColor : Color.red)
     }
+
+    @ChartContentBuilder
+    func buildSectorChartContent(title: String, items: [Item]) -> some ChartContent {
+        let value = abs(items.reduce(0) { $0 + $1.profit })
+        SectorMark(
+            angle: .value(title, value),
+            innerRadius: .ratio(0.618),
+            outerRadius: .inset(10),
+            angularInset: 1
+        )
+        .cornerRadius(4)
+        .foregroundStyle(by: .value("Category", "\(title): \(value.asCurrency)"))
+    }
 }
 
 #Preview {
     IncomesPreview { preview in
-        ChartSections(items: Array(preview.items.prefix(upTo: 20)))
+        List {
+            ChartSections(items: Array(preview.items.prefix(upTo: 20)))
+        }
     }
 }
