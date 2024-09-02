@@ -17,9 +17,6 @@ struct YearView: View {
     var body: some View {
         List {
             ChartSections(items: tag.items.orEmpty)
-            if !isSubscribeOn {
-                AdvertisementSection(.medium)
-            }
         }
         .navigationTitle(tag.displayName)
     }

@@ -27,6 +27,8 @@ extension AdvertisementSection: View {
     var body: some View {
         Section {
             googleMobileAds(size.rawValue)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, .spaceS)
         }
     }
 }
