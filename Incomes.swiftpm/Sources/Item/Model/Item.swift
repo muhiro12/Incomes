@@ -130,6 +130,12 @@ extension Item {
     }
 }
 
+extension Item: Comparable {
+    static func < (lhs: Item, rhs: Item) -> Bool {
+        lhs.date > rhs.date
+    }
+}
+
 // MARK: - Test
 
 extension Item {

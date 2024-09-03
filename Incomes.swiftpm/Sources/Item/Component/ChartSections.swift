@@ -16,7 +16,7 @@ struct ChartSections {
     private let items: [Item]
 
     init(items: [Item]) {
-        self.items = items
+        self.items = items.sorted()
     }
 }
 
