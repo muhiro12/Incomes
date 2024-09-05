@@ -16,11 +16,8 @@ public struct ContentView {
 
     @AppStorage(.isICloudOn)
     private var isICloudOn
-    @AppStorage(.isMaskAppOn)
-    private var isMaskAppOn
 
     @State private var isUpdateAlertPresented = false
-    @State private var isMasked = false
 
     private var sharedModelContainer: ModelContainer!
     private var sharedItemService: ItemService!
@@ -48,11 +45,6 @@ public struct ContentView {
 extension ContentView: View {
     public var body: some View {
         MainNavigationView()
-            .overlay {
-                if isMasked {
-                    MaskView()
-                }
-            }
             .alert(Text("Update Required"), isPresented: $isUpdateAlertPresented) {
                 Button {
                     UIApplication.shared.open(
@@ -76,9 +68,6 @@ extension ContentView: View {
                     return
                 }
                 isUpdateAlertPresented = sharedConfigurationService.isUpdateRequired()
-            }
-            .onChange(of: scenePhase) { _, newValue in
-                isMasked = isMaskAppOn && newValue != .active
             }
             .modelContainer(sharedModelContainer)
             .environment(sharedItemService)
