@@ -16,5 +16,5 @@ extension View {
         self.environment(GoogleMobileAdsPackage(builder: googleMobileAds))
             .environment(LicenseListPackage(builder: licenseList))
             .environment(StoreKitPackage(builder: storeKit))
-    }       
+    }
 }

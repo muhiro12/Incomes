@@ -1,12 +1,12 @@
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 struct TagListView: View {
     @Query(Tag.descriptor(type: .year)) private var years: [Tag]
     @Query(Tag.descriptor(type: .yearMonth)) private var yearMonths: [Tag]
     @Query(Tag.descriptor(type: .content)) private var contents: [Tag]
     @Query(Tag.descriptor(type: .category)) private var categories: [Tag]
-    
+
     var body: some View {
         List {
             buildSection(from: years) {

@@ -4,7 +4,7 @@ import SwiftUI
 struct IncomesPlaygroundsApp: App {
     @AppStorage(.isDebugOn)
     private var isDebugOn
-    
+
     var body: some Scene {
         WindowGroup {
             ContentView()

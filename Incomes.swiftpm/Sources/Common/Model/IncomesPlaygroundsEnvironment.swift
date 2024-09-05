@@ -14,7 +14,7 @@ extension View {
             }
         )
     }
-    
+
     private func placeholder(_ string: String) -> some View {
         Text(string)
             .frame(width: 240, height: 160)
@@ -23,5 +23,5 @@ extension View {
             .background(.placeholder.quinary)
             .clipShape(.rect(cornerRadius: 8))
             .padding()
-    }        
+    }
 }

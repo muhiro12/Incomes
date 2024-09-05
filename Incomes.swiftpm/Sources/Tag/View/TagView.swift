@@ -2,7 +2,7 @@ import SwiftUI
 
 struct TagView: View {
     @Environment(Tag.self) private var tag
-    
+
     var body: some View {
         List {
             Section {
