@@ -1,6 +1,24 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "Get Next Item Content" : {
+
+    },
+    "Get Next Item Date" : {
+
+    },
+    "Get Next Item Profit" : {
+
+    },
+    "Get Previous Item Content" : {
+
+    },
+    "Get Previous Item Date" : {
+
+    },
+    "Get Previous Item Profit" : {
+
+    },
     "Key" : {
       "extractionState" : "manual",
       "localizations" : {
