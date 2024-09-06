@@ -18,10 +18,10 @@ struct OpenIncomesIntent: AppIntent {
     }
 }
 
-struct ShowItemListYearSectionIntent: AppIntent {
-    static var title = LocalizedStringResource("Show Item List Year Section")
+struct ShowItemListIntent: AppIntent {
+    static var title = LocalizedStringResource("Show Item List")
 
     func perform() async throws -> some IntentResult & ShowsSnippetView {
-        try await IncomesIntent.performShowItemListYearSection()
+        try await IncomesIntent.performShowItemList()
     }
 }

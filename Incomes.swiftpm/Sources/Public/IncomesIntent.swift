@@ -31,15 +31,15 @@ public extension IncomesIntent {
         .result()
     }
 
-    static func performShowItemListYearSection() async throws -> some IntentResult & ShowsSnippetView {
+    static func performShowItemList() async throws -> some IntentResult & ShowsSnippetView {
         guard let tag = try sharedTagService.tag(Tag.descriptor(type: .year)),
               let date = tag.items?.first?.date else {
             return .result()
         }
         return .result(
             view: incomesView(
-                ItemListYearSection(
-                    yearTag: tag,
+                ItemListSection(
+                    title: tag.displayName,
                     descriptor: Item.descriptor(dateIsSameMonthAs: date)
                 )
             )
@@ -52,6 +52,8 @@ public extension IncomesIntent {
 private extension IncomesIntent {
     static func incomesView(_ view: some View) -> some View {
         view
+            .background(Color(uiColor: .systemBackground))
+            .safeAreaPadding()
             .modelContainer(sharedModelContainer)
             .environment(sharedItemService)
             .environment(sharedTagService)
@@ -62,6 +64,5 @@ private extension IncomesIntent {
                 licenseList: { EmptyView() },
                 storeKit: { EmptyView() }
             )
-            .background(Color(uiColor: .systemBackground))
     }
 }

@@ -34,8 +34,10 @@ struct ItemListView {
 extension ItemListView: View {
     var body: some View {
         List(yearTags) {
-            ItemListYearSection(yearTag: $0,
-                                descriptor: descriptorBuilder($0))
+            ItemListYearSections(
+                yearTag: $0,
+                descriptor: descriptorBuilder($0)
+            )
         }
         .listStyle(.grouped)
         .navigationTitle(Text(title))
