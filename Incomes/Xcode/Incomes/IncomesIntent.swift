@@ -25,3 +25,19 @@ struct ShowItemListIntent: AppIntent {
         try await IncomesIntent.performShowItemList()
     }
 }
+
+struct ShowNextItemIntent: AppIntent {
+    static var title = LocalizedStringResource("Show Next Item")
+
+    func perform() async throws -> some IntentResult & ShowsSnippetView {
+        try await IncomesIntent.performShowNextItem()
+    }
+}
+
+struct ShowPreviousItemIntent: AppIntent {
+    static var title = LocalizedStringResource("Show Previous Item")
+
+    func perform() async throws -> some IntentResult & ShowsSnippetView {
+        try await IncomesIntent.performShowPreviousItem()
+    }
+}

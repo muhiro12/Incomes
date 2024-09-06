@@ -23,6 +23,12 @@
     },
     "Show Item List" : {
 
+    },
+    "Show Next Item" : {
+
+    },
+    "Show Previous Item" : {
+
     }
   },
   "version" : "1.0"

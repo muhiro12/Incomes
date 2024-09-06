@@ -21,6 +21,12 @@ final class ItemService {
 
     // MARK: - Fetch
 
+    func item(_ descriptor: Item.FetchDescriptor = Item.descriptor()) throws -> Item? {
+        var descriptor = descriptor
+        descriptor.fetchLimit = 1
+        return try context.fetch(descriptor).first
+    }
+
     func itemsCount(_ descriptor: Item.FetchDescriptor = Item.descriptor()) throws -> Int {
         try context.fetchCount(descriptor)
     }

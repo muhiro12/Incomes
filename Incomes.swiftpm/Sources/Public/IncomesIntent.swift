@@ -45,6 +45,28 @@ public extension IncomesIntent {
             )
         )
     }
+
+    static func performShowNextItem() async throws -> some IntentResult & ShowsSnippetView {
+        guard let item = try sharedItemService.item(Item.descriptor(dateIsAfter: .now, order: .forward)) else {
+            return .result()
+        }
+        return .result(
+            view: incomesView(
+                ListItem(of: item)
+            )
+        )
+    }
+
+    static func performShowPreviousItem() async throws -> some IntentResult & ShowsSnippetView {
+        guard let item = try sharedItemService.item(Item.descriptor(dateIsBefore: .now)) else {
+            return .result()
+        }
+        return .result(
+            view: incomesView(
+                ListItem(of: item)
+            )
+        )
+    }
 }
 
 // MARK: - Private
