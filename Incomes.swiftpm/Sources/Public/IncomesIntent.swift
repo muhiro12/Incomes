@@ -57,11 +57,11 @@ public extension IncomesIntent {
         guard let item = try sharedItemService.item(Item.descriptor(dateIsAfter: .now, order: .forward)) else {
             return .result()
         }
-        return .result(
-            view: incomesView(
+        return .result {
+            incomesView {
                 ListItem(of: item)
-            )
-        )
+            }
+        }
     }
 
     // MARK: - Previous Item
@@ -88,32 +88,32 @@ public extension IncomesIntent {
         guard let item = try sharedItemService.item(Item.descriptor(dateIsBefore: .now)) else {
             return .result()
         }
-        return .result(
-            view: incomesView(
+        return .result {
+            incomesView {
                 ListItem(of: item)
-            )
-        )
+            }
+        }
     }
 
     // MARK: - Item List
 
     static func performShowItemList() async throws -> some IntentResult & ShowsSnippetView {
-        .result(
-            view: incomesView(
+        .result {
+            incomesView {
                 ItemListSection(
                     title: Date.now.stringValue(.yyyyMMM),
                     descriptor: Item.descriptor(dateIsSameMonthAs: .now)
                 )
-            )
-        )
+            }
+        }
     }
 }
 
 // MARK: - Private
 
 private extension IncomesIntent {
-    static func incomesView(_ view: some View) -> some View {
-        view
+    static func incomesView(content: () -> some View) -> some View {
+        content()
             .safeAreaPadding()
             .modelContainer(sharedModelContainer)
             .environment(sharedItemService)
