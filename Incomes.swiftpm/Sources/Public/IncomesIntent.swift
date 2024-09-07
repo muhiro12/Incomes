@@ -98,15 +98,11 @@ public extension IncomesIntent {
     // MARK: - Item List
 
     static func performShowItemList() async throws -> some IntentResult & ShowsSnippetView {
-        guard let tag = try sharedTagService.tag(Tag.descriptor(type: .year)),
-              let date = tag.items?.first?.date else {
-            return .result()
-        }
-        return .result(
+        .result(
             view: incomesView(
                 ItemListSection(
-                    title: tag.displayName,
-                    descriptor: Item.descriptor(dateIsSameMonthAs: date)
+                    title: Date.now.stringValue(.yyyyMMM),
+                    descriptor: Item.descriptor(dateIsSameMonthAs: .now)
                 )
             )
         )
