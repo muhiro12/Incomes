@@ -118,7 +118,6 @@ public extension IncomesIntent {
 private extension IncomesIntent {
     static func incomesView(_ view: some View) -> some View {
         view
-            .background(Color(uiColor: .systemBackground))
             .safeAreaPadding()
             .modelContainer(sharedModelContainer)
             .environment(sharedItemService)
