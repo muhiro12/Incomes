@@ -37,6 +37,8 @@ struct IncomesApp: App {
         )
 
         sharedStore = .init()
+
+        IncomesShortcuts.updateAppShortcutParameters()
     }
 
     var body: some Scene {
