@@ -1,5 +1,5 @@
 //
-//  IncomesIntent
+//  IncomesIntents.swift
 //  Incomes
 //
 //  Created by Hiromu Nakano on 9/5/24.

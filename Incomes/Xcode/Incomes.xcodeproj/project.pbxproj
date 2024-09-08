@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		AD009DB72C13EC0000682424 /* Secret.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD009DB62C13EC0000682424 /* Secret.swift */; };
-		AD0759A62C8A7CE30068A8A1 /* IncomesIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD0759A52C8A7CE00068A8A1 /* IncomesIntent.swift */; };
+		AD0759A62C8A7CE30068A8A1 /* IncomesIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD0759A52C8A7CE00068A8A1 /* IncomesIntents.swift */; };
 		AD0759A82C8CB6270068A8A1 /* IncomesShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD0759A72C8CB6270068A8A1 /* IncomesShortcuts.swift */; };
 		AD693DF12C367F4E005F81D0 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = AD693DF02C367F4E005F81D0 /* Localizable.xcstrings */; };
 		AD85E34F2C0E80C1005A33A2 /* IncomesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD85E34E2C0E80C1005A33A2 /* IncomesApp.swift */; };
@@ -22,7 +22,7 @@
 
 /* Begin PBXFileReference section */
 		AD009DB62C13EC0000682424 /* Secret.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secret.swift; sourceTree = "<group>"; };
-		AD0759A52C8A7CE00068A8A1 /* IncomesIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomesIntent.swift; sourceTree = "<group>"; };
+		AD0759A52C8A7CE00068A8A1 /* IncomesIntents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomesIntents.swift; sourceTree = "<group>"; };
 		AD0759A72C8CB6270068A8A1 /* IncomesShortcuts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomesShortcuts.swift; sourceTree = "<group>"; };
 		AD693DF02C367F4E005F81D0 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		AD85E34E2C0E80C1005A33A2 /* IncomesApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IncomesApp.swift; sourceTree = "<group>"; };
@@ -85,7 +85,7 @@
 				ADCF36B224A1D0F70011D6F5 /* Assets.xcassets */,
 				ADD8475B2C16B0EE006055C9 /* GoogleService-Info.plist */,
 				AD85E34E2C0E80C1005A33A2 /* IncomesApp.swift */,
-				AD0759A52C8A7CE00068A8A1 /* IncomesIntent.swift */,
+				AD0759A52C8A7CE00068A8A1 /* IncomesIntents.swift */,
 				AD0759A72C8CB6270068A8A1 /* IncomesShortcuts.swift */,
 				AD693DF02C367F4E005F81D0 /* Localizable.xcstrings */,
 				AD009DB62C13EC0000682424 /* Secret.swift */,
@@ -212,7 +212,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AD0759A62C8A7CE30068A8A1 /* IncomesIntent.swift in Sources */,
+				AD0759A62C8A7CE30068A8A1 /* IncomesIntents.swift in Sources */,
 				AD85E34F2C0E80C1005A33A2 /* IncomesApp.swift in Sources */,
 				AD0759A82C8CB6270068A8A1 /* IncomesShortcuts.swift in Sources */,
 				AD009DB72C13EC0000682424 /* Secret.swift in Sources */,
