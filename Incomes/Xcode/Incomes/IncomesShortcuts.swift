@@ -11,7 +11,15 @@ import AppIntents
 // MARK: - Shortcut
 
 struct IncomesShortcuts: AppShortcutsProvider {
-    static var appShortcuts: [AppShortcut] = [
+    static var appShortcuts = [
+        AppShortcut(
+            intent: OpenIncomesIntent(),
+            phrases: [
+                "Open \(.applicationName)"
+            ],
+            shortTitle: "Open Incomes",
+            systemImageName: "dollarsign.circle"
+        ),
         AppShortcut(
             intent: ShowItemListIntent(),
             phrases: [
