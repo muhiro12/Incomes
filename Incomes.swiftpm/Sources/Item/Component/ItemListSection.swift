@@ -29,7 +29,8 @@ extension ItemListSection: View {
     var body: some View {
         Section {
             ForEach(items) {
-                ListItem(of: $0)
+                ListItem()
+                    .environment($0)
             }
             .onDelete {
                 willDeleteItems = $0.map { items[$0] }

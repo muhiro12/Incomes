@@ -8,11 +8,9 @@
 
 import SwiftUI
 
-struct TitleListItem {
-    let item: Item
-}
+struct TitleListItem: View {
+    @Environment(Item.self) private var item
 
-extension TitleListItem: View {
     var body: some View {
         HStack {
             Text(item.content)
@@ -32,7 +30,8 @@ extension TitleListItem: View {
 #Preview {
     IncomesPreview { preview in
         List {
-            TitleListItem(item: preview.items[0])
+            TitleListItem()
+                .environment(preview.items[0])
         }
     }
 }

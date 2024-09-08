@@ -59,7 +59,8 @@ public extension IncomesIntents {
         }
         return .result {
             incomesView {
-                ListItem(of: item)
+                ListItem()
+                    .environment(item)
             }
         }
     }
@@ -90,7 +91,8 @@ public extension IncomesIntents {
         }
         return .result {
             incomesView {
-                ListItem(of: item)
+                ListItem()
+                    .environment(item)
             }
         }
     }

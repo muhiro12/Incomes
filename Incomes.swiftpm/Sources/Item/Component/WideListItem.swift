@@ -8,15 +8,9 @@
 
 import SwiftUI
 
-struct WideListItem {
-    private let item: Item
+struct WideListItem: View {
+    @Environment(Item.self) private var item
 
-    init(of item: Item) {
-        self.item = item
-    }
-}
-
-extension WideListItem: View {
     var body: some View {
         HStack {
             Text(item.date.stringValue(.MMMd))
@@ -25,7 +19,7 @@ extension WideListItem: View {
                 .truncationMode(.head)
                 .frame(width: .componentS)
             Divider()
-            TitleListItem(item: item)
+            TitleListItem()
             Divider()
             HStack {
                 Text(item.income.asCurrency)
@@ -48,6 +42,7 @@ extension WideListItem: View {
 
 #Preview(traits: .landscapeRight) {
     IncomesPreview { preview in
-        WideListItem(of: preview.items[0])
+        WideListItem()
+            .environment(preview.items[0])
     }
 }

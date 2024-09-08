@@ -8,15 +8,9 @@
 
 import SwiftUI
 
-struct NarrowListItem {
-    private let item: Item
+struct NarrowListItem: View {
+    @Environment(Item.self) private var item
 
-    init(of item: Item) {
-        self.item = item
-    }
-}
-
-extension NarrowListItem: View {
     var body: some View {
         HStack {
             Text(item.date.stringValue(.MMMd))
@@ -27,7 +21,7 @@ extension NarrowListItem: View {
             Divider()
             Spacer()
             VStack(alignment: .trailing, spacing: .zero) {
-                TitleListItem(item: item)
+                TitleListItem()
                 Text(item.profit.asCurrency)
                     .font(.footnote)
                     .minimumScaleFactor(.medium)
@@ -45,6 +39,7 @@ extension NarrowListItem: View {
 
 #Preview {
     IncomesPreview { preview in
-        NarrowListItem(of: preview.items[0])
+        NarrowListItem()
+            .environment(preview.items[0])
     }
 }

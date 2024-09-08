@@ -8,23 +8,17 @@
 
 import SwiftUI
 
-struct ListItem {
+struct ListItem: View {
+    @Environment(Item.self) private var item
+
     @State private var isEditPresented = false
 
-    private let item: Item
-
-    init(of item: Item) {
-        self.item = item
-    }
-}
-
-extension ListItem: View {
     var body: some View {
         GeometryReader { geometry in
             if geometry.size.width < .portraitModeMaxWidth {
-                NarrowListItem(of: item)
+                NarrowListItem()
             } else {
-                WideListItem(of: item)
+                WideListItem()
             }
         }
         .sheet(isPresented: $isEditPresented) {
@@ -40,6 +34,7 @@ extension ListItem: View {
 
 #Preview {
     IncomesPreview { preview in
-        ListItem(of: preview.items[0])
+        ListItem()
+            .environment(preview.items[0])
     }
 }
