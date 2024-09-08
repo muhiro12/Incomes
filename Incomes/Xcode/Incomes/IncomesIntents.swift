@@ -16,7 +16,7 @@ struct OpenIncomesIntent: AppIntent {
     static var openAppWhenRun = true
 
     func perform() async throws -> some IntentResult {
-        try await IncomesIntent.performOpenIncomes()
+        try await IncomesIntents.performOpenIncomes()
     }
 }
 
@@ -26,7 +26,7 @@ struct GetNextItemDate: AppIntent {
     static var title = LocalizedStringResource("Get Next Item Date")
 
     func perform() async throws -> some IntentResult & ReturnsValue<Date?> {
-        try await IncomesIntent.performGetNextItemDate()
+        try await IncomesIntents.performGetNextItemDate()
     }
 }
 
@@ -34,7 +34,7 @@ struct GetNextItemContent: AppIntent {
     static var title = LocalizedStringResource("Get Next Item Content")
 
     func perform() async throws -> some IntentResult & ReturnsValue<String?> {
-        try await IncomesIntent.performGetNextItemContent()
+        try await IncomesIntents.performGetNextItemContent()
     }
 }
 
@@ -42,7 +42,7 @@ struct GetNextItemProfit: AppIntent {
     static var title = LocalizedStringResource("Get Next Item Profit")
 
     func perform() async throws -> some IntentResult & ReturnsValue<String?> {
-        try await IncomesIntent.performGetNextItemProfit()
+        try await IncomesIntents.performGetNextItemProfit()
     }
 }
 
@@ -50,7 +50,7 @@ struct ShowNextItemIntent: AppIntent {
     static var title = LocalizedStringResource("Show Next Item")
 
     func perform() async throws -> some IntentResult & ShowsSnippetView {
-        try await IncomesIntent.performShowNextItem()
+        try await IncomesIntents.performShowNextItem()
     }
 }
 
@@ -60,7 +60,7 @@ struct GetPreviousItemDate: AppIntent {
     static var title = LocalizedStringResource("Get Previous Item Date")
 
     func perform() async throws -> some IntentResult & ReturnsValue<Date?> {
-        try await IncomesIntent.performGetPreviousItemDate()
+        try await IncomesIntents.performGetPreviousItemDate()
     }
 }
 
@@ -68,7 +68,7 @@ struct GetPreviousItemContent: AppIntent {
     static var title = LocalizedStringResource("Get Previous Item Content")
 
     func perform() async throws -> some IntentResult & ReturnsValue<String?> {
-        try await IncomesIntent.performGetPreviousItemContent()
+        try await IncomesIntents.performGetPreviousItemContent()
     }
 }
 
@@ -76,7 +76,7 @@ struct GetPreviousItemProfit: AppIntent {
     static var title = LocalizedStringResource("Get Previous Item Profit")
 
     func perform() async throws -> some IntentResult & ReturnsValue<String?> {
-        try await IncomesIntent.performGetPreviousItemProfit()
+        try await IncomesIntents.performGetPreviousItemProfit()
     }
 }
 
@@ -84,7 +84,7 @@ struct ShowPreviousItemIntent: AppIntent {
     static var title = LocalizedStringResource("Show Previous Item")
 
     func perform() async throws -> some IntentResult & ShowsSnippetView {
-        try await IncomesIntent.performShowPreviousItem()
+        try await IncomesIntents.performShowPreviousItem()
     }
 }
 
@@ -94,6 +94,6 @@ struct ShowItemListIntent: AppIntent {
     static var title = LocalizedStringResource("Show Item List")
 
     func perform() async throws -> some IntentResult & ShowsSnippetView {
-        try await IncomesIntent.performShowItemList()
+        try await IncomesIntents.performShowItemList()
     }
 }

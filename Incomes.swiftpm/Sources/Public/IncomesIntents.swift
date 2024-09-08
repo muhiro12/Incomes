@@ -1,5 +1,5 @@
 //
-//  IncomesIntent.swift
+//  IncomesIntents.swift
 //  Incomes Playgrounds
 //
 //  Created by Hiromu Nakano on 9/6/24.
@@ -10,7 +10,7 @@ import SwiftData
 import SwiftUI
 
 @MainActor
-public enum IncomesIntent {
+public enum IncomesIntents {
     private static let sharedModelContainer: ModelContainer = try! .init(
         for: Item.self,
         configurations: .init(
@@ -26,7 +26,7 @@ public enum IncomesIntent {
 
 // MARK: - Perform
 
-public extension IncomesIntent {
+public extension IncomesIntents {
     // MARK: - Open
 
     static func performOpenIncomes() async throws -> some IntentResult {
@@ -111,7 +111,7 @@ public extension IncomesIntent {
 
 // MARK: - Private
 
-private extension IncomesIntent {
+private extension IncomesIntents {
     static func incomesView(content: () -> some View) -> some View {
         content()
             .safeAreaPadding()
