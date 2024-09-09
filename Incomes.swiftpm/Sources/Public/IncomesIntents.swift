@@ -37,24 +37,24 @@ public extension IncomesIntents {
 
     static func performGetNextItemDate() async throws -> some IntentResult & ReturnsValue<Date?> {
         .result(
-            value: try sharedItemService.item(Item.descriptor(dateIsAfter: .now, sortBy: .forward))?.date
+            value: try sharedItemService.item(Item.descriptor(dateIsAfter: .now, order: .forward))?.date
         )
     }
 
     static func performGetNextItemContent() async throws -> some IntentResult & ReturnsValue<String?> {
         .result(
-            value: try sharedItemService.item(Item.descriptor(dateIsAfter: .now, sortBy: .forward))?.content
+            value: try sharedItemService.item(Item.descriptor(dateIsAfter: .now, order: .forward))?.content
         )
     }
 
     static func performGetNextItemProfit() async throws -> some IntentResult & ReturnsValue<String?> {
         .result(
-            value: try sharedItemService.item(Item.descriptor(dateIsAfter: .now, sortBy: .forward))?.profit.asCurrency
+            value: try sharedItemService.item(Item.descriptor(dateIsAfter: .now, order: .forward))?.profit.asCurrency
         )
     }
 
     static func performShowNextItem() async throws -> some IntentResult & ShowsSnippetView {
-        guard let item = try sharedItemService.item(Item.descriptor(dateIsAfter: .now, sortBy: .forward)) else {
+        guard let item = try sharedItemService.item(Item.descriptor(dateIsAfter: .now, order: .forward)) else {
             return .result()
         }
         return .result {
