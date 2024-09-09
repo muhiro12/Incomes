@@ -50,7 +50,7 @@ extension IncomesPath {
                 case .none:
                     break
                 }
-                return Item.descriptor(predicate: .false)
+                return Item.descriptor()
             }
         case .item(let item):
             ItemFormView(mode: .edit, item: item)
