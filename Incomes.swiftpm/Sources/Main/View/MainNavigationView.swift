@@ -27,7 +27,7 @@ extension MainNavigationView: View {
         } detail: {
             MainNavigationDetailView(detail)
         }
-        .onAppear {
+        .task {
             content = .home
             if let tag = try? tagService.tag(Tag.descriptor(dateIsSameMonthAs: .now)) {
                 detail = .itemList(tag)

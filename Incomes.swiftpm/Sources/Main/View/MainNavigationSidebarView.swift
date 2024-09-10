@@ -9,9 +9,6 @@
 import SwiftUI
 
 struct MainNavigationSidebarView {
-    @Environment(\.scenePhase)
-    private var scenePhase
-
     @Environment(TagService.self)
     private var tagService
     @Environment(NotificationService.self)
@@ -20,7 +17,8 @@ struct MainNavigationSidebarView {
     @AppStorage(.isDebugOn)
     private var isDebugOn
 
-    @Environment(\.pathSelection) private var selection
+    @Environment(\.pathSelection)
+    private var selection
 
     @State private var isSettingsPresented = false
 }
@@ -54,6 +52,7 @@ extension MainNavigationSidebarView: View {
                 }
             }
         }
+        .navigationTitle(Text("Incomes"))
         .toolbar {
             ToolbarItem {
                 Button {
@@ -80,16 +79,6 @@ extension MainNavigationSidebarView: View {
         }
         .sheet(isPresented: $isSettingsPresented) {
             SettingsNavigationView()
-        }
-        .navigationTitle(Text("Incomes"))
-        .onChange(of: scenePhase) {
-            guard scenePhase == .active else {
-                return
-            }
-            try? tagService.updateHasDuplicates()
-            Task {
-                await notificationService.update()
-            }
         }
         .onChange(of: notificationService.shouldShowNotification) {
             guard notificationService.shouldShowNotification else {

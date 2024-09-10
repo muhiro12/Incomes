@@ -34,7 +34,6 @@ public struct ContentView {
                 cloudKitDatabase: isICloudOn ? .automatic : .none
             )
         )
-
         sharedItemService = .init(context: sharedModelContainer.mainContext)
         sharedTagService = .init(context: sharedModelContainer.mainContext)
         sharedConfigurationService = .init()
@@ -59,15 +58,19 @@ extension ContentView: View {
             .task {
                 try? await sharedConfigurationService.load()
                 isUpdateAlertPresented = sharedConfigurationService.isUpdateRequired()
-
-                // Currently unused
-                //                await sharedNotificationService.register()
             }
             .onChange(of: scenePhase) {
                 guard scenePhase == .active else {
                     return
                 }
-                isUpdateAlertPresented = sharedConfigurationService.isUpdateRequired()
+                Task {
+                    try? await sharedConfigurationService.load()
+                    isUpdateAlertPresented = sharedConfigurationService.isUpdateRequired()
+                }
+                Task {
+                    try? sharedTagService.updateHasDuplicates()
+                    await sharedNotificationService.update()
+                }
             }
             .modelContainer(sharedModelContainer)
             .environment(sharedItemService)
