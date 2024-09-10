@@ -13,6 +13,8 @@ import SwiftUtilities
 public struct ContentView {
     @Environment(\.scenePhase)
     private var scenePhase
+    @Environment(\.requestReview)
+    private var requestReview
 
     @AppStorage(.isICloudOn)
     private var isICloudOn
@@ -70,6 +72,12 @@ extension ContentView: View {
                 Task {
                     try? sharedTagService.updateHasDuplicates()
                     await sharedNotificationService.update()
+                }
+                if Int.random(in: 0..<10) == .zero {
+                    Task {
+                        try? await Task.sleep(for: .seconds(2))
+                        requestReview()
+                    }
                 }
             }
             .modelContainer(sharedModelContainer)

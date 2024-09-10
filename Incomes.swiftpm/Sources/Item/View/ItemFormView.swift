@@ -123,6 +123,12 @@ extension ItemFormView: View {
                     } else {
                         save()
                     }
+                    if Int.random(in: 0..<5) == .zero {
+                        Task {
+                            try? await Task.sleep(for: .seconds(2))
+                            requestReview()
+                        }
+                    }
                 } label: {
                     Text(mode == .create ? "Create" : "Save")
                 }
@@ -279,13 +285,6 @@ private extension ItemFormView {
             )
         } catch {
             assertionFailure(error.localizedDescription)
-        }
-        if let count = try? itemService.itemsCount(),
-           count.isMultiple(of: 3) {
-            Task {
-                try await Task.sleep(for: .seconds(2))
-                await requestReview()
-            }
         }
         dismiss()
     }
