@@ -23,8 +23,17 @@ extension HomeView: View {
                 YearSection(yearTag: tag)
             }
         }
-        .navigationTitle(Text("Home"))
         .listStyle(.sidebar)
+        .navigationTitle(Text("Home"))
+        .toolbar {
+            ToolbarItem {
+                CreateButton()
+            }
+            ToolbarItem(placement: .status) {
+                Text("Today: \(Date.now.stringValue(.yyyyMMMd))")
+                    .font(.footnote)
+            }
+        }
     }
 }
 

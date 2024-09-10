@@ -76,6 +76,10 @@ extension MainNavigationSidebarView: View {
                         }
                 }
             }
+            ToolbarItem(placement: .status) {
+                Text("Today: \(Date.now.stringValue(.yyyyMMMd))")
+                    .font(.footnote)
+            }
         }
         .sheet(isPresented: $isSettingsPresented) {
             SettingsNavigationView()

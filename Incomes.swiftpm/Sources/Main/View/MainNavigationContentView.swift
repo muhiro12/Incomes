@@ -16,14 +16,5 @@ struct MainNavigationContentView: View {
 
     var body: some View {
         content?.view
-            .toolbar {
-                ToolbarItem {
-                    CreateButton()
-                }
-                ToolbarItem(placement: .status) {
-                    Text("Today: \(Date.now.stringValue(.yyyyMMMd))")
-                        .font(.footnote)
-                }
-            }
     }
 }
