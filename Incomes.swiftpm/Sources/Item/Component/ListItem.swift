@@ -14,20 +14,21 @@ struct ListItem: View {
     @State private var isEditPresented = false
 
     var body: some View {
-        GeometryReader { geometry in
-            if geometry.size.width < .portraitModeMaxWidth {
-                NarrowListItem()
-            } else {
-                WideListItem()
+        Button {
+            isEditPresented = true
+        } label: {
+            GeometryReader { geometry in
+                if geometry.size.width < .portraitModeMaxWidth {
+                    NarrowListItem()
+                } else {
+                    WideListItem()
+                }
             }
         }
+        .buttonStyle(.plain)
         .sheet(isPresented: $isEditPresented) {
             ItemFormNavigationView(mode: .edit(item))
                 .presentationDetents([.medium, .large])
-        }
-        .contentShape(.rect)
-        .onTapGesture {
-            isEditPresented = true
         }
     }
 }
