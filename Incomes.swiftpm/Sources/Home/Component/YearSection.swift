@@ -22,12 +22,12 @@ struct YearSection {
     @State private var isPresentedToAlert = false
     @State private var willDeleteItems: [Item] = []
 
-    private let tag: Tag
     private let title: String
+    private let date: Date
 
     init(yearTag: Tag) {
-        tag = yearTag
         title = yearTag.displayName
+        date = yearTag.name.dateValueWithoutLocale(.yyyy) ?? .distantPast
         _tags = Query(Tag.descriptor(.yearIs(yearTag.name), order: .reverse))
         _isExpanded = .init(
             initialValue: yearTag.name == Date.now.stringValueWithoutLocale(.yyyy)
@@ -56,7 +56,7 @@ extension YearSection: View {
                     willDeleteItems = $0.flatMap { tags[$0].items ?? [] }
                 }
             } header: {
-                NavigationLink(path: .year(tag)) {
+                NavigationLink(path: .year(date)) {
                     Text(title)
                 }
             }

@@ -7,16 +7,17 @@
 //
 
 import Charts
+import SwiftData
 import SwiftUI
 
 struct ChartSections {
     @AppStorage(.isSubscribeOn)
     private var isSubscribeOn: Bool
 
-    private let items: [Item]
+    @Query private var items: [Item]
 
-    init(items: [Item]) {
-        self.items = items.sorted()
+    init(_ descriptor: FetchDescriptor<Item>) {
+        _items = .init(descriptor)
     }
 }
 
@@ -143,9 +144,9 @@ private extension ChartSections {
 }
 
 #Preview {
-    IncomesPreview { preview in
+    IncomesPreview { _ in
         List {
-            ChartSections(items: Array(preview.items.prefix(upTo: 20)))
+            ChartSections(Item.descriptor(.dateIsSameYearAs(.now)))
         }
     }
 }

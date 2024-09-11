@@ -123,6 +123,12 @@ extension Item {
         profit.isPlus
     }
 
+    var year: Tag? {
+        tags?.first {
+            $0.type == .year
+        }
+    }
+
     var category: Tag? {
         tags?.first {
             $0.type == .category

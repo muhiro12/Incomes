@@ -8,23 +8,25 @@
 import SwiftUI
 
 struct YearView: View {
-    @Environment(Tag.self)
-    private var tag
-
     @AppStorage(.isSubscribeOn)
     private var isSubscribeOn: Bool
 
+    private let date: Date
+
+    init(date: Date) {
+        self.date = date
+    }
+
     var body: some View {
         List {
-            ChartSections(items: tag.items.orEmpty)
+            ChartSections(Item.descriptor(.dateIsSameYearAs(date)))
         }
-        .navigationTitle(tag.displayName)
+        .navigationTitle(date.stringValue(.yyyy))
     }
 }
 
 #Preview {
-    IncomesPreview { preview in
-        YearView()
-            .environment(preview.tags[0])
+    IncomesPreview { _ in
+        YearView(date: .now)
     }
 }

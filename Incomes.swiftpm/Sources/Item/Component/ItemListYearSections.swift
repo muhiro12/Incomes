@@ -13,37 +13,29 @@ struct ItemListYearSections {
     @AppStorage(.isSubscribeOn)
     private var isSubscribeOn: Bool
 
-    @Query private var items: [Item]
-
-    private let yearTag: Tag
     private let descriptor: FetchDescriptor<Item>
 
-    init(yearTag: Tag, descriptor: FetchDescriptor<Item>) {
-        self.yearTag = yearTag
+    init(_ descriptor: FetchDescriptor<Item>) {
         self.descriptor = descriptor
-        _items = Query(descriptor)
     }
 }
 
 extension ItemListYearSections: View {
     var body: some View {
         Group {
-            ItemListSection(title: yearTag.displayName, descriptor: descriptor)
+            ItemListSection(descriptor)
             if !isSubscribeOn {
                 AdvertisementSection(.medium)
             }
-            ChartSections(items: items)
+            ChartSections(descriptor)
         }
     }
 }
 
 #Preview {
-    IncomesPreview { preview in
+    IncomesPreview { _ in
         List {
-            ItemListYearSections(
-                yearTag: preview.tags.first { $0.type == .year }!,
-                descriptor: Item.descriptor(.dateIsSameMonthAs(.now))
-            )
+            ItemListYearSections(Item.descriptor(.dateIsSameMonthAs(.now)))
         }
     }
 }

@@ -102,10 +102,7 @@ public extension IncomesIntents {
     static func performShowItemList(date: Date) async throws -> some IntentResult & ShowsSnippetView {
         .result {
             incomesView {
-                ItemListSection(
-                    title: date.stringValue(.yyyyMMM),
-                    descriptor: Item.descriptor(.dateIsSameMonthAs(date))
-                )
+                ItemListSection(Item.descriptor(.dateIsSameMonthAs(date)))
             }
         }
     }

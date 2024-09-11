@@ -10,37 +10,39 @@ import SwiftData
 import SwiftUI
 
 struct ItemListView {
-    private let title: String
-    private let tag: Tag
-    private let yearTags: [Tag]
-    private let descriptorBuilder: (Tag) -> FetchDescriptor<Item>
+    @Environment(Tag.self)
+    private var tag
 
-    init(tag: Tag, descriptorBuilder: @escaping (Tag) -> FetchDescriptor<Item>) {
-        self.title = tag.displayName
-        self.tag = tag
-        self.yearTags = Set(
-            tag.items?.compactMap {
-                $0.tags?.first {
-                    $0.type == .year
-                }
-            } ?? []
-        ).sorted {
-            $0.name > $1.name
-        }
-        self.descriptorBuilder = descriptorBuilder
-    }
+    @State private var years = [String]()
 }
 
 extension ItemListView: View {
     var body: some View {
-        List(yearTags) {
+        List(years, id: \.self) { year in
             ItemListYearSections(
-                yearTag: $0,
-                descriptor: descriptorBuilder($0)
+                {
+                    switch tag.type {
+                    case .year:
+                        if let date = tag.name.dateValueWithoutLocale(.yyyy) {
+                            return Item.descriptor(.dateIsSameYearAs(date))
+                        }
+                    case .yearMonth:
+                        if let date = tag.name.dateValueWithoutLocale(.yyyyMM) {
+                            return Item.descriptor(.dateIsSameMonthAs(date))
+                        }
+                    case .content:
+                        return Item.descriptor(.contentAndYear(content: tag.name, year: year))
+                    case .category:
+                        break
+                    case .none:
+                        break
+                    }
+                    return Item.descriptor(.none)
+                }()
             )
         }
         .listStyle(.grouped)
-        .navigationTitle(Text(title))
+        .navigationTitle(Text(tag.displayName))
         .toolbar {
             ToolbarItem {
                 CreateButton()
@@ -50,15 +52,19 @@ extension ItemListView: View {
                     .font(.footnote)
             }
         }
+        .task {
+            years = Set(
+                tag.items?.compactMap {
+                    $0.year?.name
+                } ?? .empty
+            ).sorted(by: >)
+        }
     }
 }
 
 #Preview {
     IncomesPreview { preview in
-        ItemListView(
-            tag: preview.tags.first { $0.name == Date.now.stringValueWithoutLocale(.yyyy) }!
-        ) { _ in
-            Item.descriptor(.dateIsSameMonthAs(.now))
-        }
+        ItemListView()
+            .environment(preview.tags.first { $0.name == Date.now.stringValueWithoutLocale(.yyyy) }!)
     }
 }
