@@ -26,21 +26,12 @@ extension Calendar {
         return calendar
     }
 
-    func startOfYear(for date: Date) -> Date {
-        let components = dateComponents([.year], from: date)
-        guard let start = self.date(from: components) else {
+    func endOfDay(for date: Date) -> Date {
+        guard let next = self.date(byAdding: .day, value: 1, to: date) else {
             assertionFailure()
             return date
         }
-        return start
-    }
-
-    func endOfYear(for date: Date) -> Date {
-        guard let next = self.date(byAdding: .year, value: 1, to: date) else {
-            assertionFailure()
-            return date
-        }
-        return startOfYear(for: next) - 1
+        return startOfDay(for: next) - 1
     }
 
     func startOfMonth(for date: Date) -> Date {
@@ -58,5 +49,22 @@ extension Calendar {
             return date
         }
         return startOfMonth(for: next) - 1
+    }
+
+    func startOfYear(for date: Date) -> Date {
+        let components = dateComponents([.year], from: date)
+        guard let start = self.date(from: components) else {
+            assertionFailure()
+            return date
+        }
+        return start
+    }
+
+    func endOfYear(for date: Date) -> Date {
+        guard let next = self.date(byAdding: .year, value: 1, to: date) else {
+            assertionFailure()
+            return date
+        }
+        return startOfYear(for: next) - 1
     }
 }

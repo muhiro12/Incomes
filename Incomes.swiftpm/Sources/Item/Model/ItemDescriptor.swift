@@ -16,8 +16,9 @@ extension Item {
         case dateIsBetween(start: Date, end: Date)
         case dateIsAfter(Date)
         case dateIsBefore(Date)
-        case dateIsSameYearAs(Date)
+        case dateIsSameDayAs(Date)
         case dateIsSameMonthAs(Date)
+        case dateIsSameYearAs(Date)
         case contentAndYear(content: String, year: String)
         case repeatIDIs(UUID)
         case repeatIDAndDateIsAfter(repeatID: UUID, date: Date)
@@ -35,22 +36,27 @@ extension Item {
             case .dateIsAfter(let date):
                 return Self.dateIsBetween(
                     start: Calendar.utc.startOfDay(for: date),
-                    end: Date.distantFuture
+                    end: .distantFuture
                 ).value
             case .dateIsBefore(let date):
                 return Self.dateIsBetween(
-                    start: Date.distantPast,
-                    end: Calendar.utc.startOfDay(for: date).addingTimeInterval(-1)
+                    start: .distantPast,
+                    end: Calendar.utc.startOfDay(for: date) - 1
                 ).value
-            case .dateIsSameYearAs(let date):
+            case .dateIsSameDayAs(let date):
                 return Self.dateIsBetween(
-                    start: Calendar.utc.startOfYear(for: date),
-                    end: Calendar.utc.endOfYear(for: date)
+                    start: Calendar.utc.startOfDay(for: date),
+                    end: Calendar.utc.endOfDay(for: date)
                 ).value
             case .dateIsSameMonthAs(let date):
                 return Self.dateIsBetween(
                     start: Calendar.utc.startOfMonth(for: date),
                     end: Calendar.utc.endOfMonth(for: date)
+                ).value
+            case .dateIsSameYearAs(let date):
+                return Self.dateIsBetween(
+                    start: Calendar.utc.startOfYear(for: date),
+                    end: Calendar.utc.endOfYear(for: date)
                 ).value
             case .contentAndYear(let content, let year):
                 guard let date = year.dateValueWithoutLocale(.yyyy) else {
