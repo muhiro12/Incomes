@@ -19,7 +19,7 @@ struct ItemListSection {
 
     private let title: String
 
-    init(title: String, descriptor: Item.FetchDescriptor) {
+    init(title: String, descriptor: FetchDescriptor<Item>) {
         self.title = title
         self._items = Query(descriptor)
     }
@@ -64,7 +64,7 @@ extension ItemListSection: View {
         List {
             ItemListSection(
                 title: "Title",
-                descriptor: Item.descriptor(dateIsSameMonthAs: .now)
+                descriptor: Item.descriptor(.dateIsSameMonthAs(.now))
             )
         }
     }

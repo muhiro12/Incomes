@@ -36,21 +36,20 @@ extension IncomesPath {
                 switch tag.type {
                 case .year:
                     if let date = tag.items?.first?.date {
-                        return Item.descriptor(dateIsSameYearAs: date)
+                        return Item.descriptor(.dateIsSameYearAs(date))
                     }
                 case .yearMonth:
                     if let date = tag.items?.first?.date {
-                        return Item.descriptor(dateIsSameMonthAs: date)
+                        return Item.descriptor(.dateIsSameMonthAs(date))
                     }
                 case .content:
-                    return Item.descriptor(content: tag.name,
-                                           year: yearTag.name)
+                    return Item.descriptor(.contentAndYear(content: tag.name, year: yearTag.name))
                 case .category:
                     break
                 case .none:
                     break
                 }
-                return Item.descriptor()
+                return Item.descriptor(.none)
             }
         case .item(let item):
             ItemFormView(mode: .edit, item: item)

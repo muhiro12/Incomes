@@ -16,9 +16,9 @@ struct ItemListYearSections {
     @Query private var items: [Item]
 
     private let yearTag: Tag
-    private let descriptor: Item.FetchDescriptor
+    private let descriptor: FetchDescriptor<Item>
 
-    init(yearTag: Tag, descriptor: Item.FetchDescriptor) {
+    init(yearTag: Tag, descriptor: FetchDescriptor<Item>) {
         self.yearTag = yearTag
         self.descriptor = descriptor
         _items = Query(descriptor)
@@ -42,7 +42,7 @@ extension ItemListYearSections: View {
         List {
             ItemListYearSections(
                 yearTag: preview.tags.first { $0.type == .year }!,
-                descriptor: Item.descriptor(dateIsSameMonthAs: .now)
+                descriptor: Item.descriptor(.dateIsSameMonthAs(.now))
             )
         }
     }

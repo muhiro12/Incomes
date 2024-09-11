@@ -13,9 +13,9 @@ struct ItemListView {
     private let title: String
     private let tag: Tag
     private let yearTags: [Tag]
-    private let descriptorBuilder: (Tag) -> Item.FetchDescriptor
+    private let descriptorBuilder: (Tag) -> FetchDescriptor<Item>
 
-    init(tag: Tag, descriptorBuilder: @escaping (Tag) -> Item.FetchDescriptor) {
+    init(tag: Tag, descriptorBuilder: @escaping (Tag) -> FetchDescriptor<Item>) {
         self.title = tag.displayName
         self.tag = tag
         self.yearTags = Set(
@@ -58,7 +58,7 @@ extension ItemListView: View {
         ItemListView(
             tag: preview.tags.first { $0.name == Date.now.stringValueWithoutLocale(.yyyy) }!
         ) { _ in
-            Item.descriptor(dateIsSameMonthAs: .now)
+            Item.descriptor(.dateIsSameMonthAs(.now))
         }
     }
 }
