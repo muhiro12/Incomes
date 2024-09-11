@@ -47,52 +47,56 @@ extension ChartSections: View {
             AdvertisementSection(.medium)
         }
         Section("Category") {
-            Chart(
-                Array(
-                    Dictionary(
-                        grouping: items.filter {
-                            $0.isProfitable
+            if items.contains(where: { $0.isProfitable }) {
+                Chart(
+                    Array(
+                        Dictionary(
+                            grouping: items.filter {
+                                $0.isProfitable
+                            }
+                        ) {
+                            guard let category = $0.category,
+                                  category.displayName.isNotEmpty else {
+                                return "Others"
+                            }
+                            return category.displayName
                         }
-                    ) {
-                        guard let category = $0.category,
-                              category.displayName.isNotEmpty else {
-                            return "Others"
+                    ),
+                    id: \.key
+                ) {
+                    buildSectorChartContent(title: $0.key, items: $0.value)
+                }
+                .chartForegroundStyleScale { (title: String) in
+                    Color.accentColor.adjusted(with: title.hashValue)
+                }
+                .frame(height: .componentXL)
+                .padding()
+            }
+            if items.contains(where: { !$0.isProfitable }) {
+                Chart(
+                    Array(
+                        Dictionary(
+                            grouping: items.filter {
+                                !$0.isProfitable
+                            }
+                        ) {
+                            guard let category = $0.category,
+                                  category.displayName.isNotEmpty else {
+                                return "Others"
+                            }
+                            return category.displayName
                         }
-                        return category.displayName
-                    }
-                ),
-                id: \.key
-            ) {
-                buildSectorChartContent(title: $0.key, items: $0.value)
+                    ),
+                    id: \.key
+                ) {
+                    buildSectorChartContent(title: $0.key, items: $0.value)
+                }
+                .chartForegroundStyleScale { (title: String) in
+                    Color.red.adjusted(with: title.hashValue)
+                }
+                .frame(height: .componentXL)
+                .padding()
             }
-            .chartForegroundStyleScale { (title: String) in
-                Color.accentColor.adjusted(with: title.hashValue)
-            }
-            .frame(height: .componentXL)
-            .padding()
-            Chart(
-                Array(
-                    Dictionary(
-                        grouping: items.filter {
-                            !$0.isProfitable
-                        }
-                    ) {
-                        guard let category = $0.category,
-                              category.displayName.isNotEmpty else {
-                            return "Others"
-                        }
-                        return category.displayName
-                    }
-                ),
-                id: \.key
-            ) {
-                buildSectorChartContent(title: $0.key, items: $0.value)
-            }
-            .chartForegroundStyleScale { (title: String) in
-                Color.red.adjusted(with: title.hashValue)
-            }
-            .frame(height: .componentXL)
-            .padding()
         }
     }
 }
