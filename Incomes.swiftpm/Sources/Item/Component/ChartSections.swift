@@ -61,7 +61,7 @@ extension ChartSections: View {
                 buildSectorChartContent(title: $0.key, items: $0.value)
             }
             .chartForegroundStyleScale { (title: String) in
-                Color.accentColor.opacity(0.1 + 0.9 * Double(abs(title.hashValue % 100)) / 100)
+                Color.accentColor.adjusted(with: title.hashValue)
             }
             .frame(height: .componentXL)
             .padding()
@@ -80,7 +80,7 @@ extension ChartSections: View {
                 buildSectorChartContent(title: $0.key, items: $0.value)
             }
             .chartForegroundStyleScale { (title: String) in
-                Color.red.opacity(0.1 + 0.9 * Double(abs(title.hashValue % 100)) / 100)
+                Color.red.adjusted(with: title.hashValue)
             }
             .frame(height: .componentXL)
             .padding()
