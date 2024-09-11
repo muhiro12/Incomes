@@ -8,29 +8,56 @@
 import SwiftUI
 
 enum IncomesPath: Hashable {
-    case home
+    // MARK: Category
     case category
+    // MARK: Debug
     case debug
-    case license
+    // MARK: Home
+    case home
+    case year(Tag)
+    // MARK: Item
+    case itemFormNavigation(mode: ItemFormView.Mode, item: Item)
+    case itemForm(mode: ItemFormView.Mode, item: Item)
     case itemList(Tag)
-    case item(Item)
+    // MARK: Main
+    case mainNavigationContent
+    case mainNavigationDetail
+    case mainNavigationSidebar
+    case mainNavigation
+    case main
+    // MARK: Package
+    case license
+    // MARK: Public
+    case content
+    // MARK: Settings
+    case settingsNavigation
+    case settings
+    // MARK: Tag
+    case duplicateTagList
+    case duplicateTagNavigation
+    case duplicateTag(Tag)
     case tagList
     case tag(Tag)
-    case year(Tag)
 }
 
 extension IncomesPath {
+    @MainActor
     @ViewBuilder
     var view: some View {
         switch self {
-        case .home:
-            HomeView()
         case .category:
             CategoryView()
         case .debug:
             DebugView()
-        case .license:
-            LicenseView()
+        case .home:
+            HomeView()
+        case .year(let tag):
+            YearView()
+                .environment(tag)
+        case .itemFormNavigation(let mode, let item):
+            ItemFormNavigationView(mode: mode, item: item)
+        case .itemForm(let mode, let item):
+            ItemFormView(mode: mode, item: item)
         case .itemList(let tag):
             ItemListView(tag: tag) { yearTag in
                 switch tag.type {
@@ -51,15 +78,34 @@ extension IncomesPath {
                 }
                 return Item.descriptor(.none)
             }
-        case .item(let item):
-            ItemFormView(mode: .edit, item: item)
+        case .mainNavigationContent:
+            MainNavigationContentView(nil)
+        case .mainNavigationDetail:
+            MainNavigationDetailView(nil)
+        case .mainNavigationSidebar:
+            MainNavigationSidebarView()
+        case .mainNavigation:
+            MainNavigationView()
+        case .main:
+            MainView()
+        case .license:
+            LicenseView()
+        case .content:
+            ContentView()
+        case .settingsNavigation:
+            SettingsNavigationView()
+        case .settings:
+            SettingsView()
+        case .duplicateTagList:
+            DuplicateTagListView(selection: .constant(nil))
+        case .duplicateTagNavigation:
+            DuplicateTagNavigationView()
+        case .duplicateTag(let tag):
+            DuplicateTagView(tag)
         case .tagList:
             TagListView()
         case .tag(let tag):
             TagView()
-                .environment(tag)
-        case .year(let tag):
-            YearView()
                 .environment(tag)
         }
     }
