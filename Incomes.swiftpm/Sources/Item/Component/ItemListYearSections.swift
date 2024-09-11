@@ -11,7 +11,7 @@ import SwiftUI
 
 struct ItemListYearSections {
     @AppStorage(.isSubscribeOn)
-    private var isSubscribeOn
+    private var isSubscribeOn: Bool
 
     @Query private var items: [Item]
 

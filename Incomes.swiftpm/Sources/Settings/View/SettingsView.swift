@@ -18,12 +18,15 @@ struct SettingsView {
     private var notificationService
 
     @AppStorage(.isSubscribeOn)
-    private var isSubscribeOn
+    private var isSubscribeOn: Bool
     @AppStorage(.isICloudOn)
-    private var isICloudOn
+    private var isICloudOn: Bool
+    @AppStorage(.currencyCode)
+    private var currencyCode: String
 
-    @State private var isDuplicateTagPresented = false
+    @State private var selectedCurrencyCode = CurrencyCode.system
     @State private var isAlertPresented = false
+    @State private var isDuplicateTagPresented = false
 }
 
 extension SettingsView: View {
@@ -35,6 +38,15 @@ extension SettingsView: View {
                 }
             } else {
                 StoreSection()
+            }
+            Section {
+                Picker(selection: $selectedCurrencyCode) {
+                    ForEach(CurrencyCode.allCases, id: \.self) {
+                        Text($0.displayName)
+                    }
+                } label: {
+                    Text("Currency Code")
+                }
             }
             Section {
                 Button {
@@ -76,8 +88,11 @@ extension SettingsView: View {
                 }
             }
         }
-        .fullScreenCover(isPresented: $isDuplicateTagPresented) {
-            DuplicateTagNavigationView()
+        .navigationTitle(Text("Settings"))
+        .toolbar {
+            ToolbarItem {
+                CloseButton()
+            }
         }
         .alert(Text("Are you sure you want to delete all items?"),
                isPresented: $isAlertPresented) {
@@ -96,15 +111,16 @@ extension SettingsView: View {
                 Text("Cancel")
             }
         }
-        .toolbar {
-            ToolbarItem {
-                CloseButton()
-            }
+        .fullScreenCover(isPresented: $isDuplicateTagPresented) {
+            DuplicateTagNavigationView()
         }
-        .navigationTitle(Text("Settings"))
         .task {
-            try? tagService.updateHasDuplicates()
             notificationService.refresh()
+            selectedCurrencyCode = .init(rawValue: currencyCode) ?? .system
+            try? tagService.updateHasDuplicates()
+        }
+        .onChange(of: selectedCurrencyCode) {
+            currencyCode = selectedCurrencyCode.rawValue
         }
     }
 }

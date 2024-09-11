@@ -6,12 +6,13 @@
 //  Copyright © 2020 Hiromu Nakano. All rights reserved.
 //
 
-import Foundation
+import SwiftUI
 
 extension Decimal {
     var asCurrency: String {
         let formatter = NumberFormatter()
         formatter.numberStyle = .currency
+        formatter.currencyCode = AppStorage(.currencyCode).wrappedValue
         guard let currency = formatter.string(for: self) else {
             assertionFailure()
             return .empty

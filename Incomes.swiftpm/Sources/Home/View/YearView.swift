@@ -12,7 +12,7 @@ struct YearView: View {
     private var tag
 
     @AppStorage(.isSubscribeOn)
-    private var isSubscribeOn
+    private var isSubscribeOn: Bool
 
     var body: some View {
         List {

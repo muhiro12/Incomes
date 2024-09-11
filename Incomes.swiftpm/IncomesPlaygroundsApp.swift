@@ -3,7 +3,7 @@ import SwiftUI
 @main
 struct IncomesPlaygroundsApp: App {
     @AppStorage(.isDebugOn)
-    private var isDebugOn
+    private var isDebugOn: Bool
 
     var body: some Scene {
         WindowGroup {

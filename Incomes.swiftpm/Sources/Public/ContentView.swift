@@ -17,7 +17,7 @@ public struct ContentView {
     private var requestReview
 
     @AppStorage(.isICloudOn)
-    private var isICloudOn
+    private var isICloudOn: Bool
 
     @State private var isUpdateAlertPresented = false
 
