@@ -124,3 +124,14 @@ struct ShowItemsIntent: AppIntent {
         try await IncomesIntents.performShowItems(date: date)
     }
 }
+
+struct ShowChartsIntent: AppIntent {
+    static var title = LocalizedStringResource("Show Charts")
+
+    @Parameter(title: "Date", kind: .date)
+    private var date: Date
+
+    func perform() async throws -> some IntentResult & ShowsSnippetView {
+        try await IncomesIntents.performShowCharts(date: date)
+    }
+}

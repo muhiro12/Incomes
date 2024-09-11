@@ -28,7 +28,15 @@ struct IncomesShortcuts: AppShortcutsProvider {
                 "Show items in \(.applicationName)"
             ],
             shortTitle: "Show Items",
-            systemImageName: "list.dash.header.rectangle"
+            systemImageName: "list.bullet.rectangle"
+        ),
+        AppShortcut(
+            intent: ShowChartsIntent(),
+            phrases: [
+                "Show charts in \(.applicationName)"
+            ],
+            shortTitle: "Show Charts",
+            systemImageName: "chart.pie"
         ),
         AppShortcut(
             intent: ShowNextItemsIntent(),

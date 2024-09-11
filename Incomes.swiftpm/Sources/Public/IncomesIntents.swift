@@ -104,6 +104,14 @@ public extension IncomesIntents {
             }
         }
     }
+
+    static func performShowCharts(date: Date) async throws -> some IntentResult & ShowsSnippetView {
+        .result {
+            incomesView {
+                ChartSections(.items(.dateIsSameMonthAs(date)))
+            }
+        }
+    }
 }
 
 // MARK: - Private
