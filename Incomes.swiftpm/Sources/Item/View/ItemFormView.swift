@@ -208,7 +208,7 @@ private extension ItemFormView {
     func save() {
         do {
             if let repeatID = item?.repeatID,
-               try itemService.itemsCount(Item.descriptor(.repeatIDIs(repeatID))) > .one {
+               try itemService.itemsCount(.items(.repeatIDIs(repeatID))) > .one {
                 presentToActionSheet()
             } else {
                 saveForThisItem()

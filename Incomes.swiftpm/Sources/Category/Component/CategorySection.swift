@@ -31,7 +31,7 @@ struct CategorySection {
                 } ?? []
             )
         )
-        _tags = Query(Tag.descriptor(.contentIsIn(contents)))
+        _tags = Query(.tags(.contentIsIn(contents)))
     }
 }
 

@@ -28,5 +28,5 @@ let date: (String) -> Date = { string in
 }
 
 func fetchItems(_ context: ModelContext) -> [Item] {
-    try! context.fetch(Item.descriptor(.all))
+    try! context.fetch(.items(.all))
 }

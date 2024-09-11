@@ -35,7 +35,7 @@ extension ItemListYearSections: View {
 #Preview {
     IncomesPreview { _ in
         List {
-            ItemListYearSections(Item.descriptor(.dateIsSameMonthAs(.now)))
+            ItemListYearSections(.items(.dateIsSameMonthAs(.now)))
         }
     }
 }

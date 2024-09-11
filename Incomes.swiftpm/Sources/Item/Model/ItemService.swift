@@ -21,13 +21,13 @@ final class ItemService {
 
     // MARK: - Fetch
 
-    func item(_ descriptor: FetchDescriptor<Item> = Item.descriptor(.all)) throws -> Item? {
+    func item(_ descriptor: FetchDescriptor<Item> = .items(.all)) throws -> Item? {
         var descriptor = descriptor
         descriptor.fetchLimit = 1
         return try context.fetch(descriptor).first
     }
 
-    func itemsCount(_ descriptor: FetchDescriptor<Item> = Item.descriptor(.all)) throws -> Int {
+    func itemsCount(_ descriptor: FetchDescriptor<Item> = .items(.all)) throws -> Int {
         try context.fetchCount(descriptor)
     }
 
@@ -110,7 +110,7 @@ final class ItemService {
                                     income: income,
                                     outgo: outgo,
                                     group: group,
-                                    descriptor: Item.descriptor(.repeatIDAndDateIsAfter(repeatID: item.repeatID, date: item.date)))
+                                    descriptor: .items(.repeatIDAndDateIsAfter(repeatID: item.repeatID, date: item.date)))
     }
 
     func updateForAllItems(item: Item,
@@ -125,7 +125,7 @@ final class ItemService {
                                     income: income,
                                     outgo: outgo,
                                     group: group,
-                                    descriptor: Item.descriptor(.repeatIDIs(item.repeatID)))
+                                    descriptor: .items(.repeatIDIs(item.repeatID)))
     }
 
     // MARK: - Delete

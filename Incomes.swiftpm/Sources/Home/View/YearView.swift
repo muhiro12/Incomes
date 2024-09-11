@@ -19,7 +19,7 @@ struct YearView: View {
 
     var body: some View {
         List {
-            ChartSections(Item.descriptor(.dateIsSameYearAs(date)))
+            ChartSections(.items(.dateIsSameYearAs(date)))
         }
         .navigationTitle(date.stringValue(.yyyy))
     }

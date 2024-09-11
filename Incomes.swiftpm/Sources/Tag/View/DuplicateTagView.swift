@@ -15,7 +15,7 @@ struct DuplicateTagView: View {
     @State private var selectedTag: Tag?
 
     init(_ tag: Tag) {
-        _tags = Query(Tag.descriptor(.isSameWith(tag)))
+        _tags = Query(.tags(.isSameWith(tag)))
     }
 
     var body: some View {

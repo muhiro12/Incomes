@@ -146,7 +146,7 @@ private extension ChartSections {
 #Preview {
     IncomesPreview { _ in
         List {
-            ChartSections(Item.descriptor(.dateIsSameYearAs(.now)))
+            ChartSections(.items(.dateIsSameYearAs(.now)))
         }
     }
 }

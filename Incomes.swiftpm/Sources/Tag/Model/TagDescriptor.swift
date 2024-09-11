@@ -66,8 +66,10 @@ extension Tag {
             }
         }
     }
+}
 
-    static func descriptor(_ predicate: Predicate, order: SortOrder = .forward) -> FetchDescriptor<Tag> {
+extension FetchDescriptor {
+    static func tags(_ predicate: Tag.Predicate, order: SortOrder = .forward) -> FetchDescriptor<Tag> {
         .init(
             predicate: predicate.value,
             sortBy: [

@@ -37,24 +37,24 @@ public extension IncomesIntents {
 
     static func performGetNextItemDate(date: Date) async throws -> some IntentResult & ReturnsValue<Date?> {
         .result(
-            value: try sharedItemService.item(Item.descriptor(.dateIsAfter(date), order: .forward))?.date
+            value: try sharedItemService.item(.items(.dateIsAfter(date), order: .forward))?.date
         )
     }
 
     static func performGetNextItemContent(date: Date) async throws -> some IntentResult & ReturnsValue<String?> {
         .result(
-            value: try sharedItemService.item(Item.descriptor(.dateIsAfter(date), order: .forward))?.content
+            value: try sharedItemService.item(.items(.dateIsAfter(date), order: .forward))?.content
         )
     }
 
     static func performGetNextItemProfit(date: Date) async throws -> some IntentResult & ReturnsValue<String?> {
         .result(
-            value: try sharedItemService.item(Item.descriptor(.dateIsAfter(date), order: .forward))?.profit.asCurrency
+            value: try sharedItemService.item(.items(.dateIsAfter(date), order: .forward))?.profit.asCurrency
         )
     }
 
     static func performShowNextItem(date: Date) async throws -> some IntentResult & ShowsSnippetView {
-        guard let item = try sharedItemService.item(Item.descriptor(.dateIsAfter(date), order: .forward)) else {
+        guard let item = try sharedItemService.item(.items(.dateIsAfter(date), order: .forward)) else {
             return .result()
         }
         return .result {
@@ -69,24 +69,24 @@ public extension IncomesIntents {
 
     static func performGetPreviousItemDate(date: Date) async throws -> some IntentResult & ReturnsValue<Date?> {
         .result(
-            value: try sharedItemService.item(Item.descriptor(.dateIsBefore(date)))?.date
+            value: try sharedItemService.item(.items(.dateIsBefore(date)))?.date
         )
     }
 
     static func performGetPreviousItemContent(date: Date) async throws -> some IntentResult & ReturnsValue<String?> {
         .result(
-            value: try sharedItemService.item(Item.descriptor(.dateIsBefore(date)))?.content
+            value: try sharedItemService.item(.items(.dateIsBefore(date)))?.content
         )
     }
 
     static func performGetPreviousItemProfit(date: Date) async throws -> some IntentResult & ReturnsValue<String?> {
         .result(
-            value: try sharedItemService.item(Item.descriptor(.dateIsBefore(date)))?.profit.asCurrency
+            value: try sharedItemService.item(.items(.dateIsBefore(date)))?.profit.asCurrency
         )
     }
 
     static func performShowPreviousItem(date: Date) async throws -> some IntentResult & ShowsSnippetView {
-        guard let item = try sharedItemService.item(Item.descriptor(.dateIsBefore(date))) else {
+        guard let item = try sharedItemService.item(.items(.dateIsBefore(date))) else {
             return .result()
         }
         return .result {
@@ -102,7 +102,7 @@ public extension IncomesIntents {
     static func performShowItemList(date: Date) async throws -> some IntentResult & ShowsSnippetView {
         .result {
             incomesView {
-                ItemListSection(Item.descriptor(.dateIsSameMonthAs(date)))
+                ItemListSection(.items(.dateIsSameMonthAs(date)))
             }
         }
     }

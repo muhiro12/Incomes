@@ -61,7 +61,7 @@ extension ItemListSection: View {
 #Preview {
     IncomesPreview { _ in
         List {
-            ItemListSection(Item.descriptor(.dateIsSameMonthAs(.now)))
+            ItemListSection(.items(.dateIsSameMonthAs(.now)))
         }
     }
 }

@@ -26,7 +26,7 @@ final class Tag {
     private init() {}
 
     static func create(context: ModelContext, name: String, type: Tag.TagType) throws -> Tag {
-        let tag = try context.fetch(Self.descriptor(.nameAndType(name: name, type: type))).first ?? .init()
+        let tag = try context.fetch(.tags(.nameAndType(name: name, type: type))).first ?? .init()
         context.insert(tag)
         tag.name = name
         tag.typeID = type.rawValue

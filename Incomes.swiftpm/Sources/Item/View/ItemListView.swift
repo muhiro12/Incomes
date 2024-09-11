@@ -24,20 +24,20 @@ extension ItemListView: View {
                     switch tag.type {
                     case .year:
                         if let date = tag.name.dateValueWithoutLocale(.yyyy) {
-                            return Item.descriptor(.dateIsSameYearAs(date))
+                            return .items(.dateIsSameYearAs(date))
                         }
                     case .yearMonth:
                         if let date = tag.name.dateValueWithoutLocale(.yyyyMM) {
-                            return Item.descriptor(.dateIsSameMonthAs(date))
+                            return .items(.dateIsSameMonthAs(date))
                         }
                     case .content:
-                        return Item.descriptor(.contentAndYear(content: tag.name, year: year))
+                        return .items(.contentAndYear(content: tag.name, year: year))
                     case .category:
                         break
                     case .none:
                         break
                     }
-                    return Item.descriptor(.none)
+                    return .items(.none)
                 }()
             )
         }

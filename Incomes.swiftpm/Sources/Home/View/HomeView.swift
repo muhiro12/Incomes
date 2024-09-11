@@ -10,7 +10,7 @@ import SwiftData
 import SwiftUI
 
 struct HomeView {
-    @Query(Tag.descriptor(.typeIs(.year), order: .reverse))
+    @Query(.tags(.typeIs(.year), order: .reverse))
     private var tags: [Tag]
 
     @Environment(\.pathSelection) private var selection

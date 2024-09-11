@@ -28,7 +28,7 @@ struct YearSection {
     init(yearTag: Tag) {
         title = yearTag.displayName
         date = yearTag.name.dateValueWithoutLocale(.yyyy) ?? .distantPast
-        _tags = Query(Tag.descriptor(.yearIs(yearTag.name), order: .reverse))
+        _tags = Query(.tags(.yearIs(yearTag.name), order: .reverse))
         _isExpanded = .init(
             initialValue: yearTag.name == Date.now.stringValueWithoutLocale(.yyyy)
         )

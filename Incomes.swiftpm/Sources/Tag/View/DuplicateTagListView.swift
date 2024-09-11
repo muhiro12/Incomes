@@ -5,10 +5,10 @@ import SwiftUtilities
 struct DuplicateTagListView: View {
     @Environment(TagService.self) private var tagService
 
-    @Query(Tag.descriptor(.typeIs(.year))) private var years: [Tag]
-    @Query(Tag.descriptor(.typeIs(.yearMonth))) private var yearMonths: [Tag]
-    @Query(Tag.descriptor(.typeIs(.content))) private var contents: [Tag]
-    @Query(Tag.descriptor(.typeIs(.category))) private var categories: [Tag]
+    @Query(.tags(.typeIs(.year))) private var years: [Tag]
+    @Query(.tags(.typeIs(.yearMonth))) private var yearMonths: [Tag]
+    @Query(.tags(.typeIs(.content))) private var contents: [Tag]
+    @Query(.tags(.typeIs(.category))) private var categories: [Tag]
 
     @Binding private var selection: Tag?
 

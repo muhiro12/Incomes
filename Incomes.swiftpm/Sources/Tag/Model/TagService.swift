@@ -21,7 +21,7 @@ final class TagService {
 
     // MARK: - Fetch
 
-    func tag(_ descriptor: FetchDescriptor<Tag> = Tag.descriptor(.all)) throws -> Tag? {
+    func tag(_ descriptor: FetchDescriptor<Tag> = .tags(.all)) throws -> Tag? {
         var descriptor = descriptor
         descriptor.fetchLimit = 1
         return try context.fetch(descriptor).first
@@ -58,7 +58,7 @@ final class TagService {
         try tags.forEach { tag in
             try merge(
                 tags: self.tags(
-                    descriptor: Tag.descriptor(.isSameWith(tag))
+                    descriptor: .tags(.isSameWith(tag))
                 )
             )
         }
@@ -84,7 +84,7 @@ final class TagService {
 }
 
 private extension TagService {
-    func tags(descriptor: FetchDescriptor<Tag> = Tag.descriptor(.all)) throws -> [Tag] {
+    func tags(descriptor: FetchDescriptor<Tag> = .tags(.all)) throws -> [Tag] {
         try context.fetch(descriptor)
     }
 
