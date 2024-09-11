@@ -16,8 +16,8 @@ enum IncomesPath: Hashable {
     case home
     case year(Tag)
     // MARK: Item
-    case itemFormNavigation(mode: ItemFormView.Mode, item: Item)
-    case itemForm(mode: ItemFormView.Mode, item: Item)
+    case itemFormNavigation(mode: ItemFormView.Mode)
+    case itemForm(mode: ItemFormView.Mode)
     case itemList(Tag)
     // MARK: Main
     case mainNavigationContent
@@ -54,10 +54,10 @@ extension IncomesPath {
         case .year(let tag):
             YearView()
                 .environment(tag)
-        case .itemFormNavigation(let mode, let item):
-            ItemFormNavigationView(mode: mode, item: item)
-        case .itemForm(let mode, let item):
-            ItemFormView(mode: mode, item: item)
+        case .itemFormNavigation(let mode):
+            ItemFormNavigationView(mode: mode)
+        case .itemForm(let mode):
+            ItemFormView(mode: mode)
         case .itemList(let tag):
             ItemListView(tag: tag) { yearTag in
                 switch tag.type {

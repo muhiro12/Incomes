@@ -10,9 +10,9 @@ import StoreKit
 import SwiftUI
 
 struct ItemFormView {
-    enum Mode {
+    enum Mode: Hashable {
         case create
-        case edit
+        case edit(Item)
     }
 
     enum Field {
@@ -50,8 +50,13 @@ struct ItemFormView {
 
     private let item: Item?
 
-    init(mode: Mode, item: Item?) {
-        self.item = item
+    init(mode: Mode) {
+        switch mode {
+        case .create:
+            self.item = nil
+        case .edit(let item):
+            self.item = item
+        }
         _mode = .init(initialValue: mode)
     }
 }
@@ -309,6 +314,6 @@ private extension ItemFormView {
 
 #Preview {
     IncomesPreview { _ in
-        ItemFormView(mode: .create, item: nil)
+        ItemFormView(mode: .create)
     }
 }

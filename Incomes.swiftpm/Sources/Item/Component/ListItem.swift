@@ -22,7 +22,7 @@ struct ListItem: View {
             }
         }
         .sheet(isPresented: $isEditPresented) {
-            ItemFormNavigationView(mode: .edit, item: item)
+            ItemFormNavigationView(mode: .edit(item))
                 .presentationDetents([.medium, .large])
         }
         .contentShape(.rect)
