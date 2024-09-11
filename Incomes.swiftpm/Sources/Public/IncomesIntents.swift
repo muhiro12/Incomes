@@ -35,26 +35,26 @@ public extension IncomesIntents {
 
     // MARK: - Next Item
 
-    static func performGetNextItemDate() async throws -> some IntentResult & ReturnsValue<Date?> {
+    static func performGetNextItemDate(date: Date) async throws -> some IntentResult & ReturnsValue<Date?> {
         .result(
-            value: try sharedItemService.item(Item.descriptor(.dateIsAfter(.now), order: .forward))?.date
+            value: try sharedItemService.item(Item.descriptor(.dateIsAfter(date), order: .forward))?.date
         )
     }
 
-    static func performGetNextItemContent() async throws -> some IntentResult & ReturnsValue<String?> {
+    static func performGetNextItemContent(date: Date) async throws -> some IntentResult & ReturnsValue<String?> {
         .result(
-            value: try sharedItemService.item(Item.descriptor(.dateIsAfter(.now), order: .forward))?.content
+            value: try sharedItemService.item(Item.descriptor(.dateIsAfter(date), order: .forward))?.content
         )
     }
 
-    static func performGetNextItemProfit() async throws -> some IntentResult & ReturnsValue<String?> {
+    static func performGetNextItemProfit(date: Date) async throws -> some IntentResult & ReturnsValue<String?> {
         .result(
-            value: try sharedItemService.item(Item.descriptor(.dateIsAfter(.now), order: .forward))?.profit.asCurrency
+            value: try sharedItemService.item(Item.descriptor(.dateIsAfter(date), order: .forward))?.profit.asCurrency
         )
     }
 
-    static func performShowNextItem() async throws -> some IntentResult & ShowsSnippetView {
-        guard let item = try sharedItemService.item(Item.descriptor(.dateIsAfter(.now), order: .forward)) else {
+    static func performShowNextItem(date: Date) async throws -> some IntentResult & ShowsSnippetView {
+        guard let item = try sharedItemService.item(Item.descriptor(.dateIsAfter(date), order: .forward)) else {
             return .result()
         }
         return .result {
@@ -67,26 +67,26 @@ public extension IncomesIntents {
 
     // MARK: - Previous Item
 
-    static func performGetPreviousItemDate() async throws -> some IntentResult & ReturnsValue<Date?> {
+    static func performGetPreviousItemDate(date: Date) async throws -> some IntentResult & ReturnsValue<Date?> {
         .result(
-            value: try sharedItemService.item(Item.descriptor(.dateIsBefore(.now)))?.date
+            value: try sharedItemService.item(Item.descriptor(.dateIsBefore(date)))?.date
         )
     }
 
-    static func performGetPreviousItemContent() async throws -> some IntentResult & ReturnsValue<String?> {
+    static func performGetPreviousItemContent(date: Date) async throws -> some IntentResult & ReturnsValue<String?> {
         .result(
-            value: try sharedItemService.item(Item.descriptor(.dateIsBefore(.now)))?.content
+            value: try sharedItemService.item(Item.descriptor(.dateIsBefore(date)))?.content
         )
     }
 
-    static func performGetPreviousItemProfit() async throws -> some IntentResult & ReturnsValue<String?> {
+    static func performGetPreviousItemProfit(date: Date) async throws -> some IntentResult & ReturnsValue<String?> {
         .result(
-            value: try sharedItemService.item(Item.descriptor(.dateIsBefore(.now)))?.profit.asCurrency
+            value: try sharedItemService.item(Item.descriptor(.dateIsBefore(date)))?.profit.asCurrency
         )
     }
 
-    static func performShowPreviousItem() async throws -> some IntentResult & ShowsSnippetView {
-        guard let item = try sharedItemService.item(Item.descriptor(.dateIsBefore(.now))) else {
+    static func performShowPreviousItem(date: Date) async throws -> some IntentResult & ShowsSnippetView {
+        guard let item = try sharedItemService.item(Item.descriptor(.dateIsBefore(date))) else {
             return .result()
         }
         return .result {
@@ -99,12 +99,12 @@ public extension IncomesIntents {
 
     // MARK: - Item List
 
-    static func performShowItemList() async throws -> some IntentResult & ShowsSnippetView {
+    static func performShowItemList(date: Date) async throws -> some IntentResult & ShowsSnippetView {
         .result {
             incomesView {
                 ItemListSection(
-                    title: Date.now.stringValue(.yyyyMMM),
-                    descriptor: Item.descriptor(.dateIsSameMonthAs(.now))
+                    title: date.stringValue(.yyyyMMM),
+                    descriptor: Item.descriptor(.dateIsSameMonthAs(date))
                 )
             }
         }
