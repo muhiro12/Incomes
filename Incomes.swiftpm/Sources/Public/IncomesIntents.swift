@@ -53,14 +53,13 @@ public extension IncomesIntents {
         )
     }
 
-    static func performShowNextItem(date: Date) async throws -> some IntentResult & ShowsSnippetView {
+    static func performShowNextItems(date: Date) async throws -> some IntentResult & ShowsSnippetView {
         guard let item = try sharedItemService.item(.items(.dateIsAfter(date), order: .forward)) else {
             return .result()
         }
         return .result {
             incomesView {
-                ListItem()
-                    .environment(item)
+                ItemListSection(.items(.dateIsSameDayAs(item.date)))
             }
         }
     }
@@ -85,21 +84,20 @@ public extension IncomesIntents {
         )
     }
 
-    static func performShowPreviousItem(date: Date) async throws -> some IntentResult & ShowsSnippetView {
+    static func performShowPreviousItems(date: Date) async throws -> some IntentResult & ShowsSnippetView {
         guard let item = try sharedItemService.item(.items(.dateIsBefore(date))) else {
             return .result()
         }
         return .result {
             incomesView {
-                ListItem()
-                    .environment(item)
+                ItemListSection(.items(.dateIsSameDayAs(item.date)))
             }
         }
     }
 
     // MARK: - Item List
 
-    static func performShowItemList(date: Date) async throws -> some IntentResult & ShowsSnippetView {
+    static func performShowItems(date: Date) async throws -> some IntentResult & ShowsSnippetView {
         .result {
             incomesView {
                 ItemListSection(.items(.dateIsSameMonthAs(date)))

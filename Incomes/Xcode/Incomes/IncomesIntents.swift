@@ -55,14 +55,14 @@ struct GetNextItemProfit: AppIntent {
     }
 }
 
-struct ShowNextItemIntent: AppIntent {
-    static var title = LocalizedStringResource("Show Next Item")
+struct ShowNextItemsIntent: AppIntent {
+    static var title = LocalizedStringResource("Show Next Items")
 
     @Parameter(title: "Date", kind: .date)
     private var date: Date
 
     func perform() async throws -> some IntentResult & ShowsSnippetView {
-        try await IncomesIntents.performShowNextItem(date: date)
+        try await IncomesIntents.performShowNextItems(date: date)
     }
 }
 
@@ -101,26 +101,26 @@ struct GetPreviousItemProfit: AppIntent {
     }
 }
 
-struct ShowPreviousItemIntent: AppIntent {
-    static var title = LocalizedStringResource("Show Previous Item")
+struct ShowPreviousItemsIntent: AppIntent {
+    static var title = LocalizedStringResource("Show Previous Items")
 
     @Parameter(title: "Date", kind: .date)
     private var date: Date
 
     func perform() async throws -> some IntentResult & ShowsSnippetView {
-        try await IncomesIntents.performShowPreviousItem(date: date)
+        try await IncomesIntents.performShowPreviousItems(date: date)
     }
 }
 
 // MARK: - Item List
 
-struct ShowItemListIntent: AppIntent {
-    static var title = LocalizedStringResource("Show Item List")
+struct ShowItemsIntent: AppIntent {
+    static var title = LocalizedStringResource("Show Items")
 
     @Parameter(title: "Date", kind: .date)
     private var date: Date
 
     func perform() async throws -> some IntentResult & ShowsSnippetView {
-        try await IncomesIntents.performShowItemList(date: date)
+        try await IncomesIntents.performShowItems(date: date)
     }
 }

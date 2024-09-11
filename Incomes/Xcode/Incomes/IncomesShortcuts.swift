@@ -23,27 +23,27 @@ struct IncomesShortcuts: AppShortcutsProvider {
             systemImageName: "dollarsign.circle"
         ),
         AppShortcut(
-            intent: ShowItemListIntent(),
+            intent: ShowItemsIntent(),
             phrases: [
-                "Show item list in \(.applicationName)"
+                "Show items in \(.applicationName)"
             ],
-            shortTitle: "Show Item List",
+            shortTitle: "Show Items",
             systemImageName: "list.dash.header.rectangle"
         ),
         AppShortcut(
-            intent: ShowNextItemIntent(),
+            intent: ShowNextItemsIntent(),
             phrases: [
-                "Show next item in \(.applicationName)"
+                "Show next items in \(.applicationName)"
             ],
-            shortTitle: "Show Next Item",
+            shortTitle: "Show Next Items",
             systemImageName: "list.dash.header.rectangle"
         ),
         AppShortcut(
-            intent: ShowPreviousItemIntent(),
+            intent: ShowPreviousItemsIntent(),
             phrases: [
-                "Show previous item in \(.applicationName)"
+                "Show previous items in \(.applicationName)"
             ],
-            shortTitle: "Show Previous Item",
+            shortTitle: "Show Previous Items",
             systemImageName: "list.dash.header.rectangle"
         )
     ]
