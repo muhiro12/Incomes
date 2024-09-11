@@ -53,7 +53,11 @@ extension ChartSections: View {
                             $0.isProfitable
                         }
                     ) {
-                        $0.category?.displayName ?? "Other"
+                        guard let category = $0.category,
+                              category.displayName.isNotEmpty else {
+                            return "Others"
+                        }
+                        return category.displayName
                     }
                 ),
                 id: \.key
@@ -72,7 +76,11 @@ extension ChartSections: View {
                             !$0.isProfitable
                         }
                     ) {
-                        $0.category?.displayName ?? "Other"
+                        guard let category = $0.category,
+                              category.displayName.isNotEmpty else {
+                            return "Others"
+                        }
+                        return category.displayName
                     }
                 ),
                 id: \.key
