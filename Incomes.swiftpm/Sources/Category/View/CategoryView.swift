@@ -10,7 +10,7 @@ import SwiftData
 import SwiftUI
 
 struct CategoryView {
-    @Query(Tag.descriptor(type: .category))
+    @Query(Tag.descriptor(.typeIs(.category)))
     private var tags: [Tag]
 
     @Environment(\.pathSelection) private var selection

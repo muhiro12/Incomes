@@ -2,10 +2,10 @@ import SwiftData
 import SwiftUI
 
 struct TagListView: View {
-    @Query(Tag.descriptor(type: .year)) private var years: [Tag]
-    @Query(Tag.descriptor(type: .yearMonth)) private var yearMonths: [Tag]
-    @Query(Tag.descriptor(type: .content)) private var contents: [Tag]
-    @Query(Tag.descriptor(type: .category)) private var categories: [Tag]
+    @Query(Tag.descriptor(.typeIs(.year))) private var years: [Tag]
+    @Query(Tag.descriptor(.typeIs(.yearMonth))) private var yearMonths: [Tag]
+    @Query(Tag.descriptor(.typeIs(.content))) private var contents: [Tag]
+    @Query(Tag.descriptor(.typeIs(.category))) private var categories: [Tag]
 
     var body: some View {
         List {

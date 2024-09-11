@@ -29,7 +29,7 @@ extension MainNavigationView: View {
         }
         .task {
             content = .home
-            if let tag = try? tagService.tag(Tag.descriptor(dateIsSameMonthAs: .now)) {
+            if let tag = try? tagService.tag(Tag.descriptor(.dateIsSameMonthAs(.now))) {
                 detail = .itemList(tag)
             }
         }
