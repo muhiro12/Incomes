@@ -22,7 +22,10 @@ struct ItemListView {
 extension ItemListView: View {
     var body: some View {
         List(years, id: \.self) { year in
-            ItemListSection(descriptor(year))
+            ItemListSection(
+                descriptor(year),
+                title: years.count > 1 ? year.dateValueWithoutLocale(.yyyy)?.stringValue(.yyyy) : nil
+            )
             if !isSubscribeOn {
                 AdvertisementSection(.medium)
             }

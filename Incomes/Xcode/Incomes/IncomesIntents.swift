@@ -61,7 +61,7 @@ struct ShowNextItemsIntent: AppIntent {
     @Parameter(title: "Date", kind: .date)
     private var date: Date
 
-    func perform() async throws -> some IntentResult & ShowsSnippetView {
+    func perform() async throws -> some IntentResult & ProvidesDialog & ShowsSnippetView {
         try await IncomesIntents.performShowNextItems(date: date)
     }
 }
@@ -107,7 +107,7 @@ struct ShowPreviousItemsIntent: AppIntent {
     @Parameter(title: "Date", kind: .date)
     private var date: Date
 
-    func perform() async throws -> some IntentResult & ShowsSnippetView {
+    func perform() async throws -> some IntentResult & ProvidesDialog & ShowsSnippetView {
         try await IncomesIntents.performShowPreviousItems(date: date)
     }
 }
@@ -120,7 +120,7 @@ struct ShowItemsIntent: AppIntent {
     @Parameter(title: "Date", kind: .date)
     private var date: Date
 
-    func perform() async throws -> some IntentResult & ShowsSnippetView {
+    func perform() async throws -> some IntentResult & ProvidesDialog & ShowsSnippetView {
         try await IncomesIntents.performShowItems(date: date)
     }
 }
@@ -131,7 +131,7 @@ struct ShowChartsIntent: AppIntent {
     @Parameter(title: "Date", kind: .date)
     private var date: Date
 
-    func perform() async throws -> some IntentResult & ShowsSnippetView {
+    func perform() async throws -> some IntentResult & ProvidesDialog & ShowsSnippetView {
         try await IncomesIntents.performShowCharts(date: date)
     }
 }

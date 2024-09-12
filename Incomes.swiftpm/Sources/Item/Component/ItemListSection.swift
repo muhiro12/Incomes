@@ -17,8 +17,11 @@ struct ItemListSection {
     @State private var isPresentedToAlert = false
     @State private var willDeleteItems: [Item] = []
 
-    init(_ descriptor: FetchDescriptor<Item>) {
+    private let title: String?
+
+    init(_ descriptor: FetchDescriptor<Item>, title: String? = nil) {
         self._items = Query(descriptor)
+        self.title = title
     }
 }
 
@@ -34,8 +37,8 @@ extension ItemListSection: View {
                 isPresentedToAlert = true
             }
         } header: {
-            if let item = items.first {
-                Text(item.date.stringValue(.yyyy))
+            if let title {
+                Text(title)
             }
         }
         .actionSheet(isPresented: $isPresentedToAlert) {

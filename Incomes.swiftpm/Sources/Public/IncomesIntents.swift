@@ -53,11 +53,11 @@ public extension IncomesIntents {
         )
     }
 
-    static func performShowNextItems(date: Date) async throws -> some IntentResult & ShowsSnippetView {
+    static func performShowNextItems(date: Date) async throws -> some IntentResult & ProvidesDialog & ShowsSnippetView {
         guard let item = try sharedItemService.item(.items(.dateIsAfter(date), order: .forward)) else {
-            return .result()
+            return .result(dialog: .init("Not Found"))
         }
-        return .result {
+        return .result(dialog: .init(stringLiteral: date.stringValue(.yyyyMMM))) {
             incomesView {
                 ItemListSection(.items(.dateIsSameDayAs(item.date)))
             }
@@ -84,11 +84,11 @@ public extension IncomesIntents {
         )
     }
 
-    static func performShowPreviousItems(date: Date) async throws -> some IntentResult & ShowsSnippetView {
+    static func performShowPreviousItems(date: Date) async throws -> some IntentResult & ProvidesDialog & ShowsSnippetView {
         guard let item = try sharedItemService.item(.items(.dateIsBefore(date))) else {
-            return .result()
+            return .result(dialog: .init("Not Found"))
         }
-        return .result {
+        return .result(dialog: .init(stringLiteral: date.stringValue(.yyyyMMM))) {
             incomesView {
                 ItemListSection(.items(.dateIsSameDayAs(item.date)))
             }
@@ -97,16 +97,16 @@ public extension IncomesIntents {
 
     // MARK: - Item List
 
-    static func performShowItems(date: Date) async throws -> some IntentResult & ShowsSnippetView {
-        .result {
+    static func performShowItems(date: Date) async throws -> some IntentResult & ProvidesDialog & ShowsSnippetView {
+        .result(dialog: .init(stringLiteral: date.stringValue(.yyyyMMM))) {
             incomesView {
                 ItemListSection(.items(.dateIsSameMonthAs(date)))
             }
         }
     }
 
-    static func performShowCharts(date: Date) async throws -> some IntentResult & ShowsSnippetView {
-        .result {
+    static func performShowCharts(date: Date) async throws -> some IntentResult & ProvidesDialog & ShowsSnippetView {
+        .result(dialog: .init(stringLiteral: date.stringValue(.yyyyMMM))) {
             incomesView {
                 ChartSections(.items(.dateIsSameMonthAs(date)))
             }
