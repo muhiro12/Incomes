@@ -2,57 +2,124 @@
   "sourceLanguage" : "en",
   "strings" : {
     "Date" : {
-
-    },
-    "Get Next Item Content" : {
-
-    },
-    "Get Next Item Date" : {
-
-    },
-    "Get Next Item Profit" : {
-
-    },
-    "Get Previous Item Content" : {
-
-    },
-    "Get Previous Item Date" : {
-
-    },
-    "Get Previous Item Profit" : {
-
-    },
-    "Key" : {
-      "extractionState" : "manual",
       "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Key"
-          }
-        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Key"
+            "value" : "日付"
+          }
+        }
+      }
+    },
+    "Get Next Item Content" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "次のアイテムの内容を取得"
+          }
+        }
+      }
+    },
+    "Get Next Item Date" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "次のアイテムの日付を取得"
+          }
+        }
+      }
+    },
+    "Get Next Item Profit" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "次のアイテムの収益を取得"
+          }
+        }
+      }
+    },
+    "Get Previous Item Content" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "前のアイテムの内容を取得"
+          }
+        }
+      }
+    },
+    "Get Previous Item Date" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "前のアイテムの日付を取得"
+          }
+        }
+      }
+    },
+    "Get Previous Item Profit" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "前のアイテムの収益を取得"
           }
         }
       }
     },
     "Open Incomes" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Incomesを開く"
+          }
+        }
+      }
     },
     "Show Charts" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "チャートを表示"
+          }
+        }
+      }
     },
     "Show Items" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アイテムを表示"
+          }
+        }
+      }
     },
     "Show Next Items" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "次のアイテムを表示"
+          }
+        }
+      }
     },
     "Show Previous Items" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "前のアイテムを表示"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"
