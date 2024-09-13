@@ -11,9 +11,9 @@ import AppIntents
 // MARK: - Shortcut
 
 struct IncomesShortcuts: AppShortcutsProvider {
-    static var shortcutTileColor = ShortcutTileColor.lime
+    static let shortcutTileColor = ShortcutTileColor.lime
 
-    static var appShortcuts = [
+    static let appShortcuts = [
         AppShortcut(
             intent: OpenIncomesIntent(),
             phrases: [

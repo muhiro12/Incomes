@@ -10,19 +10,7 @@ import SwiftData
 import SwiftUI
 
 @MainActor
-public enum IncomesIntents {
-    private static let sharedModelContainer: ModelContainer = try! .init(
-        for: Item.self,
-        configurations: .init(
-            url: .applicationSupportDirectory.appendingPathComponent("Incomes.sqlite"),
-            cloudKitDatabase: AppStorage(.isICloudOn).wrappedValue ? .automatic : .none
-        )
-    )
-    private static let sharedItemService: ItemService = .init(context: sharedModelContainer.mainContext)
-    private static let sharedTagService: TagService = .init(context: sharedModelContainer.mainContext)
-    private static let sharedConfigurationService: ConfigurationService = .init()
-    private static let sharedNotificationService: NotificationService = .init()
-}
+public enum IncomesIntents {}
 
 // MARK: - Perform
 
@@ -117,6 +105,18 @@ public extension IncomesIntents {
 // MARK: - Private
 
 private extension IncomesIntents {
+    static let sharedModelContainer: ModelContainer = try! .init(
+        for: Item.self,
+        configurations: .init(
+            url: .applicationSupportDirectory.appendingPathComponent("Incomes.sqlite"),
+            cloudKitDatabase: AppStorage(.isICloudOn).wrappedValue ? .automatic : .none
+        )
+    )
+    static let sharedItemService: ItemService = .init(context: sharedModelContainer.mainContext)
+    static let sharedTagService: TagService = .init(context: sharedModelContainer.mainContext)
+    static let sharedConfigurationService: ConfigurationService = .init()
+    static let sharedNotificationService: NotificationService = .init()
+
     static func incomesView(content: () -> some View) -> some View {
         content()
             .safeAreaPadding()
