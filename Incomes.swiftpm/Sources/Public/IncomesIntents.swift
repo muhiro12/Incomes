@@ -25,24 +25,24 @@ public extension IncomesIntents {
 
     static func performGetNextItemDate(date: Date) async throws -> some IntentResult & ReturnsValue<Date?> {
         .result(
-            value: try sharedItemService.item(.items(.dateIsAfter(date), order: .forward))?.date
+            value: try itemService.item(.items(.dateIsAfter(date), order: .forward))?.date
         )
     }
 
     static func performGetNextItemContent(date: Date) async throws -> some IntentResult & ReturnsValue<String?> {
         .result(
-            value: try sharedItemService.item(.items(.dateIsAfter(date), order: .forward))?.content
+            value: try itemService.item(.items(.dateIsAfter(date), order: .forward))?.content
         )
     }
 
     static func performGetNextItemProfit(date: Date) async throws -> some IntentResult & ReturnsValue<String?> {
         .result(
-            value: try sharedItemService.item(.items(.dateIsAfter(date), order: .forward))?.profit.asCurrency
+            value: try itemService.item(.items(.dateIsAfter(date), order: .forward))?.profit.asCurrency
         )
     }
 
     static func performShowNextItems(date: Date) async throws -> some IntentResult & ProvidesDialog & ShowsSnippetView {
-        guard let item = try sharedItemService.item(.items(.dateIsAfter(date), order: .forward)) else {
+        guard let item = try itemService.item(.items(.dateIsAfter(date), order: .forward)) else {
             return .result(dialog: .init("Not Found"))
         }
         return .result(dialog: .init(stringLiteral: date.stringValue(.yyyyMMM))) {
@@ -56,24 +56,24 @@ public extension IncomesIntents {
 
     static func performGetPreviousItemDate(date: Date) async throws -> some IntentResult & ReturnsValue<Date?> {
         .result(
-            value: try sharedItemService.item(.items(.dateIsBefore(date)))?.date
+            value: try itemService.item(.items(.dateIsBefore(date)))?.date
         )
     }
 
     static func performGetPreviousItemContent(date: Date) async throws -> some IntentResult & ReturnsValue<String?> {
         .result(
-            value: try sharedItemService.item(.items(.dateIsBefore(date)))?.content
+            value: try itemService.item(.items(.dateIsBefore(date)))?.content
         )
     }
 
     static func performGetPreviousItemProfit(date: Date) async throws -> some IntentResult & ReturnsValue<String?> {
         .result(
-            value: try sharedItemService.item(.items(.dateIsBefore(date)))?.profit.asCurrency
+            value: try itemService.item(.items(.dateIsBefore(date)))?.profit.asCurrency
         )
     }
 
     static func performShowPreviousItems(date: Date) async throws -> some IntentResult & ProvidesDialog & ShowsSnippetView {
-        guard let item = try sharedItemService.item(.items(.dateIsBefore(date))) else {
+        guard let item = try itemService.item(.items(.dateIsBefore(date))) else {
             return .result(dialog: .init("Not Found"))
         }
         return .result(dialog: .init(stringLiteral: date.stringValue(.yyyyMMM))) {
@@ -105,26 +105,26 @@ public extension IncomesIntents {
 // MARK: - Private
 
 private extension IncomesIntents {
-    static let sharedModelContainer: ModelContainer = try! .init(
+    static let modelContainer: ModelContainer = try! .init(
         for: Item.self,
         configurations: .init(
             url: .applicationSupportDirectory.appendingPathComponent("Incomes.sqlite"),
             cloudKitDatabase: AppStorage(.isICloudOn).wrappedValue ? .automatic : .none
         )
     )
-    static let sharedItemService: ItemService = .init(context: sharedModelContainer.mainContext)
-    static let sharedTagService: TagService = .init(context: sharedModelContainer.mainContext)
-    static let sharedConfigurationService: ConfigurationService = .init()
-    static let sharedNotificationService: NotificationService = .init()
+    static let itemService: ItemService = .init(context: modelContainer.mainContext)
+    static let tagService: TagService = .init(context: modelContainer.mainContext)
+    static let configurationService: ConfigurationService = .init()
+    static let notificationService: NotificationService = .init()
 
     static func incomesView(content: () -> some View) -> some View {
         content()
             .safeAreaPadding()
-            .modelContainer(sharedModelContainer)
-            .environment(sharedItemService)
-            .environment(sharedTagService)
-            .environment(sharedConfigurationService)
-            .environment(sharedNotificationService)
+            .modelContainer(modelContainer)
+            .environment(itemService)
+            .environment(tagService)
+            .environment(configurationService)
+            .environment(notificationService)
             .incomesEnvironment(
                 googleMobileAds: { _ in EmptyView() },
                 licenseList: { EmptyView() },
