@@ -82,8 +82,8 @@ extension Item {
     }
 }
 
-extension FetchDescriptor {
-    static func items(_ predicate: Item.Predicate, order: SortOrder = .reverse) -> FetchDescriptor<Item> {
+extension FetchDescriptor where T == Item {
+    static func items(_ predicate: Item.Predicate, order: SortOrder = .reverse) -> FetchDescriptor {
         .init(
             predicate: predicate.value,
             sortBy: [
