@@ -14,7 +14,7 @@ struct YearSection {
     private var itemService
 
     @AppStorage(.isSubscribeOn)
-    private var isSubscribeOn: Bool
+    private var isSubscribeOn
 
     @Query private var tags: [Tag]
 

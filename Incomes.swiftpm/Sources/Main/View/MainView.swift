@@ -16,7 +16,7 @@ struct MainView {
     private var requestReview
 
     @AppStorage(.isICloudOn)
-    private var isICloudOn: Bool
+    private var isICloudOn
 
     @State private var isUpdateAlertPresented = false
 

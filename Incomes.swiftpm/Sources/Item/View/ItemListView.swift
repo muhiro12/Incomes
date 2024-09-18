@@ -14,7 +14,7 @@ struct ItemListView {
     private var tag
 
     @AppStorage(.isSubscribeOn)
-    private var isSubscribeOn: Bool
+    private var isSubscribeOn
 
     @State private var years = [String]()
 }

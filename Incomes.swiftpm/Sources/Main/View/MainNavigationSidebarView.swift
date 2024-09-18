@@ -15,7 +15,7 @@ struct MainNavigationSidebarView {
     private var notificationService
 
     @AppStorage(.isDebugOn)
-    private var isDebugOn: Bool
+    private var isDebugOn
 
     @Environment(\.pathSelection)
     private var selection

@@ -31,7 +31,7 @@ struct ItemFormView {
     private var itemService
 
     @AppStorage(.isDebugOn)
-    private var isDebugOn: Bool
+    private var isDebugOn
 
     @FocusState private var focusedField: Field?
 

@@ -12,7 +12,7 @@ import SwiftUI
 
 struct ChartSections {
     @AppStorage(.isSubscribeOn)
-    private var isSubscribeOn: Bool
+    private var isSubscribeOn
 
     @Query private var items: [Item]
 

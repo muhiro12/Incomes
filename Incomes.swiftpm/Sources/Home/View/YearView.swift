@@ -9,7 +9,7 @@ import SwiftUI
 
 struct YearView: View {
     @AppStorage(.isSubscribeOn)
-    private var isSubscribeOn: Bool
+    private var isSubscribeOn
 
     private let date: Date
 

@@ -18,11 +18,11 @@ struct SettingsView {
     private var notificationService
 
     @AppStorage(.isSubscribeOn)
-    private var isSubscribeOn: Bool
+    private var isSubscribeOn
     @AppStorage(.isICloudOn)
-    private var isICloudOn: Bool
+    private var isICloudOn
     @AppStorage(.currencyCode)
-    private var currencyCode: String
+    private var currencyCode
 
     @State private var selectedCurrencyCode = CurrencyCode.system
     @State private var isAlertPresented = false

@@ -16,9 +16,9 @@ import SwiftUI
 @main
 struct IncomesApp: App {
     @AppStorage(.isSubscribeOn)
-    private var isSubscribeOn: Bool
+    private var isSubscribeOn
     @AppStorage(.isICloudOn)
-    private var isICloudOn: Bool
+    private var isICloudOn
 
     private let sharedGoogleMobileAdsController: GoogleMobileAdsController
     private let sharedStore: Store

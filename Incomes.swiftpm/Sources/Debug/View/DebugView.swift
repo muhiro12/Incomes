@@ -17,7 +17,7 @@ struct DebugView {
     @Environment(\.pathSelection) private var selection
 
     @AppStorage(.isDebugOn)
-    private var isDebugOn: Bool
+    private var isDebugOn
 
     @State private var isAlertPresented = false
 }
