@@ -176,8 +176,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/muhiro12/SwiftUtilities.git",
       "state" : {
-        "revision" : "990ff842c7d007700b680b2a753a34a23761743c",
-        "version" : "1.4.0"
+        "revision" : "3d1659b7682df1de4a8ba74eb53d3d3049c86a07",
+        "version" : "1.5.0"
       }
     }
   ],

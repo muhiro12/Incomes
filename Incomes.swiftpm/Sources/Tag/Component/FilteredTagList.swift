@@ -49,7 +49,7 @@ extension FilteredTagList: View {
 private extension FilteredTagList {
     var filteredTags: [Tag] {
         let filtered = tags.filter {
-            $0.name.containsNormalized(name)
+            $0.name.normalizedContains(name)
         }
         let result = filtered.isNotEmpty ? filtered : tags
         return result.sorted {
