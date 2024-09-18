@@ -6,6 +6,7 @@
 //  Copyright © 2020 Hiromu Nakano. All rights reserved.
 //
 
+import AppIntents
 import SwiftUI
 import SwiftUtilities
 
@@ -86,6 +87,15 @@ extension SettingsView: View {
                 NavigationLink(path: .license) {
                     Text("License")
                 }
+            }
+            Section {
+                HStack {
+                    Spacer()
+                    ShortcutsLink()
+                        .shortcutsLinkStyle(.automaticOutline)
+                    Spacer()
+                }
+                .listRowBackground(EmptyView())
             }
         }
         .navigationTitle(Text("Settings"))
