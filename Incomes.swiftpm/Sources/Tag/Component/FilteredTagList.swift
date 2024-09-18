@@ -30,7 +30,7 @@ extension FilteredTagList: View {
         ScrollView(.horizontal, showsIndicators: false) {
             LazyHStack {
                 ForEach(filteredTags) { tag in
-                    if tag.items.orEmpty.isNotEmpty {
+                    if tag.items.isNotEmpty {
                         Button {
                             name = tag.name
                         } label: {

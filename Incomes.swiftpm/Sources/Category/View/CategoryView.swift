@@ -19,7 +19,7 @@ struct CategoryView {
 extension CategoryView: View {
     var body: some View {
         List(tags, selection: selection) { tag in
-            if tag.items.orEmpty.isNotEmpty {
+            if tag.items.isNotEmpty {
                 CategorySection(categoryTag: tag)
             }
         }

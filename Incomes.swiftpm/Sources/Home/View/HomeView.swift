@@ -19,7 +19,7 @@ struct HomeView {
 extension HomeView: View {
     var body: some View {
         List(tags, selection: selection) { tag in
-            if tag.items.orEmpty.isNotEmpty {
+            if tag.items.isNotEmpty {
                 YearSection(yearTag: tag)
             }
         }
