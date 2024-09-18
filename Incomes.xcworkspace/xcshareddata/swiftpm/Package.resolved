@@ -105,7 +105,7 @@
       "location" : "https://github.com/cybozu/LicenseList.git",
       "state" : {
         "branch" : "main",
-        "revision" : "eeb8e5eb0ba60a5651b642132957ca69c2cfc28f"
+        "revision" : "a74584035935447b81bcfea5319555812487001b"
       }
     },
     {
@@ -150,7 +150,7 @@
       "location" : "https://github.com/googleads/swift-package-manager-google-mobile-ads.git",
       "state" : {
         "branch" : "main",
-        "revision" : "ee80d8b9fb9c110c35ff0af56cfc672eee4b515e"
+        "revision" : "ccc3c2b6307384283fc63e9fefe6fbe0af3da32f"
       }
     },
     {
@@ -158,8 +158,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/googleads/swift-package-manager-google-user-messaging-platform.git",
       "state" : {
-        "revision" : "459949af1286c12487a6efd76f00f3e9d951c9ba",
-        "version" : "2.5.0"
+        "revision" : "74f2ec169551c3b924947b473716142a0b983e10",
+        "version" : "2.6.0"
       }
     },
     {
@@ -176,8 +176,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/muhiro12/SwiftUtilities.git",
       "state" : {
-        "revision" : "ca77c13bb4ac0f59be0c2d0ac79e051958450910",
-        "version" : "1.2.0"
+        "revision" : "990ff842c7d007700b680b2a753a34a23761743c",
+        "version" : "1.4.0"
       }
     }
   ],
