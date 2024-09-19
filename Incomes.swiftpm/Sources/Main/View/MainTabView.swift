@@ -18,7 +18,7 @@ struct MainTabView: View {
         TabView(selection: $tab) {
             ForEach(MainTab.allCases) { tab in
                 Tab(value: tab) {
-                    MainNavigationView(selection: $tab)
+                    tab.rootView(selection: $tab)
                         .toolbar(
                             horizontalSizeClass == .regular ? .visible : .hidden,
                             for: .tabBar

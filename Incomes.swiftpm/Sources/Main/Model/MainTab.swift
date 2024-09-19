@@ -16,6 +16,20 @@ enum MainTab {
 
 extension MainTab {
     @ViewBuilder
+    func rootView(selection: Binding<MainTab?>) -> some View {
+        switch self {
+        case .home:
+            HomeNavigationView(selection: selection)
+        case .category:
+            CategoryNavigationView(selection: selection)
+        case .settings:
+            SettingsNavigationView(selection: selection)
+        case .debug:
+            DebugNavigationView(selection: selection)
+        }
+    }
+
+    @ViewBuilder
     var label: some View {
         switch self {
         case .home:

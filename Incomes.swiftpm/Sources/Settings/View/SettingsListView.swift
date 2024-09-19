@@ -1,5 +1,5 @@
 //
-//  SettingsView.swift
+//  SettingsListView.swift
 //  Incomes
 //
 //  Created by Hiromu Nakano on 2020/06/24.
@@ -10,7 +10,7 @@ import AppIntents
 import SwiftUI
 import SwiftUtilities
 
-struct SettingsView {
+struct SettingsListView {
     @Environment(ItemService.self)
     private var itemService
     @Environment(TagService.self)
@@ -28,14 +28,20 @@ struct SettingsView {
     @AppStorage(.currencyCode)
     private var currencyCode
 
+    @Binding private var path: IncomesPath?
+
     @State private var selectedCurrencyCode = CurrencyCode.system
     @State private var isAlertPresented = false
     @State private var isDuplicateTagPresented = false
+
+    init(selection: Binding<IncomesPath?> = .constant(nil)) {
+        _path = selection
+    }
 }
 
-extension SettingsView: View {
+extension SettingsListView: View {
     var body: some View {
-        List {
+        List(selection: $path) {
             if isSubscribeOn {
                 Toggle(isOn: $isICloudOn) {
                     Text("iCloud On")
@@ -145,7 +151,7 @@ extension SettingsView: View {
 #Preview {
     IncomesPreview { _ in
         NavigationStack {
-            SettingsView()
+            SettingsListView()
         }
     }
 }

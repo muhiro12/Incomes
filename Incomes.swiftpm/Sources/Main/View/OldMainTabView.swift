@@ -16,7 +16,7 @@ struct OldMainTabView: View {
     var body: some View {
         TabView(selection: $tab) {
             ForEach(MainTab.allCases) { tab in
-                MainNavigationView(selection: $tab)
+                tab.rootView(selection: $tab)
                     .tag(tab)
                     .tabItem {
                         tab.label
