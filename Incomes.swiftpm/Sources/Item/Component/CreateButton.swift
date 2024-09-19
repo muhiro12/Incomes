@@ -17,7 +17,7 @@ extension CreateButton: View {
         Button {
             isCreatePresented = true
         } label: {
-            Image.create
+            Image(systemName: "square.and.pencil")
         }
         .sheet(isPresented: $isCreatePresented) {
             ItemFormNavigationView(mode: .create)

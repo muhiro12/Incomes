@@ -10,10 +10,11 @@ import SwiftData
 import SwiftUI
 
 struct HomeView {
+    @Environment(\.pathSelection)
+    private var selection
+
     @Query(.tags(.typeIs(.year), order: .reverse))
     private var tags: [Tag]
-
-    @Environment(\.pathSelection) private var selection
 }
 
 extension HomeView: View {
@@ -39,6 +40,8 @@ extension HomeView: View {
 
 #Preview {
     IncomesPreview { _ in
-        HomeView()
+        NavigationStack {
+            HomeView()
+        }
     }
 }

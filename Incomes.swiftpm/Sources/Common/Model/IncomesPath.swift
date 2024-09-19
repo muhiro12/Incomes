@@ -8,9 +8,6 @@
 import SwiftUI
 
 enum IncomesPath: Hashable {
-    case category
-    case debug
-    case home
     case year(Date)
     case itemForm(mode: ItemFormView.Mode)
     case itemList(Tag)
@@ -24,12 +21,6 @@ extension IncomesPath {
     @ViewBuilder
     var view: some View {
         switch self {
-        case .category:
-            CategoryView()
-        case .debug:
-            DebugView()
-        case .home:
-            HomeView()
         case .year(let date):
             YearView(date: date)
         case .itemForm(let mode):

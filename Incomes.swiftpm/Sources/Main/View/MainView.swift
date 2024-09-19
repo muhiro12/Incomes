@@ -10,6 +10,8 @@ import SwiftUI
 import SwiftUtilities
 
 struct MainView {
+    @Environment(\.horizontalSizeClass)
+    private var horizontalSizeClass
     @Environment(\.scenePhase)
     private var scenePhase
     @Environment(\.requestReview)
@@ -44,47 +46,57 @@ struct MainView {
 
 extension MainView: View {
     var body: some View {
-        MainNavigationView()
-            .alert(Text("Update Required"), isPresented: $isUpdateAlertPresented) {
-                Button {
-                    UIApplication.shared.open(
-                        .init(string: "https://apps.apple.com/jp/app/incomes/id1584472982")!
-                    )
-                } label: {
-                    Text("Open App Store")
+        Group {
+            if horizontalSizeClass == .regular {
+                if #available(iOS 18.0, *) {
+                    MainTabView()
+                } else {
+                    OldMainTabView()
                 }
-            } message: {
-                Text("Please update Incomes to the latest version to continue using it.")
+            } else {
+                MainNavigationView()
             }
-            .task {
+        }
+        .alert(Text("Update Required"), isPresented: $isUpdateAlertPresented) {
+            Button {
+                UIApplication.shared.open(
+                    .init(string: "https://apps.apple.com/jp/app/incomes/id1584472982")!
+                )
+            } label: {
+                Text("Open App Store")
+            }
+        } message: {
+            Text("Please update Incomes to the latest version to continue using it.")
+        }
+        .task {
+            try? await sharedConfigurationService.load()
+            isUpdateAlertPresented = sharedConfigurationService.isUpdateRequired()
+        }
+        .onChange(of: scenePhase) {
+            guard scenePhase == .active else {
+                return
+            }
+            Task {
                 try? await sharedConfigurationService.load()
                 isUpdateAlertPresented = sharedConfigurationService.isUpdateRequired()
             }
-            .onChange(of: scenePhase) {
-                guard scenePhase == .active else {
-                    return
-                }
+            Task {
+                try? sharedTagService.updateHasDuplicates()
+                await sharedNotificationService.update()
+            }
+            if Int.random(in: 0..<10) == .zero {
                 Task {
-                    try? await sharedConfigurationService.load()
-                    isUpdateAlertPresented = sharedConfigurationService.isUpdateRequired()
-                }
-                Task {
-                    try? sharedTagService.updateHasDuplicates()
-                    await sharedNotificationService.update()
-                }
-                if Int.random(in: 0..<10) == .zero {
-                    Task {
-                        try? await Task.sleep(for: .seconds(2))
-                        requestReview()
-                    }
+                    try? await Task.sleep(for: .seconds(2))
+                    requestReview()
                 }
             }
-            .modelContainer(sharedModelContainer)
-            .environment(sharedItemService)
-            .environment(sharedTagService)
-            .environment(sharedConfigurationService)
-            .environment(sharedNotificationService)
-            .id(isICloudOn)
+        }
+        .modelContainer(sharedModelContainer)
+        .environment(sharedItemService)
+        .environment(sharedTagService)
+        .environment(sharedConfigurationService)
+        .environment(sharedNotificationService)
+        .id(isICloudOn)
     }
 }
 

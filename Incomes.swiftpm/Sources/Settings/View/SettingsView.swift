@@ -18,6 +18,9 @@ struct SettingsView {
     @Environment(NotificationService.self)
     private var notificationService
 
+    @Environment(\.isPresented)
+    private var isPresented
+
     @AppStorage(.isSubscribeOn)
     private var isSubscribeOn
     @AppStorage(.isICloudOn)
@@ -100,8 +103,10 @@ extension SettingsView: View {
         }
         .navigationTitle(Text("Settings"))
         .toolbar {
-            ToolbarItem {
-                CloseButton()
+            if isPresented {
+                ToolbarItem {
+                    CloseButton()
+                }
             }
         }
         .alert(Text("Are you sure you want to delete all items?"),
@@ -137,6 +142,8 @@ extension SettingsView: View {
 
 #Preview {
     IncomesPreview { _ in
-        SettingsView()
+        NavigationStack {
+            SettingsView()
+        }
     }
 }

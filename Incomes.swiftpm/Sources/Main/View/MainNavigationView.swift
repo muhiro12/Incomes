@@ -1,37 +1,60 @@
 //
 //  MainNavigationView.swift
-//  Incomes
+//  Incomes Playgrounds
 //
-//  Created by Hiromu Nakano on 2023/09/23.
-//  Copyright © 2023 Hiromu Nakano. All rights reserved.
+//  Created by Hiromu Nakano on 9/19/24.
 //
 
 import SwiftUI
+import SwiftUtilities
 
-struct MainNavigationView {
-    @Environment(TagService.self)
-    private var tagService
+struct MainNavigationView: View {
+    @Environment(\.horizontalSizeClass)
+    private var horizontalSizeClass
 
-    @State private var content: IncomesPath?
+    @State private var tab = MainTab.home
     @State private var detail: IncomesPath?
-}
 
-extension MainNavigationView: View {
     var body: some View {
         NavigationSplitView {
-            MainNavigationSidebarView()
-                .environment(\.pathSelection, $content)
-        } content: {
-            MainNavigationContentView(content)
-                .environment(\.pathSelection, $detail)
-        } detail: {
-            MainNavigationDetailView(detail)
-        }
-        .task {
-            content = .home
-            if let tag = try? tagService.tag(.tags(.dateIsSameMonthAs(.now))) {
-                detail = .itemList(tag)
+            Group {
+                switch tab {
+                case .home:
+                    HomeView()
+                case .category:
+                    CategoryView()
+                case .settings:
+                    SettingsView()
+                case .debug:
+                    DebugView()
+                }
             }
+            .toolbar {
+                if horizontalSizeClass == .compact {
+                    ToolbarItem(placement: .bottomBar) {
+                        Menu {
+                            ForEach(MainTab.allCases) { tab in
+                                Button {
+                                    withAnimation {
+                                        self.tab = tab
+                                    }
+                                } label: {
+                                    tab.label
+                                }
+                            }
+                        } label: {
+                            Label {
+                                Text("Menu")
+                            } icon: {
+                                Image(systemName: "ellipsis.circle")
+                            }
+                        }
+                    }
+                }
+            }
+            .environment(\.pathSelection, $detail)
+        } detail: {
+            detail?.view
         }
     }
 }

@@ -18,7 +18,7 @@ struct TitleListItem: View {
                 .minimumScaleFactor(.high)
             Spacer()
             if item.isProfitable {
-                Image.arrowUp
+                Image(systemName: "arrow.up")
                     .resizable()
                     .frame(width: .iconS, height: .iconS)
                     .foregroundColor(.accentColor)

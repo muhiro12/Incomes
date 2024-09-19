@@ -37,26 +37,24 @@ struct IncomesPreview<Content: View>: View {
     }
 
     var body: some View {
-        NavigationStack {
-            Group {
-                if isReady {
-                    content(preview)
-                } else {
-                    ProgressView()
-                        .task {
-                            let context = previewModelContainer.mainContext
-                            await preview.prepare(context)
-                            isReady = true
-                        }
-                }
+        Group {
+            if isReady {
+                content(preview)
+            } else {
+                ProgressView()
+                    .task {
+                        let context = previewModelContainer.mainContext
+                        await preview.prepare(context)
+                        isReady = true
+                    }
             }
-            .modelContainer(previewModelContainer)
-            .environment(previewItemService)
-            .environment(previewTagService)
-            .environment(previewConfigurationService)
-            .environment(previewNotificationService)
-            .incomesNavigationDestination()
         }
+        .modelContainer(previewModelContainer)
+        .environment(previewItemService)
+        .environment(previewTagService)
+        .environment(previewConfigurationService)
+        .environment(previewNotificationService)
+        .incomesNavigationDestination()
         .incomesPlaygroundsEnvironment()
     }
 }
