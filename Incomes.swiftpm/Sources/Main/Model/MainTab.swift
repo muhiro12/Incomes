@@ -17,16 +17,7 @@ enum MainTab {
 extension MainTab {
     @ViewBuilder
     var rootView: some View {
-        switch self {
-        case .home:
-            HomeNavigationView()
-        case .category:
-            CategoryNavigationView()
-        case .settings:
-            SettingsNavigationView()
-        case .debug:
-            DebugNavigationView()
-        }
+        MainNavigationView(tab: self)
     }
 
     @ViewBuilder

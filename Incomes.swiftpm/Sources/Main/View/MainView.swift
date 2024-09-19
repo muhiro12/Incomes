@@ -54,7 +54,7 @@ extension MainView: View {
                     OldMainTabView()
                 }
             } else {
-                MainNavigationView()
+                MainNavigationView(tab: .home)
             }
         }
         .alert(Text("Update Required"), isPresented: $isUpdateAlertPresented) {

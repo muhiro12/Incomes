@@ -12,8 +12,12 @@ struct MainNavigationView: View {
     @Environment(\.horizontalSizeClass)
     private var horizontalSizeClass
 
-    @State private var tab = MainTab.home
+    @State private var tab: MainTab
     @State private var path: IncomesPath?
+
+    init(tab: MainTab) {
+        self.tab = tab
+    }
 
     var body: some View {
         NavigationSplitView {
@@ -53,13 +57,26 @@ struct MainNavigationView: View {
                 }
             }
         } detail: {
-            path?.view
+            switch path {
+            case .year(let date):
+                YearView(date: date)
+            case .itemForm(let mode):
+                ItemFormView(mode: mode)
+            case .itemList(let tag):
+                ItemListView()
+                    .environment(tag)
+            case .tag(let tag):
+                TagView()
+                    .environment(tag)
+            case .none:
+                EmptyView()
+            }
         }
     }
 }
 
 #Preview {
     IncomesPreview { _ in
-        MainNavigationView()
+        MainNavigationView(tab: .home)
     }
 }

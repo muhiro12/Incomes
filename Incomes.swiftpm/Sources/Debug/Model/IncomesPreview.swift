@@ -54,7 +54,6 @@ struct IncomesPreview<Content: View>: View {
         .environment(previewTagService)
         .environment(previewConfigurationService)
         .environment(previewNotificationService)
-        .incomesNavigationDestination()
         .incomesPlaygroundsEnvironment()
     }
 }
