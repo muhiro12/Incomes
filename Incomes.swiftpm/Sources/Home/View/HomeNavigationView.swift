@@ -8,14 +8,13 @@
 import SwiftUI
 
 struct HomeNavigationView: View {
-    @State private var detail: IncomesPath?
+    @State private var path: IncomesPath?
 
     var body: some View {
         NavigationSplitView {
-            HomeView()
-                .environment(\.pathSelection, $detail)
+            HomeListView(selection: $path)
         } detail: {
-            detail?.view
+            path?.view
         }
     }
 }

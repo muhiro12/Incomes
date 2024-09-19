@@ -13,20 +13,20 @@ struct MainNavigationView: View {
     private var horizontalSizeClass
 
     @State private var tab = MainTab.home
-    @State private var detail: IncomesPath?
+    @State private var path: IncomesPath?
 
     var body: some View {
         NavigationSplitView {
             Group {
                 switch tab {
                 case .home:
-                    HomeView()
+                    HomeListView(selection: $path)
                 case .category:
-                    CategoryView()
+                    CategoryListView(selection: $path)
                 case .settings:
                     SettingsView()
                 case .debug:
-                    DebugView()
+                    DebugListView()
                 }
             }
             .toolbar {
@@ -52,9 +52,8 @@ struct MainNavigationView: View {
                     }
                 }
             }
-            .environment(\.pathSelection, $detail)
         } detail: {
-            detail?.view
+            path?.view
         }
     }
 }

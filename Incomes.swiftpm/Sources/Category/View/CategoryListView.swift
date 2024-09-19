@@ -1,5 +1,5 @@
 //
-//  CategoryView.swift
+//  CategoryListView.swift
 //  Incomes
 //
 //  Created by Hiromu Nakano on 2023/09/10.
@@ -9,16 +9,20 @@
 import SwiftData
 import SwiftUI
 
-struct CategoryView {
+struct CategoryListView {
     @Query(.tags(.typeIs(.category)))
     private var tags: [Tag]
 
-    @Environment(\.pathSelection) private var selection
+    @Binding private var path: IncomesPath?
+
+    init(selection: Binding<IncomesPath?> = .constant(nil)) {
+        _path = selection
+    }
 }
 
-extension CategoryView: View {
+extension CategoryListView: View {
     var body: some View {
-        List(tags, selection: selection) { tag in
+        List(tags, selection: $path) { tag in
             if tag.items.isNotEmpty {
                 CategorySection(categoryTag: tag)
             }
@@ -39,6 +43,6 @@ extension CategoryView: View {
 
 #Preview {
     IncomesPreview { _ in
-        CategoryView()
+        CategoryListView()
     }
 }

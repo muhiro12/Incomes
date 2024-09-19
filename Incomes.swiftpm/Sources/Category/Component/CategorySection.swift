@@ -40,7 +40,7 @@ extension CategorySection: View {
         Section(tag.name.isNotEmpty ? tag.name : "Others", isExpanded: $isExpanded) {
             ForEach(tags) { tag in
                 if tag.items.isNotEmpty {
-                    NavigationLink(path: .itemList(tag)) {
+                    NavigationLink(value: IncomesPath.itemList(tag)) {
                         Text(tag.name)
                     }
                 }

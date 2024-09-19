@@ -8,15 +8,14 @@
 import SwiftUI
 
 struct DebugNavigationView: View {
-    @State private var detail: IncomesPath?
+    @State private var path: IncomesPath?
 
     var body: some View {
         NavigationSplitView {
-            DebugView()
-                .environment(\.pathSelection, $detail)
+            DebugListView(selection: $path)
         } detail: {
             NavigationStack {
-                detail?.view
+                path?.view
                     .incomesNavigationDestination()
             }
         }

@@ -1,5 +1,5 @@
 //
-//  HomeView.swift
+//  HomeListView.swift
 //  Incomes
 //
 //  Created by Hiromu Nakano on 2020/04/14.
@@ -9,17 +9,20 @@
 import SwiftData
 import SwiftUI
 
-struct HomeView {
-    @Environment(\.pathSelection)
-    private var selection
-
+struct HomeListView {
     @Query(.tags(.typeIs(.year), order: .reverse))
     private var tags: [Tag]
+
+    @Binding private var path: IncomesPath?
+
+    init(selection: Binding<IncomesPath?> = .constant(nil)) {
+        _path = selection
+    }
 }
 
-extension HomeView: View {
+extension HomeListView: View {
     var body: some View {
-        List(tags, selection: selection) { tag in
+        List(tags, selection: $path) { tag in
             if tag.items.isNotEmpty {
                 YearSection(yearTag: tag)
             }
@@ -41,7 +44,7 @@ extension HomeView: View {
 #Preview {
     IncomesPreview { _ in
         NavigationStack {
-            HomeView()
+            HomeListView()
         }
     }
 }

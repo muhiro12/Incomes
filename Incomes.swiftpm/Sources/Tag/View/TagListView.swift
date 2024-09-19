@@ -31,7 +31,7 @@ struct TagListView: View {
                 tags,
                 id: \.self
             ) { tag in
-                NavigationLink(path: .tag(tag)) {
+                NavigationLink(value: IncomesPath.tag(tag)) {
                     Text(tag.displayName)
                 }
             }

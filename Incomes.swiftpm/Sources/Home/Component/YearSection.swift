@@ -42,7 +42,7 @@ extension YearSection: View {
                 ForEach(tags) { tag in
                     if let items = tag.items,
                        let first = items.first {
-                        NavigationLink(path: .itemList(tag)) {
+                        NavigationLink(value: IncomesPath.itemList(tag)) {
                             Text(first.date.stringValue(.yyyyMMM))
                                 .foregroundStyle(
                                     items.contains {
@@ -56,7 +56,7 @@ extension YearSection: View {
                     willDeleteItems = $0.flatMap { tags[$0].items ?? [] }
                 }
             } header: {
-                NavigationLink(path: .year(date)) {
+                NavigationLink(value: IncomesPath.year(date)) {
                     Text(title)
                 }
             }

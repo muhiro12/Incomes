@@ -1,5 +1,5 @@
 //
-//  DebugView.swift
+//  DebugListView.swift
 //  Incomes
 //
 //  Created by Hiromu Nakano on 2022/01/12.
@@ -8,32 +8,38 @@
 
 import SwiftUI
 
-struct DebugView {
+struct DebugListView {
     @Environment(\.modelContext)
     private var context
     @Environment(TagService.self)
     private var tagService
 
-    @Environment(\.pathSelection) private var selection
-
     @AppStorage(.isDebugOn)
     private var isDebugOn
 
+    @Binding private var path: IncomesPath?
+
     @State private var isAlertPresented = false
+
+    init(selection: Binding<IncomesPath?> = .constant(nil)) {
+        _path = selection
+    }
 }
 
-extension DebugView: View {
+extension DebugListView: View {
     var body: some View {
-        List(selection: selection) {
+        List(selection: $path) {
             Section {
                 Toggle(String.debugOption, isOn: $isDebugOn)
             }
             if let tag = try? tagService.tag() {
                 Section {
-                    NavigationLink(path: .itemList(tag)) {
+                    NavigationLink(value: IncomesPath.itemList(tag)) {
                         Text(String.debugAllItems)
                     }
-                    NavigationLink(path: .tagList) {
+                    NavigationLink {
+                        TagListView()
+                    } label: {
                         Text("All Tags")
                     }
                 }
@@ -79,6 +85,6 @@ extension DebugView: View {
 
 #Preview {
     IncomesPreview { _ in
-        DebugView()
+        DebugListView()
     }
 }

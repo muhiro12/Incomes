@@ -29,7 +29,7 @@ struct TagView: View {
             }
             Section {
                 ForEach(tag.items.orEmpty) { item in
-                    NavigationLink(path: .itemForm(mode: .edit(item))) {
+                    NavigationLink(value: IncomesPath.itemForm(mode: .edit(item))) {
                         Text(item.content)
                     }
                 }

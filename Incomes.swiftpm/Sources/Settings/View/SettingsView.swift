@@ -87,7 +87,9 @@ extension SettingsView: View {
                 }
             }
             Section {
-                NavigationLink(path: .license) {
+                NavigationLink {
+                    LicenseView()
+                } label: {
                     Text("License")
                 }
             }
