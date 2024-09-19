@@ -46,7 +46,7 @@ struct MainNavigationView: View {
                             Label {
                                 Text("Menu")
                             } icon: {
-                                Image(systemName: "ellipsis.circle")
+                                Image(systemName: "list.bullet")
                             }
                         }
                     }
