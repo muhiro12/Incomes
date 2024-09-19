@@ -8,20 +8,30 @@
 import SwiftUI
 
 struct OldMainTabView: View {
+    @Environment(\.horizontalSizeClass)
+    private var horizontalSizeClass
+
+    @State private var tab: MainTab? = .home
+
     var body: some View {
-        TabView {
-            Text("MainTab")
-                .tabItem {
-                    Label {
-                        Text("Title")
-                    } icon: {
-                        Image(systemName: "house")
+        TabView(selection: $tab) {
+            ForEach(MainTab.allCases) { tab in
+                MainNavigationView(selection: $tab)
+                    .tag(tab)
+                    .tabItem {
+                        tab.label
                     }
-                }
+                    .toolbar(
+                        horizontalSizeClass == .regular ? .visible : .hidden,
+                        for: .tabBar
+                    )
+            }
         }
     }
 }
 
 #Preview {
-    OldMainTabView()
+    IncomesPreview { _ in
+        OldMainTabView()
+    }
 }

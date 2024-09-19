@@ -10,8 +10,6 @@ import SwiftUI
 import SwiftUtilities
 
 struct MainView {
-    @Environment(\.horizontalSizeClass)
-    private var horizontalSizeClass
     @Environment(\.scenePhase)
     private var scenePhase
     @Environment(\.requestReview)
@@ -47,14 +45,10 @@ struct MainView {
 extension MainView: View {
     var body: some View {
         Group {
-            if horizontalSizeClass == .regular {
-                if #available(iOS 18.0, *) {
-                    MainTabView()
-                } else {
-                    OldMainTabView()
-                }
+            if #available(iOS 18.0, *) {
+                MainTabView()
             } else {
-                MainNavigationView(tab: .home)
+                OldMainTabView()
             }
         }
         .alert(Text("Update Required"), isPresented: $isUpdateAlertPresented) {

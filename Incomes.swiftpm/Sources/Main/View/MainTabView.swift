@@ -9,11 +9,20 @@ import SwiftUI
 
 @available(iOS 18.0, *)
 struct MainTabView: View {
+    @Environment(\.horizontalSizeClass)
+    private var horizontalSizeClass
+
+    @State private var tab: MainTab? = .home
+
     var body: some View {
-        TabView {
+        TabView(selection: $tab) {
             ForEach(MainTab.allCases) { tab in
-                Tab {
-                    tab.rootView
+                Tab(value: tab) {
+                    MainNavigationView(selection: $tab)
+                        .toolbar(
+                            horizontalSizeClass == .regular ? .visible : .hidden,
+                            for: .tabBar
+                        )
                 } label: {
                     tab.label
                 }

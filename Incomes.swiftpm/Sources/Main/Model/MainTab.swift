@@ -16,11 +16,6 @@ enum MainTab {
 
 extension MainTab {
     @ViewBuilder
-    var rootView: some View {
-        MainNavigationView(tab: self)
-    }
-
-    @ViewBuilder
     var label: some View {
         switch self {
         case .home:

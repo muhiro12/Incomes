@@ -9,14 +9,12 @@ import SwiftUI
 import SwiftUtilities
 
 struct MainNavigationView: View {
-    @Environment(\.horizontalSizeClass)
-    private var horizontalSizeClass
+    @Binding private var tab: MainTab?
 
-    @State private var tab: MainTab
     @State private var path: IncomesPath?
 
-    init(tab: MainTab) {
-        self.tab = tab
+    init(selection: Binding<MainTab?> = .constant(nil)) {
+        _tab = selection
     }
 
     var body: some View {
@@ -31,27 +29,27 @@ struct MainNavigationView: View {
                     SettingsView()
                 case .debug:
                     DebugListView()
+                case .none:
+                    EmptyView()
                 }
             }
             .toolbar {
-                if horizontalSizeClass == .compact {
-                    ToolbarItem(placement: .bottomBar) {
-                        Menu {
-                            ForEach(MainTab.allCases) { tab in
-                                Button {
-                                    withAnimation {
-                                        self.tab = tab
-                                    }
-                                } label: {
-                                    tab.label
+                ToolbarItem(placement: .bottomBar) {
+                    Menu {
+                        ForEach(MainTab.allCases) { tab in
+                            Button {
+                                withAnimation {
+                                    self.tab = tab
                                 }
+                            } label: {
+                                tab.label
                             }
-                        } label: {
-                            Label {
-                                Text("Menu")
-                            } icon: {
-                                Image(systemName: "list.bullet")
-                            }
+                        }
+                    } label: {
+                        Label {
+                            Text("Menu")
+                        } icon: {
+                            Image(systemName: "list.bullet")
                         }
                     }
                 }
@@ -77,6 +75,6 @@ struct MainNavigationView: View {
 
 #Preview {
     IncomesPreview { _ in
-        MainNavigationView(tab: .home)
+        MainNavigationView()
     }
 }
