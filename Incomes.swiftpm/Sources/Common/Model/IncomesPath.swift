@@ -8,34 +8,13 @@
 import SwiftUI
 
 enum IncomesPath: Hashable {
-    // MARK: Category
     case category
-    // MARK: Debug
     case debug
-    // MARK: Home
     case home
     case year(Date)
-    // MARK: Item
-    case itemFormNavigation(mode: ItemFormView.Mode)
     case itemForm(mode: ItemFormView.Mode)
     case itemList(Tag)
-    // MARK: Main
-    case mainNavigationContent
-    case mainNavigationDetail
-    case mainNavigationSidebar
-    case mainNavigation
-    case main
-    // MARK: Package
     case license
-    // MARK: Public
-    case content
-    // MARK: Settings
-    case settingsNavigation
-    case settings
-    // MARK: Tag
-    case duplicateTagList
-    case duplicateTagNavigation
-    case duplicateTag(Tag)
     case tagList
     case tag(Tag)
 }
@@ -53,37 +32,13 @@ extension IncomesPath {
             HomeView()
         case .year(let date):
             YearView(date: date)
-        case .itemFormNavigation(let mode):
-            ItemFormNavigationView(mode: mode)
         case .itemForm(let mode):
             ItemFormView(mode: mode)
         case .itemList(let tag):
             ItemListView()
                 .environment(tag)
-        case .mainNavigationContent:
-            MainNavigationContentView(nil)
-        case .mainNavigationDetail:
-            MainNavigationDetailView(nil)
-        case .mainNavigationSidebar:
-            MainNavigationSidebarView()
-        case .mainNavigation:
-            MainNavigationView()
-        case .main:
-            MainView()
         case .license:
             LicenseView()
-        case .content:
-            ContentView()
-        case .settingsNavigation:
-            SettingsNavigationView()
-        case .settings:
-            SettingsView()
-        case .duplicateTagList:
-            DuplicateTagListView(selection: .constant(nil))
-        case .duplicateTagNavigation:
-            DuplicateTagNavigationView()
-        case .duplicateTag(let tag):
-            DuplicateTagView(tag)
         case .tagList:
             TagListView()
         case .tag(let tag):
