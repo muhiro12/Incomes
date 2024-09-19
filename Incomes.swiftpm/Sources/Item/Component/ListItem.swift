@@ -9,7 +9,10 @@
 import SwiftUI
 
 struct ListItem: View {
-    @Environment(Item.self) private var item
+    @Environment(Item.self)
+    private var item
+    @Environment(\.horizontalSizeClass)
+    private var horizontalSizeClass
 
     @State private var isEditPresented = false
 
@@ -17,13 +20,14 @@ struct ListItem: View {
         Button {
             isEditPresented = true
         } label: {
-            GeometryReader { geometry in
-                if geometry.size.width < .portraitModeMaxWidth {
-                    NarrowListItem()
-                } else {
+            Group {
+                if horizontalSizeClass == .regular {
                     WideListItem()
+                } else {
+                    NarrowListItem()
                 }
             }
+            .contentShape(.rect)
         }
         .buttonStyle(.plain)
         .sheet(isPresented: $isEditPresented) {

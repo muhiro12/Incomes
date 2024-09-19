@@ -24,8 +24,6 @@ extension CGFloat {
     static let iconM = unit * 3
     static let iconL = unit * 5
 
-    static let portraitModeMaxWidth = unit * 80
-
     // MARK: - Ratio
 
     static let low = Self(Double.low)
