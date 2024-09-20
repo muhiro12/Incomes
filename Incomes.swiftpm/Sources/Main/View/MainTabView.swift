@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-@available(iOS 18.0, *)
 struct MainTabView: View {
     @Environment(\.horizontalSizeClass)
     private var horizontalSizeClass
@@ -15,23 +14,38 @@ struct MainTabView: View {
     @State private var tab: MainTab? = .home
 
     var body: some View {
-        TabView(selection: $tab) {
-            ForEach(MainTab.allCases) { tab in
-                Tab(value: tab) {
+        if #available(iOS 18.0, *) {
+            TabView(selection: $tab) {
+                ForEach(MainTab.allCases) { tab in
+                    Tab(value: tab) {
+                        tab.rootView(selection: $tab)
+                            .toolbar(
+                                horizontalSizeClass == .regular ? .visible : .hidden,
+                                for: .tabBar
+                            )
+                    } label: {
+                        tab.label
+                    }
+                }
+            }
+        } else {
+            TabView(selection: $tab) {
+                ForEach(MainTab.allCases) { tab in
                     tab.rootView(selection: $tab)
+                        .tag(tab)
+                        .tabItem {
+                            tab.label
+                        }
                         .toolbar(
                             horizontalSizeClass == .regular ? .visible : .hidden,
                             for: .tabBar
                         )
-                } label: {
-                    tab.label
                 }
             }
         }
     }
 }
 
-@available(iOS 18.0, *)
 #Preview {
     IncomesPreview { _ in
         MainTabView()

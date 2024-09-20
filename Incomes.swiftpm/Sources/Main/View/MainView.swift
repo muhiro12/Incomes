@@ -44,53 +44,47 @@ struct MainView {
 
 extension MainView: View {
     var body: some View {
-        Group {
-            if #available(iOS 18.0, *) {
-                MainTabView()
-            } else {
-                OldMainTabView()
+        MainTabView()
+            .alert(Text("Update Required"), isPresented: $isUpdateAlertPresented) {
+                Button {
+                    UIApplication.shared.open(
+                        .init(string: "https://apps.apple.com/jp/app/incomes/id1584472982")!
+                    )
+                } label: {
+                    Text("Open App Store")
+                }
+            } message: {
+                Text("Please update Incomes to the latest version to continue using it.")
             }
-        }
-        .alert(Text("Update Required"), isPresented: $isUpdateAlertPresented) {
-            Button {
-                UIApplication.shared.open(
-                    .init(string: "https://apps.apple.com/jp/app/incomes/id1584472982")!
-                )
-            } label: {
-                Text("Open App Store")
-            }
-        } message: {
-            Text("Please update Incomes to the latest version to continue using it.")
-        }
-        .task {
-            try? await sharedConfigurationService.load()
-            isUpdateAlertPresented = sharedConfigurationService.isUpdateRequired()
-        }
-        .onChange(of: scenePhase) {
-            guard scenePhase == .active else {
-                return
-            }
-            Task {
+            .task {
                 try? await sharedConfigurationService.load()
                 isUpdateAlertPresented = sharedConfigurationService.isUpdateRequired()
             }
-            Task {
-                try? sharedTagService.updateHasDuplicates()
-                await sharedNotificationService.update()
-            }
-            if Int.random(in: 0..<10) == .zero {
+            .onChange(of: scenePhase) {
+                guard scenePhase == .active else {
+                    return
+                }
                 Task {
-                    try? await Task.sleep(for: .seconds(2))
-                    requestReview()
+                    try? await sharedConfigurationService.load()
+                    isUpdateAlertPresented = sharedConfigurationService.isUpdateRequired()
+                }
+                Task {
+                    try? sharedTagService.updateHasDuplicates()
+                    await sharedNotificationService.update()
+                }
+                if Int.random(in: 0..<10) == .zero {
+                    Task {
+                        try? await Task.sleep(for: .seconds(2))
+                        requestReview()
+                    }
                 }
             }
-        }
-        .modelContainer(sharedModelContainer)
-        .environment(sharedItemService)
-        .environment(sharedTagService)
-        .environment(sharedConfigurationService)
-        .environment(sharedNotificationService)
-        .id(isICloudOn)
+            .modelContainer(sharedModelContainer)
+            .environment(sharedItemService)
+            .environment(sharedTagService)
+            .environment(sharedConfigurationService)
+            .environment(sharedNotificationService)
+            .id(isICloudOn)
     }
 }
 
