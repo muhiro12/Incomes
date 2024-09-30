@@ -150,7 +150,7 @@
       "location" : "https://github.com/googleads/swift-package-manager-google-mobile-ads.git",
       "state" : {
         "branch" : "main",
-        "revision" : "ccc3c2b6307384283fc63e9fefe6fbe0af3da32f"
+        "revision" : "1e60477cbc4c4868ec8414524f8cd163132753ff"
       }
     },
     {
@@ -176,8 +176,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/muhiro12/SwiftUtilities.git",
       "state" : {
-        "revision" : "3d1659b7682df1de4a8ba74eb53d3d3049c86a07",
-        "version" : "1.5.0"
+        "revision" : "bed23ac161a683b3c7fd922064edb0d5a51c1832",
+        "version" : "1.6.0"
       }
     }
   ],
