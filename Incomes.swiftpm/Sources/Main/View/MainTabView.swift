@@ -11,12 +11,25 @@ struct MainTabView: View {
     @Environment(\.horizontalSizeClass)
     private var horizontalSizeClass
 
+    @AppStorage(.isDebugOn)
+    private var isDebugOn
+
     @State private var tab: MainTab? = .home
+
+    private var tabs: [MainTab] {
+        if isDebugOn {
+            MainTab.allCases
+        } else {
+            MainTab.allCases.filter {
+                $0 != .debug
+            }
+        }
+    }
 
     var body: some View {
         if #available(iOS 18.0, *) {
             TabView(selection: $tab) {
-                ForEach(MainTab.allCases) { tab in
+                ForEach(tabs) { tab in
                     Tab(value: tab) {
                         tab.rootView(selection: $tab)
                             .toolbar(
@@ -30,7 +43,7 @@ struct MainTabView: View {
             }
         } else {
             TabView(selection: $tab) {
-                ForEach(MainTab.allCases) { tab in
+                ForEach(tabs) { tab in
                     tab.rootView(selection: $tab)
                         .tag(tab)
                         .tabItem {

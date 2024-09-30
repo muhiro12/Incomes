@@ -22,23 +22,7 @@ struct DebugNavigationView: View {
             DebugListView(selection: $path)
                 .toolbar {
                     ToolbarItem(placement: .bottomBar) {
-                        Menu {
-                            ForEach(MainTab.allCases) { tab in
-                                Button {
-                                    withAnimation {
-                                        self.tab = tab
-                                    }
-                                } label: {
-                                    tab.label
-                                }
-                            }
-                        } label: {
-                            Label {
-                                Text("Menu")
-                            } icon: {
-                                Image(systemName: "list.bullet")
-                            }
-                        }
+                        MainTabMenu(selection: $tab)
                     }
                 }
         } detail: {
