@@ -36,8 +36,6 @@ struct ItemFormView {
     @FocusState private var focusedField: Field?
 
     @State private var mode = Mode.create
-    @State private var isContentSuggestionShowing = false
-    @State private var isCategorySuggestionShowing = false
     @State private var isActionSheetPresented = false
     @State private var isDebugAlertPresented = false
 
@@ -75,9 +73,6 @@ extension ItemFormView: View {
                         .focused($focusedField, equals: .content)
                         .multilineTextAlignment(.trailing)
                 }
-                if isContentSuggestionShowing {
-                    FilteredTagList(content: $content)
-                }
                 HStack {
                     Text("Income")
                     TextField(String.zero, text: $income)
@@ -100,9 +95,6 @@ extension ItemFormView: View {
                     TextField("Others", text: $group)
                         .focused($focusedField, equals: .category)
                         .multilineTextAlignment(.trailing)
-                }
-                if isCategorySuggestionShowing {
-                    FilteredTagList(category: $group)
                 }
                 if mode == .create {
                     RepeatCountPicker(selection: $repeatSelection)
@@ -140,6 +132,14 @@ extension ItemFormView: View {
                 .bold()
                 .disabled(!isValid)
             }
+            ToolbarItem(placement: .keyboard) {
+                SuggestionButtons(input: $content, type: .content)
+                    .hidden(focusedField != .content)
+            }
+            ToolbarItem(placement: .keyboard) {
+                SuggestionButtons(input: $group, type: .category)
+                    .hidden(focusedField != .category)
+            }
         }
         .gesture(
             DragGesture()
@@ -173,12 +173,6 @@ extension ItemFormView: View {
             income = item.income.description
             outgo = item.outgo.description
             group = item.tags?.first { $0.type == .category }?.displayName ?? .empty
-        }
-        .onChange(of: focusedField) { _, newValue in
-            withAnimation(.easeInOut) {
-                isContentSuggestionShowing = newValue == .content
-                isCategorySuggestionShowing = newValue == .category
-            }
         }
         .actionSheet(isPresented: $isActionSheetPresented) {
             ActionSheet(title: Text("This is a repeating item."),

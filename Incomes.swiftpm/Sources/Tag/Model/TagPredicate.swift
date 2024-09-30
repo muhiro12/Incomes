@@ -19,6 +19,7 @@ enum TagPredicate {
     case yearIs(String)
     case dateIsSameMonthAs(Date)
     case contentIsIn([String])
+    case nameContains(name: String, type: Tag.TagType)
 
     var value: Predicate<Tag> {
         switch self {
@@ -61,6 +62,16 @@ enum TagPredicate {
             let id = Tag.TagType.content.rawValue
             return #Predicate {
                 contents.contains($0.name) && $0.typeID == id
+            }
+        case .nameContains(let name, let type):
+            let typeID = type.rawValue
+            let hiragana = name.applyingTransform(.hiraganaToKatakana, reverse: true).orEmpty
+            let katakana = name.applyingTransform(.hiraganaToKatakana, reverse: false).orEmpty
+            return #Predicate {
+                $0.typeID == typeID
+                    && $0.name.localizedStandardContains(name)
+                    || $0.name.localizedStandardContains(hiragana)
+                    || $0.name.localizedStandardContains(katakana)
             }
         }
     }
