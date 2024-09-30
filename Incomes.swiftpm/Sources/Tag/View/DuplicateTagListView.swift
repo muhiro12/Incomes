@@ -65,10 +65,7 @@ struct DuplicateTagListView: View {
             EmptyView()
         } else {
             Section {
-                ForEach(
-                    duplicates,
-                    id: \.self
-                ) { tag in
+                ForEach(duplicates) { tag in
                     Text(tag.displayName)
                 }
             } header: {

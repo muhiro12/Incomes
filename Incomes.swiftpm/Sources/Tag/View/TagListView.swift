@@ -27,10 +27,7 @@ struct TagListView: View {
     @ViewBuilder
     private func buildSection<Header: View>(from tags: [Tag], header: () -> Header) -> some View {
         Section {
-            ForEach(
-                tags,
-                id: \.self
-            ) { tag in
+            ForEach(tags) { tag in
                 NavigationLink(value: IncomesPath.tag(tag)) {
                     Text(tag.displayName)
                 }
