@@ -67,7 +67,7 @@ extension ChartSections: View {
                     buildSectorChartContent(title: $0.key, items: $0.value)
                 }
                 .chartForegroundStyleScale { (title: String) in
-                    Color.accentColor.adjusted(with: title.hashValue)
+                    Color(uiColor: .tintColor).adjusted(with: title.hashValue)
                 }
                 .frame(height: .componentXL)
                 .padding()
