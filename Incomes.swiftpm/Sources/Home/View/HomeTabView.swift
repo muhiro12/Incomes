@@ -25,7 +25,7 @@ struct HomeTabView {
 extension HomeTabView: View {
     var body: some View {
         Group {
-            #if !XCODE
+            #if XCODE
             if #available(iOS 18.0, *) {
                 TabView(selection: $tag) {
                     ForEach(tags.filter { $0.items.isNotEmpty }) { tag in
