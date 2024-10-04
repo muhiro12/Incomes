@@ -50,10 +50,7 @@ struct MainTabView: View {
                         .tabItem {
                             tab.label
                         }
-                        .toolbar(
-                            horizontalSizeClass == .regular ? .visible : .hidden,
-                            for: .tabBar
-                        )
+                        .toolbar(.hidden, for: .tabBar)
                 }
             }
         }
@@ -65,10 +62,7 @@ struct MainTabView: View {
                     .tabItem {
                         tab.label
                     }
-                    .toolbar(
-                        horizontalSizeClass == .regular ? .visible : .hidden,
-                        for: .tabBar
-                    )
+                    .toolbar(.hidden, for: .tabBar)
             }
         }
         #endif
