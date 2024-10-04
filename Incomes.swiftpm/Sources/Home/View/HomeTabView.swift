@@ -37,32 +37,16 @@ extension HomeTabView: View {
             } else {
                 TabView(selection: $tag) {
                     ForEach(tags.filter { $0.items.isNotEmpty }) { tag in
-                        List(selection: $path) {
-                            HomeListView(yearTag: tag, selection: $path)
-                        }
-                        .tabItem {
-                            Label {
-                                Text(tag.displayName)
-                            } icon: {
-                                Image(systemName: "calendar")
-                            }
-                        }
+                        HomeListView(yearTag: tag, selection: $path)
+                            .tag(tag)
                     }
                 }
             }
             #else
             TabView(selection: $tag) {
                 ForEach(tags.filter { $0.items.isNotEmpty }) { tag in
-                    List(selection: $path) {
-                        HomeListView(yearTag: tag, selection: $path)
-                    }
-                    .tabItem {
-                        Label {
-                            Text(tag.displayName)
-                        } icon: {
-                            Image(systemName: "calendar")
-                        }
-                    }
+                    HomeListView(yearTag: tag, selection: $path)
+                        .tag(tag)
                 }
             }
             #endif
