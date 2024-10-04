@@ -1,5 +1,5 @@
 //
-//  YearSection.swift
+//  HomeListView.swift
 //  Incomes
 //
 //  Created by Hiromu Nakano on 2021/12/29.
@@ -9,7 +9,7 @@
 import SwiftData
 import SwiftUI
 
-struct YearSection {
+struct HomeListView {
     @Environment(ItemService.self)
     private var itemService
 
@@ -18,27 +18,26 @@ struct YearSection {
 
     @Query private var tags: [Tag]
 
-    @State private var isExpanded = true
+    @Binding private var path: IncomesPath?
+
     @State private var isPresentedToAlert = false
     @State private var willDeleteItems: [Item] = []
 
     private let title: String
     private let date: Date
 
-    init(yearTag: Tag) {
+    init(yearTag: Tag, selection: Binding<IncomesPath?> = .constant(nil)) {
+        _tags = Query(.tags(.yearIs(yearTag.name), order: .reverse))
+        _path = selection
         title = yearTag.displayName
         date = yearTag.name.dateValueWithoutLocale(.yyyy) ?? .distantPast
-        _tags = Query(.tags(.yearIs(yearTag.name), order: .reverse))
-        _isExpanded = .init(
-            initialValue: yearTag.name == Date.now.stringValueWithoutLocale(.yyyy)
-        )
     }
 }
 
-extension YearSection: View {
+extension HomeListView: View {
     var body: some View {
-        Group {
-            Section(isExpanded: $isExpanded) {
+        List(selection: $path) {
+            Section {
                 ForEach(tags) { tag in
                     if let items = tag.items,
                        let first = items.first {
@@ -55,12 +54,12 @@ extension YearSection: View {
                     isPresentedToAlert = true
                     willDeleteItems = $0.flatMap { tags[$0].items ?? [] }
                 }
-            } header: {
+            } footer: {
                 NavigationLink(value: IncomesPath.year(date)) {
-                    Text(title)
+                    Text("See Charts")
                 }
             }
-            if !isSubscribeOn, isExpanded {
+            if !isSubscribeOn {
                 AdvertisementSection(.small)
             }
         }
@@ -78,15 +77,16 @@ extension YearSection: View {
                     .cancel {
                         willDeleteItems = []
                     }
-                ])
+                ]
+            )
         }
     }
 }
 
 #Preview {
     IncomesPreview { preview in
-        List {
-            YearSection(
+        NavigationStack {
+            HomeListView(
                 yearTag: preview.tags.first { $0.type == .year }!
             )
         }

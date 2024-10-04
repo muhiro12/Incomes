@@ -19,7 +19,7 @@ struct HomeNavigationView: View {
 
     var body: some View {
         NavigationSplitView {
-            HomeListView(selection: $path)
+            HomeTabView(selection: $path)
                 .toolbar {
                     ToolbarItem(placement: .bottomBar) {
                         MainTabMenu(selection: $tab)
