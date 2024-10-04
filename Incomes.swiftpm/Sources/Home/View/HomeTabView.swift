@@ -38,7 +38,7 @@ extension HomeTabView: View {
                 TabView(selection: $tag) {
                     ForEach(tags.filter { $0.items.isNotEmpty }) { tag in
                         HomeListView(yearTag: tag, selection: $path)
-                            .tag(tag)
+                            .tag(tag as? Tag)
                     }
                 }
             }
@@ -46,7 +46,7 @@ extension HomeTabView: View {
             TabView(selection: $tag) {
                 ForEach(tags.filter { $0.items.isNotEmpty }) { tag in
                     HomeListView(yearTag: tag, selection: $path)
-                        .tag(tag)
+                        .tag(tag as Tag?)
                 }
             }
             #endif

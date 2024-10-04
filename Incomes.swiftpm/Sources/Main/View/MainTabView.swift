@@ -46,7 +46,7 @@ struct MainTabView: View {
             TabView(selection: $tab) {
                 ForEach(tabs) { tab in
                     tab.rootView(selection: $tab)
-                        .tag(tab)
+                        .tag(tab as MainTab?)
                         .tabItem {
                             tab.label
                         }
@@ -61,7 +61,7 @@ struct MainTabView: View {
         TabView(selection: $tab) {
             ForEach(tabs) { tab in
                 tab.rootView(selection: $tab)
-                    .tag(tab)
+                    .tag(tab as MainTab?)
                     .tabItem {
                         tab.label
                     }
