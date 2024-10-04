@@ -40,6 +40,9 @@ let package = Package(
             ],
             resources: [
                 .process("Resources")
+            ],
+            swiftSettings: [
+                .define("XCODE")
             ]
         ),
         .testTarget(

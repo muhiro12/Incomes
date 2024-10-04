@@ -27,6 +27,7 @@ struct MainTabView: View {
     }
 
     var body: some View {
+        #if XCODE
         if #available(iOS 18.0, *) {
             TabView(selection: $tab) {
                 ForEach(tabs) { tab in
@@ -56,6 +57,21 @@ struct MainTabView: View {
                 }
             }
         }
+        #else
+        TabView(selection: $tab) {
+            ForEach(tabs) { tab in
+                tab.rootView(selection: $tab)
+                    .tag(tab)
+                    .tabItem {
+                        tab.label
+                    }
+                    .toolbar(
+                        horizontalSizeClass == .regular ? .visible : .hidden,
+                        for: .tabBar
+                    )
+            }
+        }
+        #endif
     }
 }
 
