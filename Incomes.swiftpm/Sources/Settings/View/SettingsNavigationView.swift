@@ -9,20 +9,9 @@ import SwiftUI
 import SwiftUtilities
 
 struct SettingsNavigationView: View {
-    @Binding private var tab: MainTab?
-
-    init(selection: Binding<MainTab?> = .constant(nil)) {
-        _tab = selection
-    }
-
     var body: some View {
         NavigationStack {
             SettingsListView()
-                .toolbar {
-                    ToolbarItem(placement: .bottomBar) {
-                        MainTabMenu(selection: $tab)
-                    }
-                }
         }
     }
 }

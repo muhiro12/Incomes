@@ -8,14 +8,11 @@
 import SwiftUI
 
 struct MainTabMenu: View {
+    @Environment(\.mainTab)
+    private var mainTab
+    
     @AppStorage(.isDebugOn)
     private var isDebugOn
-
-    @Binding private var tab: MainTab?
-
-    init(selection: Binding<MainTab?> = .constant(nil)) {
-        _tab = selection
-    }
 
     private var tabs: [MainTab] {
         if isDebugOn {
@@ -32,7 +29,7 @@ struct MainTabMenu: View {
             ForEach(tabs) { tab in
                 Button {
                     withAnimation {
-                        self.tab = tab
+                        mainTab.wrappedValue = tab
                     }
                 } label: {
                     tab.label
@@ -50,4 +47,5 @@ struct MainTabMenu: View {
 
 #Preview {
     MainTabMenu()
+        .environment(\.mainTab, .constant(.home))
 }

@@ -14,7 +14,7 @@ struct MainTabView: View {
     @AppStorage(.isDebugOn)
     private var isDebugOn
 
-    @State private var tab: MainTab? = .home
+    @State private var mainTab = MainTab.home
 
     private var tabs: [MainTab] {
         if isDebugOn {
@@ -32,7 +32,7 @@ struct MainTabView: View {
             TabView(selection: $tab) {
                 ForEach(tabs) { tab in
                     Tab(value: tab) {
-                        tab.rootView(selection: $tab)
+                        tab.rootView
                             .toolbar(
                                 horizontalSizeClass == .regular ? .visible : .hidden,
                                 for: .tabBar
@@ -42,29 +42,32 @@ struct MainTabView: View {
                     }
                 }
             }
+            .environment(\.mainTab, $mainTab)
         } else {
             TabView(selection: $tab) {
                 ForEach(tabs) { tab in
-                    tab.rootView(selection: $tab)
-                        .tag(tab as MainTab?)
+                    tab.rootView
+                        .tag(tab)
                         .tabItem {
                             tab.label
                         }
                         .toolbar(.hidden, for: .tabBar)
                 }
             }
+            .environment(\.mainTab, $mainTab)
         }
         #else
-        TabView(selection: $tab) {
+        TabView(selection: $mainTab) {
             ForEach(tabs) { tab in
-                tab.rootView(selection: $tab)
-                    .tag(tab as MainTab?)
+                tab.rootView
+                    .tag(tab)
                     .tabItem {
                         tab.label
                     }
                     .toolbar(.hidden, for: .tabBar)
             }
         }
+        .environment(\.mainTab, $mainTab)
         #endif
     }
 }

@@ -80,6 +80,11 @@ extension DebugListView: View {
             Text(String.debugSetPreviewDataMessage)
         }
         .navigationTitle(Text(String.debugTitle))
+        .toolbar {
+            ToolbarItem(placement: .bottomBar) {
+                MainTabMenu()
+            }
+        }
     }
 }
 

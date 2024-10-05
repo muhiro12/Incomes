@@ -116,6 +116,13 @@ extension SettingsListView: View {
                     CloseButton()
                 }
             }
+            ToolbarItem(placement: .bottomBar) {
+                MainTabMenu()
+            }
+            ToolbarItem(placement: .status) {
+                Text("Today: \(Date.now.stringValue(.yyyyMMMd))")
+                    .font(.footnote)
+            }
         }
         .alert(Text("Are you sure you want to delete all items?"),
                isPresented: $isAlertPresented) {

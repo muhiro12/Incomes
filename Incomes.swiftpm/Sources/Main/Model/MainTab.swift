@@ -16,16 +16,18 @@ enum MainTab {
 
 extension MainTab {
     @ViewBuilder
-    func rootView(selection: Binding<MainTab?>) -> some View {
-        switch self {
-        case .home:
-            HomeNavigationView(selection: selection)
-        case .category:
-            CategoryNavigationView(selection: selection)
-        case .settings:
-            SettingsNavigationView(selection: selection)
-        case .debug:
-            DebugNavigationView(selection: selection)
+    var rootView: some View {
+        Group {
+            switch self {
+            case .home:
+                HomeNavigationView()
+            case .category:
+                CategoryNavigationView()
+            case .settings:
+                SettingsNavigationView()
+            case .debug:
+                DebugNavigationView()
+            }
         }
     }
 
@@ -65,5 +67,18 @@ extension MainTab: CaseIterable {}
 extension MainTab: Identifiable {
     var id: String {
         .init(describing: self)
+    }
+}
+
+// MARK: - Environment
+
+struct MainTabKey: EnvironmentKey {
+    static var defaultValue = Binding.constant(MainTab.home)
+}
+
+extension EnvironmentValues {
+    var mainTab: Binding<MainTab> {
+        get { self[MainTabKey.self] }
+        set { self[MainTabKey.self] = newValue }
     }
 }

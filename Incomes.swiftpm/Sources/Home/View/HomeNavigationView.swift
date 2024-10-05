@@ -9,22 +9,11 @@ import SwiftUI
 import SwiftUtilities
 
 struct HomeNavigationView: View {
-    @Binding private var tab: MainTab?
-
     @State private var path: IncomesPath?
-
-    init(selection: Binding<MainTab?> = .constant(nil)) {
-        _tab = selection
-    }
 
     var body: some View {
         NavigationSplitView {
             HomeTabView(selection: $path)
-                .toolbar {
-                    ToolbarItem(placement: .bottomBar) {
-                        MainTabMenu(selection: $tab)
-                    }
-                }
         } detail: {
             if case .itemList(let tag) = path {
                 ItemListView()

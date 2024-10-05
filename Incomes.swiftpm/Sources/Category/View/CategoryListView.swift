@@ -30,12 +30,15 @@ extension CategoryListView: View {
         .listStyle(.sidebar)
         .navigationTitle(Text("Category"))
         .toolbar {
-            ToolbarItem {
-                CreateButton()
+            ToolbarItem(placement: .bottomBar) {
+                MainTabMenu()
             }
             ToolbarItem(placement: .status) {
                 Text("Today: \(Date.now.stringValue(.yyyyMMMd))")
                     .font(.footnote)
+            }
+            ToolbarItem(placement: .bottomBar) {
+                CreateButton()
             }
         }
     }
