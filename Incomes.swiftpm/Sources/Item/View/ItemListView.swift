@@ -20,24 +20,28 @@ struct ItemListView {
 extension ItemListView: View {
     var body: some View {
         List(yearStrings, id: \.self) { yearString in
-            ItemListSection(
-                .items(.tagAndYear(tag: tag, yearString: yearString)),
-                title: {
-                    switch tag.type {
-                    case .year,
-                         .yearMonth:
-                        nil
-                    case .content,
-                         .category,
-                         .none:
-                        .init(yearString.dateValueWithoutLocale(.yyyy)?.stringValue(.yyyy) ?? .empty)
-                    }
-                }()
-            )
-            if !isSubscribeOn {
-                AdvertisementSection(.medium)
+            switch tag.type {
+            case .year,
+                 .yearMonth,
+                 .content:
+                ItemListSection(
+                    .items(.tagAndYear(tag: tag, yearString: yearString)),
+                    title: tag.type == .content
+                        ? .init(yearString.dateValueWithoutLocale(.yyyy)?.stringValue(.yyyy) ?? .empty)
+                        : nil
+                )
+                if !isSubscribeOn {
+                    AdvertisementSection(.medium)
+                }
+                ChartSections(.items(.tagAndYear(tag: tag, yearString: yearString)))
+            case .category:
+                TagItemListSection()
+                if !isSubscribeOn {
+                    AdvertisementSection(.medium)
+                }
+            case .none:
+                EmptyView()
             }
-            ChartSections(.items(.tagAndYear(tag: tag, yearString: yearString)))
         }
         .listStyle(.grouped)
         .navigationTitle(Text(tag.displayName))
@@ -86,6 +90,15 @@ private extension ItemListView {
         NavigationStack {
             ItemListView()
                 .environment(preview.tags.first { $0.type == .content })
+        }
+    }
+}
+
+#Preview {
+    IncomesPreview { preview in
+        NavigationStack {
+            ItemListView()
+                .environment(preview.tags.first { $0.type == .category })
         }
     }
 }
