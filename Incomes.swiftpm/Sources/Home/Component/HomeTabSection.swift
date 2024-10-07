@@ -23,49 +23,90 @@ struct HomeTabSection {
 extension HomeTabSection: View {
     var body: some View {
         Section {
-            #if XCODE
-            if #available(iOS 18.0, *) {
-                TabView(selection: $yearTag) {
-                    ForEach(yearTags.filter { $0.items.isNotEmpty }) { yearTag in
-                        Tab(value: yearTag) {
-                            NavigationLink(value: IncomesPath.year(yearTag.name.dateValueWithoutLocale(.yyyy) ?? .distantPast)) {
-                                Text(yearTag.displayName)
+            HStack {
+                Button {
+                    guard let index = nextIndex(reverse: true) else {
+                        return
+                    }
+                    self.yearTag = yearTags[index]
+                } label: {
+                    Image(systemName: "chevron.left.circle.fill")
+                        .foregroundStyle(
+                            Color(.secondaryLabel),
+                            Color(.secondarySystemFill)
+                        )
+                        .font(.title2)
+                }
+                .disabled(nextIndex(reverse: true) == nil)
+                Group {
+                    #if XCODE
+                    if #available(iOS 18.0, *) {
+                        TabView(selection: $yearTag) {
+                            ForEach(yearTags.filter { $0.items.isNotEmpty }) { yearTag in
+                                Tab(value: yearTag) {
+                                    HomeTabSectionLink()
+                                        .environment(yearTag)
+                                }
+                            }
+                        }
+                    } else {
+                        TabView(selection: $yearTag) {
+                            ForEach(yearTags.filter { $0.items.isNotEmpty }) { yearTag in
+                                HomeTabSectionLink()
+                                    .environment(yearTag)
+                                    .tag(yearTag as Tag?)
                             }
                         }
                     }
-                }
-            } else {
-                TabView(selection: $yearTag) {
-                    ForEach(yearTags.filter { $0.items.isNotEmpty }) { yearTag in
-                        NavigationLink(value: IncomesPath.year(yearTag.name.dateValueWithoutLocale(.yyyy) ?? .distantPast)) {
-                            Text(yearTag.displayName)
+                    #else
+                    TabView(selection: $yearTag) {
+                        ForEach(yearTags.filter { $0.items.isNotEmpty }) { yearTag in
+                            HomeTabSectionLink()
+                                .environment(yearTag)
+                                .tag(yearTag as Tag?)
                         }
-                        .tag(yearTag as Tag?)
                     }
+                    #endif
                 }
-            }
-            #else
-            TabView(selection: $yearTag) {
-                ForEach(yearTags.filter { $0.items.isNotEmpty }) { yearTag in
-                    NavigationLink(value: IncomesPath.year(yearTag.name.dateValueWithoutLocale(.yyyy) ?? .distantPast)) {
-                        Text(yearTag.displayName)
+                .tabViewStyle(.page(indexDisplayMode: .never))
+                Button {
+                    guard let index = nextIndex(reverse: false) else {
+                        return
                     }
-                    .tag(yearTag as Tag?)
+                    self.yearTag = yearTags[index]
+                } label: {
+                    Image(systemName: "chevron.right.circle.fill")
+                        .foregroundStyle(
+                            Color(.secondaryLabel),
+                            Color(.secondarySystemFill)
+                        )
+                        .font(.title2)
                 }
+                .disabled(nextIndex(reverse: false) == nil)
             }
-            #endif
         }
-        .tabViewStyle(.page)
-        .listRowInsets(.init())
         .frame(height: .componentM)
-        .background(.tint.quinary)
+        .buttonStyle(.plain)
+    }
+}
+
+private extension HomeTabSection {
+    func nextIndex(reverse: Bool) -> Int? {
+        guard let yearTag,
+              let current = yearTags.firstIndex(of: yearTag) else {
+            return nil
+        }
+        let index = current + (reverse ? -1 : 1)
+        return yearTags.indices.contains(index) ? index : nil
     }
 }
 
 #Preview {
     IncomesPreview { _ in
-        List {
-            HomeTabSection()
+        NavigationStack {
+            List {
+                HomeTabSection()
+            }
         }
     }
 }
