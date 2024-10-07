@@ -30,6 +30,7 @@ extension HomeTabSection: View {
                         ForEach(yearTags.filter { $0.items.isNotEmpty }) { yearTag in
                             Tab(value: yearTag) {
                                 HomeTabSectionLink()
+                                    .offset(y: -.spaceL)
                                     .environment(yearTag)
                             }
                         }
@@ -38,6 +39,7 @@ extension HomeTabSection: View {
                     TabView(selection: $yearTag) {
                         ForEach(yearTags.filter { $0.items.isNotEmpty }) { yearTag in
                             HomeTabSectionLink()
+                                .offset(y: -.spaceL)
                                 .environment(yearTag)
                                 .tag(yearTag as Tag?)
                         }
@@ -47,61 +49,18 @@ extension HomeTabSection: View {
                 TabView(selection: $yearTag) {
                     ForEach(yearTags.filter { $0.items.isNotEmpty }) { yearTag in
                         HomeTabSectionLink()
+                            .offset(y: -.spaceL)
                             .environment(yearTag)
                             .tag(yearTag as Tag?)
                     }
                 }
                 #endif
             }
-            .tabViewStyle(.page(indexDisplayMode: .never))
-            .frame(height: .componentM)
-            .overlay(alignment: .leading) {
-                Button {
-                    guard let index = nextIndex(reverse: true) else {
-                        return
-                    }
-                    self.yearTag = yearTags[index]
-                } label: {
-                    Image(systemName: "chevron.left.circle.fill")
-                        .foregroundStyle(
-                            Color(.secondaryLabel),
-                            Color(.secondarySystemFill)
-                        )
-                        .font(.title2)
-                }
-                .disabled(nextIndex(reverse: true) == nil)
-                .offset(x: -.spaceS)
-            }
-            .overlay(alignment: .trailing) {
-                Button {
-                    guard let index = nextIndex(reverse: false) else {
-                        return
-                    }
-                    self.yearTag = yearTags[index]
-                } label: {
-                    Image(systemName: "chevron.right.circle.fill")
-                        .foregroundStyle(
-                            Color(.secondaryLabel),
-                            Color(.secondarySystemFill)
-                        )
-                        .font(.title2)
-                }
-                .disabled(nextIndex(reverse: false) == nil)
-                .offset(x: .spaceS)
-            }
+            .tabViewStyle(.page)
+            .frame(height: .componentL)
+            .offset(y: .spaceM)
         }
         .buttonStyle(.plain)
-    }
-}
-
-private extension HomeTabSection {
-    func nextIndex(reverse: Bool) -> Int? {
-        guard let yearTag,
-              let current = yearTags.firstIndex(of: yearTag) else {
-            return nil
-        }
-        let index = current + (reverse ? -1 : 1)
-        return yearTags.indices.contains(index) ? index : nil
     }
 }
 

@@ -26,7 +26,7 @@ extension HomeTabSectionLink: View {
                     Image(systemName: "chevron.up")
                         .foregroundStyle(.tint)
                 }
-                .padding(.horizontal, .spaceL)
+                .padding(.leading, .spaceL)
                 HStack {
                     Text("Total Outgo")
                     Spacer()
@@ -35,7 +35,7 @@ extension HomeTabSectionLink: View {
                     Image(systemName: "chevron.down")
                         .foregroundStyle(.red)
                 }
-                .padding(.horizontal, .spaceL)
+                .padding(.leading, .spaceL)
             }
             .contentShape(.rect)
         }
