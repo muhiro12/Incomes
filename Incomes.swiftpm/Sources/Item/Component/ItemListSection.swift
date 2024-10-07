@@ -17,9 +17,9 @@ struct ItemListSection {
     @State private var isPresentedToAlert = false
     @State private var willDeleteItems: [Item] = []
 
-    private let title: String?
+    private let title: LocalizedStringKey?
 
-    init(_ descriptor: FetchDescriptor<Item>, title: String? = nil) {
+    init(_ descriptor: FetchDescriptor<Item>, title: LocalizedStringKey? = nil) {
         self._items = Query(descriptor)
         self.title = title
     }
@@ -64,7 +64,7 @@ extension ItemListSection: View {
 #Preview {
     IncomesPreview { _ in
         List {
-            ItemListSection(.items(.dateIsSameMonthAs(.now)))
+            ItemListSection(.items(.dateIsSameYearAs(.now)))
         }
     }
 }

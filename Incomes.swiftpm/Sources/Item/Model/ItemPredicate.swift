@@ -12,13 +12,16 @@ import SwiftData
 enum ItemPredicate {
     case all
     case none
-    case dateIsBetween(start: Date, end: Date)
-    case dateIsAfter(Date)
+    // MARK: Tag
+    case tagIs(Tag)
+    case tagAndYear(tag: Tag, yearString: String)
+    // MARK: Date
     case dateIsBefore(Date)
-    case dateIsSameDayAs(Date)
-    case dateIsSameMonthAs(Date)
+    case dateIsAfter(Date)
     case dateIsSameYearAs(Date)
-    case contentAndYear(content: String, year: String)
+    case dateIsSameMonthAs(Date)
+    case dateIsSameDayAs(Date)
+    // MARK: RepeatID
     case repeatIDIs(UUID)
     case repeatIDAndDateIsAfter(repeatID: UUID, date: Date)
 
@@ -28,46 +31,95 @@ enum ItemPredicate {
             return .true
         case .none:
             return .false
-        case .dateIsBetween(let start, let end):
+
+        // MARK: - Tag
+
+        case .tagIs(let tag):
+            guard let tagType = tag.type else {
+                return .false
+            }
+            switch tagType {
+            case .year:
+                guard let date = tag.name.dateValueWithoutLocale(.yyyy) else {
+                    return .false
+                }
+                let start = Calendar.utc.startOfYear(for: date)
+                let end = Calendar.utc.endOfYear(for: date)
+                return #Predicate {
+                    start <= $0.date && $0.date <= end
+                }
+            case .yearMonth:
+                guard let date = tag.name.dateValueWithoutLocale(.yyyyMM) else {
+                    return .false
+                }
+                let start = Calendar.utc.startOfMonth(for: date)
+                let end = Calendar.utc.endOfMonth(for: date)
+                return #Predicate {
+                    start <= $0.date && $0.date <= end
+                }
+            case .content:
+                let content = tag.name
+                return #Predicate {
+                    $0.content == content
+                }
+            case .category:
+                assertionFailure("Not Supported")
+                return .false
+            }
+        case .tagAndYear(let tag, let yearString):
+            guard let tagType = tag.type,
+                  let date = yearString.dateValueWithoutLocale(.yyyy) else {
+                return .false
+            }
+            switch tagType {
+            case .content:
+                let content = tag.name
+                let start = Calendar.utc.startOfYear(for: date)
+                let end = Calendar.utc.endOfYear(for: date)
+                return #Predicate {
+                    $0.content == content && start <= $0.date && $0.date <= end
+                }
+            case .year,
+                 .yearMonth,
+                 .category:
+                return Self.tagIs(tag).value
+            }
+
+        // MARK: - Date
+
+        case .dateIsBefore(let date):
+            let start = Date.distantPast
+            let end = Calendar.utc.startOfDay(for: date) - 1
             return #Predicate {
                 start <= $0.date && $0.date <= end
             }
         case .dateIsAfter(let date):
-            return Self.dateIsBetween(
-                start: Calendar.utc.startOfDay(for: date),
-                end: .distantFuture
-            ).value
-        case .dateIsBefore(let date):
-            return Self.dateIsBetween(
-                start: .distantPast,
-                end: Calendar.utc.startOfDay(for: date) - 1
-            ).value
-        case .dateIsSameDayAs(let date):
-            return Self.dateIsBetween(
-                start: Calendar.utc.startOfDay(for: date),
-                end: Calendar.utc.endOfDay(for: date)
-            ).value
-        case .dateIsSameMonthAs(let date):
-            return Self.dateIsBetween(
-                start: Calendar.utc.startOfMonth(for: date),
-                end: Calendar.utc.endOfMonth(for: date)
-            ).value
-        case .dateIsSameYearAs(let date):
-            return Self.dateIsBetween(
-                start: Calendar.utc.startOfYear(for: date),
-                end: Calendar.utc.endOfYear(for: date)
-            ).value
-        case .contentAndYear(let content, let year):
-            guard let date = year.dateValueWithoutLocale(.yyyy) else {
-                assertionFailure()
-                return .false
+            let start = Calendar.utc.startOfDay(for: date)
+            let end = Date.distantFuture
+            return #Predicate {
+                start <= $0.date && $0.date <= end
             }
+        case .dateIsSameYearAs(let date):
             let start = Calendar.utc.startOfYear(for: date)
             let end = Calendar.utc.endOfYear(for: date)
             return #Predicate {
-                $0.content == content
-                    && start <= $0.date && $0.date <= end
+                start <= $0.date && $0.date <= end
             }
+        case .dateIsSameMonthAs(let date):
+            let start = Calendar.utc.startOfMonth(for: date)
+            let end = Calendar.utc.endOfMonth(for: date)
+            return #Predicate {
+                start <= $0.date && $0.date <= end
+            }
+        case .dateIsSameDayAs(let date):
+            let start = Calendar.utc.startOfDay(for: date)
+            let end = Calendar.utc.endOfDay(for: date)
+            return #Predicate {
+                start <= $0.date && $0.date <= end
+            }
+
+        // MARK: - RepeatID
+
         case .repeatIDIs(let repeatID):
             return #Predicate {
                 $0.repeatID == repeatID

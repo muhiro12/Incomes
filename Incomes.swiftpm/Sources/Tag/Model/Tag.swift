@@ -42,18 +42,16 @@ extension Tag {
     var displayName: String {
         switch type {
         case .year:
-            return name.dateValueWithoutLocale(.yyyy)?.stringValue(.yyyy) ?? name
-
+            name.dateValueWithoutLocale(.yyyy)?.stringValue(.yyyy) ?? name
         case .yearMonth:
-            return name.dateValueWithoutLocale(.yyyyMM)?.stringValue(.yyyyMMM) ?? name
-
-        default:
-            return name
+            name.dateValueWithoutLocale(.yyyyMM)?.stringValue(.yyyyMMM) ?? name
+        case .content,
+             .category,
+             .none:
+            name
         }
     }
 }
-
-extension Tag: Identifiable {}
 
 // MARK: - Test
 

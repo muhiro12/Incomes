@@ -15,29 +15,29 @@ struct ItemListView {
 
     @AppStorage(.isSubscribeOn)
     private var isSubscribeOn
-
-    @State private var years = [String]()
 }
 
 extension ItemListView: View {
     var body: some View {
-        List(years, id: \.self) { year in
+        List(yearStrings, id: \.self) { yearString in
             ItemListSection(
-                descriptor(year),
-                title: years.count > 1 ? year.dateValueWithoutLocale(.yyyy)?.stringValue(.yyyy) : nil
+                .items(.tagAndYear(tag: tag, yearString: yearString)),
+                title: {
+                    switch tag.type {
+                    case .year,
+                         .yearMonth:
+                        nil
+                    case .content,
+                         .category,
+                         .none:
+                        .init(yearString.dateValueWithoutLocale(.yyyy)?.stringValue(.yyyy) ?? .empty)
+                    }
+                }()
             )
             if !isSubscribeOn {
                 AdvertisementSection(.medium)
             }
-            switch tag.type {
-            case .year,
-                 .yearMonth:
-                ChartSections(descriptor(year))
-            case .content,
-                 .category,
-                 .none:
-                EmptyView()
-            }
+            ChartSections(.items(.tagAndYear(tag: tag, yearString: yearString)))
         }
         .listStyle(.grouped)
         .navigationTitle(Text(tag.displayName))
@@ -50,41 +50,42 @@ extension ItemListView: View {
                     .font(.footnote)
             }
         }
-        .task {
-            years = Set(
-                tag.items?.compactMap {
-                    $0.year?.name
-                } ?? .empty
-            ).sorted(by: >)
-        }
     }
 }
 
 private extension ItemListView {
-    func descriptor(_ year: String) -> FetchDescriptor<Item> {
-        switch tag.type {
-        case .year:
-            if let date = tag.name.dateValueWithoutLocale(.yyyy) {
-                return .items(.dateIsSameYearAs(date))
+    var yearStrings: [String] {
+        Set(
+            tag.items.orEmpty.compactMap {
+                $0.year?.name
             }
-        case .yearMonth:
-            if let date = tag.name.dateValueWithoutLocale(.yyyyMM) {
-                return .items(.dateIsSameMonthAs(date))
-            }
-        case .content:
-            return .items(.contentAndYear(content: tag.name, year: year))
-        case .category:
-            break
-        case .none:
-            break
-        }
-        return .items(.none)
+        ).sorted(by: >)
     }
 }
 
 #Preview {
     IncomesPreview { preview in
-        ItemListView()
-            .environment(preview.tags.first { $0.name == Date.now.stringValueWithoutLocale(.yyyy) }!)
+        NavigationStack {
+            ItemListView()
+                .environment(preview.tags.first { $0.type == .year })
+        }
+    }
+}
+
+#Preview {
+    IncomesPreview { preview in
+        NavigationStack {
+            ItemListView()
+                .environment(preview.tags.first { $0.type == .yearMonth })
+        }
+    }
+}
+
+#Preview {
+    IncomesPreview { preview in
+        NavigationStack {
+            ItemListView()
+                .environment(preview.tags.first { $0.type == .content })
+        }
     }
 }
