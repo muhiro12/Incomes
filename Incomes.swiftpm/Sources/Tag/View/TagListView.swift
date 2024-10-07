@@ -1,5 +1,5 @@
 //
-//  CategoryListView.swift
+//  TagListView.swift
 //  Incomes
 //
 //  Created by Hiromu Nakano on 2023/09/10.
@@ -9,11 +9,11 @@
 import SwiftData
 import SwiftUI
 
-struct CategoryListView {
+struct TagListView {
     @Environment(ItemService.self)
     private var itemService
 
-    @Query(.tags(.typeIs(.category)))
+    @Query
     private var tags: [Tag]
 
     @Binding private var path: IncomesPath?
@@ -21,12 +21,16 @@ struct CategoryListView {
     @State private var isPresentedToAlert = false
     @State private var willDeleteItems = [Item]()
 
-    init(selection: Binding<IncomesPath?> = .constant(nil)) {
-        _path = selection
+    private let tagType: Tag.TagType
+
+    init(tagType: Tag.TagType, selection: Binding<IncomesPath?> = .constant(nil)) {
+        self.tagType = tagType
+        self._tags = .init(.tags(.typeIs(tagType)))
+        self._path = selection
     }
 }
 
-extension CategoryListView: View {
+extension TagListView: View {
     var body: some View {
         List(selection: $path) {
             ForEach(tags) { tag in
@@ -40,7 +44,7 @@ extension CategoryListView: View {
             }
         }
         .listStyle(.sidebar)
-        .navigationTitle(Text("Category"))
+        .navigationTitle(Text(tagType == .content ? "Content" : "Category"))
         .toolbar {
             ToolbarItem(placement: .bottomBar) {
                 MainTabMenu()
@@ -75,6 +79,12 @@ extension CategoryListView: View {
 
 #Preview {
     IncomesPreview { _ in
-        CategoryListView()
+        TagListView(tagType: .content)
+    }
+}
+
+#Preview {
+    IncomesPreview { _ in
+        TagListView(tagType: .category)
     }
 }

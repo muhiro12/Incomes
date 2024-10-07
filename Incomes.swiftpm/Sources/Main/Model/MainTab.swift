@@ -9,6 +9,7 @@ import SwiftUI
 
 enum MainTab {
     case home
+    case content
     case category
     case settings
     case debug
@@ -21,8 +22,10 @@ extension MainTab {
             switch self {
             case .home:
                 HomeNavigationView()
+            case .content:
+                TagNavigationView(tagType: .content)
             case .category:
-                CategoryNavigationView()
+                TagNavigationView(tagType: .category)
             case .settings:
                 SettingsNavigationView()
             case .debug:
@@ -39,6 +42,12 @@ extension MainTab {
                 Text("Home")
             } icon: {
                 Image(systemName: "calendar")
+            }
+        case .content:
+            Label {
+                Text("Content")
+            } icon: {
+                Image(systemName: "square.stack.3d.up")
             }
         case .category:
             Label {
