@@ -28,7 +28,7 @@ final class Item {
                        content: String,
                        income: Decimal,
                        outgo: Decimal,
-                       group: String,
+                       category: String,
                        repeatID: UUID) throws -> Item {
         let item = Item()
         context.insert(item)
@@ -57,7 +57,7 @@ final class Item {
             ),
             try .create(
                 context: context,
-                name: group,
+                name: category,
                 type: .category
             )
         ]
@@ -69,7 +69,7 @@ final class Item {
                 content: String,
                 income: Decimal,
                 outgo: Decimal,
-                group: String,
+                category: String,
                 repeatID: UUID) throws {
         self.date = Calendar.utc.startOfDay(for: date)
         self.content = content
@@ -99,7 +99,7 @@ final class Item {
             ),
             try .create(
                 context: context,
-                name: group,
+                name: category,
                 type: .category
             )
         ]
@@ -150,7 +150,7 @@ extension Item {
                                          content: String,
                                          income: Decimal,
                                          outgo: Decimal,
-                                         group: String,
+                                         category: String,
                                          repeatID: UUID) throws -> Item {
         let item = Item()
         context.insert(item)
@@ -179,7 +179,7 @@ extension Item {
             ),
             try .createIgnoringDuplicates(
                 context: context,
-                name: group,
+                name: category,
                 type: .category
             )
         ]

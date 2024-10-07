@@ -37,7 +37,7 @@ final class ItemService {
                 content: String,
                 income: Decimal,
                 outgo: Decimal,
-                group: String,
+                category: String,
                 repeatCount: Int = .one) throws {
         var items = [Item]()
 
@@ -49,7 +49,7 @@ final class ItemService {
             content: content,
             income: income,
             outgo: outgo,
-            group: group,
+            category: category,
             repeatID: repeatID
         )
         items.append(item)
@@ -70,7 +70,7 @@ final class ItemService {
                 content: content,
                 income: income,
                 outgo: outgo,
-                group: group,
+                category: category,
                 repeatID: repeatID
             )
             items.append(item)
@@ -88,12 +88,12 @@ final class ItemService {
                 content: String,
                 income: Decimal,
                 outgo: Decimal,
-                group: String) throws {
+                category: String) throws {
         try item.modify(date: date,
                         content: content,
                         income: income,
                         outgo: outgo,
-                        group: group,
+                        category: category,
                         repeatID: .init())
         try calculator.calculate(for: [item])
     }
@@ -103,13 +103,13 @@ final class ItemService {
                               content: String,
                               income: Decimal,
                               outgo: Decimal,
-                              group: String) throws {
+                              category: String) throws {
         try updateForRepeatingItems(item: item,
                                     date: date,
                                     content: content,
                                     income: income,
                                     outgo: outgo,
-                                    group: group,
+                                    category: category,
                                     descriptor: .items(.repeatIDAndDateIsAfter(repeatID: item.repeatID, date: item.date)))
     }
 
@@ -118,13 +118,13 @@ final class ItemService {
                            content: String,
                            income: Decimal,
                            outgo: Decimal,
-                           group: String) throws {
+                           category: String) throws {
         try updateForRepeatingItems(item: item,
                                     date: date,
                                     content: content,
                                     income: income,
                                     outgo: outgo,
-                                    group: group,
+                                    category: category,
                                     descriptor: .items(.repeatIDIs(item.repeatID)))
     }
 
@@ -154,7 +154,7 @@ private extension ItemService {
                                  content: String,
                                  income: Decimal,
                                  outgo: Decimal,
-                                 group: String,
+                                 category: String,
                                  descriptor: FetchDescriptor<Item>) throws {
         let components = Calendar.utc.dateComponents([.year, .month, .day],
                                                      from: item.date,
@@ -172,7 +172,7 @@ private extension ItemService {
                 content: content,
                 income: income,
                 outgo: outgo,
-                group: group,
+                category: category,
                 repeatID: repeatID
             )
         }

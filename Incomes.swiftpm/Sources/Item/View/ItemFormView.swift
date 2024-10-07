@@ -43,7 +43,7 @@ struct ItemFormView {
     @State private var content: String = .empty
     @State private var income: String = .empty
     @State private var outgo: String = .empty
-    @State private var group: String = .empty
+    @State private var category: String = .empty
     @State private var repeatSelection: Int = .zero
 
     private let item: Item?
@@ -90,9 +90,9 @@ extension ItemFormView: View {
                         .foregroundColor(outgo.isEmptyOrDecimal ? .primary : .red)
                 }
                 HStack {
-                    Text("Group")
+                    Text("Category")
                     Spacer()
-                    TextField("Others", text: $group)
+                    TextField("Others", text: $category)
                         .focused($focusedField, equals: .category)
                         .multilineTextAlignment(.trailing)
                 }
@@ -137,7 +137,7 @@ extension ItemFormView: View {
                     .hidden(focusedField != .content)
             }
             ToolbarItem(placement: .keyboard) {
-                SuggestionButtons(input: $group, type: .category)
+                SuggestionButtons(input: $category, type: .category)
                     .hidden(focusedField != .category)
             }
         }
@@ -172,7 +172,7 @@ extension ItemFormView: View {
             content = item.content
             income = item.income.description
             outgo = item.outgo.description
-            group = item.tags?.first { $0.type == .category }?.displayName ?? .empty
+            category = item.tags?.first { $0.type == .category }?.displayName ?? .empty
         }
         .actionSheet(isPresented: $isActionSheetPresented) {
             ActionSheet(title: Text("This is a repeating item."),
@@ -224,7 +224,7 @@ private extension ItemFormView {
                 content: content,
                 income: income.decimalValue,
                 outgo: outgo.decimalValue,
-                group: group
+                category: category
             )
         } catch {
             assertionFailure(error.localizedDescription)
@@ -244,7 +244,7 @@ private extension ItemFormView {
                 content: content,
                 income: income.decimalValue,
                 outgo: outgo.decimalValue,
-                group: group
+                category: category
             )
         } catch {
             assertionFailure(error.localizedDescription)
@@ -264,7 +264,7 @@ private extension ItemFormView {
                 content: content,
                 income: income.decimalValue,
                 outgo: outgo.decimalValue,
-                group: group
+                category: category
             )
         } catch {
             assertionFailure(error.localizedDescription)
@@ -279,7 +279,7 @@ private extension ItemFormView {
                 content: content,
                 income: income.decimalValue,
                 outgo: outgo.decimalValue,
-                group: group,
+                category: category,
                 repeatCount: repeatSelection + .one
             )
         } catch {

@@ -42,7 +42,7 @@ final class IncomesPreviewStore {
                 content: "Pension",
                 income: 0,
                 outgo: 36,
-                group: "Tax",
+                category: "Tax",
                 repeatID: .init()
             )
         }
@@ -69,7 +69,7 @@ final class IncomesPreviewStore {
                 content: "Payday",
                 income: 3_500,
                 outgo: 0,
-                group: "Salary",
+                category: "Salary",
                 repeatID: .init()
             )
             _ = try! Item.create(
@@ -78,7 +78,7 @@ final class IncomesPreviewStore {
                 content: "Advertising revenue",
                 income: 485,
                 outgo: 0,
-                group: "Salary",
+                category: "Salary",
                 repeatID: .init()
             )
             _ = try! Item.create(
@@ -87,7 +87,7 @@ final class IncomesPreviewStore {
                 content: "Apple card",
                 income: 0,
                 outgo: 1_000,
-                group: "Credit",
+                category: "Credit",
                 repeatID: .init()
             )
             _ = try! Item.create(
@@ -96,7 +96,7 @@ final class IncomesPreviewStore {
                 content: "Orange card",
                 income: 0,
                 outgo: 800,
-                group: "Credit",
+                category: "Credit",
                 repeatID: .init()
             )
             _ = try! Item.create(
@@ -105,7 +105,7 @@ final class IncomesPreviewStore {
                 content: "Lemon card",
                 income: 0,
                 outgo: 500,
-                group: "Credit",
+                category: "Credit",
                 repeatID: .init()
             )
             _ = try! Item.create(
@@ -114,7 +114,7 @@ final class IncomesPreviewStore {
                 content: "House",
                 income: 0,
                 outgo: 30,
-                group: "Loan",
+                category: "Loan",
                 repeatID: .init()
             )
             _ = try! Item.create(
@@ -123,7 +123,7 @@ final class IncomesPreviewStore {
                 content: "Car",
                 income: 0,
                 outgo: 25,
-                group: "Loan",
+                category: "Loan",
                 repeatID: .init()
             )
             _ = try! Item.create(
@@ -132,7 +132,7 @@ final class IncomesPreviewStore {
                 content: "Insurance",
                 income: 0,
                 outgo: 28,
-                group: "Tax",
+                category: "Tax",
                 repeatID: .init()
             )
             _ = try! Item.create(
@@ -141,7 +141,7 @@ final class IncomesPreviewStore {
                 content: "Pension",
                 income: 0,
                 outgo: 36,
-                group: "Tax",
+                category: "Tax",
                 repeatID: .init()
             )
         }
