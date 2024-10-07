@@ -13,7 +13,7 @@ struct HomeNavigationView: View {
 
     var body: some View {
         NavigationSplitView {
-            HomeTabView(selection: $path)
+            HomeListView(selection: $path)
         } detail: {
             if case .itemList(let tag) = path {
                 ItemListView()
