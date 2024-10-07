@@ -38,7 +38,7 @@ extension DebugListView: View {
                         Text(String.debugAllItems)
                     }
                     NavigationLink {
-                        TagListView()
+                        DebugTagListView()
                     } label: {
                         Text("All Tags")
                     }

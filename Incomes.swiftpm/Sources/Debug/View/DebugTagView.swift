@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct TagView: View {
+struct DebugTagView: View {
     @Environment(Tag.self) private var tag
 
     var body: some View {
@@ -43,7 +43,7 @@ struct TagView: View {
 
 #Preview {
     IncomesPreview { preview in
-        TagView()
+        DebugTagView()
             .environment(preview.tags[0])
     }
 }

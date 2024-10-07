@@ -1,7 +1,7 @@
 import SwiftData
 import SwiftUI
 
-struct TagListView: View {
+struct DebugTagListView: View {
     @Query(.tags(.typeIs(.year))) private var years: [Tag]
     @Query(.tags(.typeIs(.yearMonth))) private var yearMonths: [Tag]
     @Query(.tags(.typeIs(.content))) private var contents: [Tag]
@@ -40,6 +40,6 @@ struct TagListView: View {
 
 #Preview {
     IncomesPreview { _ in
-        TagListView()
+        DebugTagListView()
     }
 }
