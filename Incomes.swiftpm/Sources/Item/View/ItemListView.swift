@@ -30,16 +30,21 @@ extension ItemListView: View {
                         ? .init(yearString.dateValueWithoutLocale(.yyyy)?.stringValue(.yyyy) ?? .empty)
                         : nil
                 )
-                if !isSubscribeOn {
-                    AdvertisementSection(.medium)
-                }
-                ChartSections(.items(.tagAndYear(tag: tag, yearString: yearString)))
             case .category:
-                TagItemListSection()
-                if !isSubscribeOn {
-                    AdvertisementSection(.medium)
-                }
+                TagItemListSection(yearString: yearString)
             case .none:
+                EmptyView()
+            }
+            if !isSubscribeOn {
+                AdvertisementSection(.medium)
+            }
+            switch tag.type {
+            case .year,
+                 .yearMonth:
+                ChartSections(.items(.tagAndYear(tag: tag, yearString: yearString)))
+            case .content,
+                 .category,
+                 .none:
                 EmptyView()
             }
         }

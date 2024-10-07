@@ -16,21 +16,27 @@ struct TagItemListSection {
 
     @State private var isPresentedToAlert = false
     @State private var willDeleteItems: [Item] = []
+
+    private let yearString: String
+
+    init(yearString: String) {
+        self.yearString = yearString
+    }
 }
 
 extension TagItemListSection: View {
     var body: some View {
         Section {
-            ForEach(tag.items.orEmpty) {
+            ForEach(items) {
                 ListItem()
                     .environment($0)
             }
             .onDelete {
-                willDeleteItems = $0.map { tag.items.orEmpty[$0] }
+                willDeleteItems = $0.map { items[$0] }
                 isPresentedToAlert = true
             }
         } header: {
-            Text(tag.displayName)
+            Text(yearString.dateValueWithoutLocale(.yyyy)?.stringValue(.yyyy) ?? .empty)
         }
         .actionSheet(isPresented: $isPresentedToAlert) {
             ActionSheet(
@@ -52,10 +58,18 @@ extension TagItemListSection: View {
     }
 }
 
+private extension TagItemListSection {
+    var items: [Item] {
+        tag.items.orEmpty.filter {
+            $0.year?.name == yearString
+        }.sorted()
+    }
+}
+
 #Preview {
     IncomesPreview { preview in
         List {
-            TagItemListSection()
+            TagItemListSection(yearString: Date.now.stringValueWithoutLocale(.yyyy))
                 .environment(preview.tags.first { $0.type == .category })
         }
     }

@@ -10,10 +10,16 @@ import SwiftData
 import SwiftUI
 
 struct CategoryListView {
+    @Environment(ItemService.self)
+    private var itemService
+
     @Query(.tags(.typeIs(.category)))
     private var tags: [Tag]
 
     @Binding private var path: IncomesPath?
+
+    @State private var isPresentedToAlert = false
+    @State private var willDeleteItems = [Item]()
 
     init(selection: Binding<IncomesPath?> = .constant(nil)) {
         _path = selection
@@ -22,9 +28,15 @@ struct CategoryListView {
 
 extension CategoryListView: View {
     var body: some View {
-        List(tags, selection: $path) { tag in
-            if tag.items.isNotEmpty {
-                CategorySection(categoryTag: tag)
+        List(selection: $path) {
+            ForEach(tags) { tag in
+                NavigationLink(value: IncomesPath.itemList(tag)) {
+                    Text(tag.displayName)
+                }
+            }
+            .onDelete {
+                isPresentedToAlert = true
+                willDeleteItems = $0.flatMap { tags[$0].items ?? [] }
             }
         }
         .listStyle(.sidebar)
@@ -40,6 +52,23 @@ extension CategoryListView: View {
             ToolbarItem(placement: .bottomBar) {
                 CreateButton()
             }
+        }
+        .actionSheet(isPresented: $isPresentedToAlert) {
+            ActionSheet(
+                title: Text("Are you sure you want to delete this item?"),
+                buttons: [
+                    .destructive(Text("Delete")) {
+                        do {
+                            try itemService.delete(items: willDeleteItems)
+                        } catch {
+                            assertionFailure(error.localizedDescription)
+                        }
+                    },
+                    .cancel {
+                        willDeleteItems = []
+                    }
+                ]
+            )
         }
     }
 }
