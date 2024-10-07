@@ -22,7 +22,7 @@ struct HomeTabSection {
 
 extension HomeTabSection: View {
     var body: some View {
-        Group {
+        Section {
             #if XCODE
             if #available(iOS 18.0, *) {
                 TabView(selection: $yearTag) {
@@ -56,13 +56,15 @@ extension HomeTabSection: View {
             #endif
         }
         .tabViewStyle(.page)
+        .listRowInsets(.init())
         .frame(height: .componentM)
+        .background(.tint.quinary)
     }
 }
 
 #Preview {
     IncomesPreview { _ in
-        NavigationStack {
+        List {
             HomeTabSection()
         }
     }
