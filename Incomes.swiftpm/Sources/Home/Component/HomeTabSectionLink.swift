@@ -19,18 +19,25 @@ extension HomeTabSectionLink: View {
                 Text(yearTag.displayName)
                     .font(.title.bold())
                 HStack {
-                    Spacer()
                     Text("Total Income")
+                    Spacer()
                     Text(yearTag.items.orEmpty.reduce(.zero) { $0 + $1.income }.asCurrency)
+                        .foregroundStyle(.secondary)
+                    Image(systemName: "chevron.up")
                         .foregroundStyle(.tint)
                 }
+                .padding(.horizontal, .spaceL)
                 HStack {
-                    Spacer()
                     Text("Total Outgo")
+                    Spacer()
                     Text(yearTag.items.orEmpty.reduce(.zero) { $0 + $1.outgo }.asMinusCurrency)
+                        .foregroundStyle(.secondary)
+                    Image(systemName: "chevron.down")
                         .foregroundStyle(.red)
                 }
+                .padding(.horizontal, .spaceL)
             }
+            .contentShape(.rect)
         }
     }
 }

@@ -23,7 +23,39 @@ struct HomeTabSection {
 extension HomeTabSection: View {
     var body: some View {
         Section {
-            HStack {
+            Group {
+                #if XCODE
+                if #available(iOS 18.0, *) {
+                    TabView(selection: $yearTag) {
+                        ForEach(yearTags.filter { $0.items.isNotEmpty }) { yearTag in
+                            Tab(value: yearTag) {
+                                HomeTabSectionLink()
+                                    .environment(yearTag)
+                            }
+                        }
+                    }
+                } else {
+                    TabView(selection: $yearTag) {
+                        ForEach(yearTags.filter { $0.items.isNotEmpty }) { yearTag in
+                            HomeTabSectionLink()
+                                .environment(yearTag)
+                                .tag(yearTag as Tag?)
+                        }
+                    }
+                }
+                #else
+                TabView(selection: $yearTag) {
+                    ForEach(yearTags.filter { $0.items.isNotEmpty }) { yearTag in
+                        HomeTabSectionLink()
+                            .environment(yearTag)
+                            .tag(yearTag as Tag?)
+                    }
+                }
+                #endif
+            }
+            .tabViewStyle(.page(indexDisplayMode: .never))
+            .frame(height: .componentM)
+            .overlay(alignment: .leading) {
                 Button {
                     guard let index = nextIndex(reverse: true) else {
                         return
@@ -38,37 +70,9 @@ extension HomeTabSection: View {
                         .font(.title2)
                 }
                 .disabled(nextIndex(reverse: true) == nil)
-                Group {
-                    #if XCODE
-                    if #available(iOS 18.0, *) {
-                        TabView(selection: $yearTag) {
-                            ForEach(yearTags.filter { $0.items.isNotEmpty }) { yearTag in
-                                Tab(value: yearTag) {
-                                    HomeTabSectionLink()
-                                        .environment(yearTag)
-                                }
-                            }
-                        }
-                    } else {
-                        TabView(selection: $yearTag) {
-                            ForEach(yearTags.filter { $0.items.isNotEmpty }) { yearTag in
-                                HomeTabSectionLink()
-                                    .environment(yearTag)
-                                    .tag(yearTag as Tag?)
-                            }
-                        }
-                    }
-                    #else
-                    TabView(selection: $yearTag) {
-                        ForEach(yearTags.filter { $0.items.isNotEmpty }) { yearTag in
-                            HomeTabSectionLink()
-                                .environment(yearTag)
-                                .tag(yearTag as Tag?)
-                        }
-                    }
-                    #endif
-                }
-                .tabViewStyle(.page(indexDisplayMode: .never))
+                .offset(x: -.spaceS)
+            }
+            .overlay(alignment: .trailing) {
                 Button {
                     guard let index = nextIndex(reverse: false) else {
                         return
@@ -83,9 +87,9 @@ extension HomeTabSection: View {
                         .font(.title2)
                 }
                 .disabled(nextIndex(reverse: false) == nil)
+                .offset(x: .spaceS)
             }
         }
-        .frame(height: .componentM)
         .buttonStyle(.plain)
     }
 }
