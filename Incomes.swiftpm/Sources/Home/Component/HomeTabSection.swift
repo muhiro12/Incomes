@@ -61,6 +61,14 @@ extension HomeTabSection: View {
             .offset(y: .spaceM)
         }
         .buttonStyle(.plain)
+        .onAppear {
+            UIPageControl.appearance().currentPageIndicatorTintColor = .systemGreen
+            UIPageControl.appearance().pageIndicatorTintColor = .systemGreen.withAlphaComponent(0.5)
+        }
+        .onDisappear {
+            UIPageControl.appearance().currentPageIndicatorTintColor = nil
+            UIPageControl.appearance().pageIndicatorTintColor = nil
+        }
     }
 }
 
