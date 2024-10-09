@@ -17,6 +17,7 @@ enum TagPredicate {
     case typeIs(Tag.TagType)
     case nameIs(String, type: Tag.TagType)
     case nameContains(String, type: Tag.TagType)
+    case nameStartsWith(String, type: Tag.TagType)
 
     var value: Predicate<Tag> {
         switch self {
@@ -53,6 +54,11 @@ enum TagPredicate {
                     && $0.name.localizedStandardContains(name)
                     || $0.name.localizedStandardContains(hiragana)
                     || $0.name.localizedStandardContains(katakana)
+            }
+        case .nameStartsWith(let name, let type):
+            let id = type.rawValue
+            return #Predicate {
+                $0.name.starts(with: name) && $0.typeID == id
             }
         }
     }
