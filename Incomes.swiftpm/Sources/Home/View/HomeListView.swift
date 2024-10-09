@@ -35,6 +35,7 @@ extension HomeListView: View {
                 AdvertisementSection(.small)
             }
         }
+        .listStyle(.insetGrouped)
         .navigationTitle("Home")
         .toolbar {
             ToolbarItem(placement: .bottomBar) {

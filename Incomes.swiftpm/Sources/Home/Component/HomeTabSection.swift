@@ -30,7 +30,6 @@ extension HomeTabSection: View {
                         ForEach(yearTags.filter { $0.items.isNotEmpty }) { yearTag in
                             Tab(value: yearTag) {
                                 HomeTabSectionLink()
-                                    .offset(y: -.spaceL)
                                     .environment(yearTag)
                             }
                         }
@@ -39,7 +38,6 @@ extension HomeTabSection: View {
                     TabView(selection: $yearTag) {
                         ForEach(yearTags.filter { $0.items.isNotEmpty }) { yearTag in
                             HomeTabSectionLink()
-                                .offset(y: -.spaceL)
                                 .environment(yearTag)
                                 .tag(yearTag as Tag?)
                         }
@@ -49,25 +47,24 @@ extension HomeTabSection: View {
                 TabView(selection: $yearTag) {
                     ForEach(yearTags.filter { $0.items.isNotEmpty }) { yearTag in
                         HomeTabSectionLink()
-                            .offset(y: -.spaceL)
                             .environment(yearTag)
                             .tag(yearTag as Tag?)
                     }
                 }
                 #endif
             }
-            .tabViewStyle(.page)
-            .frame(height: .componentL)
-            .offset(y: .spaceM)
-        }
-        .buttonStyle(.plain)
-        .onAppear {
-            UIPageControl.appearance().currentPageIndicatorTintColor = .systemGreen
-            UIPageControl.appearance().pageIndicatorTintColor = .systemGreen.withAlphaComponent(0.5)
-        }
-        .onDisappear {
-            UIPageControl.appearance().currentPageIndicatorTintColor = nil
-            UIPageControl.appearance().pageIndicatorTintColor = nil
+            .tabViewStyle(.page(indexDisplayMode: .never))
+            .buttonStyle(.plain)
+            .frame(height: .componentM)
+        } footer: {
+            HStack {
+                ForEach(yearTags) { yearTag in
+                    Circle()
+                        .frame(width: 8)
+                        .foregroundStyle(self.yearTag == yearTag ? AnyShapeStyle(.tint) : AnyShapeStyle(.tint.secondary))
+                }
+            }
+            .frame(maxWidth: .infinity)
         }
     }
 }
