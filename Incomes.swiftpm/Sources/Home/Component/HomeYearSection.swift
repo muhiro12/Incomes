@@ -38,6 +38,7 @@ extension HomeYearSection: View {
                                     $0.balance.isMinus
                                 } ? .red : .primary
                             )
+                            .bold(Calendar.utc.startOfMonth(for: first.date) == Calendar.utc.startOfMonth(for: .now))
                     }
                 }
             }.onDelete {
