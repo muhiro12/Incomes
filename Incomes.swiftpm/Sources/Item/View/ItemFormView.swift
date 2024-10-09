@@ -170,9 +170,9 @@ extension ItemFormView: View {
             }
             date = item.date
             content = item.content
-            income = item.income.description
-            outgo = item.outgo.description
-            category = item.tags?.first { $0.type == .category }?.displayName ?? .empty
+            income = item.income.isNotZero ? item.income.description : .empty
+            outgo = item.outgo.isNotZero ? item.outgo.description : .empty
+            category = item.category?.name ?? .empty
         }
         .actionSheet(isPresented: $isActionSheetPresented) {
             ActionSheet(title: Text("This is a repeating item."),
