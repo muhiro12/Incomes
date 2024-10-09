@@ -45,15 +45,15 @@ extension TagListView: View {
         }
         .navigationTitle(Text(tagType == .content ? "Content" : "Category"))
         .toolbar {
+            ToolbarItem {
+                CreateButton()
+            }
             ToolbarItem(placement: .bottomBar) {
                 MainTabMenu()
             }
             ToolbarItem(placement: .status) {
                 Text("Today: \(Date.now.stringValue(.yyyyMMMd))")
                     .font(.footnote)
-            }
-            ToolbarItem(placement: .bottomBar) {
-                CreateButton()
             }
         }
         .actionSheet(isPresented: $isPresentedToAlert) {
@@ -78,12 +78,16 @@ extension TagListView: View {
 
 #Preview {
     IncomesPreview { _ in
-        TagListView(tagType: .content)
+        NavigationStack {
+            TagListView(tagType: .content)
+        }
     }
 }
 
 #Preview {
     IncomesPreview { _ in
-        TagListView(tagType: .category)
+        NavigationStack {
+            TagListView(tagType: .category)
+        }
     }
 }

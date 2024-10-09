@@ -38,15 +38,15 @@ extension HomeListView: View {
         .listStyle(.insetGrouped)
         .navigationTitle("Home")
         .toolbar {
+            ToolbarItem {
+                CreateButton()
+            }
             ToolbarItem(placement: .bottomBar) {
                 MainTabMenu()
             }
             ToolbarItem(placement: .status) {
                 Text("Today: \(Date.now.stringValue(.yyyyMMMd))")
                     .font(.footnote)
-            }
-            ToolbarItem(placement: .bottomBar) {
-                CreateButton()
             }
         }
         .task {
