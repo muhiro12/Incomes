@@ -41,7 +41,7 @@ extension ItemListView: View {
             switch tag.type {
             case .year,
                  .yearMonth:
-                ChartSections(.items(.tagAndYear(tag: tag, yearString: yearString)))
+                ChartSectionGroup(.items(.tagAndYear(tag: tag, yearString: yearString)))
             case .content,
                  .category,
                  .none:

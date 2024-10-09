@@ -96,7 +96,7 @@ public extension IncomesIntents {
     static func performShowCharts(date: Date) async throws -> some IntentResult & ProvidesDialog & ShowsSnippetView {
         .result(dialog: .init(stringLiteral: date.stringValue(.yyyyMMM))) {
             incomesView {
-                ChartSections(.items(.dateIsSameMonthAs(date)))
+                ChartSectionGroup(.items(.dateIsSameMonthAs(date)))
             }
         }
     }
