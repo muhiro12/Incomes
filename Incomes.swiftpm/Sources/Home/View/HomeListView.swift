@@ -52,6 +52,13 @@ extension HomeListView: View {
         .task {
             yearTag = try? tagService.tag(.tags(.dateIsSameYearAs(.now)))
         }
+        .onChange(of: yearTag) {
+            guard let date = yearTag?.name.dateValueWithoutLocale(.yyyy),
+                  path != .none else {
+                return
+            }
+            path = .year(date)
+        }
     }
 }
 
