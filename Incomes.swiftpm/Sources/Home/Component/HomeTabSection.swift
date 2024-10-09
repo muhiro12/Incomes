@@ -58,7 +58,7 @@ extension HomeTabSection: View {
             .frame(height: .componentM)
         } footer: {
             HStack {
-                ForEach(yearTags) { yearTag in
+                ForEach(yearTags.filter { $0.items.isNotEmpty }) { yearTag in
                     Circle()
                         .frame(width: 8)
                         .foregroundStyle(self.yearTag == yearTag ? AnyShapeStyle(.tint) : AnyShapeStyle(.tint.secondary))
