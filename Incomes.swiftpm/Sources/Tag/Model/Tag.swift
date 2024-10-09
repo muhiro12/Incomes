@@ -45,9 +45,11 @@ extension Tag {
             name.dateValueWithoutLocale(.yyyy)?.stringValue(.yyyy) ?? name
         case .yearMonth:
             name.dateValueWithoutLocale(.yyyyMM)?.stringValue(.yyyyMMM) ?? name
-        case .content,
-             .category,
-             .none:
+        case .content:
+            name
+        case .category:
+            name.isNotEmpty ? name : "Others"
+        case .none:
             name
         }
     }

@@ -53,8 +53,7 @@ extension ChartSectionGroup: View {
                         $0.income.isNotZero
                     }
                 ) {
-                    guard let category = $0.category,
-                          category.displayName.isNotEmpty else {
+                    guard let category = $0.category else {
                         return "Others"
                     }
                     return category.displayName
@@ -78,8 +77,7 @@ extension ChartSectionGroup: View {
                         $0.outgo.isNotZero
                     }
                 ) {
-                    guard let category = $0.category,
-                          category.displayName.isNotEmpty else {
+                    guard let category = $0.category else {
                         return "Others"
                     }
                     return category.displayName
