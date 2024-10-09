@@ -56,7 +56,6 @@ extension DebugListView: View {
             AdvertisementSection(.medium)
             AdvertisementSection(.small)
         }
-        .listStyle(.insetGrouped)
         .alert(String.debugSetPreviewData, isPresented: $isAlertPresented) {
             Button(role: .destructive) {
                 Task {

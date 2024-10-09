@@ -43,7 +43,6 @@ extension TagListView: View {
                 willDeleteItems = $0.flatMap { tags[$0].items ?? [] }
             }
         }
-        .listStyle(.sidebar)
         .navigationTitle(Text(tagType == .content ? "Content" : "Category"))
         .toolbar {
             ToolbarItem(placement: .bottomBar) {
