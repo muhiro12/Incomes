@@ -15,7 +15,7 @@ struct SuggestionButtons: View {
 
     init(input: Binding<String>, type: Tag.TagType) {
         _input = input
-        _suggestions = .init(.tags(.nameContains(name: input.wrappedValue, type: type)))
+        _suggestions = .init(.tags(.nameContains(input.wrappedValue, type: type)))
     }
 
     var body: some View {

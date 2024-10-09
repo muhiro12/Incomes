@@ -18,7 +18,7 @@ struct HomeYearSection {
     @State private var willDeleteItems: [Item] = []
 
     init(yearTag: Tag) {
-        _yearMonthTags = Query(.tags(.nameAndType(name: yearTag.name, type: .yearMonth), order: .reverse))
+        _yearMonthTags = Query(.tags(.nameIs(yearTag.name, type: .yearMonth), order: .reverse))
     }
 }
 

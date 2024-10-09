@@ -14,12 +14,9 @@ enum TagPredicate {
     case none
     case idIs(Tag.ID)
     case isSameWith(Tag)
-    case nameAndType(name: String, type: Tag.TagType)
     case typeIs(Tag.TagType)
-    case dateIsSameYearAs(Date)
-    case dateIsSameMonthAs(Date)
-    case contentIsIn([String])
-    case nameContains(name: String, type: Tag.TagType)
+    case nameIs(String, type: Tag.TagType)
+    case nameContains(String, type: Tag.TagType)
 
     var value: Predicate<Tag> {
         switch self {
@@ -37,32 +34,15 @@ enum TagPredicate {
             return #Predicate {
                 $0.name == name && $0.typeID == typeID
             }
-        case .nameAndType(name: let name, type: let type):
-            let id = type.rawValue
-            return #Predicate {
-                $0.name == name && $0.typeID == id
-            }
         case .typeIs(let type):
             let id = type.rawValue
             return #Predicate {
                 $0.typeID == id
             }
-        case .dateIsSameYearAs(let date):
-            let name = date.stringValueWithoutLocale(.yyyy)
-            let id = Tag.TagType.year.rawValue
+        case .nameIs(let name, let type):
+            let id = type.rawValue
             return #Predicate {
                 $0.name == name && $0.typeID == id
-            }
-        case .dateIsSameMonthAs(let date):
-            let name = date.stringValueWithoutLocale(.yyyyMM)
-            let id = Tag.TagType.yearMonth.rawValue
-            return #Predicate {
-                $0.name == name && $0.typeID == id
-            }
-        case .contentIsIn(let contents):
-            let id = Tag.TagType.content.rawValue
-            return #Predicate {
-                contents.contains($0.name) && $0.typeID == id
             }
         case .nameContains(let name, let type):
             let typeID = type.rawValue

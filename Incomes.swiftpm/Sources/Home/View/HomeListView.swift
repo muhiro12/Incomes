@@ -50,7 +50,7 @@ extension HomeListView: View {
             }
         }
         .task {
-            yearTag = try? tagService.tag(.tags(.dateIsSameYearAs(.now)))
+            yearTag = try? tagService.tag(.tags(.nameIs(Date.now.stringValueWithoutLocale(.yyyy), type: .year)))
         }
         .onChange(of: yearTag) {
             guard let date = yearTag?.name.dateValueWithoutLocale(.yyyy),
