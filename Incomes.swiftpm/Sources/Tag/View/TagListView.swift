@@ -18,6 +18,7 @@ struct TagListView {
 
     @Binding private var path: IncomesPath?
 
+    @State private var searchText = String.empty
     @State private var isPresentedToAlert = false
     @State private var willDeleteItems = [Item]()
 
@@ -37,12 +38,18 @@ extension TagListView: View {
                 NavigationLink(value: IncomesPath.itemList(tag)) {
                     Text(tag.displayName)
                 }
+                .hidden(
+                    searchText.isNotEmpty
+                        && !tag.name.normalizedContains(searchText)
+                        || tag.items.orEmpty.isEmpty
+                )
             }
             .onDelete {
                 isPresentedToAlert = true
                 willDeleteItems = $0.flatMap { tags[$0].items ?? [] }
             }
         }
+        .searchable(text: $searchText)
         .navigationTitle(Text(tagType == .content ? "Content" : "Category"))
         .toolbar {
             ToolbarItem {
@@ -60,7 +67,7 @@ extension TagListView: View {
             ActionSheet(
                 title: Text("Are you sure you want to delete this item?"),
                 buttons: [
-                    .destructive(Text("Delete")) {
+                    .destructive(Text("Delete \(Set(willDeleteItems.map { $0.content }).joined(separator: ", "))")) {
                         do {
                             try itemService.delete(items: willDeleteItems)
                         } catch {
