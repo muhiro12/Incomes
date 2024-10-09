@@ -1,5 +1,5 @@
 //
-//  SuggestionButtons.swift
+//  SuggestionButtonGroup.swift
 //  Incomes Playgrounds
 //
 //  Created by Hiromu Nakano on 10/1/24.
@@ -8,7 +8,7 @@
 import SwiftData
 import SwiftUI
 
-struct SuggestionButtons: View {
+struct SuggestionButtonGroup: View {
     @Query private var suggestions: [Tag]
 
     @Binding private var input: String
@@ -34,6 +34,6 @@ struct SuggestionButtons: View {
 
 #Preview {
     IncomesPreview { _ in
-        SuggestionButtons(input: .constant("A"), type: .content)
+        SuggestionButtonGroup(input: .constant("A"), type: .content)
     }
 }

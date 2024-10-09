@@ -133,11 +133,11 @@ extension ItemFormView: View {
                 .disabled(!isValid)
             }
             ToolbarItem(placement: .keyboard) {
-                SuggestionButtons(input: $content, type: .content)
+                SuggestionButtonGroup(input: $content, type: .content)
                     .hidden(focusedField != .content)
             }
             ToolbarItem(placement: .keyboard) {
-                SuggestionButtons(input: $category, type: .category)
+                SuggestionButtonGroup(input: $category, type: .category)
                     .hidden(focusedField != .category)
             }
         }
