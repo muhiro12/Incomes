@@ -29,7 +29,7 @@ struct MainTabView: View {
     var body: some View {
         #if XCODE
         if #available(iOS 18.0, *) {
-            TabView(selection: $tab) {
+            TabView(selection: $mainTab) {
                 ForEach(tabs) { tab in
                     Tab(value: tab) {
                         tab.rootView
@@ -44,7 +44,7 @@ struct MainTabView: View {
             }
             .environment(\.mainTab, $mainTab)
         } else {
-            TabView(selection: $tab) {
+            TabView(selection: $mainTab) {
                 ForEach(tabs) { tab in
                     tab.rootView
                         .tag(tab)
