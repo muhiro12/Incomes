@@ -19,7 +19,7 @@ struct HomeNavigationView: View {
                 ItemListView()
                     .environment(tag)
             } else if case .year(let date) = path {
-                YearView(date: date)
+                YearChartsView(date: date)
             }
         }
     }
