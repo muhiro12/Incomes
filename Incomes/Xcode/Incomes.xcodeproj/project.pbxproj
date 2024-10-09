@@ -3,31 +3,18 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		AD009DB72C13EC0000682424 /* Secret.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD009DB62C13EC0000682424 /* Secret.swift */; };
-		AD0759A62C8A7CE30068A8A1 /* IncomesIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD0759A52C8A7CE00068A8A1 /* IncomesIntents.swift */; };
-		AD0759A82C8CB6270068A8A1 /* IncomesShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD0759A72C8CB6270068A8A1 /* IncomesShortcuts.swift */; };
-		AD693DF12C367F4E005F81D0 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = AD693DF02C367F4E005F81D0 /* Localizable.xcstrings */; };
-		AD85E34F2C0E80C1005A33A2 /* IncomesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD85E34E2C0E80C1005A33A2 /* IncomesApp.swift */; };
-		ADCF36B324A1D0F70011D6F5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ADCF36B224A1D0F70011D6F5 /* Assets.xcassets */; };
 		ADCF375F24A2FEAF0011D6F5 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADCF375E24A2FEAF0011D6F5 /* CloudKit.framework */; };
 		ADCF391D24A550910011D6F5 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = ADCF391C24A550900011D6F5 /* libsqlite3.tbd */; platformFilter = ios; };
 		ADCF392124A551360011D6F5 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADCF392024A551360011D6F5 /* StoreKit.framework */; platformFilter = ios; };
-		ADD8475C2C16B0EE006055C9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = ADD8475B2C16B0EE006055C9 /* GoogleService-Info.plist */; };
 		ADD847602C16B132006055C9 /* Incomes in Frameworks */ = {isa = PBXBuildFile; productRef = ADD8475F2C16B132006055C9 /* Incomes */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		AD009DB62C13EC0000682424 /* Secret.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secret.swift; sourceTree = "<group>"; };
-		AD0759A52C8A7CE00068A8A1 /* IncomesIntents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomesIntents.swift; sourceTree = "<group>"; };
-		AD0759A72C8CB6270068A8A1 /* IncomesShortcuts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomesShortcuts.swift; sourceTree = "<group>"; };
-		AD693DF02C367F4E005F81D0 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
-		AD85E34E2C0E80C1005A33A2 /* IncomesApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IncomesApp.swift; sourceTree = "<group>"; };
 		ADCF36A624A1D0F40011D6F5 /* Incomes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Incomes.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		ADCF36B224A1D0F70011D6F5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		ADCF375E24A2FEAF0011D6F5 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		ADCF38F624A550190011D6F5 /* GoogleDataTransport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleDataTransport.framework; sourceTree = "<group>"; };
 		ADCF38F724A550190011D6F5 /* Firebase.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Firebase.framework; sourceTree = "<group>"; };
@@ -44,8 +31,11 @@
 		ADCF390224A550190011D6F5 /* .FirebaseAnalyticsBinary.version */ = {isa = PBXFileReference; lastKnownFileType = text; path = .FirebaseAnalyticsBinary.version; sourceTree = "<group>"; };
 		ADCF391C24A550900011D6F5 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/usr/lib/libsqlite3.tbd; sourceTree = DEVELOPER_DIR; };
 		ADCF392024A551360011D6F5 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/StoreKit.framework; sourceTree = DEVELOPER_DIR; };
-		ADD8475B2C16B0EE006055C9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		ADA5778B2CB66D6200CE47E2 /* Incomes */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Incomes; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		ADCF36A324A1D0F40011D6F5 /* Frameworks */ = {
@@ -65,7 +55,7 @@
 		ADCF369D24A1D0F40011D6F5 = {
 			isa = PBXGroup;
 			children = (
-				ADCF36A824A1D0F40011D6F5 /* Incomes */,
+				ADA5778B2CB66D6200CE47E2 /* Incomes */,
 				ADCF36A724A1D0F40011D6F5 /* Products */,
 				ADCF375D24A2FEAF0011D6F5 /* Frameworks */,
 			);
@@ -77,20 +67,6 @@
 				ADCF36A624A1D0F40011D6F5 /* Incomes.app */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		ADCF36A824A1D0F40011D6F5 /* Incomes */ = {
-			isa = PBXGroup;
-			children = (
-				ADCF36B224A1D0F70011D6F5 /* Assets.xcassets */,
-				ADD8475B2C16B0EE006055C9 /* GoogleService-Info.plist */,
-				AD85E34E2C0E80C1005A33A2 /* IncomesApp.swift */,
-				AD0759A52C8A7CE00068A8A1 /* IncomesIntents.swift */,
-				AD0759A72C8CB6270068A8A1 /* IncomesShortcuts.swift */,
-				AD693DF02C367F4E005F81D0 /* Localizable.xcstrings */,
-				AD009DB62C13EC0000682424 /* Secret.swift */,
-			);
-			path = Incomes;
 			sourceTree = "<group>";
 		};
 		ADCF375D24A2FEAF0011D6F5 /* Frameworks */ = {
@@ -148,6 +124,9 @@
 			);
 			dependencies = (
 			);
+			fileSystemSynchronizedGroups = (
+				ADA5778B2CB66D6200CE47E2 /* Incomes */,
+			);
 			name = Incomes;
 			packageProductDependencies = (
 				ADD8475F2C16B132006055C9 /* Incomes */,
@@ -199,9 +178,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				ADCF36B324A1D0F70011D6F5 /* Assets.xcassets in Resources */,
-				ADD8475C2C16B0EE006055C9 /* GoogleService-Info.plist in Resources */,
-				AD693DF12C367F4E005F81D0 /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -212,10 +188,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AD0759A62C8A7CE30068A8A1 /* IncomesIntents.swift in Sources */,
-				AD85E34F2C0E80C1005A33A2 /* IncomesApp.swift in Sources */,
-				AD0759A82C8CB6270068A8A1 /* IncomesShortcuts.swift in Sources */,
-				AD009DB72C13EC0000682424 /* Secret.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
