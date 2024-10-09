@@ -10,7 +10,7 @@ import SwiftUI
 struct MainTabMenu: View {
     @Environment(\.mainTab)
     private var mainTab
-    
+
     @AppStorage(.isDebugOn)
     private var isDebugOn
 
