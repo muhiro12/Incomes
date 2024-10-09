@@ -16,7 +16,6 @@ enum TagPredicate {
     case isSameWith(Tag)
     case nameAndType(name: String, type: Tag.TagType)
     case typeIs(Tag.TagType)
-    case yearIs(String)
     case dateIsSameYearAs(Date)
     case dateIsSameMonthAs(Date)
     case contentIsIn([String])
@@ -47,11 +46,6 @@ enum TagPredicate {
             let id = type.rawValue
             return #Predicate {
                 $0.typeID == id
-            }
-        case .yearIs(let year):
-            let id = Tag.TagType.yearMonth.rawValue
-            return #Predicate {
-                $0.name.starts(with: year) && $0.typeID == id
             }
         case .dateIsSameYearAs(let date):
             let name = date.stringValueWithoutLocale(.yyyy)

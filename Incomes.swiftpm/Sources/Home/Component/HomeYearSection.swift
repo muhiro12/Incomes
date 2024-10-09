@@ -12,26 +12,23 @@ struct HomeYearSection {
     @Environment(ItemService.self)
     private var itemService
 
-    @Query private var tags: [Tag]
+    @Query private var yearMonthTags: [Tag]
 
     @State private var isPresentedToAlert = false
     @State private var willDeleteItems: [Item] = []
 
-    private let yearTag: Tag
-
     init(yearTag: Tag) {
-        self.yearTag = yearTag
-        self._tags = Query(.tags(.yearIs(yearTag.name), order: .reverse))
+        _yearMonthTags = Query(.tags(.nameAndType(name: yearTag.name, type: .yearMonth), order: .reverse))
     }
 }
 
 extension HomeYearSection: View {
     var body: some View {
         Section {
-            ForEach(tags) { tag in
-                if let items = tag.items,
+            ForEach(yearMonthTags) { yearMonthTag in
+                if let items = yearMonthTag.items,
                    let first = items.first {
-                    NavigationLink(value: IncomesPath.itemList(tag)) {
+                    NavigationLink(value: IncomesPath.itemList(yearMonthTag)) {
                         Text(first.date.stringValue(.yyyyMMM))
                             .foregroundStyle(
                                 items.contains {
@@ -43,7 +40,7 @@ extension HomeYearSection: View {
                 }
             }.onDelete {
                 isPresentedToAlert = true
-                willDeleteItems = $0.flatMap { tags[$0].items ?? [] }
+                willDeleteItems = $0.flatMap { yearMonthTags[$0].items ?? [] }
             }
         }
         .actionSheet(isPresented: $isPresentedToAlert) {
