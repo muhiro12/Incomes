@@ -18,6 +18,7 @@ struct HomeListView {
     @Binding private var path: IncomesPath?
 
     @State private var yearTag: Tag?
+    @State private var hasLoaded = false
 
     init(selection: Binding<IncomesPath?> = .constant(nil)) {
         _path = selection
@@ -50,7 +51,10 @@ extension HomeListView: View {
             }
         }
         .task {
-            yearTag = try? tagService.tag(.tags(.nameIs(Date.now.stringValueWithoutLocale(.yyyy), type: .year)))
+            if !hasLoaded {
+                hasLoaded = true
+                yearTag = try? tagService.tag(.tags(.nameIs(Date.now.stringValueWithoutLocale(.yyyy), type: .year)))
+            }
         }
         .onChange(of: yearTag) {
             guard let date = yearTag?.name.dateValueWithoutLocale(.yyyy),
