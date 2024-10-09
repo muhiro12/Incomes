@@ -7,10 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		ADCF375F24A2FEAF0011D6F5 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADCF375E24A2FEAF0011D6F5 /* CloudKit.framework */; };
-		ADCF391D24A550910011D6F5 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = ADCF391C24A550900011D6F5 /* libsqlite3.tbd */; platformFilter = ios; };
-		ADCF392124A551360011D6F5 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADCF392024A551360011D6F5 /* StoreKit.framework */; platformFilter = ios; };
-		ADD847602C16B132006055C9 /* Incomes in Frameworks */ = {isa = PBXBuildFile; productRef = ADD8475F2C16B132006055C9 /* Incomes */; };
+		ADA577A02CB6743800CE47E2 /* Incomes in Frameworks */ = {isa = PBXBuildFile; productRef = ADA5779F2CB6743800CE47E2 /* Incomes */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,10 +39,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				ADCF392124A551360011D6F5 /* StoreKit.framework in Frameworks */,
-				ADD847602C16B132006055C9 /* Incomes in Frameworks */,
-				ADCF391D24A550910011D6F5 /* libsqlite3.tbd in Frameworks */,
-				ADCF375F24A2FEAF0011D6F5 /* CloudKit.framework in Frameworks */,
+				ADA577A02CB6743800CE47E2 /* Incomes in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -129,7 +123,7 @@
 			);
 			name = Incomes;
 			packageProductDependencies = (
-				ADD8475F2C16B132006055C9 /* Incomes */,
+				ADA5779F2CB6743800CE47E2 /* Incomes */,
 			);
 			productName = Incomes;
 			productReference = ADCF36A624A1D0F40011D6F5 /* Incomes.app */;
@@ -328,33 +322,48 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = ../Configurations/Incomes.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = 66PKF55HK5;
+				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
-				INFOPLIST_FILE = ../Configurations/Base.lproj/Info.plist;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ../Configurations/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleDefault;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRIght UIInterfaceOrientationPortrait";
+				INFOPLIST_OUTPUT_FORMAT = "same-as-input";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 14.6;
 				MARKETING_VERSION = 4.1;
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_BUNDLE_IDENTIFIER = com.muhiro12.Incomes.Dev;
-				PRODUCT_DISPLAY_NAME = "$(PRODUCT_NAME) Dev";
+				PLIST_FILE_OUTPUT_FORMAT = "same-as-input";
+				PRODUCT_BUNDLE_IDENTIFIER = com.muhiro12.Incomes;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+				SDKROOT = iphoneos;
+				STRINGS_FILE_OUTPUT_ENCODING = "UTF-16";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = NO;
 			};
 			name = Debug;
 		};
@@ -362,32 +371,47 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = ../Configurations/Incomes.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = 66PKF55HK5;
+				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
-				INFOPLIST_FILE = ../Configurations/Base.lproj/Info.plist;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ../Configurations/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleDefault;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRIght UIInterfaceOrientationPortrait";
+				INFOPLIST_OUTPUT_FORMAT = "same-as-input";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 14.6;
 				MARKETING_VERSION = 4.1;
 				OTHER_LDFLAGS = "-ObjC";
+				PLIST_FILE_OUTPUT_FORMAT = "same-as-input";
 				PRODUCT_BUNDLE_IDENTIFIER = com.muhiro12.Incomes;
-				PRODUCT_DISPLAY_NAME = "$(PRODUCT_NAME)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+				SDKROOT = iphoneos;
+				STRINGS_FILE_OUTPUT_ENCODING = "UTF-16";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = NO;
 			};
 			name = Release;
 		};
@@ -415,7 +439,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		ADD8475F2C16B132006055C9 /* Incomes */ = {
+		ADA5779F2CB6743800CE47E2 /* Incomes */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Incomes;
 		};

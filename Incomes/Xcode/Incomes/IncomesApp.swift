@@ -6,7 +6,6 @@
 //  Copyright © 2021 Hiromu Nakano. All rights reserved.
 //
 
-import Firebase
 import GoogleMobileAdsWrapper
 import IncomesPlaygrounds
 import LicenseListWrapper
@@ -24,8 +23,6 @@ struct IncomesApp: App {
     private let sharedStore: Store
 
     init() {
-        FirebaseApp.configure()
-
         sharedGoogleMobileAdsController = .init(
             adUnitID: {
                 #if DEBUG
