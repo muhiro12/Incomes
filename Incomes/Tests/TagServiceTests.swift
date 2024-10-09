@@ -58,7 +58,7 @@ struct TagServiceTests {
             content: "contentA",
             income: .zero,
             outgo: .zero,
-            group: "",
+            category: "",
             repeatID: .init()
         )
         let item2 = try Item.create(
@@ -67,7 +67,7 @@ struct TagServiceTests {
             content: "contentA",
             income: .zero,
             outgo: .zero,
-            group: "",
+            category: "",
             repeatID: .init()
         )
         let item3 = try Item.create(
@@ -76,11 +76,11 @@ struct TagServiceTests {
             content: "contentA",
             income: .zero,
             outgo: .zero,
-            group: "",
+            category: "",
             repeatID: .init()
         )
 
-        #expect(try context.fetchCount(.tags(.contentIsIn(["contentA"]))) == 1)
+        #expect(try context.fetchCount(.tags(.nameIs("contentA", type: .content))) == 1)
 
         let tag1 = item1.tags!.first { $0.type == .content }!
         let tag2 = item2.tags!.first { $0.type == .content }!
@@ -92,7 +92,7 @@ struct TagServiceTests {
 
         try service.merge(tags: [tag1, tag2, tag3])
 
-        #expect(try context.fetchCount(.tags(.contentIsIn(["contentA"]))) == 1)
+        #expect(try context.fetchCount(.tags(.nameIs("contentA", type: .content))) == 1)
 
         #expect(tag1.items?.contains(item1) == true)
         #expect(tag1.items?.contains(item2) == true)
@@ -112,7 +112,7 @@ struct TagServiceTests {
             content: "contentA",
             income: .zero,
             outgo: .zero,
-            group: "",
+            category: "",
             repeatID: .init()
         )
         let item2 = try Item.create(
@@ -121,7 +121,7 @@ struct TagServiceTests {
             content: "contentB",
             income: .zero,
             outgo: .zero,
-            group: "",
+            category: "",
             repeatID: .init()
         )
         let item3 = try Item.create(
@@ -130,13 +130,13 @@ struct TagServiceTests {
             content: "contentC",
             income: .zero,
             outgo: .zero,
-            group: "",
+            category: "",
             repeatID: .init()
         )
 
-        #expect(try context.fetchCount(.tags(.contentIsIn(["contentA"]))) == 1)
-        #expect(try context.fetchCount(.tags(.contentIsIn(["contentB"]))) == 1)
-        #expect(try context.fetchCount(.tags(.contentIsIn(["contentC"]))) == 1)
+        #expect(try context.fetchCount(.tags(.nameIs("contentA", type: .content))) == 1)
+        #expect(try context.fetchCount(.tags(.nameIs("contentB", type: .content))) == 1)
+        #expect(try context.fetchCount(.tags(.nameIs("contentC", type: .content))) == 1)
 
         let tag1 = item1.tags!.first { $0.type == .content }!
         let tag2 = item2.tags!.first { $0.type == .content }!
@@ -148,9 +148,9 @@ struct TagServiceTests {
 
         try service.merge(tags: [tag1, tag2, tag3])
 
-        #expect(try context.fetchCount(.tags(.contentIsIn(["contentA"]))) == 1)
-        #expect(try context.fetchCount(.tags(.contentIsIn(["contentB"]))) == 0)
-        #expect(try context.fetchCount(.tags(.contentIsIn(["contentC"]))) == 0)
+        #expect(try context.fetchCount(.tags(.nameIs("contentA", type: .content))) == 1)
+        #expect(try context.fetchCount(.tags(.nameIs("contentB", type: .content))) == 0)
+        #expect(try context.fetchCount(.tags(.nameIs("contentC", type: .content))) == 0)
 
         #expect(tag1.items?.contains(item1) == true)
         #expect(tag1.items?.contains(item2) == true)
@@ -170,7 +170,7 @@ struct TagServiceTests {
             content: "contentA",
             income: .zero,
             outgo: .zero,
-            group: "",
+            category: "",
             repeatID: .init()
         )
         let item2 = try Item.createIgnoringDuplicates(
@@ -179,7 +179,7 @@ struct TagServiceTests {
             content: "contentA",
             income: .zero,
             outgo: .zero,
-            group: "",
+            category: "",
             repeatID: .init()
         )
         let item3 = try Item.createIgnoringDuplicates(
@@ -188,11 +188,11 @@ struct TagServiceTests {
             content: "contentA",
             income: .zero,
             outgo: .zero,
-            group: "",
+            category: "",
             repeatID: .init()
         )
 
-        #expect(try context.fetchCount(.tags(.contentIsIn(["contentA"]))) == 3)
+        #expect(try context.fetchCount(.tags(.nameIs("contentA", type: .content))) == 3)
 
         let tag1 = item1.tags!.first { $0.type == .content }!
         let tag2 = item2.tags!.first { $0.type == .content }!
@@ -204,7 +204,7 @@ struct TagServiceTests {
 
         try service.merge(tags: [tag1, tag2, tag3])
 
-        #expect(try context.fetchCount(.tags(.contentIsIn(["contentA"]))) == 1)
+        #expect(try context.fetchCount(.tags(.nameIs("contentA", type: .content))) == 1)
 
         #expect(tag1.items?.contains(item1) == true)
         #expect(tag1.items?.contains(item2) == true)

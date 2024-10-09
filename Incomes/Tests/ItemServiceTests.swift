@@ -21,7 +21,7 @@ final class ItemServiceTests: XCTestCase {
                                 content: "content",
                                 income: 200,
                                 outgo: 100,
-                                group: "group")
+                                category: "category")
             let result = fetchItems(context).first!
 
             XCTAssertEqual(result.date, date("2000-01-01T00:00:00Z"))
@@ -39,7 +39,7 @@ final class ItemServiceTests: XCTestCase {
                                 content: "content",
                                 income: 200,
                                 outgo: 100,
-                                group: "group",
+                                category: "category",
                                 repeatCount: 3)
             let first = fetchItems(context).first!
             let last = fetchItems(context).last!
@@ -70,14 +70,14 @@ final class ItemServiceTests: XCTestCase {
                                 content: "content",
                                 income: 200,
                                 outgo: 100,
-                                group: "group")
+                                category: "category")
 
             try! service.update(item: fetchItems(context).first!,
                                 date: date("2001-01-02T12:00:00Z"),
                                 content: "content2",
                                 income: 100,
                                 outgo: 200,
-                                group: "group2")
+                                category: "category2")
             let result = fetchItems(context).first!
 
             XCTAssertEqual(result.date, date("2001-01-02T00:00:00Z"))
@@ -94,7 +94,7 @@ final class ItemServiceTests: XCTestCase {
                                 content: "content",
                                 income: 200,
                                 outgo: 100,
-                                group: "group",
+                                category: "category",
                                 repeatCount: 3)
 
             try! service.update(item: fetchItems(context)[1],
@@ -102,7 +102,7 @@ final class ItemServiceTests: XCTestCase {
                                 content: "content2",
                                 income: 100,
                                 outgo: 200,
-                                group: "group2")
+                                category: "category2")
 
             let first = fetchItems(context)[0]
             let second = fetchItems(context)[1]
@@ -139,14 +139,14 @@ final class ItemServiceTests: XCTestCase {
                                 content: "content",
                                 income: 200,
                                 outgo: 100,
-                                group: "group")
+                                category: "category")
 
             try! service.updateForFutureItems(item: fetchItems(context).first!,
                                               date: date("2001-01-02T12:00:00Z"),
                                               content: "content2",
                                               income: 100,
                                               outgo: 200,
-                                              group: "group2")
+                                              category: "category2")
             let result = fetchItems(context).first!
 
             XCTAssertEqual(result.date, date("2001-01-02T00:00:00Z"))
@@ -163,7 +163,7 @@ final class ItemServiceTests: XCTestCase {
                                 content: "content",
                                 income: 200,
                                 outgo: 100,
-                                group: "group",
+                                category: "category",
                                 repeatCount: 3)
 
             try! service.updateForFutureItems(item: fetchItems(context)[1],
@@ -171,7 +171,7 @@ final class ItemServiceTests: XCTestCase {
                                               content: "content2",
                                               income: 100,
                                               outgo: 200,
-                                              group: "group2")
+                                              category: "category2")
 
             let first = fetchItems(context)[0]
             let second = fetchItems(context)[1]
@@ -208,14 +208,14 @@ final class ItemServiceTests: XCTestCase {
                                 content: "content",
                                 income: 200,
                                 outgo: 100,
-                                group: "group")
+                                category: "category")
 
             try! service.updateForAllItems(item: fetchItems(context).first!,
                                            date: date("2001-01-02T12:00:00Z"),
                                            content: "content2",
                                            income: 100,
                                            outgo: 200,
-                                           group: "group2")
+                                           category: "category2")
             let result = fetchItems(context).first!
 
             XCTAssertEqual(result.date, date("2001-01-02T00:00:00Z"))
@@ -232,7 +232,7 @@ final class ItemServiceTests: XCTestCase {
                                 content: "content",
                                 income: 200,
                                 outgo: 100,
-                                group: "group",
+                                category: "category",
                                 repeatCount: 3)
 
             try! service.updateForAllItems(item: fetchItems(context)[1],
@@ -240,7 +240,7 @@ final class ItemServiceTests: XCTestCase {
                                            content: "content2",
                                            income: 100,
                                            outgo: 200,
-                                           group: "group2")
+                                           category: "category2")
 
             let first = fetchItems(context)[0]
             let second = fetchItems(context)[1]
@@ -281,7 +281,7 @@ final class ItemServiceTests: XCTestCase {
                                          content: "",
                                          income: 0,
                                          outgo: 0,
-                                         group: "",
+                                         category: "",
                                          repeatID: UUID())
             context.insert(itemA)
             let itemB = try! Item.create(context: context,
@@ -289,7 +289,7 @@ final class ItemServiceTests: XCTestCase {
                                          content: "",
                                          income: 0,
                                          outgo: 0,
-                                         group: "",
+                                         category: "",
                                          repeatID: UUID())
             context.insert(itemB)
 
@@ -311,7 +311,7 @@ final class ItemServiceTests: XCTestCase {
                                          content: "",
                                          income: 0,
                                          outgo: 0,
-                                         group: "",
+                                         category: "",
                                          repeatID: UUID())
             context.insert(itemA)
             let itemB = try! Item.create(context: context,
@@ -319,7 +319,7 @@ final class ItemServiceTests: XCTestCase {
                                          content: "",
                                          income: 0,
                                          outgo: 0,
-                                         group: "",
+                                         category: "",
                                          repeatID: UUID())
             context.insert(itemB)
 

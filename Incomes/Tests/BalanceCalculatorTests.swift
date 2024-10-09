@@ -21,7 +21,7 @@ final class BalanceCalculatorTests: XCTestCase {
                                             content: "content",
                                             income: 200,
                                             outgo: 100,
-                                            group: "group",
+                                            category: "category",
                                             repeatID: UUID())
                 context.insert(item)
             }
@@ -32,7 +32,7 @@ final class BalanceCalculatorTests: XCTestCase {
                                         content: "content",
                                         income: 200,
                                         outgo: 100,
-                                        group: "group",
+                                        category: "category",
                                         repeatID: UUID())
             context.insert(item)
             try! calculator.calculate(after: item.date)
@@ -54,7 +54,7 @@ final class BalanceCalculatorTests: XCTestCase {
                                             content: "content",
                                             income: 200,
                                             outgo: 100,
-                                            group: "group",
+                                            category: "category",
                                             repeatID: UUID())
                 context.insert(item)
             }
@@ -65,7 +65,7 @@ final class BalanceCalculatorTests: XCTestCase {
                                         content: "content",
                                         income: 200,
                                         outgo: 100,
-                                        group: "group",
+                                        category: "category",
                                         repeatID: UUID())
             context.insert(item)
             try! calculator.calculate(after: item.date)
@@ -87,7 +87,7 @@ final class BalanceCalculatorTests: XCTestCase {
                                             content: "content",
                                             income: 200,
                                             outgo: 100,
-                                            group: "group",
+                                            category: "category",
                                             repeatID: UUID())
                 context.insert(item)
             }
@@ -98,7 +98,7 @@ final class BalanceCalculatorTests: XCTestCase {
                                         content: "content",
                                         income: 200,
                                         outgo: 100,
-                                        group: "group",
+                                        category: "category",
                                         repeatID: UUID())
             context.insert(item)
             try! calculator.calculate(after: item.date)
@@ -122,7 +122,7 @@ final class BalanceCalculatorTests: XCTestCase {
                                             content: "content",
                                             income: 200,
                                             outgo: 100,
-                                            group: "group",
+                                            category: "category",
                                             repeatID: UUID())
                 context.insert(item)
                 items.append(item)
@@ -134,7 +134,7 @@ final class BalanceCalculatorTests: XCTestCase {
                              content: "content",
                              income: 300,
                              outgo: 100,
-                             group: "group",
+                             category: "category",
                              repeatID: UUID())
             try! calculator.calculate(after: item.date)
 
@@ -157,7 +157,7 @@ final class BalanceCalculatorTests: XCTestCase {
                                             content: "content",
                                             income: 200,
                                             outgo: 100,
-                                            group: "group",
+                                            category: "category",
                                             repeatID: UUID())
                 context.insert(item)
                 items.append(item)
@@ -169,7 +169,7 @@ final class BalanceCalculatorTests: XCTestCase {
                              content: "content",
                              income: 300,
                              outgo: 100,
-                             group: "group",
+                             category: "category",
                              repeatID: UUID())
             try! calculator.calculate(after: item.date)
 
@@ -192,7 +192,7 @@ final class BalanceCalculatorTests: XCTestCase {
                                             content: "content",
                                             income: 200,
                                             outgo: 100,
-                                            group: "group",
+                                            category: "category",
                                             repeatID: UUID())
                 context.insert(item)
                 items.append(item)
@@ -204,7 +204,7 @@ final class BalanceCalculatorTests: XCTestCase {
                              content: "content",
                              income: 300,
                              outgo: 100,
-                             group: "group",
+                             category: "category",
                              repeatID: UUID())
             try! calculator.calculate(after: item.date)
 
@@ -227,7 +227,7 @@ final class BalanceCalculatorTests: XCTestCase {
                                             content: "content",
                                             income: 200,
                                             outgo: 100,
-                                            group: "group",
+                                            category: "category",
                                             repeatID: UUID())
                 context.insert(item)
                 items.append(item)
@@ -239,7 +239,7 @@ final class BalanceCalculatorTests: XCTestCase {
                              content: "content",
                              income: 300,
                              outgo: 100,
-                             group: "group",
+                             category: "category",
                              repeatID: UUID())
             try! calculator.calculate(after: item.date)
 
@@ -262,7 +262,7 @@ final class BalanceCalculatorTests: XCTestCase {
                                             content: "content",
                                             income: 200,
                                             outgo: 100,
-                                            group: "group",
+                                            category: "category",
                                             repeatID: UUID())
                 context.insert(item)
                 items.append(item)
@@ -292,7 +292,7 @@ final class BalanceCalculatorTests: XCTestCase {
                                             content: "content",
                                             income: 200,
                                             outgo: 100,
-                                            group: "group",
+                                            category: "category",
                                             repeatID: UUID())
                 context.insert(item)
                 items.append(item)
@@ -322,7 +322,7 @@ final class BalanceCalculatorTests: XCTestCase {
                                             content: "content",
                                             income: 200,
                                             outgo: 100,
-                                            group: "group",
+                                            category: "category",
                                             repeatID: UUID())
                 context.insert(item)
                 items.append(item)
