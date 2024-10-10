@@ -26,16 +26,15 @@ extension HomeYearSection: View {
     var body: some View {
         Section {
             ForEach(yearMonthTags) { yearMonthTag in
-                if let items = yearMonthTag.items,
-                   let first = items.first {
+                if let items = yearMonthTag.items {
                     NavigationLink(value: IncomesPath.itemList(yearMonthTag)) {
-                        Text(first.date.stringValue(.yyyyMMM))
+                        Text(yearMonthTag.displayName)
                             .foregroundStyle(
                                 items.contains {
                                     $0.balance.isMinus
                                 } ? .red : .primary
                             )
-                            .fontWeight(Calendar.utc.startOfMonth(for: first.date) == Calendar.utc.startOfMonth(for: .now) ? .heavy : nil)
+                            .fontWeight(yearMonthTag.name.dateValueWithoutLocale(.yyyyMM) == Calendar.utc.startOfMonth(for: .now) ? .heavy : nil)
                     }
                 }
             }.onDelete {
