@@ -69,7 +69,7 @@ extension ItemFormView: View {
                 HStack {
                     Text("Content")
                     Spacer()
-                    TextField(String.empty, text: $content)
+                    TextField("Required", text: $content)
                         .focused($focusedField, equals: .content)
                         .multilineTextAlignment(.trailing)
                 }
