@@ -36,7 +36,12 @@ extension TagListView: View {
         List(selection: $path) {
             ForEach(tags) { tag in
                 NavigationLink(value: IncomesPath.itemList(tag)) {
-                    Text(tag.displayName)
+                    HStack {
+                        Text(tag.displayName)
+                        Spacer()
+                        Text(tag.items.orEmpty.count.description)
+                            .foregroundStyle(.secondary)
+                    }
                 }
                 .hidden(
                     searchText.isNotEmpty

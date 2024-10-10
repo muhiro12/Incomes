@@ -35,7 +35,7 @@ extension HomeYearSection: View {
                                     $0.balance.isMinus
                                 } ? .red : .primary
                             )
-                            .bold(Calendar.utc.startOfMonth(for: first.date) == Calendar.utc.startOfMonth(for: .now))
+                            .fontWeight(Calendar.utc.startOfMonth(for: first.date) == Calendar.utc.startOfMonth(for: .now) ? .heavy : nil)
                     }
                 }
             }.onDelete {
