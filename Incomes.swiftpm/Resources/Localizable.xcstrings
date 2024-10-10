@@ -41,6 +41,9 @@
         }
       }
     },
+    "All Tags" : {
+
+    },
     "Amount" : {
       "localizations" : {
         "ja" : {
@@ -151,6 +154,9 @@
         }
       }
     },
+    "Currency Code" : {
+
+    },
     "Date" : {
       "localizations" : {
         "ja" : {
@@ -160,6 +166,9 @@
           }
         }
       }
+    },
+    "Debug" : {
+
     },
     "Delete" : {
       "localizations" : {
@@ -171,6 +180,9 @@
         }
       }
     },
+    "Delete %@" : {
+
+    },
     "Delete all" : {
       "localizations" : {
         "ja" : {
@@ -180,6 +192,9 @@
           }
         }
       }
+    },
+    "Display Name" : {
+
     },
     "Duplicate Tags" : {
       "localizations" : {
@@ -205,6 +220,7 @@
       "shouldTranslate" : false
     },
     "Group" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -224,7 +240,11 @@
         }
       }
     },
+    "iCloud On" : {
+
+    },
     "Important Subscription Update" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -254,9 +274,6 @@
         }
       }
     },
-    "Incomes" : {
-      "shouldTranslate" : false
-    },
     "Information" : {
       "localizations" : {
         "ja" : {
@@ -266,6 +283,9 @@
           }
         }
       }
+    },
+    "Items" : {
+
     },
     "License" : {
       "localizations" : {
@@ -281,6 +301,7 @@
       "shouldTranslate" : false
     },
     "Lock the app" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -311,6 +332,7 @@
       }
     },
     "Mask the app" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -319,6 +341,9 @@
           }
         }
       }
+    },
+    "Menu" : {
+
     },
     "Merge" : {
       "localizations" : {
@@ -330,7 +355,14 @@
         }
       }
     },
+    "Name" : {
+
+    },
+    "Not Found" : {
+
+    },
     "Notification" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -399,6 +431,9 @@
           }
         }
       }
+    },
+    "Required" : {
+
     },
     "Resolve" : {
       "localizations" : {
@@ -491,6 +526,7 @@
       }
     },
     "Starting August 1st, iCloud synchronization will be moved to the subscription plan. We appreciate your understanding and support." : {
+      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -523,7 +559,20 @@
         }
       }
     },
+    "Total Income" : {
+
+    },
+    "Total Outgo" : {
+
+    },
+    "Type" : {
+
+    },
+    "Type ID" : {
+
+    },
     "Unlock" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -534,6 +583,7 @@
       }
     },
     "Unlock the app" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -544,6 +594,7 @@
       }
     },
     "Upcoming Changes to the Subscription Plan" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -564,6 +615,7 @@
       }
     },
     "We would like to inform you that starting August 1st (tentative), the contents of the subscription plan will be updated as follows:\n\n  1. iCloud synchronization and ad removal will become subscription features.\n  2. Features such as categories and graphs, which were previously part of the subscription, will now be available for free to all users.\n\nWe greatly appreciate your support and understanding as we make these changes to enhance your experience with our app. Thank you for being a valued member of our community." : {
+      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
