@@ -29,11 +29,11 @@ extension HomeListView: View {
     var body: some View {
         List(selection: $path) {
             HomeTabSection(selection: $yearTag)
-            if let yearTag {
-                HomeYearSection(yearTag: yearTag)
-            }
             if !isSubscribeOn {
                 AdvertisementSection(.small)
+            }
+            if let yearTag {
+                HomeYearSection(yearTag: yearTag)
             }
         }
         .listStyle(.insetGrouped)
