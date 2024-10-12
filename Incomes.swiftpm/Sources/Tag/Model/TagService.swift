@@ -22,9 +22,7 @@ final class TagService {
     // MARK: - Fetch
 
     func tag(_ descriptor: FetchDescriptor<Tag> = .tags(.all)) throws -> Tag? {
-        var descriptor = descriptor
-        descriptor.fetchLimit = 1
-        return try context.fetch(descriptor).first
+        try context.fetchFirst(descriptor)
     }
 
     // MARK: - Delete
