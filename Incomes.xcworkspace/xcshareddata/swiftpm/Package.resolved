@@ -6,7 +6,7 @@
       "location" : "https://github.com/muhiro12/GoogleMobileAdsWrapper.git",
       "state" : {
         "branch" : "main",
-        "revision" : "6084f4a52f33b9f1c97e7934a17cedf2d45f4251"
+        "revision" : "1820cc836326f92882261aa3645df3219c0e9f29"
       }
     },
     {
@@ -24,7 +24,7 @@
       "location" : "https://github.com/muhiro12/LicenseListWrapper.git",
       "state" : {
         "branch" : "main",
-        "revision" : "54f234c63b3ad05f52bd702f5a5c8a5cb509af20"
+        "revision" : "fb5d895d808978d8018c24bd6b3ad5227b8f0c0d"
       }
     },
     {
@@ -33,7 +33,7 @@
       "location" : "https://github.com/muhiro12/StoreKitWrapper.git",
       "state" : {
         "branch" : "main",
-        "revision" : "0a73e6ec9922a56359e41bde540431a7d57b2661"
+        "revision" : "7955f34b7b7e6757e474a6991f1b3e62f8971cb2"
       }
     },
     {
@@ -59,8 +59,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/muhiro12/SwiftUtilities.git",
       "state" : {
-        "revision" : "bed23ac161a683b3c7fd922064edb0d5a51c1832",
-        "version" : "1.6.0"
+        "revision" : "d1d3caf666487fdc96dc0961128b3892f86425fd",
+        "version" : "1.9.0"
       }
     }
   ],
