@@ -45,8 +45,10 @@ extension TagListView: View {
                 }
                 .hidden(
                     searchText.isNotEmpty
-                        && !tag.name.normalizedContains(searchText)
+                    && (
+                        !tag.name.normalizedContains(searchText)
                         || tag.items.orEmpty.isEmpty
+                    )
                 )
             }
             .onDelete {
