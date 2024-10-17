@@ -9,22 +9,28 @@
 import SwiftUI
 
 struct CreateItemButton {
-    @State private var isCreatePresented = false
+    @State private var isPresented = false
 }
 
 extension CreateItemButton: View {
     var body: some View {
         Button {
-            isCreatePresented = true
+            isPresented = true
         } label: {
-            Image(systemName: "square.and.pencil")
+            Label {
+                Text("Create")
+            } icon: {
+                Image(systemName: "square.and.pencil")
+            }
         }
-        .sheet(isPresented: $isCreatePresented) {
+        .sheet(isPresented: $isPresented) {
             ItemFormNavigationView(mode: .create)
         }
     }
 }
 
 #Preview {
-    CreateItemButton()
+    IncomesPreview { _ in
+        CreateItemButton()
+    }
 }
