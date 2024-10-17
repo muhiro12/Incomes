@@ -64,9 +64,11 @@ extension ItemFormView: View {
                 HStack {
                     Text("Content")
                     Spacer()
-                    TextField("Required", text: $content)
-                        .focused($focusedField, equals: .content)
-                        .multilineTextAlignment(.trailing)
+                    TextField(text: $content) {
+                        Text("Required")
+                    }
+                    .focused($focusedField, equals: .content)
+                    .multilineTextAlignment(.trailing)
                 }
                 HStack {
                     Text("Income")
@@ -91,9 +93,11 @@ extension ItemFormView: View {
                 HStack {
                     Text("Category")
                     Spacer()
-                    TextField("Others", text: $category)
-                        .focused($focusedField, equals: .category)
-                        .multilineTextAlignment(.trailing)
+                    TextField(text: $category) {
+                        Text("Others")
+                    }
+                    .focused($focusedField, equals: .category)
+                    .multilineTextAlignment(.trailing)
                 }
                 if mode == .create {
                     RepeatCountPicker(selection: $repeatSelection)

@@ -23,7 +23,7 @@ struct ChartSectionGroup {
 
 extension ChartSectionGroup: View {
     var body: some View {
-        Section("Balance") {
+        Section {
             Chart(items) {
                 buildAreaChartContent(date: $0.date,
                                       value: $0.balance)
@@ -32,8 +32,10 @@ extension ChartSectionGroup: View {
             }
             .frame(height: .componentL)
             .padding()
+        } header: {
+            Text("Balance")
         }
-        Section("Income and Outgo") {
+        Section {
             Chart(items) {
                 buildBarChartContent(date: $0.date,
                                      value: $0.income)
@@ -42,11 +44,13 @@ extension ChartSectionGroup: View {
             }
             .frame(height: .componentL)
             .padding()
+        } header: {
+            Text("Income and Outgo")
         }
         if !isSubscribeOn {
             AdvertisementSection(.medium)
         }
-        Section("Category") {
+        Section {
             Chart(
                 Dictionary(
                     grouping: items.filter(\.income.isNotZero)
@@ -91,6 +95,8 @@ extension ChartSectionGroup: View {
             }
             .frame(height: .componentXL)
             .padding()
+        } header: {
+            Text("Category")
         }
     }
 }

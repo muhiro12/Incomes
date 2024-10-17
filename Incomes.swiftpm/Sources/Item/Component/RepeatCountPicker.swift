@@ -21,11 +21,12 @@ extension RepeatCountPicker: View {
         HStack {
             Text("Repeat")
             Spacer()
-            Picker("Repeat",
-                   selection: $selection) {
+            Picker(selection: $selection) {
                 ForEach((.minRepeatCount)..<(.maxRepeatCount + .one), id: \.self) {
                     Text($0.description)
                 }
+            } label: {
+                Text("Repeat")
             }
             .pickerStyle(WheelPickerStyle())
             .labelsHidden()

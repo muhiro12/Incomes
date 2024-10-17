@@ -5,18 +5,20 @@
 //  Created by Hiromu Nakano on 9/11/24.
 //
 
+import SwiftUI
+
 enum CurrencyCode: String, CaseIterable {
     case system = ""
     case usd = "USD"
     case eur = "EUR"
     case jpy = "JPY"
 
-    var displayName: String {
+    var displayName: LocalizedStringKey {
         switch self {
         case .system:
             "System"
         default:
-            rawValue
+            .init(rawValue)
         }
     }
 }

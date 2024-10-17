@@ -37,7 +37,7 @@ extension HomeListView: View {
             }
         }
         .listStyle(.insetGrouped)
-        .navigationTitle("Home")
+        .navigationTitle(Text("Home"))
         .toolbar {
             ToolbarItem {
                 CreateButton()
