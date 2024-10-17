@@ -14,12 +14,22 @@ struct DeleteItemButton {
     private var itemService
 
     @State private var isPresented = false
+
+    private let action: (() -> Void)?
+
+    init(action: (() -> Void)? = nil) {
+        self.action = action
+    }
 }
 
 extension DeleteItemButton: View {
     var body: some View {
         Button(role: .destructive) {
-            isPresented = true
+            if let action {
+                action()
+            } else {
+                isPresented = true
+            }
         } label: {
             Label {
                 Text("Delete \(item.content)")

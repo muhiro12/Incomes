@@ -4,6 +4,8 @@ import SwiftUtilities
 struct ItemView {
     @Environment(Item.self)
     private var item
+    @Environment(\.isPresented)
+    private var isPresented
 
     @AppStorage(.isDebugOn)
     private var isDebugOn
@@ -51,8 +53,10 @@ extension ItemView: View {
         }
         .navigationTitle(Text(item.content))
         .toolbar {
-            ToolbarItem {
-                CloseButton()
+            if isPresented {
+                ToolbarItem {
+                    CloseButton()
+                }
             }
         }
     }

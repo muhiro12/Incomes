@@ -11,14 +11,19 @@ import SwiftUI
 struct ListItem: View {
     @Environment(Item.self)
     private var item
+    @Environment(ItemService.self)
+    private var itemService
     @Environment(\.horizontalSizeClass)
     private var horizontalSizeClass
 
-    @State private var isPresented = false
+    @State private var isDetailPresented = false
+    @State private var isEditPresented = false
+    @State private var isDuplicatePresented = false
+    @State private var isDeletePresented = false
 
     var body: some View {
         Button {
-            isPresented = true
+            isDetailPresented = true
         } label: {
             Group {
                 if horizontalSizeClass == .regular {
@@ -30,16 +35,52 @@ struct ListItem: View {
             .contentShape(.rect)
         }
         .buttonStyle(.plain)
-        .sheet(isPresented: $isPresented) {
+        .contextMenu {
+            EditItemButton {
+                isEditPresented = true
+            }
+            DuplicateItemButton {
+                isDuplicatePresented = true
+            }
+            DeleteItemButton {
+                isDeletePresented = true
+            }
+        }
+        .sheet(isPresented: $isDetailPresented) {
             ItemNavigationView()
                 .presentationDetents([.medium, .large])
+        }
+        .sheet(isPresented: $isEditPresented) {
+            ItemFormNavigationView(mode: .edit)
+        }
+        .sheet(isPresented: $isDuplicatePresented) {
+            ItemFormNavigationView(mode: .create)
+        }
+        .alert(Text("Delete \(item.content)"), isPresented: $isDeletePresented) {
+            Button(role: .cancel) {
+            } label: {
+                Text("Cancel")
+            }
+            Button(role: .destructive) {
+                do {
+                    try itemService.delete(items: [item])
+                } catch {
+                    assertionFailure(error.localizedDescription)
+                }
+            } label: {
+                Text("Delete")
+            }
+        } message: {
+            Text("Are you sure you want to delete this item?")
         }
     }
 }
 
 #Preview {
     IncomesPreview { preview in
-        ListItem()
-            .environment(preview.items[0])
+        List {
+            ListItem()
+                .environment(preview.items[0])
+        }
     }
 }
