@@ -425,18 +425,18 @@
         }
       }
     },
-    "Duplicate" : {
+    "Duplicate %@" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Duplicate"
+            "value" : "Duplicate %@"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "複製"
+            "value" : "%@ を複製"
           }
         }
       }
@@ -457,18 +457,18 @@
         }
       }
     },
-    "Edit" : {
+    "Edit %@" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Edit"
+            "value" : "Edit %@"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "編集"
+            "value" : "%@ を編集"
           }
         }
       }
