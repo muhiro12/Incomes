@@ -9,35 +9,37 @@
 import SwiftUI
 
 struct DebugSection {
-    let item: Item?
+    @Environment(Item.self)
+    private var item
 }
 
 extension DebugSection: View {
     var body: some View {
-        if let item {
-            Section(content: {
-                HStack {
-                    Text(String.debugRepeatID)
-                    Spacer()
-                    Text(item.repeatID.uuidString)
-                }
-                HStack {
-                    Text(String.debugBalance)
-                    Spacer()
-                    Text(item.balance.description)
-                }
-                HStack {
-                    Text(String.debugTags)
-                    Spacer()
-                    VStack {
-                        ForEach(item.tags ?? []) {
-                            Text(verbatim: "[\($0.name)]")
-                        }
+        Section {
+            HStack {
+                Text(String.debugRepeatID)
+                Spacer()
+                Text(item.repeatID.uuidString)
+                    .foregroundStyle(.secondary)
+            }
+            HStack {
+                Text(String.debugBalance)
+                Spacer()
+                Text(item.balance.description)
+                    .foregroundStyle(.secondary)
+            }
+            HStack {
+                Text(String.debugTags)
+                Spacer()
+                VStack(alignment: .trailing) {
+                    ForEach(item.tags.orEmpty) {
+                        Text($0.name)
+                            .foregroundStyle(.secondary)
                     }
                 }
-            }, header: {
-                Text(String.debugTitle)
-            })
+            }
+        } header: {
+            Text(String.debugTitle)
         }
     }
 }
@@ -45,7 +47,8 @@ extension DebugSection: View {
 #Preview {
     IncomesPreview { preview in
         List {
-            DebugSection(item: preview.items[0])
+            DebugSection()
+                .environment(preview.items[0])
         }
     }
 }

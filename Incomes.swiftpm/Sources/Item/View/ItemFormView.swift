@@ -102,8 +102,10 @@ extension ItemFormView: View {
             }, header: {
                 Text("Information")
             })
-            if isDebugOn {
-                DebugSection(item: item)
+            if let item,
+               isDebugOn {
+                DebugSection()
+                    .environment(item)
             }
         }
         .navigationTitle(Text(mode == .create ? "Create" : "Edit"))

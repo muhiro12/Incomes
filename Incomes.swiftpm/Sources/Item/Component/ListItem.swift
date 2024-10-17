@@ -14,11 +14,11 @@ struct ListItem: View {
     @Environment(\.horizontalSizeClass)
     private var horizontalSizeClass
 
-    @State private var isEditPresented = false
+    @State private var isPresented = false
 
     var body: some View {
         Button {
-            isEditPresented = true
+            isPresented = true
         } label: {
             Group {
                 if horizontalSizeClass == .regular {
@@ -30,8 +30,8 @@ struct ListItem: View {
             .contentShape(.rect)
         }
         .buttonStyle(.plain)
-        .sheet(isPresented: $isEditPresented) {
-            ItemFormNavigationView(mode: .edit(item))
+        .sheet(isPresented: $isPresented) {
+            ItemNavigationView()
                 .presentationDetents([.medium, .large])
         }
     }
