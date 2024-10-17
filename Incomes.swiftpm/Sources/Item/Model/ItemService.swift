@@ -36,7 +36,7 @@ final class ItemService {
                 income: Decimal,
                 outgo: Decimal,
                 category: String,
-                repeatCount: Int = .one) throws {
+                repeatCount: Int = 1) throws {
         var items = [Item]()
 
         let repeatID = UUID()

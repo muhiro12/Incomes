@@ -45,7 +45,7 @@ struct ItemFormView {
     @State private var income: String = .empty
     @State private var outgo: String = .empty
     @State private var category: String = .empty
-    @State private var repeatSelection: Int = .zero
+    @State private var repeatSelection: Int = 1
 
     private let mode: Mode
 
@@ -202,7 +202,7 @@ private extension ItemFormView {
     func save() {
         do {
             if let repeatID = item?.repeatID,
-               try itemService.itemsCount(.items(.repeatIDIs(repeatID))) > .one {
+               try itemService.itemsCount(.items(.repeatIDIs(repeatID))) > 1 {
                 presentToActionSheet()
             } else {
                 saveForThisItem()
@@ -280,7 +280,7 @@ private extension ItemFormView {
                 income: income.decimalValue,
                 outgo: outgo.decimalValue,
                 category: category,
-                repeatCount: repeatSelection + .one
+                repeatCount: repeatSelection
             )
         } catch {
             assertionFailure(error.localizedDescription)

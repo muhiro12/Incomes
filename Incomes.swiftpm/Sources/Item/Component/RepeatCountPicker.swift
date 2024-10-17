@@ -22,7 +22,7 @@ extension RepeatCountPicker: View {
             Text("Repeat")
             Spacer()
             Picker(selection: $selection) {
-                ForEach((.minRepeatCount)..<(.maxRepeatCount + .one), id: \.self) {
+                ForEach(1...60, id: \.self) {
                     Text($0.description)
                 }
             } label: {
