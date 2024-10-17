@@ -9,7 +9,6 @@ import SwiftUI
 
 enum IncomesPath: Hashable {
     case year(Date)
-    case itemForm(mode: ItemFormView.Mode)
     case itemList(Tag)
     case tag(Tag)
 }

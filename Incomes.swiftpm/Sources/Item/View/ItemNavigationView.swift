@@ -1,9 +1,6 @@
 import SwiftUI
 
-struct ItemNavigationView {
-    @Environment(Item.self)
-    private var item
-}
+struct ItemNavigationView {}
 
 extension ItemNavigationView: View {
     var body: some View {
@@ -16,6 +13,6 @@ extension ItemNavigationView: View {
 #Preview {
     IncomesPreview { preview in
         ItemNavigationView()
-            .environment(preview.items[0])        
+            .environment(preview.items[0])
     }
 }

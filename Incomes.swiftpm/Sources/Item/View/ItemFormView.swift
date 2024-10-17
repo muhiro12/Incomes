@@ -10,9 +10,9 @@ import StoreKit
 import SwiftUI
 
 struct ItemFormView {
-    enum Mode: Hashable {
+    enum Mode {
         case create
-        case edit(Item)
+        case edit
     }
 
     enum Field {
@@ -22,11 +22,13 @@ struct ItemFormView {
         case category
     }
 
-    @Environment(\.presentationMode)
-    private var presentationMode
+    @Environment(\.dismiss)
+    private var dismiss
     @Environment(\.requestReview)
     private var requestReview
 
+    @Environment(Item.self)
+    private var item: Item?
     @Environment(ItemService.self)
     private var itemService
 
@@ -35,7 +37,6 @@ struct ItemFormView {
 
     @FocusState private var focusedField: Field?
 
-    @State private var mode = Mode.create
     @State private var isActionSheetPresented = false
     @State private var isDebugAlertPresented = false
 
@@ -46,23 +47,17 @@ struct ItemFormView {
     @State private var category: String = .empty
     @State private var repeatSelection: Int = .zero
 
-    private let item: Item?
+    private let mode: Mode
 
     init(mode: Mode) {
-        switch mode {
-        case .create:
-            self.item = nil
-        case .edit(let item):
-            self.item = item
-        }
-        _mode = .init(initialValue: mode)
+        self.mode = mode
     }
 }
 
 extension ItemFormView: View {
     var body: some View {
         Form {
-            Section(content: {
+            Section {
                 DatePicker(selection: $date, displayedComponents: .date) {
                     Text("Date")
                 }
@@ -99,16 +94,11 @@ extension ItemFormView: View {
                 if mode == .create {
                     RepeatCountPicker(selection: $repeatSelection)
                 }
-            }, header: {
+            } header: {
                 Text("Information")
-            })
-            if let item,
-               isDebugOn {
-                DebugSection()
-                    .environment(item)
             }
         }
-        .navigationTitle(Text(mode == .create ? "Create" : "Edit"))
+        .navigationTitle(content.isNotEmpty ? Text(content) : Text("Create"))
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {
                 Button(action: cancel) {
@@ -302,14 +292,12 @@ private extension ItemFormView {
     func presentToActionSheet() {
         isActionSheetPresented = true
     }
-
-    func dismiss() {
-        presentationMode.wrappedValue.dismiss()
-    }
 }
 
 #Preview {
     IncomesPreview { _ in
-        ItemFormView(mode: .create)
+        NavigationStack {
+            ItemFormView(mode: .create)
+        }
     }
 }

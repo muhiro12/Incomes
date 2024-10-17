@@ -29,7 +29,10 @@ struct DebugTagView: View {
             }
             Section {
                 ForEach(tag.items.orEmpty) { item in
-                    NavigationLink(value: IncomesPath.itemForm(mode: .edit(item))) {
+                    NavigationLink {
+                        ItemFormView(mode: .edit)
+                            .environment(item)
+                    } label: {
                         Text(item.content)
                     }
                 }

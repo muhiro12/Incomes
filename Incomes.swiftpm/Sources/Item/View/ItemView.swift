@@ -7,6 +7,9 @@ struct ItemView {
 
     @AppStorage(.isDebugOn)
     private var isDebugOn
+
+    @State private var isEditFormPresented = false
+    @State private var isDuplicateFormPresented = false
 }
 
 extension ItemView: View {
@@ -43,12 +46,32 @@ extension ItemView: View {
             if isDebugOn {
                 DebugSection()
             }
+            Section {
+                Button {
+                    isEditFormPresented = true
+                } label: {
+                    Text("Edit")
+                }
+                .frame(maxWidth: .infinity)
+                Button {
+                    isDuplicateFormPresented = true
+                } label: {
+                    Text("Duplicate")
+                }
+                .frame(maxWidth: .infinity)
+            }
         }
         .navigationTitle(Text(item.content))
         .toolbar {
             ToolbarItem {
                 CloseButton()
             }
+        }
+        .sheet(isPresented: $isEditFormPresented) {
+            ItemFormNavigationView(mode: .edit)
+        }
+        .sheet(isPresented: $isDuplicateFormPresented) {
+            ItemFormNavigationView(mode: .create)
         }
     }
 }

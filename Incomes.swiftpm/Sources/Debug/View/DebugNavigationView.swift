@@ -21,8 +21,6 @@ struct DebugNavigationView: View {
             } else if case .tag(let tag) = path {
                 DebugTagView()
                     .environment(tag)
-            } else if case .itemForm(let mode) = path {
-                ItemFormView(mode: mode)
             }
         }
     }
