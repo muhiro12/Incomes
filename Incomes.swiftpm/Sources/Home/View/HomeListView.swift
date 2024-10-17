@@ -40,7 +40,7 @@ extension HomeListView: View {
         .navigationTitle(Text("Home"))
         .toolbar {
             ToolbarItem {
-                CreateButton()
+                CreateItemButton()
             }
             ToolbarItem(placement: .bottomBar) {
                 MainTabMenu()

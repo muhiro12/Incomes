@@ -1,5 +1,5 @@
 //
-//  CreateButton.swift
+//  CreateItemButton.swift
 //  Incomes
 //
 //  Created by Hiromu Nakano on 2020/06/24.
@@ -8,11 +8,11 @@
 
 import SwiftUI
 
-struct CreateButton {
+struct CreateItemButton {
     @State private var isCreatePresented = false
 }
 
-extension CreateButton: View {
+extension CreateItemButton: View {
     var body: some View {
         Button {
             isCreatePresented = true
@@ -26,5 +26,5 @@ extension CreateButton: View {
 }
 
 #Preview {
-    CreateButton()
+    CreateItemButton()
 }

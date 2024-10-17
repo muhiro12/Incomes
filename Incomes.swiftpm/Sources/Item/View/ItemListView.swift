@@ -52,7 +52,7 @@ extension ItemListView: View {
         .navigationTitle(Text(tag.displayName))
         .toolbar {
             ToolbarItem {
-                CreateButton()
+                CreateItemButton()
             }
             ToolbarItem(placement: .status) {
                 Text("\(tag.items.orEmpty.count) Items")

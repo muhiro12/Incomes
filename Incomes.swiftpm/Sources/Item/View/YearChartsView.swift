@@ -27,7 +27,7 @@ struct YearChartsView: View {
         .navigationTitle(date.stringValue(.yyyy))
         .toolbar {
             ToolbarItem {
-                CreateButton()
+                CreateItemButton()
             }
             ToolbarItem(placement: .status) {
                 if let count = try? itemService.itemsCount(.items(.dateIsSameYearAs(date))) {

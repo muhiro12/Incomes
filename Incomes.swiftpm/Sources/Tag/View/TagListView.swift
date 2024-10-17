@@ -60,7 +60,7 @@ extension TagListView: View {
         .navigationTitle(Text(tagType == .content ? "Content" : "Category"))
         .toolbar {
             ToolbarItem {
-                CreateButton()
+                CreateItemButton()
             }
             ToolbarItem(placement: .bottomBar) {
                 MainTabMenu()
