@@ -30,9 +30,7 @@ extension HomeYearSection: View {
                     NavigationLink(value: IncomesPath.itemList(yearMonthTag)) {
                         Text(yearMonthTag.displayName)
                             .foregroundStyle(
-                                items.contains {
-                                    $0.balance.isMinus
-                                } ? .red : .primary
+                                items.contains(where: \.balance.isMinus) ? .red : .primary
                             )
                             .bold(yearMonthTag.name.dateValueWithoutLocale(.yyyyMM) == Calendar.utc.startOfMonth(for: .now))
                     }

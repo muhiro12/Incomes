@@ -17,7 +17,7 @@ struct BalanceCalculator {
     }
 
     func calculate(for items: [Item]) throws {
-        if let date = items.map({ $0.date }).min() {
+        if let date = items.map(\.date).min() {
             try calculate(after: date)
         } else {
             try calculateAll()

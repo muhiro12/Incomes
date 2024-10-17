@@ -60,14 +60,14 @@ final class NotificationService: NSObject {
 }
 
 extension NotificationService: UNUserNotificationCenterDelegate {
-    func userNotificationCenter(_ center: UNUserNotificationCenter,
-                                willPresent notification: UNNotification) async -> UNNotificationPresentationOptions {
+    func userNotificationCenter(_: UNUserNotificationCenter,
+                                willPresent _: UNNotification) async -> UNNotificationPresentationOptions {
         hasNotification = true
         return [.badge, .sound, .list, .banner]
     }
 
-    func userNotificationCenter(_ center: UNUserNotificationCenter,
-                                didReceive response: UNNotificationResponse) async {
+    func userNotificationCenter(_: UNUserNotificationCenter,
+                                didReceive _: UNNotificationResponse) async {
         shouldShowNotification = true
     }
 }

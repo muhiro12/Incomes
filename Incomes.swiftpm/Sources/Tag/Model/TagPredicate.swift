@@ -51,11 +51,11 @@ enum TagPredicate {
             let katakana = name.applyingTransform(.hiraganaToKatakana, reverse: false).orEmpty
             return #Predicate {
                 $0.typeID == typeID
-                && (
-                    $0.name.localizedStandardContains(name)
-                    || $0.name.localizedStandardContains(hiragana)
-                    || $0.name.localizedStandardContains(katakana)
-                )
+                    && (
+                        $0.name.localizedStandardContains(name)
+                            || $0.name.localizedStandardContains(hiragana)
+                            || $0.name.localizedStandardContains(katakana)
+                    )
             }
         case .nameStartsWith(let name, let type):
             let id = type.rawValue

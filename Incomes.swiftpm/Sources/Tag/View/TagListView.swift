@@ -45,10 +45,10 @@ extension TagListView: View {
                 }
                 .hidden(
                     searchText.isNotEmpty
-                    && (
-                        !tag.name.normalizedContains(searchText)
-                        || tag.items.orEmpty.isEmpty
-                    )
+                        && (
+                            !tag.name.normalizedContains(searchText)
+                                || tag.items.orEmpty.isEmpty
+                        )
                 )
             }
             .onDelete {
@@ -74,7 +74,7 @@ extension TagListView: View {
             ActionSheet(
                 title: Text("Are you sure you want to delete this item?"),
                 buttons: [
-                    .destructive(Text("Delete \(Set(willDeleteItems.map { $0.content }).joined(separator: ", "))")) {
+                    .destructive(Text("Delete \(Set(willDeleteItems.map(\.content)).joined(separator: ", "))")) {
                         do {
                             try itemService.delete(items: willDeleteItems)
                         } catch {

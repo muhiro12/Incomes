@@ -27,7 +27,7 @@ extension HomeTabSection: View {
                 #if XCODE
                 if #available(iOS 18.0, *) {
                     TabView(selection: $yearTag) {
-                        ForEach(yearTags.filter { $0.items.isNotEmpty }) { yearTag in
+                        ForEach(yearTags.filter(\.items.isNotEmpty)) { yearTag in
                             Tab(value: yearTag) {
                                 HomeTabSectionLink()
                                     .environment(yearTag)
@@ -36,7 +36,7 @@ extension HomeTabSection: View {
                     }
                 } else {
                     TabView(selection: $yearTag) {
-                        ForEach(yearTags.filter { $0.items.isNotEmpty }) { yearTag in
+                        ForEach(yearTags.filter(\.items.isNotEmpty)) { yearTag in
                             HomeTabSectionLink()
                                 .environment(yearTag)
                                 .tag(yearTag as Tag?)
@@ -45,7 +45,7 @@ extension HomeTabSection: View {
                 }
                 #else
                 TabView(selection: $yearTag) {
-                    ForEach(yearTags.filter { $0.items.isNotEmpty }) { yearTag in
+                    ForEach(yearTags.filter(\.items.isNotEmpty)) { yearTag in
                         HomeTabSectionLink()
                             .environment(yearTag)
                             .tag(yearTag as Tag?)
@@ -58,7 +58,7 @@ extension HomeTabSection: View {
             .frame(height: .componentM)
         } footer: {
             HStack {
-                ForEach(yearTags.filter { $0.items.isNotEmpty }) { yearTag in
+                ForEach(yearTags.filter(\.items.isNotEmpty)) { yearTag in
                     Circle()
                         .frame(width: 8)
                         .foregroundStyle(self.yearTag == yearTag ? AnyShapeStyle(.tint) : AnyShapeStyle(.secondary))

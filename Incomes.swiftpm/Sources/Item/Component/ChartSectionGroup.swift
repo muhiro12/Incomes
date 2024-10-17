@@ -49,9 +49,7 @@ extension ChartSectionGroup: View {
         Section("Category") {
             Chart(
                 Dictionary(
-                    grouping: items.filter {
-                        $0.income.isNotZero
-                    }
+                    grouping: items.filter(\.income.isNotZero)
                 ) {
                     guard let category = $0.category else {
                         return "Others"
@@ -73,9 +71,7 @@ extension ChartSectionGroup: View {
             .padding()
             Chart(
                 Dictionary(
-                    grouping: items.filter {
-                        $0.outgo.isNotZero
-                    }
+                    grouping: items.filter(\.outgo.isNotZero)
                 ) {
                     guard let category = $0.category else {
                         return "Others"
