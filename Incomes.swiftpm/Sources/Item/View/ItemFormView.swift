@@ -70,19 +70,23 @@ extension ItemFormView: View {
                 }
                 HStack {
                     Text("Income")
-                    TextField(String.zero, text: $income)
-                        .keyboardType(.numberPad)
-                        .focused($focusedField, equals: .income)
-                        .multilineTextAlignment(.trailing)
-                        .foregroundColor(income.isEmptyOrDecimal ? .primary : .red)
+                    TextField(text: $income) {
+                        Text("0")
+                    }
+                    .keyboardType(.numberPad)
+                    .focused($focusedField, equals: .income)
+                    .multilineTextAlignment(.trailing)
+                    .foregroundColor(income.isEmptyOrDecimal ? .primary : .red)
                 }
                 HStack {
                     Text("Outgo")
-                    TextField(String.zero, text: $outgo)
-                        .keyboardType(.numberPad)
-                        .focused($focusedField, equals: .outgo)
-                        .multilineTextAlignment(.trailing)
-                        .foregroundColor(outgo.isEmptyOrDecimal ? .primary : .red)
+                    TextField(text: $outgo) {
+                        Text("0")
+                    }
+                    .keyboardType(.numberPad)
+                    .focused($focusedField, equals: .outgo)
+                    .multilineTextAlignment(.trailing)
+                    .foregroundColor(outgo.isEmptyOrDecimal ? .primary : .red)
                 }
                 HStack {
                     Text("Category")
@@ -142,7 +146,7 @@ extension ItemFormView: View {
                     focusedField = nil
                 }
         )
-        .alert(String.debugTitle, isPresented: $isDebugAlertPresented) {
+        .alert(Text("Debug"), isPresented: $isDebugAlertPresented) {
             Button(role: .cancel) {
             } label: {
                 Text("Cancel")
@@ -151,10 +155,10 @@ extension ItemFormView: View {
                 isDebugOn = true
                 dismiss()
             } label: {
-                Text(String.debugOK)
+                Text("OK")
             }
         } message: {
-            Text(String.debugMessage)
+            Text("Are you really going to use DebugMode?")
         }
         .onAppear {
             guard let item else {
@@ -281,7 +285,7 @@ private extension ItemFormView {
     }
 
     func cancel() {
-        if content == .debugCommand {
+        if content == "Enable Debug" {
             content = .empty
             isDebugAlertPresented = true
             return

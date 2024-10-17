@@ -30,12 +30,14 @@ extension DebugListView: View {
     var body: some View {
         List(selection: $path) {
             Section {
-                Toggle(String.debugOption, isOn: $isDebugOn)
+                Toggle(isOn: $isDebugOn) {
+                    Text("Debug option")
+                }
             }
             if let tag = try? tagService.tag() {
                 Section {
                     NavigationLink(value: IncomesPath.itemList(tag)) {
-                        Text(String.debugAllItems)
+                        Text("All Items")
                     }
                     NavigationLink {
                         DebugTagListView()
@@ -48,7 +50,7 @@ extension DebugListView: View {
                 Button {
                     isAlertPresented = true
                 } label: {
-                    Text(String.debugSetPreviewData)
+                    Text("Set PreviewData")
                 }
                 .disabled(!isDebugOn)
             }
@@ -56,29 +58,29 @@ extension DebugListView: View {
             AdvertisementSection(.medium)
             AdvertisementSection(.small)
         }
-        .alert(String.debugSetPreviewData, isPresented: $isAlertPresented) {
+        .alert(Text("Set PreviewData"), isPresented: $isAlertPresented) {
             Button(role: .destructive) {
                 Task {
                     await IncomesPreviewStore().prepare(context)
                 }
             } label: {
-                Text(String.debugPrepare)
+                Text("Prepare")
             }
             Button(role: .destructive) {
                 Task {
                     await IncomesPreviewStore().prepareIgnoringDuplicates(context)
                 }
             } label: {
-                Text(String.debugPrepareIgnoringDuplicates)
+                Text("Prepare ignoring duplicates")
             }
             Button(role: .cancel) {
             } label: {
                 Text("Cancel")
             }
         } message: {
-            Text(String.debugSetPreviewDataMessage)
+            Text("Are you really going to set PreviewData?")
         }
-        .navigationTitle(Text(String.debugTitle))
+        .navigationTitle(Text("Debug"))
         .toolbar {
             ToolbarItem(placement: .bottomBar) {
                 MainTabMenu()

@@ -17,19 +17,19 @@ extension DebugSection: View {
     var body: some View {
         Section {
             HStack {
-                Text(String.debugRepeatID)
+                Text("RepeatID")
                 Spacer()
                 Text(item.repeatID.uuidString)
                     .foregroundStyle(.secondary)
             }
             HStack {
-                Text(String.debugBalance)
+                Text("Balance")
                 Spacer()
                 Text(item.balance.description)
                     .foregroundStyle(.secondary)
             }
             HStack {
-                Text(String.debugTags)
+                Text("Tags")
                 Spacer()
                 VStack(alignment: .trailing) {
                     ForEach(item.tags.orEmpty) {
@@ -39,7 +39,7 @@ extension DebugSection: View {
                 }
             }
         } header: {
-            Text(String.debugTitle)
+            Text("Debug")
         }
     }
 }
