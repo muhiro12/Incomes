@@ -18,7 +18,7 @@ struct DeleteItemButton {
 
 extension DeleteItemButton: View {
     var body: some View {
-        Button {
+        Button(role: .destructive) {
             isPresented = true
         } label: {
             Label {
