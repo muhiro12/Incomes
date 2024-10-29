@@ -19,7 +19,7 @@ struct TagListView {
     @Binding private var path: IncomesPath?
 
     @State private var searchText = String.empty
-    @State private var isPresentedToAlert = false
+    @State private var isDialogPresented = false
     @State private var willDeleteItems = [Item]()
 
     private let tagType: Tag.TagType
@@ -52,7 +52,7 @@ extension TagListView: View {
                 )
             }
             .onDelete {
-                isPresentedToAlert = true
+                isDialogPresented = true
                 willDeleteItems = $0.flatMap { tags[$0].items ?? [] }
             }
         }
@@ -70,22 +70,21 @@ extension TagListView: View {
                     .font(.footnote)
             }
         }
-        .actionSheet(isPresented: $isPresentedToAlert) {
-            ActionSheet(
-                title: Text("Are you sure you want to delete this item?"),
-                buttons: [
-                    .destructive(Text("Delete \(Set(willDeleteItems.map(\.content)).joined(separator: ", "))")) {
-                        do {
-                            try itemService.delete(items: willDeleteItems)
-                        } catch {
-                            assertionFailure(error.localizedDescription)
-                        }
-                    },
-                    .cancel {
-                        willDeleteItems = []
-                    }
-                ]
-            )
+        .confirmationDialog(Text("Are you sure you want to delete this item?"), isPresented: $isDialogPresented) {
+            Button(role: .destructive) {
+                do {
+                    try itemService.delete(items: willDeleteItems)
+                } catch {
+                    assertionFailure(error.localizedDescription)
+                }
+            } label: {
+                Text("Delete \(Set(willDeleteItems.map(\.content)).joined(separator: ", "))")
+            }
+            Button(role: .cancel) {
+                willDeleteItems = []
+            } label: {
+                Text("Cancel")
+            }
         }
     }
 }

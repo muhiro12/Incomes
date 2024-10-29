@@ -14,7 +14,7 @@ struct HomeYearSection {
 
     @Query private var yearMonthTags: [Tag]
 
-    @State private var isPresentedToAlert = false
+    @State private var isDialogPresented = false
     @State private var willDeleteItems: [Item] = []
 
     init(yearTag: Tag) {
@@ -36,26 +36,25 @@ extension HomeYearSection: View {
                     }
                 }
             }.onDelete {
-                isPresentedToAlert = true
+                isDialogPresented = true
                 willDeleteItems = $0.flatMap { yearMonthTags[$0].items ?? [] }
             }
         }
-        .actionSheet(isPresented: $isPresentedToAlert) {
-            ActionSheet(
-                title: Text("Are you sure you want to delete this item?"),
-                buttons: [
-                    .destructive(Text("Delete")) {
-                        do {
-                            try itemService.delete(items: willDeleteItems)
-                        } catch {
-                            assertionFailure(error.localizedDescription)
-                        }
-                    },
-                    .cancel {
-                        willDeleteItems = []
-                    }
-                ]
-            )
+        .confirmationDialog(Text("Are you sure you want to delete this item?"), isPresented: $isDialogPresented) {
+            Button(role: .destructive) {
+                do {
+                    try itemService.delete(items: willDeleteItems)
+                } catch {
+                    assertionFailure(error.localizedDescription)
+                }
+            } label: {
+                Text("Delete")
+            }
+            Button(role: .cancel) {
+                willDeleteItems = []
+            } label: {
+                Text("Cancel")
+            }
         }
     }
 }

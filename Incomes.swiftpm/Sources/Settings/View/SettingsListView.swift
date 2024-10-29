@@ -31,7 +31,7 @@ struct SettingsListView {
     @Binding private var path: IncomesPath?
 
     @State private var selectedCurrencyCode = CurrencyCode.system
-    @State private var isAlertPresented = false
+    @State private var isDialogPresented = false
     @State private var isDuplicateTagPresented = false
 
     init(selection: Binding<IncomesPath?> = .constant(nil)) {
@@ -69,7 +69,7 @@ extension SettingsListView: View {
                     Text("Recalculate")
                 }
                 Button(role: .destructive) {
-                    isAlertPresented = true
+                    isDialogPresented = true
                 } label: {
                     Text("Delete all")
                 }
@@ -124,8 +124,8 @@ extension SettingsListView: View {
                     .font(.footnote)
             }
         }
-        .alert(Text("Are you sure you want to delete all items?"),
-               isPresented: $isAlertPresented) {
+        .confirmationDialog(Text("Are you sure you want to delete all items?"),
+                            isPresented: $isDialogPresented) {
             Button(role: .destructive) {
                 do {
                     try itemService.deleteAll()

@@ -14,7 +14,7 @@ struct TagItemListSection {
     @Environment(ItemService.self)
     private var itemService
 
-    @State private var isPresentedToAlert = false
+    @State private var isDialogPresented = false
     @State private var willDeleteItems: [Item] = []
 
     private let yearString: String
@@ -33,27 +33,26 @@ extension TagItemListSection: View {
             }
             .onDelete {
                 willDeleteItems = $0.map { items[$0] }
-                isPresentedToAlert = true
+                isDialogPresented = true
             }
         } header: {
             Text(yearString.dateValueWithoutLocale(.yyyy)?.stringValue(.yyyy) ?? .empty)
         }
-        .actionSheet(isPresented: $isPresentedToAlert) {
-            ActionSheet(
-                title: Text("Are you sure you want to delete this item?"),
-                buttons: [
-                    .destructive(Text("Delete")) {
-                        do {
-                            try itemService.delete(items: willDeleteItems)
-                        } catch {
-                            assertionFailure(error.localizedDescription)
-                        }
-                    },
-                    .cancel {
-                        willDeleteItems = []
-                    }
-                ]
-            )
+        .confirmationDialog(Text("Are you sure you want to delete this item?"), isPresented: $isDialogPresented) {
+            Button(role: .destructive) {
+                do {
+                    try itemService.delete(items: willDeleteItems)
+                } catch {
+                    assertionFailure(error.localizedDescription)
+                }
+            } label: {
+                Text("Delete")
+            }
+            Button(role: .cancel) {
+                willDeleteItems = []
+            } label: {
+                Text("Cancel")
+            }
         }
     }
 }

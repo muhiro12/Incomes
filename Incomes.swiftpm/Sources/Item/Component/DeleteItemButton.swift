@@ -13,7 +13,7 @@ struct DeleteItemButton {
     @Environment(ItemService.self)
     private var itemService
 
-    @State private var isPresented = false
+    @State private var isDialogPresented = false
 
     private let action: (() -> Void)?
 
@@ -28,7 +28,7 @@ extension DeleteItemButton: View {
             if let action {
                 action()
             } else {
-                isPresented = true
+                isDialogPresented = true
             }
         } label: {
             Label {
@@ -37,11 +37,7 @@ extension DeleteItemButton: View {
                 Image(systemName: "trash")
             }
         }
-        .alert(Text("Delete \(item.content)"), isPresented: $isPresented) {
-            Button(role: .cancel) {
-            } label: {
-                Text("Cancel")
-            }
+        .confirmationDialog(Text("Delete \(item.content)"), isPresented: $isDialogPresented) {
             Button(role: .destructive) {
                 do {
                     try itemService.delete(items: [item])
@@ -50,6 +46,10 @@ extension DeleteItemButton: View {
                 }
             } label: {
                 Text("Delete")
+            }
+            Button(role: .cancel) {
+            } label: {
+                Text("Cancel")
             }
         } message: {
             Text("Are you sure you want to delete this item?")

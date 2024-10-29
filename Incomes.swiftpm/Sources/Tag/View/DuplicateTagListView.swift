@@ -12,7 +12,7 @@ struct DuplicateTagListView: View {
 
     @Binding private var selection: Tag?
 
-    @State private var isResolveAlertPresented = false
+    @State private var isResolveDialogPresented = false
     @State private var selectedTags = [Tag]()
 
     init(selection: Binding<Tag?>) {
@@ -34,18 +34,18 @@ struct DuplicateTagListView: View {
                 Text("Category")
             }
         }
-        .alert(
+        .confirmationDialog(
             Text("Are you sure you want to resolve all duplicate tags? This action cannot be undone."),
-            isPresented: $isResolveAlertPresented
+            isPresented: $isResolveDialogPresented
         ) {
-            Button(role: .cancel) {
-            } label: {
-                Text("Cancel")
-            }
             Button {
                 try? tagService.resolveAllDuplicates(in: selectedTags)
             } label: {
                 Text("Resolve")
+            }
+            Button(role: .cancel) {
+            } label: {
+                Text("Cancel")
             }
         }
         .navigationTitle(Text("Duplicate Tags"))
@@ -73,7 +73,7 @@ struct DuplicateTagListView: View {
                     header()
                     Spacer()
                     Button {
-                        isResolveAlertPresented = true
+                        isResolveDialogPresented = true
                         selectedTags = duplicates
                     } label: {
                         Text("Resolve All")

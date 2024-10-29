@@ -38,7 +38,7 @@ struct ItemFormView {
     @FocusState private var focusedField: Field?
 
     @State private var isActionSheetPresented = false
-    @State private var isDebugAlertPresented = false
+    @State private var isDebugDialogPresented = false
 
     @State private var date: Date = .now
     @State private var content: String = .empty
@@ -150,16 +150,16 @@ extension ItemFormView: View {
                     focusedField = nil
                 }
         )
-        .alert(Text("Debug"), isPresented: $isDebugAlertPresented) {
-            Button(role: .cancel) {
-            } label: {
-                Text("Cancel")
-            }
+        .confirmationDialog(Text("Debug"), isPresented: $isDebugDialogPresented) {
             Button {
                 isDebugOn = true
                 dismiss()
             } label: {
                 Text("OK")
+            }
+            Button(role: .cancel) {
+            } label: {
+                Text("Cancel")
             }
         } message: {
             Text("Are you really going to use DebugMode?")
@@ -291,7 +291,7 @@ private extension ItemFormView {
     func cancel() {
         if content == "Enable Debug" {
             content = .empty
-            isDebugAlertPresented = true
+            isDebugDialogPresented = true
             return
         }
         dismiss()

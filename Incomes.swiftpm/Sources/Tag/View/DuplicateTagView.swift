@@ -10,8 +10,8 @@ struct DuplicateTagView: View {
 
     @Query private var tags: [Tag]
 
-    @State private var isMergeAlertPresented = false
-    @State private var isDeleteAlertPresented = false
+    @State private var isMergeDialogPresented = false
+    @State private var isDeleteDialogPresented = false
     @State private var selectedTag: Tag?
 
     init(_ tag: Tag) {
@@ -32,7 +32,7 @@ struct DuplicateTagView: View {
                                 Text("\(tag.items?.count ?? .zero) Items")
                                 Spacer()
                                 Button {
-                                    isDeleteAlertPresented = true
+                                    isDeleteDialogPresented = true
                                     selectedTag = tag
                                 } label: {
                                     Label {
@@ -54,38 +54,38 @@ struct DuplicateTagView: View {
             }
         }
         .background(Color(.systemGroupedBackground))
-        .alert(
+        .confirmationDialog(
             Text("Are you sure you want to merge these tags? This action cannot be undone."),
-            isPresented: $isMergeAlertPresented
+            isPresented: $isMergeDialogPresented
         ) {
-            Button(role: .cancel) {
-            } label: {
-                Text("Cancel")
-            }
             Button {
                 try? tagService.merge(tags: tags)
             } label: {
                 Text("Merge")
             }
-        }
-        .alert(
-            Text("Are you sure you want to delete this tag? This action cannot be undone."),
-            isPresented: $isDeleteAlertPresented
-        ) {
             Button(role: .cancel) {
             } label: {
                 Text("Cancel")
             }
+        }
+        .confirmationDialog(
+            Text("Are you sure you want to delete this tag? This action cannot be undone."),
+            isPresented: $isDeleteDialogPresented
+        ) {
             Button(role: .destructive) {
                 selectedTag?.delete()
             } label: {
                 Text("Delete")
             }
+            Button(role: .cancel) {
+            } label: {
+                Text("Cancel")
+            }
         }
         .toolbar {
             ToolbarItem {
                 Button {
-                    isMergeAlertPresented = true
+                    isMergeDialogPresented = true
                 } label: {
                     Text("Merge")
                 }

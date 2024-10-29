@@ -19,7 +19,7 @@ struct DebugListView {
 
     @Binding private var path: IncomesPath?
 
-    @State private var isAlertPresented = false
+    @State private var isDialogPresented = false
 
     init(selection: Binding<IncomesPath?> = .constant(nil)) {
         _path = selection
@@ -48,7 +48,7 @@ extension DebugListView: View {
             }
             Section {
                 Button {
-                    isAlertPresented = true
+                    isDialogPresented = true
                 } label: {
                     Text("Set PreviewData")
                 }
@@ -58,7 +58,7 @@ extension DebugListView: View {
             AdvertisementSection(.medium)
             AdvertisementSection(.small)
         }
-        .alert(Text("Set PreviewData"), isPresented: $isAlertPresented) {
+        .confirmationDialog(Text("Set PreviewData"), isPresented: $isDialogPresented) {
             Button(role: .destructive) {
                 Task {
                     await IncomesPreviewStore().prepare(context)
