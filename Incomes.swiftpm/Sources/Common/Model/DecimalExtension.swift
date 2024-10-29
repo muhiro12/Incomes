@@ -21,6 +21,9 @@ extension Decimal {
     }
 
     var asMinusCurrency: String {
+        guard isNotZero else {
+            return asCurrency
+        }
         guard asCurrency.isNotEmpty else {
             return .empty
         }
