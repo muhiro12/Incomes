@@ -47,13 +47,13 @@ extension MainTab {
             Label {
                 Text("Content")
             } icon: {
-                Image(systemName: "square.stack.3d.up")
+                Image(systemName: "doc.text")
             }
         case .category:
             Label {
                 Text("Category")
             } icon: {
-                Image(systemName: "square.stack.3d.up")
+                Image(systemName: "tag")
             }
         case .settings:
             Label {
