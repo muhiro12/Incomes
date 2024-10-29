@@ -30,7 +30,7 @@ extension DuplicateItemButton: View {
             }
         } label: {
             Label {
-                Text("Duplicate \(item.content)")
+                Text("Duplicate")
             } icon: {
                 Image(systemName: "document.on.document")
             }

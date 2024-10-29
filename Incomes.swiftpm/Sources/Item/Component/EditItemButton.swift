@@ -30,7 +30,7 @@ extension EditItemButton: View {
             }
         } label: {
             Label {
-                Text("Edit \(item.content)")
+                Text("Edit")
             } icon: {
                 Image(systemName: "pencil")
             }

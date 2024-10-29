@@ -32,7 +32,7 @@ extension DeleteItemButton: View {
             }
         } label: {
             Label {
-                Text("Delete \(item.content)")
+                Text("Delete")
             } icon: {
                 Image(systemName: "trash")
             }
