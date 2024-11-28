@@ -1,5 +1,5 @@
 //
-//  DeleteItemButton 2.swift
+//  DeleteItemButton.swift
 //  Incomes Playgrounds
 //
 //  Created by Hiromu Nakano on 10/18/24.
