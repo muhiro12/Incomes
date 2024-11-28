@@ -37,7 +37,10 @@ extension DeleteItemButton: View {
                 Image(systemName: "trash")
             }
         }
-        .confirmationDialog(Text("Delete \(item.content)"), isPresented: $isDialogPresented) {
+        .confirmationDialog(
+            Text("Delete \(item.content)"),
+            isPresented: $isDialogPresented
+        ) {
             Button(role: .destructive) {
                 do {
                     try itemService.delete(items: [item])

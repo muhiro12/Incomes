@@ -56,7 +56,10 @@ struct ListItem: View {
         .sheet(isPresented: $isDuplicatePresented) {
             ItemFormNavigationView(mode: .create)
         }
-        .confirmationDialog(Text("Delete \(item.content)"), isPresented: $isDeletePresented) {
+        .confirmationDialog(
+            Text("Delete \(item.content)"),
+            isPresented: $isDeletePresented
+        ) {
             Button(role: .destructive) {
                 do {
                     try itemService.delete(items: [item])

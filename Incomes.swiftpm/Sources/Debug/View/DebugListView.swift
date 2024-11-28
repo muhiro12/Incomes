@@ -58,7 +58,10 @@ extension DebugListView: View {
             AdvertisementSection(.medium)
             AdvertisementSection(.small)
         }
-        .confirmationDialog(Text("Set PreviewData"), isPresented: $isDialogPresented) {
+        .confirmationDialog(
+            Text("Set PreviewData"),
+            isPresented: $isDialogPresented
+        ) {
             Button(role: .destructive) {
                 Task {
                     await IncomesPreviewStore().prepare(context)

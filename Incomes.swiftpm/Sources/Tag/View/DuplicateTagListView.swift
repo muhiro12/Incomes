@@ -35,7 +35,7 @@ struct DuplicateTagListView: View {
             }
         }
         .confirmationDialog(
-            Text("Are you sure you want to resolve all duplicate tags? This action cannot be undone."),
+            Text("Resolve All"),
             isPresented: $isResolveDialogPresented
         ) {
             Button {
@@ -47,6 +47,8 @@ struct DuplicateTagListView: View {
             } label: {
                 Text("Cancel")
             }
+        } message: {
+            Text("Are you sure you want to resolve all duplicate tags? This action cannot be undone.")
         }
         .navigationTitle(Text("Duplicate Tags"))
         .toolbar {

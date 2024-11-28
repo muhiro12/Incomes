@@ -55,7 +55,7 @@ struct DuplicateTagView: View {
         }
         .background(Color(.systemGroupedBackground))
         .confirmationDialog(
-            Text("Are you sure you want to merge these tags? This action cannot be undone."),
+            Text("Merge"),
             isPresented: $isMergeDialogPresented
         ) {
             Button {
@@ -67,9 +67,11 @@ struct DuplicateTagView: View {
             } label: {
                 Text("Cancel")
             }
+        } message: {
+            Text("Are you sure you want to merge these tags? This action cannot be undone.")
         }
         .confirmationDialog(
-            Text("Are you sure you want to delete this tag? This action cannot be undone."),
+            Text("Delete"),
             isPresented: $isDeleteDialogPresented
         ) {
             Button(role: .destructive) {
@@ -81,6 +83,8 @@ struct DuplicateTagView: View {
             } label: {
                 Text("Cancel")
             }
+        } message: {
+            Text("Are you sure you want to delete this tag? This action cannot be undone.")
         }
         .toolbar {
             ToolbarItem {

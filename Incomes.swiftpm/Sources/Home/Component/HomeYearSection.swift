@@ -40,7 +40,10 @@ extension HomeYearSection: View {
                 willDeleteItems = $0.flatMap { yearMonthTags[$0].items ?? [] }
             }
         }
-        .confirmationDialog(Text("Are you sure you want to delete this item?"), isPresented: $isDialogPresented) {
+        .confirmationDialog(
+            Text("Delete"),
+            isPresented: $isDialogPresented
+        ) {
             Button(role: .destructive) {
                 do {
                     try itemService.delete(items: willDeleteItems)
@@ -55,6 +58,8 @@ extension HomeYearSection: View {
             } label: {
                 Text("Cancel")
             }
+        } message: {
+            Text("Are you sure you want to delete this item?")
         }
     }
 }

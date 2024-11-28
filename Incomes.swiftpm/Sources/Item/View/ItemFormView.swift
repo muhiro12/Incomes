@@ -150,7 +150,10 @@ extension ItemFormView: View {
                     focusedField = nil
                 }
         )
-        .confirmationDialog(Text("Debug"), isPresented: $isDebugDialogPresented) {
+        .confirmationDialog(
+            Text("Debug"),
+            isPresented: $isDebugDialogPresented
+        ) {
             Button {
                 isDebugOn = true
                 dismiss()

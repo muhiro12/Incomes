@@ -38,7 +38,10 @@ extension TagItemListSection: View {
         } header: {
             Text(yearString.dateValueWithoutLocale(.yyyy)?.stringValue(.yyyy) ?? .empty)
         }
-        .confirmationDialog(Text("Are you sure you want to delete this item?"), isPresented: $isDialogPresented) {
+        .confirmationDialog(
+            Text("Delete"),
+            isPresented: $isDialogPresented
+        ) {
             Button(role: .destructive) {
                 do {
                     try itemService.delete(items: willDeleteItems)
@@ -53,6 +56,8 @@ extension TagItemListSection: View {
             } label: {
                 Text("Cancel")
             }
+        } message: {
+            Text("Are you sure you want to delete this item?")
         }
     }
 }

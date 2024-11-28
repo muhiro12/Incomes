@@ -124,8 +124,10 @@ extension SettingsListView: View {
                     .font(.footnote)
             }
         }
-        .confirmationDialog(Text("Are you sure you want to delete all items?"),
-                            isPresented: $isDialogPresented) {
+        .confirmationDialog(
+            Text("Delete all"),
+            isPresented: $isDialogPresented
+        ) {
             Button(role: .destructive) {
                 do {
                     try itemService.deleteAll()
@@ -140,6 +142,8 @@ extension SettingsListView: View {
             } label: {
                 Text("Cancel")
             }
+        } message: {
+            Text("Are you sure you want to delete all items?")
         }
         .fullScreenCover(isPresented: $isDuplicateTagPresented) {
             DuplicateTagNavigationView()
