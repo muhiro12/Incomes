@@ -57,6 +57,7 @@ extension DebugListView: View {
             StoreSection()
             AdvertisementSection(.medium)
             AdvertisementSection(.small)
+            ShortcutsLinkSection()
         }
         .confirmationDialog(
             Text("Set PreviewData"),

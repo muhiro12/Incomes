@@ -36,6 +36,7 @@ let package = Package(
                 "Incomes"
             ],
             sources: [
+                "Sources",
                 "Incomes.swiftpm/Sources"
             ],
             resources: [

@@ -6,6 +6,7 @@
 //  Copyright © 2021 Hiromu Nakano. All rights reserved.
 //
 
+import AppIntents
 import GoogleMobileAdsWrapper
 import IncomesPlaygrounds
 import LicenseListWrapper
@@ -50,6 +51,10 @@ struct IncomesApp: App {
                     },
                     storeKit: {
                         sharedStore.buildSubscriptionSection()
+                    },
+                    appIntents: {
+                        ShortcutsLink()
+                            .shortcutsLinkStyle(.automaticOutline)
                     }
                 )
                 .task {

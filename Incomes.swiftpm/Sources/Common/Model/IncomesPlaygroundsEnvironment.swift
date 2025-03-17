@@ -11,6 +11,9 @@ extension View {
             },
             storeKit: {
                 placeholder("StoreKit")
+            },
+            appIntents: {
+                placeholder("AppIntents")
             }
         )
     }
