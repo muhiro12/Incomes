@@ -1,0 +1,69 @@
+{
+  "originHash" : "0f1fddf9d456dcbd5fcd1e75e259bf598552ee6aff46383395c6b8e2512d2aa2",
+  "pins" : [
+    {
+      "identity" : "googlemobileadswrapper",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/muhiro12/GoogleMobileAdsWrapper.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "1820cc836326f92882261aa3645df3219c0e9f29"
+      }
+    },
+    {
+      "identity" : "licenselist",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/cybozu/LicenseList.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "4801461b9ca8eee843c19ab8fe88a590ce064e15"
+      }
+    },
+    {
+      "identity" : "licenselistwrapper",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/muhiro12/LicenseListWrapper.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "fb5d895d808978d8018c24bd6b3ad5227b8f0c0d"
+      }
+    },
+    {
+      "identity" : "storekitwrapper",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/muhiro12/StoreKitWrapper.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "7955f34b7b7e6757e474a6991f1b3e62f8971cb2"
+      }
+    },
+    {
+      "identity" : "swift-package-manager-google-mobile-ads",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/googleads/swift-package-manager-google-mobile-ads.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "ab4c3ec7546c7566fe49918fc9461df44e015537"
+      }
+    },
+    {
+      "identity" : "swift-package-manager-google-user-messaging-platform",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/googleads/swift-package-manager-google-user-messaging-platform.git",
+      "state" : {
+        "revision" : "708a282840c2171ee63bd93b87afa49fe507d70e",
+        "version" : "2.7.0"
+      }
+    },
+    {
+      "identity" : "swiftutilities",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/muhiro12/SwiftUtilities.git",
+      "state" : {
+        "revision" : "d1d3caf666487fdc96dc0961128b3892f86425fd",
+        "version" : "1.9.0"
+      }
+    }
+  ],
+  "version" : 3
+}

@@ -31,10 +31,12 @@ let package = Package(
                 .product(name: "StoreKitWrapper", package: "StoreKitWrapper"),
                 .product(name: "SwiftUtilities", package: "SwiftUtilities")
             ],
-            path: "Incomes.swiftpm",
+            path: ".",
             exclude: [
-                "IncomesPlaygroundsApp.swift",
-                "Package.swift"
+                "Incomes"
+            ],
+            sources: [
+                "Incomes.swiftpm/Sources"
             ],
             resources: [
                 .process("Resources")
