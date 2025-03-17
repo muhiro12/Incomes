@@ -72,7 +72,7 @@
          </BuildableReference>
       </BuildableProductRunnable>
       <StoreKitConfigurationFileReference
-         identifier = "../Incomes/Configurations/Configuration.storekit">
+         identifier = "../Incomes/Xcode/Incomes/Configuration.storekit">
       </StoreKitConfigurationFileReference>
    </LaunchAction>
    <ProfileAction

@@ -33,14 +33,14 @@ let package = Package(
             ],
             path: ".",
             exclude: [
-                "Incomes"
+                "Incomes/Xcode"
             ],
             sources: [
-                "Sources",
+                "Incomes/Sources",
                 "Incomes.swiftpm/Sources"
             ],
             resources: [
-                .process("Resources")
+                .process("Incomes/Resources")
             ],
             swiftSettings: [
                 .swiftLanguageMode(.v5),
