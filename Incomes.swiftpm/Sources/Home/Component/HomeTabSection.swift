@@ -23,35 +23,13 @@ struct HomeTabSection {
 extension HomeTabSection: View {
     var body: some View {
         Section {
-            Group {
-                #if XCODE
-                if #available(iOS 18.0, *) {
-                    TabView(selection: $yearTag) {
-                        ForEach(yearTags.filter(\.items.isNotEmpty)) { yearTag in
-                            Tab(value: yearTag) {
-                                HomeTabSectionLink()
-                                    .environment(yearTag)
-                            }
-                        }
-                    }
-                } else {
-                    TabView(selection: $yearTag) {
-                        ForEach(yearTags.filter(\.items.isNotEmpty)) { yearTag in
-                            HomeTabSectionLink()
-                                .environment(yearTag)
-                                .tag(yearTag as Tag?)
-                        }
-                    }
-                }
-                #else
-                TabView(selection: $yearTag) {
-                    ForEach(yearTags.filter(\.items.isNotEmpty)) { yearTag in
+            TabView(selection: $yearTag) {
+                ForEach(yearTags.filter(\.items.isNotEmpty)) { yearTag in
+                    Tab(value: yearTag) {
                         HomeTabSectionLink()
                             .environment(yearTag)
-                            .tag(yearTag as Tag?)
                     }
                 }
-                #endif
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
             .buttonStyle(.plain)

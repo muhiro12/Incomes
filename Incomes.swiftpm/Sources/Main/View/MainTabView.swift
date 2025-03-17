@@ -27,48 +27,20 @@ struct MainTabView: View {
     }
 
     var body: some View {
-        #if XCODE
-        if #available(iOS 18.0, *) {
-            TabView(selection: $mainTab) {
-                ForEach(tabs) { tab in
-                    Tab(value: tab) {
-                        tab.rootView
-                            .toolbar(
-                                horizontalSizeClass == .regular ? .visible : .hidden,
-                                for: .tabBar
-                            )
-                    } label: {
-                        tab.label
-                    }
-                }
-            }
-            .environment(\.mainTab, $mainTab)
-        } else {
-            TabView(selection: $mainTab) {
-                ForEach(tabs) { tab in
-                    tab.rootView
-                        .tag(tab)
-                        .tabItem {
-                            tab.label
-                        }
-                        .toolbar(.hidden, for: .tabBar)
-                }
-            }
-            .environment(\.mainTab, $mainTab)
-        }
-        #else
         TabView(selection: $mainTab) {
             ForEach(tabs) { tab in
-                tab.rootView
-                    .tag(tab)
-                    .tabItem {
-                        tab.label
-                    }
-                    .toolbar(.hidden, for: .tabBar)
+                Tab(value: tab) {
+                    tab.rootView
+                        .toolbar(
+                            horizontalSizeClass == .regular ? .visible : .hidden,
+                            for: .tabBar
+                        )
+                } label: {
+                    tab.label
+                }
             }
         }
         .environment(\.mainTab, $mainTab)
-        #endif
     }
 }
 
