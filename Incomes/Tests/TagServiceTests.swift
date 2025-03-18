@@ -20,7 +20,7 @@ struct TagServiceTests {
 
     // MARK: - Fetch
 
-    @Test func tag() async throws {
+    @Test func tag() throws {
         #expect(try service.tag() == nil)
 
         _ = try Tag.create(context: context, name: "nameA", type: .year)
@@ -34,7 +34,7 @@ struct TagServiceTests {
 
     // MARK: - Delete
 
-    @Test func deleteAll() async throws {
+    @Test func deleteAll() throws {
         #expect(try service.tag() == nil)
 
         _ = try Tag.create(context: context, name: "nameA", type: .year)
@@ -49,7 +49,7 @@ struct TagServiceTests {
 
     // MARK: - Duplicates - merge
 
-    @Test func mergeWhenTagsAreIdentical() async throws {
+    @Test func mergeWhenTagsAreIdentical() throws {
         #expect(try service.tag() == nil)
 
         let item1 = try Item.create(
@@ -103,7 +103,7 @@ struct TagServiceTests {
         #expect(item1.tags?.contains(tag3) == true)
     }
 
-    @Test func mergeWhenTagsAreDifferent() async throws {
+    @Test func mergeWhenTagsAreDifferent() throws {
         #expect(try service.tag() == nil)
 
         let item1 = try Item.create(
@@ -161,7 +161,7 @@ struct TagServiceTests {
         #expect(item3.tags?.contains(tag1) == true)
     }
 
-    @Test func mergeWhenTagsAreDuplicated() async throws {
+    @Test func mergeWhenTagsAreDuplicated() throws {
         #expect(try service.tag() == nil)
 
         let item1 = try Item.createIgnoringDuplicates(
@@ -217,7 +217,7 @@ struct TagServiceTests {
 
     // MARK: - Duplicates - resolveAllDuplicates
 
-    @Test func resolveAllDuplicatesWithExpectedUsage() async throws {
+    @Test func resolveAllDuplicatesWithExpectedUsage() throws {
         let tag1 = try Tag.createIgnoringDuplicates(context: context, name: "nameA", type: .year)
         _ = try Tag.createIgnoringDuplicates(context: context, name: "nameA", type: .year)
         _ = try Tag.createIgnoringDuplicates(context: context, name: "nameA", type: .year)
@@ -232,7 +232,7 @@ struct TagServiceTests {
         #expect(try context.fetchCount(.tags(.all)) == 2)
     }
 
-    @Test func resolveAllDuplicatesWithUnexpectedUsage() async throws {
+    @Test func resolveAllDuplicatesWithUnexpectedUsage() throws {
         let tag1 = try Tag.createIgnoringDuplicates(context: context, name: "nameA", type: .year)
         let tag2 = try Tag.createIgnoringDuplicates(context: context, name: "nameA", type: .year)
         _ = try Tag.createIgnoringDuplicates(context: context, name: "nameA", type: .year)
@@ -249,7 +249,7 @@ struct TagServiceTests {
 
     // MARK: - Duplicates - findDuplicates
 
-    @Test func findDuplicatesWithExpectedUsage() async throws {
+    @Test func findDuplicatesWithExpectedUsage() throws {
         let tag1 = try Tag.createIgnoringDuplicates(context: context, name: "nameA", type: .year)
         let tag2 = try Tag.createIgnoringDuplicates(context: context, name: "nameA", type: .year)
         let tag3 = try Tag.createIgnoringDuplicates(context: context, name: "nameA", type: .year)
@@ -270,7 +270,7 @@ struct TagServiceTests {
         #expect(result.contains(tag5))
     }
 
-    @Test func findDuplicatesWithUnexpectedUsage() async throws {
+    @Test func findDuplicatesWithUnexpectedUsage() throws {
         let tag1 = try Tag.createIgnoringDuplicates(context: context, name: "nameA", type: .year)
         let tag2 = try Tag.createIgnoringDuplicates(context: context, name: "nameA", type: .year)
         let tag3 = try Tag.createIgnoringDuplicates(context: context, name: "nameA", type: .yearMonth)
@@ -295,7 +295,7 @@ struct TagServiceTests {
 
     // MARK: - Duplicates - updateHasDuplicates
 
-    @Test func updateHasDuplicates() async throws {
+    @Test func updateHasDuplicates() throws {
         #expect(service.hasDuplicates == false)
 
         try service.updateHasDuplicates()

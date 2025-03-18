@@ -30,7 +30,7 @@ final class IncomesPreviewStore {
     }
 
     @MainActor
-    func prepareIgnoringDuplicates(_ context: ModelContext) async {
+    func prepareIgnoringDuplicates(_ context: ModelContext) {
         for index in 0..<24 {
             _ = try! Item.createIgnoringDuplicates(
                 context: context,

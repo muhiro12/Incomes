@@ -17,31 +17,31 @@ public enum IncomesIntents {}
 public extension IncomesIntents {
     // MARK: - Open
 
-    static func performOpenIncomes() async throws -> some IntentResult {
+    static func performOpenIncomes() throws -> some IntentResult {
         .result()
     }
 
     // MARK: - Next Item
 
-    static func performGetNextItemDate(date: Date) async throws -> some IntentResult & ReturnsValue<Date?> {
+    static func performGetNextItemDate(date: Date) throws -> some IntentResult & ReturnsValue<Date?> {
         .result(
             value: try itemService.item(.items(.dateIsAfter(date), order: .forward))?.date
         )
     }
 
-    static func performGetNextItemContent(date: Date) async throws -> some IntentResult & ReturnsValue<String?> {
+    static func performGetNextItemContent(date: Date) throws -> some IntentResult & ReturnsValue<String?> {
         .result(
             value: try itemService.item(.items(.dateIsAfter(date), order: .forward))?.content
         )
     }
 
-    static func performGetNextItemProfit(date: Date) async throws -> some IntentResult & ReturnsValue<String?> {
+    static func performGetNextItemProfit(date: Date) throws -> some IntentResult & ReturnsValue<String?> {
         .result(
             value: try itemService.item(.items(.dateIsAfter(date), order: .forward))?.profit.asCurrency
         )
     }
 
-    static func performShowNextItems(date: Date) async throws -> some IntentResult & ProvidesDialog & ShowsSnippetView {
+    static func performShowNextItems(date: Date) throws -> some IntentResult & ProvidesDialog & ShowsSnippetView {
         guard let item = try itemService.item(.items(.dateIsAfter(date), order: .forward)) else {
             return .result(dialog: .init("Not Found"))
         }
@@ -54,25 +54,25 @@ public extension IncomesIntents {
 
     // MARK: - Previous Item
 
-    static func performGetPreviousItemDate(date: Date) async throws -> some IntentResult & ReturnsValue<Date?> {
+    static func performGetPreviousItemDate(date: Date) throws -> some IntentResult & ReturnsValue<Date?> {
         .result(
             value: try itemService.item(.items(.dateIsBefore(date)))?.date
         )
     }
 
-    static func performGetPreviousItemContent(date: Date) async throws -> some IntentResult & ReturnsValue<String?> {
+    static func performGetPreviousItemContent(date: Date) throws -> some IntentResult & ReturnsValue<String?> {
         .result(
             value: try itemService.item(.items(.dateIsBefore(date)))?.content
         )
     }
 
-    static func performGetPreviousItemProfit(date: Date) async throws -> some IntentResult & ReturnsValue<String?> {
+    static func performGetPreviousItemProfit(date: Date) throws -> some IntentResult & ReturnsValue<String?> {
         .result(
             value: try itemService.item(.items(.dateIsBefore(date)))?.profit.asCurrency
         )
     }
 
-    static func performShowPreviousItems(date: Date) async throws -> some IntentResult & ProvidesDialog & ShowsSnippetView {
+    static func performShowPreviousItems(date: Date) throws -> some IntentResult & ProvidesDialog & ShowsSnippetView {
         guard let item = try itemService.item(.items(.dateIsBefore(date))) else {
             return .result(dialog: .init("Not Found"))
         }
@@ -85,7 +85,7 @@ public extension IncomesIntents {
 
     // MARK: - Item List
 
-    static func performShowItems(date: Date) async throws -> some IntentResult & ProvidesDialog & ShowsSnippetView {
+    static func performShowItems(date: Date) throws -> some IntentResult & ProvidesDialog & ShowsSnippetView {
         .result(dialog: .init(stringLiteral: date.stringValue(.yyyyMMM))) {
             incomesView {
                 ItemListSection(.items(.dateIsSameMonthAs(date)))
@@ -93,7 +93,7 @@ public extension IncomesIntents {
         }
     }
 
-    static func performShowCharts(date: Date) async throws -> some IntentResult & ProvidesDialog & ShowsSnippetView {
+    static func performShowCharts(date: Date) throws -> some IntentResult & ProvidesDialog & ShowsSnippetView {
         .result(dialog: .init(stringLiteral: date.stringValue(.yyyyMMM))) {
             incomesView {
                 ChartSectionGroup(.items(.dateIsSameMonthAs(date)))
