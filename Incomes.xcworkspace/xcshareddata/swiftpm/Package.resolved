@@ -6,7 +6,7 @@
       "location" : "https://github.com/muhiro12/GoogleMobileAdsWrapper.git",
       "state" : {
         "branch" : "main",
-        "revision" : "1820cc836326f92882261aa3645df3219c0e9f29"
+        "revision" : "38c6f6e9e1b42be11139cc62719116a0a8e788c6"
       }
     },
     {
@@ -14,8 +14,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/cybozu/LicenseList.git",
       "state" : {
-        "branch" : "main",
-        "revision" : "a74584035935447b81bcfea5319555812487001b"
+        "revision" : "4801461b9ca8eee843c19ab8fe88a590ce064e15",
+        "version" : "2.0.1"
       }
     },
     {
@@ -24,7 +24,7 @@
       "location" : "https://github.com/muhiro12/LicenseListWrapper.git",
       "state" : {
         "branch" : "main",
-        "revision" : "fb5d895d808978d8018c24bd6b3ad5227b8f0c0d"
+        "revision" : "d760514bee0ba669db4aed8362d64a64ff17810d"
       }
     },
     {
@@ -41,8 +41,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/googleads/swift-package-manager-google-mobile-ads.git",
       "state" : {
-        "branch" : "main",
-        "revision" : "1e60477cbc4c4868ec8414524f8cd163132753ff"
+        "revision" : "ab4c3ec7546c7566fe49918fc9461df44e015537",
+        "version" : "12.2.0"
       }
     },
     {
@@ -50,8 +50,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/googleads/swift-package-manager-google-user-messaging-platform.git",
       "state" : {
-        "revision" : "74f2ec169551c3b924947b473716142a0b983e10",
-        "version" : "2.6.0"
+        "revision" : "708a282840c2171ee63bd93b87afa49fe507d70e",
+        "version" : "2.7.0"
       }
     },
     {
