@@ -20,7 +20,7 @@ let package = Package(
         .package(url: "https://github.com/muhiro12/GoogleMobileAdsWrapper.git", branch: "main"),
         .package(url: "https://github.com/muhiro12/LicenseListWrapper.git", branch: "main"),
         .package(url: "https://github.com/muhiro12/StoreKitWrapper.git", branch: "main"),
-        .package(url: "https://github.com/muhiro12/SwiftUtilities.git", "1.0.0"..<"2.0.0")
+        .package(url: "https://github.com/muhiro12/SwiftUtilities.git", branch: "main")
     ],
     targets: [
         .target(

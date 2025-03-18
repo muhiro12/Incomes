@@ -6,7 +6,7 @@
       "location" : "https://github.com/muhiro12/GoogleMobileAdsWrapper.git",
       "state" : {
         "branch" : "main",
-        "revision" : "38c6f6e9e1b42be11139cc62719116a0a8e788c6"
+        "revision" : "f91cf37b7964302035d78d673816938a11f6c6b5"
       }
     },
     {
@@ -59,8 +59,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/muhiro12/SwiftUtilities.git",
       "state" : {
-        "revision" : "d1d3caf666487fdc96dc0961128b3892f86425fd",
-        "version" : "1.9.0"
+        "branch" : "main",
+        "revision" : "d1d3caf666487fdc96dc0961128b3892f86425fd"
       }
     }
   ],
