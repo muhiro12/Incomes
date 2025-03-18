@@ -5,16 +5,15 @@ struct ShortcutsLinkSection: View {
 
     var body: some View {
         Section {
-            HStack {
-                Spacer()
-                appIntents()
-                Spacer()
-            }
-            .listRowBackground(EmptyView())
+            appIntents()
+                .frame(maxWidth: .infinity)
+                .listRowBackground(EmptyView())
         }
     }
 }
 
 #Preview {
-    ShortcutsLinkSection()
+    IncomesPreview { _ in
+        ShortcutsLinkSection()
+    }
 }
