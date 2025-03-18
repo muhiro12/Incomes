@@ -71,9 +71,7 @@ extension DebugListView: View {
                 Text("Prepare")
             }
             Button(role: .destructive) {
-                Task {
-                    await IncomesPreviewStore().prepareIgnoringDuplicates(context)
-                }
+                IncomesPreviewStore().prepareIgnoringDuplicates(context)
             } label: {
                 Text("Prepare ignoring duplicates")
             }
