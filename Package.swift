@@ -52,7 +52,10 @@ let package = Package(
             dependencies: [
                 "IncomesPlaygrounds"
             ],
-            path: "Incomes/Tests"
+            path: "Incomes/Tests",
+            swiftSettings: [
+                .swiftLanguageMode(.v5)
+            ]
         )
     ]
 )
