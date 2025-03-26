@@ -27,16 +27,31 @@ struct MainTabView: View {
     }
 
     var body: some View {
-        TabView(selection: $mainTab) {
-            ForEach(tabs) { tab in
-                Tab(value: tab) {
-                    tab.rootView
-                        .toolbar(
-                            horizontalSizeClass == .regular ? .visible : .hidden,
-                            for: .tabBar
-                        )
-                } label: {
-                    tab.label
+        Group {
+            if #available(iOS 18.0, *) {
+                TabView(selection: $mainTab) {
+                    ForEach(tabs) { tab in
+                        Tab(value: tab) {
+                            tab.rootView
+                                .toolbar(
+                                    horizontalSizeClass == .regular ? .visible : .hidden,
+                                    for: .tabBar
+                                )
+                        } label: {
+                            tab.label
+                        }
+                    }
+                }
+            } else {
+                TabView(selection: $mainTab) {
+                    ForEach(tabs) { tab in
+                        tab.rootView
+                            .tag(tab)
+                            .tabItem {
+                                tab.label
+                            }
+                            .toolbar(.hidden, for: .tabBar)
+                    }
                 }
             }
         }

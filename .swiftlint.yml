@@ -20,6 +20,9 @@ disabled_rules:
     # TODO: Resolve the following rules
     - anonymous_argument_in_multiline_closure
 
+excluded:
+    - Incomes.swiftpm/Package.swift
+
 file_header:
     required_pattern: |
         \/\/

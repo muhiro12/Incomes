@@ -55,6 +55,8 @@ extension Tag {
     }
 }
 
+extension Tag: Identifiable {}
+
 // MARK: - Test
 
 extension Tag {
