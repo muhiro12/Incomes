@@ -107,12 +107,12 @@ extension SettingsListView: View {
                     CloseButton()
                 }
             }
-            ToolbarItemGroup(placement: .bottomBar) {
+            ToolbarItem(placement: .bottomBar) {
                 MainTabMenu()
-                Spacer()
+            }
+            ToolbarItem(placement: .status) {
                 Text("Today: \(Date.now.stringValue(.yyyyMMMd))")
                     .font(.footnote)
-                Spacer()
             }
         }
         .confirmationDialog(
