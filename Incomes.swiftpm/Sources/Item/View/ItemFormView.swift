@@ -22,6 +22,8 @@ struct ItemFormView {
         case category
     }
 
+    @Environment(Tag.self)
+    private var tag: Tag?
     @Environment(\.dismiss)
     private var dismiss
     @Environment(\.requestReview)
@@ -168,14 +170,26 @@ extension ItemFormView: View {
             Text("Are you really going to use DebugMode?")
         }
         .onAppear {
-            guard let item else {
-                return
+            if let item {
+                date = item.date
+                content = item.content
+                income = item.income.isNotZero ? item.income.description : .empty
+                outgo = item.outgo.isNotZero ? item.outgo.description : .empty
+                category = item.category?.name ?? .empty
+            } else if let tag {
+                switch tag.type {
+                case .year:
+                    date = tag.name.dateValueWithoutLocale(.yyyy) ?? .now
+                case .yearMonth:
+                    date = tag.name.dateValueWithoutLocale(.yyyyMM) ?? .now
+                case .content:
+                    content = tag.name
+                case .category:
+                    category = tag.name
+                case .none:
+                    break
+                }
             }
-            date = item.date
-            content = item.content
-            income = item.income.isNotZero ? item.income.description : .empty
-            outgo = item.outgo.isNotZero ? item.outgo.description : .empty
-            category = item.category?.name ?? .empty
         }
         .actionSheet(isPresented: $isActionSheetPresented) {
             ActionSheet(title: Text("This is a repeating item."),
