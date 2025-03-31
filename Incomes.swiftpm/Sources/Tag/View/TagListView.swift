@@ -59,15 +59,13 @@ extension TagListView: View {
         .searchable(text: $searchText)
         .navigationTitle(Text(tagType == .content ? "Content" : "Category"))
         .toolbar {
-            ToolbarItem {
-                CreateItemButton()
-            }
-            ToolbarItem(placement: .bottomBar) {
+            ToolbarItemGroup(placement: .bottomBar) {
                 MainTabMenu()
-            }
-            ToolbarItem(placement: .status) {
+                Spacer()
                 Text("Today: \(Date.now.stringValue(.yyyyMMMd))")
                     .font(.footnote)
+                Spacer()
+                CreateItemButton()
             }
         }
         .confirmationDialog(

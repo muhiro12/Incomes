@@ -51,12 +51,12 @@ extension ItemListView: View {
         .listStyle(.grouped)
         .navigationTitle(Text(tag.displayName))
         .toolbar {
-            ToolbarItem {
-                CreateItemButton()
-            }
-            ToolbarItem(placement: .status) {
+            ToolbarItemGroup(placement: .bottomBar) {
+                Spacer()
                 Text("\(tag.items.orEmpty.count) Items")
                     .font(.footnote)
+                Spacer()
+                CreateItemButton()
             }
         }
     }
