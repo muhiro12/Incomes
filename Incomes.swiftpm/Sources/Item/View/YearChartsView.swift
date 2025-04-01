@@ -8,16 +8,16 @@
 import SwiftUI
 
 struct YearChartsView: View {
+    @Environment(Tag.self)
+    private var yearTag
     @Environment(ItemService.self)
     private var itemService
 
     @AppStorage(.isSubscribeOn)
     private var isSubscribeOn
 
-    private let date: Date
-
-    init(date: Date) {
-        self.date = date
+    var date: Date {
+        yearTag.name.dateValueWithoutLocale(.yyyy) ?? .distantPast
     }
 
     var body: some View {
@@ -40,9 +40,10 @@ struct YearChartsView: View {
 }
 
 #Preview {
-    IncomesPreview { _ in
+    IncomesPreview { preview in
         NavigationStack {
-            YearChartsView(date: .now)
+            YearChartsView()
+                .environment(preview.tags.first { $0.type == .year })
         }
     }
 }

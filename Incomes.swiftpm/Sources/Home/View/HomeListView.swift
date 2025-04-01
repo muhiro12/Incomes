@@ -57,11 +57,11 @@ extension HomeListView: View {
             }
         }
         .onChange(of: yearTag) {
-            guard let date = yearTag?.name.dateValueWithoutLocale(.yyyy),
+            guard let yearTag,
                   path != .none else {
                 return
             }
-            path = .year(date)
+            path = .year(yearTag)
         }
     }
 }

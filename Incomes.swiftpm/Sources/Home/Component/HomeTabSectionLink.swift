@@ -14,7 +14,7 @@ struct HomeTabSectionLink {
 
 extension HomeTabSectionLink: View {
     var body: some View {
-        NavigationLink(value: IncomesPath.year(yearTag.name.dateValueWithoutLocale(.yyyy) ?? .distantPast)) {
+        NavigationLink(value: IncomesPath.year(yearTag)) {
             VStack(alignment: .leading) {
                 Text(yearTag.displayName)
                     .font(.title.bold())
