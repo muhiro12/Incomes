@@ -20,7 +20,7 @@ struct BalanceCalculator {
         if let date = items.map(\.date).min() {
             try calculate(after: date)
         } else {
-            try calculateAll()
+            try calculate(after: .distantPast)
         }
     }
 
@@ -46,9 +46,5 @@ struct BalanceCalculator {
             item.modify(balance: balance)
             resultList.append(item)
         }
-    }
-
-    func calculateAll() throws {
-        try calculate(after: .init(timeIntervalSince1970: .zero))
     }
 }

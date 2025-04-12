@@ -30,7 +30,7 @@ struct SettingsListView {
     @Binding private var path: IncomesPath?
 
     @State private var selectedCurrencyCode = CurrencyCode.system
-    @State private var isDialogPresented = false
+    @State private var isDeleteDialogPresented = false
     @State private var isDuplicateTagPresented = false
 
     init(selection: Binding<IncomesPath?> = .constant(nil)) {
@@ -58,17 +58,9 @@ extension SettingsListView: View {
                 }
             }
             Section {
-                Button {
-                    do {
-                        try itemService.recalculate()
-                    } catch {
-                        assertionFailure(error.localizedDescription)
-                    }
-                } label: {
-                    Text("Recalculate")
-                }
+                RecalculateButton()
                 Button(role: .destructive) {
-                    isDialogPresented = true
+                    isDeleteDialogPresented = true
                 } label: {
                     Text("Delete all")
                 }
@@ -117,7 +109,7 @@ extension SettingsListView: View {
         }
         .confirmationDialog(
             Text("Delete all"),
-            isPresented: $isDialogPresented
+            isPresented: $isDeleteDialogPresented
         ) {
             Button(role: .destructive) {
                 do {

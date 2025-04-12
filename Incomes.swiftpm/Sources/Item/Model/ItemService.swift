@@ -141,8 +141,8 @@ final class ItemService {
 
     // MARK: - Calculate balance
 
-    func recalculate() throws {
-        try calculator.calculateAll()
+    func recalculate(after date: Date) throws {
+        try calculator.calculate(after: date)
     }
 }
 
