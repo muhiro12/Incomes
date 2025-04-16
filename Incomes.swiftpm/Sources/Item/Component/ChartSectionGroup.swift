@@ -25,10 +25,14 @@ extension ChartSectionGroup: View {
     var body: some View {
         Section {
             Chart(items) {
-                buildAreaChartContent(date: $0.date,
-                                      value: $0.balance)
-                buildBarChartContent(date: $0.date,
-                                     value: $0.balance)
+                buildAreaChartContent(
+                    date: $0.date,
+                    value: $0.balance
+                )
+                buildBarChartContent(
+                    date: $0.date,
+                    value: $0.balance
+                )
             }
             .frame(height: .componentL)
             .padding()
@@ -37,10 +41,14 @@ extension ChartSectionGroup: View {
         }
         Section {
             Chart(items) {
-                buildBarChartContent(date: $0.date,
-                                     value: $0.income)
-                buildBarChartContent(date: $0.date,
-                                     value: $0.outgo * -1)
+                buildBarChartContent(
+                    date: $0.date,
+                    value: $0.income
+                )
+                buildBarChartContent(
+                    date: $0.date,
+                    value: $0.outgo * -1
+                )
             }
             .frame(height: .componentL)
             .padding()
@@ -60,13 +68,19 @@ extension ChartSectionGroup: View {
                     }
                     return category.displayName
                 }.map { displayName, items in
-                    (title: displayName, value: items.reduce(.zero) { $0 + $1.income })
+                    (
+                        title: displayName,
+                        value: items.reduce(.zero) { $0 + $1.income }
+                    )
                 }.sorted {
                     $0.value > $1.value
                 },
                 id: \.title
             ) {
-                buildSectorChartContent(title: $0.title, value: $0.value)
+                buildSectorChartContent(
+                    title: $0.title,
+                    value: $0.value
+                )
             }
             .chartForegroundStyleScale { (title: String) in
                 Color(uiColor: .tintColor).adjusted(with: title.hashValue)
@@ -82,13 +96,19 @@ extension ChartSectionGroup: View {
                     }
                     return category.displayName
                 }.map { displayName, items in
-                    (title: displayName, value: items.reduce(.zero) { $0 + $1.outgo })
+                    (
+                        title: displayName,
+                        value: items.reduce(.zero) { $0 + $1.outgo }
+                    )
                 }.sorted {
                     $0.value > $1.value
                 },
                 id: \.title
             ) {
-                buildSectorChartContent(title: $0.title, value: $0.value)
+                buildSectorChartContent(
+                    title: $0.title,
+                    value: $0.value
+                )
             }
             .chartForegroundStyleScale { (title: String) in
                 Color.red.adjusted(with: title.hashValue)
