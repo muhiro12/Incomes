@@ -25,7 +25,7 @@ final class BalanceCalculatorTests: XCTestCase {
                                             repeatID: UUID())
                 context.insert(item)
             }
-            try! calculator.calculateAll()
+            try! calculator.calculate(after: .distantPast)
 
             let item = try! Item.create(context: context,
                                         date: date("2000-01-31T12:00:00Z"),
@@ -58,7 +58,7 @@ final class BalanceCalculatorTests: XCTestCase {
                                             repeatID: UUID())
                 context.insert(item)
             }
-            try! calculator.calculateAll()
+            try! calculator.calculate(after: .distantPast)
 
             let item = try! Item.create(context: context,
                                         date: date("2001-01-01T00:00:00Z"),
@@ -91,7 +91,7 @@ final class BalanceCalculatorTests: XCTestCase {
                                             repeatID: UUID())
                 context.insert(item)
             }
-            try! calculator.calculateAll()
+            try! calculator.calculate(after: .distantPast)
 
             let item = try! Item.create(context: context,
                                         date: date("2000-01-01T00:00:00Z"),
@@ -127,7 +127,7 @@ final class BalanceCalculatorTests: XCTestCase {
                 context.insert(item)
                 items.append(item)
             }
-            try! calculator.calculateAll()
+            try! calculator.calculate(after: .distantPast)
 
             let item = items[1]
             try! item.modify(date: date("2000-02-01T12:00:00Z"),
@@ -162,7 +162,7 @@ final class BalanceCalculatorTests: XCTestCase {
                 context.insert(item)
                 items.append(item)
             }
-            try! calculator.calculateAll()
+            try! calculator.calculate(after: .distantPast)
 
             let item = items[0]
             try! item.modify(date: date("2000-01-01T12:00:00Z"),
@@ -197,7 +197,7 @@ final class BalanceCalculatorTests: XCTestCase {
                 context.insert(item)
                 items.append(item)
             }
-            try! calculator.calculateAll()
+            try! calculator.calculate(after: .distantPast)
 
             let item = items[4]
             try! item.modify(date: date("2000-05-01T12:00:00Z"),
@@ -232,7 +232,7 @@ final class BalanceCalculatorTests: XCTestCase {
                 context.insert(item)
                 items.append(item)
             }
-            try! calculator.calculateAll()
+            try! calculator.calculate(after: .distantPast)
 
             let item = items[4]
             try! item.modify(date: date("1999-12-31T00:00:00Z"),
@@ -267,7 +267,7 @@ final class BalanceCalculatorTests: XCTestCase {
                 context.insert(item)
                 items.append(item)
             }
-            try! calculator.calculateAll()
+            try! calculator.calculate(after: .distantPast)
 
             let item = items[1]
             context.delete(item)
@@ -297,7 +297,7 @@ final class BalanceCalculatorTests: XCTestCase {
                 context.insert(item)
                 items.append(item)
             }
-            try! calculator.calculateAll()
+            try! calculator.calculate(after: .distantPast)
 
             let item = items[0]
             context.delete(item)
@@ -327,7 +327,7 @@ final class BalanceCalculatorTests: XCTestCase {
                 context.insert(item)
                 items.append(item)
             }
-            try! calculator.calculateAll()
+            try! calculator.calculate(after: .distantPast)
 
             let item = items[4]
             context.delete(item)
