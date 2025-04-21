@@ -14,8 +14,6 @@
 	<string>ca-app-pub-2619807738023307~1927328211</string>
 	<key>GADNativeAdValidatorEnabled</key>
 	<false/>
-	<key>ITSAppUsesNonExemptEncryption</key>
-	<false/>
 	<key>SKAdNetworkItems</key>
 	<array>
 		<dict>
