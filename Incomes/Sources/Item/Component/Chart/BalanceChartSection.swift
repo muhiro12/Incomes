@@ -30,21 +30,21 @@ extension BalanceChartSection: View {
                     .frame(height: .componentL)
                     .padding()
             }
+            .sheet(isPresented: $isPresented) {
+                NavigationStack {
+                    chart()
+                        .chartScrollableAxes(.horizontal)
+                        .padding()
+                        .navigationTitle(Text("Balance"))
+                        .toolbar {
+                            ToolbarItem {
+                                CloseButton()
+                            }
+                        }
+                }
+            }
         } header: {
             Text("Balance")
-        }
-        .fullScreenCover(isPresented: $isPresented) {
-            NavigationStack {
-                chart()
-                    .chartScrollableAxes(.horizontal)
-                    .padding()
-                    .navigationTitle(Text("Balance"))
-                    .toolbar {
-                        ToolbarItem {
-                            CloseButton()
-                        }
-                    }
-            }
         }
     }
 }

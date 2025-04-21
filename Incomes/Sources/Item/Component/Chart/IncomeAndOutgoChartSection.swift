@@ -30,21 +30,21 @@ extension IncomeAndOutgoChartSection: View {
                     .frame(height: .componentL)
                     .padding()
             }
+            .sheet(isPresented: $isPresented) {
+                NavigationStack {
+                    chart()
+                        .chartScrollableAxes(.horizontal)
+                        .padding()
+                        .navigationTitle(Text("Income and Outgo"))
+                        .toolbar {
+                            ToolbarItem {
+                                CloseButton()
+                            }
+                        }
+                }
+            }
         } header: {
             Text("Income and Outgo")
-        }
-        .fullScreenCover(isPresented: $isPresented) {
-            NavigationStack {
-                chart()
-                    .chartScrollableAxes(.horizontal)
-                    .padding()
-                    .navigationTitle(Text("Income and Outgo"))
-                    .toolbar {
-                        ToolbarItem {
-                            CloseButton()
-                        }
-                    }
-            }
         }
     }
 }
