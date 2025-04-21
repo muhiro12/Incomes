@@ -40,8 +40,8 @@ final class IncomesPreviewStore {
                     to: .now
                 )!,
                 content: "Pension",
-                income: 0,
-                outgo: 36,
+                income: LocaleAmountConverter.localizedAmount(baseUSD: 0),
+                outgo: LocaleAmountConverter.localizedAmount(baseUSD: 36),
                 category: "Tax",
                 repeatID: .init()
             )
@@ -67,8 +67,8 @@ final class IncomesPreviewStore {
                 context: context,
                 date: date(index, dateD),
                 content: "Payday",
-                income: 3_500,
-                outgo: 0,
+                income: LocaleAmountConverter.localizedAmount(baseUSD: 3_500),
+                outgo: LocaleAmountConverter.localizedAmount(baseUSD: 0),
                 category: "Salary",
                 repeatID: .init()
             )
@@ -76,8 +76,8 @@ final class IncomesPreviewStore {
                 context: context,
                 date: date(index, dateD),
                 content: "Advertising revenue",
-                income: 485,
-                outgo: 0,
+                income: LocaleAmountConverter.localizedAmount(baseUSD: 485),
+                outgo: LocaleAmountConverter.localizedAmount(baseUSD: 0),
                 category: "Salary",
                 repeatID: .init()
             )
@@ -85,8 +85,8 @@ final class IncomesPreviewStore {
                 context: context,
                 date: date(index, dateB),
                 content: "Apple card",
-                income: 0,
-                outgo: 1_000,
+                income: LocaleAmountConverter.localizedAmount(baseUSD: 0),
+                outgo: LocaleAmountConverter.localizedAmount(baseUSD: 1_000),
                 category: "Credit",
                 repeatID: .init()
             )
@@ -94,8 +94,8 @@ final class IncomesPreviewStore {
                 context: context,
                 date: date(index, dateA),
                 content: "Orange card",
-                income: 0,
-                outgo: 800,
+                income: LocaleAmountConverter.localizedAmount(baseUSD: 0),
+                outgo: LocaleAmountConverter.localizedAmount(baseUSD: 800),
                 category: "Credit",
                 repeatID: .init()
             )
@@ -103,8 +103,8 @@ final class IncomesPreviewStore {
                 context: context,
                 date: date(index, dateD),
                 content: "Lemon card",
-                income: 0,
-                outgo: 500,
+                income: LocaleAmountConverter.localizedAmount(baseUSD: 0),
+                outgo: LocaleAmountConverter.localizedAmount(baseUSD: 500),
                 category: "Credit",
                 repeatID: .init()
             )
@@ -112,8 +112,8 @@ final class IncomesPreviewStore {
                 context: context,
                 date: date(index, dateE),
                 content: "House",
-                income: 0,
-                outgo: 30,
+                income: LocaleAmountConverter.localizedAmount(baseUSD: 0),
+                outgo: LocaleAmountConverter.localizedAmount(baseUSD: 30),
                 category: "Loan",
                 repeatID: .init()
             )
@@ -121,8 +121,8 @@ final class IncomesPreviewStore {
                 context: context,
                 date: date(index, dateC),
                 content: "Car",
-                income: 0,
-                outgo: 25,
+                income: LocaleAmountConverter.localizedAmount(baseUSD: 0),
+                outgo: LocaleAmountConverter.localizedAmount(baseUSD: 25),
                 category: "Loan",
                 repeatID: .init()
             )
@@ -130,8 +130,8 @@ final class IncomesPreviewStore {
                 context: context,
                 date: date(index, dateA),
                 content: "Insurance",
-                income: 0,
-                outgo: 28,
+                income: LocaleAmountConverter.localizedAmount(baseUSD: 0),
+                outgo: LocaleAmountConverter.localizedAmount(baseUSD: 28),
                 category: "Tax",
                 repeatID: .init()
             )
@@ -139,8 +139,8 @@ final class IncomesPreviewStore {
                 context: context,
                 date: date(index, dateE),
                 content: "Pension",
-                income: 0,
-                outgo: 36,
+                income: LocaleAmountConverter.localizedAmount(baseUSD: 0),
+                outgo: LocaleAmountConverter.localizedAmount(baseUSD: 36),
                 category: "Tax",
                 repeatID: .init()
             )
