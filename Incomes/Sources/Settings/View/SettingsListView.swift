@@ -89,6 +89,15 @@ extension SettingsListView: View {
                 } label: {
                     Text("License")
                 }
+                if let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String,
+                   let build = Bundle.main.infoDictionary?["CFBundleVersion"] as? String {
+                    HStack {
+                        Text("Version")
+                        Spacer()
+                        Text("\(version) (\(build))")
+                            .foregroundStyle(.secondary)
+                    }
+                }
             }
             ShortcutsLinkSection()
         }
