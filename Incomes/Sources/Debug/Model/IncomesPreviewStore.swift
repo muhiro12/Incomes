@@ -39,10 +39,10 @@ final class IncomesPreviewStore {
                     value: index,
                     to: .now
                 )!,
-                content: "Pension",
+                content: String(localized: "Pension"),
                 income: LocaleAmountConverter.localizedAmount(baseUSD: 0),
                 outgo: LocaleAmountConverter.localizedAmount(baseUSD: 36),
-                category: "Tax",
+                category: String(localized: "Tax"),
                 repeatID: .init()
             )
         }
@@ -66,82 +66,82 @@ final class IncomesPreviewStore {
             _ = try! Item.create(
                 context: context,
                 date: date(index, dateD),
-                content: "Payday",
+                content: String(localized: "Payday"),
                 income: LocaleAmountConverter.localizedAmount(baseUSD: 3_500),
                 outgo: LocaleAmountConverter.localizedAmount(baseUSD: 0),
-                category: "Salary",
+                category: String(localized: "Salary"),
                 repeatID: .init()
             )
             _ = try! Item.create(
                 context: context,
                 date: date(index, dateD),
-                content: "Advertising revenue",
+                content: String(localized: "Advertising revenue"),
                 income: LocaleAmountConverter.localizedAmount(baseUSD: 485),
                 outgo: LocaleAmountConverter.localizedAmount(baseUSD: 0),
-                category: "Salary",
+                category: String(localized: "Salary"),
                 repeatID: .init()
             )
             _ = try! Item.create(
                 context: context,
                 date: date(index, dateB),
-                content: "Apple card",
+                content: String(localized: "Apple card"),
                 income: LocaleAmountConverter.localizedAmount(baseUSD: 0),
                 outgo: LocaleAmountConverter.localizedAmount(baseUSD: 1_000),
-                category: "Credit",
+                category: String(localized: "Credit"),
                 repeatID: .init()
             )
             _ = try! Item.create(
                 context: context,
                 date: date(index, dateA),
-                content: "Orange card",
+                content: String(localized: "Orange card"),
                 income: LocaleAmountConverter.localizedAmount(baseUSD: 0),
                 outgo: LocaleAmountConverter.localizedAmount(baseUSD: 800),
-                category: "Credit",
+                category: String(localized: "Credit"),
                 repeatID: .init()
             )
             _ = try! Item.create(
                 context: context,
                 date: date(index, dateD),
-                content: "Lemon card",
+                content: String(localized: "Lemon card"),
                 income: LocaleAmountConverter.localizedAmount(baseUSD: 0),
                 outgo: LocaleAmountConverter.localizedAmount(baseUSD: 500),
-                category: "Credit",
+                category: String(localized: "Credit"),
                 repeatID: .init()
             )
             _ = try! Item.create(
                 context: context,
                 date: date(index, dateE),
-                content: "House",
+                content: String(localized: "House"),
                 income: LocaleAmountConverter.localizedAmount(baseUSD: 0),
                 outgo: LocaleAmountConverter.localizedAmount(baseUSD: 30),
-                category: "Loan",
+                category: String(localized: "Loan"),
                 repeatID: .init()
             )
             _ = try! Item.create(
                 context: context,
                 date: date(index, dateC),
-                content: "Car",
+                content: String(localized: "Car"),
                 income: LocaleAmountConverter.localizedAmount(baseUSD: 0),
                 outgo: LocaleAmountConverter.localizedAmount(baseUSD: 25),
-                category: "Loan",
+                category: String(localized: "Loan"),
                 repeatID: .init()
             )
             _ = try! Item.create(
                 context: context,
                 date: date(index, dateA),
-                content: "Insurance",
+                content: String(localized: "Insurance"),
                 income: LocaleAmountConverter.localizedAmount(baseUSD: 0),
                 outgo: LocaleAmountConverter.localizedAmount(baseUSD: 28),
-                category: "Tax",
+                category: String(localized: "Tax"),
                 repeatID: .init()
             )
             _ = try! Item.create(
                 context: context,
                 date: date(index, dateE),
-                content: "Pension",
+                content: String(localized: "Pension"),
                 income: LocaleAmountConverter.localizedAmount(baseUSD: 0),
                 outgo: LocaleAmountConverter.localizedAmount(baseUSD: 36),
-                category: "Tax",
+                category: String(localized: "Tax"),
                 repeatID: .init()
             )
         }
