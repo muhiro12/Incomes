@@ -571,6 +571,9 @@
         }
       }
     },
+    "Choose a Date" : {
+
+    },
     "Content" : {
       "localizations" : {
         "en" : {
@@ -672,6 +675,9 @@
           }
         }
       }
+    },
+    "Data after this date will be recalculated." : {
+
     },
     "Date" : {
       "localizations" : {
@@ -911,7 +917,11 @@
         }
       }
     },
+    "Duplicate" : {
+
+    },
     "Duplicate %@" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -979,7 +989,11 @@
         }
       }
     },
+    "Edit" : {
+
+    },
     "Edit %@" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1013,8 +1027,23 @@
         }
       }
     },
-    "GoogleMobileAds %@" : {
-      "shouldTranslate" : false
+    "Get Next Item Content" : {
+
+    },
+    "Get Next Item Date" : {
+
+    },
+    "Get Next Item Profit" : {
+
+    },
+    "Get Previous Item Content" : {
+
+    },
+    "Get Previous Item Date" : {
+
+    },
+    "Get Previous Item Profit" : {
+
     },
     "Home" : {
       "localizations" : {
@@ -1253,9 +1282,6 @@
           }
         }
       }
-    },
-    "LicenseList" : {
-      "shouldTranslate" : false
     },
     "Manage items" : {
       "localizations" : {
@@ -1528,6 +1554,9 @@
           }
         }
       }
+    },
+    "Open Incomes" : {
+
     },
     "Others" : {
       "localizations" : {
@@ -2141,6 +2170,18 @@
         }
       }
     },
+    "Show Charts" : {
+
+    },
+    "Show Items" : {
+
+    },
+    "Show Next Items" : {
+
+    },
+    "Show Previous Items" : {
+
+    },
     "Sorry, something went wrong. We're working to fix it." : {
       "localizations" : {
         "en" : {
@@ -2174,9 +2215,6 @@
           }
         }
       }
-    },
-    "StoreKit" : {
-      "shouldTranslate" : false
     },
     "System" : {
       "localizations" : {
