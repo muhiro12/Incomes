@@ -1,0 +1,25 @@
+{
+  "configurations" : [
+    {
+      "id" : "DB835D4F-C51A-42D6-A0FA-19894CC2A364",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "language" : "en",
+    "region" : "US"
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:Incomes.xcodeproj",
+        "identifier" : "ADA85F612DB62CDA0047CB54",
+        "name" : "IncomesTests"
+      }
+    }
+  ],
+  "version" : 1
+}

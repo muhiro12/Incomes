@@ -32,7 +32,7 @@
       codeCoverageEnabled = "YES">
       <TestPlans>
          <TestPlanReference
-            reference = "container:Incomes/Incomes.xctestplan"
+            reference = "container:IncomesTests/Incomes.xctestplan"
             default = "YES">
          </TestPlanReference>
       </TestPlans>

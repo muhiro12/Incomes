@@ -37,11 +37,18 @@
 			);
 			target = ADCF36A524A1D0F40011D6F5 /* Incomes */;
 		};
+		ADF386A02DB64567004E841F /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Incomes.xctestplan,
+			);
+			target = ADA85F612DB62CDA0047CB54 /* IncomesTests */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		ADA5778B2CB66D6200CE47E2 /* Incomes */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (ADC3C97E2D88983300B8ADDE /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Incomes; sourceTree = "<group>"; };
-		ADA85F632DB62CDA0047CB54 /* IncomesTests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = IncomesTests; sourceTree = "<group>"; };
+		ADA85F632DB62CDA0047CB54 /* IncomesTests */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (ADF386A02DB64567004E841F /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = IncomesTests; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
