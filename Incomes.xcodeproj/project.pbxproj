@@ -416,7 +416,7 @@
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Incomes/Incomes.entitlements;
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "";
@@ -445,7 +445,7 @@
 				PLIST_FILE_OUTPUT_FORMAT = "same-as-input";
 				PRODUCT_BUNDLE_IDENTIFIER = com.muhiro12.Incomes;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
 				STRINGS_FILE_OUTPUT_ENCODING = "UTF-16";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -494,7 +494,7 @@
 				PLIST_FILE_OUTPUT_FORMAT = "same-as-input";
 				PRODUCT_BUNDLE_IDENTIFIER = com.muhiro12.Incomes;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
 				STRINGS_FILE_OUTPUT_ENCODING = "UTF-16";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
