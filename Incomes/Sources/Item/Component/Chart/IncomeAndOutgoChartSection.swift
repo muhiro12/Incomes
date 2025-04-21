@@ -34,6 +34,7 @@ extension IncomeAndOutgoChartSection: View {
                 NavigationStack {
                     chart()
                         .chartScrollableAxes(.horizontal)
+                        .chartScrollPosition(initialX: Date.now)
                         .padding()
                         .navigationTitle(Text("Income and Outgo"))
                         .toolbar {

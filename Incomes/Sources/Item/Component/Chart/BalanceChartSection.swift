@@ -34,6 +34,7 @@ extension BalanceChartSection: View {
                 NavigationStack {
                     chart()
                         .chartScrollableAxes(.horizontal)
+                        .chartScrollPosition(initialX: Date.now)
                         .padding()
                         .navigationTitle(Text("Balance"))
                         .toolbar {
