@@ -7,6 +7,8 @@
 //
 
 import AppIntents
+import SwiftData
+import SwiftUI
 
 // MARK: - Open
 
@@ -14,8 +16,9 @@ struct OpenIncomesIntent: AppIntent {
     static var title = LocalizedStringResource("Open Incomes")
     static var openAppWhenRun = true
 
-    func perform() async throws -> some IntentResult {
-        try await IncomesIntents.performOpenIncomes()
+    @MainActor
+    func perform() throws -> some IntentResult {
+        .result()
     }
 }
 
@@ -27,8 +30,11 @@ struct GetNextItemDate: AppIntent {
     @Parameter(title: "Date", kind: .date)
     private var date: Date
 
-    func perform() async throws -> some IntentResult & ReturnsValue<Date?> {
-        try await IncomesIntents.performGetNextItemDate(date: date)
+    @MainActor
+    func perform() throws -> some IntentResult & ReturnsValue<Date?> {
+        .result(
+            value: try IncomesIntents.itemService.item(.items(.dateIsAfter(date), order: .forward))?.date
+        )
     }
 }
 
@@ -38,8 +44,11 @@ struct GetNextItemContent: AppIntent {
     @Parameter(title: "Date", kind: .date)
     private var date: Date
 
-    func perform() async throws -> some IntentResult & ReturnsValue<String?> {
-        try await IncomesIntents.performGetNextItemContent(date: date)
+    @MainActor
+    func perform() throws -> some IntentResult & ReturnsValue<String?> {
+        .result(
+            value: try IncomesIntents.itemService.item(.items(.dateIsAfter(date), order: .forward))?.content
+        )
     }
 }
 
@@ -49,8 +58,11 @@ struct GetNextItemProfit: AppIntent {
     @Parameter(title: "Date", kind: .date)
     private var date: Date
 
-    func perform() async throws -> some IntentResult & ReturnsValue<String?> {
-        try await IncomesIntents.performGetNextItemProfit(date: date)
+    @MainActor
+    func perform() throws -> some IntentResult & ReturnsValue<String?> {
+        .result(
+            value: try IncomesIntents.itemService.item(.items(.dateIsAfter(date), order: .forward))?.profit.asCurrency
+        )
     }
 }
 
@@ -60,8 +72,16 @@ struct ShowNextItemsIntent: AppIntent {
     @Parameter(title: "Date", kind: .date)
     private var date: Date
 
-    func perform() async throws -> some IntentResult & ProvidesDialog & ShowsSnippetView {
-        try await IncomesIntents.performShowNextItems(date: date)
+    @MainActor
+    func perform() throws -> some IntentResult & ProvidesDialog & ShowsSnippetView {
+        guard let item = try IncomesIntents.itemService.item(.items(.dateIsAfter(date), order: .forward)) else {
+            return .result(dialog: .init("Not Found"))
+        }
+        return .result(dialog: .init(stringLiteral: date.stringValue(.yyyyMMM))) {
+            IncomesIntents.incomesView {
+                ItemListSection(.items(.dateIsSameDayAs(item.date)))
+            }
+        }
     }
 }
 
@@ -73,8 +93,11 @@ struct GetPreviousItemDate: AppIntent {
     @Parameter(title: "Date", kind: .date)
     private var date: Date
 
-    func perform() async throws -> some IntentResult & ReturnsValue<Date?> {
-        try await IncomesIntents.performGetPreviousItemDate(date: date)
+    @MainActor
+    func perform() throws -> some IntentResult & ReturnsValue<Date?> {
+        .result(
+            value: try IncomesIntents.itemService.item(.items(.dateIsBefore(date)))?.date
+        )
     }
 }
 
@@ -84,8 +107,11 @@ struct GetPreviousItemContent: AppIntent {
     @Parameter(title: "Date", kind: .date)
     private var date: Date
 
-    func perform() async throws -> some IntentResult & ReturnsValue<String?> {
-        try await IncomesIntents.performGetPreviousItemContent(date: date)
+    @MainActor
+    func perform() throws -> some IntentResult & ReturnsValue<String?> {
+        .result(
+            value: try IncomesIntents.itemService.item(.items(.dateIsBefore(date)))?.content
+        )
     }
 }
 
@@ -95,8 +121,11 @@ struct GetPreviousItemProfit: AppIntent {
     @Parameter(title: "Date", kind: .date)
     private var date: Date
 
-    func perform() async throws -> some IntentResult & ReturnsValue<String?> {
-        try await IncomesIntents.performGetPreviousItemProfit(date: date)
+    @MainActor
+    func perform() throws -> some IntentResult & ReturnsValue<String?> {
+        .result(
+            value: try IncomesIntents.itemService.item(.items(.dateIsBefore(date)))?.profit.asCurrency
+        )
     }
 }
 
@@ -106,8 +135,16 @@ struct ShowPreviousItemsIntent: AppIntent {
     @Parameter(title: "Date", kind: .date)
     private var date: Date
 
-    func perform() async throws -> some IntentResult & ProvidesDialog & ShowsSnippetView {
-        try await IncomesIntents.performShowPreviousItems(date: date)
+    @MainActor
+    func perform() throws -> some IntentResult & ProvidesDialog & ShowsSnippetView {
+        guard let item = try IncomesIntents.itemService.item(.items(.dateIsBefore(date))) else {
+            return .result(dialog: .init("Not Found"))
+        }
+        return .result(dialog: .init(stringLiteral: date.stringValue(.yyyyMMM))) {
+            IncomesIntents.incomesView {
+                ItemListSection(.items(.dateIsSameDayAs(item.date)))
+            }
+        }
     }
 }
 
@@ -119,8 +156,13 @@ struct ShowItemsIntent: AppIntent {
     @Parameter(title: "Date", kind: .date)
     private var date: Date
 
-    func perform() async throws -> some IntentResult & ProvidesDialog & ShowsSnippetView {
-        try await IncomesIntents.performShowItems(date: date)
+    @MainActor
+    func perform() throws -> some IntentResult & ProvidesDialog & ShowsSnippetView {
+        .result(dialog: .init(stringLiteral: date.stringValue(.yyyyMMM))) {
+            IncomesIntents.incomesView {
+                ItemListSection(.items(.dateIsSameMonthAs(date)))
+            }
+        }
     }
 }
 
@@ -130,7 +172,45 @@ struct ShowChartsIntent: AppIntent {
     @Parameter(title: "Date", kind: .date)
     private var date: Date
 
-    func perform() async throws -> some IntentResult & ProvidesDialog & ShowsSnippetView {
-        try await IncomesIntents.performShowCharts(date: date)
+    @MainActor
+    func perform() throws -> some IntentResult & ProvidesDialog & ShowsSnippetView {
+        .result(dialog: .init(stringLiteral: date.stringValue(.yyyyMMM))) {
+            IncomesIntents.incomesView {
+                ChartSectionGroup(.items(.dateIsSameMonthAs(date)))
+            }
+        }
+    }
+}
+
+// MARK: - Private
+
+@MainActor
+private enum IncomesIntents {
+    static let modelContainer: ModelContainer = try! .init(
+        for: Item.self,
+        configurations: .init(
+            url: .applicationSupportDirectory.appendingPathComponent("Incomes.sqlite"),
+            cloudKitDatabase: AppStorage(.isICloudOn).wrappedValue ? .automatic : .none
+        )
+    )
+    static let itemService: ItemService = .init(context: modelContainer.mainContext)
+    static let tagService: TagService = .init(context: modelContainer.mainContext)
+    static let configurationService: ConfigurationService = .init()
+    static let notificationService: NotificationService = .init()
+
+    static func incomesView(content: () -> some View) -> some View {
+        content()
+            .safeAreaPadding()
+            .modelContainer(modelContainer)
+            .environment(itemService)
+            .environment(tagService)
+            .environment(configurationService)
+            .environment(notificationService)
+            .incomesEnvironment(
+                googleMobileAds: { _ in EmptyView() },
+                licenseList: { EmptyView() },
+                storeKit: { EmptyView() },
+                appIntents: { EmptyView() }
+            )
     }
 }
