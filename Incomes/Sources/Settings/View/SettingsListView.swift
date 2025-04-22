@@ -17,6 +17,8 @@ struct SettingsListView {
     @Environment(NotificationService.self)
     private var notificationService
 
+    @Environment(\.locale)
+    private var locale
     @Environment(\.isPresented)
     private var isPresented
 
@@ -26,6 +28,8 @@ struct SettingsListView {
     private var isICloudOn
     @AppStorage(.currencyCode)
     private var currencyCode
+    @AppStorage(.notificationSettings)
+    private var settings: NotificationSettings
 
     @Binding private var path: IncomesPath?
 
@@ -55,6 +59,28 @@ extension SettingsListView: View {
                     }
                 } label: {
                     Text("Currency Code")
+                }
+            }
+            Section("Push notification settings") {
+                Toggle("Enable push notifications", isOn: $settings.isEnabled)
+
+                HStack {
+                    Text("Notify for amounts over")
+                    Spacer()
+                    TextField(
+                        "Amount",
+                        value: $settings.thresholdAmount,
+                        format: .currency(
+                            code: locale.currency?.identifier ?? .empty
+                        )
+                    )
+                    .keyboardType(.numberPad)
+                    .multilineTextAlignment(.trailing)
+                    .frame(maxWidth: 120)
+                }
+
+                Picker("Notify days before", selection: $settings.leadDays) {
+                    ForEach(0..<15) { Text("\($0) days") }
                 }
             }
             Section {
