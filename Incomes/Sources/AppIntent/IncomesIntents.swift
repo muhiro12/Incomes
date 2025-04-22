@@ -79,7 +79,7 @@ struct ShowNextItemsIntent: AppIntent {
         }
         return .result(dialog: .init(stringLiteral: date.stringValue(.yyyyMMM))) {
             IncomesIntents.incomesView {
-                ItemListSection(.items(.dateIsSameDayAs(item.date)))
+                IntentsItemListSection(.items(.dateIsSameDayAs(item.date)))
             }
         }
     }
@@ -142,7 +142,7 @@ struct ShowPreviousItemsIntent: AppIntent {
         }
         return .result(dialog: .init(stringLiteral: date.stringValue(.yyyyMMM))) {
             IncomesIntents.incomesView {
-                ItemListSection(.items(.dateIsSameDayAs(item.date)))
+                IntentsItemListSection(.items(.dateIsSameDayAs(item.date)))
             }
         }
     }
@@ -160,7 +160,7 @@ struct ShowItemsIntent: AppIntent {
     func perform() throws -> some IntentResult & ProvidesDialog & ShowsSnippetView {
         .result(dialog: .init(stringLiteral: date.stringValue(.yyyyMMM))) {
             IncomesIntents.incomesView {
-                ItemListSection(.items(.dateIsSameMonthAs(date)))
+                IntentsItemListSection(.items(.dateIsSameMonthAs(date)))
             }
         }
     }
@@ -212,5 +212,22 @@ private enum IncomesIntents {
                 storeKit: { EmptyView() },
                 appIntents: { EmptyView() }
             )
+    }
+}
+
+private struct IntentsItemListSection: View {
+    @Query private var items: [Item]
+
+    init(_ descriptor: FetchDescriptor<Item>) {
+        _items = Query(descriptor)
+    }
+
+    var body: some View {
+        Section {
+            ForEach(items) {
+                NarrowListItem()
+                    .environment($0)
+            }
+        }
     }
 }
