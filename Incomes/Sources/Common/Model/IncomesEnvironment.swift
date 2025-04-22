@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public extension View {
+extension View {
     func incomesEnvironment(
         googleMobileAds: @escaping (String) -> some View,
         licenseList: @escaping () -> some View,
