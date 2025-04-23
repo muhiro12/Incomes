@@ -86,8 +86,10 @@ private extension NotificationService {
             }
 
             let content = UNMutableNotificationContent()
-            content.title = "Upcoming Payment"
-            content.body = "You have a payment of \(item.outgo) on \(item.date.formatted(.dateTime.month().day()))."
+            content.title = String(localized: "Upcoming Payment")
+            content.body = String(
+                localized: "You have a payment of \(item.outgo.asCurrency) on \(item.date.formatted(.dateTime.month().day()))."
+            )
             content.sound = .default
 
             let triggerDate = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: notificationDate)
