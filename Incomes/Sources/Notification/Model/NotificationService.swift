@@ -33,10 +33,7 @@ final class NotificationService: NSObject {
             options: [.badge, .sound, .alert, .carPlay]
         )
         center.removeAllPendingNotificationRequests()
-
-        let requests = (try? buildUpcomingPaymentReminders()) ?? .empty
-
-        for request in requests {
+        for request in buildUpcomingPaymentReminders() {
             try? await center.add(request)
         }
     }
@@ -50,6 +47,29 @@ final class NotificationService: NSObject {
         center.removeAllDeliveredNotifications()
         hasNotification = false
         shouldShowNotification = false
+    }
+
+    func sendTestNotification() {
+        guard let item = try? itemService.item(.items(.dateIsAfter(.now), order: .forward)) else {
+            return
+        }
+
+        let content = UNMutableNotificationContent()
+        content.title = String(localized: "Upcoming Payment")
+        content.body = String(
+            localized: "\(item.content) - A payment of \(item.outgo.asCurrency) is due on \(item.date.formatted(.dateTime.weekday().month().day()))."
+        )
+        content.sound = .default
+
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+
+        let request = UNNotificationRequest(
+            identifier: "test-notification",
+            content: content,
+            trigger: trigger
+        )
+
+        center.add(request)
     }
 }
 
@@ -67,7 +87,7 @@ extension NotificationService: UNUserNotificationCenterDelegate {
 }
 
 private extension NotificationService {
-    func buildUpcomingPaymentReminders() throws -> [UNNotificationRequest] {
+    func buildUpcomingPaymentReminders() -> [UNNotificationRequest] {
         let settings = AppStorage(.notificationSettings).wrappedValue
 
         guard settings.isEnabled else {
@@ -79,7 +99,10 @@ private extension NotificationService {
             order: .forward
         )
         descriptor.fetchLimit = 20
-        let items = try itemService.items(descriptor)
+
+        guard let items = try? itemService.items(descriptor) else {
+            return .empty
+        }
 
         return items.compactMap { item in
             guard let scheduledDate = Calendar.current.date(byAdding: .day, value: -settings.daysBeforeDueDate, to: item.date),
@@ -91,7 +114,7 @@ private extension NotificationService {
             let content = UNMutableNotificationContent()
             content.title = String(localized: "Upcoming Payment")
             content.body = String(
-                localized: "\(item.content) — A payment of \(item.outgo.asCurrency) is due on \(item.date.formatted(.dateTime.weekday().month().day()))."
+                localized: "\(item.content) - A payment of \(item.outgo.asCurrency) is due on \(item.date.formatted(.dateTime.weekday().month().day()))."
             )
             content.sound = .default
 
