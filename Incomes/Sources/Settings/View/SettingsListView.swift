@@ -29,7 +29,7 @@ struct SettingsListView {
     @AppStorage(.currencyCode)
     private var currencyCode
     @AppStorage(.notificationSettings)
-    private var settings: NotificationSettings
+    private var notificationSettings: NotificationSettings
 
     @Binding private var path: IncomesPath?
 
@@ -62,14 +62,14 @@ extension SettingsListView: View {
                 }
             }
             Section("Push notification settings") {
-                Toggle("Enable push notifications", isOn: $settings.isEnabled)
+                Toggle("Enable push notifications", isOn: $notificationSettings.isEnabled)
 
                 HStack {
                     Text("Notify for amounts over")
                     Spacer()
                     TextField(
                         "Amount",
-                        value: $settings.thresholdAmount,
+                        value: $notificationSettings.thresholdAmount,
                         format: .currency(
                             code: locale.currency?.identifier ?? .empty
                         )
@@ -79,7 +79,7 @@ extension SettingsListView: View {
                     .frame(maxWidth: 120)
                 }
 
-                Picker("Notify days before", selection: $settings.daysBeforeDueDate) {
+                Picker("Notify days before", selection: $notificationSettings.daysBeforeDueDate) {
                     ForEach(0..<15) { Text("\($0) days") }
                 }
             }
@@ -167,12 +167,20 @@ extension SettingsListView: View {
             DuplicateTagNavigationView()
         }
         .task {
-            notificationService.refresh()
             selectedCurrencyCode = .init(rawValue: currencyCode) ?? .system
             try? tagService.updateHasDuplicates()
+
+            notificationService.refresh()
+            await notificationService.register()
         }
         .onChange(of: selectedCurrencyCode) {
             currencyCode = selectedCurrencyCode.rawValue
+        }
+        .onChange(of: notificationSettings) {
+            Task {
+                notificationService.refresh()
+                await notificationService.register()
+            }
         }
     }
 }

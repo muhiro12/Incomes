@@ -11,6 +11,8 @@ import SwiftUI
 struct HomeListView {
     @Environment(TagService.self)
     private var tagService
+    @Environment(NotificationService.self)
+    private var notificationService
 
     @AppStorage(.isSubscribeOn)
     private var isSubscribeOn
@@ -55,6 +57,9 @@ extension HomeListView: View {
                 hasLoaded = true
                 yearTag = try? tagService.tag(.tags(.nameIs(Date.now.stringValueWithoutLocale(.yyyy), type: .year)))
             }
+
+            notificationService.refresh()
+            await notificationService.register()
         }
         .onChange(of: yearTag) {
             guard let yearTag,
