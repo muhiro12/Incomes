@@ -243,6 +243,7 @@ private extension ItemFormView {
                 outgo: outgo.decimalValue,
                 category: category
             )
+            Haptic.success.impact()
         } catch {
             assertionFailure(error.localizedDescription)
         }
@@ -263,6 +264,7 @@ private extension ItemFormView {
                 outgo: outgo.decimalValue,
                 category: category
             )
+            Haptic.success.impact()
         } catch {
             assertionFailure(error.localizedDescription)
         }
@@ -283,6 +285,7 @@ private extension ItemFormView {
                 outgo: outgo.decimalValue,
                 category: category
             )
+            Haptic.success.impact()
         } catch {
             assertionFailure(error.localizedDescription)
         }
@@ -299,6 +302,7 @@ private extension ItemFormView {
                 category: category,
                 repeatCount: repeatSelection
             )
+            Haptic.success.impact()
         } catch {
             assertionFailure(error.localizedDescription)
         }

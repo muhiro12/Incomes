@@ -52,6 +52,7 @@ extension TagListView: View {
                 )
             }
             .onDelete {
+                Haptic.warning.impact()
                 isDialogPresented = true
                 willDeleteItems = $0.flatMap { tags[$0].items ?? [] }
             }

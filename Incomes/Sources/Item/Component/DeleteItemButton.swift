@@ -25,6 +25,7 @@ struct DeleteItemButton {
 extension DeleteItemButton: View {
     var body: some View {
         Button(role: .destructive) {
+            Haptic.warning.impact()
             if let action {
                 action()
             } else {

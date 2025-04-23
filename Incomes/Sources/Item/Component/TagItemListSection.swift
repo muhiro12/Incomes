@@ -32,6 +32,7 @@ extension TagItemListSection: View {
                     .environment($0)
             }
             .onDelete {
+                Haptic.warning.impact()
                 willDeleteItems = $0.map { items[$0] }
                 isDialogPresented = true
             }

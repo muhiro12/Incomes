@@ -36,6 +36,7 @@ extension HomeYearSection: View {
                     }
                 }
             }.onDelete {
+                Haptic.warning.impact()
                 isDialogPresented = true
                 willDeleteItems = $0.flatMap { yearMonthTags[$0].items ?? [] }
             }

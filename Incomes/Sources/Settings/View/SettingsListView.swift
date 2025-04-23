@@ -92,6 +92,7 @@ extension SettingsListView: View {
             Section {
                 RecalculateButton()
                 Button(role: .destructive) {
+                    Haptic.warning.impact()
                     isDeleteDialogPresented = true
                 } label: {
                     Text("Delete all")

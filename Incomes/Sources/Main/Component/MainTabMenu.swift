@@ -28,6 +28,7 @@ struct MainTabMenu: View {
         Menu {
             ForEach(tabs) { tab in
                 Button {
+                    Haptic.selectionChanged.impact()
                     withAnimation {
                         mainTab.wrappedValue = tab
                     }

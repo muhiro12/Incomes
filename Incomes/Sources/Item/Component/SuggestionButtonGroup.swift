@@ -23,6 +23,7 @@ struct SuggestionButtonGroup: View {
             HStack {
                 ForEach(suggestions) { suggestion in
                     Button(suggestion.name) {
+                        Haptic.selectionChanged.impact()
                         input = suggestion.name
                     }
                     Divider()
