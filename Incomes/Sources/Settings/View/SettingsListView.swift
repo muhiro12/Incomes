@@ -33,7 +33,6 @@ struct SettingsListView {
 
     @Binding private var path: IncomesPath?
 
-    @State private var selectedCurrencyCode = CurrencyCode.system
     @State private var isDeleteDialogPresented = false
     @State private var isDuplicateTagPresented = false
 
@@ -53,8 +52,8 @@ extension SettingsListView: View {
                 StoreSection()
             }
             Section {
-                Picker(selection: $selectedCurrencyCode) {
-                    ForEach(CurrencyCode.allCases, id: \.self) {
+                Picker(selection: $currencyCode) {
+                    ForEach(CurrencyCode.allCases, id: \.rawValue) {
                         Text($0.displayName)
                     }
                 } label: {
@@ -167,14 +166,10 @@ extension SettingsListView: View {
             DuplicateTagNavigationView()
         }
         .task {
-            selectedCurrencyCode = .init(rawValue: currencyCode) ?? .system
             try? tagService.updateHasDuplicates()
 
             notificationService.refresh()
             await notificationService.register()
-        }
-        .onChange(of: selectedCurrencyCode) {
-            currencyCode = selectedCurrencyCode.rawValue
         }
         .onChange(of: notificationSettings) {
             Task {
