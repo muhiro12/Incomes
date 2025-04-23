@@ -105,9 +105,29 @@ private extension NotificationService {
         }
 
         return items.compactMap { item in
-            guard let scheduledDate = Calendar.current.date(byAdding: .day, value: -settings.daysBeforeDueDate, to: item.date),
-                  let notificationDate = Calendar.current.date(bySettingHour: 20, minute: 0, second: 0, of: scheduledDate),
-                  notificationDate > .now else {
+            guard let scheduledDate = Calendar.current.date(
+                byAdding: .day,
+                value: -settings.daysBeforeDueDate,
+                to: item.date
+            ) else {
+                return nil
+            }
+
+            let notifyTime = Calendar.current.dateComponents(
+                [.hour, .minute],
+                from: settings.notifyTime
+            )
+
+            guard let notificationDate = Calendar.current.date(
+                bySettingHour: notifyTime.hour ?? 20,
+                minute: notifyTime.minute ?? 0,
+                second: 0,
+                of: scheduledDate
+            ) else {
+                return nil
+            }
+
+            guard notificationDate > .now else {
                 return nil
             }
 

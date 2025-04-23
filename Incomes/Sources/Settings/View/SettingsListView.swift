@@ -79,6 +79,11 @@ extension SettingsListView: View {
                     Picker("Notify days before", selection: $notificationSettings.daysBeforeDueDate) {
                         ForEach(0..<15) { Text("\($0) days") }
                     }
+                    DatePicker(
+                        "Notify time",
+                        selection: $notificationSettings.notifyTime,
+                        displayedComponents: .hourAndMinute
+                    )
                     Button("Send test notification") {
                         notificationService.sendTestNotification()
                     }
