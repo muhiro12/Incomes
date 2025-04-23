@@ -25,6 +25,10 @@ final class ItemService {
         try context.fetchFirst(descriptor)
     }
 
+    func items(_ descriptor: FetchDescriptor<Item> = .items(.all)) throws -> [Item] {
+        try context.fetch(descriptor)
+    }
+
     func itemsCount(_ descriptor: FetchDescriptor<Item> = .items(.all)) throws -> Int {
         try context.fetchCount(descriptor)
     }

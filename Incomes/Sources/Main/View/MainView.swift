@@ -37,8 +37,8 @@ struct MainView {
         )
         sharedItemService = .init(context: sharedModelContainer.mainContext)
         sharedTagService = .init(context: sharedModelContainer.mainContext)
+        sharedNotificationService = .init(context: sharedModelContainer.mainContext)
         sharedConfigurationService = .init()
-        sharedNotificationService = .init()
     }
 }
 
@@ -82,8 +82,8 @@ extension MainView: View {
             .modelContainer(sharedModelContainer)
             .environment(sharedItemService)
             .environment(sharedTagService)
-            .environment(sharedConfigurationService)
             .environment(sharedNotificationService)
+            .environment(sharedConfigurationService)
             .id(isICloudOn)
     }
 }

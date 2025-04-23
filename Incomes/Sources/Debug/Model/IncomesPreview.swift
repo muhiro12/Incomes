@@ -32,8 +32,8 @@ struct IncomesPreview<Content: View>: View {
 
         self.previewItemService = .init(context: previewModelContainer.mainContext)
         self.previewTagService = .init(context: previewModelContainer.mainContext)
+        self.previewNotificationService = .init(context: previewModelContainer.mainContext)
         self.previewConfigurationService = .init()
-        self.previewNotificationService = .init()
     }
 
     var body: some View {
@@ -52,8 +52,8 @@ struct IncomesPreview<Content: View>: View {
         .modelContainer(previewModelContainer)
         .environment(previewItemService)
         .environment(previewTagService)
-        .environment(previewConfigurationService)
         .environment(previewNotificationService)
+        .environment(previewConfigurationService)
         .incomesPlaygroundsEnvironment()
     }
 }

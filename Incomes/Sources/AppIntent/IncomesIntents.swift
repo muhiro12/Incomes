@@ -195,8 +195,8 @@ private enum IncomesIntents {
     )
     static let itemService: ItemService = .init(context: modelContainer.mainContext)
     static let tagService: TagService = .init(context: modelContainer.mainContext)
+    static let notificationService: NotificationService = .init(context: modelContainer.mainContext)
     static let configurationService: ConfigurationService = .init()
-    static let notificationService: NotificationService = .init()
 
     static func incomesView(content: () -> some View) -> some View {
         content()
@@ -204,8 +204,8 @@ private enum IncomesIntents {
             .modelContainer(modelContainer)
             .environment(itemService)
             .environment(tagService)
-            .environment(configurationService)
             .environment(notificationService)
+            .environment(configurationService)
             .incomesEnvironment(
                 googleMobileAds: { _ in EmptyView() },
                 licenseList: { EmptyView() },

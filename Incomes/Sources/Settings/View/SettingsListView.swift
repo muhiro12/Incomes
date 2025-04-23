@@ -79,7 +79,7 @@ extension SettingsListView: View {
                     .frame(maxWidth: 120)
                 }
 
-                Picker("Notify days before", selection: $settings.leadDays) {
+                Picker("Notify days before", selection: $settings.daysBeforeDueDate) {
                     ForEach(0..<15) { Text("\($0) days") }
                 }
             }

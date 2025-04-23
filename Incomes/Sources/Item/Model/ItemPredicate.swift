@@ -21,6 +21,8 @@ enum ItemPredicate {
     case dateIsSameYearAs(Date)
     case dateIsSameMonthAs(Date)
     case dateIsSameDayAs(Date)
+    // MARK: Outgo
+    case outgoIsGreaterThanOrEqualTo(amount: Decimal, onOrAfter: Date)
     // MARK: RepeatID
     case repeatIDIs(UUID)
     case repeatIDAndDateIsAfter(repeatID: UUID, date: Date)
@@ -116,6 +118,13 @@ enum ItemPredicate {
             let end = Calendar.utc.endOfDay(for: date)
             return #Predicate {
                 start <= $0.date && $0.date <= end
+            }
+
+        // MARK: - Outgo
+
+        case .outgoIsGreaterThanOrEqualTo(let amount, let date):
+            return #Predicate {
+                $0.date >= date && $0.outgo >= amount
             }
 
         // MARK: - RepeatID
