@@ -74,9 +74,12 @@ private extension NotificationService {
             return .empty
         }
 
-        let items = try itemService.items(
-            .items(.outgoIsGreaterThanOrEqualTo(amount: settings.thresholdAmount, onOrAfter: .now))
+        var descriptor = FetchDescriptor.items(
+            .outgoIsGreaterThanOrEqualTo(amount: settings.thresholdAmount, onOrAfter: .now),
+            order: .forward
         )
+        descriptor.fetchLimit = 20
+        let items = try itemService.items(descriptor)
 
         return items.compactMap { item in
             guard let scheduledDate = Calendar.current.date(byAdding: .day, value: -settings.daysBeforeDueDate, to: item.date),
