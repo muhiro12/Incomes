@@ -6,41 +6,35 @@
 //  Copyright © 2020 Hiromu Nakano. All rights reserved.
 //
 
-import SwiftData
+import StoreKitWrapper
 import SwiftUI
 import SwiftUtilities
 
 struct ContentView {
+    @Environment(TagService.self)
+    private var tagService
+    @Environment(NotificationService.self)
+    private var notificationService
+    @Environment(ConfigurationService.self)
+    private var configurationService
+    @Environment(Store.self)
+    private var store
+    @Environment(\.googleMobileAdsController)
+    private var googleMobileAdsController
+
     @Environment(\.scenePhase)
     private var scenePhase
     @Environment(\.requestReview)
     private var requestReview
 
+    @AppStorage(.isSubscribeOn)
+    private var isSubscribeOn
     @AppStorage(.isICloudOn)
     private var isICloudOn
+    @AppStorage(.isDebugOn)
+    private var isDebugOn
 
     @State private var isUpdateAlertPresented = false
-
-    private var sharedModelContainer: ModelContainer!
-    private var sharedItemService: ItemService!
-    private var sharedTagService: TagService!
-    private var sharedNotificationService: NotificationService!
-    private var sharedConfigurationService: ConfigurationService!
-
-    @MainActor
-    init() {
-        sharedModelContainer = try! .init(
-            for: Item.self,
-            configurations: .init(
-                url: .applicationSupportDirectory.appendingPathComponent("Incomes.sqlite"),
-                cloudKitDatabase: isICloudOn ? .automatic : .none
-            )
-        )
-        sharedItemService = .init(context: sharedModelContainer.mainContext)
-        sharedTagService = .init(context: sharedModelContainer.mainContext)
-        sharedNotificationService = .init(itemService: sharedItemService)
-        sharedConfigurationService = .init()
-    }
 }
 
 extension ContentView: View {
@@ -58,20 +52,38 @@ extension ContentView: View {
                 Text("Please update Incomes to the latest version to continue using it.")
             }
             .task {
-                try? await sharedConfigurationService.load()
-                isUpdateAlertPresented = sharedConfigurationService.isUpdateRequired()
+                #if DEBUG
+                isDebugOn = true
+                #endif
+
+                try? await configurationService.load()
+                isUpdateAlertPresented = configurationService.isUpdateRequired()
+
+                store.open(
+                    groupID: Secret.groupID,
+                    productIDs: [Secret.productID]
+                ) {
+                    isSubscribeOn = $0.contains {
+                        $0.id == Secret.productID
+                    }
+                    if !isSubscribeOn {
+                        isICloudOn = false
+                    }
+                }
+
+                googleMobileAdsController?.start()
             }
             .onChange(of: scenePhase) {
                 guard scenePhase == .active else {
                     return
                 }
                 Task {
-                    try? await sharedConfigurationService.load()
-                    isUpdateAlertPresented = sharedConfigurationService.isUpdateRequired()
+                    try? await configurationService.load()
+                    isUpdateAlertPresented = configurationService.isUpdateRequired()
                 }
                 Task {
-                    try? sharedTagService.updateHasDuplicates()
-                    await sharedNotificationService.update()
+                    try? tagService.updateHasDuplicates()
+                    await notificationService.update()
                 }
                 if Int.random(in: 0..<10) == .zero {
                     Task {
@@ -80,12 +92,6 @@ extension ContentView: View {
                     }
                 }
             }
-            .modelContainer(sharedModelContainer)
-            .environment(sharedItemService)
-            .environment(sharedTagService)
-            .environment(sharedNotificationService)
-            .environment(sharedConfigurationService)
-            .id(isICloudOn)
     }
 }
 

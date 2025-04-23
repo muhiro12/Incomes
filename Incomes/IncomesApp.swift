@@ -6,23 +6,48 @@
 //  Copyright © 2021 Hiromu Nakano. All rights reserved.
 //
 
+import AppIntents
 import GoogleMobileAdsWrapper
 import StoreKitWrapper
+import SwiftData
 import SwiftUI
 
 @main
 struct IncomesApp: App {
-    @AppStorage(.isSubscribeOn)
-    private var isSubscribeOn
     @AppStorage(.isICloudOn)
     private var isICloudOn
-    @AppStorage(.isDebugOn)
-    private var isDebugOn
 
-    private let sharedStore: Store
-    private let sharedGoogleMobileAdsController: GoogleMobileAdsController
+    private var sharedModelContainer: ModelContainer!
+
+    private var sharedItemService: ItemService!
+    private var sharedTagService: TagService!
+    private var sharedNotificationService: NotificationService!
+    private var sharedConfigurationService: ConfigurationService!
+
+    private var sharedStore: Store!
+    private var sharedGoogleMobileAdsController: GoogleMobileAdsController!
 
     init() {
+        let modelContainer = try! ModelContainer(
+            for: Item.self,
+            configurations: .init(
+                url: .applicationSupportDirectory.appendingPathComponent("Incomes.sqlite"),
+                cloudKitDatabase: isICloudOn ? .automatic : .none
+            )
+        )
+
+        let itemService = ItemService(context: modelContainer.mainContext)
+        let tagService = TagService(context: modelContainer.mainContext)
+        let notificationService = NotificationService(itemService: itemService)
+        let configurationService = ConfigurationService()
+
+        sharedModelContainer = modelContainer
+
+        sharedItemService = itemService
+        sharedTagService = tagService
+        sharedNotificationService = notificationService
+        sharedConfigurationService = configurationService
+
         sharedStore = .init()
 
         sharedGoogleMobileAdsController = .init(
@@ -35,9 +60,11 @@ struct IncomesApp: App {
             }()
         )
 
-        #if DEBUG
-        isDebugOn = true
-        #endif
+        AppDependencyManager.shared.add { modelContainer }
+        AppDependencyManager.shared.add { itemService }
+        AppDependencyManager.shared.add { tagService }
+        AppDependencyManager.shared.add { notificationService }
+        AppDependencyManager.shared.add { configurationService }
 
         IncomesShortcuts.updateAppShortcutParameters()
     }
@@ -45,23 +72,14 @@ struct IncomesApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .id(isICloudOn)
+                .modelContainer(sharedModelContainer)
+                .environment(sharedItemService)
+                .environment(sharedTagService)
+                .environment(sharedNotificationService)
+                .environment(sharedConfigurationService)
                 .environment(sharedStore)
                 .environment(\.googleMobileAdsController, sharedGoogleMobileAdsController)
-                .task {
-                    sharedStore.open(
-                        groupID: Secret.groupID,
-                        productIDs: [Secret.productID]
-                    ) {
-                        isSubscribeOn = $0.contains {
-                            $0.id == Secret.productID
-                        }
-                        if !isSubscribeOn {
-                            isICloudOn = false
-                        }
-                    }
-
-                    sharedGoogleMobileAdsController.start()
-                }
         }
     }
 }
