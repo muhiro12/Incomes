@@ -91,7 +91,7 @@ private extension NotificationService {
             let content = UNMutableNotificationContent()
             content.title = String(localized: "Upcoming Payment")
             content.body = String(
-                localized: "You have a payment of \(item.outgo.asCurrency) on \(item.date.formatted(.dateTime.month().day()))."
+                localized: "\(item.content) — A payment of \(item.outgo.asCurrency) is due on \(item.date.formatted(.dateTime.weekday().month().day()))."
             )
             content.sound = .default
 
