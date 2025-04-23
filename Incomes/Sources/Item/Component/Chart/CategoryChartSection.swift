@@ -48,7 +48,7 @@ extension CategoryChartSection: View {
                 .foregroundStyle(by: .value("Category", "\(object.title): \(object.value.asCurrency)"))
             }
             .chartForegroundStyleScale { (title: String) in
-                Color(uiColor: .tintColor).adjusted(with: title.hashValue)
+                Color.accentColor.adjusted(by: title.hashValue)
             }
             .frame(height: .componentXL)
             .padding()
@@ -80,7 +80,7 @@ extension CategoryChartSection: View {
                 .foregroundStyle(by: .value("Category", "\(object.title): \(object.value.asCurrency)"))
             }
             .chartForegroundStyleScale { (title: String) in
-                Color.red.adjusted(with: title.hashValue)
+                Color.red.adjusted(by: title.hashValue)
             }
             .frame(height: .componentXL)
             .padding()
