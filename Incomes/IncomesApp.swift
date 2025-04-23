@@ -18,6 +18,8 @@ struct IncomesApp: App {
     private var isSubscribeOn
     @AppStorage(.isICloudOn)
     private var isICloudOn
+    @AppStorage(.isDebugOn)
+    private var isDebugOn
 
     private let sharedGoogleMobileAdsController: GoogleMobileAdsController
     private let sharedStore: Store
@@ -34,6 +36,10 @@ struct IncomesApp: App {
         )
 
         sharedStore = .init()
+
+        #if DEBUG
+        isDebugOn = true
+        #endif
 
         IncomesShortcuts.updateAppShortcutParameters()
     }
