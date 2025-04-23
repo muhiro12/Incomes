@@ -18,7 +18,7 @@ enum BoolAppStorageKey: String {
     case isDebugOn = "a1B2c3D4"
 }
 
-enum CodableAppStorageKey: String {
+enum NotificationSettingsAppStorageKey: String {
     case notificationSettings = "A3b9Z1xQ"
 }
 
@@ -31,7 +31,7 @@ extension AppStorage {
         self.init(wrappedValue: false, key.rawValue)
     }
 
-    init(_ key: CodableAppStorageKey) where Value: AppStorageCodable {
+    init(_ key: NotificationSettingsAppStorageKey) where Value == NotificationSettings {
         self.init(wrappedValue: .init(), key.rawValue)
     }
 }

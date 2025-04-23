@@ -39,7 +39,6 @@ extension AppStorageCodable {
     }
 
     static func == (lhs: Self, rhs: Self) -> Bool {
-        print(Date.now)
-        return lhs.id == rhs.id
+        lhs.id == rhs.id
     }
 }

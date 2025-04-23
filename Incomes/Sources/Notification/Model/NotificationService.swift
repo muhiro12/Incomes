@@ -68,7 +68,7 @@ extension NotificationService: UNUserNotificationCenterDelegate {
 
 private extension NotificationService {
     func buildUpcomingPaymentReminders() throws -> [UNNotificationRequest] {
-        let settings = AppStorage(.notificationSettings).wrappedValue as NotificationSettings
+        let settings = AppStorage(.notificationSettings).wrappedValue
 
         guard settings.isEnabled else {
             return .empty

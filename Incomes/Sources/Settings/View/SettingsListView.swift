@@ -29,7 +29,7 @@ struct SettingsListView {
     @AppStorage(.currencyCode)
     private var currencyCode
     @AppStorage(.notificationSettings)
-    private var notificationSettings: NotificationSettings
+    private var notificationSettings
 
     @Binding private var path: IncomesPath?
 
