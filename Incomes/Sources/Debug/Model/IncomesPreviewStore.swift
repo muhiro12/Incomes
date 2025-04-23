@@ -62,12 +62,22 @@ final class IncomesPreviewStore {
             Calendar.utc.date(byAdding: .month, value: value, to: to)!
         }
 
+        _ = try! Item.create(
+            context: context,
+            date: date(-1, dateD),
+            content: String(localized: "Payday"),
+            income: LocaleAmountConverter.localizedAmount(baseUSD: 4_500),
+            outgo: LocaleAmountConverter.localizedAmount(baseUSD: 0),
+            category: String(localized: "Salary"),
+            repeatID: .init()
+        )
+
         for index in 0..<24 {
             _ = try! Item.create(
                 context: context,
                 date: date(index, dateD),
                 content: String(localized: "Payday"),
-                income: LocaleAmountConverter.localizedAmount(baseUSD: 3_500),
+                income: LocaleAmountConverter.localizedAmount(baseUSD: 4_500),
                 outgo: LocaleAmountConverter.localizedAmount(baseUSD: 0),
                 category: String(localized: "Salary"),
                 repeatID: .init()
@@ -76,7 +86,7 @@ final class IncomesPreviewStore {
                 context: context,
                 date: date(index, dateD),
                 content: String(localized: "Advertising revenue"),
-                income: LocaleAmountConverter.localizedAmount(baseUSD: 485),
+                income: LocaleAmountConverter.localizedAmount(baseUSD: 500),
                 outgo: LocaleAmountConverter.localizedAmount(baseUSD: 0),
                 category: String(localized: "Salary"),
                 repeatID: .init()
@@ -86,7 +96,7 @@ final class IncomesPreviewStore {
                 date: date(index, dateB),
                 content: String(localized: "Apple card"),
                 income: LocaleAmountConverter.localizedAmount(baseUSD: 0),
-                outgo: LocaleAmountConverter.localizedAmount(baseUSD: 1_000),
+                outgo: LocaleAmountConverter.localizedAmount(baseUSD: 900),
                 category: String(localized: "Credit"),
                 repeatID: .init()
             )
@@ -95,7 +105,7 @@ final class IncomesPreviewStore {
                 date: date(index, dateA),
                 content: String(localized: "Orange card"),
                 income: LocaleAmountConverter.localizedAmount(baseUSD: 0),
-                outgo: LocaleAmountConverter.localizedAmount(baseUSD: 800),
+                outgo: LocaleAmountConverter.localizedAmount(baseUSD: 600),
                 category: String(localized: "Credit"),
                 repeatID: .init()
             )
@@ -113,7 +123,7 @@ final class IncomesPreviewStore {
                 date: date(index, dateE),
                 content: String(localized: "House"),
                 income: LocaleAmountConverter.localizedAmount(baseUSD: 0),
-                outgo: LocaleAmountConverter.localizedAmount(baseUSD: 30),
+                outgo: LocaleAmountConverter.localizedAmount(baseUSD: 1_800),
                 category: String(localized: "Loan"),
                 repeatID: .init()
             )
@@ -122,7 +132,7 @@ final class IncomesPreviewStore {
                 date: date(index, dateC),
                 content: String(localized: "Car"),
                 income: LocaleAmountConverter.localizedAmount(baseUSD: 0),
-                outgo: LocaleAmountConverter.localizedAmount(baseUSD: 25),
+                outgo: LocaleAmountConverter.localizedAmount(baseUSD: 300),
                 category: String(localized: "Loan"),
                 repeatID: .init()
             )
@@ -131,7 +141,7 @@ final class IncomesPreviewStore {
                 date: date(index, dateA),
                 content: String(localized: "Insurance"),
                 income: LocaleAmountConverter.localizedAmount(baseUSD: 0),
-                outgo: LocaleAmountConverter.localizedAmount(baseUSD: 28),
+                outgo: LocaleAmountConverter.localizedAmount(baseUSD: 250),
                 category: String(localized: "Tax"),
                 repeatID: .init()
             )
@@ -140,7 +150,7 @@ final class IncomesPreviewStore {
                 date: date(index, dateE),
                 content: String(localized: "Pension"),
                 income: LocaleAmountConverter.localizedAmount(baseUSD: 0),
-                outgo: LocaleAmountConverter.localizedAmount(baseUSD: 36),
+                outgo: LocaleAmountConverter.localizedAmount(baseUSD: 300),
                 category: String(localized: "Tax"),
                 repeatID: .init()
             )
