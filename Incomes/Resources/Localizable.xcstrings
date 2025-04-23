@@ -245,40 +245,6 @@
       },
       "shouldTranslate" : false
     },
-    "Access ${applicationName}" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Access ${applicationName}"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Acceder a ${applicationName}"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Accéder à ${applicationName}"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "${applicationName} にアクセス"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "访问 ${applicationName}"
-          }
-        }
-      }
-    },
     "Advertising revenue" : {
       "localizations" : {
         "en" : {
@@ -823,108 +789,6 @@
         }
       }
     },
-    "Check analytics in ${applicationName}" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Check analytics in ${applicationName}"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ver análisis en ${applicationName}"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Voir les analyses dans ${applicationName}"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "${applicationName} の分析を確認"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "查看 ${applicationName} 中的分析"
-          }
-        }
-      }
-    },
-    "Check my items in ${applicationName}" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Check my items in ${applicationName}"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ver mis artículos en ${applicationName}"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Voir mes éléments dans ${applicationName}"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "${applicationName} のアイテムを確認"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "查看我在 ${applicationName} 中的项目"
-          }
-        }
-      }
-    },
-    "Check next payments in ${applicationName}" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Check next payments in ${applicationName}"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ver próximos pagos en ${applicationName}"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Voir les prochains paiements dans ${applicationName}"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "${applicationName} の今後の支払いを確認"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "查看 ${applicationName} 中的下一个付款"
-          }
-        }
-      }
-    },
     "Choose a Date" : {
       "localizations" : {
         "en" : {
@@ -1363,40 +1227,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "显示名称"
-          }
-        }
-      }
-    },
-    "Display stats from ${applicationName}" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Display stats from ${applicationName}"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mostrar estadísticas de ${applicationName}"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Afficher les statistiques de ${applicationName}"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "${applicationName} の統計を表示"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "显示来自 ${applicationName} 的统计数据"
           }
         }
       }
@@ -2013,40 +1843,6 @@
         }
       }
     },
-    "Launch ${applicationName}" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Launch ${applicationName}"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Iniciar ${applicationName}"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Lancer ${applicationName}"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "${applicationName}を起動"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "启动${applicationName}"
-          }
-        }
-      }
-    },
     "Lemon card" : {
       "localizations" : {
         "en" : {
@@ -2111,74 +1907,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "许可"
-          }
-        }
-      }
-    },
-    "List my entries in ${applicationName}" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "List my entries in ${applicationName}"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Listar mis entradas en ${applicationName}"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Lister mes entrées dans ${applicationName}"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "${applicationName}の自分の記録を一覧表示"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "列出我在${applicationName}中的记录"
-          }
-        }
-      }
-    },
-    "List past entries in ${applicationName}" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "List past entries in ${applicationName}"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Listar entradas anteriores en ${applicationName}"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Lister les entrées passées dans ${applicationName}"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "${applicationName}の過去の記録を一覧表示"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "列出${applicationName}中的历史记录"
           }
         }
       }
@@ -2557,40 +2285,6 @@
         }
       }
     },
-    "Open ${applicationName}" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Open ${applicationName}"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Abrir ${applicationName}"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ouvrir ${applicationName}"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "${applicationName}を開く"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "打开${applicationName}"
-          }
-        }
-      }
-    },
     "Open App Store" : {
       "localizations" : {
         "en" : {
@@ -2757,40 +2451,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "支出"
-          }
-        }
-      }
-    },
-    "Past transactions with ${applicationName}" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Past transactions with ${applicationName}"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Transacciones pasadas con ${applicationName}"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Transactions passées avec ${applicationName}"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "${applicationName}の過去の取引"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "在${applicationName}中的历史交易"
           }
         }
       }
@@ -3543,40 +3203,6 @@
         }
       }
     },
-    "Show charts in ${applicationName}" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Show charts in ${applicationName}"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mostrar gráficos en ${applicationName}"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Afficher les graphiques dans ${applicationName}"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "${applicationName}でグラフを表示"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "在${applicationName}中显示图表"
-          }
-        }
-      }
-    },
     "Show Items" : {
       "localizations" : {
         "en" : {
@@ -3607,40 +3233,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "显示项目"
-          }
-        }
-      }
-    },
-    "Show items in ${applicationName}" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Show items in ${applicationName}"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mostrar elementos en ${applicationName}"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Afficher les éléments dans ${applicationName}"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "${applicationName}でアイテムを表示"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "在${applicationName}中显示项目"
           }
         }
       }
@@ -3679,40 +3271,6 @@
         }
       }
     },
-    "Show next items in ${applicationName}" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Show next items in ${applicationName}"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mostrar elementos siguientes en ${applicationName}"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Afficher les éléments suivants dans ${applicationName}"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "${applicationName}で次のアイテムを表示"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "在${applicationName}中显示下一个项目"
-          }
-        }
-      }
-    },
     "Show Previous Items" : {
       "localizations" : {
         "en" : {
@@ -3747,40 +3305,6 @@
         }
       }
     },
-    "Show previous items in ${applicationName}" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Show previous items in ${applicationName}"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mostrar elementos anteriores en ${applicationName}"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Afficher les éléments précédents dans ${applicationName}"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "${applicationName}で前のアイテムを表示"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "在${applicationName}中显示上一个项目"
-          }
-        }
-      }
-    },
     "Sorry, something went wrong. We're working to fix it." : {
       "localizations" : {
         "en" : {
@@ -3811,40 +3335,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "抱歉，出了点问题。我们正在修复。"
-          }
-        }
-      }
-    },
-    "Start ${applicationName}" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Start ${applicationName}"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Iniciar ${applicationName}"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Démarrer ${applicationName}"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "${applicationName}を開始"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "启动${applicationName}"
           }
         }
       }
@@ -4155,40 +3645,6 @@
         }
       }
     },
-    "Upcoming entries in ${applicationName}" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Upcoming entries in ${applicationName}"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Próximas entradas en ${applicationName}"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Entrées à venir dans ${applicationName}"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "${applicationName}の今後のエントリー"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "在${applicationName}中的即将到来的条目"
-          }
-        }
-      }
-    },
     "Upcoming Payment" : {
       "localizations" : {
         "en" : {
@@ -4287,142 +3743,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "版本"
-          }
-        }
-      }
-    },
-    "View charts with ${applicationName}" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "View charts with ${applicationName}"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ver gráficos con ${applicationName}"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Voir les graphiques avec ${applicationName}"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "${applicationName}でグラフを見る"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "用${applicationName}查看图表"
-          }
-        }
-      }
-    },
-    "View history in ${applicationName}" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "View history in ${applicationName}"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ver historial en ${applicationName}"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Voir l'historique dans ${applicationName}"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "${applicationName}で履歴を見る"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "在${applicationName}中查看历史"
-          }
-        }
-      }
-    },
-    "View my items using ${applicationName}" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "View my items using ${applicationName}"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ver mis elementos usando ${applicationName}"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Voir mes éléments avec ${applicationName}"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "${applicationName}で自分のアイテムを見る"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "使用${applicationName}查看我的项目"
-          }
-        }
-      }
-    },
-    "What’s upcoming in ${applicationName}" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "What’s upcoming in ${applicationName}"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Próximos eventos en ${applicationName}"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "À venir dans ${applicationName}"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "${applicationName}の今後の予定"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "在${applicationName}中的即将事项"
           }
         }
       }

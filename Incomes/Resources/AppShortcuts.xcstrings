@@ -1,0 +1,306 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "Open ${applicationName}" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringSet" : {
+            "state" : "new",
+            "values" : [
+              "Open ${applicationName}",
+              "Launch ${applicationName}",
+              "Start ${applicationName}",
+              "Access ${applicationName}"
+            ]
+          }
+        },
+        "es" : {
+          "stringSet" : {
+            "state" : "translated",
+            "values" : [
+              "Abrir ${applicationName}",
+              "Iniciar ${applicationName}",
+              "Comenzar ${applicationName}",
+              "Acceder a ${applicationName}"
+            ]
+          }
+        },
+        "fr" : {
+          "stringSet" : {
+            "state" : "translated",
+            "values" : [
+              "Ouvrir ${applicationName}",
+              "Lancer ${applicationName}",
+              "Démarrer ${applicationName}",
+              "Accéder à ${applicationName}"
+            ]
+          }
+        },
+        "ja" : {
+          "stringSet" : {
+            "state" : "translated",
+            "values" : [
+              "${applicationName}を開く",
+              "${applicationName}を起動",
+              "${applicationName}をスタート",
+              "${applicationName}にアクセス"
+            ]
+          }
+        },
+        "zh-Hans" : {
+          "stringSet" : {
+            "state" : "translated",
+            "values" : [
+              "打开${applicationName}",
+              "启动${applicationName}",
+              "开始使用${applicationName}",
+              "访问${applicationName}"
+            ]
+          }
+        }
+      }
+    },
+    "Show charts in ${applicationName}" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringSet" : {
+            "state" : "new",
+            "values" : [
+              "Show charts in ${applicationName}",
+              "View charts with ${applicationName}",
+              "Display stats from ${applicationName}",
+              "Check analytics in ${applicationName}"
+            ]
+          }
+        },
+        "es" : {
+          "stringSet" : {
+            "state" : "translated",
+            "values" : [
+              "Mostrar gráficos en ${applicationName}",
+              "Ver gráficos con ${applicationName}",
+              "Mostrar estadísticas de ${applicationName}",
+              "Revisar análisis en ${applicationName}"
+            ]
+          }
+        },
+        "fr" : {
+          "stringSet" : {
+            "state" : "translated",
+            "values" : [
+              "Afficher les graphiques dans ${applicationName}",
+              "Voir les graphiques avec ${applicationName}",
+              "Afficher les statistiques de ${applicationName}",
+              "Vérifier les analyses dans ${applicationName}"
+            ]
+          }
+        },
+        "ja" : {
+          "stringSet" : {
+            "state" : "translated",
+            "values" : [
+              "${applicationName}でグラフを表示",
+              "${applicationName}でチャートを見る",
+              "${applicationName}の統計を表示",
+              "${applicationName}の分析を確認"
+            ]
+          }
+        },
+        "zh-Hans" : {
+          "stringSet" : {
+            "state" : "translated",
+            "values" : [
+              "在${applicationName}中显示图表",
+              "使用${applicationName}查看图表",
+              "显示${applicationName}的统计数据",
+              "检查${applicationName}中的分析"
+            ]
+          }
+        }
+      }
+    },
+    "Show items in ${applicationName}" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringSet" : {
+            "state" : "new",
+            "values" : [
+              "Show items in ${applicationName}",
+              "View my items using ${applicationName}",
+              "Check my items in ${applicationName}",
+              "List my entries in ${applicationName}"
+            ]
+          }
+        },
+        "es" : {
+          "stringSet" : {
+            "state" : "translated",
+            "values" : [
+              "Mostrar elementos en ${applicationName}",
+              "Ver mis elementos usando ${applicationName}",
+              "Revisar mis elementos en ${applicationName}",
+              "Listar mis entradas en ${applicationName}"
+            ]
+          }
+        },
+        "fr" : {
+          "stringSet" : {
+            "state" : "translated",
+            "values" : [
+              "Afficher les éléments dans ${applicationName}",
+              "Voir mes éléments avec ${applicationName}",
+              "Vérifier mes éléments dans ${applicationName}",
+              "Lister mes entrées dans ${applicationName}"
+            ]
+          }
+        },
+        "ja" : {
+          "stringSet" : {
+            "state" : "translated",
+            "values" : [
+              "${applicationName}でアイテムを表示",
+              "${applicationName}で自分のアイテムを見る",
+              "${applicationName}でアイテムを確認",
+              "${applicationName}の記録を一覧表示"
+            ]
+          }
+        },
+        "zh-Hans" : {
+          "stringSet" : {
+            "state" : "translated",
+            "values" : [
+              "在${applicationName}中显示项目",
+              "使用${applicationName}查看我的项目",
+              "检查我在${applicationName}中的项目",
+              "列出我在${applicationName}的条目"
+            ]
+          }
+        }
+      }
+    },
+    "Show next items in ${applicationName}" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringSet" : {
+            "state" : "new",
+            "values" : [
+              "Show next items in ${applicationName}",
+              "What’s upcoming in ${applicationName}",
+              "Check next payments in ${applicationName}",
+              "Upcoming entries in ${applicationName}"
+            ]
+          }
+        },
+        "es" : {
+          "stringSet" : {
+            "state" : "translated",
+            "values" : [
+              "Mostrar próximos elementos en ${applicationName}",
+              "Qué viene en ${applicationName}",
+              "Revisar próximos pagos en ${applicationName}",
+              "Entradas próximas en ${applicationName}"
+            ]
+          }
+        },
+        "fr" : {
+          "stringSet" : {
+            "state" : "translated",
+            "values" : [
+              "Afficher les prochains éléments dans ${applicationName}",
+              "Ce qui arrive dans ${applicationName}",
+              "Vérifier les prochains paiements dans ${applicationName}",
+              "Entrées à venir dans ${applicationName}"
+            ]
+          }
+        },
+        "ja" : {
+          "stringSet" : {
+            "state" : "translated",
+            "values" : [
+              "${applicationName}で次のアイテムを表示",
+              "${applicationName}で今後の予定を確認",
+              "${applicationName}で次回の支払いを確認",
+              "${applicationName}の今後の記録"
+            ]
+          }
+        },
+        "zh-Hans" : {
+          "stringSet" : {
+            "state" : "translated",
+            "values" : [
+              "在${applicationName}中显示下一个项目",
+              "查看${applicationName}中的即将事项",
+              "检查${applicationName}中的下次付款",
+              "在${applicationName}中的即将条目"
+            ]
+          }
+        }
+      }
+    },
+    "Show previous items in ${applicationName}" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringSet" : {
+            "state" : "new",
+            "values" : [
+              "Show previous items in ${applicationName}",
+              "View history in ${applicationName}",
+              "List past entries in ${applicationName}",
+              "Past transactions with ${applicationName}"
+            ]
+          }
+        },
+        "es" : {
+          "stringSet" : {
+            "state" : "translated",
+            "values" : [
+              "Mostrar elementos anteriores en ${applicationName}",
+              "Ver historial en ${applicationName}",
+              "Listar entradas pasadas en ${applicationName}",
+              "Transacciones pasadas con ${applicationName}"
+            ]
+          }
+        },
+        "fr" : {
+          "stringSet" : {
+            "state" : "translated",
+            "values" : [
+              "Afficher les éléments précédents dans ${applicationName}",
+              "Voir l'historique dans ${applicationName}",
+              "Lister les entrées passées dans ${applicationName}",
+              "Transactions passées avec ${applicationName}"
+            ]
+          }
+        },
+        "ja" : {
+          "stringSet" : {
+            "state" : "translated",
+            "values" : [
+              "${applicationName}で過去のアイテムを表示",
+              "${applicationName}の履歴を表示",
+              "${applicationName}の過去の記録を一覧表示",
+              "${applicationName}の取引履歴を確認"
+            ]
+          }
+        },
+        "zh-Hans" : {
+          "stringSet" : {
+            "state" : "translated",
+            "values" : [
+              "在${applicationName}中显示以前的项目",
+              "查看${applicationName}中的历史记录",
+              "列出${applicationName}中的过去条目",
+              "与${applicationName}的过去交易"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}
