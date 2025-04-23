@@ -33,6 +33,7 @@ struct SettingsListView {
 
     @Binding private var path: IncomesPath?
 
+    @State private var isNotificationEnabled = true
     @State private var isDeleteDialogPresented = false
     @State private var isDuplicateTagPresented = false
 
@@ -62,24 +63,22 @@ extension SettingsListView: View {
             }
             Section("Push notification settings") {
                 Toggle("Enable push notifications", isOn: $notificationSettings.isEnabled)
-
-                HStack {
-                    Text("Notify for amounts over")
-                    Spacer()
-                    TextField(
-                        "Amount",
-                        value: $notificationSettings.thresholdAmount,
-                        format: .currency(
-                            code: locale.currency?.identifier ?? .empty
+                if isNotificationEnabled {
+                    HStack {
+                        Text("Notify for amounts over")
+                        Spacer()
+                        TextField(
+                            "Amount",
+                            value: $notificationSettings.thresholdAmount,
+                            format: .currency(code: locale.currency?.identifier ?? .empty)
                         )
-                    )
-                    .keyboardType(.numberPad)
-                    .multilineTextAlignment(.trailing)
-                    .frame(maxWidth: 120)
-                }
-
-                Picker("Notify days before", selection: $notificationSettings.daysBeforeDueDate) {
-                    ForEach(0..<15) { Text("\($0) days") }
+                        .keyboardType(.numberPad)
+                        .multilineTextAlignment(.trailing)
+                        .frame(maxWidth: 120)
+                    }
+                    Picker("Notify days before", selection: $notificationSettings.daysBeforeDueDate) {
+                        ForEach(0..<15) { Text("\($0) days") }
+                    }
                 }
             }
             Section {
@@ -168,10 +167,16 @@ extension SettingsListView: View {
         .task {
             try? tagService.updateHasDuplicates()
 
+            isNotificationEnabled = notificationSettings.isEnabled
+
             notificationService.refresh()
             await notificationService.register()
         }
         .onChange(of: notificationSettings) {
+            withAnimation {
+                isNotificationEnabled = notificationSettings.isEnabled
+            }
+
             Task {
                 notificationService.refresh()
                 await notificationService.register()

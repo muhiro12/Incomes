@@ -10,7 +10,6 @@ import Foundation
 
 protocol AppStorageCodable: Codable, Equatable, RawRepresentable<String> {
     init()
-    var id: UUID { get }
 }
 
 extension AppStorageCodable {
@@ -36,9 +35,5 @@ extension AppStorageCodable {
 
     func encode(to _: Encoder) throws {
         fatalError("Must override encode(to:)")
-    }
-
-    static func == (lhs: Self, rhs: Self) -> Bool {
-        lhs.id == rhs.id
     }
 }
