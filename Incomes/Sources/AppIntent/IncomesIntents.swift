@@ -195,7 +195,7 @@ private enum IncomesIntents {
     )
     static let itemService: ItemService = .init(context: modelContainer.mainContext)
     static let tagService: TagService = .init(context: modelContainer.mainContext)
-    static let notificationService: NotificationService = .init(context: modelContainer.mainContext)
+    static let notificationService: NotificationService = .init(itemService: itemService)
     static let configurationService: ConfigurationService = .init()
 
     static func incomesView(content: () -> some View) -> some View {

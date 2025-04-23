@@ -32,7 +32,7 @@ struct IncomesPreview<Content: View>: View {
 
         self.previewItemService = .init(context: previewModelContainer.mainContext)
         self.previewTagService = .init(context: previewModelContainer.mainContext)
-        self.previewNotificationService = .init(context: previewModelContainer.mainContext)
+        self.previewNotificationService = .init(itemService: previewItemService)
         self.previewConfigurationService = .init()
     }
 

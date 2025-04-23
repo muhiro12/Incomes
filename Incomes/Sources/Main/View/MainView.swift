@@ -37,7 +37,7 @@ struct MainView {
         )
         sharedItemService = .init(context: sharedModelContainer.mainContext)
         sharedTagService = .init(context: sharedModelContainer.mainContext)
-        sharedNotificationService = .init(context: sharedModelContainer.mainContext)
+        sharedNotificationService = .init(itemService: sharedItemService)
         sharedConfigurationService = .init()
     }
 }

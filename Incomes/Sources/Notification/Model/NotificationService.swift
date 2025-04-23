@@ -22,8 +22,8 @@ final class NotificationService: NSObject {
         UNUserNotificationCenter.current()
     }
 
-    init(context: ModelContext) {
-        itemService = .init(context: context)
+    init(itemService: ItemService) {
+        self.itemService = itemService
         super.init()
         center.delegate = self
     }
