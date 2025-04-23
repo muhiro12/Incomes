@@ -17,7 +17,10 @@ struct IncomesShortcuts: AppShortcutsProvider {
         AppShortcut(
             intent: OpenIncomesIntent(),
             phrases: [
-                "Open \(.applicationName)"
+                .init(.init(localized: "Open ${applicationName}")),
+                .init(.init(localized: "Launch ${applicationName}")),
+                .init(.init(localized: "Start ${applicationName}")),
+                .init(.init(localized: "Access ${applicationName}"))
             ],
             shortTitle: "Open Incomes",
             systemImageName: "dollarsign.circle"
@@ -25,7 +28,10 @@ struct IncomesShortcuts: AppShortcutsProvider {
         AppShortcut(
             intent: ShowItemsIntent(),
             phrases: [
-                "Show items in \(.applicationName)"
+                .init(.init(localized: "Show items in ${applicationName}")),
+                .init(.init(localized: "View my items using ${applicationName}")),
+                .init(.init(localized: "Check my items in ${applicationName}")),
+                .init(.init(localized: "List my entries in ${applicationName}"))
             ],
             shortTitle: "Show Items",
             systemImageName: "list.bullet.rectangle"
@@ -33,7 +39,10 @@ struct IncomesShortcuts: AppShortcutsProvider {
         AppShortcut(
             intent: ShowChartsIntent(),
             phrases: [
-                "Show charts in \(.applicationName)"
+                .init(.init(localized: "Show charts in ${applicationName}")),
+                .init(.init(localized: "View charts with ${applicationName}")),
+                .init(.init(localized: "Display stats from ${applicationName}")),
+                .init(.init(localized: "Check analytics in ${applicationName}"))
             ],
             shortTitle: "Show Charts",
             systemImageName: "chart.pie"
@@ -41,7 +50,10 @@ struct IncomesShortcuts: AppShortcutsProvider {
         AppShortcut(
             intent: ShowNextItemsIntent(),
             phrases: [
-                "Show next items in \(.applicationName)"
+                .init(.init(localized: "Show next items in ${applicationName}")),
+                .init(.init(localized: "What’s upcoming in ${applicationName}")),
+                .init(.init(localized: "Check next payments in ${applicationName}")),
+                .init(.init(localized: "Upcoming entries in ${applicationName}"))
             ],
             shortTitle: "Show Next Items",
             systemImageName: "list.dash.header.rectangle"
@@ -49,7 +61,10 @@ struct IncomesShortcuts: AppShortcutsProvider {
         AppShortcut(
             intent: ShowPreviousItemsIntent(),
             phrases: [
-                "Show previous items in \(.applicationName)"
+                .init(.init(localized: "Show previous items in ${applicationName}")),
+                .init(.init(localized: "View history in ${applicationName}")),
+                .init(.init(localized: "List past entries in ${applicationName}")),
+                .init(.init(localized: "Past transactions with ${applicationName}"))
             ],
             shortTitle: "Show Previous Items",
             systemImageName: "list.dash.header.rectangle"
