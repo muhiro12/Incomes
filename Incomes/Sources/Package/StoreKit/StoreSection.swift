@@ -1,10 +1,12 @@
+import StoreKitWrapper
 import SwiftUI
 
 struct StoreSection: View {
-    @Environment(StoreKitPackage.self) private var storeKit
+    @Environment(Store.self)
+    private var store
 
     var body: some View {
-        storeKit()
+        store.buildSubscriptionSection()
     }
 }
 

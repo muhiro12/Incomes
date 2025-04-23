@@ -6,9 +6,7 @@
 //  Copyright © 2021 Hiromu Nakano. All rights reserved.
 //
 
-import AppIntents
 import GoogleMobileAdsWrapper
-import LicenseListWrapper
 import StoreKitWrapper
 import SwiftUI
 
@@ -21,10 +19,12 @@ struct IncomesApp: App {
     @AppStorage(.isDebugOn)
     private var isDebugOn
 
-    private let sharedGoogleMobileAdsController: GoogleMobileAdsController
     private let sharedStore: Store
+    private let sharedGoogleMobileAdsController: GoogleMobileAdsController
 
     init() {
+        sharedStore = .init()
+
         sharedGoogleMobileAdsController = .init(
             adUnitID: {
                 #if DEBUG
@@ -34,8 +34,6 @@ struct IncomesApp: App {
                 #endif
             }()
         )
-
-        sharedStore = .init()
 
         #if DEBUG
         isDebugOn = true
@@ -47,24 +45,9 @@ struct IncomesApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .incomesEnvironment(
-                    googleMobileAds: {
-                        sharedGoogleMobileAdsController.buildNativeAd($0)
-                    },
-                    licenseList: {
-                        LicenseListView()
-                    },
-                    storeKit: {
-                        sharedStore.buildSubscriptionSection()
-                    },
-                    appIntents: {
-                        ShortcutsLink()
-                            .shortcutsLinkStyle(.automaticOutline)
-                    }
-                )
+                .environment(sharedStore)
+                .environment(\.googleMobileAdsController, sharedGoogleMobileAdsController)
                 .task {
-                    sharedGoogleMobileAdsController.start()
-
                     sharedStore.open(
                         groupID: Secret.groupID,
                         productIDs: [Secret.productID]
@@ -76,6 +59,8 @@ struct IncomesApp: App {
                             isICloudOn = false
                         }
                     }
+
+                    sharedGoogleMobileAdsController.start()
                 }
         }
     }

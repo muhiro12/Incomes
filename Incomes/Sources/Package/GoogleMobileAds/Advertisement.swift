@@ -6,6 +6,7 @@
 //  Copyright © 2022 Hiromu Nakano. All rights reserved.
 //
 
+import GoogleMobileAdsWrapper
 import SwiftUI
 
 struct AdvertisementSection {
@@ -14,7 +15,8 @@ struct AdvertisementSection {
         case medium = "Medium"
     }
 
-    @Environment(GoogleMobileAdsPackage.self) private var googleMobileAds
+    @Environment(\.googleMobileAdsController)
+    private var googleMobileAdsController
 
     private let size: Size
 
@@ -26,7 +28,7 @@ struct AdvertisementSection {
 extension AdvertisementSection: View {
     var body: some View {
         Section {
-            googleMobileAds(size.rawValue)
+            googleMobileAdsController?.buildNativeAd(size.rawValue)
                 .frame(maxWidth: .infinity)
                 .padding(.spaceS)
         }

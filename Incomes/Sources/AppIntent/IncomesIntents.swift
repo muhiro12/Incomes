@@ -206,12 +206,6 @@ private enum IncomesIntents {
             .environment(tagService)
             .environment(notificationService)
             .environment(configurationService)
-            .incomesEnvironment(
-                googleMobileAds: { _ in EmptyView() },
-                licenseList: { EmptyView() },
-                storeKit: { EmptyView() },
-                appIntents: { EmptyView() }
-            )
     }
 }
 

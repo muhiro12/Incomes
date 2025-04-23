@@ -24,8 +24,8 @@ struct ContentView {
     private var sharedModelContainer: ModelContainer!
     private var sharedItemService: ItemService!
     private var sharedTagService: TagService!
-    private var sharedConfigurationService: ConfigurationService!
     private var sharedNotificationService: NotificationService!
+    private var sharedConfigurationService: ConfigurationService!
 
     @MainActor
     init() {

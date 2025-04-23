@@ -17,8 +17,8 @@ struct IncomesPreview<Content: View>: View {
     private let previewModelContainer: ModelContainer
     private let previewItemService: ItemService
     private let previewTagService: TagService
-    private let previewConfigurationService: ConfigurationService
     private let previewNotificationService: NotificationService
+    private let previewConfigurationService: ConfigurationService
 
     @MainActor
     init(content: @escaping (IncomesPreviewStore) -> Content) {
@@ -54,6 +54,5 @@ struct IncomesPreview<Content: View>: View {
         .environment(previewTagService)
         .environment(previewNotificationService)
         .environment(previewConfigurationService)
-        .incomesPlaygroundsEnvironment()
     }
 }

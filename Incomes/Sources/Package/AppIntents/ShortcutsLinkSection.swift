@@ -1,11 +1,11 @@
+import AppIntents
 import SwiftUI
 
 struct ShortcutsLinkSection: View {
-    @Environment(AppIntentsPackage.self) private var appIntents
-
     var body: some View {
         Section {
-            appIntents()
+            ShortcutsLink()
+                .shortcutsLinkStyle(.automaticOutline)
                 .frame(maxWidth: .infinity)
                 .listRowBackground(EmptyView())
         }
