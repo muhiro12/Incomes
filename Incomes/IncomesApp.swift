@@ -79,7 +79,7 @@ struct IncomesApp: App {
                 .environment(sharedNotificationService)
                 .environment(sharedConfigurationService)
                 .environment(sharedStore)
-                .environment(\.googleMobileAdsController, sharedGoogleMobileAdsController)
+                .environment(sharedGoogleMobileAdsController)
         }
     }
 }

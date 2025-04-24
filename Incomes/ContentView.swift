@@ -6,6 +6,7 @@
 //  Copyright © 2020 Hiromu Nakano. All rights reserved.
 //
 
+import GoogleMobileAdsWrapper
 import StoreKitWrapper
 import SwiftUI
 import SwiftUtilities
@@ -19,7 +20,7 @@ struct ContentView {
     private var configurationService
     @Environment(Store.self)
     private var store
-    @Environment(\.googleMobileAdsController)
+    @Environment(GoogleMobileAdsController.self)
     private var googleMobileAdsController
 
     @Environment(\.scenePhase)
@@ -71,7 +72,7 @@ extension ContentView: View {
                     }
                 }
 
-                googleMobileAdsController?.start()
+                googleMobileAdsController.start()
             }
             .onChange(of: scenePhase) {
                 guard scenePhase == .active else {
