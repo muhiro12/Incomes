@@ -5,6 +5,8 @@
 //  Created by Hiromu Nakano on 2024/06/17.
 //
 
+import GoogleMobileAdsWrapper
+import StoreKitWrapper
 import SwiftData
 import SwiftUI
 
@@ -19,6 +21,8 @@ struct IncomesPreview<Content: View>: View {
     private let previewTagService: TagService
     private let previewNotificationService: NotificationService
     private let previewConfigurationService: ConfigurationService
+    private var previewStore: Store
+    private var previewGoogleMobileAdsController: GoogleMobileAdsController
 
     @MainActor
     init(content: @escaping (IncomesPreviewStore) -> Content) {
@@ -34,6 +38,8 @@ struct IncomesPreview<Content: View>: View {
         self.previewTagService = .init(context: previewModelContainer.mainContext)
         self.previewNotificationService = .init(itemService: previewItemService)
         self.previewConfigurationService = .init()
+        self.previewStore = .init()
+        self.previewGoogleMobileAdsController = .init(adUnitID: Secret.admobNativeIDDev)
     }
 
     var body: some View {
@@ -54,5 +60,7 @@ struct IncomesPreview<Content: View>: View {
         .environment(previewTagService)
         .environment(previewNotificationService)
         .environment(previewConfigurationService)
+        .environment(previewStore)
+        .environment(previewGoogleMobileAdsController)
     }
 }
