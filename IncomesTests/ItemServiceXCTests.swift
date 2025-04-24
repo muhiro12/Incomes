@@ -1,5 +1,5 @@
 //
-//  ItemServiceTests.swift
+//  ItemServiceXCTests.swift
 //  IncomesTests
 //
 //  Created by Hiromu Nakano on 2022/01/13.
@@ -9,7 +9,7 @@
 @testable import Incomes
 import XCTest
 
-final class ItemServiceTests: XCTestCase {
+final class ItemServiceXCTests: XCTestCase {
     // MARK: - Create
 
     func testCreate() {
