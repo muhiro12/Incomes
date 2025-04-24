@@ -10,7 +10,6 @@
 import SwiftData
 import Testing
 
-@Suite
 struct ItemServiceTest {
     let context: ModelContext
     let service: ItemService
@@ -35,6 +34,27 @@ struct ItemServiceTest {
         #expect(item.content == "First")
     }
 
+    @Test("item with predicate returns only matching item")
+    func itemWithPredicate() throws {
+        try service.create(
+            date: date("2024-01-01T00:00:00Z"),
+            content: "Food",
+            income: 0,
+            outgo: 500,
+            category: "Food"
+        )
+        try service.create(
+            date: date("2024-01-01T00:00:00Z"),
+            content: "Transport",
+            income: 0,
+            outgo: 300,
+            category: "Transport"
+        )
+        let predicate = ItemPredicate.outgoIsGreaterThanOrEqualTo(amount: 400, onOrAfter: date("2024-01-01T00:00:00Z"))
+        let item = try #require(try service.item(.items(predicate)))
+        #expect(item.content == "Food")
+    }
+
     @Test("items returns all items")
     func items() throws {
         try service.create(
@@ -55,6 +75,28 @@ struct ItemServiceTest {
         #expect(items.count == 2)
     }
 
+    @Test("items with predicate filters matching items")
+    func itemsWithPredicate() throws {
+        try service.create(
+            date: date("2024-01-01T00:00:00Z"),
+            content: "Match",
+            income: 0,
+            outgo: 800,
+            category: "Filtered"
+        )
+        try service.create(
+            date: date("2024-01-01T00:00:00Z"),
+            content: "NoMatch",
+            income: 0,
+            outgo: 200,
+            category: "Filtered"
+        )
+        let predicate = ItemPredicate.outgoIsGreaterThanOrEqualTo(amount: 500, onOrAfter: date("2024-01-01T00:00:00Z"))
+        let filtered = try service.items(.items(predicate))
+        #expect(filtered.count == 1)
+        #expect(filtered.first?.content == "Match")
+    }
+
     @Test("itemsCount returns correct count")
     func itemsCount() throws {
         try service.create(
@@ -65,6 +107,27 @@ struct ItemServiceTest {
             category: "Test"
         )
         let count = try service.itemsCount()
+        #expect(count == 1)
+    }
+
+    @Test("itemsCount with predicate counts only matching items")
+    func itemsCountWithPredicate() throws {
+        try service.create(
+            date: date("2024-01-01T00:00:00Z"),
+            content: "X",
+            income: 0,
+            outgo: 900,
+            category: "Filtered"
+        )
+        try service.create(
+            date: date("2024-01-01T00:00:00Z"),
+            content: "Y",
+            income: 0,
+            outgo: 100,
+            category: "Filtered"
+        )
+        let predicate = ItemPredicate.outgoIsGreaterThanOrEqualTo(amount: 800, onOrAfter: date("2024-01-01T00:00:00Z"))
+        let count = try service.itemsCount(.items(predicate))
         #expect(count == 1)
     }
 
