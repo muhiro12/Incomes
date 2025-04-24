@@ -34,6 +34,7 @@ struct SettingsListView {
     @Binding private var path: IncomesPath?
 
     @State private var isNotificationEnabled = true
+    @State private var isIntroductionPresented = false
     @State private var isDeleteDialogPresented = false
     @State private var isDuplicateTagPresented = false
 
@@ -117,6 +118,9 @@ extension SettingsListView: View {
                 }
             }
             Section {
+                Button("View App Introduction Again") {
+                    isIntroductionPresented = true
+                }
                 NavigationLink {
                     LicenseView()
                 } label: {
@@ -148,6 +152,9 @@ extension SettingsListView: View {
                 Text("Today: \(Date.now.stringValue(.yyyyMMMd))")
                     .font(.footnote)
             }
+        }
+        .sheet(isPresented: $isIntroductionPresented) {
+            IntroductionView()
         }
         .confirmationDialog(
             Text("Delete all"),

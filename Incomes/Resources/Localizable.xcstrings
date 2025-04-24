@@ -3917,6 +3917,40 @@
         }
       }
     },
+    "View App Introduction Again" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "View App Introduction Again"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ver la introducción de la aplicación nuevamente"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Revoir l’introduction de l’application"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アプリ紹介を再確認"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "再次查看应用介绍"
+          }
+        }
+      }
+    },
     "Welcome to Incomes" : {
       "localizations" : {
         "en" : {
