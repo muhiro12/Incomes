@@ -98,6 +98,50 @@ struct ItemServiceTest {
         #expect(Set(items.map(\.repeatID)).count == 1)
     }
 
+    @Test("create with zero repeatCount still creates one item")
+    func createWithZeroRepeat() throws {
+        try service.create(
+            date: date("2024-03-01T00:00:00Z"),
+            content: "Single",
+            income: 100,
+            outgo: 50,
+            category: "Solo",
+            repeatCount: 0
+        )
+        let items = fetchItems(context)
+        #expect(items.count == 1)
+        #expect(items.first?.content == "Single")
+    }
+
+    @Test("create with zero income and outgo results in zero balance")
+    func createWithZeroAmounts() throws {
+        try service.create(
+            date: date("2024-03-01T00:00:00Z"),
+            content: "Neutral",
+            income: 0,
+            outgo: 0,
+            category: "Empty"
+        )
+        let item = try #require(fetchItems(context).first)
+        #expect(item.balance == 0)
+    }
+
+    @Test("create with duplicate category names does not break")
+    func createWithDuplicateCategoryNames() throws {
+        for _ in 0..<2 {
+            try service.create(
+                date: date("2024-03-01T00:00:00Z"),
+                content: "Repeated",
+                income: 100,
+                outgo: 50,
+                category: "Shared"
+            )
+        }
+        let items = fetchItems(context)
+        #expect(items.count == 2)
+        #expect(Set(items.map(\.category?.name)).count == 1)
+    }
+
     // MARK: - Update
 
     @Test("update changes item values and recalculates balance")
@@ -122,6 +166,62 @@ struct ItemServiceTest {
         #expect(item.balance == 50)
         #expect(item.content == "Updated")
         #expect(item.date == date("2024-01-02T00:00:00Z"))
+    }
+
+    @Test("update assigns new repeatID")
+    func updateAssignsNewRepeatID() throws {
+        try service.create(
+            date: date("2024-01-01T00:00:00Z"),
+            content: "Initial",
+            income: 100,
+            outgo: 0,
+            category: "Original"
+        )
+        let item = try #require(fetchItems(context).first)
+        let oldRepeatID = item.repeatID
+
+        try service.update(
+            item: item,
+            date: item.date,
+            content: "Changed",
+            income: 200,
+            outgo: 0,
+            category: "Updated"
+        )
+        let updated = try #require(fetchItems(context).first)
+        #expect(updated.repeatID != oldRepeatID)
+    }
+
+    @Test("update changes date and maintains correct ordering")
+    func updateChangesDateOrdering() throws {
+        try service.create(
+            date: date("2024-01-01T00:00:00Z"),
+            content: "First",
+            income: 100,
+            outgo: 0,
+            category: "SortTest"
+        )
+        try service.create(
+            date: date("2024-01-02T00:00:00Z"),
+            content: "Second",
+            income: 100,
+            outgo: 0,
+            category: "SortTest"
+        )
+        var items = try service.items().sorted { $0.date < $1.date }
+        #expect(items[0].content == "First")
+
+        try service.update(
+            item: items[1],
+            date: date("2023-12-31T00:00:00Z"),
+            content: items[1].content,
+            income: items[1].income,
+            outgo: items[1].outgo,
+            category: items[1].category?.name ?? ""
+        )
+
+        items = try service.items().sorted { $0.date < $1.date }
+        #expect(items[0].content == "Second")
     }
 
     @Test("updateForFutureItems updates only items after the target date in the repeat group")
@@ -150,6 +250,56 @@ struct ItemServiceTest {
         #expect(result[2].content == "UpdatedSub")
         #expect(result[1].outgo == 1_200)
         #expect(result[2].category?.name == "Entertainment")
+    }
+
+    @Test("updateForFutureItems updates only target if it's the last item")
+    func updateFutureLastOnly() throws {
+        try service.create(
+            date: date("2024-01-01T00:00:00Z"),
+            content: "Monthly",
+            income: 100,
+            outgo: 0,
+            category: "Bills",
+            repeatCount: 3
+        )
+        let items = try service.items().sorted { $0.date < $1.date }
+        let last = items[2]
+
+        try service.updateForFutureItems(
+            item: last,
+            date: last.date,
+            content: "Changed",
+            income: 200,
+            outgo: 0,
+            category: "BillsUpdated"
+        )
+        let result = try service.items().sorted { $0.date < $1.date }
+        #expect(result[0].content == "Monthly")
+        #expect(result[1].content == "Monthly")
+        #expect(result[2].content == "Changed")
+    }
+
+    @Test("updateForFutureItems on non-repeating item updates only itself")
+    func updateFutureSingleRepeat() throws {
+        try service.create(
+            date: date("2024-01-01T00:00:00Z"),
+            content: "Solo",
+            income: 0,
+            outgo: 50,
+            category: "OneTime"
+        )
+        let item = try #require(fetchItems(context).first)
+        try service.updateForFutureItems(
+            item: item,
+            date: item.date,
+            content: "SoloUpdated",
+            income: 100,
+            outgo: 50,
+            category: "OneTimeUpdated"
+        )
+        let updated = try #require(fetchItems(context).first)
+        #expect(updated.content == "SoloUpdated")
+        #expect(updated.income == 100)
     }
 
     @Test("updateForAllItems updates all items in the repeat group")
@@ -197,6 +347,37 @@ struct ItemServiceTest {
         #expect(items.isEmpty)
     }
 
+    @Test("delete with empty array does nothing")
+    func deleteWithEmptyArray() throws {
+        try service.delete(items: [])
+        #expect(try service.items().isEmpty)
+    }
+
+    @Test("delete with multiple items removes only specified ones")
+    func deleteMultipleItems() throws {
+        try service.create(
+            date: date("2024-01-01T00:00:00Z"),
+            content: "KeepMe",
+            income: 100,
+            outgo: 0,
+            category: "General"
+        )
+        try service.create(
+            date: date("2024-01-02T00:00:00Z"),
+            content: "RemoveMe",
+            income: 100,
+            outgo: 0,
+            category: "General"
+        )
+        let allItems = try service.items()
+        let toDelete = allItems.filter { $0.content == "RemoveMe" }
+        try service.delete(items: toDelete)
+
+        let remaining = try service.items()
+        #expect(remaining.count == 1)
+        #expect(remaining.first?.content == "KeepMe")
+    }
+
     @Test("deleteAll clears all items")
     func deleteAll() throws {
         try service.create(
@@ -233,5 +414,55 @@ struct ItemServiceTest {
         )
         item = try #require(fetchItems(context).first)
         #expect(item.balance == 10)
+    }
+
+    @Test("recalculate does not alter already correct balance")
+    func recalculateNoChange() throws {
+        try service.create(
+            date: date("2024-01-01T00:00:00Z"),
+            content: "Stable",
+            income: 100,
+            outgo: 60,
+            category: "Check"
+        )
+        let item = try #require(fetchItems(context).first)
+        let oldBalance = item.balance
+
+        try service.recalculate(after: date("2023-12-01T00:00:00Z"))
+
+        let reloaded = try #require(fetchItems(context).first)
+        #expect(reloaded.balance == oldBalance)
+    }
+
+    @Test("recalculate only affects items after the specified date")
+    func recalculatePartial() throws {
+        try service.create(
+            date: date("2024-01-01T00:00:00Z"),
+            content: "Before",
+            income: 100,
+            outgo: 50,
+            category: "Split"
+        )
+        try service.create(
+            date: date("2024-02-01T00:00:00Z"),
+            content: "After",
+            income: 200,
+            outgo: 80,
+            category: "Split"
+        )
+        var items = try service.items().sorted { $0.date < $1.date }
+        try service.update(
+            item: items[1],
+            date: items[1].date,
+            content: items[1].content,
+            income: 500,
+            outgo: 80,
+            category: items[1].category?.name ?? ""
+        )
+
+        try service.recalculate(after: date("2024-01-15T00:00:00Z"))
+        items = try service.items().sorted { $0.date < $1.date }
+        #expect(items[0].balance == 50)
+        #expect(items[1].balance == 470)
     }
 }
