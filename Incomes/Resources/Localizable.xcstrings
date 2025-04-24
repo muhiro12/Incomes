@@ -245,40 +245,6 @@
       },
       "shouldTranslate" : false
     },
-    "Add Your Own Items" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Add Your Own Items"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Agregar tus propios elementos"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ajouter vos propres éléments"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "自分でアイテムを追加"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "添加您自己的项目"
-          }
-        }
-      }
-    },
     "Advertising revenue" : {
       "localizations" : {
         "en" : {
@@ -925,36 +891,36 @@
         }
       }
     },
-    "Create Sample Data" : {
+    "Create Sample Items" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Create Sample Data"
+            "value" : "Create Sample Items"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Crear datos de muestra"
+            "value" : "Crear elementos de muestra"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Créer des données d'exemple"
+            "value" : "Créer des éléments d'exemple"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "サンプルデータを作成"
+            "value" : "サンプルアイテムを作成"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "创建示例数据"
+            "value" : "创建示例项目"
           }
         }
       }

@@ -56,7 +56,11 @@ struct IntroductionView: View {
                         }
                     } label: {
                         Label {
-                            Text(isLoading ? "Creating Sample Items..." : "Create Sample Items")
+                            if isLoading {
+                                Text("Creating Sample Items...")
+                            } else {
+                                Text("Create Sample Items")
+                            }
                         } icon: {
                             if isLoading {
                                 ProgressView()
