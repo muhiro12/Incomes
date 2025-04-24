@@ -9,6 +9,8 @@
 import SwiftUI
 
 struct HomeListView {
+    @Environment(ItemService.self)
+    private var itemService
     @Environment(TagService.self)
     private var tagService
     @Environment(NotificationService.self)
@@ -21,6 +23,7 @@ struct HomeListView {
 
     @State private var yearTag: Tag?
     @State private var hasLoaded = false
+    @State private var isIntroductionPresented = false
 
     init(selection: Binding<IncomesPath?> = .constant(nil)) {
         _path = selection
@@ -52,10 +55,14 @@ extension HomeListView: View {
                     .font(.footnote)
             }
         }
+        .sheet(isPresented: $isIntroductionPresented) {
+            IntroductionView()
+        }
         .task {
             if !hasLoaded {
                 hasLoaded = true
                 yearTag = try? tagService.tag(.tags(.nameIs(Date.now.stringValueWithoutLocale(.yyyy), type: .year)))
+                isIntroductionPresented = (try? itemService.itemsCount().isZero) ?? false
             }
 
             notificationService.refresh()
