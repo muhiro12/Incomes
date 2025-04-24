@@ -46,6 +46,13 @@ struct ListItem: View {
                 Haptic.warning.impact()
                 isDeletePresented = true
             }
+        } preview: {
+            ItemNavigationView()
+                .environment(item)
+                .environment(itemService)
+                .onDisappear {
+                    isDetailPresented = true
+                }
         }
         .sheet(isPresented: $isDetailPresented) {
             ItemNavigationView()
