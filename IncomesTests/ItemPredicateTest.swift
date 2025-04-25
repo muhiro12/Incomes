@@ -114,10 +114,7 @@ struct ItemPredicateTest {
         #expect(items.count == 1)
     }
 
-    @Test(
-        "includes multiple items after the cutoff date",
-        .disabled("Known issue: item on cutoff date is excluded")
-    )
+    @Test("includes multiple items on and after the cutoff date")
     func includesMultipleItemsAfterDate() throws {
         let cutoff = date("2024-05-01T00:00:00Z")
         try service.create(date: cutoff, content: "OnCutoff", income: 0, outgo: 0, category: "Test")
@@ -128,17 +125,14 @@ struct ItemPredicateTest {
         let items = try service.items(.items(predicate))
         let contents = items.map(\.content)
 
+        #expect(contents.contains("OnCutoff"))
         #expect(contents.contains("MaySecond"))
         #expect(contents.contains("June"))
-        #expect(!contents.contains("OnCutoff"))
-        #expect(items.count == 2)
+        #expect(items.count == 3)
     }
 
-    @Test(
-        "excludes items exactly on the cutoff date for dateIsAfter",
-        .disabled("Known issue: item on cutoff date is excluded")
-    )
-    func excludesItemsExactlyOnCutoffForDateIsAfter() throws {
+    @Test("includes items exactly on the cutoff date for dateIsAfter")
+    func includesItemsExactlyOnCutoffForDateIsAfter() throws {
         let cutoff = date("2024-05-01T00:00:00Z")
         try service.create(date: cutoff, content: "OnCutoff", income: 0, outgo: 0, category: "Test")
 
@@ -146,8 +140,8 @@ struct ItemPredicateTest {
         let items = try service.items(.items(predicate))
         let contents = items.map(\.content)
 
-        #expect(!contents.contains("OnCutoff"))
-        #expect(items.isEmpty)
+        #expect(contents.contains("OnCutoff"))
+        #expect(items.count == 1)
     }
 
     @Test("excludes items from different year in same month")
