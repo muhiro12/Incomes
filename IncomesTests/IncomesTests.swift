@@ -23,8 +23,11 @@ var testContext: ModelContext {
     )
 }
 
-let date: (String) -> Date = { string in
-    try! Date(string, strategy: .iso8601)
+let isoDate: (String) -> Date = { string in
+    guard let date = ISO8601DateFormatter().date(from: string) else {
+        preconditionFailure("Invalid ISO8601 date string: \(string)")
+    }
+    return date
 }
 
 func fetchItems(_ context: ModelContext) -> [Item] {

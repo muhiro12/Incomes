@@ -25,7 +25,7 @@ struct ItemServiceTest {
     @Test("item returns first item if available")
     func item() throws {
         try service.create(
-            date: date("2024-01-01T00:00:00Z"),
+            date: isoDate("2024-01-01T00:00:00Z"),
             content: "First",
             income: 100,
             outgo: 50,
@@ -38,20 +38,20 @@ struct ItemServiceTest {
     @Test("item with predicate returns only matching item")
     func itemWithPredicate() throws {
         try service.create(
-            date: date("2024-01-01T00:00:00Z"),
+            date: isoDate("2024-01-01T00:00:00Z"),
             content: "Food",
             income: 0,
             outgo: 500,
             category: "Food"
         )
         try service.create(
-            date: date("2024-01-01T00:00:00Z"),
+            date: isoDate("2024-01-01T00:00:00Z"),
             content: "Transport",
             income: 0,
             outgo: 300,
             category: "Transport"
         )
-        let predicate = ItemPredicate.outgoIsGreaterThanOrEqualTo(amount: 400, onOrAfter: date("2024-01-01T00:00:00Z"))
+        let predicate = ItemPredicate.outgoIsGreaterThanOrEqualTo(amount: 400, onOrAfter: isoDate("2024-01-01T00:00:00Z"))
         let item = try #require(try service.item(.items(predicate)))
         #expect(item.content == "Food")
     }
@@ -59,14 +59,14 @@ struct ItemServiceTest {
     @Test("items returns all items")
     func items() throws {
         try service.create(
-            date: date("2024-01-01T00:00:00Z"),
+            date: isoDate("2024-01-01T00:00:00Z"),
             content: "One",
             income: 100,
             outgo: 0,
             category: "Test"
         )
         try service.create(
-            date: date("2024-01-02T00:00:00Z"),
+            date: isoDate("2024-01-02T00:00:00Z"),
             content: "Two",
             income: 200,
             outgo: 0,
@@ -79,20 +79,20 @@ struct ItemServiceTest {
     @Test("items with predicate filters matching items")
     func itemsWithPredicate() throws {
         try service.create(
-            date: date("2024-01-01T00:00:00Z"),
+            date: isoDate("2024-01-01T00:00:00Z"),
             content: "Match",
             income: 0,
             outgo: 800,
             category: "Filtered"
         )
         try service.create(
-            date: date("2024-01-01T00:00:00Z"),
+            date: isoDate("2024-01-01T00:00:00Z"),
             content: "NoMatch",
             income: 0,
             outgo: 200,
             category: "Filtered"
         )
-        let predicate = ItemPredicate.outgoIsGreaterThanOrEqualTo(amount: 500, onOrAfter: date("2024-01-01T00:00:00Z"))
+        let predicate = ItemPredicate.outgoIsGreaterThanOrEqualTo(amount: 500, onOrAfter: isoDate("2024-01-01T00:00:00Z"))
         let filtered = try service.items(.items(predicate))
         #expect(filtered.count == 1)
         #expect(filtered.first?.content == "Match")
@@ -101,7 +101,7 @@ struct ItemServiceTest {
     @Test("itemsCount returns correct count")
     func itemsCount() throws {
         try service.create(
-            date: date("2024-01-01T00:00:00Z"),
+            date: isoDate("2024-01-01T00:00:00Z"),
             content: "Only",
             income: 300,
             outgo: 100,
@@ -114,20 +114,20 @@ struct ItemServiceTest {
     @Test("itemsCount with predicate counts only matching items")
     func itemsCountWithPredicate() throws {
         try service.create(
-            date: date("2024-01-01T00:00:00Z"),
+            date: isoDate("2024-01-01T00:00:00Z"),
             content: "X",
             income: 0,
             outgo: 900,
             category: "Filtered"
         )
         try service.create(
-            date: date("2024-01-01T00:00:00Z"),
+            date: isoDate("2024-01-01T00:00:00Z"),
             content: "Y",
             income: 0,
             outgo: 100,
             category: "Filtered"
         )
-        let predicate = ItemPredicate.outgoIsGreaterThanOrEqualTo(amount: 800, onOrAfter: date("2024-01-01T00:00:00Z"))
+        let predicate = ItemPredicate.outgoIsGreaterThanOrEqualTo(amount: 800, onOrAfter: isoDate("2024-01-01T00:00:00Z"))
         let count = try service.itemsCount(.items(predicate))
         #expect(count == 1)
     }
@@ -137,7 +137,7 @@ struct ItemServiceTest {
     @Test("create item with correct balance")
     func create() throws {
         try service.create(
-            date: date("2024-01-01T00:00:00Z"),
+            date: isoDate("2024-01-01T00:00:00Z"),
             content: "Lunch",
             income: 1_000,
             outgo: 300,
@@ -150,7 +150,7 @@ struct ItemServiceTest {
     @Test("create with repeatCount 3 creates 3 items with same repeatID")
     func createWithRepeat() throws {
         try service.create(
-            date: date("2024-01-01T00:00:00Z"),
+            date: isoDate("2024-01-01T00:00:00Z"),
             content: "Rent",
             income: 0,
             outgo: 100_000,
@@ -165,7 +165,7 @@ struct ItemServiceTest {
     @Test("create with zero repeatCount still creates one item")
     func createWithZeroRepeat() throws {
         try service.create(
-            date: date("2024-03-01T00:00:00Z"),
+            date: isoDate("2024-03-01T00:00:00Z"),
             content: "Single",
             income: 100,
             outgo: 50,
@@ -180,7 +180,7 @@ struct ItemServiceTest {
     @Test("create with zero income and outgo results in zero balance")
     func createWithZeroAmounts() throws {
         try service.create(
-            date: date("2024-03-01T00:00:00Z"),
+            date: isoDate("2024-03-01T00:00:00Z"),
             content: "Neutral",
             income: 0,
             outgo: 0,
@@ -194,7 +194,7 @@ struct ItemServiceTest {
     func createWithDuplicateCategoryNames() throws {
         for _ in 0..<2 {
             try service.create(
-                date: date("2024-03-01T00:00:00Z"),
+                date: isoDate("2024-03-01T00:00:00Z"),
                 content: "Repeated",
                 income: 100,
                 outgo: 50,
@@ -254,7 +254,7 @@ struct ItemServiceTest {
     @Test("update changes item values and recalculates balance")
     func update() throws {
         try service.create(
-            date: date("2024-01-01T00:00:00Z"),
+            date: isoDate("2024-01-01T00:00:00Z"),
             content: "Initial",
             income: 100,
             outgo: 50,
@@ -263,7 +263,7 @@ struct ItemServiceTest {
         var item = try #require(fetchItems(context).first)
         try service.update(
             item: item,
-            date: date("2024-01-02T00:00:00Z"),
+            date: isoDate("2024-01-02T00:00:00Z"),
             content: "Updated",
             income: 150,
             outgo: 100,
@@ -272,13 +272,13 @@ struct ItemServiceTest {
         item = try #require(fetchItems(context).first)
         #expect(item.balance == 50)
         #expect(item.content == "Updated")
-        #expect(item.date == date("2024-01-02T00:00:00Z"))
+        #expect(item.date == isoDate("2024-01-02T00:00:00Z"))
     }
 
     @Test("update assigns new repeatID")
     func updateAssignsNewRepeatID() throws {
         try service.create(
-            date: date("2024-01-01T00:00:00Z"),
+            date: isoDate("2024-01-01T00:00:00Z"),
             content: "Initial",
             income: 100,
             outgo: 0,
@@ -302,14 +302,14 @@ struct ItemServiceTest {
     @Test("update changes date and maintains correct ordering")
     func updateChangesDateOrdering() throws {
         try service.create(
-            date: date("2024-01-01T00:00:00Z"),
+            date: isoDate("2024-01-01T00:00:00Z"),
             content: "First",
             income: 100,
             outgo: 0,
             category: "SortTest"
         )
         try service.create(
-            date: date("2024-01-02T00:00:00Z"),
+            date: isoDate("2024-01-02T00:00:00Z"),
             content: "Second",
             income: 100,
             outgo: 0,
@@ -320,7 +320,7 @@ struct ItemServiceTest {
 
         try service.update(
             item: items[1],
-            date: date("2023-12-31T00:00:00Z"),
+            date: isoDate("2023-12-31T00:00:00Z"),
             content: items[1].content,
             income: items[1].income,
             outgo: items[1].outgo,
@@ -334,7 +334,7 @@ struct ItemServiceTest {
     @Test("updateForFutureItems updates only items after the target date in the repeat group")
     func updateForFutureItems() throws {
         try service.create(
-            date: date("2024-01-01T00:00:00Z"),
+            date: isoDate("2024-01-01T00:00:00Z"),
             content: "Subscription",
             income: 0,
             outgo: 1_000,
@@ -362,7 +362,7 @@ struct ItemServiceTest {
     @Test("updateForFutureItems updates only target if it's the last item")
     func updateFutureLastOnly() throws {
         try service.create(
-            date: date("2024-01-01T00:00:00Z"),
+            date: isoDate("2024-01-01T00:00:00Z"),
             content: "Monthly",
             income: 100,
             outgo: 0,
@@ -389,7 +389,7 @@ struct ItemServiceTest {
     @Test("updateForFutureItems on non-repeating item updates only itself")
     func updateFutureSingleRepeat() throws {
         try service.create(
-            date: date("2024-01-01T00:00:00Z"),
+            date: isoDate("2024-01-01T00:00:00Z"),
             content: "Solo",
             income: 0,
             outgo: 50,
@@ -412,7 +412,7 @@ struct ItemServiceTest {
     @Test("updateForAllItems updates all items in the repeat group")
     func updateForAllItems() throws {
         try service.create(
-            date: date("2024-02-01T00:00:00Z"),
+            date: isoDate("2024-02-01T00:00:00Z"),
             content: "Gym",
             income: 0,
             outgo: 8_000,
@@ -442,7 +442,7 @@ struct ItemServiceTest {
     @Test("delete removes the specified item")
     func delete() throws {
         try service.create(
-            date: date("2024-04-01T00:00:00Z"),
+            date: isoDate("2024-04-01T00:00:00Z"),
             content: "ToDelete",
             income: 100,
             outgo: 0,
@@ -463,14 +463,14 @@ struct ItemServiceTest {
     @Test("delete with multiple items removes only specified ones")
     func deleteMultipleItems() throws {
         try service.create(
-            date: date("2024-01-01T00:00:00Z"),
+            date: isoDate("2024-01-01T00:00:00Z"),
             content: "KeepMe",
             income: 100,
             outgo: 0,
             category: "General"
         )
         try service.create(
-            date: date("2024-01-02T00:00:00Z"),
+            date: isoDate("2024-01-02T00:00:00Z"),
             content: "RemoveMe",
             income: 100,
             outgo: 0,
@@ -488,7 +488,7 @@ struct ItemServiceTest {
     @Test("deleteAll clears all items")
     func deleteAll() throws {
         try service.create(
-            date: date("2024-01-01T00:00:00Z"),
+            date: isoDate("2024-01-01T00:00:00Z"),
             content: "DeleteMe",
             income: 0,
             outgo: 100,
@@ -504,7 +504,7 @@ struct ItemServiceTest {
     @Test("recalculate reflects updated outgo via update")
     func recalculate() throws {
         try service.create(
-            date: date("2024-01-01T00:00:00Z"),
+            date: isoDate("2024-01-01T00:00:00Z"),
             content: "AdjustMe",
             income: 100,
             outgo: 50,
@@ -526,7 +526,7 @@ struct ItemServiceTest {
     @Test("recalculate does not alter already correct balance")
     func recalculateNoChange() throws {
         try service.create(
-            date: date("2024-01-01T00:00:00Z"),
+            date: isoDate("2024-01-01T00:00:00Z"),
             content: "Stable",
             income: 100,
             outgo: 60,
@@ -535,7 +535,7 @@ struct ItemServiceTest {
         let item = try #require(fetchItems(context).first)
         let oldBalance = item.balance
 
-        try service.recalculate(after: date("2023-12-01T00:00:00Z"))
+        try service.recalculate(after: isoDate("2023-12-01T00:00:00Z"))
 
         let reloaded = try #require(fetchItems(context).first)
         #expect(reloaded.balance == oldBalance)
@@ -544,14 +544,14 @@ struct ItemServiceTest {
     @Test("recalculate only affects items after the specified date")
     func recalculatePartial() throws {
         try service.create(
-            date: date("2024-01-01T00:00:00Z"),
+            date: isoDate("2024-01-01T00:00:00Z"),
             content: "Before",
             income: 100,
             outgo: 50,
             category: "Split"
         )
         try service.create(
-            date: date("2024-02-01T00:00:00Z"),
+            date: isoDate("2024-02-01T00:00:00Z"),
             content: "After",
             income: 200,
             outgo: 80,
@@ -567,7 +567,7 @@ struct ItemServiceTest {
             category: items[1].category?.name ?? ""
         )
 
-        try service.recalculate(after: date("2024-01-15T00:00:00Z"))
+        try service.recalculate(after: isoDate("2024-01-15T00:00:00Z"))
         items = try service.items().sorted { $0.date < $1.date }
         #expect(items[0].balance == 50)
         #expect(items[1].balance == 470)
@@ -576,21 +576,21 @@ struct ItemServiceTest {
     @Test("recalculate is correct across time zone boundaries")
     func recalculateWithTimeZoneBoundaries() throws {
         try service.create(
-            date: date("2024-02-28T23:00:00Z"),  // potentially Feb 29 in JST
+            date: isoDate("2024-02-28T23:00:00Z"),  // potentially Feb 29 in JST
             content: "LateFeb",
             income: 500,
             outgo: 100,
             category: "TZTest"
         )
         try service.create(
-            date: date("2024-02-29T01:00:00Z"),  // clearly Feb 29 UTC
+            date: isoDate("2024-02-29T01:00:00Z"),  // clearly Feb 29 UTC
             content: "EarlyMar",
             income: 300,
             outgo: 50,
             category: "TZTest"
         )
 
-        try service.recalculate(after: date("2024-02-01T00:00:00Z"))
+        try service.recalculate(after: isoDate("2024-02-01T00:00:00Z"))
         let items = try service.items().sorted { $0.date < $1.date }
         let balances = items.map(\.balance)
 

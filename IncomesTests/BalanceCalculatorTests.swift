@@ -17,7 +17,7 @@ final class BalanceCalculatorTests: XCTestCase {
 
             for i in 1...5 {
                 let item = try! Item.create(context: context,
-                                            date: date("2000-0\(i)-01T12:00:00Z"),
+                                            date: isoDate("2000-0\(i)-01T12:00:00Z"),
                                             content: "content",
                                             income: 200,
                                             outgo: 100,
@@ -28,7 +28,7 @@ final class BalanceCalculatorTests: XCTestCase {
             try! calculator.calculate(after: .distantPast)
 
             let item = try! Item.create(context: context,
-                                        date: date("2000-01-31T12:00:00Z"),
+                                        date: isoDate("2000-01-31T12:00:00Z"),
                                         content: "content",
                                         income: 200,
                                         outgo: 100,
@@ -50,7 +50,7 @@ final class BalanceCalculatorTests: XCTestCase {
 
             for i in 1...5 {
                 let item = try! Item.create(context: context,
-                                            date: date("2000-0\(i)-01T12:00:00Z"),
+                                            date: isoDate("2000-0\(i)-01T12:00:00Z"),
                                             content: "content",
                                             income: 200,
                                             outgo: 100,
@@ -61,7 +61,7 @@ final class BalanceCalculatorTests: XCTestCase {
             try! calculator.calculate(after: .distantPast)
 
             let item = try! Item.create(context: context,
-                                        date: date("2001-01-01T00:00:00Z"),
+                                        date: isoDate("2001-01-01T00:00:00Z"),
                                         content: "content",
                                         income: 200,
                                         outgo: 100,
@@ -83,7 +83,7 @@ final class BalanceCalculatorTests: XCTestCase {
 
             for i in 1...5 {
                 let item = try! Item.create(context: context,
-                                            date: date("2000-0\(i)-01T12:00:00Z"),
+                                            date: isoDate("2000-0\(i)-01T12:00:00Z"),
                                             content: "content",
                                             income: 200,
                                             outgo: 100,
@@ -94,7 +94,7 @@ final class BalanceCalculatorTests: XCTestCase {
             try! calculator.calculate(after: .distantPast)
 
             let item = try! Item.create(context: context,
-                                        date: date("2000-01-01T00:00:00Z"),
+                                        date: isoDate("2000-01-01T00:00:00Z"),
                                         content: "content",
                                         income: 200,
                                         outgo: 100,
@@ -118,7 +118,7 @@ final class BalanceCalculatorTests: XCTestCase {
 
             for i in 1...5 {
                 let item = try! Item.create(context: context,
-                                            date: date("2000-0\(i)-01T12:00:00Z"),
+                                            date: isoDate("2000-0\(i)-01T12:00:00Z"),
                                             content: "content",
                                             income: 200,
                                             outgo: 100,
@@ -130,7 +130,7 @@ final class BalanceCalculatorTests: XCTestCase {
             try! calculator.calculate(after: .distantPast)
 
             let item = items[1]
-            try! item.modify(date: date("2000-02-01T12:00:00Z"),
+            try! item.modify(date: isoDate("2000-02-01T12:00:00Z"),
                              content: "content",
                              income: 300,
                              outgo: 100,
@@ -153,7 +153,7 @@ final class BalanceCalculatorTests: XCTestCase {
 
             for i in 1...5 {
                 let item = try! Item.create(context: context,
-                                            date: date("2000-0\(i)-01T12:00:00Z"),
+                                            date: isoDate("2000-0\(i)-01T12:00:00Z"),
                                             content: "content",
                                             income: 200,
                                             outgo: 100,
@@ -165,7 +165,7 @@ final class BalanceCalculatorTests: XCTestCase {
             try! calculator.calculate(after: .distantPast)
 
             let item = items[0]
-            try! item.modify(date: date("2000-01-01T12:00:00Z"),
+            try! item.modify(date: isoDate("2000-01-01T12:00:00Z"),
                              content: "content",
                              income: 300,
                              outgo: 100,
@@ -188,7 +188,7 @@ final class BalanceCalculatorTests: XCTestCase {
 
             for i in 1...5 {
                 let item = try! Item.create(context: context,
-                                            date: date("2000-0\(i)-01T12:00:00Z"),
+                                            date: isoDate("2000-0\(i)-01T12:00:00Z"),
                                             content: "content",
                                             income: 200,
                                             outgo: 100,
@@ -200,7 +200,7 @@ final class BalanceCalculatorTests: XCTestCase {
             try! calculator.calculate(after: .distantPast)
 
             let item = items[4]
-            try! item.modify(date: date("2000-05-01T12:00:00Z"),
+            try! item.modify(date: isoDate("2000-05-01T12:00:00Z"),
                              content: "content",
                              income: 300,
                              outgo: 100,
@@ -223,7 +223,7 @@ final class BalanceCalculatorTests: XCTestCase {
 
             for i in 1...5 {
                 let item = try! Item.create(context: context,
-                                            date: date("2000-0\(i)-01T12:00:00Z"),
+                                            date: isoDate("2000-0\(i)-01T12:00:00Z"),
                                             content: "content",
                                             income: 200,
                                             outgo: 100,
@@ -235,7 +235,7 @@ final class BalanceCalculatorTests: XCTestCase {
             try! calculator.calculate(after: .distantPast)
 
             let item = items[4]
-            try! item.modify(date: date("1999-12-31T00:00:00Z"),
+            try! item.modify(date: isoDate("1999-12-31T00:00:00Z"),
                              content: "content",
                              income: 300,
                              outgo: 100,
@@ -258,7 +258,7 @@ final class BalanceCalculatorTests: XCTestCase {
 
             for i in 1...5 {
                 let item = try! Item.create(context: context,
-                                            date: date("2000-0\(i)-01T12:00:00Z"),
+                                            date: isoDate("2000-0\(i)-01T12:00:00Z"),
                                             content: "content",
                                             income: 200,
                                             outgo: 100,
@@ -288,7 +288,7 @@ final class BalanceCalculatorTests: XCTestCase {
 
             for i in 1...5 {
                 let item = try! Item.create(context: context,
-                                            date: date("2000-0\(i)-01T12:00:00Z"),
+                                            date: isoDate("2000-0\(i)-01T12:00:00Z"),
                                             content: "content",
                                             income: 200,
                                             outgo: 100,
@@ -318,7 +318,7 @@ final class BalanceCalculatorTests: XCTestCase {
 
             for i in 1...5 {
                 let item = try! Item.create(context: context,
-                                            date: date("2000-0\(i)-01T12:00:00Z"),
+                                            date: isoDate("2000-0\(i)-01T12:00:00Z"),
                                             content: "content",
                                             income: 200,
                                             outgo: 100,
