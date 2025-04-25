@@ -173,6 +173,24 @@ struct ItemPredicateTest {
         #expect(items.count == 2)
     }
 
+    @Test("JST Jan 1 is treated as December in UTC")
+    func jstJanStartAppearsAsLastYear() throws {
+        let jstDate = ISO8601DateFormatter().date(from: "2024-01-01T00:00:00+0900")!
+        try service.create(
+            date: jstDate,
+            content: "JST_Jan1",
+            income: 0,
+            outgo: 0,
+            category: "TZBoundary"
+        )
+
+        let predicate = ItemPredicate.dateIsSameYearAs(date("2024-01-01T00:00:00Z"))
+        let items = try service.items(.items(predicate))
+        let contents = items.map(\.content)
+
+        #expect(!contents.contains("JST_Jan1"))
+    }
+
     @Test("excludes JST 3/1 from UTC March")
     func excludesJSTMarchStartFromUTCMarch() throws {
         let jstDate = ISO8601DateFormatter().date(from: "2024-03-01T00:00:00+0900")!  // = 2024-02-29T15:00:00Z
@@ -400,6 +418,23 @@ struct ItemPredicateTest {
         try service.create(date: date("2024-04-02T00:00:00Z"), content: "NextDayStart", income: 1, outgo: 0, category: "Test")
 
         let predicate = ItemPredicate.dateIsSameDayAs(baseDate)
+        let items = try service.items(.items(predicate))
+
+        #expect(items.isEmpty)
+    }
+
+    @Test("JST Jan 1 is treated as Dec 31 in UTC day")
+    func jstJanStartAppearsAsPreviousDay() throws {
+        let jstDate = ISO8601DateFormatter().date(from: "2024-01-01T00:00:00+0900")!
+        try service.create(
+            date: jstDate,
+            content: "JST_Jan1",
+            income: 0,
+            outgo: 0,
+            category: "TZBoundary"
+        )
+
+        let predicate = ItemPredicate.dateIsSameDayAs(date("2024-01-01T00:00:00Z"))
         let items = try service.items(.items(predicate))
 
         #expect(items.isEmpty)
