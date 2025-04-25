@@ -191,6 +191,74 @@ struct ItemPredicateTest {
         #expect(!contents.contains("JST_Jan1"))
     }
 
+    @Test("includes JST 12/31 23:59 as part of same UTC year")
+    func includesEndOfJSTYearInSameUTCYear() throws {
+        let jstDate = isoDate("2024-12-31T23:59:59+0900") // UTC: 2024-12-31T14:59:59Z
+        try service.create(
+            date: jstDate,
+            content: "JST_EndOfYear",
+            income: 0,
+            outgo: 0,
+            category: "Test"
+        )
+
+        let predicate = ItemPredicate.dateIsSameYearAs(isoDate("2024-01-01T00:00:00Z"))
+        let items = try service.items(.items(predicate))
+        let contents = items.map(\.content)
+
+        #expect(contents.contains("JST_EndOfYear"))
+    }
+
+    @Test("excludes JST 1/1 00:00 from same UTC year")
+    func excludesStartOfJSTYearFromSameUTCYear() throws {
+        let jstDate = isoDate("2024-01-01T00:00:00+0900") // UTC: 2023-12-31T15:00:00Z
+        try service.create(
+            date: jstDate,
+            content: "JST_StartOfYear",
+            income: 0,
+            outgo: 0,
+            category: "Test"
+        )
+
+        let predicate = ItemPredicate.dateIsSameYearAs(isoDate("2024-01-01T00:00:00Z"))
+        let items = try service.items(.items(predicate))
+        let contents = items.map(\.content)
+
+        #expect(!contents.contains("JST_StartOfYear"))
+    }
+
+    @Test(
+        "JST Jan 1 and Dec 31 expected in UTC year but may mismatch",
+        .disabled("Known issue: JST 1/1 may be excluded due to UTC boundary")
+    )
+    func jstYearBoundaryMismatchWithUTC() throws {
+        let jstDate1 = isoDate("2024-01-01T00:00:00+0900")  // 2023-12-31T15:00:00Z
+        let jstDate2 = isoDate("2024-12-31T23:59:59+0900")  // 2024-12-31T14:59:59Z
+
+        try service.create(
+            date: jstDate1,
+            content: "StartJSTYear",
+            income: 100,
+            outgo: 0,
+            category: "TZTest"
+        )
+        try service.create(
+            date: jstDate2,
+            content: "EndJSTYear",
+            income: 100,
+            outgo: 0,
+            category: "TZTest"
+        )
+
+        let predicate = ItemPredicate.dateIsSameYearAs(isoDate("2024-01-01T00:00:00Z"))
+        let items = try service.items(.items(predicate))
+        let contents = items.map(\.content)
+
+        #expect(contents.contains("StartJSTYear"))
+        #expect(contents.contains("EndJSTYear"))
+        #expect(items.count == 2)
+    }
+
     @Test("excludes JST 3/1 from UTC March")
     func excludesJSTMarchStartFromUTCMarch() throws {
         let jstDate = isoDate("2024-03-01T00:00:00+0900")  // = 2024-02-29T15:00:00Z
@@ -334,7 +402,7 @@ struct ItemPredicateTest {
 
     @Test(
         "JST 3/1 and 3/31 expected in UTC March but may mismatch",
-        .disabled("Boundary issue: JST timestamp on Mar 1 interpreted as Feb in UTC-based logic")
+        .disabled("Known issue: JST 3/1 falls outside UTC March")
     )
     func jstMarchBoundaryMismatchWithUTC() throws {
         let jstDate1 = isoDate("2024-03-01T00:00:00+0900")  // 2024-02-29T15:00:00Z
@@ -357,9 +425,8 @@ struct ItemPredicateTest {
 
         let predicate = ItemPredicate.dateIsSameMonthAs(isoDate("2024-03-01T00:00:00Z"))
         let items = try service.items(.items(predicate))
-
-        // Confirm both items match when using strict UTC calendar
         let contents = items.map(\.content)
+
         #expect(contents.contains("StartJST"))
         #expect(contents.contains("EndJST"))
         #expect(items.count == 2)
@@ -381,6 +448,38 @@ struct ItemPredicateTest {
         #expect(contents.contains("EndSameDay"))
         #expect(!contents.contains("DayBefore"))
         #expect(!contents.contains("DayAfter"))
+        #expect(items.count == 2)
+    }
+
+    @Test(
+        "JST 4/1 and 4/2 expected in UTC day but may mismatch",
+        .disabled("Known issue: JST 4/1 may be excluded due to UTC day boundary")
+    )
+    func jstDayBoundaryMismatchWithUTC() throws {
+        let jstDate1 = isoDate("2024-04-01T00:00:00+0900")  // 2024-03-31T15:00:00Z
+        let jstDate2 = isoDate("2024-04-01T23:59:59+0900")  // 2024-04-01T15:00:00Z
+
+        try service.create(
+            date: jstDate1,
+            content: "StartJSTDay",
+            income: 100,
+            outgo: 0,
+            category: "TZTest"
+        )
+        try service.create(
+            date: jstDate2,
+            content: "EndJSTDay",
+            income: 100,
+            outgo: 0,
+            category: "TZTest"
+        )
+
+        let predicate = ItemPredicate.dateIsSameDayAs(isoDate("2024-04-01T00:00:00Z"))
+        let items = try service.items(.items(predicate))
+        let contents = items.map(\.content)
+
+        #expect(contents.contains("StartJSTDay"))
+        #expect(contents.contains("EndJSTDay"))
         #expect(items.count == 2)
     }
 
@@ -438,6 +537,42 @@ struct ItemPredicateTest {
         let items = try service.items(.items(predicate))
 
         #expect(items.isEmpty)
+    }
+
+    @Test("includes JST 4/02 00:00 in UTC 4/01")
+    func excludesStartOfNextJSTDayFromUTCDay() throws {
+        let jstDate = isoDate("2024-04-02T00:00:00+0900") // UTC: 2024-04-01T15:00:00Z
+        try service.create(
+            date: jstDate,
+            content: "JST_NextDay",
+            income: 0,
+            outgo: 0,
+            category: "Test"
+        )
+
+        let predicate = ItemPredicate.dateIsSameDayAs(isoDate("2024-04-01T00:00:00Z"))
+        let items = try service.items(.items(predicate))
+        let contents = items.map(\.content)
+
+        #expect(contents.contains("JST_NextDay"))
+    }
+
+    @Test("includes JST 4/01 00:00 in UTC 3/31")
+    func includesStartOfJSTDayInPreviousUTCDay() throws {
+        let jstDate = isoDate("2024-04-01T00:00:00+0900") // UTC: 2024-03-31T15:00:00Z
+        try service.create(
+            date: jstDate,
+            content: "JST_StartOfDay",
+            income: 0,
+            outgo: 0,
+            category: "Test"
+        )
+
+        let predicate = ItemPredicate.dateIsSameDayAs(isoDate("2024-03-31T00:00:00Z"))
+        let items = try service.items(.items(predicate))
+        let contents = items.map(\.content)
+
+        #expect(contents.contains("JST_StartOfDay"))
     }
 
     // MARK: - Outgo
