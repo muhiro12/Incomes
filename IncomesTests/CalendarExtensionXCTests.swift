@@ -1,5 +1,5 @@
 //
-//  CalendarExtensionTests.swift
+//  CalendarExtensionXCTests.swift
 //  IncomesTests
 //
 //  Created by Hiromu Nakano on 2022/01/13.
@@ -9,7 +9,7 @@
 @testable import Incomes
 import XCTest
 
-final class CalendarExtensionTests: XCTestCase {
+final class CalendarExtensionXCTests: XCTestCase {
     func testUtc() {
         let expected = isoDate("2000-01-01T00:00:00Z")
 
