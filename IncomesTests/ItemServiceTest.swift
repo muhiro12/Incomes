@@ -208,7 +208,7 @@ struct ItemServiceTest {
 
     @Test("create stores date near midnight UTC correctly")
     func createWithMidnightBoundary() throws {
-        let boundaryDate = ISO8601DateFormatter().date(from: "2024-03-15T00:00:00Z")!
+        let boundaryDate = isoDate("2024-03-15T00:00:00Z")
         try service.create(
             date: boundaryDate,
             content: "MidnightUTC",
@@ -222,7 +222,7 @@ struct ItemServiceTest {
 
     @Test("create stores date in JST correctly")
     func createWithJSTTimestamp() throws {
-        let jstDate = ISO8601DateFormatter().date(from: "2024-03-15T09:00:00+0900")!  // 00:00 UTC
+        let jstDate = isoDate("2024-03-15T09:00:00+0900")  // 00:00 UTC
         try service.create(
             date: jstDate,
             content: "JSTToUTC",
@@ -236,7 +236,7 @@ struct ItemServiceTest {
 
     @Test("create rounds input date to start of day UTC")
     func createRoundsDateToStartOfDay() throws {
-        let inputDate = ISO8601DateFormatter().date(from: "2024-03-15T10:30:00Z")!
+        let inputDate = isoDate("2024-03-15T10:30:00Z")
         let expectedDate = Calendar.utc.startOfDay(for: inputDate)
         try service.create(
             date: inputDate,

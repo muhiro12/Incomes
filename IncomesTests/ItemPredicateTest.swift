@@ -175,7 +175,7 @@ struct ItemPredicateTest {
 
     @Test("JST Jan 1 is treated as December in UTC")
     func jstJanStartAppearsAsLastYear() throws {
-        let jstDate = ISO8601DateFormatter().date(from: "2024-01-01T00:00:00+0900")!
+        let jstDate = isoDate("2024-01-01T00:00:00+0900")
         try service.create(
             date: jstDate,
             content: "JST_Jan1",
@@ -193,7 +193,7 @@ struct ItemPredicateTest {
 
     @Test("excludes JST 3/1 from UTC March")
     func excludesJSTMarchStartFromUTCMarch() throws {
-        let jstDate = ISO8601DateFormatter().date(from: "2024-03-01T00:00:00+0900")!  // = 2024-02-29T15:00:00Z
+        let jstDate = isoDate("2024-03-01T00:00:00+0900")  // = 2024-02-29T15:00:00Z
         try service.create(
             date: jstDate,
             content: "JST_MarchStart",
@@ -209,7 +209,7 @@ struct ItemPredicateTest {
 
     @Test("includes UTC 3/1 in UTC March")
     func includesUTCMarchStart() throws {
-        let utcDate = ISO8601DateFormatter().date(from: "2024-03-01T00:00:00Z")!
+        let utcDate = isoDate("2024-03-01T00:00:00Z")
         try service.create(
             date: utcDate,
             content: "UTC_MarchStart",
@@ -226,7 +226,7 @@ struct ItemPredicateTest {
 
     @Test("treats JST 2/1 as January in UTC")
     func jstFebStartAppearsAsJanuary() throws {
-        let jstDate = ISO8601DateFormatter().date(from: "2024-02-01T00:00:00+0900")!
+        let jstDate = isoDate("2024-02-01T00:00:00+0900")
         try service.create(
             date: jstDate,
             content: "JSTFebStart",
@@ -244,7 +244,7 @@ struct ItemPredicateTest {
 
     @Test("treats JST 3/1 as February in UTC")
     func jstMarStartAppearsAsFebruary() throws {
-        let jstDate = ISO8601DateFormatter().date(from: "2024-03-01T00:00:00+0900")!
+        let jstDate = isoDate("2024-03-01T00:00:00+0900")
         try service.create(
             date: jstDate,
             content: "JSTMarStart",
@@ -263,7 +263,7 @@ struct ItemPredicateTest {
     @Test("includes JST 2/29 23:59 as Feb in UTC")
     func includesJSTEndOfFebInUTCFeb() throws {
         // 2024-02-29T23:59:59+0900 = 2024-02-29T14:59:59Z
-        let jstDate = ISO8601DateFormatter().date(from: "2024-02-29T23:59:59+0900")!
+        let jstDate = isoDate("2024-02-29T23:59:59+0900")
         try service.create(
             date: jstDate,
             content: "JSTEnd",
@@ -281,7 +281,7 @@ struct ItemPredicateTest {
     @Test("excludes JST 2/1 00:00 from UTC Feb")
     func excludesJSTStartOfFebFromUTCFeb() throws {
         // 2024-02-01T00:00:00+0900 = 2024-01-31T15:00:00Z
-        let jstDate = ISO8601DateFormatter().date(from: "2024-02-01T00:00:00+0900")!
+        let jstDate = isoDate("2024-02-01T00:00:00+0900")
         try service.create(
             date: jstDate,
             content: "JSTBoundary",
@@ -337,8 +337,8 @@ struct ItemPredicateTest {
         .disabled("Boundary issue: JST timestamp on Mar 1 interpreted as Feb in UTC-based logic")
     )
     func jstMarchBoundaryMismatchWithUTC() throws {
-        let jstDate1 = ISO8601DateFormatter().date(from: "2024-03-01T00:00:00+0900")!  // 2024-02-29T15:00:00Z
-        let jstDate2 = ISO8601DateFormatter().date(from: "2024-03-31T23:59:59+0900")!  // 2024-03-31T14:59:59Z
+        let jstDate1 = isoDate("2024-03-01T00:00:00+0900")  // 2024-02-29T15:00:00Z
+        let jstDate2 = isoDate("2024-03-31T23:59:59+0900")  // 2024-03-31T14:59:59Z
 
         try service.create(
             date: jstDate1,
@@ -425,7 +425,7 @@ struct ItemPredicateTest {
 
     @Test("JST Jan 1 is treated as Dec 31 in UTC day")
     func jstJanStartAppearsAsPreviousDay() throws {
-        let jstDate = ISO8601DateFormatter().date(from: "2024-01-01T00:00:00+0900")!
+        let jstDate = isoDate("2024-01-01T00:00:00+0900")
         try service.create(
             date: jstDate,
             content: "JST_Jan1",

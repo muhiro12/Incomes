@@ -24,25 +24,25 @@ struct CalendarExtensionTest {
     @Test("endOfDay returns last second before next day")
     func verifiesEndOfDay() {
         let calendar = Calendar.utc
-        let date = ISO8601DateFormatter().date(from: "2024-03-15T10:30:00Z")!
+        let date = isoDate("2024-03-15T10:30:00Z")
         let end = calendar.endOfDay(for: date)
-        #expect(end == ISO8601DateFormatter().date(from: "2024-03-15T23:59:59Z")!)
+        #expect(end == isoDate("2024-03-15T23:59:59Z"))
     }
 
     @Test("endOfDay returns Feb 29 23:59:59 UTC for 2024-02-29T15:00:00Z (JST Mar 1 00:00)")
     func verifiesEndOfDayForUTCBoundary() {
         let calendar = Calendar.utc
-        let date = ISO8601DateFormatter().date(from: "2024-02-29T15:00:00Z")!  // JST: 3/1 00:00
+        let date = isoDate("2024-02-29T15:00:00Z")  // JST: 3/1 00:00
         let end = calendar.endOfDay(for: date)
-        #expect(end == ISO8601DateFormatter().date(from: "2024-02-29T23:59:59Z")!)
+        #expect(end == isoDate("2024-02-29T23:59:59Z"))
     }
 
     @Test("endOfDay for 2024-02-29T23:59:59+0900 (JST) returns Feb 29 23:59:59 UTC")
     func verifiesEndOfDayBeforeJSTBoundary() {
         let calendar = Calendar.utc
-        let date = ISO8601DateFormatter().date(from: "2024-02-29T14:59:59Z")!  // JST: 2/29 23:59:59
+        let date = isoDate("2024-02-29T14:59:59Z")  // JST: 2/29 23:59:59
         let end = calendar.endOfDay(for: date)
-        #expect(end == ISO8601DateFormatter().date(from: "2024-02-29T23:59:59Z")!)
+        #expect(end == isoDate("2024-02-29T23:59:59Z"))
     }
 
     // MARK: - startOfMonth
@@ -50,25 +50,25 @@ struct CalendarExtensionTest {
     @Test("startOfMonth returns first day at 00:00:00")
     func verifiesStartOfMonth() {
         let calendar = Calendar.utc
-        let date = ISO8601DateFormatter().date(from: "2024-03-15T10:30:00Z")!
+        let date = isoDate("2024-03-15T10:30:00Z")
         let start = calendar.startOfMonth(for: date)
-        #expect(start == ISO8601DateFormatter().date(from: "2024-03-01T00:00:00Z")!)
+        #expect(start == isoDate("2024-03-01T00:00:00Z"))
     }
 
     @Test("startOfMonth returns Feb 1 UTC for 2024-02-29T15:00:00Z (JST Mar 1 00:00)")
     func verifiesStartOfMonthForUTCBoundary() {
         let calendar = Calendar.utc
-        let date = ISO8601DateFormatter().date(from: "2024-02-29T15:00:00Z")!  // JST: 3/1 00:00
+        let date = isoDate("2024-02-29T15:00:00Z")  // JST: 3/1 00:00
         let start = calendar.startOfMonth(for: date)
-        #expect(start == ISO8601DateFormatter().date(from: "2024-02-01T00:00:00Z")!)
+        #expect(start == isoDate("2024-02-01T00:00:00Z"))
     }
 
     @Test("startOfMonth for 2024-02-29T23:59:59+0900 (JST) returns Feb 1 UTC")
     func verifiesStartOfMonthBeforeJSTBoundary() {
         let calendar = Calendar.utc
-        let date = ISO8601DateFormatter().date(from: "2024-02-29T14:59:59Z")!  // JST: 2/29 23:59:59
+        let date = isoDate("2024-02-29T14:59:59Z")  // JST: 2/29 23:59:59
         let start = calendar.startOfMonth(for: date)
-        #expect(start == ISO8601DateFormatter().date(from: "2024-02-01T00:00:00Z")!)
+        #expect(start == isoDate("2024-02-01T00:00:00Z"))
     }
 
     // MARK: - endOfMonth
@@ -76,25 +76,25 @@ struct CalendarExtensionTest {
     @Test("endOfMonth returns last day at 23:59:59")
     func verifiesEndOfMonth() {
         let calendar = Calendar.utc
-        let date = ISO8601DateFormatter().date(from: "2024-03-15T10:30:00Z")!
+        let date = isoDate("2024-03-15T10:30:00Z")
         let end = calendar.endOfMonth(for: date)
-        #expect(end == ISO8601DateFormatter().date(from: "2024-03-31T23:59:59Z")!)
+        #expect(end == isoDate("2024-03-31T23:59:59Z"))
     }
 
     @Test("endOfMonth returns Mar 31 UTC for 2024-03-31T14:59:59Z (JST Mar 31 23:59:59)")
     func verifiesEndOfMonthForUTCBoundary() {
         let calendar = Calendar.utc
-        let date = ISO8601DateFormatter().date(from: "2024-03-31T14:59:59Z")!  // JST: 3/31 23:59:59
+        let date = isoDate("2024-03-31T14:59:59Z")  // JST: 3/31 23:59:59
         let end = calendar.endOfMonth(for: date)
-        #expect(end == ISO8601DateFormatter().date(from: "2024-03-31T23:59:59Z")!)
+        #expect(end == isoDate("2024-03-31T23:59:59Z"))
     }
 
     @Test("endOfMonth for 2024-02-29T23:59:59+0900 (JST) returns Feb 29 UTC")
     func verifiesEndOfMonthBeforeJSTBoundary() {
         let calendar = Calendar.utc
-        let date = ISO8601DateFormatter().date(from: "2024-02-29T14:59:59Z")!  // JST: 2/29 23:59:59
+        let date = isoDate("2024-02-29T14:59:59Z")  // JST: 2/29 23:59:59
         let end = calendar.endOfMonth(for: date)
-        #expect(end == ISO8601DateFormatter().date(from: "2024-02-29T23:59:59Z")!)
+        #expect(end == isoDate("2024-02-29T23:59:59Z"))
     }
 
     // MARK: - startOfYear
@@ -102,25 +102,25 @@ struct CalendarExtensionTest {
     @Test("startOfYear returns Jan 1st at 00:00:00")
     func verifiesStartOfYear() {
         let calendar = Calendar.utc
-        let date = ISO8601DateFormatter().date(from: "2024-03-15T10:30:00Z")!
+        let date = isoDate("2024-03-15T10:30:00Z")
         let start = calendar.startOfYear(for: date)
-        #expect(start == ISO8601DateFormatter().date(from: "2024-01-01T00:00:00Z")!)
+        #expect(start == isoDate("2024-01-01T00:00:00Z"))
     }
 
     @Test("startOfYear returns Jan 1 2023 UTC for 2023-12-31T15:00:00Z (JST Jan 1 00:00)")
     func verifiesStartOfYearForUTCBoundary() {
         let calendar = Calendar.utc
-        let date = ISO8601DateFormatter().date(from: "2023-12-31T15:00:00Z")!  // JST: 1/1 00:00
+        let date = isoDate("2023-12-31T15:00:00Z")  // JST: 1/1 00:00
         let start = calendar.startOfYear(for: date)
-        #expect(start == ISO8601DateFormatter().date(from: "2023-01-01T00:00:00Z")!)
+        #expect(start == isoDate("2023-01-01T00:00:00Z"))
     }
 
     @Test("startOfYear for 2023-12-31T23:59:59+0900 (JST) returns Jan 1 2023 UTC")
     func verifiesStartOfYearBeforeJSTBoundary() {
         let calendar = Calendar.utc
-        let date = ISO8601DateFormatter().date(from: "2023-12-31T14:59:59Z")!  // JST: 12/31 23:59:59
+        let date = isoDate("2023-12-31T14:59:59Z")  // JST: 12/31 23:59:59
         let start = calendar.startOfYear(for: date)
-        #expect(start == ISO8601DateFormatter().date(from: "2023-01-01T00:00:00Z")!)
+        #expect(start == isoDate("2023-01-01T00:00:00Z"))
     }
 
     // MARK: - endOfYear
@@ -128,24 +128,24 @@ struct CalendarExtensionTest {
     @Test("endOfYear returns Dec 31st at 23:59:59")
     func verifiesEndOfYear() {
         let calendar = Calendar.utc
-        let date = ISO8601DateFormatter().date(from: "2024-03-15T10:30:00Z")!
+        let date = isoDate("2024-03-15T10:30:00Z")
         let end = calendar.endOfYear(for: date)
-        #expect(end == ISO8601DateFormatter().date(from: "2024-12-31T23:59:59Z")!)
+        #expect(end == isoDate("2024-12-31T23:59:59Z"))
     }
 
     @Test("endOfYear returns Dec 31 2024 UTC for 2024-12-31T15:00:00Z (JST Jan 1 00:00)")
     func verifiesEndOfYearForUTCBoundary() {
         let calendar = Calendar.utc
-        let date = ISO8601DateFormatter().date(from: "2024-12-31T15:00:00Z")!  // JST: 1/1 00:00
+        let date = isoDate("2024-12-31T15:00:00Z")  // JST: 1/1 00:00
         let end = calendar.endOfYear(for: date)
-        #expect(end == ISO8601DateFormatter().date(from: "2024-12-31T23:59:59Z")!)
+        #expect(end == isoDate("2024-12-31T23:59:59Z"))
     }
 
     @Test("endOfYear for 2024-12-31T23:59:59+0900 (JST) returns Dec 31 2024 UTC")
     func verifiesEndOfYearBeforeJSTBoundary() {
         let calendar = Calendar.utc
-        let date = ISO8601DateFormatter().date(from: "2024-12-31T14:59:59Z")!  // JST: 12/31 23:59:59
+        let date = isoDate("2024-12-31T14:59:59Z")  // JST: 12/31 23:59:59
         let end = calendar.endOfYear(for: date)
-        #expect(end == ISO8601DateFormatter().date(from: "2024-12-31T23:59:59Z")!)
+        #expect(end == isoDate("2024-12-31T23:59:59Z"))
     }
 }
