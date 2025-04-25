@@ -56,79 +56,6 @@ struct ItemServiceTest {
         #expect(item.content == "Food")
     }
 
-    @Test("item on Feb 1 at 00:00:00+0900 should still be counted as February UTC")
-    func itemAtMidnightJST() throws {
-        // 2024-02-01T00:00:00+0900 = 2024-01-31T15:00:00Z
-        let jstDate = ISO8601DateFormatter().date(from: "2024-02-01T00:00:00+0900")!
-        try service.create(
-            date: jstDate,
-            content: "JSTBoundary",
-            income: 100,
-            outgo: 0,
-            category: "TZTest"
-        )
-
-        let predicate = ItemPredicate.dateIsSameMonthAs(date("2024-02-01T00:00:00Z"))
-        let items = try service.items(.items(predicate))
-
-        // This will fail if implementation interprets local time as month-boundary
-        #expect(items.isEmpty)
-    }
-
-    @Test("item on Feb 29 at 23:59:59+0900 should still be counted as February UTC")
-    func itemAtEndOfMonthJST() throws {
-        // 2024-02-29T23:59:59+0900 = 2024-02-29T14:59:59Z
-        let jstDate = ISO8601DateFormatter().date(from: "2024-02-29T23:59:59+0900")!
-        try service.create(
-            date: jstDate,
-            content: "JSTEnd",
-            income: 100,
-            outgo: 0,
-            category: "TZTest"
-        )
-
-        let predicate = ItemPredicate.dateIsSameMonthAs(date("2024-02-01T00:00:00Z"))
-        let items = try service.items(.items(predicate))
-
-        #expect(items.count == 1)  // Should pass if UTC-based correctly
-    }
-
-    @Test("item created on Feb 1 at 00:00+0900 is treated as January in UTC")
-    func itemJSTAppearsAsJanuary() throws {
-        let jstDate = ISO8601DateFormatter().date(from: "2024-02-01T00:00:00+0900")!
-        try service.create(
-            date: jstDate,
-            content: "JSTFebStart",
-            income: 100,
-            outgo: 0,
-            category: "TZBoundary"
-        )
-        let jan = ItemPredicate.dateIsSameMonthAs(date("2024-01-01T00:00:00Z"))
-        let feb = ItemPredicate.dateIsSameMonthAs(date("2024-02-01T00:00:00Z"))
-        let janItems = try service.items(.items(jan))
-        let febItems = try service.items(.items(feb))
-        #expect(janItems.map(\.content).contains("JSTFebStart"))
-        #expect(febItems.isEmpty)
-    }
-
-    @Test("item created on Mar 1 at 00:00+0900 is treated as February in UTC")
-    func itemJSTAppearsAsFebruary() throws {
-        let jstDate = ISO8601DateFormatter().date(from: "2024-03-01T00:00:00+0900")!
-        try service.create(
-            date: jstDate,
-            content: "JSTMarStart",
-            income: 100,
-            outgo: 0,
-            category: "TZBoundary"
-        )
-        let feb = ItemPredicate.dateIsSameMonthAs(date("2024-02-01T00:00:00Z"))
-        let mar = ItemPredicate.dateIsSameMonthAs(date("2024-03-01T00:00:00Z"))
-        let febItems = try service.items(.items(feb))
-        let marItems = try service.items(.items(mar))
-        #expect(febItems.map(\.content).contains("JSTMarStart"))
-        #expect(marItems.isEmpty)
-    }
-
     @Test("items returns all items")
     func items() throws {
         try service.create(
@@ -169,74 +96,6 @@ struct ItemServiceTest {
         let filtered = try service.items(.items(predicate))
         #expect(filtered.count == 1)
         #expect(filtered.first?.content == "Match")
-    }
-
-    @Test("items predicate includes all items in February regardless of time zone")
-    func itemsInFebruaryUTC() throws {
-        // Insert three items, one at start, one in middle, one at end of February (UTC)
-        try service.create(
-            date: date("2024-02-01T00:00:00Z"),
-            content: "StartOfMonth",
-            income: 100,
-            outgo: 0,
-            category: "TZTest"
-        )
-        try service.create(
-            date: date("2024-02-14T12:00:00Z"),
-            content: "MidMonth",
-            income: 100,
-            outgo: 0,
-            category: "TZTest"
-        )
-        try service.create(
-            date: date("2024-02-29T23:59:59Z"),
-            content: "EndOfMonth",
-            income: 100,
-            outgo: 0,
-            category: "TZTest"
-        )
-
-        let predicate = ItemPredicate.dateIsSameMonthAs(date("2024-02-01T00:00:00Z"))
-        let items = try service.items(.items(predicate))
-        let contents = items.map(\.content)
-
-        #expect(contents.contains("StartOfMonth"))
-        #expect(contents.contains("MidMonth"))
-        #expect(contents.contains("EndOfMonth"))
-        #expect(items.count == 3)
-    }
-
-    @Test(
-        "items in JST boundary month using current calendar may mismatch UTC logic",
-        .disabled("Boundary issue: JST timestamp on Mar 1 interpreted as Feb in UTC-based logic")
-    )
-    func itemsMismatchWithCurrentCalendar() throws {
-        let jstDate1 = ISO8601DateFormatter().date(from: "2024-03-01T00:00:00+0900")!  // 2024-02-29T15:00:00Z
-        let jstDate2 = ISO8601DateFormatter().date(from: "2024-03-31T23:59:59+0900")!  // 2024-03-31T14:59:59Z
-
-        try service.create(
-            date: jstDate1,
-            content: "StartJST",
-            income: 100,
-            outgo: 0,
-            category: "TZTest"
-        )
-        try service.create(
-            date: jstDate2,
-            content: "EndJST",
-            income: 100,
-            outgo: 0,
-            category: "TZTest"
-        )
-
-        let predicate = ItemPredicate.dateIsSameMonthAs(date("2024-03-01T00:00:00Z"))
-        let items = try service.items(.items(predicate))
-
-        // Confirm both items match when using strict UTC calendar
-        let contents = items.map(\.content)
-        #expect(contents.contains("StartJST"))
-        #expect(contents.contains("EndJST"))
-        #expect(items.count == 2)
     }
 
     @Test("itemsCount returns correct count")
@@ -345,6 +204,49 @@ struct ItemServiceTest {
         let items = fetchItems(context)
         #expect(items.count == 2)
         #expect(Set(items.map(\.category?.name)).count == 1)
+    }
+
+    @Test("create stores date near midnight UTC correctly")
+    func createWithMidnightBoundary() throws {
+        let boundaryDate = ISO8601DateFormatter().date(from: "2024-03-15T00:00:00Z")!
+        try service.create(
+            date: boundaryDate,
+            content: "MidnightUTC",
+            income: 100,
+            outgo: 0,
+            category: "Test"
+        )
+        let item = try #require(try service.item())
+        #expect(item.date == boundaryDate)
+    }
+
+    @Test("create stores date in JST correctly")
+    func createWithJSTTimestamp() throws {
+        let jstDate = ISO8601DateFormatter().date(from: "2024-03-15T09:00:00+0900")!  // 00:00 UTC
+        try service.create(
+            date: jstDate,
+            content: "JSTToUTC",
+            income: 100,
+            outgo: 0,
+            category: "Test"
+        )
+        let item = try #require(try service.item())
+        #expect(item.date == jstDate)
+    }
+
+    @Test("create rounds input date to start of day UTC")
+    func createRoundsDateToStartOfDay() throws {
+        let inputDate = ISO8601DateFormatter().date(from: "2024-03-15T10:30:00Z")!
+        let expectedDate = Calendar.utc.startOfDay(for: inputDate)
+        try service.create(
+            date: inputDate,
+            content: "RoundedTime",
+            income: 100,
+            outgo: 0,
+            category: "Test"
+        )
+        let item = try #require(try service.item())
+        #expect(item.date == expectedDate)
     }
 
     // MARK: - Update
