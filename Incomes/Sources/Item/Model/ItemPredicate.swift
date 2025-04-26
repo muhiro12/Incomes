@@ -48,7 +48,7 @@ enum ItemPredicate {
                 let start = Calendar.utc.startOfYear(for: date)
                 let end = Calendar.utc.endOfYear(for: date)
                 return #Predicate {
-                    start <= $0.date && $0.date <= end
+                    start <= $0.utcDate && $0.utcDate <= end
                 }
             case .yearMonth:
                 guard let date = tag.name.dateValueWithoutLocale(.yyyyMM) else {
@@ -57,7 +57,7 @@ enum ItemPredicate {
                 let start = Calendar.utc.startOfMonth(for: date)
                 let end = Calendar.utc.endOfMonth(for: date)
                 return #Predicate {
-                    start <= $0.date && $0.date <= end
+                    start <= $0.utcDate && $0.utcDate <= end
                 }
             case .content:
                 let content = tag.name
@@ -79,7 +79,7 @@ enum ItemPredicate {
                 let start = Calendar.utc.startOfYear(for: date)
                 let end = Calendar.utc.endOfYear(for: date)
                 return #Predicate {
-                    $0.content == content && start <= $0.date && $0.date <= end
+                    $0.content == content && start <= $0.utcDate && $0.utcDate <= end
                 }
             case .year,
                  .yearMonth,
@@ -93,38 +93,38 @@ enum ItemPredicate {
             let start = Date.distantPast
             let end = Calendar.utc.startOfDay(for: date) - 1
             return #Predicate {
-                start <= $0.date && $0.date <= end
+                start <= $0.utcDate && $0.utcDate <= end
             }
         case .dateIsAfter(let date):
             let start = Calendar.utc.startOfDay(for: date)
             let end = Date.distantFuture
             return #Predicate {
-                start <= $0.date && $0.date <= end
+                start <= $0.utcDate && $0.utcDate <= end
             }
         case .dateIsSameYearAs(let date):
             let start = Calendar.utc.startOfYear(for: date)
             let end = Calendar.utc.endOfYear(for: date)
             return #Predicate {
-                start <= $0.date && $0.date <= end
+                start <= $0.utcDate && $0.utcDate <= end
             }
         case .dateIsSameMonthAs(let date):
             let start = Calendar.utc.startOfMonth(for: date)
             let end = Calendar.utc.endOfMonth(for: date)
             return #Predicate {
-                start <= $0.date && $0.date <= end
+                start <= $0.utcDate && $0.utcDate <= end
             }
         case .dateIsSameDayAs(let date):
             let start = Calendar.utc.startOfDay(for: date)
             let end = Calendar.utc.endOfDay(for: date)
             return #Predicate {
-                start <= $0.date && $0.date <= end
+                start <= $0.utcDate && $0.utcDate <= end
             }
 
         // MARK: - Outgo
 
         case .outgoIsGreaterThanOrEqualTo(let amount, let date):
             return #Predicate {
-                $0.date >= date && $0.outgo >= amount
+                $0.utcDate >= date && $0.outgo >= amount
             }
 
         // MARK: - RepeatID
@@ -135,7 +135,7 @@ enum ItemPredicate {
             }
         case .repeatIDAndDateIsAfter(let repeatID, let date):
             return #Predicate {
-                $0.repeatID == repeatID && $0.date >= date
+                $0.repeatID == repeatID && $0.utcDate >= date
             }
         }
     }
@@ -146,7 +146,7 @@ extension FetchDescriptor where T == Item {
         .init(
             predicate: predicate.value,
             sortBy: [
-                .init(\.date, order: order),
+                .init(\.utcDate, order: order),
                 .init(\.content, order: order),
                 .init(\.persistentModelID, order: order)
             ]

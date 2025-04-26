@@ -11,7 +11,8 @@ import SwiftData
 
 @Model
 final class Item {
-    private(set) var date = Date(timeIntervalSinceReferenceDate: .zero)
+    @Attribute(originalName: "date")
+    private(set) var utcDate = Date(timeIntervalSinceReferenceDate: .zero)
     private(set) var content = String.empty
     private(set) var income = Decimal.zero
     private(set) var outgo = Decimal.zero
@@ -33,7 +34,10 @@ final class Item {
         let item = Item()
         context.insert(item)
 
-        item.date = Calendar.utc.startOfDay(for: date)
+        item.utcDate = Calendar.utc.startOfDay(
+            // TODO: Convert incoming local date to UTC
+            for: date// .convertedToUTC()
+        )
         item.content = content
         item.income = income
         item.outgo = outgo
@@ -42,12 +46,12 @@ final class Item {
         item.tags = [
             try .create(
                 context: context,
-                name: Calendar.utc.startOfYear(for: date).stringValueWithoutLocale(.yyyy),
+                name: item.utcDate.stringValueWithoutLocale(.yyyy),
                 type: .year
             ),
             try .create(
                 context: context,
-                name: Calendar.utc.startOfMonth(for: date).stringValueWithoutLocale(.yyyyMM),
+                name: item.utcDate.stringValueWithoutLocale(.yyyyMM),
                 type: .yearMonth
             ),
             try .create(
@@ -71,7 +75,10 @@ final class Item {
                 outgo: Decimal,
                 category: String,
                 repeatID: UUID) throws {
-        self.date = Calendar.utc.startOfDay(for: date)
+        self.utcDate = Calendar.utc.startOfDay(
+            // TODO: Convert incoming local date to UTC
+            for: date// .convertedToUTC()
+        )
         self.content = content
         self.income = income
         self.outgo = outgo
@@ -84,12 +91,12 @@ final class Item {
         self.tags = [
             try .create(
                 context: context,
-                name: Calendar.utc.startOfYear(for: date).stringValueWithoutLocale(.yyyy),
+                name: utcDate.stringValueWithoutLocale(.yyyy),
                 type: .year
             ),
             try .create(
                 context: context,
-                name: Calendar.utc.startOfMonth(for: date).stringValueWithoutLocale(.yyyyMM),
+                name: utcDate.stringValueWithoutLocale(.yyyyMM),
                 type: .yearMonth
             ),
             try .create(
@@ -115,6 +122,11 @@ final class Item {
 }
 
 extension Item {
+    var date: Date {
+        // TODO: Convert stored UTC date to local date
+        utcDate// .convertedToLocal()
+    }
+
     var profit: Decimal {
         income - outgo
     }
@@ -155,7 +167,10 @@ extension Item {
         let item = Item()
         context.insert(item)
 
-        item.date = Calendar.utc.startOfDay(for: date)
+        item.utcDate = Calendar.utc.startOfDay(
+            // TODO: Convert incoming local date to UTC
+            for: date// .convertedToUTC()
+        )
         item.content = content
         item.income = income
         item.outgo = outgo
@@ -164,12 +179,12 @@ extension Item {
         item.tags = [
             try .createIgnoringDuplicates(
                 context: context,
-                name: Calendar.utc.startOfYear(for: date).stringValueWithoutLocale(.yyyy),
+                name: item.utcDate.stringValueWithoutLocale(.yyyy),
                 type: .year
             ),
             try .createIgnoringDuplicates(
                 context: context,
-                name: Calendar.utc.startOfMonth(for: date).stringValueWithoutLocale(.yyyyMM),
+                name: item.utcDate.stringValueWithoutLocale(.yyyyMM),
                 type: .yearMonth
             ),
             try .createIgnoringDuplicates(
@@ -185,5 +200,20 @@ extension Item {
         ]
 
         return item
+    }
+}
+
+// TODO: Move these UTC conversion helpers to a dedicated Date+Extensions.swift file
+extension Date {
+    func convertedToUTC() -> Date {
+        addingTimeInterval(
+            .init(-TimeZone.current.secondsFromGMT(for: self))
+        )
+    }
+
+    func convertedToLocal() -> Date {
+        addingTimeInterval(
+            .init(TimeZone.current.secondsFromGMT(for: self))
+        )
     }
 }
