@@ -449,7 +449,7 @@
 					"@executable_path/Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.6;
-				MARKETING_VERSION = 4.11;
+				MARKETING_VERSION = 4.12;
 				OTHER_LDFLAGS = "-ObjC";
 				PLIST_FILE_OUTPUT_FORMAT = "same-as-input";
 				PRODUCT_BUNDLE_IDENTIFIER = com.muhiro12.Incomes;
@@ -500,7 +500,7 @@
 					"@executable_path/Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.6;
-				MARKETING_VERSION = 4.11;
+				MARKETING_VERSION = 4.12;
 				OTHER_LDFLAGS = "-ObjC";
 				PLIST_FILE_OUTPUT_FORMAT = "same-as-input";
 				PRODUCT_BUNDLE_IDENTIFIER = com.muhiro12.Incomes;
