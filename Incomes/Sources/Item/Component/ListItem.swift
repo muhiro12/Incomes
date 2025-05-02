@@ -36,6 +36,9 @@ struct ListItem: View {
         }
         .buttonStyle(.plain)
         .contextMenu {
+            ShowItemButton {
+                isDetailPresented = true
+            }
             EditItemButton {
                 isEditPresented = true
             }
@@ -50,9 +53,6 @@ struct ListItem: View {
             ItemNavigationView()
                 .environment(item)
                 .environment(itemService)
-                .onDisappear {
-                    isDetailPresented = true
-                }
         }
         .sheet(isPresented: $isDetailPresented) {
             ItemNavigationView()
