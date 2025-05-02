@@ -30,7 +30,7 @@ extension IncomeAndOutgoChartSection: View {
                     .frame(height: .componentL)
                     .padding()
             }
-            .sheet(isPresented: $isPresented) {
+            .fullScreenCover(isPresented: $isPresented) {
                 NavigationStack {
                     chart()
                         .chartScrollableAxes(.horizontal)
