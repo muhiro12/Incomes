@@ -108,6 +108,7 @@ extension ItemFormView: View {
                 Text("Information")
             }
         }
+        .scrollDismissesKeyboard(.interactively)
         .navigationTitle(content.isNotEmpty ? Text(content) : Text("Create"))
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {

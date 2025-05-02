@@ -138,6 +138,7 @@ extension SettingsListView: View {
             }
             ShortcutsLinkSection()
         }
+        .scrollDismissesKeyboard(.interactively)
         .navigationTitle(Text("Settings"))
         .toolbar {
             if isPresented {
