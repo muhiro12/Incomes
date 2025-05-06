@@ -16,6 +16,8 @@ struct ListItem: View {
     @Environment(\.horizontalSizeClass)
     private var horizontalSizeClass
 
+    @State private var detents = PresentationDetent.medium
+
     @State private var isDetailPresented = false
     @State private var isEditPresented = false
     @State private var isDuplicatePresented = false
@@ -23,6 +25,7 @@ struct ListItem: View {
 
     var body: some View {
         Button {
+            detents = .medium
             isDetailPresented = true
         } label: {
             Group {
@@ -37,6 +40,7 @@ struct ListItem: View {
         .buttonStyle(.plain)
         .contextMenu {
             ShowItemButton {
+                detents = .large
                 isDetailPresented = true
             }
             EditItemButton {
@@ -56,7 +60,10 @@ struct ListItem: View {
         }
         .sheet(isPresented: $isDetailPresented) {
             ItemNavigationView()
-                .presentationDetents([.medium, .large])
+                .presentationDetents(
+                    [.medium, .large],
+                    selection: $detents
+                )
         }
         .sheet(isPresented: $isEditPresented) {
             ItemFormNavigationView(mode: .edit)
