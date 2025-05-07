@@ -16,12 +16,4 @@ extension Date {
     func stringValueWithoutLocale(_ template: DateFormatter.Template) -> String {
         DateFormatter.formatterWithoutLocale(template).string(from: self)
     }
-
-    func shiftedToUTC() -> Date {
-        addingTimeInterval(.init(TimeZone.current.secondsFromGMT(for: self)))
-    }
-
-    func shiftedToLocal() -> Date {
-        addingTimeInterval(-.init(TimeZone.current.secondsFromGMT(for: self)))
-    }
 }
