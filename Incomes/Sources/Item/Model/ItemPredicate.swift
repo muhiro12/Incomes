@@ -96,31 +96,31 @@ enum ItemPredicate {
 
         case .dateIsBefore(let date):
             let start = Date.distantPast
-            let end = Calendar.utc.startOfDay(for: date) - 1
+            let end = Calendar.utc.startOfDay(for: date.shiftedToUTC()) - 1
             return #Predicate {
                 start <= $0.date && $0.date <= end
             }
         case .dateIsAfter(let date):
-            let start = Calendar.utc.startOfDay(for: date)
+            let start = Calendar.utc.startOfDay(for: date.shiftedToUTC())
             let end = Date.distantFuture
             return #Predicate {
                 start <= $0.date && $0.date <= end
             }
         case .dateIsSameYearAs(let date):
-            let start = Calendar.utc.startOfYear(for: date)
-            let end = Calendar.utc.endOfYear(for: date)
+            let start = Calendar.utc.startOfYear(for: date.shiftedToUTC())
+            let end = Calendar.utc.endOfYear(for: date.shiftedToUTC())
             return #Predicate {
                 start <= $0.date && $0.date <= end
             }
         case .dateIsSameMonthAs(let date):
-            let start = Calendar.utc.startOfMonth(for: date)
-            let end = Calendar.utc.endOfMonth(for: date)
+            let start = Calendar.utc.startOfMonth(for: date.shiftedToUTC())
+            let end = Calendar.utc.endOfMonth(for: date.shiftedToUTC())
             return #Predicate {
                 start <= $0.date && $0.date <= end
             }
         case .dateIsSameDayAs(let date):
-            let start = Calendar.utc.startOfDay(for: date)
-            let end = Calendar.utc.endOfDay(for: date)
+            let start = Calendar.utc.startOfDay(for: date.shiftedToUTC())
+            let end = Calendar.utc.endOfDay(for: date.shiftedToUTC())
             return #Predicate {
                 start <= $0.date && $0.date <= end
             }
@@ -139,8 +139,9 @@ enum ItemPredicate {
                 min <= $0.outgo && $0.outgo <= max
             }
         case .outgoIsGreaterThanOrEqualTo(let amount, let date):
+            let start = Calendar.utc.startOfDay(for: date.shiftedToUTC())
             return #Predicate {
-                $0.date >= date && $0.outgo >= amount
+                $0.date >= start && $0.outgo >= amount
             }
 
         // MARK: - Balance
@@ -157,8 +158,9 @@ enum ItemPredicate {
                 $0.repeatID == repeatID
             }
         case .repeatIDAndDateIsAfter(let repeatID, let date):
+            let start = Calendar.utc.startOfDay(for: date.shiftedToUTC())
             return #Predicate {
-                $0.repeatID == repeatID && $0.date >= date
+                $0.repeatID == repeatID && $0.date >= start
             }
         }
     }
