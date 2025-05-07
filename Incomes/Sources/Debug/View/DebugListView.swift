@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import SwiftUtilities
 
 struct DebugListView {
     @Environment(\.modelContext)
@@ -84,8 +85,8 @@ extension DebugListView: View {
         }
         .navigationTitle(Text("Debug"))
         .toolbar {
-            ToolbarItem(placement: .bottomBar) {
-                MainTabMenu()
+            ToolbarItem {
+                CloseButton()
             }
         }
     }

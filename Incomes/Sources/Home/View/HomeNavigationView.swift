@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import SwiftUtilities
 
 struct HomeNavigationView: View {
     @State private var path: IncomesPath?

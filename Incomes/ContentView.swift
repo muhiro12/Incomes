@@ -9,7 +9,6 @@
 import GoogleMobileAdsWrapper
 import StoreKitWrapper
 import SwiftUI
-import SwiftUtilities
 
 struct ContentView {
     @Environment(TagService.self)

@@ -11,8 +11,6 @@ enum MainTab {
     case home
     case content
     case category
-    case settings
-    case debug
     case search
 }
 
@@ -27,10 +25,6 @@ extension MainTab {
                 TagNavigationView(tagType: .content)
             case .category:
                 TagNavigationView(tagType: .category)
-            case .settings:
-                SettingsNavigationView()
-            case .debug:
-                DebugNavigationView()
             case .search:
                 SearchNavigationView()
             }
@@ -57,18 +51,6 @@ extension MainTab {
                 Text("Category")
             } icon: {
                 Image(systemName: "tag")
-            }
-        case .settings:
-            Label {
-                Text("Settings")
-            } icon: {
-                Image(systemName: "gear")
-            }
-        case .debug:
-            Label {
-                Text("Debug")
-            } icon: {
-                Image(systemName: "flask")
             }
         case .search:
             Label {

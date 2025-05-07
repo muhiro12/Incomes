@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import SwiftUtilities
 
 struct DebugNavigationView: View {
     @State private var path: IncomesPath?

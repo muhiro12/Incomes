@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import SwiftUtilities
 
 struct SettingsNavigationView: View {
     var body: some View {

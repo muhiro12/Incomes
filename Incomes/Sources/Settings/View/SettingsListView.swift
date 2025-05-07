@@ -141,17 +141,8 @@ extension SettingsListView: View {
         .scrollDismissesKeyboard(.interactively)
         .navigationTitle(Text("Settings"))
         .toolbar {
-            if isPresented {
-                ToolbarItem {
-                    CloseButton()
-                }
-            }
-            ToolbarItem(placement: .bottomBar) {
-                MainTabMenu()
-            }
-            ToolbarItem(placement: .status) {
-                Text("Today: \(Date.now.stringValue(.yyyyMMMd))")
-                    .font(.footnote)
+            ToolbarItem {
+                CloseButton()
             }
         }
         .sheet(isPresented: $isIntroductionPresented) {

@@ -11,22 +11,9 @@ struct MainTabMenu: View {
     @Environment(\.mainTab)
     private var mainTab
 
-    @AppStorage(.isDebugOn)
-    private var isDebugOn
-
-    private var tabs: [MainTab] {
-        if isDebugOn {
-            MainTab.allCases
-        } else {
-            MainTab.allCases.filter {
-                $0 != .debug
-            }
-        }
-    }
-
     var body: some View {
         Menu {
-            ForEach(tabs) { tab in
+            ForEach(MainTab.allCases) { tab in
                 Button {
                     Haptic.selectionChanged.impact()
                     withAnimation {

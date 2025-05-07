@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import SwiftUtilities
 
 struct TagNavigationView: View {
     @State private var path: IncomesPath?
