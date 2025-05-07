@@ -33,7 +33,7 @@ final class Item {
         let item = Item()
         context.insert(item)
 
-        item.date = Calendar.utc.startOfDay(for: Calendar.utc.date(shiftedFrom: date, using: .current))
+        item.date = Calendar.utc.startOfDay(for: date.shiftedToUTC())
         item.content = content
         item.income = income
         item.outgo = outgo
@@ -71,7 +71,7 @@ final class Item {
                 outgo: Decimal,
                 category: String,
                 repeatID: UUID) throws {
-        self.date = Calendar.utc.startOfDay(for: Calendar.utc.date(shiftedFrom: date, using: .current))
+        self.date = Calendar.utc.startOfDay(for: date.shiftedToUTC())
         self.content = content
         self.income = income
         self.outgo = outgo
@@ -120,7 +120,7 @@ extension Item {
     }
 
     var localDate: Date {
-        Calendar.current.date(shiftedFrom: utcDate, using: .utc)
+        utcDate.shiftedToLocal()
     }
 
     var profit: Decimal {
@@ -163,7 +163,7 @@ extension Item {
         let item = Item()
         context.insert(item)
 
-        item.date = Calendar.utc.startOfDay(for: Calendar.utc.date(shiftedFrom: date, using: .current))
+        item.date = Calendar.utc.startOfDay(for: date.shiftedToUTC())
         item.content = content
         item.income = income
         item.outgo = outgo
