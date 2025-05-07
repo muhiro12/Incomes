@@ -129,14 +129,14 @@ enum ItemPredicate {
 
         case .incomeIsBetween(let min, let max):
             return #Predicate {
-                $0.income >= min && $0.income <= max
+                min <= $0.income && $0.income <= max
             }
 
         // MARK: - Outgo
 
         case .outgoIsBetween(let min, let max):
             return #Predicate {
-                $0.outgo >= min && $0.outgo <= max
+                min <= $0.outgo && $0.outgo <= max
             }
         case .outgoIsGreaterThanOrEqualTo(let amount, let date):
             return #Predicate {
@@ -147,7 +147,7 @@ enum ItemPredicate {
 
         case .balanceIsBetween(let min, let max):
             return #Predicate {
-                $0.balance >= min && $0.balance <= max
+                min <= $0.balance && $0.balance <= max
             }
 
         // MARK: - RepeatID
