@@ -32,15 +32,15 @@ struct SearchListView: View {
             Section("Range") {
                 HStack(spacing: 40) {
                     TextField("Min", value: $minValue, format: .number)
-                        .keyboardType(.decimalPad)
+                        .keyboardType(.numbersAndPunctuation)
                     Text("~")
                     TextField("Max", value: $maxValue, format: .number)
-                        .keyboardType(.decimalPad)
+                        .keyboardType(.numbersAndPunctuation)
                 }
             }
             Section {
                 Button {
-                    let min = minValue ?? .zero
+                    let min = minValue ?? -.greatestFiniteMagnitude
                     let max = maxValue ?? .greatestFiniteMagnitude
 
                     switch selectedTarget {
