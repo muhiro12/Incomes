@@ -12,8 +12,8 @@ struct SearchListView: View {
     @Binding private var predicate: ItemPredicate?
 
     @State private var selectedTarget = SearchTarget.balance
-    @State private var minValue: Decimal?
-    @State private var maxValue: Decimal?
+    @State private var minValue = String.empty
+    @State private var maxValue = String.empty
 
     init(selection: Binding<ItemPredicate?>) {
         _predicate = selection
@@ -31,17 +31,17 @@ struct SearchListView: View {
             }
             Section("Range") {
                 HStack(spacing: 40) {
-                    TextField("Min", value: $minValue, format: .number)
+                    TextField("Min", text: $minValue)
                         .keyboardType(.numbersAndPunctuation)
                     Text("~")
-                    TextField("Max", value: $maxValue, format: .number)
+                    TextField("Max", text: $maxValue)
                         .keyboardType(.numbersAndPunctuation)
                 }
             }
             Section {
                 Button {
-                    let min = minValue ?? -.greatestFiniteMagnitude
-                    let max = maxValue ?? .greatestFiniteMagnitude
+                    let min = Decimal(string: minValue) ?? -Decimal.greatestFiniteMagnitude
+                    let max = Decimal(string: maxValue) ?? Decimal.greatestFiniteMagnitude
 
                     switch selectedTarget {
                     case .balance:
