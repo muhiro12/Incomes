@@ -234,6 +234,9 @@
         }
       }
     },
+    "~" : {
+      "shouldTranslate" : false
+    },
     "0" : {
       "localizations" : {
         "en" : {
