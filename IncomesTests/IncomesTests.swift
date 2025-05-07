@@ -30,6 +30,13 @@ let isoDate: (String) -> Date = { string in
     return date
 }
 
+let shiftedDate: (String) -> Date = { string in
+    Calendar.current.date(
+        shiftedFrom: isoDate(string),
+        using: .utc
+    )
+}
+
 let timeZones: [TimeZone] = [
     .init(identifier: "Asia/Tokyo")!,
     .init(identifier: "Europe/London")!,

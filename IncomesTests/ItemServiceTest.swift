@@ -249,7 +249,7 @@ struct ItemServiceTest {
     func createWithJSTTimestamp(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        let jstDate = isoDate("2024-03-15T09:00:00+0900")  // 00:00 UTC
+        let jstDate = shiftedDate("2024-03-15T09:00:00Z")  // 00:00 UTC
         try service.create(
             date: jstDate,
             content: "JSTToUTC",

@@ -27,8 +27,8 @@ struct ItemPredicateTest {
     func returnsAllItemsWithAllPredicate(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        try service.create(date: isoDate("2024-01-01T00:00:00+0900"), content: "One", income: 100, outgo: 0, category: "A")
-        try service.create(date: isoDate("2024-02-01T00:00:00+0900"), content: "Two", income: 200, outgo: 0, category: "B")
+        try service.create(date: shiftedDate("2024-01-01T00:00:00Z"), content: "One", income: 100, outgo: 0, category: "A")
+        try service.create(date: shiftedDate("2024-02-01T00:00:00Z"), content: "Two", income: 200, outgo: 0, category: "B")
 
         let predicate = ItemPredicate.all
         let items = try service.items(.items(predicate))
@@ -45,7 +45,7 @@ struct ItemPredicateTest {
     func returnsNoItemsWithNonePredicate(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        try service.create(date: isoDate("2024-01-01T00:00:00+0900"), content: "One", income: 100, outgo: 0, category: "A")
+        try service.create(date: shiftedDate("2024-01-01T00:00:00Z"), content: "One", income: 100, outgo: 0, category: "A")
 
         let predicate = ItemPredicate.none
         let items = try service.items(.items(predicate))
@@ -63,7 +63,7 @@ struct ItemPredicateTest {
     func excludesItemsExactlyOnCutoffForDateIsBefore(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        let cutoff = isoDate("2024-05-01T00:00:00+0900")
+        let cutoff = shiftedDate("2024-05-01T00:00:00Z")
         try service.create(date: cutoff, content: "OnCutoff", income: 0, outgo: 0, category: "Test")
 
         let predicate = ItemPredicate.dateIsBefore(cutoff)
@@ -78,8 +78,8 @@ struct ItemPredicateTest {
     func includesItemsBeforeDate(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        let cutoff = isoDate("2024-05-01T00:00:00+0900")
-        try service.create(date: isoDate("2024-04-30T23:59:59+0900"), content: "April", income: 1, outgo: 0, category: "Test")
+        let cutoff = shiftedDate("2024-05-01T00:00:00Z")
+        try service.create(date: shiftedDate("2024-04-30T23:59:59Z"), content: "April", income: 1, outgo: 0, category: "Test")
         try service.create(date: cutoff, content: "May", income: 1, outgo: 0, category: "Test")
 
         let predicate = ItemPredicate.dateIsBefore(cutoff)
@@ -95,9 +95,9 @@ struct ItemPredicateTest {
     func includesMultipleItemsBeforeDate(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        let cutoff = isoDate("2024-05-01T00:00:00+0900")
-        try service.create(date: isoDate("2024-04-01T00:00:00+0900"), content: "EarlyApril", income: 0, outgo: 0, category: "Test")
-        try service.create(date: isoDate("2024-04-15T00:00:00+0900"), content: "MidApril", income: 0, outgo: 0, category: "Test")
+        let cutoff = shiftedDate("2024-05-01T00:00:00Z")
+        try service.create(date: shiftedDate("2024-04-01T00:00:00Z"), content: "EarlyApril", income: 0, outgo: 0, category: "Test")
+        try service.create(date: shiftedDate("2024-04-15T00:00:00Z"), content: "MidApril", income: 0, outgo: 0, category: "Test")
         try service.create(date: cutoff, content: "OnCutoff", income: 0, outgo: 0, category: "Test")
 
         let predicate = ItemPredicate.dateIsBefore(cutoff)
@@ -114,9 +114,9 @@ struct ItemPredicateTest {
     func includesItemsAfterDate(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        let cutoff = isoDate("2024-05-01T00:00:00+0900")
-        try service.create(date: isoDate("2024-05-01T00:00:01+0900"), content: "After", income: 1, outgo: 0, category: "Test")
-        try service.create(date: isoDate("2024-04-30T23:59:59+0900"), content: "Before", income: 1, outgo: 0, category: "Test")
+        let cutoff = shiftedDate("2024-05-01T00:00:00Z")
+        try service.create(date: shiftedDate("2024-05-01T00:00:01Z"), content: "After", income: 1, outgo: 0, category: "Test")
+        try service.create(date: shiftedDate("2024-04-30T23:59:59Z"), content: "Before", income: 1, outgo: 0, category: "Test")
 
         let predicate = ItemPredicate.dateIsAfter(cutoff)
         let items = try service.items(.items(predicate))
@@ -131,10 +131,10 @@ struct ItemPredicateTest {
     func includesMultipleItemsAfterDate(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        let cutoff = isoDate("2024-05-01T00:00:00+0900")
+        let cutoff = shiftedDate("2024-05-01T00:00:00Z")
         try service.create(date: cutoff, content: "OnCutoff", income: 0, outgo: 0, category: "Test")
-        try service.create(date: isoDate("2024-05-02T00:00:00+0900"), content: "MaySecond", income: 0, outgo: 0, category: "Test")
-        try service.create(date: isoDate("2024-06-01T00:00:00+0900"), content: "June", income: 0, outgo: 0, category: "Test")
+        try service.create(date: shiftedDate("2024-05-02T00:00:00Z"), content: "MaySecond", income: 0, outgo: 0, category: "Test")
+        try service.create(date: shiftedDate("2024-06-01T00:00:00Z"), content: "June", income: 0, outgo: 0, category: "Test")
 
         let predicate = ItemPredicate.dateIsAfter(cutoff)
         let items = try service.items(.items(predicate))
@@ -150,7 +150,7 @@ struct ItemPredicateTest {
     func includesItemsExactlyOnCutoffForDateIsAfter(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        let cutoff = isoDate("2024-05-01T00:00:00+0900")
+        let cutoff = shiftedDate("2024-05-01T00:00:00Z")
         try service.create(date: cutoff, content: "OnCutoff", income: 0, outgo: 0, category: "Test")
 
         let predicate = ItemPredicate.dateIsAfter(cutoff)
@@ -165,10 +165,10 @@ struct ItemPredicateTest {
     func excludesDifferentYearSameMonth(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        try service.create(date: isoDate("2023-02-15T00:00:00+0900"), content: "2023Feb", income: 0, outgo: 0, category: "Test")
-        try service.create(date: isoDate("2024-02-15T00:00:00+0900"), content: "2024Feb", income: 0, outgo: 0, category: "Test")
+        try service.create(date: shiftedDate("2023-02-15T00:00:00Z"), content: "2023Feb", income: 0, outgo: 0, category: "Test")
+        try service.create(date: shiftedDate("2024-02-15T00:00:00Z"), content: "2024Feb", income: 0, outgo: 0, category: "Test")
 
-        let predicate = ItemPredicate.dateIsSameYearAs(isoDate("2024-02-01T00:00:00+0900"))
+        let predicate = ItemPredicate.dateIsSameYearAs(shiftedDate("2024-02-01T00:00:00Z"))
         let items = try service.items(.items(predicate))
         let contents = items.map(\.content)
 
@@ -179,10 +179,10 @@ struct ItemPredicateTest {
     func includesAllMonthsInSameYear(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        let baseDate = isoDate("2024-01-01T00:00:00+0900")
-        try service.create(date: isoDate("2024-01-15T00:00:00+0900"), content: "January", income: 0, outgo: 0, category: "Test")
-        try service.create(date: isoDate("2024-06-01T00:00:00+0900"), content: "June", income: 0, outgo: 0, category: "Test")
-        try service.create(date: isoDate("2023-12-31T23:59:59+0900"), content: "LastYear", income: 0, outgo: 0, category: "Test")
+        let baseDate = shiftedDate("2024-01-01T00:00:00Z")
+        try service.create(date: shiftedDate("2024-01-15T00:00:00Z"), content: "January", income: 0, outgo: 0, category: "Test")
+        try service.create(date: shiftedDate("2024-06-01T00:00:00Z"), content: "June", income: 0, outgo: 0, category: "Test")
+        try service.create(date: shiftedDate("2023-12-31T23:59:59Z"), content: "LastYear", income: 0, outgo: 0, category: "Test")
 
         let predicate = ItemPredicate.dateIsSameYearAs(baseDate)
         let items = try service.items(.items(predicate))
@@ -198,7 +198,7 @@ struct ItemPredicateTest {
     func jstJanStartAppearsAsSameYear(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        let jstDate = isoDate("2024-01-01T00:00:00+0900")
+        let jstDate = shiftedDate("2024-01-01T00:00:00Z")
         try service.create(
             date: jstDate,
             content: "JST_Jan1",
@@ -207,7 +207,7 @@ struct ItemPredicateTest {
             category: "TZBoundary"
         )
 
-        let predicate = ItemPredicate.dateIsSameYearAs(isoDate("2024-01-01T00:00:00+0900"))
+        let predicate = ItemPredicate.dateIsSameYearAs(shiftedDate("2024-01-01T00:00:00Z"))
         let items = try service.items(.items(predicate))
         let contents = items.map(\.content)
 
@@ -218,7 +218,7 @@ struct ItemPredicateTest {
     func includesEndOfJSTYearInSameUTCYear(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        let jstDate = isoDate("2024-12-31T23:59:59+0900") // UTC: 2024-12-31T14:59:59Z
+        let jstDate = shiftedDate("2024-12-31T23:59:59Z") // UTC: 2024-12-31T14:59:59Z
         try service.create(
             date: jstDate,
             content: "JST_EndOfYear",
@@ -227,7 +227,7 @@ struct ItemPredicateTest {
             category: "Test"
         )
 
-        let predicate = ItemPredicate.dateIsSameYearAs(isoDate("2024-01-01T00:00:00+0900"))
+        let predicate = ItemPredicate.dateIsSameYearAs(shiftedDate("2024-01-01T00:00:00Z"))
         let items = try service.items(.items(predicate))
         let contents = items.map(\.content)
 
@@ -238,7 +238,7 @@ struct ItemPredicateTest {
     func includesStartOfJSTYearInSameUTCYear(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        let jstDate = isoDate("2024-01-01T00:00:00+0900") // UTC: 2023-12-31T15:00:00Z
+        let jstDate = shiftedDate("2024-01-01T00:00:00Z") // UTC: 2023-12-31T15:00:00Z
         try service.create(
             date: jstDate,
             content: "JST_StartOfYear",
@@ -247,7 +247,7 @@ struct ItemPredicateTest {
             category: "Test"
         )
 
-        let predicate = ItemPredicate.dateIsSameYearAs(isoDate("2024-01-01T00:00:00+0900"))
+        let predicate = ItemPredicate.dateIsSameYearAs(shiftedDate("2024-01-01T00:00:00Z"))
         let items = try service.items(.items(predicate))
 
         #expect(items.map(\.content).contains("JST_StartOfYear"))
@@ -257,8 +257,8 @@ struct ItemPredicateTest {
     func jstYearBoundaryMismatchWithUTC(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        let jstDate1 = isoDate("2024-01-01T00:00:00+0900")  // 2023-12-31T15:00:00Z
-        let jstDate2 = isoDate("2024-12-31T23:59:59+0900")  // 2024-12-31T14:59:59Z
+        let jstDate1 = shiftedDate("2024-01-01T00:00:00Z")  // 2023-12-31T15:00:00Z
+        let jstDate2 = shiftedDate("2024-12-31T23:59:59Z")  // 2024-12-31T14:59:59Z
 
         try service.create(
             date: jstDate1,
@@ -275,7 +275,7 @@ struct ItemPredicateTest {
             category: "TZTest"
         )
 
-        let predicate = ItemPredicate.dateIsSameYearAs(isoDate("2024-01-01T00:00:00+0900"))
+        let predicate = ItemPredicate.dateIsSameYearAs(shiftedDate("2024-01-01T00:00:00Z"))
         let items = try service.items(.items(predicate))
         let contents = items.map(\.content)
 
@@ -288,7 +288,7 @@ struct ItemPredicateTest {
     func excludesJSTMarchStartFromUTCMarch(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        let jstDate = isoDate("2024-03-01T00:00:00+0900")  // = 2024-02-29T15:00:00Z
+        let jstDate = shiftedDate("2024-03-01T00:00:00Z")  // = 2024-02-29T15:00:00Z
         try service.create(
             date: jstDate,
             content: "JST_MarchStart",
@@ -297,7 +297,7 @@ struct ItemPredicateTest {
             category: "Test"
         )
 
-        let predicate = ItemPredicate.dateIsSameMonthAs(isoDate("2024-03-01T00:00:00+0900"))
+        let predicate = ItemPredicate.dateIsSameMonthAs(shiftedDate("2024-03-01T00:00:00Z"))
         let items = try service.items(.items(predicate))
         #expect(items.map(\.content).contains("JST_MarchStart"))
     }
@@ -306,7 +306,7 @@ struct ItemPredicateTest {
     func includesUTCMarchStart(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        let utcDate = isoDate("2024-03-01T00:00:00+0900")
+        let utcDate = shiftedDate("2024-03-01T00:00:00Z")
         try service.create(
             date: utcDate,
             content: "UTC_MarchStart",
@@ -315,7 +315,7 @@ struct ItemPredicateTest {
             category: "Test"
         )
 
-        let predicate = ItemPredicate.dateIsSameMonthAs(isoDate("2024-03-01T00:00:00+0900"))
+        let predicate = ItemPredicate.dateIsSameMonthAs(shiftedDate("2024-03-01T00:00:00Z"))
         let items = try service.items(.items(predicate))
         #expect(items.map(\.content).contains("UTC_MarchStart"))
         #expect(items.count == 1)
@@ -325,7 +325,7 @@ struct ItemPredicateTest {
     func jstFebStartAppearsAsJanuary(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        let jstDate = isoDate("2024-02-01T00:00:00+0900")
+        let jstDate = shiftedDate("2024-02-01T00:00:00Z")
         try service.create(
             date: jstDate,
             content: "JSTFebStart",
@@ -333,8 +333,8 @@ struct ItemPredicateTest {
             outgo: 0,
             category: "TZBoundary"
         )
-        let jan = ItemPredicate.dateIsSameMonthAs(isoDate("2024-01-01T00:00:00+0900"))
-        let feb = ItemPredicate.dateIsSameMonthAs(isoDate("2024-02-01T00:00:00+0900"))
+        let jan = ItemPredicate.dateIsSameMonthAs(shiftedDate("2024-01-01T00:00:00Z"))
+        let feb = ItemPredicate.dateIsSameMonthAs(shiftedDate("2024-02-01T00:00:00Z"))
         let janItems = try service.items(.items(jan))
         let febItems = try service.items(.items(feb))
         #expect(!janItems.map(\.content).contains("JSTFebStart"))
@@ -345,7 +345,7 @@ struct ItemPredicateTest {
     func jstMarStartAppearsAsFebruary(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        let jstDate = isoDate("2024-03-01T00:00:00+0900")
+        let jstDate = shiftedDate("2024-03-01T00:00:00Z")
         try service.create(
             date: jstDate,
             content: "JSTMarStart",
@@ -353,8 +353,8 @@ struct ItemPredicateTest {
             outgo: 0,
             category: "TZBoundary"
         )
-        let feb = ItemPredicate.dateIsSameMonthAs(isoDate("2024-02-01T00:00:00+0900"))
-        let mar = ItemPredicate.dateIsSameMonthAs(isoDate("2024-03-01T00:00:00+0900"))
+        let feb = ItemPredicate.dateIsSameMonthAs(shiftedDate("2024-02-01T00:00:00Z"))
+        let mar = ItemPredicate.dateIsSameMonthAs(shiftedDate("2024-03-01T00:00:00Z"))
         let febItems = try service.items(.items(feb))
         let marItems = try service.items(.items(mar))
         #expect(!febItems.map(\.content).contains("JSTMarStart"))
@@ -366,7 +366,7 @@ struct ItemPredicateTest {
         NSTimeZone.default = timeZone
 
         // 2024-02-29T23:59:59+0900 = 2024-02-29T14:59:59Z
-        let jstDate = isoDate("2024-02-29T23:59:59+0900")
+        let jstDate = shiftedDate("2024-02-29T23:59:59Z")
         try service.create(
             date: jstDate,
             content: "JSTEnd",
@@ -375,7 +375,7 @@ struct ItemPredicateTest {
             category: "TZTest"
         )
 
-        let predicate = ItemPredicate.dateIsSameMonthAs(isoDate("2024-02-01T00:00:00+0900"))
+        let predicate = ItemPredicate.dateIsSameMonthAs(shiftedDate("2024-02-01T00:00:00Z"))
         let items = try service.items(.items(predicate))
 
         #expect(items.count == 1)  // Should pass if UTC-based correctly
@@ -386,7 +386,7 @@ struct ItemPredicateTest {
         NSTimeZone.default = timeZone
 
         // 2024-02-01T00:00:00+0900 = 2024-01-31T15:00:00Z
-        let jstDate = isoDate("2024-02-01T00:00:00+0900")
+        let jstDate = shiftedDate("2024-02-01T00:00:00Z")
         try service.create(
             date: jstDate,
             content: "JSTBoundary",
@@ -395,7 +395,7 @@ struct ItemPredicateTest {
             category: "TZTest"
         )
 
-        let predicate = ItemPredicate.dateIsSameMonthAs(isoDate("2024-02-01T00:00:00+0900"))
+        let predicate = ItemPredicate.dateIsSameMonthAs(shiftedDate("2024-02-01T00:00:00Z"))
         let items = try service.items(.items(predicate))
 
         // This will fail if implementation interprets local time as month-boundary
@@ -408,28 +408,28 @@ struct ItemPredicateTest {
 
         // Insert three items, one at start, one in middle, one at end of February (UTC)
         try service.create(
-            date: isoDate("2024-02-01T00:00:00+0900"),
+            date: shiftedDate("2024-02-01T00:00:00Z"),
             content: "StartOfMonth",
             income: 100,
             outgo: 0,
             category: "TZTest"
         )
         try service.create(
-            date: isoDate("2024-02-14T12:00:00+0900"),
+            date: shiftedDate("2024-02-14T12:00:00Z"),
             content: "MidMonth",
             income: 100,
             outgo: 0,
             category: "TZTest"
         )
         try service.create(
-            date: isoDate("2024-02-29T23:59:59+0900"),
+            date: shiftedDate("2024-02-29T23:59:59Z"),
             content: "EndOfMonth",
             income: 100,
             outgo: 0,
             category: "TZTest"
         )
 
-        let predicate = ItemPredicate.dateIsSameMonthAs(isoDate("2024-02-01T00:00:00+0900"))
+        let predicate = ItemPredicate.dateIsSameMonthAs(shiftedDate("2024-02-01T00:00:00Z"))
         let items = try service.items(.items(predicate))
         let contents = items.map(\.content)
 
@@ -443,8 +443,8 @@ struct ItemPredicateTest {
     func jstMarchBoundaryIncludedInUTCMarch(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        let jstDate1 = isoDate("2024-03-01T00:00:00+0900")  // 2024-02-29T15:00:00Z
-        let jstDate2 = isoDate("2024-03-31T23:59:59+0900")  // 2024-03-31T14:59:59Z
+        let jstDate1 = shiftedDate("2024-03-01T00:00:00Z")  // 2024-02-29T15:00:00Z
+        let jstDate2 = shiftedDate("2024-03-31T23:59:59Z")  // 2024-03-31T14:59:59Z
 
         try service.create(
             date: jstDate1,
@@ -461,7 +461,7 @@ struct ItemPredicateTest {
             category: "TZTest"
         )
 
-        let predicate = ItemPredicate.dateIsSameMonthAs(isoDate("2024-03-01T00:00:00+0900"))
+        let predicate = ItemPredicate.dateIsSameMonthAs(shiftedDate("2024-03-01T00:00:00Z"))
         let items = try service.items(.items(predicate))
         let contents = items.map(\.content)
 
@@ -472,11 +472,11 @@ struct ItemPredicateTest {
     func includesOnlySameDayItems(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        let baseDate = isoDate("2024-04-01T00:00:00+0900")
+        let baseDate = shiftedDate("2024-04-01T00:00:00Z")
         try service.create(date: baseDate, content: "TargetDay", income: 1, outgo: 0, category: "Test")
-        try service.create(date: isoDate("2024-04-01T23:59:59+0900"), content: "EndSameDay", income: 1, outgo: 0, category: "Test")
-        try service.create(date: isoDate("2024-03-31T23:59:59+0900"), content: "DayBefore", income: 1, outgo: 0, category: "Test")
-        try service.create(date: isoDate("2024-04-02T00:00:00+0900"), content: "DayAfter", income: 1, outgo: 0, category: "Test")
+        try service.create(date: shiftedDate("2024-04-01T23:59:59Z"), content: "EndSameDay", income: 1, outgo: 0, category: "Test")
+        try service.create(date: shiftedDate("2024-03-31T23:59:59Z"), content: "DayBefore", income: 1, outgo: 0, category: "Test")
+        try service.create(date: shiftedDate("2024-04-02T00:00:00Z"), content: "DayAfter", income: 1, outgo: 0, category: "Test")
 
         let predicate = ItemPredicate.dateIsSameDayAs(baseDate)
         let items = try service.items(.items(predicate))
@@ -493,8 +493,8 @@ struct ItemPredicateTest {
     func includesFullJSTDayInUTCDay(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        let jstDate1 = isoDate("2024-04-01T00:00:00+0900")  // 2024-03-31T15:00:00Z
-        let jstDate2 = isoDate("2024-04-01T23:59:59+0900")  // 2024-04-01T15:00:00Z
+        let jstDate1 = shiftedDate("2024-04-01T00:00:00Z")  // 2024-03-31T15:00:00Z
+        let jstDate2 = shiftedDate("2024-04-01T23:59:59Z")  // 2024-04-01T15:00:00Z
 
         try service.create(
             date: jstDate1,
@@ -511,7 +511,7 @@ struct ItemPredicateTest {
             category: "TZTest"
         )
 
-        let predicate = ItemPredicate.dateIsSameDayAs(isoDate("2024-04-01T00:00:00+0900"))
+        let predicate = ItemPredicate.dateIsSameDayAs(shiftedDate("2024-04-01T00:00:00Z"))
         let items = try service.items(.items(predicate))
         let contents = items.map(\.content)
 
@@ -524,9 +524,9 @@ struct ItemPredicateTest {
     func excludesSameTimeDifferentDay(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        let baseDate = isoDate("2024-04-01T00:00:00+0900")
-        try service.create(date: isoDate("2024-03-31T00:00:00+0900"), content: "PrevDay", income: 1, outgo: 0, category: "Test")
-        try service.create(date: isoDate("2024-04-02T00:00:00+0900"), content: "NextDay", income: 1, outgo: 0, category: "Test")
+        let baseDate = shiftedDate("2024-04-01T00:00:00Z")
+        try service.create(date: shiftedDate("2024-03-31T00:00:00Z"), content: "PrevDay", income: 1, outgo: 0, category: "Test")
+        try service.create(date: shiftedDate("2024-04-02T00:00:00Z"), content: "NextDay", income: 1, outgo: 0, category: "Test")
 
         let predicate = ItemPredicate.dateIsSameDayAs(baseDate)
         let items = try service.items(.items(predicate))
@@ -541,8 +541,8 @@ struct ItemPredicateTest {
     func includesEndOfDayUTC(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        let baseDate = isoDate("2024-04-01T00:00:00+0900")
-        let endOfDay = isoDate("2024-04-01T23:59:59+0900")
+        let baseDate = shiftedDate("2024-04-01T00:00:00Z")
+        let endOfDay = shiftedDate("2024-04-01T23:59:59Z")
         try service.create(date: endOfDay, content: "EndOfDay", income: 1, outgo: 0, category: "Test")
 
         let predicate = ItemPredicate.dateIsSameDayAs(baseDate)
@@ -556,8 +556,8 @@ struct ItemPredicateTest {
     func excludesStartOfNextDay(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        let baseDate = isoDate("2024-04-01T00:00:00+0900")
-        try service.create(date: isoDate("2024-04-02T00:00:00+0900"), content: "NextDayStart", income: 1, outgo: 0, category: "Test")
+        let baseDate = shiftedDate("2024-04-01T00:00:00Z")
+        try service.create(date: shiftedDate("2024-04-02T00:00:00Z"), content: "NextDayStart", income: 1, outgo: 0, category: "Test")
 
         let predicate = ItemPredicate.dateIsSameDayAs(baseDate)
         let items = try service.items(.items(predicate))
@@ -569,7 +569,7 @@ struct ItemPredicateTest {
     func jstJanStartAppearsAsPreviousDay(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        let jstDate = isoDate("2024-01-01T00:00:00+0900")
+        let jstDate = shiftedDate("2024-01-01T00:00:00Z")
         try service.create(
             date: jstDate,
             content: "JST_Jan1",
@@ -578,7 +578,7 @@ struct ItemPredicateTest {
             category: "TZBoundary"
         )
 
-        let predicate = ItemPredicate.dateIsSameDayAs(isoDate("2024-01-01T00:00:00+0900"))
+        let predicate = ItemPredicate.dateIsSameDayAs(shiftedDate("2024-01-01T00:00:00Z"))
         let items = try service.items(.items(predicate))
 
         #expect(items.map(\.content).contains("JST_Jan1"))
@@ -588,7 +588,7 @@ struct ItemPredicateTest {
     func excludesStartOfNextJSTDayFromUTCDay(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        let jstDate = isoDate("2024-04-02T00:00:00+0900") // UTC: 2024-04-01T15:00:00Z
+        let jstDate = shiftedDate("2024-04-02T00:00:00Z") // UTC: 2024-04-01T15:00:00Z
         try service.create(
             date: jstDate,
             content: "JST_NextDay",
@@ -597,7 +597,7 @@ struct ItemPredicateTest {
             category: "Test"
         )
 
-        let predicate = ItemPredicate.dateIsSameDayAs(isoDate("2024-04-01T00:00:00+0900"))
+        let predicate = ItemPredicate.dateIsSameDayAs(shiftedDate("2024-04-01T00:00:00Z"))
         let items = try service.items(.items(predicate))
 
         #expect(!items.map(\.content).contains("JST_NextDay"))
@@ -607,7 +607,7 @@ struct ItemPredicateTest {
     func includesStartOfJSTDayInPreviousUTCDay(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        let jstDate = isoDate("2024-04-01T00:00:00+0900") // UTC: 2024-03-31T15:00:00Z
+        let jstDate = shiftedDate("2024-04-01T00:00:00Z") // UTC: 2024-03-31T15:00:00Z
         try service.create(
             date: jstDate,
             content: "JST_StartOfDay",
@@ -616,7 +616,7 @@ struct ItemPredicateTest {
             category: "Test"
         )
 
-        let predicate = ItemPredicate.dateIsSameDayAs(isoDate("2024-03-31T00:00:00+0900"))
+        let predicate = ItemPredicate.dateIsSameDayAs(shiftedDate("2024-03-31T00:00:00Z"))
         let items = try service.items(.items(predicate))
 
         #expect(!items.map(\.content).contains("JST_StartOfDay"))
@@ -628,7 +628,7 @@ struct ItemPredicateTest {
     func includesItemWithExactOutgoOnDate(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        let date = isoDate("2024-06-01T00:00:00+0900")
+        let date = shiftedDate("2024-06-01T00:00:00Z")
         try service.create(date: date, content: "Match", income: 0, outgo: 5_000, category: "Test")
         try service.create(date: date, content: "Low", income: 0, outgo: 4_999, category: "Test")
 
@@ -643,8 +643,8 @@ struct ItemPredicateTest {
     func excludesItemBeforeDateEvenIfOutgoMatches(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        let cutoffDate = isoDate("2024-06-01T00:00:00+0900")
-        try service.create(date: isoDate("2024-05-31T23:59:59+0900"), content: "Early", income: 0, outgo: 10_000, category: "Test")
+        let cutoffDate = shiftedDate("2024-06-01T00:00:00Z")
+        try service.create(date: shiftedDate("2024-05-31T23:59:59Z"), content: "Early", income: 0, outgo: 10_000, category: "Test")
         try service.create(date: cutoffDate, content: "Valid", income: 0, outgo: 10_000, category: "Test")
 
         let predicate = ItemPredicate.outgoIsGreaterThanOrEqualTo(amount: 5_000, onOrAfter: cutoffDate)
@@ -660,10 +660,10 @@ struct ItemPredicateTest {
     func includesItemsWithRepeatID(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        try service.create(date: isoDate("2024-01-01T00:00:00+0900"), content: "RepeatOne", income: 0, outgo: 0, category: "Test")
+        try service.create(date: shiftedDate("2024-01-01T00:00:00Z"), content: "RepeatOne", income: 0, outgo: 0, category: "Test")
         let repeatID = try service.item()!.repeatID
 
-        try service.create(date: isoDate("2024-02-01T00:00:00+0900"), content: "NonRepeat", income: 0, outgo: 0, category: "Test")
+        try service.create(date: shiftedDate("2024-02-01T00:00:00Z"), content: "NonRepeat", income: 0, outgo: 0, category: "Test")
 
         let predicate = ItemPredicate.repeatIDIs(repeatID)
         let items = try service.items(.items(predicate))
@@ -676,10 +676,10 @@ struct ItemPredicateTest {
     func includesOnlyFutureRepeatItems(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        try service.create(date: isoDate("2024-01-01T00:00:00+0900"), content: "Past", income: 0, outgo: 0, category: "Test", repeatCount: 2)
+        try service.create(date: shiftedDate("2024-01-01T00:00:00Z"), content: "Past", income: 0, outgo: 0, category: "Test", repeatCount: 2)
         let repeatID = try service.item()!.repeatID
 
-        let predicate = ItemPredicate.repeatIDAndDateIsAfter(repeatID: repeatID, date: isoDate("2024-02-01T00:00:00+0900"))
+        let predicate = ItemPredicate.repeatIDAndDateIsAfter(repeatID: repeatID, date: shiftedDate("2024-02-01T00:00:00Z"))
         let items = try service.items(.items(predicate))
         let contents = items.map(\.content)
 

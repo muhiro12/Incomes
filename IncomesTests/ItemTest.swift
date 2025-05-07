@@ -20,7 +20,7 @@ struct ItemTest {
     func createAssignsCorrectValuesAndUTCNormalizedDate(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        let date = isoDate("2024-03-15T10:30:00+0900")
+        let date = shiftedDate("2024-03-15T10:30:00Z")
         let content = "Lunch"
         let income = Decimal(0)
         let outgo = Decimal(1_200)
@@ -76,7 +76,7 @@ struct ItemTest {
         .disabled("Known issue: under UTC normalization review")
     )
     func createAssignsDefaultValues() throws {
-        let date = isoDate("2024-01-01T00:00:00+0900")
+        let date = shiftedDate("2024-01-01T00:00:00Z")
         let item = try Item.create(
             context: context,
             date: date,
@@ -98,7 +98,7 @@ struct ItemTest {
     func createAssignsAllExpectedTags(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        let date = isoDate("2024-06-10T12:00:00+0900")
+        let date = shiftedDate("2024-06-10T12:00:00Z")
         let item = try Item.create(
             context: context,
             date: date,
@@ -125,7 +125,7 @@ struct ItemTest {
     func modifyUpdatesValuesAndRegeneratesTags() throws {
         let item = try Item.create(
             context: context,
-            date: isoDate("2024-01-01T00:00:00+0900"),
+            date: shiftedDate("2024-01-01T00:00:00Z"),
             content: "Old",
             income: 100,
             outgo: 0,
@@ -133,7 +133,7 @@ struct ItemTest {
             repeatID: UUID()
         )
 
-        let newDate = isoDate("2024-04-01T00:00:00+0900")
+        let newDate = shiftedDate("2024-04-01T00:00:00Z")
         try item.modify(
             date: newDate,
             content: "Updated",
@@ -166,7 +166,7 @@ struct ItemTest {
     func modifyNormalizesBoundaryDates(date: Date, expected: Date) throws {
         let item = try Item.create(
             context: context,
-            date: isoDate("2024-01-01T00:00:00+0900"),
+            date: shiftedDate("2024-01-01T00:00:00Z"),
             content: "Initial",
             income: 0,
             outgo: 0,
@@ -193,7 +193,7 @@ struct ItemTest {
         let repeatID = UUID()
         let item = try Item.create(
             context: context,
-            date: isoDate("2024-02-01T00:00:00+0900"),
+            date: shiftedDate("2024-02-01T00:00:00Z"),
             content: "Init",
             income: 0,
             outgo: 0,
@@ -202,7 +202,7 @@ struct ItemTest {
         )
 
         try item.modify(
-            date: isoDate("2024-02-02T00:00:00+0900"),
+            date: shiftedDate("2024-02-02T00:00:00Z"),
             content: "Changed",
             income: 500,
             outgo: 200,
@@ -220,7 +220,7 @@ struct ItemTest {
 
         let item = try Item.create(
             context: context,
-            date: isoDate("2024-07-01T10:00:00+0900"),
+            date: shiftedDate("2024-07-01T10:00:00Z"),
             content: "Init",
             income: 0,
             outgo: 0,
@@ -228,7 +228,7 @@ struct ItemTest {
             repeatID: UUID()
         )
 
-        let updatedDate = isoDate("2024-07-15T23:59:59+0900")
+        let updatedDate = shiftedDate("2024-07-15T23:59:59Z")
         try item.modify(
             date: updatedDate,
             content: item.content,
