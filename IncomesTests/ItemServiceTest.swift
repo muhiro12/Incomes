@@ -11,6 +11,7 @@ import Foundation
 import SwiftData
 import Testing
 
+@Suite(.serialized)
 struct ItemServiceTest {
     let context: ModelContext
     let service: ItemService
@@ -22,8 +23,10 @@ struct ItemServiceTest {
 
     // MARK: - Fetch
 
-    @Test("item returns first item if available")
-    func item() throws {
+    @Test("item returns first item if available", arguments: timeZones)
+    func item(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
         try service.create(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "First",
@@ -35,8 +38,10 @@ struct ItemServiceTest {
         #expect(item.content == "First")
     }
 
-    @Test("item with predicate returns only matching item")
-    func itemWithPredicate() throws {
+    @Test("item with predicate returns only matching item", arguments: timeZones)
+    func itemWithPredicate(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
         try service.create(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "Food",
@@ -56,8 +61,10 @@ struct ItemServiceTest {
         #expect(item.content == "Food")
     }
 
-    @Test("items returns all items")
-    func items() throws {
+    @Test("items returns all items", arguments: timeZones)
+    func items(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
         try service.create(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "One",
@@ -76,8 +83,10 @@ struct ItemServiceTest {
         #expect(items.count == 2)
     }
 
-    @Test("items with predicate filters matching items")
-    func itemsWithPredicate() throws {
+    @Test("items with predicate filters matching items", arguments: timeZones)
+    func itemsWithPredicate(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
         try service.create(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "Match",
@@ -98,8 +107,10 @@ struct ItemServiceTest {
         #expect(filtered.first?.content == "Match")
     }
 
-    @Test("itemsCount returns correct count")
-    func itemsCount() throws {
+    @Test("itemsCount returns correct count", arguments: timeZones)
+    func itemsCount(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
         try service.create(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "Only",
@@ -111,8 +122,10 @@ struct ItemServiceTest {
         #expect(count == 1)
     }
 
-    @Test("itemsCount with predicate counts only matching items")
-    func itemsCountWithPredicate() throws {
+    @Test("itemsCount with predicate counts only matching items", arguments: timeZones)
+    func itemsCountWithPredicate(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
         try service.create(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "X",
@@ -134,8 +147,10 @@ struct ItemServiceTest {
 
     // MARK: - Create
 
-    @Test("create item with correct balance")
-    func create() throws {
+    @Test("create item with correct balance", arguments: timeZones)
+    func create(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
         try service.create(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "Lunch",
@@ -147,8 +162,10 @@ struct ItemServiceTest {
         #expect(item.balance == 700)
     }
 
-    @Test("create with repeatCount 3 creates 3 items with same repeatID")
-    func createWithRepeat() throws {
+    @Test("create with repeatCount 3 creates 3 items with same repeatID", arguments: timeZones)
+    func createWithRepeat(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
         try service.create(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "Rent",
@@ -162,8 +179,10 @@ struct ItemServiceTest {
         #expect(Set(items.map(\.repeatID)).count == 1)
     }
 
-    @Test("create with zero repeatCount still creates one item")
-    func createWithZeroRepeat() throws {
+    @Test("create with zero repeatCount still creates one item", arguments: timeZones)
+    func createWithZeroRepeat(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
         try service.create(
             date: isoDate("2024-03-01T00:00:00Z"),
             content: "Single",
@@ -177,8 +196,10 @@ struct ItemServiceTest {
         #expect(items.first?.content == "Single")
     }
 
-    @Test("create with zero income and outgo results in zero balance")
-    func createWithZeroAmounts() throws {
+    @Test("create with zero income and outgo results in zero balance", arguments: timeZones)
+    func createWithZeroAmounts(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
         try service.create(
             date: isoDate("2024-03-01T00:00:00Z"),
             content: "Neutral",
@@ -190,8 +211,10 @@ struct ItemServiceTest {
         #expect(item.balance == 0)
     }
 
-    @Test("create with duplicate category names does not break")
-    func createWithDuplicateCategoryNames() throws {
+    @Test("create with duplicate category names does not break", arguments: timeZones)
+    func createWithDuplicateCategoryNames(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
         for _ in 0..<2 {
             try service.create(
                 date: isoDate("2024-03-01T00:00:00Z"),
@@ -206,8 +229,10 @@ struct ItemServiceTest {
         #expect(Set(items.map(\.category?.name)).count == 1)
     }
 
-    @Test("create stores date near midnight UTC correctly")
-    func createWithMidnightBoundary() throws {
+    @Test("create stores date near midnight UTC correctly", arguments: timeZones)
+    func createWithMidnightBoundary(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
         let boundaryDate = isoDate("2024-03-15T00:00:00Z")
         try service.create(
             date: boundaryDate,
@@ -220,8 +245,10 @@ struct ItemServiceTest {
         #expect(item.utcDate == boundaryDate)
     }
 
-    @Test("create stores date in JST correctly")
-    func createWithJSTTimestamp() throws {
+    @Test("create stores date in JST correctly", arguments: timeZones)
+    func createWithJSTTimestamp(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
         let jstDate = isoDate("2024-03-15T09:00:00+0900")  // 00:00 UTC
         try service.create(
             date: jstDate,
@@ -234,8 +261,10 @@ struct ItemServiceTest {
         #expect(item.utcDate == jstDate)
     }
 
-    @Test("create rounds input date to start of day UTC")
-    func createRoundsDateToStartOfDay() throws {
+    @Test("create rounds input date to start of day UTC", arguments: timeZones)
+    func createRoundsDateToStartOfDay(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
         let inputDate = isoDate("2024-03-15T10:30:00Z")
         let expectedDate = Calendar.utc.startOfDay(for: inputDate)
         try service.create(
@@ -251,8 +280,10 @@ struct ItemServiceTest {
 
     // MARK: - Update
 
-    @Test("update changes item values and recalculates balance")
-    func update() throws {
+    @Test("update changes item values and recalculates balance", arguments: timeZones)
+    func update(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
         try service.create(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "Initial",
@@ -275,8 +306,10 @@ struct ItemServiceTest {
         #expect(item.utcDate == isoDate("2024-01-02T00:00:00Z"))
     }
 
-    @Test("update assigns new repeatID")
-    func updateAssignsNewRepeatID() throws {
+    @Test("update assigns new repeatID", arguments: timeZones)
+    func updateAssignsNewRepeatID(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
         try service.create(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "Initial",
@@ -299,8 +332,10 @@ struct ItemServiceTest {
         #expect(updated.repeatID != oldRepeatID)
     }
 
-    @Test("update changes date and maintains correct ordering")
-    func updateChangesDateOrdering() throws {
+    @Test("update changes date and maintains correct ordering", arguments: timeZones)
+    func updateChangesDateOrdering(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
         try service.create(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "First",
@@ -331,8 +366,10 @@ struct ItemServiceTest {
         #expect(items[0].content == "Second")
     }
 
-    @Test("updateForFutureItems updates only items after the target date in the repeat group")
-    func updateForFutureItems() throws {
+    @Test("updateForFutureItems updates only items after the target date in the repeat group", arguments: timeZones)
+    func updateForFutureItems(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
         try service.create(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "Subscription",
@@ -359,8 +396,10 @@ struct ItemServiceTest {
         #expect(result[2].category?.name == "Entertainment")
     }
 
-    @Test("updateForFutureItems updates only target if it's the last item")
-    func updateFutureLastOnly() throws {
+    @Test("updateForFutureItems updates only target if it's the last item", arguments: timeZones)
+    func updateFutureLastOnly(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
         try service.create(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "Monthly",
@@ -386,8 +425,10 @@ struct ItemServiceTest {
         #expect(result[2].content == "Changed")
     }
 
-    @Test("updateForFutureItems on non-repeating item updates only itself")
-    func updateFutureSingleRepeat() throws {
+    @Test("updateForFutureItems on non-repeating item updates only itself", arguments: timeZones)
+    func updateFutureSingleRepeat(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
         try service.create(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "Solo",
@@ -409,8 +450,10 @@ struct ItemServiceTest {
         #expect(updated.income == 100)
     }
 
-    @Test("updateForAllItems updates all items in the repeat group")
-    func updateForAllItems() throws {
+    @Test("updateForAllItems updates all items in the repeat group", arguments: timeZones)
+    func updateForAllItems(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
         try service.create(
             date: isoDate("2024-02-01T00:00:00Z"),
             content: "Gym",
@@ -439,8 +482,10 @@ struct ItemServiceTest {
 
     // MARK: - Delete
 
-    @Test("delete removes the specified item")
-    func delete() throws {
+    @Test("delete removes the specified item", arguments: timeZones)
+    func delete(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
         try service.create(
             date: isoDate("2024-04-01T00:00:00Z"),
             content: "ToDelete",
@@ -454,14 +499,18 @@ struct ItemServiceTest {
         #expect(items.isEmpty)
     }
 
-    @Test("delete with empty array does nothing")
-    func deleteWithEmptyArray() throws {
+    @Test("delete with empty array does nothing", arguments: timeZones)
+    func deleteWithEmptyArray(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
         try service.delete(items: [])
         #expect(try service.items().isEmpty)
     }
 
-    @Test("delete with multiple items removes only specified ones")
-    func deleteMultipleItems() throws {
+    @Test("delete with multiple items removes only specified ones", arguments: timeZones)
+    func deleteMultipleItems(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
         try service.create(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "KeepMe",
@@ -485,8 +534,10 @@ struct ItemServiceTest {
         #expect(remaining.first?.content == "KeepMe")
     }
 
-    @Test("deleteAll clears all items")
-    func deleteAll() throws {
+    @Test("deleteAll clears all items", arguments: timeZones)
+    func deleteAll(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
         try service.create(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "DeleteMe",
@@ -501,8 +552,10 @@ struct ItemServiceTest {
 
     // MARK: - Calculate balance
 
-    @Test("recalculate reflects updated outgo via update")
-    func recalculate() throws {
+    @Test("recalculate reflects updated outgo via update", arguments: timeZones)
+    func recalculate(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
         try service.create(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "AdjustMe",
@@ -523,8 +576,10 @@ struct ItemServiceTest {
         #expect(item.balance == 10)
     }
 
-    @Test("recalculate does not alter already correct balance")
-    func recalculateNoChange() throws {
+    @Test("recalculate does not alter already correct balance", arguments: timeZones)
+    func recalculateNoChange(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
         try service.create(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "Stable",
@@ -541,8 +596,10 @@ struct ItemServiceTest {
         #expect(reloaded.balance == oldBalance)
     }
 
-    @Test("recalculate only affects items after the specified date")
-    func recalculatePartial() throws {
+    @Test("recalculate only affects items after the specified date", arguments: timeZones)
+    func recalculatePartial(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
         try service.create(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "Before",
@@ -573,8 +630,10 @@ struct ItemServiceTest {
         #expect(items[1].balance == 470)
     }
 
-    @Test("recalculate is correct across time zone boundaries")
-    func recalculateWithTimeZoneBoundaries() throws {
+    @Test("recalculate is correct across time zone boundaries", arguments: timeZones)
+    func recalculateWithTimeZoneBoundaries(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
         try service.create(
             date: isoDate("2024-02-28T14:00:00Z"),  // JST: 2024-02-28 23:00
             content: "LateFeb",

@@ -11,6 +11,7 @@ import Foundation
 import SwiftData
 import Testing
 
+@Suite(.serialized)
 struct ItemPredicateTest {
     let context: ModelContext
     let service: ItemService
@@ -22,8 +23,10 @@ struct ItemPredicateTest {
 
     // MARK: - All
 
-    @Test("returns all items for .all predicate")
-    func returnsAllItemsWithAllPredicate() throws {
+    @Test("returns all items for .all predicate", arguments: timeZones)
+    func returnsAllItemsWithAllPredicate(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
         try service.create(date: isoDate("2024-01-01T00:00:00+0900"), content: "One", income: 100, outgo: 0, category: "A")
         try service.create(date: isoDate("2024-02-01T00:00:00+0900"), content: "Two", income: 200, outgo: 0, category: "B")
 
@@ -38,8 +41,10 @@ struct ItemPredicateTest {
 
     // MARK: - None
 
-    @Test("returns no items for .none predicate")
-    func returnsNoItemsWithNonePredicate() throws {
+    @Test("returns no items for .none predicate", arguments: timeZones)
+    func returnsNoItemsWithNonePredicate(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
         try service.create(date: isoDate("2024-01-01T00:00:00+0900"), content: "One", income: 100, outgo: 0, category: "A")
 
         let predicate = ItemPredicate.none
@@ -54,8 +59,10 @@ struct ItemPredicateTest {
 
     // MARK: - Date
 
-    @Test("excludes items exactly on the cutoff date for dateIsBefore")
-    func excludesItemsExactlyOnCutoffForDateIsBefore() throws {
+    @Test("excludes items exactly on the cutoff date for dateIsBefore", arguments: timeZones)
+    func excludesItemsExactlyOnCutoffForDateIsBefore(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
         let cutoff = isoDate("2024-05-01T00:00:00+0900")
         try service.create(date: cutoff, content: "OnCutoff", income: 0, outgo: 0, category: "Test")
 
@@ -67,9 +74,11 @@ struct ItemPredicateTest {
         #expect(items.isEmpty)
     }
 
-    @Test("includes only items before given date")
-    func includesItemsBeforeDate() throws {
-        let cutoff = isoDate("2024-05-01T00:00:00+09:00")
+    @Test("includes only items before given date", arguments: timeZones)
+    func includesItemsBeforeDate(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
+        let cutoff = isoDate("2024-05-01T00:00:00+0900")
         try service.create(date: isoDate("2024-04-30T23:59:59+0900"), content: "April", income: 1, outgo: 0, category: "Test")
         try service.create(date: cutoff, content: "May", income: 1, outgo: 0, category: "Test")
 
@@ -82,8 +91,10 @@ struct ItemPredicateTest {
         #expect(items.count == 1)
     }
 
-    @Test("includes multiple items before the cutoff date")
-    func includesMultipleItemsBeforeDate() throws {
+    @Test("includes multiple items before the cutoff date", arguments: timeZones)
+    func includesMultipleItemsBeforeDate(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
         let cutoff = isoDate("2024-05-01T00:00:00+0900")
         try service.create(date: isoDate("2024-04-01T00:00:00+0900"), content: "EarlyApril", income: 0, outgo: 0, category: "Test")
         try service.create(date: isoDate("2024-04-15T00:00:00+0900"), content: "MidApril", income: 0, outgo: 0, category: "Test")
@@ -99,8 +110,10 @@ struct ItemPredicateTest {
         #expect(items.count == 2)
     }
 
-    @Test("includes only items after given date")
-    func includesItemsAfterDate() throws {
+    @Test("includes only items after given date", arguments: timeZones)
+    func includesItemsAfterDate(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
         let cutoff = isoDate("2024-05-01T00:00:00+0900")
         try service.create(date: isoDate("2024-05-01T00:00:01+0900"), content: "After", income: 1, outgo: 0, category: "Test")
         try service.create(date: isoDate("2024-04-30T23:59:59+0900"), content: "Before", income: 1, outgo: 0, category: "Test")
@@ -114,8 +127,10 @@ struct ItemPredicateTest {
         #expect(items.count == 1)
     }
 
-    @Test("includes multiple items on and after the cutoff date")
-    func includesMultipleItemsAfterDate() throws {
+    @Test("includes multiple items on and after the cutoff date", arguments: timeZones)
+    func includesMultipleItemsAfterDate(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
         let cutoff = isoDate("2024-05-01T00:00:00+0900")
         try service.create(date: cutoff, content: "OnCutoff", income: 0, outgo: 0, category: "Test")
         try service.create(date: isoDate("2024-05-02T00:00:00+0900"), content: "MaySecond", income: 0, outgo: 0, category: "Test")
@@ -131,8 +146,10 @@ struct ItemPredicateTest {
         #expect(items.count == 3)
     }
 
-    @Test("includes items exactly on the cutoff date for dateIsAfter")
-    func includesItemsExactlyOnCutoffForDateIsAfter() throws {
+    @Test("includes items exactly on the cutoff date for dateIsAfter", arguments: timeZones)
+    func includesItemsExactlyOnCutoffForDateIsAfter(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
         let cutoff = isoDate("2024-05-01T00:00:00+0900")
         try service.create(date: cutoff, content: "OnCutoff", income: 0, outgo: 0, category: "Test")
 
@@ -144,8 +161,10 @@ struct ItemPredicateTest {
         #expect(items.count == 1)
     }
 
-    @Test("excludes items from different year in same month")
-    func excludesDifferentYearSameMonth() throws {
+    @Test("excludes items from different year in same month", arguments: timeZones)
+    func excludesDifferentYearSameMonth(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
         try service.create(date: isoDate("2023-02-15T00:00:00+0900"), content: "2023Feb", income: 0, outgo: 0, category: "Test")
         try service.create(date: isoDate("2024-02-15T00:00:00+0900"), content: "2024Feb", income: 0, outgo: 0, category: "Test")
 
@@ -156,8 +175,10 @@ struct ItemPredicateTest {
         #expect(contents == ["2024Feb"])
     }
 
-    @Test("includes all months in the same year")
-    func includesAllMonthsInSameYear() throws {
+    @Test("includes all months in the same year", arguments: timeZones)
+    func includesAllMonthsInSameYear(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
         let baseDate = isoDate("2024-01-01T00:00:00+0900")
         try service.create(date: isoDate("2024-01-15T00:00:00+0900"), content: "January", income: 0, outgo: 0, category: "Test")
         try service.create(date: isoDate("2024-06-01T00:00:00+0900"), content: "June", income: 0, outgo: 0, category: "Test")
@@ -173,8 +194,10 @@ struct ItemPredicateTest {
         #expect(items.count == 2)
     }
 
-    @Test("JST Jan 1 is treated as January in UTC")
-    func jstJanStartAppearsAsSameYear() throws {
+    @Test("JST Jan 1 is treated as January in UTC", arguments: timeZones)
+    func jstJanStartAppearsAsSameYear(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
         let jstDate = isoDate("2024-01-01T00:00:00+0900")
         try service.create(
             date: jstDate,
@@ -191,8 +214,10 @@ struct ItemPredicateTest {
         #expect(contents.contains("JST_Jan1"))
     }
 
-    @Test("includes JST 12/31 23:59 as part of same UTC year")
-    func includesEndOfJSTYearInSameUTCYear() throws {
+    @Test("includes JST 12/31 23:59 as part of same UTC year", arguments: timeZones)
+    func includesEndOfJSTYearInSameUTCYear(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
         let jstDate = isoDate("2024-12-31T23:59:59+0900") // UTC: 2024-12-31T14:59:59Z
         try service.create(
             date: jstDate,
@@ -209,8 +234,10 @@ struct ItemPredicateTest {
         #expect(contents.contains("JST_EndOfYear"))
     }
 
-    @Test("includes JST 1/1 00:00 in same UTC year")
-    func includesStartOfJSTYearInSameUTCYear() throws {
+    @Test("includes JST 1/1 00:00 in same UTC year", arguments: timeZones)
+    func includesStartOfJSTYearInSameUTCYear(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
         let jstDate = isoDate("2024-01-01T00:00:00+0900") // UTC: 2023-12-31T15:00:00Z
         try service.create(
             date: jstDate,
@@ -226,8 +253,10 @@ struct ItemPredicateTest {
         #expect(items.map(\.content).contains("JST_StartOfYear"))
     }
 
-    @Test("JST Jan 1 and Dec 31 expected in UTC year but may mismatch")
-    func jstYearBoundaryMismatchWithUTC() throws {
+    @Test("JST Jan 1 and Dec 31 expected in UTC year but may mismatch", arguments: timeZones)
+    func jstYearBoundaryMismatchWithUTC(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
         let jstDate1 = isoDate("2024-01-01T00:00:00+0900")  // 2023-12-31T15:00:00Z
         let jstDate2 = isoDate("2024-12-31T23:59:59+0900")  // 2024-12-31T14:59:59Z
 
@@ -255,8 +284,10 @@ struct ItemPredicateTest {
         #expect(items.count == 2)
     }
 
-    @Test("excludes JST 3/1 from UTC March")
-    func excludesJSTMarchStartFromUTCMarch() throws {
+    @Test("excludes JST 3/1 from UTC March", arguments: timeZones)
+    func excludesJSTMarchStartFromUTCMarch(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
         let jstDate = isoDate("2024-03-01T00:00:00+0900")  // = 2024-02-29T15:00:00Z
         try service.create(
             date: jstDate,
@@ -271,8 +302,10 @@ struct ItemPredicateTest {
         #expect(items.map(\.content).contains("JST_MarchStart"))
     }
 
-    @Test("includes UTC 3/1 in UTC March")
-    func includesUTCMarchStart() throws {
+    @Test("includes UTC 3/1 in UTC March", arguments: timeZones)
+    func includesUTCMarchStart(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
         let utcDate = isoDate("2024-03-01T00:00:00+0900")
         try service.create(
             date: utcDate,
@@ -288,8 +321,10 @@ struct ItemPredicateTest {
         #expect(items.count == 1)
     }
 
-    @Test("treats JST 2/1 as January in UTC")
-    func jstFebStartAppearsAsJanuary() throws {
+    @Test("treats JST 2/1 as January in UTC", arguments: timeZones)
+    func jstFebStartAppearsAsJanuary(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
         let jstDate = isoDate("2024-02-01T00:00:00+0900")
         try service.create(
             date: jstDate,
@@ -306,8 +341,10 @@ struct ItemPredicateTest {
         #expect(febItems.map(\.content).contains("JSTFebStart"))
     }
 
-    @Test("treats JST 3/1 as February in UTC")
-    func jstMarStartAppearsAsFebruary() throws {
+    @Test("treats JST 3/1 as February in UTC", arguments: timeZones)
+    func jstMarStartAppearsAsFebruary(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
         let jstDate = isoDate("2024-03-01T00:00:00+0900")
         try service.create(
             date: jstDate,
@@ -324,8 +361,10 @@ struct ItemPredicateTest {
         #expect(marItems.map(\.content).contains("JSTMarStart"))
     }
 
-    @Test("includes JST 2/29 23:59 as Feb in UTC")
-    func includesJSTEndOfFebInUTCFeb() throws {
+    @Test("includes JST 2/29 23:59 as Feb in UTC", arguments: timeZones)
+    func includesJSTEndOfFebInUTCFeb(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
         // 2024-02-29T23:59:59+0900 = 2024-02-29T14:59:59Z
         let jstDate = isoDate("2024-02-29T23:59:59+0900")
         try service.create(
@@ -342,8 +381,10 @@ struct ItemPredicateTest {
         #expect(items.count == 1)  // Should pass if UTC-based correctly
     }
 
-    @Test("excludes JST 2/1 00:00 from UTC Feb")
-    func excludesJSTStartOfFebFromUTCFeb() throws {
+    @Test("excludes JST 2/1 00:00 from UTC Feb", arguments: timeZones)
+    func excludesJSTStartOfFebFromUTCFeb(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
         // 2024-02-01T00:00:00+0900 = 2024-01-31T15:00:00Z
         let jstDate = isoDate("2024-02-01T00:00:00+0900")
         try service.create(
@@ -361,8 +402,10 @@ struct ItemPredicateTest {
         #expect(items.map(\.content).contains("JSTBoundary"))
     }
 
-    @Test("includes all items in February UTC")
-    func includesAllItemsInFebruaryUTC() throws {
+    @Test("includes all items in February UTC", arguments: timeZones)
+    func includesAllItemsInFebruaryUTC(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
         // Insert three items, one at start, one in middle, one at end of February (UTC)
         try service.create(
             date: isoDate("2024-02-01T00:00:00+0900"),
@@ -396,8 +439,10 @@ struct ItemPredicateTest {
         #expect(items.count == 3)
     }
 
-    @Test("JST 3/1 and 3/31 are both in UTC March")
-    func jstMarchBoundaryIncludedInUTCMarch() throws {
+    @Test("JST 3/1 and 3/31 are both in UTC March", arguments: timeZones)
+    func jstMarchBoundaryIncludedInUTCMarch(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
         let jstDate1 = isoDate("2024-03-01T00:00:00+0900")  // 2024-02-29T15:00:00Z
         let jstDate2 = isoDate("2024-03-31T23:59:59+0900")  // 2024-03-31T14:59:59Z
 
@@ -423,8 +468,10 @@ struct ItemPredicateTest {
         #expect(contents == ["EndJST", "StartJST"])
     }
 
-    @Test("includes only items on the same UTC day")
-    func includesOnlySameDayItems() throws {
+    @Test("includes only items on the same UTC day", arguments: timeZones)
+    func includesOnlySameDayItems(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
         let baseDate = isoDate("2024-04-01T00:00:00+0900")
         try service.create(date: baseDate, content: "TargetDay", income: 1, outgo: 0, category: "Test")
         try service.create(date: isoDate("2024-04-01T23:59:59+0900"), content: "EndSameDay", income: 1, outgo: 0, category: "Test")
@@ -442,8 +489,10 @@ struct ItemPredicateTest {
         #expect(items.count == 2)
     }
 
-    @Test("includes JST 4/01 00:00 and 23:59 in same UTC day")
-    func includesFullJSTDayInUTCDay() throws {
+    @Test("includes JST 4/01 00:00 and 23:59 in same UTC day", arguments: timeZones)
+    func includesFullJSTDayInUTCDay(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
         let jstDate1 = isoDate("2024-04-01T00:00:00+0900")  // 2024-03-31T15:00:00Z
         let jstDate2 = isoDate("2024-04-01T23:59:59+0900")  // 2024-04-01T15:00:00Z
 
@@ -471,8 +520,10 @@ struct ItemPredicateTest {
         #expect(items.count == 2)
     }
 
-    @Test("excludes items on previous or next day with same time")
-    func excludesSameTimeDifferentDay() throws {
+    @Test("excludes items on previous or next day with same time", arguments: timeZones)
+    func excludesSameTimeDifferentDay(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
         let baseDate = isoDate("2024-04-01T00:00:00+0900")
         try service.create(date: isoDate("2024-03-31T00:00:00+0900"), content: "PrevDay", income: 1, outgo: 0, category: "Test")
         try service.create(date: isoDate("2024-04-02T00:00:00+0900"), content: "NextDay", income: 1, outgo: 0, category: "Test")
@@ -486,8 +537,10 @@ struct ItemPredicateTest {
         #expect(items.isEmpty)
     }
 
-    @Test("includes item exactly at end of day UTC")
-    func includesEndOfDayUTC() throws {
+    @Test("includes item exactly at end of day UTC", arguments: timeZones)
+    func includesEndOfDayUTC(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
         let baseDate = isoDate("2024-04-01T00:00:00+0900")
         let endOfDay = isoDate("2024-04-01T23:59:59+0900")
         try service.create(date: endOfDay, content: "EndOfDay", income: 1, outgo: 0, category: "Test")
@@ -499,8 +552,10 @@ struct ItemPredicateTest {
         #expect(contents == ["EndOfDay"])
     }
 
-    @Test("excludes item exactly at start of next day")
-    func excludesStartOfNextDay() throws {
+    @Test("excludes item exactly at start of next day", arguments: timeZones)
+    func excludesStartOfNextDay(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
         let baseDate = isoDate("2024-04-01T00:00:00+0900")
         try service.create(date: isoDate("2024-04-02T00:00:00+0900"), content: "NextDayStart", income: 1, outgo: 0, category: "Test")
 
@@ -510,8 +565,10 @@ struct ItemPredicateTest {
         #expect(items.isEmpty)
     }
 
-    @Test("JST Jan 1 is treated as Dec 31 in UTC day")
-    func jstJanStartAppearsAsPreviousDay() throws {
+    @Test("JST Jan 1 is treated as Dec 31 in UTC day", arguments: timeZones)
+    func jstJanStartAppearsAsPreviousDay(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
         let jstDate = isoDate("2024-01-01T00:00:00+0900")
         try service.create(
             date: jstDate,
@@ -527,8 +584,10 @@ struct ItemPredicateTest {
         #expect(items.map(\.content).contains("JST_Jan1"))
     }
 
-    @Test("includes JST 4/02 00:00 in UTC 4/01")
-    func excludesStartOfNextJSTDayFromUTCDay() throws {
+    @Test("includes JST 4/02 00:00 in UTC 4/01", arguments: timeZones)
+    func excludesStartOfNextJSTDayFromUTCDay(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
         let jstDate = isoDate("2024-04-02T00:00:00+0900") // UTC: 2024-04-01T15:00:00Z
         try service.create(
             date: jstDate,
@@ -544,8 +603,10 @@ struct ItemPredicateTest {
         #expect(!items.map(\.content).contains("JST_NextDay"))
     }
 
-    @Test("includes JST 4/01 00:00 in UTC 3/31")
-    func includesStartOfJSTDayInPreviousUTCDay() throws {
+    @Test("includes JST 4/01 00:00 in UTC 3/31", arguments: timeZones)
+    func includesStartOfJSTDayInPreviousUTCDay(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
         let jstDate = isoDate("2024-04-01T00:00:00+0900") // UTC: 2024-03-31T15:00:00Z
         try service.create(
             date: jstDate,
@@ -563,8 +624,10 @@ struct ItemPredicateTest {
 
     // MARK: - Outgo
 
-    @Test("includes item with exact outgo on target date")
-    func includesItemWithExactOutgoOnDate() throws {
+    @Test("includes item with exact outgo on target date", arguments: timeZones)
+    func includesItemWithExactOutgoOnDate(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
         let date = isoDate("2024-06-01T00:00:00+0900")
         try service.create(date: date, content: "Match", income: 0, outgo: 5_000, category: "Test")
         try service.create(date: date, content: "Low", income: 0, outgo: 4_999, category: "Test")
@@ -576,8 +639,10 @@ struct ItemPredicateTest {
         #expect(contents == ["Match"])
     }
 
-    @Test("excludes item before date even if outgo matches")
-    func excludesItemBeforeDateEvenIfOutgoMatches() throws {
+    @Test("excludes item before date even if outgo matches", arguments: timeZones)
+    func excludesItemBeforeDateEvenIfOutgoMatches(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
         let cutoffDate = isoDate("2024-06-01T00:00:00+0900")
         try service.create(date: isoDate("2024-05-31T23:59:59+0900"), content: "Early", income: 0, outgo: 10_000, category: "Test")
         try service.create(date: cutoffDate, content: "Valid", income: 0, outgo: 10_000, category: "Test")
@@ -591,8 +656,10 @@ struct ItemPredicateTest {
 
     // MARK: - RepeatID
 
-    @Test("includes items with matching repeat ID")
-    func includesItemsWithRepeatID() throws {
+    @Test("includes items with matching repeat ID", arguments: timeZones)
+    func includesItemsWithRepeatID(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
         try service.create(date: isoDate("2024-01-01T00:00:00+0900"), content: "RepeatOne", income: 0, outgo: 0, category: "Test")
         let repeatID = try service.item()!.repeatID
 
@@ -605,8 +672,10 @@ struct ItemPredicateTest {
         #expect(contents == ["RepeatOne"])
     }
 
-    @Test("includes only future repeated items")
-    func includesOnlyFutureRepeatItems() throws {
+    @Test("includes only future repeated items", arguments: timeZones)
+    func includesOnlyFutureRepeatItems(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
         try service.create(date: isoDate("2024-01-01T00:00:00+0900"), content: "Past", income: 0, outgo: 0, category: "Test", repeatCount: 2)
         let repeatID = try service.item()!.repeatID
 

@@ -30,6 +30,14 @@ let isoDate: (String) -> Date = { string in
     return date
 }
 
+let timeZones: [TimeZone] = [
+    .init(identifier: "Asia/Tokyo")!,
+    .init(identifier: "Europe/London")!,
+    .init(identifier: "America/New_York")!,
+    .init(identifier: "America/Santo_Domingo")!,
+    .init(identifier: "Europe/Minsk")!
+]
+
 func fetchItems(_ context: ModelContext) -> [Item] {
     try! context.fetch(.items(.all))
 }

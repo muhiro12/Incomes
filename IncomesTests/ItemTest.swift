@@ -10,13 +10,16 @@ import Foundation
 @testable import Incomes
 import Testing
 
+@Suite(.serialized)
 struct ItemTest {
     let context = testContext
 
     // MARK: - Create
 
-    @Test("create assigns correct values and UTC-normalized date")
-    func createAssignsCorrectValuesAndUTCNormalizedDate() throws {
+    @Test("create assigns correct values and UTC-normalized date", arguments: timeZones)
+    func createAssignsCorrectValuesAndUTCNormalizedDate(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
         let date = isoDate("2024-03-15T10:30:00+0900")
         let content = "Lunch"
         let income = Decimal(0)
@@ -91,8 +94,10 @@ struct ItemTest {
         #expect(item.tags?.contains { $0.name == "202401" } == true)
     }
 
-    @Test("create tags contain year, yearMonth, content, and category")
-    func createAssignsAllExpectedTags() throws {
+    @Test("create tags contain year, yearMonth, content, and category", arguments: timeZones)
+    func createAssignsAllExpectedTags(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
         let date = isoDate("2024-06-10T12:00:00+0900")
         let item = try Item.create(
             context: context,
@@ -181,8 +186,10 @@ struct ItemTest {
         #expect(item.utcDate == expected)
     }
 
-    @Test("modify preserves repeatID if reassigned to same value")
-    func modifyPreservesRepeatIDIfSame() throws {
+    @Test("modify preserves repeatID if reassigned to same value", arguments: timeZones)
+    func modifyPreservesRepeatIDIfSame(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
         let repeatID = UUID()
         let item = try Item.create(
             context: context,
@@ -207,8 +214,10 @@ struct ItemTest {
         #expect(item.tags?.contains { $0.name == "202402" } == true)
     }
 
-    @Test("modify updates date to correct UTC startOfDay")
-    func modifyUpdatesDateToUTCDayStart() throws {
+    @Test("modify updates date to correct UTC startOfDay", arguments: timeZones)
+    func modifyUpdatesDateToUTCDayStart(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
         let item = try Item.create(
             context: context,
             date: isoDate("2024-07-01T10:00:00+0900"),
