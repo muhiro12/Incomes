@@ -75,7 +75,7 @@ struct SearchListView: View {
 #Preview {
     IncomesPreview { _ in
         NavigationStack {
-            SearchListView(selection: .constant(nil))
+            SearchListView(selection: .constant(.all))
         }
     }
 }

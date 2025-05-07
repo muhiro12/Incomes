@@ -15,12 +15,7 @@ struct SearchNavigationView: View {
         NavigationSplitView {
             SearchListView(selection: $predicate)
         } detail: {
-            if let predicate {
-                SearchResultView(predicate: predicate)
-            } else {
-                Text("No Results")
-                    .navigationTitle("Results")
-            }
+            SearchResultView(predicate: predicate ?? .none)
         }
     }
 }

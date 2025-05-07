@@ -27,13 +27,21 @@ struct SearchResultView: View {
     }
 
     var body: some View {
-        List {
-            ForEach(sortedMonths, id: \.self) { month in
-                Section(month.formatted(.dateTime.year().month())) {
-                    ForEach(groupedItems[month] ?? []) { item in
-                        ListItem()
-                            .environment(item)
+        Group {
+            if items.isNotEmpty {
+                List {
+                    ForEach(sortedMonths, id: \.self) { month in
+                        Section(month.formatted(.dateTime.year().month())) {
+                            ForEach(groupedItems[month] ?? []) { item in
+                                ListItem()
+                                    .environment(item)
+                            }
+                        }
                     }
+                }
+            } else {
+                ContentUnavailableView {
+                    Label("No Results", systemImage: "magnifyingglass")
                 }
             }
         }
@@ -45,6 +53,14 @@ struct SearchResultView: View {
     IncomesPreview { _ in
         NavigationStack {
             SearchResultView(predicate: .all)
+        }
+    }
+}
+
+#Preview {
+    IncomesPreview { _ in
+        NavigationStack {
+            SearchResultView(predicate: .none)
         }
     }
 }
