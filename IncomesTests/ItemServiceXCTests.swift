@@ -24,7 +24,7 @@ final class ItemServiceXCTests: XCTestCase {
                                 category: "category")
             let result = fetchItems(context).first!
 
-            XCTAssertEqual(result.date, isoDate("2000-01-01T00:00:00Z"))
+            XCTAssertEqual(result.utcDate, isoDate("2000-01-01T00:00:00Z"))
             XCTAssertEqual(result.content, "content")
             XCTAssertEqual(result.income, 200)
             XCTAssertEqual(result.outgo, 100)
@@ -44,13 +44,13 @@ final class ItemServiceXCTests: XCTestCase {
             let first = fetchItems(context).first!
             let last = fetchItems(context).last!
 
-            XCTAssertEqual(first.date, isoDate("2000-03-01T00:00:00Z"))
+            XCTAssertEqual(first.utcDate, isoDate("2000-03-01T00:00:00Z"))
             XCTAssertEqual(first.content, "content")
             XCTAssertEqual(first.income, 200)
             XCTAssertEqual(first.outgo, 100)
             XCTAssertEqual(first.balance, 300)
 
-            XCTAssertEqual(last.date, isoDate("2000-01-01T00:00:00Z"))
+            XCTAssertEqual(last.utcDate, isoDate("2000-01-01T00:00:00Z"))
             XCTAssertEqual(last.content, "content")
             XCTAssertEqual(last.income, 200)
             XCTAssertEqual(last.outgo, 100)
@@ -80,7 +80,7 @@ final class ItemServiceXCTests: XCTestCase {
                                 category: "category2")
             let result = fetchItems(context).first!
 
-            XCTAssertEqual(result.date, isoDate("2001-01-02T00:00:00Z"))
+            XCTAssertEqual(result.utcDate, isoDate("2001-01-02T00:00:00Z"))
             XCTAssertEqual(result.content, "content2")
             XCTAssertEqual(result.income, 100)
             XCTAssertEqual(result.outgo, 200)
@@ -108,19 +108,19 @@ final class ItemServiceXCTests: XCTestCase {
             let second = fetchItems(context)[1]
             let last = fetchItems(context)[2]
 
-            XCTAssertEqual(first.date, isoDate("2000-03-01T00:00:00Z"))
+            XCTAssertEqual(first.utcDate, isoDate("2000-03-01T00:00:00Z"))
             XCTAssertEqual(first.content, "content")
             XCTAssertEqual(first.income, 200)
             XCTAssertEqual(first.outgo, 100)
             XCTAssertEqual(first.balance, 100)
 
-            XCTAssertEqual(second.date, isoDate("2000-02-02T00:00:00Z"))
+            XCTAssertEqual(second.utcDate, isoDate("2000-02-02T00:00:00Z"))
             XCTAssertEqual(second.content, "content2")
             XCTAssertEqual(second.income, 100)
             XCTAssertEqual(second.outgo, 200)
             XCTAssertEqual(second.balance, 0)
 
-            XCTAssertEqual(last.date, isoDate("2000-01-01T00:00:00Z"))
+            XCTAssertEqual(last.utcDate, isoDate("2000-01-01T00:00:00Z"))
             XCTAssertEqual(last.content, "content")
             XCTAssertEqual(last.income, 200)
             XCTAssertEqual(last.outgo, 100)
@@ -149,7 +149,7 @@ final class ItemServiceXCTests: XCTestCase {
                                               category: "category2")
             let result = fetchItems(context).first!
 
-            XCTAssertEqual(result.date, isoDate("2001-01-02T00:00:00Z"))
+            XCTAssertEqual(result.utcDate, isoDate("2001-01-02T00:00:00Z"))
             XCTAssertEqual(result.content, "content2")
             XCTAssertEqual(result.income, 100)
             XCTAssertEqual(result.outgo, 200)
@@ -177,19 +177,19 @@ final class ItemServiceXCTests: XCTestCase {
             let second = fetchItems(context)[1]
             let last = fetchItems(context)[2]
 
-            XCTAssertEqual(first.date, isoDate("2000-03-02T00:00:00Z"))
+            XCTAssertEqual(first.utcDate, isoDate("2000-03-02T00:00:00Z"))
             XCTAssertEqual(first.content, "content2")
             XCTAssertEqual(first.income, 100)
             XCTAssertEqual(first.outgo, 200)
             XCTAssertEqual(first.balance, -100)
 
-            XCTAssertEqual(second.date, isoDate("2000-02-02T00:00:00Z"))
+            XCTAssertEqual(second.utcDate, isoDate("2000-02-02T00:00:00Z"))
             XCTAssertEqual(second.content, "content2")
             XCTAssertEqual(second.income, 100)
             XCTAssertEqual(second.outgo, 200)
             XCTAssertEqual(second.balance, 0)
 
-            XCTAssertEqual(last.date, isoDate("2000-01-01T00:00:00Z"))
+            XCTAssertEqual(last.utcDate, isoDate("2000-01-01T00:00:00Z"))
             XCTAssertEqual(last.content, "content")
             XCTAssertEqual(last.income, 200)
             XCTAssertEqual(last.outgo, 100)
@@ -218,7 +218,7 @@ final class ItemServiceXCTests: XCTestCase {
                                            category: "category2")
             let result = fetchItems(context).first!
 
-            XCTAssertEqual(result.date, isoDate("2001-01-02T00:00:00Z"))
+            XCTAssertEqual(result.utcDate, isoDate("2001-01-02T00:00:00Z"))
             XCTAssertEqual(result.content, "content2")
             XCTAssertEqual(result.income, 100)
             XCTAssertEqual(result.outgo, 200)
@@ -246,19 +246,19 @@ final class ItemServiceXCTests: XCTestCase {
             let second = fetchItems(context)[1]
             let last = fetchItems(context)[2]
 
-            XCTAssertEqual(first.date, isoDate("2000-03-02T00:00:00Z"))
+            XCTAssertEqual(first.utcDate, isoDate("2000-03-02T00:00:00Z"))
             XCTAssertEqual(first.content, "content2")
             XCTAssertEqual(first.income, 100)
             XCTAssertEqual(first.outgo, 200)
             XCTAssertEqual(first.balance, -300)
 
-            XCTAssertEqual(second.date, isoDate("2000-02-02T00:00:00Z"))
+            XCTAssertEqual(second.utcDate, isoDate("2000-02-02T00:00:00Z"))
             XCTAssertEqual(second.content, "content2")
             XCTAssertEqual(second.income, 100)
             XCTAssertEqual(second.outgo, 200)
             XCTAssertEqual(second.balance, -200)
 
-            XCTAssertEqual(last.date, isoDate("2000-01-02T00:00:00Z"))
+            XCTAssertEqual(last.utcDate, isoDate("2000-01-02T00:00:00Z"))
             XCTAssertEqual(last.content, "content2")
             XCTAssertEqual(last.income, 100)
             XCTAssertEqual(last.outgo, 200)

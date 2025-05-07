@@ -82,7 +82,7 @@ private extension BalanceChartSection {
     }
 
     func date(of item: Item) -> Date {
-        item.date
+        item.utcDate
     }
 
     func balance(of item: Item) -> Decimal {

@@ -112,7 +112,7 @@ final class ItemService {
                                     income: income,
                                     outgo: outgo,
                                     category: category,
-                                    descriptor: .items(.repeatIDAndDateIsAfter(repeatID: item.repeatID, date: item.date)))
+                                    descriptor: .items(.repeatIDAndDateIsAfter(repeatID: item.repeatID, date: item.utcDate)))
     }
 
     func updateForAllItems(item: Item,
@@ -159,13 +159,13 @@ private extension ItemService {
                                  category: String,
                                  descriptor: FetchDescriptor<Item>) throws {
         let components = Calendar.utc.dateComponents([.year, .month, .day],
-                                                     from: item.date,
+                                                     from: item.utcDate,
                                                      to: date)
 
         let repeatID = UUID()
         let items = try context.fetch(descriptor)
         try items.forEach {
-            guard let newDate = Calendar.utc.date(byAdding: components, to: $0.date) else {
+            guard let newDate = Calendar.utc.date(byAdding: components, to: $0.utcDate) else {
                 assertionFailure()
                 return
             }

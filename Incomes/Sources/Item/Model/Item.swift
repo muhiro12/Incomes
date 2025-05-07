@@ -115,6 +115,15 @@ final class Item {
 }
 
 extension Item {
+    var utcDate: Date {
+        date
+    }
+
+    var localDate: Date {
+        // TODO: Converts utcDate to startOfDay in user's local timezone
+        utcDate
+    }
+
     var profit: Decimal {
         income - outgo
     }
@@ -138,7 +147,7 @@ extension Item {
 
 extension Item: Comparable {
     static func < (lhs: Item, rhs: Item) -> Bool {
-        lhs.date > rhs.date
+        lhs.utcDate > rhs.utcDate
     }
 }
 

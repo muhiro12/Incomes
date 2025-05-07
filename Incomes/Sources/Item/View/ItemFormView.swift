@@ -172,7 +172,7 @@ extension ItemFormView: View {
         }
         .onAppear {
             if let item {
-                date = item.date
+                date = item.utcDate
                 content = item.content
                 income = item.income.isNotZero ? item.income.description : .empty
                 outgo = item.outgo.isNotZero ? item.outgo.description : .empty

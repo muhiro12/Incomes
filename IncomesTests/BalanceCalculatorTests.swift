@@ -35,7 +35,7 @@ final class BalanceCalculatorTests: XCTestCase {
                                         category: "category",
                                         repeatID: UUID())
             context.insert(item)
-            try! calculator.calculate(after: item.date)
+            try! calculator.calculate(after: item.utcDate)
 
             let first = fetchItems(context).first!
             let last = fetchItems(context).last!
@@ -68,7 +68,7 @@ final class BalanceCalculatorTests: XCTestCase {
                                         category: "category",
                                         repeatID: UUID())
             context.insert(item)
-            try! calculator.calculate(after: item.date)
+            try! calculator.calculate(after: item.utcDate)
 
             let first = fetchItems(context).first!
             let last = fetchItems(context).last!
@@ -101,7 +101,7 @@ final class BalanceCalculatorTests: XCTestCase {
                                         category: "category",
                                         repeatID: UUID())
             context.insert(item)
-            try! calculator.calculate(after: item.date)
+            try! calculator.calculate(after: item.utcDate)
 
             let first = fetchItems(context).first!
             let last = fetchItems(context).last!
@@ -136,7 +136,7 @@ final class BalanceCalculatorTests: XCTestCase {
                              outgo: 100,
                              category: "category",
                              repeatID: UUID())
-            try! calculator.calculate(after: item.date)
+            try! calculator.calculate(after: item.utcDate)
 
             let first = fetchItems(context).first!
             let last = fetchItems(context).last!
@@ -171,7 +171,7 @@ final class BalanceCalculatorTests: XCTestCase {
                              outgo: 100,
                              category: "category",
                              repeatID: UUID())
-            try! calculator.calculate(after: item.date)
+            try! calculator.calculate(after: item.utcDate)
 
             let first = fetchItems(context).first!
             let last = fetchItems(context).last!
@@ -206,7 +206,7 @@ final class BalanceCalculatorTests: XCTestCase {
                              outgo: 100,
                              category: "category",
                              repeatID: UUID())
-            try! calculator.calculate(after: item.date)
+            try! calculator.calculate(after: item.utcDate)
 
             let first = fetchItems(context).first!
             let last = fetchItems(context).last!
@@ -241,7 +241,7 @@ final class BalanceCalculatorTests: XCTestCase {
                              outgo: 100,
                              category: "category",
                              repeatID: UUID())
-            try! calculator.calculate(after: item.date)
+            try! calculator.calculate(after: item.utcDate)
 
             let first = fetchItems(context).first!
             let last = fetchItems(context).last!
@@ -271,7 +271,7 @@ final class BalanceCalculatorTests: XCTestCase {
 
             let item = items[1]
             context.delete(item)
-            try! calculator.calculate(after: item.date)
+            try! calculator.calculate(after: item.utcDate)
 
             let first = fetchItems(context).first!
             let last = fetchItems(context).last!
@@ -301,7 +301,7 @@ final class BalanceCalculatorTests: XCTestCase {
 
             let item = items[0]
             context.delete(item)
-            try! calculator.calculate(after: item.date)
+            try! calculator.calculate(after: item.utcDate)
 
             let first = fetchItems(context).first!
             let last = fetchItems(context).last!
@@ -331,7 +331,7 @@ final class BalanceCalculatorTests: XCTestCase {
 
             let item = items[4]
             context.delete(item)
-            try! calculator.calculate(after: item.date)
+            try! calculator.calculate(after: item.utcDate)
 
             let first = fetchItems(context).first!
             let last = fetchItems(context).last!

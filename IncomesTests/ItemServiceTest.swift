@@ -217,7 +217,7 @@ struct ItemServiceTest {
             category: "Test"
         )
         let item = try #require(try service.item())
-        #expect(item.date == boundaryDate)
+        #expect(item.utcDate == boundaryDate)
     }
 
     @Test("create stores date in JST correctly")
@@ -231,7 +231,7 @@ struct ItemServiceTest {
             category: "Test"
         )
         let item = try #require(try service.item())
-        #expect(item.date == jstDate)
+        #expect(item.utcDate == jstDate)
     }
 
     @Test("create rounds input date to start of day UTC")
@@ -246,7 +246,7 @@ struct ItemServiceTest {
             category: "Test"
         )
         let item = try #require(try service.item())
-        #expect(item.date == expectedDate)
+        #expect(item.utcDate == expectedDate)
     }
 
     // MARK: - Update
@@ -272,7 +272,7 @@ struct ItemServiceTest {
         item = try #require(fetchItems(context).first)
         #expect(item.balance == 50)
         #expect(item.content == "Updated")
-        #expect(item.date == isoDate("2024-01-02T00:00:00Z"))
+        #expect(item.utcDate == isoDate("2024-01-02T00:00:00Z"))
     }
 
     @Test("update assigns new repeatID")
@@ -289,7 +289,7 @@ struct ItemServiceTest {
 
         try service.update(
             item: item,
-            date: item.date,
+            date: item.utcDate,
             content: "Changed",
             income: 200,
             outgo: 0,
@@ -315,7 +315,7 @@ struct ItemServiceTest {
             outgo: 0,
             category: "SortTest"
         )
-        var items = try service.items().sorted { $0.date < $1.date }
+        var items = try service.items().sorted { $0.utcDate < $1.utcDate }
         #expect(items[0].content == "First")
 
         try service.update(
@@ -327,7 +327,7 @@ struct ItemServiceTest {
             category: items[1].category?.name ?? ""
         )
 
-        items = try service.items().sorted { $0.date < $1.date }
+        items = try service.items().sorted { $0.utcDate < $1.utcDate }
         #expect(items[0].content == "Second")
     }
 
@@ -341,17 +341,17 @@ struct ItemServiceTest {
             category: "Media",
             repeatCount: 3
         )
-        let items = try service.items().sorted { $0.date < $1.date }
+        let items = try service.items().sorted { $0.utcDate < $1.utcDate }
         let target = items[1] // middle item
         try service.updateForFutureItems(
             item: target,
-            date: target.date,
+            date: target.utcDate,
             content: "UpdatedSub",
             income: 0,
             outgo: 1_200,
             category: "Entertainment"
         )
-        let result = try service.items().sorted { $0.date < $1.date }
+        let result = try service.items().sorted { $0.utcDate < $1.utcDate }
         #expect(result[0].content == "Subscription")
         #expect(result[1].content == "UpdatedSub")
         #expect(result[2].content == "UpdatedSub")
@@ -369,18 +369,18 @@ struct ItemServiceTest {
             category: "Bills",
             repeatCount: 3
         )
-        let items = try service.items().sorted { $0.date < $1.date }
+        let items = try service.items().sorted { $0.utcDate < $1.utcDate }
         let last = items[2]
 
         try service.updateForFutureItems(
             item: last,
-            date: last.date,
+            date: last.utcDate,
             content: "Changed",
             income: 200,
             outgo: 0,
             category: "BillsUpdated"
         )
-        let result = try service.items().sorted { $0.date < $1.date }
+        let result = try service.items().sorted { $0.utcDate < $1.utcDate }
         #expect(result[0].content == "Monthly")
         #expect(result[1].content == "Monthly")
         #expect(result[2].content == "Changed")
@@ -398,7 +398,7 @@ struct ItemServiceTest {
         let item = try #require(fetchItems(context).first)
         try service.updateForFutureItems(
             item: item,
-            date: item.date,
+            date: item.utcDate,
             content: "SoloUpdated",
             income: 100,
             outgo: 50,
@@ -422,7 +422,7 @@ struct ItemServiceTest {
         let target = try #require(try service.item())
         try service.updateForAllItems(
             item: target,
-            date: target.date,
+            date: target.utcDate,
             content: "Fitness",
             income: 0,
             outgo: 7_000,
@@ -513,7 +513,7 @@ struct ItemServiceTest {
         var item = try #require(fetchItems(context).first)
         try service.update(
             item: item,
-            date: item.date,
+            date: item.utcDate,
             content: item.content,
             income: item.income,
             outgo: 90,
@@ -557,10 +557,10 @@ struct ItemServiceTest {
             outgo: 80,
             category: "Split"
         )
-        var items = try service.items().sorted { $0.date < $1.date }
+        var items = try service.items().sorted { $0.utcDate < $1.utcDate }
         try service.update(
             item: items[1],
-            date: items[1].date,
+            date: items[1].utcDate,
             content: items[1].content,
             income: 500,
             outgo: 80,
@@ -568,7 +568,7 @@ struct ItemServiceTest {
         )
 
         try service.recalculate(after: isoDate("2024-01-15T00:00:00Z"))
-        items = try service.items().sorted { $0.date < $1.date }
+        items = try service.items().sorted { $0.utcDate < $1.utcDate }
         #expect(items[0].balance == 50)
         #expect(items[1].balance == 470)
     }
@@ -591,7 +591,7 @@ struct ItemServiceTest {
         )
 
         try service.recalculate(after: isoDate("2024-02-01T00:00:00Z"))
-        let items = try service.items().sorted { $0.date < $1.date }
+        let items = try service.items().sorted { $0.utcDate < $1.utcDate }
         let balances = items.map(\.balance)
 
         #expect(balances.count == 2)

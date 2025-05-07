@@ -34,7 +34,7 @@ struct ItemTest {
             repeatID: repeatID
         )
 
-        #expect(item.date == Calendar.utc.startOfDay(for: date))
+        #expect(item.utcDate == Calendar.utc.startOfDay(for: date))
         #expect(item.content == content)
         #expect(item.income == income)
         #expect(item.outgo == outgo)
@@ -66,7 +66,7 @@ struct ItemTest {
             category: "Boundary",
             repeatID: UUID()
         )
-        #expect(item.date == expected)
+        #expect(item.utcDate == expected)
     }
 
     @Test(
@@ -85,7 +85,7 @@ struct ItemTest {
             repeatID: UUID()
         )
 
-        #expect(item.date == Calendar.utc.startOfDay(for: date))
+        #expect(item.utcDate == Calendar.utc.startOfDay(for: date))
         #expect(item.content.isEmpty)
         #expect(item.income == .zero)
         #expect(item.outgo == .zero)
@@ -139,7 +139,7 @@ struct ItemTest {
             repeatID: UUID()
         )
 
-        #expect(item.date == Calendar.utc.startOfDay(for: newDate))
+        #expect(item.utcDate == Calendar.utc.startOfDay(for: newDate))
         #expect(item.content == "Updated")
         #expect(item.income == 200)
         #expect(item.outgo == 50)
@@ -180,7 +180,7 @@ struct ItemTest {
             repeatID: item.repeatID
         )
 
-        #expect(item.date == expected)
+        #expect(item.utcDate == expected)
     }
 
     @Test("modify preserves repeatID if reassigned to same value")
@@ -231,6 +231,6 @@ struct ItemTest {
             repeatID: item.repeatID
         )
 
-        #expect(item.date == Calendar.utc.startOfDay(for: updatedDate))
+        #expect(item.utcDate == Calendar.utc.startOfDay(for: updatedDate))
     }
 }
