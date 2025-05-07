@@ -44,7 +44,6 @@ struct ItemTest {
 
     @Test(
         "create normalizes boundary dates",
-        .disabled("Known issue: under UTC normalization review"),
         arguments: [
             ("2023-12-31T23:59:59+0900", "2023-12-31T00:00:00Z"),
             ("2024-01-01T00:00:00+0900", "2024-01-01T00:00:00Z"),
@@ -148,7 +147,6 @@ struct ItemTest {
 
     @Test(
         "modify normalizes boundary dates to UTC start of day",
-        .disabled("Known issue: under UTC normalization review"),
         arguments: [
             ("2023-12-31T23:59:59+0900", "2023-12-31T00:00:00Z"),
             ("2024-01-01T00:00:00+0900", "2024-01-01T00:00:00Z"),

@@ -576,14 +576,14 @@ struct ItemServiceTest {
     @Test("recalculate is correct across time zone boundaries")
     func recalculateWithTimeZoneBoundaries() throws {
         try service.create(
-            date: isoDate("2024-02-28T23:00:00Z"),  // potentially Feb 29 in JST
+            date: isoDate("2024-02-28T14:00:00Z"),  // JST: 2024-02-28 23:00
             content: "LateFeb",
             income: 500,
             outgo: 100,
             category: "TZTest"
         )
         try service.create(
-            date: isoDate("2024-02-29T01:00:00Z"),  // clearly Feb 29 UTC
+            date: isoDate("2024-02-28T15:00:00Z"),  // JST: 2024-02-29 00:00
             content: "EarlyMar",
             income: 300,
             outgo: 50,
@@ -591,11 +591,10 @@ struct ItemServiceTest {
         )
 
         try service.recalculate(after: isoDate("2024-02-01T00:00:00Z"))
-        let items = try service.items().sorted { $0.utcDate < $1.utcDate }
-        let balances = items.map(\.balance)
+        let items = try service.items()
+        let balances = Dictionary(uniqueKeysWithValues: items.map { ($0.content, $0.balance) })
 
-        #expect(balances.count == 2)
-        #expect(balances[0] == 400)  // 500 - 100
-        #expect(balances[1] == 650)  // 400 + (300 - 50)
+        #expect(balances["LateFeb"] == 400)
+        #expect(balances["EarlyMar"] == 650)
     }
 }
