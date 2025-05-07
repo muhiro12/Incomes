@@ -56,6 +56,7 @@ struct SearchListView: View {
                 }
             }
         }
+        .scrollDismissesKeyboard(.interactively)
         .navigationTitle("Search")
         .toolbar {
             ToolbarItem(placement: .bottomBar) {
