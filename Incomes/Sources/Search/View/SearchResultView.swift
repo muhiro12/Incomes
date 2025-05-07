@@ -1,0 +1,50 @@
+//
+//  SearchResultView.swift
+//  Incomes
+//
+//  Created by Hiromu Nakano on 2025/05/07.
+//  Copyright © 2025 Hiromu Nakano. All rights reserved.
+//
+
+import SwiftData
+import SwiftUI
+
+struct SearchResultView: View {
+    @Query private var items: [Item]
+
+    init(predicate: ItemPredicate) {
+        _items = .init(.items(predicate))
+    }
+
+    private var groupedItems: [Date: [Item]] {
+        Dictionary(grouping: items) { item in
+            Calendar.utc.startOfMonth(for: item.date)
+        }
+    }
+
+    private var sortedMonths: [Date] {
+        groupedItems.keys.sorted(by: >)
+    }
+
+    var body: some View {
+        List {
+            ForEach(sortedMonths, id: \.self) { month in
+                Section(month.formatted(.dateTime.year().month())) {
+                    ForEach(groupedItems[month] ?? []) { item in
+                        ListItem()
+                            .environment(item)
+                    }
+                }
+            }
+        }
+        .navigationTitle("Results")
+    }
+}
+
+#Preview {
+    IncomesPreview { _ in
+        NavigationStack {
+            SearchResultView(predicate: .all)
+        }
+    }
+}

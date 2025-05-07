@@ -13,6 +13,7 @@ enum MainTab {
     case category
     case settings
     case debug
+    case search
 }
 
 extension MainTab {
@@ -30,6 +31,8 @@ extension MainTab {
                 SettingsNavigationView()
             case .debug:
                 DebugNavigationView()
+            case .search:
+                SearchNavigationView()
             }
         }
     }
@@ -66,6 +69,12 @@ extension MainTab {
                 Text("Debug")
             } icon: {
                 Image(systemName: "flask")
+            }
+        case .search:
+            Label {
+                Text("Search")
+            } icon: {
+                Image(systemName: "magnifyingglass")
             }
         }
     }

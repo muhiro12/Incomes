@@ -31,7 +31,7 @@ struct MainTabView: View {
             if #available(iOS 18.0, *) {
                 TabView(selection: $mainTab) {
                     ForEach(tabs) { tab in
-                        Tab(value: tab) {
+                        Tab(value: tab, role: tab == .search ? .search : nil) {
                             tab.rootView
                                 .toolbar(
                                     horizontalSizeClass == .regular ? .visible : .hidden,

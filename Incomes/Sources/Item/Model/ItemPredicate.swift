@@ -21,8 +21,13 @@ enum ItemPredicate {
     case dateIsSameYearAs(Date)
     case dateIsSameMonthAs(Date)
     case dateIsSameDayAs(Date)
+    // MARK: - Income
+    case incomeIsBetween(min: Decimal, max: Decimal)
     // MARK: Outgo
+    case outgoIsBetween(min: Decimal, max: Decimal)
     case outgoIsGreaterThanOrEqualTo(amount: Decimal, onOrAfter: Date)
+    // MARK: - Balance
+    case balanceIsBetween(min: Decimal, max: Decimal)
     // MARK: RepeatID
     case repeatIDIs(UUID)
     case repeatIDAndDateIsAfter(repeatID: UUID, date: Date)
@@ -120,11 +125,29 @@ enum ItemPredicate {
                 start <= $0.date && $0.date <= end
             }
 
+        // MARK: - Income
+
+        case .incomeIsBetween(let min, let max):
+            return #Predicate {
+                $0.income >= min && $0.income <= max
+            }
+
         // MARK: - Outgo
 
+        case .outgoIsBetween(let min, let max):
+            return #Predicate {
+                $0.outgo >= min && $0.outgo <= max
+            }
         case .outgoIsGreaterThanOrEqualTo(let amount, let date):
             return #Predicate {
                 $0.date >= date && $0.outgo >= amount
+            }
+
+        // MARK: - Balance
+
+        case .balanceIsBetween(let min, let max):
+            return #Predicate {
+                $0.balance >= min && $0.balance <= max
             }
 
         // MARK: - RepeatID
@@ -140,6 +163,8 @@ enum ItemPredicate {
         }
     }
 }
+
+extension ItemPredicate: Hashable {}
 
 extension FetchDescriptor where T == Item {
     static func items(_ predicate: ItemPredicate, order: SortOrder = .reverse) -> FetchDescriptor {
