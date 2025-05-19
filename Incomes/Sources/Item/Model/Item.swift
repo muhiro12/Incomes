@@ -120,7 +120,7 @@ extension Item {
     }
 
     var localDate: Date {
-        Calendar.current.date(shiftedFrom: utcDate, using: .utc)
+        Calendar.current.startOfDay(for: Calendar.current.date(shiftedFrom: utcDate, using: .utc))
     }
 
     var profit: Decimal {
