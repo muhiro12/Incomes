@@ -55,7 +55,56 @@ struct ItemPredicateTest {
 
     // MARK: - Tag
 
-    // TODO: No test methods currently provided for tagIs or tagAndYear in the original file
+    @Test("returns items with matching year tag", arguments: timeZones)
+    func returnsItemsWithMatchingYearTag(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
+        let date = shiftedDate("2024-01-01T00:00:00Z")
+        try service.create(date: date, content: "Content", income: 0, outgo: 0, category: "Category")
+
+        let tag = try Tag.create(context: context, name: "2024", type: .year)
+        let predicate = ItemPredicate.tagIs(tag)
+        let items = try service.items(.items(predicate))
+
+        #expect(items[0].tags?.first { $0.type == .year }?.name == "2024")
+        #expect(items[0].tags?.first { $0.type == .yearMonth }?.name == "202401")
+        #expect(items[0].tags?.first { $0.type == .content }?.name == "Content")
+        #expect(items[0].tags?.first { $0.type == .category }?.name == "Category")
+    }
+
+    @Test("returns items with matching yearMonth tag", arguments: timeZones)
+    func returnsItemsWithMatchingYearMonthTag(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
+        let date = shiftedDate("2024-01-01T00:00:00Z")
+        try service.create(date: date, content: "Content", income: 0, outgo: 0, category: "Category")
+
+        let tag = try Tag.create(context: context, name: "202401", type: .yearMonth)
+        let predicate = ItemPredicate.tagIs(tag)
+        let items = try service.items(.items(predicate))
+
+        #expect(items[0].tags?.first { $0.type == .year }?.name == "2024")
+        #expect(items[0].tags?.first { $0.type == .yearMonth }?.name == "202401")
+        #expect(items[0].tags?.first { $0.type == .content }?.name == "Content")
+        #expect(items[0].tags?.first { $0.type == .category }?.name == "Category")
+    }
+
+    @Test("returns items with matching content and year for tagAndYear", arguments: timeZones)
+    func returnsItemsWithMatchingTagAndYear(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
+        let date = shiftedDate("2024-01-01T00:00:00Z")
+        try service.create(date: date, content: "Content", income: 0, outgo: 0, category: "Category")
+
+        let tag = try Tag.create(context: context, name: "Content", type: .content)
+        let predicate = ItemPredicate.tagAndYear(tag: tag, yearString: "2024")
+        let items = try service.items(.items(predicate))
+
+        #expect(items[0].tags?.first { $0.type == .year }?.name == "2024")
+        #expect(items[0].tags?.first { $0.type == .yearMonth }?.name == "202401")
+        #expect(items[0].tags?.first { $0.type == .content }?.name == "Content")
+        #expect(items[0].tags?.first { $0.type == .category }?.name == "Category")
+    }
 
     // MARK: - Date
 

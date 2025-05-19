@@ -33,7 +33,9 @@ final class Item {
         let item = Item()
         context.insert(item)
 
-        item.date = Calendar.utc.startOfDay(for: Calendar.utc.date(shiftedFrom: date, using: .current))
+        let shiftedDate = Calendar.utc.date(shiftedFrom: date, using: .current)
+
+        item.date = Calendar.utc.startOfDay(for: shiftedDate)
         item.content = content
         item.income = income
         item.outgo = outgo
@@ -42,12 +44,12 @@ final class Item {
         item.tags = [
             try .create(
                 context: context,
-                name: Calendar.utc.startOfYear(for: date).stringValueWithoutLocale(.yyyy),
+                name: Calendar.utc.startOfYear(for: shiftedDate).stringValueWithoutLocale(.yyyy),
                 type: .year
             ),
             try .create(
                 context: context,
-                name: Calendar.utc.startOfMonth(for: date).stringValueWithoutLocale(.yyyyMM),
+                name: Calendar.utc.startOfMonth(for: shiftedDate).stringValueWithoutLocale(.yyyyMM),
                 type: .yearMonth
             ),
             try .create(
@@ -71,7 +73,9 @@ final class Item {
                 outgo: Decimal,
                 category: String,
                 repeatID: UUID) throws {
-        self.date = Calendar.utc.startOfDay(for: Calendar.utc.date(shiftedFrom: date, using: .current))
+        let shiftedDate = Calendar.utc.date(shiftedFrom: date, using: .current)
+
+        self.date = Calendar.utc.startOfDay(for: shiftedDate)
         self.content = content
         self.income = income
         self.outgo = outgo
@@ -84,12 +88,12 @@ final class Item {
         self.tags = [
             try .create(
                 context: context,
-                name: Calendar.utc.startOfYear(for: date).stringValueWithoutLocale(.yyyy),
+                name: Calendar.utc.startOfYear(for: shiftedDate).stringValueWithoutLocale(.yyyy),
                 type: .year
             ),
             try .create(
                 context: context,
-                name: Calendar.utc.startOfMonth(for: date).stringValueWithoutLocale(.yyyyMM),
+                name: Calendar.utc.startOfMonth(for: shiftedDate).stringValueWithoutLocale(.yyyyMM),
                 type: .yearMonth
             ),
             try .create(

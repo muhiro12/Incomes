@@ -78,10 +78,7 @@ struct ItemTest {
         #expect(item.utcDate == expected)
     }
 
-    @Test(
-        "create assigns default values when optional inputs are minimal",
-        .disabled("Known issue: under UTC normalization review")
-    )
+    @Test("create assigns default values when optional inputs are minimal")
     func createAssignsDefaultValues() throws {
         let date = shiftedDate("2024-01-01T00:00:00Z")
         let item = try Item.create(
@@ -94,7 +91,7 @@ struct ItemTest {
             repeatID: UUID()
         )
 
-        #expect(item.utcDate == Calendar.utc.startOfDay(for: date))
+        #expect(item.utcDate == isoDate("2024-01-01T00:00:00Z"))
         #expect(item.content.isEmpty)
         #expect(item.income == .zero)
         #expect(item.outgo == .zero)
@@ -125,10 +122,7 @@ struct ItemTest {
 
     // MARK: - Modify
 
-    @Test(
-        "modify updates values and regenerates tags with UTC-normalized date",
-        .disabled("Known issue: under UTC normalization review")
-    )
+    @Test("modify updates values and regenerates tags with UTC-normalized date")
     func modifyUpdatesValuesAndRegeneratesTags() throws {
         let item = try Item.create(
             context: context,
@@ -150,7 +144,7 @@ struct ItemTest {
             repeatID: UUID()
         )
 
-        #expect(item.utcDate == Calendar.utc.startOfDay(for: newDate))
+        #expect(item.utcDate == isoDate("2024-04-01T00:00:00Z"))
         #expect(item.content == "Updated")
         #expect(item.income == 200)
         #expect(item.outgo == 50)

@@ -81,9 +81,8 @@ enum ItemPredicate {
             switch tagType {
             case .content:
                 let content = tag.name
-                let shiftedDate = Calendar.utc.date(shiftedFrom: date, using: .current)
-                let start = Calendar.utc.startOfYear(for: shiftedDate)
-                let end = Calendar.utc.endOfYear(for: shiftedDate)
+                let start = Calendar.utc.startOfYear(for: date)
+                let end = Calendar.utc.endOfYear(for: date)
                 return #Predicate {
                     $0.content == content && start <= $0.date && $0.date <= end
                 }
