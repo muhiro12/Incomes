@@ -158,7 +158,7 @@ struct ItemTest {
     }
 
     @Test(
-        "modify normalizes boundary dates to UTC start of day",
+        "modify normalizes JST date to UTC start of day",
         arguments: [
             ("2023-12-31T23:59:59+0900", "2023-12-31T00:00:00Z"),
             ("2024-01-01T00:00:00+0900", "2024-01-01T00:00:00Z"),
@@ -170,7 +170,7 @@ struct ItemTest {
             ("2024-04-01T00:00:00+0900", "2024-04-01T00:00:00Z")
         ].map { (isoDate($0.0), isoDate($0.1)) }
     )
-    func modifyNormalizesBoundaryDates(date: Date, expected: Date) throws {
+    func modifyNormalizesJSTDateToUTCStartOfDay(date: Date, expected: Date) throws {
         NSTimeZone.default = .init(identifier: "Asia/Tokyo")!
 
         let item = try Item.create(
