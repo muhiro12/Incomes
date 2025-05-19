@@ -21,7 +21,7 @@ extension DateFormatter {
 
     private static let withoutLocaleFormatter: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.timeZone = .init(secondsFromGMT: .zero)
+        formatter.timeZone = .gmt
         return formatter
     }()
 
