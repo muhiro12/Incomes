@@ -171,6 +171,8 @@ struct ItemTest {
         ].map { (isoDate($0.0), isoDate($0.1)) }
     )
     func modifyNormalizesBoundaryDates(date: Date, expected: Date) throws {
+        NSTimeZone.default = .init(identifier: "Asia/Tokyo")!
+
         let item = try Item.create(
             context: context,
             date: shiftedDate("2024-01-01T00:00:00Z"),
