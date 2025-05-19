@@ -17,6 +17,18 @@ extension DebugSection: View {
     var body: some View {
         Section {
             HStack {
+                Text("UTC Date")
+                Spacer()
+                Text(item.utcDate.description)
+                    .foregroundStyle(.secondary)
+            }
+            HStack {
+                Text("Local Date")
+                Spacer()
+                Text(item.localDate.description)
+                    .foregroundStyle(.secondary)
+            }
+            HStack {
                 Text("RepeatID")
                 Spacer()
                 Text(item.repeatID.uuidString)
