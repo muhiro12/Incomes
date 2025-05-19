@@ -181,4 +181,28 @@ struct CalendarExtensionTest {
         let end = calendar.endOfYear(for: date)
         #expect(end == isoDate("2024-12-31T23:59:59Z"))
     }
+
+    // MARK: - shiftedDate
+
+    @Test("shiftedDate shifts date from JST components into UTC calendar")
+    func verifiesShiftedDateFromJSTtoUTC() {
+        NSTimeZone.default = .init(identifier: "Asia/Tokyo")!
+
+        let jstDate = isoDate("2024-03-15T00:00:00+0900")
+        let shiftedDate = Calendar.utc.shiftedDate(componentsFrom: jstDate, in: .current)
+
+        #expect(shiftedDate == isoDate("2024-03-15T00:00:00Z"))
+        #expect(shiftedDate == isoDate("2024-03-15T09:00:00+0900"))
+    }
+
+    @Test("shiftedDate shifts date from UTC components into JST calendar")
+    func verifiesShiftedDateFromUTCtoJST() {
+        NSTimeZone.default = .init(identifier: "Asia/Tokyo")!
+
+        let utcDate = isoDate("2024-03-14T15:00:00Z")
+        let shiftedDate = Calendar.current.shiftedDate(componentsFrom: utcDate, in: .utc)
+
+        #expect(shiftedDate == isoDate("2024-03-14T06:00:00Z"))
+        #expect(shiftedDate == isoDate("2024-03-14T15:00:00+0900"))
+    }
 }
