@@ -11,13 +11,7 @@ import Foundation
 extension Calendar {
     static var utc: Self {
         var calendar = Calendar(identifier: .gregorian)
-        calendar.timeZone = {
-            guard let gmt = TimeZone(secondsFromGMT: .zero) else {
-                assertionFailure("Failed to init TimeZone")
-                return .current
-            }
-            return gmt
-        }()
+        calendar.timeZone = .gmt
         return calendar
     }
 
