@@ -39,22 +39,22 @@ final class DateExtensionTests: XCTestCase {
             XCTAssertEqual(result, "2000")
         }
 
-        XCTContext.runActivity(named: "yyyy at 12-31 is as expected") { _ in
+        XCTContext.runActivity(named: "yyyy at Dec 31 is as expected") { _ in
             let result = isoDate("2000-12-31T00:00:00Z").stringValue(.yyyy)
             XCTAssertEqual(result, "2000")
         }
 
-        XCTContext.runActivity(named: "yyyy at 12:00, 12-31 is as expected") { _ in
+        XCTContext.runActivity(named: "yyyy at 12:00 on Dec 31 is as expected") { _ in
             let result = isoDate("2000-12-31T12:00:00Z").stringValue(.yyyy)
             XCTAssertEqual(result, "2000")
         }
 
-        XCTContext.runActivity(named: "yyyy at 15:00, 12-31 is as expected") { _ in
+        XCTContext.runActivity(named: "yyyy at 15:00 on Dec 31 is as expected") { _ in
             let result = isoDate("2000-12-31T15:00:00Z").stringValue(.yyyy)
             XCTAssertEqual(result, "2000")
         }
 
-        XCTContext.runActivity(named: "yyyy at 21:00, 12-31 is as expected") { _ in
+        XCTContext.runActivity(named: "yyyy at 21:00 on Dec 31 is as expected") { _ in
             let result = isoDate("2000-12-31T21:00:00Z").stringValue(.yyyy)
             XCTAssertEqual(result, "2000")
         }
@@ -89,7 +89,7 @@ final class DateExtensionTests: XCTestCase {
             XCTAssertEqual(result, "Jan 1, 2000")
         }
 
-        XCTContext.runActivity(named: "yyyyMMMd at 15:00 as expected") { _ in
+        XCTContext.runActivity(named: "yyyyMMMd at 15:00 is as expected") { _ in
             let result = isoDate("2000-01-01T15:00:00Z").stringValue(.yyyyMMMd)
             XCTAssertEqual(result, "Jan 1, 2000")
         }
@@ -99,22 +99,22 @@ final class DateExtensionTests: XCTestCase {
             XCTAssertEqual(result, "Jan 1, 2000")
         }
 
-        XCTContext.runActivity(named: "yyyyMMMd at 12-31 is as expected") { _ in
+        XCTContext.runActivity(named: "yyyyMMMd at Dec 31 is as expected") { _ in
             let result = isoDate("2000-12-31T00:00:00Z").stringValue(.yyyyMMMd)
             XCTAssertEqual(result, "Dec 31, 2000")
         }
 
-        XCTContext.runActivity(named: "yyyyMMMd at 12:00, 12-31 is as expected") { _ in
+        XCTContext.runActivity(named: "yyyyMMMd at 12:00 on Dec 31 is as expected") { _ in
             let result = isoDate("2000-12-31T12:00:00Z").stringValue(.yyyyMMMd)
             XCTAssertEqual(result, "Dec 31, 2000")
         }
 
-        XCTContext.runActivity(named: "yyyyMMMd at 15:00, 12-31 is as expected") { _ in
+        XCTContext.runActivity(named: "yyyyMMMd at 15:00 on Dec 31 is as expected") { _ in
             let result = isoDate("2000-12-31T15:00:00Z").stringValue(.yyyyMMMd)
             XCTAssertEqual(result, "Dec 31, 2000")
         }
 
-        XCTContext.runActivity(named: "yyyyMMMd at 21:00, 12-31 is as expected") { _ in
+        XCTContext.runActivity(named: "yyyyMMMd at 21:00 on Dec 31 is as expected") { _ in
             let result = isoDate("2000-12-31T21:00:00Z").stringValue(.yyyyMMMd)
             XCTAssertEqual(result, "Dec 31, 2000")
         }

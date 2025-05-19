@@ -245,8 +245,8 @@ struct ItemServiceTest {
         #expect(item.utcDate == isoDate("2024-03-15T00:00:00Z"))
     }
 
-    @Test("create stores date in JST correctly", arguments: timeZones)
-    func createWithJSTTimestamp(_ timeZone: TimeZone) throws {
+    @Test("create stores JST midnight as UTC start of day", arguments: timeZones)
+    func createStoresJSTMidnightAsUTCStartOfDay(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
         let jstDate = shiftedDate("2024-03-15T09:00:00Z")  // 00:00 UTC

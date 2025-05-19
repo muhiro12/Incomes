@@ -126,7 +126,7 @@ struct ItemTest {
     // MARK: - Modify
 
     @Test(
-        "modify updates values and regenerates tags",
+        "modify updates values and regenerates tags with UTC-normalized date",
         .disabled("Known issue: under UTC normalization review")
     )
     func modifyUpdatesValuesAndRegeneratesTags() throws {

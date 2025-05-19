@@ -130,7 +130,7 @@ struct CalendarExtensionTest {
         #expect(start == isoDate("2024-01-01T00:00:00Z"))
     }
 
-    @Test("startOfYear returns Jan 1 2023 UTC for 2023-12-31T15:00:00Z (JST Jan 1 00:00)", arguments: timeZones)
+    @Test("startOfYear returns Jan 1 2024 UTC for 2023-12-31T15:00:00Z (JST Jan 1 00:00)", arguments: timeZones)
     func verifiesStartOfYearForUTCBoundary(_ timeZone: TimeZone) {
         NSTimeZone.default = timeZone
 

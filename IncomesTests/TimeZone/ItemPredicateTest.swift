@@ -284,8 +284,8 @@ struct ItemPredicateTest {
         #expect(items.count == 2)
     }
 
-    @Test("excludes JST 3/1 from UTC March", arguments: timeZones)
-    func excludesJSTMarchStartFromUTCMarch(_ timeZone: TimeZone) throws {
+    @Test("includes JST 3/1 in UTC March", arguments: timeZones)
+    func includesJSTMarchStartInUTCMarch(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
         let jstDate = shiftedDate("2024-03-01T00:00:00Z")  // = 2024-02-29T15:00:00Z
@@ -381,8 +381,8 @@ struct ItemPredicateTest {
         #expect(items.count == 1)  // Should pass if UTC-based correctly
     }
 
-    @Test("excludes JST 2/1 00:00 from UTC Feb", arguments: timeZones)
-    func excludesJSTStartOfFebFromUTCFeb(_ timeZone: TimeZone) throws {
+    @Test("includes JST 2/1 00:00 in UTC Feb", arguments: timeZones)
+    func includesJSTStartOfFebInUTCFeb(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
         // 2024-02-01T00:00:00+0900 = 2024-01-31T15:00:00Z
@@ -584,7 +584,7 @@ struct ItemPredicateTest {
         #expect(items.map(\.content).contains("JST_Jan1"))
     }
 
-    @Test("includes JST 4/02 00:00 in UTC 4/01", arguments: timeZones)
+    @Test("excludes JST 4/02 00:00 from UTC 4/01", arguments: timeZones)
     func excludesStartOfNextJSTDayFromUTCDay(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
@@ -603,8 +603,8 @@ struct ItemPredicateTest {
         #expect(!items.map(\.content).contains("JST_NextDay"))
     }
 
-    @Test("includes JST 4/01 00:00 in UTC 3/31", arguments: timeZones)
-    func includesStartOfJSTDayInPreviousUTCDay(_ timeZone: TimeZone) throws {
+    @Test("excludes JST 4/01 00:00 from UTC 3/31", arguments: timeZones)
+    func excludesStartOfJSTDayFromUTCDay(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
         let jstDate = shiftedDate("2024-04-01T00:00:00Z") // UTC: 2024-03-31T15:00:00Z
