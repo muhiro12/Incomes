@@ -14,6 +14,14 @@
   },
   "testTargets" : [
     {
+      "parallelizable" : false,
+      "target" : {
+        "containerPath" : "container:Incomes.xcodeproj",
+        "identifier" : "ADD8C8B32DDADBD6002431C6",
+        "name" : "IncomesTimeZoneTests"
+      }
+    },
+    {
       "target" : {
         "containerPath" : "container:Incomes.xcodeproj",
         "identifier" : "ADA85F612DB62CDA0047CB54",
