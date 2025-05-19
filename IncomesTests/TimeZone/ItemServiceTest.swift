@@ -285,7 +285,7 @@ struct ItemServiceTest {
         NSTimeZone.default = timeZone
 
         try service.create(
-            date: isoDate("2024-01-01T00:00:00Z"),
+            date: shiftedDate("2024-01-01T00:00:00Z"),
             content: "Initial",
             income: 100,
             outgo: 50,
@@ -294,7 +294,7 @@ struct ItemServiceTest {
         var item = try #require(fetchItems(context).first)
         try service.update(
             item: item,
-            date: isoDate("2024-01-02T00:00:00Z"),
+            date: shiftedDate("2024-01-02T00:00:00Z"),
             content: "Updated",
             income: 150,
             outgo: 100,
@@ -635,25 +635,26 @@ struct ItemServiceTest {
         NSTimeZone.default = timeZone
 
         try service.create(
-            date: isoDate("2024-02-28T14:00:00Z"),  // JST: 2024-02-28 23:00
-            content: "LateFeb",
-            income: 500,
-            outgo: 100,
-            category: "TZTest"
-        )
-        try service.create(
-            date: isoDate("2024-02-28T15:00:00Z"),  // JST: 2024-02-29 00:00
+            date: shiftedDate("2024-02-28T15:00:00Z"),  // JST: 2024-02-29 00:00
             content: "EarlyMar",
             income: 300,
             outgo: 50,
             category: "TZTest"
         )
+        try service.create(
+            date: shiftedDate("2024-02-28T14:00:00Z"),  // JST: 2024-02-28 23:00
+            content: "LateFeb",
+            income: 500,
+            outgo: 100,
+            category: "TZTest"
+        )
 
         try service.recalculate(after: isoDate("2024-02-01T00:00:00Z"))
         let items = try service.items()
-        let balances = Dictionary(uniqueKeysWithValues: items.map { ($0.content, $0.balance) })
 
-        #expect(balances["LateFeb"] == 400)
-        #expect(balances["EarlyMar"] == 650)
+        #expect(items[0].content == "LateFeb")
+        #expect(items[0].balance == 650)
+        #expect(items[1].content == "EarlyMar")
+        #expect(items[1].balance == 250)
     }
 }
