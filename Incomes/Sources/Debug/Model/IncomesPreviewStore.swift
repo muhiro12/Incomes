@@ -34,7 +34,7 @@ final class IncomesPreviewStore {
         for index in 0..<24 {
             _ = try! Item.createIgnoringDuplicates(
                 context: context,
-                date: Calendar.utc.date(
+                date: Calendar.current.date(
                     byAdding: .month,
                     value: index,
                     to: .now
@@ -50,16 +50,16 @@ final class IncomesPreviewStore {
     }
 
     private func createItems(_ context: ModelContext) {
-        let now = Calendar.utc.startOfYear(for: .now)
+        let now = Calendar.current.startOfYear(for: .now)
 
-        let dateA = Calendar.utc.date(byAdding: .day, value: 0, to: now)!
-        let dateB = Calendar.utc.date(byAdding: .day, value: 6, to: now)!
-        let dateC = Calendar.utc.date(byAdding: .day, value: 12, to: now)!
-        let dateD = Calendar.utc.date(byAdding: .day, value: 18, to: now)!
-        let dateE = Calendar.utc.date(byAdding: .day, value: 24, to: now)!
+        let dateA = Calendar.current.date(byAdding: .day, value: 0, to: now)!
+        let dateB = Calendar.current.date(byAdding: .day, value: 6, to: now)!
+        let dateC = Calendar.current.date(byAdding: .day, value: 12, to: now)!
+        let dateD = Calendar.current.date(byAdding: .day, value: 18, to: now)!
+        let dateE = Calendar.current.date(byAdding: .day, value: 24, to: now)!
 
         let date = { (value: Int, to: Date) -> Date in
-            Calendar.utc.date(byAdding: .month, value: value, to: to)!
+            Calendar.current.date(byAdding: .month, value: value, to: to)!
         }
 
         _ = try! Item.create(

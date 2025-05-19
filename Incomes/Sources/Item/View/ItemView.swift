@@ -18,7 +18,7 @@ extension ItemView: View {
                 HStack {
                     Text("Date")
                     Spacer()
-                    Text(item.utcDate.stringValue(.yyyyMMMd))
+                    Text(item.localDate.stringValue(.yyyyMMMd))
                         .foregroundStyle(.secondary)
                 }
                 HStack {

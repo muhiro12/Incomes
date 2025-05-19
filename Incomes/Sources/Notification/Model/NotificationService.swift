@@ -57,7 +57,7 @@ final class NotificationService: NSObject {
         let content = UNMutableNotificationContent()
         content.title = String(localized: "Upcoming Payment")
         content.body = String(
-            localized: "\(item.content) - A payment of \(item.outgo.asCurrency) is due on \(item.utcDate.formatted(.dateTime.weekday().month().day()))."
+            localized: "\(item.content) - A payment of \(item.outgo.asCurrency) is due on \(item.localDate.formatted(.dateTime.weekday().month().day()))."
         )
         content.sound = .default
 
@@ -108,7 +108,7 @@ private extension NotificationService {
             guard let scheduledDate = Calendar.current.date(
                 byAdding: .day,
                 value: -settings.daysBeforeDueDate,
-                to: item.utcDate
+                to: item.localDate
             ) else {
                 return nil
             }
@@ -134,7 +134,7 @@ private extension NotificationService {
             let content = UNMutableNotificationContent()
             content.title = String(localized: "Upcoming Payment")
             content.body = String(
-                localized: "\(item.content) - A payment of \(item.outgo.asCurrency) is due on \(item.utcDate.formatted(.dateTime.weekday().month().day()))."
+                localized: "\(item.content) - A payment of \(item.outgo.asCurrency) is due on \(item.localDate.formatted(.dateTime.weekday().month().day()))."
             )
             content.sound = .default
 

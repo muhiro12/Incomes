@@ -60,9 +60,9 @@ final class ItemService {
             guard index > .zero else {
                 continue
             }
-            guard let repeatingDate = Calendar.utc.date(byAdding: .month,
-                                                        value: index,
-                                                        to: date) else {
+            guard let repeatingDate = Calendar.current.date(byAdding: .month,
+                                                            value: index,
+                                                            to: date) else {
                 assertionFailure()
                 return
             }
@@ -112,7 +112,7 @@ final class ItemService {
                                     income: income,
                                     outgo: outgo,
                                     category: category,
-                                    descriptor: .items(.repeatIDAndDateIsAfter(repeatID: item.repeatID, date: item.utcDate)))
+                                    descriptor: .items(.repeatIDAndDateIsAfter(repeatID: item.repeatID, date: item.localDate)))
     }
 
     func updateForAllItems(item: Item,
@@ -158,14 +158,14 @@ private extension ItemService {
                                  outgo: Decimal,
                                  category: String,
                                  descriptor: FetchDescriptor<Item>) throws {
-        let components = Calendar.utc.dateComponents([.year, .month, .day],
-                                                     from: item.utcDate,
-                                                     to: date)
+        let components = Calendar.current.dateComponents([.year, .month, .day],
+                                                         from: item.localDate,
+                                                         to: date)
 
         let repeatID = UUID()
         let items = try context.fetch(descriptor)
         try items.forEach {
-            guard let newDate = Calendar.utc.date(byAdding: components, to: $0.utcDate) else {
+            guard let newDate = Calendar.current.date(byAdding: components, to: $0.localDate) else {
                 assertionFailure()
                 return
             }

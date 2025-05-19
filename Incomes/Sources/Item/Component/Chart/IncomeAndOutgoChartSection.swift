@@ -85,7 +85,7 @@ private extension IncomeAndOutgoChartSection {
     }
 
     func date(of item: Item) -> Date {
-        item.utcDate
+        item.localDate
     }
 
     func income(of item: Item) -> Decimal {

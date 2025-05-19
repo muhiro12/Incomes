@@ -13,7 +13,7 @@ struct WideListItem: View {
 
     var body: some View {
         HStack {
-            Text(item.utcDate.stringValue(.MMMd))
+            Text(item.localDate.stringValue(.MMMd))
                 .font(.subheadline)
                 .minimumScaleFactor(.high)
                 .truncationMode(.head)

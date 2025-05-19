@@ -5,7 +5,7 @@ struct RecalculateButton: View {
     @Environment(ItemService.self)
     private var itemService
 
-    @State private var selectedDate = Calendar.utc.startOfMonth(for: .now)
+    @State private var selectedDate = Calendar.current.startOfMonth(for: .now)
     @State private var isDialogPresented = false
     @State private var isRecalculating = false
 

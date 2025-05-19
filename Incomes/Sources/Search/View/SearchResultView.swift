@@ -18,7 +18,7 @@ struct SearchResultView: View {
 
     private var groupedItems: [Date: [Item]] {
         Dictionary(grouping: items) { item in
-            Calendar.utc.startOfMonth(for: item.utcDate)
+            Calendar.current.startOfMonth(for: item.localDate)
         }
     }
 

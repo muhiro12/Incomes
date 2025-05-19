@@ -17,7 +17,7 @@ final class BalanceCalculatorTests: XCTestCase {
 
             for i in 1...5 {
                 let item = try! Item.create(context: context,
-                                            date: isoDate("2000-0\(i)-01T12:00:00Z"),
+                                            date: shiftedDate("2000-0\(i)-01T12:00:00Z"),
                                             content: "content",
                                             income: 200,
                                             outgo: 100,
@@ -28,14 +28,14 @@ final class BalanceCalculatorTests: XCTestCase {
             try! calculator.calculate(after: .distantPast)
 
             let item = try! Item.create(context: context,
-                                        date: isoDate("2000-01-31T12:00:00Z"),
+                                        date: shiftedDate("2000-01-31T12:00:00Z"),
                                         content: "content",
                                         income: 200,
                                         outgo: 100,
                                         category: "category",
                                         repeatID: UUID())
             context.insert(item)
-            try! calculator.calculate(after: item.utcDate)
+            try! calculator.calculate(after: item.localDate)
 
             let first = fetchItems(context).first!
             let last = fetchItems(context).last!
@@ -50,7 +50,7 @@ final class BalanceCalculatorTests: XCTestCase {
 
             for i in 1...5 {
                 let item = try! Item.create(context: context,
-                                            date: isoDate("2000-0\(i)-01T12:00:00Z"),
+                                            date: shiftedDate("2000-0\(i)-01T12:00:00Z"),
                                             content: "content",
                                             income: 200,
                                             outgo: 100,
@@ -61,14 +61,14 @@ final class BalanceCalculatorTests: XCTestCase {
             try! calculator.calculate(after: .distantPast)
 
             let item = try! Item.create(context: context,
-                                        date: isoDate("2001-01-01T00:00:00Z"),
+                                        date: shiftedDate("2001-01-01T00:00:00Z"),
                                         content: "content",
                                         income: 200,
                                         outgo: 100,
                                         category: "category",
                                         repeatID: UUID())
             context.insert(item)
-            try! calculator.calculate(after: item.utcDate)
+            try! calculator.calculate(after: item.localDate)
 
             let first = fetchItems(context).first!
             let last = fetchItems(context).last!
@@ -83,7 +83,7 @@ final class BalanceCalculatorTests: XCTestCase {
 
             for i in 1...5 {
                 let item = try! Item.create(context: context,
-                                            date: isoDate("2000-0\(i)-01T12:00:00Z"),
+                                            date: shiftedDate("2000-0\(i)-01T12:00:00Z"),
                                             content: "content",
                                             income: 200,
                                             outgo: 100,
@@ -94,14 +94,14 @@ final class BalanceCalculatorTests: XCTestCase {
             try! calculator.calculate(after: .distantPast)
 
             let item = try! Item.create(context: context,
-                                        date: isoDate("2000-01-01T00:00:00Z"),
+                                        date: shiftedDate("2000-01-01T00:00:00Z"),
                                         content: "content",
                                         income: 200,
                                         outgo: 100,
                                         category: "category",
                                         repeatID: UUID())
             context.insert(item)
-            try! calculator.calculate(after: item.utcDate)
+            try! calculator.calculate(after: item.localDate)
 
             let first = fetchItems(context).first!
             let last = fetchItems(context).last!
@@ -118,7 +118,7 @@ final class BalanceCalculatorTests: XCTestCase {
 
             for i in 1...5 {
                 let item = try! Item.create(context: context,
-                                            date: isoDate("2000-0\(i)-01T12:00:00Z"),
+                                            date: shiftedDate("2000-0\(i)-01T12:00:00Z"),
                                             content: "content",
                                             income: 200,
                                             outgo: 100,
@@ -130,13 +130,13 @@ final class BalanceCalculatorTests: XCTestCase {
             try! calculator.calculate(after: .distantPast)
 
             let item = items[1]
-            try! item.modify(date: isoDate("2000-02-01T12:00:00Z"),
+            try! item.modify(date: shiftedDate("2000-02-01T12:00:00Z"),
                              content: "content",
                              income: 300,
                              outgo: 100,
                              category: "category",
                              repeatID: UUID())
-            try! calculator.calculate(after: item.utcDate)
+            try! calculator.calculate(after: item.localDate)
 
             let first = fetchItems(context).first!
             let last = fetchItems(context).last!
@@ -153,7 +153,7 @@ final class BalanceCalculatorTests: XCTestCase {
 
             for i in 1...5 {
                 let item = try! Item.create(context: context,
-                                            date: isoDate("2000-0\(i)-01T12:00:00Z"),
+                                            date: shiftedDate("2000-0\(i)-01T12:00:00Z"),
                                             content: "content",
                                             income: 200,
                                             outgo: 100,
@@ -165,13 +165,13 @@ final class BalanceCalculatorTests: XCTestCase {
             try! calculator.calculate(after: .distantPast)
 
             let item = items[0]
-            try! item.modify(date: isoDate("2000-01-01T12:00:00Z"),
+            try! item.modify(date: shiftedDate("2000-01-01T12:00:00Z"),
                              content: "content",
                              income: 300,
                              outgo: 100,
                              category: "category",
                              repeatID: UUID())
-            try! calculator.calculate(after: item.utcDate)
+            try! calculator.calculate(after: item.localDate)
 
             let first = fetchItems(context).first!
             let last = fetchItems(context).last!
@@ -188,7 +188,7 @@ final class BalanceCalculatorTests: XCTestCase {
 
             for i in 1...5 {
                 let item = try! Item.create(context: context,
-                                            date: isoDate("2000-0\(i)-01T12:00:00Z"),
+                                            date: shiftedDate("2000-0\(i)-01T12:00:00Z"),
                                             content: "content",
                                             income: 200,
                                             outgo: 100,
@@ -200,13 +200,13 @@ final class BalanceCalculatorTests: XCTestCase {
             try! calculator.calculate(after: .distantPast)
 
             let item = items[4]
-            try! item.modify(date: isoDate("2000-05-01T12:00:00Z"),
+            try! item.modify(date: shiftedDate("2000-05-01T12:00:00Z"),
                              content: "content",
                              income: 300,
                              outgo: 100,
                              category: "category",
                              repeatID: UUID())
-            try! calculator.calculate(after: item.utcDate)
+            try! calculator.calculate(after: item.localDate)
 
             let first = fetchItems(context).first!
             let last = fetchItems(context).last!
@@ -223,7 +223,7 @@ final class BalanceCalculatorTests: XCTestCase {
 
             for i in 1...5 {
                 let item = try! Item.create(context: context,
-                                            date: isoDate("2000-0\(i)-01T12:00:00Z"),
+                                            date: shiftedDate("2000-0\(i)-01T12:00:00Z"),
                                             content: "content",
                                             income: 200,
                                             outgo: 100,
@@ -235,13 +235,13 @@ final class BalanceCalculatorTests: XCTestCase {
             try! calculator.calculate(after: .distantPast)
 
             let item = items[4]
-            try! item.modify(date: isoDate("1999-12-31T00:00:00Z"),
+            try! item.modify(date: shiftedDate("1999-12-31T00:00:00Z"),
                              content: "content",
                              income: 300,
                              outgo: 100,
                              category: "category",
                              repeatID: UUID())
-            try! calculator.calculate(after: item.utcDate)
+            try! calculator.calculate(after: item.localDate)
 
             let first = fetchItems(context).first!
             let last = fetchItems(context).last!
@@ -258,7 +258,7 @@ final class BalanceCalculatorTests: XCTestCase {
 
             for i in 1...5 {
                 let item = try! Item.create(context: context,
-                                            date: isoDate("2000-0\(i)-01T12:00:00Z"),
+                                            date: shiftedDate("2000-0\(i)-01T12:00:00Z"),
                                             content: "content",
                                             income: 200,
                                             outgo: 100,
@@ -271,7 +271,7 @@ final class BalanceCalculatorTests: XCTestCase {
 
             let item = items[1]
             context.delete(item)
-            try! calculator.calculate(after: item.utcDate)
+            try! calculator.calculate(after: item.localDate)
 
             let first = fetchItems(context).first!
             let last = fetchItems(context).last!
@@ -288,7 +288,7 @@ final class BalanceCalculatorTests: XCTestCase {
 
             for i in 1...5 {
                 let item = try! Item.create(context: context,
-                                            date: isoDate("2000-0\(i)-01T12:00:00Z"),
+                                            date: shiftedDate("2000-0\(i)-01T12:00:00Z"),
                                             content: "content",
                                             income: 200,
                                             outgo: 100,
@@ -301,7 +301,7 @@ final class BalanceCalculatorTests: XCTestCase {
 
             let item = items[0]
             context.delete(item)
-            try! calculator.calculate(after: item.utcDate)
+            try! calculator.calculate(after: item.localDate)
 
             let first = fetchItems(context).first!
             let last = fetchItems(context).last!
@@ -318,7 +318,7 @@ final class BalanceCalculatorTests: XCTestCase {
 
             for i in 1...5 {
                 let item = try! Item.create(context: context,
-                                            date: isoDate("2000-0\(i)-01T12:00:00Z"),
+                                            date: shiftedDate("2000-0\(i)-01T12:00:00Z"),
                                             content: "content",
                                             income: 200,
                                             outgo: 100,
@@ -331,7 +331,7 @@ final class BalanceCalculatorTests: XCTestCase {
 
             let item = items[4]
             context.delete(item)
-            try! calculator.calculate(after: item.utcDate)
+            try! calculator.calculate(after: item.localDate)
 
             let first = fetchItems(context).first!
             let last = fetchItems(context).last!

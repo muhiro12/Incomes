@@ -17,7 +17,7 @@ struct BalanceCalculator {
     }
 
     func calculate(for items: [Item]) throws {
-        if let date = items.map(\.utcDate).min() {
+        if let date = items.map(\.localDate).min() {
             try calculate(after: date)
         } else {
             try calculate(after: .distantPast)
@@ -27,7 +27,7 @@ struct BalanceCalculator {
     func calculate(after date: Date) throws {
         let allItems = try context.fetch(.items(.all, order: .forward))
 
-        guard let separatorIndex = allItems.firstIndex(where: { $0.utcDate >= date }) else {
+        guard let separatorIndex = allItems.firstIndex(where: { $0.localDate >= date }) else {
             return
         }
 

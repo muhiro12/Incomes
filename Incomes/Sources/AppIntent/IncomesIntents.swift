@@ -35,7 +35,7 @@ struct GetNextItemDate: AppIntent, @unchecked Sendable {
     @MainActor
     func perform() throws -> some IntentResult & ReturnsValue<Date?> {
         .result(
-            value: try itemService.item(.items(.dateIsAfter(date), order: .forward))?.utcDate
+            value: try itemService.item(.items(.dateIsAfter(date), order: .forward))?.localDate
         )
     }
 }
@@ -87,7 +87,7 @@ struct ShowNextItemsIntent: AppIntent, @unchecked Sendable {
             return .result(dialog: .init("Not Found"))
         }
         return .result(dialog: .init(stringLiteral: date.stringValue(.yyyyMMM))) {
-            IntentsItemListSection(.items(.dateIsSameDayAs(item.utcDate)))
+            IntentsItemListSection(.items(.dateIsSameDayAs(item.localDate)))
                 .safeAreaPadding()
                 .modelContainer(modelContainer)
         }
@@ -107,7 +107,7 @@ struct GetPreviousItemDate: AppIntent, @unchecked Sendable {
     @MainActor
     func perform() throws -> some IntentResult & ReturnsValue<Date?> {
         .result(
-            value: try itemService.item(.items(.dateIsBefore(date)))?.utcDate
+            value: try itemService.item(.items(.dateIsBefore(date)))?.localDate
         )
     }
 }
@@ -159,7 +159,7 @@ struct ShowPreviousItemsIntent: AppIntent, @unchecked Sendable {
             return .result(dialog: .init("Not Found"))
         }
         return .result(dialog: .init(stringLiteral: date.stringValue(.yyyyMMM))) {
-            IntentsItemListSection(.items(.dateIsSameDayAs(item.utcDate)))
+            IntentsItemListSection(.items(.dateIsSameDayAs(item.localDate)))
                 .safeAreaPadding()
                 .modelContainer(modelContainer)
         }
