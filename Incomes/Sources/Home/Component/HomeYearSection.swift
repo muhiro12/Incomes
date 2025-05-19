@@ -34,7 +34,7 @@ extension HomeYearSection: View {
                             )
                             .bold(
                                 Calendar.current.isDate(
-                                    yearMonthTag.name.dateValueWithoutLocale(.yyyyMM) ?? .now,
+                                    yearMonthTag.name.dateValueWithoutLocale(.yyyyMM) ?? .distantPast,
                                     inSameDayAs: Calendar.current.startOfMonth(for: .now)
                                 )
                             )
