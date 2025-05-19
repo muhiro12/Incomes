@@ -63,15 +63,15 @@ extension Calendar {
         return startOfYear(for: next) - 1
     }
 
-    func date(shiftedFrom date: Date, using from: Calendar) -> Date {
+    func shiftedDate(componentsFrom date: Date, in calendar: Calendar) -> Date {
         let shifted = self.date(
-            from: from.dateComponents(
+            from: calendar.dateComponents(
                 [.year, .month, .day, .hour, .minute, .second],
                 from: date
             )
         )
         guard let shifted else {
-            assertionFailure("Failed to shift date components from \(from) to \(self) for date: \(date)")
+            assertionFailure("Failed to shift date components from \(calendar) to \(self) for date: \(date)")
             return date
         }
         return shifted

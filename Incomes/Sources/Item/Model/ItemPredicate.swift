@@ -96,34 +96,34 @@ enum ItemPredicate {
 
         case .dateIsBefore(let date):
             let start = Date.distantPast
-            let shiftedDate = Calendar.utc.date(shiftedFrom: date, using: .current)
+            let shiftedDate = Calendar.utc.shiftedDate(componentsFrom: date, in: .current)
             let end = Calendar.utc.startOfDay(for: shiftedDate) - 1
             return #Predicate {
                 start <= $0.date && $0.date <= end
             }
         case .dateIsAfter(let date):
-            let shiftedDate = Calendar.utc.date(shiftedFrom: date, using: .current)
+            let shiftedDate = Calendar.utc.shiftedDate(componentsFrom: date, in: .current)
             let start = Calendar.utc.startOfDay(for: shiftedDate)
             let end = Date.distantFuture
             return #Predicate {
                 start <= $0.date && $0.date <= end
             }
         case .dateIsSameYearAs(let date):
-            let shiftedDate = Calendar.utc.date(shiftedFrom: date, using: .current)
+            let shiftedDate = Calendar.utc.shiftedDate(componentsFrom: date, in: .current)
             let start = Calendar.utc.startOfYear(for: shiftedDate)
             let end = Calendar.utc.endOfYear(for: shiftedDate)
             return #Predicate {
                 start <= $0.date && $0.date <= end
             }
         case .dateIsSameMonthAs(let date):
-            let shiftedDate = Calendar.utc.date(shiftedFrom: date, using: .current)
+            let shiftedDate = Calendar.utc.shiftedDate(componentsFrom: date, in: .current)
             let start = Calendar.utc.startOfMonth(for: shiftedDate)
             let end = Calendar.utc.endOfMonth(for: shiftedDate)
             return #Predicate {
                 start <= $0.date && $0.date <= end
             }
         case .dateIsSameDayAs(let date):
-            let shiftedDate = Calendar.utc.date(shiftedFrom: date, using: .current)
+            let shiftedDate = Calendar.utc.shiftedDate(componentsFrom: date, in: .current)
             let start = Calendar.utc.startOfDay(for: shiftedDate)
             let end = Calendar.utc.endOfDay(for: shiftedDate)
             return #Predicate {
@@ -144,7 +144,7 @@ enum ItemPredicate {
                 min <= $0.outgo && $0.outgo <= max
             }
         case .outgoIsGreaterThanOrEqualTo(let amount, let date):
-            let shiftedDate = Calendar.utc.date(shiftedFrom: date, using: .current)
+            let shiftedDate = Calendar.utc.shiftedDate(componentsFrom: date, in: .current)
             let start = Calendar.utc.startOfDay(for: shiftedDate)
             return #Predicate {
                 $0.date >= start && $0.outgo >= amount
@@ -164,7 +164,7 @@ enum ItemPredicate {
                 $0.repeatID == repeatID
             }
         case .repeatIDAndDateIsAfter(let repeatID, let date):
-            let shiftedDate = Calendar.utc.date(shiftedFrom: date, using: .current)
+            let shiftedDate = Calendar.utc.shiftedDate(componentsFrom: date, in: .current)
             let start = Calendar.utc.startOfDay(for: shiftedDate)
             return #Predicate {
                 $0.repeatID == repeatID && $0.date >= start

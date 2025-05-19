@@ -31,9 +31,9 @@ let isoDate: (String) -> Date = { string in
 }
 
 let shiftedDate: (String) -> Date = { string in
-    Calendar.current.date(
-        shiftedFrom: isoDate(string),
-        using: .utc
+    Calendar.current.shiftedDate(
+        componentsFrom: isoDate(string),
+        in: .utc
     )
 }
 
