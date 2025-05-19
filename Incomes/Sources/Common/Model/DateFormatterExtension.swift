@@ -17,14 +17,16 @@ extension DateFormatter {
         case yyyyMMMd
     }
 
-    private static let `default`: DateFormatter = {
+    private static let defaultFormatter = DateFormatter()
+
+    private static let withoutLocaleFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.timeZone = .init(secondsFromGMT: .zero)
         return formatter
     }()
 
     static func formatter(_ template: Template, locale: Locale = .current) -> DateFormatter {
-        let formatter = Self.default
+        let formatter = defaultFormatter
         formatter.dateFormat = dateFormat(fromTemplate: template.rawValue,
                                           options: .zero,
                                           locale: locale)
@@ -32,7 +34,7 @@ extension DateFormatter {
     }
 
     static func formatterWithoutLocale(_ template: Template) -> DateFormatter {
-        let formatter = Self.default
+        let formatter = withoutLocaleFormatter
         formatter.dateFormat = template.rawValue
         return formatter
     }
