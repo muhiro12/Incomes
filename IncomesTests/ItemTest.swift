@@ -14,6 +14,10 @@ import Testing
 struct ItemTest {
     let context = testContext
 
+    init() {
+        NSTimeZone.default = .current
+    }
+
     // MARK: - Create
 
     @Test("create assigns correct values and UTC-normalized date", arguments: timeZones)
@@ -46,7 +50,7 @@ struct ItemTest {
     }
 
     @Test(
-        "create normalizes boundary dates",
+        "create normalizes JST date to UTC start of day",
         arguments: [
             ("2023-12-31T23:59:59+0900", "2023-12-31T00:00:00Z"),
             ("2024-01-01T00:00:00+0900", "2024-01-01T00:00:00Z"),
@@ -58,7 +62,9 @@ struct ItemTest {
             ("2024-04-01T00:00:00+0900", "2024-04-01T00:00:00Z")
         ].map { (isoDate($0.0), isoDate($0.1)) }
     )
-    func createNormalizesBoundaryDates(date: Date, expected: Date) throws {
+    func createNormalizesJSTDateToUTCStartOfDay(date: Date, expected: Date) throws {
+        NSTimeZone.default = .init(identifier: "Asia/Tokyo")!
+
         let item = try Item.create(
             context: context,
             date: date,
@@ -68,6 +74,7 @@ struct ItemTest {
             category: "Boundary",
             repeatID: UUID()
         )
+
         #expect(item.utcDate == expected)
     }
 
@@ -238,6 +245,6 @@ struct ItemTest {
             repeatID: item.repeatID
         )
 
-        #expect(item.utcDate == Calendar.utc.startOfDay(for: updatedDate))
+        #expect(item.utcDate == isoDate("2024-07-15T00:00:00Z"))
     }
 }
