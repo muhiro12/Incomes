@@ -233,7 +233,7 @@ struct ItemServiceTest {
     func createWithMidnightBoundary(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        let boundaryDate = isoDate("2024-03-15T00:00:00Z")
+        let boundaryDate = shiftedDate("2024-03-15T00:00:00Z")
         try service.create(
             date: boundaryDate,
             content: "MidnightUTC",
@@ -242,7 +242,7 @@ struct ItemServiceTest {
             category: "Test"
         )
         let item = try #require(try service.item())
-        #expect(item.utcDate == boundaryDate)
+        #expect(item.utcDate == isoDate("2024-03-15T00:00:00Z"))
     }
 
     @Test("create stores date in JST correctly", arguments: timeZones)
@@ -258,7 +258,7 @@ struct ItemServiceTest {
             category: "Test"
         )
         let item = try #require(try service.item())
-        #expect(item.utcDate == jstDate)
+        #expect(item.utcDate == isoDate("2024-03-15T00:00:00Z"))
     }
 
     @Test("create rounds input date to start of day UTC", arguments: timeZones)
