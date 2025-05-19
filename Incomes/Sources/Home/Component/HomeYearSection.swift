@@ -32,7 +32,12 @@ extension HomeYearSection: View {
                             .foregroundStyle(
                                 items.contains(where: \.balance.isMinus) ? .red : .primary
                             )
-                            .bold(yearMonthTag.name.dateValueWithoutLocale(.yyyyMM) == Calendar.current.startOfMonth(for: .now))
+                            .bold(
+                                Calendar.current.isDate(
+                                    yearMonthTag.name.dateValueWithoutLocale(.yyyyMM) ?? .now,
+                                    inSameDayAs: Calendar.current.startOfMonth(for: .now)
+                                )
+                            )
                     }
                 }
             }.onDelete {
@@ -68,7 +73,11 @@ extension HomeYearSection: View {
 #Preview {
     IncomesPreview { preview in
         List {
-            HomeYearSection(yearTag: preview.tags.first { $0.type == .year }!)
+            HomeYearSection(
+                yearTag: preview.tags.first {
+                    $0.name == Date.now.stringValueWithoutLocale(.yyyy)
+                }!
+            )
         }
     }
 }
