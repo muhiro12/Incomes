@@ -33,9 +33,7 @@ final class Item {
         let item = Item()
         context.insert(item)
 
-        let shiftedDate = Calendar.utc.shiftedDate(componentsFrom: date, in: .current)
-
-        item.date = Calendar.utc.startOfDay(for: shiftedDate)
+        item.date = Calendar.utc.startOfDay(for: Calendar.utc.shiftedDate(componentsFrom: date, in: .current))
         item.content = content
         item.income = income
         item.outgo = outgo
@@ -44,12 +42,12 @@ final class Item {
         item.tags = [
             try .create(
                 context: context,
-                name: Calendar.utc.startOfYear(for: shiftedDate).stringValueWithoutLocale(.yyyy),
+                name: Calendar.current.startOfYear(for: date).stringValueWithoutLocale(.yyyy),
                 type: .year
             ),
             try .create(
                 context: context,
-                name: Calendar.utc.startOfMonth(for: shiftedDate).stringValueWithoutLocale(.yyyyMM),
+                name: Calendar.current.startOfMonth(for: date).stringValueWithoutLocale(.yyyyMM),
                 type: .yearMonth
             ),
             try .create(
@@ -73,9 +71,7 @@ final class Item {
                 outgo: Decimal,
                 category: String,
                 repeatID: UUID) throws {
-        let shiftedDate = Calendar.utc.shiftedDate(componentsFrom: date, in: .current)
-
-        self.date = Calendar.utc.startOfDay(for: shiftedDate)
+        self.date = Calendar.utc.startOfDay(for: Calendar.utc.shiftedDate(componentsFrom: date, in: .current))
         self.content = content
         self.income = income
         self.outgo = outgo
@@ -88,12 +84,12 @@ final class Item {
         self.tags = [
             try .create(
                 context: context,
-                name: Calendar.utc.startOfYear(for: shiftedDate).stringValueWithoutLocale(.yyyy),
+                name: Calendar.current.startOfYear(for: date).stringValueWithoutLocale(.yyyy),
                 type: .year
             ),
             try .create(
                 context: context,
-                name: Calendar.utc.startOfMonth(for: shiftedDate).stringValueWithoutLocale(.yyyyMM),
+                name: Calendar.current.startOfMonth(for: date).stringValueWithoutLocale(.yyyyMM),
                 type: .yearMonth
             ),
             try .create(
@@ -176,12 +172,12 @@ extension Item {
         item.tags = [
             try .createIgnoringDuplicates(
                 context: context,
-                name: Calendar.utc.startOfYear(for: date).stringValueWithoutLocale(.yyyy),
+                name: Calendar.current.startOfYear(for: date).stringValueWithoutLocale(.yyyy),
                 type: .year
             ),
             try .createIgnoringDuplicates(
                 context: context,
-                name: Calendar.utc.startOfMonth(for: date).stringValueWithoutLocale(.yyyyMM),
+                name: Calendar.current.startOfMonth(for: date).stringValueWithoutLocale(.yyyyMM),
                 type: .yearMonth
             ),
             try .createIgnoringDuplicates(

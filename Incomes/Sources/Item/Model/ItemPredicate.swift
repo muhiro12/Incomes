@@ -50,8 +50,9 @@ enum ItemPredicate {
                 guard let date = tag.name.dateValueWithoutLocale(.yyyy) else {
                     return .false
                 }
-                let start = Calendar.utc.startOfYear(for: date)
-                let end = Calendar.utc.endOfYear(for: date)
+                let shiftedDate = Calendar.utc.shiftedDate(componentsFrom: date, in: .current)
+                let start = Calendar.utc.startOfYear(for: shiftedDate)
+                let end = Calendar.utc.endOfYear(for: shiftedDate)
                 return #Predicate {
                     start <= $0.date && $0.date <= end
                 }
@@ -59,8 +60,9 @@ enum ItemPredicate {
                 guard let date = tag.name.dateValueWithoutLocale(.yyyyMM) else {
                     return .false
                 }
-                let start = Calendar.utc.startOfMonth(for: date)
-                let end = Calendar.utc.endOfMonth(for: date)
+                let shiftedDate = Calendar.utc.shiftedDate(componentsFrom: date, in: .current)
+                let start = Calendar.utc.startOfMonth(for: shiftedDate)
+                let end = Calendar.utc.endOfMonth(for: shiftedDate)
                 return #Predicate {
                     start <= $0.date && $0.date <= end
                 }
@@ -78,11 +80,12 @@ enum ItemPredicate {
                   let date = yearString.dateValueWithoutLocale(.yyyy) else {
                 return .false
             }
+            let shiftedDate = Calendar.utc.shiftedDate(componentsFrom: date, in: .current)
             switch tagType {
             case .content:
                 let content = tag.name
-                let start = Calendar.utc.startOfYear(for: date)
-                let end = Calendar.utc.endOfYear(for: date)
+                let start = Calendar.utc.startOfYear(for: shiftedDate)
+                let end = Calendar.utc.endOfYear(for: shiftedDate)
                 return #Predicate {
                     $0.content == content && start <= $0.date && $0.date <= end
                 }

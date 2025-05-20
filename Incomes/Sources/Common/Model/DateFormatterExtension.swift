@@ -19,13 +19,6 @@ extension DateFormatter {
 
     private static let defaultFormatter = DateFormatter()
 
-    private static let fixedFormatFormatter = {
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "en_US_POSIX")
-        formatter.timeZone = .gmt
-        return formatter
-    }()
-
     static func `default`(_ template: Template, locale: Locale) -> DateFormatter {
         let formatter = defaultFormatter
         formatter.dateFormat = dateFormat(
@@ -33,12 +26,14 @@ extension DateFormatter {
             options: .zero,
             locale: locale
         )
+        formatter.locale = locale
         return formatter
     }
 
     static func fixed(_ template: Template) -> DateFormatter {
-        let formatter = fixedFormatFormatter
+        let formatter = defaultFormatter
         formatter.dateFormat = template.rawValue
+        formatter.locale = .init(identifier: "en_US_POSIX")
         return formatter
     }
 }
