@@ -24,6 +24,6 @@ extension String {
     }
 
     func dateValueWithoutLocale(_ template: DateFormatter.Template) -> Date? {
-        DateFormatter.formatterWithoutLocale(template).date(from: self)
+        DateFormatter.fixed(template).date(from: self)
     }
 }

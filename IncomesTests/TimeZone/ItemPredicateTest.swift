@@ -66,6 +66,7 @@ struct ItemPredicateTest {
         let predicate = ItemPredicate.tagIs(tag)
         let items = try service.items(.items(predicate))
 
+        try #require(items.count == 1)
         #expect(items[0].tags?.first { $0.type == .year }?.name == "2024")
         #expect(items[0].tags?.first { $0.type == .yearMonth }?.name == "202401")
         #expect(items[0].tags?.first { $0.type == .content }?.name == "Content")
@@ -83,6 +84,7 @@ struct ItemPredicateTest {
         let predicate = ItemPredicate.tagIs(tag)
         let items = try service.items(.items(predicate))
 
+        try #require(items.count == 1)
         #expect(items[0].tags?.first { $0.type == .year }?.name == "2024")
         #expect(items[0].tags?.first { $0.type == .yearMonth }?.name == "202401")
         #expect(items[0].tags?.first { $0.type == .content }?.name == "Content")
@@ -100,6 +102,7 @@ struct ItemPredicateTest {
         let predicate = ItemPredicate.tagAndYear(tag: tag, yearString: "2024")
         let items = try service.items(.items(predicate))
 
+        try #require(items.count == 1)
         #expect(items[0].tags?.first { $0.type == .year }?.name == "2024")
         #expect(items[0].tags?.first { $0.type == .yearMonth }?.name == "202401")
         #expect(items[0].tags?.first { $0.type == .content }?.name == "Content")
