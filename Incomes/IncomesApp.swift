@@ -29,7 +29,8 @@ struct IncomesApp: App {
 
     init() {
         let modelContainer = try! ModelContainer(
-            for: Item.self,
+            for: Item.self, Tag.self,
+            migrationPlan: IncomesMigrationPlan.self,
             configurations: .init(
                 url: .applicationSupportDirectory.appendingPathComponent("Incomes.sqlite"),
                 cloudKitDatabase: isICloudOn ? .automatic : .none
