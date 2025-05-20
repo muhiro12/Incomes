@@ -32,12 +32,7 @@ extension HomeYearSection: View {
                             .foregroundStyle(
                                 items.contains(where: \.balance.isMinus) ? .red : .primary
                             )
-                            .bold(
-                                Calendar.current.isDate(
-                                    yearMonthTag.name.dateValueWithoutLocale(.yyyyMM) ?? .distantPast,
-                                    inSameDayAs: Calendar.current.startOfMonth(for: .now)
-                                )
-                            )
+                            .bold(yearMonthTag.name == Date.now.stringValueWithoutLocale(.yyyyMM))
                     }
                 }
             }.onDelete {
