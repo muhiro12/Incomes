@@ -11,7 +11,8 @@ import SwiftData
 
 @Model
 final class Item {
-    private(set) var date = Date(timeIntervalSinceReferenceDate: .zero)
+    @Attribute(originalName: "date")
+    private(set) var utcDate = Date(timeIntervalSinceReferenceDate: .zero)
     private(set) var content = String.empty
     private(set) var income = Decimal.zero
     private(set) var outgo = Decimal.zero
@@ -33,7 +34,7 @@ final class Item {
         let item = Item()
         context.insert(item)
 
-        item.date = Calendar.utc.startOfDay(for: Calendar.utc.shiftedDate(componentsFrom: date, in: .current))
+        item.utcDate = Calendar.utc.startOfDay(for: Calendar.utc.shiftedDate(componentsFrom: date, in: .current))
         item.content = content
         item.income = income
         item.outgo = outgo
@@ -71,7 +72,7 @@ final class Item {
                 outgo: Decimal,
                 category: String,
                 repeatID: UUID) throws {
-        self.date = Calendar.utc.startOfDay(for: Calendar.utc.shiftedDate(componentsFrom: date, in: .current))
+        self.utcDate = Calendar.utc.startOfDay(for: Calendar.utc.shiftedDate(componentsFrom: date, in: .current))
         self.content = content
         self.income = income
         self.outgo = outgo
@@ -115,10 +116,6 @@ final class Item {
 }
 
 extension Item {
-    var utcDate: Date {
-        date
-    }
-
     var localDate: Date {
         Calendar.current.shiftedDate(componentsFrom: utcDate, in: .utc)
     }
@@ -163,7 +160,7 @@ extension Item {
         let item = Item()
         context.insert(item)
 
-        item.date = Calendar.utc.startOfDay(for: Calendar.utc.shiftedDate(componentsFrom: date, in: .current))
+        item.utcDate = Calendar.utc.startOfDay(for: Calendar.utc.shiftedDate(componentsFrom: date, in: .current))
         item.content = content
         item.income = income
         item.outgo = outgo

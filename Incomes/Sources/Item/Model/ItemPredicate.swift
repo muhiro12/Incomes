@@ -54,7 +54,7 @@ enum ItemPredicate {
                 let start = Calendar.utc.startOfYear(for: shiftedDate)
                 let end = Calendar.utc.endOfYear(for: shiftedDate)
                 return #Predicate {
-                    start <= $0.date && $0.date <= end
+                    start <= $0.utcDate && $0.utcDate <= end
                 }
             case .yearMonth:
                 guard let date = tag.name.dateValueWithoutLocale(.yyyyMM) else {
@@ -64,7 +64,7 @@ enum ItemPredicate {
                 let start = Calendar.utc.startOfMonth(for: shiftedDate)
                 let end = Calendar.utc.endOfMonth(for: shiftedDate)
                 return #Predicate {
-                    start <= $0.date && $0.date <= end
+                    start <= $0.utcDate && $0.utcDate <= end
                 }
             case .content:
                 let content = tag.name
@@ -87,7 +87,7 @@ enum ItemPredicate {
                 let start = Calendar.utc.startOfYear(for: shiftedDate)
                 let end = Calendar.utc.endOfYear(for: shiftedDate)
                 return #Predicate {
-                    $0.content == content && start <= $0.date && $0.date <= end
+                    $0.content == content && start <= $0.utcDate && $0.utcDate <= end
                 }
             case .year,
                  .yearMonth,
@@ -102,35 +102,35 @@ enum ItemPredicate {
             let shiftedDate = Calendar.utc.shiftedDate(componentsFrom: date, in: .current)
             let end = Calendar.utc.startOfDay(for: shiftedDate) - 1
             return #Predicate {
-                start <= $0.date && $0.date <= end
+                start <= $0.utcDate && $0.utcDate <= end
             }
         case .dateIsAfter(let date):
             let shiftedDate = Calendar.utc.shiftedDate(componentsFrom: date, in: .current)
             let start = Calendar.utc.startOfDay(for: shiftedDate)
             let end = Date.distantFuture
             return #Predicate {
-                start <= $0.date && $0.date <= end
+                start <= $0.utcDate && $0.utcDate <= end
             }
         case .dateIsSameYearAs(let date):
             let shiftedDate = Calendar.utc.shiftedDate(componentsFrom: date, in: .current)
             let start = Calendar.utc.startOfYear(for: shiftedDate)
             let end = Calendar.utc.endOfYear(for: shiftedDate)
             return #Predicate {
-                start <= $0.date && $0.date <= end
+                start <= $0.utcDate && $0.utcDate <= end
             }
         case .dateIsSameMonthAs(let date):
             let shiftedDate = Calendar.utc.shiftedDate(componentsFrom: date, in: .current)
             let start = Calendar.utc.startOfMonth(for: shiftedDate)
             let end = Calendar.utc.endOfMonth(for: shiftedDate)
             return #Predicate {
-                start <= $0.date && $0.date <= end
+                start <= $0.utcDate && $0.utcDate <= end
             }
         case .dateIsSameDayAs(let date):
             let shiftedDate = Calendar.utc.shiftedDate(componentsFrom: date, in: .current)
             let start = Calendar.utc.startOfDay(for: shiftedDate)
             let end = Calendar.utc.endOfDay(for: shiftedDate)
             return #Predicate {
-                start <= $0.date && $0.date <= end
+                start <= $0.utcDate && $0.utcDate <= end
             }
 
         // MARK: - Income
@@ -150,7 +150,7 @@ enum ItemPredicate {
             let shiftedDate = Calendar.utc.shiftedDate(componentsFrom: date, in: .current)
             let start = Calendar.utc.startOfDay(for: shiftedDate)
             return #Predicate {
-                $0.date >= start && $0.outgo >= amount
+                $0.utcDate >= start && $0.outgo >= amount
             }
 
         // MARK: - Balance
@@ -170,7 +170,7 @@ enum ItemPredicate {
             let shiftedDate = Calendar.utc.shiftedDate(componentsFrom: date, in: .current)
             let start = Calendar.utc.startOfDay(for: shiftedDate)
             return #Predicate {
-                $0.repeatID == repeatID && $0.date >= start
+                $0.repeatID == repeatID && $0.utcDate >= start
             }
         }
     }
@@ -183,7 +183,7 @@ extension FetchDescriptor where T == Item {
         .init(
             predicate: predicate.value,
             sortBy: [
-                .init(\.date, order: order),
+                .init(\.utcDate, order: order),
                 .init(\.content, order: order),
                 .init(\.persistentModelID, order: order)
             ]
