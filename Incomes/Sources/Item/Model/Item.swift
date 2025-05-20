@@ -42,12 +42,12 @@ final class Item {
         item.tags = [
             try .create(
                 context: context,
-                name: Calendar.current.startOfYear(for: date).stringValueWithoutLocale(.yyyy),
+                name: date.stringValueWithoutLocale(.yyyy),
                 type: .year
             ),
             try .create(
                 context: context,
-                name: Calendar.current.startOfMonth(for: date).stringValueWithoutLocale(.yyyyMM),
+                name: date.stringValueWithoutLocale(.yyyyMM),
                 type: .yearMonth
             ),
             try .create(
@@ -84,12 +84,12 @@ final class Item {
         self.tags = [
             try .create(
                 context: context,
-                name: Calendar.current.startOfYear(for: date).stringValueWithoutLocale(.yyyy),
+                name: date.stringValueWithoutLocale(.yyyy),
                 type: .year
             ),
             try .create(
                 context: context,
-                name: Calendar.current.startOfMonth(for: date).stringValueWithoutLocale(.yyyyMM),
+                name: date.stringValueWithoutLocale(.yyyyMM),
                 type: .yearMonth
             ),
             try .create(
@@ -172,12 +172,12 @@ extension Item {
         item.tags = [
             try .createIgnoringDuplicates(
                 context: context,
-                name: Calendar.current.startOfYear(for: date).stringValueWithoutLocale(.yyyy),
+                name: date.stringValueWithoutLocale(.yyyy),
                 type: .year
             ),
             try .createIgnoringDuplicates(
                 context: context,
-                name: Calendar.current.startOfMonth(for: date).stringValueWithoutLocale(.yyyyMM),
+                name: date.stringValueWithoutLocale(.yyyyMM),
                 type: .yearMonth
             ),
             try .createIgnoringDuplicates(
