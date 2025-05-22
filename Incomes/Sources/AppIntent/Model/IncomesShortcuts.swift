@@ -8,8 +8,6 @@
 
 import AppIntents
 
-// MARK: - Shortcut
-
 struct IncomesShortcuts: AppShortcutsProvider {
     static let shortcutTileColor = ShortcutTileColor.lime
 
@@ -59,7 +57,7 @@ struct IncomesShortcuts: AppShortcutsProvider {
             systemImageName: "list.dash.header.rectangle"
         ),
         AppShortcut(
-            intent: GetNextItem(),
+            intent: GetNextItemIntent(),
             phrases: [
                 "Get next item in \(.applicationName)",
                 "What is next in \(.applicationName)",
@@ -81,7 +79,7 @@ struct IncomesShortcuts: AppShortcutsProvider {
             systemImageName: "list.dash.header.rectangle"
         ),
         AppShortcut(
-            intent: GetPreviousItem(),
+            intent: GetPreviousItemIntent(),
             phrases: [
                 "Get previous item in \(.applicationName)",
                 "What was before in \(.applicationName)",
