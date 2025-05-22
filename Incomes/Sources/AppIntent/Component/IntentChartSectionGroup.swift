@@ -1,18 +1,15 @@
 //
-//  ChartSectionGroup.swift
+//  IntentChartSectionGroup.swift
 //  Incomes
 //
-//  Created by Hiromu Nakano on 2024/06/03.
-//  Copyright © 2024 Hiromu Nakano. All rights reserved.
+//  Created by Hiromu Nakano on 2025/05/23.
+//  Copyright © 2025 Hiromu Nakano. All rights reserved.
 //
 
 import SwiftData
 import SwiftUI
 
-struct ChartSectionGroup {
-    @AppStorage(.isSubscribeOn)
-    private var isSubscribeOn
-
+struct IntentChartSectionGroup {
     private let descriptor: FetchDescriptor<Item>
 
     init(_ descriptor: FetchDescriptor<Item>) {
@@ -20,13 +17,10 @@ struct ChartSectionGroup {
     }
 }
 
-extension ChartSectionGroup: View {
+extension IntentChartSectionGroup: View {
     var body: some View {
         BalanceChartSection(descriptor)
         IncomeAndOutgoChartSection(descriptor)
-        if !isSubscribeOn {
-            AdvertisementSection(.medium)
-        }
         CategoryChartSection(descriptor)
     }
 }

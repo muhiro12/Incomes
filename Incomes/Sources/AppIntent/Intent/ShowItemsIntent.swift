@@ -40,7 +40,7 @@ struct ShowChartsIntent: AppIntent, @unchecked Sendable {
     @MainActor
     func perform() throws -> some IntentResult & ProvidesDialog & ShowsSnippetView {
         .result(dialog: .init(stringLiteral: date.stringValue(.yyyyMMM))) {
-            ChartSectionGroup(.items(.dateIsSameMonthAs(date)))
+            IntentChartSectionGroup(.items(.dateIsSameMonthAs(date)))
                 .safeAreaPadding()
                 .modelContainer(modelContainer)
         }
