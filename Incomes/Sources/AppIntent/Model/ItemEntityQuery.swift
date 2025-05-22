@@ -14,16 +14,7 @@ struct ItemEntityQuery: EntityStringQuery, @unchecked Sendable {
 
     func entities(for identifiers: [ItemEntity.ID]) throws -> [ItemEntity] {
         try itemService.items(
-            .items(
-                .idsAre(
-                    identifiers.map {
-                        guard let data = Data(base64Encoded: $0) else {
-                            throw DebugError.default
-                        }
-                        return try JSONDecoder().decode(PersistentIdentifier.self, from: data)
-                    }
-                )
-            )
+            .items(.idsAre(identifiers.map { try .init(base64Encoded: $0) }))
         )
         .map {
             try .init($0)

@@ -40,7 +40,7 @@ struct ItemEntity: AppEntity {
     let balance: Decimal
 
     init(_ item: Item) throws {
-        id = try JSONEncoder().encode(item.id).base64EncodedString()
+        id = try item.id.base64Encoded()
         date = item.localDate
         content = item.content
         income = item.income
