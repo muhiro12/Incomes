@@ -12,6 +12,9 @@ import SwiftData
 enum ItemPredicate {
     case all
     case none
+    // MARK: ID
+    case idIs(PersistentIdentifier)
+    case idsAre([PersistentIdentifier])
     // MARK: Tag
     case tagIs(Tag)
     case tagAndYear(tag: Tag, yearString: String)
@@ -21,6 +24,8 @@ enum ItemPredicate {
     case dateIsSameYearAs(Date)
     case dateIsSameMonthAs(Date)
     case dateIsSameDayAs(Date)
+    // MARK: Content
+    case contentContains(String)
     // MARK: - Income
     case incomeIsBetween(min: Decimal, max: Decimal)
     // MARK: Outgo
@@ -38,6 +43,18 @@ enum ItemPredicate {
             return .true
         case .none:
             return .false
+
+        // MARK: - ID
+
+        case .idIs(let id):
+            return #Predicate {
+                $0.id == id
+            }
+
+        case .idsAre(let ids):
+            return #Predicate {
+                ids.contains($0.id)
+            }
 
         // MARK: - Tag
 
@@ -131,6 +148,13 @@ enum ItemPredicate {
             let end = Calendar.utc.endOfDay(for: shiftedDate)
             return #Predicate {
                 start <= $0.date && $0.date <= end
+            }
+
+        // MARK: - Content
+
+        case .contentContains(let string):
+            return #Predicate {
+                $0.content.contains(string)
             }
 
         // MARK: - Income
