@@ -31,6 +31,7 @@ struct ItemEntity: AppEntity {
     let content: String
     let income: Decimal
     let outgo: Decimal
+    let profit: Decimal
     let balance: Decimal
 
     init(_ item: Item) throws {
@@ -39,6 +40,7 @@ struct ItemEntity: AppEntity {
         content = item.content
         income = item.income
         outgo = item.outgo
+        profit = item.profit
         balance = item.balance
     }
 }

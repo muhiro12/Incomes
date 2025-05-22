@@ -59,6 +59,17 @@ struct IncomesShortcuts: AppShortcutsProvider {
             systemImageName: "list.dash.header.rectangle"
         ),
         AppShortcut(
+            intent: GetNextItem(),
+            phrases: [
+                "Get next item in \(.applicationName)",
+                "What is next in \(.applicationName)",
+                "Next entry in \(.applicationName)",
+                "Continue to next in \(.applicationName)"
+            ],
+            shortTitle: "Get Next Item",
+            systemImageName: "arrow.down.circle"
+        ),
+        AppShortcut(
             intent: ShowPreviousItemsIntent(),
             phrases: [
                 "Show previous items in \(.applicationName)",
@@ -68,6 +79,17 @@ struct IncomesShortcuts: AppShortcutsProvider {
             ],
             shortTitle: "Show Previous Items",
             systemImageName: "list.dash.header.rectangle"
+        ),
+        AppShortcut(
+            intent: GetPreviousItem(),
+            phrases: [
+                "Get previous item in \(.applicationName)",
+                "What was before in \(.applicationName)",
+                "Previous entry in \(.applicationName)",
+                "Return to previous in \(.applicationName)"
+            ],
+            shortTitle: "Get Previous Item",
+            systemImageName: "arrow.up.circle"
         )
     ]
 }

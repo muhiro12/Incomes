@@ -24,6 +24,27 @@ struct OpenIncomesIntent: AppIntent {
 
 // MARK: - Next Item
 
+struct GetNextItem: AppIntent, @unchecked Sendable {
+    static var title = LocalizedStringResource("Get Next Item")
+
+    @Parameter(title: "Date", kind: .date)
+    private var date: Date
+
+    @Dependency private var itemService: ItemService
+
+    @MainActor
+    func perform() throws -> some IntentResult & ReturnsValue<ItemEntity?> {
+        .result(
+            value: try {
+                guard let item = try itemService.item(.items(.dateIsAfter(date), order: .forward)) else {
+                    return nil
+                }
+                return try .init(item)
+            }()
+        )
+    }
+}
+
 struct GetNextItemDate: AppIntent, @unchecked Sendable {
     static var title = LocalizedStringResource("Get Next Item Date")
 
@@ -95,6 +116,27 @@ struct ShowNextItemsIntent: AppIntent, @unchecked Sendable {
 }
 
 // MARK: - Previous Item
+
+struct GetPreviousItem: AppIntent, @unchecked Sendable {
+    static var title = LocalizedStringResource("Get Previous Item")
+
+    @Parameter(title: "Date", kind: .date)
+    private var date: Date
+
+    @Dependency private var itemService: ItemService
+
+    @MainActor
+    func perform() throws -> some IntentResult & ReturnsValue<ItemEntity?> {
+        .result(
+            value: try {
+                guard let item = try itemService.item(.items(.dateIsBefore(date))) else {
+                    return nil
+                }
+                return try .init(item)
+            }()
+        )
+    }
+}
 
 struct GetPreviousItemDate: AppIntent, @unchecked Sendable {
     static var title = LocalizedStringResource("Get Previous Item Date")

@@ -1,6 +1,126 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "Get next item in ${applicationName}" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringSet" : {
+            "state" : "new",
+            "values" : [
+              "Get next item in ${applicationName}",
+              "What is next in ${applicationName}",
+              "Next entry in ${applicationName}",
+              "Continue to next in ${applicationName}"
+            ]
+          }
+        },
+        "es" : {
+          "stringSet" : {
+            "state" : "translated",
+            "values" : [
+              "Obtener el siguiente elemento en ${applicationName}",
+              "Qué sigue en ${applicationName}",
+              "Siguiente entrada en ${applicationName}",
+              "Continuar con el siguiente en ${applicationName}"
+            ]
+          }
+        },
+        "fr" : {
+          "stringSet" : {
+            "state" : "translated",
+            "values" : [
+              "Obtenir l’élément suivant dans ${applicationName}",
+              "Quel est le prochain dans ${applicationName}",
+              "Entrée suivante dans ${applicationName}",
+              "Continuer avec le suivant dans ${applicationName}"
+            ]
+          }
+        },
+        "ja" : {
+          "stringSet" : {
+            "state" : "translated",
+            "values" : [
+              "${applicationName}で次のアイテムを取得",
+              "${applicationName}で次は何か確認",
+              "${applicationName}の次の記録",
+              "${applicationName}の次へ進む"
+            ]
+          }
+        },
+        "zh-Hans" : {
+          "stringSet" : {
+            "state" : "translated",
+            "values" : [
+              "在${applicationName}中获取下一个项目",
+              "查看${applicationName}中接下来的内容",
+              "${applicationName}中的下一个条目",
+              "继续查看${applicationName}中的下一个"
+            ]
+          }
+        }
+      }
+    },
+    "Get previous item in ${applicationName}" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringSet" : {
+            "state" : "new",
+            "values" : [
+              "Get previous item in ${applicationName}",
+              "What was before in ${applicationName}",
+              "Previous entry in ${applicationName}",
+              "Return to previous in ${applicationName}"
+            ]
+          }
+        },
+        "es" : {
+          "stringSet" : {
+            "state" : "translated",
+            "values" : [
+              "Obtener el elemento anterior en ${applicationName}",
+              "Qué fue antes en ${applicationName}",
+              "Entrada anterior en ${applicationName}",
+              "Volver al anterior en ${applicationName}"
+            ]
+          }
+        },
+        "fr" : {
+          "stringSet" : {
+            "state" : "translated",
+            "values" : [
+              "Obtenir l’élément précédent dans ${applicationName}",
+              "Quel était l’élément précédent dans ${applicationName}",
+              "Entrée précédente dans ${applicationName}",
+              "Revenir au précédent dans ${applicationName}"
+            ]
+          }
+        },
+        "ja" : {
+          "stringSet" : {
+            "state" : "translated",
+            "values" : [
+              "${applicationName}で前のアイテムを取得",
+              "${applicationName}でひとつ前を確認",
+              "${applicationName}の前の記録",
+              "${applicationName}の前に戻る"
+            ]
+          }
+        },
+        "zh-Hans" : {
+          "stringSet" : {
+            "state" : "translated",
+            "values" : [
+              "在${applicationName}中获取上一个项目",
+              "查看${applicationName}中的前一个内容",
+              "${applicationName}中的前一个条目",
+              "返回到${applicationName}中的上一个"
+            ]
+          }
+        }
+      }
+    },
     "Open ${applicationName}" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
