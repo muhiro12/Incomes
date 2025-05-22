@@ -10,9 +10,9 @@ import AppIntents
 import SwiftData
 
 struct GetNextItemIntent: AppIntent, @unchecked Sendable {
-    static var title = LocalizedStringResource("Get Next Item")
+    static let title: LocalizedStringResource = .init("Get Next Item", table: "AppIntents")
 
-    @Parameter(title: "Date", kind: .date)
+    @Parameter(title: .init("Date", table: "AppIntents"), kind: .date)
     private var date: Date
 
     @Dependency private var itemService: ItemService
@@ -31,9 +31,9 @@ struct GetNextItemIntent: AppIntent, @unchecked Sendable {
 }
 
 struct GetNextItemDateIntent: AppIntent, @unchecked Sendable {
-    static var title = LocalizedStringResource("Get Next Item Date")
+    static let title: LocalizedStringResource = .init("Get Next Item Date", table: "AppIntents")
 
-    @Parameter(title: "Date", kind: .date)
+    @Parameter(title: .init("Date", table: "AppIntents"), kind: .date)
     private var date: Date
 
     @Dependency private var itemService: ItemService
@@ -47,9 +47,9 @@ struct GetNextItemDateIntent: AppIntent, @unchecked Sendable {
 }
 
 struct GetNextItemContentIntent: AppIntent, @unchecked Sendable {
-    static var title = LocalizedStringResource("Get Next Item Content")
+    static let title: LocalizedStringResource = .init("Get Next Item Content", table: "AppIntents")
 
-    @Parameter(title: "Date", kind: .date)
+    @Parameter(title: .init("Date", table: "AppIntents"), kind: .date)
     private var date: Date
 
     @Dependency private var itemService: ItemService
@@ -63,9 +63,9 @@ struct GetNextItemContentIntent: AppIntent, @unchecked Sendable {
 }
 
 struct GetNextItemProfitIntent: AppIntent, @unchecked Sendable {
-    static var title = LocalizedStringResource("Get Next Item Profit")
+    static let title: LocalizedStringResource = .init("Get Next Item Profit", table: "AppIntents")
 
-    @Parameter(title: "Date", kind: .date)
+    @Parameter(title: .init("Date", table: "AppIntents"), kind: .date)
     private var date: Date
 
     @Dependency private var itemService: ItemService
@@ -79,9 +79,9 @@ struct GetNextItemProfitIntent: AppIntent, @unchecked Sendable {
 }
 
 struct ShowNextItemsIntent: AppIntent, @unchecked Sendable {
-    static var title = LocalizedStringResource("Show Next Items")
+    static let title: LocalizedStringResource = .init("Show Next Items", table: "AppIntents")
 
-    @Parameter(title: "Date", kind: .date)
+    @Parameter(title: .init("Date", table: "AppIntents"), kind: .date)
     private var date: Date
 
     @Dependency private var modelContainer: ModelContainer
@@ -90,7 +90,7 @@ struct ShowNextItemsIntent: AppIntent, @unchecked Sendable {
     @MainActor
     func perform() throws -> some IntentResult & ProvidesDialog & ShowsSnippetView {
         guard let item = try itemService.item(.items(.dateIsAfter(date), order: .forward)) else {
-            return .result(dialog: .init("Not Found"))
+            return .result(dialog: .init(.init("Not Found", table: "AppIntents")))
         }
         return .result(dialog: .init(stringLiteral: date.stringValue(.yyyyMMM))) {
             IntentsItemListSection(.items(.dateIsSameDayAs(item.localDate)))

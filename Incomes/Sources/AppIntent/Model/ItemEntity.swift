@@ -13,20 +13,20 @@ struct ItemEntity: AppEntity {
 
     static var typeDisplayRepresentation: TypeDisplayRepresentation {
         .init(
-            name: "Item",
-            numericFormat: "\(placeholder: .int) Items"
+            name: .init("Item", table: "AppIntents"),
+            numericFormat: LocalizedStringResource("\(placeholder: .int) Items", table: "AppIntents")
         )
     }
 
     var displayRepresentation: DisplayRepresentation {
         .init(
-            title: "\(date.stringValue(.yyyyMMMd)) \(content)",
-            subtitle: "Income: \(income.asCurrency), Outgo: \(outgo.asCurrency)",
+            title: .init("\(date.stringValue(.yyyyMMMd)) \(content)", table: "AppIntents"),
+            subtitle: .init("Income: \(income.asCurrency), Outgo: \(outgo.asCurrency)", table: "AppIntents"),
             image: .init(
                 systemName: profit.isPlus ? "arrow.up.circle.fill" : "arrow.down.circle.fill"
             ),
             synonyms: [
-                "\(content)"
+                .init("\(content)", table: "AppIntents")
             ]
         )
     }

@@ -20,7 +20,7 @@ struct IncomesShortcuts: AppShortcutsProvider {
                 "Start \(.applicationName)",
                 "Access \(.applicationName)"
             ],
-            shortTitle: "Open Incomes",
+            shortTitle: LocalizedStringResource("Open Incomes", table: "AppIntents"),
             systemImageName: "dollarsign.circle"
         ),
         AppShortcut(
@@ -31,7 +31,7 @@ struct IncomesShortcuts: AppShortcutsProvider {
                 "Check my items in \(.applicationName)",
                 "List my entries in \(.applicationName)"
             ],
-            shortTitle: "Show Items",
+            shortTitle: LocalizedStringResource("Show Items", table: "AppIntents"),
             systemImageName: "list.bullet.rectangle"
         ),
         AppShortcut(
@@ -42,7 +42,7 @@ struct IncomesShortcuts: AppShortcutsProvider {
                 "Display stats from \(.applicationName)",
                 "Check analytics in \(.applicationName)"
             ],
-            shortTitle: "Show Charts",
+            shortTitle: LocalizedStringResource("Show Charts", table: "AppIntents"),
             systemImageName: "chart.pie"
         ),
         AppShortcut(
@@ -53,7 +53,7 @@ struct IncomesShortcuts: AppShortcutsProvider {
                 "Check next payments in \(.applicationName)",
                 "Upcoming entries in \(.applicationName)"
             ],
-            shortTitle: "Show Next Items",
+            shortTitle: LocalizedStringResource("Show Next Items", table: "AppIntents"),
             systemImageName: "list.dash.header.rectangle"
         ),
         AppShortcut(
@@ -64,7 +64,7 @@ struct IncomesShortcuts: AppShortcutsProvider {
                 "Next entry in \(.applicationName)",
                 "Continue to next in \(.applicationName)"
             ],
-            shortTitle: "Get Next Item",
+            shortTitle: LocalizedStringResource("Get Next Item", table: "AppIntents"),
             systemImageName: "arrow.down.circle"
         ),
         AppShortcut(
@@ -75,7 +75,7 @@ struct IncomesShortcuts: AppShortcutsProvider {
                 "List past entries in \(.applicationName)",
                 "Past transactions with \(.applicationName)"
             ],
-            shortTitle: "Show Previous Items",
+            shortTitle: LocalizedStringResource("Show Previous Items", table: "AppIntents"),
             systemImageName: "list.dash.header.rectangle"
         ),
         AppShortcut(
@@ -86,7 +86,7 @@ struct IncomesShortcuts: AppShortcutsProvider {
                 "Previous entry in \(.applicationName)",
                 "Return to previous in \(.applicationName)"
             ],
-            shortTitle: "Get Previous Item",
+            shortTitle: LocalizedStringResource("Get Previous Item", table: "AppIntents"),
             systemImageName: "arrow.up.circle"
         )
     ]

@@ -10,9 +10,9 @@ import AppIntents
 import SwiftData
 
 struct GetPreviousItemIntent: AppIntent, @unchecked Sendable {
-    static var title = LocalizedStringResource("Get Previous Item")
+    static let title: LocalizedStringResource = .init("Get Previous Item", table: "AppIntents")
 
-    @Parameter(title: "Date", kind: .date)
+    @Parameter(title: .init("Date", table: "AppIntents"), kind: .date)
     private var date: Date
 
     @Dependency private var itemService: ItemService
@@ -31,9 +31,9 @@ struct GetPreviousItemIntent: AppIntent, @unchecked Sendable {
 }
 
 struct GetPreviousItemDateIntent: AppIntent, @unchecked Sendable {
-    static var title = LocalizedStringResource("Get Previous Item Date")
+    static let title: LocalizedStringResource = .init("Get Previous Item Date", table: "AppIntents")
 
-    @Parameter(title: "Date", kind: .date)
+    @Parameter(title: .init("Date", table: "AppIntents"), kind: .date)
     private var date: Date
 
     @Dependency private var itemService: ItemService
@@ -47,9 +47,9 @@ struct GetPreviousItemDateIntent: AppIntent, @unchecked Sendable {
 }
 
 struct GetPreviousItemContentIntent: AppIntent, @unchecked Sendable {
-    static var title = LocalizedStringResource("Get Previous Item Content")
+    static let title: LocalizedStringResource = .init("Get Previous Item Content", table: "AppIntents")
 
-    @Parameter(title: "Date", kind: .date)
+    @Parameter(title: .init("Date", table: "AppIntents"), kind: .date)
     private var date: Date
 
     @Dependency private var itemService: ItemService
@@ -63,9 +63,9 @@ struct GetPreviousItemContentIntent: AppIntent, @unchecked Sendable {
 }
 
 struct GetPreviousItemProfitIntent: AppIntent, @unchecked Sendable {
-    static var title = LocalizedStringResource("Get Previous Item Profit")
+    static let title: LocalizedStringResource = .init("Get Previous Item Profit", table: "AppIntents")
 
-    @Parameter(title: "Date", kind: .date)
+    @Parameter(title: .init("Date", table: "AppIntents"), kind: .date)
     private var date: Date
 
     @Dependency private var itemService: ItemService
@@ -79,9 +79,9 @@ struct GetPreviousItemProfitIntent: AppIntent, @unchecked Sendable {
 }
 
 struct ShowPreviousItemsIntent: AppIntent, @unchecked Sendable {
-    static var title = LocalizedStringResource("Show Previous Items")
+    static let title: LocalizedStringResource = .init("Show Previous Items", table: "AppIntents")
 
-    @Parameter(title: "Date", kind: .date)
+    @Parameter(title: .init("Date", table: "AppIntents"), kind: .date)
     private var date: Date
 
     @Dependency private var modelContainer: ModelContainer
@@ -90,7 +90,7 @@ struct ShowPreviousItemsIntent: AppIntent, @unchecked Sendable {
     @MainActor
     func perform() throws -> some IntentResult & ProvidesDialog & ShowsSnippetView {
         guard let item = try itemService.item(.items(.dateIsBefore(date))) else {
-            return .result(dialog: .init("Not Found"))
+            return .result(dialog: .init(.init("Not Found", table: "AppIntents")))
         }
         return .result(dialog: .init(stringLiteral: date.stringValue(.yyyyMMM))) {
             IntentsItemListSection(.items(.dateIsSameDayAs(item.localDate)))
