@@ -49,6 +49,17 @@
       },
       "shouldTranslate" : false
     },
+    "%@ %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ %2$@"
+          }
+        }
+      },
+      "shouldTranslate" : false
+    },
     "%lld days" : {
       "localizations" : {
         "en" : {
@@ -1913,6 +1924,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "收入与支出"
+          }
+        }
+      }
+    },
+    "Income: %@, Outgo: %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Income: %1$@, Outgo: %2$@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ingreso: %1$@, Egreso: %2$@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Revenu : %1$@, Dépense : %2$@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "収入：%1$@、支出：%2$@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "收入：%1$@，支出：%2$@"
           }
         }
       }

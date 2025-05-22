@@ -20,8 +20,14 @@ struct ItemEntity: AppEntity {
 
     var displayRepresentation: DisplayRepresentation {
         .init(
-            title: "\(content)",
-            subtitle: "\(balance.asCurrency)"
+            title: "\(date.stringValue(.yyyyMMMd)) \(content)",
+            subtitle: "Income: \(income.asCurrency), Outgo: \(outgo.asCurrency)",
+            image: .init(
+                systemName: profit.isPlus ? "arrow.up.circle.fill" : "arrow.down.circle.fill"
+            ),
+            synonyms: [
+                "\(content)"
+            ]
         )
     }
 
