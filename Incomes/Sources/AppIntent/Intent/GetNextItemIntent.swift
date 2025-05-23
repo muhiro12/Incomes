@@ -18,7 +18,7 @@ struct GetNextItemIntent: AppIntent, @unchecked Sendable {
     @Dependency private var itemService: ItemService
 
     @MainActor
-    func perform() throws -> some IntentResult & ReturnsValue<ItemEntity?> {
+    func perform() throws -> some ReturnsValue<ItemEntity?> {
         .result(
             value: try {
                 guard let item = try itemService.item(.items(.dateIsAfter(date), order: .forward)) else {
@@ -39,7 +39,7 @@ struct GetNextItemDateIntent: AppIntent, @unchecked Sendable {
     @Dependency private var itemService: ItemService
 
     @MainActor
-    func perform() throws -> some IntentResult & ReturnsValue<Date?> {
+    func perform() throws -> some ReturnsValue<Date?> {
         .result(
             value: try itemService.item(.items(.dateIsAfter(date), order: .forward))?.localDate
         )
@@ -55,7 +55,7 @@ struct GetNextItemContentIntent: AppIntent, @unchecked Sendable {
     @Dependency private var itemService: ItemService
 
     @MainActor
-    func perform() throws -> some IntentResult & ReturnsValue<String?> {
+    func perform() throws -> some ReturnsValue<String?> {
         .result(
             value: try itemService.item(.items(.dateIsAfter(date), order: .forward))?.content
         )
@@ -71,7 +71,7 @@ struct GetNextItemProfitIntent: AppIntent, @unchecked Sendable {
     @Dependency private var itemService: ItemService
 
     @MainActor
-    func perform() throws -> some IntentResult & ReturnsValue<String?> {
+    func perform() throws -> some ReturnsValue<String?> {
         .result(
             value: try itemService.item(.items(.dateIsAfter(date), order: .forward))?.profit.asCurrency
         )
@@ -88,7 +88,7 @@ struct ShowNextItemsIntent: AppIntent, @unchecked Sendable {
     @Dependency private var itemService: ItemService
 
     @MainActor
-    func perform() throws -> some IntentResult & ProvidesDialog & ShowsSnippetView {
+    func perform() throws -> some ProvidesDialog & ShowsSnippetView {
         guard let item = try itemService.item(.items(.dateIsAfter(date), order: .forward)) else {
             return .result(dialog: .init(.init("Not Found", table: "AppIntents")))
         }

@@ -18,7 +18,7 @@ struct GetPreviousItemIntent: AppIntent, @unchecked Sendable {
     @Dependency private var itemService: ItemService
 
     @MainActor
-    func perform() throws -> some IntentResult & ReturnsValue<ItemEntity?> {
+    func perform() throws -> some ReturnsValue<ItemEntity?> {
         .result(
             value: try {
                 guard let item = try itemService.item(.items(.dateIsBefore(date))) else {
@@ -39,7 +39,7 @@ struct GetPreviousItemDateIntent: AppIntent, @unchecked Sendable {
     @Dependency private var itemService: ItemService
 
     @MainActor
-    func perform() throws -> some IntentResult & ReturnsValue<Date?> {
+    func perform() throws -> some ReturnsValue<Date?> {
         .result(
             value: try itemService.item(.items(.dateIsBefore(date)))?.localDate
         )
@@ -55,7 +55,7 @@ struct GetPreviousItemContentIntent: AppIntent, @unchecked Sendable {
     @Dependency private var itemService: ItemService
 
     @MainActor
-    func perform() throws -> some IntentResult & ReturnsValue<String?> {
+    func perform() throws -> some ReturnsValue<String?> {
         .result(
             value: try itemService.item(.items(.dateIsBefore(date)))?.content
         )
@@ -71,7 +71,7 @@ struct GetPreviousItemProfitIntent: AppIntent, @unchecked Sendable {
     @Dependency private var itemService: ItemService
 
     @MainActor
-    func perform() throws -> some IntentResult & ReturnsValue<String?> {
+    func perform() throws -> some ReturnsValue<String?> {
         .result(
             value: try itemService.item(.items(.dateIsBefore(date)))?.profit.asCurrency
         )
@@ -88,7 +88,7 @@ struct ShowPreviousItemsIntent: AppIntent, @unchecked Sendable {
     @Dependency private var itemService: ItemService
 
     @MainActor
-    func perform() throws -> some IntentResult & ProvidesDialog & ShowsSnippetView {
+    func perform() throws -> some ProvidesDialog & ShowsSnippetView {
         guard let item = try itemService.item(.items(.dateIsBefore(date))) else {
             return .result(dialog: .init(.init("Not Found", table: "AppIntents")))
         }

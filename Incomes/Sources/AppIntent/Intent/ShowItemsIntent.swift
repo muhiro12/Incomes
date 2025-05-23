@@ -19,7 +19,7 @@ struct ShowItemsIntent: AppIntent, @unchecked Sendable {
     @Dependency private var itemService: ItemService
 
     @MainActor
-    func perform() throws -> some IntentResult & ProvidesDialog & ShowsSnippetView {
+    func perform() throws -> some ProvidesDialog & ShowsSnippetView {
         .result(dialog: .init(stringLiteral: date.stringValue(.yyyyMMM))) {
             IntentsItemListSection(.items(.dateIsSameMonthAs(date)))
                 .safeAreaPadding()
@@ -38,7 +38,7 @@ struct ShowChartsIntent: AppIntent, @unchecked Sendable {
     @Dependency private var itemService: ItemService
 
     @MainActor
-    func perform() throws -> some IntentResult & ProvidesDialog & ShowsSnippetView {
+    func perform() throws -> some ProvidesDialog & ShowsSnippetView {
         .result(dialog: .init(stringLiteral: date.stringValue(.yyyyMMM))) {
             IntentChartSectionGroup(.items(.dateIsSameMonthAs(date)))
                 .safeAreaPadding()
