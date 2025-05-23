@@ -24,6 +24,17 @@ struct IncomesShortcuts: AppShortcutsProvider {
             systemImageName: "dollarsign.circle"
         ),
         AppShortcut(
+            intent: CreateItemIntent(),
+            phrases: [
+                "Create item in \(.applicationName)",
+                "Add new entry to \(.applicationName)",
+                "Log transaction in \(.applicationName)",
+                "Record income or outgo in \(.applicationName)"
+            ],
+            shortTitle: LocalizedStringResource("Create Item", table: "AppIntents"),
+            systemImageName: "plus.circle"
+        ),
+        AppShortcut(
             intent: ShowItemsIntent(),
             phrases: [
                 "Show items in \(.applicationName)",

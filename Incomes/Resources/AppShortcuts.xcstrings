@@ -1,6 +1,66 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "Create item in ${applicationName}" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringSet" : {
+            "state" : "new",
+            "values" : [
+              "Create item in ${applicationName}",
+              "Add new entry to ${applicationName}",
+              "Log transaction in ${applicationName}",
+              "Record income or outgo in ${applicationName}"
+            ]
+          }
+        },
+        "es" : {
+          "stringSet" : {
+            "state" : "translated",
+            "values" : [
+              "Crear elemento en ${applicationName}",
+              "Agregar nueva entrada a ${applicationName}",
+              "Registrar transacción en ${applicationName}",
+              "Anotar ingreso o gasto en ${applicationName}"
+            ]
+          }
+        },
+        "fr" : {
+          "stringSet" : {
+            "state" : "translated",
+            "values" : [
+              "Créer un élément dans ${applicationName}",
+              "Ajouter une nouvelle entrée dans ${applicationName}",
+              "Enregistrer une transaction dans ${applicationName}",
+              "Consigner un revenu ou une dépense dans ${applicationName}"
+            ]
+          }
+        },
+        "ja" : {
+          "stringSet" : {
+            "state" : "translated",
+            "values" : [
+              "${applicationName}でアイテムを作成",
+              "${applicationName}に新しい記録を追加",
+              "${applicationName}で取引を登録",
+              "${applicationName}で収入または支出を記録"
+            ]
+          }
+        },
+        "zh-Hans" : {
+          "stringSet" : {
+            "state" : "translated",
+            "values" : [
+              "在${applicationName}中创建项目",
+              "向${applicationName}添加新条目",
+              "在${applicationName}中记录交易",
+              "在${applicationName}中记录收入或支出"
+            ]
+          }
+        }
+      }
+    },
     "Get next item in ${applicationName}" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
