@@ -17,7 +17,6 @@ struct GetPreviousItemsIntent: AppIntent, @unchecked Sendable {
 
     @Dependency private var itemService: ItemService
 
-    @MainActor
     func perform() throws -> some ReturnsValue<[ItemEntity]> {
         guard let item = try itemService.item(.items(.dateIsBefore(date))) else {
             return .result(value: .empty)
@@ -35,7 +34,6 @@ struct ShowPreviousItemsIntent: AppIntent, @unchecked Sendable {
 
     @Dependency private var itemService: ItemService
 
-    @MainActor
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
         guard let item = try itemService.item(.items(.dateIsBefore(date))) else {
             return .result(dialog: .init(.init("Not Found", table: "AppIntents")))
@@ -55,7 +53,6 @@ struct ShowRecentItemsIntent: AppIntent, @unchecked Sendable {
 
     @Dependency private var itemService: ItemService
 
-    @MainActor
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
         let date = Date.now
         guard let item = try itemService.item(.items(.dateIsBefore(date))) else {

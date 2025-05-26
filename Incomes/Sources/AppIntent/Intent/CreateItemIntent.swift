@@ -27,7 +27,6 @@ struct CreateItemIntent: AppIntent, @unchecked Sendable {
 
     @Dependency private var itemService: ItemService
 
-    @MainActor
     func perform() throws -> some ReturnsValue<ItemEntity> {
         let item = try itemService.create(
             date: date,
@@ -59,7 +58,6 @@ struct CreateAndShowItemIntent: AppIntent, @unchecked Sendable {
 
     @Dependency private var itemService: ItemService
 
-    @MainActor
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
         let item = try itemService.create(
             date: date,
