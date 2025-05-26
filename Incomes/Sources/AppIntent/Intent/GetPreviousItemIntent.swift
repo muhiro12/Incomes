@@ -16,6 +16,7 @@ struct GetPreviousItemIntent: AppIntent, @unchecked Sendable {
 
     @Dependency private var itemService: ItemService
 
+    @MainActor
     func perform() throws -> some ReturnsValue<ItemEntity?> {
         guard let item = try itemService.item(.items(.dateIsBefore(date))) else {
             return .result(value: nil)
@@ -32,6 +33,7 @@ struct GetPreviousItemDateIntent: AppIntent, @unchecked Sendable {
 
     @Dependency private var itemService: ItemService
 
+    @MainActor
     func perform() throws -> some ReturnsValue<Date?> {
         guard let item = try itemService.item(.items(.dateIsBefore(date))) else {
             return .result(value: nil)
@@ -48,6 +50,7 @@ struct GetPreviousItemContentIntent: AppIntent, @unchecked Sendable {
 
     @Dependency private var itemService: ItemService
 
+    @MainActor
     func perform() throws -> some ReturnsValue<String?> {
         guard let item = try itemService.item(.items(.dateIsBefore(date))) else {
             return .result(value: nil)
@@ -64,6 +67,7 @@ struct GetPreviousItemProfitIntent: AppIntent, @unchecked Sendable {
 
     @Dependency private var itemService: ItemService
 
+    @MainActor
     func perform() throws -> some ReturnsValue<String?> {
         guard let item = try itemService.item(.items(.dateIsBefore(date))) else {
             return .result(value: nil)
@@ -80,6 +84,7 @@ struct ShowPreviousItemIntent: AppIntent, @unchecked Sendable {
 
     @Dependency private var itemService: ItemService
 
+    @MainActor
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
         guard let item = try itemService.item(.items(.dateIsBefore(date))) else {
             return .result(dialog: .init(.init("Not Found", table: "AppIntents")))
@@ -96,6 +101,7 @@ struct ShowRecentItemIntent: AppIntent, @unchecked Sendable {
 
     @Dependency private var itemService: ItemService
 
+    @MainActor
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
         let date = Date.now
         guard let item = try itemService.item(.items(.dateIsBefore(date))) else {

@@ -16,6 +16,7 @@ struct GetNextItemsIntent: AppIntent, @unchecked Sendable {
 
     @Dependency private var itemService: ItemService
 
+    @MainActor
     func perform() throws -> some ReturnsValue<[ItemEntity]> {
         guard let item = try itemService.item(.items(.dateIsAfter(date), order: .forward)) else {
             return .result(value: .empty)
@@ -33,6 +34,7 @@ struct ShowNextItemsIntent: AppIntent, @unchecked Sendable {
 
     @Dependency private var itemService: ItemService
 
+    @MainActor
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
         guard let item = try itemService.item(.items(.dateIsAfter(date), order: .forward)) else {
             return .result(dialog: .init(.init("Not Found", table: "AppIntents")))
@@ -52,6 +54,7 @@ struct ShowUpcomingItemsIntent: AppIntent, @unchecked Sendable {
 
     @Dependency private var itemService: ItemService
 
+    @MainActor
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
         let date = Date.now
         guard let item = try itemService.item(.items(.dateIsAfter(date), order: .forward)) else {
