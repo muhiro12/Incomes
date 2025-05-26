@@ -26,7 +26,6 @@ struct CreateItemIntent: AppIntent, @unchecked Sendable {
 
     @Dependency private var itemService: ItemService
 
-    @MainActor
     func perform() throws -> some ReturnsValue<ItemEntity> {
         guard content.isNotEmpty else {
             throw $content.needsValueError()
@@ -61,7 +60,6 @@ struct CreateAndShowItemIntent: AppIntent, @unchecked Sendable {
 
     @Dependency private var itemService: ItemService
 
-    @MainActor
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
         guard content.isNotEmpty else {
             throw $content.needsValueError()

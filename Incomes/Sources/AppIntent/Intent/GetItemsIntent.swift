@@ -17,7 +17,6 @@ struct GetItemsIntent: AppIntent, @unchecked Sendable {
 
     @Dependency private var itemService: ItemService
 
-    @MainActor
     func perform() throws -> some ReturnsValue<[ItemEntity]> {
         let items = try itemService.items(.items(.dateIsSameMonthAs(date)))
         return .result(value: try items.map { try .init($0) })
@@ -32,7 +31,6 @@ struct ShowItemsIntent: AppIntent, @unchecked Sendable {
 
     @Dependency private var itemService: ItemService
 
-    @MainActor
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
         let items = try itemService.items(.items(.dateIsSameMonthAs(date)))
         guard items.isNotEmpty else {
@@ -49,7 +47,6 @@ struct ShowThisMonthItemsIntent: AppIntent, @unchecked Sendable {
 
     @Dependency private var itemService: ItemService
 
-    @MainActor
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
         let date = Date.now
         let items = try itemService.items(.items(.dateIsSameMonthAs(date)))
@@ -71,7 +68,6 @@ struct ShowChartsIntent: AppIntent, @unchecked Sendable {
     @Dependency private var itemService: ItemService
     @Dependency private var modelContainer: ModelContainer
 
-    @MainActor
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
         let items = try itemService.items(.items(.dateIsSameMonthAs(date)))
         guard items.isNotEmpty else {
@@ -90,7 +86,6 @@ struct ShowThisMonthChartsIntent: AppIntent, @unchecked Sendable {
     @Dependency private var itemService: ItemService
     @Dependency private var modelContainer: ModelContainer
 
-    @MainActor
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
         let date = Date.now
         let items = try itemService.items(.items(.dateIsSameMonthAs(date)))

@@ -16,7 +16,6 @@ struct GetNextItemIntent: AppIntent, @unchecked Sendable {
 
     @Dependency private var itemService: ItemService
 
-    @MainActor
     func perform() throws -> some ReturnsValue<ItemEntity?> {
         guard let item = try itemService.item(.items(.dateIsAfter(date), order: .forward)) else {
             return .result(value: nil)
@@ -33,7 +32,6 @@ struct GetNextItemDateIntent: AppIntent, @unchecked Sendable {
 
     @Dependency private var itemService: ItemService
 
-    @MainActor
     func perform() throws -> some ReturnsValue<Date?> {
         guard let item = try itemService.item(.items(.dateIsAfter(date), order: .forward)) else {
             return .result(value: nil)
@@ -50,7 +48,6 @@ struct GetNextItemContentIntent: AppIntent, @unchecked Sendable {
 
     @Dependency private var itemService: ItemService
 
-    @MainActor
     func perform() throws -> some ReturnsValue<String?> {
         guard let item = try itemService.item(.items(.dateIsAfter(date), order: .forward)) else {
             return .result(value: nil)
@@ -67,7 +64,6 @@ struct GetNextItemProfitIntent: AppIntent, @unchecked Sendable {
 
     @Dependency private var itemService: ItemService
 
-    @MainActor
     func perform() throws -> some ReturnsValue<String?> {
         guard let item = try itemService.item(.items(.dateIsAfter(date), order: .forward)) else {
             return .result(value: nil)
@@ -84,7 +80,6 @@ struct ShowNextItemIntent: AppIntent, @unchecked Sendable {
 
     @Dependency private var itemService: ItemService
 
-    @MainActor
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
         guard let item = try itemService.item(.items(.dateIsAfter(date), order: .forward)) else {
             return .result(dialog: .init(.init("Not Found", table: "AppIntents")))
@@ -101,7 +96,6 @@ struct ShowUpcomingItemIntent: AppIntent, @unchecked Sendable {
 
     @Dependency private var itemService: ItemService
 
-    @MainActor
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
         let date = Date.now
         guard let item = try itemService.item(.items(.dateIsAfter(date), order: .forward)) else {
