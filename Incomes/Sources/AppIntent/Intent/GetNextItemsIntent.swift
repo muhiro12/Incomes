@@ -22,10 +22,8 @@ struct GetNextItemsIntent: AppIntent, @unchecked Sendable {
         guard let item = try itemService.item(.items(.dateIsAfter(date), order: .forward)) else {
             return .result(value: .empty)
         }
-        let items = try itemService.items(.items(.dateIsSameDayAs(item.localDate))).map { item in
-            try ItemEntity(item)
-        }
-        return .result(value: items)
+        let items = try itemService.items(.items(.dateIsSameDayAs(item.localDate)))
+        return .result(value: try items.map { try .init($0) })
     }
 }
 
@@ -35,19 +33,20 @@ struct ShowNextItemsIntent: AppIntent, @unchecked Sendable {
     @Parameter(title: "Date", kind: .date)
     private var date: Date
 
+    @Dependency private var itemService: ItemService
     @Dependency private var modelContainer: ModelContainer
 
     @MainActor
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
-        guard let items = try GetNextItemsIntent().perform().value,
-              items.isNotEmpty else {
+        guard let item = try itemService.item(.items(.dateIsAfter(date), order: .forward)) else {
             return .result(dialog: .init(.init("Not Found", table: "AppIntents")))
         }
-        let ids = try items.map { item in
-            try PersistentIdentifier(base64Encoded: item.id)
+        let items = try itemService.items(.items(.dateIsSameDayAs(item.localDate)))
+        guard items.isNotEmpty else {
+            return .result(dialog: .init(.init("Not Found", table: "AppIntents")))
         }
         return .result(dialog: .init(stringLiteral: date.stringValue(.yyyyMMM))) {
-            IntentsItemListSection(.items(.idsAre(ids)))
+            IntentsItemListSection(.items(.idsAre(items.map(\.id))))
                 .safeAreaPadding()
                 .modelContainer(modelContainer)
         }

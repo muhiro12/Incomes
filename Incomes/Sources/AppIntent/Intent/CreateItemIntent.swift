@@ -37,9 +37,7 @@ struct CreateItemIntent: AppIntent, @unchecked Sendable {
             category: category,
             repeatCount: repeatCount
         )
-        return .result(
-            value: try .init(item)
-        )
+        return .result(value: try .init(item))
     }
 }
 
@@ -64,11 +62,15 @@ struct CreateAndShowItemIntent: AppIntent, @unchecked Sendable {
 
     @MainActor
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
-        guard let id = try CreateItemIntent().perform().value?.id else {
-            return .result(dialog: .init(.init("Not Found", table: "AppIntents")))
-        }
-        let item = try itemService.item(.items(.idIs(.init(base64Encoded: id))))
-        return .result(dialog: .init(stringLiteral: date.stringValue(.yyyyMMM))) {
+        let item = try itemService.create(
+            date: date,
+            content: content,
+            income: .init(income),
+            outgo: .init(outgo),
+            category: category,
+            repeatCount: repeatCount
+        )
+        return .result(dialog: .init(stringLiteral: item.content)) {
             IntentItemSection()
                 .safeAreaPadding()
                 .environment(item)

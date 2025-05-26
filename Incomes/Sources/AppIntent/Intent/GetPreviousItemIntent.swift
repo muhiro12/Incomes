@@ -19,12 +19,10 @@ struct GetPreviousItemIntent: AppIntent, @unchecked Sendable {
 
     @MainActor
     func perform() throws -> some ReturnsValue<ItemEntity?> {
-        guard let item = try itemService.item(.items(.dateIsBefore(date))).map({ item in
-            try ItemEntity(item)
-        }) else {
+        guard let item = try itemService.item(.items(.dateIsBefore(date))) else {
             return .result(value: nil)
         }
-        return .result(value: item)
+        return .result(value: try .init(item))
     }
 }
 
@@ -34,11 +32,14 @@ struct GetPreviousItemDateIntent: AppIntent, @unchecked Sendable {
     @Parameter(title: "Date", kind: .date)
     private var date: Date
 
+    @Dependency private var itemService: ItemService
+
     @MainActor
     func perform() throws -> some ReturnsValue<Date?> {
-        .result(
-            value: try GetPreviousItemIntent().perform().value??.date
-        )
+        guard let item = try itemService.item(.items(.dateIsBefore(date))) else {
+            return .result(value: nil)
+        }
+        return .result(value: item.localDate)
     }
 }
 
@@ -48,11 +49,14 @@ struct GetPreviousItemContentIntent: AppIntent, @unchecked Sendable {
     @Parameter(title: "Date", kind: .date)
     private var date: Date
 
+    @Dependency private var itemService: ItemService
+
     @MainActor
     func perform() throws -> some ReturnsValue<String?> {
-        .result(
-            value: try GetPreviousItemIntent().perform().value??.content
-        )
+        guard let item = try itemService.item(.items(.dateIsBefore(date))) else {
+            return .result(value: nil)
+        }
+        return .result(value: item.content)
     }
 }
 
@@ -62,11 +66,14 @@ struct GetPreviousItemProfitIntent: AppIntent, @unchecked Sendable {
     @Parameter(title: "Date", kind: .date)
     private var date: Date
 
+    @Dependency private var itemService: ItemService
+
     @MainActor
     func perform() throws -> some ReturnsValue<String?> {
-        .result(
-            value: try GetPreviousItemIntent().perform().value??.profit.asCurrency
-        )
+        guard let item = try itemService.item(.items(.dateIsBefore(date))) else {
+            return .result(value: nil)
+        }
+        return .result(value: item.profit.asCurrency)
     }
 }
 
@@ -81,10 +88,9 @@ struct ShowPreviousItemIntent: AppIntent, @unchecked Sendable {
 
     @MainActor
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
-        guard let id = try GetPreviousItemIntent().perform().value??.id else {
+        guard let item = try itemService.item(.items(.dateIsBefore(date))) else {
             return .result(dialog: .init(.init("Not Found", table: "AppIntents")))
         }
-        let item = try itemService.item(.items(.idIs(.init(base64Encoded: id))))
         return .result(dialog: .init(stringLiteral: date.stringValue(.yyyyMMM))) {
             IntentItemSection()
                 .safeAreaPadding()

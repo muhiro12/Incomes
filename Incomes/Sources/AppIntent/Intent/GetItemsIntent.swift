@@ -19,10 +19,8 @@ struct GetItemsIntent: AppIntent, @unchecked Sendable {
 
     @MainActor
     func perform() throws -> some ReturnsValue<[ItemEntity]> {
-        let items = try itemService.items(.items(.dateIsSameMonthAs(date))).map { item in
-            try ItemEntity(item)
-        }
-        return .result(value: items)
+        let items = try itemService.items(.items(.dateIsSameMonthAs(date)))
+        return .result(value: try items.map { try .init($0) })
     }
 }
 
@@ -32,19 +30,17 @@ struct ShowItemsIntent: AppIntent, @unchecked Sendable {
     @Parameter(title: "Date", kind: .date)
     private var date: Date
 
+    @Dependency private var itemService: ItemService
     @Dependency private var modelContainer: ModelContainer
 
     @MainActor
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
-        guard let items = try GetItemsIntent().perform().value,
-              items.isNotEmpty else {
+        let items = try itemService.items(.items(.dateIsSameMonthAs(date)))
+        guard items.isNotEmpty else {
             return .result(dialog: .init(.init("Not Found", table: "AppIntents")))
         }
-        let ids = try items.map { item in
-            try PersistentIdentifier(base64Encoded: item.id)
-        }
         return .result(dialog: .init(stringLiteral: date.stringValue(.yyyyMMM))) {
-            IntentsItemListSection(.items(.idsAre(ids)))
+            IntentsItemListSection(.items(.idsAre(items.map(\.id))))
                 .safeAreaPadding()
                 .modelContainer(modelContainer)
         }
@@ -57,19 +53,17 @@ struct ShowChartsIntent: AppIntent, @unchecked Sendable {
     @Parameter(title: "Date", kind: .date)
     private var date: Date
 
+    @Dependency private var itemService: ItemService
     @Dependency private var modelContainer: ModelContainer
 
     @MainActor
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
-        guard let items = try GetItemsIntent().perform().value,
-              items.isNotEmpty else {
+        let items = try itemService.items(.items(.dateIsSameMonthAs(date)))
+        guard items.isNotEmpty else {
             return .result(dialog: .init(.init("Not Found", table: "AppIntents")))
         }
-        let ids = try items.map { item in
-            try PersistentIdentifier(base64Encoded: item.id)
-        }
         return .result(dialog: .init(stringLiteral: date.stringValue(.yyyyMMM))) {
-            IntentChartSectionGroup(.items(.idsAre(ids)))
+            IntentChartSectionGroup(.items(.idsAre(items.map(\.id))))
                 .safeAreaPadding()
                 .modelContainer(modelContainer)
         }
