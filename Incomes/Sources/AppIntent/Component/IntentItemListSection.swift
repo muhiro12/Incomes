@@ -1,5 +1,5 @@
 //
-//  IntentsItemListSection.swift
+//  IntentItemListSection.swift
 //  Incomes
 //
 //  Created by Hiromu Nakano on 2025/05/23.
@@ -9,7 +9,7 @@
 import SwiftData
 import SwiftUI
 
-struct IntentsItemListSection: View {
+struct IntentItemListSection: View {
     private var items: [Item]
 
     init(_ items: [Item]) {
@@ -28,6 +28,6 @@ struct IntentsItemListSection: View {
 
 #Preview {
     IncomesPreview { preview in
-        IntentsItemListSection(preview.items)
+        IntentItemListSection(preview.items)
     }
 }

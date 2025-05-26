@@ -45,7 +45,7 @@ struct ShowNextItemsIntent: AppIntent, @unchecked Sendable {
             return .result(dialog: .init(.init("Not Found", table: "AppIntents")))
         }
         return .result(dialog: .init(stringLiteral: date.stringValue(.yyyyMMM))) {
-            IntentsItemListSection(items)
+            IntentItemListSection(items)
                 .safeAreaPadding()
         }
     }
