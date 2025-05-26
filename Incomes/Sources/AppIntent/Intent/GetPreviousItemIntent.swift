@@ -77,25 +77,3 @@ struct GetPreviousItemProfitIntent: AppIntent, @unchecked Sendable {
         )
     }
 }
-
-struct ShowPreviousItemsIntent: AppIntent, @unchecked Sendable {
-    static let title: LocalizedStringResource = .init("Show Previous Items", table: "AppIntents")
-
-    @Parameter(title: "Date", kind: .date)
-    private var date: Date
-
-    @Dependency private var modelContainer: ModelContainer
-    @Dependency private var itemService: ItemService
-
-    @MainActor
-    func perform() throws -> some ProvidesDialog & ShowsSnippetView {
-        guard let item = try itemService.item(.items(.dateIsBefore(date))) else {
-            return .result(dialog: .init(.init("Not Found", table: "AppIntents")))
-        }
-        return .result(dialog: .init(stringLiteral: date.stringValue(.yyyyMMM))) {
-            IntentsItemListSection(.items(.dateIsSameDayAs(item.localDate)))
-                .safeAreaPadding()
-                .modelContainer(modelContainer)
-        }
-    }
-}

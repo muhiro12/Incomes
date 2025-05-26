@@ -77,25 +77,3 @@ struct GetNextItemProfitIntent: AppIntent, @unchecked Sendable {
         )
     }
 }
-
-struct ShowNextItemsIntent: AppIntent, @unchecked Sendable {
-    static let title: LocalizedStringResource = .init("Show Next Items", table: "AppIntents")
-
-    @Parameter(title: "Date", kind: .date)
-    private var date: Date
-
-    @Dependency private var modelContainer: ModelContainer
-    @Dependency private var itemService: ItemService
-
-    @MainActor
-    func perform() throws -> some ProvidesDialog & ShowsSnippetView {
-        guard let item = try itemService.item(.items(.dateIsAfter(date), order: .forward)) else {
-            return .result(dialog: .init(.init("Not Found", table: "AppIntents")))
-        }
-        return .result(dialog: .init(stringLiteral: date.stringValue(.yyyyMMM))) {
-            IntentsItemListSection(.items(.dateIsSameDayAs(item.localDate)))
-                .safeAreaPadding()
-                .modelContainer(modelContainer)
-        }
-    }
-}
