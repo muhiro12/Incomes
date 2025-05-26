@@ -71,7 +71,6 @@ struct CreateAndShowItemIntent: AppIntent, @unchecked Sendable {
         )
         return .result(dialog: .init(stringLiteral: item.content)) {
             IntentItemSection()
-                .safeAreaPadding()
                 .environment(item)
         }
     }

@@ -11,14 +11,13 @@ import SwiftUI
 struct IntentItemSection: View {
     var body: some View {
         ItemSection()
+            .safeAreaPadding()
     }
 }
 
 #Preview {
     IncomesPreview { preview in
-        List {
-            IntentItemSection()
-                .environment(preview.items[0])
-        }
+        IntentItemSection()
+            .environment(preview.items[0])
     }
 }

@@ -90,9 +90,8 @@ struct ShowPreviousItemIntent: AppIntent, @unchecked Sendable {
         guard let item = try itemService.item(.items(.dateIsBefore(date))) else {
             return .result(dialog: .init(.init("Not Found", table: "AppIntents")))
         }
-        return .result(dialog: .init(stringLiteral: date.stringValue(.yyyyMMM))) {
+        return .result(dialog: .init(stringLiteral: item.content)) {
             IntentItemSection()
-                .safeAreaPadding()
                 .environment(item)
         }
     }
