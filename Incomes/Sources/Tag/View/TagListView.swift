@@ -12,6 +12,8 @@ import SwiftUI
 struct TagListView {
     @Environment(ItemService.self)
     private var itemService
+    @Environment(TagService.self)
+    private var tagService
 
     @Query
     private var tags: [Tag]
@@ -20,7 +22,7 @@ struct TagListView {
 
     @State private var searchText = String.empty
     @State private var isDialogPresented = false
-    @State private var willDeleteItems = [Item]()
+    @State private var willDeleteTags = [Tag]()
 
     private let tagType: Tag.TagType
 
@@ -51,10 +53,10 @@ extension TagListView: View {
                         )
                 )
             }
-            .onDelete {
+            .onDelete { indices in
                 Haptic.warning.impact()
                 isDialogPresented = true
-                willDeleteItems = $0.flatMap { tags[$0].items ?? [] }
+                willDeleteTags = indices.map { tags[$0] }
             }
         }
         .searchable(text: $searchText)
@@ -77,20 +79,24 @@ extension TagListView: View {
         ) {
             Button(role: .destructive) {
                 do {
-                    try itemService.delete(items: willDeleteItems)
+                    let tags = willDeleteTags
+                    let items = tags.flatMap { $0.items ?? .empty }
+                    try tagService.delete(tags: tags)
+                    try itemService.delete(items: items)
+                    willDeleteTags = .empty
                 } catch {
                     assertionFailure(error.localizedDescription)
                 }
             } label: {
-                Text("Delete \(Set(willDeleteItems.map(\.content)).joined(separator: ", "))")
+                Text("Delete \(Set(willDeleteTags.map(\.displayName)).joined(separator: ", "))")
             }
             Button(role: .cancel) {
-                willDeleteItems = []
+                willDeleteTags = .empty
             } label: {
                 Text("Cancel")
             }
         } message: {
-            Text("Are you sure you want to delete this item?")
+            Text("Are you sure you want to delete these tags and the items linked to them?")
         }
     }
 }

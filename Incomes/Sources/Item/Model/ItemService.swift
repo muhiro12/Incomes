@@ -142,7 +142,7 @@ final class ItemService {
     }
 
     func deleteAll() throws {
-        try delete(items: try context.fetch(.init()))
+        try delete(items: context.fetch(.init()))
     }
 
     // MARK: - Calculate balance

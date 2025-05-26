@@ -27,6 +27,12 @@ final class TagService {
 
     // MARK: - Delete
 
+    func delete(tags: [Tag]) throws {
+        tags.forEach {
+            $0.delete()
+        }
+    }
+
     func deleteAll() throws {
         try delete(tags: context.fetch(.init()))
     }
@@ -84,11 +90,5 @@ final class TagService {
 private extension TagService {
     func tags(descriptor: FetchDescriptor<Tag> = .tags(.all)) throws -> [Tag] {
         try context.fetch(descriptor)
-    }
-
-    func delete(tags: [Tag]) throws {
-        tags.forEach {
-            $0.delete()
-        }
     }
 }
