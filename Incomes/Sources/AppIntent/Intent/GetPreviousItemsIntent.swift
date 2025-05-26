@@ -19,16 +19,13 @@ struct GetPreviousItemsIntent: AppIntent, @unchecked Sendable {
 
     @MainActor
     func perform() throws -> some ReturnsValue<[ItemEntity]> {
-        .result(
-            value: try {
-                guard let item = try itemService.item(.items(.dateIsBefore(date))) else {
-                    return .empty
-                }
-                return try itemService.items(.items(.dateIsSameDayAs(item.localDate))).map { item in
-                    try .init(item)
-                }
-            }()
-        )
+        guard let item = try itemService.item(.items(.dateIsBefore(date))) else {
+            return .result(value: .empty)
+        }
+        let items = try itemService.items(.items(.dateIsSameDayAs(item.localDate))).map { item in
+            try ItemEntity(item)
+        }
+        return .result(value: items)
     }
 }
 
