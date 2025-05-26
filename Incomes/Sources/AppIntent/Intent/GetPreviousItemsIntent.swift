@@ -46,9 +46,11 @@ struct ShowPreviousItemsIntent: AppIntent, @unchecked Sendable {
               items.isNotEmpty else {
             return .result(dialog: .init(.init("Not Found", table: "AppIntents")))
         }
+        let ids = try items.map { item in
+            try PersistentIdentifier(base64Encoded: item.id)
+        }
         return .result(dialog: .init(stringLiteral: date.stringValue(.yyyyMMM))) {
-            // TODO: Modify interface of IntentsItemListSection to set [ItemEntity]
-            IntentsItemListSection(.items(.dateIsSameDayAs(items[0].date)))
+            IntentsItemListSection(.items(.idsAre(ids)))
                 .safeAreaPadding()
                 .modelContainer(modelContainer)
         }
