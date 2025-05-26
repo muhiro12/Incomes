@@ -295,7 +295,7 @@ private extension ItemFormView {
 
     func create() {
         do {
-            try itemService.create(
+            _ = try itemService.create(
                 date: date,
                 content: content,
                 income: income.decimalValue,

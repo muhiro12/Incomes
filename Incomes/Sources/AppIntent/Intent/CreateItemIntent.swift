@@ -27,8 +27,8 @@ struct CreateItemIntent: AppIntent, @unchecked Sendable {
     @Dependency private var itemService: ItemService
 
     @MainActor
-    func perform() throws -> some IntentResult {
-        try itemService.create(
+    func perform() throws -> some ReturnsValue<ItemEntity> {
+        let item = try itemService.create(
             date: date,
             content: content,
             income: .init(income),
@@ -36,6 +36,8 @@ struct CreateItemIntent: AppIntent, @unchecked Sendable {
             category: category,
             repeatCount: repeatCount
         )
-        return .result()
+        return .result(
+            value: try .init(item)
+        )
     }
 }

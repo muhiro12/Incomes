@@ -40,7 +40,7 @@ final class ItemService {
                 income: Decimal,
                 outgo: Decimal,
                 category: String,
-                repeatCount: Int = 1) throws {
+                repeatCount: Int = 1) throws -> Item {
         var items = [Item]()
 
         let repeatID = UUID()
@@ -64,7 +64,7 @@ final class ItemService {
                                                             value: index,
                                                             to: date) else {
                 assertionFailure()
-                return
+                continue
             }
             let item = try Item.create(
                 context: context,
@@ -81,6 +81,8 @@ final class ItemService {
         items.forEach(context.insert)
 
         try calculator.calculate(for: items)
+
+        return item
     }
 
     // MARK: - Update
