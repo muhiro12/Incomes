@@ -7,7 +7,6 @@
 //
 
 import AppIntents
-import SwiftData
 
 struct CreateItemIntent: AppIntent, @unchecked Sendable {
     static let title: LocalizedStringResource = .init("Create Item", table: "AppIntents")

@@ -7,7 +7,6 @@
 //
 
 import AppIntents
-import SwiftData
 
 struct ItemEntityQuery: EntityStringQuery, @unchecked Sendable {
     @Dependency private var itemService: ItemService

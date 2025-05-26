@@ -6,7 +6,6 @@
 //  Copyright © 2025 Hiromu Nakano. All rights reserved.
 //
 
-import SwiftData
 import SwiftUI
 
 struct IntentItemListSection: View {

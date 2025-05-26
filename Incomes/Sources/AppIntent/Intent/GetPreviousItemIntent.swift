@@ -7,7 +7,6 @@
 //
 
 import AppIntents
-import SwiftData
 
 struct GetPreviousItemIntent: AppIntent, @unchecked Sendable {
     static let title: LocalizedStringResource = .init("Get Previous Item", table: "AppIntents")

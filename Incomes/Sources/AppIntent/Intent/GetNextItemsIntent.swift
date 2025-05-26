@@ -7,7 +7,6 @@
 //
 
 import AppIntents
-import SwiftData
 
 struct GetNextItemsIntent: AppIntent, @unchecked Sendable {
     static let title: LocalizedStringResource = .init("Get Next Items", table: "AppIntents")
