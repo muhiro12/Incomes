@@ -1,5 +1,5 @@
 //
-//  PreviousItemIntent.swift
+//  GetNextItemIntent.swift
 //  Incomes
 //
 //  Created by Hiromu Nakano on 2025/05/23.
@@ -9,8 +9,8 @@
 import AppIntents
 import SwiftData
 
-struct GetPreviousItemIntent: AppIntent, @unchecked Sendable {
-    static let title: LocalizedStringResource = .init("Get Previous Item", table: "AppIntents")
+struct GetNextItemIntent: AppIntent, @unchecked Sendable {
+    static let title: LocalizedStringResource = .init("Get Next Item", table: "AppIntents")
 
     @Parameter(title: "Date", kind: .date)
     private var date: Date
@@ -21,7 +21,7 @@ struct GetPreviousItemIntent: AppIntent, @unchecked Sendable {
     func perform() throws -> some ReturnsValue<ItemEntity?> {
         .result(
             value: try {
-                guard let item = try itemService.item(.items(.dateIsBefore(date))) else {
+                guard let item = try itemService.item(.items(.dateIsAfter(date), order: .forward)) else {
                     return nil
                 }
                 return try .init(item)
@@ -30,8 +30,8 @@ struct GetPreviousItemIntent: AppIntent, @unchecked Sendable {
     }
 }
 
-struct GetPreviousItemDateIntent: AppIntent, @unchecked Sendable {
-    static let title: LocalizedStringResource = .init("Get Previous Item Date", table: "AppIntents")
+struct GetNextItemDateIntent: AppIntent, @unchecked Sendable {
+    static let title: LocalizedStringResource = .init("Get Next Item Date", table: "AppIntents")
 
     @Parameter(title: "Date", kind: .date)
     private var date: Date
@@ -41,13 +41,13 @@ struct GetPreviousItemDateIntent: AppIntent, @unchecked Sendable {
     @MainActor
     func perform() throws -> some ReturnsValue<Date?> {
         .result(
-            value: try itemService.item(.items(.dateIsBefore(date)))?.localDate
+            value: try itemService.item(.items(.dateIsAfter(date), order: .forward))?.localDate
         )
     }
 }
 
-struct GetPreviousItemContentIntent: AppIntent, @unchecked Sendable {
-    static let title: LocalizedStringResource = .init("Get Previous Item Content", table: "AppIntents")
+struct GetNextItemContentIntent: AppIntent, @unchecked Sendable {
+    static let title: LocalizedStringResource = .init("Get Next Item Content", table: "AppIntents")
 
     @Parameter(title: "Date", kind: .date)
     private var date: Date
@@ -57,13 +57,13 @@ struct GetPreviousItemContentIntent: AppIntent, @unchecked Sendable {
     @MainActor
     func perform() throws -> some ReturnsValue<String?> {
         .result(
-            value: try itemService.item(.items(.dateIsBefore(date)))?.content
+            value: try itemService.item(.items(.dateIsAfter(date), order: .forward))?.content
         )
     }
 }
 
-struct GetPreviousItemProfitIntent: AppIntent, @unchecked Sendable {
-    static let title: LocalizedStringResource = .init("Get Previous Item Profit", table: "AppIntents")
+struct GetNextItemProfitIntent: AppIntent, @unchecked Sendable {
+    static let title: LocalizedStringResource = .init("Get Next Item Profit", table: "AppIntents")
 
     @Parameter(title: "Date", kind: .date)
     private var date: Date
@@ -73,7 +73,7 @@ struct GetPreviousItemProfitIntent: AppIntent, @unchecked Sendable {
     @MainActor
     func perform() throws -> some ReturnsValue<String?> {
         .result(
-            value: try itemService.item(.items(.dateIsBefore(date)))?.profit.asCurrency
+            value: try itemService.item(.items(.dateIsAfter(date), order: .forward))?.profit.asCurrency
         )
     }
 }

@@ -1,5 +1,5 @@
 //
-//  PreviousItemsIntent.swift
+//  GetPreviousItemsIntent.swift
 //  Incomes
 //
 //  Created by Hiromu Nakano on 2025/05/26.
