@@ -48,6 +48,7 @@ extension HomeYearSection: View {
             Button(role: .destructive) {
                 do {
                     try itemService.delete(items: willDeleteItems)
+                    Haptic.success.impact()
                 } catch {
                     assertionFailure(error.localizedDescription)
                 }

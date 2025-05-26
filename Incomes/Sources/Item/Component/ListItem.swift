@@ -78,6 +78,7 @@ struct ListItem: View {
             Button(role: .destructive) {
                 do {
                     try itemService.delete(items: [item])
+                    Haptic.success.impact()
                 } catch {
                     assertionFailure(error.localizedDescription)
                 }

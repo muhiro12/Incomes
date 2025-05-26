@@ -84,6 +84,7 @@ extension TagListView: View {
                     try tagService.delete(tags: tags)
                     try itemService.delete(items: items)
                     willDeleteTags = .empty
+                    Haptic.success.impact()
                 } catch {
                     assertionFailure(error.localizedDescription)
                 }

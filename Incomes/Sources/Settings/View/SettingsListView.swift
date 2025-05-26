@@ -156,6 +156,7 @@ extension SettingsListView: View {
                 do {
                     try itemService.deleteAll()
                     try tagService.deleteAll()
+                    Haptic.success.impact()
                 } catch {
                     assertionFailure(error.localizedDescription)
                 }
