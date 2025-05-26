@@ -7,6 +7,7 @@
 //
 
 import AppIntents
+import SwiftUI
 
 struct GetPreviousItemIntent: AppIntent, @unchecked Sendable {
     static let title: LocalizedStringResource = .init("Get Previous Item", table: "AppIntents")
@@ -64,11 +65,12 @@ struct GetPreviousItemProfitIntent: AppIntent, @unchecked Sendable {
 
     @Dependency private var itemService: ItemService
 
-    func perform() throws -> some ReturnsValue<String?> {
+    func perform() throws -> some ReturnsValue<IntentCurrencyAmount?> {
         guard let item = try itemService.item(.items(.dateIsBefore(date))) else {
             return .result(value: nil)
         }
-        return .result(value: item.profit.asCurrency)
+        let currencyCode = AppStorage(.currencyCode).wrappedValue
+        return .result(value: .init(amount: item.profit, currencyCode: currencyCode))
     }
 }
 
