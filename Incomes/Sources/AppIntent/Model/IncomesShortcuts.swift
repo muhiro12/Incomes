@@ -24,14 +24,14 @@ struct IncomesShortcuts: AppShortcutsProvider {
             systemImageName: "dollarsign.circle"
         ),
         AppShortcut(
-            intent: CreateItemIntent(),
+            intent: CreateAndShowItemIntent(),
             phrases: [
-                "Create item in \(.applicationName)",
-                "Add new entry to \(.applicationName)",
-                "Log transaction in \(.applicationName)",
-                "Record income or outgo in \(.applicationName)"
+                "Create and view item in \(.applicationName)",
+                "Add and show entry in \(.applicationName)",
+                "Log and display transaction in \(.applicationName)",
+                "Create then reveal item in \(.applicationName)"
             ],
-            shortTitle: LocalizedStringResource("Create Item", table: "AppIntents"),
+            shortTitle: LocalizedStringResource("Create and Show Item", table: "AppIntents"),
             systemImageName: "plus.circle"
         ),
         AppShortcut(

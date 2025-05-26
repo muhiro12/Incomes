@@ -1,17 +1,16 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "Create item in ${applicationName}" : {
-      "extractionState" : "extracted_with_value",
+    "Create and view item in ${applicationName}" : {
       "localizations" : {
         "en" : {
           "stringSet" : {
-            "state" : "new",
+            "state" : "translated",
             "values" : [
-              "Create item in ${applicationName}",
-              "Add new entry to ${applicationName}",
-              "Log transaction in ${applicationName}",
-              "Record income or outgo in ${applicationName}"
+              "Create and view item in ${applicationName}",
+              "Add and show entry in ${applicationName}",
+              "Log and display transaction in ${applicationName}",
+              "Create then reveal item in ${applicationName}"
             ]
           }
         },
@@ -19,10 +18,10 @@
           "stringSet" : {
             "state" : "translated",
             "values" : [
-              "Crear elemento en ${applicationName}",
-              "Agregar nueva entrada a ${applicationName}",
-              "Registrar transacción en ${applicationName}",
-              "Anotar ingreso o gasto en ${applicationName}"
+              "Crear y ver elemento en ${applicationName}",
+              "Agregar y mostrar entrada en ${applicationName}",
+              "Registrar y mostrar transacción en ${applicationName}",
+              "Crear y revelar elemento en ${applicationName}"
             ]
           }
         },
@@ -30,10 +29,10 @@
           "stringSet" : {
             "state" : "translated",
             "values" : [
-              "Créer un élément dans ${applicationName}",
-              "Ajouter une nouvelle entrée dans ${applicationName}",
-              "Enregistrer une transaction dans ${applicationName}",
-              "Consigner un revenu ou une dépense dans ${applicationName}"
+              "Créer et afficher un élément dans ${applicationName}",
+              "Ajouter et afficher une entrée dans ${applicationName}",
+              "Enregistrer et afficher une transaction dans ${applicationName}",
+              "Créer puis révéler un élément dans ${applicationName}"
             ]
           }
         },
@@ -41,10 +40,10 @@
           "stringSet" : {
             "state" : "translated",
             "values" : [
-              "${applicationName}でアイテムを作成",
-              "${applicationName}に新しい記録を追加",
-              "${applicationName}で取引を登録",
-              "${applicationName}で収入または支出を記録"
+              "${applicationName}でアイテムを作成して表示",
+              "${applicationName}に記録を追加して表示",
+              "${applicationName}で取引を登録して表示",
+              "${applicationName}で作成してすぐに確認"
             ]
           }
         },
@@ -52,10 +51,10 @@
           "stringSet" : {
             "state" : "translated",
             "values" : [
-              "在${applicationName}中创建项目",
-              "向${applicationName}添加新条目",
-              "在${applicationName}中记录交易",
-              "在${applicationName}中记录收入或支出"
+              "在${applicationName}中创建并查看项目",
+              "在${applicationName}中添加并显示条目",
+              "记录并显示${applicationName}中的交易",
+              "在${applicationName}中创建后立即显示"
             ]
           }
         }
