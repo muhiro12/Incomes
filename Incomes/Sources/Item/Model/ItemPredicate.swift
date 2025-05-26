@@ -48,12 +48,12 @@ enum ItemPredicate {
 
         case .idIs(let id):
             return #Predicate {
-                $0.id == id
+                $0.persistentModelID == id
             }
 
         case .idsAre(let ids):
             return #Predicate {
-                ids.contains($0.id)
+                ids.contains($0.persistentModelID)
             }
 
         // MARK: - Tag

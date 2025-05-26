@@ -29,9 +29,13 @@ extension IntentChartSectionGroup: View {
 }
 
 #Preview {
-    IncomesPreview { _ in
-        List {
-            ChartSectionGroup(.items(.dateIsSameYearAs(.now)))
-        }
+    IncomesPreview { preview in
+        IntentChartSectionGroup(
+            .items(
+                .idsAre(
+                    preview.items.prefix(10).map(\.id)
+                )
+            )
+        )
     }
 }
