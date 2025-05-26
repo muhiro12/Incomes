@@ -27,7 +27,7 @@ struct ItemServiceTest {
     func item(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        try service.create(
+        _ = try service.create(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "First",
             income: 100,
@@ -42,14 +42,14 @@ struct ItemServiceTest {
     func itemWithPredicate(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        try service.create(
+        _ = try service.create(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "Food",
             income: 0,
             outgo: 500,
             category: "Food"
         )
-        try service.create(
+        _ = try service.create(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "Transport",
             income: 0,
@@ -65,14 +65,14 @@ struct ItemServiceTest {
     func items(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        try service.create(
+        _ = try service.create(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "One",
             income: 100,
             outgo: 0,
             category: "Test"
         )
-        try service.create(
+        _ = try service.create(
             date: isoDate("2024-01-02T00:00:00Z"),
             content: "Two",
             income: 200,
@@ -87,14 +87,14 @@ struct ItemServiceTest {
     func itemsWithPredicate(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        try service.create(
+        _ = try service.create(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "Match",
             income: 0,
             outgo: 800,
             category: "Filtered"
         )
-        try service.create(
+        _ = try service.create(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "NoMatch",
             income: 0,
@@ -111,7 +111,7 @@ struct ItemServiceTest {
     func itemsCount(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        try service.create(
+        _ = try service.create(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "Only",
             income: 300,
@@ -126,14 +126,14 @@ struct ItemServiceTest {
     func itemsCountWithPredicate(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        try service.create(
+        _ = try service.create(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "X",
             income: 0,
             outgo: 900,
             category: "Filtered"
         )
-        try service.create(
+        _ = try service.create(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "Y",
             income: 0,
@@ -151,7 +151,7 @@ struct ItemServiceTest {
     func create(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        try service.create(
+        _ = try service.create(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "Lunch",
             income: 1_000,
@@ -166,7 +166,7 @@ struct ItemServiceTest {
     func createWithRepeat(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        try service.create(
+        _ = try service.create(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "Rent",
             income: 0,
@@ -183,7 +183,7 @@ struct ItemServiceTest {
     func createWithZeroRepeat(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        try service.create(
+        _ = try service.create(
             date: isoDate("2024-03-01T00:00:00Z"),
             content: "Single",
             income: 100,
@@ -200,7 +200,7 @@ struct ItemServiceTest {
     func createWithZeroAmounts(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        try service.create(
+        _ = try service.create(
             date: isoDate("2024-03-01T00:00:00Z"),
             content: "Neutral",
             income: 0,
@@ -216,7 +216,7 @@ struct ItemServiceTest {
         NSTimeZone.default = timeZone
 
         for _ in 0..<2 {
-            try service.create(
+            _ = try service.create(
                 date: isoDate("2024-03-01T00:00:00Z"),
                 content: "Repeated",
                 income: 100,
@@ -234,7 +234,7 @@ struct ItemServiceTest {
         NSTimeZone.default = timeZone
 
         let boundaryDate = shiftedDate("2024-03-15T00:00:00Z")
-        try service.create(
+        _ = try service.create(
             date: boundaryDate,
             content: "MidnightUTC",
             income: 100,
@@ -250,7 +250,7 @@ struct ItemServiceTest {
         NSTimeZone.default = timeZone
 
         let jstDate = shiftedDate("2024-03-15T09:00:00Z")  // 00:00 UTC
-        try service.create(
+        _ = try service.create(
             date: jstDate,
             content: "JSTToUTC",
             income: 100,
@@ -267,7 +267,7 @@ struct ItemServiceTest {
 
         let inputDate = isoDate("2024-03-15T10:30:00Z")
         let expectedDate = Calendar.utc.startOfDay(for: inputDate)
-        try service.create(
+        _ = try service.create(
             date: inputDate,
             content: "RoundedTime",
             income: 100,
@@ -284,7 +284,7 @@ struct ItemServiceTest {
     func update(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        try service.create(
+        _ = try service.create(
             date: shiftedDate("2024-01-01T00:00:00Z"),
             content: "Initial",
             income: 100,
@@ -310,7 +310,7 @@ struct ItemServiceTest {
     func updateAssignsNewRepeatID(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        try service.create(
+        _ = try service.create(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "Initial",
             income: 100,
@@ -336,14 +336,14 @@ struct ItemServiceTest {
     func updateChangesDateOrdering(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        try service.create(
+        _ = try service.create(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "First",
             income: 100,
             outgo: 0,
             category: "SortTest"
         )
-        try service.create(
+        _ = try service.create(
             date: isoDate("2024-01-02T00:00:00Z"),
             content: "Second",
             income: 100,
@@ -370,7 +370,7 @@ struct ItemServiceTest {
     func updateForFutureItems(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        try service.create(
+        _ = try service.create(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "Subscription",
             income: 0,
@@ -400,7 +400,7 @@ struct ItemServiceTest {
     func updateFutureLastOnly(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        try service.create(
+        _ = try service.create(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "Monthly",
             income: 100,
@@ -429,7 +429,7 @@ struct ItemServiceTest {
     func updateFutureSingleRepeat(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        try service.create(
+        _ = try service.create(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "Solo",
             income: 0,
@@ -454,7 +454,7 @@ struct ItemServiceTest {
     func updateForAllItems(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        try service.create(
+        _ = try service.create(
             date: isoDate("2024-02-01T00:00:00Z"),
             content: "Gym",
             income: 0,
@@ -486,7 +486,7 @@ struct ItemServiceTest {
     func delete(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        try service.create(
+        _ = try service.create(
             date: isoDate("2024-04-01T00:00:00Z"),
             content: "ToDelete",
             income: 100,
@@ -511,14 +511,14 @@ struct ItemServiceTest {
     func deleteMultipleItems(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        try service.create(
+        _ = try service.create(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "KeepMe",
             income: 100,
             outgo: 0,
             category: "General"
         )
-        try service.create(
+        _ = try service.create(
             date: isoDate("2024-01-02T00:00:00Z"),
             content: "RemoveMe",
             income: 100,
@@ -538,7 +538,7 @@ struct ItemServiceTest {
     func deleteAll(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        try service.create(
+        _ = try service.create(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "DeleteMe",
             income: 0,
@@ -556,7 +556,7 @@ struct ItemServiceTest {
     func recalculate(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        try service.create(
+        _ = try service.create(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "AdjustMe",
             income: 100,
@@ -580,7 +580,7 @@ struct ItemServiceTest {
     func recalculateNoChange(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        try service.create(
+        _ = try service.create(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "Stable",
             income: 100,
@@ -600,14 +600,14 @@ struct ItemServiceTest {
     func recalculatePartial(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        try service.create(
+        _ = try service.create(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "Before",
             income: 100,
             outgo: 50,
             category: "Split"
         )
-        try service.create(
+        _ = try service.create(
             date: isoDate("2024-02-01T00:00:00Z"),
             content: "After",
             income: 200,
@@ -634,14 +634,14 @@ struct ItemServiceTest {
     func recalculateWithTimeZoneBoundaries(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        try service.create(
+        _ = try service.create(
             date: shiftedDate("2024-02-28T15:00:00Z"),  // JST: 2024-02-29 00:00
             content: "EarlyMar",
             income: 300,
             outgo: 50,
             category: "TZTest"
         )
-        try service.create(
+        _ = try service.create(
             date: shiftedDate("2024-02-28T14:00:00Z"),  // JST: 2024-02-28 23:00
             content: "LateFeb",
             income: 500,

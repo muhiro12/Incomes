@@ -17,11 +17,11 @@ final class ItemServiceXCTests: XCTestCase {
             let context = testContext
             let service = ItemService(context: context)
 
-            try! service.create(date: isoDate("2000-01-01T12:00:00Z"),
-                                content: "content",
-                                income: 200,
-                                outgo: 100,
-                                category: "category")
+            _ = try! service.create(date: isoDate("2000-01-01T12:00:00Z"),
+                                    content: "content",
+                                    income: 200,
+                                    outgo: 100,
+                                    category: "category")
             let result = fetchItems(context).first!
 
             XCTAssertEqual(result.utcDate, isoDate("2000-01-01T00:00:00Z"))
@@ -35,12 +35,12 @@ final class ItemServiceXCTests: XCTestCase {
             let context = testContext
             let service = ItemService(context: context)
 
-            try! service.create(date: isoDate("2000-01-01T12:00:00Z"),
-                                content: "content",
-                                income: 200,
-                                outgo: 100,
-                                category: "category",
-                                repeatCount: 3)
+            _ = try! service.create(date: isoDate("2000-01-01T12:00:00Z"),
+                                    content: "content",
+                                    income: 200,
+                                    outgo: 100,
+                                    category: "category",
+                                    repeatCount: 3)
             let first = fetchItems(context).first!
             let last = fetchItems(context).last!
 
@@ -66,11 +66,11 @@ final class ItemServiceXCTests: XCTestCase {
         XCTContext.runActivity(named: "Result is as expected") { _ in
             let context = testContext
             let service = ItemService(context: context)
-            try! service.create(date: isoDate("2000-01-01T12:00:00Z"),
-                                content: "content",
-                                income: 200,
-                                outgo: 100,
-                                category: "category")
+            _ = try! service.create(date: isoDate("2000-01-01T12:00:00Z"),
+                                    content: "content",
+                                    income: 200,
+                                    outgo: 100,
+                                    category: "category")
 
             try! service.update(item: fetchItems(context).first!,
                                 date: isoDate("2001-01-02T12:00:00Z"),
@@ -90,12 +90,12 @@ final class ItemServiceXCTests: XCTestCase {
         XCTContext.runActivity(named: "Result is as expected when repeatCount 3") { _ in
             let context = testContext
             let service = ItemService(context: context)
-            try! service.create(date: isoDate("2000-01-01T12:00:00Z"),
-                                content: "content",
-                                income: 200,
-                                outgo: 100,
-                                category: "category",
-                                repeatCount: 3)
+            _ = try! service.create(date: isoDate("2000-01-01T12:00:00Z"),
+                                    content: "content",
+                                    income: 200,
+                                    outgo: 100,
+                                    category: "category",
+                                    repeatCount: 3)
 
             try! service.update(item: fetchItems(context)[1],
                                 date: isoDate("2000-02-02T12:00:00Z"),
@@ -135,11 +135,11 @@ final class ItemServiceXCTests: XCTestCase {
         XCTContext.runActivity(named: "Result is as expected") { _ in
             let context = testContext
             let service = ItemService(context: context)
-            try! service.create(date: isoDate("2000-01-01T12:00:00Z"),
-                                content: "content",
-                                income: 200,
-                                outgo: 100,
-                                category: "category")
+            _ = try! service.create(date: isoDate("2000-01-01T12:00:00Z"),
+                                    content: "content",
+                                    income: 200,
+                                    outgo: 100,
+                                    category: "category")
 
             try! service.updateForFutureItems(item: fetchItems(context).first!,
                                               date: isoDate("2001-01-02T12:00:00Z"),
@@ -159,12 +159,12 @@ final class ItemServiceXCTests: XCTestCase {
         XCTContext.runActivity(named: "Result is as expected when repeatCount 3") { _ in
             let context = testContext
             let service = ItemService(context: context)
-            try! service.create(date: isoDate("2000-01-01T12:00:00Z"),
-                                content: "content",
-                                income: 200,
-                                outgo: 100,
-                                category: "category",
-                                repeatCount: 3)
+            _ = try! service.create(date: isoDate("2000-01-01T12:00:00Z"),
+                                    content: "content",
+                                    income: 200,
+                                    outgo: 100,
+                                    category: "category",
+                                    repeatCount: 3)
 
             try! service.updateForFutureItems(item: fetchItems(context)[1],
                                               date: isoDate("2000-02-02T12:00:00Z"),
@@ -204,11 +204,11 @@ final class ItemServiceXCTests: XCTestCase {
         XCTContext.runActivity(named: "Result is as expected") { _ in
             let context = testContext
             let service = ItemService(context: context)
-            try! service.create(date: isoDate("2000-01-01T12:00:00Z"),
-                                content: "content",
-                                income: 200,
-                                outgo: 100,
-                                category: "category")
+            _ = try! service.create(date: isoDate("2000-01-01T12:00:00Z"),
+                                    content: "content",
+                                    income: 200,
+                                    outgo: 100,
+                                    category: "category")
 
             try! service.updateForAllItems(item: fetchItems(context).first!,
                                            date: isoDate("2001-01-02T12:00:00Z"),
@@ -228,12 +228,12 @@ final class ItemServiceXCTests: XCTestCase {
         XCTContext.runActivity(named: "Result is as expected when repeatCount 3") { _ in
             let context = testContext
             let service = ItemService(context: context)
-            try! service.create(date: isoDate("2000-01-01T12:00:00Z"),
-                                content: "content",
-                                income: 200,
-                                outgo: 100,
-                                category: "category",
-                                repeatCount: 3)
+            _ = try! service.create(date: isoDate("2000-01-01T12:00:00Z"),
+                                    content: "content",
+                                    income: 200,
+                                    outgo: 100,
+                                    category: "category",
+                                    repeatCount: 3)
 
             try! service.updateForAllItems(item: fetchItems(context)[1],
                                            date: isoDate("2000-02-02T12:00:00Z"),
