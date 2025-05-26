@@ -31,7 +31,6 @@ struct ShowItemsIntent: AppIntent, @unchecked Sendable {
     private var date: Date
 
     @Dependency private var itemService: ItemService
-    @Dependency private var modelContainer: ModelContainer
 
     @MainActor
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
@@ -40,9 +39,8 @@ struct ShowItemsIntent: AppIntent, @unchecked Sendable {
             return .result(dialog: .init(.init("Not Found", table: "AppIntents")))
         }
         return .result(dialog: .init(stringLiteral: date.stringValue(.yyyyMMM))) {
-            IntentsItemListSection(.items(.idsAre(items.map(\.id))))
+            IntentsItemListSection(items)
                 .safeAreaPadding()
-                .modelContainer(modelContainer)
         }
     }
 }

@@ -10,10 +10,10 @@ import SwiftData
 import SwiftUI
 
 struct IntentsItemListSection: View {
-    @Query private var items: [Item]
+    private var items: [Item]
 
-    init(_ descriptor: FetchDescriptor<Item>) {
-        _items = Query(descriptor)
+    init(_ items: [Item]) {
+        self.items = items
     }
 
     var body: some View {
@@ -27,7 +27,7 @@ struct IntentsItemListSection: View {
 }
 
 #Preview {
-    IncomesPreview { _ in
-        IntentsItemListSection(.items(.dateIsSameMonthAs(.now)))
+    IncomesPreview { preview in
+        IntentsItemListSection(preview.items)
     }
 }

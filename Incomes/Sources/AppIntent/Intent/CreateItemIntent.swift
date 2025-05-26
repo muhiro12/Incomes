@@ -58,7 +58,6 @@ struct CreateAndShowItemIntent: AppIntent, @unchecked Sendable {
     private var repeatCount: Int
 
     @Dependency private var itemService: ItemService
-    @Dependency private var modelContainer: ModelContainer
 
     @MainActor
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
@@ -74,7 +73,6 @@ struct CreateAndShowItemIntent: AppIntent, @unchecked Sendable {
             IntentItemSection()
                 .safeAreaPadding()
                 .environment(item)
-                .modelContainer(modelContainer)
         }
     }
 }

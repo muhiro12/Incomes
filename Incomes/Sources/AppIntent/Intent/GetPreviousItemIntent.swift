@@ -84,7 +84,6 @@ struct ShowPreviousItemIntent: AppIntent, @unchecked Sendable {
     private var date: Date
 
     @Dependency private var itemService: ItemService
-    @Dependency private var modelContainer: ModelContainer
 
     @MainActor
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
@@ -95,7 +94,6 @@ struct ShowPreviousItemIntent: AppIntent, @unchecked Sendable {
             IntentItemSection()
                 .safeAreaPadding()
                 .environment(item)
-                .modelContainer(modelContainer)
         }
     }
 }
