@@ -28,6 +28,9 @@ struct CreateItemIntent: AppIntent, @unchecked Sendable {
     @Dependency private var itemService: ItemService
 
     func perform() throws -> some ReturnsValue<ItemEntity> {
+        guard content.isNotEmpty else {
+            throw $content.needsValueError()
+        }
         let item = try itemService.create(
             date: date,
             content: content,
@@ -59,6 +62,9 @@ struct CreateAndShowItemIntent: AppIntent, @unchecked Sendable {
     @Dependency private var itemService: ItemService
 
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
+        guard content.isNotEmpty else {
+            throw $content.needsValueError()
+        }
         let item = try itemService.create(
             date: date,
             content: content,
