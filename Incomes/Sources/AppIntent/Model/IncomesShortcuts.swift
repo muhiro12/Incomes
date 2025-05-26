@@ -57,6 +57,17 @@ struct IncomesShortcuts: AppShortcutsProvider {
             systemImageName: "chart.pie"
         ),
         AppShortcut(
+            intent: ShowNextItemIntent(),
+            phrases: [
+                "Show next item in \(.applicationName)",
+                "Display what's next in \(.applicationName)",
+                "Next item entry in \(.applicationName)",
+                "Reveal the upcoming item in \(.applicationName)"
+            ],
+            shortTitle: LocalizedStringResource("Show Next Item", table: "AppIntents"),
+            systemImageName: "arrow.down.circle"
+        ),
+        AppShortcut(
             intent: ShowNextItemsIntent(),
             phrases: [
                 "Show next items in \(.applicationName)",
@@ -68,15 +79,15 @@ struct IncomesShortcuts: AppShortcutsProvider {
             systemImageName: "list.dash.header.rectangle"
         ),
         AppShortcut(
-            intent: GetNextItemIntent(),
+            intent: ShowPreviousItemIntent(),
             phrases: [
-                "Get next item in \(.applicationName)",
-                "What is next in \(.applicationName)",
-                "Next entry in \(.applicationName)",
-                "Continue to next in \(.applicationName)"
+                "Show previous item in \(.applicationName)",
+                "Display what was before in \(.applicationName)",
+                "Previous item entry in \(.applicationName)",
+                "Reveal the last item in \(.applicationName)"
             ],
-            shortTitle: LocalizedStringResource("Get Next Item", table: "AppIntents"),
-            systemImageName: "arrow.down.circle"
+            shortTitle: LocalizedStringResource("Show Previous Item", table: "AppIntents"),
+            systemImageName: "arrow.up.circle"
         ),
         AppShortcut(
             intent: ShowPreviousItemsIntent(),
@@ -88,17 +99,6 @@ struct IncomesShortcuts: AppShortcutsProvider {
             ],
             shortTitle: LocalizedStringResource("Show Previous Items", table: "AppIntents"),
             systemImageName: "list.dash.header.rectangle"
-        ),
-        AppShortcut(
-            intent: GetPreviousItemIntent(),
-            phrases: [
-                "Get previous item in \(.applicationName)",
-                "What was before in \(.applicationName)",
-                "Previous entry in \(.applicationName)",
-                "Return to previous in \(.applicationName)"
-            ],
-            shortTitle: LocalizedStringResource("Get Previous Item", table: "AppIntents"),
-            systemImageName: "arrow.up.circle"
         )
     ]
 }
