@@ -19,14 +19,12 @@ struct GetPreviousItemIntent: AppIntent, @unchecked Sendable {
 
     @MainActor
     func perform() throws -> some ReturnsValue<ItemEntity?> {
-        .result(
-            value: try {
-                guard let item = try itemService.item(.items(.dateIsBefore(date))) else {
-                    return nil
-                }
-                return try .init(item)
-            }()
-        )
+        guard let item = try itemService.item(.items(.dateIsBefore(date))).map({ item in
+            try ItemEntity(item)
+        }) else {
+            return .result(value: nil)
+        }
+        return .result(value: item)
     }
 }
 
@@ -36,12 +34,10 @@ struct GetPreviousItemDateIntent: AppIntent, @unchecked Sendable {
     @Parameter(title: "Date", kind: .date)
     private var date: Date
 
-    @Dependency private var itemService: ItemService
-
     @MainActor
     func perform() throws -> some ReturnsValue<Date?> {
         .result(
-            value: try itemService.item(.items(.dateIsBefore(date)))?.localDate
+            value: try GetPreviousItemIntent().perform().value??.date
         )
     }
 }
@@ -52,12 +48,10 @@ struct GetPreviousItemContentIntent: AppIntent, @unchecked Sendable {
     @Parameter(title: "Date", kind: .date)
     private var date: Date
 
-    @Dependency private var itemService: ItemService
-
     @MainActor
     func perform() throws -> some ReturnsValue<String?> {
         .result(
-            value: try itemService.item(.items(.dateIsBefore(date)))?.content
+            value: try GetPreviousItemIntent().perform().value??.content
         )
     }
 }
@@ -68,12 +62,10 @@ struct GetPreviousItemProfitIntent: AppIntent, @unchecked Sendable {
     @Parameter(title: "Date", kind: .date)
     private var date: Date
 
-    @Dependency private var itemService: ItemService
-
     @MainActor
     func perform() throws -> some ReturnsValue<String?> {
         .result(
-            value: try itemService.item(.items(.dateIsBefore(date)))?.profit.asCurrency
+            value: try GetPreviousItemIntent().perform().value??.profit.asCurrency
         )
     }
 }

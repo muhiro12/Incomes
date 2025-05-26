@@ -19,14 +19,12 @@ struct GetNextItemIntent: AppIntent, @unchecked Sendable {
 
     @MainActor
     func perform() throws -> some ReturnsValue<ItemEntity?> {
-        .result(
-            value: try {
-                guard let item = try itemService.item(.items(.dateIsAfter(date), order: .forward)) else {
-                    return nil
-                }
-                return try .init(item)
-            }()
-        )
+        guard let item = try itemService.item(.items(.dateIsAfter(date), order: .forward)).map({ item in
+            try ItemEntity(item)
+        }) else {
+            return .result(value: nil)
+        }
+        return .result(value: item)
     }
 }
 
@@ -36,12 +34,10 @@ struct GetNextItemDateIntent: AppIntent, @unchecked Sendable {
     @Parameter(title: "Date", kind: .date)
     private var date: Date
 
-    @Dependency private var itemService: ItemService
-
     @MainActor
     func perform() throws -> some ReturnsValue<Date?> {
         .result(
-            value: try itemService.item(.items(.dateIsAfter(date), order: .forward))?.localDate
+            value: try GetNextItemIntent().perform().value??.date
         )
     }
 }
@@ -52,12 +48,10 @@ struct GetNextItemContentIntent: AppIntent, @unchecked Sendable {
     @Parameter(title: "Date", kind: .date)
     private var date: Date
 
-    @Dependency private var itemService: ItemService
-
     @MainActor
     func perform() throws -> some ReturnsValue<String?> {
         .result(
-            value: try itemService.item(.items(.dateIsAfter(date), order: .forward))?.content
+            value: try GetNextItemIntent().perform().value??.content
         )
     }
 }
@@ -68,12 +62,10 @@ struct GetNextItemProfitIntent: AppIntent, @unchecked Sendable {
     @Parameter(title: "Date", kind: .date)
     private var date: Date
 
-    @Dependency private var itemService: ItemService
-
     @MainActor
     func perform() throws -> some ReturnsValue<String?> {
         .result(
-            value: try itemService.item(.items(.dateIsAfter(date), order: .forward))?.profit.asCurrency
+            value: try GetNextItemIntent().perform().value??.profit.asCurrency
         )
     }
 }
