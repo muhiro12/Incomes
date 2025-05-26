@@ -23,6 +23,7 @@ struct IntentItemListSection: View {
                     .environment($0)
             }
         }
+        .safeAreaPadding()
     }
 }
 

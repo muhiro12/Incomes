@@ -96,3 +96,21 @@ struct ShowNextItemIntent: AppIntent, @unchecked Sendable {
         }
     }
 }
+
+struct ShowUpcomingItemIntent: AppIntent, @unchecked Sendable {
+    static let title: LocalizedStringResource = .init("Show Upcoming Item", table: "AppIntents")
+
+    @Dependency private var itemService: ItemService
+
+    @MainActor
+    func perform() throws -> some ProvidesDialog & ShowsSnippetView {
+        let date = Date.now
+        guard let item = try itemService.item(.items(.dateIsAfter(date), order: .forward)) else {
+            return .result(dialog: .init(.init("Not Found", table: "AppIntents")))
+        }
+        return .result(dialog: .init(stringLiteral: item.content)) {
+            IntentItemSection()
+                .environment(item)
+        }
+    }
+}

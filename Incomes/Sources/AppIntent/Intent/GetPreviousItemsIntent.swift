@@ -46,7 +46,27 @@ struct ShowPreviousItemsIntent: AppIntent, @unchecked Sendable {
         }
         return .result(dialog: .init(stringLiteral: date.stringValue(.yyyyMMM))) {
             IntentItemListSection(items)
-                .safeAreaPadding()
+        }
+    }
+}
+
+struct ShowRecentItemsIntent: AppIntent, @unchecked Sendable {
+    static let title: LocalizedStringResource = .init("Show Recent Items", table: "AppIntents")
+
+    @Dependency private var itemService: ItemService
+
+    @MainActor
+    func perform() throws -> some ProvidesDialog & ShowsSnippetView {
+        let date = Date.now
+        guard let item = try itemService.item(.items(.dateIsBefore(date))) else {
+            return .result(dialog: .init(.init("Not Found", table: "AppIntents")))
+        }
+        let items = try itemService.items(.items(.dateIsSameDayAs(item.localDate)))
+        guard items.isNotEmpty else {
+            return .result(dialog: .init(.init("Not Found", table: "AppIntents")))
+        }
+        return .result(dialog: .init(stringLiteral: date.stringValue(.yyyyMMM))) {
+            IntentItemListSection(items)
         }
     }
 }

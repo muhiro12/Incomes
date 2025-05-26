@@ -35,69 +35,69 @@ struct IncomesShortcuts: AppShortcutsProvider {
             systemImageName: "plus.circle"
         ),
         AppShortcut(
-            intent: ShowItemsIntent(),
+            intent: ShowThisMonthItemsIntent(),
             phrases: [
                 "Show items in \(.applicationName)",
-                "View my items using \(.applicationName)",
-                "Check my items in \(.applicationName)",
-                "List my entries in \(.applicationName)"
+                "Let me see my items with \(.applicationName)",
+                "Show this month’s items in \(.applicationName)",
+                "List current month’s items in \(.applicationName)"
             ],
-            shortTitle: LocalizedStringResource("Show Items", table: "AppIntents"),
+            shortTitle: LocalizedStringResource("This Month’s Items", table: "AppIntents"),
             systemImageName: "list.bullet.rectangle"
         ),
         AppShortcut(
-            intent: ShowChartsIntent(),
+            intent: ShowThisMonthChartsIntent(),
             phrases: [
-                "Show charts in \(.applicationName)",
-                "View charts with \(.applicationName)",
-                "Display stats from \(.applicationName)",
-                "Check analytics in \(.applicationName)"
+                "Check charts in \(.applicationName)",
+                "Let me see the stats in \(.applicationName)",
+                "Show this month’s charts in \(.applicationName)",
+                "Display charts for the current month in \(.applicationName)"
             ],
-            shortTitle: LocalizedStringResource("Show Charts", table: "AppIntents"),
+            shortTitle: LocalizedStringResource("This Month’s Charts", table: "AppIntents"),
             systemImageName: "chart.pie"
         ),
         AppShortcut(
-            intent: ShowNextItemIntent(),
+            intent: ShowUpcomingItemIntent(),
             phrases: [
-                "Show next item in \(.applicationName)",
-                "Display what's next in \(.applicationName)",
-                "Next item entry in \(.applicationName)",
-                "Reveal the upcoming item in \(.applicationName)"
+                "What’s next in \(.applicationName)",
+                "Show me the next thing in \(.applicationName)",
+                "Show upcoming item in \(.applicationName)",
+                "Reveal the upcoming entry in \(.applicationName)"
             ],
-            shortTitle: LocalizedStringResource("Show Next Item", table: "AppIntents"),
+            shortTitle: LocalizedStringResource("Upcoming Item", table: "AppIntents"),
             systemImageName: "arrow.down.circle"
         ),
         AppShortcut(
-            intent: ShowNextItemsIntent(),
+            intent: ShowUpcomingItemsIntent(),
             phrases: [
-                "Show next items in \(.applicationName)",
-                "What’s upcoming in \(.applicationName)",
-                "Check next payments in \(.applicationName)",
-                "Upcoming entries in \(.applicationName)"
+                "What’s coming up in \(.applicationName)",
+                "Show me what’s next in \(.applicationName)",
+                "Show upcoming items in \(.applicationName)",
+                "Check what’s coming in \(.applicationName)"
             ],
-            shortTitle: LocalizedStringResource("Show Next Items", table: "AppIntents"),
+            shortTitle: LocalizedStringResource("Upcoming Items", table: "AppIntents"),
             systemImageName: "list.dash.header.rectangle"
         ),
         AppShortcut(
-            intent: ShowPreviousItemIntent(),
+            intent: ShowRecentItemIntent(),
             phrases: [
-                "Show previous item in \(.applicationName)",
-                "Display what was before in \(.applicationName)",
-                "Previous item entry in \(.applicationName)",
-                "Reveal the last item in \(.applicationName)"
+                "What did I do last in \(.applicationName)",
+                "Show me the latest item in \(.applicationName)",
+                "Show recent item in \(.applicationName)",
+                "Reveal most recent item in \(.applicationName)"
             ],
-            shortTitle: LocalizedStringResource("Show Previous Item", table: "AppIntents"),
+            shortTitle: LocalizedStringResource("Recent Item", table: "AppIntents"),
             systemImageName: "arrow.up.circle"
         ),
         AppShortcut(
-            intent: ShowPreviousItemsIntent(),
+            intent: ShowRecentItemsIntent(),
             phrases: [
-                "Show previous items in \(.applicationName)",
-                "View history in \(.applicationName)",
-                "List past entries in \(.applicationName)",
-                "Past transactions with \(.applicationName)"
+                "What did I record recently in \(.applicationName)",
+                "Show me recent records in \(.applicationName)",
+                "Show recent items in \(.applicationName)",
+                "Most recent items with \(.applicationName)"
             ],
-            shortTitle: LocalizedStringResource("Show Previous Items", table: "AppIntents"),
+            shortTitle: LocalizedStringResource("Recent Items", table: "AppIntents"),
             systemImageName: "list.dash.header.rectangle"
         )
     ]

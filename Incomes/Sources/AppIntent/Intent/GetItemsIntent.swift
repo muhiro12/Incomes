@@ -40,7 +40,24 @@ struct ShowItemsIntent: AppIntent, @unchecked Sendable {
         }
         return .result(dialog: .init(stringLiteral: date.stringValue(.yyyyMMM))) {
             IntentItemListSection(items)
-                .safeAreaPadding()
+        }
+    }
+}
+
+struct ShowThisMonthItemsIntent: AppIntent, @unchecked Sendable {
+    static let title: LocalizedStringResource = .init("Show This Month's Items", table: "AppIntents")
+
+    @Dependency private var itemService: ItemService
+
+    @MainActor
+    func perform() throws -> some ProvidesDialog & ShowsSnippetView {
+        let date = Date.now
+        let items = try itemService.items(.items(.dateIsSameMonthAs(date)))
+        guard items.isNotEmpty else {
+            return .result(dialog: .init(.init("Not Found", table: "AppIntents")))
+        }
+        return .result(dialog: .init(stringLiteral: date.stringValue(.yyyyMMM))) {
+            IntentItemListSection(items)
         }
     }
 }
@@ -62,7 +79,26 @@ struct ShowChartsIntent: AppIntent, @unchecked Sendable {
         }
         return .result(dialog: .init(stringLiteral: date.stringValue(.yyyyMMM))) {
             IntentChartSectionGroup(.items(.idsAre(items.map(\.id))))
-                .safeAreaPadding()
+                .modelContainer(modelContainer)
+        }
+    }
+}
+
+struct ShowThisMonthChartsIntent: AppIntent, @unchecked Sendable {
+    static let title: LocalizedStringResource = .init("Show This Month's Charts", table: "AppIntents")
+
+    @Dependency private var itemService: ItemService
+    @Dependency private var modelContainer: ModelContainer
+
+    @MainActor
+    func perform() throws -> some ProvidesDialog & ShowsSnippetView {
+        let date = Date.now
+        let items = try itemService.items(.items(.dateIsSameMonthAs(date)))
+        guard items.isNotEmpty else {
+            return .result(dialog: .init(.init("Not Found", table: "AppIntents")))
+        }
+        return .result(dialog: .init(stringLiteral: date.stringValue(.yyyyMMM))) {
+            IntentChartSectionGroup(.items(.idsAre(items.map(\.id))))
                 .modelContainer(modelContainer)
         }
     }

@@ -96,3 +96,21 @@ struct ShowPreviousItemIntent: AppIntent, @unchecked Sendable {
         }
     }
 }
+
+struct ShowRecentItemIntent: AppIntent, @unchecked Sendable {
+    static let title: LocalizedStringResource = .init("Show Recent Item", table: "AppIntents")
+
+    @Dependency private var itemService: ItemService
+
+    @MainActor
+    func perform() throws -> some ProvidesDialog & ShowsSnippetView {
+        let date = Date.now
+        guard let item = try itemService.item(.items(.dateIsBefore(date))) else {
+            return .result(dialog: .init(.init("Not Found", table: "AppIntents")))
+        }
+        return .result(dialog: .init(stringLiteral: item.content)) {
+            IntentItemSection()
+                .environment(item)
+        }
+    }
+}
