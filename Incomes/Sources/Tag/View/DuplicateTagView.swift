@@ -75,9 +75,16 @@ struct DuplicateTagView: View {
             isPresented: $isDeleteDialogPresented
         ) {
             Button(role: .destructive) {
-                // TODO: Delete by using TagService
-                selectedTag?.delete()
-                Haptic.success.impact()
+                guard let selectedTag else {
+                    return
+                }
+                do {
+                    try tagService.delete(tags: [selectedTag])
+                    self.selectedTag = nil
+                    Haptic.success.impact()
+                } catch {
+                    assertionFailure(error.localizedDescription)
+                }
             } label: {
                 Text("Delete")
             }
