@@ -12,7 +12,7 @@ import SwiftData
 struct GetPreviousItemIntent: AppIntent, @unchecked Sendable {
     static let title: LocalizedStringResource = .init("Get Previous Item", table: "AppIntents")
 
-    @Parameter(title: .init("Date", table: "AppIntents"), kind: .date)
+    @Parameter(title: "Date", kind: .date)
     private var date: Date
 
     @Dependency private var itemService: ItemService
@@ -33,7 +33,7 @@ struct GetPreviousItemIntent: AppIntent, @unchecked Sendable {
 struct GetPreviousItemDateIntent: AppIntent, @unchecked Sendable {
     static let title: LocalizedStringResource = .init("Get Previous Item Date", table: "AppIntents")
 
-    @Parameter(title: .init("Date", table: "AppIntents"), kind: .date)
+    @Parameter(title: "Date", kind: .date)
     private var date: Date
 
     @Dependency private var itemService: ItemService
@@ -49,7 +49,7 @@ struct GetPreviousItemDateIntent: AppIntent, @unchecked Sendable {
 struct GetPreviousItemContentIntent: AppIntent, @unchecked Sendable {
     static let title: LocalizedStringResource = .init("Get Previous Item Content", table: "AppIntents")
 
-    @Parameter(title: .init("Date", table: "AppIntents"), kind: .date)
+    @Parameter(title: "Date", kind: .date)
     private var date: Date
 
     @Dependency private var itemService: ItemService
@@ -65,7 +65,7 @@ struct GetPreviousItemContentIntent: AppIntent, @unchecked Sendable {
 struct GetPreviousItemProfitIntent: AppIntent, @unchecked Sendable {
     static let title: LocalizedStringResource = .init("Get Previous Item Profit", table: "AppIntents")
 
-    @Parameter(title: .init("Date", table: "AppIntents"), kind: .date)
+    @Parameter(title: "Date", kind: .date)
     private var date: Date
 
     @Dependency private var itemService: ItemService
@@ -81,7 +81,7 @@ struct GetPreviousItemProfitIntent: AppIntent, @unchecked Sendable {
 struct ShowPreviousItemsIntent: AppIntent, @unchecked Sendable {
     static let title: LocalizedStringResource = .init("Show Previous Items", table: "AppIntents")
 
-    @Parameter(title: .init("Date", table: "AppIntents"), kind: .date)
+    @Parameter(title: "Date", kind: .date)
     private var date: Date
 
     @Dependency private var modelContainer: ModelContainer

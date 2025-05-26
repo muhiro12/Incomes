@@ -12,7 +12,7 @@ import SwiftData
 struct ShowItemsIntent: AppIntent, @unchecked Sendable {
     static let title: LocalizedStringResource = .init("Show Items", table: "AppIntents")
 
-    @Parameter(title: .init("Date", table: "AppIntents"), kind: .date)
+    @Parameter(title: "Date", kind: .date)
     private var date: Date
 
     @Dependency private var modelContainer: ModelContainer
@@ -31,7 +31,7 @@ struct ShowItemsIntent: AppIntent, @unchecked Sendable {
 struct ShowChartsIntent: AppIntent, @unchecked Sendable {
     static let title: LocalizedStringResource = .init("Show Charts", table: "AppIntents")
 
-    @Parameter(title: .init("Date", table: "AppIntents"), kind: .date)
+    @Parameter(title: "Date", kind: .date)
     private var date: Date
 
     @Dependency private var modelContainer: ModelContainer
