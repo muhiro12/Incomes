@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct TitleListItem: View {
-    @Environment(Item.self) private var item
+    @Environment(ItemEntity.self) private var item
 
     var body: some View {
         HStack {
@@ -31,7 +31,7 @@ struct TitleListItem: View {
     IncomesPreview { preview in
         List {
             TitleListItem()
-                .environment(preview.items[0])
+                .environment(try! ItemEntity(preview.items[0]))
         }
     }
 }

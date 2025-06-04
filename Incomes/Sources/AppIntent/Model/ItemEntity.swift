@@ -8,7 +8,7 @@
 
 import AppIntents
 
-struct ItemEntity: AppEntity {
+struct ItemEntity: AppEntity, ModelBridgeable {
     static let defaultQuery = ItemEntityQuery()
 
     static var typeDisplayRepresentation: TypeDisplayRepresentation {
@@ -38,6 +38,7 @@ struct ItemEntity: AppEntity {
     let outgo: Decimal
     let profit: Decimal
     let balance: Decimal
+    let category: String?
 
     init(_ item: Item) throws {
         id = try item.id.base64Encoded()
@@ -47,5 +48,18 @@ struct ItemEntity: AppEntity {
         outgo = item.outgo
         profit = item.profit
         balance = item.balance
+        category = item.category?.displayName
+    }
+}
+
+extension ItemEntity {
+    var persistentIdentifier: Item.ID? { try? .init(base64Encoded: id) }
+}
+
+extension ItemEntity {
+    typealias Model = Item
+
+    init?(_ model: Item) {
+        try? self.init(model)
     }
 }

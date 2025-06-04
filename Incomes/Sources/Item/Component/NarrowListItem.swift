@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct NarrowListItem: View {
-    @Environment(Item.self) private var item
+    @Environment(ItemEntity.self) private var item
 
     var body: some View {
         HStack {
@@ -40,6 +40,6 @@ struct NarrowListItem: View {
 #Preview {
     IncomesPreview { preview in
         NarrowListItem()
-            .environment(preview.items[0])
+            .environment(try! ItemEntity(preview.items[0]))
     }
 }

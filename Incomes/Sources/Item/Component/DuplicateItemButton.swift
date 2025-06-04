@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct DuplicateItemButton {
-    @Environment(Item.self)
+    @Environment(ItemEntity.self)
     private var item
 
     @State private var isPresented = false
@@ -44,6 +44,6 @@ extension DuplicateItemButton: View {
 #Preview {
     IncomesPreview { preview in
         DuplicateItemButton()
-            .environment(preview.items[.zero])
+            .environment(try! ItemEntity(preview.items[.zero]))
     }
 }

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct DeleteItemButton {
-    @Environment(Item.self)
+    @Environment(ItemEntity.self)
     private var item
     @Environment(ItemService.self)
     private var itemService
@@ -44,7 +44,7 @@ extension DeleteItemButton: View {
         ) {
             Button(role: .destructive) {
                 do {
-                    try itemService.delete(items: [item])
+                    try itemService.delete(entities: [item])
                     Haptic.success.impact()
                 } catch {
                     assertionFailure(error.localizedDescription)
@@ -65,6 +65,6 @@ extension DeleteItemButton: View {
 #Preview {
     IncomesPreview { preview in
         DeleteItemButton()
-            .environment(preview.items[.zero])
+            .environment(try! ItemEntity(preview.items[.zero]))
     }
 }

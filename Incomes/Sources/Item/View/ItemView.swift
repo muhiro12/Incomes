@@ -2,7 +2,7 @@ import SwiftUI
 import SwiftUtilities
 
 struct ItemView {
-    @Environment(Item.self)
+    @Environment(ItemEntity.self)
     private var item
     @Environment(\.isPresented)
     private var isPresented
@@ -39,7 +39,7 @@ extension ItemView: View {
     IncomesPreview { preview in
         NavigationStack {
             ItemView()
-                .environment(preview.items[0])
+                .environment(try! ItemEntity(preview.items[0]))
         }
     }
 }

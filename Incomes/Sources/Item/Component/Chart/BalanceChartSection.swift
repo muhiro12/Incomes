@@ -11,12 +11,12 @@ import SwiftUI
 import SwiftUtilities
 
 struct BalanceChartSection {
-    @Query private var items: [Item]
+    @BridgeQuery private var items: [ItemEntity]
 
     @State private var isPresented = false
 
     init(_ descriptor: FetchDescriptor<Item>) {
-        _items = .init(descriptor)
+        _items = .init(Query(descriptor))
     }
 }
 
@@ -81,11 +81,11 @@ private extension BalanceChartSection {
         }
     }
 
-    func date(of item: Item) -> Date {
+    func date(of item: ItemEntity) -> Date {
         item.localDate
     }
 
-    func balance(of item: Item) -> Decimal {
+    func balance(of item: ItemEntity) -> Decimal {
         item.balance
     }
 }
