@@ -12,7 +12,11 @@ struct OpenIncomesIntent: AppIntent {
     static let title: LocalizedStringResource = .init("Open Incomes", table: "AppIntents")
     static let openAppWhenRun = true
 
-    func perform() throws -> some IntentResult {
+    static func perform() -> some IntentResult {
         .result()
+    }
+
+    func perform() throws -> some IntentResult {
+        Self.perform()
     }
 }

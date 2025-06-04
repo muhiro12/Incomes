@@ -16,11 +16,18 @@ struct GetNextItemsIntent: AppIntent, @unchecked Sendable {
 
     @Dependency private var itemService: ItemService
 
-    func perform() throws -> some ReturnsValue<[ItemEntity]> {
+    static func perform(date: Date,
+                        itemService: ItemService) throws -> [Item]? {
         guard let item = try itemService.item(.items(.dateIsAfter(date), order: .forward)) else {
+            return nil
+        }
+        return try itemService.items(.items(.dateIsSameDayAs(item.localDate)))
+    }
+
+    func perform() throws -> some ReturnsValue<[ItemEntity]> {
+        guard let items = try Self.perform(date: date, itemService: itemService) else {
             return .result(value: .empty)
         }
-        let items = try itemService.items(.items(.dateIsSameDayAs(item.localDate)))
         return .result(value: try items.map { try .init($0) })
     }
 }
@@ -34,11 +41,8 @@ struct ShowNextItemsIntent: AppIntent, @unchecked Sendable {
     @Dependency private var itemService: ItemService
 
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
-        guard let item = try itemService.item(.items(.dateIsAfter(date), order: .forward)) else {
-            return .result(dialog: .init(.init("Not Found", table: "AppIntents")))
-        }
-        let items = try itemService.items(.items(.dateIsSameDayAs(item.localDate)))
-        guard items.isNotEmpty else {
+        guard let items = try GetNextItemsIntent.perform(date: date, itemService: itemService),
+              items.isNotEmpty else {
             return .result(dialog: .init(.init("Not Found", table: "AppIntents")))
         }
         return .result(dialog: .init(stringLiteral: date.stringValue(.yyyyMMM))) {
@@ -54,11 +58,8 @@ struct ShowUpcomingItemsIntent: AppIntent, @unchecked Sendable {
 
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
         let date = Date.now
-        guard let item = try itemService.item(.items(.dateIsAfter(date), order: .forward)) else {
-            return .result(dialog: .init(.init("Not Found", table: "AppIntents")))
-        }
-        let items = try itemService.items(.items(.dateIsSameDayAs(item.localDate)))
-        guard items.isNotEmpty else {
+        guard let items = try GetNextItemsIntent.perform(date: date, itemService: itemService),
+              items.isNotEmpty else {
             return .result(dialog: .init(.init("Not Found", table: "AppIntents")))
         }
         return .result(dialog: .init(stringLiteral: date.stringValue(.yyyyMMM))) {

@@ -26,11 +26,17 @@ struct CreateItemIntent: AppIntent, @unchecked Sendable {
 
     @Dependency private var itemService: ItemService
 
-    func perform() throws -> some ReturnsValue<ItemEntity> {
+    static func perform(date: Date,
+                        content: String,
+                        income: Double,
+                        outgo: Double,
+                        category: String,
+                        repeatCount: Int,
+                        itemService: ItemService) throws -> Item {
         guard content.isNotEmpty else {
-            throw $content.needsValueError()
+            throw DebugError.default
         }
-        let item = try itemService.create(
+        return try itemService.create(
             date: date,
             content: content,
             income: .init(income),
@@ -38,6 +44,16 @@ struct CreateItemIntent: AppIntent, @unchecked Sendable {
             category: category,
             repeatCount: repeatCount
         )
+    }
+
+    func perform() throws -> some ReturnsValue<ItemEntity> {
+        let item = try Self.perform(date: date,
+                                    content: content,
+                                    income: income,
+                                    outgo: outgo,
+                                    category: category,
+                                    repeatCount: repeatCount,
+                                    itemService: itemService)
         return .result(value: try .init(item))
     }
 }
@@ -60,11 +76,17 @@ struct CreateAndShowItemIntent: AppIntent, @unchecked Sendable {
 
     @Dependency private var itemService: ItemService
 
-    func perform() throws -> some ProvidesDialog & ShowsSnippetView {
+    static func perform(date: Date,
+                        content: String,
+                        income: Double,
+                        outgo: Double,
+                        category: String,
+                        repeatCount: Int,
+                        itemService: ItemService) throws -> Item {
         guard content.isNotEmpty else {
-            throw $content.needsValueError()
+            throw DebugError.default
         }
-        let item = try itemService.create(
+        return try itemService.create(
             date: date,
             content: content,
             income: .init(income),
@@ -72,6 +94,16 @@ struct CreateAndShowItemIntent: AppIntent, @unchecked Sendable {
             category: category,
             repeatCount: repeatCount
         )
+    }
+
+    func perform() throws -> some ProvidesDialog & ShowsSnippetView {
+        let item = try Self.perform(date: date,
+                                    content: content,
+                                    income: income,
+                                    outgo: outgo,
+                                    category: category,
+                                    repeatCount: repeatCount,
+                                    itemService: itemService)
         return .result(dialog: .init(stringLiteral: item.content)) {
             IntentItemSection()
                 .environment(item)
