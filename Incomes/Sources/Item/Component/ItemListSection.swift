@@ -12,15 +12,15 @@ struct ItemListSection {
     @Environment(ItemService.self)
     private var itemService
 
-    @Query private var items: [Item]
+    @BridgeQuery private var items: [ItemEntity]
 
     @State private var isDialogPresented = false
-    @State private var willDeleteItems: [Item] = []
+    @State private var willDeleteItems: [ItemEntity] = []
 
     private let title: LocalizedStringKey?
 
     init(_ descriptor: FetchDescriptor<Item>, title: LocalizedStringKey? = nil) {
-        self._items = Query(descriptor)
+        self._items = .init(Query(descriptor))
         self.title = title
     }
 }
@@ -48,7 +48,7 @@ extension ItemListSection: View {
         ) {
             Button(role: .destructive) {
                 do {
-                    try itemService.delete(items: willDeleteItems)
+                    try itemService.delete(entities: willDeleteItems)
                     Haptic.success.impact()
                 } catch {
                     assertionFailure(error.localizedDescription)

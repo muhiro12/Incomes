@@ -152,6 +152,24 @@ final class ItemService {
     }
 }
 
+extension ItemService {
+    func item(entity: ItemEntity) throws -> Item? {
+        guard let id = entity.persistentIdentifier else { return nil }
+        return try item(.items(.idIs(id)))
+    }
+
+    func items(entities: [ItemEntity]) throws -> [Item] {
+        let ids = try entities.compactMap { entity in
+            try Item.ID(base64Encoded: entity.id)
+        }
+        return try items(.items(.idsAre(ids)))
+    }
+
+    func delete(entities: [ItemEntity]) throws {
+        try delete(items: try items(entities: entities))
+    }
+}
+
 private extension ItemService {
     func updateForRepeatingItems(item: Item,
                                  date: Date,
