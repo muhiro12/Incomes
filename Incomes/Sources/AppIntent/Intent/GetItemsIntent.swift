@@ -17,8 +17,13 @@ struct GetItemsIntent: AppIntent, @unchecked Sendable {
 
     @Dependency private var itemService: ItemService
 
+    static func perform(date: Date,
+                        itemService: ItemService) throws -> [Item] {
+        try itemService.items(.items(.dateIsSameMonthAs(date)))
+    }
+
     func perform() throws -> some ReturnsValue<[ItemEntity]> {
-        let items = try itemService.items(.items(.dateIsSameMonthAs(date)))
+        let items = try Self.perform(date: date, itemService: itemService)
         return .result(value: try items.map { try .init($0) })
     }
 }
@@ -31,9 +36,14 @@ struct ShowItemsIntent: AppIntent, @unchecked Sendable {
 
     @Dependency private var itemService: ItemService
 
-    func perform() throws -> some ProvidesDialog & ShowsSnippetView {
+    static func perform(date: Date,
+                        itemService: ItemService) throws -> [Item]? {
         let items = try itemService.items(.items(.dateIsSameMonthAs(date)))
-        guard items.isNotEmpty else {
+        return items.isEmpty ? nil : items
+    }
+
+    func perform() throws -> some ProvidesDialog & ShowsSnippetView {
+        guard let items = try Self.perform(date: date, itemService: itemService) else {
             return .result(dialog: .init(.init("Not Found", table: "AppIntents")))
         }
         return .result(dialog: .init(stringLiteral: date.stringValue(.yyyyMMM))) {
@@ -49,8 +59,7 @@ struct ShowThisMonthItemsIntent: AppIntent, @unchecked Sendable {
 
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
         let date = Date.now
-        let items = try itemService.items(.items(.dateIsSameMonthAs(date)))
-        guard items.isNotEmpty else {
+        guard let items = try ShowItemsIntent.perform(date: date, itemService: itemService) else {
             return .result(dialog: .init(.init("Not Found", table: "AppIntents")))
         }
         return .result(dialog: .init(stringLiteral: date.stringValue(.yyyyMMM))) {
@@ -68,9 +77,14 @@ struct ShowChartsIntent: AppIntent, @unchecked Sendable {
     @Dependency private var itemService: ItemService
     @Dependency private var modelContainer: ModelContainer
 
-    func perform() throws -> some ProvidesDialog & ShowsSnippetView {
+    static func perform(date: Date,
+                        itemService: ItemService) throws -> [Item]? {
         let items = try itemService.items(.items(.dateIsSameMonthAs(date)))
-        guard items.isNotEmpty else {
+        return items.isEmpty ? nil : items
+    }
+
+    func perform() throws -> some ProvidesDialog & ShowsSnippetView {
+        guard let items = try Self.perform(date: date, itemService: itemService) else {
             return .result(dialog: .init(.init("Not Found", table: "AppIntents")))
         }
         return .result(dialog: .init(stringLiteral: date.stringValue(.yyyyMMM))) {
@@ -88,8 +102,7 @@ struct ShowThisMonthChartsIntent: AppIntent, @unchecked Sendable {
 
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
         let date = Date.now
-        let items = try itemService.items(.items(.dateIsSameMonthAs(date)))
-        guard items.isNotEmpty else {
+        guard let items = try ShowChartsIntent.perform(date: date, itemService: itemService) else {
             return .result(dialog: .init(.init("Not Found", table: "AppIntents")))
         }
         return .result(dialog: .init(stringLiteral: date.stringValue(.yyyyMMM))) {
