@@ -18,12 +18,11 @@ struct IntroductionView: View {
     @State private var isLoading = false
 
     var body: some View {
-        NavigationStack {
-            List {
-                Section {
-                    Image(uiImage: .appIcon)
-                        .resizable()
-                        .scaledToFit()
+        List {
+            Section {
+                Image(uiImage: .appIcon)
+                    .resizable()
+                    .scaledToFit()
                         .clipShape(.rect(cornerRadius: 32))
                         .padding()
                     Text("Welcome. Incomes is designed to help you understand your finances more clearly.")
@@ -74,16 +73,15 @@ struct IntroductionView: View {
                 } footer: {
                     Text("You can remove sample items anytime from the Settings screen.")
                 }
-            }
-            .navigationTitle("Welcome to Incomes")
-            .toolbar {
-                ToolbarItem {
-                    CloseButton()
-                }
-            }
-            .disabled(isLoading)
-            .interactiveDismissDisabled()
         }
+        .navigationTitle("Welcome to Incomes")
+        .toolbar {
+            ToolbarItem {
+                CloseButton()
+            }
+        }
+        .disabled(isLoading)
+        .interactiveDismissDisabled()
     }
 }
 

@@ -72,7 +72,7 @@ extension HomeListView: View {
             }
         }
         .sheet(isPresented: $isIntroductionPresented) {
-            IntroductionView()
+            IntroductionNavigationView()
         }
         .sheet(isPresented: $isSettingsPresented) {
             SettingsNavigationView()

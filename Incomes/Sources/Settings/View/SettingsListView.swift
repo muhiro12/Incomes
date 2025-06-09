@@ -146,7 +146,7 @@ extension SettingsListView: View {
             }
         }
         .sheet(isPresented: $isIntroductionPresented) {
-            IntroductionView()
+            IntroductionNavigationView()
         }
         .confirmationDialog(
             Text("Delete all"),
