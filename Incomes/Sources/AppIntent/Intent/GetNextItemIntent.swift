@@ -9,7 +9,7 @@
 import AppIntents
 import SwiftUI
 
-struct GetNextItemIntent: AppIntent, @unchecked Sendable {
+struct GetNextItemIntent: StaticPerformIntent, @unchecked Sendable {
     static let title: LocalizedStringResource = .init("Get Next Item", table: "AppIntents")
 
     @Parameter(title: "Date", kind: .date)
@@ -17,13 +17,17 @@ struct GetNextItemIntent: AppIntent, @unchecked Sendable {
 
     @Dependency private var itemService: ItemService
 
-    static func perform(date: Date,
-                        itemService: ItemService) throws -> Item? {
-        try itemService.item(.items(.dateIsAfter(date), order: .forward))
+    struct Arguments {
+        let date: Date
+        let itemService: ItemService
+    }
+
+    static func perform(_ arguments: Arguments) throws -> Item? {
+        try arguments.itemService.item(.items(.dateIsAfter(arguments.date), order: .forward))
     }
 
     func perform() throws -> some ReturnsValue<ItemEntity?> {
-        guard let item = try Self.perform(date: date, itemService: itemService) else {
+        guard let item = try Self.perform(.init(date: date, itemService: itemService)) else {
             return .result(value: nil)
         }
         return .result(value: try .init(item))
@@ -39,7 +43,7 @@ struct GetNextItemDateIntent: AppIntent, @unchecked Sendable {
     @Dependency private var itemService: ItemService
 
     func perform() throws -> some ReturnsValue<Date?> {
-        guard let item = try GetNextItemIntent.perform(date: date, itemService: itemService) else {
+        guard let item = try GetNextItemIntent.perform(.init(date: date, itemService: itemService)) else {
             return .result(value: nil)
         }
         return .result(value: item.localDate)
@@ -55,7 +59,7 @@ struct GetNextItemContentIntent: AppIntent, @unchecked Sendable {
     @Dependency private var itemService: ItemService
 
     func perform() throws -> some ReturnsValue<String?> {
-        guard let item = try GetNextItemIntent.perform(date: date, itemService: itemService) else {
+        guard let item = try GetNextItemIntent.perform(.init(date: date, itemService: itemService)) else {
             return .result(value: nil)
         }
         return .result(value: item.content)
@@ -71,7 +75,7 @@ struct GetNextItemProfitIntent: AppIntent, @unchecked Sendable {
     @Dependency private var itemService: ItemService
 
     func perform() throws -> some ReturnsValue<IntentCurrencyAmount?> {
-        guard let item = try GetNextItemIntent.perform(date: date, itemService: itemService) else {
+        guard let item = try GetNextItemIntent.perform(.init(date: date, itemService: itemService)) else {
             return .result(value: nil)
         }
         let currencyCode = AppStorage(.currencyCode).wrappedValue
@@ -88,7 +92,7 @@ struct ShowNextItemIntent: AppIntent, @unchecked Sendable {
     @Dependency private var itemService: ItemService
 
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
-        guard let item = try GetNextItemIntent.perform(date: date, itemService: itemService) else {
+        guard let item = try GetNextItemIntent.perform(.init(date: date, itemService: itemService)) else {
             return .result(dialog: .init(.init("Not Found", table: "AppIntents")))
         }
         return .result(dialog: .init(stringLiteral: item.content)) {
@@ -105,7 +109,7 @@ struct ShowUpcomingItemIntent: AppIntent, @unchecked Sendable {
 
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
         let date = Date.now
-        guard let item = try GetNextItemIntent.perform(date: date, itemService: itemService) else {
+        guard let item = try GetNextItemIntent.perform(.init(date: date, itemService: itemService)) else {
             return .result(dialog: .init(.init("Not Found", table: "AppIntents")))
         }
         return .result(dialog: .init(stringLiteral: item.content)) {

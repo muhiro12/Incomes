@@ -8,7 +8,7 @@
 
 import AppIntents
 
-struct CreateItemIntent: AppIntent, @unchecked Sendable {
+struct CreateItemIntent: StaticPerformIntent, @unchecked Sendable {
     static let title: LocalizedStringResource = .init("Create Item", table: "AppIntents")
 
     @Parameter(title: "Date", kind: .date)
@@ -26,13 +26,24 @@ struct CreateItemIntent: AppIntent, @unchecked Sendable {
 
     @Dependency private var itemService: ItemService
 
-    static func perform(date: Date,
-                        content: String,
-                        income: Double,
-                        outgo: Double,
-                        category: String,
-                        repeatCount: Int,
-                        itemService: ItemService) throws -> Item {
+    struct Arguments {
+        let date: Date
+        let content: String
+        let income: Double
+        let outgo: Double
+        let category: String
+        let repeatCount: Int
+        let itemService: ItemService
+    }
+
+    static func perform(_ arguments: Arguments) throws -> Item {
+        let date = arguments.date
+        let content = arguments.content
+        let income = arguments.income
+        let outgo = arguments.outgo
+        let category = arguments.category
+        let repeatCount = arguments.repeatCount
+        let itemService = arguments.itemService
         guard content.isNotEmpty else {
             throw DebugError.default
         }
@@ -47,18 +58,20 @@ struct CreateItemIntent: AppIntent, @unchecked Sendable {
     }
 
     func perform() throws -> some ReturnsValue<ItemEntity> {
-        let item = try Self.perform(date: date,
-                                    content: content,
-                                    income: income,
-                                    outgo: outgo,
-                                    category: category,
-                                    repeatCount: repeatCount,
-                                    itemService: itemService)
+        let item = try Self.perform(
+            .init(date: date,
+                  content: content,
+                  income: income,
+                  outgo: outgo,
+                  category: category,
+                  repeatCount: repeatCount,
+                  itemService: itemService)
+        )
         return .result(value: try .init(item))
     }
 }
 
-struct CreateAndShowItemIntent: AppIntent, @unchecked Sendable {
+struct CreateAndShowItemIntent: StaticPerformIntent, @unchecked Sendable {
     static let title: LocalizedStringResource = .init("Create and Show Item", table: "AppIntents")
 
     @Parameter(title: "Date", kind: .date)
@@ -76,13 +89,24 @@ struct CreateAndShowItemIntent: AppIntent, @unchecked Sendable {
 
     @Dependency private var itemService: ItemService
 
-    static func perform(date: Date,
-                        content: String,
-                        income: Double,
-                        outgo: Double,
-                        category: String,
-                        repeatCount: Int,
-                        itemService: ItemService) throws -> Item {
+    struct Arguments {
+        let date: Date
+        let content: String
+        let income: Double
+        let outgo: Double
+        let category: String
+        let repeatCount: Int
+        let itemService: ItemService
+    }
+
+    static func perform(_ arguments: Arguments) throws -> Item {
+        let date = arguments.date
+        let content = arguments.content
+        let income = arguments.income
+        let outgo = arguments.outgo
+        let category = arguments.category
+        let repeatCount = arguments.repeatCount
+        let itemService = arguments.itemService
         guard content.isNotEmpty else {
             throw DebugError.default
         }
@@ -97,13 +121,15 @@ struct CreateAndShowItemIntent: AppIntent, @unchecked Sendable {
     }
 
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
-        let item = try Self.perform(date: date,
-                                    content: content,
-                                    income: income,
-                                    outgo: outgo,
-                                    category: category,
-                                    repeatCount: repeatCount,
-                                    itemService: itemService)
+        let item = try Self.perform(
+            .init(date: date,
+                  content: content,
+                  income: income,
+                  outgo: outgo,
+                  category: category,
+                  repeatCount: repeatCount,
+                  itemService: itemService)
+        )
         return .result(dialog: .init(stringLiteral: item.content)) {
             IntentItemSection()
                 .environment(item)

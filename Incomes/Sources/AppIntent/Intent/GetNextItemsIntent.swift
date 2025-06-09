@@ -8,7 +8,7 @@
 
 import AppIntents
 
-struct GetNextItemsIntent: AppIntent, @unchecked Sendable {
+struct GetNextItemsIntent: StaticPerformIntent, @unchecked Sendable {
     static let title: LocalizedStringResource = .init("Get Next Items", table: "AppIntents")
 
     @Parameter(title: "Date", kind: .date)
@@ -16,8 +16,14 @@ struct GetNextItemsIntent: AppIntent, @unchecked Sendable {
 
     @Dependency private var itemService: ItemService
 
-    static func perform(date: Date,
-                        itemService: ItemService) throws -> [Item]? {
+    struct Arguments {
+        let date: Date
+        let itemService: ItemService
+    }
+
+    static func perform(_ arguments: Arguments) throws -> [Item]? {
+        let date = arguments.date
+        let itemService = arguments.itemService
         guard let item = try itemService.item(.items(.dateIsAfter(date), order: .forward)) else {
             return nil
         }
@@ -25,7 +31,7 @@ struct GetNextItemsIntent: AppIntent, @unchecked Sendable {
     }
 
     func perform() throws -> some ReturnsValue<[ItemEntity]> {
-        guard let items = try Self.perform(date: date, itemService: itemService) else {
+        guard let items = try Self.perform(.init(date: date, itemService: itemService)) else {
             return .result(value: .empty)
         }
         return .result(value: try items.map { try .init($0) })
@@ -41,7 +47,7 @@ struct ShowNextItemsIntent: AppIntent, @unchecked Sendable {
     @Dependency private var itemService: ItemService
 
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
-        guard let items = try GetNextItemsIntent.perform(date: date, itemService: itemService),
+        guard let items = try GetNextItemsIntent.perform(.init(date: date, itemService: itemService)),
               items.isNotEmpty else {
             return .result(dialog: .init(.init("Not Found", table: "AppIntents")))
         }
@@ -58,7 +64,7 @@ struct ShowUpcomingItemsIntent: AppIntent, @unchecked Sendable {
 
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
         let date = Date.now
-        guard let items = try GetNextItemsIntent.perform(date: date, itemService: itemService),
+        guard let items = try GetNextItemsIntent.perform(.init(date: date, itemService: itemService)),
               items.isNotEmpty else {
             return .result(dialog: .init(.init("Not Found", table: "AppIntents")))
         }

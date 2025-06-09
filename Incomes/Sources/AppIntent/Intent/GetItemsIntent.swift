@@ -9,7 +9,7 @@
 import AppIntents
 import SwiftData
 
-struct GetItemsIntent: AppIntent, @unchecked Sendable {
+struct GetItemsIntent: StaticPerformIntent, @unchecked Sendable {
     static let title: LocalizedStringResource = .init("Get Items", table: "AppIntents")
 
     @Parameter(title: "Date", kind: .date)
@@ -17,18 +17,22 @@ struct GetItemsIntent: AppIntent, @unchecked Sendable {
 
     @Dependency private var itemService: ItemService
 
-    static func perform(date: Date,
-                        itemService: ItemService) throws -> [Item] {
-        try itemService.items(.items(.dateIsSameMonthAs(date)))
+    struct Arguments {
+        let date: Date
+        let itemService: ItemService
+    }
+
+    static func perform(_ arguments: Arguments) throws -> [Item] {
+        try arguments.itemService.items(.items(.dateIsSameMonthAs(arguments.date)))
     }
 
     func perform() throws -> some ReturnsValue<[ItemEntity]> {
-        let items = try Self.perform(date: date, itemService: itemService)
+        let items = try Self.perform(.init(date: date, itemService: itemService))
         return .result(value: try items.map { try .init($0) })
     }
 }
 
-struct ShowItemsIntent: AppIntent, @unchecked Sendable {
+struct ShowItemsIntent: StaticPerformIntent, @unchecked Sendable {
     static let title: LocalizedStringResource = .init("Show Items", table: "AppIntents")
 
     @Parameter(title: "Date", kind: .date)
@@ -36,14 +40,18 @@ struct ShowItemsIntent: AppIntent, @unchecked Sendable {
 
     @Dependency private var itemService: ItemService
 
-    static func perform(date: Date,
-                        itemService: ItemService) throws -> [Item]? {
-        let items = try itemService.items(.items(.dateIsSameMonthAs(date)))
+    struct Arguments {
+        let date: Date
+        let itemService: ItemService
+    }
+
+    static func perform(_ arguments: Arguments) throws -> [Item]? {
+        let items = try arguments.itemService.items(.items(.dateIsSameMonthAs(arguments.date)))
         return items.isEmpty ? nil : items
     }
 
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
-        guard let items = try Self.perform(date: date, itemService: itemService) else {
+        guard let items = try Self.perform(.init(date: date, itemService: itemService)) else {
             return .result(dialog: .init(.init("Not Found", table: "AppIntents")))
         }
         return .result(dialog: .init(stringLiteral: date.stringValue(.yyyyMMM))) {
@@ -59,7 +67,7 @@ struct ShowThisMonthItemsIntent: AppIntent, @unchecked Sendable {
 
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
         let date = Date.now
-        guard let items = try ShowItemsIntent.perform(date: date, itemService: itemService) else {
+        guard let items = try ShowItemsIntent.perform(.init(date: date, itemService: itemService)) else {
             return .result(dialog: .init(.init("Not Found", table: "AppIntents")))
         }
         return .result(dialog: .init(stringLiteral: date.stringValue(.yyyyMMM))) {
@@ -68,7 +76,7 @@ struct ShowThisMonthItemsIntent: AppIntent, @unchecked Sendable {
     }
 }
 
-struct ShowChartsIntent: AppIntent, @unchecked Sendable {
+struct ShowChartsIntent: StaticPerformIntent, @unchecked Sendable {
     static let title: LocalizedStringResource = .init("Show Charts", table: "AppIntents")
 
     @Parameter(title: "Date", kind: .date)
@@ -77,14 +85,20 @@ struct ShowChartsIntent: AppIntent, @unchecked Sendable {
     @Dependency private var itemService: ItemService
     @Dependency private var modelContainer: ModelContainer
 
-    static func perform(date: Date,
-                        itemService: ItemService) throws -> [Item]? {
+    struct Arguments {
+        let date: Date
+        let itemService: ItemService
+    }
+
+    static func perform(_ arguments: Arguments) throws -> [Item]? {
+        let date = arguments.date
+        let itemService = arguments.itemService
         let items = try itemService.items(.items(.dateIsSameMonthAs(date)))
         return items.isEmpty ? nil : items
     }
 
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
-        guard let items = try Self.perform(date: date, itemService: itemService) else {
+        guard let items = try Self.perform(.init(date: date, itemService: itemService)) else {
             return .result(dialog: .init(.init("Not Found", table: "AppIntents")))
         }
         return .result(dialog: .init(stringLiteral: date.stringValue(.yyyyMMM))) {
@@ -102,7 +116,7 @@ struct ShowThisMonthChartsIntent: AppIntent, @unchecked Sendable {
 
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
         let date = Date.now
-        guard let items = try ShowChartsIntent.perform(date: date, itemService: itemService) else {
+        guard let items = try ShowChartsIntent.perform(.init(date: date, itemService: itemService)) else {
             return .result(dialog: .init(.init("Not Found", table: "AppIntents")))
         }
         return .result(dialog: .init(stringLiteral: date.stringValue(.yyyyMMM))) {
