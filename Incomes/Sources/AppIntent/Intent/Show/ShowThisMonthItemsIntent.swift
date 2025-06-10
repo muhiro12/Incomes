@@ -8,14 +8,21 @@
 
 import AppIntents
 
-struct ShowThisMonthItemsIntent: AppIntent, @unchecked Sendable {
+struct ShowThisMonthItemsIntent: AppIntent, IntentPerformer, @unchecked Sendable {
     static let title: LocalizedStringResource = .init("Show This Month's Items", table: "AppIntents")
 
     @Dependency private var itemService: ItemService
 
+    typealias Input = (date: Date, itemService: ItemService)
+    typealias Output = [Item]?
+
+    static func perform(_ input: Input) throws -> Output {
+        try ShowItemsIntent.perform(input)
+    }
+
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
         let date = Date.now
-        guard let items = try ShowItemsIntent.perform(date: date, itemService: itemService) else {
+        guard let items = try Self.perform((date: date, itemService: itemService)) else {
             return .result(dialog: .init(.init("Not Found", table: "AppIntents")))
         }
         return .result(dialog: .init(stringLiteral: date.stringValue(.yyyyMMM))) {

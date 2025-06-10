@@ -8,7 +8,7 @@
 
 import AppIntents
 
-struct GetItemsIntent: AppIntent, @unchecked Sendable {
+struct GetItemsIntent: AppIntent, IntentPerformer, @unchecked Sendable {
     static let title: LocalizedStringResource = .init("Get Items", table: "AppIntents")
 
     @Parameter(title: "Date", kind: .date)
@@ -16,13 +16,15 @@ struct GetItemsIntent: AppIntent, @unchecked Sendable {
 
     @Dependency private var itemService: ItemService
 
-    static func perform(date: Date,
-                        itemService: ItemService) throws -> [Item] {
-        try itemService.items(.items(.dateIsSameMonthAs(date)))
+    typealias Input = (date: Date, itemService: ItemService)
+    typealias Output = [Item]
+
+    static func perform(_ input: Input) throws -> Output {
+        try input.itemService.items(.items(.dateIsSameMonthAs(input.date)))
     }
 
     func perform() throws -> some ReturnsValue<[ItemEntity]> {
-        let items = try Self.perform(date: date, itemService: itemService)
+        let items = try Self.perform((date: date, itemService: itemService))
         return .result(value: try items.map { try .init($0) })
     }
 }

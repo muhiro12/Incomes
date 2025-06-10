@@ -8,7 +8,7 @@
 
 import AppIntents
 
-struct ShowNextItemsIntent: AppIntent, @unchecked Sendable {
+struct ShowNextItemsIntent: AppIntent, IntentPerformer, @unchecked Sendable {
     static let title: LocalizedStringResource = .init("Show Next Items", table: "AppIntents")
 
     @Parameter(title: "Date", kind: .date)
@@ -16,8 +16,15 @@ struct ShowNextItemsIntent: AppIntent, @unchecked Sendable {
 
     @Dependency private var itemService: ItemService
 
+    typealias Input = (date: Date, itemService: ItemService)
+    typealias Output = [Item]?
+
+    static func perform(_ input: Input) throws -> Output {
+        try GetNextItemsIntent.perform(input)
+    }
+
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
-        guard let items = try GetNextItemsIntent.perform(date: date, itemService: itemService),
+        guard let items = try Self.perform((date: date, itemService: itemService)),
               items.isNotEmpty else {
             return .result(dialog: .init(.init("Not Found", table: "AppIntents")))
         }
