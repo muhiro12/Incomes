@@ -9,7 +9,7 @@
 import AppIntents
 import SwiftUI
 
-struct GetPreviousItemIntent: AppIntent, @unchecked Sendable {
+struct GetPreviousItemIntent: AppIntent, StaticPerformer, @unchecked Sendable {
     static let title: LocalizedStringResource = .init("Get Previous Item", table: "AppIntents")
 
     @Parameter(title: "Date", kind: .date)
@@ -17,20 +17,22 @@ struct GetPreviousItemIntent: AppIntent, @unchecked Sendable {
 
     @Dependency private var itemService: ItemService
 
-    static func perform(date: Date,
-                        itemService: ItemService) throws -> Item? {
-        try itemService.item(.items(.dateIsBefore(date)))
+    typealias Input = (date: Date, itemService: ItemService)
+    typealias Output = Item?
+
+    static func perform(_ input: Input) throws -> Output {
+        try input.itemService.item(.items(.dateIsBefore(input.date)))
     }
 
     func perform() throws -> some ReturnsValue<ItemEntity?> {
-        guard let item = try Self.perform(date: date, itemService: itemService) else {
+        guard let item = try Self.perform((date: date, itemService: itemService)) else {
             return .result(value: nil)
         }
         return .result(value: try .init(item))
     }
 }
 
-struct GetPreviousItemDateIntent: AppIntent, @unchecked Sendable {
+struct GetPreviousItemDateIntent: AppIntent, StaticPerformer, @unchecked Sendable {
     static let title: LocalizedStringResource = .init("Get Previous Item Date", table: "AppIntents")
 
     @Parameter(title: "Date", kind: .date)
@@ -38,15 +40,25 @@ struct GetPreviousItemDateIntent: AppIntent, @unchecked Sendable {
 
     @Dependency private var itemService: ItemService
 
+    typealias Input = (date: Date, itemService: ItemService)
+    typealias Output = Date?
+
+    static func perform(_ input: Input) throws -> Output {
+        guard let item = try GetPreviousItemIntent.perform(input) else {
+            return nil
+        }
+        return item.localDate
+    }
+
     func perform() throws -> some ReturnsValue<Date?> {
-        guard let item = try GetPreviousItemIntent.perform(date: date, itemService: itemService) else {
+        guard let item = try Self.perform((date: date, itemService: itemService)) else {
             return .result(value: nil)
         }
-        return .result(value: item.localDate)
+        return .result(value: item)
     }
 }
 
-struct GetPreviousItemContentIntent: AppIntent, @unchecked Sendable {
+struct GetPreviousItemContentIntent: AppIntent, StaticPerformer, @unchecked Sendable {
     static let title: LocalizedStringResource = .init("Get Previous Item Content", table: "AppIntents")
 
     @Parameter(title: "Date", kind: .date)
@@ -54,15 +66,22 @@ struct GetPreviousItemContentIntent: AppIntent, @unchecked Sendable {
 
     @Dependency private var itemService: ItemService
 
+    typealias Input = (date: Date, itemService: ItemService)
+    typealias Output = String?
+
+    static func perform(_ input: Input) throws -> Output {
+        try GetPreviousItemIntent.perform(input)?.content
+    }
+
     func perform() throws -> some ReturnsValue<String?> {
-        guard let item = try GetPreviousItemIntent.perform(date: date, itemService: itemService) else {
+        guard let content = try Self.perform((date: date, itemService: itemService)) else {
             return .result(value: nil)
         }
-        return .result(value: item.content)
+        return .result(value: content)
     }
 }
 
-struct GetPreviousItemProfitIntent: AppIntent, @unchecked Sendable {
+struct GetPreviousItemProfitIntent: AppIntent, StaticPerformer, @unchecked Sendable {
     static let title: LocalizedStringResource = .init("Get Previous Item Profit", table: "AppIntents")
 
     @Parameter(title: "Date", kind: .date)
@@ -70,16 +89,26 @@ struct GetPreviousItemProfitIntent: AppIntent, @unchecked Sendable {
 
     @Dependency private var itemService: ItemService
 
-    func perform() throws -> some ReturnsValue<IntentCurrencyAmount?> {
-        guard let item = try GetPreviousItemIntent.perform(date: date, itemService: itemService) else {
-            return .result(value: nil)
+    typealias Input = (date: Date, itemService: ItemService)
+    typealias Output = IntentCurrencyAmount?
+
+    static func perform(_ input: Input) throws -> Output {
+        guard let item = try GetPreviousItemIntent.perform(input) else {
+            return nil
         }
         let currencyCode = AppStorage(.currencyCode).wrappedValue
-        return .result(value: .init(amount: item.profit, currencyCode: currencyCode))
+        return .init(amount: item.profit, currencyCode: currencyCode)
+    }
+
+    func perform() throws -> some ReturnsValue<IntentCurrencyAmount?> {
+        guard let amount = try Self.perform((date: date, itemService: itemService)) else {
+            return .result(value: nil)
+        }
+        return .result(value: amount)
     }
 }
 
-struct ShowPreviousItemIntent: AppIntent, @unchecked Sendable {
+struct ShowPreviousItemIntent: AppIntent, StaticPerformer, @unchecked Sendable {
     static let title: LocalizedStringResource = .init("Show Previous Item", table: "AppIntents")
 
     @Parameter(title: "Date", kind: .date)
@@ -87,8 +116,15 @@ struct ShowPreviousItemIntent: AppIntent, @unchecked Sendable {
 
     @Dependency private var itemService: ItemService
 
+    typealias Input = (date: Date, itemService: ItemService)
+    typealias Output = Item?
+
+    static func perform(_ input: Input) throws -> Output {
+        try GetPreviousItemIntent.perform(input)
+    }
+
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
-        guard let item = try GetPreviousItemIntent.perform(date: date, itemService: itemService) else {
+        guard let item = try Self.perform((date: date, itemService: itemService)) else {
             return .result(dialog: .init(.init("Not Found", table: "AppIntents")))
         }
         return .result(dialog: .init(stringLiteral: item.content)) {
@@ -98,14 +134,21 @@ struct ShowPreviousItemIntent: AppIntent, @unchecked Sendable {
     }
 }
 
-struct ShowRecentItemIntent: AppIntent, @unchecked Sendable {
+struct ShowRecentItemIntent: AppIntent, StaticPerformer, @unchecked Sendable {
     static let title: LocalizedStringResource = .init("Show Recent Item", table: "AppIntents")
 
     @Dependency private var itemService: ItemService
 
+    typealias Input = (date: Date, itemService: ItemService)
+    typealias Output = Item?
+
+    static func perform(_ input: Input) throws -> Output {
+        try GetPreviousItemIntent.perform(input)
+    }
+
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
         let date = Date.now
-        guard let item = try GetPreviousItemIntent.perform(date: date, itemService: itemService) else {
+        guard let item = try Self.perform((date: date, itemService: itemService)) else {
             return .result(dialog: .init(.init("Not Found", table: "AppIntents")))
         }
         return .result(dialog: .init(stringLiteral: item.content)) {
