@@ -32,6 +32,12 @@ struct ItemSection: View {
                 Text(item.outgo.asMinusCurrency)
                     .foregroundStyle(.secondary)
             }
+            HStack {
+                Text("Category")
+                Spacer()
+                Text(item.category ?? .empty)
+                    .foregroundStyle(.secondary)
+            }
         } header: {
             Text("Information")
         }

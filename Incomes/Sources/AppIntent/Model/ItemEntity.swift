@@ -39,8 +39,9 @@ final class ItemEntity: AppEntity {
     let outgo: Decimal
     let profit: Decimal
     let balance: Decimal
+    let category: String?
 
-    init(id: String, date: Date, content: String, income: Decimal, outgo: Decimal, profit: Decimal, balance: Decimal) {
+    init(id: String, date: Date, content: String, income: Decimal, outgo: Decimal, profit: Decimal, balance: Decimal, category: String?) {
         self.id = id
         self.date = date
         self.content = content
@@ -48,6 +49,7 @@ final class ItemEntity: AppEntity {
         self.outgo = outgo
         self.profit = profit
         self.balance = balance
+        self.category = category
     }
 }
 
@@ -67,7 +69,8 @@ extension ItemEntity: ModelBridgeable {
             income: model.income,
             outgo: model.outgo,
             profit: model.profit,
-            balance: model.balance
+            balance: model.balance,
+            category: model.category?.displayName
         )
     }
 }
