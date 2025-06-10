@@ -23,21 +23,33 @@ extension DebugSection: View {
         Section {
             if let item {
                 HStack {
-                    Text("UTC Date")
+                    Text("Date")
                     Spacer()
-                    Text(item.utcDate.description)
+                    Text(item.date.description)
                         .foregroundStyle(.secondary)
                 }
                 HStack {
-                    Text("Local Date")
+                    Text("Content")
                     Spacer()
-                    Text(item.localDate.description)
+                    Text(item.content)
+                        .foregroundStyle(.secondary)
+                }
+                HStack {
+                    Text("Income")
+                    Spacer()
+                    Text(item.income.description)
+                        .foregroundStyle(.secondary)
+                }
+                HStack {
+                    Text("Outgo")
+                    Spacer()
+                    Text(item.outgo.description)
                         .foregroundStyle(.secondary)
                 }
                 HStack {
                     Text("RepeatID")
                     Spacer()
-                    Text(item.repeatID.uuidString)
+                    Text(item.repeatID.description)
                         .foregroundStyle(.secondary)
                 }
                 HStack {
