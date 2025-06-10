@@ -15,20 +15,20 @@ struct ItemEntityQuery: EntityStringQuery, @unchecked Sendable {
         try itemService.items(
             .items(.idsAre(identifiers.map { try .init(base64Encoded: $0) }))
         )
-        .map {
-            try .init($0)
-        }
+        .compactMap(ItemEntity.init)
     }
 
     func entities(matching string: String) throws -> [ItemEntity] {
-        try itemService.items(.items(.contentContains(string))).map {
-            try .init($0)
-        }
+        try itemService.items(
+            .items(.contentContains(string))
+        )
+        .compactMap(ItemEntity.init)
     }
 
     func suggestedEntities() throws -> [ItemEntity] {
-        try itemService.items(.items(.dateIsSameMonthAs(.now))).map {
-            try .init($0)
-        }
+        try itemService.items(
+            .items(.dateIsSameMonthAs(.now))
+        )
+        .compactMap(ItemEntity.init)
     }
 }

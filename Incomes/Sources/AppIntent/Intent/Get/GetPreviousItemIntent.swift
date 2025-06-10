@@ -27,6 +27,6 @@ struct GetPreviousItemIntent: AppIntent, IntentPerformer, @unchecked Sendable {
         guard let item = try Self.perform((date: date, itemService: itemService)) else {
             return .result(value: nil)
         }
-        return .result(value: try .init(item))
+        return .result(value: .init(item))
     }
 }

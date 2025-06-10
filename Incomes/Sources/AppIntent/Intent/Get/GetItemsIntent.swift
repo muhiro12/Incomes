@@ -25,6 +25,6 @@ struct GetItemsIntent: AppIntent, IntentPerformer, @unchecked Sendable {
 
     func perform() throws -> some ReturnsValue<[ItemEntity]> {
         let items = try Self.perform((date: date, itemService: itemService))
-        return .result(value: try items.map { try .init($0) })
+        return .result(value: items.compactMap(ItemEntity.init))
     }
 }

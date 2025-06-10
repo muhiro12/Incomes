@@ -28,14 +28,11 @@ struct CreateItemIntent: AppIntent, IntentPerformer, @unchecked Sendable {
     @Dependency private var itemService: ItemService
 
     typealias Input = (date: Date, content: String, income: Decimal, outgo: Decimal, category: String, repeatCount: Int, itemService: ItemService)
-    typealias Output = Item
+    typealias Output = ItemEntity
 
     static func perform(_ input: Input) throws -> Output {
         let (date, content, income, outgo, category, repeatCount, itemService) = input
-        guard content.isNotEmpty else {
-            throw DebugError.default
-        }
-        return try itemService.create(
+        let model = try itemService.create(
             date: date,
             content: content,
             income: income,
@@ -43,6 +40,10 @@ struct CreateItemIntent: AppIntent, IntentPerformer, @unchecked Sendable {
             category: category,
             repeatCount: repeatCount
         )
+        guard let item = ItemEntity(model) else {
+            throw DebugError.default
+        }
+        return item
     }
 
     func perform() throws -> some ReturnsValue<ItemEntity> {
@@ -69,6 +70,6 @@ struct CreateItemIntent: AppIntent, IntentPerformer, @unchecked Sendable {
                 itemService: itemService
             )
         )
-        return .result(value: try .init(item))
+        return .result(value: item)
     }
 }

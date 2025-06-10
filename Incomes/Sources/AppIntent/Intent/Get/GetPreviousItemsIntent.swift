@@ -30,6 +30,6 @@ struct GetPreviousItemsIntent: AppIntent, IntentPerformer, @unchecked Sendable {
         guard let items = try Self.perform((date: date, itemService: itemService)) else {
             return .result(value: .empty)
         }
-        return .result(value: try items.map { try .init($0) })
+        return .result(value: items.compactMap(ItemEntity.init))
     }
 }

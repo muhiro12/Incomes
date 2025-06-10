@@ -38,14 +38,23 @@ struct ItemEntity: AppEntity {
     let outgo: Decimal
     let profit: Decimal
     let balance: Decimal
+}
 
-    init(_ item: Item) throws {
-        id = try item.id.base64Encoded()
-        date = item.localDate
-        content = item.content
-        income = item.income
-        outgo = item.outgo
-        profit = item.profit
-        balance = item.balance
+// MARK: - ModelBridgeable
+
+extension ItemEntity: ModelBridgeable {
+    typealias Model = Item
+
+    init?(_ model: Item) {
+        guard let encodedID = try? model.id.base64Encoded() else {
+            return nil
+        }
+        id = encodedID
+        date = model.localDate
+        content = model.content
+        income = model.income
+        outgo = model.outgo
+        profit = model.profit
+        balance = model.balance
     }
 }
