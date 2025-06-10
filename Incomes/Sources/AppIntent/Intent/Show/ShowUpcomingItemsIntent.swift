@@ -8,14 +8,21 @@
 
 import AppIntents
 
-struct ShowUpcomingItemsIntent: AppIntent, @unchecked Sendable {
+struct ShowUpcomingItemsIntent: AppIntent, IntentPerformer, @unchecked Sendable {
     static let title: LocalizedStringResource = .init("Show Upcoming Items", table: "AppIntents")
 
     @Dependency private var itemService: ItemService
 
+    typealias Input = (date: Date, itemService: ItemService)
+    typealias Output = [Item]?
+
+    static func perform(_ input: Input) throws -> Output {
+        try GetNextItemsIntent.perform(input)
+    }
+
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
         let date = Date.now
-        guard let items = try GetNextItemsIntent.perform(date: date, itemService: itemService),
+        guard let items = try Self.perform((date: date, itemService: itemService)),
               items.isNotEmpty else {
             return .result(dialog: .init(.init("Not Found", table: "AppIntents")))
         }

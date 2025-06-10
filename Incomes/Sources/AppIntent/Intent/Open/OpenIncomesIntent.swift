@@ -8,11 +8,17 @@
 
 import AppIntents
 
-struct OpenIncomesIntent: AppIntent {
+struct OpenIncomesIntent: AppIntent, IntentPerformer {
     static let title: LocalizedStringResource = .init("Open Incomes", table: "AppIntents")
     static let openAppWhenRun = true
 
+    typealias Input = Void
+    typealias Output = Void
+
+    static func perform(_ input: Input) throws -> Output {}
+
     func perform() throws -> some IntentResult {
-        .result()
+        try Self.perform(())
+        return .result()
     }
 }

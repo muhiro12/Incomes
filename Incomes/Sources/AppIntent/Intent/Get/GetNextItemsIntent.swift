@@ -8,7 +8,7 @@
 
 import AppIntents
 
-struct GetNextItemsIntent: AppIntent, @unchecked Sendable {
+struct GetNextItemsIntent: AppIntent, IntentPerformer, @unchecked Sendable {
     static let title: LocalizedStringResource = .init("Get Next Items", table: "AppIntents")
 
     @Parameter(title: "Date", kind: .date)
@@ -16,16 +16,18 @@ struct GetNextItemsIntent: AppIntent, @unchecked Sendable {
 
     @Dependency private var itemService: ItemService
 
-    static func perform(date: Date,
-                        itemService: ItemService) throws -> [Item]? {
-        guard let item = try itemService.item(.items(.dateIsAfter(date), order: .forward)) else {
+    typealias Input = (date: Date, itemService: ItemService)
+    typealias Output = [Item]?
+
+    static func perform(_ input: Input) throws -> Output {
+        guard let item = try input.itemService.item(.items(.dateIsAfter(input.date), order: .forward)) else {
             return nil
         }
-        return try itemService.items(.items(.dateIsSameDayAs(item.localDate)))
+        return try input.itemService.items(.items(.dateIsSameDayAs(item.localDate)))
     }
 
     func perform() throws -> some ReturnsValue<[ItemEntity]> {
-        guard let items = try Self.perform(date: date, itemService: itemService) else {
+        guard let items = try Self.perform((date: date, itemService: itemService)) else {
             return .result(value: .empty)
         }
         return .result(value: try items.map { try .init($0) })
