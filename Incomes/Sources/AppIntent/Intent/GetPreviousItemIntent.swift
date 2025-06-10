@@ -9,7 +9,7 @@
 import AppIntents
 import SwiftUI
 
-struct GetPreviousItemIntent: AppIntent, StaticPerformer, @unchecked Sendable {
+struct GetPreviousItemIntent: AppIntent, IntentPerformer, @unchecked Sendable {
     static let title: LocalizedStringResource = .init("Get Previous Item", table: "AppIntents")
 
     @Parameter(title: "Date", kind: .date)
@@ -32,7 +32,7 @@ struct GetPreviousItemIntent: AppIntent, StaticPerformer, @unchecked Sendable {
     }
 }
 
-struct GetPreviousItemDateIntent: AppIntent, StaticPerformer, @unchecked Sendable {
+struct GetPreviousItemDateIntent: AppIntent, IntentPerformer, @unchecked Sendable {
     static let title: LocalizedStringResource = .init("Get Previous Item Date", table: "AppIntents")
 
     @Parameter(title: "Date", kind: .date)
@@ -58,7 +58,7 @@ struct GetPreviousItemDateIntent: AppIntent, StaticPerformer, @unchecked Sendabl
     }
 }
 
-struct GetPreviousItemContentIntent: AppIntent, StaticPerformer, @unchecked Sendable {
+struct GetPreviousItemContentIntent: AppIntent, IntentPerformer, @unchecked Sendable {
     static let title: LocalizedStringResource = .init("Get Previous Item Content", table: "AppIntents")
 
     @Parameter(title: "Date", kind: .date)
@@ -81,7 +81,7 @@ struct GetPreviousItemContentIntent: AppIntent, StaticPerformer, @unchecked Send
     }
 }
 
-struct GetPreviousItemProfitIntent: AppIntent, StaticPerformer, @unchecked Sendable {
+struct GetPreviousItemProfitIntent: AppIntent, IntentPerformer, @unchecked Sendable {
     static let title: LocalizedStringResource = .init("Get Previous Item Profit", table: "AppIntents")
 
     @Parameter(title: "Date", kind: .date)
@@ -108,7 +108,7 @@ struct GetPreviousItemProfitIntent: AppIntent, StaticPerformer, @unchecked Senda
     }
 }
 
-struct ShowPreviousItemIntent: AppIntent, StaticPerformer, @unchecked Sendable {
+struct ShowPreviousItemIntent: AppIntent, IntentPerformer, @unchecked Sendable {
     static let title: LocalizedStringResource = .init("Show Previous Item", table: "AppIntents")
 
     @Parameter(title: "Date", kind: .date)
@@ -134,7 +134,7 @@ struct ShowPreviousItemIntent: AppIntent, StaticPerformer, @unchecked Sendable {
     }
 }
 
-struct ShowRecentItemIntent: AppIntent, StaticPerformer, @unchecked Sendable {
+struct ShowRecentItemIntent: AppIntent, IntentPerformer, @unchecked Sendable {
     static let title: LocalizedStringResource = .init("Show Recent Item", table: "AppIntents")
 
     @Dependency private var itemService: ItemService
