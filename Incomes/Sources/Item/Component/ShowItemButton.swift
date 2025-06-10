@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct ShowItemButton {
-    @Environment(\.itemEntity)
+    @Environment(ItemEntity.self)
     private var item
 
     @State private var isPresented = false

@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct ListItem: View {
-    @Environment(\.itemEntity)
+    @Environment(ItemEntity.self)
     private var item
     @Environment(ItemService.self)
     private var itemService

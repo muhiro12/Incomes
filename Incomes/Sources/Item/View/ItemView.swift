@@ -2,7 +2,7 @@ import SwiftUI
 import SwiftUtilities
 
 struct ItemView {
-    @Environment(\.itemEntity)
+    @Environment(ItemEntity.self)
     private var item
     @Environment(\.isPresented)
     private var isPresented

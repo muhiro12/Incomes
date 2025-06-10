@@ -8,7 +8,8 @@
 
 import AppIntents
 
-struct ItemEntity: AppEntity {
+@Observable
+final class ItemEntity: AppEntity {
     static let defaultQuery = ItemEntityQuery()
 
     static var typeDisplayRepresentation: TypeDisplayRepresentation {
@@ -38,6 +39,16 @@ struct ItemEntity: AppEntity {
     let outgo: Decimal
     let profit: Decimal
     let balance: Decimal
+
+    init(id: String, date: Date, content: String, income: Decimal, outgo: Decimal, profit: Decimal, balance: Decimal) {
+        self.id = id
+        self.date = date
+        self.content = content
+        self.income = income
+        self.outgo = outgo
+        self.profit = profit
+        self.balance = balance
+    }
 }
 
 // MARK: - ModelBridgeable
@@ -45,16 +56,24 @@ struct ItemEntity: AppEntity {
 extension ItemEntity: ModelBridgeable {
     typealias Model = Item
 
-    init?(_ model: Item) {
+    convenience init?(_ model: Item) {
         guard let encodedID = try? model.id.base64Encoded() else {
             return nil
         }
-        id = encodedID
-        date = model.localDate
-        content = model.content
-        income = model.income
-        outgo = model.outgo
-        profit = model.profit
-        balance = model.balance
+        self.init(
+            id: encodedID,
+            date: model.date,
+            content: model.content,
+            income: model.income,
+            outgo: model.outgo,
+            profit: model.profit,
+            balance: model.balance
+        )
+    }
+}
+
+extension ItemEntity {
+    var isProfitable: Bool {
+        profit.isPlus
     }
 }

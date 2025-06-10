@@ -29,7 +29,7 @@ struct ItemFormView {
     @Environment(\.requestReview)
     private var requestReview
 
-    @Environment(\.itemEntity)
+    @Environment(ItemEntity.self)
     private var item: ItemEntity?
     @Environment(ItemService.self)
     private var itemService

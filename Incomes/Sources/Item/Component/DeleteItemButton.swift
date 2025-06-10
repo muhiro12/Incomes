@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct DeleteItemButton {
-    @Environment(\.itemEntity)
+    @Environment(ItemEntity.self)
     private var item
     @Environment(ItemService.self)
     private var itemService

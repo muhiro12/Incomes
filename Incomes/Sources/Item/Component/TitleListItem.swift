@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct TitleListItem: View {
-    @Environment(\.itemEntity) private var item
+    @Environment(ItemEntity.self) private var item
 
     var body: some View {
         HStack {

@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct ItemSection: View {
-    @Environment(\.itemEntity)
+    @Environment(ItemEntity.self)
     private var item
 
     var body: some View {
@@ -17,7 +17,7 @@ struct ItemSection: View {
             HStack {
                 Text("Date")
                 Spacer()
-                Text(item.localDate.stringValue(.yyyyMMMd))
+                Text(item.date.stringValue(.yyyyMMMd))
                     .foregroundStyle(.secondary)
             }
             HStack {
