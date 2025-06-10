@@ -7,6 +7,7 @@
 //
 
 import AppIntents
+import SwiftUI
 
 struct CreateItemIntent: AppIntent, IntentPerformer, @unchecked Sendable {
     static let title: LocalizedStringResource = .init("Create Item", table: "AppIntents")
@@ -16,9 +17,9 @@ struct CreateItemIntent: AppIntent, IntentPerformer, @unchecked Sendable {
     @Parameter(title: "Content")
     private var content: String
     @Parameter(title: "Income")
-    private var income: Double
+    private var income: IntentCurrencyAmount
     @Parameter(title: "Outgo")
-    private var outgo: Double
+    private var outgo: IntentCurrencyAmount
     @Parameter(title: "Category")
     private var category: String
     @Parameter(title: "Repeat", default: 1, inclusiveRange: (1, 60))
@@ -26,7 +27,7 @@ struct CreateItemIntent: AppIntent, IntentPerformer, @unchecked Sendable {
 
     @Dependency private var itemService: ItemService
 
-    typealias Input = (date: Date, content: String, income: Double, outgo: Double, category: String, repeatCount: Int, itemService: ItemService)
+    typealias Input = (date: Date, content: String, income: Decimal, outgo: Decimal, category: String, repeatCount: Int, itemService: ItemService)
     typealias Output = Item
 
     static func perform(_ input: Input) throws -> Output {
@@ -37,21 +38,37 @@ struct CreateItemIntent: AppIntent, IntentPerformer, @unchecked Sendable {
         return try itemService.create(
             date: date,
             content: content,
-            income: .init(income),
-            outgo: .init(outgo),
+            income: income,
+            outgo: outgo,
             category: category,
             repeatCount: repeatCount
         )
     }
 
     func perform() throws -> some ReturnsValue<ItemEntity> {
-        let item = try Self.perform((date: date,
-                                     content: content,
-                                     income: income,
-                                     outgo: outgo,
-                                     category: category,
-                                     repeatCount: repeatCount,
-                                     itemService: itemService))
+        guard content.isNotEmpty else {
+            throw $content.needsValueError()
+        }
+
+        let currencyCode = AppStorage(.currencyCode).wrappedValue
+        guard income.currencyCode == currencyCode else {
+            throw $income.needsDisambiguationError(among: [.init(amount: income.amount, currencyCode: currencyCode)])
+        }
+        guard outgo.currencyCode == currencyCode else {
+            throw $outgo.needsDisambiguationError(among: [.init(amount: outgo.amount, currencyCode: currencyCode)])
+        }
+
+        let item = try Self.perform(
+            (
+                date: date,
+                content: content,
+                income: income.amount,
+                outgo: outgo.amount,
+                category: category,
+                repeatCount: repeatCount,
+                itemService: itemService
+            )
+        )
         return .result(value: try .init(item))
     }
 }
