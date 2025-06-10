@@ -295,13 +295,16 @@ private extension ItemFormView {
 
     func create() {
         do {
-            _ = try itemService.create(
-                date: date,
-                content: content,
-                income: income.decimalValue,
-                outgo: outgo.decimalValue,
-                category: category,
-                repeatCount: repeatSelection
+            _ = try CreateItemIntent.perform(
+                (
+                    date: date,
+                    content: content,
+                    income: income.decimalValue,
+                    outgo: outgo.decimalValue,
+                    category: category,
+                    repeatCount: repeatSelection,
+                    itemService: itemService
+                )
             )
             Haptic.success.impact()
         } catch {
