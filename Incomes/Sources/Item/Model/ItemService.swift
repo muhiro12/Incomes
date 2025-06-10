@@ -29,6 +29,13 @@ final class ItemService {
         try context.fetch(descriptor)
     }
 
+    func model(of entity: ItemEntity) throws -> Item {
+        guard let model = try item(.items(.idIs(.init(base64Encoded: entity.id)))) else {
+            throw DebugError.default
+        }
+        return model
+    }
+
     func itemsCount(_ descriptor: FetchDescriptor<Item> = .items(.all)) throws -> Int {
         try context.fetchCount(descriptor)
     }

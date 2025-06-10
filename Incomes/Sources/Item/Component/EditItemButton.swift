@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct EditItemButton {
-    @Environment(Item.self)
+    @Environment(ItemEntity.self)
     private var item
 
     @State private var isPresented = false
@@ -44,6 +44,6 @@ extension EditItemButton: View {
 #Preview {
     IncomesPreview { preview in
         EditItemButton()
-            .environment(preview.items[.zero])
+            .environment(ItemEntity(preview.items[.zero])!)
     }
 }

@@ -29,8 +29,8 @@ struct ItemFormView {
     @Environment(\.requestReview)
     private var requestReview
 
-    @Environment(Item.self)
-    private var item: Item?
+    @Environment(ItemEntity.self)
+    private var item: ItemEntity?
     @Environment(ItemService.self)
     private var itemService
 
@@ -172,11 +172,10 @@ extension ItemFormView: View {
         }
         .onAppear {
             if let item {
-                date = item.localDate
+                date = item.date
                 content = item.content
                 income = item.income.isNotZero ? item.income.description : .empty
                 outgo = item.outgo.isNotZero ? item.outgo.description : .empty
-                category = item.category?.name ?? .empty
             } else if let tag {
                 switch tag.type {
                 case .year:
@@ -219,8 +218,9 @@ private extension ItemFormView {
 
     func save() {
         do {
-            if let repeatID = item?.repeatID,
-               try itemService.itemsCount(.items(.repeatIDIs(repeatID))) > 1 {
+            if let entity = item,
+               let model = try? itemService.model(of: entity),
+               try itemService.itemsCount(.items(.repeatIDIs(model.repeatID))) > 1 {
                 presentToActionSheet()
             } else {
                 saveForThisItem()
@@ -236,8 +236,9 @@ private extension ItemFormView {
             return
         }
         do {
+            let model = try itemService.model(of: item)
             try itemService.update(
-                item: item,
+                item: model,
                 date: date,
                 content: content,
                 income: income.decimalValue,
@@ -257,8 +258,9 @@ private extension ItemFormView {
             return
         }
         do {
+            let model = try itemService.model(of: item)
             try itemService.updateForFutureItems(
-                item: item,
+                item: model,
                 date: date,
                 content: content,
                 income: income.decimalValue,
@@ -278,8 +280,9 @@ private extension ItemFormView {
             return
         }
         do {
+            let model = try itemService.model(of: item)
             try itemService.updateForAllItems(
-                item: item,
+                item: model,
                 date: date,
                 content: content,
                 income: income.decimalValue,

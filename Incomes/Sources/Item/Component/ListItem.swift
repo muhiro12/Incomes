@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct ListItem: View {
-    @Environment(Item.self)
+    @Environment(ItemEntity.self)
     private var item
     @Environment(ItemService.self)
     private var itemService
@@ -77,7 +77,8 @@ struct ListItem: View {
         ) {
             Button(role: .destructive) {
                 do {
-                    try itemService.delete(items: [item])
+                    let model = try itemService.model(of: item)
+                    try itemService.delete(items: [model])
                     Haptic.success.impact()
                 } catch {
                     assertionFailure(error.localizedDescription)
@@ -99,7 +100,7 @@ struct ListItem: View {
     IncomesPreview { preview in
         List {
             ListItem()
-                .environment(preview.items[0])
+                .environment(ItemEntity(preview.items[0])!)
         }
     }
 }

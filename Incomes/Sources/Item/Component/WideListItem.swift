@@ -9,11 +9,11 @@
 import SwiftUI
 
 struct WideListItem: View {
-    @Environment(Item.self) private var item
+    @Environment(ItemEntity.self) private var item
 
     var body: some View {
         HStack {
-            Text(item.localDate.stringValue(.MMMd))
+            Text(item.date.stringValue(.MMMd))
                 .font(.subheadline)
                 .minimumScaleFactor(.high)
                 .truncationMode(.head)
@@ -43,6 +43,6 @@ struct WideListItem: View {
 #Preview(traits: .landscapeRight) {
     IncomesPreview { preview in
         WideListItem()
-            .environment(preview.items[0])
+            .environment(ItemEntity(preview.items[0])!)
     }
 }
