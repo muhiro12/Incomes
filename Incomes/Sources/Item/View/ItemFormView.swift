@@ -218,7 +218,13 @@ private extension ItemFormView {
 
     func save() {
         do {
-            saveForThisItem()
+            if let entity = item,
+               let model = try? itemService.model(of: entity),
+               try itemService.itemsCount(.items(.repeatIDIs(model.repeatID))) > 1 {
+                presentToActionSheet()
+            } else {
+                saveForThisItem()
+            }
         } catch {
             assertionFailure(error.localizedDescription)
         }
