@@ -29,6 +29,13 @@ final class ItemService {
         try context.fetch(descriptor)
     }
 
+    func model(of entity: ItemEntity) throws -> Item {
+        guard let model = try item(.items(.idIs(.init(base64Encoded: entity.id)))) else {
+            throw DebugError.default
+        }
+        return model
+    }
+
     func itemsCount(_ descriptor: FetchDescriptor<Item> = .items(.all)) throws -> Int {
         try context.fetchCount(descriptor)
     }
@@ -182,15 +189,5 @@ private extension ItemService {
         }
 
         try calculator.calculate(for: items)
-    }
-}
-
-extension ItemService {
-    func model(of entity: ItemEntity) throws -> Item {
-        let id = try PersistentIdentifier(base64Encoded: entity.id)
-        guard let item = try context.model(for: id) as? Item else {
-            throw DebugError.default
-        }
-        return item
     }
 }
