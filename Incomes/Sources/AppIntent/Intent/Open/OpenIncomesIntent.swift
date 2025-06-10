@@ -15,7 +15,7 @@ struct OpenIncomesIntent: AppIntent, IntentPerformer {
     typealias Input = Void
     typealias Output = Void
 
-    static func perform(_ input: Input) throws -> Output {}
+    static func perform(_: Input) throws -> Output {}
 
     func perform() throws -> some IntentResult {
         try Self.perform(())
