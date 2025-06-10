@@ -9,49 +9,63 @@
 import SwiftUI
 
 struct DebugSection {
-    @Environment(Item.self)
-    private var item
+    @Environment(ItemEntity.self)
+    private var itemEntity
+
+    @Environment(ItemService.self)
+    private var itemService
+
+    @State private var item: Item?
 }
 
 extension DebugSection: View {
     var body: some View {
         Section {
-            HStack {
-                Text("UTC Date")
-                Spacer()
-                Text(item.utcDate.description)
-                    .foregroundStyle(.secondary)
-            }
-            HStack {
-                Text("Local Date")
-                Spacer()
-                Text(item.localDate.description)
-                    .foregroundStyle(.secondary)
-            }
-            HStack {
-                Text("RepeatID")
-                Spacer()
-                Text(item.repeatID.uuidString)
-                    .foregroundStyle(.secondary)
-            }
-            HStack {
-                Text("Balance")
-                Spacer()
-                Text(item.balance.description)
-                    .foregroundStyle(.secondary)
-            }
-            HStack {
-                Text("Tags")
-                Spacer()
-                VStack(alignment: .trailing) {
-                    ForEach(item.tags.orEmpty) {
-                        Text($0.name)
-                            .foregroundStyle(.secondary)
+            if let item {
+                HStack {
+                    Text("UTC Date")
+                    Spacer()
+                    Text(item.utcDate.description)
+                        .foregroundStyle(.secondary)
+                }
+                HStack {
+                    Text("Local Date")
+                    Spacer()
+                    Text(item.localDate.description)
+                        .foregroundStyle(.secondary)
+                }
+                HStack {
+                    Text("RepeatID")
+                    Spacer()
+                    Text(item.repeatID.uuidString)
+                        .foregroundStyle(.secondary)
+                }
+                HStack {
+                    Text("Balance")
+                    Spacer()
+                    Text(item.balance.description)
+                        .foregroundStyle(.secondary)
+                }
+                HStack {
+                    Text("Tags")
+                    Spacer()
+                    VStack(alignment: .trailing) {
+                        ForEach(item.tags.orEmpty) {
+                            Text($0.name)
+                                .foregroundStyle(.secondary)
+                        }
                     }
                 }
             }
         } header: {
             Text("Debug")
+        }
+        .task {
+            do {
+                self.item = try itemService.model(of: itemEntity)
+            } catch {
+                self.item = nil
+            }
         }
     }
 }
@@ -60,7 +74,7 @@ extension DebugSection: View {
     IncomesPreview { preview in
         List {
             DebugSection()
-                .environment(preview.items[0])
+                .environment(ItemEntity(preview.items[0])!)
         }
     }
 }
