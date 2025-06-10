@@ -1,5 +1,5 @@
 //
-//  StaticPerformer.swift
+//  IntentPerformer.swift
 //  Incomes
 //
 //  Created by Hiromu Nakano on 2025/06/10.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol StaticPerformer {
+protocol IntentPerformer {
     associatedtype Input
     associatedtype Output
     static func perform(_ input: Input) throws -> Output
