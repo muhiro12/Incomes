@@ -184,3 +184,13 @@ private extension ItemService {
         try calculator.calculate(for: items)
     }
 }
+
+extension ItemService {
+    func model(of entity: ItemEntity) throws -> Item {
+        let id = try PersistentIdentifier(base64Encoded: entity.id)
+        guard let item = try context.model(for: id) as? Item else {
+            throw DebugError.default
+        }
+        return item
+    }
+}

@@ -10,15 +10,15 @@ import SwiftData
 import SwiftUI
 
 struct SearchResultView: View {
-    @Query private var items: [Item]
+    @BridgeQuery private var items: [ItemEntity]
 
     init(predicate: ItemPredicate) {
-        _items = .init(.items(predicate))
+        _items = .init(Query(.items(predicate)))
     }
 
-    private var groupedItems: [Date: [Item]] {
+    private var groupedItems: [Date: [ItemEntity]] {
         Dictionary(grouping: items) { item in
-            Calendar.current.startOfMonth(for: item.localDate)
+            Calendar.current.startOfMonth(for: item.date)
         }
     }
 

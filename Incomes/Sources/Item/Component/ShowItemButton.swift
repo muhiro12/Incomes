@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct ShowItemButton {
-    @Environment(Item.self)
+    @Environment(\.itemEntity)
     private var item
 
     @State private var isPresented = false
@@ -46,6 +46,6 @@ extension ShowItemButton: View {
 #Preview {
     IncomesPreview { preview in
         ShowItemButton()
-            .environment(preview.items[.zero])
+            .environment(ItemEntity(preview.items[.zero])!)
     }
 }

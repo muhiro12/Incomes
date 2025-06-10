@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct WideListItem: View {
-    @Environment(Item.self) private var item
+    @Environment(\.itemEntity) private var item
 
     var body: some View {
         HStack {
@@ -43,6 +43,6 @@ struct WideListItem: View {
 #Preview(traits: .landscapeRight) {
     IncomesPreview { preview in
         WideListItem()
-            .environment(preview.items[0])
+            .environment(ItemEntity(preview.items[0])!)
     }
 }

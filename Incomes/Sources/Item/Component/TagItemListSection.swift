@@ -15,7 +15,7 @@ struct TagItemListSection {
     private var itemService
 
     @State private var isDialogPresented = false
-    @State private var willDeleteItems: [Item] = []
+    @State private var willDeleteItems: [ItemEntity] = []
 
     private let yearString: String
 
@@ -45,7 +45,8 @@ extension TagItemListSection: View {
         ) {
             Button(role: .destructive) {
                 do {
-                    try itemService.delete(items: willDeleteItems)
+                    let models = try willDeleteItems.map { try itemService.model(of: $0) }
+                    try itemService.delete(items: models)
                     Haptic.success.impact()
                 } catch {
                     assertionFailure(error.localizedDescription)
@@ -65,10 +66,10 @@ extension TagItemListSection: View {
 }
 
 private extension TagItemListSection {
-    var items: [Item] {
+    var items: [ItemEntity] {
         tag.items.orEmpty.filter {
             $0.year?.name == yearString
-        }.sorted()
+        }.sorted().compactMap(ItemEntity.init)
     }
 }
 
