@@ -17,16 +17,19 @@ struct GetPreviousItemIntent: AppIntent, IntentPerformer, @unchecked Sendable {
     @Dependency private var itemService: ItemService
 
     typealias Input = (date: Date, itemService: ItemService)
-    typealias Output = Item?
+    typealias Output = ItemEntity?
 
     static func perform(_ input: Input) throws -> Output {
-        try input.itemService.item(.items(.dateIsBefore(input.date)))
+        guard let item = try input.itemService.item(.items(.dateIsBefore(input.date))) else {
+            return nil
+        }
+        return .init(item)
     }
 
     func perform() throws -> some ReturnsValue<ItemEntity?> {
         guard let item = try Self.perform((date: date, itemService: itemService)) else {
             return .result(value: nil)
         }
-        return .result(value: .init(item))
+        return .result(value: item)
     }
 }

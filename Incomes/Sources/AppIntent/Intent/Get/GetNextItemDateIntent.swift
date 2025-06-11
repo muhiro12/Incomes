@@ -23,13 +23,13 @@ struct GetNextItemDateIntent: AppIntent, IntentPerformer, @unchecked Sendable {
         guard let item = try GetNextItemIntent.perform((date: input.date, itemService: input.itemService)) else {
             return nil
         }
-        return item.localDate
+        return item.date
     }
 
     func perform() throws -> some ReturnsValue<Date?> {
         guard let item = try GetNextItemIntent.perform((date: date, itemService: itemService)) else {
             return .result(value: nil)
         }
-        return .result(value: item.localDate)
+        return .result(value: item.date)
     }
 }

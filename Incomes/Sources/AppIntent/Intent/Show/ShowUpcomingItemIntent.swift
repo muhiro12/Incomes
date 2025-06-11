@@ -14,7 +14,7 @@ struct ShowUpcomingItemIntent: AppIntent, IntentPerformer, @unchecked Sendable {
     @Dependency private var itemService: ItemService
 
     typealias Input = (date: Date, itemService: ItemService)
-    typealias Output = Item?
+    typealias Output = ItemEntity?
 
     static func perform(_ input: Input) throws -> Output {
         try GetNextItemIntent.perform((date: input.date, itemService: input.itemService))

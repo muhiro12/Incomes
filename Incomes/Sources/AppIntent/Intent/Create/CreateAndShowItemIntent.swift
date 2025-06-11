@@ -27,14 +27,14 @@ struct CreateAndShowItemIntent: AppIntent, IntentPerformer, @unchecked Sendable 
     @Dependency private var itemService: ItemService
 
     typealias Input = (date: Date, content: String, income: Double, outgo: Double, category: String, repeatCount: Int, itemService: ItemService)
-    typealias Output = Item
+    typealias Output = ItemEntity
 
     static func perform(_ input: Input) throws -> Output {
         let (date, content, income, outgo, category, repeatCount, itemService) = input
         guard content.isNotEmpty else {
             throw DebugError.default
         }
-        return try itemService.create(
+        let item = try itemService.create(
             date: date,
             content: content,
             income: .init(income),
@@ -42,6 +42,10 @@ struct CreateAndShowItemIntent: AppIntent, IntentPerformer, @unchecked Sendable 
             category: category,
             repeatCount: repeatCount
         )
+        guard let entity = ItemEntity(item) else {
+            throw DebugError.default
+        }
+        return entity
     }
 
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {

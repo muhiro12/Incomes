@@ -23,7 +23,7 @@ struct GetPreviousItemDateIntent: AppIntent, IntentPerformer, @unchecked Sendabl
         guard let item = try GetPreviousItemIntent.perform(input) else {
             return nil
         }
-        return item.localDate
+        return item.date
     }
 
     func perform() throws -> some ReturnsValue<Date?> {
