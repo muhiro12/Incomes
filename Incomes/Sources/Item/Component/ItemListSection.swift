@@ -7,6 +7,7 @@
 
 import SwiftData
 import SwiftUI
+import SwiftUtilities
 
 struct ItemListSection {
     @Environment(ItemService.self)
