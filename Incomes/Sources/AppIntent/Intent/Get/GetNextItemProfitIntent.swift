@@ -8,6 +8,7 @@
 
 import AppIntents
 import SwiftUI
+import SwiftUtilities
 
 struct GetNextItemProfitIntent: AppIntent, IntentPerformer, @unchecked Sendable {
     static let title: LocalizedStringResource = .init("Get Next Item Profit", table: "AppIntents")

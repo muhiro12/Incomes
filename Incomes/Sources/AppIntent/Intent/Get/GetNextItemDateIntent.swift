@@ -7,6 +7,7 @@
 //
 
 import AppIntents
+import SwiftUtilities
 
 struct GetNextItemDateIntent: AppIntent, IntentPerformer, @unchecked Sendable {
     static let title: LocalizedStringResource = .init("Get Next Item Date", table: "AppIntents")

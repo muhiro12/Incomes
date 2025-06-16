@@ -7,6 +7,7 @@
 //
 
 import AppIntents
+import SwiftUtilities
 
 struct CreateAndShowItemIntent: AppIntent, IntentPerformer, @unchecked Sendable {
     static let title: LocalizedStringResource = .init("Create and Show Item", table: "AppIntents")

@@ -7,6 +7,7 @@
 //
 
 import AppIntents
+import SwiftUtilities
 
 struct OpenIncomesIntent: AppIntent, IntentPerformer {
     static let title: LocalizedStringResource = .init("Open Incomes", table: "AppIntents")

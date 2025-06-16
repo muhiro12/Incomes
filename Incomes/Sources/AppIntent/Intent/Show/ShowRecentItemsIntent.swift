@@ -7,6 +7,7 @@
 //
 
 import AppIntents
+import SwiftUtilities
 
 struct ShowRecentItemsIntent: AppIntent, IntentPerformer, @unchecked Sendable {
     static let title: LocalizedStringResource = .init("Show Recent Items", table: "AppIntents")

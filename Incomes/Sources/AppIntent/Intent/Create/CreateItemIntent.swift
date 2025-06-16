@@ -8,6 +8,7 @@
 
 import AppIntents
 import SwiftUI
+import SwiftUtilities
 
 struct CreateItemIntent: AppIntent, IntentPerformer, @unchecked Sendable {
     static let title: LocalizedStringResource = .init("Create Item", table: "AppIntents")

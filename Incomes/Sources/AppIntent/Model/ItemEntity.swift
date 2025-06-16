@@ -7,6 +7,7 @@
 //
 
 import AppIntents
+import SwiftUtilities
 
 @Observable
 final class ItemEntity: AppEntity {

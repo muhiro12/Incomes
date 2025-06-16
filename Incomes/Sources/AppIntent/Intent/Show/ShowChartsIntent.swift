@@ -8,6 +8,7 @@
 
 import AppIntents
 import SwiftData
+import SwiftUtilities
 
 struct ShowChartsIntent: AppIntent, IntentPerformer, @unchecked Sendable {
     static let title: LocalizedStringResource = .init("Show Charts", table: "AppIntents")

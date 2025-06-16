@@ -8,6 +8,7 @@
 
 import SwiftData
 import SwiftUI
+import SwiftUtilities
 
 struct SearchResultView: View {
     @BridgeQuery private var items: [ItemEntity]
