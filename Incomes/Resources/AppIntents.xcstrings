@@ -109,6 +109,9 @@
         }
       }
     },
+    "%lld Tags" : {
+
+    },
     "Create and Show Item" : {
       "localizations" : {
         "en" : {
@@ -176,6 +179,86 @@
           }
         }
       }
+    },
+    "Delete All Items" : {
+
+    },
+    "Delete All Tags" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delete All Tags"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eliminar todas las etiquetas"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Supprimer toutes les étiquettes"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "すべてのタグを削除"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "删除所有标签"
+          }
+        }
+      }
+    },
+    "Delete Item" : {
+
+    },
+    "Delete Tag" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delete Tag"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eliminar etiqueta"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Supprimer l’étiquette"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "タグを削除"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "删除标签"
+          }
+        }
+      }
+    },
+    "Get All Items Count" : {
+
+    },
+    "Get All Tags" : {
+
     },
     "Get Items" : {
       "localizations" : {
@@ -550,6 +633,18 @@
           }
         }
       }
+    },
+    "Get Repeat Items Count" : {
+
+    },
+    "Get Tag By ID" : {
+
+    },
+    "Get Tag By Name" : {
+
+    },
+    "Get Year Items Count" : {
+
     },
     "Income: %@, Outgo: %@" : {
       "localizations" : {
@@ -1118,6 +1213,9 @@
         }
       }
     },
+    "Tag" : {
+
+    },
     "This Month’s Charts" : {
       "localizations" : {
         "es" : {
@@ -1229,6 +1327,18 @@
           }
         }
       }
+    },
+    "Update All Items" : {
+
+    },
+    "Update Future Items" : {
+
+    },
+    "Update Item" : {
+
+    },
+    "Update Repeating Items" : {
+
     }
   },
   "version" : "1.0"

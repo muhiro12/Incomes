@@ -38,7 +38,7 @@ struct IncomesApp: App {
 
         let itemService = ItemService(context: modelContainer.mainContext)
         let tagService = TagService(context: modelContainer.mainContext)
-        let notificationService = NotificationService(itemService: itemService)
+        let notificationService = NotificationService(context: modelContainer.mainContext)
         let configurationService = ConfigurationService()
 
         sharedModelContainer = modelContainer

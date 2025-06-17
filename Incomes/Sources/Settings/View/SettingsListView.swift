@@ -14,6 +14,8 @@ struct SettingsListView {
     private var itemService
     @Environment(TagService.self)
     private var tagService
+    @Environment(\.modelContext)
+    private var context
     @Environment(NotificationService.self)
     private var notificationService
 
@@ -158,8 +160,8 @@ extension SettingsListView: View {
         ) {
             Button(role: .destructive) {
                 do {
-                    try itemService.deleteAll()
-                    try tagService.deleteAll()
+                    try DeleteAllItemsIntent.perform(context)
+                    try DeleteAllTagsIntent.perform(context)
                     Haptic.success.impact()
                 } catch {
                     assertionFailure(error.localizedDescription)

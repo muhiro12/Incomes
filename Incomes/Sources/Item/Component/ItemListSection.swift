@@ -12,6 +12,8 @@ import SwiftUtilities
 struct ItemListSection {
     @Environment(ItemService.self)
     private var itemService
+    @Environment(\.modelContext)
+    private var context
 
     @BridgeQuery private var items: [ItemEntity]
 
@@ -49,8 +51,9 @@ extension ItemListSection: View {
         ) {
             Button(role: .destructive) {
                 do {
-                    let models = try willDeleteItems.map { try itemService.model(of: $0) }
-                    try itemService.delete(items: models)
+                    try willDeleteItems.forEach {
+                        try DeleteItemIntent.perform((context: context, item: $0))
+                    }
                     Haptic.success.impact()
                 } catch {
                     assertionFailure(error.localizedDescription)

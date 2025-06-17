@@ -33,6 +33,8 @@ struct ItemFormView {
     private var item: ItemEntity?
     @Environment(ItemService.self)
     private var itemService
+    @Environment(\.modelContext)
+    private var context
 
     @AppStorage(.isDebugOn)
     private var isDebugOn
@@ -231,7 +233,9 @@ private extension ItemFormView {
         do {
             if let entity = item,
                let model = try? itemService.model(of: entity),
-               try itemService.itemsCount(.items(.repeatIDIs(model.repeatID))) > 1 {
+               try GetRepeatItemsCountIntent.perform(
+                   (context: context, repeatID: model.repeatID)
+               ) > 1 {
                 presentToActionSheet()
             } else {
                 saveForThisItem()
@@ -247,14 +251,16 @@ private extension ItemFormView {
             return
         }
         do {
-            let model = try itemService.model(of: item)
-            try itemService.update(
-                item: model,
-                date: date,
-                content: content,
-                income: income.decimalValue,
-                outgo: outgo.decimalValue,
-                category: category
+            try UpdateItemIntent.perform(
+                (
+                    context: context,
+                    item: item,
+                    date: date,
+                    content: content,
+                    income: income.decimalValue,
+                    outgo: outgo.decimalValue,
+                    category: category
+                )
             )
             Haptic.success.impact()
         } catch {
@@ -269,14 +275,16 @@ private extension ItemFormView {
             return
         }
         do {
-            let model = try itemService.model(of: item)
-            try itemService.updateForFutureItems(
-                item: model,
-                date: date,
-                content: content,
-                income: income.decimalValue,
-                outgo: outgo.decimalValue,
-                category: category
+            try UpdateFutureItemsIntent.perform(
+                (
+                    context: context,
+                    item: item,
+                    date: date,
+                    content: content,
+                    income: income.decimalValue,
+                    outgo: outgo.decimalValue,
+                    category: category
+                )
             )
             Haptic.success.impact()
         } catch {
@@ -291,14 +299,16 @@ private extension ItemFormView {
             return
         }
         do {
-            let model = try itemService.model(of: item)
-            try itemService.updateForAllItems(
-                item: model,
-                date: date,
-                content: content,
-                income: income.decimalValue,
-                outgo: outgo.decimalValue,
-                category: category
+            try UpdateAllItemsIntent.perform(
+                (
+                    context: context,
+                    item: item,
+                    date: date,
+                    content: content,
+                    income: income.decimalValue,
+                    outgo: outgo.decimalValue,
+                    category: category
+                )
             )
             Haptic.success.impact()
         } catch {
@@ -311,13 +321,13 @@ private extension ItemFormView {
         do {
             _ = try CreateItemIntent.perform(
                 (
+                    context: context,
                     date: date,
                     content: content,
                     income: income.decimalValue,
                     outgo: outgo.decimalValue,
                     category: category,
-                    repeatCount: repeatSelection,
-                    itemService: itemService
+                    repeatCount: repeatSelection
                 )
             )
             Haptic.success.impact()

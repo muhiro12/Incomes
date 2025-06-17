@@ -13,7 +13,7 @@ struct SuggestionButtonGroup: View {
 
     @Binding private var input: String
 
-    init(input: Binding<String>, type: Tag.TagType) {
+    init(input: Binding<String>, type: TagType) {
         _input = input
         _suggestions = .init(.tags(.nameContains(input.wrappedValue, type: type)))
     }

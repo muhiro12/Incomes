@@ -50,7 +50,6 @@
 			membershipExceptions = (
 				Default/BalanceCalculatorTests.swift,
 				Default/CalendarExtensionXCTests.swift,
-				Default/ItemServiceXCTests.swift,
 				Default/LocaleAmountConverterTest.swift,
 				Default/StringExtensionTests.swift,
 				Default/TagServiceTests.swift,

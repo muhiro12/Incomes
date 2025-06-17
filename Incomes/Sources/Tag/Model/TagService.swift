@@ -19,23 +19,6 @@ final class TagService {
         self.context = context
     }
 
-    // MARK: - Fetch
-
-    func tag(_ descriptor: FetchDescriptor<Tag> = .tags(.all)) throws -> Tag? {
-        try context.fetchFirst(descriptor)
-    }
-
-    // MARK: - Delete
-
-    func delete(tags: [Tag]) throws {
-        tags.forEach {
-            $0.delete()
-        }
-    }
-
-    func deleteAll() throws {
-        try delete(tags: context.fetch(.init()))
-    }
 
     // MARK: - Duplicates
 
@@ -55,16 +38,19 @@ final class TagService {
             item.modify(tags: tags)
         }
 
-        try delete(tags: children)
+        try children
+            .compactMap(TagEntity.init)
+            .forEach {
+                try DeleteTagIntent.perform((context: context, tag: $0))
+            }
     }
 
     func resolveAllDuplicates(in tags: [Tag]) throws {
         try tags.forEach { tag in
-            try merge(
-                tags: self.tags(
-                    descriptor: .tags(.isSameWith(tag))
-                )
+            let duplicates = try context.fetch(
+                .tags(.isSameWith(tag))
             )
+            try merge(tags: duplicates)
         }
     }
 
@@ -81,14 +67,7 @@ final class TagService {
     }
 
     func updateHasDuplicates() throws {
-        hasDuplicates = findDuplicates(
-            in: try tags()
-        ).isNotEmpty
-    }
-}
-
-private extension TagService {
-    func tags(descriptor: FetchDescriptor<Tag> = .tags(.all)) throws -> [Tag] {
-        try context.fetch(descriptor)
+        let allTags = try context.fetch(.tags(.all))
+        hasDuplicates = findDuplicates(in: allTags).isNotEmpty
     }
 }

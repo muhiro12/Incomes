@@ -13,6 +13,8 @@ struct ListItem: View {
     private var item
     @Environment(ItemService.self)
     private var itemService
+    @Environment(\.modelContext)
+    private var context
     @Environment(\.horizontalSizeClass)
     private var horizontalSizeClass
 
@@ -77,8 +79,7 @@ struct ListItem: View {
         ) {
             Button(role: .destructive) {
                 do {
-                    let model = try itemService.model(of: item)
-                    try itemService.delete(items: [model])
+                    try DeleteItemIntent.perform((context: context, item: item))
                     Haptic.success.impact()
                 } catch {
                     assertionFailure(error.localizedDescription)

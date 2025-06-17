@@ -1,0 +1,92 @@
+import AppIntents
+import SwiftData
+import SwiftUI
+import SwiftUtilities
+
+struct UpdateRepeatingItemsIntent: AppIntent, IntentPerformer {
+    static let title: LocalizedStringResource = .init("Update Repeating Items", table: "AppIntents")
+
+    @Parameter(title: "Item")
+    private var item: ItemEntity
+    @Parameter(title: "Date", kind: .date)
+    private var date: Date
+    @Parameter(title: "Content")
+    private var content: String
+    @Parameter(title: "Income")
+    private var income: IntentCurrencyAmount
+    @Parameter(title: "Outgo")
+    private var outgo: IntentCurrencyAmount
+    @Parameter(title: "Category")
+    private var category: String
+
+    @Dependency private var modelContainer: ModelContainer
+
+    typealias Input = (
+        context: ModelContext,
+        item: ItemEntity,
+        date: Date,
+        content: String,
+        income: Decimal,
+        outgo: Decimal,
+        category: String,
+        descriptor: FetchDescriptor<Item>
+    )
+    typealias Output = Void
+
+    static func perform(_ input: Input) throws -> Output {
+        let (context, entity, date, content, income, outgo, category, descriptor) = input
+        let components = Calendar.current.dateComponents(
+            [.year, .month, .day],
+            from: entity.date,
+            to: date
+        )
+        let repeatID = UUID()
+        let items = try context.fetch(descriptor)
+        try items.forEach {
+            guard let newDate = Calendar.current.date(byAdding: components, to: $0.localDate) else {
+                assertionFailure()
+                return
+            }
+            try $0.modify(
+                date: newDate,
+                content: content,
+                income: income,
+                outgo: outgo,
+                category: category,
+                repeatID: repeatID
+            )
+        }
+        let calculator = BalanceCalculator(context: context)
+        try calculator.calculate(for: items)
+    }
+
+    @MainActor
+    func perform() throws -> some IntentResult {
+        let currencyCode = AppStorage(.currencyCode).wrappedValue
+        guard income.currencyCode == currencyCode else {
+            throw $income.needsDisambiguationError(among: [.init(amount: income.amount, currencyCode: currencyCode)])
+        }
+        guard outgo.currencyCode == currencyCode else {
+            throw $outgo.needsDisambiguationError(among: [.init(amount: outgo.amount, currencyCode: currencyCode)])
+        }
+        guard
+            let id = try? PersistentIdentifier(base64Encoded: item.id),
+            let model = try modelContainer.mainContext.fetchFirst(.items(.idIs(id)))
+        else {
+            throw DebugError.default
+        }
+        try Self.perform(
+            (
+                context: modelContainer.mainContext,
+                item: item,
+                date: date,
+                content: content,
+                income: income.amount,
+                outgo: outgo.amount,
+                category: category,
+                descriptor: .items(.repeatIDIs(model.repeatID))
+            )
+        )
+        return .result()
+    }
+}

@@ -11,8 +11,8 @@ import SwiftUI
 struct TagItemListSection {
     @Environment(Tag.self)
     private var tag
-    @Environment(ItemService.self)
-    private var itemService
+    @Environment(\.modelContext)
+    private var context
 
     @State private var isDialogPresented = false
     @State private var willDeleteItems: [ItemEntity] = []
@@ -45,8 +45,9 @@ extension TagItemListSection: View {
         ) {
             Button(role: .destructive) {
                 do {
-                    let models = try willDeleteItems.map { try itemService.model(of: $0) }
-                    try itemService.delete(items: models)
+                    try willDeleteItems.forEach {
+                        try DeleteItemIntent.perform((context: context, item: $0))
+                    }
                     Haptic.success.impact()
                 } catch {
                     assertionFailure(error.localizedDescription)

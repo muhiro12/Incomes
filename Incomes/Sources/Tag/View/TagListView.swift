@@ -10,10 +10,10 @@ import SwiftData
 import SwiftUI
 
 struct TagListView {
-    @Environment(ItemService.self)
-    private var itemService
     @Environment(TagService.self)
     private var tagService
+    @Environment(\.modelContext)
+    private var context
 
     @Query
     private var tags: [Tag]
@@ -24,9 +24,9 @@ struct TagListView {
     @State private var isDialogPresented = false
     @State private var willDeleteTags = [Tag]()
 
-    private let tagType: Tag.TagType
+    private let tagType: TagType
 
-    init(tagType: Tag.TagType, selection: Binding<IncomesPath?> = .constant(nil)) {
+    init(tagType: TagType, selection: Binding<IncomesPath?> = .constant(nil)) {
         self.tagType = tagType
         self._tags = .init(.tags(.typeIs(tagType)))
         self._path = selection
@@ -81,8 +81,14 @@ extension TagListView: View {
                 do {
                     let tags = willDeleteTags
                     let items = tags.flatMap { $0.items ?? .empty }
-                    try tagService.delete(tags: tags)
-                    try itemService.delete(items: items)
+                    try tags
+                        .compactMap(TagEntity.init)
+                        .forEach {
+                            try DeleteTagIntent.perform((context: context, tag: $0))
+                        }
+                    try items.compactMap(ItemEntity.init).forEach {
+                        try DeleteItemIntent.perform((context: context, item: $0))
+                    }
                     willDeleteTags = .empty
                     Haptic.success.impact()
                 } catch {

@@ -18,39 +18,10 @@ struct TagServiceTests {
         self.service = .init(context: context)
     }
 
-    // MARK: - Fetch
-
-    @Test func tag() throws {
-        #expect(try service.tag() == nil)
-
-        _ = try Tag.create(context: context, name: "nameA", type: .year)
-        _ = try Tag.create(context: context, name: "nameB", type: .year)
-
-        #expect(try context.fetchCount(.tags(.all)) == 2)
-
-        #expect(try service.tag()?.name == "nameA")
-        #expect(try service.tag()?.type == .year)
-    }
-
-    // MARK: - Delete
-
-    @Test func deleteAll() throws {
-        #expect(try service.tag() == nil)
-
-        _ = try Tag.create(context: context, name: "nameA", type: .year)
-        _ = try Tag.create(context: context, name: "nameB", type: .year)
-
-        #expect(try context.fetchCount(.tags(.all)) == 2)
-
-        _ = try service.deleteAll()
-
-        #expect(try context.fetchCount(.tags(.all)) == 0)
-    }
-
     // MARK: - Duplicates - merge
 
     @Test func mergeWhenTagsAreIdentical() throws {
-        #expect(try service.tag() == nil)
+        #expect(try GetAllTagsIntent.perform(context).isEmpty)
 
         let item1 = try Item.create(
             context: context,
@@ -104,7 +75,7 @@ struct TagServiceTests {
     }
 
     @Test func mergeWhenTagsAreDifferent() throws {
-        #expect(try service.tag() == nil)
+        #expect(try GetAllTagsIntent.perform(context).isEmpty)
 
         let item1 = try Item.create(
             context: context,
@@ -162,7 +133,7 @@ struct TagServiceTests {
     }
 
     @Test func mergeWhenTagsAreDuplicated() throws {
-        #expect(try service.tag() == nil)
+        #expect(try GetAllTagsIntent.perform(context).isEmpty)
 
         let item1 = try Item.createIgnoringDuplicates(
             context: context,

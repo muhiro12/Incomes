@@ -21,20 +21,40 @@ struct ItemServiceTest {
         service = .init(context: context)
     }
 
+    @discardableResult
+    func createItem(date: Date,
+                    content: String,
+                    income: Decimal,
+                    outgo: Decimal,
+                    category: String,
+                    repeatCount: Int = 1) throws -> ItemEntity {
+        try CreateItemIntent.perform(
+            (
+                context: context,
+                date: date,
+                content: content,
+                income: income,
+                outgo: outgo,
+                category: category,
+                repeatCount: repeatCount
+            )
+        )
+    }
+
     // MARK: - Fetch
 
     @Test("item returns first item if available", arguments: timeZones)
     func item(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        _ = try service.create(
+        _ = try createItem(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "First",
             income: 100,
             outgo: 50,
             category: "Test"
         )
-        let item = try #require(try service.item())
+        let item = try #require(try context.fetchFirst(.items(.all)))
         #expect(item.content == "First")
     }
 
@@ -42,14 +62,14 @@ struct ItemServiceTest {
     func itemWithPredicate(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        _ = try service.create(
+        _ = try createItem(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "Food",
             income: 0,
             outgo: 500,
             category: "Food"
         )
-        _ = try service.create(
+        _ = try createItem(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "Transport",
             income: 0,
@@ -57,7 +77,7 @@ struct ItemServiceTest {
             category: "Transport"
         )
         let predicate = ItemPredicate.outgoIsGreaterThanOrEqualTo(amount: 400, onOrAfter: isoDate("2024-01-01T00:00:00Z"))
-        let item = try #require(try service.item(.items(predicate)))
+        let item = try #require(try context.fetchFirst(.items(predicate)))
         #expect(item.content == "Food")
     }
 
@@ -65,21 +85,21 @@ struct ItemServiceTest {
     func items(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        _ = try service.create(
+        _ = try createItem(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "One",
             income: 100,
             outgo: 0,
             category: "Test"
         )
-        _ = try service.create(
+        _ = try createItem(
             date: isoDate("2024-01-02T00:00:00Z"),
             content: "Two",
             income: 200,
             outgo: 0,
             category: "Test"
         )
-        let items = try service.items()
+        let items = try context.fetch(.items(.all))
         #expect(items.count == 2)
     }
 
@@ -87,14 +107,14 @@ struct ItemServiceTest {
     func itemsWithPredicate(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        _ = try service.create(
+        _ = try createItem(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "Match",
             income: 0,
             outgo: 800,
             category: "Filtered"
         )
-        _ = try service.create(
+        _ = try createItem(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "NoMatch",
             income: 0,
@@ -102,7 +122,7 @@ struct ItemServiceTest {
             category: "Filtered"
         )
         let predicate = ItemPredicate.outgoIsGreaterThanOrEqualTo(amount: 500, onOrAfter: isoDate("2024-01-01T00:00:00Z"))
-        let filtered = try service.items(.items(predicate))
+        let filtered = try context.fetch(.items(predicate))
         #expect(filtered.count == 1)
         #expect(filtered.first?.content == "Match")
     }
@@ -111,14 +131,14 @@ struct ItemServiceTest {
     func itemsCount(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        _ = try service.create(
+        _ = try createItem(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "Only",
             income: 300,
             outgo: 100,
             category: "Test"
         )
-        let count = try service.itemsCount()
+        let count = try context.fetchCount(.items(.all))
         #expect(count == 1)
     }
 
@@ -126,14 +146,14 @@ struct ItemServiceTest {
     func itemsCountWithPredicate(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        _ = try service.create(
+        _ = try createItem(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "X",
             income: 0,
             outgo: 900,
             category: "Filtered"
         )
-        _ = try service.create(
+        _ = try createItem(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "Y",
             income: 0,
@@ -141,7 +161,7 @@ struct ItemServiceTest {
             category: "Filtered"
         )
         let predicate = ItemPredicate.outgoIsGreaterThanOrEqualTo(amount: 800, onOrAfter: isoDate("2024-01-01T00:00:00Z"))
-        let count = try service.itemsCount(.items(predicate))
+        let count = try context.fetchCount(.items(predicate))
         #expect(count == 1)
     }
 
@@ -151,7 +171,7 @@ struct ItemServiceTest {
     func create(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        _ = try service.create(
+        _ = try createItem(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "Lunch",
             income: 1_000,
@@ -166,7 +186,7 @@ struct ItemServiceTest {
     func createWithRepeat(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        _ = try service.create(
+        _ = try createItem(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "Rent",
             income: 0,
@@ -183,7 +203,7 @@ struct ItemServiceTest {
     func createWithZeroRepeat(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        _ = try service.create(
+        _ = try createItem(
             date: isoDate("2024-03-01T00:00:00Z"),
             content: "Single",
             income: 100,
@@ -200,7 +220,7 @@ struct ItemServiceTest {
     func createWithZeroAmounts(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        _ = try service.create(
+        _ = try createItem(
             date: isoDate("2024-03-01T00:00:00Z"),
             content: "Neutral",
             income: 0,
@@ -216,7 +236,7 @@ struct ItemServiceTest {
         NSTimeZone.default = timeZone
 
         for _ in 0..<2 {
-            _ = try service.create(
+            _ = try createItem(
                 date: isoDate("2024-03-01T00:00:00Z"),
                 content: "Repeated",
                 income: 100,
@@ -234,15 +254,15 @@ struct ItemServiceTest {
         NSTimeZone.default = timeZone
 
         let boundaryDate = shiftedDate("2024-03-15T00:00:00Z")
-        _ = try service.create(
+        let item = try createItem(
             date: boundaryDate,
             content: "MidnightUTC",
             income: 100,
             outgo: 0,
             category: "Test"
         )
-        let item = try #require(try service.item())
-        #expect(item.utcDate == isoDate("2024-03-15T00:00:00Z"))
+        let found = try #require(try context.fetchFirst(.items(.idIs(.init(base64Encoded: item.id)))))
+        #expect(found.utcDate == isoDate("2024-03-15T00:00:00Z"))
     }
 
     @Test("create stores JST midnight as UTC start of day", arguments: timeZones)
@@ -250,15 +270,15 @@ struct ItemServiceTest {
         NSTimeZone.default = timeZone
 
         let jstDate = shiftedDate("2024-03-15T09:00:00Z")  // 00:00 UTC
-        _ = try service.create(
+        let item = try createItem(
             date: jstDate,
             content: "JSTToUTC",
             income: 100,
             outgo: 0,
             category: "Test"
         )
-        let item = try #require(try service.item())
-        #expect(item.utcDate == isoDate("2024-03-15T00:00:00Z"))
+        let found = try #require(try context.fetchFirst(.items(.idIs(.init(base64Encoded: item.id)))))
+        #expect(found.utcDate == isoDate("2024-03-15T00:00:00Z"))
     }
 
     @Test("create rounds input date to start of day UTC", arguments: timeZones)
@@ -267,15 +287,15 @@ struct ItemServiceTest {
 
         let inputDate = isoDate("2024-03-15T10:30:00Z")
         let expectedDate = Calendar.utc.startOfDay(for: inputDate)
-        _ = try service.create(
+        let item = try createItem(
             date: inputDate,
             content: "RoundedTime",
             income: 100,
             outgo: 0,
             category: "Test"
         )
-        let item = try #require(try service.item())
-        #expect(item.utcDate == expectedDate)
+        let found = try #require(try context.fetchFirst(.items(.idIs(.init(base64Encoded: item.id)))))
+        #expect(found.utcDate == expectedDate)
     }
 
     // MARK: - Update
@@ -284,7 +304,7 @@ struct ItemServiceTest {
     func update(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        _ = try service.create(
+        _ = try createItem(
             date: shiftedDate("2024-01-01T00:00:00Z"),
             content: "Initial",
             income: 100,
@@ -292,13 +312,16 @@ struct ItemServiceTest {
             category: "Misc"
         )
         var item = try #require(fetchItems(context).first)
-        try service.update(
-            item: item,
-            date: shiftedDate("2024-01-02T00:00:00Z"),
-            content: "Updated",
-            income: 150,
-            outgo: 100,
-            category: "UpdatedCat"
+        try UpdateItemIntent.perform(
+            (
+                context: context,
+                item: ItemEntity(item)!,
+                date: shiftedDate("2024-01-02T00:00:00Z"),
+                content: "Updated",
+                income: 150,
+                outgo: 100,
+                category: "UpdatedCat"
+            )
         )
         item = try #require(fetchItems(context).first)
         #expect(item.balance == 50)
@@ -310,7 +333,7 @@ struct ItemServiceTest {
     func updateAssignsNewRepeatID(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        _ = try service.create(
+        _ = try createItem(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "Initial",
             income: 100,
@@ -320,13 +343,16 @@ struct ItemServiceTest {
         let item = try #require(fetchItems(context).first)
         let oldRepeatID = item.repeatID
 
-        try service.update(
-            item: item,
-            date: item.utcDate,
-            content: "Changed",
-            income: 200,
-            outgo: 0,
-            category: "Updated"
+        try UpdateItemIntent.perform(
+            (
+                context: context,
+                item: ItemEntity(item)!,
+                date: item.utcDate,
+                content: "Changed",
+                income: 200,
+                outgo: 0,
+                category: "Updated"
+            )
         )
         let updated = try #require(fetchItems(context).first)
         #expect(updated.repeatID != oldRepeatID)
@@ -336,33 +362,36 @@ struct ItemServiceTest {
     func updateChangesDateOrdering(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        _ = try service.create(
+        _ = try createItem(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "First",
             income: 100,
             outgo: 0,
             category: "SortTest"
         )
-        _ = try service.create(
+        _ = try createItem(
             date: isoDate("2024-01-02T00:00:00Z"),
             content: "Second",
             income: 100,
             outgo: 0,
             category: "SortTest"
         )
-        var items = try service.items().sorted { $0.utcDate < $1.utcDate }
+        var items = try context.fetch(.items(.all)).sorted { $0.utcDate < $1.utcDate }
         #expect(items[0].content == "First")
 
-        try service.update(
-            item: items[1],
-            date: isoDate("2023-12-31T00:00:00Z"),
-            content: items[1].content,
-            income: items[1].income,
-            outgo: items[1].outgo,
-            category: items[1].category?.name ?? ""
+        try UpdateItemIntent.perform(
+            (
+                context: context,
+                item: ItemEntity(items[1])!,
+                date: isoDate("2023-12-31T00:00:00Z"),
+                content: items[1].content,
+                income: items[1].income,
+                outgo: items[1].outgo,
+                category: items[1].category?.name ?? ""
+            )
         )
 
-        items = try service.items().sorted { $0.utcDate < $1.utcDate }
+        items = try context.fetch(.items(.all)).sorted { $0.utcDate < $1.utcDate }
         #expect(items[0].content == "Second")
     }
 
@@ -370,7 +399,7 @@ struct ItemServiceTest {
     func updateForFutureItems(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        _ = try service.create(
+        _ = try createItem(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "Subscription",
             income: 0,
@@ -378,17 +407,20 @@ struct ItemServiceTest {
             category: "Media",
             repeatCount: 3
         )
-        let items = try service.items().sorted { $0.utcDate < $1.utcDate }
+        let items = try context.fetch(.items(.all)).sorted { $0.utcDate < $1.utcDate }
         let target = items[1] // middle item
-        try service.updateForFutureItems(
-            item: target,
-            date: target.utcDate,
-            content: "UpdatedSub",
-            income: 0,
-            outgo: 1_200,
-            category: "Entertainment"
+        try UpdateFutureItemsIntent.perform(
+            (
+                context: context,
+                item: ItemEntity(target)!,
+                date: target.utcDate,
+                content: "UpdatedSub",
+                income: 0,
+                outgo: 1_200,
+                category: "Entertainment"
+            )
         )
-        let result = try service.items().sorted { $0.utcDate < $1.utcDate }
+        let result = try context.fetch(.items(.all)).sorted { $0.utcDate < $1.utcDate }
         #expect(result[0].content == "Subscription")
         #expect(result[1].content == "UpdatedSub")
         #expect(result[2].content == "UpdatedSub")
@@ -400,7 +432,7 @@ struct ItemServiceTest {
     func updateFutureLastOnly(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        _ = try service.create(
+        _ = try createItem(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "Monthly",
             income: 100,
@@ -408,18 +440,21 @@ struct ItemServiceTest {
             category: "Bills",
             repeatCount: 3
         )
-        let items = try service.items().sorted { $0.utcDate < $1.utcDate }
+        let items = try context.fetch(.items(.all)).sorted { $0.utcDate < $1.utcDate }
         let last = items[2]
 
-        try service.updateForFutureItems(
-            item: last,
-            date: last.utcDate,
-            content: "Changed",
-            income: 200,
-            outgo: 0,
-            category: "BillsUpdated"
+        try UpdateFutureItemsIntent.perform(
+            (
+                context: context,
+                item: ItemEntity(last)!,
+                date: last.utcDate,
+                content: "Changed",
+                income: 200,
+                outgo: 0,
+                category: "BillsUpdated"
+            )
         )
-        let result = try service.items().sorted { $0.utcDate < $1.utcDate }
+        let result = try context.fetch(.items(.all)).sorted { $0.utcDate < $1.utcDate }
         #expect(result[0].content == "Monthly")
         #expect(result[1].content == "Monthly")
         #expect(result[2].content == "Changed")
@@ -429,7 +464,7 @@ struct ItemServiceTest {
     func updateFutureSingleRepeat(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        _ = try service.create(
+        _ = try createItem(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "Solo",
             income: 0,
@@ -437,13 +472,16 @@ struct ItemServiceTest {
             category: "OneTime"
         )
         let item = try #require(fetchItems(context).first)
-        try service.updateForFutureItems(
-            item: item,
-            date: item.utcDate,
-            content: "SoloUpdated",
-            income: 100,
-            outgo: 50,
-            category: "OneTimeUpdated"
+        try UpdateFutureItemsIntent.perform(
+            (
+                context: context,
+                item: ItemEntity(item)!,
+                date: item.utcDate,
+                content: "SoloUpdated",
+                income: 100,
+                outgo: 50,
+                category: "OneTimeUpdated"
+            )
         )
         let updated = try #require(fetchItems(context).first)
         #expect(updated.content == "SoloUpdated")
@@ -454,7 +492,7 @@ struct ItemServiceTest {
     func updateForAllItems(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        _ = try service.create(
+        let item = try createItem(
             date: isoDate("2024-02-01T00:00:00Z"),
             content: "Gym",
             income: 0,
@@ -462,16 +500,20 @@ struct ItemServiceTest {
             category: "Health",
             repeatCount: 3
         )
-        let target = try #require(try service.item())
-        try service.updateForAllItems(
-            item: target,
-            date: target.utcDate,
-            content: "Fitness",
-            income: 0,
-            outgo: 7_000,
-            category: "Wellness"
+        _ = try context.fetch(.items(.all))
+        let target = try #require(try context.fetchFirst(.items(.idIs(.init(base64Encoded: item.id)))))
+        try UpdateAllItemsIntent.perform(
+            (
+                context: context,
+                item: ItemEntity(target)!,
+                date: target.utcDate,
+                content: "Fitness",
+                income: 0,
+                outgo: 7_000,
+                category: "Wellness"
+            )
         )
-        let updatedItems = try service.items()
+        let updatedItems = try context.fetch(.items(.all))
         #expect(updatedItems.count == 3)
         for item in updatedItems {
             #expect(item.content == "Fitness")
@@ -486,7 +528,7 @@ struct ItemServiceTest {
     func delete(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        _ = try service.create(
+        _ = try createItem(
             date: isoDate("2024-04-01T00:00:00Z"),
             content: "ToDelete",
             income: 100,
@@ -494,42 +536,41 @@ struct ItemServiceTest {
             category: "Temp"
         )
         let item = try #require(fetchItems(context).first)
-        try service.delete(items: [item])
-        let items = try service.items()
+        try DeleteItemIntent.perform(
+            (
+                context: context,
+                item: ItemEntity(item)!
+            )
+        )
+        let items = try context.fetch(.items(.all))
         #expect(items.isEmpty)
-    }
-
-    @Test("delete with empty array does nothing", arguments: timeZones)
-    func deleteWithEmptyArray(_ timeZone: TimeZone) throws {
-        NSTimeZone.default = timeZone
-
-        try service.delete(items: [])
-        #expect(try service.items().isEmpty)
     }
 
     @Test("delete with multiple items removes only specified ones", arguments: timeZones)
     func deleteMultipleItems(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        _ = try service.create(
+        _ = try createItem(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "KeepMe",
             income: 100,
             outgo: 0,
             category: "General"
         )
-        _ = try service.create(
+        _ = try createItem(
             date: isoDate("2024-01-02T00:00:00Z"),
             content: "RemoveMe",
             income: 100,
             outgo: 0,
             category: "General"
         )
-        let allItems = try service.items()
+        let allItems = try context.fetch(.items(.all))
         let toDelete = allItems.filter { $0.content == "RemoveMe" }
-        try service.delete(items: toDelete)
+        try toDelete.forEach {
+            try DeleteItemIntent.perform((context: context, item: ItemEntity($0)!))
+        }
 
-        let remaining = try service.items()
+        let remaining = try context.fetch(.items(.all))
         #expect(remaining.count == 1)
         #expect(remaining.first?.content == "KeepMe")
     }
@@ -538,7 +579,7 @@ struct ItemServiceTest {
     func deleteAll(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        _ = try service.create(
+        _ = try createItem(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "DeleteMe",
             income: 0,
@@ -546,7 +587,7 @@ struct ItemServiceTest {
             category: "Tmp"
         )
         #expect(!fetchItems(context).isEmpty)
-        try service.deleteAll()
+        try DeleteAllItemsIntent.perform(context)
         #expect(fetchItems(context).isEmpty)
     }
 
@@ -556,7 +597,7 @@ struct ItemServiceTest {
     func recalculate(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        _ = try service.create(
+        _ = try createItem(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "AdjustMe",
             income: 100,
@@ -564,13 +605,16 @@ struct ItemServiceTest {
             category: "Test"
         )
         var item = try #require(fetchItems(context).first)
-        try service.update(
-            item: item,
-            date: item.utcDate,
-            content: item.content,
-            income: item.income,
-            outgo: 90,
-            category: item.category?.name ?? ""
+        try UpdateItemIntent.perform(
+            (
+                context: context,
+                item: ItemEntity(item)!,
+                date: item.utcDate,
+                content: item.content,
+                income: item.income,
+                outgo: 90,
+                category: item.category?.name ?? ""
+            )
         )
         item = try #require(fetchItems(context).first)
         #expect(item.balance == 10)
@@ -580,7 +624,7 @@ struct ItemServiceTest {
     func recalculateNoChange(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        _ = try service.create(
+        _ = try createItem(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "Stable",
             income: 100,
@@ -600,32 +644,35 @@ struct ItemServiceTest {
     func recalculatePartial(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        _ = try service.create(
+        _ = try createItem(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "Before",
             income: 100,
             outgo: 50,
             category: "Split"
         )
-        _ = try service.create(
+        _ = try createItem(
             date: isoDate("2024-02-01T00:00:00Z"),
             content: "After",
             income: 200,
             outgo: 80,
             category: "Split"
         )
-        var items = try service.items().sorted { $0.utcDate < $1.utcDate }
-        try service.update(
-            item: items[1],
-            date: items[1].utcDate,
-            content: items[1].content,
-            income: 500,
-            outgo: 80,
-            category: items[1].category?.name ?? ""
+        var items = try context.fetch(.items(.all)).sorted { $0.utcDate < $1.utcDate }
+        try UpdateItemIntent.perform(
+            (
+                context: context,
+                item: ItemEntity(items[1])!,
+                date: items[1].utcDate,
+                content: items[1].content,
+                income: 500,
+                outgo: 80,
+                category: items[1].category?.name ?? ""
+            )
         )
 
         try service.recalculate(after: isoDate("2024-01-15T00:00:00Z"))
-        items = try service.items().sorted { $0.utcDate < $1.utcDate }
+        items = try context.fetch(.items(.all)).sorted { $0.utcDate < $1.utcDate }
         #expect(items[0].balance == 50)
         #expect(items[1].balance == 470)
     }
@@ -634,14 +681,14 @@ struct ItemServiceTest {
     func recalculateWithTimeZoneBoundaries(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        _ = try service.create(
+        _ = try createItem(
             date: shiftedDate("2024-02-28T15:00:00Z"),  // JST: 2024-02-29 00:00
             content: "EarlyMar",
             income: 300,
             outgo: 50,
             category: "TZTest"
         )
-        _ = try service.create(
+        _ = try createItem(
             date: shiftedDate("2024-02-28T14:00:00Z"),  // JST: 2024-02-28 23:00
             content: "LateFeb",
             income: 500,
@@ -650,7 +697,7 @@ struct ItemServiceTest {
         )
 
         try service.recalculate(after: isoDate("2024-02-01T00:00:00Z"))
-        let items = try service.items()
+        let items = try context.fetch(.items(.all))
 
         #expect(items[0].content == "LateFeb")
         #expect(items[0].balance == 650)
