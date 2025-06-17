@@ -7,18 +7,19 @@
 //
 
 import AppIntents
+import SwiftData
 import SwiftUI
 import SwiftUtilities
 
-struct GetPreviousItemProfitIntent: AppIntent, IntentPerformer, @unchecked Sendable {
+struct GetPreviousItemProfitIntent: AppIntent, IntentPerformer {
     static let title: LocalizedStringResource = .init("Get Previous Item Profit", table: "AppIntents")
 
     @Parameter(title: "Date", kind: .date)
     private var date: Date
 
-    @Dependency private var itemService: ItemService
+    @Dependency private var modelContainer: ModelContainer
 
-    typealias Input = (date: Date, itemService: ItemService)
+    typealias Input = (context: ModelContext, date: Date)
     typealias Output = IntentCurrencyAmount?
 
     static func perform(_ input: Input) throws -> Output {
@@ -29,8 +30,9 @@ struct GetPreviousItemProfitIntent: AppIntent, IntentPerformer, @unchecked Senda
         return .init(amount: item.profit, currencyCode: currencyCode)
     }
 
+    @MainActor
     func perform() throws -> some ReturnsValue<IntentCurrencyAmount?> {
-        guard let amount = try Self.perform((date: date, itemService: itemService)) else {
+        guard let amount = try Self.perform((context: modelContainer.mainContext, date: date)) else {
             return .result(value: nil)
         }
         return .result(value: amount)

@@ -7,17 +7,18 @@
 //
 
 import AppIntents
+import SwiftData
 import SwiftUtilities
 
-struct GetPreviousItemDateIntent: AppIntent, IntentPerformer, @unchecked Sendable {
+struct GetPreviousItemDateIntent: AppIntent, IntentPerformer {
     static let title: LocalizedStringResource = .init("Get Previous Item Date", table: "AppIntents")
 
     @Parameter(title: "Date", kind: .date)
     private var date: Date
 
-    @Dependency private var itemService: ItemService
+    @Dependency private var modelContainer: ModelContainer
 
-    typealias Input = (date: Date, itemService: ItemService)
+    typealias Input = (context: ModelContext, date: Date)
     typealias Output = Date?
 
     static func perform(_ input: Input) throws -> Output {
@@ -27,8 +28,9 @@ struct GetPreviousItemDateIntent: AppIntent, IntentPerformer, @unchecked Sendabl
         return item.date
     }
 
+    @MainActor
     func perform() throws -> some ReturnsValue<Date?> {
-        guard let item = try Self.perform((date: date, itemService: itemService)) else {
+        guard let item = try Self.perform((context: modelContainer.mainContext, date: date)) else {
             return .result(value: nil)
         }
         return .result(value: item)

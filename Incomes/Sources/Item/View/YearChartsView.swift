@@ -5,13 +5,14 @@
 //  Created by Hiromu Nakano on 8/30/24.
 //
 
+import SwiftData
 import SwiftUI
 
 struct YearChartsView: View {
     @Environment(Tag.self)
     private var yearTag
-    @Environment(ItemService.self)
-    private var itemService
+    @Environment(\.modelContext)
+    private var context
 
     @AppStorage(.isSubscribeOn)
     private var isSubscribeOn
@@ -30,7 +31,9 @@ struct YearChartsView: View {
                 ToolbarAlignmentSpacer()
             }
             ToolbarItem(placement: .status) {
-                if let count = try? itemService.itemsCount(.items(.dateIsSameYearAs(date))) {
+                if let count = try? GetYearItemsCountIntent.perform(
+                    (context: context, date: date)
+                ) {
                     Text("\(count) Items")
                         .font(.footnote)
                 }

@@ -21,23 +21,12 @@ final class ItemService {
 
     // MARK: - Fetch
 
-    func item(_ descriptor: FetchDescriptor<Item> = .items(.all)) throws -> Item? {
-        try context.fetchFirst(descriptor)
-    }
-
-    func items(_ descriptor: FetchDescriptor<Item> = .items(.all)) throws -> [Item] {
-        try context.fetch(descriptor)
-    }
-
     func model(of entity: ItemEntity) throws -> Item {
-        guard let model = try item(.items(.idIs(.init(base64Encoded: entity.id)))) else {
+        let descriptor = FetchDescriptor.items(.idIs(try .init(base64Encoded: entity.id)))
+        guard let model = try context.fetchFirst(descriptor) else {
             throw ItemError.itemNotFound
         }
         return model
-    }
-
-    func itemsCount(_ descriptor: FetchDescriptor<Item> = .items(.all)) throws -> Int {
-        try context.fetchCount(descriptor)
     }
 
     // MARK: - Calculate balance
@@ -46,4 +35,3 @@ final class ItemService {
         try calculator.calculate(after: date)
     }
 }
-

@@ -7,28 +7,30 @@
 //
 
 import AppIntents
+import SwiftData
 import SwiftUtilities
 
-struct GetNextItemContentIntent: AppIntent, IntentPerformer, @unchecked Sendable {
+struct GetNextItemContentIntent: AppIntent, IntentPerformer {
     static let title: LocalizedStringResource = .init("Get Next Item Content", table: "AppIntents")
 
     @Parameter(title: "Date", kind: .date)
     private var date: Date
 
-    @Dependency private var itemService: ItemService
+    @Dependency private var modelContainer: ModelContainer
 
-    typealias Input = (date: Date, itemService: ItemService)
+    typealias Input = (context: ModelContext, date: Date)
     typealias Output = String?
 
     static func perform(_ input: Input) throws -> Output {
-        guard let item = try GetNextItemIntent.perform((date: input.date, itemService: input.itemService)) else {
+        guard let item = try GetNextItemIntent.perform((context: input.context, date: input.date)) else {
             return nil
         }
         return item.content
     }
 
+    @MainActor
     func perform() throws -> some ReturnsValue<String?> {
-        guard let item = try GetNextItemIntent.perform((date: date, itemService: itemService)) else {
+        guard let item = try GetNextItemIntent.perform((context: modelContainer.mainContext, date: date)) else {
             return .result(value: nil)
         }
         return .result(value: item.content)
