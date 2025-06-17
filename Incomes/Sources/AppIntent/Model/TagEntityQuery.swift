@@ -7,45 +7,56 @@
 //
 
 import AppIntents
+import SwiftData
 
 struct TagEntityQuery: EntityStringQuery, @unchecked Sendable {
-    @Dependency private var tagService: TagService
+    @Dependency private var modelContainer: ModelContainer
 
     func entities(for identifiers: [TagEntity.ID]) throws -> [TagEntity] {
         try identifiers.compactMap { id in
-            try tagService.tag(
-                .tags(.idIs(try .init(base64Encoded: id)))
+            try GetTagByIDIntent.perform(
+                (
+                    context: modelContainer.mainContext,
+                    id: try .init(base64Encoded: id)
+                )
             )
         }
         .compactMap(TagEntity.init)
     }
 
     func entities(matching string: String) throws -> [TagEntity] {
-        try [
+        let tags = try GetAllTagsIntent.perform(modelContainer.mainContext)
+        let hiragana = string.applyingTransform(.hiraganaToKatakana, reverse: true).orEmpty
+        let katakana = string.applyingTransform(.hiraganaToKatakana, reverse: false).orEmpty
+        return [
             Tag.TagType.year,
             .yearMonth,
             .content,
             .category
         ]
         .compactMap { type in
-            try tagService.tag(
-                .tags(.nameContains(string, type: type))
-            )
+            tags.first {
+                $0.type == type
+                    && (
+                        $0.name.localizedStandardContains(string)
+                            || $0.name.localizedStandardContains(hiragana)
+                            || $0.name.localizedStandardContains(katakana)
+                    )
+            }
         }
         .compactMap(TagEntity.init)
     }
 
     func suggestedEntities() throws -> [TagEntity] {
-        try [
+        let tags = try GetAllTagsIntent.perform(modelContainer.mainContext)
+        return [
             Tag.TagType.year,
             .yearMonth,
             .content,
             .category
         ]
         .compactMap { type in
-            try tagService.tag(
-                .tags(.typeIs(type))
-            )
+            tags.first { $0.type == type }
         }
         .compactMap(TagEntity.init)
     }
