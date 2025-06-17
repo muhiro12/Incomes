@@ -3,7 +3,7 @@ import SwiftUI
 import SwiftUtilities
 
 struct DuplicateTagListView: View {
-    @Environment(TagService.self) private var tagService
+    @Environment(\.modelContext) private var context
 
     @Query(.tags(.typeIs(.year))) private var years: [Tag]
     @Query(.tags(.typeIs(.yearMonth))) private var yearMonths: [Tag]
@@ -39,7 +39,16 @@ struct DuplicateTagListView: View {
             isPresented: $isResolveDialogPresented
         ) {
             Button {
-                try? tagService.resolveAllDuplicates(in: selectedTags)
+                do {
+                    try ResolveDuplicateTagsIntent.perform(
+                        (
+                            context: context,
+                            tags: selectedTags.compactMap(TagEntity.init)
+                        )
+                    )
+                } catch {
+                    assertionFailure(error.localizedDescription)
+                }
             } label: {
                 Text("Resolve")
             }
@@ -60,8 +69,22 @@ struct DuplicateTagListView: View {
 
     @ViewBuilder
     private func buildSection<Header: View>(from tags: [Tag], header: () -> Header) -> some View {
-        let duplicates = tagService.findDuplicates(in: tags).sorted {
-            $0.displayName < $1.displayName
+        let duplicates: [Tag]
+        do {
+            let entities = try FindDuplicateTagsIntent.perform(
+                (
+                    context: context,
+                    tags: tags.compactMap(TagEntity.init)
+                )
+            )
+            duplicates = try entities.compactMap { entity in
+                let id = try PersistentIdentifier(base64Encoded: entity.id)
+                return try context.fetchFirst(.tags(.idIs(id)))
+            }
+            .sorted { $0.displayName < $1.displayName }
+        } catch {
+            assertionFailure(error.localizedDescription)
+            duplicates = []
         }
         if duplicates.isEmpty {
             EmptyView()

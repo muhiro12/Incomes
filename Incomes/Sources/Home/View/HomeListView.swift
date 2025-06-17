@@ -9,8 +9,6 @@
 import SwiftUI
 
 struct HomeListView {
-    @Environment(TagService.self)
-    private var tagService
     @Environment(NotificationService.self)
     private var notificationService
     @Environment(\.modelContext)
