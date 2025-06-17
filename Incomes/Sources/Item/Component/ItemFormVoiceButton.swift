@@ -10,10 +10,21 @@ struct ItemFormVoiceButton: View {
     @Binding var category: String
 
     @State private var transcriber = SpeechTranscriber()
+    @State private var isProcessing = false
+    @State private var errorMessage: String?
 
     var body: some View {
         Button(action: toggle) {
-            Image(systemName: transcriber.isTranscribing ? "stop.circle" : "mic.circle")
+            if isProcessing {
+                ProgressView()
+            } else {
+                Image(systemName: transcriber.isTranscribing ? "stop.circle" : "mic.circle")
+            }
+        }
+        .alert("Error", isPresented: Binding(get: { errorMessage != nil }, set: { if !$0 { errorMessage = nil } })) {
+            Button("OK", role: .cancel) { errorMessage = nil }
+        } message: {
+            Text(errorMessage ?? "")
         }
         .onChange(of: transcriber.transcript) { _, newValue in
             guard transcriber.isTranscribing == false, newValue.isNotEmpty else { return }
@@ -27,11 +38,17 @@ struct ItemFormVoiceButton: View {
         if transcriber.isTranscribing {
             transcriber.stopTranscribing()
         } else {
-            try? transcriber.startTranscribing()
+            do {
+                try transcriber.startTranscribing()
+            } catch {
+                errorMessage = error.localizedDescription
+            }
         }
     }
 
     private func updateForm(with text: String) async {
+        isProcessing = true
+        defer { isProcessing = false }
         do {
             let inference = try await InferItemFormIntent.perform(text)
             if let newDate = inference.date.dateValueWithoutLocale(.yyyyMMdd) {
@@ -43,7 +60,19 @@ struct ItemFormVoiceButton: View {
             category = inference.category
             transcriber.transcript = .empty
         } catch {
+            errorMessage = error.localizedDescription
             assertionFailure(error.localizedDescription)
         }
     }
+}
+
+@available(iOS 26.0, *)
+#Preview {
+    ItemFormVoiceButton(
+        date: .constant(.now),
+        content: .constant(.empty),
+        income: .constant(.empty),
+        outgo: .constant(.empty),
+        category: .constant(.empty)
+    )
 }
