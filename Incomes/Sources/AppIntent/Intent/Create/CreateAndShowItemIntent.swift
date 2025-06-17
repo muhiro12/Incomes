@@ -7,6 +7,7 @@
 //
 
 import AppIntents
+import SwiftData
 import SwiftUtilities
 
 struct CreateAndShowItemIntent: AppIntent, IntentPerformer, @unchecked Sendable {
@@ -25,38 +26,37 @@ struct CreateAndShowItemIntent: AppIntent, IntentPerformer, @unchecked Sendable 
     @Parameter(title: "Repeat", default: 1, inclusiveRange: (1, 60))
     private var repeatCount: Int
 
-    @Dependency private var itemService: ItemService
+    @Dependency private var modelContainer: ModelContainer
 
-    typealias Input = (date: Date, content: String, income: Double, outgo: Double, category: String, repeatCount: Int, itemService: ItemService)
+    typealias Input = (context: ModelContext, date: Date, content: String, income: Double, outgo: Double, category: String, repeatCount: Int)
     typealias Output = ItemEntity
 
     static func perform(_ input: Input) throws -> Output {
-        let (date, content, income, outgo, category, repeatCount, itemService) = input
+        let (context, date, content, income, outgo, category, repeatCount) = input
         guard content.isNotEmpty else {
             throw DebugError.default
         }
-        let item = try itemService.create(
-            date: date,
-            content: content,
-            income: .init(income),
-            outgo: .init(outgo),
-            category: category,
-            repeatCount: repeatCount
+        return try CreateItemIntent.perform(
+            (
+                context: context,
+                date: date,
+                content: content,
+                income: .init(income),
+                outgo: .init(outgo),
+                category: category,
+                repeatCount: repeatCount
+            )
         )
-        guard let entity = ItemEntity(item) else {
-            throw DebugError.default
-        }
-        return entity
     }
 
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
-        let item = try Self.perform((date: date,
+        let item = try Self.perform((context: modelContainer.mainContext,
+                                     date: date,
                                      content: content,
                                      income: income,
                                      outgo: outgo,
                                      category: category,
-                                     repeatCount: repeatCount,
-                                     itemService: itemService))
+                                     repeatCount: repeatCount))
         return .result(dialog: .init(stringLiteral: item.content)) {
             IntentItemSection()
                 .environment(item)

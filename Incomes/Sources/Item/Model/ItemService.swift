@@ -40,58 +40,6 @@ final class ItemService {
         try context.fetchCount(descriptor)
     }
 
-    // MARK: - Create
-
-    func create(date: Date,
-                content: String,
-                income: Decimal,
-                outgo: Decimal,
-                category: String,
-                repeatCount: Int = 1) throws -> Item {
-        var items = [Item]()
-
-        let repeatID = UUID()
-
-        let item = try Item.create(
-            context: context,
-            date: date,
-            content: content,
-            income: income,
-            outgo: outgo,
-            category: category,
-            repeatID: repeatID
-        )
-        items.append(item)
-
-        for index in 0..<repeatCount {
-            guard index > .zero else {
-                continue
-            }
-            guard let repeatingDate = Calendar.current.date(byAdding: .month,
-                                                            value: index,
-                                                            to: date) else {
-                assertionFailure()
-                continue
-            }
-            let item = try Item.create(
-                context: context,
-                date: repeatingDate,
-                content: content,
-                income: income,
-                outgo: outgo,
-                category: category,
-                repeatID: repeatID
-            )
-            items.append(item)
-        }
-
-        items.forEach(context.insert)
-
-        try calculator.calculate(for: items)
-
-        return item
-    }
-
     // MARK: - Update
 
     func update(item: Item,
