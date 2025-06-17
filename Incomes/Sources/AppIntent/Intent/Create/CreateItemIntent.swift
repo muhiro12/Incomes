@@ -7,6 +7,7 @@
 //
 
 import AppIntents
+import SwiftData
 import SwiftUI
 import SwiftUtilities
 
@@ -26,27 +27,62 @@ struct CreateItemIntent: AppIntent, IntentPerformer, @unchecked Sendable {
     @Parameter(title: "Repeat", default: 1, inclusiveRange: (1, 60))
     private var repeatCount: Int
 
-    @Dependency private var itemService: ItemService
+    @Dependency private var modelContainer: ModelContainer
 
-    typealias Input = (date: Date, content: String, income: Decimal, outgo: Decimal, category: String, repeatCount: Int, itemService: ItemService)
+    typealias Input = (context: ModelContext, date: Date, content: String, income: Decimal, outgo: Decimal, category: String, repeatCount: Int)
     typealias Output = ItemEntity
 
     static func perform(_ input: Input) throws -> Output {
-        let (date, content, income, outgo, category, repeatCount, itemService) = input
-        let model = try itemService.create(
+        let (context, date, content, income, outgo, category, repeatCount) = input
+        var items = [Item]()
+
+        let repeatID = UUID()
+
+        let model = try Item.create(
+            context: context,
             date: date,
             content: content,
             income: income,
             outgo: outgo,
             category: category,
-            repeatCount: repeatCount
+            repeatID: repeatID
         )
-        guard let item = ItemEntity(model) else {
+        items.append(model)
+
+        for index in 0..<repeatCount {
+            guard index > .zero else {
+                continue
+            }
+            guard let repeatingDate = Calendar.current.date(byAdding: .month,
+                                                            value: index,
+                                                            to: date) else {
+                assertionFailure()
+                continue
+            }
+            let item = try Item.create(
+                context: context,
+                date: repeatingDate,
+                content: content,
+                income: income,
+                outgo: outgo,
+                category: category,
+                repeatID: repeatID
+            )
+            items.append(item)
+        }
+
+        items.forEach(context.insert)
+
+        let calculator = BalanceCalculator(context: context)
+        try calculator.calculate(for: items)
+
+        guard let entity = ItemEntity(model) else {
             throw DebugError.default
         }
-        return item
+        return entity
     }
 
+    @MainActor
     func perform() throws -> some ReturnsValue<ItemEntity> {
         guard content.isNotEmpty else {
             throw $content.needsValueError()
@@ -62,13 +98,13 @@ struct CreateItemIntent: AppIntent, IntentPerformer, @unchecked Sendable {
 
         let item = try Self.perform(
             (
+                context: modelContainer.mainContext,
                 date: date,
                 content: content,
                 income: income.amount,
                 outgo: outgo.amount,
                 category: category,
-                repeatCount: repeatCount,
-                itemService: itemService
+                repeatCount: repeatCount
             )
         )
         return .result(value: item)

@@ -33,6 +33,8 @@ struct ItemFormView {
     private var item: ItemEntity?
     @Environment(ItemService.self)
     private var itemService
+    @Environment(\.modelContext)
+    private var context
 
     @AppStorage(.isDebugOn)
     private var isDebugOn
@@ -300,13 +302,13 @@ private extension ItemFormView {
         do {
             _ = try CreateItemIntent.perform(
                 (
+                    context: context,
                     date: date,
                     content: content,
                     income: income.decimalValue,
                     outgo: outgo.decimalValue,
                     category: category,
-                    repeatCount: repeatSelection,
-                    itemService: itemService
+                    repeatCount: repeatSelection
                 )
             )
             Haptic.success.impact()
