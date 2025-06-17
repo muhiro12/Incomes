@@ -9,8 +9,8 @@ import SwiftData
 import SwiftUI
 
 struct HomeYearSection {
-    @Environment(ItemService.self)
-    private var itemService
+    @Environment(\.modelContext)
+    private var context
 
     @Query private var yearMonthTags: [Tag]
 
@@ -47,7 +47,9 @@ extension HomeYearSection: View {
         ) {
             Button(role: .destructive) {
                 do {
-                    try itemService.delete(items: willDeleteItems)
+                    try willDeleteItems.compactMap(ItemEntity.init).forEach {
+                        try DeleteItemIntent.perform((context: context, item: $0))
+                    }
                     Haptic.success.impact()
                 } catch {
                     assertionFailure(error.localizedDescription)

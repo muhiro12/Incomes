@@ -87,19 +87,6 @@ final class ItemService {
                                     descriptor: .items(.repeatIDIs(item.repeatID)))
     }
 
-    // MARK: - Delete
-
-    func delete(items: [Item]) throws {
-        items.forEach {
-            $0.delete()
-        }
-        try calculator.calculate(for: items)
-    }
-
-    func deleteAll() throws {
-        try delete(items: context.fetch(.init()))
-    }
-
     // MARK: - Calculate balance
 
     func recalculate(after date: Date) throws {

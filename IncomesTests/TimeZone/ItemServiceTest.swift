@@ -514,17 +514,14 @@ struct ItemServiceTest {
             category: "Temp"
         )
         let item = try #require(fetchItems(context).first)
-        try service.delete(items: [item])
+        try DeleteItemIntent.perform(
+            (
+                context: context,
+                item: ItemEntity(item)!
+            )
+        )
         let items = try service.items()
         #expect(items.isEmpty)
-    }
-
-    @Test("delete with empty array does nothing", arguments: timeZones)
-    func deleteWithEmptyArray(_ timeZone: TimeZone) throws {
-        NSTimeZone.default = timeZone
-
-        try service.delete(items: [])
-        #expect(try service.items().isEmpty)
     }
 
     @Test("delete with multiple items removes only specified ones", arguments: timeZones)
@@ -547,7 +544,9 @@ struct ItemServiceTest {
         )
         let allItems = try service.items()
         let toDelete = allItems.filter { $0.content == "RemoveMe" }
-        try service.delete(items: toDelete)
+        try toDelete.forEach {
+            try DeleteItemIntent.perform((context: context, item: ItemEntity($0)!))
+        }
 
         let remaining = try service.items()
         #expect(remaining.count == 1)
@@ -566,7 +565,7 @@ struct ItemServiceTest {
             category: "Tmp"
         )
         #expect(!fetchItems(context).isEmpty)
-        try service.deleteAll()
+        try DeleteAllItemsIntent.perform(context)
         #expect(fetchItems(context).isEmpty)
     }
 

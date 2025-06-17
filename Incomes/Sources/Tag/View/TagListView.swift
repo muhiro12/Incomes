@@ -10,10 +10,10 @@ import SwiftData
 import SwiftUI
 
 struct TagListView {
-    @Environment(ItemService.self)
-    private var itemService
     @Environment(TagService.self)
     private var tagService
+    @Environment(\.modelContext)
+    private var context
 
     @Query
     private var tags: [Tag]
@@ -82,7 +82,9 @@ extension TagListView: View {
                     let tags = willDeleteTags
                     let items = tags.flatMap { $0.items ?? .empty }
                     try tagService.delete(tags: tags)
-                    try itemService.delete(items: items)
+                    try items.compactMap(ItemEntity.init).forEach {
+                        try DeleteItemIntent.perform((context: context, item: $0))
+                    }
                     willDeleteTags = .empty
                     Haptic.success.impact()
                 } catch {

@@ -177,6 +177,12 @@
         }
       }
     },
+    "Delete All Items" : {
+
+    },
+    "Delete Item" : {
+
+    },
     "Get Items" : {
       "localizations" : {
         "en" : {
