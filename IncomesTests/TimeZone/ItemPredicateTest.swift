@@ -31,7 +31,7 @@ struct ItemPredicateTest {
         _ = try CreateItemIntent.perform((context: context, date: shiftedDate("2024-02-01T00:00:00Z"), content: "Two", income: 200, outgo: 0, category: "B", repeatCount: 1))
 
         let predicate = ItemPredicate.all
-        let items = try service.items(.items(predicate))
+        let items = try context.fetch(.items(predicate))
         let contents = items.map(\.content)
 
         #expect(contents.contains("One"))
@@ -48,7 +48,7 @@ struct ItemPredicateTest {
         _ = try CreateItemIntent.perform((context: context, date: shiftedDate("2024-01-01T00:00:00Z"), content: "One", income: 100, outgo: 0, category: "A", repeatCount: 1))
 
         let predicate = ItemPredicate.none
-        let items = try service.items(.items(predicate))
+        let items = try context.fetch(.items(predicate))
 
         #expect(items.isEmpty)
     }
@@ -64,7 +64,7 @@ struct ItemPredicateTest {
 
         let tag = try Tag.create(context: context, name: "2024", type: .year)
         let predicate = ItemPredicate.tagIs(tag)
-        let items = try service.items(.items(predicate))
+        let items = try context.fetch(.items(predicate))
 
         try #require(items.count == 1)
         #expect(items[0].tags?.first { $0.type == .year }?.name == "2024")
@@ -82,7 +82,7 @@ struct ItemPredicateTest {
 
         let tag = try Tag.create(context: context, name: "202401", type: .yearMonth)
         let predicate = ItemPredicate.tagIs(tag)
-        let items = try service.items(.items(predicate))
+        let items = try context.fetch(.items(predicate))
 
         try #require(items.count == 1)
         #expect(items[0].tags?.first { $0.type == .year }?.name == "2024")
@@ -100,7 +100,7 @@ struct ItemPredicateTest {
 
         let tag = try Tag.create(context: context, name: "Content", type: .content)
         let predicate = ItemPredicate.tagAndYear(tag: tag, yearString: "2024")
-        let items = try service.items(.items(predicate))
+        let items = try context.fetch(.items(predicate))
 
         try #require(items.count == 1)
         #expect(items[0].tags?.first { $0.type == .year }?.name == "2024")
@@ -119,7 +119,7 @@ struct ItemPredicateTest {
         _ = try CreateItemIntent.perform((context: context, date: cutoff, content: "OnCutoff", income: 0, outgo: 0, category: "Test", repeatCount: 1))
 
         let predicate = ItemPredicate.dateIsBefore(cutoff)
-        let items = try service.items(.items(predicate))
+        let items = try context.fetch(.items(predicate))
         let contents = items.map(\.content)
 
         #expect(!contents.contains("OnCutoff"))
@@ -135,7 +135,7 @@ struct ItemPredicateTest {
         _ = try CreateItemIntent.perform((context: context, date: cutoff, content: "May", income: 1, outgo: 0, category: "Test", repeatCount: 1))
 
         let predicate = ItemPredicate.dateIsBefore(cutoff)
-        let items = try service.items(.items(predicate))
+        let items = try context.fetch(.items(predicate))
         let contents = items.map(\.content)
 
         #expect(contents.contains("April"))
@@ -153,7 +153,7 @@ struct ItemPredicateTest {
         _ = try CreateItemIntent.perform((context: context, date: cutoff, content: "OnCutoff", income: 0, outgo: 0, category: "Test", repeatCount: 1))
 
         let predicate = ItemPredicate.dateIsBefore(cutoff)
-        let items = try service.items(.items(predicate))
+        let items = try context.fetch(.items(predicate))
         let contents = items.map(\.content)
 
         #expect(contents.contains("EarlyApril"))
@@ -171,7 +171,7 @@ struct ItemPredicateTest {
         _ = try CreateItemIntent.perform((context: context, date: shiftedDate("2024-04-30T23:59:59Z"), content: "Before", income: 1, outgo: 0, category: "Test", repeatCount: 1))
 
         let predicate = ItemPredicate.dateIsAfter(cutoff)
-        let items = try service.items(.items(predicate))
+        let items = try context.fetch(.items(predicate))
         let contents = items.map(\.content)
 
         #expect(contents.contains("After"))
@@ -189,7 +189,7 @@ struct ItemPredicateTest {
         _ = try CreateItemIntent.perform((context: context, date: shiftedDate("2024-06-01T00:00:00Z"), content: "June", income: 0, outgo: 0, category: "Test", repeatCount: 1))
 
         let predicate = ItemPredicate.dateIsAfter(cutoff)
-        let items = try service.items(.items(predicate))
+        let items = try context.fetch(.items(predicate))
         let contents = items.map(\.content)
 
         #expect(contents.contains("OnCutoff"))
@@ -206,7 +206,7 @@ struct ItemPredicateTest {
         _ = try CreateItemIntent.perform((context: context, date: cutoff, content: "OnCutoff", income: 0, outgo: 0, category: "Test", repeatCount: 1))
 
         let predicate = ItemPredicate.dateIsAfter(cutoff)
-        let items = try service.items(.items(predicate))
+        let items = try context.fetch(.items(predicate))
         let contents = items.map(\.content)
 
         #expect(contents.contains("OnCutoff"))
@@ -221,7 +221,7 @@ struct ItemPredicateTest {
         _ = try CreateItemIntent.perform((context: context, date: shiftedDate("2024-02-15T00:00:00Z"), content: "2024Feb", income: 0, outgo: 0, category: "Test", repeatCount: 1))
 
         let predicate = ItemPredicate.dateIsSameYearAs(shiftedDate("2024-02-01T00:00:00Z"))
-        let items = try service.items(.items(predicate))
+        let items = try context.fetch(.items(predicate))
         let contents = items.map(\.content)
 
         #expect(contents == ["2024Feb"])
@@ -237,7 +237,7 @@ struct ItemPredicateTest {
         _ = try CreateItemIntent.perform((context: context, date: shiftedDate("2023-12-31T23:59:59Z"), content: "LastYear", income: 0, outgo: 0, category: "Test", repeatCount: 1))
 
         let predicate = ItemPredicate.dateIsSameYearAs(baseDate)
-        let items = try service.items(.items(predicate))
+        let items = try context.fetch(.items(predicate))
         let contents = items.map(\.content)
 
         #expect(contents.contains("January"))
@@ -262,7 +262,7 @@ struct ItemPredicateTest {
         )
 
         let predicate = ItemPredicate.dateIsSameYearAs(shiftedDate("2024-01-01T00:00:00Z"))
-        let items = try service.items(.items(predicate))
+        let items = try context.fetch(.items(predicate))
         let contents = items.map(\.content)
 
         #expect(contents.contains("JST_Jan1"))
@@ -284,7 +284,7 @@ struct ItemPredicateTest {
         )
 
         let predicate = ItemPredicate.dateIsSameYearAs(shiftedDate("2024-01-01T00:00:00Z"))
-        let items = try service.items(.items(predicate))
+        let items = try context.fetch(.items(predicate))
         let contents = items.map(\.content)
 
         #expect(contents.contains("JST_EndOfYear"))
@@ -306,7 +306,7 @@ struct ItemPredicateTest {
         )
 
         let predicate = ItemPredicate.dateIsSameYearAs(shiftedDate("2024-01-01T00:00:00Z"))
-        let items = try service.items(.items(predicate))
+        let items = try context.fetch(.items(predicate))
 
         #expect(items.map(\.content).contains("JST_StartOfYear"))
     }
@@ -338,7 +338,7 @@ struct ItemPredicateTest {
         )
 
         let predicate = ItemPredicate.dateIsSameYearAs(shiftedDate("2024-01-01T00:00:00Z"))
-        let items = try service.items(.items(predicate))
+        let items = try context.fetch(.items(predicate))
         let contents = items.map(\.content)
 
         #expect(contents.contains("StartJSTYear"))
@@ -362,7 +362,7 @@ struct ItemPredicateTest {
         )
 
         let predicate = ItemPredicate.dateIsSameMonthAs(shiftedDate("2024-03-01T00:00:00Z"))
-        let items = try service.items(.items(predicate))
+        let items = try context.fetch(.items(predicate))
         #expect(items.map(\.content).contains("JST_MarchStart"))
     }
 
@@ -382,7 +382,7 @@ struct ItemPredicateTest {
         )
 
         let predicate = ItemPredicate.dateIsSameMonthAs(shiftedDate("2024-03-01T00:00:00Z"))
-        let items = try service.items(.items(predicate))
+        let items = try context.fetch(.items(predicate))
         #expect(items.map(\.content).contains("UTC_MarchStart"))
         #expect(items.count == 1)
     }
@@ -403,8 +403,8 @@ struct ItemPredicateTest {
         )
         let jan = ItemPredicate.dateIsSameMonthAs(shiftedDate("2024-01-01T00:00:00Z"))
         let feb = ItemPredicate.dateIsSameMonthAs(shiftedDate("2024-02-01T00:00:00Z"))
-        let janItems = try service.items(.items(jan))
-        let febItems = try service.items(.items(feb))
+        let janItems = try context.fetch(.items(jan))
+        let febItems = try context.fetch(.items(feb))
         #expect(!janItems.map(\.content).contains("JSTFebStart"))
         #expect(febItems.map(\.content).contains("JSTFebStart"))
     }
@@ -425,8 +425,8 @@ struct ItemPredicateTest {
         )
         let feb = ItemPredicate.dateIsSameMonthAs(shiftedDate("2024-02-01T00:00:00Z"))
         let mar = ItemPredicate.dateIsSameMonthAs(shiftedDate("2024-03-01T00:00:00Z"))
-        let febItems = try service.items(.items(feb))
-        let marItems = try service.items(.items(mar))
+        let febItems = try context.fetch(.items(feb))
+        let marItems = try context.fetch(.items(mar))
         #expect(!febItems.map(\.content).contains("JSTMarStart"))
         #expect(marItems.map(\.content).contains("JSTMarStart"))
     }
@@ -448,7 +448,7 @@ struct ItemPredicateTest {
         )
 
         let predicate = ItemPredicate.dateIsSameMonthAs(shiftedDate("2024-02-01T00:00:00Z"))
-        let items = try service.items(.items(predicate))
+        let items = try context.fetch(.items(predicate))
 
         #expect(items.count == 1)  // Should pass if UTC-based correctly
     }
@@ -470,7 +470,7 @@ struct ItemPredicateTest {
         )
 
         let predicate = ItemPredicate.dateIsSameMonthAs(shiftedDate("2024-02-01T00:00:00Z"))
-        let items = try service.items(.items(predicate))
+        let items = try context.fetch(.items(predicate))
 
         // This will fail if implementation interprets local time as month-boundary
         #expect(items.map(\.content).contains("JSTBoundary"))
@@ -510,7 +510,7 @@ struct ItemPredicateTest {
         )
 
         let predicate = ItemPredicate.dateIsSameMonthAs(shiftedDate("2024-02-01T00:00:00Z"))
-        let items = try service.items(.items(predicate))
+        let items = try context.fetch(.items(predicate))
         let contents = items.map(\.content)
 
         #expect(contents.contains("StartOfMonth"))
@@ -546,7 +546,7 @@ struct ItemPredicateTest {
         )
 
         let predicate = ItemPredicate.dateIsSameMonthAs(shiftedDate("2024-03-01T00:00:00Z"))
-        let items = try service.items(.items(predicate))
+        let items = try context.fetch(.items(predicate))
         let contents = items.map(\.content)
 
         #expect(contents == ["EndJST", "StartJST"])
@@ -563,7 +563,7 @@ struct ItemPredicateTest {
         _ = try CreateItemIntent.perform((context: context, date: shiftedDate("2024-04-02T00:00:00Z"), content: "DayAfter", income: 1, outgo: 0, category: "Test", repeatCount: 1))
 
         let predicate = ItemPredicate.dateIsSameDayAs(baseDate)
-        let items = try service.items(.items(predicate))
+        let items = try context.fetch(.items(predicate))
         let contents = items.map(\.content)
 
         #expect(contents.contains("TargetDay"))
@@ -600,7 +600,7 @@ struct ItemPredicateTest {
         )
 
         let predicate = ItemPredicate.dateIsSameDayAs(shiftedDate("2024-04-01T00:00:00Z"))
-        let items = try service.items(.items(predicate))
+        let items = try context.fetch(.items(predicate))
         let contents = items.map(\.content)
 
         #expect(contents.contains("StartJSTDay"))
@@ -617,7 +617,7 @@ struct ItemPredicateTest {
         _ = try CreateItemIntent.perform((context: context, date: shiftedDate("2024-04-02T00:00:00Z"), content: "NextDay", income: 1, outgo: 0, category: "Test", repeatCount: 1))
 
         let predicate = ItemPredicate.dateIsSameDayAs(baseDate)
-        let items = try service.items(.items(predicate))
+        let items = try context.fetch(.items(predicate))
         let contents = items.map(\.content)
 
         #expect(!contents.contains("PrevDay"))
@@ -634,7 +634,7 @@ struct ItemPredicateTest {
         _ = try CreateItemIntent.perform((context: context, date: endOfDay, content: "EndOfDay", income: 1, outgo: 0, category: "Test", repeatCount: 1))
 
         let predicate = ItemPredicate.dateIsSameDayAs(baseDate)
-        let items = try service.items(.items(predicate))
+        let items = try context.fetch(.items(predicate))
         let contents = items.map(\.content)
 
         #expect(contents == ["EndOfDay"])
@@ -648,7 +648,7 @@ struct ItemPredicateTest {
         _ = try CreateItemIntent.perform((context: context, date: shiftedDate("2024-04-02T00:00:00Z"), content: "NextDayStart", income: 1, outgo: 0, category: "Test", repeatCount: 1))
 
         let predicate = ItemPredicate.dateIsSameDayAs(baseDate)
-        let items = try service.items(.items(predicate))
+        let items = try context.fetch(.items(predicate))
 
         #expect(items.isEmpty)
     }
@@ -669,7 +669,7 @@ struct ItemPredicateTest {
         )
 
         let predicate = ItemPredicate.dateIsSameDayAs(shiftedDate("2024-01-01T00:00:00Z"))
-        let items = try service.items(.items(predicate))
+        let items = try context.fetch(.items(predicate))
 
         #expect(items.map(\.content).contains("JST_Jan1"))
     }
@@ -690,7 +690,7 @@ struct ItemPredicateTest {
         )
 
         let predicate = ItemPredicate.dateIsSameDayAs(shiftedDate("2024-04-01T00:00:00Z"))
-        let items = try service.items(.items(predicate))
+        let items = try context.fetch(.items(predicate))
 
         #expect(!items.map(\.content).contains("JST_NextDay"))
     }
@@ -711,7 +711,7 @@ struct ItemPredicateTest {
         )
 
         let predicate = ItemPredicate.dateIsSameDayAs(shiftedDate("2024-03-31T00:00:00Z"))
-        let items = try service.items(.items(predicate))
+        let items = try context.fetch(.items(predicate))
 
         #expect(!items.map(\.content).contains("JST_StartOfDay"))
     }
@@ -727,7 +727,7 @@ struct ItemPredicateTest {
         _ = try CreateItemIntent.perform((context: context, date: date, content: "Low", income: 0, outgo: 4_999, category: "Test", repeatCount: 1))
 
         let predicate = ItemPredicate.outgoIsGreaterThanOrEqualTo(amount: 5_000, onOrAfter: date)
-        let items = try service.items(.items(predicate))
+        let items = try context.fetch(.items(predicate))
         let contents = items.map(\.content)
 
         #expect(contents == ["Match"])
@@ -742,7 +742,7 @@ struct ItemPredicateTest {
         _ = try CreateItemIntent.perform((context: context, date: cutoffDate, content: "Valid", income: 0, outgo: 10_000, category: "Test", repeatCount: 1))
 
         let predicate = ItemPredicate.outgoIsGreaterThanOrEqualTo(amount: 5_000, onOrAfter: cutoffDate)
-        let items = try service.items(.items(predicate))
+        let items = try context.fetch(.items(predicate))
         let contents = items.map(\.content)
 
         #expect(contents == ["Valid"])
@@ -755,12 +755,12 @@ struct ItemPredicateTest {
         NSTimeZone.default = timeZone
 
         _ = try CreateItemIntent.perform((context: context, date: shiftedDate("2024-01-01T00:00:00Z"), content: "RepeatOne", income: 0, outgo: 0, category: "Test", repeatCount: 1))
-        let repeatID = try service.item()!.repeatID
-
+        let repeatOneItem = try context.fetch(.items(.all)).first { $0.content == "RepeatOne" }!
+        let repeatID = repeatOneItem.repeatID
         _ = try CreateItemIntent.perform((context: context, date: shiftedDate("2024-02-01T00:00:00Z"), content: "NonRepeat", income: 0, outgo: 0, category: "Test", repeatCount: 1))
 
         let predicate = ItemPredicate.repeatIDIs(repeatID)
-        let items = try service.items(.items(predicate))
+        let items = try context.fetch(.items(predicate))
         let contents = items.map(\.content)
 
         #expect(contents == ["RepeatOne"])
@@ -771,10 +771,10 @@ struct ItemPredicateTest {
         NSTimeZone.default = timeZone
 
         _ = try CreateItemIntent.perform((context: context, date: shiftedDate("2024-01-01T00:00:00Z"), content: "Past", income: 0, outgo: 0, category: "Test", repeatCount: 2))
-        let repeatID = try service.item()!.repeatID
+        let repeatID = try context.fetch(.items(.all)).first!.repeatID
 
         let predicate = ItemPredicate.repeatIDAndDateIsAfter(repeatID: repeatID, date: shiftedDate("2024-02-01T00:00:00Z"))
-        let items = try service.items(.items(predicate))
+        let items = try context.fetch(.items(predicate))
         let contents = items.map(\.content)
 
         #expect(contents == ["Past"])
