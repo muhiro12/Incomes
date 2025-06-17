@@ -49,6 +49,7 @@ struct CreateAndShowItemIntent: AppIntent, IntentPerformer, @unchecked Sendable 
         )
     }
 
+    @MainActor
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
         let item = try Self.perform((context: modelContainer.mainContext,
                                      date: date,

@@ -82,6 +82,7 @@ struct CreateItemIntent: AppIntent, IntentPerformer, @unchecked Sendable {
         return entity
     }
 
+    @MainActor
     func perform() throws -> some ReturnsValue<ItemEntity> {
         guard content.isNotEmpty else {
             throw $content.needsValueError()
