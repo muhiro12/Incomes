@@ -31,7 +31,7 @@ final class ItemService {
 
     func model(of entity: ItemEntity) throws -> Item {
         guard let model = try item(.items(.idIs(.init(base64Encoded: entity.id)))) else {
-            throw DebugError.default
+            throw ItemError.itemNotFound
         }
         return model
     }

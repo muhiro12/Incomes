@@ -34,7 +34,7 @@ struct CreateAndShowItemIntent: AppIntent, IntentPerformer, @unchecked Sendable 
     static func perform(_ input: Input) throws -> Output {
         let (context, date, content, income, outgo, category, repeatCount) = input
         guard content.isNotEmpty else {
-            throw DebugError.default
+            throw ItemError.contentIsEmpty
         }
         return try CreateItemIntent.perform(
             (
