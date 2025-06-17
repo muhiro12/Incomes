@@ -1,5 +1,6 @@
 import AppIntents
 import SwiftData
+import SwiftUI
 import SwiftUtilities
 
 struct UpdateFutureItemsIntent: AppIntent, IntentPerformer, @unchecked Sendable {

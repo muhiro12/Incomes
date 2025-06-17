@@ -11,13 +11,11 @@ import SwiftData
 import XCTest
 
 final class ItemServiceXCTests: XCTestCase {
-
     // MARK: - Delete
 
     func testDelete() {
         XCTContext.runActivity(named: "") { _ in
             let context = testContext
-            let service = ItemService(context: context)
 
             let itemA = try! Item.create(context: context,
                                          date: .now,

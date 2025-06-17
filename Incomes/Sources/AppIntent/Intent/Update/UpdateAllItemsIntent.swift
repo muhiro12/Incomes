@@ -1,5 +1,6 @@
 import AppIntents
 import SwiftData
+import SwiftUI
 import SwiftUtilities
 
 struct UpdateAllItemsIntent: AppIntent, IntentPerformer, @unchecked Sendable {
