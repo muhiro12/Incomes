@@ -20,7 +20,7 @@ final class SpeechTranscriber: ObservableObject {
         guard let request else { return }
         let inputNode = audioEngine.inputNode
         inputNode.removeTap(onBus: .zero)
-        inputNode.installTap(onBus: .zero, bufferSize: 1024, format: inputNode.outputFormat(forBus: .zero)) { buffer, _ in
+        inputNode.installTap(onBus: .zero, bufferSize: 1_024, format: inputNode.outputFormat(forBus: .zero)) { buffer, _ in
             request.append(buffer)
         }
         audioEngine.prepare()
