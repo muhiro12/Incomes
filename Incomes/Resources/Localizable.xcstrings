@@ -1,6 +1,9 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "%@" : {
+
+    },
     "%@ - A payment of %@ is due on %@." : {
       "localizations" : {
         "en" : {
@@ -1744,6 +1747,9 @@
         }
       }
     },
+    "Item Form Inference" : {
+
+    },
     "Items" : {
       "localizations" : {
         "en" : {
@@ -3342,6 +3348,40 @@
         }
       }
     },
+    "Subscription" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Subscription"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Suscripción"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abonnement"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "サブスクリプション"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "订阅"
+          }
+        }
+      }
+    },
     "System" : {
       "localizations" : {
         "en" : {
@@ -3477,6 +3517,9 @@
           }
         }
       }
+    },
+    "Text" : {
+
     },
     "This is a repeating item." : {
       "localizations" : {

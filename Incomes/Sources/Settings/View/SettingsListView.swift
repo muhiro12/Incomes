@@ -51,7 +51,11 @@ extension SettingsListView: View {
                     Text("iCloud On")
                 }
             } else {
-                StoreSection()
+                NavigationLink {
+                    StoreListView()
+                } label: {
+                    Text("Subscription")
+                }
             }
             Section {
                 Picker(selection: $currencyCode) {
