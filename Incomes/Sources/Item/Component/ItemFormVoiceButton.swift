@@ -1,5 +1,5 @@
-import SwiftUI
 import AppIntents
+import SwiftUI
 
 @available(iOS 26.0, *)
 struct ItemFormVoiceButton: View {
@@ -15,7 +15,7 @@ struct ItemFormVoiceButton: View {
         Button(action: toggle) {
             Image(systemName: transcriber.isTranscribing ? "stop.circle" : "mic.circle")
         }
-        .onChange(of: transcriber.transcript) { newValue in
+        .onChange(of: transcriber.transcript) { _, newValue in
             guard transcriber.isTranscribing == false, newValue.isNotEmpty else { return }
             Task {
                 await updateForm(with: newValue)
@@ -33,7 +33,7 @@ struct ItemFormVoiceButton: View {
 
     private func updateForm(with text: String) async {
         do {
-            let inference = try await InferItemFormIntent.perform((text: text))
+            let inference = try await InferItemFormIntent.perform(text)
             if let newDate = inference.date.dateValueWithoutLocale(.yyyyMMdd) {
                 date = newDate
             }
