@@ -2,7 +2,7 @@ import AppIntents
 import SwiftData
 import SwiftUtilities
 
-struct DeleteItemIntent: AppIntent, IntentPerformer, @unchecked Sendable {
+struct DeleteItemIntent: AppIntent, IntentPerformer {
     static let title: LocalizedStringResource = .init("Delete Item", table: "AppIntents")
 
     @Parameter(title: "Item")

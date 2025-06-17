@@ -10,7 +10,7 @@ import AppIntents
 import SwiftData
 import SwiftUtilities
 
-struct CreateAndShowItemIntent: AppIntent, IntentPerformer, @unchecked Sendable {
+struct CreateAndShowItemIntent: AppIntent, IntentPerformer {
     static let title: LocalizedStringResource = .init("Create and Show Item", table: "AppIntents")
 
     @Parameter(title: "Date", kind: .date)

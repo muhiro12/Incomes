@@ -3,7 +3,7 @@ import SwiftData
 import SwiftUI
 import SwiftUtilities
 
-struct UpdateRepeatingItemsIntent: AppIntent, IntentPerformer, @unchecked Sendable {
+struct UpdateRepeatingItemsIntent: AppIntent, IntentPerformer {
     static let title: LocalizedStringResource = .init("Update Repeating Items", table: "AppIntents")
 
     @Parameter(title: "Item")
