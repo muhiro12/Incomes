@@ -2,7 +2,7 @@
 import SwiftData
 import Testing
 
-struct UpdateAllItemsIntentTests {
+struct UpdateItemIntentTest {
     let context: ModelContext
 
     init() {
@@ -21,7 +21,7 @@ struct UpdateAllItemsIntentTests {
                 repeatCount: 1
             )
         )
-        try UpdateAllItemsIntent.perform(
+        try UpdateItemIntent.perform(
             (
                 context: context,
                 item: item,
@@ -52,7 +52,7 @@ struct UpdateAllItemsIntentTests {
                 repeatCount: 3
             )
         )
-        try UpdateAllItemsIntent.perform(
+        try UpdateItemIntent.perform(
             (
                 context: context,
                 item: ItemEntity(fetchItems(context)[1])!,
@@ -63,26 +63,27 @@ struct UpdateAllItemsIntentTests {
                 category: "category2"
             )
         )
+
         let first = fetchItems(context)[0]
         let second = fetchItems(context)[1]
         let last = fetchItems(context)[2]
 
-        #expect(first.utcDate == isoDate("2000-03-02T00:00:00Z"))
-        #expect(first.content == "content2")
-        #expect(first.income == 100)
-        #expect(first.outgo == 200)
-        #expect(first.balance == -300)
+        #expect(first.utcDate == isoDate("2000-03-01T00:00:00Z"))
+        #expect(first.content == "content")
+        #expect(first.income == 200)
+        #expect(first.outgo == 100)
+        #expect(first.balance == 100)
 
         #expect(second.utcDate == isoDate("2000-02-02T00:00:00Z"))
         #expect(second.content == "content2")
         #expect(second.income == 100)
         #expect(second.outgo == 200)
-        #expect(second.balance == -200)
+        #expect(second.balance == 0)
 
-        #expect(last.utcDate == isoDate("2000-01-02T00:00:00Z"))
-        #expect(last.content == "content2")
-        #expect(last.income == 100)
-        #expect(last.outgo == 200)
-        #expect(last.balance == -100)
+        #expect(last.utcDate == isoDate("2000-01-01T00:00:00Z"))
+        #expect(last.content == "content")
+        #expect(last.income == 200)
+        #expect(last.outgo == 100)
+        #expect(last.balance == 100)
     }
 }

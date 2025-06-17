@@ -2,7 +2,7 @@
 import SwiftData
 import Testing
 
-struct GetNextItemIntentTests {
+struct GetPreviousItemIntentTest {
     let context: ModelContext
 
     init() {
@@ -32,7 +32,7 @@ struct GetNextItemIntentTests {
                 repeatCount: 1
             )
         )
-        let item = try #require(try GetNextItemIntent.perform((context: context, date: isoDate("2000-01-15T00:00:00Z"))))
+        let item = try #require(try GetPreviousItemIntent.perform((context: context, date: isoDate("2000-02-15T00:00:00Z"))))
         #expect(item.content == "B")
     }
 }

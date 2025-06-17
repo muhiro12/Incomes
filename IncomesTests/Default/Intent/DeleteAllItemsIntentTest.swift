@@ -2,7 +2,7 @@
 import SwiftData
 import Testing
 
-struct GetPreviousItemIntentTests {
+struct DeleteAllItemsIntentTest {
     let context: ModelContext
 
     init() {
@@ -14,25 +14,26 @@ struct GetPreviousItemIntentTests {
             (
                 context: context,
                 date: isoDate("2000-01-01T12:00:00Z"),
-                content: "A",
-                income: 0,
-                outgo: 100,
-                category: "Test",
+                content: "contentA",
+                income: 100,
+                outgo: 0,
+                category: "category",
                 repeatCount: 1
             )
         )
         _ = try CreateItemIntent.perform(
             (
                 context: context,
-                date: isoDate("2000-02-01T12:00:00Z"),
-                content: "B",
+                date: isoDate("2000-01-02T12:00:00Z"),
+                content: "contentB",
                 income: 0,
-                outgo: 200,
-                category: "Test",
+                outgo: 50,
+                category: "category",
                 repeatCount: 1
             )
         )
-        let item = try #require(try GetPreviousItemIntent.perform((context: context, date: isoDate("2000-02-15T00:00:00Z"))))
-        #expect(item.content == "B")
+        #expect(fetchItems(context).count == 2)
+        try DeleteAllItemsIntent.perform(context)
+        #expect(fetchItems(context).isEmpty)
     }
 }

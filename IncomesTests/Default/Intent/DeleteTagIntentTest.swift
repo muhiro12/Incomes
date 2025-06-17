@@ -2,7 +2,7 @@
 import SwiftData
 import Testing
 
-struct DeleteTagIntentTests {
+struct DeleteTagIntentTest {
     let context: ModelContext
 
     init() {

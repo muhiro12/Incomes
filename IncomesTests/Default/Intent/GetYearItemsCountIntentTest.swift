@@ -2,7 +2,7 @@
 import SwiftData
 import Testing
 
-struct GetYearItemsCountIntentTests {
+struct GetYearItemsCountIntentTest {
     let context: ModelContext
 
     init() {
