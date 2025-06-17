@@ -33,6 +33,35 @@ func makeUser() -> User {
 let user = User(name: "Carol") // ❌ Less preferred when type is not obvious
 ```
 
+### Multiline control‑flow and trailing‑closure formatting
+
+Avoid single‑line bodies for **any** control‑flow statement (`if`, `guard`, `while`, `switch`, etc.) or trailing closures.  
+Always place the body on its own indented line between braces to improve readability and make diffs cleaner.
+
+#### Preferred
+
+```swift
+guard let currentUser = optionalUser else {
+    return
+}
+
+if isDebugMode {
+    logger.debug("Entering debug state")
+}
+
+tasks.filter {
+    $0.isCompleted
+}
+```
+
+#### Not preferred
+
+```swift
+guard let currentUser = optionalUser else { return }
+if isDebugMode { logger.debug("Entering debug state") }
+tasks.filter { $0.isCompleted }
+```
+
 ## Markdown Guidelines
 
 ### Follow markdownlint rules for Markdown files
