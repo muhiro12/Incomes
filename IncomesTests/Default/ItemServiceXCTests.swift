@@ -278,7 +278,12 @@ final class ItemServiceXCTests: XCTestCase {
                                          repeatID: UUID())
             context.insert(itemB)
 
-            try! service.delete(items: [itemA])
+            try! DeleteItemIntent.perform(
+                (
+                    context: context,
+                    item: ItemEntity(itemA)!
+                )
+            )
 
             let result = fetchItems(context)
 
@@ -308,7 +313,7 @@ final class ItemServiceXCTests: XCTestCase {
                                          repeatID: UUID())
             context.insert(itemB)
 
-            try! service.deleteAll()
+            try! DeleteAllItemsIntent.perform((context: context))
 
             let result = fetchItems(context)
 
