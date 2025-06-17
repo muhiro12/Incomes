@@ -7,6 +7,7 @@
 //
 
 import AppIntents
+import SwiftData
 import SwiftUtilities
 
 struct GetNextItemDateIntent: AppIntent, IntentPerformer {
@@ -27,6 +28,7 @@ struct GetNextItemDateIntent: AppIntent, IntentPerformer {
         return item.date
     }
 
+    @MainActor
     func perform() throws -> some ReturnsValue<Date?> {
         guard let item = try GetNextItemIntent.perform((context: modelContainer.mainContext, date: date)) else {
             return .result(value: nil)

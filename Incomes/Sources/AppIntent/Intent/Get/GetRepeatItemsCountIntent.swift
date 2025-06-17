@@ -1,5 +1,6 @@
 import AppIntents
 import SwiftData
+import SwiftUtilities
 
 struct GetRepeatItemsCountIntent: AppIntent, IntentPerformer {
     static let title: LocalizedStringResource = .init("Get Repeat Items Count", table: "AppIntents")

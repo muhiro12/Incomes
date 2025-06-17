@@ -28,6 +28,7 @@ struct ShowChartsIntent: AppIntent, IntentPerformer {
         return items.isEmpty ? nil : items
     }
 
+    @MainActor
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
         guard let items = try Self.perform((context: modelContainer.mainContext, date: date)) else {
             return .result(dialog: .init(.init("Not Found", table: "AppIntents")))

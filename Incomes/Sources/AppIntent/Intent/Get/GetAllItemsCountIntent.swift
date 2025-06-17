@@ -1,5 +1,6 @@
 import AppIntents
 import SwiftData
+import SwiftUtilities
 
 struct GetAllItemsCountIntent: AppIntent, IntentPerformer {
     static let title: LocalizedStringResource = .init("Get All Items Count", table: "AppIntents")

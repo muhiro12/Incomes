@@ -7,6 +7,7 @@
 //
 
 import AppIntents
+import SwiftData
 import SwiftUtilities
 
 struct ShowPreviousItemsIntent: AppIntent, IntentPerformer {
@@ -24,6 +25,7 @@ struct ShowPreviousItemsIntent: AppIntent, IntentPerformer {
         try GetPreviousItemsIntent.perform(input)
     }
 
+    @MainActor
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
         guard let items = try Self.perform((context: modelContainer.mainContext, date: date)),
               items.isNotEmpty else {

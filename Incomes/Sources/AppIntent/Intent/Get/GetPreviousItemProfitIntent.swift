@@ -7,6 +7,7 @@
 //
 
 import AppIntents
+import SwiftData
 import SwiftUI
 import SwiftUtilities
 
@@ -29,6 +30,7 @@ struct GetPreviousItemProfitIntent: AppIntent, IntentPerformer {
         return .init(amount: item.profit, currencyCode: currencyCode)
     }
 
+    @MainActor
     func perform() throws -> some ReturnsValue<IntentCurrencyAmount?> {
         guard let amount = try Self.perform((context: modelContainer.mainContext, date: date)) else {
             return .result(value: nil)

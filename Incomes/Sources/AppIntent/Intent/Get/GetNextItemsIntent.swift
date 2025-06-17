@@ -28,6 +28,7 @@ struct GetNextItemsIntent: AppIntent, IntentPerformer {
         return try input.context.fetch(.items(.dateIsSameDayAs(item.localDate)))
     }
 
+    @MainActor
     func perform() throws -> some ReturnsValue<[ItemEntity]> {
         guard let items = try Self.perform((context: modelContainer.mainContext, date: date)) else {
             return .result(value: .empty)

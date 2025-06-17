@@ -26,6 +26,7 @@ struct GetItemsIntent: AppIntent, IntentPerformer {
         )
     }
 
+    @MainActor
     func perform() throws -> some ReturnsValue<[ItemEntity]> {
         let items = try Self.perform((context: modelContainer.mainContext, date: date))
         return .result(value: items.compactMap(ItemEntity.init))
