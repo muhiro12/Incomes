@@ -9,7 +9,8 @@ struct ItemFormVoiceButton: View {
     @Binding var outgo: String
     @Binding var category: String
 
-    @State private var transcriber = SpeechTranscriber()
+    @StateObject private var transcriber = SpeechTranscriber()
+
     @State private var isProcessing = false
     @State private var errorMessage: String?
 
@@ -26,10 +27,13 @@ struct ItemFormVoiceButton: View {
         } message: {
             Text(errorMessage ?? "")
         }
-        .onChange(of: transcriber.transcript) { _, newValue in
-            guard transcriber.isTranscribing == false, newValue.isNotEmpty else { return }
+        .onChange(of: transcriber.isTranscribing) {
+            guard !transcriber.isTranscribing,
+                  transcriber.transcript.isNotEmpty else {
+                return
+            }
             Task {
-                await updateForm(with: newValue)
+                await updateForm(with: transcriber.transcript)
             }
         }
     }
