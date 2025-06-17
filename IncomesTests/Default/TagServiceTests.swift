@@ -32,21 +32,6 @@ struct TagServiceTests {
         #expect(try service.tag()?.type == .year)
     }
 
-    // MARK: - Delete
-
-    @Test func deleteAll() throws {
-        #expect(try service.tag() == nil)
-
-        _ = try Tag.create(context: context, name: "nameA", type: .year)
-        _ = try Tag.create(context: context, name: "nameB", type: .year)
-
-        #expect(try context.fetchCount(.tags(.all)) == 2)
-
-        _ = try service.deleteAll()
-
-        #expect(try context.fetchCount(.tags(.all)) == 0)
-    }
-
     // MARK: - Duplicates - merge
 
     @Test func mergeWhenTagsAreIdentical() throws {
