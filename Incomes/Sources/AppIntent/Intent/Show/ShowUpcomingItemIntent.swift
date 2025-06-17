@@ -9,21 +9,21 @@
 import AppIntents
 import SwiftUtilities
 
-struct ShowUpcomingItemIntent: AppIntent, IntentPerformer, @unchecked Sendable {
+struct ShowUpcomingItemIntent: AppIntent, IntentPerformer {
     static let title: LocalizedStringResource = .init("Show Upcoming Item", table: "AppIntents")
 
-    @Dependency private var itemService: ItemService
+    @Dependency private var modelContainer: ModelContainer
 
-    typealias Input = (date: Date, itemService: ItemService)
+    typealias Input = (context: ModelContext, date: Date)
     typealias Output = ItemEntity?
 
     static func perform(_ input: Input) throws -> Output {
-        try GetNextItemIntent.perform((date: input.date, itemService: input.itemService))
+        try GetNextItemIntent.perform((context: input.context, date: input.date))
     }
 
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
         let date = Date.now
-        guard let item = try GetNextItemIntent.perform((date: date, itemService: itemService)) else {
+        guard let item = try GetNextItemIntent.perform((context: modelContainer.mainContext, date: date)) else {
             return .result(dialog: .init(.init("Not Found", table: "AppIntents")))
         }
         return .result(dialog: .init(stringLiteral: item.content)) {

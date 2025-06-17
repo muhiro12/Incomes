@@ -9,12 +9,12 @@
 import SwiftUI
 
 struct HomeListView {
-    @Environment(ItemService.self)
-    private var itemService
     @Environment(TagService.self)
     private var tagService
     @Environment(NotificationService.self)
     private var notificationService
+    @Environment(\.modelContext)
+    private var context
 
     @AppStorage(.isSubscribeOn)
     private var isSubscribeOn
@@ -84,7 +84,9 @@ extension HomeListView: View {
             if !hasLoaded {
                 hasLoaded = true
                 yearTag = try? tagService.tag(.tags(.nameIs(Date.now.stringValueWithoutLocale(.yyyy), type: .year)))
-                isIntroductionPresented = (try? itemService.itemsCount().isZero) ?? false
+                isIntroductionPresented = (
+                    try? GetAllItemsCountIntent.perform(context).isZero
+                ) ?? false
             }
 
             notificationService.refresh()

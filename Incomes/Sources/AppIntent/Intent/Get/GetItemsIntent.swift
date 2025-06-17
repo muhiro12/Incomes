@@ -7,25 +7,27 @@
 //
 
 import AppIntents
+import SwiftData
 import SwiftUtilities
 
-struct GetItemsIntent: AppIntent, IntentPerformer, @unchecked Sendable {
+struct GetItemsIntent: AppIntent, IntentPerformer {
     static let title: LocalizedStringResource = .init("Get Items", table: "AppIntents")
 
     @Parameter(title: "Date", kind: .date)
     private var date: Date
 
-    @Dependency private var itemService: ItemService
-
-    typealias Input = (date: Date, itemService: ItemService)
+    @Dependency private var modelContainer: ModelContainer
+    typealias Input = (context: ModelContext, date: Date)
     typealias Output = [Item]
 
     static func perform(_ input: Input) throws -> Output {
-        try input.itemService.items(.items(.dateIsSameMonthAs(input.date)))
+        try input.context.fetch(
+            .items(.dateIsSameMonthAs(input.date))
+        )
     }
 
     func perform() throws -> some ReturnsValue<[ItemEntity]> {
-        let items = try Self.perform((date: date, itemService: itemService))
+        let items = try Self.perform((context: modelContainer.mainContext, date: date))
         return .result(value: items.compactMap(ItemEntity.init))
     }
 }

@@ -13,7 +13,7 @@ import UserNotifications
 @MainActor
 @Observable
 final class NotificationService: NSObject {
-    private let itemService: ItemService
+    private let context: ModelContext
 
     private(set) var hasNotification = false
     private(set) var shouldShowNotification = false
@@ -22,8 +22,8 @@ final class NotificationService: NSObject {
         UNUserNotificationCenter.current()
     }
 
-    init(itemService: ItemService) {
-        self.itemService = itemService
+    init(context: ModelContext) {
+        self.context = context
         super.init()
         center.delegate = self
     }
@@ -50,7 +50,7 @@ final class NotificationService: NSObject {
     }
 
     func sendTestNotification() {
-        guard let item = try? itemService.item(.items(.dateIsAfter(.now), order: .forward)) else {
+        guard let item = try? GetNextItemIntent.perform((context: context, date: .now)) else {
             return
         }
 
@@ -100,7 +100,7 @@ private extension NotificationService {
         )
         descriptor.fetchLimit = 20
 
-        guard let items = try? itemService.items(descriptor) else {
+        guard let items = try? context.fetch(descriptor) else {
             return .empty
         }
 
