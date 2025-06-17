@@ -11,13 +11,6 @@ import SwiftData
 
 @Model
 final class Tag {
-    enum TagType: String {
-        case year = "aae8af65"
-        case yearMonth = "27c9be4b"
-        case content = "e2d390d9"
-        case category = "a7a130f4"
-    }
-
     private(set) var name = String.empty
     private(set) var typeID = String.empty
 
@@ -25,7 +18,7 @@ final class Tag {
 
     private init() {}
 
-    static func create(context: ModelContext, name: String, type: Tag.TagType) throws -> Tag {
+    static func create(context: ModelContext, name: String, type: TagType) throws -> Tag {
         let tag = try context.fetchFirst(.tags(.nameIs(name, type: type))) ?? .init()
         context.insert(tag)
         tag.name = name
@@ -60,7 +53,7 @@ extension Tag: Identifiable {}
 // MARK: - Test
 
 extension Tag {
-    static func createIgnoringDuplicates(context: ModelContext, name: String, type: Tag.TagType) throws -> Tag {
+    static func createIgnoringDuplicates(context: ModelContext, name: String, type: TagType) throws -> Tag {
         let tag = Tag()
         context.insert(tag)
         tag.name = name

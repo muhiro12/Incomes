@@ -14,10 +14,10 @@ enum TagPredicate {
     case none
     case idIs(Tag.ID)
     case isSameWith(Tag)
-    case typeIs(Tag.TagType)
-    case nameIs(String, type: Tag.TagType)
-    case nameContains(String, type: Tag.TagType)
-    case nameStartsWith(String, type: Tag.TagType)
+    case typeIs(TagType)
+    case nameIs(String, type: TagType)
+    case nameContains(String, type: TagType)
+    case nameStartsWith(String, type: TagType)
 
     var value: Predicate<Tag> {
         switch self {

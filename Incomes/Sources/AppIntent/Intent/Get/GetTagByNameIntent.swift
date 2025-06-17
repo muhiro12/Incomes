@@ -8,11 +8,11 @@ struct GetTagByNameIntent: AppIntent, IntentPerformer {
     @Parameter(title: "Name")
     private var name: String
     @Parameter(title: "Type")
-    private var type: Tag.TagType
+    private var type: TagType
 
     @Dependency private var modelContainer: ModelContainer
 
-    typealias Input = (context: ModelContext, name: String, type: Tag.TagType)
+    typealias Input = (context: ModelContext, name: String, type: TagType)
     typealias Output = Tag?
 
     static func perform(_ input: Input) throws -> Output {

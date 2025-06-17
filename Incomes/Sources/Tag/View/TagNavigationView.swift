@@ -10,9 +10,9 @@ import SwiftUI
 struct TagNavigationView: View {
     @State private var path: IncomesPath?
 
-    private let tagType: Tag.TagType
+    private let tagType: TagType
 
-    init(tagType: Tag.TagType) {
+    init(tagType: TagType) {
         self.tagType = tagType
     }
 

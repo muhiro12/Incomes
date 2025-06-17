@@ -24,9 +24,9 @@ struct TagListView {
     @State private var isDialogPresented = false
     @State private var willDeleteTags = [Tag]()
 
-    private let tagType: Tag.TagType
+    private let tagType: TagType
 
-    init(tagType: Tag.TagType, selection: Binding<IncomesPath?> = .constant(nil)) {
+    init(tagType: TagType, selection: Binding<IncomesPath?> = .constant(nil)) {
         self.tagType = tagType
         self._tags = .init(.tags(.typeIs(tagType)))
         self._path = selection

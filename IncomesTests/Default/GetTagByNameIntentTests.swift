@@ -12,7 +12,7 @@ struct GetTagByNameIntentTests {
     @Test func perform() throws {
         _ = try Tag.create(context: context, name: "name", type: .year)
         let tag = try #require(
-            GetTagByNameIntent.perform(
+            try GetTagByNameIntent.perform(
                 (
                     context: context,
                     name: "name",

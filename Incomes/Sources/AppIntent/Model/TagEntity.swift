@@ -59,8 +59,8 @@ extension TagEntity: ModelBridgeable {
 }
 
 extension TagEntity {
-    var type: Tag.TagType? {
-        Tag.TagType(rawValue: typeID)
+    var type: TagType? {
+        TagType(rawValue: typeID)
     }
 
     var displayName: String {

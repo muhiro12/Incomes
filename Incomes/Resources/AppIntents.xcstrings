@@ -257,6 +257,9 @@
     "Get All Items Count" : {
 
     },
+    "Get All Tags" : {
+
+    },
     "Get Items" : {
       "localizations" : {
         "en" : {
@@ -632,6 +635,12 @@
       }
     },
     "Get Repeat Items Count" : {
+
+    },
+    "Get Tag By ID" : {
+
+    },
+    "Get Tag By Name" : {
 
     },
     "Get Year Items Count" : {

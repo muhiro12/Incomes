@@ -5,6 +5,9 @@ import SwiftUtilities
 struct GetTagByIDIntent: AppIntent, IntentPerformer {
     static let title: LocalizedStringResource = .init("Get Tag By ID", table: "AppIntents")
 
+    @Parameter(title: "Tag ID")
+    var id: String
+
     @Dependency private var modelContainer: ModelContainer
 
     typealias Input = (context: ModelContext, id: PersistentIdentifier)
@@ -18,6 +21,11 @@ struct GetTagByIDIntent: AppIntent, IntentPerformer {
 
     @MainActor
     func perform() throws -> some ReturnsValue<TagEntity?> {
-        fatalError("This intent is designed for programmatic use only")
+        guard let persistentID = try? PersistentIdentifier(base64Encoded: id),
+              let tag = try Self.perform((context: modelContainer.mainContext, id: persistentID)),
+              let tagEntity = TagEntity(tag) else {
+            return .result(value: nil)
+        }
+        return .result(value: tagEntity)
     }
 }
