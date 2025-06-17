@@ -56,7 +56,6 @@ struct ListItem: View {
         } preview: {
             ItemNavigationView()
                 .environment(item)
-                .environment(\.modelContext, context)
         }
         .sheet(isPresented: $isDetailPresented) {
             ItemNavigationView()
