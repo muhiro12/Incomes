@@ -19,11 +19,6 @@ final class TagService {
         self.context = context
     }
 
-    // MARK: - Fetch
-
-    func tag(_ descriptor: FetchDescriptor<Tag> = .tags(.all)) throws -> Tag? {
-        try context.fetchFirst(descriptor)
-    }
 
     // MARK: - Duplicates
 
@@ -52,11 +47,10 @@ final class TagService {
 
     func resolveAllDuplicates(in tags: [Tag]) throws {
         try tags.forEach { tag in
-            try merge(
-                tags: self.tags(
-                    descriptor: .tags(.isSameWith(tag))
-                )
+            let duplicates = try context.fetch(
+                .tags(.isSameWith(tag))
             )
+            try merge(tags: duplicates)
         }
     }
 
@@ -73,14 +67,7 @@ final class TagService {
     }
 
     func updateHasDuplicates() throws {
-        hasDuplicates = findDuplicates(
-            in: try tags()
-        ).isNotEmpty
-    }
-}
-
-private extension TagService {
-    func tags(descriptor: FetchDescriptor<Tag> = .tags(.all)) throws -> [Tag] {
-        try context.fetch(descriptor)
+        let allTags = try context.fetch(.tags(.all))
+        hasDuplicates = findDuplicates(in: allTags).isNotEmpty
     }
 }

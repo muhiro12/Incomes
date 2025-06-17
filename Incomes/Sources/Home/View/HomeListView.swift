@@ -83,7 +83,13 @@ extension HomeListView: View {
         .task {
             if !hasLoaded {
                 hasLoaded = true
-                yearTag = try? tagService.tag(.tags(.nameIs(Date.now.stringValueWithoutLocale(.yyyy), type: .year)))
+                yearTag = try? GetTagByNameIntent.perform(
+                    (
+                        context: context,
+                        name: Date.now.stringValueWithoutLocale(.yyyy),
+                        type: .year
+                    )
+                )
                 isIntroductionPresented = (
                     try? GetAllItemsCountIntent.perform(context).isZero
                 ) ?? false
