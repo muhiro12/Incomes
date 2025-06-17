@@ -6,7 +6,7 @@ struct GetRepeatItemsCountIntent: AppIntent, IntentPerformer {
     static let title: LocalizedStringResource = .init("Get Repeat Items Count", table: "AppIntents")
 
     @Parameter(title: "Repeat ID")
-    private var repeatID: UUID
+    private var repeatID: String
 
     @Dependency private var modelContainer: ModelContainer
 
@@ -19,6 +19,9 @@ struct GetRepeatItemsCountIntent: AppIntent, IntentPerformer {
 
     @MainActor
     func perform() throws -> some ReturnsValue<Int> {
-        .result(value: try Self.perform((context: modelContainer.mainContext, repeatID: repeatID)))
+        guard let uuid = UUID(uuidString: repeatID) else {
+            throw DebugError.default
+        }
+        return .result(value: try Self.perform((context: modelContainer.mainContext, repeatID: uuid)))
     }
 }
