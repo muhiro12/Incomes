@@ -145,6 +145,17 @@ extension ItemFormView: View {
                 SuggestionButtonGroup(input: $category, type: .category)
                     .hidden(focusedField != .category)
             }
+            ToolbarItem(placement: .bottomBar) {
+                if #available(iOS 26.0, *) {
+                    ItemFormVoiceButton(
+                        date: $date,
+                        content: $content,
+                        income: $income,
+                        outgo: $outgo,
+                        category: $category
+                    )
+                }
+            }
         }
         .gesture(
             DragGesture()

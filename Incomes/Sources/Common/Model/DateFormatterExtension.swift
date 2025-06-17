@@ -14,6 +14,7 @@ extension DateFormatter {
         case yyyyMM
         case yyyyMMM
         case MMMd
+        case yyyyMMdd
         case yyyyMMMd
     }
 
