@@ -22,7 +22,7 @@ final class ItemService {
     // MARK: - Fetch
 
     func model(of entity: ItemEntity) throws -> Item {
-        let descriptor = FetchDescriptor.items(.idIs(.init(base64Encoded: entity.id)))
+        let descriptor = FetchDescriptor.items(.idIs(try .init(base64Encoded: entity.id)))
         guard let model = try context.fetchFirst(descriptor) else {
             throw ItemError.itemNotFound
         }
@@ -35,4 +35,3 @@ final class ItemService {
         try calculator.calculate(after: date)
     }
 }
-
