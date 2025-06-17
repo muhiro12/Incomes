@@ -178,7 +178,7 @@ struct ItemServiceTest {
             outgo: 300,
             category: "Food"
         )
-        let item = try #require(try fetchItems(context).first)
+        let item = try #require(fetchItems(context).first)
         #expect(item.balance == 700)
     }
 
@@ -227,7 +227,7 @@ struct ItemServiceTest {
             outgo: 0,
             category: "Empty"
         )
-        let item = try #require(try fetchItems(context).first)
+        let item = try #require(fetchItems(context).first)
         #expect(item.balance == 0)
     }
 
@@ -261,7 +261,6 @@ struct ItemServiceTest {
             outgo: 0,
             category: "Test"
         )
-        let items = try context.fetch(.items(.all))
         let found = try #require(try context.fetchFirst(.items(.idIs(.init(base64Encoded: item.id)))))
         #expect(found.utcDate == isoDate("2024-03-15T00:00:00Z"))
     }
@@ -278,7 +277,6 @@ struct ItemServiceTest {
             outgo: 0,
             category: "Test"
         )
-        let items = try context.fetch(.items(.all))
         let found = try #require(try context.fetchFirst(.items(.idIs(.init(base64Encoded: item.id)))))
         #expect(found.utcDate == isoDate("2024-03-15T00:00:00Z"))
     }
@@ -313,7 +311,7 @@ struct ItemServiceTest {
             outgo: 50,
             category: "Misc"
         )
-        var item = try #require(try fetchItems(context).first)
+        var item = try #require(fetchItems(context).first)
         try UpdateItemIntent.perform(
             (
                 context: context,
@@ -325,7 +323,7 @@ struct ItemServiceTest {
                 category: "UpdatedCat"
             )
         )
-        item = try #require(try fetchItems(context).first)
+        item = try #require(fetchItems(context).first)
         #expect(item.balance == 50)
         #expect(item.content == "Updated")
         #expect(item.utcDate == isoDate("2024-01-02T00:00:00Z"))
@@ -342,7 +340,7 @@ struct ItemServiceTest {
             outgo: 0,
             category: "Original"
         )
-        let item = try #require(try fetchItems(context).first)
+        let item = try #require(fetchItems(context).first)
         let oldRepeatID = item.repeatID
 
         try UpdateItemIntent.perform(
@@ -356,7 +354,7 @@ struct ItemServiceTest {
                 category: "Updated"
             )
         )
-        let updated = try #require(try fetchItems(context).first)
+        let updated = try #require(fetchItems(context).first)
         #expect(updated.repeatID != oldRepeatID)
     }
 
@@ -473,7 +471,7 @@ struct ItemServiceTest {
             outgo: 50,
             category: "OneTime"
         )
-        let item = try #require(try fetchItems(context).first)
+        let item = try #require(fetchItems(context).first)
         try UpdateFutureItemsIntent.perform(
             (
                 context: context,
@@ -485,7 +483,7 @@ struct ItemServiceTest {
                 category: "OneTimeUpdated"
             )
         )
-        let updated = try #require(try fetchItems(context).first)
+        let updated = try #require(fetchItems(context).first)
         #expect(updated.content == "SoloUpdated")
         #expect(updated.income == 100)
     }
@@ -502,7 +500,7 @@ struct ItemServiceTest {
             category: "Health",
             repeatCount: 3
         )
-        let items = try context.fetch(.items(.all))
+        _ = try context.fetch(.items(.all))
         let target = try #require(try context.fetchFirst(.items(.idIs(.init(base64Encoded: item.id)))))
         try UpdateAllItemsIntent.perform(
             (
@@ -537,7 +535,7 @@ struct ItemServiceTest {
             outgo: 0,
             category: "Temp"
         )
-        let item = try #require(try fetchItems(context).first)
+        let item = try #require(fetchItems(context).first)
         try DeleteItemIntent.perform(
             (
                 context: context,
@@ -606,7 +604,7 @@ struct ItemServiceTest {
             outgo: 50,
             category: "Test"
         )
-        var item = try #require(try fetchItems(context).first)
+        var item = try #require(fetchItems(context).first)
         try UpdateItemIntent.perform(
             (
                 context: context,
@@ -618,7 +616,7 @@ struct ItemServiceTest {
                 category: item.category?.name ?? ""
             )
         )
-        item = try #require(try fetchItems(context).first)
+        item = try #require(fetchItems(context).first)
         #expect(item.balance == 10)
     }
 
@@ -633,12 +631,12 @@ struct ItemServiceTest {
             outgo: 60,
             category: "Check"
         )
-        let item = try #require(try fetchItems(context).first)
+        let item = try #require(fetchItems(context).first)
         let oldBalance = item.balance
 
         try service.recalculate(after: isoDate("2023-12-01T00:00:00Z"))
 
-        let reloaded = try #require(try fetchItems(context).first)
+        let reloaded = try #require(fetchItems(context).first)
         #expect(reloaded.balance == oldBalance)
     }
 
