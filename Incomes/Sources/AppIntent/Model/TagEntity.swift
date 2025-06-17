@@ -7,6 +7,7 @@
 //
 
 import AppIntents
+import SwiftUtilities
 
 @Observable
 final class TagEntity: AppEntity {
@@ -77,4 +78,3 @@ extension TagEntity {
         }
     }
 }
-

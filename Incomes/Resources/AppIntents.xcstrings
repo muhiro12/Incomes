@@ -109,6 +109,9 @@
         }
       }
     },
+    "%lld Tags" : {
+
+    },
     "Create and Show Item" : {
       "localizations" : {
         "en" : {
@@ -1120,6 +1123,9 @@
           }
         }
       }
+    },
+    "Tag" : {
+
     },
     "This Month’s Charts" : {
       "localizations" : {
