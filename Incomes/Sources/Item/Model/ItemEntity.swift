@@ -7,6 +7,7 @@
 //
 
 import AppIntents
+import SwiftData
 import SwiftUtilities
 
 @Observable
@@ -79,5 +80,15 @@ extension ItemEntity: ModelBridgeable {
 extension ItemEntity {
     var isProfitable: Bool {
         profit.isPlus
+    }
+
+    func model(in context: ModelContext) throws -> Item {
+        guard
+            let id = try? PersistentIdentifier(base64Encoded: id),
+            let model = try context.fetchFirst(.items(.idIs(id)))
+        else {
+            throw ItemError.itemNotFound
+        }
+        return model
     }
 }

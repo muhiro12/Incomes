@@ -14,11 +14,9 @@ import Testing
 @Suite(.serialized)
 struct ItemPredicateTest {
     let context: ModelContext
-    let service: ItemService
 
     init() {
         context = testContext
-        service = .init(context: context)
     }
 
     // MARK: - All

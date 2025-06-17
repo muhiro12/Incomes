@@ -14,11 +14,9 @@ import Testing
 @Suite(.serialized)
 struct ItemServiceTest {
     let context: ModelContext
-    let service: ItemService
 
     init() {
         context = testContext
-        service = .init(context: context)
     }
 
     @discardableResult
@@ -634,7 +632,9 @@ struct ItemServiceTest {
         let item = try #require(fetchItems(context).first)
         let oldBalance = item.balance
 
-        try service.recalculate(after: isoDate("2023-12-01T00:00:00Z"))
+        try RecalculateItemIntent.perform(
+            (context: context, date: isoDate("2023-12-01T00:00:00Z"))
+        )
 
         let reloaded = try #require(fetchItems(context).first)
         #expect(reloaded.balance == oldBalance)
@@ -671,7 +671,9 @@ struct ItemServiceTest {
             )
         )
 
-        try service.recalculate(after: isoDate("2024-01-15T00:00:00Z"))
+        try RecalculateItemIntent.perform(
+            (context: context, date: isoDate("2024-01-15T00:00:00Z"))
+        )
         items = try context.fetch(.items(.all)).sorted { $0.utcDate < $1.utcDate }
         #expect(items[0].balance == 50)
         #expect(items[1].balance == 470)
@@ -696,7 +698,9 @@ struct ItemServiceTest {
             category: "TZTest"
         )
 
-        try service.recalculate(after: isoDate("2024-02-01T00:00:00Z"))
+        try RecalculateItemIntent.perform(
+            (context: context, date: isoDate("2024-02-01T00:00:00Z"))
+        )
         let items = try context.fetch(.items(.all))
 
         #expect(items[0].content == "LateFeb")

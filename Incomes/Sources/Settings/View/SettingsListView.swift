@@ -10,8 +10,6 @@ import SwiftUI
 import SwiftUtilities
 
 struct SettingsListView {
-    @Environment(ItemService.self)
-    private var itemService
     @Environment(TagService.self)
     private var tagService
     @Environment(\.modelContext)

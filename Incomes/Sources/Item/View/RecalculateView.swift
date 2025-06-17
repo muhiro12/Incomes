@@ -10,7 +10,7 @@ import SwiftUI
 import SwiftUtilities
 
 struct RecalculateView: View {
-    @Environment(ItemService.self) private var itemService
+    @Environment(\.modelContext) private var context
 
     @Binding private var selectedDate: Date
     @Binding private var isRecalculating: Bool
@@ -36,7 +36,9 @@ struct RecalculateView: View {
                     Task {
                         isRecalculating = true
                         do {
-                            try itemService.recalculate(after: selectedDate)
+                            try RecalculateItemIntent.perform(
+                                (context: context, date: selectedDate)
+                            )
                             try await Task.sleep(for: .seconds(5))
                         } catch {
                             assertionFailure(error.localizedDescription)

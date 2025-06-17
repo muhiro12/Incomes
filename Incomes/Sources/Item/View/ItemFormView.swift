@@ -31,8 +31,6 @@ struct ItemFormView {
 
     @Environment(ItemEntity.self)
     private var item: ItemEntity?
-    @Environment(ItemService.self)
-    private var itemService
     @Environment(\.modelContext)
     private var context
 
@@ -232,9 +230,9 @@ private extension ItemFormView {
     func save() {
         do {
             if let entity = item,
-               let model = try? itemService.model(of: entity),
+               let model = try? entity.model(in: context),
                try GetRepeatItemsCountIntent.perform(
-                (context: context, repeatID: model.repeatID)
+                   (context: context, repeatID: model.repeatID)
                ) > 1 {
                 presentToActionSheet()
             } else {
