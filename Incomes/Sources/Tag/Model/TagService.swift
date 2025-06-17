@@ -19,7 +19,6 @@ final class TagService {
         self.context = context
     }
 
-
     // MARK: - Duplicates
 
     func merge(tags: [Tag]) throws {
