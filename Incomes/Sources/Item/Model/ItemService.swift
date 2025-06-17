@@ -40,53 +40,6 @@ final class ItemService {
         try context.fetchCount(descriptor)
     }
 
-    // MARK: - Update
-
-    func update(item: Item,
-                date: Date,
-                content: String,
-                income: Decimal,
-                outgo: Decimal,
-                category: String) throws {
-        try item.modify(date: date,
-                        content: content,
-                        income: income,
-                        outgo: outgo,
-                        category: category,
-                        repeatID: .init())
-        try calculator.calculate(for: [item])
-    }
-
-    func updateForFutureItems(item: Item,
-                              date: Date,
-                              content: String,
-                              income: Decimal,
-                              outgo: Decimal,
-                              category: String) throws {
-        try updateForRepeatingItems(item: item,
-                                    date: date,
-                                    content: content,
-                                    income: income,
-                                    outgo: outgo,
-                                    category: category,
-                                    descriptor: .items(.repeatIDAndDateIsAfter(repeatID: item.repeatID, date: item.localDate)))
-    }
-
-    func updateForAllItems(item: Item,
-                           date: Date,
-                           content: String,
-                           income: Decimal,
-                           outgo: Decimal,
-                           category: String) throws {
-        try updateForRepeatingItems(item: item,
-                                    date: date,
-                                    content: content,
-                                    income: income,
-                                    outgo: outgo,
-                                    category: category,
-                                    descriptor: .items(.repeatIDIs(item.repeatID)))
-    }
-
     // MARK: - Calculate balance
 
     func recalculate(after date: Date) throws {
@@ -94,35 +47,3 @@ final class ItemService {
     }
 }
 
-private extension ItemService {
-    func updateForRepeatingItems(item: Item,
-                                 date: Date,
-                                 content: String,
-                                 income: Decimal,
-                                 outgo: Decimal,
-                                 category: String,
-                                 descriptor: FetchDescriptor<Item>) throws {
-        let components = Calendar.current.dateComponents([.year, .month, .day],
-                                                         from: item.localDate,
-                                                         to: date)
-
-        let repeatID = UUID()
-        let items = try context.fetch(descriptor)
-        try items.forEach {
-            guard let newDate = Calendar.current.date(byAdding: components, to: $0.localDate) else {
-                assertionFailure()
-                return
-            }
-            try $0.modify(
-                date: newDate,
-                content: content,
-                income: income,
-                outgo: outgo,
-                category: category,
-                repeatID: repeatID
-            )
-        }
-
-        try calculator.calculate(for: items)
-    }
-}
