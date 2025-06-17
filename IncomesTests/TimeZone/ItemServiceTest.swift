@@ -54,7 +54,7 @@ struct ItemServiceTest {
             outgo: 50,
             category: "Test"
         )
-        let item = try #require(context.fetchFirst(.items(.all)))
+        let item = try #require(try context.fetchFirst(.items(.all)))
         #expect(item.content == "First")
     }
 
@@ -77,7 +77,7 @@ struct ItemServiceTest {
             category: "Transport"
         )
         let predicate = ItemPredicate.outgoIsGreaterThanOrEqualTo(amount: 400, onOrAfter: isoDate("2024-01-01T00:00:00Z"))
-        let item = try #require(context.fetchFirst(.items(predicate)))
+        let item = try #require(try context.fetchFirst(.items(predicate)))
         #expect(item.content == "Food")
     }
 
@@ -178,7 +178,7 @@ struct ItemServiceTest {
             outgo: 300,
             category: "Food"
         )
-        let item = try #require(fetchItems(context).first)
+        let item = try #require(try fetchItems(context).first)
         #expect(item.balance == 700)
     }
 
@@ -227,7 +227,7 @@ struct ItemServiceTest {
             outgo: 0,
             category: "Empty"
         )
-        let item = try #require(fetchItems(context).first)
+        let item = try #require(try fetchItems(context).first)
         #expect(item.balance == 0)
     }
 
@@ -254,15 +254,16 @@ struct ItemServiceTest {
         NSTimeZone.default = timeZone
 
         let boundaryDate = shiftedDate("2024-03-15T00:00:00Z")
-        _ = try createItem(
+        let item = try createItem(
             date: boundaryDate,
             content: "MidnightUTC",
             income: 100,
             outgo: 0,
             category: "Test"
         )
-        let item = try #require(try item())
-        #expect(item.utcDate == isoDate("2024-03-15T00:00:00Z"))
+        let items = try context.fetch(.items(.all))
+        let found = try #require(try context.fetchFirst(.items(.idIs(.init(base64Encoded: item.id)))))
+        #expect(found.utcDate == isoDate("2024-03-15T00:00:00Z"))
     }
 
     @Test("create stores JST midnight as UTC start of day", arguments: timeZones)
@@ -270,15 +271,16 @@ struct ItemServiceTest {
         NSTimeZone.default = timeZone
 
         let jstDate = shiftedDate("2024-03-15T09:00:00Z")  // 00:00 UTC
-        _ = try createItem(
+        let item = try createItem(
             date: jstDate,
             content: "JSTToUTC",
             income: 100,
             outgo: 0,
             category: "Test"
         )
-        let item = try #require(try item())
-        #expect(item.utcDate == isoDate("2024-03-15T00:00:00Z"))
+        let items = try context.fetch(.items(.all))
+        let found = try #require(try context.fetchFirst(.items(.idIs(.init(base64Encoded: item.id)))))
+        #expect(found.utcDate == isoDate("2024-03-15T00:00:00Z"))
     }
 
     @Test("create rounds input date to start of day UTC", arguments: timeZones)
@@ -287,15 +289,15 @@ struct ItemServiceTest {
 
         let inputDate = isoDate("2024-03-15T10:30:00Z")
         let expectedDate = Calendar.utc.startOfDay(for: inputDate)
-        _ = try createItem(
+        let item = try createItem(
             date: inputDate,
             content: "RoundedTime",
             income: 100,
             outgo: 0,
             category: "Test"
         )
-        let item = try #require(try item())
-        #expect(item.utcDate == expectedDate)
+        let found = try #require(try context.fetchFirst(.items(.idIs(.init(base64Encoded: item.id)))))
+        #expect(found.utcDate == expectedDate)
     }
 
     // MARK: - Update
@@ -311,7 +313,7 @@ struct ItemServiceTest {
             outgo: 50,
             category: "Misc"
         )
-        var item = try #require(fetchItems(context).first)
+        var item = try #require(try fetchItems(context).first)
         try UpdateItemIntent.perform(
             (
                 context: context,
@@ -323,7 +325,7 @@ struct ItemServiceTest {
                 category: "UpdatedCat"
             )
         )
-        item = try #require(fetchItems(context).first)
+        item = try #require(try fetchItems(context).first)
         #expect(item.balance == 50)
         #expect(item.content == "Updated")
         #expect(item.utcDate == isoDate("2024-01-02T00:00:00Z"))
@@ -340,7 +342,7 @@ struct ItemServiceTest {
             outgo: 0,
             category: "Original"
         )
-        let item = try #require(fetchItems(context).first)
+        let item = try #require(try fetchItems(context).first)
         let oldRepeatID = item.repeatID
 
         try UpdateItemIntent.perform(
@@ -354,7 +356,7 @@ struct ItemServiceTest {
                 category: "Updated"
             )
         )
-        let updated = try #require(fetchItems(context).first)
+        let updated = try #require(try fetchItems(context).first)
         #expect(updated.repeatID != oldRepeatID)
     }
 
@@ -471,7 +473,7 @@ struct ItemServiceTest {
             outgo: 50,
             category: "OneTime"
         )
-        let item = try #require(fetchItems(context).first)
+        let item = try #require(try fetchItems(context).first)
         try UpdateFutureItemsIntent.perform(
             (
                 context: context,
@@ -483,7 +485,7 @@ struct ItemServiceTest {
                 category: "OneTimeUpdated"
             )
         )
-        let updated = try #require(fetchItems(context).first)
+        let updated = try #require(try fetchItems(context).first)
         #expect(updated.content == "SoloUpdated")
         #expect(updated.income == 100)
     }
@@ -492,7 +494,7 @@ struct ItemServiceTest {
     func updateForAllItems(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        _ = try createItem(
+        let item = try createItem(
             date: isoDate("2024-02-01T00:00:00Z"),
             content: "Gym",
             income: 0,
@@ -500,7 +502,8 @@ struct ItemServiceTest {
             category: "Health",
             repeatCount: 3
         )
-        let target = try #require(try item())
+        let items = try context.fetch(.items(.all))
+        let target = try #require(try context.fetchFirst(.items(.idIs(.init(base64Encoded: item.id)))))
         try UpdateAllItemsIntent.perform(
             (
                 context: context,
@@ -534,7 +537,7 @@ struct ItemServiceTest {
             outgo: 0,
             category: "Temp"
         )
-        let item = try #require(fetchItems(context).first)
+        let item = try #require(try fetchItems(context).first)
         try DeleteItemIntent.perform(
             (
                 context: context,
@@ -603,7 +606,7 @@ struct ItemServiceTest {
             outgo: 50,
             category: "Test"
         )
-        var item = try #require(fetchItems(context).first)
+        var item = try #require(try fetchItems(context).first)
         try UpdateItemIntent.perform(
             (
                 context: context,
@@ -615,7 +618,7 @@ struct ItemServiceTest {
                 category: item.category?.name ?? ""
             )
         )
-        item = try #require(fetchItems(context).first)
+        item = try #require(try fetchItems(context).first)
         #expect(item.balance == 10)
     }
 
@@ -630,12 +633,12 @@ struct ItemServiceTest {
             outgo: 60,
             category: "Check"
         )
-        let item = try #require(fetchItems(context).first)
+        let item = try #require(try fetchItems(context).first)
         let oldBalance = item.balance
 
         try service.recalculate(after: isoDate("2023-12-01T00:00:00Z"))
 
-        let reloaded = try #require(fetchItems(context).first)
+        let reloaded = try #require(try fetchItems(context).first)
         #expect(reloaded.balance == oldBalance)
     }
 

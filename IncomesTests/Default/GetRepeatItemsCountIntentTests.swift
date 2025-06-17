@@ -22,7 +22,7 @@ struct GetRepeatItemsCountIntentTests {
             )
         )
         let repeatID = try PersistentIdentifier(base64Encoded: entity.id)
-        let model = try #require(context.fetchFirst(.items(.idIs(repeatID))))
+        let model = try #require(try context.fetchFirst(.items(.idIs(repeatID))))
         let count = try GetRepeatItemsCountIntent.perform(
             (context: context, repeatID: model.repeatID)
         )
