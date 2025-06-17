@@ -2,7 +2,7 @@
 import SwiftData
 import Testing
 
-struct CreateItemIntentTests {
+struct CreateItemIntentTest {
     let context: ModelContext
 
     init() {
@@ -44,4 +44,3 @@ struct CreateItemIntentTests {
         #expect(Set(items.map(\.repeatID)).count == 1)
     }
 }
-

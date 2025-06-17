@@ -2,7 +2,7 @@
 import SwiftData
 import Testing
 
-struct GetTagByNameIntentTests {
+struct GetTagByNameIntentTest {
     let context: ModelContext
 
     init() {

@@ -2,7 +2,7 @@
 import SwiftData
 import Testing
 
-struct UpdateItemIntentTests {
+struct UpdateFutureItemsIntentTest {
     let context: ModelContext
 
     init() {
@@ -21,7 +21,7 @@ struct UpdateItemIntentTests {
                 repeatCount: 1
             )
         )
-        try UpdateItemIntent.perform(
+        try UpdateFutureItemsIntent.perform(
             (
                 context: context,
                 item: item,
@@ -52,7 +52,7 @@ struct UpdateItemIntentTests {
                 repeatCount: 3
             )
         )
-        try UpdateItemIntent.perform(
+        try UpdateFutureItemsIntent.perform(
             (
                 context: context,
                 item: ItemEntity(fetchItems(context)[1])!,
@@ -63,16 +63,15 @@ struct UpdateItemIntentTests {
                 category: "category2"
             )
         )
-
         let first = fetchItems(context)[0]
         let second = fetchItems(context)[1]
         let last = fetchItems(context)[2]
 
-        #expect(first.utcDate == isoDate("2000-03-01T00:00:00Z"))
-        #expect(first.content == "content")
-        #expect(first.income == 200)
-        #expect(first.outgo == 100)
-        #expect(first.balance == 100)
+        #expect(first.utcDate == isoDate("2000-03-02T00:00:00Z"))
+        #expect(first.content == "content2")
+        #expect(first.income == 100)
+        #expect(first.outgo == 200)
+        #expect(first.balance == -100)
 
         #expect(second.utcDate == isoDate("2000-02-02T00:00:00Z"))
         #expect(second.content == "content2")

@@ -2,7 +2,7 @@
 import SwiftData
 import Testing
 
-struct UpdateFutureItemsIntentTests {
+struct UpdateAllItemsIntentTest {
     let context: ModelContext
 
     init() {
@@ -21,7 +21,7 @@ struct UpdateFutureItemsIntentTests {
                 repeatCount: 1
             )
         )
-        try UpdateFutureItemsIntent.perform(
+        try UpdateAllItemsIntent.perform(
             (
                 context: context,
                 item: item,
@@ -52,7 +52,7 @@ struct UpdateFutureItemsIntentTests {
                 repeatCount: 3
             )
         )
-        try UpdateFutureItemsIntent.perform(
+        try UpdateAllItemsIntent.perform(
             (
                 context: context,
                 item: ItemEntity(fetchItems(context)[1])!,
@@ -71,18 +71,18 @@ struct UpdateFutureItemsIntentTests {
         #expect(first.content == "content2")
         #expect(first.income == 100)
         #expect(first.outgo == 200)
-        #expect(first.balance == -100)
+        #expect(first.balance == -300)
 
         #expect(second.utcDate == isoDate("2000-02-02T00:00:00Z"))
         #expect(second.content == "content2")
         #expect(second.income == 100)
         #expect(second.outgo == 200)
-        #expect(second.balance == 0)
+        #expect(second.balance == -200)
 
-        #expect(last.utcDate == isoDate("2000-01-01T00:00:00Z"))
-        #expect(last.content == "content")
-        #expect(last.income == 200)
-        #expect(last.outgo == 100)
-        #expect(last.balance == 100)
+        #expect(last.utcDate == isoDate("2000-01-02T00:00:00Z"))
+        #expect(last.content == "content2")
+        #expect(last.income == 100)
+        #expect(last.outgo == 200)
+        #expect(last.balance == -100)
     }
 }
