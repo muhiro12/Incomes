@@ -1,18 +1,11 @@
 import SwiftUI
 
 struct StoreListView: View {
-    @Environment(Store.self) private var store
-
     var body: some View {
         List {
-            store.buildSubscriptionSection()
+            StoreSection()
         }
-        .navigationTitle(Text("Paid Features"))
-        .toolbar {
-            ToolbarItem {
-                CloseButton()
-            }
-        }
+        .navigationTitle("Subscription")
     }
 }
 

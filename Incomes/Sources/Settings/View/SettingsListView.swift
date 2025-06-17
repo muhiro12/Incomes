@@ -52,9 +52,9 @@ extension SettingsListView: View {
                 }
             } else {
                 NavigationLink {
-                    StoreNavigationView()
+                    StoreListView()
                 } label: {
-                    Text("Paid Features")
+                    Text("Subscription")
                 }
             }
             Section {
