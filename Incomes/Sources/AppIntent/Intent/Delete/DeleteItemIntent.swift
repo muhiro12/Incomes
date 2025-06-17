@@ -19,7 +19,7 @@ struct DeleteItemIntent: AppIntent, IntentPerformer, @unchecked Sendable {
             let id = try? PersistentIdentifier(base64Encoded: entity.id),
             let model = try context.fetchFirst(.items(.idIs(id)))
         else {
-            throw DebugError.default
+            throw ItemError.itemNotFound
         }
         model.delete()
         let calculator = BalanceCalculator(context: context)

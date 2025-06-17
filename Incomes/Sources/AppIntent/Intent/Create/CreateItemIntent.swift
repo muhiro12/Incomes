@@ -77,7 +77,7 @@ struct CreateItemIntent: AppIntent, IntentPerformer, @unchecked Sendable {
         try calculator.calculate(for: items)
 
         guard let entity = ItemEntity(model) else {
-            throw DebugError.default
+            throw ItemError.entityConversionFailed
         }
         return entity
     }
