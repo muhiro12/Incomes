@@ -1,5 +1,6 @@
 import AppIntents
 import SwiftData
+import SwiftUtilities
 
 struct DeleteTagIntent: AppIntent, IntentPerformer, @unchecked Sendable {
     static let title: LocalizedStringResource = .init("Delete Tag", table: "AppIntents")

@@ -258,7 +258,6 @@ final class ItemServiceXCTests: XCTestCase {
     func testDelete() {
         XCTContext.runActivity(named: "") { _ in
             let context = testContext
-            let service = ItemService(context: context)
 
             let itemA = try! Item.create(context: context,
                                          date: .now,
