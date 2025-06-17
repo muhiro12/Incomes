@@ -9,7 +9,7 @@ struct ItemFormVoiceButton: View {
     @Binding var outgo: String
     @Binding var category: String
 
-    @StateObject private var transcriber = SpeechTranscriber()
+    @StateObject private var transcriber = WhisperTranscriber()
 
     @State private var isProcessing = false
     @State private var errorMessage: String?
@@ -40,7 +40,7 @@ struct ItemFormVoiceButton: View {
 
     private func toggle() {
         if transcriber.isTranscribing {
-            transcriber.stopTranscribing()
+            Task { await transcriber.stopTranscribing() }
         } else {
             do {
                 try transcriber.startTranscribing()
