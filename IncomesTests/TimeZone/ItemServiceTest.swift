@@ -524,14 +524,6 @@ struct ItemServiceTest {
         #expect(items.isEmpty)
     }
 
-    @Test("delete with empty array does nothing", arguments: timeZones)
-    func deleteWithEmptyArray(_ timeZone: TimeZone) throws {
-        NSTimeZone.default = timeZone
-
-        // Do nothing
-        #expect(try service.items().isEmpty)
-    }
-
     @Test("delete with multiple items removes only specified ones", arguments: timeZones)
     func deleteMultipleItems(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
@@ -573,7 +565,7 @@ struct ItemServiceTest {
             category: "Tmp"
         )
         #expect(!fetchItems(context).isEmpty)
-        try DeleteAllItemsIntent.perform((context: context))
+        try DeleteAllItemsIntent.perform(context)
         #expect(fetchItems(context).isEmpty)
     }
 

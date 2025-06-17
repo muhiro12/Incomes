@@ -11,7 +11,6 @@ import SwiftData
 import XCTest
 
 final class ItemServiceXCTests: XCTestCase {
-
     // MARK: - Update
 
     func testUpdate() {
@@ -294,7 +293,6 @@ final class ItemServiceXCTests: XCTestCase {
     func testDeleteAll() {
         XCTContext.runActivity(named: "") { _ in
             let context = testContext
-            let service = ItemService(context: context)
 
             let itemA = try! Item.create(context: context,
                                          date: .now,
@@ -313,7 +311,7 @@ final class ItemServiceXCTests: XCTestCase {
                                          repeatID: UUID())
             context.insert(itemB)
 
-            try! DeleteAllItemsIntent.perform((context: context))
+            try! DeleteAllItemsIntent.perform(context)
 
             let result = fetchItems(context)
 

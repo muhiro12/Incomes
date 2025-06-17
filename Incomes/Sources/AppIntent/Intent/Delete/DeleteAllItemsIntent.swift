@@ -7,11 +7,11 @@ struct DeleteAllItemsIntent: AppIntent, IntentPerformer, @unchecked Sendable {
 
     @Dependency private var modelContainer: ModelContainer
 
-    typealias Input = (context: ModelContext)
+    typealias Input = ModelContext
     typealias Output = Void
 
     static func perform(_ input: Input) throws -> Output {
-        let context = input.context
+        let context = input
         let items = try context.fetch(FetchDescriptor<Item>())
         items.forEach { $0.delete() }
         let calculator = BalanceCalculator(context: context)
@@ -20,7 +20,7 @@ struct DeleteAllItemsIntent: AppIntent, IntentPerformer, @unchecked Sendable {
 
     @MainActor
     func perform() throws -> some IntentResult {
-        try Self.perform((context: modelContainer.mainContext))
+        try Self.perform(modelContainer.mainContext)
         return .result()
     }
 }
