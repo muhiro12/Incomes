@@ -25,18 +25,6 @@ final class TagService {
         try context.fetchFirst(descriptor)
     }
 
-    // MARK: - Delete
-
-    func delete(tags: [Tag]) throws {
-        tags.forEach {
-            $0.delete()
-        }
-    }
-
-    func deleteAll() throws {
-        try delete(tags: context.fetch(.init()))
-    }
-
     // MARK: - Duplicates
 
     func merge(tags: [Tag]) throws {
@@ -55,7 +43,11 @@ final class TagService {
             item.modify(tags: tags)
         }
 
-        try delete(tags: children)
+        try children
+            .compactMap(TagEntity.init)
+            .forEach {
+                try DeleteTagIntent.perform((context: context, tag: $0))
+            }
     }
 
     func resolveAllDuplicates(in tags: [Tag]) throws {

@@ -7,6 +7,8 @@ struct DuplicateTagView: View {
     private var itemService
     @Environment(TagService.self)
     private var tagService
+    @Environment(\.modelContext)
+    private var context
 
     @Query private var tags: [Tag]
 
@@ -79,7 +81,12 @@ struct DuplicateTagView: View {
                     return
                 }
                 do {
-                    try tagService.delete(tags: [selectedTag])
+                    try DeleteTagIntent.perform(
+                        (
+                            context: context,
+                            tag: .init(selectedTag)!
+                        )
+                    )
                     self.selectedTag = nil
                     Haptic.success.impact()
                 } catch {

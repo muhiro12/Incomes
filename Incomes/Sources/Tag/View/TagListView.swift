@@ -81,7 +81,11 @@ extension TagListView: View {
                 do {
                     let tags = willDeleteTags
                     let items = tags.flatMap { $0.items ?? .empty }
-                    try tagService.delete(tags: tags)
+                    try tags
+                        .compactMap(TagEntity.init)
+                        .forEach {
+                            try DeleteTagIntent.perform((context: context, tag: $0))
+                        }
                     try items.compactMap(ItemEntity.init).forEach {
                         try DeleteItemIntent.perform((context: context, item: $0))
                     }

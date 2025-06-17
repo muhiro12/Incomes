@@ -161,7 +161,7 @@ extension SettingsListView: View {
             Button(role: .destructive) {
                 do {
                     try DeleteAllItemsIntent.perform(context)
-                    try tagService.deleteAll()
+                    try DeleteAllTagsIntent.perform(context)
                     Haptic.success.impact()
                 } catch {
                     assertionFailure(error.localizedDescription)

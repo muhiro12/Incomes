@@ -186,6 +186,24 @@
     "Delete Item" : {
 
     },
+    "Delete All Tags" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Delete All Tags" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Eliminar todas las etiquetas" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Supprimer toutes les étiquettes" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "すべてのタグを削除" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "删除所有标签" } }
+      }
+    },
+    "Delete Tag" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Delete Tag" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Eliminar etiqueta" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Supprimer l’étiquette" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "タグを削除" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "删除标签" } }
+      }
+    },
     "Get Items" : {
       "localizations" : {
         "en" : {
