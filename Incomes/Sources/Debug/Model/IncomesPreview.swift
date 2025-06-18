@@ -17,8 +17,6 @@ struct IncomesPreview<Content: View>: View {
     private let preview: IncomesPreviewStore
 
     private let previewModelContainer: ModelContainer
-    private let previewItemService: ItemService
-    private let previewTagService: TagService
     private let previewNotificationService: NotificationService
     private let previewConfigurationService: ConfigurationService
     private var previewStore: Store
@@ -34,8 +32,6 @@ struct IncomesPreview<Content: View>: View {
             configurations: .init(isStoredInMemoryOnly: true)
         )
 
-        self.previewItemService = .init(context: previewModelContainer.mainContext)
-        self.previewTagService = .init(context: previewModelContainer.mainContext)
         self.previewNotificationService = .init(context: previewModelContainer.mainContext)
         self.previewConfigurationService = .init()
         self.previewStore = .init()
@@ -56,8 +52,6 @@ struct IncomesPreview<Content: View>: View {
             }
         }
         .modelContainer(previewModelContainer)
-        .environment(previewItemService)
-        .environment(previewTagService)
         .environment(previewNotificationService)
         .environment(previewConfigurationService)
         .environment(previewStore)

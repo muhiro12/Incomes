@@ -10,8 +10,6 @@ import SwiftData
 import SwiftUI
 
 struct TagListView {
-    @Environment(TagService.self)
-    private var tagService
     @Environment(\.modelContext)
     private var context
 
