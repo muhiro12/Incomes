@@ -3,8 +3,6 @@ import SwiftUI
 import SwiftUtilities
 
 struct DuplicateTagView: View {
-    @Environment(ItemService.self)
-    private var itemService
     @Environment(\.modelContext)
     private var context
 

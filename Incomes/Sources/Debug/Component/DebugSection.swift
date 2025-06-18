@@ -12,8 +12,8 @@ struct DebugSection {
     @Environment(ItemEntity.self)
     private var itemEntity
 
-    @Environment(ItemService.self)
-    private var itemService
+    @Environment(\.modelContext)
+    private var context
 
     @State private var item: Item?
 }
@@ -74,7 +74,7 @@ extension DebugSection: View {
         }
         .task {
             do {
-                self.item = try itemService.model(of: itemEntity)
+                self.item = try itemEntity.model(in: context)
             } catch {
                 self.item = nil
             }

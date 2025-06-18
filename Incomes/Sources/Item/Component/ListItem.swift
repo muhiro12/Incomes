@@ -11,8 +11,6 @@ import SwiftUI
 struct ListItem: View {
     @Environment(ItemEntity.self)
     private var item
-    @Environment(ItemService.self)
-    private var itemService
     @Environment(\.modelContext)
     private var context
     @Environment(\.horizontalSizeClass)
@@ -58,7 +56,6 @@ struct ListItem: View {
         } preview: {
             ItemNavigationView()
                 .environment(item)
-                .environment(itemService)
         }
         .sheet(isPresented: $isDetailPresented) {
             ItemNavigationView()

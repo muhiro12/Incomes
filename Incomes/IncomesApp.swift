@@ -19,7 +19,6 @@ struct IncomesApp: App {
 
     private var sharedModelContainer: ModelContainer!
 
-    private var sharedItemService: ItemService!
     private var sharedNotificationService: NotificationService!
     private var sharedConfigurationService: ConfigurationService!
 
@@ -35,13 +34,11 @@ struct IncomesApp: App {
             )
         )
 
-        let itemService = ItemService(context: modelContainer.mainContext)
         let notificationService = NotificationService(context: modelContainer.mainContext)
         let configurationService = ConfigurationService()
 
         sharedModelContainer = modelContainer
 
-        sharedItemService = itemService
         sharedNotificationService = notificationService
         sharedConfigurationService = configurationService
 
@@ -58,7 +55,6 @@ struct IncomesApp: App {
         )
 
         AppDependencyManager.shared.add { modelContainer }
-        AppDependencyManager.shared.add { itemService }
         AppDependencyManager.shared.add { notificationService }
         AppDependencyManager.shared.add { configurationService }
 
@@ -70,7 +66,6 @@ struct IncomesApp: App {
             ContentView()
                 .id(isICloudOn)
                 .modelContainer(sharedModelContainer)
-                .environment(sharedItemService)
                 .environment(sharedNotificationService)
                 .environment(sharedConfigurationService)
                 .environment(sharedStore)
