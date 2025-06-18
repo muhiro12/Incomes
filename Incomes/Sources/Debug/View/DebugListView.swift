@@ -12,8 +12,6 @@ import SwiftUtilities
 struct DebugListView {
     @Environment(\.modelContext)
     private var context
-    @Environment(TagService.self)
-    private var tagService
 
     @AppStorage(.isDebugOn)
     private var isDebugOn

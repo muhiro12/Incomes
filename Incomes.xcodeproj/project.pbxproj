@@ -52,7 +52,6 @@
 				Default/CalendarExtensionXCTests.swift,
 				Default/LocaleAmountConverterTest.swift,
 				Default/StringExtensionTests.swift,
-				Default/TagServiceTests.swift,
 				Incomes.xctestplan,
 			);
 			target = ADD8C8B32DDADBD6002431C6 /* IncomesTimeZoneTests */;

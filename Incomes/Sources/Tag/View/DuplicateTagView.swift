@@ -3,8 +3,6 @@ import SwiftUI
 import SwiftUtilities
 
 struct DuplicateTagView: View {
-    @Environment(TagService.self)
-    private var tagService
     @Environment(\.modelContext)
     private var context
 
@@ -59,7 +57,16 @@ struct DuplicateTagView: View {
             isPresented: $isMergeDialogPresented
         ) {
             Button {
-                try? tagService.merge(tags: tags)
+                do {
+                    try MergeDuplicateTagsIntent.perform(
+                        (
+                            context: context,
+                            tags: tags.compactMap(TagEntity.init)
+                        )
+                    )
+                } catch {
+                    assertionFailure(error.localizedDescription)
+                }
             } label: {
                 Text("Merge")
             }

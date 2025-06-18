@@ -254,10 +254,16 @@
         }
       }
     },
+    "Find Duplicate Tags" : {
+
+    },
     "Get All Items Count" : {
 
     },
     "Get All Tags" : {
+
+    },
+    "Get Has Duplicate Tags" : {
 
     },
     "Get Items" : {
@@ -717,6 +723,9 @@
         }
       }
     },
+    "Merge Duplicate Tags" : {
+
+    },
     "Not Found" : {
       "localizations" : {
         "en" : {
@@ -843,6 +852,9 @@
           }
         }
       }
+    },
+    "Resolve Duplicate Tags" : {
+
     },
     "Show Charts" : {
       "localizations" : {

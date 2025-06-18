@@ -11,8 +11,6 @@ import StoreKitWrapper
 import SwiftUI
 
 struct ContentView {
-    @Environment(TagService.self)
-    private var tagService
     @Environment(NotificationService.self)
     private var notificationService
     @Environment(ConfigurationService.self)
@@ -82,7 +80,6 @@ extension ContentView: View {
                     isUpdateAlertPresented = configurationService.isUpdateRequired()
                 }
                 Task {
-                    try? tagService.updateHasDuplicates()
                     await notificationService.update()
                 }
                 if Int.random(in: 0..<10) == .zero {

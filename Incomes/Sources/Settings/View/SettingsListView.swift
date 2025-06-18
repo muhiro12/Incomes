@@ -10,8 +10,6 @@ import SwiftUI
 import SwiftUtilities
 
 struct SettingsListView {
-    @Environment(TagService.self)
-    private var tagService
     @Environment(\.modelContext)
     private var context
     @Environment(NotificationService.self)
@@ -37,6 +35,7 @@ struct SettingsListView {
     @State private var isIntroductionPresented = false
     @State private var isDeleteDialogPresented = false
     @State private var isDuplicateTagPresented = false
+    @State private var hasDuplicateTags = false
 
     init(selection: Binding<IncomesPath?> = .constant(nil)) {
         _path = selection
@@ -105,7 +104,7 @@ extension SettingsListView: View {
             } header: {
                 Text("Manage items")
             }
-            if tagService.hasDuplicates {
+            if hasDuplicateTags {
                 Section {
                     Button {
                         isDuplicateTagPresented = true
@@ -178,7 +177,12 @@ extension SettingsListView: View {
             DuplicateTagNavigationView()
         }
         .task {
-            try? tagService.updateHasDuplicates()
+            do {
+                hasDuplicateTags = try GetHasDuplicateTagsIntent.perform(context)
+            } catch {
+                assertionFailure(error.localizedDescription)
+                hasDuplicateTags = false
+            }
 
             isNotificationEnabled = notificationSettings.isEnabled
 
