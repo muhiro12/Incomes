@@ -22,7 +22,7 @@ struct FindDuplicateTagsIntent: AppIntent, IntentPerformer {
         let duplicates = Dictionary(grouping: models) { tag in
             tag.typeID + tag.name
         }
-        .compactMap { _, values in
+        .compactMap { _, values -> Tag? in
             guard values.count > 1 else {
                 return nil
             }

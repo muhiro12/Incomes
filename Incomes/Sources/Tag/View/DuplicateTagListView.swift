@@ -67,7 +67,6 @@ struct DuplicateTagListView: View {
         }
     }
 
-    @ViewBuilder
     private func buildSection<Header: View>(from tags: [Tag], header: () -> Header) -> some View {
         let duplicates: [Tag]
         do {
@@ -86,9 +85,11 @@ struct DuplicateTagListView: View {
             assertionFailure(error.localizedDescription)
             duplicates = []
         }
+
         if duplicates.isEmpty {
-            EmptyView()
-        } else {
+            return AnyView(EmptyView())
+        }
+        return AnyView(
             Section {
                 ForEach(duplicates) { tag in
                     Text(tag.displayName)
@@ -107,7 +108,7 @@ struct DuplicateTagListView: View {
                     .textCase(nil)
                 }
             }
-        }
+        )
     }
 }
 

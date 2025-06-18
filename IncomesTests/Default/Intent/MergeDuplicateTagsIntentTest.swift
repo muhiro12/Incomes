@@ -48,7 +48,7 @@ struct MergeDuplicateTagsIntentTest {
             )
         )
 
-        #expect(try context.fetchCount(.tags(.nameIs("name", type: .content))) == 1)
+        #expect(try context.fetchCount(.tags(.nameIs("contentA", type: .content))) == 1)
         #expect(try context.fetchCount(.tags(.nameIs("contentB", type: .content))) == 0)
         #expect(try context.fetchCount(.tags(.nameIs("contentC", type: .content))) == 0)
         #expect(item1.tags?.contains(tag1) == true)
@@ -57,9 +57,9 @@ struct MergeDuplicateTagsIntentTest {
     }
 
     @Test func mergeWhenTagsAreDuplicated() throws {
-        let tag1 = try Tag.createIgnoringDuplicates(context: context, name: "name", type: .content)
-        let tag2 = try Tag.createIgnoringDuplicates(context: context, name: "name", type: .content)
-        let tag3 = try Tag.createIgnoringDuplicates(context: context, name: "name", type: .content)
+        let tag1 = try Tag.createIgnoringDuplicates(context: context, name: "contentA", type: .content)
+        let tag2 = try Tag.createIgnoringDuplicates(context: context, name: "contentA", type: .content)
+        let tag3 = try Tag.createIgnoringDuplicates(context: context, name: "contentA", type: .content)
 
         try MergeDuplicateTagsIntent.perform(
             (
