@@ -14,8 +14,8 @@ struct RecalculateItemIntent: AppIntent, IntentPerformer {
     typealias Output = Void
 
     static func perform(_ input: Input) throws -> Output {
-        let calculator = BalanceCalculator(context: input.context)
-        try calculator.calculate(after: input.date)
+        let calculator = BalanceCalculator()
+        try calculator.calculate(in: input.context, after: input.date)
     }
 
     @MainActor
