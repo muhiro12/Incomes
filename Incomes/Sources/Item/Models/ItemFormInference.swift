@@ -31,7 +31,7 @@ struct ItemFormInference: AppEntity {
 }
 
 @available(iOS 26.0, *)
-struct ItemFormInferenceQuery: EntityStringQuery, @unchecked Sendable {
+struct ItemFormInferenceQuery: EntityStringQuery {
     func entities(for _: [String]) throws -> [ItemFormInference] { [] }
     func entities(matching _: String) throws -> [ItemFormInference] { [] }
     func suggestedEntities() throws -> [ItemFormInference] { [] }

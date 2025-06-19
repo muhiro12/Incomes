@@ -9,7 +9,7 @@
 import SwiftData
 import SwiftUI
 
-struct HomeTabSection {
+struct HomeTabSection: View {
     @Query(.tags(.typeIs(.year)))
     private var yearTags: [Tag]
 
@@ -18,9 +18,7 @@ struct HomeTabSection {
     init(selection: Binding<Tag?> = .constant(nil)) {
         _yearTag = selection
     }
-}
 
-extension HomeTabSection: View {
     var body: some View {
         Section {
             Group {

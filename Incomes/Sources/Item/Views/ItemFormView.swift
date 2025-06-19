@@ -9,7 +9,7 @@
 import StoreKit
 import SwiftUI
 
-struct ItemFormView {
+struct ItemFormView: View {
     enum Mode {
         case create
         case edit
@@ -54,9 +54,7 @@ struct ItemFormView {
     init(mode: Mode) {
         self.mode = mode
     }
-}
 
-extension ItemFormView: View {
     var body: some View {
         Form {
             Section {
@@ -232,7 +230,7 @@ private extension ItemFormView {
             if let entity = item,
                let model = try? entity.model(in: context),
                try GetRepeatItemsCountIntent.perform(
-                   (context: context, repeatID: model.repeatID)
+                (context: context, repeatID: model.repeatID)
                ) > 1 {
                 presentToActionSheet()
             } else {

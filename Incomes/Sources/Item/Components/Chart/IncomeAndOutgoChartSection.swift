@@ -10,7 +10,7 @@ import SwiftData
 import SwiftUI
 import SwiftUtilities
 
-struct IncomeAndOutgoChartSection {
+struct IncomeAndOutgoChartSection: View {
     @Query private var items: [Item]
 
     @State private var isPresented = false
@@ -18,9 +18,7 @@ struct IncomeAndOutgoChartSection {
     init(_ descriptor: FetchDescriptor<Item>) {
         _items = .init(descriptor)
     }
-}
 
-extension IncomeAndOutgoChartSection: View {
     var body: some View {
         Section {
             Button {

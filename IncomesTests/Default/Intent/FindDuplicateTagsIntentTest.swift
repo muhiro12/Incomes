@@ -23,11 +23,11 @@ struct FindDuplicateTagsIntentTest {
         )
 
         #expect(result.count == 2)
-        #expect(result.contains(where: {
+        #expect(result.contains {
             (try? PersistentIdentifier(base64Encoded: $0.id)) == tag1.id
-        }))
-        #expect(result.contains(where: {
+        })
+        #expect(result.contains {
             (try? PersistentIdentifier(base64Encoded: $0.id)) == tag3.id
-        }))
+        })
     }
 }

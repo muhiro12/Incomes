@@ -34,7 +34,7 @@ struct IncomesApp: App {
             )
         )
 
-        let notificationService = NotificationService(context: modelContainer.mainContext)
+        let notificationService = NotificationService(modelContainer: modelContainer)
         let configurationService = ConfigurationService()
 
         sharedModelContainer = modelContainer

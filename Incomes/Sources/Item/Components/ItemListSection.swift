@@ -9,7 +9,7 @@ import SwiftData
 import SwiftUI
 import SwiftUtilities
 
-struct ItemListSection {
+struct ItemListSection: View {
     @Environment(\.modelContext)
     private var context
 
@@ -24,9 +24,7 @@ struct ItemListSection {
         self._items = BridgeQuery(Query(descriptor))
         self.title = title
     }
-}
 
-extension ItemListSection: View {
     var body: some View {
         Section {
             ForEach(items) {

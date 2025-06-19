@@ -3,7 +3,7 @@ import FoundationModels
 import SwiftUtilities
 
 @available(iOS 26.0, *)
-struct InferItemFormIntent: AppIntent, IntentPerformer, @unchecked Sendable {
+struct InferItemFormIntent: AppIntent, IntentPerformer {
     static let title: LocalizedStringResource = .init("Infer Item Form", table: "AppIntents")
 
     @Parameter(title: "Text")

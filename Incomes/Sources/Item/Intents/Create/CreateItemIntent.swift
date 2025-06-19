@@ -73,8 +73,8 @@ struct CreateItemIntent: AppIntent, IntentPerformer {
 
         items.forEach(context.insert)
 
-        let calculator = BalanceCalculator(context: context)
-        try calculator.calculate(for: items)
+        let calculator = BalanceCalculator()
+        try calculator.calculate(in: context, for: items)
 
         guard let entity = ItemEntity(model) else {
             throw ItemError.entityConversionFailed

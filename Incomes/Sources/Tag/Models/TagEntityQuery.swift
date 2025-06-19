@@ -9,7 +9,7 @@
 import AppIntents
 import SwiftData
 
-struct TagEntityQuery: EntityStringQuery, @unchecked Sendable {
+struct TagEntityQuery: EntityStringQuery {
     @Dependency private var modelContainer: ModelContainer
 
     @MainActor
@@ -18,11 +18,10 @@ struct TagEntityQuery: EntityStringQuery, @unchecked Sendable {
             try GetTagByIDIntent.perform(
                 (
                     context: modelContainer.mainContext,
-                    id: try .init(base64Encoded: id)
+                    id: id
                 )
             )
         }
-        .compactMap(TagEntity.init)
     }
 
     @MainActor

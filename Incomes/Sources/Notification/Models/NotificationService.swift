@@ -13,44 +13,42 @@ import UserNotifications
 @MainActor
 @Observable
 final class NotificationService: NSObject {
-    private let context: ModelContext
+    private let modelContainer: ModelContainer
 
     private(set) var hasNotification = false
     private(set) var shouldShowNotification = false
 
-    private var center: UNUserNotificationCenter {
-        UNUserNotificationCenter.current()
-    }
-
-    init(context: ModelContext) {
-        self.context = context
+    init(modelContainer: ModelContainer) {
+        self.modelContainer = modelContainer
         super.init()
-        center.delegate = self
+        UNUserNotificationCenter.current().delegate = self
     }
 
     func register() async {
-        _ = try? await center.requestAuthorization(
+        _ = try? await UNUserNotificationCenter.current().requestAuthorization(
             options: [.badge, .sound, .alert, .carPlay]
         )
-        center.removeAllPendingNotificationRequests()
+        UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
         for request in buildUpcomingPaymentReminders() {
-            try? await center.add(request)
+            Task { @MainActor in
+                try? await UNUserNotificationCenter.current().add(request)
+            }
         }
     }
 
     func update() async {
-        hasNotification = await center.deliveredNotifications().isNotEmpty
+        hasNotification = await UNUserNotificationCenter.current().deliveredNotifications().isNotEmpty
     }
 
     func refresh() {
-        center.setBadgeCount(0)
-        center.removeAllDeliveredNotifications()
+        UNUserNotificationCenter.current().setBadgeCount(0)
+        UNUserNotificationCenter.current().removeAllDeliveredNotifications()
         hasNotification = false
         shouldShowNotification = false
     }
 
     func sendTestNotification() {
-        guard let item = try? GetNextItemIntent.perform((context: context, date: .now)) else {
+        guard let item = try? GetNextItemIntent.perform((context: modelContainer.mainContext, date: .now)) else {
             return
         }
 
@@ -69,20 +67,24 @@ final class NotificationService: NSObject {
             trigger: trigger
         )
 
-        center.add(request)
+        UNUserNotificationCenter.current().add(request)
     }
 }
 
-extension NotificationService: UNUserNotificationCenterDelegate {
+nonisolated extension NotificationService: UNUserNotificationCenterDelegate {
     func userNotificationCenter(_: UNUserNotificationCenter,
                                 willPresent _: UNNotification) async -> UNNotificationPresentationOptions { // swiftlint:disable:this async_without_await
-        hasNotification = true
+        Task { @MainActor in
+            hasNotification = true
+        }
         return [.badge, .sound, .list, .banner]
     }
 
     func userNotificationCenter(_: UNUserNotificationCenter,
                                 didReceive _: UNNotificationResponse) async { // swiftlint:disable:this async_without_await
-        shouldShowNotification = true
+        Task { @MainActor in
+            shouldShowNotification = true
+        }
     }
 }
 
@@ -100,7 +102,7 @@ private extension NotificationService {
         )
         descriptor.fetchLimit = 20
 
-        guard let items = try? context.fetch(descriptor) else {
+        guard let items = try? modelContainer.mainContext.fetch(descriptor) else {
             return .empty
         }
 

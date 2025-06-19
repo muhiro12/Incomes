@@ -56,8 +56,8 @@ struct UpdateRepeatingItemsIntent: AppIntent, IntentPerformer {
                 repeatID: repeatID
             )
         }
-        let calculator = BalanceCalculator(context: context)
-        try calculator.calculate(for: items)
+        let calculator = BalanceCalculator()
+        try calculator.calculate(in: context, for: items)
     }
 
     @MainActor
