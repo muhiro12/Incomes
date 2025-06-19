@@ -12,7 +12,7 @@ struct GetTagByIDIntentTest {
     @Test func perform() throws {
         let model = try Tag.create(context: context, name: "name", type: .content)
         let id = try model.id.base64Encoded()
-        let tag = try #require(
+        let tagEntity = try #require(
             GetTagByIDIntent.perform(
                 (
                     context: context,
@@ -20,7 +20,7 @@ struct GetTagByIDIntentTest {
                 )
             )
         )
-        #expect(tag.name == "name")
-        #expect(tag.type == .content)
+        #expect(tagEntity.name == "name")
+        #expect(tagEntity.type == .content)
     }
 }

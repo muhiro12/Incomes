@@ -22,7 +22,6 @@ struct TagEntityQuery: EntityStringQuery {
                 )
             )
         }
-        .compactMap(TagEntity.init)
     }
 
     @MainActor
