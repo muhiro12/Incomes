@@ -22,8 +22,8 @@ struct DeleteItemIntent: AppIntent, IntentPerformer {
             throw ItemError.itemNotFound
         }
         model.delete()
-        let calculator = BalanceCalculator(context: context)
-        try calculator.calculate(for: [model])
+        let calculator = BalanceCalculator()
+        try calculator.calculate(in: context, for: [model])
     }
 
     @MainActor

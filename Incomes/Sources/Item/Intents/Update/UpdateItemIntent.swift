@@ -40,8 +40,8 @@ struct UpdateItemIntent: AppIntent, IntentPerformer {
             category: category,
             repeatID: .init()
         )
-        let calculator = BalanceCalculator(context: context)
-        try calculator.calculate(for: [model])
+        let calculator = BalanceCalculator()
+        try calculator.calculate(in: context, for: [model])
     }
 
     @MainActor

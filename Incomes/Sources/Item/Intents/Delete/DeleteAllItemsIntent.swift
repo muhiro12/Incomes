@@ -14,8 +14,8 @@ struct DeleteAllItemsIntent: AppIntent, IntentPerformer {
         let context = input
         let items = try context.fetch(FetchDescriptor<Item>())
         items.forEach { $0.delete() }
-        let calculator = BalanceCalculator(context: context)
-        try calculator.calculate(for: items)
+        let calculator = BalanceCalculator()
+        try calculator.calculate(in: context, for: items)
     }
 
     @MainActor

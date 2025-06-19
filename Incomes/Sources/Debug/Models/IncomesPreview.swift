@@ -32,7 +32,7 @@ struct IncomesPreview<Content: View>: View {
             configurations: .init(isStoredInMemoryOnly: true)
         )
 
-        self.previewNotificationService = .init(context: previewModelContainer.mainContext)
+        self.previewNotificationService = .init(modelContainer: previewModelContainer)
         self.previewConfigurationService = .init()
         self.previewStore = .init()
         self.previewGoogleMobileAdsController = .init(adUnitID: Secret.admobNativeIDDev)

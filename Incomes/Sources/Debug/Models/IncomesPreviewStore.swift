@@ -26,7 +26,7 @@ final class IncomesPreviewStore {
             items = try! context.fetch(.items(.all))
             tags = try! context.fetch(.tags(.all))
         }
-        try! BalanceCalculator(context: context).calculate(for: items)
+        try! BalanceCalculator().calculate(in: context, for: items)
     }
 
     @MainActor
@@ -46,7 +46,7 @@ final class IncomesPreviewStore {
                 repeatID: .init()
             )
         }
-        try! BalanceCalculator(context: context).calculate(for: items)
+        try! BalanceCalculator().calculate(in: context, for: items)
     }
 
     private func createItems(_ context: ModelContext) {
