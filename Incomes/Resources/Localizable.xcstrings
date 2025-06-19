@@ -1,9 +1,6 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "%@" : {
-
-    },
     "%@ - A payment of %@ is due on %@." : {
       "localizations" : {
         "en" : {
@@ -1478,9 +1475,6 @@
         }
       }
     },
-    "Error" : {
-
-    },
     "Explore with Sample Items" : {
       "localizations" : {
         "en" : {
@@ -1760,9 +1754,6 @@
 
     },
     "Item not found" : {
-
-    },
-    "Item Form Inference" : {
 
     },
     "Items" : {
@@ -3547,9 +3538,6 @@
           }
         }
       }
-    },
-    "Text" : {
-
     },
     "This is a repeating item." : {
       "localizations" : {
