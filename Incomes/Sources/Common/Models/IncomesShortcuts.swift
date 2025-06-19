@@ -11,7 +11,7 @@ import AppIntents
 struct IncomesShortcuts: AppShortcutsProvider {
     static let shortcutTileColor = ShortcutTileColor.lime
 
-    static let appShortcuts = [
+    static var appShortcuts: [AppShortcut] {
         AppShortcut(
             intent: OpenIncomesIntent(),
             phrases: [
@@ -22,7 +22,7 @@ struct IncomesShortcuts: AppShortcutsProvider {
             ],
             shortTitle: LocalizedStringResource("Open Incomes", table: "AppIntents"),
             systemImageName: "dollarsign.circle"
-        ),
+        )
         AppShortcut(
             intent: CreateAndShowItemIntent(),
             phrases: [
@@ -33,7 +33,7 @@ struct IncomesShortcuts: AppShortcutsProvider {
             ],
             shortTitle: LocalizedStringResource("Create and Show Item", table: "AppIntents"),
             systemImageName: "plus.circle"
-        ),
+        )
         AppShortcut(
             intent: ShowThisMonthItemsIntent(),
             phrases: [
@@ -44,7 +44,7 @@ struct IncomesShortcuts: AppShortcutsProvider {
             ],
             shortTitle: LocalizedStringResource("This Month’s Items", table: "AppIntents"),
             systemImageName: "list.bullet.rectangle"
-        ),
+        )
         AppShortcut(
             intent: ShowThisMonthChartsIntent(),
             phrases: [
@@ -55,7 +55,7 @@ struct IncomesShortcuts: AppShortcutsProvider {
             ],
             shortTitle: LocalizedStringResource("This Month’s Charts", table: "AppIntents"),
             systemImageName: "chart.pie"
-        ),
+        )
         AppShortcut(
             intent: ShowUpcomingItemIntent(),
             phrases: [
@@ -66,7 +66,7 @@ struct IncomesShortcuts: AppShortcutsProvider {
             ],
             shortTitle: LocalizedStringResource("Upcoming Item", table: "AppIntents"),
             systemImageName: "arrow.down.circle"
-        ),
+        )
         AppShortcut(
             intent: ShowUpcomingItemsIntent(),
             phrases: [
@@ -77,7 +77,7 @@ struct IncomesShortcuts: AppShortcutsProvider {
             ],
             shortTitle: LocalizedStringResource("Upcoming Items", table: "AppIntents"),
             systemImageName: "list.dash.header.rectangle"
-        ),
+        )
         AppShortcut(
             intent: ShowRecentItemIntent(),
             phrases: [
@@ -88,7 +88,7 @@ struct IncomesShortcuts: AppShortcutsProvider {
             ],
             shortTitle: LocalizedStringResource("Recent Item", table: "AppIntents"),
             systemImageName: "arrow.up.circle"
-        ),
+        )
         AppShortcut(
             intent: ShowRecentItemsIntent(),
             phrases: [
@@ -100,5 +100,5 @@ struct IncomesShortcuts: AppShortcutsProvider {
             shortTitle: LocalizedStringResource("Recent Items", table: "AppIntents"),
             systemImageName: "list.dash.header.rectangle"
         )
-    ]
+    }
 }

@@ -8,7 +8,7 @@
 import SwiftData
 import SwiftUI
 
-struct HomeYearSection {
+struct HomeYearSection: View {
     @Environment(\.modelContext)
     private var context
 
@@ -20,9 +20,7 @@ struct HomeYearSection {
     init(yearTag: Tag) {
         _yearMonthTags = Query(.tags(.nameStartsWith(yearTag.name, type: .yearMonth), order: .reverse))
     }
-}
 
-extension HomeYearSection: View {
     var body: some View {
         Section {
             ForEach(yearMonthTags) { yearMonthTag in

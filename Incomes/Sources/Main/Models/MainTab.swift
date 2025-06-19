@@ -14,6 +14,7 @@ enum MainTab {
     case search
 }
 
+@MainActor
 extension MainTab {
     @ViewBuilder
     var rootView: some View {
@@ -73,7 +74,7 @@ extension MainTab: Identifiable {
 // MARK: - Environment
 
 struct MainTabKey: EnvironmentKey {
-    static var defaultValue = Binding.constant(MainTab.home)
+    static let defaultValue = Binding.constant(MainTab.home)
 }
 
 extension EnvironmentValues {

@@ -9,15 +9,13 @@ import Charts
 import SwiftData
 import SwiftUI
 
-struct CategoryChartSection {
+struct CategoryChartSection: View {
     @Query private var items: [Item]
 
     init(_ descriptor: FetchDescriptor<Item>) {
         _items = .init(descriptor)
     }
-}
 
-extension CategoryChartSection: View {
     var body: some View {
         Section {
             Chart(

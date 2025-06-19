@@ -9,7 +9,7 @@
 import SwiftData
 import SwiftUI
 
-struct TagListView {
+struct TagListView: View {
     @Environment(\.modelContext)
     private var context
 
@@ -29,9 +29,7 @@ struct TagListView {
         self._tags = .init(.tags(.typeIs(tagType)))
         self._path = selection
     }
-}
 
-extension TagListView: View {
     var body: some View {
         List(selection: $path) {
             ForEach(tags) { tag in

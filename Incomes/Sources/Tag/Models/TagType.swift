@@ -17,7 +17,9 @@ enum TagType: String {
 }
 
 extension TagType: AppEnum {
-    static var typeDisplayRepresentation: TypeDisplayRepresentation = .init(name: "Tag Type")
+    static var typeDisplayRepresentation: TypeDisplayRepresentation {
+        .init(name: "Tag Type")
+    }
 
     static var caseDisplayRepresentations: [Self: DisplayRepresentation] {
         [
