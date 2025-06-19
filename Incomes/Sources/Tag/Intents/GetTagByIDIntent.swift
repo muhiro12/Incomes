@@ -14,12 +14,10 @@ struct GetTagByIDIntent: AppIntent, IntentPerformer {
     typealias Output = TagEntity?
 
     static func perform(_ input: Input) throws -> Output {
-        guard let persistentID =
-            try? PersistentIdentifier(base64Encoded: input.id),
-            let tag = try input.context.fetchFirst(
-                .tags(.idIs(persistentID))
-            )
-        else {
+        let persistentID = try PersistentIdentifier(base64Encoded: input.id)
+        guard let tag = try input.context.fetchFirst(
+            .tags(.idIs(persistentID))
+        ) else {
             return nil
         }
         return TagEntity(tag)
