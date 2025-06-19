@@ -10,8 +10,6 @@ import Foundation
 import SwiftData
 
 struct BalanceCalculator {
-    init() {}
-
     func calculate(in context: ModelContext, for items: [Item]) throws {
         if let date = items.map(\.localDate).min() {
             try calculate(in: context, after: date)
