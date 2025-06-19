@@ -13,7 +13,7 @@ struct GetTagByIDIntentTest {
         let model = try Tag.create(context: context, name: "name", type: .content)
         let id = try model.id.base64Encoded()
         let tagEntity = try #require(
-            GetTagByIDIntent.perform(
+            try GetTagByIDIntent.perform(
                 (
                     context: context,
                     id: id
