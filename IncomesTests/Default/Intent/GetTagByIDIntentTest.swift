@@ -16,7 +16,7 @@ struct GetTagByIDIntentTest {
             GetTagByIDIntent.perform(
                 (
                     context: context,
-                    id: try .init(base64Encoded: id)
+                    id: id
                 )
             )
         )

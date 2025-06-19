@@ -10,20 +10,24 @@ struct GetTagByIDIntent: AppIntent, IntentPerformer {
 
     @Dependency private var modelContainer: ModelContainer
 
-    typealias Input = (context: ModelContext, id: PersistentIdentifier)
+    typealias Input = (context: ModelContext, id: String)
     typealias Output = Tag?
 
     static func perform(_ input: Input) throws -> Output {
-        try input.context.fetchFirst(
-            .tags(.idIs(input.id))
+        guard let persistentID = try? PersistentIdentifier(base64Encoded: input.id) else {
+            return nil
+        }
+        return try input.context.fetchFirst(
+            .tags(.idIs(persistentID))
         )
     }
 
     @MainActor
     func perform() throws -> some ReturnsValue<TagEntity?> {
-        guard let persistentID = try? PersistentIdentifier(base64Encoded: id),
-              let tag = try Self.perform((context: modelContainer.mainContext, id: persistentID)),
-              let tagEntity = TagEntity(tag) else {
+        guard let tag = try Self.perform(
+            (context: modelContainer.mainContext, id: id)
+        ),
+        let tagEntity = TagEntity(tag) else {
             return .result(value: nil)
         }
         return .result(value: tagEntity)

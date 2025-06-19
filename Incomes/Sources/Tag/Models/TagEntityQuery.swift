@@ -18,7 +18,7 @@ struct TagEntityQuery: EntityStringQuery {
             try GetTagByIDIntent.perform(
                 (
                     context: modelContainer.mainContext,
-                    id: try .init(base64Encoded: id)
+                    id: id
                 )
             )
         }
