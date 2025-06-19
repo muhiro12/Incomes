@@ -9,7 +9,7 @@
 import AppIntents
 import SwiftData
 
-struct TagEntityQuery: EntityStringQuery, @unchecked Sendable {
+struct TagEntityQuery: EntityStringQuery {
     @Dependency private var modelContainer: ModelContainer
 
     @MainActor
