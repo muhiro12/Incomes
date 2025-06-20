@@ -9,9 +9,9 @@
 import SwiftUI
 
 struct IntentItemListSection: View {
-    private var items: [Item]
+    private var items: [ItemEntity]
 
-    init(_ items: [Item]) {
+    init(_ items: [ItemEntity]) {
         self.items = items
     }
 
@@ -28,6 +28,6 @@ struct IntentItemListSection: View {
 
 #Preview {
     IncomesPreview { preview in
-        IntentItemListSection(preview.items)
+        IntentItemListSection(preview.items.compactMap(ItemEntity.init))
     }
 }
