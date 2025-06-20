@@ -17,11 +17,13 @@ struct ItemFormOCRButton: View {
     @State private var errorMessage: String?
 
     var body: some View {
-        PhotosPicker(selection: $selectedItem, matching: .images) {
+        Group {
             if isProcessing {
                 ProgressView()
             } else {
-                Image(systemName: "doc.text.viewfinder")
+                PhotosPicker(selection: $selectedItem, matching: .images) {
+                    Image(systemName: "doc.text.viewfinder")
+                }
             }
         }
         .alert("Error", isPresented: Binding(get: { errorMessage != nil }, set: { if !$0 { errorMessage = nil } })) {
@@ -29,8 +31,8 @@ struct ItemFormOCRButton: View {
         } message: {
             Text(errorMessage ?? "")
         }
-        .onChange(of: selectedItem) { _ in
-            guard selectedItem != nil else { return }
+        .onChange(of: selectedItem) { _, newValue in
+            guard newValue != nil else { return }
             Task {
                 await scanReceipt()
             }
