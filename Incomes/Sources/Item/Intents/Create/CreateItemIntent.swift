@@ -12,7 +12,8 @@ import SwiftUI
 import SwiftUtilities
 
 struct CreateItemIntent: AppIntent, IntentPerformer {
-    static let title: LocalizedStringResource = .init("Create Item", table: "AppIntents")
+    typealias Input = (context: ModelContext, date: Date, content: String, income: Decimal, outgo: Decimal, category: String, repeatCount: Int)
+    typealias Output = ItemEntity
 
     @Parameter(title: "Date", kind: .date)
     private var date: Date
@@ -29,8 +30,7 @@ struct CreateItemIntent: AppIntent, IntentPerformer {
 
     @Dependency private var modelContainer: ModelContainer
 
-    typealias Input = (context: ModelContext, date: Date, content: String, income: Decimal, outgo: Decimal, category: String, repeatCount: Int)
-    typealias Output = ItemEntity
+    static let title: LocalizedStringResource = .init("Create Item", table: "AppIntents")
 
     static func perform(_ input: Input) throws -> Output {
         let (context, date, content, income, outgo, category, repeatCount) = input

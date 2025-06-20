@@ -4,7 +4,17 @@ import SwiftUI
 import SwiftUtilities
 
 struct UpdateRepeatingItemsIntent: AppIntent, IntentPerformer {
-    static let title: LocalizedStringResource = .init("Update Repeating Items", table: "AppIntents")
+    typealias Input = (
+        context: ModelContext,
+        item: ItemEntity,
+        date: Date,
+        content: String,
+        income: Decimal,
+        outgo: Decimal,
+        category: String,
+        descriptor: FetchDescriptor<Item>
+    )
+    typealias Output = Void
 
     @Parameter(title: "Item")
     private var item: ItemEntity
@@ -21,17 +31,7 @@ struct UpdateRepeatingItemsIntent: AppIntent, IntentPerformer {
 
     @Dependency private var modelContainer: ModelContainer
 
-    typealias Input = (
-        context: ModelContext,
-        item: ItemEntity,
-        date: Date,
-        content: String,
-        income: Decimal,
-        outgo: Decimal,
-        category: String,
-        descriptor: FetchDescriptor<Item>
-    )
-    typealias Output = Void
+    static let title: LocalizedStringResource = .init("Update Repeating Items", table: "AppIntents")
 
     static func perform(_ input: Input) throws -> Output {
         let (context, entity, date, content, income, outgo, category, descriptor) = input

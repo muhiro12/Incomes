@@ -3,12 +3,12 @@ import SwiftData
 import SwiftUtilities
 
 struct DeleteAllTagsIntent: AppIntent, IntentPerformer {
-    static let title: LocalizedStringResource = .init("Delete All Tags", table: "AppIntents")
+    typealias Input = ModelContext
+    typealias Output = Void
 
     @Dependency private var modelContainer: ModelContainer
 
-    typealias Input = ModelContext
-    typealias Output = Void
+    static let title: LocalizedStringResource = .init("Delete All Tags", table: "AppIntents")
 
     static func perform(_ input: Input) throws -> Output {
         let context = input

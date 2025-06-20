@@ -11,14 +11,15 @@ import SwiftData
 import SwiftUtilities
 
 struct GetNextItemIntent: AppIntent, IntentPerformer {
-    static let title: LocalizedStringResource = .init("Get Next Item", table: "AppIntents")
+    typealias Input = (context: ModelContext, date: Date)
+    typealias Output = ItemEntity?
 
     @Parameter(title: "Date", kind: .date)
     private var date: Date
 
     @Dependency private var modelContainer: ModelContainer
-    typealias Input = (context: ModelContext, date: Date)
-    typealias Output = ItemEntity?
+
+    static let title: LocalizedStringResource = .init("Get Next Item", table: "AppIntents")
 
     static func perform(_ input: Input) throws -> Output {
         let descriptor = FetchDescriptor.items(.dateIsAfter(input.date), order: .forward)

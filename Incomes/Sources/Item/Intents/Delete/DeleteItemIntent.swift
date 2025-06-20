@@ -3,15 +3,15 @@ import SwiftData
 import SwiftUtilities
 
 struct DeleteItemIntent: AppIntent, IntentPerformer {
-    static let title: LocalizedStringResource = .init("Delete Item", table: "AppIntents")
+    typealias Input = (context: ModelContext, item: ItemEntity)
+    typealias Output = Void
 
     @Parameter(title: "Item")
     private var item: ItemEntity
 
     @Dependency private var modelContainer: ModelContainer
 
-    typealias Input = (context: ModelContext, item: ItemEntity)
-    typealias Output = Void
+    static let title: LocalizedStringResource = .init("Delete Item", table: "AppIntents")
 
     static func perform(_ input: Input) throws -> Output {
         let (context, entity) = input

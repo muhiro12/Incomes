@@ -4,7 +4,8 @@ import SwiftUI
 import SwiftUtilities
 
 struct UpdateFutureItemsIntent: AppIntent, IntentPerformer {
-    static let title: LocalizedStringResource = .init("Update Future Items", table: "AppIntents")
+    typealias Input = (context: ModelContext, item: ItemEntity, date: Date, content: String, income: Decimal, outgo: Decimal, category: String)
+    typealias Output = Void
 
     @Parameter(title: "Item")
     private var item: ItemEntity
@@ -21,8 +22,7 @@ struct UpdateFutureItemsIntent: AppIntent, IntentPerformer {
 
     @Dependency private var modelContainer: ModelContainer
 
-    typealias Input = (context: ModelContext, item: ItemEntity, date: Date, content: String, income: Decimal, outgo: Decimal, category: String)
-    typealias Output = Void
+    static let title: LocalizedStringResource = .init("Update Future Items", table: "AppIntents")
 
     static func perform(_ input: Input) throws -> Output {
         let (context, entity, date, content, income, outgo, category) = input
