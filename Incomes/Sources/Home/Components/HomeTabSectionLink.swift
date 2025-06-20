@@ -26,7 +26,7 @@ extension HomeTabSectionLink: View {
                             $0 + $1.income
                         }.asCurrency
                     )
-                        .foregroundStyle(.secondary)
+                    .foregroundStyle(.secondary)
                     Image(systemName: "chevron.up")
                         .foregroundStyle(.tint)
                 }
@@ -39,7 +39,7 @@ extension HomeTabSectionLink: View {
                             $0 + $1.outgo
                         }.asMinusCurrency
                     )
-                        .foregroundStyle(.secondary)
+                    .foregroundStyle(.secondary)
                     Image(systemName: "chevron.down")
                         .foregroundStyle(.red)
                 }
