@@ -13,11 +13,15 @@ final class SpeechTranscriber: ObservableObject {
     private let audioEngine = AVAudioEngine()
 
     func startTranscribing() throws {
-        guard !isTranscribing else { return }
+        guard !isTranscribing else {
+            return
+        }
         try AVAudioSession.sharedInstance().setCategory(.record, mode: .measurement)
         try AVAudioSession.sharedInstance().setActive(true, options: .notifyOthersOnDeactivation)
         request = .init()
-        guard let request else { return }
+        guard let request else {
+            return
+        }
         let inputNode = audioEngine.inputNode
         inputNode.removeTap(onBus: .zero)
         inputNode.installTap(onBus: .zero, bufferSize: 1_024, format: inputNode.outputFormat(forBus: .zero)) { buffer, _ in
@@ -26,7 +30,9 @@ final class SpeechTranscriber: ObservableObject {
         audioEngine.prepare()
         try audioEngine.start()
         task = recognizer?.recognitionTask(with: request) { [weak self] result, error in
-            guard let self else { return }
+            guard let self else {
+                return
+            }
             if let result {
                 transcript = result.bestTranscription.formattedString
             }
@@ -38,7 +44,9 @@ final class SpeechTranscriber: ObservableObject {
     }
 
     func stopTranscribing() {
-        guard isTranscribing else { return }
+        guard isTranscribing else {
+            return
+        }
         audioEngine.stop()
         request?.endAudio()
         task?.cancel()

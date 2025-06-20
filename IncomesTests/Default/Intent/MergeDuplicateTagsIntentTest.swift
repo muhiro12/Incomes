@@ -37,9 +37,15 @@ struct MergeDuplicateTagsIntentTest {
             category: "",
             repeatID: .init()
         )
-        let tag1 = item1.tags!.first { $0.type == .content }!
-        let tag2 = item2.tags!.first { $0.type == .content }!
-        let tag3 = item3.tags!.first { $0.type == .content }!
+        let tag1 = item1.tags!.first {
+            $0.type == .content
+        }!
+        let tag2 = item2.tags!.first {
+            $0.type == .content
+        }!
+        let tag3 = item3.tags!.first {
+            $0.type == .content
+        }!
 
         try MergeDuplicateTagsIntent.perform(
             (

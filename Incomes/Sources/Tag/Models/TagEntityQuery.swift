@@ -58,7 +58,9 @@ struct TagEntityQuery: EntityStringQuery {
             .category
         ]
         .compactMap { type in
-            tags.first { $0.type == type }
+            tags.first {
+                $0.type == type
+            }
         }
         .compactMap(TagEntity.init)
     }

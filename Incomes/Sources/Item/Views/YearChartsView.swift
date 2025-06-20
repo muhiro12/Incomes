@@ -49,7 +49,11 @@ struct YearChartsView: View {
     IncomesPreview { preview in
         NavigationStack {
             YearChartsView()
-                .environment(preview.tags.first { $0.type == .year })
+                .environment(
+                    preview.tags.first {
+                        $0.type == .year
+                    }
+                )
         }
     }
 }
