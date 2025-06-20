@@ -22,7 +22,9 @@ struct MergeDuplicateTagsIntent: AppIntent, IntentPerformer {
         guard let parent = models.first else {
             return
         }
-        let children = models.filter { $0.id != parent.id }
+        let children = models.filter {
+            $0.id != parent.id
+        }
         for item in children.flatMap({ $0.items ?? [] }) {
             var tags = item.tags ?? []
             tags.append(parent)

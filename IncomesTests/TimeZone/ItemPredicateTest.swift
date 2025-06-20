@@ -65,10 +65,26 @@ struct ItemPredicateTest {
         let items = try context.fetch(.items(predicate))
 
         try #require(items.count == 1)
-        #expect(items[0].tags?.first { $0.type == .year }?.name == "2024")
-        #expect(items[0].tags?.first { $0.type == .yearMonth }?.name == "202401")
-        #expect(items[0].tags?.first { $0.type == .content }?.name == "Content")
-        #expect(items[0].tags?.first { $0.type == .category }?.name == "Category")
+        #expect(
+            items[0].tags?.first {
+                $0.type == .year
+            }?.name == "2024"
+        )
+        #expect(
+            items[0].tags?.first {
+                $0.type == .yearMonth
+            }?.name == "202401"
+        )
+        #expect(
+            items[0].tags?.first {
+                $0.type == .content
+            }?.name == "Content"
+        )
+        #expect(
+            items[0].tags?.first {
+                $0.type == .category
+            }?.name == "Category"
+        )
     }
 
     @Test("returns items with matching yearMonth tag", arguments: timeZones)
@@ -83,10 +99,26 @@ struct ItemPredicateTest {
         let items = try context.fetch(.items(predicate))
 
         try #require(items.count == 1)
-        #expect(items[0].tags?.first { $0.type == .year }?.name == "2024")
-        #expect(items[0].tags?.first { $0.type == .yearMonth }?.name == "202401")
-        #expect(items[0].tags?.first { $0.type == .content }?.name == "Content")
-        #expect(items[0].tags?.first { $0.type == .category }?.name == "Category")
+        #expect(
+            items[0].tags?.first {
+                $0.type == .year
+            }?.name == "2024"
+        )
+        #expect(
+            items[0].tags?.first {
+                $0.type == .yearMonth
+            }?.name == "202401"
+        )
+        #expect(
+            items[0].tags?.first {
+                $0.type == .content
+            }?.name == "Content"
+        )
+        #expect(
+            items[0].tags?.first {
+                $0.type == .category
+            }?.name == "Category"
+        )
     }
 
     @Test("returns items with matching content and year for tagAndYear", arguments: timeZones)
@@ -101,10 +133,26 @@ struct ItemPredicateTest {
         let items = try context.fetch(.items(predicate))
 
         try #require(items.count == 1)
-        #expect(items[0].tags?.first { $0.type == .year }?.name == "2024")
-        #expect(items[0].tags?.first { $0.type == .yearMonth }?.name == "202401")
-        #expect(items[0].tags?.first { $0.type == .content }?.name == "Content")
-        #expect(items[0].tags?.first { $0.type == .category }?.name == "Category")
+        #expect(
+            items[0].tags?.first {
+                $0.type == .year
+            }?.name == "2024"
+        )
+        #expect(
+            items[0].tags?.first {
+                $0.type == .yearMonth
+            }?.name == "202401"
+        )
+        #expect(
+            items[0].tags?.first {
+                $0.type == .content
+            }?.name == "Content"
+        )
+        #expect(
+            items[0].tags?.first {
+                $0.type == .category
+            }?.name == "Category"
+        )
     }
 
     // MARK: - Date
@@ -753,7 +801,9 @@ struct ItemPredicateTest {
         NSTimeZone.default = timeZone
 
         _ = try CreateItemIntent.perform((context: context, date: shiftedDate("2024-01-01T00:00:00Z"), content: "RepeatOne", income: 0, outgo: 0, category: "Test", repeatCount: 1))
-        let repeatOneItem = try context.fetch(.items(.all)).first { $0.content == "RepeatOne" }!
+        let repeatOneItem = try context.fetch(.items(.all)).first {
+            $0.content == "RepeatOne"
+        }!
         let repeatID = repeatOneItem.repeatID
         _ = try CreateItemIntent.perform((context: context, date: shiftedDate("2024-02-01T00:00:00Z"), content: "NonRepeat", income: 0, outgo: 0, category: "Test", repeatCount: 1))
 

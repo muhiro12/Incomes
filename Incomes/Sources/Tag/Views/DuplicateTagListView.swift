@@ -80,7 +80,9 @@ struct DuplicateTagListView: View {
                 let id = try PersistentIdentifier(base64Encoded: entity.id)
                 return try context.fetchFirst(.tags(.idIs(id)))
             }
-            .sorted { $0.displayName < $1.displayName }
+            .sorted {
+                $0.displayName < $1.displayName
+            }
         } catch {
             assertionFailure(error.localizedDescription)
             duplicates = []

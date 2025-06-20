@@ -79,7 +79,11 @@ private extension ItemListView {
     IncomesPreview { preview in
         NavigationStack {
             ItemListView()
-                .environment(preview.tags.first { $0.type == .year })
+                .environment(
+                    preview.tags.first {
+                        $0.type == .year
+                    }
+                )
         }
     }
 }
@@ -88,7 +92,11 @@ private extension ItemListView {
     IncomesPreview { preview in
         NavigationStack {
             ItemListView()
-                .environment(preview.tags.first { $0.type == .yearMonth })
+                .environment(
+                    preview.tags.first {
+                        $0.type == .yearMonth
+                    }
+                )
         }
     }
 }
@@ -97,7 +105,11 @@ private extension ItemListView {
     IncomesPreview { preview in
         NavigationStack {
             ItemListView()
-                .environment(preview.tags.first { $0.type == .content })
+                .environment(
+                    preview.tags.first {
+                        $0.type == .content
+                    }
+                )
         }
     }
 }
@@ -106,7 +118,11 @@ private extension ItemListView {
     IncomesPreview { preview in
         NavigationStack {
             ItemListView()
-                .environment(preview.tags.first { $0.type == .category })
+                .environment(
+                    preview.tags.first {
+                        $0.type == .category
+                    }
+                )
         }
     }
 }

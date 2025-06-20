@@ -33,7 +33,9 @@ extension TagItemListSection: View {
             }
             .onDelete {
                 Haptic.warning.impact()
-                willDeleteItems = $0.map { items[$0] }
+                willDeleteItems = $0.map {
+                    items[$0]
+                }
                 isDialogPresented = true
             }
         } header: {
@@ -78,7 +80,11 @@ private extension TagItemListSection {
     IncomesPreview { preview in
         List {
             TagItemListSection(yearString: Date.now.stringValueWithoutLocale(.yyyy))
-                .environment(preview.tags.first { $0.type == .category })
+                .environment(
+                    preview.tags.first {
+                        $0.type == .category
+                    }
+                )
         }
     }
 }
