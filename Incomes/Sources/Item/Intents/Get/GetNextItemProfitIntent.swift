@@ -12,15 +12,15 @@ import SwiftUI
 import SwiftUtilities
 
 struct GetNextItemProfitIntent: AppIntent, IntentPerformer {
-    static let title: LocalizedStringResource = .init("Get Next Item Profit", table: "AppIntents")
+    typealias Input = (context: ModelContext, date: Date)
+    typealias Output = IntentCurrencyAmount?
 
     @Parameter(title: "Date", kind: .date)
     private var date: Date
 
     @Dependency private var modelContainer: ModelContainer
 
-    typealias Input = (context: ModelContext, date: Date)
-    typealias Output = IntentCurrencyAmount?
+    static let title: LocalizedStringResource = .init("Get Next Item Profit", table: "AppIntents")
 
     static func perform(_ input: Input) throws -> Output {
         guard let item = try GetNextItemIntent.perform((context: input.context, date: input.date)) else {

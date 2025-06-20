@@ -3,15 +3,15 @@ import SwiftData
 import SwiftUtilities
 
 struct GetTagByIDIntent: AppIntent, IntentPerformer {
-    static let title: LocalizedStringResource = .init("Get Tag By ID", table: "AppIntents")
+    typealias Input = (context: ModelContext, id: String)
+    typealias Output = TagEntity?
 
     @Parameter(title: "Tag ID")
     var id: String
 
     @Dependency private var modelContainer: ModelContainer
 
-    typealias Input = (context: ModelContext, id: String)
-    typealias Output = TagEntity?
+    static let title: LocalizedStringResource = .init("Get Tag By ID", table: "AppIntents")
 
     static func perform(_ input: Input) throws -> Output {
         let persistentID = try PersistentIdentifier(base64Encoded: input.id)

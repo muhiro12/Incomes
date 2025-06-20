@@ -3,7 +3,8 @@ import SwiftData
 import SwiftUtilities
 
 struct GetTagByNameIntent: AppIntent, IntentPerformer {
-    static let title: LocalizedStringResource = .init("Get Tag By Name", table: "AppIntents")
+    typealias Input = (context: ModelContext, name: String, type: TagType)
+    typealias Output = Tag?
 
     @Parameter(title: "Name")
     private var name: String
@@ -12,8 +13,7 @@ struct GetTagByNameIntent: AppIntent, IntentPerformer {
 
     @Dependency private var modelContainer: ModelContainer
 
-    typealias Input = (context: ModelContext, name: String, type: TagType)
-    typealias Output = Tag?
+    static let title: LocalizedStringResource = .init("Get Tag By Name", table: "AppIntents")
 
     static func perform(_ input: Input) throws -> Output {
         try input.context.fetchFirst(

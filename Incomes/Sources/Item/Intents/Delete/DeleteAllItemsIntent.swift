@@ -3,12 +3,12 @@ import SwiftData
 import SwiftUtilities
 
 struct DeleteAllItemsIntent: AppIntent, IntentPerformer {
-    static let title: LocalizedStringResource = .init("Delete All Items", table: "AppIntents")
+    typealias Input = ModelContext
+    typealias Output = Void
 
     @Dependency private var modelContainer: ModelContainer
 
-    typealias Input = ModelContext
-    typealias Output = Void
+    static let title: LocalizedStringResource = .init("Delete All Items", table: "AppIntents")
 
     static func perform(_ input: Input) throws -> Output {
         let context = input

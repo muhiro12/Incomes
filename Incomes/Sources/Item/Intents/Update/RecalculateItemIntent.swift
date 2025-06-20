@@ -3,15 +3,15 @@ import SwiftData
 import SwiftUtilities
 
 struct RecalculateItemIntent: AppIntent, IntentPerformer {
-    static let title: LocalizedStringResource = .init("Recalculate Item", table: "AppIntents")
+    typealias Input = (context: ModelContext, date: Date)
+    typealias Output = Void
 
     @Parameter(title: "Date", kind: .date)
     private var date: Date
 
     @Dependency private var modelContainer: ModelContainer
 
-    typealias Input = (context: ModelContext, date: Date)
-    typealias Output = Void
+    static let title: LocalizedStringResource = .init("Recalculate Item", table: "AppIntents")
 
     static func perform(_ input: Input) throws -> Output {
         let calculator = BalanceCalculator()
