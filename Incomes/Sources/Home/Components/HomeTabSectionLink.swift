@@ -21,7 +21,11 @@ extension HomeTabSectionLink: View {
                 HStack {
                     Text("Total Income")
                     Spacer()
-                    Text(yearTag.items.orEmpty.reduce(.zero) { $0 + $1.income }.asCurrency)
+                    Text(
+                        yearTag.items.orEmpty.reduce(.zero) {
+                            $0 + $1.income
+                        }.asCurrency
+                    )
                         .foregroundStyle(.secondary)
                     Image(systemName: "chevron.up")
                         .foregroundStyle(.tint)
@@ -30,7 +34,11 @@ extension HomeTabSectionLink: View {
                 HStack {
                     Text("Total Outgo")
                     Spacer()
-                    Text(yearTag.items.orEmpty.reduce(.zero) { $0 + $1.outgo }.asMinusCurrency)
+                    Text(
+                        yearTag.items.orEmpty.reduce(.zero) {
+                            $0 + $1.outgo
+                        }.asMinusCurrency
+                    )
                         .foregroundStyle(.secondary)
                     Image(systemName: "chevron.down")
                         .foregroundStyle(.red)
@@ -46,7 +54,11 @@ extension HomeTabSectionLink: View {
     IncomesPreview { preview in
         List {
             HomeTabSectionLink()
-                .environment(preview.tags.first { $0.type == .year })
+                .environment(
+                    preview.tags.first {
+                        $0.type == .year
+                    }
+                )
         }
     }
 }

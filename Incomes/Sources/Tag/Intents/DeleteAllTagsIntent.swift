@@ -13,7 +13,9 @@ struct DeleteAllTagsIntent: AppIntent, IntentPerformer {
     static func perform(_ input: Input) throws -> Output {
         let context = input
         let tags = try context.fetch(FetchDescriptor<Tag>())
-        tags.forEach { $0.delete() }
+        tags.forEach {
+            $0.delete()
+        }
     }
 
     @MainActor

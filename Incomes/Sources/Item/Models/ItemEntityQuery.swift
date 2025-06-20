@@ -15,7 +15,13 @@ struct ItemEntityQuery: EntityStringQuery {
     @MainActor
     func entities(for identifiers: [ItemEntity.ID]) throws -> [ItemEntity] {
         try modelContainer.mainContext.fetch(
-            .items(.idsAre(identifiers.map { try .init(base64Encoded: $0) }))
+            .items(
+                .idsAre(
+                    identifiers.map {
+                        try .init(base64Encoded: $0)
+                    }
+                )
+            )
         )
         .compactMap(ItemEntity.init)
     }

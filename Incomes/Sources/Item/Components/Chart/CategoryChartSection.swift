@@ -29,7 +29,9 @@ struct CategoryChartSection: View {
                 }.map { displayName, items in
                     (
                         title: displayName,
-                        value: items.reduce(.zero) { $0 + $1.income }
+                        value: items.reduce(.zero) {
+                            $0 + $1.income
+                        }
                     )
                 }.sorted {
                     $0.value > $1.value
@@ -61,7 +63,9 @@ struct CategoryChartSection: View {
                 }.map { displayName, items in
                     (
                         title: displayName,
-                        value: items.reduce(.zero) { $0 + $1.outgo }
+                        value: items.reduce(.zero) {
+                            $0 + $1.outgo
+                        }
                     )
                 }.sorted {
                     $0.value > $1.value
