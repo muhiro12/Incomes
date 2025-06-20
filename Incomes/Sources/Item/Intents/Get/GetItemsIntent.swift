@@ -11,14 +11,15 @@ import SwiftData
 import SwiftUtilities
 
 struct GetItemsIntent: AppIntent, IntentPerformer {
-    static let title: LocalizedStringResource = .init("Get Items", table: "AppIntents")
+    typealias Input = (context: ModelContext, date: Date)
+    typealias Output = [Item]
 
     @Parameter(title: "Date", kind: .date)
     private var date: Date
 
     @Dependency private var modelContainer: ModelContainer
-    typealias Input = (context: ModelContext, date: Date)
-    typealias Output = [Item]
+
+    static let title: LocalizedStringResource = .init("Get Items", table: "AppIntents")
 
     static func perform(_ input: Input) throws -> Output {
         try input.context.fetch(

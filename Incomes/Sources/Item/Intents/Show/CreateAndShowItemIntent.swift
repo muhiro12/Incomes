@@ -11,7 +11,8 @@ import SwiftData
 import SwiftUtilities
 
 struct CreateAndShowItemIntent: AppIntent, IntentPerformer {
-    static let title: LocalizedStringResource = .init("Create and Show Item", table: "AppIntents")
+    typealias Input = (context: ModelContext, date: Date, content: String, income: Double, outgo: Double, category: String, repeatCount: Int)
+    typealias Output = ItemEntity
 
     @Parameter(title: "Date", kind: .date)
     private var date: Date
@@ -28,8 +29,7 @@ struct CreateAndShowItemIntent: AppIntent, IntentPerformer {
 
     @Dependency private var modelContainer: ModelContainer
 
-    typealias Input = (context: ModelContext, date: Date, content: String, income: Double, outgo: Double, category: String, repeatCount: Int)
-    typealias Output = ItemEntity
+    static let title: LocalizedStringResource = .init("Create and Show Item", table: "AppIntents")
 
     static func perform(_ input: Input) throws -> Output {
         let (context, date, content, income, outgo, category, repeatCount) = input

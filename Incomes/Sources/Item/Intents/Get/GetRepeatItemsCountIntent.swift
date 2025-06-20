@@ -3,15 +3,15 @@ import SwiftData
 import SwiftUtilities
 
 struct GetRepeatItemsCountIntent: AppIntent, IntentPerformer {
-    static let title: LocalizedStringResource = .init("Get Repeat Items Count", table: "AppIntents")
+    typealias Input = (context: ModelContext, repeatID: UUID)
+    typealias Output = Int
 
     @Parameter(title: "Repeat ID")
     private var repeatID: String
 
     @Dependency private var modelContainer: ModelContainer
 
-    typealias Input = (context: ModelContext, repeatID: UUID)
-    typealias Output = Int
+    static let title: LocalizedStringResource = .init("Get Repeat Items Count", table: "AppIntents")
 
     static func perform(_ input: Input) throws -> Output {
         try input.context.fetchCount(.items(.repeatIDIs(input.repeatID)))

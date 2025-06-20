@@ -11,12 +11,12 @@ import SwiftData
 import SwiftUtilities
 
 struct ShowUpcomingItemIntent: AppIntent, IntentPerformer {
-    static let title: LocalizedStringResource = .init("Show Upcoming Item", table: "AppIntents")
+    typealias Input = (context: ModelContext, date: Date)
+    typealias Output = ItemEntity?
 
     @Dependency private var modelContainer: ModelContainer
 
-    typealias Input = (context: ModelContext, date: Date)
-    typealias Output = ItemEntity?
+    static let title: LocalizedStringResource = .init("Show Upcoming Item", table: "AppIntents")
 
     static func perform(_ input: Input) throws -> Output {
         try GetNextItemIntent.perform((context: input.context, date: input.date))

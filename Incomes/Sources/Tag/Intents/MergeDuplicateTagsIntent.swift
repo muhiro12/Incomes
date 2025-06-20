@@ -3,15 +3,15 @@ import SwiftData
 import SwiftUtilities
 
 struct MergeDuplicateTagsIntent: AppIntent, IntentPerformer {
-    static let title: LocalizedStringResource = .init("Merge Duplicate Tags", table: "AppIntents")
+    typealias Input = (context: ModelContext, tags: [TagEntity])
+    typealias Output = Void
 
     @Parameter(title: "Tags")
     private var tags: [TagEntity]
 
     @Dependency private var modelContainer: ModelContainer
 
-    typealias Input = (context: ModelContext, tags: [TagEntity])
-    typealias Output = Void
+    static let title: LocalizedStringResource = .init("Merge Duplicate Tags", table: "AppIntents")
 
     static func perform(_ input: Input) throws -> Output {
         let (context, entities) = input

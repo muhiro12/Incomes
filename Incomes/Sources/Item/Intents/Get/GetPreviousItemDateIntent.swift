@@ -11,15 +11,15 @@ import SwiftData
 import SwiftUtilities
 
 struct GetPreviousItemDateIntent: AppIntent, IntentPerformer {
-    static let title: LocalizedStringResource = .init("Get Previous Item Date", table: "AppIntents")
+    typealias Input = (context: ModelContext, date: Date)
+    typealias Output = Date?
 
     @Parameter(title: "Date", kind: .date)
     private var date: Date
 
     @Dependency private var modelContainer: ModelContainer
 
-    typealias Input = (context: ModelContext, date: Date)
-    typealias Output = Date?
+    static let title: LocalizedStringResource = .init("Get Previous Item Date", table: "AppIntents")
 
     static func perform(_ input: Input) throws -> Output {
         guard let item = try GetPreviousItemIntent.perform(input) else {

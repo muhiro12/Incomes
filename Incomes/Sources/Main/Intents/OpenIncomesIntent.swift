@@ -10,11 +10,11 @@ import AppIntents
 import SwiftUtilities
 
 struct OpenIncomesIntent: AppIntent, IntentPerformer {
-    static let title: LocalizedStringResource = .init("Open Incomes", table: "AppIntents")
-    static let openAppWhenRun = true
-
     typealias Input = Void
     typealias Output = Void
+
+    static let title: LocalizedStringResource = .init("Open Incomes", table: "AppIntents")
+    static let openAppWhenRun = true
 
     static func perform(_: Input) throws -> Output {}
 

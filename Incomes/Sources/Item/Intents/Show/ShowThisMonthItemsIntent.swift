@@ -11,12 +11,12 @@ import SwiftData
 import SwiftUtilities
 
 struct ShowThisMonthItemsIntent: AppIntent, IntentPerformer {
-    static let title: LocalizedStringResource = .init("Show This Month's Items", table: "AppIntents")
+    typealias Input = (context: ModelContext, date: Date)
+    typealias Output = [Item]?
 
     @Dependency private var modelContainer: ModelContainer
 
-    typealias Input = (context: ModelContext, date: Date)
-    typealias Output = [Item]?
+    static let title: LocalizedStringResource = .init("Show This Month's Items", table: "AppIntents")
 
     static func perform(_ input: Input) throws -> Output {
         try ShowItemsIntent.perform(input)

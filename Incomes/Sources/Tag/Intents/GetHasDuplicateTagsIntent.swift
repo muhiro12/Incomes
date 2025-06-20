@@ -3,12 +3,12 @@ import SwiftData
 import SwiftUtilities
 
 struct GetHasDuplicateTagsIntent: AppIntent, IntentPerformer {
-    static let title: LocalizedStringResource = .init("Get Has Duplicate Tags", table: "AppIntents")
+    typealias Input = ModelContext
+    typealias Output = Bool
 
     @Dependency private var modelContainer: ModelContainer
 
-    typealias Input = ModelContext
-    typealias Output = Bool
+    static let title: LocalizedStringResource = .init("Get Has Duplicate Tags", table: "AppIntents")
 
     static func perform(_ input: Input) throws -> Output {
         let context = input
