@@ -12,7 +12,7 @@ import SwiftUtilities
 
 struct ShowChartsIntent: AppIntent, IntentPerformer {
     typealias Input = (context: ModelContext, date: Date)
-    typealias Output = [Item]?
+    typealias Output = [ItemEntity]
 
     @Parameter(title: "Date", kind: .date)
     private var date: Date
@@ -25,14 +25,18 @@ struct ShowChartsIntent: AppIntent, IntentPerformer {
         let items = try input.context.fetch(
             .items(.dateIsSameMonthAs(input.date))
         )
-        return items.isEmpty ? nil : items
+        return items.compactMap(ItemEntity.init)
     }
 
     @MainActor
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
-        guard let items = try Self.perform((context: modelContainer.mainContext, date: date)) else {
+        let entities = try Self.perform(
+            (context: modelContainer.mainContext, date: date)
+        )
+        guard entities.isNotEmpty else {
             return .result(dialog: .init(.init("Not Found", table: "AppIntents")))
         }
+        let items = try entities.compactMap { try $0.model(in: modelContainer.mainContext) }
         return .result(dialog: .init(stringLiteral: date.stringValue(.yyyyMMM))) {
             IntentChartSectionGroup(.items(.idsAre(items.map(\.id))))
                 .modelContainer(modelContainer)

@@ -12,7 +12,7 @@ import SwiftUtilities
 
 struct GetItemsIntent: AppIntent, IntentPerformer {
     typealias Input = (context: ModelContext, date: Date)
-    typealias Output = [Item]
+    typealias Output = [ItemEntity]
 
     @Parameter(title: "Date", kind: .date)
     private var date: Date
@@ -22,14 +22,15 @@ struct GetItemsIntent: AppIntent, IntentPerformer {
     static let title: LocalizedStringResource = .init("Get Items", table: "AppIntents")
 
     static func perform(_ input: Input) throws -> Output {
-        try input.context.fetch(
+        let items = try input.context.fetch(
             .items(.dateIsSameMonthAs(input.date))
         )
+        return items.compactMap(ItemEntity.init)
     }
 
     @MainActor
     func perform() throws -> some ReturnsValue<[ItemEntity]> {
         let items = try Self.perform((context: modelContainer.mainContext, date: date))
-        return .result(value: items.compactMap(ItemEntity.init))
+        return .result(value: items)
     }
 }

@@ -45,7 +45,6 @@ struct TagEntityQuery: EntityStringQuery {
                     )
             }
         }
-        .compactMap(TagEntity.init)
     }
 
     @MainActor
@@ -62,6 +61,5 @@ struct TagEntityQuery: EntityStringQuery {
                 $0.type == type
             }
         }
-        .compactMap(TagEntity.init)
     }
 }
