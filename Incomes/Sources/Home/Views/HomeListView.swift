@@ -87,7 +87,7 @@ extension HomeListView: View {
                         name: Date.now.stringValueWithoutLocale(.yyyy),
                         type: .year
                     )
-                )
+                )?.model(in: context)
                 isIntroductionPresented = (
                     try? GetAllItemsCountIntent.perform(context).isZero
                 ) ?? false
