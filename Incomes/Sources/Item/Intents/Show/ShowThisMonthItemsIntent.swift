@@ -12,7 +12,7 @@ import SwiftUtilities
 
 struct ShowThisMonthItemsIntent: AppIntent, IntentPerformer {
     typealias Input = (context: ModelContext, date: Date)
-    typealias Output = [Item]?
+    typealias Output = [ItemEntity]
 
     @Dependency private var modelContainer: ModelContainer
 
@@ -25,7 +25,10 @@ struct ShowThisMonthItemsIntent: AppIntent, IntentPerformer {
     @MainActor
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
         let date = Date.now
-        guard let items = try Self.perform((context: modelContainer.mainContext, date: date)) else {
+        let items = try Self.perform(
+            (context: modelContainer.mainContext, date: date)
+        )
+        guard items.isNotEmpty else {
             return .result(dialog: .init(.init("Not Found", table: "AppIntents")))
         }
         return .result(dialog: .init(stringLiteral: date.stringValue(.yyyyMMM))) {

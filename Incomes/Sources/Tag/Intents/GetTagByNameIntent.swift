@@ -4,7 +4,7 @@ import SwiftUtilities
 
 struct GetTagByNameIntent: AppIntent, IntentPerformer {
     typealias Input = (context: ModelContext, name: String, type: TagType)
-    typealias Output = Tag?
+    typealias Output = TagEntity?
 
     @Parameter(title: "Name")
     private var name: String
@@ -16,16 +16,17 @@ struct GetTagByNameIntent: AppIntent, IntentPerformer {
     static let title: LocalizedStringResource = .init("Get Tag By Name", table: "AppIntents")
 
     static func perform(_ input: Input) throws -> Output {
-        try input.context.fetchFirst(
+        let tag = try input.context.fetchFirst(
             .tags(.nameIs(input.name, type: input.type))
         )
+        return tag.flatMap(TagEntity.init)
     }
 
     @MainActor
     func perform() throws -> some ReturnsValue<TagEntity?> {
-        let tag = try Self.perform(
+        let result = try Self.perform(
             (context: modelContainer.mainContext, name: name, type: type)
         )
-        return .result(value: tag.flatMap(TagEntity.init))
+        return .result(value: result)
     }
 }

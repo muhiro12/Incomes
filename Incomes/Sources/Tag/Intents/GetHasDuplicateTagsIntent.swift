@@ -16,7 +16,7 @@ struct GetHasDuplicateTagsIntent: AppIntent, IntentPerformer {
         let duplicates = try FindDuplicateTagsIntent.perform(
             (
                 context: context,
-                tags: tags.compactMap(TagEntity.init)
+                tags: tags
             )
         )
         return !duplicates.isEmpty
