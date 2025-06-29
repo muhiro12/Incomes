@@ -3,7 +3,7 @@ import SwiftData
 import SwiftUtilities
 
 struct DeleteTagIntent: AppIntent, IntentPerformer {
-    typealias Input = (context: ModelContext, tag: TagEntity)
+    typealias Input = (container: ModelContainer, tag: TagEntity)
     typealias Output = Void
 
     @Parameter(title: "Tag")
@@ -24,7 +24,7 @@ struct DeleteTagIntent: AppIntent, IntentPerformer {
 
     @MainActor
     func perform() throws -> some IntentResult {
-        try Self.perform((context: modelContainer.mainContext, tag: tag))
+        try Self.perform((container: modelContainer, tag: tag))
         return .result()
     }
 }

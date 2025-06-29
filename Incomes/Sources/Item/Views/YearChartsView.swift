@@ -32,7 +32,7 @@ struct YearChartsView: View {
             }
             ToolbarItem(placement: .status) {
                 if let count = try? GetYearItemsCountIntent.perform(
-                    (context: context, date: date)
+                    (container: context.modelContainer, date: date)
                 ) {
                     Text("\(count) Items")
                         .font(.footnote)

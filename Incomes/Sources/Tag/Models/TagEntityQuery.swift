@@ -17,7 +17,7 @@ struct TagEntityQuery: EntityStringQuery {
         try identifiers.compactMap { id in
             try GetTagByIDIntent.perform(
                 (
-                    context: modelContainer.mainContext,
+                    container: modelContainer,
                     id: id
                 )
             )

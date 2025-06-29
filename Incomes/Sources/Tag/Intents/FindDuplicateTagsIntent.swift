@@ -3,7 +3,7 @@ import SwiftData
 import SwiftUtilities
 
 struct FindDuplicateTagsIntent: AppIntent, IntentPerformer {
-    typealias Input = (context: ModelContext, tags: [TagEntity])
+    typealias Input = (container: ModelContainer, tags: [TagEntity])
     typealias Output = [TagEntity]
 
     @Parameter(title: "Tags")
@@ -33,7 +33,7 @@ struct FindDuplicateTagsIntent: AppIntent, IntentPerformer {
 
     @MainActor
     func perform() throws -> some ReturnsValue<[TagEntity]> {
-        let result = try Self.perform((context: modelContainer.mainContext, tags: tags))
+        let result = try Self.perform((container: modelContainer, tags: tags))
         return .result(value: result)
     }
 }

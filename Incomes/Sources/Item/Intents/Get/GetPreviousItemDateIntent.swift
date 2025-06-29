@@ -11,7 +11,7 @@ import SwiftData
 import SwiftUtilities
 
 struct GetPreviousItemDateIntent: AppIntent, IntentPerformer {
-    typealias Input = (context: ModelContext, date: Date)
+    typealias Input = (container: ModelContainer, date: Date)
     typealias Output = Date?
 
     @Parameter(title: "Date", kind: .date)
@@ -30,7 +30,7 @@ struct GetPreviousItemDateIntent: AppIntent, IntentPerformer {
 
     @MainActor
     func perform() throws -> some ReturnsValue<Date?> {
-        guard let item = try Self.perform((context: modelContainer.mainContext, date: date)) else {
+        guard let item = try Self.perform((container: modelContainer, date: date)) else {
             return .result(value: nil)
         }
         return .result(value: item)

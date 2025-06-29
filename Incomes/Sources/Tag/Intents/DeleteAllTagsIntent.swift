@@ -3,7 +3,7 @@ import SwiftData
 import SwiftUtilities
 
 struct DeleteAllTagsIntent: AppIntent, IntentPerformer {
-    typealias Input = ModelContext
+    typealias Input = ModelContainer
     typealias Output = Void
 
     @Dependency private var modelContainer: ModelContainer
@@ -20,7 +20,7 @@ struct DeleteAllTagsIntent: AppIntent, IntentPerformer {
 
     @MainActor
     func perform() throws -> some IntentResult {
-        try Self.perform(modelContainer.mainContext)
+        try Self.perform(modelContainer)
         return .result()
     }
 }

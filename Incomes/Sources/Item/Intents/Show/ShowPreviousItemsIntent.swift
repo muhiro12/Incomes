@@ -11,7 +11,7 @@ import SwiftData
 import SwiftUtilities
 
 struct ShowPreviousItemsIntent: AppIntent, IntentPerformer {
-    typealias Input = (context: ModelContext, date: Date)
+    typealias Input = (container: ModelContainer, date: Date)
     typealias Output = [ItemEntity]
 
     @Parameter(title: "Date", kind: .date)
@@ -28,7 +28,7 @@ struct ShowPreviousItemsIntent: AppIntent, IntentPerformer {
     @MainActor
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
         let items = try Self.perform(
-            (context: modelContainer.mainContext, date: date)
+            (container: modelContainer, date: date)
         )
         guard items.isNotEmpty else {
             return .result(dialog: .init(.init("Not Found", table: "AppIntents")))

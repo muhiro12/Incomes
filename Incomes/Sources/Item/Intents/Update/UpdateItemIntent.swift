@@ -4,7 +4,7 @@ import SwiftUI
 import SwiftUtilities
 
 struct UpdateItemIntent: AppIntent, IntentPerformer {
-    typealias Input = (context: ModelContext, item: ItemEntity, date: Date, content: String, income: Decimal, outgo: Decimal, category: String)
+    typealias Input = (container: ModelContainer, item: ItemEntity, date: Date, content: String, income: Decimal, outgo: Decimal, category: String)
     typealias Output = Void
 
     @Parameter(title: "Item")
@@ -25,7 +25,8 @@ struct UpdateItemIntent: AppIntent, IntentPerformer {
     static let title: LocalizedStringResource = .init("Update Item", table: "AppIntents")
 
     static func perform(_ input: Input) throws -> Output {
-        let (context, entity, date, content, income, outgo, category) = input
+        let (container, entity, date, content, income, outgo, category) = input
+        let context = container.mainContext
         guard
             let id = try? PersistentIdentifier(base64Encoded: entity.id),
             let model = try context.fetchFirst(.items(.idIs(id)))
@@ -55,7 +56,7 @@ struct UpdateItemIntent: AppIntent, IntentPerformer {
         }
         try Self.perform(
             (
-                context: modelContainer.mainContext,
+                container: modelContainer,
                 item: item,
                 date: date,
                 content: content,

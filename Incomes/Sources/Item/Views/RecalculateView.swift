@@ -37,7 +37,7 @@ struct RecalculateView: View {
                         isRecalculating = true
                         do {
                             try RecalculateItemIntent.perform(
-                                (context: context, date: selectedDate)
+                                (container: context.modelContainer, date: selectedDate)
                             )
                             try await Task.sleep(for: .seconds(5))
                         } catch {

@@ -3,7 +3,7 @@ import SwiftData
 import SwiftUtilities
 
 struct MergeDuplicateTagsIntent: AppIntent, IntentPerformer {
-    typealias Input = (context: ModelContext, tags: [TagEntity])
+    typealias Input = (container: ModelContainer, tags: [TagEntity])
     typealias Output = Void
 
     @Parameter(title: "Tags")
@@ -31,13 +31,13 @@ struct MergeDuplicateTagsIntent: AppIntent, IntentPerformer {
             item.modify(tags: tags)
         }
         try children.compactMap(TagEntity.init).forEach { child in
-            try DeleteTagIntent.perform((context: context, tag: child))
+            try DeleteTagIntent.perform((container: context.modelContainer, tag: child))
         }
     }
 
     @MainActor
     func perform() throws -> some IntentResult {
-        try Self.perform((context: modelContainer.mainContext, tags: tags))
+        try Self.perform((container: modelContainer, tags: tags))
         return .result()
     }
 }

@@ -3,7 +3,7 @@ import SwiftData
 import SwiftUtilities
 
 struct GetAllTagsIntent: AppIntent, IntentPerformer {
-    typealias Input = ModelContext
+    typealias Input = ModelContainer
     typealias Output = [TagEntity]
 
     @Dependency private var modelContainer: ModelContainer
@@ -17,7 +17,7 @@ struct GetAllTagsIntent: AppIntent, IntentPerformer {
 
     @MainActor
     func perform() throws -> some ReturnsValue<[TagEntity]> {
-        let tags = try Self.perform(modelContainer.mainContext)
+        let tags = try Self.perform(modelContainer)
         return .result(value: tags)
     }
 }

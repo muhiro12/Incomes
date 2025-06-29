@@ -3,7 +3,7 @@ import SwiftData
 import SwiftUtilities
 
 struct DeleteAllItemsIntent: AppIntent, IntentPerformer {
-    typealias Input = ModelContext
+    typealias Input = ModelContainer
     typealias Output = Void
 
     @Dependency private var modelContainer: ModelContainer
@@ -11,7 +11,7 @@ struct DeleteAllItemsIntent: AppIntent, IntentPerformer {
     static let title: LocalizedStringResource = .init("Delete All Items", table: "AppIntents")
 
     static func perform(_ input: Input) throws -> Output {
-        let context = input
+        let context = input.mainContext
         let items = try context.fetch(FetchDescriptor<Item>())
         items.forEach {
             $0.delete()
@@ -22,7 +22,7 @@ struct DeleteAllItemsIntent: AppIntent, IntentPerformer {
 
     @MainActor
     func perform() throws -> some IntentResult {
-        try Self.perform(modelContainer.mainContext)
+        try Self.perform(modelContainer)
         return .result()
     }
 }
