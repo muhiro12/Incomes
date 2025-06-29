@@ -50,7 +50,7 @@ struct ItemListSection: View {
             Button(role: .destructive) {
                 do {
                     try willDeleteItems.forEach {
-                        try DeleteItemIntent.perform((context: context, item: $0))
+                        try DeleteItemIntent.perform((container: context.modelContainer, item: $0))
                     }
                     Haptic.success.impact()
                 } catch {

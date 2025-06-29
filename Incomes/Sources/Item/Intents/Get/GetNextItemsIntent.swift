@@ -11,7 +11,7 @@ import SwiftData
 import SwiftUtilities
 
 struct GetNextItemsIntent: AppIntent, IntentPerformer {
-    typealias Input = (context: ModelContext, date: Date)
+    typealias Input = (container: ModelContainer, date: Date)
     typealias Output = [ItemEntity]
 
     @Parameter(title: "Date", kind: .date)
@@ -23,10 +23,10 @@ struct GetNextItemsIntent: AppIntent, IntentPerformer {
 
     static func perform(_ input: Input) throws -> Output {
         let descriptor = FetchDescriptor.items(.dateIsAfter(input.date), order: .forward)
-        guard let item = try input.context.fetchFirst(descriptor) else {
+        guard let item = try input.container.mainContext.fetchFirst(descriptor) else {
             return .empty
         }
-        let items = try input.context.fetch(
+        let items = try input.container.mainContext.fetch(
             .items(.dateIsSameDayAs(item.localDate))
         )
         return items.compactMap(ItemEntity.init)
@@ -35,7 +35,7 @@ struct GetNextItemsIntent: AppIntent, IntentPerformer {
     @MainActor
     func perform() throws -> some ReturnsValue<[ItemEntity]> {
         let items = try Self.perform(
-            (context: modelContainer.mainContext, date: date)
+            (container: modelContainer, date: date)
         )
         return .result(value: items)
     }

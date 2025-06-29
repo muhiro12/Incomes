@@ -219,7 +219,7 @@ private extension ItemFormView {
             if let entity = item,
                let model = try? entity.model(in: context),
                try GetRepeatItemsCountIntent.perform(
-                (context: context, repeatID: model.repeatID)
+                (container: context.modelContainer, repeatID: model.repeatID)
                ) > 1 {
                 presentToActionSheet()
             } else {

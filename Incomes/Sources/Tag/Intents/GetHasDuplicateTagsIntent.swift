@@ -3,7 +3,7 @@ import SwiftData
 import SwiftUtilities
 
 struct GetHasDuplicateTagsIntent: AppIntent, IntentPerformer {
-    typealias Input = ModelContext
+    typealias Input = ModelContainer
     typealias Output = Bool
 
     @Dependency private var modelContainer: ModelContainer
@@ -24,7 +24,7 @@ struct GetHasDuplicateTagsIntent: AppIntent, IntentPerformer {
 
     @MainActor
     func perform() throws -> some ReturnsValue<Bool> {
-        let result = try Self.perform(modelContainer.mainContext)
+        let result = try Self.perform(modelContainer)
         return .result(value: result)
     }
 }

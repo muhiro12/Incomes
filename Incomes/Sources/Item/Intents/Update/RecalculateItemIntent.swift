@@ -3,7 +3,7 @@ import SwiftData
 import SwiftUtilities
 
 struct RecalculateItemIntent: AppIntent, IntentPerformer {
-    typealias Input = (context: ModelContext, date: Date)
+    typealias Input = (container: ModelContainer, date: Date)
     typealias Output = Void
 
     @Parameter(title: "Date", kind: .date)
@@ -15,12 +15,12 @@ struct RecalculateItemIntent: AppIntent, IntentPerformer {
 
     static func perform(_ input: Input) throws -> Output {
         let calculator = BalanceCalculator()
-        try calculator.calculate(in: input.context, after: input.date)
+        try calculator.calculate(in: input.container.mainContext, after: input.date)
     }
 
     @MainActor
     func perform() throws -> some IntentResult {
-        try Self.perform((context: modelContainer.mainContext, date: date))
+        try Self.perform((container: modelContainer, date: date))
         return .result()
     }
 }

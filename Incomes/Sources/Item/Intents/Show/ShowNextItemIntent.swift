@@ -11,7 +11,7 @@ import SwiftData
 import SwiftUtilities
 
 struct ShowNextItemIntent: AppIntent, IntentPerformer {
-    typealias Input = (context: ModelContext, date: Date)
+    typealias Input = (container: ModelContainer, date: Date)
     typealias Output = ItemEntity?
 
     @Parameter(title: "Date", kind: .date)
@@ -22,12 +22,12 @@ struct ShowNextItemIntent: AppIntent, IntentPerformer {
     static let title: LocalizedStringResource = .init("Show Next Item", table: "AppIntents")
 
     static func perform(_ input: Input) throws -> Output {
-        try GetNextItemIntent.perform((context: input.context, date: input.date))
+        try GetNextItemIntent.perform((container: input.container, date: input.date))
     }
 
     @MainActor
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
-        guard let item = try GetNextItemIntent.perform((context: modelContainer.mainContext, date: date)) else {
+        guard let item = try GetNextItemIntent.perform((container: modelContainer, date: date)) else {
             return .result(dialog: .init(.init("Not Found", table: "AppIntents")))
         }
         return .result(dialog: .init(stringLiteral: item.content)) {

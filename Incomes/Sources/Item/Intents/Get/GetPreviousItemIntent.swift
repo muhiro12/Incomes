@@ -11,7 +11,7 @@ import SwiftData
 import SwiftUtilities
 
 struct GetPreviousItemIntent: AppIntent, IntentPerformer {
-    typealias Input = (context: ModelContext, date: Date)
+    typealias Input = (container: ModelContainer, date: Date)
     typealias Output = ItemEntity?
 
     @Parameter(title: "Date", kind: .date)
@@ -23,7 +23,7 @@ struct GetPreviousItemIntent: AppIntent, IntentPerformer {
 
     static func perform(_ input: Input) throws -> Output {
         let descriptor = FetchDescriptor.items(.dateIsBefore(input.date))
-        guard let item = try input.context.fetchFirst(descriptor) else {
+        guard let item = try input.container.mainContext.fetchFirst(descriptor) else {
             return nil
         }
         return .init(item)
@@ -31,7 +31,7 @@ struct GetPreviousItemIntent: AppIntent, IntentPerformer {
 
     @MainActor
     func perform() throws -> some ReturnsValue<ItemEntity?> {
-        guard let item = try Self.perform((context: modelContainer.mainContext, date: date)) else {
+        guard let item = try Self.perform((container: modelContainer, date: date)) else {
             return .result(value: nil)
         }
         return .result(value: item)

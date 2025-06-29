@@ -11,7 +11,7 @@ import SwiftData
 import SwiftUtilities
 
 struct ShowThisMonthItemsIntent: AppIntent, IntentPerformer {
-    typealias Input = (context: ModelContext, date: Date)
+    typealias Input = (container: ModelContainer, date: Date)
     typealias Output = [ItemEntity]
 
     @Dependency private var modelContainer: ModelContainer
@@ -26,7 +26,7 @@ struct ShowThisMonthItemsIntent: AppIntent, IntentPerformer {
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
         let date = Date.now
         let items = try Self.perform(
-            (context: modelContainer.mainContext, date: date)
+            (container: modelContainer, date: date)
         )
         guard items.isNotEmpty else {
             return .result(dialog: .init(.init("Not Found", table: "AppIntents")))
