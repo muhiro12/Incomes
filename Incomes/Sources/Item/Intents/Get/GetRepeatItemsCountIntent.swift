@@ -3,7 +3,7 @@ import SwiftData
 import SwiftUtilities
 
 struct GetRepeatItemsCountIntent: AppIntent, IntentPerformer {
-    typealias Input = (context: ModelContext, repeatID: UUID)
+    typealias Input = (container: ModelContainer, repeatID: UUID)
     typealias Output = Int
 
     @Parameter(title: "Repeat ID")
@@ -15,7 +15,7 @@ struct GetRepeatItemsCountIntent: AppIntent, IntentPerformer {
 
     @MainActor
     static func perform(_ input: Input) throws -> Output {
-        try input.context.fetchCount(.items(.repeatIDIs(input.repeatID)))
+        try input.container.mainContext.fetchCount(.items(.repeatIDIs(input.repeatID)))
     }
 
     @MainActor
@@ -23,6 +23,6 @@ struct GetRepeatItemsCountIntent: AppIntent, IntentPerformer {
         guard let uuid = UUID(uuidString: repeatID) else {
             throw DebugError.default
         }
-        return .result(value: try Self.perform((context: modelContainer.mainContext, repeatID: uuid)))
+        return .result(value: try Self.perform((container: modelContainer, repeatID: uuid)))
     }
 }

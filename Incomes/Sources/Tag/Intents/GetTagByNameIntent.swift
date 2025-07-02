@@ -3,7 +3,7 @@ import SwiftData
 import SwiftUtilities
 
 struct GetTagByNameIntent: AppIntent, IntentPerformer {
-    typealias Input = (context: ModelContext, name: String, type: TagType)
+    typealias Input = (container: ModelContainer, name: String, type: TagType)
     typealias Output = TagEntity?
 
     @Parameter(title: "Name")
@@ -17,7 +17,7 @@ struct GetTagByNameIntent: AppIntent, IntentPerformer {
 
     @MainActor
     static func perform(_ input: Input) throws -> Output {
-        let tag = try input.context.fetchFirst(
+        let tag = try input.container.mainContext.fetchFirst(
             .tags(.nameIs(input.name, type: input.type))
         )
         return tag.flatMap(TagEntity.init)
@@ -26,7 +26,7 @@ struct GetTagByNameIntent: AppIntent, IntentPerformer {
     @MainActor
     func perform() throws -> some ReturnsValue<TagEntity?> {
         let result = try Self.perform(
-            (context: modelContainer.mainContext, name: name, type: type)
+            (container: modelContainer, name: name, type: type)
         )
         return .result(value: result)
     }

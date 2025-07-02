@@ -12,7 +12,7 @@ import SwiftUI
 import SwiftUtilities
 
 struct GetPreviousItemProfitIntent: AppIntent, IntentPerformer {
-    typealias Input = (context: ModelContext, date: Date)
+    typealias Input = (container: ModelContainer, date: Date)
     typealias Output = IntentCurrencyAmount?
 
     @Parameter(title: "Date", kind: .date)
@@ -33,7 +33,7 @@ struct GetPreviousItemProfitIntent: AppIntent, IntentPerformer {
 
     @MainActor
     func perform() throws -> some ReturnsValue<IntentCurrencyAmount?> {
-        guard let amount = try Self.perform((context: modelContainer.mainContext, date: date)) else {
+        guard let amount = try Self.perform((container: modelContainer, date: date)) else {
             return .result(value: nil)
         }
         return .result(value: amount)

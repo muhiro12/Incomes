@@ -3,7 +3,7 @@ import SwiftData
 import SwiftUtilities
 
 struct DeleteItemIntent: AppIntent, IntentPerformer {
-    typealias Input = (context: ModelContext, item: ItemEntity)
+    typealias Input = (container: ModelContainer, item: ItemEntity)
     typealias Output = Void
 
     @Parameter(title: "Item")
@@ -15,7 +15,8 @@ struct DeleteItemIntent: AppIntent, IntentPerformer {
 
     @MainActor
     static func perform(_ input: Input) throws -> Output {
-        let (context, entity) = input
+        let (container, entity) = input
+        let context = container.mainContext
         guard
             let id = try? PersistentIdentifier(base64Encoded: entity.id),
             let model = try context.fetchFirst(.items(.idIs(id)))
@@ -29,7 +30,7 @@ struct DeleteItemIntent: AppIntent, IntentPerformer {
 
     @MainActor
     func perform() throws -> some IntentResult {
-        try Self.perform((context: modelContainer.mainContext, item: item))
+        try Self.perform((container: modelContainer, item: item))
         return .result()
     }
 }

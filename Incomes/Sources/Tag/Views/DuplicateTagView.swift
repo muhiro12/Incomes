@@ -88,7 +88,7 @@ struct DuplicateTagView: View {
                 do {
                     try DeleteTagIntent.perform(
                         (
-                            context: context,
+                            container: context.modelContainer,
                             tag: .init(selectedTag)!
                         )
                     )

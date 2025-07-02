@@ -11,7 +11,7 @@ import SwiftData
 import SwiftUtilities
 
 struct ShowItemsIntent: AppIntent, IntentPerformer {
-    typealias Input = (context: ModelContext, date: Date)
+    typealias Input = (container: ModelContainer, date: Date)
     typealias Output = [ItemEntity]
 
     @Parameter(title: "Date", kind: .date)
@@ -23,7 +23,7 @@ struct ShowItemsIntent: AppIntent, IntentPerformer {
 
     @MainActor
     static func perform(_ input: Input) throws -> Output {
-        let items = try input.context.fetch(
+        let items = try input.container.mainContext.fetch(
             .items(.dateIsSameMonthAs(input.date))
         )
         return items.compactMap(ItemEntity.init)
@@ -32,7 +32,7 @@ struct ShowItemsIntent: AppIntent, IntentPerformer {
     @MainActor
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
         let items = try Self.perform(
-            (context: modelContainer.mainContext, date: date)
+            (container: modelContainer, date: date)
         )
         guard items.isNotEmpty else {
             return .result(dialog: .init(.init("Not Found", table: "AppIntents")))

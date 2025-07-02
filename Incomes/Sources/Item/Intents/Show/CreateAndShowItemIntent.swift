@@ -11,7 +11,7 @@ import SwiftData
 import SwiftUtilities
 
 struct CreateAndShowItemIntent: AppIntent, IntentPerformer {
-    typealias Input = (context: ModelContext, date: Date, content: String, income: Double, outgo: Double, category: String, repeatCount: Int)
+    typealias Input = (container: ModelContainer, date: Date, content: String, income: Double, outgo: Double, category: String, repeatCount: Int)
     typealias Output = ItemEntity
 
     @Parameter(title: "Date", kind: .date)
@@ -33,13 +33,13 @@ struct CreateAndShowItemIntent: AppIntent, IntentPerformer {
 
     @MainActor
     static func perform(_ input: Input) throws -> Output {
-        let (context, date, content, income, outgo, category, repeatCount) = input
+        let (container, date, content, income, outgo, category, repeatCount) = input
         guard content.isNotEmpty else {
             throw ItemError.contentIsEmpty
         }
         return try CreateItemIntent.perform(
             (
-                context: context,
+                container: container,
                 date: date,
                 content: content,
                 income: .init(income),
@@ -52,7 +52,7 @@ struct CreateAndShowItemIntent: AppIntent, IntentPerformer {
 
     @MainActor
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
-        let item = try Self.perform((context: modelContainer.mainContext,
+        let item = try Self.perform((container: modelContainer,
                                      date: date,
                                      content: content,
                                      income: income,

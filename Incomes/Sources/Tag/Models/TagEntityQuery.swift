@@ -17,7 +17,7 @@ struct TagEntityQuery: EntityStringQuery {
         try identifiers.compactMap { id in
             try GetTagByIDIntent.perform(
                 (
-                    context: modelContainer.mainContext,
+                    container: modelContainer,
                     id: id
                 )
             )
@@ -26,7 +26,7 @@ struct TagEntityQuery: EntityStringQuery {
 
     @MainActor
     func entities(matching string: String) throws -> [TagEntity] {
-        let tags = try GetAllTagsIntent.perform(modelContainer.mainContext)
+        let tags = try GetAllTagsIntent.perform(modelContainer)
         let hiragana = string.applyingTransform(.hiraganaToKatakana, reverse: true).orEmpty
         let katakana = string.applyingTransform(.hiraganaToKatakana, reverse: false).orEmpty
         return [
@@ -49,7 +49,7 @@ struct TagEntityQuery: EntityStringQuery {
 
     @MainActor
     func suggestedEntities() throws -> [TagEntity] {
-        let tags = try GetAllTagsIntent.perform(modelContainer.mainContext)
+        let tags = try GetAllTagsIntent.perform(modelContainer)
         return [
             TagType.year,
             .yearMonth,
