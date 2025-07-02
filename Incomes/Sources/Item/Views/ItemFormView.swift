@@ -219,7 +219,10 @@ private extension ItemFormView {
             if let entity = item,
                let model = try? entity.model(in: context),
                try GetRepeatItemsCountIntent.perform(
-                (context: context, repeatID: model.repeatID)
+                (
+                    container: context.modelContainer,
+                    repeatID: model.repeatID
+                )
                ) > 1 {
                 presentToActionSheet()
             } else {
@@ -238,7 +241,7 @@ private extension ItemFormView {
         do {
             try UpdateItemIntent.perform(
                 (
-                    context: context,
+                    container: context.modelContainer,
                     item: item,
                     date: date,
                     content: content,
@@ -262,7 +265,7 @@ private extension ItemFormView {
         do {
             try UpdateFutureItemsIntent.perform(
                 (
-                    context: context,
+                    container: context.modelContainer,
                     item: item,
                     date: date,
                     content: content,
@@ -286,7 +289,7 @@ private extension ItemFormView {
         do {
             try UpdateAllItemsIntent.perform(
                 (
-                    context: context,
+                    container: context.modelContainer,
                     item: item,
                     date: date,
                     content: content,
@@ -306,7 +309,7 @@ private extension ItemFormView {
         do {
             _ = try CreateItemIntent.perform(
                 (
-                    context: context,
+                    container: context.modelContainer,
                     date: date,
                     content: content,
                     income: income.decimalValue,

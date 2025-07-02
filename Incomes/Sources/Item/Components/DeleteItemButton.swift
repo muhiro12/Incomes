@@ -44,7 +44,12 @@ extension DeleteItemButton: View {
         ) {
             Button(role: .destructive) {
                 do {
-                    try DeleteItemIntent.perform((context: context, item: item))
+                    try DeleteItemIntent.perform(
+                        (
+                            container: context.modelContainer,
+                            item: item
+                        )
+                    )
                     Haptic.success.impact()
                 } catch {
                     assertionFailure(error.localizedDescription)

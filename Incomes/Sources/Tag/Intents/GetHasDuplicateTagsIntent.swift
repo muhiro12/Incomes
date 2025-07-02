@@ -13,7 +13,6 @@ struct GetHasDuplicateTagsIntent: AppIntent, IntentPerformer {
     @MainActor
     static func perform(_ input: Input) throws -> Output {
         let container = input
-        let context = container.mainContext
         let tags = try GetAllTagsIntent.perform(container)
         let duplicates = try FindDuplicateTagsIntent.perform(
             (
