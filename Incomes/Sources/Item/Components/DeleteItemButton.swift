@@ -5,6 +5,7 @@
 //  Created by Hiromu Nakano on 10/18/24.
 //
 
+import SwiftData
 import SwiftUI
 
 struct DeleteItemButton {
@@ -46,7 +47,7 @@ extension DeleteItemButton: View {
                 do {
                     try DeleteItemIntent.perform(
                         (
-                            container: context.modelContainer,
+                            container: context.container,
                             item: item
                         )
                     )

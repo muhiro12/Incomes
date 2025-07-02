@@ -50,7 +50,7 @@ struct HomeYearSection: View {
                     try willDeleteItems.compactMap(ItemEntity.init).forEach {
                         try DeleteItemIntent.perform(
                             (
-                                container: context.modelContainer,
+                                container: context.container,
                                 item: $0
                             )
                         )

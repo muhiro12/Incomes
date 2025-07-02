@@ -50,7 +50,7 @@ extension TagItemListSection: View {
                     try willDeleteItems.forEach {
                         try DeleteItemIntent.perform(
                             (
-                                container: context.modelContainer,
+                                container: context.container,
                                 item: $0
                             )
                         )

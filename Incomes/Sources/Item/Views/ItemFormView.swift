@@ -7,6 +7,7 @@
 //
 
 import StoreKit
+import SwiftData
 import SwiftUI
 
 struct ItemFormView: View {
@@ -220,7 +221,7 @@ private extension ItemFormView {
                let model = try? entity.model(in: context),
                try GetRepeatItemsCountIntent.perform(
                 (
-                    container: context.modelContainer,
+                    container: context.container,
                     repeatID: model.repeatID
                 )
                ) > 1 {
@@ -241,7 +242,7 @@ private extension ItemFormView {
         do {
             try UpdateItemIntent.perform(
                 (
-                    container: context.modelContainer,
+                    container: context.container,
                     item: item,
                     date: date,
                     content: content,
@@ -265,7 +266,7 @@ private extension ItemFormView {
         do {
             try UpdateFutureItemsIntent.perform(
                 (
-                    container: context.modelContainer,
+                    container: context.container,
                     item: item,
                     date: date,
                     content: content,
@@ -289,7 +290,7 @@ private extension ItemFormView {
         do {
             try UpdateAllItemsIntent.perform(
                 (
-                    container: context.modelContainer,
+                    container: context.container,
                     item: item,
                     date: date,
                     content: content,
@@ -309,7 +310,7 @@ private extension ItemFormView {
         do {
             _ = try CreateItemIntent.perform(
                 (
-                    container: context.modelContainer,
+                    container: context.container,
                     date: date,
                     content: content,
                     income: income.decimalValue,

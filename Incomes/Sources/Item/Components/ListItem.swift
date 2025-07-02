@@ -6,6 +6,7 @@
 //  Copyright © 2020 Hiromu Nakano. All rights reserved.
 //
 
+import SwiftData
 import SwiftUI
 
 struct ListItem: View {
@@ -78,7 +79,7 @@ struct ListItem: View {
                 do {
                     try DeleteItemIntent.perform(
                         (
-                            container: context.modelContainer,
+                            container: context.container,
                             item: item
                         )
                     )
