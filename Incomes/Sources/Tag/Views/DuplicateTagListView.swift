@@ -42,7 +42,7 @@ struct DuplicateTagListView: View {
                 do {
                     try ResolveDuplicateTagsIntent.perform(
                         (
-                            container: context.modelContainer,
+                            container: context.container,
                             tags: selectedTags.compactMap(TagEntity.init)
                         )
                     )
@@ -72,7 +72,7 @@ struct DuplicateTagListView: View {
         do {
             let entities = try FindDuplicateTagsIntent.perform(
                 (
-                    container: context.modelContainer,
+                    container: context.container,
                     tags: tags.compactMap(TagEntity.init)
                 )
             )

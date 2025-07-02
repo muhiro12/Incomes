@@ -50,7 +50,7 @@ extension TagItemListSection: View {
                     try willDeleteItems.forEach {
                         try DeleteItemIntent.perform(
                             (
-                                container: context.modelContainer,
+                                container: context.container,
                                 item: $0
                             )
                         )
@@ -74,6 +74,7 @@ extension TagItemListSection: View {
 }
 
 private extension TagItemListSection {
+    @MainActor
     var items: [ItemEntity] {
         tag.items.orEmpty.filter {
             $0.year?.name == yearString

@@ -6,6 +6,7 @@
 //  Copyright © 2020 Hiromu Nakano. All rights reserved.
 //
 
+import SwiftData
 import SwiftUI
 import SwiftUtilities
 
@@ -157,8 +158,8 @@ extension SettingsListView: View {
         ) {
             Button(role: .destructive) {
                 do {
-                    try DeleteAllItemsIntent.perform(context.modelContainer)
-                    try DeleteAllTagsIntent.perform(context.modelContainer)
+                    try DeleteAllItemsIntent.perform(context.container)
+                    try DeleteAllTagsIntent.perform(context.container)
                     Haptic.success.impact()
                 } catch {
                     assertionFailure(error.localizedDescription)
@@ -178,7 +179,7 @@ extension SettingsListView: View {
         }
         .task {
             do {
-                hasDuplicateTags = try GetHasDuplicateTagsIntent.perform(context.modelContainer)
+                hasDuplicateTags = try GetHasDuplicateTagsIntent.perform(context.container)
             } catch {
                 assertionFailure(error.localizedDescription)
                 hasDuplicateTags = false
