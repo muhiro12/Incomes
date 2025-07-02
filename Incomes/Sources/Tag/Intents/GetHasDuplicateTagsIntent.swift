@@ -10,6 +10,7 @@ struct GetHasDuplicateTagsIntent: AppIntent, IntentPerformer {
 
     static let title: LocalizedStringResource = .init("Get Has Duplicate Tags", table: "AppIntents")
 
+    @MainActor
     static func perform(_ input: Input) throws -> Output {
         let context = input
         let tags = try GetAllTagsIntent.perform(context)

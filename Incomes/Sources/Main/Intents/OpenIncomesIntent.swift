@@ -16,6 +16,7 @@ struct OpenIncomesIntent: AppIntent, IntentPerformer {
     static let title: LocalizedStringResource = .init("Open Incomes", table: "AppIntents")
     static let openAppWhenRun = true
 
+    @MainActor
     static func perform(_: Input) throws -> Output {}
 
     func perform() throws -> some IntentResult {

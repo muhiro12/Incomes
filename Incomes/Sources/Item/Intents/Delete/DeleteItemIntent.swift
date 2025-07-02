@@ -13,6 +13,7 @@ struct DeleteItemIntent: AppIntent, IntentPerformer {
 
     static let title: LocalizedStringResource = .init("Delete Item", table: "AppIntents")
 
+    @MainActor
     static func perform(_ input: Input) throws -> Output {
         let (context, entity) = input
         guard

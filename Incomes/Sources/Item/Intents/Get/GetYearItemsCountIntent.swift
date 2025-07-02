@@ -13,6 +13,7 @@ struct GetYearItemsCountIntent: AppIntent, IntentPerformer {
 
     static let title: LocalizedStringResource = .init("Get Year Items Count", table: "AppIntents")
 
+    @MainActor
     static func perform(_ input: Input) throws -> Output {
         try input.context.fetchCount(.items(.dateIsSameYearAs(input.date)))
     }

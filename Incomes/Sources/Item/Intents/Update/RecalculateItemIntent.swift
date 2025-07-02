@@ -13,6 +13,7 @@ struct RecalculateItemIntent: AppIntent, IntentPerformer {
 
     static let title: LocalizedStringResource = .init("Recalculate Item", table: "AppIntents")
 
+    @MainActor
     static func perform(_ input: Input) throws -> Output {
         let calculator = BalanceCalculator()
         try calculator.calculate(in: input.context, after: input.date)

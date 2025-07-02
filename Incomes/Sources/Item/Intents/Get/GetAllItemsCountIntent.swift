@@ -10,6 +10,7 @@ struct GetAllItemsCountIntent: AppIntent, IntentPerformer {
 
     static let title: LocalizedStringResource = .init("Get All Items Count", table: "AppIntents")
 
+    @MainActor
     static func perform(_ input: Input) throws -> Output {
         try input.fetchCount(.items(.all))
     }

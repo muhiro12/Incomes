@@ -18,6 +18,7 @@ struct ShowThisMonthItemsIntent: AppIntent, IntentPerformer {
 
     static let title: LocalizedStringResource = .init("Show This Month's Items", table: "AppIntents")
 
+    @MainActor
     static func perform(_ input: Input) throws -> Output {
         try ShowItemsIntent.perform(input)
     }

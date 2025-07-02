@@ -21,6 +21,7 @@ struct GetItemsIntent: AppIntent, IntentPerformer {
 
     static let title: LocalizedStringResource = .init("Get Items", table: "AppIntents")
 
+    @MainActor
     static func perform(_ input: Input) throws -> Output {
         let items = try input.context.fetch(
             .items(.dateIsSameMonthAs(input.date))
