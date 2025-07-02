@@ -2,6 +2,7 @@
 import SwiftData
 import Testing
 
+@MainActor
 struct DeleteAllItemsIntentTest {
     let context: ModelContext
 

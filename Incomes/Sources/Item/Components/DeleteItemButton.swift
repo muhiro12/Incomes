@@ -5,6 +5,7 @@
 //  Created by Hiromu Nakano on 10/18/24.
 //
 
+import SwiftData
 import SwiftUI
 
 struct DeleteItemButton {
@@ -44,7 +45,12 @@ extension DeleteItemButton: View {
         ) {
             Button(role: .destructive) {
                 do {
-                    try DeleteItemIntent.perform((context: context, item: item))
+                    try DeleteItemIntent.perform(
+                        (
+                            container: context.container,
+                            item: item
+                        )
+                    )
                     Haptic.success.impact()
                 } catch {
                     assertionFailure(error.localizedDescription)

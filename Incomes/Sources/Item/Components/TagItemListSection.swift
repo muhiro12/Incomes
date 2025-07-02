@@ -48,7 +48,12 @@ extension TagItemListSection: View {
             Button(role: .destructive) {
                 do {
                     try willDeleteItems.forEach {
-                        try DeleteItemIntent.perform((context: context, item: $0))
+                        try DeleteItemIntent.perform(
+                            (
+                                container: context.container,
+                                item: $0
+                            )
+                        )
                     }
                     Haptic.success.impact()
                 } catch {
@@ -69,6 +74,7 @@ extension TagItemListSection: View {
 }
 
 private extension TagItemListSection {
+    @MainActor
     var items: [ItemEntity] {
         tag.items.orEmpty.filter {
             $0.year?.name == yearString

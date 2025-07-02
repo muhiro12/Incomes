@@ -5,7 +5,7 @@ import SwiftUtilities
 
 struct UpdateRepeatingItemsIntent: AppIntent, IntentPerformer {
     typealias Input = (
-        context: ModelContext,
+        container: ModelContainer,
         item: ItemEntity,
         date: Date,
         content: String,
@@ -33,8 +33,10 @@ struct UpdateRepeatingItemsIntent: AppIntent, IntentPerformer {
 
     static let title: LocalizedStringResource = .init("Update Repeating Items", table: "AppIntents")
 
+    @MainActor
     static func perform(_ input: Input) throws -> Output {
-        let (context, entity, date, content, income, outgo, category, descriptor) = input
+        let (container, entity, date, content, income, outgo, category, descriptor) = input
+        let context = container.mainContext
         let components = Calendar.current.dateComponents(
             [.year, .month, .day],
             from: entity.date,
@@ -77,7 +79,7 @@ struct UpdateRepeatingItemsIntent: AppIntent, IntentPerformer {
         }
         try Self.perform(
             (
-                context: modelContainer.mainContext,
+                container: modelContainer,
                 item: item,
                 date: date,
                 content: content,

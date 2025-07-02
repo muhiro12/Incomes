@@ -6,6 +6,7 @@
 //  Copyright © 2025 Hiromu Nakano. All rights reserved.
 //
 
+import SwiftData
 import SwiftUI
 import SwiftUtilities
 
@@ -37,7 +38,10 @@ struct RecalculateView: View {
                         isRecalculating = true
                         do {
                             try RecalculateItemIntent.perform(
-                                (context: context, date: selectedDate)
+                                (
+                                    container: context.container,
+                                    date: selectedDate
+                                )
                             )
                             try await Task.sleep(for: .seconds(5))
                         } catch {

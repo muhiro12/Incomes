@@ -12,7 +12,7 @@ import SwiftUI
 import SwiftUtilities
 
 struct GetPreviousItemProfitIntent: AppIntent, IntentPerformer {
-    typealias Input = (context: ModelContext, date: Date)
+    typealias Input = (container: ModelContainer, date: Date)
     typealias Output = IntentCurrencyAmount?
 
     @Parameter(title: "Date", kind: .date)
@@ -22,6 +22,7 @@ struct GetPreviousItemProfitIntent: AppIntent, IntentPerformer {
 
     static let title: LocalizedStringResource = .init("Get Previous Item Profit", table: "AppIntents")
 
+    @MainActor
     static func perform(_ input: Input) throws -> Output {
         guard let item = try GetPreviousItemIntent.perform(input) else {
             return nil
@@ -32,7 +33,7 @@ struct GetPreviousItemProfitIntent: AppIntent, IntentPerformer {
 
     @MainActor
     func perform() throws -> some ReturnsValue<IntentCurrencyAmount?> {
-        guard let amount = try Self.perform((context: modelContainer.mainContext, date: date)) else {
+        guard let amount = try Self.perform((container: modelContainer, date: date)) else {
             return .result(value: nil)
         }
         return .result(value: amount)

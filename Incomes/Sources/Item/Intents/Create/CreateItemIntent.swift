@@ -12,7 +12,7 @@ import SwiftUI
 import SwiftUtilities
 
 struct CreateItemIntent: AppIntent, IntentPerformer {
-    typealias Input = (context: ModelContext, date: Date, content: String, income: Decimal, outgo: Decimal, category: String, repeatCount: Int)
+    typealias Input = (container: ModelContainer, date: Date, content: String, income: Decimal, outgo: Decimal, category: String, repeatCount: Int)
     typealias Output = ItemEntity
 
     @Parameter(title: "Date", kind: .date)
@@ -32,8 +32,10 @@ struct CreateItemIntent: AppIntent, IntentPerformer {
 
     static let title: LocalizedStringResource = .init("Create Item", table: "AppIntents")
 
+    @MainActor
     static func perform(_ input: Input) throws -> Output {
-        let (context, date, content, income, outgo, category, repeatCount) = input
+        let (container, date, content, income, outgo, category, repeatCount) = input
+        let context = container.mainContext
         var items = [Item]()
 
         let repeatID = UUID()
@@ -98,7 +100,7 @@ struct CreateItemIntent: AppIntent, IntentPerformer {
 
         let item = try Self.perform(
             (
-                context: modelContainer.mainContext,
+                container: modelContainer,
                 date: date,
                 content: content,
                 income: income.amount,

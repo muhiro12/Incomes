@@ -2,6 +2,7 @@
 import SwiftData
 import Testing
 
+@MainActor
 struct RecalculateItemIntentTest {
     let context: ModelContext
 
