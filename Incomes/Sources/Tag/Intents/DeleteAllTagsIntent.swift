@@ -10,6 +10,7 @@ struct DeleteAllTagsIntent: AppIntent, IntentPerformer {
 
     static let title: LocalizedStringResource = .init("Delete All Tags", table: "AppIntents")
 
+    @MainActor
     static func perform(_ input: Input) throws -> Output {
         let context = input
         let tags = try context.fetch(FetchDescriptor<Tag>())

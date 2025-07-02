@@ -21,6 +21,7 @@ struct GetPreviousItemDateIntent: AppIntent, IntentPerformer {
 
     static let title: LocalizedStringResource = .init("Get Previous Item Date", table: "AppIntents")
 
+    @MainActor
     static func perform(_ input: Input) throws -> Output {
         guard let item = try GetPreviousItemIntent.perform(input) else {
             return nil

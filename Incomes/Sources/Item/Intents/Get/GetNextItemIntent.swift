@@ -21,6 +21,7 @@ struct GetNextItemIntent: AppIntent, IntentPerformer {
 
     static let title: LocalizedStringResource = .init("Get Next Item", table: "AppIntents")
 
+    @MainActor
     static func perform(_ input: Input) throws -> Output {
         let descriptor = FetchDescriptor.items(.dateIsAfter(input.date), order: .forward)
         guard let item = try input.context.fetchFirst(descriptor) else {

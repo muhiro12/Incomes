@@ -32,6 +32,7 @@ struct CreateItemIntent: AppIntent, IntentPerformer {
 
     static let title: LocalizedStringResource = .init("Create Item", table: "AppIntents")
 
+    @MainActor
     static func perform(_ input: Input) throws -> Output {
         let (context, date, content, income, outgo, category, repeatCount) = input
         var items = [Item]()

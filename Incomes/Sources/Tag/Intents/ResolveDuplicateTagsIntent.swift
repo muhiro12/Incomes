@@ -13,6 +13,7 @@ struct ResolveDuplicateTagsIntent: AppIntent, IntentPerformer {
 
     static let title: LocalizedStringResource = .init("Resolve Duplicate Tags", table: "AppIntents")
 
+    @MainActor
     static func perform(_ input: Input) throws -> Output {
         let (context, entities) = input
         let models: [Tag] = try entities.compactMap { entity in

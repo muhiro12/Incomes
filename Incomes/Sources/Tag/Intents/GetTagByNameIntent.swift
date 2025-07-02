@@ -15,6 +15,7 @@ struct GetTagByNameIntent: AppIntent, IntentPerformer {
 
     static let title: LocalizedStringResource = .init("Get Tag By Name", table: "AppIntents")
 
+    @MainActor
     static func perform(_ input: Input) throws -> Output {
         let tag = try input.context.fetchFirst(
             .tags(.nameIs(input.name, type: input.type))

@@ -18,6 +18,7 @@ struct ShowUpcomingItemIntent: AppIntent, IntentPerformer {
 
     static let title: LocalizedStringResource = .init("Show Upcoming Item", table: "AppIntents")
 
+    @MainActor
     static func perform(_ input: Input) throws -> Output {
         try GetNextItemIntent.perform((context: input.context, date: input.date))
     }

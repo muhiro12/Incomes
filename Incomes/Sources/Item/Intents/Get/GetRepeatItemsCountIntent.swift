@@ -13,6 +13,7 @@ struct GetRepeatItemsCountIntent: AppIntent, IntentPerformer {
 
     static let title: LocalizedStringResource = .init("Get Repeat Items Count", table: "AppIntents")
 
+    @MainActor
     static func perform(_ input: Input) throws -> Output {
         try input.context.fetchCount(.items(.repeatIDIs(input.repeatID)))
     }

@@ -13,6 +13,7 @@ struct DeleteTagIntent: AppIntent, IntentPerformer {
 
     static let title: LocalizedStringResource = .init("Delete Tag", table: "AppIntents")
 
+    @MainActor
     static func perform(_ input: Input) throws -> Output {
         let (context, entity) = input
         let id = try PersistentIdentifier(base64Encoded: entity.id)

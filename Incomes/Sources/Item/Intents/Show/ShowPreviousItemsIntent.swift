@@ -21,6 +21,7 @@ struct ShowPreviousItemsIntent: AppIntent, IntentPerformer {
 
     static let title: LocalizedStringResource = .init("Show Previous Items", table: "AppIntents")
 
+    @MainActor
     static func perform(_ input: Input) throws -> Output {
         try GetPreviousItemsIntent.perform(input)
     }

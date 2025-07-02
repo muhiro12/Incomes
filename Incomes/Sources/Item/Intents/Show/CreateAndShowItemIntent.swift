@@ -31,6 +31,7 @@ struct CreateAndShowItemIntent: AppIntent, IntentPerformer {
 
     static let title: LocalizedStringResource = .init("Create and Show Item", table: "AppIntents")
 
+    @MainActor
     static func perform(_ input: Input) throws -> Output {
         let (context, date, content, income, outgo, category, repeatCount) = input
         guard content.isNotEmpty else {

@@ -13,6 +13,7 @@ struct GetTagByIDIntent: AppIntent, IntentPerformer {
 
     static let title: LocalizedStringResource = .init("Get Tag By ID", table: "AppIntents")
 
+    @MainActor
     static func perform(_ input: Input) throws -> Output {
         let persistentID = try PersistentIdentifier(base64Encoded: input.id)
         guard let tag = try input.context.fetchFirst(

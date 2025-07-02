@@ -21,6 +21,7 @@ struct ShowChartsIntent: AppIntent, IntentPerformer {
 
     static let title: LocalizedStringResource = .init("Show Charts", table: "AppIntents")
 
+    @MainActor
     static func perform(_ input: Input) throws -> Output {
         let items = try input.context.fetch(
             .items(.dateIsSameMonthAs(input.date))

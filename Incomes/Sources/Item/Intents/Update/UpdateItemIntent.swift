@@ -24,6 +24,7 @@ struct UpdateItemIntent: AppIntent, IntentPerformer {
 
     static let title: LocalizedStringResource = .init("Update Item", table: "AppIntents")
 
+    @MainActor
     static func perform(_ input: Input) throws -> Output {
         let (context, entity, date, content, income, outgo, category) = input
         guard
