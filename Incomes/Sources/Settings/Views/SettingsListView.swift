@@ -157,8 +157,8 @@ extension SettingsListView: View {
         ) {
             Button(role: .destructive) {
                 do {
-                    try DeleteAllItemsIntent.perform(context)
-                    try DeleteAllTagsIntent.perform(context)
+                    try DeleteAllItemsIntent.perform(context.modelContainer)
+                    try DeleteAllTagsIntent.perform(context.modelContainer)
                     Haptic.success.impact()
                 } catch {
                     assertionFailure(error.localizedDescription)
@@ -178,7 +178,7 @@ extension SettingsListView: View {
         }
         .task {
             do {
-                hasDuplicateTags = try GetHasDuplicateTagsIntent.perform(context)
+                hasDuplicateTags = try GetHasDuplicateTagsIntent.perform(context.modelContainer)
             } catch {
                 assertionFailure(error.localizedDescription)
                 hasDuplicateTags = false

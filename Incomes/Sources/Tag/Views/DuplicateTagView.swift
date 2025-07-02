@@ -60,7 +60,7 @@ struct DuplicateTagView: View {
                 do {
                     try MergeDuplicateTagsIntent.perform(
                         (
-                            context: context,
+                            container: context.modelContainer,
                             tags: tags.compactMap(TagEntity.init)
                         )
                     )
