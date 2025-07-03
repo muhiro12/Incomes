@@ -4,28 +4,28 @@ import Testing
 
 @MainActor
 struct ResolveDuplicateTagsIntentTest {
-    let context: ModelContext
+    let container: ModelContainer
 
     init() {
-        context = testContext
+        container = testContainer
     }
 
     @Test func perform() throws {
-        let tag1 = try Tag.createIgnoringDuplicates(context: context, name: "A", type: .year)
-        _ = try Tag.createIgnoringDuplicates(context: context, name: "A", type: .year)
-        _ = try Tag.createIgnoringDuplicates(context: context, name: "A", type: .year)
-        let tag4 = try Tag.createIgnoringDuplicates(context: context, name: "B", type: .yearMonth)
-        _ = try Tag.createIgnoringDuplicates(context: context, name: "B", type: .yearMonth)
+        let tag1 = try Tag.createIgnoringDuplicates(context: container.mainContext, name: "A", type: .year)
+        _ = try Tag.createIgnoringDuplicates(context: container.mainContext, name: "A", type: .year)
+        _ = try Tag.createIgnoringDuplicates(context: container.mainContext, name: "A", type: .year)
+        let tag4 = try Tag.createIgnoringDuplicates(context: container.mainContext, name: "B", type: .yearMonth)
+        _ = try Tag.createIgnoringDuplicates(context: container.mainContext, name: "B", type: .yearMonth)
 
-        #expect(try context.fetchCount(.tags(.all)) == 5)
+        #expect(try container.mainContext.fetchCount(.tags(.all)) == 5)
 
         try ResolveDuplicateTagsIntent.perform(
             (
-                container: context.container,
+                container: container,
                 tags: [tag1, tag4].compactMap(TagEntity.init)
             )
         )
 
-        #expect(try context.fetchCount(.tags(.all)) == 2)
+        #expect(try container.mainContext.fetchCount(.tags(.all)) == 2)
     }
 }

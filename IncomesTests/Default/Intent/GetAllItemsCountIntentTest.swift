@@ -4,16 +4,16 @@ import Testing
 
 @MainActor
 struct GetAllItemsCountIntentTest {
-    let context: ModelContext
+    let container: ModelContainer
 
     init() {
-        context = testContext
+        container = testContainer
     }
 
     @Test func perform() throws {
         _ = try CreateItemIntent.perform(
             (
-                container: context.container,
+                container: container,
                 date: isoDate("2000-01-01T12:00:00Z"),
                 content: "content",
                 income: 100,
@@ -22,7 +22,7 @@ struct GetAllItemsCountIntentTest {
                 repeatCount: 1
             )
         )
-        let count = try GetAllItemsCountIntent.perform(context.container)
+        let count = try GetAllItemsCountIntent.perform(container)
         #expect(count == 1)
     }
 }

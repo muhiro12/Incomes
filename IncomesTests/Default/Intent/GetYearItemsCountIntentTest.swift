@@ -4,16 +4,16 @@ import Testing
 
 @MainActor
 struct GetYearItemsCountIntentTest {
-    let context: ModelContext
+    let container: ModelContainer
 
     init() {
-        context = testContext
+        container = testContainer
     }
 
     @Test func perform() throws {
         _ = try CreateItemIntent.perform(
             (
-                container: context.container,
+                container: container,
                 date: isoDate("2000-02-01T12:00:00Z"),
                 content: "A",
                 income: 0,
@@ -23,7 +23,7 @@ struct GetYearItemsCountIntentTest {
             )
         )
         let count = try GetYearItemsCountIntent.perform(
-            (container: context.container, date: isoDate("2000-01-01T00:00:00Z"))
+            (container: container, date: isoDate("2000-01-01T00:00:00Z"))
         )
         #expect(count == 1)
     }

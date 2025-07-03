@@ -4,19 +4,19 @@ import Testing
 
 @MainActor
 struct GetTagByIDIntentTest {
-    let context: ModelContext
+    let container: ModelContainer
 
     init() {
-        context = testContext
+        container = testContainer
     }
 
     @Test func perform() throws {
-        let model = try Tag.create(context: context, name: "name", type: .content)
+        let model = try Tag.create(context: container.mainContext, name: "name", type: .content)
         let id = try model.id.base64Encoded()
         let tagEntity = try #require(
             try GetTagByIDIntent.perform(
                 (
-                    container: context.container,
+                    container: container,
                     id: id
                 )
             )
