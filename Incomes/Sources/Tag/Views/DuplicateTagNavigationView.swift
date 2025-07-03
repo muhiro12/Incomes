@@ -10,8 +10,7 @@ struct DuplicateTagNavigationView: View {
             DuplicateTagListView(selection: $detail)
         } detail: {
             if let detail,
-               let tag = try? detail.model(in: context)
-            {
+               let tag = try? detail.model(in: context) {
                 DuplicateTagView(tag)
             }
         }
