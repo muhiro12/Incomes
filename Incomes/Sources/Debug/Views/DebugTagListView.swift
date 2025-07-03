@@ -3,10 +3,14 @@ import SwiftUI
 import SwiftUtilities
 
 struct DebugTagListView: View {
-    @BridgeQuery(.init(.tags(.typeIs(.year)))) private var yearEntities: [TagEntity]
-    @BridgeQuery(.init(.tags(.typeIs(.yearMonth)))) private var yearMonthEntities: [TagEntity]
-    @BridgeQuery(.init(.tags(.typeIs(.content)))) private var contentEntities: [TagEntity]
-    @BridgeQuery(.init(.tags(.typeIs(.category)))) private var categoryEntities: [TagEntity]
+    @BridgeQuery(.tags(.typeIs(.year)))
+    private var yearEntities: [TagEntity]
+    @BridgeQuery(.tags(.typeIs(.yearMonth)))
+    private var yearMonthEntities: [TagEntity]
+    @BridgeQuery(.tags(.typeIs(.content)))
+    private var contentEntities: [TagEntity]
+    @BridgeQuery(.tags(.typeIs(.category)))
+    private var categoryEntities: [TagEntity]
 
     var body: some View {
         List {

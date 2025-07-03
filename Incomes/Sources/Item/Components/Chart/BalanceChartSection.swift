@@ -16,7 +16,7 @@ struct BalanceChartSection: View {
     @State private var isPresented = false
 
     init(_ descriptor: FetchDescriptor<Item>) {
-        _items = BridgeQuery(Query(descriptor))
+        _items = .init(descriptor)
     }
 
     var body: some View {
