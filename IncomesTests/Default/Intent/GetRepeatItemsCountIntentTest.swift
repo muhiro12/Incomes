@@ -13,7 +13,7 @@ struct GetRepeatItemsCountIntentTest {
     @Test func perform() throws {
         let entity = try CreateItemIntent.perform(
             (
-                context: context,
+                container: context.container,
                 date: isoDate("2000-01-01T12:00:00Z"),
                 content: "A",
                 income: 0,
@@ -25,7 +25,7 @@ struct GetRepeatItemsCountIntentTest {
         let repeatID = try PersistentIdentifier(base64Encoded: entity.id)
         let model = try #require(try context.fetchFirst(.items(.idIs(repeatID))))
         let count = try GetRepeatItemsCountIntent.perform(
-            (context: context, repeatID: model.repeatID)
+            (container: context.container, repeatID: model.repeatID)
         )
         #expect(count == 2)
     }

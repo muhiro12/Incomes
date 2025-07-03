@@ -13,7 +13,7 @@ struct DeleteItemIntentTest {
     @Test func perform() throws {
         let item = try CreateItemIntent.perform(
             (
-                context: context,
+                container: context.container,
                 date: isoDate("2000-01-01T12:00:00Z"),
                 content: "content",
                 income: 200,
@@ -23,7 +23,7 @@ struct DeleteItemIntentTest {
             )
         )
         #expect(!fetchItems(context).isEmpty)
-        try DeleteItemIntent.perform((context: context, item: item))
+        try DeleteItemIntent.perform((container: context.container, item: item))
         #expect(fetchItems(context).isEmpty)
     }
 }

@@ -50,7 +50,7 @@ struct MergeDuplicateTagsIntentTest {
 
         try MergeDuplicateTagsIntent.perform(
             (
-                context: context,
+                container: context.container,
                 tags: [tag1, tag2, tag3].compactMap(TagEntity.init)
             )
         )
@@ -70,7 +70,7 @@ struct MergeDuplicateTagsIntentTest {
 
         try MergeDuplicateTagsIntent.perform(
             (
-                context: context,
+                container: context.container,
                 tags: [tag1, tag2, tag3].compactMap(TagEntity.init)
             )
         )

@@ -13,7 +13,7 @@ struct GetNextItemIntentTest {
     @Test func perform() throws {
         _ = try CreateItemIntent.perform(
             (
-                context: context,
+                container: context.container,
                 date: isoDate("2000-01-01T12:00:00Z"),
                 content: "A",
                 income: 0,
@@ -24,7 +24,7 @@ struct GetNextItemIntentTest {
         )
         _ = try CreateItemIntent.perform(
             (
-                context: context,
+                container: context.container,
                 date: isoDate("2000-02-01T12:00:00Z"),
                 content: "B",
                 income: 0,
@@ -33,7 +33,7 @@ struct GetNextItemIntentTest {
                 repeatCount: 1
             )
         )
-        let item = try #require(try GetNextItemIntent.perform((context: context, date: isoDate("2000-01-15T00:00:00Z"))))
+        let item = try #require(try GetNextItemIntent.perform((container: context.container, date: isoDate("2000-01-15T00:00:00Z"))))
         #expect(item.content == "B")
     }
 }

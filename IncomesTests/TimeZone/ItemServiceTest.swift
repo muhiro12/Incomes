@@ -29,7 +29,7 @@ struct ItemServiceTest {
                     repeatCount: Int = 1) throws -> ItemEntity {
         try CreateItemIntent.perform(
             (
-                context: context,
+                container: context.container,
                 date: date,
                 content: content,
                 income: income,
@@ -313,7 +313,7 @@ struct ItemServiceTest {
         var item = try #require(fetchItems(context).first)
         try UpdateItemIntent.perform(
             (
-                context: context,
+                container: context.container,
                 item: ItemEntity(item)!,
                 date: shiftedDate("2024-01-02T00:00:00Z"),
                 content: "Updated",
@@ -344,7 +344,7 @@ struct ItemServiceTest {
 
         try UpdateItemIntent.perform(
             (
-                context: context,
+                container: context.container,
                 item: ItemEntity(item)!,
                 date: item.utcDate,
                 content: "Changed",
@@ -380,7 +380,7 @@ struct ItemServiceTest {
 
         try UpdateItemIntent.perform(
             (
-                context: context,
+                container: context.container,
                 item: ItemEntity(items[1])!,
                 date: isoDate("2023-12-31T00:00:00Z"),
                 content: items[1].content,
@@ -410,7 +410,7 @@ struct ItemServiceTest {
         let target = items[1] // middle item
         try UpdateFutureItemsIntent.perform(
             (
-                context: context,
+                container: context.container,
                 item: ItemEntity(target)!,
                 date: target.utcDate,
                 content: "UpdatedSub",
@@ -444,7 +444,7 @@ struct ItemServiceTest {
 
         try UpdateFutureItemsIntent.perform(
             (
-                context: context,
+                container: context.container,
                 item: ItemEntity(last)!,
                 date: last.utcDate,
                 content: "Changed",
@@ -473,7 +473,7 @@ struct ItemServiceTest {
         let item = try #require(fetchItems(context).first)
         try UpdateFutureItemsIntent.perform(
             (
-                context: context,
+                container: context.container,
                 item: ItemEntity(item)!,
                 date: item.utcDate,
                 content: "SoloUpdated",
@@ -503,7 +503,7 @@ struct ItemServiceTest {
         let target = try #require(try context.fetchFirst(.items(.idIs(.init(base64Encoded: item.id)))))
         try UpdateAllItemsIntent.perform(
             (
-                context: context,
+                container: context.container,
                 item: ItemEntity(target)!,
                 date: target.utcDate,
                 content: "Fitness",
@@ -537,7 +537,7 @@ struct ItemServiceTest {
         let item = try #require(fetchItems(context).first)
         try DeleteItemIntent.perform(
             (
-                context: context,
+                container: context.container,
                 item: ItemEntity(item)!
             )
         )
@@ -566,7 +566,7 @@ struct ItemServiceTest {
         let allItems = try context.fetch(.items(.all))
         let toDelete = allItems.filter { $0.content == "RemoveMe" }
         try toDelete.forEach {
-            try DeleteItemIntent.perform((context: context, item: ItemEntity($0)!))
+            try DeleteItemIntent.perform((container: context.container, item: ItemEntity($0)!))
         }
 
         let remaining = try context.fetch(.items(.all))
@@ -586,7 +586,7 @@ struct ItemServiceTest {
             category: "Tmp"
         )
         #expect(!fetchItems(context).isEmpty)
-        try DeleteAllItemsIntent.perform(context)
+        try DeleteAllItemsIntent.perform(context.container)
         #expect(fetchItems(context).isEmpty)
     }
 
@@ -606,7 +606,7 @@ struct ItemServiceTest {
         var item = try #require(fetchItems(context).first)
         try UpdateItemIntent.perform(
             (
-                context: context,
+                container: context.container,
                 item: ItemEntity(item)!,
                 date: item.utcDate,
                 content: item.content,
@@ -634,7 +634,7 @@ struct ItemServiceTest {
         let oldBalance = item.balance
 
         try RecalculateItemIntent.perform(
-            (context: context, date: isoDate("2023-12-01T00:00:00Z"))
+            (container: context.container, date: isoDate("2023-12-01T00:00:00Z"))
         )
 
         let reloaded = try #require(fetchItems(context).first)
@@ -662,7 +662,7 @@ struct ItemServiceTest {
         var items = try context.fetch(.items(.all)).sorted { $0.utcDate < $1.utcDate }
         try UpdateItemIntent.perform(
             (
-                context: context,
+                container: context.container,
                 item: ItemEntity(items[1])!,
                 date: items[1].utcDate,
                 content: items[1].content,
@@ -673,7 +673,7 @@ struct ItemServiceTest {
         )
 
         try RecalculateItemIntent.perform(
-            (context: context, date: isoDate("2024-01-15T00:00:00Z"))
+            (container: context.container, date: isoDate("2024-01-15T00:00:00Z"))
         )
         items = try context.fetch(.items(.all)).sorted { $0.utcDate < $1.utcDate }
         #expect(items[0].balance == 50)
@@ -700,7 +700,7 @@ struct ItemServiceTest {
         )
 
         try RecalculateItemIntent.perform(
-            (context: context, date: isoDate("2024-02-01T00:00:00Z"))
+            (container: context.container, date: isoDate("2024-02-01T00:00:00Z"))
         )
         let items = try context.fetch(.items(.all))
 

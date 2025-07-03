@@ -16,7 +16,7 @@ struct GetTagByIDIntentTest {
         let tagEntity = try #require(
             try GetTagByIDIntent.perform(
                 (
-                    context: context,
+                    container: context.container,
                     id: id
                 )
             )

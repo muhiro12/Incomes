@@ -18,7 +18,7 @@ struct FindDuplicateTagsIntentTest {
 
         let result = try FindDuplicateTagsIntent.perform(
             (
-                context: context,
+                container: context.container,
                 tags: [tag1, tag2, tag3, tag4].compactMap(TagEntity.init)
             )
         )

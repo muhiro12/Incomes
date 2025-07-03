@@ -13,7 +13,7 @@ struct UpdateAllItemsIntentTest {
     @Test func perform() throws {
         let item = try CreateItemIntent.perform(
             (
-                context: context,
+                container: context.container,
                 date: isoDate("2000-01-01T12:00:00Z"),
                 content: "content",
                 income: 200,
@@ -24,7 +24,7 @@ struct UpdateAllItemsIntentTest {
         )
         try UpdateAllItemsIntent.perform(
             (
-                context: context,
+                container: context.container,
                 item: item,
                 date: isoDate("2001-01-02T12:00:00Z"),
                 content: "content2",
@@ -44,7 +44,7 @@ struct UpdateAllItemsIntentTest {
     @Test func performRepeat() throws {
         _ = try CreateItemIntent.perform(
             (
-                context: context,
+                container: context.container,
                 date: isoDate("2000-01-01T12:00:00Z"),
                 content: "content",
                 income: 200,
@@ -55,7 +55,7 @@ struct UpdateAllItemsIntentTest {
         )
         try UpdateAllItemsIntent.perform(
             (
-                context: context,
+                container: context.container,
                 item: ItemEntity(fetchItems(context)[1])!,
                 date: isoDate("2000-02-02T12:00:00Z"),
                 content: "content2",

@@ -21,7 +21,7 @@ struct ResolveDuplicateTagsIntentTest {
 
         try ResolveDuplicateTagsIntent.perform(
             (
-                context: context,
+                container: context.container,
                 tags: [tag1, tag4].compactMap(TagEntity.init)
             )
         )

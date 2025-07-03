@@ -15,7 +15,7 @@ struct GetTagByNameIntentTest {
         let tag = try #require(
             try GetTagByNameIntent.perform(
                 (
-                    context: context,
+                    container: context.container,
                     name: "name",
                     type: .year
                 )

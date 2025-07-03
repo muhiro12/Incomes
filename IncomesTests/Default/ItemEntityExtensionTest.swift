@@ -13,7 +13,7 @@ struct ItemEntityExtensionTest {
     @Test func modelFetch() throws {
         let entity = try CreateItemIntent.perform(
             (
-                context: context,
+                container: context.container,
                 date: isoDate("2000-01-01T12:00:00Z"),
                 content: "content",
                 income: 200,
