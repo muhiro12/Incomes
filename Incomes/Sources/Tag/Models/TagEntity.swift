@@ -61,7 +61,11 @@ extension TagEntity: ModelBridgeable {
 
 extension TagEntity: Hashable {
     static func == (lhs: TagEntity, rhs: TagEntity) -> Bool {
-        lhs.id == rhs.id
+        guard let lID = try? PersistentIdentifier(base64Encoded: lhs.id),
+              let rID = try? PersistentIdentifier(base64Encoded: rhs.id) else {
+            return false
+        }
+        return lID == rID
     }
 
     func hash(into hasher: inout Hasher) {
