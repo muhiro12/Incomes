@@ -23,8 +23,8 @@ struct ItemFormView: View {
         case category
     }
 
-    @Environment(Tag.self)
-    private var tag: Tag?
+    @Environment(TagEntity.self)
+    private var tag: TagEntity?
     @Environment(\.dismiss)
     private var dismiss
     @Environment(\.requestReview)

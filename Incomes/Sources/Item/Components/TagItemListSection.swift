@@ -9,7 +9,7 @@ import SwiftData
 import SwiftUI
 
 struct TagItemListSection {
-    @Environment(Tag.self)
+    @Environment(TagEntity.self)
     private var tag
     @Environment(\.modelContext)
     private var context
@@ -76,9 +76,11 @@ extension TagItemListSection: View {
 private extension TagItemListSection {
     @MainActor
     var items: [ItemEntity] {
-        tag.items.orEmpty.filter {
-            $0.year?.name == yearString
-        }.sorted().compactMap(ItemEntity.init)
+        (
+            try? tag.model(in: context).items.orEmpty.filter {
+                $0.year?.name == yearString
+            }.sorted().compactMap(ItemEntity.init)
+        ).orEmpty
     }
 }
 
