@@ -22,7 +22,7 @@ struct HomeListView {
 
     @Binding private var path: IncomesPath?
 
-    @State private var yearTag: Tag?
+    @State private var yearTagEntity: TagEntity?
     @State private var hasLoaded = false
     @State private var isIntroductionPresented = false
     @State private var isSettingsPresented = false
@@ -36,12 +36,12 @@ struct HomeListView {
 extension HomeListView: View {
     var body: some View {
         List(selection: $path) {
-            HomeTabSection(selection: $yearTag)
+            HomeTabSection(selection: $yearTagEntity)
             if !isSubscribeOn {
                 AdvertisementSection(.small)
             }
-            if let yearTag {
-                HomeYearSection(yearTag: yearTag)
+            if let yearTagEntity {
+                HomeYearSection(yearTag: yearTagEntity)
             }
         }
         .listStyle(.insetGrouped)
@@ -82,13 +82,13 @@ extension HomeListView: View {
         .task {
             if !hasLoaded {
                 hasLoaded = true
-                    yearTag = try? GetTagByNameIntent.perform(
+                    yearTagEntity = try? GetTagByNameIntent.perform(
                         (
                             container: context.container,
                             name: Date.now.stringValueWithoutLocale(.yyyy),
                             type: .year
                         )
-                    )?.model(in: context)
+                    ).flatMap(TagEntity.init)
                     isIntroductionPresented = (
                         try? GetAllItemsCountIntent.perform(context.container).isZero
                     ) ?? false
@@ -97,12 +97,12 @@ extension HomeListView: View {
             notificationService.refresh()
             await notificationService.register()
         }
-        .onChange(of: yearTag) {
-            guard let yearTag,
+        .onChange(of: yearTagEntity) {
+            guard let yearTagEntity,
                   path != .none else {
                 return
             }
-            path = .year(yearTag)
+            path = .year(yearTagEntity)
         }
     }
 }

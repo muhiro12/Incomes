@@ -5,32 +5,32 @@ import SwiftUtilities
 struct DuplicateTagListView: View {
     @Environment(\.modelContext) private var context
 
-    @Query(.tags(.typeIs(.year))) private var years: [Tag]
-    @Query(.tags(.typeIs(.yearMonth))) private var yearMonths: [Tag]
-    @Query(.tags(.typeIs(.content))) private var contents: [Tag]
-    @Query(.tags(.typeIs(.category))) private var categories: [Tag]
+    @BridgeQuery(.tags(.typeIs(.year))) private var yearEntities: [TagEntity]
+    @BridgeQuery(.tags(.typeIs(.yearMonth))) private var yearMonthEntities: [TagEntity]
+    @BridgeQuery(.tags(.typeIs(.content))) private var contentEntities: [TagEntity]
+    @BridgeQuery(.tags(.typeIs(.category))) private var categoryEntities: [TagEntity]
 
-    @Binding private var selection: Tag?
+    @Binding private var selection: TagEntity?
 
     @State private var isResolveDialogPresented = false
     @State private var selectedTags = [Tag]()
 
-    init(selection: Binding<Tag?>) {
+    init(selection: Binding<TagEntity?>) {
         _selection = selection
     }
 
     var body: some View {
         List(selection: $selection) {
-            buildSection(from: years) {
+            buildSection(from: yearEntities) {
                 Text("Year")
             }
-            buildSection(from: yearMonths) {
+            buildSection(from: yearMonthEntities) {
                 Text("YearMonth")
             }
-            buildSection(from: contents) {
+            buildSection(from: contentEntities) {
                 Text("Content")
             }
-            buildSection(from: categories) {
+            buildSection(from: categoryEntities) {
                 Text("Category")
             }
         }
@@ -67,7 +67,8 @@ struct DuplicateTagListView: View {
         }
     }
 
-    private func buildSection<Header: View>(from tags: [Tag], header: () -> Header) -> some View {
+    private func buildSection<Header: View>(from entities: [TagEntity], header: () -> Header) -> some View {
+        let tags = entities.compactMap { try? $0.model(in: context) }
         let duplicates: [Tag]
         do {
             let entities = try FindDuplicateTagsIntent.perform(
@@ -91,10 +92,11 @@ struct DuplicateTagListView: View {
         if duplicates.isEmpty {
             return AnyView(EmptyView())
         }
+        let duplicateEntities = duplicates.compactMap(TagEntity.init)
         return AnyView(
             Section {
-                ForEach(duplicates) { tag in
-                    Text(tag.displayName)
+                ForEach(duplicateEntities) { entity in
+                    Text((try? entity.model(in: context))?.displayName ?? "")
                 }
             } header: {
                 HStack {

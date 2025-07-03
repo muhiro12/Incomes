@@ -8,35 +8,48 @@
 
 import SwiftData
 import SwiftUI
+import SwiftUtilities
 
 struct HomeTabSection: View {
-    @Query(.tags(.typeIs(.year)))
-    private var yearTags: [Tag]
+    @Environment(\.modelContext)
+    private var context
 
-    @Binding private var yearTag: Tag?
+    @BridgeQuery(.tags(.typeIs(.year)))
+    private var yearTagEntities: [TagEntity]
 
-    init(selection: Binding<Tag?> = .constant(nil)) {
-        _yearTag = selection
+    @Binding private var yearTagEntity: TagEntity?
+
+    init(selection: Binding<TagEntity?> = .constant(nil)) {
+        _yearTagEntity = selection
+    }
+
+    private var availableYearTagEntities: [TagEntity] {
+        yearTagEntities.filter { entity in
+            guard let model = try? entity.model(in: context) else {
+                return false
+            }
+            return model.items.isNotEmpty
+        }
     }
 
     var body: some View {
         Section {
             Group {
                 if #available(iOS 18.0, *) {
-                    TabView(selection: $yearTag) {
-                        ForEach(yearTags.filter(\.items.isNotEmpty)) { yearTag in
-                            Tab(value: yearTag) {
+                    TabView(selection: $yearTagEntity) {
+                        ForEach(availableYearTagEntities) { entity in
+                            Tab(value: entity) {
                                 HomeTabSectionLink()
-                                    .environment(yearTag)
+                                    .environment(entity)
                             }
                         }
                     }
                 } else {
-                    TabView(selection: $yearTag) {
-                        ForEach(yearTags.filter(\.items.isNotEmpty)) { yearTag in
+                    TabView(selection: $yearTagEntity) {
+                        ForEach(availableYearTagEntities) { entity in
                             HomeTabSectionLink()
-                                .environment(yearTag)
-                                .tag(yearTag as Tag?)
+                                .environment(entity)
+                                .tag(entity as TagEntity?)
                         }
                     }
                 }
@@ -46,10 +59,10 @@ struct HomeTabSection: View {
             .frame(height: .componentM)
         } footer: {
             HStack {
-                ForEach(yearTags.filter(\.items.isNotEmpty)) { yearTag in
+                ForEach(availableYearTagEntities) { entity in
                     Circle()
                         .frame(width: 8)
-                        .foregroundStyle(self.yearTag == yearTag ? AnyShapeStyle(.tint) : AnyShapeStyle(.secondary))
+                        .foregroundStyle(self.yearTagEntity == entity ? AnyShapeStyle(.tint) : AnyShapeStyle(.secondary))
                 }
             }
             .frame(maxWidth: .infinity)

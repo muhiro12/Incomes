@@ -20,9 +20,9 @@ struct TagNavigationView: View {
         NavigationSplitView {
             TagListView(tagType: tagType, selection: $path)
         } detail: {
-            if case .itemList(let tag) = path {
+            if case .itemList(let tagEntity) = path {
                 ItemListView()
-                    .environment(tag)
+                    .environment(tagEntity)
             }
         }
     }
