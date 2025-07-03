@@ -20,11 +20,9 @@ struct HomeYearSection: View {
 
     init(yearTag: TagEntity) {
         _yearMonthTags = BridgeQuery(
-            Query(
-                .tags(
-                    .nameStartsWith(yearTag.name, type: .yearMonth),
-                    order: .reverse
-                )
+            .tags(
+                .nameStartsWith(yearTag.name, type: .yearMonth),
+                order: .reverse
             )
         )
     }
@@ -34,8 +32,7 @@ struct HomeYearSection: View {
             ForEach(yearMonthTags) { entity in
                 if
                     let tag = try? entity.model(in: context),
-                    let items = tag.items
-                {
+                    let items = tag.items {
                     NavigationLink(value: IncomesPath.itemList(entity)) {
                         Text(tag.displayName)
                             .foregroundStyle(

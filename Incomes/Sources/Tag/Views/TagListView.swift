@@ -27,7 +27,7 @@ struct TagListView: View {
 
     init(tagType: TagType, selection: Binding<IncomesPath?> = .constant(nil)) {
         self.tagType = tagType
-        self._tagEntities = BridgeQuery(Query(.tags(.typeIs(tagType))))
+        self._tagEntities = .init(.tags(.typeIs(tagType)))
         self._path = selection
     }
 

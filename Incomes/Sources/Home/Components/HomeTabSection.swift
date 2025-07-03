@@ -14,7 +14,7 @@ struct HomeTabSection: View {
     @Environment(\.modelContext)
     private var context
 
-    @BridgeQuery(.init(.tags(.typeIs(.year))))
+    @BridgeQuery(.tags(.typeIs(.year)))
     private var yearTagEntities: [TagEntity]
 
     @Binding private var yearTagEntity: TagEntity?

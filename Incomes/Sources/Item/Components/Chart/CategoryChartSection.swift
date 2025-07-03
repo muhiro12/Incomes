@@ -14,7 +14,7 @@ struct CategoryChartSection: View {
     @BridgeQuery private var items: [ItemEntity]
 
     init(_ descriptor: FetchDescriptor<Item>) {
-        _items = BridgeQuery(Query(descriptor))
+        _items = .init(descriptor)
     }
 
     var body: some View {

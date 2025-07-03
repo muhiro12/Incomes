@@ -30,7 +30,7 @@ extension HomeTabSectionLink: View {
                     Text("Total Income")
                     Spacer()
                     Text(income.asCurrency)
-                    .foregroundStyle(.secondary)
+                        .foregroundStyle(.secondary)
                     Image(systemName: "chevron.up")
                         .foregroundStyle(.tint)
                 }
@@ -39,7 +39,7 @@ extension HomeTabSectionLink: View {
                     Text("Total Outgo")
                     Spacer()
                     Text(outgo.asMinusCurrency)
-                    .foregroundStyle(.secondary)
+                        .foregroundStyle(.secondary)
                     Image(systemName: "chevron.down")
                         .foregroundStyle(.red)
                 }

@@ -13,7 +13,7 @@ struct DuplicateTagView: View {
     @State private var selectedTag: Tag?
 
     init(_ tag: Tag) {
-        _tags = BridgeQuery(Query(.tags(.isSameWith(tag))))
+        _tags = .init(.tags(.isSameWith(tag)))
     }
 
     var body: some View {

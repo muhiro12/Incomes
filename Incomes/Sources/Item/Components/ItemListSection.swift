@@ -21,7 +21,7 @@ struct ItemListSection: View {
     private let title: LocalizedStringKey?
 
     init(_ descriptor: FetchDescriptor<Item>, title: LocalizedStringKey? = nil) {
-        self._items = BridgeQuery(Query(descriptor))
+        self._items = .init(descriptor)
         self.title = title
     }
 
