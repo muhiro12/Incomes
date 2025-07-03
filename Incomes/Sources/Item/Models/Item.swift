@@ -23,6 +23,7 @@ final class Item {
 
     private init() {}
 
+    @MainActor
     static func create(container: ModelContainer,
                        date: Date,
                        content: String,
@@ -65,6 +66,7 @@ final class Item {
         return item
     }
 
+    @MainActor
     func modify(date: Date,
                 content: String,
                 income: Decimal,
@@ -153,6 +155,7 @@ extension Item: Comparable {
 // MARK: - Test
 
 extension Item {
+    @MainActor
     static func createIgnoringDuplicates(container: ModelContainer,
                                          date: Date,
                                          content: String,

@@ -44,7 +44,7 @@ struct UpdateRepeatingItemsIntent: AppIntent, IntentPerformer {
         let repeatID = UUID()
         let items = try container.mainContext.fetch(descriptor)
         try items.forEach { item in
-            guard let newDate = Calendar.current.date(byAdding: components, to: $0.localDate) else {
+            guard let newDate = Calendar.current.date(byAdding: components, to: item.localDate) else {
                 assertionFailure()
                 return
             }

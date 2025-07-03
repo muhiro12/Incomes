@@ -9,6 +9,7 @@
 import SwiftData
 import SwiftUI
 
+@MainActor
 @Observable
 final class IncomesPreviewStore {
     private(set) var items = [Item]()
@@ -18,7 +19,6 @@ final class IncomesPreviewStore {
         items.isNotEmpty && tags.isNotEmpty
     }
 
-    @MainActor
     func prepare(_ container: ModelContainer) async {
         createItems(container)
         while !isReady {
@@ -29,7 +29,6 @@ final class IncomesPreviewStore {
         try! BalanceCalculator().calculate(in: container.mainContext, for: items)
     }
 
-    @MainActor
     func prepareIgnoringDuplicates(_ container: ModelContainer) {
         for index in 0..<24 {
             _ = try! Item.createIgnoringDuplicates(

@@ -18,6 +18,7 @@ final class Tag {
 
     private init() {}
 
+    @MainActor
     static func create(container: ModelContainer, name: String, type: TagType) throws -> Tag {
         let tag = try container.mainContext.fetchFirst(
             .tags(.nameIs(name, type: type))
@@ -55,6 +56,7 @@ extension Tag: Identifiable {}
 // MARK: - Test
 
 extension Tag {
+    @MainActor
     static func createIgnoringDuplicates(container: ModelContainer, name: String, type: TagType) throws -> Tag {
         let tag = Tag()
         container.mainContext.insert(tag)
