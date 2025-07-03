@@ -82,16 +82,16 @@ extension HomeListView: View {
         .task {
             if !hasLoaded {
                 hasLoaded = true
-                    yearTagEntity = try? GetTagByNameIntent.perform(
-                        (
-                            container: context.container,
-                            name: Date.now.stringValueWithoutLocale(.yyyy),
-                            type: .year
-                        )
-                    ).flatMap(TagEntity.init)
-                    isIntroductionPresented = (
-                        try? GetAllItemsCountIntent.perform(context.container).isZero
-                    ) ?? false
+                yearTagEntity = try? GetTagByNameIntent.perform(
+                    (
+                        container: context.container,
+                        name: Date.now.stringValueWithoutLocale(.yyyy),
+                        type: .year
+                    )
+                )
+                isIntroductionPresented = (
+                    try? GetAllItemsCountIntent.perform(context.container).isZero
+                ) ?? false
             }
 
             notificationService.refresh()

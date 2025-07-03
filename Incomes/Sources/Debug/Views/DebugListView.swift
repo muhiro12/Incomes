@@ -34,7 +34,7 @@ extension DebugListView: View {
                     Text("Debug option")
                 }
             }
-            if let tagEntity = try? GetAllTagsIntent.perform(context.container).first.flatMap(TagEntity.init) {
+            if let tagEntity = try? GetAllTagsIntent.perform(context.container).first {
                 Section {
                     NavigationLink(value: IncomesPath.itemList(tagEntity)) {
                         Text("All Items")

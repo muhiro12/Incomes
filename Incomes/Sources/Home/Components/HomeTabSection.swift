@@ -14,7 +14,7 @@ struct HomeTabSection: View {
     @Environment(\.modelContext)
     private var context
 
-    @BridgeQuery(.tags(.typeIs(.year)))
+    @BridgeQuery(.init(.tags(.typeIs(.year))))
     private var yearTagEntities: [TagEntity]
 
     @Binding private var yearTagEntity: TagEntity?
@@ -62,7 +62,7 @@ struct HomeTabSection: View {
                 ForEach(availableYearTagEntities) { entity in
                     Circle()
                         .frame(width: 8)
-                        .foregroundStyle(self.yearTagEntity == entity ? AnyShapeStyle(.tint) : AnyShapeStyle(.secondary))
+                        .foregroundStyle(yearTagEntity == entity ? AnyShapeStyle(.tint) : AnyShapeStyle(.secondary))
                 }
             }
             .frame(maxWidth: .infinity)
