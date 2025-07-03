@@ -16,16 +16,17 @@ struct DeleteItemIntent: AppIntent, IntentPerformer {
     @MainActor
     static func perform(_ input: Input) throws -> Output {
         let (container, entity) = input
-        let context = container.mainContext
         guard
             let id = try? PersistentIdentifier(base64Encoded: entity.id),
-            let model = try context.fetchFirst(.items(.idIs(id)))
+            let model = try container.mainContext.fetchFirst(
+                .items(.idIs(id))
+            )
         else {
             throw ItemError.itemNotFound
         }
         model.delete()
         let calculator = BalanceCalculator()
-        try calculator.calculate(in: context, for: [model])
+        try calculator.calculate(in: container.mainContext, for: [model])
     }
 
     @MainActor

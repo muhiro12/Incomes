@@ -11,7 +11,7 @@ struct DeleteTagIntentTest {
     }
 
     @Test func perform() throws {
-        let tag = try Tag.create(context: container.mainContext, name: "name", type: .year)
+        let tag = try Tag.create(container: container, name: "name", type: .year)
         #expect(try container.mainContext.fetchCount(.tags(.all)) == 1)
         try DeleteTagIntent.perform((container: container, tag: .init(tag)!))
         #expect(try container.mainContext.fetchCount(.tags(.all)) == 0)

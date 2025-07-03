@@ -16,13 +16,16 @@ struct ResolveDuplicateTagsIntent: AppIntent, IntentPerformer {
     @MainActor
     static func perform(_ input: Input) throws -> Output {
         let (container, entities) = input
-        let context = container.mainContext
         let models: [Tag] = try entities.compactMap { entity in
             let id = try PersistentIdentifier(base64Encoded: entity.id)
-            return try context.fetchFirst(.tags(.idIs(id)))
+            return try container.mainContext.fetchFirst(
+                .tags(.idIs(id))
+            )
         }
         for model in models {
-            let duplicates = try context.fetch(.tags(.isSameWith(model)))
+            let duplicates = try container.mainContext.fetch(
+                .tags(.isSameWith(model))
+            )
             try MergeDuplicateTagsIntent.perform(
                 (
                     container: container,

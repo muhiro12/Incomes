@@ -61,7 +61,7 @@ struct ItemPredicateTest {
         let date = shiftedDate("2024-01-01T00:00:00Z")
         _ = try CreateItemIntent.perform((container: container, date: date, content: "Content", income: 0, outgo: 0, category: "Category", repeatCount: 1))
 
-        let tag = try Tag.create(context: container.mainContext, name: "2024", type: .year)
+        let tag = try Tag.create(container: container, name: "2024", type: .year)
         let predicate = ItemPredicate.tagIs(tag)
         let items = try container.mainContext.fetch(.items(predicate))
 
@@ -95,7 +95,7 @@ struct ItemPredicateTest {
         let date = shiftedDate("2024-01-01T00:00:00Z")
         _ = try CreateItemIntent.perform((container: container, date: date, content: "Content", income: 0, outgo: 0, category: "Category", repeatCount: 1))
 
-        let tag = try Tag.create(context: container.mainContext, name: "202401", type: .yearMonth)
+        let tag = try Tag.create(container: container, name: "202401", type: .yearMonth)
         let predicate = ItemPredicate.tagIs(tag)
         let items = try container.mainContext.fetch(.items(predicate))
 
@@ -129,7 +129,7 @@ struct ItemPredicateTest {
         let date = shiftedDate("2024-01-01T00:00:00Z")
         _ = try CreateItemIntent.perform((container: container, date: date, content: "Content", income: 0, outgo: 0, category: "Category", repeatCount: 1))
 
-        let tag = try Tag.create(context: container.mainContext, name: "Content", type: .content)
+        let tag = try Tag.create(container: container, name: "Content", type: .content)
         let predicate = ItemPredicate.tagAndYear(tag: tag, yearString: "2024")
         let items = try container.mainContext.fetch(.items(predicate))
 

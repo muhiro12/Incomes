@@ -33,7 +33,7 @@ struct ItemTest {
         let repeatID = UUID()
 
         let item = try Item.create(
-            context: container.mainContext,
+            container: container,
             date: date,
             content: content,
             income: income,
@@ -67,7 +67,7 @@ struct ItemTest {
         NSTimeZone.default = .init(identifier: "Asia/Tokyo")!
 
         let item = try Item.create(
-            context: container.mainContext,
+            container: container,
             date: date,
             content: "Check",
             income: .zero,
@@ -83,7 +83,7 @@ struct ItemTest {
     func createAssignsDefaultValues() throws {
         let date = shiftedDate("2024-01-01T00:00:00Z")
         let item = try Item.create(
-            context: container.mainContext,
+            container: container,
             date: date,
             content: "",
             income: .zero,
@@ -105,7 +105,7 @@ struct ItemTest {
 
         let date = shiftedDate("2024-06-10T12:00:00Z")
         let item = try Item.create(
-            context: container.mainContext,
+            container: container,
             date: date,
             content: "Groceries",
             income: .zero,
@@ -126,7 +126,7 @@ struct ItemTest {
     @Test("modify updates values and regenerates tags with UTC-normalized date")
     func modifyUpdatesValuesAndRegeneratesTags() throws {
         let item = try Item.create(
-            context: container.mainContext,
+            container: container,
             date: shiftedDate("2024-01-01T00:00:00Z"),
             content: "Old",
             income: 100,
@@ -169,7 +169,7 @@ struct ItemTest {
         NSTimeZone.default = .init(identifier: "Asia/Tokyo")!
 
         let item = try Item.create(
-            context: container.mainContext,
+            container: container,
             date: shiftedDate("2024-01-01T00:00:00Z"),
             content: "Initial",
             income: 0,
@@ -196,7 +196,7 @@ struct ItemTest {
 
         let repeatID = UUID()
         let item = try Item.create(
-            context: container.mainContext,
+            container: container,
             date: shiftedDate("2024-02-01T00:00:00Z"),
             content: "Init",
             income: 0,
@@ -223,7 +223,7 @@ struct ItemTest {
         NSTimeZone.default = timeZone
 
         let item = try Item.create(
-            context: container.mainContext,
+            container: container,
             date: shiftedDate("2024-07-01T10:00:00Z"),
             content: "Init",
             income: 0,

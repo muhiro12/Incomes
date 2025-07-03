@@ -16,9 +16,10 @@ struct DeleteTagIntent: AppIntent, IntentPerformer {
     @MainActor
     static func perform(_ input: Input) throws -> Output {
         let (container, entity) = input
-        let context = container.mainContext
         let id = try PersistentIdentifier(base64Encoded: entity.id)
-        guard let model = try context.fetchFirst(.tags(.idIs(id))) else {
+        guard let model = try container.mainContext.fetchFirst(
+            .tags(.idIs(id))
+        ) else {
             throw TagError.tagNotFound
         }
         model.delete()
