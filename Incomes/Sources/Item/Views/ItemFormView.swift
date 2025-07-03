@@ -175,6 +175,7 @@ struct ItemFormView: View {
                 content = item.content
                 income = item.income.isNotZero ? item.income.description : .empty
                 outgo = item.outgo.isNotZero ? item.outgo.description : .empty
+                category = item.category ?? .empty
             } else if let tag {
                 switch tag.type {
                 case .year:
