@@ -6,6 +6,7 @@
 //  Copyright © 2020 Hiromu Nakano. All rights reserved.
 //
 
+import SwiftData
 import SwiftUI
 
 struct ListItem: View {
@@ -76,7 +77,12 @@ struct ListItem: View {
         ) {
             Button(role: .destructive) {
                 do {
-                    try DeleteItemIntent.perform((context: context, item: item))
+                    try DeleteItemIntent.perform(
+                        (
+                            container: context.container,
+                            item: item
+                        )
+                    )
                     Haptic.success.impact()
                 } catch {
                     assertionFailure(error.localizedDescription)

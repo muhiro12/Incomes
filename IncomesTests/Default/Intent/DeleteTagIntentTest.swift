@@ -2,17 +2,18 @@
 import SwiftData
 import Testing
 
+@MainActor
 struct DeleteTagIntentTest {
-    let context: ModelContext
+    let container: ModelContainer
 
     init() {
-        context = testContext
+        container = testContainer
     }
 
     @Test func perform() throws {
-        let tag = try Tag.create(context: context, name: "name", type: .year)
-        #expect(try context.fetchCount(.tags(.all)) == 1)
-        try DeleteTagIntent.perform((context: context, tag: .init(tag)!))
-        #expect(try context.fetchCount(.tags(.all)) == 0)
+        let tag = try Tag.create(context: container.mainContext, name: "name", type: .year)
+        #expect(try container.mainContext.fetchCount(.tags(.all)) == 1)
+        try DeleteTagIntent.perform((container: container, tag: .init(tag)!))
+        #expect(try container.mainContext.fetchCount(.tags(.all)) == 0)
     }
 }

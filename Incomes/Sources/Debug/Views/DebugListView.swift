@@ -6,6 +6,7 @@
 //  Copyright © 2022 Hiromu Nakano. All rights reserved.
 //
 
+import SwiftData
 import SwiftUI
 import SwiftUtilities
 
@@ -33,7 +34,7 @@ extension DebugListView: View {
                     Text("Debug option")
                 }
             }
-            if let tag = try? GetAllTagsIntent.perform(context).first?.model(in: context) {
+            if let tag = try? GetAllTagsIntent.perform(context.container).first?.model(in: context) {
                 Section {
                     NavigationLink(value: IncomesPath.itemList(tag)) {
                         Text("All Items")

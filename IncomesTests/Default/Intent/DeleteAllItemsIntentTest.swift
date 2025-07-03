@@ -2,17 +2,18 @@
 import SwiftData
 import Testing
 
+@MainActor
 struct DeleteAllItemsIntentTest {
-    let context: ModelContext
+    let container: ModelContainer
 
     init() {
-        context = testContext
+        container = testContainer
     }
 
     @Test func perform() throws {
         _ = try CreateItemIntent.perform(
             (
-                context: context,
+                container: container,
                 date: isoDate("2000-01-01T12:00:00Z"),
                 content: "contentA",
                 income: 100,
@@ -23,7 +24,7 @@ struct DeleteAllItemsIntentTest {
         )
         _ = try CreateItemIntent.perform(
             (
-                context: context,
+                container: container,
                 date: isoDate("2000-01-02T12:00:00Z"),
                 content: "contentB",
                 income: 0,
@@ -32,8 +33,8 @@ struct DeleteAllItemsIntentTest {
                 repeatCount: 1
             )
         )
-        #expect(fetchItems(context).count == 2)
-        try DeleteAllItemsIntent.perform(context)
-        #expect(fetchItems(context).isEmpty)
+        #expect(fetchItems(container).count == 2)
+        try DeleteAllItemsIntent.perform(container)
+        #expect(fetchItems(container).isEmpty)
     }
 }

@@ -6,6 +6,7 @@
 //  Copyright © 2021 Hiromu Nakano. All rights reserved.
 //
 
+import SwiftData
 import SwiftUI
 
 struct HomeListView {
@@ -81,16 +82,16 @@ extension HomeListView: View {
         .task {
             if !hasLoaded {
                 hasLoaded = true
-                yearTag = try? GetTagByNameIntent.perform(
-                    (
-                        context: context,
-                        name: Date.now.stringValueWithoutLocale(.yyyy),
-                        type: .year
-                    )
-                )?.model(in: context)
-                isIntroductionPresented = (
-                    try? GetAllItemsCountIntent.perform(context).isZero
-                ) ?? false
+                    yearTag = try? GetTagByNameIntent.perform(
+                        (
+                            container: context.container,
+                            name: Date.now.stringValueWithoutLocale(.yyyy),
+                            type: .year
+                        )
+                    )?.model(in: context)
+                    isIntroductionPresented = (
+                        try? GetAllItemsCountIntent.perform(context.container).isZero
+                    ) ?? false
             }
 
             notificationService.refresh()

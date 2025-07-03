@@ -7,6 +7,7 @@
 //
 
 import StoreKit
+import SwiftData
 import SwiftUI
 
 struct ItemFormView: View {
@@ -194,6 +195,7 @@ struct ItemFormView: View {
                 content = item.content
                 income = item.income.isNotZero ? item.income.description : .empty
                 outgo = item.outgo.isNotZero ? item.outgo.description : .empty
+                category = item.category ?? .empty
             } else if let tag {
                 switch tag.type {
                 case .year:
@@ -239,7 +241,10 @@ private extension ItemFormView {
             if let entity = item,
                let model = try? entity.model(in: context),
                try GetRepeatItemsCountIntent.perform(
-                (context: context, repeatID: model.repeatID)
+                (
+                    container: context.container,
+                    repeatID: model.repeatID
+                )
                ) > 1 {
                 presentToActionSheet()
             } else {
@@ -258,7 +263,7 @@ private extension ItemFormView {
         do {
             try UpdateItemIntent.perform(
                 (
-                    context: context,
+                    container: context.container,
                     item: item,
                     date: date,
                     content: content,
@@ -282,7 +287,7 @@ private extension ItemFormView {
         do {
             try UpdateFutureItemsIntent.perform(
                 (
-                    context: context,
+                    container: context.container,
                     item: item,
                     date: date,
                     content: content,
@@ -306,7 +311,7 @@ private extension ItemFormView {
         do {
             try UpdateAllItemsIntent.perform(
                 (
-                    context: context,
+                    container: context.container,
                     item: item,
                     date: date,
                     content: content,
@@ -326,7 +331,7 @@ private extension ItemFormView {
         do {
             _ = try CreateItemIntent.perform(
                 (
-                    context: context,
+                    container: context.container,
                     date: date,
                     content: content,
                     income: income.decimalValue,
