@@ -45,8 +45,7 @@ struct IncomesPreview<Content: View>: View {
             } else {
                 ProgressView()
                     .task {
-                        let context = previewModelContainer.mainContext
-                        await preview.prepare(context)
+                        await preview.prepare(previewModelContainer)
                         isReady = true
                     }
             }

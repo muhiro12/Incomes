@@ -34,9 +34,9 @@ extension DebugListView: View {
                     Text("Debug option")
                 }
             }
-            if let tag = try? GetAllTagsIntent.perform(context.container).first?.model(in: context) {
+            if let tagEntity = try? GetAllTagsIntent.perform(context.container).first {
                 Section {
-                    NavigationLink(value: IncomesPath.itemList(tag)) {
+                    NavigationLink(value: IncomesPath.itemList(tagEntity)) {
                         Text("All Items")
                     }
                     NavigationLink {
@@ -65,13 +65,13 @@ extension DebugListView: View {
         ) {
             Button(role: .destructive) {
                 Task {
-                    await IncomesPreviewStore().prepare(context)
+                    await IncomesPreviewStore().prepare(context.container)
                 }
             } label: {
                 Text("Prepare")
             }
             Button(role: .destructive) {
-                IncomesPreviewStore().prepareIgnoringDuplicates(context)
+                IncomesPreviewStore().prepareIgnoringDuplicates(context.container)
             } label: {
                 Text("Prepare ignoring duplicates")
             }

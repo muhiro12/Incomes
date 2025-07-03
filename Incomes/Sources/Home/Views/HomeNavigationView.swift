@@ -14,12 +14,12 @@ struct HomeNavigationView: View {
         NavigationSplitView {
             HomeListView(selection: $path)
         } detail: {
-            if case .itemList(let tag) = path {
+            if case .itemList(let tagEntity) = path {
                 ItemListView()
-                    .environment(tag)
-            } else if case .year(let yearTag) = path {
+                    .environment(tagEntity)
+            } else if case .year(let yearTagEntity) = path {
                 YearChartsView()
-                    .environment(yearTag)
+                    .environment(yearTagEntity)
             }
         }
     }

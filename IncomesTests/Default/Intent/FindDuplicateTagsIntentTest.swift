@@ -11,10 +11,10 @@ struct FindDuplicateTagsIntentTest {
     }
 
     @Test func perform() throws {
-        let tag1 = try Tag.createIgnoringDuplicates(context: container.mainContext, name: "A", type: .year)
-        let tag2 = try Tag.createIgnoringDuplicates(context: container.mainContext, name: "A", type: .year)
-        let tag3 = try Tag.createIgnoringDuplicates(context: container.mainContext, name: "B", type: .yearMonth)
-        let tag4 = try Tag.createIgnoringDuplicates(context: container.mainContext, name: "B", type: .yearMonth)
+        let tag1 = try Tag.createIgnoringDuplicates(container: container, name: "A", type: .year)
+        let tag2 = try Tag.createIgnoringDuplicates(container: container, name: "A", type: .year)
+        let tag3 = try Tag.createIgnoringDuplicates(container: container, name: "B", type: .yearMonth)
+        let tag4 = try Tag.createIgnoringDuplicates(container: container, name: "B", type: .yearMonth)
 
         let result = try FindDuplicateTagsIntent.perform(
             (

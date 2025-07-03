@@ -35,13 +35,12 @@ struct CreateItemIntent: AppIntent, IntentPerformer {
     @MainActor
     static func perform(_ input: Input) throws -> Output {
         let (container, date, content, income, outgo, category, repeatCount) = input
-        let context = container.mainContext
         var items = [Item]()
 
         let repeatID = UUID()
 
         let model = try Item.create(
-            context: context,
+            container: container,
             date: date,
             content: content,
             income: income,
@@ -62,7 +61,7 @@ struct CreateItemIntent: AppIntent, IntentPerformer {
                 continue
             }
             let item = try Item.create(
-                context: context,
+                container: container,
                 date: repeatingDate,
                 content: content,
                 income: income,
@@ -73,10 +72,10 @@ struct CreateItemIntent: AppIntent, IntentPerformer {
             items.append(item)
         }
 
-        items.forEach(context.insert)
+        items.forEach(container.mainContext.insert)
 
         let calculator = BalanceCalculator()
-        try calculator.calculate(in: context, for: items)
+        try calculator.calculate(in: container.mainContext, for: items)
 
         guard let entity = ItemEntity(model) else {
             throw ItemError.entityConversionFailed

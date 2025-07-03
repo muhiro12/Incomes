@@ -16,7 +16,7 @@ final class BalanceCalculatorTests: XCTestCase {
             let calculator = BalanceCalculator()
 
             for i in 1...5 {
-                let item = try! Item.create(context: container.mainContext,
+                let item = try! Item.create(container: container,
                                             date: shiftedDate("2000-0\(i)-01T12:00:00Z"),
                                             content: "content",
                                             income: 200,
@@ -27,7 +27,7 @@ final class BalanceCalculatorTests: XCTestCase {
             }
             try! calculator.calculate(in: container.mainContext, after: .distantPast)
 
-            let item = try! Item.create(context: container.mainContext,
+            let item = try! Item.create(container: container,
                                         date: shiftedDate("2000-01-31T12:00:00Z"),
                                         content: "content",
                                         income: 200,
@@ -49,7 +49,7 @@ final class BalanceCalculatorTests: XCTestCase {
             let calculator = BalanceCalculator()
 
             for i in 1...5 {
-                let item = try! Item.create(context: container.mainContext,
+                let item = try! Item.create(container: container,
                                             date: shiftedDate("2000-0\(i)-01T12:00:00Z"),
                                             content: "content",
                                             income: 200,
@@ -60,7 +60,7 @@ final class BalanceCalculatorTests: XCTestCase {
             }
             try! calculator.calculate(in: container.mainContext, after: .distantPast)
 
-            let item = try! Item.create(context: container.mainContext,
+            let item = try! Item.create(container: container,
                                         date: shiftedDate("2001-01-01T00:00:00Z"),
                                         content: "content",
                                         income: 200,
@@ -82,7 +82,7 @@ final class BalanceCalculatorTests: XCTestCase {
             let calculator = BalanceCalculator()
 
             for i in 1...5 {
-                let item = try! Item.create(context: container.mainContext,
+                let item = try! Item.create(container: container,
                                             date: shiftedDate("2000-0\(i)-01T12:00:00Z"),
                                             content: "content",
                                             income: 200,
@@ -93,7 +93,7 @@ final class BalanceCalculatorTests: XCTestCase {
             }
             try! calculator.calculate(in: container.mainContext, after: .distantPast)
 
-            let item = try! Item.create(context: container.mainContext,
+            let item = try! Item.create(container: container,
                                         date: shiftedDate("2000-01-01T00:00:00Z"),
                                         content: "content",
                                         income: 200,
@@ -117,7 +117,7 @@ final class BalanceCalculatorTests: XCTestCase {
             var items: [Item] = []
 
             for i in 1...5 {
-                let item = try! Item.create(context: container.mainContext,
+                let item = try! Item.create(container: container,
                                             date: shiftedDate("2000-0\(i)-01T12:00:00Z"),
                                             content: "content",
                                             income: 200,
@@ -152,7 +152,7 @@ final class BalanceCalculatorTests: XCTestCase {
             var items: [Item] = []
 
             for i in 1...5 {
-                let item = try! Item.create(context: container.mainContext,
+                let item = try! Item.create(container: container,
                                             date: shiftedDate("2000-0\(i)-01T12:00:00Z"),
                                             content: "content",
                                             income: 200,
@@ -187,7 +187,7 @@ final class BalanceCalculatorTests: XCTestCase {
             var items: [Item] = []
 
             for i in 1...5 {
-                let item = try! Item.create(context: container.mainContext,
+                let item = try! Item.create(container: container,
                                             date: shiftedDate("2000-0\(i)-01T12:00:00Z"),
                                             content: "content",
                                             income: 200,
@@ -222,7 +222,7 @@ final class BalanceCalculatorTests: XCTestCase {
             var items: [Item] = []
 
             for i in 1...5 {
-                let item = try! Item.create(context: container.mainContext,
+                let item = try! Item.create(container: container,
                                             date: shiftedDate("2000-0\(i)-01T12:00:00Z"),
                                             content: "content",
                                             income: 200,
@@ -257,7 +257,7 @@ final class BalanceCalculatorTests: XCTestCase {
             var items: [Item] = []
 
             for i in 1...5 {
-                let item = try! Item.create(context: container.mainContext,
+                let item = try! Item.create(container: container,
                                             date: shiftedDate("2000-0\(i)-01T12:00:00Z"),
                                             content: "content",
                                             income: 200,
@@ -287,7 +287,7 @@ final class BalanceCalculatorTests: XCTestCase {
             var items: [Item] = []
 
             for i in 1...5 {
-                let item = try! Item.create(context: container.mainContext,
+                let item = try! Item.create(container: container,
                                             date: shiftedDate("2000-0\(i)-01T12:00:00Z"),
                                             content: "content",
                                             income: 200,
@@ -317,7 +317,7 @@ final class BalanceCalculatorTests: XCTestCase {
             var items: [Item] = []
 
             for i in 1...5 {
-                let item = try! Item.create(context: container.mainContext,
+                let item = try! Item.create(container: container,
                                             date: shiftedDate("2000-0\(i)-01T12:00:00Z"),
                                             content: "content",
                                             income: 200,

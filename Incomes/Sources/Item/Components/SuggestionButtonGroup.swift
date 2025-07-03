@@ -7,15 +7,16 @@
 
 import SwiftData
 import SwiftUI
+import SwiftUtilities
 
 struct SuggestionButtonGroup: View {
-    @Query private var suggestions: [Tag]
+    @BridgeQuery private var suggestions: [TagEntity]
 
     @Binding private var input: String
 
     init(input: Binding<String>, type: TagType) {
         _input = input
-        _suggestions = .init(.tags(.nameContains(input.wrappedValue, type: type)))
+        _suggestions = .init(Query(.tags(.nameContains(input.wrappedValue, type: type))))
     }
 
     var body: some View {

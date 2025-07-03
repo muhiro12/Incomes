@@ -59,6 +59,16 @@ extension TagEntity: ModelBridgeable {
     }
 }
 
+extension TagEntity: Hashable {
+    static func == (lhs: TagEntity, rhs: TagEntity) -> Bool {
+        lhs.id == rhs.id
+    }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+}
+
 extension TagEntity {
     var type: TagType? {
         TagType(rawValue: typeID)

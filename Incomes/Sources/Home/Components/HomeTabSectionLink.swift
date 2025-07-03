@@ -6,26 +6,30 @@
 //
 
 import SwiftUI
+import SwiftUtilities
 
 struct HomeTabSectionLink {
-    @Environment(Tag.self)
-    private var yearTag: Tag
+    @Environment(TagEntity.self)
+    private var yearTagEntity: TagEntity
+    @Environment(\.modelContext)
+    private var context
 }
 
 extension HomeTabSectionLink: View {
     var body: some View {
-        NavigationLink(value: IncomesPath.year(yearTag)) {
+        let tagModel = try? yearTagEntity.model(in: context)
+        let income = tagModel?
+            .items.orEmpty.reduce(.zero) { $0 + $1.income } ?? .zero
+        let outgo = tagModel?
+            .items.orEmpty.reduce(.zero) { $0 + $1.outgo } ?? .zero
+        NavigationLink(value: IncomesPath.year(yearTagEntity)) {
             VStack(alignment: .leading) {
-                Text(yearTag.displayName)
+                Text(yearTagEntity.displayName)
                     .font(.title.bold())
                 HStack {
                     Text("Total Income")
                     Spacer()
-                    Text(
-                        yearTag.items.orEmpty.reduce(.zero) {
-                            $0 + $1.income
-                        }.asCurrency
-                    )
+                    Text(income.asCurrency)
                     .foregroundStyle(.secondary)
                     Image(systemName: "chevron.up")
                         .foregroundStyle(.tint)
@@ -34,11 +38,7 @@ extension HomeTabSectionLink: View {
                 HStack {
                     Text("Total Outgo")
                     Spacer()
-                    Text(
-                        yearTag.items.orEmpty.reduce(.zero) {
-                            $0 + $1.outgo
-                        }.asMinusCurrency
-                    )
+                    Text(outgo.asMinusCurrency)
                     .foregroundStyle(.secondary)
                     Image(systemName: "chevron.down")
                         .foregroundStyle(.red)
@@ -55,9 +55,9 @@ extension HomeTabSectionLink: View {
         List {
             HomeTabSectionLink()
                 .environment(
-                    preview.tags.first {
-                        $0.type == .year
-                    }
+                    preview.tags
+                        .first { $0.type == .year }
+                        .flatMap(TagEntity.init)
                 )
         }
     }

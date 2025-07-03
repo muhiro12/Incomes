@@ -8,7 +8,7 @@
 import SwiftUI
 
 enum IncomesPath: Hashable {
-    case year(Tag)
-    case itemList(Tag)
-    case tag(Tag)
+    case year(TagEntity)
+    case itemList(TagEntity)
+    case tag(TagEntity)
 }
