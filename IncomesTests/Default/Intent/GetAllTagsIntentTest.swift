@@ -11,8 +11,8 @@ struct GetAllTagsIntentTest {
     }
 
     @Test func perform() throws {
-        _ = try Tag.create(context: container.mainContext, name: "A", type: .year)
-        _ = try Tag.create(context: container.mainContext, name: "B", type: .content)
+        _ = try Tag.create(container: container, name: "A", type: .year)
+        _ = try Tag.create(container: container, name: "B", type: .content)
         let tags = try GetAllTagsIntent.perform(container)
         #expect(tags.count == 2)
     }

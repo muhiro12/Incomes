@@ -19,21 +19,21 @@ final class IncomesPreviewStore {
     }
 
     @MainActor
-    func prepare(_ context: ModelContext) async {
-        createItems(context)
+    func prepare(_ container: ModelContainer) async {
+        createItems(container)
         while !isReady {
             try! await Task.sleep(for: .seconds(0.2))
-            items = try! context.fetch(.items(.all))
-            tags = try! context.fetch(.tags(.all))
+            items = try! container.mainContext.fetch(.items(.all))
+            tags = try! container.mainContext.fetch(.tags(.all))
         }
-        try! BalanceCalculator().calculate(in: context, for: items)
+        try! BalanceCalculator().calculate(in: container.mainContext, for: items)
     }
 
     @MainActor
-    func prepareIgnoringDuplicates(_ context: ModelContext) {
+    func prepareIgnoringDuplicates(_ container: ModelContainer) {
         for index in 0..<24 {
             _ = try! Item.createIgnoringDuplicates(
-                context: context,
+                container: container,
                 date: Calendar.current.date(
                     byAdding: .month,
                     value: index,
@@ -46,10 +46,10 @@ final class IncomesPreviewStore {
                 repeatID: .init()
             )
         }
-        try! BalanceCalculator().calculate(in: context, for: items)
+        try! BalanceCalculator().calculate(in: container.mainContext, for: items)
     }
 
-    private func createItems(_ context: ModelContext) {
+    private func createItems(_ container: ModelContainer) {
         let now = Calendar.current.startOfYear(for: .now)
 
         let dateA = Calendar.current.date(byAdding: .day, value: 0, to: now)!
@@ -63,7 +63,7 @@ final class IncomesPreviewStore {
         }
 
         _ = try! Item.create(
-            context: context,
+            container: container,
             date: date(-1, dateD),
             content: String(localized: "Payday"),
             income: LocaleAmountConverter.localizedAmount(baseUSD: 4_500),
@@ -74,7 +74,7 @@ final class IncomesPreviewStore {
 
         for index in 0..<24 {
             _ = try! Item.create(
-                context: context,
+                container: container,
                 date: date(index, dateD),
                 content: String(localized: "Payday"),
                 income: LocaleAmountConverter.localizedAmount(baseUSD: 4_500),
@@ -83,7 +83,7 @@ final class IncomesPreviewStore {
                 repeatID: .init()
             )
             _ = try! Item.create(
-                context: context,
+                container: container,
                 date: date(index, dateD),
                 content: String(localized: "Advertising revenue"),
                 income: LocaleAmountConverter.localizedAmount(baseUSD: 500),
@@ -92,7 +92,7 @@ final class IncomesPreviewStore {
                 repeatID: .init()
             )
             _ = try! Item.create(
-                context: context,
+                container: container,
                 date: date(index, dateB),
                 content: String(localized: "Apple card"),
                 income: LocaleAmountConverter.localizedAmount(baseUSD: 0),
@@ -101,7 +101,7 @@ final class IncomesPreviewStore {
                 repeatID: .init()
             )
             _ = try! Item.create(
-                context: context,
+                container: container,
                 date: date(index, dateA),
                 content: String(localized: "Orange card"),
                 income: LocaleAmountConverter.localizedAmount(baseUSD: 0),
@@ -110,7 +110,7 @@ final class IncomesPreviewStore {
                 repeatID: .init()
             )
             _ = try! Item.create(
-                context: context,
+                container: container,
                 date: date(index, dateD),
                 content: String(localized: "Lemon card"),
                 income: LocaleAmountConverter.localizedAmount(baseUSD: 0),
@@ -119,7 +119,7 @@ final class IncomesPreviewStore {
                 repeatID: .init()
             )
             _ = try! Item.create(
-                context: context,
+                container: container,
                 date: date(index, dateE),
                 content: String(localized: "House"),
                 income: LocaleAmountConverter.localizedAmount(baseUSD: 0),
@@ -128,7 +128,7 @@ final class IncomesPreviewStore {
                 repeatID: .init()
             )
             _ = try! Item.create(
-                context: context,
+                container: container,
                 date: date(index, dateC),
                 content: String(localized: "Car"),
                 income: LocaleAmountConverter.localizedAmount(baseUSD: 0),
@@ -137,7 +137,7 @@ final class IncomesPreviewStore {
                 repeatID: .init()
             )
             _ = try! Item.create(
-                context: context,
+                container: container,
                 date: date(index, dateA),
                 content: String(localized: "Insurance"),
                 income: LocaleAmountConverter.localizedAmount(baseUSD: 0),
@@ -146,7 +146,7 @@ final class IncomesPreviewStore {
                 repeatID: .init()
             )
             _ = try! Item.create(
-                context: context,
+                container: container,
                 date: date(index, dateE),
                 content: String(localized: "Pension"),
                 income: LocaleAmountConverter.localizedAmount(baseUSD: 0),

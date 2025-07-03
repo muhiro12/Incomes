@@ -12,7 +12,7 @@ struct MergeDuplicateTagsIntentTest {
 
     @Test func mergeWhenTagsAreDifferent() throws {
         let item1 = try Item.create(
-            context: container.mainContext,
+            container: container,
             date: .now,
             content: "contentA",
             income: .zero,
@@ -21,7 +21,7 @@ struct MergeDuplicateTagsIntentTest {
             repeatID: .init()
         )
         let item2 = try Item.create(
-            context: container.mainContext,
+            container: container,
             date: .now,
             content: "contentB",
             income: .zero,
@@ -30,7 +30,7 @@ struct MergeDuplicateTagsIntentTest {
             repeatID: .init()
         )
         let item3 = try Item.create(
-            context: container.mainContext,
+            container: container,
             date: .now,
             content: "contentC",
             income: .zero,
@@ -64,9 +64,9 @@ struct MergeDuplicateTagsIntentTest {
     }
 
     @Test func mergeWhenTagsAreDuplicated() throws {
-        let tag1 = try Tag.createIgnoringDuplicates(context: container.mainContext, name: "contentA", type: .content)
-        let tag2 = try Tag.createIgnoringDuplicates(context: container.mainContext, name: "contentA", type: .content)
-        let tag3 = try Tag.createIgnoringDuplicates(context: container.mainContext, name: "contentA", type: .content)
+        let tag1 = try Tag.createIgnoringDuplicates(container: container, name: "contentA", type: .content)
+        let tag2 = try Tag.createIgnoringDuplicates(container: container, name: "contentA", type: .content)
+        let tag3 = try Tag.createIgnoringDuplicates(container: container, name: "contentA", type: .content)
 
         try MergeDuplicateTagsIntent.perform(
             (

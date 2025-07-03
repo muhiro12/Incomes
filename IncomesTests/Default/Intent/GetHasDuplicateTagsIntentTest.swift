@@ -13,8 +13,8 @@ struct GetHasDuplicateTagsIntentTest {
     @Test func perform() throws {
         #expect(try GetHasDuplicateTagsIntent.perform(container) == false)
 
-        let tag1 = try Tag.createIgnoringDuplicates(context: container.mainContext, name: "A", type: .year)
-        _ = try Tag.createIgnoringDuplicates(context: container.mainContext, name: "A", type: .year)
+        let tag1 = try Tag.createIgnoringDuplicates(container: container, name: "A", type: .year)
+        _ = try Tag.createIgnoringDuplicates(container: container, name: "A", type: .year)
 
         #expect(try GetHasDuplicateTagsIntent.perform(container) == true)
 

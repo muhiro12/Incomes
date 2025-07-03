@@ -36,20 +36,19 @@ struct UpdateRepeatingItemsIntent: AppIntent, IntentPerformer {
     @MainActor
     static func perform(_ input: Input) throws -> Output {
         let (container, entity, date, content, income, outgo, category, descriptor) = input
-        let context = container.mainContext
         let components = Calendar.current.dateComponents(
             [.year, .month, .day],
             from: entity.date,
             to: date
         )
         let repeatID = UUID()
-        let items = try context.fetch(descriptor)
-        try items.forEach {
+        let items = try container.mainContext.fetch(descriptor)
+        try items.forEach { item in
             guard let newDate = Calendar.current.date(byAdding: components, to: $0.localDate) else {
                 assertionFailure()
                 return
             }
-            try $0.modify(
+            try item.modify(
                 date: newDate,
                 content: content,
                 income: income,
@@ -59,7 +58,7 @@ struct UpdateRepeatingItemsIntent: AppIntent, IntentPerformer {
             )
         }
         let calculator = BalanceCalculator()
-        try calculator.calculate(in: context, for: items)
+        try calculator.calculate(in: container.mainContext, for: items)
     }
 
     @MainActor

@@ -11,7 +11,7 @@ struct GetTagByNameIntentTest {
     }
 
     @Test func perform() throws {
-        _ = try Tag.create(context: container.mainContext, name: "name", type: .year)
+        _ = try Tag.create(container: container, name: "name", type: .year)
         let tag = try #require(
             try GetTagByNameIntent.perform(
                 (

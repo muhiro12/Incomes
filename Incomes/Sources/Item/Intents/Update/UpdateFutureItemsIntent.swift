@@ -27,10 +27,11 @@ struct UpdateFutureItemsIntent: AppIntent, IntentPerformer {
     @MainActor
     static func perform(_ input: Input) throws -> Output {
         let (container, entity, date, content, income, outgo, category) = input
-        let context = container.mainContext
         guard
             let id = try? PersistentIdentifier(base64Encoded: entity.id),
-            let model = try context.fetchFirst(.items(.idIs(id)))
+            let model = try container.mainContext.fetchFirst(
+                .items(.idIs(id))
+            )
         else {
             throw DebugError.default
         }

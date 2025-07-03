@@ -23,7 +23,7 @@ final class Item {
 
     private init() {}
 
-    static func create(context: ModelContext,
+    static func create(container: ModelContainer,
                        date: Date,
                        content: String,
                        income: Decimal,
@@ -31,7 +31,7 @@ final class Item {
                        category: String,
                        repeatID: UUID) throws -> Item {
         let item = Item()
-        context.insert(item)
+        container.mainContext.insert(item)
 
         item.date = Calendar.utc.startOfDay(for: Calendar.utc.shiftedDate(componentsFrom: date, in: .current))
         item.content = content
@@ -41,22 +41,22 @@ final class Item {
 
         item.tags = [
             try .create(
-                context: context,
+                container: container,
                 name: date.stringValueWithoutLocale(.yyyy),
                 type: .year
             ),
             try .create(
-                context: context,
+                container: container,
                 name: date.stringValueWithoutLocale(.yyyyMM),
                 type: .yearMonth
             ),
             try .create(
-                context: context,
+                container: container,
                 name: content,
                 type: .content
             ),
             try .create(
-                context: context,
+                container: container,
                 name: category,
                 type: .category
             )
@@ -83,22 +83,22 @@ final class Item {
 
         self.tags = [
             try .create(
-                context: context,
+                container: context.container,
                 name: date.stringValueWithoutLocale(.yyyy),
                 type: .year
             ),
             try .create(
-                context: context,
+                container: context.container,
                 name: date.stringValueWithoutLocale(.yyyyMM),
                 type: .yearMonth
             ),
             try .create(
-                context: context,
+                container: context.container,
                 name: content,
                 type: .content
             ),
             try .create(
-                context: context,
+                container: context.container,
                 name: category,
                 type: .category
             )
@@ -153,7 +153,7 @@ extension Item: Comparable {
 // MARK: - Test
 
 extension Item {
-    static func createIgnoringDuplicates(context: ModelContext,
+    static func createIgnoringDuplicates(container: ModelContainer,
                                          date: Date,
                                          content: String,
                                          income: Decimal,
@@ -161,7 +161,7 @@ extension Item {
                                          category: String,
                                          repeatID: UUID) throws -> Item {
         let item = Item()
-        context.insert(item)
+        container.mainContext.insert(item)
 
         item.date = Calendar.utc.startOfDay(for: Calendar.utc.shiftedDate(componentsFrom: date, in: .current))
         item.content = content
@@ -171,22 +171,22 @@ extension Item {
 
         item.tags = [
             try .createIgnoringDuplicates(
-                context: context,
+                container: container,
                 name: date.stringValueWithoutLocale(.yyyy),
                 type: .year
             ),
             try .createIgnoringDuplicates(
-                context: context,
+                container: container,
                 name: date.stringValueWithoutLocale(.yyyyMM),
                 type: .yearMonth
             ),
             try .createIgnoringDuplicates(
-                context: context,
+                container: container,
                 name: content,
                 type: .content
             ),
             try .createIgnoringDuplicates(
-                context: context,
+                container: container,
                 name: category,
                 type: .category
             )

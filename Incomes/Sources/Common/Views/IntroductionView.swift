@@ -46,7 +46,7 @@ struct IntroductionView: View {
                         withAnimation {
                             isLoading = true
                         }
-                        await IncomesPreviewStore().prepare(context)
+                        await IncomesPreviewStore().prepare(context.container)
                         try? await Task.sleep(for: .seconds(5))
                         withAnimation {
                             isLoading = false

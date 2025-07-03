@@ -12,13 +12,12 @@ struct DeleteAllItemsIntent: AppIntent, IntentPerformer {
 
     @MainActor
     static func perform(_ input: Input) throws -> Output {
-        let context = input.mainContext
-        let items = try context.fetch(FetchDescriptor<Item>())
-        items.forEach {
-            $0.delete()
+        let items = try input.mainContext.fetch(FetchDescriptor<Item>())
+        items.forEach { item in
+            item.delete()
         }
         let calculator = BalanceCalculator()
-        try calculator.calculate(in: context, for: items)
+        try calculator.calculate(in: input.mainContext, for: items)
     }
 
     @MainActor
