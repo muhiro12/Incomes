@@ -4,16 +4,16 @@ import Testing
 
 @MainActor
 struct DeleteItemIntentTest {
-    let context: ModelContext
+    let container: ModelContainer
 
     init() {
-        context = testContext
+        container = testContainer
     }
 
     @Test func perform() throws {
         let item = try CreateItemIntent.perform(
             (
-                container: context.container,
+                container: container,
                 date: isoDate("2000-01-01T12:00:00Z"),
                 content: "content",
                 income: 200,
@@ -22,8 +22,8 @@ struct DeleteItemIntentTest {
                 repeatCount: 1
             )
         )
-        #expect(!fetchItems(context).isEmpty)
-        try DeleteItemIntent.perform((container: context.container, item: item))
-        #expect(fetchItems(context).isEmpty)
+        #expect(!fetchItems(container).isEmpty)
+        try DeleteItemIntent.perform((container: container, item: item))
+        #expect(fetchItems(container).isEmpty)
     }
 }

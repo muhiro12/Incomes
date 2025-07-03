@@ -4,27 +4,27 @@ import Testing
 
 @MainActor
 struct GetHasDuplicateTagsIntentTest {
-    let context: ModelContext
+    let container: ModelContainer
 
     init() {
-        context = testContext
+        container = testContainer
     }
 
     @Test func perform() throws {
-        #expect(try GetHasDuplicateTagsIntent.perform(context.container) == false)
+        #expect(try GetHasDuplicateTagsIntent.perform(container) == false)
 
-        let tag1 = try Tag.createIgnoringDuplicates(context: context, name: "A", type: .year)
-        _ = try Tag.createIgnoringDuplicates(context: context, name: "A", type: .year)
+        let tag1 = try Tag.createIgnoringDuplicates(context: container.mainContext, name: "A", type: .year)
+        _ = try Tag.createIgnoringDuplicates(context: container.mainContext, name: "A", type: .year)
 
-        #expect(try GetHasDuplicateTagsIntent.perform(context.container) == true)
+        #expect(try GetHasDuplicateTagsIntent.perform(container) == true)
 
         try MergeDuplicateTagsIntent.perform(
             (
-                container: context.container,
-                tags: try context.fetch(.tags(.isSameWith(tag1))).compactMap(TagEntity.init)
+                container: container,
+                tags: try container.mainContext.fetch(.tags(.isSameWith(tag1))).compactMap(TagEntity.init)
             )
         )
 
-        #expect(try GetHasDuplicateTagsIntent.perform(context.container) == false)
+        #expect(try GetHasDuplicateTagsIntent.perform(container) == false)
     }
 }

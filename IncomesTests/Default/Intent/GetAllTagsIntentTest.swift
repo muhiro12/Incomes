@@ -4,16 +4,16 @@ import Testing
 
 @MainActor
 struct GetAllTagsIntentTest {
-    let context: ModelContext
+    let container: ModelContainer
 
     init() {
-        context = testContext
+        container = testContainer
     }
 
     @Test func perform() throws {
-        _ = try Tag.create(context: context, name: "A", type: .year)
-        _ = try Tag.create(context: context, name: "B", type: .content)
-        let tags = try GetAllTagsIntent.perform(context.container)
+        _ = try Tag.create(context: container.mainContext, name: "A", type: .year)
+        _ = try Tag.create(context: container.mainContext, name: "B", type: .content)
+        let tags = try GetAllTagsIntent.perform(container)
         #expect(tags.count == 2)
     }
 }

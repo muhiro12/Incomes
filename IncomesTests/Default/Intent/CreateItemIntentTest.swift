@@ -4,16 +4,16 @@ import Testing
 
 @MainActor
 struct CreateItemIntentTest {
-    let context: ModelContext
+    let container: ModelContainer
 
     init() {
-        context = testContext
+        container = testContainer
     }
 
     @Test func perform() throws {
         _ = try CreateItemIntent.perform(
             (
-                container: context.container,
+                container: container,
                 date: isoDate("2000-01-01T12:00:00Z"),
                 content: "content",
                 income: 200,
@@ -22,7 +22,7 @@ struct CreateItemIntentTest {
                 repeatCount: 1
             )
         )
-        let result = try #require(fetchItems(context).first)
+        let result = try #require(fetchItems(container).first)
         #expect(result.utcDate == isoDate("2000-01-01T00:00:00Z"))
         #expect(result.content == "content")
         #expect(result.balance == 100)
@@ -31,7 +31,7 @@ struct CreateItemIntentTest {
     @Test func performRepeat() throws {
         _ = try CreateItemIntent.perform(
             (
-                container: context.container,
+                container: container,
                 date: isoDate("2000-01-01T12:00:00Z"),
                 content: "content",
                 income: 200,
@@ -40,7 +40,7 @@ struct CreateItemIntentTest {
                 repeatCount: 3
             )
         )
-        let items = fetchItems(context)
+        let items = fetchItems(container)
         #expect(items.count == 3)
         #expect(Set(items.map(\.repeatID)).count == 1)
     }
