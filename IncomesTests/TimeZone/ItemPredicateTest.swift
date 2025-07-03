@@ -62,28 +62,29 @@ struct ItemPredicateTest {
         _ = try CreateItemIntent.perform((container: container, date: date, content: "Content", income: 0, outgo: 0, category: "Category", repeatCount: 1))
 
         let tag = try Tag.create(container: container, name: "2024", type: .year)
-        let predicate = ItemPredicate.tagIs(tag)
+        let tagEntity = TagEntity(tag)!
+        let predicate = ItemPredicate.tagIs(tagEntity)
         let items = try container.mainContext.fetch(.items(predicate))
 
         try #require(items.count == 1)
         #expect(
             items[0].tags?.first {
-                $0.type == .year
+                $0.type == TagType.year
             }?.name == "2024"
         )
         #expect(
             items[0].tags?.first {
-                $0.type == .yearMonth
+                $0.type == TagType.yearMonth
             }?.name == "202401"
         )
         #expect(
             items[0].tags?.first {
-                $0.type == .content
+                $0.type == TagType.content
             }?.name == "Content"
         )
         #expect(
             items[0].tags?.first {
-                $0.type == .category
+                $0.type == TagType.category
             }?.name == "Category"
         )
     }
@@ -96,28 +97,29 @@ struct ItemPredicateTest {
         _ = try CreateItemIntent.perform((container: container, date: date, content: "Content", income: 0, outgo: 0, category: "Category", repeatCount: 1))
 
         let tag = try Tag.create(container: container, name: "202401", type: .yearMonth)
-        let predicate = ItemPredicate.tagIs(tag)
+        let tagEntity = TagEntity(tag)!
+        let predicate = ItemPredicate.tagIs(tagEntity)
         let items = try container.mainContext.fetch(.items(predicate))
 
         try #require(items.count == 1)
         #expect(
             items[0].tags?.first {
-                $0.type == .year
+                $0.type == TagType.year
             }?.name == "2024"
         )
         #expect(
             items[0].tags?.first {
-                $0.type == .yearMonth
+                $0.type == TagType.yearMonth
             }?.name == "202401"
         )
         #expect(
             items[0].tags?.first {
-                $0.type == .content
+                $0.type == TagType.content
             }?.name == "Content"
         )
         #expect(
             items[0].tags?.first {
-                $0.type == .category
+                $0.type == TagType.category
             }?.name == "Category"
         )
     }
@@ -130,28 +132,29 @@ struct ItemPredicateTest {
         _ = try CreateItemIntent.perform((container: container, date: date, content: "Content", income: 0, outgo: 0, category: "Category", repeatCount: 1))
 
         let tag = try Tag.create(container: container, name: "Content", type: .content)
-        let predicate = ItemPredicate.tagAndYear(tag: tag, yearString: "2024")
+        let tagEntity = TagEntity(tag)!
+        let predicate = ItemPredicate.tagAndYear(tag: tagEntity, yearString: "2024")
         let items = try container.mainContext.fetch(.items(predicate))
 
         try #require(items.count == 1)
         #expect(
             items[0].tags?.first {
-                $0.type == .year
+                $0.type == TagType.year
             }?.name == "2024"
         )
         #expect(
             items[0].tags?.first {
-                $0.type == .yearMonth
+                $0.type == TagType.yearMonth
             }?.name == "202401"
         )
         #expect(
             items[0].tags?.first {
-                $0.type == .content
+                $0.type == TagType.content
             }?.name == "Content"
         )
         #expect(
             items[0].tags?.first {
-                $0.type == .category
+                $0.type == TagType.category
             }?.name == "Category"
         )
     }
