@@ -43,6 +43,7 @@ let timeZones: [TimeZone] = [
     .init(identifier: "Europe/Minsk")!
 ]
 
+@MainActor
 func fetchItems(_ container: ModelContainer) -> [Item] {
     try! container.mainContext.fetch(.items(.all))
 }
