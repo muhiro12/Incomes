@@ -55,7 +55,7 @@ struct ListItem: View {
                 isDeletePresented = true
             }
         } preview: {
-            ItemNavigationView()
+            ItemPreviewNavigationView()
                 .environment(item)
         }
         .sheet(isPresented: $isDetailPresented) {
