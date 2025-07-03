@@ -7,37 +7,49 @@
 
 import SwiftData
 import SwiftUI
+import SwiftUtilities
 
 struct HomeYearSection: View {
     @Environment(\.modelContext)
     private var context
 
-    @Query private var yearMonthTags: [Tag]
+    @BridgeQuery private var yearMonthTags: [TagEntity]
 
     @State private var isDialogPresented = false
     @State private var willDeleteItems: [Item] = []
 
-    init(yearTag: Tag) {
-        _yearMonthTags = Query(.tags(.nameStartsWith(yearTag.name, type: .yearMonth), order: .reverse))
+    init(yearTag: TagEntity) {
+        _yearMonthTags = BridgeQuery(
+            Query(
+                .tags(
+                    .nameStartsWith(yearTag.name, type: .yearMonth),
+                    order: .reverse
+                )
+            )
+        )
     }
 
     var body: some View {
         Section {
-            ForEach(yearMonthTags) { yearMonthTag in
-                if let items = yearMonthTag.items {
-                    NavigationLink(value: IncomesPath.itemList(yearMonthTag)) {
-                        Text(yearMonthTag.displayName)
+            ForEach(yearMonthTags) { entity in
+                if
+                    let tag = try? entity.model(in: context),
+                    let items = tag.items
+                {
+                    NavigationLink(value: IncomesPath.itemList(entity)) {
+                        Text(tag.displayName)
                             .foregroundStyle(
                                 items.contains(where: \.balance.isMinus) ? .red : .primary
                             )
-                            .bold(yearMonthTag.name == Date.now.stringValueWithoutLocale(.yyyyMM))
+                            .bold(tag.name == Date.now.stringValueWithoutLocale(.yyyyMM))
                     }
                 }
-            }.onDelete {
+            }
+            .onDelete { indices in
                 Haptic.warning.impact()
                 isDialogPresented = true
-                willDeleteItems = $0.flatMap {
-                    yearMonthTags[$0].items ?? []
+                willDeleteItems = indices.flatMap {
+                    (try? yearMonthTags[$0].model(in: context))?.items ?? []
                 }
             }
         }
@@ -77,9 +89,9 @@ struct HomeYearSection: View {
     IncomesPreview { preview in
         List {
             HomeYearSection(
-                yearTag: preview.tags.first {
-                    $0.name == Date.now.stringValueWithoutLocale(.yyyy)
-                }!
+                yearTag: preview.tags
+                    .first { $0.name == Date.now.stringValueWithoutLocale(.yyyy) }
+                    .flatMap(TagEntity.init)!
             )
         }
     }

@@ -1,35 +1,36 @@
 import SwiftData
 import SwiftUI
+import SwiftUtilities
 
 struct DebugTagListView: View {
-    @Query(.tags(.typeIs(.year))) private var years: [Tag]
-    @Query(.tags(.typeIs(.yearMonth))) private var yearMonths: [Tag]
-    @Query(.tags(.typeIs(.content))) private var contents: [Tag]
-    @Query(.tags(.typeIs(.category))) private var categories: [Tag]
+    @BridgeQuery(.init(.tags(.typeIs(.year)))) private var yearEntities: [TagEntity]
+    @BridgeQuery(.init(.tags(.typeIs(.yearMonth)))) private var yearMonthEntities: [TagEntity]
+    @BridgeQuery(.init(.tags(.typeIs(.content)))) private var contentEntities: [TagEntity]
+    @BridgeQuery(.init(.tags(.typeIs(.category)))) private var categoryEntities: [TagEntity]
 
     var body: some View {
         List {
-            buildSection(from: years) {
+            buildSection(from: yearEntities) {
                 Text("Year")
             }
-            buildSection(from: yearMonths) {
+            buildSection(from: yearMonthEntities) {
                 Text("YearMonth")
             }
-            buildSection(from: contents) {
+            buildSection(from: contentEntities) {
                 Text("Content")
             }
-            buildSection(from: categories) {
+            buildSection(from: categoryEntities) {
                 Text("Category")
             }
         }
     }
 
     @ViewBuilder
-    private func buildSection<Header: View>(from tags: [Tag], header: () -> Header) -> some View {
+    private func buildSection<Header: View>(from entities: [TagEntity], header: () -> Header) -> some View {
         Section {
-            ForEach(tags) { tag in
-                NavigationLink(value: IncomesPath.tag(tag)) {
-                    Text(tag.displayName)
+            ForEach(entities) { entity in
+                NavigationLink(value: IncomesPath.tag(entity)) {
+                    Text(entity.displayName)
                 }
             }
         } header: {

@@ -8,12 +8,13 @@
 import Charts
 import SwiftData
 import SwiftUI
+import SwiftUtilities
 
 struct CategoryChartSection: View {
-    @Query private var items: [Item]
+    @BridgeQuery private var items: [ItemEntity]
 
     init(_ descriptor: FetchDescriptor<Item>) {
-        _items = .init(descriptor)
+        _items = BridgeQuery(Query(descriptor))
     }
 
     var body: some View {
@@ -21,11 +22,8 @@ struct CategoryChartSection: View {
             Chart(
                 Dictionary(
                     grouping: items.filter(\.income.isNotZero)
-                ) {
-                    guard let category = $0.category else {
-                        return "Others"
-                    }
-                    return category.displayName
+                ) { item in
+                    item.category ?? "Others"
                 }.map { displayName, items in
                     (
                         title: displayName,
@@ -55,11 +53,8 @@ struct CategoryChartSection: View {
             Chart(
                 Dictionary(
                     grouping: items.filter(\.outgo.isNotZero)
-                ) {
-                    guard let category = $0.category else {
-                        return "Others"
-                    }
-                    return category.displayName
+                ) { item in
+                    item.category ?? "Others"
                 }.map { displayName, items in
                     (
                         title: displayName,

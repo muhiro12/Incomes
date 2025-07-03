@@ -14,12 +14,12 @@ struct DebugNavigationView: View {
         NavigationSplitView {
             DebugListView(selection: $path)
         } detail: {
-            if case .itemList(let tag) = path {
+            if case .itemList(let tagEntity) = path {
                 ItemListView()
-                    .environment(tag)
-            } else if case .tag(let tag) = path {
+                    .environment(tagEntity)
+            } else if case .tag(let tagEntity) = path {
                 DebugTagView()
-                    .environment(tag)
+                    .environment(tagEntity)
             }
         }
     }

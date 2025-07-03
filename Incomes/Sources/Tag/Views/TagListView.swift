@@ -8,13 +8,14 @@
 
 import SwiftData
 import SwiftUI
+import SwiftUtilities
 
 struct TagListView: View {
     @Environment(\.modelContext)
     private var context
 
-    @Query
-    private var tags: [Tag]
+    @BridgeQuery
+    private var tagEntities: [TagEntity]
 
     @Binding private var path: IncomesPath?
 
@@ -26,34 +27,39 @@ struct TagListView: View {
 
     init(tagType: TagType, selection: Binding<IncomesPath?> = .constant(nil)) {
         self.tagType = tagType
-        self._tags = .init(.tags(.typeIs(tagType)))
+        self._tagEntities = BridgeQuery(Query(.tags(.typeIs(tagType))))
         self._path = selection
+    }
+
+    private var tags: [Tag] {
+        tagEntities.compactMap { try? $0.model(in: context) }
     }
 
     var body: some View {
         List(selection: $path) {
-            ForEach(tags) { tag in
-                NavigationLink(value: IncomesPath.itemList(tag)) {
+            ForEach(tagEntities) { entity in
+                let tag = try? entity.model(in: context)
+                NavigationLink(value: IncomesPath.itemList(entity)) {
                     HStack {
-                        Text(tag.displayName)
+                        Text(tag?.displayName ?? "")
                         Spacer()
-                        Text(tag.items.orEmpty.count.description)
+                        Text(tag?.items.orEmpty.count.description ?? "0")
                             .foregroundStyle(.secondary)
                     }
                 }
                 .hidden(
                     searchText.isNotEmpty
                         && (
-                            !tag.name.normalizedContains(searchText)
-                                || tag.items.orEmpty.isEmpty
+                            !(tag?.name.normalizedContains(searchText) ?? false)
+                                || tag?.items.orEmpty.isEmpty ?? true
                         )
                 )
             }
             .onDelete { indices in
                 Haptic.warning.impact()
                 isDialogPresented = true
-                willDeleteTags = indices.map {
-                    tags[$0]
+                willDeleteTags = indices.compactMap {
+                    try? tagEntities[$0].model(in: context)
                 }
             }
         }

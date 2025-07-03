@@ -6,20 +6,21 @@ struct DuplicateTagView: View {
     @Environment(\.modelContext)
     private var context
 
-    @Query private var tags: [Tag]
+    @BridgeQuery private var tags: [TagEntity]
 
     @State private var isMergeDialogPresented = false
     @State private var isDeleteDialogPresented = false
     @State private var selectedTag: Tag?
 
     init(_ tag: Tag) {
-        _tags = Query(.tags(.isSameWith(tag)))
+        _tags = BridgeQuery(Query(.tags(.isSameWith(tag))))
     }
 
     var body: some View {
         ScrollView(.horizontal) {
             LazyHStack(spacing: .zero) {
-                ForEach(tags) { tag in
+                let tagModels = tags.compactMap { try? $0.model(in: context) }
+                ForEach(tagModels) { tag in
                     List {
                         Section {
                             ForEach(tag.items ?? []) { item in
@@ -45,7 +46,7 @@ struct DuplicateTagView: View {
                         }
                     }
                     .frame(width: .componentXL)
-                    if tag != tags.last {
+                    if tag.id != tagModels.last?.id {
                         Divider()
                     }
                 }
@@ -61,7 +62,7 @@ struct DuplicateTagView: View {
                     try MergeDuplicateTagsIntent.perform(
                         (
                             container: context.container,
-                            tags: tags.compactMap(TagEntity.init)
+                            tags: tags
                         )
                     )
                 } catch {
