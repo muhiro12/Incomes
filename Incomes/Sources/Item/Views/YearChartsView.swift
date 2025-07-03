@@ -9,7 +9,7 @@ import SwiftData
 import SwiftUI
 
 struct YearChartsView: View {
-    @Environment(Tag.self)
+    @Environment(TagEntity.self)
     private var yearTag
     @Environment(\.modelContext)
     private var context

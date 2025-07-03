@@ -1,7 +1,10 @@
 import SwiftUI
 
 struct DebugTagView: View {
-    @Environment(Tag.self) private var tag
+    @Environment(TagEntity.self)
+    private var tag
+    @Environment(\.modelContext)
+    private var context
 
     var body: some View {
         List {
@@ -28,7 +31,7 @@ struct DebugTagView: View {
                 Text("Type ID")
             }
             Section {
-                ForEach(tag.items.orEmpty) { item in
+                ForEach(items) { item in
                     NavigationLink {
                         ItemFormView(mode: .edit)
                             .environment(item)
@@ -41,6 +44,15 @@ struct DebugTagView: View {
             }
         }
         .navigationTitle(tag.displayName)
+    }
+}
+
+private extension DebugTagView {
+    @MainActor
+    var items: [ItemEntity] {
+        (
+            try? tag.model(in: context).items.orEmpty.compactMap(ItemEntity.init)
+        ).orEmpty
     }
 }
 

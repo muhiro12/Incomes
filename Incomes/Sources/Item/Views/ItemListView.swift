@@ -10,8 +10,10 @@ import SwiftData
 import SwiftUI
 
 struct ItemListView {
-    @Environment(Tag.self)
+    @Environment(TagEntity.self)
     private var tag
+    @Environment(\.modelContext)
+    private var context
 
     @AppStorage(.isSubscribeOn)
     private var isSubscribeOn
@@ -55,7 +57,7 @@ extension ItemListView: View {
                 ToolbarAlignmentSpacer()
             }
             ToolbarItem(placement: .status) {
-                Text("\(tag.items.orEmpty.count) Items")
+                Text("\(items.count) Items")
                     .font(.footnote)
             }
             ToolbarItem(placement: .bottomBar) {
@@ -66,10 +68,18 @@ extension ItemListView: View {
 }
 
 private extension ItemListView {
+    @MainActor
+    var items: [ItemEntity] {
+        (
+            try? tag.model(in: context).items.orEmpty.compactMap(ItemEntity.init)
+        ).orEmpty
+    }
+
+    @MainActor
     var yearStrings: [String] {
         Set(
-            tag.items.orEmpty.compactMap {
-                $0.year?.name
+            items.compactMap {
+                $0.date.stringValueWithoutLocale(.yyyy)
             }
         ).sorted(by: >)
     }
