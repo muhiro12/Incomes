@@ -2,18 +2,17 @@
 import SwiftData
 import Testing
 
-@MainActor
 struct RecalculateItemIntentTest {
-    let container: ModelContainer
+    let context: ModelContext
 
     init() {
-        container = testContainer
+        context = testContext
     }
 
     @Test func perform() throws {
         let entity = try CreateItemIntent.perform(
             (
-                container: container,
+                context: context,
                 date: isoDate("2000-01-01T00:00:00Z"),
                 content: "content",
                 income: 100,
@@ -24,7 +23,7 @@ struct RecalculateItemIntentTest {
         )
         try UpdateItemIntent.perform(
             (
-                container: container,
+                context: context,
                 item: entity,
                 date: entity.date,
                 content: entity.content,
@@ -33,8 +32,8 @@ struct RecalculateItemIntentTest {
                 category: entity.category ?? ""
             )
         )
-        try RecalculateItemIntent.perform((container: container, date: isoDate("1999-12-01T00:00:00Z")))
-        let item = try #require(fetchItems(container).first)
+        try RecalculateItemIntent.perform((context: context, date: isoDate("1999-12-01T00:00:00Z")))
+        let item = try #require(fetchItems(context).first)
         #expect(item.balance == 10)
     }
 }

@@ -84,13 +84,13 @@ extension HomeListView: View {
                 hasLoaded = true
                 yearTagEntity = try? GetTagByNameIntent.perform(
                     (
-                        container: context.container,
+                        context: context,
                         name: Date.now.stringValueWithoutLocale(.yyyy),
                         type: .year
                     )
                 )
                 isIntroductionPresented = (
-                    try? GetAllItemsCountIntent.perform(context.container).isZero
+                    try? GetAllItemsCountIntent.perform(context).isZero
                 ) ?? false
             }
 

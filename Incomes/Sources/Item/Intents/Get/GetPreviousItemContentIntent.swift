@@ -11,7 +11,7 @@ import SwiftData
 import SwiftUtilities
 
 struct GetPreviousItemContentIntent: AppIntent, IntentPerformer {
-    typealias Input = (container: ModelContainer, date: Date)
+    typealias Input = (context: ModelContext, date: Date)
     typealias Output = String?
 
     @Parameter(title: "Date", kind: .date)
@@ -21,14 +21,13 @@ struct GetPreviousItemContentIntent: AppIntent, IntentPerformer {
 
     static let title: LocalizedStringResource = .init("Get Previous Item Content", table: "AppIntents")
 
-    @MainActor
     static func perform(_ input: Input) throws -> Output {
         try GetPreviousItemIntent.perform(input)?.content
     }
 
     @MainActor
     func perform() throws -> some ReturnsValue<String?> {
-        guard let content = try Self.perform((container: modelContainer, date: date)) else {
+        guard let content = try Self.perform((context: modelContainer.mainContext, date: date)) else {
             return .result(value: nil)
         }
         return .result(value: content)

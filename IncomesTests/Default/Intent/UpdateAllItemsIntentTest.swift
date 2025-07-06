@@ -2,18 +2,17 @@
 import SwiftData
 import Testing
 
-@MainActor
 struct UpdateAllItemsIntentTest {
-    let container: ModelContainer
+    let context: ModelContext
 
     init() {
-        container = testContainer
+        context = testContext
     }
 
     @Test func perform() throws {
         let item = try CreateItemIntent.perform(
             (
-                container: container,
+                context: context,
                 date: isoDate("2000-01-01T12:00:00Z"),
                 content: "content",
                 income: 200,
@@ -24,7 +23,7 @@ struct UpdateAllItemsIntentTest {
         )
         try UpdateAllItemsIntent.perform(
             (
-                container: container,
+                context: context,
                 item: item,
                 date: isoDate("2001-01-02T12:00:00Z"),
                 content: "content2",
@@ -33,7 +32,7 @@ struct UpdateAllItemsIntentTest {
                 category: "category2"
             )
         )
-        let result = fetchItems(container).first!
+        let result = fetchItems(context).first!
         #expect(result.utcDate == isoDate("2001-01-02T00:00:00Z"))
         #expect(result.content == "content2")
         #expect(result.income == 100)
@@ -44,7 +43,7 @@ struct UpdateAllItemsIntentTest {
     @Test func performRepeat() throws {
         _ = try CreateItemIntent.perform(
             (
-                container: container,
+                context: context,
                 date: isoDate("2000-01-01T12:00:00Z"),
                 content: "content",
                 income: 200,
@@ -55,8 +54,8 @@ struct UpdateAllItemsIntentTest {
         )
         try UpdateAllItemsIntent.perform(
             (
-                container: container,
-                item: ItemEntity(fetchItems(container)[1])!,
+                context: context,
+                item: ItemEntity(fetchItems(context)[1])!,
                 date: isoDate("2000-02-02T12:00:00Z"),
                 content: "content2",
                 income: 100,
@@ -64,9 +63,9 @@ struct UpdateAllItemsIntentTest {
                 category: "category2"
             )
         )
-        let first = fetchItems(container)[0]
-        let second = fetchItems(container)[1]
-        let last = fetchItems(container)[2]
+        let first = fetchItems(context)[0]
+        let second = fetchItems(context)[1]
+        let last = fetchItems(context)[2]
 
         #expect(first.utcDate == isoDate("2000-03-02T00:00:00Z"))
         #expect(first.content == "content2")

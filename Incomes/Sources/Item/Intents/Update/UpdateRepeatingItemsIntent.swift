@@ -5,7 +5,7 @@ import SwiftUtilities
 
 struct UpdateRepeatingItemsIntent: AppIntent, IntentPerformer {
     typealias Input = (
-        container: ModelContainer,
+        context: ModelContext,
         item: ItemEntity,
         date: Date,
         content: String,
@@ -33,16 +33,15 @@ struct UpdateRepeatingItemsIntent: AppIntent, IntentPerformer {
 
     static let title: LocalizedStringResource = .init("Update Repeating Items", table: "AppIntents")
 
-    @MainActor
     static func perform(_ input: Input) throws -> Output {
-        let (container, entity, date, content, income, outgo, category, descriptor) = input
+        let (context, entity, date, content, income, outgo, category, descriptor) = input
         let components = Calendar.current.dateComponents(
             [.year, .month, .day],
             from: entity.date,
             to: date
         )
         let repeatID = UUID()
-        let items = try container.mainContext.fetch(descriptor)
+        let items = try context.fetch(descriptor)
         try items.forEach { item in
             guard let newDate = Calendar.current.date(byAdding: components, to: item.localDate) else {
                 assertionFailure()
@@ -58,7 +57,7 @@ struct UpdateRepeatingItemsIntent: AppIntent, IntentPerformer {
             )
         }
         let calculator = BalanceCalculator()
-        try calculator.calculate(in: container.mainContext, for: items)
+        try calculator.calculate(in: context, for: items)
     }
 
     @MainActor
@@ -78,7 +77,7 @@ struct UpdateRepeatingItemsIntent: AppIntent, IntentPerformer {
         }
         try Self.perform(
             (
-                container: modelContainer,
+                context: modelContainer.mainContext,
                 item: item,
                 date: date,
                 content: content,

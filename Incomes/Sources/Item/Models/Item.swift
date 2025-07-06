@@ -23,8 +23,7 @@ final class Item {
 
     private init() {}
 
-    @MainActor
-    static func create(container: ModelContainer,
+    static func create(context: ModelContext,
                        date: Date,
                        content: String,
                        income: Decimal,
@@ -32,7 +31,7 @@ final class Item {
                        category: String,
                        repeatID: UUID) throws -> Item {
         let item = Item()
-        container.mainContext.insert(item)
+        context.insert(item)
 
         item.date = Calendar.utc.startOfDay(for: Calendar.utc.shiftedDate(componentsFrom: date, in: .current))
         item.content = content
@@ -42,22 +41,22 @@ final class Item {
 
         item.tags = [
             try .create(
-                container: container,
+                context: context,
                 name: date.stringValueWithoutLocale(.yyyy),
                 type: .year
             ),
             try .create(
-                container: container,
+                context: context,
                 name: date.stringValueWithoutLocale(.yyyyMM),
                 type: .yearMonth
             ),
             try .create(
-                container: container,
+                context: context,
                 name: content,
                 type: .content
             ),
             try .create(
-                container: container,
+                context: context,
                 name: category,
                 type: .category
             )
@@ -66,7 +65,6 @@ final class Item {
         return item
     }
 
-    @MainActor
     func modify(date: Date,
                 content: String,
                 income: Decimal,
@@ -85,22 +83,22 @@ final class Item {
 
         self.tags = [
             try .create(
-                container: context.container,
+                context: context,
                 name: date.stringValueWithoutLocale(.yyyy),
                 type: .year
             ),
             try .create(
-                container: context.container,
+                context: context,
                 name: date.stringValueWithoutLocale(.yyyyMM),
                 type: .yearMonth
             ),
             try .create(
-                container: context.container,
+                context: context,
                 name: content,
                 type: .content
             ),
             try .create(
-                container: context.container,
+                context: context,
                 name: category,
                 type: .category
             )
@@ -155,8 +153,7 @@ extension Item: Comparable {
 // MARK: - Test
 
 extension Item {
-    @MainActor
-    static func createIgnoringDuplicates(container: ModelContainer,
+    static func createIgnoringDuplicates(context: ModelContext,
                                          date: Date,
                                          content: String,
                                          income: Decimal,
@@ -164,7 +161,7 @@ extension Item {
                                          category: String,
                                          repeatID: UUID) throws -> Item {
         let item = Item()
-        container.mainContext.insert(item)
+        context.insert(item)
 
         item.date = Calendar.utc.startOfDay(for: Calendar.utc.shiftedDate(componentsFrom: date, in: .current))
         item.content = content
@@ -174,22 +171,22 @@ extension Item {
 
         item.tags = [
             try .createIgnoringDuplicates(
-                container: container,
+                context: context,
                 name: date.stringValueWithoutLocale(.yyyy),
                 type: .year
             ),
             try .createIgnoringDuplicates(
-                container: container,
+                context: context,
                 name: date.stringValueWithoutLocale(.yyyyMM),
                 type: .yearMonth
             ),
             try .createIgnoringDuplicates(
-                container: container,
+                context: context,
                 name: content,
                 type: .content
             ),
             try .createIgnoringDuplicates(
-                container: container,
+                context: context,
                 name: category,
                 type: .category
             )

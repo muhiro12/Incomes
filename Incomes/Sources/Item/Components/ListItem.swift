@@ -79,7 +79,7 @@ struct ListItem: View {
                 do {
                     try DeleteItemIntent.perform(
                         (
-                            container: context.container,
+                            context: context,
                             item: item
                         )
                     )

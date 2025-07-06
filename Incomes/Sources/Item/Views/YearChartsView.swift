@@ -33,7 +33,7 @@ struct YearChartsView: View {
             ToolbarItem(placement: .status) {
                 if let count = try? GetYearItemsCountIntent.perform(
                     (
-                        container: context.container,
+                        context: context,
                         date: date
                     )
                 ) {

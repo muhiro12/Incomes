@@ -11,7 +11,7 @@ import SwiftData
 import SwiftUtilities
 
 struct GetNextItemIntent: AppIntent, IntentPerformer {
-    typealias Input = (container: ModelContainer, date: Date)
+    typealias Input = (context: ModelContext, date: Date)
     typealias Output = ItemEntity?
 
     @Parameter(title: "Date", kind: .date)
@@ -21,10 +21,9 @@ struct GetNextItemIntent: AppIntent, IntentPerformer {
 
     static let title: LocalizedStringResource = .init("Get Next Item", table: "AppIntents")
 
-    @MainActor
     static func perform(_ input: Input) throws -> Output {
         let descriptor = FetchDescriptor.items(.dateIsAfter(input.date), order: .forward)
-        guard let item = try input.container.mainContext.fetchFirst(descriptor) else {
+        guard let item = try input.context.fetchFirst(descriptor) else {
             return nil
         }
         return .init(item)
@@ -32,7 +31,7 @@ struct GetNextItemIntent: AppIntent, IntentPerformer {
 
     @MainActor
     func perform() throws -> some ReturnsValue<ItemEntity?> {
-        guard let item = try Self.perform((container: modelContainer, date: date)) else {
+        guard let item = try Self.perform((context: modelContainer.mainContext, date: date)) else {
             return .result(value: nil)
         }
         return .result(value: item)

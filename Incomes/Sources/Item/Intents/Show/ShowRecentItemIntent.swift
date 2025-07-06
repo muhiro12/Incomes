@@ -11,14 +11,13 @@ import SwiftData
 import SwiftUtilities
 
 struct ShowRecentItemIntent: AppIntent, IntentPerformer {
-    typealias Input = (container: ModelContainer, date: Date)
+    typealias Input = (context: ModelContext, date: Date)
     typealias Output = ItemEntity?
 
     @Dependency private var modelContainer: ModelContainer
 
     static let title: LocalizedStringResource = .init("Show Recent Item", table: "AppIntents")
 
-    @MainActor
     static func perform(_ input: Input) throws -> Output {
         try GetPreviousItemIntent.perform(input)
     }
@@ -26,7 +25,7 @@ struct ShowRecentItemIntent: AppIntent, IntentPerformer {
     @MainActor
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
         let date = Date.now
-        guard let item = try Self.perform((container: modelContainer, date: date)) else {
+        guard let item = try Self.perform((context: modelContainer.mainContext, date: date)) else {
             return .result(dialog: .init(.init("Not Found", table: "AppIntents")))
         }
         return .result(dialog: .init(stringLiteral: item.content)) {

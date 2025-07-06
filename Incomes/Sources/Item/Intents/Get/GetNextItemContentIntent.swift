@@ -11,7 +11,7 @@ import SwiftData
 import SwiftUtilities
 
 struct GetNextItemContentIntent: AppIntent, IntentPerformer {
-    typealias Input = (container: ModelContainer, date: Date)
+    typealias Input = (context: ModelContext, date: Date)
     typealias Output = String?
 
     @Parameter(title: "Date", kind: .date)
@@ -21,9 +21,8 @@ struct GetNextItemContentIntent: AppIntent, IntentPerformer {
 
     static let title: LocalizedStringResource = .init("Get Next Item Content", table: "AppIntents")
 
-    @MainActor
     static func perform(_ input: Input) throws -> Output {
-        guard let item = try GetNextItemIntent.perform((container: input.container, date: input.date)) else {
+        guard let item = try GetNextItemIntent.perform((context: input.context, date: input.date)) else {
             return nil
         }
         return item.content
@@ -31,7 +30,7 @@ struct GetNextItemContentIntent: AppIntent, IntentPerformer {
 
     @MainActor
     func perform() throws -> some ReturnsValue<String?> {
-        guard let item = try GetNextItemIntent.perform((container: modelContainer, date: date)) else {
+        guard let item = try GetNextItemIntent.perform((context: modelContainer.mainContext, date: date)) else {
             return .result(value: nil)
         }
         return .result(value: item.content)

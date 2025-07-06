@@ -2,18 +2,17 @@
 import SwiftData
 import Testing
 
-@MainActor
 struct CreateItemIntentTest {
-    let container: ModelContainer
+    let context: ModelContext
 
     init() {
-        container = testContainer
+        context = testContext
     }
 
     @Test func perform() throws {
         _ = try CreateItemIntent.perform(
             (
-                container: container,
+                context: context,
                 date: isoDate("2000-01-01T12:00:00Z"),
                 content: "content",
                 income: 200,
@@ -22,7 +21,7 @@ struct CreateItemIntentTest {
                 repeatCount: 1
             )
         )
-        let result = try #require(fetchItems(container).first)
+        let result = try #require(fetchItems(context).first)
         #expect(result.utcDate == isoDate("2000-01-01T00:00:00Z"))
         #expect(result.content == "content")
         #expect(result.balance == 100)
@@ -31,7 +30,7 @@ struct CreateItemIntentTest {
     @Test func performRepeat() throws {
         _ = try CreateItemIntent.perform(
             (
-                container: container,
+                context: context,
                 date: isoDate("2000-01-01T12:00:00Z"),
                 content: "content",
                 income: 200,
@@ -40,7 +39,7 @@ struct CreateItemIntentTest {
                 repeatCount: 3
             )
         )
-        let items = fetchItems(container)
+        let items = fetchItems(context)
         #expect(items.count == 3)
         #expect(Set(items.map(\.repeatID)).count == 1)
     }

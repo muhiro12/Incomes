@@ -12,7 +12,7 @@ import SwiftUI
 import SwiftUtilities
 
 struct GetNextItemProfitIntent: AppIntent, IntentPerformer {
-    typealias Input = (container: ModelContainer, date: Date)
+    typealias Input = (context: ModelContext, date: Date)
     typealias Output = IntentCurrencyAmount?
 
     @Parameter(title: "Date", kind: .date)
@@ -22,9 +22,8 @@ struct GetNextItemProfitIntent: AppIntent, IntentPerformer {
 
     static let title: LocalizedStringResource = .init("Get Next Item Profit", table: "AppIntents")
 
-    @MainActor
     static func perform(_ input: Input) throws -> Output {
-        guard let item = try GetNextItemIntent.perform((container: input.container, date: input.date)) else {
+        guard let item = try GetNextItemIntent.perform((context: input.context, date: input.date)) else {
             return nil
         }
         let currencyCode = AppStorage(.currencyCode).wrappedValue
@@ -33,7 +32,7 @@ struct GetNextItemProfitIntent: AppIntent, IntentPerformer {
 
     @MainActor
     func perform() throws -> some ReturnsValue<IntentCurrencyAmount?> {
-        guard let item = try GetNextItemIntent.perform((container: modelContainer, date: date)) else {
+        guard let item = try GetNextItemIntent.perform((context: modelContainer.mainContext, date: date)) else {
             return .result(value: nil)
         }
         let currencyCode = AppStorage(.currencyCode).wrappedValue

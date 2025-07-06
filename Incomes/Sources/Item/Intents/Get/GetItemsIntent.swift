@@ -11,7 +11,7 @@ import SwiftData
 import SwiftUtilities
 
 struct GetItemsIntent: AppIntent, IntentPerformer {
-    typealias Input = (container: ModelContainer, date: Date)
+    typealias Input = (context: ModelContext, date: Date)
     typealias Output = [ItemEntity]
 
     @Parameter(title: "Date", kind: .date)
@@ -21,9 +21,8 @@ struct GetItemsIntent: AppIntent, IntentPerformer {
 
     static let title: LocalizedStringResource = .init("Get Items", table: "AppIntents")
 
-    @MainActor
     static func perform(_ input: Input) throws -> Output {
-        let items = try input.container.mainContext.fetch(
+        let items = try input.context.fetch(
             .items(.dateIsSameMonthAs(input.date))
         )
         return items.compactMap(ItemEntity.init)
@@ -31,7 +30,7 @@ struct GetItemsIntent: AppIntent, IntentPerformer {
 
     @MainActor
     func perform() throws -> some ReturnsValue<[ItemEntity]> {
-        let items = try Self.perform((container: modelContainer, date: date))
+        let items = try Self.perform((context: modelContainer.mainContext, date: date))
         return .result(value: items)
     }
 }

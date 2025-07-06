@@ -222,7 +222,7 @@ private extension ItemFormView {
                let model = try? entity.model(in: context),
                try GetRepeatItemsCountIntent.perform(
                 (
-                    container: context.container,
+                    context: context,
                     repeatID: model.repeatID
                 )
                ) > 1 {
@@ -243,7 +243,7 @@ private extension ItemFormView {
         do {
             try UpdateItemIntent.perform(
                 (
-                    container: context.container,
+                    context: context,
                     item: item,
                     date: date,
                     content: content,
@@ -267,7 +267,7 @@ private extension ItemFormView {
         do {
             try UpdateFutureItemsIntent.perform(
                 (
-                    container: context.container,
+                    context: context,
                     item: item,
                     date: date,
                     content: content,
@@ -291,7 +291,7 @@ private extension ItemFormView {
         do {
             try UpdateAllItemsIntent.perform(
                 (
-                    container: context.container,
+                    context: context,
                     item: item,
                     date: date,
                     content: content,
@@ -311,7 +311,7 @@ private extension ItemFormView {
         do {
             _ = try CreateItemIntent.perform(
                 (
-                    container: context.container,
+                    context: context,
                     date: date,
                     content: content,
                     income: income.decimalValue,

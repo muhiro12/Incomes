@@ -18,12 +18,11 @@ final class Tag {
 
     private init() {}
 
-    @MainActor
-    static func create(container: ModelContainer, name: String, type: TagType) throws -> Tag {
-        let tag = try container.mainContext.fetchFirst(
+    static func create(context: ModelContext, name: String, type: TagType) throws -> Tag {
+        let tag = try context.fetchFirst(
             .tags(.nameIs(name, type: type))
         ) ?? .init()
-        container.mainContext.insert(tag)
+        context.insert(tag)
         tag.name = name
         tag.typeID = type.rawValue
         return tag
@@ -56,10 +55,9 @@ extension Tag: Identifiable {}
 // MARK: - Test
 
 extension Tag {
-    @MainActor
-    static func createIgnoringDuplicates(container: ModelContainer, name: String, type: TagType) throws -> Tag {
+    static func createIgnoringDuplicates(context: ModelContext, name: String, type: TagType) throws -> Tag {
         let tag = Tag()
-        container.mainContext.insert(tag)
+        context.insert(tag)
         tag.name = name
         tag.typeID = type.rawValue
         return tag

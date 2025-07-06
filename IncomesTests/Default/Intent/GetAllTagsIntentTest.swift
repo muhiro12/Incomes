@@ -2,18 +2,17 @@
 import SwiftData
 import Testing
 
-@MainActor
 struct GetAllTagsIntentTest {
-    let container: ModelContainer
+    let context: ModelContext
 
     init() {
-        container = testContainer
+        context = testContext
     }
 
     @Test func perform() throws {
-        _ = try Tag.create(container: container, name: "A", type: .year)
-        _ = try Tag.create(container: container, name: "B", type: .content)
-        let tags = try GetAllTagsIntent.perform(container)
+        _ = try Tag.create(context: context, name: "A", type: .year)
+        _ = try Tag.create(context: context, name: "B", type: .content)
+        let tags = try GetAllTagsIntent.perform(context)
         #expect(tags.count == 2)
     }
 }

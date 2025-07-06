@@ -52,7 +52,7 @@ struct ItemListSection: View {
                     try willDeleteItems.forEach {
                         try DeleteItemIntent.perform(
                             (
-                                container: context.container,
+                                context: context,
                                 item: $0
                             )
                         )
