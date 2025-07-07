@@ -4,7 +4,7 @@ import SwiftUtilities
 
 @available(iOS 26.0, *)
 struct InferItemFormIntent: AppIntent, IntentPerformer {
-    static let title: LocalizedStringResource = .init("Infer Item Form", table: "AppIntents")
+    nonisolated static let title: LocalizedStringResource = .init("Infer Item Form", table: "AppIntents")
 
     @Parameter(title: "Text")
     private var text: String

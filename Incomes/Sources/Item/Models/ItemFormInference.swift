@@ -4,7 +4,7 @@ import FoundationModels
 
 @available(iOS 26.0, *)
 @Generable
-struct ItemFormInference: AppEntity {
+nonisolated struct ItemFormInference: AppEntity {
     @Guide(description: "Date formatted as yyyyMMdd")
     var date: String
     @Guide(description: "Item content")
@@ -16,7 +16,6 @@ struct ItemFormInference: AppEntity {
     @Guide(description: "Category name")
     var category: String
 
-    // AppEntity conformance
     static var typeDisplayRepresentation: TypeDisplayRepresentation {
         .init(name: "Item Form Inference")
     }
