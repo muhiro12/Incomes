@@ -33,7 +33,9 @@ extension IntentChartSectionGroup: View {
         IntentChartSectionGroup(
             .items(
                 .idsAre(
-                    preview.items.prefix(10).map(\.id)
+                    preview.items.prefix(10).compactMap { idEntity in
+                        try? PersistentIdentifier(base64Encoded: idEntity.id)
+                    }
                 )
             )
         )

@@ -46,6 +46,6 @@ extension ShowItemButton: View {
 #Preview {
     IncomesPreview { preview in
         ShowItemButton()
-            .environment(ItemEntity(preview.items[.zero])!)
+            .environment(preview.items[.zero])
     }
 }

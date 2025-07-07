@@ -39,7 +39,7 @@ extension ItemView: View {
     IncomesPreview { preview in
         NavigationStack {
             ItemView()
-                .environment(ItemEntity(preview.items[0])!)
+                .environment(preview.items[0])
         }
     }
 }

@@ -15,7 +15,7 @@ struct DebugNavigationView: View {
             DebugListView(selection: $path)
         } detail: {
             if case .itemList(let tagEntity) = path {
-                ItemListView()
+                ItemListGroup()
                     .environment(tagEntity)
             } else if case .tag(let tagEntity) = path {
                 DebugTagView()

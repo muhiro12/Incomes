@@ -129,7 +129,7 @@ struct DuplicateTagView: View {
 }
 
 #Preview {
-    IncomesPreview { preview in
-        DuplicateTagView(preview.tags[0])
+    IncomesPreview { _ in
+        DuplicateTagNavigationView()
     }
 }

@@ -71,6 +71,6 @@ extension DeleteItemButton: View {
 #Preview {
     IncomesPreview { preview in
         DeleteItemButton()
-            .environment(ItemEntity(preview.items[.zero])!)
+            .environment(preview.items[.zero])
     }
 }
