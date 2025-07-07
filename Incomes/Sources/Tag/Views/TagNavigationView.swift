@@ -21,7 +21,7 @@ struct TagNavigationView: View {
             TagListView(tagType: tagType, selection: $path)
         } detail: {
             if case .itemList(let tagEntity) = path {
-                ItemListView()
+                ItemListGroup()
                     .environment(tagEntity)
             }
         }
