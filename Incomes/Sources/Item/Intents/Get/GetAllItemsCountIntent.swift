@@ -14,7 +14,7 @@ struct GetAllItemsCountIntent: AppIntent, IntentPerformer {
         try input.fetchCount(.items(.all))
     }
 
-    func perform() throws -> some ReturnsValue<Int> {
+    @MainActor func perform() throws -> some ReturnsValue<Int> {
         .result(value: try Self.perform(modelContainer.mainContext))
     }
 }

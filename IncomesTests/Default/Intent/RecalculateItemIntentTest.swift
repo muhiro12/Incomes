@@ -10,7 +10,7 @@ struct RecalculateItemIntentTest {
         context = testContext
     }
 
-    @Test func perform() throws {
+    @Test @MainActor func perform() throws {
         let entity = try CreateItemIntent.perform(
             (
                 context: context,

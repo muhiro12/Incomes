@@ -28,7 +28,7 @@ struct ShowChartsIntent: AppIntent, IntentPerformer {
         return items.compactMap(ItemEntity.init)
     }
 
-    func perform() throws -> some ProvidesDialog & ShowsSnippetView {
+    @MainActor func perform() throws -> some ProvidesDialog & ShowsSnippetView {
         let entities = try Self.perform(
             (context: modelContainer.mainContext, date: date)
         )

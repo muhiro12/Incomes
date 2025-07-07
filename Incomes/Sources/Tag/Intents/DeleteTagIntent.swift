@@ -24,7 +24,7 @@ struct DeleteTagIntent: AppIntent, IntentPerformer {
         model.delete()
     }
 
-    func perform() throws -> some IntentResult {
+    @MainActor func perform() throws -> some IntentResult {
         try Self.perform((context: modelContainer.mainContext, tag: tag))
         return .result()
     }

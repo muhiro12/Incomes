@@ -15,7 +15,7 @@ struct GetAllTagsIntent: AppIntent, IntentPerformer {
         return tags.compactMap(TagEntity.init)
     }
 
-    func perform() throws -> some ReturnsValue<[TagEntity]> {
+    @MainActor func perform() throws -> some ReturnsValue<[TagEntity]> {
         let tags = try Self.perform(modelContainer.mainContext)
         return .result(value: tags)
     }

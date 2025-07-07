@@ -19,7 +19,7 @@ struct DeleteAllItemsIntent: AppIntent, IntentPerformer {
         try calculator.calculate(in: input, for: items)
     }
 
-    func perform() throws -> some IntentResult {
+    @MainActor func perform() throws -> some IntentResult {
         try Self.perform(modelContainer.mainContext)
         return .result()
     }

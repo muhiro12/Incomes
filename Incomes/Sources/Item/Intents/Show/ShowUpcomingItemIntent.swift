@@ -22,7 +22,7 @@ struct ShowUpcomingItemIntent: AppIntent, IntentPerformer {
         try GetNextItemIntent.perform((context: input.context, date: input.date))
     }
 
-    func perform() throws -> some ProvidesDialog & ShowsSnippetView {
+    @MainActor func perform() throws -> some ProvidesDialog & ShowsSnippetView {
         let date = Date.now
         guard let item = try GetNextItemIntent.perform((context: modelContainer.mainContext, date: date)) else {
             return .result(dialog: .init(.init("Not Found", table: "AppIntents")))

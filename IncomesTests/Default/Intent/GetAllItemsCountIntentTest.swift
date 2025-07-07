@@ -10,7 +10,7 @@ struct GetAllItemsCountIntentTest {
         context = testContext
     }
 
-    @Test func perform() throws {
+    @Test @MainActor func perform() throws {
         _ = try CreateItemIntent.perform(
             (
                 context: context,

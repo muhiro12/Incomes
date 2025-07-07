@@ -25,7 +25,7 @@ struct GetPreviousItemContentIntent: AppIntent, IntentPerformer {
         try GetPreviousItemIntent.perform(input)?.content
     }
 
-    func perform() throws -> some ReturnsValue<String?> {
+    @MainActor func perform() throws -> some ReturnsValue<String?> {
         guard let content = try Self.perform((context: modelContainer.mainContext, date: date)) else {
             return .result(value: nil)
         }

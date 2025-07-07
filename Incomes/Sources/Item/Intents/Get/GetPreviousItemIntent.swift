@@ -29,7 +29,7 @@ struct GetPreviousItemIntent: AppIntent, IntentPerformer {
         return .init(item)
     }
 
-    func perform() throws -> some ReturnsValue<ItemEntity?> {
+    @MainActor func perform() throws -> some ReturnsValue<ItemEntity?> {
         guard let item = try Self.perform((context: modelContainer.mainContext, date: date)) else {
             return .result(value: nil)
         }

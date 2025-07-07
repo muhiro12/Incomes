@@ -22,7 +22,7 @@ struct GetTagByNameIntent: AppIntent, IntentPerformer {
         return tag.flatMap(TagEntity.init)
     }
 
-    func perform() throws -> some ReturnsValue<TagEntity?> {
+    @MainActor func perform() throws -> some ReturnsValue<TagEntity?> {
         let result = try Self.perform(
             (context: modelContainer.mainContext, name: name, type: type)
         )

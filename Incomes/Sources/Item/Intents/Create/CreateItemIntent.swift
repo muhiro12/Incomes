@@ -82,7 +82,7 @@ struct CreateItemIntent: AppIntent, IntentPerformer {
         return entity
     }
 
-    func perform() throws -> some ReturnsValue<ItemEntity> {
+    @MainActor func perform() throws -> some ReturnsValue<ItemEntity> {
         guard content.isNotEmpty else {
             throw $content.needsValueError()
         }

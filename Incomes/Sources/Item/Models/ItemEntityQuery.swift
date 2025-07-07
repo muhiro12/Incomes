@@ -12,7 +12,7 @@ import SwiftData
 struct ItemEntityQuery: EntityStringQuery {
     @Dependency private var modelContainer: ModelContainer
 
-    func entities(for identifiers: [ItemEntity.ID]) throws -> [ItemEntity] {
+    @MainActor func entities(for identifiers: [ItemEntity.ID]) throws -> [ItemEntity] {
         try modelContainer.mainContext.fetch(
             .items(
                 .idsAre(
@@ -25,14 +25,14 @@ struct ItemEntityQuery: EntityStringQuery {
         .compactMap(ItemEntity.init)
     }
 
-    func entities(matching string: String) throws -> [ItemEntity] {
+    @MainActor func entities(matching string: String) throws -> [ItemEntity] {
         try modelContainer.mainContext.fetch(
             .items(.contentContains(string))
         )
         .compactMap(ItemEntity.init)
     }
 
-    func suggestedEntities() throws -> [ItemEntity] {
+    @MainActor func suggestedEntities() throws -> [ItemEntity] {
         try modelContainer.mainContext.fetch(
             .items(.dateIsSameMonthAs(.now))
         )

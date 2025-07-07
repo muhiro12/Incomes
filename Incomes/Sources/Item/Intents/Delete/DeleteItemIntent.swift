@@ -28,7 +28,7 @@ struct DeleteItemIntent: AppIntent, IntentPerformer {
         try calculator.calculate(in: context, for: [model])
     }
 
-    func perform() throws -> some IntentResult {
+    @MainActor func perform() throws -> some IntentResult {
         try Self.perform((context: modelContainer.mainContext, item: item))
         return .result()
     }

@@ -46,7 +46,7 @@ struct UpdateItemIntent: AppIntent, IntentPerformer {
         try calculator.calculate(in: context, for: [model])
     }
 
-    func perform() throws -> some IntentResult {
+    @MainActor func perform() throws -> some IntentResult {
         let currencyCode = AppStorage(.currencyCode).wrappedValue
         guard income.currencyCode == currencyCode else {
             throw $income.needsDisambiguationError(among: [.init(amount: income.amount, currencyCode: currencyCode)])

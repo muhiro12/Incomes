@@ -10,7 +10,7 @@ struct GetTagByIDIntentTest {
         context = testContext
     }
 
-    @Test func perform() throws {
+    @Test @MainActor func perform() throws {
         let model = try Tag.create(context: context, name: "name", type: .content)
         let id = try model.id.base64Encoded()
         let tagEntity = try #require(

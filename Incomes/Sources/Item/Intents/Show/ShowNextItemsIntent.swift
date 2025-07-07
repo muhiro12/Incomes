@@ -25,7 +25,7 @@ struct ShowNextItemsIntent: AppIntent, IntentPerformer {
         try GetNextItemsIntent.perform(input)
     }
 
-    func perform() throws -> some ProvidesDialog & ShowsSnippetView {
+    @MainActor func perform() throws -> some ProvidesDialog & ShowsSnippetView {
         let items = try Self.perform(
             (context: modelContainer.mainContext, date: date)
         )

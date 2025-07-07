@@ -10,7 +10,7 @@ struct GetHasDuplicateTagsIntentTest {
         context = testContext
     }
 
-    @Test func perform() throws {
+    @Test @MainActor func perform() throws {
         #expect(try GetHasDuplicateTagsIntent.perform(context) == false)
 
         let tag1 = try Tag.createIgnoringDuplicates(context: context, name: "A", type: .year)

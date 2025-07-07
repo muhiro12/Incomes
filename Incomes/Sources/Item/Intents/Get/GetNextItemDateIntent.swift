@@ -28,7 +28,7 @@ struct GetNextItemDateIntent: AppIntent, IntentPerformer {
         return item.date
     }
 
-    func perform() throws -> some ReturnsValue<Date?> {
+    @MainActor func perform() throws -> some ReturnsValue<Date?> {
         guard let item = try GetNextItemIntent.perform((context: modelContainer.mainContext, date: date)) else {
             return .result(value: nil)
         }

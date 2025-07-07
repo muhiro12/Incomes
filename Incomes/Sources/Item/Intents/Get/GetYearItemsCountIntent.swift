@@ -17,7 +17,7 @@ struct GetYearItemsCountIntent: AppIntent, IntentPerformer {
         try input.context.fetchCount(.items(.dateIsSameYearAs(input.date)))
     }
 
-    func perform() throws -> some ReturnsValue<Int> {
+    @MainActor func perform() throws -> some ReturnsValue<Int> {
         .result(value: try Self.perform((context: modelContainer.mainContext, date: date)))
     }
 }

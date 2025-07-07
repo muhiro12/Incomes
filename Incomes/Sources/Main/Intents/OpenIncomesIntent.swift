@@ -18,7 +18,7 @@ struct OpenIncomesIntent: AppIntent, IntentPerformer {
 
     static func perform(_: Input) throws -> Output {}
 
-    func perform() throws -> some IntentResult {
+    @MainActor func perform() throws -> some IntentResult {
         try Self.perform(())
         return .result()
     }

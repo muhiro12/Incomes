@@ -10,7 +10,7 @@ struct UpdateAllItemsIntentTest {
         context = testContext
     }
 
-    @Test func perform() throws {
+    @Test @MainActor func perform() throws {
         let item = try CreateItemIntent.perform(
             (
                 context: context,

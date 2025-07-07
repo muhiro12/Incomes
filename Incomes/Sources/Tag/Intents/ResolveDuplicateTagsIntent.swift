@@ -34,7 +34,7 @@ struct ResolveDuplicateTagsIntent: AppIntent, IntentPerformer {
         }
     }
 
-    func perform() throws -> some IntentResult {
+    @MainActor func perform() throws -> some IntentResult {
         try Self.perform((context: modelContainer.mainContext, tags: tags))
         return .result()
     }

@@ -25,7 +25,7 @@ struct ShowPreviousItemIntent: AppIntent, IntentPerformer {
         try GetPreviousItemIntent.perform(input)
     }
 
-    func perform() throws -> some ProvidesDialog & ShowsSnippetView {
+    @MainActor func perform() throws -> some ProvidesDialog & ShowsSnippetView {
         guard let item = try Self.perform((context: modelContainer.mainContext, date: date)) else {
             return .result(dialog: .init(.init("Not Found", table: "AppIntents")))
         }

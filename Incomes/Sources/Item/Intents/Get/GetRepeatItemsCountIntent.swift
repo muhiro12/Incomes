@@ -17,7 +17,7 @@ struct GetRepeatItemsCountIntent: AppIntent, IntentPerformer {
         try input.context.fetchCount(.items(.repeatIDIs(input.repeatID)))
     }
 
-    func perform() throws -> some ReturnsValue<Int> {
+    @MainActor func perform() throws -> some ReturnsValue<Int> {
         guard let uuid = UUID(uuidString: repeatID) else {
             throw DebugError.default
         }

@@ -28,7 +28,7 @@ struct GetNextItemContentIntent: AppIntent, IntentPerformer {
         return item.content
     }
 
-    func perform() throws -> some ReturnsValue<String?> {
+    @MainActor func perform() throws -> some ReturnsValue<String?> {
         guard let item = try GetNextItemIntent.perform((context: modelContainer.mainContext, date: date)) else {
             return .result(value: nil)
         }

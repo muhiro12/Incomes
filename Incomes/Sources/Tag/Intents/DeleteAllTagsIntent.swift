@@ -17,7 +17,7 @@ struct DeleteAllTagsIntent: AppIntent, IntentPerformer {
         }
     }
 
-    func perform() throws -> some IntentResult {
+    @MainActor func perform() throws -> some IntentResult {
         try Self.perform(modelContainer.mainContext)
         return .result()
     }

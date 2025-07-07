@@ -33,7 +33,7 @@ struct FindDuplicateTagsIntent: AppIntent, IntentPerformer {
         return duplicates.compactMap(TagEntity.init)
     }
 
-    func perform() throws -> some ReturnsValue<[TagEntity]> {
+    @MainActor func perform() throws -> some ReturnsValue<[TagEntity]> {
         let result = try Self.perform((context: modelContainer.mainContext, tags: tags))
         return .result(value: result)
     }

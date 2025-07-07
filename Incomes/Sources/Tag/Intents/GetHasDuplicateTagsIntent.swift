@@ -21,7 +21,7 @@ struct GetHasDuplicateTagsIntent: AppIntent, IntentPerformer {
         return !duplicates.isEmpty
     }
 
-    func perform() throws -> some ReturnsValue<Bool> {
+    @MainActor func perform() throws -> some ReturnsValue<Bool> {
         let result = try Self.perform(modelContainer.mainContext)
         return .result(value: result)
     }

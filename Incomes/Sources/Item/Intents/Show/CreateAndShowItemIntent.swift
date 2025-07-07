@@ -49,7 +49,7 @@ struct CreateAndShowItemIntent: AppIntent, IntentPerformer {
         )
     }
 
-    func perform() throws -> some ProvidesDialog & ShowsSnippetView {
+    @MainActor func perform() throws -> some ProvidesDialog & ShowsSnippetView {
         let item = try Self.perform((context: modelContainer.mainContext,
                                      date: date,
                                      content: content,

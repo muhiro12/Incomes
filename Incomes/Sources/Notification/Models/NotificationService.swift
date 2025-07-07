@@ -23,7 +23,7 @@ final class NotificationService: NSObject {
         UNUserNotificationCenter.current().delegate = self
     }
 
-    func register() async {
+    @MainActor func register() async {
         _ = try? await UNUserNotificationCenter.current().requestAuthorization(
             options: [.badge, .sound, .alert, .carPlay]
         )
@@ -49,7 +49,7 @@ final class NotificationService: NSObject {
         shouldShowNotification = false
     }
 
-    func sendTestNotification() {
+    @MainActor func sendTestNotification() {
         guard let item = try? GetNextItemIntent.perform((context: modelContainer.mainContext, date: .now)) else {
             return
         }
@@ -91,7 +91,7 @@ nonisolated extension NotificationService: UNUserNotificationCenterDelegate {
 }
 
 private extension NotificationService {
-    func buildUpcomingPaymentReminders() -> [UNNotificationRequest] {
+    @MainActor func buildUpcomingPaymentReminders() -> [UNNotificationRequest] {
         let settings = AppStorage(.notificationSettings).wrappedValue
 
         guard settings.isEnabled else {

@@ -18,7 +18,7 @@ struct RecalculateItemIntent: AppIntent, IntentPerformer {
         try calculator.calculate(in: input.context, after: input.date)
     }
 
-    func perform() throws -> some IntentResult {
+    @MainActor func perform() throws -> some IntentResult {
         try Self.perform((context: modelContainer.mainContext, date: date))
         return .result()
     }
