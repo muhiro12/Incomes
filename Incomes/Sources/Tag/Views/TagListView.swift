@@ -47,6 +47,10 @@ struct TagListView: View {
                             .foregroundStyle(.secondary)
                     }
                 }
+                .contextMenu {
+                    EditTagButton()
+                        .environment(entity)
+                }
                 .hidden(
                     searchText.isNotEmpty
                         && (

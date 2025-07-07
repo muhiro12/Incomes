@@ -27,6 +27,10 @@ nonisolated final class Tag {
         tag.typeID = type.rawValue
         return tag
     }
+
+    func modify(name: String) {
+        self.name = name
+    }
 }
 
 extension Tag {
