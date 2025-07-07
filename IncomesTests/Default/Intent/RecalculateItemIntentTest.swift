@@ -14,7 +14,7 @@ struct RecalculateItemIntentTest {
         let entity = try CreateItemIntent.perform(
             (
                 context: context,
-                date: isoDate("2000-01-01T00:00:00Z"),
+                date: shiftedDate("2000-01-01T00:00:00Z"),
                 content: "content",
                 income: 100,
                 outgo: 50,
@@ -33,7 +33,7 @@ struct RecalculateItemIntentTest {
                 category: entity.category ?? ""
             )
         )
-        try RecalculateItemIntent.perform((context: context, date: isoDate("1999-12-01T00:00:00Z")))
+        try RecalculateItemIntent.perform((context: context, date: shiftedDate("1999-12-01T00:00:00Z")))
         let item = try #require(fetchItems(context).first)
         #expect(item.balance == 10)
     }

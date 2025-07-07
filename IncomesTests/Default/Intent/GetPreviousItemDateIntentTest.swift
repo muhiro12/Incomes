@@ -14,7 +14,7 @@ struct GetPreviousItemDateIntentTest {
         _ = try CreateItemIntent.perform(
             (
                 context: context,
-                date: isoDate("2000-01-01T12:00:00Z"),
+                date: shiftedDate("2000-01-01T12:00:00Z"),
                 content: "A",
                 income: 0,
                 outgo: 100,
@@ -25,7 +25,7 @@ struct GetPreviousItemDateIntentTest {
         _ = try CreateItemIntent.perform(
             (
                 context: context,
-                date: isoDate("2000-02-01T12:00:00Z"),
+                date: shiftedDate("2000-02-01T12:00:00Z"),
                 content: "B",
                 income: 0,
                 outgo: 100,
@@ -35,15 +35,15 @@ struct GetPreviousItemDateIntentTest {
         )
         let result = try #require(
             try GetPreviousItemDateIntent.perform(
-                (context: context, date: isoDate("2000-02-15T00:00:00Z"))
+                (context: context, date: shiftedDate("2000-02-15T00:00:00Z"))
             )
         )
-        #expect(result == isoDate("2000-02-01T00:00:00Z"))
+        #expect(result == shiftedDate("2000-02-01T00:00:00Z"))
     }
 
     @Test func performNotFound() throws {
         let result = try GetPreviousItemDateIntent.perform(
-            (context: context, date: isoDate("1999-01-01T00:00:00Z"))
+            (context: context, date: shiftedDate("1999-01-01T00:00:00Z"))
         )
         #expect(result == nil)
     }

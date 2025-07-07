@@ -14,7 +14,7 @@ struct GetRepeatItemsCountIntentTest {
         let entity = try CreateItemIntent.perform(
             (
                 context: context,
-                date: isoDate("2000-01-01T12:00:00Z"),
+                date: shiftedDate("2000-01-01T12:00:00Z"),
                 content: "A",
                 income: 0,
                 outgo: 100,

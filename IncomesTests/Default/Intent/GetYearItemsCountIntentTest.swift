@@ -14,7 +14,7 @@ struct GetYearItemsCountIntentTest {
         _ = try CreateItemIntent.perform(
             (
                 context: context,
-                date: isoDate("2000-02-01T12:00:00Z"),
+                date: shiftedDate("2000-02-01T12:00:00Z"),
                 content: "A",
                 income: 0,
                 outgo: 100,
@@ -23,7 +23,7 @@ struct GetYearItemsCountIntentTest {
             )
         )
         let count = try GetYearItemsCountIntent.perform(
-            (context: context, date: isoDate("2000-01-02T00:00:00Z"))
+            (context: context, date: shiftedDate("2000-01-02T00:00:00Z"))
         )
         #expect(count == 1)
     }

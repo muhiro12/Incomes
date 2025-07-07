@@ -14,7 +14,7 @@ struct GetNextItemIntentTest {
         _ = try CreateItemIntent.perform(
             (
                 context: context,
-                date: isoDate("2000-01-01T12:00:00Z"),
+                date: shiftedDate("2000-01-01T12:00:00Z"),
                 content: "A",
                 income: 0,
                 outgo: 100,
@@ -25,7 +25,7 @@ struct GetNextItemIntentTest {
         _ = try CreateItemIntent.perform(
             (
                 context: context,
-                date: isoDate("2000-02-01T12:00:00Z"),
+                date: shiftedDate("2000-02-01T12:00:00Z"),
                 content: "B",
                 income: 0,
                 outgo: 200,
@@ -33,7 +33,7 @@ struct GetNextItemIntentTest {
                 repeatCount: 1
             )
         )
-        let item = try #require(try GetNextItemIntent.perform((context: context, date: isoDate("2000-01-15T00:00:00Z"))))
+        let item = try #require(try GetNextItemIntent.perform((context: context, date: shiftedDate("2000-01-15T00:00:00Z"))))
         #expect(item.content == "B")
     }
 
@@ -41,7 +41,7 @@ struct GetNextItemIntentTest {
         _ = try CreateItemIntent.perform(
             (
                 context: context,
-                date: isoDate("2000-03-01T00:00:00Z"),
+                date: shiftedDate("2000-03-01T00:00:00Z"),
                 content: "Exact",
                 income: 10,
                 outgo: 0,
@@ -50,14 +50,14 @@ struct GetNextItemIntentTest {
             )
         )
         let result = try GetNextItemIntent.perform(
-            (context: context, date: isoDate("2000-03-01T00:00:00Z"))
+            (context: context, date: shiftedDate("2000-03-01T00:00:00Z"))
         )
         #expect(result?.content == "Exact")
     }
 
     @Test func performNotFound() throws {
         let result = try GetNextItemIntent.perform(
-            (context: context, date: isoDate("2001-01-01T00:00:00Z"))
+            (context: context, date: shiftedDate("2001-01-01T00:00:00Z"))
         )
         #expect(result == nil)
     }

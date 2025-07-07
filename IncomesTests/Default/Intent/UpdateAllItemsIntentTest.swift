@@ -14,7 +14,7 @@ struct UpdateAllItemsIntentTest {
         let item = try CreateItemIntent.perform(
             (
                 context: context,
-                date: isoDate("2000-01-01T12:00:00Z"),
+                date: shiftedDate("2000-01-01T12:00:00Z"),
                 content: "content",
                 income: 200,
                 outgo: 100,
@@ -26,7 +26,7 @@ struct UpdateAllItemsIntentTest {
             (
                 context: context,
                 item: item,
-                date: isoDate("2001-01-02T12:00:00Z"),
+                date: shiftedDate("2001-01-02T12:00:00Z"),
                 content: "content2",
                 income: 100,
                 outgo: 200,
@@ -45,7 +45,7 @@ struct UpdateAllItemsIntentTest {
         _ = try CreateItemIntent.perform(
             (
                 context: context,
-                date: isoDate("2000-01-01T12:00:00Z"),
+                date: shiftedDate("2000-01-01T12:00:00Z"),
                 content: "content",
                 income: 200,
                 outgo: 100,
@@ -57,7 +57,7 @@ struct UpdateAllItemsIntentTest {
             (
                 context: context,
                 item: ItemEntity(fetchItems(context)[1])!,
-                date: isoDate("2000-02-02T12:00:00Z"),
+                date: shiftedDate("2000-02-02T12:00:00Z"),
                 content: "content2",
                 income: 100,
                 outgo: 200,
