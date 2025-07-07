@@ -23,7 +23,7 @@ struct GetYearItemsCountIntentTest {
             )
         )
         let count = try GetYearItemsCountIntent.perform(
-            (context: context, date: isoDate("2000-01-01T00:00:00Z"))
+            (context: context, date: isoDate("2000-01-02T00:00:00Z"))
         )
         #expect(count == 1)
     }
