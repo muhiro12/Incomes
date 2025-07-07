@@ -14,7 +14,6 @@ enum MainTab {
     case search
 }
 
-@MainActor
 extension MainTab {
     @ViewBuilder
     var rootView: some View {

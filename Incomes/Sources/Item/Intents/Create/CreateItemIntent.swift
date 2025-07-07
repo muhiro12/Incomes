@@ -12,7 +12,7 @@ import SwiftUI
 import SwiftUtilities
 
 struct CreateItemIntent: AppIntent, IntentPerformer {
-    typealias Input = (container: ModelContainer, date: Date, content: String, income: Decimal, outgo: Decimal, category: String, repeatCount: Int)
+    typealias Input = (context: ModelContext, date: Date, content: String, income: Decimal, outgo: Decimal, category: String, repeatCount: Int)
     typealias Output = ItemEntity
 
     @Parameter(title: "Date", kind: .date)
@@ -30,17 +30,16 @@ struct CreateItemIntent: AppIntent, IntentPerformer {
 
     @Dependency private var modelContainer: ModelContainer
 
-    static let title: LocalizedStringResource = .init("Create Item", table: "AppIntents")
+    nonisolated static let title: LocalizedStringResource = .init("Create Item", table: "AppIntents")
 
-    @MainActor
     static func perform(_ input: Input) throws -> Output {
-        let (container, date, content, income, outgo, category, repeatCount) = input
+        let (context, date, content, income, outgo, category, repeatCount) = input
         var items = [Item]()
 
         let repeatID = UUID()
 
         let model = try Item.create(
-            container: container,
+            context: context,
             date: date,
             content: content,
             income: income,
@@ -61,7 +60,7 @@ struct CreateItemIntent: AppIntent, IntentPerformer {
                 continue
             }
             let item = try Item.create(
-                container: container,
+                context: context,
                 date: repeatingDate,
                 content: content,
                 income: income,
@@ -72,10 +71,10 @@ struct CreateItemIntent: AppIntent, IntentPerformer {
             items.append(item)
         }
 
-        items.forEach(container.mainContext.insert)
+        items.forEach(context.insert)
 
         let calculator = BalanceCalculator()
-        try calculator.calculate(in: container.mainContext, for: items)
+        try calculator.calculate(in: context, for: items)
 
         guard let entity = ItemEntity(model) else {
             throw ItemError.entityConversionFailed
@@ -83,7 +82,6 @@ struct CreateItemIntent: AppIntent, IntentPerformer {
         return entity
     }
 
-    @MainActor
     func perform() throws -> some ReturnsValue<ItemEntity> {
         guard content.isNotEmpty else {
             throw $content.needsValueError()
@@ -99,7 +97,7 @@ struct CreateItemIntent: AppIntent, IntentPerformer {
 
         let item = try Self.perform(
             (
-                container: modelContainer,
+                context: modelContainer.mainContext,
                 date: date,
                 content: content,
                 income: income.amount,

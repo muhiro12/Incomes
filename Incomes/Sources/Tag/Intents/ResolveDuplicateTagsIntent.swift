@@ -3,7 +3,7 @@ import SwiftData
 import SwiftUtilities
 
 struct ResolveDuplicateTagsIntent: AppIntent, IntentPerformer {
-    typealias Input = (container: ModelContainer, tags: [TagEntity])
+    typealias Input = (context: ModelContext, tags: [TagEntity])
     typealias Output = Void
 
     @Parameter(title: "Tags")
@@ -11,33 +11,31 @@ struct ResolveDuplicateTagsIntent: AppIntent, IntentPerformer {
 
     @Dependency private var modelContainer: ModelContainer
 
-    static let title: LocalizedStringResource = .init("Resolve Duplicate Tags", table: "AppIntents")
+    nonisolated static let title: LocalizedStringResource = .init("Resolve Duplicate Tags", table: "AppIntents")
 
-    @MainActor
     static func perform(_ input: Input) throws -> Output {
-        let (container, entities) = input
+        let (context, entities) = input
         let models: [Tag] = try entities.compactMap { entity in
             let id = try PersistentIdentifier(base64Encoded: entity.id)
-            return try container.mainContext.fetchFirst(
+            return try context.fetchFirst(
                 .tags(.idIs(id))
             )
         }
         for model in models {
-            let duplicates = try container.mainContext.fetch(
+            let duplicates = try context.fetch(
                 .tags(.isSameWith(model))
             )
             try MergeDuplicateTagsIntent.perform(
                 (
-                    container: container,
+                    context: context,
                     tags: duplicates.compactMap(TagEntity.init)
                 )
             )
         }
     }
 
-    @MainActor
     func perform() throws -> some IntentResult {
-        try Self.perform((container: modelContainer, tags: tags))
+        try Self.perform((context: modelContainer.mainContext, tags: tags))
         return .result()
     }
 }

@@ -39,7 +39,7 @@ struct RecalculateView: View {
                         do {
                             try RecalculateItemIntent.perform(
                                 (
-                                    container: context.container,
+                                    context: context,
                                     date: selectedDate
                                 )
                             )

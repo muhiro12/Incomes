@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension String {
+nonisolated extension String {
     var isEmptyOrDecimal: Bool {
         if isEmpty {
             return true

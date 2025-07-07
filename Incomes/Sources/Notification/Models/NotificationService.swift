@@ -10,7 +10,6 @@ import SwiftData
 import SwiftUI
 import UserNotifications
 
-@MainActor
 @Observable
 final class NotificationService: NSObject {
     private let modelContainer: ModelContainer
@@ -48,7 +47,7 @@ final class NotificationService: NSObject {
     }
 
     func sendTestNotification() {
-        guard let item = try? GetNextItemIntent.perform((container: modelContainer, date: .now)) else {
+        guard let item = try? GetNextItemIntent.perform((context: modelContainer.mainContext, date: .now)) else {
             return
         }
 

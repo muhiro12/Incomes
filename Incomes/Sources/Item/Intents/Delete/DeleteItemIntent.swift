@@ -3,7 +3,7 @@ import SwiftData
 import SwiftUtilities
 
 struct DeleteItemIntent: AppIntent, IntentPerformer {
-    typealias Input = (container: ModelContainer, item: ItemEntity)
+    typealias Input = (context: ModelContext, item: ItemEntity)
     typealias Output = Void
 
     @Parameter(title: "Item")
@@ -11,14 +11,13 @@ struct DeleteItemIntent: AppIntent, IntentPerformer {
 
     @Dependency private var modelContainer: ModelContainer
 
-    static let title: LocalizedStringResource = .init("Delete Item", table: "AppIntents")
+    nonisolated static let title: LocalizedStringResource = .init("Delete Item", table: "AppIntents")
 
-    @MainActor
     static func perform(_ input: Input) throws -> Output {
-        let (container, entity) = input
+        let (context, entity) = input
         guard
             let id = try? PersistentIdentifier(base64Encoded: entity.id),
-            let model = try container.mainContext.fetchFirst(
+            let model = try context.fetchFirst(
                 .items(.idIs(id))
             )
         else {
@@ -26,12 +25,11 @@ struct DeleteItemIntent: AppIntent, IntentPerformer {
         }
         model.delete()
         let calculator = BalanceCalculator()
-        try calculator.calculate(in: container.mainContext, for: [model])
+        try calculator.calculate(in: context, for: [model])
     }
 
-    @MainActor
     func perform() throws -> some IntentResult {
-        try Self.perform((container: modelContainer, item: item))
+        try Self.perform((context: modelContainer.mainContext, item: item))
         return .result()
     }
 }

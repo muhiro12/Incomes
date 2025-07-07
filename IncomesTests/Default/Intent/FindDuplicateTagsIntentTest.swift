@@ -4,21 +4,21 @@ import Testing
 
 @MainActor
 struct FindDuplicateTagsIntentTest {
-    let container: ModelContainer
+    let context: ModelContext
 
     init() {
-        container = testContainer
+        context = testContext
     }
 
     @Test func perform() throws {
-        let tag1 = try Tag.createIgnoringDuplicates(container: container, name: "A", type: .year)
-        let tag2 = try Tag.createIgnoringDuplicates(container: container, name: "A", type: .year)
-        let tag3 = try Tag.createIgnoringDuplicates(container: container, name: "B", type: .yearMonth)
-        let tag4 = try Tag.createIgnoringDuplicates(container: container, name: "B", type: .yearMonth)
+        let tag1 = try Tag.createIgnoringDuplicates(context: context, name: "A", type: .year)
+        let tag2 = try Tag.createIgnoringDuplicates(context: context, name: "A", type: .year)
+        let tag3 = try Tag.createIgnoringDuplicates(context: context, name: "B", type: .yearMonth)
+        let tag4 = try Tag.createIgnoringDuplicates(context: context, name: "B", type: .yearMonth)
 
         let result = try FindDuplicateTagsIntent.perform(
             (
-                container: container,
+                context: context,
                 tags: [tag1, tag2, tag3, tag4].compactMap(TagEntity.init)
             )
         )

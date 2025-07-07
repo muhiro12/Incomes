@@ -90,10 +90,10 @@ struct TagListView: View {
                     try tags
                         .compactMap(TagEntity.init)
                         .forEach {
-                            try DeleteTagIntent.perform((container: context.container, tag: $0))
+                            try DeleteTagIntent.perform((context: context, tag: $0))
                         }
                     try items.compactMap(ItemEntity.init).forEach {
-                        try DeleteItemIntent.perform((container: context.container, item: $0))
+                        try DeleteItemIntent.perform((context: context, item: $0))
                     }
                     willDeleteTags = .empty
                     Haptic.success.impact()

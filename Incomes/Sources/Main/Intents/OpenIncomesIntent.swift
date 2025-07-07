@@ -13,13 +13,11 @@ struct OpenIncomesIntent: AppIntent, IntentPerformer {
     typealias Input = Void
     typealias Output = Void
 
-    static let title: LocalizedStringResource = .init("Open Incomes", table: "AppIntents")
-    static let openAppWhenRun = true
+    nonisolated static let title: LocalizedStringResource = .init("Open Incomes", table: "AppIntents")
+    nonisolated static let openAppWhenRun = true
 
-    @MainActor
     static func perform(_: Input) throws -> Output {}
 
-    @MainActor
     func perform() throws -> some IntentResult {
         try Self.perform(())
         return .result()

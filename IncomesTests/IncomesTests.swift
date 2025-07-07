@@ -12,11 +12,13 @@ import XCTest
 
 final class IncomesTests: XCTestCase {}
 
-var testContainer: ModelContainer {
-    try! .init(
-        for: Item.self,
-        configurations: .init(
-            isStoredInMemoryOnly: true
+var testContext: ModelContext {
+    .init(
+        try! .init(
+            for: Item.self,
+            configurations: .init(
+                isStoredInMemoryOnly: true
+            )
         )
     )
 }
@@ -43,7 +45,6 @@ let timeZones: [TimeZone] = [
     .init(identifier: "Europe/Minsk")!
 ]
 
-@MainActor
-func fetchItems(_ container: ModelContainer) -> [Item] {
-    try! container.mainContext.fetch(.items(.all))
+func fetchItems(_ context: ModelContext) -> [Item] {
+    try! context.fetch(.items(.all))
 }

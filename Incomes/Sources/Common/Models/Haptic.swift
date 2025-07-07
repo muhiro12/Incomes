@@ -14,7 +14,6 @@ enum Haptic {
     case selectionChanged
 }
 
-@MainActor
 extension Haptic {
     func impact() {
         switch self {

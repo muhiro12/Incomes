@@ -22,7 +22,7 @@ enum NotificationSettingsAppStorageKey: String {
     case notificationSettings = "A3b9Z1xQ"
 }
 
-extension AppStorage {
+nonisolated extension AppStorage {
     init(_ key: StringAppStorageKey) where Value == String {
         self.init(wrappedValue: .empty, key.rawValue)
     }

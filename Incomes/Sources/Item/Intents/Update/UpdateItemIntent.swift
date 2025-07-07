@@ -4,7 +4,7 @@ import SwiftUI
 import SwiftUtilities
 
 struct UpdateItemIntent: AppIntent, IntentPerformer {
-    typealias Input = (container: ModelContainer, item: ItemEntity, date: Date, content: String, income: Decimal, outgo: Decimal, category: String)
+    typealias Input = (context: ModelContext, item: ItemEntity, date: Date, content: String, income: Decimal, outgo: Decimal, category: String)
     typealias Output = Void
 
     @Parameter(title: "Item")
@@ -22,14 +22,13 @@ struct UpdateItemIntent: AppIntent, IntentPerformer {
 
     @Dependency private var modelContainer: ModelContainer
 
-    static let title: LocalizedStringResource = .init("Update Item", table: "AppIntents")
+    nonisolated static let title: LocalizedStringResource = .init("Update Item", table: "AppIntents")
 
-    @MainActor
     static func perform(_ input: Input) throws -> Output {
-        let (container, entity, date, content, income, outgo, category) = input
+        let (context, entity, date, content, income, outgo, category) = input
         guard
             let id = try? PersistentIdentifier(base64Encoded: entity.id),
-            let model = try container.mainContext.fetchFirst(
+            let model = try context.fetchFirst(
                 .items(.idIs(id))
             )
         else {
@@ -44,10 +43,9 @@ struct UpdateItemIntent: AppIntent, IntentPerformer {
             repeatID: .init()
         )
         let calculator = BalanceCalculator()
-        try calculator.calculate(in: container.mainContext, for: [model])
+        try calculator.calculate(in: context, for: [model])
     }
 
-    @MainActor
     func perform() throws -> some IntentResult {
         let currencyCode = AppStorage(.currencyCode).wrappedValue
         guard income.currencyCode == currencyCode else {
@@ -58,7 +56,7 @@ struct UpdateItemIntent: AppIntent, IntentPerformer {
         }
         try Self.perform(
             (
-                container: modelContainer,
+                context: modelContainer.mainContext,
                 item: item,
                 date: date,
                 content: content,

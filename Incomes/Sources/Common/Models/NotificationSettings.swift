@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct NotificationSettings: AppStorageCodable {
+nonisolated struct NotificationSettings: AppStorageCodable {
     var isEnabled = true
     var thresholdAmount = LocaleAmountConverter.localizedAmount(baseUSD: 500)
     var daysBeforeDueDate = 3
@@ -32,7 +32,7 @@ struct NotificationSettings: AppStorageCodable {
         try container.encode(notifyTime, forKey: .notifyTime)
     }
 
-    private enum CodingKeys: String, CodingKey {
+    nonisolated private enum CodingKeys: String, CodingKey {
         case isEnabled = "X7z8Lm4Q"
         case thresholdAmount = "F3d2Tg9P"
         case daysBeforeDueDate = "Q8w6Er7Y"

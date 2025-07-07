@@ -4,18 +4,18 @@ import Testing
 
 @MainActor
 struct GetTagByNameIntentTest {
-    let container: ModelContainer
+    let context: ModelContext
 
     init() {
-        container = testContainer
+        context = testContext
     }
 
     @Test func perform() throws {
-        _ = try Tag.create(container: container, name: "name", type: .year)
+        _ = try Tag.create(context: context, name: "name", type: .year)
         let tag = try #require(
             try GetTagByNameIntent.perform(
                 (
-                    container: container,
+                    context: context,
                     name: "name",
                     type: .year
                 )

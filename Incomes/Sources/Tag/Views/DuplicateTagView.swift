@@ -61,7 +61,7 @@ struct DuplicateTagView: View {
                 do {
                     try MergeDuplicateTagsIntent.perform(
                         (
-                            container: context.container,
+                            context: context,
                             tags: tags
                         )
                     )
@@ -89,7 +89,7 @@ struct DuplicateTagView: View {
                 do {
                     try DeleteTagIntent.perform(
                         (
-                            container: context.container,
+                            context: context,
                             tag: .init(selectedTag)!
                         )
                     )

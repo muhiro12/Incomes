@@ -15,8 +15,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/cybozu/LicenseList.git",
       "state" : {
-        "revision" : "0f83f934ee437461b87870b62871108b882a143a",
-        "version" : "2.0.3"
+        "revision" : "a0a1784aa60dcdafbc30cb2ffbac90544b46100a",
+        "version" : "2.1.0"
       }
     },
     {
@@ -60,8 +60,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/muhiro12/SwiftUtilities.git",
       "state" : {
-        "revision" : "6bb1d1431ab97595cf37085e03edd4b49463da43",
-        "version" : "1.20.0"
+        "revision" : "5339b5d4bb3743cbbda98e956e236c461019ce11",
+        "version" : "1.21.0"
       }
     }
   ],

@@ -4,16 +4,16 @@ import Testing
 
 @MainActor
 struct DeleteTagIntentTest {
-    let container: ModelContainer
+    let context: ModelContext
 
     init() {
-        container = testContainer
+        context = testContext
     }
 
     @Test func perform() throws {
-        let tag = try Tag.create(container: container, name: "name", type: .year)
-        #expect(try container.mainContext.fetchCount(.tags(.all)) == 1)
-        try DeleteTagIntent.perform((container: container, tag: .init(tag)!))
-        #expect(try container.mainContext.fetchCount(.tags(.all)) == 0)
+        let tag = try Tag.create(context: context, name: "name", type: .year)
+        #expect(try context.fetchCount(.tags(.all)) == 1)
+        try DeleteTagIntent.perform((context: context, tag: .init(tag)!))
+        #expect(try context.fetchCount(.tags(.all)) == 0)
     }
 }

@@ -4,16 +4,16 @@ import Testing
 
 @MainActor
 struct GetPreviousItemIntentTest {
-    let container: ModelContainer
+    let context: ModelContext
 
     init() {
-        container = testContainer
+        context = testContext
     }
 
     @Test func perform() throws {
         _ = try CreateItemIntent.perform(
             (
-                container: container,
+                context: context,
                 date: isoDate("2000-01-01T12:00:00Z"),
                 content: "A",
                 income: 0,
@@ -24,7 +24,7 @@ struct GetPreviousItemIntentTest {
         )
         _ = try CreateItemIntent.perform(
             (
-                container: container,
+                context: context,
                 date: isoDate("2000-02-01T12:00:00Z"),
                 content: "B",
                 income: 0,
@@ -33,7 +33,7 @@ struct GetPreviousItemIntentTest {
                 repeatCount: 1
             )
         )
-        let item = try #require(try GetPreviousItemIntent.perform((container: container, date: isoDate("2000-02-15T00:00:00Z"))))
+        let item = try #require(try GetPreviousItemIntent.perform((context: context, date: isoDate("2000-02-15T00:00:00Z"))))
         #expect(item.content == "B")
     }
 }

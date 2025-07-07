@@ -12,21 +12,19 @@ import SwiftData
 struct TagEntityQuery: EntityStringQuery {
     @Dependency private var modelContainer: ModelContainer
 
-    @MainActor
     func entities(for identifiers: [TagEntity.ID]) throws -> [TagEntity] {
         try identifiers.compactMap { id in
             try GetTagByIDIntent.perform(
                 (
-                    container: modelContainer,
+                    context: modelContainer.mainContext,
                     id: id
                 )
             )
         }
     }
 
-    @MainActor
     func entities(matching string: String) throws -> [TagEntity] {
-        let tags = try GetAllTagsIntent.perform(modelContainer)
+        let tags = try GetAllTagsIntent.perform(modelContainer.mainContext)
         let hiragana = string.applyingTransform(.hiraganaToKatakana, reverse: true).orEmpty
         let katakana = string.applyingTransform(.hiraganaToKatakana, reverse: false).orEmpty
         return [
@@ -47,9 +45,8 @@ struct TagEntityQuery: EntityStringQuery {
         }
     }
 
-    @MainActor
     func suggestedEntities() throws -> [TagEntity] {
-        let tags = try GetAllTagsIntent.perform(modelContainer)
+        let tags = try GetAllTagsIntent.perform(modelContainer.mainContext)
         return [
             TagType.year,
             .yearMonth,

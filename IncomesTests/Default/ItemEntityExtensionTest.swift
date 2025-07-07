@@ -4,16 +4,16 @@ import Testing
 
 @MainActor
 struct ItemEntityExtensionTest {
-    let container: ModelContainer
+    let context: ModelContext
 
     init() {
-        container = testContainer
+        context = testContext
     }
 
     @Test func modelFetch() throws {
         let entity = try CreateItemIntent.perform(
             (
-                container: container,
+                context: context,
                 date: isoDate("2000-01-01T12:00:00Z"),
                 content: "content",
                 income: 200,
@@ -22,7 +22,7 @@ struct ItemEntityExtensionTest {
                 repeatCount: 1
             )
         )
-        let item = try entity.model(in: container.mainContext)
+        let item = try entity.model(in: context)
         #expect(item.content == "content")
         #expect(item.balance == 100)
     }

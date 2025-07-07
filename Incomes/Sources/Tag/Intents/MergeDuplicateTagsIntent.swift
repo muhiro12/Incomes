@@ -3,7 +3,7 @@ import SwiftData
 import SwiftUtilities
 
 struct MergeDuplicateTagsIntent: AppIntent, IntentPerformer {
-    typealias Input = (container: ModelContainer, tags: [TagEntity])
+    typealias Input = (context: ModelContext, tags: [TagEntity])
     typealias Output = Void
 
     @Parameter(title: "Tags")
@@ -11,14 +11,13 @@ struct MergeDuplicateTagsIntent: AppIntent, IntentPerformer {
 
     @Dependency private var modelContainer: ModelContainer
 
-    static let title: LocalizedStringResource = .init("Merge Duplicate Tags", table: "AppIntents")
+    nonisolated static let title: LocalizedStringResource = .init("Merge Duplicate Tags", table: "AppIntents")
 
-    @MainActor
     static func perform(_ input: Input) throws -> Output {
-        let (container, entities) = input
+        let (context, entities) = input
         let models: [Tag] = try entities.compactMap { entity in
             let id = try PersistentIdentifier(base64Encoded: entity.id)
-            return try container.mainContext.fetchFirst(
+            return try context.fetchFirst(
                 .tags(.idIs(id))
             )
         }
@@ -34,13 +33,12 @@ struct MergeDuplicateTagsIntent: AppIntent, IntentPerformer {
             item.modify(tags: tags)
         }
         try children.compactMap(TagEntity.init).forEach { child in
-            try DeleteTagIntent.perform((container: container, tag: child))
+            try DeleteTagIntent.perform((context: context, tag: child))
         }
     }
 
-    @MainActor
     func perform() throws -> some IntentResult {
-        try Self.perform((container: modelContainer, tags: tags))
+        try Self.perform((context: modelContainer.mainContext, tags: tags))
         return .result()
     }
 }
