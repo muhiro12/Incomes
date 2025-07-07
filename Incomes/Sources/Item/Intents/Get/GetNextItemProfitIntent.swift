@@ -20,7 +20,7 @@ struct GetNextItemProfitIntent: AppIntent, IntentPerformer {
 
     @Dependency private var modelContainer: ModelContainer
 
-    static let title: LocalizedStringResource = .init("Get Next Item Profit", table: "AppIntents")
+    nonisolated static let title: LocalizedStringResource = .init("Get Next Item Profit", table: "AppIntents")
 
     static func perform(_ input: Input) throws -> Output {
         guard let item = try GetNextItemIntent.perform((context: input.context, date: input.date)) else {
@@ -30,7 +30,6 @@ struct GetNextItemProfitIntent: AppIntent, IntentPerformer {
         return .init(amount: item.profit, currencyCode: currencyCode)
     }
 
-    @MainActor
     func perform() throws -> some ReturnsValue<IntentCurrencyAmount?> {
         guard let item = try GetNextItemIntent.perform((context: modelContainer.mainContext, date: date)) else {
             return .result(value: nil)

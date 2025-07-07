@@ -19,7 +19,7 @@ struct GetNextItemsIntent: AppIntent, IntentPerformer {
 
     @Dependency private var modelContainer: ModelContainer
 
-    static let title: LocalizedStringResource = .init("Get Next Items", table: "AppIntents")
+    nonisolated static let title: LocalizedStringResource = .init("Get Next Items", table: "AppIntents")
 
     static func perform(_ input: Input) throws -> Output {
         let descriptor = FetchDescriptor.items(.dateIsAfter(input.date), order: .forward)
@@ -32,7 +32,6 @@ struct GetNextItemsIntent: AppIntent, IntentPerformer {
         return items.compactMap(ItemEntity.init)
     }
 
-    @MainActor
     func perform() throws -> some ReturnsValue<[ItemEntity]> {
         let items = try Self.perform(
             (context: modelContainer.mainContext, date: date)

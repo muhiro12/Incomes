@@ -29,7 +29,7 @@ struct CreateAndShowItemIntent: AppIntent, IntentPerformer {
 
     @Dependency private var modelContainer: ModelContainer
 
-    static let title: LocalizedStringResource = .init("Create and Show Item", table: "AppIntents")
+    nonisolated static let title: LocalizedStringResource = .init("Create and Show Item", table: "AppIntents")
 
     static func perform(_ input: Input) throws -> Output {
         let (context, date, content, income, outgo, category, repeatCount) = input
@@ -49,7 +49,6 @@ struct CreateAndShowItemIntent: AppIntent, IntentPerformer {
         )
     }
 
-    @MainActor
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
         let item = try Self.perform((context: modelContainer.mainContext,
                                      date: date,

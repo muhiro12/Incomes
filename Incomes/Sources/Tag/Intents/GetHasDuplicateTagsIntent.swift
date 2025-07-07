@@ -8,7 +8,7 @@ struct GetHasDuplicateTagsIntent: AppIntent, IntentPerformer {
 
     @Dependency private var modelContainer: ModelContainer
 
-    static let title: LocalizedStringResource = .init("Get Has Duplicate Tags", table: "AppIntents")
+    nonisolated static let title: LocalizedStringResource = .init("Get Has Duplicate Tags", table: "AppIntents")
 
     static func perform(_ input: Input) throws -> Output {
         let tags = try GetAllTagsIntent.perform(input)
@@ -21,7 +21,6 @@ struct GetHasDuplicateTagsIntent: AppIntent, IntentPerformer {
         return !duplicates.isEmpty
     }
 
-    @MainActor
     func perform() throws -> some ReturnsValue<Bool> {
         let result = try Self.perform(modelContainer.mainContext)
         return .result(value: result)

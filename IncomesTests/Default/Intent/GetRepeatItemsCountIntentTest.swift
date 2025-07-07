@@ -2,6 +2,7 @@
 import SwiftData
 import Testing
 
+@MainActor
 struct GetRepeatItemsCountIntentTest {
     let context: ModelContext
 

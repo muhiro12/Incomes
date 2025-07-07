@@ -19,7 +19,7 @@ struct ShowItemsIntent: AppIntent, IntentPerformer {
 
     @Dependency private var modelContainer: ModelContainer
 
-    static let title: LocalizedStringResource = .init("Show Items", table: "AppIntents")
+    nonisolated static let title: LocalizedStringResource = .init("Show Items", table: "AppIntents")
 
     static func perform(_ input: Input) throws -> Output {
         let items = try input.context.fetch(
@@ -28,7 +28,6 @@ struct ShowItemsIntent: AppIntent, IntentPerformer {
         return items.compactMap(ItemEntity.init)
     }
 
-    @MainActor
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
         let items = try Self.perform(
             (context: modelContainer.mainContext, date: date)

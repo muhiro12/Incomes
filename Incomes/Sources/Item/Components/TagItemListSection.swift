@@ -74,7 +74,6 @@ extension TagItemListSection: View {
 }
 
 private extension TagItemListSection {
-    @MainActor
     var items: [ItemEntity] {
         (
             try? tag.model(in: context).items.orEmpty.filter {

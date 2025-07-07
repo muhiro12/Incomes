@@ -2,7 +2,6 @@ import AVFoundation
 import Speech
 import SwiftUI
 
-@MainActor
 final class SpeechTranscriber: ObservableObject {
     @Published var transcript = String()
     @Published var isTranscribing = false

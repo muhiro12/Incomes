@@ -13,7 +13,7 @@ struct GetTagByNameIntent: AppIntent, IntentPerformer {
 
     @Dependency private var modelContainer: ModelContainer
 
-    static let title: LocalizedStringResource = .init("Get Tag By Name", table: "AppIntents")
+    nonisolated static let title: LocalizedStringResource = .init("Get Tag By Name", table: "AppIntents")
 
     static func perform(_ input: Input) throws -> Output {
         let tag = try input.context.fetchFirst(
@@ -22,7 +22,6 @@ struct GetTagByNameIntent: AppIntent, IntentPerformer {
         return tag.flatMap(TagEntity.init)
     }
 
-    @MainActor
     func perform() throws -> some ReturnsValue<TagEntity?> {
         let result = try Self.perform(
             (context: modelContainer.mainContext, name: name, type: type)

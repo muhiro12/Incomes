@@ -12,7 +12,6 @@ import SwiftData
 struct ItemEntityQuery: EntityStringQuery {
     @Dependency private var modelContainer: ModelContainer
 
-    @MainActor
     func entities(for identifiers: [ItemEntity.ID]) throws -> [ItemEntity] {
         try modelContainer.mainContext.fetch(
             .items(
@@ -26,7 +25,6 @@ struct ItemEntityQuery: EntityStringQuery {
         .compactMap(ItemEntity.init)
     }
 
-    @MainActor
     func entities(matching string: String) throws -> [ItemEntity] {
         try modelContainer.mainContext.fetch(
             .items(.contentContains(string))
@@ -34,7 +32,6 @@ struct ItemEntityQuery: EntityStringQuery {
         .compactMap(ItemEntity.init)
     }
 
-    @MainActor
     func suggestedEntities() throws -> [ItemEntity] {
         try modelContainer.mainContext.fetch(
             .items(.dateIsSameMonthAs(.now))

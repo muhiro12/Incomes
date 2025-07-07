@@ -11,7 +11,7 @@ struct ResolveDuplicateTagsIntent: AppIntent, IntentPerformer {
 
     @Dependency private var modelContainer: ModelContainer
 
-    static let title: LocalizedStringResource = .init("Resolve Duplicate Tags", table: "AppIntents")
+    nonisolated static let title: LocalizedStringResource = .init("Resolve Duplicate Tags", table: "AppIntents")
 
     static func perform(_ input: Input) throws -> Output {
         let (context, entities) = input
@@ -34,7 +34,6 @@ struct ResolveDuplicateTagsIntent: AppIntent, IntentPerformer {
         }
     }
 
-    @MainActor
     func perform() throws -> some IntentResult {
         try Self.perform((context: modelContainer.mainContext, tags: tags))
         return .result()

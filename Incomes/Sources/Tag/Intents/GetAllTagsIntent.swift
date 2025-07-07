@@ -8,14 +8,13 @@ struct GetAllTagsIntent: AppIntent, IntentPerformer {
 
     @Dependency private var modelContainer: ModelContainer
 
-    static let title: LocalizedStringResource = .init("Get All Tags", table: "AppIntents")
+    nonisolated static let title: LocalizedStringResource = .init("Get All Tags", table: "AppIntents")
 
     static func perform(_ input: Input) throws -> Output {
         let tags = try input.fetch(.tags(.all))
         return tags.compactMap(TagEntity.init)
     }
 
-    @MainActor
     func perform() throws -> some ReturnsValue<[TagEntity]> {
         let tags = try Self.perform(modelContainer.mainContext)
         return .result(value: tags)

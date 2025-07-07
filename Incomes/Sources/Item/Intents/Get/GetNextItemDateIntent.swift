@@ -19,7 +19,7 @@ struct GetNextItemDateIntent: AppIntent, IntentPerformer {
 
     @Dependency private var modelContainer: ModelContainer
 
-    static let title: LocalizedStringResource = .init("Get Next Item Date", table: "AppIntents")
+    nonisolated static let title: LocalizedStringResource = .init("Get Next Item Date", table: "AppIntents")
 
     static func perform(_ input: Input) throws -> Output {
         guard let item = try GetNextItemIntent.perform((context: input.context, date: input.date)) else {
@@ -28,7 +28,6 @@ struct GetNextItemDateIntent: AppIntent, IntentPerformer {
         return item.date
     }
 
-    @MainActor
     func perform() throws -> some ReturnsValue<Date?> {
         guard let item = try GetNextItemIntent.perform((context: modelContainer.mainContext, date: date)) else {
             return .result(value: nil)

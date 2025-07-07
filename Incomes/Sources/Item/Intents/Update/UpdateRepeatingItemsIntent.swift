@@ -31,7 +31,7 @@ struct UpdateRepeatingItemsIntent: AppIntent, IntentPerformer {
 
     @Dependency private var modelContainer: ModelContainer
 
-    static let title: LocalizedStringResource = .init("Update Repeating Items", table: "AppIntents")
+    nonisolated static let title: LocalizedStringResource = .init("Update Repeating Items", table: "AppIntents")
 
     static func perform(_ input: Input) throws -> Output {
         let (context, entity, date, content, income, outgo, category, descriptor) = input
@@ -60,7 +60,6 @@ struct UpdateRepeatingItemsIntent: AppIntent, IntentPerformer {
         try calculator.calculate(in: context, for: items)
     }
 
-    @MainActor
     func perform() throws -> some IntentResult {
         let currencyCode = AppStorage(.currencyCode).wrappedValue
         guard income.currencyCode == currencyCode else {

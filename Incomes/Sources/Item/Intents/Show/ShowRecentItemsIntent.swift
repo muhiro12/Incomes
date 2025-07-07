@@ -16,13 +16,12 @@ struct ShowRecentItemsIntent: AppIntent, IntentPerformer {
 
     @Dependency private var modelContainer: ModelContainer
 
-    static let title: LocalizedStringResource = .init("Show Recent Items", table: "AppIntents")
+    nonisolated static let title: LocalizedStringResource = .init("Show Recent Items", table: "AppIntents")
 
     static func perform(_ input: Input) throws -> Output {
         try GetPreviousItemsIntent.perform(input)
     }
 
-    @MainActor
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
         let date = Date.now
         let items = try Self.perform(

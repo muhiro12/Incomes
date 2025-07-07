@@ -8,7 +8,7 @@ struct DeleteAllItemsIntent: AppIntent, IntentPerformer {
 
     @Dependency private var modelContainer: ModelContainer
 
-    static let title: LocalizedStringResource = .init("Delete All Items", table: "AppIntents")
+    nonisolated static let title: LocalizedStringResource = .init("Delete All Items", table: "AppIntents")
 
     static func perform(_ input: Input) throws -> Output {
         let items = try input.fetch(FetchDescriptor<Item>())
@@ -19,7 +19,6 @@ struct DeleteAllItemsIntent: AppIntent, IntentPerformer {
         try calculator.calculate(in: input, for: items)
     }
 
-    @MainActor
     func perform() throws -> some IntentResult {
         try Self.perform(modelContainer.mainContext)
         return .result()

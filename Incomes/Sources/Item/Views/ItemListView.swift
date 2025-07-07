@@ -68,14 +68,12 @@ extension ItemListView: View {
 }
 
 private extension ItemListView {
-    @MainActor
     var items: [ItemEntity] {
         (
             try? tag.model(in: context).items.orEmpty.compactMap(ItemEntity.init)
         ).orEmpty
     }
 
-    @MainActor
     var yearStrings: [String] {
         Set(
             items.compactMap {

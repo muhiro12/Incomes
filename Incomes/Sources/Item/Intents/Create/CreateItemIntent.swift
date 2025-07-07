@@ -30,7 +30,7 @@ struct CreateItemIntent: AppIntent, IntentPerformer {
 
     @Dependency private var modelContainer: ModelContainer
 
-    static let title: LocalizedStringResource = .init("Create Item", table: "AppIntents")
+    nonisolated static let title: LocalizedStringResource = .init("Create Item", table: "AppIntents")
 
     static func perform(_ input: Input) throws -> Output {
         let (context, date, content, income, outgo, category, repeatCount) = input
@@ -82,7 +82,6 @@ struct CreateItemIntent: AppIntent, IntentPerformer {
         return entity
     }
 
-    @MainActor
     func perform() throws -> some ReturnsValue<ItemEntity> {
         guard content.isNotEmpty else {
             throw $content.needsValueError()

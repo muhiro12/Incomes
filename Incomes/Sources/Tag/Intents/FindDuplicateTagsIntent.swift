@@ -11,7 +11,7 @@ struct FindDuplicateTagsIntent: AppIntent, IntentPerformer {
 
     @Dependency private var modelContainer: ModelContainer
 
-    static let title: LocalizedStringResource = .init("Find Duplicate Tags", table: "AppIntents")
+    nonisolated static let title: LocalizedStringResource = .init("Find Duplicate Tags", table: "AppIntents")
 
     static func perform(_ input: Input) throws -> Output {
         let (context, entities) = input
@@ -33,7 +33,6 @@ struct FindDuplicateTagsIntent: AppIntent, IntentPerformer {
         return duplicates.compactMap(TagEntity.init)
     }
 
-    @MainActor
     func perform() throws -> some ReturnsValue<[TagEntity]> {
         let result = try Self.perform((context: modelContainer.mainContext, tags: tags))
         return .result(value: result)

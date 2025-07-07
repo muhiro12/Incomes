@@ -16,13 +16,12 @@ struct ShowUpcomingItemsIntent: AppIntent, IntentPerformer {
 
     @Dependency private var modelContainer: ModelContainer
 
-    static let title: LocalizedStringResource = .init("Show Upcoming Items", table: "AppIntents")
+    nonisolated static let title: LocalizedStringResource = .init("Show Upcoming Items", table: "AppIntents")
 
     static func perform(_ input: Input) throws -> Output {
         try GetNextItemsIntent.perform(input)
     }
 
-    @MainActor
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
         let date = Date.now
         let items = try Self.perform(

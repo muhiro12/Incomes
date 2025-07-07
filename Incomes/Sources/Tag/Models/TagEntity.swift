@@ -11,7 +11,7 @@ import SwiftData
 import SwiftUtilities
 
 @Observable
-final class TagEntity: AppEntity {
+nonisolated final class TagEntity: AppEntity {
     static let defaultQuery = TagEntityQuery()
 
     static var typeDisplayRepresentation: TypeDisplayRepresentation {

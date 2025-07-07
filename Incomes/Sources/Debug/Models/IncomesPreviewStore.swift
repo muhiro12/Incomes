@@ -9,7 +9,6 @@
 import SwiftData
 import SwiftUI
 
-@MainActor
 @Observable
 final class IncomesPreviewStore {
     private(set) var items = [Item]()

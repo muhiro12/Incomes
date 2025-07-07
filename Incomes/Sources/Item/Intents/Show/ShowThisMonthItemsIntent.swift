@@ -16,13 +16,12 @@ struct ShowThisMonthItemsIntent: AppIntent, IntentPerformer {
 
     @Dependency private var modelContainer: ModelContainer
 
-    static let title: LocalizedStringResource = .init("Show This Month's Items", table: "AppIntents")
+    nonisolated static let title: LocalizedStringResource = .init("Show This Month's Items", table: "AppIntents")
 
     static func perform(_ input: Input) throws -> Output {
         try ShowItemsIntent.perform(input)
     }
 
-    @MainActor
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
         let date = Date.now
         let items = try Self.perform(

@@ -10,7 +10,6 @@ import SwiftData
 import SwiftUI
 import UserNotifications
 
-@MainActor
 @Observable
 final class NotificationService: NSObject {
     private let modelContainer: ModelContainer

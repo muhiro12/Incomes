@@ -11,13 +11,12 @@ struct GetRepeatItemsCountIntent: AppIntent, IntentPerformer {
 
     @Dependency private var modelContainer: ModelContainer
 
-    static let title: LocalizedStringResource = .init("Get Repeat Items Count", table: "AppIntents")
+    nonisolated static let title: LocalizedStringResource = .init("Get Repeat Items Count", table: "AppIntents")
 
     static func perform(_ input: Input) throws -> Output {
         try input.context.fetchCount(.items(.repeatIDIs(input.repeatID)))
     }
 
-    @MainActor
     func perform() throws -> some ReturnsValue<Int> {
         guard let uuid = UUID(uuidString: repeatID) else {
             throw DebugError.default

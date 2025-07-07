@@ -22,7 +22,6 @@ struct IncomesPreview<Content: View>: View {
     private var previewStore: Store
     private var previewGoogleMobileAdsController: GoogleMobileAdsController
 
-    @MainActor
     init(content: @escaping (IncomesPreviewStore) -> Content) {
         self.content = content
         self.preview = .init()

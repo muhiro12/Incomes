@@ -11,7 +11,7 @@ struct GetTagByIDIntent: AppIntent, IntentPerformer {
 
     @Dependency private var modelContainer: ModelContainer
 
-    static let title: LocalizedStringResource = .init("Get Tag By ID", table: "AppIntents")
+    nonisolated static let title: LocalizedStringResource = .init("Get Tag By ID", table: "AppIntents")
 
     static func perform(_ input: Input) throws -> Output {
         let persistentID = try PersistentIdentifier(base64Encoded: input.id)
@@ -23,7 +23,6 @@ struct GetTagByIDIntent: AppIntent, IntentPerformer {
         return TagEntity(tag)
     }
 
-    @MainActor
     func perform() throws -> some ReturnsValue<TagEntity?> {
         guard let tagEntity = try Self.perform(
             (context: modelContainer.mainContext, id: id)

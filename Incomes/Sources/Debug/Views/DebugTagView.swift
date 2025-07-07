@@ -48,7 +48,6 @@ struct DebugTagView: View {
 }
 
 private extension DebugTagView {
-    @MainActor
     var items: [ItemEntity] {
         (
             try? tag.model(in: context).items.orEmpty.compactMap(ItemEntity.init)

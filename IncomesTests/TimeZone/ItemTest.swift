@@ -10,7 +10,6 @@ import Foundation
 @testable import Incomes
 import Testing
 
-@MainActor
 @Suite(.serialized)
 struct ItemTest {
     let context = testContext

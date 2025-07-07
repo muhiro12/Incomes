@@ -8,7 +8,7 @@ struct DeleteAllTagsIntent: AppIntent, IntentPerformer {
 
     @Dependency private var modelContainer: ModelContainer
 
-    static let title: LocalizedStringResource = .init("Delete All Tags", table: "AppIntents")
+    nonisolated static let title: LocalizedStringResource = .init("Delete All Tags", table: "AppIntents")
 
     static func perform(_ input: Input) throws -> Output {
         let tags = try input.fetch(FetchDescriptor<Tag>())
@@ -17,7 +17,6 @@ struct DeleteAllTagsIntent: AppIntent, IntentPerformer {
         }
     }
 
-    @MainActor
     func perform() throws -> some IntentResult {
         try Self.perform(modelContainer.mainContext)
         return .result()

@@ -11,14 +11,13 @@ struct RecalculateItemIntent: AppIntent, IntentPerformer {
 
     @Dependency private var modelContainer: ModelContainer
 
-    static let title: LocalizedStringResource = .init("Recalculate Item", table: "AppIntents")
+    nonisolated static let title: LocalizedStringResource = .init("Recalculate Item", table: "AppIntents")
 
     static func perform(_ input: Input) throws -> Output {
         let calculator = BalanceCalculator()
         try calculator.calculate(in: input.context, after: input.date)
     }
 
-    @MainActor
     func perform() throws -> some IntentResult {
         try Self.perform((context: modelContainer.mainContext, date: date))
         return .result()
