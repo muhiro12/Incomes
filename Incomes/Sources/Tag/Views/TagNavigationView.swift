@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct TagNavigationView: View {
-    @State private var path: IncomesPath?
+    @State private var tag: TagEntity?
 
     private let tagType: TagType
 
@@ -18,11 +18,11 @@ struct TagNavigationView: View {
 
     var body: some View {
         NavigationSplitView {
-            TagListView(tagType: tagType, selection: $path)
+            TagListView(tagType: tagType, selection: $tag)
         } detail: {
-            if case .itemList(let tagEntity) = path {
+            if let tag {
                 ItemListGroup()
-                    .environment(tagEntity)
+                    .environment(tag)
             }
         }
     }

@@ -17,18 +17,18 @@ struct DebugListView {
     @AppStorage(.isDebugOn)
     private var isDebugOn
 
-    @Binding private var path: IncomesPath?
+    @Binding private var tag: TagEntity?
 
     @State private var isDialogPresented = false
 
-    init(selection: Binding<IncomesPath?> = .constant(nil)) {
-        _path = selection
+    init(selection: Binding<TagEntity?> = .constant(nil)) {
+        _tag = selection
     }
 }
 
 extension DebugListView: View {
     var body: some View {
-        List(selection: $path) {
+        List(selection: $tag) {
             Section {
                 Toggle(isOn: $isDebugOn) {
                     Text("Debug option")
@@ -36,7 +36,7 @@ extension DebugListView: View {
             }
             if let tagEntity = try? GetAllTagsIntent.perform(context).first {
                 Section {
-                    NavigationLink(value: IncomesPath.itemList(tagEntity)) {
+                    NavigationLink(value: tagEntity) {
                         Text("All Items")
                     }
                     NavigationLink {

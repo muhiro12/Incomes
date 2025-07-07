@@ -1,3 +1,4 @@
+import Foundation
 @testable import Incomes
 import SwiftData
 import Testing
@@ -25,5 +26,21 @@ struct DeleteItemIntentTest {
         #expect(!fetchItems(context).isEmpty)
         try DeleteItemIntent.perform((context: context, item: item))
         #expect(fetchItems(context).isEmpty)
+    }
+
+    @Test func performNotFound() throws {
+        let result: ItemEntity = .init(
+            id: UUID().uuidString,
+            date: .now,
+            content: "non-existent",
+            income: .zero,
+            outgo: .zero,
+            profit: .zero,
+            balance: .zero,
+            category: nil
+        )
+        #expect(throws: Error.self) {
+            try DeleteItemIntent.perform((context: context, item: result))
+        }
     }
 }

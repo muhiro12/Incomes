@@ -16,7 +16,7 @@ extension ItemListGroup: View {
     var body: some View {
         switch tag.type {
         case .year:
-            YearItemListView()
+            YearChartsView()
         case .yearMonth:
             YearMonthItemListView()
         case .content:

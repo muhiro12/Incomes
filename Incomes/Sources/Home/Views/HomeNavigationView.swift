@@ -8,18 +8,15 @@
 import SwiftUI
 
 struct HomeNavigationView: View {
-    @State private var path: IncomesPath?
+    @State private var tag: TagEntity?
 
     var body: some View {
         NavigationSplitView {
-            HomeListView(selection: $path)
+            HomeListView(selection: $tag)
         } detail: {
-            if case .itemList(let tagEntity) = path {
+            if let tag {
                 ItemListGroup()
-                    .environment(tagEntity)
-            } else if case .year(let yearTagEntity) = path {
-                YearChartsView()
-                    .environment(yearTagEntity)
+                    .environment(tag)
             }
         }
     }
