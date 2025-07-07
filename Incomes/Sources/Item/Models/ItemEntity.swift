@@ -43,7 +43,16 @@ nonisolated final class ItemEntity: AppEntity {
     let balance: Decimal
     let category: String?
 
-    init(id: String, date: Date, content: String, income: Decimal, outgo: Decimal, profit: Decimal, balance: Decimal, category: String?) {
+    private init(
+        id: String,
+        date: Date,
+        content: String,
+        income: Decimal,
+        outgo: Decimal,
+        profit: Decimal,
+        balance: Decimal,
+        category: String?
+    ) {
         self.id = id
         self.date = date
         self.content = content
@@ -66,7 +75,7 @@ extension ItemEntity: ModelBridgeable {
         }
         self.init(
             id: encodedID,
-            date: model.date,
+            date: model.localDate,
             content: model.content,
             income: model.income,
             outgo: model.outgo,
