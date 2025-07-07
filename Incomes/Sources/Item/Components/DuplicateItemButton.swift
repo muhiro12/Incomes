@@ -44,6 +44,6 @@ extension DuplicateItemButton: View {
 #Preview {
     IncomesPreview { preview in
         DuplicateItemButton()
-            .environment(ItemEntity(preview.items[.zero])!)
+            .environment(preview.items[.zero])
     }
 }

@@ -57,7 +57,6 @@ extension HomeTabSectionLink: View {
                 .environment(
                     preview.tags
                         .first { $0.type == .year }
-                        .flatMap(TagEntity.init)
                 )
         }
     }

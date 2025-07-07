@@ -32,6 +32,6 @@ extension ItemListGroup: View {
 #Preview {
     IncomesPreview { preview in
         ItemListGroup()
-            .environment(TagEntity(preview.tags[0])!)
+            .environment(preview.tags[0])
     }
 }

@@ -28,6 +28,6 @@ struct IntentItemListSection: View {
 
 #Preview {
     IncomesPreview { preview in
-        IntentItemListSection(preview.items.compactMap(ItemEntity.init))
+        IntentItemListSection(preview.items)
     }
 }
