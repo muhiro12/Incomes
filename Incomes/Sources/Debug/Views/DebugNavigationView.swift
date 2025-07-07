@@ -8,18 +8,15 @@
 import SwiftUI
 
 struct DebugNavigationView: View {
-    @State private var path: IncomesPath?
+    @State private var tag: TagEntity?
 
     var body: some View {
         NavigationSplitView {
-            DebugListView(selection: $path)
+            DebugListView(selection: $tag)
         } detail: {
-            if case .itemList(let tagEntity) = path {
+            if let tag {
                 ItemListGroup()
-                    .environment(tagEntity)
-            } else if case .tag(let tagEntity) = path {
-                DebugTagView()
-                    .environment(tagEntity)
+                    .environment(tag)
             }
         }
     }

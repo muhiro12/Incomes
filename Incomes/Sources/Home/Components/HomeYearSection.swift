@@ -33,7 +33,7 @@ struct HomeYearSection: View {
                 if
                     let tag = try? entity.model(in: context),
                     let items = tag.items {
-                    NavigationLink(value: IncomesPath.itemList(entity)) {
+                    NavigationLink(value: entity) {
                         Text(tag.displayName)
                             .foregroundStyle(
                                 items.contains(where: \.balance.isMinus) ? .red : .primary

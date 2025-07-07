@@ -20,7 +20,7 @@ struct HomeListView {
     @AppStorage(.isDebugOn)
     private var isDebugOn
 
-    @Binding private var path: IncomesPath?
+    @Binding private var tag: TagEntity?
 
     @State private var yearTagEntity: TagEntity?
     @State private var hasLoaded = false
@@ -28,14 +28,14 @@ struct HomeListView {
     @State private var isSettingsPresented = false
     @State private var isDebugPresented = false
 
-    init(selection: Binding<IncomesPath?> = .constant(nil)) {
-        _path = selection
+    init(selection: Binding<TagEntity?> = .constant(nil)) {
+        _tag = selection
     }
 }
 
 extension HomeListView: View {
     var body: some View {
-        List(selection: $path) {
+        List(selection: $tag) {
             HomeTabSection(selection: $yearTagEntity)
             if !isSubscribeOn {
                 AdvertisementSection(.small)
@@ -99,10 +99,10 @@ extension HomeListView: View {
         }
         .onChange(of: yearTagEntity) {
             guard let yearTagEntity,
-                  path != .none else {
+                  tag != .none else {
                 return
             }
-            path = .year(yearTagEntity)
+            tag = yearTagEntity
         }
     }
 }

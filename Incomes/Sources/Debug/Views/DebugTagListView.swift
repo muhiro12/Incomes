@@ -33,7 +33,7 @@ struct DebugTagListView: View {
     private func buildSection<Header: View>(from entities: [TagEntity], header: () -> Header) -> some View {
         Section {
             ForEach(entities) { entity in
-                NavigationLink(value: IncomesPath.tag(entity)) {
+                NavigationLink(value: entity) {
                     Text(entity.displayName)
                 }
             }

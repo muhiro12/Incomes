@@ -30,7 +30,7 @@ struct SettingsListView {
     @AppStorage(.notificationSettings)
     private var notificationSettings
 
-    @Binding private var path: IncomesPath?
+    @Binding private var tag: TagEntity?
 
     @State private var isNotificationEnabled = true
     @State private var isIntroductionPresented = false
@@ -38,14 +38,14 @@ struct SettingsListView {
     @State private var isDuplicateTagPresented = false
     @State private var hasDuplicateTags = false
 
-    init(selection: Binding<IncomesPath?> = .constant(nil)) {
-        _path = selection
+    init(selection: Binding<TagEntity?> = .constant(nil)) {
+        _tag = selection
     }
 }
 
 extension SettingsListView: View {
     var body: some View {
-        List(selection: $path) {
+        List(selection: $tag) {
             if isSubscribeOn {
                 Toggle(isOn: $isICloudOn) {
                     Text("iCloud On")

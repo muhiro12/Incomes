@@ -22,7 +22,7 @@ extension HomeTabSectionLink: View {
             .items.orEmpty.reduce(.zero) { $0 + $1.income } ?? .zero
         let outgo = tagModel?
             .items.orEmpty.reduce(.zero) { $0 + $1.outgo } ?? .zero
-        NavigationLink(value: IncomesPath.year(yearTagEntity)) {
+        NavigationLink(value: yearTagEntity) {
             VStack(alignment: .leading) {
                 Text(yearTagEntity.displayName)
                     .font(.title.bold())

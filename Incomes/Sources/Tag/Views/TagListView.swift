@@ -17,7 +17,7 @@ struct TagListView: View {
     @BridgeQuery
     private var tagEntities: [TagEntity]
 
-    @Binding private var path: IncomesPath?
+    @Binding private var tag: TagEntity?
 
     @State private var searchText = String.empty
     @State private var isDialogPresented = false
@@ -25,10 +25,10 @@ struct TagListView: View {
 
     private let tagType: TagType
 
-    init(tagType: TagType, selection: Binding<IncomesPath?> = .constant(nil)) {
+    init(tagType: TagType, selection: Binding<TagEntity?> = .constant(nil)) {
         self.tagType = tagType
         self._tagEntities = .init(.tags(.typeIs(tagType)))
-        self._path = selection
+        self._tag = selection
     }
 
     private var tags: [Tag] {
@@ -36,10 +36,10 @@ struct TagListView: View {
     }
 
     var body: some View {
-        List(selection: $path) {
+        List(selection: $tag) {
             ForEach(tagEntities) { entity in
                 let tag = try? entity.model(in: context)
-                NavigationLink(value: IncomesPath.itemList(entity)) {
+                NavigationLink(value: entity) {
                     HStack {
                         Text(tag?.displayName ?? "")
                         Spacer()
