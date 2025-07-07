@@ -35,11 +35,8 @@ final class NotificationService: NSObject {
         }
     }
 
-    nonisolated func update() async {
-        let notifications = await UNUserNotificationCenter.current().deliveredNotifications()
-        Task { @MainActor in
-            hasNotification = notifications.isNotEmpty
-        }
+    func update() async {
+        hasNotification = await UNUserNotificationCenter.current().deliveredNotifications().isNotEmpty
     }
 
     func refresh() {
