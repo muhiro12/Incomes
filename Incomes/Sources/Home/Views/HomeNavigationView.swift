@@ -15,7 +15,7 @@ struct HomeNavigationView: View {
             HomeListView(selection: $path)
         } detail: {
             if case .itemList(let tagEntity) = path {
-                ItemListView()
+                ItemListGroup()
                     .environment(tagEntity)
             } else if case .year(let yearTagEntity) = path {
                 YearChartsView()
