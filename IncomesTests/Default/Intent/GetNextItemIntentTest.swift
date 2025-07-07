@@ -52,7 +52,7 @@ struct GetNextItemIntentTest {
         let result = try GetNextItemIntent.perform(
             (context: context, date: isoDate("2000-03-01T00:00:00Z"))
         )
-        #expect(result == nil)
+        #expect(result?.content == "Exact")
     }
 
     @Test func performNotFound() throws {

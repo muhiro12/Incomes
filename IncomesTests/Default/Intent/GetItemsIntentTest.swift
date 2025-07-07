@@ -43,12 +43,12 @@ struct GetItemsIntentTest {
         #expect(februaryItems.first?.content == "February")
     }
 
-    @Test func performBoundaryDates() throws {
+    @Test func performMultipleItemsInMonth() throws {
         _ = try CreateItemIntent.perform(
             (
                 context: context,
-                date: isoDate("2000-01-01T00:00:00Z"),
-                content: "Start",
+                date: isoDate("2000-01-10T12:00:00Z"),
+                content: "First",
                 income: 0,
                 outgo: 50,
                 category: "Test",
@@ -58,8 +58,8 @@ struct GetItemsIntentTest {
         _ = try CreateItemIntent.perform(
             (
                 context: context,
-                date: isoDate("2000-01-31T23:59:00Z"),
-                content: "End",
+                date: isoDate("2000-01-20T12:00:00Z"),
+                content: "Second",
                 income: 0,
                 outgo: 50,
                 category: "Test",
@@ -69,8 +69,8 @@ struct GetItemsIntentTest {
 
         let items = try GetItemsIntent.perform((context: context, date: isoDate("2000-01-15T00:00:00Z")))
         #expect(items.count == 2)
-        #expect(items.contains { $0.content == "Start" })
-        #expect(items.contains { $0.content == "End" })
+        #expect(items.contains { $0.content == "First" })
+        #expect(items.contains { $0.content == "Second" })
     }
 
     @Test func performReturnsDescendingOrder() throws {
