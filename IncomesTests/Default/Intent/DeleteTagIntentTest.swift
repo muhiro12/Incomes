@@ -16,4 +16,18 @@ struct DeleteTagIntentTest {
         try DeleteTagIntent.perform((context: context, tag: .init(tag)!))
         #expect(try context.fetchCount(.tags(.all)) == 0)
     }
+
+    @Test func performNotFound() throws {
+        let entity: TagEntity = .init(
+            id: UUID().uuidString,
+            name: "missing",
+            type: .content
+        )
+        do {
+            try DeleteTagIntent.perform((context: context, tag: entity))
+            #expect(false)
+        } catch {
+            #expect(true)
+        }
+    }
 }

@@ -26,4 +26,23 @@ struct DeleteItemIntentTest {
         try DeleteItemIntent.perform((context: context, item: item))
         #expect(fetchItems(context).isEmpty)
     }
+
+    @Test func performNotFound() throws {
+        let result: ItemEntity = .init(
+            id: UUID().uuidString,
+            date: .now,
+            content: "non-existent",
+            income: .zero,
+            outgo: .zero,
+            category: "",
+            tags: [],
+            repeatID: nil
+        )
+        do {
+            try DeleteItemIntent.perform((context: context, item: result))
+            #expect(false)
+        } catch {
+            #expect(true)
+        }
+    }
 }

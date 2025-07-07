@@ -36,4 +36,11 @@ struct GetPreviousItemIntentTest {
         let item = try #require(try GetPreviousItemIntent.perform((context: context, date: isoDate("2000-02-15T00:00:00Z"))))
         #expect(item.content == "B")
     }
+
+    @Test func performNotFound() throws {
+        let result = try GetPreviousItemIntent.perform(
+            (context: context, date: isoDate("1999-01-01T00:00:00Z"))
+        )
+        #expect(result == nil)
+    }
 }
