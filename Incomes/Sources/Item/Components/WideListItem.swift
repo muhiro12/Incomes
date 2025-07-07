@@ -43,6 +43,6 @@ struct WideListItem: View {
 #Preview(traits: .landscapeRight) {
     IncomesPreview { preview in
         WideListItem()
-            .environment(ItemEntity(preview.items[0])!)
+            .environment(preview.items[0])
     }
 }

@@ -87,8 +87,7 @@ struct HomeYearSection: View {
         List {
             HomeYearSection(
                 yearTag: preview.tags
-                    .first { $0.name == Date.now.stringValueWithoutLocale(.yyyy) }
-                    .flatMap(TagEntity.init)!
+                    .first { $0.name == Date.now.stringValueWithoutLocale(.yyyy) }!
             )
         }
     }

@@ -48,7 +48,7 @@ struct ItemSection: View {
     IncomesPreview { preview in
         List {
             ItemSection()
-                .environment(ItemEntity(preview.items[0])!)
+                .environment(preview.items[0])
         }
     }
 }

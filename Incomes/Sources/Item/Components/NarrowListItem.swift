@@ -40,6 +40,6 @@ struct NarrowListItem: View {
 #Preview {
     IncomesPreview { preview in
         NarrowListItem()
-            .environment(ItemEntity(preview.items[0])!)
+            .environment(preview.items[0])
     }
 }

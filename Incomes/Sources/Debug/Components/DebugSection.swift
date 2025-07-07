@@ -86,7 +86,7 @@ extension DebugSection: View {
     IncomesPreview { preview in
         List {
             DebugSection()
-                .environment(ItemEntity(preview.items[0])!)
+                .environment(preview.items[0])
         }
     }
 }
