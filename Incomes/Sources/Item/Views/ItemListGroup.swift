@@ -7,8 +7,6 @@
 
 import SwiftUI
 
-/// A view that selects the item list view based on the tag type in the
-/// environment.
 struct ItemListGroup {
     @Environment(TagEntity.self)
     private var tag
@@ -31,3 +29,9 @@ extension ItemListGroup: View {
     }
 }
 
+#Preview {
+    IncomesPreview { preview in
+        ItemListGroup()
+            .environment(TagEntity(preview.tags[0])!)
+    }
+}

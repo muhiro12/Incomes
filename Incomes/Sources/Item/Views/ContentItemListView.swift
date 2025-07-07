@@ -20,7 +20,7 @@ struct ContentItemListView {
 
 extension ContentItemListView: View {
     var body: some View {
-        List(yearStrings, id: \.\self) { yearString in
+        List(yearStrings, id: \.self) { yearString in
             ItemListSection(
                 .items(.tagAndYear(tag: tag, yearString: yearString)),
                 title: .init(
