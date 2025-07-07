@@ -1,3 +1,4 @@
+import Foundation
 @testable import Incomes
 import SwiftData
 import Testing
@@ -34,15 +35,12 @@ struct DeleteItemIntentTest {
             content: "non-existent",
             income: .zero,
             outgo: .zero,
-            category: "",
-            tags: [],
-            repeatID: nil
+            profit: .zero,
+            balance: .zero,
+            category: nil
         )
-        do {
+        #expect(throws: Error.self) {
             try DeleteItemIntent.perform((context: context, item: result))
-            #expect(false)
-        } catch {
-            #expect(true)
         }
     }
 }

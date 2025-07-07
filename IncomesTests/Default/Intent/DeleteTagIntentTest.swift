@@ -1,3 +1,4 @@
+import Foundation
 @testable import Incomes
 import SwiftData
 import Testing
@@ -21,13 +22,10 @@ struct DeleteTagIntentTest {
         let entity: TagEntity = .init(
             id: UUID().uuidString,
             name: "missing",
-            type: .content
+            typeID: TagType.content.rawValue
         )
-        do {
+        #expect(throws: Error.self) {
             try DeleteTagIntent.perform((context: context, tag: entity))
-            #expect(false)
-        } catch {
-            #expect(true)
         }
     }
 }

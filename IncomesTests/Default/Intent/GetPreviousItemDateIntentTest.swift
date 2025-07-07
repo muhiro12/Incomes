@@ -34,7 +34,7 @@ struct GetPreviousItemDateIntentTest {
             )
         )
         let result = try #require(
-            GetPreviousItemDateIntent.perform(
+            try GetPreviousItemDateIntent.perform(
                 (context: context, date: isoDate("2000-02-15T00:00:00Z"))
             )
         )
