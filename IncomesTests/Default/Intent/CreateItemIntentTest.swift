@@ -14,7 +14,7 @@ struct CreateItemIntentTest {
         _ = try CreateItemIntent.perform(
             (
                 context: context,
-                date: isoDate("2000-01-01T12:00:00Z"),
+                date: shiftedDate("2000-01-01T12:00:00Z"),
                 content: "content",
                 income: 200,
                 outgo: 100,
@@ -32,7 +32,7 @@ struct CreateItemIntentTest {
         _ = try CreateItemIntent.perform(
             (
                 context: context,
-                date: isoDate("2000-01-01T12:00:00Z"),
+                date: shiftedDate("2000-01-01T12:00:00Z"),
                 content: "content",
                 income: 200,
                 outgo: 100,
