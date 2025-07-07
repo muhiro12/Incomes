@@ -37,4 +37,10 @@ struct DeleteAllItemsIntentTest {
         try DeleteAllItemsIntent.perform(context)
         #expect(fetchItems(context).isEmpty)
     }
+
+    @Test func performWhenEmpty() throws {
+        #expect(fetchItems(context).isEmpty)
+        try DeleteAllItemsIntent.perform(context)
+        #expect(fetchItems(context).isEmpty)
+    }
 }
