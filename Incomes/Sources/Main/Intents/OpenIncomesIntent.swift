@@ -7,7 +7,6 @@
 //
 
 import AppIntents
-import SwiftUtilities
 
 struct OpenIncomesIntent: AppIntent, IntentPerformer {
     typealias Input = Void

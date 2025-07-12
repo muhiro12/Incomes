@@ -7,7 +7,6 @@
 //
 
 import SwiftUI
-import SwiftUtilities
 
 struct IntroductionView: View {
     @Environment(\.modelContext)

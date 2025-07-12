@@ -1,6 +1,5 @@
 import SwiftData
 import SwiftUI
-import SwiftUtilities
 
 struct DuplicateTagView: View {
     @Environment(\.modelContext)

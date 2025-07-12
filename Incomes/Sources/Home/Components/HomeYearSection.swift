@@ -7,7 +7,6 @@
 
 import SwiftData
 import SwiftUI
-import SwiftUtilities
 
 struct HomeYearSection: View {
     @Environment(\.modelContext)

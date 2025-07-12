@@ -8,7 +8,6 @@
 
 import AppIntents
 import SwiftData
-import SwiftUtilities
 
 @Observable
 nonisolated final class TagEntity: AppEntity {

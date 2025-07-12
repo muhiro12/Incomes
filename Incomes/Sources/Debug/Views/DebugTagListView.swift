@@ -1,6 +1,5 @@
 import SwiftData
 import SwiftUI
-import SwiftUtilities
 
 struct DebugTagListView: View {
     @BridgeQuery(.tags(.typeIs(.year)))

@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import SwiftUtilities
 
 struct HomeTabSectionLink {
     @Environment(TagEntity.self)

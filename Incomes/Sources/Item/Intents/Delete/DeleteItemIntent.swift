@@ -1,6 +1,5 @@
 import AppIntents
 import SwiftData
-import SwiftUtilities
 
 struct DeleteItemIntent: AppIntent, IntentPerformer {
     typealias Input = (context: ModelContext, item: ItemEntity)

@@ -1,5 +1,4 @@
 import SwiftUI
-import SwiftUtilities
 
 struct ItemView {
     @Environment(ItemEntity.self)

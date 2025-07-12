@@ -1,6 +1,5 @@
 import AppIntents
 import SwiftData
-import SwiftUtilities
 
 struct DeleteAllTagsIntent: AppIntent, IntentPerformer {
     typealias Input = ModelContext
