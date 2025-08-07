@@ -13,10 +13,10 @@ struct TagListView: View {
     @Environment(\.modelContext)
     private var context
 
-    @BridgeQuery
-    private var tagEntities: [TagEntity]
+    @Query
+    private var tags: [Tag]
 
-    @Binding private var tag: TagEntity?
+    @Binding private var tag: Tag?
 
     @State private var searchText = String.empty
     @State private var isDialogPresented = false
@@ -24,42 +24,35 @@ struct TagListView: View {
 
     private let tagType: TagType
 
-    init(tagType: TagType, selection: Binding<TagEntity?> = .constant(nil)) {
+    init(tagType: TagType, selection: Binding<Tag?> = .constant(nil)) {
         self.tagType = tagType
-        self._tagEntities = .init(.tags(.typeIs(tagType)))
+        self._tags = Query(.tags(.typeIs(tagType)))
         self._tag = selection
-    }
-
-    private var tags: [Tag] {
-        tagEntities.compactMap { try? $0.model(in: context) }
     }
 
     var body: some View {
         List(selection: $tag) {
-            ForEach(tagEntities) { entity in
-                let tag = try? entity.model(in: context)
-                NavigationLink(value: entity) {
+            ForEach(tags) { tag in
+                NavigationLink(value: tag) {
                     HStack {
-                        Text(tag?.displayName ?? "")
+                        Text(tag.displayName)
                         Spacer()
-                        Text(tag?.items.orEmpty.count.description ?? "0")
+                        Text(tag.items.orEmpty.count.description)
                             .foregroundStyle(.secondary)
                     }
                 }
                 .hidden(
                     searchText.isNotEmpty
                         && (
-                            !(tag?.name.normalizedContains(searchText) ?? false)
-                                || tag?.items.orEmpty.isEmpty ?? true
+                            !tag.name.normalizedContains(searchText)
+                                || tag.items.orEmpty.isEmpty
                         )
                 )
             }
             .onDelete { indices in
                 Haptic.warning.impact()
                 isDialogPresented = true
-                willDeleteTags = indices.compactMap {
-                    try? tagEntities[$0].model(in: context)
-                }
+                willDeleteTags = indices.map { tags[$0] }
             }
         }
         .searchable(text: $searchText)
