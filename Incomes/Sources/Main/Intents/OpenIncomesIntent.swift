@@ -8,6 +8,7 @@
 
 import AppIntents
 
+@MainActor
 struct OpenIncomesIntent: AppIntent, IntentPerformer {
     typealias Input = Void
     typealias Output = Void

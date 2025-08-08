@@ -2,6 +2,7 @@ import AppIntents
 import SwiftData
 import SwiftUI
 
+@MainActor
 struct UpdateRepeatingItemsIntent: AppIntent, IntentPerformer {
     typealias Input = (
         context: ModelContext,

@@ -1,6 +1,7 @@
 import AppIntents
 import SwiftData
 
+@MainActor
 struct DeleteTagIntent: AppIntent, IntentPerformer {
     typealias Input = (context: ModelContext, tag: TagEntity)
     typealias Output = Void

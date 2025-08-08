@@ -2,6 +2,7 @@ import AppIntents
 import FoundationModels
 
 @available(iOS 26.0, *)
+@MainActor
 struct InferItemFormIntent: AppIntent, IntentPerformer {
     nonisolated static let title: LocalizedStringResource = .init("Infer Item Form", table: "AppIntents")
 

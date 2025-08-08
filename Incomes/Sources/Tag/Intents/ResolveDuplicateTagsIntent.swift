@@ -1,6 +1,7 @@
 import AppIntents
 import SwiftData
 
+@MainActor
 struct ResolveDuplicateTagsIntent: AppIntent, IntentPerformer {
     typealias Input = (context: ModelContext, tags: [TagEntity])
     typealias Output = Void

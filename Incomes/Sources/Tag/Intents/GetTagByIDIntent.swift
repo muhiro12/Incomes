@@ -1,6 +1,7 @@
 import AppIntents
 import SwiftData
 
+@MainActor
 struct GetTagByIDIntent: AppIntent, IntentPerformer {
     typealias Input = (context: ModelContext, id: String)
     typealias Output = TagEntity?

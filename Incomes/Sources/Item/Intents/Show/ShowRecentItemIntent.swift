@@ -9,6 +9,7 @@
 import AppIntents
 import SwiftData
 
+@MainActor
 struct ShowRecentItemIntent: AppIntent, IntentPerformer {
     typealias Input = (context: ModelContext, date: Date)
     typealias Output = ItemEntity?
