@@ -16,7 +16,7 @@ struct CategoryChartSection: View {
         _items = .init(descriptor)
     }
 
-    private var incomeObjects: [(title: String, value: Int64)] {
+    private var incomeObjects: [(title: String, value: Decimal)] {
         let filtered: [Item] = items.filter(\.income.isNotZero)
         let grouped: [String: [Item]] = .init(grouping: filtered) { item in
             item.category?.displayName ?? "Others"
@@ -34,7 +34,7 @@ struct CategoryChartSection: View {
         }
     }
 
-    private var outgoObjects: [(title: String, value: Int64)] {
+    private var outgoObjects: [(title: String, value: Decimal)] {
         let filtered: [Item] = items.filter(\.outgo.isNotZero)
         let grouped: [String: [Item]] = .init(grouping: filtered) { item in
             item.category?.displayName ?? "Others"
@@ -56,7 +56,10 @@ struct CategoryChartSection: View {
         Section {
             Chart(incomeObjects, id: \.title) { object in
                 SectorMark(
-                    angle: .value(object.title, object.value),
+                    angle: .value(
+                        object.title,
+                        NSDecimalNumber(decimal: object.value).doubleValue
+                    ),
                     innerRadius: .ratio(0.618),
                     outerRadius: .inset(10),
                     angularInset: 1
@@ -71,7 +74,10 @@ struct CategoryChartSection: View {
             .padding()
             Chart(outgoObjects, id: \.title) { object in
                 SectorMark(
-                    angle: .value(object.title, object.value),
+                    angle: .value(
+                        object.title,
+                        NSDecimalNumber(decimal: object.value).doubleValue
+                    ),
                     innerRadius: .ratio(0.618),
                     outerRadius: .inset(10),
                     angularInset: 1
