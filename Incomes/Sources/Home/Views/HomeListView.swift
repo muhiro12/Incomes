@@ -20,15 +20,15 @@ struct HomeListView {
     @AppStorage(.isDebugOn)
     private var isDebugOn
 
-    @Binding private var tag: TagEntity?
+    @Binding private var tag: Tag?
 
-    @State private var yearTagEntity: TagEntity?
+    @State private var yearTagEntity: Tag?
     @State private var hasLoaded = false
     @State private var isIntroductionPresented = false
     @State private var isSettingsPresented = false
     @State private var isDebugPresented = false
 
-    init(selection: Binding<TagEntity?> = .constant(nil)) {
+    init(selection: Binding<Tag?> = .constant(nil)) {
         _tag = selection
     }
 }
@@ -82,11 +82,12 @@ extension HomeListView: View {
         .task {
             if !hasLoaded {
                 hasLoaded = true
-                yearTagEntity = try? GetTagByNameIntent.perform(
-                    (
-                        context: context,
-                        name: Date.now.stringValueWithoutLocale(.yyyy),
-                        type: .year
+                yearTagEntity = try? context.fetchFirst(
+                    .tags(
+                        .nameIs(
+                            Date.now.stringValueWithoutLocale(.yyyy),
+                            type: .year
+                        )
                     )
                 )
                 isIntroductionPresented = (

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct DebugNavigationView: View {
-    @State private var tag: TagEntity?
+    @State private var tag: Tag?
 
     var body: some View {
         NavigationSplitView {

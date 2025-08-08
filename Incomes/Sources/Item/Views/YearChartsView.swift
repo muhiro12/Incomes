@@ -9,8 +9,8 @@ import SwiftData
 import SwiftUI
 
 struct YearChartsView: View {
-    @Environment(TagEntity.self)
-    private var yearTag
+    @Environment(Tag.self)
+    private var tag
     @Environment(\.modelContext)
     private var context
 
@@ -18,7 +18,7 @@ struct YearChartsView: View {
     private var isSubscribeOn
 
     var date: Date {
-        yearTag.name.dateValueWithoutLocale(.yyyy) ?? .distantPast
+        tag.name.dateValueWithoutLocale(.yyyy) ?? .distantPast
     }
 
     var body: some View {
@@ -51,12 +51,10 @@ struct YearChartsView: View {
 #Preview {
     IncomesPreview { preview in
         NavigationStack {
-            YearChartsView()
-                .environment(
-                    preview.tags.first {
-                        $0.type == .year
-                    }
-                )
+            if let tag = preview.tags.first(where: { $0.type == .year }) {
+                YearChartsView()
+                    .environment(tag)
+            }
         }
     }
 }

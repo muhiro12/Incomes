@@ -52,6 +52,18 @@ extension Tag {
 
 extension Tag: Identifiable {}
 
+// MARK: - Hashable
+
+extension Tag: Hashable {
+    static func == (lhs: Tag, rhs: Tag) -> Bool {
+        lhs.id == rhs.id
+    }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+}
+
 // MARK: - Test
 
 extension Tag {

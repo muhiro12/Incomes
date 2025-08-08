@@ -9,13 +9,13 @@ import SwiftData
 import SwiftUI
 
 struct SuggestionButtonGroup: View {
-    @BridgeQuery private var suggestions: [TagEntity]
+    @Query private var suggestions: [Tag]
 
     @Binding private var input: String
 
     init(input: Binding<String>, type: TagType) {
         _input = input
-        _suggestions = .init(
+        _suggestions = Query(
             .tags(.nameContains(input.wrappedValue, type: type))
         )
     }

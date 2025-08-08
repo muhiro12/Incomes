@@ -13,22 +13,17 @@ struct HomeTabSection: View {
     @Environment(\.modelContext)
     private var context
 
-    @BridgeQuery(.tags(.typeIs(.year)))
-    private var yearTagEntities: [TagEntity]
+    @Query(.tags(.typeIs(.year)))
+    private var yearTagEntities: [Tag]
 
-    @Binding private var yearTagEntity: TagEntity?
+    @Binding private var yearTagEntity: Tag?
 
-    init(selection: Binding<TagEntity?> = .constant(nil)) {
+    init(selection: Binding<Tag?> = .constant(nil)) {
         _yearTagEntity = selection
     }
 
-    private var availableYearTagEntities: [TagEntity] {
-        yearTagEntities.filter { entity in
-            guard let model = try? entity.model(in: context) else {
-                return false
-            }
-            return model.items.isNotEmpty
-        }
+    private var availableYearTagEntities: [Tag] {
+        yearTagEntities.filter(\.items.isNotEmpty)
     }
 
     var body: some View {
@@ -36,19 +31,19 @@ struct HomeTabSection: View {
             Group {
                 if #available(iOS 18.0, *) {
                     TabView(selection: $yearTagEntity) {
-                        ForEach(availableYearTagEntities) { entity in
-                            Tab(value: entity) {
+                        ForEach(availableYearTagEntities) { tag in
+                            Tab(value: tag) {
                                 HomeTabSectionLink()
-                                    .environment(entity)
+                                    .environment(tag)
                             }
                         }
                     }
                 } else {
                     TabView(selection: $yearTagEntity) {
-                        ForEach(availableYearTagEntities) { entity in
+                        ForEach(availableYearTagEntities) { tag in
                             HomeTabSectionLink()
-                                .environment(entity)
-                                .tag(entity as TagEntity?)
+                                .environment(tag)
+                                .tag(tag as Tag?)
                         }
                     }
                 }

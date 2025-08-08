@@ -9,10 +9,8 @@ import SwiftData
 import SwiftUI
 
 struct CategoryItemListView {
-    @Environment(TagEntity.self)
+    @Environment(Tag.self)
     private var tag
-    @Environment(\.modelContext)
-    private var context
 
     @AppStorage(.isSubscribeOn)
     private var isSubscribeOn
@@ -45,9 +43,7 @@ extension CategoryItemListView: View {
 
 private extension CategoryItemListView {
     var items: [ItemEntity] {
-        (
-            try? tag.model(in: context).items.orEmpty.compactMap(ItemEntity.init)
-        ).orEmpty
+        tag.items.orEmpty.compactMap(ItemEntity.init)
     }
 
     var yearStrings: [String] {
@@ -62,10 +58,10 @@ private extension CategoryItemListView {
 #Preview {
     IncomesPreview { preview in
         NavigationStack {
-            CategoryItemListView()
-                .environment(
-                    preview.tags.first { $0.type == .category }!
-                )
+            if let tag = preview.tags.first(where: { $0.type == .category }) {
+                CategoryItemListView()
+                    .environment(tag)
+            }
         }
     }
 }

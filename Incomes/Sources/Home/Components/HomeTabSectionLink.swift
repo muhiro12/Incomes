@@ -8,22 +8,18 @@
 import SwiftUI
 
 struct HomeTabSectionLink {
-    @Environment(TagEntity.self)
-    private var yearTagEntity: TagEntity
-    @Environment(\.modelContext)
-    private var context
+    @Environment(Tag.self)
+    private var yearTag
 }
 
 extension HomeTabSectionLink: View {
     var body: some View {
-        let tagModel = try? yearTagEntity.model(in: context)
-        let income = tagModel?
-            .items.orEmpty.reduce(.zero) { $0 + $1.income } ?? .zero
-        let outgo = tagModel?
-            .items.orEmpty.reduce(.zero) { $0 + $1.outgo } ?? .zero
-        NavigationLink(value: yearTagEntity) {
+        let items = yearTag.items.orEmpty
+        let income = items.reduce(.zero) { $0 + $1.income }
+        let outgo = items.reduce(.zero) { $0 + $1.outgo }
+        NavigationLink(value: yearTag) {
             VStack(alignment: .leading) {
-                Text(yearTagEntity.displayName)
+                Text(yearTag.displayName)
                     .font(.title.bold())
                 HStack {
                     Text("Total Income")
@@ -52,11 +48,10 @@ extension HomeTabSectionLink: View {
 #Preview {
     IncomesPreview { preview in
         List {
-            HomeTabSectionLink()
-                .environment(
-                    preview.tags
-                        .first { $0.type == .year }
-                )
+            if let tag = preview.tags.first(where: { $0.type == .year }) {
+                HomeTabSectionLink()
+                    .environment(tag)
+            }
         }
     }
 }

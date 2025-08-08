@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ItemListGroup {
-    @Environment(TagEntity.self)
+    @Environment(Tag.self)
     private var tag
 }
 

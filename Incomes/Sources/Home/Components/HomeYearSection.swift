@@ -12,13 +12,13 @@ struct HomeYearSection: View {
     @Environment(\.modelContext)
     private var context
 
-    @BridgeQuery private var yearMonthTags: [TagEntity]
+    @Query private var yearMonthTags: [Tag]
 
     @State private var isDialogPresented = false
     @State private var willDeleteItems: [Item] = []
 
-    init(yearTag: TagEntity) {
-        _yearMonthTags = BridgeQuery(
+    init(yearTag: Tag) {
+        _yearMonthTags = Query(
             .tags(
                 .nameStartsWith(yearTag.name, type: .yearMonth),
                 order: .reverse
@@ -28,25 +28,20 @@ struct HomeYearSection: View {
 
     var body: some View {
         Section {
-            ForEach(yearMonthTags) { entity in
-                if
-                    let tag = try? entity.model(in: context),
-                    let items = tag.items {
-                    NavigationLink(value: entity) {
-                        Text(tag.displayName)
-                            .foregroundStyle(
-                                items.contains(where: \.balance.isMinus) ? .red : .primary
-                            )
-                            .bold(tag.name == Date.now.stringValueWithoutLocale(.yyyyMM))
-                    }
+            ForEach(yearMonthTags) { tag in
+                let items = tag.items.orEmpty
+                NavigationLink(value: tag) {
+                    Text(tag.displayName)
+                        .foregroundStyle(
+                            items.contains(where: \.balance.isMinus) ? .red : .primary
+                        )
+                        .bold(tag.name == Date.now.stringValueWithoutLocale(.yyyyMM))
                 }
             }
             .onDelete { indices in
                 Haptic.warning.impact()
                 isDialogPresented = true
-                willDeleteItems = indices.flatMap {
-                    (try? yearMonthTags[$0].model(in: context))?.items ?? []
-                }
+                willDeleteItems = indices.flatMap { yearMonthTags[$0].items.orEmpty }
             }
         }
         .confirmationDialog(

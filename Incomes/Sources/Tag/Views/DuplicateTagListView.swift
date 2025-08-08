@@ -4,21 +4,21 @@ import SwiftUI
 struct DuplicateTagListView: View {
     @Environment(\.modelContext) private var context
 
-    @BridgeQuery(.tags(.typeIs(.year)))
-    private var yearEntities: [TagEntity]
-    @BridgeQuery(.tags(.typeIs(.yearMonth)))
-    private var yearMonthEntities: [TagEntity]
-    @BridgeQuery(.tags(.typeIs(.content)))
-    private var contentEntities: [TagEntity]
-    @BridgeQuery(.tags(.typeIs(.category)))
-    private var categoryEntities: [TagEntity]
+    @Query(.tags(.typeIs(.year)))
+    private var yearEntities: [Tag]
+    @Query(.tags(.typeIs(.yearMonth)))
+    private var yearMonthEntities: [Tag]
+    @Query(.tags(.typeIs(.content)))
+    private var contentEntities: [Tag]
+    @Query(.tags(.typeIs(.category)))
+    private var categoryEntities: [Tag]
 
-    @Binding private var selection: TagEntity?
+    @Binding private var selection: Tag?
 
     @State private var isResolveDialogPresented = false
     @State private var selectedTags = [Tag]()
 
-    init(selection: Binding<TagEntity?>) {
+    init(selection: Binding<Tag?>) {
         _selection = selection
     }
 
@@ -70,8 +70,8 @@ struct DuplicateTagListView: View {
         }
     }
 
-    private func buildSection<Header: View>(from entities: [TagEntity], header: () -> Header) -> some View {
-        let tags = entities.compactMap { try? $0.model(in: context) }
+    private func buildSection<Header: View>(from entities: [Tag], header: () -> Header) -> some View {
+        let tags = entities
         let duplicates: [Tag]
         do {
             let entities = try FindDuplicateTagsIntent.perform(
@@ -95,11 +95,10 @@ struct DuplicateTagListView: View {
         if duplicates.isEmpty {
             return AnyView(EmptyView())
         }
-        let duplicateEntities = duplicates.compactMap(TagEntity.init)
         return AnyView(
             Section {
-                ForEach(duplicateEntities) { entity in
-                    Text((try? entity.model(in: context))?.displayName ?? "")
+                ForEach(duplicates) { tag in
+                    Text(tag.displayName)
                 }
             } header: {
                 HStack {

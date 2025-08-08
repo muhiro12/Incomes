@@ -9,7 +9,7 @@ import SwiftData
 import SwiftUI
 
 struct TagItemListSection {
-    @Environment(TagEntity.self)
+    @Environment(Tag.self)
     private var tag
     @Environment(\.modelContext)
     private var context
@@ -75,23 +75,20 @@ extension TagItemListSection: View {
 
 private extension TagItemListSection {
     var items: [ItemEntity] {
-        (
-            try? tag.model(in: context).items.orEmpty.filter {
-                $0.year?.name == yearString
-            }.sorted().compactMap(ItemEntity.init)
-        ).orEmpty
+        tag.items.orEmpty
+            .filter { $0.year?.name == yearString }
+            .sorted()
+            .compactMap(ItemEntity.init)
     }
 }
 
 #Preview {
     IncomesPreview { preview in
         List {
-            TagItemListSection(yearString: Date.now.stringValueWithoutLocale(.yyyy))
-                .environment(
-                    preview.tags.first {
-                        $0.type == .category
-                    }
-                )
+            if let tag = preview.tags.first(where: { $0.type == .category }) {
+                TagItemListSection(yearString: Date.now.stringValueWithoutLocale(.yyyy))
+                    .environment(tag)
+            }
         }
     }
 }

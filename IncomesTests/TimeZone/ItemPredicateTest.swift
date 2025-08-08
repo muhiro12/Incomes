@@ -62,8 +62,7 @@ struct ItemPredicateTest {
         _ = try CreateItemIntent.perform((context: context, date: date, content: "Content", income: 0, outgo: 0, category: "Category", repeatCount: 1))
 
         let tag = try Tag.create(context: context, name: "2024", type: .year)
-        let tagEntity = TagEntity(tag)!
-        let predicate = ItemPredicate.tagIs(tagEntity)
+        let predicate = ItemPredicate.tagIs(tag)
         let items = try context.fetch(.items(predicate))
 
         try #require(items.count == 1)
@@ -97,8 +96,7 @@ struct ItemPredicateTest {
         _ = try CreateItemIntent.perform((context: context, date: date, content: "Content", income: 0, outgo: 0, category: "Category", repeatCount: 1))
 
         let tag = try Tag.create(context: context, name: "202401", type: .yearMonth)
-        let tagEntity = TagEntity(tag)!
-        let predicate = ItemPredicate.tagIs(tagEntity)
+        let predicate = ItemPredicate.tagIs(tag)
         let items = try context.fetch(.items(predicate))
 
         try #require(items.count == 1)
@@ -132,8 +130,7 @@ struct ItemPredicateTest {
         _ = try CreateItemIntent.perform((context: context, date: date, content: "Content", income: 0, outgo: 0, category: "Category", repeatCount: 1))
 
         let tag = try Tag.create(context: context, name: "Content", type: .content)
-        let tagEntity = TagEntity(tag)!
-        let predicate = ItemPredicate.tagAndYear(tag: tagEntity, yearString: "2024")
+        let predicate = ItemPredicate.tagAndYear(tag: tag, yearString: "2024")
         let items = try context.fetch(.items(predicate))
 
         try #require(items.count == 1)
