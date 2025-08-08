@@ -1,6 +1,5 @@
 import AppIntents
 import SwiftData
-import SwiftUtilities
 
 struct DeleteTagIntent: AppIntent, IntentPerformer {
     typealias Input = (context: ModelContext, tag: TagEntity)

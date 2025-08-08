@@ -8,7 +8,6 @@
 import Charts
 import SwiftData
 import SwiftUI
-import SwiftUtilities
 
 struct IncomeAndOutgoChartSection: View {
     @BridgeQuery private var items: [ItemEntity]

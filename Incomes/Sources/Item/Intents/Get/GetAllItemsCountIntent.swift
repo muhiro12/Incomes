@@ -1,6 +1,5 @@
 import AppIntents
 import SwiftData
-import SwiftUtilities
 
 struct GetAllItemsCountIntent: AppIntent, IntentPerformer {
     typealias Input = ModelContext

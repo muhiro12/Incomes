@@ -7,7 +7,6 @@
 
 import SwiftData
 import SwiftUI
-import SwiftUtilities
 
 struct SuggestionButtonGroup: View {
     @BridgeQuery private var suggestions: [TagEntity]

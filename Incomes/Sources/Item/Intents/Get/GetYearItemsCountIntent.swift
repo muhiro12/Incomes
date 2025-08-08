@@ -1,6 +1,5 @@
 import AppIntents
 import SwiftData
-import SwiftUtilities
 
 struct GetYearItemsCountIntent: AppIntent, IntentPerformer {
     typealias Input = (context: ModelContext, date: Date)

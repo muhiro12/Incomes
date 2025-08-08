@@ -9,7 +9,6 @@
 import AppIntents
 import SwiftData
 import SwiftUI
-import SwiftUtilities
 
 struct GetNextItemProfitIntent: AppIntent, IntentPerformer {
     typealias Input = (context: ModelContext, date: Date)

@@ -1,6 +1,5 @@
 import AppIntents
 import SwiftData
-import SwiftUtilities
 
 struct GetAllTagsIntent: AppIntent, IntentPerformer {
     typealias Input = ModelContext

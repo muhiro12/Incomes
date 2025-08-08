@@ -1,6 +1,5 @@
 import AppIntents
 import SwiftData
-import SwiftUtilities
 
 struct GetHasDuplicateTagsIntent: AppIntent, IntentPerformer {
     typealias Input = ModelContext

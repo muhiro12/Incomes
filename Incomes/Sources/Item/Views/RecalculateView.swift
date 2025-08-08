@@ -8,7 +8,6 @@
 
 import SwiftData
 import SwiftUI
-import SwiftUtilities
 
 struct RecalculateView: View {
     @Environment(\.modelContext) private var context

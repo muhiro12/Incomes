@@ -8,7 +8,6 @@
 
 import AppIntents
 import SwiftData
-import SwiftUtilities
 
 struct ShowUpcomingItemIntent: AppIntent, IntentPerformer {
     typealias Input = (context: ModelContext, date: Date)

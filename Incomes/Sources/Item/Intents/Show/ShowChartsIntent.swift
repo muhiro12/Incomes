@@ -8,7 +8,6 @@
 
 import AppIntents
 import SwiftData
-import SwiftUtilities
 
 struct ShowChartsIntent: AppIntent, IntentPerformer {
     typealias Input = (context: ModelContext, date: Date)

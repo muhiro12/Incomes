@@ -1,6 +1,5 @@
 import AppIntents
 import SwiftData
-import SwiftUtilities
 
 struct MergeDuplicateTagsIntent: AppIntent, IntentPerformer {
     typealias Input = (context: ModelContext, tags: [TagEntity])

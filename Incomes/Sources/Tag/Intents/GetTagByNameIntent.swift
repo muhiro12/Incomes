@@ -1,6 +1,5 @@
 import AppIntents
 import SwiftData
-import SwiftUtilities
 
 struct GetTagByNameIntent: AppIntent, IntentPerformer {
     typealias Input = (context: ModelContext, name: String, type: TagType)

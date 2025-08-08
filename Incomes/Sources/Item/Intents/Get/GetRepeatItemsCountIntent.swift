@@ -1,6 +1,5 @@
 import AppIntents
 import SwiftData
-import SwiftUtilities
 
 struct GetRepeatItemsCountIntent: AppIntent, IntentPerformer {
     typealias Input = (context: ModelContext, repeatID: UUID)

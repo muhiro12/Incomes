@@ -1,6 +1,5 @@
 import AppIntents
 import SwiftData
-import SwiftUtilities
 
 struct DeleteAllItemsIntent: AppIntent, IntentPerformer {
     typealias Input = ModelContext

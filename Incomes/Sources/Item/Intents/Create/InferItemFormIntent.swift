@@ -1,6 +1,5 @@
 import AppIntents
 import FoundationModels
-import SwiftUtilities
 
 @available(iOS 26.0, *)
 struct InferItemFormIntent: AppIntent, IntentPerformer {

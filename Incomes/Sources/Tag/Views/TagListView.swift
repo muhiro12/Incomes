@@ -8,7 +8,6 @@
 
 import SwiftData
 import SwiftUI
-import SwiftUtilities
 
 struct TagListView: View {
     @Environment(\.modelContext)
