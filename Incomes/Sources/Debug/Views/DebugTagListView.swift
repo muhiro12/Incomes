@@ -2,14 +2,14 @@ import SwiftData
 import SwiftUI
 
 struct DebugTagListView: View {
-    @BridgeQuery(.tags(.typeIs(.year)))
-    private var yearEntities: [TagEntity]
-    @BridgeQuery(.tags(.typeIs(.yearMonth)))
-    private var yearMonthEntities: [TagEntity]
-    @BridgeQuery(.tags(.typeIs(.content)))
-    private var contentEntities: [TagEntity]
-    @BridgeQuery(.tags(.typeIs(.category)))
-    private var categoryEntities: [TagEntity]
+    @Query(.tags(.typeIs(.year)))
+    private var yearEntities: [Tag]
+    @Query(.tags(.typeIs(.yearMonth)))
+    private var yearMonthEntities: [Tag]
+    @Query(.tags(.typeIs(.content)))
+    private var contentEntities: [Tag]
+    @Query(.tags(.typeIs(.category)))
+    private var categoryEntities: [Tag]
 
     var body: some View {
         List {
@@ -29,7 +29,7 @@ struct DebugTagListView: View {
     }
 
     @ViewBuilder
-    private func buildSection<Header: View>(from entities: [TagEntity], header: () -> Header) -> some View {
+    private func buildSection<Header: View>(from entities: [Tag], header: () -> Header) -> some View {
         Section {
             ForEach(entities) { entity in
                 NavigationLink(value: entity) {

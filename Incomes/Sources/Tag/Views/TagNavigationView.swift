@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct TagNavigationView: View {
-    @State private var tag: TagEntity?
+    @State private var tag: Tag?
 
     private let tagType: TagType
 

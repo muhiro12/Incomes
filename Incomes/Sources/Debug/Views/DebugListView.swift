@@ -16,11 +16,11 @@ struct DebugListView {
     @AppStorage(.isDebugOn)
     private var isDebugOn
 
-    @Binding private var tag: TagEntity?
+    @Binding private var tag: Tag?
 
     @State private var isDialogPresented = false
 
-    init(selection: Binding<TagEntity?> = .constant(nil)) {
+    init(selection: Binding<Tag?> = .constant(nil)) {
         _tag = selection
     }
 }
@@ -33,9 +33,9 @@ extension DebugListView: View {
                     Text("Debug option")
                 }
             }
-            if let tagEntity = try? GetAllTagsIntent.perform(context).first {
+            if let tag = try? context.fetchFirst(.tags(.all)) {
                 Section {
-                    NavigationLink(value: tagEntity) {
+                    NavigationLink(value: tag) {
                         Text("All Items")
                     }
                     NavigationLink {

@@ -12,7 +12,7 @@ import SwiftUI
 @Observable
 final class IncomesPreviewStore {
     private(set) var items = [ItemEntity]()
-    private(set) var tags = [TagEntity]()
+    private(set) var tags = [Tag]()
 
     private var isReady: Bool {
         items.isNotEmpty && tags.isNotEmpty
@@ -23,7 +23,7 @@ final class IncomesPreviewStore {
         while !isReady {
             try! await Task.sleep(for: .seconds(0.2))
             items = try! context.fetch(.items(.all)).compactMap(ItemEntity.init)
-            tags = try! context.fetch(.tags(.all)).compactMap(TagEntity.init)
+            tags = try! context.fetch(.tags(.all))
         }
         let models = try! items.map { try $0.model(in: context) }
         try! BalanceCalculator().calculate(in: context, for: models)
@@ -48,7 +48,7 @@ final class IncomesPreviewStore {
         let models = try! context.fetch(.items(.all))
         try! BalanceCalculator().calculate(in: context, for: models)
         items = models.compactMap(ItemEntity.init)
-        tags = try! context.fetch(.tags(.all)).compactMap(TagEntity.init)
+        tags = try! context.fetch(.tags(.all))
     }
 
     private func createItems(_ context: ModelContext) {

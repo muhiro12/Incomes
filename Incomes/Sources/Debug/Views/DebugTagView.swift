@@ -1,10 +1,8 @@
 import SwiftUI
 
 struct DebugTagView: View {
-    @Environment(TagEntity.self)
+    @Environment(Tag.self)
     private var tag
-    @Environment(\.modelContext)
-    private var context
 
     var body: some View {
         List {
@@ -49,9 +47,7 @@ struct DebugTagView: View {
 
 private extension DebugTagView {
     var items: [ItemEntity] {
-        (
-            try? tag.model(in: context).items.orEmpty.compactMap(ItemEntity.init)
-        ).orEmpty
+        tag.items.orEmpty.compactMap(ItemEntity.init)
     }
 }
 

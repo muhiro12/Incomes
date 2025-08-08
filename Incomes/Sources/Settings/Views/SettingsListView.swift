@@ -29,7 +29,7 @@ struct SettingsListView {
     @AppStorage(.notificationSettings)
     private var notificationSettings
 
-    @Binding private var tag: TagEntity?
+    @Binding private var tag: Tag?
 
     @State private var isNotificationEnabled = true
     @State private var isIntroductionPresented = false
@@ -37,7 +37,7 @@ struct SettingsListView {
     @State private var isDuplicateTagPresented = false
     @State private var hasDuplicateTags = false
 
-    init(selection: Binding<TagEntity?> = .constant(nil)) {
+    init(selection: Binding<Tag?> = .constant(nil)) {
         _tag = selection
     }
 }

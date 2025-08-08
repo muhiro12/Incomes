@@ -16,8 +16,8 @@ nonisolated enum ItemPredicate {
     case idIs(PersistentIdentifier)
     case idsAre([PersistentIdentifier])
     // MARK: Tag
-    case tagIs(TagEntity)
-    case tagAndYear(tag: TagEntity, yearString: String)
+    case tagIs(Tag)
+    case tagAndYear(tag: Tag, yearString: String)
     // MARK: Date
     case dateIsBefore(Date)
     case dateIsAfter(Date)
