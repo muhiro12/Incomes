@@ -9,11 +9,11 @@
 import SwiftUI
 
 struct WideListItem: View {
-    @Environment(ItemEntity.self) private var item
+    @Environment(Item.self) private var item
 
     var body: some View {
         HStack {
-            Text(item.date.stringValue(.MMMd))
+            Text(item.localDate.stringValue(.MMMd))
                 .font(.subheadline)
                 .minimumScaleFactor(.high)
                 .truncationMode(.head)

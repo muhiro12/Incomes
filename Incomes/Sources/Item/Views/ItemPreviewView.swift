@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct ItemPreviewView {
-    @Environment(ItemEntity.self)
+    @Environment(Item.self)
     private var item
 }
 

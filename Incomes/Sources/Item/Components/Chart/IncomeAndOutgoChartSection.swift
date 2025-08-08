@@ -10,12 +10,12 @@ import SwiftData
 import SwiftUI
 
 struct IncomeAndOutgoChartSection: View {
-    @BridgeQuery private var items: [ItemEntity]
+    @Query private var items: [Item]
 
     @State private var isPresented = false
 
     init(_ descriptor: FetchDescriptor<Item>) {
-        _items = .init(descriptor)
+        _items = Query(descriptor)
     }
 
     var body: some View {
@@ -81,18 +81,15 @@ private extension IncomeAndOutgoChartSection {
         }
     }
 
-    func date(of item: ItemEntity) -> Date {
-        Calendar.current.shiftedDate(
-            componentsFrom: item.date,
-            in: .utc
-        )
+    func date(of item: Item) -> Date {
+        item.localDate
     }
 
-    func income(of item: ItemEntity) -> Decimal {
+    func income(of item: Item) -> Decimal {
         item.income
     }
 
-    func outgo(of item: ItemEntity) -> Decimal {
+    func outgo(of item: Item) -> Decimal {
         item.outgo * -1
     }
 }
