@@ -5,13 +5,13 @@ struct DuplicateTagListView: View {
     @Environment(\.modelContext) private var context
 
     @Query(.tags(.typeIs(.year)))
-    private var yearEntities: [Tag]
+    private var yearTags: [Tag]
     @Query(.tags(.typeIs(.yearMonth)))
-    private var yearMonthEntities: [Tag]
+    private var yearMonthTags: [Tag]
     @Query(.tags(.typeIs(.content)))
-    private var contentEntities: [Tag]
+    private var contentTags: [Tag]
     @Query(.tags(.typeIs(.category)))
-    private var categoryEntities: [Tag]
+    private var categoryTags: [Tag]
 
     @Binding private var selection: Tag?
 
@@ -24,16 +24,16 @@ struct DuplicateTagListView: View {
 
     var body: some View {
         List(selection: $selection) {
-            buildSection(from: yearEntities) {
+            buildSection(from: yearTags) {
                 Text("Year")
             }
-            buildSection(from: yearMonthEntities) {
+            buildSection(from: yearMonthTags) {
                 Text("YearMonth")
             }
-            buildSection(from: contentEntities) {
+            buildSection(from: contentTags) {
                 Text("Content")
             }
-            buildSection(from: categoryEntities) {
+            buildSection(from: categoryTags) {
                 Text("Category")
             }
         }
@@ -70,8 +70,7 @@ struct DuplicateTagListView: View {
         }
     }
 
-    private func buildSection<Header: View>(from entities: [Tag], header: () -> Header) -> some View {
-        let tags = entities
+    private func buildSection<Header: View>(from tags: [Tag], header: () -> Header) -> some View {
         let duplicates: [Tag]
         do {
             let entities = try FindDuplicateTagsIntent.perform(

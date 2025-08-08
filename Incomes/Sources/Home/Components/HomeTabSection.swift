@@ -14,24 +14,24 @@ struct HomeTabSection: View {
     private var context
 
     @Query(.tags(.typeIs(.year)))
-    private var yearTagEntities: [Tag]
+    private var yearTags: [Tag]
 
-    @Binding private var yearTagEntity: Tag?
+    @Binding private var yearTag: Tag?
 
     init(selection: Binding<Tag?> = .constant(nil)) {
-        _yearTagEntity = selection
+        _yearTag = selection
     }
 
-    private var availableYearTagEntities: [Tag] {
-        yearTagEntities.filter(\.items.isNotEmpty)
+    private var availableYearTags: [Tag] {
+        yearTags.filter(\.items.isNotEmpty)
     }
 
     var body: some View {
         Section {
             Group {
                 if #available(iOS 18.0, *) {
-                    TabView(selection: $yearTagEntity) {
-                        ForEach(availableYearTagEntities) { tag in
+                    TabView(selection: $yearTag) {
+                        ForEach(availableYearTags) { tag in
                             Tab(value: tag) {
                                 HomeTabSectionLink()
                                     .environment(tag)
@@ -39,8 +39,8 @@ struct HomeTabSection: View {
                         }
                     }
                 } else {
-                    TabView(selection: $yearTagEntity) {
-                        ForEach(availableYearTagEntities) { tag in
+                    TabView(selection: $yearTag) {
+                        ForEach(availableYearTags) { tag in
                             HomeTabSectionLink()
                                 .environment(tag)
                                 .tag(tag as Tag?)
@@ -53,10 +53,10 @@ struct HomeTabSection: View {
             .frame(height: .componentM)
         } footer: {
             HStack {
-                ForEach(availableYearTagEntities) { entity in
+                ForEach(availableYearTags) { entity in
                     Circle()
                         .frame(width: 8)
-                        .foregroundStyle(yearTagEntity == entity ? AnyShapeStyle(.tint) : AnyShapeStyle(.secondary))
+                        .foregroundStyle(yearTag == entity ? AnyShapeStyle(.tint) : AnyShapeStyle(.secondary))
                 }
             }
             .frame(maxWidth: .infinity)

@@ -3,37 +3,37 @@ import SwiftUI
 
 struct DebugTagListView: View {
     @Query(.tags(.typeIs(.year)))
-    private var yearEntities: [Tag]
+    private var yearTags: [Tag]
     @Query(.tags(.typeIs(.yearMonth)))
-    private var yearMonthEntities: [Tag]
+    private var yearMonthTags: [Tag]
     @Query(.tags(.typeIs(.content)))
-    private var contentEntities: [Tag]
+    private var contentTags: [Tag]
     @Query(.tags(.typeIs(.category)))
-    private var categoryEntities: [Tag]
+    private var categoryTags: [Tag]
 
     var body: some View {
         List {
-            buildSection(from: yearEntities) {
+            buildSection(from: yearTags) {
                 Text("Year")
             }
-            buildSection(from: yearMonthEntities) {
+            buildSection(from: yearMonthTags) {
                 Text("YearMonth")
             }
-            buildSection(from: contentEntities) {
+            buildSection(from: contentTags) {
                 Text("Content")
             }
-            buildSection(from: categoryEntities) {
+            buildSection(from: categoryTags) {
                 Text("Category")
             }
         }
     }
 
     @ViewBuilder
-    private func buildSection<Header: View>(from entities: [Tag], header: () -> Header) -> some View {
+    private func buildSection<Header: View>(from tags: [Tag], header: () -> Header) -> some View {
         Section {
-            ForEach(entities) { entity in
-                NavigationLink(value: entity) {
-                    Text(entity.displayName)
+            ForEach(tags) { tag in
+                NavigationLink(value: tag) {
+                    Text(tag.displayName)
                 }
             }
         } header: {

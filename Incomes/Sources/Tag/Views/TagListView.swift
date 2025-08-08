@@ -14,7 +14,7 @@ struct TagListView: View {
     private var context
 
     @Query
-    private var tagEntities: [Tag]
+    private var tags: [Tag]
 
     @Binding private var tag: Tag?
 
@@ -26,15 +26,13 @@ struct TagListView: View {
 
     init(tagType: TagType, selection: Binding<Tag?> = .constant(nil)) {
         self.tagType = tagType
-        self._tagEntities = Query(.tags(.typeIs(tagType)))
+        self._tags = Query(.tags(.typeIs(tagType)))
         self._tag = selection
     }
 
-    private var tags: [Tag] { tagEntities }
-
     var body: some View {
         List(selection: $tag) {
-            ForEach(tagEntities) { tag in
+            ForEach(tags) { tag in
                 NavigationLink(value: tag) {
                     HStack {
                         Text(tag.displayName)
@@ -54,7 +52,7 @@ struct TagListView: View {
             .onDelete { indices in
                 Haptic.warning.impact()
                 isDialogPresented = true
-                willDeleteTags = indices.map { tagEntities[$0] }
+                willDeleteTags = indices.map { tags[$0] }
             }
         }
         .searchable(text: $searchText)
@@ -77,11 +75,11 @@ struct TagListView: View {
         ) {
             Button(role: .destructive) {
                 do {
-                    let tags = willDeleteTags
-                    let items = tags.flatMap {
+                    let selectedTags = willDeleteTags
+                    let items = selectedTags.flatMap {
                         $0.items ?? .empty
                     }
-                    try tags
+                    try selectedTags
                         .compactMap(TagEntity.init)
                         .forEach {
                             try DeleteTagIntent.perform((context: context, tag: $0))
