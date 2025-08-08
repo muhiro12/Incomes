@@ -10,6 +10,7 @@ import AppIntents
 import SwiftData
 import SwiftUI
 
+@MainActor
 struct GetNextItemProfitIntent: AppIntent, IntentPerformer {
     typealias Input = (context: ModelContext, date: Date)
     typealias Output = IntentCurrencyAmount?

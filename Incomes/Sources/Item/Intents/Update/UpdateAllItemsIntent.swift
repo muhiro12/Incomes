@@ -2,6 +2,7 @@ import AppIntents
 import SwiftData
 import SwiftUI
 
+@MainActor
 struct UpdateAllItemsIntent: AppIntent, IntentPerformer {
     typealias Input = (context: ModelContext, item: ItemEntity, date: Date, content: String, income: Decimal, outgo: Decimal, category: String)
     typealias Output = Void
