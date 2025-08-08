@@ -32,6 +32,7 @@ struct ShowThisMonthItemsIntent: AppIntent, IntentPerformer {
         }
         return .result(dialog: .init(stringLiteral: date.stringValue(.yyyyMMM))) {
             IntentItemListSection(items)
+                .modelContainer(modelContainer)
         }
     }
 }

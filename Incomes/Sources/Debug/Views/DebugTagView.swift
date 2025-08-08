@@ -46,8 +46,8 @@ struct DebugTagView: View {
 }
 
 private extension DebugTagView {
-    var items: [ItemEntity] {
-        tag.items.orEmpty.compactMap(ItemEntity.init)
+    var items: [Item] {
+        tag.items.orEmpty
     }
 }
 

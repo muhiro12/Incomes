@@ -6,9 +6,13 @@
 //  Copyright © 2025 Hiromu Nakano. All rights reserved.
 //
 
+import SwiftData
 import SwiftUI
 
 struct IntentItemListSection: View {
+    @Environment(\.modelContext)
+    private var context
+
     private var items: [ItemEntity]
 
     init(_ items: [ItemEntity]) {
@@ -17,9 +21,11 @@ struct IntentItemListSection: View {
 
     var body: some View {
         Section {
-            ForEach(items) {
-                NarrowListItem()
-                    .environment($0)
+            ForEach(items) { item in
+                if let model = try? item.model(in: context) {
+                    NarrowListItem()
+                        .environment(model)
+                }
             }
         }
         .safeAreaPadding()
@@ -28,6 +34,6 @@ struct IntentItemListSection: View {
 
 #Preview {
     IncomesPreview { preview in
-        IntentItemListSection(preview.items)
+        IntentItemListSection(preview.items.compactMap(ItemEntity.init))
     }
 }

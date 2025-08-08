@@ -31,7 +31,7 @@ struct ShowPreviousItemIntent: AppIntent, IntentPerformer {
         }
         return .result(dialog: .init(stringLiteral: item.content)) {
             IntentItemSection()
-                .environment(item)
+                .environment(try! item.model(in: modelContainer.mainContext))
         }
     }
 }

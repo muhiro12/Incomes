@@ -9,7 +9,7 @@ import SwiftData
 import SwiftUI
 
 struct DeleteItemButton {
-    @Environment(ItemEntity.self)
+    @Environment(Item.self)
     private var item
     @Environment(\.modelContext)
     private var context
@@ -45,10 +45,14 @@ extension DeleteItemButton: View {
         ) {
             Button(role: .destructive) {
                 do {
+                    guard let entity = ItemEntity(item) else {
+                        assertionFailure()
+                        return
+                    }
                     try DeleteItemIntent.perform(
                         (
                             context: context,
-                            item: item
+                            item: entity
                         )
                     )
                     Haptic.success.impact()

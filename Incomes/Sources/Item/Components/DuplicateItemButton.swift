@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct DuplicateItemButton {
-    @Environment(ItemEntity.self)
+    @Environment(Item.self)
     private var item
 
     @State private var isPresented = false
