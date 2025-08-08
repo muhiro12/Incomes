@@ -9,6 +9,7 @@
 import AppIntents
 import SwiftData
 
+@MainActor
 struct CreateAndShowItemIntent: AppIntent, IntentPerformer {
     typealias Input = (context: ModelContext, date: Date, content: String, income: Double, outgo: Double, category: String, repeatCount: Int)
     typealias Output = ItemEntity

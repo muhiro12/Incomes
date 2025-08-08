@@ -9,6 +9,7 @@
 import AppIntents
 import SwiftData
 
+@MainActor
 struct TagEntityQuery: EntityStringQuery {
     @Dependency private var modelContainer: ModelContainer
 
