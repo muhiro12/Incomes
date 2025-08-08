@@ -13,28 +13,48 @@ struct CategoryChartSection: View {
     @Query private var items: [Item]
 
     init(_ descriptor: FetchDescriptor<Item>) {
-        _items = Query(descriptor)
+        _items = .init(descriptor)
+    }
+
+    private var incomeObjects: [(title: String, value: Int64)] {
+        let filtered: [Item] = items.filter(\.income.isNotZero)
+        let grouped: [String: [Item]] = .init(grouping: filtered) { item in
+            item.category?.displayName ?? "Others"
+        }
+        return grouped.map { displayName, items in
+            (
+                title: displayName,
+                value: items.reduce(.zero) { result, item in
+                    result + item.income
+                }
+            )
+        }
+        .sorted { left, right in
+            left.value > right.value
+        }
+    }
+
+    private var outgoObjects: [(title: String, value: Int64)] {
+        let filtered: [Item] = items.filter(\.outgo.isNotZero)
+        let grouped: [String: [Item]] = .init(grouping: filtered) { item in
+            item.category?.displayName ?? "Others"
+        }
+        return grouped.map { displayName, items in
+            (
+                title: displayName,
+                value: items.reduce(.zero) { result, item in
+                    result + item.outgo
+                }
+            )
+        }
+        .sorted { left, right in
+            left.value > right.value
+        }
     }
 
     var body: some View {
         Section {
-            Chart(
-                Dictionary(
-                    grouping: items.filter(\.income.isNotZero)
-                ) { item in
-                    item.category?.displayName ?? "Others"
-                }.map { displayName, items in
-                    (
-                        title: displayName,
-                        value: items.reduce(.zero) {
-                            $0 + $1.income
-                        }
-                    )
-                }.sorted {
-                    $0.value > $1.value
-                },
-                id: \.title
-            ) { object in
+            Chart(incomeObjects, id: \.title) { object in
                 SectorMark(
                     angle: .value(object.title, object.value),
                     innerRadius: .ratio(0.618),
@@ -49,23 +69,7 @@ struct CategoryChartSection: View {
             }
             .frame(height: .componentXL)
             .padding()
-            Chart(
-                Dictionary(
-                    grouping: items.filter(\.outgo.isNotZero)
-                ) { item in
-                    item.category?.displayName ?? "Others"
-                }.map { displayName, items in
-                    (
-                        title: displayName,
-                        value: items.reduce(.zero) {
-                            $0 + $1.outgo
-                        }
-                    )
-                }.sorted {
-                    $0.value > $1.value
-                },
-                id: \.title
-            ) { object in
+            Chart(outgoObjects, id: \.title) { object in
                 SectorMark(
                     angle: .value(object.title, object.value),
                     innerRadius: .ratio(0.618),
