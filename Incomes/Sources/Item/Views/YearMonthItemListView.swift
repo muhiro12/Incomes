@@ -47,14 +47,14 @@ extension YearMonthItemListView: View {
 }
 
 private extension YearMonthItemListView {
-    var items: [ItemEntity] {
-        tag.items.orEmpty.compactMap(ItemEntity.init)
+    var items: [Item] {
+        tag.items.orEmpty
     }
 
     var yearStrings: [String] {
         Set(
-            items.compactMap {
-                $0.date.stringValueWithoutLocale(.yyyy)
+            items.map {
+                $0.localDate.stringValueWithoutLocale(.yyyy)
             }
         ).sorted(by: >)
     }

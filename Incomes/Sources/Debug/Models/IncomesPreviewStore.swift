@@ -11,7 +11,7 @@ import SwiftUI
 
 @Observable
 final class IncomesPreviewStore {
-    private(set) var items = [ItemEntity]()
+    private(set) var items = [Item]()
     private(set) var tags = [Tag]()
 
     private var isReady: Bool {
@@ -22,11 +22,10 @@ final class IncomesPreviewStore {
         createItems(context)
         while !isReady {
             try! await Task.sleep(for: .seconds(0.2))
-            items = try! context.fetch(.items(.all)).compactMap(ItemEntity.init)
+            items = try! context.fetch(.items(.all))
             tags = try! context.fetch(.tags(.all))
         }
-        let models = try! items.map { try $0.model(in: context) }
-        try! BalanceCalculator().calculate(in: context, for: models)
+        try! BalanceCalculator().calculate(in: context, for: items)
     }
 
     func prepareIgnoringDuplicates(_ context: ModelContext) {
@@ -45,9 +44,8 @@ final class IncomesPreviewStore {
                 repeatID: .init()
             )
         }
-        let models = try! context.fetch(.items(.all))
-        try! BalanceCalculator().calculate(in: context, for: models)
-        items = models.compactMap(ItemEntity.init)
+        items = try! context.fetch(.items(.all))
+        try! BalanceCalculator().calculate(in: context, for: items)
         tags = try! context.fetch(.tags(.all))
     }
 

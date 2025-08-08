@@ -30,8 +30,8 @@ struct ItemFormView: View {
     @Environment(\.requestReview)
     private var requestReview
 
-    @Environment(ItemEntity.self)
-    private var item: ItemEntity?
+    @Environment(Item.self)
+    private var item: Item?
     @Environment(\.modelContext)
     private var context
 
@@ -191,11 +191,11 @@ struct ItemFormView: View {
         }
         .onAppear {
             if let item {
-                date = item.date
+                date = item.localDate
                 content = item.content
                 income = item.income.isNotZero ? item.income.description : .empty
                 outgo = item.outgo.isNotZero ? item.outgo.description : .empty
-                category = item.category ?? .empty
+                category = item.category?.displayName ?? .empty
             } else if let tag {
                 switch tag.type {
                 case .year:
@@ -238,12 +238,11 @@ private extension ItemFormView {
 
     func save() {
         do {
-            if let entity = item,
-               let model = try? entity.model(in: context),
+            if let item,
                try GetRepeatItemsCountIntent.perform(
                 (
                     context: context,
-                    repeatID: model.repeatID
+                    repeatID: item.repeatID
                 )
                ) > 1 {
                 presentToActionSheet()
@@ -256,7 +255,8 @@ private extension ItemFormView {
     }
 
     func saveForThisItem() {
-        guard let item else {
+        guard let item,
+              let entity = ItemEntity(item) else {
             assertionFailure()
             return
         }
@@ -264,7 +264,7 @@ private extension ItemFormView {
             try UpdateItemIntent.perform(
                 (
                     context: context,
-                    item: item,
+                    item: entity,
                     date: date,
                     content: content,
                     income: income.decimalValue,
@@ -280,7 +280,8 @@ private extension ItemFormView {
     }
 
     func saveForFutureItems() {
-        guard let item else {
+        guard let item,
+              let entity = ItemEntity(item) else {
             assertionFailure()
             return
         }
@@ -288,7 +289,7 @@ private extension ItemFormView {
             try UpdateFutureItemsIntent.perform(
                 (
                     context: context,
-                    item: item,
+                    item: entity,
                     date: date,
                     content: content,
                     income: income.decimalValue,
@@ -304,7 +305,8 @@ private extension ItemFormView {
     }
 
     func saveForAllItems() {
-        guard let item else {
+        guard let item,
+              let entity = ItemEntity(item) else {
             assertionFailure()
             return
         }
@@ -312,7 +314,7 @@ private extension ItemFormView {
             try UpdateAllItemsIntent.perform(
                 (
                     context: context,
-                    item: item,
+                    item: entity,
                     date: date,
                     content: content,
                     income: income.decimalValue,

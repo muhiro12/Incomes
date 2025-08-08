@@ -15,7 +15,7 @@ struct TagItemListSection {
     private var context
 
     @State private var isDialogPresented = false
-    @State private var willDeleteItems: [ItemEntity] = []
+    @State private var willDeleteItems: [Item] = []
 
     private let yearString: String
 
@@ -27,15 +27,13 @@ struct TagItemListSection {
 extension TagItemListSection: View {
     var body: some View {
         Section {
-            ForEach(items) {
+            ForEach(items) { item in
                 ListItem()
-                    .environment($0)
+                    .environment(item)
             }
             .onDelete {
                 Haptic.warning.impact()
-                willDeleteItems = $0.map {
-                    items[$0]
-                }
+                willDeleteItems = $0.map { items[$0] }
                 isDialogPresented = true
             }
         } header: {
@@ -47,7 +45,7 @@ extension TagItemListSection: View {
         ) {
             Button(role: .destructive) {
                 do {
-                    try willDeleteItems.forEach {
+                    try willDeleteItems.compactMap(ItemEntity.init).forEach {
                         try DeleteItemIntent.perform(
                             (
                                 context: context,
@@ -74,11 +72,10 @@ extension TagItemListSection: View {
 }
 
 private extension TagItemListSection {
-    var items: [ItemEntity] {
+    var items: [Item] {
         tag.items.orEmpty
             .filter { $0.year?.name == yearString }
             .sorted()
-            .compactMap(ItemEntity.init)
     }
 }
 

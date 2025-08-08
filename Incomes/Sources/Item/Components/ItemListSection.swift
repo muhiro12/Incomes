@@ -12,29 +12,27 @@ struct ItemListSection: View {
     @Environment(\.modelContext)
     private var context
 
-    @BridgeQuery private var items: [ItemEntity]
+    @Query private var items: [Item]
 
     @State private var isDialogPresented = false
-    @State private var willDeleteItems: [ItemEntity] = []
+    @State private var willDeleteItems: [Item] = []
 
     private let title: LocalizedStringKey?
 
     init(_ descriptor: FetchDescriptor<Item>, title: LocalizedStringKey? = nil) {
-        self._items = .init(descriptor)
+        self._items = Query(descriptor)
         self.title = title
     }
 
     var body: some View {
         Section {
-            ForEach(items) {
+            ForEach(items) { item in
                 ListItem()
-                    .environment($0)
+                    .environment(item)
             }
             .onDelete {
                 Haptic.warning.impact()
-                willDeleteItems = $0.map {
-                    items[$0]
-                }
+                willDeleteItems = $0.map { items[$0] }
                 isDialogPresented = true
             }
         } header: {
@@ -48,7 +46,7 @@ struct ItemListSection: View {
         ) {
             Button(role: .destructive) {
                 do {
-                    try willDeleteItems.forEach {
+                    try willDeleteItems.compactMap(ItemEntity.init).forEach {
                         try DeleteItemIntent.perform(
                             (
                                 context: context,
