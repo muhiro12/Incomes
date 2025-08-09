@@ -13,16 +13,16 @@ struct IntentItemListSection: View {
     @Environment(\.modelContext)
     private var context
 
-    private var items: [ItemEntity]
+    private var itemEntities: [ItemEntity]
 
     init(_ items: [ItemEntity]) {
-        self.items = items
+        self.itemEntities = items
     }
 
     var body: some View {
         Section {
-            ForEach(items) { item in
-                if let model = try? item.model(in: context) {
+            ForEach(itemEntities) { entity in
+                if let model = try? entity.model(in: context) {
                     NarrowListItem()
                         .environment(model)
                 }

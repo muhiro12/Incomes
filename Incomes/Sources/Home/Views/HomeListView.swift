@@ -22,7 +22,7 @@ struct HomeListView {
 
     @Binding private var tag: Tag?
 
-    @State private var yearTagEntity: Tag?
+    @State private var yearTag: Tag?
     @State private var hasLoaded = false
     @State private var isIntroductionPresented = false
     @State private var isSettingsPresented = false
@@ -36,12 +36,12 @@ struct HomeListView {
 extension HomeListView: View {
     var body: some View {
         List(selection: $tag) {
-            HomeTabSection(selection: $yearTagEntity)
+            HomeTabSection(selection: $yearTag)
             if !isSubscribeOn {
                 AdvertisementSection(.small)
             }
-            if let yearTagEntity {
-                HomeYearSection(yearTag: yearTagEntity)
+            if let yearTag {
+                HomeYearSection(yearTag: yearTag)
             }
         }
         .listStyle(.insetGrouped)
@@ -82,7 +82,7 @@ extension HomeListView: View {
         .task {
             if !hasLoaded {
                 hasLoaded = true
-                yearTagEntity = try? context.fetchFirst(
+                yearTag = try? context.fetchFirst(
                     .tags(
                         .nameIs(
                             Date.now.stringValueWithoutLocale(.yyyy),
@@ -98,12 +98,12 @@ extension HomeListView: View {
             notificationService.refresh()
             await notificationService.register()
         }
-        .onChange(of: yearTagEntity) {
-            guard let yearTagEntity,
-                  tag != .none else {
+        .onChange(of: yearTag) {
+            guard tag == nil,
+                  let yearTag else {
                 return
             }
-            tag = yearTagEntity
+            tag = yearTag
         }
     }
 }
