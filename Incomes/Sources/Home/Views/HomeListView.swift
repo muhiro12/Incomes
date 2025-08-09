@@ -99,8 +99,8 @@ extension HomeListView: View {
             await notificationService.register()
         }
         .onChange(of: yearTag) {
-            guard tag == nil,
-                  let yearTag else {
+            guard let yearTag,
+                  tag != .none else {
                 return
             }
             tag = yearTag
