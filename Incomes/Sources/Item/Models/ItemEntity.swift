@@ -63,11 +63,7 @@ nonisolated final class ItemEntity: AppEntity {
     }
 }
 
-// MARK: - ModelBridgeable
-
-extension ItemEntity: ModelBridgeable {
-    typealias Model = Item
-
+extension ItemEntity {
     convenience init?(_ model: Item) {
         guard let encodedID = try? model.id.base64Encoded() else {
             return nil

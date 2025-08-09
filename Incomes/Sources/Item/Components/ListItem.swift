@@ -66,7 +66,7 @@ struct ListItem: View {
                 )
         }
         .sheet(isPresented: $isEditPresented) {
-                ItemFormNavigationView(mode: .edit)
+            ItemFormNavigationView(mode: .edit)
         }
         .sheet(isPresented: $isDuplicatePresented) {
             ItemFormNavigationView(mode: .create)
