@@ -15,14 +15,31 @@ struct ItemFormOCRButton: View {
 
     @State private var isProcessing = false
     @State private var errorMessage: String?
+    @State private var isCameraPresented = false
 
     var body: some View {
         Group {
             if isProcessing {
                 ProgressView()
             } else {
-                PhotosPicker(selection: $selectedItem, matching: .images) {
+                Menu {
+                    PhotosPicker(selection: $selectedItem, matching: .images) {
+                        Label("Photo Library", systemImage: "photo")
+                    }
+                    Button {
+                        isCameraPresented = true
+                    } label: {
+                        Label("Camera", systemImage: "camera")
+                    }
+                } label: {
                     Image(systemName: "doc.text.viewfinder")
+                }
+                .sheet(isPresented: $isCameraPresented) {
+                    CameraPicker { image in
+                        Task {
+                            await scanImage(image)
+                        }
+                    }
                 }
             }
         }
@@ -32,7 +49,9 @@ struct ItemFormOCRButton: View {
             Text(errorMessage ?? "")
         }
         .onChange(of: selectedItem) { _, newValue in
-            guard newValue != nil else { return }
+            guard newValue != nil else {
+                return
+            }
             Task {
                 await scanReceipt()
             }
@@ -40,14 +59,32 @@ struct ItemFormOCRButton: View {
     }
 
     private func scanReceipt() async {
-        guard let item = selectedItem else { return }
+        guard let item = selectedItem else {
+            return
+        }
 
-        isProcessing = true
-        defer { isProcessing = false; selectedItem = nil }
+        defer {
+            selectedItem = nil
+        }
         do {
             guard let data = try await item.loadTransferable(type: Data.self),
-                  let uiImage = UIImage(data: data) else { return }
-            try await scanner.scan(uiImage)
+                  let image = UIImage(data: data) else {
+                return
+            }
+            await scanImage(image)
+        } catch {
+            errorMessage = error.localizedDescription
+            assertionFailure(error.localizedDescription)
+        }
+    }
+
+    private func scanImage(_ image: UIImage) async {
+        isProcessing = true
+        defer {
+            isProcessing = false
+        }
+        do {
+            try await scanner.scan(image)
             let text = scanner.recognizedText
             let inference = try await InferItemFormIntent.perform(text)
             if let newDate = inference.date.dateValueWithoutLocale(.yyyyMMdd) {
