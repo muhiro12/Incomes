@@ -53,10 +53,10 @@ struct HomeTabSection: View {
             .frame(height: .componentM)
         } footer: {
             HStack {
-                ForEach(availableYearTags) { entity in
+                ForEach(availableYearTags) { tag in
                     Circle()
                         .frame(width: 8)
-                        .foregroundStyle(yearTag == entity ? AnyShapeStyle(.tint) : AnyShapeStyle(.secondary))
+                        .foregroundStyle(yearTag == tag ? AnyShapeStyle(.tint) : AnyShapeStyle(.secondary))
                 }
             }
             .frame(maxWidth: .infinity)
