@@ -512,8 +512,6 @@
 				INFOPLIST_FILE = Incomes/Configurations/Info.plist;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
-				INFOPLIST_KEY_NSMicrophoneUsageDescription = "This app needs access to the microphone so it can listen to and transcribe your speech.";
-				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "This app uses speech recognition to transcribe your spoken words into text.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
@@ -569,8 +567,6 @@
 				INFOPLIST_FILE = Incomes/Configurations/Info.plist;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
-				INFOPLIST_KEY_NSMicrophoneUsageDescription = "This app needs access to the microphone so it can listen to and transcribe your speech.";
-				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "This app uses speech recognition to transcribe your spoken words into text.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
