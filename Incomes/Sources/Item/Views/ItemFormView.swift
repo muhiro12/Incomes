@@ -144,22 +144,13 @@ struct ItemFormView: View {
             }
             ToolbarItem(placement: .bottomBar) {
                 if #available(iOS 26.0, *) {
-                    HStack {
-                        ItemFormOCRButton(
-                            date: $date,
-                            content: $content,
-                            income: $income,
-                            outgo: $outgo,
-                            category: $category
-                        )
-                        ItemFormVoiceButton(
-                            date: $date,
-                            content: $content,
-                            income: $income,
-                            outgo: $outgo,
-                            category: $category
-                        )
-                    }
+                    ItemFormOCRButton(
+                        date: $date,
+                        content: $content,
+                        income: $income,
+                        outgo: $outgo,
+                        category: $category
+                    )
                 }
             }
         }
