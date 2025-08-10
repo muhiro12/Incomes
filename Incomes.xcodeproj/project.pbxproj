@@ -512,6 +512,9 @@
 				INFOPLIST_FILE = Incomes/Configurations/Info.plist;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Camera access is required to scan receipts.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Allow microphone access to capture your speech for transcription.";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Allow speech recognition to convert your speech into text.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
@@ -567,6 +570,9 @@
 				INFOPLIST_FILE = Incomes/Configurations/Info.plist;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Camera access is required to scan receipts.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Allow microphone access to capture your speech for transcription.";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Allow speech recognition to convert your speech into text.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
