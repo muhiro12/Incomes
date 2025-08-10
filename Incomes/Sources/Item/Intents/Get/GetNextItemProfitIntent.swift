@@ -11,10 +11,7 @@ import SwiftData
 import SwiftUI
 
 @MainActor
-struct GetNextItemProfitIntent: AppIntent, IntentPerformer {
-    typealias Input = (context: ModelContext, date: Date)
-    typealias Output = IntentCurrencyAmount?
-
+struct GetNextItemProfitIntent: AppIntent {
     @Parameter(title: "Date", kind: .date)
     private var date: Date
 
@@ -22,17 +19,11 @@ struct GetNextItemProfitIntent: AppIntent, IntentPerformer {
 
     nonisolated static let title: LocalizedStringResource = .init("Get Next Item Profit", table: "AppIntents")
 
-    static func perform(_ input: Input) throws -> Output {
-        return try ItemService.nextItemProfit(
-            context: input.context,
-            date: input.date
-        )
-    }
-
     func perform() throws -> some ReturnsValue<IntentCurrencyAmount?> {
         return .result(
-            value: try Self.perform(
-                (context: modelContainer.mainContext, date: date)
+            value: try ItemService.nextItemProfit(
+                context: modelContainer.mainContext,
+                date: date
             )
         )
     }

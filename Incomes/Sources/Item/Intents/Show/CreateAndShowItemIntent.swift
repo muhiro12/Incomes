@@ -10,10 +10,7 @@ import AppIntents
 import SwiftData
 
 @MainActor
-struct CreateAndShowItemIntent: AppIntent, IntentPerformer {
-    typealias Input = (context: ModelContext, date: Date, content: String, income: Double, outgo: Double, category: String, repeatCount: Int)
-    typealias Output = ItemEntity
-
+struct CreateAndShowItemIntent: AppIntent {
     @Parameter(title: "Date", kind: .date)
     private var date: Date
     @Parameter(title: "Content")
@@ -31,13 +28,12 @@ struct CreateAndShowItemIntent: AppIntent, IntentPerformer {
 
     nonisolated static let title: LocalizedStringResource = .init("Create and Show Item", table: "AppIntents")
 
-    static func perform(_ input: Input) throws -> Output {
-        let (context, date, content, income, outgo, category, repeatCount) = input
+    func perform() throws -> some ProvidesDialog & ShowsSnippetView {
         guard content.isNotEmpty else {
             throw ItemError.contentIsEmpty
         }
-        return try ItemService.create(
-            context: context,
+        let item = try ItemService.create(
+            context: modelContainer.mainContext,
             date: date,
             content: content,
             income: .init(income),
@@ -45,16 +41,6 @@ struct CreateAndShowItemIntent: AppIntent, IntentPerformer {
             category: category,
             repeatCount: repeatCount
         )
-    }
-
-    func perform() throws -> some ProvidesDialog & ShowsSnippetView {
-        let item = try Self.perform((context: modelContainer.mainContext,
-                                     date: date,
-                                     content: content,
-                                     income: income,
-                                     outgo: outgo,
-                                     category: category,
-                                     repeatCount: repeatCount))
         return .result(dialog: .init(stringLiteral: item.content)) {
             IntentItemSection()
                 .environment(try! item.model(in: modelContainer.mainContext))

@@ -81,11 +81,9 @@ struct ListItem: View {
                         assertionFailure()
                         return
                     }
-                    try DeleteItemIntent.perform(
-                        (
-                            context: context,
-                            item: entity
-                        )
+                    try ItemService.delete(
+                        context: context,
+                        item: entity
                     )
                     Haptic.success.impact()
                 } catch {

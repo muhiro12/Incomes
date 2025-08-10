@@ -10,10 +10,7 @@ import AppIntents
 import SwiftData
 
 @MainActor
-struct ShowChartsIntent: AppIntent, IntentPerformer {
-    typealias Input = (context: ModelContext, date: Date)
-    typealias Output = [ItemEntity]
-
+struct ShowChartsIntent: AppIntent {
     @Parameter(title: "Date", kind: .date)
     private var date: Date
 
@@ -21,16 +18,10 @@ struct ShowChartsIntent: AppIntent, IntentPerformer {
 
     nonisolated static let title: LocalizedStringResource = .init("Show Charts", table: "AppIntents")
 
-    static func perform(_ input: Input) throws -> Output {
-        return try ItemService.items(
-            context: input.context,
-            date: input.date
-        )
-    }
-
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
-        let entities = try Self.perform(
-            (context: modelContainer.mainContext, date: date)
+        let entities = try ItemService.items(
+            context: modelContainer.mainContext,
+            date: date
         )
         guard entities.isNotEmpty else {
             return .result(dialog: .init(.init("Not Found", table: "AppIntents")))
