@@ -19,7 +19,10 @@ struct ShowRecentItemIntent: AppIntent, IntentPerformer {
     nonisolated static let title: LocalizedStringResource = .init("Show Recent Item", table: "AppIntents")
 
     static func perform(_ input: Input) throws -> Output {
-        try GetPreviousItemIntent.perform(input)
+        return try ItemService.previousItem(
+            context: input.context,
+            date: input.date
+        )
     }
 
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {

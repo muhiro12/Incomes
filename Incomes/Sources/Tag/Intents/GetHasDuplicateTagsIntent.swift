@@ -11,14 +11,7 @@ struct GetHasDuplicateTagsIntent: AppIntent, IntentPerformer {
     nonisolated static let title: LocalizedStringResource = .init("Get Has Duplicate Tags", table: "AppIntents")
 
     static func perform(_ input: Input) throws -> Output {
-        let tags = try GetAllTagsIntent.perform(input)
-        let duplicates = try FindDuplicateTagsIntent.perform(
-            (
-                context: input,
-                tags: tags
-            )
-        )
-        return !duplicates.isEmpty
+        return try TagService.hasDuplicates(context: input)
     }
 
     func perform() throws -> some ReturnsValue<Bool> {

@@ -25,25 +25,15 @@ struct UpdateItemIntent: AppIntent, IntentPerformer {
     nonisolated static let title: LocalizedStringResource = .init("Update Item", table: "AppIntents")
 
     static func perform(_ input: Input) throws -> Output {
-        let (context, entity, date, content, income, outgo, category) = input
-        guard
-            let id = try? PersistentIdentifier(base64Encoded: entity.id),
-            let model = try context.fetchFirst(
-                .items(.idIs(id))
-            )
-        else {
-            throw DebugError.default
-        }
-        try model.modify(
-            date: date,
-            content: content,
-            income: income,
-            outgo: outgo,
-            category: category,
-            repeatID: .init()
+        try ItemService.update(
+            context: input.context,
+            item: input.item,
+            date: input.date,
+            content: input.content,
+            income: input.income,
+            outgo: input.outgo,
+            category: input.category
         )
-        let calculator = BalanceCalculator()
-        try calculator.calculate(in: context, for: [model])
     }
 
     func perform() throws -> some IntentResult {

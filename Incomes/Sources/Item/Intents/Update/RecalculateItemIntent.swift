@@ -14,8 +14,7 @@ struct RecalculateItemIntent: AppIntent, IntentPerformer {
     nonisolated static let title: LocalizedStringResource = .init("Recalculate Item", table: "AppIntents")
 
     static func perform(_ input: Input) throws -> Output {
-        let calculator = BalanceCalculator()
-        try calculator.calculate(in: input.context, after: input.date)
+        try ItemService.recalculate(context: input.context, date: input.date)
     }
 
     func perform() throws -> some IntentResult {

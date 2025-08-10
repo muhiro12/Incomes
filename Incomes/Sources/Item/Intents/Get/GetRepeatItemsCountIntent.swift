@@ -14,7 +14,10 @@ struct GetRepeatItemsCountIntent: AppIntent, IntentPerformer {
     nonisolated static let title: LocalizedStringResource = .init("Get Repeat Items Count", table: "AppIntents")
 
     static func perform(_ input: Input) throws -> Output {
-        try input.context.fetchCount(.items(.repeatIDIs(input.repeatID)))
+        return try ItemService.repeatItemsCount(
+            context: input.context,
+            repeatID: input.repeatID
+        )
     }
 
     func perform() throws -> some ReturnsValue<Int> {

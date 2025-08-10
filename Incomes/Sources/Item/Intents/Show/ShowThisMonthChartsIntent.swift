@@ -19,7 +19,10 @@ struct ShowThisMonthChartsIntent: AppIntent, IntentPerformer {
     nonisolated static let title: LocalizedStringResource = .init("Show This Month's Charts", table: "AppIntents")
 
     static func perform(_ input: Input) throws -> Output {
-        try ShowChartsIntent.perform(input)
+        return try ItemService.items(
+            context: input.context,
+            date: input.date
+        )
     }
 
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {

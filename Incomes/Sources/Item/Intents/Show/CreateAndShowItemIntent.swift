@@ -36,16 +36,14 @@ struct CreateAndShowItemIntent: AppIntent, IntentPerformer {
         guard content.isNotEmpty else {
             throw ItemError.contentIsEmpty
         }
-        return try CreateItemIntent.perform(
-            (
-                context: context,
-                date: date,
-                content: content,
-                income: .init(income),
-                outgo: .init(outgo),
-                category: category,
-                repeatCount: repeatCount
-            )
+        return try ItemService.create(
+            context: context,
+            date: date,
+            content: content,
+            income: .init(income),
+            outgo: .init(outgo),
+            category: category,
+            repeatCount: repeatCount
         )
     }
 

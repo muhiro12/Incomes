@@ -14,14 +14,7 @@ struct DeleteTagIntent: AppIntent, IntentPerformer {
     nonisolated static let title: LocalizedStringResource = .init("Delete Tag", table: "AppIntents")
 
     static func perform(_ input: Input) throws -> Output {
-        let (context, entity) = input
-        let id = try PersistentIdentifier(base64Encoded: entity.id)
-        guard let model = try context.fetchFirst(
-            .tags(.idIs(id))
-        ) else {
-            throw TagError.tagNotFound
-        }
-        model.delete()
+        try TagService.delete(context: input.context, tag: input.tag)
     }
 
     func perform() throws -> some IntentResult {

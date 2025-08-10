@@ -22,11 +22,10 @@ struct GetPreviousItemIntent: AppIntent, IntentPerformer {
     nonisolated static let title: LocalizedStringResource = .init("Get Previous Item", table: "AppIntents")
 
     static func perform(_ input: Input) throws -> Output {
-        let descriptor = FetchDescriptor.items(.dateIsBefore(input.date))
-        guard let item = try input.context.fetchFirst(descriptor) else {
-            return nil
-        }
-        return .init(item)
+        return try ItemService.previousItem(
+            context: input.context,
+            date: input.date
+        )
     }
 
     func perform() throws -> some ReturnsValue<ItemEntity?> {

@@ -11,12 +11,7 @@ struct DeleteAllItemsIntent: AppIntent, IntentPerformer {
     nonisolated static let title: LocalizedStringResource = .init("Delete All Items", table: "AppIntents")
 
     static func perform(_ input: Input) throws -> Output {
-        let items = try input.fetch(FetchDescriptor<Item>())
-        items.forEach { item in
-            item.delete()
-        }
-        let calculator = BalanceCalculator()
-        try calculator.calculate(in: input, for: items)
+        try ItemService.deleteAll(context: input)
     }
 
     func perform() throws -> some IntentResult {

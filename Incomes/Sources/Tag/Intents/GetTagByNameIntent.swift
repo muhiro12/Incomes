@@ -16,10 +16,11 @@ struct GetTagByNameIntent: AppIntent, IntentPerformer {
     nonisolated static let title: LocalizedStringResource = .init("Get Tag By Name", table: "AppIntents")
 
     static func perform(_ input: Input) throws -> Output {
-        let tag = try input.context.fetchFirst(
-            .tags(.nameIs(input.name, type: input.type))
+        return try TagService.getByName(
+            context: input.context,
+            name: input.name,
+            type: input.type
         )
-        return tag.flatMap(TagEntity.init)
     }
 
     func perform() throws -> some ReturnsValue<TagEntity?> {

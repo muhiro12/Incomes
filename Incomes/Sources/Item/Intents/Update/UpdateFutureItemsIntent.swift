@@ -25,31 +25,14 @@ struct UpdateFutureItemsIntent: AppIntent, IntentPerformer {
     nonisolated static let title: LocalizedStringResource = .init("Update Future Items", table: "AppIntents")
 
     static func perform(_ input: Input) throws -> Output {
-        let (context, entity, date, content, income, outgo, category) = input
-        guard
-            let id = try? PersistentIdentifier(base64Encoded: entity.id),
-            let model = try context.fetchFirst(
-                .items(.idIs(id))
-            )
-        else {
-            throw DebugError.default
-        }
-        try UpdateRepeatingItemsIntent.perform(
-            (
-                context: context,
-                item: entity,
-                date: date,
-                content: content,
-                income: income,
-                outgo: outgo,
-                category: category,
-                descriptor: .items(
-                    .repeatIDAndDateIsAfter(
-                        repeatID: model.repeatID,
-                        date: model.localDate
-                    )
-                )
-            )
+        try ItemService.updateFuture(
+            context: input.context,
+            item: input.item,
+            date: input.date,
+            content: input.content,
+            income: input.income,
+            outgo: input.outgo,
+            category: input.category
         )
     }
 

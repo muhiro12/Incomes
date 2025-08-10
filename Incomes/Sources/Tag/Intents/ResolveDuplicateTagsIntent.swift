@@ -14,24 +14,10 @@ struct ResolveDuplicateTagsIntent: AppIntent, IntentPerformer {
     nonisolated static let title: LocalizedStringResource = .init("Resolve Duplicate Tags", table: "AppIntents")
 
     static func perform(_ input: Input) throws -> Output {
-        let (context, entities) = input
-        let models: [Tag] = try entities.compactMap { entity in
-            let id = try PersistentIdentifier(base64Encoded: entity.id)
-            return try context.fetchFirst(
-                .tags(.idIs(id))
-            )
-        }
-        for model in models {
-            let duplicates = try context.fetch(
-                .tags(.isSameWith(model))
-            )
-            try MergeDuplicateTagsIntent.perform(
-                (
-                    context: context,
-                    tags: duplicates.compactMap(TagEntity.init)
-                )
-            )
-        }
+        try TagService.resolveDuplicates(
+            context: input.context,
+            tags: input.tags
+        )
     }
 
     func perform() throws -> some IntentResult {
