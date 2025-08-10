@@ -26,7 +26,7 @@ struct TagServiceTests {
         let model = try Tag.create(context: context, name: "name", type: .content)
         let id = try model.id.base64Encoded()
         let tagEntity = try #require(
-            TagService.getByID(
+            try TagService.getByID(
                 context: context,
                 id: id
             )
@@ -39,7 +39,7 @@ struct TagServiceTests {
     func getByName_returns_matching_tag() throws {
         _ = try Tag.create(context: context, name: "name", type: .year)
         let tag = try #require(
-            TagService.getByName(
+            try TagService.getByName(
                 context: context,
                 name: "name",
                 type: .year
@@ -188,4 +188,3 @@ struct TagServiceTests {
         #expect(try context.fetchCount(.tags(.all)) == 0)
     }
 }
-

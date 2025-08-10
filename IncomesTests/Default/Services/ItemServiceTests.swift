@@ -1,7 +1,7 @@
+import Foundation
 @testable import Incomes
 import SwiftData
 import Testing
-import Foundation
 
 @MainActor
 struct ItemServiceTests {
@@ -269,7 +269,7 @@ struct ItemServiceTests {
             repeatCount: 1
         )
         let result = try #require(
-            ItemService.nextItemDate(
+            try ItemService.nextItemDate(
                 context: context,
                 date: shiftedDate("2000-01-15T00:00:00Z")
             )
@@ -307,7 +307,7 @@ struct ItemServiceTests {
             repeatCount: 1
         )
         let item = try #require(
-            ItemService.nextItem(
+            try ItemService.nextItem(
                 context: context,
                 date: shiftedDate("2000-01-15T00:00:00Z")
             )
@@ -363,7 +363,7 @@ struct ItemServiceTests {
             repeatCount: 1
         )
         let result = try #require(
-            ItemService.previousItemDate(
+            try ItemService.previousItemDate(
                 context: context,
                 date: shiftedDate("2000-02-15T00:00:00Z")
             )
@@ -401,7 +401,7 @@ struct ItemServiceTests {
             repeatCount: 1
         )
         let item = try #require(
-            ItemService.previousItem(
+            try ItemService.previousItem(
                 context: context,
                 date: shiftedDate("2000-02-15T00:00:00Z")
             )
@@ -654,4 +654,3 @@ struct ItemServiceTests {
         #expect(item.balance == 10)
     }
 }
-
