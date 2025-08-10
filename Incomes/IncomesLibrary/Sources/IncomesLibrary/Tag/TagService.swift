@@ -2,12 +2,12 @@ import Foundation
 import SwiftData
 
 @MainActor
-enum TagService {
-    static func getAll(context: ModelContext) throws -> [Tag] {
+public enum TagService {
+    public static func getAll(context: ModelContext) throws -> [Tag] {
         try context.fetch(.tags(.all))
     }
 
-    static func getByID(context: ModelContext, id: String) throws -> Tag? {
+    public static func getByID(context: ModelContext, id: String) throws -> Tag? {
         let persistentID = try PersistentIdentifier(base64Encoded: id)
         guard let tag = try context.fetchFirst(
             .tags(.idIs(persistentID))
@@ -17,7 +17,7 @@ enum TagService {
         return tag
     }
 
-    static func getByName(
+    public static func getByName(
         context: ModelContext,
         name: String,
         type: TagType
@@ -27,7 +27,7 @@ enum TagService {
         )
     }
 
-    static func findDuplicates(
+    public static func findDuplicates(
         context _: ModelContext,
         tags: [Tag]
     ) throws -> [Tag] {
@@ -42,13 +42,13 @@ enum TagService {
         }
     }
 
-    static func hasDuplicates(context: ModelContext) throws -> Bool {
+    public static func hasDuplicates(context: ModelContext) throws -> Bool {
         let tags = try getAll(context: context)
         let duplicates = try findDuplicates(context: context, tags: tags)
         return !duplicates.isEmpty
     }
 
-    static func mergeDuplicates(tags: [Tag]) throws {
+    public static func mergeDuplicates(tags: [Tag]) throws {
         guard let parent = tags.first else {
             return
         }
@@ -65,7 +65,7 @@ enum TagService {
         }
     }
 
-    static func resolveDuplicates(
+    public static func resolveDuplicates(
         context: ModelContext,
         tags: [Tag]
     ) throws {
@@ -79,11 +79,11 @@ enum TagService {
         }
     }
 
-    static func delete(tag: Tag) throws {
+    public static func delete(tag: Tag) throws {
         tag.delete()
     }
 
-    static func deleteAll(context: ModelContext) throws {
+    public static func deleteAll(context: ModelContext) throws {
         let tags = try context.fetch(FetchDescriptor<Tag>())
         tags.forEach { tag in
             tag.delete()

@@ -9,7 +9,7 @@
 import Foundation
 import SwiftData
 
-nonisolated enum ItemPredicate {
+public nonisolated enum ItemPredicate {
     case all
     case none
     // MARK: ID
@@ -202,7 +202,7 @@ nonisolated enum ItemPredicate {
 
 extension ItemPredicate: Hashable {}
 
-nonisolated extension FetchDescriptor where T == Item {
+public nonisolated extension FetchDescriptor where T == Item {
     static func items(_ predicate: ItemPredicate, order: SortOrder = .reverse) -> FetchDescriptor {
         .init(
             predicate: predicate.value,

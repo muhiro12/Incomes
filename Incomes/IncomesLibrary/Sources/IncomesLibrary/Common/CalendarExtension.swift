@@ -8,7 +8,7 @@
 
 import Foundation
 
-nonisolated extension Calendar {
+public nonisolated extension Calendar {
     static var utc: Self {
         var calendar = Calendar(identifier: .gregorian)
         calendar.timeZone = .gmt

@@ -10,26 +10,26 @@ import Foundation
 import SwiftData
 
 @Model
-nonisolated final class Item {
-    private(set) var date = Date(timeIntervalSinceReferenceDate: .zero)
-    private(set) var content = String.empty
-    private(set) var income = Decimal.zero
-    private(set) var outgo = Decimal.zero
-    private(set) var repeatID = UUID()
-    private(set) var balance = Decimal.zero
+public nonisolated final class Item {
+    public private(set) var date = Date(timeIntervalSinceReferenceDate: .zero)
+    public private(set) var content = String.empty
+    public private(set) var income = Decimal.zero
+    public private(set) var outgo = Decimal.zero
+    public private(set) var repeatID = UUID()
+    public private(set) var balance = Decimal.zero
 
     @Relationship(inverse: \Tag.items)
-    private(set) var tags: [Tag]?
+    public private(set) var tags: [Tag]?
 
     private init() {}
 
-    static func create(context: ModelContext,
-                       date: Date,
-                       content: String,
-                       income: Decimal,
-                       outgo: Decimal,
-                       category: String,
-                       repeatID: UUID) throws -> Item {
+    public static func create(context: ModelContext,
+                              date: Date,
+                              content: String,
+                              income: Decimal,
+                              outgo: Decimal,
+                              category: String,
+                              repeatID: UUID) throws -> Item {
         let item = Item()
         context.insert(item)
 
@@ -65,12 +65,12 @@ nonisolated final class Item {
         return item
     }
 
-    func modify(date: Date,
-                content: String,
-                income: Decimal,
-                outgo: Decimal,
-                category: String,
-                repeatID: UUID) throws {
+    public func modify(date: Date,
+                       content: String,
+                       income: Decimal,
+                       outgo: Decimal,
+                       category: String,
+                       repeatID: UUID) throws {
         self.date = Calendar.utc.startOfDay(for: Calendar.utc.shiftedDate(componentsFrom: date, in: .current))
         self.content = content
         self.income = income
@@ -105,39 +105,39 @@ nonisolated final class Item {
         ]
     }
 
-    func modify(balance: Decimal) {
+    public func modify(balance: Decimal) {
         self.balance = balance
     }
 
-    func modify(tags: [Tag]) {
+    public func modify(tags: [Tag]) {
         self.tags = tags
     }
 }
 
 extension Item {
-    var utcDate: Date {
+    public var utcDate: Date {
         date
     }
 
-    var localDate: Date {
+    public var localDate: Date {
         Calendar.current.shiftedDate(componentsFrom: utcDate, in: .utc)
     }
 
-    var profit: Decimal {
+    public var profit: Decimal {
         income - outgo
     }
 
-    var isProfitable: Bool {
+    public var isProfitable: Bool {
         profit.isPlus
     }
 
-    var year: Tag? {
+    public var year: Tag? {
         tags?.first {
             $0.type == .year
         }
     }
 
-    var category: Tag? {
+    public var category: Tag? {
         tags?.first {
             $0.type == .category
         }
@@ -145,7 +145,7 @@ extension Item {
 }
 
 extension Item: Comparable {
-    static func < (lhs: Item, rhs: Item) -> Bool {
+    public static func < (lhs: Item, rhs: Item) -> Bool {
         lhs.utcDate > rhs.utcDate
     }
 }
@@ -153,13 +153,13 @@ extension Item: Comparable {
 // MARK: - Test
 
 extension Item {
-    static func createIgnoringDuplicates(context: ModelContext,
-                                         date: Date,
-                                         content: String,
-                                         income: Decimal,
-                                         outgo: Decimal,
-                                         category: String,
-                                         repeatID: UUID) throws -> Item {
+    public static func createIgnoringDuplicates(context: ModelContext,
+                                                date: Date,
+                                                content: String,
+                                                income: Decimal,
+                                                outgo: Decimal,
+                                                category: String,
+                                                repeatID: UUID) throws -> Item {
         let item = Item()
         context.insert(item)
 

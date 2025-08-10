@@ -9,7 +9,7 @@
 import AppIntents
 import Foundation
 
-nonisolated enum TagType: String {
+public nonisolated enum TagType: String {
     case year = "aae8af65"
     case yearMonth = "27c9be4b"
     case content = "e2d390d9"
@@ -17,11 +17,11 @@ nonisolated enum TagType: String {
 }
 
 extension TagType: AppEnum {
-    static var typeDisplayRepresentation: TypeDisplayRepresentation {
+    public static var typeDisplayRepresentation: TypeDisplayRepresentation {
         .init(name: "Tag Type")
     }
 
-    static var caseDisplayRepresentations: [Self: DisplayRepresentation] {
+    public static var caseDisplayRepresentations: [Self: DisplayRepresentation] {
         [
             .year: .init(title: "Year"),
             .yearMonth: .init(title: "Year/Month"),

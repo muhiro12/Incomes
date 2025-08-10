@@ -13,7 +13,6 @@ final class BalanceCalculatorTests: XCTestCase {
     func testCalculate() {
         XCTContext.runActivity(named: "Result is as expected when inserting") { _ in
             let context = testContext
-            let calculator = BalanceCalculator()
 
             for i in 1...5 {
                 let item = try! Item.create(context: context,
@@ -25,7 +24,7 @@ final class BalanceCalculatorTests: XCTestCase {
                                             repeatID: UUID())
                 context.insert(item)
             }
-            try! calculator.calculate(in: context, after: .distantPast)
+            try! BalanceCalculator.calculate(in: context, after: .distantPast)
 
             let item = try! Item.create(context: context,
                                         date: shiftedDate("2000-01-31T12:00:00Z"),
@@ -35,7 +34,7 @@ final class BalanceCalculatorTests: XCTestCase {
                                         category: "category",
                                         repeatID: UUID())
             context.insert(item)
-            try! calculator.calculate(in: context, after: item.localDate)
+            try! BalanceCalculator.calculate(in: context, after: item.localDate)
 
             let first = fetchItems(context).first!
             let last = fetchItems(context).last!
@@ -46,7 +45,6 @@ final class BalanceCalculatorTests: XCTestCase {
 
         XCTContext.runActivity(named: "Result is as expected when inserting first") { _ in
             let context = testContext
-            let calculator = BalanceCalculator()
 
             for i in 1...5 {
                 let item = try! Item.create(context: context,
@@ -58,7 +56,7 @@ final class BalanceCalculatorTests: XCTestCase {
                                             repeatID: UUID())
                 context.insert(item)
             }
-            try! calculator.calculate(in: context, after: .distantPast)
+            try! BalanceCalculator.calculate(in: context, after: .distantPast)
 
             let item = try! Item.create(context: context,
                                         date: shiftedDate("2001-01-01T00:00:00Z"),
@@ -68,7 +66,7 @@ final class BalanceCalculatorTests: XCTestCase {
                                         category: "category",
                                         repeatID: UUID())
             context.insert(item)
-            try! calculator.calculate(in: context, after: item.localDate)
+            try! BalanceCalculator.calculate(in: context, after: item.localDate)
 
             let first = fetchItems(context).first!
             let last = fetchItems(context).last!
@@ -79,7 +77,6 @@ final class BalanceCalculatorTests: XCTestCase {
 
         XCTContext.runActivity(named: "Result is as expected when inserting last") { _ in
             let context = testContext
-            let calculator = BalanceCalculator()
 
             for i in 1...5 {
                 let item = try! Item.create(context: context,
@@ -91,7 +88,7 @@ final class BalanceCalculatorTests: XCTestCase {
                                             repeatID: UUID())
                 context.insert(item)
             }
-            try! calculator.calculate(in: context, after: .distantPast)
+            try! BalanceCalculator.calculate(in: context, after: .distantPast)
 
             let item = try! Item.create(context: context,
                                         date: shiftedDate("2000-01-01T00:00:00Z"),
@@ -101,7 +98,7 @@ final class BalanceCalculatorTests: XCTestCase {
                                         category: "category",
                                         repeatID: UUID())
             context.insert(item)
-            try! calculator.calculate(in: context, after: item.localDate)
+            try! BalanceCalculator.calculate(in: context, after: item.localDate)
 
             let first = fetchItems(context).first!
             let last = fetchItems(context).last!
@@ -112,7 +109,6 @@ final class BalanceCalculatorTests: XCTestCase {
 
         XCTContext.runActivity(named: "Result is as expected when updating") { _ in
             let context = testContext
-            let calculator = BalanceCalculator()
 
             var items: [Item] = []
 
@@ -127,7 +123,7 @@ final class BalanceCalculatorTests: XCTestCase {
                 context.insert(item)
                 items.append(item)
             }
-            try! calculator.calculate(in: context, after: .distantPast)
+            try! BalanceCalculator.calculate(in: context, after: .distantPast)
 
             let item = items[1]
             try! item.modify(date: shiftedDate("2000-02-01T12:00:00Z"),
@@ -136,7 +132,7 @@ final class BalanceCalculatorTests: XCTestCase {
                              outgo: 100,
                              category: "category",
                              repeatID: UUID())
-            try! calculator.calculate(in: context, after: item.localDate)
+            try! BalanceCalculator.calculate(in: context, after: item.localDate)
 
             let first = fetchItems(context).first!
             let last = fetchItems(context).last!
@@ -147,7 +143,6 @@ final class BalanceCalculatorTests: XCTestCase {
 
         XCTContext.runActivity(named: "Result is as expected when updating first") { _ in
             let context = testContext
-            let calculator = BalanceCalculator()
 
             var items: [Item] = []
 
@@ -162,7 +157,7 @@ final class BalanceCalculatorTests: XCTestCase {
                 context.insert(item)
                 items.append(item)
             }
-            try! calculator.calculate(in: context, after: .distantPast)
+            try! BalanceCalculator.calculate(in: context, after: .distantPast)
 
             let item = items[0]
             try! item.modify(date: shiftedDate("2000-01-01T12:00:00Z"),
@@ -171,7 +166,7 @@ final class BalanceCalculatorTests: XCTestCase {
                              outgo: 100,
                              category: "category",
                              repeatID: UUID())
-            try! calculator.calculate(in: context, after: item.localDate)
+            try! BalanceCalculator.calculate(in: context, after: item.localDate)
 
             let first = fetchItems(context).first!
             let last = fetchItems(context).last!
@@ -182,7 +177,6 @@ final class BalanceCalculatorTests: XCTestCase {
 
         XCTContext.runActivity(named: "Result is as expected when updating last") { _ in
             let context = testContext
-            let calculator = BalanceCalculator()
 
             var items: [Item] = []
 
@@ -197,7 +191,7 @@ final class BalanceCalculatorTests: XCTestCase {
                 context.insert(item)
                 items.append(item)
             }
-            try! calculator.calculate(in: context, after: .distantPast)
+            try! BalanceCalculator.calculate(in: context, after: .distantPast)
 
             let item = items[4]
             try! item.modify(date: shiftedDate("2000-05-01T12:00:00Z"),
@@ -206,7 +200,7 @@ final class BalanceCalculatorTests: XCTestCase {
                              outgo: 100,
                              category: "category",
                              repeatID: UUID())
-            try! calculator.calculate(in: context, after: item.localDate)
+            try! BalanceCalculator.calculate(in: context, after: item.localDate)
 
             let first = fetchItems(context).first!
             let last = fetchItems(context).last!
@@ -217,7 +211,6 @@ final class BalanceCalculatorTests: XCTestCase {
 
         XCTContext.runActivity(named: "Result is as expected when changing order") { _ in
             let context = testContext
-            let calculator = BalanceCalculator()
 
             var items: [Item] = []
 
@@ -232,7 +225,7 @@ final class BalanceCalculatorTests: XCTestCase {
                 context.insert(item)
                 items.append(item)
             }
-            try! calculator.calculate(in: context, after: .distantPast)
+            try! BalanceCalculator.calculate(in: context, after: .distantPast)
 
             let item = items[4]
             try! item.modify(date: shiftedDate("1999-12-31T00:00:00Z"),
@@ -241,7 +234,7 @@ final class BalanceCalculatorTests: XCTestCase {
                              outgo: 100,
                              category: "category",
                              repeatID: UUID())
-            try! calculator.calculate(in: context, after: item.localDate)
+            try! BalanceCalculator.calculate(in: context, after: item.localDate)
 
             let first = fetchItems(context).first!
             let last = fetchItems(context).last!
@@ -252,7 +245,6 @@ final class BalanceCalculatorTests: XCTestCase {
 
         XCTContext.runActivity(named: "Result is as expected when deleting") { _ in
             let context = testContext
-            let calculator = BalanceCalculator()
 
             var items: [Item] = []
 
@@ -267,11 +259,11 @@ final class BalanceCalculatorTests: XCTestCase {
                 context.insert(item)
                 items.append(item)
             }
-            try! calculator.calculate(in: context, after: .distantPast)
+            try! BalanceCalculator.calculate(in: context, after: .distantPast)
 
             let item = items[1]
             context.delete(item)
-            try! calculator.calculate(in: context, after: item.localDate)
+            try! BalanceCalculator.calculate(in: context, after: item.localDate)
 
             let first = fetchItems(context).first!
             let last = fetchItems(context).last!
@@ -282,7 +274,6 @@ final class BalanceCalculatorTests: XCTestCase {
 
         XCTContext.runActivity(named: "Result is as expected when deleting first") { _ in
             let context = testContext
-            let calculator = BalanceCalculator()
 
             var items: [Item] = []
 
@@ -297,11 +288,11 @@ final class BalanceCalculatorTests: XCTestCase {
                 context.insert(item)
                 items.append(item)
             }
-            try! calculator.calculate(in: context, after: .distantPast)
+            try! BalanceCalculator.calculate(in: context, after: .distantPast)
 
             let item = items[0]
             context.delete(item)
-            try! calculator.calculate(in: context, after: item.localDate)
+            try! BalanceCalculator.calculate(in: context, after: item.localDate)
 
             let first = fetchItems(context).first!
             let last = fetchItems(context).last!
@@ -312,7 +303,6 @@ final class BalanceCalculatorTests: XCTestCase {
 
         XCTContext.runActivity(named: "Result is as expected when deleting last") { _ in
             let context = testContext
-            let calculator = BalanceCalculator()
 
             var items: [Item] = []
 
@@ -327,11 +317,11 @@ final class BalanceCalculatorTests: XCTestCase {
                 context.insert(item)
                 items.append(item)
             }
-            try! calculator.calculate(in: context, after: .distantPast)
+            try! BalanceCalculator.calculate(in: context, after: .distantPast)
 
             let item = items[4]
             context.delete(item)
-            try! calculator.calculate(in: context, after: item.localDate)
+            try! BalanceCalculator.calculate(in: context, after: item.localDate)
 
             let first = fetchItems(context).first!
             let last = fetchItems(context).last!

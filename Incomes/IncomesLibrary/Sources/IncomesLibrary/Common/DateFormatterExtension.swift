@@ -8,7 +8,7 @@
 
 import Foundation
 
-nonisolated extension DateFormatter {
+public nonisolated extension DateFormatter {
     enum Template: String {
         case yyyy
         case yyyyMM

@@ -5,8 +5,8 @@ import SwiftData
 import SwiftUI
 
 @MainActor
-enum ItemService {
-    static func create(
+public enum ItemService {
+    public static func create(
         context: ModelContext,
         date: Date,
         content: String,
@@ -47,13 +47,12 @@ enum ItemService {
             items.append(item)
         }
         items.forEach(context.insert)
-        let calculator = BalanceCalculator()
-        try calculator.calculate(in: context, for: items)
+        try BalanceCalculator.calculate(in: context, for: items)
         return item
     }
 
     @available(iOS 26.0, *)
-    static func inferForm(text: String) async throws -> ItemFormInference {
+    public static func inferForm(text: String) async throws -> ItemFormInference {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyyMMdd"
         let today = formatter.string(from: Date())
@@ -89,67 +88,46 @@ enum ItemService {
         return response.content
     }
 
-    static func delete(context: ModelContext, item: Item) throws {
+    public static func delete(context: ModelContext, item: Item) throws {
         item.delete()
-        let calculator = BalanceCalculator()
-        try calculator.calculate(in: context, for: [item])
+        try BalanceCalculator.calculate(in: context, for: [item])
     }
 
-    static func deleteAll(context: ModelContext) throws {
+    public static func deleteAll(context: ModelContext) throws {
         let items = try context.fetch(FetchDescriptor<Item>())
         items.forEach { item in
             item.delete()
         }
-        let calculator = BalanceCalculator()
-        try calculator.calculate(in: context, for: items)
+        try BalanceCalculator.calculate(in: context, for: items)
     }
 
-    static func allItemsCount(context: ModelContext) throws -> Int {
+    public static func allItemsCount(context: ModelContext) throws -> Int {
         try context.fetchCount(.items(.all))
     }
 
-    static func repeatItemsCount(context: ModelContext, repeatID: UUID) throws -> Int {
+    public static func repeatItemsCount(context: ModelContext, repeatID: UUID) throws -> Int {
         try context.fetchCount(.items(.repeatIDIs(repeatID)))
     }
 
-    static func yearItemsCount(context: ModelContext, date: Date) throws -> Int {
+    public static func yearItemsCount(context: ModelContext, date: Date) throws -> Int {
         try context.fetchCount(.items(.dateIsSameYearAs(date)))
     }
 
-    static func items(context: ModelContext, date: Date) throws -> [Item] {
+    public static func items(context: ModelContext, date: Date) throws -> [Item] {
         try context.fetch(
             .items(.dateIsSameMonthAs(date))
         )
     }
 
-    private static func nextItemModel(
-        context: ModelContext,
-        date: Date
-    ) throws -> Item? {
-        let descriptor = FetchDescriptor.items(
-            .dateIsAfter(date),
-            order: .forward
-        )
-        return try context.fetchFirst(descriptor)
-    }
-
-    private static func previousItemModel(
-        context: ModelContext,
-        date: Date
-    ) throws -> Item? {
-        let descriptor = FetchDescriptor.items(.dateIsBefore(date))
-        return try context.fetchFirst(descriptor)
-    }
-
-    static func nextItem(context: ModelContext, date: Date) throws -> Item? {
+    public static func nextItem(context: ModelContext, date: Date) throws -> Item? {
         try nextItemModel(context: context, date: date)
     }
 
-    static func previousItem(context: ModelContext, date: Date) throws -> Item? {
+    public static func previousItem(context: ModelContext, date: Date) throws -> Item? {
         try previousItemModel(context: context, date: date)
     }
 
-    static func nextItems(context: ModelContext, date: Date) throws -> [Item] {
+    public static func nextItems(context: ModelContext, date: Date) throws -> [Item] {
         guard let item = try nextItemModel(context: context, date: date) else {
             return []
         }
@@ -158,7 +136,7 @@ enum ItemService {
         )
     }
 
-    static func previousItems(context: ModelContext, date: Date) throws -> [Item] {
+    public static func previousItems(context: ModelContext, date: Date) throws -> [Item] {
         guard let item = try previousItemModel(context: context, date: date) else {
             return []
         }
@@ -167,23 +145,23 @@ enum ItemService {
         )
     }
 
-    static func nextItemDate(context: ModelContext, date: Date) throws -> Date? {
+    public static func nextItemDate(context: ModelContext, date: Date) throws -> Date? {
         try nextItemModel(context: context, date: date)?.localDate
     }
 
-    static func previousItemDate(context: ModelContext, date: Date) throws -> Date? {
+    public static func previousItemDate(context: ModelContext, date: Date) throws -> Date? {
         try previousItemModel(context: context, date: date)?.localDate
     }
 
-    static func nextItemContent(context: ModelContext, date: Date) throws -> String? {
+    public static func nextItemContent(context: ModelContext, date: Date) throws -> String? {
         try nextItemModel(context: context, date: date)?.content
     }
 
-    static func previousItemContent(context: ModelContext, date: Date) throws -> String? {
+    public static func previousItemContent(context: ModelContext, date: Date) throws -> String? {
         try previousItemModel(context: context, date: date)?.content
     }
 
-    static func nextItemProfit(context: ModelContext, date: Date) throws -> IntentCurrencyAmount? {
+    public static func nextItemProfit(context: ModelContext, date: Date) throws -> IntentCurrencyAmount? {
         guard let profit = try nextItemModel(context: context, date: date)?.profit else {
             return nil
         }
@@ -191,7 +169,7 @@ enum ItemService {
         return .init(amount: profit, currencyCode: currencyCode)
     }
 
-    static func previousItemProfit(context: ModelContext, date: Date) throws -> IntentCurrencyAmount? {
+    public static func previousItemProfit(context: ModelContext, date: Date) throws -> IntentCurrencyAmount? {
         guard let profit = try previousItemModel(context: context, date: date)?.profit else {
             return nil
         }
@@ -199,7 +177,7 @@ enum ItemService {
         return .init(amount: profit, currencyCode: currencyCode)
     }
 
-    static func update(
+    public static func update(
         context: ModelContext,
         item: Item,
         date: Date,
@@ -216,11 +194,10 @@ enum ItemService {
             category: category,
             repeatID: .init()
         )
-        let calculator = BalanceCalculator()
-        try calculator.calculate(in: context, for: [item])
+        try BalanceCalculator.calculate(in: context, for: [item])
     }
 
-    static func updateRepeatingItems(
+    public static func updateRepeatingItems(
         context: ModelContext,
         item: Item,
         date: Date,
@@ -251,11 +228,10 @@ enum ItemService {
                 repeatID: repeatID
             )
         }
-        let calculator = BalanceCalculator()
-        try calculator.calculate(in: context, for: items)
+        try BalanceCalculator.calculate(in: context, for: items)
     }
 
-    static func updateAll(
+    public static func updateAll(
         context: ModelContext,
         item: Item,
         date: Date,
@@ -276,7 +252,7 @@ enum ItemService {
         )
     }
 
-    static func updateFuture(
+    public static func updateFuture(
         context: ModelContext,
         item: Item,
         date: Date,
@@ -302,8 +278,28 @@ enum ItemService {
         )
     }
 
-    static func recalculate(context: ModelContext, date: Date) throws {
-        let calculator = BalanceCalculator()
-        try calculator.calculate(in: context, after: date)
+    public static func recalculate(context: ModelContext, date: Date) throws {
+        try BalanceCalculator.calculate(in: context, after: date)
+    }
+}
+
+private extension ItemService {
+    static func nextItemModel(
+        context: ModelContext,
+        date: Date
+    ) throws -> Item? {
+        let descriptor = FetchDescriptor.items(
+            .dateIsAfter(date),
+            order: .forward
+        )
+        return try context.fetchFirst(descriptor)
+    }
+
+    static func previousItemModel(
+        context: ModelContext,
+        date: Date
+    ) throws -> Item? {
+        let descriptor = FetchDescriptor.items(.dateIsBefore(date))
+        return try context.fetchFirst(descriptor)
     }
 }

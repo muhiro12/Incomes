@@ -9,8 +9,8 @@
 import Foundation
 import SwiftData
 
-struct BalanceCalculator {
-    func calculate(in context: ModelContext, for items: [Item]) throws {
+public enum BalanceCalculator {
+    public static func calculate(in context: ModelContext, for items: [Item]) throws {
         if let date = items.map(\.localDate).min() {
             try calculate(in: context, after: date)
         } else {
@@ -18,7 +18,7 @@ struct BalanceCalculator {
         }
     }
 
-    func calculate(in context: ModelContext, after date: Date) throws {
+    public static func calculate(in context: ModelContext, after date: Date) throws {
         let allItems = try context.fetch(.items(.all, order: .forward))
 
         guard let separatorIndex = allItems.firstIndex(where: { $0.localDate >= date }) else {

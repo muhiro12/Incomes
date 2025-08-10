@@ -1,9 +1,6 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "%@" : {
-
-    },
     "%@ - A payment of %@ is due on %@." : {
       "localizations" : {
         "en" : {
@@ -1762,9 +1759,6 @@
     "Item" : {
 
     },
-    "Item Form Inference" : {
-
-    },
     "Item not found" : {
 
     },
@@ -3407,6 +3401,7 @@
       }
     },
     "System" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -3447,9 +3442,6 @@
 
     },
     "Tag not found" : {
-
-    },
-    "Tag Type" : {
 
     },
     "Tags" : {
@@ -4032,9 +4024,6 @@
           }
         }
       }
-    },
-    "Year/Month" : {
-
     },
     "YearMonth" : {
       "localizations" : {

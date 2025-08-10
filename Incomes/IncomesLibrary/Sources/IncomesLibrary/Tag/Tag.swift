@@ -10,15 +10,15 @@ import Foundation
 import SwiftData
 
 @Model
-nonisolated final class Tag {
-    private(set) var name = String.empty
-    private(set) var typeID = String.empty
+public nonisolated final class Tag {
+    public private(set) var name = String.empty
+    public private(set) var typeID = String.empty
 
-    private(set) var items: [Item]?
+    public private(set) var items: [Item]?
 
     private init() {}
 
-    static func create(context: ModelContext, name: String, type: TagType) throws -> Tag {
+    public static func create(context: ModelContext, name: String, type: TagType) throws -> Tag {
         let tag = try context.fetchFirst(
             .tags(.nameIs(name, type: type))
         ) ?? .init()
@@ -30,11 +30,11 @@ nonisolated final class Tag {
 }
 
 extension Tag {
-    var type: TagType? {
+    public var type: TagType? {
         TagType(rawValue: typeID)
     }
 
-    var displayName: String {
+    public var displayName: String {
         switch type {
         case .year:
             name.dateValueWithoutLocale(.yyyy)?.stringValue(.yyyy) ?? name
@@ -55,11 +55,11 @@ extension Tag: Identifiable {}
 // MARK: - Hashable
 
 extension Tag: Hashable {
-    static func == (lhs: Tag, rhs: Tag) -> Bool {
+    public static func == (lhs: Tag, rhs: Tag) -> Bool {
         lhs.id == rhs.id
     }
 
-    func hash(into hasher: inout Hasher) {
+    public func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }
 }
@@ -67,7 +67,7 @@ extension Tag: Hashable {
 // MARK: - Test
 
 extension Tag {
-    static func createIgnoringDuplicates(context: ModelContext, name: String, type: TagType) throws -> Tag {
+    public static func createIgnoringDuplicates(context: ModelContext, name: String, type: TagType) throws -> Tag {
         let tag = Tag()
         context.insert(tag)
         tag.name = name
