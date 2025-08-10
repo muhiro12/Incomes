@@ -14,7 +14,6 @@ struct OpenIncomesIntent: AppIntent {
     nonisolated static let openAppWhenRun = true
 
     func perform() throws -> some IntentResult {
-        MainService.open()
-        return .result()
+        .result()
     }
 }
