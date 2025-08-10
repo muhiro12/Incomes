@@ -1,0 +1,32 @@
+{
+  "configurations" : [
+    {
+      "id" : "810A4C9C-E574-4164-83DE-9BBB9AEC5BBF",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "performanceAntipatternCheckerEnabled" : true
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "IncomesLibraryTests",
+        "name" : "IncomesLibraryTests"
+      }
+    },
+    {
+      "parallelizable" : false,
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "IncomesLibraryTimeZoneTests",
+        "name" : "IncomesLibraryTimeZoneTests"
+      }
+    }
+  ],
+  "version" : 2
+}

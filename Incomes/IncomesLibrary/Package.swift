@@ -26,7 +26,13 @@ let package = Package(
         ),
         .testTarget(
             name: "IncomesLibraryTests",
-            dependencies: ["IncomesLibrary"]
+            dependencies: ["IncomesLibrary"],
+            path: "Tests/Default"
+        ),
+        .testTarget(
+            name: "IncomesLibraryTimeZoneTests",
+            dependencies: ["IncomesLibrary"],
+            path: "Tests/TimeZone"
         )
     ]
 )

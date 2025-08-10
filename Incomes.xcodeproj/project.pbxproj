@@ -48,9 +48,8 @@
 		ADD8C8BD2DDADBD6002431C6 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Default/BalanceCalculatorTests.swift,
 				Default/CalendarExtensionXCTests.swift,
-				Default/LocaleAmountConverterTest.swift,
+				Default/ItemEntityExtensionTest.swift,
 				Default/StringExtensionTests.swift,
 				Incomes.xctestplan,
 			);
@@ -62,9 +61,6 @@
 				Incomes.xctestplan,
 				TimeZone/CalendarExtensionTest.swift,
 				TimeZone/DateExtensionTests.swift,
-				TimeZone/ItemPredicateTest.swift,
-				TimeZone/ItemServiceTest.swift,
-				TimeZone/ItemTest.swift,
 			);
 			target = ADA85F612DB62CDA0047CB54 /* IncomesTests */;
 		};

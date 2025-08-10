@@ -6,9 +6,10 @@
 //  Copyright © 2022 Hiromu Nakano. All rights reserved.
 //
 
-@testable import Incomes
+@testable import IncomesLibrary
 import XCTest
 
+@MainActor
 final class BalanceCalculatorTests: XCTestCase {
     func testCalculate() {
         XCTContext.runActivity(named: "Result is as expected when inserting") { _ in
