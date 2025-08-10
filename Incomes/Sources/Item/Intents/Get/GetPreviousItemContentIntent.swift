@@ -10,10 +10,7 @@ import AppIntents
 import SwiftData
 
 @MainActor
-struct GetPreviousItemContentIntent: AppIntent, IntentPerformer {
-    typealias Input = (context: ModelContext, date: Date)
-    typealias Output = String?
-
+struct GetPreviousItemContentIntent: AppIntent {
     @Parameter(title: "Date", kind: .date)
     private var date: Date
 
@@ -21,17 +18,11 @@ struct GetPreviousItemContentIntent: AppIntent, IntentPerformer {
 
     nonisolated static let title: LocalizedStringResource = .init("Get Previous Item Content", table: "AppIntents")
 
-    static func perform(_ input: Input) throws -> Output {
-        return try ItemService.previousItemContent(
-            context: input.context,
-            date: input.date
-        )
-    }
-
     func perform() throws -> some ReturnsValue<String?> {
         return .result(
-            value: try Self.perform(
-                (context: modelContainer.mainContext, date: date)
+            value: try ItemService.previousItemContent(
+                context: modelContainer.mainContext,
+                date: date
             )
         )
     }

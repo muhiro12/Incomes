@@ -11,10 +11,7 @@ import SwiftData
 import SwiftUI
 
 @MainActor
-struct CreateItemIntent: AppIntent, IntentPerformer {
-    typealias Input = (context: ModelContext, date: Date, content: String, income: Decimal, outgo: Decimal, category: String, repeatCount: Int)
-    typealias Output = ItemEntity
-
+struct CreateItemIntent: AppIntent {
     @Parameter(title: "Date", kind: .date)
     private var date: Date
     @Parameter(title: "Content")
@@ -32,18 +29,6 @@ struct CreateItemIntent: AppIntent, IntentPerformer {
 
     nonisolated static let title: LocalizedStringResource = .init("Create Item", table: "AppIntents")
 
-    static func perform(_ input: Input) throws -> Output {
-        return try ItemService.create(
-            context: input.context,
-            date: input.date,
-            content: input.content,
-            income: input.income,
-            outgo: input.outgo,
-            category: input.category,
-            repeatCount: input.repeatCount
-        )
-    }
-
     func perform() throws -> some ReturnsValue<ItemEntity> {
         guard content.isNotEmpty else {
             throw $content.needsValueError()
@@ -57,16 +42,14 @@ struct CreateItemIntent: AppIntent, IntentPerformer {
             throw $outgo.needsDisambiguationError(among: [.init(amount: outgo.amount, currencyCode: currencyCode)])
         }
 
-        let item = try Self.perform(
-            (
-                context: modelContainer.mainContext,
-                date: date,
-                content: content,
-                income: income.amount,
-                outgo: outgo.amount,
-                category: category,
-                repeatCount: repeatCount
-            )
+        let item = try ItemService.create(
+            context: modelContainer.mainContext,
+            date: date,
+            content: content,
+            income: income.amount,
+            outgo: outgo.amount,
+            category: category,
+            repeatCount: repeatCount
         )
         return .result(value: item)
     }

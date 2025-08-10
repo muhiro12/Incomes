@@ -86,7 +86,7 @@ struct ItemFormOCRButton: View {
         do {
             try await scanner.scan(image)
             let text = scanner.recognizedText
-            let inference = try await InferItemFormIntent.perform(text)
+            let inference = try await ItemService.inferForm(text: text)
             if let newDate = inference.date.dateValueWithoutLocale(.yyyyMMdd) {
                 date = newDate
             }

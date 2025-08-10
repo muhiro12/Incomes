@@ -2,20 +2,13 @@ import AppIntents
 import SwiftData
 
 @MainActor
-struct DeleteAllTagsIntent: AppIntent, IntentPerformer {
-    typealias Input = ModelContext
-    typealias Output = Void
-
+struct DeleteAllTagsIntent: AppIntent {
     @Dependency private var modelContainer: ModelContainer
 
     nonisolated static let title: LocalizedStringResource = .init("Delete All Tags", table: "AppIntents")
 
-    static func perform(_ input: Input) throws -> Output {
-        try TagService.deleteAll(context: input)
-    }
-
     func perform() throws -> some IntentResult {
-        try Self.perform(modelContainer.mainContext)
+        try TagService.deleteAll(context: modelContainer.mainContext)
         return .result()
     }
 }

@@ -58,11 +58,9 @@ struct DuplicateTagView: View {
         ) {
             Button {
                 do {
-                    try MergeDuplicateTagsIntent.perform(
-                        (
-                            context: context,
-                            tags: tags.compactMap(TagEntity.init)
-                        )
+                    try TagService.mergeDuplicates(
+                        context: context,
+                        tags: tags.compactMap(TagEntity.init)
                     )
                 } catch {
                     assertionFailure(error.localizedDescription)
@@ -86,11 +84,9 @@ struct DuplicateTagView: View {
                     return
                 }
                 do {
-                    try DeleteTagIntent.perform(
-                        (
-                            context: context,
-                            tag: .init(selectedTag)!
-                        )
+                    try TagService.delete(
+                        context: context,
+                        tag: .init(selectedTag)!
                     )
                     self.selectedTag = nil
                     Haptic.success.impact()

@@ -47,7 +47,10 @@ final class NotificationService: NSObject {
     }
 
     func sendTestNotification() {
-        guard let item = try? GetNextItemIntent.perform((context: modelContainer.mainContext, date: .now)) else {
+        guard let item = try? ItemService.nextItem(
+            context: modelContainer.mainContext,
+            date: .now
+        ) else {
             return
         }
 

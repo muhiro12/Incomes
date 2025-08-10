@@ -31,11 +31,9 @@ struct YearChartsView: View {
                 ToolbarAlignmentSpacer()
             }
             ToolbarItem(placement: .status) {
-                if let count = try? GetYearItemsCountIntent.perform(
-                    (
-                        context: context,
-                        date: date
-                    )
+                if let count = try? ItemService.yearItemsCount(
+                    context: context,
+                    date: date
                 ) {
                     Text("\(count) Items")
                         .font(.footnote)

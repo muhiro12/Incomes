@@ -3,10 +3,7 @@ import SwiftData
 import SwiftUI
 
 @MainActor
-struct UpdateItemIntent: AppIntent, IntentPerformer {
-    typealias Input = (context: ModelContext, item: ItemEntity, date: Date, content: String, income: Decimal, outgo: Decimal, category: String)
-    typealias Output = Void
-
+struct UpdateItemIntent: AppIntent {
     @Parameter(title: "Item")
     private var item: ItemEntity
     @Parameter(title: "Date", kind: .date)
@@ -24,18 +21,6 @@ struct UpdateItemIntent: AppIntent, IntentPerformer {
 
     nonisolated static let title: LocalizedStringResource = .init("Update Item", table: "AppIntents")
 
-    static func perform(_ input: Input) throws -> Output {
-        try ItemService.update(
-            context: input.context,
-            item: input.item,
-            date: input.date,
-            content: input.content,
-            income: input.income,
-            outgo: input.outgo,
-            category: input.category
-        )
-    }
-
     func perform() throws -> some IntentResult {
         let currencyCode = AppStorage(.currencyCode).wrappedValue
         guard income.currencyCode == currencyCode else {
@@ -44,16 +29,14 @@ struct UpdateItemIntent: AppIntent, IntentPerformer {
         guard outgo.currencyCode == currencyCode else {
             throw $outgo.needsDisambiguationError(among: [.init(amount: outgo.amount, currencyCode: currencyCode)])
         }
-        try Self.perform(
-            (
-                context: modelContainer.mainContext,
-                item: item,
-                date: date,
-                content: content,
-                income: income.amount,
-                outgo: outgo.amount,
-                category: category
-            )
+        try ItemService.update(
+            context: modelContainer.mainContext,
+            item: item,
+            date: date,
+            content: content,
+            income: income.amount,
+            outgo: outgo.amount,
+            category: category
         )
         return .result()
     }

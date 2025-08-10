@@ -51,11 +51,9 @@ struct HomeYearSection: View {
             Button(role: .destructive) {
                 do {
                     try willDeleteItems.compactMap(ItemEntity.init).forEach {
-                        try DeleteItemIntent.perform(
-                            (
-                                context: context,
-                                item: $0
-                            )
+                        try ItemService.delete(
+                            context: context,
+                            item: $0
                         )
                     }
                     Haptic.success.impact()
