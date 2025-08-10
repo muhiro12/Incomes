@@ -11,7 +11,7 @@ struct GetAllItemsCountIntent: AppIntent, IntentPerformer {
     nonisolated static let title: LocalizedStringResource = .init("Get All Items Count", table: "AppIntents")
 
     static func perform(_ input: Input) throws -> Output {
-        try input.fetchCount(.items(.all))
+        return try ItemService.allItemsCount(context: input)
     }
 
     func perform() throws -> some ReturnsValue<Int> {

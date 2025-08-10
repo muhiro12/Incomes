@@ -14,7 +14,10 @@ struct GetYearItemsCountIntent: AppIntent, IntentPerformer {
     nonisolated static let title: LocalizedStringResource = .init("Get Year Items Count", table: "AppIntents")
 
     static func perform(_ input: Input) throws -> Output {
-        try input.context.fetchCount(.items(.dateIsSameYearAs(input.date)))
+        return try ItemService.yearItemsCount(
+            context: input.context,
+            date: input.date
+        )
     }
 
     func perform() throws -> some ReturnsValue<Int> {

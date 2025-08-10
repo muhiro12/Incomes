@@ -22,16 +22,17 @@ struct GetNextItemDateIntent: AppIntent, IntentPerformer {
     nonisolated static let title: LocalizedStringResource = .init("Get Next Item Date", table: "AppIntents")
 
     static func perform(_ input: Input) throws -> Output {
-        guard let item = try GetNextItemIntent.perform((context: input.context, date: input.date)) else {
-            return nil
-        }
-        return item.date
+        return try ItemService.nextItemDate(
+            context: input.context,
+            date: input.date
+        )
     }
 
     func perform() throws -> some ReturnsValue<Date?> {
-        guard let item = try GetNextItemIntent.perform((context: modelContainer.mainContext, date: date)) else {
-            return .result(value: nil)
-        }
-        return .result(value: item.date)
+        return .result(
+            value: try Self.perform(
+                (context: modelContainer.mainContext, date: date)
+            )
+        )
     }
 }

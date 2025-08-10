@@ -23,17 +23,17 @@ struct GetPreviousItemProfitIntent: AppIntent, IntentPerformer {
     nonisolated static let title: LocalizedStringResource = .init("Get Previous Item Profit", table: "AppIntents")
 
     static func perform(_ input: Input) throws -> Output {
-        guard let item = try GetPreviousItemIntent.perform(input) else {
-            return nil
-        }
-        let currencyCode = AppStorage(.currencyCode).wrappedValue
-        return .init(amount: item.profit, currencyCode: currencyCode)
+        return try ItemService.previousItemProfit(
+            context: input.context,
+            date: input.date
+        )
     }
 
     func perform() throws -> some ReturnsValue<IntentCurrencyAmount?> {
-        guard let amount = try Self.perform((context: modelContainer.mainContext, date: date)) else {
-            return .result(value: nil)
-        }
-        return .result(value: amount)
+        return .result(
+            value: try Self.perform(
+                (context: modelContainer.mainContext, date: date)
+            )
+        )
     }
 }

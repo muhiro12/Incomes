@@ -14,23 +14,10 @@ struct FindDuplicateTagsIntent: AppIntent, IntentPerformer {
     nonisolated static let title: LocalizedStringResource = .init("Find Duplicate Tags", table: "AppIntents")
 
     static func perform(_ input: Input) throws -> Output {
-        let (context, entities) = input
-        let models: [Tag] = try entities.compactMap { entity in
-            let id = try PersistentIdentifier(base64Encoded: entity.id)
-            return try context.fetchFirst(
-                .tags(.idIs(id))
-            )
-        }
-        let duplicates = Dictionary(grouping: models) { tag in
-            tag.typeID + tag.name
-        }
-        .compactMap { _, values -> Tag? in
-            guard values.count > 1 else {
-                return nil
-            }
-            return values.first
-        }
-        return duplicates.compactMap(TagEntity.init)
+        return try TagService.findDuplicates(
+            context: input.context,
+            tags: input.tags
+        )
     }
 
     func perform() throws -> some ReturnsValue<[TagEntity]> {

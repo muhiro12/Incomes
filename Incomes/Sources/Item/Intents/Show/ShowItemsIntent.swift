@@ -22,10 +22,10 @@ struct ShowItemsIntent: AppIntent, IntentPerformer {
     nonisolated static let title: LocalizedStringResource = .init("Show Items", table: "AppIntents")
 
     static func perform(_ input: Input) throws -> Output {
-        let items = try input.context.fetch(
-            .items(.dateIsSameMonthAs(input.date))
+        return try ItemService.items(
+            context: input.context,
+            date: input.date
         )
-        return items.compactMap(ItemEntity.init)
     }
 
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {

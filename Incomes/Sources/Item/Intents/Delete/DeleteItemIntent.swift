@@ -14,18 +14,10 @@ struct DeleteItemIntent: AppIntent, IntentPerformer {
     nonisolated static let title: LocalizedStringResource = .init("Delete Item", table: "AppIntents")
 
     static func perform(_ input: Input) throws -> Output {
-        let (context, entity) = input
-        guard
-            let id = try? PersistentIdentifier(base64Encoded: entity.id),
-            let model = try context.fetchFirst(
-                .items(.idIs(id))
-            )
-        else {
-            throw ItemError.itemNotFound
-        }
-        model.delete()
-        let calculator = BalanceCalculator()
-        try calculator.calculate(in: context, for: [model])
+        try ItemService.delete(
+            context: input.context,
+            item: input.item
+        )
     }
 
     func perform() throws -> some IntentResult {

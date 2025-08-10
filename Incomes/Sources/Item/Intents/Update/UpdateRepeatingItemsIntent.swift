@@ -34,30 +34,16 @@ struct UpdateRepeatingItemsIntent: AppIntent, IntentPerformer {
     nonisolated static let title: LocalizedStringResource = .init("Update Repeating Items", table: "AppIntents")
 
     static func perform(_ input: Input) throws -> Output {
-        let (context, entity, date, content, income, outgo, category, descriptor) = input
-        let components = Calendar.current.dateComponents(
-            [.year, .month, .day],
-            from: entity.date,
-            to: date
+        try ItemService.updateRepeatingItems(
+            context: input.context,
+            item: input.item,
+            date: input.date,
+            content: input.content,
+            income: input.income,
+            outgo: input.outgo,
+            category: input.category,
+            descriptor: input.descriptor
         )
-        let repeatID = UUID()
-        let items = try context.fetch(descriptor)
-        try items.forEach { item in
-            guard let newDate = Calendar.current.date(byAdding: components, to: item.localDate) else {
-                assertionFailure()
-                return
-            }
-            try item.modify(
-                date: newDate,
-                content: content,
-                income: income,
-                outgo: outgo,
-                category: category,
-                repeatID: repeatID
-            )
-        }
-        let calculator = BalanceCalculator()
-        try calculator.calculate(in: context, for: items)
     }
 
     func perform() throws -> some IntentResult {

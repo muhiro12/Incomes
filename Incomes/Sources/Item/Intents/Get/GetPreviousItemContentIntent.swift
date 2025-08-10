@@ -22,13 +22,17 @@ struct GetPreviousItemContentIntent: AppIntent, IntentPerformer {
     nonisolated static let title: LocalizedStringResource = .init("Get Previous Item Content", table: "AppIntents")
 
     static func perform(_ input: Input) throws -> Output {
-        try GetPreviousItemIntent.perform(input)?.content
+        return try ItemService.previousItemContent(
+            context: input.context,
+            date: input.date
+        )
     }
 
     func perform() throws -> some ReturnsValue<String?> {
-        guard let content = try Self.perform((context: modelContainer.mainContext, date: date)) else {
-            return .result(value: nil)
-        }
-        return .result(value: content)
+        return .result(
+            value: try Self.perform(
+                (context: modelContainer.mainContext, date: date)
+            )
+        )
     }
 }

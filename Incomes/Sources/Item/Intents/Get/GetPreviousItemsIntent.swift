@@ -22,14 +22,10 @@ struct GetPreviousItemsIntent: AppIntent, IntentPerformer {
     nonisolated static let title: LocalizedStringResource = .init("Get Previous Items", table: "AppIntents")
 
     static func perform(_ input: Input) throws -> Output {
-        let descriptor = FetchDescriptor.items(.dateIsBefore(input.date))
-        guard let item = try input.context.fetchFirst(descriptor) else {
-            return .empty
-        }
-        let items = try input.context.fetch(
-            .items(.dateIsSameDayAs(item.localDate))
+        return try ItemService.previousItems(
+            context: input.context,
+            date: input.date
         )
-        return items.compactMap(ItemEntity.init)
     }
 
     func perform() throws -> some ReturnsValue<[ItemEntity]> {

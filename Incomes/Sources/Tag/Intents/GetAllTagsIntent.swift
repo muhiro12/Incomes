@@ -11,8 +11,7 @@ struct GetAllTagsIntent: AppIntent, IntentPerformer {
     nonisolated static let title: LocalizedStringResource = .init("Get All Tags", table: "AppIntents")
 
     static func perform(_ input: Input) throws -> Output {
-        let tags = try input.fetch(.tags(.all))
-        return tags.compactMap(TagEntity.init)
+        return try TagService.getAll(context: input)
     }
 
     func perform() throws -> some ReturnsValue<[TagEntity]> {
