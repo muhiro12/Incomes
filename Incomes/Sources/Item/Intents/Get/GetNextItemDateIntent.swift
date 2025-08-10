@@ -19,7 +19,7 @@ struct GetNextItemDateIntent: AppIntent {
     nonisolated static let title: LocalizedStringResource = .init("Get Next Item Date", table: "AppIntents")
 
     func perform() throws -> some ReturnsValue<Date?> {
-        return .result(
+        .result(
             value: try ItemService.nextItemDate(
                 context: modelContainer.mainContext,
                 date: date

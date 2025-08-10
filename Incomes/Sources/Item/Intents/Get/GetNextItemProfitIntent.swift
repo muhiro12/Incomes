@@ -20,7 +20,7 @@ struct GetNextItemProfitIntent: AppIntent {
     nonisolated static let title: LocalizedStringResource = .init("Get Next Item Profit", table: "AppIntents")
 
     func perform() throws -> some ReturnsValue<IntentCurrencyAmount?> {
-        return .result(
+        .result(
             value: try ItemService.nextItemProfit(
                 context: modelContainer.mainContext,
                 date: date

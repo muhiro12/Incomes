@@ -19,7 +19,7 @@ struct GetPreviousItemContentIntent: AppIntent {
     nonisolated static let title: LocalizedStringResource = .init("Get Previous Item Content", table: "AppIntents")
 
     func perform() throws -> some ReturnsValue<String?> {
-        return .result(
+        .result(
             value: try ItemService.previousItemContent(
                 context: modelContainer.mainContext,
                 date: date
