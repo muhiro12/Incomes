@@ -2,10 +2,7 @@ import AppIntents
 import SwiftData
 
 @MainActor
-struct GetTagByNameIntent: AppIntent, IntentPerformer {
-    typealias Input = (context: ModelContext, name: String, type: TagType)
-    typealias Output = TagEntity?
-
+struct GetTagByNameIntent: AppIntent {
     @Parameter(title: "Name")
     private var name: String
     @Parameter(title: "Type")
@@ -15,16 +12,11 @@ struct GetTagByNameIntent: AppIntent, IntentPerformer {
 
     nonisolated static let title: LocalizedStringResource = .init("Get Tag By Name", table: "AppIntents")
 
-    static func perform(_ input: Input) throws -> Output {
-        let tag = try input.context.fetchFirst(
-            .tags(.nameIs(input.name, type: input.type))
-        )
-        return tag.flatMap(TagEntity.init)
-    }
-
     func perform() throws -> some ReturnsValue<TagEntity?> {
-        let result = try Self.perform(
-            (context: modelContainer.mainContext, name: name, type: type)
+        let result = try TagService.getByName(
+            context: modelContainer.mainContext,
+            name: name,
+            type: type
         )
         return .result(value: result)
     }

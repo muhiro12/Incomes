@@ -91,7 +91,7 @@ extension HomeListView: View {
                     )
                 )
                 isIntroductionPresented = (
-                    try? GetAllItemsCountIntent.perform(context).isZero
+                    try? ItemService.allItemsCount(context: context).isZero
                 ) ?? false
             }
 

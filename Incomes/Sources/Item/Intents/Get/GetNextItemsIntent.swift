@@ -10,10 +10,7 @@ import AppIntents
 import SwiftData
 
 @MainActor
-struct GetNextItemsIntent: AppIntent, IntentPerformer {
-    typealias Input = (context: ModelContext, date: Date)
-    typealias Output = [ItemEntity]
-
+struct GetNextItemsIntent: AppIntent {
     @Parameter(title: "Date", kind: .date)
     private var date: Date
 
@@ -21,20 +18,10 @@ struct GetNextItemsIntent: AppIntent, IntentPerformer {
 
     nonisolated static let title: LocalizedStringResource = .init("Get Next Items", table: "AppIntents")
 
-    static func perform(_ input: Input) throws -> Output {
-        let descriptor = FetchDescriptor.items(.dateIsAfter(input.date), order: .forward)
-        guard let item = try input.context.fetchFirst(descriptor) else {
-            return .empty
-        }
-        let items = try input.context.fetch(
-            .items(.dateIsSameDayAs(item.localDate))
-        )
-        return items.compactMap(ItemEntity.init)
-    }
-
     func perform() throws -> some ReturnsValue<[ItemEntity]> {
-        let items = try Self.perform(
-            (context: modelContainer.mainContext, date: date)
+        let items = try ItemService.nextItems(
+            context: modelContainer.mainContext,
+            date: date
         )
         return .result(value: items)
     }

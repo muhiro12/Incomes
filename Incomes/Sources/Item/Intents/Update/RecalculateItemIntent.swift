@@ -2,10 +2,7 @@ import AppIntents
 import SwiftData
 
 @MainActor
-struct RecalculateItemIntent: AppIntent, IntentPerformer {
-    typealias Input = (context: ModelContext, date: Date)
-    typealias Output = Void
-
+struct RecalculateItemIntent: AppIntent {
     @Parameter(title: "Date", kind: .date)
     private var date: Date
 
@@ -13,13 +10,8 @@ struct RecalculateItemIntent: AppIntent, IntentPerformer {
 
     nonisolated static let title: LocalizedStringResource = .init("Recalculate Item", table: "AppIntents")
 
-    static func perform(_ input: Input) throws -> Output {
-        let calculator = BalanceCalculator()
-        try calculator.calculate(in: input.context, after: input.date)
-    }
-
     func perform() throws -> some IntentResult {
-        try Self.perform((context: modelContainer.mainContext, date: date))
+        try ItemService.recalculate(context: modelContainer.mainContext, date: date)
         return .result()
     }
 }

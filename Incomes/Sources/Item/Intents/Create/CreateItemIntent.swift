@@ -11,10 +11,7 @@ import SwiftData
 import SwiftUI
 
 @MainActor
-struct CreateItemIntent: AppIntent, IntentPerformer {
-    typealias Input = (context: ModelContext, date: Date, content: String, income: Decimal, outgo: Decimal, category: String, repeatCount: Int)
-    typealias Output = ItemEntity
-
+struct CreateItemIntent: AppIntent {
     @Parameter(title: "Date", kind: .date)
     private var date: Date
     @Parameter(title: "Content")
@@ -32,56 +29,6 @@ struct CreateItemIntent: AppIntent, IntentPerformer {
 
     nonisolated static let title: LocalizedStringResource = .init("Create Item", table: "AppIntents")
 
-    static func perform(_ input: Input) throws -> Output {
-        let (context, date, content, income, outgo, category, repeatCount) = input
-        var items = [Item]()
-
-        let repeatID = UUID()
-
-        let model = try Item.create(
-            context: context,
-            date: date,
-            content: content,
-            income: income,
-            outgo: outgo,
-            category: category,
-            repeatID: repeatID
-        )
-        items.append(model)
-
-        for index in 0..<repeatCount {
-            guard index > .zero else {
-                continue
-            }
-            guard let repeatingDate = Calendar.current.date(byAdding: .month,
-                                                            value: index,
-                                                            to: date) else {
-                assertionFailure()
-                continue
-            }
-            let item = try Item.create(
-                context: context,
-                date: repeatingDate,
-                content: content,
-                income: income,
-                outgo: outgo,
-                category: category,
-                repeatID: repeatID
-            )
-            items.append(item)
-        }
-
-        items.forEach(context.insert)
-
-        let calculator = BalanceCalculator()
-        try calculator.calculate(in: context, for: items)
-
-        guard let entity = ItemEntity(model) else {
-            throw ItemError.entityConversionFailed
-        }
-        return entity
-    }
-
     func perform() throws -> some ReturnsValue<ItemEntity> {
         guard content.isNotEmpty else {
             throw $content.needsValueError()
@@ -95,16 +42,14 @@ struct CreateItemIntent: AppIntent, IntentPerformer {
             throw $outgo.needsDisambiguationError(among: [.init(amount: outgo.amount, currencyCode: currencyCode)])
         }
 
-        let item = try Self.perform(
-            (
-                context: modelContainer.mainContext,
-                date: date,
-                content: content,
-                income: income.amount,
-                outgo: outgo.amount,
-                category: category,
-                repeatCount: repeatCount
-            )
+        let item = try ItemService.create(
+            context: modelContainer.mainContext,
+            date: date,
+            content: content,
+            income: income.amount,
+            outgo: outgo.amount,
+            category: category,
+            repeatCount: repeatCount
         )
         return .result(value: item)
     }

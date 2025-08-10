@@ -10,10 +10,7 @@ import AppIntents
 import SwiftData
 
 @MainActor
-struct GetNextItemDateIntent: AppIntent, IntentPerformer {
-    typealias Input = (context: ModelContext, date: Date)
-    typealias Output = Date?
-
+struct GetNextItemDateIntent: AppIntent {
     @Parameter(title: "Date", kind: .date)
     private var date: Date
 
@@ -21,17 +18,12 @@ struct GetNextItemDateIntent: AppIntent, IntentPerformer {
 
     nonisolated static let title: LocalizedStringResource = .init("Get Next Item Date", table: "AppIntents")
 
-    static func perform(_ input: Input) throws -> Output {
-        guard let item = try GetNextItemIntent.perform((context: input.context, date: input.date)) else {
-            return nil
-        }
-        return item.date
-    }
-
     func perform() throws -> some ReturnsValue<Date?> {
-        guard let item = try GetNextItemIntent.perform((context: modelContainer.mainContext, date: date)) else {
-            return .result(value: nil)
-        }
-        return .result(value: item.date)
+        .result(
+            value: try ItemService.nextItemDate(
+                context: modelContainer.mainContext,
+                date: date
+            )
+        )
     }
 }

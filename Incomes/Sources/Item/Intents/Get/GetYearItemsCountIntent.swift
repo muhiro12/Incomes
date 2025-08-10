@@ -2,10 +2,7 @@ import AppIntents
 import SwiftData
 
 @MainActor
-struct GetYearItemsCountIntent: AppIntent, IntentPerformer {
-    typealias Input = (context: ModelContext, date: Date)
-    typealias Output = Int
-
+struct GetYearItemsCountIntent: AppIntent {
     @Parameter(title: "Date", kind: .date)
     private var date: Date
 
@@ -13,11 +10,10 @@ struct GetYearItemsCountIntent: AppIntent, IntentPerformer {
 
     nonisolated static let title: LocalizedStringResource = .init("Get Year Items Count", table: "AppIntents")
 
-    static func perform(_ input: Input) throws -> Output {
-        try input.context.fetchCount(.items(.dateIsSameYearAs(input.date)))
-    }
-
     func perform() throws -> some ReturnsValue<Int> {
-        .result(value: try Self.perform((context: modelContainer.mainContext, date: date)))
+        .result(value: try ItemService.yearItemsCount(
+            context: modelContainer.mainContext,
+            date: date
+        ))
     }
 }

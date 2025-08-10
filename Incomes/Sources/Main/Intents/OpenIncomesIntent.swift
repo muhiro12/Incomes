@@ -9,17 +9,12 @@
 import AppIntents
 
 @MainActor
-struct OpenIncomesIntent: AppIntent, IntentPerformer {
-    typealias Input = Void
-    typealias Output = Void
-
+struct OpenIncomesIntent: AppIntent {
     nonisolated static let title: LocalizedStringResource = .init("Open Incomes", table: "AppIntents")
     nonisolated static let openAppWhenRun = true
 
-    static func perform(_: Input) throws -> Output {}
-
     func perform() throws -> some IntentResult {
-        try Self.perform(())
+        MainService.open()
         return .result()
     }
 }

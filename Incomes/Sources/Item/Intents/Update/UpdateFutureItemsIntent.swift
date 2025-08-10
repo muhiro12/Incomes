@@ -3,10 +3,7 @@ import SwiftData
 import SwiftUI
 
 @MainActor
-struct UpdateFutureItemsIntent: AppIntent, IntentPerformer {
-    typealias Input = (context: ModelContext, item: ItemEntity, date: Date, content: String, income: Decimal, outgo: Decimal, category: String)
-    typealias Output = Void
-
+struct UpdateFutureItemsIntent: AppIntent {
     @Parameter(title: "Item")
     private var item: ItemEntity
     @Parameter(title: "Date", kind: .date)
@@ -24,35 +21,6 @@ struct UpdateFutureItemsIntent: AppIntent, IntentPerformer {
 
     nonisolated static let title: LocalizedStringResource = .init("Update Future Items", table: "AppIntents")
 
-    static func perform(_ input: Input) throws -> Output {
-        let (context, entity, date, content, income, outgo, category) = input
-        guard
-            let id = try? PersistentIdentifier(base64Encoded: entity.id),
-            let model = try context.fetchFirst(
-                .items(.idIs(id))
-            )
-        else {
-            throw DebugError.default
-        }
-        try UpdateRepeatingItemsIntent.perform(
-            (
-                context: context,
-                item: entity,
-                date: date,
-                content: content,
-                income: income,
-                outgo: outgo,
-                category: category,
-                descriptor: .items(
-                    .repeatIDAndDateIsAfter(
-                        repeatID: model.repeatID,
-                        date: model.localDate
-                    )
-                )
-            )
-        )
-    }
-
     func perform() throws -> some IntentResult {
         let currencyCode = AppStorage(.currencyCode).wrappedValue
         guard income.currencyCode == currencyCode else {
@@ -61,16 +29,14 @@ struct UpdateFutureItemsIntent: AppIntent, IntentPerformer {
         guard outgo.currencyCode == currencyCode else {
             throw $outgo.needsDisambiguationError(among: [.init(amount: outgo.amount, currencyCode: currencyCode)])
         }
-        try Self.perform(
-            (
-                context: modelContainer.mainContext,
-                item: item,
-                date: date,
-                content: content,
-                income: income.amount,
-                outgo: outgo.amount,
-                category: category
-            )
+        try ItemService.updateFuture(
+            context: modelContainer.mainContext,
+            item: item,
+            date: date,
+            content: content,
+            income: income.amount,
+            outgo: outgo.amount,
+            category: category
         )
         return .result()
     }

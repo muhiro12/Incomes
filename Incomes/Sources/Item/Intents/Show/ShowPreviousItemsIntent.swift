@@ -10,10 +10,7 @@ import AppIntents
 import SwiftData
 
 @MainActor
-struct ShowPreviousItemsIntent: AppIntent, IntentPerformer {
-    typealias Input = (context: ModelContext, date: Date)
-    typealias Output = [ItemEntity]
-
+struct ShowPreviousItemsIntent: AppIntent {
     @Parameter(title: "Date", kind: .date)
     private var date: Date
 
@@ -21,13 +18,10 @@ struct ShowPreviousItemsIntent: AppIntent, IntentPerformer {
 
     nonisolated static let title: LocalizedStringResource = .init("Show Previous Items", table: "AppIntents")
 
-    static func perform(_ input: Input) throws -> Output {
-        try GetPreviousItemsIntent.perform(input)
-    }
-
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
-        let items = try Self.perform(
-            (context: modelContainer.mainContext, date: date)
+        let items = try ItemService.previousItems(
+            context: modelContainer.mainContext,
+            date: date
         )
         guard items.isNotEmpty else {
             return .result(dialog: .init(.init("Not Found", table: "AppIntents")))

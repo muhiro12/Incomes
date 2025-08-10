@@ -10,22 +10,16 @@ import AppIntents
 import SwiftData
 
 @MainActor
-struct ShowThisMonthItemsIntent: AppIntent, IntentPerformer {
-    typealias Input = (context: ModelContext, date: Date)
-    typealias Output = [ItemEntity]
-
+struct ShowThisMonthItemsIntent: AppIntent {
     @Dependency private var modelContainer: ModelContainer
 
     nonisolated static let title: LocalizedStringResource = .init("Show This Month's Items", table: "AppIntents")
 
-    static func perform(_ input: Input) throws -> Output {
-        try ShowItemsIntent.perform(input)
-    }
-
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
         let date = Date.now
-        let items = try Self.perform(
-            (context: modelContainer.mainContext, date: date)
+        let items = try ItemService.items(
+            context: modelContainer.mainContext,
+            date: date
         )
         guard items.isNotEmpty else {
             return .result(dialog: .init(.init("Not Found", table: "AppIntents")))

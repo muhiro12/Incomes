@@ -3,19 +3,7 @@ import SwiftData
 import SwiftUI
 
 @MainActor
-struct UpdateRepeatingItemsIntent: AppIntent, IntentPerformer {
-    typealias Input = (
-        context: ModelContext,
-        item: ItemEntity,
-        date: Date,
-        content: String,
-        income: Decimal,
-        outgo: Decimal,
-        category: String,
-        descriptor: FetchDescriptor<Item>
-    )
-    typealias Output = Void
-
+struct UpdateRepeatingItemsIntent: AppIntent {
     @Parameter(title: "Item")
     private var item: ItemEntity
     @Parameter(title: "Date", kind: .date)
@@ -33,33 +21,6 @@ struct UpdateRepeatingItemsIntent: AppIntent, IntentPerformer {
 
     nonisolated static let title: LocalizedStringResource = .init("Update Repeating Items", table: "AppIntents")
 
-    static func perform(_ input: Input) throws -> Output {
-        let (context, entity, date, content, income, outgo, category, descriptor) = input
-        let components = Calendar.current.dateComponents(
-            [.year, .month, .day],
-            from: entity.date,
-            to: date
-        )
-        let repeatID = UUID()
-        let items = try context.fetch(descriptor)
-        try items.forEach { item in
-            guard let newDate = Calendar.current.date(byAdding: components, to: item.localDate) else {
-                assertionFailure()
-                return
-            }
-            try item.modify(
-                date: newDate,
-                content: content,
-                income: income,
-                outgo: outgo,
-                category: category,
-                repeatID: repeatID
-            )
-        }
-        let calculator = BalanceCalculator()
-        try calculator.calculate(in: context, for: items)
-    }
-
     func perform() throws -> some IntentResult {
         let currencyCode = AppStorage(.currencyCode).wrappedValue
         guard income.currencyCode == currencyCode else {
@@ -74,17 +35,15 @@ struct UpdateRepeatingItemsIntent: AppIntent, IntentPerformer {
         else {
             throw DebugError.default
         }
-        try Self.perform(
-            (
-                context: modelContainer.mainContext,
-                item: item,
-                date: date,
-                content: content,
-                income: income.amount,
-                outgo: outgo.amount,
-                category: category,
-                descriptor: .items(.repeatIDIs(model.repeatID))
-            )
+        try ItemService.updateRepeatingItems(
+            context: modelContainer.mainContext,
+            item: item,
+            date: date,
+            content: content,
+            income: income.amount,
+            outgo: outgo.amount,
+            category: category,
+            descriptor: .items(.repeatIDIs(model.repeatID))
         )
         return .result()
     }

@@ -26,8 +26,8 @@ struct ItemPredicateTest {
     func returnsAllItemsWithAllPredicate(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        _ = try CreateItemIntent.perform((context: context, date: shiftedDate("2024-01-01T00:00:00Z"), content: "One", income: 100, outgo: 0, category: "A", repeatCount: 1))
-        _ = try CreateItemIntent.perform((context: context, date: shiftedDate("2024-02-01T00:00:00Z"), content: "Two", income: 200, outgo: 0, category: "B", repeatCount: 1))
+        _ = try ItemService.create(context: context, date: shiftedDate("2024-01-01T00:00:00Z"), content: "One", income: 100, outgo: 0, category: "A", repeatCount: 1)
+        _ = try ItemService.create(context: context, date: shiftedDate("2024-02-01T00:00:00Z"), content: "Two", income: 200, outgo: 0, category: "B", repeatCount: 1)
 
         let predicate = ItemPredicate.all
         let items = try context.fetch(.items(predicate))
@@ -44,7 +44,7 @@ struct ItemPredicateTest {
     func returnsNoItemsWithNonePredicate(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        _ = try CreateItemIntent.perform((context: context, date: shiftedDate("2024-01-01T00:00:00Z"), content: "One", income: 100, outgo: 0, category: "A", repeatCount: 1))
+        _ = try ItemService.create(context: context, date: shiftedDate("2024-01-01T00:00:00Z"), content: "One", income: 100, outgo: 0, category: "A", repeatCount: 1)
 
         let predicate = ItemPredicate.none
         let items = try context.fetch(.items(predicate))
@@ -59,7 +59,7 @@ struct ItemPredicateTest {
         NSTimeZone.default = timeZone
 
         let date = shiftedDate("2024-01-01T00:00:00Z")
-        _ = try CreateItemIntent.perform((context: context, date: date, content: "Content", income: 0, outgo: 0, category: "Category", repeatCount: 1))
+        _ = try ItemService.create(context: context, date: date, content: "Content", income: 0, outgo: 0, category: "Category", repeatCount: 1)
 
         let tag = try Tag.create(context: context, name: "2024", type: .year)
         let predicate = ItemPredicate.tagIs(tag)
@@ -93,7 +93,7 @@ struct ItemPredicateTest {
         NSTimeZone.default = timeZone
 
         let date = shiftedDate("2024-01-01T00:00:00Z")
-        _ = try CreateItemIntent.perform((context: context, date: date, content: "Content", income: 0, outgo: 0, category: "Category", repeatCount: 1))
+        _ = try ItemService.create(context: context, date: date, content: "Content", income: 0, outgo: 0, category: "Category", repeatCount: 1)
 
         let tag = try Tag.create(context: context, name: "202401", type: .yearMonth)
         let predicate = ItemPredicate.tagIs(tag)
@@ -127,7 +127,7 @@ struct ItemPredicateTest {
         NSTimeZone.default = timeZone
 
         let date = shiftedDate("2024-01-01T00:00:00Z")
-        _ = try CreateItemIntent.perform((context: context, date: date, content: "Content", income: 0, outgo: 0, category: "Category", repeatCount: 1))
+        _ = try ItemService.create(context: context, date: date, content: "Content", income: 0, outgo: 0, category: "Category", repeatCount: 1)
 
         let tag = try Tag.create(context: context, name: "Content", type: .content)
         let predicate = ItemPredicate.tagAndYear(tag: tag, yearString: "2024")
@@ -163,7 +163,7 @@ struct ItemPredicateTest {
         NSTimeZone.default = timeZone
 
         let cutoff = shiftedDate("2024-05-01T00:00:00Z")
-        _ = try CreateItemIntent.perform((context: context, date: cutoff, content: "OnCutoff", income: 0, outgo: 0, category: "Test", repeatCount: 1))
+        _ = try ItemService.create(context: context, date: cutoff, content: "OnCutoff", income: 0, outgo: 0, category: "Test", repeatCount: 1)
 
         let predicate = ItemPredicate.dateIsBefore(cutoff)
         let items = try context.fetch(.items(predicate))
@@ -178,8 +178,8 @@ struct ItemPredicateTest {
         NSTimeZone.default = timeZone
 
         let cutoff = shiftedDate("2024-05-01T00:00:00Z")
-        _ = try CreateItemIntent.perform((context: context, date: shiftedDate("2024-04-30T23:59:59Z"), content: "April", income: 1, outgo: 0, category: "Test", repeatCount: 1))
-        _ = try CreateItemIntent.perform((context: context, date: cutoff, content: "May", income: 1, outgo: 0, category: "Test", repeatCount: 1))
+        _ = try ItemService.create(context: context, date: shiftedDate("2024-04-30T23:59:59Z"), content: "April", income: 1, outgo: 0, category: "Test", repeatCount: 1)
+        _ = try ItemService.create(context: context, date: cutoff, content: "May", income: 1, outgo: 0, category: "Test", repeatCount: 1)
 
         let predicate = ItemPredicate.dateIsBefore(cutoff)
         let items = try context.fetch(.items(predicate))
@@ -195,9 +195,9 @@ struct ItemPredicateTest {
         NSTimeZone.default = timeZone
 
         let cutoff = shiftedDate("2024-05-01T00:00:00Z")
-        _ = try CreateItemIntent.perform((context: context, date: shiftedDate("2024-04-01T00:00:00Z"), content: "EarlyApril", income: 0, outgo: 0, category: "Test", repeatCount: 1))
-        _ = try CreateItemIntent.perform((context: context, date: shiftedDate("2024-04-15T00:00:00Z"), content: "MidApril", income: 0, outgo: 0, category: "Test", repeatCount: 1))
-        _ = try CreateItemIntent.perform((context: context, date: cutoff, content: "OnCutoff", income: 0, outgo: 0, category: "Test", repeatCount: 1))
+        _ = try ItemService.create(context: context, date: shiftedDate("2024-04-01T00:00:00Z"), content: "EarlyApril", income: 0, outgo: 0, category: "Test", repeatCount: 1)
+        _ = try ItemService.create(context: context, date: shiftedDate("2024-04-15T00:00:00Z"), content: "MidApril", income: 0, outgo: 0, category: "Test", repeatCount: 1)
+        _ = try ItemService.create(context: context, date: cutoff, content: "OnCutoff", income: 0, outgo: 0, category: "Test", repeatCount: 1)
 
         let predicate = ItemPredicate.dateIsBefore(cutoff)
         let items = try context.fetch(.items(predicate))
@@ -214,8 +214,8 @@ struct ItemPredicateTest {
         NSTimeZone.default = timeZone
 
         let cutoff = shiftedDate("2024-05-01T00:00:00Z")
-        _ = try CreateItemIntent.perform((context: context, date: shiftedDate("2024-05-01T00:00:01Z"), content: "After", income: 1, outgo: 0, category: "Test", repeatCount: 1))
-        _ = try CreateItemIntent.perform((context: context, date: shiftedDate("2024-04-30T23:59:59Z"), content: "Before", income: 1, outgo: 0, category: "Test", repeatCount: 1))
+        _ = try ItemService.create(context: context, date: shiftedDate("2024-05-01T00:00:01Z"), content: "After", income: 1, outgo: 0, category: "Test", repeatCount: 1)
+        _ = try ItemService.create(context: context, date: shiftedDate("2024-04-30T23:59:59Z"), content: "Before", income: 1, outgo: 0, category: "Test", repeatCount: 1)
 
         let predicate = ItemPredicate.dateIsAfter(cutoff)
         let items = try context.fetch(.items(predicate))
@@ -231,9 +231,9 @@ struct ItemPredicateTest {
         NSTimeZone.default = timeZone
 
         let cutoff = shiftedDate("2024-05-01T00:00:00Z")
-        _ = try CreateItemIntent.perform((context: context, date: cutoff, content: "OnCutoff", income: 0, outgo: 0, category: "Test", repeatCount: 1))
-        _ = try CreateItemIntent.perform((context: context, date: shiftedDate("2024-05-02T00:00:00Z"), content: "MaySecond", income: 0, outgo: 0, category: "Test", repeatCount: 1))
-        _ = try CreateItemIntent.perform((context: context, date: shiftedDate("2024-06-01T00:00:00Z"), content: "June", income: 0, outgo: 0, category: "Test", repeatCount: 1))
+        _ = try ItemService.create(context: context, date: cutoff, content: "OnCutoff", income: 0, outgo: 0, category: "Test", repeatCount: 1)
+        _ = try ItemService.create(context: context, date: shiftedDate("2024-05-02T00:00:00Z"), content: "MaySecond", income: 0, outgo: 0, category: "Test", repeatCount: 1)
+        _ = try ItemService.create(context: context, date: shiftedDate("2024-06-01T00:00:00Z"), content: "June", income: 0, outgo: 0, category: "Test", repeatCount: 1)
 
         let predicate = ItemPredicate.dateIsAfter(cutoff)
         let items = try context.fetch(.items(predicate))
@@ -250,7 +250,7 @@ struct ItemPredicateTest {
         NSTimeZone.default = timeZone
 
         let cutoff = shiftedDate("2024-05-01T00:00:00Z")
-        _ = try CreateItemIntent.perform((context: context, date: cutoff, content: "OnCutoff", income: 0, outgo: 0, category: "Test", repeatCount: 1))
+        _ = try ItemService.create(context: context, date: cutoff, content: "OnCutoff", income: 0, outgo: 0, category: "Test", repeatCount: 1)
 
         let predicate = ItemPredicate.dateIsAfter(cutoff)
         let items = try context.fetch(.items(predicate))
@@ -264,8 +264,8 @@ struct ItemPredicateTest {
     func excludesDifferentYearSameMonth(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        _ = try CreateItemIntent.perform((context: context, date: shiftedDate("2023-02-15T00:00:00Z"), content: "2023Feb", income: 0, outgo: 0, category: "Test", repeatCount: 1))
-        _ = try CreateItemIntent.perform((context: context, date: shiftedDate("2024-02-15T00:00:00Z"), content: "2024Feb", income: 0, outgo: 0, category: "Test", repeatCount: 1))
+        _ = try ItemService.create(context: context, date: shiftedDate("2023-02-15T00:00:00Z"), content: "2023Feb", income: 0, outgo: 0, category: "Test", repeatCount: 1)
+        _ = try ItemService.create(context: context, date: shiftedDate("2024-02-15T00:00:00Z"), content: "2024Feb", income: 0, outgo: 0, category: "Test", repeatCount: 1)
 
         let predicate = ItemPredicate.dateIsSameYearAs(shiftedDate("2024-02-01T00:00:00Z"))
         let items = try context.fetch(.items(predicate))
@@ -279,9 +279,9 @@ struct ItemPredicateTest {
         NSTimeZone.default = timeZone
 
         let baseDate = shiftedDate("2024-01-01T00:00:00Z")
-        _ = try CreateItemIntent.perform((context: context, date: shiftedDate("2024-01-15T00:00:00Z"), content: "January", income: 0, outgo: 0, category: "Test", repeatCount: 1))
-        _ = try CreateItemIntent.perform((context: context, date: shiftedDate("2024-06-01T00:00:00Z"), content: "June", income: 0, outgo: 0, category: "Test", repeatCount: 1))
-        _ = try CreateItemIntent.perform((context: context, date: shiftedDate("2023-12-31T23:59:59Z"), content: "LastYear", income: 0, outgo: 0, category: "Test", repeatCount: 1))
+        _ = try ItemService.create(context: context, date: shiftedDate("2024-01-15T00:00:00Z"), content: "January", income: 0, outgo: 0, category: "Test", repeatCount: 1)
+        _ = try ItemService.create(context: context, date: shiftedDate("2024-06-01T00:00:00Z"), content: "June", income: 0, outgo: 0, category: "Test", repeatCount: 1)
+        _ = try ItemService.create(context: context, date: shiftedDate("2023-12-31T23:59:59Z"), content: "LastYear", income: 0, outgo: 0, category: "Test", repeatCount: 1)
 
         let predicate = ItemPredicate.dateIsSameYearAs(baseDate)
         let items = try context.fetch(.items(predicate))
@@ -298,15 +298,13 @@ struct ItemPredicateTest {
         NSTimeZone.default = timeZone
 
         let jstDate = shiftedDate("2024-01-01T00:00:00Z")
-        _ = try CreateItemIntent.perform(
-            (context: context,
-             date: jstDate,
-             content: "JST_Jan1",
-             income: 0,
-             outgo: 0,
-             category: "TZBoundary",
-             repeatCount: 1)
-        )
+        _ = try ItemService.create(context: context,
+                                   date: jstDate,
+                                   content: "JST_Jan1",
+                                   income: 0,
+                                   outgo: 0,
+                                   category: "TZBoundary",
+                                   repeatCount: 1)
 
         let predicate = ItemPredicate.dateIsSameYearAs(shiftedDate("2024-01-01T00:00:00Z"))
         let items = try context.fetch(.items(predicate))
@@ -320,15 +318,13 @@ struct ItemPredicateTest {
         NSTimeZone.default = timeZone
 
         let jstDate = shiftedDate("2024-12-31T23:59:59Z") // UTC: 2024-12-31T14:59:59Z
-        _ = try CreateItemIntent.perform(
-            (context: context,
-             date: jstDate,
-             content: "JST_EndOfYear",
-             income: 0,
-             outgo: 0,
-             category: "Test",
-             repeatCount: 1)
-        )
+        _ = try ItemService.create(context: context,
+                                   date: jstDate,
+                                   content: "JST_EndOfYear",
+                                   income: 0,
+                                   outgo: 0,
+                                   category: "Test",
+                                   repeatCount: 1)
 
         let predicate = ItemPredicate.dateIsSameYearAs(shiftedDate("2024-01-01T00:00:00Z"))
         let items = try context.fetch(.items(predicate))
@@ -342,15 +338,13 @@ struct ItemPredicateTest {
         NSTimeZone.default = timeZone
 
         let jstDate = shiftedDate("2024-01-01T00:00:00Z") // UTC: 2023-12-31T15:00:00Z
-        _ = try CreateItemIntent.perform(
-            (context: context,
-             date: jstDate,
-             content: "JST_StartOfYear",
-             income: 0,
-             outgo: 0,
-             category: "Test",
-             repeatCount: 1)
-        )
+        _ = try ItemService.create(context: context,
+                                   date: jstDate,
+                                   content: "JST_StartOfYear",
+                                   income: 0,
+                                   outgo: 0,
+                                   category: "Test",
+                                   repeatCount: 1)
 
         let predicate = ItemPredicate.dateIsSameYearAs(shiftedDate("2024-01-01T00:00:00Z"))
         let items = try context.fetch(.items(predicate))
@@ -365,24 +359,20 @@ struct ItemPredicateTest {
         let jstDate1 = shiftedDate("2024-01-01T00:00:00Z")  // 2023-12-31T15:00:00Z
         let jstDate2 = shiftedDate("2024-12-31T23:59:59Z")  // 2024-12-31T14:59:59Z
 
-        _ = try CreateItemIntent.perform(
-            (context: context,
-             date: jstDate1,
-             content: "StartJSTYear",
-             income: 100,
-             outgo: 0,
-             category: "TZTest",
-             repeatCount: 1)
-        )
-        _ = try CreateItemIntent.perform(
-            (context: context,
-             date: jstDate2,
-             content: "EndJSTYear",
-             income: 100,
-             outgo: 0,
-             category: "TZTest",
-             repeatCount: 1)
-        )
+        _ = try ItemService.create(context: context,
+                                   date: jstDate1,
+                                   content: "StartJSTYear",
+                                   income: 100,
+                                   outgo: 0,
+                                   category: "TZTest",
+                                   repeatCount: 1)
+        _ = try ItemService.create(context: context,
+                                   date: jstDate2,
+                                   content: "EndJSTYear",
+                                   income: 100,
+                                   outgo: 0,
+                                   category: "TZTest",
+                                   repeatCount: 1)
 
         let predicate = ItemPredicate.dateIsSameYearAs(shiftedDate("2024-01-01T00:00:00Z"))
         let items = try context.fetch(.items(predicate))
@@ -398,15 +388,13 @@ struct ItemPredicateTest {
         NSTimeZone.default = timeZone
 
         let jstDate = shiftedDate("2024-03-01T00:00:00Z")  // = 2024-02-29T15:00:00Z
-        _ = try CreateItemIntent.perform(
-            (context: context,
-             date: jstDate,
-             content: "JST_MarchStart",
-             income: 0,
-             outgo: 0,
-             category: "Test",
-             repeatCount: 1)
-        )
+        _ = try ItemService.create(context: context,
+                                   date: jstDate,
+                                   content: "JST_MarchStart",
+                                   income: 0,
+                                   outgo: 0,
+                                   category: "Test",
+                                   repeatCount: 1)
 
         let predicate = ItemPredicate.dateIsSameMonthAs(shiftedDate("2024-03-01T00:00:00Z"))
         let items = try context.fetch(.items(predicate))
@@ -418,15 +406,13 @@ struct ItemPredicateTest {
         NSTimeZone.default = timeZone
 
         let utcDate = shiftedDate("2024-03-01T00:00:00Z")
-        _ = try CreateItemIntent.perform(
-            (context: context,
-             date: utcDate,
-             content: "UTC_MarchStart",
-             income: 0,
-             outgo: 0,
-             category: "Test",
-             repeatCount: 1)
-        )
+        _ = try ItemService.create(context: context,
+                                   date: utcDate,
+                                   content: "UTC_MarchStart",
+                                   income: 0,
+                                   outgo: 0,
+                                   category: "Test",
+                                   repeatCount: 1)
 
         let predicate = ItemPredicate.dateIsSameMonthAs(shiftedDate("2024-03-01T00:00:00Z"))
         let items = try context.fetch(.items(predicate))
@@ -439,15 +425,13 @@ struct ItemPredicateTest {
         NSTimeZone.default = timeZone
 
         let jstDate = shiftedDate("2024-02-01T00:00:00Z")
-        _ = try CreateItemIntent.perform(
-            (context: context,
-             date: jstDate,
-             content: "JSTFebStart",
-             income: 100,
-             outgo: 0,
-             category: "TZBoundary",
-             repeatCount: 1)
-        )
+        _ = try ItemService.create(context: context,
+                                   date: jstDate,
+                                   content: "JSTFebStart",
+                                   income: 100,
+                                   outgo: 0,
+                                   category: "TZBoundary",
+                                   repeatCount: 1)
         let jan = ItemPredicate.dateIsSameMonthAs(shiftedDate("2024-01-01T00:00:00Z"))
         let feb = ItemPredicate.dateIsSameMonthAs(shiftedDate("2024-02-01T00:00:00Z"))
         let janItems = try context.fetch(.items(jan))
@@ -461,15 +445,13 @@ struct ItemPredicateTest {
         NSTimeZone.default = timeZone
 
         let jstDate = shiftedDate("2024-03-01T00:00:00Z")
-        _ = try CreateItemIntent.perform(
-            (context: context,
-             date: jstDate,
-             content: "JSTMarStart",
-             income: 100,
-             outgo: 0,
-             category: "TZBoundary",
-             repeatCount: 1)
-        )
+        _ = try ItemService.create(context: context,
+                                   date: jstDate,
+                                   content: "JSTMarStart",
+                                   income: 100,
+                                   outgo: 0,
+                                   category: "TZBoundary",
+                                   repeatCount: 1)
         let feb = ItemPredicate.dateIsSameMonthAs(shiftedDate("2024-02-01T00:00:00Z"))
         let mar = ItemPredicate.dateIsSameMonthAs(shiftedDate("2024-03-01T00:00:00Z"))
         let febItems = try context.fetch(.items(feb))
@@ -484,15 +466,13 @@ struct ItemPredicateTest {
 
         // 2024-02-29T23:59:59+0900 = 2024-02-29T14:59:59Z
         let jstDate = shiftedDate("2024-02-29T23:59:59Z")
-        _ = try CreateItemIntent.perform(
-            (context: context,
-             date: jstDate,
-             content: "JSTEnd",
-             income: 100,
-             outgo: 0,
-             category: "TZTest",
-             repeatCount: 1)
-        )
+        _ = try ItemService.create(context: context,
+                                   date: jstDate,
+                                   content: "JSTEnd",
+                                   income: 100,
+                                   outgo: 0,
+                                   category: "TZTest",
+                                   repeatCount: 1)
 
         let predicate = ItemPredicate.dateIsSameMonthAs(shiftedDate("2024-02-01T00:00:00Z"))
         let items = try context.fetch(.items(predicate))
@@ -506,15 +486,13 @@ struct ItemPredicateTest {
 
         // 2024-02-01T00:00:00+0900 = 2024-01-31T15:00:00Z
         let jstDate = shiftedDate("2024-02-01T00:00:00Z")
-        _ = try CreateItemIntent.perform(
-            (context: context,
-             date: jstDate,
-             content: "JSTBoundary",
-             income: 100,
-             outgo: 0,
-             category: "TZTest",
-             repeatCount: 1)
-        )
+        _ = try ItemService.create(context: context,
+                                   date: jstDate,
+                                   content: "JSTBoundary",
+                                   income: 100,
+                                   outgo: 0,
+                                   category: "TZTest",
+                                   repeatCount: 1)
 
         let predicate = ItemPredicate.dateIsSameMonthAs(shiftedDate("2024-02-01T00:00:00Z"))
         let items = try context.fetch(.items(predicate))
@@ -528,33 +506,27 @@ struct ItemPredicateTest {
         NSTimeZone.default = timeZone
 
         // Insert three items, one at start, one in middle, one at end of February (UTC)
-        _ = try CreateItemIntent.perform(
-            (context: context,
-             date: shiftedDate("2024-02-01T00:00:00Z"),
-             content: "StartOfMonth",
-             income: 100,
-             outgo: 0,
-             category: "TZTest",
-             repeatCount: 1)
-        )
-        _ = try CreateItemIntent.perform(
-            (context: context,
-             date: shiftedDate("2024-02-14T12:00:00Z"),
-             content: "MidMonth",
-             income: 100,
-             outgo: 0,
-             category: "TZTest",
-             repeatCount: 1)
-        )
-        _ = try CreateItemIntent.perform(
-            (context: context,
-             date: shiftedDate("2024-02-29T23:59:59Z"),
-             content: "EndOfMonth",
-             income: 100,
-             outgo: 0,
-             category: "TZTest",
-             repeatCount: 1)
-        )
+        _ = try ItemService.create(context: context,
+                                   date: shiftedDate("2024-02-01T00:00:00Z"),
+                                   content: "StartOfMonth",
+                                   income: 100,
+                                   outgo: 0,
+                                   category: "TZTest",
+                                   repeatCount: 1)
+        _ = try ItemService.create(context: context,
+                                   date: shiftedDate("2024-02-14T12:00:00Z"),
+                                   content: "MidMonth",
+                                   income: 100,
+                                   outgo: 0,
+                                   category: "TZTest",
+                                   repeatCount: 1)
+        _ = try ItemService.create(context: context,
+                                   date: shiftedDate("2024-02-29T23:59:59Z"),
+                                   content: "EndOfMonth",
+                                   income: 100,
+                                   outgo: 0,
+                                   category: "TZTest",
+                                   repeatCount: 1)
 
         let predicate = ItemPredicate.dateIsSameMonthAs(shiftedDate("2024-02-01T00:00:00Z"))
         let items = try context.fetch(.items(predicate))
@@ -573,24 +545,20 @@ struct ItemPredicateTest {
         let jstDate1 = shiftedDate("2024-03-01T00:00:00Z")  // 2024-02-29T15:00:00Z
         let jstDate2 = shiftedDate("2024-03-31T23:59:59Z")  // 2024-03-31T14:59:59Z
 
-        _ = try CreateItemIntent.perform(
-            (context: context,
-             date: jstDate1,
-             content: "StartJST",
-             income: 100,
-             outgo: 0,
-             category: "TZTest",
-             repeatCount: 1)
-        )
-        _ = try CreateItemIntent.perform(
-            (context: context,
-             date: jstDate2,
-             content: "EndJST",
-             income: 100,
-             outgo: 0,
-             category: "TZTest",
-             repeatCount: 1)
-        )
+        _ = try ItemService.create(context: context,
+                                   date: jstDate1,
+                                   content: "StartJST",
+                                   income: 100,
+                                   outgo: 0,
+                                   category: "TZTest",
+                                   repeatCount: 1)
+        _ = try ItemService.create(context: context,
+                                   date: jstDate2,
+                                   content: "EndJST",
+                                   income: 100,
+                                   outgo: 0,
+                                   category: "TZTest",
+                                   repeatCount: 1)
 
         let predicate = ItemPredicate.dateIsSameMonthAs(shiftedDate("2024-03-01T00:00:00Z"))
         let items = try context.fetch(.items(predicate))
@@ -604,10 +572,10 @@ struct ItemPredicateTest {
         NSTimeZone.default = timeZone
 
         let baseDate = shiftedDate("2024-04-01T00:00:00Z")
-        _ = try CreateItemIntent.perform((context: context, date: baseDate, content: "TargetDay", income: 1, outgo: 0, category: "Test", repeatCount: 1))
-        _ = try CreateItemIntent.perform((context: context, date: shiftedDate("2024-04-01T23:59:59Z"), content: "EndSameDay", income: 1, outgo: 0, category: "Test", repeatCount: 1))
-        _ = try CreateItemIntent.perform((context: context, date: shiftedDate("2024-03-31T23:59:59Z"), content: "DayBefore", income: 1, outgo: 0, category: "Test", repeatCount: 1))
-        _ = try CreateItemIntent.perform((context: context, date: shiftedDate("2024-04-02T00:00:00Z"), content: "DayAfter", income: 1, outgo: 0, category: "Test", repeatCount: 1))
+        _ = try ItemService.create(context: context, date: baseDate, content: "TargetDay", income: 1, outgo: 0, category: "Test", repeatCount: 1)
+        _ = try ItemService.create(context: context, date: shiftedDate("2024-04-01T23:59:59Z"), content: "EndSameDay", income: 1, outgo: 0, category: "Test", repeatCount: 1)
+        _ = try ItemService.create(context: context, date: shiftedDate("2024-03-31T23:59:59Z"), content: "DayBefore", income: 1, outgo: 0, category: "Test", repeatCount: 1)
+        _ = try ItemService.create(context: context, date: shiftedDate("2024-04-02T00:00:00Z"), content: "DayAfter", income: 1, outgo: 0, category: "Test", repeatCount: 1)
 
         let predicate = ItemPredicate.dateIsSameDayAs(baseDate)
         let items = try context.fetch(.items(predicate))
@@ -627,24 +595,20 @@ struct ItemPredicateTest {
         let jstDate1 = shiftedDate("2024-04-01T00:00:00Z")  // 2024-03-31T15:00:00Z
         let jstDate2 = shiftedDate("2024-04-01T23:59:59Z")  // 2024-04-01T15:00:00Z
 
-        _ = try CreateItemIntent.perform(
-            (context: context,
-             date: jstDate1,
-             content: "StartJSTDay",
-             income: 100,
-             outgo: 0,
-             category: "TZTest",
-             repeatCount: 1)
-        )
-        _ = try CreateItemIntent.perform(
-            (context: context,
-             date: jstDate2,
-             content: "EndJSTDay",
-             income: 100,
-             outgo: 0,
-             category: "TZTest",
-             repeatCount: 1)
-        )
+        _ = try ItemService.create(context: context,
+                                   date: jstDate1,
+                                   content: "StartJSTDay",
+                                   income: 100,
+                                   outgo: 0,
+                                   category: "TZTest",
+                                   repeatCount: 1)
+        _ = try ItemService.create(context: context,
+                                   date: jstDate2,
+                                   content: "EndJSTDay",
+                                   income: 100,
+                                   outgo: 0,
+                                   category: "TZTest",
+                                   repeatCount: 1)
 
         let predicate = ItemPredicate.dateIsSameDayAs(shiftedDate("2024-04-01T00:00:00Z"))
         let items = try context.fetch(.items(predicate))
@@ -660,8 +624,8 @@ struct ItemPredicateTest {
         NSTimeZone.default = timeZone
 
         let baseDate = shiftedDate("2024-04-01T00:00:00Z")
-        _ = try CreateItemIntent.perform((context: context, date: shiftedDate("2024-03-31T00:00:00Z"), content: "PrevDay", income: 1, outgo: 0, category: "Test", repeatCount: 1))
-        _ = try CreateItemIntent.perform((context: context, date: shiftedDate("2024-04-02T00:00:00Z"), content: "NextDay", income: 1, outgo: 0, category: "Test", repeatCount: 1))
+        _ = try ItemService.create(context: context, date: shiftedDate("2024-03-31T00:00:00Z"), content: "PrevDay", income: 1, outgo: 0, category: "Test", repeatCount: 1)
+        _ = try ItemService.create(context: context, date: shiftedDate("2024-04-02T00:00:00Z"), content: "NextDay", income: 1, outgo: 0, category: "Test", repeatCount: 1)
 
         let predicate = ItemPredicate.dateIsSameDayAs(baseDate)
         let items = try context.fetch(.items(predicate))
@@ -678,7 +642,7 @@ struct ItemPredicateTest {
 
         let baseDate = shiftedDate("2024-04-01T00:00:00Z")
         let endOfDay = shiftedDate("2024-04-01T23:59:59Z")
-        _ = try CreateItemIntent.perform((context: context, date: endOfDay, content: "EndOfDay", income: 1, outgo: 0, category: "Test", repeatCount: 1))
+        _ = try ItemService.create(context: context, date: endOfDay, content: "EndOfDay", income: 1, outgo: 0, category: "Test", repeatCount: 1)
 
         let predicate = ItemPredicate.dateIsSameDayAs(baseDate)
         let items = try context.fetch(.items(predicate))
@@ -692,7 +656,7 @@ struct ItemPredicateTest {
         NSTimeZone.default = timeZone
 
         let baseDate = shiftedDate("2024-04-01T00:00:00Z")
-        _ = try CreateItemIntent.perform((context: context, date: shiftedDate("2024-04-02T00:00:00Z"), content: "NextDayStart", income: 1, outgo: 0, category: "Test", repeatCount: 1))
+        _ = try ItemService.create(context: context, date: shiftedDate("2024-04-02T00:00:00Z"), content: "NextDayStart", income: 1, outgo: 0, category: "Test", repeatCount: 1)
 
         let predicate = ItemPredicate.dateIsSameDayAs(baseDate)
         let items = try context.fetch(.items(predicate))
@@ -705,15 +669,13 @@ struct ItemPredicateTest {
         NSTimeZone.default = timeZone
 
         let jstDate = shiftedDate("2024-01-01T00:00:00Z")
-        _ = try CreateItemIntent.perform(
-            (context: context,
-             date: jstDate,
-             content: "JST_Jan1",
-             income: 0,
-             outgo: 0,
-             category: "TZBoundary",
-             repeatCount: 1)
-        )
+        _ = try ItemService.create(context: context,
+                                   date: jstDate,
+                                   content: "JST_Jan1",
+                                   income: 0,
+                                   outgo: 0,
+                                   category: "TZBoundary",
+                                   repeatCount: 1)
 
         let predicate = ItemPredicate.dateIsSameDayAs(shiftedDate("2024-01-01T00:00:00Z"))
         let items = try context.fetch(.items(predicate))
@@ -726,15 +688,13 @@ struct ItemPredicateTest {
         NSTimeZone.default = timeZone
 
         let jstDate = shiftedDate("2024-04-02T00:00:00Z") // UTC: 2024-04-01T15:00:00Z
-        _ = try CreateItemIntent.perform(
-            (context: context,
-             date: jstDate,
-             content: "JST_NextDay",
-             income: 0,
-             outgo: 0,
-             category: "Test",
-             repeatCount: 1)
-        )
+        _ = try ItemService.create(context: context,
+                                   date: jstDate,
+                                   content: "JST_NextDay",
+                                   income: 0,
+                                   outgo: 0,
+                                   category: "Test",
+                                   repeatCount: 1)
 
         let predicate = ItemPredicate.dateIsSameDayAs(shiftedDate("2024-04-01T00:00:00Z"))
         let items = try context.fetch(.items(predicate))
@@ -747,15 +707,13 @@ struct ItemPredicateTest {
         NSTimeZone.default = timeZone
 
         let jstDate = shiftedDate("2024-04-01T00:00:00Z") // UTC: 2024-03-31T15:00:00Z
-        _ = try CreateItemIntent.perform(
-            (context: context,
-             date: jstDate,
-             content: "JST_StartOfDay",
-             income: 0,
-             outgo: 0,
-             category: "Test",
-             repeatCount: 1)
-        )
+        _ = try ItemService.create(context: context,
+                                   date: jstDate,
+                                   content: "JST_StartOfDay",
+                                   income: 0,
+                                   outgo: 0,
+                                   category: "Test",
+                                   repeatCount: 1)
 
         let predicate = ItemPredicate.dateIsSameDayAs(shiftedDate("2024-03-31T00:00:00Z"))
         let items = try context.fetch(.items(predicate))
@@ -770,8 +728,8 @@ struct ItemPredicateTest {
         NSTimeZone.default = timeZone
 
         let date = shiftedDate("2024-06-01T00:00:00Z")
-        _ = try CreateItemIntent.perform((context: context, date: date, content: "Match", income: 0, outgo: 5_000, category: "Test", repeatCount: 1))
-        _ = try CreateItemIntent.perform((context: context, date: date, content: "Low", income: 0, outgo: 4_999, category: "Test", repeatCount: 1))
+        _ = try ItemService.create(context: context, date: date, content: "Match", income: 0, outgo: 5_000, category: "Test", repeatCount: 1)
+        _ = try ItemService.create(context: context, date: date, content: "Low", income: 0, outgo: 4_999, category: "Test", repeatCount: 1)
 
         let predicate = ItemPredicate.outgoIsGreaterThanOrEqualTo(amount: 5_000, onOrAfter: date)
         let items = try context.fetch(.items(predicate))
@@ -785,8 +743,8 @@ struct ItemPredicateTest {
         NSTimeZone.default = timeZone
 
         let cutoffDate = shiftedDate("2024-06-01T00:00:00Z")
-        _ = try CreateItemIntent.perform((context: context, date: shiftedDate("2024-05-31T23:59:59Z"), content: "Early", income: 0, outgo: 10_000, category: "Test", repeatCount: 1))
-        _ = try CreateItemIntent.perform((context: context, date: cutoffDate, content: "Valid", income: 0, outgo: 10_000, category: "Test", repeatCount: 1))
+        _ = try ItemService.create(context: context, date: shiftedDate("2024-05-31T23:59:59Z"), content: "Early", income: 0, outgo: 10_000, category: "Test", repeatCount: 1)
+        _ = try ItemService.create(context: context, date: cutoffDate, content: "Valid", income: 0, outgo: 10_000, category: "Test", repeatCount: 1)
 
         let predicate = ItemPredicate.outgoIsGreaterThanOrEqualTo(amount: 5_000, onOrAfter: cutoffDate)
         let items = try context.fetch(.items(predicate))
@@ -801,12 +759,12 @@ struct ItemPredicateTest {
     func includesItemsWithRepeatID(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        _ = try CreateItemIntent.perform((context: context, date: shiftedDate("2024-01-01T00:00:00Z"), content: "RepeatOne", income: 0, outgo: 0, category: "Test", repeatCount: 1))
+        _ = try ItemService.create(context: context, date: shiftedDate("2024-01-01T00:00:00Z"), content: "RepeatOne", income: 0, outgo: 0, category: "Test", repeatCount: 1)
         let repeatOneItem = try context.fetch(.items(.all)).first {
             $0.content == "RepeatOne"
         }!
         let repeatID = repeatOneItem.repeatID
-        _ = try CreateItemIntent.perform((context: context, date: shiftedDate("2024-02-01T00:00:00Z"), content: "NonRepeat", income: 0, outgo: 0, category: "Test", repeatCount: 1))
+        _ = try ItemService.create(context: context, date: shiftedDate("2024-02-01T00:00:00Z"), content: "NonRepeat", income: 0, outgo: 0, category: "Test", repeatCount: 1)
 
         let predicate = ItemPredicate.repeatIDIs(repeatID)
         let items = try context.fetch(.items(predicate))
@@ -819,7 +777,7 @@ struct ItemPredicateTest {
     func includesOnlyFutureRepeatItems(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        _ = try CreateItemIntent.perform((context: context, date: shiftedDate("2024-01-01T00:00:00Z"), content: "Past", income: 0, outgo: 0, category: "Test", repeatCount: 2))
+        _ = try ItemService.create(context: context, date: shiftedDate("2024-01-01T00:00:00Z"), content: "Past", income: 0, outgo: 0, category: "Test", repeatCount: 2)
         let repeatID = try context.fetch(.items(.all)).first!.repeatID
 
         let predicate = ItemPredicate.repeatIDAndDateIsAfter(repeatID: repeatID, date: shiftedDate("2024-02-01T00:00:00Z"))

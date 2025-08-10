@@ -2,21 +2,13 @@ import AppIntents
 import SwiftData
 
 @MainActor
-struct GetAllTagsIntent: AppIntent, IntentPerformer {
-    typealias Input = ModelContext
-    typealias Output = [TagEntity]
-
+struct GetAllTagsIntent: AppIntent {
     @Dependency private var modelContainer: ModelContainer
 
     nonisolated static let title: LocalizedStringResource = .init("Get All Tags", table: "AppIntents")
 
-    static func perform(_ input: Input) throws -> Output {
-        let tags = try input.fetch(.tags(.all))
-        return tags.compactMap(TagEntity.init)
-    }
-
     func perform() throws -> some ReturnsValue<[TagEntity]> {
-        let tags = try Self.perform(modelContainer.mainContext)
+        let tags = try TagService.getAll(context: modelContainer.mainContext)
         return .result(value: tags)
     }
 }
