@@ -1,6 +1,6 @@
 //
 //  Tag.swift
-//  Incomes
+//  IncomesLibrary
 //
 //  Created by Hiromu Nakano on 2023/09/09.
 //  Copyright © 2023 Hiromu Nakano. All rights reserved.
@@ -10,11 +10,11 @@ import Foundation
 import SwiftData
 
 @Model
-nonisolated final class Tag {
-    private(set) var name = String.empty
-    private(set) var typeID = String.empty
+public nonisolated final class Tag {
+    public private(set) var name = String.empty
+    public private(set) var typeID = String.empty
 
-    private(set) var items: [Item]?
+    public private(set) var items: [Item]?
 
     private init() {}
 
@@ -29,7 +29,7 @@ nonisolated final class Tag {
     }
 }
 
-extension Tag {
+public extension Tag {
     var type: TagType? {
         TagType(rawValue: typeID)
     }
@@ -55,11 +55,11 @@ extension Tag: Identifiable {}
 // MARK: - Hashable
 
 extension Tag: Hashable {
-    static func == (lhs: Tag, rhs: Tag) -> Bool {
+    public static func == (lhs: Tag, rhs: Tag) -> Bool {
         lhs.id == rhs.id
     }
 
-    func hash(into hasher: inout Hasher) {
+    public func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }
 }

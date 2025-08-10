@@ -6,4 +6,5 @@
 //  Copyright © 2025 Hiromu Nakano. All rights reserved.
 //
 
+@_exported import IncomesLibrary
 @_exported import SwiftUtilities

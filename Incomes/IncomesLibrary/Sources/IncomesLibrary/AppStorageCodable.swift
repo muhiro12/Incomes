@@ -1,6 +1,6 @@
 //
 //  AppStorageCodable.swift
-//  Incomes
+//  IncomesLibrary
 //
 //  Created by Hiromu Nakano on 2025/04/22.
 //  Copyright © 2025 Hiromu Nakano. All rights reserved.
@@ -8,11 +8,11 @@
 
 import Foundation
 
-nonisolated protocol AppStorageCodable: Codable, Equatable, RawRepresentable<String> {
+public nonisolated protocol AppStorageCodable: Codable, Equatable, RawRepresentable<String> {
     init()
 }
 
-extension AppStorageCodable {
+public extension AppStorageCodable {
     init?(rawValue: RawValue) {
         guard let data = rawValue.data(using: .utf8),
               let value = try? JSONDecoder().decode(Self.self, from: data) else {

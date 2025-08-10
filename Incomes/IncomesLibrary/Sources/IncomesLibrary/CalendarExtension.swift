@@ -1,6 +1,6 @@
 //
 //  CalendarExtension.swift
-//  Incomes
+//  IncomesLibrary
 //
 //  Created by Hiromu Nakano on 2021/12/28.
 //  Copyright © 2021 Hiromu Nakano. All rights reserved.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-nonisolated extension Calendar {
+public nonisolated extension Calendar {
     static var utc: Self {
         var calendar = Calendar(identifier: .gregorian)
         calendar.timeZone = .gmt

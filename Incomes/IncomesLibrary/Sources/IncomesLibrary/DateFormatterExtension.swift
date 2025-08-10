@@ -1,6 +1,6 @@
 //
 //  DateFormatterExtension.swift
-//  Incomes
+//  IncomesLibrary
 //
 //  Created by Hiromu Nakano on 2023/09/26.
 //  Copyright © 2023 Hiromu Nakano. All rights reserved.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-nonisolated extension DateFormatter {
+public nonisolated extension DateFormatter {
     enum Template: String {
         case yyyy
         case yyyyMM

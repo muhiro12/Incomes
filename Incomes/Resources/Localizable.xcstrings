@@ -3407,6 +3407,7 @@
       }
     },
     "System" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -3447,9 +3448,6 @@
 
     },
     "Tag not found" : {
-
-    },
-    "Tag Type" : {
 
     },
     "Tags" : {
@@ -4032,9 +4030,6 @@
           }
         }
       }
-    },
-    "Year/Month" : {
-
     },
     "YearMonth" : {
       "localizations" : {
