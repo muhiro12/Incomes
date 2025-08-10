@@ -727,6 +727,9 @@
         }
       }
     },
+    "Camera" : {
+
+    },
     "Cancel" : {
       "localizations" : {
         "en" : {
@@ -1759,10 +1762,10 @@
     "Item" : {
 
     },
-    "Item not found" : {
+    "Item Form Inference" : {
 
     },
-    "Item Form Inference" : {
+    "Item not found" : {
 
     },
     "Items" : {
@@ -2512,6 +2515,9 @@
           }
         }
       }
+    },
+    "Photo Library" : {
+
     },
     "Please update Incomes to the latest version to continue using it." : {
       "localizations" : {
