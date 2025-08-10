@@ -57,7 +57,7 @@ final class NotificationService: NSObject {
         let content = UNMutableNotificationContent()
         content.title = String(localized: "Upcoming Payment")
         content.body = String(
-            localized: "\(item.content) - A payment of \(item.outgo.asCurrency) is due on \(item.date.formatted(.dateTime.weekday().month().day()))."
+            localized: "\(item.content) - A payment of \(item.outgo.asCurrency) is due on \(item.localDate.formatted(.dateTime.weekday().month().day()))."
         )
         content.sound = .default
 

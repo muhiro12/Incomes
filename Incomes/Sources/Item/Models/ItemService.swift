@@ -232,7 +232,7 @@ enum ItemService {
     ) throws {
         let components = Calendar.current.dateComponents(
             [.year, .month, .day],
-            from: item.date,
+            from: item.localDate,
             to: date
         )
         let repeatID = UUID()

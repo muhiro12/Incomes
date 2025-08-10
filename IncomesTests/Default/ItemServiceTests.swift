@@ -626,7 +626,7 @@ struct ItemServiceTests {
 
     @Test
     func recalculate_recomputes_balance_after_update() throws {
-        let entity = try ItemService.create(
+        let item = try ItemService.create(
             context: context,
             date: shiftedDate("2000-01-01T00:00:00Z"),
             content: "content",
@@ -637,18 +637,18 @@ struct ItemServiceTests {
         )
         try ItemService.update(
             context: context,
-            item: entity,
-            date: entity.date,
-            content: entity.content,
-            income: entity.income,
+            item: item,
+            date: item.localDate,
+            content: item.content,
+            income: item.income,
             outgo: 90,
-            category: entity.category?.name ?? ""
+            category: item.category?.name ?? ""
         )
         try ItemService.recalculate(
             context: context,
             date: shiftedDate("1999-12-01T00:00:00Z")
         )
-        let item = try #require(fetchItems(context).first)
-        #expect(item.balance == 10)
+        let result = try #require(fetchItems(context).first)
+        #expect(result.balance == 10)
     }
 }
