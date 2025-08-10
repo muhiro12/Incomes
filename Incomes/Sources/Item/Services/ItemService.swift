@@ -1,4 +1,6 @@
+import AppIntents
 import Foundation
+import FoundationModels
 import SwiftData
 import SwiftUI
 
@@ -53,6 +55,7 @@ enum ItemService {
         return entity
     }
 
+    @available(iOS 26.0, *)
     static func inferForm(text: String) async throws -> ItemFormInference {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyyMMdd"
