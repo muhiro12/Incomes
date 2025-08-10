@@ -15,10 +15,13 @@ struct TagEntityQuery: EntityStringQuery {
 
     func entities(for identifiers: [TagEntity.ID]) throws -> [TagEntity] {
         try identifiers.compactMap { id in
-            try TagService.getByID(
+            guard let tag = try TagService.getByID(
                 context: modelContainer.mainContext,
                 id: id
-            )
+            ) else {
+                return nil
+            }
+            return .init(tag)
         }
     }
 
@@ -33,14 +36,19 @@ struct TagEntityQuery: EntityStringQuery {
             .category
         ]
         .compactMap { type in
-            tags.first {
-                $0.type == type
-                    && (
-                        $0.name.localizedStandardContains(string)
-                            || $0.name.localizedStandardContains(hiragana)
-                            || $0.name.localizedStandardContains(katakana)
-                    )
+            guard let tag = tags.first(
+                where: {
+                    $0.type == type
+                        && (
+                            $0.name.localizedStandardContains(string)
+                                || $0.name.localizedStandardContains(hiragana)
+                                || $0.name.localizedStandardContains(katakana)
+                        )
+                }
+            ) else {
+                return nil
             }
+            return .init(tag)
         }
     }
 
@@ -53,9 +61,14 @@ struct TagEntityQuery: EntityStringQuery {
             .category
         ]
         .compactMap { type in
-            tags.first {
-                $0.type == type
+            guard let tag = tags.first(
+                where: {
+                    $0.type == type
+                }
+            ) else {
+                return nil
             }
+            return .init(tag)
         }
     }
 }

@@ -13,7 +13,9 @@ struct ResolveDuplicateTagsIntent: AppIntent {
     func perform() throws -> some IntentResult {
         try TagService.resolveDuplicates(
             context: modelContainer.mainContext,
-            tags: tags
+            tags: tags.map {
+                try $0.model(in: modelContainer.mainContext)
+            }
         )
         return .result()
     }

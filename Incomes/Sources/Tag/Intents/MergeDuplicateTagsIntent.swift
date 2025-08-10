@@ -12,8 +12,9 @@ struct MergeDuplicateTagsIntent: AppIntent {
 
     func perform() throws -> some IntentResult {
         try TagService.mergeDuplicates(
-            context: modelContainer.mainContext,
-            tags: tags
+            tags: tags.map {
+                try $0.model(in: modelContainer.mainContext)
+            }
         )
         return .result()
     }

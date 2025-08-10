@@ -18,8 +18,7 @@ struct DuplicateTagView: View {
     var body: some View {
         ScrollView(.horizontal) {
             LazyHStack(spacing: .zero) {
-                let tagModels = tags
-                ForEach(tagModels) { tag in
+                ForEach(tags) { tag in
                     List {
                         Section {
                             ForEach(tag.items ?? []) { item in
@@ -45,7 +44,7 @@ struct DuplicateTagView: View {
                         }
                     }
                     .frame(width: .componentXL)
-                    if tag.id != tagModels.last?.id {
+                    if tag.id != tags.last?.id {
                         Divider()
                     }
                 }
@@ -58,10 +57,7 @@ struct DuplicateTagView: View {
         ) {
             Button {
                 do {
-                    try TagService.mergeDuplicates(
-                        context: context,
-                        tags: tags.compactMap(TagEntity.init)
-                    )
+                    try TagService.mergeDuplicates(tags: tags)
                 } catch {
                     assertionFailure(error.localizedDescription)
                 }
@@ -84,10 +80,7 @@ struct DuplicateTagView: View {
                     return
                 }
                 do {
-                    try TagService.delete(
-                        context: context,
-                        tag: .init(selectedTag)!
-                    )
+                    try TagService.delete(tag: selectedTag)
                     self.selectedTag = nil
                     Haptic.success.impact()
                 } catch {

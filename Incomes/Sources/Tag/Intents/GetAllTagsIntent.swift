@@ -8,7 +8,10 @@ struct GetAllTagsIntent: AppIntent {
     nonisolated static let title: LocalizedStringResource = .init("Get All Tags", table: "AppIntents")
 
     func perform() throws -> some ReturnsValue<[TagEntity]> {
-        let tags = try TagService.getAll(context: modelContainer.mainContext)
-        return .result(value: tags)
+        .result(
+            value: try TagService.getAll(
+                context: modelContainer.mainContext
+            ).compactMap(TagEntity.init)
+        )
     }
 }

@@ -11,10 +11,13 @@ struct FindDuplicateTagsIntent: AppIntent {
     nonisolated static let title: LocalizedStringResource = .init("Find Duplicate Tags", table: "AppIntents")
 
     func perform() throws -> some ReturnsValue<[TagEntity]> {
-        let result = try TagService.findDuplicates(
-            context: modelContainer.mainContext,
-            tags: tags
+        .result(
+            value: try TagService.findDuplicates(
+                context: modelContainer.mainContext,
+                tags: tags.map {
+                    try $0.model(in: modelContainer.mainContext)
+                }
+            ).compactMap(TagEntity.init)
         )
-        return .result(value: result)
     }
 }

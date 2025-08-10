@@ -59,11 +59,11 @@ struct TagServiceTests {
         let tag4 = try Tag.createIgnoringDuplicates(context: context, name: "B", type: .yearMonth)
         let result = try TagService.findDuplicates(
             context: context,
-            tags: [tag1, tag2, tag3, tag4].compactMap(TagEntity.init)
+            tags: [tag1, tag2, tag3, tag4]
         )
         #expect(result.count == 2)
-        #expect(result.contains { (try? PersistentIdentifier(base64Encoded: $0.id)) == tag1.id })
-        #expect(result.contains { (try? PersistentIdentifier(base64Encoded: $0.id)) == tag3.id })
+        #expect(result.contains { $0.id == tag1.id })
+        #expect(result.contains { $0.id == tag3.id })
     }
 
     @Test
@@ -73,8 +73,7 @@ struct TagServiceTests {
         _ = try Tag.createIgnoringDuplicates(context: context, name: "A", type: .year)
         #expect(try TagService.hasDuplicates(context: context) == true)
         try TagService.mergeDuplicates(
-            context: context,
-            tags: try context.fetch(.tags(.isSameWith(tag1))).compactMap(TagEntity.init)
+            tags: try context.fetch(.tags(.isSameWith(tag1)))
         )
         #expect(try TagService.hasDuplicates(context: context) == false)
     }
@@ -112,8 +111,7 @@ struct TagServiceTests {
         let tag2 = item2.tags!.first { $0.type == .content }!
         let tag3 = item3.tags!.first { $0.type == .content }!
         try TagService.mergeDuplicates(
-            context: context,
-            tags: [tag1, tag2, tag3].compactMap(TagEntity.init)
+            tags: [tag1, tag2, tag3]
         )
         #expect(try context.fetchCount(.tags(.nameIs("contentA", type: .content))) == 1)
         #expect(try context.fetchCount(.tags(.nameIs("contentB", type: .content))) == 0)
@@ -129,8 +127,7 @@ struct TagServiceTests {
         let tag2 = try Tag.createIgnoringDuplicates(context: context, name: "contentA", type: .content)
         let tag3 = try Tag.createIgnoringDuplicates(context: context, name: "contentA", type: .content)
         try TagService.mergeDuplicates(
-            context: context,
-            tags: [tag1, tag2, tag3].compactMap(TagEntity.init)
+            tags: [tag1, tag2, tag3]
         )
         #expect(try context.fetchCount(.tags(.nameIs("contentA", type: .content))) == 1)
     }
@@ -145,7 +142,7 @@ struct TagServiceTests {
         #expect(try context.fetchCount(.tags(.all)) == 5)
         try TagService.resolveDuplicates(
             context: context,
-            tags: [tag1, tag4].compactMap(TagEntity.init)
+            tags: [tag1, tag4]
         )
         #expect(try context.fetchCount(.tags(.all)) == 2)
     }
@@ -156,20 +153,8 @@ struct TagServiceTests {
     func delete_removes_tag() throws {
         let tag = try Tag.create(context: context, name: "name", type: .year)
         #expect(try context.fetchCount(.tags(.all)) == 1)
-        try TagService.delete(context: context, tag: .init(tag)!)
+        try TagService.delete(tag: tag)
         #expect(try context.fetchCount(.tags(.all)) == 0)
-    }
-
-    @Test
-    func delete_throws_when_not_found() throws {
-        let entity = TagEntity(
-            id: UUID().uuidString,
-            name: "missing",
-            typeID: TagType.content.rawValue
-        )
-        #expect(throws: Error.self) {
-            try TagService.delete(context: context, tag: entity)
-        }
     }
 
     @Test

@@ -3,43 +3,35 @@ import SwiftData
 
 @MainActor
 enum TagService {
-    static func getAll(context: ModelContext) throws -> [TagEntity] {
-        let tags = try context.fetch(.tags(.all))
-        return tags.compactMap(TagEntity.init)
+    static func getAll(context: ModelContext) throws -> [Tag] {
+        try context.fetch(.tags(.all))
     }
 
-    static func getByID(context: ModelContext, id: String) throws -> TagEntity? {
+    static func getByID(context: ModelContext, id: String) throws -> Tag? {
         let persistentID = try PersistentIdentifier(base64Encoded: id)
         guard let tag = try context.fetchFirst(
             .tags(.idIs(persistentID))
         ) else {
             return nil
         }
-        return TagEntity(tag)
+        return tag
     }
 
     static func getByName(
         context: ModelContext,
         name: String,
         type: TagType
-    ) throws -> TagEntity? {
-        let tag = try context.fetchFirst(
+    ) throws -> Tag? {
+        try context.fetchFirst(
             .tags(.nameIs(name, type: type))
         )
-        return tag.flatMap(TagEntity.init)
     }
 
     static func findDuplicates(
-        context: ModelContext,
-        tags: [TagEntity]
-    ) throws -> [TagEntity] {
-        let models: [Tag] = try tags.compactMap { entity in
-            let id = try PersistentIdentifier(base64Encoded: entity.id)
-            return try context.fetchFirst(
-                .tags(.idIs(id))
-            )
-        }
-        let duplicates = Dictionary(grouping: models) { tag in
+        context _: ModelContext,
+        tags: [Tag]
+    ) throws -> [Tag] {
+        Dictionary(grouping: tags) { tag in
             tag.typeID + tag.name
         }
         .compactMap { _, values -> Tag? in
@@ -48,7 +40,6 @@ enum TagService {
             }
             return values.first
         }
-        return duplicates.compactMap(TagEntity.init)
     }
 
     static func hasDuplicates(context: ModelContext) throws -> Bool {
@@ -57,20 +48,11 @@ enum TagService {
         return !duplicates.isEmpty
     }
 
-    static func mergeDuplicates(
-        context: ModelContext,
-        tags: [TagEntity]
-    ) throws {
-        let models: [Tag] = try tags.compactMap { entity in
-            let id = try PersistentIdentifier(base64Encoded: entity.id)
-            return try context.fetchFirst(
-                .tags(.idIs(id))
-            )
-        }
-        guard let parent = models.first else {
+    static func mergeDuplicates(tags: [Tag]) throws {
+        guard let parent = tags.first else {
             return
         }
-        let children = models.filter {
+        let children = tags.filter {
             $0.id != parent.id
         }
         for item in children.flatMap({ $0.items ?? [] }) {
@@ -78,40 +60,27 @@ enum TagService {
             tags.append(parent)
             item.modify(tags: tags)
         }
-        try children.compactMap(TagEntity.init).forEach { child in
-            try delete(context: context, tag: child)
+        try children.forEach { child in
+            try delete(tag: child)
         }
     }
 
     static func resolveDuplicates(
         context: ModelContext,
-        tags: [TagEntity]
+        tags: [Tag]
     ) throws {
-        let models: [Tag] = try tags.compactMap { entity in
-            let id = try PersistentIdentifier(base64Encoded: entity.id)
-            return try context.fetchFirst(
-                .tags(.idIs(id))
-            )
-        }
-        for model in models {
+        for tag in tags {
             let duplicates = try context.fetch(
-                .tags(.isSameWith(model))
+                .tags(.isSameWith(tag))
             )
             try mergeDuplicates(
-                context: context,
-                tags: duplicates.compactMap(TagEntity.init)
+                tags: duplicates
             )
         }
     }
 
-    static func delete(context: ModelContext, tag: TagEntity) throws {
-        let id = try PersistentIdentifier(base64Encoded: tag.id)
-        guard let model = try context.fetchFirst(
-            .tags(.idIs(id))
-        ) else {
-            throw TagError.tagNotFound
-        }
-        model.delete()
+    static func delete(tag: Tag) throws {
+        tag.delete()
     }
 
     static func deleteAll(context: ModelContext) throws {

@@ -45,7 +45,7 @@ struct DuplicateTagListView: View {
                 do {
                     try TagService.resolveDuplicates(
                         context: context,
-                        tags: selectedTags.compactMap(TagEntity.init)
+                        tags: selectedTags
                     )
                 } catch {
                     assertionFailure(error.localizedDescription)
@@ -71,14 +71,10 @@ struct DuplicateTagListView: View {
     private func buildSection<Header: View>(from tags: [Tag], header: () -> Header) -> some View {
         let duplicates: [Tag]
         do {
-            let entities = try TagService.findDuplicates(
+            duplicates = try TagService.findDuplicates(
                 context: context,
-                tags: tags.compactMap(TagEntity.init)
+                tags: tags
             )
-            duplicates = try entities.compactMap { entity in
-                let id = try PersistentIdentifier(base64Encoded: entity.id)
-                return try context.fetchFirst(.tags(.idIs(id)))
-            }
             .sorted {
                 $0.displayName < $1.displayName
             }
