@@ -188,11 +188,11 @@ enum ItemService {
     }
 
     static func nextItemDate(context: ModelContext, date: Date) throws -> Date? {
-        try nextItemModel(context: context, date: date)?.date
+        try nextItemModel(context: context, date: date)?.localDate
     }
 
     static func previousItemDate(context: ModelContext, date: Date) throws -> Date? {
-        try previousItemModel(context: context, date: date)?.date
+        try previousItemModel(context: context, date: date)?.localDate
     }
 
     static func nextItemContent(context: ModelContext, date: Date) throws -> String? {
