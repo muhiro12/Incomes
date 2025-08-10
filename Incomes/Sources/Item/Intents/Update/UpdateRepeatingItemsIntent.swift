@@ -29,15 +29,10 @@ struct UpdateRepeatingItemsIntent: AppIntent {
         guard outgo.currencyCode == currencyCode else {
             throw $outgo.needsDisambiguationError(among: [.init(amount: outgo.amount, currencyCode: currencyCode)])
         }
-        guard
-            let id = try? PersistentIdentifier(base64Encoded: item.id),
-            let model = try modelContainer.mainContext.fetchFirst(.items(.idIs(id)))
-        else {
-            throw DebugError.default
-        }
+        let model = try item.model(in: modelContainer.mainContext)
         try ItemService.updateRepeatingItems(
             context: modelContainer.mainContext,
-            item: item,
+            item: model,
             date: date,
             content: content,
             income: income.amount,

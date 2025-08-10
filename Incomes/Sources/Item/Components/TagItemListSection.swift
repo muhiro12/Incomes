@@ -45,7 +45,7 @@ extension TagItemListSection: View {
         ) {
             Button(role: .destructive) {
                 do {
-                    try willDeleteItems.compactMap(ItemEntity.init).forEach {
+                    try willDeleteItems.forEach {
                         try ItemService.delete(
                             context: context,
                             item: $0

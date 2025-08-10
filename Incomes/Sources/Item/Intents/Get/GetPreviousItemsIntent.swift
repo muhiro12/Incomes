@@ -19,10 +19,11 @@ struct GetPreviousItemsIntent: AppIntent {
     nonisolated static let title: LocalizedStringResource = .init("Get Previous Items", table: "AppIntents")
 
     func perform() throws -> some ReturnsValue<[ItemEntity]> {
-        let items = try ItemService.previousItems(
-            context: modelContainer.mainContext,
-            date: date
+        .result(
+            value: try ItemService.previousItems(
+                context: modelContainer.mainContext,
+                date: date
+            ).compactMap(ItemEntity.init)
         )
-        return .result(value: items)
     }
 }

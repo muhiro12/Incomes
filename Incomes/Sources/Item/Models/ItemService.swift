@@ -14,10 +14,10 @@ enum ItemService {
         outgo: Decimal,
         category: String,
         repeatCount: Int
-    ) throws -> ItemEntity {
+    ) throws -> Item {
         var items = [Item]()
         let repeatID = UUID()
-        let model = try Item.create(
+        let item = try Item.create(
             context: context,
             date: date,
             content: content,
@@ -26,7 +26,7 @@ enum ItemService {
             category: category,
             repeatID: repeatID
         )
-        items.append(model)
+        items.append(item)
         for index in 0..<repeatCount {
             guard index > .zero else {
                 continue
@@ -49,10 +49,7 @@ enum ItemService {
         items.forEach(context.insert)
         let calculator = BalanceCalculator()
         try calculator.calculate(in: context, for: items)
-        guard let entity = ItemEntity(model) else {
-            throw ItemError.entityConversionFailed
-        }
-        return entity
+        return item
     }
 
     @available(iOS 26.0, *)
@@ -92,18 +89,10 @@ enum ItemService {
         return response.content
     }
 
-    static func delete(context: ModelContext, item: ItemEntity) throws {
-        guard
-            let id = try? PersistentIdentifier(base64Encoded: item.id),
-            let model = try context.fetchFirst(
-                .items(.idIs(id))
-            )
-        else {
-            throw ItemError.itemNotFound
-        }
-        model.delete()
+    static func delete(context: ModelContext, item: Item) throws {
+        item.delete()
         let calculator = BalanceCalculator()
-        try calculator.calculate(in: context, for: [model])
+        try calculator.calculate(in: context, for: [item])
     }
 
     static func deleteAll(context: ModelContext) throws {
@@ -127,11 +116,10 @@ enum ItemService {
         try context.fetchCount(.items(.dateIsSameYearAs(date)))
     }
 
-    static func items(context: ModelContext, date: Date) throws -> [ItemEntity] {
-        let items = try context.fetch(
+    static func items(context: ModelContext, date: Date) throws -> [Item] {
+        try context.fetch(
             .items(.dateIsSameMonthAs(date))
         )
-        return items.compactMap(ItemEntity.init)
     }
 
     private static func nextItemModel(
@@ -153,38 +141,30 @@ enum ItemService {
         return try context.fetchFirst(descriptor)
     }
 
-    static func nextItem(context: ModelContext, date: Date) throws -> ItemEntity? {
-        guard let item = try nextItemModel(context: context, date: date) else {
-            return nil
-        }
-        return ItemEntity(item)
+    static func nextItem(context: ModelContext, date: Date) throws -> Item? {
+        try nextItemModel(context: context, date: date)
     }
 
-    static func previousItem(context: ModelContext, date: Date) throws -> ItemEntity? {
-        guard let item = try previousItemModel(context: context, date: date) else {
-            return nil
-        }
-        return ItemEntity(item)
+    static func previousItem(context: ModelContext, date: Date) throws -> Item? {
+        try previousItemModel(context: context, date: date)
     }
 
-    static func nextItems(context: ModelContext, date: Date) throws -> [ItemEntity] {
+    static func nextItems(context: ModelContext, date: Date) throws -> [Item] {
         guard let item = try nextItemModel(context: context, date: date) else {
             return []
         }
-        let items = try context.fetch(
+        return try context.fetch(
             .items(.dateIsSameDayAs(item.localDate))
         )
-        return items.compactMap(ItemEntity.init)
     }
 
-    static func previousItems(context: ModelContext, date: Date) throws -> [ItemEntity] {
+    static func previousItems(context: ModelContext, date: Date) throws -> [Item] {
         guard let item = try previousItemModel(context: context, date: date) else {
             return []
         }
-        let items = try context.fetch(
+        return try context.fetch(
             .items(.dateIsSameDayAs(item.localDate))
         )
-        return items.compactMap(ItemEntity.init)
     }
 
     static func nextItemDate(context: ModelContext, date: Date) throws -> Date? {
@@ -221,22 +201,14 @@ enum ItemService {
 
     static func update(
         context: ModelContext,
-        item: ItemEntity,
+        item: Item,
         date: Date,
         content: String,
         income: Decimal,
         outgo: Decimal,
         category: String
     ) throws {
-        guard
-            let id = try? PersistentIdentifier(base64Encoded: item.id),
-            let model = try context.fetchFirst(
-                .items(.idIs(id))
-            )
-        else {
-            throw DebugError.default
-        }
-        try model.modify(
+        try item.modify(
             date: date,
             content: content,
             income: income,
@@ -245,12 +217,12 @@ enum ItemService {
             repeatID: .init()
         )
         let calculator = BalanceCalculator()
-        try calculator.calculate(in: context, for: [model])
+        try calculator.calculate(in: context, for: [item])
     }
 
     static func updateRepeatingItems(
         context: ModelContext,
-        item: ItemEntity,
+        item: Item,
         date: Date,
         content: String,
         income: Decimal,
@@ -285,21 +257,13 @@ enum ItemService {
 
     static func updateAll(
         context: ModelContext,
-        item: ItemEntity,
+        item: Item,
         date: Date,
         content: String,
         income: Decimal,
         outgo: Decimal,
         category: String
     ) throws {
-        guard
-            let id = try? PersistentIdentifier(base64Encoded: item.id),
-            let model = try context.fetchFirst(
-                .items(.idIs(id))
-            )
-        else {
-            throw DebugError.default
-        }
         try updateRepeatingItems(
             context: context,
             item: item,
@@ -308,27 +272,19 @@ enum ItemService {
             income: income,
             outgo: outgo,
             category: category,
-            descriptor: .items(.repeatIDIs(model.repeatID))
+            descriptor: .items(.repeatIDIs(item.repeatID))
         )
     }
 
     static func updateFuture(
         context: ModelContext,
-        item: ItemEntity,
+        item: Item,
         date: Date,
         content: String,
         income: Decimal,
         outgo: Decimal,
         category: String
     ) throws {
-        guard
-            let id = try? PersistentIdentifier(base64Encoded: item.id),
-            let model = try context.fetchFirst(
-                .items(.idIs(id))
-            )
-        else {
-            throw DebugError.default
-        }
         try updateRepeatingItems(
             context: context,
             item: item,
@@ -339,8 +295,8 @@ enum ItemService {
             category: category,
             descriptor: .items(
                 .repeatIDAndDateIsAfter(
-                    repeatID: model.repeatID,
-                    date: model.localDate
+                    repeatID: item.repeatID,
+                    date: item.localDate
                 )
             )
         )

@@ -51,6 +51,9 @@ struct CreateItemIntent: AppIntent {
             category: category,
             repeatCount: repeatCount
         )
-        return .result(value: item)
+        guard let entity = ItemEntity(item) else {
+            throw ItemError.entityConversionFailed
+        }
+        return .result(value: entity)
     }
 }

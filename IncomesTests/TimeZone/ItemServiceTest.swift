@@ -28,7 +28,7 @@ struct ItemServiceTest {
         outgo: Decimal,
         category: String,
         repeatCount: Int = 1
-    ) throws -> ItemEntity {
+    ) throws -> Item {
         try ItemService.create(
             context: context,
             date: date,
@@ -260,7 +260,7 @@ struct ItemServiceTest {
             outgo: 0,
             category: "Test"
         )
-        let found = try #require(try context.fetchFirst(.items(.idIs(.init(base64Encoded: item.id)))))
+        let found = try #require(try context.fetchFirst(.items(.idIs(item.id))))
         #expect(found.utcDate == isoDate("2024-03-15T00:00:00Z"))
     }
 
@@ -276,7 +276,7 @@ struct ItemServiceTest {
             outgo: 0,
             category: "Test"
         )
-        let found = try #require(try context.fetchFirst(.items(.idIs(.init(base64Encoded: item.id)))))
+        let found = try #require(try context.fetchFirst(.items(.idIs(item.id))))
         #expect(found.utcDate == isoDate("2024-03-15T00:00:00Z"))
     }
 
@@ -293,7 +293,7 @@ struct ItemServiceTest {
             outgo: 0,
             category: "Test"
         )
-        let found = try #require(try context.fetchFirst(.items(.idIs(.init(base64Encoded: item.id)))))
+        let found = try #require(try context.fetchFirst(.items(.idIs(item.id))))
         #expect(found.utcDate == expectedDate)
     }
 
@@ -313,7 +313,7 @@ struct ItemServiceTest {
         var item = try #require(fetchItems(context).first)
         try ItemService.update(
             context: context,
-            item: ItemEntity(item)!,
+            item: item,
             date: shiftedDate("2024-01-02T00:00:00Z"),
             content: "Updated",
             income: 150,
@@ -342,7 +342,7 @@ struct ItemServiceTest {
 
         try ItemService.update(
             context: context,
-            item: ItemEntity(item)!,
+            item: item,
             date: item.utcDate,
             content: "Changed",
             income: 200,
@@ -376,7 +376,7 @@ struct ItemServiceTest {
 
         try ItemService.update(
             context: context,
-            item: ItemEntity(items[1])!,
+            item: items[1],
             date: isoDate("2023-12-31T00:00:00Z"),
             content: items[1].content,
             income: items[1].income,
@@ -404,7 +404,7 @@ struct ItemServiceTest {
         let target = items[1] // middle item
         try ItemService.updateFuture(
             context: context,
-            item: ItemEntity(target)!,
+            item: target,
             date: target.utcDate,
             content: "UpdatedSub",
             income: 0,
@@ -436,7 +436,7 @@ struct ItemServiceTest {
 
         try ItemService.updateFuture(
             context: context,
-            item: ItemEntity(last)!,
+            item: last,
             date: last.utcDate,
             content: "Changed",
             income: 200,
@@ -463,7 +463,7 @@ struct ItemServiceTest {
         let item = try #require(fetchItems(context).first)
         try ItemService.updateFuture(
             context: context,
-            item: ItemEntity(item)!,
+            item: item,
             date: item.utcDate,
             content: "SoloUpdated",
             income: 100,
@@ -488,10 +488,10 @@ struct ItemServiceTest {
             repeatCount: 3
         )
         _ = try context.fetch(.items(.all))
-        let target = try #require(try context.fetchFirst(.items(.idIs(.init(base64Encoded: item.id)))))
+        let target = try #require(try context.fetchFirst(.items(.idIs(item.id))))
         try ItemService.updateAll(
             context: context,
-            item: ItemEntity(target)!,
+            item: target,
             date: target.utcDate,
             content: "Fitness",
             income: 0,
@@ -523,7 +523,7 @@ struct ItemServiceTest {
         let item = try #require(fetchItems(context).first)
         try ItemService.delete(
             context: context,
-            item: ItemEntity(item)!
+            item: item
         )
         let items = try context.fetch(.items(.all))
         #expect(items.isEmpty)
@@ -550,7 +550,7 @@ struct ItemServiceTest {
         let allItems = try context.fetch(.items(.all))
         let toDelete = allItems.filter { $0.content == "RemoveMe" }
         try toDelete.forEach {
-            try ItemService.delete(context: context, item: ItemEntity($0)!)
+            try ItemService.delete(context: context, item: $0)
         }
 
         let remaining = try context.fetch(.items(.all))
@@ -590,7 +590,7 @@ struct ItemServiceTest {
         var item = try #require(fetchItems(context).first)
         try ItemService.update(
             context: context,
-            item: ItemEntity(item)!,
+            item: item,
             date: item.utcDate,
             content: item.content,
             income: item.income,
@@ -645,7 +645,7 @@ struct ItemServiceTest {
         var items = try context.fetch(.items(.all)).sorted { $0.utcDate < $1.utcDate }
         try ItemService.update(
             context: context,
-            item: ItemEntity(items[1])!,
+            item: items[1],
             date: items[1].utcDate,
             content: items[1].content,
             income: 500,

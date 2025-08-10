@@ -19,10 +19,11 @@ struct GetItemsIntent: AppIntent {
     nonisolated static let title: LocalizedStringResource = .init("Get Items", table: "AppIntents")
 
     func perform() throws -> some ReturnsValue<[ItemEntity]> {
-        let items = try ItemService.items(
-            context: modelContainer.mainContext,
-            date: date
+        .result(
+            value: try ItemService.items(
+                context: modelContainer.mainContext,
+                date: date
+            ).compactMap(ItemEntity.init)
         )
-        return .result(value: items)
     }
 }

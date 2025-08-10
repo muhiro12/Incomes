@@ -84,7 +84,7 @@ struct TagListView: View {
                         .forEach {
                             try TagService.delete(context: context, tag: $0)
                         }
-                    try items.compactMap(ItemEntity.init).forEach {
+                    try items.forEach {
                         try ItemService.delete(context: context, item: $0)
                     }
                     willDeleteTags = .empty

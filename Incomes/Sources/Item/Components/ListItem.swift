@@ -77,13 +77,9 @@ struct ListItem: View {
         ) {
             Button(role: .destructive) {
                 do {
-                    guard let entity = ItemEntity(item) else {
-                        assertionFailure()
-                        return
-                    }
                     try ItemService.delete(
                         context: context,
-                        item: entity
+                        item: item
                     )
                     Haptic.success.impact()
                 } catch {

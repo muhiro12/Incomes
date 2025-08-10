@@ -115,7 +115,7 @@ struct ItemServiceTests {
 
     @Test
     func repeatItemsCount_returns_count_for_repeat_id() throws {
-        let entity = try ItemService.create(
+        let item = try ItemService.create(
             context: context,
             date: shiftedDate("2000-01-01T12:00:00Z"),
             content: "A",
@@ -124,11 +124,9 @@ struct ItemServiceTests {
             category: "Test",
             repeatCount: 2
         )
-        let repeatID = try PersistentIdentifier(base64Encoded: entity.id)
-        let model = try #require(try context.fetchFirst(.items(.idIs(repeatID))))
         let count = try ItemService.repeatItemsCount(
             context: context,
-            repeatID: model.repeatID
+            repeatID: item.repeatID
         )
         #expect(count == 2)
     }
@@ -461,7 +459,7 @@ struct ItemServiceTests {
         )
         try ItemService.update(
             context: context,
-            item: ItemEntity(fetchItems(context)[1])!,
+            item: fetchItems(context)[1],
             date: shiftedDate("2000-02-02T12:00:00Z"),
             content: "content2",
             income: 100,
@@ -529,7 +527,7 @@ struct ItemServiceTests {
         )
         try ItemService.updateAll(
             context: context,
-            item: ItemEntity(fetchItems(context)[1])!,
+            item: fetchItems(context)[1],
             date: shiftedDate("2000-02-02T12:00:00Z"),
             content: "content2",
             income: 100,
@@ -597,7 +595,7 @@ struct ItemServiceTests {
         )
         try ItemService.updateFuture(
             context: context,
-            item: ItemEntity(fetchItems(context)[1])!,
+            item: fetchItems(context)[1],
             date: shiftedDate("2000-02-02T12:00:00Z"),
             content: "content2",
             income: 100,
@@ -644,7 +642,7 @@ struct ItemServiceTests {
             content: entity.content,
             income: entity.income,
             outgo: 90,
-            category: entity.category ?? ""
+            category: entity.category?.name ?? ""
         )
         try ItemService.recalculate(
             context: context,
