@@ -29,12 +29,4 @@ public nonisolated extension Decimal {
         }
         return "-" + asCurrency
     }
-
-    var isPlus: Bool {
-        self > .zero
-    }
-
-    var isMinus: Bool {
-        self < .zero
-    }
 }
