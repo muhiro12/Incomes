@@ -43,7 +43,7 @@ struct CreateAndShowItemIntent: AppIntent {
         )
         return .result(dialog: .init(stringLiteral: item.content)) {
             IntentItemSection()
-                .environment(try! item.model(in: modelContainer.mainContext))
+                .environment(item)
         }
     }
 }

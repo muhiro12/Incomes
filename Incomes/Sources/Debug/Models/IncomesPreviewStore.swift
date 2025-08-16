@@ -25,7 +25,7 @@ final class IncomesPreviewStore {
             items = try! context.fetch(.items(.all))
             tags = try! context.fetch(.tags(.all))
         }
-        try! BalanceCalculator().calculate(in: context, for: items)
+        try! BalanceCalculator.calculate(in: context, for: items)
     }
 
     func prepareIgnoringDuplicates(_ context: ModelContext) {
@@ -45,7 +45,7 @@ final class IncomesPreviewStore {
             )
         }
         items = try! context.fetch(.items(.all))
-        try! BalanceCalculator().calculate(in: context, for: items)
+        try! BalanceCalculator.calculate(in: context, for: items)
         tags = try! context.fetch(.tags(.all))
     }
 

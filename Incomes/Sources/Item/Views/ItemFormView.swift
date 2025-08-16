@@ -244,15 +244,14 @@ private extension ItemFormView {
     }
 
     func saveForThisItem() {
-        guard let item,
-              let entity = ItemEntity(item) else {
+        guard let item else {
             assertionFailure()
             return
         }
         do {
             try ItemService.update(
                 context: context,
-                item: entity,
+                item: item,
                 date: date,
                 content: content,
                 income: income.decimalValue,
@@ -267,15 +266,14 @@ private extension ItemFormView {
     }
 
     func saveForFutureItems() {
-        guard let item,
-              let entity = ItemEntity(item) else {
+        guard let item else {
             assertionFailure()
             return
         }
         do {
             try ItemService.updateFuture(
                 context: context,
-                item: entity,
+                item: item,
                 date: date,
                 content: content,
                 income: income.decimalValue,
@@ -290,15 +288,14 @@ private extension ItemFormView {
     }
 
     func saveForAllItems() {
-        guard let item,
-              let entity = ItemEntity(item) else {
+        guard let item else {
             assertionFailure()
             return
         }
         do {
             try ItemService.updateAll(
                 context: context,
-                item: entity,
+                item: item,
                 date: date,
                 content: content,
                 income: income.decimalValue,

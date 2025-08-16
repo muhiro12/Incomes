@@ -31,7 +31,7 @@ struct UpdateItemIntent: AppIntent {
         }
         try ItemService.update(
             context: modelContainer.mainContext,
-            item: item,
+            item: item.model(in: modelContainer.mainContext),
             date: date,
             content: content,
             income: income.amount,

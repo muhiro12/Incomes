@@ -13,7 +13,7 @@ struct DeleteItemIntent: AppIntent {
     func perform() throws -> some IntentResult {
         try ItemService.delete(
             context: modelContainer.mainContext,
-            item: item
+            item: item.model(in: modelContainer.mainContext)
         )
         return .result()
     }

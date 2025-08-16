@@ -11,7 +11,7 @@ struct DeleteTagIntent: AppIntent {
     nonisolated static let title: LocalizedStringResource = .init("Delete Tag", table: "AppIntents")
 
     func perform() throws -> some IntentResult {
-        try TagService.delete(context: modelContainer.mainContext, tag: tag)
+        try TagService.delete(tag: tag.model(in: modelContainer.mainContext))
         return .result()
     }
 }

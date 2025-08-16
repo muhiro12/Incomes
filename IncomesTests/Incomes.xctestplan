@@ -2,7 +2,7 @@
   "configurations" : [
     {
       "id" : "DB835D4F-C51A-42D6-A0FA-19894CC2A364",
-      "name" : "Configuration 1",
+      "name" : "Test Scheme Action",
       "options" : {
 
       }
@@ -14,18 +14,18 @@
   },
   "testTargets" : [
     {
+      "target" : {
+        "containerPath" : "container:Incomes.xcodeproj",
+        "identifier" : "ADA85F612DB62CDA0047CB54",
+        "name" : "IncomesTests"
+      }
+    },
+    {
       "parallelizable" : false,
       "target" : {
         "containerPath" : "container:Incomes.xcodeproj",
         "identifier" : "ADD8C8B32DDADBD6002431C6",
         "name" : "IncomesTimeZoneTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:Incomes.xcodeproj",
-        "identifier" : "ADA85F612DB62CDA0047CB54",
-        "name" : "IncomesTests"
       }
     }
   ],

@@ -13,19 +13,17 @@ struct IntentItemListSection: View {
     @Environment(\.modelContext)
     private var context
 
-    private var itemEntities: [ItemEntity]
+    private var items: [Item]
 
-    init(_ items: [ItemEntity]) {
-        self.itemEntities = items
+    init(_ items: [Item]) {
+        self.items = items
     }
 
     var body: some View {
         Section {
-            ForEach(itemEntities) { entity in
-                if let model = try? entity.model(in: context) {
-                    NarrowListItem()
-                        .environment(model)
-                }
+            ForEach(items) { item in
+                NarrowListItem()
+                    .environment(item)
             }
         }
         .safeAreaPadding()
@@ -34,6 +32,6 @@ struct IntentItemListSection: View {
 
 #Preview {
     IncomesPreview { preview in
-        IntentItemListSection(preview.items.compactMap(ItemEntity.init))
+        IntentItemListSection(preview.items)
     }
 }

@@ -13,11 +13,13 @@ struct GetTagByNameIntent: AppIntent {
     nonisolated static let title: LocalizedStringResource = .init("Get Tag By Name", table: "AppIntents")
 
     func perform() throws -> some ReturnsValue<TagEntity?> {
-        let result = try TagService.getByName(
+        guard let tag = try TagService.getByName(
             context: modelContainer.mainContext,
             name: name,
             type: type
-        )
-        return .result(value: result)
+        ) else {
+            return .result(value: nil)
+        }
+        return .result(value: .init(tag))
     }
 }

@@ -25,6 +25,6 @@ struct GetPreviousItemIntent: AppIntent {
         ) else {
             return .result(value: nil)
         }
-        return .result(value: item)
+        return .result(value: .init(item))
     }
 }

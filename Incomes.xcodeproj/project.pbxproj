@@ -7,9 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AD2A9A2A2E489E6500EFC7C3 /* IncomesLibrary in Frameworks */ = {isa = PBXBuildFile; productRef = AD2A9A292E489E6500EFC7C3 /* IncomesLibrary */; };
 		ADA85F312DB6275B0047CB54 /* GoogleMobileAdsWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = ADA85F302DB6275B0047CB54 /* GoogleMobileAdsWrapper */; };
 		ADA85F342DB627730047CB54 /* LicenseListWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = ADA85F332DB627730047CB54 /* LicenseListWrapper */; };
-		ADA85F372DB627A20047CB54 /* SwiftUtilities in Frameworks */ = {isa = PBXBuildFile; productRef = ADA85F362DB627A20047CB54 /* SwiftUtilities */; };
 		ADEACF912DB634A1001407EF /* StoreKitWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = ADEACF902DB634A1001407EF /* StoreKitWrapper */; };
 /* End PBXBuildFile section */
 
@@ -48,9 +48,8 @@
 		ADD8C8BD2DDADBD6002431C6 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Default/BalanceCalculatorTests.swift,
 				Default/CalendarExtensionXCTests.swift,
-				Default/LocaleAmountConverterTest.swift,
+				Default/ItemEntityExtensionTest.swift,
 				Default/StringExtensionTests.swift,
 				Incomes.xctestplan,
 			);
@@ -62,9 +61,6 @@
 				Incomes.xctestplan,
 				TimeZone/CalendarExtensionTest.swift,
 				TimeZone/DateExtensionTests.swift,
-				TimeZone/ItemPredicateTest.swift,
-				TimeZone/ItemServiceTest.swift,
-				TimeZone/ItemTest.swift,
 			);
 			target = ADA85F612DB62CDA0047CB54 /* IncomesTests */;
 		};
@@ -89,8 +85,8 @@
 			files = (
 				ADA85F312DB6275B0047CB54 /* GoogleMobileAdsWrapper in Frameworks */,
 				ADEACF912DB634A1001407EF /* StoreKitWrapper in Frameworks */,
+				AD2A9A2A2E489E6500EFC7C3 /* IncomesLibrary in Frameworks */,
 				ADA85F342DB627730047CB54 /* LicenseListWrapper in Frameworks */,
-				ADA85F372DB627A20047CB54 /* SwiftUtilities in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -177,8 +173,8 @@
 			packageProductDependencies = (
 				ADA85F302DB6275B0047CB54 /* GoogleMobileAdsWrapper */,
 				ADA85F332DB627730047CB54 /* LicenseListWrapper */,
-				ADA85F362DB627A20047CB54 /* SwiftUtilities */,
 				ADEACF902DB634A1001407EF /* StoreKitWrapper */,
+				AD2A9A292E489E6500EFC7C3 /* IncomesLibrary */,
 			);
 			productName = Incomes;
 			productReference = ADCF36A624A1D0F40011D6F5 /* Incomes.app */;
@@ -244,8 +240,8 @@
 			packageReferences = (
 				ADA85F2F2DB6275B0047CB54 /* XCRemoteSwiftPackageReference "GoogleMobileAdsWrapper" */,
 				ADA85F322DB627730047CB54 /* XCRemoteSwiftPackageReference "LicenseListWrapper" */,
-				ADA85F352DB627A20047CB54 /* XCRemoteSwiftPackageReference "SwiftUtilities" */,
 				ADEACF8F2DB634A1001407EF /* XCRemoteSwiftPackageReference "StoreKitWrapper" */,
+				AD2A9A282E489E6500EFC7C3 /* XCLocalSwiftPackageReference "Incomes/IncomesLibrary" */,
 			);
 			productRefGroup = ADCF36A724A1D0F40011D6F5 /* Products */;
 			projectDirPath = "";
@@ -690,6 +686,13 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCLocalSwiftPackageReference section */
+		AD2A9A282E489E6500EFC7C3 /* XCLocalSwiftPackageReference "Incomes/IncomesLibrary" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Incomes/IncomesLibrary;
+		};
+/* End XCLocalSwiftPackageReference section */
+
 /* Begin XCRemoteSwiftPackageReference section */
 		ADA85F2F2DB6275B0047CB54 /* XCRemoteSwiftPackageReference "GoogleMobileAdsWrapper" */ = {
 			isa = XCRemoteSwiftPackageReference;
@@ -707,14 +710,6 @@
 				minimumVersion = 1.1.0;
 			};
 		};
-		ADA85F352DB627A20047CB54 /* XCRemoteSwiftPackageReference "SwiftUtilities" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/muhiro12/SwiftUtilities.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.9.0;
-			};
-		};
 		ADEACF8F2DB634A1001407EF /* XCRemoteSwiftPackageReference "StoreKitWrapper" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/muhiro12/StoreKitWrapper.git";
@@ -726,6 +721,10 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		AD2A9A292E489E6500EFC7C3 /* IncomesLibrary */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = IncomesLibrary;
+		};
 		ADA85F302DB6275B0047CB54 /* GoogleMobileAdsWrapper */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = ADA85F2F2DB6275B0047CB54 /* XCRemoteSwiftPackageReference "GoogleMobileAdsWrapper" */;
@@ -735,11 +734,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = ADA85F322DB627730047CB54 /* XCRemoteSwiftPackageReference "LicenseListWrapper" */;
 			productName = LicenseListWrapper;
-		};
-		ADA85F362DB627A20047CB54 /* SwiftUtilities */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = ADA85F352DB627A20047CB54 /* XCRemoteSwiftPackageReference "SwiftUtilities" */;
-			productName = SwiftUtilities;
 		};
 		ADEACF902DB634A1001407EF /* StoreKitWrapper */ = {
 			isa = XCSwiftPackageProductDependency;

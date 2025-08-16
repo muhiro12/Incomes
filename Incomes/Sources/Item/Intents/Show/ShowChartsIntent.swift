@@ -19,14 +19,13 @@ struct ShowChartsIntent: AppIntent {
     nonisolated static let title: LocalizedStringResource = .init("Show Charts", table: "AppIntents")
 
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
-        let entities = try ItemService.items(
+        let items = try ItemService.items(
             context: modelContainer.mainContext,
             date: date
         )
-        guard entities.isNotEmpty else {
+        guard items.isNotEmpty else {
             return .result(dialog: .init(.init("Not Found", table: "AppIntents")))
         }
-        let items = try entities.compactMap { try $0.model(in: modelContainer.mainContext) }
         return .result(dialog: .init(stringLiteral: date.stringValue(.yyyyMMM))) {
             IntentChartSectionGroup(.items(.idsAre(items.map(\.id))))
                 .modelContainer(modelContainer)

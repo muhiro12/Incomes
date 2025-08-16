@@ -79,12 +79,10 @@ struct TagListView: View {
                     let items = selectedTags.flatMap {
                         $0.items ?? .empty
                     }
-                    try selectedTags
-                        .compactMap(TagEntity.init)
-                        .forEach {
-                            try TagService.delete(context: context, tag: $0)
-                        }
-                    try items.compactMap(ItemEntity.init).forEach {
+                    try selectedTags.forEach {
+                        try TagService.delete(tag: $0)
+                    }
+                    try items.forEach {
                         try ItemService.delete(context: context, item: $0)
                     }
                     willDeleteTags = .empty

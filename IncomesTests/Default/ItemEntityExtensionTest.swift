@@ -11,7 +11,7 @@ struct ItemEntityExtensionTest {
     }
 
     @Test func modelFetch() throws {
-        let entity = try ItemService.create(
+        let item = try ItemService.create(
             context: context,
             date: isoDate("2000-01-01T12:00:00Z"),
             content: "content",
@@ -20,7 +20,6 @@ struct ItemEntityExtensionTest {
             category: "category",
             repeatCount: 1
         )
-        let item = try entity.model(in: context)
         #expect(item.content == "content")
         #expect(item.balance == 100)
     }
