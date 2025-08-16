@@ -80,3 +80,46 @@ Use English for:
 - Documentation and identifiers (variables, methods, etc.)
 
 Avoid using Japanese or other non-English languages in code unless strictly necessary (e.g., legal compliance, UI text localization).
+
+## Test Commands
+
+Use these simple, reusable commands to build and run tests via Xcode. They avoid hard-coding simulator models or UDIDs and should work across projects with iOS targets.
+
+Prerequisites
+
+- Xcode with iOS Simulator installed
+- A simulator available (any iOS device is fine)
+
+Commands
+
+- List schemes:
+
+  ```sh
+  xcodebuild -list -project Incomes.xcodeproj
+  ```
+
+- Run app tests with the latest iOS Simulator:
+
+  ```sh
+  xcodebuild -project Incomes.xcodeproj -scheme Incomes -destination 'platform=iOS Simulator,OS=latest' test
+  ```
+
+- Run library tests with the latest iOS Simulator:
+
+  ```sh
+  xcodebuild -project Incomes.xcodeproj -scheme IncomesLibrary -destination 'platform=iOS Simulator,OS=latest' test
+  ```
+
+- If destination resolution fails, target a booted simulator UDID:
+
+  ```sh
+  UDID=$(xcrun simctl list devices | awk '/Booted/ {print $4; exit}' | tr -d '()'); \
+  xcodebuild -project Incomes.xcodeproj -scheme Incomes -destination "id=$UDID" test
+  ```
+
+  Or, pick any iPhone simulator if none is booted:
+
+  ```sh
+  UDID=$(xcrun simctl list devices | awk '/iPhone/ && /(Shutdown|Booted)/ {print $4; exit}' | tr -d '()'); \
+  xcodebuild -project Incomes.xcodeproj -scheme Incomes -destination "id=$UDID" test
+  ```
