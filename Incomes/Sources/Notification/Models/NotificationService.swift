@@ -93,48 +93,17 @@ nonisolated extension NotificationService: UNUserNotificationCenterDelegate {
 private extension NotificationService {
     func buildUpcomingPaymentReminders() -> [UNNotificationRequest] {
         let settings = AppStorage(.notificationSettings).wrappedValue
-
-        guard settings.isEnabled else {
+        guard let plans = try? UpcomingPaymentPlanner.build(
+            context: modelContainer.mainContext,
+            settings: settings,
+            now: .now,
+            limit: 20
+        ) else {
             return .empty
         }
 
-        var descriptor = FetchDescriptor.items(
-            .outgoIsGreaterThanOrEqualTo(amount: settings.thresholdAmount, onOrAfter: .now),
-            order: .forward
-        )
-        descriptor.fetchLimit = 20
-
-        guard let items = try? modelContainer.mainContext.fetch(descriptor) else {
-            return .empty
-        }
-
-        return items.compactMap { item in
-            guard let scheduledDate = Calendar.current.date(
-                byAdding: .day,
-                value: -settings.daysBeforeDueDate,
-                to: item.localDate
-            ) else {
-                return nil
-            }
-
-            let notifyTime = Calendar.current.dateComponents(
-                [.hour, .minute],
-                from: settings.notifyTime
-            )
-
-            guard let notificationDate = Calendar.current.date(
-                bySettingHour: notifyTime.hour ?? 20,
-                minute: notifyTime.minute ?? 0,
-                second: 0,
-                of: scheduledDate
-            ) else {
-                return nil
-            }
-
-            guard notificationDate > .now else {
-                return nil
-            }
-
+        return plans.map { plan in
+            let item = plan.item
             let content = UNMutableNotificationContent()
             content.title = String(localized: "Upcoming Payment")
             content.body = String(
@@ -142,7 +111,7 @@ private extension NotificationService {
             )
             content.sound = .default
 
-            let triggerDate = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: notificationDate)
+            let triggerDate = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: plan.notifyDate)
             let trigger = UNCalendarNotificationTrigger(dateMatching: triggerDate, repeats: false)
 
             return UNNotificationRequest(
