@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import IncomesLibrary
 
 @Observable
 final class ConfigurationService {
@@ -28,6 +29,6 @@ final class ConfigurationService {
               Bundle.main.bundleIdentifier?.contains("playgrounds") == false else {
             return false
         }
-        return current.compare(required, options: .numeric) == .orderedAscending
+        return VersionComparator.isUpdateRequired(current: current, required: required)
     }
 }
