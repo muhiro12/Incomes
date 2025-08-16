@@ -6,27 +6,13 @@
 //  Copyright © 2025 Hiromu Nakano. All rights reserved.
 //
 
-import AppIntents
 import Foundation
 
-public nonisolated enum TagType: String {
+public nonisolated enum TagType: String, Sendable, CaseIterable {
     case year = "aae8af65"
     case yearMonth = "27c9be4b"
     case content = "e2d390d9"
     case category = "a7a130f4"
 }
 
-extension TagType: AppEnum {
-    public static var typeDisplayRepresentation: TypeDisplayRepresentation {
-        .init(name: "Tag Type")
-    }
-
-    public static var caseDisplayRepresentations: [Self: DisplayRepresentation] {
-        [
-            .year: .init(title: "Year"),
-            .yearMonth: .init(title: "Year/Month"),
-            .content: .init(title: "Content"),
-            .category: .init(title: "Category")
-        ]
-    }
-}
+// AppIntents-specific conformances should live in the app target.

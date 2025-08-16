@@ -1,3 +1,10 @@
+//
+//  ItemFormInference.swift
+//  Incomes
+//
+//  Moved from IncomesLibrary to app to avoid AppIntents in the library.
+//
+
 import AppIntents
 import Foundation
 import FoundationModels
@@ -32,7 +39,6 @@ public nonisolated struct ItemFormInference: AppEntity {
 @available(iOS 26.0, *)
 public struct ItemFormInferenceQuery: EntityStringQuery {
     public init() {}
-
     public func entities(for _: [String]) throws -> [ItemFormInference] { [] }
     public func entities(matching _: String) throws -> [ItemFormInference] { [] }
     public func suggestedEntities() throws -> [ItemFormInference] { [] }
