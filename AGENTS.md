@@ -83,43 +83,43 @@ Avoid using Japanese or other non-English languages in code unless strictly nece
 
 ## Test Commands
 
-Use these simple, reusable commands to build and run tests via Xcode. They avoid hard-coding simulator models or UDIDs and should work across projects with iOS targets.
+Use these minimal, reliable commands to build and run tests via Xcode. They avoid hard-coding device names and work across environments.
 
-Prerequisites
-
-- Xcode with iOS Simulator installed
-- A simulator available (any iOS device is fine)
-
-Commands
+- Prerequisites:
+  - Xcode with iOS Simulator runtime installed
+  - At least one iPhone simulator available (booted is best)
 
 - List schemes:
-
   ```sh
   xcodebuild -list -project Incomes.xcodeproj
   ```
 
-- Run app tests with the latest iOS Simulator:
-
+- Run app tests (auto-pick latest iOS Simulator):
   ```sh
-  xcodebuild -project Incomes.xcodeproj -scheme Incomes -destination 'platform=iOS Simulator,OS=latest' test
+  xcodebuild -project Incomes.xcodeproj -scheme Incomes \
+    -destination 'platform=iOS Simulator,OS=latest' test
   ```
 
-- Run library tests with the latest iOS Simulator:
-
+- Run library tests (via Xcode scheme on iOS Simulator):
   ```sh
-  xcodebuild -project Incomes.xcodeproj -scheme IncomesLibrary -destination 'platform=iOS Simulator,OS=latest' test
+  # Note: IncomesLibrary is iOS-only. Do not use `swift test`.
+  xcodebuild -project Incomes.xcodeproj -scheme IncomesLibrary \
+    -destination 'platform=iOS Simulator,OS=latest' test
   ```
 
-- If destination resolution fails, target a booted simulator UDID:
-
+- If destination resolution fails, target a specific simulator UDID:
   ```sh
-  UDID=$(xcrun simctl list devices | awk '/Booted/ {print $4; exit}' | tr -d '()'); \
+  # Prefer a booted simulator
+  UDID=$(xcrun simctl list devices | awk '/Booted/ {print $4; exit}' | tr -d '()')
+  if [ -z "$UDID" ]; then
+    # Else pick any iPhone simulator (Booted or Shutdown)
+    UDID=$(xcrun simctl list devices | awk '/iPhone/ && /(Shutdown|Booted)/ {print $4; exit}' | tr -d '()')
+  fi
   xcodebuild -project Incomes.xcodeproj -scheme Incomes -destination "id=$UDID" test
+  xcodebuild -project Incomes.xcodeproj -scheme IncomesLibrary -destination "id=$UDID" test
   ```
 
-  Or, pick any iPhone simulator if none is booted:
-
-  ```sh
-  UDID=$(xcrun simctl list devices | awk '/iPhone/ && /(Shutdown|Booted)/ {print $4; exit}' | tr -d '()'); \
-  xcodebuild -project Incomes.xcodeproj -scheme Incomes -destination "id=$UDID" test
-  ```
+- Tips:
+  - Use `-resultBundlePath build/TestResults.xcresult` to save results. If it already exists, delete it or use a new path.
+  - When piping output, add `set -o pipefail` to propagate failures.
+  - If you need concise logs, install `xcpretty` and pipe `xcodebuild` output to it (optional).

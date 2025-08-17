@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		AD2A9A2A2E489E6500EFC7C3 /* IncomesLibrary in Frameworks */ = {isa = PBXBuildFile; productRef = AD2A9A292E489E6500EFC7C3 /* IncomesLibrary */; };
+		AD6C5A752E515E3000E1FBA0 /* IncomesLibrary in Frameworks */ = {isa = PBXBuildFile; productRef = AD6C5A742E515E3000E1FBA0 /* IncomesLibrary */; };
 		ADA85F312DB6275B0047CB54 /* GoogleMobileAdsWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = ADA85F302DB6275B0047CB54 /* GoogleMobileAdsWrapper */; };
 		ADA85F342DB627730047CB54 /* LicenseListWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = ADA85F332DB627730047CB54 /* LicenseListWrapper */; };
 		ADEACF912DB634A1001407EF /* StoreKitWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = ADEACF902DB634A1001407EF /* StoreKitWrapper */; };
@@ -35,6 +35,7 @@
 		ADCF36A624A1D0F40011D6F5 /* Incomes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Incomes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ADCF375E24A2FEAF0011D6F5 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		ADD8C8BC2DDADBD6002431C6 /* IncomesTimeZoneTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = IncomesTimeZoneTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		ADFA3E992E51617C005960FF /* IncomesLibrary */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = IncomesLibrary; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -84,8 +85,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				ADA85F312DB6275B0047CB54 /* GoogleMobileAdsWrapper in Frameworks */,
+				AD6C5A752E515E3000E1FBA0 /* IncomesLibrary in Frameworks */,
 				ADEACF912DB634A1001407EF /* StoreKitWrapper in Frameworks */,
-				AD2A9A2A2E489E6500EFC7C3 /* IncomesLibrary in Frameworks */,
 				ADA85F342DB627730047CB54 /* LicenseListWrapper in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -105,6 +106,7 @@
 			children = (
 				ADA5778B2CB66D6200CE47E2 /* Incomes */,
 				ADA85F632DB62CDA0047CB54 /* IncomesTests */,
+				ADFA3E992E51617C005960FF /* IncomesLibrary */,
 				ADCF36A724A1D0F40011D6F5 /* Products */,
 				ADCF375D24A2FEAF0011D6F5 /* Frameworks */,
 			);
@@ -174,7 +176,7 @@
 				ADA85F302DB6275B0047CB54 /* GoogleMobileAdsWrapper */,
 				ADA85F332DB627730047CB54 /* LicenseListWrapper */,
 				ADEACF902DB634A1001407EF /* StoreKitWrapper */,
-				AD2A9A292E489E6500EFC7C3 /* IncomesLibrary */,
+				AD6C5A742E515E3000E1FBA0 /* IncomesLibrary */,
 			);
 			productName = Incomes;
 			productReference = ADCF36A624A1D0F40011D6F5 /* Incomes.app */;
@@ -241,7 +243,7 @@
 				ADA85F2F2DB6275B0047CB54 /* XCRemoteSwiftPackageReference "GoogleMobileAdsWrapper" */,
 				ADA85F322DB627730047CB54 /* XCRemoteSwiftPackageReference "LicenseListWrapper" */,
 				ADEACF8F2DB634A1001407EF /* XCRemoteSwiftPackageReference "StoreKitWrapper" */,
-				AD2A9A282E489E6500EFC7C3 /* XCLocalSwiftPackageReference "Incomes/IncomesLibrary" */,
+				AD6C5A732E515E3000E1FBA0 /* XCLocalSwiftPackageReference "IncomesLibrary" */,
 			);
 			productRefGroup = ADCF36A724A1D0F40011D6F5 /* Products */;
 			projectDirPath = "";
@@ -687,9 +689,9 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		AD2A9A282E489E6500EFC7C3 /* XCLocalSwiftPackageReference "Incomes/IncomesLibrary" */ = {
+		AD6C5A732E515E3000E1FBA0 /* XCLocalSwiftPackageReference "IncomesLibrary" */ = {
 			isa = XCLocalSwiftPackageReference;
-			relativePath = Incomes/IncomesLibrary;
+			relativePath = IncomesLibrary;
 		};
 /* End XCLocalSwiftPackageReference section */
 
@@ -721,7 +723,7 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		AD2A9A292E489E6500EFC7C3 /* IncomesLibrary */ = {
+		AD6C5A742E515E3000E1FBA0 /* IncomesLibrary */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = IncomesLibrary;
 		};
