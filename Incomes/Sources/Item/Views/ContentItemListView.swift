@@ -34,9 +34,7 @@ extension ContentItemListView: View {
         .listStyle(.grouped)
         .navigationTitle(Text(tag.displayName))
         .toolbar {
-            ToolbarItem(placement: .bottomBar) {
-                ToolbarAlignmentSpacer()
-            }
+            ToolbarAlignmentSpacer(placement: .bottomBar)
             ToolbarItem(placement: .status) {
                 Text("\(items.count) Items")
                     .font(.footnote)
