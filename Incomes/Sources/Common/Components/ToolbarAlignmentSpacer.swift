@@ -9,11 +9,17 @@
 import SwiftUI
 
 struct ToolbarAlignmentSpacer: ToolbarContent {
+    private let placement: ToolbarItemPlacement
+
+    init(placement: ToolbarItemPlacement = .automatic) {
+        self.placement = placement
+    }
+
     var body: some ToolbarContent {
         if #available(iOS 26.0, *) {
-            ToolbarSpacer()
+            ToolbarSpacer(placement: placement)
         } else {
-            ToolbarItem(placement: .bottomBar) {
+            ToolbarItem(placement: placement) {
                 Button(action: {}) {
                     Label(String.empty, systemImage: .empty)
                 }
@@ -30,7 +36,7 @@ struct ToolbarAlignmentSpacer: ToolbarContent {
         Text("Toolbar Spacer Preview")
     }
     .toolbar {
-        ToolbarAlignmentSpacer()
+        ToolbarAlignmentSpacer(placement: .bottomBar)
         ToolbarItem(placement: .bottomBar) {
             Button(action: {
             }) {

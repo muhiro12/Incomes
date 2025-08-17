@@ -32,7 +32,7 @@ extension YearMonthItemListView: View {
         .listStyle(.grouped)
         .navigationTitle(Text(tag.displayName))
         .toolbar {
-            ToolbarAlignmentSpacer()
+            ToolbarAlignmentSpacer(placement: .bottomBar)
             ToolbarItem(placement: .status) {
                 Text("\(items.count) Items")
                     .font(.footnote)
