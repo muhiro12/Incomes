@@ -8,13 +8,34 @@
 
 import SwiftUI
 
-struct ToolbarAlignmentSpacer: View {
-    var body: some View {
-        Button(action: {}) {
-            Label(String.empty, systemImage: .empty)
+struct ToolbarAlignmentSpacer: ToolbarContent {
+    var body: some ToolbarContent {
+        if #available(iOS 26.0, *) {
+            ToolbarSpacer()
+        } else {
+            ToolbarItem(placement: .bottomBar) {
+                Button(action: {}) {
+                    Label(String.empty, systemImage: .empty)
+                }
+                .accessibilityHidden(true)
+                .disabled(true)
+                .allowsHitTesting(false)
+            }
         }
-        .accessibilityHidden(true)
-        .disabled(true)
-        .allowsHitTesting(false)
+    }
+}
+
+#Preview {
+    NavigationStack {
+        Text("Toolbar Spacer Preview")
+    }
+    .toolbar {
+        ToolbarAlignmentSpacer()
+        ToolbarItem(placement: .bottomBar) {
+            Button(action: {
+            }) {
+                Label(.init("Action"), systemImage: "plus")
+            }
+        }
     }
 }

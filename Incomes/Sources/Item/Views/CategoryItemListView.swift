@@ -27,9 +27,7 @@ extension CategoryItemListView: View {
         .listStyle(.grouped)
         .navigationTitle(Text(tag.displayName))
         .toolbar {
-            ToolbarItem(placement: .bottomBar) {
-                ToolbarAlignmentSpacer()
-            }
+            ToolbarAlignmentSpacer()
             ToolbarItem(placement: .status) {
                 Text("\(items.count) Items")
                     .font(.footnote)
