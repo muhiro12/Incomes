@@ -409,38 +409,138 @@
     },
     "Find Duplicate Tags" : {
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Find Duplicate Tags" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Buscar etiquetas duplicadas" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Trouver les étiquettes en double" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "重複タグを検索" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "查找重复标签" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Find Duplicate Tags"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buscar etiquetas duplicadas"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trouver les étiquettes en double"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "重複タグを検索"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "查找重复标签"
+          }
+        }
       }
     },
     "Get All Items Count" : {
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Get All Items Count" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Obtener el conteo de todos los elementos" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Obtenir le nombre de tous les éléments" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "すべてのアイテム数を取得" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "获取所有项目的数量" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Get All Items Count"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obtener el conteo de todos los elementos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obtenir le nombre de tous les éléments"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "すべてのアイテム数を取得"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "获取所有项目的数量"
+          }
+        }
       }
     },
     "Get All Tags" : {
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Get All Tags" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Obtener todas las etiquetas" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Obtenir toutes les étiquettes" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "すべてのタグを取得" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "获取所有标签" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Get All Tags"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obtener todas las etiquetas"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obtenir toutes les étiquettes"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "すべてのタグを取得"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "获取所有标签"
+          }
+        }
       }
     },
     "Get Has Duplicate Tags" : {
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Get Has Duplicate Tags" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Obtener si hay etiquetas duplicadas" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Obtenir s'il existe des étiquettes en double" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "重複タグがあるか取得" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "获取是否存在重复标签" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Get Has Duplicate Tags"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obtener si hay etiquetas duplicadas"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obtenir s'il existe des étiquettes en double"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "重複タグがあるか取得"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "获取是否存在重复标签"
+          }
+        }
       }
     },
     "Get Items" : {
@@ -819,38 +919,138 @@
     },
     "Get Repeat Items Count" : {
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Get Repeat Items Count" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Obtener el conteo de elementos repetidos" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Obtenir le nombre d'éléments répétitifs" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "繰り返しアイテム数を取得" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "获取重复项目的数量" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Get Repeat Items Count"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obtener el conteo de elementos repetidos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obtenir le nombre d'éléments répétitifs"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "繰り返しアイテム数を取得"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "获取重复项目的数量"
+          }
+        }
       }
     },
     "Get Tag By ID" : {
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Get Tag By ID" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Obtener etiqueta por ID" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Obtenir l'étiquette par ID" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "IDでタグを取得" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "按ID获取标签" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Get Tag By ID"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obtener etiqueta por ID"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obtenir l'étiquette par ID"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "IDでタグを取得"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "按ID获取标签"
+          }
+        }
       }
     },
     "Get Tag By Name" : {
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Get Tag By Name" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Obtener etiqueta por nombre" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Obtenir l'étiquette par nom" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "名前でタグを取得" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "按名称获取标签" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Get Tag By Name"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obtener etiqueta por nombre"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obtenir l'étiquette par nom"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "名前でタグを取得"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "按名称获取标签"
+          }
+        }
       }
     },
     "Get Year Items Count" : {
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Get Year Items Count" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Obtener el conteo de elementos del año" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Obtenir le nombre d'éléments de l'année" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "年間アイテム数を取得" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "获取年度项目数量" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Get Year Items Count"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obtener el conteo de elementos del año"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obtenir le nombre d'éléments de l'année"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "年間アイテム数を取得"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "获取年度项目数量"
+          }
+        }
       }
     },
     "Income: %@, Outgo: %@" : {
@@ -889,11 +1089,36 @@
     },
     "Infer Item Form" : {
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Infer Item Form" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Inferir formulario de elemento" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Déduire le formulaire de l'élément" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "アイテムフォームを推測" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "推断项目表单" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Infer Item Form"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inferir formulario de elemento"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Déduire le formulaire de l'élément"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アイテムフォームを推測"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "推断项目表单"
+          }
+        }
       }
     },
     "Item" : {
@@ -932,11 +1157,36 @@
     },
     "Merge Duplicate Tags" : {
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Merge Duplicate Tags" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Combinar etiquetas duplicadas" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Fusionner les étiquettes en double" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "重複タグを統合" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "合并重复标签" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Merge Duplicate Tags"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Combinar etiquetas duplicadas"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fusionner les étiquettes en double"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "重複タグを統合"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "合并重复标签"
+          }
+        }
       }
     },
     "Not Found" : {
@@ -1009,11 +1259,36 @@
     },
     "Recalculate Item" : {
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Recalculate Item" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Recalcular elemento" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Recalculer l'élément" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "アイテムを再計算" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "重新计算项目" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recalculate Item"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recalcular elemento"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recalculer l'élément"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アイテムを再計算"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "重新计算项目"
+          }
+        }
       }
     },
     "Recent Item" : {
@@ -1074,11 +1349,36 @@
     },
     "Resolve Duplicate Tags" : {
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Resolve Duplicate Tags" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Resolver etiquetas duplicadas" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Résoudre les étiquettes en double" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "重複タグを解決" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "解决重复标签" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Resolve Duplicate Tags"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Resolver etiquetas duplicadas"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Résoudre les étiquettes en double"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "重複タグを解決"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "解决重复标签"
+          }
+        }
       }
     },
     "Show Charts" : {
@@ -1455,11 +1755,36 @@
     },
     "Tag" : {
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Tag" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Etiqueta" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Étiquette" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "タグ" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "标签" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tag"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Etiqueta"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Étiquette"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "タグ"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "标签"
+          }
+        }
       }
     },
     "This Month’s Charts" : {
@@ -1576,38 +1901,138 @@
     },
     "Update All Items" : {
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Update All Items" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Actualizar todos los elementos" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Mettre à jour tous les éléments" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "すべてのアイテムを更新" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "更新所有项目" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Update All Items"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Actualizar todos los elementos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mettre à jour tous les éléments"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "すべてのアイテムを更新"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "更新所有项目"
+          }
+        }
       }
     },
     "Update Future Items" : {
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Update Future Items" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Actualizar elementos futuros" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Mettre à jour les éléments futurs" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "今後のアイテムを更新" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "更新未来项目" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Update Future Items"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Actualizar elementos futuros"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mettre à jour les éléments futurs"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "今後のアイテムを更新"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "更新未来项目"
+          }
+        }
       }
     },
     "Update Item" : {
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Update Item" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Actualizar elemento" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Mettre à jour l'élément" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "アイテムを更新" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "更新项目" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Update Item"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Actualizar elemento"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mettre à jour l'élément"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アイテムを更新"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "更新项目"
+          }
+        }
       }
     },
     "Update Repeating Items" : {
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Update Repeating Items" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Actualizar elementos repetidos" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Mettre à jour les éléments récurrents" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "繰り返しアイテムを更新" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "更新重复项目" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Update Repeating Items"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Actualizar elementos repetidos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mettre à jour les éléments récurrents"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "繰り返しアイテムを更新"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "更新重复项目"
+          }
+        }
       }
     }
   },
