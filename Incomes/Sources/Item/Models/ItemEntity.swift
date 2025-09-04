@@ -10,7 +10,7 @@ import AppIntents
 import SwiftData
 
 @Observable
-nonisolated final class ItemEntity: AppEntity {
+final class ItemEntity: AppEntity {
     static let defaultQuery = ItemEntityQuery()
 
     static var typeDisplayRepresentation: TypeDisplayRepresentation {

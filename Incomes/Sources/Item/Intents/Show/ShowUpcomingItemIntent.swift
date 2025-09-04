@@ -9,12 +9,12 @@
 import AppIntents
 import SwiftData
 
-@MainActor
 struct ShowUpcomingItemIntent: AppIntent {
     @Dependency private var modelContainer: ModelContainer
 
-    nonisolated static let title: LocalizedStringResource = .init("Show Upcoming Item", table: "AppIntents")
+    static let title: LocalizedStringResource = .init("Show Upcoming Item", table: "AppIntents")
 
+    @MainActor
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
         let date = Date.now
         guard let item = try ItemService.nextItem(

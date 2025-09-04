@@ -9,10 +9,10 @@
 import AppIntents
 import SwiftData
 
-@MainActor
 struct TagEntityQuery: EntityStringQuery {
     @Dependency private var modelContainer: ModelContainer
 
+    @MainActor
     func entities(for identifiers: [TagEntity.ID]) throws -> [TagEntity] {
         try identifiers.compactMap { id in
             guard let tag = try TagService.getByID(
@@ -25,6 +25,7 @@ struct TagEntityQuery: EntityStringQuery {
         }
     }
 
+    @MainActor
     func entities(matching string: String) throws -> [TagEntity] {
         let tags = try TagService.getAll(context: modelContainer.mainContext)
         let hiragana = string.applyingTransform(.hiraganaToKatakana, reverse: true).orEmpty
@@ -52,6 +53,7 @@ struct TagEntityQuery: EntityStringQuery {
         }
     }
 
+    @MainActor
     func suggestedEntities() throws -> [TagEntity] {
         let tags = try TagService.getAll(context: modelContainer.mainContext)
         return [

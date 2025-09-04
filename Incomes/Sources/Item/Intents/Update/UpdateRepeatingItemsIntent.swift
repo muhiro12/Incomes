@@ -2,7 +2,6 @@ import AppIntents
 import SwiftData
 import SwiftUI
 
-@MainActor
 struct UpdateRepeatingItemsIntent: AppIntent {
     @Parameter(title: "Item")
     private var item: ItemEntity
@@ -19,8 +18,9 @@ struct UpdateRepeatingItemsIntent: AppIntent {
 
     @Dependency private var modelContainer: ModelContainer
 
-    nonisolated static let title: LocalizedStringResource = .init("Update Repeating Items", table: "AppIntents")
+    static let title: LocalizedStringResource = .init("Update Repeating Items", table: "AppIntents")
 
+    @MainActor
     func perform() throws -> some IntentResult {
         let currencyCode = AppStorage(.currencyCode).wrappedValue
         guard income.currencyCode == currencyCode else {

@@ -8,7 +8,7 @@
 
 import Foundation
 
-public nonisolated enum LocaleAmountConverter {
+public enum LocaleAmountConverter {
     public static func localizedAmount(baseUSD: Decimal, locale: Locale = .current) -> Decimal {
         let currencyCode = CurrencyCode(rawValue: locale.currency?.identifier ?? "")
         let multiplier: Decimal

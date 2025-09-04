@@ -1,7 +1,7 @@
 import Foundation
 import SwiftData
 
-public nonisolated enum UpcomingPaymentPlanner {
+public enum UpcomingPaymentPlanner {
     public struct PlannedPayment {
         public let item: Item
         public let notifyDate: Date

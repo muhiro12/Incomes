@@ -8,7 +8,7 @@
 
 import AppIntents
 
-nonisolated struct IncomesShortcuts: AppShortcutsProvider {
+struct IncomesShortcuts: AppShortcutsProvider {
     static let shortcutTileColor = ShortcutTileColor.lime
 
     static var appShortcuts: [AppShortcut] {

@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum TagError: IncomesError {
+enum TagError: @preconcurrency IncomesError {
     case tagNotFound
 
     var resource: LocalizedStringResource {

@@ -10,15 +10,15 @@ import AppIntents
 import SwiftData
 import SwiftUI
 
-@MainActor
 struct GetNextItemProfitIntent: AppIntent {
     @Parameter(title: "Date", kind: .date)
     private var date: Date
 
     @Dependency private var modelContainer: ModelContainer
 
-    nonisolated static let title: LocalizedStringResource = .init("Get Next Item Profit", table: "AppIntents")
+    static let title: LocalizedStringResource = .init("Get Next Item Profit", table: "AppIntents")
 
+    @MainActor
     func perform() throws -> some ReturnsValue<IntentCurrencyAmount?> {
         let profit = try ItemService.nextItem(
             context: modelContainer.mainContext,

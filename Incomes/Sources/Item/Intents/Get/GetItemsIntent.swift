@@ -9,15 +9,15 @@
 import AppIntents
 import SwiftData
 
-@MainActor
 struct GetItemsIntent: AppIntent {
     @Parameter(title: "Date", kind: .date)
     private var date: Date
 
     @Dependency private var modelContainer: ModelContainer
 
-    nonisolated static let title: LocalizedStringResource = .init("Get Items", table: "AppIntents")
+    static let title: LocalizedStringResource = .init("Get Items", table: "AppIntents")
 
+    @MainActor
     func perform() throws -> some ReturnsValue<[ItemEntity]> {
         .result(
             value: try ItemService.items(

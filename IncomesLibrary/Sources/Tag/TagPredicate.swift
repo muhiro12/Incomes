@@ -9,7 +9,7 @@
 import Foundation
 import SwiftData
 
-public nonisolated enum TagPredicate {
+public enum TagPredicate {
     case all
     case none
     case idIs(Tag.ID)
@@ -66,7 +66,7 @@ public nonisolated enum TagPredicate {
     }
 }
 
-public nonisolated extension FetchDescriptor where T == Tag {
+public extension FetchDescriptor where T == Tag {
     static func tags(_ predicate: TagPredicate, order: SortOrder = .forward) -> FetchDescriptor {
         .init(
             predicate: predicate.value,

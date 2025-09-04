@@ -11,7 +11,6 @@ import Foundation
 import SwiftData
 import Testing
 
-@MainActor
 @Suite(.serialized)
 struct ItemPredicateTest {
     let context: ModelContext

@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum DebugError: IncomesError {
+enum DebugError: @preconcurrency IncomesError {
     case `default`
 
     var resource: LocalizedStringResource {

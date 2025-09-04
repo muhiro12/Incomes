@@ -1,15 +1,15 @@
 import AppIntents
 import SwiftData
 
-@MainActor
 struct FindDuplicateTagsIntent: AppIntent {
     @Parameter(title: "Tags")
     private var tags: [TagEntity]
 
     @Dependency private var modelContainer: ModelContainer
 
-    nonisolated static let title: LocalizedStringResource = .init("Find Duplicate Tags", table: "AppIntents")
+    static let title: LocalizedStringResource = .init("Find Duplicate Tags", table: "AppIntents")
 
+    @MainActor
     func perform() throws -> some ReturnsValue<[TagEntity]> {
         .result(
             value: try TagService.findDuplicates(

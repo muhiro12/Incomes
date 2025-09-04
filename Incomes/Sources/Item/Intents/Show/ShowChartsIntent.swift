@@ -9,15 +9,15 @@
 import AppIntents
 import SwiftData
 
-@MainActor
 struct ShowChartsIntent: AppIntent {
     @Parameter(title: "Date", kind: .date)
     private var date: Date
 
     @Dependency private var modelContainer: ModelContainer
 
-    nonisolated static let title: LocalizedStringResource = .init("Show Charts", table: "AppIntents")
+    static let title: LocalizedStringResource = .init("Show Charts", table: "AppIntents")
 
+    @MainActor
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
         let items = try ItemService.items(
             context: modelContainer.mainContext,

@@ -10,7 +10,7 @@ import Foundation
 import SwiftData
 
 @Model
-public nonisolated final class Tag {
+public final class Tag {
     public private(set) var name = String.empty
     public private(set) var typeID = String.empty
 

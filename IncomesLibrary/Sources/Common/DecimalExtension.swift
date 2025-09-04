@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-public nonisolated extension Decimal {
+public extension Decimal {
     var asCurrency: String {
         let formatter = NumberFormatter()
         formatter.numberStyle = .currency

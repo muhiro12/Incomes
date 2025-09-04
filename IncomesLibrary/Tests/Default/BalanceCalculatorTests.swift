@@ -9,7 +9,6 @@
 @testable import IncomesLibrary
 import XCTest
 
-@MainActor
 final class BalanceCalculatorTests: XCTestCase {
     func testCalculate() {
         XCTContext.runActivity(named: "Result is as expected when inserting") { _ in

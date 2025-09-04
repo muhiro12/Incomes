@@ -1,7 +1,6 @@
 import Foundation
 import SwiftData
 
-@MainActor
 public enum TagService {
     public static func getAll(context: ModelContext) throws -> [Tag] {
         try context.fetch(.tags(.all))
