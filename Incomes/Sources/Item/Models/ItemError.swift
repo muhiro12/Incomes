@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum ItemError: IncomesError {
+enum ItemError: @preconcurrency IncomesError {
     case contentIsEmpty
     case entityConversionFailed
     case itemNotFound

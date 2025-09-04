@@ -10,7 +10,6 @@ import AppIntents
 import SwiftData
 import SwiftUI
 
-@MainActor
 struct CreateItemIntent: AppIntent {
     @Parameter(title: "Date", kind: .date)
     private var date: Date
@@ -27,8 +26,9 @@ struct CreateItemIntent: AppIntent {
 
     @Dependency private var modelContainer: ModelContainer
 
-    nonisolated static let title: LocalizedStringResource = .init("Create Item", table: "AppIntents")
+    static let title: LocalizedStringResource = .init("Create Item", table: "AppIntents")
 
+    @MainActor
     func perform() throws -> some ReturnsValue<ItemEntity> {
         guard content.isNotEmpty else {
             throw $content.needsValueError()

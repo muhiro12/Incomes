@@ -1,7 +1,6 @@
 import Foundation
 import SwiftData
 
-@MainActor
 public enum ItemService {
     public static func create(
         context: ModelContext,

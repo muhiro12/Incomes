@@ -9,12 +9,12 @@
 import AppIntents
 import SwiftData
 
-@MainActor
 struct ShowThisMonthItemsIntent: AppIntent {
     @Dependency private var modelContainer: ModelContainer
 
-    nonisolated static let title: LocalizedStringResource = .init("Show This Month's Items", table: "AppIntents")
+    static let title: LocalizedStringResource = .init("Show This Month's Items", table: "AppIntents")
 
+    @MainActor
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
         let date = Date.now
         let items = try ItemService.items(

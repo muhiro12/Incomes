@@ -2,7 +2,6 @@ import SwiftUI
 import UIKit
 import VisionKit
 
-@MainActor
 final class ImageTextScanner: ObservableObject {
     @Published var recognizedText = String()
     @Published var isScanning = false

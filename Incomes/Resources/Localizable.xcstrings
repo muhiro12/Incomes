@@ -3796,6 +3796,7 @@
       }
     },
     "Tag Type" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -4442,6 +4443,7 @@
       }
     },
     "Year/Month" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {

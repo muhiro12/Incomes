@@ -10,7 +10,7 @@ import AppIntents
 import SwiftData
 
 @Observable
-nonisolated final class TagEntity: AppEntity {
+final class TagEntity: AppEntity {
     static let defaultQuery = TagEntityQuery()
 
     static var typeDisplayRepresentation: TypeDisplayRepresentation {

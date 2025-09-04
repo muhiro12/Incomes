@@ -11,7 +11,7 @@ import FoundationModels
 
 @available(iOS 26.0, *)
 @Generable
-public nonisolated struct ItemFormInference: AppEntity {
+public struct ItemFormInference: AppEntity {
     @Guide(description: "Date formatted as yyyyMMdd")
     public var date: String
     @Guide(description: "Item content")

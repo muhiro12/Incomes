@@ -8,7 +8,7 @@
 
 import Foundation
 
-public nonisolated protocol AppStorageCodable: Codable, Equatable, RawRepresentable<String> {
+public protocol AppStorageCodable: Codable, Equatable, RawRepresentable<String> {
     init()
 }
 

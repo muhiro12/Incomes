@@ -8,7 +8,7 @@
 
 import Foundation
 
-nonisolated protocol IncomesError: LocalizedError {
+protocol IncomesError: LocalizedError {
     var resource: LocalizedStringResource { get }
 }
 

@@ -9,7 +9,6 @@
 import AppIntents
 import SwiftData
 
-@MainActor
 struct CreateAndShowItemIntent: AppIntent {
     @Parameter(title: "Date", kind: .date)
     private var date: Date
@@ -26,8 +25,9 @@ struct CreateAndShowItemIntent: AppIntent {
 
     @Dependency private var modelContainer: ModelContainer
 
-    nonisolated static let title: LocalizedStringResource = .init("Create and Show Item", table: "AppIntents")
+    static let title: LocalizedStringResource = .init("Create and Show Item", table: "AppIntents")
 
+    @MainActor
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
         guard content.isNotEmpty else {
             throw ItemError.contentIsEmpty

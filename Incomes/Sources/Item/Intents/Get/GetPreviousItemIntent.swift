@@ -9,15 +9,15 @@
 import AppIntents
 import SwiftData
 
-@MainActor
 struct GetPreviousItemIntent: AppIntent {
     @Parameter(title: "Date", kind: .date)
     private var date: Date
 
     @Dependency private var modelContainer: ModelContainer
 
-    nonisolated static let title: LocalizedStringResource = .init("Get Previous Item", table: "AppIntents")
+    static let title: LocalizedStringResource = .init("Get Previous Item", table: "AppIntents")
 
+    @MainActor
     func perform() throws -> some ReturnsValue<ItemEntity?> {
         guard let item = try ItemService.previousItem(
             context: modelContainer.mainContext,

@@ -29,7 +29,7 @@ final class NotificationService: NSObject {
         )
         UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
         for request in buildUpcomingPaymentReminders() {
-            Task { @MainActor in
+            Task {
                 try? await UNUserNotificationCenter.current().add(request)
             }
         }
@@ -73,10 +73,10 @@ final class NotificationService: NSObject {
     }
 }
 
-nonisolated extension NotificationService: UNUserNotificationCenterDelegate {
+extension NotificationService: UNUserNotificationCenterDelegate {
     func userNotificationCenter(_: UNUserNotificationCenter,
                                 willPresent _: UNNotification) async -> UNNotificationPresentationOptions { // swiftlint:disable:this async_without_await
-        Task { @MainActor in
+        Task {
             hasNotification = true
         }
         return [.badge, .sound, .list, .banner]
@@ -84,7 +84,7 @@ nonisolated extension NotificationService: UNUserNotificationCenterDelegate {
 
     func userNotificationCenter(_: UNUserNotificationCenter,
                                 didReceive _: UNNotificationResponse) async { // swiftlint:disable:this async_without_await
-        Task { @MainActor in
+        Task {
             shouldShowNotification = true
         }
     }

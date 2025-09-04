@@ -10,7 +10,7 @@ import Foundation
 import SwiftData
 
 @Model
-public nonisolated final class Item {
+public final class Item {
     public private(set) var date = Date(timeIntervalSinceReferenceDate: .zero)
     public private(set) var content = String.empty
     public private(set) var income = Decimal.zero

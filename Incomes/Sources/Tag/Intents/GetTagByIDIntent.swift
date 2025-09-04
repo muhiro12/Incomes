@@ -1,15 +1,15 @@
 import AppIntents
 import SwiftData
 
-@MainActor
 struct GetTagByIDIntent: AppIntent {
     @Parameter(title: "Tag ID")
     var id: String
 
     @Dependency private var modelContainer: ModelContainer
 
-    nonisolated static let title: LocalizedStringResource = .init("Get Tag By ID", table: "AppIntents")
+    static let title: LocalizedStringResource = .init("Get Tag By ID", table: "AppIntents")
 
+    @MainActor
     func perform() throws -> some ReturnsValue<TagEntity?> {
         guard let tag = try TagService.getByID(
             context: modelContainer.mainContext,

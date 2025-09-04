@@ -8,11 +8,11 @@
 
 import AppIntents
 
-@MainActor
 struct OpenIncomesIntent: AppIntent {
-    nonisolated static let title: LocalizedStringResource = .init("Open Incomes", table: "AppIntents")
-    nonisolated static let openAppWhenRun = true
+    static let title: LocalizedStringResource = .init("Open Incomes", table: "AppIntents")
+    static let openAppWhenRun = true
 
+    @MainActor
     func perform() throws -> some IntentResult {
         .result()
     }
