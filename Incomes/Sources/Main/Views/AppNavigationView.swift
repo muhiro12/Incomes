@@ -12,8 +12,8 @@ struct AppNavigationView: View {
     @Environment(\.modelContext)
     private var context
 
-    @Query(.tags(.typeIs(.yearMonth)))
-    private var yearMonthTags: [Tag]
+    @Query(.tags(.typeIs(.year)))
+    private var yearTags: [Tag]
     @Query(.tags(.typeIs(.content)))
     private var contentTags: [Tag]
     @Query(.tags(.typeIs(.category)))
@@ -22,7 +22,6 @@ struct AppNavigationView: View {
     @State private var mainFeature = MainFeature.home
 
     @State private var homeSelectedYear: Tag?
-    @State private var homeSelectedDetailTag: Tag?
     @State private var contentTag: Tag?
     @State private var categoryTag: Tag?
     @State private var searchPredicate: ItemPredicate?
@@ -31,14 +30,13 @@ struct AppNavigationView: View {
         NavigationSplitView {
             List {
                 Section("Home") {
-                    ForEach(sortedYearMonthTags) { tag in
+                    ForEach(sortedYearTags) { year in
                         Button {
                             Haptic.selectionChanged.impact()
                             mainFeature = .home
-                            homeSelectedYear = fetchYearTag(from: tag)
-                            homeSelectedDetailTag = tag
+                            homeSelectedYear = year
                         } label: {
-                            Label(tag.displayName, systemImage: "calendar")
+                            Label(year.displayName, systemImage: "calendar")
                         }
                     }
                 }
@@ -87,10 +85,7 @@ struct AppNavigationView: View {
         } detail: {
             switch mainFeature {
             case .home:
-                if let detailTag = homeSelectedDetailTag {
-                    ItemListGroup()
-                        .environment(detailTag)
-                }
+                EmptyView()
             case .content:
                 if let contentTag {
                     ItemListGroup()
@@ -109,17 +104,8 @@ struct AppNavigationView: View {
 }
 
 private extension AppNavigationView {
-    var sortedYearMonthTags: [Tag] {
-        yearMonthTags.sorted { $0.name > $1.name }
-    }
-
-    func fetchYearTag(from yearMonth: Tag) -> Tag? {
-        let yearString = String(yearMonth.name.prefix(4))
-        return try? context.fetchFirst(
-            .tags(
-                .nameIs(yearString, type: .year)
-            )
-        )
+    var sortedYearTags: [Tag] {
+        yearTags.sorted { $0.name > $1.name }
     }
 }
 

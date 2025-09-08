@@ -3628,6 +3628,9 @@
         }
       }
     },
+    "Select a month" : {
+
+    },
     "Send test notification" : {
       "localizations" : {
         "en" : {
