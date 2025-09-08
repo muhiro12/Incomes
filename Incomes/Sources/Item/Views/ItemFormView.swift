@@ -49,6 +49,7 @@ struct ItemFormView: View {
     @State private var outgo: String = .empty
     @State private var category: String = .empty
     @State private var repeatSelection: Int = 1
+    @State private var isAssistPresented = false
 
     private let mode: Mode
 
@@ -144,22 +145,11 @@ struct ItemFormView: View {
             }
             if #available(iOS 26.0, *) {
                 ToolbarItem(placement: .bottomBar) {
-                    ItemFormOCRButton(
-                        date: $date,
-                        content: $content,
-                        income: $income,
-                        outgo: $outgo,
-                        category: $category
-                    )
-                }
-                ToolbarItem(placement: .bottomBar) {
-                    ItemFormSpeechButton(
-                        date: $date,
-                        content: $content,
-                        income: $income,
-                        outgo: $outgo,
-                        category: $category
-                    )
+                    Button {
+                        isAssistPresented = true
+                    } label: {
+                        Label("Assist", systemImage: "wand.and.stars")
+                    }
                 }
             }
         }
@@ -224,6 +214,19 @@ struct ItemFormView: View {
                         ])
         }
         .navigationViewStyle(StackNavigationViewStyle())
+        .sheet(isPresented: $isAssistPresented) {
+            if #available(iOS 26.0, *) {
+                NavigationStack {
+                    ItemFormInputAssistView(
+                        date: $date,
+                        content: $content,
+                        income: $income,
+                        outgo: $outgo,
+                        category: $category
+                    )
+                }
+            }
+        }
     }
 }
 
