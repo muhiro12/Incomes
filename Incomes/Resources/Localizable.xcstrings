@@ -701,6 +701,9 @@
         }
       }
     },
+    "Assist" : {
+
+    },
     "Balance" : {
       "localizations" : {
         "en" : {
@@ -802,6 +805,12 @@
           }
         }
       }
+    },
+    "Capture Text" : {
+
+    },
+    "Captured text" : {
+
     },
     "Car" : {
       "localizations" : {
@@ -1414,6 +1423,9 @@
           }
         }
       }
+    },
+    "Done" : {
+
     },
     "Duplicate" : {
       "localizations" : {
@@ -2064,6 +2076,9 @@
         }
       }
     },
+    "Library" : {
+
+    },
     "License" : {
       "localizations" : {
         "en" : {
@@ -2301,6 +2316,9 @@
           }
         }
       }
+    },
+    "Microphone" : {
+
     },
     "Min" : {
       "localizations" : {
