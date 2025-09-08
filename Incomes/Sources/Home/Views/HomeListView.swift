@@ -36,7 +36,7 @@ struct HomeListView {
 extension HomeListView: View {
     var body: some View {
         List(selection: $tag) {
-            HomeTabSection(selection: $yearTag)
+            HomeYearPagerSection(selection: $yearTag)
             if !isSubscribeOn {
                 AdvertisementSection(.small)
             }

@@ -1,5 +1,5 @@
 //
-//  HomeTabSectionLink.swift
+//  HomeYearPagerLink.swift
 //  Incomes Playgrounds
 //
 //  Created by Hiromu Nakano on 10/8/24.
@@ -7,12 +7,12 @@
 
 import SwiftUI
 
-struct HomeTabSectionLink {
+struct HomeYearPagerLink {
     @Environment(Tag.self)
     private var yearTag
 }
 
-extension HomeTabSectionLink: View {
+extension HomeYearPagerLink: View {
     var body: some View {
         let items = yearTag.items.orEmpty
         let income = items.reduce(.zero) { $0 + $1.income }
@@ -49,7 +49,7 @@ extension HomeTabSectionLink: View {
     IncomesPreview { preview in
         List {
             if let tag = preview.tags.first(where: { $0.type == .year }) {
-                HomeTabSectionLink()
+                HomeYearPagerLink()
                     .environment(tag)
             }
         }

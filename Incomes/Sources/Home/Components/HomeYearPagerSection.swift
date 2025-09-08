@@ -1,5 +1,5 @@
 //
-//  HomeTabSection.swift
+//  HomeYearPagerSection.swift
 //  Incomes
 //
 //  Created by Hiromu Nakano on 2020/04/14.
@@ -9,7 +9,7 @@
 import SwiftData
 import SwiftUI
 
-struct HomeTabSection: View {
+struct HomeYearPagerSection: View {
     @Environment(\.modelContext)
     private var context
 
@@ -33,7 +33,7 @@ struct HomeTabSection: View {
                     TabView(selection: $yearTag) {
                         ForEach(availableYearTags) { tag in
                             Tab(value: tag) {
-                                HomeTabSectionLink()
+                                HomeYearPagerLink()
                                     .environment(tag)
                             }
                         }
@@ -41,7 +41,7 @@ struct HomeTabSection: View {
                 } else {
                     TabView(selection: $yearTag) {
                         ForEach(availableYearTags) { tag in
-                            HomeTabSectionLink()
+                            HomeYearPagerLink()
                                 .environment(tag)
                                 .tag(tag as Tag?)
                         }
@@ -68,7 +68,7 @@ struct HomeTabSection: View {
     IncomesPreview { _ in
         NavigationStack {
             List {
-                HomeTabSection()
+                HomeYearPagerSection()
             }
         }
     }

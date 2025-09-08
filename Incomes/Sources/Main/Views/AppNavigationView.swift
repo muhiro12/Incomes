@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct AppNavigationView: View {
-    @State private var mainTab = MainTab.home
+    @State private var mainFeature = MainFeature.home
 
     @State private var homeTag: Tag?
     @State private var contentTag: Tag?
@@ -17,22 +17,22 @@ struct AppNavigationView: View {
 
     var body: some View {
         NavigationSplitView {
-            List(selection: .constant(mainTab)) {
-                ForEach(MainTab.allCases) { tab in
+            List(selection: .constant(mainFeature)) {
+                ForEach(MainFeature.allCases) { feature in
                     Button {
                         Haptic.selectionChanged.impact()
                         withAnimation {
-                            mainTab = tab
+                            mainFeature = feature
                         }
                     } label: {
-                        tab.label
-                            .fontWeight(tab == mainTab ? .semibold : .regular)
+                        feature.label
+                            .fontWeight(feature == mainFeature ? .semibold : .regular)
                     }
                 }
             }
             .navigationTitle(Text("Menu"))
         } content: {
-            switch mainTab {
+            switch mainFeature {
             case .home:
                 HomeListView(selection: $homeTag)
             case .content:
@@ -43,7 +43,7 @@ struct AppNavigationView: View {
                 SearchListView(selection: $searchPredicate)
             }
         } detail: {
-            switch mainTab {
+            switch mainFeature {
             case .home:
                 if let homeTag {
                     ItemListGroup()
@@ -63,7 +63,6 @@ struct AppNavigationView: View {
                 SearchResultView(predicate: searchPredicate ?? .none)
             }
         }
-        .environment(\.mainTab, $mainTab)
     }
 }
 
