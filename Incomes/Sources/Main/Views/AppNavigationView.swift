@@ -46,8 +46,7 @@ struct AppNavigationView: View {
             switch mainFeature {
             case .home:
                 if let homeTag {
-                    ItemListGroup()
-                        .environment(homeTag)
+                    HomeYearListView(yearTag: homeTag)
                 }
             case .content:
                 if let contentTag {
