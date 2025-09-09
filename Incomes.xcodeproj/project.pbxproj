@@ -11,6 +11,7 @@
 		AD71621C2E70BC5C00C4CFCE /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD71621B2E70BC5C00C4CFCE /* WidgetKit.framework */; };
 		AD71621E2E70BC5C00C4CFCE /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD71621D2E70BC5C00C4CFCE /* SwiftUI.framework */; };
 		AD71622F2E70BC5D00C4CFCE /* WidgetsExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = AD71621A2E70BC5C00C4CFCE /* WidgetsExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		AD7162362E70BD9F00C4CFCE /* IncomesLibrary in Frameworks */ = {isa = PBXBuildFile; productRef = AD7162352E70BD9F00C4CFCE /* IncomesLibrary */; };
 		ADA85F312DB6275B0047CB54 /* GoogleMobileAdsWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = ADA85F302DB6275B0047CB54 /* GoogleMobileAdsWrapper */; };
 		ADA85F342DB627730047CB54 /* LicenseListWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = ADA85F332DB627730047CB54 /* LicenseListWrapper */; };
 		ADADFCDC2E6DD1840011E90E /* SpeechWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = ADADFCDB2E6DD1840011E90E /* SpeechWrapper */; };
@@ -114,6 +115,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AD71621E2E70BC5C00C4CFCE /* SwiftUI.framework in Frameworks */,
+				AD7162362E70BD9F00C4CFCE /* IncomesLibrary in Frameworks */,
 				AD71621C2E70BC5C00C4CFCE /* WidgetKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -200,6 +202,7 @@
 			);
 			name = WidgetsExtension;
 			packageProductDependencies = (
+				AD7162352E70BD9F00C4CFCE /* IncomesLibrary */,
 			);
 			productName = WidgetsExtension;
 			productReference = AD71621A2E70BC5C00C4CFCE /* WidgetsExtension.appex */;
@@ -906,6 +909,10 @@
 
 /* Begin XCSwiftPackageProductDependency section */
 		AD6C5A742E515E3000E1FBA0 /* IncomesLibrary */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = IncomesLibrary;
+		};
+		AD7162352E70BD9F00C4CFCE /* IncomesLibrary */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = IncomesLibrary;
 		};
