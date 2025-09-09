@@ -59,6 +59,9 @@ struct SearchListView: View {
         .scrollDismissesKeyboard(.interactively)
         .navigationTitle("Search")
         .toolbar {
+            ToolbarItem(placement: .bottomBar) {
+                MainTabMenu()
+            }
             ToolbarItem(placement: .status) {
                 Text("Today: \(Date.now.stringValue(.yyyyMMMd))")
                     .font(.footnote)

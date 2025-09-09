@@ -21,8 +21,8 @@ struct HomeListView {
     private var isDebugOn
 
     @Binding private var tag: Tag?
-    @Query(.tags(.typeIs(.year)))
-    private var yearTags: [Tag]
+
+    @State private var yearTag: Tag?
     @State private var hasLoaded = false
     @State private var isIntroductionPresented = false
     @State private var isSettingsPresented = false
@@ -36,16 +36,12 @@ struct HomeListView {
 extension HomeListView: View {
     var body: some View {
         List(selection: $tag) {
-            Section("Year") {
-                ForEach(yearTags) { year in
-                    NavigationLink(value: year) {
-                        Text(year.displayName)
-                            .bold(year.name == Date.now.stringValueWithoutLocale(.yyyy))
-                    }
-                }
-            }
+            HomeTabSection(selection: $yearTag)
             if !isSubscribeOn {
                 AdvertisementSection(.small)
+            }
+            if let yearTag {
+                HomeYearSection(yearTag: yearTag)
             }
         }
         .listStyle(.insetGrouped)
@@ -62,6 +58,9 @@ extension HomeListView: View {
                 Button("Settings", systemImage: "gear") {
                     isSettingsPresented = true
                 }
+            }
+            ToolbarItem(placement: .bottomBar) {
+                MainTabMenu()
             }
             ToolbarItem(placement: .status) {
                 Text("Today: \(Date.now.stringValue(.yyyyMMMd))")
@@ -83,16 +82,14 @@ extension HomeListView: View {
         .task {
             if !hasLoaded {
                 hasLoaded = true
-                if tag == nil {
-                    tag = try? context.fetchFirst(
-                        .tags(
-                            .nameIs(
-                                Date.now.stringValueWithoutLocale(.yyyy),
-                                type: .year
-                            )
+                yearTag = try? context.fetchFirst(
+                    .tags(
+                        .nameIs(
+                            Date.now.stringValueWithoutLocale(.yyyy),
+                            type: .year
                         )
                     )
-                }
+                )
                 isIntroductionPresented = (
                     try? ItemService.allItemsCount(context: context).isZero
                 ) ?? false
@@ -100,6 +97,13 @@ extension HomeListView: View {
 
             notificationService.refresh()
             await notificationService.register()
+        }
+        .onChange(of: yearTag) {
+            guard let yearTag,
+                  tag != .none else {
+                return
+            }
+            tag = yearTag
         }
     }
 }
