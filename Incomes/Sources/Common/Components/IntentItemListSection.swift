@@ -10,9 +10,6 @@ import SwiftData
 import SwiftUI
 
 struct IntentItemListSection: View {
-    @Environment(\.modelContext)
-    private var context
-
     private var items: [Item]
 
     init(_ items: [Item]) {

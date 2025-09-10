@@ -12,7 +12,6 @@ extension CGFloat {
     private static let unit = Self(8)
 
     static let spaceS = unit * 1
-    static let spaceM = unit * 2
     static let spaceL = unit * 3
 
     static let componentS = unit * 8
@@ -21,12 +20,9 @@ extension CGFloat {
     static let componentXL = unit * 32
 
     static let iconS = unit * 1
-    static let iconM = unit * 3
-    static let iconL = unit * 5
 
     // MARK: - Ratio
 
-    static let low = Self(Double.low)
     static let medium = Self(Double.medium)
     static let high = Self(Double.high)
 }

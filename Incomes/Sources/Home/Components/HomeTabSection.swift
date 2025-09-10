@@ -10,9 +10,6 @@ import SwiftData
 import SwiftUI
 
 struct HomeTabSection: View {
-    @Environment(\.modelContext)
-    private var context
-
     @Query(.tags(.typeIs(.year)))
     private var yearTags: [Tag]
 

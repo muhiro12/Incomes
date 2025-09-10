@@ -9,9 +9,6 @@
 import SwiftUI
 
 struct ShowItemButton {
-    @Environment(Item.self)
-    private var item
-
     @State private var isPresented = false
 
     private let action: (() -> Void)?
