@@ -17,8 +17,6 @@ struct SettingsListView {
 
     @Environment(\.locale)
     private var locale
-    @Environment(\.isPresented)
-    private var isPresented
 
     @AppStorage(.isSubscribeOn)
     private var isSubscribeOn

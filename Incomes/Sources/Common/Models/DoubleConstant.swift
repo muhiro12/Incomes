@@ -9,7 +9,6 @@
 import Foundation
 
 extension Double {
-    static let low = 0.2
     static let medium = 0.5
     static let high = 0.8
 }

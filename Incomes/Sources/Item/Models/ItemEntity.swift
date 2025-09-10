@@ -39,8 +39,6 @@ final class ItemEntity: AppEntity {
     let income: Decimal
     let outgo: Decimal
     let profit: Decimal
-    let balance: Decimal
-    let category: String?
 
     private init(
         id: String,
@@ -48,9 +46,7 @@ final class ItemEntity: AppEntity {
         content: String,
         income: Decimal,
         outgo: Decimal,
-        profit: Decimal,
-        balance: Decimal,
-        category: String?
+        profit: Decimal
     ) {
         self.id = id
         self.date = date
@@ -58,8 +54,6 @@ final class ItemEntity: AppEntity {
         self.income = income
         self.outgo = outgo
         self.profit = profit
-        self.balance = balance
-        self.category = category
     }
 }
 
@@ -74,9 +68,7 @@ extension ItemEntity {
             content: model.content,
             income: model.income,
             outgo: model.outgo,
-            profit: model.profit,
-            balance: model.balance,
-            category: model.category?.displayName
+            profit: model.profit
         )
     }
 }

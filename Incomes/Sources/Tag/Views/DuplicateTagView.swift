@@ -2,9 +2,6 @@ import SwiftData
 import SwiftUI
 
 struct DuplicateTagView: View {
-    @Environment(\.modelContext)
-    private var context
-
     @Query private var tags: [Tag]
 
     @State private var isMergeDialogPresented = false

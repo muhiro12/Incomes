@@ -14,9 +14,6 @@ struct YearChartsView: View {
     @Environment(\.modelContext)
     private var context
 
-    @AppStorage(.isSubscribeOn)
-    private var isSubscribeOn
-
     var date: Date {
         tag.name.dateValueWithoutLocale(.yyyy) ?? .distantPast
     }
