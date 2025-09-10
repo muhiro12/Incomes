@@ -4,6 +4,7 @@ import WidgetKit
 struct MonthSummaryEntry: TimelineEntry {
     let date: Date
     let configuration: ConfigurationAppIntent
-    let itemCount: Int
-    let monthBalance: String
+    // Metrics for display
+    let totalIncomeText: String
+    let totalOutgoText: String
 }

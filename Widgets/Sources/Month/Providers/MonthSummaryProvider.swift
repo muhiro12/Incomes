@@ -4,7 +4,12 @@ import WidgetKit
 
 struct MonthSummaryProvider: AppIntentTimelineProvider {
     func placeholder(in _: Context) -> MonthSummaryEntry {
-        .init(date: Date.now, configuration: .init(), itemCount: 0, monthBalance: "-")
+        .init(
+            date: Date.now,
+            configuration: .init(),
+            totalIncomeText: "$0",
+            totalOutgoText: "-$0"
+        )
     }
 
     func snapshot(for configuration: ConfigurationAppIntent, in _: Context) -> MonthSummaryEntry {
@@ -33,12 +38,27 @@ struct MonthSummaryProvider: AppIntentTimelineProvider {
             )
             let context = ModelContext(modelContainer)
             let items: [Item] = try ItemService.items(context: context, date: date)
-            let itemCount: Int = items.count
-            let monthBalanceDecimal: Decimal = items.reduce(.zero) { $0 + $1.profit }
-            let monthBalance: String = monthBalanceDecimal.asCurrency
-            return .init(date: date, configuration: configuration, itemCount: itemCount, monthBalance: monthBalance)
+            let totalIncomeDecimal: Decimal = items.reduce(.zero) { partial, item in
+                partial + item.income
+            }
+            let totalOutgoDecimal: Decimal = items.reduce(.zero) { partial, item in
+                partial + item.outgo
+            }
+            let totalIncomeText: String = totalIncomeDecimal.asCurrency
+            let totalOutgoText: String = totalOutgoDecimal.asMinusCurrency
+            return .init(
+                date: date,
+                configuration: configuration,
+                totalIncomeText: totalIncomeText,
+                totalOutgoText: totalOutgoText
+            )
         } catch {
-            return .init(date: date, configuration: configuration, itemCount: 0, monthBalance: "-")
+            return .init(
+                date: date,
+                configuration: configuration,
+                totalIncomeText: "$0",
+                totalOutgoText: "-$0"
+            )
         }
     }
 
