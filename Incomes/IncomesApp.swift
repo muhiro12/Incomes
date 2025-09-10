@@ -26,17 +26,12 @@ struct IncomesApp: App {
     private var sharedGoogleMobileAdsController: GoogleMobileAdsController!
 
     init() {
-        // Use a shared SwiftData store located in the App Group container.
-        let sharedStoreURL = AppGroup.storeURL
-        let legacyStoreURL = URL.applicationSupportDirectory.appendingPathComponent(AppGroup.databaseFileName)
-
-        // One-time migration from legacy app container store to the App Group store.
-        StoreMigrator.migrateSQLiteFilesIfNeeded(from: legacyStoreURL, to: sharedStoreURL)
+        DatabaseMigrator.migrateSQLiteFilesIfNeeded()
 
         let modelContainer = try! ModelContainer(
             for: Item.self,
             configurations: .init(
-                url: sharedStoreURL,
+                url: Database.url,
                 cloudKitDatabase: isICloudOn ? .automatic : .none
             )
         )

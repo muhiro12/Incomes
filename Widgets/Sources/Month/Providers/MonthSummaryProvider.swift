@@ -16,8 +16,7 @@ struct MonthSummaryProvider: AppIntentTimelineProvider {
         let targetDate: Date = resolveTargetDate(from: configuration, now: currentDate)
         var entries: [MonthSummaryEntry] = .init()
         for hourOffset in 0 ..< 5 {
-            if let entryDate = Calendar.current.date(byAdding: .hour, value: hourOffset, to: currentDate) {
-                // Keep updating the same target month while advancing the timeline time.
+            if Calendar.current.date(byAdding: .hour, value: hourOffset, to: currentDate) != nil {
                 entries.append(makeEntry(date: targetDate, configuration: configuration))
             }
         }
@@ -26,10 +25,13 @@ struct MonthSummaryProvider: AppIntentTimelineProvider {
 
     private func makeEntry(date: Date, configuration: ConfigurationAppIntent) -> MonthSummaryEntry {
         do {
-            let storeURL = AppGroup.storeURL
-            let modelConfiguration = ModelConfiguration(url: storeURL)
-            let container = try ModelContainer(for: Item.self, Tag.self, configurations: modelConfiguration)
-            let context: ModelContext = .init(container)
+            let modelContainer = try ModelContainer(
+                for: Item.self,
+                configurations: .init(
+                    url: Database.url
+                )
+            )
+            let context = ModelContext(modelContainer)
             let items: [Item] = try ItemService.items(context: context, date: date)
             let itemCount: Int = items.count
             let monthBalanceDecimal: Decimal = items.reduce(.zero) { $0 + $1.profit }
