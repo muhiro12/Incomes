@@ -26,7 +26,9 @@ struct MonthSummaryProvider: AppIntentTimelineProvider {
 
     private func makeEntry(date: Date, configuration: ConfigurationAppIntent) -> MonthSummaryEntry {
         do {
-            let container: ModelContainer = try .init(for: Item.self, Tag.self)
+            let storeURL = AppGroup.storeURL
+            let modelConfiguration = ModelConfiguration(url: storeURL)
+            let container = try ModelContainer(for: Item.self, Tag.self, configurations: modelConfiguration)
             let context: ModelContext = .init(container)
             let items: [Item] = try ItemService.items(context: context, date: date)
             let itemCount: Int = items.count
