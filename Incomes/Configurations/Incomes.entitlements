@@ -16,5 +16,9 @@
 	<array>
 		<string>CloudKit</string>
 	</array>
+	<key>com.apple.security.application-groups</key>
+	<array>
+		<string>group.com.muhiro12.Incomes</string>
+	</array>
 </dict>
 </plist>
