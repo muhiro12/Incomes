@@ -7,327 +7,328 @@
 //
 
 @testable import IncomesLibrary
-import XCTest
+import Testing
 
-final class BalanceCalculatorTests: XCTestCase {
+struct BalanceCalculatorTests {
+    @Test
     func testCalculate() {
-        XCTContext.runActivity(named: "Result is as expected when inserting") { _ in
+        // inserting
+        do {
             let context = testContext
-
             for i in 1...5 {
-                let item = try! Item.create(context: context,
-                                            date: shiftedDate("2000-0\(i)-01T12:00:00Z"),
-                                            content: "content",
-                                            income: 200,
-                                            outgo: 100,
-                                            category: "category",
-                                            repeatID: UUID())
+                let item = try! Item.create(
+                    context: context,
+                    date: shiftedDate("2000-0\(i)-01T12:00:00Z"),
+                    content: "content",
+                    income: 200,
+                    outgo: 100,
+                    category: "category",
+                    repeatID: UUID()
+                )
                 context.insert(item)
             }
             try! BalanceCalculator.calculate(in: context, after: .distantPast)
-
-            let item = try! Item.create(context: context,
-                                        date: shiftedDate("2000-01-31T12:00:00Z"),
-                                        content: "content",
-                                        income: 200,
-                                        outgo: 100,
-                                        category: "category",
-                                        repeatID: UUID())
+            let item = try! Item.create(
+                context: context,
+                date: shiftedDate("2000-01-31T12:00:00Z"),
+                content: "content",
+                income: 200,
+                outgo: 100,
+                category: "category",
+                repeatID: UUID()
+            )
             context.insert(item)
             try! BalanceCalculator.calculate(in: context, after: item.localDate)
 
             let first = fetchItems(context).first!
             let last = fetchItems(context).last!
-
-            XCTAssertEqual(first.balance, 600)
-            XCTAssertEqual(last.balance, 100)
+            #expect(first.balance == 600)
+            #expect(last.balance == 100)
         }
 
-        XCTContext.runActivity(named: "Result is as expected when inserting first") { _ in
+        // inserting first
+        do {
             let context = testContext
-
             for i in 1...5 {
-                let item = try! Item.create(context: context,
-                                            date: shiftedDate("2000-0\(i)-01T12:00:00Z"),
-                                            content: "content",
-                                            income: 200,
-                                            outgo: 100,
-                                            category: "category",
-                                            repeatID: UUID())
+                let item = try! Item.create(
+                    context: context,
+                    date: shiftedDate("2000-0\(i)-01T12:00:00Z"),
+                    content: "content",
+                    income: 200,
+                    outgo: 100,
+                    category: "category",
+                    repeatID: UUID()
+                )
                 context.insert(item)
             }
             try! BalanceCalculator.calculate(in: context, after: .distantPast)
-
-            let item = try! Item.create(context: context,
-                                        date: shiftedDate("2001-01-01T00:00:00Z"),
-                                        content: "content",
-                                        income: 200,
-                                        outgo: 100,
-                                        category: "category",
-                                        repeatID: UUID())
+            let item = try! Item.create(
+                context: context,
+                date: shiftedDate("2001-01-01T00:00:00Z"),
+                content: "content",
+                income: 200,
+                outgo: 100,
+                category: "category",
+                repeatID: UUID()
+            )
             context.insert(item)
             try! BalanceCalculator.calculate(in: context, after: item.localDate)
 
             let first = fetchItems(context).first!
             let last = fetchItems(context).last!
-
-            XCTAssertEqual(first.balance, 600)
-            XCTAssertEqual(last.balance, 100)
+            #expect(first.balance == 600)
+            #expect(last.balance == 100)
         }
 
-        XCTContext.runActivity(named: "Result is as expected when inserting last") { _ in
+        // inserting last
+        do {
             let context = testContext
-
             for i in 1...5 {
-                let item = try! Item.create(context: context,
-                                            date: shiftedDate("2000-0\(i)-01T12:00:00Z"),
-                                            content: "content",
-                                            income: 200,
-                                            outgo: 100,
-                                            category: "category",
-                                            repeatID: UUID())
+                let item = try! Item.create(
+                    context: context,
+                    date: shiftedDate("2000-0\(i)-01T12:00:00Z"),
+                    content: "content",
+                    income: 200,
+                    outgo: 100,
+                    category: "category",
+                    repeatID: UUID()
+                )
                 context.insert(item)
             }
             try! BalanceCalculator.calculate(in: context, after: .distantPast)
-
-            let item = try! Item.create(context: context,
-                                        date: shiftedDate("2000-01-01T00:00:00Z"),
-                                        content: "content",
-                                        income: 200,
-                                        outgo: 100,
-                                        category: "category",
-                                        repeatID: UUID())
+            let item = try! Item.create(
+                context: context,
+                date: shiftedDate("2000-01-01T00:00:00Z"),
+                content: "content",
+                income: 200,
+                outgo: 100,
+                category: "category",
+                repeatID: UUID()
+            )
             context.insert(item)
             try! BalanceCalculator.calculate(in: context, after: item.localDate)
 
             let first = fetchItems(context).first!
             let last = fetchItems(context).last!
-
-            XCTAssertEqual(first.balance, 600)
-            XCTAssertEqual(last.balance, 100)
+            #expect(first.balance == 600)
+            #expect(last.balance == 100)
         }
 
-        XCTContext.runActivity(named: "Result is as expected when updating") { _ in
+        // updating
+        do {
             let context = testContext
-
             var items: [Item] = []
-
             for i in 1...5 {
-                let item = try! Item.create(context: context,
-                                            date: shiftedDate("2000-0\(i)-01T12:00:00Z"),
-                                            content: "content",
-                                            income: 200,
-                                            outgo: 100,
-                                            category: "category",
-                                            repeatID: UUID())
+                let item = try! Item.create(
+                    context: context,
+                    date: shiftedDate("2000-0\(i)-01T12:00:00Z"),
+                    content: "content",
+                    income: 200,
+                    outgo: 100,
+                    category: "category",
+                    repeatID: UUID()
+                )
                 context.insert(item)
                 items.append(item)
             }
             try! BalanceCalculator.calculate(in: context, after: .distantPast)
-
             let item = items[1]
-            try! item.modify(date: shiftedDate("2000-02-01T12:00:00Z"),
-                             content: "content",
-                             income: 300,
-                             outgo: 100,
-                             category: "category",
-                             repeatID: UUID())
+            try! item.modify(
+                date: shiftedDate("2000-02-01T12:00:00Z"),
+                content: "content",
+                income: 300,
+                outgo: 100,
+                category: "category",
+                repeatID: UUID()
+            )
             try! BalanceCalculator.calculate(in: context, after: item.localDate)
-
             let first = fetchItems(context).first!
             let last = fetchItems(context).last!
-
-            XCTAssertEqual(first.balance, 600)
-            XCTAssertEqual(last.balance, 100)
+            #expect(first.balance == 600)
+            #expect(last.balance == 100)
         }
 
-        XCTContext.runActivity(named: "Result is as expected when updating first") { _ in
+        // updating first
+        do {
             let context = testContext
-
             var items: [Item] = []
-
             for i in 1...5 {
-                let item = try! Item.create(context: context,
-                                            date: shiftedDate("2000-0\(i)-01T12:00:00Z"),
-                                            content: "content",
-                                            income: 200,
-                                            outgo: 100,
-                                            category: "category",
-                                            repeatID: UUID())
+                let item = try! Item.create(
+                    context: context,
+                    date: shiftedDate("2000-0\(i)-01T12:00:00Z"),
+                    content: "content",
+                    income: 200,
+                    outgo: 100,
+                    category: "category",
+                    repeatID: UUID()
+                )
                 context.insert(item)
                 items.append(item)
             }
             try! BalanceCalculator.calculate(in: context, after: .distantPast)
-
             let item = items[0]
-            try! item.modify(date: shiftedDate("2000-01-01T12:00:00Z"),
-                             content: "content",
-                             income: 300,
-                             outgo: 100,
-                             category: "category",
-                             repeatID: UUID())
+            try! item.modify(
+                date: shiftedDate("2000-01-01T12:00:00Z"),
+                content: "content",
+                income: 300,
+                outgo: 100,
+                category: "category",
+                repeatID: UUID()
+            )
             try! BalanceCalculator.calculate(in: context, after: item.localDate)
-
             let first = fetchItems(context).first!
             let last = fetchItems(context).last!
-
-            XCTAssertEqual(first.balance, 600)
-            XCTAssertEqual(last.balance, 200)
+            #expect(first.balance == 600)
+            #expect(last.balance == 200)
         }
 
-        XCTContext.runActivity(named: "Result is as expected when updating last") { _ in
+        // updating last
+        do {
             let context = testContext
-
             var items: [Item] = []
-
             for i in 1...5 {
-                let item = try! Item.create(context: context,
-                                            date: shiftedDate("2000-0\(i)-01T12:00:00Z"),
-                                            content: "content",
-                                            income: 200,
-                                            outgo: 100,
-                                            category: "category",
-                                            repeatID: UUID())
+                let item = try! Item.create(
+                    context: context,
+                    date: shiftedDate("2000-0\(i)-01T12:00:00Z"),
+                    content: "content",
+                    income: 200,
+                    outgo: 100,
+                    category: "category",
+                    repeatID: UUID()
+                )
                 context.insert(item)
                 items.append(item)
             }
             try! BalanceCalculator.calculate(in: context, after: .distantPast)
-
             let item = items[4]
-            try! item.modify(date: shiftedDate("2000-05-01T12:00:00Z"),
-                             content: "content",
-                             income: 300,
-                             outgo: 100,
-                             category: "category",
-                             repeatID: UUID())
+            try! item.modify(
+                date: shiftedDate("2000-05-01T12:00:00Z"),
+                content: "content",
+                income: 300,
+                outgo: 100,
+                category: "category",
+                repeatID: UUID()
+            )
             try! BalanceCalculator.calculate(in: context, after: item.localDate)
-
             let first = fetchItems(context).first!
             let last = fetchItems(context).last!
-
-            XCTAssertEqual(first.balance, 600)
-            XCTAssertEqual(last.balance, 100)
+            #expect(first.balance == 600)
+            #expect(last.balance == 100)
         }
 
-        XCTContext.runActivity(named: "Result is as expected when changing order") { _ in
+        // changing order
+        do {
             let context = testContext
-
             var items: [Item] = []
-
             for i in 1...5 {
-                let item = try! Item.create(context: context,
-                                            date: shiftedDate("2000-0\(i)-01T12:00:00Z"),
-                                            content: "content",
-                                            income: 200,
-                                            outgo: 100,
-                                            category: "category",
-                                            repeatID: UUID())
+                let item = try! Item.create(
+                    context: context,
+                    date: shiftedDate("2000-0\(i)-01T12:00:00Z"),
+                    content: "content",
+                    income: 200,
+                    outgo: 100,
+                    category: "category",
+                    repeatID: UUID()
+                )
                 context.insert(item)
                 items.append(item)
             }
             try! BalanceCalculator.calculate(in: context, after: .distantPast)
-
             let item = items[4]
-            try! item.modify(date: shiftedDate("1999-12-31T00:00:00Z"),
-                             content: "content",
-                             income: 300,
-                             outgo: 100,
-                             category: "category",
-                             repeatID: UUID())
+            try! item.modify(
+                date: shiftedDate("1999-12-31T00:00:00Z"),
+                content: "content",
+                income: 300,
+                outgo: 100,
+                category: "category",
+                repeatID: UUID()
+            )
             try! BalanceCalculator.calculate(in: context, after: item.localDate)
-
             let first = fetchItems(context).first!
             let last = fetchItems(context).last!
-
-            XCTAssertEqual(first.balance, 600)
-            XCTAssertEqual(last.balance, 200)
+            #expect(first.balance == 600)
+            #expect(last.balance == 200)
         }
 
-        XCTContext.runActivity(named: "Result is as expected when deleting") { _ in
+        // deleting
+        do {
             let context = testContext
-
             var items: [Item] = []
-
             for i in 1...5 {
-                let item = try! Item.create(context: context,
-                                            date: shiftedDate("2000-0\(i)-01T12:00:00Z"),
-                                            content: "content",
-                                            income: 200,
-                                            outgo: 100,
-                                            category: "category",
-                                            repeatID: UUID())
+                let item = try! Item.create(
+                    context: context,
+                    date: shiftedDate("2000-0\(i)-01T12:00:00Z"),
+                    content: "content",
+                    income: 200,
+                    outgo: 100,
+                    category: "category",
+                    repeatID: UUID()
+                )
                 context.insert(item)
                 items.append(item)
             }
             try! BalanceCalculator.calculate(in: context, after: .distantPast)
-
             let item = items[1]
             context.delete(item)
             try! BalanceCalculator.calculate(in: context, after: item.localDate)
-
             let first = fetchItems(context).first!
             let last = fetchItems(context).last!
-
-            XCTAssertEqual(first.balance, 400)
-            XCTAssertEqual(last.balance, 100)
+            #expect(first.balance == 400)
+            #expect(last.balance == 100)
         }
 
-        XCTContext.runActivity(named: "Result is as expected when deleting first") { _ in
+        // deleting first
+        do {
             let context = testContext
-
             var items: [Item] = []
-
             for i in 1...5 {
-                let item = try! Item.create(context: context,
-                                            date: shiftedDate("2000-0\(i)-01T12:00:00Z"),
-                                            content: "content",
-                                            income: 200,
-                                            outgo: 100,
-                                            category: "category",
-                                            repeatID: UUID())
+                let item = try! Item.create(
+                    context: context,
+                    date: shiftedDate("2000-0\(i)-01T12:00:00Z"),
+                    content: "content",
+                    income: 200,
+                    outgo: 100,
+                    category: "category",
+                    repeatID: UUID()
+                )
                 context.insert(item)
                 items.append(item)
             }
             try! BalanceCalculator.calculate(in: context, after: .distantPast)
-
             let item = items[0]
             context.delete(item)
             try! BalanceCalculator.calculate(in: context, after: item.localDate)
-
             let first = fetchItems(context).first!
             let last = fetchItems(context).last!
-
-            XCTAssertEqual(first.balance, 400)
-            XCTAssertEqual(last.balance, 100)
+            #expect(first.balance == 400)
+            #expect(last.balance == 100)
         }
 
-        XCTContext.runActivity(named: "Result is as expected when deleting last") { _ in
+        // deleting last
+        do {
             let context = testContext
-
             var items: [Item] = []
-
             for i in 1...5 {
-                let item = try! Item.create(context: context,
-                                            date: shiftedDate("2000-0\(i)-01T12:00:00Z"),
-                                            content: "content",
-                                            income: 200,
-                                            outgo: 100,
-                                            category: "category",
-                                            repeatID: UUID())
+                let item = try! Item.create(
+                    context: context,
+                    date: shiftedDate("2000-0\(i)-01T12:00:00Z"),
+                    content: "content",
+                    income: 200,
+                    outgo: 100,
+                    category: "category",
+                    repeatID: UUID()
+                )
                 context.insert(item)
                 items.append(item)
             }
             try! BalanceCalculator.calculate(in: context, after: .distantPast)
-
             let item = items[4]
             context.delete(item)
             try! BalanceCalculator.calculate(in: context, after: item.localDate)
-
             let first = fetchItems(context).first!
             let last = fetchItems(context).last!
-
-            XCTAssertEqual(first.balance, 400)
-            XCTAssertEqual(last.balance, 100)
+            #expect(first.balance == 400)
+            #expect(last.balance == 100)
         }
     }
 }
