@@ -6,11 +6,9 @@
 //  Copyright © 2022 Hiromu Nakano. All rights reserved.
 //
 
+import Foundation
 @testable import Incomes
 import SwiftData
-import XCTest
-
-final class IncomesTests: XCTestCase {}
 
 var testContext: ModelContext {
     .init(
@@ -37,7 +35,7 @@ let shiftedDate: (String) -> Date = { string in
     )
 }
 
-let timeZones: [TimeZone] = [
+nonisolated let timeZones: [TimeZone] = [
     .init(identifier: "Asia/Tokyo")!,
     .init(identifier: "Europe/London")!,
     .init(identifier: "America/New_York")!,

@@ -18,7 +18,6 @@ struct DateExtensionTests {
 
     // MARK: - Default Locale (parameterized by timeZones)
 
-    @Suite
     struct DefaultLocaleTests {
         @Test("yyyy is as expected", arguments: timeZones)
         func yyyy_is_expected(_ timeZone: TimeZone) {
@@ -183,7 +182,6 @@ struct DateExtensionTests {
 
     // MARK: - En Locale
 
-    @Suite
     struct EnLocaleTests {
         @Test("yyyy in en is as expected")
         func yyyy_en_is_expected() {
@@ -272,7 +270,6 @@ struct DateExtensionTests {
 
     // MARK: - Ja Locale
 
-    @Suite
     struct JaLocaleTests {
         @Test("yyyy in ja is as expected")
         func yyyy_ja_is_expected() {
