@@ -6,9 +6,11 @@
 //  Copyright © 2022 Hiromu Nakano. All rights reserved.
 //
 
-import Foundation
 @testable import Incomes
 import SwiftData
+import XCTest
+
+final class IncomesTests: XCTestCase {}
 
 var testContext: ModelContext {
     .init(
@@ -35,7 +37,7 @@ let shiftedDate: (String) -> Date = { string in
     )
 }
 
-nonisolated(unsafe) let timeZones: [TimeZone] = [
+let timeZones: [TimeZone] = [
     .init(identifier: "Asia/Tokyo")!,
     .init(identifier: "Europe/London")!,
     .init(identifier: "America/New_York")!,
@@ -46,7 +48,3 @@ nonisolated(unsafe) let timeZones: [TimeZone] = [
 func fetchItems(_ context: ModelContext) -> [Item] {
     try! context.fetch(.items(.all))
 }
-
-// Temporary shim until Section is available in the Testing library version
-@inline(__always)
-func Section(_: String, _ body: () -> Void) { body() }
