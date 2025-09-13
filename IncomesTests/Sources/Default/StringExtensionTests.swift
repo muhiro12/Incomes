@@ -7,102 +7,120 @@
 //
 
 @testable import Incomes
-import XCTest
+import Testing
 
-final class StringExtensionTests: XCTestCase {
-    func testIsNotEmpty() {
-        XCTContext.runActivity(named: "Text returns true") { _ in
+struct StringExtensionTests {
+    struct IsNotEmptyTests {
+        @Test("Text returns true")
+        func text_returns_true() {
             let string = "text"
-            XCTAssertTrue(string.isNotEmpty)
+            #expect(string.isNotEmpty)
         }
 
-        XCTContext.runActivity(named: "Empty returns false") { _ in
+        @Test("Empty returns false")
+        func empty_returns_false() {
             let string = ""
-            XCTAssertFalse(string.isNotEmpty)
+            #expect(!string.isNotEmpty)
         }
     }
 
-    func testIsEmptyOrDecimal() {
-        XCTContext.runActivity(named: "Empty returns true") { _ in
+    struct IsEmptyOrDecimalTests {
+        @Test("Empty returns true")
+        func empty_returns_true() {
             let string = ""
-            XCTAssertTrue(string.isEmptyOrDecimal)
+            #expect(string.isEmptyOrDecimal)
         }
 
-        XCTContext.runActivity(named: "0 returns true") { _ in
+        @Test("0 returns true")
+        func zero_returns_true() {
             let string = "0"
-            XCTAssertTrue(string.isEmptyOrDecimal)
+            #expect(string.isEmptyOrDecimal)
         }
 
-        XCTContext.runActivity(named: "Int returns true") { _ in
+        @Test("Int returns true")
+        func int_returns_true() {
             let string = "1000"
-            XCTAssertTrue(string.isEmptyOrDecimal)
+            #expect(string.isEmptyOrDecimal)
         }
 
-        XCTContext.runActivity(named: "Text returns false") { _ in
+        @Test("Text returns false")
+        func text_returns_false() {
             let string = "text"
-            XCTAssertFalse(string.isEmptyOrDecimal)
+            #expect(!string.isEmptyOrDecimal)
         }
 
-        XCTContext.runActivity(named: "Int starting with 0 returns true") { _ in
+        @Test("Int starting with 0 returns true")
+        func leading_zero_returns_true() {
             let string = "01000"
-            XCTAssertTrue(string.isEmptyOrDecimal)
+            #expect(string.isEmptyOrDecimal)
         }
 
-        XCTContext.runActivity(named: "Int starting with minus returns true") { _ in
+        @Test("Int starting with minus returns true")
+        func negative_int_returns_true() {
             let string = "-1000"
-            XCTAssertTrue(string.isEmptyOrDecimal)
+            #expect(string.isEmptyOrDecimal)
         }
 
-        XCTContext.runActivity(named: "Int starting with minus and 0 returns true") { _ in
+        @Test("Int starting with minus and 0 returns true")
+        func negative_leading_zero_returns_true() {
             let string = "-01000"
-            XCTAssertTrue(string.isEmptyOrDecimal)
+            #expect(string.isEmptyOrDecimal)
         }
 
-        XCTContext.runActivity(named: "Double returns true") { _ in
+        @Test("Double returns true")
+        func double_returns_true() {
             let string = "1.000"
-            XCTAssertTrue(string.isEmptyOrDecimal)
+            #expect(string.isEmptyOrDecimal)
         }
 
-        XCTContext.runActivity(named: "Int with comma returns true") { _ in
+        @Test("Int with comma returns true")
+        func int_with_comma_returns_true() {
             let string = "1,000"
-            XCTAssertTrue(string.isEmptyOrDecimal)
+            #expect(string.isEmptyOrDecimal)
         }
 
-        XCTContext.runActivity(named: "Int32 upper limit returns true") { _ in
+        @Test("Int32 upper limit returns true")
+        func int32_upper_limit_returns_true() {
             let string = "2147483647"
-            XCTAssertTrue(string.isEmptyOrDecimal)
+            #expect(string.isEmptyOrDecimal)
         }
 
-        XCTContext.runActivity(named: "Numbers overing Int32 upper limit returns true") { _ in
+        @Test("Numbers overing Int32 upper limit returns true")
+        func over_int32_upper_returns_true() {
             let string = "2147483648"
-            XCTAssertTrue(string.isEmptyOrDecimal)
+            #expect(string.isEmptyOrDecimal)
         }
 
-        XCTContext.runActivity(named: "Int32 lower limit returns true") { _ in
+        @Test("Int32 lower limit returns true")
+        func int32_lower_limit_returns_true() {
             let string = "-2147483648"
-            XCTAssertTrue(string.isEmptyOrDecimal)
+            #expect(string.isEmptyOrDecimal)
         }
 
-        XCTContext.runActivity(named: "Numbers overing Int lower limit returns true") { _ in
+        @Test("Numbers overing Int lower limit returns true")
+        func over_int_lower_returns_true() {
             let string = "-2147483649"
-            XCTAssertTrue(string.isEmptyOrDecimal)
+            #expect(string.isEmptyOrDecimal)
         }
     }
 
-    func testDecimalValue() {
-        XCTContext.runActivity(named: "Text returns 0") { _ in
+    struct DecimalValueTests {
+        @Test("Text returns 0")
+        func text_returns_zero() {
             let string = "text"
-            XCTAssertEqual(string.decimalValue, 0)
+            #expect(string.decimalValue == 0)
         }
 
-        XCTContext.runActivity(named: "0 returns 0") { _ in
+        @Test("0 returns 0")
+        func zero_returns_zero() {
             let string = "0"
-            XCTAssertEqual(string.decimalValue, 0)
+            #expect(string.decimalValue == 0)
         }
 
-        XCTContext.runActivity(named: "Int returns decimal") { _ in
+        @Test("Int returns decimal")
+        func int_returns_decimal() {
             let string = "1000"
-            XCTAssertEqual(string.decimalValue, 1_000)
+            #expect(string.decimalValue == 1_000)
         }
     }
 }

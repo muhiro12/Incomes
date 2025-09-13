@@ -6,286 +6,359 @@
 //  Copyright © 2022 Hiromu Nakano. All rights reserved.
 //
 
+import Foundation
 @testable import Incomes
-import XCTest
+import Testing
 
-final class DateExtensionTests: XCTestCase {
-    override func setUp() {
+@Suite(.serialized)
+struct DateExtensionTests {
+    init() {
         NSTimeZone.default = .current
     }
 
-    override func tearDown() {
-        NSTimeZone.default = .current
-    }
+    // MARK: - Default Locale (parameterized by timeZones)
 
-    func testStringValue() {
-        XCTContext.runActivity(named: "yyyy is as expected") { _ in
+    struct DefaultLocaleTests {
+        @Test("yyyy is as expected", arguments: timeZones)
+        func yyyy_is_expected(_ timeZone: TimeZone) {
+            NSTimeZone.default = timeZone
+
             let result = shiftedDate("2000-01-01T00:00:00Z").stringValue(.yyyy)
-            XCTAssertEqual(result, "2000")
+            #expect(result == "2000")
         }
 
-        XCTContext.runActivity(named: "yyyy at 12:00 is as expected") { _ in
+        @Test("yyyy at 12:00 is as expected", arguments: timeZones)
+        func yyyy_at_noon_is_expected(_ timeZone: TimeZone) {
+            NSTimeZone.default = timeZone
+
             let result = shiftedDate("2000-01-01T12:00:00Z").stringValue(.yyyy)
-            XCTAssertEqual(result, "2000")
+            #expect(result == "2000")
         }
 
-        XCTContext.runActivity(named: "yyyy at 15:00 is as expected") { _ in
+        @Test("yyyy at 15:00 is as expected", arguments: timeZones)
+        func yyyy_at_15_is_expected(_ timeZone: TimeZone) {
+            NSTimeZone.default = timeZone
+
             let result = shiftedDate("2000-01-01T15:00:00Z").stringValue(.yyyy)
-            XCTAssertEqual(result, "2000")
+            #expect(result == "2000")
         }
 
-        XCTContext.runActivity(named: "yyyy at 21:00 is as expected") { _ in
+        @Test("yyyy at 21:00 is as expected", arguments: timeZones)
+        func yyyy_at_21_is_expected(_ timeZone: TimeZone) {
+            NSTimeZone.default = timeZone
+
             let result = shiftedDate("2000-01-01T21:00:00Z").stringValue(.yyyy)
-            XCTAssertEqual(result, "2000")
+            #expect(result == "2000")
         }
 
-        XCTContext.runActivity(named: "yyyy at Dec 31 is as expected") { _ in
+        @Test("yyyy at Dec 31 is as expected", arguments: timeZones)
+        func yyyy_at_dec31_is_expected(_ timeZone: TimeZone) {
+            NSTimeZone.default = timeZone
+
             let result = shiftedDate("2000-12-31T00:00:00Z").stringValue(.yyyy)
-            XCTAssertEqual(result, "2000")
+            #expect(result == "2000")
         }
 
-        XCTContext.runActivity(named: "yyyy at 12:00 on Dec 31 is as expected") { _ in
+        @Test("yyyy at 12:00 on Dec 31 is as expected", arguments: timeZones)
+        func yyyy_at_noon_dec31_is_expected(_ timeZone: TimeZone) {
+            NSTimeZone.default = timeZone
+
             let result = shiftedDate("2000-12-31T12:00:00Z").stringValue(.yyyy)
-            XCTAssertEqual(result, "2000")
+            #expect(result == "2000")
         }
 
-        XCTContext.runActivity(named: "yyyy at 15:00 on Dec 31 is as expected") { _ in
+        @Test("yyyy at 15:00 on Dec 31 is as expected", arguments: timeZones)
+        func yyyy_at_15_dec31_is_expected(_ timeZone: TimeZone) {
+            NSTimeZone.default = timeZone
+
             let result = shiftedDate("2000-12-31T15:00:00Z").stringValue(.yyyy)
-            XCTAssertEqual(result, "2000")
+            #expect(result == "2000")
         }
 
-        XCTContext.runActivity(named: "yyyy at 21:00 on Dec 31 is as expected") { _ in
+        @Test("yyyy at 21:00 on Dec 31 is as expected", arguments: timeZones)
+        func yyyy_at_21_dec31_is_expected(_ timeZone: TimeZone) {
+            NSTimeZone.default = timeZone
+
             let result = shiftedDate("2000-12-31T21:00:00Z").stringValue(.yyyy)
-            XCTAssertEqual(result, "2000")
+            #expect(result == "2000")
         }
 
-        XCTContext.runActivity(named: "yyyyMMM is as expected") { _ in
+        @Test("yyyyMMM is as expected", arguments: timeZones)
+        func yyyyMMM_is_expected(_ timeZone: TimeZone) {
+            NSTimeZone.default = timeZone
+
             let result = shiftedDate("2000-01-01T00:00:00Z").stringValue(.yyyyMMM)
-            XCTAssertEqual(result, "Jan 2000")
+            #expect(result == "Jan 2000")
         }
 
-        XCTContext.runActivity(named: "yyyyMMM at 15:00 is as expected") { _ in
+        @Test("yyyyMMM at 15:00 is as expected", arguments: timeZones)
+        func yyyyMMM_at_15_is_expected(_ timeZone: TimeZone) {
+            NSTimeZone.default = timeZone
+
             let result = shiftedDate("2000-01-01T15:00:00Z").stringValue(.yyyyMMM)
-            XCTAssertEqual(result, "Jan 2000")
+            #expect(result == "Jan 2000")
         }
 
-        XCTContext.runActivity(named: "MMMd is as expected") { _ in
+        @Test("MMMd is as expected", arguments: timeZones)
+        func MMMd_is_expected(_ timeZone: TimeZone) {
+            NSTimeZone.default = timeZone
+
             let result = shiftedDate("2000-01-01T00:00:00Z").stringValue(.MMMd)
-            XCTAssertEqual(result, "Jan 1")
+            #expect(result == "Jan 1")
         }
 
-        XCTContext.runActivity(named: "MMMd at 15:00 is as expected") { _ in
+        @Test("MMMd at 15:00 is as expected", arguments: timeZones)
+        func MMMd_at_15_is_expected(_ timeZone: TimeZone) {
+            NSTimeZone.default = timeZone
+
             let result = shiftedDate("2000-01-01T15:00:00Z").stringValue(.MMMd)
-            XCTAssertEqual(result, "Jan 1")
+            #expect(result == "Jan 1")
         }
 
-        XCTContext.runActivity(named: "yyyyMMMd is as expected") { _ in
+        @Test("yyyyMMMd is as expected", arguments: timeZones)
+        func yyyyMMMd_is_expected(_ timeZone: TimeZone) {
+            NSTimeZone.default = timeZone
+
             let result = shiftedDate("2000-01-01T00:00:00Z").stringValue(.yyyyMMMd)
-            XCTAssertEqual(result, "Jan 1, 2000")
+            #expect(result == "Jan 1, 2000")
         }
 
-        XCTContext.runActivity(named: "yyyyMMMd at 12:00 is as expected") { _ in
+        @Test("yyyyMMMd at 12:00 is as expected", arguments: timeZones)
+        func yyyyMMMd_at_noon_is_expected(_ timeZone: TimeZone) {
+            NSTimeZone.default = timeZone
+
             let result = shiftedDate("2000-01-01T12:00:00Z").stringValue(.yyyyMMMd)
-            XCTAssertEqual(result, "Jan 1, 2000")
+            #expect(result == "Jan 1, 2000")
         }
 
-        XCTContext.runActivity(named: "yyyyMMMd at 15:00 is as expected") { _ in
+        @Test("yyyyMMMd at 15:00 is as expected", arguments: timeZones)
+        func yyyyMMMd_at_15_is_expected(_ timeZone: TimeZone) {
+            NSTimeZone.default = timeZone
+
             let result = shiftedDate("2000-01-01T15:00:00Z").stringValue(.yyyyMMMd)
-            XCTAssertEqual(result, "Jan 1, 2000")
+            #expect(result == "Jan 1, 2000")
         }
 
-        XCTContext.runActivity(named: "yyyyMMMd at 21:00 is as expected") { _ in
+        @Test("yyyyMMMd at 21:00 is as expected", arguments: timeZones)
+        func yyyyMMMd_at_21_is_expected(_ timeZone: TimeZone) {
+            NSTimeZone.default = timeZone
+
             let result = shiftedDate("2000-01-01T21:00:00Z").stringValue(.yyyyMMMd)
-            XCTAssertEqual(result, "Jan 1, 2000")
+            #expect(result == "Jan 1, 2000")
         }
 
-        XCTContext.runActivity(named: "yyyyMMMd at Dec 31 is as expected") { _ in
+        @Test("yyyyMMMd at Dec 31 is as expected", arguments: timeZones)
+        func yyyyMMMd_dec31_is_expected(_ timeZone: TimeZone) {
+            NSTimeZone.default = timeZone
+
             let result = shiftedDate("2000-12-31T00:00:00Z").stringValue(.yyyyMMMd)
-            XCTAssertEqual(result, "Dec 31, 2000")
+            #expect(result == "Dec 31, 2000")
         }
 
-        XCTContext.runActivity(named: "yyyyMMMd at 12:00 on Dec 31 is as expected") { _ in
+        @Test("yyyyMMMd at 12:00 on Dec 31 is as expected", arguments: timeZones)
+        func yyyyMMMd_noon_dec31_is_expected(_ timeZone: TimeZone) {
+            NSTimeZone.default = timeZone
+
             let result = shiftedDate("2000-12-31T12:00:00Z").stringValue(.yyyyMMMd)
-            XCTAssertEqual(result, "Dec 31, 2000")
+            #expect(result == "Dec 31, 2000")
         }
 
-        XCTContext.runActivity(named: "yyyyMMMd at 15:00 on Dec 31 is as expected") { _ in
+        @Test("yyyyMMMd at 15:00 on Dec 31 is as expected", arguments: timeZones)
+        func yyyyMMMd_15_dec31_is_expected(_ timeZone: TimeZone) {
+            NSTimeZone.default = timeZone
+
             let result = shiftedDate("2000-12-31T15:00:00Z").stringValue(.yyyyMMMd)
-            XCTAssertEqual(result, "Dec 31, 2000")
+            #expect(result == "Dec 31, 2000")
         }
 
-        XCTContext.runActivity(named: "yyyyMMMd at 21:00 on Dec 31 is as expected") { _ in
+        @Test("yyyyMMMd at 21:00 on Dec 31 is as expected", arguments: timeZones)
+        func yyyyMMMd_21_dec31_is_expected(_ timeZone: TimeZone) {
+            NSTimeZone.default = timeZone
+
             let result = shiftedDate("2000-12-31T21:00:00Z").stringValue(.yyyyMMMd)
-            XCTAssertEqual(result, "Dec 31, 2000")
+            #expect(result == "Dec 31, 2000")
         }
     }
 
-    func testStringValueLondon() {
-        NSTimeZone.default = .init(identifier: "Europe/London")!
-        testStringValue()
-    }
+    // MARK: - En Locale
 
-    func testStringValueNewYork() {
-        NSTimeZone.default = .init(identifier: "America/New_York")!
-        testStringValue()
-    }
-
-    func testStringValueTokyo() {
-        NSTimeZone.default = .init(identifier: "Asia/Tokyo")!
-        testStringValue()
-    }
-
-    func testStringValueEn() {
-        XCTContext.runActivity(named: "yyyy in en is as expected") { _ in
+    struct EnLocaleTests {
+        @Test("yyyy in en is as expected")
+        func yyyy_en_is_expected() {
             let result = shiftedDate("2000-01-01T00:00:00Z").stringValue(.yyyy, locale: .init(identifier: "en_US"))
-            XCTAssertEqual(result, "2000")
+            #expect(result == "2000")
         }
 
-        XCTContext.runActivity(named: "yyyy at 15:00 in en is as expected") { _ in
+        @Test("yyyy at 15:00 in en is as expected")
+        func yyyy_at_15_en_is_expected() {
             let result = shiftedDate("2000-01-01T15:00:00Z").stringValue(.yyyy, locale: .init(identifier: "en_US"))
-            XCTAssertEqual(result, "2000")
+            #expect(result == "2000")
         }
 
-        XCTContext.runActivity(named: "yyyyMMM in en is as expected") { _ in
+        @Test("yyyyMMM in en is as expected")
+        func yyyyMMM_en_is_expected() {
             let result = shiftedDate("2000-01-01T00:00:00Z").stringValue(.yyyyMMM, locale: .init(identifier: "en_US"))
-            XCTAssertEqual(result, "Jan 2000")
+            #expect(result == "Jan 2000")
         }
 
-        XCTContext.runActivity(named: "yyyyMMM at 15:00 in en is as expected") { _ in
+        @Test("yyyyMMM at 15:00 in en is as expected")
+        func yyyyMMM_at_15_en_is_expected() {
             let result = shiftedDate("2000-01-01T15:00:00Z").stringValue(.yyyyMMM, locale: .init(identifier: "en_US"))
-            XCTAssertEqual(result, "Jan 2000")
+            #expect(result == "Jan 2000")
         }
 
-        XCTContext.runActivity(named: "MMMd in en is as expected") { _ in
+        @Test("MMMd in en is as expected")
+        func MMMd_en_is_expected() {
             let result = shiftedDate("2000-01-01T00:00:00Z").stringValue(.MMMd, locale: .init(identifier: "en_US"))
-            XCTAssertEqual(result, "Jan 1")
+            #expect(result == "Jan 1")
         }
 
-        XCTContext.runActivity(named: "MMMd at 15:00 in en is as expected") { _ in
+        @Test("MMMd at 15:00 in en is as expected")
+        func MMMd_at_15_en_is_expected() {
             let result = shiftedDate("2000-01-01T15:00:00Z").stringValue(.MMMd, locale: .init(identifier: "en_US"))
-            XCTAssertEqual(result, "Jan 1")
+            #expect(result == "Jan 1")
         }
 
-        XCTContext.runActivity(named: "yyyyMMMd in en is as expected") { _ in
+        @Test("yyyyMMMd in en is as expected")
+        func yyyyMMMd_en_is_expected() {
             let result = shiftedDate("2000-01-01T00:00:00Z").stringValue(.yyyyMMMd, locale: .init(identifier: "en_US"))
-            XCTAssertEqual(result, "Jan 1, 2000")
+            #expect(result == "Jan 1, 2000")
         }
 
-        XCTContext.runActivity(named: "yyyyMMMd at 12:00 in en is as expected") { _ in
+        @Test("yyyyMMMd at 12:00 in en is as expected")
+        func yyyyMMMd_at_noon_en_is_expected() {
             let result = shiftedDate("2000-01-01T12:00:00Z").stringValue(.yyyyMMMd, locale: .init(identifier: "en_US"))
-            XCTAssertEqual(result, "Jan 1, 2000")
+            #expect(result == "Jan 1, 2000")
         }
 
-        XCTContext.runActivity(named: "yyyyMMMd at 15:00 in en is as expected") { _ in
+        @Test("yyyyMMMd at 15:00 in en is as expected")
+        func yyyyMMMd_at_15_en_is_expected() {
             let result = shiftedDate("2000-01-01T15:00:00Z").stringValue(.yyyyMMMd, locale: .init(identifier: "en_US"))
-            XCTAssertEqual(result, "Jan 1, 2000")
+            #expect(result == "Jan 1, 2000")
         }
 
-        XCTContext.runActivity(named: "yyyyMMMd at 21:00 in en is as expected") { _ in
+        @Test("yyyyMMMd at 21:00 in en is as expected")
+        func yyyyMMMd_at_21_en_is_expected() {
             let result = shiftedDate("2000-01-01T21:00:00Z").stringValue(.yyyyMMMd, locale: .init(identifier: "en_US"))
-            XCTAssertEqual(result, "Jan 1, 2000")
+            #expect(result == "Jan 1, 2000")
         }
 
-        XCTContext.runActivity(named: "yyyyMMMd at 12-31 in en is as expected") { _ in
+        @Test("yyyyMMMd at 12-31 in en is as expected")
+        func yyyyMMMd_dec31_en_is_expected() {
             let result = shiftedDate("2000-12-31T00:00:00Z").stringValue(.yyyyMMMd, locale: .init(identifier: "en_US"))
-            XCTAssertEqual(result, "Dec 31, 2000")
+            #expect(result == "Dec 31, 2000")
         }
 
-        XCTContext.runActivity(named: "yyyyMMMd at 12:00, 12-31 in en is as expected") { _ in
+        @Test("yyyyMMMd at 12:00, 12-31 in en is as expected")
+        func yyyyMMMd_noon_dec31_en_is_expected() {
             let result = shiftedDate("2000-12-31T12:00:00Z").stringValue(.yyyyMMMd, locale: .init(identifier: "en_US"))
-            XCTAssertEqual(result, "Dec 31, 2000")
+            #expect(result == "Dec 31, 2000")
         }
 
-        XCTContext.runActivity(named: "yyyyMMMd at 15:00, 12-31 in en is as expected") { _ in
+        @Test("yyyyMMMd at 15:00, 12-31 in en is as expected")
+        func yyyyMMMd_15_dec31_en_is_expected() {
             let result = shiftedDate("2000-12-31T15:00:00Z").stringValue(.yyyyMMMd, locale: .init(identifier: "en_US"))
-            XCTAssertEqual(result, "Dec 31, 2000")
+            #expect(result == "Dec 31, 2000")
         }
 
-        XCTContext.runActivity(named: "yyyyMMMd at 21:00, 12-31 in en is as expected") { _ in
+        @Test("yyyyMMMd at 21:00, 12-31 in en is as expected")
+        func yyyyMMMd_21_dec31_en_is_expected() {
             let result = shiftedDate("2000-12-31T21:00:00Z").stringValue(.yyyyMMMd, locale: .init(identifier: "en_US"))
-            XCTAssertEqual(result, "Dec 31, 2000")
+            #expect(result == "Dec 31, 2000")
         }
     }
 
-    func testStringValueJa() {
-        XCTContext.runActivity(named: "yyyy in ja as expected") { _ in
+    // MARK: - Ja Locale
+
+    struct JaLocaleTests {
+        @Test("yyyy in ja is as expected")
+        func yyyy_ja_is_expected() {
             let result = shiftedDate("2000-01-01T00:00:00Z").stringValue(.yyyy, locale: .init(identifier: "ja_JP"))
-            XCTAssertEqual(result, "2000年")
+            #expect(result == "2000年")
         }
 
-        XCTContext.runActivity(named: "yyyy at 15:00 in ja as expected") { _ in
+        @Test("yyyy at 15:00 in ja is as expected")
+        func yyyy_at_15_ja_is_expected() {
             let result = shiftedDate("2000-01-01T15:00:00Z").stringValue(.yyyy, locale: .init(identifier: "ja_JP"))
-            XCTAssertEqual(result, "2000年")
+            #expect(result == "2000年")
         }
 
-        XCTContext.runActivity(named: "yyyyMMM in ja is as expected") { _ in
+        @Test("yyyyMMM in ja is as expected")
+        func yyyyMMM_ja_is_expected() {
             let result = shiftedDate("2000-01-01T00:00:00Z").stringValue(.yyyyMMM, locale: .init(identifier: "ja_JP"))
-            XCTAssertEqual(result, "2000年1月")
+            #expect(result == "2000年1月")
         }
 
-        XCTContext.runActivity(named: "yyyyMMM at 15:00 in ja is as expected") { _ in
+        @Test("yyyyMMM at 15:00 in ja is as expected")
+        func yyyyMMM_at_15_ja_is_expected() {
             let result = shiftedDate("2000-01-01T15:00:00Z").stringValue(.yyyyMMM, locale: .init(identifier: "ja_JP"))
-            XCTAssertEqual(result, "2000年1月")
+            #expect(result == "2000年1月")
         }
 
-        XCTContext.runActivity(named: "MMMd in ja is as expected") { _ in
+        @Test("MMMd in ja is as expected")
+        func MMMd_ja_is_expected() {
             let result = shiftedDate("2000-01-01T00:00:00Z").stringValue(.MMMd, locale: .init(identifier: "ja_JP"))
-            XCTAssertEqual(result, "1月1日")
+            #expect(result == "1月1日")
         }
 
-        XCTContext.runActivity(named: "MMMd at 15:00 in ja is as expected") { _ in
+        @Test("MMMd at 15:00 in ja is as expected")
+        func MMMd_at_15_ja_is_expected() {
             let result = shiftedDate("2000-01-01T15:00:00Z").stringValue(.MMMd, locale: .init(identifier: "ja_JP"))
-            XCTAssertEqual(result, "1月1日")
+            #expect(result == "1月1日")
         }
 
-        XCTContext.runActivity(named: "yyyyMMMd in ja is as expected") { _ in
+        @Test("yyyyMMMd in ja is as expected")
+        func yyyyMMMd_ja_is_expected() {
             let result = shiftedDate("2000-01-01T00:00:00Z").stringValue(.yyyyMMMd, locale: .init(identifier: "ja_JP"))
-            XCTAssertEqual(result, "2000年1月1日")
+            #expect(result == "2000年1月1日")
         }
 
-        XCTContext.runActivity(named: "yyyyMMMd at 15:00 in ja is as expected") { _ in
+        @Test("yyyyMMMd at 15:00 in ja is as expected")
+        func yyyyMMMd_at_15_ja_is_expected() {
             let result = shiftedDate("2000-01-01T15:00:00Z").stringValue(.yyyyMMMd, locale: .init(identifier: "ja_JP"))
-            XCTAssertEqual(result, "2000年1月1日")
+            #expect(result == "2000年1月1日")
         }
 
-        XCTContext.runActivity(named: "yyyyMMMd in ja is as expected") { _ in
+        @Test("yyyyMMMd at 00:00 in ja is as expected")
+        func yyyyMMMd_midnight_ja_is_expected() {
             let result = shiftedDate("2000-01-01T00:00:00Z").stringValue(.yyyyMMMd, locale: .init(identifier: "ja_JP"))
-            XCTAssertEqual(result, "2000年1月1日")
+            #expect(result == "2000年1月1日")
         }
 
-        XCTContext.runActivity(named: "yyyyMMMd at 12:00 in ja is as expected") { _ in
+        @Test("yyyyMMMd at 12:00 in ja is as expected")
+        func yyyyMMMd_noon_ja_is_expected() {
             let result = shiftedDate("2000-01-01T12:00:00Z").stringValue(.yyyyMMMd, locale: .init(identifier: "ja_JP"))
-            XCTAssertEqual(result, "2000年1月1日")
+            #expect(result == "2000年1月1日")
         }
 
-        XCTContext.runActivity(named: "yyyyMMMd at 15:00 in ja is as expected") { _ in
-            let result = shiftedDate("2000-01-01T15:00:00Z").stringValue(.yyyyMMMd, locale: .init(identifier: "ja_JP"))
-            XCTAssertEqual(result, "2000年1月1日")
-        }
-
-        XCTContext.runActivity(named: "yyyyMMMd at 21:00 in ja is as expected") { _ in
+        @Test("yyyyMMMd at 21:00 in ja is as expected")
+        func yyyyMMMd_21_ja_is_expected() {
             let result = shiftedDate("2000-01-01T21:00:00Z").stringValue(.yyyyMMMd, locale: .init(identifier: "ja_JP"))
-            XCTAssertEqual(result, "2000年1月1日")
+            #expect(result == "2000年1月1日")
         }
 
-        XCTContext.runActivity(named: "yyyyMMMd at 12-31 in ja is as expected") { _ in
+        @Test("yyyyMMMd at 12-31 in ja is as expected")
+        func yyyyMMMd_dec31_ja_is_expected() {
             let result = shiftedDate("2000-12-31T00:00:00Z").stringValue(.yyyyMMMd, locale: .init(identifier: "ja_JP"))
-            XCTAssertEqual(result, "2000年12月31日")
+            #expect(result == "2000年12月31日")
         }
 
-        XCTContext.runActivity(named: "yyyyMMMd at 12:00, 12-31 in ja is as expected") { _ in
+        @Test("yyyyMMMd at 12:00, 12-31 in ja is as expected")
+        func yyyyMMMd_noon_dec31_ja_is_expected() {
             let result = shiftedDate("2000-12-31T12:00:00Z").stringValue(.yyyyMMMd, locale: .init(identifier: "ja_JP"))
-            XCTAssertEqual(result, "2000年12月31日")
+            #expect(result == "2000年12月31日")
         }
 
-        XCTContext.runActivity(named: "yyyyMMMd at 15:00, 12-31 in ja is as expected") { _ in
+        @Test("yyyyMMMd at 15:00, 12-31 in ja is as expected")
+        func yyyyMMMd_15_dec31_ja_is_expected() {
             let result = shiftedDate("2000-12-31T15:00:00Z").stringValue(.yyyyMMMd, locale: .init(identifier: "ja_JP"))
-            XCTAssertEqual(result, "2000年12月31日")
+            #expect(result == "2000年12月31日")
         }
 
-        XCTContext.runActivity(named: "yyyyMMMd at 21:00, 12-31 in ja is as expected") { _ in
+        @Test("yyyyMMMd at 21:00, 12-31 in ja is as expected")
+        func yyyyMMMd_21_dec31_ja_is_expected() {
             let result = shiftedDate("2000-12-31T21:00:00Z").stringValue(.yyyyMMMd, locale: .init(identifier: "ja_JP"))
-            XCTAssertEqual(result, "2000年12月31日")
+            #expect(result == "2000年12月31日")
         }
     }
 }

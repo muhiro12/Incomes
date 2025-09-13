@@ -6,151 +6,188 @@
 //  Copyright © 2022 Hiromu Nakano. All rights reserved.
 //
 
+import Foundation
 @testable import Incomes
-import XCTest
+import Testing
 
-final class CalendarExtensionXCTests: XCTestCase {
-    func testUtc() {
-        let expected = isoDate("2000-01-01T00:00:00Z")
-
-        XCTContext.runActivity(named: "UTC of startOfDay returns startOfDay when target is startOfDay") { _ in
+struct CalendarExtensionXCTests {
+    struct StartOfDayUTCTests {
+        @Test("UTC of startOfDay returns startOfDay when target is startOfDay")
+        func whenStartOfDay() {
+            let expected = isoDate("2000-01-01T00:00:00Z")
             let result = Calendar.utc.startOfDay(for: isoDate("2000-01-01T00:00:00Z"))
-            XCTAssertEqual(result, expected)
+            #expect(result == expected)
         }
 
-        XCTContext.runActivity(named: "UTC of startOfDay returns startOfDay when target is same day") { _ in
+        @Test("UTC of startOfDay returns startOfDay when target is same day")
+        func whenSameDay() {
+            let expected = isoDate("2000-01-01T00:00:00Z")
             let result = Calendar.utc.startOfDay(for: isoDate("2000-01-01T12:00:00Z"))
-            XCTAssertEqual(result, expected)
+            #expect(result == expected)
         }
 
-        XCTContext.runActivity(named: "UTC of startOfDay does not return startOfDay when target is next day") { _ in
+        @Test("UTC of startOfDay does not return startOfDay when target is next day")
+        func whenNextDay() {
+            let expected = isoDate("2000-01-01T00:00:00Z")
             let result = Calendar.utc.startOfDay(for: isoDate("2000-01-02T00:00:00Z"))
-            XCTAssertNotEqual(result, expected)
+            #expect(result != expected)
         }
     }
 
-    func testEndOfDay() {
-        let expected = isoDate("2000-12-31T23:59:59Z")
-
-        XCTContext.runActivity(named: "endOfDay returns endOfDay when target is endOfDay") { _ in
+    struct EndOfDayTests {
+        @Test("endOfDay returns endOfDay when target is endOfDay")
+        func whenEndOfDay() {
+            let expected = isoDate("2000-12-31T23:59:59Z")
             let result = Calendar.utc.endOfMonth(for: isoDate("2000-12-31T23:59:59Z"))
-            XCTAssertEqual(result, expected)
+            #expect(result == expected)
         }
 
-        XCTContext.runActivity(named: "endOfDay returns endOfDay when target is same day") { _ in
+        @Test("endOfDay returns endOfDay when target is same day")
+        func whenSameDay() {
+            let expected = isoDate("2000-12-31T23:59:59Z")
             let result = Calendar.utc.endOfMonth(for: isoDate("2000-12-31T00:00:00Z"))
-            XCTAssertEqual(result, expected)
+            #expect(result == expected)
         }
 
-        XCTContext.runActivity(named: "endOfDay does not return endOfDay when target is last day") { _ in
+        @Test("endOfDay does not return endOfDay when target is last day")
+        func whenLastDay() {
+            let expected = isoDate("2000-12-31T23:59:59Z")
             let result = Calendar.utc.endOfMonth(for: isoDate("2000-11-30T00:00:00Z"))
-            XCTAssertNotEqual(result, expected)
+            #expect(result != expected)
         }
     }
 
-    func testStartOfMonth() {
-        let expected = isoDate("2000-01-01T00:00:00Z")
-
-        XCTContext.runActivity(named: "startOfMonth returns startOfMonth when target is startOfMonth") { _ in
+    struct StartOfMonthTests {
+        @Test("startOfMonth returns startOfMonth when target is startOfMonth")
+        func whenStartOfMonth() {
+            let expected = isoDate("2000-01-01T00:00:00Z")
             let result = Calendar.utc.startOfMonth(for: isoDate("2000-01-01T00:00:00Z"))
-            XCTAssertEqual(result, expected)
+            #expect(result == expected)
         }
 
-        XCTContext.runActivity(named: "startOfMonth returns startOfMonth when target is same day") { _ in
+        @Test("startOfMonth returns startOfMonth when target is same day")
+        func whenSameDay() {
+            let expected = isoDate("2000-01-01T00:00:00Z")
             let result = Calendar.utc.startOfMonth(for: isoDate("2000-01-01T12:00:00Z"))
-            XCTAssertEqual(result, expected)
+            #expect(result == expected)
         }
 
-        XCTContext.runActivity(named: "startOfMonth returns startOfMonth when target is next day") { _ in
+        @Test("startOfMonth returns startOfMonth when target is next day")
+        func whenNextDay() {
+            let expected = isoDate("2000-01-01T00:00:00Z")
             let result = Calendar.utc.startOfMonth(for: isoDate("2000-01-02T00:00:00Z"))
-            XCTAssertEqual(result, expected)
+            #expect(result == expected)
         }
 
-        XCTContext.runActivity(named: "startOfMonth does not return startOfMonth when target is next month") { _ in
+        @Test("startOfMonth does not return startOfMonth when target is next month")
+        func whenNextMonth() {
+            let expected = isoDate("2000-01-01T00:00:00Z")
             let result = Calendar.utc.startOfMonth(for: isoDate("2000-02-01T00:00:00Z"))
-            XCTAssertNotEqual(result, expected)
+            #expect(result != expected)
         }
     }
 
-    func testEndOfMonth() {
-        let expected = isoDate("2000-12-31T23:59:59Z")
-
-        XCTContext.runActivity(named: "endOfMonth returns endOfMonth when target is endOfMonth") { _ in
+    struct EndOfMonthTests {
+        @Test("endOfMonth returns endOfMonth when target is endOfMonth")
+        func whenEndOfMonth() {
+            let expected = isoDate("2000-12-31T23:59:59Z")
             let result = Calendar.utc.endOfMonth(for: isoDate("2000-12-31T23:59:59Z"))
-            XCTAssertEqual(result, expected)
+            #expect(result == expected)
         }
 
-        XCTContext.runActivity(named: "endOfMonth returns endOfMonth when target is same day") { _ in
+        @Test("endOfMonth returns endOfMonth when target is same day")
+        func whenSameDay() {
+            let expected = isoDate("2000-12-31T23:59:59Z")
             let result = Calendar.utc.endOfMonth(for: isoDate("2000-12-31T00:00:00Z"))
-            XCTAssertEqual(result, expected)
+            #expect(result == expected)
         }
 
-        XCTContext.runActivity(named: "endOfMonth returns endOfMonth when target is last day") { _ in
+        @Test("endOfMonth returns endOfMonth when target is last day")
+        func whenLastDay() {
+            let expected = isoDate("2000-12-31T23:59:59Z")
             let result = Calendar.utc.endOfMonth(for: isoDate("2000-12-30T00:00:00Z"))
-            XCTAssertEqual(result, expected)
+            #expect(result == expected)
         }
 
-        XCTContext.runActivity(named: "endOfMonth does not return endOfMonth when target is last month") { _ in
+        @Test("endOfMonth does not return endOfMonth when target is last month")
+        func whenLastMonth() {
+            let expected = isoDate("2000-12-31T23:59:59Z")
             let result = Calendar.utc.endOfMonth(for: isoDate("2000-11-30T00:00:00Z"))
-            XCTAssertNotEqual(result, expected)
+            #expect(result != expected)
         }
     }
 
-    func testStartOfYear() {
-        let expected = isoDate("2000-01-01T00:00:00Z")
-
-        XCTContext.runActivity(named: "startOfYear returns startOfYear when target is startOfYear") { _ in
+    struct StartOfYearTests {
+        @Test("startOfYear returns startOfYear when target is startOfYear")
+        func whenStartOfYear() {
+            let expected = isoDate("2000-01-01T00:00:00Z")
             let result = Calendar.utc.startOfYear(for: isoDate("2000-01-01T00:00:00Z"))
-            XCTAssertEqual(result, expected)
+            #expect(result == expected)
         }
 
-        XCTContext.runActivity(named: "startOfYear returns startOfYear when target is same day") { _ in
+        @Test("startOfYear returns startOfYear when target is same day")
+        func whenSameDay() {
+            let expected = isoDate("2000-01-01T00:00:00Z")
             let result = Calendar.utc.startOfYear(for: isoDate("2000-01-01T12:00:00Z"))
-            XCTAssertEqual(result, expected)
+            #expect(result == expected)
         }
 
-        XCTContext.runActivity(named: "startOfYear returns startOfYear when target is next day") { _ in
+        @Test("startOfYear returns startOfYear when target is next day")
+        func whenNextDay() {
+            let expected = isoDate("2000-01-01T00:00:00Z")
             let result = Calendar.utc.startOfYear(for: isoDate("2000-01-02T00:00:00Z"))
-            XCTAssertEqual(result, expected)
+            #expect(result == expected)
         }
 
-        XCTContext.runActivity(named: "startOfYear returns startOfYear when target is next month") { _ in
+        @Test("startOfYear returns startOfYear when target is next month")
+        func whenNextMonth() {
+            let expected = isoDate("2000-01-01T00:00:00Z")
             let result = Calendar.utc.startOfYear(for: isoDate("2000-02-01T00:00:00Z"))
-            XCTAssertEqual(result, expected)
+            #expect(result == expected)
         }
 
-        XCTContext.runActivity(named: "startOfYear does not return startOfYear when target is next year") { _ in
+        @Test("startOfYear does not return startOfYear when target is next year")
+        func whenNextYear() {
+            let expected = isoDate("2000-01-01T00:00:00Z")
             let result = Calendar.utc.startOfYear(for: isoDate("2001-01-01T00:00:00Z"))
-            XCTAssertNotEqual(result, expected)
+            #expect(result != expected)
         }
     }
 
-    func testEndOfYear() {
-        let expected = isoDate("2000-12-31T23:59:59Z")
-
-        XCTContext.runActivity(named: "endOfYear returns endOfYear when target is endOfYear") { _ in
+    struct EndOfYearTests {
+        @Test("endOfYear returns endOfYear when target is endOfYear")
+        func whenEndOfYear() {
+            let expected = isoDate("2000-12-31T23:59:59Z")
             let result = Calendar.utc.endOfYear(for: isoDate("2000-12-31T23:59:59Z"))
-            XCTAssertEqual(result, expected)
+            #expect(result == expected)
         }
 
-        XCTContext.runActivity(named: "endOfYear returns endOfYear when target is same day") { _ in
+        @Test("endOfYear returns endOfYear when target is same day")
+        func whenSameDay() {
+            let expected = isoDate("2000-12-31T23:59:59Z")
             let result = Calendar.utc.endOfYear(for: isoDate("2000-12-31T00:00:00Z"))
-            XCTAssertEqual(result, expected)
+            #expect(result == expected)
         }
 
-        XCTContext.runActivity(named: "endOfYear returns endOfYear when target is last day") { _ in
+        @Test("endOfYear returns endOfYear when target is last day")
+        func whenLastDay() {
+            let expected = isoDate("2000-12-31T23:59:59Z")
             let result = Calendar.utc.endOfYear(for: isoDate("2000-12-30T00:00:00Z"))
-            XCTAssertEqual(result, expected)
+            #expect(result == expected)
         }
 
-        XCTContext.runActivity(named: "endOfYear returns endOfYear when target is last month") { _ in
+        @Test("endOfYear returns endOfYear when target is last month")
+        func whenLastMonth() {
+            let expected = isoDate("2000-12-31T23:59:59Z")
             let result = Calendar.utc.endOfYear(for: isoDate("2000-11-30T00:00:00Z"))
-            XCTAssertEqual(result, expected)
+            #expect(result == expected)
         }
 
-        XCTContext.runActivity(named: "endOfYear does not return endOfYear when target is last year") { _ in
+        @Test("endOfYear does not return endOfYear when target is last year")
+        func whenLastYear() {
+            let expected = isoDate("2000-12-31T23:59:59Z")
             let result = Calendar.utc.endOfYear(for: isoDate("1999-12-31T00:00:00Z"))
-            XCTAssertNotEqual(result, expected)
+            #expect(result != expected)
         }
     }
 }
