@@ -35,7 +35,7 @@ let shiftedDate: (String) -> Date = { string in
     )
 }
 
-let timeZones: [TimeZone] = [
+nonisolated(unsafe) let timeZones: [TimeZone] = [
     .init(identifier: "Asia/Tokyo")!,
     .init(identifier: "Europe/London")!,
     .init(identifier: "America/New_York")!,
@@ -46,3 +46,7 @@ let timeZones: [TimeZone] = [
 func fetchItems(_ context: ModelContext) -> [Item] {
     try! context.fetch(.items(.all))
 }
+
+// Temporary shim until Section is available in the Testing library version
+@inline(__always)
+func Section(_: String, _ body: () -> Void) { body() }

@@ -13,21 +13,23 @@ var testContext: ModelContext {
     )
 }
 
-let isoDate: (String) -> Date = { string in
+@preconcurrency
+nonisolated(unsafe) func isoDate(_ string: String) -> Date {
     guard let date = ISO8601DateFormatter().date(from: string) else {
         preconditionFailure("Invalid ISO8601 date string: \(string)")
     }
     return date
 }
 
-let shiftedDate: (String) -> Date = { string in
+@preconcurrency
+nonisolated(unsafe) func shiftedDate(_ string: String) -> Date {
     Calendar.current.shiftedDate(
         componentsFrom: isoDate(string),
         in: .utc
     )
 }
 
-let timeZones: [TimeZone] = [
+nonisolated(unsafe) let timeZones: [TimeZone] = [
     .init(identifier: "Asia/Tokyo")!,
     .init(identifier: "Europe/London")!,
     .init(identifier: "America/New_York")!,
