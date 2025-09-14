@@ -1,8 +1,8 @@
 import SwiftUI
 import WidgetKit
 
-struct IncomesMonthWidget: Widget {
-    let kind: String = "IncomesMonthWidget"
+struct IncomesMonthBalanceWidget: Widget {
+    let kind: String = "IncomesMonthBalanceWidget"
 
     // MARK: - Helpers
     private static func monthTitle(from date: Date) -> String {
@@ -13,7 +13,7 @@ struct IncomesMonthWidget: Widget {
     }
 
     var body: some WidgetConfiguration {
-        AppIntentConfiguration(kind: kind, intent: ConfigurationAppIntent.self, provider: MonthSummaryProvider()) { entry in
+        AppIntentConfiguration(kind: kind, intent: ConfigurationAppIntent.self, provider: BalanceProvider()) { entry in
             ViewThatFits(in: .horizontal) {
                 // Medium (roomy) layout: horizontal split
                 HStack(alignment: .center, spacing: 12) {
@@ -23,29 +23,19 @@ struct IncomesMonthWidget: Widget {
                             .foregroundStyle(.secondary)
                             .lineLimit(1)
                             .minimumScaleFactor(0.8)
-                        Text("Income / Outgo")
+                        Text("Balance")
                             .font(.caption2)
                             .foregroundStyle(.secondary)
                             .lineLimit(1)
                     }
                     Spacer(minLength: 0)
-                    VStack(alignment: .trailing, spacing: 6) {
-                        HStack(spacing: 6) {
-                            Image(systemName: "chevron.up")
-                                .foregroundStyle(Color.accentColor)
-                            Text(entry.totalIncomeText)
-                                .font(.title3)
-                                .lineLimit(1)
-                                .minimumScaleFactor(0.8)
-                        }
-                        HStack(spacing: 6) {
-                            Image(systemName: "chevron.down")
-                                .foregroundStyle(Color.red)
-                            Text(entry.totalOutgoText)
-                                .font(.title3)
-                                .lineLimit(1)
-                                .minimumScaleFactor(0.8)
-                        }
+                    HStack(spacing: 6) {
+                        Image(systemName: entry.isPositive ? "chevron.up" : "chevron.down")
+                            .foregroundStyle(entry.isPositive ? Color.accentColor : Color.red)
+                        Text(entry.balanceText)
+                            .font(.title3)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.8)
                     }
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
@@ -58,56 +48,48 @@ struct IncomesMonthWidget: Widget {
                         .foregroundStyle(.secondary)
                         .lineLimit(1)
                         .minimumScaleFactor(0.8)
-                    Text("Income / Outgo")
+                    Text("Balance")
                         .font(.caption2)
                         .foregroundStyle(.secondary)
                         .lineLimit(1)
                     HStack(spacing: 6) {
-                        Image(systemName: "chevron.up")
-                            .foregroundStyle(Color.accentColor)
-                        Text(entry.totalIncomeText)
+                        Image(systemName: entry.isPositive ? "chevron.up" : "chevron.down")
+                            .foregroundStyle(entry.isPositive ? Color.accentColor : Color.red)
+                        Text(entry.balanceText)
+                            .font(.headline)
                             .lineLimit(1)
                             .minimumScaleFactor(0.7)
                     }
-                    .font(.footnote)
-                    HStack(spacing: 6) {
-                        Image(systemName: "chevron.down")
-                            .foregroundStyle(Color.red)
-                        Text(entry.totalOutgoText)
-                            .lineLimit(1)
-                            .minimumScaleFactor(0.7)
-                    }
-                    .font(.footnote)
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
                 .padding(8)
             }
             .containerBackground(.fill.tertiary, for: .widget)
         }
-        .configurationDisplayName("Incomes")
-        .description("This month's items and balance")
+        .configurationDisplayName("Incomes Balance")
+        .description("This month's net balance")
         .supportedFamilies([.systemSmall, .systemMedium])
     }
 }
 
 #Preview("Small", as: .systemSmall) {
-    IncomesMonthWidget()
+    IncomesMonthBalanceWidget()
 } timeline: {
-    MonthSummaryEntry(
+    BalanceEntry(
         date: .now,
         configuration: .init(),
-        totalIncomeText: "$1,200",
-        totalOutgoText: "-$800"
+        balanceText: "$1,234",
+        isPositive: true
     )
 }
 
 #Preview("Medium", as: .systemMedium) {
-    IncomesMonthWidget()
+    IncomesMonthBalanceWidget()
 } timeline: {
-    MonthSummaryEntry(
+    BalanceEntry(
         date: .now,
         configuration: .init(),
-        totalIncomeText: "$1,200",
-        totalOutgoText: "-$800"
+        balanceText: "$1,234",
+        isPositive: true
     )
 }

@@ -33,3 +33,29 @@ struct ConfigurationAppIntent: WidgetConfigurationIntent {
     @Parameter(title: "Target Month", default: .currentMonth)
     var targetMonth: MonthSelection
 }
+
+// MARK: - Upcoming configuration (next or previous)
+
+enum UpcomingDirection: String, AppEnum {
+    case next
+    case previous
+
+    static var typeDisplayRepresentation: TypeDisplayRepresentation {
+        .init(name: "Direction")
+    }
+
+    static var caseDisplayRepresentations: [Self: DisplayRepresentation] {
+        [
+            .next: .init(title: "Next"),
+            .previous: .init(title: "Previous")
+        ]
+    }
+}
+
+struct UpcomingConfigurationAppIntent: WidgetConfigurationIntent {
+    static var title: LocalizedStringResource { "Upcoming Configuration" }
+    static var description: IntentDescription { "Configure upcoming widget direction" }
+
+    @Parameter(title: "Direction", default: .next)
+    var direction: UpcomingDirection
+}
