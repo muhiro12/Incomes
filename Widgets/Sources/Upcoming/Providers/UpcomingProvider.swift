@@ -6,6 +6,7 @@ struct UpcomingProvider: AppIntentTimelineProvider {
     func placeholder(in _: Context) -> UpcomingEntry {
         .init(
             date: Date.now,
+            subtitleText: "Next",
             titleText: "Upcoming",
             detailText: "No items",
             amountText: "$0",
@@ -55,6 +56,7 @@ struct UpcomingProvider: AppIntentTimelineProvider {
                 let amount: Decimal = item.profit
                 return .init(
                     date: now,
+                    subtitleText: configuration.direction == .next ? "Next" : "Previous",
                     titleText: titleText,
                     detailText: detailText,
                     amountText: amount.asCurrency,
@@ -63,6 +65,7 @@ struct UpcomingProvider: AppIntentTimelineProvider {
             }
             return .init(
                 date: now,
+                subtitleText: configuration.direction == .next ? "Next" : "Previous",
                 titleText: "Upcoming",
                 detailText: "No items",
                 amountText: "$0",
@@ -71,6 +74,7 @@ struct UpcomingProvider: AppIntentTimelineProvider {
         } catch {
             return .init(
                 date: now,
+                subtitleText: "Next",
                 titleText: "Upcoming",
                 detailText: "Error",
                 amountText: "$0",

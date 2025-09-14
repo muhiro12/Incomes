@@ -14,34 +14,74 @@ struct IncomesMonthWidget: Widget {
 
     var body: some WidgetConfiguration {
         AppIntentConfiguration(kind: kind, intent: ConfigurationAppIntent.self, provider: MonthSummaryProvider()) { entry in
-            VStack(alignment: .leading, spacing: 8) {
-                Text(Self.monthTitle(from: entry.date))
-                    .font(.headline)
-
-                HStack(spacing: 8) {
-                    Text("Total Income")
+            ViewThatFits(in: .horizontal) {
+                // Medium (roomy) layout: horizontal split
+                HStack(alignment: .center, spacing: 12) {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(Self.monthTitle(from: entry.date))
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.8)
+                        Text("Income / Outgo")
+                            .font(.caption2)
+                            .foregroundStyle(.secondary)
+                            .lineLimit(1)
+                    }
                     Spacer(minLength: 0)
-                    Text(entry.totalIncomeText)
-                        .foregroundStyle(.secondary)
-                    Image(systemName: "chevron.up")
-                        .foregroundStyle(Color.accentColor)
+                    VStack(alignment: .trailing, spacing: 6) {
+                        HStack(spacing: 6) {
+                            Image(systemName: "chevron.up")
+                                .foregroundStyle(Color.accentColor)
+                            Text(entry.totalIncomeText)
+                                .font(.title3)
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.8)
+                        }
+                        HStack(spacing: 6) {
+                            Image(systemName: "chevron.down")
+                                .foregroundStyle(Color.red)
+                            Text(entry.totalOutgoText)
+                                .font(.title3)
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.8)
+                        }
+                    }
                 }
-                .font(.footnote)
-                .padding(.leading, 12)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+                .padding(12)
 
-                HStack(spacing: 8) {
-                    Text("Total Outgo")
-                    Spacer(minLength: 0)
-                    Text(entry.totalOutgoText)
+                // Small (compact) layout: vertical stack
+                VStack(alignment: .leading, spacing: 6) {
+                    Text(Self.monthTitle(from: entry.date))
+                        .font(.footnote)
                         .foregroundStyle(.secondary)
-                    Image(systemName: "chevron.down")
-                        .foregroundStyle(Color.red)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.8)
+                    Text("Income / Outgo")
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                        .lineLimit(1)
+                    HStack(spacing: 6) {
+                        Image(systemName: "chevron.up")
+                            .foregroundStyle(Color.accentColor)
+                        Text(entry.totalIncomeText)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.7)
+                    }
+                    .font(.footnote)
+                    HStack(spacing: 6) {
+                        Image(systemName: "chevron.down")
+                            .foregroundStyle(Color.red)
+                        Text(entry.totalOutgoText)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.7)
+                    }
+                    .font(.footnote)
                 }
-                .font(.footnote)
-                .padding(.leading, 12)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+                .padding(8)
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-            .padding(12)
             .containerBackground(.fill.tertiary, for: .widget)
         }
         .configurationDisplayName("Incomes")
