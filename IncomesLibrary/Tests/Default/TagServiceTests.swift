@@ -132,6 +132,35 @@ struct TagServiceTests {
     }
 
     @Test
+    func mergeDuplicates_does_not_leave_parent_duplicated_on_items() throws {
+        let item = try Item.createIgnoringDuplicates(
+            context: context,
+            date: .now,
+            content: "content",
+            income: .zero,
+            outgo: .zero,
+            category: "",
+            repeatID: .init()
+        )
+        let parent = try #require(
+            item.tags?.first { tag in
+                tag.type == .content
+            }
+        )
+        let duplicate = try Tag.createIgnoringDuplicates(
+            context: context,
+            name: parent.name,
+            type: .content
+        )
+        item.modify(tags: [parent, duplicate])
+        try TagService.mergeDuplicates(tags: [parent, duplicate])
+        let contentTags = item.tags?.filter { tag in
+            tag.id == parent.id
+        }
+        #expect(contentTags?.count == 1)
+    }
+
+    @Test
     func resolveDuplicates_removes_all_duplicates() throws {
         let tag1 = try Tag.createIgnoringDuplicates(context: context, name: "A", type: .year)
         _ = try Tag.createIgnoringDuplicates(context: context, name: "A", type: .year)
