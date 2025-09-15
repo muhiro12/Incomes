@@ -9,7 +9,9 @@
     }
   ],
   "defaultOptions" : {
-    "performanceAntipatternCheckerEnabled" : true
+    "language" : "en",
+    "performanceAntipatternCheckerEnabled" : true,
+    "region" : "US"
   },
   "testTargets" : [
     {
