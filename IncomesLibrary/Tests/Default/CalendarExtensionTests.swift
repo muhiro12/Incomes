@@ -1,5 +1,5 @@
 //
-//  CalendarExtensionXCTests.swift
+//  CalendarExtensionTests.swift
 //  IncomesTests
 //
 //  Created by Hiromu Nakano on 2022/01/13.
@@ -10,7 +10,7 @@ import Foundation
 @testable import Incomes
 import Testing
 
-struct CalendarExtensionXCTests {
+struct CalendarExtensionTests {
     struct StartOfDayUTCTests {
         @Test("UTC of startOfDay returns startOfDay when target is startOfDay")
         func whenStartOfDay() {

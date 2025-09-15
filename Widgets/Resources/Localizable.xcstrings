@@ -1,0 +1,111 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "•" : {
+
+    },
+    "A an example control that runs a timer." : {
+
+    },
+    "Balance" : {
+
+    },
+    "Bottom %@" : {
+
+    },
+    "Configuration" : {
+
+    },
+    "Configure upcoming widget direction" : {
+
+    },
+    "Current Month" : {
+
+    },
+    "Direction" : {
+
+    },
+    "Hello %@" : {
+
+    },
+    "Income / Outgo" : {
+
+    },
+    "Incomes" : {
+
+    },
+    "Incomes Balance" : {
+
+    },
+    "Incomes widgets configuration" : {
+
+    },
+    "L" : {
+
+    },
+    "Leading" : {
+
+    },
+    "Next" : {
+
+    },
+    "Next Month" : {
+
+    },
+    "Off" : {
+
+    },
+    "On" : {
+
+    },
+    "Previous" : {
+
+    },
+    "Previous Month" : {
+
+    },
+    "Shows the next or previous item" : {
+
+    },
+    "Start a timer" : {
+
+    },
+    "Start Timer" : {
+
+    },
+    "T %@" : {
+
+    },
+    "Target Month" : {
+
+    },
+    "This month's items and balance" : {
+
+    },
+    "This month's net balance" : {
+
+    },
+    "Timer" : {
+
+    },
+    "Timer is running" : {
+
+    },
+    "Timer Name" : {
+
+    },
+    "Timer Name Configuration" : {
+
+    },
+    "Trailing" : {
+
+    },
+    "Upcoming Configuration" : {
+
+    },
+    "Upcoming Item" : {
+
+    }
+  },
+  "version" : "1.1"
+}

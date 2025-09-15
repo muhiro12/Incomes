@@ -1,5 +1,5 @@
 //
-//  ToolbarAlignmentSpacer.swift
+//  SpacerToolbarItem.swift
 //  Incomes
 //
 //  Created by Hiromu Nakano on 2025/05/07.
@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct ToolbarAlignmentSpacer: ToolbarContent {
+struct SpacerToolbarItem: ToolbarContent {
     private let placement: ToolbarItemPlacement
 
     init(placement: ToolbarItemPlacement = .automatic) {
@@ -36,7 +36,7 @@ struct ToolbarAlignmentSpacer: ToolbarContent {
         Text("Toolbar Spacer Preview")
     }
     .toolbar {
-        ToolbarAlignmentSpacer(placement: .bottomBar)
+        SpacerToolbarItem(placement: .bottomBar)
         ToolbarItem(placement: .bottomBar) {
             Button(action: {
             }) {

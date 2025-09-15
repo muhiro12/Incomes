@@ -31,7 +31,7 @@ struct IncomesUpcomingWidget: Widget {
                     Spacer(minLength: 0)
                     HStack(spacing: 6) {
                         Image(systemName: entry.isPositive ? "chevron.up" : "chevron.down")
-                            .foregroundStyle(entry.isPositive ? Color.accentColor : Color.red)
+                            .foregroundStyle(entry.isPositive ? .accent : .red)
                         Text(entry.amountText)
                             .font(.title3)
                             .lineLimit(1)
@@ -62,7 +62,7 @@ struct IncomesUpcomingWidget: Widget {
                     }
                     HStack(spacing: 6) {
                         Image(systemName: entry.isPositive ? "chevron.up" : "chevron.down")
-                            .foregroundStyle(entry.isPositive ? Color.accentColor : Color.red)
+                            .foregroundStyle(entry.isPositive ? .accent : .red)
                         Text(entry.amountText)
                             .font(.headline)
                             .lineLimit(1)

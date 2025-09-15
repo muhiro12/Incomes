@@ -56,13 +56,13 @@ private extension IncomeAndOutgoChartSection {
                     y: .value("Amount", income(of: item)),
                     stacking: .unstacked
                 )
-                .foregroundStyle(income(of: item).isPlus ? Color.accentColor : Color.red)
+                .foregroundStyle(income(of: item).isPlus ? .accent : .red)
                 .opacity(.medium)
                 RectangleMark(
                     x: .value("Date", date(of: item)),
                     y: .value("Amount", income(of: item))
                 )
-                .foregroundStyle(income(of: item).isPlus ? Color.accentColor : Color.red)
+                .foregroundStyle(income(of: item).isPlus ? .accent : .red)
             }
             if outgo(of: item).isNotZero {
                 BarMark(
@@ -70,13 +70,13 @@ private extension IncomeAndOutgoChartSection {
                     y: .value("Amount", outgo(of: item)),
                     stacking: .unstacked
                 )
-                .foregroundStyle(outgo(of: item).isPlus ? Color.accentColor : Color.red)
+                .foregroundStyle(outgo(of: item).isPlus ? .accent : .red)
                 .opacity(.medium)
                 RectangleMark(
                     x: .value("Date", date(of: item)),
                     y: .value("Amount", outgo(of: item))
                 )
-                .foregroundStyle(outgo(of: item).isPlus ? Color.accentColor : Color.red)
+                .foregroundStyle(outgo(of: item).isPlus ? .accent : .red)
             }
         }
     }
