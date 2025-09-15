@@ -81,22 +81,6 @@
         }
       }
     },
-    "Items: %lld" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Items: %lld"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "アイテム数: %lld"
-          }
-        }
-      }
-    },
     "Manage your subscription in the iPhone app's Settings. Purchases are not available on Apple Watch." : {
       "localizations" : {
         "en" : {
@@ -173,22 +157,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "サブスクリプション"
-          }
-        }
-      }
-    },
-    "Summary" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Summary"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "概要"
           }
         }
       }

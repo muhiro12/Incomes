@@ -266,7 +266,7 @@ struct ItemServiceTest {
         let months = items.map { item in
             item.utcDate.stringValueWithoutLocale(.yyyyMM)
         }
-        #expect(months == ["2024-01", "2024-02", "2024-03"])
+        #expect(months == ["202401", "202402", "202403"])
     }
 
     @Test("create stores date near midnight UTC correctly", arguments: timeZones)

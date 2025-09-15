@@ -9,7 +9,6 @@
 import IncomesLibrary
 import StoreKit
 import StoreKitWrapper
-import SwiftData
 import SwiftUI
 
 struct ContentView: View {
@@ -18,25 +17,32 @@ struct ContentView: View {
     @Environment(\.modelContext)
     private var context
 
-    @Query(sort: \Item.date, order: .reverse)
-    private var items: [Item]
-
     @AppStorage(.isSubscribeOn)
     private var isSubscribeOn
     @AppStorage(.isICloudOn)
     private var isICloudOn
 
+    @State private var items = [Item]()
     @State private var isSettingsPresented = false
 
     var body: some View {
         NavigationStack {
             List {
-                Section("Summary") {
-                    Text(String.localizedStringWithFormat(String(localized: "Items: %lld"), items.count))
-                }
                 Section("Upcoming") {
-                    if let nextDate = try? ItemService.nextItemDate(context: context, date: .now) {
-                        Text(nextDate.formatted(date: .abbreviated, time: .omitted))
+                    if items.isNotEmpty {
+                        ForEach(items) { item in
+                            VStack {
+                                Text(item.content)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                HStack {
+                                    Text(item.localDate.formatted(.dateTime.month().day()))
+                                        .font(.footnote)
+                                    Text(item.profit.asCurrency)
+                                        .foregroundStyle(item.isProfitable ? .accent : .red)
+                                        .frame(maxWidth: .infinity, alignment: .trailing)
+                                }
+                            }
+                        }
                     } else {
                         Text("No upcoming items")
                     }
@@ -66,10 +72,13 @@ struct ContentView: View {
                     isICloudOn = false
                 }
             }
+
+            items = (try? ItemService.nextItems(context: context, date: .now)) ?? []
         }
     }
 }
 
 #Preview {
     ContentView()
+        .environment(Store())
 }
