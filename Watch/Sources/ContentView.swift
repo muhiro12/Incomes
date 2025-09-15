@@ -26,17 +26,36 @@ struct ContentView: View {
     @AppStorage(.isICloudOn)
     private var isICloudOn
 
+    @State private var isSettingsPresented = false
+
     var body: some View {
-        List {
-            Section("Summary") {
-                Text("Items: \(items.count)")
-            }
-            Section("Upcoming") {
-                if let nextDate = try? ItemService.nextItemDate(context: context, date: .now) {
-                    Text(nextDate.formatted(date: .abbreviated, time: .omitted))
-                } else {
-                    Text("No upcoming items")
+        NavigationStack {
+            List {
+                Section("Summary") {
+                    Text("Items: \(items.count)")
                 }
+                Section("Upcoming") {
+                    if let nextDate = try? ItemService.nextItemDate(context: context, date: .now) {
+                        Text(nextDate.formatted(date: .abbreviated, time: .omitted))
+                    } else {
+                        Text("No upcoming items")
+                    }
+                }
+            }
+            .navigationTitle("Incomes")
+            .toolbar {
+                ToolbarItem {
+                    Button {
+                        isSettingsPresented = true
+                    } label: {
+                        Image(systemName: "gear")
+                    }
+                }
+            }
+        }
+        .sheet(isPresented: $isSettingsPresented) {
+            NavigationStack {
+                SettingsListView()
             }
         }
         .task {
