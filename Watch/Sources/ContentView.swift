@@ -32,7 +32,7 @@ struct ContentView: View {
         NavigationStack {
             List {
                 Section("Summary") {
-                    Text("Items: \(items.count)")
+                    Text(String.localizedStringWithFormat(String(localized: "Items: %lld"), items.count))
                 }
                 Section("Upcoming") {
                     if let nextDate = try? ItemService.nextItemDate(context: context, date: .now) {
