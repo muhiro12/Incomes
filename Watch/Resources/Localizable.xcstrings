@@ -8,6 +8,12 @@
             "state" : "translated",
             "value" : "Active"
           }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アクティブ"
+          }
         }
       }
     },
