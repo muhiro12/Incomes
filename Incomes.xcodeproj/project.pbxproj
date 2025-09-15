@@ -108,7 +108,7 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Configurations/Incomes.xctestplan,
-				Sources/Default/CalendarExtensionXCTests.swift,
+				Sources/Default/CalendarExtensionTests.swift,
 				Sources/Default/ItemEntityExtensionTest.swift,
 				Sources/Default/StringExtensionTests.swift,
 			);
