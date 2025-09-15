@@ -40,17 +40,12 @@ struct ContentView: View {
             }
         }
         .task {
-            struct WatchSecret {
-                static let groupID = "group.dev.placeholder"
-                static let productID = "com.example.placeholder.subscription"
-            }
-
             store.open(
-                groupID: WatchSecret.groupID,
-                productIDs: [WatchSecret.productID]
+                groupID: Secret.groupID,
+                productIDs: [Secret.productID]
             ) { entitlements in
                 isSubscribeOn = entitlements.contains {
-                    $0.id == WatchSecret.productID
+                    $0.id == Secret.productID
                 }
                 if !isSubscribeOn {
                     isICloudOn = false
