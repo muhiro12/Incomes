@@ -91,6 +91,9 @@ public enum ItemPredicate {
             case .category:
                 assertionFailure("Not Supported")
                 return .false
+            case .debug:
+                assertionFailure("Not Supported")
+                return .false
             }
         case .tagAndYear(let tag, let yearString):
             guard let tagType = tag.type,
@@ -108,7 +111,8 @@ public enum ItemPredicate {
                 }
             case .year,
                  .yearMonth,
-                 .category:
+                 .category,
+                 .debug:
                 return Self.tagIs(tag).value
             }
 

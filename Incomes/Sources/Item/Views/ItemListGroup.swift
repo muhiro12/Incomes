@@ -23,6 +23,8 @@ extension ItemListGroup: View {
             ContentItemListView()
         case .category:
             CategoryItemListView()
+        case .debug:
+            EmptyView()
         case .none:
             EmptyView()
         }

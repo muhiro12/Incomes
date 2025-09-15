@@ -1,6 +1,12 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "   - Monthly: select previous/current/next month." : {
+
+    },
+    "   - Upcoming: select Next or Previous." : {
+
+    },
     "%@" : {
       "localizations" : {
         "en" : {
@@ -258,6 +264,18 @@
         }
       },
       "shouldTranslate" : false
+    },
+    "1. Touch and hold the Home Screen, then tap +." : {
+
+    },
+    "2. Search for ‘Incomes’ and choose a widget and size." : {
+
+    },
+    "3. Tap ‘Add Widget’, then ‘Edit’ to set options." : {
+
+    },
+    "Add widgets to your Home" : {
+
     },
     "Advertising revenue" : {
       "localizations" : {
@@ -735,6 +753,9 @@
         }
       }
     },
+    "Available widgets" : {
+
+    },
     "Balance" : {
       "localizations" : {
         "en" : {
@@ -1110,6 +1131,7 @@
       }
     },
     "Create Sample Items" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1144,6 +1166,7 @@
       }
     },
     "Creating Sample Items..." : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1347,6 +1370,9 @@
         }
       }
     },
+    "Debug data" : {
+
+    },
     "Debug option" : {
       "localizations" : {
         "en" : {
@@ -1482,6 +1508,9 @@
           }
         }
       }
+    },
+    "Delete tutorial/debug data" : {
+
     },
     "Display Name" : {
       "localizations" : {
@@ -1722,6 +1751,7 @@
       }
     },
     "Explore with Sample Items" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1788,6 +1818,12 @@
           }
         }
       }
+    },
+    "Food" : {
+
+    },
+    "Grocery" : {
+
     },
     "Home" : {
       "localizations" : {
@@ -1856,6 +1892,12 @@
           }
         }
       }
+    },
+    "Housing" : {
+
+    },
+    "How to add" : {
+
     },
     "iCloud On" : {
       "localizations" : {
@@ -2503,6 +2545,12 @@
         }
       }
     },
+    "Monthly Balance: shows net balance for a selected month." : {
+
+    },
+    "Monthly Summary: shows income and outgo for a selected month." : {
+
+    },
     "Name" : {
       "localizations" : {
         "en" : {
@@ -2741,6 +2789,9 @@
         }
       }
     },
+    "Open Settings → Subscription to view plans and purchase." : {
+
+    },
     "Orange card" : {
       "localizations" : {
         "en" : {
@@ -2774,6 +2825,9 @@
           }
         }
       }
+    },
+    "Organize monthly items" : {
+
     },
     "Others" : {
       "localizations" : {
@@ -3114,6 +3168,15 @@
           }
         }
       }
+    },
+    "Remove ads across the app" : {
+
+    },
+    "Removes items tagged as Debug and their tags." : {
+
+    },
+    "Rent" : {
+
     },
     "Repeat" : {
       "localizations" : {
@@ -3591,6 +3654,9 @@
         }
       }
     },
+    "See details at a glance" : {
+
+    },
     "Send test notification" : {
       "localizations" : {
         "en" : {
@@ -3863,6 +3929,9 @@
         }
       }
     },
+    "Support ongoing development" : {
+
+    },
     "Tags" : {
       "localizations" : {
         "en" : {
@@ -4033,6 +4102,9 @@
         }
       }
     },
+    "This will remove tutorial/debug items and tags. Continue?" : {
+
+    },
     "Today: %@" : {
       "localizations" : {
         "en" : {
@@ -4136,6 +4208,7 @@
       }
     },
     "Try creating an item" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -4237,6 +4310,15 @@
         }
       }
     },
+    "Understand your finances clearly with simple inputs and quick insights." : {
+
+    },
+    "Unlock iCloud sync" : {
+
+    },
+    "Unlock Premium options" : {
+
+    },
     "Upcoming Payment" : {
       "localizations" : {
         "en" : {
@@ -4270,6 +4352,9 @@
           }
         }
       }
+    },
+    "Upcoming: shows the next or previous item (choose direction)." : {
+
     },
     "Update Required" : {
       "localizations" : {
@@ -4373,6 +4458,9 @@
         }
       }
     },
+    "Welcome" : {
+
+    },
     "Welcome to Incomes" : {
       "localizations" : {
         "en" : {
@@ -4408,6 +4496,7 @@
       }
     },
     "Welcome. Incomes is designed to help you understand your finances more clearly." : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -4440,6 +4529,9 @@
           }
         }
       }
+    },
+    "What’s included" : {
+
     },
     "Year" : {
       "localizations" : {
@@ -4510,6 +4602,7 @@
       }
     },
     "You can remove sample items anytime from the Settings screen." : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {

@@ -32,8 +32,10 @@ struct SettingsListView {
     @State private var isNotificationEnabled = true
     @State private var isIntroductionPresented = false
     @State private var isDeleteDialogPresented = false
+    @State private var isDeleteDebugDialogPresented = false
     @State private var isDuplicateTagPresented = false
     @State private var hasDuplicateTags = false
+    @State private var hasDebugData = false
 
     init(selection: Binding<Tag?> = .constant(nil)) {
         _tag = selection
@@ -118,6 +120,25 @@ extension SettingsListView: View {
                     }
                 }
             }
+            if hasDebugData {
+                Section {
+                    Button(role: .destructive) {
+                        Haptic.warning.impact()
+                        isDeleteDebugDialogPresented = true
+                    } label: {
+                        Text("Delete tutorial/debug data")
+                    }
+                } header: {
+                    HStack {
+                        Text("Debug data")
+                        Circle()
+                            .frame(width: .iconS)
+                            .foregroundStyle(.red)
+                    }
+                } footer: {
+                    Text("Removes items tagged as Debug and their tags.")
+                }
+            }
             Section {
                 Button("View App Introduction Again") {
                     isIntroductionPresented = true
@@ -171,15 +192,49 @@ extension SettingsListView: View {
         } message: {
             Text("Are you sure you want to delete all items?")
         }
+        .confirmationDialog(
+            Text("Delete tutorial/debug data"),
+            isPresented: $isDeleteDebugDialogPresented
+        ) {
+            Button(role: .destructive) {
+                do {
+                    let debugTags = try context.fetch(.tags(.typeIs(.debug)))
+                    let items = debugTags.flatMap(\.items.orEmpty)
+                    try items.forEach { item in
+                        try ItemService.delete(
+                            context: context,
+                            item: item
+                        )
+                    }
+                    try debugTags.forEach { tag in
+                        try TagService.delete(tag: tag)
+                    }
+                    Haptic.success.impact()
+                    hasDebugData = false
+                } catch {
+                    assertionFailure(error.localizedDescription)
+                }
+            } label: {
+                Text("Delete")
+            }
+            Button(role: .cancel) {
+            } label: {
+                Text("Cancel")
+            }
+        } message: {
+            Text("This will remove tutorial/debug items and tags. Continue?")
+        }
         .fullScreenCover(isPresented: $isDuplicateTagPresented) {
             DuplicateTagNavigationView()
         }
         .task {
             do {
                 hasDuplicateTags = try TagService.hasDuplicates(context: context)
+                hasDebugData = try !context.fetch(.tags(.typeIs(.debug))).isEmpty
             } catch {
                 assertionFailure(error.localizedDescription)
                 hasDuplicateTags = false
+                hasDebugData = false
             }
 
             isNotificationEnabled = notificationSettings.isEnabled
@@ -195,6 +250,14 @@ extension SettingsListView: View {
             Task {
                 notificationService.refresh()
                 await notificationService.register()
+            }
+        }
+        .onAppear {
+            do {
+                hasDebugData = try !context.fetch(.tags(.typeIs(.debug))).isEmpty
+            } catch {
+                assertionFailure(error.localizedDescription)
+                hasDebugData = false
             }
         }
     }
