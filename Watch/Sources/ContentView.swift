@@ -41,17 +41,13 @@ struct ContentView: View {
                         Text("No upcoming items")
                     }
                 }
-            }
-            .navigationTitle("Incomes")
-            .toolbar {
-                ToolbarItem {
-                    Button {
+                Section {
+                    Button("Settings", systemImage: "gear") {
                         isSettingsPresented = true
-                    } label: {
-                        Image(systemName: "gear")
                     }
                 }
             }
+            .navigationTitle("Incomes")
         }
         .sheet(isPresented: $isSettingsPresented) {
             NavigationStack {
