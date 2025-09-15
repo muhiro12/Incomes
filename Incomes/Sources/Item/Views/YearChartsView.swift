@@ -24,7 +24,7 @@ struct YearChartsView: View {
         }
         .navigationTitle(date.stringValue(.yyyy))
         .toolbar {
-            ToolbarAlignmentSpacer(placement: .bottomBar)
+            SpacerToolbarItem(placement: .bottomBar)
             if let count = try? ItemService.yearItemsCount(
                 context: context,
                 date: date
