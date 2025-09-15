@@ -247,6 +247,28 @@ struct ItemServiceTest {
         #expect(Set(items.map(\.category?.name)).count == 1)
     }
 
+    @Test("create with end-of-month date generates all repeating items", arguments: timeZones)
+    func createEndOfMonthRepeatingItems(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
+        _ = try createItem(
+            date: isoDate("2024-01-31T00:00:00Z"),
+            content: "EndMonth",
+            income: 100,
+            outgo: 0,
+            category: "Test",
+            repeatCount: 3
+        )
+        let items = try context.fetch(.items(.all)).sorted { first, second in
+            first.utcDate < second.utcDate
+        }
+        #expect(items.count == 3)
+        let months = items.map { item in
+            item.utcDate.stringValueWithoutLocale(.yyyyMM)
+        }
+        #expect(months == ["2024-01", "2024-02", "2024-03"])
+    }
+
     @Test("create stores date near midnight UTC correctly", arguments: timeZones)
     func createWithMidnightBoundary(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
