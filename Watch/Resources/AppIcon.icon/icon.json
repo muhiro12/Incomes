@@ -1,0 +1,92 @@
+{
+  "fill" : {
+    "automatic-gradient" : "extended-srgb:0.15686,0.80392,0.25490,1.00000"
+  },
+  "groups" : [
+    {
+      "layers" : [
+        {
+          "fill-specializations" : [
+            {
+              "appearance" : "dark",
+              "value" : {
+                "automatic-gradient" : "extended-srgb:0.15686,0.80392,0.25490,1.00000"
+              }
+            }
+          ],
+          "hidden" : false,
+          "image-name" : "AppIcon.001.png",
+          "name" : "AppIcon.001",
+          "opacity-specializations" : [
+            {
+              "value" : 1
+            },
+            {
+              "appearance" : "dark",
+              "value" : 0.8
+            }
+          ],
+          "position" : {
+            "scale" : 1,
+            "translation-in-points" : [
+              144,
+              -16
+            ]
+          }
+        },
+        {
+          "blend-mode-specializations" : [
+            {
+              "appearance" : "dark",
+              "value" : "normal"
+            }
+          ],
+          "fill-specializations" : [
+            {
+              "appearance" : "dark",
+              "value" : {
+                "automatic-gradient" : "extended-srgb:0.15686,0.80392,0.25490,1.00000"
+              }
+            }
+          ],
+          "image-name" : "AppIcon.002.png",
+          "name" : "AppIcon.002",
+          "opacity-specializations" : [
+            {
+              "value" : 1
+            },
+            {
+              "appearance" : "dark",
+              "value" : 0.8
+            },
+            {
+              "appearance" : "tinted",
+              "value" : 1
+            }
+          ],
+          "position" : {
+            "scale" : 1,
+            "translation-in-points" : [
+              0,
+              240
+            ]
+          }
+        }
+      ],
+      "shadow" : {
+        "kind" : "neutral",
+        "opacity" : 0.5
+      },
+      "translucency" : {
+        "enabled" : true,
+        "value" : 0.5
+      }
+    }
+  ],
+  "supported-platforms" : {
+    "circles" : [
+      "watchOS"
+    ],
+    "squares" : "shared"
+  }
+}
