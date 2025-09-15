@@ -32,7 +32,7 @@ struct IncomesMonthWidget: Widget {
                     VStack(alignment: .trailing, spacing: 6) {
                         HStack(spacing: 6) {
                             Image(systemName: "chevron.up")
-                                .foregroundStyle(Color.accentColor)
+                                .foregroundStyle(.accent)
                             Text(entry.totalIncomeText)
                                 .font(.title3)
                                 .lineLimit(1)
@@ -40,7 +40,7 @@ struct IncomesMonthWidget: Widget {
                         }
                         HStack(spacing: 6) {
                             Image(systemName: "chevron.down")
-                                .foregroundStyle(Color.red)
+                                .foregroundStyle(.red)
                             Text(entry.totalOutgoText)
                                 .font(.title3)
                                 .lineLimit(1)
@@ -64,7 +64,7 @@ struct IncomesMonthWidget: Widget {
                         .lineLimit(1)
                     HStack(spacing: 6) {
                         Image(systemName: "chevron.up")
-                            .foregroundStyle(Color.accentColor)
+                            .foregroundStyle(.accent)
                         Text(entry.totalIncomeText)
                             .lineLimit(1)
                             .minimumScaleFactor(0.7)
@@ -72,7 +72,7 @@ struct IncomesMonthWidget: Widget {
                     .font(.footnote)
                     HStack(spacing: 6) {
                         Image(systemName: "chevron.down")
-                            .foregroundStyle(Color.red)
+                            .foregroundStyle(.red)
                         Text(entry.totalOutgoText)
                             .lineLimit(1)
                             .minimumScaleFactor(0.7)

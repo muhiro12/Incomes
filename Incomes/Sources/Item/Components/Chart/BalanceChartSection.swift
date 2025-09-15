@@ -67,13 +67,13 @@ private extension BalanceChartSection {
                     y: .value("Amount", balance(of: item)),
                     stacking: .unstacked
                 )
-                .foregroundStyle(balance(of: item).isPlus ? Color.accentColor : Color.red)
+                .foregroundStyle(balance(of: item).isPlus ? .accent : .red)
                 .opacity(.medium)
                 RectangleMark(
                     x: .value("Date", date(of: item)),
                     y: .value("Amount", balance(of: item))
                 )
-                .foregroundStyle(balance(of: item).isPlus ? Color.accentColor : Color.red)
+                .foregroundStyle(balance(of: item).isPlus ? .accent : .red)
             }
         }
     }

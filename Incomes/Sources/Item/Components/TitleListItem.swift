@@ -21,7 +21,7 @@ struct TitleListItem: View {
                 Image(systemName: "arrow.up")
                     .resizable()
                     .frame(width: .iconS, height: .iconS)
-                    .foregroundColor(.accentColor)
+                    .foregroundColor(.accent)
             }
         }
     }
