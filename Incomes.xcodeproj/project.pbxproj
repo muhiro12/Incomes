@@ -10,6 +10,7 @@
 		AD6C5A752E515E3000E1FBA0 /* IncomesLibrary in Frameworks */ = {isa = PBXBuildFile; productRef = AD6C5A742E515E3000E1FBA0 /* IncomesLibrary */; };
 		AD6DB6DC2E779B2C00E5BB78 /* Watch.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = AD6DB6D22E779B2B00E5BB78 /* Watch.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		AD6DB6E32E779C5400E5BB78 /* IncomesLibrary in Frameworks */ = {isa = PBXBuildFile; productRef = AD6DB6E22E779C5400E5BB78 /* IncomesLibrary */; };
+		AD6DBB852E77A18B00E5BB78 /* StoreKitWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = AD6DBB842E77A18B00E5BB78 /* StoreKitWrapper */; };
 		AD71621C2E70BC5C00C4CFCE /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD71621B2E70BC5C00C4CFCE /* WidgetKit.framework */; };
 		AD71621E2E70BC5C00C4CFCE /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD71621D2E70BC5C00C4CFCE /* SwiftUI.framework */; };
 		AD71622F2E70BC5D00C4CFCE /* Widgets.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = AD71621A2E70BC5C00C4CFCE /* Widgets.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -137,6 +138,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AD6DB6E32E779C5400E5BB78 /* IncomesLibrary in Frameworks */,
+				AD6DBB852E77A18B00E5BB78 /* StoreKitWrapper in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -235,6 +237,7 @@
 			name = Watch;
 			packageProductDependencies = (
 				AD6DB6E22E779C5400E5BB78 /* IncomesLibrary */,
+				AD6DBB842E77A18B00E5BB78 /* StoreKitWrapper */,
 			);
 			productName = "Incomes (Watch) Watch App";
 			productReference = AD6DB6D22E779B2B00E5BB78 /* Watch.app */;
@@ -1084,6 +1087,10 @@
 		AD6DB6E22E779C5400E5BB78 /* IncomesLibrary */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = IncomesLibrary;
+		};
+		AD6DBB842E77A18B00E5BB78 /* StoreKitWrapper */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = StoreKitWrapper;
 		};
 		AD7162352E70BD9F00C4CFCE /* IncomesLibrary */ = {
 			isa = XCSwiftPackageProductDependency;
