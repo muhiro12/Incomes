@@ -11,6 +11,7 @@ import SwiftData
 
 @Model
 public final class Item {
+    @available(iOS, deprecated: 100000.0, message: "Use `utcDate` (UTC) or `localDate` (current calendar) instead.")
     public private(set) var date = Date(timeIntervalSinceReferenceDate: .zero)
     public private(set) var content = String.empty
     public private(set) var income = Decimal.zero
