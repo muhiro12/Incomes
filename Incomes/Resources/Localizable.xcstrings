@@ -362,7 +362,6 @@
       }
     },
     "~" : {
-      "shouldTranslate" : false,
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -394,7 +393,8 @@
             "value" : "~"
           }
         }
-      }
+      },
+      "shouldTranslate" : false
     },
     "0" : {
       "localizations" : {
