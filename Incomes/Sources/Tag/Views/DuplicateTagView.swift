@@ -104,10 +104,7 @@ struct DuplicateTagView: View {
             ToolbarItem {
                 CloseButton()
             }
-            ToolbarItem(placement: .status) {
-                Text("\(tags.count) Items")
-                    .font(.footnote)
-            }
+            StatusToolbarItem("\(tags.count) Items")
         }
         .navigationTitle(Text(tags.first?.displayName ?? ""))
     }

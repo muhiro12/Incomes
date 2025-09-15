@@ -62,10 +62,7 @@ struct SearchListView: View {
             ToolbarItem(placement: .bottomBar) {
                 MainTabMenu()
             }
-            ToolbarItem(placement: .status) {
-                Text("Today: \(Date.now.stringValue(.yyyyMMMd))")
-                    .font(.footnote)
-            }
+            StatusToolbarItem("Today: \(Date.now.stringValue(.yyyyMMMd))")
             ToolbarItem(placement: .bottomBar) {
                 CreateItemButton()
             }

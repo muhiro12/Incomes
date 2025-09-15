@@ -33,18 +33,7 @@ extension YearMonthItemListView: View {
         .navigationTitle(Text(tag.displayName))
         .toolbar {
             ToolbarAlignmentSpacer(placement: .bottomBar)
-            if #available(iOS 26.0, *) {
-                ToolbarItem(placement: .largeSubtitle) {
-                    Text("\(items.count) Items")
-                        .foregroundStyle(.secondary)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                }
-            } else {
-                ToolbarItem(placement: .status) {
-                    Text("\(items.count) Items")
-                        .font(.footnote)
-                }
-            }
+            StatusToolbarItem("\(items.count) Items")
             ToolbarItem(placement: .bottomBar) {
                 CreateItemButton()
             }
