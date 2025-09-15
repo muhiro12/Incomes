@@ -196,6 +196,8 @@ struct ItemFormView: View {
                     content = tag.name
                 case .category:
                     category = tag.name
+                case .debug:
+                    break
                 case .none:
                     break
                 }

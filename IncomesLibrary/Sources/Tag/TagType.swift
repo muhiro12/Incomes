@@ -13,4 +13,5 @@ public enum TagType: String, CaseIterable {
     case yearMonth = "27c9be4b"
     case content = "e2d390d9"
     case category = "a7a130f4"
+    case debug = "d3b6f0c1"
 }

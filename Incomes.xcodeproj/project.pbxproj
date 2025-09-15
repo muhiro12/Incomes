@@ -8,9 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		AD6C5A752E515E3000E1FBA0 /* IncomesLibrary in Frameworks */ = {isa = PBXBuildFile; productRef = AD6C5A742E515E3000E1FBA0 /* IncomesLibrary */; };
+		AD6DB6DC2E779B2C00E5BB78 /* Watch.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = AD6DB6D22E779B2B00E5BB78 /* Watch.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		AD6DB6E32E779C5400E5BB78 /* IncomesLibrary in Frameworks */ = {isa = PBXBuildFile; productRef = AD6DB6E22E779C5400E5BB78 /* IncomesLibrary */; };
+		AD6DBB852E77A18B00E5BB78 /* StoreKitWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = AD6DBB842E77A18B00E5BB78 /* StoreKitWrapper */; };
 		AD71621C2E70BC5C00C4CFCE /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD71621B2E70BC5C00C4CFCE /* WidgetKit.framework */; };
 		AD71621E2E70BC5C00C4CFCE /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD71621D2E70BC5C00C4CFCE /* SwiftUI.framework */; };
-		AD71622F2E70BC5D00C4CFCE /* WidgetsExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = AD71621A2E70BC5C00C4CFCE /* WidgetsExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		AD71622F2E70BC5D00C4CFCE /* Widgets.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = AD71621A2E70BC5C00C4CFCE /* Widgets.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		AD7162362E70BD9F00C4CFCE /* IncomesLibrary in Frameworks */ = {isa = PBXBuildFile; productRef = AD7162352E70BD9F00C4CFCE /* IncomesLibrary */; };
 		ADA85F312DB6275B0047CB54 /* GoogleMobileAdsWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = ADA85F302DB6275B0047CB54 /* GoogleMobileAdsWrapper */; };
 		ADA85F342DB627730047CB54 /* LicenseListWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = ADA85F332DB627730047CB54 /* LicenseListWrapper */; };
@@ -19,6 +22,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		AD6DB6DA2E779B2C00E5BB78 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = ADCF369E24A1D0F40011D6F5 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = AD6DB6D12E779B2B00E5BB78;
+			remoteInfo = "Incomes (Watch) Watch App";
+		};
 		AD71622D2E70BC5D00C4CFCE /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = ADCF369E24A1D0F40011D6F5 /* Project object */;
@@ -43,13 +53,24 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		AD6DB6DD2E779B2C00E5BB78 /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				AD6DB6DC2E779B2C00E5BB78 /* Watch.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		AD7162342E70BC5D00C4CFCE /* Embed Foundation Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				AD71622F2E70BC5D00C4CFCE /* WidgetsExtension.appex in Embed Foundation Extensions */,
+				AD71622F2E70BC5D00C4CFCE /* Widgets.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -57,7 +78,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		AD71621A2E70BC5C00C4CFCE /* WidgetsExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = WidgetsExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		AD6DB6D22E779B2B00E5BB78 /* Watch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Watch.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		AD71621A2E70BC5C00C4CFCE /* Widgets.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = Widgets.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		AD71621B2E70BC5C00C4CFCE /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		AD71621D2E70BC5C00C4CFCE /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		ADA85F622DB62CDA0047CB54 /* IncomesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = IncomesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -73,7 +95,7 @@
 			membershipExceptions = (
 				Configurations/Info.plist,
 			);
-			target = AD7162192E70BC5C00C4CFCE /* WidgetsExtension */;
+			target = AD7162192E70BC5C00C4CFCE /* Widgets */;
 		};
 		ADC3C97E2D88983300B8ADDE /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
@@ -104,12 +126,22 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		AD6DB6D32E779B2B00E5BB78 /* Watch */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Watch; sourceTree = "<group>"; };
 		AD71621F2E70BC5C00C4CFCE /* Widgets */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (AD7162332E70BC5D00C4CFCE /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Widgets; sourceTree = "<group>"; };
 		ADA5778B2CB66D6200CE47E2 /* Incomes */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (ADC3C97E2D88983300B8ADDE /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Incomes; sourceTree = "<group>"; };
 		ADA85F632DB62CDA0047CB54 /* IncomesTests */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (ADF386A02DB64567004E841F /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ADD8C8BD2DDADBD6002431C6 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = IncomesTests; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		AD6DB6CF2E779B2B00E5BB78 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AD6DB6E32E779C5400E5BB78 /* IncomesLibrary in Frameworks */,
+				AD6DBB852E77A18B00E5BB78 /* StoreKitWrapper in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		AD7162172E70BC5C00C4CFCE /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -152,10 +184,11 @@
 		ADCF369D24A1D0F40011D6F5 = {
 			isa = PBXGroup;
 			children = (
-				ADA5778B2CB66D6200CE47E2 /* Incomes */,
-				ADA85F632DB62CDA0047CB54 /* IncomesTests */,
-				AD71621F2E70BC5C00C4CFCE /* Widgets */,
 				ADFA3E992E51617C005960FF /* IncomesLibrary */,
+				ADA5778B2CB66D6200CE47E2 /* Incomes */,
+				AD71621F2E70BC5C00C4CFCE /* Widgets */,
+				AD6DB6D32E779B2B00E5BB78 /* Watch */,
+				ADA85F632DB62CDA0047CB54 /* IncomesTests */,
 				ADCF36A724A1D0F40011D6F5 /* Products */,
 				ADCF375D24A2FEAF0011D6F5 /* Frameworks */,
 			);
@@ -167,7 +200,8 @@
 				ADCF36A624A1D0F40011D6F5 /* Incomes.app */,
 				ADA85F622DB62CDA0047CB54 /* IncomesTests.xctest */,
 				ADD8C8BC2DDADBD6002431C6 /* IncomesTimeZoneTests.xctest */,
-				AD71621A2E70BC5C00C4CFCE /* WidgetsExtension.appex */,
+				AD71621A2E70BC5C00C4CFCE /* Widgets.appex */,
+				AD6DB6D22E779B2B00E5BB78 /* Watch.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -185,9 +219,33 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		AD7162192E70BC5C00C4CFCE /* WidgetsExtension */ = {
+		AD6DB6D12E779B2B00E5BB78 /* Watch */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = AD7162302E70BC5D00C4CFCE /* Build configuration list for PBXNativeTarget "WidgetsExtension" */;
+			buildConfigurationList = AD6DB6E02E779B2C00E5BB78 /* Build configuration list for PBXNativeTarget "Watch" */;
+			buildPhases = (
+				AD6DB6CE2E779B2B00E5BB78 /* Sources */,
+				AD6DB6CF2E779B2B00E5BB78 /* Frameworks */,
+				AD6DB6D02E779B2B00E5BB78 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				AD6DB6D32E779B2B00E5BB78 /* Watch */,
+			);
+			name = Watch;
+			packageProductDependencies = (
+				AD6DB6E22E779C5400E5BB78 /* IncomesLibrary */,
+				AD6DBB842E77A18B00E5BB78 /* StoreKitWrapper */,
+			);
+			productName = "Incomes (Watch) Watch App";
+			productReference = AD6DB6D22E779B2B00E5BB78 /* Watch.app */;
+			productType = "com.apple.product-type.application";
+		};
+		AD7162192E70BC5C00C4CFCE /* Widgets */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AD7162302E70BC5D00C4CFCE /* Build configuration list for PBXNativeTarget "Widgets" */;
 			buildPhases = (
 				AD7162162E70BC5C00C4CFCE /* Sources */,
 				AD7162172E70BC5C00C4CFCE /* Frameworks */,
@@ -200,12 +258,12 @@
 			fileSystemSynchronizedGroups = (
 				AD71621F2E70BC5C00C4CFCE /* Widgets */,
 			);
-			name = WidgetsExtension;
+			name = Widgets;
 			packageProductDependencies = (
 				AD7162352E70BD9F00C4CFCE /* IncomesLibrary */,
 			);
 			productName = WidgetsExtension;
-			productReference = AD71621A2E70BC5C00C4CFCE /* WidgetsExtension.appex */;
+			productReference = AD71621A2E70BC5C00C4CFCE /* Widgets.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
 		ADA85F612DB62CDA0047CB54 /* IncomesTests */ = {
@@ -239,11 +297,13 @@
 				ADCF36A324A1D0F40011D6F5 /* Frameworks */,
 				ADCF36A424A1D0F40011D6F5 /* Resources */,
 				AD7162342E70BC5D00C4CFCE /* Embed Foundation Extensions */,
+				AD6DB6DD2E779B2C00E5BB78 /* Embed Watch Content */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				AD71622E2E70BC5D00C4CFCE /* PBXTargetDependency */,
+				AD6DB6DB2E779B2C00E5BB78 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				ADA5778B2CB66D6200CE47E2 /* Incomes */,
@@ -294,6 +354,9 @@
 				LastUpgradeCheck = 2600;
 				ORGANIZATIONNAME = "Hiromu Nakano";
 				TargetAttributes = {
+					AD6DB6D12E779B2B00E5BB78 = {
+						CreatedOnToolsVersion = 26.0;
+					};
 					AD7162192E70BC5C00C4CFCE = {
 						CreatedOnToolsVersion = 26.0;
 					};
@@ -332,14 +395,22 @@
 			projectRoot = "";
 			targets = (
 				ADCF36A524A1D0F40011D6F5 /* Incomes */,
+				AD7162192E70BC5C00C4CFCE /* Widgets */,
+				AD6DB6D12E779B2B00E5BB78 /* Watch */,
 				ADA85F612DB62CDA0047CB54 /* IncomesTests */,
 				ADD8C8B32DDADBD6002431C6 /* IncomesTimeZoneTests */,
-				AD7162192E70BC5C00C4CFCE /* WidgetsExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		AD6DB6D02E779B2B00E5BB78 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		AD7162182E70BC5C00C4CFCE /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -371,6 +442,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		AD6DB6CE2E779B2B00E5BB78 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		AD7162162E70BC5C00C4CFCE /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -402,9 +480,14 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		AD6DB6DB2E779B2C00E5BB78 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = AD6DB6D12E779B2B00E5BB78 /* Watch */;
+			targetProxy = AD6DB6DA2E779B2C00E5BB78 /* PBXContainerItemProxy */;
+		};
 		AD71622E2E70BC5D00C4CFCE /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = AD7162192E70BC5C00C4CFCE /* WidgetsExtension */;
+			target = AD7162192E70BC5C00C4CFCE /* Widgets */;
 			targetProxy = AD71622D2E70BC5D00C4CFCE /* PBXContainerItemProxy */;
 		};
 		ADA85F672DB62CDA0047CB54 /* PBXTargetDependency */ = {
@@ -420,20 +503,89 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		AD6DB6DE2E779B2C00E5BB78 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_ENTITLEMENTS = Watch/Configurations/Watch.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_PREVIEWS = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.muhiro12.Incomes;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 5.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.muhiro12.Incomes.Watch;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 11.0;
+			};
+			name = Debug;
+		};
+		AD6DB6DF2E779B2C00E5BB78 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_ENTITLEMENTS = Watch/Configurations/Watch.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_PREVIEWS = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.muhiro12.Incomes;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 5.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.muhiro12.Incomes.Watch;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 11.0;
+			};
+			name = Release;
+		};
 		AD7162312E70BC5D00C4CFCE /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
-				CODE_SIGN_ENTITLEMENTS = Widgets/Configurations/WidgetsExtension.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Widgets/Configurations/Widgets.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Widgets/Configurations/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Widgets;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 Hiromu Nakano. All rights reserved.";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -462,13 +614,12 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
-				CODE_SIGN_ENTITLEMENTS = Widgets/Configurations/WidgetsExtension.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Widgets/Configurations/Widgets.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Widgets/Configurations/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Widgets;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 Hiromu Nakano. All rights reserved.";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -830,7 +981,16 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		AD7162302E70BC5D00C4CFCE /* Build configuration list for PBXNativeTarget "WidgetsExtension" */ = {
+		AD6DB6E02E779B2C00E5BB78 /* Build configuration list for PBXNativeTarget "Watch" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AD6DB6DE2E779B2C00E5BB78 /* Debug */,
+				AD6DB6DF2E779B2C00E5BB78 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AD7162302E70BC5D00C4CFCE /* Build configuration list for PBXNativeTarget "Widgets" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				AD7162312E70BC5D00C4CFCE /* Debug */,
@@ -923,6 +1083,14 @@
 		AD6C5A742E515E3000E1FBA0 /* IncomesLibrary */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = IncomesLibrary;
+		};
+		AD6DB6E22E779C5400E5BB78 /* IncomesLibrary */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = IncomesLibrary;
+		};
+		AD6DBB842E77A18B00E5BB78 /* StoreKitWrapper */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = StoreKitWrapper;
 		};
 		AD7162352E70BD9F00C4CFCE /* IncomesLibrary */ = {
 			isa = XCSwiftPackageProductDependency;

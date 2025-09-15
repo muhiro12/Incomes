@@ -83,6 +83,8 @@ extension TagEntity {
             name
         case .category:
             name.isNotEmpty ? name : "Others"
+        case .debug:
+            name
         case .none:
             name
         }
