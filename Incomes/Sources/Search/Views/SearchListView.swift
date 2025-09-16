@@ -66,7 +66,7 @@ struct SearchListView: View {
                 }
             }
             Section {
-                Button {
+                Button("Search", systemImage: "magnifyingglass") {
                     let min = Decimal(string: minValue) ?? -Decimal.greatestFiniteMagnitude
                     let max = Decimal(string: maxValue) ?? Decimal.greatestFiniteMagnitude
 
@@ -86,9 +86,20 @@ struct SearchListView: View {
                     case .outgo:
                         predicate = .outgoIsBetween(min: min, max: max)
                     }
-                } label: {
-                    Label("Search", systemImage: "magnifyingglass")
                 }
+                .disabled(
+                    {
+                        switch selectedTarget {
+                        case .content,
+                             .category:
+                            selectedTagID == nil
+                        case .balance,
+                             .income,
+                             .outgo:
+                            false
+                        }
+                    }()
+                )
             }
         }
         .scrollDismissesKeyboard(.interactively)
