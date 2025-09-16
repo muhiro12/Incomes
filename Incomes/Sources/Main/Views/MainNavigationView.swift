@@ -103,6 +103,14 @@ struct MainNavigationView: View {
                     )
                 )
             )
+            tag = try? context.fetchFirst(
+                .tags(
+                    .nameIs(
+                        Date.now.stringValueWithoutLocale(.yyyyMM),
+                        type: .yearMonth
+                    )
+                )
+            )
         }
     }
 }
