@@ -1,4 +1,4 @@
-@testable import Incomes
+@testable import IncomesLibrary
 import SwiftData
 import Testing
 
