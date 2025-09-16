@@ -50,6 +50,14 @@ extension Tag {
             name
         }
     }
+
+    public var income: Decimal {
+        items.orEmpty.reduce(.zero) { $0 + $1.income }
+    }
+
+    public var outgo: Decimal {
+        items.orEmpty.reduce(.zero) { $0 + $1.outgo }
+    }
 }
 
 extension Tag: Identifiable {}

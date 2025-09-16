@@ -29,13 +29,9 @@ struct HomeYearSection: View {
     var body: some View {
         Section {
             ForEach(yearMonthTags) { tag in
-                let items = tag.items.orEmpty
                 NavigationLink(value: tag) {
-                    Text(tag.displayName)
-                        .foregroundStyle(
-                            items.contains(where: \.balance.isMinus) ? .red : .primary
-                        )
-                        .bold(tag.name == Date.now.stringValueWithoutLocale(.yyyyMM))
+                    TagSummaryRow()
+                        .environment(tag)
                 }
             }
             .onDelete { indices in

@@ -38,7 +38,11 @@ extension HomeListView: View {
             if !isSubscribeOn {
                 AdvertisementSection(.small)
             }
-            HomeTabSection()
+            Section("Summary") {
+                NavigationLink(value: yearTag) {
+                    TagSummaryRow()
+                }
+            }
         }
         .listStyle(.insetGrouped)
         .navigationTitle(yearTag.displayName)
