@@ -10,6 +10,7 @@ import SwiftUI
 
 enum SearchTarget: CaseIterable {
     case content
+    case category
     case balance
     case income
     case outgo
@@ -18,6 +19,8 @@ enum SearchTarget: CaseIterable {
         switch self {
         case .content:
             "Content"
+        case .category:
+            "Category"
         case .balance:
             "Balance"
         case .income:

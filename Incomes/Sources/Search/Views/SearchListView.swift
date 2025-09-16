@@ -12,6 +12,8 @@ import SwiftUI
 struct SearchListView: View {
     @Query(.tags(.typeIs(.content)))
     private var contents: [Tag]
+    @Query(.tags(.typeIs(.category)))
+    private var categories: [Tag]
 
     @Binding private var predicate: ItemPredicate?
 
@@ -44,6 +46,13 @@ struct SearchListView: View {
                                 .tag(content.id)
                         }
                     }
+                case .category:
+                    Picker(selectedTarget.value, selection: $selectedTagID) {
+                        ForEach(categories) { category in
+                            Text(category.displayName)
+                                .tag(category.id)
+                        }
+                    }
                 case .balance,
                      .income,
                      .outgo:
@@ -64,6 +73,10 @@ struct SearchListView: View {
                     switch selectedTarget {
                     case .content:
                         if let tag = contents.first(where: { $0.id == selectedTagID }) {
+                            predicate = .tagIs(tag)
+                        }
+                    case .category:
+                        if let tag = categories.first(where: { $0.id == selectedTagID }) {
                             predicate = .tagIs(tag)
                         }
                     case .balance:
