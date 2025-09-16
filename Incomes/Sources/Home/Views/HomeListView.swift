@@ -10,8 +10,11 @@ import SwiftData
 import SwiftUI
 
 struct HomeListView {
+    @Environment(Tag.self)
+    private var yearTag
     @Environment(NotificationService.self)
     private var notificationService
+
     @Environment(\.modelContext)
     private var context
 
@@ -20,7 +23,6 @@ struct HomeListView {
 
     @Binding private var tag: Tag?
 
-    @State private var yearTag: Tag?
     @State private var hasLoaded = false
     @State private var isIntroductionPresented = false
 
@@ -32,30 +34,20 @@ struct HomeListView {
 extension HomeListView: View {
     var body: some View {
         List(selection: $tag) {
-            HomeTabSection(selection: $yearTag)
+            HomeYearSection(yearTag: yearTag)
             if !isSubscribeOn {
                 AdvertisementSection(.small)
             }
-            if let yearTag {
-                HomeYearSection(yearTag: yearTag)
-            }
+            HomeTabSection()
         }
         .listStyle(.insetGrouped)
-        .navigationTitle(Text("Home"))
+        .navigationTitle(yearTag.displayName)
         .sheet(isPresented: $isIntroductionPresented) {
             IntroductionNavigationView()
         }
         .task {
             if !hasLoaded {
                 hasLoaded = true
-                yearTag = try? context.fetchFirst(
-                    .tags(
-                        .nameIs(
-                            Date.now.stringValueWithoutLocale(.yyyy),
-                            type: .year
-                        )
-                    )
-                )
                 isIntroductionPresented = (
                     try? ItemService.allItemsCount(context: context).isZero
                 ) ?? false
@@ -64,20 +56,14 @@ extension HomeListView: View {
             notificationService.refresh()
             await notificationService.register()
         }
-        .onChange(of: yearTag) {
-            guard let yearTag,
-                  tag != .none else {
-                return
-            }
-            tag = yearTag
-        }
     }
 }
 
 #Preview {
-    IncomesPreview { _ in
+    IncomesPreview { preview in
         NavigationStack {
             HomeListView()
+                .environment(preview.tags.last { $0.type == .year })
         }
     }
 }

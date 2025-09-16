@@ -12,6 +12,7 @@ extension CGFloat {
     private static let unit = Self(8)
 
     static let spaceS = unit * 1
+    static let spaceM = unit * 2
     static let spaceL = unit * 3
 
     static let componentS = unit * 8
