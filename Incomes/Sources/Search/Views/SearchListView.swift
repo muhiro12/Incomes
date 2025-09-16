@@ -43,11 +43,7 @@ struct SearchListView: View {
                 case .content:
                     ForEach(
                         contents.filter {
-                            if searchText.isEmpty {
-                                true
-                            } else {
-                                $0.displayName.contains(searchText)
-                            }
+                            searchText.isEmpty || $0.displayName.normalizedContains(searchText)
                         }
                     ) { content in
                         Button(content.displayName) {
@@ -57,11 +53,7 @@ struct SearchListView: View {
                 case .category:
                     ForEach(
                         categories.filter {
-                            if searchText.isEmpty {
-                                true
-                            } else {
-                                $0.displayName.contains(searchText)
-                            }
+                            searchText.isEmpty || $0.displayName.normalizedContains(searchText)
                         }
                     ) { category in
                         Button(category.displayName) {
