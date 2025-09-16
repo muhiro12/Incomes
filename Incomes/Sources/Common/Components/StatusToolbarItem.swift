@@ -22,7 +22,6 @@ struct StatusToolbarItem: ToolbarContent {
                     .foregroundStyle(.secondary)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
-            ToolbarSpacer(placement: .bottomBar)
         } else {
             ToolbarItem(placement: .status) {
                 Text(content)

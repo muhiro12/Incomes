@@ -30,6 +30,9 @@ struct YearChartsView: View {
             ) {
                 StatusToolbarItem("\(count) Items")
             }
+        }
+        .toolbar {
+            SpacerToolbarItem(placement: .bottomBar)
             ToolbarItem(placement: .bottomBar) {
                 CreateItemButton()
             }

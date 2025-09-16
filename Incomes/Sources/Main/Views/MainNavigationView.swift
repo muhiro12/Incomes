@@ -46,6 +46,15 @@ struct MainNavigationView: View {
                     }
                 }
             }
+            .toolbar {
+                StatusToolbarItem("Today: \(Date.now.stringValue(.yyyyMMMd))")
+            }
+            .toolbar {
+                SpacerToolbarItem(placement: .bottomBar)
+                ToolbarItem(placement: .bottomBar) {
+                    CreateItemButton()
+                }
+            }
         } content: {
             Group {
                 if isSearchPresented {
@@ -60,33 +69,13 @@ struct MainNavigationView: View {
             }
             .searchable(text: $searchText, isPresented: $isSearchPresented)
             .toolbar {
-                if #available(iOS 26.0, *) {
-                    ToolbarItem(placement: .largeSubtitle) {
-                        Text("Today: \(Date.now.stringValue(.yyyyMMMd))")
-                            .foregroundStyle(.secondary)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                    }
-                } else {
-                    ToolbarItem(placement: .status) {
-                        Text("Today: \(Date.now.stringValue(.yyyyMMMd))")
-                            .font(.footnote)
-                    }
-                }
+                StatusToolbarItem("Today: \(Date.now.stringValue(.yyyyMMMd))")
             }
             .toolbar {
                 if #available(iOS 26.0, *) {
                     DefaultToolbarItem(kind: .search, placement: .bottomBar)
-                    ToolbarSpacer(placement: .bottomBar)
-                } else {
-                    ToolbarItem(placement: .bottomBar) {
-                        Button(action: {}) {
-                            Label(String.empty, systemImage: .empty)
-                        }
-                        .accessibilityHidden(true)
-                        .disabled(true)
-                        .allowsHitTesting(false)
-                    }
                 }
+                SpacerToolbarItem(placement: .bottomBar)
                 ToolbarItem(placement: .bottomBar) {
                     CreateItemButton()
                 }

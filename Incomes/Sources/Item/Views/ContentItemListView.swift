@@ -35,6 +35,9 @@ extension ContentItemListView: View {
         .navigationTitle(Text(tag.displayName))
         .toolbar {
             StatusToolbarItem("\(items.count) Items")
+        }
+        .toolbar {
+            SpacerToolbarItem(placement: .bottomBar)
             ToolbarItem(placement: .bottomBar) {
                 CreateItemButton()
             }
