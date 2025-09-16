@@ -22,11 +22,15 @@ struct MainNavigationView: View {
         NavigationSplitView {
             Group {
                 if isSearchPresented {
-                    SearchListView(selection: $predicate)
+                    SearchListView(
+                        selection: $predicate,
+                        searchText: $searchText
+                    )
                 } else {
                     HomeListView(selection: $tag)
                 }
             }
+            .searchable(text: $searchText, isPresented: $isSearchPresented)
             .toolbar {
                 if isDebugOn {
                     ToolbarItem {
@@ -56,19 +60,18 @@ struct MainNavigationView: View {
                 }
             }
             .toolbar {
-                ToolbarItem(placement: .bottomBar) {
-                    if isSearchPresented {
-                        Button("Close", systemImage: "xmark") {
-                            isSearchPresented = false
-                        }
-                    } else {
-                        Button("Search", systemImage: "magnifyingglass") {
-                            isSearchPresented = true
-                        }
-                    }
-                }
                 if #available(iOS 26.0, *) {
+                    DefaultToolbarItem(kind: .search, placement: .bottomBar)
                     ToolbarSpacer(placement: .bottomBar)
+                } else {
+                    ToolbarItem(placement: .bottomBar) {
+                        Button(action: {}) {
+                            Label(String.empty, systemImage: .empty)
+                        }
+                        .accessibilityHidden(true)
+                        .disabled(true)
+                        .allowsHitTesting(false)
+                    }
                 }
                 ToolbarItem(placement: .bottomBar) {
                     CreateItemButton()
