@@ -29,4 +29,16 @@ enum SearchTarget: CaseIterable {
             "Outgo"
         }
     }
+
+    var isForCurrency: Bool {
+        switch self {
+        case .content,
+             .category:
+            false
+        case .balance,
+             .income,
+             .outgo:
+            true
+        }
+    }
 }

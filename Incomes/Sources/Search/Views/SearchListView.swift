@@ -16,14 +16,15 @@ struct SearchListView: View {
     private var categories: [Tag]
 
     @Binding private var predicate: ItemPredicate?
+    @Binding private var searchText: String
 
     @State private var selectedTarget = SearchTarget.content
-    @State private var selectedTagID: Tag.ID?
     @State private var minValue = String.empty
     @State private var maxValue = String.empty
 
-    init(selection: Binding<ItemPredicate?>) {
+    init(selection: Binding<ItemPredicate?>, searchText: Binding<String>) {
         _predicate = selection
+        _searchText = searchText
     }
 
     var body: some View {
@@ -40,17 +41,31 @@ struct SearchListView: View {
             Section("Filter") {
                 switch selectedTarget {
                 case .content:
-                    Picker(selectedTarget.value, selection: $selectedTagID) {
-                        ForEach(contents) { content in
-                            Text(content.displayName)
-                                .tag(content.id)
+                    ForEach(
+                        contents.filter {
+                            if searchText.isEmpty {
+                                true
+                            } else {
+                                $0.displayName.contains(searchText)
+                            }
+                        }
+                    ) { content in
+                        Button(content.displayName) {
+                            predicate = .tagIs(content)
                         }
                     }
                 case .category:
-                    Picker(selectedTarget.value, selection: $selectedTagID) {
-                        ForEach(categories) { category in
-                            Text(category.displayName)
-                                .tag(category.id)
+                    ForEach(
+                        categories.filter {
+                            if searchText.isEmpty {
+                                true
+                            } else {
+                                $0.displayName.contains(searchText)
+                            }
+                        }
+                    ) { category in
+                        Button(category.displayName) {
+                            predicate = .tagIs(category)
                         }
                     }
                 case .balance,
@@ -65,41 +80,25 @@ struct SearchListView: View {
                     }
                 }
             }
-            Section {
-                Button("Search", systemImage: "magnifyingglass") {
-                    let min = Decimal(string: minValue) ?? -Decimal.greatestFiniteMagnitude
-                    let max = Decimal(string: maxValue) ?? Decimal.greatestFiniteMagnitude
+            if selectedTarget.isForCurrency {
+                Section {
+                    Button("Search", systemImage: "magnifyingglass") {
+                        let min = Decimal(string: minValue) ?? -Decimal.greatestFiniteMagnitude
+                        let max = Decimal(string: maxValue) ?? Decimal.greatestFiniteMagnitude
 
-                    switch selectedTarget {
-                    case .content:
-                        if let tag = contents.first(where: { $0.id == selectedTagID }) {
-                            predicate = .tagIs(tag)
-                        }
-                    case .category:
-                        if let tag = categories.first(where: { $0.id == selectedTagID }) {
-                            predicate = .tagIs(tag)
-                        }
-                    case .balance:
-                        predicate = .balanceIsBetween(min: min, max: max)
-                    case .income:
-                        predicate = .incomeIsBetween(min: min, max: max)
-                    case .outgo:
-                        predicate = .outgoIsBetween(min: min, max: max)
-                    }
-                }
-                .disabled(
-                    {
                         switch selectedTarget {
                         case .content,
                              .category:
-                            selectedTagID == nil
-                        case .balance,
-                             .income,
-                             .outgo:
-                            false
+                            break
+                        case .balance:
+                            predicate = .balanceIsBetween(min: min, max: max)
+                        case .income:
+                            predicate = .incomeIsBetween(min: min, max: max)
+                        case .outgo:
+                            predicate = .outgoIsBetween(min: min, max: max)
                         }
-                    }()
-                )
+                    }
+                }
             }
         }
         .scrollDismissesKeyboard(.interactively)
@@ -110,7 +109,10 @@ struct SearchListView: View {
 #Preview {
     IncomesPreview { _ in
         NavigationStack {
-            SearchListView(selection: .constant(.all))
+            SearchListView(
+                selection: .constant(.all),
+                searchText: .constant(.empty)
+            )
         }
     }
 }
