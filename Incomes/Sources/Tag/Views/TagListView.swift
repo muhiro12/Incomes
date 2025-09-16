@@ -58,9 +58,6 @@ struct TagListView: View {
         .searchable(text: $searchText)
         .navigationTitle(Text(tagType == .content ? "Content" : "Category"))
         .toolbar {
-            ToolbarItem(placement: .bottomBar) {
-                MainTabMenu()
-            }
             StatusToolbarItem("Today: \(Date.now.stringValue(.yyyyMMMd))")
             ToolbarItem(placement: .bottomBar) {
                 CreateItemButton()

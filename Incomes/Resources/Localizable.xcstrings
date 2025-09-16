@@ -2812,6 +2812,7 @@
       }
     },
     "Menu" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {

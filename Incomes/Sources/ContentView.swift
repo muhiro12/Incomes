@@ -37,7 +37,7 @@ struct ContentView {
 
 extension ContentView: View {
     var body: some View {
-        MainTabView()
+        HomeNavigationView()
             .alert(Text("Update Required"), isPresented: $isUpdateAlertPresented) {
                 Button {
                     UIApplication.shared.open(

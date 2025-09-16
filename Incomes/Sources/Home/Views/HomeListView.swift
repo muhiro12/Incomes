@@ -59,9 +59,6 @@ extension HomeListView: View {
                     isSettingsPresented = true
                 }
             }
-            ToolbarItem(placement: .bottomBar) {
-                MainTabMenu()
-            }
             StatusToolbarItem("Today: \(Date.now.stringValue(.yyyyMMMd))")
             ToolbarItem(placement: .bottomBar) {
                 CreateItemButton()
