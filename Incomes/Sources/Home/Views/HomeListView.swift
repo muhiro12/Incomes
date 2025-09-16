@@ -17,16 +17,12 @@ struct HomeListView {
 
     @AppStorage(.isSubscribeOn)
     private var isSubscribeOn
-    @AppStorage(.isDebugOn)
-    private var isDebugOn
 
     @Binding private var tag: Tag?
 
     @State private var yearTag: Tag?
     @State private var hasLoaded = false
     @State private var isIntroductionPresented = false
-    @State private var isSettingsPresented = false
-    @State private var isDebugPresented = false
 
     init(selection: Binding<Tag?> = .constant(nil)) {
         _tag = selection
@@ -46,32 +42,8 @@ extension HomeListView: View {
         }
         .listStyle(.insetGrouped)
         .navigationTitle(Text("Home"))
-        .toolbar {
-            if isDebugOn {
-                ToolbarItem {
-                    Button("Debug", systemImage: "flask") {
-                        isDebugPresented = true
-                    }
-                }
-            }
-            ToolbarItem {
-                Button("Settings", systemImage: "gear") {
-                    isSettingsPresented = true
-                }
-            }
-            StatusToolbarItem("Today: \(Date.now.stringValue(.yyyyMMMd))")
-            ToolbarItem(placement: .bottomBar) {
-                CreateItemButton()
-            }
-        }
         .sheet(isPresented: $isIntroductionPresented) {
             IntroductionNavigationView()
-        }
-        .sheet(isPresented: $isSettingsPresented) {
-            SettingsNavigationView()
-        }
-        .sheet(isPresented: $isDebugPresented) {
-            DebugNavigationView()
         }
         .task {
             if !hasLoaded {
