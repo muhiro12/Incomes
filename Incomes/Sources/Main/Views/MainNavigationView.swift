@@ -28,8 +28,10 @@ struct MainNavigationView: View {
 
     var body: some View {
         NavigationSplitView {
-            List(yearTags, id: \.self, selection: $yearTag) { yearTag in
-                Text(yearTag.displayName)
+            List(yearTags, selection: $yearTag) { yearTag in
+                TagSummaryRow()
+                    .environment(yearTag)
+                    .tag(yearTag)
             }
             .navigationTitle("Incomes")
             .toolbar {
