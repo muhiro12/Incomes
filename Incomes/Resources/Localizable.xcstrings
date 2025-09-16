@@ -2100,6 +2100,9 @@
         }
       }
     },
+    "Filter" : {
+
+    },
     "Food" : {
       "localizations" : {
         "en" : {
@@ -3632,6 +3635,7 @@
       }
     },
     "Range" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {

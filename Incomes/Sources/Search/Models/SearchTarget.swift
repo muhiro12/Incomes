@@ -9,12 +9,15 @@
 import SwiftUI
 
 enum SearchTarget: CaseIterable {
+    case content
     case balance
     case income
     case outgo
 
     var value: LocalizedStringKey {
         switch self {
+        case .content:
+            "Content"
         case .balance:
             "Balance"
         case .income:

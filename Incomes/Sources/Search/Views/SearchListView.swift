@@ -6,12 +6,17 @@
 //  Copyright © 2025 Hiromu Nakano. All rights reserved.
 //
 
+import SwiftData
 import SwiftUI
 
 struct SearchListView: View {
+    @Query(.tags(.typeIs(.content)))
+    private var contents: [Tag]
+
     @Binding private var predicate: ItemPredicate?
 
-    @State private var selectedTarget = SearchTarget.balance
+    @State private var selectedTarget = SearchTarget.content
+    @State private var selectedTagID: Tag.ID?
     @State private var minValue = String.empty
     @State private var maxValue = String.empty
 
@@ -24,18 +29,31 @@ struct SearchListView: View {
             Section("Target") {
                 Picker("Target", selection: $selectedTarget) {
                     ForEach(SearchTarget.allCases, id: \.self) { target in
-                        Text(target.value).tag(target)
+                        Text(target.value)
+                            .tag(target)
                     }
                 }
                 .pickerStyle(.menu)
             }
-            Section("Range") {
-                HStack(spacing: 40) {
-                    TextField("Min", text: $minValue)
-                        .keyboardType(.numbersAndPunctuation)
-                    Text("~")
-                    TextField("Max", text: $maxValue)
-                        .keyboardType(.numbersAndPunctuation)
+            Section("Filter") {
+                switch selectedTarget {
+                case .content:
+                    Picker(selectedTarget.value, selection: $selectedTagID) {
+                        ForEach(contents) { content in
+                            Text(content.displayName)
+                                .tag(content.id)
+                        }
+                    }
+                case .balance,
+                     .income,
+                     .outgo:
+                    HStack(spacing: 40) {
+                        TextField("Min", text: $minValue)
+                            .keyboardType(.numbersAndPunctuation)
+                        Text("~")
+                        TextField("Max", text: $maxValue)
+                            .keyboardType(.numbersAndPunctuation)
+                    }
                 }
             }
             Section {
@@ -44,6 +62,10 @@ struct SearchListView: View {
                     let max = Decimal(string: maxValue) ?? Decimal.greatestFiniteMagnitude
 
                     switch selectedTarget {
+                    case .content:
+                        if let tag = contents.first(where: { $0.id == selectedTagID }) {
+                            predicate = .tagIs(tag)
+                        }
                     case .balance:
                         predicate = .balanceIsBetween(min: min, max: max)
                     case .income:
