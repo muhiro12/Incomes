@@ -839,40 +839,6 @@
         }
       }
     },
-    "Are you sure you want to delete these tags and the items linked to them?" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Are you sure you want to delete these tags and the items linked to them?"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "¿Estás seguro de que quieres eliminar estas etiquetas y los elementos vinculados a ellas?"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Êtes-vous sûr de vouloir supprimer ces étiquettes et les éléments qui y sont liés ?"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "これらのタグと、それに紐づくアイテムも削除してよろしいですか？"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "你确定要删除这些标签及其关联的项目吗？"
-          }
-        }
-      }
-    },
     "Are you sure you want to delete this item?" : {
       "localizations" : {
         "en" : {
@@ -1348,6 +1314,9 @@
           }
         }
       }
+    },
+    "Close" : {
+
     },
     "Content" : {
       "localizations" : {
@@ -2097,6 +2066,9 @@
         }
       }
     },
+    "Filter" : {
+
+    },
     "Food" : {
       "localizations" : {
         "en" : {
@@ -2807,40 +2779,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "最大"
-          }
-        }
-      }
-    },
-    "Menu" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Menu"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Menú"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Menu"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "メニュー"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "菜单"
           }
         }
       }
@@ -3623,40 +3561,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "推送通知设置"
-          }
-        }
-      }
-    },
-    "Range" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Range"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Rango"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Plage"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "範囲"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "范围"
           }
         }
       }

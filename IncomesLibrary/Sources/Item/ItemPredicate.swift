@@ -89,8 +89,10 @@ public enum ItemPredicate {
                     $0.content == content
                 }
             case .category:
-                assertionFailure("Not Supported")
-                return .false
+                let itemIDs = tag.items?.map(\.id) ?? []
+                return #Predicate {
+                    itemIDs.contains($0.id)
+                }
             case .debug:
                 assertionFailure("Not Supported")
                 return .false
