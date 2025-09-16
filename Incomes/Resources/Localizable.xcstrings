@@ -2135,6 +2135,7 @@
       }
     },
     "Home" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2371,6 +2372,9 @@
           }
         }
       }
+    },
+    "Incomes" : {
+
     },
     "Information" : {
       "localizations" : {
@@ -4479,6 +4483,9 @@
           }
         }
       }
+    },
+    "Summary" : {
+
     },
     "Tags" : {
       "localizations" : {

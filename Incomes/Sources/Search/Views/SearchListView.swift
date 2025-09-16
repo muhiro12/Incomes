@@ -41,43 +41,13 @@ struct SearchListView: View {
             Section("Filter") {
                 switch selectedTarget {
                 case .content:
-                    ForEach(
-                        contents.filter {
-                            if searchText.isEmpty {
-                                true
-                            } else {
-                                $0.displayName.contains(searchText)
-                            }
-                        }
-                    ) { content in
-                        Button(content.displayName) {
-                            predicate = .tagIs(content)
-                        }
-                    }
+                    buildTagRows(tags: contents)
                 case .category:
-                    ForEach(
-                        categories.filter {
-                            if searchText.isEmpty {
-                                true
-                            } else {
-                                $0.displayName.contains(searchText)
-                            }
-                        }
-                    ) { category in
-                        Button(category.displayName) {
-                            predicate = .tagIs(category)
-                        }
-                    }
+                    buildTagRows(tags: categories)
                 case .balance,
                      .income,
                      .outgo:
-                    HStack(spacing: 40) {
-                        TextField("Min", text: $minValue)
-                            .keyboardType(.numbersAndPunctuation)
-                        Text("~")
-                        TextField("Max", text: $maxValue)
-                            .keyboardType(.numbersAndPunctuation)
-                    }
+                    buildCurrencyRows()
                 }
             }
             if selectedTarget.isForCurrency {
@@ -103,6 +73,37 @@ struct SearchListView: View {
         }
         .scrollDismissesKeyboard(.interactively)
         .navigationTitle("Search")
+    }
+}
+
+private extension SearchListView {
+    func buildTagRows(tags: [Tag]) -> some View {
+        ForEach(
+            tags.filter {
+                searchText.isEmpty || $0.displayName.normalizedContains(searchText)
+            }
+        ) { tag in
+            Button {
+                predicate = .tagIs(tag)
+            } label: {
+                HStack {
+                    Text(tag.displayName)
+                    Spacer()
+                    Text(tag.items.orEmpty.count.description)
+                        .foregroundStyle(.secondary)
+                }
+            }
+        }
+    }
+
+    func buildCurrencyRows() -> some View {
+        HStack(spacing: 40) {
+            TextField("Min", text: $minValue)
+                .keyboardType(.numbersAndPunctuation)
+            Text("~")
+            TextField("Max", text: $maxValue)
+                .keyboardType(.numbersAndPunctuation)
+        }
     }
 }
 

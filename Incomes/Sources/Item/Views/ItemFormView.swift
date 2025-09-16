@@ -135,6 +135,8 @@ struct ItemFormView: View {
                 .bold()
                 .disabled(!isValid)
             }
+        }
+        .toolbar {
             ToolbarItem(placement: .keyboard) {
                 SuggestionButtonGroup(input: $content, type: .content)
                     .hidden(focusedField != .content)
@@ -143,6 +145,8 @@ struct ItemFormView: View {
                 SuggestionButtonGroup(input: $category, type: .category)
                     .hidden(focusedField != .category)
             }
+        }
+        .toolbar {
             if #available(iOS 26.0, *) {
                 ToolbarItem(placement: .bottomBar) {
                     Button {

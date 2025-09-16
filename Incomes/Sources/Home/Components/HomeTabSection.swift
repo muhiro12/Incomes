@@ -10,62 +10,47 @@ import SwiftData
 import SwiftUI
 
 struct HomeTabSection: View {
-    @Query(.tags(.typeIs(.year)))
-    private var yearTags: [Tag]
-
-    @Binding private var yearTag: Tag?
-
-    init(selection: Binding<Tag?> = .constant(nil)) {
-        _yearTag = selection
-    }
-
-    private var availableYearTags: [Tag] {
-        yearTags.filter(\.items.isNotEmpty)
-    }
+    @Environment(Tag.self)
+    private var yearTag
 
     var body: some View {
-        Section {
-            Group {
-                if #available(iOS 18.0, *) {
-                    TabView(selection: $yearTag) {
-                        ForEach(availableYearTags) { tag in
-                            Tab(value: tag) {
-                                HomeTabSectionLink()
-                                    .environment(tag)
-                            }
-                        }
+        let items = yearTag.items.orEmpty
+        let income = items.reduce(.zero) { $0 + $1.income }
+        let outgo = items.reduce(.zero) { $0 + $1.outgo }
+
+        Section("Summary") {
+            NavigationLink(value: yearTag) {
+                VStack(alignment: .leading) {
+                    HStack {
+                        Text("Total Income")
+                        Spacer()
+                        Text(income.asCurrency)
+                            .foregroundStyle(.secondary)
+                        Image(systemName: "chevron.up")
+                            .foregroundStyle(.tint)
                     }
-                } else {
-                    TabView(selection: $yearTag) {
-                        ForEach(availableYearTags) { tag in
-                            HomeTabSectionLink()
-                                .environment(tag)
-                                .tag(tag as Tag?)
-                        }
+                    .padding(.vertical)
+                    HStack {
+                        Text("Total Outgo")
+                        Spacer()
+                        Text(outgo.asMinusCurrency)
+                            .foregroundStyle(.secondary)
+                        Image(systemName: "chevron.down")
+                            .foregroundStyle(.red)
                     }
+                    .padding(.vertical)
                 }
             }
-            .tabViewStyle(.page(indexDisplayMode: .never))
-            .buttonStyle(.plain)
-            .frame(height: .componentM)
-        } footer: {
-            HStack {
-                ForEach(availableYearTags) { tag in
-                    Circle()
-                        .frame(width: 8)
-                        .foregroundStyle(yearTag == tag ? AnyShapeStyle(.tint) : AnyShapeStyle(.secondary))
-                }
-            }
-            .frame(maxWidth: .infinity)
         }
     }
 }
 
 #Preview {
-    IncomesPreview { _ in
+    IncomesPreview { preview in
         NavigationStack {
             List {
                 HomeTabSection()
+                    .environment(preview.tags.first { $0.type == .year })
             }
         }
     }

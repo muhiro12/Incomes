@@ -5,12 +5,20 @@
 //  Created by Hiromu Nakano on 9/20/24.
 //
 
+import SwiftData
 import SwiftUI
 
 struct MainNavigationView: View {
+    @Environment(\.modelContext)
+    private var context
+
+    @Query(.tags(.typeIs(.year), order: .reverse))
+    private var yearTags: [Tag]
+
     @AppStorage(.isDebugOn)
     private var isDebugOn
 
+    @State private var yearTag: Tag?
     @State private var tag: Tag?
     @State private var searchText = ""
     @State private var predicate: ItemPredicate?
@@ -20,17 +28,10 @@ struct MainNavigationView: View {
 
     var body: some View {
         NavigationSplitView {
-            Group {
-                if isSearchPresented {
-                    SearchListView(
-                        selection: $predicate,
-                        searchText: $searchText
-                    )
-                } else {
-                    HomeListView(selection: $tag)
-                }
+            List(yearTags, id: \.self, selection: $yearTag) { yearTag in
+                Text(yearTag.displayName)
             }
-            .searchable(text: $searchText, isPresented: $isSearchPresented)
+            .navigationTitle("Incomes")
             .toolbar {
                 if isDebugOn {
                     ToolbarItem {
@@ -46,33 +47,35 @@ struct MainNavigationView: View {
                 }
             }
             .toolbar {
-                if #available(iOS 26.0, *) {
-                    ToolbarItem(placement: .largeSubtitle) {
-                        Text("Today: \(Date.now.stringValue(.yyyyMMMd))")
-                            .foregroundStyle(.secondary)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                    }
-                } else {
-                    ToolbarItem(placement: .status) {
-                        Text("Today: \(Date.now.stringValue(.yyyyMMMd))")
-                            .font(.footnote)
-                    }
+                StatusToolbarItem("Today: \(Date.now.stringValue(.yyyyMMMd))")
+            }
+            .toolbar {
+                SpacerToolbarItem(placement: .bottomBar)
+                ToolbarItem(placement: .bottomBar) {
+                    CreateItemButton()
                 }
+            }
+        } content: {
+            Group {
+                if isSearchPresented {
+                    SearchListView(
+                        selection: $predicate,
+                        searchText: $searchText
+                    )
+                } else if let yearTag {
+                    HomeListView(selection: $tag)
+                        .environment(yearTag)
+                }
+            }
+            .searchable(text: $searchText, isPresented: $isSearchPresented)
+            .toolbar {
+                StatusToolbarItem("Today: \(Date.now.stringValue(.yyyyMMMd))")
             }
             .toolbar {
                 if #available(iOS 26.0, *) {
                     DefaultToolbarItem(kind: .search, placement: .bottomBar)
-                    ToolbarSpacer(placement: .bottomBar)
-                } else {
-                    ToolbarItem(placement: .bottomBar) {
-                        Button(action: {}) {
-                            Label(String.empty, systemImage: .empty)
-                        }
-                        .accessibilityHidden(true)
-                        .disabled(true)
-                        .allowsHitTesting(false)
-                    }
                 }
+                SpacerToolbarItem(placement: .bottomBar)
                 ToolbarItem(placement: .bottomBar) {
                     CreateItemButton()
                 }
@@ -90,6 +93,16 @@ struct MainNavigationView: View {
                 ItemListGroup()
                     .environment(tag)
             }
+        }
+        .task {
+            yearTag = try? context.fetchFirst(
+                .tags(
+                    .nameIs(
+                        Date.now.stringValueWithoutLocale(.yyyy),
+                        type: .year
+                    )
+                )
+            )
         }
     }
 }
