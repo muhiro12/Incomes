@@ -23,9 +23,6 @@ struct HomeListView {
 
     @Binding private var tag: Tag?
 
-    @State private var hasLoaded = false
-    @State private var isIntroductionPresented = false
-
     init(selection: Binding<Tag?> = .constant(nil)) {
         _tag = selection
     }
@@ -46,17 +43,7 @@ extension HomeListView: View {
         }
         .listStyle(.insetGrouped)
         .navigationTitle(yearTag.displayName)
-        .sheet(isPresented: $isIntroductionPresented) {
-            IntroductionNavigationView()
-        }
         .task {
-            if !hasLoaded {
-                hasLoaded = true
-                isIntroductionPresented = (
-                    try? ItemService.allItemsCount(context: context).isZero
-                ) ?? false
-            }
-
             notificationService.refresh()
             await notificationService.register()
         }
