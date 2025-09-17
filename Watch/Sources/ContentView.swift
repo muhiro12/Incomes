@@ -22,15 +22,16 @@ struct ContentView: View {
     @AppStorage(.isICloudOn)
     private var isICloudOn
 
-    @State private var items = [Item]()
+    @State private var nextItems = [Item]()
     @State private var isSettingsPresented = false
+    @State private var isTutorialPresented = false
 
     var body: some View {
         NavigationStack {
             List {
                 Section("Upcoming") {
-                    if items.isNotEmpty {
-                        ForEach(items) { item in
+                    if nextItems.isNotEmpty {
+                        ForEach(nextItems) { item in
                             VStack {
                                 Text(item.content)
                                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -60,6 +61,11 @@ struct ContentView: View {
                 SettingsListView()
             }
         }
+        .sheet(isPresented: $isTutorialPresented) {
+            NavigationStack {
+                WatchTutorialView()
+            }
+        }
         .task {
             store.open(
                 groupID: Secret.groupID,
@@ -73,7 +79,11 @@ struct ContentView: View {
                 }
             }
 
-            items = (try? ItemService.nextItems(context: context, date: .now)) ?? []
+            nextItems = (try? ItemService.nextItems(context: context, date: .now)) ?? []
+
+            if (try? ItemService.allItemsCount(context: context).isNotZero) != true {
+                isTutorialPresented = true
+            }
         }
     }
 }

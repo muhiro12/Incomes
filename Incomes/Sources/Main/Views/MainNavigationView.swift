@@ -26,6 +26,9 @@ struct MainNavigationView: View {
     @State private var isSettingsPresented = false
     @State private var isDebugPresented = false
 
+    @State private var hasLoaded = false
+    @State private var isIntroductionPresented = false
+
     var body: some View {
         NavigationSplitView {
             List(yearTags, selection: $yearTag) { yearTag in
@@ -96,7 +99,17 @@ struct MainNavigationView: View {
                     .environment(tag)
             }
         }
+        .sheet(isPresented: $isIntroductionPresented) {
+            IntroductionNavigationView()
+        }
         .task {
+            if !hasLoaded {
+                hasLoaded = true
+                isIntroductionPresented = (
+                    try? ItemService.allItemsCount(context: context).isZero
+                ) ?? false
+            }
+
             yearTag = try? context.fetchFirst(
                 .tags(
                     .nameIs(

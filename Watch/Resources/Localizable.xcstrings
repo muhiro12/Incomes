@@ -1,6 +1,9 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "About the Watch app" : {
+
+    },
     "Active" : {
       "localizations" : {
         "en" : {
@@ -34,6 +37,12 @@
           }
         }
       }
+    },
+    "Adding or editing data on Apple Watch isn’t supported yet." : {
+
+    },
+    "Close" : {
+
     },
     "iCloud" : {
       "localizations" : {
@@ -102,6 +111,9 @@
           }
         }
       }
+    },
+    "iCloud sync is available to subscribers only. If you don’t subscribe, items won’t appear on your Watch." : {
+
     },
     "Inactive" : {
       "localizations" : {
@@ -239,6 +251,9 @@
         }
       }
     },
+    "Right now, it only shows data synced from your iPhone via iCloud." : {
+
+    },
     "Settings" : {
       "localizations" : {
         "en" : {
@@ -341,6 +356,12 @@
         }
       }
     },
+    "This Watch app is still in development." : {
+
+    },
+    "Tutorial" : {
+
+    },
     "Upcoming" : {
       "localizations" : {
         "en" : {
@@ -374,6 +395,9 @@
           }
         }
       }
+    },
+    "View Tutorial" : {
+
     },
     "When enabled, data syncs with the iPhone app via iCloud. A full effect may require restarting the app." : {
       "localizations" : {

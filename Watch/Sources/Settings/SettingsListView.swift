@@ -13,6 +13,7 @@ struct SettingsListView: View {
     private var isSubscribeOn
     @AppStorage(.isICloudOn)
     private var isICloudOn
+    @State private var isTutorialPresented = false
 
     var body: some View {
         List {
@@ -38,8 +39,18 @@ struct SettingsListView: View {
             } footer: {
                 Text("When enabled, data syncs with the iPhone app via iCloud. A full effect may require restarting the app.")
             }
+            Section {
+                Button("View Tutorial", systemImage: "questionmark.circle") {
+                    isTutorialPresented = true
+                }
+            }
         }
         .navigationTitle(Text("Settings"))
+        .sheet(isPresented: $isTutorialPresented) {
+            NavigationStack {
+                WatchTutorialView()
+            }
+        }
     }
 }
 

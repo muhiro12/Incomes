@@ -13,35 +13,30 @@ struct TagSummaryRow: View {
     private var tag
 
     var body: some View {
-        VStack {
-            HStack {
-                Text(tag.displayName)
-                    .font(.headline)
-                Text("(\(tag.items.orEmpty.count))")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-                Spacer()
-            }
+        HStack {
+            Text(tag.displayName)
+                .font(.headline)
+            Text("(\(tag.items.orEmpty.count))")
+                .font(.caption)
+                .foregroundColor(.secondary)
             Spacer()
             Group {
-                HStack {
-                    Text("Total Income")
-                        .padding(.leading, .spaceS)
-                    Spacer()
-                    Text(tag.income.asCurrency)
-                    Image(systemName: "chevron.up")
-                        .foregroundStyle(.accent)
-                }
-                HStack {
-                    Text("Total Outgo")
-                        .padding(.leading, .spaceS)
-                    Spacer()
-                    Text(tag.outgo.asMinusCurrency)
-                    Image(systemName: "chevron.down")
-                        .foregroundStyle(.red)
+                Image(systemName: "plus.slash.minus")
+                VStack(alignment: .trailing) {
+                    HStack {
+                        Text(tag.income.asCurrency)
+                        Image(systemName: "chevron.up")
+                            .foregroundStyle(.accent)
+                    }
+                    HStack {
+                        Text(tag.outgo.asMinusCurrency)
+                        Image(systemName: "chevron.down")
+                            .foregroundStyle(.red)
+                    }
                 }
             }
             .font(.subheadline)
+            .foregroundStyle(.secondary)
         }
     }
 }
