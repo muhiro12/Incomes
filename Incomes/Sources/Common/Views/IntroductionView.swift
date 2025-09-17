@@ -126,6 +126,9 @@ struct IntroductionView: View {
             }
         }
         .interactiveDismissDisabled()
+        .task {
+            seedTutorialDataIfNeeded()
+        }
     }
 }
 
