@@ -17,11 +17,7 @@ struct IntroductionView: View {
 
     @State private var selectedPageIndex: Int = .zero
 
-    @Query private var monthItems: [Item]
-
-    init() {
-        _monthItems = Query(.items(.dateIsSameMonthAs(.now)))
-    }
+    @Query private var items: [Item]
 
     var body: some View {
         VStack(spacing: 0) {
@@ -134,7 +130,7 @@ struct IntroductionView: View {
 
 private extension IntroductionView {
     func seedTutorialDataIfNeeded() {
-        guard monthItems.isEmpty else {
+        guard items.isEmpty else {
             return
         }
         do {
@@ -193,7 +189,7 @@ private extension IntroductionView {
     }
     func listSample() -> some View {
         List {
-            ForEach(Array(monthItems.prefix(5))) { item in
+            ForEach(Array(items.prefix(5))) { item in
                 ListItem()
                     .environment(item)
             }
@@ -207,7 +203,7 @@ private extension IntroductionView {
 
     func detailSample() -> some View {
         List {
-            if let item = monthItems.first {
+            if let item = items.first {
                 ItemSection()
                     .environment(item)
             }
