@@ -21,19 +21,12 @@ struct TagSummaryRow: View {
                 .foregroundColor(.secondary)
             Spacer()
             Group {
-                Image(systemName: "plus.slash.minus")
                 VStack(alignment: .trailing) {
-                    HStack {
-                        Text(tag.income.asCurrency)
-                        Image(systemName: "chevron.up")
-                            .foregroundStyle(.accent)
-                    }
-                    HStack {
-                        Text(tag.outgo.asMinusCurrency)
-                        Image(systemName: "chevron.down")
-                            .foregroundStyle(.red)
-                    }
+                    Text(tag.income.asCurrency)
+                    Text(tag.outgo.asMinusCurrency)
                 }
+                Image(systemName: "plus.slash.minus")
+                    .foregroundStyle((tag.income - tag.outgo).isPlus ? .accent : .red)
             }
             .font(.subheadline)
             .foregroundStyle(.secondary)

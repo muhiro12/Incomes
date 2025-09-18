@@ -31,7 +31,7 @@ struct NarrowListItem: View {
             Divider()
             Text(item.balance.asCurrency)
                 .minimumScaleFactor(.medium)
-                .frame(width: .componentM)
+                .frame(width: .componentM, alignment: .trailing)
                 .foregroundColor(item.balance.isMinus ? .red : .primary)
         }
     }
@@ -39,7 +39,11 @@ struct NarrowListItem: View {
 
 #Preview {
     IncomesPreview { preview in
-        NarrowListItem()
-            .environment(preview.items[0])
+        List {
+            NarrowListItem()
+                .environment(preview.items[0])
+            NarrowListItem()
+                .environment(preview.items[1])
+        }
     }
 }

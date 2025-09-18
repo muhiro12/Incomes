@@ -23,10 +23,10 @@ struct WideListItem: View {
             Divider()
             HStack {
                 Text(item.income.asCurrency)
-                    .frame(width: .componentM)
+                    .frame(width: .componentM, alignment: .trailing)
                 Divider()
                 Text(item.outgo.asMinusCurrency)
-                    .frame(width: .componentM)
+                    .frame(width: .componentM, alignment: .trailing)
             }
             .font(.footnote)
             .minimumScaleFactor(.medium)
@@ -34,7 +34,7 @@ struct WideListItem: View {
             Divider()
             Text(item.balance.asCurrency)
                 .minimumScaleFactor(.medium)
-                .frame(width: .componentL)
+                .frame(width: .componentL, alignment: .trailing)
                 .foregroundColor(item.balance.isMinus ? .red : .primary)
         }
     }
@@ -42,7 +42,11 @@ struct WideListItem: View {
 
 #Preview(traits: .landscapeRight) {
     IncomesPreview { preview in
-        WideListItem()
-            .environment(preview.items[0])
+        List {
+            WideListItem()
+                .environment(preview.items[0])
+            WideListItem()
+                .environment(preview.items[1])
+        }
     }
 }
