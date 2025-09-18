@@ -17,7 +17,7 @@ struct NarrowListItem: View {
                 .font(.subheadline)
                 .minimumScaleFactor(.high)
                 .truncationMode(.head)
-                .frame(width: .componentS)
+                .frame(width: .componentXS, alignment: .leading)
             Divider()
             Spacer()
             VStack(alignment: .trailing, spacing: .zero) {

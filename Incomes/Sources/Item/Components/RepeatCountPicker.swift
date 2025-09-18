@@ -30,8 +30,10 @@ extension RepeatCountPicker: View {
             }
             .pickerStyle(WheelPickerStyle())
             .labelsHidden()
-            .frame(width: .componentS,
-                   height: .componentS)
+            .frame(
+                width: .componentS,
+                height: .componentS
+            )
             .clipped()
         }
     }
