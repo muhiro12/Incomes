@@ -17,10 +17,9 @@ struct TitleListItem: View {
                 .font(.headline)
                 .minimumScaleFactor(.high)
             Spacer()
-            if item.isProfitable {
-                Image(systemName: "chevron.up")
-                    .foregroundColor(.accent)
-            }
+            Circle()
+                .foregroundStyle(item.profit.isPlus ? .accent : .clear)
+                .frame(width: .iconS)
         }
     }
 }

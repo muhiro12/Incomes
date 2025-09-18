@@ -58,6 +58,10 @@ extension Tag {
     public var outgo: Decimal {
         items.orEmpty.reduce(.zero) { $0 + $1.outgo }
     }
+
+    public var profit: Decimal {
+        income - outgo
+    }
 }
 
 extension Tag: Identifiable {}
