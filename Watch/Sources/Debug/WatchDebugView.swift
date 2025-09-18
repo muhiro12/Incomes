@@ -89,7 +89,9 @@ private extension WatchDebugView {
 }
 
 #Preview {
-    NavigationStack {
-        WatchDebugView()
+    WatchPreview {
+        NavigationStack {
+            WatchDebugView()
+        }
     }
 }

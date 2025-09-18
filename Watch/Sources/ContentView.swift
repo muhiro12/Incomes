@@ -118,6 +118,8 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView()
-        .environment(Store())
+    WatchPreview {
+        ContentView()
+            .environment(Store())
+    }
 }
