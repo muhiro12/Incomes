@@ -2,7 +2,38 @@
   "sourceLanguage" : "en",
   "strings" : {
     "About the Watch app" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "About the Watch app"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Acerca de la app de Apple Watch"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "À propos de l’app Apple Watch"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Watchアプリについて"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "关于 Apple Watch 应用"
+          }
+        }
+      }
     },
     "Active" : {
       "localizations" : {
@@ -39,10 +70,99 @@
       }
     },
     "Adding or editing data on Apple Watch isn’t supported yet." : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adding or editing data on Apple Watch isn’t supported yet."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Añadir o editar datos en Apple Watch todavía no es compatible."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L’ajout ou la modification de données sur Apple Watch n’est pas encore pris en charge."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Watchでのデータの追加や編集はまだサポートされていません。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "暂不支持在 Apple Watch 上添加或编辑数据。"
+          }
+        }
+      }
     },
     "Close" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Close"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cerrar"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fermer"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "閉じる"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "关闭"
+          }
+        }
+      }
+    },
+    "Creates a few sample items tagged as Debug when the store is empty." : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Creates a few sample items tagged as Debug when the store is empty." } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Cuando el almacén está vacío, crea algunos elementos de muestra etiquetados como Depuración." } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Crée quelques éléments d’exemple marqués comme Débogage lorsque le magasin est vide." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "ストアが空の場合、Debugタグ付きのサンプル項目をいくつか作成します。" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "当存储为空时，创建一些带“调试”标签的示例项目。" } }
+      }
+    },
+    "Debug" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Debug" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Depuración" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Débogage" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "デバッグ" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "调试" } }
+      }
+    },
+    "Delete tutorial/debug data" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Delete tutorial/debug data" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Eliminar datos de tutorial/depuración" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Supprimer les données de tutoriel/débogage" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "チュートリアル/デバッグデータを削除" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "删除教程/调试数据" } }
+      }
     },
     "iCloud" : {
       "localizations" : {
@@ -113,7 +233,38 @@
       }
     },
     "iCloud sync is available to subscribers only. If you don’t subscribe, items won’t appear on your Watch." : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud sync is available to subscribers only. If you don’t subscribe, items won’t appear on your Watch."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La sincronización con iCloud está disponible solo para suscriptores. Si no te suscribes, los elementos no aparecerán en tu Watch."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La synchronisation iCloud est réservée aux abonnés. Sans abonnement, les éléments n’apparaîtront pas sur votre Watch."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud同期は加入者のみ利用できます。未加入の場合、項目はWatchに表示されません。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud 同步仅对订阅用户开放。未订阅时，项目不会显示在你的 Watch 上。"
+          }
+        }
+      }
     },
     "Inactive" : {
       "localizations" : {
@@ -251,8 +402,57 @@
         }
       }
     },
+    "Removes items tagged as Debug and their tags." : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Removes items tagged as Debug and their tags." } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Elimina los elementos etiquetados como Depuración y sus etiquetas." } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Supprime les éléments marqués comme Débogage et leurs étiquettes." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "デバッグとしてタグ付けされたアイテムとそのタグを削除します。" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "删除标记为调试的项目及其标签。" } }
+      }
+    },
     "Right now, it only shows data synced from your iPhone via iCloud." : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Right now, it only shows data synced from your iPhone via iCloud."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Por ahora solo muestra los datos sincronizados desde tu iPhone a través de iCloud."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pour le moment, seuls les données synchronisées depuis votre iPhone via iCloud sont affichées."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "現時点では、iCloud経由でiPhoneから同期されたデータのみが表示されます。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "目前仅显示通过 iCloud 从你的 iPhone 同步的数据。"
+          }
+        }
+      }
+    },
+    "Seed Tutorial Data" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Seed Tutorial Data" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Sembrar datos de tutorial" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Générer des données de tutoriel" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "チュートリアルデータの投入" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "生成教程数据" } }
+      }
     },
     "Settings" : {
       "localizations" : {
@@ -357,10 +557,72 @@
       }
     },
     "This Watch app is still in development." : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This Watch app is still in development."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esta app de Watch todavía está en desarrollo."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cette app pour Watch est encore en développement."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "このWatchアプリはまだ開発中です。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这款 Watch 应用仍在开发中。"
+          }
+        }
+      }
     },
     "Tutorial" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tutorial"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tutorial"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tutoriel"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "チュートリアル"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "教程"
+          }
+        }
+      }
     },
     "Upcoming" : {
       "localizations" : {
@@ -397,7 +659,38 @@
       }
     },
     "View Tutorial" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "View Tutorial"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ver tutorial"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voir le tutoriel"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "チュートリアルを見る"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "查看教程"
+          }
+        }
+      }
     },
     "When enabled, data syncs with the iPhone app via iCloud. A full effect may require restarting the app." : {
       "localizations" : {

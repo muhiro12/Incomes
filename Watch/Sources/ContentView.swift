@@ -9,6 +9,7 @@
 import IncomesLibrary
 import StoreKit
 import StoreKitWrapper
+import SwiftData
 import SwiftUI
 
 struct ContentView: View {
@@ -21,17 +22,31 @@ struct ContentView: View {
     private var isSubscribeOn
     @AppStorage(.isICloudOn)
     private var isICloudOn
+    @AppStorage(.isDebugOn)
+    private var isDebugOn
 
-    @State private var nextItems = [Item]()
+    @Query(.items(.dateIsAfter(Date.now), order: .forward))
+    private var upcomingCandidates: [Item]
     @State private var isSettingsPresented = false
     @State private var isTutorialPresented = false
+    @State private var isDebugPresented = false
 
     var body: some View {
         NavigationStack {
             List {
                 Section("Upcoming") {
-                    if nextItems.isNotEmpty {
-                        ForEach(nextItems) { item in
+                    let itemsForDisplay: [Item] = {
+                        guard let first = upcomingCandidates.first else {
+                            return []
+                        }
+                        let firstDate = first.localDate
+                        return upcomingCandidates.filter { item in
+                            Calendar.current.isDate(item.localDate, inSameDayAs: firstDate)
+                        }
+                    }()
+
+                    if itemsForDisplay.isNotEmpty {
+                        ForEach(itemsForDisplay) { item in
                             VStack {
                                 Text(item.content)
                                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -53,6 +68,13 @@ struct ContentView: View {
                         isSettingsPresented = true
                     }
                 }
+                if isDebugOn {
+                    Section {
+                        Button("Debug", systemImage: "flask") {
+                            isDebugPresented = true
+                        }
+                    }
+                }
             }
             .navigationTitle("Incomes")
         }
@@ -64,6 +86,11 @@ struct ContentView: View {
         .sheet(isPresented: $isTutorialPresented) {
             NavigationStack {
                 WatchTutorialView()
+            }
+        }
+        .sheet(isPresented: $isDebugPresented) {
+            NavigationStack {
+                WatchDebugView()
             }
         }
         .task {
@@ -79,11 +106,13 @@ struct ContentView: View {
                 }
             }
 
-            nextItems = (try? ItemService.nextItems(context: context, date: .now)) ?? []
-
             if (try? ItemService.allItemsCount(context: context).isNotZero) != true {
                 isTutorialPresented = true
             }
+
+            #if DEBUG
+            isDebugOn = true
+            #endif
         }
     }
 }

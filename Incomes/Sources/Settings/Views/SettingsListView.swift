@@ -198,17 +198,7 @@ extension SettingsListView: View {
         ) {
             Button(role: .destructive) {
                 do {
-                    let debugTags = try context.fetch(.tags(.typeIs(.debug)))
-                    let items = debugTags.flatMap(\.items.orEmpty)
-                    try items.forEach { item in
-                        try ItemService.delete(
-                            context: context,
-                            item: item
-                        )
-                    }
-                    try debugTags.forEach { tag in
-                        try TagService.delete(tag: tag)
-                    }
+                    try ItemService.deleteDebugData(context: context)
                     Haptic.success.impact()
                     hasDebugData = false
                 } catch {
@@ -230,7 +220,7 @@ extension SettingsListView: View {
         .task {
             do {
                 hasDuplicateTags = try TagService.hasDuplicates(context: context)
-                hasDebugData = try !context.fetch(.tags(.typeIs(.debug))).isEmpty
+                hasDebugData = try ItemService.hasDebugData(context: context)
             } catch {
                 assertionFailure(error.localizedDescription)
                 hasDuplicateTags = false
@@ -254,7 +244,7 @@ extension SettingsListView: View {
         }
         .onAppear {
             do {
-                hasDebugData = try !context.fetch(.tags(.typeIs(.debug))).isEmpty
+                hasDebugData = try ItemService.hasDebugData(context: context)
             } catch {
                 assertionFailure(error.localizedDescription)
                 hasDebugData = false

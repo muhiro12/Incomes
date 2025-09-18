@@ -130,62 +130,13 @@ struct IntroductionView: View {
 
 private extension IntroductionView {
     func seedTutorialDataIfNeeded() {
-        guard items.isEmpty else {
-            return
-        }
         do {
-            // Create a few lightweight items for tutorial/debug and tag them.
-            let baseDate = Date.now
-            let firstDate = baseDate
-            let secondDate = Calendar.current.date(byAdding: .day, value: -1, to: baseDate) ?? baseDate
-            let thirdDate = Calendar.current.date(byAdding: .day, value: -2, to: baseDate) ?? baseDate
-
-            // Income example
-            let incomeItem = try Item.create(
-                context: context,
-                date: firstDate,
-                content: String(localized: "Salary"),
-                income: LocaleAmountConverter.localizedAmount(baseUSD: 3_000),
-                outgo: .zero,
-                category: String(localized: "Salary"),
-                repeatID: .init()
+            try ItemService.seedTutorialDataIfNeeded(
+                context: context
             )
-            try attachDebugTag(to: incomeItem, context: context)
-
-            // Outgo examples
-            let rentItem = try Item.create(
-                context: context,
-                date: secondDate,
-                content: String(localized: "Rent"),
-                income: .zero,
-                outgo: LocaleAmountConverter.localizedAmount(baseUSD: 1_200),
-                category: String(localized: "Housing"),
-                repeatID: .init()
-            )
-            try attachDebugTag(to: rentItem, context: context)
-
-            let groceryItem = try Item.create(
-                context: context,
-                date: thirdDate,
-                content: String(localized: "Grocery"),
-                income: .zero,
-                outgo: LocaleAmountConverter.localizedAmount(baseUSD: 45),
-                category: String(localized: "Food"),
-                repeatID: .init()
-            )
-            try attachDebugTag(to: groceryItem, context: context)
-
-            try BalanceCalculator.calculate(in: context, for: [incomeItem, rentItem, groceryItem])
         } catch {
             assertionFailure(error.localizedDescription)
         }
-    }
-
-    func attachDebugTag(to item: Item, context: ModelContext) throws {
-        let debugTag = try Tag.create(context: context, name: "Debug", type: .debug)
-        var current = item.tags.orEmpty
-        current.append(debugTag)
-        item.modify(tags: current)
     }
     func listSample() -> some View {
         List {

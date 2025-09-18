@@ -85,14 +85,47 @@ Avoid using Japanese or other non-English languages in code unless strictly nece
 
 Use these minimal, reliable commands to build and run tests via Xcode. They avoid hard-coding device names and work across environments.
 
+### Preferred: use `ci_scripts/` helpers
+
+These scripts standardize invocation and keep artifacts under `build/` to avoid permission issues.
+
+- List schemes:
+  ```sh
+  bash ci_scripts/xcodebuild_list_schemes.sh
+  ```
+
+- Run app tests (Incomes scheme):
+  ```sh
+  DERIVED_DATA_PATH=build/DerivedData \
+  RESULTS_DIR=build \
+  bash ci_scripts/xcodebuild_test_scheme.sh Incomes
+  ```
+
+- Run library tests (IncomesLibrary scheme):
+  ```sh
+  # Note: IncomesLibrary is iOS-only. Do not use `swift test`.
+  DERIVED_DATA_PATH=build/DerivedData \
+  RESULTS_DIR=build \
+  bash ci_scripts/xcodebuild_test_scheme.sh IncomesLibrary
+  ```
+
+- Options:
+  - Prefer a specific simulator: set `UDID=<simulator-udid>`
+  - Concise logs when available: pass `xcpretty` as the second arg
+    ```sh
+    bash ci_scripts/xcodebuild_test_scheme.sh Incomes xcpretty
+    ```
+  - Auto-fallback: If a scheme has no Test action, the script automatically falls back to `build`.
+  - Force action: explicitly set `ACTION=test` or `ACTION=build` to override.
+  - Artifacts:
+    - Derived data: `build/DerivedData`
+    - Results bundle: `build/TestResults_<Scheme>_<timestamp>.xcresult`
+
 - Prerequisites:
   - Xcode with iOS Simulator runtime installed
   - At least one iPhone simulator available (booted is best)
 
-- List schemes:
-  ```sh
-  xcodebuild -list -project Incomes.xcodeproj
-  ```
+- Equivalent raw commands (if you prefer `xcodebuild` directly):
 
 - Run app tests (auto-pick latest iOS Simulator):
   ```sh
