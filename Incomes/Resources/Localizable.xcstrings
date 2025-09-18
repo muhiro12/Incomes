@@ -5193,43 +5193,6 @@
         }
       }
     }
-  ,
-    "Rent" : {
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Rent" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Alquiler" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Loyer" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "家賃" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "房租" } }
-      }
-    },
-    "Housing" : {
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Housing" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Vivienda" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Logement" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "住居" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "住房" } }
-      }
-    },
-    "Grocery" : {
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Grocery" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Comestibles" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Épicerie" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "食料品" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "杂货" } }
-      }
-    },
-    "Food" : {
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Food" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Alimentación" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Alimentation" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "食費" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "餐饮" } }
-      }
-    }
   },
   "version" : "1.0"
 }
