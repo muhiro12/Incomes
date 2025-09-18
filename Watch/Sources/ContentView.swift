@@ -21,10 +21,13 @@ struct ContentView: View {
     private var isSubscribeOn
     @AppStorage(.isICloudOn)
     private var isICloudOn
+    @AppStorage(.isDebugOn)
+    private var isDebugOn
 
     @State private var nextItems = [Item]()
     @State private var isSettingsPresented = false
     @State private var isTutorialPresented = false
+    @State private var isDebugPresented = false
 
     var body: some View {
         NavigationStack {
@@ -53,6 +56,13 @@ struct ContentView: View {
                         isSettingsPresented = true
                     }
                 }
+                if isDebugOn {
+                    Section {
+                        Button("Debug", systemImage: "flask") {
+                            isDebugPresented = true
+                        }
+                    }
+                }
             }
             .navigationTitle("Incomes")
         }
@@ -64,6 +74,11 @@ struct ContentView: View {
         .sheet(isPresented: $isTutorialPresented) {
             NavigationStack {
                 WatchTutorialView()
+            }
+        }
+        .sheet(isPresented: $isDebugPresented) {
+            NavigationStack {
+                WatchDebugView()
             }
         }
         .task {
@@ -84,6 +99,10 @@ struct ContentView: View {
             if (try? ItemService.allItemsCount(context: context).isNotZero) != true {
                 isTutorialPresented = true
             }
+
+            #if DEBUG
+            isDebugOn = true
+            #endif
         }
     }
 }

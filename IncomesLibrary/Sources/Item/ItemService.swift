@@ -227,9 +227,88 @@ public enum ItemService {
     public static func recalculate(context: ModelContext, date: Date) throws {
         try BalanceCalculator.calculate(in: context, after: date)
     }
+
+    // MARK: - Tutorial / Debug Sample Data
+
+    /// Seed lightweight tutorial/debug items if the store is empty.
+    /// Items are tagged with a `.debug` tag so they can be discovered and removed later.
+    public static func seedTutorialDataIfNeeded(
+        context: ModelContext,
+        baseDate: Date = .now
+    ) throws {
+        let count = try allItemsCount(context: context)
+        guard count == .zero else {
+            return
+        }
+
+        let firstDate = baseDate
+        let secondDate = Calendar.current.date(byAdding: .day, value: -1, to: baseDate) ?? baseDate
+        let thirdDate = Calendar.current.date(byAdding: .day, value: -2, to: baseDate) ?? baseDate
+
+        let incomeItem = try Item.create(
+            context: context,
+            date: firstDate,
+            content: String(localized: "Salary"),
+            income: LocaleAmountConverter.localizedAmount(baseUSD: 3_000),
+            outgo: .zero,
+            category: String(localized: "Salary"),
+            repeatID: .init()
+        )
+        try attachDebugTag(to: incomeItem, context: context)
+
+        let rentItem = try Item.create(
+            context: context,
+            date: secondDate,
+            content: String(localized: "Rent"),
+            income: .zero,
+            outgo: LocaleAmountConverter.localizedAmount(baseUSD: 1_200),
+            category: String(localized: "Housing"),
+            repeatID: .init()
+        )
+        try attachDebugTag(to: rentItem, context: context)
+
+        let groceryItem = try Item.create(
+            context: context,
+            date: thirdDate,
+            content: String(localized: "Grocery"),
+            income: .zero,
+            outgo: LocaleAmountConverter.localizedAmount(baseUSD: 45),
+            category: String(localized: "Food"),
+            repeatID: .init()
+        )
+        try attachDebugTag(to: groceryItem, context: context)
+
+        try BalanceCalculator.calculate(in: context, for: [incomeItem, rentItem, groceryItem])
+    }
+
+    /// Returns whether tutorial/debug data exists.
+    public static func hasDebugData(context: ModelContext) throws -> Bool {
+        try !context.fetch(.tags(.typeIs(.debug))).isEmpty
+    }
+
+    /// Deletes items and tags associated with tutorial/debug data.
+    public static func deleteDebugData(context: ModelContext) throws {
+        let debugTags = try context.fetch(.tags(.typeIs(.debug)))
+        let items = debugTags.flatMap(\.items.orEmpty)
+        try items.forEach { item in
+            try delete(
+                context: context,
+                item: item
+            )
+        }
+        try debugTags.forEach { tag in
+            try TagService.delete(tag: tag)
+        }
+    }
 }
 
 private extension ItemService {
+    static func attachDebugTag(to item: Item, context: ModelContext) throws {
+        let debugTag = try Tag.create(context: context, name: "Debug", type: .debug)
+        var current = item.tags.orEmpty
+        current.append(debugTag)
+        item.modify(tags: current)
+    }
     static func nextItemModel(
         context: ModelContext,
         date: Date
