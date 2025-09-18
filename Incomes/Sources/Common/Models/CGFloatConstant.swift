@@ -13,14 +13,17 @@ extension CGFloat {
 
     static let spaceS = unit * 1
     static let spaceM = unit * 2
-    static let spaceL = unit * 3
-
-    static let componentS = unit * 8
-    static let componentM = unit * 12
-    static let componentL = unit * 16
-    static let componentXL = unit * 32
+    static let spaceL = unit * 4
 
     static let iconS = unit * 1
+    static let iconM = unit * 5
+    static let iconL = unit * 8
+
+    static let componentXS = unit * 8
+    static let componentS = unit * 10
+    static let componentM = unit * 15
+    static let componentL = unit * 30
+    static let componentXL = unit * 40
 
     // MARK: - Ratio
 

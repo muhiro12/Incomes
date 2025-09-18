@@ -17,16 +17,16 @@ struct WideListItem: View {
                 .font(.subheadline)
                 .minimumScaleFactor(.high)
                 .truncationMode(.head)
-                .frame(width: .componentS)
+                .frame(width: .componentXS)
             Divider()
             TitleListItem()
             Divider()
             HStack {
                 Text(item.income.asCurrency)
-                    .frame(width: .componentM, alignment: .trailing)
+                    .frame(width: .componentS, alignment: .trailing)
                 Divider()
                 Text(item.outgo.asMinusCurrency)
-                    .frame(width: .componentM, alignment: .trailing)
+                    .frame(width: .componentS, alignment: .trailing)
             }
             .font(.footnote)
             .minimumScaleFactor(.medium)
@@ -34,7 +34,7 @@ struct WideListItem: View {
             Divider()
             Text(item.balance.asCurrency)
                 .minimumScaleFactor(.medium)
-                .frame(width: .componentL, alignment: .trailing)
+                .frame(width: .componentM, alignment: .trailing)
                 .foregroundColor(item.balance.isMinus ? .red : .primary)
         }
     }

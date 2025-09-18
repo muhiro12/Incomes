@@ -20,16 +20,15 @@ struct TagSummaryRow: View {
                 .font(.caption)
                 .foregroundColor(.secondary)
             Spacer()
-            Group {
-                VStack(alignment: .trailing) {
-                    Text(tag.income.asCurrency)
-                    Text(tag.outgo.asMinusCurrency)
-                }
-                Image(systemName: "plus.slash.minus")
-                    .foregroundStyle((tag.income - tag.outgo).isPlus ? .accent : .red)
+            VStack(alignment: .trailing) {
+                Text(tag.income.asCurrency)
+                Text(tag.outgo.asMinusCurrency)
             }
             .font(.subheadline)
             .foregroundStyle(.secondary)
+            Circle()
+                .foregroundStyle(tag.profit.isPlus ? .accent : .clear)
+                .frame(width: .iconS)
         }
     }
 }
