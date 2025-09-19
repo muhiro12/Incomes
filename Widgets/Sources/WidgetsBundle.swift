@@ -13,7 +13,7 @@ import WidgetKit
 struct WidgetsBundle: WidgetBundle {
     var body: some Widget {
         IncomesMonthWidget()
-        IncomesMonthBalanceWidget()
+        IncomesMonthNetIncomeWidget()
         IncomesUpcomingWidget()
         WidgetsControl()
         WidgetsLiveActivity()

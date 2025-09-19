@@ -121,7 +121,7 @@ public enum ItemService {
     }
 
     // Intentionally keep AppIntent-specific formatting (e.g., IntentCurrencyAmount)
-    // out of the library. Use nextItem/previousItem and compute profit in the app.
+    // out of the library. Use nextItem/previousItem and compute net income in the app.
 
     public static func update(
         context: ModelContext,

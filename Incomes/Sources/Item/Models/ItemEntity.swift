@@ -25,7 +25,7 @@ final class ItemEntity: AppEntity {
             title: .init("\(date.stringValue(.yyyyMMMd)) \(content)", table: "AppIntents"),
             subtitle: .init("Income: \(income.asCurrency), Outgo: \(outgo.asCurrency)", table: "AppIntents"),
             image: .init(
-                systemName: profit.isPlus ? "arrow.up.circle.fill" : "arrow.down.circle.fill"
+                systemName: netIncome.isPlus ? "arrow.up.circle.fill" : "arrow.down.circle.fill"
             ),
             synonyms: [
                 .init("\(content)", table: "AppIntents")
@@ -38,7 +38,7 @@ final class ItemEntity: AppEntity {
     let content: String
     let income: Decimal
     let outgo: Decimal
-    let profit: Decimal
+    let netIncome: Decimal
 
     private init(
         id: String,
@@ -46,14 +46,14 @@ final class ItemEntity: AppEntity {
         content: String,
         income: Decimal,
         outgo: Decimal,
-        profit: Decimal
+        netIncome: Decimal
     ) {
         self.id = id
         self.date = date
         self.content = content
         self.income = income
         self.outgo = outgo
-        self.profit = profit
+        self.netIncome = netIncome
     }
 }
 
@@ -68,14 +68,14 @@ extension ItemEntity {
             content: model.content,
             income: model.income,
             outgo: model.outgo,
-            profit: model.profit
+            netIncome: model.netIncome
         )
     }
 }
 
 extension ItemEntity {
-    var isProfitable: Bool {
-        profit.isPlus
+    var isNetIncomePositive: Bool {
+        netIncome.isPlus
     }
 
     func model(in context: ModelContext) throws -> Item {

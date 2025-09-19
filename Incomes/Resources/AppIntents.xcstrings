@@ -441,36 +441,36 @@
         }
       }
     },
-    "Get Next Item Profit" : {
+    "Get Next Item Net Income" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Get Next Item Profit"
+            "value" : "Get Next Item Net Income"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Obtener ganancia del siguiente elemento"
+            "value" : "Obtener ingreso neto del siguiente elemento"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Obtenir le profit de l’élément suivant"
+            "value" : "Obtenir le revenu net de l’élément suivant"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "次のアイテムの利益を取得"
+            "value" : "次のアイテムの純利益を取得"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "获取下一个项目的利润"
+            "value" : "获取下一个项目的净收入"
           }
         }
       }
@@ -611,36 +611,36 @@
         }
       }
     },
-    "Get Previous Item Profit" : {
+    "Get Previous Item Net Income" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Get Previous Item Profit"
+            "value" : "Get Previous Item Net Income"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Obtener ganancia del elemento anterior"
+            "value" : "Obtener ingreso neto del elemento anterior"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Obtenir le profit de l’élément précédent"
+            "value" : "Obtenir le revenu net de l’élément précédent"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "前のアイテムの利益を取得"
+            "value" : "前のアイテムの純利益を取得"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "获取上一个项目的利润"
+            "value" : "获取上一个项目的净收入"
           }
         }
       }

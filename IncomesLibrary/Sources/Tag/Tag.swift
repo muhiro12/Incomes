@@ -59,7 +59,7 @@ extension Tag {
         items.orEmpty.reduce(.zero) { $0 + $1.outgo }
     }
 
-    public var profit: Decimal {
+    public var netIncome: Decimal {
         income - outgo
     }
 }

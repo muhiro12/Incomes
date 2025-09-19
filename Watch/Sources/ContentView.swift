@@ -54,8 +54,8 @@ extension ContentView: View {
                                 HStack {
                                     Text(item.localDate.formatted(.dateTime.month().day()))
                                         .font(.footnote)
-                                    Text(item.profit.asCurrency)
-                                        .foregroundStyle(item.isProfitable ? .accent : .red)
+                                    Text(item.netIncome.asCurrency)
+                                        .foregroundStyle(item.isNetIncomePositive ? .accent : .red)
                                         .frame(maxWidth: .infinity, alignment: .trailing)
                                 }
                             }

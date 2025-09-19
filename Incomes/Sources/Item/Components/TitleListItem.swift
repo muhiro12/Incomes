@@ -15,11 +15,12 @@ struct TitleListItem: View {
         HStack {
             Text(item.content)
                 .font(.headline)
+                .lineLimit(1)
                 .minimumScaleFactor(.minimumScaleFactor)
             Spacer()
             Circle()
-                .foregroundStyle(item.profit.isPlus ? .accent : .clear)
-                .frame(width: .icon(.s))
+                .foregroundStyle(item.netIncome.isPlus ? .accent : .clear)
+                .frame(width: .icon(.xs))
         }
     }
 }
@@ -28,7 +29,7 @@ struct TitleListItem: View {
     IncomesPreview { preview in
         List {
             TitleListItem()
-                .environment(preview.items[0])
+                .environment(preview.items.first(where: \.isNetIncomePositive))
         }
     }
 }

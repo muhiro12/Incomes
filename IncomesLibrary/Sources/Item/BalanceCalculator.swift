@@ -33,9 +33,9 @@ public enum BalanceCalculator {
         targetList.enumerated().forEach { index, item in
             let balance = {
                 guard resultList.indices.contains(index - 1) else {
-                    return previousBalance + item.profit
+                    return previousBalance + item.netIncome
                 }
-                return resultList[index - 1].balance + item.profit
+                return resultList[index - 1].balance + item.netIncome
             }()
             item.modify(balance: balance)
             resultList.append(item)

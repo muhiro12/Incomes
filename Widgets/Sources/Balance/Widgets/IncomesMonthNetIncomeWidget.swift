@@ -1,10 +1,9 @@
 import SwiftUI
 import WidgetKit
 
-struct IncomesMonthBalanceWidget {
-    let kind: String = "IncomesMonthBalanceWidget"
+struct IncomesMonthNetIncomeWidget {
+    let kind: String = "IncomesMonthNetIncomeWidget"
 
-    // MARK: - Helpers
     private static func monthTitle(from date: Date) -> String {
         let formatter: DateFormatter = .init()
         formatter.locale = .current
@@ -13,11 +12,10 @@ struct IncomesMonthBalanceWidget {
     }
 }
 
-extension IncomesMonthBalanceWidget: Widget {
+extension IncomesMonthNetIncomeWidget: Widget {
     var body: some WidgetConfiguration {
-        AppIntentConfiguration(kind: kind, intent: ConfigurationAppIntent.self, provider: BalanceProvider()) { entry in
+        AppIntentConfiguration(kind: kind, intent: ConfigurationAppIntent.self, provider: NetIncomeProvider()) { entry in
             ViewThatFits(in: .horizontal) {
-                // Medium (roomy) layout: horizontal split
                 HStack(alignment: .center, spacing: .space(.m)) {
                     VStack(alignment: .leading, spacing: .space(.xs)) {
                         Text(Self.monthTitle(from: entry.date))
@@ -25,7 +23,7 @@ extension IncomesMonthBalanceWidget: Widget {
                             .foregroundStyle(.secondary)
                             .lineLimit(1)
                             .minimumScaleFactor(.minimumScaleFactor)
-                        Text("Balance")
+                        Text("Net Income")
                             .font(.caption2)
                             .foregroundStyle(.secondary)
                             .lineLimit(1)
@@ -34,7 +32,7 @@ extension IncomesMonthBalanceWidget: Widget {
                     HStack(spacing: .space(.s)) {
                         Image(systemName: entry.isPositive ? "chevron.up" : "chevron.down")
                             .foregroundStyle(entry.isPositive ? .accent : .red)
-                        Text(entry.balanceText)
+                        Text(entry.netIncomeText)
                             .font(.title3)
                             .lineLimit(1)
                             .minimumScaleFactor(.minimumScaleFactor)
@@ -43,21 +41,20 @@ extension IncomesMonthBalanceWidget: Widget {
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
                 .padding(.space(.m))
 
-                // Small (compact) layout: vertical stack
                 VStack(alignment: .leading, spacing: .space(.s)) {
                     Text(Self.monthTitle(from: entry.date))
                         .font(.footnote)
                         .foregroundStyle(.secondary)
                         .lineLimit(1)
                         .minimumScaleFactor(.minimumScaleFactor)
-                    Text("Balance")
+                    Text("Net Income")
                         .font(.caption2)
                         .foregroundStyle(.secondary)
                         .lineLimit(1)
                     HStack(spacing: .space(.s)) {
                         Image(systemName: entry.isPositive ? "chevron.up" : "chevron.down")
                             .foregroundStyle(entry.isPositive ? .accent : .red)
-                        Text(entry.balanceText)
+                        Text(entry.netIncomeText)
                             .font(.headline)
                             .lineLimit(1)
                             .minimumScaleFactor(.minimumScaleFactor)
@@ -68,30 +65,30 @@ extension IncomesMonthBalanceWidget: Widget {
             }
             .containerBackground(.fill.tertiary, for: .widget)
         }
-        .configurationDisplayName("Incomes Balance")
-        .description("This month's net balance")
+        .configurationDisplayName("Incomes Net Income")
+        .description("This month's net income")
         .supportedFamilies([.systemSmall, .systemMedium])
     }
 }
 
 #Preview("Small", as: .systemSmall) {
-    IncomesMonthBalanceWidget()
+    IncomesMonthNetIncomeWidget()
 } timeline: {
-    BalanceEntry(
+    NetIncomeEntry(
         date: .now,
         configuration: .init(),
-        balanceText: "$1,234",
+        netIncomeText: "$1,234",
         isPositive: true
     )
 }
 
 #Preview("Medium", as: .systemMedium) {
-    IncomesMonthBalanceWidget()
+    IncomesMonthNetIncomeWidget()
 } timeline: {
-    BalanceEntry(
+    NetIncomeEntry(
         date: .now,
         configuration: .init(),
-        balanceText: "$1,234",
+        netIncomeText: "$1,234",
         isPositive: true
     )
 }

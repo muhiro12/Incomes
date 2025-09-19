@@ -45,7 +45,7 @@ struct UpcomingProvider: AppIntentTimelineProvider {
             if let item {
                 let titleText: String = Formatting.shortDayTitle(from: item.localDate)
                 let detailText: String = item.content
-                let amount: Decimal = item.profit
+                let amount: Decimal = item.netIncome
                 return .init(
                     date: now,
                     subtitleText: configuration.direction == .next ? "Next" : "Previous",
