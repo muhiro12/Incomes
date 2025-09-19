@@ -5,7 +5,6 @@
 //  Created by Codex on 2025/09/15.
 //
 
-import IncomesLibrary
 import SwiftUI
 
 struct SettingsListView {

@@ -1,4 +1,3 @@
-import IncomesLibrary
 import SwiftData
 import SwiftUI
 

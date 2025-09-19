@@ -15,13 +15,13 @@ let package = Package(
         )
     ],
     dependencies: [
-        .package(url: "https://github.com/muhiro12/SwiftAppUtilities", "1.0.0"..<"2.0.0")
+        .package(url: "https://github.com/muhiro12/SwiftUtilities", "1.0.0"..<"2.0.0")
     ],
     targets: [
         .target(
             name: "IncomesLibrary",
             dependencies: [
-                .product(name: "SwiftAppUtilities", package: "SwiftAppUtilities")
+                .product(name: "SwiftUtilities", package: "SwiftUtilities")
             ]
         ),
         .testTarget(
