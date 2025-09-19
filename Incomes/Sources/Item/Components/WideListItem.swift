@@ -15,6 +15,7 @@ struct WideListItem: View {
         HStack {
             Text(item.localDate.stringValue(.MMMd))
                 .font(.subheadline)
+                .lineLimit(1)
                 .minimumScaleFactor(.minimumScaleFactor)
                 .truncationMode(.head)
                 .frame(width: .component(.xs))
@@ -23,9 +24,13 @@ struct WideListItem: View {
             Divider()
             HStack {
                 Text(item.income.asCurrency)
+                    .lineLimit(1)
+                    .minimumScaleFactor(.minimumScaleFactor)
                     .frame(width: .component(.s), alignment: .trailing)
                 Divider()
                 Text(item.outgo.asMinusCurrency)
+                    .lineLimit(1)
+                    .minimumScaleFactor(.minimumScaleFactor)
                     .frame(width: .component(.s), alignment: .trailing)
             }
             .font(.footnote)
@@ -33,6 +38,7 @@ struct WideListItem: View {
             .foregroundColor(.secondary)
             Divider()
             Text(item.balance.asCurrency)
+                .lineLimit(1)
                 .minimumScaleFactor(.minimumScaleFactor)
                 .frame(width: .component(.m), alignment: .trailing)
                 .foregroundColor(item.balance.isMinus ? .red : .primary)

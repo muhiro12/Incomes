@@ -15,6 +15,7 @@ struct TitleListItem: View {
         HStack {
             Text(item.content)
                 .font(.headline)
+                .lineLimit(1)
                 .minimumScaleFactor(.minimumScaleFactor)
             Spacer()
             Circle()
