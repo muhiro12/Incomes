@@ -31,8 +31,8 @@ extension RepeatCountPicker: View {
             .pickerStyle(WheelPickerStyle())
             .labelsHidden()
             .frame(
-                width: .componentS,
-                height: .componentS
+                width: .component(.s),
+                height: .component(.s)
             )
             .clipped()
         }

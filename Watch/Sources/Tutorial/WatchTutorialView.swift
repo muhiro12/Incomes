@@ -7,7 +7,7 @@ struct WatchTutorialView {
 extension WatchTutorialView: View {
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 12) {
+            VStack(alignment: .leading, spacing: .space(.m)) {
                 Text("About the Watch app")
                     .font(.headline)
 

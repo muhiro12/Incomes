@@ -30,7 +30,7 @@ extension AdvertisementSection: View {
         Section {
             googleMobileAdsController.buildNativeAd(size.rawValue)
                 .frame(maxWidth: .infinity)
-                .padding(.spaceS)
+                .padding(.space(.s))
         }
     }
 }

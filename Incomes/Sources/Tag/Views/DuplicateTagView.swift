@@ -40,7 +40,7 @@ struct DuplicateTagView: View {
                             }
                         }
                     }
-                    .frame(width: .componentXL)
+                    .frame(width: .component(.xl))
                     if tag.id != tags.last?.id {
                         Divider()
                     }

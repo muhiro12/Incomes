@@ -15,11 +15,11 @@ struct TitleListItem: View {
         HStack {
             Text(item.content)
                 .font(.headline)
-                .minimumScaleFactor(.high)
+                .minimumScaleFactor(.minimumScaleFactor)
             Spacer()
             Circle()
                 .foregroundStyle(item.profit.isPlus ? .accent : .clear)
-                .frame(width: .iconS)
+                .frame(width: .icon(.s))
         }
     }
 }
