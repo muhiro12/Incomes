@@ -9,9 +9,11 @@ import AppIntents
 import SwiftUI
 import WidgetKit
 
-struct WidgetsControl: ControlWidget {
+struct WidgetsControl {
     static let kind: String = "com.muhiro12.Incomes.Widgets"
+}
 
+extension WidgetsControl: ControlWidget {
     var body: some ControlWidgetConfiguration {
         AppIntentControlConfiguration(
             kind: Self.kind,

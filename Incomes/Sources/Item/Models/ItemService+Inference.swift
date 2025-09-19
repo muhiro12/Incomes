@@ -7,7 +7,6 @@
 
 import Foundation
 import FoundationModels
-import IncomesLibrary
 
 @available(iOS 26.0, *)
 extension ItemService {

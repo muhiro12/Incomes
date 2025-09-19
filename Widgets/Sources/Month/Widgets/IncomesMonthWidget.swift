@@ -1,17 +1,16 @@
 import SwiftUI
 import WidgetKit
 
-struct IncomesMonthWidget: Widget {
+struct IncomesMonthWidget {
     let kind: String = "IncomesMonthWidget"
 
     // MARK: - Helpers
     private static func monthTitle(from date: Date) -> String {
-        let formatter: DateFormatter = .init()
-        formatter.locale = .current
-        formatter.dateFormat = "yyyy MMM"
-        return formatter.string(from: date)
+        Formatting.monthTitle(from: date)
     }
+}
 
+extension IncomesMonthWidget: Widget {
     var body: some WidgetConfiguration {
         AppIntentConfiguration(kind: kind, intent: ConfigurationAppIntent.self, provider: MonthSummaryProvider()) { entry in
             ViewThatFits(in: .horizontal) {

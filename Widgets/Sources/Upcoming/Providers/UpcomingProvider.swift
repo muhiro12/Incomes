@@ -31,13 +31,7 @@ struct UpcomingProvider: AppIntentTimelineProvider {
 
     private func makeEntry(now: Date, configuration: UpcomingConfigurationAppIntent) -> UpcomingEntry {
         do {
-            let modelContainer = try ModelContainer(
-                for: Item.self,
-                configurations: .init(
-                    url: Database.url
-                )
-            )
-            let context = ModelContext(modelContainer)
+            let context = try ModelContainerFactory.sharedContext()
 
             let item: Item?
             switch configuration.direction {
@@ -48,10 +42,7 @@ struct UpcomingProvider: AppIntentTimelineProvider {
             }
 
             if let item {
-                let dateFormatter: DateFormatter = .init()
-                dateFormatter.locale = .current
-                dateFormatter.dateFormat = "MMM d (EEE)"
-                let titleText: String = dateFormatter.string(from: item.localDate)
+                let titleText: String = Formatting.shortDayTitle(from: item.localDate)
                 let detailText: String = item.content
                 let amount: Decimal = item.profit
                 return .init(

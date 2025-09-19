@@ -1,15 +1,16 @@
-import IncomesLibrary
 import SwiftData
 import SwiftUI
 
-struct WatchDebugView: View {
+struct WatchDebugView {
     @Environment(\.modelContext)
     private var context
 
     @State private var hasDebugData = false
     @State private var isSeeding = false
     @State private var isDeleting = false
+}
 
+extension WatchDebugView: View {
     var body: some View {
         List {
             Section {

@@ -6,13 +6,12 @@
 //  Copyright © 2025 Hiromu Nakano. All rights reserved.
 //
 
-import IncomesLibrary
 import StoreKit
 import StoreKitWrapper
 import SwiftData
 import SwiftUI
 
-struct ContentView: View {
+struct ContentView {
     @Environment(Store.self)
     private var store
     @Environment(\.modelContext)
@@ -30,7 +29,9 @@ struct ContentView: View {
     @State private var isSettingsPresented = false
     @State private var isTutorialPresented = false
     @State private var isDebugPresented = false
+}
 
+extension ContentView: View {
     var body: some View {
         NavigationStack {
             List {

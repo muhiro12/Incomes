@@ -16,7 +16,9 @@ struct WidgetsAttributes: ActivityAttributes {
     var name: String
 }
 
-struct WidgetsLiveActivity: Widget {
+struct WidgetsLiveActivity {}
+
+extension WidgetsLiveActivity: Widget {
     var body: some WidgetConfiguration {
         ActivityConfiguration(for: WidgetsAttributes.self) { context in
             VStack {

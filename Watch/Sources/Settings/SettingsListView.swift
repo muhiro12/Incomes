@@ -5,16 +5,17 @@
 //  Created by Codex on 2025/09/15.
 //
 
-import IncomesLibrary
 import SwiftUI
 
-struct SettingsListView: View {
+struct SettingsListView {
     @AppStorage(.isSubscribeOn)
     private var isSubscribeOn
     @AppStorage(.isICloudOn)
     private var isICloudOn
     @State private var isTutorialPresented = false
+}
 
+extension SettingsListView: View {
     var body: some View {
         List {
             Section {

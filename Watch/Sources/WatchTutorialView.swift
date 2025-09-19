@@ -1,8 +1,10 @@
 import SwiftUI
 
-struct WatchTutorialView: View {
+struct WatchTutorialView {
     @Environment(\.dismiss) private var dismiss
+}
 
+extension WatchTutorialView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 12) {

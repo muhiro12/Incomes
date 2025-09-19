@@ -6,7 +6,6 @@
 //  Copyright © 2025 Hiromu Nakano. All rights reserved.
 //
 
-import IncomesLibrary
 import StoreKit
 import StoreKitWrapper
 import SwiftData

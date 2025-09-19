@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import IncomesLibrary
 
 @Observable
 final class ConfigurationService {
