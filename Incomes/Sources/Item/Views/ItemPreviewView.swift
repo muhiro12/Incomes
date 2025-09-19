@@ -10,7 +10,7 @@ extension ItemPreviewView: View {
         List {
             ItemSection()
         }
-        .navigationTitle(Text(item.content))
+        .navigationTitle(item.content)
     }
 }
 

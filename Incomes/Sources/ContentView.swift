@@ -38,13 +38,11 @@ struct ContentView {
 extension ContentView: View {
     var body: some View {
         MainNavigationView()
-            .alert(Text("Update Required"), isPresented: $isUpdateAlertPresented) {
-                Button {
+            .alert("Update Required", isPresented: $isUpdateAlertPresented) {
+                Button("Open App Store") {
                     UIApplication.shared.open(
                         .init(string: "https://apps.apple.com/jp/app/incomes/id1584472982")!
                     )
-                } label: {
-                    Text("Open App Store")
                 }
             } message: {
                 Text("Please update Incomes to the latest version to continue using it.")

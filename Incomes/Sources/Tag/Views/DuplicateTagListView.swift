@@ -60,7 +60,7 @@ struct DuplicateTagListView: View {
         } message: {
             Text("Are you sure you want to resolve all duplicate tags? This action cannot be undone.")
         }
-        .navigationTitle(Text("Duplicate Tags"))
+        .navigationTitle("Duplicate Tags")
         .toolbar {
             ToolbarItem {
                 CloseButton()

@@ -33,7 +33,7 @@ struct BalanceChartSection: View {
                         .chartScrollableAxes(.horizontal)
                         .chartScrollPosition(initialX: Date.now)
                         .padding()
-                        .navigationTitle(Text("Balance"))
+                        .navigationTitle("Balance")
                         .toolbar {
                             ToolbarItem {
                                 CloseButton()

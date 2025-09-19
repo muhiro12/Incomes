@@ -161,7 +161,7 @@ extension SettingsListView: View {
             ShortcutsLinkSection()
         }
         .scrollDismissesKeyboard(.interactively)
-        .navigationTitle(Text("Settings"))
+        .navigationTitle("Settings")
         .toolbar {
             ToolbarItem {
                 CloseButton()
