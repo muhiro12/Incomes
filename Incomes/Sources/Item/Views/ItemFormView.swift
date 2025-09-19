@@ -160,7 +160,7 @@ struct ItemFormView: View {
         .gesture(
             DragGesture()
                 .onChanged { value in
-                    guard abs(value.translation.height) > .spaceS else {
+                    guard abs(value.translation.height) > .space(.s) else {
                         return
                     }
                     focusedField = nil

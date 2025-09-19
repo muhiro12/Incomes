@@ -70,7 +70,7 @@ struct CategoryChartSection: View {
             .chartForegroundStyleScale { (title: String) in
                 .accent.adjusted(by: title.hashValue)
             }
-            .frame(height: .componentXL)
+            .frame(height: .component(.xl))
             .padding()
             Chart(outgoObjects, id: \.title) { object in
                 SectorMark(
@@ -88,7 +88,7 @@ struct CategoryChartSection: View {
             .chartForegroundStyleScale { (title: String) in
                 .red.adjusted(by: title.hashValue)
             }
-            .frame(height: .componentXL)
+            .frame(height: .component(.xl))
             .padding()
         } header: {
             Text("Category")

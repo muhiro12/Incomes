@@ -19,7 +19,7 @@ struct TitleListItem: View {
             Spacer()
             Circle()
                 .foregroundStyle(item.profit.isPlus ? .accent : .clear)
-                .frame(width: .iconS)
+                .frame(width: .icon(.s))
         }
     }
 }

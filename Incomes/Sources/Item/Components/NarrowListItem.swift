@@ -17,7 +17,7 @@ struct NarrowListItem: View {
                 .font(.subheadline)
                 .minimumScaleFactor(.minimumScaleFactor)
                 .truncationMode(.head)
-                .frame(width: .componentXS, alignment: .leading)
+                .frame(width: .component(.xs), alignment: .leading)
             Divider()
             Spacer()
             VStack(alignment: .trailing, spacing: .zero) {
@@ -31,7 +31,7 @@ struct NarrowListItem: View {
             Divider()
             Text(item.balance.asCurrency)
                 .minimumScaleFactor(.minimumScaleFactor)
-                .frame(width: .componentM, alignment: .trailing)
+                .frame(width: .component(.m), alignment: .trailing)
                 .foregroundColor(item.balance.isMinus ? .red : .primary)
         }
     }

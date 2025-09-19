@@ -9,21 +9,60 @@
 import SwiftUI
 
 extension CGFloat {
+    enum Size {
+        case xs
+        case s
+        case m
+        case l
+        case xl
+    }
+
     private static let unit = Self(8)
 
-    static let spaceS = unit * 1
-    static let spaceM = unit * 2
-    static let spaceL = unit * 4
+    static func space(_ size: Size) -> Self {
+        switch size {
+        case .xs:
+            unit * 0.5
+        case .s:
+            unit * 1
+        case .m:
+            unit * 2
+        case .l:
+            unit * 4
+        case .xl:
+            unit * 5
+        }
+    }
 
-    static let iconS = unit * 1
-    static let iconM = unit * 5
-    static let iconL = unit * 8
+    static func icon(_ size: Size) -> Self {
+        switch size {
+        case .xs:
+            unit * 0.5
+        case .s:
+            unit * 1
+        case .m:
+            unit * 5
+        case .l:
+            unit * 6
+        case .xl:
+            unit * 8
+        }
+    }
 
-    static let componentXS = unit * 8
-    static let componentS = unit * 10
-    static let componentM = unit * 15
-    static let componentL = unit * 30
-    static let componentXL = unit * 40
+    static func component(_ size: Size) -> Self {
+        switch size {
+        case .xs:
+            unit * 8
+        case .s:
+            unit * 10
+        case .m:
+            unit * 15
+        case .l:
+            unit * 30
+        case .xl:
+            unit * 40
+        }
+    }
 
     static let minimumScaleFactor = 0.5
 }

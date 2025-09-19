@@ -24,7 +24,7 @@ struct BalanceChartSection: View {
                 isPresented = true
             } label: {
                 chart()
-                    .frame(height: .componentL)
+                    .frame(height: .component(.l))
                     .padding()
             }
             .fullScreenCover(isPresented: $isPresented) {

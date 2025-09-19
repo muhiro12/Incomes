@@ -28,7 +28,7 @@ struct TagSummaryRow: View {
             .foregroundStyle(.secondary)
             Circle()
                 .foregroundStyle(tag.profit.isPlus ? .accent : .clear)
-                .frame(width: .iconS)
+                .frame(width: .icon(.s))
         }
     }
 }
