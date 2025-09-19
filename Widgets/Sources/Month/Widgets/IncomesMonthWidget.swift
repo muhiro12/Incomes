@@ -6,10 +6,7 @@ struct IncomesMonthWidget {
 
     // MARK: - Helpers
     private static func monthTitle(from date: Date) -> String {
-        let formatter: DateFormatter = .init()
-        formatter.locale = .current
-        formatter.dateFormat = "yyyy MMM"
-        return formatter.string(from: date)
+        Formatting.monthTitle(from: date)
     }
 }
 

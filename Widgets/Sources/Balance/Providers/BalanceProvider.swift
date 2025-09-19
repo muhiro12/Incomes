@@ -30,13 +30,7 @@ struct BalanceProvider: AppIntentTimelineProvider {
 
     private func makeEntry(date: Date, configuration: ConfigurationAppIntent) -> BalanceEntry {
         do {
-            let modelContainer = try ModelContainer(
-                for: Item.self,
-                configurations: .init(
-                    url: Database.url
-                )
-            )
-            let context = ModelContext(modelContainer)
+            let context = try ModelContainerFactory.sharedContext()
             let items: [Item] = try ItemService.items(context: context, date: date)
             let totalIncomeDecimal: Decimal = items.reduce(.zero) { partial, item in
                 partial + item.income
