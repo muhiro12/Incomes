@@ -18,7 +18,7 @@ struct TitleListItem: View {
                 .minimumScaleFactor(.minimumScaleFactor)
             Spacer()
             Circle()
-                .foregroundStyle(item.profit.isPlus ? .accent : .clear)
+                .foregroundStyle(item.netIncome.isPlus ? .accent : .clear)
                 .frame(width: .icon(.s))
         }
     }

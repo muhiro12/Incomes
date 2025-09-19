@@ -27,7 +27,7 @@ struct TagSummaryRow: View {
             .font(.subheadline)
             .foregroundStyle(.secondary)
             Circle()
-                .foregroundStyle(tag.profit.isPlus ? .accent : .clear)
+                .foregroundStyle(tag.netIncome.isPlus ? .accent : .clear)
                 .frame(width: .icon(.s))
         }
     }

@@ -124,12 +124,12 @@ extension Item {
         Calendar.current.shiftedDate(componentsFrom: utcDate, in: .utc)
     }
 
-    public var profit: Decimal {
+    public var netIncome: Decimal {
         income - outgo
     }
 
-    public var isProfitable: Bool {
-        profit.isPlus
+    public var isNetIncomePositive: Bool {
+        netIncome.isPlus
     }
 
     public var year: Tag? {

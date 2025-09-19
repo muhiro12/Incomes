@@ -2,24 +2,24 @@ import Foundation
 import SwiftData
 import WidgetKit
 
-struct BalanceProvider: AppIntentTimelineProvider {
-    func placeholder(in _: Context) -> BalanceEntry {
+struct NetIncomeProvider: AppIntentTimelineProvider {
+    func placeholder(in _: Context) -> NetIncomeEntry {
         .init(
             date: Date.now,
             configuration: .init(),
-            balanceText: "$0",
+            netIncomeText: "$0",
             isPositive: true
         )
     }
 
-    func snapshot(for configuration: ConfigurationAppIntent, in _: Context) -> BalanceEntry {
+    func snapshot(for configuration: ConfigurationAppIntent, in _: Context) -> NetIncomeEntry {
         makeEntry(date: resolveTargetDate(from: configuration, now: Date.now), configuration: configuration)
     }
 
-    func timeline(for configuration: ConfigurationAppIntent, in _: Context) -> Timeline<BalanceEntry> {
+    func timeline(for configuration: ConfigurationAppIntent, in _: Context) -> Timeline<NetIncomeEntry> {
         let currentDate = Date.now
         let targetDate: Date = resolveTargetDate(from: configuration, now: currentDate)
-        var entries: [BalanceEntry] = .init()
+        var entries: [NetIncomeEntry] = .init()
         for hourOffset in 0 ..< 5 {
             if Calendar.current.date(byAdding: .hour, value: hourOffset, to: currentDate) != nil {
                 entries.append(makeEntry(date: targetDate, configuration: configuration))
@@ -28,7 +28,7 @@ struct BalanceProvider: AppIntentTimelineProvider {
         return .init(entries: entries, policy: .atEnd)
     }
 
-    private func makeEntry(date: Date, configuration: ConfigurationAppIntent) -> BalanceEntry {
+    private func makeEntry(date: Date, configuration: ConfigurationAppIntent) -> NetIncomeEntry {
         do {
             let context = try ModelContainerFactory.sharedContext()
             let items: [Item] = try ItemService.items(context: context, date: date)
@@ -38,18 +38,18 @@ struct BalanceProvider: AppIntentTimelineProvider {
             let totalOutgoDecimal: Decimal = items.reduce(.zero) { partial, item in
                 partial + item.outgo
             }
-            let balance: Decimal = totalIncomeDecimal - totalOutgoDecimal
+            let net: Decimal = totalIncomeDecimal - totalOutgoDecimal
             return .init(
                 date: date,
                 configuration: configuration,
-                balanceText: balance.asCurrency,
-                isPositive: balance.isPlus || balance.isZero
+                netIncomeText: net.asCurrency,
+                isPositive: net.isPlus || net.isZero
             )
         } catch {
             return .init(
                 date: date,
                 configuration: configuration,
-                balanceText: "$0",
+                netIncomeText: "$0",
                 isPositive: true
             )
         }

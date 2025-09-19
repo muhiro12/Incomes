@@ -1,9 +1,9 @@
 import Foundation
 import WidgetKit
 
-struct BalanceEntry: TimelineEntry {
+struct NetIncomeEntry: TimelineEntry {
     let date: Date
     let configuration: ConfigurationAppIntent
-    let balanceText: String
+    let netIncomeText: String
     let isPositive: Bool
 }

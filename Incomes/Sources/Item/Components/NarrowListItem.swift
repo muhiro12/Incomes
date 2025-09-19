@@ -22,7 +22,7 @@ struct NarrowListItem: View {
             Spacer()
             VStack(alignment: .trailing, spacing: .zero) {
                 TitleListItem()
-                Text(item.profit.asCurrency)
+                Text(item.netIncome.asCurrency)
                     .font(.footnote)
                     .minimumScaleFactor(.minimumScaleFactor)
                     .foregroundColor(.secondary)
