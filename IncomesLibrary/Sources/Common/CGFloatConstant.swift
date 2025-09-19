@@ -1,15 +1,7 @@
-//
-//  CGFloatConstant.swift
-//  Incomes
-//
-//  Created by Hiromu Nakano on 2020/06/23.
-//  Copyright © 2020 Hiromu Nakano. All rights reserved.
-//
-
 import SwiftUI
 
 extension CGFloat {
-    enum Size {
+    public enum Size {
         case xs
         case s
         case m
@@ -19,7 +11,7 @@ extension CGFloat {
 
     private static let unit = Self(8)
 
-    static func space(_ size: Size) -> Self {
+    public static func space(_ size: Size) -> Self {
         switch size {
         case .xs:
             unit * 0.5
@@ -34,7 +26,7 @@ extension CGFloat {
         }
     }
 
-    static func icon(_ size: Size) -> Self {
+    public static func icon(_ size: Size) -> Self {
         switch size {
         case .xs:
             unit * 0.5
@@ -49,7 +41,7 @@ extension CGFloat {
         }
     }
 
-    static func component(_ size: Size) -> Self {
+    public static func component(_ size: Size) -> Self {
         switch size {
         case .xs:
             unit * 8
@@ -64,5 +56,5 @@ extension CGFloat {
         }
     }
 
-    static let minimumScaleFactor = 0.5
+    public static let minimumScaleFactor = 0.5
 }

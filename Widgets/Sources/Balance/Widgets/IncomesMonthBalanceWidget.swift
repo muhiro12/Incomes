@@ -18,53 +18,53 @@ extension IncomesMonthBalanceWidget: Widget {
         AppIntentConfiguration(kind: kind, intent: ConfigurationAppIntent.self, provider: BalanceProvider()) { entry in
             ViewThatFits(in: .horizontal) {
                 // Medium (roomy) layout: horizontal split
-                HStack(alignment: .center, spacing: 12) {
-                    VStack(alignment: .leading, spacing: 4) {
+                HStack(alignment: .center, spacing: .space(.m)) {
+                    VStack(alignment: .leading, spacing: .space(.xs)) {
                         Text(Self.monthTitle(from: entry.date))
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
                             .lineLimit(1)
-                            .minimumScaleFactor(0.8)
+                            .minimumScaleFactor(.minimumScaleFactor)
                         Text("Balance")
                             .font(.caption2)
                             .foregroundStyle(.secondary)
                             .lineLimit(1)
                     }
                     Spacer(minLength: 0)
-                    HStack(spacing: 6) {
+                    HStack(spacing: .space(.s)) {
                         Image(systemName: entry.isPositive ? "chevron.up" : "chevron.down")
                             .foregroundStyle(entry.isPositive ? .accent : .red)
                         Text(entry.balanceText)
                             .font(.title3)
                             .lineLimit(1)
-                            .minimumScaleFactor(0.8)
+                            .minimumScaleFactor(.minimumScaleFactor)
                     }
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-                .padding(12)
+                .padding(.space(.m))
 
                 // Small (compact) layout: vertical stack
-                VStack(alignment: .leading, spacing: 6) {
+                VStack(alignment: .leading, spacing: .space(.s)) {
                     Text(Self.monthTitle(from: entry.date))
                         .font(.footnote)
                         .foregroundStyle(.secondary)
                         .lineLimit(1)
-                        .minimumScaleFactor(0.8)
+                        .minimumScaleFactor(.minimumScaleFactor)
                     Text("Balance")
                         .font(.caption2)
                         .foregroundStyle(.secondary)
                         .lineLimit(1)
-                    HStack(spacing: 6) {
+                    HStack(spacing: .space(.s)) {
                         Image(systemName: entry.isPositive ? "chevron.up" : "chevron.down")
                             .foregroundStyle(entry.isPositive ? .accent : .red)
                         Text(entry.balanceText)
                             .font(.headline)
                             .lineLimit(1)
-                            .minimumScaleFactor(0.7)
+                            .minimumScaleFactor(.minimumScaleFactor)
                     }
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-                .padding(8)
+                .padding(.space(.s))
             }
             .containerBackground(.fill.tertiary, for: .widget)
         }
