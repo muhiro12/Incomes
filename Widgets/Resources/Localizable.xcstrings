@@ -36,6 +36,15 @@
       },
       "shouldTranslate" : false
     },
+    "$0" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "$0" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "$0" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "$0" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "$0" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "$0" } }
+      }
+    },
     "A an example control that runs a timer." : {
       "localizations" : {
         "en" : {
@@ -272,6 +281,15 @@
             "value" : "方向"
           }
         }
+      }
+    },
+    "Error" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Error" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Error" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Erreur" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "エラー" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "错误" } }
       }
     },
     "Hello %@" : {
@@ -580,6 +598,15 @@
             "value" : "下个月"
           }
         }
+      }
+    },
+    "No items" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "No items" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "No hay elementos" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Aucun élément" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "項目はありません" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "暂无项目" } }
       }
     },
     "Off" : {
@@ -1125,6 +1152,15 @@
             "value" : "尾部"
           }
         }
+      }
+    },
+    "Upcoming" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Upcoming" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Próximos" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "À venir" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "予定" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "即将到来" } }
       }
     },
     "Upcoming Configuration" : {
