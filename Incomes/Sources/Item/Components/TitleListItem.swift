@@ -19,7 +19,7 @@ struct TitleListItem: View {
             Spacer()
             Circle()
                 .foregroundStyle(item.netIncome.isPlus ? .accent : .clear)
-                .frame(width: .icon(.s))
+                .frame(width: .icon(.xs))
         }
     }
 }
@@ -28,7 +28,7 @@ struct TitleListItem: View {
     IncomesPreview { preview in
         List {
             TitleListItem()
-                .environment(preview.items[0])
+                .environment(preview.items.first(where: \.isNetIncomePositive))
         }
     }
 }
