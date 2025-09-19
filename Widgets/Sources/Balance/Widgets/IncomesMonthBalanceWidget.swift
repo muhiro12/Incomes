@@ -1,7 +1,7 @@
 import SwiftUI
 import WidgetKit
 
-struct IncomesMonthBalanceWidget: Widget {
+struct IncomesMonthBalanceWidget {
     let kind: String = "IncomesMonthBalanceWidget"
 
     // MARK: - Helpers
@@ -11,7 +11,9 @@ struct IncomesMonthBalanceWidget: Widget {
         formatter.dateFormat = "yyyy MMM"
         return formatter.string(from: date)
     }
+}
 
+extension IncomesMonthBalanceWidget: Widget {
     var body: some WidgetConfiguration {
         AppIntentConfiguration(kind: kind, intent: ConfigurationAppIntent.self, provider: BalanceProvider()) { entry in
             ViewThatFits(in: .horizontal) {

@@ -1,9 +1,11 @@
 import SwiftUI
 import WidgetKit
 
-struct IncomesUpcomingWidget: Widget {
+struct IncomesUpcomingWidget {
     let kind: String = "IncomesUpcomingWidget"
+}
 
+extension IncomesUpcomingWidget: Widget {
     var body: some WidgetConfiguration {
         AppIntentConfiguration(kind: kind, intent: UpcomingConfigurationAppIntent.self, provider: UpcomingProvider()) { entry in
             ViewThatFits(in: .horizontal) {
