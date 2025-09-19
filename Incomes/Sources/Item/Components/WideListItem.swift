@@ -15,7 +15,7 @@ struct WideListItem: View {
         HStack {
             Text(item.localDate.stringValue(.MMMd))
                 .font(.subheadline)
-                .minimumScaleFactor(.high)
+                .minimumScaleFactor(.minimumScaleFactor)
                 .truncationMode(.head)
                 .frame(width: .componentXS)
             Divider()
@@ -29,11 +29,11 @@ struct WideListItem: View {
                     .frame(width: .componentS, alignment: .trailing)
             }
             .font(.footnote)
-            .minimumScaleFactor(.medium)
+            .minimumScaleFactor(.minimumScaleFactor)
             .foregroundColor(.secondary)
             Divider()
             Text(item.balance.asCurrency)
-                .minimumScaleFactor(.medium)
+                .minimumScaleFactor(.minimumScaleFactor)
                 .frame(width: .componentM, alignment: .trailing)
                 .foregroundColor(item.balance.isMinus ? .red : .primary)
         }

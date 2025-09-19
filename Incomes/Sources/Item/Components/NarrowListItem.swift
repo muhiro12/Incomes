@@ -15,7 +15,7 @@ struct NarrowListItem: View {
         HStack {
             Text(item.localDate.stringValue(.MMMd))
                 .font(.subheadline)
-                .minimumScaleFactor(.high)
+                .minimumScaleFactor(.minimumScaleFactor)
                 .truncationMode(.head)
                 .frame(width: .componentXS, alignment: .leading)
             Divider()
@@ -24,13 +24,13 @@ struct NarrowListItem: View {
                 TitleListItem()
                 Text(item.profit.asCurrency)
                     .font(.footnote)
-                    .minimumScaleFactor(.medium)
+                    .minimumScaleFactor(.minimumScaleFactor)
                     .foregroundColor(.secondary)
             }
             Spacer()
             Divider()
             Text(item.balance.asCurrency)
-                .minimumScaleFactor(.medium)
+                .minimumScaleFactor(.minimumScaleFactor)
                 .frame(width: .componentM, alignment: .trailing)
                 .foregroundColor(item.balance.isMinus ? .red : .primary)
         }

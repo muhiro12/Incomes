@@ -25,8 +25,5 @@ extension CGFloat {
     static let componentL = unit * 30
     static let componentXL = unit * 40
 
-    // MARK: - Ratio
-
-    static let medium = Self(Double.medium)
-    static let high = Self(Double.high)
+    static let minimumScaleFactor = 0.5
 }
