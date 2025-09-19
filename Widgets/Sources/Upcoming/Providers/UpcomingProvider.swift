@@ -1,5 +1,6 @@
 import Foundation
 import SwiftData
+import SwiftUI
 import WidgetKit
 
 struct UpcomingProvider: AppIntentTimelineProvider {
@@ -48,9 +49,9 @@ struct UpcomingProvider: AppIntentTimelineProvider {
                 return .init(
                     date: now,
                     subtitleText: configuration.direction == .next ? "Next" : "Previous",
-                    titleText: titleText,
-                    detailText: detailText,
-                    amountText: amount.asCurrency,
+                    titleText: .init(titleText),
+                    detailText: .init(detailText),
+                    amountText: .init(amount.asCurrency),
                     isPositive: amount.isPlus || amount.isZero
                 )
             }

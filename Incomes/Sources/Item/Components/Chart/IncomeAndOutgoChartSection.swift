@@ -33,7 +33,7 @@ struct IncomeAndOutgoChartSection: View {
                         .chartScrollableAxes(.horizontal)
                         .chartScrollPosition(initialX: Date.now)
                         .padding()
-                        .navigationTitle(Text("Income and Outgo"))
+                        .navigationTitle("Income and Outgo")
                         .toolbar {
                             ToolbarItem {
                                 CloseButton()

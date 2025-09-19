@@ -106,7 +106,7 @@ struct DuplicateTagView: View {
             }
             StatusToolbarItem("\(tags.count) Items")
         }
-        .navigationTitle(Text(tags.first?.displayName ?? ""))
+        .navigationTitle(tags.first?.displayName ?? "")
     }
 }
 

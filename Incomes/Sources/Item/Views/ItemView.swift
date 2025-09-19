@@ -23,7 +23,7 @@ extension ItemView: View {
                 DeleteItemButton()
             }
         }
-        .navigationTitle(Text(item.content))
+        .navigationTitle(item.content)
         .toolbar {
             if isPresented {
                 ToolbarItem {

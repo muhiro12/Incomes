@@ -32,7 +32,7 @@ extension ContentItemListView: View {
             }
         }
         .listStyle(.grouped)
-        .navigationTitle(Text(tag.displayName))
+        .navigationTitle(tag.displayName)
         .toolbar {
             StatusToolbarItem("\(items.count) Items")
         }

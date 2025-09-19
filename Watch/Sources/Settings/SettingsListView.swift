@@ -46,7 +46,7 @@ extension SettingsListView: View {
                 }
             }
         }
-        .navigationTitle(Text("Settings"))
+        .navigationTitle("Settings")
         .sheet(isPresented: $isTutorialPresented) {
             NavigationStack {
                 WatchTutorialView()

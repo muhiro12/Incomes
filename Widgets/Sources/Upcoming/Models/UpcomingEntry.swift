@@ -1,11 +1,12 @@
 import Foundation
+import SwiftUI
 import WidgetKit
 
 struct UpcomingEntry: TimelineEntry {
     let date: Date
-    let subtitleText: String
-    let titleText: String
-    let detailText: String
-    let amountText: String
+    let subtitleText: LocalizedStringKey
+    let titleText: LocalizedStringKey
+    let detailText: LocalizedStringKey
+    let amountText: LocalizedStringKey
     let isPositive: Bool
 }

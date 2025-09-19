@@ -81,7 +81,7 @@ extension DebugListView: View {
         } message: {
             Text("Are you really going to set PreviewData?")
         }
-        .navigationTitle(Text("Debug"))
+        .navigationTitle("Debug")
         .toolbar {
             ToolbarItem {
                 CloseButton()
