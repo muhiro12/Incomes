@@ -21,12 +21,11 @@ extension IncomesMonthNetIncomeWidget: Widget {
                         Text(Self.monthTitle(from: entry.date))
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
-                            .lineLimit(1)
-                            .minimumScaleFactor(.minimumScaleFactor)
+                            .singleLine()
                         Text("Net Income")
                             .font(.caption2)
                             .foregroundStyle(.secondary)
-                            .lineLimit(1)
+                            .singleLine()
                     }
                     Spacer(minLength: 0)
                     HStack(spacing: .space(.s)) {
@@ -34,8 +33,7 @@ extension IncomesMonthNetIncomeWidget: Widget {
                             .foregroundStyle(entry.isPositive ? .accent : .red)
                         Text(entry.netIncomeText)
                             .font(.title3)
-                            .lineLimit(1)
-                            .minimumScaleFactor(.minimumScaleFactor)
+                            .singleLine()
                     }
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
@@ -45,19 +43,17 @@ extension IncomesMonthNetIncomeWidget: Widget {
                     Text(Self.monthTitle(from: entry.date))
                         .font(.footnote)
                         .foregroundStyle(.secondary)
-                        .lineLimit(1)
-                        .minimumScaleFactor(.minimumScaleFactor)
+                        .singleLine()
                     Text("Net Income")
                         .font(.caption2)
                         .foregroundStyle(.secondary)
-                        .lineLimit(1)
+                        .singleLine()
                     HStack(spacing: .space(.s)) {
                         Image(systemName: entry.isPositive ? "chevron.up" : "chevron.down")
                             .foregroundStyle(entry.isPositive ? .accent : .red)
                         Text(entry.netIncomeText)
                             .font(.headline)
-                            .lineLimit(1)
-                            .minimumScaleFactor(.minimumScaleFactor)
+                            .singleLine()
                     }
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)

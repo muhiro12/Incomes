@@ -20,12 +20,11 @@ extension IncomesMonthWidget: Widget {
                         Text(Self.monthTitle(from: entry.date))
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
-                            .lineLimit(1)
-                            .minimumScaleFactor(.minimumScaleFactor)
+                            .singleLine()
                         Text("Income / Outgo")
                             .font(.caption2)
                             .foregroundStyle(.secondary)
-                            .lineLimit(1)
+                            .singleLine()
                     }
                     Spacer(minLength: 0)
                     VStack(alignment: .trailing, spacing: .space(.s)) {
@@ -34,16 +33,14 @@ extension IncomesMonthWidget: Widget {
                                 .foregroundStyle(.accent)
                             Text(entry.totalIncomeText)
                                 .font(.title3)
-                                .lineLimit(1)
-                                .minimumScaleFactor(.minimumScaleFactor)
+                                .singleLine()
                         }
                         HStack(spacing: .space(.s)) {
                             Image(systemName: "chevron.down")
                                 .foregroundStyle(.red)
                             Text(entry.totalOutgoText)
                                 .font(.title3)
-                                .lineLimit(1)
-                                .minimumScaleFactor(.minimumScaleFactor)
+                                .singleLine()
                         }
                     }
                 }
@@ -55,26 +52,23 @@ extension IncomesMonthWidget: Widget {
                     Text(Self.monthTitle(from: entry.date))
                         .font(.footnote)
                         .foregroundStyle(.secondary)
-                        .lineLimit(1)
-                        .minimumScaleFactor(.minimumScaleFactor)
+                        .singleLine()
                     Text("Income / Outgo")
                         .font(.caption2)
                         .foregroundStyle(.secondary)
-                        .lineLimit(1)
+                        .singleLine()
                     HStack(spacing: .space(.s)) {
                         Image(systemName: "chevron.up")
                             .foregroundStyle(.accent)
                         Text(entry.totalIncomeText)
-                            .lineLimit(1)
-                            .minimumScaleFactor(.minimumScaleFactor)
+                            .singleLine()
                     }
                     .font(.footnote)
                     HStack(spacing: .space(.s)) {
                         Image(systemName: "chevron.down")
                             .foregroundStyle(.red)
                         Text(entry.totalOutgoText)
-                            .lineLimit(1)
-                            .minimumScaleFactor(.minimumScaleFactor)
+                            .singleLine()
                     }
                     .font(.footnote)
                 }

@@ -15,19 +15,17 @@ extension IncomesUpcomingWidget: Widget {
                         Text(entry.titleText)
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
-                            .lineLimit(1)
-                            .minimumScaleFactor(.minimumScaleFactor)
+                            .singleLine()
                         HStack(spacing: .space(.s)) {
                             Text(entry.subtitleText)
                                 .font(.caption2)
                                 .foregroundStyle(.secondary)
-                                .lineLimit(1)
+                                .singleLine()
                             Text("•")
                                 .foregroundStyle(.tertiary)
                             Text(entry.detailText)
                                 .font(.footnote)
-                                .lineLimit(1)
-                                .minimumScaleFactor(.minimumScaleFactor)
+                                .singleLine()
                         }
                     }
                     Spacer(minLength: 0)
@@ -36,8 +34,7 @@ extension IncomesUpcomingWidget: Widget {
                             .foregroundStyle(entry.isPositive ? .accent : .red)
                         Text(entry.amountText)
                             .font(.title3)
-                            .lineLimit(1)
-                            .minimumScaleFactor(.minimumScaleFactor)
+                            .singleLine()
                     }
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
@@ -48,27 +45,24 @@ extension IncomesUpcomingWidget: Widget {
                     Text(entry.titleText)
                         .font(.footnote)
                         .foregroundStyle(.secondary)
-                        .lineLimit(1)
-                        .minimumScaleFactor(.minimumScaleFactor)
+                        .singleLine()
                     HStack(spacing: .space(.s)) {
                         Text(entry.subtitleText)
                             .font(.caption2)
                             .foregroundStyle(.secondary)
-                            .lineLimit(1)
+                            .singleLine()
                         Text("•")
                             .foregroundStyle(.tertiary)
                         Text(entry.detailText)
                             .font(.footnote)
-                            .lineLimit(1)
-                            .minimumScaleFactor(.minimumScaleFactor)
+                            .singleLine()
                     }
                     HStack(spacing: .space(.s)) {
                         Image(systemName: entry.isPositive ? "chevron.up" : "chevron.down")
                             .foregroundStyle(entry.isPositive ? .accent : .red)
                         Text(entry.amountText)
                             .font(.headline)
-                            .lineLimit(1)
-                            .minimumScaleFactor(.minimumScaleFactor)
+                            .singleLine()
                     }
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
