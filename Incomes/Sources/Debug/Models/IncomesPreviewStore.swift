@@ -19,7 +19,7 @@ final class IncomesPreviewStore {
     }
 
     func prepare(_ context: ModelContext) async {
-        try! ItemService.seedPreviewData(context: context)
+        try! ItemService.seedSampleData(context: context, profile: .preview)
         while !isReady {
             try! await Task.sleep(for: .seconds(0.2))
             items = try! context.fetch(.items(.all))
@@ -29,7 +29,7 @@ final class IncomesPreviewStore {
     }
 
     func prepareIgnoringDuplicates(_ context: ModelContext) {
-        try! ItemService.seedPreviewDataIgnoringDuplicates(context: context)
+        try! ItemService.seedSampleData(context: context, profile: .debug, ignoringDuplicates: true)
         items = try! context.fetch(.items(.all))
         try! BalanceCalculator.calculate(in: context, for: items)
         tags = try! context.fetch(.tags(.all))

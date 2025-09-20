@@ -2,6 +2,11 @@ import Foundation
 import SwiftData
 
 public enum ItemService {
+    public enum SampleDataProfile {
+        case debug
+        case tutorial
+        case preview
+    }
     public static func create(
         context: ModelContext,
         date: Date,
@@ -228,10 +233,46 @@ public enum ItemService {
         try BalanceCalculator.calculate(in: context, after: date)
     }
 
+    // MARK: - Unified Sample Data
+
+    /// Seeds sample data for various profiles (debug/tutorial/preview).
+    /// - Parameters:
+    ///   - profile: Desired dataset size/content.
+    ///   - baseDate: Anchor date for generation.
+    ///   - ignoringDuplicates: Use duplicate-ignoring creation (useful for repeated seeding in debug tools).
+    ///   - ifEmptyOnly: Skip seeding when store is not empty (useful for tutorial/demo first-run).
+    public static func seedSampleData(
+        context: ModelContext,
+        profile: SampleDataProfile,
+        baseDate: Date = .now,
+        ignoringDuplicates: Bool = false,
+        ifEmptyOnly: Bool = false
+    ) throws {
+        if ifEmptyOnly {
+            let count = try allItemsCount(context: context)
+            guard count == .zero else {
+                return
+            }
+        }
+
+        switch profile {
+        case .debug:
+            if ignoringDuplicates {
+                try seedPreviewDataIgnoringDuplicates(context: context, baseDate: baseDate)
+            } else {
+                try seedPreviewData(context: context, baseDate: baseDate)
+            }
+        case .tutorial:
+            try seedTutorialData(context: context, baseDate: baseDate)
+        case .preview:
+            // Use rich dataset to support various preview screens.
+            try seedPreviewData(context: context, baseDate: baseDate)
+        }
+    }
+
     // MARK: - Preview Sample Data
 
-    /// Seeds rich preview data used by SwiftUI previews.
-    /// Mirrors the data previously created in `IncomesPreviewStore`.
+    /// Seeds rich preview/debug data (large dataset).
     public static func seedPreviewData(
         context: ModelContext,
         baseDate: Date = .now
@@ -362,6 +403,7 @@ public enum ItemService {
         }
 
         try BalanceCalculator.calculate(in: context, for: created)
+        try created.forEach { try attachSampleTag(to: $0, context: context) }
     }
 
     /// Seeds a minimal preview dataset that ignores duplicate tag creation.
@@ -386,6 +428,7 @@ public enum ItemService {
             )
         }
         try BalanceCalculator.calculate(in: context, for: created)
+        try created.forEach { try attachSampleTag(to: $0, context: context) }
     }
 
     // MARK: - Tutorial / Debug Sample Data
@@ -396,11 +439,14 @@ public enum ItemService {
         context: ModelContext,
         baseDate: Date = .now
     ) throws {
-        let count = try allItemsCount(context: context)
-        guard count == .zero else {
-            return
-        }
+        try seedSampleData(context: context, profile: .tutorial, baseDate: baseDate, ignoringDuplicates: false, ifEmptyOnly: true)
+    }
 
+    /// Seed lightweight tutorial items (always, without emptiness check).
+    public static func seedTutorialData(
+        context: ModelContext,
+        baseDate: Date = .now
+    ) throws {
         let firstDate = baseDate
         let secondDate = Calendar.current.date(byAdding: .day, value: -1, to: baseDate) ?? baseDate
         let thirdDate = Calendar.current.date(byAdding: .day, value: -2, to: baseDate) ?? baseDate
@@ -414,7 +460,7 @@ public enum ItemService {
             category: String(localized: "Salary"),
             repeatID: .init()
         )
-        try attachDebugTag(to: incomeItem, context: context)
+        try attachSampleTag(to: incomeItem, context: context)
 
         let rentItem = try Item.create(
             context: context,
@@ -425,7 +471,7 @@ public enum ItemService {
             category: String(localized: "Housing"),
             repeatID: .init()
         )
-        try attachDebugTag(to: rentItem, context: context)
+        try attachSampleTag(to: rentItem, context: context)
 
         let groceryItem = try Item.create(
             context: context,
@@ -436,7 +482,7 @@ public enum ItemService {
             category: String(localized: "Food"),
             repeatID: .init()
         )
-        try attachDebugTag(to: groceryItem, context: context)
+        try attachSampleTag(to: groceryItem, context: context)
 
         try BalanceCalculator.calculate(in: context, for: [incomeItem, rentItem, groceryItem])
     }
@@ -463,11 +509,16 @@ public enum ItemService {
 }
 
 private extension ItemService {
-    static func attachDebugTag(to item: Item, context: ModelContext) throws {
-        let debugTag = try Tag.create(context: context, name: "Debug", type: .debug)
+    static func attachSampleTag(to item: Item, context: ModelContext) throws {
+        let sampleName = String(localized: "Sample Data")
+        let debugTag = try Tag.create(context: context, name: sampleName, type: .debug)
         var current = item.tags.orEmpty
         current.append(debugTag)
         item.modify(tags: current)
+    }
+    // Backward-compatible alias
+    static func attachDebugTag(to item: Item, context: ModelContext) throws {
+        try attachSampleTag(to: item, context: context)
     }
     static func nextItemModel(
         context: ModelContext,
