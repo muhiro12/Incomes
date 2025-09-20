@@ -21,6 +21,8 @@ struct ContentView {
     private var isSubscribeOn
     @AppStorage(.isICloudOn)
     private var isICloudOn
+    @AppStorage(.isDebugOn)
+    private var isDebugOn
 
     @Query(.items(.dateIsAfter(Date.now), order: .forward))
     private var upcomingCandidates: [Item]
@@ -95,6 +97,11 @@ extension ContentView: View {
             if (try? ItemService.allItemsCount(context: context).isNotZero) != true {
                 isTutorialPresented = true
             }
+
+            #if DEBUG
+            // Enable debug features in debug builds, mirroring the iOS app behavior
+            isDebugOn = true
+            #endif
         }
     }
 }
