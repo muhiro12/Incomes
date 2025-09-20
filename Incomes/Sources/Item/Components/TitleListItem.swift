@@ -15,12 +15,10 @@ struct TitleListItem: View {
         HStack {
             Text(item.content)
                 .font(.headline)
-                .lineLimit(1)
-                .minimumScaleFactor(.minimumScaleFactor)
+                .singleLine()
             Spacer()
-            Circle()
+            Image(systemName: "chevron.up")
                 .foregroundStyle(item.netIncome.isPlus ? .accent : .clear)
-                .frame(width: .icon(.xs))
         }
     }
 }

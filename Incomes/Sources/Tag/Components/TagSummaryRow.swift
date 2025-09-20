@@ -26,9 +26,8 @@ struct TagSummaryRow: View {
             }
             .font(.subheadline)
             .foregroundStyle(.secondary)
-            Circle()
+            Image(systemName: "chevron.up")
                 .foregroundStyle(tag.netIncome.isPlus ? .accent : .clear)
-                .frame(width: .icon(.s))
         }
     }
 }
