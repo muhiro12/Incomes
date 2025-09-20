@@ -5,6 +5,9 @@ struct WatchDebugView {
     @Environment(\.modelContext)
     private var context
 
+    @AppStorage(.isDebugOn)
+    private var isDebugOn
+
     @State private var hasDebugData = false
     @State private var isSeeding = false
     @State private var isDeleting = false
@@ -13,6 +16,11 @@ struct WatchDebugView {
 extension WatchDebugView: View {
     var body: some View {
         List {
+            Section {
+                Toggle(isOn: $isDebugOn) {
+                    Text("Debug option")
+                }
+            }
             Section {
                 Button {
                     seedTutorialData()
