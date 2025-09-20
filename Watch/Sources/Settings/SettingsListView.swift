@@ -12,6 +12,8 @@ struct SettingsListView {
     private var isSubscribeOn
     @AppStorage(.isICloudOn)
     private var isICloudOn
+    @AppStorage(.isDebugOn)
+    private var isDebugOn
     @State private var isTutorialPresented = false
 }
 
@@ -43,6 +45,16 @@ extension SettingsListView: View {
             Section {
                 Button("View Tutorial", systemImage: "questionmark.circle") {
                     isTutorialPresented = true
+                }
+            }
+            // Place debug entry point only at the very bottom of Settings
+            if isDebugOn {
+                Section {
+                    NavigationLink {
+                        WatchDebugView()
+                    } label: {
+                        Label("Debug", systemImage: "flask")
+                    }
                 }
             }
         }

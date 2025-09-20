@@ -15,16 +15,12 @@ struct MainNavigationView: View {
     @Query(.tags(.typeIs(.year), order: .reverse))
     private var yearTags: [Tag]
 
-    @AppStorage(.isDebugOn)
-    private var isDebugOn
-
     @State private var yearTag: Tag?
     @State private var tag: Tag?
     @State private var searchText = ""
     @State private var predicate: ItemPredicate?
     @State private var isSearchPresented = false
     @State private var isSettingsPresented = false
-    @State private var isDebugPresented = false
 
     @State private var hasLoaded = false
     @State private var isIntroductionPresented = false
@@ -38,13 +34,6 @@ struct MainNavigationView: View {
             }
             .navigationTitle("Incomes")
             .toolbar {
-                if isDebugOn {
-                    ToolbarItem {
-                        Button("Debug", systemImage: "flask") {
-                            isDebugPresented = true
-                        }
-                    }
-                }
                 ToolbarItem {
                     Button("Settings", systemImage: "gear") {
                         isSettingsPresented = true
@@ -87,9 +76,6 @@ struct MainNavigationView: View {
             }
             .sheet(isPresented: $isSettingsPresented) {
                 SettingsNavigationView()
-            }
-            .sheet(isPresented: $isDebugPresented) {
-                DebugNavigationView()
             }
         } detail: {
             if isSearchPresented {

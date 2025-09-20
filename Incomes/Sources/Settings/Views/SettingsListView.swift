@@ -26,6 +26,8 @@ struct SettingsListView {
     private var currencyCode
     @AppStorage(.notificationSettings)
     private var notificationSettings
+    @AppStorage(.isDebugOn)
+    private var isDebugOn
 
     @Binding private var tag: Tag?
 
@@ -159,6 +161,16 @@ extension SettingsListView: View {
                 }
             }
             ShortcutsLinkSection()
+            // Place debug entry point only at the very bottom of Settings
+            if isDebugOn {
+                Section {
+                    NavigationLink {
+                        DebugNavigationView()
+                    } label: {
+                        Text("Debug")
+                    }
+                }
+            }
         }
         .scrollDismissesKeyboard(.interactively)
         .navigationTitle("Settings")

@@ -21,14 +21,11 @@ struct ContentView {
     private var isSubscribeOn
     @AppStorage(.isICloudOn)
     private var isICloudOn
-    @AppStorage(.isDebugOn)
-    private var isDebugOn
 
     @Query(.items(.dateIsAfter(Date.now), order: .forward))
     private var upcomingCandidates: [Item]
     @State private var isSettingsPresented = false
     @State private var isTutorialPresented = false
-    @State private var isDebugPresented = false
 }
 
 extension ContentView: View {
@@ -69,13 +66,6 @@ extension ContentView: View {
                         isSettingsPresented = true
                     }
                 }
-                if isDebugOn {
-                    Section {
-                        Button("Debug", systemImage: "flask") {
-                            isDebugPresented = true
-                        }
-                    }
-                }
             }
             .navigationTitle("Incomes")
         }
@@ -87,11 +77,6 @@ extension ContentView: View {
         .sheet(isPresented: $isTutorialPresented) {
             NavigationStack {
                 WatchTutorialView()
-            }
-        }
-        .sheet(isPresented: $isDebugPresented) {
-            NavigationStack {
-                WatchDebugView()
             }
         }
         .task {
@@ -110,10 +95,6 @@ extension ContentView: View {
             if (try? ItemService.allItemsCount(context: context).isNotZero) != true {
                 isTutorialPresented = true
             }
-
-            #if DEBUG
-            isDebugOn = true
-            #endif
         }
     }
 }
