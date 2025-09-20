@@ -2,6 +2,38 @@
   "sourceLanguage" : "en",
   "strings" : {
     "%@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@"
+          }
+        }
+      },
       "shouldTranslate" : false
     },
     "%@ %@" : {
@@ -9,6 +41,30 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "%1$@ %2$@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ %2$@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ %2$@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ %2$@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
             "value" : "%1$@ %2$@"
           }
         }
@@ -919,6 +975,12 @@
     },
     "Recent Item" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recent Item"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -947,6 +1009,12 @@
     },
     "Recent Items" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recent Items"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1179,6 +1247,12 @@
     },
     "Show Recent Item" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show Recent Item"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1207,6 +1281,12 @@
     },
     "Show Recent Items" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show Recent Items"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1235,6 +1315,12 @@
     },
     "Show This Month's Charts" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show This Month's Charts"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1263,6 +1349,12 @@
     },
     "Show This Month's Items" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show This Month's Items"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1291,6 +1383,12 @@
     },
     "Show Upcoming Item" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show Upcoming Item"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1319,6 +1417,12 @@
     },
     "Show Upcoming Items" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show Upcoming Items"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1381,6 +1485,12 @@
     },
     "This Month’s Charts" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This Month’s Charts"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1409,6 +1519,12 @@
     },
     "This Month’s Items" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This Month’s Items"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1437,6 +1553,12 @@
     },
     "Upcoming Item" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Upcoming Item"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1465,6 +1587,12 @@
     },
     "Upcoming Items" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Upcoming Items"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",

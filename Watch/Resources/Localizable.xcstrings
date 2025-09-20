@@ -139,29 +139,138 @@
     },
     "Creates a few sample items tagged as Debug when the store is empty." : {
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Creates a few sample items tagged as Debug when the store is empty." } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Cuando el almacén está vacío, crea algunos elementos de muestra etiquetados como Depuración." } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Crée quelques éléments d’exemple marqués comme Débogage lorsque le magasin est vide." } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "ストアが空の場合、Debugタグ付きのサンプル項目をいくつか作成します。" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "当存储为空时，创建一些带“调试”标签的示例项目。" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Creates a few sample items tagged as Debug when the store is empty."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cuando el almacén está vacío, crea algunos elementos de muestra etiquetados como Depuración."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Crée quelques éléments d’exemple marqués comme Débogage lorsque le magasin est vide."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ストアが空の場合、Debugタグ付きのサンプル項目をいくつか作成します。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "当存储为空时，创建一些带“调试”标签的示例项目。"
+          }
+        }
       }
     },
     "Debug" : {
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Debug" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Depuración" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Débogage" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "デバッグ" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "调试" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Debug"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Depuración"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Débogage"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "デバッグ"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "调试"
+          }
+        }
+      }
+    },
+    "Debug option" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Debug option"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opción de depuración"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Option de débogage"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "デバッグオプション"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "调试选项"
+          }
+        }
       }
     },
     "Delete tutorial/debug data" : {
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Delete tutorial/debug data" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Eliminar datos de tutorial/depuración" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Supprimer les données de tutoriel/débogage" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "チュートリアル/デバッグデータを削除" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "删除教程/调试数据" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delete tutorial/debug data"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eliminar datos de tutorial/depuración"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Supprimer les données de tutoriel/débogage"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "チュートリアル/デバッグデータを削除"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "删除教程/调试数据"
+          }
+        }
       }
     },
     "iCloud" : {
@@ -404,11 +513,36 @@
     },
     "Removes items tagged as Debug and their tags." : {
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Removes items tagged as Debug and their tags." } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Elimina los elementos etiquetados como Depuración y sus etiquetas." } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Supprime les éléments marqués comme Débogage et leurs étiquettes." } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "デバッグとしてタグ付けされたアイテムとそのタグを削除します。" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "删除标记为调试的项目及其标签。" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Removes items tagged as Debug and their tags."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elimina los elementos etiquetados como Depuración y sus etiquetas."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Supprime les éléments marqués comme Débogage et leurs étiquettes."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "デバッグとしてタグ付けされたアイテムとそのタグを削除します。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "删除标记为调试的项目及其标签。"
+          }
+        }
       }
     },
     "Right now, it only shows data synced from your iPhone via iCloud." : {
@@ -447,11 +581,36 @@
     },
     "Seed Tutorial Data" : {
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Seed Tutorial Data" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Sembrar datos de tutorial" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Générer des données de tutoriel" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "チュートリアルデータの投入" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "生成教程数据" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seed Tutorial Data"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sembrar datos de tutorial"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Générer des données de tutoriel"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "チュートリアルデータの投入"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "生成教程数据"
+          }
+        }
       }
     },
     "Settings" : {
