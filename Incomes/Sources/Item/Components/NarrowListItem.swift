@@ -31,7 +31,7 @@ struct NarrowListItem: View {
             Divider()
             Text(item.balance.asCurrency)
                 .singleLine()
-                .frame(width: .component(.s), alignment: .trailing)
+                .frame(width: .component(.m), alignment: .trailing)
                 .foregroundColor(item.balance.isMinus ? .red : .primary)
         }
     }
