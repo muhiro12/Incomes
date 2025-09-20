@@ -82,6 +82,10 @@ extension ContentView: View {
             }
         }
         .task {
+            #if DEBUG
+            isDebugOn = true
+            #endif
+
             store.open(
                 groupID: Secret.groupID,
                 productIDs: [Secret.productID]
@@ -97,11 +101,6 @@ extension ContentView: View {
             if (try? ItemService.allItemsCount(context: context).isNotZero) != true {
                 isTutorialPresented = true
             }
-
-            #if DEBUG
-            // Enable debug features in debug builds, mirroring the iOS app behavior
-            isDebugOn = true
-            #endif
         }
     }
 }

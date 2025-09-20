@@ -161,7 +161,6 @@ extension SettingsListView: View {
                 }
             }
             ShortcutsLinkSection()
-            // Place debug entry point only at the very bottom of Settings
             if isDebugOn {
                 Section {
                     NavigationLink {
