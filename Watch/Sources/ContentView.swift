@@ -28,7 +28,6 @@ struct ContentView {
     private var upcomingCandidates: [Item]
     @State private var isSettingsPresented = false
     @State private var isTutorialPresented = false
-    @State private var isDebugPresented = false
 }
 
 extension ContentView: View {
@@ -69,13 +68,6 @@ extension ContentView: View {
                         isSettingsPresented = true
                     }
                 }
-                if isDebugOn {
-                    Section {
-                        Button("Debug", systemImage: "flask") {
-                            isDebugPresented = true
-                        }
-                    }
-                }
             }
             .navigationTitle("Incomes")
         }
@@ -89,12 +81,11 @@ extension ContentView: View {
                 WatchTutorialView()
             }
         }
-        .sheet(isPresented: $isDebugPresented) {
-            NavigationStack {
-                WatchDebugView()
-            }
-        }
         .task {
+            #if DEBUG
+            isDebugOn = true
+            #endif
+
             store.open(
                 groupID: Secret.groupID,
                 productIDs: [Secret.productID]
@@ -110,10 +101,6 @@ extension ContentView: View {
             if (try? ItemService.allItemsCount(context: context).isNotZero) != true {
                 isTutorialPresented = true
             }
-
-            #if DEBUG
-            isDebugOn = true
-            #endif
         }
     }
 }

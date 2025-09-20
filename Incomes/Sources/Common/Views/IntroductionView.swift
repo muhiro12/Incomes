@@ -22,7 +22,6 @@ struct IntroductionView: View {
     var body: some View {
         VStack(spacing: .zero) {
             TabView(selection: $selectedPageIndex) {
-                // 1. Welcome
                 VStack(spacing: .space(.l)) {
                     Image(uiImage: .appIcon)
                         .resizable()
@@ -39,12 +38,11 @@ struct IntroductionView: View {
                         .multilineTextAlignment(.center)
                 }
                 .padding(.vertical, .space(.s))
-                .padding(.bottom, .space(.l)) // avoid overlapping with page indicator
+                .padding(.bottom, .space(.l))
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
                 .background(Color(.secondarySystemBackground))
                 .tag(0)
 
-                // 2. List sample
                 VStack(spacing: .space(.l)) {
                     Label("Organize monthly items", systemImage: "list.bullet")
                         .font(.title3)
@@ -57,7 +55,6 @@ struct IntroductionView: View {
                 .background(Color(.secondarySystemBackground))
                 .tag(1)
 
-                // 3. Detail sample
                 VStack(spacing: .space(.l)) {
                     Label("See details at a glance", systemImage: "doc.text.magnifyingglass")
                         .font(.title3)
@@ -70,7 +67,6 @@ struct IntroductionView: View {
                 .background(Color(.secondarySystemBackground))
                 .tag(2)
 
-                // 4. Widgets
                 VStack(spacing: .space(.l)) {
                     Label("Add widgets to your Home", systemImage: "square.grid.2x2")
                         .font(.title3)
@@ -83,7 +79,6 @@ struct IntroductionView: View {
                 .background(Color(.secondarySystemBackground))
                 .tag(3)
 
-                // 5. Premium
                 VStack(spacing: .space(.l)) {
                     Label("Unlock Premium options", systemImage: "star.circle")
                         .font(.title3)
@@ -100,7 +95,6 @@ struct IntroductionView: View {
             .indexViewStyle(.page(backgroundDisplayMode: .always))
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
 
-            // Actions
             HStack(spacing: .space(.s)) {
                 Button {
                     dismiss()
@@ -146,9 +140,7 @@ private extension IntroductionView {
             }
         }
         .listStyle(.plain)
-        // No explicit height limit to avoid clipping on some devices
         .scrollIndicators(.hidden)
-        .clipShape(.rect(cornerRadius: .component(.s)))
         .allowsHitTesting(false)
     }
 
@@ -160,9 +152,7 @@ private extension IntroductionView {
             }
         }
         .listStyle(.insetGrouped)
-        // No explicit height limit to avoid clipping on some devices
         .scrollDisabled(true)
-        .clipShape(.rect(cornerRadius: .component(.s)))
         .allowsHitTesting(false)
     }
 
@@ -202,10 +192,7 @@ private extension IntroductionView {
         }
         .padding()
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(
-            RoundedRectangle(cornerRadius: .component(.m))
-                .fill(Color.secondary.opacity(0.1))
-        )
+        .background(.secondary.opacity(0.1))
     }
 
     func premiumSample() -> some View {
@@ -225,7 +212,7 @@ private extension IntroductionView {
         }
         .padding()
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(RoundedRectangle(cornerRadius: .component(.m)).fill(Color.secondary.opacity(0.1)))
+        .background(.secondary.opacity(0.1))
     }
 }
 
