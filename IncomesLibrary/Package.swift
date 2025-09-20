@@ -5,6 +5,7 @@ import PackageDescription
 
 let package = Package(
     name: "IncomesLibrary",
+    defaultLocalization: "en",
     platforms: [
         .iOS(.v17)
     ],
@@ -22,6 +23,13 @@ let package = Package(
             name: "IncomesLibrary",
             dependencies: [
                 .product(name: "SwiftUtilities", package: "SwiftUtilities")
+            ],
+            path: ".",
+            sources: [
+                "Sources"
+            ],
+            resources: [
+                .process("Resources")
             ]
         ),
         .testTarget(

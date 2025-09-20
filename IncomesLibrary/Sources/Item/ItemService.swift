@@ -228,6 +228,166 @@ public enum ItemService {
         try BalanceCalculator.calculate(in: context, after: date)
     }
 
+    // MARK: - Preview Sample Data
+
+    /// Seeds rich preview data used by SwiftUI previews.
+    /// Mirrors the data previously created in `IncomesPreviewStore`.
+    public static func seedPreviewData(
+        context: ModelContext,
+        baseDate: Date = .now
+    ) throws {
+        let startOfYear = Calendar.current.startOfYear(for: baseDate)
+
+        let dayA = Calendar.current.date(byAdding: .day, value: 0, to: startOfYear)!
+        let dayB = Calendar.current.date(byAdding: .day, value: 6, to: startOfYear)!
+        let dayC = Calendar.current.date(byAdding: .day, value: 12, to: startOfYear)!
+        let dayD = Calendar.current.date(byAdding: .day, value: 18, to: startOfYear)!
+        let dayE = Calendar.current.date(byAdding: .day, value: 24, to: startOfYear)!
+
+        let monthShift: (Int, Date) -> Date = { value, to in
+            Calendar.current.date(byAdding: .month, value: value, to: to)!
+        }
+
+        _ = try Item.create(
+            context: context,
+            date: monthShift(-1, dayD),
+            content: String(localized: "Payday"),
+            income: LocaleAmountConverter.localizedAmount(baseUSD: 4_500),
+            outgo: LocaleAmountConverter.localizedAmount(baseUSD: 0),
+            category: String(localized: "Salary"),
+            repeatID: .init()
+        )
+
+        var created = [Item]()
+        for index in 0..<24 {
+            created.append(
+                try Item.create(
+                    context: context,
+                    date: monthShift(index, dayD),
+                    content: String(localized: "Payday"),
+                    income: LocaleAmountConverter.localizedAmount(baseUSD: 4_500),
+                    outgo: LocaleAmountConverter.localizedAmount(baseUSD: 0),
+                    category: String(localized: "Salary"),
+                    repeatID: .init()
+                )
+            )
+            created.append(
+                try Item.create(
+                    context: context,
+                    date: monthShift(index, dayD),
+                    content: String(localized: "Advertising revenue"),
+                    income: LocaleAmountConverter.localizedAmount(baseUSD: 500),
+                    outgo: LocaleAmountConverter.localizedAmount(baseUSD: 0),
+                    category: String(localized: "Salary"),
+                    repeatID: .init()
+                )
+            )
+            created.append(
+                try Item.create(
+                    context: context,
+                    date: monthShift(index, dayB),
+                    content: String(localized: "Apple card"),
+                    income: LocaleAmountConverter.localizedAmount(baseUSD: 0),
+                    outgo: LocaleAmountConverter.localizedAmount(baseUSD: 900),
+                    category: String(localized: "Credit"),
+                    repeatID: .init()
+                )
+            )
+            created.append(
+                try Item.create(
+                    context: context,
+                    date: monthShift(index, dayA),
+                    content: String(localized: "Orange card"),
+                    income: LocaleAmountConverter.localizedAmount(baseUSD: 0),
+                    outgo: LocaleAmountConverter.localizedAmount(baseUSD: 600),
+                    category: String(localized: "Credit"),
+                    repeatID: .init()
+                )
+            )
+            created.append(
+                try Item.create(
+                    context: context,
+                    date: monthShift(index, dayD),
+                    content: String(localized: "Lemon card"),
+                    income: LocaleAmountConverter.localizedAmount(baseUSD: 0),
+                    outgo: LocaleAmountConverter.localizedAmount(baseUSD: 500),
+                    category: String(localized: "Credit"),
+                    repeatID: .init()
+                )
+            )
+            created.append(
+                try Item.create(
+                    context: context,
+                    date: monthShift(index, dayE),
+                    content: String(localized: "House"),
+                    income: LocaleAmountConverter.localizedAmount(baseUSD: 0),
+                    outgo: LocaleAmountConverter.localizedAmount(baseUSD: 1_800),
+                    category: String(localized: "Loan"),
+                    repeatID: .init()
+                )
+            )
+            created.append(
+                try Item.create(
+                    context: context,
+                    date: monthShift(index, dayC),
+                    content: String(localized: "Car"),
+                    income: LocaleAmountConverter.localizedAmount(baseUSD: 0),
+                    outgo: LocaleAmountConverter.localizedAmount(baseUSD: 300),
+                    category: String(localized: "Loan"),
+                    repeatID: .init()
+                )
+            )
+            created.append(
+                try Item.create(
+                    context: context,
+                    date: monthShift(index, dayA),
+                    content: String(localized: "Insurance"),
+                    income: LocaleAmountConverter.localizedAmount(baseUSD: 0),
+                    outgo: LocaleAmountConverter.localizedAmount(baseUSD: 250),
+                    category: String(localized: "Tax"),
+                    repeatID: .init()
+                )
+            )
+            created.append(
+                try Item.create(
+                    context: context,
+                    date: monthShift(index, dayE),
+                    content: String(localized: "Pension"),
+                    income: LocaleAmountConverter.localizedAmount(baseUSD: 0),
+                    outgo: LocaleAmountConverter.localizedAmount(baseUSD: 300),
+                    category: String(localized: "Tax"),
+                    repeatID: .init()
+                )
+            )
+        }
+
+        try BalanceCalculator.calculate(in: context, for: created)
+    }
+
+    /// Seeds a minimal preview dataset that ignores duplicate tag creation.
+    /// Useful for debug screens that may call this repeatedly.
+    public static func seedPreviewDataIgnoringDuplicates(
+        context: ModelContext,
+        baseDate: Date = .now
+    ) throws {
+        var created = [Item]()
+        for index in 0..<24 {
+            let date = Calendar.current.date(byAdding: .month, value: index, to: baseDate)!
+            created.append(
+                try Item.createIgnoringDuplicates(
+                    context: context,
+                    date: date,
+                    content: String(localized: "Pension"),
+                    income: LocaleAmountConverter.localizedAmount(baseUSD: 0),
+                    outgo: LocaleAmountConverter.localizedAmount(baseUSD: 36),
+                    category: String(localized: "Tax"),
+                    repeatID: .init()
+                )
+            )
+        }
+        try BalanceCalculator.calculate(in: context, for: created)
+    }
+
     // MARK: - Tutorial / Debug Sample Data
 
     /// Seed lightweight tutorial/debug items if the store is empty.
