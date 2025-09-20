@@ -17,9 +17,8 @@ struct TitleListItem: View {
                 .font(.headline)
                 .singleLine()
             Spacer()
-            Circle()
+            Image(systemName: "chevron.up")
                 .foregroundStyle(item.netIncome.isPlus ? .accent : .clear)
-                .frame(width: .icon(.xs))
         }
     }
 }

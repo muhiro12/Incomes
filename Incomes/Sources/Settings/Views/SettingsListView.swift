@@ -115,7 +115,7 @@ extension SettingsListView: View {
                     HStack {
                         Text("Manage tags")
                         Circle()
-                            .frame(width: .icon(.s))
+                            .frame(width: .icon(.xs))
                             .foregroundStyle(.orange)
                     }
                 }
@@ -132,7 +132,7 @@ extension SettingsListView: View {
                     HStack {
                         Text("Debug data")
                         Circle()
-                            .frame(width: .icon(.s))
+                            .frame(width: .icon(.xs))
                             .foregroundStyle(.red)
                     }
                 } footer: {
