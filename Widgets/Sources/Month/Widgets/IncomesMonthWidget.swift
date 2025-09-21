@@ -2,7 +2,7 @@ import SwiftUI
 import WidgetKit
 
 struct IncomesMonthWidget {
-    let kind: String = "IncomesMonthWidget"
+    private let kind: String = "com.muhiro12.Incomes.Widgets.Month"
 
     // MARK: - Helpers
     private static func monthTitle(from date: Date) -> String {
