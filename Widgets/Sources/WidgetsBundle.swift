@@ -15,7 +15,5 @@ struct WidgetsBundle: WidgetBundle {
         IncomesMonthWidget()
         IncomesMonthNetIncomeWidget()
         IncomesUpcomingWidget()
-        WidgetsControl()
-        WidgetsLiveActivity()
     }
 }

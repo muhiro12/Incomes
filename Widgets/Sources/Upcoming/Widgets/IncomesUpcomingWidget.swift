@@ -2,7 +2,7 @@ import SwiftUI
 import WidgetKit
 
 struct IncomesUpcomingWidget {
-    let kind: String = "IncomesUpcomingWidget"
+    private let kind: String = "com.muhiro12.Incomes.Widgets.Upcoming"
 }
 
 extension IncomesUpcomingWidget: Widget {
