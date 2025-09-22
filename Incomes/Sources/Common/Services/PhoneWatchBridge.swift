@@ -9,7 +9,6 @@ import Foundation
 import SwiftData
 @preconcurrency import WatchConnectivity
 
-@MainActor
 final class PhoneWatchBridge: NSObject {
     static let shared = PhoneWatchBridge()
 
@@ -57,6 +56,7 @@ nonisolated extension PhoneWatchBridge: WCSessionDelegate {
     }
 
     func sessionDidBecomeInactive(_: WCSession) {}
+
     func sessionDidDeactivate(_ session: WCSession) {
         // Re-activate if needed and notify waiters again
         Task { @MainActor in

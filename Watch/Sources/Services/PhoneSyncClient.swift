@@ -8,7 +8,6 @@
 import Foundation
 import WatchConnectivity
 
-@MainActor
 final class PhoneSyncClient: NSObject {
     static let shared = PhoneSyncClient()
 
