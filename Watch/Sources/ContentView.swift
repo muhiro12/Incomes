@@ -18,7 +18,6 @@ struct ContentView {
     @Query(.items(.dateIsAfter(Date.now), order: .forward))
     private var upcomingCandidates: [Item]
     @State private var isSettingsPresented = false
-    @State private var isTutorialPresented = false
     @State private var isReloading = false
 }
 
@@ -78,11 +77,6 @@ extension ContentView: View {
         .sheet(isPresented: $isSettingsPresented) {
             NavigationStack {
                 SettingsListView()
-            }
-        }
-        .sheet(isPresented: $isTutorialPresented) {
-            NavigationStack {
-                WatchTutorialView()
             }
         }
         .task {

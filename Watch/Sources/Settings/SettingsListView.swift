@@ -14,18 +14,12 @@ struct SettingsListView {
     @AppStorage(.isDebugOn)
     private var isDebugOn
 
-    @State private var isTutorialPresented = false
     @State private var isReloading = false
 }
 
 extension SettingsListView: View {
     var body: some View {
         List {
-            Section {
-                Button("View Tutorial", systemImage: "questionmark.circle") {
-                    isTutorialPresented = true
-                }
-            }
             Section {
                 NavigationLink {
                     WatchItemListView()
@@ -44,11 +38,6 @@ extension SettingsListView: View {
             }
         }
         .navigationTitle("Settings")
-        .sheet(isPresented: $isTutorialPresented) {
-            NavigationStack {
-                WatchTutorialView()
-            }
-        }
     }
 }
 
