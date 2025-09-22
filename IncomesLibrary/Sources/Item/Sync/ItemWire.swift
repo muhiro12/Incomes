@@ -1,6 +1,6 @@
 import Foundation
 
-public struct ItemsRequest: Codable {
+public struct ItemsRequest: Codable, Sendable {
     public let baseEpoch: Double
     public let monthOffsets: [Int]
 
@@ -10,7 +10,7 @@ public struct ItemsRequest: Codable {
     }
 }
 
-public struct ItemWire: Codable {
+public struct ItemWire: Codable, Sendable {
     public let dateEpoch: Double
     public let content: String
     public let income: Double
@@ -26,7 +26,7 @@ public struct ItemWire: Codable {
     }
 }
 
-public struct ItemsPayload: Codable {
+public struct ItemsPayload: Codable, Sendable {
     public let items: [ItemWire]
 
     public init(items: [ItemWire]) {

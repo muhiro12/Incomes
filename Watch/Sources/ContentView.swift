@@ -58,10 +58,9 @@ extension ContentView: View {
                     Button("Reload", systemImage: "arrow.trianglehead.clockwise") {
                         guard !isReloading else { return }
                         isReloading = true
-                        WatchDataSyncer.syncRecentMonths(context: context) {
-                            DispatchQueue.main.async {
-                                isReloading = false
-                            }
+                        Task { @MainActor in
+                            await WatchDataSyncer.syncRecentMonths(context: context)
+                            isReloading = false
                         }
                     }
                     .disabled(isReloading)
@@ -85,8 +84,8 @@ extension ContentView: View {
             #endif
 
             // Activate phone sync and request recent items
-            PhoneSyncClient.shared.activate()
-            WatchDataSyncer.syncRecentMonths(context: context)
+            await PhoneSyncClient.shared.activate()
+            await WatchDataSyncer.syncRecentMonths(context: context)
         }
     }
 }

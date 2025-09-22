@@ -113,7 +113,7 @@ struct MainNavigationView: View {
                 )
             )
 
-            PhoneWatchBridge.shared.activate(modelContext: context)
+            await PhoneWatchBridge.shared.activate(modelContext: context)
         }
     }
 }
