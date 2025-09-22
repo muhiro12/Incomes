@@ -56,14 +56,6 @@ extension ContentView: View {
                     }
                 }
                 Section {
-                    Button("Settings", systemImage: "gear") {
-                        isSettingsPresented = true
-                    }
-                }
-            }
-            .navigationTitle("Incomes")
-            .toolbar {
-                ToolbarItem {
                     Button("Reload", systemImage: "arrow.trianglehead.clockwise") {
                         guard !isReloading else { return }
                         isReloading = true
@@ -75,7 +67,13 @@ extension ContentView: View {
                     }
                     .disabled(isReloading)
                 }
+                Section {
+                    Button("Settings", systemImage: "gear") {
+                        isSettingsPresented = true
+                    }
+                }
             }
+            .navigationTitle("Incomes")
         }
         .sheet(isPresented: $isSettingsPresented) {
             NavigationStack {

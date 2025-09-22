@@ -33,22 +33,6 @@ extension SettingsListView: View {
                     Label("Items", systemImage: "list.bullet")
                 }
             }
-            Section {
-                Button {
-                    guard !isReloading else { return }
-                    isReloading = true
-                    WatchDataSyncer.syncRecentMonths(context: context) {
-                        DispatchQueue.main.async { isReloading = false }
-                    }
-                } label: {
-                    if isReloading {
-                        ProgressView()
-                    } else {
-                        Text("Reload")
-                    }
-                }
-                .disabled(isReloading)
-            }
             if isDebugOn {
                 Section {
                     NavigationLink {
