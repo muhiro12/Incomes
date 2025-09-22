@@ -30,19 +30,16 @@ enum WatchDataSyncer {
 
             // Delete items not in allowed months
             let all: [Item] = (try? context.fetch(FetchDescriptor<Item>())) ?? []
-            let toDelete = all.filter { item in
-                let ym = item.localDate.stringValueWithoutLocale(.yyyyMM)
-                return !allowedYearMonths.contains(ym)
-            }
-            toDelete.forEach { item in
+            for item in all where !allowedYearMonths.contains(item.localDate.stringValueWithoutLocale(.yyyyMM)) {
                 try? ItemService.delete(context: context, item: item)
             }
 
             // Replace items for each allowed month with incoming snapshot
             for ym in allowedYearMonths {
                 // Delete existing items for that month
-                let monthItems = all.filter { $0.localDate.stringValueWithoutLocale(.yyyyMM) == ym }
-                monthItems.forEach { try? ItemService.delete(context: context, item: $0) }
+                for item in all where item.localDate.stringValueWithoutLocale(.yyyyMM) == ym {
+                    try? ItemService.delete(context: context, item: item)
+                }
 
                 // Create incoming items
                 for wire in grouped[ym].orEmpty {
