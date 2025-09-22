@@ -5,46 +5,26 @@
 //  Created by Codex on 2025/09/15.
 //
 
+import SwiftData
 import SwiftUI
 
 struct SettingsListView {
-    @AppStorage(.isSubscribeOn)
-    private var isSubscribeOn
-    @AppStorage(.isICloudOn)
-    private var isICloudOn
+    @Environment(\.modelContext)
+    private var context
     @AppStorage(.isDebugOn)
     private var isDebugOn
-    @State private var isTutorialPresented = false
+
+    @State private var isReloading = false
 }
 
 extension SettingsListView: View {
     var body: some View {
         List {
             Section {
-                HStack {
-                    Text("Status")
-                    Spacer()
-                    Text(isSubscribeOn ? "Active" : "Inactive")
-                        .foregroundStyle(.secondary)
-                }
-            } header: {
-                Text("Subscription")
-            } footer: {
-                Text("Manage your subscription in the iPhone app's Settings. Purchases are not available on Apple Watch.")
-            }
-            Section {
-                Toggle(isOn: $isICloudOn) {
-                    Text("iCloud On")
-                }
-                .disabled(!isSubscribeOn)
-            } header: {
-                Text("iCloud")
-            } footer: {
-                Text("When enabled, data syncs with the iPhone app via iCloud. A full effect may require restarting the app.")
-            }
-            Section {
-                Button("View Tutorial", systemImage: "questionmark.circle") {
-                    isTutorialPresented = true
+                NavigationLink {
+                    WatchItemListView()
+                } label: {
+                    Label("Items", systemImage: "list.bullet")
                 }
             }
             if isDebugOn {
@@ -58,11 +38,6 @@ extension SettingsListView: View {
             }
         }
         .navigationTitle("Settings")
-        .sheet(isPresented: $isTutorialPresented) {
-            NavigationStack {
-                WatchTutorialView()
-            }
-        }
     }
 }
 

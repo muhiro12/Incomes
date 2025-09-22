@@ -9,7 +9,6 @@ struct WatchDebugView {
     private var isDebugOn
 
     @State private var hasDebugData = false
-    @State private var isSeeding = false
     @State private var isDeleting = false
 }
 
@@ -22,20 +21,17 @@ extension WatchDebugView: View {
                 }
             }
             Section {
-                Button {
-                    seedTutorialData()
+                NavigationLink {
+                    WatchItemListView()
                 } label: {
-                    if isSeeding {
-                        ProgressView()
-                    } else {
-                        Text("Seed Tutorial Data")
-                    }
+                    Label("Items", systemImage: "list.bullet")
                 }
-                .disabled(isSeeding)
-            } footer: {
-                Text("Creates a few sample items tagged as Debug when the store is empty.")
+                NavigationLink {
+                    WatchTagListView()
+                } label: {
+                    Label("Tags", systemImage: "tag")
+                }
             }
-
             if hasDebugData {
                 Section {
                     Button(role: .destructive) {
@@ -67,19 +63,6 @@ private extension WatchDebugView {
         } catch {
             assertionFailure(error.localizedDescription)
             hasDebugData = false
-        }
-    }
-
-    func seedTutorialData() {
-        isSeeding = true
-        defer {
-            isSeeding = false
-        }
-        do {
-            try ItemService.seedTutorialDataIfNeeded(context: context)
-            refreshDebugPresence()
-        } catch {
-            assertionFailure(error.localizedDescription)
         }
     }
 

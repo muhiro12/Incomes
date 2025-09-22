@@ -112,6 +112,8 @@ struct MainNavigationView: View {
                     )
                 )
             )
+
+            PhoneWatchBridge.shared.activate(modelContext: context)
         }
     }
 }
