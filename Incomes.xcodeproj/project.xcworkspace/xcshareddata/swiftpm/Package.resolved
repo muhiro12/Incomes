@@ -40,10 +40,10 @@
     {
       "identity" : "storekitwrapper",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/muhiro12/StoreKitWrapper.git",
+      "location" : "https://github.com/muhiro12/StoreKitWrapper",
       "state" : {
-        "revision" : "7955f34b7b7e6757e474a6991f1b3e62f8971cb2",
-        "version" : "1.0.0"
+        "revision" : "0dadae21ef743f41a431f9299c4c675e3147c3b5",
+        "version" : "1.1.0"
       }
     },
     {

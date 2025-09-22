@@ -56,7 +56,7 @@ extension ContentView: View {
                 isUpdateAlertPresented = configurationService.isUpdateRequired()
 
                 store.open(
-                    groupID: Secret.groupID,
+                    groupID: nil,
                     productIDs: [Secret.productID]
                 ) {
                     isSubscribeOn = $0.contains {
