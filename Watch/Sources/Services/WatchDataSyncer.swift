@@ -46,7 +46,7 @@ enum WatchDataSyncer {
 
                 // Create incoming items
                 for wire in grouped[ym].orEmpty {
-                    _ = try? Item.createIgnoringDuplicates(
+                    _ = try? Item.create(
                         context: context,
                         date: Date(timeIntervalSince1970: wire.dateEpoch),
                         content: wire.content,
