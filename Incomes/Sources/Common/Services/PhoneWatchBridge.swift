@@ -13,28 +13,58 @@ final class PhoneWatchBridge: NSObject {
     static let shared = PhoneWatchBridge()
 
     private weak var modelContext: ModelContext?
+    private var activationWaiters: [CheckedContinuation<Void, Never>] = []
+    private var isActivating = false
+    private var hasActivated = false
 
     override private init() {
         super.init()
     }
 
-    func activate(modelContext: ModelContext) {
+    func activate(modelContext: ModelContext) async {
         self.modelContext = modelContext
         guard WCSession.isSupported() else {
             return
         }
         let session = WCSession.default
         session.delegate = self
-        session.activate()
+        if hasActivated || session.activationState == .activated {
+            hasActivated = true
+            return
+        }
+        await withCheckedContinuation { [weak self] continuation in
+            guard let self else { return }
+            activationWaiters.append(continuation)
+            if !isActivating {
+                isActivating = true
+                session.activate()
+            }
+        }
+        return
     }
 }
 
 nonisolated extension PhoneWatchBridge: WCSessionDelegate {
-    func session(_: WCSession, activationDidCompleteWith _: WCSessionActivationState, error _: Error?) {
+    func session(_: WCSession, activationDidCompleteWith state: WCSessionActivationState, error _: Error?) {
+        Task { @MainActor in
+            hasActivated = (state == .activated)
+            isActivating = false
+            let waiters = activationWaiters
+            activationWaiters.removeAll()
+            waiters.forEach { $0.resume() }
+        }
     }
 
     func sessionDidBecomeInactive(_: WCSession) {}
-    func sessionDidDeactivate(_ session: WCSession) { session.activate() }
+
+    func sessionDidDeactivate(_ session: WCSession) {
+        // Re-activate if needed and notify waiters again
+        Task { @MainActor in
+            hasActivated = false
+            isActivating = true
+            session.activate()
+        }
+    }
 
     func session(_: WCSession, didReceiveMessageData messageData: Data, replyHandler: @escaping @Sendable (Data) -> Void) {
         guard let req = try? JSONDecoder().decode(ItemsRequest.self, from: messageData) else {
