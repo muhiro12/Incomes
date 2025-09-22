@@ -20,7 +20,7 @@ struct IncomesWatchApp: App {
         let modelContainer = try! ModelContainer(
             for: Item.self,
             configurations: .init(
-                url: Database.url,
+                isStoredInMemoryOnly: true,
                 cloudKitDatabase: .none
             )
         )
