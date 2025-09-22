@@ -22,7 +22,11 @@ enum WatchDataSyncer {
             formatter.calendar = .current
             formatter.dateFormat = "yyyyMM"
 
-            let grouped = Dictionary(grouping: items) { formatter.string(from: Date(timeIntervalSince1970: $0.dateEpoch)) }
+            var grouped: [String: [ItemWire]] = [:]
+            for wire in items {
+                let key = formatter.string(from: Date(timeIntervalSince1970: wire.dateEpoch))
+                grouped[key, default: []].append(wire)
+            }
 
             // Delete items not in allowed months
             let all: [Item] = (try? context.fetch(FetchDescriptor<Item>())) ?? []
@@ -35,13 +39,13 @@ enum WatchDataSyncer {
             }
 
             // Replace items for each allowed month with incoming snapshot
-            allowedYearMonths.forEach { ym in
+            for ym in allowedYearMonths {
                 // Delete existing items for that month
                 let monthItems = all.filter { $0.localDate.stringValueWithoutLocale(.yyyyMM) == ym }
                 monthItems.forEach { try? ItemService.delete(context: context, item: $0) }
 
                 // Create incoming items
-                grouped[ym].orEmpty.forEach { wire in
+                for wire in grouped[ym].orEmpty {
                     _ = try? Item.createIgnoringDuplicates(
                         context: context,
                         date: Date(timeIntervalSince1970: wire.dateEpoch),

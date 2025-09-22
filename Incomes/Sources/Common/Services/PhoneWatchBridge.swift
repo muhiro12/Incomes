@@ -7,7 +7,7 @@
 
 import Foundation
 import SwiftData
-import WatchConnectivity
+@preconcurrency import WatchConnectivity
 
 final class PhoneWatchBridge: NSObject {
     static let shared = PhoneWatchBridge()
@@ -29,21 +29,24 @@ final class PhoneWatchBridge: NSObject {
     }
 }
 
-extension PhoneWatchBridge: WCSessionDelegate {
+nonisolated extension PhoneWatchBridge: WCSessionDelegate {
     func session(_: WCSession, activationDidCompleteWith _: WCSessionActivationState, error _: Error?) {
     }
 
     func sessionDidBecomeInactive(_: WCSession) {}
     func sessionDidDeactivate(_ session: WCSession) { session.activate() }
 
-    func session(_: WCSession, didReceiveMessageData messageData: Data, replyHandler: @escaping (Data) -> Void) {
+    func session(_: WCSession, didReceiveMessageData messageData: Data, replyHandler: @escaping @Sendable (Data) -> Void) {
         guard let req = try? JSONDecoder().decode(ItemsRequest.self, from: messageData) else {
             replyHandler(Data())
             return
         }
-        handleRecentItems(request: req, replyHandler: replyHandler)
+        Task { @MainActor in
+            handleRecentItems(request: req, replyHandler: replyHandler)
+        }
     }
 
+    @MainActor
     private func handleRecentItems(request: ItemsRequest, replyHandler: @escaping (Data) -> Void) {
         let baseDate = Date(timeIntervalSince1970: request.baseEpoch)
         guard let context = modelContext else {

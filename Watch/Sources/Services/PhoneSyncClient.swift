@@ -32,7 +32,7 @@ final class PhoneSyncClient: NSObject {
         session.activate()
     }
 
-    func requestRecentItems(completion: @escaping ([ItemWire]) -> Void) {
+    nonisolated func requestRecentItems(completion: @escaping ([ItemWire]) -> Void) {
         guard WCSession.default.isReachable else {
             completion([])
             return
@@ -54,6 +54,6 @@ final class PhoneSyncClient: NSObject {
     }
 }
 
-extension PhoneSyncClient: WCSessionDelegate {
+nonisolated extension PhoneSyncClient: WCSessionDelegate {
     func session(_: WCSession, activationDidCompleteWith _: WCSessionActivationState, error _: Error?) {}
 }
