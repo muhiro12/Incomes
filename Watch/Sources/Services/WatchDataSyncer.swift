@@ -22,7 +22,7 @@ enum WatchDataSyncer {
             formatter.calendar = .current
             formatter.dateFormat = "yyyyMM"
 
-            let grouped = Dictionary(grouping: items) { formatter.string(from: $0.date) }
+            let grouped = Dictionary(grouping: items) { formatter.string(from: Date(timeIntervalSince1970: $0.dateEpoch)) }
 
             // Delete items not in allowed months
             let all: [Item] = (try? context.fetch(FetchDescriptor<Item>())) ?? []
@@ -41,14 +41,14 @@ enum WatchDataSyncer {
                 monthItems.forEach { try? ItemService.delete(context: context, item: $0) }
 
                 // Create incoming items
-                grouped[ym].orEmpty.forEach { phone in
+                grouped[ym].orEmpty.forEach { wire in
                     _ = try? Item.createIgnoringDuplicates(
                         context: context,
-                        date: phone.date,
-                        content: phone.content,
-                        income: phone.income,
-                        outgo: phone.outgo,
-                        category: phone.category,
+                        date: Date(timeIntervalSince1970: wire.dateEpoch),
+                        content: wire.content,
+                        income: .init(wire.income),
+                        outgo: .init(wire.outgo),
+                        category: wire.category,
                         repeatID: .init()
                     )
                 }

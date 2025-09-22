@@ -36,43 +36,40 @@ extension PhoneWatchBridge: WCSessionDelegate {
     func sessionDidBecomeInactive(_: WCSession) {}
     func sessionDidDeactivate(_ session: WCSession) { session.activate() }
 
-    func session(_: WCSession, didReceiveMessage message: [String: Any], replyHandler: @escaping ([String: Any]) -> Void) {
-        guard let request = message["request"] as? String, request == "recentItems" else {
+    func session(_: WCSession, didReceiveMessageData messageData: Data, replyHandler: @escaping (Data) -> Void) {
+        guard let req = try? JSONDecoder().decode(ItemsRequest.self, from: messageData) else {
+            replyHandler(Data())
             return
         }
-        let months = message["months"] as? [Int] ?? [-1, 0, 1]
-        let baseDateISO = message["baseDate"] as? String
-        let baseDate = baseDateISO.flatMap { ISO8601DateFormatter().date(from: $0) } ?? Date()
-        var payload = [[String: Any]]()
+        handleRecentItems(request: req, replyHandler: replyHandler)
+    }
+
+    private func handleRecentItems(request: ItemsRequest, replyHandler: @escaping (Data) -> Void) {
+        let baseDate = Date(timeIntervalSince1970: request.baseEpoch)
         guard let context = modelContext else {
-            replyHandler(["items": payload])
+            replyHandler(Data())
             return
         }
-        for offset in months {
-            if let monthDate = Calendar.current.date(byAdding: .month, value: offset, to: baseDate) {
-                let items = (try? ItemService.items(context: context, date: monthDate)) ?? []
-                let monthPayload = items.prefix(20).map { item in
-                    [
-                        "content": item.content,
-                        "date": ISO8601DateFormatter().string(from: item.localDate),
-                        "net": NumberFormatter.currency.string(from: (item.netIncome as NSDecimalNumber)) ?? "\(item.netIncome)",
-                        "income": item.income.description,
-                        "outgo": item.outgo.description,
-                        "category": item.category?.name ?? ""
-                    ]
-                }
-                payload.append(contentsOf: monthPayload)
+        var wires = [ItemWire]()
+        for offset in request.monthOffsets {
+            guard let monthDate = Calendar.current.date(byAdding: .month, value: offset, to: baseDate) else {
+                continue
+            }
+            let items = (try? ItemService.items(context: context, date: monthDate)) ?? []
+            for item in items.prefix(50) {
+                wires.append(
+                    .init(
+                        dateEpoch: item.localDate.timeIntervalSince1970,
+                        content: item.content,
+                        income: (item.income as NSDecimalNumber).doubleValue,
+                        outgo: (item.outgo as NSDecimalNumber).doubleValue,
+                        category: item.category?.name ?? ""
+                    )
+                )
             }
         }
-        payload = Array(payload.prefix(60))
-        replyHandler(["items": payload])
+        wires = Array(wires.prefix(120))
+        let data = (try? JSONEncoder().encode(ItemsPayload(items: wires))) ?? Data()
+        replyHandler(data)
     }
-}
-
-private extension NumberFormatter {
-    static let currency: NumberFormatter = {
-        let nf = NumberFormatter()
-        nf.numberStyle = .currency
-        return nf
-    }()
 }
