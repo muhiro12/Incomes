@@ -6,21 +6,12 @@
 //  Copyright © 2025 Hiromu Nakano. All rights reserved.
 //
 
-import StoreKit
-import StoreKitWrapper
 import SwiftData
 import SwiftUI
 
 struct ContentView {
-    @Environment(Store.self)
-    private var store
     @Environment(\.modelContext)
     private var context
-
-    @AppStorage(.isSubscribeOn)
-    private var isSubscribeOn
-    @AppStorage(.isICloudOn)
-    private var isICloudOn
     @AppStorage(.isDebugOn)
     private var isDebugOn
 
@@ -28,6 +19,7 @@ struct ContentView {
     private var upcomingCandidates: [Item]
     @State private var isSettingsPresented = false
     @State private var isTutorialPresented = false
+    @State private var isReloading = false
 }
 
 extension ContentView: View {
@@ -70,6 +62,20 @@ extension ContentView: View {
                 }
             }
             .navigationTitle("Incomes")
+            .toolbar {
+                ToolbarItem {
+                    Button("Reload", systemImage: "arrow.trianglehead.clockwise") {
+                        guard !isReloading else { return }
+                        isReloading = true
+                        WatchDataSyncer.syncRecentMonths(context: context) {
+                            DispatchQueue.main.async {
+                                isReloading = false
+                            }
+                        }
+                    }
+                    .disabled(isReloading)
+                }
+            }
         }
         .sheet(isPresented: $isSettingsPresented) {
             NavigationStack {
@@ -86,21 +92,9 @@ extension ContentView: View {
             isDebugOn = true
             #endif
 
-            store.open(
-                groupID: Secret.groupID,
-                productIDs: [Secret.productID]
-            ) { entitlements in
-                isSubscribeOn = entitlements.contains {
-                    $0.id == Secret.productID
-                }
-                if !isSubscribeOn {
-                    isICloudOn = false
-                }
-            }
-
-            if (try? ItemService.allItemsCount(context: context).isNotZero) != true {
-                isTutorialPresented = true
-            }
+            // Activate phone sync and request recent items
+            PhoneSyncClient.shared.activate()
+            WatchDataSyncer.syncRecentMonths(context: context)
         }
     }
 }
@@ -108,6 +102,5 @@ extension ContentView: View {
 #Preview {
     WatchPreview {
         ContentView()
-            .environment(Store())
     }
 }

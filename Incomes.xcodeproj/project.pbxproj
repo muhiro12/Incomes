@@ -10,7 +10,6 @@
 		AD6C5A752E515E3000E1FBA0 /* IncomesLibrary in Frameworks */ = {isa = PBXBuildFile; productRef = AD6C5A742E515E3000E1FBA0 /* IncomesLibrary */; };
 		AD6DB6DC2E779B2C00E5BB78 /* Watch.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = AD6DB6D22E779B2B00E5BB78 /* Watch.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		AD6DB6E32E779C5400E5BB78 /* IncomesLibrary in Frameworks */ = {isa = PBXBuildFile; productRef = AD6DB6E22E779C5400E5BB78 /* IncomesLibrary */; };
-		AD6DBB852E77A18B00E5BB78 /* StoreKitWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = AD6DBB842E77A18B00E5BB78 /* StoreKitWrapper */; };
 		AD71621C2E70BC5C00C4CFCE /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD71621B2E70BC5C00C4CFCE /* WidgetKit.framework */; };
 		AD71621E2E70BC5C00C4CFCE /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD71621D2E70BC5C00C4CFCE /* SwiftUI.framework */; };
 		AD71622F2E70BC5D00C4CFCE /* Widgets.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = AD71621A2E70BC5C00C4CFCE /* Widgets.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -18,7 +17,7 @@
 		ADA85F312DB6275B0047CB54 /* GoogleMobileAdsWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = ADA85F302DB6275B0047CB54 /* GoogleMobileAdsWrapper */; };
 		ADA85F342DB627730047CB54 /* LicenseListWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = ADA85F332DB627730047CB54 /* LicenseListWrapper */; };
 		ADADFCDC2E6DD1840011E90E /* SpeechWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = ADADFCDB2E6DD1840011E90E /* SpeechWrapper */; };
-		ADEACF912DB634A1001407EF /* StoreKitWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = ADEACF902DB634A1001407EF /* StoreKitWrapper */; };
+		ADE464F92E80212600F8EEC9 /* StoreKitWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = ADE464F82E80212600F8EEC9 /* StoreKitWrapper */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -102,7 +101,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				AD6DB6E32E779C5400E5BB78 /* IncomesLibrary in Frameworks */,
-				AD6DBB852E77A18B00E5BB78 /* StoreKitWrapper in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -120,10 +118,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ADE464F92E80212600F8EEC9 /* StoreKitWrapper in Frameworks */,
 				ADA85F312DB6275B0047CB54 /* GoogleMobileAdsWrapper in Frameworks */,
 				ADADFCDC2E6DD1840011E90E /* SpeechWrapper in Frameworks */,
 				AD6C5A752E515E3000E1FBA0 /* IncomesLibrary in Frameworks */,
-				ADEACF912DB634A1001407EF /* StoreKitWrapper in Frameworks */,
 				ADA85F342DB627730047CB54 /* LicenseListWrapper in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -184,7 +182,6 @@
 			name = Watch;
 			packageProductDependencies = (
 				AD6DB6E22E779C5400E5BB78 /* IncomesLibrary */,
-				AD6DBB842E77A18B00E5BB78 /* StoreKitWrapper */,
 			);
 			productName = "Incomes (Watch) Watch App";
 			productReference = AD6DB6D22E779B2B00E5BB78 /* Watch.app */;
@@ -236,9 +233,9 @@
 			packageProductDependencies = (
 				ADA85F302DB6275B0047CB54 /* GoogleMobileAdsWrapper */,
 				ADA85F332DB627730047CB54 /* LicenseListWrapper */,
-				ADEACF902DB634A1001407EF /* StoreKitWrapper */,
 				AD6C5A742E515E3000E1FBA0 /* IncomesLibrary */,
 				ADADFCDB2E6DD1840011E90E /* SpeechWrapper */,
+				ADE464F82E80212600F8EEC9 /* StoreKitWrapper */,
 			);
 			productName = Incomes;
 			productReference = ADCF36A624A1D0F40011D6F5 /* Incomes.app */;
@@ -283,9 +280,9 @@
 			packageReferences = (
 				ADA85F2F2DB6275B0047CB54 /* XCRemoteSwiftPackageReference "GoogleMobileAdsWrapper" */,
 				ADA85F322DB627730047CB54 /* XCRemoteSwiftPackageReference "LicenseListWrapper" */,
-				ADEACF8F2DB634A1001407EF /* XCRemoteSwiftPackageReference "StoreKitWrapper" */,
 				AD6C5A732E515E3000E1FBA0 /* XCLocalSwiftPackageReference "IncomesLibrary" */,
 				ADADFCDA2E6DD1840011E90E /* XCRemoteSwiftPackageReference "SpeechWrapper" */,
+				ADE464F72E80212500F8EEC9 /* XCRemoteSwiftPackageReference "StoreKitWrapper" */,
 			);
 			productRefGroup = ADCF36A724A1D0F40011D6F5 /* Products */;
 			projectDirPath = "";
@@ -390,7 +387,7 @@
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = 4;
 				WATCHOS_DEPLOYMENT_TARGET = 11.0;
 			};
@@ -424,7 +421,7 @@
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = 4;
 				WATCHOS_DEPLOYMENT_TARGET = 11.0;
 			};
@@ -798,18 +795,18 @@
 /* Begin XCRemoteSwiftPackageReference section */
 		ADA85F2F2DB6275B0047CB54 /* XCRemoteSwiftPackageReference "GoogleMobileAdsWrapper" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/muhiro12/GoogleMobileAdsWrapper.git";
+			repositoryURL = "https://github.com/muhiro12/GoogleMobileAdsWrapper";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.2.0;
+				minimumVersion = 1.0.0;
 			};
 		};
 		ADA85F322DB627730047CB54 /* XCRemoteSwiftPackageReference "LicenseListWrapper" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/muhiro12/LicenseListWrapper.git";
+			repositoryURL = "https://github.com/muhiro12/LicenseListWrapper";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.1.0;
+				minimumVersion = 1.0.0;
 			};
 		};
 		ADADFCDA2E6DD1840011E90E /* XCRemoteSwiftPackageReference "SpeechWrapper" */ = {
@@ -820,9 +817,9 @@
 				minimumVersion = 1.0.0;
 			};
 		};
-		ADEACF8F2DB634A1001407EF /* XCRemoteSwiftPackageReference "StoreKitWrapper" */ = {
+		ADE464F72E80212500F8EEC9 /* XCRemoteSwiftPackageReference "StoreKitWrapper" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/muhiro12/StoreKitWrapper.git";
+			repositoryURL = "https://github.com/muhiro12/StoreKitWrapper";
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 1.0.0;
@@ -838,10 +835,6 @@
 		AD6DB6E22E779C5400E5BB78 /* IncomesLibrary */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = IncomesLibrary;
-		};
-		AD6DBB842E77A18B00E5BB78 /* StoreKitWrapper */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = StoreKitWrapper;
 		};
 		AD7162352E70BD9F00C4CFCE /* IncomesLibrary */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -862,9 +855,9 @@
 			package = ADADFCDA2E6DD1840011E90E /* XCRemoteSwiftPackageReference "SpeechWrapper" */;
 			productName = SpeechWrapper;
 		};
-		ADEACF902DB634A1001407EF /* StoreKitWrapper */ = {
+		ADE464F82E80212600F8EEC9 /* StoreKitWrapper */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = ADEACF8F2DB634A1001407EF /* XCRemoteSwiftPackageReference "StoreKitWrapper" */;
+			package = ADE464F72E80212500F8EEC9 /* XCRemoteSwiftPackageReference "StoreKitWrapper" */;
 			productName = StoreKitWrapper;
 		};
 /* End XCSwiftPackageProductDependency section */

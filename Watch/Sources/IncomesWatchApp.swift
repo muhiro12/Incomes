@@ -6,20 +6,12 @@
 //  Copyright © 2025 Hiromu Nakano. All rights reserved.
 //
 
-import StoreKit
-import StoreKitWrapper
 import SwiftData
 import SwiftUI
 
 @main
 struct IncomesWatchApp: App {
-    @AppStorage(.isICloudOn)
-    private var isICloudOn
-    @AppStorage(.isSubscribeOn)
-    private var isSubscribeOn
-
     private var sharedModelContainer: ModelContainer!
-    private var sharedStore: Store!
 
     init() {
         // Migrate possible legacy DB files into App Group first
@@ -29,21 +21,17 @@ struct IncomesWatchApp: App {
             for: Item.self,
             configurations: .init(
                 url: Database.url,
-                cloudKitDatabase: isICloudOn ? .automatic : .none
+                cloudKitDatabase: .none
             )
         )
 
         sharedModelContainer = modelContainer
-
-        sharedStore = .init()
     }
 
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .id(isICloudOn)
                 .modelContainer(sharedModelContainer)
-                .environment(sharedStore)
         }
     }
 }

@@ -35,40 +35,6 @@
         }
       }
     },
-    "Active" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Active"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Activo"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Actif"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "アクティブ"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "启用"
-          }
-        }
-      }
-    },
     "Adding or editing data on Apple Watch isn’t supported yet." : {
       "localizations" : {
         "en" : {
@@ -273,74 +239,6 @@
         }
       }
     },
-    "iCloud" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "iCloud"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "iCloud"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "iCloud"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "iCloud"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "iCloud"
-          }
-        }
-      }
-    },
-    "iCloud On" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "iCloud On"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "iCloud activado"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "iCloud activé"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "iCloudをオン"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "iCloud 开启"
-          }
-        }
-      }
-    },
     "iCloud sync is available to subscribers only. If you don’t subscribe, items won’t appear on your Watch." : {
       "localizations" : {
         "en" : {
@@ -371,40 +269,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "iCloud 同步仅对订阅用户开放。未订阅时，项目不会显示在你的 Watch 上。"
-          }
-        }
-      }
-    },
-    "Inactive" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Inactive"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Inactivo"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Inactif"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "無効"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "未启用"
           }
         }
       }
@@ -443,40 +307,6 @@
         }
       }
     },
-    "Manage your subscription in the iPhone app's Settings. Purchases are not available on Apple Watch." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Manage your subscription in the iPhone app's Settings. Purchases are not available on Apple Watch."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Gestiona tu suscripción en los Ajustes de la aplicación para iPhone. Las compras no están disponibles en Apple Watch."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Gérez votre abonnement dans les Paramètres de l’application iPhone. Les achats ne sont pas disponibles sur Apple Watch."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "購読の管理はiPhoneアプリの設定で行ってください。Apple Watchでは購入できません。"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "请在 iPhone 应用的“设置”中管理订阅。Apple Watch 上无法购买。"
-          }
-        }
-      }
-    },
     "No upcoming items" : {
       "localizations" : {
         "en" : {
@@ -507,6 +337,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "暂无即将到来的项目"
+          }
+        }
+      }
+    },
+    "Reload" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reload"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recargar"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recharger"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "再読み込み"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "重新加载"
           }
         }
       }
@@ -647,74 +511,6 @@
         }
       }
     },
-    "Status" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Status"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Estado"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Statut"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ステータス"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "状态"
-          }
-        }
-      }
-    },
-    "Subscription" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Subscription"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Suscripción"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Abonnement"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "サブスクリプション"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "订阅"
-          }
-        }
-      }
-    },
     "This Watch app is still in development." : {
       "localizations" : {
         "en" : {
@@ -847,40 +643,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "查看教程"
-          }
-        }
-      }
-    },
-    "When enabled, data syncs with the iPhone app via iCloud. A full effect may require restarting the app." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "When enabled, data syncs with the iPhone app via iCloud. A full effect may require restarting the app."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Al activarlo, los datos se sincronizan con la aplicación de iPhone mediante iCloud. Puede que debas reiniciar la aplicación para que surta efecto por completo."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Une fois activé, les données se synchronisent avec l’application iPhone via iCloud. Un redémarrage de l’application peut être nécessaire pour un effet complet."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "有効にすると、iCloud経由でiPhoneアプリとデータが同期されます。完全に反映されるまでアプリの再起動が必要な場合があります。"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "启用后，数据会通过 iCloud 与 iPhone 应用同步。可能需要重新启动应用才能完全生效。"
           }
         }
       }
