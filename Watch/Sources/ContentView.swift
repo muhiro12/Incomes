@@ -55,12 +55,20 @@ extension ContentView: View {
                     }
                 }
                 Section {
-                    Button("Reload", systemImage: "arrow.trianglehead.clockwise") {
-                        guard !isReloading else { return }
+                    Button {
+                        guard !isReloading else {
+                            return
+                        }
                         isReloading = true
                         Task { @MainActor in
                             await WatchDataSyncer.syncRecentMonths(context: context)
                             isReloading = false
+                        }
+                    } label: {
+                        if isReloading {
+                            ProgressView()
+                        } else {
+                            Label("Reload", systemImage: "arrow.trianglehead.clockwise")
                         }
                     }
                     .disabled(isReloading)
@@ -84,8 +92,10 @@ extension ContentView: View {
             #endif
 
             // Activate phone sync and request recent items
+            isReloading = true
             await PhoneSyncClient.shared.activate()
             await WatchDataSyncer.syncRecentMonths(context: context)
+            isReloading = false
         }
     }
 }
