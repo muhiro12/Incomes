@@ -307,6 +307,15 @@
         }
       }
     },
+    "Items" : {
+
+    },
+    "No items" : {
+
+    },
+    "No tags" : {
+
+    },
     "No upcoming items" : {
       "localizations" : {
         "en" : {
@@ -510,6 +519,9 @@
           }
         }
       }
+    },
+    "Tags" : {
+
     },
     "This Watch app is still in development." : {
       "localizations" : {

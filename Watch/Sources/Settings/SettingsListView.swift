@@ -27,6 +27,13 @@ extension SettingsListView: View {
                 }
             }
             Section {
+                NavigationLink {
+                    WatchItemListView()
+                } label: {
+                    Label("Items", systemImage: "list.bullet")
+                }
+            }
+            Section {
                 Button {
                     guard !isReloading else { return }
                     isReloading = true

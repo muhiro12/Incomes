@@ -22,6 +22,18 @@ extension WatchDebugView: View {
                 }
             }
             Section {
+                NavigationLink {
+                    WatchItemListView()
+                } label: {
+                    Label("Items", systemImage: "list.bullet")
+                }
+                NavigationLink {
+                    WatchTagListView()
+                } label: {
+                    Label("Tags", systemImage: "tag")
+                }
+            }
+            Section {
                 Button {
                     seedTutorialData()
                 } label: {
