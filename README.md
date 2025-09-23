@@ -1,95 +1,145 @@
 # Incomes
 
-Incomes is a Cupertino-style budget manager that keeps your finances organised across iPhone, Apple Watch and widgets.
+## Overview
+
+Incomes is a SwiftUI budgeting app that keeps personal finances organised across
+iPhone, Apple Watch, and widgets. It stores data with SwiftData in a shared app
+group container, optionally syncs through CloudKit, and layers on StoreKit 2
+subscriptions, Google Mobile Ads, and App Intents powered by Apple Foundation
+Models.
 
 [Download on the App Store](https://apps.apple.com/app/id1584472982)
 
-## Features
+## Targets
 
-### Intelligent capture
+- **Incomes** – the iOS app that drives the end-to-end experience with SwiftUI
+  views, SwiftData, and on-device services such as notifications, ads, and App
+  Intents.
+- **Watch** – a watchOS companion that mirrors upcoming payments, settings, and
+  debug utilities while staying in sync with the phone via WatchConnectivity
+  snapshots.
+- **Widgets** – a WidgetKit bundle that surfaces balances, upcoming
+  transactions, and monthly breakdowns on the Home Screen and StandBy.
+- **IncomesLibrary** – the shared domain layer containing the SwiftData models,
+  balance calculator, notification planner, and sync payloads used by every
+  target.
 
-- Capture receipts or statements from the photo library, camera or microphone and let on-device speech recognition and Vision extract the text automatically.
-- Use Foundation Models–powered inference to pre-fill the item form with dates, categories and amounts in the user’s locale.
+## Feature highlights
 
-### Fast logging and organisation
+### Capture and inference
 
-- Log incomes and outgoings with repeat counts, categories and contextual shortcuts straight from the form view.
-- Automatically create future occurrences for recurring payments and keep balances accurate through the shared data layer.
-- Resolve duplicate tags, recalculate balances and clean up tutorial data directly from Settings.
+- Capture receipts through the photo library or camera, or dictate statements
+  with Speech Recognition, then run on-device VisionKit OCR to assemble a
+  transcript.
+- Use Apple Foundation Models to infer the date, amounts, and category that
+  pre-populate the item form or App Intent output, respecting the user’s
+  locale.
 
-### Search and insights
+### Logging and organisation
 
-- Search by content, category or numeric ranges with menu-driven filters to drill into any time period.
-- Browse yearly summaries, detailed charts and profit breakdowns powered by Swift Charts and SwiftData predicates.
+- Create and edit items with repeat tracking, categorisation, and automatic tag
+  management to keep yearly and monthly views tidy.
+- Seed preview or debug databases with realistic sample data to explore the UI
+  without real transactions.
 
-### Stay on schedule
+### Insights and search
 
-- Configure rich push-notification rules, including thresholds, lead times, delivery windows and test notifications.
-- Automatic upcoming-payment reminders keep badge counts and delivered notifications in sync across devices.
+- Drill into periods or categories using search targets and tag summaries backed
+  by SwiftData queries and chart-ready aggregates.
 
-### Available everywhere
+### Notifications and schedules
 
-- A collection of widgets for balance snapshots, upcoming items, monthly breakdowns, control widgets and Live Activities keeps data on the Home Screen and StandBy.
-- The watchOS companion lists upcoming payments, manages subscriptions and mirrors notification settings right from the wrist.
+- Configure notification rules, register reminders, and deliver badge-aware
+  updates with the notification service and planner.
+- Trigger test alerts and refresh badge counts to keep multiple devices in
+  sync.
 
-### Premium and sync options
+### Cross-device experiences
 
-- Subscribers unlock iCloud syncing, remove ads and manage their plan through StoreKit 2 and the in-app paywall.
-- Non-subscribers see Google Mobile Ads placements that are shared across the app and widgets.
-- A remote configuration feed allows urgent update requirements to be enforced without shipping a new build.
+- Share data through a single SwiftData store located in the app group
+  container, with legacy SQLite migration for existing users.
+- Sync recent transactions to watchOS by replying to WatchConnectivity requests
+  with trimmed JSON payloads and recalculating balances after import.
 
-## Targets and shared modules
+### Premium, sync, and remote configuration
 
-- **Incomes** – the main iOS app built with SwiftUI and SwiftData, including CloudKit-backed syncing when iCloud is enabled.
-- **Watch** – a watchOS companion that uses the same SwiftData store and StoreKit subscription logic.
-- **Widgets** – WidgetKit bundle providing multiple Home Screen widgets, Live Activities and control widgets.
-- **IncomesLibrary** – a reusable module containing the data model, business logic, migration utilities and notification planners shared across all targets.
+- Open the StoreKit 2 paywall to manage premium subscriptions, automatically
+  toggle iCloud sync, and start Google Mobile Ads placements.
+- Fetch `.config.json` from GitHub at launch to learn about required versions or
+  feature flags, and prompt users to update when needed.
 
-External packages such as StoreKitWrapper, GoogleMobileAdsWrapper, PhotosUI, SpeechWrapper and VisionKit are used to integrate subscriptions, advertising and media capture.
+### App Intents and shortcuts
 
-## Getting started
+- Offer App Intents for quickly opening the app or requesting Foundation Model
+  inference from Shortcuts and Siri.
 
-### Requirements
+## Architecture and technologies
 
-- Xcode 16 (iOS 18 / watchOS 11 SDKs) or later
-- An Apple Developer account for configuring App Group, iCloud and StoreKit entitlements
+- **SwiftData + App Group** – all targets read and write through a shared model
+  container rooted at `group.com.muhiro12.Incomes`; update `AppGroup.id` when
+  using your own bundle identifiers.
+- **Database migration** – `DatabaseMigrator` moves legacy SQLite files into the
+  shared container on first launch so long-time users keep their history.
+- **WatchConnectivity bridge** – `PhoneWatchBridge` answers watch requests with
+  filtered payloads, while `PhoneSyncClient` manages activation and message
+  replies on watchOS.
+- **Preview infrastructure** – `IncomesPreview` provisions an in-memory store,
+  sample data, and mock services so SwiftUI previews remain functional.
 
-### Project setup
+## Requirements
 
-1. Clone the repository.
-2. Create `Incomes/Configurations/Secret.swift` (and copy it to `Watch/Configurations/Secret.swift`) containing your identifiers:
+- Xcode 16 or later with the iOS 18 and watchOS 11 SDKs installed.
+- An Apple Developer account configured for App Groups, iCloud, StoreKit 2,
+  notifications, and ads.
+- A device or simulator that supports Foundation Models for on-device inference
+  features.
+
+## Setup
+
+Follow these steps to run a local build:
+
+1. Clone the repository and open the project directory.
+2. Update bundle identifiers and the app group constant to match your
+   provisioning profile if you are not using the production identifiers.
+3. Create `Incomes/Configurations/Secret.swift` and copy it to
+   `Watch/Configurations/Secret.swift` with your StoreKit product ID and AdMob
+   unit IDs:
 
    ```swift
    enum Secret {
        static let groupID = "group.com.example.incomes"
        static let productID = "com.example.incomes.premium"
        static let admobNativeID = "ca-app-pub-xxxxxxxxxxxxxxxx/yyyyyyyyyy"
-       static let admobNativeIDDev = "ca-app-pub-3940256099942544/3986624511" // Google test ID
+       static let admobNativeIDDev = "ca-app-pub-3940256099942544/3986624511"
    }
    ```
 
-   Xcode Cloud retrieves the same file from the `SECRET_BASE64` environment variable during CI builds.
-3. Open `Incomes.xcodeproj` in Xcode and select the **Incomes** scheme.
-4. Run on an iOS 18 simulator or device. Enable the **IncomesWatch** and **Widgets** schemes if you want to test companion experiences.
+4. Open `Incomes.xcodeproj` in Xcode, select the **Incomes** scheme, and run on
+   an iOS 18 simulator or device. Enable the **IncomesWatch** and **Widgets**
+   schemes if you want to test the companion experiences.
 
 ### Remote configuration
 
-The app downloads `.config.json` from the `main` branch on GitHub at launch to learn about required versions or feature flags. Host your own file if you fork the project.
+The app downloads `.config.json` from the `main` branch on GitHub at launch.
+Update the file or host your own endpoint when shipping a fork so update prompts
+reflect your release channel.
 
-### Testing
+## Testing
 
-Run the shared test suites from macOS using Xcode command line tools:
+Run the shared test suites from macOS using the Xcode command line tools or the
+helper scripts in `ci_scripts/`:
 
 ```sh
-xcodebuild -project Incomes.xcodeproj -scheme Incomes \
-  -destination 'platform=iOS Simulator,OS=latest' test
+DERIVED_DATA_PATH=build/DerivedData \
+RESULTS_DIR=build \
+bash ci_scripts/xcodebuild_test_scheme.sh Incomes
 
-xcodebuild -project Incomes.xcodeproj -scheme IncomesLibrary \
-  -destination 'platform=iOS Simulator,OS=latest' test
+DERIVED_DATA_PATH=build/DerivedData \
+RESULTS_DIR=build \
+bash ci_scripts/xcodebuild_test_scheme.sh IncomesLibrary
 ```
 
-## Links
+## Useful links
 
 - [App Store](https://apps.apple.com/app/id1584472982)
 - [Privacy Policy](.github/pages/privacy.md)
-
