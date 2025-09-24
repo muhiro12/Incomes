@@ -31,15 +31,9 @@ struct MonthSummaryProvider: AppIntentTimelineProvider {
     private func makeEntry(date: Date, configuration: ConfigurationAppIntent) -> MonthSummaryEntry {
         do {
             let context = try ModelContainerFactory.sharedContext()
-            let items: [Item] = try ItemService.items(context: context, date: date)
-            let totalIncomeDecimal: Decimal = items.reduce(.zero) { partial, item in
-                partial + item.income
-            }
-            let totalOutgoDecimal: Decimal = items.reduce(.zero) { partial, item in
-                partial + item.outgo
-            }
-            let totalIncomeText: String = totalIncomeDecimal.asCurrency
-            let totalOutgoText: String = totalOutgoDecimal.asMinusCurrency
+            let totals = try SummaryCalculator.monthlyTotals(context: context, date: date)
+            let totalIncomeText: String = totals.totalIncome.asCurrency
+            let totalOutgoText: String = totals.totalOutgo.asMinusCurrency
             return .init(
                 date: date,
                 configuration: configuration,
