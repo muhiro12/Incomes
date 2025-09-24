@@ -9,6 +9,7 @@
 import Foundation
 import SwiftData
 
+/// A classification tag that groups related items (e.g., year, month, category).
 @Model
 public final class Tag {
     public private(set) var name = String.empty
@@ -18,6 +19,7 @@ public final class Tag {
 
     private init() {}
 
+    /// Creates or returns an existing tag with the given `name` and `type`.
     public static func create(context: ModelContext, name: String, type: TagType) throws -> Tag {
         let tag = try context.fetchFirst(
             .tags(.nameIs(name, type: type))
@@ -30,10 +32,12 @@ public final class Tag {
 }
 
 extension Tag {
+    /// The strongly-typed tag kind, derived from `typeID`.
     public var type: TagType? {
         TagType(rawValue: typeID)
     }
 
+    /// A localized or user-friendly name for the tag.
     public var displayName: String {
         switch type {
         case .year:
@@ -51,14 +55,17 @@ extension Tag {
         }
     }
 
+    /// Sum of `income` across related items.
     public var income: Decimal {
         items.orEmpty.reduce(.zero) { $0 + $1.income }
     }
 
+    /// Sum of `outgo` across related items.
     public var outgo: Decimal {
         items.orEmpty.reduce(.zero) { $0 + $1.outgo }
     }
 
+    /// Convenience: `income - outgo`.
     public var netIncome: Decimal {
         income - outgo
     }
@@ -81,6 +88,7 @@ extension Tag: Hashable {
 // MARK: - Test
 
 extension Tag {
+    /// Testing helper: creates a tag without checking duplicates.
     public static func createIgnoringDuplicates(context: ModelContext, name: String, type: TagType) throws -> Tag {
         let tag = Tag()
         context.insert(tag)

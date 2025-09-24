@@ -31,19 +31,12 @@ struct NetIncomeProvider: AppIntentTimelineProvider {
     private func makeEntry(date: Date, configuration: ConfigurationAppIntent) -> NetIncomeEntry {
         do {
             let context = try ModelContainerFactory.sharedContext()
-            let items: [Item] = try ItemService.items(context: context, date: date)
-            let totalIncomeDecimal: Decimal = items.reduce(.zero) { partial, item in
-                partial + item.income
-            }
-            let totalOutgoDecimal: Decimal = items.reduce(.zero) { partial, item in
-                partial + item.outgo
-            }
-            let net: Decimal = totalIncomeDecimal - totalOutgoDecimal
+            let totals = try SummaryCalculator.monthlyTotals(context: context, date: date)
             return .init(
                 date: date,
                 configuration: configuration,
-                netIncomeText: net.asCurrency,
-                isPositive: net.isPlus || net.isZero
+                netIncomeText: totals.netIncome.asCurrency,
+                isPositive: totals.netIncome.isPlus || totals.netIncome.isZero
             )
         } catch {
             return .init(

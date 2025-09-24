@@ -10,15 +10,43 @@ import SwiftData
 import SwiftUI
 
 struct CategoryChartSection: View {
+    // Legacy single-source query (kept for compatibility)
     @Query private var items: [Item]
+    // New: split sources to express non-zero income/outgo at fetch-time
+    @Query private var incomeItems: [Item]
+    @Query private var outgoItems: [Item]
+
+    private let useSeparatedQueries: Bool
 
     init(_ descriptor: FetchDescriptor<Item>) {
         _items = .init(descriptor)
+        // Unused queries initialized with the same descriptor to satisfy property wrapper
+        _incomeItems = .init(descriptor)
+        _outgoItems = .init(descriptor)
+        useSeparatedQueries = false
+    }
+
+    init(yearScopedTo date: Date) {
+        // Income: year scope + income non-zero
+        var incomeQuery = ItemQuery()
+        incomeQuery.date = .sameYear(date)
+        incomeQuery.incomeNonZero = true
+        _incomeItems = .init(incomeQuery.descriptor())
+
+        // Outgo: year scope + outgo non-zero
+        var outgoQuery = ItemQuery()
+        outgoQuery.date = .sameYear(date)
+        outgoQuery.outgoNonZero = true
+        _outgoItems = .init(outgoQuery.descriptor())
+
+        // Legacy items not used in this mode
+        _items = .init(.items(.none))
+        useSeparatedQueries = true
     }
 
     private var incomeObjects: [(title: String, value: Decimal)] {
-        let filtered: [Item] = items.filter(\.income.isNotZero)
-        let grouped: [String: [Item]] = .init(grouping: filtered) { item in
+        let source: [Item] = useSeparatedQueries ? incomeItems : items.filter(\.income.isNotZero)
+        let grouped: [String: [Item]] = .init(grouping: source) { item in
             item.category?.displayName ?? "Others"
         }
         return grouped.map { displayName, items in
@@ -35,8 +63,8 @@ struct CategoryChartSection: View {
     }
 
     private var outgoObjects: [(title: String, value: Decimal)] {
-        let filtered: [Item] = items.filter(\.outgo.isNotZero)
-        let grouped: [String: [Item]] = .init(grouping: filtered) { item in
+        let source: [Item] = useSeparatedQueries ? outgoItems : items.filter(\.outgo.isNotZero)
+        let grouped: [String: [Item]] = .init(grouping: source) { item in
             item.category?.displayName ?? "Others"
         }
         return grouped.map { displayName, items in
@@ -99,7 +127,7 @@ struct CategoryChartSection: View {
 #Preview {
     IncomesPreview { _ in
         List {
-            CategoryChartSection(.items(.dateIsSameYearAs(.now)))
+            CategoryChartSection(yearScopedTo: .now)
         }
     }
 }

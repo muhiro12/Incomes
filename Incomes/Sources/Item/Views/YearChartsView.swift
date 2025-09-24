@@ -20,7 +20,7 @@ struct YearChartsView: View {
 
     var body: some View {
         List {
-            ChartSectionGroup(.items(.dateIsSameYearAs(date)))
+            ChartSectionGroup(yearScopedTo: date)
         }
         .navigationTitle(date.stringValue(.yyyy))
         .toolbar {

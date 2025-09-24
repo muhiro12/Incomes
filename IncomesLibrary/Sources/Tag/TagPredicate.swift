@@ -9,6 +9,7 @@
 import Foundation
 import SwiftData
 
+/// Discrete predicate presets for fetching tags.
 public enum TagPredicate {
     case all
     case none
@@ -67,6 +68,10 @@ public enum TagPredicate {
 }
 
 public extension FetchDescriptor where T == Tag {
+    /// Convenience factory for a `FetchDescriptor<Tag>` using a `TagPredicate`.
+    /// - Parameters:
+    ///   - predicate: A preset predicate.
+    ///   - order: Sort order (default: forward).
     static func tags(_ predicate: TagPredicate, order: SortOrder = .forward) -> FetchDescriptor {
         .init(
             predicate: predicate.value,
