@@ -9,6 +9,7 @@
 import Foundation
 import SwiftData
 
+/// A financial record representing one income/outgo entry with tags.
 @Model
 public final class Item {
     @available(iOS, deprecated: 100000.0, message: "Use `utcDate` (UTC) or `localDate` (current calendar) instead.")
@@ -24,6 +25,7 @@ public final class Item {
 
     private init() {}
 
+    /// Creates a new item and attaches year/month/content/category tags.
     public static func create(context: ModelContext,
                               date: Date,
                               content: String,
@@ -66,6 +68,7 @@ public final class Item {
         return item
     }
 
+    /// Updates core fields and reattaches derived tags based on the new values.
     public func modify(date: Date,
                        content: String,
                        income: Decimal,
@@ -106,38 +109,46 @@ public final class Item {
         ]
     }
 
+    /// Updates the computed balance field.
     public func modify(balance: Decimal) {
         self.balance = balance
     }
 
+    /// Replaces current tags with `tags`.
     public func modify(tags: [Tag]) {
         self.tags = tags
     }
 }
 
 extension Item {
+    /// UTC date persisted in the store.
     public var utcDate: Date {
         date
     }
 
+    /// Local calendar date derived from `utcDate`.
     public var localDate: Date {
         Calendar.current.shiftedDate(componentsFrom: utcDate, in: .utc)
     }
 
+    /// `income - outgo`.
     public var netIncome: Decimal {
         income - outgo
     }
 
+    /// True when `netIncome >= 0`.
     public var isNetIncomePositive: Bool {
         netIncome.isPlus
     }
 
+    /// Year tag if present.
     public var year: Tag? {
         tags?.first {
             $0.type == .year
         }
     }
 
+    /// Category tag if present.
     public var category: Tag? {
         tags?.first {
             $0.type == .category
@@ -154,6 +165,7 @@ extension Item: Comparable {
 // MARK: - Test
 
 extension Item {
+    /// Testing helper: creates an item without checking duplicate tags.
     public static func createIgnoringDuplicates(context: ModelContext,
                                                 date: Date,
                                                 content: String,

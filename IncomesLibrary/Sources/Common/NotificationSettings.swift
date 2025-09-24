@@ -8,12 +8,18 @@
 
 import Foundation
 
+/// User-configurable settings that control upcoming payment notifications.
 public struct NotificationSettings: AppStorageCodable {
+    /// Enables/disables upcoming payment notifications.
     public var isEnabled = true
+    /// Minimum outgo amount to trigger a notification.
     public var thresholdAmount = LocaleAmountConverter.localizedAmount(baseUSD: 500)
+    /// Number of days before the due date to notify.
     public var daysBeforeDueDate = 3
+    /// Time of day to deliver notifications.
     public var notifyTime = Calendar.current.date(bySettingHour: 20, minute: 0, second: 0, of: .now) ?? .now
 
+    /// Creates default settings.
     public init() {}
 
     public init(from decoder: any Decoder) throws {

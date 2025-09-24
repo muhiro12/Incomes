@@ -8,33 +8,54 @@
 import Foundation
 import SwiftData
 
+/// Composable builder to express complex fetch-time filters for `Item`.
 public struct ItemQuery: Sendable {
+    /// Date-range filters based on a pivot date.
     public enum DateFilter: Sendable {
+        /// Items strictly before the start of the given local day.
         case before(Date)
+        /// Items on or after the start of the given local day.
         case after(Date)
+        /// Items within the same local calendar year as the given date.
         case sameYear(Date)
+        /// Items within the same local calendar month as the given date.
         case sameMonth(Date)
+        /// Items within the same local calendar day as the given date.
         case sameDay(Date)
     }
 
+    /// Optional date filter restriction.
     public var date: DateFilter?
+    /// Substring match against `Item.content`.
     public var contentContains: String?
 
+    /// Minimum income (inclusive) filter.
     public var incomeMin: Decimal?
+    /// Maximum income (inclusive) filter.
     public var incomeMax: Decimal?
+    /// Require income to be non-zero when `true`.
     public var incomeNonZero: Bool = false
 
+    /// Minimum outgo (inclusive) filter.
     public var outgoMin: Decimal?
+    /// Maximum outgo (inclusive) filter.
     public var outgoMax: Decimal?
+    /// Require outgo to be non-zero when `true`.
     public var outgoNonZero: Bool = false
 
+    /// Minimum balance (inclusive) filter.
     public var balanceMin: Decimal?
+    /// Maximum balance (inclusive) filter.
     public var balanceMax: Decimal?
 
+    /// Restrict to a specific repeat series.
     public var repeatID: UUID?
 
+    /// Creates an empty query.
     public init() {}
 
+    /// Materializes a `FetchDescriptor<Item>` from this query.
+    /// - Parameter order: Sort order for the descriptor.
     public func descriptor(order: SortOrder = .reverse) -> FetchDescriptor<Item> {
         .init(
             predicate: predicate(),
@@ -46,6 +67,7 @@ public struct ItemQuery: Sendable {
         )
     }
 
+    /// Builds a SwiftData `Predicate<Item>` equivalent to this query.
     public func predicate() -> Predicate<Item> {
         // Pre-compute date bounds outside of #Predicate closure.
         let dateBounds: (start: Date, end: Date)? = {
@@ -165,6 +187,11 @@ public struct ItemQuery: Sendable {
 }
 
 public extension ItemService {
+    /// Fetches items using an `ItemQuery`.
+    /// - Parameters:
+    ///   - context: A `ModelContext` to query from.
+    ///   - query: The composable query.
+    ///   - order: Sort order (default: reverse).
     static func items(context: ModelContext, query: ItemQuery, order: SortOrder = .reverse) throws -> [Item] {
         try context.fetch(query.descriptor(order: order))
     }

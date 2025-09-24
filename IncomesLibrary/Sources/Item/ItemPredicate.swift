@@ -9,6 +9,9 @@
 import Foundation
 import SwiftData
 
+/// Discrete predicate presets for fetching items.
+/// Use these when a single well-known filter is sufficient; for complex
+/// combinations prefer `ItemQuery`.
 public enum ItemPredicate {
     case all
     case none
@@ -209,6 +212,10 @@ public enum ItemPredicate {
 extension ItemPredicate: Hashable {}
 
 public extension FetchDescriptor where T == Item {
+    /// Convenience factory for a `FetchDescriptor<Item>` using an `ItemPredicate`.
+    /// - Parameters:
+    ///   - predicate: A preset predicate.
+    ///   - order: Sort order (default: reverse).
     static func items(_ predicate: ItemPredicate, order: SortOrder = .reverse) -> FetchDescriptor {
         .init(
             predicate: predicate.value,

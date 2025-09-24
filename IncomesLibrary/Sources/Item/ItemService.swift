@@ -1,12 +1,24 @@
 import Foundation
 import SwiftData
 
+/// Domain services for creating, updating, deleting, and querying `Item`.
 public enum ItemService {
+    /// Preset datasets used when seeding sample data.
     public enum SampleDataProfile {
         case debug
         case tutorial
         case preview
     }
+    /// Creates an item and optional repeating items, then recalculates balances.
+    /// - Parameters:
+    ///   - context: Target model context.
+    ///   - date: Local date for the first item.
+    ///   - content: Item description.
+    ///   - income: Income amount.
+    ///   - outgo: Outgo amount.
+    ///   - category: Category name.
+    ///   - repeatCount: Number of monthly repeats (>= 1).
+    /// - Returns: The first created item.
     public static func create(
         context: ModelContext,
         date: Date,
@@ -52,11 +64,13 @@ public enum ItemService {
         return item
     }
 
+    /// Deletes one item and recalculates balances for affected items.
     public static func delete(context: ModelContext, item: Item) throws {
         item.delete()
         try BalanceCalculator.calculate(in: context, for: [item])
     }
 
+    /// Deletes all items and recalculates balances.
     public static func deleteAll(context: ModelContext) throws {
         let items = try context.fetch(FetchDescriptor<Item>())
         items.forEach { item in
@@ -65,32 +79,39 @@ public enum ItemService {
         try BalanceCalculator.calculate(in: context, for: items)
     }
 
+    /// Returns total number of items.
     public static func allItemsCount(context: ModelContext) throws -> Int {
         try context.fetchCount(.items(.all))
     }
 
+    /// Returns number of items in the same repeat series.
     public static func repeatItemsCount(context: ModelContext, repeatID: UUID) throws -> Int {
         try context.fetchCount(.items(.repeatIDIs(repeatID)))
     }
 
+    /// Returns number of items in the year containing `date`.
     public static func yearItemsCount(context: ModelContext, date: Date) throws -> Int {
         try context.fetchCount(.items(.dateIsSameYearAs(date)))
     }
 
+    /// Returns items within the month containing `date`.
     public static func items(context: ModelContext, date: Date) throws -> [Item] {
         try context.fetch(
             .items(.dateIsSameMonthAs(date))
         )
     }
 
+    /// Returns the next item on or after `date`.
     public static func nextItem(context: ModelContext, date: Date) throws -> Item? {
         try nextItemModel(context: context, date: date)
     }
 
+    /// Returns the previous item on or before `date`.
     public static func previousItem(context: ModelContext, date: Date) throws -> Item? {
         try previousItemModel(context: context, date: date)
     }
 
+    /// Returns all items that occur on the same local day as the next item after `date`.
     public static func nextItems(context: ModelContext, date: Date) throws -> [Item] {
         guard let item = try nextItemModel(context: context, date: date) else {
             return []
@@ -100,6 +121,7 @@ public enum ItemService {
         )
     }
 
+    /// Returns all items that occur on the same local day as the previous item before `date`.
     public static func previousItems(context: ModelContext, date: Date) throws -> [Item] {
         guard let item = try previousItemModel(context: context, date: date) else {
             return []
@@ -109,18 +131,22 @@ public enum ItemService {
         )
     }
 
+    /// Returns the local date of the next item after `date`.
     public static func nextItemDate(context: ModelContext, date: Date) throws -> Date? {
         try nextItemModel(context: context, date: date)?.localDate
     }
 
+    /// Returns the local date of the previous item before `date`.
     public static func previousItemDate(context: ModelContext, date: Date) throws -> Date? {
         try previousItemModel(context: context, date: date)?.localDate
     }
 
+    /// Convenience: returns the content of the next item after `date`.
     public static func nextItemContent(context: ModelContext, date: Date) throws -> String? {
         try nextItemModel(context: context, date: date)?.content
     }
 
+    /// Convenience: returns the content of the previous item before `date`.
     public static func previousItemContent(context: ModelContext, date: Date) throws -> String? {
         try previousItemModel(context: context, date: date)?.content
     }
@@ -128,6 +154,7 @@ public enum ItemService {
     // Intentionally keep AppIntent-specific formatting (e.g., IntentCurrencyAmount)
     // out of the library. Use nextItem/previousItem and compute net income in the app.
 
+    /// Updates a single item with the provided values and recalculates balance.
     public static func update(
         context: ModelContext,
         item: Item,
@@ -148,6 +175,8 @@ public enum ItemService {
         try BalanceCalculator.calculate(in: context, for: [item])
     }
 
+    /// Updates a set of repeating items specified by `descriptor` using the delta
+    /// between the original item's date and the new `date`, then recalculates balances.
     public static func updateRepeatingItems(
         context: ModelContext,
         item: Item,
@@ -182,6 +211,7 @@ public enum ItemService {
         try BalanceCalculator.calculate(in: context, for: items)
     }
 
+    /// Updates all items in the same repeat series as `item`.
     public static func updateAll(
         context: ModelContext,
         item: Item,
@@ -203,6 +233,7 @@ public enum ItemService {
         )
     }
 
+    /// Updates items in the repeat series that occur on/after the original `item` date.
     public static func updateFuture(
         context: ModelContext,
         item: Item,
@@ -229,6 +260,7 @@ public enum ItemService {
         )
     }
 
+    /// Recalculates balances for items after the given `date`.
     public static func recalculate(context: ModelContext, date: Date) throws {
         try BalanceCalculator.calculate(in: context, after: date)
     }

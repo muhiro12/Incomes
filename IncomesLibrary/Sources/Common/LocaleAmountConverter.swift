@@ -8,7 +8,13 @@
 
 import Foundation
 
+/// Converts amounts from a base USD value into a rough locale-sensitive scale.
 public enum LocaleAmountConverter {
+    /// Converts a base USD amount to an approximate local currency magnitude.
+    /// - Parameters:
+    ///   - baseUSD: Amount in USD used as a baseline.
+    ///   - locale: Target locale (default: current).
+    /// - Returns: Converted amount intended for demo/sample data.
     public static func localizedAmount(baseUSD: Decimal, locale: Locale = .current) -> Decimal {
         let currencyCode = CurrencyCode(rawValue: locale.currency?.identifier ?? "")
         let multiplier: Decimal
