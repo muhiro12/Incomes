@@ -16,6 +16,7 @@ struct TagSummaryRow: View {
         HStack {
             Text(tag.displayName)
                 .font(.headline)
+                .foregroundStyle(tag.netIncome.isPlus ? Color.primary : Color.red)
             Text("(\(tag.items.orEmpty.count))")
                 .font(.caption)
                 .foregroundColor(.secondary)

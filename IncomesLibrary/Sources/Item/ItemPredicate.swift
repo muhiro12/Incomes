@@ -10,8 +10,6 @@ import Foundation
 import SwiftData
 
 /// Discrete predicate presets for fetching items.
-/// Use these when a single well-known filter is sufficient; for complex
-/// combinations prefer `ItemQuery`.
 public enum ItemPredicate {
     case all
     case none
@@ -31,9 +29,11 @@ public enum ItemPredicate {
     case contentContains(String)
     // MARK: - Income
     case incomeIsBetween(min: Decimal, max: Decimal)
+    case incomeIsNonZero
     // MARK: Outgo
     case outgoIsBetween(min: Decimal, max: Decimal)
     case outgoIsGreaterThanOrEqualTo(amount: Decimal, onOrAfter: Date)
+    case outgoIsNonZero
     // MARK: - Balance
     case balanceIsBetween(min: Decimal, max: Decimal)
     // MARK: RepeatID
@@ -172,6 +172,11 @@ public enum ItemPredicate {
             return #Predicate {
                 min <= $0.income && $0.income <= max
             }
+        case .incomeIsNonZero:
+            let zero: Decimal = .zero
+            return #Predicate {
+                $0.income != zero
+            }
 
         // MARK: - Outgo
 
@@ -184,6 +189,11 @@ public enum ItemPredicate {
             let start = Calendar.utc.startOfDay(for: shiftedDate)
             return #Predicate {
                 $0.date >= start && $0.outgo >= amount
+            }
+        case .outgoIsNonZero:
+            let zero: Decimal = .zero
+            return #Predicate {
+                $0.outgo != zero
             }
 
         // MARK: - Balance
