@@ -8,7 +8,9 @@
 
 import Foundation
 
-public protocol AppStorageCodable: Codable, Equatable, RawRepresentable<String> {
+// A convenience protocol to store Codable values in AppStorage by
+// representing them as a JSON `String` raw value.
+public protocol AppStorageCodable: Codable, Equatable, RawRepresentable where RawValue == String {
     init()
 }
 
@@ -21,19 +23,11 @@ public extension AppStorageCodable {
         self = value
     }
 
-    init(from _: Decoder) throws {
-        fatalError("Must override init(from:)")
-    }
-
     var rawValue: RawValue {
         guard let data = try? JSONEncoder().encode(self),
               let string = String(data: data, encoding: .utf8) else {
             return .empty
         }
         return string
-    }
-
-    func encode(to _: Encoder) throws {
-        fatalError("Must override encode(to:)")
     }
 }

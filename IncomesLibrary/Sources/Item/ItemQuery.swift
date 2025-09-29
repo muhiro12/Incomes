@@ -54,6 +54,61 @@ public struct ItemQuery: Sendable {
     /// Creates an empty query.
     public init() {}
 
+    /// Returns date bounds for the current `date` filter in UTC item space.
+    fileprivate func predicateDateBounds() -> (start: Date, end: Date)? {
+        switch date {
+        case .none:
+            return nil
+        case .some(.before(let d)):
+            let shifted = Calendar.utc.shiftedDate(componentsFrom: d, in: .current)
+            let start = Date.distantPast
+            let end = Calendar.utc.startOfDay(for: shifted) - 1
+            return (start, end)
+        case .some(.after(let d)):
+            let shifted = Calendar.utc.shiftedDate(componentsFrom: d, in: .current)
+            let start = Calendar.utc.startOfDay(for: shifted)
+            let end = Date.distantFuture
+            return (start, end)
+        case .some(.sameYear(let d)):
+            let shifted = Calendar.utc.shiftedDate(componentsFrom: d, in: .current)
+            return (Calendar.utc.startOfYear(for: shifted), Calendar.utc.endOfYear(for: shifted))
+        case .some(.sameMonth(let d)):
+            let shifted = Calendar.utc.shiftedDate(componentsFrom: d, in: .current)
+            return (Calendar.utc.startOfMonth(for: shifted), Calendar.utc.endOfMonth(for: shifted))
+        case .some(.sameDay(let d)):
+            let shifted = Calendar.utc.shiftedDate(componentsFrom: d, in: .current)
+            return (Calendar.utc.startOfDay(for: shifted), Calendar.utc.endOfDay(for: shifted))
+        }
+    }
+
+    /// In-memory evaluation to refine results beyond what SwiftData's macro allows.
+    fileprivate func matches(_ item: Item) -> Bool {
+        // Date filter (already applied in fetch when present, but keep as safety)
+        if let bounds = predicateDateBounds() {
+            if !(bounds.start <= item.date && item.date <= bounds.end) {
+                return false
+            }
+        }
+        // Content substring
+        if let contentContains, !item.content.contains(contentContains) {
+            return false
+        }
+        // Income range / non-zero
+        if let min = incomeMin, !(min <= item.income) { return false }
+        if let max = incomeMax, !(item.income <= max) { return false }
+        if incomeNonZero, item.income == Decimal.zero { return false }
+        // Outgo range / non-zero
+        if let min = outgoMin, !(min <= item.outgo) { return false }
+        if let max = outgoMax, !(item.outgo <= max) { return false }
+        if outgoNonZero, item.outgo == Decimal.zero { return false }
+        // Balance range
+        if let min = balanceMin, !(min <= item.balance) { return false }
+        if let max = balanceMax, !(item.balance <= max) { return false }
+        // Repeat series
+        if let repeatID, item.repeatID != repeatID { return false }
+        return true
+    }
+
     /// Materializes a `FetchDescriptor<Item>` from this query.
     /// - Parameter order: Sort order for the descriptor.
     public func descriptor(order: SortOrder = .reverse) -> FetchDescriptor<Item> {
@@ -69,119 +124,40 @@ public struct ItemQuery: Sendable {
 
     /// Builds a SwiftData `Predicate<Item>` equivalent to this query.
     public func predicate() -> Predicate<Item> {
-        // Pre-compute date bounds outside of #Predicate closure.
-        let dateBounds: (start: Date, end: Date)? = {
-            guard let date else {
-                return nil
-            }
+        // Compute simple start/end date values to capture in the macro.
+        var startOpt: Date?
+        var endOpt: Date?
+        if let date {
             switch date {
             case .before(let d):
                 let shifted = Calendar.utc.shiftedDate(componentsFrom: d, in: .current)
-                let start = Date.distantPast
-                let end = Calendar.utc.startOfDay(for: shifted) - 1
-                return (start, end)
+                startOpt = Date.distantPast
+                endOpt = Calendar.utc.startOfDay(for: shifted) - 1
             case .after(let d):
                 let shifted = Calendar.utc.shiftedDate(componentsFrom: d, in: .current)
-                let start = Calendar.utc.startOfDay(for: shifted)
-                let end = Date.distantFuture
-                return (start, end)
+                startOpt = Calendar.utc.startOfDay(for: shifted)
+                endOpt = Date.distantFuture
             case .sameYear(let d):
                 let shifted = Calendar.utc.shiftedDate(componentsFrom: d, in: .current)
-                return (Calendar.utc.startOfYear(for: shifted), Calendar.utc.endOfYear(for: shifted))
+                startOpt = Calendar.utc.startOfYear(for: shifted)
+                endOpt = Calendar.utc.endOfYear(for: shifted)
             case .sameMonth(let d):
                 let shifted = Calendar.utc.shiftedDate(componentsFrom: d, in: .current)
-                return (Calendar.utc.startOfMonth(for: shifted), Calendar.utc.endOfMonth(for: shifted))
+                startOpt = Calendar.utc.startOfMonth(for: shifted)
+                endOpt = Calendar.utc.endOfMonth(for: shifted)
             case .sameDay(let d):
                 let shifted = Calendar.utc.shiftedDate(componentsFrom: d, in: .current)
-                return (Calendar.utc.startOfDay(for: shifted), Calendar.utc.endOfDay(for: shifted))
+                startOpt = Calendar.utc.startOfDay(for: shifted)
+                endOpt = Calendar.utc.endOfDay(for: shifted)
             }
-        }()
+        }
 
-        let content = contentContains
-
-        let incomeMin = incomeMin
-        let incomeMax = incomeMax
-        let incomeNonZero = incomeNonZero
-
-        let outgoMin = outgoMin
-        let outgoMax = outgoMax
-        let outgoNonZero = outgoNonZero
-
-        let balanceMin = balanceMin
-        let balanceMax = balanceMax
-
-        let repeatID = repeatID
-
+        // Keep the SwiftData predicate simple to avoid macro limitations.
+        guard let start = startOpt, let end = endOpt else {
+            return #Predicate { _ in true }
+        }
         return #Predicate { item in
-            // Date
-            let dateOK: Bool = {
-                guard let dateBounds else {
-                    return true
-                }
-                return dateBounds.start <= item.date && item.date <= dateBounds.end
-            }()
-
-            // Content
-            let contentOK: Bool = {
-                guard let content else {
-                    return true
-                }
-                return item.content.contains(content)
-            }()
-
-            // Income
-            let incomeRangeOK: Bool = {
-                switch (incomeMin, incomeMax) {
-                case (nil, nil):
-                    true
-                case (let min?, nil):
-                    min <= item.income
-                case (nil, let max?):
-                    item.income <= max
-                case (let min?, let max?):
-                    min <= item.income && item.income <= max
-                }
-            }()
-            let incomeNonZeroOK: Bool = incomeNonZero ? (item.income != .zero) : true
-
-            // Outgo
-            let outgoRangeOK: Bool = {
-                switch (outgoMin, outgoMax) {
-                case (nil, nil):
-                    true
-                case (let min?, nil):
-                    min <= item.outgo
-                case (nil, let max?):
-                    item.outgo <= max
-                case (let min?, let max?):
-                    min <= item.outgo && item.outgo <= max
-                }
-            }()
-            let outgoNonZeroOK: Bool = outgoNonZero ? (item.outgo != .zero) : true
-
-            // Balance
-            let balanceRangeOK: Bool = {
-                switch (balanceMin, balanceMax) {
-                case (nil, nil):
-                    true
-                case (let min?, nil):
-                    min <= item.balance
-                case (nil, let max?):
-                    item.balance <= max
-                case (let min?, let max?):
-                    min <= item.balance && item.balance <= max
-                }
-            }()
-
-            // RepeatID
-            let repeatOK: Bool = {
-                guard let repeatID else {
-                    return true
-                }
-                return item.repeatID == repeatID
-            }()
-
-            return dateOK && contentOK && incomeRangeOK && incomeNonZeroOK && outgoRangeOK && outgoNonZeroOK && balanceRangeOK && repeatOK
+            (start <= item.date) && (item.date <= end)
         }
     }
 }
@@ -193,6 +169,32 @@ public extension ItemService {
     ///   - query: The composable query.
     ///   - order: Sort order (default: reverse).
     static func items(context: ModelContext, query: ItemQuery, order: SortOrder = .reverse) throws -> [Item] {
-        try context.fetch(query.descriptor(order: order))
+        // Fetch a superset using only date bounds (fast in-store filtering),
+        // then refine in-memory to honor the full query.
+        let descriptor: FetchDescriptor<Item>
+        if let bounds = query.predicateDateBounds() {
+            let start = bounds.start
+            let end = bounds.end
+            descriptor = .init(
+                predicate: #Predicate { item in
+                    (start <= item.date) && (item.date <= end)
+                },
+                sortBy: [
+                    .init(\.date, order: order),
+                    .init(\.content, order: order),
+                    .init(\.persistentModelID, order: order)
+                ]
+            )
+        } else {
+            descriptor = .init(
+                sortBy: [
+                    .init(\.date, order: order),
+                    .init(\.content, order: order),
+                    .init(\.persistentModelID, order: order)
+                ]
+            )
+        }
+        let fetched = try context.fetch(descriptor)
+        return fetched.filter { query.matches($0) }
     }
 }
