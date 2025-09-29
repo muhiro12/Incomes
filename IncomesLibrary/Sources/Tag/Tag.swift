@@ -69,6 +69,12 @@ extension Tag {
     public var netIncome: Decimal {
         income - outgo
     }
+
+    /// True when any related item has a negative running balance (deficit).
+    /// Used for quick visual warnings in summary lists.
+    public var hasDeficit: Bool {
+        items.orEmpty.contains(where: \.balance.isMinus)
+    }
 }
 
 extension Tag: Identifiable {}
