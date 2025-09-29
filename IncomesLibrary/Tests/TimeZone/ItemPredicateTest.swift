@@ -785,4 +785,49 @@ struct ItemPredicateTest {
 
         #expect(contents == ["Past"])
     }
+
+    // MARK: - Content and Amount
+
+    @Test("filters items with non-zero income", arguments: timeZones)
+    func filtersNonZeroIncome(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
+        _ = try ItemService.create(context: context, date: shiftedDate("2024-07-01T00:00:00Z"), content: "Zero", income: 0, outgo: 0, category: "Test", repeatCount: 1)
+        _ = try ItemService.create(context: context, date: shiftedDate("2024-07-02T00:00:00Z"), content: "NonZero", income: 10, outgo: 0, category: "Test", repeatCount: 1)
+
+        let predicate = ItemPredicate.incomeIsNonZero
+        let items = try context.fetch(.items(predicate))
+        let contents = items.map(\.content)
+
+        #expect(contents == ["NonZero"])
+    }
+
+    @Test("filters items with outgo in range", arguments: timeZones)
+    func filtersOutgoInRange(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
+        _ = try ItemService.create(context: context, date: shiftedDate("2024-08-01T00:00:00Z"), content: "Low", income: 0, outgo: 10, category: "Test", repeatCount: 1)
+        _ = try ItemService.create(context: context, date: shiftedDate("2024-08-02T00:00:00Z"), content: "Mid", income: 0, outgo: 50, category: "Test", repeatCount: 1)
+        _ = try ItemService.create(context: context, date: shiftedDate("2024-08-03T00:00:00Z"), content: "High", income: 0, outgo: 100, category: "Test", repeatCount: 1)
+
+        let predicate = ItemPredicate.outgoIsBetween(min: 20, max: 80)
+        let items = try context.fetch(.items(predicate))
+        let contents = items.map(\.content)
+
+        #expect(contents == ["Mid"])
+    }
+
+    @Test("filters items whose content contains a substring", arguments: timeZones)
+    func filtersByContentSubstring(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
+        _ = try ItemService.create(context: context, date: shiftedDate("2024-09-01T00:00:00Z"), content: "Grocery Store", income: 0, outgo: 20, category: "Test", repeatCount: 1)
+        _ = try ItemService.create(context: context, date: shiftedDate("2024-09-02T00:00:00Z"), content: "Gas Station", income: 0, outgo: 30, category: "Test", repeatCount: 1)
+
+        let predicate = ItemPredicate.contentContains("Grocery")
+        let items = try context.fetch(.items(predicate))
+        let contents = items.map(\.content)
+
+        #expect(contents == ["Grocery Store"])
+    }
 }
