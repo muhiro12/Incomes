@@ -1215,6 +1215,7 @@
       }
     },
     "Choose a Date" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1385,6 +1386,7 @@
       }
     },
     "Data after this date will be recalculated." : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
