@@ -50,6 +50,7 @@ struct ListItem: View {
             DuplicateItemButton {
                 isDuplicatePresented = true
             }
+            RecalculateItemButton()
             DeleteItemButton {
                 Haptic.warning.impact()
                 isDeletePresented = true
