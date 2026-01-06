@@ -29,7 +29,7 @@ struct TagTests {
             category: "Category",
             repeatCount: 1
         )
-        let secondItem = try ItemService.create(
+        _ = try ItemService.create(
             context: context,
             date: shiftedDate("2024-01-02T00:00:00Z"),
             content: "Second",
@@ -39,13 +39,24 @@ struct TagTests {
             repeatCount: 1
         )
 
-        let tag = try #require(secondItem.year)
+        try ItemService.recalculate(
+            context: context,
+            date: .distantPast
+        )
+
+        let tag = try #require(
+            try TagService.getByName(
+                context: context,
+                name: "2024",
+                type: .year
+            )
+        )
         #expect(tag.hasDeficit == true)
     }
 
     @Test
     func hasDeficit_returns_false_when_all_items_have_non_negative_balance() throws {
-        let item = try ItemService.create(
+        _ = try ItemService.create(
             context: context,
             date: shiftedDate("2024-02-01T00:00:00Z"),
             content: "Positive",
@@ -55,7 +66,18 @@ struct TagTests {
             repeatCount: 1
         )
 
-        let tag = try #require(item.year)
+        try ItemService.recalculate(
+            context: context,
+            date: .distantPast
+        )
+
+        let tag = try #require(
+            try TagService.getByName(
+                context: context,
+                name: "2024",
+                type: .year
+            )
+        )
         #expect(tag.hasDeficit == false)
     }
 }

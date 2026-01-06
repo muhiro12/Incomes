@@ -40,6 +40,43 @@ struct ItemServiceSampleDataTests {
         #expect(fetchItems(context).count == 3)
     }
 
+    @Test
+    func seedSampleData_creates_debug_items_when_ignoring_duplicates() throws {
+        try ItemService.seedSampleData(
+            context: context,
+            profile: .debug,
+            baseDate: shiftedDate("2000-01-03T12:00:00Z"),
+            ignoringDuplicates: true,
+            ifEmptyOnly: false
+        )
+
+        #expect(fetchItems(context).count == 24)
+        #expect(try ItemService.hasDebugData(context: context))
+    }
+
+    @Test
+    func seedSampleData_skips_when_ifEmptyOnly_and_items_exist() throws {
+        _ = try ItemService.create(
+            context: context,
+            date: shiftedDate("2000-01-01T12:00:00Z"),
+            content: "Seeded",
+            income: 100,
+            outgo: .zero,
+            category: "Seed",
+            repeatCount: 1
+        )
+
+        try ItemService.seedSampleData(
+            context: context,
+            profile: .preview,
+            baseDate: shiftedDate("2000-01-03T12:00:00Z"),
+            ignoringDuplicates: false,
+            ifEmptyOnly: true
+        )
+
+        #expect(fetchItems(context).count == 1)
+    }
+
     // MARK: - Delete
 
     @Test

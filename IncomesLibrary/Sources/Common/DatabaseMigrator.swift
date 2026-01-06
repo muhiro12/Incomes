@@ -2,10 +2,18 @@ import Foundation
 
 public enum DatabaseMigrator {
     public static func migrateSQLiteFilesIfNeeded() {
-        let fileManager: FileManager = .default
-        let legacyURL = Database.legacyURL
-        let currentURL = Database.url
+        migrateSQLiteFilesIfNeeded(
+            fileManager: .default,
+            legacyURL: Database.legacyURL,
+            currentURL: Database.url
+        )
+    }
 
+    static func migrateSQLiteFilesIfNeeded(
+        fileManager: FileManager,
+        legacyURL: URL,
+        currentURL: URL
+    ) {
         guard fileManager.fileExists(atPath: legacyURL.path),
               !fileManager.fileExists(atPath: currentURL.path) else {
             return
