@@ -39,14 +39,14 @@ enum WatchDataSyncer {
         }
 
         // Replace items for each allowed month with incoming snapshot
-        for ym in allowedYearMonths {
+        for yearMonth in allowedYearMonths {
             // Delete existing items for that month
-            for item in all where item.localDate.stringValueWithoutLocale(.yyyyMM) == ym {
+            for item in all where item.localDate.stringValueWithoutLocale(.yyyyMM) == yearMonth {
                 try? ItemService.delete(context: context, item: item)
             }
 
             // Create incoming items
-            for wire in grouped[ym].orEmpty {
+            for wire in grouped[yearMonth].orEmpty {
                 _ = try? Item.create(
                     context: context,
                     date: Date(timeIntervalSince1970: wire.dateEpoch),

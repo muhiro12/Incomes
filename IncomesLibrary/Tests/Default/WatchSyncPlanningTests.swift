@@ -58,15 +58,19 @@ struct WatchSyncPlanningTests {
         )
 
         // Allowed months: [-1, 0, 1] => Aug, Sep, Oct
-        let allowed: Set<String> = Set([-1, 0, 1].compactMap { off in
-            Calendar.current.date(byAdding: .month, value: off, to: base)?.stringValueWithoutLocale(.yyyyMM)
+        let allowed: Set<String> = Set([-1, 0, 1].compactMap { offset in
+            Calendar.current.date(
+                byAdding: .month,
+                value: offset,
+                to: base
+            )?.stringValueWithoutLocale(.yyyyMM)
         })
 
         // Prune items not in allowed set (simulate watch syncer pruning)
         let all = try context.fetch(FetchDescriptor<Item>())
         for item in all {
-            let ym = item.localDate.stringValueWithoutLocale(.yyyyMM)
-            if !allowed.contains(ym) {
+            let yearMonth = item.localDate.stringValueWithoutLocale(.yyyyMM)
+            if !allowed.contains(yearMonth) {
                 try ItemService.delete(context: context, item: item)
             }
         }

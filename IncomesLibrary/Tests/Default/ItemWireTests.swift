@@ -5,11 +5,11 @@ import Testing
 struct ItemWireTests {
     @Test
     func itemsRequest_roundTrips_via_JSON() throws {
-        let req = ItemsRequest(baseEpoch: 1_725_000_000, monthOffsets: [-1, 0, 1])
-        let data = try JSONEncoder().encode(req)
+        let request = ItemsRequest(baseEpoch: 1_725_000_000, monthOffsets: [-1, 0, 1])
+        let data = try JSONEncoder().encode(request)
         let decoded = try #require(try? JSONDecoder().decode(ItemsRequest.self, from: data))
-        #expect(decoded.baseEpoch == req.baseEpoch)
-        #expect(decoded.monthOffsets == req.monthOffsets)
+        #expect(decoded.baseEpoch == request.baseEpoch)
+        #expect(decoded.monthOffsets == request.monthOffsets)
     }
 
     @Test

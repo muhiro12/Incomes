@@ -71,12 +71,12 @@ nonisolated extension PhoneWatchBridge: WCSessionDelegate {
     }
 
     func session(_: WCSession, didReceiveMessageData messageData: Data, replyHandler: @escaping @Sendable (Data) -> Void) {
-        guard let req = try? JSONDecoder().decode(ItemsRequest.self, from: messageData) else {
+        guard let request = try? JSONDecoder().decode(ItemsRequest.self, from: messageData) else {
             replyHandler(Data())
             return
         }
         Task { @MainActor in
-            handleRecentItems(request: req, replyHandler: replyHandler)
+            handleRecentItems(request: request, replyHandler: replyHandler)
         }
     }
 
