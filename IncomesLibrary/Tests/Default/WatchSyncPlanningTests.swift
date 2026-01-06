@@ -58,7 +58,7 @@ struct WatchSyncPlanningTests {
         )
 
         // Allowed months: [-1, 0, 1] => Aug, Sep, Oct
-        let allowed: Set<String> = Set([-1, 0, 1].compactMap { offset in
+        let allowed: Set<String> = .init([-1, 0, 1].compactMap { offset in
             Calendar.current.date(
                 byAdding: .month,
                 value: offset,

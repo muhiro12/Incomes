@@ -12,7 +12,7 @@ enum WatchDataSyncer {
     static func syncRecentMonths(context: ModelContext) async {
         let baseDate = Date()
         let months: [Int] = [-1, 0, 1]
-        let allowedYearMonths: Set<String> = Set(months.compactMap { offset in
+        let allowedYearMonths: Set<String> = .init(months.compactMap { offset in
             Calendar.current.date(
                 byAdding: .month,
                 value: offset,
