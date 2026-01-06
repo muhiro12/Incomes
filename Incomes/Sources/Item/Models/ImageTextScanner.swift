@@ -8,7 +8,9 @@ final class ImageTextScanner: ObservableObject {
 
     func scan(_ image: UIImage) async throws {
         isScanning = true
-        defer { isScanning = false }
+        defer {
+            isScanning = false
+        }
 
         let analyzer: ImageAnalyzer = .init()
         let configuration: ImageAnalyzer.Configuration = .init([.text])

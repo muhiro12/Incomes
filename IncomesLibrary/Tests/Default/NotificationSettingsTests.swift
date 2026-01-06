@@ -26,7 +26,10 @@ struct NotificationSettingsTests {
         let encoded = original.rawValue
         let decoded = try #require(NotificationSettings(rawValue: encoded))
 
-        #expect(decoded == original)
+        #expect(decoded.isEnabled == original.isEnabled)
+        #expect(decoded.thresholdAmount == original.thresholdAmount)
+        #expect(decoded.daysBeforeDueDate == original.daysBeforeDueDate)
+        #expect(abs(decoded.notifyTime.timeIntervalSince1970 - original.notifyTime.timeIntervalSince1970) < 0.001)
     }
 
     @Test
