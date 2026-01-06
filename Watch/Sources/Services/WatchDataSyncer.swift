@@ -13,7 +13,11 @@ enum WatchDataSyncer {
         let baseDate = Date()
         let months: [Int] = [-1, 0, 1]
         let allowedYearMonths: Set<String> = Set(months.compactMap { offset in
-            Calendar.current.date(byAdding: .month, value: offset, to: baseDate)?.stringValueWithoutLocale(.yyyyMM)
+            Calendar.current.date(
+                byAdding: .month,
+                value: offset,
+                to: baseDate
+            )?.stringValueWithoutLocale(.yyyyMM)
         })
 
         let items = await PhoneSyncClient.shared.requestRecentItems()

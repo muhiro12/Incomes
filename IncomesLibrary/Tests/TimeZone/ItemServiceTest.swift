@@ -392,7 +392,9 @@ struct ItemServiceTest {
             outgo: 0,
             category: "SortTest"
         )
-        var items = try context.fetch(.items(.all)).sorted { $0.utcDate < $1.utcDate }
+        var items = try context.fetch(.items(.all)).sorted { lhs, rhs in
+            lhs.utcDate < rhs.utcDate
+        }
         #expect(items[0].content == "First")
 
         try ItemService.update(
@@ -405,7 +407,9 @@ struct ItemServiceTest {
             category: items[1].category?.name ?? ""
         )
 
-        items = try context.fetch(.items(.all)).sorted { $0.utcDate < $1.utcDate }
+        items = try context.fetch(.items(.all)).sorted { lhs, rhs in
+            lhs.utcDate < rhs.utcDate
+        }
         #expect(items[0].content == "Second")
     }
 
@@ -421,7 +425,9 @@ struct ItemServiceTest {
             category: "Media",
             repeatCount: 3
         )
-        let items = try context.fetch(.items(.all)).sorted { $0.utcDate < $1.utcDate }
+        let items = try context.fetch(.items(.all)).sorted { lhs, rhs in
+            lhs.utcDate < rhs.utcDate
+        }
         let target = items[1] // middle item
         try ItemService.updateFuture(
             context: context,
@@ -432,7 +438,9 @@ struct ItemServiceTest {
             outgo: 1_200,
             category: "Entertainment"
         )
-        let result = try context.fetch(.items(.all)).sorted { $0.utcDate < $1.utcDate }
+        let result = try context.fetch(.items(.all)).sorted { lhs, rhs in
+            lhs.utcDate < rhs.utcDate
+        }
         #expect(result[0].content == "Subscription")
         #expect(result[1].content == "UpdatedSub")
         #expect(result[2].content == "UpdatedSub")
@@ -452,7 +460,9 @@ struct ItemServiceTest {
             category: "Bills",
             repeatCount: 3
         )
-        let items = try context.fetch(.items(.all)).sorted { $0.utcDate < $1.utcDate }
+        let items = try context.fetch(.items(.all)).sorted { lhs, rhs in
+            lhs.utcDate < rhs.utcDate
+        }
         let last = items[2]
 
         try ItemService.updateFuture(
@@ -464,7 +474,9 @@ struct ItemServiceTest {
             outgo: 0,
             category: "BillsUpdated"
         )
-        let result = try context.fetch(.items(.all)).sorted { $0.utcDate < $1.utcDate }
+        let result = try context.fetch(.items(.all)).sorted { lhs, rhs in
+            lhs.utcDate < rhs.utcDate
+        }
         #expect(result[0].content == "Monthly")
         #expect(result[1].content == "Monthly")
         #expect(result[2].content == "Changed")
@@ -569,7 +581,9 @@ struct ItemServiceTest {
             category: "General"
         )
         let allItems = try context.fetch(.items(.all))
-        let toDelete = allItems.filter { $0.content == "RemoveMe" }
+        let toDelete = allItems.filter { item in
+            item.content == "RemoveMe"
+        }
         try toDelete.forEach {
             try ItemService.delete(context: context, item: $0)
         }
@@ -663,7 +677,9 @@ struct ItemServiceTest {
             outgo: 80,
             category: "Split"
         )
-        var items = try context.fetch(.items(.all)).sorted { $0.utcDate < $1.utcDate }
+        var items = try context.fetch(.items(.all)).sorted { lhs, rhs in
+            lhs.utcDate < rhs.utcDate
+        }
         try ItemService.update(
             context: context,
             item: items[1],
@@ -678,7 +694,9 @@ struct ItemServiceTest {
             context: context,
             date: isoDate("2024-01-15T00:00:00Z")
         )
-        items = try context.fetch(.items(.all)).sorted { $0.utcDate < $1.utcDate }
+        items = try context.fetch(.items(.all)).sorted { lhs, rhs in
+            lhs.utcDate < rhs.utcDate
+        }
         #expect(items[0].balance == 50)
         #expect(items[1].balance == 470)
     }

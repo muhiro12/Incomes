@@ -56,9 +56,15 @@ struct IncomesApp: App {
             }()
         )
 
-        AppDependencyManager.shared.add { modelContainer }
-        AppDependencyManager.shared.add { notificationService }
-        AppDependencyManager.shared.add { configurationService }
+        AppDependencyManager.shared.add {
+            modelContainer
+        }
+        AppDependencyManager.shared.add {
+            notificationService
+        }
+        AppDependencyManager.shared.add {
+            configurationService
+        }
 
         IncomesShortcuts.updateAppShortcutParameters()
     }

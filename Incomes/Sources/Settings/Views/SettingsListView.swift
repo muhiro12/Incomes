@@ -60,8 +60,8 @@ extension SettingsListView: View {
             }
             Section {
                 Picker(selection: $currencyCode) {
-                    ForEach(CurrencyCode.allCases, id: \.rawValue) {
-                        Text($0.displayName)
+                    ForEach(CurrencyCode.allCases, id: \.rawValue) { code in
+                        Text(code.displayName)
                     }
                 } label: {
                     Text("Currency Code")
@@ -83,7 +83,9 @@ extension SettingsListView: View {
                         .frame(maxWidth: 120)
                     }
                     Picker("Notify days before", selection: $notificationSettings.daysBeforeDueDate) {
-                        ForEach(0..<15) { Text("\($0) days") }
+                        ForEach(0..<15) { dayOffset in
+                            Text("\(dayOffset) days")
+                        }
                     }
                     DatePicker(
                         "Notify time",

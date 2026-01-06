@@ -127,7 +127,19 @@ struct ItemFormInputAssistView: View {
                 await scanReceipt()
             }
         }
-        .alert("Error", isPresented: Binding(get: { errorMessage != nil }, set: { if !$0 { errorMessage = nil } })) {
+        .alert(
+            "Error",
+            isPresented: Binding(
+                get: {
+                    errorMessage != nil
+                },
+                set: { isPresented in
+                    if !isPresented {
+                        errorMessage = nil
+                    }
+                }
+            )
+        ) {
             Button("OK", role: .cancel) {
                 errorMessage = nil
             }
@@ -140,7 +152,9 @@ struct ItemFormInputAssistView: View {
 
     private func startRecording() async {
         isProcessing = true
-        defer { isProcessing = false }
+        defer {
+            isProcessing = false
+        }
         do {
             let stream = try await speechClient.stream()
             isRecording = true
@@ -154,7 +168,9 @@ struct ItemFormInputAssistView: View {
 
     private func stopRecording() async {
         isProcessing = true
-        defer { isProcessing = false }
+        defer {
+            isProcessing = false
+        }
         await speechClient.stop()
         isRecording = false
     }
@@ -163,7 +179,9 @@ struct ItemFormInputAssistView: View {
         guard let item = selectedItem else {
             return
         }
-        defer { selectedItem = nil }
+        defer {
+            selectedItem = nil
+        }
         do {
             guard let data = try await item.loadTransferable(type: Data.self),
                   let image = UIImage(data: data) else {
@@ -177,7 +195,9 @@ struct ItemFormInputAssistView: View {
 
     private func scanImage(_ image: UIImage) async {
         isProcessing = true
-        defer { isProcessing = false }
+        defer {
+            isProcessing = false
+        }
         do {
             try await scanner.scan(image)
             text = scanner.recognizedText
@@ -188,7 +208,9 @@ struct ItemFormInputAssistView: View {
 
     private func applyInferenceAndClose() async {
         isProcessing = true
-        defer { isProcessing = false }
+        defer {
+            isProcessing = false
+        }
         do {
             let inference = try await ItemService.inferForm(text: text)
             if let newDate = inference.date.dateValueWithoutLocale(.yyyyMMdd) {

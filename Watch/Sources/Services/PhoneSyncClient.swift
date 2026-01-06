@@ -20,7 +20,9 @@ final class PhoneSyncClient: NSObject {
     }
 
     func activate() async {
-        guard WCSession.isSupported() else { return }
+        guard WCSession.isSupported() else {
+            return
+        }
         let session = WCSession.default
         session.delegate = self
 
@@ -30,7 +32,9 @@ final class PhoneSyncClient: NSObject {
         }
 
         await withCheckedContinuation { [weak self] continuation in
-            guard let self else { return }
+            guard let self else {
+                return
+            }
             activationWaiters.append(continuation)
             if !isActivating {
                 isActivating = true
@@ -72,7 +76,9 @@ nonisolated extension PhoneSyncClient: WCSessionDelegate {
             isActivating = false
             let waiters = activationWaiters
             activationWaiters.removeAll()
-            waiters.forEach { $0.resume() }
+            waiters.forEach { waiter in
+                waiter.resume()
+            }
         }
     }
 }

@@ -61,8 +61,12 @@ struct TagServiceTests {
             tags: [tag1, tag2, tag3, tag4]
         )
         #expect(result.count == 2)
-        #expect(result.contains { $0.id == tag1.id })
-        #expect(result.contains { $0.id == tag3.id })
+        #expect(result.contains { tag in
+            tag.id == tag1.id
+        })
+        #expect(result.contains { tag in
+            tag.id == tag3.id
+        })
     }
 
     @Test
@@ -106,9 +110,15 @@ struct TagServiceTests {
             category: "",
             repeatID: .init()
         )
-        let tag1 = item1.tags!.first { $0.type == .content }!
-        let tag2 = item2.tags!.first { $0.type == .content }!
-        let tag3 = item3.tags!.first { $0.type == .content }!
+        let tag1 = item1.tags!.first { tag in
+            tag.type == .content
+        }!
+        let tag2 = item2.tags!.first { tag in
+            tag.type == .content
+        }!
+        let tag3 = item3.tags!.first { tag in
+            tag.type == .content
+        }!
         try TagService.mergeDuplicates(
             tags: [tag1, tag2, tag3]
         )

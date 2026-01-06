@@ -33,7 +33,9 @@ extension TagItemListSection: View {
             }
             .onDelete {
                 Haptic.warning.impact()
-                willDeleteItems = $0.map { items[$0] }
+                willDeleteItems = $0.map { index in
+                    items[index]
+                }
                 isDialogPresented = true
             }
         } header: {
@@ -72,7 +74,9 @@ extension TagItemListSection: View {
 private extension TagItemListSection {
     var items: [Item] {
         tag.items.orEmpty
-            .filter { $0.year?.name == yearString }
+            .filter { item in
+                item.year?.name == yearString
+            }
             .sorted()
     }
 }
@@ -80,7 +84,9 @@ private extension TagItemListSection {
 #Preview {
     IncomesPreview { preview in
         List {
-            if let tag = preview.tags.first(where: { $0.type == .category }) {
+            if let tag = preview.tags.first(where: { previewTag in
+                previewTag.type == .category
+            }) {
                 TagItemListSection(yearString: Date.now.stringValueWithoutLocale(.yyyy))
                     .environment(tag)
             }

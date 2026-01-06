@@ -210,8 +210,12 @@ struct ItemServiceTests {
             date: shiftedDate("2000-01-15T00:00:00Z")
         )
         #expect(items.count == 2)
-        #expect(items.contains { $0.content == "First" })
-        #expect(items.contains { $0.content == "Second" })
+        #expect(items.contains { item in
+            item.content == "First"
+        })
+        #expect(items.contains { item in
+            item.content == "Second"
+        })
     }
 
     @Test

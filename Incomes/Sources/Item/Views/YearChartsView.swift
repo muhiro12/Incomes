@@ -43,7 +43,9 @@ struct YearChartsView: View {
 #Preview {
     IncomesPreview { preview in
         NavigationStack {
-            if let tag = preview.tags.first(where: { $0.type == .year }) {
+            if let tag = preview.tags.first(where: { previewTag in
+                previewTag.type == .year
+            }) {
                 YearChartsView()
                     .environment(tag)
             }

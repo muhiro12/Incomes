@@ -58,10 +58,13 @@ public enum TagService {
         guard let parent = tags.first else {
             return
         }
-        let children = tags.filter {
-            $0.id != parent.id
+        let children = tags.filter { tag in
+            tag.id != parent.id
         }
-        for item in children.flatMap({ $0.items ?? [] }) {
+        let childItems = children.flatMap { tag in
+            tag.items ?? []
+        }
+        for item in childItems {
             var tags = item.tags ?? []
             tags.append(parent)
             item.modify(tags: tags)

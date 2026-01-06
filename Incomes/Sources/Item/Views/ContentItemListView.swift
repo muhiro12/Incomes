@@ -52,8 +52,8 @@ private extension ContentItemListView {
 
     var yearStrings: [String] {
         Set(
-            items.map {
-                $0.localDate.stringValueWithoutLocale(.yyyy)
+            items.map { item in
+                item.localDate.stringValueWithoutLocale(.yyyy)
             }
         ).sorted(by: >)
     }
@@ -62,7 +62,9 @@ private extension ContentItemListView {
 #Preview {
     IncomesPreview { preview in
         NavigationStack {
-            if let tag = preview.tags.first(where: { $0.type == .content }) {
+            if let tag = preview.tags.first(where: { previewTag in
+                previewTag.type == .content
+            }) {
                 ContentItemListView()
                     .environment(tag)
             }

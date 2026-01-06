@@ -20,7 +20,8 @@ struct SpacerToolbarItem: ToolbarContent {
             ToolbarSpacer(placement: placement)
         } else {
             ToolbarItem(placement: placement) {
-                Button(action: {}) {
+                Button(action: {
+                }) {
                     Label(String.empty, systemImage: .empty)
                 }
                 .accessibilityHidden(true)

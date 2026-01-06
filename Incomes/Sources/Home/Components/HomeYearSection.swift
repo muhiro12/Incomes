@@ -37,7 +37,9 @@ struct HomeYearSection: View {
             .onDelete { indices in
                 Haptic.warning.impact()
                 isDialogPresented = true
-                willDeleteItems = indices.flatMap { yearMonthTags[$0].items.orEmpty }
+                willDeleteItems = indices.flatMap { index in
+                    yearMonthTags[index].items.orEmpty
+                }
             }
         }
         .confirmationDialog(
@@ -75,7 +77,9 @@ struct HomeYearSection: View {
         List {
             HomeYearSection(
                 yearTag: preview.tags
-                    .first { $0.name == Date.now.stringValueWithoutLocale(.yyyy) }!
+                    .first { tag in
+                        tag.name == Date.now.stringValueWithoutLocale(.yyyy)
+                    }!
             )
         }
     }

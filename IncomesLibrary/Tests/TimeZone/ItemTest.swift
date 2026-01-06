@@ -46,7 +46,9 @@ struct ItemTest {
         #expect(item.income == income)
         #expect(item.outgo == outgo)
         #expect(item.repeatID == repeatID)
-        #expect(item.tags?.contains { $0.name == "202403" } == true)
+        #expect(item.tags?.contains { tag in
+            tag.name == "202403"
+        } == true)
     }
 
     @Test(
@@ -60,7 +62,9 @@ struct ItemTest {
             ("2024-01-01T15:00:00+0900", "2024-01-01T00:00:00Z"),
             ("2024-03-31T23:59:59+0900", "2024-03-31T00:00:00Z"),
             ("2024-04-01T00:00:00+0900", "2024-04-01T00:00:00Z")
-        ].map { (isoDate($0.0), isoDate($0.1)) }
+        ].map { value in
+            (isoDate(value.0), isoDate(value.1))
+        }
     )
     func createNormalizesJSTDateToUTCStartOfDay(date: Date, expected: Date) throws {
         NSTimeZone.default = .init(identifier: "Asia/Tokyo")!
@@ -95,7 +99,9 @@ struct ItemTest {
         #expect(item.content.isEmpty)
         #expect(item.income == .zero)
         #expect(item.outgo == .zero)
-        #expect(item.tags?.contains { $0.name == "202401" } == true)
+        #expect(item.tags?.contains { tag in
+            tag.name == "202401"
+        } == true)
     }
 
     @Test("create tags contain year, yearMonth, content, and category", arguments: timeZones)
@@ -148,7 +154,9 @@ struct ItemTest {
         #expect(item.content == "Updated")
         #expect(item.income == 200)
         #expect(item.outgo == 50)
-        #expect(item.tags?.contains { $0.name == "202404" } == true)
+        #expect(item.tags?.contains { tag in
+            tag.name == "202404"
+        } == true)
     }
 
     @Test(
@@ -162,7 +170,9 @@ struct ItemTest {
             ("2024-01-01T15:00:00+0900", "2024-01-01T00:00:00Z"),
             ("2024-03-31T23:59:59+0900", "2024-03-31T00:00:00Z"),
             ("2024-04-01T00:00:00+0900", "2024-04-01T00:00:00Z")
-        ].map { (isoDate($0.0), isoDate($0.1)) }
+        ].map { value in
+            (isoDate(value.0), isoDate(value.1))
+        }
     )
     func modifyNormalizesJSTDateToUTCStartOfDay(date: Date, expected: Date) throws {
         NSTimeZone.default = .init(identifier: "Asia/Tokyo")!
@@ -214,7 +224,9 @@ struct ItemTest {
         )
 
         #expect(item.repeatID == repeatID)
-        #expect(item.tags?.contains { $0.name == "202402" } == true)
+        #expect(item.tags?.contains { tag in
+            tag.name == "202402"
+        } == true)
     }
 
     @Test("modify updates date to correct UTC startOfDay", arguments: timeZones)

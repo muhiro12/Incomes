@@ -435,7 +435,9 @@ public enum ItemService {
         }
 
         try BalanceCalculator.calculate(in: context, for: created)
-        try created.forEach { try attachSampleTag(to: $0, context: context) }
+        try created.forEach { item in
+            try attachSampleTag(to: item, context: context)
+        }
     }
 
     /// Seeds a minimal preview dataset that ignores duplicate tag creation.
@@ -460,7 +462,9 @@ public enum ItemService {
             )
         }
         try BalanceCalculator.calculate(in: context, for: created)
-        try created.forEach { try attachSampleTag(to: $0, context: context) }
+        try created.forEach { item in
+            try attachSampleTag(to: item, context: context)
+        }
     }
 
     // MARK: - Tutorial / Debug Sample Data

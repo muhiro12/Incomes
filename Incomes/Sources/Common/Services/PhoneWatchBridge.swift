@@ -33,7 +33,9 @@ final class PhoneWatchBridge: NSObject {
             return
         }
         await withCheckedContinuation { [weak self] continuation in
-            guard let self else { return }
+            guard let self else {
+                return
+            }
             activationWaiters.append(continuation)
             if !isActivating {
                 isActivating = true
@@ -51,7 +53,9 @@ nonisolated extension PhoneWatchBridge: WCSessionDelegate {
             isActivating = false
             let waiters = activationWaiters
             activationWaiters.removeAll()
-            waiters.forEach { $0.resume() }
+            waiters.forEach { waiter in
+                waiter.resume()
+            }
         }
     }
 

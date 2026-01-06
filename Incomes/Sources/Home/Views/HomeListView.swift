@@ -54,7 +54,9 @@ extension HomeListView: View {
     IncomesPreview { preview in
         NavigationStack {
             HomeListView()
-                .environment(preview.tags.last { $0.type == .year })
+                .environment(preview.tags.last { tag in
+                    tag.type == .year
+                })
         }
     }
 }

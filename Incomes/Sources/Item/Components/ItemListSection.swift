@@ -32,7 +32,9 @@ struct ItemListSection: View {
             }
             .onDelete {
                 Haptic.warning.impact()
-                willDeleteItems = $0.map { items[$0] }
+                willDeleteItems = $0.map { index in
+                    items[index]
+                }
                 isDialogPresented = true
             }
         } header: {

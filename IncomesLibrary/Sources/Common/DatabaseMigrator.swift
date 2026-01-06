@@ -29,7 +29,9 @@ public enum DatabaseMigrator {
             let baseName = legacyURL.lastPathComponent
 
             let candidateNames = try fileManager.contentsOfDirectory(atPath: legacyDir.path)
-                .filter { $0 == baseName || $0.hasPrefix(baseName + "-") }
+                .filter { name in
+                    name == baseName || name.hasPrefix(baseName + "-")
+                }
 
             for name in candidateNames {
                 let source = legacyDir.appendingPathComponent(name)

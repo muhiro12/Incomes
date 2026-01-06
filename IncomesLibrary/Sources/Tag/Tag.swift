@@ -57,12 +57,16 @@ extension Tag {
 
     /// Sum of `income` across related items.
     public var income: Decimal {
-        items.orEmpty.reduce(.zero) { $0 + $1.income }
+        items.orEmpty.reduce(.zero) { partial, item in
+            partial + item.income
+        }
     }
 
     /// Sum of `outgo` across related items.
     public var outgo: Decimal {
-        items.orEmpty.reduce(.zero) { $0 + $1.outgo }
+        items.orEmpty.reduce(.zero) { partial, item in
+            partial + item.outgo
+        }
     }
 
     /// Convenience: `income - outgo`.

@@ -21,7 +21,9 @@ public enum BalanceCalculator {
     public static func calculate(in context: ModelContext, after date: Date) throws {
         let allItems = try context.fetch(.items(.all, order: .forward))
 
-        guard let separatorIndex = allItems.firstIndex(where: { $0.localDate >= date }) else {
+        guard let separatorIndex = allItems.firstIndex(where: { item in
+            item.localDate >= date
+        }) else {
             return
         }
 

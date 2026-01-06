@@ -45,8 +45,8 @@ private extension CategoryItemListView {
 
     var yearStrings: [String] {
         Set(
-            items.map {
-                $0.localDate.stringValueWithoutLocale(.yyyy)
+            items.map { item in
+                item.localDate.stringValueWithoutLocale(.yyyy)
             }
         ).sorted(by: >)
     }
@@ -55,7 +55,9 @@ private extension CategoryItemListView {
 #Preview {
     IncomesPreview { preview in
         NavigationStack {
-            if let tag = preview.tags.first(where: { $0.type == .category }) {
+            if let tag = preview.tags.first(where: { previewTag in
+                previewTag.type == .category
+            }) {
                 CategoryItemListView()
                     .environment(tag)
             }
