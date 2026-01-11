@@ -58,13 +58,15 @@ extension ContentView: View {
                 store.open(
                     groupID: nil,
                     productIDs: [Secret.productID]
-                ) {
-                    isSubscribeOn = $0.contains {
-                        $0.id == Secret.productID
-                    }
-                    if !isSubscribeOn {
-                        isICloudOn = false
-                    }
+                ) { products in
+                    let purchasedProductIDs = Set(products.map(\.id))
+                    let state = SubscriptionStateCalculator.calculate(
+                        purchasedProductIDs: purchasedProductIDs,
+                        productID: Secret.productID,
+                        isICloudOn: isICloudOn
+                    )
+                    isSubscribeOn = state.isSubscribeOn
+                    isICloudOn = state.isICloudOn
                 }
 
                 googleMobileAdsController.start()
