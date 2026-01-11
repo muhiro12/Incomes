@@ -89,29 +89,19 @@ struct MainNavigationView: View {
             IntroductionNavigationView()
         }
         .task {
-            if !hasLoaded {
-                hasLoaded = true
-                isIntroductionPresented = (
-                    try? ItemService.allItemsCount(context: context).isZero
-                ) ?? false
+            do {
+                let state = try MainNavigationStateLoader.load(
+                    context: context
+                )
+                if !hasLoaded {
+                    hasLoaded = true
+                    isIntroductionPresented = state.isIntroductionPresented
+                }
+                yearTag = state.yearTag
+                tag = state.yearMonthTag
+            } catch {
+                assertionFailure(error.localizedDescription)
             }
-
-            yearTag = try? context.fetchFirst(
-                .tags(
-                    .nameIs(
-                        Date.now.stringValueWithoutLocale(.yyyy),
-                        type: .year
-                    )
-                )
-            )
-            tag = try? context.fetchFirst(
-                .tags(
-                    .nameIs(
-                        Date.now.stringValueWithoutLocale(.yyyyMM),
-                        type: .yearMonth
-                    )
-                )
-            )
 
             await PhoneWatchBridge.shared.activate(modelContext: context)
         }
