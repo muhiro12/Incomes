@@ -32,9 +32,10 @@ struct ItemListSection: View {
             }
             .onDelete {
                 Haptic.warning.impact()
-                willDeleteItems = $0.map { index in
-                    items[index]
-                }
+                willDeleteItems = ItemDeletionService.resolveItemsForDeletion(
+                    from: items,
+                    indices: $0
+                )
                 isDialogPresented = true
             }
         } header: {
@@ -48,12 +49,10 @@ struct ItemListSection: View {
         ) {
             Button(role: .destructive) {
                 do {
-                    try willDeleteItems.forEach {
-                        try ItemService.delete(
-                            context: context,
-                            item: $0
-                        )
-                    }
+                    try ItemDeletionService.delete(
+                        context: context,
+                        items: willDeleteItems
+                    )
                     Haptic.success.impact()
                 } catch {
                     assertionFailure(error.localizedDescription)
