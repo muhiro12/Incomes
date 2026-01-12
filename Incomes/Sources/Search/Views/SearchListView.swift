@@ -53,19 +53,11 @@ struct SearchListView: View {
             if selectedTarget.isForCurrency {
                 Section {
                     Button("Search", systemImage: "magnifyingglass") {
-                        let min = Decimal(string: minValue) ?? -Decimal.greatestFiniteMagnitude
-                        let max = Decimal(string: maxValue) ?? Decimal.greatestFiniteMagnitude
-
-                        switch selectedTarget {
-                        case .content,
-                             .category:
-                            break
-                        case .balance:
-                            predicate = .balanceIsBetween(min: min, max: max)
-                        case .income:
-                            predicate = .incomeIsBetween(min: min, max: max)
-                        case .outgo:
-                            predicate = .outgoIsBetween(min: min, max: max)
+                        if let newPredicate = selectedTarget.predicate(
+                            minimumText: minValue,
+                            maximumText: maxValue
+                        ) {
+                            predicate = newPredicate
                         }
                     }
                 }

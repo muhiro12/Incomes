@@ -41,4 +41,25 @@ enum SearchTarget: CaseIterable {
             true
         }
     }
+
+    func predicate(minimumText: String, maximumText: String) -> ItemPredicate? {
+        guard isForCurrency else {
+            return nil
+        }
+
+        let minimumValue = Decimal(string: minimumText) ?? -Decimal.greatestFiniteMagnitude
+        let maximumValue = Decimal(string: maximumText) ?? Decimal.greatestFiniteMagnitude
+
+        switch self {
+        case .content,
+             .category:
+            return nil
+        case .balance:
+            return .balanceIsBetween(min: minimumValue, max: maximumValue)
+        case .income:
+            return .incomeIsBetween(min: minimumValue, max: maximumValue)
+        case .outgo:
+            return .outgoIsBetween(min: minimumValue, max: maximumValue)
+        }
+    }
 }
