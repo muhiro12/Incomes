@@ -212,21 +212,22 @@ struct ItemFormInputAssistView: View {
             isProcessing = false
         }
         do {
-            let inference = try await ItemService.inferForm(text: text)
-            let update = ItemFormInferenceMapper.map(
-                dateString: inference.date,
-                content: inference.content,
-                income: inference.income,
-                outgo: inference.outgo,
-                category: inference.category
+            let currentInput: ItemFormInput = .init(
+                date: date,
+                content: content,
+                incomeText: income,
+                outgoText: outgo,
+                category: category
             )
-            if let newDate = update.date {
-                date = newDate
-            }
-            content = update.content
-            income = update.incomeText
-            outgo = update.outgoText
-            category = update.category
+            let updatedInput = try await ItemFormInferenceApplier.apply(
+                text: text,
+                currentInput: currentInput
+            )
+            date = updatedInput.date
+            content = updatedInput.content
+            income = updatedInput.incomeText
+            outgo = updatedInput.outgoText
+            category = updatedInput.category
             dismiss()
         } catch {
             errorMessage = error.localizedDescription
