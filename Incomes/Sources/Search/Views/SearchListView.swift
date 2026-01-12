@@ -71,9 +71,7 @@ struct SearchListView: View {
 private extension SearchListView {
     func buildTagRows(tags: [Tag]) -> some View {
         ForEach(
-            tags.filter {
-                searchText.isEmpty || $0.displayName.normalizedContains(searchText)
-            }
+            selectedTarget.filteredTags(tags, searchText: searchText)
         ) { tag in
             Button {
                 predicate = .tagIs(tag)

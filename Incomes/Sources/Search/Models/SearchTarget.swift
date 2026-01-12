@@ -62,4 +62,14 @@ enum SearchTarget: CaseIterable {
             return .outgoIsBetween(min: minimumValue, max: maximumValue)
         }
     }
+
+    func filteredTags(_ tags: [Tag], searchText: String) -> [Tag] {
+        guard isForCurrency == false else {
+            return []
+        }
+
+        return tags.filter { tag in
+            searchText.isEmpty || tag.displayName.normalizedContains(searchText)
+        }
+    }
 }
