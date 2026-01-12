@@ -78,9 +78,9 @@ struct ListItem: View {
         ) {
             Button(role: .destructive) {
                 do {
-                    try ItemService.delete(
+                    try ItemDeletionService.delete(
                         context: context,
-                        item: item
+                        items: [item]
                     )
                     Haptic.success.impact()
                 } catch {
