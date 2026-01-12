@@ -37,9 +37,10 @@ struct HomeYearSection: View {
             .onDelete { indices in
                 Haptic.warning.impact()
                 isDialogPresented = true
-                willDeleteItems = indices.flatMap { index in
-                    yearMonthTags[index].items.orEmpty
-                }
+                willDeleteItems = TagItemDeletionResolver.resolveItemsForDeletion(
+                    from: yearMonthTags,
+                    indices: indices
+                )
             }
         }
         .confirmationDialog(
@@ -48,12 +49,10 @@ struct HomeYearSection: View {
         ) {
             Button(role: .destructive) {
                 do {
-                    try willDeleteItems.forEach {
-                        try ItemService.delete(
-                            context: context,
-                            item: $0
-                        )
-                    }
+                    try ItemDeletionService.delete(
+                        context: context,
+                        items: willDeleteItems
+                    )
                     Haptic.success.impact()
                 } catch {
                     assertionFailure(error.localizedDescription)

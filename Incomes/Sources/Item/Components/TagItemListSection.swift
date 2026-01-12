@@ -73,11 +73,10 @@ extension TagItemListSection: View {
 
 private extension TagItemListSection {
     var items: [Item] {
-        tag.items.orEmpty
-            .filter { item in
-                item.year?.name == yearString
-            }
-            .sorted()
+        TagItemFiltering.items(
+            for: tag,
+            yearString: yearString
+        )
     }
 }
 
