@@ -78,7 +78,7 @@ struct ListItem: View {
         ) {
             Button(role: .destructive) {
                 do {
-                    try ItemDeletionService.delete(
+                    try ItemService.delete(
                         context: context,
                         items: [item]
                     )

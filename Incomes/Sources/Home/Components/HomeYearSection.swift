@@ -49,7 +49,7 @@ struct HomeYearSection: View {
         ) {
             Button(role: .destructive) {
                 do {
-                    try ItemDeletionService.delete(
+                    try ItemService.delete(
                         context: context,
                         items: willDeleteItems
                     )

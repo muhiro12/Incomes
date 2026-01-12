@@ -32,7 +32,7 @@ struct ItemListSection: View {
             }
             .onDelete {
                 Haptic.warning.impact()
-                willDeleteItems = ItemDeletionService.resolveItemsForDeletion(
+                willDeleteItems = ItemService.resolveItemsForDeletion(
                     from: items,
                     indices: $0
                 )
@@ -49,7 +49,7 @@ struct ItemListSection: View {
         ) {
             Button(role: .destructive) {
                 do {
-                    try ItemDeletionService.delete(
+                    try ItemService.delete(
                         context: context,
                         items: willDeleteItems
                     )

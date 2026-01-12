@@ -70,6 +70,23 @@ public enum ItemService {
         try BalanceCalculator.calculate(in: context, for: [item])
     }
 
+    /// Deletes multiple items and recalculates balances.
+    public static func delete(context: ModelContext, items: [Item]) throws {
+        try items.forEach { item in
+            try delete(context: context, item: item)
+        }
+    }
+
+    /// Resolves items to delete based on list indices.
+    public static func resolveItemsForDeletion(
+        from items: [Item],
+        indices: IndexSet
+    ) -> [Item] {
+        indices.compactMap { index in
+            items.indices.contains(index) ? items[index] : nil
+        }
+    }
+
     /// Deletes all items and recalculates balances.
     public static func deleteAll(context: ModelContext) throws {
         let items = try context.fetch(FetchDescriptor<Item>())
