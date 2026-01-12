@@ -239,19 +239,27 @@ struct ItemFormView: View {
 // MARK: - private
 
 private extension ItemFormView {
+    var formInputData: ItemFormInput {
+        .init(
+            date: date,
+            content: content,
+            incomeText: income,
+            outgoText: outgo,
+            category: category
+        )
+    }
+
     var isValid: Bool {
-        content.isNotEmpty
-            && income.isEmptyOrDecimal
-            && outgo.isEmptyOrDecimal
+        formInputData.isValid
     }
 
     func save() {
         do {
             if let item,
-               try ItemService.repeatItemsCount(
+               try ItemFormSaveDecision.requiresScopeSelection(
                 context: context,
-                repeatID: item.repeatID
-               ) > 1 {
+                item: item
+               ) {
                 presentToActionSheet()
             } else {
                 saveForThisItem()
@@ -270,11 +278,11 @@ private extension ItemFormView {
             try ItemService.update(
                 context: context,
                 item: item,
-                date: date,
-                content: content,
-                income: income.decimalValue,
-                outgo: outgo.decimalValue,
-                category: category
+                date: formInputData.date,
+                content: formInputData.content,
+                income: formInputData.income,
+                outgo: formInputData.outgo,
+                category: formInputData.category
             )
             Haptic.success.impact()
         } catch {
@@ -292,11 +300,11 @@ private extension ItemFormView {
             try ItemService.updateFuture(
                 context: context,
                 item: item,
-                date: date,
-                content: content,
-                income: income.decimalValue,
-                outgo: outgo.decimalValue,
-                category: category
+                date: formInputData.date,
+                content: formInputData.content,
+                income: formInputData.income,
+                outgo: formInputData.outgo,
+                category: formInputData.category
             )
             Haptic.success.impact()
         } catch {
@@ -314,11 +322,11 @@ private extension ItemFormView {
             try ItemService.updateAll(
                 context: context,
                 item: item,
-                date: date,
-                content: content,
-                income: income.decimalValue,
-                outgo: outgo.decimalValue,
-                category: category
+                date: formInputData.date,
+                content: formInputData.content,
+                income: formInputData.income,
+                outgo: formInputData.outgo,
+                category: formInputData.category
             )
             Haptic.success.impact()
         } catch {
@@ -331,11 +339,11 @@ private extension ItemFormView {
         do {
             _ = try ItemService.create(
                 context: context,
-                date: date,
-                content: content,
-                income: income.decimalValue,
-                outgo: outgo.decimalValue,
-                category: category,
+                date: formInputData.date,
+                content: formInputData.content,
+                income: formInputData.income,
+                outgo: formInputData.outgo,
+                category: formInputData.category,
                 repeatCount: repeatSelection
             )
             Haptic.success.impact()
