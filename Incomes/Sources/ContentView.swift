@@ -82,7 +82,10 @@ extension ContentView: View {
                 Task {
                     await notificationService.update()
                 }
-                if Int.random(in: 0..<10) == .zero {
+                if ReviewRequestPolicy.shouldRequestReview(
+                    randomValue: Int.random(in: 0..<10),
+                    maxExclusive: 10
+                ) {
                     Task {
                         try? await Task.sleep(for: .seconds(2))
                         requestReview()

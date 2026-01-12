@@ -123,7 +123,10 @@ struct ItemFormView: View {
                     } else {
                         save()
                     }
-                    if Int.random(in: 0..<5) == .zero {
+                    if ReviewRequestPolicy.shouldRequestReview(
+                        randomValue: Int.random(in: 0..<5),
+                        maxExclusive: 5
+                    ) {
                         Task {
                             try? await Task.sleep(for: .seconds(2))
                             requestReview()
