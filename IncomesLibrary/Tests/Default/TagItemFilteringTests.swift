@@ -50,7 +50,7 @@ struct TagItemFilteringTests {
             }
         )
 
-        let items = TagItemFiltering.items(
+        let items = TagService.items(
             for: tag,
             yearString: firstDate.stringValueWithoutLocale(.yyyy)
         )

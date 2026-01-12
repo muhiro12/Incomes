@@ -42,7 +42,7 @@ struct TagItemDeletionResolverTests {
             }
         )
 
-        let resolved = TagItemDeletionResolver.resolveItemsForDeletion(
+        let resolved = TagService.resolveItemsForDeletion(
             from: [firstTag, secondTag],
             indices: IndexSet([1])
         )

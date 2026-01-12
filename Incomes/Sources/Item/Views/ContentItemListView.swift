@@ -51,7 +51,7 @@ private extension ContentItemListView {
     }
 
     var yearStrings: [String] {
-        TagItemFiltering.yearStrings(for: tag)
+        TagService.yearStrings(for: tag)
     }
 }
 

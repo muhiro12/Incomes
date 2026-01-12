@@ -49,7 +49,7 @@ private extension YearMonthItemListView {
     }
 
     var yearStrings: [String] {
-        TagItemFiltering.yearStrings(for: tag)
+        TagService.yearStrings(for: tag)
     }
 }
 

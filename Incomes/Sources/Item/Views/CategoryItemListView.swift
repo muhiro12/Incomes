@@ -44,7 +44,7 @@ private extension CategoryItemListView {
     }
 
     var yearStrings: [String] {
-        TagItemFiltering.yearStrings(for: tag)
+        TagService.yearStrings(for: tag)
     }
 }
 

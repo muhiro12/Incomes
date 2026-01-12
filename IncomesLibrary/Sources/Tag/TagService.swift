@@ -101,4 +101,41 @@ public enum TagService {
             tag.delete()
         }
     }
+
+    /// Returns items for a given tag and year string.
+    public static func items(
+        for tag: Tag,
+        yearString: String
+    ) -> [Item] {
+        tag.items.orEmpty
+            .filter { item in
+                item.year?.name == yearString
+            }
+            .sorted()
+    }
+
+    /// Returns unique year strings for the tag items in descending order.
+    public static func yearStrings(
+        for tag: Tag
+    ) -> [String] {
+        Set(
+            tag.items.orEmpty.map { item in
+                item.localDate.stringValueWithoutLocale(.yyyy)
+            }
+        )
+        .sorted(by: >)
+    }
+
+    /// Resolves items for deletion based on selected tag indices.
+    public static func resolveItemsForDeletion(
+        from tags: [Tag],
+        indices: IndexSet
+    ) -> [Item] {
+        indices.flatMap { index -> [Item] in
+            guard tags.indices.contains(index) else {
+                return []
+            }
+            return tags[index].items.orEmpty
+        }
+    }
 }

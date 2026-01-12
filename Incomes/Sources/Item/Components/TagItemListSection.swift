@@ -73,7 +73,7 @@ extension TagItemListSection: View {
 
 private extension TagItemListSection {
     var items: [Item] {
-        TagItemFiltering.items(
+        TagService.items(
             for: tag,
             yearString: yearString
         )
