@@ -231,8 +231,9 @@ extension SettingsListView: View {
         }
         .task {
             do {
-                hasDuplicateTags = try TagService.hasDuplicates(context: context)
-                hasDebugData = try ItemService.hasDebugData(context: context)
+                let status = try SettingsStatusLoader.load(context: context)
+                hasDuplicateTags = status.hasDuplicateTags
+                hasDebugData = status.hasDebugData
             } catch {
                 assertionFailure(error.localizedDescription)
                 hasDuplicateTags = false
@@ -256,9 +257,12 @@ extension SettingsListView: View {
         }
         .onAppear {
             do {
-                hasDebugData = try ItemService.hasDebugData(context: context)
+                let status = try SettingsStatusLoader.load(context: context)
+                hasDuplicateTags = status.hasDuplicateTags
+                hasDebugData = status.hasDebugData
             } catch {
                 assertionFailure(error.localizedDescription)
+                hasDuplicateTags = false
                 hasDebugData = false
             }
         }
