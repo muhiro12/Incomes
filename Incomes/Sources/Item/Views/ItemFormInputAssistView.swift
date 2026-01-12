@@ -213,13 +213,20 @@ struct ItemFormInputAssistView: View {
         }
         do {
             let inference = try await ItemService.inferForm(text: text)
-            if let newDate = inference.date.dateValueWithoutLocale(.yyyyMMdd) {
+            let update = ItemFormInferenceMapper.map(
+                dateString: inference.date,
+                content: inference.content,
+                income: inference.income,
+                outgo: inference.outgo,
+                category: inference.category
+            )
+            if let newDate = update.date {
                 date = newDate
             }
-            content = inference.content
-            income = inference.income.description
-            outgo = inference.outgo.description
-            category = inference.category
+            content = update.content
+            income = update.incomeText
+            outgo = update.outgoText
+            category = update.category
             dismiss()
         } catch {
             errorMessage = error.localizedDescription
