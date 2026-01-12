@@ -44,11 +44,7 @@ private extension CategoryItemListView {
     }
 
     var yearStrings: [String] {
-        Set(
-            items.map { item in
-                item.localDate.stringValueWithoutLocale(.yyyy)
-            }
-        ).sorted(by: >)
+        TagItemFiltering.yearStrings(for: tag)
     }
 }
 

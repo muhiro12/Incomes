@@ -51,11 +51,7 @@ private extension ContentItemListView {
     }
 
     var yearStrings: [String] {
-        Set(
-            items.map { item in
-                item.localDate.stringValueWithoutLocale(.yyyy)
-            }
-        ).sorted(by: >)
+        TagItemFiltering.yearStrings(for: tag)
     }
 }
 
