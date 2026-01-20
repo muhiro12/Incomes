@@ -188,9 +188,8 @@ extension SettingsListView: View {
         ) {
             Button(role: .destructive) {
                 do {
-                    try ItemService.deleteAll(context: context)
-                    try TagService.deleteAll(context: context)
-                    Haptic.success.impact()
+                    try SettingsActionCoordinator.deleteAllData(context: context)
+                    updateStatus()
                 } catch {
                     assertionFailure(error.localizedDescription)
                 }
@@ -210,9 +209,8 @@ extension SettingsListView: View {
         ) {
             Button(role: .destructive) {
                 do {
-                    try ItemService.deleteDebugData(context: context)
-                    Haptic.success.impact()
-                    hasDebugData = false
+                    try SettingsActionCoordinator.deleteDebugData(context: context)
+                    updateStatus()
                 } catch {
                     assertionFailure(error.localizedDescription)
                 }
@@ -230,20 +228,13 @@ extension SettingsListView: View {
             DuplicateTagNavigationView()
         }
         .task {
-            do {
-                let status = try SettingsStatusLoader.load(context: context)
-                hasDuplicateTags = status.hasDuplicateTags
-                hasDebugData = status.hasDebugData
-            } catch {
-                assertionFailure(error.localizedDescription)
-                hasDuplicateTags = false
-                hasDebugData = false
-            }
+            updateStatus()
 
             isNotificationEnabled = notificationSettings.isEnabled
 
-            notificationService.refresh()
-            await notificationService.register()
+            await SettingsActionCoordinator.refreshNotifications(
+                notificationService: notificationService
+            )
         }
         .onChange(of: notificationSettings) {
             withAnimation {
@@ -251,20 +242,27 @@ extension SettingsListView: View {
             }
 
             Task {
-                notificationService.refresh()
-                await notificationService.register()
+                await SettingsActionCoordinator.refreshNotifications(
+                    notificationService: notificationService
+                )
             }
         }
         .onAppear {
-            do {
-                let status = try SettingsStatusLoader.load(context: context)
-                hasDuplicateTags = status.hasDuplicateTags
-                hasDebugData = status.hasDebugData
-            } catch {
-                assertionFailure(error.localizedDescription)
-                hasDuplicateTags = false
-                hasDebugData = false
-            }
+            updateStatus()
+        }
+    }
+}
+
+private extension SettingsListView {
+    func updateStatus() {
+        do {
+            let status = try SettingsActionCoordinator.loadStatus(context: context)
+            hasDuplicateTags = status.hasDuplicateTags
+            hasDebugData = status.hasDebugData
+        } catch {
+            assertionFailure(error.localizedDescription)
+            hasDuplicateTags = false
+            hasDebugData = false
         }
     }
 }
