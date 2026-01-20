@@ -125,9 +125,7 @@ struct IntroductionView: View {
 private extension IntroductionView {
     func seedTutorialDataIfNeeded() {
         do {
-            try ItemService.seedTutorialDataIfNeeded(
-                context: context
-            )
+            try IntroductionTutorialSeeder.seed(context: context)
         } catch {
             assertionFailure(error.localizedDescription)
         }
