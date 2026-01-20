@@ -258,14 +258,18 @@ private extension ItemFormView {
 
     func save() {
         do {
-            if let item,
-               try ItemFormSaveDecision.requiresScopeSelection(
+            let outcome = try ItemFormSaveCoordinator.save(
+                mode: saveMode,
                 context: context,
-                item: item
-               ) {
+                item: item,
+                formInputData: formInputData,
+                repeatCount: repeatSelection
+            )
+            switch outcome {
+            case .requiresScopeSelection:
                 presentToActionSheet()
-            } else {
-                saveForThisItem()
+            case .didSave:
+                dismiss()
             }
         } catch {
             assertionFailure(error.localizedDescription)
@@ -278,16 +282,12 @@ private extension ItemFormView {
             return
         }
         do {
-            try ItemService.update(
+            try ItemFormSaveCoordinator.save(
+                scope: .thisItem,
                 context: context,
                 item: item,
-                date: formInputData.date,
-                content: formInputData.content,
-                income: formInputData.income,
-                outgo: formInputData.outgo,
-                category: formInputData.category
+                formInputData: formInputData
             )
-            Haptic.success.impact()
         } catch {
             assertionFailure(error.localizedDescription)
         }
@@ -300,16 +300,12 @@ private extension ItemFormView {
             return
         }
         do {
-            try ItemService.updateFuture(
+            try ItemFormSaveCoordinator.save(
+                scope: .futureItems,
                 context: context,
                 item: item,
-                date: formInputData.date,
-                content: formInputData.content,
-                income: formInputData.income,
-                outgo: formInputData.outgo,
-                category: formInputData.category
+                formInputData: formInputData
             )
-            Haptic.success.impact()
         } catch {
             assertionFailure(error.localizedDescription)
         }
@@ -322,16 +318,12 @@ private extension ItemFormView {
             return
         }
         do {
-            try ItemService.updateAll(
+            try ItemFormSaveCoordinator.save(
+                scope: .allItems,
                 context: context,
                 item: item,
-                date: formInputData.date,
-                content: formInputData.content,
-                income: formInputData.income,
-                outgo: formInputData.outgo,
-                category: formInputData.category
+                formInputData: formInputData
             )
-            Haptic.success.impact()
         } catch {
             assertionFailure(error.localizedDescription)
         }
@@ -340,16 +332,13 @@ private extension ItemFormView {
 
     func create() {
         do {
-            _ = try ItemService.create(
+            _ = try ItemFormSaveCoordinator.save(
+                mode: .create,
                 context: context,
-                date: formInputData.date,
-                content: formInputData.content,
-                income: formInputData.income,
-                outgo: formInputData.outgo,
-                category: formInputData.category,
+                item: item,
+                formInputData: formInputData,
                 repeatCount: repeatSelection
             )
-            Haptic.success.impact()
         } catch {
             assertionFailure(error.localizedDescription)
         }
@@ -367,6 +356,15 @@ private extension ItemFormView {
 
     func presentToActionSheet() {
         isActionSheetPresented = true
+    }
+
+    var saveMode: ItemFormSaveMode {
+        switch mode {
+        case .create:
+            .create
+        case .edit:
+            .edit
+        }
     }
 }
 
