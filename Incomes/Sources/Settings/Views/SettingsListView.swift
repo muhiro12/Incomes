@@ -36,6 +36,7 @@ struct SettingsListView {
     @State private var isDeleteDialogPresented = false
     @State private var isDeleteDebugDialogPresented = false
     @State private var isDuplicateTagPresented = false
+    @State private var isYearlyDuplicationPresented = false
     @State private var hasDuplicateTags = false
     @State private var hasDebugData = false
 
@@ -106,6 +107,11 @@ extension SettingsListView: View {
                 }
             } header: {
                 Text("Manage items")
+            }
+            Section("Planning") {
+                Button("Duplicate year items") {
+                    isYearlyDuplicationPresented = true
+                }
             }
             if hasDuplicateTags {
                 Section {
@@ -181,6 +187,11 @@ extension SettingsListView: View {
         }
         .sheet(isPresented: $isIntroductionPresented) {
             IntroductionNavigationView()
+        }
+        .sheet(isPresented: $isYearlyDuplicationPresented) {
+            NavigationStack {
+                YearlyDuplicationView()
+            }
         }
         .confirmationDialog(
             Text("Delete all"),
