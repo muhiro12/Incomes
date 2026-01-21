@@ -8,7 +8,7 @@ public struct YearlyItemDuplicationOptions {
 
     public init(
         includeSingleItems: Bool = false,
-        minimumRepeatItemCount: Int = 2,
+        minimumRepeatItemCount: Int = 3,
         skipExistingItems: Bool = true
     ) {
         self.includeSingleItems = includeSingleItems
@@ -20,22 +20,66 @@ public struct YearlyItemDuplicationOptions {
 public struct YearlyItemDuplicationEntry {
     public let sourceItem: Item
     public let targetDate: Date
-    public let sourceRepeatID: UUID
+    public let groupID: UUID
 
-    public init(sourceItem: Item, targetDate: Date, sourceRepeatID: UUID) {
+    public init(sourceItem: Item, targetDate: Date, groupID: UUID) {
         self.sourceItem = sourceItem
         self.targetDate = targetDate
-        self.sourceRepeatID = sourceRepeatID
+        self.groupID = groupID
+    }
+}
+
+public struct YearlyItemDuplicationGroup {
+    public let id: UUID
+    public let content: String
+    public let category: String
+    public let averageIncome: Decimal
+    public let averageOutgo: Decimal
+    public let entryCount: Int
+    public let targetDates: [Date]
+
+    public init(
+        id: UUID,
+        content: String,
+        category: String,
+        averageIncome: Decimal,
+        averageOutgo: Decimal,
+        entryCount: Int,
+        targetDates: [Date]
+    ) {
+        self.id = id
+        self.content = content
+        self.category = category
+        self.averageIncome = averageIncome
+        self.averageOutgo = averageOutgo
+        self.entryCount = entryCount
+        self.targetDates = targetDates
     }
 }
 
 public struct YearlyItemDuplicationPlan {
+    public let groups: [YearlyItemDuplicationGroup]
     public let entries: [YearlyItemDuplicationEntry]
     public let skippedDuplicateCount: Int
 
-    public init(entries: [YearlyItemDuplicationEntry], skippedDuplicateCount: Int) {
+    public init(
+        groups: [YearlyItemDuplicationGroup],
+        entries: [YearlyItemDuplicationEntry],
+        skippedDuplicateCount: Int
+    ) {
+        self.groups = groups
         self.entries = entries
         self.skippedDuplicateCount = skippedDuplicateCount
+    }
+}
+
+public struct YearlyItemDuplicationGroupAmount: Hashable {
+    public let income: Decimal
+    public let outgo: Decimal
+
+    public init(income: Decimal, outgo: Decimal) {
+        self.income = income
+        self.outgo = outgo
     }
 }
 
@@ -73,15 +117,46 @@ public enum YearlyItemDuplicator {
             }
         )
 
-        let groupedItems = Dictionary(grouping: sourceItems) { item in
+        let groupedItemsByRepeatID = Dictionary(grouping: sourceItems) { item in
             item.repeatID
         }
 
         var entries = [YearlyItemDuplicationEntry]()
+        var groups = [YearlyItemDuplicationGroup]()
         var skippedDuplicateCount = 0
         let minimumRepeatItemCount = max(1, options.minimumRepeatItemCount)
+        var fallbackCandidates = [Item]()
 
-        for (repeatID, items) in groupedItems {
+        for (_, items) in groupedItemsByRepeatID {
+            if items.count >= minimumRepeatItemCount {
+                let groupID = UUID()
+                let buildResult = buildGroupEntries(
+                    from: items,
+                    groupID: groupID,
+                    yearShift: yearShift,
+                    existingKeys: existingKeys,
+                    options: options
+                )
+                skippedDuplicateCount += buildResult.skippedDuplicateCount
+                if buildResult.entries.isNotEmpty {
+                    entries.append(contentsOf: buildResult.entries)
+                    let group = makeGroup(
+                        id: groupID,
+                        items: items,
+                        targetDates: buildResult.targetDates
+                    )
+                    groups.append(group)
+                }
+            } else {
+                fallbackCandidates.append(contentsOf: items)
+            }
+        }
+
+        let groupedItemsByFallbackKey = Dictionary(grouping: fallbackCandidates) { item in
+            fallbackGroupingKey(for: item)
+        }
+
+        for (_, items) in groupedItemsByFallbackKey {
             let shouldInclude = shouldIncludeGroup(
                 items: items,
                 includeSingleItems: options.includeSingleItems,
@@ -91,39 +166,35 @@ public enum YearlyItemDuplicator {
                 continue
             }
 
-            for item in items {
-                guard let targetDate = shiftDate(
-                    item.localDate,
-                    yearShift: yearShift
-                ) else {
-                    assertionFailure()
-                    continue
-                }
-
-                let entry = YearlyItemDuplicationEntry(
-                    sourceItem: item,
-                    targetDate: targetDate,
-                    sourceRepeatID: repeatID
+            let groupID = UUID()
+            let buildResult = buildGroupEntries(
+                from: items,
+                groupID: groupID,
+                yearShift: yearShift,
+                existingKeys: existingKeys,
+                options: options
+            )
+            skippedDuplicateCount += buildResult.skippedDuplicateCount
+            if buildResult.entries.isNotEmpty {
+                entries.append(contentsOf: buildResult.entries)
+                let group = makeGroup(
+                    id: groupID,
+                    items: items,
+                    targetDates: buildResult.targetDates
                 )
-                if options.skipExistingItems {
-                    let key = duplicationKey(
-                        targetDate: targetDate,
-                        item: item
-                    )
-                    if existingKeys.contains(key) {
-                        skippedDuplicateCount += 1
-                        continue
-                    }
-                }
-                entries.append(entry)
+                groups.append(group)
             }
         }
 
         entries.sort { left, right in
             left.targetDate < right.targetDate
         }
+        groups.sort { left, right in
+            left.content < right.content
+        }
 
         return .init(
+            groups: groups,
             entries: entries,
             skippedDuplicateCount: skippedDuplicateCount
         )
@@ -131,24 +202,40 @@ public enum YearlyItemDuplicator {
 
     public static func apply(
         plan: YearlyItemDuplicationPlan,
-        context: ModelContext
+        context: ModelContext,
+        overrides: [UUID: YearlyItemDuplicationGroupAmount] = [:]
     ) throws -> YearlyItemDuplicationResult {
         let groupedEntries = Dictionary(grouping: plan.entries) { entry in
-            entry.sourceRepeatID
+            entry.groupID
         }
+        let defaultAmountsByGroupID = Dictionary(
+            uniqueKeysWithValues: plan.groups.map { group in
+                (
+                    group.id,
+                    YearlyItemDuplicationGroupAmount(
+                        income: group.averageIncome,
+                        outgo: group.averageOutgo
+                    )
+                )
+            }
+        )
 
         var createdItems = [Item]()
 
-        for (_, entries) in groupedEntries {
+        for (groupID, entries) in groupedEntries {
             let newRepeatID = UUID()
+            let amount = overrides[groupID]
+                ?? defaultAmountsByGroupID[groupID]
             for entry in entries {
                 let categoryName = entry.sourceItem.category?.name ?? .empty
+                let incomeValue = amount?.income ?? entry.sourceItem.income
+                let outgoValue = amount?.outgo ?? entry.sourceItem.outgo
                 let item = try Item.create(
                     context: context,
                     date: entry.targetDate,
                     content: entry.sourceItem.content,
-                    income: entry.sourceItem.income,
-                    outgo: entry.sourceItem.outgo,
+                    income: incomeValue,
+                    outgo: outgoValue,
                     category: categoryName,
                     repeatID: newRepeatID
                 )
@@ -174,6 +261,11 @@ private extension YearlyItemDuplicator {
         let category: String
     }
 
+    struct FallbackGroupingKey: Hashable {
+        let content: String
+        let category: String
+    }
+
     static func duplicationKey(for item: Item) -> DuplicationKey {
         duplicationKey(targetDate: item.localDate, item: item)
     }
@@ -181,11 +273,19 @@ private extension YearlyItemDuplicator {
     static func duplicationKey(targetDate: Date, item: Item) -> DuplicationKey {
         let categoryName = item.category?.name ?? .empty
         let normalizedDate = Calendar.current.startOfDay(for: targetDate)
-        return DuplicationKey(
+        return .init(
             date: normalizedDate,
             content: item.content,
             income: item.income,
             outgo: item.outgo,
+            category: categoryName
+        )
+    }
+
+    static func fallbackGroupingKey(for item: Item) -> FallbackGroupingKey {
+        let categoryName = item.category?.name ?? .empty
+        return .init(
+            content: item.content,
             category: categoryName
         )
     }
@@ -219,6 +319,87 @@ private extension YearlyItemDuplicator {
             value: yearShift,
             to: startOfDay
         )
+    }
+
+    struct GroupBuildResult {
+        let entries: [YearlyItemDuplicationEntry]
+        let targetDates: [Date]
+        let skippedDuplicateCount: Int
+    }
+
+    static func buildGroupEntries(
+        from items: [Item],
+        groupID: UUID,
+        yearShift: Int,
+        existingKeys: Set<DuplicationKey>,
+        options: YearlyItemDuplicationOptions
+    ) -> GroupBuildResult {
+        var entries = [YearlyItemDuplicationEntry]()
+        var targetDates = [Date]()
+        var skippedDuplicateCount = 0
+        for item in items {
+            guard let targetDate = shiftDate(
+                item.localDate,
+                yearShift: yearShift
+            ) else {
+                assertionFailure()
+                continue
+            }
+
+            let entry = YearlyItemDuplicationEntry(
+                sourceItem: item,
+                targetDate: targetDate,
+                groupID: groupID
+            )
+            if options.skipExistingItems {
+                let key = duplicationKey(
+                    targetDate: targetDate,
+                    item: item
+                )
+                if existingKeys.contains(key) {
+                    skippedDuplicateCount += 1
+                    continue
+                }
+            }
+            entries.append(entry)
+            targetDates.append(targetDate)
+        }
+        return .init(
+            entries: entries,
+            targetDates: targetDates,
+            skippedDuplicateCount: skippedDuplicateCount
+        )
+    }
+
+    static func makeGroup(
+        id: UUID,
+        items: [Item],
+        targetDates: [Date]
+    ) -> YearlyItemDuplicationGroup {
+        let content = items.first?.content ?? .empty
+        let category = items.first?.category?.name ?? .empty
+        let averageIncome = averageValue(items.map(\.income))
+        let averageOutgo = averageValue(items.map(\.outgo))
+        return .init(
+            id: id,
+            content: content,
+            category: category,
+            averageIncome: averageIncome,
+            averageOutgo: averageOutgo,
+            entryCount: targetDates.count,
+            targetDates: targetDates.sorted()
+        )
+    }
+
+    static func averageValue(_ values: [Decimal]) -> Decimal {
+        guard values.isNotEmpty else {
+            return .zero
+        }
+        let total = values.reduce(.zero, +)
+        let count = NSDecimalNumber(value: values.count)
+        return NSDecimalNumber(decimal: total)
+            .dividing(by: count)
+            .decimalValue
     }
 }
 
