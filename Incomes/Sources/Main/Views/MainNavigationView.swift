@@ -21,16 +21,75 @@ struct MainNavigationView: View {
     @State private var predicate: ItemPredicate?
     @State private var isSearchPresented = false
     @State private var isSettingsPresented = false
+    @State private var isYearlyDuplicationPresented = false
 
     @State private var hasLoaded = false
     @State private var isIntroductionPresented = false
+    @State private var showYearlyDuplicationPromo = false
+    @State private var isYearlyDuplicationPromoDismissed = false
+    @State private var yearlyDuplicationProposal: YearlyItemDuplicationGroup?
+    @State private var yearlyDuplicationSourceYear: Int?
+    @State private var yearlyDuplicationTargetYear: Int?
 
     var body: some View {
         NavigationSplitView {
-            List(yearTags, selection: $yearTag) { yearTag in
-                TagSummaryRow()
-                    .environment(yearTag)
-                    .tag(yearTag)
+            List(selection: $yearTag) {
+                ForEach(yearTags, id: \.self) { yearTag in
+                    TagSummaryRow()
+                        .environment(yearTag)
+                        .tag(yearTag)
+                }
+                if showYearlyDuplicationPromo,
+                   let proposal = yearlyDuplicationProposal,
+                   let sourceYear = yearlyDuplicationSourceYear,
+                   let targetYear = yearlyDuplicationTargetYear {
+                    Section {
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Duplicate Year")
+                                .font(.headline)
+                            Text(String(localized: "Year: \(sourceYear) -> \(targetYear)"))
+                                .font(.footnote)
+                                .foregroundStyle(.secondary)
+                            Text(String(localized: "Sample proposal"))
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                            Text(proposal.content)
+                                .font(.subheadline.weight(.semibold))
+                            if proposal.category.isNotEmpty {
+                                Text(proposal.category)
+                                    .font(.footnote)
+                                    .foregroundStyle(.secondary)
+                            }
+                            Text(String(localized: "Dates: \(monthDayListText(for: proposal))"))
+                                .font(.footnote)
+                                .foregroundStyle(.secondary)
+                            Text(String(localized: "Items: \(proposal.entryCount)"))
+                                .font(.footnote)
+                                .foregroundStyle(.secondary)
+                            Button("Review proposals") {
+                                isYearlyDuplicationPresented = true
+                            }
+                            .buttonStyle(.bordered)
+                        }
+                        .padding(.vertical, 4)
+                    } header: {
+                        HStack {
+                            Text("Yearly duplication")
+                            Spacer()
+                            Button {
+                                dismissYearlyDuplicationPromo()
+                            } label: {
+                                Image(systemName: "xmark.circle.fill")
+                                    .foregroundStyle(.secondary)
+                            }
+                            .buttonStyle(.borderless)
+                            .accessibilityLabel(Text("Close"))
+                        }
+                    }
+                }
+            }
+            .onAppear {
+                updateYearlyDuplicationPromo()
             }
             .navigationTitle("Incomes")
             .toolbar {
@@ -77,6 +136,11 @@ struct MainNavigationView: View {
             .sheet(isPresented: $isSettingsPresented) {
                 SettingsNavigationView()
             }
+            .sheet(isPresented: $isYearlyDuplicationPresented) {
+                NavigationStack {
+                    YearlyDuplicationView()
+                }
+            }
         } detail: {
             if isSearchPresented {
                 SearchResultView(predicate: predicate ?? .none)
@@ -105,11 +169,121 @@ struct MainNavigationView: View {
 
             await PhoneWatchBridge.shared.activate(modelContext: context)
         }
+        .onAppear {
+            updateYearlyDuplicationPromo()
+        }
+        .onChange(of: yearTags) {
+            if showYearlyDuplicationPromo {
+                loadYearlyDuplicationProposal()
+            }
+        }
     }
 }
 
 #Preview {
     IncomesPreview { _ in
         MainNavigationView()
+    }
+}
+
+private extension MainNavigationView {
+    struct MonthDay: Hashable {
+        let month: Int
+        let day: Int
+    }
+
+    func shouldShowYearlyDuplicationPromo(date: Date = .now) -> Bool {
+        let month = Calendar.current.component(.month, from: date)
+        guard [11, 12, 1, 2].contains(month) else {
+            return false
+        }
+        return Int.random(in: 0..<3) == 0
+    }
+
+    func updateYearlyDuplicationPromo() {
+        guard !isYearlyDuplicationPromoDismissed else {
+            showYearlyDuplicationPromo = false
+            yearlyDuplicationProposal = nil
+            yearlyDuplicationSourceYear = nil
+            yearlyDuplicationTargetYear = nil
+            return
+        }
+        showYearlyDuplicationPromo = shouldShowYearlyDuplicationPromo()
+        if showYearlyDuplicationPromo {
+            loadYearlyDuplicationProposal()
+        } else {
+            yearlyDuplicationProposal = nil
+            yearlyDuplicationSourceYear = nil
+            yearlyDuplicationTargetYear = nil
+        }
+    }
+
+    func dismissYearlyDuplicationPromo() {
+        isYearlyDuplicationPromoDismissed = true
+        showYearlyDuplicationPromo = false
+        yearlyDuplicationProposal = nil
+        yearlyDuplicationSourceYear = nil
+        yearlyDuplicationTargetYear = nil
+    }
+
+    func loadYearlyDuplicationProposal() {
+        guard let sourceYear = latestSourceYearValue() else {
+            yearlyDuplicationProposal = nil
+            yearlyDuplicationSourceYear = nil
+            yearlyDuplicationTargetYear = nil
+            return
+        }
+        let targetYear = sourceYear + 1
+        do {
+            let plan = try YearlyItemDuplicator.plan(
+                context: context,
+                sourceYear: sourceYear,
+                targetYear: targetYear
+            )
+            yearlyDuplicationProposal = plan.groups.first
+            yearlyDuplicationSourceYear = sourceYear
+            yearlyDuplicationTargetYear = targetYear
+        } catch {
+            yearlyDuplicationProposal = nil
+            yearlyDuplicationSourceYear = nil
+            yearlyDuplicationTargetYear = nil
+            assertionFailure(error.localizedDescription)
+        }
+    }
+
+    func latestSourceYearValue() -> Int? {
+        let values = yearTags.compactMap { tag in
+            yearValue(from: tag)
+        }
+        return values.sorted(by: >).first
+    }
+
+    func yearValue(from tag: Tag) -> Int? {
+        if let integerValue = Int(tag.name) {
+            return integerValue
+        }
+        guard let date = tag.name.dateValueWithoutLocale(.yyyy) else {
+            return nil
+        }
+        return Calendar.current.component(.year, from: date)
+    }
+
+    func monthDayListText(for group: YearlyItemDuplicationGroup) -> String {
+        let calendar = Calendar.current
+        let monthDays = group.targetDates.map { date in
+            MonthDay(
+                month: calendar.component(.month, from: date),
+                day: calendar.component(.day, from: date)
+            )
+        }
+        let sortedMonthDays = Array(Set(monthDays)).sorted { left, right in
+            if left.month != right.month {
+                return left.month < right.month
+            }
+            return left.day < right.day
+        }
+        return sortedMonthDays
+            .map { "\($0.month)/\($0.day)" }
+            .joined(separator: ", ")
     }
 }

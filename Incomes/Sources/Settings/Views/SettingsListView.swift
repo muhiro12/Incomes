@@ -99,6 +99,9 @@ extension SettingsListView: View {
                 }
             }
             Section {
+                Button("Duplicate year items") {
+                    isYearlyDuplicationPresented = true
+                }
                 Button(role: .destructive) {
                     Haptic.warning.impact()
                     isDeleteDialogPresented = true
@@ -107,11 +110,6 @@ extension SettingsListView: View {
                 }
             } header: {
                 Text("Manage items")
-            }
-            Section("Planning") {
-                Button("Duplicate year items") {
-                    isYearlyDuplicationPresented = true
-                }
             }
             if hasDuplicateTags {
                 Section {
