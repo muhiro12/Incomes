@@ -53,9 +53,26 @@ struct ItemFormView: View {
     @State private var isAssistPresented = false
 
     private let mode: Mode
+    private let draft: ItemFormDraft?
+    private let onCreate: (() -> Void)?
 
-    init(mode: Mode) {
+    init(
+        mode: Mode,
+        draft: ItemFormDraft? = nil,
+        onCreate: (() -> Void)? = nil
+    ) {
         self.mode = mode
+        self.draft = draft
+        self.onCreate = onCreate
+        if let draft {
+            _date = State(initialValue: draft.date)
+            _content = State(initialValue: draft.content)
+            _income = State(initialValue: draft.incomeText)
+            _outgo = State(initialValue: draft.outgoText)
+            _category = State(initialValue: draft.category)
+            _repeatMonthSelections = State(initialValue: draft.repeatMonthSelections)
+            _isRepeatEnabled = State(initialValue: draft.isRepeatEnabled)
+        }
     }
 
     var body: some View {
@@ -198,6 +215,10 @@ struct ItemFormView: View {
             Text("Are you really going to use DebugMode?")
         }
         .onAppear {
+            if draft != nil {
+                syncRepeatMonthSelectionsWithBaseDate()
+                return
+            }
             if let item {
                 date = item.localDate
                 content = item.content
@@ -362,6 +383,7 @@ private extension ItemFormView {
                 formInputData: formInputData,
                 repeatMonthSelections: effectiveRepeatMonthSelections
             )
+            onCreate?()
         } catch {
             assertionFailure(error.localizedDescription)
         }

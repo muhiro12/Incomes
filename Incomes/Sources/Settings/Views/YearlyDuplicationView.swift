@@ -21,9 +21,8 @@ struct YearlyDuplicationView: View {
     @State private var targetYear = Calendar.current.component(.year, from: .now)
 
     @State private var plan: YearlyItemDuplicationPlan?
-    @State private var groupAmountEdits = [UUID: GroupAmountEdit]()
-    @State private var selectedGroupIndex = 0
-    private let autoAdvanceDelay: TimeInterval = 0.5
+    @State private var createdGroupIDs = Set<UUID>()
+    @State private var itemFormDraft: ItemFormDraft?
     @State private var resultMessage: String?
     @State private var errorMessage: String?
 
@@ -71,79 +70,63 @@ struct YearlyDuplicationView: View {
                             .foregroundStyle(.secondary)
                     }
                     if plan.groups.isNotEmpty {
-                        Text(String(localized: "Confirm each proposal to continue."))
+                        Text(String(localized: "Select a proposal to edit or create it directly."))
                             .font(.footnote)
                             .foregroundStyle(.secondary)
                     }
                 }
                 Section("Proposals") {
-                    if plan.groups.isNotEmpty {
-                        Text(String(localized: "Proposal \(selectedGroupIndex + 1) of \(plan.groups.count)"))
-                            .font(.footnote)
-                            .foregroundStyle(.secondary)
-                    }
-                    TabView(selection: $selectedGroupIndex) {
-                        ForEach(Array(plan.groups.enumerated()), id: \.element.id) { index, group in
-                            VStack(alignment: .leading, spacing: 12) {
+                    ForEach(plan.groups, id: \.id) { group in
+                        let entries = entries(for: group, in: plan)
+                        let isCreated = createdGroupIDs.contains(group.id)
+                        VStack(alignment: .leading, spacing: 8) {
+                            HStack {
                                 Text(group.content)
                                     .font(.headline)
-                                if group.category.isNotEmpty {
-                                    Text(group.category)
+                                if isCreated {
+                                    Text(String(localized: "Created"))
                                         .font(.footnote)
                                         .foregroundStyle(.secondary)
                                 }
-                                Text(String(localized: "Months: \(monthListText(for: group))"))
-                                    .font(.footnote)
-                                    .foregroundStyle(.secondary)
-                                Text(String(localized: "Items: \(group.entryCount)"))
-                                    .font(.footnote)
-                                    .foregroundStyle(.secondary)
-                                HStack {
-                                    Text("Income")
-                                    TextField(
-                                        "0",
-                                        text: bindingForIncomeText(groupID: group.id)
-                                    )
-                                    .keyboardType(.numberPad)
-                                    .multilineTextAlignment(.trailing)
-                                    .foregroundColor(incomeTextColor(groupID: group.id))
-                                    .disabled(isGroupSkipped(groupID: group.id))
-                                }
-                                HStack {
-                                    Text("Outgo")
-                                    TextField(
-                                        "0",
-                                        text: bindingForOutgoText(groupID: group.id)
-                                    )
-                                    .keyboardType(.numberPad)
-                                    .multilineTextAlignment(.trailing)
-                                    .foregroundColor(outgoTextColor(groupID: group.id))
-                                    .disabled(isGroupSkipped(groupID: group.id))
-                                }
-                                confirmationStatusPicker(
-                                    groupID: group.id,
-                                    index: index,
-                                    totalCount: plan.groups.count
-                                )
                             }
-                            .padding(.vertical, 4)
-                            .tag(index)
+                            if group.category.isNotEmpty {
+                                Text(group.category)
+                                    .font(.footnote)
+                                    .foregroundStyle(.secondary)
+                            }
+                            Text(String(localized: "Dates: \(monthDayListText(for: group))"))
+                                .font(.footnote)
+                                .foregroundStyle(.secondary)
+                            Text(String(localized: "Items: \(group.entryCount)"))
+                                .font(.footnote)
+                                .foregroundStyle(.secondary)
+                            Text(String(localized: "Income: \(decimalString(from: group.averageIncome))"))
+                                .font(.footnote)
+                                .foregroundStyle(.secondary)
+                            Text(String(localized: "Outgo: \(decimalString(from: group.averageOutgo))"))
+                                .font(.footnote)
+                                .foregroundStyle(.secondary)
+                            HStack {
+                                Button("Edit") {
+                                    presentItemForm(
+                                        group: group,
+                                        entries: entries
+                                    )
+                                }
+                                .buttonStyle(.bordered)
+                                .disabled(isCreated || entries.isEmpty)
+                                Button("Create") {
+                                    createGroupItems(
+                                        group: group,
+                                        entries: entries
+                                    )
+                                }
+                                .buttonStyle(.borderedProminent)
+                                .disabled(isCreated || entries.isEmpty)
+                            }
                         }
+                        .padding(.vertical, 4)
                     }
-                    .tabViewStyle(.page(indexDisplayMode: .never))
-                    .frame(minHeight: 320)
-                    .animation(.easeInOut, value: selectedGroupIndex)
-                    .highPriorityGesture(DragGesture())
-                    Button("Back") {
-                        goToPreviousGroup()
-                    }
-                    .disabled(selectedGroupIndex <= 0)
-                }
-                Section {
-                    Button("Create Items") {
-                        applyPlan()
-                    }
-                    .disabled(!canCreateItems)
                 }
             }
         }
@@ -160,6 +143,14 @@ struct YearlyDuplicationView: View {
         }
         .onChange(of: yearTags) {
             alignYearSelections()
+        }
+        .sheet(item: $itemFormDraft) { draft in
+            ItemFormNavigationView(
+                mode: .create,
+                draft: draft
+            ) {
+                createdGroupIDs.insert(draft.groupID)
+            }
         }
         .alert(
             "Error",
@@ -203,6 +194,11 @@ struct YearlyDuplicationView: View {
 }
 
 private extension YearlyDuplicationView {
+    struct MonthDay: Hashable {
+        let month: Int
+        let day: Int
+    }
+
     var sourceYears: [Int] {
         let yearValues = yearTags.compactMap { tag in
             yearValue(from: tag)
@@ -219,58 +215,6 @@ private extension YearlyDuplicationView {
         return Array((currentYear - 10)...(currentYear + 10)).sorted(by: >)
     }
 
-    var areGroupAmountsValid: Bool {
-        guard let plan else {
-            return false
-        }
-        if plan.groups.isEmpty {
-            return false
-        }
-        for group in plan.groups {
-            guard let edit = groupAmountEdits[group.id] else {
-                return false
-            }
-            if edit.confirmationStatus == .confirmed {
-                if !edit.incomeText.isEmptyOrDecimal {
-                    return false
-                }
-                if !edit.outgoText.isEmptyOrDecimal {
-                    return false
-                }
-            }
-        }
-        return true
-    }
-
-    var areAllGroupsChecked: Bool {
-        guard let plan else {
-            return false
-        }
-        if plan.groups.isEmpty {
-            return false
-        }
-        return plan.groups.allSatisfy { group in
-            let status = groupAmountEdits[group.id]?.confirmationStatus ?? .unconfirmed
-            return status != .unconfirmed
-        }
-    }
-
-    var canCreateItems: Bool {
-        guard let plan else {
-            return false
-        }
-        let confirmedGroupIDs = confirmedGroupIdentifiers(from: plan)
-        if confirmedGroupIDs.isEmpty {
-            return false
-        }
-        let confirmedEntriesCount = plan.entries.filter { entry in
-            confirmedGroupIDs.contains(entry.groupID)
-        }.count
-        return confirmedEntriesCount > .zero
-            && areGroupAmountsValid
-            && areAllGroupsChecked
-    }
-
     func previewPlan() {
         do {
             plan = try YearlyItemDuplicator.plan(
@@ -278,32 +222,84 @@ private extension YearlyDuplicationView {
                 sourceYear: sourceYear,
                 targetYear: targetYear
             )
-            configureGroupAmountEdits()
-            selectedGroupIndex = 0
+            createdGroupIDs.removeAll()
+            itemFormDraft = nil
         } catch {
             errorMessage = error.localizedDescription
         }
     }
 
-    func applyPlan() {
-        guard let plan else {
+    func createGroupItems(
+        group: YearlyItemDuplicationGroup,
+        entries: [YearlyItemDuplicationEntry]
+    ) {
+        guard entries.isNotEmpty else {
             return
         }
+        let filteredPlan = singleGroupPlan(
+            group: group,
+            entries: entries
+        )
         do {
-            let confirmedPlan = filteredPlanForConfirmedGroups(from: plan)
-            let confirmedGroupIDs = confirmedGroupIdentifiers(from: plan)
-            let overrides = groupAmountOverrides(for: confirmedGroupIDs)
             let result = try YearlyItemDuplicator.apply(
-                plan: confirmedPlan,
-                context: context,
-                overrides: overrides
+                plan: filteredPlan,
+                context: context
             )
             resultMessage = String(localized: "Created \(result.createdCount) items.")
-            self.plan = nil
-            groupAmountEdits.removeAll()
+            createdGroupIDs.insert(group.id)
         } catch {
             errorMessage = error.localizedDescription
         }
+    }
+
+    func presentItemForm(
+        group: YearlyItemDuplicationGroup,
+        entries: [YearlyItemDuplicationEntry]
+    ) {
+        guard let baseDate = entries.map(\.targetDate).sorted().first else {
+            return
+        }
+        let selections = repeatMonthSelections(from: entries)
+        itemFormDraft = .init(
+            groupID: group.id,
+            date: baseDate,
+            content: group.content,
+            incomeText: decimalString(from: group.averageIncome),
+            outgoText: decimalString(from: group.averageOutgo),
+            category: group.category,
+            repeatMonthSelections: selections
+        )
+    }
+
+    func entries(
+        for group: YearlyItemDuplicationGroup,
+        in plan: YearlyItemDuplicationPlan
+    ) -> [YearlyItemDuplicationEntry] {
+        plan.entries.filter { entry in
+            entry.groupID == group.id
+        }
+    }
+
+    func singleGroupPlan(
+        group: YearlyItemDuplicationGroup,
+        entries: [YearlyItemDuplicationEntry]
+    ) -> YearlyItemDuplicationPlan {
+        .init(
+            groups: [group],
+            entries: entries,
+            skippedDuplicateCount: 0
+        )
+    }
+
+    func repeatMonthSelections(
+        from entries: [YearlyItemDuplicationEntry]
+    ) -> Set<RepeatMonthSelection> {
+        let calendar = Calendar.current
+        return Set(entries.map { entry in
+            let year = calendar.component(.year, from: entry.targetDate)
+            let month = calendar.component(.month, from: entry.targetDate)
+            return .init(year: year, month: month)
+        })
     }
 
     func yearValue(from tag: Tag) -> Int? {
@@ -338,234 +334,27 @@ private extension YearlyDuplicationView {
         }
     }
 
-    func configureGroupAmountEdits() {
-        guard let plan else {
-            groupAmountEdits = [:]
-            return
-        }
-        var edits = [UUID: GroupAmountEdit]()
-        for group in plan.groups {
-            edits[group.id] = .init(
-                incomeText: decimalString(from: group.averageIncome),
-                outgoText: decimalString(from: group.averageOutgo),
-                confirmationStatus: .unconfirmed
+    func monthDayListText(for group: YearlyItemDuplicationGroup) -> String {
+        let calendar = Calendar.current
+        let monthDays = group.targetDates.map { date in
+            MonthDay(
+                month: calendar.component(.month, from: date),
+                day: calendar.component(.day, from: date)
             )
         }
-        groupAmountEdits = edits
-    }
-
-    func groupAmountOverrides(
-        for groupIDs: Set<UUID>
-    ) -> [UUID: YearlyItemDuplicationGroupAmount] {
-        var overrides = [UUID: YearlyItemDuplicationGroupAmount]()
-        for groupID in groupIDs {
-            let edit = groupAmountEdits[groupID]
-            let incomeValue = (edit?.incomeText ?? .empty).decimalValue
-            let outgoValue = (edit?.outgoText ?? .empty).decimalValue
-            overrides[groupID] = .init(
-                income: incomeValue,
-                outgo: outgoValue
-            )
+        let sortedMonthDays = Array(Set(monthDays)).sorted { left, right in
+            if left.month != right.month {
+                return left.month < right.month
+            }
+            return left.day < right.day
         }
-        return overrides
-    }
-
-    func bindingForIncomeText(groupID: UUID) -> Binding<String> {
-        Binding(
-            get: {
-                groupAmountEdits[groupID]?.incomeText ?? .empty
-            },
-            set: { newValue in
-                var edit = groupAmountEdits[groupID] ?? .init()
-                edit.incomeText = newValue
-                groupAmountEdits[groupID] = edit
-            }
-        )
-    }
-
-    func bindingForOutgoText(groupID: UUID) -> Binding<String> {
-        Binding(
-            get: {
-                groupAmountEdits[groupID]?.outgoText ?? .empty
-            },
-            set: { newValue in
-                var edit = groupAmountEdits[groupID] ?? .init()
-                edit.outgoText = newValue
-                groupAmountEdits[groupID] = edit
-            }
-        )
-    }
-
-    func incomeTextColor(groupID: UUID) -> Color {
-        let text = groupAmountEdits[groupID]?.incomeText ?? .empty
-        return text.isEmptyOrDecimal ? .primary : .red
-    }
-
-    func outgoTextColor(groupID: UUID) -> Color {
-        let text = groupAmountEdits[groupID]?.outgoText ?? .empty
-        return text.isEmptyOrDecimal ? .primary : .red
-    }
-
-    func isGroupSkipped(groupID: UUID) -> Bool {
-        let status = groupAmountEdits[groupID]?.confirmationStatus ?? .unconfirmed
-        return status == .skipped
-    }
-
-    func monthListText(for group: YearlyItemDuplicationGroup) -> String {
-        let months = group.targetDates
-            .map { Calendar.current.component(.month, from: $0) }
-        let sortedMonths = Array(Set(months)).sorted()
-        return sortedMonths
-            .map { String($0) }
+        return sortedMonthDays
+            .map { "\($0.month)/\($0.day)" }
             .joined(separator: ", ")
     }
 
     func decimalString(from value: Decimal) -> String {
         NSDecimalNumber(decimal: value).stringValue
-    }
-
-    func advanceToNextGroup(from index: Int, totalCount: Int) {
-        let nextIndex = min(index + 1, totalCount - 1)
-        if nextIndex != index {
-            DispatchQueue.main.asyncAfter(deadline: .now() + autoAdvanceDelay) {
-                withAnimation(.easeInOut) {
-                    selectedGroupIndex = nextIndex
-                }
-            }
-        }
-    }
-
-    func confirmedGroupIdentifiers(
-        from plan: YearlyItemDuplicationPlan
-    ) -> Set<UUID> {
-        let confirmedGroups = plan.groups.filter { group in
-            groupAmountEdits[group.id]?.confirmationStatus == .confirmed
-        }
-        return Set(confirmedGroups.map(\.id))
-    }
-
-    func filteredPlanForConfirmedGroups(
-        from plan: YearlyItemDuplicationPlan
-    ) -> YearlyItemDuplicationPlan {
-        let confirmedGroupIDs = confirmedGroupIdentifiers(from: plan)
-        let confirmedGroups = plan.groups.filter { group in
-            confirmedGroupIDs.contains(group.id)
-        }
-        let confirmedEntries = plan.entries.filter { entry in
-            confirmedGroupIDs.contains(entry.groupID)
-        }
-        return .init(
-            groups: confirmedGroups,
-            entries: confirmedEntries,
-            skippedDuplicateCount: plan.skippedDuplicateCount
-        )
-    }
-
-    func canAdvanceFromGroup(
-        plan: YearlyItemDuplicationPlan,
-        index: Int
-    ) -> Bool {
-        guard plan.groups.indices.contains(index) else {
-            return false
-        }
-        let groupID = plan.groups[index].id
-        let status = groupAmountEdits[groupID]?.confirmationStatus ?? .unconfirmed
-        return status != .unconfirmed
-    }
-
-    func confirmationStatusPicker(
-        groupID: UUID,
-        index: Int,
-        totalCount: Int
-    ) -> some View {
-        let selection = groupAmountEdits[groupID]?.confirmationStatus ?? .unconfirmed
-        return HStack(spacing: 0) {
-            ForEach(GroupConfirmationStatus.allCases, id: \.self) { status in
-                Button {
-                    setGroupConfirmationStatus(
-                        groupID: groupID,
-                        status: status,
-                        index: index,
-                        totalCount: totalCount
-                    )
-                } label: {
-                    Text(confirmationStatusLabel(status))
-                        .font(.subheadline)
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 8)
-                }
-                .buttonStyle(.plain)
-                .background {
-                    if status == selection {
-                        RoundedRectangle(cornerRadius: 8, style: .continuous)
-                            .fill(Color.accentColor.opacity(0.2))
-                    }
-                }
-            }
-        }
-        .padding(2)
-        .background(Color(.secondarySystemBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
-        .overlay(
-            RoundedRectangle(cornerRadius: 8, style: .continuous)
-                .stroke(Color(.separator), lineWidth: 1)
-        )
-    }
-
-    func confirmationStatusLabel(_ status: GroupConfirmationStatus) -> String {
-        switch status {
-        case .unconfirmed:
-            return String(localized: "Unconfirmed")
-        case .confirmed:
-            return String(localized: "Confirmed")
-        case .skipped:
-            return String(localized: "Skip")
-        }
-    }
-
-    func setGroupConfirmationStatus(
-        groupID: UUID,
-        status: GroupConfirmationStatus,
-        index: Int,
-        totalCount: Int
-    ) {
-        var edit = groupAmountEdits[groupID] ?? .init()
-        edit.confirmationStatus = status
-        groupAmountEdits[groupID] = edit
-        if status != .unconfirmed {
-            advanceToNextGroup(from: index, totalCount: totalCount)
-        }
-    }
-
-    func goToPreviousGroup() {
-        let nextIndex = max(0, selectedGroupIndex - 1)
-        if nextIndex != selectedGroupIndex {
-            withAnimation(.easeInOut) {
-                selectedGroupIndex = nextIndex
-            }
-        }
-    }
-}
-
-private enum GroupConfirmationStatus: String, CaseIterable {
-    case unconfirmed
-    case confirmed
-    case skipped
-}
-
-private struct GroupAmountEdit {
-    var incomeText: String
-    var outgoText: String
-    var confirmationStatus: GroupConfirmationStatus
-
-    init(
-        incomeText: String = .empty,
-        outgoText: String = .empty,
-        confirmationStatus: GroupConfirmationStatus = .unconfirmed
-    ) {
-        self.incomeText = incomeText
-        self.outgoText = outgoText
-        self.confirmationStatus = confirmationStatus
     }
 }
 
