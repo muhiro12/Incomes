@@ -190,7 +190,15 @@ public enum YearlyItemDuplicator {
             left.targetDate < right.targetDate
         }
         groups.sort { left, right in
-            left.content < right.content
+            if left.entryCount != right.entryCount {
+                return left.entryCount > right.entryCount
+            }
+            let leftDate = left.targetDates.first ?? .distantFuture
+            let rightDate = right.targetDates.first ?? .distantFuture
+            if leftDate != rightDate {
+                return leftDate < rightDate
+            }
+            return left.content < right.content
         }
 
         return .init(
