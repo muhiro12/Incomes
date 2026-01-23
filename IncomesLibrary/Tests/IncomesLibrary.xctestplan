@@ -16,7 +16,7 @@
   "testTargets" : [
     {
       "target" : {
-        "containerPath" : "container:",
+        "containerPath" : "container:IncomesLibrary",
         "identifier" : "IncomesLibraryTests",
         "name" : "IncomesLibraryTests"
       }
@@ -24,7 +24,7 @@
     {
       "parallelizable" : false,
       "target" : {
-        "containerPath" : "container:",
+        "containerPath" : "container:IncomesLibrary",
         "identifier" : "IncomesLibraryTimeZoneTests",
         "name" : "IncomesLibraryTimeZoneTests"
       }
