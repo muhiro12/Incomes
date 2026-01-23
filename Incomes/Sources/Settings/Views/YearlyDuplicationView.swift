@@ -17,8 +17,8 @@ struct YearlyDuplicationView: View {
     @Query(.tags(.typeIs(.year), order: .reverse))
     private var yearTags: [Tag]
 
-    @State private var sourceYear = Calendar.current.component(.year, from: .now)
-    @State private var targetYear = Calendar.current.component(.year, from: .now) + 1
+    @State private var sourceYear = Calendar.current.component(.year, from: .now) - 1
+    @State private var targetYear = Calendar.current.component(.year, from: .now)
 
     @State private var plan: YearlyItemDuplicationPlan?
     @State private var groupAmountEdits = [UUID: GroupAmountEdit]()
@@ -319,15 +319,22 @@ private extension YearlyDuplicationView {
     func alignYearSelections() {
         let source = sourceYears
         let target = targetYears
+        let currentYear = Calendar.current.component(.year, from: .now)
         guard let defaultSourceYear = source.first,
               let defaultTargetYear = target.first else {
             return
         }
+        let preferredSourceYear = source.contains(currentYear - 1)
+            ? currentYear - 1
+            : defaultSourceYear
+        let preferredTargetYear = target.contains(currentYear)
+            ? currentYear
+            : defaultTargetYear
         if !source.contains(sourceYear) {
-            sourceYear = defaultSourceYear
+            sourceYear = preferredSourceYear
         }
         if !target.contains(targetYear) {
-            targetYear = defaultTargetYear
+            targetYear = preferredTargetYear
         }
     }
 
