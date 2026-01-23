@@ -227,45 +227,23 @@ private extension MainNavigationView {
     }
 
     func loadYearlyDuplicationProposal() {
-        guard let sourceYear = latestSourceYearValue() else {
+        let targetYears = YearlyItemDuplicator.targetYears()
+        let suggestion = YearlyItemDuplicator.suggestion(
+            context: context,
+            yearTags: yearTags,
+            targetYears: targetYears,
+            minimumGroupCount: 3
+        )
+        if let suggestion,
+           let proposal = suggestion.plan.groups.first {
+            yearlyDuplicationProposal = proposal
+            yearlyDuplicationSourceYear = suggestion.sourceYear
+            yearlyDuplicationTargetYear = suggestion.targetYear
+        } else {
             yearlyDuplicationProposal = nil
             yearlyDuplicationSourceYear = nil
             yearlyDuplicationTargetYear = nil
-            return
         }
-        let targetYear = sourceYear + 1
-        do {
-            let plan = try YearlyItemDuplicator.plan(
-                context: context,
-                sourceYear: sourceYear,
-                targetYear: targetYear
-            )
-            yearlyDuplicationProposal = plan.groups.first
-            yearlyDuplicationSourceYear = sourceYear
-            yearlyDuplicationTargetYear = targetYear
-        } catch {
-            yearlyDuplicationProposal = nil
-            yearlyDuplicationSourceYear = nil
-            yearlyDuplicationTargetYear = nil
-            assertionFailure(error.localizedDescription)
-        }
-    }
-
-    func latestSourceYearValue() -> Int? {
-        let values = yearTags.compactMap { tag in
-            yearValue(from: tag)
-        }
-        return values.sorted(by: >).first
-    }
-
-    func yearValue(from tag: Tag) -> Int? {
-        if let integerValue = Int(tag.name) {
-            return integerValue
-        }
-        guard let date = tag.name.dateValueWithoutLocale(.yyyy) else {
-            return nil
-        }
-        return Calendar.current.component(.year, from: date)
     }
 
     func monthDayListText(for group: YearlyItemDuplicationGroup) -> String {

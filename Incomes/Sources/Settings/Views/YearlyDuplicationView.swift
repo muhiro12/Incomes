@@ -173,21 +173,22 @@ private extension YearlyDuplicationView {
         let day: Int
     }
 
+    var currentYear: Int {
+        Calendar.current.component(.year, from: .now)
+    }
+
     var sourceYears: [Int] {
-        let yearValues = yearTags.compactMap { tag in
-            yearValue(from: tag)
-        }
-        if yearValues.isEmpty {
-            let currentYear = Calendar.current.component(.year, from: .now)
-            return [currentYear]
-        }
-        return Array(Set(yearValues)).sorted(by: >)
+        YearlyItemDuplicator.availableSourceYears(
+            from: yearTags,
+            currentYear: currentYear
+        )
     }
 
     var targetYears: [Int] {
-        let currentYear = Calendar.current.component(.year, from: .now)
-        let referenceYear = max(currentYear, sourceYears.first ?? currentYear)
-        return Array((referenceYear - 10)...(referenceYear + 10)).sorted(by: >)
+        YearlyItemDuplicator.targetYears(
+            currentYear: currentYear,
+            range: 10
+        )
     }
 
     func previewPlan() {
@@ -277,16 +278,6 @@ private extension YearlyDuplicationView {
         })
     }
 
-    func yearValue(from tag: Tag) -> Int? {
-        if let integerValue = Int(tag.name) {
-            return integerValue
-        }
-        guard let date = tag.name.dateValueWithoutLocale(.yyyy) else {
-            return nil
-        }
-        return Calendar.current.component(.year, from: date)
-    }
-
     func alignYearSelections() {
         let source = sourceYears
         let target = targetYears
@@ -294,11 +285,14 @@ private extension YearlyDuplicationView {
               let defaultTargetYear = target.first else {
             return
         }
-        let latestSourceYear = defaultSourceYear
-        let preferredSourceYear = latestSourceYear
-        let preferredTargetYear = target.contains(latestSourceYear + 1)
-            ? latestSourceYear + 1
-            : defaultTargetYear
+        let suggestion = YearlyItemDuplicator.suggestion(
+            context: context,
+            yearTags: yearTags,
+            targetYears: target,
+            minimumGroupCount: 3
+        )
+        let preferredSourceYear = suggestion?.sourceYear ?? defaultSourceYear
+        let preferredTargetYear = suggestion?.targetYear ?? defaultTargetYear
         if plan == nil || !source.contains(sourceYear) {
             sourceYear = preferredSourceYear
         }

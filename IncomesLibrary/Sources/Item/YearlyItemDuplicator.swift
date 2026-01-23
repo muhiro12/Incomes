@@ -93,7 +93,107 @@ public struct YearlyItemDuplicationResult {
     }
 }
 
+public struct YearlyItemDuplicationSuggestion {
+    public let sourceYear: Int
+    public let targetYear: Int
+    public let plan: YearlyItemDuplicationPlan
+
+    public init(
+        sourceYear: Int,
+        targetYear: Int,
+        plan: YearlyItemDuplicationPlan
+    ) {
+        self.sourceYear = sourceYear
+        self.targetYear = targetYear
+        self.plan = plan
+    }
+}
+
 public enum YearlyItemDuplicator {
+    public static func availableSourceYears(
+        from yearTags: [Tag],
+        currentYear: Int = Calendar.current.component(.year, from: .now)
+    ) -> [Int] {
+        let years = yearTags.compactMap { tag in
+            yearValue(from: tag)
+        }
+        if years.isEmpty {
+            return [currentYear]
+        }
+        return Array(Set(years)).sorted(by: >)
+    }
+
+    public static func targetYears(
+        currentYear: Int = Calendar.current.component(.year, from: .now),
+        range: Int = 10
+    ) -> [Int] {
+        Array((currentYear - range)...(currentYear + range)).sorted(by: >)
+    }
+
+    public static func suggestion(
+        context: ModelContext,
+        yearTags: [Tag],
+        targetYears: [Int],
+        minimumGroupCount: Int,
+        options: YearlyItemDuplicationOptions = .init()
+    ) -> YearlyItemDuplicationSuggestion? {
+        let sourceYears = availableSourceYears(from: yearTags)
+        return suggestion(
+            context: context,
+            sourceYears: sourceYears,
+            targetYears: targetYears,
+            minimumGroupCount: minimumGroupCount,
+            options: options
+        )
+    }
+
+    public static func suggestion(
+        context: ModelContext,
+        sourceYears: [Int],
+        targetYears: [Int],
+        minimumGroupCount: Int,
+        options: YearlyItemDuplicationOptions = .init()
+    ) -> YearlyItemDuplicationSuggestion? {
+        guard sourceYears.isNotEmpty, targetYears.isNotEmpty else {
+            return nil
+        }
+        for year in sourceYears {
+            let candidateTargetYear = year + 1
+            guard targetYears.contains(candidateTargetYear) else {
+                continue
+            }
+            if let plan = try? plan(
+                context: context,
+                sourceYear: year,
+                targetYear: candidateTargetYear,
+                options: options
+            ), plan.groups.count >= minimumGroupCount {
+                return .init(
+                    sourceYear: year,
+                    targetYear: candidateTargetYear,
+                    plan: plan
+                )
+            }
+        }
+        let fallbackSourceYear = sourceYears.first ?? Calendar.current.component(.year, from: .now)
+        let fallbackTargetYear = targetYears.contains(fallbackSourceYear + 1)
+            ? fallbackSourceYear + 1
+            : targetYears.first ?? fallbackSourceYear + 1
+        if let plan = try? plan(
+            context: context,
+            sourceYear: fallbackSourceYear,
+            targetYear: fallbackTargetYear,
+            options: options
+        ) {
+            return .init(
+                sourceYear: fallbackSourceYear,
+                targetYear: fallbackTargetYear,
+                plan: plan
+            )
+        }
+        return nil
+    }
+
     public static func plan(
         context: ModelContext,
         sourceYear: Int,
@@ -272,6 +372,16 @@ private extension YearlyItemDuplicator {
     struct FallbackGroupingKey: Hashable {
         let content: String
         let category: String
+    }
+
+    static func yearValue(from tag: Tag) -> Int? {
+        if let integerValue = Int(tag.name) {
+            return integerValue
+        }
+        guard let date = tag.name.dateValueWithoutLocale(.yyyy) else {
+            return nil
+        }
+        return Calendar.current.component(.year, from: date)
     }
 
     static func duplicationKey(for item: Item) -> DuplicationKey {
