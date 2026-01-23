@@ -29,7 +29,7 @@ enum ItemFormSaveCoordinator {
         context: ModelContext,
         item: Item?,
         formInputData: ItemFormInput,
-        repeatMonths: Set<Int>
+        repeatMonthSelections: Set<RepeatMonthSelection>
     ) throws -> ItemFormSaveOutcome {
         switch mode {
         case .create:
@@ -40,7 +40,7 @@ enum ItemFormSaveCoordinator {
                 income: formInputData.income,
                 outgo: formInputData.outgo,
                 category: formInputData.category,
-                repeatMonths: repeatMonths
+                repeatMonthSelections: repeatMonthSelections
             )
             Haptic.success.impact()
             return .didSave

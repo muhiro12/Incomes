@@ -64,7 +64,7 @@ public enum ItemService {
         return item
     }
 
-    /// Creates an item and additional items in the selected months of the same year.
+    /// Creates an item and additional items in the selected months of the base or next year.
     /// - Parameters:
     ///   - context: Target model context.
     ///   - date: Local date for the first item.
@@ -72,7 +72,7 @@ public enum ItemService {
     ///   - income: Income amount.
     ///   - outgo: Outgo amount.
     ///   - category: Category name.
-    ///   - repeatMonths: Months (1...12) to create items in. The base month is always included.
+    ///   - repeatMonthSelections: Year/month selections to create items in. The base month is always included.
     /// - Returns: The first created item.
     public static func create(
         context: ModelContext,
@@ -81,17 +81,21 @@ public enum ItemService {
         income: Decimal,
         outgo: Decimal,
         category: String,
-        repeatMonths: Set<Int>
+        repeatMonthSelections: Set<RepeatMonthSelection>
     ) throws -> Item {
         let calendar = Calendar.current
+        let baseYear = calendar.component(.year, from: date)
         let baseMonth = calendar.component(.month, from: date)
-        let validMonths = repeatMonths.filter { month in
-            (1...12).contains(month)
+        let validSelections = repeatMonthSelections.filter { selection in
+            let isValidMonth = (1...12).contains(selection.month)
+            let isValidYear = selection.year == baseYear || selection.year == baseYear + 1
+            return isValidMonth && isValidYear
         }
-        if validMonths.count != repeatMonths.count {
-            assertionFailure("Repeat months must be between 1 and 12.")
+        if validSelections.count != repeatMonthSelections.count {
+            // Invalid selections are ignored to avoid crashing on unexpected input.
         }
-        let months = Set(validMonths).union([baseMonth])
+        let baseSelection = RepeatMonthSelection(year: baseYear, month: baseMonth)
+        let selections = Set(validSelections).union([baseSelection])
 
         var items = [Item]()
         let repeatID = UUID()
@@ -106,12 +110,17 @@ public enum ItemService {
         )
         items.append(item)
 
-        let sortedMonths = months.sorted()
-        for month in sortedMonths {
-            guard month != baseMonth else {
+        let sortedSelections = selections.sorted { left, right in
+            if left.year != right.year {
+                return left.year < right.year
+            }
+            return left.month < right.month
+        }
+        for selection in sortedSelections {
+            guard selection.year != baseYear || selection.month != baseMonth else {
                 continue
             }
-            let monthOffset = month - baseMonth
+            let monthOffset = (selection.year - baseYear) * 12 + (selection.month - baseMonth)
             guard let repeatingDate = calendar.date(
                 byAdding: .month,
                 value: monthOffset,

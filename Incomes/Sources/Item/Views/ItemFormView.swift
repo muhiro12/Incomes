@@ -48,7 +48,7 @@ struct ItemFormView: View {
     @State private var income: String = .empty
     @State private var outgo: String = .empty
     @State private var category: String = .empty
-    @State private var repeatMonths: Set<Int> = []
+    @State private var repeatMonthSelections: Set<RepeatMonthSelection> = []
     @State private var isRepeatEnabled = false
     @State private var isAssistPresented = false
 
@@ -112,8 +112,8 @@ struct ItemFormView: View {
                 if isRepeatEnabled {
                     Section("Repeat Months") {
                         RepeatMonthPicker(
-                            selectedMonths: $repeatMonths,
-                            baseMonth: baseMonth
+                            selectedMonthSelections: $repeatMonthSelections,
+                            baseDate: date
                         )
                     }
                 }
@@ -220,17 +220,17 @@ struct ItemFormView: View {
                     break
                 }
             }
-            syncRepeatMonthsWithBaseMonth()
+            syncRepeatMonthSelectionsWithBaseDate()
         }
         .onChange(of: date) {
             isRepeatEnabled = false
-            syncRepeatMonthsWithBaseMonth()
+            syncRepeatMonthSelectionsWithBaseDate()
         }
         .onChange(of: isRepeatEnabled) {
             if !isRepeatEnabled {
-                repeatMonths = [baseMonth]
+                repeatMonthSelections = [baseSelection]
             } else {
-                syncRepeatMonthsWithBaseMonth()
+                syncRepeatMonthSelectionsWithBaseDate()
             }
         }
         .actionSheet(isPresented: $isActionSheetPresented) {
@@ -286,7 +286,7 @@ private extension ItemFormView {
                 context: context,
                 item: item,
                 formInputData: formInputData,
-                repeatMonths: effectiveRepeatMonths
+                repeatMonthSelections: effectiveRepeatMonthSelections
             )
             switch outcome {
             case .requiresScopeSelection:
@@ -360,7 +360,7 @@ private extension ItemFormView {
                 context: context,
                 item: item,
                 formInputData: formInputData,
-                repeatMonths: effectiveRepeatMonths
+                repeatMonthSelections: effectiveRepeatMonthSelections
             )
         } catch {
             assertionFailure(error.localizedDescription)
@@ -381,22 +381,32 @@ private extension ItemFormView {
         isActionSheetPresented = true
     }
 
+    var baseYear: Int {
+        Calendar.current.component(.year, from: date)
+    }
+
     var baseMonth: Int {
         Calendar.current.component(.month, from: date)
     }
 
-    var effectiveRepeatMonths: Set<Int> {
-        if isRepeatEnabled {
-            return repeatMonths
-        }
-        return [baseMonth]
+    var baseSelection: RepeatMonthSelection {
+        .init(year: baseYear, month: baseMonth)
     }
 
-    func syncRepeatMonthsWithBaseMonth() {
-        let currentBaseMonth = baseMonth
-        if !repeatMonths.contains(currentBaseMonth) {
-            repeatMonths.insert(currentBaseMonth)
+    var effectiveRepeatMonthSelections: Set<RepeatMonthSelection> {
+        if isRepeatEnabled {
+            return repeatMonthSelections
         }
+        return [baseSelection]
+    }
+
+    func syncRepeatMonthSelectionsWithBaseDate() {
+        let currentBaseSelection = baseSelection
+        let allowedYears = Set([baseYear, baseYear + 1])
+        repeatMonthSelections = repeatMonthSelections.filter { selection in
+            allowedYears.contains(selection.year)
+        }
+        repeatMonthSelections.insert(currentBaseSelection)
     }
 
     var saveMode: ItemFormSaveMode {

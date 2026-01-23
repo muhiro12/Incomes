@@ -47,6 +47,11 @@ struct ItemServiceTests {
 
     @Test
     func create_creates_items_for_selected_months() throws {
+        let selections: Set<RepeatMonthSelection> = [
+            .init(year: 2_000, month: 4),
+            .init(year: 2_000, month: 6),
+            .init(year: 2_000, month: 7)
+        ]
         _ = try ItemService.create(
             context: context,
             date: shiftedDate("2000-04-03T12:00:00Z"),
@@ -54,7 +59,7 @@ struct ItemServiceTests {
             income: 200,
             outgo: 100,
             category: "category",
-            repeatMonths: [4, 6, 7]
+            repeatMonthSelections: selections
         )
         let items = fetchItems(context)
         #expect(items.count == 3)
@@ -66,6 +71,115 @@ struct ItemServiceTests {
         })
         let expectedMonths: Set<Int> = [4, 6, 7]
         #expect(months == expectedMonths)
+    }
+
+    @Test
+    func create_creates_items_for_base_and_next_year() throws {
+        let selections: Set<RepeatMonthSelection> = [
+            .init(year: 2_000, month: 2),
+            .init(year: 2_001, month: 1)
+        ]
+        _ = try ItemService.create(
+            context: context,
+            date: shiftedDate("2000-11-03T12:00:00Z"),
+            content: "content",
+            income: 200,
+            outgo: 100,
+            category: "category",
+            repeatMonthSelections: selections
+        )
+        let items = fetchItems(context)
+        #expect(items.count == 3)
+
+        let calendar = Calendar.current
+        let yearMonthPairs = Set(items.map { item in
+            let year = calendar.component(.year, from: item.localDate)
+            let month = calendar.component(.month, from: item.localDate)
+            return "\(year)-\(month)"
+        })
+        let expectedPairs: Set<String> = ["2000-2", "2000-11", "2001-1"]
+        #expect(yearMonthPairs == expectedPairs)
+    }
+
+    @Test
+    func create_includes_base_month_when_not_selected() throws {
+        let selections: Set<RepeatMonthSelection> = [
+            .init(year: 2_000, month: 1),
+            .init(year: 2_000, month: 3)
+        ]
+        _ = try ItemService.create(
+            context: context,
+            date: shiftedDate("2000-02-03T12:00:00Z"),
+            content: "content",
+            income: 200,
+            outgo: 100,
+            category: "category",
+            repeatMonthSelections: selections
+        )
+        let items = fetchItems(context)
+        #expect(items.count == 3)
+
+        let calendar = Calendar.current
+        let months = Set(items.map { item in
+            calendar.component(.month, from: item.localDate)
+        })
+        let expectedMonths: Set<Int> = [1, 2, 3]
+        #expect(months == expectedMonths)
+    }
+
+    @Test
+    func create_ignores_invalid_months_and_years() throws {
+        let selections: Set<RepeatMonthSelection> = [
+            .init(year: 2_000, month: 4),
+            .init(year: 2_000, month: 0),
+            .init(year: 2_000, month: 13),
+            .init(year: 1_999, month: 6),
+            .init(year: 2_002, month: 7)
+        ]
+        _ = try ItemService.create(
+            context: context,
+            date: shiftedDate("2000-04-03T12:00:00Z"),
+            content: "content",
+            income: 200,
+            outgo: 100,
+            category: "category",
+            repeatMonthSelections: selections
+        )
+        let items = fetchItems(context)
+        #expect(items.count == 1)
+
+        let calendar = Calendar.current
+        let yearMonthPairs = Set(items.map { item in
+            let year = calendar.component(.year, from: item.localDate)
+            let month = calendar.component(.month, from: item.localDate)
+            return "\(year)-\(month)"
+        })
+        let expectedPairs: Set<String> = ["2000-4"]
+        #expect(yearMonthPairs == expectedPairs)
+    }
+
+    @Test
+    func create_with_empty_selections_creates_only_base_month() throws {
+        _ = try ItemService.create(
+            context: context,
+            date: shiftedDate("2000-04-03T12:00:00Z"),
+            content: "content",
+            income: 200,
+            outgo: 100,
+            category: "category",
+            repeatMonthSelections: []
+        )
+        let items = fetchItems(context)
+        #expect(items.count == 1)
+
+        let calendar = Calendar.current
+        let yearMonthPairs = Set(items.map { item in
+            let year = calendar.component(.year, from: item.localDate)
+            let month = calendar.component(.month, from: item.localDate)
+            return "\(year)-\(month)"
+        })
+        let expectedPairs: Set<String> = ["2000-4"]
+        #expect(yearMonthPairs == expectedPairs)
     }
 
     // MARK: - Delete
