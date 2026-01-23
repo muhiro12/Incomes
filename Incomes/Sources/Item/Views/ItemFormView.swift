@@ -48,7 +48,8 @@ struct ItemFormView: View {
     @State private var income: String = .empty
     @State private var outgo: String = .empty
     @State private var category: String = .empty
-    @State private var repeatSelection: Int = 1
+    @State private var repeatMonths: Set<Int> = []
+    @State private var isRepeatEnabled = false
     @State private var isAssistPresented = false
 
     private let mode: Mode
@@ -101,11 +102,21 @@ struct ItemFormView: View {
                     .focused($focusedField, equals: .category)
                     .multilineTextAlignment(.trailing)
                 }
-                if mode == .create {
-                    RepeatCountPicker(selection: $repeatSelection)
-                }
             } header: {
                 Text("Information")
+            }
+            if mode == .create {
+                Section {
+                    Toggle("Repeat", isOn: $isRepeatEnabled)
+                }
+                if isRepeatEnabled {
+                    Section("Repeat Months") {
+                        RepeatMonthPicker(
+                            selectedMonths: $repeatMonths,
+                            baseMonth: baseMonth
+                        )
+                    }
+                }
             }
         }
         .scrollDismissesKeyboard(.interactively)
@@ -209,6 +220,18 @@ struct ItemFormView: View {
                     break
                 }
             }
+            syncRepeatMonthsWithBaseMonth()
+        }
+        .onChange(of: date) {
+            isRepeatEnabled = false
+            syncRepeatMonthsWithBaseMonth()
+        }
+        .onChange(of: isRepeatEnabled) {
+            if !isRepeatEnabled {
+                repeatMonths = [baseMonth]
+            } else {
+                syncRepeatMonthsWithBaseMonth()
+            }
         }
         .actionSheet(isPresented: $isActionSheetPresented) {
             ActionSheet(title: Text("This is a repeating item."),
@@ -263,7 +286,7 @@ private extension ItemFormView {
                 context: context,
                 item: item,
                 formInputData: formInputData,
-                repeatCount: repeatSelection
+                repeatMonths: effectiveRepeatMonths
             )
             switch outcome {
             case .requiresScopeSelection:
@@ -337,7 +360,7 @@ private extension ItemFormView {
                 context: context,
                 item: item,
                 formInputData: formInputData,
-                repeatCount: repeatSelection
+                repeatMonths: effectiveRepeatMonths
             )
         } catch {
             assertionFailure(error.localizedDescription)
@@ -356,6 +379,24 @@ private extension ItemFormView {
 
     func presentToActionSheet() {
         isActionSheetPresented = true
+    }
+
+    var baseMonth: Int {
+        Calendar.current.component(.month, from: date)
+    }
+
+    var effectiveRepeatMonths: Set<Int> {
+        if isRepeatEnabled {
+            return repeatMonths
+        }
+        return [baseMonth]
+    }
+
+    func syncRepeatMonthsWithBaseMonth() {
+        let currentBaseMonth = baseMonth
+        if !repeatMonths.contains(currentBaseMonth) {
+            repeatMonths.insert(currentBaseMonth)
+        }
     }
 
     var saveMode: ItemFormSaveMode {

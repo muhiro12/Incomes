@@ -45,6 +45,29 @@ struct ItemServiceTests {
         #expect(Set(items.map(\.repeatID)).count == 1)
     }
 
+    @Test
+    func create_creates_items_for_selected_months() throws {
+        _ = try ItemService.create(
+            context: context,
+            date: shiftedDate("2000-04-03T12:00:00Z"),
+            content: "content",
+            income: 200,
+            outgo: 100,
+            category: "category",
+            repeatMonths: [4, 6, 7]
+        )
+        let items = fetchItems(context)
+        #expect(items.count == 3)
+        #expect(Set(items.map(\.repeatID)).count == 1)
+
+        let calendar = Calendar.current
+        let months = Set(items.map { item in
+            calendar.component(.month, from: item.localDate)
+        })
+        let expectedMonths: Set<Int> = [4, 6, 7]
+        #expect(months == expectedMonths)
+    }
+
     // MARK: - Delete
 
     @Test

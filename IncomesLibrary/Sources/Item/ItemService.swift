@@ -64,6 +64,79 @@ public enum ItemService {
         return item
     }
 
+    /// Creates an item and additional items in the selected months of the same year.
+    /// - Parameters:
+    ///   - context: Target model context.
+    ///   - date: Local date for the first item.
+    ///   - content: Item description.
+    ///   - income: Income amount.
+    ///   - outgo: Outgo amount.
+    ///   - category: Category name.
+    ///   - repeatMonths: Months (1...12) to create items in. The base month is always included.
+    /// - Returns: The first created item.
+    public static func create(
+        context: ModelContext,
+        date: Date,
+        content: String,
+        income: Decimal,
+        outgo: Decimal,
+        category: String,
+        repeatMonths: Set<Int>
+    ) throws -> Item {
+        let calendar = Calendar.current
+        let baseMonth = calendar.component(.month, from: date)
+        let validMonths = repeatMonths.filter { month in
+            (1...12).contains(month)
+        }
+        if validMonths.count != repeatMonths.count {
+            assertionFailure("Repeat months must be between 1 and 12.")
+        }
+        let months = Set(validMonths).union([baseMonth])
+
+        var items = [Item]()
+        let repeatID = UUID()
+        let item = try Item.create(
+            context: context,
+            date: date,
+            content: content,
+            income: income,
+            outgo: outgo,
+            category: category,
+            repeatID: repeatID
+        )
+        items.append(item)
+
+        let sortedMonths = months.sorted()
+        for month in sortedMonths {
+            guard month != baseMonth else {
+                continue
+            }
+            let monthOffset = month - baseMonth
+            guard let repeatingDate = calendar.date(
+                byAdding: .month,
+                value: monthOffset,
+                to: date
+            ) else {
+                assertionFailure()
+                continue
+            }
+            let repeatItem = try Item.create(
+                context: context,
+                date: repeatingDate,
+                content: content,
+                income: income,
+                outgo: outgo,
+                category: category,
+                repeatID: repeatID
+            )
+            items.append(repeatItem)
+        }
+
+        items.forEach(context.insert)
+        try BalanceCalculator.calculate(in: context, for: items)
+        return item
+    }
+
     /// Deletes one item and recalculates balances for affected items.
     public static func delete(context: ModelContext, item: Item) throws {
         item.delete()
