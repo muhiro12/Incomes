@@ -11,8 +11,6 @@ import SwiftUI
 struct YearlyDuplicationView: View {
     @Environment(\.modelContext)
     private var context
-    @Environment(\.dismiss)
-    private var dismiss
 
     @Query(.tags(.typeIs(.year), order: .reverse))
     private var yearTags: [Tag]
@@ -28,53 +26,7 @@ struct YearlyDuplicationView: View {
 
     var body: some View {
         Form {
-            Section("Year Range") {
-                HStack(alignment: .top, spacing: 16) {
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("Source Year")
-                            .font(.footnote)
-                            .foregroundStyle(.secondary)
-                        Picker("Source Year", selection: $sourceYear) {
-                            ForEach(sourceYears, id: \.self) { year in
-                                Text(verbatim: "\(year)")
-                            }
-                        }
-                        .pickerStyle(.wheel)
-                        .frame(maxWidth: .infinity)
-                    }
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("Target Year")
-                            .font(.footnote)
-                            .foregroundStyle(.secondary)
-                        Picker("Target Year", selection: $targetYear) {
-                            ForEach(targetYears, id: \.self) { year in
-                                Text(verbatim: "\(year)")
-                            }
-                        }
-                        .pickerStyle(.wheel)
-                        .frame(maxWidth: .infinity)
-                    }
-                }
-            }
-            Section {
-                Button("Preview") {
-                    previewPlan()
-                }
-            }
             if let plan {
-                Section("Preview") {
-                    Text(String(localized: "Groups: \(plan.groups.count)"))
-                    Text(String(localized: "Items: \(plan.entries.count)"))
-                    if plan.skippedDuplicateCount > .zero {
-                        Text(String(localized: "Skipped duplicates: \(plan.skippedDuplicateCount)"))
-                            .foregroundStyle(.secondary)
-                    }
-                    if plan.groups.isNotEmpty {
-                        Text(String(localized: "Select a proposal to edit or create it directly."))
-                            .font(.footnote)
-                            .foregroundStyle(.secondary)
-                    }
-                }
                 Section("Proposals") {
                     ForEach(plan.groups, id: \.id) { group in
                         let entries = entries(for: group, in: plan)
@@ -128,21 +80,43 @@ struct YearlyDuplicationView: View {
                         .padding(.vertical, 4)
                     }
                 }
+                Section("Preview") {
+                    Text(String(localized: "Groups: \(plan.groups.count)"))
+                    Text(String(localized: "Items: \(plan.entries.count)"))
+                    if plan.skippedDuplicateCount > .zero {
+                        Text(String(localized: "Skipped duplicates: \(plan.skippedDuplicateCount)"))
+                            .foregroundStyle(.secondary)
+                    }
+                    if plan.groups.isNotEmpty {
+                        Text(String(localized: "Select a proposal to edit or create it directly."))
+                            .font(.footnote)
+                            .foregroundStyle(.secondary)
+                    }
+                }
             }
         }
         .navigationTitle("Duplicate Year")
+        .safeAreaInset(edge: .top) {
+            yearSelectionBar
+        }
         .toolbar {
-            ToolbarItem(placement: .cancellationAction) {
-                Button("Close") {
-                    dismiss()
-                }
+            ToolbarItem {
+                CloseButton()
             }
         }
         .onAppear {
             alignYearSelections()
+            previewPlan()
         }
         .onChange(of: yearTags) {
             alignYearSelections()
+            previewPlan()
+        }
+        .onChange(of: sourceYear) {
+            previewPlan()
+        }
+        .onChange(of: targetYear) {
+            previewPlan()
         }
         .sheet(item: $itemFormDraft) { draft in
             ItemFormNavigationView(
@@ -212,7 +186,8 @@ private extension YearlyDuplicationView {
 
     var targetYears: [Int] {
         let currentYear = Calendar.current.component(.year, from: .now)
-        return Array((currentYear - 10)...(currentYear + 10)).sorted(by: >)
+        let referenceYear = max(currentYear, sourceYears.first ?? currentYear)
+        return Array((referenceYear - 10)...(referenceYear + 10)).sorted(by: >)
     }
 
     func previewPlan() {
@@ -315,22 +290,62 @@ private extension YearlyDuplicationView {
     func alignYearSelections() {
         let source = sourceYears
         let target = targetYears
-        let currentYear = Calendar.current.component(.year, from: .now)
         guard let defaultSourceYear = source.first,
               let defaultTargetYear = target.first else {
             return
         }
-        let preferredSourceYear = source.contains(currentYear - 1)
-            ? currentYear - 1
-            : defaultSourceYear
-        let preferredTargetYear = target.contains(currentYear)
-            ? currentYear
+        let latestSourceYear = defaultSourceYear
+        let preferredSourceYear = latestSourceYear
+        let preferredTargetYear = target.contains(latestSourceYear + 1)
+            ? latestSourceYear + 1
             : defaultTargetYear
-        if !source.contains(sourceYear) {
+        if plan == nil || !source.contains(sourceYear) {
             sourceYear = preferredSourceYear
         }
-        if !target.contains(targetYear) {
+        if plan == nil || !target.contains(targetYear) {
             targetYear = preferredTargetYear
+        }
+    }
+
+    var yearSelectionBar: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text("Year Range")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+            HStack(alignment: .top, spacing: 16) {
+                yearMenu(
+                    title: "Source Year",
+                    selection: $sourceYear,
+                    years: sourceYears
+                )
+                yearMenu(
+                    title: "Target Year",
+                    selection: $targetYear,
+                    years: targetYears
+                )
+            }
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 10)
+        .background(.ultraThinMaterial)
+    }
+
+    func yearMenu(
+        title: LocalizedStringKey,
+        selection: Binding<Int>,
+        years: [Int]
+    ) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text(title)
+                .font(.caption2)
+                .foregroundStyle(.secondary)
+            Picker(title, selection: selection) {
+                ForEach(years, id: \.self) { year in
+                    Text(verbatim: "\(year)")
+                }
+            }
+            .pickerStyle(.menu)
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
     }
 
