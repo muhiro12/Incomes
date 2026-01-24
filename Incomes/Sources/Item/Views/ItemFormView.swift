@@ -244,7 +244,6 @@ struct ItemFormView: View {
             syncRepeatMonthSelectionsWithBaseDate()
         }
         .onChange(of: date) {
-            isRepeatEnabled = false
             syncRepeatMonthSelectionsWithBaseDate()
         }
         .onChange(of: isRepeatEnabled) {
