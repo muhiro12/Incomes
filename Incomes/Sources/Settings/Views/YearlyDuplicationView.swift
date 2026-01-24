@@ -363,7 +363,18 @@ private extension YearlyDuplicationView {
     }
 
     func decimalString(from value: Decimal) -> String {
-        NSDecimalNumber(decimal: value).stringValue
+        let number = NSDecimalNumber(decimal: value)
+        let rounded = number.rounding(
+            accordingToBehavior: NSDecimalNumberHandler(
+                roundingMode: .down,
+                scale: 0,
+                raiseOnExactness: false,
+                raiseOnOverflow: false,
+                raiseOnUnderflow: false,
+                raiseOnDivideByZero: false
+            )
+        )
+        return rounded.stringValue
     }
 }
 
