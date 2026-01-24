@@ -6,7 +6,6 @@
 //
 
 import PhotosUI
-import SpeechWrapper
 import SwiftUI
 
 @available(iOS 26.0, *)
@@ -28,8 +27,6 @@ struct ItemFormInputAssistView: View {
     @State private var selectedItem: PhotosPickerItem?
 
     @StateObject private var scanner: ImageTextScanner = .init()
-    private let speechClient = SpeechClient(settings: .init(useLegacy: true))
-    @State private var isRecording = false
 
     init(
         date: Binding<Date>,
@@ -66,24 +63,6 @@ struct ItemFormInputAssistView: View {
                     isCameraPresented = true
                 } label: {
                     Label("Camera", systemImage: "camera")
-                }
-
-                if isRecording {
-                    Button {
-                        Task {
-                            await stopRecording()
-                        }
-                    } label: {
-                        Label("Stop", systemImage: "stop.circle.fill")
-                    }
-                } else {
-                    Button {
-                        Task {
-                            await startRecording()
-                        }
-                    } label: {
-                        Label("Microphone", systemImage: "mic")
-                    }
                 }
             }
         }
@@ -149,31 +128,6 @@ struct ItemFormInputAssistView: View {
     }
 
     // MARK: - Actions
-
-    private func startRecording() async {
-        isProcessing = true
-        defer {
-            isProcessing = false
-        }
-        do {
-            let stream = try await speechClient.stream()
-            isRecording = true
-            for await latest in stream {
-                text = latest
-            }
-        } catch {
-            errorMessage = error.localizedDescription
-        }
-    }
-
-    private func stopRecording() async {
-        isProcessing = true
-        defer {
-            isProcessing = false
-        }
-        await speechClient.stop()
-        isRecording = false
-    }
 
     private func scanReceipt() async {
         guard let item = selectedItem else {

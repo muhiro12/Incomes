@@ -1,5 +1,5 @@
 {
-  "originHash" : "aba08e14769466a8138d04b3660e4f7cbfe972b64ad5f2783206ff7cd5bc7592",
+  "originHash" : "b2388d6fdc8a56b0635f43f34c9700a901cca0e1acbe3d85797dae8f578f6f02",
   "pins" : [
     {
       "identity" : "googlemobileadswrapper",
@@ -25,15 +25,6 @@
       "location" : "https://github.com/muhiro12/LicenseListWrapper.git",
       "state" : {
         "revision" : "d760514bee0ba669db4aed8362d64a64ff17810d",
-        "version" : "1.1.0"
-      }
-    },
-    {
-      "identity" : "speechwrapper",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/muhiro12/SpeechWrapper",
-      "state" : {
-        "revision" : "e04e7ea7af05e8048ba9ef087766b2c3c200819f",
         "version" : "1.1.0"
       }
     },

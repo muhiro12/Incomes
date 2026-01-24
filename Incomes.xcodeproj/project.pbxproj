@@ -16,7 +16,6 @@
 		AD7162362E70BD9F00C4CFCE /* IncomesLibrary in Frameworks */ = {isa = PBXBuildFile; productRef = AD7162352E70BD9F00C4CFCE /* IncomesLibrary */; };
 		ADA85F312DB6275B0047CB54 /* GoogleMobileAdsWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = ADA85F302DB6275B0047CB54 /* GoogleMobileAdsWrapper */; };
 		ADA85F342DB627730047CB54 /* LicenseListWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = ADA85F332DB627730047CB54 /* LicenseListWrapper */; };
-		ADADFCDC2E6DD1840011E90E /* SpeechWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = ADADFCDB2E6DD1840011E90E /* SpeechWrapper */; };
 		ADE464F92E80212600F8EEC9 /* StoreKitWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = ADE464F82E80212600F8EEC9 /* StoreKitWrapper */; };
 /* End PBXBuildFile section */
 
@@ -120,7 +119,6 @@
 			files = (
 				ADE464F92E80212600F8EEC9 /* StoreKitWrapper in Frameworks */,
 				ADA85F312DB6275B0047CB54 /* GoogleMobileAdsWrapper in Frameworks */,
-				ADADFCDC2E6DD1840011E90E /* SpeechWrapper in Frameworks */,
 				AD6C5A752E515E3000E1FBA0 /* IncomesLibrary in Frameworks */,
 				ADA85F342DB627730047CB54 /* LicenseListWrapper in Frameworks */,
 			);
@@ -234,7 +232,6 @@
 				ADA85F302DB6275B0047CB54 /* GoogleMobileAdsWrapper */,
 				ADA85F332DB627730047CB54 /* LicenseListWrapper */,
 				AD6C5A742E515E3000E1FBA0 /* IncomesLibrary */,
-				ADADFCDB2E6DD1840011E90E /* SpeechWrapper */,
 				ADE464F82E80212600F8EEC9 /* StoreKitWrapper */,
 			);
 			productName = Incomes;
@@ -281,7 +278,6 @@
 				ADA85F2F2DB6275B0047CB54 /* XCRemoteSwiftPackageReference "GoogleMobileAdsWrapper" */,
 				ADA85F322DB627730047CB54 /* XCRemoteSwiftPackageReference "LicenseListWrapper" */,
 				AD6C5A732E515E3000E1FBA0 /* XCLocalSwiftPackageReference "IncomesLibrary" */,
-				ADADFCDA2E6DD1840011E90E /* XCRemoteSwiftPackageReference "SpeechWrapper" */,
 				ADE464F72E80212500F8EEC9 /* XCRemoteSwiftPackageReference "StoreKitWrapper" */,
 			);
 			productRefGroup = ADCF36A724A1D0F40011D6F5 /* Products */;
@@ -649,8 +645,6 @@
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Camera access is required to scan receipts.";
-				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Allow microphone access to capture your speech for transcription.";
-				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Allow speech recognition to convert your speech into text.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
@@ -707,8 +701,6 @@
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Camera access is required to scan receipts.";
-				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Allow microphone access to capture your speech for transcription.";
-				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Allow speech recognition to convert your speech into text.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
@@ -809,14 +801,6 @@
 				minimumVersion = 1.0.0;
 			};
 		};
-		ADADFCDA2E6DD1840011E90E /* XCRemoteSwiftPackageReference "SpeechWrapper" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/muhiro12/SpeechWrapper";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.0;
-			};
-		};
 		ADE464F72E80212500F8EEC9 /* XCRemoteSwiftPackageReference "StoreKitWrapper" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/muhiro12/StoreKitWrapper";
@@ -849,11 +833,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = ADA85F322DB627730047CB54 /* XCRemoteSwiftPackageReference "LicenseListWrapper" */;
 			productName = LicenseListWrapper;
-		};
-		ADADFCDB2E6DD1840011E90E /* SpeechWrapper */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = ADADFCDA2E6DD1840011E90E /* XCRemoteSwiftPackageReference "SpeechWrapper" */;
-			productName = SpeechWrapper;
 		};
 		ADE464F82E80212600F8EEC9 /* StoreKitWrapper */ = {
 			isa = XCSwiftPackageProductDependency;
