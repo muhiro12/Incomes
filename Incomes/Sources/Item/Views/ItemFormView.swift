@@ -40,7 +40,7 @@ struct ItemFormView: View {
 
     @FocusState private var focusedField: Field?
 
-    @State private var isActionSheetPresented = false
+    @State private var isRepeatingDialogPresented = false
     @State private var isDebugDialogPresented = false
 
     @State private var date: Date = .now
@@ -264,17 +264,21 @@ struct ItemFormView: View {
                 syncRepeatMonthSelectionsWithBaseDate()
             }
         }
-        .actionSheet(isPresented: $isActionSheetPresented) {
-            ActionSheet(title: Text("This is a repeating item."),
-                        buttons: [
-                            .default(Text("Save for this item only"),
-                                     action: saveForThisItem),
-                            .default(Text("Save for future items"),
-                                     action: saveForFutureItems),
-                            .default(Text("Save for all items"),
-                                     action: saveForAllItems),
-                            .cancel()
-                        ])
+        .confirmationDialog(
+            "This is a repeating item.",
+            isPresented: $isRepeatingDialogPresented,
+            titleVisibility: .visible
+        ) {
+            Button("Save for this item only") {
+                saveForThisItem()
+            }
+            Button("Save for future items") {
+                saveForFutureItems()
+            }
+            Button("Save for all items") {
+                saveForAllItems()
+            }
+            Button("Cancel", role: .cancel) {}
         }
         .navigationViewStyle(StackNavigationViewStyle())
         .sheet(isPresented: $isAssistPresented) {
@@ -334,7 +338,7 @@ private extension ItemFormView {
             )
             switch outcome {
             case .requiresScopeSelection:
-                presentToActionSheet()
+                presentToRepeatingDialog()
             case .didSave:
                 dismiss()
             }
@@ -422,8 +426,8 @@ private extension ItemFormView {
         dismiss()
     }
 
-    func presentToActionSheet() {
-        isActionSheetPresented = true
+    func presentToRepeatingDialog() {
+        isRepeatingDialogPresented = true
     }
 
     func initialDate(for tag: Tag, currentDate: Date) -> Date {
