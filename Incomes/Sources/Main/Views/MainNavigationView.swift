@@ -22,6 +22,9 @@ struct MainNavigationView: View {
     @State private var isSearchPresented = false
     @State private var isSettingsPresented = false
     @State private var isYearlyDuplicationPresented = false
+    @State private var isYearDeleteDialogPresented = false
+    @State private var willDeleteItems: [Item] = []
+    @State private var willDeleteTags: [Tag] = []
 
     @State private var hasLoaded = false
     @State private var isIntroductionPresented = false
@@ -38,6 +41,20 @@ struct MainNavigationView: View {
                     TagSummaryRow()
                         .environment(yearTag)
                         .tag(yearTag)
+                }
+                .onDelete { indices in
+                    Haptic.warning.impact()
+                    isYearDeleteDialogPresented = true
+                    willDeleteTags = indices.compactMap { index in
+                        guard yearTags.indices.contains(index) else {
+                            return nil
+                        }
+                        return yearTags[index]
+                    }
+                    willDeleteItems = TagService.resolveItemsForDeletion(
+                        from: yearTags,
+                        indices: indices
+                    )
                 }
                 if showYearlyDuplicationPromo,
                    let proposal = yearlyDuplicationProposal,
@@ -87,6 +104,40 @@ struct MainNavigationView: View {
                         }
                     }
                 }
+            }
+            .confirmationDialog(
+                Text("Delete"),
+                isPresented: $isYearDeleteDialogPresented
+            ) {
+                Button(role: .destructive) {
+                    do {
+                        try ItemService.delete(
+                            context: context,
+                            items: willDeleteItems
+                        )
+                        if let yearTag,
+                           willDeleteTags.contains(where: { tag in
+                            tag.name == yearTag.name && tag.typeID == yearTag.typeID
+                           }) {
+                            self.yearTag = nil
+                        }
+                        willDeleteItems = []
+                        willDeleteTags = []
+                        Haptic.success.impact()
+                    } catch {
+                        assertionFailure(error.localizedDescription)
+                    }
+                } label: {
+                    Text("Delete")
+                }
+                Button(role: .cancel) {
+                    willDeleteItems = []
+                    willDeleteTags = []
+                } label: {
+                    Text("Cancel")
+                }
+            } message: {
+                Text("Are you sure you want to delete these items?")
             }
             .onAppear {
                 updateYearlyDuplicationPromo()
