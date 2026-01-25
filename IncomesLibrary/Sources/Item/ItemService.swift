@@ -270,6 +270,7 @@ public enum ItemService {
         category: String,
         priority: Int
     ) throws {
+        let originalDate = item.localDate
         try item.modify(
             date: date,
             content: content,
@@ -279,7 +280,8 @@ public enum ItemService {
             priority: priority,
             repeatID: .init()
         )
-        try BalanceCalculator.calculate(in: context, for: [item])
+        let recalcDate = min(originalDate, item.localDate)
+        try BalanceCalculator.calculate(in: context, after: recalcDate)
     }
 
     /// Updates a set of repeating items specified by `descriptor` using the delta
@@ -302,10 +304,23 @@ public enum ItemService {
         )
         let repeatID = UUID()
         let items = try context.fetch(descriptor)
+        var earliestOriginalDate: Date?
+        var earliestUpdatedDate: Date?
         try items.forEach { item in
-            guard let newDate = Calendar.current.date(byAdding: components, to: item.localDate) else {
+            let originalDate = item.localDate
+            if let earliest = earliestOriginalDate {
+                earliestOriginalDate = min(earliest, originalDate)
+            } else {
+                earliestOriginalDate = originalDate
+            }
+            guard let newDate = Calendar.current.date(byAdding: components, to: originalDate) else {
                 assertionFailure()
                 return
+            }
+            if let earliest = earliestUpdatedDate {
+                earliestUpdatedDate = min(earliest, newDate)
+            } else {
+                earliestUpdatedDate = newDate
             }
             try item.modify(
                 date: newDate,
@@ -317,7 +332,15 @@ public enum ItemService {
                 repeatID: repeatID
             )
         }
-        try BalanceCalculator.calculate(in: context, for: items)
+        if let earliestOriginalDate, let earliestUpdatedDate {
+            try BalanceCalculator.calculate(in: context, after: min(earliestOriginalDate, earliestUpdatedDate))
+        } else if let earliestOriginalDate {
+            try BalanceCalculator.calculate(in: context, after: earliestOriginalDate)
+        } else if let earliestUpdatedDate {
+            try BalanceCalculator.calculate(in: context, after: earliestUpdatedDate)
+        } else {
+            try BalanceCalculator.calculate(in: context, after: date)
+        }
     }
 
     /// Updates all items in the same repeat series as `item`.

@@ -617,6 +617,66 @@ struct ItemServiceTests {
     }
 
     @Test
+    func update_recalculates_balances_when_date_moves_later() throws {
+        let originalTimeZone = NSTimeZone.default
+        NSTimeZone.default = TimeZone(secondsFromGMT: 0)!
+        defer {
+            NSTimeZone.default = originalTimeZone
+        }
+
+        _ = try ItemService.create(
+            context: context,
+            date: shiftedDate("2000-01-01T12:00:00Z"),
+            content: "First",
+            income: 100,
+            outgo: 0,
+            category: "Test",
+            priority: 0,
+            repeatCount: 1
+        )
+        let itemToMove = try ItemService.create(
+            context: context,
+            date: shiftedDate("2000-01-02T12:00:00Z"),
+            content: "Second",
+            income: 0,
+            outgo: 50,
+            category: "Test",
+            priority: 0,
+            repeatCount: 1
+        )
+        _ = try ItemService.create(
+            context: context,
+            date: shiftedDate("2000-01-03T12:00:00Z"),
+            content: "Third",
+            income: 10,
+            outgo: 0,
+            category: "Test",
+            priority: 0,
+            repeatCount: 1
+        )
+
+        try ItemService.update(
+            context: context,
+            item: itemToMove,
+            date: shiftedDate("2000-01-04T12:00:00Z"),
+            content: "Second",
+            income: 0,
+            outgo: 50,
+            category: "Test",
+            priority: 0,
+            )
+
+        let items = try context.fetch(.items(.all, order: .forward))
+        #expect(items.count == 3)
+        #expect(items[0].utcDate == isoDate("2000-01-01T00:00:00Z"))
+        #expect(items[1].utcDate == isoDate("2000-01-03T00:00:00Z"))
+        #expect(items[2].utcDate == isoDate("2000-01-04T00:00:00Z"))
+        #expect(items[0].balance == 100)
+        #expect(items[1].balance == 110)
+        #expect(items[2].balance == 60)
+    }
+
+    @Test
     func update_updates_only_selected_repeating_item() throws {
         _ = try ItemService.create(
             context: context,
