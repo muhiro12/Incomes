@@ -181,7 +181,12 @@ struct MainNavigationView: View {
                 }
                 SpacerToolbarItem(placement: .bottomBar)
                 ToolbarItem(placement: .bottomBar) {
-                    CreateItemButton()
+                    if let yearTag {
+                        CreateItemButton()
+                            .environment(yearTag)
+                    } else {
+                        CreateItemButton()
+                    }
                 }
             }
             .sheet(isPresented: $isSettingsPresented) {
