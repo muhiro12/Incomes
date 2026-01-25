@@ -21,6 +21,7 @@ struct ItemServiceTests {
             income: 200,
             outgo: 100,
             category: "category",
+            priority: 0,
             repeatCount: 1
         )
         let result = try #require(fetchItems(context).first)
@@ -38,6 +39,7 @@ struct ItemServiceTests {
             income: 200,
             outgo: 100,
             category: "category",
+            priority: 0,
             repeatCount: 3
         )
         let items = fetchItems(context)
@@ -59,6 +61,7 @@ struct ItemServiceTests {
             income: 200,
             outgo: 100,
             category: "category",
+            priority: 0,
             repeatMonthSelections: selections
         )
         let items = fetchItems(context)
@@ -86,6 +89,7 @@ struct ItemServiceTests {
             income: 200,
             outgo: 100,
             category: "category",
+            priority: 0,
             repeatMonthSelections: selections
         )
         let items = fetchItems(context)
@@ -114,6 +118,7 @@ struct ItemServiceTests {
             income: 200,
             outgo: 100,
             category: "category",
+            priority: 0,
             repeatMonthSelections: selections
         )
         let items = fetchItems(context)
@@ -143,6 +148,7 @@ struct ItemServiceTests {
             income: 200,
             outgo: 100,
             category: "category",
+            priority: 0,
             repeatMonthSelections: selections
         )
         let items = fetchItems(context)
@@ -167,6 +173,7 @@ struct ItemServiceTests {
             income: 200,
             outgo: 100,
             category: "category",
+            priority: 0,
             repeatMonthSelections: []
         )
         let items = fetchItems(context)
@@ -193,6 +200,7 @@ struct ItemServiceTests {
             income: 100,
             outgo: 0,
             category: "category",
+            priority: 0,
             repeatCount: 1
         )
         _ = try ItemService.create(
@@ -202,6 +210,7 @@ struct ItemServiceTests {
             income: 0,
             outgo: 50,
             category: "category",
+            priority: 0,
             repeatCount: 1
         )
         #expect(fetchItems(context).count == 2)
@@ -225,6 +234,7 @@ struct ItemServiceTests {
             income: 200,
             outgo: 100,
             category: "category",
+            priority: 0,
             repeatCount: 1
         )
         #expect(!fetchItems(context).isEmpty)
@@ -243,6 +253,7 @@ struct ItemServiceTests {
             income: 100,
             outgo: 0,
             category: "category",
+            priority: 0,
             repeatCount: 1
         )
         let count = try ItemService.allItemsCount(context: context)
@@ -258,6 +269,7 @@ struct ItemServiceTests {
             income: 0,
             outgo: 100,
             category: "Test",
+            priority: 0,
             repeatCount: 2
         )
         let count = try ItemService.repeatItemsCount(
@@ -276,6 +288,7 @@ struct ItemServiceTests {
             income: 0,
             outgo: 100,
             category: "Test",
+            priority: 0,
             repeatCount: 1
         )
         let count = try ItemService.yearItemsCount(
@@ -296,6 +309,7 @@ struct ItemServiceTests {
             income: 100,
             outgo: 0,
             category: "Test",
+            priority: 0,
             repeatCount: 1
         )
         _ = try ItemService.create(
@@ -305,6 +319,7 @@ struct ItemServiceTests {
             income: 200,
             outgo: 0,
             category: "Test",
+            priority: 0,
             repeatCount: 1
         )
         let januaryItems = try ItemService.items(
@@ -331,6 +346,7 @@ struct ItemServiceTests {
             income: 0,
             outgo: 50,
             category: "Test",
+            priority: 0,
             repeatCount: 1
         )
         _ = try ItemService.create(
@@ -340,6 +356,7 @@ struct ItemServiceTests {
             income: 0,
             outgo: 50,
             category: "Test",
+            priority: 0,
             repeatCount: 1
         )
         let items = try ItemService.items(
@@ -364,6 +381,7 @@ struct ItemServiceTests {
             income: 10,
             outgo: 0,
             category: "Test",
+            priority: 0,
             repeatCount: 1
         )
         _ = try ItemService.create(
@@ -373,6 +391,7 @@ struct ItemServiceTests {
             income: 20,
             outgo: 0,
             category: "Test",
+            priority: 0,
             repeatCount: 1
         )
         let items = try ItemService.items(
@@ -395,6 +414,7 @@ struct ItemServiceTests {
             income: 0,
             outgo: 100,
             category: "Test",
+            priority: 0,
             repeatCount: 1
         )
         _ = try ItemService.create(
@@ -404,6 +424,7 @@ struct ItemServiceTests {
             income: 0,
             outgo: 100,
             category: "Test",
+            priority: 0,
             repeatCount: 1
         )
         let result = try #require(
@@ -433,6 +454,7 @@ struct ItemServiceTests {
             income: 0,
             outgo: 100,
             category: "Test",
+            priority: 0,
             repeatCount: 1
         )
         _ = try ItemService.create(
@@ -442,6 +464,7 @@ struct ItemServiceTests {
             income: 0,
             outgo: 200,
             category: "Test",
+            priority: 0,
             repeatCount: 1
         )
         let item = try #require(
@@ -462,6 +485,7 @@ struct ItemServiceTests {
             income: 10,
             outgo: 0,
             category: "Test",
+            priority: 0,
             repeatCount: 1
         )
         let result = try ItemService.nextItem(
@@ -489,6 +513,7 @@ struct ItemServiceTests {
             income: 0,
             outgo: 100,
             category: "Test",
+            priority: 0,
             repeatCount: 1
         )
         _ = try ItemService.create(
@@ -498,6 +523,7 @@ struct ItemServiceTests {
             income: 0,
             outgo: 100,
             category: "Test",
+            priority: 0,
             repeatCount: 1
         )
         let result = try #require(
@@ -527,6 +553,7 @@ struct ItemServiceTests {
             income: 0,
             outgo: 100,
             category: "Test",
+            priority: 0,
             repeatCount: 1
         )
         _ = try ItemService.create(
@@ -536,6 +563,7 @@ struct ItemServiceTests {
             income: 0,
             outgo: 200,
             category: "Test",
+            priority: 0,
             repeatCount: 1
         )
         let item = try #require(
@@ -567,6 +595,7 @@ struct ItemServiceTests {
             income: 200,
             outgo: 100,
             category: "category",
+            priority: 0,
             repeatCount: 1
         )
         try ItemService.update(
@@ -576,8 +605,9 @@ struct ItemServiceTests {
             content: "content2",
             income: 100,
             outgo: 200,
-            category: "category2"
-        )
+            category: "category2",
+            priority: 0,
+            )
         let result = fetchItems(context).first!
         #expect(result.utcDate == isoDate("2001-01-02T00:00:00Z"))
         #expect(result.content == "content2")
@@ -595,6 +625,7 @@ struct ItemServiceTests {
             income: 200,
             outgo: 100,
             category: "category",
+            priority: 0,
             repeatCount: 3
         )
         try ItemService.update(
@@ -604,8 +635,9 @@ struct ItemServiceTests {
             content: "content2",
             income: 100,
             outgo: 200,
-            category: "category2"
-        )
+            category: "category2",
+            priority: 0,
+            )
         let first = fetchItems(context)[0]
         let second = fetchItems(context)[1]
         let last = fetchItems(context)[2]
@@ -635,6 +667,7 @@ struct ItemServiceTests {
             income: 200,
             outgo: 100,
             category: "category",
+            priority: 0,
             repeatCount: 1
         )
         try ItemService.updateAll(
@@ -644,8 +677,9 @@ struct ItemServiceTests {
             content: "content2",
             income: 100,
             outgo: 200,
-            category: "category2"
-        )
+            category: "category2",
+            priority: 0,
+            )
         let result = fetchItems(context).first!
         #expect(result.utcDate == isoDate("2001-01-02T00:00:00Z"))
         #expect(result.content == "content2")
@@ -663,6 +697,7 @@ struct ItemServiceTests {
             income: 200,
             outgo: 100,
             category: "category",
+            priority: 0,
             repeatCount: 3
         )
         try ItemService.updateAll(
@@ -672,8 +707,9 @@ struct ItemServiceTests {
             content: "content2",
             income: 100,
             outgo: 200,
-            category: "category2"
-        )
+            category: "category2",
+            priority: 0,
+            )
         let first = fetchItems(context)[0]
         let second = fetchItems(context)[1]
         let last = fetchItems(context)[2]
@@ -703,6 +739,7 @@ struct ItemServiceTests {
             income: 200,
             outgo: 100,
             category: "category",
+            priority: 0,
             repeatCount: 1
         )
         try ItemService.updateFuture(
@@ -712,8 +749,9 @@ struct ItemServiceTests {
             content: "content2",
             income: 100,
             outgo: 200,
-            category: "category2"
-        )
+            category: "category2",
+            priority: 0,
+            )
         let result = fetchItems(context).first!
         #expect(result.utcDate == isoDate("2001-01-02T00:00:00Z"))
         #expect(result.content == "content2")
@@ -731,6 +769,7 @@ struct ItemServiceTests {
             income: 200,
             outgo: 100,
             category: "category",
+            priority: 0,
             repeatCount: 3
         )
         try ItemService.updateFuture(
@@ -740,8 +779,9 @@ struct ItemServiceTests {
             content: "content2",
             income: 100,
             outgo: 200,
-            category: "category2"
-        )
+            category: "category2",
+            priority: 0,
+            )
         let first = fetchItems(context)[0]
         let second = fetchItems(context)[1]
         let last = fetchItems(context)[2]
@@ -773,6 +813,7 @@ struct ItemServiceTests {
             income: 100,
             outgo: 50,
             category: "category",
+            priority: 0,
             repeatCount: 1
         )
         try ItemService.update(
@@ -782,8 +823,9 @@ struct ItemServiceTests {
             content: item.content,
             income: item.income,
             outgo: 90,
-            category: item.category?.name ?? ""
-        )
+            category: item.category?.name ?? "",
+            priority: 0,
+            )
         try ItemService.recalculate(
             context: context,
             date: shiftedDate("1999-12-01T00:00:00Z")

@@ -19,6 +19,7 @@ struct ItemFormSaveDecisionTests {
             income: 0,
             outgo: 10,
             category: "Category",
+            priority: 0,
             repeatID: .init()
         )
 
@@ -39,6 +40,7 @@ struct ItemFormSaveDecisionTests {
             income: 0,
             outgo: 10,
             category: "Category",
+            priority: 0,
             repeatID: repeatID
         )
         _ = try Item.create(
@@ -48,6 +50,7 @@ struct ItemFormSaveDecisionTests {
             income: 0,
             outgo: 10,
             category: "Category",
+            priority: 0,
             repeatID: repeatID
         )
 

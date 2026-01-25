@@ -243,6 +243,7 @@ private extension YearlyDuplicationView {
             incomeText: decimalString(from: group.averageIncome),
             outgoText: decimalString(from: group.averageOutgo),
             category: group.category,
+            priorityText: .empty,
             repeatMonthSelections: selections
         )
     }

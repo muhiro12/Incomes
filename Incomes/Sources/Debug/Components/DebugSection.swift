@@ -41,6 +41,12 @@ extension DebugSection: View {
                     .foregroundStyle(.secondary)
             }
             HStack {
+                Text("Priority")
+                Spacer()
+                Text(item.priority.description)
+                    .foregroundStyle(.secondary)
+            }
+            HStack {
                 Text("RepeatID")
                 Spacer()
                 Text(item.repeatID.description)

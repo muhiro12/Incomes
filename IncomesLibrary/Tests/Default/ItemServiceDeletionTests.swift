@@ -19,6 +19,7 @@ struct ItemServiceDeletionTests {
             income: 0,
             outgo: 10,
             category: "Category",
+            priority: 0,
             repeatID: .init()
         )
         let secondItem = try Item.create(
@@ -28,6 +29,7 @@ struct ItemServiceDeletionTests {
             income: 0,
             outgo: 20,
             category: "Category",
+            priority: 0,
             repeatID: .init()
         )
         let thirdItem = try Item.create(
@@ -37,6 +39,7 @@ struct ItemServiceDeletionTests {
             income: 0,
             outgo: 30,
             category: "Category",
+            priority: 0,
             repeatID: .init()
         )
 
@@ -57,6 +60,7 @@ struct ItemServiceDeletionTests {
             income: 0,
             outgo: 10,
             category: "Category",
+            priority: 0,
             repeatID: .init()
         )
         let secondItem = try Item.create(
@@ -66,6 +70,7 @@ struct ItemServiceDeletionTests {
             income: 0,
             outgo: 20,
             category: "Category",
+            priority: 0,
             repeatID: .init()
         )
 

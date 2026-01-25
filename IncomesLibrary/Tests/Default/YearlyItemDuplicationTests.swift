@@ -19,6 +19,7 @@ struct YearlyItemDuplicationTests {
             income: 0,
             outgo: 100,
             category: "Rent",
+            priority: 0,
             repeatCount: 1
         )
         _ = try ItemService.create(
@@ -28,6 +29,7 @@ struct YearlyItemDuplicationTests {
             income: 0,
             outgo: 200,
             category: "Rent",
+            priority: 0,
             repeatCount: 3
         )
 
@@ -49,6 +51,7 @@ struct YearlyItemDuplicationTests {
             income: 0,
             outgo: 100,
             category: "Rent",
+            priority: 0,
             repeatCount: 1
         )
         _ = try ItemService.create(
@@ -58,6 +61,7 @@ struct YearlyItemDuplicationTests {
             income: 0,
             outgo: 200,
             category: "Rent",
+            priority: 0,
             repeatCount: 3
         )
 
@@ -81,6 +85,7 @@ struct YearlyItemDuplicationTests {
             income: 0,
             outgo: 100,
             category: "Credit",
+            priority: 0,
             repeatCount: 1
         )
         _ = try ItemService.create(
@@ -90,6 +95,7 @@ struct YearlyItemDuplicationTests {
             income: 0,
             outgo: 120,
             category: "Credit",
+            priority: 0,
             repeatCount: 1
         )
         _ = try ItemService.create(
@@ -99,6 +105,7 @@ struct YearlyItemDuplicationTests {
             income: 0,
             outgo: 130,
             category: "Credit",
+            priority: 0,
             repeatCount: 1
         )
 
@@ -120,6 +127,7 @@ struct YearlyItemDuplicationTests {
             income: 100,
             outgo: 10,
             category: "Service",
+            priority: 0,
             repeatCount: 1
         )
         _ = try ItemService.create(
@@ -129,6 +137,7 @@ struct YearlyItemDuplicationTests {
             income: 200,
             outgo: 20,
             category: "Service",
+            priority: 0,
             repeatCount: 1
         )
         _ = try ItemService.create(
@@ -138,6 +147,7 @@ struct YearlyItemDuplicationTests {
             income: 300,
             outgo: 30,
             category: "Service",
+            priority: 0,
             repeatCount: 1
         )
 
@@ -163,6 +173,7 @@ struct YearlyItemDuplicationTests {
             income: 0,
             outgo: 100,
             category: "Rent",
+            priority: 0,
             repeatCount: 1
         )
 
@@ -190,6 +201,7 @@ struct YearlyItemDuplicationTests {
             income: 0,
             outgo: 90,
             category: "Credit",
+            priority: 0,
             repeatCount: 1
         )
         _ = try ItemService.create(
@@ -199,6 +211,7 @@ struct YearlyItemDuplicationTests {
             income: 0,
             outgo: 110,
             category: "Credit",
+            priority: 0,
             repeatCount: 1
         )
         _ = try ItemService.create(
@@ -208,6 +221,7 @@ struct YearlyItemDuplicationTests {
             income: 0,
             outgo: 130,
             category: "Credit",
+            priority: 0,
             repeatCount: 1
         )
 
@@ -242,6 +256,7 @@ struct YearlyItemDuplicationTests {
             income: 0,
             outgo: 100,
             category: "Rent",
+            priority: 0,
             repeatCount: 3
         )
         _ = try ItemService.create(
@@ -251,6 +266,7 @@ struct YearlyItemDuplicationTests {
             income: 0,
             outgo: 50,
             category: "Insurance",
+            priority: 0,
             repeatCount: 3
         )
 
@@ -294,6 +310,7 @@ struct YearlyItemDuplicationTests {
             income: 0,
             outgo: 100,
             category: "Rent",
+            priority: 0,
             repeatCount: 1
         )
         _ = try ItemService.create(
@@ -303,6 +320,7 @@ struct YearlyItemDuplicationTests {
             income: 0,
             outgo: 100,
             category: "Rent",
+            priority: 0,
             repeatCount: 1
         )
 

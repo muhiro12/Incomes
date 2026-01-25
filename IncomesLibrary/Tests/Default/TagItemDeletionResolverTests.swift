@@ -19,6 +19,7 @@ struct TagItemDeletionResolverTests {
             income: 0,
             outgo: 1,
             category: "Category",
+            priority: 0,
             repeatID: .init()
         )
         let secondItem = try Item.create(
@@ -28,6 +29,7 @@ struct TagItemDeletionResolverTests {
             income: 0,
             outgo: 2,
             category: "Category",
+            priority: 0,
             repeatID: .init()
         )
 

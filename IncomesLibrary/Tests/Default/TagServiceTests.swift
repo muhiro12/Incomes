@@ -90,6 +90,7 @@ struct TagServiceTests {
             income: .zero,
             outgo: .zero,
             category: "",
+            priority: 0,
             repeatID: .init()
         )
         let item2 = try Item.create(
@@ -99,6 +100,7 @@ struct TagServiceTests {
             income: .zero,
             outgo: .zero,
             category: "",
+            priority: 0,
             repeatID: .init()
         )
         let item3 = try Item.create(
@@ -108,6 +110,7 @@ struct TagServiceTests {
             income: .zero,
             outgo: .zero,
             category: "",
+            priority: 0,
             repeatID: .init()
         )
         let tag1 = item1.tags!.first { tag in
@@ -150,6 +153,7 @@ struct TagServiceTests {
             income: .zero,
             outgo: .zero,
             category: "",
+            priority: 0,
             repeatID: .init()
         )
         let parent = try #require(

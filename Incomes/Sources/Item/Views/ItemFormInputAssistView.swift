@@ -15,6 +15,7 @@ struct ItemFormInputAssistView: View {
     @Binding private var income: String
     @Binding private var outgo: String
     @Binding private var category: String
+    @Binding private var priority: String
 
     @Environment(\.dismiss)
     private var dismiss
@@ -33,13 +34,15 @@ struct ItemFormInputAssistView: View {
         content: Binding<String>,
         income: Binding<String>,
         outgo: Binding<String>,
-        category: Binding<String>
+        category: Binding<String>,
+        priority: Binding<String>
     ) {
         _date = date
         _content = content
         _income = income
         _outgo = outgo
         _category = category
+        _priority = priority
     }
 
     var body: some View {
@@ -171,7 +174,8 @@ struct ItemFormInputAssistView: View {
                 content: content,
                 incomeText: income,
                 outgoText: outgo,
-                category: category
+                category: category,
+                priorityText: priority
             )
             let updatedInput = try await ItemFormInferenceApplier.apply(
                 text: text,
@@ -182,6 +186,7 @@ struct ItemFormInputAssistView: View {
             income = updatedInput.incomeText
             outgo = updatedInput.outgoText
             category = updatedInput.category
+            priority = updatedInput.priorityText
             dismiss()
         } catch {
             errorMessage = error.localizedDescription
@@ -197,7 +202,8 @@ struct ItemFormInputAssistView: View {
             content: .constant(.empty),
             income: .constant(.empty),
             outgo: .constant(.empty),
-            category: .constant(.empty)
+            category: .constant(.empty),
+            priority: .constant("0")
         )
     }
 }

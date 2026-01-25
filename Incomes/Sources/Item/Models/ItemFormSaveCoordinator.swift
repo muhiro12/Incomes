@@ -40,6 +40,7 @@ enum ItemFormSaveCoordinator {
                 income: formInputData.income,
                 outgo: formInputData.outgo,
                 category: formInputData.category,
+                priority: formInputData.priority,
                 repeatMonthSelections: repeatMonthSelections
             )
             Haptic.success.impact()
@@ -80,7 +81,8 @@ enum ItemFormSaveCoordinator {
                 content: formInputData.content,
                 income: formInputData.income,
                 outgo: formInputData.outgo,
-                category: formInputData.category
+                category: formInputData.category,
+                priority: formInputData.priority
             )
         case .futureItems:
             try ItemService.updateFuture(
@@ -90,7 +92,8 @@ enum ItemFormSaveCoordinator {
                 content: formInputData.content,
                 income: formInputData.income,
                 outgo: formInputData.outgo,
-                category: formInputData.category
+                category: formInputData.category,
+                priority: formInputData.priority
             )
         case .allItems:
             try ItemService.updateAll(
@@ -100,7 +103,8 @@ enum ItemFormSaveCoordinator {
                 content: formInputData.content,
                 income: formInputData.income,
                 outgo: formInputData.outgo,
-                category: formInputData.category
+                category: formInputData.category,
+                priority: formInputData.priority
             )
         }
         Haptic.success.impact()

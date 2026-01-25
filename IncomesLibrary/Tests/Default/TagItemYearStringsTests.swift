@@ -19,6 +19,7 @@ struct TagItemYearStringsTests {
             income: 0,
             outgo: 1,
             category: "Category",
+            priority: 0,
             repeatID: .init()
         )
         _ = try Item.create(
@@ -28,6 +29,7 @@ struct TagItemYearStringsTests {
             income: 0,
             outgo: 2,
             category: "Category",
+            priority: 0,
             repeatID: .init()
         )
         _ = try Item.create(
@@ -37,6 +39,7 @@ struct TagItemYearStringsTests {
             income: 0,
             outgo: 3,
             category: "Category",
+            priority: 0,
             repeatID: .init()
         )
 

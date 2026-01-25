@@ -26,6 +26,7 @@ public enum ItemService {
         income: Decimal,
         outgo: Decimal,
         category: String,
+        priority: Int,
         repeatCount: Int
     ) throws -> Item {
         var items = [Item]()
@@ -37,6 +38,7 @@ public enum ItemService {
             income: income,
             outgo: outgo,
             category: category,
+            priority: priority,
             repeatID: repeatID
         )
         items.append(item)
@@ -55,6 +57,7 @@ public enum ItemService {
                 income: income,
                 outgo: outgo,
                 category: category,
+                priority: priority,
                 repeatID: repeatID
             )
             items.append(item)
@@ -81,6 +84,7 @@ public enum ItemService {
         income: Decimal,
         outgo: Decimal,
         category: String,
+        priority: Int,
         repeatMonthSelections: Set<RepeatMonthSelection>
     ) throws -> Item {
         let calendar = Calendar.current
@@ -106,6 +110,7 @@ public enum ItemService {
             income: income,
             outgo: outgo,
             category: category,
+            priority: priority,
             repeatID: repeatID
         )
         items.append(item)
@@ -136,6 +141,7 @@ public enum ItemService {
                 income: income,
                 outgo: outgo,
                 category: category,
+                priority: priority,
                 repeatID: repeatID
             )
             items.append(repeatItem)
@@ -261,7 +267,8 @@ public enum ItemService {
         content: String,
         income: Decimal,
         outgo: Decimal,
-        category: String
+        category: String,
+        priority: Int
     ) throws {
         try item.modify(
             date: date,
@@ -269,6 +276,7 @@ public enum ItemService {
             income: income,
             outgo: outgo,
             category: category,
+            priority: priority,
             repeatID: .init()
         )
         try BalanceCalculator.calculate(in: context, for: [item])
@@ -284,6 +292,7 @@ public enum ItemService {
         income: Decimal,
         outgo: Decimal,
         category: String,
+        priority: Int,
         descriptor: FetchDescriptor<Item>
     ) throws {
         let components = Calendar.current.dateComponents(
@@ -304,6 +313,7 @@ public enum ItemService {
                 income: income,
                 outgo: outgo,
                 category: category,
+                priority: priority,
                 repeatID: repeatID
             )
         }
@@ -318,7 +328,8 @@ public enum ItemService {
         content: String,
         income: Decimal,
         outgo: Decimal,
-        category: String
+        category: String,
+        priority: Int
     ) throws {
         try updateRepeatingItems(
             context: context,
@@ -328,6 +339,7 @@ public enum ItemService {
             income: income,
             outgo: outgo,
             category: category,
+            priority: priority,
             descriptor: .items(.repeatIDIs(item.repeatID))
         )
     }
@@ -340,7 +352,8 @@ public enum ItemService {
         content: String,
         income: Decimal,
         outgo: Decimal,
-        category: String
+        category: String,
+        priority: Int
     ) throws {
         try updateRepeatingItems(
             context: context,
@@ -350,6 +363,7 @@ public enum ItemService {
             income: income,
             outgo: outgo,
             category: category,
+            priority: priority,
             descriptor: .items(
                 .repeatIDAndDateIsAfter(
                     repeatID: item.repeatID,
@@ -427,6 +441,7 @@ public enum ItemService {
             income: LocaleAmountConverter.localizedAmount(baseUSD: 4_500),
             outgo: LocaleAmountConverter.localizedAmount(baseUSD: 0),
             category: String(localized: "Salary"),
+            priority: 0,
             repeatID: .init()
         )
 
@@ -440,6 +455,7 @@ public enum ItemService {
                     income: LocaleAmountConverter.localizedAmount(baseUSD: 4_500),
                     outgo: LocaleAmountConverter.localizedAmount(baseUSD: 0),
                     category: String(localized: "Salary"),
+                    priority: 0,
                     repeatID: .init()
                 )
             )
@@ -451,6 +467,7 @@ public enum ItemService {
                     income: LocaleAmountConverter.localizedAmount(baseUSD: 500),
                     outgo: LocaleAmountConverter.localizedAmount(baseUSD: 0),
                     category: String(localized: "Salary"),
+                    priority: 0,
                     repeatID: .init()
                 )
             )
@@ -462,6 +479,7 @@ public enum ItemService {
                     income: LocaleAmountConverter.localizedAmount(baseUSD: 0),
                     outgo: LocaleAmountConverter.localizedAmount(baseUSD: 900),
                     category: String(localized: "Credit"),
+                    priority: 0,
                     repeatID: .init()
                 )
             )
@@ -473,6 +491,7 @@ public enum ItemService {
                     income: LocaleAmountConverter.localizedAmount(baseUSD: 0),
                     outgo: LocaleAmountConverter.localizedAmount(baseUSD: 600),
                     category: String(localized: "Credit"),
+                    priority: 0,
                     repeatID: .init()
                 )
             )
@@ -484,6 +503,7 @@ public enum ItemService {
                     income: LocaleAmountConverter.localizedAmount(baseUSD: 0),
                     outgo: LocaleAmountConverter.localizedAmount(baseUSD: 500),
                     category: String(localized: "Credit"),
+                    priority: 0,
                     repeatID: .init()
                 )
             )
@@ -495,6 +515,7 @@ public enum ItemService {
                     income: LocaleAmountConverter.localizedAmount(baseUSD: 0),
                     outgo: LocaleAmountConverter.localizedAmount(baseUSD: 1_800),
                     category: String(localized: "Loan"),
+                    priority: 0,
                     repeatID: .init()
                 )
             )
@@ -506,6 +527,7 @@ public enum ItemService {
                     income: LocaleAmountConverter.localizedAmount(baseUSD: 0),
                     outgo: LocaleAmountConverter.localizedAmount(baseUSD: 300),
                     category: String(localized: "Loan"),
+                    priority: 0,
                     repeatID: .init()
                 )
             )
@@ -517,6 +539,7 @@ public enum ItemService {
                     income: LocaleAmountConverter.localizedAmount(baseUSD: 0),
                     outgo: LocaleAmountConverter.localizedAmount(baseUSD: 250),
                     category: String(localized: "Tax"),
+                    priority: 0,
                     repeatID: .init()
                 )
             )
@@ -528,6 +551,7 @@ public enum ItemService {
                     income: LocaleAmountConverter.localizedAmount(baseUSD: 0),
                     outgo: LocaleAmountConverter.localizedAmount(baseUSD: 300),
                     category: String(localized: "Tax"),
+                    priority: 0,
                     repeatID: .init()
                 )
             )
@@ -556,6 +580,7 @@ public enum ItemService {
                     income: LocaleAmountConverter.localizedAmount(baseUSD: 0),
                     outgo: LocaleAmountConverter.localizedAmount(baseUSD: 36),
                     category: String(localized: "Tax"),
+                    priority: 0,
                     repeatID: .init()
                 )
             )
@@ -593,6 +618,7 @@ public enum ItemService {
             income: LocaleAmountConverter.localizedAmount(baseUSD: 3_000),
             outgo: .zero,
             category: String(localized: "Salary"),
+            priority: 0,
             repeatID: .init()
         )
         try attachSampleTag(to: incomeItem, context: context)
@@ -604,6 +630,7 @@ public enum ItemService {
             income: .zero,
             outgo: LocaleAmountConverter.localizedAmount(baseUSD: 1_200),
             category: String(localized: "Housing"),
+            priority: 0,
             repeatID: .init()
         )
         try attachSampleTag(to: rentItem, context: context)
@@ -615,6 +642,7 @@ public enum ItemService {
             income: .zero,
             outgo: LocaleAmountConverter.localizedAmount(baseUSD: 45),
             category: String(localized: "Food"),
+            priority: 0,
             repeatID: .init()
         )
         try attachSampleTag(to: groceryItem, context: context)

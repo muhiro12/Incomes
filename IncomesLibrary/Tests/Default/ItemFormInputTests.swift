@@ -10,7 +10,8 @@ struct ItemFormInputTests {
             content: "",
             incomeText: "100",
             outgoText: "0",
-            category: "Category"
+            category: "Category",
+            priorityText: "1"
         )
         #expect(invalidContent.isValid == false)
 
@@ -19,7 +20,8 @@ struct ItemFormInputTests {
             content: "Content",
             incomeText: "abc",
             outgoText: "10",
-            category: "Category"
+            category: "Category",
+            priorityText: "1"
         )
         #expect(invalidNumbers.isValid == false)
 
@@ -28,9 +30,20 @@ struct ItemFormInputTests {
             content: "Content",
             incomeText: "1,000",
             outgoText: "",
-            category: "Category"
+            category: "Category",
+            priorityText: "0"
         )
         #expect(valid.isValid == true)
+
+        let invalidPriority = ItemFormInput(
+            date: .now,
+            content: "Content",
+            incomeText: "100",
+            outgoText: "0",
+            category: "Category",
+            priorityText: "1.5"
+        )
+        #expect(invalidPriority.isValid == false)
     }
 
     @Test
@@ -40,7 +53,8 @@ struct ItemFormInputTests {
             content: "Content",
             incomeText: "1000",
             outgoText: "250",
-            category: "Category"
+            category: "Category",
+            priorityText: "2"
         )
         #expect(input.income == 1_000)
         #expect(input.outgo == 250)

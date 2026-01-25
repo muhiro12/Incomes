@@ -345,6 +345,7 @@ public enum YearlyItemDuplicator {
                     income: incomeValue,
                     outgo: outgoValue,
                     category: categoryName,
+                    priority: 0,
                     repeatID: newRepeatID
                 )
                 createdItems.append(item)

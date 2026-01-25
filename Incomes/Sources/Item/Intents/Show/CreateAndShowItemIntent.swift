@@ -39,6 +39,7 @@ struct CreateAndShowItemIntent: AppIntent {
             income: .init(income),
             outgo: .init(outgo),
             category: category,
+            priority: 0,
             repeatCount: repeatCount
         )
         return .result(dialog: .init(stringLiteral: item.content)) {

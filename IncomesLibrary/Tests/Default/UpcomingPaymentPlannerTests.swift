@@ -26,6 +26,7 @@ struct UpcomingPaymentPlannerTests {
             income: .zero,
             outgo: 1_000,
             category: "Housing",
+            priority: 0,
             repeatCount: 1
         )
 
@@ -50,6 +51,7 @@ struct UpcomingPaymentPlannerTests {
             income: .zero,
             outgo: 800,
             category: "Bills",
+            priority: 0,
             repeatCount: 1
         )
 
@@ -95,6 +97,7 @@ struct UpcomingPaymentPlannerTests {
             income: .zero,
             outgo: 600,
             category: "Bills",
+            priority: 0,
             repeatCount: 1
         )
         _ = try ItemService.create(
@@ -104,6 +107,7 @@ struct UpcomingPaymentPlannerTests {
             income: .zero,
             outgo: 600,
             category: "Bills",
+            priority: 0,
             repeatCount: 1
         )
 

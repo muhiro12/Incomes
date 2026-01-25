@@ -39,6 +39,7 @@ struct YearlyItemDuplicationSuggestionTests {
             income: 0,
             outgo: 120,
             category: "Other",
+            priority: 0,
             repeatCount: 3
         )
 
@@ -52,6 +53,7 @@ struct YearlyItemDuplicationSuggestionTests {
                 income: 0,
                 outgo: 200,
                 category: "Card",
+                priority: 0,
                 repeatCount: 3
             )
         }
@@ -84,6 +86,7 @@ struct YearlyItemDuplicationSuggestionTests {
             income: 0,
             outgo: 100,
             category: "Other",
+            priority: 0,
             repeatCount: 3
         )
 

@@ -38,6 +38,7 @@ struct ItemTest {
             income: income,
             outgo: outgo,
             category: category,
+            priority: 0,
             repeatID: repeatID
         )
 
@@ -76,6 +77,7 @@ struct ItemTest {
             income: .zero,
             outgo: .zero,
             category: "Boundary",
+            priority: 0,
             repeatID: UUID()
         )
 
@@ -92,6 +94,7 @@ struct ItemTest {
             income: .zero,
             outgo: .zero,
             category: "",
+            priority: 0,
             repeatID: UUID()
         )
 
@@ -116,6 +119,7 @@ struct ItemTest {
             income: .zero,
             outgo: 5_000,
             category: "Daily",
+            priority: 0,
             repeatID: UUID()
         )
 
@@ -137,6 +141,7 @@ struct ItemTest {
             income: 100,
             outgo: 0,
             category: "Misc",
+            priority: 0,
             repeatID: UUID()
         )
 
@@ -147,6 +152,7 @@ struct ItemTest {
             income: 200,
             outgo: 50,
             category: "Update",
+            priority: 0,
             repeatID: UUID()
         )
 
@@ -184,6 +190,7 @@ struct ItemTest {
             income: 0,
             outgo: 0,
             category: "Init",
+            priority: 0,
             repeatID: UUID()
         )
 
@@ -193,6 +200,7 @@ struct ItemTest {
             income: 100,
             outgo: 50,
             category: "Updated",
+            priority: 0,
             repeatID: item.repeatID
         )
 
@@ -211,6 +219,7 @@ struct ItemTest {
             income: 0,
             outgo: 0,
             category: "Start",
+            priority: 0,
             repeatID: repeatID
         )
 
@@ -220,6 +229,7 @@ struct ItemTest {
             income: 500,
             outgo: 200,
             category: "Updated",
+            priority: 0,
             repeatID: repeatID
         )
 
@@ -240,6 +250,7 @@ struct ItemTest {
             income: 0,
             outgo: 0,
             category: "Tag",
+            priority: 0,
             repeatID: UUID()
         )
 
@@ -250,6 +261,7 @@ struct ItemTest {
             income: item.income,
             outgo: item.outgo,
             category: "Tag",
+            priority: 0,
             repeatID: item.repeatID
         )
 

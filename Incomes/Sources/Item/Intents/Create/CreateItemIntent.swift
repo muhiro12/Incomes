@@ -49,6 +49,7 @@ struct CreateItemIntent: AppIntent {
             income: income.amount,
             outgo: outgo.amount,
             category: category,
+            priority: 0,
             repeatCount: repeatCount
         )
         guard let entity = ItemEntity(item) else {

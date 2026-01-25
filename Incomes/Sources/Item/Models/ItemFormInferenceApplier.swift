@@ -28,7 +28,8 @@ enum ItemFormInferenceApplier {
             content: update.content,
             incomeText: update.incomeText,
             outgoText: update.outgoText,
-            category: update.category
+            category: update.category,
+            priorityText: currentInput.priorityText
         )
     }
 }

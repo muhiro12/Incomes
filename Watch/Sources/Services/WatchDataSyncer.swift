@@ -54,6 +54,7 @@ enum WatchDataSyncer {
                     income: .init(wire.income),
                     outgo: .init(wire.outgo),
                     category: wire.category,
+                    priority: 0,
                     repeatID: .init()
                 )
             }

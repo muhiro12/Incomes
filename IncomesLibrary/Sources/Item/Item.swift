@@ -17,6 +17,7 @@ public final class Item {
     public private(set) var content = String.empty
     public private(set) var income = Decimal.zero
     public private(set) var outgo = Decimal.zero
+    public private(set) var priority = 0
     public private(set) var repeatID = UUID()
     public private(set) var balance = Decimal.zero
 
@@ -32,6 +33,7 @@ public final class Item {
                               income: Decimal,
                               outgo: Decimal,
                               category: String,
+                              priority: Int,
                               repeatID: UUID) throws -> Item {
         let item = Item()
         context.insert(item)
@@ -40,6 +42,7 @@ public final class Item {
         item.content = content
         item.income = income
         item.outgo = outgo
+        item.priority = priority
         item.repeatID = repeatID
 
         item.tags = [
@@ -74,11 +77,13 @@ public final class Item {
                        income: Decimal,
                        outgo: Decimal,
                        category: String,
+                       priority: Int,
                        repeatID: UUID) throws {
         self.date = Calendar.utc.startOfDay(for: Calendar.utc.shiftedDate(componentsFrom: date, in: .current))
         self.content = content
         self.income = income
         self.outgo = outgo
+        self.priority = priority
         self.repeatID = repeatID
 
         guard let context = modelContext else {
@@ -158,7 +163,16 @@ extension Item {
 
 extension Item: Comparable {
     public static func < (lhs: Item, rhs: Item) -> Bool {
-        lhs.utcDate > rhs.utcDate
+        if lhs.utcDate != rhs.utcDate {
+            return lhs.utcDate > rhs.utcDate
+        }
+        if lhs.priority != rhs.priority {
+            return lhs.priority > rhs.priority
+        }
+        if lhs.content != rhs.content {
+            return lhs.content > rhs.content
+        }
+        return String(describing: lhs.persistentModelID) > String(describing: rhs.persistentModelID)
     }
 }
 
@@ -172,6 +186,7 @@ extension Item {
                                                 income: Decimal,
                                                 outgo: Decimal,
                                                 category: String,
+                                                priority: Int,
                                                 repeatID: UUID) throws -> Item {
         let item = Item()
         context.insert(item)
@@ -180,6 +195,7 @@ extension Item {
         item.content = content
         item.income = income
         item.outgo = outgo
+        item.priority = priority
         item.repeatID = repeatID
 
         item.tags = [

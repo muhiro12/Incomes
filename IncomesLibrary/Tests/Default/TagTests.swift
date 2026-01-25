@@ -27,6 +27,7 @@ struct TagTests {
             income: .zero,
             outgo: 100,
             category: "Category",
+            priority: 0,
             repeatCount: 1
         )
         _ = try ItemService.create(
@@ -36,6 +37,7 @@ struct TagTests {
             income: 200,
             outgo: .zero,
             category: "Category",
+            priority: 0,
             repeatCount: 1
         )
 
@@ -63,6 +65,7 @@ struct TagTests {
             income: 200,
             outgo: 100,
             category: "Category",
+            priority: 0,
             repeatCount: 1
         )
 

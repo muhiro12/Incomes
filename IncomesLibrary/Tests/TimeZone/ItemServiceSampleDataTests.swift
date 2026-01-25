@@ -63,6 +63,7 @@ struct ItemServiceSampleDataTests {
             income: 100,
             outgo: .zero,
             category: "Seed",
+            priority: 0,
             repeatCount: 1
         )
 

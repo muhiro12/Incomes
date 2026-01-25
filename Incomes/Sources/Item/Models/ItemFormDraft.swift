@@ -8,6 +8,7 @@ struct ItemFormDraft: Identifiable, Hashable {
     let incomeText: String
     let outgoText: String
     let category: String
+    let priorityText: String
     let repeatMonthSelections: Set<RepeatMonthSelection>
     let isRepeatEnabled: Bool
 
@@ -19,6 +20,7 @@ struct ItemFormDraft: Identifiable, Hashable {
         incomeText: String,
         outgoText: String,
         category: String,
+        priorityText: String = "0",
         repeatMonthSelections: Set<RepeatMonthSelection>
     ) {
         self.id = id
@@ -28,6 +30,7 @@ struct ItemFormDraft: Identifiable, Hashable {
         self.incomeText = incomeText
         self.outgoText = outgoText
         self.category = category
+        self.priorityText = priorityText
         self.repeatMonthSelections = repeatMonthSelections
         self.isRepeatEnabled = repeatMonthSelections.count > 1
     }

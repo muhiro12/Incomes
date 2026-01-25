@@ -45,6 +45,7 @@ struct ItemFormView: View {
 
     @State private var date: Date = .now
     @State private var content: String = .empty
+    @State private var priority: String = "0"
     @State private var income: String = .empty
     @State private var outgo: String = .empty
     @State private var category: String = .empty
@@ -55,6 +56,7 @@ struct ItemFormView: View {
     private let mode: Mode
     private let draft: ItemFormDraft?
     private let onCreate: (() -> Void)?
+    private let priorityRange = 0...10
 
     init(
         mode: Mode,
@@ -65,8 +67,10 @@ struct ItemFormView: View {
         self.draft = draft
         self.onCreate = onCreate
         if let draft {
+            let resolvedPriority = draft.priorityText.isEmpty ? "0" : draft.priorityText
             _date = State(initialValue: draft.date)
             _content = State(initialValue: draft.content)
+            _priority = State(initialValue: resolvedPriority)
             _income = State(initialValue: draft.incomeText)
             _outgo = State(initialValue: draft.outgoText)
             _category = State(initialValue: draft.category)
@@ -118,6 +122,12 @@ struct ItemFormView: View {
                     }
                     .focused($focusedField, equals: .category)
                     .multilineTextAlignment(.trailing)
+                }
+                Picker("Priority", selection: priorityValue) {
+                    ForEach(priorityRange, id: \.self) { value in
+                        Text("\(value)")
+                            .tag(value)
+                    }
                 }
             } header: {
                 Text("Information")
@@ -222,6 +232,7 @@ struct ItemFormView: View {
             if let item {
                 date = item.localDate
                 content = item.content
+                priority = "\(item.priority)"
                 income = item.income.isNotZero ? item.income.description : .empty
                 outgo = item.outgo.isNotZero ? item.outgo.description : .empty
                 category = item.category?.displayName ?? .empty
@@ -274,7 +285,8 @@ struct ItemFormView: View {
                         content: $content,
                         income: $income,
                         outgo: $outgo,
-                        category: $category
+                        category: $category,
+                        priority: $priority
                     )
                 }
             }
@@ -285,13 +297,25 @@ struct ItemFormView: View {
 // MARK: - private
 
 private extension ItemFormView {
+    var priorityValue: Binding<Int> {
+        .init(
+            get: {
+                priority.intValue
+            },
+            set: { newValue in
+                priority = "\(newValue)"
+            }
+        )
+    }
+
     var formInputData: ItemFormInput {
         .init(
             date: date,
             content: content,
             incomeText: income,
             outgoText: outgo,
-            category: category
+            category: category,
+            priorityText: priority
         )
     }
 

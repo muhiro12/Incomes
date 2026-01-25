@@ -17,6 +17,7 @@ struct ItemEntityExtensionTest {
             income: 200,
             outgo: 100,
             category: "category",
+            priority: 0,
             repeatCount: 1
         )
         #expect(item.content == "content")

@@ -123,4 +123,56 @@ struct StringExtensionTests {
             #expect(string.decimalValue == 1_000)
         }
     }
+
+    struct IsEmptyOrIntTests {
+        @Test("Empty returns true")
+        func empty_returns_true() {
+            let string = ""
+            #expect(string.isEmptyOrInt)
+        }
+
+        @Test("Int returns true")
+        func int_returns_true() {
+            let string = "10"
+            #expect(string.isEmptyOrInt)
+        }
+
+        @Test("Negative int returns true")
+        func negative_int_returns_true() {
+            let string = "-1"
+            #expect(string.isEmptyOrInt)
+        }
+
+        @Test("Decimal returns false")
+        func decimal_returns_false() {
+            let string = "1.5"
+            #expect(!string.isEmptyOrInt)
+        }
+
+        @Test("Text returns false")
+        func text_returns_false() {
+            let string = "text"
+            #expect(!string.isEmptyOrInt)
+        }
+    }
+
+    struct IntValueTests {
+        @Test("Text returns 0")
+        func text_returns_zero() {
+            let string = "text"
+            #expect(string.intValue == 0)
+        }
+
+        @Test("Int returns int value")
+        func int_returns_int_value() {
+            let string = "123"
+            #expect(string.intValue == 123)
+        }
+
+        @Test("Whitespace returns int value")
+        func whitespace_returns_int_value() {
+            let string = "  5 "
+            #expect(string.intValue == 5)
+        }
+    }
 }

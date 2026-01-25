@@ -27,6 +27,7 @@ struct MainNavigationStateLoaderTests {
             income: 100,
             outgo: 0,
             category: "Test",
+            priority: 0,
             repeatID: .init()
         )
         let state = try MainNavigationStateLoader.load(
@@ -45,6 +46,7 @@ struct MainNavigationStateLoaderTests {
             income: 0,
             outgo: 50,
             category: "Category",
+            priority: 0,
             repeatID: .init()
         )
 

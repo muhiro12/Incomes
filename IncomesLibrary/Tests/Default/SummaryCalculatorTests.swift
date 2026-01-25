@@ -38,6 +38,7 @@ struct SummaryCalculatorTests {
             income: 1_000,
             outgo: .zero,
             category: "Work",
+            priority: 0,
             repeatCount: 1
         )
         _ = try ItemService.create(
@@ -47,6 +48,7 @@ struct SummaryCalculatorTests {
             income: .zero,
             outgo: 400,
             category: "Housing",
+            priority: 0,
             repeatCount: 1
         )
         _ = try ItemService.create(
@@ -56,6 +58,7 @@ struct SummaryCalculatorTests {
             income: 200,
             outgo: .zero,
             category: "Misc",
+            priority: 0,
             repeatCount: 1
         )
 

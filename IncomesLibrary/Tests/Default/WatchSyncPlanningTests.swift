@@ -27,6 +27,7 @@ struct WatchSyncPlanningTests {
             income: 100,
             outgo: 0,
             category: "Test",
+            priority: 0,
             repeatCount: 1
         )
         _ = try ItemService.create(
@@ -36,6 +37,7 @@ struct WatchSyncPlanningTests {
             income: 100,
             outgo: 0,
             category: "Test",
+            priority: 0,
             repeatCount: 1
         )
         _ = try ItemService.create(
@@ -45,6 +47,7 @@ struct WatchSyncPlanningTests {
             income: 100,
             outgo: 0,
             category: "Test",
+            priority: 0,
             repeatCount: 1
         )
         _ = try ItemService.create(
@@ -54,6 +57,7 @@ struct WatchSyncPlanningTests {
             income: 100,
             outgo: 0,
             category: "Test",
+            priority: 0,
             repeatCount: 1
         )
 
