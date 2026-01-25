@@ -22,7 +22,7 @@ struct ChartSectionGroup {
     }
 
     init(yearScopedTo date: Date) {
-        self.descriptor = .items(.none)
+        self.descriptor = .items(.dateIsSameYearAs(date))
         self.yearScopedDate = date
     }
 }
