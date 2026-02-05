@@ -66,9 +66,10 @@ extension DeleteItemButton: View {
     }
 }
 
-#Preview {
-    IncomesPreview { preview in
-        DeleteItemButton()
-            .environment(preview.items[.zero])
-    }
+@available(iOS 18.0, *)
+#Preview(traits: .modifier(IncomesSampleData())) {
+    @Previewable @Query var items: [Item]
+
+    DeleteItemButton()
+        .environment(items[.zero])
 }

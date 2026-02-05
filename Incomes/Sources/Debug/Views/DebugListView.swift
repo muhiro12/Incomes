@@ -90,8 +90,7 @@ extension DebugListView: View {
     }
 }
 
-#Preview {
-    IncomesPreview { _ in
-        DebugListView()
-    }
+@available(iOS 18.0, *)
+#Preview(traits: .modifier(IncomesSampleData())) {
+    DebugListView()
 }

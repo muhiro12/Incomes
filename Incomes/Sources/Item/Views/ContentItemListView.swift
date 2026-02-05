@@ -55,15 +55,16 @@ private extension ContentItemListView {
     }
 }
 
-#Preview {
-    IncomesPreview { preview in
-        NavigationStack {
-            if let tag = preview.tags.first(where: { previewTag in
-                previewTag.type == .content
-            }) {
-                ContentItemListView()
-                    .environment(tag)
-            }
+@available(iOS 18.0, *)
+#Preview(traits: .modifier(IncomesSampleData())) {
+    @Previewable @Query var tags: [Tag]
+
+    NavigationStack {
+        if let tag = tags.first(where: { previewTag in
+            previewTag.type == .content
+        }) {
+            ContentItemListView()
+                .environment(tag)
         }
     }
 }

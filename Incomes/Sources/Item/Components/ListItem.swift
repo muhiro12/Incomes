@@ -99,11 +99,12 @@ struct ListItem: View {
     }
 }
 
-#Preview {
-    IncomesPreview { preview in
-        List {
-            ListItem()
-                .environment(preview.items[0])
-        }
+@available(iOS 18.0, *)
+#Preview(traits: .modifier(IncomesSampleData())) {
+    @Previewable @Query var items: [Item]
+
+    List {
+        ListItem()
+            .environment(items[0])
     }
 }

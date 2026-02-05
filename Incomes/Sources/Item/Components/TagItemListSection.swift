@@ -80,15 +80,16 @@ private extension TagItemListSection {
     }
 }
 
-#Preview {
-    IncomesPreview { preview in
-        List {
-            if let tag = preview.tags.first(where: { previewTag in
-                previewTag.type == .category
-            }) {
-                TagItemListSection(yearString: Date.now.stringValueWithoutLocale(.yyyy))
-                    .environment(tag)
-            }
+@available(iOS 18.0, *)
+#Preview(traits: .modifier(IncomesSampleData())) {
+    @Previewable @Query var tags: [Tag]
+
+    List {
+        if let tag = tags.first(where: { previewTag in
+            previewTag.type == .category
+        }) {
+            TagItemListSection(yearString: Date.now.stringValueWithoutLocale(.yyyy))
+                .environment(tag)
         }
     }
 }

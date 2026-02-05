@@ -97,13 +97,12 @@ private extension SearchListView {
     }
 }
 
-#Preview {
-    IncomesPreview { _ in
-        NavigationStack {
-            SearchListView(
-                selection: .constant(.all),
-                searchText: .constant(.empty)
-            )
-        }
+@available(iOS 18.0, *)
+#Preview(traits: .modifier(IncomesSampleData())) {
+    NavigationStack {
+        SearchListView(
+            selection: .constant(.all),
+            searchText: .constant(.empty)
+        )
     }
 }

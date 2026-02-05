@@ -94,10 +94,11 @@ private extension IncomeAndOutgoChartSection {
     }
 }
 
-#Preview {
-    IncomesPreview { _ in
-        List {
-            IncomeAndOutgoChartSection(.items(.dateIsSameYearAs(.now)))
-        }
+@available(iOS 18.0, *)
+#Preview(traits: .modifier(IncomesSampleData())) {
+    @Previewable @Query var items: [Item]
+
+    List {
+        IncomeAndOutgoChartSection(.items(.dateIsSameYearAs(.now)))
     }
 }

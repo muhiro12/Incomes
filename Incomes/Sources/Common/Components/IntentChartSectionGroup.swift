@@ -28,14 +28,15 @@ extension IntentChartSectionGroup: View {
     }
 }
 
-#Preview {
-    IncomesPreview { preview in
-        IntentChartSectionGroup(
-            .items(
-                .idsAre(
-                    preview.items.prefix(10).map(\.id)
-                )
+@available(iOS 18.0, *)
+#Preview(traits: .modifier(IncomesSampleData())) {
+    @Previewable @Query var items: [Item]
+
+    IntentChartSectionGroup(
+        .items(
+            .idsAre(
+                items.prefix(10).map(\.id)
             )
         )
-    }
+    )
 }

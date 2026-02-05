@@ -35,11 +35,10 @@ extension AdvertisementSection: View {
     }
 }
 
-#Preview {
-    IncomesPreview { _ in
-        List {
-            AdvertisementSection(.medium)
-            AdvertisementSection(.small)
-        }
+@available(iOS 18.0, *)
+#Preview(traits: .modifier(IncomesSampleData())) {
+    List {
+        AdvertisementSection(.medium)
+        AdvertisementSection(.small)
     }
 }

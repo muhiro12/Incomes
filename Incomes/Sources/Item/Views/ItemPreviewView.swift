@@ -1,3 +1,4 @@
+import SwiftData
 import SwiftUI
 
 struct ItemPreviewView {
@@ -14,11 +15,12 @@ extension ItemPreviewView: View {
     }
 }
 
-#Preview {
-    IncomesPreview { preview in
-        NavigationStack {
-            ItemPreviewView()
-                .environment(preview.items[0])
-        }
+@available(iOS 18.0, *)
+#Preview(traits: .modifier(IncomesSampleData())) {
+    @Previewable @Query var items: [Item]
+
+    NavigationStack {
+        ItemPreviewView()
+            .environment(items[0])
     }
 }

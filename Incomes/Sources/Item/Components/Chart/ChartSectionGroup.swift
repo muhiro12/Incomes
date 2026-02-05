@@ -42,10 +42,11 @@ extension ChartSectionGroup: View {
     }
 }
 
-#Preview {
-    IncomesPreview { _ in
-        List {
-            ChartSectionGroup(.items(.dateIsSameYearAs(.now)))
-        }
+@available(iOS 18.0, *)
+#Preview(traits: .modifier(IncomesSampleData())) {
+    @Previewable @Query var items: [Item]
+
+    List {
+        ChartSectionGroup(.items(.dateIsSameYearAs(.now)))
     }
 }

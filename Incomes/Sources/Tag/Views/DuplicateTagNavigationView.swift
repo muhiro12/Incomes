@@ -14,8 +14,7 @@ struct DuplicateTagNavigationView: View {
     }
 }
 
-#Preview {
-    IncomesPreview { _ in
-        DuplicateTagNavigationView()
-    }
+@available(iOS 18.0, *)
+#Preview(traits: .modifier(IncomesSampleData())) {
+    DuplicateTagNavigationView()
 }

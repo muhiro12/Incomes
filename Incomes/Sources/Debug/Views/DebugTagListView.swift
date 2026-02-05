@@ -42,8 +42,7 @@ struct DebugTagListView: View {
     }
 }
 
-#Preview {
-    IncomesPreview { _ in
-        DebugTagListView()
-    }
+@available(iOS 18.0, *)
+#Preview(traits: .modifier(IncomesSampleData())) {
+    DebugTagListView()
 }

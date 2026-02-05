@@ -5,6 +5,7 @@
 //  Created by Hiromu Nakano on 10/18/24.
 //
 
+import SwiftData
 import SwiftUI
 
 struct DuplicateItemButton {
@@ -38,9 +39,10 @@ extension DuplicateItemButton: View {
     }
 }
 
-#Preview {
-    IncomesPreview { preview in
-        DuplicateItemButton()
-            .environment(preview.items[.zero])
-    }
+@available(iOS 18.0, *)
+#Preview(traits: .modifier(IncomesSampleData())) {
+    @Previewable @Query var items: [Item]
+
+    DuplicateItemButton()
+        .environment(items[.zero])
 }

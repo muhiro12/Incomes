@@ -6,6 +6,7 @@
 //  Copyright © 2025 Hiromu Nakano. All rights reserved.
 //
 
+import SwiftData
 import SwiftUI
 
 struct ItemSection: View {
@@ -44,11 +45,12 @@ struct ItemSection: View {
     }
 }
 
-#Preview {
-    IncomesPreview { preview in
-        List {
-            ItemSection()
-                .environment(preview.items[0])
-        }
+@available(iOS 18.0, *)
+#Preview(traits: .modifier(IncomesSampleData())) {
+    @Previewable @Query var items: [Item]
+
+    List {
+        ItemSection()
+            .environment(items[0])
     }
 }

@@ -6,6 +6,7 @@
 //  Copyright © 2020 Hiromu Nakano. All rights reserved.
 //
 
+import SwiftData
 import SwiftUI
 
 struct NarrowListItem: View {
@@ -37,13 +38,14 @@ struct NarrowListItem: View {
     }
 }
 
-#Preview {
-    IncomesPreview { preview in
-        List {
-            NarrowListItem()
-                .environment(preview.items[0])
-            NarrowListItem()
-                .environment(preview.items[1])
-        }
+@available(iOS 18.0, *)
+#Preview(traits: .modifier(IncomesSampleData())) {
+    @Previewable @Query var items: [Item]
+
+    List {
+        NarrowListItem()
+            .environment(items[0])
+        NarrowListItem()
+            .environment(items[1])
     }
 }

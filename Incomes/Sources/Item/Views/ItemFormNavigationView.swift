@@ -36,8 +36,7 @@ extension ItemFormNavigationView: View {
     }
 }
 
-#Preview {
-    IncomesPreview { _ in
-        ItemFormNavigationView(mode: .create)
-    }
+@available(iOS 18.0, *)
+#Preview(traits: .modifier(IncomesSampleData())) {
+    ItemFormNavigationView(mode: .create)
 }

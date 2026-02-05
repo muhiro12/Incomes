@@ -71,15 +71,16 @@ struct HomeYearSection: View {
     }
 }
 
-#Preview {
-    IncomesPreview { preview in
-        List {
-            HomeYearSection(
-                yearTag: preview.tags
-                    .first { tag in
-                        tag.name == Date.now.stringValueWithoutLocale(.yyyy)
-                    }!
-            )
-        }
+@available(iOS 18.0, *)
+#Preview(traits: .modifier(IncomesSampleData())) {
+    @Previewable @Query var tags: [Tag]
+
+    List {
+        HomeYearSection(
+            yearTag: tags
+                .first { tag in
+                    tag.name == Date.now.stringValueWithoutLocale(.yyyy)
+                }!
+        )
     }
 }

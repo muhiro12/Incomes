@@ -71,10 +71,11 @@ struct ItemListSection: View {
     }
 }
 
-#Preview {
-    IncomesPreview { _ in
-        List {
-            ItemListSection(.items(.dateIsSameYearAs(.now)))
-        }
+@available(iOS 18.0, *)
+#Preview(traits: .modifier(IncomesSampleData())) {
+    @Previewable @Query var items: [Item]
+
+    List {
+        ItemListSection(.items(.dateIsSameYearAs(.now)))
     }
 }

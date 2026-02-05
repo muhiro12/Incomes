@@ -22,8 +22,7 @@ struct DebugNavigationView: View {
     }
 }
 
-#Preview {
-    IncomesPreview { _ in
-        DebugNavigationView()
-    }
+@available(iOS 18.0, *)
+#Preview(traits: .modifier(IncomesSampleData())) {
+    DebugNavigationView()
 }

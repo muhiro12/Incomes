@@ -27,8 +27,9 @@ struct IntentItemListSection: View {
     }
 }
 
-#Preview {
-    IncomesPreview { preview in
-        IntentItemListSection(preview.items)
-    }
+@available(iOS 18.0, *)
+#Preview(traits: .modifier(IncomesSampleData())) {
+    @Previewable @Query var items: [Item]
+
+    IntentItemListSection(items)
 }

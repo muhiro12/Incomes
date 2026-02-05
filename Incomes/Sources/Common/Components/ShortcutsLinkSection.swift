@@ -12,8 +12,7 @@ struct ShortcutsLinkSection: View {
     }
 }
 
-#Preview {
-    IncomesPreview { _ in
-        ShortcutsLinkSection()
-    }
+@available(iOS 18.0, *)
+#Preview(traits: .modifier(IncomesSampleData())) {
+    ShortcutsLinkSection()
 }

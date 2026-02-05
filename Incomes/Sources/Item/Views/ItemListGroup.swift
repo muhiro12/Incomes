@@ -5,6 +5,7 @@
 //  Created by Codex on 2025/07/09.
 //
 
+import SwiftData
 import SwiftUI
 
 struct ItemListGroup {
@@ -31,9 +32,10 @@ extension ItemListGroup: View {
     }
 }
 
-#Preview {
-    IncomesPreview { preview in
-        ItemListGroup()
-            .environment(preview.tags[0])
-    }
+@available(iOS 18.0, *)
+#Preview(traits: .modifier(IncomesSampleData())) {
+    @Previewable @Query var tags: [Tag]
+
+    ItemListGroup()
+        .environment(tags[0])
 }

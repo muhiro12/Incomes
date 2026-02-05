@@ -109,8 +109,7 @@ struct DuplicateTagListView: View {
     }
 }
 
-#Preview {
-    IncomesPreview { _ in
-        DuplicateTagListView(selection: .constant(nil))
-    }
+@available(iOS 18.0, *)
+#Preview(traits: .modifier(IncomesSampleData())) {
+    DuplicateTagListView(selection: .constant(nil))
 }

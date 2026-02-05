@@ -49,18 +49,16 @@ struct SearchResultView: View {
     }
 }
 
-#Preview {
-    IncomesPreview { _ in
-        NavigationStack {
-            SearchResultView(predicate: .all)
-        }
+@available(iOS 18.0, *)
+#Preview(traits: .modifier(IncomesSampleData())) {
+    NavigationStack {
+        SearchResultView(predicate: .all)
     }
 }
 
-#Preview {
-    IncomesPreview { _ in
-        NavigationStack {
-            SearchResultView(predicate: .none)
-        }
+@available(iOS 18.0, *)
+#Preview(traits: .modifier(IncomesSampleData())) {
+    NavigationStack {
+        SearchResultView(predicate: .none)
     }
 }

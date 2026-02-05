@@ -101,10 +101,9 @@ struct CategoryChartSection: View {
     }
 }
 
-#Preview {
-    IncomesPreview { _ in
-        List {
-            CategoryChartSection(yearScopedTo: .now)
-        }
+@available(iOS 18.0, *)
+#Preview(traits: .modifier(IncomesSampleData())) {
+    List {
+        CategoryChartSection(yearScopedTo: .now)
     }
 }

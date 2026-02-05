@@ -10,31 +10,61 @@ import StoreKitWrapper
 import SwiftData
 import SwiftUI
 
+struct IncomesSampleData: PreviewModifier {
+    struct Context {
+        let modelContainer: ModelContainer
+        let notificationService: NotificationService
+        let configurationService: ConfigurationService
+        let store: Store
+        let googleMobileAdsController: GoogleMobileAdsController
+    }
+
+    static func makeSharedContext() throws -> Context {
+        let modelContainer = try ModelContainer(
+            for: Item.self,
+            configurations: .init(isStoredInMemoryOnly: true)
+        )
+        let previewContext = modelContainer.mainContext
+        try? ItemService.seedSampleData(
+            context: previewContext,
+            profile: .preview,
+            ifEmptyOnly: true
+        )
+        try? BalanceCalculator.calculate(in: previewContext, after: .distantPast)
+        let notificationService = NotificationService(modelContainer: modelContainer)
+        let configurationService = ConfigurationService()
+        let store = Store()
+        let googleMobileAdsController = GoogleMobileAdsController(adUnitID: Secret.admobNativeIDDev)
+
+        return .init(
+            modelContainer: modelContainer,
+            notificationService: notificationService,
+            configurationService: configurationService,
+            store: store,
+            googleMobileAdsController: googleMobileAdsController
+        )
+    }
+
+    func body(content: Content, context: Context) -> some View {
+        content
+            .modelContainer(context.modelContainer)
+            .environment(context.notificationService)
+            .environment(context.configurationService)
+            .environment(context.store)
+            .environment(context.googleMobileAdsController)
+    }
+}
+
 struct IncomesPreview<Content: View>: View {
+    @Environment(\.modelContext) private var modelContext
     @State private var isReady = false
 
     private let content: (IncomesPreviewStore) -> Content
     private let preview: IncomesPreviewStore
 
-    private let previewModelContainer: ModelContainer
-    private let previewNotificationService: NotificationService
-    private let previewConfigurationService: ConfigurationService
-    private var previewStore: Store
-    private var previewGoogleMobileAdsController: GoogleMobileAdsController
-
     init(content: @escaping (IncomesPreviewStore) -> Content) {
         self.content = content
         self.preview = .init()
-
-        self.previewModelContainer = try! .init(
-            for: Item.self,
-            configurations: .init(isStoredInMemoryOnly: true)
-        )
-
-        self.previewNotificationService = .init(modelContainer: previewModelContainer)
-        self.previewConfigurationService = .init()
-        self.previewStore = .init()
-        self.previewGoogleMobileAdsController = .init(adUnitID: Secret.admobNativeIDDev)
     }
 
     var body: some View {
@@ -44,15 +74,10 @@ struct IncomesPreview<Content: View>: View {
             } else {
                 ProgressView()
                     .task {
-                        await preview.prepare(previewModelContainer.mainContext)
+                        await preview.prepare(modelContext)
                         isReady = true
                     }
             }
         }
-        .modelContainer(previewModelContainer)
-        .environment(previewNotificationService)
-        .environment(previewConfigurationService)
-        .environment(previewStore)
-        .environment(previewGoogleMobileAdsController)
     }
 }

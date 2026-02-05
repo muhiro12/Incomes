@@ -6,6 +6,7 @@
 //  Copyright © 2020 Hiromu Nakano. All rights reserved.
 //
 
+import SwiftData
 import SwiftUI
 
 struct TitleListItem: View {
@@ -23,11 +24,12 @@ struct TitleListItem: View {
     }
 }
 
-#Preview {
-    IncomesPreview { preview in
-        List {
-            TitleListItem()
-                .environment(preview.items.first(where: \.isNetIncomePositive))
-        }
+@available(iOS 18.0, *)
+#Preview(traits: .modifier(IncomesSampleData())) {
+    @Previewable @Query var items: [Item]
+
+    List {
+        TitleListItem()
+            .environment(items.first(where: \.isNetIncomePositive))
     }
 }

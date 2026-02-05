@@ -6,6 +6,7 @@
 //  Copyright © 2025 Hiromu Nakano. All rights reserved.
 //
 
+import SwiftData
 import SwiftUI
 
 struct TagSummaryRow: View {
@@ -33,11 +34,12 @@ struct TagSummaryRow: View {
     }
 }
 
-#Preview {
-    IncomesPreview { preview in
-        List {
-            TagSummaryRow()
-                .environment(preview.tags[0])
-        }
+@available(iOS 18.0, *)
+#Preview(traits: .modifier(IncomesSampleData())) {
+    @Previewable @Query var tags: [Tag]
+
+    List {
+        TagSummaryRow()
+            .environment(tags[0])
     }
 }

@@ -236,10 +236,9 @@ struct MainNavigationView: View {
     }
 }
 
-#Preview {
-    IncomesPreview { _ in
-        MainNavigationView()
-    }
+@available(iOS 18.0, *)
+#Preview(traits: .modifier(IncomesSampleData())) {
+    MainNavigationView()
 }
 
 private extension MainNavigationView {

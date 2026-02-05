@@ -1,3 +1,4 @@
+import SwiftData
 import SwiftUI
 
 struct DebugTagView: View {
@@ -51,9 +52,10 @@ private extension DebugTagView {
     }
 }
 
-#Preview {
-    IncomesPreview { preview in
-        DebugTagView()
-            .environment(preview.tags[0])
-    }
+@available(iOS 18.0, *)
+#Preview(traits: .modifier(IncomesSampleData())) {
+    @Previewable @Query var tags: [Tag]
+
+    DebugTagView()
+        .environment(tags[0])
 }

@@ -1,3 +1,4 @@
+import SwiftData
 import SwiftUI
 
 struct ItemNavigationView {}
@@ -10,9 +11,10 @@ extension ItemNavigationView: View {
     }
 }
 
-#Preview {
-    IncomesPreview { preview in
-        ItemNavigationView()
-            .environment(preview.items[0])
-    }
+@available(iOS 18.0, *)
+#Preview(traits: .modifier(IncomesSampleData())) {
+    @Previewable @Query var items: [Item]
+
+    ItemNavigationView()
+        .environment(items[0])
 }

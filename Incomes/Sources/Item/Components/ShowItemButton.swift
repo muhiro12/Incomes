@@ -6,6 +6,7 @@
 //  Copyright © 2025 Hiromu Nakano. All rights reserved.
 //
 
+import SwiftData
 import SwiftUI
 
 struct ShowItemButton {
@@ -40,9 +41,10 @@ extension ShowItemButton: View {
     }
 }
 
-#Preview {
-    IncomesPreview { preview in
-        ShowItemButton()
-            .environment(preview.items[.zero])
-    }
+@available(iOS 18.0, *)
+#Preview(traits: .modifier(IncomesSampleData())) {
+    @Previewable @Query var items: [Item]
+
+    ShowItemButton()
+        .environment(items[.zero])
 }

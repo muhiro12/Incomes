@@ -87,10 +87,11 @@ private extension BalanceChartSection {
     }
 }
 
-#Preview {
-    IncomesPreview { _ in
-        List {
-            BalanceChartSection(.items(.dateIsSameYearAs(.now)))
-        }
+@available(iOS 18.0, *)
+#Preview(traits: .modifier(IncomesSampleData())) {
+    @Previewable @Query var items: [Item]
+
+    List {
+        BalanceChartSection(.items(.dateIsSameYearAs(.now)))
     }
 }

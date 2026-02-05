@@ -6,6 +6,7 @@
 //  Copyright © 2020 Hiromu Nakano. All rights reserved.
 //
 
+import SwiftData
 import SwiftUI
 
 struct WideListItem: View {
@@ -42,13 +43,14 @@ struct WideListItem: View {
     }
 }
 
-#Preview(traits: .landscapeRight) {
-    IncomesPreview { preview in
-        List {
-            WideListItem()
-                .environment(preview.items[0])
-            WideListItem()
-                .environment(preview.items[1])
-        }
+@available(iOS 18.0, *)
+#Preview(traits: .landscapeRight, .modifier(IncomesSampleData())) {
+    @Previewable @Query var items: [Item]
+
+    List {
+        WideListItem()
+            .environment(items[0])
+        WideListItem()
+            .environment(items[1])
     }
 }

@@ -40,15 +40,16 @@ struct YearChartsView: View {
     }
 }
 
-#Preview {
-    IncomesPreview { preview in
-        NavigationStack {
-            if let tag = preview.tags.first(where: { previewTag in
-                previewTag.type == .year
-            }) {
-                YearChartsView()
-                    .environment(tag)
-            }
+@available(iOS 18.0, *)
+#Preview(traits: .modifier(IncomesSampleData())) {
+    @Previewable @Query var tags: [Tag]
+
+    NavigationStack {
+        if let tag = tags.first(where: { previewTag in
+            previewTag.type == .year
+        }) {
+            YearChartsView()
+                .environment(tag)
         }
     }
 }

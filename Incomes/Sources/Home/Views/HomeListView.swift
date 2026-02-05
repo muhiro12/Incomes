@@ -50,13 +50,16 @@ extension HomeListView: View {
     }
 }
 
-#Preview {
-    IncomesPreview { preview in
-        NavigationStack {
-            HomeListView()
-                .environment(preview.tags.last { tag in
+@available(iOS 18.0, *)
+#Preview(traits: .modifier(IncomesSampleData())) {
+    @Previewable @Query var tags: [Tag]
+
+    NavigationStack {
+        HomeListView()
+            .environment(
+                tags.last { tag in
                     tag.type == .year
-                })
-        }
+                }!
+            )
     }
 }

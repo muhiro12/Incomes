@@ -9,10 +9,9 @@ struct StoreListView: View {
     }
 }
 
-#Preview {
-    IncomesPreview { _ in
-        NavigationStack {
-            StoreListView()
-        }
+@available(iOS 18.0, *)
+#Preview(traits: .modifier(IncomesSampleData())) {
+    NavigationStack {
+        StoreListView()
     }
 }

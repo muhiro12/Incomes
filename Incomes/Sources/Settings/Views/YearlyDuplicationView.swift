@@ -379,10 +379,9 @@ private extension YearlyDuplicationView {
     }
 }
 
-#Preview {
-    IncomesPreview { _ in
-        NavigationStack {
-            YearlyDuplicationView()
-        }
+@available(iOS 18.0, *)
+#Preview(traits: .modifier(IncomesSampleData())) {
+    NavigationStack {
+        YearlyDuplicationView()
     }
 }

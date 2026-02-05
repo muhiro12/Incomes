@@ -6,6 +6,7 @@
 //  Copyright © 2023 Hiromu Nakano. All rights reserved.
 //
 
+import SwiftData
 import SwiftUI
 
 struct DebugSection {
@@ -74,11 +75,12 @@ extension DebugSection: View {
     }
 }
 
-#Preview {
-    IncomesPreview { preview in
-        List {
-            DebugSection()
-                .environment(preview.items[0])
-        }
+@available(iOS 18.0, *)
+#Preview(traits: .modifier(IncomesSampleData())) {
+    @Previewable @Query var items: [Item]
+
+    List {
+        DebugSection()
+            .environment(items[0])
     }
 }

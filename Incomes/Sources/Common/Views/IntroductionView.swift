@@ -214,8 +214,7 @@ private extension IntroductionView {
     }
 }
 
-#Preview {
-    IncomesPreview { _ in
-        IntroductionView()
-    }
+@available(iOS 18.0, *)
+#Preview(traits: .modifier(IncomesSampleData())) {
+    IntroductionView()
 }

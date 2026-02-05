@@ -497,10 +497,9 @@ private extension ItemFormView {
     }
 }
 
-#Preview {
-    IncomesPreview { _ in
-        NavigationStack {
-            ItemFormView(mode: .create)
-        }
+@available(iOS 18.0, *)
+#Preview(traits: .modifier(IncomesSampleData())) {
+    NavigationStack {
+        ItemFormView(mode: .create)
     }
 }

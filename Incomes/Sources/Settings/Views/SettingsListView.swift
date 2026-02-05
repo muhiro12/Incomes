@@ -276,10 +276,9 @@ private extension SettingsListView {
     }
 }
 
-#Preview {
-    IncomesPreview { _ in
-        NavigationStack {
-            SettingsListView()
-        }
+@available(iOS 18.0, *)
+#Preview(traits: .modifier(IncomesSampleData())) {
+    NavigationStack {
+        SettingsListView()
     }
 }
