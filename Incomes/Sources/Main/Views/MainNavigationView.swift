@@ -28,12 +28,6 @@ struct MainNavigationView: View {
 
     @State private var hasLoaded = false
     @State private var isIntroductionPresented = false
-    @State private var showYearlyDuplicationPromo = false
-    @State private var isYearlyDuplicationPromoDismissed = false
-    @State private var yearlyDuplicationProposal: YearlyItemDuplicationGroup?
-    @State private var yearlyDuplicationSourceYear: Int?
-    @State private var yearlyDuplicationTargetYear: Int?
-
     private var selectedYearTag: Tag? {
         guard let yearTagID else {
             return nil
@@ -65,53 +59,11 @@ struct MainNavigationView: View {
                         indices: indices
                     )
                 }
-                if showYearlyDuplicationPromo,
-                   let proposal = yearlyDuplicationProposal,
-                   let sourceYear = yearlyDuplicationSourceYear,
-                   let targetYear = yearlyDuplicationTargetYear {
-                    Section {
-                        VStack(alignment: .leading, spacing: 8) {
-                            Text("Duplicate Year")
-                                .font(.headline)
-                            Text(String(localized: "Year: \(sourceYear) -> \(targetYear)"))
-                                .font(.footnote)
-                                .foregroundStyle(.secondary)
-                            Text(String(localized: "Sample proposal"))
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                            Text(proposal.content)
-                                .font(.subheadline.weight(.semibold))
-                            if proposal.category.isNotEmpty {
-                                Text(proposal.category)
-                                    .font(.footnote)
-                                    .foregroundStyle(.secondary)
-                            }
-                            Text(String(localized: "Dates: \(monthDayListText(for: proposal))"))
-                                .font(.footnote)
-                                .foregroundStyle(.secondary)
-                            Text(String(localized: "Items: \(proposal.entryCount)"))
-                                .font(.footnote)
-                                .foregroundStyle(.secondary)
-                            Button("Review proposals") {
-                                isYearlyDuplicationPresented = true
-                            }
-                            .buttonStyle(.bordered)
-                        }
-                        .padding(.vertical, 4)
-                    } header: {
-                        HStack {
-                            Text("Yearly duplication")
-                            Spacer()
-                            Button {
-                                dismissYearlyDuplicationPromo()
-                            } label: {
-                                Image(systemName: "xmark.circle.fill")
-                                    .foregroundStyle(.secondary)
-                            }
-                            .buttonStyle(.borderless)
-                            .accessibilityLabel(Text("Close"))
-                        }
-                    }
+                YearlyDuplicationPromoSection(
+                    context: context,
+                    yearTags: yearTags
+                ) {
+                    isYearlyDuplicationPresented = true
                 }
             }
             .confirmationDialog(
@@ -147,9 +99,6 @@ struct MainNavigationView: View {
                 }
             } message: {
                 Text("Are you sure you want to delete these items?")
-            }
-            .onAppear {
-                updateYearlyDuplicationPromo()
             }
             .navigationTitle("Incomes")
             .toolbar {
@@ -234,98 +183,10 @@ struct MainNavigationView: View {
 
             await PhoneWatchBridge.shared.activate(modelContext: context)
         }
-        .onAppear {
-            updateYearlyDuplicationPromo()
-        }
-        .onChange(of: yearTags) {
-            if showYearlyDuplicationPromo {
-                loadYearlyDuplicationProposal()
-            }
-        }
     }
 }
 
 @available(iOS 18.0, *)
 #Preview(traits: .modifier(IncomesSampleData())) {
     MainNavigationView()
-}
-
-private extension MainNavigationView {
-    struct MonthDay: Hashable {
-        let month: Int
-        let day: Int
-    }
-
-    func shouldShowYearlyDuplicationPromo(date: Date = .now) -> Bool {
-        let month = Calendar.current.component(.month, from: date)
-        guard [11, 12, 1, 2].contains(month) else {
-            return false
-        }
-        return Int.random(in: 0..<3) == 0
-    }
-
-    func updateYearlyDuplicationPromo() {
-        guard !isYearlyDuplicationPromoDismissed else {
-            showYearlyDuplicationPromo = false
-            yearlyDuplicationProposal = nil
-            yearlyDuplicationSourceYear = nil
-            yearlyDuplicationTargetYear = nil
-            return
-        }
-        showYearlyDuplicationPromo = shouldShowYearlyDuplicationPromo()
-        if showYearlyDuplicationPromo {
-            loadYearlyDuplicationProposal()
-        } else {
-            yearlyDuplicationProposal = nil
-            yearlyDuplicationSourceYear = nil
-            yearlyDuplicationTargetYear = nil
-        }
-    }
-
-    func dismissYearlyDuplicationPromo() {
-        isYearlyDuplicationPromoDismissed = true
-        showYearlyDuplicationPromo = false
-        yearlyDuplicationProposal = nil
-        yearlyDuplicationSourceYear = nil
-        yearlyDuplicationTargetYear = nil
-    }
-
-    func loadYearlyDuplicationProposal() {
-        let targetYears = YearlyItemDuplicator.targetYears()
-        let suggestion = YearlyItemDuplicator.suggestion(
-            context: context,
-            yearTags: yearTags,
-            targetYears: targetYears,
-            minimumGroupCount: 3
-        )
-        if let suggestion,
-           let proposal = suggestion.plan.groups.first {
-            yearlyDuplicationProposal = proposal
-            yearlyDuplicationSourceYear = suggestion.sourceYear
-            yearlyDuplicationTargetYear = suggestion.targetYear
-        } else {
-            yearlyDuplicationProposal = nil
-            yearlyDuplicationSourceYear = nil
-            yearlyDuplicationTargetYear = nil
-        }
-    }
-
-    func monthDayListText(for group: YearlyItemDuplicationGroup) -> String {
-        let calendar = Calendar.current
-        let monthDays = group.targetDates.map { date in
-            MonthDay(
-                month: calendar.component(.month, from: date),
-                day: calendar.component(.day, from: date)
-            )
-        }
-        let sortedMonthDays = Array(Set(monthDays)).sorted { left, right in
-            if left.month != right.month {
-                return left.month < right.month
-            }
-            return left.day < right.day
-        }
-        return sortedMonthDays
-            .map { "\($0.month)/\($0.day)" }
-            .joined(separator: ", ")
-    }
 }
