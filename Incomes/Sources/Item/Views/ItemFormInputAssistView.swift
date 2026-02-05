@@ -46,31 +46,56 @@ struct ItemFormInputAssistView: View {
     }
 
     var body: some View {
-        VStack(spacing: 16) {
-            TextEditor(text: $text)
-                .padding(8)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(Color.secondary, lineWidth: 1)
-                )
-                .frame(maxWidth: .infinity)
-                .frame(minHeight: 220)
-                .accessibilityLabel("Captured text")
+        Form {
+            Section {
+                ZStack(alignment: .topLeading) {
+                    if text.isEmpty {
+                        Text("Paste or capture text to extract details.")
+                            .foregroundStyle(.secondary)
+                            .padding(.top, 10)
+                            .padding(.leading, 8)
+                    }
 
-            HStack(spacing: 24) {
-                PhotosPicker(selection: $selectedItem, matching: .images) {
-                    Label("Library", systemImage: "photo")
+                    TextEditor(text: $text)
+                        .scrollContentBackground(.hidden)
+                        .frame(minHeight: 220)
+                        .padding(8)
+                        .background(
+                            RoundedRectangle(cornerRadius: 12, style: .continuous)
+                                .fill(Color(uiColor: .secondarySystemBackground))
+                        )
+                        .accessibilityLabel("Captured text")
                 }
+                .overlay(
+                    RoundedRectangle(cornerRadius: 12, style: .continuous)
+                        .stroke(Color.secondary.opacity(0.18), lineWidth: 1)
+                )
+                .listRowInsets(.init(top: 8, leading: 16, bottom: 12, trailing: 16))
+            } header: {
+                Text("Recognized Text")
+            } footer: {
+                Text("We will extract date, amounts, category, and priority from this text.")
+            }
+
+            Section {
+                PhotosPicker(selection: $selectedItem, matching: .images) {
+                    Label("Photo Library", systemImage: "photo.on.rectangle")
+                }
+                .labelStyle(.titleAndIcon)
 
                 Button {
                     isCameraPresented = true
                 } label: {
                     Label("Camera", systemImage: "camera")
                 }
+                .labelStyle(.titleAndIcon)
+            } header: {
+                Text("Import")
             }
         }
-        .padding()
-        .navigationTitle("Capture Text")
+        .formStyle(.grouped)
+        .navigationTitle("Text Capture")
+        .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {
                 Button {
