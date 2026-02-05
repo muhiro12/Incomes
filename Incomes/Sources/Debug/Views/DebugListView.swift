@@ -64,13 +64,13 @@ extension DebugListView: View {
         ) {
             Button(role: .destructive) {
                 Task {
-                    await IncomesPreviewStore().prepare(context)
+                    await IncomesSampleData.prepareData(in: context)
                 }
             } label: {
                 Text("Prepare")
             }
             Button(role: .destructive) {
-                IncomesPreviewStore().prepareIgnoringDuplicates(context)
+                IncomesSampleData.prepareDataIgnoringDuplicates(in: context)
             } label: {
                 Text("Prepare ignoring duplicates")
             }

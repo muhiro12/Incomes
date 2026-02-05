@@ -1,5 +1,5 @@
 //
-//  IncomesPreview.swift
+//  IncomesSampleData.swift
 //
 //
 //  Created by Hiromu Nakano on 2024/06/17.
@@ -55,29 +55,27 @@ struct IncomesSampleData: PreviewModifier {
     }
 }
 
-struct IncomesPreview<Content: View>: View {
-    @Environment(\.modelContext) private var modelContext
-    @State private var isReady = false
-
-    private let content: (IncomesPreviewStore) -> Content
-    private let preview: IncomesPreviewStore
-
-    init(content: @escaping (IncomesPreviewStore) -> Content) {
-        self.content = content
-        self.preview = .init()
+extension IncomesSampleData {
+    static func prepareData(in context: ModelContext) async {
+        try? ItemService.seedSampleData(context: context, profile: .preview)
+        var items = [Item]()
+        var tags = [Tag]()
+        while items.isEmpty || tags.isEmpty {
+            try? await Task.sleep(for: .seconds(0.2))
+            items = (try? context.fetch(.items(.all))) ?? []
+            tags = (try? context.fetch(.tags(.all))) ?? []
+        }
+        try? BalanceCalculator.calculate(in: context, for: items)
     }
 
-    var body: some View {
-        Group {
-            if isReady {
-                content(preview)
-            } else {
-                ProgressView()
-                    .task {
-                        await preview.prepare(modelContext)
-                        isReady = true
-                    }
-            }
-        }
+    static func prepareDataIgnoringDuplicates(in context: ModelContext) {
+        try? ItemService.seedSampleData(
+            context: context,
+            profile: .debug,
+            ignoringDuplicates: true
+        )
+        let items = (try? context.fetch(.items(.all))) ?? []
+        try? BalanceCalculator.calculate(in: context, for: items)
+        _ = (try? context.fetch(.tags(.all))) ?? []
     }
 }
