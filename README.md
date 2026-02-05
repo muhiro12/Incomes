@@ -124,19 +124,25 @@ The app downloads `.config.json` from the `main` branch on GitHub at launch.
 Update the file or host your own endpoint when shipping a fork so update prompts
 reflect your release channel.
 
-## Testing
+## Build and Test
 
-Run the shared test suites from macOS using the Xcode command line tools or the
-helper scripts in `ci_scripts/`:
+Use the helper scripts in `ci_scripts/` as needed. If you are unsure, run the
+required builds/tests based on local changes:
 
 ```sh
-DERIVED_DATA_PATH=build/DerivedData \
-RESULTS_DIR=build \
-bash ci_scripts/xcodebuild_test_scheme.sh Incomes
+bash ci_scripts/run_required_builds.sh
+```
 
-DERIVED_DATA_PATH=build/DerivedData \
-RESULTS_DIR=build \
-bash ci_scripts/xcodebuild_test_scheme.sh IncomesLibrary
+If you only need the app build:
+
+```sh
+bash ci_scripts/build_incomes.sh
+```
+
+If you only need library tests:
+
+```sh
+bash ci_scripts/test_incomes_library.sh
 ```
 
 ## Useful links

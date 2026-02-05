@@ -89,81 +89,16 @@ Avoid using Japanese or other non-English languages in code unless strictly nece
 
 Use these minimal, reliable commands to build and run tests via Xcode. They avoid hard-coding device names and work across environments.
 
-### Preferred: use `ci_scripts/` helpers
+### Preferred: use `ci_scripts/` helper
 
-These scripts standardize invocation and keep artifacts under `build/` to avoid permission issues.
+This script standardizes invocation, keeps artifacts under `build/`, and does not accept arguments.
 
-- List schemes:
-
-  ```sh
-  bash ci_scripts/xcodebuild_list_schemes.sh
-  ```
-
-- Run app tests (Incomes scheme):
+- Run required build/tests based on local changes:
 
   ```sh
-  DERIVED_DATA_PATH=build/DerivedData \
-  RESULTS_DIR=build \
-  bash ci_scripts/xcodebuild_test_scheme.sh Incomes
+  bash ci_scripts/run_required_builds.sh
   ```
 
-- Run library tests (IncomesLibrary scheme):
-
-  ```sh
-  # Note: IncomesLibrary is iOS-only. Do not use `swift test`. `xcodebuild` is required because the scheme depends on the iOS Simulator runtime that `swift test` cannot drive.
-  DERIVED_DATA_PATH=build/DerivedData \
-  RESULTS_DIR=build \
-  bash ci_scripts/xcodebuild_test_scheme.sh IncomesLibrary
-  ```
-
-- Options:
-  - Prefer a specific simulator: set `UDID=<simulator-udid>`
-  - Concise logs when available: pass `xcpretty` as the second arg
-
-    ```sh
-    bash ci_scripts/xcodebuild_test_scheme.sh Incomes xcpretty
-    ```
-  - Auto-fallback: If a scheme has no Test action, the script automatically falls back to `build`.
-  - Force action: explicitly set `ACTION=test` or `ACTION=build` to override.
-  - Artifacts:
-    - Derived data: `build/DerivedData`
-    - Results bundle: `build/TestResults_<Scheme>_<timestamp>.xcresult`
-
-- Prerequisites:
-  - Xcode with iOS Simulator runtime installed
-  - At least one iPhone simulator available (booted is best)
-
-- Equivalent raw commands (if you prefer `xcodebuild` directly):
-
-- Run app tests (auto-pick latest iOS Simulator):
-
-  ```sh
-  xcodebuild -project Incomes.xcodeproj -scheme Incomes \
-    -destination 'platform=iOS Simulator,OS=latest' test
-  ```
-
-- Run library tests (via Xcode scheme on iOS Simulator):
-
-  ```sh
-  # Note: IncomesLibrary is iOS-only. Do not use `swift test`. `xcodebuild` is required because the scheme depends on the iOS Simulator runtime that `swift test` cannot drive.
-  xcodebuild -project Incomes.xcodeproj -scheme IncomesLibrary \
-    -destination 'platform=iOS Simulator,OS=latest' test
-  ```
-
-- If destination resolution fails, target a specific simulator UDID:
-
-  ```sh
-  # Prefer a booted simulator
-  UDID=$(xcrun simctl list devices | awk '/Booted/ {print $4; exit}' | tr -d '()')
-  if [ -z "$UDID" ]; then
-    # Else pick any iPhone simulator (Booted or Shutdown)
-    UDID=$(xcrun simctl list devices | awk '/iPhone/ && /(Shutdown|Booted)/ {print $4; exit}' | tr -d '()')
-  fi
-  xcodebuild -project Incomes.xcodeproj -scheme Incomes -destination "id=$UDID" test
-  xcodebuild -project Incomes.xcodeproj -scheme IncomesLibrary -destination "id=$UDID" test
-  ```
-
-- Tips:
-  - Use `-resultBundlePath build/TestResults.xcresult` to save results. If it already exists, delete it or use a new path.
-  - When piping output, add `set -o pipefail` to propagate failures.
-  - If you need concise logs, install `xcpretty` and pipe `xcodebuild` output to it (optional).
+- Artifacts:
+  - Derived data: `build/DerivedData`
+  - Results bundle: `build/TestResults_<Scheme>_<timestamp>.xcresult`
