@@ -15,7 +15,7 @@ struct MainNavigationView: View {
     @Query(.tags(.typeIs(.year), order: .reverse))
     private var yearTags: [Tag]
 
-    @State private var yearTag: Tag?
+    @State private var yearTagID: Tag.ID?
     @State private var tag: Tag?
     @State private var searchText = ""
     @State private var predicate: ItemPredicate?
@@ -34,13 +34,22 @@ struct MainNavigationView: View {
     @State private var yearlyDuplicationSourceYear: Int?
     @State private var yearlyDuplicationTargetYear: Int?
 
+    private var selectedYearTag: Tag? {
+        guard let yearTagID else {
+            return nil
+        }
+        return yearTags.first { tag in
+            tag.persistentModelID == yearTagID
+        }
+    }
+
     var body: some View {
         NavigationSplitView {
-            List(selection: $yearTag) {
-                ForEach(yearTags, id: \.self) { yearTag in
+            List(selection: $yearTagID) {
+                ForEach(yearTags, id: \.persistentModelID) { yearTag in
                     TagSummaryRow()
                         .environment(yearTag)
-                        .tag(yearTag)
+                        .tag(yearTag.persistentModelID)
                 }
                 .onDelete { indices in
                     Haptic.warning.impact()
@@ -115,11 +124,11 @@ struct MainNavigationView: View {
                             context: context,
                             items: willDeleteItems
                         )
-                        if let yearTag,
+                        if let selectedYearTag,
                            willDeleteTags.contains(where: { tag in
-                            tag.name == yearTag.name && tag.typeID == yearTag.typeID
+                            tag.name == selectedYearTag.name && tag.typeID == selectedYearTag.typeID
                            }) {
-                            self.yearTag = nil
+                            yearTagID = nil
                         }
                         willDeleteItems = []
                         willDeleteTags = []
@@ -166,9 +175,9 @@ struct MainNavigationView: View {
                         selection: $predicate,
                         searchText: $searchText
                     )
-                } else if let yearTag {
+                } else if let selectedYearTag {
                     HomeListView(selection: $tag)
-                        .environment(yearTag)
+                        .environment(selectedYearTag)
                 }
             }
             .searchable(text: $searchText, isPresented: $isSearchPresented)
@@ -181,9 +190,9 @@ struct MainNavigationView: View {
                 }
                 SpacerToolbarItem(placement: .bottomBar)
                 ToolbarItem(placement: .bottomBar) {
-                    if let yearTag {
+                    if let selectedYearTag {
                         CreateItemButton()
-                            .environment(yearTag)
+                            .environment(selectedYearTag)
                     } else {
                         CreateItemButton()
                     }
@@ -217,7 +226,7 @@ struct MainNavigationView: View {
                     hasLoaded = true
                     isIntroductionPresented = state.isIntroductionPresented
                 }
-                yearTag = state.yearTag
+                yearTagID = state.yearTag?.persistentModelID
                 tag = state.yearMonthTag
             } catch {
                 assertionFailure(error.localizedDescription)
