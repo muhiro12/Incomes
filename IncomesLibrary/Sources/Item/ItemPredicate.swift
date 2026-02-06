@@ -67,7 +67,7 @@ public enum ItemPredicate {
             }
             switch tagType {
             case .year:
-                guard let date = tag.name.dateValueWithoutLocale(.yyyy) else {
+                guard let date = tag.name.stableDateValueWithoutLocale(.yyyy) else {
                     return .false
                 }
                 let shiftedDate = Calendar.utc.shiftedDate(componentsFrom: date, in: .current)
@@ -77,7 +77,7 @@ public enum ItemPredicate {
                     start <= $0.date && $0.date <= end
                 }
             case .yearMonth:
-                guard let date = tag.name.dateValueWithoutLocale(.yyyyMM) else {
+                guard let date = tag.name.stableDateValueWithoutLocale(.yyyyMM) else {
                     return .false
                 }
                 let shiftedDate = Calendar.utc.shiftedDate(componentsFrom: date, in: .current)
@@ -102,7 +102,7 @@ public enum ItemPredicate {
             }
         case .tagAndYear(let tag, let yearString):
             guard let tagType = tag.type,
-                  let date = yearString.dateValueWithoutLocale(.yyyy) else {
+                  let date = yearString.stableDateValueWithoutLocale(.yyyy) else {
                 return .false
             }
             let shiftedDate = Calendar.utc.shiftedDate(componentsFrom: date, in: .current)

@@ -18,7 +18,7 @@ struct ItemSection: View {
             HStack {
                 Text("Date")
                 Spacer()
-                Text(item.localDate.stringValue(.yyyyMMMd))
+                Text(item.localDate.stableStringValue(.yyyyMMMd))
                     .foregroundStyle(.secondary)
             }
             HStack {

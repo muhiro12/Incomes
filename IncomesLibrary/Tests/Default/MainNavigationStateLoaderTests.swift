@@ -57,9 +57,9 @@ struct MainNavigationStateLoaderTests {
         let yearTag = try #require(state.yearTag)
         let yearMonthTag = try #require(state.yearMonthTag)
 
-        #expect(yearTag.name == date.stringValueWithoutLocale(.yyyy))
+        #expect(yearTag.name == date.stableStringValueWithoutLocale(.yyyy))
         #expect(yearTag.type == .year)
-        #expect(yearMonthTag.name == date.stringValueWithoutLocale(.yyyyMM))
+        #expect(yearMonthTag.name == date.stableStringValueWithoutLocale(.yyyyMM))
         #expect(yearMonthTag.type == .yearMonth)
     }
 }

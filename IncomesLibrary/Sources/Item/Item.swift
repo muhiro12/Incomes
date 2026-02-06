@@ -48,12 +48,12 @@ public final class Item {
         item.tags = [
             try .create(
                 context: context,
-                name: date.stringValueWithoutLocale(.yyyy),
+                name: date.stableStringValueWithoutLocale(.yyyy),
                 type: .year
             ),
             try .create(
                 context: context,
-                name: date.stringValueWithoutLocale(.yyyyMM),
+                name: date.stableStringValueWithoutLocale(.yyyyMM),
                 type: .yearMonth
             ),
             try .create(
@@ -93,12 +93,12 @@ public final class Item {
         self.tags = [
             try .create(
                 context: context,
-                name: date.stringValueWithoutLocale(.yyyy),
+                name: date.stableStringValueWithoutLocale(.yyyy),
                 type: .year
             ),
             try .create(
                 context: context,
-                name: date.stringValueWithoutLocale(.yyyyMM),
+                name: date.stableStringValueWithoutLocale(.yyyyMM),
                 type: .yearMonth
             ),
             try .create(
@@ -201,12 +201,12 @@ extension Item {
         item.tags = [
             try .createIgnoringDuplicates(
                 context: context,
-                name: date.stringValueWithoutLocale(.yyyy),
+                name: date.stableStringValueWithoutLocale(.yyyy),
                 type: .year
             ),
             try .createIgnoringDuplicates(
                 context: context,
-                name: date.stringValueWithoutLocale(.yyyyMM),
+                name: date.stableStringValueWithoutLocale(.yyyyMM),
                 type: .yearMonth
             ),
             try .createIgnoringDuplicates(

@@ -23,8 +23,8 @@ extension ContentItemListView: View {
                 .items(.tagAndYear(tag: tag, yearString: yearString)),
                 title: .init(
                     yearString
-                        .dateValueWithoutLocale(.yyyy)?
-                        .stringValue(.yyyy) ?? .empty
+                        .stableDateValueWithoutLocale(.yyyy)?
+                        .stableStringValue(.yyyy) ?? .empty
                 )
             )
             if !isSubscribeOn {

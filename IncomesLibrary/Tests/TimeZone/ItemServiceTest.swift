@@ -282,7 +282,7 @@ struct ItemServiceTest {
         }
         #expect(items.count == 3)
         let months = items.map { item in
-            item.utcDate.stringValueWithoutLocale(.yyyyMM)
+            item.utcDate.stableStringValueWithoutLocale(.yyyyMM)
         }
         #expect(months == ["202401", "202402", "202403"])
     }

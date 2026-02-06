@@ -436,7 +436,7 @@ private extension ItemFormView {
         let currentMonth = calendar.component(.month, from: currentDate)
         switch tag.type {
         case .year:
-            guard let tagDate = tag.name.dateValueWithoutLocale(.yyyy) else {
+            guard let tagDate = tag.name.stableDateValueWithoutLocale(.yyyy) else {
                 return currentDate
             }
             let tagYear = calendar.component(.year, from: tagDate)
@@ -445,7 +445,7 @@ private extension ItemFormView {
             }
             return tagDate
         case .yearMonth:
-            guard let tagDate = tag.name.dateValueWithoutLocale(.yyyyMM) else {
+            guard let tagDate = tag.name.stableDateValueWithoutLocale(.yyyyMM) else {
                 return currentDate
             }
             let tagYear = calendar.component(.year, from: tagDate)

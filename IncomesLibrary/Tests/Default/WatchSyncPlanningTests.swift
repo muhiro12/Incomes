@@ -67,13 +67,13 @@ struct WatchSyncPlanningTests {
                 byAdding: .month,
                 value: offset,
                 to: base
-            )?.stringValueWithoutLocale(.yyyyMM)
+            )?.stableStringValueWithoutLocale(.yyyyMM)
         })
 
         // Prune items not in allowed set (simulate watch syncer pruning)
         let all = try context.fetch(FetchDescriptor<Item>())
         for item in all {
-            let yearMonth = item.localDate.stringValueWithoutLocale(.yyyyMM)
+            let yearMonth = item.localDate.stableStringValueWithoutLocale(.yyyyMM)
             if !allowed.contains(yearMonth) {
                 try ItemService.delete(context: context, item: item)
             }

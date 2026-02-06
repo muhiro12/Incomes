@@ -120,7 +120,7 @@ public enum TagService {
     ) -> [String] {
         Set(
             tag.items.orEmpty.map { item in
-                item.localDate.stringValueWithoutLocale(.yyyy)
+                item.localDate.stableStringValueWithoutLocale(.yyyy)
             }
         )
         .sorted(by: >)

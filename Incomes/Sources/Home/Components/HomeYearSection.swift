@@ -79,7 +79,7 @@ struct HomeYearSection: View {
         HomeYearSection(
             yearTag: tags
                 .first { tag in
-                    tag.name == Date.now.stringValueWithoutLocale(.yyyy)
+                    tag.name == Date.now.stableStringValueWithoutLocale(.yyyy)
                 }!
         )
     }

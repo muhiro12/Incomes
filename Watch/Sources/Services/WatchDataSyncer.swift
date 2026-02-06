@@ -17,7 +17,7 @@ enum WatchDataSyncer {
                 byAdding: .month,
                 value: offset,
                 to: baseDate
-            )?.stringValueWithoutLocale(.yyyyMM)
+            )?.stableStringValueWithoutLocale(.yyyyMM)
         })
 
         let items = await PhoneSyncClient.shared.requestRecentItems()
@@ -34,14 +34,14 @@ enum WatchDataSyncer {
 
         // Delete items not in allowed months
         let all: [Item] = (try? context.fetch(FetchDescriptor<Item>())) ?? []
-        for item in all where !allowedYearMonths.contains(item.localDate.stringValueWithoutLocale(.yyyyMM)) {
+        for item in all where !allowedYearMonths.contains(item.localDate.stableStringValueWithoutLocale(.yyyyMM)) {
             try? ItemService.delete(context: context, item: item)
         }
 
         // Replace items for each allowed month with incoming snapshot
         for yearMonth in allowedYearMonths {
             // Delete existing items for that month
-            for item in all where item.localDate.stringValueWithoutLocale(.yyyyMM) == yearMonth {
+            for item in all where item.localDate.stableStringValueWithoutLocale(.yyyyMM) == yearMonth {
                 try? ItemService.delete(context: context, item: item)
             }
 

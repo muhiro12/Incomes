@@ -27,12 +27,12 @@ public enum MainNavigationStateLoader {
         ).isZero
         let yearTag = try TagService.getByName(
             context: context,
-            name: date.stringValueWithoutLocale(.yyyy),
+            name: date.stableStringValueWithoutLocale(.yyyy),
             type: .year
         )
         let yearMonthTag = try TagService.getByName(
             context: context,
-            name: date.stringValueWithoutLocale(.yyyyMM),
+            name: date.stableStringValueWithoutLocale(.yyyyMM),
             type: .yearMonth
         )
         return .init(

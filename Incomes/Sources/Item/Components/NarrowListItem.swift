@@ -14,7 +14,7 @@ struct NarrowListItem: View {
 
     var body: some View {
         HStack {
-            Text(item.localDate.stringValue(.MMMd))
+            Text(item.localDate.stableStringValue(.MMMd))
                 .font(.subheadline)
                 .singleLine()
                 .truncationMode(.head)

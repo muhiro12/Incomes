@@ -30,7 +30,7 @@ public enum ItemFormInferenceMapper {
         outgo: Decimal,
         category: String
     ) -> ItemFormInferenceUpdate {
-        let date = dateString.dateValueWithoutLocale(.yyyyMMdd)
+        let date = dateString.stableDateValueWithoutLocale(.yyyyMMdd)
         return .init(
             date: date,
             content: content,

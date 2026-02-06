@@ -39,7 +39,7 @@ extension TagItemListSection: View {
                 isDialogPresented = true
             }
         } header: {
-            Text(yearString.dateValueWithoutLocale(.yyyy)?.stringValue(.yyyy) ?? .empty)
+            Text(yearString.stableDateValueWithoutLocale(.yyyy)?.stableStringValue(.yyyy) ?? .empty)
         }
         .confirmationDialog(
             Text("Delete"),
@@ -88,7 +88,7 @@ private extension TagItemListSection {
         if let tag = tags.first(where: { previewTag in
             previewTag.type == .category
         }) {
-            TagItemListSection(yearString: Date.now.stringValueWithoutLocale(.yyyy))
+            TagItemListSection(yearString: Date.now.stableStringValueWithoutLocale(.yyyy))
                 .environment(tag)
         }
     }

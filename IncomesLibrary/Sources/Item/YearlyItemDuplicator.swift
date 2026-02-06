@@ -379,7 +379,7 @@ private extension YearlyItemDuplicator {
         if let integerValue = Int(tag.name) {
             return integerValue
         }
-        guard let date = tag.name.dateValueWithoutLocale(.yyyy) else {
+        guard let date = tag.name.stableDateValueWithoutLocale(.yyyy) else {
             return nil
         }
         return Calendar.current.component(.year, from: date)

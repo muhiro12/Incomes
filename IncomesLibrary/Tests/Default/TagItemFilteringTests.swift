@@ -55,7 +55,7 @@ struct TagItemFilteringTests {
 
         let items = TagService.items(
             for: tag,
-            yearString: firstDate.stringValueWithoutLocale(.yyyy)
+            yearString: firstDate.stableStringValueWithoutLocale(.yyyy)
         )
 
         if items.count != 2
@@ -63,7 +63,7 @@ struct TagItemFilteringTests {
             || items.last?.id != firstItem.id {
             logDiagnostics(
                 tag: tag,
-                yearString: firstDate.stringValueWithoutLocale(.yyyy)
+                yearString: firstDate.stableStringValueWithoutLocale(.yyyy)
             )
         }
 
@@ -105,7 +105,7 @@ struct TagItemFilteringTests {
 
         let items = TagService.items(
             for: categoryTag,
-            yearString: firstDate.stringValueWithoutLocale(.yyyy)
+            yearString: firstDate.stableStringValueWithoutLocale(.yyyy)
         )
 
         if items.count != 2
@@ -113,7 +113,7 @@ struct TagItemFilteringTests {
             || items.last?.id != firstItem.id {
             logDiagnostics(
                 tag: categoryTag,
-                yearString: firstDate.stringValueWithoutLocale(.yyyy)
+                yearString: firstDate.stableStringValueWithoutLocale(.yyyy)
             )
         }
 
@@ -157,7 +157,7 @@ struct TagItemFilteringTests {
 
         let items = TagService.items(
             for: categoryTag,
-            yearString: firstDate.stringValueWithoutLocale(.yyyy)
+            yearString: firstDate.stableStringValueWithoutLocale(.yyyy)
         )
 
         if items.count != 2
@@ -165,7 +165,7 @@ struct TagItemFilteringTests {
             || items.last?.id != firstItem.id {
             logDiagnostics(
                 tag: categoryTag,
-                yearString: firstDate.stringValueWithoutLocale(.yyyy)
+                yearString: firstDate.stableStringValueWithoutLocale(.yyyy)
             )
         }
 

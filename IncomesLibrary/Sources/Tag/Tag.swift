@@ -41,9 +41,9 @@ extension Tag {
     public var displayName: String {
         switch type {
         case .year:
-            name.dateValueWithoutLocale(.yyyy)?.stringValue(.yyyy) ?? name
+            name.stableDateValueWithoutLocale(.yyyy)?.stableStringValue(.yyyy) ?? name
         case .yearMonth:
-            name.dateValueWithoutLocale(.yyyyMM)?.stringValue(.yyyyMMM) ?? name
+            name.stableDateValueWithoutLocale(.yyyyMM)?.stableStringValue(.yyyyMMM) ?? name
         case .content:
             name
         case .category:

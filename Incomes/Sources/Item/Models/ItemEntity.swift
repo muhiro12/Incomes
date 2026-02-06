@@ -22,7 +22,7 @@ final class ItemEntity: AppEntity {
 
     var displayRepresentation: DisplayRepresentation {
         .init(
-            title: .init("\(date.stringValue(.yyyyMMMd)) \(content)", table: "AppIntents"),
+            title: .init("\(date.stableStringValue(.yyyyMMMd)) \(content)", table: "AppIntents"),
             subtitle: .init("Income: \(income.asCurrency), Outgo: \(outgo.asCurrency)", table: "AppIntents"),
             image: .init(
                 systemName: netIncome.isPlus ? "arrow.up.circle.fill" : "arrow.down.circle.fill"

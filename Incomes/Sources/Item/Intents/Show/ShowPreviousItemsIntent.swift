@@ -26,7 +26,7 @@ struct ShowPreviousItemsIntent: AppIntent {
         guard items.isNotEmpty else {
             return .result(dialog: .init(.init("Not Found", table: "AppIntents")))
         }
-        return .result(dialog: .init(stringLiteral: date.stringValue(.yyyyMMM))) {
+        return .result(dialog: .init(stringLiteral: date.stableStringValue(.yyyyMMM))) {
             IntentItemListSection(items)
                 .modelContainer(modelContainer)
         }

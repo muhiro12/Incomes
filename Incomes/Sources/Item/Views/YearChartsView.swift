@@ -15,14 +15,14 @@ struct YearChartsView: View {
     private var context
 
     var date: Date {
-        tag.name.dateValueWithoutLocale(.yyyy) ?? .distantPast
+        tag.name.stableDateValueWithoutLocale(.yyyy) ?? .distantPast
     }
 
     var body: some View {
         List {
             ChartSectionGroup(yearScopedTo: date)
         }
-        .navigationTitle(date.stringValue(.yyyy))
+        .navigationTitle(date.stableStringValue(.yyyy))
         .toolbar {
             if let count = try? ItemService.yearItemsCount(
                 context: context,
