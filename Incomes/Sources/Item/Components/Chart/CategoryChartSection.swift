@@ -73,7 +73,7 @@ struct CategoryChartSection: View {
                 .foregroundStyle(by: .value("Category", "\(object.title): \(object.value.asCurrency)"))
             }
             .chartForegroundStyleScale { (title: String) in
-                .accent.adjusted(by: title.hashValue)
+                .accent.adjusted(by: .init(title.hashValue))
             }
             .frame(height: .component(.xl))
             .padding()
@@ -91,7 +91,7 @@ struct CategoryChartSection: View {
                 .foregroundStyle(by: .value("Category", "\(object.title): \(object.value.asCurrency)"))
             }
             .chartForegroundStyleScale { (title: String) in
-                .red.adjusted(by: title.hashValue)
+                .red.adjusted(by: .init(title.hashValue))
             }
             .frame(height: .component(.xl))
             .padding()

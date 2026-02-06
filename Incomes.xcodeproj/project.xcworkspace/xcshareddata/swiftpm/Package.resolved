@@ -33,8 +33,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/muhiro12/StoreKitWrapper",
       "state" : {
-        "revision" : "0dadae21ef743f41a431f9299c4c675e3147c3b5",
-        "version" : "1.1.0"
+        "revision" : "c43d9cd7f68eb66d63f6b258af48c9825c1f0d00",
+        "version" : "1.2.0"
       }
     },
     {
@@ -42,8 +42,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/googleads/swift-package-manager-google-mobile-ads.git",
       "state" : {
-        "revision" : "c79144a4a0a5bbc2019f9030af66d6573e348daf",
-        "version" : "12.11.0"
+        "revision" : "1239c23464503053c17d37ee5daa70de3455e9c8",
+        "version" : "12.14.0"
       }
     },
     {
@@ -51,8 +51,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/googleads/swift-package-manager-google-user-messaging-platform.git",
       "state" : {
-        "revision" : "69b53394c5258b3fe688e625a998047d1f393497",
-        "version" : "3.0.0"
+        "revision" : "13b248eaa73b7826f0efb1bcf455e251d65ecb1b",
+        "version" : "3.1.0"
       }
     },
     {
@@ -60,8 +60,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/muhiro12/SwiftUtilities",
       "state" : {
-        "revision" : "1e7e633caa979d8dafea34701dd48c8aa1b5e0ac",
-        "version" : "1.31.0"
+        "revision" : "be692d2baaefab20d560f51bbae1df7d1b5bc0df",
+        "version" : "1.33.0"
       }
     }
   ],
