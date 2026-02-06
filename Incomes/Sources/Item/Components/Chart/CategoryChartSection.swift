@@ -169,10 +169,14 @@ private extension CategoryChartSection {
 
     var incomeColorScale: [String: Color] {
         .init(
-            uniqueKeysWithValues: incomeObjects.map { object in
+            uniqueKeysWithValues: incomeObjects.enumerated().map { index, object in
                 (
                     object.label,
-                    adjustedChartColor(for: object.ratio, baseColor: .accent)
+                    adjustedChartColor(
+                        forRank: index,
+                        totalCount: incomeObjects.count,
+                        baseColor: .accent
+                    )
                 )
             }
         )
@@ -180,18 +184,27 @@ private extension CategoryChartSection {
 
     var outgoColorScale: [String: Color] {
         .init(
-            uniqueKeysWithValues: outgoObjects.map { object in
+            uniqueKeysWithValues: outgoObjects.enumerated().map { index, object in
                 (
                     object.label,
-                    adjustedChartColor(for: object.ratio, baseColor: .red)
+                    adjustedChartColor(
+                        forRank: index,
+                        totalCount: outgoObjects.count,
+                        baseColor: .red
+                    )
                 )
             }
         )
     }
 
-    func adjustedChartColor(for ratio: Double, baseColor: Color) -> Color {
-        let clampedRatio = min(max(ratio, 0), 1)
-        let percentage = (1 - clampedRatio) * 100
+    func adjustedChartColor(forRank index: Int, totalCount: Int, baseColor: Color) -> Color {
+        guard totalCount > 1 else {
+            return baseColor
+        }
+        let clampedIndex = min(max(index, 0), totalCount - 1)
+        let progress = Double(clampedIndex) / Double(totalCount - 1)
+        let maxAdjustment = 60.0
+        let percentage = maxAdjustment * progress
         return baseColor.adjusted(by: percentage)
     }
 
