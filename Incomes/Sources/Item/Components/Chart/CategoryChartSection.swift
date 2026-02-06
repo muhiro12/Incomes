@@ -58,9 +58,11 @@ private extension CategoryChartSection {
                 .chartForegroundStyleScale { (label: String) in
                     incomeColorScale[label] ?? .accent
                 }
+                .chartLegend(.hidden)
                 totalLabel(amount: incomeTotal)
             }
             .frame(height: .component(.xl))
+            incomeLegend
         }
     }
 
@@ -87,9 +89,11 @@ private extension CategoryChartSection {
                 .chartForegroundStyleScale { (label: String) in
                     outgoColorScale[label] ?? .red
                 }
+                .chartLegend(.hidden)
                 totalLabel(amount: outgoTotal)
             }
             .frame(height: .component(.xl))
+            outgoLegend
         }
         .padding(.top, .space(.s))
     }
@@ -103,6 +107,16 @@ private extension CategoryChartSection {
             Text(amount.asCurrency)
                 .font(.headline)
         }
+    }
+
+    @ViewBuilder
+    var incomeLegend: some View {
+        legendList(objects: incomeObjects, colorScale: incomeColorScale)
+    }
+
+    @ViewBuilder
+    var outgoLegend: some View {
+        legendList(objects: outgoObjects, colorScale: outgoColorScale)
     }
 }
 
@@ -203,9 +217,45 @@ private extension CategoryChartSection {
         }
         let clampedIndex = min(max(index, 0), totalCount - 1)
         let progress = Double(clampedIndex) / Double(totalCount - 1)
-        let maxAdjustment = 60.0
+        let maxAdjustment = 80.0
         let percentage = maxAdjustment * progress
         return baseColor.adjusted(by: percentage)
+    }
+
+    @ViewBuilder
+    func legendList(
+        objects: [(title: String, value: Decimal, ratio: Double, label: String)],
+        colorScale: [String: Color]
+    ) -> some View {
+        let columns: [GridItem] = [
+            .init(.flexible(), spacing: .space(.s), alignment: .leading),
+            .init(.flexible(), spacing: .space(.s), alignment: .leading)
+        ]
+        LazyVGrid(columns: columns, alignment: .leading) {
+            ForEach(objects, id: \.label) { object in
+                VStack {
+                    HStack {
+                        Circle()
+                            .fill(colorScale[object.label] ?? .secondary)
+                            .frame(width: 6, height: 6)
+                        Text(object.title)
+                            .font(.caption.bold())
+                            .foregroundStyle(.secondary)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                    HStack {
+                        Circle()
+                            .fill(.clear)
+                            .frame(width: 6, height: 6)
+                        Text("\(percentString(for: object.ratio)), \(object.value.asCurrency)")
+                            .font(.caption2)
+                            .foregroundStyle(.secondary)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                }
+            }
+        }
+        .padding(.top, .space(.xs))
     }
 
     func ratioFor(value: Decimal, total: Decimal) -> Double {
