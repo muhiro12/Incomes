@@ -167,7 +167,7 @@ extension Item: Comparable {
             return lhs.utcDate > rhs.utcDate
         }
         if lhs.priority != rhs.priority {
-            return lhs.priority > rhs.priority
+            return lhs.priority < rhs.priority
         }
         if lhs.content != rhs.content {
             return lhs.content > rhs.content
