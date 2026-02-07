@@ -227,12 +227,11 @@ public extension FetchDescriptor where T == Item {
     ///   - predicate: A preset predicate.
     ///   - order: Sort order (default: reverse).
     static func items(_ predicate: ItemPredicate, order: SortOrder = .reverse) -> FetchDescriptor {
-        let priorityOrder: SortOrder = .reverse
-        return .init(
+        .init(
             predicate: predicate.value,
             sortBy: [
                 .init(\.date, order: order),
-                .init(\.priority, order: priorityOrder),
+                .init(\.priority, order: order == .forward ? .reverse : .forward),
                 .init(\.content, order: order),
                 .init(\.persistentModelID, order: order)
             ]
