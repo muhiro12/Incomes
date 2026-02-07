@@ -19,6 +19,104 @@ struct ItemPredicateTest {
         context = testContext
     }
 
+    // MARK: - Sort Order
+
+    @Test("List order respects content name when priorities match", arguments: timeZones)
+    func listNameOrderIsExpected(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
+        let baseDate = shiftedDate("2000-01-01T12:00:00Z")
+        _ = try Item.create(
+            context: context,
+            date: baseDate,
+            content: "Item A",
+            income: 0,
+            outgo: 10,
+            category: "category",
+            priority: 0,
+            repeatID: UUID()
+        )
+        _ = try Item.create(
+            context: context,
+            date: baseDate,
+            content: "Item B",
+            income: 0,
+            outgo: 20,
+            category: "category",
+            priority: 0,
+            repeatID: UUID()
+        )
+
+        let items = try context.fetch(.items(.all, order: .reverse))
+        #expect(items.count == 2)
+        #expect(items[0].content == "Item B")
+        #expect(items[1].content == "Item A")
+    }
+
+    @Test("List order is as expected when priorities share the same date", arguments: timeZones)
+    func listPriorityOrderIsExpected(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
+        let baseDate = shiftedDate("2000-01-01T12:00:00Z")
+        _ = try Item.create(
+            context: context,
+            date: baseDate,
+            content: "Item A",
+            income: 0,
+            outgo: 50,
+            category: "category",
+            priority: 0,
+            repeatID: UUID()
+        )
+        _ = try Item.create(
+            context: context,
+            date: baseDate,
+            content: "Item B",
+            income: 100,
+            outgo: 0,
+            category: "category",
+            priority: 1,
+            repeatID: UUID()
+        )
+
+        let items = try context.fetch(.items(.all, order: .reverse))
+        #expect(items.count == 2)
+        #expect(items[0].content == "Item A")
+        #expect(items[1].content == "Item B")
+    }
+
+    @Test("List order is consistent between priority 0/1 and 1/2", arguments: timeZones)
+    func listPriorityOrderIsConsistent(_ timeZone: TimeZone) throws {
+        NSTimeZone.default = timeZone
+
+        let baseDate = shiftedDate("2000-01-01T12:00:00Z")
+        _ = try Item.create(
+            context: context,
+            date: baseDate,
+            content: "Item A",
+            income: 0,
+            outgo: 10,
+            category: "category",
+            priority: 1,
+            repeatID: UUID()
+        )
+        _ = try Item.create(
+            context: context,
+            date: baseDate,
+            content: "Item B",
+            income: 0,
+            outgo: 20,
+            category: "category",
+            priority: 2,
+            repeatID: UUID()
+        )
+
+        let items = try context.fetch(.items(.all, order: .reverse))
+        #expect(items.count == 2)
+        #expect(items[0].content == "Item A")
+        #expect(items[1].content == "Item B")
+    }
+
     // MARK: - All
 
     @Test("returns all items for .all predicate", arguments: timeZones)
