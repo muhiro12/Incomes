@@ -79,6 +79,7 @@ XDG_CACHE_HOME="$cache_directory" \
 CLANG_MODULE_CACHE_PATH="$clang_module_cache_directory" \
 SWIFTPM_CACHE_PATH="$swiftpm_cache_directory" \
 SWIFTPM_CONFIG_PATH="$swiftpm_config_directory" \
+PLL_SOURCE_PACKAGES_PATH="$cloned_source_packages_directory" \
 xcodebuild \
   -project "$project_path" \
   -scheme "IncomesLibrary" \
