@@ -1,5 +1,5 @@
 {
-  "originHash" : "b2388d6fdc8a56b0635f43f34c9700a901cca0e1acbe3d85797dae8f578f6f02",
+  "originHash" : "7b220e647229bb270c24b4576a09ef74bcda3f01e3d71a4e387612df3c918f7c",
   "pins" : [
     {
       "identity" : "googlemobileadswrapper",
@@ -60,8 +60,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/muhiro12/SwiftUtilities",
       "state" : {
-        "revision" : "72776c9fe4f0a0c5cc570c9c162103e5214b0231",
-        "version" : "1.35.0"
+        "revision" : "be692d2baaefab20d560f51bbae1df7d1b5bc0df",
+        "version" : "1.33.0"
       }
     }
   ],
