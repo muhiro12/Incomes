@@ -141,6 +141,93 @@ struct BalanceCalculatorTests {
             #expect(items[1].balance == 50)
         }
 
+        @Test("List order respects content name when priorities match")
+        func list_name_order_is_expected() {
+            let context = testContext
+            let baseDate = shiftedDate("2000-01-01T12:00:00Z")
+            let firstItem = try! Item.create(context: context,
+                                             date: baseDate,
+                                             content: "Item A",
+                                             income: 0,
+                                             outgo: 10,
+                                             category: "category",
+                                             priority: 0,
+                                             repeatID: UUID())
+            let secondItem = try! Item.create(context: context,
+                                              date: baseDate,
+                                              content: "Item B",
+                                              income: 0,
+                                              outgo: 20,
+                                              category: "category",
+                                              priority: 0,
+                                              repeatID: UUID())
+            context.insert(firstItem)
+            context.insert(secondItem)
+
+            let items = try! context.fetch(.items(.all, order: .reverse))
+            #expect(items.count == 2)
+            #expect(items[0].content == "Item B")
+            #expect(items[1].content == "Item A")
+        }
+
+        @Test("List order is as expected when priorities share the same date")
+        func list_priority_order_is_expected() {
+            let context = testContext
+            let baseDate = shiftedDate("2000-01-01T12:00:00Z")
+            let lowPriorityItem = try! Item.create(context: context,
+                                                   date: baseDate,
+                                                   content: "Item A",
+                                                   income: 0,
+                                                   outgo: 50,
+                                                   category: "category",
+                                                   priority: 0,
+                                                   repeatID: UUID())
+            let highPriorityItem = try! Item.create(context: context,
+                                                    date: baseDate,
+                                                    content: "Item B",
+                                                    income: 100,
+                                                    outgo: 0,
+                                                    category: "category",
+                                                    priority: 1,
+                                                    repeatID: UUID())
+            context.insert(lowPriorityItem)
+            context.insert(highPriorityItem)
+
+            let items = try! context.fetch(.items(.all, order: .reverse))
+            #expect(items.count == 2)
+            #expect(items[0].content == "Item A")
+            #expect(items[1].content == "Item B")
+        }
+
+        @Test("List order is consistent between priority 0/1 and 1/2")
+        func list_priority_order_is_consistent() {
+            let context = testContext
+            let baseDate = shiftedDate("2000-01-01T12:00:00Z")
+            let firstItem = try! Item.create(context: context,
+                                             date: baseDate,
+                                             content: "Item A",
+                                             income: 0,
+                                             outgo: 10,
+                                             category: "category",
+                                             priority: 1,
+                                             repeatID: UUID())
+            let secondItem = try! Item.create(context: context,
+                                              date: baseDate,
+                                              content: "Item B",
+                                              income: 0,
+                                              outgo: 20,
+                                              category: "category",
+                                              priority: 2,
+                                              repeatID: UUID())
+            context.insert(firstItem)
+            context.insert(secondItem)
+
+            let items = try! context.fetch(.items(.all, order: .reverse))
+            #expect(items.count == 2)
+            #expect(items[0].content == "Item A")
+            #expect(items[1].content == "Item B")
+        }
+
         @Test("Result is as expected when updating")
         func updating_is_expected() {
             let context = testContext
