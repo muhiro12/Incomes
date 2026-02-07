@@ -16,6 +16,8 @@ import SwiftUI
 struct IncomesApp: App {
     @AppStorage(.isICloudOn)
     private var isICloudOn
+    @AppStorage(.lastLaunchedAppVersion)
+    private var lastLaunchedAppVersion
 
     private var sharedModelContainer: ModelContainer!
 
@@ -64,6 +66,10 @@ struct IncomesApp: App {
         }
         AppDependencyManager.shared.add {
             configurationService
+        }
+
+        if let currentAppVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
+            lastLaunchedAppVersion = currentAppVersion
         }
 
         IncomesShortcuts.updateAppShortcutParameters()

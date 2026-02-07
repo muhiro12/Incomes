@@ -10,6 +10,7 @@ import SwiftUI
 
 public enum StringAppStorageKey: String {
     case currencyCode = "R8k2Z3tL"
+    case lastLaunchedAppVersion = "j4N7v2Qk"
 }
 
 public enum BoolAppStorageKey: String {
