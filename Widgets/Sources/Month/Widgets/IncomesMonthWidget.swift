@@ -27,19 +27,25 @@ extension IncomesMonthWidget: Widget {
                             .singleLine()
                     }
                     Spacer(minLength: 0)
-                    VStack(alignment: .trailing, spacing: .space(.s)) {
-                        HStack(spacing: .space(.s)) {
+                    Grid(alignment: .trailing, horizontalSpacing: .space(.s), verticalSpacing: .space(.s)) {
+                        GridRow {
                             Image(systemName: "chevron.up")
-                                .foregroundStyle(.accent)
+                                .font(.subheadline.weight(.semibold))
+                                .symbolRenderingMode(.hierarchical)
+                                .foregroundStyle(.green)
                             Text(entry.totalIncomeText)
-                                .font(.title3)
+                                .font(.title2.weight(.semibold))
+                                .monospacedDigit()
                                 .singleLine()
                         }
-                        HStack(spacing: .space(.s)) {
+                        GridRow {
                             Image(systemName: "chevron.down")
+                                .font(.subheadline.weight(.semibold))
+                                .symbolRenderingMode(.hierarchical)
                                 .foregroundStyle(.red)
                             Text(entry.totalOutgoText)
-                                .font(.title3)
+                                .font(.title2.weight(.semibold))
+                                .monospacedDigit()
                                 .singleLine()
                         }
                     }
@@ -59,18 +65,26 @@ extension IncomesMonthWidget: Widget {
                         .singleLine()
                     HStack(spacing: .space(.s)) {
                         Image(systemName: "chevron.up")
-                            .foregroundStyle(.accent)
+                            .font(.caption.weight(.semibold))
+                            .symbolRenderingMode(.hierarchical)
+                            .foregroundStyle(.green)
+                            .frame(width: 14, alignment: .leading)
                         Text(entry.totalIncomeText)
+                            .font(.footnote.weight(.semibold))
+                            .monospacedDigit()
                             .singleLine()
                     }
-                    .font(.footnote)
                     HStack(spacing: .space(.s)) {
                         Image(systemName: "chevron.down")
+                            .font(.caption.weight(.semibold))
+                            .symbolRenderingMode(.hierarchical)
                             .foregroundStyle(.red)
+                            .frame(width: 14, alignment: .leading)
                         Text(entry.totalOutgoText)
+                            .font(.footnote.weight(.semibold))
+                            .monospacedDigit()
                             .singleLine()
                     }
-                    .font(.footnote)
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
                 .padding(.space(.s))
