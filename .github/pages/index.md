@@ -34,3 +34,4 @@ See the [README](../../README.md) for detailed setup instructions, testing comma
 
 - [App Store](https://apps.apple.com/app/id1584472982)
 - [Privacy Policy](privacy.html)
+- [Deep Links](deeplinks.html)
