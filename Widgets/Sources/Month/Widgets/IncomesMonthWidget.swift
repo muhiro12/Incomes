@@ -36,7 +36,8 @@ extension IncomesMonthWidget: Widget {
                             Text(entry.totalIncomeText)
                                 .font(.title2.weight(.semibold))
                                 .monospacedDigit()
-                                .singleLine()
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.8)
                         }
                         GridRow {
                             Image(systemName: "chevron.down")
@@ -46,7 +47,49 @@ extension IncomesMonthWidget: Widget {
                             Text(entry.totalOutgoText)
                                 .font(.title2.weight(.semibold))
                                 .monospacedDigit()
-                                .singleLine()
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.8)
+                        }
+                    }
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+                .padding(.space(.m))
+
+                // Medium (compact) layout: horizontal split
+                HStack(alignment: .center, spacing: .space(.s)) {
+                    VStack(alignment: .leading, spacing: .space(.xs)) {
+                        Text(Self.monthTitle(from: entry.date))
+                            .font(.footnote)
+                            .foregroundStyle(.secondary)
+                            .singleLine()
+                        Text("Income / Outgo")
+                            .font(.caption2)
+                            .foregroundStyle(.secondary)
+                            .singleLine()
+                    }
+                    Spacer(minLength: 0)
+                    Grid(alignment: .trailing, horizontalSpacing: .space(.s), verticalSpacing: .space(.xs)) {
+                        GridRow {
+                            Image(systemName: "chevron.up")
+                                .font(.caption.weight(.semibold))
+                                .symbolRenderingMode(.hierarchical)
+                                .foregroundStyle(.green)
+                            Text(entry.totalIncomeText)
+                                .font(.title3.weight(.semibold))
+                                .monospacedDigit()
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.7)
+                        }
+                        GridRow {
+                            Image(systemName: "chevron.down")
+                                .font(.caption.weight(.semibold))
+                                .symbolRenderingMode(.hierarchical)
+                                .foregroundStyle(.red)
+                            Text(entry.totalOutgoText)
+                                .font(.title3.weight(.semibold))
+                                .monospacedDigit()
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.7)
                         }
                     }
                 }
