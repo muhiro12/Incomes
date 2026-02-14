@@ -5,10 +5,7 @@ struct IncomesMonthNetIncomeWidget {
     private let kind: String = "com.muhiro12.Incomes.Widgets.MonthNetIncome"
 
     private static func monthTitle(from date: Date) -> String {
-        let formatter: DateFormatter = .init()
-        formatter.locale = .current
-        formatter.dateFormat = "yyyy MMM"
-        return formatter.string(from: date)
+        Formatting.monthTitle(from: date)
     }
 }
 
@@ -30,9 +27,11 @@ extension IncomesMonthNetIncomeWidget: Widget {
                     Spacer(minLength: 0)
                     HStack(spacing: .space(.s)) {
                         Image(systemName: entry.isPositive ? "chevron.up" : "chevron.down")
-                            .foregroundStyle(entry.isPositive ? .accent : .red)
+                            .font(.body.weight(.semibold))
+                            .foregroundStyle(entry.isPositive ? .green : .red)
                         Text(entry.netIncomeText)
-                            .font(.title3)
+                            .font(.title2.weight(.semibold))
+                            .monospacedDigit()
                             .singleLine()
                     }
                 }
@@ -50,9 +49,11 @@ extension IncomesMonthNetIncomeWidget: Widget {
                         .singleLine()
                     HStack(spacing: .space(.s)) {
                         Image(systemName: entry.isPositive ? "chevron.up" : "chevron.down")
-                            .foregroundStyle(entry.isPositive ? .accent : .red)
+                            .font(.footnote.weight(.semibold))
+                            .foregroundStyle(entry.isPositive ? .green : .red)
                         Text(entry.netIncomeText)
-                            .font(.headline)
+                            .font(.headline.weight(.semibold))
+                            .monospacedDigit()
                             .singleLine()
                     }
                 }
