@@ -31,10 +31,14 @@ extension IncomesUpcomingWidget: Widget {
                     Spacer(minLength: 0)
                     HStack(spacing: .space(.s)) {
                         Image(systemName: entry.isPositive ? "chevron.up" : "chevron.down")
-                            .foregroundStyle(entry.isPositive ? .accent : .red)
+                            .font(.subheadline.weight(.semibold))
+                            .symbolRenderingMode(.hierarchical)
+                            .foregroundStyle(entry.isPositive ? .green : .red)
                         Text(entry.amountText)
-                            .font(.title3)
-                            .singleLine()
+                            .font(.title2.weight(.semibold))
+                            .monospacedDigit()
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.8)
                     }
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
@@ -59,10 +63,14 @@ extension IncomesUpcomingWidget: Widget {
                     }
                     HStack(spacing: .space(.s)) {
                         Image(systemName: entry.isPositive ? "chevron.up" : "chevron.down")
-                            .foregroundStyle(entry.isPositive ? .accent : .red)
+                            .font(.caption.weight(.semibold))
+                            .symbolRenderingMode(.hierarchical)
+                            .foregroundStyle(entry.isPositive ? .green : .red)
                         Text(entry.amountText)
-                            .font(.headline)
-                            .singleLine()
+                            .font(.headline.weight(.semibold))
+                            .monospacedDigit()
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.85)
                     }
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
