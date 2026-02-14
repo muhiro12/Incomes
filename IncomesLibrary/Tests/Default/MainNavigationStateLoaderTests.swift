@@ -39,15 +39,15 @@ struct MainNavigationStateLoaderTests {
     @Test
     func load_resolves_year_and_year_month_tags_for_date() throws {
         let date = shiftedDate("2002-04-05T12:00:00Z")
-        _ = try Item.create(
+        _ = try Tag.create(
             context: context,
-            date: date,
-            content: "Content",
-            income: 0,
-            outgo: 50,
-            category: "Category",
-            priority: 0,
-            repeatID: .init()
+            name: date.stringValueWithoutLocale(.yyyy),
+            type: .year
+        )
+        _ = try Tag.create(
+            context: context,
+            name: date.stringValueWithoutLocale(.yyyyMM),
+            type: .yearMonth
         )
 
         let state = try MainNavigationStateLoader.load(

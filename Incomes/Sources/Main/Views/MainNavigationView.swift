@@ -5,6 +5,7 @@
 //  Created by Hiromu Nakano on 9/20/24.
 //
 
+import Foundation
 import SwiftData
 import SwiftUI
 
@@ -14,6 +15,8 @@ struct MainNavigationView: View {
 
     @Query(.tags(.typeIs(.year), order: .reverse))
     private var yearTags: [Tag]
+
+    @Binding private var incomingRoute: IncomesRoute?
 
     @State private var yearTagID: Tag.ID?
     @State private var tag: Tag?
@@ -28,6 +31,12 @@ struct MainNavigationView: View {
 
     @State private var hasLoaded = false
     @State private var isIntroductionPresented = false
+    @State private var pendingRoute: IncomesRoute?
+
+    init(incomingRoute: Binding<IncomesRoute?> = .constant(nil)) {
+        _incomingRoute = incomingRoute
+    }
+
     private var selectedYearTag: Tag? {
         guard let yearTagID else {
             return nil
@@ -166,6 +175,9 @@ struct MainNavigationView: View {
         .sheet(isPresented: $isIntroductionPresented) {
             IntroductionNavigationView()
         }
+        .onChange(of: incomingRoute) {
+            handleIncomingRouteIfNeeded()
+        }
         .task {
             do {
                 let state = try MainNavigationStateLoader.load(
@@ -181,7 +193,87 @@ struct MainNavigationView: View {
                 assertionFailure(error.localizedDescription)
             }
 
+            handleIncomingRouteIfNeeded()
+            applyPendingRouteIfNeeded()
+
             await PhoneWatchBridge.shared.activate(modelContext: context)
+        }
+    }
+}
+
+private extension MainNavigationView {
+    func handleIncomingRouteIfNeeded() {
+        guard let route = incomingRoute else {
+            return
+        }
+        if hasLoaded {
+            apply(route: route)
+        } else {
+            pendingRoute = route
+        }
+        incomingRoute = nil
+    }
+
+    func applyPendingRouteIfNeeded() {
+        guard hasLoaded,
+              let pendingRoute else {
+            return
+        }
+        apply(route: pendingRoute)
+        self.pendingRoute = nil
+    }
+
+    func apply(route: IncomesRoute) {
+        do {
+            switch route {
+            case .home:
+                let state = try MainNavigationStateLoader.load(
+                    context: context
+                )
+                yearTagID = state.yearTag?.persistentModelID
+                tag = state.yearMonthTag
+                isSearchPresented = false
+                searchText = .empty
+                predicate = nil
+            case .settings:
+                isSettingsPresented = true
+            case .year(let year):
+                let yearTagName = String(format: "%04d", year)
+                let yearTag = try TagService.getByName(
+                    context: context,
+                    name: yearTagName,
+                    type: .year
+                )
+                yearTagID = yearTag?.persistentModelID
+                tag = nil
+                isSearchPresented = false
+                searchText = .empty
+                predicate = nil
+            case .month(let year, let month):
+                let yearTagName = String(format: "%04d", year)
+                let yearMonthTagName = String(format: "%04d%02d", year, month)
+                let yearTag = try TagService.getByName(
+                    context: context,
+                    name: yearTagName,
+                    type: .year
+                )
+                let yearMonthTag = try TagService.getByName(
+                    context: context,
+                    name: yearMonthTagName,
+                    type: .yearMonth
+                )
+                yearTagID = yearTag?.persistentModelID
+                tag = yearMonthTag
+                isSearchPresented = false
+                searchText = .empty
+                predicate = nil
+            case .search(let query):
+                isSearchPresented = true
+                searchText = query ?? .empty
+                predicate = nil
+            }
+        } catch {
+            assertionFailure(error.localizedDescription)
         }
     }
 }

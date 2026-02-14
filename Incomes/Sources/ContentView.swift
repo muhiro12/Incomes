@@ -33,11 +33,12 @@ struct ContentView {
     private var isDebugOn
 
     @State private var isUpdateAlertPresented = false
+    @State private var incomingRoute: IncomesRoute?
 }
 
 extension ContentView: View {
     var body: some View {
-        MainNavigationView()
+        MainNavigationView(incomingRoute: $incomingRoute)
             .alert("Update Required", isPresented: $isUpdateAlertPresented) {
                 Button("Open App Store") {
                     UIApplication.shared.open(
@@ -92,6 +93,24 @@ extension ContentView: View {
                     }
                 }
             }
+            .onOpenURL { url in
+                handleIncomingURL(url)
+            }
+            .onContinueUserActivity(NSUserActivityTypeBrowsingWeb) { userActivity in
+                guard let webpageURL = userActivity.webpageURL else {
+                    return
+                }
+                handleIncomingURL(webpageURL)
+            }
+    }
+}
+
+private extension ContentView {
+    func handleIncomingURL(_ url: URL) {
+        guard let route = IncomesRouteParser.parse(url: url) else {
+            return
+        }
+        incomingRoute = route
     }
 }
 

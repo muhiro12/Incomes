@@ -3,6 +3,7 @@ import Foundation
 import SwiftData
 import Testing
 
+@Suite(.serialized)
 struct ItemServiceTests {
     let context: ModelContext
 
