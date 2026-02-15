@@ -18,16 +18,14 @@ struct ListItem: View {
     private var horizontalSizeClass
 
     @State private var detents = PresentationDetent.medium
+    @StateObject private var router: ListItemRouter = .init()
 
-    @State private var isDetailPresented = false
-    @State private var isEditPresented = false
-    @State private var isDuplicatePresented = false
     @State private var isDeletePresented = false
 
     var body: some View {
         Button {
             detents = .medium
-            isDetailPresented = true
+            router.navigate(to: .detail)
         } label: {
             Group {
                 if horizontalSizeClass == .regular {
@@ -42,13 +40,13 @@ struct ListItem: View {
         .contextMenu {
             ShowItemButton {
                 detents = .large
-                isDetailPresented = true
+                router.navigate(to: .detail)
             }
             EditItemButton {
-                isEditPresented = true
+                router.navigate(to: .edit)
             }
             DuplicateItemButton {
-                isDuplicatePresented = true
+                router.navigate(to: .duplicate)
             }
             RecalculateItemButton()
             DeleteItemButton {
@@ -59,18 +57,8 @@ struct ListItem: View {
             ItemPreviewNavigationView()
                 .environment(item)
         }
-        .sheet(isPresented: $isDetailPresented) {
-            ItemNavigationView()
-                .presentationDetents(
-                    [.medium, .large],
-                    selection: $detents
-                )
-        }
-        .sheet(isPresented: $isEditPresented) {
-            ItemFormNavigationView(mode: .edit)
-        }
-        .sheet(isPresented: $isDuplicatePresented) {
-            ItemFormNavigationView(mode: .create)
+        .sheet(item: $router.route) { route in
+            buildSheet(for: route)
         }
         .confirmationDialog(
             Text("Delete \(item.content)"),
@@ -96,6 +84,43 @@ struct ListItem: View {
         } message: {
             Text("Are you sure you want to delete this item?")
         }
+    }
+}
+
+@MainActor
+private final class ListItemRouter: ObservableObject {
+    @Published var route: ListItemRoute?
+
+    func navigate(to route: ListItemRoute) {
+        self.route = route
+    }
+}
+
+private extension ListItem {
+    @ViewBuilder
+    func buildSheet(for route: ListItemRoute) -> some View {
+        switch route {
+        case .detail:
+            ItemNavigationView()
+                .presentationDetents(
+                    [.medium, .large],
+                    selection: $detents
+                )
+        case .edit:
+            ItemFormNavigationView(mode: .edit)
+        case .duplicate:
+            ItemFormNavigationView(mode: .create)
+        }
+    }
+}
+
+private enum ListItemRoute: String, Identifiable {
+    case detail
+    case edit
+    case duplicate
+
+    var id: String {
+        rawValue
     }
 }
 

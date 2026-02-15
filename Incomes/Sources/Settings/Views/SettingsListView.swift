@@ -29,35 +29,34 @@ struct SettingsListView {
     @AppStorage(.isDebugOn)
     private var isDebugOn
 
-    @Binding private var tag: Tag?
-
     @State private var isNotificationEnabled = true
-    @State private var isIntroductionPresented = false
     @State private var isDeleteDialogPresented = false
     @State private var isDeleteDebugDialogPresented = false
-    @State private var isDuplicateTagPresented = false
-    @State private var isYearlyDuplicationPresented = false
     @State private var hasDuplicateTags = false
     @State private var hasDebugData = false
 
-    init(selection: Binding<Tag?> = .constant(nil)) {
-        _tag = selection
+    private let navigateToRoute: (IncomesRoute) -> Void
+
+    init(
+        navigateToRoute: @escaping (IncomesRoute) -> Void = { _ in
+        }
+    ) {
+        self.navigateToRoute = navigateToRoute
     }
 }
 
 extension SettingsListView: View {
     var body: some View {
-        List(selection: $tag) {
+        List {
             if isSubscribeOn {
                 Toggle(isOn: $isICloudOn) {
                     Text("iCloud On")
                 }
             } else {
-                NavigationLink {
-                    StoreListView()
-                } label: {
-                    Text("Subscription")
-                }
+                routeRowButton(
+                    "Subscription",
+                    route: .settingsSubscription
+                )
             }
             Section {
                 Picker(selection: $currencyCode) {
@@ -100,7 +99,7 @@ extension SettingsListView: View {
             }
             Section {
                 Button("Duplicate year items") {
-                    isYearlyDuplicationPresented = true
+                    navigateToRoute(.yearlyDuplication)
                 }
                 Button(role: .destructive) {
                     Haptic.warning.impact()
@@ -114,7 +113,7 @@ extension SettingsListView: View {
             if hasDuplicateTags {
                 Section {
                     Button {
-                        isDuplicateTagPresented = true
+                        navigateToRoute(.duplicateTags)
                     } label: {
                         Text("Resolve duplicate tags")
                     }
@@ -148,13 +147,12 @@ extension SettingsListView: View {
             }
             Section {
                 Button("View App Introduction Again") {
-                    isIntroductionPresented = true
+                    navigateToRoute(.introduction)
                 }
-                NavigationLink {
-                    LicenseView()
-                } label: {
-                    Text("License")
-                }
+                routeRowButton(
+                    "License",
+                    route: .settingsLicense
+                )
                 if let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String,
                    let build = Bundle.main.infoDictionary?["CFBundleVersion"] as? String {
                     HStack {
@@ -168,11 +166,10 @@ extension SettingsListView: View {
             ShortcutsLinkSection()
             if isDebugOn {
                 Section {
-                    NavigationLink {
-                        DebugNavigationView()
-                    } label: {
-                        Text("Debug")
-                    }
+                    routeRowButton(
+                        "Debug",
+                        route: .settingsDebug
+                    )
                 }
             }
         }
@@ -181,14 +178,6 @@ extension SettingsListView: View {
         .toolbar {
             ToolbarItem {
                 CloseButton()
-            }
-        }
-        .sheet(isPresented: $isIntroductionPresented) {
-            IntroductionNavigationView()
-        }
-        .sheet(isPresented: $isYearlyDuplicationPresented) {
-            NavigationStack {
-                YearlyDuplicationView()
             }
         }
         .confirmationDialog(
@@ -233,9 +222,6 @@ extension SettingsListView: View {
         } message: {
             Text("This will remove tutorial/debug items and tags. Continue?")
         }
-        .fullScreenCover(isPresented: $isDuplicateTagPresented) {
-            DuplicateTagNavigationView()
-        }
         .task {
             updateStatus()
 
@@ -263,6 +249,24 @@ extension SettingsListView: View {
 }
 
 private extension SettingsListView {
+    func routeRowButton(
+        _ title: LocalizedStringKey,
+        route: IncomesRoute
+    ) -> some View {
+        Button {
+            navigateToRoute(route)
+        } label: {
+            HStack {
+                Text(title)
+                Spacer()
+                Image(systemName: "chevron.right")
+                    .font(.footnote.weight(.semibold))
+                    .foregroundStyle(.tertiary)
+            }
+        }
+        .buttonStyle(.plain)
+    }
+
     func updateStatus() {
         do {
             let status = try SettingsActionCoordinator.loadStatus(context: context)

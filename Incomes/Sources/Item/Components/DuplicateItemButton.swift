@@ -9,7 +9,7 @@ import SwiftData
 import SwiftUI
 
 struct DuplicateItemButton {
-    @State private var isPresented = false
+    @StateObject private var router: DuplicateItemRouter = .init()
 
     private let action: (() -> Void)?
 
@@ -24,7 +24,7 @@ extension DuplicateItemButton: View {
             if let action {
                 action()
             } else {
-                isPresented = true
+                router.navigate(to: .duplicate)
             }
         } label: {
             Label {
@@ -33,9 +33,26 @@ extension DuplicateItemButton: View {
                 Image(systemName: "document.on.document")
             }
         }
-        .sheet(isPresented: $isPresented) {
+        .sheet(item: $router.route) { _ in
             ItemFormNavigationView(mode: .create)
         }
+    }
+}
+
+@MainActor
+private final class DuplicateItemRouter: ObservableObject {
+    @Published var route: DuplicateItemRoute?
+
+    func navigate(to route: DuplicateItemRoute) {
+        self.route = route
+    }
+}
+
+private enum DuplicateItemRoute: String, Identifiable {
+    case duplicate
+
+    var id: String {
+        rawValue
     }
 }
 

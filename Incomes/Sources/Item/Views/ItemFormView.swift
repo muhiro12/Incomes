@@ -23,6 +23,19 @@ struct ItemFormView: View {
         case category
     }
 
+    enum DialogRoute {
+        case debug
+        case repeating
+    }
+
+    enum SheetRoute: String, Identifiable {
+        case assist
+
+        var id: String {
+            rawValue
+        }
+    }
+
     @Environment(Tag.self)
     private var tag: Tag?
     @Environment(\.dismiss)
@@ -39,9 +52,7 @@ struct ItemFormView: View {
     private var isDebugOn
 
     @FocusState private var focusedField: Field?
-
-    @State private var isRepeatingDialogPresented = false
-    @State private var isDebugDialogPresented = false
+    @StateObject private var router: ItemFormRouter = .init()
 
     @State private var date: Date = .now
     @State private var content: String = .empty
@@ -51,7 +62,6 @@ struct ItemFormView: View {
     @State private var category: String = .empty
     @State private var repeatMonthSelections: Set<RepeatMonthSelection> = []
     @State private var isRepeatEnabled = false
-    @State private var isAssistPresented = false
 
     private let mode: Mode
     private let draft: ItemFormDraft?
@@ -191,7 +201,7 @@ struct ItemFormView: View {
             if #available(iOS 26.0, *) {
                 ToolbarItem(placement: .bottomBar) {
                     Button {
-                        isAssistPresented = true
+                        router.navigate(to: .assist)
                     } label: {
                         Label("Assist", systemImage: "wand.and.stars")
                     }
@@ -209,7 +219,7 @@ struct ItemFormView: View {
         )
         .confirmationDialog(
             Text("Debug"),
-            isPresented: $isDebugDialogPresented
+            isPresented: router.isDialogPresented(.debug)
         ) {
             Button {
                 isDebugOn = true
@@ -266,7 +276,7 @@ struct ItemFormView: View {
         }
         .confirmationDialog(
             "This is a repeating item.",
-            isPresented: $isRepeatingDialogPresented,
+            isPresented: router.isDialogPresented(.repeating),
             titleVisibility: .visible
         ) {
             Button("Save for this item only") {
@@ -278,20 +288,24 @@ struct ItemFormView: View {
             Button("Save for all items") {
                 saveForAllItems()
             }
-            Button("Cancel", role: .cancel) {}
+            Button("Cancel", role: .cancel) {
+            }
         }
         .navigationViewStyle(StackNavigationViewStyle())
-        .sheet(isPresented: $isAssistPresented) {
-            if #available(iOS 26.0, *) {
-                NavigationStack {
-                    ItemFormInputAssistView(
-                        date: $date,
-                        content: $content,
-                        income: $income,
-                        outgo: $outgo,
-                        category: $category,
-                        priority: $priority
-                    )
+        .sheet(item: $router.sheetRoute) { route in
+            switch route {
+            case .assist:
+                if #available(iOS 26.0, *) {
+                    NavigationStack {
+                        ItemFormInputAssistView(
+                            date: $date,
+                            content: $content,
+                            income: $income,
+                            outgo: $outgo,
+                            category: $category,
+                            priority: $priority
+                        )
+                    }
                 }
             }
         }
@@ -420,14 +434,14 @@ private extension ItemFormView {
     func cancel() {
         if content == "Enable Debug" {
             content = .empty
-            isDebugDialogPresented = true
+            router.presentDialog(.debug)
             return
         }
         dismiss()
     }
 
     func presentToRepeatingDialog() {
-        isRepeatingDialogPresented = true
+        router.presentDialog(.repeating)
     }
 
     func initialDate(for tag: Tag, currentDate: Date) -> Date {
@@ -494,6 +508,35 @@ private extension ItemFormView {
         case .edit:
             .edit
         }
+    }
+}
+
+@MainActor
+private final class ItemFormRouter: ObservableObject {
+    @Published var dialogRoute: ItemFormView.DialogRoute?
+    @Published var sheetRoute: ItemFormView.SheetRoute?
+
+    func presentDialog(_ route: ItemFormView.DialogRoute) {
+        dialogRoute = route
+    }
+
+    func navigate(to route: ItemFormView.SheetRoute) {
+        sheetRoute = route
+    }
+
+    func isDialogPresented(_ route: ItemFormView.DialogRoute) -> Binding<Bool> {
+        .init(
+            get: {
+                self.dialogRoute == route
+            },
+            set: { isPresented in
+                if isPresented {
+                    self.dialogRoute = route
+                } else if self.dialogRoute == route {
+                    self.dialogRoute = nil
+                }
+            }
+        )
     }
 }
 

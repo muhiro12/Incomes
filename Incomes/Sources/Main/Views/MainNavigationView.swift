@@ -18,37 +18,35 @@ struct MainNavigationView: View {
 
     @Binding private var incomingRoute: IncomesRoute?
 
-    @State private var yearTagID: Tag.ID?
-    @State private var tag: Tag?
-    @State private var searchText = ""
-    @State private var predicate: ItemPredicate?
-    @State private var isSearchPresented = false
-    @State private var isSettingsPresented = false
-    @State private var isYearlyDuplicationPresented = false
-    @State private var isYearDeleteDialogPresented = false
-    @State private var willDeleteItems: [Item] = []
-    @State private var willDeleteTags: [Tag] = []
-
-    @State private var hasLoaded = false
-    @State private var isIntroductionPresented = false
-    @State private var pendingRoute: IncomesRoute?
+    @StateObject private var router: MainNavigationRouter = .init()
 
     init(incomingRoute: Binding<IncomesRoute?> = .constant(nil)) {
         _incomingRoute = incomingRoute
     }
 
     private var selectedYearTag: Tag? {
-        guard let yearTagID else {
+        guard let yearTagID = router.yearTagID else {
             return nil
         }
-        return yearTags.first { tag in
-            tag.persistentModelID == yearTagID
+        return yearTags.first { yearTag in
+            yearTag.persistentModelID == yearTagID
         }
+    }
+
+    private var yearTagSelection: Binding<Tag.ID?> {
+        .init(
+            get: {
+                router.yearTagID
+            },
+            set: { yearTagID in
+                handleYearTagSelection(yearTagID)
+            }
+        )
     }
 
     var body: some View {
         NavigationSplitView {
-            List(selection: $yearTagID) {
+            List(selection: yearTagSelection) {
                 ForEach(yearTags, id: \.persistentModelID) { yearTag in
                     TagSummaryRow()
                         .environment(yearTag)
@@ -56,14 +54,14 @@ struct MainNavigationView: View {
                 }
                 .onDelete { indices in
                     Haptic.warning.impact()
-                    isYearDeleteDialogPresented = true
-                    willDeleteTags = indices.compactMap { index in
+                    router.isYearDeleteDialogPresented = true
+                    router.willDeleteTags = indices.compactMap { index in
                         guard yearTags.indices.contains(index) else {
                             return nil
                         }
                         return yearTags[index]
                     }
-                    willDeleteItems = TagService.resolveItemsForDeletion(
+                    router.willDeleteItems = TagService.resolveItemsForDeletion(
                         from: yearTags,
                         indices: indices
                     )
@@ -72,27 +70,27 @@ struct MainNavigationView: View {
                     context: context,
                     yearTags: yearTags
                 ) {
-                    isYearlyDuplicationPresented = true
+                    navigate(to: .yearlyDuplication)
                 }
             }
             .confirmationDialog(
                 Text("Delete"),
-                isPresented: $isYearDeleteDialogPresented
+                isPresented: $router.isYearDeleteDialogPresented
             ) {
                 Button(role: .destructive) {
                     do {
                         try ItemService.delete(
                             context: context,
-                            items: willDeleteItems
+                            items: router.willDeleteItems
                         )
                         if let selectedYearTag,
-                           willDeleteTags.contains(where: { tag in
-                            tag.name == selectedYearTag.name && tag.typeID == selectedYearTag.typeID
+                           router.willDeleteTags.contains(where: { deletingTag in
+                            deletingTag.name == selectedYearTag.name && deletingTag.typeID == selectedYearTag.typeID
                            }) {
-                            yearTagID = nil
+                            router.yearTagID = nil
                         }
-                        willDeleteItems = []
-                        willDeleteTags = []
+                        router.willDeleteItems = []
+                        router.willDeleteTags = []
                         Haptic.success.impact()
                     } catch {
                         assertionFailure(error.localizedDescription)
@@ -101,8 +99,8 @@ struct MainNavigationView: View {
                     Text("Delete")
                 }
                 Button(role: .cancel) {
-                    willDeleteItems = []
-                    willDeleteTags = []
+                    router.willDeleteItems = []
+                    router.willDeleteTags = []
                 } label: {
                     Text("Cancel")
                 }
@@ -113,7 +111,7 @@ struct MainNavigationView: View {
             .toolbar {
                 ToolbarItem {
                     Button("Settings", systemImage: "gear") {
-                        isSettingsPresented = true
+                        navigate(to: .settings)
                     }
                 }
             }
@@ -128,17 +126,19 @@ struct MainNavigationView: View {
             }
         } content: {
             Group {
-                if isSearchPresented {
+                if router.isSearchPresented {
                     SearchListView(
-                        selection: $predicate,
-                        searchText: $searchText
+                        selection: $router.predicate,
+                        searchText: $router.searchText
                     )
                 } else if let selectedYearTag {
-                    HomeListView(selection: $tag)
-                        .environment(selectedYearTag)
+                    HomeListView { route in
+                        navigate(to: route)
+                    }
+                    .environment(selectedYearTag)
                 }
             }
-            .searchable(text: $searchText, isPresented: $isSearchPresented)
+            .searchable(text: $router.searchText, isPresented: $router.isSearchPresented)
             .toolbar {
                 StatusToolbarItem("Today: \(Date.now.stringValue(.yyyyMMMd))")
             }
@@ -156,45 +156,76 @@ struct MainNavigationView: View {
                     }
                 }
             }
-            .sheet(isPresented: $isSettingsPresented) {
-                SettingsNavigationView()
+        } detail: {
+            if router.isSearchPresented {
+                SearchResultView(predicate: router.predicate ?? .none)
+            } else if let selectedTag = router.selectedTag {
+                ItemListGroup()
+                    .environment(selectedTag)
             }
-            .sheet(isPresented: $isYearlyDuplicationPresented) {
+        }
+        .sheet(
+            item: $router.sheetRoute,
+            onDismiss: {
+                do {
+                    try router.applyPendingRouteAfterSettingsDismissalIfNeeded(
+                        context: context
+                    )
+                } catch {
+                    assertionFailure(error.localizedDescription)
+                }
+            }
+        ) { sheetRoute in
+            switch sheetRoute {
+            case .settings:
+                SettingsNavigationView(
+                    incomingDestination: $router.settingsDestination
+                ) { route in
+                    do {
+                        try router.navigateFromSettings(
+                            to: route,
+                            context: context
+                        )
+                    } catch {
+                        assertionFailure(error.localizedDescription)
+                    }
+                }
+            case .yearlyDuplication:
                 NavigationStack {
                     YearlyDuplicationView()
                 }
-            }
-        } detail: {
-            if isSearchPresented {
-                SearchResultView(predicate: predicate ?? .none)
-            } else if let tag {
-                ItemListGroup()
-                    .environment(tag)
+            case .introduction:
+                IntroductionNavigationView()
             }
         }
-        .sheet(isPresented: $isIntroductionPresented) {
-            IntroductionNavigationView()
+        .fullScreenCover(item: $router.fullScreenRoute) { fullScreenRoute in
+            switch fullScreenRoute {
+            case .duplicateTags:
+                DuplicateTagNavigationView()
+            }
         }
         .onChange(of: incomingRoute) {
-            handleIncomingRouteIfNeeded()
+            do {
+                try handleIncomingRoute()
+            } catch {
+                assertionFailure(error.localizedDescription)
+            }
         }
         .task {
             do {
-                let state = try MainNavigationStateLoader.load(
+                try router.loadState(
                     context: context
                 )
-                if !hasLoaded {
-                    hasLoaded = true
-                    isIntroductionPresented = state.isIntroductionPresented
-                }
-                yearTagID = state.yearTag?.persistentModelID
-                tag = state.yearMonthTag
             } catch {
                 assertionFailure(error.localizedDescription)
             }
 
-            handleIncomingRouteIfNeeded()
-            applyPendingRouteIfNeeded()
+            do {
+                try handleIncomingRoute()
+                try router.applyPendingRouteIfNeeded(context: context)
+            } catch {
+                assertionFailure(error.localizedDescription)
+            }
 
             await PhoneWatchBridge.shared.activate(modelContext: context)
         }
@@ -202,78 +233,221 @@ struct MainNavigationView: View {
 }
 
 private extension MainNavigationView {
-    func handleIncomingRouteIfNeeded() {
+    func handleYearTagSelection(_ yearTagID: Tag.ID?) {
+        guard let yearTagID else {
+            router.selectYearTagID(nil)
+            return
+        }
+        guard let yearTag = yearTags.first(where: { yearTag in
+            yearTag.persistentModelID == yearTagID
+        }) else {
+            return
+        }
+        guard let year = Int(yearTag.name),
+              1...9_999 ~= year else {
+            router.selectYearTagID(yearTagID)
+            return
+        }
+        navigate(to: .year(year))
+    }
+
+    func navigate(to route: IncomesRoute) {
+        do {
+            try router.navigate(
+                to: route,
+                context: context
+            )
+        } catch {
+            assertionFailure(error.localizedDescription)
+        }
+    }
+
+    func handleIncomingRoute() throws {
         guard let route = incomingRoute else {
             return
         }
+        try router.handleIncomingRoute(route, context: context)
+        incomingRoute = nil
+    }
+}
+
+enum MainNavigationSheetRoute: String, Identifiable {
+    case settings
+    case yearlyDuplication
+    case introduction
+
+    var id: String {
+        rawValue
+    }
+}
+
+enum MainNavigationFullScreenRoute: String, Identifiable {
+    case duplicateTags
+
+    var id: String {
+        rawValue
+    }
+}
+
+@MainActor
+final class MainNavigationRouter: ObservableObject {
+    @Published var yearTagID: Tag.ID?
+    @Published var selectedTag: Tag?
+    @Published var searchText = ""
+    @Published var predicate: ItemPredicate?
+    @Published var isSearchPresented = false
+    @Published var sheetRoute: MainNavigationSheetRoute?
+    @Published var fullScreenRoute: MainNavigationFullScreenRoute?
+    @Published var settingsDestination: SettingsNavigationDestination?
+    @Published var isYearDeleteDialogPresented = false
+    @Published var willDeleteItems: [Item] = []
+    @Published var willDeleteTags: [Tag] = []
+
+    private var hasLoaded = false
+    private var pendingRoute: IncomesRoute?
+    private var pendingRouteAfterSettingsDismissal: IncomesRoute?
+
+    func loadState(context: ModelContext) throws {
+        let state = try MainNavigationStateLoader.load(context: context)
+        if hasLoaded == false {
+            hasLoaded = true
+            if state.isIntroductionPresented {
+                sheetRoute = .introduction
+            }
+        }
+        yearTagID = state.yearTag?.persistentModelID
+        selectedTag = state.yearMonthTag
+    }
+
+    func handleIncomingRoute(
+        _ route: IncomesRoute?,
+        context: ModelContext
+    ) throws {
+        guard let route else {
+            return
+        }
         if hasLoaded {
-            apply(route: route)
+            try apply(route: route, context: context)
         } else {
             pendingRoute = route
         }
-        incomingRoute = nil
     }
 
-    func applyPendingRouteIfNeeded() {
+    func navigate(
+        to route: IncomesRoute,
+        context: ModelContext
+    ) throws {
+        try apply(route: route, context: context)
+    }
+
+    func navigateFromSettings(
+        to route: IncomesRoute,
+        context: ModelContext
+    ) throws {
+        if isSettingsPresented && route.isSettingsScopeRoute {
+            try apply(route: route, context: context)
+        } else if isSettingsPresented {
+            pendingRouteAfterSettingsDismissal = route
+            sheetRoute = nil
+        } else {
+            try apply(route: route, context: context)
+        }
+    }
+
+    func applyPendingRouteIfNeeded(context: ModelContext) throws {
         guard hasLoaded,
               let pendingRoute else {
             return
         }
-        apply(route: pendingRoute)
+        try apply(route: pendingRoute, context: context)
         self.pendingRoute = nil
     }
 
-    func apply(route: IncomesRoute) {
-        do {
-            switch route {
-            case .home:
-                let state = try MainNavigationStateLoader.load(
-                    context: context
-                )
-                yearTagID = state.yearTag?.persistentModelID
-                tag = state.yearMonthTag
-                isSearchPresented = false
-                searchText = .empty
-                predicate = nil
-            case .settings:
-                isSettingsPresented = true
-            case .year(let year):
-                let yearTagName = String(format: "%04d", year)
-                let yearTag = try TagService.getByName(
-                    context: context,
-                    name: yearTagName,
-                    type: .year
-                )
-                yearTagID = yearTag?.persistentModelID
-                tag = nil
-                isSearchPresented = false
-                searchText = .empty
-                predicate = nil
-            case .month(let year, let month):
-                let yearTagName = String(format: "%04d", year)
-                let yearMonthTagName = String(format: "%04d%02d", year, month)
-                let yearTag = try TagService.getByName(
-                    context: context,
-                    name: yearTagName,
-                    type: .year
-                )
-                let yearMonthTag = try TagService.getByName(
-                    context: context,
-                    name: yearMonthTagName,
-                    type: .yearMonth
-                )
-                yearTagID = yearTag?.persistentModelID
-                tag = yearMonthTag
-                isSearchPresented = false
-                searchText = .empty
-                predicate = nil
-            case .search(let query):
-                isSearchPresented = true
-                searchText = query ?? .empty
-                predicate = nil
-            }
-        } catch {
-            assertionFailure(error.localizedDescription)
+    func applyPendingRouteAfterSettingsDismissalIfNeeded(
+        context: ModelContext
+    ) throws {
+        guard isSettingsPresented == false,
+              let pendingRouteAfterSettingsDismissal else {
+            return
+        }
+        self.pendingRouteAfterSettingsDismissal = nil
+        try apply(route: pendingRouteAfterSettingsDismissal, context: context)
+    }
+}
+
+private extension MainNavigationRouter {
+    func apply(
+        route: IncomesRoute,
+        context: ModelContext
+    ) throws {
+        let outcome = try MainNavigationRouteExecutor.execute(
+            route: route,
+            context: context
+        )
+        switch outcome {
+        case .destination(let yearTagID, let selectedTag):
+            self.yearTagID = yearTagID
+            self.selectedTag = selectedTag
+            clearSearchState()
+        case .search(let query):
+            isSearchPresented = true
+            searchText = query ?? .empty
+            predicate = nil
+        case .settings:
+            sheetRoute = .settings
+            settingsDestination = nil
+        case .settingsSubscription:
+            sheetRoute = .settings
+            settingsDestination = .subscription
+        case .settingsLicense:
+            sheetRoute = .settings
+            settingsDestination = .license
+        case .settingsDebug:
+            sheetRoute = .settings
+            settingsDestination = .debug
+        case .yearlyDuplication:
+            sheetRoute = .yearlyDuplication
+        case .introduction:
+            sheetRoute = .introduction
+        case .duplicateTags:
+            fullScreenRoute = .duplicateTags
+        }
+    }
+
+    func clearSearchState() {
+        isSearchPresented = false
+        searchText = .empty
+        predicate = nil
+    }
+
+    var isSettingsPresented: Bool {
+        sheetRoute == .settings
+    }
+
+    func selectYearTagID(_ yearTagID: Tag.ID?) {
+        self.yearTagID = yearTagID
+        selectedTag = nil
+        clearSearchState()
+    }
+}
+
+private extension IncomesRoute {
+    var isSettingsScopeRoute: Bool {
+        switch self {
+        case .settings,
+             .settingsSubscription,
+             .settingsLicense,
+             .settingsDebug:
+            return true
+        case .home,
+             .yearSummary,
+             .yearlyDuplication,
+             .introduction,
+             .duplicateTags,
+             .year,
+             .month,
+             .search:
+            return false
         }
     }
 }

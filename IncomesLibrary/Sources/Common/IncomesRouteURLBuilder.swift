@@ -45,6 +45,20 @@ private extension IncomesRouteURLBuilder {
             return ["home"]
         case .settings:
             return ["settings"]
+        case .settingsSubscription:
+            return ["settings", "subscription"]
+        case .settingsLicense:
+            return ["settings", "license"]
+        case .settingsDebug:
+            return ["settings", "debug"]
+        case .yearSummary(let year):
+            return ["year-summary", String(format: "%04d", year)]
+        case .yearlyDuplication:
+            return ["yearly-duplication"]
+        case .introduction:
+            return ["introduction"]
+        case .duplicateTags:
+            return ["duplicate-tags"]
         case .year(let year):
             return ["year", String(format: "%04d", year)]
         case .month(let year, let month):
@@ -69,6 +83,13 @@ private extension IncomesRouteURLBuilder {
             ]
         case .home,
              .settings,
+             .settingsSubscription,
+             .settingsLicense,
+             .settingsDebug,
+             .yearSummary,
+             .yearlyDuplication,
+             .introduction,
+             .duplicateTags,
              .year,
              .month:
             return nil

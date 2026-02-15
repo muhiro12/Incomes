@@ -16,18 +16,21 @@ struct DebugListView {
     @AppStorage(.isDebugOn)
     private var isDebugOn
 
-    @Binding private var tag: Tag?
-
     @State private var isDialogPresented = false
 
-    init(selection: Binding<Tag?> = .constant(nil)) {
-        _tag = selection
+    private let navigateToRoute: (DebugRoute) -> Void
+
+    init(
+        navigateToRoute: @escaping (DebugRoute) -> Void = { _ in
+        }
+    ) {
+        self.navigateToRoute = navigateToRoute
     }
 }
 
 extension DebugListView: View {
     var body: some View {
-        List(selection: $tag) {
+        List {
             Section {
                 Toggle(isOn: $isDebugOn) {
                     Text("Debug option")
@@ -35,14 +38,18 @@ extension DebugListView: View {
             }
             if let tag = try? context.fetchFirst(.tags(.all)) {
                 Section {
-                    NavigationLink(value: tag) {
+                    Button {
+                        navigateToRoute(.tag(tag))
+                    } label: {
                         Text("All Items")
                     }
-                    NavigationLink {
-                        DebugTagListView()
+                    .buttonStyle(.plain)
+                    Button {
+                        navigateToRoute(.allTags)
                     } label: {
                         Text("All Tags")
                     }
+                    .buttonStyle(.plain)
                 }
             }
             Section {

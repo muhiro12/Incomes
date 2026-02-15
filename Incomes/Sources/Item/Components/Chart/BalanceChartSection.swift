@@ -12,7 +12,7 @@ import SwiftUI
 struct BalanceChartSection: View {
     @Query private var items: [Item]
 
-    @State private var isPresented = false
+    @StateObject private var router: BalanceChartRouter = .init()
 
     init(_ descriptor: FetchDescriptor<Item>) {
         _items = Query(descriptor)
@@ -21,14 +21,14 @@ struct BalanceChartSection: View {
     var body: some View {
         Section {
             Button {
-                isPresented = true
+                router.navigate(to: .detail)
             } label: {
                 chart()
                     .frame(height: .component(.l))
                     .padding()
             }
             .buttonStyle(.plain)
-            .fullScreenCover(isPresented: $isPresented) {
+            .fullScreenCover(item: $router.route) { _ in
                 NavigationStack {
                     chart()
                         .chartScrollableAxes(.horizontal)
@@ -46,6 +46,23 @@ struct BalanceChartSection: View {
         } header: {
             Text("Balance")
         }
+    }
+}
+
+@MainActor
+private final class BalanceChartRouter: ObservableObject {
+    @Published var route: BalanceChartRoute?
+
+    func navigate(to route: BalanceChartRoute) {
+        self.route = route
+    }
+}
+
+private enum BalanceChartRoute: String, Identifiable {
+    case detail
+
+    var id: String {
+        rawValue
     }
 }
 

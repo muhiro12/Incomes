@@ -17,22 +17,35 @@ struct HomeYearSection: View {
     @State private var isDialogPresented = false
     @State private var willDeleteItems: [Item] = []
 
-    init(yearTag: Tag) {
+    private let navigateToRoute: (IncomesRoute) -> Void
+
+    init(
+        yearTag: Tag,
+        navigateToRoute: @escaping (IncomesRoute) -> Void = { _ in
+        }
+    ) {
         _yearMonthTags = Query(
             .tags(
                 .nameStartsWith(yearTag.name, type: .yearMonth),
                 order: .reverse
             )
         )
+        self.navigateToRoute = navigateToRoute
     }
 
     var body: some View {
         Section {
             ForEach(yearMonthTags) { tag in
-                NavigationLink(value: tag) {
+                Button {
+                    guard let monthRoute = route(for: tag) else {
+                        return
+                    }
+                    navigateToRoute(monthRoute)
+                } label: {
                     TagSummaryRow()
                         .environment(tag)
                 }
+                .buttonStyle(.plain)
             }
             .onDelete { indices in
                 Haptic.warning.impact()
@@ -68,6 +81,25 @@ struct HomeYearSection: View {
         } message: {
             Text("Are you sure you want to delete this item?")
         }
+    }
+}
+
+private extension HomeYearSection {
+    func route(for yearMonthTag: Tag) -> IncomesRoute? {
+        guard yearMonthTag.type == .yearMonth else {
+            return nil
+        }
+
+        let normalizedName = yearMonthTag.name.replacingOccurrences(of: "-", with: "")
+        guard normalizedName.count == 6,
+              let year = Int(String(normalizedName.prefix(4))),
+              let month = Int(String(normalizedName.suffix(2))),
+              1...9_999 ~= year,
+              1...12 ~= month else {
+            return nil
+        }
+
+        return .month(year: year, month: month)
     }
 }
 

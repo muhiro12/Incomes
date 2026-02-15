@@ -10,7 +10,7 @@ import SwiftData
 import SwiftUI
 
 struct ShowItemButton {
-    @State private var isPresented = false
+    @StateObject private var router: ShowItemRouter = .init()
 
     private let action: (() -> Void)?
 
@@ -25,7 +25,7 @@ extension ShowItemButton: View {
             if let action {
                 action()
             } else {
-                isPresented = true
+                router.navigate(to: .detail)
             }
         } label: {
             Label {
@@ -34,10 +34,27 @@ extension ShowItemButton: View {
                 Image(systemName: "doc.text.magnifyingglass")
             }
         }
-        .sheet(isPresented: $isPresented) {
+        .sheet(item: $router.route) { _ in
             ItemNavigationView()
                 .presentationDetents([.medium, .large])
         }
+    }
+}
+
+@MainActor
+private final class ShowItemRouter: ObservableObject {
+    @Published var route: ShowItemRoute?
+
+    func navigate(to route: ShowItemRoute) {
+        self.route = route
+    }
+}
+
+private enum ShowItemRoute: String, Identifiable {
+    case detail
+
+    var id: String {
+        rawValue
     }
 }
 

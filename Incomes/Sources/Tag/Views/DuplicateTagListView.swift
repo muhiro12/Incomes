@@ -13,17 +13,20 @@ struct DuplicateTagListView: View {
     @Query(.tags(.typeIs(.category)))
     private var categoryTags: [Tag]
 
-    @Binding private var selection: Tag?
-
     @State private var isResolveDialogPresented = false
     @State private var selectedTags = [Tag]()
 
-    init(selection: Binding<Tag?>) {
-        _selection = selection
+    private let navigateToRoute: (DuplicateTagRoute) -> Void
+
+    init(
+        navigateToRoute: @escaping (DuplicateTagRoute) -> Void = { _ in
+        }
+    ) {
+        self.navigateToRoute = navigateToRoute
     }
 
     var body: some View {
-        List(selection: $selection) {
+        List {
             buildSection(from: yearTags) {
                 Text("Year")
             }
@@ -89,7 +92,12 @@ struct DuplicateTagListView: View {
         return AnyView(
             Section {
                 ForEach(duplicates) { tag in
-                    Text(tag.displayName)
+                    Button {
+                        navigateToRoute(.tag(tag))
+                    } label: {
+                        Text(tag.displayName)
+                    }
+                    .buttonStyle(.plain)
                 }
             } header: {
                 HStack {
@@ -111,5 +119,5 @@ struct DuplicateTagListView: View {
 
 @available(iOS 18.0, *)
 #Preview(traits: .modifier(IncomesSampleData())) {
-    DuplicateTagListView(selection: .constant(nil))
+    DuplicateTagListView()
 }

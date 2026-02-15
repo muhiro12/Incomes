@@ -28,7 +28,7 @@ struct SearchListView: View {
     }
 
     var body: some View {
-        List(selection: $predicate) {
+        List {
             Section("Target") {
                 Picker("Target", selection: $selectedTarget) {
                     ForEach(SearchTarget.allCases, id: \.self) { target in

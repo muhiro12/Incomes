@@ -69,7 +69,32 @@ private extension IncomesRouteParser {
         case "home":
             return .home
         case "settings":
-            return .settings
+            guard normalizedSegments.count >= 2 else {
+                return .settings
+            }
+            let settingsDestination = normalizedSegments[1].lowercased()
+            switch settingsDestination {
+            case "subscription":
+                return .settingsSubscription
+            case "license":
+                return .settingsLicense
+            case "debug":
+                return .settingsDebug
+            default:
+                return nil
+            }
+        case "year-summary":
+            guard normalizedSegments.count >= 2,
+                  let year = parseYear(from: normalizedSegments[1]) else {
+                return nil
+            }
+            return .yearSummary(year)
+        case "yearly-duplication":
+            return .yearlyDuplication
+        case "introduction":
+            return .introduction
+        case "duplicate-tags":
+            return .duplicateTags
         case "year":
             guard normalizedSegments.count >= 2,
                   let year = parseYear(from: normalizedSegments[1]) else {

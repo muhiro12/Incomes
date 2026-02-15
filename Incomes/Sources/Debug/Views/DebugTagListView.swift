@@ -11,6 +11,15 @@ struct DebugTagListView: View {
     @Query(.tags(.typeIs(.category)))
     private var categoryTags: [Tag]
 
+    private let navigateToRoute: (DebugRoute) -> Void
+
+    init(
+        navigateToRoute: @escaping (DebugRoute) -> Void = { _ in
+        }
+    ) {
+        self.navigateToRoute = navigateToRoute
+    }
+
     var body: some View {
         List {
             buildSection(from: yearTags) {
@@ -32,9 +41,12 @@ struct DebugTagListView: View {
     private func buildSection<Header: View>(from tags: [Tag], header: () -> Header) -> some View {
         Section {
             ForEach(tags) { tag in
-                NavigationLink(value: tag) {
+                Button {
+                    navigateToRoute(.tag(tag))
+                } label: {
                     Text(tag.displayName)
                 }
+                .buttonStyle(.plain)
             }
         } header: {
             header()

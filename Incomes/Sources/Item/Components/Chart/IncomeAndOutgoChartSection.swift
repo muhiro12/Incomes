@@ -12,7 +12,7 @@ import SwiftUI
 struct IncomeAndOutgoChartSection: View {
     @Query private var items: [Item]
 
-    @State private var isPresented = false
+    @StateObject private var router: IncomeAndOutgoChartRouter = .init()
 
     init(_ descriptor: FetchDescriptor<Item>) {
         _items = Query(descriptor)
@@ -21,14 +21,14 @@ struct IncomeAndOutgoChartSection: View {
     var body: some View {
         Section {
             Button {
-                isPresented = true
+                router.navigate(to: .detail)
             } label: {
                 chart()
                     .frame(height: .component(.l))
                     .padding()
             }
             .buttonStyle(.plain)
-            .fullScreenCover(isPresented: $isPresented) {
+            .fullScreenCover(item: $router.route) { _ in
                 NavigationStack {
                     chart()
                         .chartScrollableAxes(.horizontal)
@@ -46,6 +46,23 @@ struct IncomeAndOutgoChartSection: View {
         } header: {
             Text("Income and Outgo")
         }
+    }
+}
+
+@MainActor
+private final class IncomeAndOutgoChartRouter: ObservableObject {
+    @Published var route: IncomeAndOutgoChartRoute?
+
+    func navigate(to route: IncomeAndOutgoChartRoute) {
+        self.route = route
+    }
+}
+
+private enum IncomeAndOutgoChartRoute: String, Identifiable {
+    case detail
+
+    var id: String {
+        rawValue
     }
 }
 

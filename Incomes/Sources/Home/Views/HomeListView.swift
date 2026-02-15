@@ -21,24 +21,36 @@ struct HomeListView {
     @AppStorage(.isSubscribeOn)
     private var isSubscribeOn
 
-    @Binding private var tag: Tag?
+    private let navigateToRoute: (IncomesRoute) -> Void
 
-    init(selection: Binding<Tag?> = .constant(nil)) {
-        _tag = selection
+    init(
+        navigateToRoute: @escaping (IncomesRoute) -> Void = { _ in
+        }
+    ) {
+        self.navigateToRoute = navigateToRoute
     }
 }
 
 extension HomeListView: View {
     var body: some View {
-        List(selection: $tag) {
-            HomeYearSection(yearTag: yearTag)
+        List {
+            HomeYearSection(
+                yearTag: yearTag,
+                navigateToRoute: navigateToRoute
+            )
             if !isSubscribeOn {
                 AdvertisementSection(.small)
             }
             Section("Summary") {
-                NavigationLink(value: yearTag) {
+                Button {
+                    guard let yearRoute = route(for: yearTag) else {
+                        return
+                    }
+                    navigateToRoute(yearRoute)
+                } label: {
                     TagSummaryRow()
                 }
+                .buttonStyle(.plain)
             }
         }
         .listStyle(.insetGrouped)
@@ -47,6 +59,17 @@ extension HomeListView: View {
             notificationService.refresh()
             await notificationService.register()
         }
+    }
+}
+
+private extension HomeListView {
+    func route(for yearTag: Tag) -> IncomesRoute? {
+        guard yearTag.type == .year,
+              let year = Int(yearTag.name),
+              1...9_999 ~= year else {
+            return nil
+        }
+        return .yearSummary(year)
     }
 }
 

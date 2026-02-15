@@ -36,6 +36,62 @@ struct IncomesRouteParserTests {
     }
 
     @Test
+    func parse_custom_scheme_settings_subscription_route() {
+        let route = IncomesRouteParser.parse(
+            url: .init(string: "incomes://v1/settings/subscription")!
+        )
+        #expect(route == .settingsSubscription)
+    }
+
+    @Test
+    func parse_custom_scheme_settings_license_route() {
+        let route = IncomesRouteParser.parse(
+            url: .init(string: "incomes://v1/settings/license")!
+        )
+        #expect(route == .settingsLicense)
+    }
+
+    @Test
+    func parse_custom_scheme_settings_debug_route() {
+        let route = IncomesRouteParser.parse(
+            url: .init(string: "incomes://v1/settings/debug")!
+        )
+        #expect(route == .settingsDebug)
+    }
+
+    @Test
+    func parse_custom_scheme_year_summary_route() {
+        let route = IncomesRouteParser.parse(
+            url: .init(string: "incomes://v1/year-summary/2026")!
+        )
+        #expect(route == .yearSummary(2_026))
+    }
+
+    @Test
+    func parse_custom_scheme_yearly_duplication_route() {
+        let route = IncomesRouteParser.parse(
+            url: .init(string: "incomes://v1/yearly-duplication")!
+        )
+        #expect(route == .yearlyDuplication)
+    }
+
+    @Test
+    func parse_custom_scheme_introduction_route() {
+        let route = IncomesRouteParser.parse(
+            url: .init(string: "incomes://v1/introduction")!
+        )
+        #expect(route == .introduction)
+    }
+
+    @Test
+    func parse_custom_scheme_duplicate_tags_route() {
+        let route = IncomesRouteParser.parse(
+            url: .init(string: "incomes://v1/duplicate-tags")!
+        )
+        #expect(route == .duplicateTags)
+    }
+
+    @Test
     func parse_universal_link_route_with_prefix() {
         let route = IncomesRouteParser.parse(
             url: .init(string: "https://muhiro12.github.io/Incomes/v1/month/2026-01")!

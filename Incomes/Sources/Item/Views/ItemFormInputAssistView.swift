@@ -10,6 +10,14 @@ import SwiftUI
 
 @available(iOS 26.0, *)
 struct ItemFormInputAssistView: View {
+    enum ImportRoute: String, Identifiable {
+        case camera
+
+        var id: String {
+            rawValue
+        }
+    }
+
     @Binding private var date: Date
     @Binding private var content: String
     @Binding private var income: String
@@ -24,9 +32,9 @@ struct ItemFormInputAssistView: View {
     @State private var isProcessing = false
     @State private var errorMessage: String?
 
-    @State private var isCameraPresented = false
     @State private var selectedItem: PhotosPickerItem?
 
+    @StateObject private var router: ItemFormInputAssistRouter = .init()
     @StateObject private var scanner: ImageTextScanner = .init()
 
     init(
@@ -84,7 +92,7 @@ struct ItemFormInputAssistView: View {
                 .labelStyle(.titleAndIcon)
 
                 Button {
-                    isCameraPresented = true
+                    router.navigate(to: .camera)
                 } label: {
                     Label("Camera", systemImage: "camera")
                 }
@@ -119,10 +127,13 @@ struct ItemFormInputAssistView: View {
                 .disabled(text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || isProcessing)
             }
         }
-        .sheet(isPresented: $isCameraPresented) {
-            CameraPicker { image in
-                Task {
-                    await scanImage(image)
+        .sheet(item: $router.importRoute) { route in
+            switch route {
+            case .camera:
+                CameraPicker { image in
+                    Task {
+                        await scanImage(image)
+                    }
                 }
             }
         }
@@ -216,6 +227,16 @@ struct ItemFormInputAssistView: View {
         } catch {
             errorMessage = error.localizedDescription
         }
+    }
+}
+
+@available(iOS 26.0, *)
+@MainActor
+private final class ItemFormInputAssistRouter: ObservableObject {
+    @Published var importRoute: ItemFormInputAssistView.ImportRoute?
+
+    func navigate(to route: ItemFormInputAssistView.ImportRoute) {
+        importRoute = route
     }
 }
 

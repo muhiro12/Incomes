@@ -18,9 +18,9 @@ struct YearlyDuplicationView: View {
     @State private var sourceYear = Calendar.current.component(.year, from: .now) - 1
     @State private var targetYear = Calendar.current.component(.year, from: .now)
 
+    @StateObject private var router: YearlyDuplicationRouter = .init()
     @State private var plan: YearlyItemDuplicationPlan?
     @State private var createdGroupIDs = Set<UUID>()
-    @State private var itemFormDraft: ItemFormDraft?
     @State private var resultMessage: String?
     @State private var errorMessage: String?
 
@@ -118,12 +118,15 @@ struct YearlyDuplicationView: View {
         .onChange(of: targetYear) {
             previewPlan()
         }
-        .sheet(item: $itemFormDraft) { draft in
-            ItemFormNavigationView(
-                mode: .create,
-                draft: draft
-            ) {
-                createdGroupIDs.insert(draft.groupID)
+        .sheet(item: $router.route) { route in
+            switch route {
+            case .itemForm(let draft):
+                ItemFormNavigationView(
+                    mode: .create,
+                    draft: draft
+                ) {
+                    createdGroupIDs.insert(draft.groupID)
+                }
             }
         }
         .alert(
@@ -167,6 +170,19 @@ struct YearlyDuplicationView: View {
     }
 }
 
+@MainActor
+private final class YearlyDuplicationRouter: ObservableObject {
+    @Published var route: YearlyDuplicationRoute?
+
+    func navigate(to route: YearlyDuplicationRoute) {
+        self.route = route
+    }
+
+    func resetRoute() {
+        route = nil
+    }
+}
+
 private extension YearlyDuplicationView {
     struct MonthDay: Hashable {
         let month: Int
@@ -199,7 +215,7 @@ private extension YearlyDuplicationView {
                 targetYear: targetYear
             )
             createdGroupIDs.removeAll()
-            itemFormDraft = nil
+            router.resetRoute()
         } catch {
             errorMessage = error.localizedDescription
         }
@@ -236,7 +252,7 @@ private extension YearlyDuplicationView {
             return
         }
         let selections = repeatMonthSelections(from: entries)
-        itemFormDraft = .init(
+        let draft: ItemFormDraft = .init(
             groupID: group.id,
             date: baseDate,
             content: group.content,
@@ -246,6 +262,7 @@ private extension YearlyDuplicationView {
             priorityText: .empty,
             repeatMonthSelections: selections
         )
+        router.navigate(to: .itemForm(draft))
     }
 
     func entries(

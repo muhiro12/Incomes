@@ -9,13 +9,13 @@
 import SwiftUI
 
 struct CreateItemButton {
-    @State private var isPresented = false
+    @StateObject private var router: CreateItemRouter = .init()
 }
 
 extension CreateItemButton: View {
     var body: some View {
         Button {
-            isPresented = true
+            router.navigate(to: .create)
         } label: {
             Label {
                 Text("Create")
@@ -23,9 +23,26 @@ extension CreateItemButton: View {
                 Image(systemName: "square.and.pencil")
             }
         }
-        .sheet(isPresented: $isPresented) {
+        .sheet(item: $router.route) { _ in
             ItemFormNavigationView(mode: .create)
         }
+    }
+}
+
+@MainActor
+private final class CreateItemRouter: ObservableObject {
+    @Published var route: CreateItemRoute?
+
+    func navigate(to route: CreateItemRoute) {
+        self.route = route
+    }
+}
+
+private enum CreateItemRoute: String, Identifiable {
+    case create
+
+    var id: String {
+        rawValue
     }
 }
 
