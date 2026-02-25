@@ -57,31 +57,37 @@ struct MainNavigationView: View {
 
     var body: some View {
         NavigationSplitView(preferredCompactColumn: $router.preferredCompactColumn) {
-            List(selection: yearTagSelection) {
-                ForEach(yearTags, id: \.persistentModelID) { yearTag in
-                    TagSummaryRow()
-                        .environment(yearTag)
-                        .tag(yearTag.persistentModelID)
-                }
-                .onDelete { indices in
-                    Haptic.warning.impact()
-                    router.isYearDeleteDialogPresented = true
-                    router.willDeleteTags = indices.compactMap { index in
-                        guard yearTags.indices.contains(index) else {
-                            return nil
+            Group {
+                if yearTags.isEmpty {
+                    CreateItemButton()
+                } else {
+                    List(selection: yearTagSelection) {
+                        ForEach(yearTags, id: \.persistentModelID) { yearTag in
+                            TagSummaryRow()
+                                .environment(yearTag)
+                                .tag(yearTag.persistentModelID)
                         }
-                        return yearTags[index]
+                        .onDelete { indices in
+                            Haptic.warning.impact()
+                            router.isYearDeleteDialogPresented = true
+                            router.willDeleteTags = indices.compactMap { index in
+                                guard yearTags.indices.contains(index) else {
+                                    return nil
+                                }
+                                return yearTags[index]
+                            }
+                            router.willDeleteItems = TagService.resolveItemsForDeletion(
+                                from: yearTags,
+                                indices: indices
+                            )
+                        }
+                        YearlyDuplicationPromoSection(
+                            context: context,
+                            yearTags: yearTags
+                        ) {
+                            navigate(to: .yearlyDuplication)
+                        }
                     }
-                    router.willDeleteItems = TagService.resolveItemsForDeletion(
-                        from: yearTags,
-                        indices: indices
-                    )
-                }
-                YearlyDuplicationPromoSection(
-                    context: context,
-                    yearTags: yearTags
-                ) {
-                    navigate(to: .yearlyDuplication)
                 }
             }
             .confirmationDialog(
