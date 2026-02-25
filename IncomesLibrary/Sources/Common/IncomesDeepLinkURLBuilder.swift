@@ -13,7 +13,12 @@ public enum IncomesDeepLinkURLBuilder {
         if let customSchemeURL = IncomesRouteURLBuilder.customSchemeURL(for: route) {
             return customSchemeURL
         }
-        return .init(string: "\(IncomesRouteURLDefaults.customScheme)://v1/home")!
+        if let homeCustomSchemeURL = IncomesRouteURLBuilder.customSchemeURL(for: .home) {
+            return homeCustomSchemeURL
+        }
+        return .init(
+            string: "\(IncomesRouteURLDefaults.customScheme)://\(IncomesRouteURLDefaults.routeVersionPathSegment)/home"
+        )!
     }
 
     public static func homeURL() -> URL? {

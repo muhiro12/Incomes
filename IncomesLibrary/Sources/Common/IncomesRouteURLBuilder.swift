@@ -11,7 +11,7 @@ public enum IncomesRouteURLBuilder {
     ) -> URL? {
         var urlComponents = URLComponents()
         urlComponents.scheme = customScheme
-        urlComponents.host = "v1"
+        urlComponents.host = IncomesRouteURLDefaults.routeVersionPathSegment
         urlComponents.path = "/" + routePathSegments(route).joined(separator: "/")
         urlComponents.queryItems = routeQueryItems(route)
         return urlComponents.url
@@ -30,7 +30,7 @@ public enum IncomesRouteURLBuilder {
         if appPathPrefix.isNotEmpty {
             allPathSegments.append(appPathPrefix)
         }
-        allPathSegments.append("v1")
+        allPathSegments.append(IncomesRouteURLDefaults.routeVersionPathSegment)
         allPathSegments.append(contentsOf: routePathSegments(route))
         urlComponents.path = "/" + allPathSegments.joined(separator: "/")
         urlComponents.queryItems = routeQueryItems(route)
