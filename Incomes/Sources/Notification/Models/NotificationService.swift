@@ -72,9 +72,7 @@ final class NotificationService: NSObject {
             localized: "\(item.content) - A payment of \(item.outgo.asCurrency) is due on \(item.localDate.formatted(.dateTime.weekday().month().day()))."
         )
         content.sound = .default
-        if let deepLinkUserInfo = buildDeepLinkUserInfo(for: item) {
-            content.userInfo = deepLinkUserInfo
-        }
+        content.userInfo = buildDeepLinkUserInfo(for: item)
 
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
 
@@ -109,17 +107,15 @@ extension NotificationService: UNUserNotificationCenterDelegate {
 }
 
 private extension NotificationService {
-    func buildDeepLinkUserInfo(for item: Item) -> [AnyHashable: Any]? {
-        guard let deepLinkURL = buildDeepLinkURL(for: item) else {
-            return nil
-        }
+    func buildDeepLinkUserInfo(for item: Item) -> [AnyHashable: Any] {
+        let deepLinkURL = buildDeepLinkURL(for: item)
         return [
             NotificationPayloadKey.deepLinkURL: deepLinkURL.absoluteString
         ]
     }
 
-    func buildDeepLinkURL(for item: Item) -> URL? {
-        IncomesDeepLinkURLBuilder.monthURL(for: item.localDate)
+    func buildDeepLinkURL(for item: Item) -> URL {
+        IncomesDeepLinkURLBuilder.preferredMonthURL(for: item.localDate)
     }
 
     func extractDeepLinkURL(from userInfo: [AnyHashable: Any]) -> URL? {
@@ -151,9 +147,7 @@ private extension NotificationService {
                 localized: "\(item.content) - A payment of \(item.outgo.asCurrency) is due on \(item.localDate.formatted(.dateTime.weekday().month().day()))."
             )
             content.sound = .default
-            if let deepLinkUserInfo = buildDeepLinkUserInfo(for: item) {
-                content.userInfo = deepLinkUserInfo
-            }
+            content.userInfo = buildDeepLinkUserInfo(for: item)
 
             let triggerDate = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: plan.notifyDate)
             let trigger = UNCalendarNotificationTrigger(dateMatching: triggerDate, repeats: false)
