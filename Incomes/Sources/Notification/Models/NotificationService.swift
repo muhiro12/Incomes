@@ -119,11 +119,7 @@ private extension NotificationService {
     }
 
     func buildDeepLinkURL(for item: Item) -> URL? {
-        let year = Calendar.current.component(.year, from: item.localDate)
-        let month = Calendar.current.component(.month, from: item.localDate)
-        return IncomesRouteURLBuilder.universalLinkURL(
-            for: .month(year: year, month: month)
-        )
+        IncomesDeepLinkURLBuilder.monthURL(for: item.localDate)
     }
 
     func extractDeepLinkURL(from userInfo: [AnyHashable: Any]) -> URL? {

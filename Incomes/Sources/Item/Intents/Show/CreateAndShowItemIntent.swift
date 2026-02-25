@@ -42,7 +42,10 @@ struct CreateAndShowItemIntent: AppIntent {
             priority: 0,
             repeatCount: repeatCount
         )
-        return .result(dialog: .init(stringLiteral: item.content)) {
+        return .result(
+            opensIntent: IncomesIntentRouteOpener.monthIntent(for: item.localDate),
+            dialog: .init(stringLiteral: item.content)
+        ) {
             IntentItemSection()
                 .environment(item)
         }

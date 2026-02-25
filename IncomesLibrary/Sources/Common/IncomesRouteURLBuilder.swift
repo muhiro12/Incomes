@@ -2,9 +2,9 @@ import Foundation
 
 /// Builds shareable URLs from app routes.
 public enum IncomesRouteURLBuilder {
-    public static let customScheme = IncomesRouteParser.customScheme
-    public static let defaultUniversalLinkHost = "muhiro12.github.io"
-    public static let defaultUniversalLinkPathPrefix = "Incomes"
+    public static let customScheme = IncomesRouteURLDefaults.customScheme
+    public static let defaultUniversalLinkHost = IncomesRouteURLDefaults.universalLinkHost
+    public static let defaultUniversalLinkPathPrefix = IncomesRouteURLDefaults.universalLinkPathPrefix
 
     public static func customSchemeURL(
         for route: IncomesRoute

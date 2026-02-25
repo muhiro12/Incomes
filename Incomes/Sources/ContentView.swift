@@ -71,7 +71,7 @@ extension ContentView: View {
                 }
 
                 googleMobileAdsController.start()
-                applyPendingNotificationDeepLinkIfNeeded()
+                applyPendingDeepLinkIfNeeded()
             }
             .onChange(of: scenePhase) {
                 guard scenePhase == .active else {
@@ -93,9 +93,10 @@ extension ContentView: View {
                         requestReview()
                     }
                 }
+                applyPendingDeepLinkIfNeeded()
             }
             .onChange(of: notificationService.pendingDeepLinkURL) {
-                applyPendingNotificationDeepLinkIfNeeded()
+                applyPendingDeepLinkIfNeeded()
             }
             .onOpenURL { url in
                 handleIncomingURL(url)
@@ -110,11 +111,13 @@ extension ContentView: View {
 }
 
 private extension ContentView {
-    func applyPendingNotificationDeepLinkIfNeeded() {
-        guard let deepLinkURL = notificationService.consumePendingDeepLinkURL() else {
-            return
+    func applyPendingDeepLinkIfNeeded() {
+        if let intentDeepLinkURL = IncomesIntentRouteStore.consume() {
+            handleIncomingURL(intentDeepLinkURL)
         }
-        handleIncomingURL(deepLinkURL)
+        if let notificationDeepLinkURL = notificationService.consumePendingDeepLinkURL() {
+            handleIncomingURL(notificationDeepLinkURL)
+        }
     }
 
     func handleIncomingURL(_ url: URL) {

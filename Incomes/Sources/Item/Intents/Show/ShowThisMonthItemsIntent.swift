@@ -21,10 +21,17 @@ struct ShowThisMonthItemsIntent: AppIntent {
             context: modelContainer.mainContext,
             date: date
         )
+        let openIntent = IncomesIntentRouteOpener.monthIntent(for: date)
         guard items.isNotEmpty else {
-            return .result(dialog: .init(.init("Not Found", table: "AppIntents")))
+            return .result(
+                opensIntent: openIntent,
+                dialog: .init(.init("Not Found", table: "AppIntents"))
+            )
         }
-        return .result(dialog: .init(stringLiteral: date.stringValue(.yyyyMMM))) {
+        return .result(
+            opensIntent: openIntent,
+            dialog: .init(stringLiteral: date.stringValue(.yyyyMMM))
+        ) {
             IntentItemListSection(items)
                 .modelContainer(modelContainer)
         }

@@ -7,7 +7,9 @@
 
 import Foundation
 
-enum AppGroup {
-    static let id = "group.com.muhiro12.Incomes"
-    static let containerURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: id)!
+public enum AppGroup {
+    public static let id = "group.com.muhiro12.Incomes"
+    public static let containerURL = FileManager.default.containerURL(
+        forSecurityApplicationGroupIdentifier: id
+    )!
 }

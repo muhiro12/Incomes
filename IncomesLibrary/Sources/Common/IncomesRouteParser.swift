@@ -2,8 +2,10 @@ import Foundation
 
 /// Parses incoming URLs and maps them to app navigation routes.
 public enum IncomesRouteParser {
-    public static let customScheme = "incomes"
-    public static let universalLinkHosts: Set<String> = ["muhiro12.github.io"]
+    public static let customScheme = IncomesRouteURLDefaults.customScheme
+    public static let universalLinkHosts: Set<String> = [
+        IncomesRouteURLDefaults.universalLinkHost
+    ]
 
     public static func parse(
         url: URL,
@@ -55,7 +57,8 @@ private extension IncomesRouteParser {
         queryItems: [URLQueryItem]
     ) -> IncomesRoute? {
         var normalizedSegments = pathSegments
-        if normalizedSegments.first?.lowercased() == "incomes" {
+        if normalizedSegments.first?.lowercased() ==
+            IncomesRouteURLDefaults.universalLinkPathPrefix.lowercased() {
             _ = normalizedSegments.removeFirst()
         }
         if normalizedSegments.first?.lowercased() == "v1" {
