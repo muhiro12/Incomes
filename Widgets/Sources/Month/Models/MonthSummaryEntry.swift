@@ -7,4 +7,5 @@ struct MonthSummaryEntry: TimelineEntry {
     // Metrics for display
     let totalIncomeText: String
     let totalOutgoText: String
+    let deepLinkURL: URL?
 }

@@ -77,6 +77,7 @@ extension IncomesUpcomingWidget: Widget {
                 .padding(.space(.s))
             }
             .containerBackground(.fill.tertiary, for: .widget)
+            .widgetURL(entry.deepLinkURL)
         }
         .configurationDisplayName("Upcoming Item")
         .description("Shows the next or previous item")
@@ -93,7 +94,8 @@ extension IncomesUpcomingWidget: Widget {
         titleText: "Sep 14 (Sat)",
         detailText: "Utility bill",
         amountText: "-$80",
-        isPositive: false
+        isPositive: false,
+        deepLinkURL: nil
     )
 }
 
@@ -106,6 +108,7 @@ extension IncomesUpcomingWidget: Widget {
         titleText: "Sep 14 (Sat)",
         detailText: "Grocery",
         amountText: "-$45",
-        isPositive: false
+        isPositive: false,
+        deepLinkURL: nil
     )
 }

@@ -6,4 +6,5 @@ struct NetIncomeEntry: TimelineEntry {
     let configuration: ConfigurationAppIntent
     let netIncomeText: String
     let isPositive: Bool
+    let deepLinkURL: URL?
 }

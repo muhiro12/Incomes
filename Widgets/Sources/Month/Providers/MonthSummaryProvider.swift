@@ -4,11 +4,13 @@ import WidgetKit
 
 struct MonthSummaryProvider: AppIntentTimelineProvider {
     func placeholder(in _: Context) -> MonthSummaryEntry {
-        .init(
-            date: Date.now,
+        let date = Date.now
+        return .init(
+            date: date,
             configuration: .init(),
             totalIncomeText: "$0",
-            totalOutgoText: "-$0"
+            totalOutgoText: "-$0",
+            deepLinkURL: WidgetDeepLinkBuilder.monthURL(for: date)
         )
     }
 
@@ -29,6 +31,7 @@ struct MonthSummaryProvider: AppIntentTimelineProvider {
     }
 
     private func makeEntry(date: Date, configuration: ConfigurationAppIntent) -> MonthSummaryEntry {
+        let deepLinkURL = WidgetDeepLinkBuilder.monthURL(for: date)
         do {
             let context = try ModelContainerFactory.sharedContext()
             let totals = try SummaryCalculator.monthlyTotals(context: context, date: date)
@@ -38,14 +41,16 @@ struct MonthSummaryProvider: AppIntentTimelineProvider {
                 date: date,
                 configuration: configuration,
                 totalIncomeText: totalIncomeText,
-                totalOutgoText: totalOutgoText
+                totalOutgoText: totalOutgoText,
+                deepLinkURL: deepLinkURL
             )
         } catch {
             return .init(
                 date: date,
                 configuration: configuration,
                 totalIncomeText: "$0",
-                totalOutgoText: "-$0"
+                totalOutgoText: "-$0",
+                deepLinkURL: deepLinkURL
             )
         }
     }

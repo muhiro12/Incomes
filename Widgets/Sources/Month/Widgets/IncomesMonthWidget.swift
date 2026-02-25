@@ -133,6 +133,7 @@ extension IncomesMonthWidget: Widget {
                 .padding(.space(.s))
             }
             .containerBackground(.fill.tertiary, for: .widget)
+            .widgetURL(entry.deepLinkURL)
         }
         .configurationDisplayName("Incomes")
         .description("This month's items and balance")
@@ -147,7 +148,8 @@ extension IncomesMonthWidget: Widget {
         date: .now,
         configuration: .init(),
         totalIncomeText: "$1,200",
-        totalOutgoText: "-$800"
+        totalOutgoText: "-$800",
+        deepLinkURL: nil
     )
 }
 
@@ -158,6 +160,7 @@ extension IncomesMonthWidget: Widget {
         date: .now,
         configuration: .init(),
         totalIncomeText: "$1,200",
-        totalOutgoText: "-$800"
+        totalOutgoText: "-$800",
+        deepLinkURL: nil
     )
 }

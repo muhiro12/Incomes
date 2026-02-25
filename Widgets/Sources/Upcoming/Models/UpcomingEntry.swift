@@ -9,4 +9,5 @@ struct UpcomingEntry: TimelineEntry {
     let detailText: LocalizedStringKey
     let amountText: LocalizedStringKey
     let isPositive: Bool
+    let deepLinkURL: URL?
 }

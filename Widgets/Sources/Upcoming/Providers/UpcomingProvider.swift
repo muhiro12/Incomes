@@ -11,7 +11,8 @@ struct UpcomingProvider: AppIntentTimelineProvider {
             titleText: "Upcoming",
             detailText: "No items",
             amountText: "$0",
-            isPositive: true
+            isPositive: true,
+            deepLinkURL: WidgetDeepLinkBuilder.homeURL()
         )
     }
 
@@ -52,7 +53,8 @@ struct UpcomingProvider: AppIntentTimelineProvider {
                     titleText: .init(titleText),
                     detailText: .init(detailText),
                     amountText: .init(amount.asCurrency),
-                    isPositive: amount.isPlus || amount.isZero
+                    isPositive: amount.isPlus || amount.isZero,
+                    deepLinkURL: WidgetDeepLinkBuilder.monthURL(for: item.localDate)
                 )
             }
             return .init(
@@ -61,7 +63,8 @@ struct UpcomingProvider: AppIntentTimelineProvider {
                 titleText: "Upcoming",
                 detailText: "No items",
                 amountText: "$0",
-                isPositive: true
+                isPositive: true,
+                deepLinkURL: WidgetDeepLinkBuilder.homeURL()
             )
         } catch {
             return .init(
@@ -70,7 +73,8 @@ struct UpcomingProvider: AppIntentTimelineProvider {
                 titleText: "Upcoming",
                 detailText: "Error",
                 amountText: "$0",
-                isPositive: true
+                isPositive: true,
+                deepLinkURL: WidgetDeepLinkBuilder.homeURL()
             )
         }
     }

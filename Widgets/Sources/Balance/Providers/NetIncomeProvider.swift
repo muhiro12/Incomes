@@ -4,11 +4,13 @@ import WidgetKit
 
 struct NetIncomeProvider: AppIntentTimelineProvider {
     func placeholder(in _: Context) -> NetIncomeEntry {
-        .init(
-            date: Date.now,
+        let date = Date.now
+        return .init(
+            date: date,
             configuration: .init(),
             netIncomeText: "$0",
-            isPositive: true
+            isPositive: true,
+            deepLinkURL: WidgetDeepLinkBuilder.monthURL(for: date)
         )
     }
 
@@ -29,6 +31,7 @@ struct NetIncomeProvider: AppIntentTimelineProvider {
     }
 
     private func makeEntry(date: Date, configuration: ConfigurationAppIntent) -> NetIncomeEntry {
+        let deepLinkURL = WidgetDeepLinkBuilder.monthURL(for: date)
         do {
             let context = try ModelContainerFactory.sharedContext()
             let totals = try SummaryCalculator.monthlyTotals(context: context, date: date)
@@ -36,14 +39,16 @@ struct NetIncomeProvider: AppIntentTimelineProvider {
                 date: date,
                 configuration: configuration,
                 netIncomeText: totals.netIncome.asCurrency,
-                isPositive: totals.netIncome.isPlus || totals.netIncome.isZero
+                isPositive: totals.netIncome.isPlus || totals.netIncome.isZero,
+                deepLinkURL: deepLinkURL
             )
         } catch {
             return .init(
                 date: date,
                 configuration: configuration,
                 netIncomeText: "$0",
-                isPositive: true
+                isPositive: true,
+                deepLinkURL: deepLinkURL
             )
         }
     }
