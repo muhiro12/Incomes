@@ -12,3 +12,8 @@ enum IntroductionTutorialSeeder {
         try ItemService.seedTutorialDataIfNeeded(context: context)
     }
 }
+
+enum IntroductionPresentationPolicy {
+    // Temporary kill-switch for tutorial presentation while iCloud startup behavior is under investigation.
+    static let isEnabled = false
+}

@@ -323,7 +323,8 @@ final class MainNavigationRouter: ObservableObject {
         let state = try MainNavigationStateLoader.load(context: context)
         if hasLoaded == false {
             hasLoaded = true
-            if state.isIntroductionPresented {
+            if state.isIntroductionPresented &&
+                IntroductionPresentationPolicy.isEnabled {
                 sheetRoute = .introduction
             }
         }
@@ -429,7 +430,9 @@ private extension MainNavigationRouter {
         case .yearlyDuplication:
             sheetRoute = .yearlyDuplication
         case .introduction:
-            sheetRoute = .introduction
+            if IntroductionPresentationPolicy.isEnabled {
+                sheetRoute = .introduction
+            }
         case .duplicateTags:
             fullScreenRoute = .duplicateTags
         }

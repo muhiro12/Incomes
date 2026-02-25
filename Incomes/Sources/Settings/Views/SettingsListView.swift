@@ -146,8 +146,10 @@ extension SettingsListView: View {
                 }
             }
             Section {
-                Button("View App Introduction Again") {
-                    navigateToRoute(.introduction)
+                if IntroductionPresentationPolicy.isEnabled {
+                    Button("View App Introduction Again") {
+                        navigateToRoute(.introduction)
+                    }
                 }
                 routeRowButton(
                     "License",
