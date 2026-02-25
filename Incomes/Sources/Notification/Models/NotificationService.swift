@@ -12,10 +12,15 @@ import UserNotifications
 
 @Observable
 final class NotificationService: NSObject {
+    private enum NotificationPayloadKey {
+        static let deepLinkURL = "deepLinkURL"
+    }
+
     private let modelContainer: ModelContainer
 
     private(set) var hasNotification = false
     private(set) var shouldShowNotification = false
+    private(set) var pendingDeepLinkURL: URL?
 
     init(modelContainer: ModelContainer) {
         self.modelContainer = modelContainer
@@ -44,6 +49,13 @@ final class NotificationService: NSObject {
         UNUserNotificationCenter.current().removeAllDeliveredNotifications()
         hasNotification = false
         shouldShowNotification = false
+        pendingDeepLinkURL = nil
+    }
+
+    func consumePendingDeepLinkURL() -> URL? {
+        let deepLinkURL = pendingDeepLinkURL
+        pendingDeepLinkURL = nil
+        return deepLinkURL
     }
 
     func sendTestNotification() {
@@ -60,6 +72,9 @@ final class NotificationService: NSObject {
             localized: "\(item.content) - A payment of \(item.outgo.asCurrency) is due on \(item.localDate.formatted(.dateTime.weekday().month().day()))."
         )
         content.sound = .default
+        if let deepLinkUserInfo = buildDeepLinkUserInfo(for: item) {
+            content.userInfo = deepLinkUserInfo
+        }
 
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
 
@@ -83,14 +98,44 @@ extension NotificationService: UNUserNotificationCenterDelegate {
     }
 
     func userNotificationCenter(_: UNUserNotificationCenter,
-                                didReceive _: UNNotificationResponse) async { // swiftlint:disable:this async_without_await
+                                didReceive response: UNNotificationResponse) async { // swiftlint:disable:this async_without_await
         Task {
             shouldShowNotification = true
+            pendingDeepLinkURL = extractDeepLinkURL(
+                from: response.notification.request.content.userInfo
+            )
         }
     }
 }
 
 private extension NotificationService {
+    func buildDeepLinkUserInfo(for item: Item) -> [AnyHashable: Any]? {
+        guard let deepLinkURL = buildDeepLinkURL(for: item) else {
+            return nil
+        }
+        return [
+            NotificationPayloadKey.deepLinkURL: deepLinkURL.absoluteString
+        ]
+    }
+
+    func buildDeepLinkURL(for item: Item) -> URL? {
+        let year = Calendar.current.component(.year, from: item.localDate)
+        let month = Calendar.current.component(.month, from: item.localDate)
+        return IncomesRouteURLBuilder.universalLinkURL(
+            for: .month(year: year, month: month)
+        )
+    }
+
+    func extractDeepLinkURL(from userInfo: [AnyHashable: Any]) -> URL? {
+        if let deepLinkURLString = userInfo[NotificationPayloadKey.deepLinkURL] as? String {
+            return URL(string: deepLinkURLString)
+        }
+        if let deepLinkURL = userInfo[NotificationPayloadKey.deepLinkURL] as? URL {
+            return deepLinkURL
+        }
+        return nil
+    }
+
     func buildUpcomingPaymentReminders() -> [UNNotificationRequest] {
         let settings = AppStorage(.notificationSettings).wrappedValue
         guard let plans = try? UpcomingPaymentPlanner.build(
@@ -110,6 +155,9 @@ private extension NotificationService {
                 localized: "\(item.content) - A payment of \(item.outgo.asCurrency) is due on \(item.localDate.formatted(.dateTime.weekday().month().day()))."
             )
             content.sound = .default
+            if let deepLinkUserInfo = buildDeepLinkUserInfo(for: item) {
+                content.userInfo = deepLinkUserInfo
+            }
 
             let triggerDate = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: plan.notifyDate)
             let trigger = UNCalendarNotificationTrigger(dateMatching: triggerDate, repeats: false)
