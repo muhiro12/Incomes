@@ -61,10 +61,6 @@ private extension IncomesRouteParser {
             IncomesRouteURLDefaults.universalLinkPathPrefix.lowercased() {
             _ = normalizedSegments.removeFirst()
         }
-        if normalizedSegments.first?.lowercased() ==
-            IncomesRouteURLDefaults.routeVersionPathSegment.lowercased() {
-            _ = normalizedSegments.removeFirst()
-        }
         guard let destination = normalizedSegments.first?.lowercased() else {
             return .home
         }

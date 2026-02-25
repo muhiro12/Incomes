@@ -17,7 +17,7 @@ public enum IncomesDeepLinkURLBuilder {
             return homeCustomSchemeURL
         }
         return .init(
-            string: "\(IncomesRouteURLDefaults.customScheme)://\(IncomesRouteURLDefaults.routeVersionPathSegment)/home"
+            string: "\(IncomesRouteURLDefaults.customScheme)://home"
         )!
     }
 

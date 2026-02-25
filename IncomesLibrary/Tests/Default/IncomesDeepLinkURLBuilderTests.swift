@@ -7,7 +7,7 @@ struct IncomesDeepLinkURLBuilderTests {
     func route_url_builds_home_url() {
         let url = IncomesDeepLinkURLBuilder.routeURL(for: .home)
         #expect(
-            url?.absoluteString == "https://muhiro12.github.io/Incomes/v1/home"
+            url?.absoluteString == "https://muhiro12.github.io/Incomes/home"
         )
     }
 
@@ -15,7 +15,7 @@ struct IncomesDeepLinkURLBuilderTests {
     func preferred_url_builds_home_url() {
         let url = IncomesDeepLinkURLBuilder.preferredURL(for: .home)
         #expect(
-            url.absoluteString == "https://muhiro12.github.io/Incomes/v1/home"
+            url.absoluteString == "https://muhiro12.github.io/Incomes/home"
         )
     }
 
@@ -40,7 +40,7 @@ struct IncomesDeepLinkURLBuilderTests {
         )
 
         #expect(
-            url?.absoluteString == "https://muhiro12.github.io/Incomes/v1/month/2026-07"
+            url?.absoluteString == "https://muhiro12.github.io/Incomes/month/2026-07"
         )
     }
 
@@ -65,7 +65,7 @@ struct IncomesDeepLinkURLBuilderTests {
         )
 
         #expect(
-            url.absoluteString == "https://muhiro12.github.io/Incomes/v1/month/2026-07"
+            url.absoluteString == "https://muhiro12.github.io/Incomes/month/2026-07"
         )
     }
 }

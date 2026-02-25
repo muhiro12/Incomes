@@ -8,7 +8,7 @@ struct IncomesRouteURLBuilderTests {
         let route = IncomesRoute.month(year: 2_026, month: 4)
         let url = IncomesRouteURLBuilder.customSchemeURL(for: route)
         #expect(
-            url?.absoluteString == "incomes://v1/month/2026-04"
+            url?.absoluteString == "incomes://month/2026-04"
         )
     }
 
@@ -21,7 +21,7 @@ struct IncomesRouteURLBuilderTests {
             appPathPrefix: "Incomes"
         )
         #expect(
-            url?.absoluteString == "https://muhiro12.github.io/Incomes/v1/search?q=gas"
+            url?.absoluteString == "https://muhiro12.github.io/Incomes/search?q=gas"
         )
     }
 
@@ -30,7 +30,7 @@ struct IncomesRouteURLBuilderTests {
         let route = IncomesRoute.yearlyDuplication
         let url = IncomesRouteURLBuilder.customSchemeURL(for: route)
         #expect(
-            url?.absoluteString == "incomes://v1/yearly-duplication"
+            url?.absoluteString == "incomes://yearly-duplication"
         )
     }
 
@@ -39,7 +39,7 @@ struct IncomesRouteURLBuilderTests {
         let route = IncomesRoute.introduction
         let url = IncomesRouteURLBuilder.customSchemeURL(for: route)
         #expect(
-            url?.absoluteString == "incomes://v1/introduction"
+            url?.absoluteString == "incomes://introduction"
         )
     }
 
@@ -48,7 +48,7 @@ struct IncomesRouteURLBuilderTests {
         let route = IncomesRoute.duplicateTags
         let url = IncomesRouteURLBuilder.customSchemeURL(for: route)
         #expect(
-            url?.absoluteString == "incomes://v1/duplicate-tags"
+            url?.absoluteString == "incomes://duplicate-tags"
         )
     }
 
@@ -57,7 +57,7 @@ struct IncomesRouteURLBuilderTests {
         let route = IncomesRoute.settingsSubscription
         let url = IncomesRouteURLBuilder.customSchemeURL(for: route)
         #expect(
-            url?.absoluteString == "incomes://v1/settings/subscription"
+            url?.absoluteString == "incomes://settings/subscription"
         )
     }
 
@@ -66,7 +66,7 @@ struct IncomesRouteURLBuilderTests {
         let route = IncomesRoute.settingsLicense
         let url = IncomesRouteURLBuilder.customSchemeURL(for: route)
         #expect(
-            url?.absoluteString == "incomes://v1/settings/license"
+            url?.absoluteString == "incomes://settings/license"
         )
     }
 
@@ -75,7 +75,7 @@ struct IncomesRouteURLBuilderTests {
         let route = IncomesRoute.settingsDebug
         let url = IncomesRouteURLBuilder.customSchemeURL(for: route)
         #expect(
-            url?.absoluteString == "incomes://v1/settings/debug"
+            url?.absoluteString == "incomes://settings/debug"
         )
     }
 
@@ -84,7 +84,7 @@ struct IncomesRouteURLBuilderTests {
         let route = IncomesRoute.yearSummary(2_026)
         let url = IncomesRouteURLBuilder.customSchemeURL(for: route)
         #expect(
-            url?.absoluteString == "incomes://v1/year-summary/2026"
+            url?.absoluteString == "incomes://year-summary/2026"
         )
     }
 }

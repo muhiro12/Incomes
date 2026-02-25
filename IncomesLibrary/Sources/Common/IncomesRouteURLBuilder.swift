@@ -9,10 +9,15 @@ public enum IncomesRouteURLBuilder {
     public static func customSchemeURL(
         for route: IncomesRoute
     ) -> URL? {
+        let pathSegments = routePathSegments(route)
         var urlComponents = URLComponents()
         urlComponents.scheme = customScheme
-        urlComponents.host = IncomesRouteURLDefaults.routeVersionPathSegment
-        urlComponents.path = "/" + routePathSegments(route).joined(separator: "/")
+        urlComponents.host = pathSegments.first
+        if pathSegments.count >= 2 {
+            urlComponents.path = "/" + pathSegments.dropFirst().joined(separator: "/")
+        } else {
+            urlComponents.path = .empty
+        }
         urlComponents.queryItems = routeQueryItems(route)
         return urlComponents.url
     }
@@ -30,7 +35,6 @@ public enum IncomesRouteURLBuilder {
         if appPathPrefix.isNotEmpty {
             allPathSegments.append(appPathPrefix)
         }
-        allPathSegments.append(IncomesRouteURLDefaults.routeVersionPathSegment)
         allPathSegments.append(contentsOf: routePathSegments(route))
         urlComponents.path = "/" + allPathSegments.joined(separator: "/")
         urlComponents.queryItems = routeQueryItems(route)
