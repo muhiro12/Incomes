@@ -38,6 +38,18 @@ public enum IncomesDeepLinkURLBuilder {
         return routeURL(for: .month(year: year, month: month))
     }
 
+    public static func itemURL(
+        for itemID: String
+    ) -> URL? {
+        routeURL(for: .item(itemID))
+    }
+
+    public static func preferredItemURL(
+        for itemID: String
+    ) -> URL {
+        preferredURL(for: .item(itemID))
+    }
+
     public static func preferredMonthURL(
         for date: Date,
         calendar: Calendar = .current

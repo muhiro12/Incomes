@@ -28,6 +28,14 @@ struct IncomesRouteParserTests {
     }
 
     @Test
+    func parse_custom_scheme_item_route_with_query() {
+        let route = IncomesRouteParser.parse(
+            url: .init(string: "incomes://item?id=item-id")!
+        )
+        #expect(route == .item("item-id"))
+    }
+
+    @Test
     func parse_custom_scheme_settings_route() {
         let route = IncomesRouteParser.parse(
             url: .init(string: "incomes://settings")!
@@ -105,6 +113,14 @@ struct IncomesRouteParserTests {
             url: .init(string: "https://muhiro12.github.io/year/2025")!
         )
         #expect(route == .year(2_025))
+    }
+
+    @Test
+    func parse_universal_link_item_route_with_query() {
+        let route = IncomesRouteParser.parse(
+            url: .init(string: "https://muhiro12.github.io/Incomes/item?id=item-id")!
+        )
+        #expect(route == .item("item-id"))
     }
 
     @Test

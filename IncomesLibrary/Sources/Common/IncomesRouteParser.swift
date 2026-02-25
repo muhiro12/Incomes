@@ -105,6 +105,11 @@ private extension IncomesRouteParser {
             return parseMonthRoute(
                 from: Array(normalizedSegments.dropFirst())
             )
+        case "item":
+            return parseItemRoute(
+                from: Array(normalizedSegments.dropFirst()),
+                queryItems: queryItems
+            )
         case "search":
             let query = queryItems.first { queryItem in
                 queryItem.name == "q"
@@ -141,6 +146,24 @@ private extension IncomesRouteParser {
             return nil
         }
         return .month(year: year, month: month)
+    }
+
+    static func parseItemRoute(
+        from itemSegments: [String],
+        queryItems: [URLQueryItem]
+    ) -> IncomesRoute? {
+        if let itemID = itemSegments.first,
+           itemID.isNotEmpty {
+            return .item(itemID)
+        }
+        let itemID = queryItems.first { queryItem in
+            queryItem.name == "id"
+        }?.value
+        guard let itemID,
+              itemID.isNotEmpty else {
+            return nil
+        }
+        return .item(itemID)
     }
 
     static func parseYear(from value: String) -> Int? {

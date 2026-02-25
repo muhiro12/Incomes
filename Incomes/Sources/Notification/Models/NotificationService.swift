@@ -115,7 +115,14 @@ private extension NotificationService {
     }
 
     func buildDeepLinkURL(for item: Item) -> URL {
-        IncomesDeepLinkURLBuilder.preferredMonthURL(for: item.localDate)
+        if let itemID = try? item.id.base64Encoded() {
+            return IncomesDeepLinkURLBuilder.preferredItemURL(
+                for: itemID
+            )
+        }
+        return IncomesDeepLinkURLBuilder.preferredMonthURL(
+            for: item.localDate
+        )
     }
 
     func extractDeepLinkURL(from userInfo: [AnyHashable: Any]) -> URL? {

@@ -27,7 +27,8 @@ struct MainNavigationRouteExecutorTests {
              .settingsDebug,
              .yearlyDuplication,
              .introduction,
-             .duplicateTags:
+             .duplicateTags,
+             .itemDetail:
             Issue.record("Expected .settings outcome.")
         }
     }
@@ -49,7 +50,8 @@ struct MainNavigationRouteExecutorTests {
              .settingsDebug,
              .yearlyDuplication,
              .introduction,
-             .duplicateTags:
+             .duplicateTags,
+             .itemDetail:
             Issue.record("Expected .settingsSubscription outcome.")
         }
     }
@@ -71,7 +73,8 @@ struct MainNavigationRouteExecutorTests {
              .settingsDebug,
              .yearlyDuplication,
              .introduction,
-             .duplicateTags:
+             .duplicateTags,
+             .itemDetail:
             Issue.record("Expected .settingsLicense outcome.")
         }
     }
@@ -93,7 +96,8 @@ struct MainNavigationRouteExecutorTests {
              .settingsLicense,
              .yearlyDuplication,
              .introduction,
-             .duplicateTags:
+             .duplicateTags,
+             .itemDetail:
             Issue.record("Expected .settingsDebug outcome.")
         }
     }
@@ -122,7 +126,8 @@ struct MainNavigationRouteExecutorTests {
              .settingsDebug,
              .yearlyDuplication,
              .introduction,
-             .duplicateTags:
+             .duplicateTags,
+             .itemDetail:
             Issue.record("Expected .destination outcome for year summary route.")
         }
     }
@@ -144,7 +149,8 @@ struct MainNavigationRouteExecutorTests {
              .settingsLicense,
              .settingsDebug,
              .introduction,
-             .duplicateTags:
+             .duplicateTags,
+             .itemDetail:
             Issue.record("Expected .yearlyDuplication outcome.")
         }
     }
@@ -166,7 +172,8 @@ struct MainNavigationRouteExecutorTests {
              .settingsLicense,
              .settingsDebug,
              .yearlyDuplication,
-             .duplicateTags:
+             .duplicateTags,
+             .itemDetail:
             Issue.record("Expected .introduction outcome.")
         }
     }
@@ -188,7 +195,8 @@ struct MainNavigationRouteExecutorTests {
              .settingsLicense,
              .settingsDebug,
              .yearlyDuplication,
-             .introduction:
+             .introduction,
+             .itemDetail:
             Issue.record("Expected .duplicateTags outcome.")
         }
     }
@@ -210,7 +218,8 @@ struct MainNavigationRouteExecutorTests {
              .settingsDebug,
              .yearlyDuplication,
              .introduction,
-             .duplicateTags:
+             .duplicateTags,
+             .itemDetail:
             Issue.record("Expected .search outcome.")
         }
     }
@@ -238,7 +247,8 @@ struct MainNavigationRouteExecutorTests {
              .settingsDebug,
              .yearlyDuplication,
              .introduction,
-             .duplicateTags:
+             .duplicateTags,
+             .itemDetail:
             Issue.record("Expected .destination outcome for year route.")
         }
     }
@@ -272,7 +282,8 @@ struct MainNavigationRouteExecutorTests {
              .settingsDebug,
              .yearlyDuplication,
              .introduction,
-             .duplicateTags:
+             .duplicateTags,
+             .itemDetail:
             Issue.record("Expected .destination outcome for month route.")
         }
     }
@@ -307,8 +318,66 @@ struct MainNavigationRouteExecutorTests {
              .settingsDebug,
              .yearlyDuplication,
              .introduction,
-             .duplicateTags:
+             .duplicateTags,
+             .itemDetail:
             Issue.record("Expected .destination outcome for home route.")
+        }
+    }
+
+    @Test
+    func execute_returns_item_detail_for_item_route() throws {
+        let item = try Item.create(
+            context: context,
+            date: .now,
+            content: "Rent",
+            income: 1_000,
+            outgo: 400,
+            category: "Fixed",
+            priority: 1,
+            repeatID: UUID()
+        )
+        let itemID = try item.id.base64Encoded()
+        let outcome = try MainNavigationRouteExecutor.execute(
+            route: .item(itemID),
+            context: context
+        )
+
+        switch outcome {
+        case .itemDetail(let resolvedItemID):
+            #expect(resolvedItemID == item.id)
+        case .destination,
+             .search,
+             .settings,
+             .settingsSubscription,
+             .settingsLicense,
+             .settingsDebug,
+             .yearlyDuplication,
+             .introduction,
+             .duplicateTags:
+            Issue.record("Expected .itemDetail outcome for item route.")
+        }
+    }
+
+    @Test
+    func execute_falls_back_to_destination_for_invalid_item_route() throws {
+        let outcome = try MainNavigationRouteExecutor.execute(
+            route: .item("invalid"),
+            context: context
+        )
+
+        switch outcome {
+        case .destination:
+            break
+        case .search,
+             .settings,
+             .settingsSubscription,
+             .settingsLicense,
+             .settingsDebug,
+             .yearlyDuplication,
+             .introduction,
+             .duplicateTags,
+             .itemDetail:
+            Issue.record("Expected fallback .destination outcome for invalid item route.")
         }
     }
 }

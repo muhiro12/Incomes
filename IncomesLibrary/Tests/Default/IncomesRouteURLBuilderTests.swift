@@ -13,6 +13,15 @@ struct IncomesRouteURLBuilderTests {
     }
 
     @Test
+    func build_custom_scheme_url_for_item() {
+        let route = IncomesRoute.item("item-id")
+        let url = IncomesRouteURLBuilder.customSchemeURL(for: route)
+        #expect(
+            url?.absoluteString == "incomes://item?id=item-id"
+        )
+    }
+
+    @Test
     func build_universal_link_url_for_search() {
         let route = IncomesRoute.search(query: "gas")
         let url = IncomesRouteURLBuilder.universalLinkURL(

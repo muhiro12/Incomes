@@ -11,5 +11,6 @@ public enum IncomesRoute: Equatable, Sendable {
     case duplicateTags
     case year(Int)
     case month(year: Int, month: Int)
+    case item(String)
     case search(query: String?)
 }

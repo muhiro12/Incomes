@@ -47,6 +47,16 @@ struct UpcomingProvider: AppIntentTimelineProvider {
                 let titleText: String = Formatting.shortDayTitle(from: item.localDate)
                 let detailText: String = item.content
                 let amount: Decimal = item.netIncome
+                let deepLinkURL: URL? = {
+                    if let itemID = try? item.id.base64Encoded() {
+                        return WidgetDeepLinkBuilder.itemURL(
+                            for: itemID
+                        )
+                    }
+                    return WidgetDeepLinkBuilder.monthURL(
+                        for: item.localDate
+                    )
+                }()
                 return .init(
                     date: now,
                     subtitleText: configuration.direction == .next ? "Next" : "Previous",
@@ -54,7 +64,7 @@ struct UpcomingProvider: AppIntentTimelineProvider {
                     detailText: .init(detailText),
                     amountText: .init(amount.asCurrency),
                     isPositive: amount.isPlus || amount.isZero,
-                    deepLinkURL: WidgetDeepLinkBuilder.monthURL(for: item.localDate)
+                    deepLinkURL: deepLinkURL
                 )
             }
             return .init(

@@ -178,6 +178,7 @@ struct MainNavigationView: View {
         .sheet(
             item: $router.sheetRoute,
             onDismiss: {
+                router.itemDetailID = nil
                 do {
                     try router.applyPendingRouteAfterSettingsDismissalIfNeeded(
                         context: context
@@ -207,6 +208,8 @@ struct MainNavigationView: View {
                 }
             case .introduction:
                 IntroductionNavigationView()
+            case .itemDetail:
+                deepLinkedItemNavigationView()
             }
         }
         .fullScreenCover(item: $router.fullScreenRoute) { fullScreenRoute in
@@ -280,12 +283,34 @@ private extension MainNavigationView {
         try router.handleIncomingRoute(route, context: context)
         incomingRoute = nil
     }
+
+    @ViewBuilder
+    func deepLinkedItemNavigationView() -> some View {
+        if let itemDetailID = router.itemDetailID,
+           let item = try? context.fetchFirst(
+            .items(.idIs(itemDetailID))
+           ) {
+            ItemNavigationView()
+                .environment(item)
+        } else {
+            NavigationStack {
+                Text("Item not found")
+                    .navigationTitle("Item")
+                    .toolbar {
+                        ToolbarItem {
+                            CloseButton()
+                        }
+                    }
+            }
+        }
+    }
 }
 
 enum MainNavigationSheetRoute: String, Identifiable {
     case settings
     case yearlyDuplication
     case introduction
+    case itemDetail
 
     var id: String {
         rawValue
@@ -311,6 +336,7 @@ final class MainNavigationRouter: ObservableObject {
     @Published var sheetRoute: MainNavigationSheetRoute?
     @Published var fullScreenRoute: MainNavigationFullScreenRoute?
     @Published var settingsDestination: SettingsNavigationDestination?
+    @Published var itemDetailID: PersistentIdentifier?
     @Published var isYearDeleteDialogPresented = false
     @Published var willDeleteItems: [Item] = []
     @Published var willDeleteTags: [Tag] = []
@@ -435,6 +461,9 @@ private extension MainNavigationRouter {
             }
         case .duplicateTags:
             fullScreenRoute = .duplicateTags
+        case .itemDetail(let itemID):
+            itemDetailID = itemID
+            sheetRoute = .itemDetail
         }
     }
 
@@ -479,6 +508,7 @@ private extension IncomesRoute {
              .duplicateTags,
              .year,
              .month,
+             .item,
              .search:
             return false
         }

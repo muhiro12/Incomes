@@ -61,6 +61,18 @@ public enum MainNavigationRouteExecutor {
                 yearTagID: yearTagID,
                 selectedTag: yearMonthTag
             )
+        case .item(let itemID):
+            guard let persistentID = try? PersistentIdentifier(
+                base64Encoded: itemID
+            ) else {
+                return try fallbackHomeDestination(context: context)
+            }
+            guard try context.fetchFirst(
+                .items(.idIs(persistentID))
+            ) != nil else {
+                return try fallbackHomeDestination(context: context)
+            }
+            return .itemDetail(itemID: persistentID)
         case .search(let query):
             return .search(query: query)
         }
@@ -80,9 +92,20 @@ public enum MainNavigationRouteOutcome {
     case yearlyDuplication
     case introduction
     case duplicateTags
+    case itemDetail(itemID: PersistentIdentifier)
 }
 
 private extension MainNavigationRouteExecutor {
+    static func fallbackHomeDestination(
+        context: ModelContext
+    ) throws -> MainNavigationRouteOutcome {
+        let state = try MainNavigationStateLoader.load(context: context)
+        return .destination(
+            yearTagID: state.yearTag?.persistentModelID,
+            selectedTag: state.yearMonthTag
+        )
+    }
+
     static func resolveYearTagID(
         context: ModelContext,
         year: Int

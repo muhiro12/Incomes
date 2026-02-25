@@ -68,6 +68,8 @@ private extension IncomesRouteURLBuilder {
         case .month(let year, let month):
             let monthText = String(format: "%04d-%02d", year, month)
             return ["month", monthText]
+        case .item:
+            return ["item"]
         case .search:
             return ["search"]
         }
@@ -84,6 +86,13 @@ private extension IncomesRouteURLBuilder {
             }
             return [
                 .init(name: "q", value: query)
+            ]
+        case .item(let itemID):
+            guard itemID.isNotEmpty else {
+                return nil
+            }
+            return [
+                .init(name: "id", value: itemID)
             ]
         case .home,
              .settings,

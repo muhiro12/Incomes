@@ -20,6 +20,22 @@ struct IncomesDeepLinkURLBuilderTests {
     }
 
     @Test
+    func route_url_builds_item_url() {
+        let url = IncomesDeepLinkURLBuilder.itemURL(for: "item-id")
+        #expect(
+            url?.absoluteString == "https://muhiro12.github.io/Incomes/item?id=item-id"
+        )
+    }
+
+    @Test
+    func preferred_url_builds_item_url() {
+        let url = IncomesDeepLinkURLBuilder.preferredItemURL(for: "item-id")
+        #expect(
+            url.absoluteString == "https://muhiro12.github.io/Incomes/item?id=item-id"
+        )
+    }
+
+    @Test
     func month_url_builds_month_route_from_date_components() {
         var calendar = Calendar(identifier: .gregorian)
         calendar.timeZone = .init(secondsFromGMT: 0)!
