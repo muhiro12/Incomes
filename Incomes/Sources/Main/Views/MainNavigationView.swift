@@ -44,8 +44,19 @@ struct MainNavigationView: View {
         )
     }
 
+    private var searchPredicateSelection: Binding<ItemPredicate?> {
+        .init(
+            get: {
+                router.predicate
+            },
+            set: { predicate in
+                router.selectSearchPredicate(predicate)
+            }
+        )
+    }
+
     var body: some View {
-        NavigationSplitView {
+        NavigationSplitView(preferredCompactColumn: $router.preferredCompactColumn) {
             List(selection: yearTagSelection) {
                 ForEach(yearTags, id: \.persistentModelID) { yearTag in
                     TagSummaryRow()
@@ -128,7 +139,7 @@ struct MainNavigationView: View {
             Group {
                 if router.isSearchPresented {
                     SearchListView(
-                        selection: $router.predicate,
+                        selection: searchPredicateSelection,
                         searchText: $router.searchText
                     )
                 } else if let selectedYearTag {
@@ -291,6 +302,7 @@ enum MainNavigationFullScreenRoute: String, Identifiable {
 
 @MainActor
 final class MainNavigationRouter: ObservableObject {
+    @Published var preferredCompactColumn: NavigationSplitViewColumn = .sidebar
     @Published var yearTagID: Tag.ID?
     @Published var selectedTag: Tag?
     @Published var searchText = ""
@@ -317,6 +329,13 @@ final class MainNavigationRouter: ObservableObject {
         }
         yearTagID = state.yearTag?.persistentModelID
         selectedTag = state.yearMonthTag
+        if state.yearTag == nil {
+            preferredCompactColumn = .sidebar
+        } else if state.yearMonthTag == nil {
+            preferredCompactColumn = .content
+        } else {
+            preferredCompactColumn = .detail
+        }
     }
 
     func handleIncomingRoute(
@@ -389,10 +408,12 @@ private extension MainNavigationRouter {
             self.yearTagID = yearTagID
             self.selectedTag = selectedTag
             clearSearchState()
+            preferredCompactColumn = selectedTag == nil ? .content : .detail
         case .search(let query):
             isSearchPresented = true
             searchText = query ?? .empty
             predicate = nil
+            preferredCompactColumn = .content
         case .settings:
             sheetRoute = .settings
             settingsDestination = nil
@@ -424,10 +445,19 @@ private extension MainNavigationRouter {
         sheetRoute == .settings
     }
 
+    func selectSearchPredicate(_ predicate: ItemPredicate?) {
+        self.predicate = predicate
+        guard isSearchPresented else {
+            return
+        }
+        preferredCompactColumn = predicate == nil ? .content : .detail
+    }
+
     func selectYearTagID(_ yearTagID: Tag.ID?) {
         self.yearTagID = yearTagID
         selectedTag = nil
         clearSearchState()
+        preferredCompactColumn = yearTagID == nil ? .sidebar : .content
     }
 }
 

@@ -96,6 +96,8 @@ struct DuplicateTagListView: View {
                         navigateToRoute(.tag(tag))
                     } label: {
                         Text(tag.displayName)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .contentShape(Rectangle())
                     }
                     .buttonStyle(.plain)
                 }

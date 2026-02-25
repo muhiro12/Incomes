@@ -42,12 +42,16 @@ extension DebugListView: View {
                         navigateToRoute(.tag(tag))
                     } label: {
                         Text("All Items")
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .contentShape(Rectangle())
                     }
                     .buttonStyle(.plain)
                     Button {
                         navigateToRoute(.allTags)
                     } label: {
                         Text("All Tags")
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .contentShape(Rectangle())
                     }
                     .buttonStyle(.plain)
                 }

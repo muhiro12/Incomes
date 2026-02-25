@@ -82,6 +82,8 @@ private extension SearchListView {
                     Text(tag.items.orEmpty.count.description)
                         .foregroundStyle(.secondary)
                 }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .contentShape(Rectangle())
             }
         }
     }

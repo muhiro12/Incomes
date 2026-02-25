@@ -49,6 +49,8 @@ extension HomeListView: View {
                     navigateToRoute(yearRoute)
                 } label: {
                     TagSummaryRow()
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
             }

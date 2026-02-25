@@ -44,6 +44,8 @@ struct HomeYearSection: View {
                 } label: {
                     TagSummaryRow()
                         .environment(tag)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
             }
