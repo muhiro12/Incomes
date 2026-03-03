@@ -16,6 +16,8 @@ struct ListItem: View {
     private var context
     @Environment(\.horizontalSizeClass)
     private var horizontalSizeClass
+    @Environment(IncomesTipController.self)
+    private var tipController
 
     @State private var detents = PresentationDetent.medium
     @StateObject private var router: ListItemRouter = .init()
@@ -25,6 +27,7 @@ struct ListItem: View {
     var body: some View {
         Button {
             detents = .medium
+            tipController.donateDidOpenItemDetail()
             router.navigate(to: .detail)
         } label: {
             Group {

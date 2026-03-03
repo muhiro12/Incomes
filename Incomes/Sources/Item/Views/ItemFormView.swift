@@ -9,6 +9,7 @@
 import StoreKit
 import SwiftData
 import SwiftUI
+import TipKit
 
 struct ItemFormView: View {
     enum Mode {
@@ -42,6 +43,8 @@ struct ItemFormView: View {
     private var dismiss
     @Environment(\.requestReview)
     private var requestReview
+    @Environment(IncomesTipController.self)
+    private var tipController
 
     @Environment(Item.self)
     private var item: Item?
@@ -67,6 +70,7 @@ struct ItemFormView: View {
     private let draft: ItemFormDraft?
     private let onCreate: (() -> Void)?
     private let priorityRange = 0...10
+    private let repeatItemsTip = RepeatItemsTip()
 
     init(
         mode: Mode,
@@ -145,6 +149,7 @@ struct ItemFormView: View {
             if mode == .create {
                 Section {
                     Toggle("Repeat", isOn: $isRepeatEnabled)
+                        .popoverTip(repeatItemsTip, arrowEdge: .bottom)
                 }
                 if isRepeatEnabled {
                     Section("Repeat Months") {
@@ -272,6 +277,9 @@ struct ItemFormView: View {
                 repeatMonthSelections = [baseSelection]
             } else {
                 syncRepeatMonthSelectionsWithBaseDate()
+                if mode == .create {
+                    tipController.donateDidEnableRepeat()
+                }
             }
         }
         .confirmationDialog(

@@ -7,6 +7,7 @@
 
 import SwiftData
 import SwiftUI
+import TipKit
 
 struct YearMonthItemListView {
     @Environment(Tag.self)
@@ -14,20 +15,27 @@ struct YearMonthItemListView {
 
     @AppStorage(.isSubscribeOn)
     private var isSubscribeOn
+
+    private let itemDetailTip = ItemDetailTip()
 }
 
 extension YearMonthItemListView: View {
     var body: some View {
-        List(yearStrings, id: \.self) { yearString in
-            ItemListSection(
-                .items(.tagAndYear(tag: tag, yearString: yearString))
-            )
-            if !isSubscribeOn {
-                AdvertisementSection(.medium)
+        List {
+            if items.isNotEmpty {
+                TipView(itemDetailTip)
             }
-            ChartSectionGroup(
-                .items(.tagAndYear(tag: tag, yearString: yearString))
-            )
+            ForEach(yearStrings, id: \.self) { yearString in
+                ItemListSection(
+                    .items(.tagAndYear(tag: tag, yearString: yearString))
+                )
+                if !isSubscribeOn {
+                    AdvertisementSection(.medium)
+                }
+                ChartSectionGroup(
+                    .items(.tagAndYear(tag: tag, yearString: yearString))
+                )
+            }
         }
         .listStyle(.grouped)
         .navigationTitle(tag.displayName)

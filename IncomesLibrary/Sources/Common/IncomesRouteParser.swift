@@ -91,8 +91,6 @@ private extension IncomesRouteParser {
             return .yearSummary(year)
         case "yearly-duplication":
             return .yearlyDuplication
-        case "introduction":
-            return .introduction
         case "duplicate-tags":
             return .duplicateTags
         case "year":

@@ -7,14 +7,21 @@
 //
 
 import SwiftUI
+import TipKit
 
 struct CreateItemButton {
+    @Environment(IncomesTipController.self)
+    private var tipController
+
     @StateObject private var router: CreateItemRouter = .init()
+
+    private let createItemTip = CreateItemTip()
 }
 
 extension CreateItemButton: View {
     var body: some View {
         Button {
+            tipController.donateDidOpenCreateForm()
             router.navigate(to: .create)
         } label: {
             Label {
@@ -23,6 +30,7 @@ extension CreateItemButton: View {
                 Image(systemName: "square.and.pencil")
             }
         }
+        .popoverTip(createItemTip)
         .sheet(item: $router.route) { _ in
             ItemFormNavigationView(mode: .create)
         }

@@ -26,7 +26,6 @@ struct MainNavigationRouteExecutorTests {
              .settingsLicense,
              .settingsDebug,
              .yearlyDuplication,
-             .introduction,
              .duplicateTags,
              .itemDetail:
             Issue.record("Expected .settings outcome.")
@@ -49,7 +48,6 @@ struct MainNavigationRouteExecutorTests {
              .settingsLicense,
              .settingsDebug,
              .yearlyDuplication,
-             .introduction,
              .duplicateTags,
              .itemDetail:
             Issue.record("Expected .settingsSubscription outcome.")
@@ -72,7 +70,6 @@ struct MainNavigationRouteExecutorTests {
              .settingsSubscription,
              .settingsDebug,
              .yearlyDuplication,
-             .introduction,
              .duplicateTags,
              .itemDetail:
             Issue.record("Expected .settingsLicense outcome.")
@@ -95,7 +92,6 @@ struct MainNavigationRouteExecutorTests {
              .settingsSubscription,
              .settingsLicense,
              .yearlyDuplication,
-             .introduction,
              .duplicateTags,
              .itemDetail:
             Issue.record("Expected .settingsDebug outcome.")
@@ -125,7 +121,6 @@ struct MainNavigationRouteExecutorTests {
              .settingsLicense,
              .settingsDebug,
              .yearlyDuplication,
-             .introduction,
              .duplicateTags,
              .itemDetail:
             Issue.record("Expected .destination outcome for year summary route.")
@@ -148,33 +143,9 @@ struct MainNavigationRouteExecutorTests {
              .settingsSubscription,
              .settingsLicense,
              .settingsDebug,
-             .introduction,
              .duplicateTags,
              .itemDetail:
             Issue.record("Expected .yearlyDuplication outcome.")
-        }
-    }
-
-    @Test
-    func execute_returns_introduction_for_introduction_route() throws {
-        let outcome = try MainNavigationRouteExecutor.execute(
-            route: .introduction,
-            context: context
-        )
-
-        switch outcome {
-        case .introduction:
-            break
-        case .destination,
-             .search,
-             .settings,
-             .settingsSubscription,
-             .settingsLicense,
-             .settingsDebug,
-             .yearlyDuplication,
-             .duplicateTags,
-             .itemDetail:
-            Issue.record("Expected .introduction outcome.")
         }
     }
 
@@ -195,7 +166,6 @@ struct MainNavigationRouteExecutorTests {
              .settingsLicense,
              .settingsDebug,
              .yearlyDuplication,
-             .introduction,
              .itemDetail:
             Issue.record("Expected .duplicateTags outcome.")
         }
@@ -217,7 +187,6 @@ struct MainNavigationRouteExecutorTests {
              .settingsLicense,
              .settingsDebug,
              .yearlyDuplication,
-             .introduction,
              .duplicateTags,
              .itemDetail:
             Issue.record("Expected .search outcome.")
@@ -246,7 +215,6 @@ struct MainNavigationRouteExecutorTests {
              .settingsLicense,
              .settingsDebug,
              .yearlyDuplication,
-             .introduction,
              .duplicateTags,
              .itemDetail:
             Issue.record("Expected .destination outcome for year route.")
@@ -281,7 +249,6 @@ struct MainNavigationRouteExecutorTests {
              .settingsLicense,
              .settingsDebug,
              .yearlyDuplication,
-             .introduction,
              .duplicateTags,
              .itemDetail:
             Issue.record("Expected .destination outcome for month route.")
@@ -317,7 +284,6 @@ struct MainNavigationRouteExecutorTests {
              .settingsLicense,
              .settingsDebug,
              .yearlyDuplication,
-             .introduction,
              .duplicateTags,
              .itemDetail:
             Issue.record("Expected .destination outcome for home route.")
@@ -352,7 +318,6 @@ struct MainNavigationRouteExecutorTests {
              .settingsLicense,
              .settingsDebug,
              .yearlyDuplication,
-             .introduction,
              .duplicateTags:
             Issue.record("Expected .itemDetail outcome for item route.")
         }
@@ -374,7 +339,6 @@ struct MainNavigationRouteExecutorTests {
              .settingsLicense,
              .settingsDebug,
              .yearlyDuplication,
-             .introduction,
              .duplicateTags,
              .itemDetail:
             Issue.record("Expected fallback .destination outcome for invalid item route.")

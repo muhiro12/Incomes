@@ -35,8 +35,6 @@ public enum MainNavigationRouteExecutor {
             )
         case .yearlyDuplication:
             return .yearlyDuplication
-        case .introduction:
-            return .introduction
         case .duplicateTags:
             return .duplicateTags
         case .year(let year):
@@ -90,7 +88,6 @@ public enum MainNavigationRouteOutcome {
     case settingsLicense
     case settingsDebug
     case yearlyDuplication
-    case introduction
     case duplicateTags
     case itemDetail(itemID: PersistentIdentifier)
 }

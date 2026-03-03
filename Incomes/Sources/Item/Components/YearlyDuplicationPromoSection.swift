@@ -9,6 +9,9 @@ import SwiftData
 import SwiftUI
 
 struct YearlyDuplicationPromoSection: View {
+    @Environment(IncomesTipController.self)
+    private var tipController
+
     let context: ModelContext
     let yearTags: [Tag]
     let onReview: () -> Void
@@ -49,6 +52,7 @@ struct YearlyDuplicationPromoSection: View {
                             .font(.footnote)
                             .foregroundStyle(.secondary)
                         Button("Review proposals") {
+                            tipController.donateDidOpenYearlyDuplication()
                             onReview()
                         }
                         .buttonStyle(.bordered)

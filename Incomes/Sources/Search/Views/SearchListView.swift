@@ -8,8 +8,12 @@
 
 import SwiftData
 import SwiftUI
+import TipKit
 
 struct SearchListView: View {
+    @Environment(IncomesTipController.self)
+    private var tipController
+
     @Query(.tags(.typeIs(.content)))
     private var contents: [Tag]
     @Query(.tags(.typeIs(.category)))
@@ -22,6 +26,8 @@ struct SearchListView: View {
     @State private var minValue = String.empty
     @State private var maxValue = String.empty
 
+    private let searchFiltersTip = SearchFiltersTip()
+
     init(selection: Binding<ItemPredicate?>, searchText: Binding<String>) {
         _predicate = selection
         _searchText = searchText
@@ -29,6 +35,7 @@ struct SearchListView: View {
 
     var body: some View {
         List {
+            TipView(searchFiltersTip)
             Section("Target") {
                 Picker("Target", selection: $selectedTarget) {
                     ForEach(SearchTarget.allCases, id: \.self) { target in
@@ -57,6 +64,7 @@ struct SearchListView: View {
                             minimumText: minValue,
                             maximumText: maxValue
                         ) {
+                            tipController.donateDidApplySearch()
                             predicate = newPredicate
                         }
                     }
@@ -74,6 +82,7 @@ private extension SearchListView {
             selectedTarget.filteredTags(tags, searchText: searchText)
         ) { tag in
             Button {
+                tipController.donateDidApplySearch()
                 predicate = .tagIs(tag)
             } label: {
                 HStack {

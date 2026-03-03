@@ -10,6 +10,9 @@ import SwiftData
 import SwiftUI
 
 struct ShowItemButton {
+    @Environment(IncomesTipController.self)
+    private var tipController
+
     @StateObject private var router: ShowItemRouter = .init()
 
     private let action: (() -> Void)?
@@ -22,6 +25,7 @@ struct ShowItemButton {
 extension ShowItemButton: View {
     var body: some View {
         Button {
+            tipController.donateDidOpenItemDetail()
             if let action {
                 action()
             } else {

@@ -40,12 +40,12 @@ extension WatchDebugView: View {
                         if isDeleting {
                             ProgressView()
                         } else {
-                            Text("Delete tutorial/debug data")
+                            Text("Delete debug sample data")
                         }
                     }
                     .disabled(isDeleting)
                 } footer: {
-                    Text("Removes items tagged as Debug and their tags.")
+                    Text("Removes debug sample items and their tags.")
                 }
             }
         }

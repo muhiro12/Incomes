@@ -59,8 +59,6 @@ private extension IncomesRouteURLBuilder {
             return ["year-summary", String(format: "%04d", year)]
         case .yearlyDuplication:
             return ["yearly-duplication"]
-        case .introduction:
-            return ["introduction"]
         case .duplicateTags:
             return ["duplicate-tags"]
         case .year(let year):
@@ -101,7 +99,6 @@ private extension IncomesRouteURLBuilder {
              .settingsDebug,
              .yearSummary,
              .yearlyDuplication,
-             .introduction,
              .duplicateTags,
              .year,
              .month:

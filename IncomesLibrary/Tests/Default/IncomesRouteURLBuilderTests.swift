@@ -44,15 +44,6 @@ struct IncomesRouteURLBuilderTests {
     }
 
     @Test
-    func build_custom_scheme_url_for_introduction() {
-        let route = IncomesRoute.introduction
-        let url = IncomesRouteURLBuilder.customSchemeURL(for: route)
-        #expect(
-            url?.absoluteString == "incomes://introduction"
-        )
-    }
-
-    @Test
     func build_custom_scheme_url_for_duplicate_tags() {
         let route = IncomesRoute.duplicateTags
         let url = IncomesRouteURLBuilder.customSchemeURL(for: route)

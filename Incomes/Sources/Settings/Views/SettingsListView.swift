@@ -8,15 +8,21 @@
 
 import SwiftData
 import SwiftUI
+import TipKit
 
 struct SettingsListView {
     @Environment(\.modelContext)
     private var context
     @Environment(NotificationService.self)
     private var notificationService
+    @Environment(IncomesTipController.self)
+    private var tipController
 
     @Environment(\.locale)
     private var locale
+
+    @Query(.tags(.typeIs(.year)))
+    private var yearTags: [Tag]
 
     @AppStorage(.isSubscribeOn)
     private var isSubscribeOn
@@ -34,8 +40,12 @@ struct SettingsListView {
     @State private var isDeleteDebugDialogPresented = false
     @State private var hasDuplicateTags = false
     @State private var hasDebugData = false
+    @State private var isSubscriptionTipEligible = false
+    @State private var isYearlyDuplicationTipEligible = false
 
     private let navigateToRoute: (IncomesRoute) -> Void
+    private let subscriptionTip = SubscriptionTip()
+    private let yearlyDuplicationTip = YearlyDuplicationTip()
 
     init(
         navigateToRoute: @escaping (IncomesRoute) -> Void = { _ in
@@ -53,10 +63,15 @@ extension SettingsListView: View {
                     Text("iCloud On")
                 }
             } else {
+                if isSubscriptionTipEligible {
+                    TipView(subscriptionTip)
+                }
                 routeRowButton(
                     "Subscription",
                     route: .settingsSubscription
-                )
+                ) {
+                    tipController.donateDidOpenSubscription()
+                }
             }
             Section {
                 Picker(selection: $currencyCode) {
@@ -98,7 +113,11 @@ extension SettingsListView: View {
                 }
             }
             Section {
+                if shouldShowYearlyDuplicationTip {
+                    TipView(yearlyDuplicationTip)
+                }
                 Button("Duplicate year items") {
+                    tipController.donateDidOpenYearlyDuplication()
                     navigateToRoute(.yearlyDuplication)
                 }
                 Button(role: .destructive) {
@@ -132,7 +151,7 @@ extension SettingsListView: View {
                         Haptic.warning.impact()
                         isDeleteDebugDialogPresented = true
                     } label: {
-                        Text("Delete tutorial/debug data")
+                        Text("Delete debug sample data")
                     }
                 } header: {
                     HStack {
@@ -142,13 +161,16 @@ extension SettingsListView: View {
                             .foregroundStyle(.red)
                     }
                 } footer: {
-                    Text("Removes items tagged as Debug and their tags.")
+                    Text("Removes debug sample items and their tags.")
                 }
             }
             Section {
-                if IntroductionPresentationPolicy.isEnabled {
-                    Button("View App Introduction Again") {
-                        navigateToRoute(.introduction)
+                Button("Show tips again") {
+                    do {
+                        try tipController.resetTips(hasAnyItems: !yearTags.isEmpty)
+                        refreshTipEligibility()
+                    } catch {
+                        assertionFailure(error.localizedDescription)
                     }
                 }
                 routeRowButton(
@@ -190,6 +212,7 @@ extension SettingsListView: View {
                 do {
                     try SettingsActionCoordinator.deleteAllData(context: context)
                     updateStatus()
+                    refreshTipEligibility()
                 } catch {
                     assertionFailure(error.localizedDescription)
                 }
@@ -204,13 +227,14 @@ extension SettingsListView: View {
             Text("Are you sure you want to delete all items?")
         }
         .confirmationDialog(
-            Text("Delete tutorial/debug data"),
+            Text("Delete debug sample data"),
             isPresented: $isDeleteDebugDialogPresented
         ) {
             Button(role: .destructive) {
                 do {
                     try SettingsActionCoordinator.deleteDebugData(context: context)
                     updateStatus()
+                    refreshTipEligibility()
                 } catch {
                     assertionFailure(error.localizedDescription)
                 }
@@ -222,10 +246,11 @@ extension SettingsListView: View {
                 Text("Cancel")
             }
         } message: {
-            Text("This will remove tutorial/debug items and tags. Continue?")
+            Text("This will remove debug sample items and tags. Continue?")
         }
         .task {
             updateStatus()
+            refreshTipEligibility()
 
             isNotificationEnabled = notificationSettings.isEnabled
 
@@ -244,18 +269,30 @@ extension SettingsListView: View {
                 )
             }
         }
+        .onChange(of: yearTags) {
+            refreshTipEligibility()
+        }
         .onAppear {
             updateStatus()
+            refreshTipEligibility()
         }
     }
 }
 
 private extension SettingsListView {
+    var shouldShowYearlyDuplicationTip: Bool {
+        yearTags.isNotEmpty &&
+            isSubscriptionTipEligible == false &&
+            isYearlyDuplicationTipEligible
+    }
+
     func routeRowButton(
         _ title: LocalizedStringKey,
-        route: IncomesRoute
+        route: IncomesRoute,
+        action: (() -> Void)? = nil
     ) -> some View {
         Button {
+            action?()
             navigateToRoute(route)
         } label: {
             HStack {
@@ -269,6 +306,11 @@ private extension SettingsListView {
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
+    }
+
+    func refreshTipEligibility() {
+        isSubscriptionTipEligible = subscriptionTip.shouldDisplay
+        isYearlyDuplicationTipEligible = yearlyDuplicationTip.shouldDisplay
     }
 
     func updateStatus() {

@@ -11,29 +11,12 @@ struct MainNavigationStateLoaderTests {
     }
 
     @Test
-    func load_sets_intro_presented_when_empty() throws {
+    func load_returns_nil_tags_when_store_is_empty() throws {
         let state = try MainNavigationStateLoader.load(
             context: context
         )
-        #expect(state.isIntroductionPresented == true)
-    }
-
-    @Test
-    func load_sets_intro_presented_false_when_items_exist() throws {
-        _ = try Item.create(
-            context: context,
-            date: shiftedDate("2001-02-03T12:00:00Z"),
-            content: "Sample",
-            income: 100,
-            outgo: 0,
-            category: "Test",
-            priority: 0,
-            repeatID: .init()
-        )
-        let state = try MainNavigationStateLoader.load(
-            context: context
-        )
-        #expect(state.isIntroductionPresented == false)
+        #expect(state.yearTag == nil)
+        #expect(state.yearMonthTag == nil)
     }
 
     @Test

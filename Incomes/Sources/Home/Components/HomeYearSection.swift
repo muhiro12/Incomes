@@ -11,6 +11,8 @@ import SwiftUI
 struct HomeYearSection: View {
     @Environment(\.modelContext)
     private var context
+    @Environment(IncomesTipController.self)
+    private var tipController
 
     @Query private var yearMonthTags: [Tag]
 
@@ -40,6 +42,7 @@ struct HomeYearSection: View {
                     guard let monthRoute = route(for: tag) else {
                         return
                     }
+                    tipController.donateDidOpenMonth()
                     navigateToRoute(monthRoute)
                 } label: {
                     TagSummaryRow()

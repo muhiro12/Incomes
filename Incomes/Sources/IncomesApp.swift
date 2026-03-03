@@ -11,6 +11,7 @@ import GoogleMobileAdsWrapper
 import StoreKitWrapper
 import SwiftData
 import SwiftUI
+import TipKit
 
 @main
 struct IncomesApp: App {
@@ -23,10 +24,12 @@ struct IncomesApp: App {
 
     private var sharedNotificationService: NotificationService!
     private var sharedConfigurationService: ConfigurationService!
+    private var sharedTipController: IncomesTipController!
 
     private var sharedStore: Store!
     private var sharedGoogleMobileAdsController: GoogleMobileAdsController!
 
+    @MainActor
     init() {
         DatabaseMigrator.migrateSQLiteFilesIfNeeded()
 
@@ -40,11 +43,13 @@ struct IncomesApp: App {
 
         let notificationService = NotificationService(modelContainer: modelContainer)
         let configurationService = ConfigurationService()
+        let tipController = IncomesTipController()
 
         sharedModelContainer = modelContainer
 
         sharedNotificationService = notificationService
         sharedConfigurationService = configurationService
+        sharedTipController = tipController
 
         sharedStore = .init()
 
@@ -68,6 +73,14 @@ struct IncomesApp: App {
             configurationService
         }
 
+        do {
+            try tipController.configureIfNeeded()
+        } catch {
+            #if DEBUG
+            assertionFailure(error.localizedDescription)
+            #endif
+        }
+
         if let currentAppVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
             lastLaunchedAppVersion = currentAppVersion
         }
@@ -82,6 +95,7 @@ struct IncomesApp: App {
                 .modelContainer(sharedModelContainer)
                 .environment(sharedNotificationService)
                 .environment(sharedConfigurationService)
+                .environment(sharedTipController)
                 .environment(sharedStore)
                 .environment(sharedGoogleMobileAdsController)
         }

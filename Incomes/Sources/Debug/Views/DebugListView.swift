@@ -8,10 +8,16 @@
 
 import SwiftData
 import SwiftUI
+import TipKit
 
 struct DebugListView {
     @Environment(\.modelContext)
     private var context
+    @Environment(IncomesTipController.self)
+    private var tipController
+
+    @Query(.tags(.typeIs(.year)))
+    private var yearTags: [Tag]
 
     @AppStorage(.isDebugOn)
     private var isDebugOn
@@ -63,6 +69,21 @@ extension DebugListView: View {
                     Text("Set PreviewData")
                 }
                 .disabled(!isDebugOn)
+            }
+            Section("TipKit") {
+                Button("Reset Tips") {
+                    do {
+                        try tipController.resetTips(hasAnyItems: !yearTags.isEmpty)
+                    } catch {
+                        assertionFailure(error.localizedDescription)
+                    }
+                }
+                Button("Show All Tips For Testing") {
+                    Tips.showAllTipsForTesting()
+                }
+                Button("Hide All Tips For Testing") {
+                    Tips.hideAllTipsForTesting()
+                }
             }
             StoreSection()
             AdvertisementSection(.medium)

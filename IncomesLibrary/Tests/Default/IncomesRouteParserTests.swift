@@ -84,14 +84,6 @@ struct IncomesRouteParserTests {
     }
 
     @Test
-    func parse_custom_scheme_introduction_route() {
-        let route = IncomesRouteParser.parse(
-            url: .init(string: "incomes://introduction")!
-        )
-        #expect(route == .introduction)
-    }
-
-    @Test
     func parse_custom_scheme_duplicate_tags_route() {
         let route = IncomesRouteParser.parse(
             url: .init(string: "incomes://duplicate-tags")!

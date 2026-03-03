@@ -8,6 +8,7 @@
 
 import SwiftData
 import SwiftUI
+import TipKit
 
 struct HomeListView {
     @Environment(Tag.self)
@@ -18,10 +19,14 @@ struct HomeListView {
     @Environment(\.modelContext)
     private var context
 
+    @Query(.tags(.typeIs(.yearMonth)))
+    private var allYearMonthTags: [Tag]
+
     @AppStorage(.isSubscribeOn)
     private var isSubscribeOn
 
     private let navigateToRoute: (IncomesRoute) -> Void
+    private let monthListTip = MonthListTip()
 
     init(
         navigateToRoute: @escaping (IncomesRoute) -> Void = { _ in
@@ -34,6 +39,9 @@ struct HomeListView {
 extension HomeListView: View {
     var body: some View {
         List {
+            if hasMonthRows {
+                TipView(monthListTip)
+            }
             HomeYearSection(
                 yearTag: yearTag,
                 navigateToRoute: navigateToRoute
@@ -65,6 +73,12 @@ extension HomeListView: View {
 }
 
 private extension HomeListView {
+    var hasMonthRows: Bool {
+        allYearMonthTags.contains { tag in
+            tag.name.hasPrefix(yearTag.name)
+        }
+    }
+
     func route(for yearTag: Tag) -> IncomesRoute? {
         guard yearTag.type == .year,
               let year = Int(yearTag.name),

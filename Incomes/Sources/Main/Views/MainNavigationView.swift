@@ -12,6 +12,8 @@ import SwiftUI
 struct MainNavigationView: View {
     @Environment(\.modelContext)
     private var context
+    @Environment(IncomesTipController.self)
+    private var tipController
 
     @Query(.tags(.typeIs(.year), order: .reverse))
     private var yearTags: [Tag]
@@ -212,8 +214,6 @@ struct MainNavigationView: View {
                 NavigationStack {
                     YearlyDuplicationView()
                 }
-            case .introduction:
-                IntroductionNavigationView()
             case .itemDetail:
                 deepLinkedItemNavigationView()
             }
@@ -231,6 +231,14 @@ struct MainNavigationView: View {
                 assertionFailure(error.localizedDescription)
             }
         }
+        .onChange(of: yearTags) {
+            tipController.refreshHasAnyItems(!yearTags.isEmpty)
+        }
+        .onChange(of: router.isSearchPresented) {
+            if router.isSearchPresented {
+                tipController.donateDidOpenSearch()
+            }
+        }
         .task {
             do {
                 try router.loadState(
@@ -239,6 +247,8 @@ struct MainNavigationView: View {
             } catch {
                 assertionFailure(error.localizedDescription)
             }
+
+            tipController.refreshHasAnyItems(!yearTags.isEmpty)
 
             do {
                 try handleIncomingRoute()
@@ -315,7 +325,6 @@ private extension MainNavigationView {
 enum MainNavigationSheetRoute: String, Identifiable {
     case settings
     case yearlyDuplication
-    case introduction
     case itemDetail
 
     var id: String {
@@ -355,10 +364,6 @@ final class MainNavigationRouter: ObservableObject {
         let state = try MainNavigationStateLoader.load(context: context)
         if hasLoaded == false {
             hasLoaded = true
-            if state.isIntroductionPresented &&
-                IntroductionPresentationPolicy.isEnabled {
-                sheetRoute = .introduction
-            }
         }
         yearTagID = state.yearTag?.persistentModelID
         selectedTag = state.yearMonthTag
@@ -396,7 +401,7 @@ final class MainNavigationRouter: ObservableObject {
         to route: IncomesRoute,
         context: ModelContext
     ) throws {
-        if isSettingsPresented && route.isSettingsScopeRoute {
+        if isSettingsPresented, route.isSettingsScopeRoute {
             try apply(route: route, context: context)
         } else if isSettingsPresented {
             pendingRouteAfterSettingsDismissal = route
@@ -461,10 +466,6 @@ private extension MainNavigationRouter {
             settingsDestination = .debug
         case .yearlyDuplication:
             sheetRoute = .yearlyDuplication
-        case .introduction:
-            if IntroductionPresentationPolicy.isEnabled {
-                sheetRoute = .introduction
-            }
         case .duplicateTags:
             fullScreenRoute = .duplicateTags
         case .itemDetail(let itemID):
@@ -510,7 +511,6 @@ private extension IncomesRoute {
         case .home,
              .yearSummary,
              .yearlyDuplication,
-             .introduction,
              .duplicateTags,
              .year,
              .month,
