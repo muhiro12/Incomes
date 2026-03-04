@@ -15,7 +15,7 @@ struct YearChartsView: View {
     private var context
 
     var date: Date {
-        tag.name.dateValueWithoutLocale(.yyyy) ?? .distantPast
+        TagService.date(for: tag) ?? .distantPast
     }
 
     var body: some View {

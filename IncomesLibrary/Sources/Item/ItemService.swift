@@ -24,7 +24,7 @@ public enum ItemService {
         input: ItemFormInput,
         repeatMonthSelections: Set<RepeatMonthSelection>
     ) throws -> Item {
-        try create(
+        try createItem(
             context: context,
             date: input.date,
             content: input.content,
@@ -42,7 +42,7 @@ public enum ItemService {
         input: ItemFormInput,
         repeatCount: Int
     ) throws -> Item {
-        try create(
+        try createItem(
             context: context,
             date: input.date,
             content: input.content,
@@ -64,6 +64,11 @@ public enum ItemService {
     ///   - category: Category name.
     ///   - repeatCount: Number of monthly repeats (>= 1).
     /// - Returns: The first created item.
+    @available(
+    *,
+    deprecated,
+    message: "Use create(context:input:repeatCount:) instead."
+    )
     public static func create(
         context: ModelContext,
         date: Date,
@@ -74,9 +79,7 @@ public enum ItemService {
         priority: Int,
         repeatCount: Int
     ) throws -> Item {
-        var items = [Item]()
-        let repeatID = UUID()
-        let item = try Item.create(
+        try createItem(
             context: context,
             date: date,
             content: content,
@@ -84,32 +87,8 @@ public enum ItemService {
             outgo: outgo,
             category: category,
             priority: priority,
-            repeatID: repeatID
+            repeatCount: repeatCount
         )
-        items.append(item)
-        for index in 0..<repeatCount {
-            guard index > .zero else {
-                continue
-            }
-            guard let repeatingDate = Calendar.current.date(byAdding: .month, value: index, to: date) else {
-                assertionFailure()
-                continue
-            }
-            let item = try Item.create(
-                context: context,
-                date: repeatingDate,
-                content: content,
-                income: income,
-                outgo: outgo,
-                category: category,
-                priority: priority,
-                repeatID: repeatID
-            )
-            items.append(item)
-        }
-        items.forEach(context.insert)
-        try BalanceCalculator.calculate(in: context, for: items)
-        return item
     }
 
     /// Creates an item and additional items in the selected months of the base or next year.
@@ -122,6 +101,11 @@ public enum ItemService {
     ///   - category: Category name.
     ///   - repeatMonthSelections: Year/month selections to create items in. The base month is always included.
     /// - Returns: The first created item.
+    @available(
+    *,
+    deprecated,
+    message: "Use create(context:input:repeatMonthSelections:) instead."
+    )
     public static func create(
         context: ModelContext,
         date: Date,
@@ -132,23 +116,7 @@ public enum ItemService {
         priority: Int,
         repeatMonthSelections: Set<RepeatMonthSelection>
     ) throws -> Item {
-        let calendar = Calendar.current
-        let baseYear = calendar.component(.year, from: date)
-        let baseMonth = calendar.component(.month, from: date)
-        let validSelections = repeatMonthSelections.filter { selection in
-            let isValidMonth = (1...12).contains(selection.month)
-            let isValidYear = selection.year == baseYear || selection.year == baseYear + 1
-            return isValidMonth && isValidYear
-        }
-        if validSelections.count != repeatMonthSelections.count {
-            // Invalid selections are ignored to avoid crashing on unexpected input.
-        }
-        let baseSelection = RepeatMonthSelection(year: baseYear, month: baseMonth)
-        let selections = Set(validSelections).union([baseSelection])
-
-        var items = [Item]()
-        let repeatID = UUID()
-        let item = try Item.create(
+        try createItem(
             context: context,
             date: date,
             content: content,
@@ -156,45 +124,8 @@ public enum ItemService {
             outgo: outgo,
             category: category,
             priority: priority,
-            repeatID: repeatID
+            repeatMonthSelections: repeatMonthSelections
         )
-        items.append(item)
-
-        let sortedSelections = selections.sorted { left, right in
-            if left.year != right.year {
-                return left.year < right.year
-            }
-            return left.month < right.month
-        }
-        for selection in sortedSelections {
-            guard selection.year != baseYear || selection.month != baseMonth else {
-                continue
-            }
-            let monthOffset = (selection.year - baseYear) * 12 + (selection.month - baseMonth)
-            guard let repeatingDate = calendar.date(
-                byAdding: .month,
-                value: monthOffset,
-                to: date
-            ) else {
-                assertionFailure()
-                continue
-            }
-            let repeatItem = try Item.create(
-                context: context,
-                date: repeatingDate,
-                content: content,
-                income: income,
-                outgo: outgo,
-                category: category,
-                priority: priority,
-                repeatID: repeatID
-            )
-            items.append(repeatItem)
-        }
-
-        items.forEach(context.insert)
-        try BalanceCalculator.calculate(in: context, for: items)
-        return item
     }
 
     /// Deletes one item and recalculates balances for affected items.
@@ -313,7 +244,7 @@ public enum ItemService {
     ) throws {
         switch scope {
         case .thisItem:
-            try update(
+            try updateSingleItem(
                 context: context,
                 item: item,
                 date: input.date,
@@ -324,7 +255,7 @@ public enum ItemService {
                 priority: input.priority
             )
         case .futureItems:
-            try updateFuture(
+            try updateFutureItems(
                 context: context,
                 item: item,
                 date: input.date,
@@ -335,7 +266,7 @@ public enum ItemService {
                 priority: input.priority
             )
         case .allItems:
-            try updateAll(
+            try updateAllItems(
                 context: context,
                 item: item,
                 date: input.date,
@@ -349,6 +280,11 @@ public enum ItemService {
     }
 
     /// Updates a single item with the provided values and recalculates balance.
+    @available(
+    *,
+    deprecated,
+    message: "Use update(context:item:input:scope:) instead."
+    )
     public static func update(
         context: ModelContext,
         item: Item,
@@ -359,18 +295,16 @@ public enum ItemService {
         category: String,
         priority: Int
     ) throws {
-        let originalDate = item.localDate
-        try item.modify(
+        try updateSingleItem(
+            context: context,
+            item: item,
             date: date,
             content: content,
             income: income,
             outgo: outgo,
             category: category,
-            priority: priority,
-            repeatID: .init()
+            priority: priority
         )
-        let recalcDate = min(originalDate, item.localDate)
-        try BalanceCalculator.calculate(in: context, after: recalcDate)
     }
 
     /// Updates a set of repeating items specified by `descriptor` using the delta
@@ -433,6 +367,11 @@ public enum ItemService {
     }
 
     /// Updates all items in the same repeat series as `item`.
+    @available(
+    *,
+    deprecated,
+    message: "Use update(context:item:input:scope:) with .allItems instead."
+    )
     public static func updateAll(
         context: ModelContext,
         item: Item,
@@ -443,7 +382,7 @@ public enum ItemService {
         category: String,
         priority: Int
     ) throws {
-        try updateRepeatingItems(
+        try updateAllItems(
             context: context,
             item: item,
             date: date,
@@ -451,12 +390,16 @@ public enum ItemService {
             income: income,
             outgo: outgo,
             category: category,
-            priority: priority,
-            descriptor: .items(.repeatIDIs(item.repeatID))
+            priority: priority
         )
     }
 
     /// Updates items in the repeat series that occur on/after the original `item` date.
+    @available(
+    *,
+    deprecated,
+    message: "Use update(context:item:input:scope:) with .futureItems instead."
+    )
     public static func updateFuture(
         context: ModelContext,
         item: Item,
@@ -467,7 +410,7 @@ public enum ItemService {
         category: String,
         priority: Int
     ) throws {
-        try updateRepeatingItems(
+        try updateFutureItems(
             context: context,
             item: item,
             date: date,
@@ -475,13 +418,7 @@ public enum ItemService {
             income: income,
             outgo: outgo,
             category: category,
-            priority: priority,
-            descriptor: .items(
-                .repeatIDAndDateIsAfter(
-                    repeatID: item.repeatID,
-                    date: item.localDate
-                )
-            )
+            priority: priority
         )
     }
 
@@ -777,13 +714,211 @@ public enum ItemService {
                 item: item
             )
         }
-        try debugTags.forEach { tag in
-            try TagService.delete(tag: tag)
+        debugTags.forEach { tag in
+            TagService.delete(tag: tag)
         }
     }
 }
 
 private extension ItemService {
+    static func createItem(
+        context: ModelContext,
+        date: Date,
+        content: String,
+        income: Decimal,
+        outgo: Decimal,
+        category: String,
+        priority: Int,
+        repeatCount: Int
+    ) throws -> Item {
+        var items = [Item]()
+        let repeatID = UUID()
+        let item = try Item.create(
+            context: context,
+            date: date,
+            content: content,
+            income: income,
+            outgo: outgo,
+            category: category,
+            priority: priority,
+            repeatID: repeatID
+        )
+        items.append(item)
+        for index in 0..<repeatCount {
+            guard index > .zero else {
+                continue
+            }
+            guard let repeatingDate = Calendar.current.date(byAdding: .month, value: index, to: date) else {
+                assertionFailure()
+                continue
+            }
+            let repeatItem = try Item.create(
+                context: context,
+                date: repeatingDate,
+                content: content,
+                income: income,
+                outgo: outgo,
+                category: category,
+                priority: priority,
+                repeatID: repeatID
+            )
+            items.append(repeatItem)
+        }
+        items.forEach(context.insert)
+        try BalanceCalculator.calculate(in: context, for: items)
+        return item
+    }
+
+    static func createItem(
+        context: ModelContext,
+        date: Date,
+        content: String,
+        income: Decimal,
+        outgo: Decimal,
+        category: String,
+        priority: Int,
+        repeatMonthSelections: Set<RepeatMonthSelection>
+    ) throws -> Item {
+        let calendar = Calendar.current
+        let baseYear = calendar.component(.year, from: date)
+        let baseMonth = calendar.component(.month, from: date)
+        let validSelections = repeatMonthSelections.filter { selection in
+            let isValidMonth = (1...12).contains(selection.month)
+            let isValidYear = selection.year == baseYear || selection.year == baseYear + 1
+            return isValidMonth && isValidYear
+        }
+        if validSelections.count != repeatMonthSelections.count {
+            // Invalid selections are ignored to avoid crashing on unexpected input.
+        }
+        let baseSelection = RepeatMonthSelection(year: baseYear, month: baseMonth)
+        let selections = Set(validSelections).union([baseSelection])
+
+        var items = [Item]()
+        let repeatID = UUID()
+        let item = try Item.create(
+            context: context,
+            date: date,
+            content: content,
+            income: income,
+            outgo: outgo,
+            category: category,
+            priority: priority,
+            repeatID: repeatID
+        )
+        items.append(item)
+
+        let sortedSelections = selections.sorted { left, right in
+            if left.year != right.year {
+                return left.year < right.year
+            }
+            return left.month < right.month
+        }
+        for selection in sortedSelections {
+            guard selection.year != baseYear || selection.month != baseMonth else {
+                continue
+            }
+            let monthOffset = (selection.year - baseYear) * 12 + (selection.month - baseMonth)
+            guard let repeatingDate = calendar.date(
+                byAdding: .month,
+                value: monthOffset,
+                to: date
+            ) else {
+                assertionFailure()
+                continue
+            }
+            let repeatItem = try Item.create(
+                context: context,
+                date: repeatingDate,
+                content: content,
+                income: income,
+                outgo: outgo,
+                category: category,
+                priority: priority,
+                repeatID: repeatID
+            )
+            items.append(repeatItem)
+        }
+
+        items.forEach(context.insert)
+        try BalanceCalculator.calculate(in: context, for: items)
+        return item
+    }
+
+    static func updateSingleItem(
+        context: ModelContext,
+        item: Item,
+        date: Date,
+        content: String,
+        income: Decimal,
+        outgo: Decimal,
+        category: String,
+        priority: Int
+    ) throws {
+        let originalDate = item.localDate
+        try item.modify(
+            date: date,
+            content: content,
+            income: income,
+            outgo: outgo,
+            category: category,
+            priority: priority,
+            repeatID: .init()
+        )
+        let recalcDate = min(originalDate, item.localDate)
+        try BalanceCalculator.calculate(in: context, after: recalcDate)
+    }
+
+    static func updateAllItems(
+        context: ModelContext,
+        item: Item,
+        date: Date,
+        content: String,
+        income: Decimal,
+        outgo: Decimal,
+        category: String,
+        priority: Int
+    ) throws {
+        try updateRepeatingItems(
+            context: context,
+            item: item,
+            date: date,
+            content: content,
+            income: income,
+            outgo: outgo,
+            category: category,
+            priority: priority,
+            descriptor: .items(.repeatIDIs(item.repeatID))
+        )
+    }
+
+    static func updateFutureItems(
+        context: ModelContext,
+        item: Item,
+        date: Date,
+        content: String,
+        income: Decimal,
+        outgo: Decimal,
+        category: String,
+        priority: Int
+    ) throws {
+        try updateRepeatingItems(
+            context: context,
+            item: item,
+            date: date,
+            content: content,
+            income: income,
+            outgo: outgo,
+            category: category,
+            priority: priority,
+            descriptor: .items(
+                .repeatIDAndDateIsAfter(
+                    repeatID: item.repeatID,
+                    date: item.localDate
+                )
+            )
+        )
+    }
+
     static func attachSampleTag(to item: Item, context: ModelContext) throws {
         let sampleName = String(localized: "Sample Data")
         let debugTag = try Tag.create(context: context, name: sampleName, type: .debug)

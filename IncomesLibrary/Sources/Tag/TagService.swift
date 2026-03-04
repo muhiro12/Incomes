@@ -73,7 +73,7 @@ public enum TagService {
     }
 
     /// Merges `tags` into the first tag, reattaching item relationships.
-    public static func mergeDuplicates(tags: [Tag]) throws {
+    public static func mergeDuplicates(tags: [Tag]) {
         guard let parent = tags.first else {
             return
         }
@@ -88,8 +88,8 @@ public enum TagService {
             tags.append(parent)
             item.modify(tags: tags)
         }
-        try children.forEach { child in
-            try delete(tag: child)
+        children.forEach { child in
+            delete(tag: child)
         }
     }
 
@@ -131,6 +131,19 @@ public enum TagService {
         }
     }
 
+    /// Returns the selected tags for deletion based on list indices.
+    public static func resolveTagsForDeletion(
+        from tags: [Tag],
+        indices: IndexSet
+    ) -> [Tag] {
+        indices.compactMap { index in
+            guard tags.indices.contains(index) else {
+                return nil
+            }
+            return tags[index]
+        }
+    }
+
     /// Returns items for a given tag and year string.
     public static func items(
         for tag: Tag,
@@ -165,6 +178,28 @@ public enum TagService {
                 return []
             }
             return matchingItems(for: tags[index])
+        }
+    }
+
+    /// Returns a matching date for year and year-month tags.
+    public static func date(for tag: Tag) -> Date? {
+        switch tag.type {
+        case .year:
+            return tag.name.dateValueWithoutLocale(.yyyy)
+        case .yearMonth:
+            return tag.name.dateValueWithoutLocale(.yyyyMM)
+        case .content, .category, .debug, .none:
+            return nil
+        }
+    }
+
+    /// True when `tag` has the same semantic identity as any tag in `tags`.
+    public static func containsEquivalentTag(
+        _ tag: Tag,
+        in tags: [Tag]
+    ) -> Bool {
+        tags.contains { candidate in
+            candidate.name == tag.name && candidate.typeID == tag.typeID
         }
     }
 }

@@ -218,6 +218,42 @@ struct TagServiceTests {
         #expect(try context.fetchCount(.tags(.all)) == 2)
     }
 
+    @Test
+    func date_returns_date_for_year_tag() throws {
+        let tag = try Tag.create(context: context, name: "2024", type: .year)
+
+        let date = try #require(TagService.date(for: tag))
+
+        #expect(date.stringValueWithoutLocale(.yyyy) == "2024")
+    }
+
+    @Test
+    func date_returns_date_for_year_month_tag() throws {
+        let tag = try Tag.create(context: context, name: "202402", type: .yearMonth)
+
+        let date = try #require(TagService.date(for: tag))
+
+        #expect(date.stringValueWithoutLocale(.yyyyMM) == "202402")
+    }
+
+    @Test
+    func containsEquivalentTag_matches_name_and_type() throws {
+        let target = try Tag.create(context: context, name: "2024", type: .year)
+        let sameSemanticTag = try Tag.createIgnoringDuplicates(
+            context: context,
+            name: "2024",
+            type: .year
+        )
+        let differentTag = try Tag.create(context: context, name: "2025", type: .year)
+
+        #expect(
+            TagService.containsEquivalentTag(
+                target,
+                in: [sameSemanticTag, differentTag]
+            )
+        )
+    }
+
     // MARK: - Delete
 
     @Test

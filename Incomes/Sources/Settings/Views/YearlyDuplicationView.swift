@@ -29,7 +29,10 @@ struct YearlyDuplicationView: View {
             if let plan {
                 Section("Proposals") {
                     ForEach(plan.groups, id: \.id) { group in
-                        let entries = entries(for: group, in: plan)
+                        let entries = YearlyDuplicationCoordinator.entries(
+                            for: group,
+                            in: plan
+                        )
                         let isCreated = createdGroupIDs.contains(group.id)
                         VStack(alignment: .leading, spacing: 8) {
                             HStack {
@@ -46,32 +49,38 @@ struct YearlyDuplicationView: View {
                                     .font(.footnote)
                                     .foregroundStyle(.secondary)
                             }
-                            Text(String(localized: "Dates: \(monthDayListText(for: group))"))
-                                .font(.footnote)
-                                .foregroundStyle(.secondary)
+                            Text(
+                                String(
+                                    localized: "Dates: \(YearlyDuplicationCoordinator.monthDayListText(for: group))"
+                                )
+                            )
+                            .font(.footnote)
+                            .foregroundStyle(.secondary)
                             Text(String(localized: "Items: \(group.entryCount)"))
                                 .font(.footnote)
                                 .foregroundStyle(.secondary)
-                            Text(String(localized: "Income: \(decimalString(from: group.averageIncome))"))
-                                .font(.footnote)
-                                .foregroundStyle(.secondary)
-                            Text(String(localized: "Outgo: \(decimalString(from: group.averageOutgo))"))
-                                .font(.footnote)
-                                .foregroundStyle(.secondary)
+                            Text(
+                                String(
+                                    localized: "Income: \(YearlyDuplicationCoordinator.decimalString(from: group.averageIncome))"
+                                )
+                            )
+                            .font(.footnote)
+                            .foregroundStyle(.secondary)
+                            Text(
+                                String(
+                                    localized: "Outgo: \(YearlyDuplicationCoordinator.decimalString(from: group.averageOutgo))"
+                                )
+                            )
+                            .font(.footnote)
+                            .foregroundStyle(.secondary)
                             HStack {
                                 Button("Edit") {
-                                    presentItemForm(
-                                        group: group,
-                                        entries: entries
-                                    )
+                                    presentItemForm(group: group)
                                 }
                                 .buttonStyle(.bordered)
                                 .disabled(isCreated || entries.isEmpty)
                                 Button("Create") {
-                                    createGroupItems(
-                                        group: group,
-                                        entries: entries
-                                    )
+                                    createGroupItems(group: group)
                                 }
                                 .buttonStyle(.borderedProminent)
                                 .disabled(isCreated || entries.isEmpty)
@@ -105,11 +114,11 @@ struct YearlyDuplicationView: View {
             }
         }
         .onAppear {
-            alignYearSelections()
+            alignYearSelections(preserveCurrentSelection: false)
             previewPlan()
         }
         .onChange(of: yearTags) {
-            alignYearSelections()
+            alignYearSelections(preserveCurrentSelection: plan != nil)
             previewPlan()
         }
         .onChange(of: sourceYear) {
@@ -184,24 +193,19 @@ private final class YearlyDuplicationRouter: ObservableObject {
 }
 
 private extension YearlyDuplicationView {
-    struct MonthDay: Hashable {
-        let month: Int
-        let day: Int
-    }
-
     var currentYear: Int {
         Calendar.current.component(.year, from: .now)
     }
 
     var sourceYears: [Int] {
-        YearlyItemDuplicator.availableSourceYears(
+        YearlyDuplicationCoordinator.sourceYears(
             from: yearTags,
             currentYear: currentYear
         )
     }
 
     var targetYears: [Int] {
-        YearlyItemDuplicator.targetYears(
+        YearlyDuplicationCoordinator.targetYears(
             currentYear: currentYear,
             range: 10
         )
@@ -209,7 +213,7 @@ private extension YearlyDuplicationView {
 
     func previewPlan() {
         do {
-            plan = try YearlyItemDuplicator.plan(
+            plan = try YearlyDuplicationCoordinator.previewPlan(
                 context: context,
                 sourceYear: sourceYear,
                 targetYear: targetYear
@@ -221,22 +225,18 @@ private extension YearlyDuplicationView {
         }
     }
 
-    func createGroupItems(
-        group: YearlyItemDuplicationGroup,
-        entries: [YearlyItemDuplicationEntry]
-    ) {
-        guard entries.isNotEmpty else {
+    func createGroupItems(group: YearlyItemDuplicationGroup) {
+        guard let plan else {
             return
         }
-        let filteredPlan = singleGroupPlan(
-            group: group,
-            entries: entries
-        )
         do {
-            let result = try YearlyItemDuplicator.apply(
-                plan: filteredPlan,
+            guard let result = try YearlyDuplicationCoordinator.apply(
+                group: group,
+                in: plan,
                 context: context
-            )
+            ) else {
+                return
+            }
             resultMessage = String(localized: "Created \(result.createdCount) items.")
             createdGroupIDs.insert(group.id)
         } catch {
@@ -244,79 +244,30 @@ private extension YearlyDuplicationView {
         }
     }
 
-    func presentItemForm(
-        group: YearlyItemDuplicationGroup,
-        entries: [YearlyItemDuplicationEntry]
-    ) {
-        guard let baseDate = entries.map(\.targetDate).sorted().first else {
+    func presentItemForm(group: YearlyItemDuplicationGroup) {
+        guard let plan else {
             return
         }
-        let selections = repeatMonthSelections(from: entries)
-        let draft: ItemFormDraft = .init(
-            groupID: group.id,
-            date: baseDate,
-            content: group.content,
-            incomeText: decimalString(from: group.averageIncome),
-            outgoText: decimalString(from: group.averageOutgo),
-            category: group.category,
-            priorityText: .empty,
-            repeatMonthSelections: selections
-        )
+        guard let draft = YearlyDuplicationCoordinator.createDraft(
+            for: group,
+            in: plan
+        ) else {
+            return
+        }
         router.navigate(to: .itemForm(draft))
     }
 
-    func entries(
-        for group: YearlyItemDuplicationGroup,
-        in plan: YearlyItemDuplicationPlan
-    ) -> [YearlyItemDuplicationEntry] {
-        plan.entries.filter { entry in
-            entry.groupID == group.id
-        }
-    }
-
-    func singleGroupPlan(
-        group: YearlyItemDuplicationGroup,
-        entries: [YearlyItemDuplicationEntry]
-    ) -> YearlyItemDuplicationPlan {
-        .init(
-            groups: [group],
-            entries: entries,
-            skippedDuplicateCount: 0
-        )
-    }
-
-    func repeatMonthSelections(
-        from entries: [YearlyItemDuplicationEntry]
-    ) -> Set<RepeatMonthSelection> {
-        let calendar = Calendar.current
-        return Set(entries.map { entry in
-            let year = calendar.component(.year, from: entry.targetDate)
-            let month = calendar.component(.month, from: entry.targetDate)
-            return .init(year: year, month: month)
-        })
-    }
-
-    func alignYearSelections() {
-        let source = sourceYears
-        let target = targetYears
-        guard let defaultSourceYear = source.first,
-              let defaultTargetYear = target.first else {
-            return
-        }
-        let suggestion = YearlyItemDuplicator.suggestion(
+    func alignYearSelections(preserveCurrentSelection: Bool) {
+        let selectionState = YearlyDuplicationCoordinator.selectionState(
             context: context,
             yearTags: yearTags,
-            targetYears: target,
-            minimumGroupCount: 3
+            currentSourceYear: sourceYear,
+            currentTargetYear: targetYear,
+            preserveCurrentSelection: preserveCurrentSelection,
+            currentYear: currentYear
         )
-        let preferredSourceYear = suggestion?.sourceYear ?? defaultSourceYear
-        let preferredTargetYear = suggestion?.targetYear ?? defaultTargetYear
-        if plan == nil || !source.contains(sourceYear) {
-            sourceYear = preferredSourceYear
-        }
-        if plan == nil || !target.contains(targetYear) {
-            targetYear = preferredTargetYear
-        }
+        sourceYear = selectionState.sourceYear
+        targetYear = selectionState.targetYear
     }
 
     var yearSelectionBar: some View {
@@ -359,40 +310,6 @@ private extension YearlyDuplicationView {
             .pickerStyle(.menu)
             .frame(maxWidth: .infinity, alignment: .leading)
         }
-    }
-
-    func monthDayListText(for group: YearlyItemDuplicationGroup) -> String {
-        let calendar = Calendar.current
-        let monthDays = group.targetDates.map { date in
-            MonthDay(
-                month: calendar.component(.month, from: date),
-                day: calendar.component(.day, from: date)
-            )
-        }
-        let sortedMonthDays = Array(Set(monthDays)).sorted { left, right in
-            if left.month != right.month {
-                return left.month < right.month
-            }
-            return left.day < right.day
-        }
-        return sortedMonthDays
-            .map { "\($0.month)/\($0.day)" }
-            .joined(separator: ", ")
-    }
-
-    func decimalString(from value: Decimal) -> String {
-        let number = NSDecimalNumber(decimal: value)
-        let rounded = number.rounding(
-            accordingToBehavior: NSDecimalNumberHandler(
-                roundingMode: .down,
-                scale: 0,
-                raiseOnExactness: false,
-                raiseOnOverflow: false,
-                raiseOnUnderflow: false,
-                raiseOnDivideByZero: false
-            )
-        )
-        return rounded.stringValue
     }
 }
 

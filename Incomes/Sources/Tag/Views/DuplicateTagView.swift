@@ -76,13 +76,9 @@ struct DuplicateTagView: View {
                 guard let selectedTag else {
                     return
                 }
-                do {
-                    try TagService.delete(tag: selectedTag)
-                    self.selectedTag = nil
-                    Haptic.success.impact()
-                } catch {
-                    assertionFailure(error.localizedDescription)
-                }
+                TagService.delete(tag: selectedTag)
+                self.selectedTag = nil
+                Haptic.success.impact()
             } label: {
                 Text("Delete")
             }

@@ -94,17 +94,14 @@ private extension HomeYearSection {
         guard yearMonthTag.type == .yearMonth else {
             return nil
         }
-
-        let normalizedName = yearMonthTag.name.replacingOccurrences(of: "-", with: "")
-        guard normalizedName.count == 6,
-              let year = Int(String(normalizedName.prefix(4))),
-              let month = Int(String(normalizedName.suffix(2))),
-              1...9_999 ~= year,
-              1...12 ~= month else {
+        guard let date = TagService.date(for: yearMonthTag) else {
             return nil
         }
-
-        return .month(year: year, month: month)
+        let calendar = Calendar.current
+        return .month(
+            year: calendar.component(.year, from: date),
+            month: calendar.component(.month, from: date)
+        )
     }
 }
 

@@ -40,3 +40,97 @@ let timeZones: [TimeZone] = [
 func fetchItems(_ context: ModelContext) -> [Item] {
     try! context.fetch(.items(.all))
 }
+
+func makeItemFormInput(
+    date: Date,
+    content: String,
+    income: Decimal,
+    outgo: Decimal,
+    category: String,
+    priority: Int
+) -> ItemFormInput {
+    .init(
+        date: date,
+        content: content,
+        incomeText: income.description,
+        outgoText: outgo.description,
+        category: category,
+        priorityText: "\(priority)"
+    )
+}
+
+@discardableResult
+func createItem(
+    context: ModelContext,
+    date: Date,
+    content: String,
+    income: Decimal,
+    outgo: Decimal,
+    category: String,
+    priority: Int,
+    repeatCount: Int = 1
+) throws -> Item {
+    try ItemService.create(
+        context: context,
+        input: makeItemFormInput(
+            date: date,
+            content: content,
+            income: income,
+            outgo: outgo,
+            category: category,
+            priority: priority
+        ),
+        repeatCount: repeatCount
+    )
+}
+
+@discardableResult
+func createItem(
+    context: ModelContext,
+    date: Date,
+    content: String,
+    income: Decimal,
+    outgo: Decimal,
+    category: String,
+    priority: Int,
+    repeatMonthSelections: Set<RepeatMonthSelection>
+) throws -> Item {
+    try ItemService.create(
+        context: context,
+        input: makeItemFormInput(
+            date: date,
+            content: content,
+            income: income,
+            outgo: outgo,
+            category: category,
+            priority: priority
+        ),
+        repeatMonthSelections: repeatMonthSelections
+    )
+}
+
+func updateItem(
+    context: ModelContext,
+    item: Item,
+    date: Date,
+    content: String,
+    income: Decimal,
+    outgo: Decimal,
+    category: String,
+    priority: Int,
+    scope: ItemMutationScope = .thisItem
+) throws {
+    try ItemService.update(
+        context: context,
+        item: item,
+        input: makeItemFormInput(
+            date: date,
+            content: content,
+            income: income,
+            outgo: outgo,
+            category: category,
+            priority: priority
+        ),
+        scope: scope
+    )
+}

@@ -64,7 +64,7 @@ private extension YearMonthItemListView {
     }
 
     var monthDate: Date? {
-        tag.name.dateValueWithoutLocale(.yyyyMM)
+        TagService.date(for: tag)
     }
 
     var yearStrings: [String] {

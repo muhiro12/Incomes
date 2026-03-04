@@ -20,7 +20,7 @@ struct ItemServiceTest {
     }
 
     @discardableResult
-    func createItem(
+    func createTestItem(
         date: Date,
         content: String,
         income: Decimal,
@@ -29,7 +29,7 @@ struct ItemServiceTest {
         priority: Int,
         repeatCount: Int = 1
     ) throws -> Item {
-        try ItemService.create(
+        try createItem(
             context: context,
             date: date,
             content: content,
@@ -41,13 +41,36 @@ struct ItemServiceTest {
         )
     }
 
+    func updateTestItem(
+        item: Item,
+        date: Date,
+        content: String,
+        income: Decimal,
+        outgo: Decimal,
+        category: String,
+        priority: Int,
+        scope: ItemMutationScope = .thisItem
+    ) throws {
+        try updateItem(
+            context: context,
+            item: item,
+            date: date,
+            content: content,
+            income: income,
+            outgo: outgo,
+            category: category,
+            priority: priority,
+            scope: scope
+        )
+    }
+
     // MARK: - Fetch
 
     @Test("item returns first item if available", arguments: timeZones)
     func item(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        _ = try createItem(
+        _ = try createTestItem(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "First",
             income: 100,
@@ -63,7 +86,7 @@ struct ItemServiceTest {
     func itemWithPredicate(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        _ = try createItem(
+        _ = try createTestItem(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "Food",
             income: 0,
@@ -71,7 +94,7 @@ struct ItemServiceTest {
             category: "Food",
             priority: 0,
             )
-        _ = try createItem(
+        _ = try createTestItem(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "Transport",
             income: 0,
@@ -88,7 +111,7 @@ struct ItemServiceTest {
     func items(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        _ = try createItem(
+        _ = try createTestItem(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "One",
             income: 100,
@@ -96,7 +119,7 @@ struct ItemServiceTest {
             category: "Test",
             priority: 0,
             )
-        _ = try createItem(
+        _ = try createTestItem(
             date: isoDate("2024-01-02T00:00:00Z"),
             content: "Two",
             income: 200,
@@ -112,7 +135,7 @@ struct ItemServiceTest {
     func itemsWithPredicate(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        _ = try createItem(
+        _ = try createTestItem(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "Match",
             income: 0,
@@ -120,7 +143,7 @@ struct ItemServiceTest {
             category: "Filtered",
             priority: 0,
             )
-        _ = try createItem(
+        _ = try createTestItem(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "NoMatch",
             income: 0,
@@ -138,7 +161,7 @@ struct ItemServiceTest {
     func itemsCount(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        _ = try createItem(
+        _ = try createTestItem(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "Only",
             income: 300,
@@ -154,7 +177,7 @@ struct ItemServiceTest {
     func itemsCountWithPredicate(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        _ = try createItem(
+        _ = try createTestItem(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "X",
             income: 0,
@@ -162,7 +185,7 @@ struct ItemServiceTest {
             category: "Filtered",
             priority: 0,
             )
-        _ = try createItem(
+        _ = try createTestItem(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "Y",
             income: 0,
@@ -181,7 +204,7 @@ struct ItemServiceTest {
     func create(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        _ = try createItem(
+        _ = try createTestItem(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "Lunch",
             income: 1_000,
@@ -197,7 +220,7 @@ struct ItemServiceTest {
     func createWithRepeat(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        _ = try createItem(
+        _ = try createTestItem(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "Rent",
             income: 0,
@@ -215,7 +238,7 @@ struct ItemServiceTest {
     func createWithZeroRepeat(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        _ = try createItem(
+        _ = try createTestItem(
             date: isoDate("2024-03-01T00:00:00Z"),
             content: "Single",
             income: 100,
@@ -233,7 +256,7 @@ struct ItemServiceTest {
     func createWithZeroAmounts(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        _ = try createItem(
+        _ = try createTestItem(
             date: isoDate("2024-03-01T00:00:00Z"),
             content: "Neutral",
             income: 0,
@@ -250,7 +273,7 @@ struct ItemServiceTest {
         NSTimeZone.default = timeZone
 
         for _ in 0..<2 {
-            _ = try createItem(
+            _ = try createTestItem(
                 date: isoDate("2024-03-01T00:00:00Z"),
                 content: "Repeated",
                 income: 100,
@@ -268,7 +291,7 @@ struct ItemServiceTest {
     func createEndOfMonthRepeatingItems(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        _ = try createItem(
+        _ = try createTestItem(
             date: isoDate("2024-01-31T00:00:00Z"),
             content: "EndMonth",
             income: 100,
@@ -292,7 +315,7 @@ struct ItemServiceTest {
         NSTimeZone.default = timeZone
 
         let boundaryDate = shiftedDate("2024-03-15T00:00:00Z")
-        let item = try createItem(
+        let item = try createTestItem(
             date: boundaryDate,
             content: "MidnightUTC",
             income: 100,
@@ -309,7 +332,7 @@ struct ItemServiceTest {
         NSTimeZone.default = timeZone
 
         let jstDate = shiftedDate("2024-03-15T09:00:00Z")  // 00:00 UTC
-        let item = try createItem(
+        let item = try createTestItem(
             date: jstDate,
             content: "JSTToUTC",
             income: 100,
@@ -327,7 +350,7 @@ struct ItemServiceTest {
 
         let inputDate = isoDate("2024-03-15T10:30:00Z")
         let expectedDate = Calendar.utc.startOfDay(for: inputDate)
-        let item = try createItem(
+        let item = try createTestItem(
             date: inputDate,
             content: "RoundedTime",
             income: 100,
@@ -345,7 +368,7 @@ struct ItemServiceTest {
     func update(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        _ = try createItem(
+        _ = try createTestItem(
             date: shiftedDate("2024-01-01T00:00:00Z"),
             content: "Initial",
             income: 100,
@@ -354,16 +377,15 @@ struct ItemServiceTest {
             priority: 0,
             )
         var item = try #require(fetchItems(context).first)
-        try ItemService.update(
-            context: context,
+        try updateTestItem(
             item: item,
             date: shiftedDate("2024-01-02T00:00:00Z"),
             content: "Updated",
             income: 150,
             outgo: 100,
             category: "UpdatedCat",
-            priority: 0,
-            )
+            priority: 0
+        )
         item = try #require(fetchItems(context).first)
         #expect(item.balance == 50)
         #expect(item.content == "Updated")
@@ -374,7 +396,7 @@ struct ItemServiceTest {
     func updateAssignsNewRepeatID(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        _ = try createItem(
+        _ = try createTestItem(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "Initial",
             income: 100,
@@ -385,16 +407,15 @@ struct ItemServiceTest {
         let item = try #require(fetchItems(context).first)
         let oldRepeatID = item.repeatID
 
-        try ItemService.update(
-            context: context,
+        try updateTestItem(
             item: item,
             date: item.utcDate,
             content: "Changed",
             income: 200,
             outgo: 0,
             category: "Updated",
-            priority: 0,
-            )
+            priority: 0
+        )
         let updated = try #require(fetchItems(context).first)
         #expect(updated.repeatID != oldRepeatID)
     }
@@ -403,7 +424,7 @@ struct ItemServiceTest {
     func updateChangesDateOrdering(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        _ = try createItem(
+        _ = try createTestItem(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "First",
             income: 100,
@@ -411,7 +432,7 @@ struct ItemServiceTest {
             category: "SortTest",
             priority: 0,
             )
-        _ = try createItem(
+        _ = try createTestItem(
             date: isoDate("2024-01-02T00:00:00Z"),
             content: "Second",
             income: 100,
@@ -424,16 +445,15 @@ struct ItemServiceTest {
         }
         #expect(items[0].content == "First")
 
-        try ItemService.update(
-            context: context,
+        try updateTestItem(
             item: items[1],
             date: isoDate("2023-12-31T00:00:00Z"),
             content: items[1].content,
             income: items[1].income,
             outgo: items[1].outgo,
             category: items[1].category?.name ?? "",
-            priority: 0,
-            )
+            priority: 0
+        )
 
         items = try context.fetch(.items(.all)).sorted { lhs, rhs in
             lhs.utcDate < rhs.utcDate
@@ -445,7 +465,7 @@ struct ItemServiceTest {
     func updateForFutureItems(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        _ = try createItem(
+        _ = try createTestItem(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "Subscription",
             income: 0,
@@ -458,8 +478,7 @@ struct ItemServiceTest {
             lhs.utcDate < rhs.utcDate
         }
         let target = items[1] // middle item
-        try ItemService.updateFuture(
-            context: context,
+        try updateTestItem(
             item: target,
             date: target.utcDate,
             content: "UpdatedSub",
@@ -467,7 +486,8 @@ struct ItemServiceTest {
             outgo: 1_200,
             category: "Entertainment",
             priority: 0,
-            )
+            scope: .futureItems
+        )
         let result = try context.fetch(.items(.all)).sorted { lhs, rhs in
             lhs.utcDate < rhs.utcDate
         }
@@ -482,7 +502,7 @@ struct ItemServiceTest {
     func updateFutureLastOnly(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        _ = try createItem(
+        _ = try createTestItem(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "Monthly",
             income: 100,
@@ -496,8 +516,7 @@ struct ItemServiceTest {
         }
         let last = items[2]
 
-        try ItemService.updateFuture(
-            context: context,
+        try updateTestItem(
             item: last,
             date: last.utcDate,
             content: "Changed",
@@ -505,7 +524,8 @@ struct ItemServiceTest {
             outgo: 0,
             category: "BillsUpdated",
             priority: 0,
-            )
+            scope: .futureItems
+        )
         let result = try context.fetch(.items(.all)).sorted { lhs, rhs in
             lhs.utcDate < rhs.utcDate
         }
@@ -518,7 +538,7 @@ struct ItemServiceTest {
     func updateFutureSingleRepeat(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        _ = try createItem(
+        _ = try createTestItem(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "Solo",
             income: 0,
@@ -527,8 +547,7 @@ struct ItemServiceTest {
             priority: 0,
             )
         let item = try #require(fetchItems(context).first)
-        try ItemService.updateFuture(
-            context: context,
+        try updateTestItem(
             item: item,
             date: item.utcDate,
             content: "SoloUpdated",
@@ -536,7 +555,8 @@ struct ItemServiceTest {
             outgo: 50,
             category: "OneTimeUpdated",
             priority: 0,
-            )
+            scope: .futureItems
+        )
         let updated = try #require(fetchItems(context).first)
         #expect(updated.content == "SoloUpdated")
         #expect(updated.income == 100)
@@ -546,7 +566,7 @@ struct ItemServiceTest {
     func updateForAllItems(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        let item = try createItem(
+        let item = try createTestItem(
             date: isoDate("2024-02-01T00:00:00Z"),
             content: "Gym",
             income: 0,
@@ -557,8 +577,7 @@ struct ItemServiceTest {
         )
         _ = try context.fetch(.items(.all))
         let target = try #require(try context.fetchFirst(.items(.idIs(item.id))))
-        try ItemService.updateAll(
-            context: context,
+        try updateTestItem(
             item: target,
             date: target.utcDate,
             content: "Fitness",
@@ -566,7 +585,8 @@ struct ItemServiceTest {
             outgo: 7_000,
             category: "Wellness",
             priority: 0,
-            )
+            scope: .allItems
+        )
         let updatedItems = try context.fetch(.items(.all))
         #expect(updatedItems.count == 3)
         for item in updatedItems {
@@ -582,7 +602,7 @@ struct ItemServiceTest {
     func delete(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        _ = try createItem(
+        _ = try createTestItem(
             date: isoDate("2024-04-01T00:00:00Z"),
             content: "ToDelete",
             income: 100,
@@ -603,7 +623,7 @@ struct ItemServiceTest {
     func deleteMultipleItems(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        _ = try createItem(
+        _ = try createTestItem(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "KeepMe",
             income: 100,
@@ -611,7 +631,7 @@ struct ItemServiceTest {
             category: "General",
             priority: 0,
             )
-        _ = try createItem(
+        _ = try createTestItem(
             date: isoDate("2024-01-02T00:00:00Z"),
             content: "RemoveMe",
             income: 100,
@@ -636,7 +656,7 @@ struct ItemServiceTest {
     func deleteAll(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        _ = try createItem(
+        _ = try createTestItem(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "DeleteMe",
             income: 0,
@@ -655,7 +675,7 @@ struct ItemServiceTest {
     func recalculate(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        _ = try createItem(
+        _ = try createTestItem(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "AdjustMe",
             income: 100,
@@ -664,16 +684,15 @@ struct ItemServiceTest {
             priority: 0,
             )
         var item = try #require(fetchItems(context).first)
-        try ItemService.update(
-            context: context,
+        try updateTestItem(
             item: item,
             date: item.utcDate,
             content: item.content,
             income: item.income,
             outgo: 90,
             category: item.category?.name ?? "",
-            priority: 0,
-            )
+            priority: 0
+        )
         item = try #require(fetchItems(context).first)
         #expect(item.balance == 10)
     }
@@ -682,7 +701,7 @@ struct ItemServiceTest {
     func recalculateNoChange(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        _ = try createItem(
+        _ = try createTestItem(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "Stable",
             income: 100,
@@ -706,7 +725,7 @@ struct ItemServiceTest {
     func recalculatePartial(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        _ = try createItem(
+        _ = try createTestItem(
             date: isoDate("2024-01-01T00:00:00Z"),
             content: "Before",
             income: 100,
@@ -714,7 +733,7 @@ struct ItemServiceTest {
             category: "Split",
             priority: 0,
             )
-        _ = try createItem(
+        _ = try createTestItem(
             date: isoDate("2024-02-01T00:00:00Z"),
             content: "After",
             income: 200,
@@ -725,16 +744,15 @@ struct ItemServiceTest {
         var items = try context.fetch(.items(.all)).sorted { lhs, rhs in
             lhs.utcDate < rhs.utcDate
         }
-        try ItemService.update(
-            context: context,
+        try updateTestItem(
             item: items[1],
             date: items[1].utcDate,
             content: items[1].content,
             income: 500,
             outgo: 80,
             category: items[1].category?.name ?? "",
-            priority: 0,
-            )
+            priority: 0
+        )
 
         try ItemService.recalculate(
             context: context,
@@ -751,7 +769,7 @@ struct ItemServiceTest {
     func recalculateWithTimeZoneBoundaries(_ timeZone: TimeZone) throws {
         NSTimeZone.default = timeZone
 
-        _ = try createItem(
+        _ = try createTestItem(
             date: shiftedDate("2024-02-28T15:00:00Z"),  // JST: 2024-02-29 00:00
             content: "EarlyMar",
             income: 300,
@@ -759,7 +777,7 @@ struct ItemServiceTest {
             category: "TZTest",
             priority: 0,
             )
-        _ = try createItem(
+        _ = try createTestItem(
             date: shiftedDate("2024-02-28T14:00:00Z"),  // JST: 2024-02-28 23:00
             content: "LateFeb",
             income: 500,

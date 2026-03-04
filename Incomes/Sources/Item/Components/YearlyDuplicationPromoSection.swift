@@ -45,9 +45,13 @@ struct YearlyDuplicationPromoSection: View {
                                 .font(.footnote)
                                 .foregroundStyle(.secondary)
                         }
-                        Text(String(localized: "Dates: \(monthDayListText(for: proposal))"))
-                            .font(.footnote)
-                            .foregroundStyle(.secondary)
+                        Text(
+                            String(
+                                localized: "Dates: \(YearlyDuplicationCoordinator.monthDayListText(for: proposal))"
+                            )
+                        )
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
                         Text(String(localized: "Items: \(proposal.entryCount)"))
                             .font(.footnote)
                             .foregroundStyle(.secondary)
@@ -86,17 +90,12 @@ struct YearlyDuplicationPromoSection: View {
 }
 
 private extension YearlyDuplicationPromoSection {
-    struct MonthDay: Hashable {
-        let month: Int
-        let day: Int
-    }
-
     func updateYearlyDuplicationPromo() {
         guard !isYearlyDuplicationPromoDismissed else {
             resetPromoState()
             return
         }
-        showYearlyDuplicationPromo = shouldShowYearlyDuplicationPromo()
+        showYearlyDuplicationPromo = YearlyDuplicationCoordinator.shouldShowPromo()
         if showYearlyDuplicationPromo {
             loadYearlyDuplicationProposal()
         } else {
@@ -110,7 +109,7 @@ private extension YearlyDuplicationPromoSection {
     }
 
     func loadYearlyDuplicationProposal() {
-        if let result = loadYearlyDuplicationProposal(
+        if let result = YearlyDuplicationCoordinator.promoState(
             context: context,
             yearTags: yearTags
         ) {
@@ -122,57 +121,10 @@ private extension YearlyDuplicationPromoSection {
         }
     }
 
-    func shouldShowYearlyDuplicationPromo(date: Date = .now) -> Bool {
-        let month = Calendar.current.component(.month, from: date)
-        guard [11, 12, 1, 2].contains(month) else {
-            return false
-        }
-        return Int.random(in: 0..<3) == 0
-    }
-
-    func loadYearlyDuplicationProposal(
-        context: ModelContext,
-        yearTags: [Tag]
-    ) -> (proposal: YearlyItemDuplicationGroup, sourceYear: Int, targetYear: Int)? {
-        let targetYears = YearlyItemDuplicator.targetYears()
-        let suggestion = YearlyItemDuplicator.suggestion(
-            context: context,
-            yearTags: yearTags,
-            targetYears: targetYears,
-            minimumGroupCount: 3
-        )
-        guard let suggestion,
-              let proposal = suggestion.plan.groups.first else {
-            return nil
-        }
-        return (proposal, suggestion.sourceYear, suggestion.targetYear)
-    }
-
     func resetPromoState() {
         showYearlyDuplicationPromo = false
         yearlyDuplicationProposal = nil
         yearlyDuplicationSourceYear = nil
         yearlyDuplicationTargetYear = nil
-    }
-
-    func monthDayListText(for group: YearlyItemDuplicationGroup) -> String {
-        let calendar = Calendar.current
-        let monthDays = group.targetDates.map { date in
-            MonthDay(
-                month: calendar.component(.month, from: date),
-                day: calendar.component(.day, from: date)
-            )
-        }
-        let sortedMonthDays = Array(Set(monthDays)).sorted { left, right in
-            if left.month != right.month {
-                return left.month < right.month
-            }
-            return left.day < right.day
-        }
-        return sortedMonthDays
-            .map { monthDay in
-                "\(monthDay.month)/\(monthDay.day)"
-            }
-            .joined(separator: ", ")
     }
 }

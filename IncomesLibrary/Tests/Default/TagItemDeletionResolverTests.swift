@@ -53,4 +53,18 @@ struct TagItemDeletionResolverTests {
         #expect(!resolvedIDs.contains(firstItem.id))
         #expect(resolvedIDs.contains(secondItem.id))
     }
+
+    @Test
+    func resolveTagsForDeletion_returns_selected_tags() throws {
+        let firstTag = try Tag.create(context: context, name: "2001", type: .year)
+        let secondTag = try Tag.create(context: context, name: "2002", type: .year)
+
+        let resolved = TagService.resolveTagsForDeletion(
+            from: [firstTag, secondTag],
+            indices: IndexSet([1])
+        )
+
+        #expect(resolved.count == 1)
+        #expect(resolved.first?.id == secondTag.id)
+    }
 }

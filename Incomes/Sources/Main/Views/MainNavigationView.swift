@@ -71,14 +71,7 @@ struct MainNavigationView: View {
                         }
                         .onDelete { indices in
                             Haptic.warning.impact()
-                            router.isYearDeleteDialogPresented = true
-                            router.willDeleteTags = indices.compactMap { index in
-                                guard yearTags.indices.contains(index) else {
-                                    return nil
-                                }
-                                return yearTags[index]
-                            }
-                            router.willDeleteItems = TagService.resolveItemsForDeletion(
+                            router.prepareYearDeletion(
                                 from: yearTags,
                                 indices: indices
                             )
@@ -102,14 +95,9 @@ struct MainNavigationView: View {
                             context: context,
                             items: router.willDeleteItems
                         )
-                        if let selectedYearTag,
-                           router.willDeleteTags.contains(where: { deletingTag in
-                            deletingTag.name == selectedYearTag.name && deletingTag.typeID == selectedYearTag.typeID
-                           }) {
-                            router.yearTagID = nil
-                        }
-                        router.willDeleteItems = []
-                        router.willDeleteTags = []
+                        router.completeYearDeletion(
+                            selectedYearTag: selectedYearTag
+                        )
                         Haptic.success.impact()
                     } catch {
                         assertionFailure(error.localizedDescription)
@@ -118,8 +106,7 @@ struct MainNavigationView: View {
                     Text("Delete")
                 }
                 Button(role: .cancel) {
-                    router.willDeleteItems = []
-                    router.willDeleteTags = []
+                    router.clearYearDeletion()
                 } label: {
                     Text("Cancel")
                 }
@@ -359,6 +346,38 @@ final class MainNavigationRouter: ObservableObject {
     private var hasLoaded = false
     private var pendingRoute: IncomesRoute?
     private var pendingRouteAfterSettingsDismissal: IncomesRoute?
+
+    func prepareYearDeletion(
+        from yearTags: [Tag],
+        indices: IndexSet
+    ) {
+        willDeleteTags = TagService.resolveTagsForDeletion(
+            from: yearTags,
+            indices: indices
+        )
+        willDeleteItems = TagService.resolveItemsForDeletion(
+            from: yearTags,
+            indices: indices
+        )
+        isYearDeleteDialogPresented = willDeleteTags.isNotEmpty
+    }
+
+    func completeYearDeletion(selectedYearTag: Tag?) {
+        if let selectedYearTag,
+           TagService.containsEquivalentTag(
+            selectedYearTag,
+            in: willDeleteTags
+           ) {
+            yearTagID = nil
+        }
+        clearYearDeletion()
+    }
+
+    func clearYearDeletion() {
+        isYearDeleteDialogPresented = false
+        willDeleteItems = []
+        willDeleteTags = []
+    }
 
     func loadState(context: ModelContext) throws {
         let state = try MainNavigationStateLoader.load(context: context)
