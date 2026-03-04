@@ -20,6 +20,8 @@ struct SettingsListView {
 
     @Environment(\.locale)
     private var locale
+    @Environment(\.scenePhase)
+    private var scenePhase
 
     @Query(.tags(.typeIs(.year)))
     private var yearTags: [Tag]
@@ -110,6 +112,23 @@ extension SettingsListView: View {
                     Button("Send test notification") {
                         notificationService.sendTestNotification()
                     }
+                }
+                switch notificationService.authorizationState {
+                case .authorized:
+                    Text("Notifications are enabled and will follow your in-app schedule.")
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                case .denied:
+                    Button("Open System Settings") {
+                        openSystemSettings()
+                    }
+                    Text("Notifications are currently denied in iOS Settings.")
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                case .notDetermined:
+                    Text("Notification permission will be requested when reminders are registered.")
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
                 }
             }
             Section {
@@ -276,6 +295,14 @@ extension SettingsListView: View {
             updateStatus()
             refreshTipEligibility()
         }
+        .onChange(of: scenePhase) {
+            guard scenePhase == .active else {
+                return
+            }
+            Task {
+                await notificationService.refreshAuthorizationStatus()
+            }
+        }
     }
 }
 
@@ -323,6 +350,13 @@ private extension SettingsListView {
             hasDuplicateTags = false
             hasDebugData = false
         }
+    }
+
+    func openSystemSettings() {
+        guard let settingsURL = URL(string: UIApplication.openSettingsURLString) else {
+            return
+        }
+        UIApplication.shared.open(settingsURL)
     }
 }
 

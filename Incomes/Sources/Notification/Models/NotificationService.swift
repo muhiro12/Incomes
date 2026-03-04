@@ -13,7 +13,29 @@ import UserNotifications
 @Observable
 final class NotificationService: NSObject {
     private enum NotificationPayloadKey {
-        static let deepLinkURL = "deepLinkURL"
+        static let itemIdentifier = "itemIdentifier"
+        static let notificationKind = "notificationKind"
+        static let primaryDeepLinkURL = "primaryDeepLinkURL"
+        static let secondaryDeepLinkURL = "secondaryDeepLinkURL"
+    }
+
+    private enum NotificationCategoryIdentifier {
+        static let upcomingPaymentActions = "upcoming-payment.actions"
+    }
+
+    private enum NotificationActionIdentifier {
+        static let viewItem = "upcoming-payment.view-item"
+        static let viewMonth = "upcoming-payment.view-month"
+    }
+
+    private enum NotificationKind {
+        static let upcomingPayment = "upcoming-payment"
+    }
+
+    enum AuthorizationState {
+        case notDetermined
+        case authorized
+        case denied
     }
 
     private let modelContainer: ModelContainer
@@ -21,35 +43,58 @@ final class NotificationService: NSObject {
     private(set) var hasNotification = false
     private(set) var shouldShowNotification = false
     private(set) var pendingDeepLinkURL: URL?
+    private(set) var authorizationState: AuthorizationState = .notDetermined
 
     init(modelContainer: ModelContainer) {
         self.modelContainer = modelContainer
         super.init()
         UNUserNotificationCenter.current().delegate = self
+        registerNotificationCategories()
     }
 
     func register() async {
-        _ = try? await UNUserNotificationCenter.current().requestAuthorization(
-            options: [.badge, .sound, .alert, .carPlay]
+        let center = UNUserNotificationCenter.current()
+
+        _ = try? await center.requestAuthorization(
+            options: [.badge, .sound, .alert, .carPlay, .providesAppNotificationSettings]
         )
-        UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+
+        await refreshAuthorizationStatus()
+
+        let pendingIdentifiers = await pendingNotificationIdentifiers()
+        if pendingIdentifiers.isNotEmpty {
+            center.removePendingNotificationRequests(withIdentifiers: pendingIdentifiers)
+        }
+
         for request in buildUpcomingPaymentReminders() {
-            Task {
-                try? await UNUserNotificationCenter.current().add(request)
-            }
+            try? await center.add(request)
         }
     }
 
     func update() async {
-        hasNotification = await UNUserNotificationCenter.current().deliveredNotifications().isNotEmpty
+        await refreshAuthorizationStatus()
+        hasNotification = await deliveredNotificationIdentifiers().isNotEmpty
     }
 
-    func refresh() {
-        UNUserNotificationCenter.current().setBadgeCount(0)
-        UNUserNotificationCenter.current().removeAllDeliveredNotifications()
+    func refresh() async {
+        let center = UNUserNotificationCenter.current()
+        try? await center.setBadgeCount(0)
+
+        let deliveredIdentifiers = await deliveredNotificationIdentifiers()
+        if deliveredIdentifiers.isNotEmpty {
+            center.removeDeliveredNotifications(
+                withIdentifiers: deliveredIdentifiers
+            )
+        }
+
         hasNotification = false
         shouldShowNotification = false
         pendingDeepLinkURL = nil
+    }
+
+    func refreshAuthorizationStatus() async {
+        let settings = await UNUserNotificationCenter.current().notificationSettings()
+        authorizationState = .init(status: settings.authorizationStatus)
     }
 
     func consumePendingDeepLinkURL() -> URL? {
@@ -66,22 +111,24 @@ final class NotificationService: NSObject {
             return
         }
 
-        let content = UNMutableNotificationContent()
-        content.title = String(localized: "Upcoming Payment")
-        content.body = String(
-            localized: "\(item.content) - A payment of \(item.outgo.asCurrency) is due on \(item.localDate.formatted(.dateTime.weekday().month().day()))."
+        let settings = AppStorage(.notificationSettings).wrappedValue
+        let plan = UpcomingPaymentPlanner.PlannedPayment(
+            item: item,
+            notifyDate: Date.now.addingTimeInterval(1)
         )
-        content.sound = .default
-        content.userInfo = buildDeepLinkUserInfo(for: item)
+        guard let presentation = UpcomingPaymentNotificationPresentationBuilder.build(
+            plans: [plan],
+            settings: settings,
+            now: .now
+        ).first?.previewPresentation() else {
+            return
+        }
 
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
-
-        let request = UNNotificationRequest(
-            identifier: "test-notification",
-            content: content,
+        let request = buildNotificationRequest(
+            presentation: presentation,
             trigger: trigger
         )
-
         UNUserNotificationCenter.current().add(request)
     }
 }
@@ -99,37 +146,116 @@ extension NotificationService: UNUserNotificationCenterDelegate {
                                 didReceive response: UNNotificationResponse) async { // swiftlint:disable:this async_without_await
         Task {
             shouldShowNotification = true
-            pendingDeepLinkURL = extractDeepLinkURL(
-                from: response.notification.request.content.userInfo
-            )
+            pendingDeepLinkURL = extractDeepLinkURL(from: response)
+        }
+    }
+
+    func userNotificationCenter(_: UNUserNotificationCenter,
+                                openSettingsFor _: UNNotification?) {
+        Task {
+            pendingDeepLinkURL = IncomesDeepLinkURLBuilder.preferredURL(for: .settings)
         }
     }
 }
 
 private extension NotificationService {
-    func buildDeepLinkUserInfo(for item: Item) -> [AnyHashable: Any] {
-        let deepLinkURL = buildDeepLinkURL(for: item)
-        return [
-            NotificationPayloadKey.deepLinkURL: deepLinkURL.absoluteString
+    func registerNotificationCategories() {
+        let categories: Set<UNNotificationCategory> = [
+            .init(
+                identifier: NotificationCategoryIdentifier.upcomingPaymentActions,
+                actions: [
+                    .init(
+                        identifier: NotificationActionIdentifier.viewItem,
+                        title: String(localized: "View Item"),
+                        options: [.foreground]
+                    ),
+                    .init(
+                        identifier: NotificationActionIdentifier.viewMonth,
+                        title: String(localized: "View Month"),
+                        options: [.foreground]
+                    )
+                ],
+                intentIdentifiers: [],
+                options: []
+            )
         ]
+
+        UNUserNotificationCenter.current().setNotificationCategories(categories)
     }
 
-    func buildDeepLinkURL(for item: Item) -> URL {
-        if let itemID = try? item.id.base64Encoded() {
-            return IncomesDeepLinkURLBuilder.preferredItemURL(
-                for: itemID
-            )
-        }
-        return IncomesDeepLinkURLBuilder.preferredMonthURL(
-            for: item.localDate
+    func buildNotificationRequest(
+        presentation: UpcomingPaymentNotificationPresentation,
+        trigger: UNNotificationTrigger
+    ) -> UNNotificationRequest {
+        let content = UNMutableNotificationContent()
+        content.title = presentation.itemContent
+        content.subtitle = "\(presentation.amount.asCurrency) • \(relativeDueText(for: presentation.daysUntilDue))"
+        content.body = String(
+            localized: "Due on \(presentation.dueDate.formatted(.dateTime.weekday().month().day()))"
+        )
+        content.sound = .default
+        content.categoryIdentifier = NotificationCategoryIdentifier.upcomingPaymentActions
+        content.threadIdentifier = presentation.threadIdentifier
+        content.targetContentIdentifier = presentation.targetContentIdentifier
+        content.relevanceScore = presentation.relevanceScore
+        content.interruptionLevel = notificationInterruptionLevel(
+            from: presentation.interruptionLevel
+        )
+        content.badge = NSNumber(value: presentation.badgeCount)
+        content.userInfo = buildUserInfo(for: presentation)
+
+        return .init(
+            identifier: presentation.requestIdentifier,
+            content: content,
+            trigger: trigger
         )
     }
 
-    func extractDeepLinkURL(from userInfo: [AnyHashable: Any]) -> URL? {
-        if let deepLinkURLString = userInfo[NotificationPayloadKey.deepLinkURL] as? String {
+    func buildUserInfo(
+        for presentation: UpcomingPaymentNotificationPresentation
+    ) -> [AnyHashable: Any] {
+        [
+            NotificationPayloadKey.itemIdentifier: presentation.targetContentIdentifier,
+            NotificationPayloadKey.notificationKind: NotificationKind.upcomingPayment,
+            NotificationPayloadKey.primaryDeepLinkURL: presentation.primaryRouteURL.absoluteString,
+            NotificationPayloadKey.secondaryDeepLinkURL: presentation.secondaryRouteURL.absoluteString
+        ]
+    }
+
+    func extractDeepLinkURL(
+        from response: UNNotificationResponse
+    ) -> URL? {
+        let userInfo = response.notification.request.content.userInfo
+
+        if response.actionIdentifier == NotificationActionIdentifier.viewMonth,
+           let monthURL = extractDeepLinkURL(
+            from: userInfo,
+            key: NotificationPayloadKey.secondaryDeepLinkURL
+           ) {
+            return monthURL
+        }
+
+        if let primaryURL = extractDeepLinkURL(
+            from: userInfo,
+            key: NotificationPayloadKey.primaryDeepLinkURL
+        ) {
+            return primaryURL
+        }
+
+        return extractDeepLinkURL(
+            from: userInfo,
+            key: NotificationPayloadKey.secondaryDeepLinkURL
+        )
+    }
+
+    func extractDeepLinkURL(
+        from userInfo: [AnyHashable: Any],
+        key: String
+    ) -> URL? {
+        if let deepLinkURLString = userInfo[key] as? String {
             return URL(string: deepLinkURLString)
         }
-        if let deepLinkURL = userInfo[NotificationPayloadKey.deepLinkURL] as? URL {
+        if let deepLinkURL = userInfo[key] as? URL {
             return deepLinkURL
         }
         return nil
@@ -146,24 +272,77 @@ private extension NotificationService {
             return .empty
         }
 
-        return plans.map { plan in
-            let item = plan.item
-            let content = UNMutableNotificationContent()
-            content.title = String(localized: "Upcoming Payment")
-            content.body = String(
-                localized: "\(item.content) - A payment of \(item.outgo.asCurrency) is due on \(item.localDate.formatted(.dateTime.weekday().month().day()))."
-            )
-            content.sound = .default
-            content.userInfo = buildDeepLinkUserInfo(for: item)
+        let presentations = UpcomingPaymentNotificationPresentationBuilder.build(
+            plans: plans,
+            settings: settings,
+            now: .now
+        )
 
-            let triggerDate = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: plan.notifyDate)
+        return presentations.map { presentation in
+            let triggerDate = Calendar.current.dateComponents(
+                [.year, .month, .day, .hour, .minute],
+                from: presentation.notifyDate
+            )
             let trigger = UNCalendarNotificationTrigger(dateMatching: triggerDate, repeats: false)
 
-            return UNNotificationRequest(
-                identifier: "payment-\(item.id)",
-                content: content,
+            return buildNotificationRequest(
+                presentation: presentation,
                 trigger: trigger
             )
+        }
+    }
+
+    func relativeDueText(for daysUntilDue: Int) -> String {
+        switch daysUntilDue {
+        case ...0:
+            return String(localized: "Due today")
+        case 1:
+            return String(localized: "Due tomorrow")
+        default:
+            return String(localized: "Due in \(daysUntilDue) days")
+        }
+    }
+
+    func notificationInterruptionLevel(
+        from interruptionLevel: UpcomingPaymentNotificationPresentation.InterruptionLevel
+    ) -> UNNotificationInterruptionLevel {
+        switch interruptionLevel {
+        case .active:
+            return .active
+        }
+    }
+
+    func pendingNotificationIdentifiers() async -> [String] {
+        await UNUserNotificationCenter.current().pendingNotificationRequests()
+            .map(\.identifier)
+            .filter(isManagedNotificationIdentifier)
+    }
+
+    func deliveredNotificationIdentifiers() async -> [String] {
+        await UNUserNotificationCenter.current().deliveredNotifications()
+            .map(\.request.identifier)
+            .filter(isManagedNotificationIdentifier)
+    }
+
+    func isManagedNotificationIdentifier(_ identifier: String) -> Bool {
+        identifier.hasPrefix(UpcomingPaymentNotificationPresentation.requestIdentifierPrefix) ||
+            identifier.hasPrefix(UpcomingPaymentNotificationPresentation.previewRequestIdentifierPrefix)
+    }
+}
+
+private extension NotificationService.AuthorizationState {
+    init(status: UNAuthorizationStatus) {
+        switch status {
+        case .authorized,
+             .ephemeral,
+             .provisional:
+            self = .authorized
+        case .denied:
+            self = .denied
+        case .notDetermined:
+            self = .notDetermined
+        @unknown default:
+            self = .denied
         }
     }
 }

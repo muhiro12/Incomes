@@ -142,6 +142,7 @@
       "shouldTranslate" : false
     },
     "%@ - A payment of %@ is due on %@." : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2018,6 +2019,18 @@
         }
       }
     },
+    "Due in %lld days" : {
+
+    },
+    "Due on %@" : {
+
+    },
+    "Due today" : {
+
+    },
+    "Due tomorrow" : {
+
+    },
     "Duplicate" : {
       "localizations" : {
         "en" : {
@@ -2426,6 +2439,74 @@
         }
       }
     },
+    "Generate Summary" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Generate Summary"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Generar resumen"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Générer le résumé"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "要約を生成"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "生成摘要"
+          }
+        }
+      }
+    },
+    "Generated on device. Your financial data stays on this device." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Generated on device. Your financial data stays on this device."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Generado en el dispositivo. Tus datos financieros permanecen en este dispositivo."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Généré sur l'appareil. Vos données financières restent sur cet appareil."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "デバイス上で生成されます。家計データがデバイス外に送信されることはありません。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在设备上生成。您的财务数据会保留在此设备上。"
+          }
+        }
+      }
+    },
     "Groups: %lld" : {
       "localizations" : {
         "en" : {
@@ -2798,6 +2879,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "查看项目详情"
+          }
+        }
+      }
+    },
+    "Invalid month requested for summary generation." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Invalid month requested for summary generation."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se solicitó un mes no válido para generar el resumen."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un mois non valide a été demandé pour générer le résumé."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "サマリー生成に無効な月が指定されました。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请求了无效的月份来生成摘要。"
           }
         }
       }
@@ -3211,6 +3326,40 @@
         }
       }
     },
+    "Monthly Summary" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Monthly Summary"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Resumen mensual"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Résumé mensuel"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "月次サマリー"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "月度摘要"
+          }
+        }
+      }
+    },
     "Monthly Summary: shows income and outgo for a selected month." : {
       "extractionState" : "stale",
       "localizations" : {
@@ -3313,6 +3462,15 @@
           }
         }
       }
+    },
+    "Notification permission will be requested when reminders are registered." : {
+
+    },
+    "Notifications are currently denied in iOS Settings." : {
+
+    },
+    "Notifications are enabled and will follow your in-app schedule." : {
+
     },
     "Notify days before" : {
       "localizations" : {
@@ -3446,6 +3604,74 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "确定"
+          }
+        }
+      }
+    },
+    "On-device monthly summaries are currently unavailable." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "On-device monthly summaries are currently unavailable."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Los resúmenes mensuales en el dispositivo no están disponibles en este momento."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les résumés mensuels sur l'appareil sont actuellement indisponibles."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "オンデバイスの月次サマリーは現在利用できません。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "设备端月度摘要当前不可用。"
+          }
+        }
+      }
+    },
+    "On-device monthly summaries are unavailable in the current language." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "On-device monthly summaries are unavailable in the current language."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Los resúmenes mensuales en el dispositivo no están disponibles en el idioma actual."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les résumés mensuels sur l'appareil ne sont pas disponibles dans la langue actuelle."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "オンデバイスの月次サマリーは現在の言語では利用できません。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "设备端月度摘要在当前语言下不可用。"
           }
         }
       }
@@ -3586,6 +3812,9 @@
           }
         }
       }
+    },
+    "Open System Settings" : {
+
     },
     "Organize monthly items" : {
       "extractionState" : "stale",
@@ -4094,6 +4323,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "识别的文本"
+          }
+        }
+      }
+    },
+    "Regenerate Summary" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Regenerate Summary"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Regenerar resumen"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Régénérer le résumé"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "要約を再生成"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "重新生成摘要"
           }
         }
       }
@@ -5840,6 +6103,40 @@
         }
       }
     },
+    "Unable to generate the monthly summary." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unable to generate the monthly summary."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se puede generar el resumen mensual."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossible de générer le résumé mensuel."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "月次サマリーを生成できません。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法生成月度摘要。"
+          }
+        }
+      }
+    },
     "Understand your finances clearly with simple inputs and quick insights." : {
       "extractionState" : "stale",
       "localizations" : {
@@ -5946,6 +6243,7 @@
       }
     },
     "Upcoming Payment" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -6184,6 +6482,12 @@
           }
         }
       }
+    },
+    "View Item" : {
+
+    },
+    "View Month" : {
+
     },
     "We will extract date, amounts, category, and priority from this text." : {
       "localizations" : {
@@ -6490,278 +6794,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "年月份"
-          }
-        }
-      }
-    },
-    "Generate Summary" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Generate Summary"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Generar resumen"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Générer le résumé"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "要約を生成"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "生成摘要"
-          }
-        }
-      }
-    },
-    "Generated on device. Your financial data stays on this device." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Generated on device. Your financial data stays on this device."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Generado en el dispositivo. Tus datos financieros permanecen en este dispositivo."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Généré sur l'appareil. Vos données financières restent sur cet appareil."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "デバイス上で生成されます。家計データがデバイス外に送信されることはありません。"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "在设备上生成。您的财务数据会保留在此设备上。"
-          }
-        }
-      }
-    },
-    "Invalid month requested for summary generation." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Invalid month requested for summary generation."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Se solicitó un mes no válido para generar el resumen."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Un mois non valide a été demandé pour générer le résumé."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "サマリー生成に無効な月が指定されました。"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "请求了无效的月份来生成摘要。"
-          }
-        }
-      }
-    },
-    "Monthly Summary" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Monthly Summary"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Resumen mensual"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Résumé mensuel"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "月次サマリー"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "月度摘要"
-          }
-        }
-      }
-    },
-    "On-device monthly summaries are currently unavailable." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "On-device monthly summaries are currently unavailable."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Los resúmenes mensuales en el dispositivo no están disponibles en este momento."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Les résumés mensuels sur l'appareil sont actuellement indisponibles."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "オンデバイスの月次サマリーは現在利用できません。"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "设备端月度摘要当前不可用。"
-          }
-        }
-      }
-    },
-    "On-device monthly summaries are unavailable in the current language." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "On-device monthly summaries are unavailable in the current language."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Los resúmenes mensuales en el dispositivo no están disponibles en el idioma actual."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Les résumés mensuels sur l'appareil ne sont pas disponibles dans la langue actuelle."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "オンデバイスの月次サマリーは現在の言語では利用できません。"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "设备端月度摘要在当前语言下不可用。"
-          }
-        }
-      }
-    },
-    "Regenerate Summary" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Regenerate Summary"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Regenerar resumen"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Régénérer le résumé"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "要約を再生成"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "重新生成摘要"
-          }
-        }
-      }
-    },
-    "Unable to generate the monthly summary." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Unable to generate the monthly summary."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No se puede generar el resumen mensual."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Impossible de générer le résumé mensuel."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "月次サマリーを生成できません。"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "无法生成月度摘要。"
           }
         }
       }

@@ -71,6 +71,7 @@ extension ContentView: View {
                 }
 
                 googleMobileAdsController.start()
+                await notificationService.update()
                 applyPendingDeepLinkIfNeeded()
             }
             .onChange(of: scenePhase) {

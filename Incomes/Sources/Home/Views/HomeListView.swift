@@ -66,7 +66,7 @@ extension HomeListView: View {
         .listStyle(.insetGrouped)
         .navigationTitle(yearTag.displayName)
         .task {
-            notificationService.refresh()
+            await notificationService.refresh()
             await notificationService.register()
         }
     }

@@ -24,7 +24,7 @@ enum SettingsActionCoordinator {
     }
 
     static func refreshNotifications(notificationService: NotificationService) async {
-        notificationService.refresh()
+        await notificationService.refresh()
         await notificationService.register()
     }
 }
