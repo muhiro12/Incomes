@@ -10,7 +10,7 @@ struct InferItemFormIntent: AppIntent {
 
     @MainActor
     func perform() async throws -> some ReturnsValue<ItemFormInference> {
-        let result = try await ItemService.inferForm(text: text)
+        let result = try await ItemInferenceService.inferForm(text: text)
         return .result(value: result)
     }
 }

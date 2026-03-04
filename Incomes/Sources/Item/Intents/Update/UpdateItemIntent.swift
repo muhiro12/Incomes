@@ -1,16 +1,10 @@
-//
-//  CreateItemIntent.swift
-//  Incomes
-//
-//  Created by Hiromu Nakano on 2025/05/23.
-//  Copyright © 2025 Hiromu Nakano. All rights reserved.
-//
-
 import AppIntents
 import SwiftData
 import SwiftUI
 
-struct CreateItemIntent: AppIntent {
+struct UpdateItemIntent: AppIntent {
+    @Parameter(title: "Item")
+    private var item: ItemEntity
     @Parameter(title: "Date", kind: .date)
     private var date: Date
     @Parameter(title: "Content")
@@ -21,12 +15,15 @@ struct CreateItemIntent: AppIntent {
     private var outgo: IntentCurrencyAmount
     @Parameter(title: "Category")
     private var category: String
-    @Parameter(title: "Repeat", default: 1, inclusiveRange: (1, 60))
-    private var repeatCount: Int
+    @Parameter(title: "Priority", default: 0, inclusiveRange: (0, 10))
+    private var priority: Int
+    @Parameter(title: "Scope", default: .thisItem)
+    private var scope: ItemMutationScopeIntentValue
 
     @Dependency private var modelContainer: ModelContainer
 
-    static let title: LocalizedStringResource = .init("Create Item", table: "AppIntents")
+    static let title: LocalizedStringResource = .init("Update Item", table: "AppIntents")
+    static let isDiscoverable = false
 
     private var formInput: ItemFormInput {
         .init(
@@ -35,7 +32,7 @@ struct CreateItemIntent: AppIntent {
             incomeText: income.amount.description,
             outgoText: outgo.amount.description,
             category: category,
-            priorityText: "0"
+            priorityText: "\(priority)"
         )
     }
 
@@ -53,12 +50,14 @@ struct CreateItemIntent: AppIntent {
             throw $outgo.needsDisambiguationError(among: [.init(amount: outgo.amount, currencyCode: currencyCode)])
         }
 
-        let item = try ItemService.create(
+        let model = try item.model(in: modelContainer.mainContext)
+        try ItemService.update(
             context: modelContainer.mainContext,
+            item: model,
             input: formInput,
-            repeatCount: repeatCount
+            scope: scope.scope
         )
-        guard let entity = ItemEntity(item) else {
+        guard let entity = ItemEntity(model) else {
             throw ItemError.entityConversionFailed
         }
         return .result(value: entity)

@@ -12,6 +12,7 @@ enum ItemError: @preconcurrency IncomesError {
     case contentIsEmpty
     case entityConversionFailed
     case itemNotFound
+    case invalidRepeatMonthSelections
 
     var resource: LocalizedStringResource {
         switch self {
@@ -21,6 +22,8 @@ enum ItemError: @preconcurrency IncomesError {
             return .init(stringLiteral: "Failed to convert item entity")
         case .itemNotFound:
             return .init(stringLiteral: "Item not found")
+        case .invalidRepeatMonthSelections:
+            return .init(stringLiteral: "Repeat month selections are invalid")
         }
     }
 }

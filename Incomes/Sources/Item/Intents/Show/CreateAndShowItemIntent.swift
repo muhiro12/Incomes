@@ -27,6 +27,17 @@ struct CreateAndShowItemIntent: AppIntent {
 
     static let title: LocalizedStringResource = .init("Create and Show Item", table: "AppIntents")
 
+    private var formInput: ItemFormInput {
+        .init(
+            date: date,
+            content: content,
+            incomeText: Decimal(income).description,
+            outgoText: Decimal(outgo).description,
+            category: category,
+            priorityText: "0"
+        )
+    }
+
     @MainActor
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
         guard content.isNotEmpty else {
@@ -34,12 +45,7 @@ struct CreateAndShowItemIntent: AppIntent {
         }
         let item = try ItemService.create(
             context: modelContainer.mainContext,
-            date: date,
-            content: content,
-            income: .init(income),
-            outgo: .init(outgo),
-            category: category,
-            priority: 0,
+            input: formInput,
             repeatCount: repeatCount
         )
         return .result(

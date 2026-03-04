@@ -82,14 +82,14 @@ private extension UpcomingPaymentNotificationPresentationBuilder {
     }
 
     static func primaryRouteURL(for item: Item) -> URL {
-        if let itemID = try? item.id.base64Encoded() {
+        if let itemID = try? PersistentIdentifierCoder.encode(item.id) {
             return IncomesDeepLinkURLBuilder.preferredItemURL(for: itemID)
         }
         return IncomesDeepLinkURLBuilder.preferredMonthURL(for: item.localDate)
     }
 
     static func itemIdentifier(for item: Item) -> String {
-        if let itemID = try? item.id.base64Encoded() {
+        if let itemID = try? PersistentIdentifierCoder.encode(item.id) {
             return itemID
         }
         return String(describing: item.persistentModelID)

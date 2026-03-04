@@ -23,7 +23,7 @@ struct TagServiceTests {
     @Test
     func getByID_returns_matching_tag() throws {
         let model = try Tag.create(context: context, name: "name", type: .content)
-        let id = try model.id.base64Encoded()
+        let id = try PersistentIdentifierCoder.encode(model.id)
         let tagEntity = try #require(
             try TagService.getByID(
                 context: context,
@@ -79,6 +79,23 @@ struct TagServiceTests {
             tags: try context.fetch(.tags(.isSameWith(tag1)))
         )
         #expect(try TagService.hasDuplicates(context: context) == false)
+    }
+
+    @Test
+    func duplicateTags_returns_only_matching_type() throws {
+        _ = try Tag.createIgnoringDuplicates(context: context, name: "A", type: .year)
+        _ = try Tag.createIgnoringDuplicates(context: context, name: "A", type: .year)
+        _ = try Tag.createIgnoringDuplicates(context: context, name: "B", type: .content)
+        _ = try Tag.createIgnoringDuplicates(context: context, name: "B", type: .content)
+
+        let duplicates = try TagService.duplicateTags(
+            context: context,
+            type: .year
+        )
+
+        #expect(duplicates.count == 1)
+        #expect(duplicates.first?.name == "A")
+        #expect(duplicates.first?.type == .year)
     }
 
     @Test
@@ -186,6 +203,18 @@ struct TagServiceTests {
             context: context,
             tags: [tag1, tag4]
         )
+        #expect(try context.fetchCount(.tags(.all)) == 2)
+    }
+
+    @Test
+    func resolveAllDuplicates_removes_all_duplicate_groups() throws {
+        _ = try Tag.createIgnoringDuplicates(context: context, name: "A", type: .year)
+        _ = try Tag.createIgnoringDuplicates(context: context, name: "A", type: .year)
+        _ = try Tag.createIgnoringDuplicates(context: context, name: "B", type: .content)
+        _ = try Tag.createIgnoringDuplicates(context: context, name: "B", type: .content)
+
+        try TagService.resolveAllDuplicates(context: context)
+
         #expect(try context.fetchCount(.tags(.all)) == 2)
     }
 

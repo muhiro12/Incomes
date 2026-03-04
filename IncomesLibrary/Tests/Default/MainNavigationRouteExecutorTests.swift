@@ -302,7 +302,7 @@ struct MainNavigationRouteExecutorTests {
             priority: 1,
             repeatID: UUID()
         )
-        let itemID = try item.id.base64Encoded()
+        let itemID = try PersistentIdentifierCoder.encode(item.id)
         let outcome = try MainNavigationRouteExecutor.execute(
             route: .item(itemID),
             context: context

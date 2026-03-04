@@ -71,8 +71,8 @@ struct UpcomingPaymentNotificationPresentationBuilderTests {
         let secondPresentation = try #require(presentations.dropFirst().first)
         let thirdPresentation = try #require(presentations.last)
 
-        let firstIdentifier = try firstItem.id.base64Encoded()
-        let thirdIdentifier = try thirdItem.id.base64Encoded()
+        let firstIdentifier = try PersistentIdentifierCoder.encode(firstItem.id)
+        let thirdIdentifier = try PersistentIdentifierCoder.encode(thirdItem.id)
 
         #expect(
             firstPresentation.requestIdentifier ==

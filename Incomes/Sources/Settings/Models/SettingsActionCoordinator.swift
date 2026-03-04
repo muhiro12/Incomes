@@ -12,17 +12,6 @@ enum SettingsActionCoordinator {
         try SettingsStatusLoader.load(context: context)
     }
 
-    static func deleteAllData(context: ModelContext) throws {
-        try ItemService.deleteAll(context: context)
-        try TagService.deleteAll(context: context)
-        Haptic.success.impact()
-    }
-
-    static func deleteDebugData(context: ModelContext) throws {
-        try ItemService.deleteDebugData(context: context)
-        Haptic.success.impact()
-    }
-
     static func refreshNotifications(notificationService: NotificationService) async {
         await notificationService.refresh()
         await notificationService.register()

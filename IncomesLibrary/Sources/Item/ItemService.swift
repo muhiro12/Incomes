@@ -21,6 +21,51 @@ public enum ItemService {
     /// - Returns: The first created item.
     public static func create(
         context: ModelContext,
+        input: ItemFormInput,
+        repeatMonthSelections: Set<RepeatMonthSelection>
+    ) throws -> Item {
+        try create(
+            context: context,
+            date: input.date,
+            content: input.content,
+            income: input.income,
+            outgo: input.outgo,
+            category: input.category,
+            priority: input.priority,
+            repeatMonthSelections: repeatMonthSelections
+        )
+    }
+
+    /// Creates an item using shared form input and simple monthly repetition count.
+    public static func create(
+        context: ModelContext,
+        input: ItemFormInput,
+        repeatCount: Int
+    ) throws -> Item {
+        try create(
+            context: context,
+            date: input.date,
+            content: input.content,
+            income: input.income,
+            outgo: input.outgo,
+            category: input.category,
+            priority: input.priority,
+            repeatCount: repeatCount
+        )
+    }
+
+    /// Creates an item and optional repeating items, then recalculates balances.
+    /// - Parameters:
+    ///   - context: Target model context.
+    ///   - date: Local date for the first item.
+    ///   - content: Item description.
+    ///   - income: Income amount.
+    ///   - outgo: Outgo amount.
+    ///   - category: Category name.
+    ///   - repeatCount: Number of monthly repeats (>= 1).
+    /// - Returns: The first created item.
+    public static func create(
+        context: ModelContext,
         date: Date,
         content: String,
         income: Decimal,
@@ -258,6 +303,50 @@ public enum ItemService {
 
     // Intentionally keep AppIntent-specific formatting (e.g., IntentCurrencyAmount)
     // out of the library. Use nextItem/previousItem and compute net income in the app.
+
+    /// Updates a single item with shared form input and the given mutation scope.
+    public static func update(
+        context: ModelContext,
+        item: Item,
+        input: ItemFormInput,
+        scope: ItemMutationScope
+    ) throws {
+        switch scope {
+        case .thisItem:
+            try update(
+                context: context,
+                item: item,
+                date: input.date,
+                content: input.content,
+                income: input.income,
+                outgo: input.outgo,
+                category: input.category,
+                priority: input.priority
+            )
+        case .futureItems:
+            try updateFuture(
+                context: context,
+                item: item,
+                date: input.date,
+                content: input.content,
+                income: input.income,
+                outgo: input.outgo,
+                category: input.category,
+                priority: input.priority
+            )
+        case .allItems:
+            try updateAll(
+                context: context,
+                item: item,
+                date: input.date,
+                content: input.content,
+                income: input.income,
+                outgo: input.outgo,
+                category: input.category,
+                priority: input.priority
+            )
+        }
+    }
 
     /// Updates a single item with the provided values and recalculates balance.
     public static func update(

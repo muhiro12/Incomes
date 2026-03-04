@@ -43,7 +43,7 @@ final class TagEntity: AppEntity {
 
 extension TagEntity {
     convenience init?(_ model: Tag) {
-        guard let encodedID = try? model.id.base64Encoded() else {
+        guard let encodedID = try? PersistentIdentifierCoder.encode(model.id) else {
             return nil
         }
         self.init(
@@ -56,8 +56,8 @@ extension TagEntity {
 
 extension TagEntity: Hashable {
     static func == (lhs: TagEntity, rhs: TagEntity) -> Bool {
-        guard let lID = try? PersistentIdentifier(base64Encoded: lhs.id),
-              let rID = try? PersistentIdentifier(base64Encoded: rhs.id) else {
+        guard let lID = try? PersistentIdentifierCoder.decode(lhs.id),
+              let rID = try? PersistentIdentifierCoder.decode(rhs.id) else {
             return false
         }
         return lID == rID

@@ -17,12 +17,6 @@ enum ItemFormSaveOutcome {
     case didSave
 }
 
-enum ItemFormSaveScope {
-    case thisItem
-    case futureItems
-    case allItems
-}
-
 enum ItemFormSaveCoordinator {
     static func save(
         mode: ItemFormSaveMode,
@@ -35,12 +29,7 @@ enum ItemFormSaveCoordinator {
         case .create:
             _ = try ItemService.create(
                 context: context,
-                date: formInputData.date,
-                content: formInputData.content,
-                income: formInputData.income,
-                outgo: formInputData.outgo,
-                category: formInputData.category,
-                priority: formInputData.priority,
+                input: formInputData,
                 repeatMonthSelections: repeatMonthSelections
             )
             Haptic.success.impact()
@@ -67,46 +56,17 @@ enum ItemFormSaveCoordinator {
     }
 
     static func save(
-        scope: ItemFormSaveScope,
+        scope: ItemMutationScope,
         context: ModelContext,
         item: Item,
         formInputData: ItemFormInput
     ) throws {
-        switch scope {
-        case .thisItem:
-            try ItemService.update(
-                context: context,
-                item: item,
-                date: formInputData.date,
-                content: formInputData.content,
-                income: formInputData.income,
-                outgo: formInputData.outgo,
-                category: formInputData.category,
-                priority: formInputData.priority
-            )
-        case .futureItems:
-            try ItemService.updateFuture(
-                context: context,
-                item: item,
-                date: formInputData.date,
-                content: formInputData.content,
-                income: formInputData.income,
-                outgo: formInputData.outgo,
-                category: formInputData.category,
-                priority: formInputData.priority
-            )
-        case .allItems:
-            try ItemService.updateAll(
-                context: context,
-                item: item,
-                date: formInputData.date,
-                content: formInputData.content,
-                income: formInputData.income,
-                outgo: formInputData.outgo,
-                category: formInputData.category,
-                priority: formInputData.priority
-            )
-        }
+        try ItemService.update(
+            context: context,
+            item: item,
+            input: formInputData,
+            scope: scope
+        )
         Haptic.success.impact()
     }
 }

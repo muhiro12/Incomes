@@ -1,15 +1,15 @@
 //
-//  ItemService+Inference.swift
+//  ItemInferenceService.swift
 //  Incomes
 //
-//  Adds AppIntents-dependent inference to the app target.
+//  Created by Codex on 2026/03/04.
 //
 
 import Foundation
 import FoundationModels
 
 @available(iOS 26.0, *)
-extension ItemService {
+enum ItemInferenceService {
     static func inferForm(text: String) async throws -> ItemFormInference {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyyMMdd"

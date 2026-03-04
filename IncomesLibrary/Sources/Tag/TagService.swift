@@ -34,7 +34,7 @@ public enum TagService {
     public static func findDuplicates(
         context _: ModelContext,
         tags: [Tag]
-    ) throws -> [Tag] {
+    ) -> [Tag] {
         Dictionary(grouping: tags) { tag in
             tag.typeID + tag.name
         }
@@ -48,9 +48,28 @@ public enum TagService {
 
     /// True when duplicate tags exist in the store.
     public static func hasDuplicates(context: ModelContext) throws -> Bool {
-        let tags = try getAll(context: context)
-        let duplicates = try findDuplicates(context: context, tags: tags)
-        return !duplicates.isEmpty
+        try !duplicateTags(context: context).isEmpty
+    }
+
+    /// Returns one representative per duplicate tag group in the store.
+    public static func duplicateTags(
+        context: ModelContext
+    ) throws -> [Tag] {
+        try findDuplicates(
+            context: context,
+            tags: getAll(context: context)
+        )
+    }
+
+    /// Returns one representative per duplicate tag group for a specific type.
+    public static func duplicateTags(
+        context: ModelContext,
+        type: TagType
+    ) throws -> [Tag] {
+        try findDuplicates(
+            context: context,
+            tags: context.fetch(.tags(.typeIs(type)))
+        )
     }
 
     /// Merges `tags` into the first tag, reattaching item relationships.
@@ -89,8 +108,18 @@ public enum TagService {
         }
     }
 
+    /// Resolves every duplicate tag group in the store.
+    public static func resolveAllDuplicates(
+        context: ModelContext
+    ) throws {
+        try resolveDuplicates(
+            context: context,
+            tags: duplicateTags(context: context)
+        )
+    }
+
     /// Deletes a single tag.
-    public static func delete(tag: Tag) throws {
+    public static func delete(tag: Tag) {
         tag.delete()
     }
 
@@ -107,9 +136,9 @@ public enum TagService {
         for tag: Tag,
         yearString: String
     ) -> [Item] {
-        tag.items.orEmpty
+        matchingItems(for: tag)
             .filter { item in
-                item.year?.name == yearString
+                item.localDate.stringValueWithoutLocale(.yyyy) == yearString
             }
             .sorted()
     }
@@ -119,7 +148,7 @@ public enum TagService {
         for tag: Tag
     ) -> [String] {
         Set(
-            tag.items.orEmpty.map { item in
+            matchingItems(for: tag).map { item in
                 item.localDate.stringValueWithoutLocale(.yyyy)
             }
         )
@@ -135,7 +164,37 @@ public enum TagService {
             guard tags.indices.contains(index) else {
                 return []
             }
-            return tags[index].items.orEmpty
+            return matchingItems(for: tags[index])
+        }
+    }
+}
+
+private extension TagService {
+    static func matchingItems(for tag: Tag) -> [Item] {
+        let fallbackItems = tag.items.orEmpty
+        guard
+            let context = tag.modelContext,
+            let tagType = tag.type,
+            let items = try? context.fetch(.items(.all))
+        else {
+            return fallbackItems
+        }
+
+        return items.filter { item in
+            switch tagType {
+            case .year:
+                return item.localDate.stringValueWithoutLocale(.yyyy) == tag.name
+            case .yearMonth:
+                return item.localDate.stringValueWithoutLocale(.yyyyMM) == tag.name
+            case .content:
+                return item.content == tag.name
+            case .category:
+                return item.category?.name == tag.name
+            case .debug:
+                return item.tags.orEmpty.contains { itemTag in
+                    itemTag.id == tag.id
+                }
+            }
         }
     }
 }

@@ -74,10 +74,16 @@ struct DuplicateTagListView: View {
     private func buildSection<Header: View>(from tags: [Tag], header: () -> Header) -> some View {
         let duplicates: [Tag]
         do {
-            duplicates = try TagService.findDuplicates(
-                context: context,
-                tags: tags
-            )
+            let type = tags.first?.type
+            duplicates = try {
+                if let type {
+                    return try TagService.duplicateTags(
+                        context: context,
+                        type: type
+                    )
+                }
+                return []
+            }()
             .sorted {
                 $0.displayName < $1.displayName
             }

@@ -10,7 +10,7 @@ import Foundation
 @available(iOS 26.0, *)
 enum ItemFormInferenceApplier {
     static func apply(text: String, currentInput: ItemFormInput) async throws -> ItemFormInput {
-        let inference = try await ItemService.inferForm(text: text)
+        let inference = try await ItemInferenceService.inferForm(text: text)
         let update = ItemFormInferenceMapper.map(
             dateString: inference.date,
             content: inference.content,

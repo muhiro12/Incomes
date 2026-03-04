@@ -1,16 +1,9 @@
-//
-//  CreateItemIntent.swift
-//  Incomes
-//
-//  Created by Hiromu Nakano on 2025/05/23.
-//  Copyright © 2025 Hiromu Nakano. All rights reserved.
-//
-
 import AppIntents
+import Foundation
 import SwiftData
 import SwiftUI
 
-struct CreateItemIntent: AppIntent {
+struct CreateScheduledItemIntent: AppIntent {
     @Parameter(title: "Date", kind: .date)
     private var date: Date
     @Parameter(title: "Content")
@@ -21,12 +14,15 @@ struct CreateItemIntent: AppIntent {
     private var outgo: IntentCurrencyAmount
     @Parameter(title: "Category")
     private var category: String
-    @Parameter(title: "Repeat", default: 1, inclusiveRange: (1, 60))
-    private var repeatCount: Int
+    @Parameter(title: "Priority", default: 0, inclusiveRange: (0, 10))
+    private var priority: Int
+    @Parameter(title: "Repeat Months", default: "")
+    private var repeatMonths: String
 
     @Dependency private var modelContainer: ModelContainer
 
-    static let title: LocalizedStringResource = .init("Create Item", table: "AppIntents")
+    static let title: LocalizedStringResource = .init("Create Scheduled Item", table: "AppIntents")
+    static let isDiscoverable = false
 
     private var formInput: ItemFormInput {
         .init(
@@ -35,7 +31,7 @@ struct CreateItemIntent: AppIntent {
             incomeText: income.amount.description,
             outgoText: outgo.amount.description,
             category: category,
-            priorityText: "0"
+            priorityText: "\(priority)"
         )
     }
 
@@ -56,11 +52,41 @@ struct CreateItemIntent: AppIntent {
         let item = try ItemService.create(
             context: modelContainer.mainContext,
             input: formInput,
-            repeatCount: repeatCount
+            repeatMonthSelections: try parsedRepeatMonthSelections()
         )
         guard let entity = ItemEntity(item) else {
             throw ItemError.entityConversionFailed
         }
         return .result(value: entity)
+    }
+}
+
+private extension CreateScheduledItemIntent {
+    func parsedRepeatMonthSelections() throws -> Set<RepeatMonthSelection> {
+        let trimmedValue = repeatMonths.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard trimmedValue.isNotEmpty else {
+            return []
+        }
+
+        let tokens = trimmedValue
+            .split { character in
+                character == "," || character.isWhitespace
+            }
+            .map(String.init)
+        var selections = Set<RepeatMonthSelection>()
+
+        for token in tokens {
+            let compactValue = token.replacingOccurrences(of: "-", with: "")
+            guard compactValue.count == 6,
+                  let year = Int(compactValue.prefix(4)),
+                  let month = Int(compactValue.suffix(2)),
+                  (1...9_999).contains(year),
+                  (1...12).contains(month) else {
+                throw ItemError.invalidRepeatMonthSelections
+            }
+            selections.insert(.init(year: year, month: month))
+        }
+
+        return selections
     }
 }

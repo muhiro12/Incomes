@@ -59,7 +59,7 @@ final class ItemEntity: AppEntity {
 
 extension ItemEntity {
     convenience init?(_ model: Item) {
-        guard let encodedID = try? model.id.base64Encoded() else {
+        guard let encodedID = try? PersistentIdentifierCoder.encode(model.id) else {
             return nil
         }
         self.init(
@@ -80,7 +80,7 @@ extension ItemEntity {
 
     func model(in context: ModelContext) throws -> Item {
         guard
-            let id = try? PersistentIdentifier(base64Encoded: id),
+            let id = try? PersistentIdentifierCoder.decode(id),
             let model = try context.fetchFirst(.items(.idIs(id)))
         else {
             throw ItemError.itemNotFound

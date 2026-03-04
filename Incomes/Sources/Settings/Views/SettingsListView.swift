@@ -229,7 +229,8 @@ extension SettingsListView: View {
         ) {
             Button(role: .destructive) {
                 do {
-                    try SettingsActionCoordinator.deleteAllData(context: context)
+                    try DataMaintenanceService.deleteAllData(context: context)
+                    Haptic.success.impact()
                     updateStatus()
                     refreshTipEligibility()
                 } catch {
@@ -251,7 +252,8 @@ extension SettingsListView: View {
         ) {
             Button(role: .destructive) {
                 do {
-                    try SettingsActionCoordinator.deleteDebugData(context: context)
+                    try DataMaintenanceService.deleteDebugData(context: context)
+                    Haptic.success.impact()
                     updateStatus()
                     refreshTipEligibility()
                 } catch {
