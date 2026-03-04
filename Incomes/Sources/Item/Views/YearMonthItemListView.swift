@@ -21,20 +21,27 @@ struct YearMonthItemListView {
 
 extension YearMonthItemListView: View {
     var body: some View {
-        List {
-            if items.isNotEmpty {
-                TipView(itemDetailTip)
-            }
-            ForEach(yearStrings, id: \.self) { yearString in
-                ItemListSection(
-                    .items(.tagAndYear(tag: tag, yearString: yearString))
-                )
-                if !isSubscribeOn {
-                    AdvertisementSection(.medium)
+        ZStack {
+            List {
+                if items.isNotEmpty {
+                    TipView(itemDetailTip)
                 }
-                ChartSectionGroup(
-                    .items(.tagAndYear(tag: tag, yearString: yearString))
-                )
+                ForEach(Array(yearStrings.enumerated()), id: \.element) { _, yearString in
+                    ItemListSection(
+                        .items(.tagAndYear(tag: tag, yearString: yearString))
+                    )
+                    if !isSubscribeOn {
+                        AdvertisementSection(.medium)
+                    }
+                    ChartSectionGroup(
+                        .items(.tagAndYear(tag: tag, yearString: yearString))
+                    )
+                }
+            }
+            if let monthDate {
+                if #available(iOS 26.0, *) {
+                    MonthlySummarySection(date: monthDate)
+                }
             }
         }
         .listStyle(.grouped)
@@ -54,6 +61,10 @@ extension YearMonthItemListView: View {
 private extension YearMonthItemListView {
     var items: [Item] {
         tag.items.orEmpty
+    }
+
+    var monthDate: Date? {
+        tag.name.dateValueWithoutLocale(.yyyyMM)
     }
 
     var yearStrings: [String] {
