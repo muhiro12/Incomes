@@ -1,0 +1,89 @@
+version = 1
+
+[[rule]]
+name = "Shared library logic changed"
+severity = "high"
+mode = "any"
+paths = ["IncomesLibrary/Sources/**"]
+reason = "Changes in IncomesLibrary propagate across the app and shared targets."
+advice = "Run IncomesLibrary tests and a broad app regression before release."
+
+[[rule]]
+name = "App shared models or services changed"
+severity = "high"
+mode = "any"
+paths = [
+  "Incomes/Sources/Common/Models/**",
+  "Incomes/Sources/Common/Services/**",
+  "Incomes/Sources/Configuration/**",
+  "Incomes/Sources/Package/**",
+  "Watch/Sources/Common/**",
+  "Watch/Sources/Services/**",
+  "Widgets/Sources/Common/**"
+]
+reason = "Shared app wiring or cross-feature behavior changed."
+advice = "Verify the main app flow, settings, and shared integrations."
+
+[[rule]]
+name = "Build or release configuration changed"
+severity = "high"
+mode = "any"
+paths = [
+  "Incomes.xcodeproj/project.pbxproj",
+  "Incomes/Configurations/**",
+  "Watch/Configurations/**",
+  "Widgets/Configurations/**",
+  ".github/workflows/**",
+  "ci_scripts/**",
+  "Package.resolved",
+  "IncomesLibrary/Package.resolved"
+]
+reason = "Packaging, dependencies, or release automation changed."
+advice = "Run clean builds and verify the release pipeline before shipping."
+
+[[rule]]
+name = "Feature logic changed"
+severity = "medium"
+mode = "any"
+paths = [
+  "Incomes/Sources/**/Models/**",
+  "Incomes/Sources/**/Intents/**",
+  "Watch/Sources/**/Models/**",
+  "Widgets/Sources/**/Models/**",
+  "Widgets/Sources/**/Providers/**"
+]
+exclude_paths = [
+  "Incomes/Sources/Common/Models/**",
+  "Incomes/Sources/Common/Services/**"
+]
+reason = "Feature-level behavior changed beyond presentation code."
+advice = "Run focused regression for the touched features and widgets."
+
+[[rule]]
+name = "Only presentation and resources changed"
+severity = "low"
+mode = "all"
+paths = [
+  "Incomes/Sources/**/Views/**",
+  "Incomes/Sources/**/Components/**",
+  "Incomes/Resources/**",
+  "Watch/Sources/**/Views/**",
+  "Watch/Resources/**",
+  "Widgets/Resources/**"
+]
+reason = "Changes are limited to presentation or bundled resources."
+advice = "The blast radius is easier to contain. Targeted manual checks are usually enough."
+
+[[rule]]
+name = "Only tests or docs changed"
+severity = "low"
+mode = "all"
+paths = [
+  "IncomesLibrary/Tests/**",
+  "docs/**",
+  "*.md",
+  ".github/**",
+  "AGENTS.md"
+]
+reason = "Only tests, docs, or automation-facing metadata changed."
+advice = "Confirm that no shipped binaries or generated assets changed unexpectedly."
