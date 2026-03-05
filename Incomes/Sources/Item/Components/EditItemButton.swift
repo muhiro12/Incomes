@@ -9,7 +9,7 @@ import SwiftData
 import SwiftUI
 
 struct EditItemButton {
-    @StateObject private var router: EditItemRouter = .init()
+    @State private var isEditSheetPresented = false
 
     private let action: (() -> Void)?
 
@@ -24,7 +24,7 @@ extension EditItemButton: View {
             if let action {
                 action()
             } else {
-                router.navigate(to: .edit)
+                isEditSheetPresented = true
             }
         } label: {
             Label {
@@ -33,26 +33,9 @@ extension EditItemButton: View {
                 Image(systemName: "pencil")
             }
         }
-        .sheet(item: $router.route) { _ in
+        .sheet(isPresented: $isEditSheetPresented) {
             ItemFormNavigationView(mode: .edit)
         }
-    }
-}
-
-@MainActor
-private final class EditItemRouter: ObservableObject {
-    @Published var route: EditItemRoute?
-
-    func navigate(to route: EditItemRoute) {
-        self.route = route
-    }
-}
-
-private enum EditItemRoute: String, Identifiable {
-    case edit
-
-    var id: String {
-        rawValue
     }
 }
 

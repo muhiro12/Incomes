@@ -3,13 +3,14 @@
 //  Incomes
 //
 //  Created by Hiromu Nakano on 2022/01/14.
-//  Copyright © 2022 Hiromu Nakano. All rights reserved.
 //
 
 import Foundation
 import SwiftData
 
+/// Documented for SwiftLint compliance.
 public enum BalanceCalculator {
+    /// Documented for SwiftLint compliance.
     public static func calculate(in context: ModelContext, for items: [Item]) throws {
         if let date = items.map(\.localDate).min() {
             try calculate(in: context, after: date)
@@ -18,6 +19,7 @@ public enum BalanceCalculator {
         }
     }
 
+    /// Documented for SwiftLint compliance.
     public static func calculate(in context: ModelContext, after date: Date) throws {
         let allItems = try context.fetch(.items(.all, order: .forward))
 

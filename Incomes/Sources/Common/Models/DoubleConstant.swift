@@ -3,7 +3,6 @@
 //  Incomes
 //
 //  Created by Hiromu Nakano on 2023/10/04.
-//  Copyright © 2023 Hiromu Nakano. All rights reserved.
 //
 
 import Foundation

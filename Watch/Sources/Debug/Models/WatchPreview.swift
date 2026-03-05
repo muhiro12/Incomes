@@ -9,10 +9,14 @@ struct WatchPreview<Content: View>: View {
 
     init(@ViewBuilder content: @escaping () -> Content) {
         self.content = content
-        self.previewModelContainer = try! .init(
-            for: Item.self,
-            configurations: .init(isStoredInMemoryOnly: true)
-        )
+        do {
+            previewModelContainer = try .init(
+                for: Item.self,
+                configurations: .init(isStoredInMemoryOnly: true)
+            )
+        } catch {
+            preconditionFailure("Failed to initialize preview model container: \(error)")
+        }
     }
 
     var body: some View {

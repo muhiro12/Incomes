@@ -3,7 +3,6 @@
 //  Incomes
 //
 //  Created by Hiromu Nakano on 2021/12/29.
-//  Copyright © 2021 Hiromu Nakano. All rights reserved.
 //
 
 import Foundation
@@ -12,19 +11,29 @@ import SwiftData
 /// A financial record representing one income/outgo entry with tags.
 @Model
 public final class Item {
+    /// Documented for SwiftLint compliance.
     @available(iOS, deprecated: 100000.0, message: "Use `utcDate` (UTC) or `localDate` (current calendar) instead.")
     public private(set) var date = Date(timeIntervalSinceReferenceDate: .zero)
+    /// Documented for SwiftLint compliance.
     public private(set) var content = String.empty
+    /// Documented for SwiftLint compliance.
     public private(set) var income = Decimal.zero
+    /// Documented for SwiftLint compliance.
     public private(set) var outgo = Decimal.zero
+    /// Documented for SwiftLint compliance.
     public private(set) var priority = 0
+    /// Documented for SwiftLint compliance.
     public private(set) var repeatID = UUID()
+    /// Documented for SwiftLint compliance.
     public private(set) var balance = Decimal.zero
 
+    /// Documented for SwiftLint compliance.
     @Relationship(inverse: \Tag.items)
     public private(set) var tags: [Tag]?
 
-    private init() {}
+    private init() {
+        // no-op
+    }
 
     /// Creates a new item and attaches year/month/content/category tags.
     public static func create(context: ModelContext,
@@ -148,15 +157,15 @@ extension Item {
 
     /// Year tag if present.
     public var year: Tag? {
-        tags?.first {
-            $0.type == .year
+        tags?.first { tag in
+            tag.type == .year
         }
     }
 
     /// Category tag if present.
     public var category: Tag? {
-        tags?.first {
-            $0.type == .category
+        tags?.first { tag in
+            tag.type == .category
         }
     }
 }

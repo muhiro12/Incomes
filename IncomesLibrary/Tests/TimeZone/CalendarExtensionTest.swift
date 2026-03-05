@@ -3,7 +3,6 @@
 //  Incomes
 //
 //  Created by Hiromu Nakano on 2025/04/25.
-//  Copyright © 2025 Hiromu Nakano. All rights reserved.
 //
 
 import Foundation
@@ -16,7 +15,7 @@ struct CalendarExtensionTest {
 
     @Test("UTC calendar should have zero offset", arguments: timeZones)
     func verifiesUTCCalendarTimeZone(_ timeZone: TimeZone) {
-        NSTimeZone.default = timeZone
+        TimeZone.ReferenceType.default = timeZone
 
         let calendar = Calendar.utc
         #expect(calendar.timeZone.secondsFromGMT() == 0)
@@ -26,7 +25,7 @@ struct CalendarExtensionTest {
 
     @Test("endOfDay returns last second before next day", arguments: timeZones)
     func verifiesEndOfDay(_ timeZone: TimeZone) {
-        NSTimeZone.default = timeZone
+        TimeZone.ReferenceType.default = timeZone
 
         let calendar = Calendar.utc
         let date = isoDate("2024-03-15T10:30:00Z")
@@ -36,7 +35,7 @@ struct CalendarExtensionTest {
 
     @Test("endOfDay returns Feb 29 23:59:59 UTC for 2024-02-29T15:00:00Z (JST Mar 1 00:00)", arguments: timeZones)
     func verifiesEndOfDayForUTCBoundary(_ timeZone: TimeZone) {
-        NSTimeZone.default = timeZone
+        TimeZone.ReferenceType.default = timeZone
 
         let calendar = Calendar.utc
         let date = isoDate("2024-02-29T15:00:00Z")  // JST: 3/1 00:00
@@ -46,7 +45,7 @@ struct CalendarExtensionTest {
 
     @Test("endOfDay for 2024-02-29T23:59:59+0900 (JST) returns Feb 29 23:59:59 UTC", arguments: timeZones)
     func verifiesEndOfDayBeforeJSTBoundary(_ timeZone: TimeZone) {
-        NSTimeZone.default = timeZone
+        TimeZone.ReferenceType.default = timeZone
 
         let calendar = Calendar.utc
         let date = isoDate("2024-02-29T14:59:59Z")  // JST: 2/29 23:59:59
@@ -58,7 +57,7 @@ struct CalendarExtensionTest {
 
     @Test("startOfMonth returns first day at 00:00:00", arguments: timeZones)
     func verifiesStartOfMonth(_ timeZone: TimeZone) {
-        NSTimeZone.default = timeZone
+        TimeZone.ReferenceType.default = timeZone
 
         let calendar = Calendar.utc
         let date = isoDate("2024-03-15T10:30:00Z")
@@ -68,7 +67,7 @@ struct CalendarExtensionTest {
 
     @Test("startOfMonth returns Feb 1 UTC for 2024-02-29T15:00:00Z (JST Mar 1 00:00)", arguments: timeZones)
     func verifiesStartOfMonthForUTCBoundary(_ timeZone: TimeZone) {
-        NSTimeZone.default = timeZone
+        TimeZone.ReferenceType.default = timeZone
 
         let calendar = Calendar.utc
         let date = isoDate("2024-02-29T15:00:00Z")  // JST: 3/1 00:00
@@ -78,7 +77,7 @@ struct CalendarExtensionTest {
 
     @Test("startOfMonth for 2024-02-29T23:59:59+0900 (JST) returns Feb 1 UTC", arguments: timeZones)
     func verifiesStartOfMonthBeforeJSTBoundary(_ timeZone: TimeZone) {
-        NSTimeZone.default = timeZone
+        TimeZone.ReferenceType.default = timeZone
 
         let calendar = Calendar.utc
         let date = isoDate("2024-02-29T14:59:59Z")  // JST: 2/29 23:59:59
@@ -90,7 +89,7 @@ struct CalendarExtensionTest {
 
     @Test("endOfMonth returns last day at 23:59:59", arguments: timeZones)
     func verifiesEndOfMonth(_ timeZone: TimeZone) {
-        NSTimeZone.default = timeZone
+        TimeZone.ReferenceType.default = timeZone
 
         let calendar = Calendar.utc
         let date = isoDate("2024-03-15T10:30:00Z")
@@ -100,7 +99,7 @@ struct CalendarExtensionTest {
 
     @Test("endOfMonth returns Mar 31 UTC for 2024-03-31T14:59:59Z (JST Mar 31 23:59:59)", arguments: timeZones)
     func verifiesEndOfMonthForUTCBoundary(_ timeZone: TimeZone) {
-        NSTimeZone.default = timeZone
+        TimeZone.ReferenceType.default = timeZone
 
         let calendar = Calendar.utc
         let date = isoDate("2024-03-31T14:59:59Z")  // JST: 3/31 23:59:59
@@ -110,7 +109,7 @@ struct CalendarExtensionTest {
 
     @Test("endOfMonth for 2024-02-29T23:59:59+0900 (JST) returns Feb 29 UTC", arguments: timeZones)
     func verifiesEndOfMonthBeforeJSTBoundary(_ timeZone: TimeZone) {
-        NSTimeZone.default = timeZone
+        TimeZone.ReferenceType.default = timeZone
 
         let calendar = Calendar.utc
         let date = isoDate("2024-02-29T14:59:59Z")  // JST: 2/29 23:59:59
@@ -122,7 +121,7 @@ struct CalendarExtensionTest {
 
     @Test("startOfYear returns Jan 1st at 00:00:00", arguments: timeZones)
     func verifiesStartOfYear(_ timeZone: TimeZone) {
-        NSTimeZone.default = timeZone
+        TimeZone.ReferenceType.default = timeZone
 
         let calendar = Calendar.utc
         let date = isoDate("2024-03-15T10:30:00Z")
@@ -132,7 +131,7 @@ struct CalendarExtensionTest {
 
     @Test("startOfYear returns Jan 1 2024 UTC for 2023-12-31T15:00:00Z (JST Jan 1 00:00)", arguments: timeZones)
     func verifiesStartOfYearForUTCBoundary(_ timeZone: TimeZone) {
-        NSTimeZone.default = timeZone
+        TimeZone.ReferenceType.default = timeZone
 
         let calendar = Calendar.utc
         let date = isoDate("2023-12-31T15:00:00Z")  // JST: 1/1 00:00
@@ -142,7 +141,7 @@ struct CalendarExtensionTest {
 
     @Test("startOfYear for 2023-12-31T23:59:59+0900 (JST) returns Jan 1 2023 UTC", arguments: timeZones)
     func verifiesStartOfYearBeforeJSTBoundary(_ timeZone: TimeZone) {
-        NSTimeZone.default = timeZone
+        TimeZone.ReferenceType.default = timeZone
 
         let calendar = Calendar.utc
         let date = isoDate("2023-12-31T14:59:59Z")  // JST: 12/31 23:59:59
@@ -154,7 +153,7 @@ struct CalendarExtensionTest {
 
     @Test("endOfYear returns Dec 31st at 23:59:59", arguments: timeZones)
     func verifiesEndOfYear(_ timeZone: TimeZone) {
-        NSTimeZone.default = timeZone
+        TimeZone.ReferenceType.default = timeZone
 
         let calendar = Calendar.utc
         let date = isoDate("2024-03-15T10:30:00Z")
@@ -164,7 +163,7 @@ struct CalendarExtensionTest {
 
     @Test("endOfYear returns Dec 31 2024 UTC for 2024-12-31T15:00:00Z (JST Jan 1 00:00)", arguments: timeZones)
     func verifiesEndOfYearForUTCBoundary(_ timeZone: TimeZone) {
-        NSTimeZone.default = timeZone
+        TimeZone.ReferenceType.default = timeZone
 
         let calendar = Calendar.utc
         let date = isoDate("2024-12-31T15:00:00Z")  // JST: 1/1 00:00
@@ -174,7 +173,7 @@ struct CalendarExtensionTest {
 
     @Test("endOfYear for 2024-12-31T23:59:59+0900 (JST) returns Dec 31 2024 UTC", arguments: timeZones)
     func verifiesEndOfYearBeforeJSTBoundary(_ timeZone: TimeZone) {
-        NSTimeZone.default = timeZone
+        TimeZone.ReferenceType.default = timeZone
 
         let calendar = Calendar.utc
         let date = isoDate("2024-12-31T14:59:59Z")  // JST: 12/31 23:59:59
@@ -186,7 +185,11 @@ struct CalendarExtensionTest {
 
     @Test("shiftedDate shifts date from JST components into UTC calendar")
     func verifiesShiftedDateFromJSTtoUTC() {
-        NSTimeZone.default = .init(identifier: "Asia/Tokyo")!
+        guard let tokyoTimeZone = TimeZone(identifier: "Asia/Tokyo") else {
+            Issue.record("Failed to construct Asia/Tokyo time zone")
+            return
+        }
+        TimeZone.ReferenceType.default = tokyoTimeZone
 
         let jstDate = isoDate("2024-03-15T00:00:00+0900")
         let shiftedDate = Calendar.utc.shiftedDate(componentsFrom: jstDate, in: .current)
@@ -197,7 +200,11 @@ struct CalendarExtensionTest {
 
     @Test("shiftedDate shifts date from UTC components into JST calendar")
     func verifiesShiftedDateFromUTCtoJST() {
-        NSTimeZone.default = .init(identifier: "Asia/Tokyo")!
+        guard let tokyoTimeZone = TimeZone(identifier: "Asia/Tokyo") else {
+            Issue.record("Failed to construct Asia/Tokyo time zone")
+            return
+        }
+        TimeZone.ReferenceType.default = tokyoTimeZone
 
         let utcDate = isoDate("2024-03-14T15:00:00Z")
         let shiftedDate = Calendar.current.shiftedDate(componentsFrom: utcDate, in: .utc)

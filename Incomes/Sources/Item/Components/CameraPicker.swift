@@ -4,7 +4,8 @@ import UIKit
 struct CameraPicker: UIViewControllerRepresentable {
     typealias CompletionHandler = (UIImage) -> Void
 
-    @Environment(\.dismiss) private var dismiss
+    @Environment(\.dismiss)
+    private var dismiss
     let completionHandler: CompletionHandler
 
     init(completionHandler: @escaping CompletionHandler) {
@@ -19,6 +20,7 @@ struct CameraPicker: UIViewControllerRepresentable {
     }
 
     func updateUIViewController(_: UIImagePickerController, context _: Context) {
+        // no-op
     }
 
     func makeCoordinator() -> Coordinator {

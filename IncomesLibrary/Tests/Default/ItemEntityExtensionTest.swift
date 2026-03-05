@@ -9,7 +9,8 @@ struct ItemEntityExtensionTest {
         context = testContext
     }
 
-    @Test func modelFetch() throws {
+    @Test
+    func modelFetch() throws {
         let item = try ItemService.create(
             context: context,
             date: isoDate("2000-01-01T12:00:00Z"),

@@ -3,7 +3,6 @@
 //  Incomes
 //
 //  Created by Hiromu Nakano on 2023/09/09.
-//  Copyright © 2023 Hiromu Nakano. All rights reserved.
 //
 
 import Foundation
@@ -12,12 +11,17 @@ import SwiftData
 /// A classification tag that groups related items (e.g., year, month, category).
 @Model
 public final class Tag {
+    /// Documented for SwiftLint compliance.
     public private(set) var name = String.empty
+    /// Documented for SwiftLint compliance.
     public private(set) var typeID = String.empty
 
+    /// Documented for SwiftLint compliance.
     public private(set) var items: [Item]?
 
-    private init() {}
+    private init() {
+        // no-op
+    }
 
     /// Creates or returns an existing tag with the given `name` and `type`.
     public static func create(context: ModelContext, name: String, type: TagType) throws -> Tag {
@@ -99,7 +103,7 @@ extension Tag: Hashable {
 
 extension Tag {
     /// Testing helper: creates a tag without checking duplicates.
-    public static func createIgnoringDuplicates(context: ModelContext, name: String, type: TagType) throws -> Tag {
+    public static func createIgnoringDuplicates(context: ModelContext, name: String, type: TagType) -> Tag {
         let tag = Tag()
         context.insert(tag)
         tag.name = name

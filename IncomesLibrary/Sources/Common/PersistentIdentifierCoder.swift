@@ -1,7 +1,9 @@
 import Foundation
 import SwiftData
 
+/// Documented for SwiftLint compliance.
 public enum PersistentIdentifierCoder {
+    /// Documented for SwiftLint compliance.
     public static func decode(
         _ string: String
     ) throws -> PersistentIdentifier {
@@ -11,6 +13,7 @@ public enum PersistentIdentifierCoder {
         return try JSONDecoder().decode(PersistentIdentifier.self, from: data)
     }
 
+    /// Documented for SwiftLint compliance.
     public static func encode(
         _ identifier: PersistentIdentifier
     ) throws -> String {

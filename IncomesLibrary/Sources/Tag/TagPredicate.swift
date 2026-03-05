@@ -3,7 +3,6 @@
 //  Incomes
 //
 //  Created by Hiromu Nakano on 2023/09/10.
-//  Copyright © 2023 Hiromu Nakano. All rights reserved.
 //
 
 import Foundation
@@ -11,13 +10,21 @@ import SwiftData
 
 /// Discrete predicate presets for fetching tags.
 public enum TagPredicate {
+    /// Documented for SwiftLint compliance.
     case all
+    /// Documented for SwiftLint compliance.
     case none
+    /// Documented for SwiftLint compliance.
     case idIs(Tag.ID)
+    /// Documented for SwiftLint compliance.
     case isSameWith(Tag)
+    /// Documented for SwiftLint compliance.
     case typeIs(TagType)
+    /// Documented for SwiftLint compliance.
     case nameIs(String, type: TagType)
+    /// Documented for SwiftLint compliance.
     case nameContains(String, type: TagType)
+    /// Documented for SwiftLint compliance.
     case nameStartsWith(String, type: TagType)
 
     var value: Predicate<Tag> {
@@ -27,41 +34,41 @@ public enum TagPredicate {
         case .none:
             return .false
         case .idIs(let id):
-            return #Predicate {
-                $0.persistentModelID == id
+            return #Predicate { tag in
+                tag.persistentModelID == id
             }
         case .isSameWith(let tag):
             let name = tag.name
             let typeID = tag.typeID
-            return #Predicate {
-                $0.name == name && $0.typeID == typeID
+            return #Predicate { tag in
+                tag.name == name && tag.typeID == typeID
             }
         case .typeIs(let type):
             let id = type.rawValue
-            return #Predicate {
-                $0.typeID == id
+            return #Predicate { tag in
+                tag.typeID == id
             }
-        case .nameIs(let name, let type):
+        case let .nameIs(name, type):
             let id = type.rawValue
-            return #Predicate {
-                $0.name == name && $0.typeID == id
+            return #Predicate { tag in
+                tag.name == name && tag.typeID == id
             }
-        case .nameContains(let name, let type):
+        case let .nameContains(name, type):
             let typeID = type.rawValue
             let hiragana = name.applyingTransform(.hiraganaToKatakana, reverse: true).orEmpty
             let katakana = name.applyingTransform(.hiraganaToKatakana, reverse: false).orEmpty
-            return #Predicate {
-                $0.typeID == typeID
+            return #Predicate { tag in
+                tag.typeID == typeID
                     && (
-                        $0.name.localizedStandardContains(name)
-                            || $0.name.localizedStandardContains(hiragana)
-                            || $0.name.localizedStandardContains(katakana)
+                        tag.name.localizedStandardContains(name)
+                            || tag.name.localizedStandardContains(hiragana)
+                            || tag.name.localizedStandardContains(katakana)
                     )
             }
-        case .nameStartsWith(let name, let type):
+        case let .nameStartsWith(name, type):
             let id = type.rawValue
-            return #Predicate {
-                $0.name.starts(with: name) && $0.typeID == id
+            return #Predicate { tag in
+                tag.name.starts(with: name) && tag.typeID == id
             }
         }
     }

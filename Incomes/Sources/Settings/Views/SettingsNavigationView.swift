@@ -7,30 +7,15 @@
 
 import SwiftUI
 
-enum SettingsNavigationDestination: Hashable {
-    case subscription
-    case license
-    case debug
-}
-
 struct SettingsNavigationView: View {
     @Binding private var incomingDestination: SettingsNavigationDestination?
 
-    @StateObject private var router: SettingsNavigationRouter = .init()
+    @State private var path: [SettingsNavigationDestination] = []
 
     private let navigateToRoute: (IncomesRoute) -> Void
 
-    init(
-        incomingDestination: Binding<SettingsNavigationDestination?> = .constant(nil),
-        navigateToRoute: @escaping (IncomesRoute) -> Void = { _ in
-        }
-    ) {
-        _incomingDestination = incomingDestination
-        self.navigateToRoute = navigateToRoute
-    }
-
     var body: some View {
-        NavigationStack(path: $router.path) {
+        NavigationStack(path: $path) {
             SettingsListView(
                 navigateToRoute: navigateToRoute
             )
@@ -52,29 +37,25 @@ struct SettingsNavigationView: View {
             applyIncomingDestinationIfNeeded()
         }
     }
+
+    init(
+        incomingDestination: Binding<SettingsNavigationDestination?> = .constant(nil),
+        navigateToRoute: @escaping (IncomesRoute) -> Void = { _ in
+            // no-op
+        }
+    ) {
+        _incomingDestination = incomingDestination
+        self.navigateToRoute = navigateToRoute
+    }
 }
 
 private extension SettingsNavigationView {
     func applyIncomingDestinationIfNeeded() {
-        guard router.applyIncomingDestination(incomingDestination) else {
+        guard let incomingDestination else {
             return
         }
-        self.incomingDestination = nil
-    }
-}
-
-@MainActor
-private final class SettingsNavigationRouter: ObservableObject {
-    @Published var path: [SettingsNavigationDestination] = []
-
-    func applyIncomingDestination(
-        _ incomingDestination: SettingsNavigationDestination?
-    ) -> Bool {
-        guard let incomingDestination else {
-            return false
-        }
         path = [incomingDestination]
-        return true
+        self.incomingDestination = nil
     }
 }
 

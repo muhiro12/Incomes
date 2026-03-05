@@ -14,10 +14,16 @@ struct WatchSyncPlanningTests {
     func pruning_keeps_only_last_current_next_month() throws {
         // Base: 2000-09-15
         let base = shiftedDate("2000-09-15T12:00:00Z")
-        let july = Calendar.current.date(byAdding: .month, value: -2, to: base)!
-        let aug = Calendar.current.date(byAdding: .month, value: -1, to: base)!
+        let july = try #require(
+            Calendar.current.date(byAdding: .month, value: -2, to: base)
+        )
+        let aug = try #require(
+            Calendar.current.date(byAdding: .month, value: -1, to: base)
+        )
         let sep = base
-        let oct = Calendar.current.date(byAdding: .month, value: 1, to: base)!
+        let oct = try #require(
+            Calendar.current.date(byAdding: .month, value: 1, to: base)
+        )
 
         // Seed four months (July..Oct)
         _ = try ItemService.create(

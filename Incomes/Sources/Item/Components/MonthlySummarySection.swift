@@ -35,11 +35,9 @@ struct MonthlySummarySection: View {
     @AppStorage(.currencyCode)
     private var currencyCode
 
-    @Query
-    private var currentItems: [Item]
+    @Query private var currentItems: [Item]
 
-    @Query
-    private var previousItems: [Item]
+    @Query private var previousItems: [Item]
 
     @State private var languageModel = SystemLanguageModel.default
     @State private var generatedSummary: String?
@@ -146,8 +144,7 @@ private extension MonthlySummarySection {
         }
     }
 
-    @ViewBuilder
-    private var summaryPopover: some View {
+    @ViewBuilder private var summaryPopover: some View {
         VStack(alignment: .leading, spacing: .space(.s)) {
             Text("Monthly Summary")
                 .font(.headline)

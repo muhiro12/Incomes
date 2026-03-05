@@ -3,7 +3,6 @@
 //  Incomes
 //
 //  Created by Hiromu Nakano on 2025/05/02.
-//  Copyright © 2025 Hiromu Nakano. All rights reserved.
 //
 
 import SwiftData
@@ -13,7 +12,7 @@ struct ShowItemButton {
     @Environment(IncomesTipController.self)
     private var tipController
 
-    @StateObject private var router: ShowItemRouter = .init()
+    @State private var isDetailSheetPresented = false
 
     private let action: (() -> Void)?
 
@@ -29,7 +28,7 @@ extension ShowItemButton: View {
             if let action {
                 action()
             } else {
-                router.navigate(to: .detail)
+                isDetailSheetPresented = true
             }
         } label: {
             Label {
@@ -38,27 +37,10 @@ extension ShowItemButton: View {
                 Image(systemName: "doc.text.magnifyingglass")
             }
         }
-        .sheet(item: $router.route) { _ in
+        .sheet(isPresented: $isDetailSheetPresented) {
             ItemNavigationView()
                 .presentationDetents([.medium, .large])
         }
-    }
-}
-
-@MainActor
-private final class ShowItemRouter: ObservableObject {
-    @Published var route: ShowItemRoute?
-
-    func navigate(to route: ShowItemRoute) {
-        self.route = route
-    }
-}
-
-private enum ShowItemRoute: String, Identifiable {
-    case detail
-
-    var id: String {
-        rawValue
     }
 }
 

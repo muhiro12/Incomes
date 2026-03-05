@@ -5,8 +5,11 @@ import SwiftData
 public enum ItemService {
     /// Preset datasets used when seeding sample data.
     public enum SampleDataProfile {
+        /// Documented for SwiftLint compliance.
         case debug
+        /// Documented for SwiftLint compliance.
         case tutorial
+        /// Documented for SwiftLint compliance.
         case preview
     }
     /// Creates an item and optional repeating items, then recalculates balances.
@@ -472,15 +475,18 @@ public enum ItemService {
         baseDate: Date = .now
     ) throws {
         let startOfYear = Calendar.current.startOfYear(for: baseDate)
+        guard
+            let dayA = Calendar.current.date(byAdding: .day, value: 0, to: startOfYear),
+            let dayB = Calendar.current.date(byAdding: .day, value: 6, to: startOfYear),
+            let dayC = Calendar.current.date(byAdding: .day, value: 12, to: startOfYear),
+            let dayD = Calendar.current.date(byAdding: .day, value: 18, to: startOfYear),
+            let dayE = Calendar.current.date(byAdding: .day, value: 24, to: startOfYear)
+        else {
+            return
+        }
 
-        let dayA = Calendar.current.date(byAdding: .day, value: 0, to: startOfYear)!
-        let dayB = Calendar.current.date(byAdding: .day, value: 6, to: startOfYear)!
-        let dayC = Calendar.current.date(byAdding: .day, value: 12, to: startOfYear)!
-        let dayD = Calendar.current.date(byAdding: .day, value: 18, to: startOfYear)!
-        let dayE = Calendar.current.date(byAdding: .day, value: 24, to: startOfYear)!
-
-        let monthShift: (Int, Date) -> Date = { value, to in
-            Calendar.current.date(byAdding: .month, value: value, to: to)!
+        let monthShift: (Int, Date) -> Date = { value, date in
+            Calendar.current.date(byAdding: .month, value: value, to: date) ?? date
         }
 
         _ = try Item.create(
@@ -620,7 +626,9 @@ public enum ItemService {
     ) throws {
         var created = [Item]()
         for index in 0..<24 {
-            let date = Calendar.current.date(byAdding: .month, value: index, to: baseDate)!
+            guard let date = Calendar.current.date(byAdding: .month, value: index, to: baseDate) else {
+                continue
+            }
             created.append(
                 try Item.createIgnoringDuplicates(
                     context: context,

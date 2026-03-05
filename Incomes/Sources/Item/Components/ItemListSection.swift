@@ -30,11 +30,11 @@ struct ItemListSection: View {
                 ListItem()
                     .environment(item)
             }
-            .onDelete {
+            .onDelete { indices in
                 Haptic.warning.impact()
                 willDeleteItems = ItemService.resolveItemsForDeletion(
                     from: items,
-                    indices: $0
+                    indices: indices
                 )
                 isDialogPresented = true
             }

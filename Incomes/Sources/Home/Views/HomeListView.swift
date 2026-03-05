@@ -3,7 +3,6 @@
 //  Incomes
 //
 //  Created by Hiromu Nakano on 2021/12/29.
-//  Copyright © 2021 Hiromu Nakano. All rights reserved.
 //
 
 import SwiftData
@@ -30,6 +29,7 @@ struct HomeListView {
 
     init(
         navigateToRoute: @escaping (IncomesRoute) -> Void = { _ in
+            // no-op
         }
     ) {
         self.navigateToRoute = navigateToRoute
@@ -94,11 +94,13 @@ private extension HomeListView {
     @Previewable @Query var tags: [Tag]
 
     NavigationStack {
-        HomeListView()
-            .environment(
-                tags.last { tag in
-                    tag.type == .year
-                }!
-            )
+        if let yearTag = tags.last(where: { tag in
+            tag.type == .year
+        }) {
+            HomeListView()
+                .environment(yearTag)
+        } else {
+            EmptyView()
+        }
     }
 }

@@ -59,7 +59,9 @@ nonisolated extension PhoneWatchBridge: WCSessionDelegate {
         }
     }
 
-    func sessionDidBecomeInactive(_: WCSession) {}
+    func sessionDidBecomeInactive(_: WCSession) {
+        // no-op
+    }
 
     func sessionDidDeactivate(_ session: WCSession) {
         // Re-activate if needed and notify waiters again
@@ -81,7 +83,7 @@ nonisolated extension PhoneWatchBridge: WCSessionDelegate {
     }
 
     @MainActor
-    private func handleRecentItems(request: ItemsRequest, replyHandler: @escaping (Data) -> Void) {
+    private func handleRecentItems(request: ItemsRequest, replyHandler: (Data) -> Void) {
         let baseDate = Date(timeIntervalSince1970: request.baseEpoch)
         guard let context = modelContext else {
             replyHandler(Data())
@@ -98,8 +100,8 @@ nonisolated extension PhoneWatchBridge: WCSessionDelegate {
                     .init(
                         dateEpoch: item.localDate.timeIntervalSince1970,
                         content: item.content,
-                        income: (item.income as NSDecimalNumber).doubleValue,
-                        outgo: (item.outgo as NSDecimalNumber).doubleValue,
+                        income: Double(item.income.description) ?? .zero,
+                        outgo: Double(item.outgo.description) ?? .zero,
                         category: item.category?.name ?? ""
                     )
                 )

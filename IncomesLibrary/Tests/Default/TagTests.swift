@@ -3,7 +3,6 @@
 //  IncomesTests
 //
 //  Created by Hiromu Nakano on 2025/10/11.
-//  Copyright © 2025 Hiromu Nakano. All rights reserved.
 //
 
 import Foundation

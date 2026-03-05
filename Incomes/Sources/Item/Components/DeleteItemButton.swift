@@ -57,6 +57,7 @@ extension DeleteItemButton: View {
                 Text("Delete")
             }
             Button(role: .cancel) {
+                // no-op
             } label: {
                 Text("Cancel")
             }

@@ -3,7 +3,6 @@
 //  Watch
 //
 //  Created by Hiromu Nakano on 2025/09/15.
-//  Copyright © 2025 Hiromu Nakano. All rights reserved.
 //
 
 import SwiftData
@@ -11,19 +10,24 @@ import SwiftUI
 
 @main
 struct IncomesWatchApp: App {
-    private var sharedModelContainer: ModelContainer!
+    private let sharedModelContainer: ModelContainer
 
     init() {
         // Migrate possible legacy DB files into App Group first
         DatabaseMigrator.migrateSQLiteFilesIfNeeded()
 
-        let modelContainer = try! ModelContainer(
-            for: Item.self,
-            configurations: .init(
-                isStoredInMemoryOnly: true,
-                cloudKitDatabase: .none
+        let modelContainer: ModelContainer
+        do {
+            modelContainer = try ModelContainer(
+                for: Item.self,
+                configurations: .init(
+                    isStoredInMemoryOnly: true,
+                    cloudKitDatabase: .none
+                )
             )
-        )
+        } catch {
+            preconditionFailure("Failed to initialize watch model container: \(error)")
+        }
 
         sharedModelContainer = modelContainer
     }

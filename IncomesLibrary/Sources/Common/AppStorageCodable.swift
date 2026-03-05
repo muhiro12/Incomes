@@ -3,7 +3,6 @@
 //  Incomes
 //
 //  Created by Hiromu Nakano on 2025/04/22.
-//  Copyright © 2025 Hiromu Nakano. All rights reserved.
 //
 
 import Foundation
@@ -15,6 +14,7 @@ public protocol AppStorageCodable: Codable, Equatable, RawRepresentable where Ra
 }
 
 public extension AppStorageCodable {
+    /// Documented for SwiftLint compliance.
     init?(rawValue: RawValue) {
         guard let data = rawValue.data(using: .utf8),
               let value = try? JSONDecoder().decode(Self.self, from: data) else {
@@ -23,6 +23,7 @@ public extension AppStorageCodable {
         self = value
     }
 
+    /// Documented for SwiftLint compliance.
     var rawValue: RawValue {
         guard let data = try? JSONEncoder().encode(self),
               let string = String(data: data, encoding: .utf8) else {

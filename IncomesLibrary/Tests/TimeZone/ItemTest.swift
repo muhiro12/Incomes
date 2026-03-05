@@ -3,7 +3,6 @@
 //  Incomes
 //
 //  Created by Hiromu Nakano on 2025/04/25.
-//  Copyright © 2025 Hiromu Nakano. All rights reserved.
 //
 
 import Foundation
@@ -15,14 +14,14 @@ struct ItemTest {
     let context = testContext
 
     init() {
-        NSTimeZone.default = .current
+        TimeZone.ReferenceType.default = .current
     }
 
     // MARK: - Create
 
     @Test("create assigns correct values and UTC-normalized date", arguments: timeZones)
     func createAssignsCorrectValuesAndUTCNormalizedDate(_ timeZone: TimeZone) throws {
-        NSTimeZone.default = timeZone
+        TimeZone.ReferenceType.default = timeZone
 
         let date = shiftedDate("2024-03-15T10:30:00Z")
         let content = "Lunch"
@@ -68,7 +67,9 @@ struct ItemTest {
         }
     )
     func createNormalizesJSTDateToUTCStartOfDay(date: Date, expected: Date) throws {
-        NSTimeZone.default = .init(identifier: "Asia/Tokyo")!
+        TimeZone.ReferenceType.default = try #require(
+            TimeZone(identifier: "Asia/Tokyo")
+        )
 
         let item = try Item.create(
             context: context,
@@ -109,7 +110,7 @@ struct ItemTest {
 
     @Test("create tags contain year, yearMonth, content, and category", arguments: timeZones)
     func createAssignsAllExpectedTags(_ timeZone: TimeZone) throws {
-        NSTimeZone.default = timeZone
+        TimeZone.ReferenceType.default = timeZone
 
         let date = shiftedDate("2024-06-10T12:00:00Z")
         let item = try Item.create(
@@ -181,7 +182,9 @@ struct ItemTest {
         }
     )
     func modifyNormalizesJSTDateToUTCStartOfDay(date: Date, expected: Date) throws {
-        NSTimeZone.default = .init(identifier: "Asia/Tokyo")!
+        TimeZone.ReferenceType.default = try #require(
+            TimeZone(identifier: "Asia/Tokyo")
+        )
 
         let item = try Item.create(
             context: context,
@@ -209,7 +212,7 @@ struct ItemTest {
 
     @Test("modify preserves repeatID if reassigned to same value", arguments: timeZones)
     func modifyPreservesRepeatIDIfSame(_ timeZone: TimeZone) throws {
-        NSTimeZone.default = timeZone
+        TimeZone.ReferenceType.default = timeZone
 
         let repeatID = UUID()
         let item = try Item.create(
@@ -241,7 +244,7 @@ struct ItemTest {
 
     @Test("modify updates date to correct UTC startOfDay", arguments: timeZones)
     func modifyUpdatesDateToUTCDayStart(_ timeZone: TimeZone) throws {
-        NSTimeZone.default = timeZone
+        TimeZone.ReferenceType.default = timeZone
 
         let item = try Item.create(
             context: context,
@@ -272,7 +275,7 @@ struct ItemTest {
 
     @Test("Comparable order respects content name when priorities match", arguments: timeZones)
     func comparableNameOrderIsExpected(_ timeZone: TimeZone) throws {
-        NSTimeZone.default = timeZone
+        TimeZone.ReferenceType.default = timeZone
 
         let baseDate = shiftedDate("2000-01-01T12:00:00Z")
         let firstItem = try Item.create(
@@ -304,7 +307,7 @@ struct ItemTest {
 
     @Test("Comparable order is as expected when priorities share the same date", arguments: timeZones)
     func comparablePriorityOrderIsExpected(_ timeZone: TimeZone) throws {
-        NSTimeZone.default = timeZone
+        TimeZone.ReferenceType.default = timeZone
 
         let baseDate = shiftedDate("2000-01-01T12:00:00Z")
         let lowPriorityItem = try Item.create(
@@ -336,7 +339,7 @@ struct ItemTest {
 
     @Test("Comparable order is consistent between priority 0/1 and 1/2", arguments: timeZones)
     func comparablePriorityOrderIsConsistent(_ timeZone: TimeZone) throws {
-        NSTimeZone.default = timeZone
+        TimeZone.ReferenceType.default = timeZone
 
         let baseDate = shiftedDate("2000-01-01T12:00:00Z")
         let firstItem = try Item.create(

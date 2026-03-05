@@ -62,6 +62,7 @@ struct DuplicateTagView: View {
                 Text("Merge")
             }
             Button(role: .cancel) {
+                // no-op
             } label: {
                 Text("Cancel")
             }
@@ -83,6 +84,7 @@ struct DuplicateTagView: View {
                 Text("Delete")
             }
             Button(role: .cancel) {
+                // no-op
             } label: {
                 Text("Cancel")
             }

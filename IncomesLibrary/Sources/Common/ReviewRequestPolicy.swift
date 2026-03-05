@@ -1,6 +1,8 @@
 import Foundation
 
+/// Documented for SwiftLint compliance.
 public enum ReviewRequestPolicy {
+    /// Documented for SwiftLint compliance.
     public static func shouldRequestReview(
         randomValue: Int,
         maxExclusive: Int

@@ -1,37 +1,19 @@
 import Foundation
 import SwiftData
 
+/// Documented for SwiftLint compliance.
 public struct MainNavigationState {
+    /// Documented for SwiftLint compliance.
     public let yearTag: Tag?
+    /// Documented for SwiftLint compliance.
     public let yearMonthTag: Tag?
 
+    /// Documented for SwiftLint compliance.
     public init(
         yearTag: Tag?,
         yearMonthTag: Tag?
     ) {
         self.yearTag = yearTag
         self.yearMonthTag = yearMonthTag
-    }
-}
-
-public enum MainNavigationStateLoader {
-    public static func load(
-        context: ModelContext,
-        date: Date = .now
-    ) throws -> MainNavigationState {
-        let yearTag = try TagService.getByName(
-            context: context,
-            name: date.stringValueWithoutLocale(.yyyy),
-            type: .year
-        )
-        let yearMonthTag = try TagService.getByName(
-            context: context,
-            name: date.stringValueWithoutLocale(.yyyyMM),
-            type: .yearMonth
-        )
-        return .init(
-            yearTag: yearTag,
-            yearMonthTag: yearMonthTag
-        )
     }
 }

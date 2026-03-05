@@ -609,7 +609,7 @@ struct ItemServiceTests {
             category: "category2",
             priority: 0,
             )
-        let result = fetchItems(context).first!
+        let result = try #require(fetchItems(context).first)
         #expect(result.utcDate == isoDate("2001-01-02T00:00:00Z"))
         #expect(result.content == "content2")
         #expect(result.income == 100)
@@ -619,10 +619,10 @@ struct ItemServiceTests {
 
     @Test
     func update_recalculates_balances_when_date_moves_later() throws {
-        let originalTimeZone = NSTimeZone.default
-        NSTimeZone.default = TimeZone(secondsFromGMT: 0)!
+        let originalTimeZone = TimeZone.ReferenceType.default
+        TimeZone.ReferenceType.default = try #require(TimeZone(secondsFromGMT: 0))
         defer {
-            NSTimeZone.default = originalTimeZone
+            TimeZone.ReferenceType.default = originalTimeZone
         }
 
         _ = try ItemService.create(
@@ -741,7 +741,7 @@ struct ItemServiceTests {
             category: "category2",
             priority: 0,
             )
-        let result = fetchItems(context).first!
+        let result = try #require(fetchItems(context).first)
         #expect(result.utcDate == isoDate("2001-01-02T00:00:00Z"))
         #expect(result.content == "content2")
         #expect(result.income == 100)
@@ -813,7 +813,7 @@ struct ItemServiceTests {
             category: "category2",
             priority: 0,
             )
-        let result = fetchItems(context).first!
+        let result = try #require(fetchItems(context).first)
         #expect(result.utcDate == isoDate("2001-01-02T00:00:00Z"))
         #expect(result.content == "content2")
         #expect(result.income == 100)

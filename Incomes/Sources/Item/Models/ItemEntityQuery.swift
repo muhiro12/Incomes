@@ -3,7 +3,6 @@
 //  Incomes
 //
 //  Created by Hiromu Nakano on 2025/05/23.
-//  Copyright © 2025 Hiromu Nakano. All rights reserved.
 //
 
 import AppIntents
@@ -17,8 +16,8 @@ struct ItemEntityQuery: EntityStringQuery {
         try modelContainer.mainContext.fetch(
             .items(
                 .idsAre(
-                    identifiers.map {
-                        try .init(base64Encoded: $0)
+                    identifiers.map { identifier in
+                        try .init(base64Encoded: identifier)
                     }
                 )
             )

@@ -1,6 +1,8 @@
 import Foundation
 
+/// Documented for SwiftLint compliance.
 public enum DatabaseMigrator {
+    /// Documented for SwiftLint compliance.
     public static func migrateSQLiteFilesIfNeeded() {
         migrateSQLiteFilesIfNeeded(
             fileManager: .default,

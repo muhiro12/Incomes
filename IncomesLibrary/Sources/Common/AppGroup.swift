@@ -7,9 +7,17 @@
 
 import Foundation
 
+/// Documented for SwiftLint compliance.
 public enum AppGroup {
+    /// Documented for SwiftLint compliance.
     public static let id = "group.com.muhiro12.Incomes"
-    public static let containerURL = FileManager.default.containerURL(
-        forSecurityApplicationGroupIdentifier: id
-    )!
+    /// Documented for SwiftLint compliance.
+    public static let containerURL: URL = {
+        guard let url = FileManager.default.containerURL(
+            forSecurityApplicationGroupIdentifier: id
+        ) else {
+            preconditionFailure("Failed to resolve App Group container URL.")
+        }
+        return url
+    }()
 }

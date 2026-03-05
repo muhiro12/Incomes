@@ -3,7 +3,6 @@
 //  Incomes
 //
 //  Created by Hiromu Nakano on 2020/04/11.
-//  Copyright © 2020 Hiromu Nakano. All rights reserved.
 //
 
 import SwiftData
@@ -81,6 +80,7 @@ struct ListItem: View {
                 Text("Delete")
             }
             Button(role: .cancel) {
+                // no-op
             } label: {
                 Text("Cancel")
             }

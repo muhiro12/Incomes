@@ -22,10 +22,8 @@ struct NetIncomeProvider: AppIntentTimelineProvider {
         let currentDate = Date.now
         let targetDate: Date = resolveTargetDate(from: configuration, now: currentDate)
         var entries: [NetIncomeEntry] = .init()
-        for hourOffset in 0 ..< 5 {
-            if Calendar.current.date(byAdding: .hour, value: hourOffset, to: currentDate) != nil {
-                entries.append(makeEntry(date: targetDate, configuration: configuration))
-            }
+        for hourOffset in 0 ..< 5 where Calendar.current.date(byAdding: .hour, value: hourOffset, to: currentDate) != nil {
+            entries.append(makeEntry(date: targetDate, configuration: configuration))
         }
         return .init(entries: entries, policy: .atEnd)
     }

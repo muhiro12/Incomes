@@ -59,12 +59,14 @@ struct UpcomingPaymentPlannerTests {
         settings.isEnabled = true
         settings.thresholdAmount = 500
         settings.daysBeforeDueDate = 2
-        settings.notifyTime = Calendar.current.date(
-            bySettingHour: 9,
-            minute: 30,
-            second: 0,
-            of: shiftedDate("2024-01-01T00:00:00Z")
-        )!
+        settings.notifyTime = try #require(
+            Calendar.current.date(
+                bySettingHour: 9,
+                minute: 30,
+                second: 0,
+                of: shiftedDate("2024-01-01T00:00:00Z")
+            )
+        )
 
         let plans = try UpcomingPaymentPlanner.build(
             context: context,
@@ -73,16 +75,21 @@ struct UpcomingPaymentPlannerTests {
         )
 
         let plan = try #require(plans.first)
-        let expectedDate = Calendar.current.date(
-            bySettingHour: 9,
-            minute: 30,
-            second: 0,
-            of: Calendar.current.date(
+        let plannedDate = try #require(
+            Calendar.current.date(
                 byAdding: .day,
                 value: -2,
                 to: item.localDate
-            )!
-        )!
+            )
+        )
+        let expectedDate = try #require(
+            Calendar.current.date(
+                bySettingHour: 9,
+                minute: 30,
+                second: 0,
+                of: plannedDate
+            )
+        )
 
         #expect(plan.item.id == item.id)
         #expect(plan.notifyDate == expectedDate)
@@ -115,12 +122,14 @@ struct UpcomingPaymentPlannerTests {
         settings.isEnabled = true
         settings.thresholdAmount = 500
         settings.daysBeforeDueDate = 1
-        settings.notifyTime = Calendar.current.date(
-            bySettingHour: 9,
-            minute: 0,
-            second: 0,
-            of: shiftedDate("2024-01-01T00:00:00Z")
-        )!
+        settings.notifyTime = try #require(
+            Calendar.current.date(
+                bySettingHour: 9,
+                minute: 0,
+                second: 0,
+                of: shiftedDate("2024-01-01T00:00:00Z")
+            )
+        )
 
         let plans = try UpcomingPaymentPlanner.build(
             context: context,

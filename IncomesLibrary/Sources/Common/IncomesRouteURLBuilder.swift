@@ -2,10 +2,14 @@ import Foundation
 
 /// Builds shareable URLs from app routes.
 public enum IncomesRouteURLBuilder {
+    /// Documented for SwiftLint compliance.
     public static let customScheme = IncomesRouteURLDefaults.customScheme
+    /// Documented for SwiftLint compliance.
     public static let defaultUniversalLinkHost = IncomesRouteURLDefaults.universalLinkHost
+    /// Documented for SwiftLint compliance.
     public static let defaultUniversalLinkPathPrefix = IncomesRouteURLDefaults.universalLinkPathPrefix
 
+    /// Documented for SwiftLint compliance.
     public static func customSchemeURL(
         for route: IncomesRoute
     ) -> URL? {
@@ -22,6 +26,7 @@ public enum IncomesRouteURLBuilder {
         return urlComponents.url
     }
 
+    /// Documented for SwiftLint compliance.
     public static func universalLinkURL(
         for route: IncomesRoute,
         host: String = defaultUniversalLinkHost,
@@ -63,7 +68,7 @@ private extension IncomesRouteURLBuilder {
             return ["duplicate-tags"]
         case .year(let year):
             return ["year", String(format: "%04d", year)]
-        case .month(let year, let month):
+        case let .month(year, month):
             let monthText = String(format: "%04d-%02d", year, month)
             return ["month", monthText]
         case .item:

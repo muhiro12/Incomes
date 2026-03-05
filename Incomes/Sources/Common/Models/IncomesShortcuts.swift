@@ -3,7 +3,6 @@
 //  Incomes
 //
 //  Created by Hiromu Nakano on 9/8/24.
-//  Copyright © 2024 Hiromu Nakano. All rights reserved.
 //
 
 import AppIntents

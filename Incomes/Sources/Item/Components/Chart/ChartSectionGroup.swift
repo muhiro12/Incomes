@@ -3,7 +3,6 @@
 //  Incomes
 //
 //  Created by Hiromu Nakano on 2024/06/03.
-//  Copyright © 2024 Hiromu Nakano. All rights reserved.
 //
 
 import SwiftData

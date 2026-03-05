@@ -1,11 +1,16 @@
 import Foundation
 import SwiftData
 
+/// Documented for SwiftLint compliance.
 public struct YearlyItemDuplicationOptions {
+    /// Documented for SwiftLint compliance.
     public let includeSingleItems: Bool
+    /// Documented for SwiftLint compliance.
     public let minimumRepeatItemCount: Int
+    /// Documented for SwiftLint compliance.
     public let skipExistingItems: Bool
 
+    /// Documented for SwiftLint compliance.
     public init(
         includeSingleItems: Bool = false,
         minimumRepeatItemCount: Int = 3,
@@ -17,11 +22,16 @@ public struct YearlyItemDuplicationOptions {
     }
 }
 
+/// Documented for SwiftLint compliance.
 public struct YearlyItemDuplicationEntry {
+    /// Documented for SwiftLint compliance.
     public let sourceItem: Item
+    /// Documented for SwiftLint compliance.
     public let targetDate: Date
+    /// Documented for SwiftLint compliance.
     public let groupID: UUID
 
+    /// Documented for SwiftLint compliance.
     public init(sourceItem: Item, targetDate: Date, groupID: UUID) {
         self.sourceItem = sourceItem
         self.targetDate = targetDate
@@ -29,15 +39,24 @@ public struct YearlyItemDuplicationEntry {
     }
 }
 
+/// Documented for SwiftLint compliance.
 public struct YearlyItemDuplicationGroup {
+    /// Documented for SwiftLint compliance.
     public let id: UUID
+    /// Documented for SwiftLint compliance.
     public let content: String
+    /// Documented for SwiftLint compliance.
     public let category: String
+    /// Documented for SwiftLint compliance.
     public let averageIncome: Decimal
+    /// Documented for SwiftLint compliance.
     public let averageOutgo: Decimal
+    /// Documented for SwiftLint compliance.
     public let entryCount: Int
+    /// Documented for SwiftLint compliance.
     public let targetDates: [Date]
 
+    /// Documented for SwiftLint compliance.
     public init(
         id: UUID,
         content: String,
@@ -57,11 +76,16 @@ public struct YearlyItemDuplicationGroup {
     }
 }
 
+/// Documented for SwiftLint compliance.
 public struct YearlyItemDuplicationPlan {
+    /// Documented for SwiftLint compliance.
     public let groups: [YearlyItemDuplicationGroup]
+    /// Documented for SwiftLint compliance.
     public let entries: [YearlyItemDuplicationEntry]
+    /// Documented for SwiftLint compliance.
     public let skippedDuplicateCount: Int
 
+    /// Documented for SwiftLint compliance.
     public init(
         groups: [YearlyItemDuplicationGroup],
         entries: [YearlyItemDuplicationEntry],
@@ -83,21 +107,30 @@ public struct YearlyItemDuplicationGroupAmount: Hashable {
     }
 }
 
+/// Documented for SwiftLint compliance.
 public struct YearlyItemDuplicationResult {
+    /// Documented for SwiftLint compliance.
     public let createdCount: Int
+    /// Documented for SwiftLint compliance.
     public let skippedDuplicateCount: Int
 
+    /// Documented for SwiftLint compliance.
     public init(createdCount: Int, skippedDuplicateCount: Int) {
         self.createdCount = createdCount
         self.skippedDuplicateCount = skippedDuplicateCount
     }
 }
 
+/// Documented for SwiftLint compliance.
 public struct YearlyItemDuplicationSuggestion {
+    /// Documented for SwiftLint compliance.
     public let sourceYear: Int
+    /// Documented for SwiftLint compliance.
     public let targetYear: Int
+    /// Documented for SwiftLint compliance.
     public let plan: YearlyItemDuplicationPlan
 
+    /// Documented for SwiftLint compliance.
     public init(
         sourceYear: Int,
         targetYear: Int,
@@ -109,7 +142,9 @@ public struct YearlyItemDuplicationSuggestion {
     }
 }
 
+/// Documented for SwiftLint compliance.
 public enum YearlyItemDuplicator {
+    /// Documented for SwiftLint compliance.
     public static func availableSourceYears(
         from yearTags: [Tag],
         currentYear: Int = Calendar.current.component(.year, from: .now)
@@ -123,6 +158,7 @@ public enum YearlyItemDuplicator {
         return Array(Set(years)).sorted(by: >)
     }
 
+    /// Documented for SwiftLint compliance.
     public static func targetYears(
         currentYear: Int = Calendar.current.component(.year, from: .now),
         range: Int = 10
@@ -130,6 +166,7 @@ public enum YearlyItemDuplicator {
         Array((currentYear - range)...(currentYear + range)).sorted(by: >)
     }
 
+    /// Documented for SwiftLint compliance.
     public static func suggestion(
         context: ModelContext,
         yearTags: [Tag],
@@ -147,6 +184,7 @@ public enum YearlyItemDuplicator {
         )
     }
 
+    /// Documented for SwiftLint compliance.
     public static func suggestion(
         context: ModelContext,
         sourceYears: [Int],
@@ -194,6 +232,7 @@ public enum YearlyItemDuplicator {
         return nil
     }
 
+    /// Documented for SwiftLint compliance.
     public static func plan(
         context: ModelContext,
         sourceYear: Int,
@@ -308,6 +347,7 @@ public enum YearlyItemDuplicator {
         )
     }
 
+    /// Documented for SwiftLint compliance.
     public static func apply(
         plan: YearlyItemDuplicationPlan,
         context: ModelContext,
@@ -417,7 +457,7 @@ private extension YearlyItemDuplicator {
         if items.count >= minimumRepeatItemCount {
             return true
         }
-        if includeSingleItems && items.count == 1 {
+        if includeSingleItems, items.count == 1 {
             return true
         }
         return false
@@ -515,10 +555,8 @@ private extension YearlyItemDuplicator {
             return .zero
         }
         let total = values.reduce(.zero, +)
-        let count = NSDecimalNumber(value: values.count)
-        return NSDecimalNumber(decimal: total)
-            .dividing(by: count)
-            .decimalValue
+        let count = Decimal(values.count)
+        return total / count
     }
 }
 

@@ -38,8 +38,10 @@ public struct ItemFormInference: AppEntity {
 
 @available(iOS 26.0, *)
 public struct ItemFormInferenceQuery: EntityStringQuery {
-    public init() {}
-    public func entities(for _: [String]) throws -> [ItemFormInference] { [] }
-    public func entities(matching _: String) throws -> [ItemFormInference] { [] }
-    public func suggestedEntities() throws -> [ItemFormInference] { [] }
+    public init() {
+        // no-op
+    }
+    public func entities(for _: [String]) -> [ItemFormInference] { [] }
+    public func entities(matching _: String) -> [ItemFormInference] { [] }
+    public func suggestedEntities() -> [ItemFormInference] { [] }
 }

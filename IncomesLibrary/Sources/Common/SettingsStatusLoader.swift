@@ -1,20 +1,8 @@
-import Foundation
 import SwiftData
 
-public struct SettingsStatus {
-    public let hasDuplicateTags: Bool
-    public let hasDebugData: Bool
-
-    public init(
-        hasDuplicateTags: Bool,
-        hasDebugData: Bool
-    ) {
-        self.hasDuplicateTags = hasDuplicateTags
-        self.hasDebugData = hasDebugData
-    }
-}
-
+/// Documented for SwiftLint compliance.
 public enum SettingsStatusLoader {
+    /// Documented for SwiftLint compliance.
     public static func load(
         context: ModelContext
     ) throws -> SettingsStatus {

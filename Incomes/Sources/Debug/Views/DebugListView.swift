@@ -3,7 +3,6 @@
 //  Incomes
 //
 //  Created by Hiromu Nakano on 2022/01/12.
-//  Copyright © 2022 Hiromu Nakano. All rights reserved.
 //
 
 import SwiftData
@@ -28,6 +27,7 @@ struct DebugListView {
 
     init(
         navigateToRoute: @escaping (DebugRoute) -> Void = { _ in
+            // no-op
         }
     ) {
         self.navigateToRoute = navigateToRoute
@@ -107,6 +107,7 @@ extension DebugListView: View {
                 Text("Prepare ignoring duplicates")
             }
             Button(role: .cancel) {
+                // no-op
             } label: {
                 Text("Cancel")
             }

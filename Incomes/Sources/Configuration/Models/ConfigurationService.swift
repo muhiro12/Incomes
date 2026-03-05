@@ -14,10 +14,13 @@ final class ConfigurationService {
     private let decoder = JSONDecoder()
 
     func load() async throws {
+        guard let configurationURL = URL(
+            string: "https://raw.githubusercontent.com/muhiro12/Incomes/main/.config.json"
+        ) else {
+            throw URLError(.badURL)
+        }
         let data = try await URLSession.shared.data(
-            from: .init(
-                string: "https://raw.githubusercontent.com/muhiro12/Incomes/main/.config.json"
-            )!
+            from: configurationURL
         ).0
         configuration = try decoder.decode(Configuration.self, from: data)
     }

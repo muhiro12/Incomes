@@ -3,13 +3,12 @@
 //  IncomesTests
 //
 //  Created by Hiromu Nakano on 2020/04/11.
-//  Copyright © 2020 Hiromu Nakano. All rights reserved.
 //
 
 @testable import IncomesLibrary
 import Testing
 
-struct StringExtensionTests {
+enum StringExtensionTests {
     struct IsNotEmptyTests {
         @Test("Text returns true")
         func text_returns_true() {

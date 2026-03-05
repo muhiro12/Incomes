@@ -3,7 +3,6 @@
 //  Incomes
 //
 //  Created by Hiromu Nakano on 2021/12/28.
-//  Copyright © 2021 Hiromu Nakano. All rights reserved.
 //
 
 import AppIntents
@@ -20,26 +19,34 @@ struct IncomesApp: App {
     @AppStorage(.lastLaunchedAppVersion)
     private var lastLaunchedAppVersion
 
-    private var sharedModelContainer: ModelContainer!
+    private let sharedModelContainer: ModelContainer
 
-    private var sharedNotificationService: NotificationService!
-    private var sharedConfigurationService: ConfigurationService!
-    private var sharedTipController: IncomesTipController!
+    private let sharedNotificationService: NotificationService
+    private let sharedConfigurationService: ConfigurationService
+    private let sharedTipController: IncomesTipController
 
-    private var sharedStore: Store!
-    private var sharedGoogleMobileAdsController: GoogleMobileAdsController!
+    private let sharedStore: Store
+    private let sharedGoogleMobileAdsController: GoogleMobileAdsController
 
     @MainActor
     init() {
         DatabaseMigrator.migrateSQLiteFilesIfNeeded()
-
-        let modelContainer = try! ModelContainer(
-            for: Item.self,
-            configurations: .init(
-                url: Database.url,
-                cloudKitDatabase: isICloudOn ? .automatic : .none
-            )
+        let isICloudEnabled = UserDefaults.standard.bool(
+            forKey: BoolAppStorageKey.isICloudOn.rawValue
         )
+
+        let modelContainer: ModelContainer
+        do {
+            modelContainer = try ModelContainer(
+                for: Item.self,
+                configurations: .init(
+                    url: Database.url,
+                    cloudKitDatabase: isICloudEnabled ? .automatic : .none
+                )
+            )
+        } catch {
+            preconditionFailure("Failed to initialize model container: \(error)")
+        }
 
         let notificationService = NotificationService(modelContainer: modelContainer)
         let configurationService = ConfigurationService()

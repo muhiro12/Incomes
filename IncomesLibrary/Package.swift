@@ -3,6 +3,7 @@
 
 import PackageDescription
 
+// swiftlint:disable:next prefixed_toplevel_constant
 let package = Package(
     name: "IncomesLibrary",
     defaultLocalization: "en",

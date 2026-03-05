@@ -24,6 +24,7 @@ struct HomeYearSection: View {
     init(
         yearTag: Tag,
         navigateToRoute: @escaping (IncomesRoute) -> Void = { _ in
+            // no-op
         }
     ) {
         _yearMonthTags = Query(
@@ -110,11 +111,12 @@ private extension HomeYearSection {
     @Previewable @Query var tags: [Tag]
 
     List {
-        HomeYearSection(
-            yearTag: tags
-                .first { tag in
-                    tag.name == Date.now.stringValueWithoutLocale(.yyyy)
-                }!
-        )
+        if let yearTag = tags.first(where: { tag in
+            tag.name == Date.now.stringValueWithoutLocale(.yyyy)
+        }) {
+            HomeYearSection(yearTag: yearTag)
+        } else {
+            EmptyView()
+        }
     }
 }

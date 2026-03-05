@@ -3,7 +3,6 @@
 //  Incomes
 //
 //  Created by Hiromu Nakano on 2020/06/24.
-//  Copyright © 2020 Hiromu Nakano. All rights reserved.
 //
 
 import SwiftData
@@ -51,6 +50,7 @@ struct SettingsListView {
 
     init(
         navigateToRoute: @escaping (IncomesRoute) -> Void = { _ in
+            // no-op
         }
     ) {
         self.navigateToRoute = navigateToRoute
@@ -240,6 +240,7 @@ extension SettingsListView: View {
                 Text("Delete")
             }
             Button(role: .cancel) {
+                // no-op
             } label: {
                 Text("Cancel")
             }
@@ -263,6 +264,7 @@ extension SettingsListView: View {
                 Text("Delete")
             }
             Button(role: .cancel) {
+                // no-op
             } label: {
                 Text("Cancel")
             }

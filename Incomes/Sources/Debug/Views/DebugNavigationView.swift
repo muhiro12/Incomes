@@ -8,13 +8,18 @@
 import SwiftUI
 
 struct DebugNavigationView: View {
-    @StateObject private var router: DebugNavigationRouter = .init()
+    private enum DebugNavigationDestination: Hashable {
+        case tagList
+    }
+
+    @State private var selectedTag: Tag?
+    @State private var path: [DebugNavigationDestination] = []
 
     var body: some View {
         NavigationSplitView {
-            NavigationStack(path: $router.path) {
+            NavigationStack(path: $path) {
                 DebugListView(
-                    navigateToRoute: router.navigate(to:)
+                    navigateToRoute: navigate(to:)
                 )
                 .navigationDestination(
                     for: DebugNavigationDestination.self
@@ -22,30 +27,20 @@ struct DebugNavigationView: View {
                     switch destination {
                     case .tagList:
                         DebugTagListView(
-                            navigateToRoute: router.navigate(to:)
+                            navigateToRoute: navigate(to:)
                         )
                     }
                 }
             }
         } detail: {
-            if let selectedTag = router.selectedTag {
+            if let selectedTag {
                 ItemListGroup()
                     .environment(selectedTag)
             }
         }
     }
-}
 
-private enum DebugNavigationDestination: Hashable {
-    case tagList
-}
-
-@MainActor
-private final class DebugNavigationRouter: ObservableObject {
-    @Published var selectedTag: Tag?
-    @Published var path: [DebugNavigationDestination] = []
-
-    func navigate(to route: DebugRoute) {
+    private func navigate(to route: DebugRoute) {
         switch route {
         case .allTags:
             path = [.tagList]

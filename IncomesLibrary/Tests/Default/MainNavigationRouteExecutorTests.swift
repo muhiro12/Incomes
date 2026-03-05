@@ -111,7 +111,7 @@ struct MainNavigationRouteExecutorTests {
         )
 
         switch outcome {
-        case .destination(let yearTagID, let selectedTag):
+        case let .destination(yearTagID, selectedTag):
             #expect(yearTagID == yearTag.persistentModelID)
             let selectedTag = try #require(selectedTag)
             #expect(selectedTag.persistentModelID == yearTag.persistentModelID)
@@ -206,7 +206,7 @@ struct MainNavigationRouteExecutorTests {
         )
 
         switch outcome {
-        case .destination(let yearTagID, let selectedTag):
+        case let .destination(yearTagID, selectedTag):
             #expect(yearTagID == yearTag.persistentModelID)
             #expect(selectedTag == nil)
         case .search,
@@ -239,7 +239,7 @@ struct MainNavigationRouteExecutorTests {
         )
 
         switch outcome {
-        case .destination(let yearTagID, let selectedTag):
+        case let .destination(yearTagID, selectedTag):
             #expect(yearTagID == yearTag.persistentModelID)
             let selectedTag = try #require(selectedTag)
             #expect(selectedTag.persistentModelID == yearMonthTag.persistentModelID)
@@ -274,7 +274,7 @@ struct MainNavigationRouteExecutorTests {
         )
 
         switch outcome {
-        case .destination(let yearTagID, let selectedTag):
+        case let .destination(yearTagID, selectedTag):
             #expect(yearTagID == yearTag.persistentModelID)
             let selectedTag = try #require(selectedTag)
             #expect(selectedTag.persistentModelID == yearMonthTag.persistentModelID)

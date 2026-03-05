@@ -193,18 +193,10 @@ enum YearlyDuplicationCoordinator {
     }
 
     static func decimalString(from value: Decimal) -> String {
-        let number = NSDecimalNumber(decimal: value)
-        let rounded = number.rounding(
-            accordingToBehavior: NSDecimalNumberHandler(
-                roundingMode: .down,
-                scale: 0,
-                raiseOnExactness: false,
-                raiseOnOverflow: false,
-                raiseOnUnderflow: false,
-                raiseOnDivideByZero: false
-            )
-        )
-        return rounded.stringValue
+        var source = value
+        var rounded = Decimal.zero
+        NSDecimalRound(&rounded, &source, 0, .down)
+        return rounded.description
     }
 }
 

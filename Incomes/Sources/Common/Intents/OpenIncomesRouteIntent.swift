@@ -9,14 +9,16 @@ struct OpenIncomesRouteIntent: AppIntent {
     @Parameter(title: "URL")
     private var url: URL
 
-    init() {}
+    init() {
+        // Required by AppIntent.
+    }
 
     init(url: URL) {
         self.url = url
     }
 
     @MainActor
-    func perform() throws -> some IntentResult {
+    func perform() -> some IntentResult {
         IncomesIntentRouteStore.store(url)
         return .result()
     }

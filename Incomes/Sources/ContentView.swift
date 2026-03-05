@@ -3,7 +3,6 @@
 //  Incomes
 //
 //  Created by Hiromu Nakano on 2020/04/08.
-//  Copyright © 2020 Hiromu Nakano. All rights reserved.
 //
 
 import GoogleMobileAdsWrapper
@@ -41,9 +40,11 @@ extension ContentView: View {
         MainNavigationView(incomingRoute: $incomingRoute)
             .alert("Update Required", isPresented: $isUpdateAlertPresented) {
                 Button("Open App Store") {
-                    UIApplication.shared.open(
-                        .init(string: "https://apps.apple.com/jp/app/incomes/id1584472982")!
-                    )
+                    if let appStoreURL = URL(
+                        string: "https://apps.apple.com/jp/app/incomes/id1584472982"
+                    ) {
+                        UIApplication.shared.open(appStoreURL)
+                    }
                 }
             } message: {
                 Text("Please update Incomes to the latest version to continue using it.")

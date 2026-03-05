@@ -3,7 +3,6 @@
 //  Incomes
 //
 //  Created by Hiromu Nakano on 2020/06/24.
-//  Copyright © 2020 Hiromu Nakano. All rights reserved.
 //
 
 import SwiftUI
@@ -13,7 +12,7 @@ struct CreateItemButton {
     @Environment(IncomesTipController.self)
     private var tipController
 
-    @StateObject private var router: CreateItemRouter = .init()
+    @State private var isCreateSheetPresented = false
 
     private let createItemTip = CreateItemTip()
 }
@@ -22,7 +21,7 @@ extension CreateItemButton: View {
     var body: some View {
         Button {
             tipController.donateDidOpenCreateForm()
-            router.navigate(to: .create)
+            isCreateSheetPresented = true
         } label: {
             Label {
                 Text("Create")
@@ -31,26 +30,9 @@ extension CreateItemButton: View {
             }
         }
         .popoverTip(createItemTip)
-        .sheet(item: $router.route) { _ in
+        .sheet(isPresented: $isCreateSheetPresented) {
             ItemFormNavigationView(mode: .create)
         }
-    }
-}
-
-@MainActor
-private final class CreateItemRouter: ObservableObject {
-    @Published var route: CreateItemRoute?
-
-    func navigate(to route: CreateItemRoute) {
-        self.route = route
-    }
-}
-
-private enum CreateItemRoute: String, Identifiable {
-    case create
-
-    var id: String {
-        rawValue
     }
 }
 

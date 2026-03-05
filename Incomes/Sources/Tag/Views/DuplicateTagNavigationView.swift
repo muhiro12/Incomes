@@ -1,26 +1,21 @@
 import SwiftUI
 
 struct DuplicateTagNavigationView: View {
-    @StateObject private var router: DuplicateTagNavigationRouter = .init()
+    @State private var selectedTag: Tag?
 
     var body: some View {
         NavigationSplitView {
             DuplicateTagListView(
-                navigateToRoute: router.navigate(to:)
+                navigateToRoute: navigate(to:)
             )
         } detail: {
-            if let selectedTag = router.selectedTag {
+            if let selectedTag {
                 DuplicateTagView(selectedTag)
             }
         }
     }
-}
 
-@MainActor
-private final class DuplicateTagNavigationRouter: ObservableObject {
-    @Published var selectedTag: Tag?
-
-    func navigate(to route: DuplicateTagRoute) {
+    private func navigate(to route: DuplicateTagRoute) {
         switch route {
         case .tag(let tag):
             selectedTag = tag

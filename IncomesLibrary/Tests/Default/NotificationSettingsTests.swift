@@ -16,12 +16,14 @@ struct NotificationSettingsTests {
         original.isEnabled = false
         original.thresholdAmount = 1_234
         original.daysBeforeDueDate = 5
-        original.notifyTime = Calendar.current.date(
-            bySettingHour: 7,
-            minute: 15,
-            second: 0,
-            of: shiftedDate("2024-01-01T00:00:00Z")
-        )!
+        original.notifyTime = try #require(
+            Calendar.current.date(
+                bySettingHour: 7,
+                minute: 15,
+                second: 0,
+                of: shiftedDate("2024-01-01T00:00:00Z")
+            )
+        )
 
         let encoded = original.rawValue
         let decoded = try #require(NotificationSettings(rawValue: encoded))

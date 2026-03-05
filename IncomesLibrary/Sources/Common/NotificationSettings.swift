@@ -3,7 +3,6 @@
 //  Incomes
 //
 //  Created by Hiromu Nakano on 2025/04/22.
-//  Copyright © 2025 Hiromu Nakano. All rights reserved.
 //
 
 import Foundation
@@ -20,7 +19,9 @@ public struct NotificationSettings: AppStorageCodable {
     public var notifyTime = Calendar.current.date(bySettingHour: 20, minute: 0, second: 0, of: .now) ?? .now
 
     /// Creates default settings.
-    public init() {}
+    public init() {
+        // no-op
+    }
 
     public init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)

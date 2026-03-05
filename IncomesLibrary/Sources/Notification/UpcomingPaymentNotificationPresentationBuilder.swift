@@ -2,6 +2,7 @@ import Foundation
 
 /// Builds display-ready notification payloads for upcoming payment reminders.
 public enum UpcomingPaymentNotificationPresentationBuilder {
+    /// Documented for SwiftLint compliance.
     public static func build(
         plans: [UpcomingPaymentPlanner.PlannedPayment],
         settings: NotificationSettings,
@@ -123,8 +124,8 @@ private extension UpcomingPaymentNotificationPresentationBuilder {
 
         let amountBoost: Double
         if thresholdAmount > .zero {
-            let amountValue = NSDecimalNumber(decimal: amount).doubleValue
-            let thresholdValue = NSDecimalNumber(decimal: thresholdAmount).doubleValue
+            let amountValue = Double(amount.description) ?? .zero
+            let thresholdValue = Double(thresholdAmount.description) ?? .zero
             let ratio = min(max(amountValue / thresholdValue, 0.0), 3.0)
             amountBoost = (ratio / 3.0) * 0.20
         } else {

@@ -38,8 +38,12 @@ struct IncomesDeepLinkURLBuilderTests {
     @Test
     func month_url_builds_month_route_from_date_components() {
         var calendar = Calendar(identifier: .gregorian)
-        calendar.timeZone = .init(secondsFromGMT: 0)!
-        let date = calendar.date(
+        guard let utcTimeZone = TimeZone(secondsFromGMT: 0) else {
+            Issue.record("Failed to construct UTC time zone")
+            return
+        }
+        calendar.timeZone = utcTimeZone
+        guard let date = calendar.date(
             from: .init(
                 year: 2_026,
                 month: 7,
@@ -48,7 +52,10 @@ struct IncomesDeepLinkURLBuilderTests {
                 minute: 0,
                 second: 0
             )
-        )!
+        ) else {
+            Issue.record("Failed to construct test date")
+            return
+        }
 
         let url = IncomesDeepLinkURLBuilder.monthURL(
             for: date,
@@ -63,8 +70,12 @@ struct IncomesDeepLinkURLBuilderTests {
     @Test
     func preferred_month_url_builds_month_route_from_date_components() {
         var calendar = Calendar(identifier: .gregorian)
-        calendar.timeZone = .init(secondsFromGMT: 0)!
-        let date = calendar.date(
+        guard let utcTimeZone = TimeZone(secondsFromGMT: 0) else {
+            Issue.record("Failed to construct UTC time zone")
+            return
+        }
+        calendar.timeZone = utcTimeZone
+        guard let date = calendar.date(
             from: .init(
                 year: 2_026,
                 month: 7,
@@ -73,7 +84,10 @@ struct IncomesDeepLinkURLBuilderTests {
                 minute: 0,
                 second: 0
             )
-        )!
+        ) else {
+            Issue.record("Failed to construct test date")
+            return
+        }
 
         let url = IncomesDeepLinkURLBuilder.preferredMonthURL(
             for: date,

@@ -373,7 +373,7 @@ private extension MonthlySummaryGenerator {
     }
 
     static func decimalString(_ value: Decimal) -> String {
-        NSDecimalNumber(decimal: value).stringValue
+        value.description
     }
 
     static func comparisonLines(from snapshot: CategoryComparisonSnapshot) -> String {
@@ -404,21 +404,20 @@ private extension MonthlySummaryGenerator {
             throw MonthlySummaryGenerationError.generationFailed
         }
 
-        let allowedNumbers = [
+        let allowedNumbers: [Decimal] = [
             currentTotals.totalIncome,
             currentTotals.totalOutgo,
             currentTotals.netIncome
-        ].map(NSDecimalNumber.init)
+        ]
         let posixLocale = Locale(identifier: "en_US_POSIX")
 
         for token in numericTokens(in: trimmedSummary) {
             let normalizedToken = token.replacingOccurrences(of: ",", with: "")
-            let numericValue = NSDecimalNumber(string: normalizedToken, locale: posixLocale)
-            guard numericValue != NSDecimalNumber.notANumber else {
+            guard let numericValue = Decimal(string: normalizedToken, locale: posixLocale) else {
                 throw MonthlySummaryGenerationError.generationFailed
             }
             guard allowedNumbers.contains(where: { allowedNumber in
-                allowedNumber.compare(numericValue) == .orderedSame
+                allowedNumber == numericValue
             }) else {
                 throw MonthlySummaryGenerationError.generationFailed
             }
@@ -508,8 +507,8 @@ private extension MonthlySummaryGenerator {
         locale: Locale
     ) -> String? {
         let isJapanese = locale.language.languageCode?.identifier == "ja"
-        let incomeMagnitude = abs(NSDecimalNumber(decimal: comparison.incomeDelta).doubleValue)
-        let outgoMagnitude = abs(NSDecimalNumber(decimal: comparison.outgoDelta).doubleValue)
+        let incomeMagnitude = abs(decimalToDouble(comparison.incomeDelta))
+        let outgoMagnitude = abs(decimalToDouble(comparison.outgoDelta))
 
         if incomeMagnitude == .zero,
            outgoMagnitude == .zero {
@@ -551,7 +550,7 @@ private extension MonthlySummaryGenerator {
         formatter.numberStyle = .currency
         formatter.currencyCode = currencyCode
         formatter.locale = locale
-        return formatter.string(from: NSDecimalNumber(decimal: value)) ?? value.description
+        return formatter.string(for: value) ?? value.description
     }
 
     static func numericTokens(in text: String) -> [String] {
@@ -565,5 +564,9 @@ private extension MonthlySummaryGenerator {
         return regularExpression.matches(in: text, range: range).compactMap { result in
             Range(result.range, in: text).map { String(text[$0]) }
         }
+    }
+
+    private static func decimalToDouble(_ value: Decimal) -> Double {
+        Double(value.description) ?? .zero
     }
 }

@@ -6,7 +6,7 @@ struct IncomesRouteParserTests {
     @Test
     func parse_custom_scheme_year_route() {
         let route = IncomesRouteParser.parse(
-            url: .init(string: "incomes://year/2026")!
+            url: testURL("incomes://year/2026")
         )
         #expect(route == .year(2_026))
     }
@@ -14,7 +14,7 @@ struct IncomesRouteParserTests {
     @Test
     func parse_custom_scheme_month_route_compact() {
         let route = IncomesRouteParser.parse(
-            url: .init(string: "incomes://month/202602")!
+            url: testURL("incomes://month/202602")
         )
         #expect(route == .month(year: 2_026, month: 2))
     }
@@ -22,7 +22,7 @@ struct IncomesRouteParserTests {
     @Test
     func parse_custom_scheme_month_route_hyphenated() {
         let route = IncomesRouteParser.parse(
-            url: .init(string: "incomes://month/2026-12")!
+            url: testURL("incomes://month/2026-12")
         )
         #expect(route == .month(year: 2_026, month: 12))
     }
@@ -30,7 +30,7 @@ struct IncomesRouteParserTests {
     @Test
     func parse_custom_scheme_item_route_with_query() {
         let route = IncomesRouteParser.parse(
-            url: .init(string: "incomes://item?id=item-id")!
+            url: testURL("incomes://item?id=item-id")
         )
         #expect(route == .item("item-id"))
     }
@@ -38,7 +38,7 @@ struct IncomesRouteParserTests {
     @Test
     func parse_custom_scheme_settings_route() {
         let route = IncomesRouteParser.parse(
-            url: .init(string: "incomes://settings")!
+            url: testURL("incomes://settings")
         )
         #expect(route == .settings)
     }
@@ -46,7 +46,7 @@ struct IncomesRouteParserTests {
     @Test
     func parse_custom_scheme_settings_subscription_route() {
         let route = IncomesRouteParser.parse(
-            url: .init(string: "incomes://settings/subscription")!
+            url: testURL("incomes://settings/subscription")
         )
         #expect(route == .settingsSubscription)
     }
@@ -54,7 +54,7 @@ struct IncomesRouteParserTests {
     @Test
     func parse_custom_scheme_settings_license_route() {
         let route = IncomesRouteParser.parse(
-            url: .init(string: "incomes://settings/license")!
+            url: testURL("incomes://settings/license")
         )
         #expect(route == .settingsLicense)
     }
@@ -62,7 +62,7 @@ struct IncomesRouteParserTests {
     @Test
     func parse_custom_scheme_settings_debug_route() {
         let route = IncomesRouteParser.parse(
-            url: .init(string: "incomes://settings/debug")!
+            url: testURL("incomes://settings/debug")
         )
         #expect(route == .settingsDebug)
     }
@@ -70,7 +70,7 @@ struct IncomesRouteParserTests {
     @Test
     func parse_custom_scheme_year_summary_route() {
         let route = IncomesRouteParser.parse(
-            url: .init(string: "incomes://year-summary/2026")!
+            url: testURL("incomes://year-summary/2026")
         )
         #expect(route == .yearSummary(2_026))
     }
@@ -78,7 +78,7 @@ struct IncomesRouteParserTests {
     @Test
     func parse_custom_scheme_yearly_duplication_route() {
         let route = IncomesRouteParser.parse(
-            url: .init(string: "incomes://yearly-duplication")!
+            url: testURL("incomes://yearly-duplication")
         )
         #expect(route == .yearlyDuplication)
     }
@@ -86,7 +86,7 @@ struct IncomesRouteParserTests {
     @Test
     func parse_custom_scheme_duplicate_tags_route() {
         let route = IncomesRouteParser.parse(
-            url: .init(string: "incomes://duplicate-tags")!
+            url: testURL("incomes://duplicate-tags")
         )
         #expect(route == .duplicateTags)
     }
@@ -94,7 +94,7 @@ struct IncomesRouteParserTests {
     @Test
     func parse_universal_link_route_with_prefix() {
         let route = IncomesRouteParser.parse(
-            url: .init(string: "https://muhiro12.github.io/Incomes/month/2026-01")!
+            url: testURL("https://muhiro12.github.io/Incomes/month/2026-01")
         )
         #expect(route == .month(year: 2_026, month: 1))
     }
@@ -102,7 +102,7 @@ struct IncomesRouteParserTests {
     @Test
     func parse_universal_link_route_without_prefix() {
         let route = IncomesRouteParser.parse(
-            url: .init(string: "https://muhiro12.github.io/year/2025")!
+            url: testURL("https://muhiro12.github.io/year/2025")
         )
         #expect(route == .year(2_025))
     }
@@ -110,7 +110,7 @@ struct IncomesRouteParserTests {
     @Test
     func parse_universal_link_item_route_with_query() {
         let route = IncomesRouteParser.parse(
-            url: .init(string: "https://muhiro12.github.io/Incomes/item?id=item-id")!
+            url: testURL("https://muhiro12.github.io/Incomes/item?id=item-id")
         )
         #expect(route == .item("item-id"))
     }
@@ -118,7 +118,7 @@ struct IncomesRouteParserTests {
     @Test
     func parse_rejects_unknown_universal_link_host() {
         let route = IncomesRouteParser.parse(
-            url: .init(string: "https://example.com/Incomes/settings")!
+            url: testURL("https://example.com/Incomes/settings")
         )
         #expect(route == nil)
     }
@@ -126,7 +126,7 @@ struct IncomesRouteParserTests {
     @Test
     func parse_search_route_with_query() {
         let route = IncomesRouteParser.parse(
-            url: .init(string: "incomes://search?q=rent")!
+            url: testURL("incomes://search?q=rent")
         )
         #expect(route == .search(query: "rent"))
     }
@@ -134,7 +134,7 @@ struct IncomesRouteParserTests {
     @Test
     func parse_search_route_without_query() {
         let route = IncomesRouteParser.parse(
-            url: .init(string: "incomes://search")!
+            url: testURL("incomes://search")
         )
         #expect(route == .search(query: nil))
     }
@@ -142,10 +142,10 @@ struct IncomesRouteParserTests {
     @Test
     func parse_defaults_to_home_when_no_destination() {
         let customSchemeRoute = IncomesRouteParser.parse(
-            url: .init(string: "incomes://")!
+            url: testURL("incomes://")
         )
         let universalLinkRoute = IncomesRouteParser.parse(
-            url: .init(string: "https://muhiro12.github.io/Incomes")!
+            url: testURL("https://muhiro12.github.io/Incomes")
         )
         #expect(customSchemeRoute == .home)
         #expect(universalLinkRoute == .home)
@@ -154,7 +154,7 @@ struct IncomesRouteParserTests {
     @Test
     func parse_returns_nil_for_invalid_month() {
         let route = IncomesRouteParser.parse(
-            url: .init(string: "incomes://month/2026-13")!
+            url: testURL("incomes://month/2026-13")
         )
         #expect(route == nil)
     }
@@ -162,7 +162,7 @@ struct IncomesRouteParserTests {
     @Test
     func parse_returns_nil_for_versioned_custom_scheme_url() {
         let route = IncomesRouteParser.parse(
-            url: .init(string: "incomes://v1/month/2026-01")!
+            url: testURL("incomes://v1/month/2026-01")
         )
         #expect(route == nil)
     }
@@ -170,8 +170,16 @@ struct IncomesRouteParserTests {
     @Test
     func parse_returns_nil_for_versioned_universal_link_url() {
         let route = IncomesRouteParser.parse(
-            url: .init(string: "https://muhiro12.github.io/Incomes/v1/month/2026-01")!
+            url: testURL("https://muhiro12.github.io/Incomes/v1/month/2026-01")
         )
         #expect(route == nil)
+    }
+
+    private func testURL(_ value: String) -> URL {
+        guard let url = URL(string: value) else {
+            Issue.record("Invalid test URL: \(value)")
+            return URL(fileURLWithPath: "/")
+        }
+        return url
     }
 }

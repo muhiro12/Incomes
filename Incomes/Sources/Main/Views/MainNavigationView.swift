@@ -181,30 +181,31 @@ struct MainNavigationView: View {
                 } catch {
                     assertionFailure(error.localizedDescription)
                 }
-            }
-        ) { sheetRoute in
-            switch sheetRoute {
-            case .settings:
-                SettingsNavigationView(
-                    incomingDestination: $router.settingsDestination
-                ) { route in
-                    do {
-                        try router.navigateFromSettings(
-                            to: route,
-                            context: context
-                        )
-                    } catch {
-                        assertionFailure(error.localizedDescription)
+            },
+            content: { sheetRoute in
+                switch sheetRoute {
+                case .settings:
+                    SettingsNavigationView(
+                        incomingDestination: $router.settingsDestination
+                    ) { route in
+                        do {
+                            try router.navigateFromSettings(
+                                to: route,
+                                context: context
+                            )
+                        } catch {
+                            assertionFailure(error.localizedDescription)
+                        }
                     }
+                case .yearlyDuplication:
+                    NavigationStack {
+                        YearlyDuplicationView()
+                    }
+                case .itemDetail:
+                    deepLinkedItemNavigationView()
                 }
-            case .yearlyDuplication:
-                NavigationStack {
-                    YearlyDuplicationView()
-                }
-            case .itemDetail:
-                deepLinkedItemNavigationView()
             }
-        }
+        )
         .fullScreenCover(item: $router.fullScreenRoute) { fullScreenRoute in
             switch fullScreenRoute {
             case .duplicateTags:
@@ -461,7 +462,7 @@ private extension MainNavigationRouter {
             context: context
         )
         switch outcome {
-        case .destination(let yearTagID, let selectedTag):
+        case let .destination(yearTagID, selectedTag):
             self.yearTagID = yearTagID
             self.selectedTag = selectedTag
             clearSearchState()

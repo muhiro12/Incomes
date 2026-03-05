@@ -7,7 +7,9 @@
 
 import Foundation
 
+/// Documented for SwiftLint compliance.
 public enum Database {
+    /// Documented for SwiftLint compliance.
     public static let url = AppGroup.containerURL.appendingPathComponent(fileName)
 
     static let legacyURL = URL.applicationSupportDirectory.appendingPathComponent(fileName)

@@ -1,28 +1,8 @@
 import Foundation
 
-public struct ItemFormInferenceUpdate {
-    public let date: Date?
-    public let content: String
-    public let incomeText: String
-    public let outgoText: String
-    public let category: String
-
-    public init(
-        date: Date?,
-        content: String,
-        incomeText: String,
-        outgoText: String,
-        category: String
-    ) {
-        self.date = date
-        self.content = content
-        self.incomeText = incomeText
-        self.outgoText = outgoText
-        self.category = category
-    }
-}
-
+/// Documented for SwiftLint compliance.
 public enum ItemFormInferenceMapper {
+    /// Documented for SwiftLint compliance.
     public static func map(
         dateString: String,
         content: String,

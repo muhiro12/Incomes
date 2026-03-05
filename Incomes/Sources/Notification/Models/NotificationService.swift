@@ -3,7 +3,6 @@
 //  Incomes
 //
 //  Created by Hiromu Nakano on 2024/05/31.
-//  Copyright © 2024 Hiromu Nakano. All rights reserved.
 //
 
 import SwiftData
@@ -201,7 +200,7 @@ private extension NotificationService {
         content.interruptionLevel = notificationInterruptionLevel(
             from: presentation.interruptionLevel
         )
-        content.badge = NSNumber(value: presentation.badgeCount)
+        content.badge = .init(value: presentation.badgeCount)
         content.userInfo = buildUserInfo(for: presentation)
 
         return .init(

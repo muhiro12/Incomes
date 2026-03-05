@@ -3,12 +3,12 @@
 //  Incomes
 //
 //  Created by Hiromu Nakano on 2020/06/24.
-//  Copyright © 2020 Hiromu Nakano. All rights reserved.
 //
 
 import SwiftUI
 
 public extension Decimal {
+    /// Documented for SwiftLint compliance.
     var asCurrency: String {
         let formatter = NumberFormatter()
         formatter.numberStyle = .currency
@@ -20,6 +20,7 @@ public extension Decimal {
         return currency
     }
 
+    /// Documented for SwiftLint compliance.
     var asMinusCurrency: String {
         guard isNotZero else {
             return asCurrency

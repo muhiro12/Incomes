@@ -3,7 +3,6 @@
 //  Incomes
 //
 //  Created by Hiromu Nakano on 2025/04/25.
-//  Copyright © 2025 Hiromu Nakano. All rights reserved.
 //
 
 import Foundation
@@ -68,7 +67,7 @@ struct ItemServiceTest {
 
     @Test("item returns first item if available", arguments: timeZones)
     func item(_ timeZone: TimeZone) throws {
-        NSTimeZone.default = timeZone
+        TimeZone.ReferenceType.default = timeZone
 
         _ = try createTestItem(
             date: isoDate("2024-01-01T00:00:00Z"),
@@ -84,7 +83,7 @@ struct ItemServiceTest {
 
     @Test("item with predicate returns only matching item", arguments: timeZones)
     func itemWithPredicate(_ timeZone: TimeZone) throws {
-        NSTimeZone.default = timeZone
+        TimeZone.ReferenceType.default = timeZone
 
         _ = try createTestItem(
             date: isoDate("2024-01-01T00:00:00Z"),
@@ -109,7 +108,7 @@ struct ItemServiceTest {
 
     @Test("items returns all items", arguments: timeZones)
     func items(_ timeZone: TimeZone) throws {
-        NSTimeZone.default = timeZone
+        TimeZone.ReferenceType.default = timeZone
 
         _ = try createTestItem(
             date: isoDate("2024-01-01T00:00:00Z"),
@@ -133,7 +132,7 @@ struct ItemServiceTest {
 
     @Test("items with predicate filters matching items", arguments: timeZones)
     func itemsWithPredicate(_ timeZone: TimeZone) throws {
-        NSTimeZone.default = timeZone
+        TimeZone.ReferenceType.default = timeZone
 
         _ = try createTestItem(
             date: isoDate("2024-01-01T00:00:00Z"),
@@ -159,7 +158,7 @@ struct ItemServiceTest {
 
     @Test("itemsCount returns correct count", arguments: timeZones)
     func itemsCount(_ timeZone: TimeZone) throws {
-        NSTimeZone.default = timeZone
+        TimeZone.ReferenceType.default = timeZone
 
         _ = try createTestItem(
             date: isoDate("2024-01-01T00:00:00Z"),
@@ -175,7 +174,7 @@ struct ItemServiceTest {
 
     @Test("itemsCount with predicate counts only matching items", arguments: timeZones)
     func itemsCountWithPredicate(_ timeZone: TimeZone) throws {
-        NSTimeZone.default = timeZone
+        TimeZone.ReferenceType.default = timeZone
 
         _ = try createTestItem(
             date: isoDate("2024-01-01T00:00:00Z"),
@@ -202,7 +201,7 @@ struct ItemServiceTest {
 
     @Test("create item with correct balance", arguments: timeZones)
     func create(_ timeZone: TimeZone) throws {
-        NSTimeZone.default = timeZone
+        TimeZone.ReferenceType.default = timeZone
 
         _ = try createTestItem(
             date: isoDate("2024-01-01T00:00:00Z"),
@@ -218,7 +217,7 @@ struct ItemServiceTest {
 
     @Test("create with repeatCount 3 creates 3 items with same repeatID", arguments: timeZones)
     func createWithRepeat(_ timeZone: TimeZone) throws {
-        NSTimeZone.default = timeZone
+        TimeZone.ReferenceType.default = timeZone
 
         _ = try createTestItem(
             date: isoDate("2024-01-01T00:00:00Z"),
@@ -236,7 +235,7 @@ struct ItemServiceTest {
 
     @Test("create with zero repeatCount still creates one item", arguments: timeZones)
     func createWithZeroRepeat(_ timeZone: TimeZone) throws {
-        NSTimeZone.default = timeZone
+        TimeZone.ReferenceType.default = timeZone
 
         _ = try createTestItem(
             date: isoDate("2024-03-01T00:00:00Z"),
@@ -254,7 +253,7 @@ struct ItemServiceTest {
 
     @Test("create with zero income and outgo results in zero balance", arguments: timeZones)
     func createWithZeroAmounts(_ timeZone: TimeZone) throws {
-        NSTimeZone.default = timeZone
+        TimeZone.ReferenceType.default = timeZone
 
         _ = try createTestItem(
             date: isoDate("2024-03-01T00:00:00Z"),
@@ -270,7 +269,7 @@ struct ItemServiceTest {
 
     @Test("create with duplicate category names does not break", arguments: timeZones)
     func createWithDuplicateCategoryNames(_ timeZone: TimeZone) throws {
-        NSTimeZone.default = timeZone
+        TimeZone.ReferenceType.default = timeZone
 
         for _ in 0..<2 {
             _ = try createTestItem(
@@ -289,7 +288,7 @@ struct ItemServiceTest {
 
     @Test("create with end-of-month date generates all repeating items", arguments: timeZones)
     func createEndOfMonthRepeatingItems(_ timeZone: TimeZone) throws {
-        NSTimeZone.default = timeZone
+        TimeZone.ReferenceType.default = timeZone
 
         _ = try createTestItem(
             date: isoDate("2024-01-31T00:00:00Z"),
@@ -312,7 +311,7 @@ struct ItemServiceTest {
 
     @Test("create stores date near midnight UTC correctly", arguments: timeZones)
     func createWithMidnightBoundary(_ timeZone: TimeZone) throws {
-        NSTimeZone.default = timeZone
+        TimeZone.ReferenceType.default = timeZone
 
         let boundaryDate = shiftedDate("2024-03-15T00:00:00Z")
         let item = try createTestItem(
@@ -329,7 +328,7 @@ struct ItemServiceTest {
 
     @Test("create stores JST midnight as UTC start of day", arguments: timeZones)
     func createStoresJSTMidnightAsUTCStartOfDay(_ timeZone: TimeZone) throws {
-        NSTimeZone.default = timeZone
+        TimeZone.ReferenceType.default = timeZone
 
         let jstDate = shiftedDate("2024-03-15T09:00:00Z")  // 00:00 UTC
         let item = try createTestItem(
@@ -346,7 +345,7 @@ struct ItemServiceTest {
 
     @Test("create rounds input date to start of day UTC", arguments: timeZones)
     func createRoundsDateToStartOfDay(_ timeZone: TimeZone) throws {
-        NSTimeZone.default = timeZone
+        TimeZone.ReferenceType.default = timeZone
 
         let inputDate = isoDate("2024-03-15T10:30:00Z")
         let expectedDate = Calendar.utc.startOfDay(for: inputDate)
@@ -366,7 +365,7 @@ struct ItemServiceTest {
 
     @Test("update changes item values and recalculates balance", arguments: timeZones)
     func update(_ timeZone: TimeZone) throws {
-        NSTimeZone.default = timeZone
+        TimeZone.ReferenceType.default = timeZone
 
         _ = try createTestItem(
             date: shiftedDate("2024-01-01T00:00:00Z"),
@@ -394,7 +393,7 @@ struct ItemServiceTest {
 
     @Test("update assigns new repeatID", arguments: timeZones)
     func updateAssignsNewRepeatID(_ timeZone: TimeZone) throws {
-        NSTimeZone.default = timeZone
+        TimeZone.ReferenceType.default = timeZone
 
         _ = try createTestItem(
             date: isoDate("2024-01-01T00:00:00Z"),
@@ -422,7 +421,7 @@ struct ItemServiceTest {
 
     @Test("update changes date and maintains correct ordering", arguments: timeZones)
     func updateChangesDateOrdering(_ timeZone: TimeZone) throws {
-        NSTimeZone.default = timeZone
+        TimeZone.ReferenceType.default = timeZone
 
         _ = try createTestItem(
             date: isoDate("2024-01-01T00:00:00Z"),
@@ -463,7 +462,7 @@ struct ItemServiceTest {
 
     @Test("updateForFutureItems updates only items after the target date in the repeat group", arguments: timeZones)
     func updateForFutureItems(_ timeZone: TimeZone) throws {
-        NSTimeZone.default = timeZone
+        TimeZone.ReferenceType.default = timeZone
 
         _ = try createTestItem(
             date: isoDate("2024-01-01T00:00:00Z"),
@@ -500,7 +499,7 @@ struct ItemServiceTest {
 
     @Test("updateForFutureItems updates only target if it's the last item", arguments: timeZones)
     func updateFutureLastOnly(_ timeZone: TimeZone) throws {
-        NSTimeZone.default = timeZone
+        TimeZone.ReferenceType.default = timeZone
 
         _ = try createTestItem(
             date: isoDate("2024-01-01T00:00:00Z"),
@@ -536,7 +535,7 @@ struct ItemServiceTest {
 
     @Test("updateForFutureItems on non-repeating item updates only itself", arguments: timeZones)
     func updateFutureSingleRepeat(_ timeZone: TimeZone) throws {
-        NSTimeZone.default = timeZone
+        TimeZone.ReferenceType.default = timeZone
 
         _ = try createTestItem(
             date: isoDate("2024-01-01T00:00:00Z"),
@@ -564,7 +563,7 @@ struct ItemServiceTest {
 
     @Test("updateForAllItems updates all items in the repeat group", arguments: timeZones)
     func updateForAllItems(_ timeZone: TimeZone) throws {
-        NSTimeZone.default = timeZone
+        TimeZone.ReferenceType.default = timeZone
 
         let item = try createTestItem(
             date: isoDate("2024-02-01T00:00:00Z"),
@@ -600,7 +599,7 @@ struct ItemServiceTest {
 
     @Test("delete removes the specified item", arguments: timeZones)
     func delete(_ timeZone: TimeZone) throws {
-        NSTimeZone.default = timeZone
+        TimeZone.ReferenceType.default = timeZone
 
         _ = try createTestItem(
             date: isoDate("2024-04-01T00:00:00Z"),
@@ -621,7 +620,7 @@ struct ItemServiceTest {
 
     @Test("delete with multiple items removes only specified ones", arguments: timeZones)
     func deleteMultipleItems(_ timeZone: TimeZone) throws {
-        NSTimeZone.default = timeZone
+        TimeZone.ReferenceType.default = timeZone
 
         _ = try createTestItem(
             date: isoDate("2024-01-01T00:00:00Z"),
@@ -643,8 +642,8 @@ struct ItemServiceTest {
         let toDelete = allItems.filter { item in
             item.content == "RemoveMe"
         }
-        try toDelete.forEach {
-            try ItemService.delete(context: context, item: $0)
+        try toDelete.forEach { item in
+            try ItemService.delete(context: context, item: item)
         }
 
         let remaining = try context.fetch(.items(.all))
@@ -654,7 +653,7 @@ struct ItemServiceTest {
 
     @Test("deleteAll clears all items", arguments: timeZones)
     func deleteAll(_ timeZone: TimeZone) throws {
-        NSTimeZone.default = timeZone
+        TimeZone.ReferenceType.default = timeZone
 
         _ = try createTestItem(
             date: isoDate("2024-01-01T00:00:00Z"),
@@ -673,7 +672,7 @@ struct ItemServiceTest {
 
     @Test("recalculate reflects updated outgo via update", arguments: timeZones)
     func recalculate(_ timeZone: TimeZone) throws {
-        NSTimeZone.default = timeZone
+        TimeZone.ReferenceType.default = timeZone
 
         _ = try createTestItem(
             date: isoDate("2024-01-01T00:00:00Z"),
@@ -699,7 +698,7 @@ struct ItemServiceTest {
 
     @Test("recalculate does not alter already correct balance", arguments: timeZones)
     func recalculateNoChange(_ timeZone: TimeZone) throws {
-        NSTimeZone.default = timeZone
+        TimeZone.ReferenceType.default = timeZone
 
         _ = try createTestItem(
             date: isoDate("2024-01-01T00:00:00Z"),
@@ -723,7 +722,7 @@ struct ItemServiceTest {
 
     @Test("recalculate only affects items after the specified date", arguments: timeZones)
     func recalculatePartial(_ timeZone: TimeZone) throws {
-        NSTimeZone.default = timeZone
+        TimeZone.ReferenceType.default = timeZone
 
         _ = try createTestItem(
             date: isoDate("2024-01-01T00:00:00Z"),
@@ -767,7 +766,7 @@ struct ItemServiceTest {
 
     @Test("recalculate is correct across time zone boundaries", arguments: timeZones)
     func recalculateWithTimeZoneBoundaries(_ timeZone: TimeZone) throws {
-        NSTimeZone.default = timeZone
+        TimeZone.ReferenceType.default = timeZone
 
         _ = try createTestItem(
             date: shiftedDate("2024-02-28T15:00:00Z"),  // JST: 2024-02-29 00:00

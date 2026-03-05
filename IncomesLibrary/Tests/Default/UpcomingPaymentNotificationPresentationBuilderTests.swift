@@ -144,13 +144,13 @@ struct UpcomingPaymentNotificationPresentationBuilderTests {
         )
 
         let lowAttention = try #require(
-            presentations.first {
-                $0.itemContent == "Streaming"
+            presentations.first { presentation in
+                presentation.itemContent == "Streaming"
             }
         )
         let highAttention = try #require(
-            presentations.first {
-                $0.itemContent == "Mortgage"
+            presentations.first { presentation in
+                presentation.itemContent == "Mortgage"
             }
         )
 
@@ -201,13 +201,13 @@ struct UpcomingPaymentNotificationPresentationBuilderTests {
         )
 
         let lowUrgency = try #require(
-            presentations.first {
-                $0.itemContent == "Cloud Storage"
+            presentations.first { presentation in
+                presentation.itemContent == "Cloud Storage"
             }
         )
         let highUrgency = try #require(
-            presentations.first {
-                $0.itemContent == "Tax"
+            presentations.first { presentation in
+                presentation.itemContent == "Tax"
             }
         )
 

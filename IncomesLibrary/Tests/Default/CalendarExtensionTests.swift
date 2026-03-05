@@ -3,14 +3,13 @@
 //  IncomesTests
 //
 //  Created by Hiromu Nakano on 2022/01/13.
-//  Copyright © 2022 Hiromu Nakano. All rights reserved.
 //
 
 import Foundation
 @testable import IncomesLibrary
 import Testing
 
-struct CalendarExtensionTests {
+enum CalendarExtensionTests {
     struct StartOfDayUTCTests {
         @Test("UTC of startOfDay returns startOfDay when target is startOfDay")
         func whenStartOfDay() {

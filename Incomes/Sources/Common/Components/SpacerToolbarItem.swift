@@ -3,7 +3,6 @@
 //  Incomes
 //
 //  Created by Hiromu Nakano on 2025/05/07.
-//  Copyright © 2025 Hiromu Nakano. All rights reserved.
 //
 
 import SwiftUI
@@ -21,9 +20,10 @@ struct SpacerToolbarItem: ToolbarContent {
         } else {
             ToolbarItem(placement: placement) {
                 Button(action: {
-                }) {
+                    // no-op
+                }, label: {
                     Label(String.empty, systemImage: .empty)
-                }
+                })
                 .accessibilityHidden(true)
                 .disabled(true)
                 .allowsHitTesting(false)
@@ -40,9 +40,10 @@ struct SpacerToolbarItem: ToolbarContent {
         SpacerToolbarItem(placement: .bottomBar)
         ToolbarItem(placement: .bottomBar) {
             Button(action: {
-            }) {
+                // no-op
+            }, label: {
                 Label(.init("Action"), systemImage: "plus")
-            }
+            })
         }
     }
 }

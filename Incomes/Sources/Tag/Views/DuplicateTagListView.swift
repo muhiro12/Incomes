@@ -2,7 +2,8 @@ import SwiftData
 import SwiftUI
 
 struct DuplicateTagListView: View {
-    @Environment(\.modelContext) private var context
+    @Environment(\.modelContext)
+    private var context
 
     @Query(.tags(.typeIs(.year)))
     private var yearTags: [Tag]
@@ -20,6 +21,7 @@ struct DuplicateTagListView: View {
 
     init(
         navigateToRoute: @escaping (DuplicateTagRoute) -> Void = { _ in
+            // no-op
         }
     ) {
         self.navigateToRoute = navigateToRoute
@@ -57,6 +59,7 @@ struct DuplicateTagListView: View {
                 Text("Resolve")
             }
             Button(role: .cancel) {
+                // no-op
             } label: {
                 Text("Cancel")
             }
@@ -84,8 +87,8 @@ struct DuplicateTagListView: View {
                 }
                 return []
             }()
-            .sorted {
-                $0.displayName < $1.displayName
+            .sorted { left, right in
+                left.displayName < right.displayName
             }
         } catch {
             assertionFailure(error.localizedDescription)

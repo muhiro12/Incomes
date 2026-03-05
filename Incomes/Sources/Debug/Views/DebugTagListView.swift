@@ -15,6 +15,7 @@ struct DebugTagListView: View {
 
     init(
         navigateToRoute: @escaping (DebugRoute) -> Void = { _ in
+            // no-op
         }
     ) {
         self.navigateToRoute = navigateToRoute

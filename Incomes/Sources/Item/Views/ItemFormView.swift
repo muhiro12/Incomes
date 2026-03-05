@@ -3,7 +3,6 @@
 //  Incomes
 //
 //  Created by Hiromu Nakano on 2020/04/10.
-//  Copyright © 2020 Hiromu Nakano. All rights reserved.
 //
 
 import StoreKit
@@ -55,7 +54,8 @@ struct ItemFormView: View {
     private var isDebugOn
 
     @FocusState private var focusedField: Field?
-    @StateObject private var router: ItemFormRouter = .init()
+    @State private var dialogRoute: DialogRoute?
+    @State private var sheetRoute: SheetRoute?
 
     @State private var date: Date = .now
     @State private var content: String = .empty
@@ -206,7 +206,7 @@ struct ItemFormView: View {
             if #available(iOS 26.0, *) {
                 ToolbarItem(placement: .bottomBar) {
                     Button {
-                        router.navigate(to: .assist)
+                        sheetRoute = .assist
                     } label: {
                         Label("Assist", systemImage: "wand.and.stars")
                     }
@@ -224,7 +224,7 @@ struct ItemFormView: View {
         )
         .confirmationDialog(
             Text("Debug"),
-            isPresented: router.isDialogPresented(.debug)
+            isPresented: isDialogPresented(.debug)
         ) {
             Button {
                 isDebugOn = true
@@ -233,6 +233,7 @@ struct ItemFormView: View {
                 Text("OK")
             }
             Button(role: .cancel) {
+                // no-op
             } label: {
                 Text("Cancel")
             }
@@ -284,7 +285,7 @@ struct ItemFormView: View {
         }
         .confirmationDialog(
             "This is a repeating item.",
-            isPresented: router.isDialogPresented(.repeating),
+            isPresented: isDialogPresented(.repeating),
             titleVisibility: .visible
         ) {
             Button("Save for this item only") {
@@ -297,10 +298,11 @@ struct ItemFormView: View {
                 saveForAllItems()
             }
             Button("Cancel", role: .cancel) {
+                // no-op
             }
         }
         .navigationViewStyle(StackNavigationViewStyle())
-        .sheet(item: $router.sheetRoute) { route in
+        .sheet(item: $sheetRoute) { route in
             switch route {
             case .assist:
                 if #available(iOS 26.0, *) {
@@ -347,6 +349,34 @@ private extension ItemFormView {
 
     var isValid: Bool {
         formInputData.isValid
+    }
+
+    var baseYear: Int {
+        Calendar.current.component(.year, from: date)
+    }
+
+    var baseMonth: Int {
+        Calendar.current.component(.month, from: date)
+    }
+
+    var baseSelection: RepeatMonthSelection {
+        .init(year: baseYear, month: baseMonth)
+    }
+
+    var effectiveRepeatMonthSelections: Set<RepeatMonthSelection> {
+        if isRepeatEnabled {
+            return repeatMonthSelections
+        }
+        return [baseSelection]
+    }
+
+    var saveMode: ItemFormSaveMode {
+        switch mode {
+        case .create:
+            .create
+        case .edit:
+            .edit
+        }
     }
 
     func save() {
@@ -442,14 +472,14 @@ private extension ItemFormView {
     func cancel() {
         if content == "Enable Debug" {
             content = .empty
-            router.presentDialog(.debug)
+            dialogRoute = .debug
             return
         }
         dismiss()
     }
 
     func presentToRepeatingDialog() {
-        router.presentDialog(.repeating)
+        dialogRoute = .repeating
     }
 
     func initialDate(for tag: Tag, currentDate: Date) -> Date {
@@ -481,25 +511,6 @@ private extension ItemFormView {
         }
     }
 
-    var baseYear: Int {
-        Calendar.current.component(.year, from: date)
-    }
-
-    var baseMonth: Int {
-        Calendar.current.component(.month, from: date)
-    }
-
-    var baseSelection: RepeatMonthSelection {
-        .init(year: baseYear, month: baseMonth)
-    }
-
-    var effectiveRepeatMonthSelections: Set<RepeatMonthSelection> {
-        if isRepeatEnabled {
-            return repeatMonthSelections
-        }
-        return [baseSelection]
-    }
-
     func syncRepeatMonthSelectionsWithBaseDate() {
         let currentBaseSelection = baseSelection
         let allowedYears = Set([baseYear, baseYear + 1])
@@ -509,39 +520,16 @@ private extension ItemFormView {
         repeatMonthSelections.insert(currentBaseSelection)
     }
 
-    var saveMode: ItemFormSaveMode {
-        switch mode {
-        case .create:
-            .create
-        case .edit:
-            .edit
-        }
-    }
-}
-
-@MainActor
-private final class ItemFormRouter: ObservableObject {
-    @Published var dialogRoute: ItemFormView.DialogRoute?
-    @Published var sheetRoute: ItemFormView.SheetRoute?
-
-    func presentDialog(_ route: ItemFormView.DialogRoute) {
-        dialogRoute = route
-    }
-
-    func navigate(to route: ItemFormView.SheetRoute) {
-        sheetRoute = route
-    }
-
-    func isDialogPresented(_ route: ItemFormView.DialogRoute) -> Binding<Bool> {
+    func isDialogPresented(_ route: DialogRoute) -> Binding<Bool> {
         .init(
             get: {
-                self.dialogRoute == route
+                dialogRoute == route
             },
             set: { isPresented in
                 if isPresented {
-                    self.dialogRoute = route
-                } else if self.dialogRoute == route {
-                    self.dialogRoute = nil
+                    dialogRoute = route
+                } else if dialogRoute == route {
+                    dialogRoute = nil
                 }
             }
         )

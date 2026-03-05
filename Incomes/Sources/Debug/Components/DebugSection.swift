@@ -3,7 +3,6 @@
 //  Incomes
 //
 //  Created by Hiromu Nakano on 2023/09/05.
-//  Copyright © 2023 Hiromu Nakano. All rights reserved.
 //
 
 import SwiftData
@@ -63,8 +62,8 @@ extension DebugSection: View {
                 Text("Tags")
                 Spacer()
                 VStack(alignment: .trailing) {
-                    ForEach(item.tags.orEmpty) {
-                        Text($0.name)
+                    ForEach(item.tags.orEmpty) { tag in
+                        Text(tag.name)
                             .foregroundStyle(.secondary)
                     }
                 }

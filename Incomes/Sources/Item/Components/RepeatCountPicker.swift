@@ -3,7 +3,6 @@
 //  Incomes
 //
 //  Created by Hiromu Nakano on 2024/06/03.
-//  Copyright © 2024 Hiromu Nakano. All rights reserved.
 //
 
 import SwiftUI
@@ -22,8 +21,8 @@ extension RepeatCountPicker: View {
             Text("Repeat")
             Spacer()
             Picker(selection: $selection) {
-                ForEach(1...60, id: \.self) {
-                    Text($0.description)
+                ForEach(1...60, id: \.self) { count in
+                    Text(count.description)
                 }
             } label: {
                 Text("Repeat")

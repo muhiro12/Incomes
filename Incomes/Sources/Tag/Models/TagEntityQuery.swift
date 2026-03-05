@@ -3,7 +3,6 @@
 //  Incomes
 //
 //  Created by Hiromu Nakano on 2025/05/24.
-//  Copyright © 2025 Hiromu Nakano. All rights reserved.
 //
 
 import AppIntents
@@ -38,12 +37,12 @@ struct TagEntityQuery: EntityStringQuery {
         ]
         .compactMap { type in
             guard let tag = tags.first(
-                where: {
-                    $0.type == type
+                where: { item in
+                    item.type == type
                         && (
-                            $0.name.localizedStandardContains(string)
-                                || $0.name.localizedStandardContains(hiragana)
-                                || $0.name.localizedStandardContains(katakana)
+                            item.name.localizedStandardContains(string)
+                                || item.name.localizedStandardContains(hiragana)
+                                || item.name.localizedStandardContains(katakana)
                         )
                 }
             ) else {
@@ -64,8 +63,8 @@ struct TagEntityQuery: EntityStringQuery {
         ]
         .compactMap { type in
             guard let tag = tags.first(
-                where: {
-                    $0.type == type
+                where: { item in
+                    item.type == type
                 }
             ) else {
                 return nil

@@ -130,15 +130,15 @@ struct TagServiceTests {
             priority: 0,
             repeatID: .init()
         )
-        let tag1 = item1.tags!.first { tag in
+        let tag1 = try #require(item1.tags?.first { tag in
             tag.type == .content
-        }!
-        let tag2 = item2.tags!.first { tag in
+        })
+        let tag2 = try #require(item2.tags?.first { tag in
             tag.type == .content
-        }!
-        let tag3 = item3.tags!.first { tag in
+        })
+        let tag3 = try #require(item3.tags?.first { tag in
             tag.type == .content
-        }!
+        })
         try TagService.mergeDuplicates(
             tags: [tag1, tag2, tag3]
         )

@@ -35,8 +35,7 @@ struct CategoryChartSection: View {
 }
 
 private extension CategoryChartSection {
-    @ViewBuilder
-    var incomeContent: some View {
+    @ViewBuilder var incomeContent: some View {
         VStack(alignment: .leading, spacing: .space(.xs)) {
             Text("Income")
                 .font(.headline)
@@ -46,7 +45,7 @@ private extension CategoryChartSection {
                     SectorMark(
                         angle: .value(
                             object.title,
-                            NSDecimalNumber(decimal: object.value).doubleValue
+                            decimalToDouble(object.value)
                         ),
                         innerRadius: .ratio(0.618),
                         outerRadius: .inset(10),
@@ -66,8 +65,7 @@ private extension CategoryChartSection {
         }
     }
 
-    @ViewBuilder
-    var outgoContent: some View {
+    @ViewBuilder var outgoContent: some View {
         VStack(alignment: .leading, spacing: .space(.xs)) {
             Text("Outgo")
                 .font(.headline)
@@ -77,7 +75,7 @@ private extension CategoryChartSection {
                     SectorMark(
                         angle: .value(
                             object.title,
-                            NSDecimalNumber(decimal: object.value).doubleValue
+                            decimalToDouble(object.value)
                         ),
                         innerRadius: .ratio(0.618),
                         outerRadius: .inset(10),
@@ -109,13 +107,11 @@ private extension CategoryChartSection {
         }
     }
 
-    @ViewBuilder
-    var incomeLegend: some View {
+    @ViewBuilder var incomeLegend: some View {
         legendList(objects: incomeObjects, colorScale: incomeColorScale)
     }
 
-    @ViewBuilder
-    var outgoLegend: some View {
+    @ViewBuilder var outgoLegend: some View {
         legendList(objects: outgoObjects, colorScale: outgoColorScale)
     }
 }
@@ -262,13 +258,17 @@ private extension CategoryChartSection {
         guard total.isNotZero else {
             return 0
         }
-        let totalValue = NSDecimalNumber(decimal: total).doubleValue
-        let currentValue = NSDecimalNumber(decimal: value).doubleValue
+        let totalValue = decimalToDouble(total)
+        let currentValue = decimalToDouble(value)
         return currentValue / totalValue
     }
 
     func percentString(for ratio: Double) -> String {
         ratio.formatted(.percent.precision(.fractionLength(0)))
+    }
+
+    private func decimalToDouble(_ value: Decimal) -> Double {
+        Double(value.description) ?? .zero
     }
 }
 
