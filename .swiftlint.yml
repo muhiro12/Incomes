@@ -17,3 +17,6 @@ disabled_rules:
     - required_deinit # Omit deinit
     - sorted_enum_cases # Prioritize readability
     - vertical_whitespace_between_cases # Keep switch cases visually grouped together
+
+excluded:
+    - .build
