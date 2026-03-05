@@ -18,7 +18,7 @@ if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
   exit 1
 fi
 
-runs_root="$repository_root/build/ai-runs"
+runs_root="$repository_root/.build/ci_runs"
 run_directory=$(ai_run_create_dir "$runs_root")
 run_identifier=$(basename "$run_directory")
 
