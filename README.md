@@ -135,7 +135,7 @@ bash ci_scripts/tasks/verify.sh
 If you only need required builds/tests based on local changes:
 
 ```sh
-bash ci_scripts/run_required_builds.sh
+bash ci_scripts/tasks/run_required_builds.sh
 ```
 
 If you only need the app build:

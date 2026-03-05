@@ -98,7 +98,7 @@ tasks.filter { $0.isCompleted }
 Agents MUST use one of these standardized entrypoints:
 
 ``` sh
-bash ci_scripts/run_required_builds.sh
+bash ci_scripts/tasks/run_required_builds.sh
 bash ci_scripts/tasks/verify.sh
 ```
 
