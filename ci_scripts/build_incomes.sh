@@ -19,6 +19,7 @@ fi
 project_path="Incomes.xcodeproj"
 derived_data_path="build/DerivedData"
 results_directory="build"
+results_directory="${AI_RUN_RESULTS_DIR:-$results_directory}"
 
 local_home_directory="$repository_root/build/xcodebuild_home"
 cache_directory="$repository_root/build/xcodebuild_cache"
