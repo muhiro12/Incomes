@@ -1,6 +1,6 @@
 # Incomes Current Product and Architecture Overview
 
-Current as of March 4, 2026.
+Current as of March 5, 2026.
 
 ## Purpose
 
@@ -58,7 +58,7 @@ living in the app targets.
   - outgo
   - category
 - Apply the inferred values back into the item form.
-- Expose the same inference capability through a hidden App Intent.
+- Expose the same inference capability through an iOS 26 App Intent.
 
 ### 3. Item editing and mutation
 
@@ -435,7 +435,8 @@ The following behaviors are already centralized and should remain centralized:
 
 ## Notable Version and Capability Gates
 
-- The baseline product targets iOS 18 and watchOS 11 era APIs.
+- The iPhone app target is iOS 17, the widgets target is iOS 18, and the
+  watch companion target is watchOS 11.
 - On-device text inference and monthly narrative summaries require iOS 26 and
   Apple Foundation Models availability.
 - Notification features depend on user authorization.
