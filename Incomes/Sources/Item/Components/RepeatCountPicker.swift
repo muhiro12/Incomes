@@ -21,7 +21,7 @@ extension RepeatCountPicker: View {
             Text("Repeat")
             Spacer()
             Picker(selection: $selection) {
-                ForEach(1...60, id: \.self) { count in
+                ForEach(1...60, id: \.self) { count in // swiftlint:disable:this no_magic_numbers
                     Text(count.description)
                 }
             } label: {

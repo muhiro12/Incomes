@@ -13,7 +13,7 @@ public enum TagPredicate {
     /// Documented for SwiftLint compliance.
     case all
     /// Documented for SwiftLint compliance.
-    case none
+    case none // swiftlint:disable:this discouraged_none_name
     /// Documented for SwiftLint compliance.
     case idIs(Tag.ID)
     /// Documented for SwiftLint compliance.

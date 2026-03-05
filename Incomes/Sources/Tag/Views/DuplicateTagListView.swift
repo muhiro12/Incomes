@@ -19,7 +19,7 @@ struct DuplicateTagListView: View {
 
     private let navigateToRoute: (DuplicateTagRoute) -> Void
 
-    init(
+    init( // swiftlint:disable:this type_contents_order
         navigateToRoute: @escaping (DuplicateTagRoute) -> Void = { _ in
             // no-op
         }

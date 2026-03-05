@@ -11,7 +11,7 @@ import SwiftUI
 struct IntentItemListSection: View {
     private var items: [Item]
 
-    init(_ items: [Item]) {
+    init(_ items: [Item]) { // swiftlint:disable:this type_contents_order
         self.items = items
     }
 

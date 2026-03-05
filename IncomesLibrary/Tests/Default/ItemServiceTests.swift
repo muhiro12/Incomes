@@ -1,10 +1,11 @@
+// swiftlint:disable file_length
 import Foundation
 @testable import IncomesLibrary
 import SwiftData
 import Testing
 
 @Suite(.serialized)
-struct ItemServiceTests {
+struct ItemServiceTests { // swiftlint:disable:this type_body_length
     let context: ModelContext
 
     init() {
@@ -618,7 +619,7 @@ struct ItemServiceTests {
     }
 
     @Test
-    func update_recalculates_balances_when_date_moves_later() throws {
+    func update_recalculates_balances_when_date_moves_later() throws { // swiftlint:disable:this function_body_length
         let originalTimeZone = TimeZone.ReferenceType.default
         TimeZone.ReferenceType.default = try #require(TimeZone(secondsFromGMT: 0))
         defer {
@@ -895,3 +896,4 @@ struct ItemServiceTests {
         #expect(result.balance == 10)
     }
 }
+// swiftlint:enable file_length

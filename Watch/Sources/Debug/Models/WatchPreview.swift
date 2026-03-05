@@ -7,7 +7,7 @@ struct WatchPreview<Content: View>: View {
     private let content: () -> Content
     private let previewModelContainer: ModelContainer
 
-    init(@ViewBuilder content: @escaping () -> Content) {
+    init(@ViewBuilder content: @escaping () -> Content) { // swiftlint:disable:this type_contents_order
         self.content = content
         do {
             previewModelContainer = try .init(

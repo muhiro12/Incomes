@@ -17,7 +17,7 @@ public final class Tag {
     public private(set) var typeID = String.empty
 
     /// Documented for SwiftLint compliance.
-    public private(set) var items: [Item]?
+    public private(set) var items: [Item]? // swiftlint:disable:this discouraged_optional_collection
 
     private init() {
         // no-op
@@ -35,7 +35,7 @@ public final class Tag {
     }
 }
 
-extension Tag {
+extension Tag { // swiftlint:disable:this extension_access_modifier
     /// The strongly-typed tag kind, derived from `typeID`.
     public var type: TagType? {
         TagType(rawValue: typeID)
@@ -101,7 +101,7 @@ extension Tag: Hashable {
 
 // MARK: - Test
 
-extension Tag {
+extension Tag { // swiftlint:disable:this extension_access_modifier
     /// Testing helper: creates a tag without checking duplicates.
     public static func createIgnoringDuplicates(context: ModelContext, name: String, type: TagType) -> Tag {
         let tag = Tag()

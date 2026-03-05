@@ -72,7 +72,7 @@ nonisolated extension PhoneWatchBridge: WCSessionDelegate {
         }
     }
 
-    func session(_: WCSession, didReceiveMessageData messageData: Data, replyHandler: @escaping @Sendable (Data) -> Void) {
+    func session(_: WCSession, didReceiveMessageData messageData: Data, replyHandler: @escaping @Sendable (Data) -> Void) { // swiftlint:disable:this line_length
         guard let request = try? JSONDecoder().decode(ItemsRequest.self, from: messageData) else {
             replyHandler(Data())
             return
@@ -95,7 +95,7 @@ nonisolated extension PhoneWatchBridge: WCSessionDelegate {
                 continue
             }
             let items = (try? ItemService.items(context: context, date: monthDate)) ?? []
-            for item in items.prefix(50) {
+            for item in items.prefix(50) { // swiftlint:disable:this no_magic_numbers
                 wires.append(
                     .init(
                         dateEpoch: item.localDate.timeIntervalSince1970,
@@ -107,7 +107,7 @@ nonisolated extension PhoneWatchBridge: WCSessionDelegate {
                 )
             }
         }
-        wires = Array(wires.prefix(120))
+        wires = Array(wires.prefix(120)) // swiftlint:disable:this no_magic_numbers
         let data = (try? JSONEncoder().encode(ItemsPayload(items: wires))) ?? Data()
         replyHandler(data)
     }

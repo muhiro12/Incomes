@@ -6,7 +6,7 @@ struct FormattingTests {
     private let enUS: Locale = .init(identifier: "en_US_POSIX")
 
     // Helper to create a fixed UTC date
-    private func utcDate(_ year: Int, _ month: Int, _ day: Int, _ hour: Int = 0, _ minute: Int = 0, _ second: Int = 0) -> Date {
+    private func utcDate(_ year: Int, _ month: Int, _ day: Int, _ hour: Int = 0, _ minute: Int = 0, _ second: Int = 0) -> Date { // swiftlint:disable:this line_length
         var components = DateComponents()
         components.year = year
         components.month = month

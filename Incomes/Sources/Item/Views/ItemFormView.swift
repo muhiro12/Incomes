@@ -1,3 +1,4 @@
+// swiftlint:disable file_length
 //
 //  ItemFormView.swift
 //  Incomes
@@ -10,7 +11,7 @@ import SwiftData
 import SwiftUI
 import TipKit
 
-struct ItemFormView: View {
+struct ItemFormView: View { // swiftlint:disable:this type_body_length
     enum Mode {
         case create
         case edit
@@ -72,7 +73,7 @@ struct ItemFormView: View {
     private let priorityRange = 0...10
     private let repeatItemsTip = RepeatItemsTip()
 
-    init(
+    init( // swiftlint:disable:this type_contents_order
         mode: Mode,
         draft: ItemFormDraft? = nil,
         onCreate: (() -> Void)? = nil
@@ -94,8 +95,8 @@ struct ItemFormView: View {
     }
 
     var body: some View {
-        Form {
-            Section {
+        Form { // swiftlint:disable:this closure_body_length
+            Section { // swiftlint:disable:this closure_body_length
                 DatePicker(selection: $date, displayedComponents: .date) {
                     Text("Date")
                 }
@@ -177,11 +178,11 @@ struct ItemFormView: View {
                         save()
                     }
                     if ReviewRequestPolicy.shouldRequestReview(
-                        randomValue: Int.random(in: 0..<5),
-                        maxExclusive: 5
+                        randomValue: Int.random(in: 0..<5), // swiftlint:disable:this no_magic_numbers
+                        maxExclusive: 5 // swiftlint:disable:this no_magic_numbers
                     ) {
                         Task {
-                            try? await Task.sleep(for: .seconds(2))
+                            try? await Task.sleep(for: .seconds(2)) // swiftlint:disable:this no_magic_numbers
                             requestReview()
                         }
                     }
@@ -542,3 +543,4 @@ private extension ItemFormView {
         ItemFormView(mode: .create)
     }
 }
+// swiftlint:enable file_length

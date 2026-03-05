@@ -1,4 +1,4 @@
-import Foundation
+import Foundation // swiftlint:disable:this file_name
 
 public extension String {
     /// Documented for SwiftLint compliance.

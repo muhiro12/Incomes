@@ -7,8 +7,8 @@ struct IncomesUpcomingWidget {
 
 extension IncomesUpcomingWidget: Widget {
     var body: some WidgetConfiguration {
-        AppIntentConfiguration(kind: kind, intent: UpcomingConfigurationAppIntent.self, provider: UpcomingProvider()) { entry in
-            ViewThatFits(in: .horizontal) {
+        AppIntentConfiguration(kind: kind, intent: UpcomingConfigurationAppIntent.self, provider: UpcomingProvider()) { entry in // swiftlint:disable:this closure_body_length line_length
+            ViewThatFits(in: .horizontal) { // swiftlint:disable:this closure_body_length
                 // Medium (roomy) layout: horizontal split
                 HStack(alignment: .center, spacing: .space(.m)) {
                     VStack(alignment: .leading, spacing: .space(.xs)) {
@@ -38,7 +38,7 @@ extension IncomesUpcomingWidget: Widget {
                             .font(.title2.weight(.semibold))
                             .monospacedDigit()
                             .lineLimit(1)
-                            .minimumScaleFactor(0.8)
+                            .minimumScaleFactor(0.8) // swiftlint:disable:this no_magic_numbers
                     }
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
@@ -70,7 +70,7 @@ extension IncomesUpcomingWidget: Widget {
                             .font(.headline.weight(.semibold))
                             .monospacedDigit()
                             .lineLimit(1)
-                            .minimumScaleFactor(0.85)
+                            .minimumScaleFactor(0.85) // swiftlint:disable:this no_magic_numbers
                     }
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)

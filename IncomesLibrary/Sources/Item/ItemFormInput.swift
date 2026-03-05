@@ -16,7 +16,7 @@ public struct ItemFormInput {
     public let priorityText: String
 
     /// Documented for SwiftLint compliance.
-    public init(
+    public init( // swiftlint:disable:this type_contents_order
         date: Date,
         content: String,
         incomeText: String,

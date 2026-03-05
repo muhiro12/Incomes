@@ -9,7 +9,7 @@ import AppIntents
 import SwiftData
 
 struct ShowThisMonthChartsIntent: AppIntent {
-    @Dependency private var modelContainer: ModelContainer
+    @Dependency private var modelContainer: ModelContainer // swiftlint:disable:this type_contents_order
 
     static let title: LocalizedStringResource = .init("Show This Month's Charts", table: "AppIntents")
 

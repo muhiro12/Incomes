@@ -12,7 +12,7 @@ import SwiftUI
 struct IncomesWatchApp: App {
     private let sharedModelContainer: ModelContainer
 
-    init() {
+    init() { // swiftlint:disable:this type_contents_order
         // Migrate possible legacy DB files into App Group first
         DatabaseMigrator.migrateSQLiteFilesIfNeeded()
 

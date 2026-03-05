@@ -9,6 +9,30 @@ import SwiftData
 import SwiftUI
 
 struct YearlyDuplicationView: View {
+    private enum Constants {
+        static let proposalVerticalSpacing: CGFloat = 8
+        static let proposalVerticalPadding: CGFloat = 4
+        static let targetYearRange = 10
+        static let selectionBarSpacing: CGFloat = 6
+        static let selectionColumnsSpacing: CGFloat = 16
+        static let selectionBarHorizontalPadding: CGFloat = 16
+        static let selectionBarVerticalPadding: CGFloat = 10
+        static let menuVerticalSpacing: CGFloat = 4
+    }
+
+    @MainActor
+    private final class Router: ObservableObject {
+        @Published var route: YearlyDuplicationRoute?
+
+        func navigate(to route: YearlyDuplicationRoute) {
+            self.route = route
+        }
+
+        func resetRoute() {
+            route = nil
+        }
+    }
+
     @Environment(\.modelContext)
     private var context
 
@@ -18,23 +42,23 @@ struct YearlyDuplicationView: View {
     @State private var sourceYear = Calendar.current.component(.year, from: .now) - 1
     @State private var targetYear = Calendar.current.component(.year, from: .now)
 
-    @StateObject private var router: YearlyDuplicationRouter = .init()
+    @StateObject private var router: Router = .init()
     @State private var plan: YearlyItemDuplicationPlan?
     @State private var createdGroupIDs = Set<UUID>()
     @State private var resultMessage: String?
     @State private var errorMessage: String?
 
     var body: some View {
-        Form {
+        Form { // swiftlint:disable:this closure_body_length
             if let plan {
-                Section("Proposals") {
-                    ForEach(plan.groups, id: \.id) { group in
+                Section("Proposals") { // swiftlint:disable:this closure_body_length
+                    ForEach(plan.groups, id: \.id) { group in // swiftlint:disable:this closure_body_length
                         let entries = YearlyDuplicationCoordinator.entries(
                             for: group,
                             in: plan
                         )
                         let isCreated = createdGroupIDs.contains(group.id)
-                        VStack(alignment: .leading, spacing: 8) {
+                        VStack(alignment: .leading, spacing: Constants.proposalVerticalSpacing) { // swiftlint:disable:this closure_body_length line_length
                             HStack {
                                 Text(group.content)
                                     .font(.headline)
@@ -61,14 +85,14 @@ struct YearlyDuplicationView: View {
                                 .foregroundStyle(.secondary)
                             Text(
                                 String(
-                                    localized: "Income: \(YearlyDuplicationCoordinator.decimalString(from: group.averageIncome))"
+                                    localized: "Income: \(YearlyDuplicationCoordinator.decimalString(from: group.averageIncome))" // swiftlint:disable:this line_length
                                 )
                             )
                             .font(.footnote)
                             .foregroundStyle(.secondary)
                             Text(
                                 String(
-                                    localized: "Outgo: \(YearlyDuplicationCoordinator.decimalString(from: group.averageOutgo))"
+                                    localized: "Outgo: \(YearlyDuplicationCoordinator.decimalString(from: group.averageOutgo))" // swiftlint:disable:this line_length
                                 )
                             )
                             .font(.footnote)
@@ -86,7 +110,7 @@ struct YearlyDuplicationView: View {
                                 .disabled(isCreated || entries.isEmpty)
                             }
                         }
-                        .padding(.vertical, 4)
+                        .padding(.vertical, Constants.proposalVerticalPadding)
                     }
                 }
                 Section("Preview") {
@@ -106,7 +130,7 @@ struct YearlyDuplicationView: View {
         }
         .navigationTitle("Duplicate Year")
         .safeAreaInset(edge: .top) {
-            yearSelectionBar
+            yearSelectionBar()
         }
         .toolbar {
             ToolbarItem {
@@ -179,19 +203,6 @@ struct YearlyDuplicationView: View {
     }
 }
 
-@MainActor
-private final class YearlyDuplicationRouter: ObservableObject {
-    @Published var route: YearlyDuplicationRoute?
-
-    func navigate(to route: YearlyDuplicationRoute) {
-        self.route = route
-    }
-
-    func resetRoute() {
-        route = nil
-    }
-}
-
 private extension YearlyDuplicationView {
     var currentYear: Int {
         Calendar.current.component(.year, from: .now)
@@ -207,7 +218,7 @@ private extension YearlyDuplicationView {
     var targetYears: [Int] {
         YearlyDuplicationCoordinator.targetYears(
             currentYear: currentYear,
-            range: 10
+            range: Constants.targetYearRange
         )
     }
 
@@ -270,12 +281,12 @@ private extension YearlyDuplicationView {
         targetYear = selectionState.targetYear
     }
 
-    var yearSelectionBar: some View {
-        VStack(alignment: .leading, spacing: 6) {
+    func yearSelectionBar() -> some View {
+        VStack(alignment: .leading, spacing: Constants.selectionBarSpacing) {
             Text("Year Range")
                 .font(.caption)
                 .foregroundStyle(.secondary)
-            HStack(alignment: .top, spacing: 16) {
+            HStack(alignment: .top, spacing: Constants.selectionColumnsSpacing) {
                 yearMenu(
                     title: "Source Year",
                     selection: $sourceYear,
@@ -288,8 +299,8 @@ private extension YearlyDuplicationView {
                 )
             }
         }
-        .padding(.horizontal, 16)
-        .padding(.vertical, 10)
+        .padding(.horizontal, Constants.selectionBarHorizontalPadding)
+        .padding(.vertical, Constants.selectionBarVerticalPadding)
         .background(.ultraThinMaterial)
     }
 
@@ -298,7 +309,7 @@ private extension YearlyDuplicationView {
         selection: Binding<Int>,
         years: [Int]
     ) -> some View {
-        VStack(alignment: .leading, spacing: 4) {
+        VStack(alignment: .leading, spacing: Constants.menuVerticalSpacing) {
             Text(title)
                 .font(.caption2)
                 .foregroundStyle(.secondary)

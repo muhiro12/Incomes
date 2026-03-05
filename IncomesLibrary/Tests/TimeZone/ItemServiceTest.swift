@@ -1,3 +1,4 @@
+// swiftlint:disable file_length
 //
 //  ItemServiceTest.swift
 //  Incomes
@@ -11,7 +12,7 @@ import SwiftData
 import Testing
 
 @Suite(.serialized)
-struct ItemServiceTest {
+struct ItemServiceTest { // swiftlint:disable:this type_body_length
     let context: ModelContext
 
     init() {
@@ -19,7 +20,7 @@ struct ItemServiceTest {
     }
 
     @discardableResult
-    func createTestItem(
+    func createTestItem( // swiftlint:disable:this function_parameter_count
         date: Date,
         content: String,
         income: Decimal,
@@ -40,7 +41,7 @@ struct ItemServiceTest {
         )
     }
 
-    func updateTestItem(
+    func updateTestItem( // swiftlint:disable:this function_parameter_count
         item: Item,
         date: Date,
         content: String,
@@ -101,7 +102,7 @@ struct ItemServiceTest {
             category: "Transport",
             priority: 0,
             )
-        let predicate = ItemPredicate.outgoIsGreaterThanOrEqualTo(amount: 400, onOrAfter: isoDate("2024-01-01T00:00:00Z"))
+        let predicate = ItemPredicate.outgoIsGreaterThanOrEqualTo(amount: 400, onOrAfter: isoDate("2024-01-01T00:00:00Z")) // swiftlint:disable:this line_length
         let item = try #require(try context.fetchFirst(.items(predicate)))
         #expect(item.content == "Food")
     }
@@ -150,7 +151,7 @@ struct ItemServiceTest {
             category: "Filtered",
             priority: 0,
             )
-        let predicate = ItemPredicate.outgoIsGreaterThanOrEqualTo(amount: 500, onOrAfter: isoDate("2024-01-01T00:00:00Z"))
+        let predicate = ItemPredicate.outgoIsGreaterThanOrEqualTo(amount: 500, onOrAfter: isoDate("2024-01-01T00:00:00Z")) // swiftlint:disable:this line_length
         let filtered = try context.fetch(.items(predicate))
         #expect(filtered.count == 1)
         #expect(filtered.first?.content == "Match")
@@ -192,7 +193,7 @@ struct ItemServiceTest {
             category: "Filtered",
             priority: 0,
             )
-        let predicate = ItemPredicate.outgoIsGreaterThanOrEqualTo(amount: 800, onOrAfter: isoDate("2024-01-01T00:00:00Z"))
+        let predicate = ItemPredicate.outgoIsGreaterThanOrEqualTo(amount: 800, onOrAfter: isoDate("2024-01-01T00:00:00Z")) // swiftlint:disable:this line_length
         let count = try context.fetchCount(.items(predicate))
         #expect(count == 1)
     }
@@ -797,3 +798,4 @@ struct ItemServiceTest {
         #expect(items[1].balance == 250)
     }
 }
+// swiftlint:enable file_length

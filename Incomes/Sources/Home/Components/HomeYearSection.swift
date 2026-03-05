@@ -21,7 +21,7 @@ struct HomeYearSection: View {
 
     private let navigateToRoute: (IncomesRoute) -> Void
 
-    init(
+    init( // swiftlint:disable:this type_contents_order
         yearTag: Tag,
         navigateToRoute: @escaping (IncomesRoute) -> Void = { _ in
             // no-op

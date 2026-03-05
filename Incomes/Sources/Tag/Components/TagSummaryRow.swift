@@ -27,7 +27,7 @@ struct TagSummaryRow: View {
             }
             .font(.subheadline)
             .foregroundStyle(.secondary)
-            Image(systemName: "chevron.up")
+            Image(systemName: "chevron.up") // swiftlint:disable:this accessibility_label_for_image
                 .foregroundStyle(tag.netIncome.isPlus ? .accent : .clear)
         }
     }

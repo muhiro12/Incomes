@@ -3,7 +3,7 @@ import Foundation
 import SwiftData
 import Testing
 
-struct UpcomingPaymentNotificationPresentationBuilderTests {
+struct UpcomingPaymentNotificationPresentationBuilderTests { // swiftlint:disable:this type_name
     let context: ModelContext
 
     init() {
@@ -11,7 +11,7 @@ struct UpcomingPaymentNotificationPresentationBuilderTests {
     }
 
     @Test
-    func build_assigns_stable_identifiers_routes_threads_and_badges() throws {
+    func build_assigns_stable_identifiers_routes_threads_and_badges() throws { // swiftlint:disable:this function_body_length line_length
         let firstItem = try ItemService.create(
             context: context,
             date: shiftedDate("2024-01-20T00:00:00Z"),

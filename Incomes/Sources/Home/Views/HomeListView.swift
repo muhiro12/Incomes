@@ -82,7 +82,7 @@ private extension HomeListView {
     func route(for yearTag: Tag) -> IncomesRoute? {
         guard yearTag.type == .year,
               let year = Int(yearTag.name),
-              1...9_999 ~= year else {
+              1...9_999 ~= year else { // swiftlint:disable:this no_magic_numbers
             return nil
         }
         return .yearSummary(year)

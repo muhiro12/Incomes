@@ -12,11 +12,11 @@ import SwiftUI
 struct CategoryChartSection: View {
     @Query private var items: [Item]
 
-    init(_ descriptor: FetchDescriptor<Item>) {
+    init(_ descriptor: FetchDescriptor<Item>) { // swiftlint:disable:this type_contents_order
         _items = .init(descriptor)
     }
 
-    init(yearScopedTo date: Date) {
+    init(yearScopedTo date: Date) { // swiftlint:disable:this type_contents_order
         // Fetch year scope; apply non-zero filters in-memory
         _items = .init(.items(.dateIsSameYearAs(date)))
     }
@@ -47,11 +47,11 @@ private extension CategoryChartSection {
                             object.title,
                             decimalToDouble(object.value)
                         ),
-                        innerRadius: .ratio(0.618),
-                        outerRadius: .inset(10),
+                        innerRadius: .ratio(0.618), // swiftlint:disable:this no_magic_numbers
+                        outerRadius: .inset(10), // swiftlint:disable:this no_magic_numbers
                         angularInset: 1
                     )
-                    .cornerRadius(4)
+                    .cornerRadius(4) // swiftlint:disable:this no_magic_numbers
                     .foregroundStyle(by: .value("Category", object.label))
                 }
                 .chartForegroundStyleScale { (label: String) in
@@ -77,11 +77,11 @@ private extension CategoryChartSection {
                             object.title,
                             decimalToDouble(object.value)
                         ),
-                        innerRadius: .ratio(0.618),
-                        outerRadius: .inset(10),
+                        innerRadius: .ratio(0.618), // swiftlint:disable:this no_magic_numbers
+                        outerRadius: .inset(10), // swiftlint:disable:this no_magic_numbers
                         angularInset: 1
                     )
-                    .cornerRadius(4)
+                    .cornerRadius(4) // swiftlint:disable:this no_magic_numbers
                     .foregroundStyle(by: .value("Category", object.label))
                 }
                 .chartForegroundStyleScale { (label: String) in
@@ -97,8 +97,8 @@ private extension CategoryChartSection {
     }
 
     @ViewBuilder
-    func totalLabel(amount: Decimal) -> some View {
-        VStack(spacing: 4) {
+    func totalLabel(amount: Decimal) -> some View { // swiftlint:disable:this type_contents_order
+        VStack(spacing: 4) { // swiftlint:disable:this no_magic_numbers
             Text("Total")
                 .font(.caption)
                 .foregroundStyle(.secondary)
@@ -129,7 +129,7 @@ private extension CategoryChartSection {
         }
     }
 
-    var incomeObjects: [(title: String, value: Decimal, ratio: Double, label: String)] {
+    var incomeObjects: [(title: String, value: Decimal, ratio: Double, label: String)] { // swiftlint:disable:this large_tuple line_length
         let source: [Item] = items.filter(\.income.isNotZero)
         let grouped: [String: [Item]] = .init(grouping: source) { item in
             item.category?.displayName ?? "Others"
@@ -153,7 +153,7 @@ private extension CategoryChartSection {
         }
     }
 
-    var outgoObjects: [(title: String, value: Decimal, ratio: Double, label: String)] {
+    var outgoObjects: [(title: String, value: Decimal, ratio: Double, label: String)] { // swiftlint:disable:this large_tuple line_length
         let source: [Item] = items.filter(\.outgo.isNotZero)
         let grouped: [String: [Item]] = .init(grouping: source) { item in
             item.category?.displayName ?? "Others"
@@ -220,7 +220,7 @@ private extension CategoryChartSection {
 
     @ViewBuilder
     func legendList(
-        objects: [(title: String, value: Decimal, ratio: Double, label: String)],
+        objects: [(title: String, value: Decimal, ratio: Double, label: String)], // swiftlint:disable:this large_tuple
         colorScale: [String: Color]
     ) -> some View {
         let columns: [GridItem] = [
@@ -233,7 +233,7 @@ private extension CategoryChartSection {
                     HStack {
                         Circle()
                             .fill(colorScale[object.label] ?? .secondary)
-                            .frame(width: 6, height: 6)
+                            .frame(width: 6, height: 6) // swiftlint:disable:this no_magic_numbers
                         Text(object.title)
                             .font(.caption.bold())
                             .foregroundStyle(.secondary)
@@ -242,7 +242,7 @@ private extension CategoryChartSection {
                     HStack {
                         Circle()
                             .fill(.clear)
-                            .frame(width: 6, height: 6)
+                            .frame(width: 6, height: 6) // swiftlint:disable:this no_magic_numbers
                         Text("\(percentString(for: object.ratio)), \(object.value.asCurrency)")
                             .font(.caption2)
                             .foregroundStyle(.secondary)

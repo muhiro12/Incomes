@@ -15,6 +15,7 @@ enum ItemInferenceService {
         formatter.dateFormat = "yyyyMMdd"
         let today = formatter.string(from: Date())
         let languageCode = Locale.current.language.languageCode?.identifier ?? "en"
+        // swiftlint:disable line_length
         let session = LanguageModelSession(
             instructions: """
                 You are a professional financial advisor for a household accounting and budgeting app. Carefully extract and output the necessary fields from user input as an expert accountant.
@@ -39,6 +40,7 @@ enum ItemInferenceService {
 
             Text: \(text)
             """
+        // swiftlint:enable line_length
         let response = try await session.respond(
             to: prompt,
             generating: ItemFormInference.self

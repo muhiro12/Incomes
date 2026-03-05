@@ -17,7 +17,7 @@ public enum IncomesRouteURLBuilder {
         var urlComponents = URLComponents()
         urlComponents.scheme = customScheme
         urlComponents.host = pathSegments.first
-        if pathSegments.count >= 2 {
+        if pathSegments.count >= 2 { // swiftlint:disable:this no_magic_numbers
             urlComponents.path = "/" + pathSegments.dropFirst().joined(separator: "/")
         } else {
             urlComponents.path = .empty
@@ -48,7 +48,7 @@ public enum IncomesRouteURLBuilder {
 }
 
 private extension IncomesRouteURLBuilder {
-    static func routePathSegments(_ route: IncomesRoute) -> [String] {
+    static func routePathSegments(_ route: IncomesRoute) -> [String] { // swiftlint:disable:this cyclomatic_complexity
         switch route {
         case .home:
             return ["home"]
@@ -80,7 +80,7 @@ private extension IncomesRouteURLBuilder {
 
     static func routeQueryItems(
         _ route: IncomesRoute
-    ) -> [URLQueryItem]? {
+    ) -> [URLQueryItem]? { // swiftlint:disable:this discouraged_optional_collection
         switch route {
         case .search(let query):
             guard let query,

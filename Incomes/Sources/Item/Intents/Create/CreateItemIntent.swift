@@ -11,19 +11,19 @@ import SwiftUI
 
 struct CreateItemIntent: AppIntent {
     @Parameter(title: "Date", kind: .date)
-    private var date: Date
+    private var date: Date // swiftlint:disable:this type_contents_order
     @Parameter(title: "Content")
-    private var content: String
+    private var content: String // swiftlint:disable:this type_contents_order
     @Parameter(title: "Income")
-    private var income: IntentCurrencyAmount
+    private var income: IntentCurrencyAmount // swiftlint:disable:this type_contents_order
     @Parameter(title: "Outgo")
-    private var outgo: IntentCurrencyAmount
+    private var outgo: IntentCurrencyAmount // swiftlint:disable:this type_contents_order
     @Parameter(title: "Category")
-    private var category: String
-    @Parameter(title: "Repeat", default: 1, inclusiveRange: (1, 60))
-    private var repeatCount: Int
+    private var category: String // swiftlint:disable:this type_contents_order
+    @Parameter(title: "Repeat", default: 1, inclusiveRange: (1, 60)) // swiftlint:disable:this no_magic_numbers
+    private var repeatCount: Int // swiftlint:disable:this type_contents_order
 
-    @Dependency private var modelContainer: ModelContainer
+    @Dependency private var modelContainer: ModelContainer // swiftlint:disable:this type_contents_order
 
     static let title: LocalizedStringResource = .init("Create Item", table: "AppIntents")
 

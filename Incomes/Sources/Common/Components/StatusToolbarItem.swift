@@ -10,7 +10,7 @@ import SwiftUI
 struct StatusToolbarItem: ToolbarContent {
     private let content: LocalizedStringResource
 
-    init(_ content: LocalizedStringResource) {
+    init(_ content: LocalizedStringResource) { // swiftlint:disable:this type_contents_order
         self.content = content
     }
 

@@ -4,23 +4,23 @@ import SwiftUI
 
 struct UpdateItemIntent: AppIntent {
     @Parameter(title: "Item")
-    private var item: ItemEntity
+    private var item: ItemEntity // swiftlint:disable:this type_contents_order
     @Parameter(title: "Date", kind: .date)
-    private var date: Date
+    private var date: Date // swiftlint:disable:this type_contents_order
     @Parameter(title: "Content")
-    private var content: String
+    private var content: String // swiftlint:disable:this type_contents_order
     @Parameter(title: "Income")
-    private var income: IntentCurrencyAmount
+    private var income: IntentCurrencyAmount // swiftlint:disable:this type_contents_order
     @Parameter(title: "Outgo")
-    private var outgo: IntentCurrencyAmount
+    private var outgo: IntentCurrencyAmount // swiftlint:disable:this type_contents_order
     @Parameter(title: "Category")
-    private var category: String
-    @Parameter(title: "Priority", default: 0, inclusiveRange: (0, 10))
-    private var priority: Int
+    private var category: String // swiftlint:disable:this type_contents_order
+    @Parameter(title: "Priority", default: 0, inclusiveRange: (0, 10)) // swiftlint:disable:this no_magic_numbers
+    private var priority: Int // swiftlint:disable:this type_contents_order
     @Parameter(title: "Scope", default: .thisItem)
-    private var scope: ItemMutationScopeIntentValue
+    private var scope: ItemMutationScopeIntentValue // swiftlint:disable:this type_contents_order
 
-    @Dependency private var modelContainer: ModelContainer
+    @Dependency private var modelContainer: ModelContainer // swiftlint:disable:this type_contents_order
 
     static let title: LocalizedStringResource = .init("Update Item", table: "AppIntents")
     static let isDiscoverable = false

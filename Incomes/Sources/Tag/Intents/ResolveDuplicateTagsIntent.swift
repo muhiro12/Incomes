@@ -2,7 +2,7 @@ import AppIntents
 import SwiftData
 
 struct ResolveDuplicateTagsIntent: AppIntent {
-    @Dependency private var modelContainer: ModelContainer
+    @Dependency private var modelContainer: ModelContainer // swiftlint:disable:this type_contents_order
 
     static let title: LocalizedStringResource = .init("Resolve Duplicate Tags", table: "AppIntents")
     static let isDiscoverable = false

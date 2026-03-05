@@ -12,10 +12,10 @@ struct IncomesMonthWidget {
 
 extension IncomesMonthWidget: Widget {
     var body: some WidgetConfiguration {
-        AppIntentConfiguration(kind: kind, intent: ConfigurationAppIntent.self, provider: MonthSummaryProvider()) { entry in
-            ViewThatFits(in: .horizontal) {
+        AppIntentConfiguration(kind: kind, intent: ConfigurationAppIntent.self, provider: MonthSummaryProvider()) { entry in // swiftlint:disable:this closure_body_length line_length
+            ViewThatFits(in: .horizontal) { // swiftlint:disable:this closure_body_length
                 // Medium (roomy) layout: horizontal split
-                HStack(alignment: .center, spacing: .space(.m)) {
+                HStack(alignment: .center, spacing: .space(.m)) { // swiftlint:disable:this closure_body_length
                     VStack(alignment: .leading, spacing: .space(.xs)) {
                         Text(Self.monthTitle(from: entry.date))
                             .font(.subheadline)
@@ -37,7 +37,7 @@ extension IncomesMonthWidget: Widget {
                                 .font(.title2.weight(.semibold))
                                 .monospacedDigit()
                                 .lineLimit(1)
-                                .minimumScaleFactor(0.8)
+                                .minimumScaleFactor(0.8) // swiftlint:disable:this no_magic_numbers
                         }
                         GridRow {
                             Image(systemName: "chevron.down")
@@ -48,7 +48,7 @@ extension IncomesMonthWidget: Widget {
                                 .font(.title2.weight(.semibold))
                                 .monospacedDigit()
                                 .lineLimit(1)
-                                .minimumScaleFactor(0.8)
+                                .minimumScaleFactor(0.8) // swiftlint:disable:this no_magic_numbers
                         }
                     }
                 }
@@ -56,7 +56,7 @@ extension IncomesMonthWidget: Widget {
                 .padding(.space(.m))
 
                 // Medium (compact) layout: horizontal split
-                HStack(alignment: .center, spacing: .space(.s)) {
+                HStack(alignment: .center, spacing: .space(.s)) { // swiftlint:disable:this closure_body_length
                     VStack(alignment: .leading, spacing: .space(.xs)) {
                         Text(Self.monthTitle(from: entry.date))
                             .font(.footnote)
@@ -78,7 +78,7 @@ extension IncomesMonthWidget: Widget {
                                 .font(.title3.weight(.semibold))
                                 .monospacedDigit()
                                 .lineLimit(1)
-                                .minimumScaleFactor(0.7)
+                                .minimumScaleFactor(0.7) // swiftlint:disable:this no_magic_numbers
                         }
                         GridRow {
                             Image(systemName: "chevron.down")
@@ -89,7 +89,7 @@ extension IncomesMonthWidget: Widget {
                                 .font(.title3.weight(.semibold))
                                 .monospacedDigit()
                                 .lineLimit(1)
-                                .minimumScaleFactor(0.7)
+                                .minimumScaleFactor(0.7) // swiftlint:disable:this no_magic_numbers
                         }
                     }
                 }
@@ -111,7 +111,7 @@ extension IncomesMonthWidget: Widget {
                             .font(.caption.weight(.semibold))
                             .symbolRenderingMode(.hierarchical)
                             .foregroundStyle(.green)
-                            .frame(width: 14, alignment: .leading)
+                            .frame(width: 14, alignment: .leading) // swiftlint:disable:this no_magic_numbers
                         Text(entry.totalIncomeText)
                             .font(.footnote.weight(.semibold))
                             .monospacedDigit()
@@ -122,7 +122,7 @@ extension IncomesMonthWidget: Widget {
                             .font(.caption.weight(.semibold))
                             .symbolRenderingMode(.hierarchical)
                             .foregroundStyle(.red)
-                            .frame(width: 14, alignment: .leading)
+                            .frame(width: 14, alignment: .leading) // swiftlint:disable:this no_magic_numbers
                         Text(entry.totalOutgoText)
                             .font(.footnote.weight(.semibold))
                             .monospacedDigit()

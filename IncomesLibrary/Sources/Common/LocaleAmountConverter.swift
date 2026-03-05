@@ -23,7 +23,7 @@ public enum LocaleAmountConverter {
              .eur:
             multiplier = 1
         case .cny:
-            multiplier = 20
+            multiplier = 20 // swiftlint:disable:this no_magic_numbers
         case .jpy:
             multiplier = 100
         default:

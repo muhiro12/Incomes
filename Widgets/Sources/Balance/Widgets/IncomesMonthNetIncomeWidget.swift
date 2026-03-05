@@ -11,8 +11,8 @@ struct IncomesMonthNetIncomeWidget {
 
 extension IncomesMonthNetIncomeWidget: Widget {
     var body: some WidgetConfiguration {
-        AppIntentConfiguration(kind: kind, intent: ConfigurationAppIntent.self, provider: NetIncomeProvider()) { entry in
-            ViewThatFits(in: .horizontal) {
+        AppIntentConfiguration(kind: kind, intent: ConfigurationAppIntent.self, provider: NetIncomeProvider()) { entry in // swiftlint:disable:this closure_body_length line_length
+            ViewThatFits(in: .horizontal) { // swiftlint:disable:this closure_body_length
                 HStack(alignment: .center, spacing: .space(.m)) {
                     VStack(alignment: .leading, spacing: .space(.xs)) {
                         Text(Self.monthTitle(from: entry.date))

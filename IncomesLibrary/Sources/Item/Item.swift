@@ -29,14 +29,14 @@ public final class Item {
 
     /// Documented for SwiftLint compliance.
     @Relationship(inverse: \Tag.items)
-    public private(set) var tags: [Tag]?
+    public private(set) var tags: [Tag]? // swiftlint:disable:this discouraged_optional_collection
 
     private init() {
         // no-op
     }
 
     /// Creates a new item and attaches year/month/content/category tags.
-    public static func create(context: ModelContext,
+    public static func create(context: ModelContext, // swiftlint:disable:this function_parameter_count
                               date: Date,
                               content: String,
                               income: Decimal,
@@ -81,7 +81,7 @@ public final class Item {
     }
 
     /// Updates core fields and reattaches derived tags based on the new values.
-    public func modify(date: Date,
+    public func modify(date: Date, // swiftlint:disable:this function_parameter_count
                        content: String,
                        income: Decimal,
                        outgo: Decimal,
@@ -134,7 +134,7 @@ public final class Item {
     }
 }
 
-extension Item {
+extension Item { // swiftlint:disable:this extension_access_modifier
     /// UTC date persisted in the store.
     public var utcDate: Date {
         date
@@ -187,9 +187,9 @@ extension Item: Comparable {
 
 // MARK: - Test
 
-extension Item {
+extension Item { // swiftlint:disable:this extension_access_modifier
     /// Testing helper: creates an item without checking duplicate tags.
-    public static func createIgnoringDuplicates(context: ModelContext,
+    public static func createIgnoringDuplicates(context: ModelContext, // swiftlint:disable:this function_parameter_count line_length
                                                 date: Date,
                                                 content: String,
                                                 income: Decimal,

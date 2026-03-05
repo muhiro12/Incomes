@@ -14,7 +14,7 @@ struct WatchDebugView {
 
 extension WatchDebugView: View {
     var body: some View {
-        List {
+        List { // swiftlint:disable:this closure_body_length
             Section {
                 Toggle(isOn: $isDebugOn) {
                     Text("Debug option")

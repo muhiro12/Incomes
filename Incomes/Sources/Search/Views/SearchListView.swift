@@ -27,13 +27,13 @@ struct SearchListView: View {
 
     private let searchFiltersTip = SearchFiltersTip()
 
-    init(selection: Binding<ItemPredicate?>, searchText: Binding<String>) {
+    init(selection: Binding<ItemPredicate?>, searchText: Binding<String>) { // swiftlint:disable:this line_length type_contents_order
         _predicate = selection
         _searchText = searchText
     }
 
     var body: some View {
-        List {
+        List { // swiftlint:disable:this closure_body_length
             TipView(searchFiltersTip)
             Section("Target") {
                 Picker("Target", selection: $selectedTarget) {
@@ -97,7 +97,7 @@ private extension SearchListView {
     }
 
     func buildCurrencyRows() -> some View {
-        HStack(spacing: 40) {
+        HStack(spacing: 40) { // swiftlint:disable:this no_magic_numbers
             TextField("Min", text: $minValue)
                 .keyboardType(.numbersAndPunctuation)
             Text("~")

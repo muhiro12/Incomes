@@ -18,6 +18,30 @@ struct ItemFormInputAssistView: View {
         }
     }
 
+    private enum Constants {
+        static let placeholderTopPadding: CGFloat = 10
+        static let placeholderLeadingPadding: CGFloat = 8
+        static let textEditorMinimumHeight: CGFloat = 220
+        static let textEditorPadding: CGFloat = 8
+        static let cardCornerRadius: CGFloat = 12
+        static let cardBorderOpacity = 0.18
+        static let cardBorderLineWidth: CGFloat = 1
+
+        static let rowInsetTop: CGFloat = 8
+        static let rowInsetLeading: CGFloat = 16
+        static let rowInsetBottom: CGFloat = 12
+        static let rowInsetTrailing: CGFloat = 16
+    }
+
+    @MainActor
+    private final class Router: ObservableObject {
+        @Published var importRoute: ImportRoute?
+
+        func navigate(to route: ImportRoute) {
+            importRoute = route
+        }
+    }
+
     @Binding private var date: Date
     @Binding private var content: String
     @Binding private var income: String
@@ -34,72 +58,13 @@ struct ItemFormInputAssistView: View {
 
     @State private var selectedItem: PhotosPickerItem?
 
-    @StateObject private var router: ItemFormInputAssistRouter = .init()
+    @StateObject private var router: Router = .init()
     @StateObject private var scanner: ImageTextScanner = .init()
-
-    init(
-        date: Binding<Date>,
-        content: Binding<String>,
-        income: Binding<String>,
-        outgo: Binding<String>,
-        category: Binding<String>,
-        priority: Binding<String>
-    ) {
-        _date = date
-        _content = content
-        _income = income
-        _outgo = outgo
-        _category = category
-        _priority = priority
-    }
 
     var body: some View {
         Form {
-            Section {
-                ZStack(alignment: .topLeading) {
-                    if text.isEmpty {
-                        Text("Paste or capture text to extract details.")
-                            .foregroundStyle(.secondary)
-                            .padding(.top, 10)
-                            .padding(.leading, 8)
-                    }
-
-                    TextEditor(text: $text)
-                        .scrollContentBackground(.hidden)
-                        .frame(minHeight: 220)
-                        .padding(8)
-                        .background(
-                            RoundedRectangle(cornerRadius: 12, style: .continuous)
-                                .fill(Color(uiColor: .secondarySystemBackground))
-                        )
-                        .accessibilityLabel("Captured text")
-                }
-                .overlay(
-                    RoundedRectangle(cornerRadius: 12, style: .continuous)
-                        .stroke(Color.secondary.opacity(0.18), lineWidth: 1)
-                )
-                .listRowInsets(.init(top: 8, leading: 16, bottom: 12, trailing: 16))
-            } header: {
-                Text("Recognized Text")
-            } footer: {
-                Text("We will extract date, amounts, category, and priority from this text.")
-            }
-
-            Section {
-                PhotosPicker(selection: $selectedItem, matching: .images) {
-                    Label("Photo Library", systemImage: "photo.on.rectangle")
-                }
-                .labelStyle(.titleAndIcon)
-
-                Button {
-                    router.navigate(to: .camera)
-                } label: {
-                    Label("Camera", systemImage: "camera")
-                }
-                .labelStyle(.titleAndIcon)
-            } header: {
-                Text("Import")
-            }
+            recognizedTextSection
+            importSection
         }
         .formStyle(.grouped)
         .navigationTitle("Text Capture")
@@ -166,6 +131,85 @@ struct ItemFormInputAssistView: View {
         }
     }
 
+    init(
+        date: Binding<Date>,
+        content: Binding<String>,
+        income: Binding<String>,
+        outgo: Binding<String>,
+        category: Binding<String>,
+        priority: Binding<String>
+    ) {
+        _date = date
+        _content = content
+        _income = income
+        _outgo = outgo
+        _category = category
+        _priority = priority
+    }
+}
+
+@available(iOS 26.0, *)
+private extension ItemFormInputAssistView {
+    var recognizedTextSection: some View {
+        Section { // swiftlint:disable:this closure_body_length
+            ZStack(alignment: .topLeading) {
+                if text.isEmpty {
+                    Text("Paste or capture text to extract details.")
+                        .foregroundStyle(.secondary)
+                        .padding(.top, Constants.placeholderTopPadding)
+                        .padding(.leading, Constants.placeholderLeadingPadding)
+                }
+
+                TextEditor(text: $text)
+                    .scrollContentBackground(.hidden)
+                    .frame(minHeight: Constants.textEditorMinimumHeight)
+                    .padding(Constants.textEditorPadding)
+                    .background(
+                        RoundedRectangle(cornerRadius: Constants.cardCornerRadius, style: .continuous)
+                            .fill(Color(uiColor: .secondarySystemBackground))
+                    )
+                    .accessibilityLabel("Captured text")
+            }
+            .overlay(
+                RoundedRectangle(cornerRadius: Constants.cardCornerRadius, style: .continuous)
+                    .stroke(
+                        Color.secondary.opacity(Constants.cardBorderOpacity),
+                        lineWidth: Constants.cardBorderLineWidth
+                    )
+            )
+            .listRowInsets(
+                .init(
+                    top: Constants.rowInsetTop,
+                    leading: Constants.rowInsetLeading,
+                    bottom: Constants.rowInsetBottom,
+                    trailing: Constants.rowInsetTrailing
+                )
+            )
+        } header: {
+            Text("Recognized Text")
+        } footer: {
+            Text("We will extract date, amounts, category, and priority from this text.")
+        }
+    }
+
+    var importSection: some View {
+        Section {
+            PhotosPicker(selection: $selectedItem, matching: .images) {
+                Label("Photo Library", systemImage: "photo.on.rectangle")
+            }
+            .labelStyle(.titleAndIcon)
+
+            Button {
+                router.navigate(to: .camera)
+            } label: {
+                Label("Camera", systemImage: "camera")
+            }
+            .labelStyle(.titleAndIcon)
+        } header: {
+            Text("Import")
+        }
+    }
+
     // MARK: - Actions
 
     private func scanReceipt() async {
@@ -227,16 +271,6 @@ struct ItemFormInputAssistView: View {
         } catch {
             errorMessage = error.localizedDescription
         }
-    }
-}
-
-@available(iOS 26.0, *)
-@MainActor
-private final class ItemFormInputAssistRouter: ObservableObject {
-    @Published var importRoute: ItemFormInputAssistView.ImportRoute?
-
-    func navigate(to route: ItemFormInputAssistView.ImportRoute) {
-        importRoute = route
     }
 }
 

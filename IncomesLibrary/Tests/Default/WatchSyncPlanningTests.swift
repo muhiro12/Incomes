@@ -11,7 +11,7 @@ struct WatchSyncPlanningTests {
     }
 
     @Test
-    func pruning_keeps_only_last_current_next_month() throws {
+    func pruning_keeps_only_last_current_next_month() throws { // swiftlint:disable:this function_body_length
         // Base: 2000-09-15
         let base = shiftedDate("2000-09-15T12:00:00Z")
         let july = try #require(
@@ -73,7 +73,7 @@ struct WatchSyncPlanningTests {
                 byAdding: .month,
                 value: offset,
                 to: base
-            )?.stringValueWithoutLocale(.yyyyMM)
+            )?.stringValueWithoutLocale(.yyyyMM) // swiftlint:disable:this multiline_function_chains
         })
 
         // Prune items not in allowed set (simulate watch syncer pruning)

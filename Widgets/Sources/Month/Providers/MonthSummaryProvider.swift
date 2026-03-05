@@ -22,7 +22,7 @@ struct MonthSummaryProvider: AppIntentTimelineProvider {
         let currentDate = Date.now
         let targetDate: Date = resolveTargetDate(from: configuration, now: currentDate)
         var entries: [MonthSummaryEntry] = .init()
-        for hourOffset in 0 ..< 5 where Calendar.current.date(byAdding: .hour, value: hourOffset, to: currentDate) != nil {
+        for hourOffset in 0 ..< 5 where Calendar.current.date(byAdding: .hour, value: hourOffset, to: currentDate) != nil { // swiftlint:disable:this line_length no_magic_numbers
             entries.append(makeEntry(date: targetDate, configuration: configuration))
         }
         return .init(entries: entries, policy: .atEnd)

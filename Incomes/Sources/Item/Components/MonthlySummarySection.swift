@@ -48,7 +48,7 @@ struct MonthlySummarySection: View {
 
     private let date: Date
 
-    init(date: Date) {
+    init(date: Date) { // swiftlint:disable:this type_contents_order
         self.date = date
         _currentItems = .init(.items(.dateIsSameMonthAs(date)))
         _previousItems = .init(
@@ -145,7 +145,7 @@ private extension MonthlySummarySection {
     }
 
     @ViewBuilder private var summaryPopover: some View {
-        VStack(alignment: .leading, spacing: .space(.s)) {
+        VStack(alignment: .leading, spacing: .space(.s)) { // swiftlint:disable:this closure_body_length
             Text("Monthly Summary")
                 .font(.headline)
 
@@ -188,7 +188,7 @@ private extension MonthlySummarySection {
                 .disabled(isGenerating)
             }
         }
-        .frame(minWidth: 280, idealWidth: 320, maxWidth: 360, alignment: .leading)
+        .frame(minWidth: 280, idealWidth: 320, maxWidth: 360, alignment: .leading) // swiftlint:disable:this line_length no_magic_numbers
         .padding()
     }
 
@@ -197,7 +197,7 @@ private extension MonthlySummarySection {
     }
 
     @MainActor
-    func generateSummary(
+    func generateSummary( // swiftlint:disable:this type_contents_order
         presentsErrors: Bool,
         forceRegeneration: Bool
     ) async {
@@ -243,7 +243,7 @@ private extension MonthlySummarySection {
         }
     }
 
-    private func snapshot(for item: Item) -> SummarySourceSnapshot {
+    private func snapshot(for item: Item) -> SummarySourceSnapshot { // swiftlint:disable:this type_contents_order
         .init(
             id: String(describing: item.persistentModelID),
             date: item.utcDate,
@@ -254,12 +254,12 @@ private extension MonthlySummarySection {
         )
     }
 
-    func clearGeneratedSummary() {
+    func clearGeneratedSummary() { // swiftlint:disable:this type_contents_order
         generatedSummary = nil
         errorMessage = nil
     }
 
-    func resolvedErrorMessage(from error: Error) -> String {
+    func resolvedErrorMessage(from error: Error) -> String { // swiftlint:disable:this type_contents_order
         if let localizedError = error as? LocalizedError,
            let description = localizedError.errorDescription {
             return description

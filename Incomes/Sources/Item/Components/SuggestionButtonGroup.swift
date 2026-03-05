@@ -13,7 +13,7 @@ struct SuggestionButtonGroup: View {
 
     @Binding private var input: String
 
-    init(input: Binding<String>, type: TagType) {
+    init(input: Binding<String>, type: TagType) { // swiftlint:disable:this type_contents_order
         _input = input
         _suggestions = Query(
             .tags(.nameContains(input.wrappedValue, type: type))

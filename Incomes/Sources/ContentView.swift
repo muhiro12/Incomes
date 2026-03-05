@@ -87,11 +87,11 @@ extension ContentView: View {
                     await notificationService.update()
                 }
                 if ReviewRequestPolicy.shouldRequestReview(
-                    randomValue: Int.random(in: 0..<10),
-                    maxExclusive: 10
+                    randomValue: Int.random(in: 0..<10), // swiftlint:disable:this no_magic_numbers
+                    maxExclusive: 10 // swiftlint:disable:this no_magic_numbers
                 ) {
                     Task {
-                        try? await Task.sleep(for: .seconds(2))
+                        try? await Task.sleep(for: .seconds(2)) // swiftlint:disable:this no_magic_numbers
                         requestReview()
                     }
                 }

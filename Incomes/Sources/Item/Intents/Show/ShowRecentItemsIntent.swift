@@ -9,7 +9,7 @@ import AppIntents
 import SwiftData
 
 struct ShowRecentItemsIntent: AppIntent {
-    @Dependency private var modelContainer: ModelContainer
+    @Dependency private var modelContainer: ModelContainer // swiftlint:disable:this type_contents_order
 
     static let title: LocalizedStringResource = .init("Show Recent Items", table: "AppIntents")
 

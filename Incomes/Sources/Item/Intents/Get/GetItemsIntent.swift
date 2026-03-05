@@ -10,9 +10,9 @@ import SwiftData
 
 struct GetItemsIntent: AppIntent {
     @Parameter(title: "Date", kind: .date)
-    private var date: Date
+    private var date: Date // swiftlint:disable:this type_contents_order
 
-    @Dependency private var modelContainer: ModelContainer
+    @Dependency private var modelContainer: ModelContainer // swiftlint:disable:this type_contents_order
 
     static let title: LocalizedStringResource = .init("Get Items", table: "AppIntents")
 
@@ -22,7 +22,7 @@ struct GetItemsIntent: AppIntent {
             value: try ItemService.items(
                 context: modelContainer.mainContext,
                 date: date
-            ).compactMap(ItemEntity.init)
+            ).compactMap(ItemEntity.init) // swiftlint:disable:this multiline_function_chains
         )
     }
 }

@@ -19,7 +19,7 @@ struct ItemListSection: View {
 
     private let title: LocalizedStringKey?
 
-    init(_ descriptor: FetchDescriptor<Item>, title: LocalizedStringKey? = nil) {
+    init(_ descriptor: FetchDescriptor<Item>, title: LocalizedStringKey? = nil) { // swiftlint:disable:this line_length type_contents_order
         self._items = Query(descriptor)
         self.title = title
     }

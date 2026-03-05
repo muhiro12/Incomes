@@ -61,7 +61,7 @@ extension IncomesSampleData {
         var items = [Item]()
         var tags = [Tag]()
         while items.isEmpty || tags.isEmpty {
-            try? await Task.sleep(for: .seconds(0.2))
+            try? await Task.sleep(for: .seconds(0.2)) // swiftlint:disable:this no_magic_numbers
             items = (try? context.fetch(.items(.all))) ?? []
             tags = (try? context.fetch(.tags(.all))) ?? []
         }

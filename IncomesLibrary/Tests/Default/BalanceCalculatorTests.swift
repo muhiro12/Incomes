@@ -9,12 +9,12 @@ import Foundation
 @testable import IncomesLibrary
 import Testing
 
-enum BalanceCalculatorTests {
-    struct CalculateTests {
+enum BalanceCalculatorTests { // swiftlint:disable:this type_body_length
+    struct CalculateTests { // swiftlint:disable:this type_body_length
         @Test("Result is as expected when inserting")
         func inserting_is_expected() throws {
             let context = testContext
-            for i in 1...5 {
+            for i in 1...5 { // swiftlint:disable:this identifier_name
                 let item = try Item.create(context: context,
                                            date: shiftedDate("2000-0\(i)-01T12:00:00Z"),
                                            content: "content",
@@ -46,7 +46,7 @@ enum BalanceCalculatorTests {
         @Test("Result is as expected when inserting first")
         func inserting_first_is_expected() throws {
             let context = testContext
-            for i in 1...5 {
+            for i in 1...5 { // swiftlint:disable:this identifier_name
                 let item = try Item.create(context: context,
                                            date: shiftedDate("2000-0\(i)-01T12:00:00Z"),
                                            content: "content",
@@ -78,7 +78,7 @@ enum BalanceCalculatorTests {
         @Test("Result is as expected when inserting last")
         func inserting_last_is_expected() throws {
             let context = testContext
-            for i in 1...5 {
+            for i in 1...5 { // swiftlint:disable:this identifier_name
                 let item = try Item.create(context: context,
                                            date: shiftedDate("2000-0\(i)-01T12:00:00Z"),
                                            content: "content",
@@ -144,7 +144,7 @@ enum BalanceCalculatorTests {
         func updating_is_expected() throws {
             let context = testContext
             var items: [Item] = []
-            for i in 1...5 {
+            for i in 1...5 { // swiftlint:disable:this identifier_name
                 let item = try Item.create(context: context,
                                            date: shiftedDate("2000-0\(i)-01T12:00:00Z"),
                                            content: "content",
@@ -176,7 +176,7 @@ enum BalanceCalculatorTests {
         func updating_first_is_expected() throws {
             let context = testContext
             var items: [Item] = []
-            for i in 1...5 {
+            for i in 1...5 { // swiftlint:disable:this identifier_name
                 let item = try Item.create(context: context,
                                            date: shiftedDate("2000-0\(i)-01T12:00:00Z"),
                                            content: "content",
@@ -208,7 +208,7 @@ enum BalanceCalculatorTests {
         func updating_last_is_expected() throws {
             let context = testContext
             var items: [Item] = []
-            for i in 1...5 {
+            for i in 1...5 { // swiftlint:disable:this identifier_name
                 let item = try Item.create(context: context,
                                            date: shiftedDate("2000-0\(i)-01T12:00:00Z"),
                                            content: "content",
@@ -240,7 +240,7 @@ enum BalanceCalculatorTests {
         func changing_order_is_expected() throws {
             let context = testContext
             var items: [Item] = []
-            for i in 1...5 {
+            for i in 1...5 { // swiftlint:disable:this identifier_name
                 let item = try Item.create(context: context,
                                            date: shiftedDate("2000-0\(i)-01T12:00:00Z"),
                                            content: "content",
@@ -272,7 +272,7 @@ enum BalanceCalculatorTests {
         func deleting_is_expected() throws {
             let context = testContext
             var items: [Item] = []
-            for i in 1...5 {
+            for i in 1...5 { // swiftlint:disable:this identifier_name
                 let item = try Item.create(context: context,
                                            date: shiftedDate("2000-0\(i)-01T12:00:00Z"),
                                            content: "content",
@@ -298,7 +298,7 @@ enum BalanceCalculatorTests {
         func deleting_first_is_expected() throws {
             let context = testContext
             var items: [Item] = []
-            for i in 1...5 {
+            for i in 1...5 { // swiftlint:disable:this identifier_name
                 let item = try Item.create(context: context,
                                            date: shiftedDate("2000-0\(i)-01T12:00:00Z"),
                                            content: "content",
@@ -324,7 +324,7 @@ enum BalanceCalculatorTests {
         func deleting_last_is_expected() throws {
             let context = testContext
             var items: [Item] = []
-            for i in 1...5 {
+            for i in 1...5 { // swiftlint:disable:this identifier_name
                 let item = try Item.create(context: context,
                                            date: shiftedDate("2000-0\(i)-01T12:00:00Z"),
                                            content: "content",

@@ -9,7 +9,7 @@ struct WatchItemListView: View {
         List {
             if allItems.isNotEmpty {
                 ForEach(allItems) { item in
-                    VStack(alignment: .leading, spacing: 2) {
+                    VStack(alignment: .leading, spacing: 2) { // swiftlint:disable:this no_magic_numbers
                         Text(item.content)
                             .frame(maxWidth: .infinity, alignment: .leading)
                         HStack {

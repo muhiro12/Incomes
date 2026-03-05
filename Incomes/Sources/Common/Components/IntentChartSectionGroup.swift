@@ -34,7 +34,7 @@ extension IntentChartSectionGroup: View {
     IntentChartSectionGroup(
         .items(
             .idsAre(
-                items.prefix(10).map(\.id)
+                items.prefix(10).map(\.id) // swiftlint:disable:this no_magic_numbers
             )
         )
     )

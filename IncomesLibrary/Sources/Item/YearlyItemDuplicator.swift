@@ -1,146 +1,6 @@
+// swiftlint:disable file_length
 import Foundation
 import SwiftData
-
-/// Documented for SwiftLint compliance.
-public struct YearlyItemDuplicationOptions {
-    /// Documented for SwiftLint compliance.
-    public let includeSingleItems: Bool
-    /// Documented for SwiftLint compliance.
-    public let minimumRepeatItemCount: Int
-    /// Documented for SwiftLint compliance.
-    public let skipExistingItems: Bool
-
-    /// Documented for SwiftLint compliance.
-    public init(
-        includeSingleItems: Bool = false,
-        minimumRepeatItemCount: Int = 3,
-        skipExistingItems: Bool = true
-    ) {
-        self.includeSingleItems = includeSingleItems
-        self.minimumRepeatItemCount = minimumRepeatItemCount
-        self.skipExistingItems = skipExistingItems
-    }
-}
-
-/// Documented for SwiftLint compliance.
-public struct YearlyItemDuplicationEntry {
-    /// Documented for SwiftLint compliance.
-    public let sourceItem: Item
-    /// Documented for SwiftLint compliance.
-    public let targetDate: Date
-    /// Documented for SwiftLint compliance.
-    public let groupID: UUID
-
-    /// Documented for SwiftLint compliance.
-    public init(sourceItem: Item, targetDate: Date, groupID: UUID) {
-        self.sourceItem = sourceItem
-        self.targetDate = targetDate
-        self.groupID = groupID
-    }
-}
-
-/// Documented for SwiftLint compliance.
-public struct YearlyItemDuplicationGroup {
-    /// Documented for SwiftLint compliance.
-    public let id: UUID
-    /// Documented for SwiftLint compliance.
-    public let content: String
-    /// Documented for SwiftLint compliance.
-    public let category: String
-    /// Documented for SwiftLint compliance.
-    public let averageIncome: Decimal
-    /// Documented for SwiftLint compliance.
-    public let averageOutgo: Decimal
-    /// Documented for SwiftLint compliance.
-    public let entryCount: Int
-    /// Documented for SwiftLint compliance.
-    public let targetDates: [Date]
-
-    /// Documented for SwiftLint compliance.
-    public init(
-        id: UUID,
-        content: String,
-        category: String,
-        averageIncome: Decimal,
-        averageOutgo: Decimal,
-        entryCount: Int,
-        targetDates: [Date]
-    ) {
-        self.id = id
-        self.content = content
-        self.category = category
-        self.averageIncome = averageIncome
-        self.averageOutgo = averageOutgo
-        self.entryCount = entryCount
-        self.targetDates = targetDates
-    }
-}
-
-/// Documented for SwiftLint compliance.
-public struct YearlyItemDuplicationPlan {
-    /// Documented for SwiftLint compliance.
-    public let groups: [YearlyItemDuplicationGroup]
-    /// Documented for SwiftLint compliance.
-    public let entries: [YearlyItemDuplicationEntry]
-    /// Documented for SwiftLint compliance.
-    public let skippedDuplicateCount: Int
-
-    /// Documented for SwiftLint compliance.
-    public init(
-        groups: [YearlyItemDuplicationGroup],
-        entries: [YearlyItemDuplicationEntry],
-        skippedDuplicateCount: Int
-    ) {
-        self.groups = groups
-        self.entries = entries
-        self.skippedDuplicateCount = skippedDuplicateCount
-    }
-}
-
-public struct YearlyItemDuplicationGroupAmount: Hashable {
-    public let income: Decimal
-    public let outgo: Decimal
-
-    public init(income: Decimal, outgo: Decimal) {
-        self.income = income
-        self.outgo = outgo
-    }
-}
-
-/// Documented for SwiftLint compliance.
-public struct YearlyItemDuplicationResult {
-    /// Documented for SwiftLint compliance.
-    public let createdCount: Int
-    /// Documented for SwiftLint compliance.
-    public let skippedDuplicateCount: Int
-
-    /// Documented for SwiftLint compliance.
-    public init(createdCount: Int, skippedDuplicateCount: Int) {
-        self.createdCount = createdCount
-        self.skippedDuplicateCount = skippedDuplicateCount
-    }
-}
-
-/// Documented for SwiftLint compliance.
-public struct YearlyItemDuplicationSuggestion {
-    /// Documented for SwiftLint compliance.
-    public let sourceYear: Int
-    /// Documented for SwiftLint compliance.
-    public let targetYear: Int
-    /// Documented for SwiftLint compliance.
-    public let plan: YearlyItemDuplicationPlan
-
-    /// Documented for SwiftLint compliance.
-    public init(
-        sourceYear: Int,
-        targetYear: Int,
-        plan: YearlyItemDuplicationPlan
-    ) {
-        self.sourceYear = sourceYear
-        self.targetYear = targetYear
-        self.plan = plan
-    }
-}
 
 /// Documented for SwiftLint compliance.
 public enum YearlyItemDuplicator {
@@ -233,7 +93,7 @@ public enum YearlyItemDuplicator {
     }
 
     /// Documented for SwiftLint compliance.
-    public static func plan(
+    public static func plan( // swiftlint:disable:this function_body_length
         context: ModelContext,
         sourceYear: Int,
         targetYear: Int,
@@ -415,7 +275,7 @@ private extension YearlyItemDuplicator {
         let category: String
     }
 
-    static func yearValue(from tag: Tag) -> Int? {
+    static func yearValue(from tag: Tag) -> Int? { // swiftlint:disable:this type_contents_order
         if let integerValue = Int(tag.name) {
             return integerValue
         }
@@ -425,11 +285,11 @@ private extension YearlyItemDuplicator {
         return Calendar.current.component(.year, from: date)
     }
 
-    static func duplicationKey(for item: Item) -> DuplicationKey {
+    static func duplicationKey(for item: Item) -> DuplicationKey { // swiftlint:disable:this type_contents_order
         duplicationKey(targetDate: item.localDate, item: item)
     }
 
-    static func duplicationKey(targetDate: Date, item: Item) -> DuplicationKey {
+    static func duplicationKey(targetDate: Date, item: Item) -> DuplicationKey { // swiftlint:disable:this line_length type_contents_order
         let categoryName = item.category?.name ?? .empty
         let normalizedDate = Calendar.current.startOfDay(for: targetDate)
         return .init(
@@ -441,7 +301,7 @@ private extension YearlyItemDuplicator {
         )
     }
 
-    static func fallbackGroupingKey(for item: Item) -> FallbackGroupingKey {
+    static func fallbackGroupingKey(for item: Item) -> FallbackGroupingKey { // swiftlint:disable:this line_length type_contents_order
         let categoryName = item.category?.name ?? .empty
         return .init(
             content: item.content,
@@ -449,7 +309,7 @@ private extension YearlyItemDuplicator {
         )
     }
 
-    static func shouldIncludeGroup(
+    static func shouldIncludeGroup( // swiftlint:disable:this type_contents_order
         items: [Item],
         includeSingleItems: Bool,
         minimumRepeatItemCount: Int
@@ -463,7 +323,7 @@ private extension YearlyItemDuplicator {
         return false
     }
 
-    static func yearStartDate(year: Int) throws -> Date {
+    static func yearStartDate(year: Int) throws -> Date { // swiftlint:disable:this type_contents_order
         let components = DateComponents(year: year, month: 1, day: 1)
         guard let date = Calendar.current.date(from: components) else {
             throw YearlyItemDuplicationError.invalidYear(year)
@@ -471,7 +331,7 @@ private extension YearlyItemDuplicator {
         return date
     }
 
-    static func shiftDate(_ date: Date, yearShift: Int) -> Date? {
+    static func shiftDate(_ date: Date, yearShift: Int) -> Date? { // swiftlint:disable:this type_contents_order
         let startOfDay = Calendar.current.startOfDay(for: date)
         return Calendar.current.date(
             byAdding: .year,
@@ -559,7 +419,4 @@ private extension YearlyItemDuplicator {
         return total / count
     }
 }
-
-public enum YearlyItemDuplicationError: Error {
-    case invalidYear(Int)
-}
+// swiftlint:enable file_length

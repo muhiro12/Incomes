@@ -3,7 +3,7 @@ import Foundation
 import SwiftData
 import Testing
 
-struct MainNavigationRouteExecutorTests {
+struct MainNavigationRouteExecutorTests { // swiftlint:disable:this type_body_length
     let context: ModelContext
 
     init() {

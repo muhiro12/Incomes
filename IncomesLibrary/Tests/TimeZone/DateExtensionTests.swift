@@ -10,8 +10,8 @@ import Foundation
 import Testing
 
 @Suite(.serialized)
-struct DateExtensionTests {
-    init() {
+struct DateExtensionTests { // swiftlint:disable:this type_body_length
+    init() { // swiftlint:disable:this type_contents_order
         TimeZone.ReferenceType.default = .current
     }
 

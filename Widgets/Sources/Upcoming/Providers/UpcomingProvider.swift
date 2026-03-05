@@ -23,13 +23,13 @@ struct UpcomingProvider: AppIntentTimelineProvider {
     func timeline(for configuration: UpcomingConfigurationAppIntent, in _: Context) -> Timeline<UpcomingEntry> {
         let currentDate = Date.now
         var entries: [UpcomingEntry] = .init()
-        for hourOffset in 0 ..< 5 where Calendar.current.date(byAdding: .hour, value: hourOffset, to: currentDate) != nil {
+        for hourOffset in 0 ..< 5 where Calendar.current.date(byAdding: .hour, value: hourOffset, to: currentDate) != nil { // swiftlint:disable:this line_length no_magic_numbers
             entries.append(makeEntry(now: currentDate, configuration: configuration))
         }
         return .init(entries: entries, policy: .atEnd)
     }
 
-    private func makeEntry(now: Date, configuration: UpcomingConfigurationAppIntent) -> UpcomingEntry {
+    private func makeEntry(now: Date, configuration: UpcomingConfigurationAppIntent) -> UpcomingEntry { // swiftlint:disable:this function_body_length line_length
         do {
             let context = try ModelContainerFactory.sharedContext()
 

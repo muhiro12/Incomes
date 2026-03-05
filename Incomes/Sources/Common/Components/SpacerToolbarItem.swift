@@ -10,7 +10,7 @@ import SwiftUI
 struct SpacerToolbarItem: ToolbarContent {
     private let placement: ToolbarItemPlacement
 
-    init(placement: ToolbarItemPlacement = .automatic) {
+    init(placement: ToolbarItemPlacement = .automatic) { // swiftlint:disable:this type_contents_order
         self.placement = placement
     }
 

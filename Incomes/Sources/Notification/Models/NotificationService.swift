@@ -119,7 +119,7 @@ final class NotificationService: NSObject {
             plans: [plan],
             settings: settings,
             now: .now
-        ).first?.previewPresentation() else {
+        ).first?.previewPresentation() else { // swiftlint:disable:this multiline_function_chains
             return
         }
 
@@ -134,7 +134,7 @@ final class NotificationService: NSObject {
 
 extension NotificationService: UNUserNotificationCenterDelegate {
     func userNotificationCenter(_: UNUserNotificationCenter,
-                                willPresent _: UNNotification) async -> UNNotificationPresentationOptions { // swiftlint:disable:this async_without_await
+                                willPresent _: UNNotification) async -> UNNotificationPresentationOptions { // swiftlint:disable:this async_without_await line_length
         Task {
             hasNotification = true
         }
@@ -142,7 +142,7 @@ extension NotificationService: UNUserNotificationCenterDelegate {
     }
 
     func userNotificationCenter(_: UNUserNotificationCenter,
-                                didReceive response: UNNotificationResponse) async { // swiftlint:disable:this async_without_await
+                                didReceive response: UNNotificationResponse) async { // swiftlint:disable:this async_without_await line_length
         Task {
             shouldShowNotification = true
             pendingDeepLinkURL = extractDeepLinkURL(from: response)
@@ -266,7 +266,7 @@ private extension NotificationService {
             context: modelContainer.mainContext,
             settings: settings,
             now: .now,
-            limit: 20
+            limit: 20 // swiftlint:disable:this no_magic_numbers
         ) else {
             return .empty
         }
@@ -312,13 +312,13 @@ private extension NotificationService {
     }
 
     func pendingNotificationIdentifiers() async -> [String] {
-        await UNUserNotificationCenter.current().pendingNotificationRequests()
+        await UNUserNotificationCenter.current().pendingNotificationRequests() // swiftlint:disable:this line_length multiline_function_chains
             .map(\.identifier)
             .filter(isManagedNotificationIdentifier)
     }
 
     func deliveredNotificationIdentifiers() async -> [String] {
-        await UNUserNotificationCenter.current().deliveredNotifications()
+        await UNUserNotificationCenter.current().deliveredNotifications() // swiftlint:disable:this line_length multiline_function_chains
             .map(\.request.identifier)
             .filter(isManagedNotificationIdentifier)
     }

@@ -55,7 +55,7 @@ private extension IncomesRouteParser {
         }
     }
 
-    static func route(
+    static func route( // swiftlint:disable:this cyclomatic_complexity function_body_length
         from pathSegments: [String],
         queryItems: [URLQueryItem]
     ) -> IncomesRoute? {
@@ -72,7 +72,7 @@ private extension IncomesRouteParser {
         case "home":
             return .home
         case "settings":
-            guard normalizedSegments.count >= 2 else {
+            guard normalizedSegments.count >= 2 else { // swiftlint:disable:this no_magic_numbers
                 return .settings
             }
             let settingsDestination = normalizedSegments[1].lowercased()
@@ -87,7 +87,7 @@ private extension IncomesRouteParser {
                 return nil
             }
         case "year-summary":
-            guard normalizedSegments.count >= 2,
+            guard normalizedSegments.count >= 2, // swiftlint:disable:this no_magic_numbers
                   let year = parseYear(from: normalizedSegments[1]) else {
                 return nil
             }
@@ -97,7 +97,7 @@ private extension IncomesRouteParser {
         case "duplicate-tags":
             return .duplicateTags
         case "year":
-            guard normalizedSegments.count >= 2,
+            guard normalizedSegments.count >= 2, // swiftlint:disable:this no_magic_numbers
                   let year = parseYear(from: normalizedSegments[1]) else {
                 return nil
             }
@@ -128,7 +128,7 @@ private extension IncomesRouteParser {
             return nil
         }
 
-        if monthSegments.count >= 2 {
+        if monthSegments.count >= 2 { // swiftlint:disable:this no_magic_numbers
             guard let year = parseYear(from: firstSegment),
                   let month = parseMonth(from: monthSegments[1]) else {
                 return nil
@@ -137,12 +137,12 @@ private extension IncomesRouteParser {
         }
 
         let compactValue = firstSegment.replacingOccurrences(of: "-", with: "")
-        guard compactValue.count == 6,
+        guard compactValue.count == 6, // swiftlint:disable:this no_magic_numbers
               let year = parseYear(
-                from: String(compactValue.prefix(4))
+                from: String(compactValue.prefix(4)) // swiftlint:disable:this no_magic_numbers
               ),
               let month = parseMonth(
-                from: String(compactValue.suffix(2))
+                from: String(compactValue.suffix(2)) // swiftlint:disable:this no_magic_numbers
               ) else {
             return nil
         }
@@ -168,9 +168,9 @@ private extension IncomesRouteParser {
     }
 
     static func parseYear(from value: String) -> Int? {
-        guard value.count == 4,
+        guard value.count == 4, // swiftlint:disable:this no_magic_numbers
               let year = Int(value),
-              1...9_999 ~= year else {
+              1...9_999 ~= year else { // swiftlint:disable:this no_magic_numbers
             return nil
         }
         return year
@@ -178,7 +178,7 @@ private extension IncomesRouteParser {
 
     static func parseMonth(from value: String) -> Int? {
         guard let month = Int(value),
-              1...12 ~= month else {
+              1...12 ~= month else { // swiftlint:disable:this no_magic_numbers
             return nil
         }
         return month

@@ -13,14 +13,14 @@ struct ItemFormDraft: Identifiable, Hashable {
     let isRepeatEnabled: Bool
 
     init(
-        id: UUID = UUID(),
+        id: UUID = UUID(), // swiftlint:disable:this function_default_parameter_at_end
         groupID: UUID,
         date: Date,
         content: String,
         incomeText: String,
         outgoText: String,
         category: String,
-        priorityText: String = "0",
+        priorityText: String = "0", // swiftlint:disable:this function_default_parameter_at_end
         repeatMonthSelections: Set<RepeatMonthSelection>
     ) {
         self.id = id

@@ -59,7 +59,7 @@ struct SettingsListView {
 
 extension SettingsListView: View {
     var body: some View {
-        List {
+        List { // swiftlint:disable:this closure_body_length
             if isSubscribeOn {
                 Toggle(isOn: $isICloudOn) {
                     Text("iCloud On")
@@ -84,7 +84,7 @@ extension SettingsListView: View {
                     Text("Currency Code")
                 }
             }
-            Section("Push notification settings") {
+            Section("Push notification settings") { // swiftlint:disable:this closure_body_length
                 Toggle("Enable push notifications", isOn: $notificationSettings.isEnabled)
                 if isNotificationEnabled {
                     HStack {
@@ -97,10 +97,10 @@ extension SettingsListView: View {
                         )
                         .keyboardType(.numberPad)
                         .multilineTextAlignment(.trailing)
-                        .frame(maxWidth: 120)
+                        .frame(maxWidth: 120) // swiftlint:disable:this no_magic_numbers
                     }
                     Picker("Notify days before", selection: $notificationSettings.daysBeforeDueDate) {
-                        ForEach(0..<15) { dayOffset in
+                        ForEach(0..<15) { dayOffset in // swiftlint:disable:this no_magic_numbers
                             Text("\(dayOffset) days")
                         }
                     }

@@ -12,6 +12,12 @@ import FoundationModels
 @available(iOS 26.0, *)
 @Generable
 public struct ItemFormInference: AppEntity {
+    public static var typeDisplayRepresentation: TypeDisplayRepresentation {
+        .init(name: "Item Form Inference")
+    }
+
+    public static let defaultQuery = ItemFormInferenceQuery()
+
     @Guide(description: "Date formatted as yyyyMMdd")
     public var date: String
     @Guide(description: "Item content")
@@ -23,25 +29,9 @@ public struct ItemFormInference: AppEntity {
     @Guide(description: "Category name")
     public var category: String
 
-    public static var typeDisplayRepresentation: TypeDisplayRepresentation {
-        .init(name: "Item Form Inference")
-    }
-
-    public static let defaultQuery = ItemFormInferenceQuery()
-
     public var id: String { "\(date)-\(content)-\(category)" }
 
     public var displayRepresentation: DisplayRepresentation {
         .init(title: "\(content)", subtitle: "\(date)")
     }
-}
-
-@available(iOS 26.0, *)
-public struct ItemFormInferenceQuery: EntityStringQuery {
-    public init() {
-        // no-op
-    }
-    public func entities(for _: [String]) -> [ItemFormInference] { [] }
-    public func entities(matching _: String) -> [ItemFormInference] { [] }
-    public func suggestedEntities() -> [ItemFormInference] { [] }
 }

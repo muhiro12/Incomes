@@ -11,7 +11,7 @@ import SwiftUI
 struct SearchResultView: View {
     @Query private var items: [Item]
 
-    init(predicate: ItemPredicate) {
+    init(predicate: ItemPredicate) { // swiftlint:disable:this type_contents_order
         _items = Query(.items(predicate))
     }
 

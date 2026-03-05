@@ -18,7 +18,7 @@ struct TitleListItem: View {
                 .font(.headline)
                 .singleLine()
             Spacer()
-            Image(systemName: "chevron.up")
+            Image(systemName: "chevron.up") // swiftlint:disable:this accessibility_label_for_image
                 .foregroundStyle(item.netIncome.isPlus ? .accent : .clear)
         }
     }

@@ -31,8 +31,8 @@ struct DatabaseMigratorTests {
         }
 
         #expect(fileManager.createFile(atPath: legacyURL.path, contents: Data()))
-        #expect(fileManager.createFile(atPath: legacyDirectory.appendingPathComponent("\(Database.fileName)-shm").path, contents: Data()))
-        #expect(fileManager.createFile(atPath: legacyDirectory.appendingPathComponent("\(Database.fileName)-wal").path, contents: Data()))
+        #expect(fileManager.createFile(atPath: legacyDirectory.appendingPathComponent("\(Database.fileName)-shm").path, contents: Data())) // swiftlint:disable:this line_length
+        #expect(fileManager.createFile(atPath: legacyDirectory.appendingPathComponent("\(Database.fileName)-wal").path, contents: Data())) // swiftlint:disable:this line_length
 
         DatabaseMigrator.migrateSQLiteFilesIfNeeded(
             fileManager: fileManager,
@@ -41,8 +41,8 @@ struct DatabaseMigratorTests {
         )
 
         #expect(fileManager.fileExists(atPath: currentURL.path))
-        #expect(fileManager.fileExists(atPath: currentDirectory.appendingPathComponent("\(Database.fileName)-shm").path))
-        #expect(fileManager.fileExists(atPath: currentDirectory.appendingPathComponent("\(Database.fileName)-wal").path))
+        #expect(fileManager.fileExists(atPath: currentDirectory.appendingPathComponent("\(Database.fileName)-shm").path)) // swiftlint:disable:this line_length
+        #expect(fileManager.fileExists(atPath: currentDirectory.appendingPathComponent("\(Database.fileName)-wal").path)) // swiftlint:disable:this line_length
     }
 
     @Test

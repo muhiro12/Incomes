@@ -17,24 +17,21 @@ var testContext: ModelContext {
     }
 }
 
-// swiftlint:disable:next prefixed_toplevel_constant
-@MainActor let isoDate: (String) -> Date = { string in
+@MainActor let isoDate: (String) -> Date = { string in // swiftlint:disable:this prefixed_toplevel_constant
     guard let date = ISO8601DateFormatter().date(from: string) else {
         preconditionFailure("Invalid ISO8601 date string: \(string)")
     }
     return date
 }
 
-// swiftlint:disable:next prefixed_toplevel_constant
-@MainActor let shiftedDate: (String) -> Date = { string in
+@MainActor let shiftedDate: (String) -> Date = { string in // swiftlint:disable:this prefixed_toplevel_constant
     Calendar.current.shiftedDate(
         componentsFrom: isoDate(string),
         in: .utc
     )
 }
 
-// swiftlint:disable:next prefixed_toplevel_constant
-let timeZones: [TimeZone] = [
+let timeZones: [TimeZone] = [ // swiftlint:disable:this prefixed_toplevel_constant
     timeZone(identifier: "Asia/Tokyo"),
     timeZone(identifier: "Europe/London"),
     timeZone(identifier: "America/New_York"),

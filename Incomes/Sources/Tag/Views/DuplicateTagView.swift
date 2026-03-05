@@ -8,12 +8,12 @@ struct DuplicateTagView: View {
     @State private var isDeleteDialogPresented = false
     @State private var selectedTag: Tag?
 
-    init(_ tag: Tag) {
+    init(_ tag: Tag) { // swiftlint:disable:this type_contents_order
         _tags = Query(.tags(.isSameWith(tag)))
     }
 
     var body: some View {
-        ScrollView(.horizontal) {
+        ScrollView(.horizontal) { // swiftlint:disable:this closure_body_length
             LazyHStack(spacing: .zero) {
                 ForEach(tags) { tag in
                     List {
@@ -32,7 +32,7 @@ struct DuplicateTagView: View {
                                     Label {
                                         Text("Delete")
                                     } icon: {
-                                        Image(systemName: "trash")
+                                        Image(systemName: "trash") // swiftlint:disable:this accessibility_label_for_image line_length
                                     }
                                 }
                                 .font(.caption)

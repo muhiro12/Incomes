@@ -5,21 +5,21 @@ import SwiftUI
 
 struct CreateScheduledItemIntent: AppIntent {
     @Parameter(title: "Date", kind: .date)
-    private var date: Date
+    private var date: Date // swiftlint:disable:this type_contents_order
     @Parameter(title: "Content")
-    private var content: String
+    private var content: String // swiftlint:disable:this type_contents_order
     @Parameter(title: "Income")
-    private var income: IntentCurrencyAmount
+    private var income: IntentCurrencyAmount // swiftlint:disable:this type_contents_order
     @Parameter(title: "Outgo")
-    private var outgo: IntentCurrencyAmount
+    private var outgo: IntentCurrencyAmount // swiftlint:disable:this type_contents_order
     @Parameter(title: "Category")
-    private var category: String
-    @Parameter(title: "Priority", default: 0, inclusiveRange: (0, 10))
-    private var priority: Int
+    private var category: String // swiftlint:disable:this type_contents_order
+    @Parameter(title: "Priority", default: 0, inclusiveRange: (0, 10)) // swiftlint:disable:this no_magic_numbers
+    private var priority: Int // swiftlint:disable:this type_contents_order
     @Parameter(title: "Repeat Months", default: "")
-    private var repeatMonths: String
+    private var repeatMonths: String // swiftlint:disable:this type_contents_order
 
-    @Dependency private var modelContainer: ModelContainer
+    @Dependency private var modelContainer: ModelContainer // swiftlint:disable:this type_contents_order
 
     static let title: LocalizedStringResource = .init("Create Scheduled Item", table: "AppIntents")
     static let isDiscoverable = false
@@ -77,11 +77,11 @@ private extension CreateScheduledItemIntent {
 
         for token in tokens {
             let compactValue = token.replacingOccurrences(of: "-", with: "")
-            guard compactValue.count == 6,
-                  let year = Int(compactValue.prefix(4)),
-                  let month = Int(compactValue.suffix(2)),
-                  (1...9_999).contains(year),
-                  (1...12).contains(month) else {
+            guard compactValue.count == 6, // swiftlint:disable:this no_magic_numbers
+                  let year = Int(compactValue.prefix(4)), // swiftlint:disable:this no_magic_numbers
+                  let month = Int(compactValue.suffix(2)), // swiftlint:disable:this no_magic_numbers
+                  (1...9_999).contains(year), // swiftlint:disable:this no_magic_numbers
+                  (1...12).contains(month) else { // swiftlint:disable:this no_magic_numbers
                 throw ItemError.invalidRepeatMonthSelections
             }
             selections.insert(.init(year: year, month: month))

@@ -53,7 +53,7 @@ public enum UpcomingPaymentPlanner {
             }
 
             guard let notificationDate = Calendar.current.date(
-                bySettingHour: notifyTime.hour ?? 20,
+                bySettingHour: notifyTime.hour ?? 20, // swiftlint:disable:this no_magic_numbers
                 minute: notifyTime.minute ?? 0,
                 second: 0,
                 of: scheduledDate

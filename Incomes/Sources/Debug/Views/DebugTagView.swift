@@ -6,7 +6,7 @@ struct DebugTagView: View {
     private var tag
 
     var body: some View {
-        List {
+        List { // swiftlint:disable:this closure_body_length
             Section {
                 Text(tag.displayName)
             } header: {

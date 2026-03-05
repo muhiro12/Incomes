@@ -9,7 +9,7 @@ struct WatchTagListView: View {
         List {
             if allTags.isNotEmpty {
                 ForEach(allTags) { tag in
-                    VStack(alignment: .leading, spacing: 2) {
+                    VStack(alignment: .leading, spacing: 2) { // swiftlint:disable:this no_magic_numbers
                         Text(tag.displayName)
                             .frame(maxWidth: .infinity, alignment: .leading)
                         HStack {

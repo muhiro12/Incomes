@@ -10,15 +10,11 @@ import SwiftData
 import SwiftUI
 
 struct BalanceChartSection: View {
-    @Query private var items: [Item]
+    @Query private var items: [Item] // swiftlint:disable:this type_contents_order
 
-    @StateObject private var router: BalanceChartRouter = .init()
+    @StateObject private var router: Router = .init() // swiftlint:disable:this type_contents_order
 
-    init(_ descriptor: FetchDescriptor<Item>) {
-        _items = Query(descriptor)
-    }
-
-    var body: some View {
+    var body: some View { // swiftlint:disable:this type_contents_order
         Section {
             Button {
                 router.navigate(to: .detail)
@@ -47,31 +43,52 @@ struct BalanceChartSection: View {
             Text("Balance")
         }
     }
-}
 
-@MainActor
-private final class BalanceChartRouter: ObservableObject {
-    @Published var route: BalanceChartRoute?
-
-    func navigate(to route: BalanceChartRoute) {
-        self.route = route
+    init(_ descriptor: FetchDescriptor<Item>) { // swiftlint:disable:this type_contents_order
+        _items = Query(descriptor)
     }
-}
 
-private enum BalanceChartRoute: String, Identifiable {
-    case detail
+    @MainActor
+    private final class Router: ObservableObject {
+        @Published var route: Route?
 
-    var id: String {
-        rawValue
+        func navigate(to route: Route) {
+            self.route = route
+        }
+    }
+
+    private enum Route: String, Identifiable {
+        case detail
+
+        var id: String {
+            rawValue
+        }
     }
 }
 
 private extension BalanceChartSection {
+    private enum Constants {
+        static let zeroRuleYValue: Double = .zero
+        static let zeroRuleOpacity = 0.25
+        static let zeroRuleLineWidth: CGFloat = 1
+        static let zeroRuleDashLength: CGFloat = 4
+        static let areaMarkOpacity = 0.2
+        static let lineMarkWidth: CGFloat = 2
+        static let xAxisMonthStride = 3
+        static let axisGridOpacity = 0.2
+        static let axisTickOpacity = 0.4
+    }
+
     func chart() -> some View {
         Chart {
-            RuleMark(y: .value("Zero", 0))
-                .foregroundStyle(.secondary.opacity(0.25))
-                .lineStyle(.init(lineWidth: 1, dash: [4]))
+            RuleMark(y: .value("Zero", Constants.zeroRuleYValue))
+                .foregroundStyle(.secondary.opacity(Constants.zeroRuleOpacity))
+                .lineStyle(
+                    .init(
+                        lineWidth: Constants.zeroRuleLineWidth,
+                        dash: [Constants.zeroRuleDashLength]
+                    )
+                )
 
             ForEach(items) { item in
                 AreaMark(
@@ -81,31 +98,31 @@ private extension BalanceChartSection {
                 )
                 .foregroundStyle(.tint)
                 .interpolationMethod(.catmullRom)
-                .opacity(0.2)
+                .opacity(Constants.areaMarkOpacity)
                 LineMark(
                     x: .value("Date", date(of: item)),
                     y: .value("Amount", balance(of: item))
                 )
                 .foregroundStyle(.tint)
                 .interpolationMethod(.catmullRom)
-                .lineStyle(.init(lineWidth: 2))
+                .lineStyle(.init(lineWidth: Constants.lineMarkWidth))
             }
         }
         .chartXAxis {
-            AxisMarks(values: .stride(by: .month, count: 3)) { _ in
+            AxisMarks(values: .stride(by: .month, count: Constants.xAxisMonthStride)) { _ in
                 AxisGridLine()
-                    .foregroundStyle(.secondary.opacity(0.2))
+                    .foregroundStyle(.secondary.opacity(Constants.axisGridOpacity))
                 AxisTick()
-                    .foregroundStyle(.secondary.opacity(0.4))
+                    .foregroundStyle(.secondary.opacity(Constants.axisTickOpacity))
                 AxisValueLabel()
             }
         }
         .chartYAxis {
             AxisMarks(position: .trailing) { _ in
                 AxisGridLine()
-                    .foregroundStyle(.secondary.opacity(0.2))
+                    .foregroundStyle(.secondary.opacity(Constants.axisGridOpacity))
                 AxisTick()
-                    .foregroundStyle(.secondary.opacity(0.4))
+                    .foregroundStyle(.secondary.opacity(Constants.axisTickOpacity))
                 AxisValueLabel()
             }
         }

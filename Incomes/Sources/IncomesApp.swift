@@ -29,7 +29,7 @@ struct IncomesApp: App {
     private let sharedGoogleMobileAdsController: GoogleMobileAdsController
 
     @MainActor
-    init() {
+    init() { // swiftlint:disable:this function_body_length type_contents_order
         DatabaseMigrator.migrateSQLiteFilesIfNeeded()
         let isICloudEnabled = UserDefaults.standard.bool(
             forKey: BoolAppStorageKey.isICloudOn.rawValue

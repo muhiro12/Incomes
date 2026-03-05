@@ -23,13 +23,13 @@ struct YearlyDuplicationPromoSection: View {
     @State private var yearlyDuplicationTargetYear: Int?
 
     var body: some View {
-        Group {
+        Group { // swiftlint:disable:this closure_body_length
             if showYearlyDuplicationPromo,
                let proposal = yearlyDuplicationProposal,
                let sourceYear = yearlyDuplicationSourceYear,
                let targetYear = yearlyDuplicationTargetYear {
-                Section {
-                    VStack(alignment: .leading, spacing: 8) {
+                Section { // swiftlint:disable:this closure_body_length
+                    VStack(alignment: .leading, spacing: 8) { // swiftlint:disable:this no_magic_numbers
                         Text("Duplicate Year")
                             .font(.headline)
                         Text(String(localized: "Year: \(sourceYear) -> \(targetYear)"))
@@ -61,7 +61,7 @@ struct YearlyDuplicationPromoSection: View {
                         }
                         .buttonStyle(.bordered)
                     }
-                    .padding(.vertical, 4)
+                    .padding(.vertical, 4) // swiftlint:disable:this no_magic_numbers
                 } header: {
                     HStack {
                         Text("Yearly duplication")

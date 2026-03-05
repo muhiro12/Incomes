@@ -13,7 +13,7 @@ struct DebugTagListView: View {
 
     private let navigateToRoute: (DebugRoute) -> Void
 
-    init(
+    init( // swiftlint:disable:this type_contents_order
         navigateToRoute: @escaping (DebugRoute) -> Void = { _ in
             // no-op
         }

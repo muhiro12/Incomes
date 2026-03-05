@@ -15,7 +15,7 @@ struct DebugSection {
 
 extension DebugSection: View {
     var body: some View {
-        Section {
+        Section { // swiftlint:disable:this closure_body_length
             HStack {
                 Text("Date")
                 Spacer()

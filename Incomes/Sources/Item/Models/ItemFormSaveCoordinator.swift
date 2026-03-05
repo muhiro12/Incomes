@@ -7,16 +7,6 @@
 
 import SwiftData
 
-enum ItemFormSaveMode {
-    case create
-    case edit
-}
-
-enum ItemFormSaveOutcome {
-    case requiresScopeSelection
-    case didSave
-}
-
 enum ItemFormSaveCoordinator {
     static func save(
         mode: ItemFormSaveMode,

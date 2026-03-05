@@ -10,20 +10,19 @@ import SwiftUI
 
 struct ListItem: View {
     @Environment(Item.self)
-    private var item
+    private var item // swiftlint:disable:this type_contents_order
     @Environment(\.modelContext)
-    private var context
+    private var context // swiftlint:disable:this type_contents_order
     @Environment(\.horizontalSizeClass)
-    private var horizontalSizeClass
+    private var horizontalSizeClass // swiftlint:disable:this type_contents_order
     @Environment(IncomesTipController.self)
-    private var tipController
+    private var tipController // swiftlint:disable:this type_contents_order
 
-    @State private var detents = PresentationDetent.medium
-    @StateObject private var router: ListItemRouter = .init()
+    @State private var detents = PresentationDetent.medium // swiftlint:disable:this type_contents_order
+    @State private var isDeletePresented = false // swiftlint:disable:this type_contents_order
+    @StateObject private var router: Router = .init() // swiftlint:disable:this type_contents_order
 
-    @State private var isDeletePresented = false
-
-    var body: some View {
+    var body: some View { // swiftlint:disable:this type_contents_order
         Button {
             detents = .medium
             tipController.donateDidOpenItemDetail()
@@ -88,20 +87,30 @@ struct ListItem: View {
             Text("Are you sure you want to delete this item?")
         }
     }
-}
 
-@MainActor
-private final class ListItemRouter: ObservableObject {
-    @Published var route: ListItemRoute?
+    @MainActor
+    private final class Router: ObservableObject {
+        @Published var route: Route?
 
-    func navigate(to route: ListItemRoute) {
-        self.route = route
+        func navigate(to route: Route) {
+            self.route = route
+        }
+    }
+
+    private enum Route: String, Identifiable {
+        case detail
+        case edit
+        case duplicate
+
+        var id: String {
+            rawValue
+        }
     }
 }
 
 private extension ListItem {
     @ViewBuilder
-    func buildSheet(for route: ListItemRoute) -> some View {
+    private func buildSheet(for route: Route) -> some View {
         switch route {
         case .detail:
             ItemNavigationView()
@@ -114,16 +123,6 @@ private extension ListItem {
         case .duplicate:
             ItemFormNavigationView(mode: .create)
         }
-    }
-}
-
-private enum ListItemRoute: String, Identifiable {
-    case detail
-    case edit
-    case duplicate
-
-    var id: String {
-        rawValue
     }
 }
 

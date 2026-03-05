@@ -15,7 +15,7 @@ public protocol AppStorageCodable: Codable, Equatable, RawRepresentable where Ra
 
 public extension AppStorageCodable {
     /// Documented for SwiftLint compliance.
-    init?(rawValue: RawValue) {
+    init?(rawValue: RawValue) { // swiftlint:disable:this type_contents_order
         guard let data = rawValue.data(using: .utf8),
               let value = try? JSONDecoder().decode(Self.self, from: data) else {
             return nil

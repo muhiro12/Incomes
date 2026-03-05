@@ -17,7 +17,7 @@ enum WatchDataSyncer {
                 byAdding: .month,
                 value: offset,
                 to: baseDate
-            )?.stringValueWithoutLocale(.yyyyMM)
+            )?.stringValueWithoutLocale(.yyyyMM) // swiftlint:disable:this multiline_function_chains
         })
 
         let items = await PhoneSyncClient.shared.requestRecentItems()

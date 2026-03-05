@@ -11,7 +11,7 @@ struct TagItemFilteringTests {
     }
 
     @Test
-    func items_filters_by_year_string_and_sorts() throws {
+    func items_filters_by_year_string_and_sorts() throws { // swiftlint:disable:this function_body_length
         let firstDate = shiftedDate("2001-01-01T00:00:00Z")
         let secondDate = shiftedDate("2001-03-01T00:00:00Z")
         let thirdDate = shiftedDate("2002-01-01T00:00:00Z")
@@ -227,7 +227,7 @@ struct TagItemFilteringTests {
             let itemYears = match.items.orEmpty.map { item in
                 item.year?.name ?? "nil"
             }
-            print("  match[\(index)] id=\(match.persistentModelID) items=\(match.items.orEmpty.count) years=\(itemYears)")
+            print("  match[\(index)] id=\(match.persistentModelID) items=\(match.items.orEmpty.count) years=\(itemYears)") // swiftlint:disable:this line_length
         }
         let filtered = TagService.items(for: tag, yearString: yearString)
         let filteredYears = filtered.map { item in

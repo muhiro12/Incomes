@@ -13,7 +13,7 @@ public enum ItemPredicate {
     /// Documented for SwiftLint compliance.
     case all
     /// Documented for SwiftLint compliance.
-    case none
+    case none // swiftlint:disable:this discouraged_none_name
     // MARK: ID
     /// Documented for SwiftLint compliance.
     case idIs(PersistentIdentifier)

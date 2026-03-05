@@ -52,7 +52,7 @@ enum YearlyDuplicationCoordinator {
             context: context,
             yearTags: yearTags,
             targetYears: targetYears,
-            minimumGroupCount: 3
+            minimumGroupCount: 3 // swiftlint:disable:this no_magic_numbers
         )
         let suggestedSourceYear = suggestion?.sourceYear ?? defaultSourceYear
         let suggestedTargetYear = suggestion?.targetYear ?? defaultTargetYear
@@ -98,7 +98,7 @@ enum YearlyDuplicationCoordinator {
             for: group,
             in: plan
         )
-        guard let baseDate = entries.map(\.targetDate).sorted().first else {
+        guard let baseDate = entries.map(\.targetDate).sorted().first else { // swiftlint:disable:this sorted_first_last
             return nil
         }
         return .init(
@@ -145,7 +145,7 @@ enum YearlyDuplicationCoordinator {
                 context: context,
                 yearTags: yearTags,
                 targetYears: targetYears,
-                minimumGroupCount: 3
+                minimumGroupCount: 3 // swiftlint:disable:this no_magic_numbers
             ),
             let proposal = suggestion.plan.groups.first
         else {
@@ -160,10 +160,10 @@ enum YearlyDuplicationCoordinator {
 
     static func shouldShowPromo(
         date: Date = .now,
-        randomValue: Int = Int.random(in: 0..<3)
+        randomValue: Int = Int.random(in: 0..<3) // swiftlint:disable:this no_magic_numbers
     ) -> Bool {
         let month = Calendar.current.component(.month, from: date)
-        guard [11, 12, 1, 2].contains(month) else {
+        guard [11, 12, 1, 2].contains(month) else { // swiftlint:disable:this no_magic_numbers
             return false
         }
         return randomValue == 0

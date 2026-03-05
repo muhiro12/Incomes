@@ -22,8 +22,8 @@ struct ContentView {
 
 extension ContentView: View {
     var body: some View {
-        NavigationStack {
-            List {
+        NavigationStack { // swiftlint:disable:this closure_body_length
+            List { // swiftlint:disable:this closure_body_length
                 Section("Upcoming") {
                     let itemsForDisplay: [Item] = {
                         guard let first = upcomingCandidates.first else {

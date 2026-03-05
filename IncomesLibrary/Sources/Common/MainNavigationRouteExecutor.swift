@@ -4,7 +4,7 @@ import SwiftData
 /// Resolves an `IncomesRoute` into a navigation outcome for main navigation UI state.
 public enum MainNavigationRouteExecutor {
     /// Documented for SwiftLint compliance.
-    public static func execute(
+    public static func execute( // swiftlint:disable:this cyclomatic_complexity function_body_length
         route: IncomesRoute,
         context: ModelContext
     ) throws -> MainNavigationRouteOutcome {
@@ -76,31 +76,6 @@ public enum MainNavigationRouteExecutor {
             return .search(query: query)
         }
     }
-}
-
-/// Documented for SwiftLint compliance.
-public enum MainNavigationRouteOutcome {
-    /// Documented for SwiftLint compliance.
-    case destination(
-            yearTagID: Tag.ID?,
-            selectedTag: Tag?
-         )
-    /// Documented for SwiftLint compliance.
-    case search(query: String?)
-    /// Documented for SwiftLint compliance.
-    case settings
-    /// Documented for SwiftLint compliance.
-    case settingsSubscription
-    /// Documented for SwiftLint compliance.
-    case settingsLicense
-    /// Documented for SwiftLint compliance.
-    case settingsDebug
-    /// Documented for SwiftLint compliance.
-    case yearlyDuplication
-    /// Documented for SwiftLint compliance.
-    case duplicateTags
-    /// Documented for SwiftLint compliance.
-    case itemDetail(itemID: PersistentIdentifier)
 }
 
 private extension MainNavigationRouteExecutor {

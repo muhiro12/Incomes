@@ -10,7 +10,7 @@ import Foundation
 import Testing
 
 @Suite(.serialized)
-struct ItemTest {
+struct ItemTest { // swiftlint:disable:this type_body_length
     let context = testContext
 
     init() {
