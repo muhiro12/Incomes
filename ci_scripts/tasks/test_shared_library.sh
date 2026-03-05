@@ -8,7 +8,7 @@ if [[ $argument_count -ne 0 ]]; then
 fi
 
 script_directory=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
-repository_root=$(cd "$script_directory/.." && pwd)
+repository_root=$(cd "$script_directory/../.." && pwd)
 cd "$repository_root"
 
 if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then

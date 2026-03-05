@@ -130,19 +130,19 @@ Use the helper scripts in `ci_scripts/` as needed. If you are unsure, run the
 required builds/tests based on local changes:
 
 ```sh
-bash ci_scripts/run_required_builds.sh
+bash ci_scripts/tasks/run_required_builds.sh
 ```
 
 If you only need the app build:
 
 ```sh
-bash ci_scripts/build_incomes.sh
+bash ci_scripts/tasks/build_app.sh
 ```
 
 If you only need library tests:
 
 ```sh
-bash ci_scripts/test_incomes_library.sh
+bash ci_scripts/tasks/test_shared_library.sh
 ```
 
 ## Useful links

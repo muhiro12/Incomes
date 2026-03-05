@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-ai_run_create_dir() {
+ci_run_create_dir() {
   local runs_root=$1
 
   mkdir -p "$runs_root"
@@ -28,7 +28,7 @@ ai_run_create_dir() {
   printf '%s\n' "$run_directory"
 }
 
-ai_run_capture_command() {
+ci_run_capture_command() {
   local commands_file=$1
   shift
 
@@ -50,7 +50,7 @@ ai_run_capture_command() {
   } >>"$commands_file"
 }
 
-ai_run_json_escape() {
+ci_run_json_escape() {
   local escaped_value=$1
 
   escaped_value=${escaped_value//\\/\\\\}
@@ -62,7 +62,7 @@ ai_run_json_escape() {
   printf '%s' "$escaped_value"
 }
 
-ai_run_write_summary() {
+ci_run_write_summary() {
   local summary_path=$1
   local run_identifier=$2
   local started_at=$3
@@ -107,7 +107,7 @@ ai_run_write_summary() {
   } >"$summary_path"
 }
 
-ai_run_write_meta() {
+ci_run_write_meta() {
   local meta_path=$1
   local run_identifier=$2
   local started_at_iso=$3
@@ -123,22 +123,22 @@ ai_run_write_meta() {
 
   {
     printf '{\n'
-    printf '  "run_id": "%s",\n' "$(ai_run_json_escape "$run_identifier")"
-    printf '  "start_time": "%s",\n' "$(ai_run_json_escape "$started_at_iso")"
-    printf '  "end_time": "%s",\n' "$(ai_run_json_escape "$ended_at_iso")"
+    printf '  "run_id": "%s",\n' "$(ci_run_json_escape "$run_identifier")"
+    printf '  "start_time": "%s",\n' "$(ci_run_json_escape "$started_at_iso")"
+    printf '  "end_time": "%s",\n' "$(ci_run_json_escape "$ended_at_iso")"
     printf '  "duration_seconds": %s,\n' "$duration_seconds"
-    printf '  "result": "%s",\n' "$(ai_run_json_escape "$overall_result")"
-    printf '  "note": "%s",\n' "$(ai_run_json_escape "$run_note")"
-    printf '  "failed_step": "%s",\n' "$(ai_run_json_escape "$failed_step")"
-    printf '  "failed_log": "%s",\n' "$(ai_run_json_escape "$failed_log")"
-    printf '  "commands_file": "%s",\n' "$(ai_run_json_escape "$commands_file")"
-    printf '  "logs_dir": "%s",\n' "$(ai_run_json_escape "$logs_directory")"
-    printf '  "results_dir": "%s"\n' "$(ai_run_json_escape "$results_directory")"
+    printf '  "result": "%s",\n' "$(ci_run_json_escape "$overall_result")"
+    printf '  "note": "%s",\n' "$(ci_run_json_escape "$run_note")"
+    printf '  "failed_step": "%s",\n' "$(ci_run_json_escape "$failed_step")"
+    printf '  "failed_log": "%s",\n' "$(ci_run_json_escape "$failed_log")"
+    printf '  "commands_file": "%s",\n' "$(ci_run_json_escape "$commands_file")"
+    printf '  "logs_dir": "%s",\n' "$(ci_run_json_escape "$logs_directory")"
+    printf '  "results_dir": "%s"\n' "$(ci_run_json_escape "$results_directory")"
     printf '}\n'
   } >"$meta_path"
 }
 
-ai_run_prune_old_runs() {
+ci_run_prune_old_runs() {
   local runs_root=$1
   local retain_count=$2
 

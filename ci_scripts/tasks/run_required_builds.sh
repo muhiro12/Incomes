@@ -8,10 +8,10 @@ if [[ $argument_count -ne 0 ]]; then
 fi
 
 script_directory=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
-repository_root=$(cd "$script_directory/.." && pwd)
+repository_root=$(cd "$script_directory/../.." && pwd)
 cd "$repository_root"
 
-source "$repository_root/ci_scripts/lib/ai_run_artifacts.sh"
+source "$repository_root/ci_scripts/lib/ci_runs.sh"
 
 if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
   echo "This script must run inside a git repository." >&2
@@ -19,7 +19,7 @@ if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
 fi
 
 runs_root="$repository_root/.build/ci_runs"
-run_directory=$(ai_run_create_dir "$runs_root")
+run_directory=$(ci_run_create_dir "$runs_root")
 run_identifier=$(basename "$run_directory")
 
 commands_file="$run_directory/commands.txt"
@@ -71,7 +71,7 @@ finalize_run_artifacts() {
     executed_steps_markdown=${executed_steps_markdown%$'\n'}
   fi
 
-  ai_run_write_summary \
+  ci_run_write_summary \
     "$summary_path" \
     "$run_identifier" \
     "$start_time_display" \
@@ -85,7 +85,7 @@ finalize_run_artifacts() {
     "$results_directory" \
     "$commands_file" || true
 
-  ai_run_write_meta \
+  ci_run_write_meta \
     "$meta_path" \
     "$run_identifier" \
     "$start_time_iso" \
@@ -99,12 +99,12 @@ finalize_run_artifacts() {
     "$logs_directory" \
     "$results_directory" || true
 
-  ai_run_prune_old_runs "$runs_root" 5 || true
+  ci_run_prune_old_runs "$runs_root" 5 || true
 }
 
 trap 'finalize_run_artifacts "$?"' EXIT
 
-ai_run_capture_command "$commands_file" "$0" "$@"
+ci_run_capture_command "$commands_file" "$0" "$@"
 echo "AI run artifacts: $run_directory"
 
 run_logged_step() {
@@ -115,7 +115,7 @@ run_logged_step() {
   local log_path="$logs_directory/${step_identifier}.log"
   executed_steps+=("$step_description")
 
-  ai_run_capture_command "$commands_file" "AI_RUN_RESULTS_DIR=$results_directory" "$@"
+  ci_run_capture_command "$commands_file" "AI_RUN_RESULTS_DIR=$results_directory" "$@"
 
   echo "Running ${step_description}."
   set +e
@@ -171,12 +171,12 @@ if $needs_incomes_build; then
   run_logged_step \
     "build_incomes" \
     "Build Incomes scheme" \
-    bash ci_scripts/build_incomes.sh
+    bash "$repository_root/ci_scripts/tasks/build_app.sh"
 fi
 
 if $needs_incomes_library_tests; then
   run_logged_step \
     "test_incomes_library" \
     "Test IncomesLibrary scheme" \
-    bash ci_scripts/test_incomes_library.sh
+    bash "$repository_root/ci_scripts/tasks/test_shared_library.sh"
 fi

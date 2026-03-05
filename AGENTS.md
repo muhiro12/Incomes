@@ -98,5 +98,9 @@ tasks.filter { $0.isCompleted }
 Agents MUST use the standardized CI helper:
 
 ``` sh
-bash ci_scripts/run_required_builds.sh
+bash ci_scripts/tasks/verify.sh
 ```
+
+CI run artifacts are written under `.build/ci_runs/<RUN_ID>/`.
+Each run stores `summary.md`, `commands.txt`, `meta.json`, `logs/`, and `results/`.
+Only the newest 5 runs are retained.
