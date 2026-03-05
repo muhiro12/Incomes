@@ -151,7 +151,7 @@ fi
 needs_incomes_build=false
 needs_incomes_library_tests=false
 
-if grep -Eq '^Incomes/' <<<"$changed_files"; then
+if grep -Eq '^Incomes/|^Incomes\.xcodeproj/|^Widgets/|^Watch/' <<<"$changed_files"; then
   needs_incomes_build=true
 fi
 
@@ -160,14 +160,19 @@ if grep -Eq '^IncomesLibrary/' <<<"$changed_files"; then
 fi
 
 if ! $needs_incomes_build && ! $needs_incomes_library_tests; then
-  echo "No changes under Incomes/ or IncomesLibrary/."
-  run_note="No changes under Incomes/ or IncomesLibrary/. Build/test steps were skipped."
+  echo "No changes under Incomes/, IncomesLibrary/, Widgets/, Watch/, or Incomes.xcodeproj/."
+  run_note="No changes under Incomes/, IncomesLibrary/, Widgets/, Watch/, or Incomes.xcodeproj/. Build/test steps were skipped."
   exit 0
 fi
 
 run_note="Executed required build/test steps based on local changes."
 
 if $needs_incomes_build; then
+  run_logged_step \
+    "check_models_directory_consistency" \
+    "Check Models directory consistency" \
+    bash "$repository_root/ci_scripts/tasks/check_models_directory_consistency.sh"
+
   run_logged_step \
     "build_incomes" \
     "Build Incomes scheme" \
