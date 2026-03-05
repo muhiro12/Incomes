@@ -42,24 +42,14 @@ enum SearchTarget: CaseIterable {
     }
 
     func predicate(minimumText: String, maximumText: String) -> ItemPredicate? {
-        guard isForCurrency else {
+        guard let target = searchPredicateTarget else {
             return nil
         }
-
-        let minimumValue = Decimal(string: minimumText) ?? -Decimal.greatestFiniteMagnitude
-        let maximumValue = Decimal(string: maximumText) ?? Decimal.greatestFiniteMagnitude
-
-        switch self {
-        case .content,
-             .category:
-            return nil
-        case .balance:
-            return .balanceIsBetween(min: minimumValue, max: maximumValue)
-        case .income:
-            return .incomeIsBetween(min: minimumValue, max: maximumValue)
-        case .outgo:
-            return .outgoIsBetween(min: minimumValue, max: maximumValue)
-        }
+        return ItemSearchPredicateBuilder.build(
+            target: target,
+            minimumText: minimumText,
+            maximumText: maximumText
+        )
     }
 
     func filteredTags(_ tags: [Tag], searchText: String) -> [Tag] {
@@ -69,6 +59,22 @@ enum SearchTarget: CaseIterable {
 
         return tags.filter { tag in
             searchText.isEmpty || tag.displayName.normalizedContains(searchText)
+        }
+    }
+}
+
+private extension SearchTarget {
+    var searchPredicateTarget: ItemSearchPredicateBuilder.Target? {
+        switch self {
+        case .content,
+             .category:
+            return nil
+        case .balance:
+            return .balance
+        case .income:
+            return .income
+        case .outgo:
+            return .outgo
         }
     }
 }

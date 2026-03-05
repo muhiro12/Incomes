@@ -196,7 +196,7 @@ extension Item { // swiftlint:disable:this extension_access_modifier
                                                 outgo: Decimal,
                                                 category: String,
                                                 priority: Int,
-                                                repeatID: UUID) throws -> Item {
+                                                repeatID: UUID) -> Item {
         let item = Item()
         context.insert(item)
 
@@ -208,22 +208,22 @@ extension Item { // swiftlint:disable:this extension_access_modifier
         item.repeatID = repeatID
 
         item.tags = [
-            try .createIgnoringDuplicates(
+            .createIgnoringDuplicates(
                 context: context,
                 name: date.stringValueWithoutLocale(.yyyy),
                 type: .year
             ),
-            try .createIgnoringDuplicates(
+            .createIgnoringDuplicates(
                 context: context,
                 name: date.stringValueWithoutLocale(.yyyyMM),
                 type: .yearMonth
             ),
-            try .createIgnoringDuplicates(
+            .createIgnoringDuplicates(
                 context: context,
                 name: content,
                 type: .content
             ),
-            try .createIgnoringDuplicates(
+            .createIgnoringDuplicates(
                 context: context,
                 name: category,
                 type: .category

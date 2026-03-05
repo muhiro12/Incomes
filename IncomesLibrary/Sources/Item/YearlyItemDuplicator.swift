@@ -3,7 +3,7 @@ import Foundation
 import SwiftData
 
 /// Documented for SwiftLint compliance.
-public enum YearlyItemDuplicator {
+public enum YearlyItemDuplicator { // swiftlint:disable:this type_body_length
     /// Documented for SwiftLint compliance.
     public static func availableSourceYears(
         from yearTags: [Tag],
@@ -24,6 +24,88 @@ public enum YearlyItemDuplicator {
         range: Int = 10
     ) -> [Int] {
         Array((currentYear - range)...(currentYear + range)).sorted(by: >)
+    }
+
+    /// Resolves source/target year selections for yearly duplication UI.
+    public static func selectionState(
+        context: ModelContext,
+        yearTags: [Tag],
+        currentSourceYear: Int,
+        currentTargetYear: Int,
+        preserveCurrentSelection: Bool,
+        currentYear: Int = Calendar.current.component(.year, from: .now),
+        targetYearRange: Int = 10,
+        minimumGroupCount: Int = 3,
+        options: YearlyItemDuplicationOptions = .init()
+    ) -> YearlyItemDuplicationSelectionState {
+        let sourceYears = availableSourceYears(
+            from: yearTags,
+            currentYear: currentYear
+        )
+        let targetYears = targetYears(
+            currentYear: currentYear,
+            range: targetYearRange
+        )
+        let defaultSourceYear = sourceYears.first ?? currentYear
+        let defaultTargetYear = targetYears.first ?? currentYear
+        let suggestion = suggestion(
+            context: context,
+            yearTags: yearTags,
+            targetYears: targetYears,
+            minimumGroupCount: minimumGroupCount,
+            options: options
+        )
+        let suggestedSourceYear = suggestion?.sourceYear ?? defaultSourceYear
+        let suggestedTargetYear = suggestion?.targetYear ?? defaultTargetYear
+        let sourceYear = preserveCurrentSelection && sourceYears.contains(currentSourceYear)
+            ? currentSourceYear
+            : suggestedSourceYear
+        let targetYear = preserveCurrentSelection && targetYears.contains(currentTargetYear)
+            ? currentTargetYear
+            : suggestedTargetYear
+        return .init(
+            sourceYear: sourceYear,
+            targetYear: targetYear
+        )
+    }
+
+    /// Returns entries for one group.
+    public static func entries(
+        for groupID: UUID,
+        in plan: YearlyItemDuplicationPlan
+    ) -> [YearlyItemDuplicationEntry] {
+        plan.entries.filter { entry in
+            entry.groupID == groupID
+        }
+    }
+
+    /// Builds a domain draft for yearly duplication edits.
+    public static func draft(
+        for groupID: UUID,
+        in plan: YearlyItemDuplicationPlan
+    ) -> YearlyItemDuplicationDraft? {
+        guard let group = plan.groups.first(where: { itemGroup in
+            itemGroup.id == groupID
+        }) else {
+            return nil
+        }
+        let entries = entries(
+            for: groupID,
+            in: plan
+        )
+        guard let baseDate = entries.map(\.targetDate).sorted().first else { // swiftlint:disable:this sorted_first_last
+            return nil
+        }
+        return .init(
+            groupID: group.id,
+            date: baseDate,
+            content: group.content,
+            incomeText: decimalString(from: group.averageIncome),
+            outgoText: decimalString(from: group.averageOutgo),
+            category: group.category,
+            priorityText: .empty,
+            repeatMonthSelections: repeatMonthSelections(from: entries)
+        )
     }
 
     /// Documented for SwiftLint compliance.
@@ -213,6 +295,45 @@ public enum YearlyItemDuplicator {
         context: ModelContext,
         overrides: [UUID: YearlyItemDuplicationGroupAmount] = [:]
     ) throws -> YearlyItemDuplicationResult {
+        try applyWithOutcome(
+            plan: plan,
+            context: context,
+            overrides: overrides
+        ).value
+    }
+
+    /// Applies a single group from a plan.
+    public static func apply(
+        groupID: UUID,
+        in plan: YearlyItemDuplicationPlan,
+        context: ModelContext,
+        overrides: [UUID: YearlyItemDuplicationGroupAmount] = [:]
+    ) throws -> YearlyItemDuplicationResult? {
+        let entries = entries(
+            for: groupID,
+            in: plan
+        )
+        guard let group = plan.groups.first(where: { itemGroup in
+            itemGroup.id == groupID
+        }), entries.isNotEmpty else {
+            return nil
+        }
+        return try apply(
+            plan: singleGroupPlan(
+                group: group,
+                entries: entries
+            ),
+            context: context,
+            overrides: overrides
+        )
+    }
+
+    /// Applies a plan and returns mutation metadata.
+    public static func applyWithOutcome( // swiftlint:disable:this function_body_length
+        plan: YearlyItemDuplicationPlan,
+        context: ModelContext,
+        overrides: [UUID: YearlyItemDuplicationGroupAmount] = [:]
+    ) throws -> MutationResult<YearlyItemDuplicationResult> {
         let groupedEntries = Dictionary(grouping: plan.entries) { entry in
             entry.groupID
         }
@@ -254,9 +375,24 @@ public enum YearlyItemDuplicator {
 
         try BalanceCalculator.calculate(in: context, for: createdItems)
 
-        return .init(
+        let result: YearlyItemDuplicationResult = .init(
             createdCount: createdItems.count,
             skippedDuplicateCount: plan.skippedDuplicateCount
+        )
+        let createdIDs = Set(createdItems.map(\.persistentModelID))
+        let createdDates = createdItems.map(\.localDate)
+        let outcome: MutationOutcome = .init(
+            changedIDs: .init(
+                created: createdIDs,
+                updated: [],
+                deleted: []
+            ),
+            affectedDateRange: dateRange(from: createdDates),
+            followUpHints: yearlyDuplicationFollowUpHints
+        )
+        return .init(
+            value: result,
+            outcome: outcome
         )
     }
 }
@@ -275,7 +411,56 @@ private extension YearlyItemDuplicator {
         let category: String
     }
 
-    static func yearValue(from tag: Tag) -> Int? { // swiftlint:disable:this type_contents_order
+    struct GroupBuildResult {
+        let entries: [YearlyItemDuplicationEntry]
+        let targetDates: [Date]
+        let skippedDuplicateCount: Int
+    }
+
+    static let yearlyDuplicationFollowUpHints: Set<MutationOutcome.FollowUpHint> = [
+        .refreshNotificationSchedule,
+        .reloadWidgets,
+        .refreshWatchSnapshot
+    ]
+
+    static func dateRange(from dates: [Date]) -> ClosedRange<Date>? {
+        guard let minDate = dates.min(),
+              let maxDate = dates.max() else {
+            return nil
+        }
+        return minDate...maxDate
+    }
+
+    static func singleGroupPlan(
+        group: YearlyItemDuplicationGroup,
+        entries: [YearlyItemDuplicationEntry]
+    ) -> YearlyItemDuplicationPlan {
+        .init(
+            groups: [group],
+            entries: entries,
+            skippedDuplicateCount: 0
+        )
+    }
+
+    static func repeatMonthSelections(
+        from entries: [YearlyItemDuplicationEntry]
+    ) -> Set<RepeatMonthSelection> {
+        Set(entries.map { entry in
+            .init(
+                year: Calendar.current.component(.year, from: entry.targetDate),
+                month: Calendar.current.component(.month, from: entry.targetDate)
+            )
+        })
+    }
+
+    static func decimalString(from value: Decimal) -> String {
+        var source = value
+        var rounded = Decimal.zero
+        NSDecimalRound(&rounded, &source, 0, .down)
+        return rounded.description
+    }
+
+    static func yearValue(from tag: Tag) -> Int? {
         if let integerValue = Int(tag.name) {
             return integerValue
         }
@@ -285,11 +470,11 @@ private extension YearlyItemDuplicator {
         return Calendar.current.component(.year, from: date)
     }
 
-    static func duplicationKey(for item: Item) -> DuplicationKey { // swiftlint:disable:this type_contents_order
+    static func duplicationKey(for item: Item) -> DuplicationKey {
         duplicationKey(targetDate: item.localDate, item: item)
     }
 
-    static func duplicationKey(targetDate: Date, item: Item) -> DuplicationKey { // swiftlint:disable:this line_length type_contents_order
+    static func duplicationKey(targetDate: Date, item: Item) -> DuplicationKey {
         let categoryName = item.category?.name ?? .empty
         let normalizedDate = Calendar.current.startOfDay(for: targetDate)
         return .init(
@@ -301,7 +486,7 @@ private extension YearlyItemDuplicator {
         )
     }
 
-    static func fallbackGroupingKey(for item: Item) -> FallbackGroupingKey { // swiftlint:disable:this line_length type_contents_order
+    static func fallbackGroupingKey(for item: Item) -> FallbackGroupingKey {
         let categoryName = item.category?.name ?? .empty
         return .init(
             content: item.content,
@@ -309,7 +494,7 @@ private extension YearlyItemDuplicator {
         )
     }
 
-    static func shouldIncludeGroup( // swiftlint:disable:this type_contents_order
+    static func shouldIncludeGroup(
         items: [Item],
         includeSingleItems: Bool,
         minimumRepeatItemCount: Int
@@ -323,7 +508,7 @@ private extension YearlyItemDuplicator {
         return false
     }
 
-    static func yearStartDate(year: Int) throws -> Date { // swiftlint:disable:this type_contents_order
+    static func yearStartDate(year: Int) throws -> Date {
         let components = DateComponents(year: year, month: 1, day: 1)
         guard let date = Calendar.current.date(from: components) else {
             throw YearlyItemDuplicationError.invalidYear(year)
@@ -331,19 +516,13 @@ private extension YearlyItemDuplicator {
         return date
     }
 
-    static func shiftDate(_ date: Date, yearShift: Int) -> Date? { // swiftlint:disable:this type_contents_order
+    static func shiftDate(_ date: Date, yearShift: Int) -> Date? {
         let startOfDay = Calendar.current.startOfDay(for: date)
         return Calendar.current.date(
             byAdding: .year,
             value: yearShift,
             to: startOfDay
         )
-    }
-
-    struct GroupBuildResult {
-        let entries: [YearlyItemDuplicationEntry]
-        let targetDates: [Date]
-        let skippedDuplicateCount: Int
     }
 
     static func buildGroupEntries(

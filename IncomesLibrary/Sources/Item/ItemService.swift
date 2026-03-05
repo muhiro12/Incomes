@@ -13,6 +13,72 @@ public enum ItemService { // swiftlint:disable:this type_body_length
         /// Documented for SwiftLint compliance.
         case preview
     }
+
+    /// Creates an item and optional repeating items, and returns mutation metadata.
+    public static func createWithOutcome(
+        context: ModelContext,
+        input: ItemFormInput,
+        repeatMonthSelections: Set<RepeatMonthSelection>
+    ) throws -> MutationResult<Item> {
+        try input.validate()
+        let item = try createItem(
+            context: context,
+            date: input.date,
+            content: input.content,
+            income: input.income,
+            outgo: input.outgo,
+            category: input.category,
+            priority: input.priority,
+            repeatMonthSelections: repeatMonthSelections
+        )
+        let createdItems = try context.fetch(
+            .items(.repeatIDIs(item.repeatID))
+        )
+        let createdIDs = Set(createdItems.map(\.persistentModelID))
+        return .init(
+            value: item,
+            outcome: .init(
+                changedIDs: .init(created: createdIDs),
+                affectedDateRange: dateRange(
+                    from: createdItems.map(\.localDate)
+                ),
+                followUpHints: itemMutationFollowUpHints
+            )
+        )
+    }
+
+    /// Creates an item with monthly repeat count, and returns mutation metadata.
+    public static func createWithOutcome(
+        context: ModelContext,
+        input: ItemFormInput,
+        repeatCount: Int
+    ) throws -> MutationResult<Item> {
+        try input.validate()
+        let item = try createItem(
+            context: context,
+            date: input.date,
+            content: input.content,
+            income: input.income,
+            outgo: input.outgo,
+            category: input.category,
+            priority: input.priority,
+            repeatCount: repeatCount
+        )
+        let createdItems = try context.fetch(
+            .items(.repeatIDIs(item.repeatID))
+        )
+        let createdIDs = Set(createdItems.map(\.persistentModelID))
+        return .init(
+            value: item,
+            outcome: .init(
+                changedIDs: .init(created: createdIDs),
+                affectedDateRange: dateRange(
+                    from: createdItems.map(\.localDate)
+                ),
+                followUpHints: itemMutationFollowUpHints
+            )
+        )
+    }
     /// Creates an item and optional repeating items, then recalculates balances.
     /// - Parameters:
     ///   - context: Target model context.
@@ -28,16 +94,11 @@ public enum ItemService { // swiftlint:disable:this type_body_length
         input: ItemFormInput,
         repeatMonthSelections: Set<RepeatMonthSelection>
     ) throws -> Item {
-        try createItem(
+        try createWithOutcome(
             context: context,
-            date: input.date,
-            content: input.content,
-            income: input.income,
-            outgo: input.outgo,
-            category: input.category,
-            priority: input.priority,
+            input: input,
             repeatMonthSelections: repeatMonthSelections
-        )
+        ).value
     }
 
     /// Creates an item using shared form input and simple monthly repetition count.
@@ -46,16 +107,11 @@ public enum ItemService { // swiftlint:disable:this type_body_length
         input: ItemFormInput,
         repeatCount: Int
     ) throws -> Item {
-        try createItem(
+        try createWithOutcome(
             context: context,
-            date: input.date,
-            content: input.content,
-            income: input.income,
-            outgo: input.outgo,
-            category: input.category,
-            priority: input.priority,
+            input: input,
             repeatCount: repeatCount
-        )
+        ).value
     }
 
     /// Creates an item and optional repeating items, then recalculates balances.
@@ -83,16 +139,18 @@ public enum ItemService { // swiftlint:disable:this type_body_length
         priority: Int,
         repeatCount: Int
     ) throws -> Item {
-        try createItem(
+        try createWithOutcome(
             context: context,
-            date: date,
-            content: content,
-            income: income,
-            outgo: outgo,
-            category: category,
-            priority: priority,
+            input: .init(
+                date: date,
+                content: content,
+                incomeText: income.description,
+                outgoText: outgo.description,
+                category: category,
+                priorityText: "\(priority)"
+            ),
             repeatCount: repeatCount
-        )
+        ).value
     }
 
     /// Creates an item and additional items in the selected months of the base or next year.
@@ -120,29 +178,77 @@ public enum ItemService { // swiftlint:disable:this type_body_length
         priority: Int,
         repeatMonthSelections: Set<RepeatMonthSelection>
     ) throws -> Item {
-        try createItem(
+        try createWithOutcome(
             context: context,
-            date: date,
-            content: content,
-            income: income,
-            outgo: outgo,
-            category: category,
-            priority: priority,
+            input: .init(
+                date: date,
+                content: content,
+                incomeText: income.description,
+                outgoText: outgo.description,
+                category: category,
+                priorityText: "\(priority)"
+            ),
             repeatMonthSelections: repeatMonthSelections
-        )
+        ).value
     }
 
     /// Deletes one item and recalculates balances for affected items.
     public static func delete(context: ModelContext, item: Item) throws {
-        item.delete()
-        try BalanceCalculator.calculate(in: context, for: [item])
+        _ = try deleteWithOutcome(
+            context: context,
+            item: item
+        )
+    }
+
+    /// Deletes one item and returns mutation metadata.
+    public static func deleteWithOutcome(
+        context: ModelContext,
+        item: Item
+    ) throws -> MutationOutcome {
+        try deleteWithOutcome(
+            context: context,
+            items: [item]
+        )
     }
 
     /// Deletes multiple items and recalculates balances.
     public static func delete(context: ModelContext, items: [Item]) throws {
-        try items.forEach { item in
-            try delete(context: context, item: item)
+        _ = try deleteWithOutcome(
+            context: context,
+            items: items
+        )
+    }
+
+    /// Deletes multiple items and returns mutation metadata.
+    public static func deleteWithOutcome(
+        context: ModelContext,
+        items: [Item]
+    ) throws -> MutationOutcome {
+        guard items.isNotEmpty else {
+            return .init(
+                changedIDs: .init(),
+                affectedDateRange: nil,
+                followUpHints: []
+            )
         }
+
+        let deletedIDs = Set(items.map(\.persistentModelID))
+        let deletedDates = items.map(\.localDate)
+        for item in items {
+            item.delete()
+        }
+        if let startDate = deletedDates.min() {
+            try BalanceCalculator.calculate(in: context, after: startDate)
+        }
+        return .init(
+            changedIDs: .init(
+                created: [],
+                updated: [],
+                deleted: deletedIDs
+            ),
+            affectedDateRange: dateRange(from: deletedDates),
+            followUpHints: itemMutationFollowUpHints
+        )
     }
 
     /// Resolves items to delete based on list indices.
@@ -246,6 +352,31 @@ public enum ItemService { // swiftlint:disable:this type_body_length
         input: ItemFormInput,
         scope: ItemMutationScope
     ) throws {
+        _ = try updateWithOutcome(
+            context: context,
+            item: item,
+            input: input,
+            scope: scope
+        )
+    }
+
+    /// Updates item(s) and returns mutation metadata.
+    public static func updateWithOutcome( // swiftlint:disable:this function_body_length
+        context: ModelContext,
+        item: Item,
+        input: ItemFormInput,
+        scope: ItemMutationScope
+    ) throws -> MutationOutcome {
+        try input.validate()
+
+        let affectedItems = try itemsForMutationScope(
+            context: context,
+            item: item,
+            scope: scope
+        )
+        let beforeDates = affectedItems.map(\.localDate)
+        let updatedIDs = Set(affectedItems.map(\.persistentModelID))
+
         switch scope {
         case .thisItem:
             try updateSingleItem(
@@ -281,6 +412,18 @@ public enum ItemService { // swiftlint:disable:this type_body_length
                 priority: input.priority
             )
         }
+
+        let afterDates = affectedItems.map(\.localDate)
+        let candidateDates = beforeDates + afterDates + [input.date]
+        return .init(
+            changedIDs: .init(
+                created: [],
+                updated: updatedIDs,
+                deleted: []
+            ),
+            affectedDateRange: dateRange(from: candidateDates),
+            followUpHints: itemMutationFollowUpHints
+        )
     }
 
     /// Updates a single item with the provided values and recalculates balance.
@@ -299,15 +442,18 @@ public enum ItemService { // swiftlint:disable:this type_body_length
         category: String,
         priority: Int
     ) throws {
-        try updateSingleItem(
+        _ = try updateWithOutcome(
             context: context,
             item: item,
-            date: date,
-            content: content,
-            income: income,
-            outgo: outgo,
-            category: category,
-            priority: priority
+            input: .init(
+                date: date,
+                content: content,
+                incomeText: income.description,
+                outgoText: outgo.description,
+                category: category,
+                priorityText: "\(priority)"
+            ),
+            scope: .thisItem
         )
     }
 
@@ -386,15 +532,18 @@ public enum ItemService { // swiftlint:disable:this type_body_length
         category: String,
         priority: Int
     ) throws {
-        try updateAllItems(
+        _ = try updateWithOutcome(
             context: context,
             item: item,
-            date: date,
-            content: content,
-            income: income,
-            outgo: outgo,
-            category: category,
-            priority: priority
+            input: .init(
+                date: date,
+                content: content,
+                incomeText: income.description,
+                outgoText: outgo.description,
+                category: category,
+                priorityText: "\(priority)"
+            ),
+            scope: .allItems
         )
     }
 
@@ -414,15 +563,18 @@ public enum ItemService { // swiftlint:disable:this type_body_length
         category: String,
         priority: Int
     ) throws {
-        try updateFutureItems(
+        _ = try updateWithOutcome(
             context: context,
             item: item,
-            date: date,
-            content: content,
-            income: income,
-            outgo: outgo,
-            category: category,
-            priority: priority
+            input: .init(
+                date: date,
+                content: content,
+                incomeText: income.description,
+                outgoText: outgo.description,
+                category: category,
+                priorityText: "\(priority)"
+            ),
+            scope: .futureItems
         )
     }
 
@@ -631,7 +783,7 @@ public enum ItemService { // swiftlint:disable:this type_body_length
                 continue
             }
             created.append(
-                try Item.createIgnoringDuplicates(
+                Item.createIgnoringDuplicates(
                     context: context,
                     date: date,
                     content: String(localized: "Pension"),
@@ -730,6 +882,44 @@ public enum ItemService { // swiftlint:disable:this type_body_length
 }
 
 private extension ItemService {
+    static let itemMutationFollowUpHints: Set<MutationOutcome.FollowUpHint> = [
+        .refreshNotificationSchedule,
+        .reloadWidgets,
+        .refreshWatchSnapshot
+    ]
+
+    static func dateRange(from dates: [Date]) -> ClosedRange<Date>? {
+        guard let minDate = dates.min(),
+              let maxDate = dates.max() else {
+            return nil
+        }
+        return minDate...maxDate
+    }
+
+    static func itemsForMutationScope(
+        context: ModelContext,
+        item: Item,
+        scope: ItemMutationScope
+    ) throws -> [Item] {
+        switch scope {
+        case .thisItem:
+            return [item]
+        case .futureItems:
+            return try context.fetch(
+                .items(
+                    .repeatIDAndDateIsAfter(
+                        repeatID: item.repeatID,
+                        date: item.localDate
+                    )
+                )
+            )
+        case .allItems:
+            return try context.fetch(
+                .items(.repeatIDIs(item.repeatID))
+            )
+        }
+    }
+
     static func createItem( // swiftlint:disable:this function_parameter_count
         context: ModelContext,
         date: Date,
@@ -789,18 +979,17 @@ private extension ItemService {
         repeatMonthSelections: Set<RepeatMonthSelection>
     ) throws -> Item {
         let calendar = Calendar.current
-        let baseYear = calendar.component(.year, from: date)
-        let baseMonth = calendar.component(.month, from: date)
-        let validSelections = repeatMonthSelections.filter { selection in
-            let isValidMonth = (1...12).contains(selection.month) // swiftlint:disable:this no_magic_numbers
-            let isValidYear = selection.year == baseYear || selection.year == baseYear + 1
-            return isValidMonth && isValidYear
-        }
-        if validSelections.count != repeatMonthSelections.count {
-            // Invalid selections are ignored to avoid crashing on unexpected input.
-        }
-        let baseSelection = RepeatMonthSelection(year: baseYear, month: baseMonth)
-        let selections = Set(validSelections).union([baseSelection])
+        let baseSelection = RepeatMonthSelectionRules.baseSelection(
+            baseDate: date,
+            calendar: calendar
+        )
+        let baseYear = baseSelection.year
+        let baseMonth = baseSelection.month
+        let selections = RepeatMonthSelectionRules.normalized(
+            repeatMonthSelections,
+            baseDate: date,
+            calendar: calendar
+        )
 
         var items = [Item]()
         let repeatID = UUID()
@@ -826,7 +1015,11 @@ private extension ItemService {
             guard selection.year != baseYear || selection.month != baseMonth else {
                 continue
             }
-            let monthOffset = (selection.year - baseYear) * 12 + (selection.month - baseMonth) // swiftlint:disable:this line_length no_magic_numbers
+            let monthOffset = RepeatMonthSelectionRules.monthOffset(
+                from: date,
+                to: selection,
+                calendar: calendar
+            )
             guard let repeatingDate = calendar.date(
                 byAdding: .month,
                 value: monthOffset,

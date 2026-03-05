@@ -53,11 +53,7 @@ struct DuplicateTagView: View {
             isPresented: $isMergeDialogPresented
         ) {
             Button {
-                do {
-                    try TagService.mergeDuplicates(tags: tags)
-                } catch {
-                    assertionFailure(error.localizedDescription)
-                }
+                TagService.mergeDuplicates(tags: tags)
             } label: {
                 Text("Merge")
             }

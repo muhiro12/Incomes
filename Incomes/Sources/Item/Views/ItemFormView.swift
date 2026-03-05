@@ -352,16 +352,8 @@ private extension ItemFormView {
         formInputData.isValid
     }
 
-    var baseYear: Int {
-        Calendar.current.component(.year, from: date)
-    }
-
-    var baseMonth: Int {
-        Calendar.current.component(.month, from: date)
-    }
-
     var baseSelection: RepeatMonthSelection {
-        .init(year: baseYear, month: baseMonth)
+        RepeatMonthSelectionRules.baseSelection(baseDate: date)
     }
 
     var effectiveRepeatMonthSelections: Set<RepeatMonthSelection> {
@@ -513,12 +505,10 @@ private extension ItemFormView {
     }
 
     func syncRepeatMonthSelectionsWithBaseDate() {
-        let currentBaseSelection = baseSelection
-        let allowedYears = Set([baseYear, baseYear + 1])
-        repeatMonthSelections = repeatMonthSelections.filter { selection in
-            allowedYears.contains(selection.year)
-        }
-        repeatMonthSelections.insert(currentBaseSelection)
+        repeatMonthSelections = RepeatMonthSelectionRules.normalized(
+            repeatMonthSelections,
+            baseDate: date
+        )
     }
 
     func isDialogPresented(_ route: DialogRoute) -> Binding<Bool> {

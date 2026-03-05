@@ -11,7 +11,7 @@ struct WatchSyncPlanningTests {
     }
 
     @Test
-    func pruning_keeps_only_last_current_next_month() throws { // swiftlint:disable:this function_body_length
+    func applySnapshot_replaces_store_with_allowed_month_items() throws { // swiftlint:disable:this function_body_length
         // Base: 2000-09-15
         let base = shiftedDate("2000-09-15T12:00:00Z")
         let july = try #require(
@@ -25,11 +25,10 @@ struct WatchSyncPlanningTests {
             Calendar.current.date(byAdding: .month, value: 1, to: base)
         )
 
-        // Seed four months (July..Oct)
         _ = try ItemService.create(
             context: context,
             date: july,
-            content: "JULY",
+            content: "JULY-OLD",
             income: 100,
             outgo: 0,
             category: "Test",
@@ -39,7 +38,7 @@ struct WatchSyncPlanningTests {
         _ = try ItemService.create(
             context: context,
             date: aug,
-            content: "AUG",
+            content: "AUG-OLD",
             income: 100,
             outgo: 0,
             category: "Test",
@@ -49,7 +48,7 @@ struct WatchSyncPlanningTests {
         _ = try ItemService.create(
             context: context,
             date: sep,
-            content: "SEP",
+            content: "SEP-OLD",
             income: 100,
             outgo: 0,
             category: "Test",
@@ -59,7 +58,7 @@ struct WatchSyncPlanningTests {
         _ = try ItemService.create(
             context: context,
             date: oct,
-            content: "OCT",
+            content: "OCT-OLD",
             income: 100,
             outgo: 0,
             category: "Test",
@@ -67,30 +66,45 @@ struct WatchSyncPlanningTests {
             repeatCount: 1
         )
 
-        // Allowed months: [-1, 0, 1] => Aug, Sep, Oct
-        let allowed: Set<String> = .init([-1, 0, 1].compactMap { offset in
-            Calendar.current.date(
-                byAdding: .month,
-                value: offset,
-                to: base
-            )?.stringValueWithoutLocale(.yyyyMM) // swiftlint:disable:this multiline_function_chains
-        })
+        let incoming: [ItemWire] = [
+            .init(
+                dateEpoch: aug.timeIntervalSince1970,
+                content: "AUG-NEW",
+                income: 200,
+                outgo: 0,
+                category: "Sync"
+            ),
+            .init(
+                dateEpoch: sep.timeIntervalSince1970,
+                content: "SEP-NEW",
+                income: 300,
+                outgo: 0,
+                category: "Sync"
+            ),
+            .init(
+                dateEpoch: oct.timeIntervalSince1970,
+                content: "OCT-NEW",
+                income: 400,
+                outgo: 0,
+                category: "Sync"
+            )
+        ]
 
-        // Prune items not in allowed set (simulate watch syncer pruning)
-        let all = try context.fetch(FetchDescriptor<Item>())
-        for item in all {
-            let yearMonth = item.localDate.stringValueWithoutLocale(.yyyyMM)
-            if !allowed.contains(yearMonth) {
-                try ItemService.delete(context: context, item: item)
-            }
-        }
+        let outcome = try WatchSyncService.applySnapshot(
+            context: context,
+            items: incoming,
+            baseDate: base,
+            monthOffsets: [-1, 0, 1]
+        )
 
-        // Verify only AUG/SEP/OCT remain
+        #expect(outcome.followUpHints.contains(.reloadWidgets))
+        #expect(outcome.followUpHints.contains(.refreshWatchSnapshot))
+        #expect(!outcome.changedIDs.deleted.isEmpty)
+        #expect(outcome.changedIDs.created.count == 3)
+
         let remaining = try context.fetch(FetchDescriptor<Item>())
         let contents = Set(remaining.map(\.content))
-        #expect(contents.contains("AUG"))
-        #expect(contents.contains("SEP"))
-        #expect(contents.contains("OCT"))
-        #expect(!contents.contains("JULY"))
+        #expect(contents == Set(["AUG-NEW", "SEP-NEW", "OCT-NEW"]))
+        #expect(!contents.contains("JULY-OLD"))
     }
 }

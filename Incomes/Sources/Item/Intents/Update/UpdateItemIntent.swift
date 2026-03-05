@@ -38,16 +38,20 @@ struct UpdateItemIntent: AppIntent {
 
     @MainActor
     func perform() throws -> some ReturnsValue<ItemEntity> {
-        guard content.isNotEmpty else {
-            throw $content.needsValueError()
-        }
+        try validateFormInput()
 
         let currencyCode = AppStorage(.currencyCode).wrappedValue
-        guard income.currencyCode == currencyCode else {
-            throw $income.needsDisambiguationError(among: [.init(amount: income.amount, currencyCode: currencyCode)])
+        if let amount = ItemIntentCurrencyValidator.disambiguationAmount(
+            amount: income,
+            expectedCurrencyCode: currencyCode
+        ) {
+            throw $income.needsDisambiguationError(among: [amount])
         }
-        guard outgo.currencyCode == currencyCode else {
-            throw $outgo.needsDisambiguationError(among: [.init(amount: outgo.amount, currencyCode: currencyCode)])
+        if let amount = ItemIntentCurrencyValidator.disambiguationAmount(
+            amount: outgo,
+            expectedCurrencyCode: currencyCode
+        ) {
+            throw $outgo.needsDisambiguationError(among: [amount])
         }
 
         let model = try item.model(in: modelContainer.mainContext)
@@ -61,5 +65,19 @@ struct UpdateItemIntent: AppIntent {
             throw ItemError.entityConversionFailed
         }
         return .result(value: entity)
+    }
+}
+
+private extension UpdateItemIntent {
+    func validateFormInput() throws {
+        do {
+            try formInput.validate()
+        } catch ItemFormInput.ValidationError.contentIsEmpty {
+            throw $content.needsValueError()
+        } catch ItemFormInput.ValidationError.invalidPriority {
+            throw $priority.needsValueError()
+        } catch {
+            throw error
+        }
     }
 }

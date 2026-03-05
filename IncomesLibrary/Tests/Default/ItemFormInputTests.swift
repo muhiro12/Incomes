@@ -59,4 +59,31 @@ struct ItemFormInputTests {
         #expect(input.income == 1_000)
         #expect(input.outgo == 250)
     }
+
+    @Test
+    func validate_throws_specific_errors() {
+        let invalidContent = ItemFormInput(
+            date: .now,
+            content: "",
+            incomeText: "100",
+            outgoText: "0",
+            category: "Category",
+            priorityText: "1"
+        )
+        #expect(throws: ItemFormInput.ValidationError.self) {
+            try invalidContent.validate()
+        }
+
+        let invalidIncome = ItemFormInput(
+            date: .now,
+            content: "Content",
+            incomeText: "abc",
+            outgoText: "0",
+            category: "Category",
+            priorityText: "1"
+        )
+        #expect(throws: ItemFormInput.ValidationError.self) {
+            try invalidIncome.validate()
+        }
+    }
 }

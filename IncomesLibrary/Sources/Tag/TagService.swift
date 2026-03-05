@@ -102,7 +102,7 @@ public enum TagService {
             let duplicates = try context.fetch(
                 .tags(.isSameWith(tag))
             )
-            try mergeDuplicates(
+            mergeDuplicates(
                 tags: duplicates
             )
         }

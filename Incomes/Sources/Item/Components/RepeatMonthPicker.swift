@@ -30,8 +30,10 @@ struct RepeatMonthPicker: View {
     }
 
     var body: some View {
-        let currentBaseYear = baseYear
-        let years = [currentBaseYear, currentBaseYear + 1]
+        let years = RepeatMonthSelectionRules.allowedYears(
+            baseDate: baseDate,
+            calendar: calendar
+        )
         VStack(alignment: .leading, spacing: 16) { // swiftlint:disable:this closure_body_length no_magic_numbers
             ForEach(years, id: \.self) { year in
                 VStack(alignment: .leading, spacing: 8) { // swiftlint:disable:this no_magic_numbers
@@ -111,21 +113,18 @@ struct RepeatMonthPicker: View {
     }
 
     func monthOffset(for selection: RepeatMonthSelection) -> Int { // swiftlint:disable:this type_contents_order
-        let baseMonth = baseMonth
-        let baseYear = baseYear
-        return (selection.year - baseYear) * 12 + (selection.month - baseMonth) // swiftlint:disable:this line_length no_magic_numbers
-    }
-
-    var baseYear: Int {
-        calendar.component(.year, from: baseDate)
-    }
-
-    var baseMonth: Int {
-        calendar.component(.month, from: baseDate)
+        RepeatMonthSelectionRules.monthOffset(
+            from: baseDate,
+            to: selection,
+            calendar: calendar
+        )
     }
 
     var baseSelection: RepeatMonthSelection {
-        .init(year: baseYear, month: baseMonth)
+        RepeatMonthSelectionRules.baseSelection(
+            baseDate: baseDate,
+            calendar: calendar
+        )
     }
 }
 

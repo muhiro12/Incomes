@@ -37,16 +37,20 @@ struct CreateScheduledItemIntent: AppIntent {
 
     @MainActor
     func perform() throws -> some ReturnsValue<ItemEntity> {
-        guard content.isNotEmpty else {
-            throw $content.needsValueError()
-        }
+        try validateFormInput()
 
         let currencyCode = AppStorage(.currencyCode).wrappedValue
-        guard income.currencyCode == currencyCode else {
-            throw $income.needsDisambiguationError(among: [.init(amount: income.amount, currencyCode: currencyCode)])
+        if let amount = ItemIntentCurrencyValidator.disambiguationAmount(
+            amount: income,
+            expectedCurrencyCode: currencyCode
+        ) {
+            throw $income.needsDisambiguationError(among: [amount])
         }
-        guard outgo.currencyCode == currencyCode else {
-            throw $outgo.needsDisambiguationError(among: [.init(amount: outgo.amount, currencyCode: currencyCode)])
+        if let amount = ItemIntentCurrencyValidator.disambiguationAmount(
+            amount: outgo,
+            expectedCurrencyCode: currencyCode
+        ) {
+            throw $outgo.needsDisambiguationError(among: [amount])
         }
 
         let item = try ItemService.create(
@@ -62,31 +66,23 @@ struct CreateScheduledItemIntent: AppIntent {
 }
 
 private extension CreateScheduledItemIntent {
+    func validateFormInput() throws {
+        do {
+            try formInput.validate()
+        } catch ItemFormInput.ValidationError.contentIsEmpty {
+            throw $content.needsValueError()
+        } catch ItemFormInput.ValidationError.invalidPriority {
+            throw $priority.needsValueError()
+        } catch {
+            throw error
+        }
+    }
+
     func parsedRepeatMonthSelections() throws -> Set<RepeatMonthSelection> {
-        let trimmedValue = repeatMonths.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard trimmedValue.isNotEmpty else {
-            return []
+        do {
+            return try RepeatMonthSelectionParser.parse(repeatMonths)
+        } catch RepeatMonthSelectionParser.ParserError.invalidToken {
+            throw ItemError.invalidRepeatMonthSelections
         }
-
-        let tokens = trimmedValue
-            .split { character in
-                character == "," || character.isWhitespace
-            }
-            .map(String.init)
-        var selections = Set<RepeatMonthSelection>()
-
-        for token in tokens {
-            let compactValue = token.replacingOccurrences(of: "-", with: "")
-            guard compactValue.count == 6, // swiftlint:disable:this no_magic_numbers
-                  let year = Int(compactValue.prefix(4)), // swiftlint:disable:this no_magic_numbers
-                  let month = Int(compactValue.suffix(2)), // swiftlint:disable:this no_magic_numbers
-                  (1...9_999).contains(year), // swiftlint:disable:this no_magic_numbers
-                  (1...12).contains(month) else { // swiftlint:disable:this no_magic_numbers
-                throw ItemError.invalidRepeatMonthSelections
-            }
-            selections.insert(.init(year: year, month: month))
-        }
-
-        return selections
     }
 }

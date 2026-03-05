@@ -41,31 +41,18 @@ enum YearlyDuplicationCoordinator {
         preserveCurrentSelection: Bool,
         currentYear: Int = Calendar.current.component(.year, from: .now)
     ) -> SelectionState {
-        let sourceYears = sourceYears(
-            from: yearTags,
-            currentYear: currentYear
-        )
-        let targetYears = targetYears(currentYear: currentYear)
-        let defaultSourceYear = sourceYears.first ?? currentYear
-        let defaultTargetYear = targetYears.first ?? currentYear
-        let suggestion = YearlyItemDuplicator.suggestion(
+        let state = YearlyItemDuplicator.selectionState(
             context: context,
             yearTags: yearTags,
-            targetYears: targetYears,
+            currentSourceYear: currentSourceYear,
+            currentTargetYear: currentTargetYear,
+            preserveCurrentSelection: preserveCurrentSelection,
+            currentYear: currentYear,
             minimumGroupCount: 3 // swiftlint:disable:this no_magic_numbers
         )
-        let suggestedSourceYear = suggestion?.sourceYear ?? defaultSourceYear
-        let suggestedTargetYear = suggestion?.targetYear ?? defaultTargetYear
-        let sourceYear = preserveCurrentSelection && sourceYears.contains(currentSourceYear)
-            ? currentSourceYear
-            : suggestedSourceYear
-        let targetYear = preserveCurrentSelection && targetYears.contains(currentTargetYear)
-            ? currentTargetYear
-            : suggestedTargetYear
-
         return .init(
-            sourceYear: sourceYear,
-            targetYear: targetYear
+            sourceYear: state.sourceYear,
+            targetYear: state.targetYear
         )
     }
 
@@ -94,22 +81,21 @@ enum YearlyDuplicationCoordinator {
         for group: YearlyItemDuplicationGroup,
         in plan: YearlyItemDuplicationPlan
     ) -> ItemFormDraft? {
-        let entries = entries(
-            for: group,
+        guard let draft = YearlyItemDuplicator.draft(
+            for: group.id,
             in: plan
-        )
-        guard let baseDate = entries.map(\.targetDate).sorted().first else { // swiftlint:disable:this sorted_first_last
+        ) else {
             return nil
         }
         return .init(
-            groupID: group.id,
-            date: baseDate,
-            content: group.content,
-            incomeText: decimalString(from: group.averageIncome),
-            outgoText: decimalString(from: group.averageOutgo),
-            category: group.category,
-            priorityText: .empty,
-            repeatMonthSelections: repeatMonthSelections(from: entries)
+            groupID: draft.groupID,
+            date: draft.date,
+            content: draft.content,
+            incomeText: draft.incomeText,
+            outgoText: draft.outgoText,
+            category: draft.category,
+            priorityText: draft.priorityText,
+            repeatMonthSelections: draft.repeatMonthSelections
         )
     }
 
@@ -126,10 +112,8 @@ enum YearlyDuplicationCoordinator {
             return nil
         }
         return try YearlyItemDuplicator.apply(
-            plan: singleGroupPlan(
-                group: group,
-                entries: entries
-            ),
+            groupID: group.id,
+            in: plan,
             context: context
         )
     }
@@ -204,28 +188,5 @@ private extension YearlyDuplicationCoordinator {
     struct MonthDay: Hashable {
         let month: Int
         let day: Int
-    }
-
-    static func singleGroupPlan(
-        group: YearlyItemDuplicationGroup,
-        entries: [YearlyItemDuplicationEntry]
-    ) -> YearlyItemDuplicationPlan {
-        .init(
-            groups: [group],
-            entries: entries,
-            skippedDuplicateCount: 0
-        )
-    }
-
-    static func repeatMonthSelections(
-        from entries: [YearlyItemDuplicationEntry]
-    ) -> Set<RepeatMonthSelection> {
-        let calendar = Calendar.current
-        return Set(entries.map { entry in
-            .init(
-                year: calendar.component(.year, from: entry.targetDate),
-                month: calendar.component(.month, from: entry.targetDate)
-            )
-        })
     }
 }

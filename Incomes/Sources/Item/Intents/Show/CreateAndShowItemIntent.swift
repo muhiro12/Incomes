@@ -39,7 +39,9 @@ struct CreateAndShowItemIntent: AppIntent {
 
     @MainActor
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
-        guard content.isNotEmpty else {
+        do {
+            try formInput.validate()
+        } catch ItemFormInput.ValidationError.contentIsEmpty {
             throw ItemError.contentIsEmpty
         }
         let item = try ItemService.create(
