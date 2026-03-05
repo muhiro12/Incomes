@@ -27,6 +27,10 @@ summary_path="$run_directory/summary.md"
 meta_path="$run_directory/meta.json"
 logs_directory="$run_directory/logs"
 results_directory="$run_directory/results"
+run_work_directory="$run_directory/work"
+shared_cache_root="$repository_root/.build/work/cache"
+
+mkdir -p "$run_work_directory" "$shared_cache_root"
 
 start_epoch=$(date +%s)
 start_time_display=$(date +"%Y-%m-%d %H:%M:%S %z")
@@ -115,11 +119,19 @@ run_logged_step() {
   local log_path="$logs_directory/${step_identifier}.log"
   executed_steps+=("$step_description")
 
-  ci_run_capture_command "$commands_file" "AI_RUN_RESULTS_DIR=$results_directory" "$@"
+  ci_run_capture_command \
+    "$commands_file" \
+    "AI_RUN_RESULTS_DIR=$results_directory" \
+    "AI_RUN_WORK_DIR=$run_work_directory" \
+    "AI_RUN_CACHE_ROOT=$shared_cache_root" \
+    "$@"
 
   echo "Running ${step_description}."
   set +e
-  AI_RUN_RESULTS_DIR="$results_directory" "$@" 2>&1 | tee "$log_path"
+  AI_RUN_RESULTS_DIR="$results_directory" \
+    AI_RUN_WORK_DIR="$run_work_directory" \
+    AI_RUN_CACHE_ROOT="$shared_cache_root" \
+    "$@" 2>&1 | tee "$log_path"
   local command_status=${PIPESTATUS[0]}
   set -e
 
