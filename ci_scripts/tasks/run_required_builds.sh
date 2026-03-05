@@ -18,7 +18,14 @@ if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
   exit 1
 fi
 
-runs_root="$repository_root/.build/ci_runs"
+ci_root="$repository_root/.build/ci"
+runs_root="$ci_root/runs"
+shared_directory="$ci_root/shared"
+cache_directory="$shared_directory/cache"
+derived_data_directory="$shared_directory/DerivedData"
+shared_tmp_directory="$shared_directory/tmp"
+shared_home_directory="$shared_directory/home"
+
 run_directory=$(ci_run_create_dir "$runs_root")
 run_identifier=$(basename "$run_directory")
 
@@ -28,9 +35,13 @@ meta_path="$run_directory/meta.json"
 logs_directory="$run_directory/logs"
 results_directory="$run_directory/results"
 run_work_directory="$run_directory/work"
-shared_cache_root="$repository_root/.build/work/cache"
 
-mkdir -p "$run_work_directory" "$shared_cache_root"
+mkdir -p \
+  "$run_work_directory" \
+  "$cache_directory" \
+  "$derived_data_directory" \
+  "$shared_tmp_directory" \
+  "$shared_home_directory"
 
 start_epoch=$(date +%s)
 start_time_display=$(date +"%Y-%m-%d %H:%M:%S %z")
@@ -59,7 +70,7 @@ finalize_run_artifacts() {
 
   if [[ $exit_code -ne 0 ]]; then
     overall_result="failure"
-    if [[ -z "$run_note" || "$run_note" == "Executed required build/test steps based on local changes." ]]; then
+    if [[ -z "$run_note" || "$run_note" == "Executed required CI steps based on local changes." ]]; then
       run_note="A required step failed. Review failure details and logs."
     fi
   fi
@@ -109,7 +120,7 @@ finalize_run_artifacts() {
 trap 'finalize_run_artifacts "$?"' EXIT
 
 ci_run_capture_command "$commands_file" "$0" "$@"
-echo "AI run artifacts: $run_directory"
+echo "CI run artifacts: $run_directory"
 
 run_logged_step() {
   local step_identifier=$1
@@ -121,16 +132,28 @@ run_logged_step() {
 
   ci_run_capture_command \
     "$commands_file" \
+    "CI_RUN_DIR=$run_directory" \
+    "CI_RUN_WORK_DIR=$run_work_directory" \
+    "CI_SHARED_DIR=$shared_directory" \
+    "CI_CACHE_DIR=$cache_directory" \
+    "CI_DERIVED_DATA_DIR=$derived_data_directory" \
+    "CI_RUN_RESULTS_DIR=$results_directory" \
     "AI_RUN_RESULTS_DIR=$results_directory" \
     "AI_RUN_WORK_DIR=$run_work_directory" \
-    "AI_RUN_CACHE_ROOT=$shared_cache_root" \
+    "AI_RUN_CACHE_ROOT=$cache_directory" \
     "$@"
 
   echo "Running ${step_description}."
   set +e
-  AI_RUN_RESULTS_DIR="$results_directory" \
+  CI_RUN_DIR="$run_directory" \
+    CI_RUN_WORK_DIR="$run_work_directory" \
+    CI_SHARED_DIR="$shared_directory" \
+    CI_CACHE_DIR="$cache_directory" \
+    CI_DERIVED_DATA_DIR="$derived_data_directory" \
+    CI_RUN_RESULTS_DIR="$results_directory" \
+    AI_RUN_RESULTS_DIR="$results_directory" \
     AI_RUN_WORK_DIR="$run_work_directory" \
-    AI_RUN_CACHE_ROOT="$shared_cache_root" \
+    AI_RUN_CACHE_ROOT="$cache_directory" \
     "$@" 2>&1 | tee "$log_path"
   local command_status=${PIPESTATUS[0]}
   set -e
@@ -146,6 +169,18 @@ run_logged_step() {
   return 0
 }
 
+should_run_pre_commit=false
+if [[ "${CI_RUN_ENABLE_PRE_COMMIT:-0}" == "1" || "${CI_RUN_ENABLE_PRE_COMMIT:-}" == "true" ]]; then
+  should_run_pre_commit=true
+fi
+
+if $should_run_pre_commit; then
+  run_logged_step \
+    "pre_commit" \
+    "Run pre-commit hooks" \
+    bash "$repository_root/ci_scripts/tasks/pre_commit.sh"
+fi
+
 changed_files=$(
   {
     git diff --name-only --cached
@@ -156,7 +191,11 @@ changed_files=$(
 
 if [[ -z "$changed_files" ]]; then
   echo "No local changes detected."
-  run_note="No local changes detected. Build/test steps were skipped."
+  if $should_run_pre_commit; then
+    run_note="pre-commit completed. No local changes detected. Build/test steps were skipped."
+  else
+    run_note="No local changes detected. Build/test steps were skipped."
+  fi
   exit 0
 fi
 
@@ -173,11 +212,15 @@ fi
 
 if ! $needs_incomes_build && ! $needs_incomes_library_tests; then
   echo "No changes under Incomes/, IncomesLibrary/, Widgets/, Watch/, or Incomes.xcodeproj/."
-  run_note="No changes under Incomes/, IncomesLibrary/, Widgets/, Watch/, or Incomes.xcodeproj/. Build/test steps were skipped."
+  if $should_run_pre_commit; then
+    run_note="pre-commit completed. No changes under Incomes/, IncomesLibrary/, Widgets/, Watch/, or Incomes.xcodeproj/. Build/test steps were skipped."
+  else
+    run_note="No changes under Incomes/, IncomesLibrary/, Widgets/, Watch/, or Incomes.xcodeproj/. Build/test steps were skipped."
+  fi
   exit 0
 fi
 
-run_note="Executed required build/test steps based on local changes."
+run_note="Executed required CI steps based on local changes."
 
 if $needs_incomes_build; then
   run_logged_step \
@@ -186,14 +229,14 @@ if $needs_incomes_build; then
     bash "$repository_root/ci_scripts/tasks/check_models_directory_consistency.sh"
 
   run_logged_step \
-    "build_incomes" \
+    "build_app" \
     "Build Incomes scheme" \
     bash "$repository_root/ci_scripts/tasks/build_app.sh"
 fi
 
 if $needs_incomes_library_tests; then
   run_logged_step \
-    "test_incomes_library" \
+    "test_shared_library" \
     "Test IncomesLibrary scheme" \
     bash "$repository_root/ci_scripts/tasks/test_shared_library.sh"
 fi

@@ -126,11 +126,16 @@ reflect your release channel.
 
 ## Build and Test
 
-Use the helper scripts in `ci_scripts/` as needed. If you are unsure, run the
-required builds/tests based on local changes:
+Use the helper scripts in `ci_scripts/` as needed. For full local verification:
 
 ```sh
-bash ci_scripts/tasks/run_required_builds.sh
+bash ci_scripts/tasks/verify.sh
+```
+
+If you only need required builds/tests based on local changes:
+
+```sh
+bash ci_scripts/run_required_builds.sh
 ```
 
 If you only need the app build:
@@ -144,6 +149,13 @@ If you only need library tests:
 ```sh
 bash ci_scripts/tasks/test_shared_library.sh
 ```
+
+### CI artifact layout
+
+CI helper scripts write all generated artifacts under `.build/ci/`.
+Run-scoped outputs are stored in `.build/ci/runs/<RUN_ID>/` (summary, commands,
+meta, logs, results, work), while shared caches and build state live in
+`.build/ci/shared/` (`cache/`, `DerivedData/`, `tmp/`, `home/`).
 
 ## Useful links
 

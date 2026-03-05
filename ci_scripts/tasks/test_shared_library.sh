@@ -17,15 +17,14 @@ if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
 fi
 
 project_path="Incomes.xcodeproj"
-work_directory="${AI_RUN_WORK_DIR:-$repository_root/.build/work}"
-cache_root="${AI_RUN_CACHE_ROOT:-$repository_root/.build/work/cache}"
-derived_data_path="$work_directory/DerivedData"
-results_directory="$work_directory/results"
-results_directory="${AI_RUN_RESULTS_DIR:-$results_directory}"
+shared_directory="${CI_SHARED_DIR:-$repository_root/.build/ci/shared}"
+work_directory="${CI_RUN_WORK_DIR:-${AI_RUN_WORK_DIR:-$shared_directory/work}}"
+cache_directory="${CI_CACHE_DIR:-${AI_RUN_CACHE_ROOT:-$shared_directory/cache}}"
+derived_data_path="${CI_DERIVED_DATA_DIR:-$shared_directory/DerivedData}"
+results_directory="${CI_RUN_RESULTS_DIR:-${AI_RUN_RESULTS_DIR:-$work_directory/results}}"
 
-local_home_directory="$work_directory/home"
-cache_directory="$cache_root"
-temporary_directory="$work_directory/tmp"
+local_home_directory="$shared_directory/home"
+temporary_directory="$shared_directory/tmp"
 clang_module_cache_directory="$cache_directory/clang/ModuleCache"
 package_cache_directory="$cache_directory/package"
 cloned_source_packages_directory="$cache_directory/source_packages"
@@ -33,6 +32,7 @@ swiftpm_cache_directory="$cache_directory/swiftpm/cache"
 swiftpm_config_directory="$cache_directory/swiftpm/config"
 
 mkdir -p \
+  "$work_directory" \
   "$local_home_directory/Library/Caches" \
   "$local_home_directory/Library/Developer" \
   "$local_home_directory/Library/Logs" \
@@ -42,9 +42,9 @@ mkdir -p \
   "$cloned_source_packages_directory" \
   "$swiftpm_cache_directory" \
   "$swiftpm_config_directory" \
-  "$temporary_directory"
-
-mkdir -p "$derived_data_path" "$results_directory"
+  "$temporary_directory" \
+  "$derived_data_path" \
+  "$results_directory"
 
 resolve_simulator_identifier() {
   local booted_simulator_identifier

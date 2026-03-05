@@ -77,7 +77,7 @@ ci_run_write_summary() {
   local commands_file=${12}
 
   {
-    printf '# AI Run Summary\n\n'
+    printf '# CI Run Summary\n\n'
     printf -- '- Run ID: `%s`\n' "$run_identifier"
     printf -- '- Start time: `%s`\n' "$started_at"
     printf -- '- End time: `%s`\n' "$ended_at"

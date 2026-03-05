@@ -95,14 +95,15 @@ tasks.filter { $0.isCompleted }
 
 ## Build and Test Entry Point
 
-Agents MUST use the standardized CI helper:
+Agents MUST use one of these standardized entrypoints:
 
 ``` sh
+bash ci_scripts/run_required_builds.sh
 bash ci_scripts/tasks/verify.sh
 ```
 
-CI run artifacts are written under `.build/ci_runs/<RUN_ID>/`.
-Each run stores `summary.md`, `commands.txt`, `meta.json`, `logs/`, and `results/`.
-CI work directories are under `.build/ci_runs/<RUN_ID>/work/`.
-Shared build caches are stored under `.build/work/cache/`.
-Only the newest 5 runs are retained.
+CI run artifacts are written under `.build/ci/runs/<RUN_ID>/`.
+Each run stores `summary.md`, `commands.txt`, `meta.json`, `logs/`, `results/`, and `work/`.
+Shared CI directories are under `.build/ci/shared/` (`cache/`, `DerivedData/`, `tmp/`, `home/`).
+Only the newest 5 run directories are retained.
+The entire `.build/ci` directory is disposable.
