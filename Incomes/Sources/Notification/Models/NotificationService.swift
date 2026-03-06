@@ -171,12 +171,20 @@ extension NotificationService: UNUserNotificationCenterDelegate {
     func userNotificationCenter(_: UNUserNotificationCenter,
                                 openSettingsFor _: UNNotification?) {
         Task {
+            notificationLogger.info("notification settings route requested")
             pendingDeepLinkURL = IncomesDeepLinkURLBuilder.preferredURL(for: .settings)
         }
     }
 }
 
 private extension NotificationService {
+    var notificationLogger: MHLogger {
+        IncomesApp.logger(
+            category: "NotificationRoute",
+            source: #fileID
+        )
+    }
+
     func registerNotificationCategories() {
         MHNotificationOrchestrator.registerCategories(
             [
@@ -257,14 +265,21 @@ private extension NotificationService {
             from: userInfo,
             key: NotificationPayloadKey.secondaryDeepLinkURL
            ) {
+            notificationLogger.notice("notification route resolved via legacy month fallback")
             return monthURL
         }
 
-        return MHNotificationOrchestrator.resolveRouteURL(
+        let routeURL = MHNotificationOrchestrator.resolveRouteURL(
             userInfo: userInfo,
             actionIdentifier: response.actionIdentifier,
             codec: Self.notificationPayloadCodec
         )
+        if routeURL == nil {
+            notificationLogger.info("notification route resolution returned no route")
+        } else {
+            notificationLogger.info("notification route resolved")
+        }
+        return routeURL
     }
 
     func extractLegacyDeepLinkURL(

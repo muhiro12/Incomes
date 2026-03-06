@@ -70,8 +70,9 @@ extension ContentView: View {
                     await notificationService.update()
                 }
                 Task {
-                    _ = await MHReviewRequester.requestIfNeeded(
-                        policy: Self.reviewPolicy
+                    _ = await IncomesApp.requestReviewIfNeeded(
+                        policy: Self.reviewPolicy,
+                        source: #fileID
                     )
                 }
                 applyPendingDeepLinkIfNeeded()
@@ -104,6 +105,13 @@ private extension ContentView {
         .init(
             lotteryMaxExclusive: ReviewConstants.lotteryMaxExclusive,
             requestDelay: .seconds(ReviewConstants.requestDelaySeconds)
+        )
+    }
+
+    var routeLogger: MHLogger {
+        IncomesApp.logger(
+            category: "RouteExecution",
+            source: #fileID
         )
     }
 
@@ -140,8 +148,10 @@ private extension ContentView {
 
     func handleIncomingURL(_ url: URL) {
         guard let route = IncomesRouteParser.parse(url: url) else {
+            routeLogger.info("ignored deep-link URL because parsing failed")
             return
         }
+        routeLogger.info("accepted deep-link URL for route handling")
         incomingRoute = route
     }
 }

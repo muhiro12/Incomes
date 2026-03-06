@@ -121,11 +121,13 @@ final class MainNavigationRouter: ObservableObject {
     }
 
     func applyPendingRouteIfNeeded(context: ModelContext) async throws {
-        _ = try await routeCoordinator.applyPendingIfReady { [self] route in
+        if let outcome = try await routeCoordinator.applyPendingIfReady(applyOnMainActor: { [self] route in
             try apply(
                 route: route,
                 context: context
             )
+        }) {
+            logExecutionOutcome(outcome)
         }
     }
 
@@ -160,16 +162,24 @@ final class MainNavigationRouter: ObservableObject {
 }
 
 private extension MainNavigationRouter {
+    var routeLogger: MHLogger {
+        IncomesApp.logger(
+            category: "RouteExecution",
+            source: #fileID
+        )
+    }
+
     func submit(
         _ route: IncomesRoute,
         context: ModelContext
     ) async throws {
-        _ = try await routeCoordinator.submit(route) { [self] route in
+        let outcome = try await routeCoordinator.submit(route) { [self] route in
             try apply(
                 route: route,
                 context: context
             )
         }
+        logExecutionOutcome(outcome)
     }
 
     func apply(
@@ -217,5 +227,18 @@ private extension MainNavigationRouter {
         isSearchPresented = false
         searchText = .empty
         predicate = nil
+    }
+
+    func logExecutionOutcome(
+        _ outcome: MHRouteExecutionOutcome<IncomesRoute>
+    ) {
+        switch outcome {
+        case .applied:
+            routeLogger.notice("route applied")
+        case .queued:
+            routeLogger.info("route queued until execution becomes ready")
+        case .deduplicated:
+            routeLogger.info("route deduplicated against pending route")
+        }
     }
 }

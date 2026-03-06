@@ -176,8 +176,9 @@ struct ItemFormView: View { // swiftlint:disable:this type_body_length
                         save()
                     }
                     Task {
-                        _ = await MHReviewRequester.requestIfNeeded(
-                            policy: Self.reviewPolicy
+                        _ = await IncomesApp.requestReviewIfNeeded(
+                            policy: Self.reviewPolicy,
+                            source: #fileID
                         )
                     }
                 } label: {
