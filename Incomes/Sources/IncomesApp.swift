@@ -7,6 +7,7 @@
 
 import AppIntents
 import GoogleMobileAdsWrapper
+import MHPlatform
 import StoreKitWrapper
 import SwiftData
 import SwiftUI
@@ -27,9 +28,11 @@ struct IncomesApp: App {
 
     private let sharedStore: Store
     private let sharedGoogleMobileAdsController: GoogleMobileAdsController
+    private let startupLogger = Self.makeStartupLogger()
 
     @MainActor
     init() { // swiftlint:disable:this function_body_length type_contents_order
+        startupLogger.notice("app startup began")
         DatabaseMigrator.migrateSQLiteFilesIfNeeded()
         let isICloudEnabled = UserDefaults.standard.bool(
             forKey: BoolAppStorageKey.isICloudOn.rawValue
@@ -69,6 +72,7 @@ struct IncomesApp: App {
                 #endif
             }()
         )
+        startupLogger.notice("startup dependencies ready")
 
         AppDependencyManager.shared.add {
             modelContainer
@@ -93,6 +97,7 @@ struct IncomesApp: App {
         }
 
         IncomesShortcuts.updateAppShortcutParameters()
+        startupLogger.notice("startup wiring finished")
     }
 
     var body: some Scene {
@@ -106,5 +111,22 @@ struct IncomesApp: App {
                 .environment(sharedStore)
                 .environment(sharedGoogleMobileAdsController)
         }
+    }
+}
+
+private extension IncomesApp {
+    static func makeStartupLogger() -> MHLogger {
+        let policy = MHLogPolicy.default
+        let store = MHLogStore(
+            policy: policy,
+            sinks: [MHOSLogSink()]
+        )
+
+        return MHLogger(
+            #fileID,
+            store: store,
+            category: "AppStartup",
+            policy: policy
+        )
     }
 }
