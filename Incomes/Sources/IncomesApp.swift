@@ -6,9 +6,7 @@
 //
 
 import AppIntents
-import GoogleMobileAdsWrapper
 import MHPlatform
-import StoreKitWrapper
 import SwiftData
 import SwiftUI
 import TipKit
@@ -25,13 +23,23 @@ struct IncomesApp: App {
     private let sharedNotificationService: NotificationService
     private let sharedConfigurationService: ConfigurationService
     private let sharedTipController: IncomesTipController
-
-    private let sharedStore: Store
-    private let sharedGoogleMobileAdsController: GoogleMobileAdsController
+    private let sharedAppRuntime: MHAppRuntime
     private let startupLogger = Self.makeStartupLogger()
 
+    var body: some Scene {
+        WindowGroup {
+            ContentView()
+                .id(isICloudOn)
+                .modelContainer(sharedModelContainer)
+                .environment(sharedNotificationService)
+                .environment(sharedConfigurationService)
+                .environment(sharedTipController)
+                .environment(sharedAppRuntime)
+        }
+    }
+
     @MainActor
-    init() { // swiftlint:disable:this function_body_length type_contents_order
+    init() {
         startupLogger.notice("app startup began")
         DatabaseMigrator.migrateSQLiteFilesIfNeeded()
         let isICloudEnabled = UserDefaults.standard.bool(
@@ -60,18 +68,7 @@ struct IncomesApp: App {
         sharedNotificationService = notificationService
         sharedConfigurationService = configurationService
         sharedTipController = tipController
-
-        sharedStore = .init()
-
-        sharedGoogleMobileAdsController = .init(
-            adUnitID: {
-                #if DEBUG
-                Secret.admobNativeIDDev
-                #else
-                Secret.admobNativeID
-                #endif
-            }()
-        )
+        sharedAppRuntime = Self.makeAppRuntime()
         startupLogger.notice("startup dependencies ready")
 
         AppDependencyManager.shared.add {
@@ -99,22 +96,29 @@ struct IncomesApp: App {
         IncomesShortcuts.updateAppShortcutParameters()
         startupLogger.notice("startup wiring finished")
     }
-
-    var body: some Scene {
-        WindowGroup {
-            ContentView()
-                .id(isICloudOn)
-                .modelContainer(sharedModelContainer)
-                .environment(sharedNotificationService)
-                .environment(sharedConfigurationService)
-                .environment(sharedTipController)
-                .environment(sharedStore)
-                .environment(sharedGoogleMobileAdsController)
-        }
-    }
 }
 
 private extension IncomesApp {
+    static var nativeAdUnitID: String {
+        #if DEBUG
+        Secret.admobNativeIDDev
+        #else
+        Secret.admobNativeID
+        #endif
+    }
+
+    @MainActor
+    static func makeAppRuntime() -> MHAppRuntime {
+        .init(
+            configuration: .init(
+                subscriptionProductIDs: [Secret.productID],
+                nativeAdUnitID: nativeAdUnitID,
+                preferencesSuiteName: AppGroup.id,
+                showsLicenses: true
+            )
+        )
+    }
+
     static func makeStartupLogger() -> MHLogger {
         let policy = MHLogPolicy.default
         let store = MHLogStore(

@@ -5,8 +5,7 @@
 //  Created by Hiromu Nakano on 2024/06/17.
 //
 
-import GoogleMobileAdsWrapper
-import StoreKitWrapper
+import MHPlatform
 import SwiftData
 import SwiftUI
 
@@ -15,8 +14,7 @@ struct IncomesSampleData: PreviewModifier {
         let modelContainer: ModelContainer
         let notificationService: NotificationService
         let configurationService: ConfigurationService
-        let store: Store
-        let googleMobileAdsController: GoogleMobileAdsController
+        let appRuntime: MHAppRuntime
     }
 
     static func makeSharedContext() throws -> Context {
@@ -33,15 +31,22 @@ struct IncomesSampleData: PreviewModifier {
         try? BalanceCalculator.calculate(in: previewContext, after: .distantPast)
         let notificationService = NotificationService(modelContainer: modelContainer)
         let configurationService = ConfigurationService()
-        let store = Store()
-        let googleMobileAdsController = GoogleMobileAdsController(adUnitID: Secret.admobNativeIDDev)
+        let appRuntime = MainActor.assumeIsolated {
+            MHAppRuntime(
+                configuration: .init(
+                    subscriptionProductIDs: [Secret.productID],
+                    nativeAdUnitID: Secret.admobNativeIDDev,
+                    preferencesSuiteName: AppGroup.id,
+                    showsLicenses: true
+                )
+            )
+        }
 
         return .init(
             modelContainer: modelContainer,
             notificationService: notificationService,
             configurationService: configurationService,
-            store: store,
-            googleMobileAdsController: googleMobileAdsController
+            appRuntime: appRuntime
         )
     }
 
@@ -50,8 +55,7 @@ struct IncomesSampleData: PreviewModifier {
             .modelContainer(context.modelContainer)
             .environment(context.notificationService)
             .environment(context.configurationService)
-            .environment(context.store)
-            .environment(context.googleMobileAdsController)
+            .environment(context.appRuntime)
     }
 }
 

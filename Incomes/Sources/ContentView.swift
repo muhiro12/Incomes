@@ -5,9 +5,7 @@
 //  Created by Hiromu Nakano on 2020/04/08.
 //
 
-import GoogleMobileAdsWrapper
 import MHPlatform
-import StoreKitWrapper
 import SwiftUI
 
 struct ContentView {
@@ -15,10 +13,8 @@ struct ContentView {
     private var notificationService
     @Environment(ConfigurationService.self)
     private var configurationService
-    @Environment(Store.self)
-    private var store
-    @Environment(GoogleMobileAdsController.self)
-    private var googleMobileAdsController
+    @Environment(MHAppRuntime.self)
+    private var appRuntime
 
     @Environment(\.scenePhase)
     private var scenePhase
@@ -53,24 +49,10 @@ extension ContentView: View {
                 isDebugOn = true
                 #endif
 
+                appRuntime.startIfNeeded()
+                syncSubscriptionStateIfNeeded()
                 try? await configurationService.load()
                 isUpdateAlertPresented = configurationService.isUpdateRequired()
-
-                store.open(
-                    groupID: nil,
-                    productIDs: [Secret.productID]
-                ) { products in
-                    let purchasedProductIDs = Set(products.map(\.id))
-                    let state = SubscriptionStateCalculator.calculate(
-                        purchasedProductIDs: purchasedProductIDs,
-                        productID: Secret.productID,
-                        isICloudOn: isICloudOn
-                    )
-                    isSubscribeOn = state.isSubscribeOn
-                    isICloudOn = state.isICloudOn
-                }
-
-                googleMobileAdsController.start()
                 await notificationService.update()
                 applyPendingDeepLinkIfNeeded()
             }
@@ -78,6 +60,8 @@ extension ContentView: View {
                 guard scenePhase == .active else {
                     return
                 }
+                appRuntime.startIfNeeded()
+                syncSubscriptionStateIfNeeded()
                 Task {
                     try? await configurationService.load()
                     isUpdateAlertPresented = configurationService.isUpdateRequired()
@@ -91,6 +75,9 @@ extension ContentView: View {
                     )
                 }
                 applyPendingDeepLinkIfNeeded()
+            }
+            .onChange(of: appRuntime.premiumStatus) {
+                syncSubscriptionStateIfNeeded()
             }
             .onChange(of: notificationService.pendingDeepLinkURL) {
                 applyPendingDeepLinkIfNeeded()
@@ -118,6 +105,28 @@ private extension ContentView {
             lotteryMaxExclusive: ReviewConstants.lotteryMaxExclusive,
             requestDelay: .seconds(ReviewConstants.requestDelaySeconds)
         )
+    }
+
+    @MainActor
+    func syncSubscriptionStateIfNeeded() {
+        let purchasedProductIDs: Set<String>
+
+        switch appRuntime.premiumStatus {
+        case .unknown:
+            return
+        case .inactive:
+            purchasedProductIDs = []
+        case .active:
+            purchasedProductIDs = [Secret.productID]
+        }
+
+        let state = SubscriptionStateCalculator.calculate(
+            purchasedProductIDs: purchasedProductIDs,
+            productID: Secret.productID,
+            isICloudOn: isICloudOn
+        )
+        isSubscribeOn = state.isSubscribeOn
+        isICloudOn = state.isICloudOn
     }
 
     func applyPendingDeepLinkIfNeeded() {

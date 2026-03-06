@@ -1,13 +1,18 @@
-import LicenseListWrapper
+import MHPlatform
 import SwiftUI
 
 struct LicenseView: View {
+    @Environment(MHAppRuntime.self)
+    private var appRuntime
+
     var body: some View {
-        LicenseListView()
+        appRuntime.licensesView()
             .navigationTitle("License")
     }
 }
 
-#Preview {
-    LicenseView()
+#Preview(traits: .modifier(IncomesSampleData())) {
+    NavigationStack {
+        LicenseView()
+    }
 }
