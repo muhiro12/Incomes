@@ -37,6 +37,10 @@ let package = Package( // swiftlint:disable:this prefixed_toplevel_constant
                 .product(
                     name: "MHDeepLinking",
                     package: "MHPlatform"
+                ),
+                .product(
+                    name: "MHPreferences",
+                    package: "MHPlatform"
                 )
             ],
             path: ".",

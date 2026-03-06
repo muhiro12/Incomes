@@ -42,8 +42,8 @@ struct IncomesApp: App {
     init() {
         startupLogger.notice("app startup began")
         DatabaseMigrator.migrateSQLiteFilesIfNeeded()
-        let isICloudEnabled = UserDefaults.standard.bool(
-            forKey: BoolAppStorageKey.isICloudOn.rawValue
+        let isICloudEnabled = MHPreferenceStore().bool(
+            for: BoolAppStorageKey.isICloudOn.preferenceKey
         )
 
         let modelContainer: ModelContainer
