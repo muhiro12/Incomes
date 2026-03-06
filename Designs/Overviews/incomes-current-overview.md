@@ -435,8 +435,10 @@ The following behaviors are already centralized and should remain centralized:
 
 ## Notable Version and Capability Gates
 
-- The iPhone app target is iOS 17, the widgets target is iOS 18, and the
-  watch companion target is watchOS 11.
+- The iPhone app target and widgets target are iOS 18, and the watch
+  companion target is watchOS 11.
+- `IncomesLibrary` declares iOS 18 and watchOS 11 as supported package
+  platforms.
 - On-device text inference and monthly narrative summaries require iOS 26 and
   Apple Foundation Models availability.
 - Notification features depend on user authorization.
