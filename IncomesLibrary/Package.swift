@@ -7,7 +7,8 @@ let package = Package( // swiftlint:disable:this prefixed_toplevel_constant
     name: "IncomesLibrary",
     defaultLocalization: "en",
     platforms: [
-        .iOS(.v17)
+        .iOS(.v18),
+        .watchOS(.v11)
     ],
     products: [
         .library(
