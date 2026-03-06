@@ -6,7 +6,7 @@
 //  Created by Hiromu Nakano on 2020/04/10.
 //
 
-import StoreKit
+import MHPlatform
 import SwiftData
 import SwiftUI
 import TipKit
@@ -41,8 +41,6 @@ struct ItemFormView: View { // swiftlint:disable:this type_body_length
     private var tag: Tag?
     @Environment(\.dismiss)
     private var dismiss
-    @Environment(\.requestReview)
-    private var requestReview
     @Environment(IncomesTipController.self)
     private var tipController
 
@@ -177,14 +175,10 @@ struct ItemFormView: View { // swiftlint:disable:this type_body_length
                     } else {
                         save()
                     }
-                    if ReviewRequestPolicy.shouldRequestReview(
-                        randomValue: Int.random(in: 0..<5), // swiftlint:disable:this no_magic_numbers
-                        maxExclusive: 5 // swiftlint:disable:this no_magic_numbers
-                    ) {
-                        Task {
-                            try? await Task.sleep(for: .seconds(2)) // swiftlint:disable:this no_magic_numbers
-                            requestReview()
-                        }
+                    Task {
+                        _ = await MHReviewRequester.requestIfNeeded(
+                            policy: Self.reviewPolicy
+                        )
                     }
                 } label: {
                     Text(mode == .create ? "Create" : "Save")
@@ -323,9 +317,19 @@ struct ItemFormView: View { // swiftlint:disable:this type_body_length
     }
 }
 
-// MARK: - private
-
 private extension ItemFormView {
+    private enum ReviewConstants {
+        static let lotteryMaxExclusive = 5
+        static let requestDelaySeconds = 2
+    }
+
+    static var reviewPolicy: MHReviewPolicy {
+        .init(
+            lotteryMaxExclusive: ReviewConstants.lotteryMaxExclusive,
+            requestDelay: .seconds(ReviewConstants.requestDelaySeconds)
+        )
+    }
+
     var priorityValue: Binding<Int> {
         .init(
             get: {

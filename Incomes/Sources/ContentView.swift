@@ -6,6 +6,7 @@
 //
 
 import GoogleMobileAdsWrapper
+import MHPlatform
 import StoreKitWrapper
 import SwiftUI
 
@@ -21,8 +22,6 @@ struct ContentView {
 
     @Environment(\.scenePhase)
     private var scenePhase
-    @Environment(\.requestReview)
-    private var requestReview
 
     @AppStorage(.isSubscribeOn)
     private var isSubscribeOn
@@ -86,14 +85,10 @@ extension ContentView: View {
                 Task {
                     await notificationService.update()
                 }
-                if ReviewRequestPolicy.shouldRequestReview(
-                    randomValue: Int.random(in: 0..<10), // swiftlint:disable:this no_magic_numbers
-                    maxExclusive: 10 // swiftlint:disable:this no_magic_numbers
-                ) {
-                    Task {
-                        try? await Task.sleep(for: .seconds(2)) // swiftlint:disable:this no_magic_numbers
-                        requestReview()
-                    }
+                Task {
+                    _ = await MHReviewRequester.requestIfNeeded(
+                        policy: Self.reviewPolicy
+                    )
                 }
                 applyPendingDeepLinkIfNeeded()
             }
@@ -113,6 +108,18 @@ extension ContentView: View {
 }
 
 private extension ContentView {
+    private enum ReviewConstants {
+        static let lotteryMaxExclusive = 10
+        static let requestDelaySeconds = 2
+    }
+
+    static var reviewPolicy: MHReviewPolicy {
+        .init(
+            lotteryMaxExclusive: ReviewConstants.lotteryMaxExclusive,
+            requestDelay: .seconds(ReviewConstants.requestDelaySeconds)
+        )
+    }
+
     func applyPendingDeepLinkIfNeeded() {
         if let intentDeepLinkURL = IncomesIntentRouteStore.consume() {
             handleIncomingURL(intentDeepLinkURL)
