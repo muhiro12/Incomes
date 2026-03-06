@@ -17,13 +17,27 @@ let package = Package( // swiftlint:disable:this prefixed_toplevel_constant
         )
     ],
     dependencies: [
-        .package(url: "https://github.com/muhiro12/SwiftUtilities", "1.0.0"..<"1.35.0")
+        .package(
+            url: "https://github.com/muhiro12/SwiftUtilities",
+            "1.0.0"..<"1.35.0"
+        ),
+        .package(
+            url: "https://github.com/muhiro12/MHPlatform.git",
+            branch: "main"
+        )
     ],
     targets: [
         .target(
             name: "IncomesLibrary",
             dependencies: [
-                .product(name: "SwiftUtilities", package: "SwiftUtilities")
+                .product(
+                    name: "SwiftUtilities",
+                    package: "SwiftUtilities"
+                ),
+                .product(
+                    name: "MHDeepLinking",
+                    package: "MHPlatform"
+                )
             ],
             path: ".",
             sources: [

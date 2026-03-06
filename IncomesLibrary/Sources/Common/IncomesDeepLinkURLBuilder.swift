@@ -4,19 +4,19 @@ import Foundation
 public enum IncomesDeepLinkURLBuilder {
     /// Documented for SwiftLint compliance.
     public static func routeURL(for route: IncomesRoute) -> URL? {
-        IncomesRouteURLBuilder.universalLinkURL(for: route)
+        IncomesDeepLinkCodec.shared.url(
+            for: route,
+            transport: .universalLink
+        )
     }
 
     /// Documented for SwiftLint compliance.
     public static func preferredURL(for route: IncomesRoute) -> URL {
-        if let universalLinkURL = routeURL(for: route) {
-            return universalLinkURL
+        if let preferredURL = IncomesDeepLinkCodec.shared.preferredURL(for: route) {
+            return preferredURL
         }
-        if let customSchemeURL = IncomesRouteURLBuilder.customSchemeURL(for: route) {
-            return customSchemeURL
-        }
-        if let homeCustomSchemeURL = IncomesRouteURLBuilder.customSchemeURL(for: .home) {
-            return homeCustomSchemeURL
+        if let homeURL = IncomesDeepLinkCodec.shared.preferredURL(for: .home) {
+            return homeURL
         }
         guard let fallbackURL = URL(
             string: "\(IncomesRouteURLDefaults.customScheme)://home"

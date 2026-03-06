@@ -76,7 +76,7 @@ struct MainNavigationView: View {
                             context: context,
                             yearTags: yearTags
                         ) {
-                            navigate(to: .yearlyDuplication)
+                            enqueueNavigation(to: .yearlyDuplication)
                         }
                     }
                 }
@@ -113,7 +113,7 @@ struct MainNavigationView: View {
             .toolbar {
                 ToolbarItem {
                     Button("Settings", systemImage: "gear") {
-                        navigate(to: .settings)
+                        enqueueNavigation(to: .settings)
                     }
                 }
             }
@@ -135,7 +135,7 @@ struct MainNavigationView: View {
                     )
                 } else if let selectedYearTag {
                     HomeListView { route in
-                        navigate(to: route)
+                        enqueueNavigation(to: route)
                     }
                     .environment(selectedYearTag)
                 }
@@ -170,12 +170,8 @@ struct MainNavigationView: View {
             item: $router.sheetRoute,
             onDismiss: {
                 router.itemDetailID = nil
-                do {
-                    try router.applyPendingRouteAfterSettingsDismissalIfNeeded(
-                        context: context
-                    )
-                } catch {
-                    assertionFailure(error.localizedDescription)
+                Task {
+                    await applyPendingRouteAfterSettingsDismissalIfNeeded()
                 }
             },
             content: { sheetRoute in
@@ -184,13 +180,8 @@ struct MainNavigationView: View {
                     SettingsNavigationView(
                         incomingDestination: $router.settingsDestination
                     ) { route in
-                        do {
-                            try router.navigateFromSettings(
-                                to: route,
-                                context: context
-                            )
-                        } catch {
-                            assertionFailure(error.localizedDescription)
+                        Task {
+                            await navigateFromSettings(to: route)
                         }
                     }
                 case .yearlyDuplication:
@@ -209,10 +200,8 @@ struct MainNavigationView: View {
             }
         }
         .onChange(of: incomingRoute) {
-            do {
-                try handleIncomingRoute()
-            } catch {
-                assertionFailure(error.localizedDescription)
+            Task {
+                await handleIncomingRoute()
             }
         }
         .onChange(of: yearTags) {
@@ -224,22 +213,12 @@ struct MainNavigationView: View {
             }
         }
         .task {
-            do {
-                try router.loadState(
-                    context: context
-                )
-            } catch {
-                assertionFailure(error.localizedDescription)
-            }
+            await loadState()
 
             tipController.refreshHasAnyItems(!yearTags.isEmpty)
 
-            do {
-                try handleIncomingRoute()
-                try router.applyPendingRouteIfNeeded(context: context)
-            } catch {
-                assertionFailure(error.localizedDescription)
-            }
+            await handleIncomingRoute()
+            await applyPendingRouteIfNeeded()
 
             await PhoneWatchBridge.shared.activate(modelContext: context)
         }
@@ -266,12 +245,28 @@ private extension MainNavigationView {
             router.selectYearTagID(yearTagID)
             return
         }
-        navigate(to: .year(year))
+        enqueueNavigation(to: .year(year))
     }
 
-    func navigate(to route: IncomesRoute) {
+    func enqueueNavigation(to route: IncomesRoute) {
+        Task {
+            await navigate(to: route)
+        }
+    }
+
+    func loadState() async {
         do {
-            try router.navigate(
+            try await router.loadState(
+                context: context
+            )
+        } catch {
+            assertionFailure(error.localizedDescription)
+        }
+    }
+
+    func navigate(to route: IncomesRoute) async {
+        do {
+            try await router.navigate(
                 to: route,
                 context: context
             )
@@ -280,12 +275,50 @@ private extension MainNavigationView {
         }
     }
 
-    func handleIncomingRoute() throws {
+    func navigateFromSettings(to route: IncomesRoute) async {
+        do {
+            try await router.navigateFromSettings(
+                to: route,
+                context: context
+            )
+        } catch {
+            assertionFailure(error.localizedDescription)
+        }
+    }
+
+    func handleIncomingRoute() async {
         guard let route = incomingRoute else {
             return
         }
-        try router.handleIncomingRoute(route, context: context)
         incomingRoute = nil
+        do {
+            try await router.handleIncomingRoute(
+                route,
+                context: context
+            )
+        } catch {
+            assertionFailure(error.localizedDescription)
+        }
+    }
+
+    func applyPendingRouteIfNeeded() async {
+        do {
+            try await router.applyPendingRouteIfNeeded(
+                context: context
+            )
+        } catch {
+            assertionFailure(error.localizedDescription)
+        }
+    }
+
+    func applyPendingRouteAfterSettingsDismissalIfNeeded() {
+        do {
+            try router.applyPendingRouteAfterSettingsDismissalIfNeeded(
+                context: context
+            )
+        } catch {
+            assertionFailure(error.localizedDescription)
+        }
     }
 
     @ViewBuilder

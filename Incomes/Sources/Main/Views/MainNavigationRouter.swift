@@ -5,6 +5,7 @@
 //  Created by Codex on 2026/03/05.
 //
 
+import MHPlatform
 import SwiftData
 import SwiftUI
 
@@ -24,8 +25,18 @@ final class MainNavigationRouter: ObservableObject {
     @Published var willDeleteItems: [Item] = []
     @Published var willDeleteTags: [Tag] = []
 
-    private var hasLoaded = false
-    private var pendingRoute: IncomesRoute?
+    private let routeCoordinator: MHRouteCoordinator<IncomesRoute, IncomesRoute> = .init(
+        executor: .init(
+            resolve: { route in
+                route
+            },
+            apply: { _ in
+                // Route application stays app-specific.
+            }
+        ),
+        isDuplicate: ==
+    )
+
     private var pendingRouteAfterSettingsDismissal: IncomesRoute?
 
     private var isSettingsPresented: Bool {
@@ -64,11 +75,8 @@ final class MainNavigationRouter: ObservableObject {
         willDeleteTags = []
     }
 
-    func loadState(context: ModelContext) throws {
+    func loadState(context: ModelContext) async throws {
         let state = try MainNavigationStateLoader.load(context: context)
-        if hasLoaded == false {
-            hasLoaded = true
-        }
         yearTagID = state.yearTag?.persistentModelID
         selectedTag = state.yearMonthTag
         if state.yearTag == nil {
@@ -78,50 +86,48 @@ final class MainNavigationRouter: ObservableObject {
         } else {
             preferredCompactColumn = .detail
         }
+        await routeCoordinator.setReadiness(true)
     }
 
     func handleIncomingRoute(
         _ route: IncomesRoute?,
         context: ModelContext
-    ) throws {
+    ) async throws {
         guard let route else {
             return
         }
-        if hasLoaded {
-            try apply(route: route, context: context)
-        } else {
-            pendingRoute = route
-        }
+        try await submit(route, context: context)
     }
 
     func navigate(
         to route: IncomesRoute,
         context: ModelContext
-    ) throws {
-        try apply(route: route, context: context)
+    ) async throws {
+        try await submit(route, context: context)
     }
 
     func navigateFromSettings(
         to route: IncomesRoute,
         context: ModelContext
-    ) throws {
+    ) async throws {
         if isSettingsPresented, route.isSettingsScopeRoute {
-            try apply(route: route, context: context)
+            try await submit(route, context: context)
         } else if isSettingsPresented {
             pendingRouteAfterSettingsDismissal = route
             sheetRoute = nil
         } else {
-            try apply(route: route, context: context)
+            try await submit(route, context: context)
         }
     }
 
-    func applyPendingRouteIfNeeded(context: ModelContext) throws {
-        guard hasLoaded,
-              let pendingRoute else {
+    func applyPendingRouteIfNeeded(context: ModelContext) async throws {
+        guard let executionOutcome = try await routeCoordinator.applyPendingIfReady() else {
             return
         }
-        try apply(route: pendingRoute, context: context)
-        self.pendingRoute = nil
+        try apply(
+            executionOutcome,
+            context: context
+        )
     }
 
     func applyPendingRouteAfterSettingsDismissalIfNeeded(
@@ -132,7 +138,10 @@ final class MainNavigationRouter: ObservableObject {
             return
         }
         self.pendingRouteAfterSettingsDismissal = nil
-        try apply(route: pendingRouteAfterSettingsDismissal, context: context)
+        try apply(
+            route: pendingRouteAfterSettingsDismissal,
+            context: context
+        )
     }
 
     func selectSearchPredicate(_ predicate: ItemPredicate?) {
@@ -152,6 +161,33 @@ final class MainNavigationRouter: ObservableObject {
 }
 
 private extension MainNavigationRouter {
+    func submit(
+        _ route: IncomesRoute,
+        context: ModelContext
+    ) async throws {
+        let executionOutcome = try await routeCoordinator.submit(route)
+        try apply(
+            executionOutcome,
+            context: context
+        )
+    }
+
+    func apply(
+        _ executionOutcome: MHRouteExecutionOutcome<IncomesRoute>,
+        context: ModelContext
+    ) throws {
+        switch executionOutcome {
+        case .applied(let route):
+            try apply(
+                route: route,
+                context: context
+            )
+        case .queued,
+             .deduplicated:
+            return
+        }
+    }
+
     func apply(
         route: IncomesRoute,
         context: ModelContext
