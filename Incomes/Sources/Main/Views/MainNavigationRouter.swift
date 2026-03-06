@@ -121,13 +121,12 @@ final class MainNavigationRouter: ObservableObject {
     }
 
     func applyPendingRouteIfNeeded(context: ModelContext) async throws {
-        guard let executionOutcome = try await routeCoordinator.applyPendingIfReady() else {
-            return
+        _ = try await routeCoordinator.applyPendingIfReady { [self] route in
+            try apply(
+                route: route,
+                context: context
+            )
         }
-        try apply(
-            executionOutcome,
-            context: context
-        )
     }
 
     func applyPendingRouteAfterSettingsDismissalIfNeeded(
@@ -165,26 +164,11 @@ private extension MainNavigationRouter {
         _ route: IncomesRoute,
         context: ModelContext
     ) async throws {
-        let executionOutcome = try await routeCoordinator.submit(route)
-        try apply(
-            executionOutcome,
-            context: context
-        )
-    }
-
-    func apply(
-        _ executionOutcome: MHRouteExecutionOutcome<IncomesRoute>,
-        context: ModelContext
-    ) throws {
-        switch executionOutcome {
-        case .applied(let route):
+        _ = try await routeCoordinator.submit(route) { [self] route in
             try apply(
                 route: route,
                 context: context
             )
-        case .queued,
-             .deduplicated:
-            return
         }
     }
 
