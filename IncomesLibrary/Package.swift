@@ -45,6 +45,10 @@ let package = Package( // swiftlint:disable:this prefixed_toplevel_constant
                 .product(
                     name: "MHPersistenceMaintenance",
                     package: "MHPlatform"
+                ),
+                .product(
+                    name: "MHNotificationPlans",
+                    package: "MHPlatform"
                 )
             ],
             path: ".",

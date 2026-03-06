@@ -1,4 +1,5 @@
 import Foundation
+import MHNotificationPlans
 
 /// Builds display-ready notification payloads for upcoming payment reminders.
 public enum UpcomingPaymentNotificationPresentationBuilder { // swiftlint:disable:this type_name
@@ -44,13 +45,13 @@ private extension UpcomingPaymentNotificationPresentationBuilder {
         calendar: Calendar
     ) -> UpcomingPaymentNotificationPresentation {
         let itemIdentifier = itemIdentifier(for: plan.item)
-        let primaryRouteURL = primaryRouteURL(for: plan.item)
-        let secondaryRouteURL = IncomesDeepLinkURLBuilder.preferredMonthURL(
+        let primaryRouteURL = plan.reminderPlan?.primaryRouteURL ?? primaryRouteURL(for: plan.item)
+        let secondaryRouteURL = plan.reminderPlan?.secondaryRouteURL ?? IncomesDeepLinkURLBuilder.preferredMonthURL( // swiftlint:disable:this line_length
             for: plan.item.localDate,
             calendar: calendar
         )
         let referenceDate = max(plan.notifyDate, now)
-        let daysUntilDue = max(
+        let daysUntilDue = plan.reminderPlan?.daysUntilDue ?? max(
             0,
             calendar.dateComponents(
                 [.day],
@@ -60,16 +61,18 @@ private extension UpcomingPaymentNotificationPresentationBuilder {
         )
 
         return .init(
-            requestIdentifier: UpcomingPaymentNotificationPresentation.requestIdentifierPrefix + itemIdentifier,
+            requestIdentifier: plan.reminderPlan?.identifier
+                ?? UpcomingPaymentNotificationPresentation.requestIdentifierPrefix + itemIdentifier,
             primaryRouteURL: primaryRouteURL,
             secondaryRouteURL: secondaryRouteURL,
-            threadIdentifier: threadIdentifier(for: plan.item.localDate, calendar: calendar),
+            threadIdentifier: plan.reminderPlan?.threadIdentifier
+                ?? threadIdentifier(for: plan.item.localDate, calendar: calendar),
             targetContentIdentifier: itemIdentifier,
             summaryArgument: plan.item.content,
             summaryArgumentCount: 1,
-            badgeCount: badgeCount,
+            badgeCount: plan.reminderPlan?.badgeCount ?? badgeCount,
             daysUntilDue: daysUntilDue,
-            relevanceScore: relevanceScore(
+            relevanceScore: plan.reminderPlan?.relevanceScore ?? relevanceScore(
                 amount: plan.item.outgo,
                 thresholdAmount: settings.thresholdAmount,
                 daysUntilDue: daysUntilDue
