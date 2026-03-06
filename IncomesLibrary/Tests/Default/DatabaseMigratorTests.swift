@@ -77,4 +77,42 @@ struct DatabaseMigratorTests {
         #expect(fileManager.fileExists(atPath: legacyURL.path))
         #expect(fileManager.fileExists(atPath: currentURL.path))
     }
+
+    @Test
+    func migrateSQLiteFilesIfNeeded_removes_legacy_files_after_successful_copy() throws {
+        let fileManager: FileManager = .default
+        let baseDirectory = fileManager.temporaryDirectory.appendingPathComponent(
+            UUID().uuidString,
+            isDirectory: true
+        )
+        let legacyDirectory = baseDirectory.appendingPathComponent("legacy", isDirectory: true)
+        let currentDirectory = baseDirectory.appendingPathComponent("current", isDirectory: true)
+
+        try fileManager.createDirectory(at: legacyDirectory, withIntermediateDirectories: true)
+        try fileManager.createDirectory(at: currentDirectory, withIntermediateDirectories: true)
+
+        let legacyURL = legacyDirectory.appendingPathComponent(Database.fileName)
+        let currentURL = currentDirectory.appendingPathComponent(Database.fileName)
+        let legacyShmURL = legacyDirectory.appendingPathComponent("\(Database.fileName)-shm")
+        let legacyWalURL = legacyDirectory.appendingPathComponent("\(Database.fileName)-wal")
+
+        defer {
+            try? fileManager.removeItem(at: baseDirectory)
+        }
+
+        #expect(fileManager.createFile(atPath: legacyURL.path, contents: Data()))
+        #expect(fileManager.createFile(atPath: legacyShmURL.path, contents: Data()))
+        #expect(fileManager.createFile(atPath: legacyWalURL.path, contents: Data()))
+
+        DatabaseMigrator.migrateSQLiteFilesIfNeeded(
+            fileManager: fileManager,
+            legacyURL: legacyURL,
+            currentURL: currentURL
+        )
+
+        #expect(fileManager.fileExists(atPath: currentURL.path))
+        #expect(!fileManager.fileExists(atPath: legacyURL.path))
+        #expect(!fileManager.fileExists(atPath: legacyShmURL.path))
+        #expect(!fileManager.fileExists(atPath: legacyWalURL.path))
+    }
 }

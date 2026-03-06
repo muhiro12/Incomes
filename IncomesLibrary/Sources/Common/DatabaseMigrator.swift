@@ -1,4 +1,5 @@
 import Foundation
+import MHPersistenceMaintenance
 
 /// Documented for SwiftLint compliance.
 public enum DatabaseMigrator {
@@ -17,34 +18,25 @@ public enum DatabaseMigrator {
         currentURL: URL
     ) {
         guard fileManager.fileExists(atPath: legacyURL.path),
-              !fileManager.fileExists(atPath: currentURL.path) else {
+              fileManager.fileExists(atPath: currentURL.path) == false else {
             return
         }
 
         do {
-            try fileManager.createDirectory(
-                at: currentURL.deletingLastPathComponent(),
-                withIntermediateDirectories: true
+            let plan = MHStoreMigrationPlan(
+                legacyStoreURL: legacyURL,
+                currentStoreURL: currentURL
             )
 
-            let legacyDir = legacyURL.deletingLastPathComponent()
-            let baseName = legacyURL.lastPathComponent
-
-            let candidateNames = try fileManager.contentsOfDirectory(atPath: legacyDir.path)
-                .filter { name in
-                    name == baseName || name.hasPrefix(baseName + "-")
-                }
-
-            for name in candidateNames {
-                let source = legacyDir.appendingPathComponent(name)
-                let destination = currentURL.deletingLastPathComponent().appendingPathComponent(name)
-                do {
-                    try fileManager.moveItem(at: source, to: destination)
-                } catch {
-                    if !fileManager.fileExists(atPath: destination.path) {
-                        try fileManager.copyItem(at: source, to: destination)
-                    }
-                }
+            let outcome = try MHStoreMigrator.migrateIfNeeded(
+                plan: plan,
+                fileManager: fileManager
+            )
+            if case .migrated = outcome {
+                _ = try MHStoreMigrator.removeLegacyStoreFilesIfNeeded(
+                    plan: plan,
+                    fileManager: fileManager
+                )
             }
         } catch {
             assertionFailure("Store migration failed: \(error.localizedDescription)")
