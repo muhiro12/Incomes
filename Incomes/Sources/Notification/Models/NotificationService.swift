@@ -53,6 +53,7 @@ final class NotificationService: NSObject {
         )
     )
     private let modelContainer: ModelContainer
+    private let deepLinkInbox = MHDeepLinkInbox()
 
     private(set) var hasNotification = false
     private(set) var shouldShowNotification = false
@@ -107,7 +108,7 @@ final class NotificationService: NSObject {
 
         hasNotification = false
         shouldShowNotification = false
-        pendingDeepLinkURL = nil
+        await setPendingDeepLinkURL(nil)
     }
 
     func refreshAuthorizationStatus() async {
@@ -115,8 +116,8 @@ final class NotificationService: NSObject {
         authorizationState = .init(status: settings.authorizationStatus)
     }
 
-    func consumePendingDeepLinkURL() -> URL? {
-        let deepLinkURL = pendingDeepLinkURL
+    func consumePendingDeepLinkURL() async -> URL? {
+        let deepLinkURL = await deepLinkInbox.consumeLatest()
         pendingDeepLinkURL = nil
         return deepLinkURL
     }
@@ -164,7 +165,9 @@ extension NotificationService: UNUserNotificationCenterDelegate {
                                 didReceive response: UNNotificationResponse) async { // swiftlint:disable:this async_without_await line_length
         Task {
             shouldShowNotification = true
-            pendingDeepLinkURL = resolveDeepLinkURL(from: response)
+            await setPendingDeepLinkURL(
+                resolveDeepLinkURL(from: response)
+            )
         }
     }
 
@@ -172,7 +175,9 @@ extension NotificationService: UNUserNotificationCenterDelegate {
                                 openSettingsFor _: UNNotification?) {
         Task {
             notificationLogger.info("notification settings route requested")
-            pendingDeepLinkURL = IncomesDeepLinkURLBuilder.preferredURL(for: .settings)
+            await setPendingDeepLinkURL(
+                IncomesDeepLinkURLBuilder.preferredURL(for: .settings)
+            )
         }
     }
 }
@@ -293,6 +298,15 @@ private extension NotificationService {
             return deepLinkURL
         }
         return nil
+    }
+
+    func setPendingDeepLinkURL(_ deepLinkURL: URL?) async {
+        if let deepLinkURL {
+            await deepLinkInbox.ingest(deepLinkURL)
+        } else {
+            _ = await deepLinkInbox.consumeLatest()
+        }
+        pendingDeepLinkURL = deepLinkURL
     }
 
     func buildUpcomingPaymentReminders() -> [UNNotificationRequest] {

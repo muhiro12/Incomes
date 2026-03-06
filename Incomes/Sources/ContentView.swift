@@ -54,7 +54,9 @@ extension ContentView: View {
                 try? await configurationService.load()
                 isUpdateAlertPresented = configurationService.isUpdateRequired()
                 await notificationService.update()
-                applyPendingDeepLinkIfNeeded()
+                Task {
+                    await applyPendingDeepLinkIfNeeded()
+                }
             }
             .onChange(of: scenePhase) {
                 guard scenePhase == .active else {
@@ -75,13 +77,17 @@ extension ContentView: View {
                         source: #fileID
                     )
                 }
-                applyPendingDeepLinkIfNeeded()
+                Task {
+                    await applyPendingDeepLinkIfNeeded()
+                }
             }
             .onChange(of: appRuntime.premiumStatus) {
                 syncSubscriptionStateIfNeeded()
             }
             .onChange(of: notificationService.pendingDeepLinkURL) {
-                applyPendingDeepLinkIfNeeded()
+                Task {
+                    await applyPendingDeepLinkIfNeeded()
+                }
             }
             .onOpenURL { url in
                 handleIncomingURL(url)
@@ -137,11 +143,11 @@ private extension ContentView {
         isICloudOn = state.isICloudOn
     }
 
-    func applyPendingDeepLinkIfNeeded() {
+    func applyPendingDeepLinkIfNeeded() async {
         if let intentDeepLinkURL = IncomesIntentRouteStore.consume() {
             handleIncomingURL(intentDeepLinkURL)
         }
-        if let notificationDeepLinkURL = notificationService.consumePendingDeepLinkURL() {
+        if let notificationDeepLinkURL = await notificationService.consumePendingDeepLinkURL() {
             handleIncomingURL(notificationDeepLinkURL)
         }
     }
