@@ -281,7 +281,7 @@
 				ADA85F2F2DB6275B0047CB54 /* XCRemoteSwiftPackageReference "GoogleMobileAdsWrapper" */,
 				ADA85F322DB627730047CB54 /* XCRemoteSwiftPackageReference "LicenseListWrapper" */,
 				AD6C5A732E515E3000E1FBA0 /* XCLocalSwiftPackageReference "IncomesLibrary" */,
-				AD7F5C0C2F5B3186008D91F3 /* XCLocalSwiftPackageReference "../MHPlatform" */,
+				AD7F5C0C2F5B3186008D91F3 /* XCRemoteSwiftPackageReference "MHPlatform" */,
 				ADE464F72E80212500F8EEC9 /* XCRemoteSwiftPackageReference "StoreKitWrapper" */,
 			);
 			productRefGroup = ADCF36A724A1D0F40011D6F5 /* Products */;
@@ -786,13 +786,17 @@
 			isa = XCLocalSwiftPackageReference;
 			relativePath = IncomesLibrary;
 		};
-		AD7F5C0C2F5B3186008D91F3 /* XCLocalSwiftPackageReference "../MHPlatform" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = ../MHPlatform;
-		};
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		AD7F5C0C2F5B3186008D91F3 /* XCRemoteSwiftPackageReference "MHPlatform" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/muhiro12/MHPlatform.git";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 		ADA85F2F2DB6275B0047CB54 /* XCRemoteSwiftPackageReference "GoogleMobileAdsWrapper" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/muhiro12/GoogleMobileAdsWrapper";
@@ -834,7 +838,7 @@
 		};
 		AD7F5C0D2F5B3186008D91F3 /* MHPlatform */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = AD7F5C0C2F5B3186008D91F3 /* XCLocalSwiftPackageReference "../MHPlatform" */;
+			package = AD7F5C0C2F5B3186008D91F3 /* XCRemoteSwiftPackageReference "MHPlatform" */;
 			productName = MHPlatform;
 		};
 		ADA85F302DB6275B0047CB54 /* GoogleMobileAdsWrapper */ = {
