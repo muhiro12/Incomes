@@ -228,13 +228,15 @@ extension SettingsListView: View {
             isPresented: $isDeleteDialogPresented
         ) {
             Button(role: .destructive) {
-                do {
-                    try DataMaintenanceService.deleteAllData(context: context)
-                    Haptic.success.impact()
-                    updateStatus()
-                    refreshTipEligibility()
-                } catch {
-                    assertionFailure(error.localizedDescription)
+                Task {
+                    do {
+                        try await DataMaintenanceService.resetAllData(context: context)
+                        Haptic.success.impact()
+                        updateStatus()
+                        refreshTipEligibility()
+                    } catch {
+                        assertionFailure(error.localizedDescription)
+                    }
                 }
             } label: {
                 Text("Delete")

@@ -3,6 +3,7 @@ import Foundation
 import SwiftData
 import Testing
 
+@MainActor
 struct DataMaintenanceServiceTests {
     let context: ModelContext
 
@@ -24,6 +25,25 @@ struct DataMaintenanceServiceTests {
         )
 
         try DataMaintenanceService.deleteAllData(context: context)
+
+        #expect(try context.fetchCount(.items(.all)) == 0)
+        #expect(try context.fetchCount(.tags(.all)) == 0)
+    }
+
+    @Test
+    func resetAllData_removesItemsAndTags() async throws {
+        _ = try ItemService.create(
+            context: context,
+            date: shiftedDate("2001-01-01T00:00:00Z"),
+            content: "content",
+            income: 100,
+            outgo: 0,
+            category: "category",
+            priority: 0,
+            repeatCount: 1
+        )
+
+        try await DataMaintenanceService.resetAllData(context: context)
 
         #expect(try context.fetchCount(.items(.all)) == 0)
         #expect(try context.fetchCount(.tags(.all)) == 0)
