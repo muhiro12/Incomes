@@ -5,6 +5,7 @@
 //  Created by Hiromu Nakano on 2024/05/31.
 //
 
+@preconcurrency import MHPlatform
 import SwiftData
 import SwiftUI
 import UserNotifications
@@ -16,6 +17,7 @@ final class NotificationService: NSObject {
         static let notificationKind = "notificationKind"
         static let primaryDeepLinkURL = "primaryDeepLinkURL"
         static let secondaryDeepLinkURL = "secondaryDeepLinkURL"
+        static let actionRouteURLs = "actionRouteURLs"
     }
 
     private enum NotificationCategoryIdentifier {
@@ -37,6 +39,19 @@ final class NotificationService: NSObject {
         case denied
     }
 
+    private static let notificationPayloadCodec: MHNotificationPayloadCodec = .init(
+        configuration: .init(
+            keys: .init(
+                defaultRouteURL: NotificationPayloadKey.primaryDeepLinkURL,
+                fallbackRouteURL: NotificationPayloadKey.secondaryDeepLinkURL,
+                actionRouteURLs: NotificationPayloadKey.actionRouteURLs
+            ),
+            decodableMetadataKeys: [
+                NotificationPayloadKey.itemIdentifier,
+                NotificationPayloadKey.notificationKind
+            ]
+        )
+    )
     private let modelContainer: ModelContainer
 
     private(set) var hasNotification = false
@@ -53,21 +68,25 @@ final class NotificationService: NSObject {
 
     func register() async {
         let center = UNUserNotificationCenter.current()
+        let requests = buildUpcomingPaymentReminders()
+        let isManagedIdentifier: @Sendable (String) -> Bool = { identifier in
+            identifier.hasPrefix(UpcomingPaymentNotificationPresentation.requestIdentifierPrefix)
+                || identifier.hasPrefix(
+                    UpcomingPaymentNotificationPresentation.previewRequestIdentifierPrefix
+                )
+        }
 
-        _ = try? await center.requestAuthorization(
+        let status = await MHNotificationOrchestrator.requestAuthorizationIfNeeded(
+            center: center,
             options: [.badge, .sound, .alert, .carPlay, .providesAppNotificationSettings]
         )
+        authorizationState = .init(status: status)
 
-        await refreshAuthorizationStatus()
-
-        let pendingIdentifiers = await pendingNotificationIdentifiers()
-        if pendingIdentifiers.isNotEmpty {
-            center.removePendingNotificationRequests(withIdentifiers: pendingIdentifiers)
-        }
-
-        for request in buildUpcomingPaymentReminders() {
-            try? await center.add(request)
-        }
+        _ = await MHNotificationOrchestrator.replaceManagedPendingRequests(
+            center: center,
+            requests: requests,
+            isManagedIdentifier: isManagedIdentifier
+        )
     }
 
     func update() async {
@@ -145,7 +164,7 @@ extension NotificationService: UNUserNotificationCenterDelegate {
                                 didReceive response: UNNotificationResponse) async { // swiftlint:disable:this async_without_await line_length
         Task {
             shouldShowNotification = true
-            pendingDeepLinkURL = extractDeepLinkURL(from: response)
+            pendingDeepLinkURL = resolveDeepLinkURL(from: response)
         }
     }
 
@@ -159,27 +178,24 @@ extension NotificationService: UNUserNotificationCenterDelegate {
 
 private extension NotificationService {
     func registerNotificationCategories() {
-        let categories: Set<UNNotificationCategory> = [
-            .init(
-                identifier: NotificationCategoryIdentifier.upcomingPaymentActions,
-                actions: [
-                    .init(
-                        identifier: NotificationActionIdentifier.viewItem,
-                        title: String(localized: "View Item"),
-                        options: [.foreground]
-                    ),
-                    .init(
-                        identifier: NotificationActionIdentifier.viewMonth,
-                        title: String(localized: "View Month"),
-                        options: [.foreground]
-                    )
-                ],
-                intentIdentifiers: [],
-                options: []
-            )
-        ]
-
-        UNUserNotificationCenter.current().setNotificationCategories(categories)
+        MHNotificationOrchestrator.registerCategories(
+            [
+                .init(
+                    identifier: NotificationCategoryIdentifier.upcomingPaymentActions,
+                    actions: [
+                        .init(
+                            identifier: NotificationActionIdentifier.viewItem,
+                            title: String(localized: "View Item")
+                        ),
+                        .init(
+                            identifier: NotificationActionIdentifier.viewMonth,
+                            title: String(localized: "View Month")
+                        )
+                    ]
+                )
+            ],
+            center: UNUserNotificationCenter.current()
+        )
     }
 
     func buildNotificationRequest(
@@ -213,41 +229,45 @@ private extension NotificationService {
     func buildUserInfo(
         for presentation: UpcomingPaymentNotificationPresentation
     ) -> [AnyHashable: Any] {
-        [
-            NotificationPayloadKey.itemIdentifier: presentation.targetContentIdentifier,
-            NotificationPayloadKey.notificationKind: NotificationKind.upcomingPayment,
-            NotificationPayloadKey.primaryDeepLinkURL: presentation.primaryRouteURL.absoluteString,
-            NotificationPayloadKey.secondaryDeepLinkURL: presentation.secondaryRouteURL.absoluteString
-        ]
+        Self.notificationPayloadCodec.encode(
+            .init(
+                routes: .init(
+                    defaultRouteURL: presentation.primaryRouteURL,
+                    fallbackRouteURL: presentation.secondaryRouteURL,
+                    actionRouteURLs: [
+                        NotificationActionIdentifier.viewMonth: presentation.secondaryRouteURL
+                    ]
+                ),
+                metadata: [
+                    NotificationPayloadKey.itemIdentifier: presentation.targetContentIdentifier,
+                    NotificationPayloadKey.notificationKind: NotificationKind.upcomingPayment
+                ]
+            )
+        )
     }
 
-    func extractDeepLinkURL(
+    func resolveDeepLinkURL(
         from response: UNNotificationResponse
     ) -> URL? {
         let userInfo = response.notification.request.content.userInfo
 
         if response.actionIdentifier == NotificationActionIdentifier.viewMonth,
-           let monthURL = extractDeepLinkURL(
+           userInfo[NotificationPayloadKey.actionRouteURLs] == nil,
+           let monthURL = extractLegacyDeepLinkURL(
             from: userInfo,
             key: NotificationPayloadKey.secondaryDeepLinkURL
            ) {
             return monthURL
         }
 
-        if let primaryURL = extractDeepLinkURL(
-            from: userInfo,
-            key: NotificationPayloadKey.primaryDeepLinkURL
-        ) {
-            return primaryURL
-        }
-
-        return extractDeepLinkURL(
-            from: userInfo,
-            key: NotificationPayloadKey.secondaryDeepLinkURL
+        return MHNotificationOrchestrator.resolveRouteURL(
+            userInfo: userInfo,
+            actionIdentifier: response.actionIdentifier,
+            codec: Self.notificationPayloadCodec
         )
     }
 
-    func extractDeepLinkURL(
+    func extractLegacyDeepLinkURL(
         from userInfo: [AnyHashable: Any],
         key: String
     ) -> URL? {
@@ -309,12 +329,6 @@ private extension NotificationService {
         case .active:
             return .active
         }
-    }
-
-    func pendingNotificationIdentifiers() async -> [String] {
-        await UNUserNotificationCenter.current().pendingNotificationRequests() // swiftlint:disable:this line_length multiline_function_chains
-            .map(\.identifier)
-            .filter(isManagedNotificationIdentifier)
     }
 
     func deliveredNotificationIdentifiers() async -> [String] {
