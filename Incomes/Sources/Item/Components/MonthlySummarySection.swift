@@ -35,6 +35,9 @@ struct MonthlySummarySection: View {
     @AppStorage(.currencyCode)
     private var currencyCode
 
+    @AppStorage(.isDebugOn)
+    private var isDebugOn
+
     @Query private var currentItems: [Item]
 
     @Query private var previousItems: [Item]
@@ -100,6 +103,9 @@ struct MonthlySummarySection: View {
 @available(iOS 26.0, *)
 private extension MonthlySummarySection {
     var shouldDisplaySummaryControl: Bool {
+        guard isDebugOn else {
+            return false
+        }
         guard !currentItems.isEmpty else {
             return false
         }

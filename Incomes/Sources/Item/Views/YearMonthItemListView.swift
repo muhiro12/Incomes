@@ -15,6 +15,8 @@ struct YearMonthItemListView {
 
     @AppStorage(.isSubscribeOn)
     private var isSubscribeOn
+    @AppStorage(.isDebugOn)
+    private var isDebugOn
 
     private let itemDetailTip = ItemDetailTip()
 }
@@ -38,7 +40,8 @@ extension YearMonthItemListView: View {
                     )
                 }
             }
-            if let monthDate {
+            if isDebugOn,
+               let monthDate {
                 if #available(iOS 26.0, *) {
                     MonthlySummarySection(date: monthDate)
                 }
