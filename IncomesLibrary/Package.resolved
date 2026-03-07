@@ -22,7 +22,7 @@
     {
       "identity" : "licenselistwrapper",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/muhiro12/LicenseListWrapper.git",
+      "location" : "https://github.com/muhiro12/LicenseListWrapper",
       "state" : {
         "revision" : "d760514bee0ba669db4aed8362d64a64ff17810d",
         "version" : "1.1.0"
@@ -34,13 +34,13 @@
       "location" : "https://github.com/muhiro12/MHPlatform.git",
       "state" : {
         "branch" : "main",
-        "revision" : "fd3a00bf9227d00d986f95201d9511ac9cb8c5ca"
+        "revision" : "dcd54ece13ea31fe9742a8c8f0482a2f8cecdd12"
       }
     },
     {
       "identity" : "storekitwrapper",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/muhiro12/StoreKitWrapper",
+      "location" : "https://github.com/muhiro12/StoreKitWrapper.git",
       "state" : {
         "revision" : "c43d9cd7f68eb66d63f6b258af48c9825c1f0d00",
         "version" : "1.2.0"

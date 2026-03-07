@@ -165,9 +165,7 @@ extension NotificationService: UNUserNotificationCenterDelegate {
                                 didReceive response: UNNotificationResponse) async { // swiftlint:disable:this async_without_await line_length
         Task {
             shouldShowNotification = true
-            await setPendingDeepLinkURL(
-                resolveDeepLinkURL(from: response)
-            )
+            await deliverNotificationRoute(from: response)
         }
     }
 
@@ -182,14 +180,14 @@ extension NotificationService: UNUserNotificationCenterDelegate {
     }
 }
 
-private extension NotificationService {
-    var notificationLogger: MHLogger {
-        IncomesApp.logger(
-            category: "NotificationRoute",
-            source: #fileID
-        )
+extension NotificationService {
+    func setPendingDeepLinkURL(_ deepLinkURL: URL?) async {
+        await deepLinkInbox.replacePendingURL(deepLinkURL)
+        pendingDeepLinkURL = deepLinkURL
     }
+}
 
+private extension NotificationService {
     func registerNotificationCategories() {
         MHNotificationOrchestrator.registerCategories(
             [
@@ -257,56 +255,6 @@ private extension NotificationService {
                 ]
             )
         )
-    }
-
-    func resolveDeepLinkURL(
-        from response: UNNotificationResponse
-    ) -> URL? {
-        let userInfo = response.notification.request.content.userInfo
-
-        if response.actionIdentifier == NotificationActionIdentifier.viewMonth,
-           userInfo[NotificationPayloadKey.actionRouteURLs] == nil,
-           let monthURL = extractLegacyDeepLinkURL(
-            from: userInfo,
-            key: NotificationPayloadKey.secondaryDeepLinkURL
-           ) {
-            notificationLogger.notice("notification route resolved via legacy month fallback")
-            return monthURL
-        }
-
-        let routeURL = MHNotificationOrchestrator.resolveRouteURL(
-            userInfo: userInfo,
-            actionIdentifier: response.actionIdentifier,
-            codec: Self.notificationPayloadCodec
-        )
-        if routeURL == nil {
-            notificationLogger.info("notification route resolution returned no route")
-        } else {
-            notificationLogger.info("notification route resolved")
-        }
-        return routeURL
-    }
-
-    func extractLegacyDeepLinkURL(
-        from userInfo: [AnyHashable: Any],
-        key: String
-    ) -> URL? {
-        if let deepLinkURLString = userInfo[key] as? String {
-            return URL(string: deepLinkURLString)
-        }
-        if let deepLinkURL = userInfo[key] as? URL {
-            return deepLinkURL
-        }
-        return nil
-    }
-
-    func setPendingDeepLinkURL(_ deepLinkURL: URL?) async {
-        if let deepLinkURL {
-            await deepLinkInbox.ingest(deepLinkURL)
-        } else {
-            _ = await deepLinkInbox.consumeLatest()
-        }
-        pendingDeepLinkURL = deepLinkURL
     }
 
     func buildUpcomingPaymentReminders() -> [UNNotificationRequest] {
