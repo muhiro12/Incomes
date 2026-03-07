@@ -50,25 +50,24 @@ extension NotificationService {
         }
 
         let userInfo = response.notification.request.content.userInfo
-        let payload = NotificationRouteDeliveryConstants.payloadCodec.decode(userInfo)
-        let responseContext = MHNotificationResponseContext(
-            actionIdentifier: response.actionIdentifier
-        )
-        let fallbackRouteURL = legacyMonthFallbackRouteURL(
+        let fallbackRouteURL = Self.legacyMonthFallbackRouteURL(
             userInfo: userInfo,
             actionIdentifier: response.actionIdentifier
         )
-
-        let outcome = await MHNotificationOrchestrator.deliverRouteURL(
-            payload: payload,
-            response: responseContext,
-            deliver: deliverPendingDeepLink,
-            clearPendingURLWhenNoRoute: true
-        ) { _, _ in
+        let outcome = MHNotificationOrchestrator.routeDeliveryOutcome(
+            userInfo: userInfo,
+            actionIdentifier: response.actionIdentifier,
+            codec: NotificationRouteDeliveryConstants.payloadCodec,
+            ) { _, _ in
             fallbackRouteURL
         }
+        let deliveredOutcome = await MHNotificationOrchestrator.deliverRouteURL(
+            outcome,
+            deliver: deliverPendingDeepLink,
+            clearPendingURLWhenNoRoute: true
+        )
 
-        switch outcome.source {
+        switch deliveredOutcome.source {
         case .payload:
             notificationLogger.info("notification route resolved")
         case .fallback:
@@ -80,7 +79,7 @@ extension NotificationService {
 }
 
 private extension NotificationService {
-    func legacyDeepLinkURL(
+    static func legacyDeepLinkURL(
         from userInfo: [AnyHashable: Any],
         key: String
     ) -> URL? {
@@ -93,7 +92,7 @@ private extension NotificationService {
         return nil
     }
 
-    func legacyMonthFallbackRouteURL(
+    static func legacyMonthFallbackRouteURL(
         userInfo: [AnyHashable: Any],
         actionIdentifier: String
     ) -> URL? {
