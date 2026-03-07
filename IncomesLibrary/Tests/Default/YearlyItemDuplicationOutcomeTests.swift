@@ -12,7 +12,7 @@ struct YearlyItemDuplicationOutcomeTests {
 
     @Test
     func applyWithOutcome_reports_created_ids_and_hints() throws {
-        _ = try ItemService.create(
+        _ = try createItem(
             context: context,
             date: shiftedDate("2024-01-10T12:00:00Z"),
             content: "Rent",
@@ -42,7 +42,7 @@ struct YearlyItemDuplicationOutcomeTests {
 
     @Test
     func apply_groupID_applies_only_target_group() throws {
-        _ = try ItemService.create(
+        _ = try createItem(
             context: context,
             date: shiftedDate("2024-01-10T12:00:00Z"),
             content: "Rent",
@@ -52,7 +52,7 @@ struct YearlyItemDuplicationOutcomeTests {
             priority: 0,
             repeatCount: 3
         )
-        _ = try ItemService.create(
+        _ = try createItem(
             context: context,
             date: shiftedDate("2024-02-20T12:00:00Z"),
             content: "Salary",

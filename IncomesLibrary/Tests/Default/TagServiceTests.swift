@@ -51,12 +51,12 @@ struct TagServiceTests {
     // MARK: - Duplicates
 
     @Test
-    func findDuplicates_returns_first_tag_of_each_duplicate() throws {
-        let tag1 = try Tag.createIgnoringDuplicates(context: context, name: "A", type: .year)
-        let tag2 = try Tag.createIgnoringDuplicates(context: context, name: "A", type: .year)
-        let tag3 = try Tag.createIgnoringDuplicates(context: context, name: "B", type: .yearMonth)
-        let tag4 = try Tag.createIgnoringDuplicates(context: context, name: "B", type: .yearMonth)
-        let result = try TagService.findDuplicates(
+    func findDuplicates_returns_first_tag_of_each_duplicate() {
+        let tag1 = Tag.createIgnoringDuplicates(context: context, name: "A", type: .year)
+        let tag2 = Tag.createIgnoringDuplicates(context: context, name: "A", type: .year)
+        let tag3 = Tag.createIgnoringDuplicates(context: context, name: "B", type: .yearMonth)
+        let tag4 = Tag.createIgnoringDuplicates(context: context, name: "B", type: .yearMonth)
+        let result = TagService.findDuplicates(
             context: context,
             tags: [tag1, tag2, tag3, tag4]
         )
@@ -72,10 +72,10 @@ struct TagServiceTests {
     @Test
     func hasDuplicates_detects_and_clears_duplicates() throws {
         #expect(try TagService.hasDuplicates(context: context) == false)
-        let tag1 = try Tag.createIgnoringDuplicates(context: context, name: "A", type: .year)
-        _ = try Tag.createIgnoringDuplicates(context: context, name: "A", type: .year)
+        let tag1 = Tag.createIgnoringDuplicates(context: context, name: "A", type: .year)
+        _ = Tag.createIgnoringDuplicates(context: context, name: "A", type: .year)
         #expect(try TagService.hasDuplicates(context: context) == true)
-        try TagService.mergeDuplicates(
+        TagService.mergeDuplicates(
             tags: try context.fetch(.tags(.isSameWith(tag1)))
         )
         #expect(try TagService.hasDuplicates(context: context) == false)
@@ -83,10 +83,10 @@ struct TagServiceTests {
 
     @Test
     func duplicateTags_returns_only_matching_type() throws {
-        _ = try Tag.createIgnoringDuplicates(context: context, name: "A", type: .year)
-        _ = try Tag.createIgnoringDuplicates(context: context, name: "A", type: .year)
-        _ = try Tag.createIgnoringDuplicates(context: context, name: "B", type: .content)
-        _ = try Tag.createIgnoringDuplicates(context: context, name: "B", type: .content)
+        _ = Tag.createIgnoringDuplicates(context: context, name: "A", type: .year)
+        _ = Tag.createIgnoringDuplicates(context: context, name: "A", type: .year)
+        _ = Tag.createIgnoringDuplicates(context: context, name: "B", type: .content)
+        _ = Tag.createIgnoringDuplicates(context: context, name: "B", type: .content)
 
         let duplicates = try TagService.duplicateTags(
             context: context,
@@ -139,7 +139,7 @@ struct TagServiceTests {
         let tag3 = try #require(item3.tags?.first { tag in
             tag.type == .content
         })
-        try TagService.mergeDuplicates(
+        TagService.mergeDuplicates(
             tags: [tag1, tag2, tag3]
         )
         #expect(try context.fetchCount(.tags(.nameIs("contentA", type: .content))) == 1)
@@ -152,10 +152,10 @@ struct TagServiceTests {
 
     @Test
     func mergeDuplicates_when_tags_are_duplicated() throws {
-        let tag1 = try Tag.createIgnoringDuplicates(context: context, name: "contentA", type: .content)
-        let tag2 = try Tag.createIgnoringDuplicates(context: context, name: "contentA", type: .content)
-        let tag3 = try Tag.createIgnoringDuplicates(context: context, name: "contentA", type: .content)
-        try TagService.mergeDuplicates(
+        let tag1 = Tag.createIgnoringDuplicates(context: context, name: "contentA", type: .content)
+        let tag2 = Tag.createIgnoringDuplicates(context: context, name: "contentA", type: .content)
+        let tag3 = Tag.createIgnoringDuplicates(context: context, name: "contentA", type: .content)
+        TagService.mergeDuplicates(
             tags: [tag1, tag2, tag3]
         )
         #expect(try context.fetchCount(.tags(.nameIs("contentA", type: .content))) == 1)
@@ -163,7 +163,7 @@ struct TagServiceTests {
 
     @Test
     func mergeDuplicates_does_not_leave_parent_duplicated_on_items() throws {
-        let item = try Item.createIgnoringDuplicates(
+        let item = Item.createIgnoringDuplicates(
             context: context,
             date: .now,
             content: "content",
@@ -178,13 +178,13 @@ struct TagServiceTests {
                 tag.type == .content
             }
         )
-        let duplicate = try Tag.createIgnoringDuplicates(
+        let duplicate = Tag.createIgnoringDuplicates(
             context: context,
             name: parent.name,
             type: .content
         )
         item.modify(tags: [parent, duplicate])
-        try TagService.mergeDuplicates(tags: [parent, duplicate])
+        TagService.mergeDuplicates(tags: [parent, duplicate])
         let contentTags = item.tags?.filter { tag in
             tag.id == parent.id
         }
@@ -193,11 +193,11 @@ struct TagServiceTests {
 
     @Test
     func resolveDuplicates_removes_all_duplicates() throws {
-        let tag1 = try Tag.createIgnoringDuplicates(context: context, name: "A", type: .year)
-        _ = try Tag.createIgnoringDuplicates(context: context, name: "A", type: .year)
-        _ = try Tag.createIgnoringDuplicates(context: context, name: "A", type: .year)
-        let tag4 = try Tag.createIgnoringDuplicates(context: context, name: "B", type: .yearMonth)
-        _ = try Tag.createIgnoringDuplicates(context: context, name: "B", type: .yearMonth)
+        let tag1 = Tag.createIgnoringDuplicates(context: context, name: "A", type: .year)
+        _ = Tag.createIgnoringDuplicates(context: context, name: "A", type: .year)
+        _ = Tag.createIgnoringDuplicates(context: context, name: "A", type: .year)
+        let tag4 = Tag.createIgnoringDuplicates(context: context, name: "B", type: .yearMonth)
+        _ = Tag.createIgnoringDuplicates(context: context, name: "B", type: .yearMonth)
         #expect(try context.fetchCount(.tags(.all)) == 5)
         try TagService.resolveDuplicates(
             context: context,
@@ -208,10 +208,10 @@ struct TagServiceTests {
 
     @Test
     func resolveAllDuplicates_removes_all_duplicate_groups() throws {
-        _ = try Tag.createIgnoringDuplicates(context: context, name: "A", type: .year)
-        _ = try Tag.createIgnoringDuplicates(context: context, name: "A", type: .year)
-        _ = try Tag.createIgnoringDuplicates(context: context, name: "B", type: .content)
-        _ = try Tag.createIgnoringDuplicates(context: context, name: "B", type: .content)
+        _ = Tag.createIgnoringDuplicates(context: context, name: "A", type: .year)
+        _ = Tag.createIgnoringDuplicates(context: context, name: "A", type: .year)
+        _ = Tag.createIgnoringDuplicates(context: context, name: "B", type: .content)
+        _ = Tag.createIgnoringDuplicates(context: context, name: "B", type: .content)
 
         try TagService.resolveAllDuplicates(context: context)
 
@@ -239,7 +239,7 @@ struct TagServiceTests {
     @Test
     func containsEquivalentTag_matches_name_and_type() throws {
         let target = try Tag.create(context: context, name: "2024", type: .year)
-        let sameSemanticTag = try Tag.createIgnoringDuplicates(
+        let sameSemanticTag = Tag.createIgnoringDuplicates(
             context: context,
             name: "2024",
             type: .year
@@ -260,7 +260,7 @@ struct TagServiceTests {
     func delete_removes_tag() throws {
         let tag = try Tag.create(context: context, name: "name", type: .year)
         #expect(try context.fetchCount(.tags(.all)) == 1)
-        try TagService.delete(tag: tag)
+        TagService.delete(tag: tag)
         #expect(try context.fetchCount(.tags(.all)) == 0)
     }
 

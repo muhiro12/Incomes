@@ -19,7 +19,7 @@ struct TagTests {
 
     @Test
     func hasDeficit_returns_true_when_any_item_has_negative_balance() throws {
-        _ = try ItemService.create(
+        _ = try createItem(
             context: context,
             date: shiftedDate("2024-01-01T00:00:00Z"),
             content: "First",
@@ -29,7 +29,7 @@ struct TagTests {
             priority: 0,
             repeatCount: 1
         )
-        _ = try ItemService.create(
+        _ = try createItem(
             context: context,
             date: shiftedDate("2024-01-02T00:00:00Z"),
             content: "Second",
@@ -57,7 +57,7 @@ struct TagTests {
 
     @Test
     func hasDeficit_returns_false_when_all_items_have_non_negative_balance() throws {
-        _ = try ItemService.create(
+        _ = try createItem(
             context: context,
             date: shiftedDate("2024-02-01T00:00:00Z"),
             content: "Positive",

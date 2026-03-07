@@ -38,7 +38,7 @@ struct MutationOutcomeTests {
 
     @Test
     func updateWithOutcome_reports_updated_ids() throws {
-        let created = try ItemService.create(
+        let created = try createItem(
             context: context,
             date: shiftedDate("2024-03-10T12:00:00Z"),
             content: "Subscription",
@@ -72,7 +72,7 @@ struct MutationOutcomeTests {
 
     @Test
     func deleteWithOutcome_reports_deleted_ids() throws {
-        _ = try ItemService.create(
+        _ = try createItem(
             context: context,
             date: shiftedDate("2024-06-01T12:00:00Z"),
             content: "Delete Me",

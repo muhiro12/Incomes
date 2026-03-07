@@ -47,6 +47,146 @@ func fetchItems(_ context: ModelContext) -> [Item] {
     }
 }
 
+func makeItemFormInput( // swiftlint:disable:this function_parameter_count
+    date: Date,
+    content: String,
+    income: Decimal,
+    outgo: Decimal,
+    category: String,
+    priority: Int
+) -> ItemFormInput {
+    .init(
+        date: date,
+        content: content,
+        incomeText: income.description,
+        outgoText: outgo.description,
+        category: category,
+        priorityText: "\(priority)"
+    )
+}
+
+@discardableResult
+func createItem( // swiftlint:disable:this function_parameter_count
+    context: ModelContext,
+    date: Date,
+    content: String,
+    income: Decimal,
+    outgo: Decimal,
+    category: String,
+    priority: Int,
+    repeatCount: Int = 1
+) throws -> Item {
+    try ItemService.create(
+        context: context,
+        input: makeItemFormInput(
+            date: date,
+            content: content,
+            income: income,
+            outgo: outgo,
+            category: category,
+            priority: priority
+        ),
+        repeatCount: repeatCount
+    )
+}
+
+@discardableResult
+func createItem( // swiftlint:disable:this function_parameter_count
+    context: ModelContext,
+    date: Date,
+    content: String,
+    income: Decimal,
+    outgo: Decimal,
+    category: String,
+    priority: Int,
+    repeatMonthSelections: Set<RepeatMonthSelection>
+) throws -> Item {
+    try ItemService.create(
+        context: context,
+        input: makeItemFormInput(
+            date: date,
+            content: content,
+            income: income,
+            outgo: outgo,
+            category: category,
+            priority: priority
+        ),
+        repeatMonthSelections: repeatMonthSelections
+    )
+}
+
+func updateItem( // swiftlint:disable:this function_parameter_count
+    context: ModelContext,
+    item: Item,
+    date: Date,
+    content: String,
+    income: Decimal,
+    outgo: Decimal,
+    category: String,
+    priority: Int,
+    scope: ItemMutationScope = .thisItem
+) throws {
+    try ItemService.update(
+        context: context,
+        item: item,
+        input: makeItemFormInput(
+            date: date,
+            content: content,
+            income: income,
+            outgo: outgo,
+            category: category,
+            priority: priority
+        ),
+        scope: scope
+    )
+}
+
+func updateAllItems( // swiftlint:disable:this function_parameter_count
+    context: ModelContext,
+    item: Item,
+    date: Date,
+    content: String,
+    income: Decimal,
+    outgo: Decimal,
+    category: String,
+    priority: Int
+) throws {
+    try updateItem(
+        context: context,
+        item: item,
+        date: date,
+        content: content,
+        income: income,
+        outgo: outgo,
+        category: category,
+        priority: priority,
+        scope: .allItems
+    )
+}
+
+func updateFutureItems( // swiftlint:disable:this function_parameter_count
+    context: ModelContext,
+    item: Item,
+    date: Date,
+    content: String,
+    income: Decimal,
+    outgo: Decimal,
+    category: String,
+    priority: Int
+) throws {
+    try updateItem(
+        context: context,
+        item: item,
+        date: date,
+        content: content,
+        income: income,
+        outgo: outgo,
+        category: category,
+        priority: priority,
+        scope: .futureItems
+    )
+}
+
 private func timeZone(identifier: String) -> TimeZone {
     guard let timeZone = TimeZone(identifier: identifier) else {
         preconditionFailure("Invalid time zone identifier: \(identifier)")

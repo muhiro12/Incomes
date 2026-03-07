@@ -19,8 +19,8 @@ struct SettingsStatusLoaderTests {
 
     @Test
     func load_detects_duplicate_tags_and_debug_data() throws {
-        _ = try Tag.createIgnoringDuplicates(context: context, name: "A", type: .content)
-        _ = try Tag.createIgnoringDuplicates(context: context, name: "A", type: .content)
+        _ = Tag.createIgnoringDuplicates(context: context, name: "A", type: .content)
+        _ = Tag.createIgnoringDuplicates(context: context, name: "A", type: .content)
         _ = try ItemService.seedSampleData(
             context: context,
             profile: .debug,

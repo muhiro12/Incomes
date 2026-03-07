@@ -56,7 +56,7 @@ struct ItemServiceSampleDataTests {
 
     @Test
     func seedSampleData_skips_when_ifEmptyOnly_and_items_exist() throws {
-        _ = try ItemService.create(
+        _ = try createItem(
             context: context,
             date: shiftedDate("2000-01-01T12:00:00Z"),
             content: "Seeded",

@@ -32,7 +32,7 @@ struct YearlyItemDuplicationSuggestionTests {
 
     @Test
     func suggestion_selects_latest_year_meeting_minimum_groups() throws {
-        _ = try ItemService.create(
+        _ = try createItem(
             context: context,
             date: shiftedDate("2024-04-10T12:00:00Z"),
             content: "Solo",
@@ -46,7 +46,7 @@ struct YearlyItemDuplicationSuggestionTests {
         for (offset, content) in ["Alpha", "Beta", "Gamma"].enumerated() {
             let month = 1 + offset
             let dateString = "2023-0\(month)-10T12:00:00Z"
-            _ = try ItemService.create(
+            _ = try createItem(
                 context: context,
                 date: shiftedDate(dateString),
                 content: content,
@@ -79,7 +79,7 @@ struct YearlyItemDuplicationSuggestionTests {
 
     @Test
     func suggestion_falls_back_when_no_year_meets_threshold() throws {
-        _ = try ItemService.create(
+        _ = try createItem(
             context: context,
             date: shiftedDate("2024-06-10T12:00:00Z"),
             content: "Solo",

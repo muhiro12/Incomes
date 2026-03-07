@@ -12,7 +12,7 @@ struct UpcomingPaymentNotificationPresentationBuilderTests { // swiftlint:disabl
 
     @Test
     func build_assigns_stable_identifiers_routes_threads_and_badges() throws { // swiftlint:disable:this function_body_length line_length
-        let firstItem = try ItemService.create(
+        let firstItem = try createItem(
             context: context,
             date: shiftedDate("2024-01-20T00:00:00Z"),
             content: "Rent",
@@ -22,7 +22,7 @@ struct UpcomingPaymentNotificationPresentationBuilderTests { // swiftlint:disabl
             priority: 0,
             repeatCount: 1
         )
-        let secondItem = try ItemService.create(
+        let secondItem = try createItem(
             context: context,
             date: shiftedDate("2024-01-22T00:00:00Z"),
             content: "Insurance",
@@ -32,7 +32,7 @@ struct UpcomingPaymentNotificationPresentationBuilderTests { // swiftlint:disabl
             priority: 0,
             repeatCount: 1
         )
-        let thirdItem = try ItemService.create(
+        let thirdItem = try createItem(
             context: context,
             date: shiftedDate("2024-02-05T00:00:00Z"),
             content: "Gym",
@@ -104,7 +104,7 @@ struct UpcomingPaymentNotificationPresentationBuilderTests { // swiftlint:disabl
 
     @Test
     func build_increases_relevance_for_nearer_and_larger_payments() throws {
-        let lowAttentionItem = try ItemService.create(
+        let lowAttentionItem = try createItem(
             context: context,
             date: shiftedDate("2024-01-20T00:00:00Z"),
             content: "Streaming",
@@ -114,7 +114,7 @@ struct UpcomingPaymentNotificationPresentationBuilderTests { // swiftlint:disabl
             priority: 0,
             repeatCount: 1
         )
-        let highAttentionItem = try ItemService.create(
+        let highAttentionItem = try createItem(
             context: context,
             date: shiftedDate("2024-01-11T00:00:00Z"),
             content: "Mortgage",
@@ -161,7 +161,7 @@ struct UpcomingPaymentNotificationPresentationBuilderTests { // swiftlint:disabl
 
     @Test
     func build_clamps_relevance_and_sets_active_interruption_level() throws {
-        let lowUrgencyItem = try ItemService.create(
+        let lowUrgencyItem = try createItem(
             context: context,
             date: shiftedDate("2024-01-20T00:00:00Z"),
             content: "Cloud Storage",
@@ -171,7 +171,7 @@ struct UpcomingPaymentNotificationPresentationBuilderTests { // swiftlint:disabl
             priority: 0,
             repeatCount: 1
         )
-        let highUrgencyItem = try ItemService.create(
+        let highUrgencyItem = try createItem(
             context: context,
             date: shiftedDate("2024-01-10T00:00:00Z"),
             content: "Tax",

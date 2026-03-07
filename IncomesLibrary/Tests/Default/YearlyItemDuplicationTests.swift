@@ -12,7 +12,7 @@ struct YearlyItemDuplicationTests { // swiftlint:disable:this type_body_length
 
     @Test
     func plan_excludes_single_items_by_default() throws {
-        _ = try ItemService.create(
+        _ = try createItem(
             context: context,
             date: shiftedDate("2024-01-10T12:00:00Z"),
             content: "Single",
@@ -22,7 +22,7 @@ struct YearlyItemDuplicationTests { // swiftlint:disable:this type_body_length
             priority: 0,
             repeatCount: 1
         )
-        _ = try ItemService.create(
+        _ = try createItem(
             context: context,
             date: shiftedDate("2024-02-10T12:00:00Z"),
             content: "Repeat",
@@ -44,7 +44,7 @@ struct YearlyItemDuplicationTests { // swiftlint:disable:this type_body_length
 
     @Test
     func plan_includes_single_items_when_enabled() throws {
-        _ = try ItemService.create(
+        _ = try createItem(
             context: context,
             date: shiftedDate("2024-01-10T12:00:00Z"),
             content: "Single",
@@ -54,7 +54,7 @@ struct YearlyItemDuplicationTests { // swiftlint:disable:this type_body_length
             priority: 0,
             repeatCount: 1
         )
-        _ = try ItemService.create(
+        _ = try createItem(
             context: context,
             date: shiftedDate("2024-02-10T12:00:00Z"),
             content: "Repeat",
@@ -78,7 +78,7 @@ struct YearlyItemDuplicationTests { // swiftlint:disable:this type_body_length
 
     @Test
     func plan_groups_items_without_repeat_id_when_content_matches() throws {
-        _ = try ItemService.create(
+        _ = try createItem(
             context: context,
             date: shiftedDate("2024-01-10T12:00:00Z"),
             content: "Card",
@@ -88,7 +88,7 @@ struct YearlyItemDuplicationTests { // swiftlint:disable:this type_body_length
             priority: 0,
             repeatCount: 1
         )
-        _ = try ItemService.create(
+        _ = try createItem(
             context: context,
             date: shiftedDate("2024-02-10T12:00:00Z"),
             content: "Card",
@@ -98,7 +98,7 @@ struct YearlyItemDuplicationTests { // swiftlint:disable:this type_body_length
             priority: 0,
             repeatCount: 1
         )
-        _ = try ItemService.create(
+        _ = try createItem(
             context: context,
             date: shiftedDate("2024-03-10T12:00:00Z"),
             content: "Card",
@@ -120,7 +120,7 @@ struct YearlyItemDuplicationTests { // swiftlint:disable:this type_body_length
 
     @Test
     func plan_creates_group_with_average_amounts() throws {
-        _ = try ItemService.create(
+        _ = try createItem(
             context: context,
             date: shiftedDate("2024-01-05T12:00:00Z"),
             content: "Subscription",
@@ -130,7 +130,7 @@ struct YearlyItemDuplicationTests { // swiftlint:disable:this type_body_length
             priority: 0,
             repeatCount: 1
         )
-        _ = try ItemService.create(
+        _ = try createItem(
             context: context,
             date: shiftedDate("2024-02-05T12:00:00Z"),
             content: "Subscription",
@@ -140,7 +140,7 @@ struct YearlyItemDuplicationTests { // swiftlint:disable:this type_body_length
             priority: 0,
             repeatCount: 1
         )
-        _ = try ItemService.create(
+        _ = try createItem(
             context: context,
             date: shiftedDate("2024-03-05T12:00:00Z"),
             content: "Subscription",
@@ -166,7 +166,7 @@ struct YearlyItemDuplicationTests { // swiftlint:disable:this type_body_length
 
     @Test
     func plan_shifts_dates_by_year() throws {
-        _ = try ItemService.create(
+        _ = try createItem(
             context: context,
             date: shiftedDate("2024-01-31T12:00:00Z"),
             content: "Rent",
@@ -194,7 +194,7 @@ struct YearlyItemDuplicationTests { // swiftlint:disable:this type_body_length
 
     @Test
     func apply_groups_fallback_items_into_single_repeat_id() throws {
-        _ = try ItemService.create(
+        _ = try createItem(
             context: context,
             date: shiftedDate("2024-06-10T12:00:00Z"),
             content: "Card",
@@ -204,7 +204,7 @@ struct YearlyItemDuplicationTests { // swiftlint:disable:this type_body_length
             priority: 0,
             repeatCount: 1
         )
-        _ = try ItemService.create(
+        _ = try createItem(
             context: context,
             date: shiftedDate("2024-07-10T12:00:00Z"),
             content: "Card",
@@ -214,7 +214,7 @@ struct YearlyItemDuplicationTests { // swiftlint:disable:this type_body_length
             priority: 0,
             repeatCount: 1
         )
-        _ = try ItemService.create(
+        _ = try createItem(
             context: context,
             date: shiftedDate("2024-08-10T12:00:00Z"),
             content: "Card",
@@ -249,7 +249,7 @@ struct YearlyItemDuplicationTests { // swiftlint:disable:this type_body_length
 
     @Test
     func apply_creates_new_repeat_ids_per_group() throws {
-        _ = try ItemService.create(
+        _ = try createItem(
             context: context,
             date: shiftedDate("2024-03-01T12:00:00Z"),
             content: "Rent",
@@ -259,7 +259,7 @@ struct YearlyItemDuplicationTests { // swiftlint:disable:this type_body_length
             priority: 0,
             repeatCount: 3
         )
-        _ = try ItemService.create(
+        _ = try createItem(
             context: context,
             date: shiftedDate("2024-04-05T12:00:00Z"),
             content: "Insurance",
@@ -303,7 +303,7 @@ struct YearlyItemDuplicationTests { // swiftlint:disable:this type_body_length
 
     @Test
     func plan_skips_existing_items_when_enabled() throws {
-        _ = try ItemService.create(
+        _ = try createItem(
             context: context,
             date: shiftedDate("2024-05-10T12:00:00Z"),
             content: "Rent",
@@ -313,7 +313,7 @@ struct YearlyItemDuplicationTests { // swiftlint:disable:this type_body_length
             priority: 0,
             repeatCount: 1
         )
-        _ = try ItemService.create(
+        _ = try createItem(
             context: context,
             date: shiftedDate("2025-05-10T12:00:00Z"),
             content: "Rent",

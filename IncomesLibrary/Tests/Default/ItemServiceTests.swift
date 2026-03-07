@@ -16,7 +16,7 @@ struct ItemServiceTests { // swiftlint:disable:this type_body_length
 
     @Test
     func create_creates_item() throws {
-        _ = try ItemService.create(
+        _ = try createItem(
             context: context,
             date: shiftedDate("2000-01-01T12:00:00Z"),
             content: "content",
@@ -34,7 +34,7 @@ struct ItemServiceTests { // swiftlint:disable:this type_body_length
 
     @Test
     func create_creates_repeating_items() throws {
-        _ = try ItemService.create(
+        _ = try createItem(
             context: context,
             date: shiftedDate("2000-01-01T12:00:00Z"),
             content: "content",
@@ -56,7 +56,7 @@ struct ItemServiceTests { // swiftlint:disable:this type_body_length
             .init(year: 2_000, month: 6),
             .init(year: 2_000, month: 7)
         ]
-        _ = try ItemService.create(
+        _ = try createItem(
             context: context,
             date: shiftedDate("2000-04-03T12:00:00Z"),
             content: "content",
@@ -84,7 +84,7 @@ struct ItemServiceTests { // swiftlint:disable:this type_body_length
             .init(year: 2_000, month: 2),
             .init(year: 2_001, month: 1)
         ]
-        _ = try ItemService.create(
+        _ = try createItem(
             context: context,
             date: shiftedDate("2000-11-03T12:00:00Z"),
             content: "content",
@@ -113,7 +113,7 @@ struct ItemServiceTests { // swiftlint:disable:this type_body_length
             .init(year: 2_000, month: 1),
             .init(year: 2_000, month: 3)
         ]
-        _ = try ItemService.create(
+        _ = try createItem(
             context: context,
             date: shiftedDate("2000-02-03T12:00:00Z"),
             content: "content",
@@ -143,7 +143,7 @@ struct ItemServiceTests { // swiftlint:disable:this type_body_length
             .init(year: 1_999, month: 6),
             .init(year: 2_002, month: 7)
         ]
-        _ = try ItemService.create(
+        _ = try createItem(
             context: context,
             date: shiftedDate("2000-04-03T12:00:00Z"),
             content: "content",
@@ -168,7 +168,7 @@ struct ItemServiceTests { // swiftlint:disable:this type_body_length
 
     @Test
     func create_with_empty_selections_creates_only_base_month() throws {
-        _ = try ItemService.create(
+        _ = try createItem(
             context: context,
             date: shiftedDate("2000-04-03T12:00:00Z"),
             content: "content",
@@ -195,7 +195,7 @@ struct ItemServiceTests { // swiftlint:disable:this type_body_length
 
     @Test
     func deleteAll_removes_all_items() throws {
-        _ = try ItemService.create(
+        _ = try createItem(
             context: context,
             date: shiftedDate("2000-01-01T12:00:00Z"),
             content: "contentA",
@@ -205,7 +205,7 @@ struct ItemServiceTests { // swiftlint:disable:this type_body_length
             priority: 0,
             repeatCount: 1
         )
-        _ = try ItemService.create(
+        _ = try createItem(
             context: context,
             date: shiftedDate("2000-01-02T12:00:00Z"),
             content: "contentB",
@@ -229,7 +229,7 @@ struct ItemServiceTests { // swiftlint:disable:this type_body_length
 
     @Test
     func delete_removes_item() throws {
-        let item = try ItemService.create(
+        let item = try createItem(
             context: context,
             date: shiftedDate("2000-01-01T12:00:00Z"),
             content: "content",
@@ -248,7 +248,7 @@ struct ItemServiceTests { // swiftlint:disable:this type_body_length
 
     @Test
     func allItemsCount_returns_count() throws {
-        _ = try ItemService.create(
+        _ = try createItem(
             context: context,
             date: shiftedDate("2000-01-01T12:00:00Z"),
             content: "content",
@@ -264,7 +264,7 @@ struct ItemServiceTests { // swiftlint:disable:this type_body_length
 
     @Test
     func repeatItemsCount_returns_count_for_repeat_id() throws {
-        let item = try ItemService.create(
+        let item = try createItem(
             context: context,
             date: shiftedDate("2000-01-01T12:00:00Z"),
             content: "A",
@@ -283,7 +283,7 @@ struct ItemServiceTests { // swiftlint:disable:this type_body_length
 
     @Test
     func yearItemsCount_returns_count_for_year() throws {
-        _ = try ItemService.create(
+        _ = try createItem(
             context: context,
             date: shiftedDate("2000-02-01T12:00:00Z"),
             content: "A",
@@ -304,7 +304,7 @@ struct ItemServiceTests { // swiftlint:disable:this type_body_length
 
     @Test
     func items_returns_items_for_month() throws {
-        _ = try ItemService.create(
+        _ = try createItem(
             context: context,
             date: shiftedDate("2000-01-05T12:00:00Z"),
             content: "January",
@@ -314,7 +314,7 @@ struct ItemServiceTests { // swiftlint:disable:this type_body_length
             priority: 0,
             repeatCount: 1
         )
-        _ = try ItemService.create(
+        _ = try createItem(
             context: context,
             date: shiftedDate("2000-02-10T12:00:00Z"),
             content: "February",
@@ -341,7 +341,7 @@ struct ItemServiceTests { // swiftlint:disable:this type_body_length
 
     @Test
     func items_returns_multiple_items_in_month() throws {
-        _ = try ItemService.create(
+        _ = try createItem(
             context: context,
             date: shiftedDate("2000-01-10T12:00:00Z"),
             content: "First",
@@ -351,7 +351,7 @@ struct ItemServiceTests { // swiftlint:disable:this type_body_length
             priority: 0,
             repeatCount: 1
         )
-        _ = try ItemService.create(
+        _ = try createItem(
             context: context,
             date: shiftedDate("2000-01-20T12:00:00Z"),
             content: "Second",
@@ -376,7 +376,7 @@ struct ItemServiceTests { // swiftlint:disable:this type_body_length
 
     @Test
     func items_returns_descending_order() throws {
-        _ = try ItemService.create(
+        _ = try createItem(
             context: context,
             date: shiftedDate("2000-03-01T12:00:00Z"),
             content: "A",
@@ -386,7 +386,7 @@ struct ItemServiceTests { // swiftlint:disable:this type_body_length
             priority: 0,
             repeatCount: 1
         )
-        _ = try ItemService.create(
+        _ = try createItem(
             context: context,
             date: shiftedDate("2000-03-10T12:00:00Z"),
             content: "B",
@@ -409,7 +409,7 @@ struct ItemServiceTests { // swiftlint:disable:this type_body_length
 
     @Test
     func nextItemDate_returns_next_local_date() throws {
-        _ = try ItemService.create(
+        _ = try createItem(
             context: context,
             date: shiftedDate("2000-01-01T12:00:00Z"),
             content: "A",
@@ -419,7 +419,7 @@ struct ItemServiceTests { // swiftlint:disable:this type_body_length
             priority: 0,
             repeatCount: 1
         )
-        _ = try ItemService.create(
+        _ = try createItem(
             context: context,
             date: shiftedDate("2000-02-01T12:00:00Z"),
             content: "B",
@@ -449,7 +449,7 @@ struct ItemServiceTests { // swiftlint:disable:this type_body_length
 
     @Test
     func nextItem_returns_next_item() throws {
-        _ = try ItemService.create(
+        _ = try createItem(
             context: context,
             date: shiftedDate("2000-01-01T12:00:00Z"),
             content: "A",
@@ -459,7 +459,7 @@ struct ItemServiceTests { // swiftlint:disable:this type_body_length
             priority: 0,
             repeatCount: 1
         )
-        _ = try ItemService.create(
+        _ = try createItem(
             context: context,
             date: shiftedDate("2000-02-01T12:00:00Z"),
             content: "B",
@@ -480,7 +480,7 @@ struct ItemServiceTests { // swiftlint:disable:this type_body_length
 
     @Test
     func nextItem_returns_item_when_date_is_exact() throws {
-        _ = try ItemService.create(
+        _ = try createItem(
             context: context,
             date: shiftedDate("2000-03-01T00:00:00Z"),
             content: "Exact",
@@ -508,7 +508,7 @@ struct ItemServiceTests { // swiftlint:disable:this type_body_length
 
     @Test
     func previousItemDate_returns_previous_local_date() throws {
-        _ = try ItemService.create(
+        _ = try createItem(
             context: context,
             date: shiftedDate("2000-01-01T12:00:00Z"),
             content: "A",
@@ -518,7 +518,7 @@ struct ItemServiceTests { // swiftlint:disable:this type_body_length
             priority: 0,
             repeatCount: 1
         )
-        _ = try ItemService.create(
+        _ = try createItem(
             context: context,
             date: shiftedDate("2000-02-01T12:00:00Z"),
             content: "B",
@@ -548,7 +548,7 @@ struct ItemServiceTests { // swiftlint:disable:this type_body_length
 
     @Test
     func previousItem_returns_previous_item() throws {
-        _ = try ItemService.create(
+        _ = try createItem(
             context: context,
             date: shiftedDate("2000-01-01T12:00:00Z"),
             content: "A",
@@ -558,7 +558,7 @@ struct ItemServiceTests { // swiftlint:disable:this type_body_length
             priority: 0,
             repeatCount: 1
         )
-        _ = try ItemService.create(
+        _ = try createItem(
             context: context,
             date: shiftedDate("2000-02-01T12:00:00Z"),
             content: "B",
@@ -590,7 +590,7 @@ struct ItemServiceTests { // swiftlint:disable:this type_body_length
 
     @Test
     func update_updates_single_item() throws {
-        let item = try ItemService.create(
+        let item = try createItem(
             context: context,
             date: shiftedDate("2000-01-01T12:00:00Z"),
             content: "content",
@@ -600,7 +600,7 @@ struct ItemServiceTests { // swiftlint:disable:this type_body_length
             priority: 0,
             repeatCount: 1
         )
-        try ItemService.update(
+        try updateItem(
             context: context,
             item: item,
             date: shiftedDate("2001-01-02T12:00:00Z"),
@@ -626,7 +626,7 @@ struct ItemServiceTests { // swiftlint:disable:this type_body_length
             TimeZone.ReferenceType.default = originalTimeZone
         }
 
-        _ = try ItemService.create(
+        _ = try createItem(
             context: context,
             date: shiftedDate("2000-01-01T12:00:00Z"),
             content: "First",
@@ -636,7 +636,7 @@ struct ItemServiceTests { // swiftlint:disable:this type_body_length
             priority: 0,
             repeatCount: 1
         )
-        let itemToMove = try ItemService.create(
+        let itemToMove = try createItem(
             context: context,
             date: shiftedDate("2000-01-02T12:00:00Z"),
             content: "Second",
@@ -646,7 +646,7 @@ struct ItemServiceTests { // swiftlint:disable:this type_body_length
             priority: 0,
             repeatCount: 1
         )
-        _ = try ItemService.create(
+        _ = try createItem(
             context: context,
             date: shiftedDate("2000-01-03T12:00:00Z"),
             content: "Third",
@@ -657,7 +657,7 @@ struct ItemServiceTests { // swiftlint:disable:this type_body_length
             repeatCount: 1
         )
 
-        try ItemService.update(
+        try updateItem(
             context: context,
             item: itemToMove,
             date: shiftedDate("2000-01-04T12:00:00Z"),
@@ -680,7 +680,7 @@ struct ItemServiceTests { // swiftlint:disable:this type_body_length
 
     @Test
     func update_updates_only_selected_repeating_item() throws {
-        _ = try ItemService.create(
+        _ = try createItem(
             context: context,
             date: shiftedDate("2000-01-01T12:00:00Z"),
             content: "content",
@@ -690,7 +690,7 @@ struct ItemServiceTests { // swiftlint:disable:this type_body_length
             priority: 0,
             repeatCount: 3
         )
-        try ItemService.update(
+        try updateItem(
             context: context,
             item: fetchItems(context)[1],
             date: shiftedDate("2000-02-02T12:00:00Z"),
@@ -722,7 +722,7 @@ struct ItemServiceTests { // swiftlint:disable:this type_body_length
 
     @Test
     func updateAll_updates_all_repeating_items() throws {
-        let item = try ItemService.create(
+        let item = try createItem(
             context: context,
             date: shiftedDate("2000-01-01T12:00:00Z"),
             content: "content",
@@ -732,7 +732,7 @@ struct ItemServiceTests { // swiftlint:disable:this type_body_length
             priority: 0,
             repeatCount: 1
         )
-        try ItemService.updateAll(
+        try updateAllItems(
             context: context,
             item: item,
             date: shiftedDate("2001-01-02T12:00:00Z"),
@@ -752,7 +752,7 @@ struct ItemServiceTests { // swiftlint:disable:this type_body_length
 
     @Test
     func updateAll_updates_repeating_items_from_selected_item() throws {
-        _ = try ItemService.create(
+        _ = try createItem(
             context: context,
             date: shiftedDate("2000-01-01T12:00:00Z"),
             content: "content",
@@ -762,7 +762,7 @@ struct ItemServiceTests { // swiftlint:disable:this type_body_length
             priority: 0,
             repeatCount: 3
         )
-        try ItemService.updateAll(
+        try updateAllItems(
             context: context,
             item: fetchItems(context)[1],
             date: shiftedDate("2000-02-02T12:00:00Z"),
@@ -794,7 +794,7 @@ struct ItemServiceTests { // swiftlint:disable:this type_body_length
 
     @Test
     func updateFuture_updates_all_future_repeating_items() throws {
-        let item = try ItemService.create(
+        let item = try createItem(
             context: context,
             date: shiftedDate("2000-01-01T12:00:00Z"),
             content: "content",
@@ -804,7 +804,7 @@ struct ItemServiceTests { // swiftlint:disable:this type_body_length
             priority: 0,
             repeatCount: 1
         )
-        try ItemService.updateFuture(
+        try updateFutureItems(
             context: context,
             item: item,
             date: shiftedDate("2001-01-02T12:00:00Z"),
@@ -824,7 +824,7 @@ struct ItemServiceTests { // swiftlint:disable:this type_body_length
 
     @Test
     func updateFuture_updates_future_items_only() throws {
-        _ = try ItemService.create(
+        _ = try createItem(
             context: context,
             date: shiftedDate("2000-01-01T12:00:00Z"),
             content: "content",
@@ -834,7 +834,7 @@ struct ItemServiceTests { // swiftlint:disable:this type_body_length
             priority: 0,
             repeatCount: 3
         )
-        try ItemService.updateFuture(
+        try updateFutureItems(
             context: context,
             item: fetchItems(context)[1],
             date: shiftedDate("2000-02-02T12:00:00Z"),
@@ -868,7 +868,7 @@ struct ItemServiceTests { // swiftlint:disable:this type_body_length
 
     @Test
     func recalculate_recomputes_balance_after_update() throws {
-        let item = try ItemService.create(
+        let item = try createItem(
             context: context,
             date: shiftedDate("2000-01-01T00:00:00Z"),
             content: "content",
@@ -878,7 +878,7 @@ struct ItemServiceTests { // swiftlint:disable:this type_body_length
             priority: 0,
             repeatCount: 1
         )
-        try ItemService.update(
+        try updateItem(
             context: context,
             item: item,
             date: item.localDate,

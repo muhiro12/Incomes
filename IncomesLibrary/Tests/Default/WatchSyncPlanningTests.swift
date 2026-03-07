@@ -25,7 +25,7 @@ struct WatchSyncPlanningTests {
             Calendar.current.date(byAdding: .month, value: 1, to: base)
         )
 
-        _ = try ItemService.create(
+        _ = try createItem(
             context: context,
             date: july,
             content: "JULY-OLD",
@@ -35,7 +35,7 @@ struct WatchSyncPlanningTests {
             priority: 0,
             repeatCount: 1
         )
-        _ = try ItemService.create(
+        _ = try createItem(
             context: context,
             date: aug,
             content: "AUG-OLD",
@@ -45,7 +45,7 @@ struct WatchSyncPlanningTests {
             priority: 0,
             repeatCount: 1
         )
-        _ = try ItemService.create(
+        _ = try createItem(
             context: context,
             date: sep,
             content: "SEP-OLD",
@@ -55,7 +55,7 @@ struct WatchSyncPlanningTests {
             priority: 0,
             repeatCount: 1
         )
-        _ = try ItemService.create(
+        _ = try createItem(
             context: context,
             date: oct,
             content: "OCT-OLD",

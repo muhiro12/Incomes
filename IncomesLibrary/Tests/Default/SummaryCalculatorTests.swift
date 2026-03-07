@@ -31,35 +31,26 @@ struct SummaryCalculatorTests {
 
     @Test
     func monthlyTotals_returns_aggregated_values_for_month() throws {
-        _ = try ItemService.create(
-            context: context,
-            date: shiftedDate("2024-02-02T00:00:00Z"),
+        _ = try createSummaryItem(
+            date: "2024-02-02T00:00:00Z",
             content: "Salary",
             income: 1_000,
             outgo: .zero,
-            category: "Work",
-            priority: 0,
-            repeatCount: 1
+            category: "Work"
         )
-        _ = try ItemService.create(
-            context: context,
-            date: shiftedDate("2024-02-20T00:00:00Z"),
+        _ = try createSummaryItem(
+            date: "2024-02-20T00:00:00Z",
             content: "Rent",
             income: .zero,
             outgo: 400,
-            category: "Housing",
-            priority: 0,
-            repeatCount: 1
+            category: "Housing"
         )
-        _ = try ItemService.create(
-            context: context,
-            date: shiftedDate("2024-03-01T00:00:00Z"),
+        _ = try createSummaryItem(
+            date: "2024-03-01T00:00:00Z",
             content: "Other",
             income: 200,
             outgo: .zero,
-            category: "Misc",
-            priority: 0,
-            repeatCount: 1
+            category: "Misc"
         )
 
         let totals = try SummaryCalculator.monthlyTotals(
@@ -84,7 +75,7 @@ struct SummaryCalculatorTests {
 
     @Test
     func categoryComparison_returns_zero_previous_values_for_new_current_category() throws {
-        _ = try createItem(
+        _ = try createSummaryItem(
             date: "2024-05-10T00:00:00Z",
             content: "Bonus",
             income: 300,
@@ -110,7 +101,7 @@ struct SummaryCalculatorTests {
 
     @Test
     func categoryComparison_returns_zero_current_values_for_removed_previous_category() throws {
-        _ = try createItem(
+        _ = try createSummaryItem(
             date: "2024-05-10T00:00:00Z",
             content: "Rent",
             income: .zero,
@@ -136,14 +127,14 @@ struct SummaryCalculatorTests {
 
     @Test
     func categoryComparison_compares_january_against_previous_december() throws {
-        _ = try createItem(
+        _ = try createSummaryItem(
             date: "2023-12-10T00:00:00Z",
             content: "Freelance",
             income: 700,
             outgo: .zero,
             category: "Work"
         )
-        _ = try createItem(
+        _ = try createSummaryItem(
             date: "2024-01-08T00:00:00Z",
             content: "Freelance",
             income: 900,
@@ -166,14 +157,14 @@ struct SummaryCalculatorTests {
 
     @Test
     func categoryComparison_maps_blank_category_to_others() throws {
-        _ = try createItem(
+        _ = try createSummaryItem(
             date: "2024-07-03T00:00:00Z",
             content: "Refund",
             income: 50,
             outgo: .zero,
             category: .empty
         )
-        _ = try createItem(
+        _ = try createSummaryItem(
             date: "2024-06-20T00:00:00Z",
             content: "Snacks",
             income: .zero,
@@ -194,28 +185,28 @@ struct SummaryCalculatorTests {
 
     @Test
     func categoryComparison_sorts_by_largest_absolute_delta_then_category_name() throws {
-        _ = try createItem(
+        _ = try createSummaryItem(
             date: "2024-08-01T00:00:00Z",
             content: "Alpha old",
             income: .zero,
             outgo: 100,
             category: "Alpha"
         )
-        _ = try createItem(
+        _ = try createSummaryItem(
             date: "2024-08-02T00:00:00Z",
             content: "Beta old",
             income: .zero,
             outgo: 100,
             category: "Beta"
         )
-        _ = try createItem(
+        _ = try createSummaryItem(
             date: "2024-08-03T00:00:00Z",
             content: "Gamma old",
             income: .zero,
             outgo: 50,
             category: "Gamma"
         )
-        _ = try createItem(
+        _ = try createSummaryItem(
             date: "2024-09-01T00:00:00Z",
             content: "Gamma new",
             income: .zero,
@@ -234,14 +225,14 @@ struct SummaryCalculatorTests {
 
 private extension SummaryCalculatorTests {
     @discardableResult
-    func createItem(
+    func createSummaryItem(
         date: String,
         content: String,
         income: Decimal,
         outgo: Decimal,
         category: String
     ) throws -> Item {
-        try ItemService.create(
+        try createItem(
             context: context,
             date: shiftedDate(date),
             content: content,

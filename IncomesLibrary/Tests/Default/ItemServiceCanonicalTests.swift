@@ -41,7 +41,7 @@ struct ItemServiceCanonicalTests {
 
     @Test
     func update_withThisItemScope_updatesOnlyTheTargetItem() throws {
-        let item = try ItemService.create(
+        let item = try createItem(
             context: context,
             date: shiftedDate("2000-01-01T12:00:00Z"),
             content: "before",
@@ -77,7 +77,7 @@ struct ItemServiceCanonicalTests {
 
     @Test
     func update_withFutureItemsScope_updatesOnlyFutureItems() throws {
-        _ = try ItemService.create(
+        _ = try createItem(
             context: context,
             date: shiftedDate("2000-01-01T12:00:00Z"),
             content: "before",
@@ -113,7 +113,7 @@ struct ItemServiceCanonicalTests {
 
     @Test
     func update_withAllItemsScope_updatesEntireSeries() throws {
-        let item = try ItemService.create(
+        let item = try createItem(
             context: context,
             date: shiftedDate("2000-01-01T12:00:00Z"),
             content: "before",
