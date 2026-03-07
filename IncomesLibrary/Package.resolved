@@ -1,5 +1,5 @@
 {
-  "originHash" : "bc88c7867a37cc91fa7b7c614859a7d545262eea8677aee73a9beec6d4da08dd",
+  "originHash" : "2208b72aa41f903613275ffcc94e24d389796e0f4a3c5ec72dbfb27b4f33c504",
   "pins" : [
     {
       "identity" : "googlemobileadswrapper",
@@ -20,18 +20,27 @@
       }
     },
     {
+      "identity" : "licenselistwrapper",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/muhiro12/LicenseListWrapper.git",
+      "state" : {
+        "revision" : "d760514bee0ba669db4aed8362d64a64ff17810d",
+        "version" : "1.1.0"
+      }
+    },
+    {
       "identity" : "mhplatform",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/muhiro12/MHPlatform.git",
       "state" : {
         "branch" : "main",
-        "revision" : "36f74a250e4a4cc8908160179359325d204a83ef"
+        "revision" : "0f1955d63d494502dc653ab40a6f63bd629f10bb"
       }
     },
     {
       "identity" : "storekitwrapper",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/muhiro12/StoreKitWrapper.git",
+      "location" : "https://github.com/muhiro12/StoreKitWrapper",
       "state" : {
         "revision" : "c43d9cd7f68eb66d63f6b258af48c9825c1f0d00",
         "version" : "1.2.0"
