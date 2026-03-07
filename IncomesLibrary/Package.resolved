@@ -1,5 +1,5 @@
 {
-  "originHash" : "2208b72aa41f903613275ffcc94e24d389796e0f4a3c5ec72dbfb27b4f33c504",
+  "originHash" : "ca6ed2e1b38fffe6880d8ef9500588a561fad04faa4919ddb32a6976b1e4fe24",
   "pins" : [
     {
       "identity" : "googlemobileadswrapper",
@@ -33,8 +33,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/muhiro12/MHPlatform.git",
       "state" : {
-        "branch" : "main",
-        "revision" : "c22dfbd70083dccc5b09ed1c82dbcb0fd247bb6a"
+        "branch" : "codex/shared-mutation-workflow",
+        "revision" : "81a21a9c844780da30732353bd72c0f64ae6834e"
       }
     },
     {

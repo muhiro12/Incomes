@@ -793,7 +793,7 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/muhiro12/MHPlatform.git";
 			requirement = {
-				branch = main;
+				branch = "codex/shared-mutation-workflow";
 				kind = branch;
 			};
 		};

@@ -23,7 +23,7 @@ let package = Package( // swiftlint:disable:this prefixed_toplevel_constant
         ),
         .package(
             url: "https://github.com/muhiro12/MHPlatform.git",
-            branch: "main"
+            branch: "codex/shared-mutation-workflow"
         )
     ],
     targets: [

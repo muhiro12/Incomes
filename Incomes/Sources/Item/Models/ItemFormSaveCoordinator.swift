@@ -48,9 +48,15 @@ enum ItemFormSaveCoordinator {
                         context: context,
                         input: request.formInputData,
                         repeatMonthSelections: request.repeatMonthSelections
-                    ).outcome.followUpHints
+                    )
                 },
-                adapter: adapter
+                adapter: adapter,
+                afterSuccess: { result in
+                    result.outcome.followUpHints
+                },
+                returning: { _ in
+                    ()
+                }
             )
             return .didSave
         case .edit:
@@ -91,12 +97,18 @@ enum ItemFormSaveCoordinator {
                     item: item,
                     input: formInputData,
                     scope: scope
-                ).followUpHints
+                )
             },
             adapter: IncomesMutationWorkflow.itemFormAdapter(
                 refreshNotificationSchedule: workflow.refreshNotificationSchedule,
                 requestReviewIfNeeded: workflow.requestReviewIfNeeded
-            )
+            ),
+            afterSuccess: { outcome in
+                outcome.followUpHints
+            },
+            returning: { _ in
+                ()
+            }
         )
     }
 

@@ -118,14 +118,11 @@ enum YearlyDuplicationCoordinator {
             .followUpHintAdapter(
                 refreshNotificationSchedule: refreshNotificationSchedule
             )
-            .contramap { (value: MutationWorkflowValue) in
-                value.followUpHints
-            }
 
-        let value = try await IncomesMutationWorkflow.run(
+        return try await IncomesMutationWorkflow.run(
             name: "duplicateYearlyItems",
             operation: {
-                let mutationResult = try YearlyItemDuplicator.applyWithOutcome(
+                try YearlyItemDuplicator.applyWithOutcome(
                     plan: .init(
                         groups: [group],
                         entries: entries,
@@ -133,15 +130,15 @@ enum YearlyDuplicationCoordinator {
                     ),
                     context: context
                 )
-                return MutationWorkflowValue(
-                    result: mutationResult.value,
-                    followUpHints: mutationResult.outcome.followUpHints
-                )
             },
-            adapter: adapter
+            adapter: adapter,
+            afterSuccess: { result in
+                result.outcome.followUpHints
+            },
+            returning: { result in
+                result.value
+            }
         )
-
-        return value.result
     }
 
     static func promoState(
@@ -211,11 +208,6 @@ enum YearlyDuplicationCoordinator {
 }
 
 private extension YearlyDuplicationCoordinator {
-    struct MutationWorkflowValue: Sendable {
-        let result: YearlyItemDuplicationResult
-        let followUpHints: Set<MutationOutcome.FollowUpHint>
-    }
-
     struct MonthDay: Hashable {
         let month: Int
         let day: Int
