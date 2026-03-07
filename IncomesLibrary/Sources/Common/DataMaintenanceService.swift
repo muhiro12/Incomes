@@ -14,7 +14,7 @@ public enum DataMaintenanceService {
     @preconcurrency
     @MainActor
     public static func resetAllData(context: ModelContext) async throws {
-        let outcome = await MHDestructiveResetService.run(
+        _ = try await MHDestructiveResetService.runThrowing(
             steps: [
                 .init(name: "deleteAllData") {
                     try await MainActor.run {
@@ -23,10 +23,6 @@ public enum DataMaintenanceService {
                 }
             ]
         )
-
-        if case let .failed(error, _, _) = outcome {
-            throw error
-        }
     }
 
     /// Deletes tutorial/debug sample data from the store.
