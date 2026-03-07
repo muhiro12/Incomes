@@ -66,8 +66,9 @@ extension HomeListView: View {
         .listStyle(.insetGrouped)
         .navigationTitle(yearTag.displayName)
         .task {
-            await notificationService.refresh()
-            await notificationService.register()
+            await IncomesMutationWorkflow.refreshNotificationSchedule(
+                notificationService: notificationService
+            )
         }
     }
 }

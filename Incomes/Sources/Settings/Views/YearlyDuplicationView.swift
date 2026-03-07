@@ -35,6 +35,8 @@ struct YearlyDuplicationView: View {
 
     @Environment(\.modelContext)
     private var context
+    @Environment(NotificationService.self)
+    private var notificationService
 
     @Query(.tags(.typeIs(.year), order: .reverse))
     private var yearTags: [Tag]
@@ -104,7 +106,9 @@ struct YearlyDuplicationView: View {
                                 .buttonStyle(.bordered)
                                 .disabled(isCreated || entries.isEmpty)
                                 Button("Create") {
-                                    createGroupItems(group: group)
+                                    Task { @MainActor in
+                                        await createGroupItems(group: group)
+                                    }
                                 }
                                 .buttonStyle(.borderedProminent)
                                 .disabled(isCreated || entries.isEmpty)
@@ -222,6 +226,14 @@ private extension YearlyDuplicationView {
         )
     }
 
+    var refreshNotificationSchedule: IncomesMutationWorkflow.NotificationScheduleRefresher {
+        {
+            await IncomesMutationWorkflow.refreshNotificationSchedule(
+                notificationService: notificationService
+            )
+        }
+    }
+
     func previewPlan() {
         do {
             plan = try YearlyDuplicationCoordinator.previewPlan(
@@ -236,15 +248,16 @@ private extension YearlyDuplicationView {
         }
     }
 
-    func createGroupItems(group: YearlyItemDuplicationGroup) {
+    func createGroupItems(group: YearlyItemDuplicationGroup) async {
         guard let plan else {
             return
         }
         do {
-            guard let result = try YearlyDuplicationCoordinator.apply(
+            guard let result = try await YearlyDuplicationCoordinator.apply(
                 group: group,
                 in: plan,
-                context: context
+                context: context,
+                refreshNotificationSchedule: refreshNotificationSchedule
             ) else {
                 return
             }

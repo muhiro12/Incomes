@@ -43,6 +43,8 @@ struct ItemFormView: View { // swiftlint:disable:this type_body_length
     private var dismiss
     @Environment(IncomesTipController.self)
     private var tipController
+    @Environment(NotificationService.self)
+    private var notificationService
 
     @Environment(Item.self)
     private var item: Item?
@@ -170,16 +172,12 @@ struct ItemFormView: View { // swiftlint:disable:this type_body_length
             }
             ToolbarItem(placement: .primaryAction) {
                 Button {
-                    if mode == .create {
-                        create()
-                    } else {
-                        save()
-                    }
-                    Task {
-                        _ = await IncomesApp.requestReviewIfNeeded(
-                            policy: Self.reviewPolicy,
-                            source: #fileID
-                        )
+                    Task { @MainActor in
+                        if mode == .create {
+                            await create()
+                        } else {
+                            await save()
+                        }
                     }
                 } label: {
                     Text(mode == .create ? "Create" : "Save")
@@ -285,13 +283,19 @@ struct ItemFormView: View { // swiftlint:disable:this type_body_length
             titleVisibility: .visible
         ) {
             Button("Save for this item only") {
-                saveForThisItem()
+                Task { @MainActor in
+                    await saveForThisItem()
+                }
             }
             Button("Save for future items") {
-                saveForFutureItems()
+                Task { @MainActor in
+                    await saveForFutureItems()
+                }
             }
             Button("Save for all items") {
-                saveForAllItems()
+                Task { @MainActor in
+                    await saveForAllItems()
+                }
             }
             Button("Cancel", role: .cancel) {
                 // no-op
@@ -377,14 +381,33 @@ private extension ItemFormView {
         }
     }
 
-    func save() {
+    var saveWorkflow: ItemFormSaveCoordinator.Workflow {
+        .init(
+            refreshNotificationSchedule: {
+                await IncomesMutationWorkflow.refreshNotificationSchedule(
+                    notificationService: notificationService
+                )
+            },
+            requestReviewIfNeeded: {
+                await IncomesApp.requestReviewIfNeeded(
+                    policy: Self.reviewPolicy,
+                    source: #fileID
+                )
+            }
+        )
+    }
+
+    func save() async {
         do {
-            let outcome = try ItemFormSaveCoordinator.save(
-                mode: saveMode,
+            let outcome = try await ItemFormSaveCoordinator.save(
                 context: context,
-                item: item,
-                formInputData: formInputData,
-                repeatMonthSelections: effectiveRepeatMonthSelections
+                request: .init(
+                    mode: saveMode,
+                    item: item,
+                    formInputData: formInputData,
+                    repeatMonthSelections: effectiveRepeatMonthSelections
+                ),
+                workflow: saveWorkflow
             )
             switch outcome {
             case .requiresScopeSelection:
@@ -397,17 +420,18 @@ private extension ItemFormView {
         }
     }
 
-    func saveForThisItem() {
+    func saveForThisItem() async {
         guard let item else {
             assertionFailure()
             return
         }
         do {
-            try ItemFormSaveCoordinator.save(
+            try await ItemFormSaveCoordinator.save(
                 scope: .thisItem,
                 context: context,
                 item: item,
-                formInputData: formInputData
+                formInputData: formInputData,
+                workflow: saveWorkflow
             )
         } catch {
             assertionFailure(error.localizedDescription)
@@ -415,17 +439,18 @@ private extension ItemFormView {
         dismiss()
     }
 
-    func saveForFutureItems() {
+    func saveForFutureItems() async {
         guard let item else {
             assertionFailure()
             return
         }
         do {
-            try ItemFormSaveCoordinator.save(
+            try await ItemFormSaveCoordinator.save(
                 scope: .futureItems,
                 context: context,
                 item: item,
-                formInputData: formInputData
+                formInputData: formInputData,
+                workflow: saveWorkflow
             )
         } catch {
             assertionFailure(error.localizedDescription)
@@ -433,17 +458,18 @@ private extension ItemFormView {
         dismiss()
     }
 
-    func saveForAllItems() {
+    func saveForAllItems() async {
         guard let item else {
             assertionFailure()
             return
         }
         do {
-            try ItemFormSaveCoordinator.save(
+            try await ItemFormSaveCoordinator.save(
                 scope: .allItems,
                 context: context,
                 item: item,
-                formInputData: formInputData
+                formInputData: formInputData,
+                workflow: saveWorkflow
             )
         } catch {
             assertionFailure(error.localizedDescription)
@@ -451,14 +477,17 @@ private extension ItemFormView {
         dismiss()
     }
 
-    func create() {
+    func create() async {
         do {
-            _ = try ItemFormSaveCoordinator.save(
-                mode: .create,
+            _ = try await ItemFormSaveCoordinator.save(
                 context: context,
-                item: item,
-                formInputData: formInputData,
-                repeatMonthSelections: effectiveRepeatMonthSelections
+                request: .init(
+                    mode: .create,
+                    item: item,
+                    formInputData: formInputData,
+                    repeatMonthSelections: effectiveRepeatMonthSelections
+                ),
+                workflow: saveWorkflow
             )
             onCreate?()
         } catch {

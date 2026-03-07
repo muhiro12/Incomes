@@ -1,4 +1,5 @@
 import Foundation
+import MHPlatform
 import SwiftData
 
 enum YearlyDuplicationCoordinator {
@@ -102,8 +103,9 @@ enum YearlyDuplicationCoordinator {
     static func apply(
         group: YearlyItemDuplicationGroup,
         in plan: YearlyItemDuplicationPlan,
-        context: ModelContext
-    ) throws -> YearlyItemDuplicationResult? {
+        context: ModelContext,
+        refreshNotificationSchedule: @escaping IncomesMutationWorkflow.NotificationScheduleRefresher
+    ) async throws -> YearlyItemDuplicationResult? {
         let entries = entries(
             for: group,
             in: plan
@@ -111,11 +113,35 @@ enum YearlyDuplicationCoordinator {
         guard entries.isNotEmpty else {
             return nil
         }
-        return try YearlyItemDuplicator.apply(
-            groupID: group.id,
-            in: plan,
-            context: context
+
+        let adapter = IncomesMutationWorkflow
+            .followUpHintAdapter(
+                refreshNotificationSchedule: refreshNotificationSchedule
+            )
+            .contramap { (value: MutationWorkflowValue) in
+                value.followUpHints
+            }
+
+        let value = try await IncomesMutationWorkflow.run(
+            name: "duplicateYearlyItems",
+            operation: {
+                let mutationResult = try YearlyItemDuplicator.applyWithOutcome(
+                    plan: .init(
+                        groups: [group],
+                        entries: entries,
+                        skippedDuplicateCount: 0
+                    ),
+                    context: context
+                )
+                return MutationWorkflowValue(
+                    result: mutationResult.value,
+                    followUpHints: mutationResult.outcome.followUpHints
+                )
+            },
+            adapter: adapter
         )
+
+        return value.result
     }
 
     static func promoState(
@@ -185,6 +211,11 @@ enum YearlyDuplicationCoordinator {
 }
 
 private extension YearlyDuplicationCoordinator {
+    struct MutationWorkflowValue: Sendable {
+        let result: YearlyItemDuplicationResult
+        let followUpHints: Set<MutationOutcome.FollowUpHint>
+    }
+
     struct MonthDay: Hashable {
         let month: Int
         let day: Int

@@ -13,7 +13,8 @@ enum SettingsActionCoordinator {
     }
 
     static func refreshNotifications(notificationService: NotificationService) async {
-        await notificationService.refresh()
-        await notificationService.register()
+        await IncomesMutationWorkflow.refreshNotificationSchedule(
+            notificationService: notificationService
+        )
     }
 }

@@ -1,7 +1,7 @@
 import Foundation
 
 /// Documented for SwiftLint compliance.
-public struct YearlyItemDuplicationResult {
+public struct YearlyItemDuplicationResult: Sendable {
     /// Documented for SwiftLint compliance.
     public let createdCount: Int
     /// Documented for SwiftLint compliance.
