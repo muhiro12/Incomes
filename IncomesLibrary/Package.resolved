@@ -33,8 +33,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/muhiro12/MHPlatform.git",
       "state" : {
-        "branch" : "codex/shared-mutation-workflow",
-        "revision" : "81a21a9c844780da30732353bd72c0f64ae6834e"
+        "branch" : "main",
+        "revision" : "e7b9a004bf11fd69d20eb70c9ea1ff94b3da2c8a"
       }
     },
     {
