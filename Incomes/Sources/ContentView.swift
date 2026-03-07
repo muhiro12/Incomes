@@ -72,9 +72,9 @@ extension ContentView: View {
                     await notificationService.update()
                 }
                 Task {
-                    _ = await IncomesApp.requestReviewIfNeeded(
+                    _ = await MHReviewRequester.requestIfNeeded(
                         policy: Self.reviewPolicy,
-                        source: #fileID
+                        logger: reviewLogger
                     )
                 }
                 Task {
@@ -117,6 +117,13 @@ private extension ContentView {
     var routeLogger: MHLogger {
         IncomesApp.logger(
             category: "RouteExecution",
+            source: #fileID
+        )
+    }
+
+    var reviewLogger: MHLogger {
+        IncomesApp.logger(
+            category: "ReviewFlow",
             source: #fileID
         )
     }

@@ -335,6 +335,13 @@ private extension ItemFormView {
         )
     }
 
+    var reviewLogger: MHLogger {
+        IncomesApp.logger(
+            category: "ReviewFlow",
+            source: #fileID
+        )
+    }
+
     var priorityValue: Binding<Int> {
         .init(
             get: {
@@ -389,9 +396,9 @@ private extension ItemFormView {
                 )
             },
             requestReviewIfNeeded: {
-                await IncomesApp.requestReviewIfNeeded(
+                await MHReviewRequester.requestIfNeeded(
                     policy: Self.reviewPolicy,
-                    source: #fileID
+                    logger: reviewLogger
                 )
             }
         )

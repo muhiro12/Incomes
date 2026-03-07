@@ -132,30 +132,4 @@ extension IncomesApp {
             source: source
         )
     }
-
-    @discardableResult
-    nonisolated static func requestReviewIfNeeded(
-        policy: MHReviewPolicy,
-        source: String = #fileID
-    ) async -> MHReviewRequestOutcome {
-        await MHReviewRequester.requestIfNeeded(policy: policy) { outcome in
-            let logger = logger(
-                category: "ReviewFlow",
-                source: source
-            )
-
-            switch outcome {
-            case .requested:
-                logger.notice("review request invoked")
-            case .skippedInvalidLotteryRange:
-                logger.warning("review request skipped because the lottery range was invalid")
-            case .skippedNoForegroundScene:
-                logger.info("review request skipped because no foreground scene was available")
-            case .unsupportedPlatform:
-                logger.info("review request skipped because the platform is unsupported")
-            case .skippedByPolicy:
-                break
-            }
-        }
-    }
 }
