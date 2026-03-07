@@ -82,7 +82,12 @@ final class MainNavigationRouter: ObservableObject {
         } else {
             preferredCompactColumn = .detail
         }
-        await routeLifecycle.setReadiness(true)
+        _ = try await routeLifecycle.activate { [self] route in
+            try apply(
+                route: route,
+                context: context
+            )
+        }
     }
 
     func handleIncomingURL(
@@ -124,15 +129,6 @@ final class MainNavigationRouter: ObservableObject {
             sheetRoute = nil
         } else {
             try await submitRoute(route, context: context)
-        }
-    }
-
-    func applyPendingRouteIfNeeded(context: ModelContext) async throws {
-        _ = try await routeLifecycle.applyPendingIfReady { [self] route in
-            try apply(
-                route: route,
-                context: context
-            )
         }
     }
 

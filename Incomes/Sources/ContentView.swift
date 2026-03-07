@@ -144,16 +144,29 @@ private extension ContentView {
     }
 
     func applyPendingDeepLinkIfNeeded() async {
-        if let intentDeepLinkURL = IncomesIntentRouteStore.consume() {
-            handleIncomingURL(intentDeepLinkURL)
+        if let intentRouteSource = IncomesIntentRouteStore.source {
+            await applyPendingDeepLinkIfNeeded(from: intentRouteSource)
         }
-        if let notificationDeepLinkURL = await notificationService.consumePendingDeepLinkURL() {
-            handleIncomingURL(notificationDeepLinkURL)
+        if await applyPendingDeepLinkIfNeeded(
+            from: notificationService.pendingDeepLinkSource
+        ) {
+            await notificationService.setPendingDeepLinkURL(nil)
         }
     }
 
     func handleIncomingURL(_ url: URL) {
         incomingRouteURL = url
+    }
+
+    @discardableResult
+    func applyPendingDeepLinkIfNeeded(
+        from source: some MHDeepLinkURLSource
+    ) async -> Bool {
+        guard let deepLinkURL = await source.consumeLatestURL() else {
+            return false
+        }
+        handleIncomingURL(deepLinkURL)
+        return true
     }
 }
 

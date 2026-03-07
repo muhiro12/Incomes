@@ -116,12 +116,6 @@ final class NotificationService: NSObject {
         authorizationState = .init(status: settings.authorizationStatus)
     }
 
-    func consumePendingDeepLinkURL() async -> URL? {
-        let deepLinkURL = await deepLinkInbox.consumeLatest()
-        pendingDeepLinkURL = nil
-        return deepLinkURL
-    }
-
     func sendTestNotification() {
         guard let item = try? ItemService.nextItem(
             context: modelContainer.mainContext,
@@ -181,6 +175,10 @@ extension NotificationService: UNUserNotificationCenterDelegate {
 }
 
 extension NotificationService {
+    var pendingDeepLinkSource: MHDeepLinkInbox {
+        deepLinkInbox
+    }
+
     func setPendingDeepLinkURL(_ deepLinkURL: URL?) async {
         await deepLinkInbox.replacePendingURL(deepLinkURL)
         pendingDeepLinkURL = deepLinkURL

@@ -8,11 +8,11 @@ enum IncomesIntentRouteStore {
         key: pendingDeepLinkURLKey
     )
 
-    static func store(_ url: URL) {
-        deepLinkStore?.ingest(url)
+    static var source: MHDeepLinkStore? {
+        deepLinkStore
     }
 
-    static func consume() -> URL? {
-        deepLinkStore?.consumeLatest()
+    static func store(_ url: URL) {
+        deepLinkStore?.ingest(url)
     }
 }

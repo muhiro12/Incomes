@@ -218,7 +218,6 @@ struct MainNavigationView: View {
             tipController.refreshHasAnyItems(!yearTags.isEmpty)
 
             await handleIncomingRouteURL()
-            await applyPendingRouteIfNeeded()
 
             await PhoneWatchBridge.shared.activate(modelContext: context)
         }
@@ -294,16 +293,6 @@ private extension MainNavigationView {
         do {
             try await router.handleIncomingURL(
                 url,
-                context: context
-            )
-        } catch {
-            assertionFailure(error.localizedDescription)
-        }
-    }
-
-    func applyPendingRouteIfNeeded() async {
-        do {
-            try await router.applyPendingRouteIfNeeded(
                 context: context
             )
         } catch {
