@@ -1,15 +1,15 @@
 import Foundation
 
-/// Documented for SwiftLint compliance.
+/// Complete yearly duplication plan with grouped summaries and item entries.
 public struct YearlyItemDuplicationPlan {
-    /// Documented for SwiftLint compliance.
+    /// Grouped summaries shown to the user.
     public let groups: [YearlyItemDuplicationGroup]
-    /// Documented for SwiftLint compliance.
+    /// Planned duplicated items across all groups.
     public let entries: [YearlyItemDuplicationEntry]
-    /// Documented for SwiftLint compliance.
+    /// Number of candidate items skipped because matches already exist.
     public let skippedDuplicateCount: Int
 
-    /// Documented for SwiftLint compliance.
+    /// Creates a yearly duplication plan.
     public init(
         groups: [YearlyItemDuplicationGroup],
         entries: [YearlyItemDuplicationEntry],

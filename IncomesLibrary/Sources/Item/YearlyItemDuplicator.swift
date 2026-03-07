@@ -2,9 +2,9 @@
 import Foundation
 import SwiftData
 
-/// Documented for SwiftLint compliance.
+/// Builds, suggests, and applies yearly item duplication plans.
 public enum YearlyItemDuplicator { // swiftlint:disable:this type_body_length
-    /// Documented for SwiftLint compliance.
+    /// Returns source years extracted from `yearTags`, or `currentYear` when none exist.
     public static func availableSourceYears(
         from yearTags: [Tag],
         currentYear: Int = Calendar.current.component(.year, from: .now)
@@ -18,7 +18,7 @@ public enum YearlyItemDuplicator { // swiftlint:disable:this type_body_length
         return Array(Set(years)).sorted(by: >)
     }
 
-    /// Documented for SwiftLint compliance.
+    /// Returns selectable target years centered around `currentYear`.
     public static func targetYears(
         currentYear: Int = Calendar.current.component(.year, from: .now),
         range: Int = 10
@@ -108,7 +108,7 @@ public enum YearlyItemDuplicator { // swiftlint:disable:this type_body_length
         )
     }
 
-    /// Documented for SwiftLint compliance.
+    /// Builds a suggested source and target year pair from available year tags.
     public static func suggestion(
         context: ModelContext,
         yearTags: [Tag],
@@ -126,7 +126,7 @@ public enum YearlyItemDuplicator { // swiftlint:disable:this type_body_length
         )
     }
 
-    /// Documented for SwiftLint compliance.
+    /// Builds a suggested source and target year pair from explicit year lists.
     public static func suggestion(
         context: ModelContext,
         sourceYears: [Int],
@@ -174,7 +174,7 @@ public enum YearlyItemDuplicator { // swiftlint:disable:this type_body_length
         return nil
     }
 
-    /// Documented for SwiftLint compliance.
+    /// Builds a yearly duplication plan from `sourceYear` into `targetYear`.
     public static func plan( // swiftlint:disable:this function_body_length
         context: ModelContext,
         sourceYear: Int,
@@ -289,7 +289,7 @@ public enum YearlyItemDuplicator { // swiftlint:disable:this type_body_length
         )
     }
 
-    /// Documented for SwiftLint compliance.
+    /// Applies `plan` using optional amount overrides and returns a result summary.
     public static func apply(
         plan: YearlyItemDuplicationPlan,
         context: ModelContext,

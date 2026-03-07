@@ -1,15 +1,15 @@
 import Foundation
 
-/// Documented for SwiftLint compliance.
+/// Suggested source and target years with a prebuilt duplication plan.
 public struct YearlyItemDuplicationSuggestion {
-    /// Documented for SwiftLint compliance.
+    /// Suggested source year.
     public let sourceYear: Int
-    /// Documented for SwiftLint compliance.
+    /// Suggested target year.
     public let targetYear: Int
-    /// Documented for SwiftLint compliance.
+    /// Precomputed plan for the suggested year pair.
     public let plan: YearlyItemDuplicationPlan
 
-    /// Documented for SwiftLint compliance.
+    /// Creates a yearly duplication suggestion.
     public init(
         sourceYear: Int,
         targetYear: Int,

@@ -1,6 +1,6 @@
-/// Documented for SwiftLint compliance.
+/// Resolves `SubscriptionState` from purchase and iCloud inputs.
 public enum SubscriptionStateCalculator {
-    /// Documented for SwiftLint compliance.
+    /// Builds a subscription state for the given purchase set and iCloud toggle.
     public static func calculate(
         purchasedProductIDs: Set<String>,
         productID: String,

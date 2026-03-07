@@ -3,7 +3,7 @@ import SwiftData
 
 /// Resolves an `IncomesRoute` into a navigation outcome for main navigation UI state.
 public enum MainNavigationRouteExecutor {
-    /// Documented for SwiftLint compliance.
+    /// Resolves `route` into the destination or modal state for main navigation.
     public static func execute( // swiftlint:disable:this cyclomatic_complexity function_body_length
         route: IncomesRoute,
         context: ModelContext

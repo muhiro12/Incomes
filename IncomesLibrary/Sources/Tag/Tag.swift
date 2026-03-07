@@ -11,12 +11,12 @@ import SwiftData
 /// A classification tag that groups related items (e.g., year, month, category).
 @Model
 public final class Tag {
-    /// Documented for SwiftLint compliance.
+    /// Stored tag name value.
     public private(set) var name = String.empty
-    /// Documented for SwiftLint compliance.
+    /// Stored raw tag type identifier.
     public private(set) var typeID = String.empty
 
-    /// Documented for SwiftLint compliance.
+    /// Items that currently reference this tag.
     public private(set) var items: [Item]? // swiftlint:disable:this discouraged_optional_collection
 
     private init() {

@@ -7,11 +7,11 @@
 
 import Foundation
 
-/// Documented for SwiftLint compliance.
+/// Shared App Group identifiers and resolved container locations.
 public enum AppGroup {
-    /// Documented for SwiftLint compliance.
+    /// App Group identifier shared by the app and its extensions.
     public static let id = "group.com.muhiro12.Incomes"
-    /// Documented for SwiftLint compliance.
+    /// Root container URL for the shared App Group.
     public static let containerURL: URL = {
         guard let url = FileManager.default.containerURL(
             forSecurityApplicationGroupIdentifier: id

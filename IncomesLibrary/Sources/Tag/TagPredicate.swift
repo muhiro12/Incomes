@@ -10,21 +10,21 @@ import SwiftData
 
 /// Discrete predicate presets for fetching tags.
 public enum TagPredicate {
-    /// Documented for SwiftLint compliance.
+    /// Matches every tag.
     case all
-    /// Documented for SwiftLint compliance.
+    /// Matches no tags.
     case none // swiftlint:disable:this discouraged_none_name
-    /// Documented for SwiftLint compliance.
+    /// Matches a tag with the specified persistent identifier.
     case idIs(Tag.ID)
-    /// Documented for SwiftLint compliance.
+    /// Matches tags with the same name and type as the given tag.
     case isSameWith(Tag)
-    /// Documented for SwiftLint compliance.
+    /// Matches tags of the specified type.
     case typeIs(TagType)
-    /// Documented for SwiftLint compliance.
+    /// Matches a tag with an exact name and type.
     case nameIs(String, type: TagType)
-    /// Documented for SwiftLint compliance.
+    /// Matches tags whose name contains the search text for the specified type.
     case nameContains(String, type: TagType)
-    /// Documented for SwiftLint compliance.
+    /// Matches tags whose name starts with the prefix for the specified type.
     case nameStartsWith(String, type: TagType)
 
     var value: Predicate<Tag> {

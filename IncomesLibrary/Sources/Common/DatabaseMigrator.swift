@@ -1,9 +1,9 @@
 import Foundation
 import MHPersistenceMaintenance
 
-/// Documented for SwiftLint compliance.
+/// Migrates legacy database files into the shared store location.
 public enum DatabaseMigrator {
-    /// Documented for SwiftLint compliance.
+    /// Moves the legacy SQLite store into the current location when required.
     public static func migrateSQLiteFilesIfNeeded() {
         migrateSQLiteFilesIfNeeded(
             fileManager: .default,

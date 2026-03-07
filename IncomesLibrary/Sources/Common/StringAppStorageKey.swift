@@ -18,7 +18,7 @@ public enum StringAppStorageKey: String {
 }
 
 public extension AppStorage {
-    /// Documented for SwiftLint compliance.
+    /// Creates a string `AppStorage` binding for the given string storage key.
     init(_ key: StringAppStorageKey) where Value == String {
         self.init(
             key.preferenceKey,
@@ -26,12 +26,12 @@ public extension AppStorage {
         )
     }
 
-    /// Documented for SwiftLint compliance.
+    /// Creates a boolean `AppStorage` binding for the given boolean storage key.
     init(_ key: BoolAppStorageKey) where Value == Bool {
         self.init(key.preferenceKey)
     }
 
-    /// Documented for SwiftLint compliance.
+    /// Creates a notification-settings `AppStorage` binding for the given storage key.
     init(_ key: NotificationSettingsAppStorageKey) where Value == NotificationSettings {
         self.init(
             key.preferenceKey,

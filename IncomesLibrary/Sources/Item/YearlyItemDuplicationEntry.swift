@@ -1,15 +1,15 @@
 import Foundation
 
-/// Documented for SwiftLint compliance.
+/// Planned duplicate item for a specific target date.
 public struct YearlyItemDuplicationEntry {
-    /// Documented for SwiftLint compliance.
+    /// Source item used to create the duplicated entry.
     public let sourceItem: Item
-    /// Documented for SwiftLint compliance.
+    /// Local date assigned to the duplicated item.
     public let targetDate: Date
-    /// Documented for SwiftLint compliance.
+    /// Identifier of the duplication group this entry belongs to.
     public let groupID: UUID
 
-    /// Documented for SwiftLint compliance.
+    /// Creates a duplication entry for a source item and target date.
     public init(sourceItem: Item, targetDate: Date, groupID: UUID) {
         self.sourceItem = sourceItem
         self.targetDate = targetDate

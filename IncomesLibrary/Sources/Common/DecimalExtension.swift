@@ -8,7 +8,7 @@
 import SwiftUI
 
 public extension Decimal {
-    /// Documented for SwiftLint compliance.
+    /// Formats the decimal using the currently selected currency code.
     var asCurrency: String {
         let formatter = NumberFormatter()
         formatter.numberStyle = .currency
@@ -20,7 +20,7 @@ public extension Decimal {
         return currency
     }
 
-    /// Documented for SwiftLint compliance.
+    /// Formats the decimal as a negative currency string when the value is non-zero.
     var asMinusCurrency: String {
         guard isNotZero else {
             return asCurrency

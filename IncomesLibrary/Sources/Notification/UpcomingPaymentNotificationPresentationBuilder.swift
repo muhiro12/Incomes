@@ -3,7 +3,7 @@ import MHNotificationPlans
 
 /// Builds display-ready notification payloads for upcoming payment reminders.
 public enum UpcomingPaymentNotificationPresentationBuilder { // swiftlint:disable:this type_name
-    /// Documented for SwiftLint compliance.
+    /// Builds sorted notification presentations for the provided planned payments.
     public static func build(
         plans: [UpcomingPaymentPlanner.PlannedPayment],
         settings: NotificationSettings,

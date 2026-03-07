@@ -1,13 +1,13 @@
 import Foundation
 
-/// Documented for SwiftLint compliance.
+/// Result summary after applying a yearly duplication plan.
 public struct YearlyItemDuplicationResult: Sendable {
-    /// Documented for SwiftLint compliance.
+    /// Number of items created from the plan.
     public let createdCount: Int
-    /// Documented for SwiftLint compliance.
+    /// Number of duplicates skipped during planning.
     public let skippedDuplicateCount: Int
 
-    /// Documented for SwiftLint compliance.
+    /// Creates a yearly duplication result summary.
     public init(createdCount: Int, skippedDuplicateCount: Int) {
         self.createdCount = createdCount
         self.skippedDuplicateCount = skippedDuplicateCount

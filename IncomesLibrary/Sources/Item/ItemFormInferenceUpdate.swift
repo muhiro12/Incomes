@@ -1,19 +1,19 @@
 import Foundation
 
-/// Documented for SwiftLint compliance.
+/// Suggested item form values inferred from another input source.
 public struct ItemFormInferenceUpdate {
-    /// Documented for SwiftLint compliance.
+    /// Suggested local date, if one was inferred.
     public let date: Date?
-    /// Documented for SwiftLint compliance.
+    /// Suggested item description text.
     public let content: String
-    /// Documented for SwiftLint compliance.
+    /// Suggested income amount represented as text.
     public let incomeText: String
-    /// Documented for SwiftLint compliance.
+    /// Suggested outgo amount represented as text.
     public let outgoText: String
-    /// Documented for SwiftLint compliance.
+    /// Suggested category name.
     public let category: String
 
-    /// Documented for SwiftLint compliance.
+    /// Creates an inferred item form update.
     public init(
         date: Date?,
         content: String,

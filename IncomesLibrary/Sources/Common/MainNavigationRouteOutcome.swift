@@ -1,27 +1,27 @@
 import Foundation
 import SwiftData
 
-/// Documented for SwiftLint compliance.
+/// Resolved outcome used to drive the app's main navigation state.
 public enum MainNavigationRouteOutcome {
-    /// Documented for SwiftLint compliance.
+    /// Shows the main destination with an optional year tag and selected subtag.
     case destination(
             yearTagID: Tag.ID?,
             selectedTag: Tag?
          )
-    /// Documented for SwiftLint compliance.
+    /// Opens search with an optional prefilled query.
     case search(query: String?)
-    /// Documented for SwiftLint compliance.
+    /// Opens the settings root screen.
     case settings
-    /// Documented for SwiftLint compliance.
+    /// Opens the subscription settings screen.
     case settingsSubscription
-    /// Documented for SwiftLint compliance.
+    /// Opens the license settings screen.
     case settingsLicense
-    /// Documented for SwiftLint compliance.
+    /// Opens the debug settings screen.
     case settingsDebug
-    /// Documented for SwiftLint compliance.
+    /// Opens the yearly duplication flow.
     case yearlyDuplication
-    /// Documented for SwiftLint compliance.
+    /// Opens duplicate-tag management.
     case duplicateTags
-    /// Documented for SwiftLint compliance.
+    /// Opens the detail screen for the specified item.
     case itemDetail(itemID: PersistentIdentifier)
 }

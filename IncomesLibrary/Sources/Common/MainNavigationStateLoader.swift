@@ -1,9 +1,9 @@
 import Foundation
 import SwiftData
 
-/// Documented for SwiftLint compliance.
+/// Loads the default year and month selections for main navigation.
 public enum MainNavigationStateLoader {
-    /// Documented for SwiftLint compliance.
+    /// Returns the year and year-month tags that match `date`.
     public static func load(
         context: ModelContext,
         date: Date = .now

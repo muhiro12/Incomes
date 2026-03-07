@@ -1,8 +1,8 @@
 import SwiftData
 
-/// Documented for SwiftLint compliance.
+/// Loads derived status flags for the settings screen.
 public enum SettingsStatusLoader {
-    /// Documented for SwiftLint compliance.
+    /// Computes the current settings status from the store.
     public static func load(
         context: ModelContext
     ) throws -> SettingsStatus {

@@ -1,9 +1,9 @@
 import Foundation
 import SwiftData
 
-/// Documented for SwiftLint compliance.
+/// Encodes and decodes `PersistentIdentifier` values as Base64 strings.
 public enum PersistentIdentifierCoder {
-    /// Documented for SwiftLint compliance.
+    /// Decodes a Base64 string into a `PersistentIdentifier`.
     public static func decode(
         _ string: String
     ) throws -> PersistentIdentifier {
@@ -13,7 +13,7 @@ public enum PersistentIdentifierCoder {
         return try JSONDecoder().decode(PersistentIdentifier.self, from: data)
     }
 
-    /// Documented for SwiftLint compliance.
+    /// Encodes a `PersistentIdentifier` into a stable Base64 string.
     public static func encode(
         _ identifier: PersistentIdentifier
     ) throws -> String {

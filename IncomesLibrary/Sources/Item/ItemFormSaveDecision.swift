@@ -1,9 +1,9 @@
 import Foundation
 import SwiftData
 
-/// Documented for SwiftLint compliance.
+/// Determines whether saving an item requires a repeat-scope decision.
 public enum ItemFormSaveDecision {
-    /// Documented for SwiftLint compliance.
+    /// True when saving `item` should ask whether to update one or multiple repeated items.
     public static func requiresScopeSelection(
         context: ModelContext,
         item: Item

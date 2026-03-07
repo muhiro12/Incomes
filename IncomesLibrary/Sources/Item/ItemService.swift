@@ -6,11 +6,11 @@ import SwiftData
 public enum ItemService { // swiftlint:disable:this type_body_length
     /// Preset datasets used when seeding sample data.
     public enum SampleDataProfile {
-        /// Documented for SwiftLint compliance.
+        /// Rich sample data used for debug flows.
         case debug
-        /// Documented for SwiftLint compliance.
+        /// Lightweight tutorial sample data.
         case tutorial
-        /// Documented for SwiftLint compliance.
+        /// Sample data used by SwiftUI previews.
         case preview
     }
 

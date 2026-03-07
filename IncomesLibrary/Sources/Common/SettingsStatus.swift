@@ -1,11 +1,11 @@
-/// Documented for SwiftLint compliance.
+/// Summary flags used to populate the settings screen.
 public struct SettingsStatus {
-    /// Documented for SwiftLint compliance.
+    /// True when duplicate tags exist in the store.
     public let hasDuplicateTags: Bool
-    /// Documented for SwiftLint compliance.
+    /// True when tutorial or debug sample data exists.
     public let hasDebugData: Bool
 
-    /// Documented for SwiftLint compliance.
+    /// Creates a settings status snapshot.
     public init(
         hasDuplicateTags: Bool,
         hasDebugData: Bool

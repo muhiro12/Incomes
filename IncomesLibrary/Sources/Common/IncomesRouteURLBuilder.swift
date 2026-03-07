@@ -2,14 +2,14 @@ import Foundation
 
 /// Builds shareable URLs from app routes.
 public enum IncomesRouteURLBuilder {
-    /// Documented for SwiftLint compliance.
+    /// Default custom scheme used when building custom-scheme URLs.
     public static let customScheme = IncomesRouteURLDefaults.customScheme
-    /// Documented for SwiftLint compliance.
+    /// Default host used when building universal links.
     public static let defaultUniversalLinkHost = IncomesRouteURLDefaults.universalLinkHost
-    /// Documented for SwiftLint compliance.
+    /// Default app path prefix used when building universal links.
     public static let defaultUniversalLinkPathPrefix = IncomesRouteURLDefaults.universalLinkPathPrefix
 
-    /// Documented for SwiftLint compliance.
+    /// Builds a custom-scheme URL for `route`.
     public static func customSchemeURL(
         for route: IncomesRoute
     ) -> URL? {
@@ -19,7 +19,7 @@ public enum IncomesRouteURLBuilder {
         )
     }
 
-    /// Documented for SwiftLint compliance.
+    /// Builds a universal-link URL for `route` using the supplied host settings.
     public static func universalLinkURL(
         for route: IncomesRoute,
         host: String = defaultUniversalLinkHost,

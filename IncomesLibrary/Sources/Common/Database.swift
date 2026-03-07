@@ -7,9 +7,9 @@
 
 import Foundation
 
-/// Documented for SwiftLint compliance.
+/// Shared database file locations used by the app and extensions.
 public enum Database {
-    /// Documented for SwiftLint compliance.
+    /// Current SQLite store URL inside the shared App Group container.
     public static let url = AppGroup.containerURL.appendingPathComponent(fileName)
 
     static let legacyURL = URL.applicationSupportDirectory.appendingPathComponent(fileName)

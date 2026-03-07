@@ -11,23 +11,23 @@ import SwiftData
 /// A financial record representing one income/outgo entry with tags.
 @Model
 public final class Item {
-    /// Documented for SwiftLint compliance.
+    /// Persisted UTC start-of-day date backing `utcDate` and `localDate`.
     @available(iOS, deprecated: 100000.0, message: "Use `utcDate` (UTC) or `localDate` (current calendar) instead.")
     public private(set) var date = Date(timeIntervalSinceReferenceDate: .zero)
-    /// Documented for SwiftLint compliance.
+    /// User-entered item description.
     public private(set) var content = String.empty
-    /// Documented for SwiftLint compliance.
+    /// Income amount assigned to the item.
     public private(set) var income = Decimal.zero
-    /// Documented for SwiftLint compliance.
+    /// Outgo amount assigned to the item.
     public private(set) var outgo = Decimal.zero
-    /// Documented for SwiftLint compliance.
+    /// Display priority used when multiple items share the same day.
     public private(set) var priority = 0
-    /// Documented for SwiftLint compliance.
+    /// Identifier shared by items in the same repeat series.
     public private(set) var repeatID = UUID()
-    /// Documented for SwiftLint compliance.
+    /// Running balance after applying this item.
     public private(set) var balance = Decimal.zero
 
-    /// Documented for SwiftLint compliance.
+    /// Derived tags currently attached to the item.
     @Relationship(inverse: \Tag.items)
     public private(set) var tags: [Tag]? // swiftlint:disable:this discouraged_optional_collection
 

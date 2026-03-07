@@ -1,8 +1,8 @@
 import Foundation
 
-/// Documented for SwiftLint compliance.
+/// Maps normalized inference values into `ItemFormInferenceUpdate`.
 public enum ItemFormInferenceMapper {
-    /// Documented for SwiftLint compliance.
+    /// Builds an inference update from parsed form values.
     public static func map(
         dateString: String,
         content: String,

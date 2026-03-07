@@ -14,7 +14,7 @@ public protocol AppStorageCodable: Codable, Equatable, RawRepresentable where Ra
 }
 
 public extension AppStorageCodable {
-    /// Documented for SwiftLint compliance.
+    /// Decodes a JSON-backed raw string into the conforming value.
     init?(rawValue: RawValue) { // swiftlint:disable:this type_contents_order
         guard let data = rawValue.data(using: .utf8),
               let value = try? JSONDecoder().decode(Self.self, from: data) else {
@@ -23,7 +23,7 @@ public extension AppStorageCodable {
         self = value
     }
 
-    /// Documented for SwiftLint compliance.
+    /// JSON string representation used when storing the value in `AppStorage`.
     var rawValue: RawValue {
         guard let data = try? JSONEncoder().encode(self),
               let string = String(data: data, encoding: .utf8) else {

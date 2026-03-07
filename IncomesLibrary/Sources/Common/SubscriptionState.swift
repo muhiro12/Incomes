@@ -1,13 +1,13 @@
 import Foundation
 
-/// Documented for SwiftLint compliance.
+/// Combined subscription and iCloud availability state for premium features.
 public struct SubscriptionState {
-    /// Documented for SwiftLint compliance.
+    /// True when the premium product is currently purchased.
     public let isSubscribeOn: Bool
-    /// Documented for SwiftLint compliance.
+    /// True when iCloud-backed features are enabled for the active subscription.
     public let isICloudOn: Bool
 
-    /// Documented for SwiftLint compliance.
+    /// Creates a subscription state snapshot.
     public init(
         isSubscribeOn: Bool,
         isICloudOn: Bool

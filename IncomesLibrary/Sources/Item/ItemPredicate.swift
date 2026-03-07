@@ -10,53 +10,53 @@ import SwiftData
 
 /// Discrete predicate presets for fetching items.
 public enum ItemPredicate {
-    /// Documented for SwiftLint compliance.
+    /// Matches every item.
     case all
-    /// Documented for SwiftLint compliance.
+    /// Matches no items.
     case none // swiftlint:disable:this discouraged_none_name
     // MARK: ID
-    /// Documented for SwiftLint compliance.
+    /// Matches an item with the specified persistent identifier.
     case idIs(PersistentIdentifier)
-    /// Documented for SwiftLint compliance.
+    /// Matches items whose identifiers are in the provided list.
     case idsAre([PersistentIdentifier])
     // MARK: Tag
-    /// Documented for SwiftLint compliance.
+    /// Matches items associated with the given tag.
     case tagIs(Tag)
-    /// Documented for SwiftLint compliance.
+    /// Matches items related to `tag` within the specified year.
     case tagAndYear(tag: Tag, yearString: String)
     // MARK: Date
-    /// Documented for SwiftLint compliance.
+    /// Matches items before the local day containing the provided date.
     case dateIsBefore(Date)
-    /// Documented for SwiftLint compliance.
+    /// Matches items on or after the local day containing the provided date.
     case dateIsAfter(Date)
-    /// Documented for SwiftLint compliance.
+    /// Matches items within the year containing the provided date.
     case dateIsSameYearAs(Date)
-    /// Documented for SwiftLint compliance.
+    /// Matches items within the month containing the provided date.
     case dateIsSameMonthAs(Date)
-    /// Documented for SwiftLint compliance.
+    /// Matches items on the same local day as the provided date.
     case dateIsSameDayAs(Date)
     // MARK: Content
-    /// Documented for SwiftLint compliance.
+    /// Matches items whose content contains the given text.
     case contentContains(String)
     // MARK: - Income
-    /// Documented for SwiftLint compliance.
+    /// Matches items whose income falls within the inclusive range.
     case incomeIsBetween(min: Decimal, max: Decimal)
-    /// Documented for SwiftLint compliance.
+    /// Matches items with non-zero income.
     case incomeIsNonZero
     // MARK: Outgo
-    /// Documented for SwiftLint compliance.
+    /// Matches items whose outgo falls within the inclusive range.
     case outgoIsBetween(min: Decimal, max: Decimal)
-    /// Documented for SwiftLint compliance.
+    /// Matches items on or after the date whose outgo is at least `amount`.
     case outgoIsGreaterThanOrEqualTo(amount: Decimal, onOrAfter: Date)
-    /// Documented for SwiftLint compliance.
+    /// Matches items with non-zero outgo.
     case outgoIsNonZero
     // MARK: - Balance
-    /// Documented for SwiftLint compliance.
+    /// Matches items whose running balance falls within the inclusive range.
     case balanceIsBetween(min: Decimal, max: Decimal)
     // MARK: RepeatID
-    /// Documented for SwiftLint compliance.
+    /// Matches items in the specified repeat series.
     case repeatIDIs(UUID)
-    /// Documented for SwiftLint compliance.
+    /// Matches repeat-series items on or after the provided date.
     case repeatIDAndDateIsAfter(repeatID: UUID, date: Date)
 
     var value: Predicate<Item> {

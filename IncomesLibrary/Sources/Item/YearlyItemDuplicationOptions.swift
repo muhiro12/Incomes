@@ -1,15 +1,15 @@
 import Foundation
 
-/// Documented for SwiftLint compliance.
+/// Options that control which yearly duplication groups are generated.
 public struct YearlyItemDuplicationOptions {
-    /// Documented for SwiftLint compliance.
+    /// True when standalone items may be suggested as groups.
     public let includeSingleItems: Bool
-    /// Documented for SwiftLint compliance.
+    /// Minimum number of items required for a repeat-based group.
     public let minimumRepeatItemCount: Int
-    /// Documented for SwiftLint compliance.
+    /// True when matching items in the target year should be skipped.
     public let skipExistingItems: Bool
 
-    /// Documented for SwiftLint compliance.
+    /// Creates yearly duplication options.
     public init(
         includeSingleItems: Bool = false,
         minimumRepeatItemCount: Int = 3,

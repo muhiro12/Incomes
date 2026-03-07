@@ -1,6 +1,6 @@
 import Foundation
 
-/// Documented for SwiftLint compliance.
+/// Normalized date and text inputs for creating or updating an item.
 public struct ItemFormInput {
     /// Validation errors for item form values.
     public enum ValidationError: Error, Equatable {
@@ -14,20 +14,20 @@ public struct ItemFormInput {
         case invalidPriority
     }
 
-    /// Documented for SwiftLint compliance.
+    /// Selected local date for the item.
     public let date: Date
-    /// Documented for SwiftLint compliance.
+    /// Item description text.
     public let content: String
-    /// Documented for SwiftLint compliance.
+    /// Income amount entered as text.
     public let incomeText: String
-    /// Documented for SwiftLint compliance.
+    /// Outgo amount entered as text.
     public let outgoText: String
-    /// Documented for SwiftLint compliance.
+    /// Category name entered for the item.
     public let category: String
-    /// Documented for SwiftLint compliance.
+    /// Priority value entered as text.
     public let priorityText: String
 
-    /// Documented for SwiftLint compliance.
+    /// Creates an item form input snapshot.
     public init( // swiftlint:disable:this type_contents_order
         date: Date,
         content: String,
@@ -44,22 +44,22 @@ public struct ItemFormInput {
         self.priorityText = priorityText
     }
 
-    /// Documented for SwiftLint compliance.
+    /// True when all form values pass `validate()`.
     public var isValid: Bool {
         (try? validate()) != nil
     }
 
-    /// Documented for SwiftLint compliance.
+    /// Income value parsed from `incomeText`.
     public var income: Decimal {
         incomeText.decimalValue
     }
 
-    /// Documented for SwiftLint compliance.
+    /// Outgo value parsed from `outgoText`.
     public var outgo: Decimal {
         outgoText.decimalValue
     }
 
-    /// Documented for SwiftLint compliance.
+    /// Priority value parsed from `priorityText`.
     public var priority: Int {
         priorityText.intValue
     }

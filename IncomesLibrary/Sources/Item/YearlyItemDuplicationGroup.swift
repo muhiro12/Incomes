@@ -1,23 +1,23 @@
 import Foundation
 
-/// Documented for SwiftLint compliance.
+/// Aggregated duplication group shown in the yearly duplication UI.
 public struct YearlyItemDuplicationGroup {
-    /// Documented for SwiftLint compliance.
+    /// Stable identifier for the group.
     public let id: UUID
-    /// Documented for SwiftLint compliance.
+    /// Representative content shared by the group's items.
     public let content: String
-    /// Documented for SwiftLint compliance.
+    /// Representative category shared by the group's items.
     public let category: String
-    /// Documented for SwiftLint compliance.
+    /// Average income used as the group's suggested amount.
     public let averageIncome: Decimal
-    /// Documented for SwiftLint compliance.
+    /// Average outgo used as the group's suggested amount.
     public let averageOutgo: Decimal
-    /// Documented for SwiftLint compliance.
+    /// Number of planned entries in the group.
     public let entryCount: Int
-    /// Documented for SwiftLint compliance.
+    /// Target dates included in the group.
     public let targetDates: [Date]
 
-    /// Documented for SwiftLint compliance.
+    /// Creates a yearly duplication group summary.
     public init(
         id: UUID,
         content: String,

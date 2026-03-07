@@ -1,14 +1,14 @@
 import Foundation
 import SwiftData
 
-/// Documented for SwiftLint compliance.
+/// Default year and month selections for the main navigation UI.
 public struct MainNavigationState {
-    /// Documented for SwiftLint compliance.
+    /// Selected year tag, if available.
     public let yearTag: Tag?
-    /// Documented for SwiftLint compliance.
+    /// Selected year-month tag, if available.
     public let yearMonthTag: Tag?
 
-    /// Documented for SwiftLint compliance.
+    /// Creates a navigation state from the resolved year and month tags.
     public init(
         yearTag: Tag?,
         yearMonthTag: Tag?
