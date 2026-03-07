@@ -27,12 +27,12 @@ struct ContentView {
     private var isDebugOn
 
     @State private var isUpdateAlertPresented = false
-    @State private var incomingRoute: IncomesRoute?
+    @State private var incomingRouteURL: URL?
 }
 
 extension ContentView: View {
     var body: some View {
-        MainNavigationView(incomingRoute: $incomingRoute)
+        MainNavigationView(incomingRouteURL: $incomingRouteURL)
             .alert("Update Required", isPresented: $isUpdateAlertPresented) {
                 Button("Open App Store") {
                     if let appStoreURL = URL(
@@ -114,13 +114,6 @@ private extension ContentView {
         )
     }
 
-    var routeLogger: MHLogger {
-        IncomesApp.logger(
-            category: "RouteExecution",
-            source: #fileID
-        )
-    }
-
     var reviewLogger: MHLogger {
         IncomesApp.logger(
             category: "ReviewFlow",
@@ -160,12 +153,7 @@ private extension ContentView {
     }
 
     func handleIncomingURL(_ url: URL) {
-        guard let route = IncomesRouteParser.parse(url: url) else {
-            routeLogger.info("ignored deep-link URL because parsing failed")
-            return
-        }
-        routeLogger.info("accepted deep-link URL for route handling")
-        incomingRoute = route
+        incomingRouteURL = url
     }
 }
 

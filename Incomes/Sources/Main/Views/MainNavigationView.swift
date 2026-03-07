@@ -18,7 +18,7 @@ struct MainNavigationView: View {
     @Query(.tags(.typeIs(.year), order: .reverse))
     private var yearTags: [Tag]
 
-    @Binding private var incomingRoute: IncomesRoute?
+    @Binding private var incomingRouteURL: URL?
 
     @StateObject private var router: MainNavigationRouter = .init()
 
@@ -171,7 +171,7 @@ struct MainNavigationView: View {
             onDismiss: {
                 router.itemDetailID = nil
                 Task {
-                    await applyPendingRouteAfterSettingsDismissalIfNeeded()
+                    applyPendingRouteAfterSettingsDismissalIfNeeded()
                 }
             },
             content: { sheetRoute in
@@ -199,9 +199,9 @@ struct MainNavigationView: View {
                 DuplicateTagNavigationView()
             }
         }
-        .onChange(of: incomingRoute) {
+        .onChange(of: incomingRouteURL) {
             Task {
-                await handleIncomingRoute()
+                await handleIncomingRouteURL()
             }
         }
         .onChange(of: yearTags) {
@@ -217,15 +217,15 @@ struct MainNavigationView: View {
 
             tipController.refreshHasAnyItems(!yearTags.isEmpty)
 
-            await handleIncomingRoute()
+            await handleIncomingRouteURL()
             await applyPendingRouteIfNeeded()
 
             await PhoneWatchBridge.shared.activate(modelContext: context)
         }
     }
 
-    init(incomingRoute: Binding<IncomesRoute?> = .constant(nil)) {
-        _incomingRoute = incomingRoute
+    init(incomingRouteURL: Binding<URL?> = .constant(nil)) {
+        _incomingRouteURL = incomingRouteURL
     }
 }
 
@@ -286,14 +286,14 @@ private extension MainNavigationView {
         }
     }
 
-    func handleIncomingRoute() async {
-        guard let route = incomingRoute else {
+    func handleIncomingRouteURL() async {
+        guard let url = incomingRouteURL else {
             return
         }
-        incomingRoute = nil
+        incomingRouteURL = nil
         do {
-            try await router.handleIncomingRoute(
-                route,
+            try await router.handleIncomingURL(
+                url,
                 context: context
             )
         } catch {

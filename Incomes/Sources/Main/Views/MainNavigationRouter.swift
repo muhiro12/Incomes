@@ -25,14 +25,10 @@ final class MainNavigationRouter: ObservableObject {
     @Published var willDeleteItems: [Item] = []
     @Published var willDeleteTags: [Tag] = []
 
-    private let routeCoordinator: MHRouteCoordinator<IncomesRoute, IncomesRoute> = .init(
-        executor: .init(
-            resolve: { route in
-                route
-            },
-            apply: { _ in
-                // Route application stays app-specific.
-            }
+    private let routeLifecycle = MHRouteLifecycle<IncomesRoute>(
+        logger: IncomesApp.logger(
+            category: "RouteExecution",
+            source: #fileID
         ),
         isDuplicate: ==
     )
@@ -86,24 +82,35 @@ final class MainNavigationRouter: ObservableObject {
         } else {
             preferredCompactColumn = .detail
         }
-        await routeCoordinator.setReadiness(true)
+        await routeLifecycle.setReadiness(true)
     }
 
-    func handleIncomingRoute(
-        _ route: IncomesRoute?,
+    func handleIncomingURL(
+        _ url: URL?,
         context: ModelContext
     ) async throws {
-        guard let route else {
+        guard let url else {
             return
         }
-        try await submit(route, context: context)
+        _ = try await routeLifecycle.submit(
+            url,
+            parse: { routeURL in
+                IncomesRouteParser.parse(url: routeURL)
+            },
+            applyOnMainActor: { [self] route in
+                try apply(
+                    route: route,
+                    context: context
+                )
+            }
+        )
     }
 
     func navigate(
         to route: IncomesRoute,
         context: ModelContext
     ) async throws {
-        try await submit(route, context: context)
+        try await submitRoute(route, context: context)
     }
 
     func navigateFromSettings(
@@ -111,23 +118,21 @@ final class MainNavigationRouter: ObservableObject {
         context: ModelContext
     ) async throws {
         if isSettingsPresented, route.isSettingsScopeRoute {
-            try await submit(route, context: context)
+            try await submitRoute(route, context: context)
         } else if isSettingsPresented {
             pendingRouteAfterSettingsDismissal = route
             sheetRoute = nil
         } else {
-            try await submit(route, context: context)
+            try await submitRoute(route, context: context)
         }
     }
 
     func applyPendingRouteIfNeeded(context: ModelContext) async throws {
-        if let outcome = try await routeCoordinator.applyPendingIfReady(applyOnMainActor: { [self] route in
+        _ = try await routeLifecycle.applyPendingIfReady { [self] route in
             try apply(
                 route: route,
                 context: context
             )
-        }) {
-            logExecutionOutcome(outcome)
         }
     }
 
@@ -162,24 +167,16 @@ final class MainNavigationRouter: ObservableObject {
 }
 
 private extension MainNavigationRouter {
-    var routeLogger: MHLogger {
-        IncomesApp.logger(
-            category: "RouteExecution",
-            source: #fileID
-        )
-    }
-
-    func submit(
+    func submitRoute(
         _ route: IncomesRoute,
         context: ModelContext
     ) async throws {
-        let outcome = try await routeCoordinator.submit(route) { [self] route in
+        _ = try await routeLifecycle.submit(route) { [self] route in
             try apply(
                 route: route,
                 context: context
             )
         }
-        logExecutionOutcome(outcome)
     }
 
     func apply(
@@ -227,18 +224,5 @@ private extension MainNavigationRouter {
         isSearchPresented = false
         searchText = .empty
         predicate = nil
-    }
-
-    func logExecutionOutcome(
-        _ outcome: MHRouteExecutionOutcome<IncomesRoute>
-    ) {
-        switch outcome {
-        case .applied:
-            routeLogger.notice("route applied")
-        case .queued:
-            routeLogger.info("route queued until execution becomes ready")
-        case .deduplicated:
-            routeLogger.info("route deduplicated against pending route")
-        }
     }
 }
