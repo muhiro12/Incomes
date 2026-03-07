@@ -5,27 +5,6 @@ enum IncomesMutationWorkflow {
     typealias NotificationScheduleRefresher = @MainActor @Sendable () async -> Void
     typealias ReviewRequester = @MainActor @Sendable () async -> MHReviewRequestOutcome
 
-    private enum ExecutionError: LocalizedError, Sendable, CustomStringConvertible {
-        case operation(String)
-        case step(name: String, description: String)
-
-        var description: String {
-            switch self {
-            case .operation(let description):
-                return description
-            case let .step(name, description):
-                if description.isEmpty {
-                    return "Mutation step \(name) failed."
-                }
-                return description
-            }
-        }
-
-        var errorDescription: String? {
-            description
-        }
-    }
-
     @MainActor
     static func refreshNotificationSchedule(
         notificationService: NotificationService
@@ -96,9 +75,7 @@ enum IncomesMutationWorkflow {
         try await MHMutationWorkflow.runThrowing(
             name: name,
             operation: operation,
-            adapter: adapter,
-            mapFailure: executionError(from:),
-            operationErrorDescription: operationErrorDescription
+            adapter: adapter
         )
     }
 
@@ -119,31 +96,7 @@ enum IncomesMutationWorkflow {
             operation: operation,
             adapter: adapter,
             afterSuccess: afterSuccess,
-            returning: returning,
-            mapFailure: executionError(from:),
-            operationErrorDescription: operationErrorDescription
+            returning: returning
         )
-    }
-
-    nonisolated
-    private static func executionError(
-        from failure: MHMutationFailure
-    ) -> ExecutionError {
-        switch failure {
-        case .operation(let description):
-            return .operation(description)
-        case let .step(name, description):
-            return .step(
-                name: name,
-                description: description
-            )
-        }
-    }
-
-    nonisolated
-    private static func operationErrorDescription(
-        _ error: any Error
-    ) -> String {
-        error.localizedDescription
     }
 }
