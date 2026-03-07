@@ -8,7 +8,7 @@
 import MHPreferences
 import SwiftUI
 
-public enum StringAppStorageKey: String {
+public enum StringAppStorageKey: String, MHStringPreferenceKeyRepresentable {
     case currencyCode = "R8k2Z3tL"
     case lastLaunchedAppVersion = "j4N7v2Qk"
 
@@ -18,24 +18,38 @@ public enum StringAppStorageKey: String {
 }
 
 public extension AppStorage {
-    /// Creates a string `AppStorage` binding for the given string storage key.
-    init(_ key: StringAppStorageKey) where Value == String {
+    /// Creates a boolean app-storage binding for the given storage key.
+    init(
+        _ key: BoolAppStorageKey,
+        store: UserDefaults = .standard
+    ) where Value == Bool {
         self.init(
             key.preferenceKey,
-            default: .empty
+            store: store
         )
     }
 
-    /// Creates a boolean `AppStorage` binding for the given boolean storage key.
-    init(_ key: BoolAppStorageKey) where Value == Bool {
-        self.init(key.preferenceKey)
+    /// Creates a string app-storage binding for the given storage key.
+    init(
+        _ key: StringAppStorageKey,
+        store: UserDefaults = .standard
+    ) where Value == String {
+        self.init(
+            key.preferenceKey,
+            default: "",
+            store: store
+        )
     }
 
     /// Creates a notification-settings `AppStorage` binding for the given storage key.
-    init(_ key: NotificationSettingsAppStorageKey) where Value == NotificationSettings {
+    init(
+        _ key: NotificationSettingsAppStorageKey,
+        store: UserDefaults = .standard
+    ) where Value == NotificationSettings {
         self.init(
             key.preferenceKey,
-            default: .init()
+            default: .init(),
+            store: store
         )
     }
 }
