@@ -14,6 +14,7 @@ struct IncomesSampleData: PreviewModifier {
         let modelContainer: ModelContainer
         let notificationService: NotificationService
         let configurationService: ConfigurationService
+        let tipController: IncomesTipController
         let appRuntime: MHAppRuntime
     }
 
@@ -31,8 +32,10 @@ struct IncomesSampleData: PreviewModifier {
         try? BalanceCalculator.calculate(in: previewContext, after: .distantPast)
         let notificationService = NotificationService(modelContainer: modelContainer)
         let configurationService = ConfigurationService()
-        let appRuntime = MainActor.assumeIsolated {
-            MHAppRuntime(
+        let (tipController, appRuntime) = try MainActor.assumeIsolated {
+            let tipController = IncomesTipController()
+            try tipController.configureIfNeeded()
+            let appRuntime = MHAppRuntime(
                 configuration: .init(
                     subscriptionProductIDs: [Secret.productID],
                     nativeAdUnitID: Secret.admobNativeIDDev,
@@ -40,12 +43,15 @@ struct IncomesSampleData: PreviewModifier {
                     showsLicenses: true
                 )
             )
+
+            return (tipController, appRuntime)
         }
 
         return .init(
             modelContainer: modelContainer,
             notificationService: notificationService,
             configurationService: configurationService,
+            tipController: tipController,
             appRuntime: appRuntime
         )
     }
@@ -55,6 +61,7 @@ struct IncomesSampleData: PreviewModifier {
             .modelContainer(context.modelContainer)
             .environment(context.notificationService)
             .environment(context.configurationService)
+            .environment(context.tipController)
             .environment(context.appRuntime)
     }
 }
