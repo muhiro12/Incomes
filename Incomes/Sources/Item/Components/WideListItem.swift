@@ -43,7 +43,6 @@ struct WideListItem: View {
     }
 }
 
-@available(iOS 18.0, *)
 #Preview(traits: .landscapeRight, .modifier(IncomesSampleData())) {
     @Previewable @Query var items: [Item]
 

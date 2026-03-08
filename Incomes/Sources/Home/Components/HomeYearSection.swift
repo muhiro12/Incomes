@@ -106,7 +106,6 @@ private extension HomeYearSection {
     }
 }
 
-@available(iOS 18.0, *)
 #Preview(traits: .modifier(IncomesSampleData())) {
     @Previewable @Query var tags: [Tag]
 

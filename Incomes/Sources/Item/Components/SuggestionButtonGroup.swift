@@ -35,7 +35,6 @@ struct SuggestionButtonGroup: View {
     }
 }
 
-@available(iOS 18.0, *)
 #Preview(traits: .modifier(IncomesSampleData())) {
     SuggestionButtonGroup(input: .constant("A"), type: .content)
 }

@@ -128,7 +128,6 @@ struct DuplicateTagListView: View {
     }
 }
 
-@available(iOS 18.0, *)
 #Preview(traits: .modifier(IncomesSampleData())) {
     DuplicateTagListView()
 }

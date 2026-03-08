@@ -45,7 +45,6 @@ private extension AdvertisementSection.Size {
     }
 }
 
-@available(iOS 18.0, *)
 #Preview(traits: .modifier(IncomesSampleData())) {
     List {
         AdvertisementSection(.medium)

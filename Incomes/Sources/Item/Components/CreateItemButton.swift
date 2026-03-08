@@ -36,7 +36,6 @@ extension CreateItemButton: View {
     }
 }
 
-@available(iOS 18.0, *)
 #Preview(traits: .modifier(IncomesSampleData())) {
     CreateItemButton()
 }

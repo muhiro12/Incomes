@@ -107,7 +107,6 @@ private extension SearchListView {
     }
 }
 
-@available(iOS 18.0, *)
 #Preview(traits: .modifier(IncomesSampleData())) {
     NavigationStack {
         SearchListView(

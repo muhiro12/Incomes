@@ -27,14 +27,13 @@ extension IntentChartSectionGroup: View {
     }
 }
 
-@available(iOS 18.0, *)
 #Preview(traits: .modifier(IncomesSampleData())) {
     @Previewable @Query var items: [Item]
 
     IntentChartSectionGroup(
         .items(
             .idsAre(
-                items.prefix(10).map(\.id) // swiftlint:disable:this no_magic_numbers
+                items.prefix(10).map(\.id)
             )
         )
     )

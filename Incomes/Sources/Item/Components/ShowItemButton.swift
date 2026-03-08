@@ -44,7 +44,6 @@ extension ShowItemButton: View {
     }
 }
 
-@available(iOS 18.0, *)
 #Preview(traits: .modifier(IncomesSampleData())) {
     @Previewable @Query var items: [Item]
 

@@ -48,14 +48,12 @@ struct SearchResultView: View {
     }
 }
 
-@available(iOS 18.0, *)
 #Preview(traits: .modifier(IncomesSampleData())) {
     NavigationStack {
         SearchResultView(predicate: .all)
     }
 }
 
-@available(iOS 18.0, *)
 #Preview(traits: .modifier(IncomesSampleData())) {
     NavigationStack {
         SearchResultView(predicate: .none)
