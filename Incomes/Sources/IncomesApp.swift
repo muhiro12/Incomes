@@ -18,23 +18,14 @@ struct IncomesApp: App {
     @AppStorage(.lastLaunchedAppVersion)
     private var lastLaunchedAppVersion
 
-    private let sharedModelContainer: ModelContainer
-
-    private let sharedNotificationService: NotificationService
-    private let sharedConfigurationService: ConfigurationService
-    private let sharedTipController: IncomesTipController
-    private let sharedAppRuntime: MHAppRuntime
+    private let platformEnvironment: IncomesPlatformEnvironment
     private let startupLogger = Self.logger(category: "AppStartup")
 
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .id(isICloudOn)
-                .modelContainer(sharedModelContainer)
-                .environment(sharedNotificationService)
-                .environment(sharedConfigurationService)
-                .environment(sharedTipController)
-                .environment(sharedAppRuntime)
+                .incomesPlatformEnvironment(platformEnvironment)
         }
     }
 
@@ -46,47 +37,29 @@ struct IncomesApp: App {
             for: BoolAppStorageKey.isICloudOn.preferenceKey
         )
 
-        let modelContainer: ModelContainer
+        let platformEnvironment: IncomesPlatformEnvironment
         do {
-            modelContainer = try ModelContainer(
-                for: Item.self,
-                configurations: .init(
-                    url: Database.url,
-                    cloudKitDatabase: isICloudEnabled ? .automatic : .none
-                )
+            let modelContainer = try IncomesPlatformEnvironmentFactory.makeAppModelContainer(
+                isICloudEnabled: isICloudEnabled
+            )
+            platformEnvironment = Self.makePlatformEnvironment(
+                modelContainer: modelContainer
             )
         } catch {
             preconditionFailure("Failed to initialize model container: \(error)")
         }
 
-        let notificationService = NotificationService(modelContainer: modelContainer)
-        let configurationService = ConfigurationService()
-        let tipController = IncomesTipController()
-
-        sharedModelContainer = modelContainer
-
-        sharedNotificationService = notificationService
-        sharedConfigurationService = configurationService
-        sharedTipController = tipController
-        sharedAppRuntime = Self.makeAppRuntime()
+        self.platformEnvironment = platformEnvironment
         startupLogger.notice("startup dependencies ready")
 
         AppDependencyManager.shared.add {
-            modelContainer
+            platformEnvironment.modelContainer
         }
         AppDependencyManager.shared.add {
-            notificationService
+            platformEnvironment.notificationService
         }
         AppDependencyManager.shared.add {
-            configurationService
-        }
-
-        do {
-            try tipController.configureIfNeeded()
-        } catch {
-            #if DEBUG
-            assertionFailure(error.localizedDescription)
-            #endif
+            platformEnvironment.configurationService
         }
 
         if let currentAppVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
@@ -99,23 +72,13 @@ struct IncomesApp: App {
 }
 
 private extension IncomesApp {
-    static var nativeAdUnitID: String {
-        #if DEBUG
-        Secret.admobNativeIDDev
-        #else
-        Secret.admobNativeID
-        #endif
-    }
-
     @MainActor
-    static func makeAppRuntime() -> MHAppRuntime {
-        .init(
-            configuration: .init(
-                subscriptionProductIDs: [Secret.productID],
-                nativeAdUnitID: nativeAdUnitID,
-                preferencesSuiteName: AppGroup.id,
-                showsLicenses: true
-            )
+    static func makePlatformEnvironment(
+        modelContainer: ModelContainer
+    ) -> IncomesPlatformEnvironment {
+        IncomesPlatformEnvironmentFactory.make(
+            modelContainer: modelContainer,
+            platformMode: .production
         )
     }
 }

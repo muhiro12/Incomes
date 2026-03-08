@@ -6,7 +6,6 @@
 //  Created by Hiromu Nakano on 2020/04/10.
 //
 
-import MHPlatform
 import SwiftData
 import SwiftUI
 import TipKit
@@ -323,25 +322,6 @@ struct ItemFormView: View { // swiftlint:disable:this type_body_length
 }
 
 private extension ItemFormView {
-    private enum ReviewConstants {
-        static let lotteryMaxExclusive = 5
-        static let requestDelaySeconds = 2
-    }
-
-    static var reviewPolicy: MHReviewPolicy {
-        .init(
-            lotteryMaxExclusive: ReviewConstants.lotteryMaxExclusive,
-            requestDelay: .seconds(ReviewConstants.requestDelaySeconds)
-        )
-    }
-
-    var reviewLogger: MHLogger {
-        IncomesApp.logger(
-            category: "ReviewFlow",
-            source: #fileID
-        )
-    }
-
     var priorityValue: Binding<Int> {
         .init(
             get: {
@@ -388,22 +368,6 @@ private extension ItemFormView {
         }
     }
 
-    var saveWorkflow: ItemFormSaveCoordinator.Workflow {
-        .init(
-            refreshNotificationSchedule: {
-                await IncomesMutationWorkflow.refreshNotificationSchedule(
-                    notificationService: notificationService
-                )
-            },
-            requestReviewIfNeeded: {
-                await MHReviewRequester.requestIfNeeded(
-                    policy: Self.reviewPolicy,
-                    logger: reviewLogger
-                )
-            }
-        )
-    }
-
     func save() async {
         do {
             let outcome = try await ItemFormSaveCoordinator.save(
@@ -414,7 +378,7 @@ private extension ItemFormView {
                     formInputData: formInputData,
                     repeatMonthSelections: effectiveRepeatMonthSelections
                 ),
-                workflow: saveWorkflow
+                notificationService: notificationService
             )
             switch outcome {
             case .requiresScopeSelection:
@@ -438,7 +402,7 @@ private extension ItemFormView {
                 context: context,
                 item: item,
                 formInputData: formInputData,
-                workflow: saveWorkflow
+                notificationService: notificationService
             )
         } catch {
             assertionFailure(error.localizedDescription)
@@ -457,7 +421,7 @@ private extension ItemFormView {
                 context: context,
                 item: item,
                 formInputData: formInputData,
-                workflow: saveWorkflow
+                notificationService: notificationService
             )
         } catch {
             assertionFailure(error.localizedDescription)
@@ -476,7 +440,7 @@ private extension ItemFormView {
                 context: context,
                 item: item,
                 formInputData: formInputData,
-                workflow: saveWorkflow
+                notificationService: notificationService
             )
         } catch {
             assertionFailure(error.localizedDescription)
@@ -494,7 +458,7 @@ private extension ItemFormView {
                     formInputData: formInputData,
                     repeatMonthSelections: effectiveRepeatMonthSelections
                 ),
-                workflow: saveWorkflow
+                notificationService: notificationService
             )
             onCreate?()
         } catch {

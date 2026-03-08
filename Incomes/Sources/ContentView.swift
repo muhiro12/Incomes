@@ -71,82 +71,23 @@ extension ContentView: View {
 }
 
 private extension ContentView {
-    private struct NotificationPendingDeepLinkSource: MHDeepLinkURLSource, @unchecked Sendable {
-        let notificationService: NotificationService
-
-        func consumeLatestURL() async -> URL? {
-            await notificationService.consumePendingDeepLinkURL()
-        }
-    }
-
-    private enum ReviewConstants {
-        static let lotteryMaxExclusive = 10
-        static let requestDelaySeconds = 2
-    }
-
-    static var reviewPolicy: MHReviewPolicy {
-        .init(
-            lotteryMaxExclusive: ReviewConstants.lotteryMaxExclusive,
-            requestDelay: .seconds(ReviewConstants.requestDelaySeconds)
-        )
-    }
-
     var runtimeLifecyclePlan: MHAppRuntimeLifecyclePlan {
-        .init(
-            startupTasks: [
-                .init(name: "syncSubscriptionState") {
-                    syncSubscriptionStateIfNeeded()
-                },
-                .init(name: "loadConfiguration") {
-                    await refreshConfigurationState()
-                },
-                .init(name: "updateNotifications") {
-                    await notificationService.update()
-                },
-                .init(name: "applyPendingDeepLink") {
-                    await applyPendingDeepLinkIfNeeded()
-                }
-            ],
-            activeTasks: [
-                .init(name: "syncSubscriptionState") {
-                    syncSubscriptionStateIfNeeded()
-                },
-                .init(name: "loadConfiguration") {
-                    await refreshConfigurationState()
-                },
-                .init(name: "updateNotifications") {
-                    await notificationService.update()
-                },
-                .init(name: "requestReview") {
-                    await requestReviewIfNeeded()
-                },
-                .init(name: "applyPendingDeepLink") {
-                    await applyPendingDeepLinkIfNeeded()
-                }
-            ],
-            skipFirstActivePhase: true
-        )
-    }
-
-    var pendingDeepLinkSources: [any MHDeepLinkURLSource] {
-        var sources = [any MHDeepLinkURLSource]()
-
-        if let intentRouteSource = IncomesIntentRouteStore.source {
-            sources.append(intentRouteSource)
-        }
-
-        sources.append(
-            NotificationPendingDeepLinkSource(
-                notificationService: notificationService
-            )
-        )
-        return sources
-    }
-
-    var reviewLogger: MHLogger {
-        IncomesApp.logger(
-            category: "ReviewFlow",
-            source: #fileID
+        IncomesRuntimeLifecycleSupport.makePlan(
+            syncSubscriptionStateIfNeeded: {
+                syncSubscriptionStateIfNeeded()
+            },
+            refreshConfigurationState: {
+                await refreshConfigurationState()
+            },
+            updateNotifications: {
+                await notificationService.update()
+            },
+            requestReviewIfNeeded: {
+                await requestReviewIfNeeded()
+            },
+            applyPendingDeepLinkIfNeeded: {
+                await applyPendingDeepLinkIfNeeded()
+            }
         )
     }
 
@@ -180,15 +121,16 @@ private extension ContentView {
 
     @MainActor
     func requestReviewIfNeeded() async {
-        _ = await MHReviewRequester.requestIfNeeded(
-            policy: Self.reviewPolicy,
-            logger: reviewLogger
+        _ = await IncomesReviewSupport.requestIfNeeded(
+            context: .appActivation,
+            source: #fileID
         )
     }
 
     func applyPendingDeepLinkIfNeeded() async {
-        let sourceChain = MHDeepLinkSourceChain(pendingDeepLinkSources)
-        guard let deepLinkURL = await sourceChain.consumeLatestURL() else {
+        guard let deepLinkURL = await IncomesPendingDeepLinkSupport.consumeLatestURL(
+            notificationService: notificationService
+        ) else {
             return
         }
         handleIncomingURL(deepLinkURL)

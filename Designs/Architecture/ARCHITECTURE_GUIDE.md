@@ -77,43 +77,37 @@ API style decision:
 
 ## Current Hotspots and Minimal Refactor Plans
 
-1. Yearly duplication coordinator keeps domain selection/application logic in app adapter.
+1. App lifecycle and runtime wiring should stay in app-side platform support, not in root app/view files.
    Files:
-   - `Incomes/Sources/Settings/Models/YearlyDuplicationCoordinator.swift`
-   - `Incomes/Sources/Settings/Views/YearlyDuplicationView.swift`
+   - `Incomes/Sources/IncomesApp.swift`
+   - `Incomes/Sources/ContentView.swift`
+   - `Incomes/Sources/Debug/Models/IncomesSampleData.swift`
+   - `Incomes/Sources/Common/Platform/*`
    Minimal plan:
-   - Keep UI orchestration in coordinator.
-   - Use `YearlyItemDuplicator.selectionState`, `YearlyItemDuplicator.apply(groupID:in:)`, and draft helper APIs from library.
+   - Keep `MHAppRuntime`, review policy, and pending deep-link source-chain setup in app-only support helpers.
+   - Keep `IncomesApp` and `ContentView` focused on dependency injection, scene wiring, and UI state updates.
 
-2. Watch sync path performs direct CRUD and recalculation in watch target.
+2. Notification route payload configuration must stay defined in one adapter helper.
    File:
+   - `Incomes/Sources/Notification/Models/NotificationService.swift`
+   - `Incomes/Sources/Notification/Models/NotificationService+RouteDelivery.swift`
+   - `Incomes/Sources/Notification/Models/NotificationRoutePayload.swift`
+   Minimal plan:
+   - Keep payload codec, metadata keys, and legacy month fallback logic in a single adapter helper.
+   - Keep `UNUserNotificationCenter` integration and presentation assembly in `NotificationService`.
+
+3. Generic mutation workflow helpers must stay separate from item-form-specific side effects.
+   Files:
+   - `Incomes/Sources/Common/Services/IncomesMutationWorkflow.swift`
+   - `Incomes/Sources/Item/Models/ItemFormSaveCoordinator.swift`
+   Minimal plan:
+   - Keep generic follow-up hint execution in `IncomesMutationWorkflow`.
+   - Keep save-specific haptics and review scheduling in `ItemFormSaveCoordinator`.
+
+4. Watch sync should keep using the shared snapshot service rather than reintroducing target-local mutation rules.
+   Files:
    - `Watch/Sources/Services/WatchDataSyncer.swift`
+   - `IncomesLibrary/Sources/Item/Sync/WatchSyncService.swift`
    Minimal plan:
-   - Delegate snapshot application to `WatchSyncService.applySnapshot(...)` in `IncomesLibrary`.
-   - Keep watch-side networking and trigger timing in adapter.
-
-3. Repeat month rules are duplicated in UI and library.
-   Files:
-   - `Incomes/Sources/Item/Views/ItemFormView.swift`
-   - `Incomes/Sources/Item/Components/RepeatMonthPicker.swift`
-   - `IncomesLibrary/Sources/Item/ItemService.swift`
-   Minimal plan:
-   - Centralize validation/normalization in `RepeatMonthSelectionRules`.
-   - Reuse the same rule set in both view and library mutation paths.
-
-4. App Intents duplicate form validation and repeat month parsing.
-   Files:
-   - `Incomes/Sources/Item/Intents/Create/CreateItemIntent.swift`
-   - `Incomes/Sources/Item/Intents/Create/CreateScheduledItemIntent.swift`
-   - `Incomes/Sources/Item/Intents/Update/UpdateItemIntent.swift`
-   Minimal plan:
-   - Use `ItemFormInput.validate()` and `RepeatMonthSelectionParser` in `IncomesLibrary`.
-   - Keep only App Intent-specific error conversion in intent files.
-
-5. Search numeric range interpretation lives in UI model.
-   Files:
-   - `Incomes/Sources/Search/Models/SearchTarget.swift`
-   - `Incomes/Sources/Search/Views/SearchListView.swift`
-   Minimal plan:
-   - Move numeric range to predicate mapping into `ItemSearchPredicateBuilder` in library.
-   - Keep `SearchTarget` as presentation selection.
+   - Keep networking/timing in watch adapters.
+   - Keep snapshot apply and reconciliation in `WatchSyncService`.

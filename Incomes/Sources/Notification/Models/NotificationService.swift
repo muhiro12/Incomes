@@ -12,25 +12,13 @@ import UserNotifications
 
 @Observable
 final class NotificationService: NSObject {
-    private enum NotificationPayloadKey {
-        static let itemIdentifier = "itemIdentifier"
-        static let notificationKind = "notificationKind"
-        static let primaryDeepLinkURL = "primaryDeepLinkURL"
-        static let secondaryDeepLinkURL = "secondaryDeepLinkURL"
-        static let actionRouteURLs = "actionRouteURLs"
-    }
-
     private enum NotificationCategoryIdentifier {
         static let upcomingPaymentActions = "upcoming-payment.actions"
     }
 
     private enum NotificationActionIdentifier {
         static let viewItem = "upcoming-payment.view-item"
-        static let viewMonth = "upcoming-payment.view-month"
-    }
-
-    private enum NotificationKind {
-        static let upcomingPayment = "upcoming-payment"
+        static let viewMonth = NotificationRoutePayload.viewMonthActionIdentifier
     }
 
     enum AuthorizationState {
@@ -39,19 +27,6 @@ final class NotificationService: NSObject {
         case denied
     }
 
-    private static let notificationPayloadCodec: MHNotificationPayloadCodec = .init(
-        configuration: .init(
-            keys: .init(
-                defaultRouteURL: NotificationPayloadKey.primaryDeepLinkURL,
-                fallbackRouteURL: NotificationPayloadKey.secondaryDeepLinkURL,
-                actionRouteURLs: NotificationPayloadKey.actionRouteURLs
-            ),
-            decodableMetadataKeys: [
-                NotificationPayloadKey.itemIdentifier,
-                NotificationPayloadKey.notificationKind
-            ]
-        )
-    )
     private let modelContainer: ModelContainer
     private let deepLinkInbox = MHDeepLinkInbox()
 
@@ -242,21 +217,7 @@ private extension NotificationService {
     func buildUserInfo(
         for presentation: UpcomingPaymentNotificationPresentation
     ) -> [AnyHashable: Any] {
-        Self.notificationPayloadCodec.encode(
-            .init(
-                routes: .init(
-                    defaultRouteURL: presentation.primaryRouteURL,
-                    fallbackRouteURL: presentation.secondaryRouteURL,
-                    actionRouteURLs: [
-                        NotificationActionIdentifier.viewMonth: presentation.secondaryRouteURL
-                    ]
-                ),
-                metadata: [
-                    NotificationPayloadKey.itemIdentifier: presentation.targetContentIdentifier,
-                    NotificationPayloadKey.notificationKind: NotificationKind.upcomingPayment
-                ]
-            )
-        )
+        NotificationRoutePayload.userInfo(for: presentation)
     }
 
     func buildUpcomingPaymentReminders() -> [UNNotificationRequest] {

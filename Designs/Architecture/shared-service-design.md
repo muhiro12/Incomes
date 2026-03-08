@@ -22,6 +22,7 @@ work across the iOS app, App Intents, Apple Watch, and widgets.
 | --- | --- | --- |
 | Shared domain logic | `IncomesLibrary` | `Item`, `Tag`, predicates, `ItemService`, `TagService`, `SummaryCalculator`, `YearlyItemDuplicator`, `DataMaintenanceService`, `UpcomingPaymentPlanner`, `SettingsStatusLoader` |
 | Apple framework adapters | `Incomes` | `ItemInferenceService`, `NotificationService`, App Intent types, deep-link routing, StoreKit, ads |
+| App-side platform support | `Incomes/Sources/Common/Platform` | `IncomesPlatformEnvironmentFactory`, runtime lifecycle task assembly, review policy helpers, pending deep-link coordination |
 | Presentation orchestration | `Incomes` | SwiftUI views, navigation state, form state, coordinators such as `ItemFormSaveCoordinator` and `YearlyDuplicationCoordinator` |
 
 ## Canonical Shared APIs
@@ -56,6 +57,9 @@ the canonical APIs above.
    boundary into library models or value types.
 5. Treat hidden intents as acceptable when the capability is useful but the
    shortcut should not be broadly discoverable.
+6. If glue code is app-only but reused by multiple app entry points, factor it
+   into `Incomes/Sources/Common/Platform` instead of moving it into
+   `IncomesLibrary`.
 
 ## Current Examples
 
@@ -63,6 +67,9 @@ the canonical APIs above.
   `Incomes` and returns values that fit the shared item form flow.
 - `NotificationService` stays in `Incomes` and uses shared planning logic from
   `IncomesLibrary`.
+- `IncomesPlatformEnvironmentFactory` stays in `Incomes` because runtime,
+  review, and deep-link wiring depend on `MHPlatform`, app secrets, and SwiftUI
+  environment injection.
 - `YearlyDuplicationCoordinator` is an app-side adapter that delegates
   duplication rules to `YearlyItemDuplicator`.
 - `ItemFormSaveCoordinator` converts UI state into `ItemFormInput` and calls
@@ -72,3 +79,5 @@ the canonical APIs above.
 
 When a business rule is duplicated, the default fix is to move the rule into
 `IncomesLibrary` rather than duplicating it in another view, intent, or target.
+When the duplicated code is still Apple-framework glue, the default fix is to
+extract it into `Incomes/Sources/Common/Platform`.

@@ -10,19 +10,10 @@ import SwiftData
 import SwiftUI
 
 struct IncomesSampleData: PreviewModifier {
-    struct Context {
-        let modelContainer: ModelContainer
-        let notificationService: NotificationService
-        let configurationService: ConfigurationService
-        let tipController: IncomesTipController
-        let appRuntime: MHAppRuntime
-    }
+    typealias Context = IncomesPlatformEnvironment
 
     static func makeSharedContext() throws -> Context {
-        let modelContainer = try ModelContainer(
-            for: Item.self,
-            configurations: .init(isStoredInMemoryOnly: true)
-        )
+        let modelContainer = try IncomesPlatformEnvironmentFactory.makePreviewModelContainer()
         let previewContext = modelContainer.mainContext
         try? ItemService.seedSampleData(
             context: previewContext,
@@ -30,39 +21,17 @@ struct IncomesSampleData: PreviewModifier {
             ifEmptyOnly: true
         )
         try? BalanceCalculator.calculate(in: previewContext, after: .distantPast)
-        let notificationService = NotificationService(modelContainer: modelContainer)
-        let configurationService = ConfigurationService()
-        let (tipController, appRuntime) = try MainActor.assumeIsolated {
-            let tipController = IncomesTipController()
-            try tipController.configureIfNeeded()
-            let appRuntime = MHAppRuntime(
-                configuration: .init(
-                    subscriptionProductIDs: [Secret.productID],
-                    nativeAdUnitID: Secret.admobNativeIDDev,
-                    preferencesSuiteName: AppGroup.id,
-                    showsLicenses: true
-                )
+        return MainActor.assumeIsolated {
+            IncomesPlatformEnvironmentFactory.make(
+                modelContainer: modelContainer,
+                platformMode: .preview
             )
-
-            return (tipController, appRuntime)
         }
-
-        return .init(
-            modelContainer: modelContainer,
-            notificationService: notificationService,
-            configurationService: configurationService,
-            tipController: tipController,
-            appRuntime: appRuntime
-        )
     }
 
     func body(content: Content, context: Context) -> some View {
         content
-            .modelContainer(context.modelContainer)
-            .environment(context.notificationService)
-            .environment(context.configurationService)
-            .environment(context.tipController)
-            .environment(context.appRuntime)
+            .incomesPlatformEnvironment(context)
     }
 }
 

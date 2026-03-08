@@ -3,7 +3,6 @@ import MHPlatform
 
 enum IncomesMutationWorkflow {
     typealias NotificationScheduleRefresher = @MainActor @Sendable () async -> Void
-    typealias ReviewRequester = @MainActor @Sendable () async -> MHReviewRequestOutcome
 
     @MainActor
     static func refreshNotificationSchedule(
@@ -42,28 +41,6 @@ enum IncomesMutationWorkflow {
 
             return steps
         }
-    }
-
-    @MainActor
-    static func itemFormAdapter(
-        refreshNotificationSchedule: @escaping NotificationScheduleRefresher,
-        requestReviewIfNeeded: @escaping ReviewRequester
-    ) -> MHMutationAdapter<Set<MutationOutcome.FollowUpHint>> {
-        followUpHintAdapter(
-            refreshNotificationSchedule: refreshNotificationSchedule
-        )
-        .appending(
-            [
-                .mainActor(name: "successHaptic") {
-                    Haptic.success.impact()
-                },
-                .mainActor(name: "scheduleReviewRequest") {
-                    Task { @MainActor in
-                        _ = await requestReviewIfNeeded()
-                    }
-                }
-            ]
-        )
     }
 
     @MainActor
