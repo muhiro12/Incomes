@@ -14,11 +14,11 @@ struct MainNavigationView: View {
     private var context
     @Environment(IncomesTipController.self)
     private var tipController
+    @Environment(IncomesRouteInbox.self)
+    private var routeInbox
 
     @Query(.tags(.typeIs(.year), order: .reverse))
     private var yearTags: [Tag]
-
-    @Binding private var incomingRouteURL: URL?
 
     @StateObject private var router: MainNavigationRouter = .init()
 
@@ -180,9 +180,7 @@ struct MainNavigationView: View {
                     SettingsNavigationView(
                         incomingDestination: $router.settingsDestination
                     ) { route in
-                        Task {
-                            await navigateFromSettings(to: route)
-                        }
+                        navigateFromSettings(to: route)
                     }
                 case .yearlyDuplication:
                     NavigationStack {
@@ -199,10 +197,8 @@ struct MainNavigationView: View {
                 DuplicateTagNavigationView()
             }
         }
-        .onChange(of: incomingRouteURL) {
-            Task {
-                await handleIncomingRouteURL()
-            }
+        .onChange(of: routeInbox.pendingRoute) {
+            handleIncomingRouteIfNeeded()
         }
         .onChange(of: yearTags) {
             tipController.refreshHasAnyItems(!yearTags.isEmpty)
@@ -213,18 +209,14 @@ struct MainNavigationView: View {
             }
         }
         .task {
-            await loadState()
+            loadState()
 
             tipController.refreshHasAnyItems(!yearTags.isEmpty)
 
-            await handleIncomingRouteURL()
+            handleIncomingRouteIfNeeded()
 
             await PhoneWatchBridge.shared.activate(modelContext: context)
         }
-    }
-
-    init(incomingRouteURL: Binding<URL?> = .constant(nil)) {
-        _incomingRouteURL = incomingRouteURL
     }
 }
 
@@ -248,14 +240,12 @@ private extension MainNavigationView {
     }
 
     func enqueueNavigation(to route: IncomesRoute) {
-        Task {
-            await navigate(to: route)
-        }
+        navigate(to: route)
     }
 
-    func loadState() async {
+    func loadState() {
         do {
-            try await router.loadState(
+            try router.loadState(
                 context: context
             )
         } catch {
@@ -263,9 +253,9 @@ private extension MainNavigationView {
         }
     }
 
-    func navigate(to route: IncomesRoute) async {
+    func navigate(to route: IncomesRoute) {
         do {
-            try await router.navigate(
+            try router.navigate(
                 to: route,
                 context: context
             )
@@ -274,9 +264,9 @@ private extension MainNavigationView {
         }
     }
 
-    func navigateFromSettings(to route: IncomesRoute) async {
+    func navigateFromSettings(to route: IncomesRoute) {
         do {
-            try await router.navigateFromSettings(
+            try router.navigateFromSettings(
                 to: route,
                 context: context
             )
@@ -285,14 +275,13 @@ private extension MainNavigationView {
         }
     }
 
-    func handleIncomingRouteURL() async {
-        guard let url = incomingRouteURL else {
+    func handleIncomingRouteIfNeeded() {
+        guard let route = routeInbox.consumeLatest() else {
             return
         }
-        incomingRouteURL = nil
         do {
-            try await router.handleIncomingURL(
-                url,
+            try router.handleIncomingRoute(
+                route,
                 context: context
             )
         } catch {

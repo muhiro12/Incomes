@@ -128,20 +128,20 @@ enum ItemFormSaveCoordinator {
         let adapter = IncomesMutationWorkflow.followUpHintAdapter(
             refreshNotificationSchedule: refreshNotificationSchedule
         )
+        let reviewFlow = IncomesReviewSupport.flow(
+            context: .itemMutation,
+            source: #fileID
+        )
+        let reviewStep = reviewFlow.step(
+            name: "scheduleReviewRequest"
+        )
 
         return adapter.appending(
             [
                 .mainActor(name: "successHaptic") {
                     Haptic.success.impact()
                 },
-                .mainActor(name: "scheduleReviewRequest") {
-                    Task { @MainActor in
-                        _ = await IncomesReviewSupport.requestIfNeeded(
-                            context: .itemMutation,
-                            source: #fileID
-                        )
-                    }
-                }
+                reviewStep
             ]
         )
     }

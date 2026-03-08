@@ -39,12 +39,11 @@ enum IncomesReviewSupport {
         )
     }
 
-    @MainActor
-    static func requestIfNeeded(
+    static func flow(
         context: Context,
         source: String = #fileID
-    ) async -> MHReviewRequestOutcome {
-        await MHReviewRequester.requestIfNeeded(
+    ) -> MHReviewFlow {
+        .init(
             policy: policy(for: context),
             logger: logger(source: source)
         )

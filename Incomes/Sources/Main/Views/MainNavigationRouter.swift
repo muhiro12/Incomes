@@ -5,7 +5,6 @@
 //  Created by Codex on 2026/03/05.
 //
 
-import MHPlatform
 import SwiftData
 import SwiftUI
 
@@ -24,14 +23,6 @@ final class MainNavigationRouter: ObservableObject {
     @Published var isYearDeleteDialogPresented = false
     @Published var willDeleteItems: [Item] = []
     @Published var willDeleteTags: [Tag] = []
-
-    private let routeLifecycle = MHRouteLifecycle<IncomesRoute>(
-        logger: IncomesApp.logger(
-            category: "RouteExecution",
-            source: #fileID
-        ),
-        isDuplicate: ==
-    )
 
     private var pendingRouteAfterSettingsDismissal: IncomesRoute?
 
@@ -71,7 +62,7 @@ final class MainNavigationRouter: ObservableObject {
         willDeleteTags = []
     }
 
-    func loadState(context: ModelContext) async throws {
+    func loadState(context: ModelContext) throws {
         let state = try MainNavigationStateLoader.load(context: context)
         yearTagID = state.yearTag?.persistentModelID
         selectedTag = state.yearMonthTag
@@ -82,50 +73,48 @@ final class MainNavigationRouter: ObservableObject {
         } else {
             preferredCompactColumn = .detail
         }
-        _ = try await routeLifecycle.activate { [self] route in
-            try apply(
-                route: route,
-                context: context
-            )
-        }
     }
 
-    func handleIncomingURL(
-        _ url: URL?,
+    func handleIncomingRoute(
+        _ route: IncomesRoute?,
         context: ModelContext
-    ) async throws {
-        guard let url else {
+    ) throws {
+        guard let route else {
             return
         }
-        _ = try await routeLifecycle.submit(
-            url,
-            using: IncomesDeepLinkCodec.shared
-        ) { [self] route in
-            try apply(
-                route: route,
-                context: context
-            )
-        }
+        try apply(
+            route: route,
+            context: context
+        )
     }
 
     func navigate(
         to route: IncomesRoute,
         context: ModelContext
-    ) async throws {
-        try await submitRoute(route, context: context)
+    ) throws {
+        try apply(
+            route: route,
+            context: context
+        )
     }
 
     func navigateFromSettings(
         to route: IncomesRoute,
         context: ModelContext
-    ) async throws {
+    ) throws {
         if isSettingsPresented, route.isSettingsScopeRoute {
-            try await submitRoute(route, context: context)
+            try apply(
+                route: route,
+                context: context
+            )
         } else if isSettingsPresented {
             pendingRouteAfterSettingsDismissal = route
             sheetRoute = nil
         } else {
-            try await submitRoute(route, context: context)
+            try apply(
+                route: route,
+                context: context
+            )
         }
     }
 
@@ -160,18 +149,6 @@ final class MainNavigationRouter: ObservableObject {
 }
 
 private extension MainNavigationRouter {
-    func submitRoute(
-        _ route: IncomesRoute,
-        context: ModelContext
-    ) async throws {
-        _ = try await routeLifecycle.submit(route) { [self] route in
-            try apply(
-                route: route,
-                context: context
-            )
-        }
-    }
-
     func apply(
         route: IncomesRoute,
         context: ModelContext

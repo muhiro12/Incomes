@@ -21,10 +21,7 @@ let package = Package( // swiftlint:disable:this prefixed_toplevel_constant
             url: "https://github.com/muhiro12/SwiftUtilities",
             "1.0.0"..<"1.35.0"
         ),
-        .package(
-            url: "https://github.com/muhiro12/MHPlatform.git",
-            branch: "main"
-        )
+        .package(path: "../../MHPlatform")
     ],
     targets: [
         .target(

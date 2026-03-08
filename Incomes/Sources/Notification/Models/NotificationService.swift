@@ -28,15 +28,20 @@ final class NotificationService: NSObject {
     }
 
     private let modelContainer: ModelContainer
-    private let deepLinkInbox = MHDeepLinkInbox()
+    let deliverPendingRoute: @MainActor @Sendable (URL?) async -> Void
 
     private(set) var hasNotification = false
     private(set) var shouldShowNotification = false
-    private(set) var pendingDeepLinkURL: URL?
     private(set) var authorizationState: AuthorizationState = .notDetermined
 
-    init(modelContainer: ModelContainer) {
+    init(
+        modelContainer: ModelContainer,
+        routeDestination: any MHDeepLinkURLDestination
+    ) {
         self.modelContainer = modelContainer
+        self.deliverPendingRoute = { deepLinkURL in
+            await routeDestination.setPendingURL(deepLinkURL)
+        }
         super.init()
         UNUserNotificationCenter.current().delegate = self
         registerNotificationCategories()
@@ -83,7 +88,6 @@ final class NotificationService: NSObject {
 
         hasNotification = false
         shouldShowNotification = false
-        await setPendingDeepLinkURL(nil)
     }
 
     func refreshAuthorizationStatus() async {
@@ -142,25 +146,10 @@ extension NotificationService: UNUserNotificationCenterDelegate {
                                 openSettingsFor _: UNNotification?) {
         Task {
             notificationLogger.info("notification settings route requested")
-            await setPendingDeepLinkURL(
+            await deliverPendingRoute(
                 IncomesDeepLinkURLBuilder.preferredURL(for: .settings)
             )
         }
-    }
-}
-
-extension NotificationService {
-    @MainActor
-    func consumePendingDeepLinkURL() async -> URL? {
-        let deepLinkURL = await deepLinkInbox.consumeLatestURL()
-        pendingDeepLinkURL = nil
-        return deepLinkURL
-    }
-
-    @MainActor
-    func setPendingDeepLinkURL(_ deepLinkURL: URL?) async {
-        await deepLinkInbox.replacePendingURL(deepLinkURL)
-        pendingDeepLinkURL = deepLinkURL
     }
 }
 

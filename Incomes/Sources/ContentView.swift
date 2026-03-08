@@ -9,8 +9,6 @@ import MHPlatform
 import SwiftUI
 
 struct ContentView {
-    @Environment(NotificationService.self)
-    private var notificationService
     @Environment(ConfigurationService.self)
     private var configurationService
     @Environment(MHAppRuntime.self)
@@ -22,15 +20,12 @@ struct ContentView {
     private var isICloudOn
     @AppStorage(.isDebugOn)
     private var isDebugOn
-
-    @State private var isUpdateAlertPresented = false
-    @State private var incomingRouteURL: URL?
 }
 
 extension ContentView: View {
     var body: some View {
-        MainNavigationView(incomingRouteURL: $incomingRouteURL)
-            .alert("Update Required", isPresented: $isUpdateAlertPresented) {
+        MainNavigationView()
+            .alert("Update Required", isPresented: isUpdateRequiredBinding) {
                 Button("Open App Store") {
                     if let appStoreURL = URL(
                         string: "https://apps.apple.com/jp/app/incomes/id1584472982"
@@ -41,52 +36,26 @@ extension ContentView: View {
             } message: {
                 Text("Please update Incomes to the latest version to continue using it.")
             }
-            .mhAppRuntimeLifecycle(
-                runtime: appRuntime,
-                plan: runtimeLifecyclePlan
-            )
             .task {
                 #if DEBUG
                 isDebugOn = true
                 #endif
+                syncSubscriptionStateIfNeeded()
             }
             .onChange(of: appRuntime.premiumStatus) {
                 syncSubscriptionStateIfNeeded()
-            }
-            .onChange(of: notificationService.pendingDeepLinkURL) {
-                Task {
-                    await applyPendingDeepLinkIfNeeded()
-                }
-            }
-            .onOpenURL { url in
-                handleIncomingURL(url)
-            }
-            .onContinueUserActivity(NSUserActivityTypeBrowsingWeb) { userActivity in
-                guard let webpageURL = userActivity.webpageURL else {
-                    return
-                }
-                handleIncomingURL(webpageURL)
             }
     }
 }
 
 private extension ContentView {
-    var runtimeLifecyclePlan: MHAppRuntimeLifecyclePlan {
-        IncomesRuntimeLifecycleSupport.makePlan(
-            syncSubscriptionStateIfNeeded: {
-                syncSubscriptionStateIfNeeded()
+    var isUpdateRequiredBinding: Binding<Bool> {
+        .init(
+            get: {
+                configurationService.isUpdateRequired()
             },
-            refreshConfigurationState: {
-                await refreshConfigurationState()
-            },
-            updateNotifications: {
-                await notificationService.update()
-            },
-            requestReviewIfNeeded: {
-                await requestReviewIfNeeded()
-            },
-            applyPendingDeepLinkIfNeeded: {
-                await applyPendingDeepLinkIfNeeded()
+            set: { _ in
+                // Keep the alert driven by the latest remote configuration.
             }
         )
     }
@@ -111,33 +80,6 @@ private extension ContentView {
         )
         isSubscribeOn = state.isSubscribeOn
         isICloudOn = state.isICloudOn
-    }
-
-    @MainActor
-    func refreshConfigurationState() async {
-        try? await configurationService.load()
-        isUpdateAlertPresented = configurationService.isUpdateRequired()
-    }
-
-    @MainActor
-    func requestReviewIfNeeded() async {
-        _ = await IncomesReviewSupport.requestIfNeeded(
-            context: .appActivation,
-            source: #fileID
-        )
-    }
-
-    func applyPendingDeepLinkIfNeeded() async {
-        guard let deepLinkURL = await IncomesPendingDeepLinkSupport.consumeLatestURL(
-            notificationService: notificationService
-        ) else {
-            return
-        }
-        handleIncomingURL(deepLinkURL)
-    }
-
-    func handleIncomingURL(_ url: URL) {
-        incomingRouteURL = url
     }
 }
 

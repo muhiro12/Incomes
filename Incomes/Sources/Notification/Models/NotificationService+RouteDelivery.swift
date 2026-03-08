@@ -20,29 +20,23 @@ extension NotificationService {
     func deliverNotificationRoute(
         from response: UNNotificationResponse
     ) async {
-        @MainActor
-        @Sendable
-        func deliverPendingDeepLink(_ deepLinkURL: URL?) async {
-            await setPendingDeepLinkURL(deepLinkURL)
-        }
-
         let userInfo = response.notification.request.content.userInfo
-        let fallbackRouteURL = NotificationRoutePayload.legacyFallbackRouteURL(
-            userInfo: userInfo,
+        let payload = NotificationRoutePayload.codec.decode(userInfo)
+        let responseContext = MHNotificationResponseContext(
             actionIdentifier: response.actionIdentifier
         )
-        let outcome = MHNotificationOrchestrator.routeDeliveryOutcome(
+        let legacyFallbackRouteURL = NotificationRoutePayload.legacyFallbackRouteURL(
             userInfo: userInfo,
-            actionIdentifier: response.actionIdentifier,
-            codec: NotificationRoutePayload.codec,
-            ) { _, _ in
-            fallbackRouteURL
-        }
-        let deliveredOutcome = await MHNotificationOrchestrator.deliverRouteURL(
-            outcome,
-            deliver: deliverPendingDeepLink,
-            clearPendingURLWhenNoRoute: true
+            actionIdentifier: responseContext.actionIdentifier
         )
+        let deliveredOutcome = await MHNotificationOrchestrator.deliverRouteURL(
+            payload: payload,
+            response: responseContext,
+            deliver: deliverPendingRoute,
+            clearPendingURLWhenNoRoute: true
+        ) { _, _ in
+            legacyFallbackRouteURL
+        }
 
         switch deliveredOutcome.source {
         case .payload:

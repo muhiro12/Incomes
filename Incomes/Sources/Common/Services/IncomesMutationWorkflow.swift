@@ -52,7 +52,8 @@ enum IncomesMutationWorkflow {
         try await MHMutationWorkflow.runThrowing(
             name: name,
             operation: operation,
-            adapter: adapter
+            adapter: adapter,
+            projection: .identity
         )
     }
 
@@ -72,8 +73,10 @@ enum IncomesMutationWorkflow {
             name: name,
             operation: operation,
             adapter: adapter,
-            afterSuccess: afterSuccess,
-            returning: returning
+            projection: .closures(
+                afterSuccess: afterSuccess,
+                returning: returning
+            )
         )
     }
 }
