@@ -31,7 +31,7 @@ enum ItemFormSaveCoordinator {
     ) async throws -> ItemFormSaveOutcome {
         switch request.mode {
         case .create:
-            _ = try await IncomesMutationWorkflow.run(
+            _ = try await MHMutationWorkflow.runThrowing(
                 name: MutationName.create,
                 operation: {
                     try ItemService.createWithOutcome(
@@ -43,12 +43,14 @@ enum ItemFormSaveCoordinator {
                 adapter: itemFormAdapter(
                     notificationService: notificationService
                 ),
-                afterSuccess: { result in
-                    result.outcome.followUpHints
-                },
-                returning: { _ in
-                    ()
-                }
+                projection: .closures(
+                    afterSuccess: { result in
+                        result.outcome.followUpHints
+                    },
+                    returning: { _ in
+                        ()
+                    }
+                )
             )
             return .didSave
         case .edit:
@@ -81,7 +83,7 @@ enum ItemFormSaveCoordinator {
         formInputData: ItemFormInput,
         notificationService: NotificationService
     ) async throws {
-        _ = try await IncomesMutationWorkflow.run(
+        _ = try await MHMutationWorkflow.runThrowing(
             name: mutationName(for: scope),
             operation: {
                 try ItemService.updateWithOutcome(
@@ -94,12 +96,14 @@ enum ItemFormSaveCoordinator {
             adapter: itemFormAdapter(
                 notificationService: notificationService
             ),
-            afterSuccess: { outcome in
-                outcome.followUpHints
-            },
-            returning: { _ in
-                ()
-            }
+            projection: .closures(
+                afterSuccess: { outcome in
+                    outcome.followUpHints
+                },
+                returning: { _ in
+                    ()
+                }
+            )
         )
     }
 

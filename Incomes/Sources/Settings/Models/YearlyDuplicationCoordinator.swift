@@ -119,7 +119,7 @@ enum YearlyDuplicationCoordinator {
                 refreshNotificationSchedule: refreshNotificationSchedule
             )
 
-        return try await IncomesMutationWorkflow.run(
+        return try await MHMutationWorkflow.runThrowing(
             name: "duplicateYearlyItems",
             operation: {
                 try YearlyItemDuplicator.applyWithOutcome(
@@ -132,12 +132,10 @@ enum YearlyDuplicationCoordinator {
                 )
             },
             adapter: adapter,
-            afterSuccess: { result in
-                result.outcome.followUpHints
-            },
-            returning: { result in
-                result.value
-            }
+            projection: .keyPaths(
+                adapterValue: \.outcome.followUpHints,
+                resultValue: \.value
+            )
         )
     }
 

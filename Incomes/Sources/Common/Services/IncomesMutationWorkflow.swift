@@ -42,41 +42,4 @@ enum IncomesMutationWorkflow {
             return steps
         }
     }
-
-    @MainActor
-    static func run<Value: Sendable>(
-        name: String,
-        operation: @escaping @MainActor @Sendable () throws -> Value,
-        adapter: MHMutationAdapter<Value>
-    ) async throws -> Value {
-        try await MHMutationWorkflow.runThrowing(
-            name: name,
-            operation: operation,
-            adapter: adapter,
-            projection: .identity
-        )
-    }
-
-    @MainActor
-    static func run<
-        OperationValue,
-        AdapterValue: Sendable,
-        ResultValue: Sendable
-    >(
-        name: String,
-        operation: @escaping @MainActor @Sendable () throws -> OperationValue,
-        adapter: MHMutationAdapter<AdapterValue>,
-        afterSuccess: @escaping @MainActor @Sendable (OperationValue) -> AdapterValue,
-        returning: @escaping @MainActor @Sendable (OperationValue) -> ResultValue
-    ) async throws -> ResultValue {
-        try await MHMutationWorkflow.runThrowing(
-            name: name,
-            operation: operation,
-            adapter: adapter,
-            projection: .closures(
-                afterSuccess: afterSuccess,
-                returning: returning
-            )
-        )
-    }
 }
