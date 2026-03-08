@@ -22,7 +22,7 @@ work across the iOS app, App Intents, Apple Watch, and widgets.
 | --- | --- | --- |
 | Shared domain logic | `IncomesLibrary` | `Item`, `Tag`, predicates, `ItemService`, `TagService`, `SummaryCalculator`, `YearlyItemDuplicator`, `DataMaintenanceService`, `UpcomingPaymentPlanner`, `SettingsStatusLoader` |
 | Apple framework adapters | `Incomes` | `ItemInferenceService`, `NotificationService`, App Intent types, deep-link routing, StoreKit, ads |
-| App-side platform support | `Incomes/Sources/Common/Platform` | `IncomesPlatformEnvironmentFactory`, runtime lifecycle task assembly, review policy helpers, pending deep-link coordination |
+| App-side platform support | `Incomes/Sources/Common/Platform` | `IncomesPlatformEnvironmentFactory`, `MHAppRuntimeBootstrap` assembly, `MHAppRoutePipeline<IncomesRoute>` assembly, `MHReviewFlow` policy helpers, `IncomesRouteInbox` |
 | Presentation orchestration | `Incomes` | SwiftUI views, navigation state, form state, coordinators such as `ItemFormSaveCoordinator` and `YearlyDuplicationCoordinator` |
 
 ## Canonical Shared APIs
@@ -41,8 +41,8 @@ operations:
 - `DataMaintenanceService.deleteAllData(context:)`
 - `DataMaintenanceService.deleteDebugData(context:)`
 
-Compatibility wrappers may remain temporarily, but new call sites should use
-the canonical APIs above.
+App-side mutation call sites should prefer
+`MHMutationWorkflow.runThrowing(... projection:)` over local wrapper APIs.
 
 ## Placement Rules
 
@@ -68,12 +68,17 @@ the canonical APIs above.
 - `NotificationService` stays in `Incomes` and uses shared planning logic from
   `IncomesLibrary`.
 - `IncomesPlatformEnvironmentFactory` stays in `Incomes` because runtime,
-  review, and deep-link wiring depend on `MHPlatform`, app secrets, and SwiftUI
-  environment injection.
+  route pipeline, and review flow assembly depend on `MHPlatform`, app
+  secrets, and SwiftUI environment injection.
+- `ContentView` stays thin because `MHAppRuntimeBootstrap` owns the runtime,
+  lifecycle, and route-drain shell.
+- `MainNavigationView` consumes `IncomesRouteInbox` so the package owns route
+  intake while the app still owns navigation meaning.
 - `YearlyDuplicationCoordinator` is an app-side adapter that delegates
-  duplication rules to `YearlyItemDuplicator`.
+  duplication rules to `YearlyItemDuplicator` and uses package-owned mutation
+  projection strategies.
 - `ItemFormSaveCoordinator` converts UI state into `ItemFormInput` and calls
-  canonical `ItemService` APIs.
+  canonical `ItemService` APIs with package-owned mutation and review shells.
 
 ## Refactoring Heuristic
 

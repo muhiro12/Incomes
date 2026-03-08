@@ -77,15 +77,21 @@ API style decision:
 
 ## Current Hotspots and Minimal Refactor Plans
 
-1. App lifecycle and runtime wiring should stay in app-side platform support, not in root app/view files.
+1. App runtime integration should use the package-owned shells, not
+   handwritten root orchestration.
    Files:
    - `Incomes/Sources/IncomesApp.swift`
    - `Incomes/Sources/ContentView.swift`
    - `Incomes/Sources/Debug/Models/IncomesSampleData.swift`
    - `Incomes/Sources/Common/Platform/*`
    Minimal plan:
-   - Keep `MHAppRuntime`, review policy, and pending deep-link source-chain setup in app-only support helpers.
-   - Keep `IncomesApp` and `ContentView` focused on dependency injection, scene wiring, and UI state updates.
+   - Keep `IncomesPlatformEnvironmentFactory` focused on assembling
+     `MHAppRuntimeBootstrap`, `MHAppRoutePipeline<IncomesRoute>`,
+     `MHReviewFlow`, and app services.
+   - Keep `ContentView` focused on UI state synchronization and update
+     alert presentation.
+   - Keep `MainNavigationView` responsible for app-specific navigation
+     meaning by consuming `IncomesRouteInbox`.
 
 2. Notification route payload configuration must stay defined in one adapter helper.
    File:
@@ -93,16 +99,26 @@ API style decision:
    - `Incomes/Sources/Notification/Models/NotificationService+RouteDelivery.swift`
    - `Incomes/Sources/Notification/Models/NotificationRoutePayload.swift`
    Minimal plan:
-   - Keep payload codec, metadata keys, and legacy month fallback logic in a single adapter helper.
-   - Keep `UNUserNotificationCenter` integration and presentation assembly in `NotificationService`.
+   - Keep payload codec, metadata keys, and legacy month fallback logic
+     in a single adapter helper.
+   - Keep `UNUserNotificationCenter` integration and presentation
+     assembly in `NotificationService`.
+   - Deliver decoded route URLs into the package-owned route pipeline
+     instead of storing app-local pending URLs.
 
-3. Generic mutation workflow helpers must stay separate from item-form-specific side effects.
+3. Generic mutation follow-up execution must stay separate from
+   feature-specific mutation projections.
    Files:
    - `Incomes/Sources/Common/Services/IncomesMutationWorkflow.swift`
    - `Incomes/Sources/Item/Models/ItemFormSaveCoordinator.swift`
+   - `Incomes/Sources/Settings/Models/YearlyDuplicationCoordinator.swift`
    Minimal plan:
-   - Keep generic follow-up hint execution in `IncomesMutationWorkflow`.
-   - Keep save-specific haptics and review scheduling in `ItemFormSaveCoordinator`.
+   - Keep generic follow-up hint execution in
+     `IncomesMutationWorkflow`.
+   - Use `MHMutationWorkflow.runThrowing(... projection:)` directly in
+     coordinators instead of app-local wrapper APIs.
+   - Keep save-specific haptics and review scheduling in
+     `ItemFormSaveCoordinator`.
 
 4. Watch sync should keep using the shared snapshot service rather than reintroducing target-local mutation rules.
    Files:
