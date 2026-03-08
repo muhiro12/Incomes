@@ -1,9 +1,12 @@
 import MHDeepLinking
 
-enum IncomesDeepLinkCodec {
-    static let shared = make()
+/// Builds the shared deep-link codec used by Incomes routes.
+public enum IncomesDeepLinkCodec {
+    /// Shared codec instance for decoding incoming Incomes deep links.
+    public static let shared = make()
 
-    static func make(
+    /// Creates a codec configured for Incomes deep-link transports.
+    public static func make(
         host: String = IncomesRouteURLDefaults.universalLinkHost,
         allowedUniversalLinkHosts: Set<String> = [
             IncomesRouteURLDefaults.universalLinkHost

@@ -175,10 +175,14 @@ extension NotificationService: UNUserNotificationCenterDelegate {
 }
 
 extension NotificationService {
-    var pendingDeepLinkSource: MHDeepLinkInbox {
-        deepLinkInbox
+    @MainActor
+    func consumePendingDeepLinkURL() async -> URL? {
+        let deepLinkURL = await deepLinkInbox.consumeLatestURL()
+        pendingDeepLinkURL = nil
+        return deepLinkURL
     }
 
+    @MainActor
     func setPendingDeepLinkURL(_ deepLinkURL: URL?) async {
         await deepLinkInbox.replacePendingURL(deepLinkURL)
         pendingDeepLinkURL = deepLinkURL

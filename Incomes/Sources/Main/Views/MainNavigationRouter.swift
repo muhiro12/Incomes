@@ -99,16 +99,13 @@ final class MainNavigationRouter: ObservableObject {
         }
         _ = try await routeLifecycle.submit(
             url,
-            parse: { routeURL in
-                IncomesRouteParser.parse(url: routeURL)
-            },
-            applyOnMainActor: { [self] route in
-                try apply(
-                    route: route,
-                    context: context
-                )
-            }
-        )
+            using: IncomesDeepLinkCodec.shared
+        ) { [self] route in
+            try apply(
+                route: route,
+                context: context
+            )
+        }
     }
 
     func navigate(

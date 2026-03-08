@@ -16,9 +16,6 @@ struct ContentView {
     @Environment(MHAppRuntime.self)
     private var appRuntime
 
-    @Environment(\.scenePhase)
-    private var scenePhase
-
     @AppStorage(.isSubscribeOn)
     private var isSubscribeOn
     @AppStorage(.isICloudOn)
@@ -44,42 +41,14 @@ extension ContentView: View {
             } message: {
                 Text("Please update Incomes to the latest version to continue using it.")
             }
+            .mhAppRuntimeLifecycle(
+                runtime: appRuntime,
+                plan: runtimeLifecyclePlan
+            )
             .task {
                 #if DEBUG
                 isDebugOn = true
                 #endif
-
-                appRuntime.startIfNeeded()
-                syncSubscriptionStateIfNeeded()
-                try? await configurationService.load()
-                isUpdateAlertPresented = configurationService.isUpdateRequired()
-                await notificationService.update()
-                Task {
-                    await applyPendingDeepLinkIfNeeded()
-                }
-            }
-            .onChange(of: scenePhase) {
-                guard scenePhase == .active else {
-                    return
-                }
-                appRuntime.startIfNeeded()
-                syncSubscriptionStateIfNeeded()
-                Task {
-                    try? await configurationService.load()
-                    isUpdateAlertPresented = configurationService.isUpdateRequired()
-                }
-                Task {
-                    await notificationService.update()
-                }
-                Task {
-                    _ = await MHReviewRequester.requestIfNeeded(
-                        policy: Self.reviewPolicy,
-                        logger: reviewLogger
-                    )
-                }
-                Task {
-                    await applyPendingDeepLinkIfNeeded()
-                }
             }
             .onChange(of: appRuntime.premiumStatus) {
                 syncSubscriptionStateIfNeeded()
@@ -102,6 +71,14 @@ extension ContentView: View {
 }
 
 private extension ContentView {
+    private struct NotificationPendingDeepLinkSource: MHDeepLinkURLSource, @unchecked Sendable {
+        let notificationService: NotificationService
+
+        func consumeLatestURL() async -> URL? {
+            await notificationService.consumePendingDeepLinkURL()
+        }
+    }
+
     private enum ReviewConstants {
         static let lotteryMaxExclusive = 10
         static let requestDelaySeconds = 2
@@ -112,6 +89,58 @@ private extension ContentView {
             lotteryMaxExclusive: ReviewConstants.lotteryMaxExclusive,
             requestDelay: .seconds(ReviewConstants.requestDelaySeconds)
         )
+    }
+
+    var runtimeLifecyclePlan: MHAppRuntimeLifecyclePlan {
+        .init(
+            startupTasks: [
+                .init(name: "syncSubscriptionState") {
+                    syncSubscriptionStateIfNeeded()
+                },
+                .init(name: "loadConfiguration") {
+                    await refreshConfigurationState()
+                },
+                .init(name: "updateNotifications") {
+                    await notificationService.update()
+                },
+                .init(name: "applyPendingDeepLink") {
+                    await applyPendingDeepLinkIfNeeded()
+                }
+            ],
+            activeTasks: [
+                .init(name: "syncSubscriptionState") {
+                    syncSubscriptionStateIfNeeded()
+                },
+                .init(name: "loadConfiguration") {
+                    await refreshConfigurationState()
+                },
+                .init(name: "updateNotifications") {
+                    await notificationService.update()
+                },
+                .init(name: "requestReview") {
+                    await requestReviewIfNeeded()
+                },
+                .init(name: "applyPendingDeepLink") {
+                    await applyPendingDeepLinkIfNeeded()
+                }
+            ],
+            skipFirstActivePhase: true
+        )
+    }
+
+    var pendingDeepLinkSources: [any MHDeepLinkURLSource] {
+        var sources = [any MHDeepLinkURLSource]()
+
+        if let intentRouteSource = IncomesIntentRouteStore.source {
+            sources.append(intentRouteSource)
+        }
+
+        sources.append(
+            NotificationPendingDeepLinkSource(
+                notificationService: notificationService
+            )
+        )
+        return sources
     }
 
     var reviewLogger: MHLogger {
@@ -143,30 +172,30 @@ private extension ContentView {
         isICloudOn = state.isICloudOn
     }
 
+    @MainActor
+    func refreshConfigurationState() async {
+        try? await configurationService.load()
+        isUpdateAlertPresented = configurationService.isUpdateRequired()
+    }
+
+    @MainActor
+    func requestReviewIfNeeded() async {
+        _ = await MHReviewRequester.requestIfNeeded(
+            policy: Self.reviewPolicy,
+            logger: reviewLogger
+        )
+    }
+
     func applyPendingDeepLinkIfNeeded() async {
-        if let intentRouteSource = IncomesIntentRouteStore.source {
-            await applyPendingDeepLinkIfNeeded(from: intentRouteSource)
+        let sourceChain = MHDeepLinkSourceChain(pendingDeepLinkSources)
+        guard let deepLinkURL = await sourceChain.consumeLatestURL() else {
+            return
         }
-        if await applyPendingDeepLinkIfNeeded(
-            from: notificationService.pendingDeepLinkSource
-        ) {
-            await notificationService.setPendingDeepLinkURL(nil)
-        }
+        handleIncomingURL(deepLinkURL)
     }
 
     func handleIncomingURL(_ url: URL) {
         incomingRouteURL = url
-    }
-
-    @discardableResult
-    func applyPendingDeepLinkIfNeeded(
-        from source: some MHDeepLinkURLSource
-    ) async -> Bool {
-        guard let deepLinkURL = await source.consumeLatestURL() else {
-            return false
-        }
-        handleIncomingURL(deepLinkURL)
-        return true
     }
 }
 
