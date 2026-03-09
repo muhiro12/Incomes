@@ -33,7 +33,7 @@ extension NotificationService {
         let deliveredOutcome = await MHNotificationOrchestrator.deliverRouteURL(
             payload: payload,
             response: responseContext,
-            deliver: deliverPendingRoute,
+            destination: routeDestination,
             clearPendingURLWhenNoRoute: true
         ) { _, _ in
             legacyFallbackRouteURL

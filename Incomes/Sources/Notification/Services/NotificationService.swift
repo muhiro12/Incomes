@@ -29,7 +29,7 @@ final class NotificationService: NSObject {
     }
 
     private let modelContainer: ModelContainer
-    let deliverPendingRoute: @MainActor @Sendable (URL?) async -> Void
+    let routeDestination: any MHDeepLinkURLDestination
 
     private(set) var hasNotification = false
     private(set) var shouldShowNotification = false
@@ -40,9 +40,7 @@ final class NotificationService: NSObject {
         routeDestination: any MHDeepLinkURLDestination
     ) {
         self.modelContainer = modelContainer
-        self.deliverPendingRoute = { deepLinkURL in
-            await routeDestination.setPendingURL(deepLinkURL)
-        }
+        self.routeDestination = routeDestination
         super.init()
         UNUserNotificationCenter.current().delegate = self
         registerNotificationCategories()
@@ -51,12 +49,12 @@ final class NotificationService: NSObject {
     func register() async {
         let center = UNUserNotificationCenter.current()
         let requests = buildUpcomingPaymentReminders()
-        let isManagedIdentifier: @Sendable (String) -> Bool = { identifier in
-            identifier.hasPrefix(UpcomingPaymentNotificationPresentation.requestIdentifierPrefix)
-                || identifier.hasPrefix(
-                    UpcomingPaymentNotificationPresentation.previewRequestIdentifierPrefix
-                )
-        }
+        let matcher = MHNotificationIdentifierMatcher(
+            prefixes: [
+                UpcomingPaymentNotificationPresentation.requestIdentifierPrefix,
+                UpcomingPaymentNotificationPresentation.previewRequestIdentifierPrefix
+            ]
+        )
 
         let status = await MHNotificationOrchestrator.requestAuthorizationIfNeeded(
             center: center,
@@ -67,7 +65,7 @@ final class NotificationService: NSObject {
         _ = await MHNotificationOrchestrator.replaceManagedPendingRequests(
             center: center,
             requests: requests,
-            isManagedIdentifier: isManagedIdentifier
+            matcher: matcher
         )
     }
 
@@ -147,7 +145,7 @@ extension NotificationService: UNUserNotificationCenterDelegate {
                                 openSettingsFor _: UNNotification?) {
         Task {
             notificationLogger.info("notification settings route requested")
-            await deliverPendingRoute(
+            await routeDestination.setPendingURL(
                 IncomesDeepLinkURLBuilder.preferredURL(for: .settings)
             )
         }
