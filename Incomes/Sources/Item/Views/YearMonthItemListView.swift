@@ -7,30 +7,27 @@
 
 import SwiftData
 import SwiftUI
-import TipKit
 
 struct YearMonthItemListView {
     @Environment(Tag.self)
     private var tag
+    @Environment(IncomesTipController.self)
+    private var tipController
 
     @AppStorage(.isSubscribeOn)
     private var isSubscribeOn
     @AppStorage(.isDebugOn)
     private var isDebugOn
-
-    private let itemDetailTip = ItemDetailTip()
 }
 
 extension YearMonthItemListView: View {
     var body: some View {
         ZStack {
             List {
-                if items.isNotEmpty {
-                    TipView(itemDetailTip)
-                }
-                ForEach(Array(yearStrings.enumerated()), id: \.element) { _, yearString in
+                ForEach(Array(yearStrings.enumerated()), id: \.element) { index, yearString in
                     ItemListSection(
-                        .items(.tagAndYear(tag: tag, yearString: yearString))
+                        .items(.tagAndYear(tag: tag, yearString: yearString)),
+                        showsItemDetailTip: index == .zero
                     )
                     if !isSubscribeOn {
                         AdvertisementSection(.medium)
@@ -49,6 +46,12 @@ extension YearMonthItemListView: View {
         }
         .listStyle(.grouped)
         .navigationTitle(tag.displayName)
+        .task(id: items.count) {
+            guard items.isNotEmpty else {
+                return
+            }
+            tipController.donateDidViewItemList()
+        }
         .toolbar {
             StatusToolbarItem("\(items.count) Items")
         }

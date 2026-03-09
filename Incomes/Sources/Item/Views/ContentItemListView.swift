@@ -11,6 +11,8 @@ import SwiftUI
 struct ContentItemListView {
     @Environment(Tag.self)
     private var tag
+    @Environment(IncomesTipController.self)
+    private var tipController
 
     @AppStorage(.isSubscribeOn)
     private var isSubscribeOn
@@ -18,14 +20,15 @@ struct ContentItemListView {
 
 extension ContentItemListView: View {
     var body: some View {
-        List(yearStrings, id: \.self) { yearString in
+        List(Array(yearStrings.enumerated()), id: \.element) { index, yearString in
             ItemListSection(
                 .items(.tagAndYear(tag: tag, yearString: yearString)),
                 title: .init(
                     yearString
                         .dateValueWithoutLocale(.yyyy)?
                         .stringValue(.yyyy) ?? .empty
-                )
+                ),
+                showsItemDetailTip: index == .zero
             )
             if !isSubscribeOn {
                 AdvertisementSection(.medium)
@@ -33,6 +36,12 @@ extension ContentItemListView: View {
         }
         .listStyle(.grouped)
         .navigationTitle(tag.displayName)
+        .task(id: items.count) {
+            guard items.isNotEmpty else {
+                return
+            }
+            tipController.donateDidViewItemList()
+        }
         .toolbar {
             StatusToolbarItem("\(items.count) Items")
         }

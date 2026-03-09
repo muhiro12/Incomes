@@ -11,6 +11,8 @@ import SwiftUI
 struct CategoryItemListView {
     @Environment(Tag.self)
     private var tag
+    @Environment(IncomesTipController.self)
+    private var tipController
 
     @AppStorage(.isSubscribeOn)
     private var isSubscribeOn
@@ -18,14 +20,23 @@ struct CategoryItemListView {
 
 extension CategoryItemListView: View {
     var body: some View {
-        List(yearStrings, id: \.self) { yearString in
-            TagItemListSection(yearString: yearString)
+        List(Array(yearStrings.enumerated()), id: \.element) { index, yearString in
+            TagItemListSection(
+                yearString: yearString,
+                showsItemDetailTip: index == .zero
+            )
             if !isSubscribeOn {
                 AdvertisementSection(.medium)
             }
         }
         .listStyle(.grouped)
         .navigationTitle(tag.displayName)
+        .task(id: items.count) {
+            guard items.isNotEmpty else {
+                return
+            }
+            tipController.donateDidViewItemList()
+        }
         .toolbar {
             StatusToolbarItem("\(items.count) Items")
         }

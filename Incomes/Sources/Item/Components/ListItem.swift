@@ -7,22 +7,43 @@
 
 import SwiftData
 import SwiftUI
+import TipKit
 
-struct ListItem: View {
+struct ListItem {
     @Environment(Item.self)
-    private var item // swiftlint:disable:this type_contents_order
+    private var item
     @Environment(\.modelContext)
-    private var context // swiftlint:disable:this type_contents_order
+    private var context
     @Environment(\.horizontalSizeClass)
-    private var horizontalSizeClass // swiftlint:disable:this type_contents_order
+    private var horizontalSizeClass
     @Environment(IncomesTipController.self)
-    private var tipController // swiftlint:disable:this type_contents_order
+    private var tipController
 
-    @State private var detents = PresentationDetent.medium // swiftlint:disable:this type_contents_order
-    @State private var isDeletePresented = false // swiftlint:disable:this type_contents_order
-    @StateObject private var router: Router = .init() // swiftlint:disable:this type_contents_order
+    @State private var detents = PresentationDetent.medium
+    @State private var isDeletePresented = false
+    @StateObject private var router: Router = .init()
 
-    var body: some View { // swiftlint:disable:this type_contents_order
+    private let isItemDetailTipAnchor: Bool
+    private let itemDetailTip = ItemDetailTip()
+
+    init(isItemDetailTipAnchor: Bool = false) {
+        self.isItemDetailTipAnchor = isItemDetailTipAnchor
+    }
+}
+
+extension ListItem: View {
+    var body: some View {
+        if isItemDetailTipAnchor {
+            button
+                .popoverTip(itemDetailTip, arrowEdge: .top)
+        } else {
+            button
+        }
+    }
+}
+
+private extension ListItem {
+    var button: some View {
         Button {
             detents = .medium
             tipController.donateDidOpenItemDetail()
@@ -87,9 +108,11 @@ struct ListItem: View {
             Text("Are you sure you want to delete this item?")
         }
     }
+}
 
+private extension ListItem {
     @MainActor
-    private final class Router: ObservableObject {
+    final class Router: ObservableObject {
         @Published var route: Route?
 
         func navigate(to route: Route) {
@@ -97,7 +120,7 @@ struct ListItem: View {
         }
     }
 
-    private enum Route: String, Identifiable {
+    enum Route: String, Identifiable {
         case detail
         case edit
         case duplicate

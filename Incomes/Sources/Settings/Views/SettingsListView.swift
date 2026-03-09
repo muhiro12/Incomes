@@ -41,8 +41,6 @@ struct SettingsListView {
     @State private var isDeleteDebugDialogPresented = false
     @State private var hasDuplicateTags = false
     @State private var hasDebugData = false
-    @State private var isSubscriptionTipEligible = false
-    @State private var isYearlyDuplicationTipEligible = false
 
     private let navigateToRoute: (IncomesRoute) -> Void
     private let subscriptionTip = SubscriptionTip()
@@ -65,15 +63,13 @@ extension SettingsListView: View {
                     Text("iCloud On")
                 }
             } else {
-                if isSubscriptionTipEligible {
-                    TipView(subscriptionTip)
-                }
                 routeRowButton(
                     "Subscription",
                     route: .settingsSubscription
                 ) {
                     tipController.donateDidOpenSubscription()
                 }
+                .popoverTip(subscriptionTip, arrowEdge: .top)
             }
             Section {
                 Picker(selection: $currencyCode) {
@@ -132,13 +128,7 @@ extension SettingsListView: View {
                 }
             }
             Section {
-                if shouldShowYearlyDuplicationTip {
-                    TipView(yearlyDuplicationTip)
-                }
-                Button("Duplicate year items") {
-                    tipController.donateDidOpenYearlyDuplication()
-                    navigateToRoute(.yearlyDuplication)
-                }
+                yearlyDuplicationButton()
                 Button(role: .destructive) {
                     Haptic.warning.impact()
                     isDeleteDialogPresented = true
@@ -187,7 +177,6 @@ extension SettingsListView: View {
                 Button("Show tips again") {
                     do {
                         try tipController.resetTips(hasAnyItems: !yearTags.isEmpty)
-                        refreshTipEligibility()
                     } catch {
                         assertionFailure(error.localizedDescription)
                     }
@@ -233,7 +222,6 @@ extension SettingsListView: View {
                         try await DataMaintenanceService.resetAllData(context: context)
                         Haptic.success.impact()
                         updateStatus()
-                        refreshTipEligibility()
                     } catch {
                         assertionFailure(error.localizedDescription)
                     }
@@ -258,7 +246,6 @@ extension SettingsListView: View {
                     try DataMaintenanceService.deleteDebugData(context: context)
                     Haptic.success.impact()
                     updateStatus()
-                    refreshTipEligibility()
                 } catch {
                     assertionFailure(error.localizedDescription)
                 }
@@ -275,7 +262,6 @@ extension SettingsListView: View {
         }
         .task {
             updateStatus()
-            refreshTipEligibility()
 
             isNotificationEnabled = notificationSettings.isEnabled
 
@@ -294,12 +280,8 @@ extension SettingsListView: View {
                 )
             }
         }
-        .onChange(of: yearTags) {
-            refreshTipEligibility()
-        }
         .onAppear {
             updateStatus()
-            refreshTipEligibility()
         }
         .onChange(of: scenePhase) {
             guard scenePhase == .active else {
@@ -313,12 +295,6 @@ extension SettingsListView: View {
 }
 
 private extension SettingsListView {
-    var shouldShowYearlyDuplicationTip: Bool {
-        yearTags.isNotEmpty &&
-            isSubscriptionTipEligible == false &&
-            isYearlyDuplicationTipEligible
-    }
-
     func routeRowButton(
         _ title: LocalizedStringKey,
         route: IncomesRoute,
@@ -341,9 +317,18 @@ private extension SettingsListView {
         .buttonStyle(.plain)
     }
 
-    func refreshTipEligibility() {
-        isSubscriptionTipEligible = subscriptionTip.shouldDisplay
-        isYearlyDuplicationTipEligible = yearlyDuplicationTip.shouldDisplay
+    @ViewBuilder
+    func yearlyDuplicationButton() -> some View {
+        let button = Button("Duplicate year items") {
+            tipController.donateDidOpenYearlyDuplication()
+            navigateToRoute(.yearlyDuplication)
+        }
+
+        if yearTags.isNotEmpty {
+            button.popoverTip(yearlyDuplicationTip, arrowEdge: .top)
+        } else {
+            button
+        }
     }
 
     func updateStatus() {

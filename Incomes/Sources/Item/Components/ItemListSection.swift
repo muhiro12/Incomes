@@ -8,7 +8,7 @@
 import SwiftData
 import SwiftUI
 
-struct ItemListSection: View {
+struct ItemListSection {
     @Environment(\.modelContext)
     private var context
 
@@ -18,16 +18,27 @@ struct ItemListSection: View {
     @State private var willDeleteItems: [Item] = []
 
     private let title: LocalizedStringKey?
+    private let showsItemDetailTip: Bool
 
-    init(_ descriptor: FetchDescriptor<Item>, title: LocalizedStringKey? = nil) { // swiftlint:disable:this line_length type_contents_order
+    init(
+        _ descriptor: FetchDescriptor<Item>,
+        title: LocalizedStringKey? = nil,
+        showsItemDetailTip: Bool = false
+    ) {
         self._items = Query(descriptor)
         self.title = title
+        self.showsItemDetailTip = showsItemDetailTip
     }
+}
 
+extension ItemListSection: View {
     var body: some View {
         Section {
-            ForEach(items) { item in
-                ListItem()
+            ForEach(
+                Array(items.enumerated()),
+                id: \.element.persistentModelID
+            ) { index, item in
+                ListItem(isItemDetailTipAnchor: showsItemDetailTip && index == .zero)
                     .environment(item)
             }
             .onDelete { indices in

@@ -9,6 +9,9 @@ import SwiftData
 import SwiftUI
 
 struct SearchResultView: View {
+    @Environment(IncomesTipController.self)
+    private var tipController
+
     @Query private var items: [Item]
 
     init(predicate: ItemPredicate) { // swiftlint:disable:this type_contents_order
@@ -29,11 +32,17 @@ struct SearchResultView: View {
         Group {
             if items.isNotEmpty {
                 List {
-                    ForEach(sortedMonths, id: \.self) { month in
+                    ForEach(Array(sortedMonths.enumerated()), id: \.element) { monthIndex, month in
                         Section(month.formatted(.dateTime.year().month())) {
-                            ForEach(groupedItems[month] ?? []) { item in
-                                ListItem()
-                                    .environment(item)
+                            ForEach(
+                                Array((groupedItems[month] ?? []).enumerated()),
+                                id: \.element.persistentModelID
+                            ) { itemIndex, item in
+                                ListItem(
+                                    isItemDetailTipAnchor: monthIndex == .zero &&
+                                        itemIndex == .zero
+                                )
+                                .environment(item)
                             }
                         }
                     }
@@ -45,6 +54,12 @@ struct SearchResultView: View {
             }
         }
         .navigationTitle("Results")
+        .task(id: items.count) {
+            guard items.isNotEmpty else {
+                return
+            }
+            tipController.donateDidViewItemList()
+        }
     }
 }
 

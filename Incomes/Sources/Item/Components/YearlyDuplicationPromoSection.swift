@@ -7,6 +7,7 @@
 
 import SwiftData
 import SwiftUI
+import TipKit
 
 struct YearlyDuplicationPromoSection: View {
     @Environment(IncomesTipController.self)
@@ -22,13 +23,15 @@ struct YearlyDuplicationPromoSection: View {
     @State private var yearlyDuplicationSourceYear: Int?
     @State private var yearlyDuplicationTargetYear: Int?
 
+    private let yearlyDuplicationTip = YearlyDuplicationTip()
+
     var body: some View {
         Group { // swiftlint:disable:this closure_body_length
             if showYearlyDuplicationPromo,
                let proposal = yearlyDuplicationProposal,
                let sourceYear = yearlyDuplicationSourceYear,
                let targetYear = yearlyDuplicationTargetYear {
-                Section { // swiftlint:disable:this closure_body_length
+                Section {
                     VStack(alignment: .leading, spacing: 8) { // swiftlint:disable:this no_magic_numbers
                         Text("Duplicate Year")
                             .font(.headline)
@@ -55,11 +58,7 @@ struct YearlyDuplicationPromoSection: View {
                         Text(String(localized: "Items: \(proposal.entryCount)"))
                             .font(.footnote)
                             .foregroundStyle(.secondary)
-                        Button("Review proposals") {
-                            tipController.donateDidOpenYearlyDuplication()
-                            onReview()
-                        }
-                        .buttonStyle(.bordered)
+                        reviewProposalsButton()
                     }
                     .padding(.vertical, 4) // swiftlint:disable:this no_magic_numbers
                 } header: {
@@ -106,6 +105,15 @@ private extension YearlyDuplicationPromoSection {
     func dismissYearlyDuplicationPromo() {
         isYearlyDuplicationPromoDismissed = true
         resetPromoState()
+    }
+
+    func reviewProposalsButton() -> some View {
+        Button("Review proposals") {
+            tipController.donateDidOpenYearlyDuplication()
+            onReview()
+        }
+        .buttonStyle(.bordered)
+        .popoverTip(yearlyDuplicationTip, arrowEdge: .top)
     }
 
     func loadYearlyDuplicationProposal() {

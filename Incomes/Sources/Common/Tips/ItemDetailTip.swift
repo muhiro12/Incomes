@@ -15,7 +15,7 @@ struct ItemDetailTip: Tip {
     }
 
     var rules: [Rule] {
-        #Rule(IncomesTipEvents.didOpenMonth) { event in
+        #Rule(IncomesTipEvents.didViewItemList) { event in
             event.donations.count > 0
         }
         #Rule(IncomesTipEvents.didOpenItemDetail) { event in

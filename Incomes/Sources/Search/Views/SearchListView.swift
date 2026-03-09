@@ -34,7 +34,6 @@ struct SearchListView: View {
 
     var body: some View {
         List { // swiftlint:disable:this closure_body_length
-            TipView(searchFiltersTip)
             Section("Target") {
                 Picker("Target", selection: $selectedTarget) {
                     ForEach(SearchTarget.allCases, id: \.self) { target in
@@ -43,6 +42,7 @@ struct SearchListView: View {
                     }
                 }
                 .pickerStyle(.menu)
+                .popoverTip(searchFiltersTip, arrowEdge: .top)
             }
             Section("Filter") {
                 switch selectedTarget {

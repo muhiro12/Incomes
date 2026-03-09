@@ -7,6 +7,7 @@
 
 import SwiftData
 import SwiftUI
+import TipKit
 
 struct HomeYearSection: View {
     @Environment(\.modelContext)
@@ -20,6 +21,7 @@ struct HomeYearSection: View {
     @State private var willDeleteItems: [Item] = []
 
     private let navigateToRoute: (IncomesRoute) -> Void
+    private let monthListTip = MonthListTip()
 
     init( // swiftlint:disable:this type_contents_order
         yearTag: Tag,
@@ -38,20 +40,14 @@ struct HomeYearSection: View {
 
     var body: some View {
         Section {
-            ForEach(yearMonthTags) { tag in
-                Button {
-                    guard let monthRoute = route(for: tag) else {
-                        return
-                    }
-                    tipController.donateDidOpenMonth()
-                    navigateToRoute(monthRoute)
-                } label: {
-                    TagSummaryRow()
-                        .environment(tag)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .contentShape(Rectangle())
-                }
-                .buttonStyle(.plain)
+            ForEach(
+                Array(yearMonthTags.enumerated()),
+                id: \.element.persistentModelID
+            ) { index, tag in
+                buildMonthButton(
+                    for: tag,
+                    showsTip: index == .zero
+                )
             }
             .onDelete { indices in
                 Haptic.warning.impact()
@@ -91,6 +87,32 @@ struct HomeYearSection: View {
 }
 
 private extension HomeYearSection {
+    @ViewBuilder
+    func buildMonthButton(
+        for tag: Tag,
+        showsTip: Bool
+    ) -> some View {
+        let button = Button {
+            guard let monthRoute = route(for: tag) else {
+                return
+            }
+            tipController.donateDidOpenMonth()
+            navigateToRoute(monthRoute)
+        } label: {
+            TagSummaryRow()
+                .environment(tag)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+
+        if showsTip {
+            button.popoverTip(monthListTip, arrowEdge: .top)
+        } else {
+            button
+        }
+    }
+
     func route(for yearMonthTag: Tag) -> IncomesRoute? {
         guard yearMonthTag.type == .yearMonth else {
             return nil

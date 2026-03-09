@@ -18,17 +18,25 @@ struct TagItemListSection {
     @State private var willDeleteItems: [Item] = []
 
     private let yearString: String
+    private let showsItemDetailTip: Bool
 
-    init(yearString: String) {
+    init(
+        yearString: String,
+        showsItemDetailTip: Bool = false
+    ) {
         self.yearString = yearString
+        self.showsItemDetailTip = showsItemDetailTip
     }
 }
 
 extension TagItemListSection: View {
     var body: some View {
         Section {
-            ForEach(items) { item in
-                ListItem()
+            ForEach(
+                Array(items.enumerated()),
+                id: \.element.persistentModelID
+            ) { index, item in
+                ListItem(isItemDetailTipAnchor: showsItemDetailTip && index == .zero)
                     .environment(item)
             }
             .onDelete { indices in

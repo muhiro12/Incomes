@@ -32,6 +32,10 @@ final class IncomesTipController {
         IncomesTipEvents.didOpenMonth.sendDonation()
     }
 
+    func donateDidViewItemList() {
+        IncomesTipEvents.didViewItemList.sendDonation()
+    }
+
     func donateDidOpenItemDetail() {
         IncomesTipEvents.didOpenItemDetail.sendDonation()
     }
