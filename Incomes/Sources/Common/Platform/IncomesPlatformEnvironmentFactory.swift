@@ -26,8 +26,40 @@ enum IncomesPlatformEnvironmentFactory {
         modelContainer: ModelContainer,
         platformMode: IncomesPlatformMode
     ) -> IncomesPlatformEnvironment {
-        let routeInbox = IncomesRouteInbox()
-        let appRuntime = MHAppRuntime(
+        let routeBridge = IncomesRouteBridge()
+        let appRuntime = makeAppRuntime(for: platformMode)
+        let routePipeline = makeRoutePipeline(routeBridge: routeBridge)
+        let notificationService = NotificationService(
+            modelContainer: modelContainer,
+            routeDestination: routePipeline.inbox
+        )
+        let configurationService = ConfigurationService()
+        let tipController = makeTipController()
+        let reviewFlow = IncomesReviewSupport.flow(
+            context: .appActivation,
+            source: #fileID
+        )
+
+        return .init(
+            modelContainer: modelContainer,
+            notificationService: notificationService,
+            configurationService: configurationService,
+            tipController: tipController,
+            routeBridge: routeBridge,
+            runtimeBootstrap: makeRuntimeBootstrap(
+                runtime: appRuntime,
+                routePipeline: routePipeline,
+                configurationService: configurationService,
+                notificationService: notificationService,
+                reviewFlow: reviewFlow
+            )
+        )
+    }
+
+    private static func makeAppRuntime(
+        for platformMode: IncomesPlatformMode
+    ) -> MHAppRuntime {
+        .init(
             configuration: .init(
                 subscriptionProductIDs: [Secret.productID],
                 nativeAdUnitID: nativeAdUnitID(for: platformMode),
@@ -35,6 +67,12 @@ enum IncomesPlatformEnvironmentFactory {
                 showsLicenses: true
             )
         )
+    }
+
+    @MainActor
+    private static func makeRoutePipeline(
+        routeBridge: IncomesRouteBridge
+    ) -> MHAppRoutePipeline<IncomesRoute> {
         let routePipeline = MHAppRoutePipeline(
             routeLifecycle: .init(
                 logger: IncomesApp.logger(
@@ -47,35 +85,32 @@ enum IncomesPlatformEnvironmentFactory {
             using: IncomesDeepLinkCodec.shared,
             pendingSources: pendingURLSources()
         ) { route in
-            routeInbox.ingest(route)
+            try await routeBridge.apply(route)
+        } onFailure: { error in
+            handleRoutePipelineFailure(error)
         }
-        let notificationService = NotificationService(
-            modelContainer: modelContainer,
-            routeDestination: routePipeline.inbox
-        )
-        let configurationService = ConfigurationService()
-        let tipController = IncomesTipController()
-        let reviewFlow = IncomesReviewSupport.flow(
-            context: .appActivation,
-            source: #fileID
-        )
 
-        configureTipControllerIfNeeded(tipController)
+        routeBridge.configureResynchronization {
+            _ = await routePipeline.synchronizePendingRoutesIfPossible()
+        }
 
-        return .init(
-            modelContainer: modelContainer,
-            notificationService: notificationService,
-            configurationService: configurationService,
-            tipController: tipController,
-            routeInbox: routeInbox,
-            runtimeBootstrap: makeRuntimeBootstrap(
-                runtime: appRuntime,
-                routePipeline: routePipeline,
-                configurationService: configurationService,
-                notificationService: notificationService,
-                reviewFlow: reviewFlow
+        return routePipeline
+    }
+
+    @MainActor
+    private static func handleRoutePipelineFailure(
+        _ error: any Error
+    ) {
+        if error is IncomesRouteBridge.HandlerUnavailableError {
+            let logger = IncomesApp.logger(
+                category: "RouteExecution",
+                source: #fileID
             )
-        )
+            logger.info("route handling deferred until main navigation is ready")
+            return
+        }
+
+        assertionFailure(error.localizedDescription)
     }
 
     private static func pendingURLSources() -> [any MHDeepLinkURLSource] {
@@ -86,6 +121,12 @@ enum IncomesPlatformEnvironmentFactory {
         }
 
         return sources
+    }
+
+    private static func makeTipController() -> IncomesTipController {
+        let tipController = IncomesTipController()
+        configureTipControllerIfNeeded(tipController)
+        return tipController
     }
 
     private static func nativeAdUnitID(
@@ -120,12 +161,12 @@ enum IncomesPlatformEnvironmentFactory {
                     },
                     .init(name: "updateNotifications") {
                         await notificationService.update()
-                    },
-                    routePipeline.task(
-                        name: "synchronizePendingRoutes"
-                    )
+                    }
                 ],
                 activeTasks: [
+                    routePipeline.task(
+                        name: "synchronizePendingRoutes"
+                    ),
                     reviewFlow.task(name: "requestReview")
                 ],
                 skipFirstActivePhase: true

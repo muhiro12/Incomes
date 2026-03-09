@@ -7,7 +7,7 @@ struct IncomesPlatformEnvironment {
     let notificationService: NotificationService
     let configurationService: ConfigurationService
     let tipController: IncomesTipController
-    let routeInbox: IncomesRouteInbox
+    let routeBridge: IncomesRouteBridge
     let runtimeBootstrap: MHAppRuntimeBootstrap
 }
 
@@ -19,7 +19,7 @@ extension View {
             .environment(environment.notificationService)
             .environment(environment.configurationService)
             .environment(environment.tipController)
-            .environment(environment.routeInbox)
+            .environment(environment.routeBridge)
             .mhAppRuntimeBootstrap(environment.runtimeBootstrap)
     }
 }

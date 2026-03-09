@@ -87,11 +87,11 @@ API style decision:
    Minimal plan:
    - Keep `IncomesPlatformEnvironmentFactory` focused on assembling
      `MHAppRuntimeBootstrap`, `MHAppRoutePipeline<IncomesRoute>`,
-     `MHReviewFlow`, and app services.
+     `IncomesRouteBridge`, `MHReviewFlow`, and app services.
    - Keep `ContentView` focused on UI state synchronization and update
      alert presentation.
    - Keep `MainNavigationView` responsible for app-specific navigation
-     meaning by consuming `IncomesRouteInbox`.
+     meaning by registering the route handler after loading persisted state.
 
 2. Notification route payload configuration must stay defined in one adapter helper.
    File:
@@ -104,7 +104,7 @@ API style decision:
    - Keep `UNUserNotificationCenter` integration and presentation
      assembly in `NotificationService`.
    - Deliver decoded route URLs into the package-owned route pipeline
-     instead of storing app-local pending URLs.
+     through `IncomesRouteBridge` instead of storing app-local pending routes.
 
 3. Generic mutation follow-up execution must stay separate from
    feature-specific mutation projections.

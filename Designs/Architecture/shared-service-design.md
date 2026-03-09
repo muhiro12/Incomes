@@ -22,7 +22,7 @@ work across the iOS app, App Intents, Apple Watch, and widgets.
 | --- | --- | --- |
 | Shared domain logic | `IncomesLibrary` | `Item`, `Tag`, predicates, `ItemService`, `TagService`, `SummaryCalculator`, `YearlyItemDuplicator`, `DataMaintenanceService`, `UpcomingPaymentPlanner`, `SettingsStatusLoader` |
 | Apple framework adapters | `Incomes` | `ItemInferenceService`, `NotificationService`, App Intent types, deep-link routing, StoreKit, ads |
-| App-side platform support | `Incomes/Sources/Common/Platform` | `IncomesPlatformEnvironmentFactory`, `MHAppRuntimeBootstrap` assembly, `MHAppRoutePipeline<IncomesRoute>` assembly, `MHReviewFlow` policy helpers, `IncomesRouteInbox` |
+| App-side platform support | `Incomes/Sources/Common/Platform` | `IncomesPlatformEnvironmentFactory`, `MHAppRuntimeBootstrap` assembly, `MHAppRoutePipeline<IncomesRoute>` assembly, `IncomesRouteBridge`, `MHReviewFlow` policy helpers |
 | Presentation orchestration | `Incomes` | SwiftUI views, navigation state, form state, coordinators such as `ItemFormSaveCoordinator` and `YearlyDuplicationCoordinator` |
 
 ## Canonical Shared APIs
@@ -72,8 +72,8 @@ App-side mutation call sites should prefer
   secrets, and SwiftUI environment injection.
 - `ContentView` stays thin because `MHAppRuntimeBootstrap` owns the runtime,
   lifecycle, and route-drain shell.
-- `MainNavigationView` consumes `IncomesRouteInbox` so the package owns route
-  intake while the app still owns navigation meaning.
+- `MainNavigationView` registers its route handler through `IncomesRouteBridge`
+  so the package owns route intake while the app still owns navigation meaning.
 - `YearlyDuplicationCoordinator` is an app-side adapter that delegates
   duplication rules to `YearlyItemDuplicator` and uses package-owned mutation
   projection strategies.

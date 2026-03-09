@@ -14,8 +14,8 @@ struct MainNavigationView: View {
     private var context
     @Environment(IncomesTipController.self)
     private var tipController
-    @Environment(IncomesRouteInbox.self)
-    private var routeInbox
+    @Environment(IncomesRouteBridge.self)
+    private var routeBridge
 
     @Query(.tags(.typeIs(.year), order: .reverse))
     private var yearTags: [Tag]
@@ -197,8 +197,8 @@ struct MainNavigationView: View {
                 DuplicateTagNavigationView()
             }
         }
-        .onChange(of: routeInbox.pendingRoute) {
-            handleIncomingRouteIfNeeded()
+        .onDisappear {
+            routeBridge.unregisterHandler()
         }
         .onChange(of: yearTags) {
             tipController.refreshHasAnyItems(!yearTags.isEmpty)
@@ -209,11 +209,22 @@ struct MainNavigationView: View {
             }
         }
         .task {
+            routeBridge.registerHandler { route in
+                do {
+                    try router.handleIncomingRoute(
+                        route,
+                        context: context
+                    )
+                } catch {
+                    assertionFailure(error.localizedDescription)
+                    throw error
+                }
+            }
             loadState()
 
             tipController.refreshHasAnyItems(!yearTags.isEmpty)
 
-            handleIncomingRouteIfNeeded()
+            await routeBridge.resynchronizePendingRoutesIfPossible()
 
             await PhoneWatchBridge.shared.activate(modelContext: context)
         }
@@ -268,20 +279,6 @@ private extension MainNavigationView {
         do {
             try router.navigateFromSettings(
                 to: route,
-                context: context
-            )
-        } catch {
-            assertionFailure(error.localizedDescription)
-        }
-    }
-
-    func handleIncomingRouteIfNeeded() {
-        guard let route = routeInbox.consumeLatest() else {
-            return
-        }
-        do {
-            try router.handleIncomingRoute(
-                route,
                 context: context
             )
         } catch {
