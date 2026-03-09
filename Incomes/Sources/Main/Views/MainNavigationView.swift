@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import MHAppRuntimeCore
 import SwiftData
 import SwiftUI
 
@@ -14,8 +15,8 @@ struct MainNavigationView: View {
     private var context
     @Environment(IncomesTipController.self)
     private var tipController
-    @Environment(IncomesRouteBridge.self)
-    private var routeBridge
+    @Environment(IncomesRouteInbox.self)
+    private var routeInbox
 
     @Query(.tags(.typeIs(.year), order: .reverse))
     private var yearTags: [Tag]
@@ -197,8 +198,11 @@ struct MainNavigationView: View {
                 DuplicateTagNavigationView()
             }
         }
-        .onDisappear {
-            routeBridge.unregisterHandler()
+        .mhRouteHandler(routeInbox) { route in
+            try router.handleIncomingRoute(
+                route,
+                context: context
+            )
         }
         .onChange(of: yearTags) {
             tipController.refreshHasAnyItems(!yearTags.isEmpty)
@@ -209,22 +213,9 @@ struct MainNavigationView: View {
             }
         }
         .task {
-            routeBridge.registerHandler { route in
-                do {
-                    try router.handleIncomingRoute(
-                        route,
-                        context: context
-                    )
-                } catch {
-                    assertionFailure(error.localizedDescription)
-                    throw error
-                }
-            }
             loadState()
 
             tipController.refreshHasAnyItems(!yearTags.isEmpty)
-
-            await routeBridge.resynchronizePendingRoutesIfPossible()
 
             await PhoneWatchBridge.shared.activate(modelContext: context)
         }

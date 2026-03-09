@@ -1,5 +1,5 @@
 import Foundation
-import MHPlatform
+import MHMutationFlow
 import SwiftData
 
 enum YearlyDuplicationCoordinator {

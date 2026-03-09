@@ -1,5 +1,5 @@
 import Foundation
-import MHPlatform
+import MHDeepLinking
 
 enum IncomesIntentRouteStore {
     private static let pendingDeepLinkURLKey = "pendingIntentDeepLinkURL"

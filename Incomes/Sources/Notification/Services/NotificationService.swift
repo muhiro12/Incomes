@@ -5,7 +5,8 @@
 //  Created by Hiromu Nakano on 2024/05/31.
 //
 
-@preconcurrency import MHPlatform
+@preconcurrency import MHDeepLinking
+@preconcurrency import MHNotificationPayloads
 import SwiftData
 import SwiftUI
 import UserNotifications

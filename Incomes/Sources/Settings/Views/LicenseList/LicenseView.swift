@@ -1,4 +1,4 @@
-import MHPlatform
+import MHAppRuntimeCore
 import SwiftUI
 
 struct LicenseView: View {

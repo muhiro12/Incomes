@@ -5,7 +5,6 @@
 //  Created by Hiromu Nakano on 2024/06/17.
 //
 
-import MHPlatform
 import SwiftData
 import SwiftUI
 

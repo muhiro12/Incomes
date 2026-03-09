@@ -6,7 +6,8 @@
 //
 
 import AppIntents
-import MHPlatform
+import MHLogging
+import MHPreferences
 import SwiftData
 import SwiftUI
 import TipKit
