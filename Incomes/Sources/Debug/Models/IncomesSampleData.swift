@@ -30,7 +30,7 @@ struct IncomesSampleData: PreviewModifier {
 
     func body(content: Content, context: Context) -> some View {
         content
-            .incomesPlatformEnvironment(context)
+            .incomesPreviewPlatformEnvironment(context)
     }
 }
 
