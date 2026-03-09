@@ -5,7 +5,7 @@ import SwiftUI
 struct IncomesPlatformEnvironment {
     let modelContainer: ModelContainer
     let notificationService: NotificationService
-    let configurationService: ConfigurationService
+    let remoteConfigurationService: RemoteConfigurationService
     let tipController: IncomesTipController
     let routeBridge: IncomesRouteBridge
     let runtimeBootstrap: MHAppRuntimeBootstrap
@@ -17,7 +17,7 @@ extension View {
     ) -> some View {
         modelContainer(environment.modelContainer)
             .environment(environment.notificationService)
-            .environment(environment.configurationService)
+            .environment(environment.remoteConfigurationService)
             .environment(environment.tipController)
             .environment(environment.routeBridge)
             .mhAppRuntimeBootstrap(environment.runtimeBootstrap)

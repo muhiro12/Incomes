@@ -95,9 +95,9 @@ API style decision:
 
 2. Notification route payload configuration must stay defined in one adapter helper.
    File:
-   - `Incomes/Sources/Notification/Models/NotificationService.swift`
-   - `Incomes/Sources/Notification/Models/NotificationService+RouteDelivery.swift`
-   - `Incomes/Sources/Notification/Models/NotificationRoutePayload.swift`
+   - `Incomes/Sources/Notification/Services/NotificationService.swift`
+   - `Incomes/Sources/Notification/Services/NotificationService+RouteDelivery.swift`
+   - `Incomes/Sources/Notification/Routing/NotificationRoutePayload.swift`
    Minimal plan:
    - Keep payload codec, metadata keys, and legacy month fallback logic
      in a single adapter helper.
@@ -110,8 +110,8 @@ API style decision:
    feature-specific mutation projections.
    Files:
    - `Incomes/Sources/Common/Services/IncomesMutationWorkflow.swift`
-   - `Incomes/Sources/Item/Models/ItemFormSaveCoordinator.swift`
-   - `Incomes/Sources/Settings/Models/YearlyDuplicationCoordinator.swift`
+   - `Incomes/Sources/Item/Services/ItemFormSaveCoordinator.swift`
+   - `Incomes/Sources/Settings/Coordinators/YearlyDuplicationCoordinator.swift`
    Minimal plan:
    - Keep generic follow-up hint execution in
      `IncomesMutationWorkflow`.

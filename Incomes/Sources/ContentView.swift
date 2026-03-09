@@ -9,8 +9,8 @@ import MHPlatform
 import SwiftUI
 
 struct ContentView {
-    @Environment(ConfigurationService.self)
-    private var configurationService
+    @Environment(RemoteConfigurationService.self)
+    private var remoteConfigurationService
     @Environment(MHAppRuntime.self)
     private var appRuntime
 
@@ -52,7 +52,7 @@ private extension ContentView {
     var isUpdateRequiredBinding: Binding<Bool> {
         .init(
             get: {
-                configurationService.isUpdateRequired()
+                remoteConfigurationService.isUpdateRequired()
             },
             set: { _ in
                 // Keep the alert driven by the latest remote configuration.

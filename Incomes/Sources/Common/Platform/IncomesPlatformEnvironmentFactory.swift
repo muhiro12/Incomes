@@ -33,7 +33,7 @@ enum IncomesPlatformEnvironmentFactory {
             modelContainer: modelContainer,
             routeDestination: routePipeline.inbox
         )
-        let configurationService = ConfigurationService()
+        let remoteConfigurationService = RemoteConfigurationService()
         let tipController = makeTipController()
         let reviewFlow = IncomesReviewSupport.flow(
             context: .appActivation,
@@ -43,13 +43,13 @@ enum IncomesPlatformEnvironmentFactory {
         return .init(
             modelContainer: modelContainer,
             notificationService: notificationService,
-            configurationService: configurationService,
+            remoteConfigurationService: remoteConfigurationService,
             tipController: tipController,
             routeBridge: routeBridge,
             runtimeBootstrap: makeRuntimeBootstrap(
                 runtime: appRuntime,
                 routePipeline: routePipeline,
-                configurationService: configurationService,
+                remoteConfigurationService: remoteConfigurationService,
                 notificationService: notificationService,
                 reviewFlow: reviewFlow
             )
@@ -148,7 +148,7 @@ enum IncomesPlatformEnvironmentFactory {
     private static func makeRuntimeBootstrap(
         runtime: MHAppRuntime,
         routePipeline: MHAppRoutePipeline<IncomesRoute>,
-        configurationService: ConfigurationService,
+        remoteConfigurationService: RemoteConfigurationService,
         notificationService: NotificationService,
         reviewFlow: MHReviewFlow
     ) -> MHAppRuntimeBootstrap {
@@ -156,8 +156,8 @@ enum IncomesPlatformEnvironmentFactory {
             runtime: runtime,
             lifecyclePlan: .init(
                 commonTasks: [
-                    .init(name: "loadConfiguration") {
-                        try? await configurationService.load()
+                    .init(name: "loadRemoteConfiguration") {
+                        try? await remoteConfigurationService.load()
                     },
                     .init(name: "updateNotifications") {
                         await notificationService.update()

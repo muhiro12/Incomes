@@ -59,7 +59,7 @@ struct IncomesApp: App {
             platformEnvironment.notificationService
         }
         AppDependencyManager.shared.add {
-            platformEnvironment.configurationService
+            platformEnvironment.remoteConfigurationService
         }
 
         if let currentAppVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
