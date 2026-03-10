@@ -189,7 +189,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Direction"
+            "value" : "Sens"
           }
         },
         "ja" : {
@@ -326,7 +326,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Revenu net Incomes"
+            "value" : "Revenu net d’Incomes"
           }
         },
         "ja" : {

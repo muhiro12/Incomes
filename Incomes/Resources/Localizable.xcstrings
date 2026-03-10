@@ -1692,41 +1692,6 @@
         }
       }
     },
-    "Delete tutorial/debug data" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Delete tutorial/debug data"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Eliminar datos de tutorial/depuración"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Supprimer les données de tutoriel/débogage"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "チュートリアル/デバッグデータを削除"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "删除教程/调试数据"
-          }
-        }
-      }
-    },
     "Display Name" : {
       "localizations" : {
         "en" : {

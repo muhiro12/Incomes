@@ -6,7 +6,7 @@
       "localizations" : {
         "en" : {
           "stringSet" : {
-            "state" : "new",
+            "state" : "translated",
             "values" : [
               "Check charts in ${applicationName}",
               "Let me see the stats in ${applicationName}",
@@ -125,7 +125,7 @@
       "localizations" : {
         "en" : {
           "stringSet" : {
-            "state" : "new",
+            "state" : "translated",
             "values" : [
               "Open ${applicationName}",
               "Launch ${applicationName}",
@@ -185,7 +185,7 @@
       "localizations" : {
         "en" : {
           "stringSet" : {
-            "state" : "new",
+            "state" : "translated",
             "values" : [
               "Show items in ${applicationName}",
               "Let me see my items with ${applicationName}",
@@ -245,7 +245,7 @@
       "localizations" : {
         "en" : {
           "stringSet" : {
-            "state" : "new",
+            "state" : "translated",
             "values" : [
               "What did I do last in ${applicationName}",
               "Show me the latest item in ${applicationName}",
@@ -305,7 +305,7 @@
       "localizations" : {
         "en" : {
           "stringSet" : {
-            "state" : "new",
+            "state" : "translated",
             "values" : [
               "What did I record recently in ${applicationName}",
               "Show me recent records in ${applicationName}",
@@ -365,7 +365,7 @@
       "localizations" : {
         "en" : {
           "stringSet" : {
-            "state" : "new",
+            "state" : "translated",
             "values" : [
               "What’s coming up in ${applicationName}",
               "Show me what’s next in ${applicationName}",
@@ -425,7 +425,7 @@
       "localizations" : {
         "en" : {
           "stringSet" : {
-            "state" : "new",
+            "state" : "translated",
             "values" : [
               "What’s next in ${applicationName}",
               "Show me the next thing in ${applicationName}",
