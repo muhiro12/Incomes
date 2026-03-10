@@ -1,5 +1,5 @@
 import Foundation
-import MHNotificationPlans
+import MHPlatform
 
 /// Builds display-ready notification payloads for upcoming payment reminders.
 public enum UpcomingPaymentNotificationPresentationBuilder { // swiftlint:disable:this type_name

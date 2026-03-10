@@ -5,6 +5,7 @@
 //  Created by Hiromu Nakano on 2021/12/29.
 //
 
+import MHPlatform
 import SwiftData
 import SwiftUI
 
@@ -14,7 +15,7 @@ struct HomeListView {
     @Environment(NotificationService.self)
     private var notificationService
 
-    @AppStorage(.isSubscribeOn)
+    @AppStorage(BoolAppStorageKey.isSubscribeOn)
     private var isSubscribeOn
 
     private let navigateToRoute: (IncomesRoute) -> Void

@@ -1,4 +1,5 @@
 import AppIntents
+import MHPlatform
 import SwiftData
 import SwiftUI
 
@@ -40,7 +41,10 @@ struct UpdateItemIntent: AppIntent {
     func perform() throws -> some ReturnsValue<ItemEntity> {
         try validateFormInput()
 
-        let currencyCode = AppStorage(.currencyCode).wrappedValue
+        let currencyCode = AppStorage(
+            StringAppStorageKey.currencyCode,
+            default: ""
+        ).wrappedValue
         if let amount = ItemIntentCurrencyValidator.disambiguationAmount(
             amount: income,
             expectedCurrencyCode: currencyCode

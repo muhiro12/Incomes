@@ -6,6 +6,7 @@
 //  Created by Hiromu Nakano on 2020/04/10.
 //
 
+import MHPlatform
 import SwiftData
 import SwiftUI
 import TipKit
@@ -50,7 +51,7 @@ struct ItemFormView: View { // swiftlint:disable:this type_body_length
     @Environment(\.modelContext)
     private var context
 
-    @AppStorage(.isDebugOn)
+    @AppStorage(BoolAppStorageKey.isDebugOn)
     private var isDebugOn
 
     @FocusState private var focusedField: Field?

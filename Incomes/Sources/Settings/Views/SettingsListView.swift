@@ -5,6 +5,7 @@
 //  Created by Hiromu Nakano on 2020/06/24.
 //
 
+import MHPlatform
 import SwiftData
 import SwiftUI
 import TipKit
@@ -25,16 +26,16 @@ struct SettingsListView {
     @Query(.tags(.typeIs(.year)))
     private var yearTags: [Tag]
 
-    @AppStorage(.isSubscribeOn)
-    private var isSubscribeOn
-    @AppStorage(.isICloudOn)
-    private var isICloudOn
-    @AppStorage(.currencyCode)
-    private var currencyCode
-    @AppStorage(.notificationSettings)
-    private var notificationSettings
-    @AppStorage(.isDebugOn)
-    private var isDebugOn
+    @AppStorage(BoolAppStorageKey.isSubscribeOn)
+    private var isSubscribeOn: Bool
+    @AppStorage(BoolAppStorageKey.isICloudOn)
+    private var isICloudOn: Bool
+    @AppStorage(StringAppStorageKey.currencyCode, default: "")
+    private var currencyCode: String
+    @AppStorage(NotificationSettingsAppStorageKey.notificationSettings, default: .init())
+    private var notificationSettings: NotificationSettings
+    @AppStorage(BoolAppStorageKey.isDebugOn)
+    private var isDebugOn: Bool
 
     @State private var isNotificationEnabled = true
     @State private var isDeleteDialogPresented = false

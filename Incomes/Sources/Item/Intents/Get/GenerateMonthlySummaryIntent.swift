@@ -1,4 +1,5 @@
 import AppIntents
+import MHPlatform
 import SwiftData
 import SwiftUI
 
@@ -17,7 +18,10 @@ struct GenerateMonthlySummaryIntent: AppIntent {
         let summary = try await MonthlySummaryGenerator.generate(
             modelContainer: modelContainer,
             date: date,
-            currencyCode: AppStorage(.currencyCode).wrappedValue,
+            currencyCode: AppStorage(
+                StringAppStorageKey.currencyCode,
+                default: ""
+            ).wrappedValue,
             locale: .current
         )
         return .result(value: summary)

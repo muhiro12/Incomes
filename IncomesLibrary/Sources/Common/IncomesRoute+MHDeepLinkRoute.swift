@@ -1,5 +1,5 @@
 import Foundation
-import MHDeepLinking
+import MHPlatform
 
 extension IncomesRoute: MHDeepLinkRoute {
     public var deepLinkDescriptor: MHDeepLinkDescriptor {

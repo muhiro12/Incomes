@@ -5,13 +5,14 @@
 //  Created by Codex on 2025/09/15.
 //
 
+import MHPlatform
 import SwiftData
 import SwiftUI
 
 struct SettingsListView {
     @Environment(\.modelContext)
     private var context
-    @AppStorage(.isDebugOn)
+    @AppStorage(BoolAppStorageKey.isDebugOn)
     private var isDebugOn
 
     @State private var isReloading = false

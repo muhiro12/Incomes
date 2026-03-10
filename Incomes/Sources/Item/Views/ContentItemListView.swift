@@ -5,6 +5,7 @@
 //  Created by Hiromu Nakano on 2025/07/09.
 //
 
+import MHPlatform
 import SwiftData
 import SwiftUI
 
@@ -14,7 +15,7 @@ struct ContentItemListView {
     @Environment(IncomesTipController.self)
     private var tipController
 
-    @AppStorage(.isSubscribeOn)
+    @AppStorage(BoolAppStorageKey.isSubscribeOn)
     private var isSubscribeOn
 }
 

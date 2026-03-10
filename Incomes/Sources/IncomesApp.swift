@@ -13,9 +13,9 @@ import TipKit
 
 @main
 struct IncomesApp: App {
-    @AppStorage(.isICloudOn)
+    @AppStorage(BoolAppStorageKey.isICloudOn)
     private var isICloudOn
-    @AppStorage(.lastLaunchedAppVersion)
+    @AppStorage(StringAppStorageKey.lastLaunchedAppVersion, default: "")
     private var lastLaunchedAppVersion
 
     private let platformEnvironment: IncomesPlatformEnvironment

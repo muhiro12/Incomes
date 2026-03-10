@@ -1,3 +1,4 @@
+import MHPlatform
 import SwiftData
 import SwiftUI
 
@@ -5,7 +6,7 @@ struct WatchDebugView {
     @Environment(\.modelContext)
     private var context
 
-    @AppStorage(.isDebugOn)
+    @AppStorage(BoolAppStorageKey.isDebugOn)
     private var isDebugOn
 
     @State private var hasDebugData = false

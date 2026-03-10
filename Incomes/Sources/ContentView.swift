@@ -14,11 +14,11 @@ struct ContentView {
     @Environment(MHAppRuntime.self)
     private var appRuntime
 
-    @AppStorage(.isSubscribeOn)
+    @AppStorage(BoolAppStorageKey.isSubscribeOn)
     private var isSubscribeOn
-    @AppStorage(.isICloudOn)
+    @AppStorage(BoolAppStorageKey.isICloudOn)
     private var isICloudOn
-    @AppStorage(.isDebugOn)
+    @AppStorage(BoolAppStorageKey.isDebugOn)
     private var isDebugOn
 }
 

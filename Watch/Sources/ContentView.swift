@@ -5,13 +5,14 @@
 //  Created by Hiromu Nakano on 2025/09/15.
 //
 
+import MHPlatform
 import SwiftData
 import SwiftUI
 
 struct ContentView {
     @Environment(\.modelContext)
     private var context
-    @AppStorage(.isDebugOn)
+    @AppStorage(BoolAppStorageKey.isDebugOn)
     private var isDebugOn
 
     @Query(.items(.dateIsAfter(Date.now), order: .forward))

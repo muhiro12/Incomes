@@ -6,6 +6,7 @@
 //
 
 import AppIntents
+import MHPlatform
 import SwiftData
 import SwiftUI
 
@@ -26,7 +27,10 @@ struct GetNextItemNetIncomeIntent: AppIntent {
         guard let netIncome else {
             return .result(value: nil)
         }
-        let currencyCode = AppStorage(.currencyCode).wrappedValue
+        let currencyCode = AppStorage(
+            StringAppStorageKey.currencyCode,
+            default: ""
+        ).wrappedValue
         return .result(value: .init(amount: netIncome, currencyCode: currencyCode))
     }
 }

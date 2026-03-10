@@ -5,11 +5,12 @@
 //  Created by Hiromu Nakano on 2024/06/03.
 //
 
+import MHPlatform
 import SwiftData
 import SwiftUI
 
 struct ChartSectionGroup {
-    @AppStorage(.isSubscribeOn)
+    @AppStorage(BoolAppStorageKey.isSubscribeOn)
     private var isSubscribeOn
 
     private let descriptor: FetchDescriptor<Item>

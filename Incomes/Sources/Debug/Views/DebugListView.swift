@@ -5,6 +5,7 @@
 //  Created by Hiromu Nakano on 2022/01/12.
 //
 
+import MHPlatform
 import SwiftData
 import SwiftUI
 import TipKit
@@ -18,7 +19,7 @@ struct DebugListView {
     @Query(.tags(.typeIs(.year)))
     private var yearTags: [Tag]
 
-    @AppStorage(.isDebugOn)
+    @AppStorage(BoolAppStorageKey.isDebugOn)
     private var isDebugOn
 
     @State private var isDialogPresented = false

@@ -6,6 +6,7 @@
 //
 
 import FoundationModels
+import MHPlatform
 import SwiftData
 import SwiftUI
 
@@ -32,10 +33,10 @@ struct MonthlySummarySection: View {
     @Environment(\.locale)
     private var locale
 
-    @AppStorage(.currencyCode)
+    @AppStorage(StringAppStorageKey.currencyCode, default: "")
     private var currencyCode
 
-    @AppStorage(.isDebugOn)
+    @AppStorage(BoolAppStorageKey.isDebugOn)
     private var isDebugOn
 
     @Query private var currentItems: [Item]

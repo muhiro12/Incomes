@@ -1,3 +1,4 @@
+import MHPlatform
 import SwiftData
 import SwiftUI
 
@@ -7,7 +8,7 @@ struct ItemView {
     @Environment(\.isPresented)
     private var isPresented
 
-    @AppStorage(.isDebugOn)
+    @AppStorage(BoolAppStorageKey.isDebugOn)
     private var isDebugOn
 }
 

@@ -15,6 +15,7 @@
 		AD71622F2E70BC5D00C4CFCE /* Widgets.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = AD71621A2E70BC5C00C4CFCE /* Widgets.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		AD7162362E70BD9F00C4CFCE /* IncomesLibrary in Frameworks */ = {isa = PBXBuildFile; productRef = AD7162352E70BD9F00C4CFCE /* IncomesLibrary */; };
 		AD7F5C202F5B3186008D91F3 /* MHPlatform in Frameworks */ = {isa = PBXBuildFile; productRef = AD7F5C212F5B3186008D91F3 /* MHPlatform */; };
+		AD7F5C232F5B3186008D91F3 /* MHPlatform in Frameworks */ = {isa = PBXBuildFile; productRef = AD7F5C222F5B3186008D91F3 /* MHPlatform */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -98,6 +99,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AD6DB6E32E779C5400E5BB78 /* IncomesLibrary in Frameworks */,
+				AD7F5C232F5B3186008D91F3 /* MHPlatform in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -176,6 +178,7 @@
 			name = Watch;
 			packageProductDependencies = (
 				AD6DB6E22E779C5400E5BB78 /* IncomesLibrary */,
+				AD7F5C222F5B3186008D91F3 /* MHPlatform */,
 			);
 			productName = "Incomes (Watch) Watch App";
 			productReference = AD6DB6D22E779B2B00E5BB78 /* Watch.app */;
@@ -799,6 +802,11 @@
 		AD7162352E70BD9F00C4CFCE /* IncomesLibrary */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = IncomesLibrary;
+		};
+		AD7F5C222F5B3186008D91F3 /* MHPlatform */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AD7F5C0C2F5B3186008D91F3 /* XCRemoteSwiftPackageReference "MHPlatform" */;
+			productName = MHPlatform;
 		};
 		AD7F5C212F5B3186008D91F3 /* MHPlatform */ = {
 			isa = XCSwiftPackageProductDependency;
