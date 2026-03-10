@@ -1,5 +1,5 @@
 import Foundation
-import MHMutationFlow
+import MHPlatform
 
 enum IncomesMutationWorkflow {
     typealias NotificationScheduleRefresher = @MainActor @Sendable () async -> Void

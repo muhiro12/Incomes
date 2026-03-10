@@ -5,7 +5,7 @@
 //  Created by Codex on 2025/09/08.
 //
 
-import MHMutationFlow
+import MHPlatform
 import SwiftData
 
 enum ItemFormSaveCoordinator {

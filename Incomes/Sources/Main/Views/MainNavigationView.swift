@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import MHAppRuntimeCore
+import MHPlatform
 import SwiftData
 import SwiftUI
 

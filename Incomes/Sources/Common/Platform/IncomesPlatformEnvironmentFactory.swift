@@ -1,13 +1,5 @@
-import GoogleMobileAdsWrapper
-import LicenseListWrapper
-import MHAppRuntimeCore
-import MHDeepLinking
-import MHPreferences
-import MHReviewPolicy
-import MHRouteExecution
-import StoreKitWrapper
+import MHPlatform
 import SwiftData
-import SwiftUI
 
 enum IncomesPlatformEnvironmentFactory {
     static func makeAppModelContainer(
@@ -35,7 +27,6 @@ enum IncomesPlatformEnvironmentFactory {
         platformMode: IncomesPlatformMode
     ) -> IncomesPlatformEnvironment {
         let routeInbox = makeRouteInbox()
-        let appRuntime = makeAppRuntime(for: platformMode)
         let routePipeline = makeRoutePipeline(routeInbox: routeInbox)
         let notificationService = NotificationService(
             modelContainer: modelContainer,
@@ -55,7 +46,7 @@ enum IncomesPlatformEnvironmentFactory {
             tipController: tipController,
             routeInbox: routeInbox,
             runtimeBootstrap: makeRuntimeBootstrap(
-                runtime: appRuntime,
+                configuration: makeAppConfiguration(for: platformMode),
                 routePipeline: routePipeline,
                 remoteConfigurationService: remoteConfigurationService,
                 notificationService: notificationService,
@@ -64,54 +55,14 @@ enum IncomesPlatformEnvironmentFactory {
         )
     }
 
-    @MainActor
-    private static func makeAppRuntime(
+    private static func makeAppConfiguration(
         for platformMode: IncomesPlatformMode
-    ) -> MHAppRuntime {
-        let configuration: MHAppConfiguration = .init(
+    ) -> MHAppConfiguration {
+        .init(
             subscriptionProductIDs: [Secret.productID],
             nativeAdUnitID: nativeAdUnitID(for: platformMode),
             preferencesSuiteName: AppGroup.id,
             showsLicenses: true
-        )
-
-        let store = Store()
-        let nativeAdController = makeNativeAdController(
-            nativeAdUnitID: configuration.nativeAdUnitID
-        )
-        let licensesViewBuilder: MHAppRuntime.LicensesViewBuilder = {
-            if configuration.showsLicenses {
-                return AnyView(LicenseListView())
-            }
-
-            return AnyView(EmptyView())
-        }
-
-        return .init(
-            configuration: configuration,
-            preferenceStore: makePreferenceStore(
-                suiteName: configuration.preferencesSuiteName
-            ),
-            startStore: { purchasedProductIDsDidSet in
-                store.open(
-                    groupID: configuration.subscriptionGroupID,
-                    productIDs: configuration.subscriptionProductIDs
-                ) { products in
-                    purchasedProductIDsDidSet(
-                        Set(products.map(\.id))
-                    )
-                }
-            },
-            subscriptionSectionViewBuilder: {
-                AnyView(store.buildSubscriptionSection())
-            },
-            startAds: makeAdsStarter(
-                controller: nativeAdController
-            ),
-            nativeAdViewBuilder: makeNativeAdViewBuilder(
-                controller: nativeAdController
-            ),
-            licensesViewBuilder: licensesViewBuilder
         )
     }
 
@@ -183,76 +134,16 @@ enum IncomesPlatformEnvironmentFactory {
         }
     }
 
-    private static func makePreferenceStore(
-        suiteName: String?
-    ) -> MHPreferenceStore {
-        guard let suiteName,
-              let userDefaults = UserDefaults(suiteName: suiteName) else {
-            return .init()
-        }
-
-        return .init(userDefaults: userDefaults)
-    }
-
-    private static func makeNativeAdController(
-        nativeAdUnitID: String?
-    ) -> GoogleMobileAdsController? {
-        guard let nativeAdUnitID else {
-            return nil
-        }
-
-        return .init(adUnitID: nativeAdUnitID)
-    }
-
-    private static func makeAdsStarter(
-        controller: GoogleMobileAdsController?
-    ) -> MHAppRuntime.StartAds? {
-        guard let controller else {
-            return nil
-        }
-
-        return {
-            controller.start()
-        }
-    }
-
-    private static func makeNativeAdViewBuilder(
-        controller: GoogleMobileAdsController?
-    ) -> MHAppRuntime.NativeAdViewBuilder? {
-        guard let controller else {
-            return nil
-        }
-
-        return { size in
-            AnyView(
-                controller.buildNativeAd(
-                    nativeAdSizeIdentifier(for: size)
-                )
-            )
-        }
-    }
-
-    private static func nativeAdSizeIdentifier(
-        for size: MHNativeAdSize
-    ) -> String {
-        switch size {
-        case .small:
-            "Small"
-        case .medium:
-            "Medium"
-        }
-    }
-
     @MainActor
     private static func makeRuntimeBootstrap(
-        runtime: MHAppRuntime,
+        configuration: MHAppConfiguration,
         routePipeline: MHAppRoutePipeline<IncomesRoute>,
         remoteConfigurationService: RemoteConfigurationService,
         notificationService: NotificationService,
         reviewFlow: MHReviewFlow
     ) -> MHAppRuntimeBootstrap {
         .init(
-            runtime: runtime,
+            configuration: configuration,
             lifecyclePlan: .init(
                 commonTasks: [
                     .init(name: "loadRemoteConfiguration") {

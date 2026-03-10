@@ -6,8 +6,7 @@
 //
 
 import Foundation
-@preconcurrency import MHLogging
-@preconcurrency import MHNotificationPayloads
+@preconcurrency import MHPlatform
 import UserNotifications
 
 extension NotificationService {

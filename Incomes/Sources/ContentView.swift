@@ -5,7 +5,7 @@
 //  Created by Hiromu Nakano on 2020/04/08.
 //
 
-import MHAppRuntimeCore
+import MHPlatform
 import SwiftUI
 
 struct ContentView {

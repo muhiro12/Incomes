@@ -14,17 +14,7 @@
 		AD71621E2E70BC5C00C4CFCE /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD71621D2E70BC5C00C4CFCE /* SwiftUI.framework */; };
 		AD71622F2E70BC5D00C4CFCE /* Widgets.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = AD71621A2E70BC5C00C4CFCE /* Widgets.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		AD7162362E70BD9F00C4CFCE /* IncomesLibrary in Frameworks */ = {isa = PBXBuildFile; productRef = AD7162352E70BD9F00C4CFCE /* IncomesLibrary */; };
-		AD7F5C102F5B3186008D91F3 /* MHAppRuntimeCore in Frameworks */ = {isa = PBXBuildFile; productRef = AD7F5C112F5B3186008D91F3 /* MHAppRuntimeCore */; };
-		AD7F5C122F5B3186008D91F3 /* MHDeepLinking in Frameworks */ = {isa = PBXBuildFile; productRef = AD7F5C132F5B3186008D91F3 /* MHDeepLinking */; };
-		AD7F5C142F5B3186008D91F3 /* MHLogging in Frameworks */ = {isa = PBXBuildFile; productRef = AD7F5C152F5B3186008D91F3 /* MHLogging */; };
-		AD7F5C162F5B3186008D91F3 /* MHMutationFlow in Frameworks */ = {isa = PBXBuildFile; productRef = AD7F5C172F5B3186008D91F3 /* MHMutationFlow */; };
-		AD7F5C182F5B3186008D91F3 /* MHNotificationPayloads in Frameworks */ = {isa = PBXBuildFile; productRef = AD7F5C192F5B3186008D91F3 /* MHNotificationPayloads */; };
-		AD7F5C1A2F5B3186008D91F3 /* MHPreferences in Frameworks */ = {isa = PBXBuildFile; productRef = AD7F5C1B2F5B3186008D91F3 /* MHPreferences */; };
-		AD7F5C1C2F5B3186008D91F3 /* MHReviewPolicy in Frameworks */ = {isa = PBXBuildFile; productRef = AD7F5C1D2F5B3186008D91F3 /* MHReviewPolicy */; };
-		AD7F5C1E2F5B3186008D91F3 /* MHRouteExecution in Frameworks */ = {isa = PBXBuildFile; productRef = AD7F5C1F2F5B3186008D91F3 /* MHRouteExecution */; };
-		ADA85F312DB6275B0047CB54 /* GoogleMobileAdsWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = ADA85F302DB6275B0047CB54 /* GoogleMobileAdsWrapper */; };
-		ADA85F342DB627730047CB54 /* LicenseListWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = ADA85F332DB627730047CB54 /* LicenseListWrapper */; };
-		ADE464F92E80212600F8EEC9 /* StoreKitWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = ADE464F82E80212600F8EEC9 /* StoreKitWrapper */; };
+		AD7F5C202F5B3186008D91F3 /* MHPlatform in Frameworks */ = {isa = PBXBuildFile; productRef = AD7F5C212F5B3186008D91F3 /* MHPlatform */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -125,18 +115,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AD7F5C102F5B3186008D91F3 /* MHAppRuntimeCore in Frameworks */,
-				AD7F5C122F5B3186008D91F3 /* MHDeepLinking in Frameworks */,
-				AD7F5C142F5B3186008D91F3 /* MHLogging in Frameworks */,
-				AD7F5C162F5B3186008D91F3 /* MHMutationFlow in Frameworks */,
-				AD7F5C182F5B3186008D91F3 /* MHNotificationPayloads in Frameworks */,
-				AD7F5C1A2F5B3186008D91F3 /* MHPreferences in Frameworks */,
-				AD7F5C1C2F5B3186008D91F3 /* MHReviewPolicy in Frameworks */,
-				AD7F5C1E2F5B3186008D91F3 /* MHRouteExecution in Frameworks */,
-				ADE464F92E80212600F8EEC9 /* StoreKitWrapper in Frameworks */,
-				ADA85F312DB6275B0047CB54 /* GoogleMobileAdsWrapper in Frameworks */,
+				AD7F5C202F5B3186008D91F3 /* MHPlatform in Frameworks */,
 				AD6C5A752E515E3000E1FBA0 /* IncomesLibrary in Frameworks */,
-				ADA85F342DB627730047CB54 /* LicenseListWrapper in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -245,18 +225,8 @@
 			);
 			name = Incomes;
 			packageProductDependencies = (
-				ADA85F302DB6275B0047CB54 /* GoogleMobileAdsWrapper */,
-				ADA85F332DB627730047CB54 /* LicenseListWrapper */,
 				AD6C5A742E515E3000E1FBA0 /* IncomesLibrary */,
-				AD7F5C112F5B3186008D91F3 /* MHAppRuntimeCore */,
-				AD7F5C132F5B3186008D91F3 /* MHDeepLinking */,
-				AD7F5C152F5B3186008D91F3 /* MHLogging */,
-				AD7F5C172F5B3186008D91F3 /* MHMutationFlow */,
-				AD7F5C192F5B3186008D91F3 /* MHNotificationPayloads */,
-				AD7F5C1B2F5B3186008D91F3 /* MHPreferences */,
-				AD7F5C1D2F5B3186008D91F3 /* MHReviewPolicy */,
-				AD7F5C1F2F5B3186008D91F3 /* MHRouteExecution */,
-				ADE464F82E80212600F8EEC9 /* StoreKitWrapper */,
+				AD7F5C212F5B3186008D91F3 /* MHPlatform */,
 			);
 			productName = Incomes;
 			productReference = ADCF36A624A1D0F40011D6F5 /* Incomes.app */;
@@ -299,11 +269,8 @@
 			);
 			mainGroup = ADCF369D24A1D0F40011D6F5;
 			packageReferences = (
-				ADA85F2F2DB6275B0047CB54 /* XCRemoteSwiftPackageReference "GoogleMobileAdsWrapper" */,
-				ADA85F322DB627730047CB54 /* XCRemoteSwiftPackageReference "LicenseListWrapper" */,
 				AD6C5A732E515E3000E1FBA0 /* XCLocalSwiftPackageReference "IncomesLibrary" */,
 				AD7F5C0C2F5B3186008D91F3 /* XCRemoteSwiftPackageReference "MHPlatform" */,
-				ADE464F72E80212500F8EEC9 /* XCRemoteSwiftPackageReference "StoreKitWrapper" */,
 			);
 			productRefGroup = ADCF36A724A1D0F40011D6F5 /* Products */;
 			projectDirPath = "";
@@ -818,30 +785,6 @@
 				kind = branch;
 			};
 		};
-		ADA85F2F2DB6275B0047CB54 /* XCRemoteSwiftPackageReference "GoogleMobileAdsWrapper" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/muhiro12/GoogleMobileAdsWrapper";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.0;
-			};
-		};
-		ADA85F322DB627730047CB54 /* XCRemoteSwiftPackageReference "LicenseListWrapper" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/muhiro12/LicenseListWrapper";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.0;
-			};
-		};
-		ADE464F72E80212500F8EEC9 /* XCRemoteSwiftPackageReference "StoreKitWrapper" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/muhiro12/StoreKitWrapper";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.0;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -857,60 +800,10 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = IncomesLibrary;
 		};
-		AD7F5C112F5B3186008D91F3 /* MHAppRuntimeCore */ = {
+		AD7F5C212F5B3186008D91F3 /* MHPlatform */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = AD7F5C0C2F5B3186008D91F3 /* XCRemoteSwiftPackageReference "MHPlatform" */;
-			productName = MHAppRuntimeCore;
-		};
-		AD7F5C132F5B3186008D91F3 /* MHDeepLinking */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = AD7F5C0C2F5B3186008D91F3 /* XCRemoteSwiftPackageReference "MHPlatform" */;
-			productName = MHDeepLinking;
-		};
-		AD7F5C152F5B3186008D91F3 /* MHLogging */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = AD7F5C0C2F5B3186008D91F3 /* XCRemoteSwiftPackageReference "MHPlatform" */;
-			productName = MHLogging;
-		};
-		AD7F5C172F5B3186008D91F3 /* MHMutationFlow */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = AD7F5C0C2F5B3186008D91F3 /* XCRemoteSwiftPackageReference "MHPlatform" */;
-			productName = MHMutationFlow;
-		};
-		AD7F5C192F5B3186008D91F3 /* MHNotificationPayloads */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = AD7F5C0C2F5B3186008D91F3 /* XCRemoteSwiftPackageReference "MHPlatform" */;
-			productName = MHNotificationPayloads;
-		};
-		AD7F5C1B2F5B3186008D91F3 /* MHPreferences */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = AD7F5C0C2F5B3186008D91F3 /* XCRemoteSwiftPackageReference "MHPlatform" */;
-			productName = MHPreferences;
-		};
-		AD7F5C1D2F5B3186008D91F3 /* MHReviewPolicy */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = AD7F5C0C2F5B3186008D91F3 /* XCRemoteSwiftPackageReference "MHPlatform" */;
-			productName = MHReviewPolicy;
-		};
-		AD7F5C1F2F5B3186008D91F3 /* MHRouteExecution */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = AD7F5C0C2F5B3186008D91F3 /* XCRemoteSwiftPackageReference "MHPlatform" */;
-			productName = MHRouteExecution;
-		};
-		ADA85F302DB6275B0047CB54 /* GoogleMobileAdsWrapper */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = ADA85F2F2DB6275B0047CB54 /* XCRemoteSwiftPackageReference "GoogleMobileAdsWrapper" */;
-			productName = GoogleMobileAdsWrapper;
-		};
-		ADA85F332DB627730047CB54 /* LicenseListWrapper */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = ADA85F322DB627730047CB54 /* XCRemoteSwiftPackageReference "LicenseListWrapper" */;
-			productName = LicenseListWrapper;
-		};
-		ADE464F82E80212600F8EEC9 /* StoreKitWrapper */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = ADE464F72E80212500F8EEC9 /* XCRemoteSwiftPackageReference "StoreKitWrapper" */;
-			productName = StoreKitWrapper;
+			productName = MHPlatform;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

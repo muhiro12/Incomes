@@ -1,5 +1,4 @@
-import MHLogging
-import MHReviewPolicy
+import MHPlatform
 
 enum IncomesReviewSupport {
     enum Context {
