@@ -21,7 +21,7 @@ struct ListItem {
 
     @State private var detents = PresentationDetent.medium
     @State private var isDeletePresented = false
-    @StateObject private var router: Router = .init()
+    @State private var route: Route?
 
     private let isItemDetailTipAnchor: Bool
     private let itemDetailTip = ItemDetailTip()
@@ -47,7 +47,7 @@ private extension ListItem {
         Button {
             detents = .medium
             tipController.donateDidOpenItemDetail()
-            router.navigate(to: .detail)
+            route = .detail
         } label: {
             Group {
                 if horizontalSizeClass == .regular {
@@ -62,13 +62,13 @@ private extension ListItem {
         .contextMenu {
             ShowItemButton {
                 detents = .large
-                router.navigate(to: .detail)
+                route = .detail
             }
             EditItemButton {
-                router.navigate(to: .edit)
+                route = .edit
             }
             DuplicateItemButton {
-                router.navigate(to: .duplicate)
+                route = .duplicate
             }
             RecalculateItemButton()
             DeleteItemButton {
@@ -79,7 +79,7 @@ private extension ListItem {
             ItemPreviewNavigationView()
                 .environment(item)
         }
-        .sheet(item: $router.route) { route in
+        .sheet(item: $route) { route in
             buildSheet(for: route)
         }
         .confirmationDialog(
@@ -111,15 +111,6 @@ private extension ListItem {
 }
 
 private extension ListItem {
-    @MainActor
-    final class Router: ObservableObject {
-        @Published var route: Route?
-
-        func navigate(to route: Route) {
-            self.route = route
-        }
-    }
-
     enum Route: String, Identifiable {
         case detail
         case edit
@@ -141,10 +132,13 @@ private extension ListItem {
                     [.medium, .large],
                     selection: $detents
                 )
+                .incomesSheetPresentation()
         case .edit:
             ItemFormNavigationView(mode: .edit)
+                .incomesSheetPresentation()
         case .duplicate:
             ItemFormNavigationView(mode: .create)
+                .incomesSheetPresentation()
         }
     }
 }

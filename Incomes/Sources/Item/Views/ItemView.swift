@@ -25,6 +25,8 @@ extension ItemView: View {
                 DeleteItemButton()
             }
         }
+        .contentMargins(.bottom, .space(.s), for: .scrollContent)
+        .toolbarRole(.editor)
         .navigationTitle(item.content)
         .toolbar {
             if isPresented {

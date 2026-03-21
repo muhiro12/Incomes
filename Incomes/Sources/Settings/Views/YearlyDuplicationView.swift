@@ -20,19 +20,6 @@ struct YearlyDuplicationView: View {
         static let menuVerticalSpacing: CGFloat = 4
     }
 
-    @MainActor
-    private final class Router: ObservableObject {
-        @Published var route: YearlyDuplicationRoute?
-
-        func navigate(to route: YearlyDuplicationRoute) {
-            self.route = route
-        }
-
-        func resetRoute() {
-            route = nil
-        }
-    }
-
     @Environment(\.modelContext)
     private var context
     @Environment(NotificationService.self)
@@ -44,7 +31,7 @@ struct YearlyDuplicationView: View {
     @State private var sourceYear = Calendar.current.component(.year, from: .now) - 1
     @State private var targetYear = Calendar.current.component(.year, from: .now)
 
-    @StateObject private var router: Router = .init()
+    @State private var route: YearlyDuplicationRoute?
     @State private var plan: YearlyItemDuplicationPlan?
     @State private var createdGroupIDs = Set<UUID>()
     @State private var resultMessage: String?
@@ -155,7 +142,9 @@ struct YearlyDuplicationView: View {
         .onChange(of: targetYear) {
             previewPlan()
         }
-        .sheet(item: $router.route) { route in
+        .contentMargins(.bottom, .space(.s), for: .scrollContent)
+        .toolbarRole(.editor)
+        .sheet(item: $route) { route in
             switch route {
             case .itemForm(let draft):
                 ItemFormNavigationView(
@@ -164,6 +153,7 @@ struct YearlyDuplicationView: View {
                 ) {
                     createdGroupIDs.insert(draft.groupID)
                 }
+                .incomesSheetPresentation()
             }
         }
         .alert(
@@ -242,7 +232,7 @@ private extension YearlyDuplicationView {
                 targetYear: targetYear
             )
             createdGroupIDs.removeAll()
-            router.resetRoute()
+            route = nil
         } catch {
             errorMessage = error.localizedDescription
         }
@@ -278,7 +268,7 @@ private extension YearlyDuplicationView {
         ) else {
             return
         }
-        router.navigate(to: .itemForm(draft))
+        route = .itemForm(draft)
     }
 
     func alignYearSelections(preserveCurrentSelection: Bool) {

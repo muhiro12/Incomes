@@ -10,21 +10,21 @@ import SwiftData
 import SwiftUI
 
 struct IncomeAndOutgoChartSection: View {
-    @Query private var items: [Item] // swiftlint:disable:this type_contents_order
+    @Query private var items: [Item]
 
-    @StateObject private var router: Router = .init() // swiftlint:disable:this type_contents_order
+    @State private var isDetailPresented = false
 
-    var body: some View { // swiftlint:disable:this type_contents_order
+    var body: some View {
         Section {
             Button {
-                router.navigate(to: .detail)
+                isDetailPresented = true
             } label: {
                 chart()
                     .frame(height: .component(.l))
                     .padding()
             }
             .buttonStyle(.plain)
-            .fullScreenCover(item: $router.route) { _ in
+            .fullScreenCover(isPresented: $isDetailPresented) {
                 NavigationStack {
                     chart()
                         .chartScrollableAxes(.horizontal)
@@ -44,25 +44,8 @@ struct IncomeAndOutgoChartSection: View {
         }
     }
 
-    init(_ descriptor: FetchDescriptor<Item>) { // swiftlint:disable:this type_contents_order
+    init(_ descriptor: FetchDescriptor<Item>) {
         _items = Query(descriptor)
-    }
-
-    @MainActor
-    private final class Router: ObservableObject {
-        @Published var route: Route?
-
-        func navigate(to route: Route) {
-            self.route = route
-        }
-    }
-
-    private enum Route: String, Identifiable {
-        case detail
-
-        var id: String {
-            rawValue
-        }
     }
 }
 

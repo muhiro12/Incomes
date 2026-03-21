@@ -33,40 +33,31 @@ struct ItemFormInputAssistView: View {
         static let rowInsetTrailing: CGFloat = 16
     }
 
-    @MainActor
-    private final class Router: ObservableObject {
-        @Published var importRoute: ImportRoute?
-
-        func navigate(to route: ImportRoute) {
-            importRoute = route
-        }
-    }
-
-    @Binding private var date: Date
-    @Binding private var content: String
-    @Binding private var income: String
-    @Binding private var outgo: String
-    @Binding private var category: String
-    @Binding private var priority: String
-
     @Environment(\.dismiss)
     private var dismiss
+    @Environment(ItemFormModel.self)
+    private var model
 
-    @State private var text: String = .empty
-    @State private var isProcessing = false
+    @State private var importRoute: ImportRoute?
+    @State private var isApplyingInference = false
     @State private var errorMessage: String?
-
     @State private var selectedItem: PhotosPickerItem?
-
-    @StateObject private var router: Router = .init()
-    @StateObject private var scanner: ImageTextScanner = .init()
+    @State private var scanner: ImageTextScanner = .init()
 
     var body: some View {
+        @Bindable var scanner = scanner
+        let isProcessing = isApplyingInference || scanner.isScanning
+
         Form {
-            recognizedTextSection
-            importSection
+            recognizedTextSection(
+                recognizedText: $scanner.recognizedText,
+                isRecognizedTextEmpty: scanner.recognizedText.isEmpty
+            )
+            importSection()
         }
         .formStyle(.grouped)
+        .contentMargins(.bottom, .space(.s), for: .scrollContent)
+        .toolbarRole(.editor)
         .navigationTitle("Text Capture")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -89,10 +80,14 @@ struct ItemFormInputAssistView: View {
                         Text("Done")
                     }
                 }
-                .disabled(text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || isProcessing)
+                .disabled(
+                    scanner.recognizedText
+                        .trimmingCharacters(in: .whitespacesAndNewlines)
+                        .isEmpty || isProcessing
+                )
             }
         }
-        .sheet(item: $router.importRoute) { route in
+        .sheet(item: $importRoute) { route in
             switch route {
             case .camera:
                 CameraPicker { image in
@@ -130,37 +125,42 @@ struct ItemFormInputAssistView: View {
             Text(errorMessage ?? .empty)
         }
     }
-
-    init(
-        date: Binding<Date>,
-        content: Binding<String>,
-        income: Binding<String>,
-        outgo: Binding<String>,
-        category: Binding<String>,
-        priority: Binding<String>
-    ) {
-        _date = date
-        _content = content
-        _income = income
-        _outgo = outgo
-        _category = category
-        _priority = priority
-    }
 }
 
 @available(iOS 26.0, *)
 private extension ItemFormInputAssistView {
-    var recognizedTextSection: some View {
+    func importSection() -> some View {
+        Section {
+            PhotosPicker(selection: $selectedItem, matching: .images) {
+                Label("Photo Library", systemImage: "photo.on.rectangle")
+            }
+            .labelStyle(.titleAndIcon)
+
+            Button {
+                importRoute = .camera
+            } label: {
+                Label("Camera", systemImage: "camera")
+            }
+            .labelStyle(.titleAndIcon)
+        } header: {
+            Text("Import")
+        }
+    }
+
+    func recognizedTextSection(
+        recognizedText: Binding<String>,
+        isRecognizedTextEmpty: Bool
+    ) -> some View {
         Section { // swiftlint:disable:this closure_body_length
             ZStack(alignment: .topLeading) {
-                if text.isEmpty {
+                if isRecognizedTextEmpty {
                     Text("Paste or capture text to extract details.")
                         .foregroundStyle(.secondary)
                         .padding(.top, Constants.placeholderTopPadding)
                         .padding(.leading, Constants.placeholderLeadingPadding)
                 }
 
-                TextEditor(text: $text)
+                TextEditor(text: recognizedText)
                     .scrollContentBackground(.hidden)
                     .frame(minHeight: Constants.textEditorMinimumHeight)
                     .padding(Constants.textEditorPadding)
@@ -192,26 +192,6 @@ private extension ItemFormInputAssistView {
         }
     }
 
-    var importSection: some View {
-        Section {
-            PhotosPicker(selection: $selectedItem, matching: .images) {
-                Label("Photo Library", systemImage: "photo.on.rectangle")
-            }
-            .labelStyle(.titleAndIcon)
-
-            Button {
-                router.navigate(to: .camera)
-            } label: {
-                Label("Camera", systemImage: "camera")
-            }
-            .labelStyle(.titleAndIcon)
-        } header: {
-            Text("Import")
-        }
-    }
-
-    // MARK: - Actions
-
     private func scanReceipt() async {
         guard let item = selectedItem else {
             return
@@ -231,42 +211,24 @@ private extension ItemFormInputAssistView {
     }
 
     private func scanImage(_ image: UIImage) async {
-        isProcessing = true
-        defer {
-            isProcessing = false
-        }
         do {
             try await scanner.scan(image)
-            text = scanner.recognizedText
         } catch {
             errorMessage = error.localizedDescription
         }
     }
 
     private func applyInferenceAndClose() async {
-        isProcessing = true
+        isApplyingInference = true
         defer {
-            isProcessing = false
+            isApplyingInference = false
         }
         do {
-            let currentInput: ItemFormInput = .init(
-                date: date,
-                content: content,
-                incomeText: income,
-                outgoText: outgo,
-                category: category,
-                priorityText: priority
-            )
             let updatedInput = try await ItemFormInferenceApplier.apply(
-                text: text,
-                currentInput: currentInput
+                text: scanner.recognizedText,
+                currentInput: model.formInputData
             )
-            date = updatedInput.date
-            content = updatedInput.content
-            income = updatedInput.incomeText
-            outgo = updatedInput.outgoText
-            category = updatedInput.category
-            priority = updatedInput.priorityText
+            model.apply(updatedInput)
             dismiss()
         } catch {
             errorMessage = error.localizedDescription
@@ -277,13 +239,7 @@ private extension ItemFormInputAssistView {
 @available(iOS 26.0, *)
 #Preview {
     NavigationStack {
-        ItemFormInputAssistView(
-            date: .constant(.now),
-            content: .constant(.empty),
-            income: .constant(.empty),
-            outgo: .constant(.empty),
-            category: .constant(.empty),
-            priority: .constant("0")
-        )
+        ItemFormInputAssistView()
+            .environment(ItemFormModel())
     }
 }

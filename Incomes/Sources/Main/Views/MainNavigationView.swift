@@ -21,7 +21,7 @@ struct MainNavigationView: View {
     @Query(.tags(.typeIs(.year), order: .reverse))
     private var yearTags: [Tag]
 
-    @StateObject private var router: MainNavigationRouter = .init()
+    @State private var router: MainNavigationRouter = .init()
 
     private var selectedYearTag: Tag? {
         guard let yearTagID = router.yearTagID else {
@@ -55,6 +55,8 @@ struct MainNavigationView: View {
     }
 
     var body: some View {
+        @Bindable var router = router
+
         NavigationSplitView(preferredCompactColumn: $router.preferredCompactColumn) { // swiftlint:disable:this closure_body_length line_length
             Group {
                 if yearTags.isEmpty {
@@ -183,12 +185,15 @@ struct MainNavigationView: View {
                     ) { route in
                         navigateFromSettings(to: route)
                     }
+                    .incomesSheetPresentation()
                 case .yearlyDuplication:
                     NavigationStack {
                         YearlyDuplicationView()
                     }
+                    .incomesSheetPresentation()
                 case .itemDetail:
                     deepLinkedItemNavigationView()
+                        .incomesSheetPresentation()
                 }
             }
         )

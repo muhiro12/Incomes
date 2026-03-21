@@ -40,6 +40,7 @@ extension ShowItemButton: View {
         .sheet(isPresented: $isDetailSheetPresented) {
             ItemNavigationView()
                 .presentationDetents([.medium, .large])
+                .incomesSheetPresentation()
         }
     }
 }

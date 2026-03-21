@@ -35,6 +35,7 @@ extension EditItemButton: View {
         }
         .sheet(isPresented: $isEditSheetPresented) {
             ItemFormNavigationView(mode: .edit)
+                .incomesSheetPresentation()
         }
     }
 }

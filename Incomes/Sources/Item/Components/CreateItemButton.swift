@@ -29,9 +29,12 @@ extension CreateItemButton: View {
                 Image(systemName: "square.and.pencil")
             }
         }
+        .buttonStyle(.borderedProminent)
+        .buttonBorderShape(.capsule)
         .popoverTip(createItemTip)
         .sheet(isPresented: $isCreateSheetPresented) {
             ItemFormNavigationView(mode: .create)
+                .incomesSheetPresentation()
         }
     }
 }

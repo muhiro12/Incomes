@@ -9,20 +9,21 @@ import SwiftData
 import SwiftUI
 
 @MainActor
-final class MainNavigationRouter: ObservableObject {
-    @Published var preferredCompactColumn: NavigationSplitViewColumn = .sidebar
-    @Published var yearTagID: Tag.ID?
-    @Published var selectedTag: Tag?
-    @Published var searchText = ""
-    @Published var predicate: ItemPredicate?
-    @Published var isSearchPresented = false
-    @Published var sheetRoute: MainNavigationSheetRoute?
-    @Published var fullScreenRoute: MainNavigationFullScreenRoute?
-    @Published var settingsDestination: SettingsNavigationDestination?
-    @Published var itemDetailID: PersistentIdentifier?
-    @Published var isYearDeleteDialogPresented = false
-    @Published var willDeleteItems: [Item] = []
-    @Published var willDeleteTags: [Tag] = []
+@Observable
+final class MainNavigationRouter {
+    var preferredCompactColumn: NavigationSplitViewColumn = .sidebar
+    var yearTagID: Tag.ID?
+    var selectedTag: Tag?
+    var searchText = ""
+    var predicate: ItemPredicate?
+    var isSearchPresented = false
+    var sheetRoute: MainNavigationSheetRoute?
+    var fullScreenRoute: MainNavigationFullScreenRoute?
+    var settingsDestination: SettingsNavigationDestination?
+    var itemDetailID: PersistentIdentifier?
+    var isYearDeleteDialogPresented = false
+    var willDeleteItems: [Item] = []
+    var willDeleteTags: [Tag] = []
 
     private var pendingRouteAfterSettingsDismissal: IncomesRoute?
 

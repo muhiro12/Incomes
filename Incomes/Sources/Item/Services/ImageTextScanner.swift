@@ -2,9 +2,10 @@ import SwiftUI
 import UIKit
 import VisionKit
 
-final class ImageTextScanner: ObservableObject {
-    @Published var recognizedText = String()
-    @Published var isScanning = false
+@Observable
+final class ImageTextScanner {
+    var recognizedText = String()
+    var isScanning = false
 
     func scan(_ image: UIImage) async throws {
         isScanning = true

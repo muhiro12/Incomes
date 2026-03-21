@@ -35,6 +35,7 @@ extension DuplicateItemButton: View {
         }
         .sheet(isPresented: $isDuplicateSheetPresented) {
             ItemFormNavigationView(mode: .create)
+                .incomesSheetPresentation()
         }
     }
 }

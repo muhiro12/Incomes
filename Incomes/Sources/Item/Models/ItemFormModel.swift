@@ -1,0 +1,185 @@
+import Foundation
+import SwiftData
+
+@Observable
+final class ItemFormModel {
+    var date: Date = .now
+    var content: String = .empty
+    var priority: String = "0"
+    var income: String = .empty
+    var outgo: String = .empty
+    var category: String = .empty
+    var repeatMonthSelections: Set<RepeatMonthSelection> = []
+    var isRepeatEnabled = false
+
+    private let hasDraft: Bool
+    private var hasAppliedInitialContext = false
+
+    init(draft: ItemFormDraft? = nil) {
+        hasDraft = draft != nil
+
+        guard let draft else {
+            return
+        }
+
+        let resolvedPriority = draft.priorityText.isEmpty ? "0" : draft.priorityText
+        date = draft.date
+        content = draft.content
+        priority = resolvedPriority
+        income = draft.incomeText
+        outgo = draft.outgoText
+        category = draft.category
+        repeatMonthSelections = draft.repeatMonthSelections
+        isRepeatEnabled = draft.isRepeatEnabled
+    }
+}
+
+extension ItemFormModel {
+    var priorityValue: Int {
+        get {
+            priority.intValue
+        }
+        set {
+            priority = "\(newValue)"
+        }
+    }
+
+    var formInputData: ItemFormInput {
+        .init(
+            date: date,
+            content: content,
+            incomeText: income,
+            outgoText: outgo,
+            category: category,
+            priorityText: priority
+        )
+    }
+
+    var isValid: Bool {
+        formInputData.isValid
+    }
+
+    var baseSelection: RepeatMonthSelection {
+        RepeatMonthSelectionRules.baseSelection(baseDate: date)
+    }
+
+    var effectiveRepeatMonthSelections: Set<RepeatMonthSelection> {
+        if isRepeatEnabled {
+            return repeatMonthSelections
+        }
+        return [baseSelection]
+    }
+
+    func applyInitialContext(
+        item: Item?,
+        tag: Tag?,
+        currentDate: Date = .now
+    ) {
+        guard !hasAppliedInitialContext else {
+            return
+        }
+
+        defer {
+            hasAppliedInitialContext = true
+        }
+
+        if hasDraft {
+            syncRepeatMonthSelectionsWithBaseDate()
+            return
+        }
+
+        if let item {
+            date = item.localDate
+            content = item.content
+            priority = "\(item.priority)"
+            income = item.income.isNotZero ? item.income.description : .empty
+            outgo = item.outgo.isNotZero ? item.outgo.description : .empty
+            category = item.category?.displayName ?? .empty
+            syncRepeatMonthSelectionsWithBaseDate()
+            return
+        }
+
+        if let tag {
+            switch tag.type {
+            case .year:
+                date = initialDate(for: tag, currentDate: currentDate)
+            case .yearMonth:
+                date = initialDate(for: tag, currentDate: currentDate)
+            case .content:
+                content = tag.name
+            case .category:
+                category = tag.name
+            case .debug:
+                break
+            case .none:
+                break
+            }
+        }
+
+        syncRepeatMonthSelectionsWithBaseDate()
+    }
+
+    func apply(_ formInput: ItemFormInput) {
+        date = formInput.date
+        content = formInput.content
+        income = formInput.incomeText
+        outgo = formInput.outgoText
+        category = formInput.category
+        priority = formInput.priorityText
+        syncRepeatMonthSelectionsWithBaseDate()
+    }
+
+    func handleDateChange() {
+        syncRepeatMonthSelectionsWithBaseDate()
+    }
+
+    func handleRepeatEnabledChange() {
+        if !isRepeatEnabled {
+            repeatMonthSelections = [baseSelection]
+        } else {
+            syncRepeatMonthSelectionsWithBaseDate()
+        }
+    }
+
+    func syncRepeatMonthSelectionsWithBaseDate() {
+        repeatMonthSelections = RepeatMonthSelectionRules.normalized(
+            repeatMonthSelections,
+            baseDate: date
+        )
+    }
+}
+
+private extension ItemFormModel {
+    func initialDate(
+        for tag: Tag,
+        currentDate: Date
+    ) -> Date {
+        let calendar = Calendar.current
+        let currentYear = calendar.component(.year, from: currentDate)
+        let currentMonth = calendar.component(.month, from: currentDate)
+
+        switch tag.type {
+        case .year:
+            guard let tagDate = TagService.date(for: tag) else {
+                return currentDate
+            }
+            let tagYear = calendar.component(.year, from: tagDate)
+            if tagYear == currentYear {
+                return currentDate
+            }
+            return tagDate
+        case .yearMonth:
+            guard let tagDate = TagService.date(for: tag) else {
+                return currentDate
+            }
+            let tagYear = calendar.component(.year, from: tagDate)
+            let tagMonth = calendar.component(.month, from: tagDate)
+            if tagYear == currentYear, tagMonth == currentMonth {
+                return currentDate
+            }
+            return tagDate
+        case .content, .category, .debug, .none:
+            return currentDate
+        }
+    }
+}
