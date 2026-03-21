@@ -5,7 +5,7 @@ import TipKit
 final class IncomesTipController {
     private(set) var isConfigured = false
 
-    func configureIfNeeded() throws {
+    func configureIfNeeded(hideAllTipsForTesting: Bool = false) throws {
         guard isConfigured == false else {
             return
         }
@@ -13,6 +13,9 @@ final class IncomesTipController {
             .displayFrequency(.immediate),
             .datastoreLocation(.applicationDefault)
         ])
+        if hideAllTipsForTesting {
+            Tips.hideAllTipsForTesting()
+        }
         isConfigured = true
     }
 

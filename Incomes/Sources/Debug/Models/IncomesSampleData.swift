@@ -12,19 +12,13 @@ struct IncomesSampleData: PreviewModifier {
     typealias Context = IncomesPlatformEnvironment
 
     static func makeSharedContext() throws -> Context {
-        let modelContainer = try IncomesPlatformEnvironmentFactory.makePreviewModelContainer()
-        let previewContext = modelContainer.mainContext
-        try? ItemService.seedSampleData(
-            context: previewContext,
-            profile: .preview,
-            ifEmptyOnly: true
-        )
-        try? BalanceCalculator.calculate(in: previewContext, after: .distantPast)
-        return MainActor.assumeIsolated {
-            IncomesPlatformEnvironmentFactory.make(
-                modelContainer: modelContainer,
-                platformMode: .preview
+        try makePreviewContext { previewContext in
+            try ItemService.seedSampleData(
+                context: previewContext,
+                profile: .preview,
+                ifEmptyOnly: true
             )
+            try BalanceCalculator.calculate(in: previewContext, after: .distantPast)
         }
     }
 
@@ -35,6 +29,20 @@ struct IncomesSampleData: PreviewModifier {
 }
 
 extension IncomesSampleData {
+    static func makePreviewContext(
+        seed: (ModelContext) throws -> Void
+    ) throws -> Context {
+        let modelContainer = try IncomesPlatformEnvironmentFactory.makePreviewModelContainer()
+        let previewContext = modelContainer.mainContext
+        try seed(previewContext)
+        return MainActor.assumeIsolated {
+            IncomesPlatformEnvironmentFactory.make(
+                modelContainer: modelContainer,
+                platformMode: .preview
+            )
+        }
+    }
+
     static func prepareData(in context: ModelContext) async {
         try? ItemService.seedSampleData(context: context, profile: .preview)
         var items = [Item]()
@@ -56,5 +64,31 @@ extension IncomesSampleData {
         let items = (try? context.fetch(.items(.all))) ?? []
         try? BalanceCalculator.calculate(in: context, for: items)
         _ = (try? context.fetch(.tags(.all))) ?? []
+    }
+
+    static func prepareDuplicateTagPreviewData(
+        in context: ModelContext
+    ) throws {
+        let previewDuplicateCount = 2
+        let duplicateCategoryName = String(localized: "Credit")
+        let items = try context.fetch(.items(.all))
+        let sourceItems = items.filter { item in
+            item.category?.name == duplicateCategoryName
+        }
+
+        guard sourceItems.count >= previewDuplicateCount else {
+            return
+        }
+
+        for item in sourceItems.prefix(previewDuplicateCount) {
+            let duplicateTag = Tag.createIgnoringDuplicates(
+                context: context,
+                name: duplicateCategoryName,
+                type: .category
+            )
+            var tags = item.tags.orEmpty
+            tags.append(duplicateTag)
+            item.modify(tags: tags)
+        }
     }
 }

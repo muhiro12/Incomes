@@ -23,6 +23,6 @@ struct DuplicateTagNavigationView: View {
     }
 }
 
-#Preview(traits: .modifier(IncomesSampleData())) {
+#Preview(traits: .modifier(IncomesDuplicateTagSampleData())) {
     DuplicateTagNavigationView()
 }

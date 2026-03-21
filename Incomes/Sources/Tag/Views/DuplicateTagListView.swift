@@ -128,6 +128,6 @@ struct DuplicateTagListView: View {
     }
 }
 
-#Preview(traits: .modifier(IncomesSampleData())) {
+#Preview(traits: .modifier(IncomesDuplicateTagSampleData())) {
     DuplicateTagListView()
 }

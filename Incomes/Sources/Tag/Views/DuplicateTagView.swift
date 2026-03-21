@@ -104,6 +104,25 @@ struct DuplicateTagView: View {
     }
 }
 
-#Preview(traits: .modifier(IncomesSampleData())) {
-    DuplicateTagNavigationView()
+#Preview(traits: .modifier(IncomesDuplicateTagSampleData())) {
+    @Previewable @Query var tags: [Tag]
+
+    NavigationStack {
+        if let duplicateTag = tags.firstDuplicatePreviewTag {
+            DuplicateTagView(duplicateTag)
+        }
+    }
+}
+
+private extension Array where Element == Tag {
+    var firstDuplicatePreviewTag: Tag? {
+        Dictionary(grouping: self) { tag in
+            tag.typeID + tag.name
+        }
+        .values
+        .first { tags in
+            tags.count > 1
+        }?
+        .first
+    }
 }

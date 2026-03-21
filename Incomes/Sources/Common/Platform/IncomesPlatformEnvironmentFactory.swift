@@ -33,7 +33,7 @@ enum IncomesPlatformEnvironmentFactory {
             routeDestination: routePipeline.inbox
         )
         let remoteConfigurationService = RemoteConfigurationService()
-        let tipController = makeTipController()
+        let tipController = makeTipController(for: platformMode)
         let reviewFlow = IncomesReviewSupport.flow(
             context: .appActivation,
             source: #fileID
@@ -113,9 +113,14 @@ enum IncomesPlatformEnvironmentFactory {
         return sources
     }
 
-    private static func makeTipController() -> IncomesTipController {
+    private static func makeTipController(
+        for platformMode: IncomesPlatformMode
+    ) -> IncomesTipController {
         let tipController = IncomesTipController()
-        configureTipControllerIfNeeded(tipController)
+        configureTipControllerIfNeeded(
+            tipController,
+            hideAllTipsForTesting: platformMode == .preview
+        )
         return tipController
     }
 
@@ -166,10 +171,13 @@ enum IncomesPlatformEnvironmentFactory {
     }
 
     private static func configureTipControllerIfNeeded(
-        _ tipController: IncomesTipController
+        _ tipController: IncomesTipController,
+        hideAllTipsForTesting: Bool
     ) {
         do {
-            try tipController.configureIfNeeded()
+            try tipController.configureIfNeeded(
+                hideAllTipsForTesting: hideAllTipsForTesting
+            )
         } catch {
             #if DEBUG
             assertionFailure(error.localizedDescription)
