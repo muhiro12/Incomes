@@ -2,7 +2,6 @@
   "sourceLanguage" : "en",
   "strings" : {
     "Check charts in ${applicationName}" : {
-      "extractionState" : "extracted_with_value",
       "localizations" : {
         "en" : {
           "stringSet" : {
@@ -121,7 +120,6 @@
       }
     },
     "Open ${applicationName}" : {
-      "extractionState" : "extracted_with_value",
       "localizations" : {
         "en" : {
           "stringSet" : {
@@ -181,7 +179,6 @@
       }
     },
     "Show items in ${applicationName}" : {
-      "extractionState" : "extracted_with_value",
       "localizations" : {
         "en" : {
           "stringSet" : {
@@ -241,7 +238,6 @@
       }
     },
     "What did I do last in ${applicationName}" : {
-      "extractionState" : "extracted_with_value",
       "localizations" : {
         "en" : {
           "stringSet" : {
@@ -301,7 +297,6 @@
       }
     },
     "What did I record recently in ${applicationName}" : {
-      "extractionState" : "extracted_with_value",
       "localizations" : {
         "en" : {
           "stringSet" : {
@@ -361,7 +356,6 @@
       }
     },
     "What’s coming up in ${applicationName}" : {
-      "extractionState" : "extracted_with_value",
       "localizations" : {
         "en" : {
           "stringSet" : {
@@ -421,7 +415,6 @@
       }
     },
     "What’s next in ${applicationName}" : {
-      "extractionState" : "extracted_with_value",
       "localizations" : {
         "en" : {
           "stringSet" : {
