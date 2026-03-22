@@ -1,4 +1,4 @@
-import MHPlatform
+import MHPreferences
 
 public enum BoolAppStorageKey: String, MHBoolPreferenceKeyRepresentable {
     case isSubscribeOn = "a018f613"

@@ -5,7 +5,7 @@
 //  Created by Hiromu Nakano on 2021/12/28.
 //
 
-import MHPlatform
+import MHPreferences
 import SwiftUI
 
 public enum StringAppStorageKey: String, MHStringPreferenceKeyRepresentable {

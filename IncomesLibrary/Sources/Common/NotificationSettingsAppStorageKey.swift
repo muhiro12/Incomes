@@ -1,4 +1,4 @@
-import MHPlatform
+import MHPreferences
 
 public enum NotificationSettingsAppStorageKey: String, MHStringPreferenceKeyRepresentable {
     case notificationSettings = "A3b9Z1xQ"

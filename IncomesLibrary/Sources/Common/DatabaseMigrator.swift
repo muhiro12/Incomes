@@ -1,5 +1,5 @@
 import Foundation
-import MHPlatform
+import MHPersistenceMaintenance
 
 /// Migrates legacy database files into the shared store location.
 public enum DatabaseMigrator {

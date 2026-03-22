@@ -1,4 +1,4 @@
-import MHPlatform
+import MHPreferences
 import SwiftData
 import SwiftUI
 
