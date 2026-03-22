@@ -22,6 +22,7 @@ struct UpdateItemIntent: AppIntent {
     private var scope: ItemMutationScopeIntentValue // swiftlint:disable:this type_contents_order
 
     @Dependency private var modelContainer: ModelContainer // swiftlint:disable:this type_contents_order
+    @Dependency private var notificationService: NotificationService // swiftlint:disable:this type_contents_order
 
     static let title: LocalizedStringResource = .init("Update Item", table: "AppIntents")
     static let isDiscoverable = false
@@ -38,7 +39,7 @@ struct UpdateItemIntent: AppIntent {
     }
 
     @MainActor
-    func perform() throws -> some ReturnsValue<ItemEntity> {
+    func perform() async throws -> some ReturnsValue<ItemEntity> {
         try validateFormInput()
 
         let currencyCode = AppStorage(
@@ -59,15 +60,13 @@ struct UpdateItemIntent: AppIntent {
         }
 
         let model = try item.model(in: modelContainer.mainContext)
-        try ItemService.update(
+        let entity = try await UpdateItemIntentMutationPerformer.perform(
             context: modelContainer.mainContext,
             item: model,
             input: formInput,
-            scope: scope.scope
+            scope: scope.scope,
+            notificationService: notificationService
         )
-        guard let entity = ItemEntity(model) else {
-            throw ItemError.entityConversionFailed
-        }
         return .result(value: entity)
     }
 }
