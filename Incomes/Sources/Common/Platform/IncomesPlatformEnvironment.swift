@@ -3,6 +3,7 @@ import SwiftData
 import SwiftUI
 
 typealias IncomesRouteInbox = MHObservableRouteInbox<IncomesRoute>
+typealias IncomesRoutePipeline = MHAppRoutePipeline<IncomesRoute>
 
 struct IncomesPlatformEnvironment {
     let modelContainer: ModelContainer
@@ -10,6 +11,7 @@ struct IncomesPlatformEnvironment {
     let remoteConfigurationService: RemoteConfigurationService
     let tipController: IncomesTipController
     let routeInbox: IncomesRouteInbox
+    let routePipeline: IncomesRoutePipeline
     let runtimeBootstrap: MHAppRuntimeBootstrap
 }
 
@@ -36,5 +38,6 @@ extension View {
             .environment(environment.remoteConfigurationService)
             .environment(environment.tipController)
             .environment(environment.routeInbox)
+            .environment(environment.routePipeline)
     }
 }

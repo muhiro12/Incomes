@@ -45,6 +45,7 @@ enum IncomesPlatformEnvironmentFactory {
             remoteConfigurationService: remoteConfigurationService,
             tipController: tipController,
             routeInbox: routeInbox,
+            routePipeline: routePipeline,
             runtimeBootstrap: makeRuntimeBootstrap(
                 configuration: makeAppConfiguration(for: platformMode),
                 routePipeline: routePipeline,

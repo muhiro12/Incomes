@@ -13,6 +13,8 @@ struct ContentView {
     private var remoteConfigurationService
     @Environment(MHAppRuntime.self)
     private var appRuntime
+    @Environment(IncomesRoutePipeline.self)
+    private var routePipeline
 
     @AppStorage(BoolAppStorageKey.isSubscribeOn)
     private var isSubscribeOn
@@ -25,6 +27,17 @@ struct ContentView {
 extension ContentView: View {
     var body: some View {
         MainNavigationView()
+            .alert(
+                "Invalid Link",
+                isPresented: invalidDeepLinkAlertBinding,
+                presenting: routePipeline.lastParseFailureURL
+            ) { _ in
+                Button("OK", role: .cancel) {
+                    routePipeline.clearLastParseFailure()
+                }
+            } message: { invalidURL in
+                Text("Incomes could not open \(invalidURL.absoluteString)")
+            }
             .alert("Update Required", isPresented: isUpdateRequiredBinding) {
                 Button("Open App Store") {
                     if let appStoreURL = URL(
@@ -49,6 +62,19 @@ extension ContentView: View {
 }
 
 private extension ContentView {
+    var invalidDeepLinkAlertBinding: Binding<Bool> {
+        .init(
+            get: {
+                routePipeline.lastParseFailureURL != nil
+            },
+            set: { isPresented in
+                if !isPresented {
+                    routePipeline.clearLastParseFailure()
+                }
+            }
+        )
+    }
+
     var isUpdateRequiredBinding: Binding<Bool> {
         .init(
             get: {

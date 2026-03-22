@@ -19,27 +19,19 @@ enum IncomesMutationWorkflow {
             IncomesWidgetReloader.reloadAllWidgets()
         }
     ) -> MHMutationAdapter<Set<MutationOutcome.FollowUpHint>> {
-        .init { followUpHints in
-            var steps = [MHMutationStep]()
-
+        .build { followUpHints in
             if followUpHints.contains(.refreshNotificationSchedule) {
-                steps.append(
-                    .mainActor(name: "refreshNotificationSchedule") {
-                        await refreshNotificationSchedule()
-                    }
-                )
+                MHMutationStep.mainActor(name: "refreshNotificationSchedule") {
+                    await refreshNotificationSchedule()
+                }
             }
 
             if followUpHints.contains(.reloadWidgets) {
-                steps.append(
-                    .mainActor(
-                        name: "reloadWidgets",
-                        action: reloadWidgets
-                    )
+                MHMutationStep.mainActor(
+                    name: "reloadWidgets",
+                    action: reloadWidgets
                 )
             }
-
-            return steps
         }
     }
 }
