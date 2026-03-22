@@ -1,12 +1,10 @@
-import MHPlatform
+import LicenseList
 import SwiftUI
 
 struct LicenseView: View {
-    @Environment(MHAppRuntime.self)
-    private var appRuntime
-
     var body: some View {
-        appRuntime.licensesView()
+        LicenseList.LicenseListView()
+            .licenseViewStyle(.withRepositoryAnchorLink)
             .navigationTitle("License")
     }
 }

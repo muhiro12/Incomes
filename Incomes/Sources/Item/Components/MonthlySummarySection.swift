@@ -6,7 +6,6 @@
 //
 
 import FoundationModels
-import MHPlatform
 import SwiftData
 import SwiftUI
 

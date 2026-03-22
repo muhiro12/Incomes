@@ -1,18 +1,27 @@
 import Foundation
-import MHPlatform
 
 enum IncomesIntentRouteStore {
     private static let pendingDeepLinkURLKey = "pendingIntentDeepLinkURL"
-    private static let deepLinkStore = MHDeepLinkStore(
-        suiteName: AppGroup.id,
-        key: pendingDeepLinkURLKey
-    )
-
-    static var source: MHDeepLinkStore? {
-        deepLinkStore
-    }
 
     static func store(_ url: URL) {
-        deepLinkStore?.ingest(url)
+        guard let userDefaults = UserDefaults(suiteName: AppGroup.id) else {
+            return
+        }
+        userDefaults.set(url.absoluteString, forKey: pendingDeepLinkURLKey)
+    }
+
+    static func consume() -> URL? {
+        guard let userDefaults = UserDefaults(suiteName: AppGroup.id) else {
+            return nil
+        }
+        defer {
+            userDefaults.removeObject(forKey: pendingDeepLinkURLKey)
+        }
+        guard let deepLinkURLString = userDefaults.string(
+            forKey: pendingDeepLinkURLKey
+        ) else {
+            return nil
+        }
+        return .init(string: deepLinkURLString)
     }
 }

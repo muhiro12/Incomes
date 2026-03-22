@@ -5,7 +5,7 @@
 //  Created by Hiromu Nakano on 2022/01/17.
 //
 
-import MHPlatform
+import GoogleMobileAdsWrapper
 import SwiftUI
 
 struct AdvertisementSection {
@@ -14,8 +14,8 @@ struct AdvertisementSection {
         case medium = "Medium"
     }
 
-    @Environment(MHAppRuntime.self)
-    private var appRuntime
+    @Environment(GoogleMobileAdsController.self)
+    private var googleMobileAdsController
 
     private let size: Size
 
@@ -27,20 +27,9 @@ struct AdvertisementSection {
 extension AdvertisementSection: View {
     var body: some View {
         Section {
-            appRuntime.nativeAdView(size: size.runtimeSize)
+            googleMobileAdsController.buildNativeAd(size.rawValue)
                 .frame(maxWidth: .infinity)
                 .padding(.space(.s))
-        }
-    }
-}
-
-private extension AdvertisementSection.Size {
-    var runtimeSize: MHNativeAdSize {
-        switch self {
-        case .small:
-            .small
-        case .medium:
-            .medium
         }
     }
 }

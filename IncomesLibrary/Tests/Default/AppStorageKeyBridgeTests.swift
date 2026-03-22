@@ -3,30 +3,23 @@ import Testing
 
 @Suite("AppStorage key bridge")
 struct AppStorageKeyBridgeTests {
-    @Test("Bool key bridge preserves the legacy storage key")
-    func boolKeyBridgePreservesLegacyStorageKey() {
-        let storageKey = BoolAppStorageKey.isSubscribeOn.preferenceKey.storageKey
-
-        #expect(
-            storageKey == BoolAppStorageKey.isSubscribeOn.rawValue
-        )
+    @Test("Bool keys preserve legacy raw values")
+    func boolKeysPreserveLegacyRawValues() {
+        #expect(BoolAppStorageKey.isSubscribeOn.rawValue == "a018f613")
+        #expect(BoolAppStorageKey.isICloudOn.rawValue == "X7b9C4tZ")
+        #expect(BoolAppStorageKey.isDebugOn.rawValue == "a1B2c3D4")
     }
 
-    @Test("String key bridge preserves the legacy storage key")
-    func stringKeyBridgePreservesLegacyStorageKey() {
-        let storageKey = StringAppStorageKey.currencyCode.preferenceKey.storageKey
-
-        #expect(
-            storageKey == StringAppStorageKey.currencyCode.rawValue
-        )
+    @Test("String keys preserve legacy raw values")
+    func stringKeysPreserveLegacyRawValues() {
+        #expect(StringAppStorageKey.currencyCode.rawValue == "R8k2Z3tL")
+        #expect(StringAppStorageKey.lastLaunchedAppVersion.rawValue == "j4N7v2Qk")
     }
 
-    @Test("Notification settings key bridge preserves the legacy storage key")
-    func notificationSettingsKeyBridgePreservesLegacyStorageKey() {
-        let storageKey = NotificationSettingsAppStorageKey.notificationSettings.preferenceKey.storageKey
-
+    @Test("Notification settings key preserves legacy raw value")
+    func notificationSettingsKeyPreservesLegacyRawValue() {
         #expect(
-            storageKey == NotificationSettingsAppStorageKey.notificationSettings.rawValue
+            NotificationSettingsAppStorageKey.notificationSettings.rawValue == "A3b9Z1xQ"
         )
     }
 }

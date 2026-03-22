@@ -1,22 +1,8 @@
 import Foundation
-import MHPlatform
 import SwiftData
 
 /// Shared maintenance operations that mutate stored data without any UI concerns.
 public enum DataMaintenanceService {
-    @MainActor
-    private final class ResetContextBox: @unchecked Sendable {
-        let context: ModelContext
-
-        init(context: ModelContext) {
-            self.context = context
-        }
-
-        func deleteAllData() throws {
-            try DataMaintenanceService.deleteAllData(context: context)
-        }
-    }
-
     /// Deletes all items and tags from the store.
     public static func deleteAllData(context: ModelContext) throws {
         try ItemService.deleteAll(context: context)
@@ -26,18 +12,8 @@ public enum DataMaintenanceService {
     /// Deletes all stored data through the shared reset orchestration flow.
     @preconcurrency
     @MainActor
-    public static func resetAllData(context: ModelContext) async throws {
-        let resetContext = ResetContextBox(context: context)
-
-        _ = try await MHDestructiveResetService.runThrowing(
-            steps: [
-                .init(name: "deleteAllData") {
-                    try await MainActor.run {
-                        try resetContext.deleteAllData()
-                    }
-                }
-            ]
-        )
+    public static func resetAllData(context: ModelContext) throws {
+        try deleteAllData(context: context)
     }
 
     /// Deletes tutorial/debug sample data from the store.

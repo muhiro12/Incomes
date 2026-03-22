@@ -1,5 +1,4 @@
 import Foundation
-@preconcurrency import MHPlatform
 
 enum NotificationRoutePayload {
     private enum Key {
@@ -16,37 +15,48 @@ enum NotificationRoutePayload {
 
     static let viewMonthActionIdentifier = "upcoming-payment.view-month"
 
-    static let codec: MHNotificationPayloadCodec = .init(
-        configuration: .init(
-            keys: .init(
-                defaultRouteURL: Key.primaryDeepLinkURL,
-                fallbackRouteURL: Key.secondaryDeepLinkURL,
-                actionRouteURLs: Key.actionRouteURLs
-            ),
-            decodableMetadataKeys: [
-                Key.itemIdentifier,
-                Key.notificationKind
-            ]
-        )
-    )
-
     static func userInfo(
         for presentation: UpcomingPaymentNotificationPresentation
     ) -> [AnyHashable: Any] {
-        codec.encode(
-            .init(
-                routes: .init(
-                    defaultRouteURL: presentation.primaryRouteURL,
-                    fallbackRouteURL: presentation.secondaryRouteURL,
-                    actionRouteURLs: [
-                        viewMonthActionIdentifier: presentation.secondaryRouteURL
-                    ]
-                ),
-                metadata: [
-                    Key.itemIdentifier: presentation.targetContentIdentifier,
-                    Key.notificationKind: NotificationKind.upcomingPayment
-                ]
-            )
+        [
+            Key.itemIdentifier: presentation.targetContentIdentifier,
+            Key.notificationKind: NotificationKind.upcomingPayment,
+            Key.primaryDeepLinkURL: presentation.primaryRouteURL.absoluteString,
+            Key.secondaryDeepLinkURL: presentation.secondaryRouteURL.absoluteString,
+            Key.actionRouteURLs: [
+                viewMonthActionIdentifier: presentation.secondaryRouteURL.absoluteString
+            ]
+        ]
+    }
+
+    static func deepLinkURL(
+        userInfo: [AnyHashable: Any],
+        actionIdentifier: String
+    ) -> URL? {
+        if let actionRouteURL = actionRouteURL(
+            userInfo: userInfo,
+            actionIdentifier: actionIdentifier
+        ) {
+            return actionRouteURL
+        }
+
+        if let primaryURL = deepLinkURL(
+            from: userInfo,
+            key: Key.primaryDeepLinkURL
+        ) {
+            return primaryURL
+        }
+
+        if let legacyFallbackRouteURL = legacyFallbackRouteURL(
+            userInfo: userInfo,
+            actionIdentifier: actionIdentifier
+        ) {
+            return legacyFallbackRouteURL
+        }
+
+        return deepLinkURL(
+            from: userInfo,
+            key: Key.secondaryDeepLinkURL
         )
     }
 
@@ -59,21 +69,47 @@ enum NotificationRoutePayload {
             return nil
         }
 
-        return legacyDeepLinkURL(
+        return deepLinkURL(
             from: userInfo,
             key: Key.secondaryDeepLinkURL
         )
     }
+}
 
-    private static func legacyDeepLinkURL(
+private extension NotificationRoutePayload {
+    static func actionRouteURL(
+        userInfo: [AnyHashable: Any],
+        actionIdentifier: String
+    ) -> URL? {
+        if let actionRouteURLs = userInfo[Key.actionRouteURLs] as? [String: Any],
+           let value = actionRouteURLs[actionIdentifier] {
+            return deepLinkURL(from: value)
+        }
+
+        if let actionRouteURLs = userInfo[Key.actionRouteURLs] as? [AnyHashable: Any],
+           let value = actionRouteURLs[actionIdentifier] {
+            return deepLinkURL(from: value)
+        }
+
+        return nil
+    }
+
+    static func deepLinkURL(
         from userInfo: [AnyHashable: Any],
         key: String
     ) -> URL? {
-        if let deepLinkURLString = userInfo[key] as? String {
+        guard let value = userInfo[key] else {
+            return nil
+        }
+        return deepLinkURL(from: value)
+    }
+
+    static func deepLinkURL(from value: Any) -> URL? {
+        if let deepLinkURLString = value as? String {
             return URL(string: deepLinkURLString)
         }
 
-        if let deepLinkURL = userInfo[key] as? URL {
+        if let deepLinkURL = value as? URL {
             return deepLinkURL
         }
 

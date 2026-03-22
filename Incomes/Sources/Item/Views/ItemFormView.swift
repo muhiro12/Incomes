@@ -6,7 +6,6 @@
 //  Created by Hiromu Nakano on 2020/04/10.
 //
 
-import MHPlatform
 import SwiftData
 import SwiftUI
 import TipKit
@@ -41,6 +40,8 @@ struct ItemFormView: View {
     private var tag: Tag?
     @Environment(\.dismiss)
     private var dismiss
+    @Environment(\.requestReview)
+    private var requestReview
     @Environment(IncomesTipController.self)
     private var tipController
     @Environment(NotificationService.self)
@@ -313,6 +314,7 @@ private extension ItemFormView {
             case .requiresScopeSelection:
                 presentToRepeatingDialog()
             case .didSave:
+                requestItemMutationReviewIfNeeded()
                 dismiss()
             }
         } catch {
@@ -333,10 +335,11 @@ private extension ItemFormView {
                 formInputData: model.formInputData,
                 notificationService: notificationService
             )
+            requestItemMutationReviewIfNeeded()
+            dismiss()
         } catch {
             assertionFailure(error.localizedDescription)
         }
-        dismiss()
     }
 
     func saveForFutureItems() async {
@@ -352,10 +355,11 @@ private extension ItemFormView {
                 formInputData: model.formInputData,
                 notificationService: notificationService
             )
+            requestItemMutationReviewIfNeeded()
+            dismiss()
         } catch {
             assertionFailure(error.localizedDescription)
         }
-        dismiss()
     }
 
     func saveForAllItems() async {
@@ -371,10 +375,11 @@ private extension ItemFormView {
                 formInputData: model.formInputData,
                 notificationService: notificationService
             )
+            requestItemMutationReviewIfNeeded()
+            dismiss()
         } catch {
             assertionFailure(error.localizedDescription)
         }
-        dismiss()
     }
 
     func create() async {
@@ -390,10 +395,11 @@ private extension ItemFormView {
                 notificationService: notificationService
             )
             onCreate?()
+            requestItemMutationReviewIfNeeded()
+            dismiss()
         } catch {
             assertionFailure(error.localizedDescription)
         }
-        dismiss()
     }
 
     func cancel() {
@@ -407,6 +413,20 @@ private extension ItemFormView {
 
     func presentToRepeatingDialog() {
         dialogRoute = .repeating
+    }
+
+    func requestItemMutationReviewIfNeeded() {
+        guard ReviewRequestPolicy.shouldRequestReview(
+            randomValue: Int.random(in: 0..<5), // swiftlint:disable:this no_magic_numbers
+            maxExclusive: 5 // swiftlint:disable:this no_magic_numbers
+        ) else {
+            return
+        }
+
+        Task {
+            try? await Task.sleep(for: .seconds(2)) // swiftlint:disable:this no_magic_numbers
+            requestReview()
+        }
     }
 
     func isDialogPresented(_ route: DialogRoute) -> Binding<Bool> {

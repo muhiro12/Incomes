@@ -5,7 +5,6 @@
 //  Created by Hiromu Nakano on 2024/05/31.
 //
 
-@preconcurrency import MHPlatform
 import SwiftData
 import SwiftUI
 import UserNotifications
@@ -28,18 +27,14 @@ final class NotificationService: NSObject {
     }
 
     private let modelContainer: ModelContainer
-    let routeDestination: any MHDeepLinkURLDestination
 
     private(set) var hasNotification = false
     private(set) var shouldShowNotification = false
+    private(set) var pendingDeepLinkURL: URL?
     private(set) var authorizationState: AuthorizationState = .notDetermined
 
-    init(
-        modelContainer: ModelContainer,
-        routeDestination: any MHDeepLinkURLDestination
-    ) {
+    init(modelContainer: ModelContainer) {
         self.modelContainer = modelContainer
-        self.routeDestination = routeDestination
         super.init()
         UNUserNotificationCenter.current().delegate = self
         registerNotificationCategories()
@@ -47,25 +42,21 @@ final class NotificationService: NSObject {
 
     func register() async {
         let center = UNUserNotificationCenter.current()
-        let requests = buildUpcomingPaymentReminders()
-        let matcher = MHNotificationIdentifierMatcher(
-            prefixes: [
-                UpcomingPaymentNotificationPresentation.requestIdentifierPrefix,
-                UpcomingPaymentNotificationPresentation.previewRequestIdentifierPrefix
-            ]
-        )
 
-        let status = await MHNotificationOrchestrator.requestAuthorizationIfNeeded(
-            center: center,
+        _ = try? await center.requestAuthorization(
             options: [.badge, .sound, .alert, .carPlay, .providesAppNotificationSettings]
         )
-        authorizationState = .init(status: status)
 
-        _ = await MHNotificationOrchestrator.replaceManagedPendingRequests(
-            center: center,
-            requests: requests,
-            matcher: matcher
-        )
+        await refreshAuthorizationStatus()
+
+        let pendingIdentifiers = await pendingNotificationIdentifiers()
+        if pendingIdentifiers.isNotEmpty {
+            center.removePendingNotificationRequests(withIdentifiers: pendingIdentifiers)
+        }
+
+        for request in buildUpcomingPaymentReminders() {
+            try? await center.add(request)
+        }
     }
 
     func update() async {
@@ -86,11 +77,18 @@ final class NotificationService: NSObject {
 
         hasNotification = false
         shouldShowNotification = false
+        pendingDeepLinkURL = nil
     }
 
     func refreshAuthorizationStatus() async {
         let settings = await UNUserNotificationCenter.current().notificationSettings()
         authorizationState = .init(status: settings.authorizationStatus)
+    }
+
+    func consumePendingDeepLinkURL() -> URL? {
+        let deepLinkURL = pendingDeepLinkURL
+        pendingDeepLinkURL = nil
+        return deepLinkURL
     }
 
     func sendTestNotification() {
@@ -139,41 +137,44 @@ extension NotificationService: UNUserNotificationCenterDelegate {
                                 didReceive response: UNNotificationResponse) async { // swiftlint:disable:this async_without_await line_length
         Task {
             shouldShowNotification = true
-            await deliverNotificationRoute(from: response)
+            pendingDeepLinkURL = NotificationRoutePayload.deepLinkURL(
+                userInfo: response.notification.request.content.userInfo,
+                actionIdentifier: response.actionIdentifier
+            )
         }
     }
 
     func userNotificationCenter(_: UNUserNotificationCenter,
                                 openSettingsFor _: UNNotification?) {
         Task {
-            notificationLogger.info("notification settings route requested")
-            await routeDestination.setPendingURL(
-                IncomesDeepLinkURLBuilder.preferredURL(for: .settings)
-            )
+            pendingDeepLinkURL = IncomesDeepLinkURLBuilder.preferredURL(for: .settings)
         }
     }
 }
 
 private extension NotificationService {
     func registerNotificationCategories() {
-        MHNotificationOrchestrator.registerCategories(
-            [
-                .init(
-                    identifier: NotificationCategoryIdentifier.upcomingPaymentActions,
-                    actions: [
-                        .init(
-                            identifier: NotificationActionIdentifier.viewItem,
-                            title: String(localized: "View Item")
-                        ),
-                        .init(
-                            identifier: NotificationActionIdentifier.viewMonth,
-                            title: String(localized: "View Month")
-                        )
-                    ]
-                )
-            ],
-            center: UNUserNotificationCenter.current()
-        )
+        let categories: Set<UNNotificationCategory> = [
+            .init(
+                identifier: NotificationCategoryIdentifier.upcomingPaymentActions,
+                actions: [
+                    .init(
+                        identifier: NotificationActionIdentifier.viewItem,
+                        title: String(localized: "View Item"),
+                        options: [.foreground]
+                    ),
+                    .init(
+                        identifier: NotificationActionIdentifier.viewMonth,
+                        title: String(localized: "View Month"),
+                        options: [.foreground]
+                    )
+                ],
+                intentIdentifiers: [],
+                options: []
+            )
+        ]
+
+        UNUserNotificationCenter.current().setNotificationCategories(categories)
     }
 
     func buildNotificationRequest(
@@ -262,6 +263,12 @@ private extension NotificationService {
         case .active:
             return .active
         }
+    }
+
+    func pendingNotificationIdentifiers() async -> [String] {
+        await UNUserNotificationCenter.current().pendingNotificationRequests() // swiftlint:disable:this line_length multiline_function_chains
+            .map(\.identifier)
+            .filter(isManagedNotificationIdentifier)
     }
 
     func deliveredNotificationIdentifiers() async -> [String] {

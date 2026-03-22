@@ -14,8 +14,9 @@
 		AD71621E2E70BC5C00C4CFCE /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD71621D2E70BC5C00C4CFCE /* SwiftUI.framework */; };
 		AD71622F2E70BC5D00C4CFCE /* Widgets.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = AD71621A2E70BC5C00C4CFCE /* Widgets.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		AD7162362E70BD9F00C4CFCE /* IncomesLibrary in Frameworks */ = {isa = PBXBuildFile; productRef = AD7162352E70BD9F00C4CFCE /* IncomesLibrary */; };
-		AD7F5C202F5B3186008D91F3 /* MHPlatform in Frameworks */ = {isa = PBXBuildFile; productRef = AD7F5C212F5B3186008D91F3 /* MHPlatform */; };
-		AD7F5C232F5B3186008D91F3 /* MHPlatform in Frameworks */ = {isa = PBXBuildFile; productRef = AD7F5C222F5B3186008D91F3 /* MHPlatform */; };
+		ADA85F312DB6275B0047CB54 /* GoogleMobileAdsWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = ADA85F302DB6275B0047CB54 /* GoogleMobileAdsWrapper */; };
+		ADA85F342DB627730047CB54 /* LicenseList in Frameworks */ = {isa = PBXBuildFile; productRef = ADA85F332DB627730047CB54 /* LicenseList */; };
+		ADE464F92E80212600F8EEC9 /* StoreKitWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = ADE464F82E80212600F8EEC9 /* StoreKitWrapper */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -99,7 +100,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				AD6DB6E32E779C5400E5BB78 /* IncomesLibrary in Frameworks */,
-				AD7F5C232F5B3186008D91F3 /* MHPlatform in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -117,8 +117,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AD7F5C202F5B3186008D91F3 /* MHPlatform in Frameworks */,
+				ADE464F92E80212600F8EEC9 /* StoreKitWrapper in Frameworks */,
+				ADA85F312DB6275B0047CB54 /* GoogleMobileAdsWrapper in Frameworks */,
 				AD6C5A752E515E3000E1FBA0 /* IncomesLibrary in Frameworks */,
+				ADA85F342DB627730047CB54 /* LicenseList in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -178,7 +180,6 @@
 			name = Watch;
 			packageProductDependencies = (
 				AD6DB6E22E779C5400E5BB78 /* IncomesLibrary */,
-				AD7F5C222F5B3186008D91F3 /* MHPlatform */,
 			);
 			productName = "Incomes (Watch) Watch App";
 			productReference = AD6DB6D22E779B2B00E5BB78 /* Watch.app */;
@@ -228,8 +229,10 @@
 			);
 			name = Incomes;
 			packageProductDependencies = (
+				ADA85F302DB6275B0047CB54 /* GoogleMobileAdsWrapper */,
+				ADA85F332DB627730047CB54 /* LicenseList */,
 				AD6C5A742E515E3000E1FBA0 /* IncomesLibrary */,
-				AD7F5C212F5B3186008D91F3 /* MHPlatform */,
+				ADE464F82E80212600F8EEC9 /* StoreKitWrapper */,
 			);
 			productName = Incomes;
 			productReference = ADCF36A624A1D0F40011D6F5 /* Incomes.app */;
@@ -272,8 +275,10 @@
 			);
 			mainGroup = ADCF369D24A1D0F40011D6F5;
 			packageReferences = (
+				ADA85F2F2DB6275B0047CB54 /* XCRemoteSwiftPackageReference "GoogleMobileAdsWrapper" */,
+				ADA85F322DB627730047CB54 /* XCRemoteSwiftPackageReference "LicenseList" */,
 				AD6C5A732E515E3000E1FBA0 /* XCLocalSwiftPackageReference "IncomesLibrary" */,
-				AD7F5C0C2F5B3186008D91F3 /* XCRemoteSwiftPackageReference "MHPlatform" */,
+				ADE464F72E80212500F8EEC9 /* XCRemoteSwiftPackageReference "StoreKitWrapper" */,
 			);
 			productRefGroup = ADCF36A724A1D0F40011D6F5 /* Products */;
 			projectDirPath = "";
@@ -780,12 +785,28 @@
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		AD7F5C0C2F5B3186008D91F3 /* XCRemoteSwiftPackageReference "MHPlatform" */ = {
+		ADA85F2F2DB6275B0047CB54 /* XCRemoteSwiftPackageReference "GoogleMobileAdsWrapper" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/muhiro12/MHPlatform.git";
+			repositoryURL = "https://github.com/muhiro12/GoogleMobileAdsWrapper";
 			requirement = {
-				branch = main;
-				kind = branch;
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.3.0;
+			};
+		};
+		ADA85F322DB627730047CB54 /* XCRemoteSwiftPackageReference "LicenseList" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/cybozu/LicenseList.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.2.0;
+			};
+		};
+		ADE464F72E80212500F8EEC9 /* XCRemoteSwiftPackageReference "StoreKitWrapper" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/muhiro12/StoreKitWrapper";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.2.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
@@ -803,15 +824,20 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = IncomesLibrary;
 		};
-		AD7F5C212F5B3186008D91F3 /* MHPlatform */ = {
+		ADA85F302DB6275B0047CB54 /* GoogleMobileAdsWrapper */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = AD7F5C0C2F5B3186008D91F3 /* XCRemoteSwiftPackageReference "MHPlatform" */;
-			productName = MHPlatform;
+			package = ADA85F2F2DB6275B0047CB54 /* XCRemoteSwiftPackageReference "GoogleMobileAdsWrapper" */;
+			productName = GoogleMobileAdsWrapper;
 		};
-		AD7F5C222F5B3186008D91F3 /* MHPlatform */ = {
+		ADA85F332DB627730047CB54 /* LicenseList */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = AD7F5C0C2F5B3186008D91F3 /* XCRemoteSwiftPackageReference "MHPlatform" */;
-			productName = MHPlatform;
+			package = ADA85F322DB627730047CB54 /* XCRemoteSwiftPackageReference "LicenseList" */;
+			productName = LicenseList;
+		};
+		ADE464F82E80212600F8EEC9 /* StoreKitWrapper */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = ADE464F72E80212500F8EEC9 /* XCRemoteSwiftPackageReference "StoreKitWrapper" */;
+			productName = StoreKitWrapper;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

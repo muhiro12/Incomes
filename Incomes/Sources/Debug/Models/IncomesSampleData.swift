@@ -5,11 +5,20 @@
 //  Created by Hiromu Nakano on 2024/06/17.
 //
 
+import GoogleMobileAdsWrapper
+import StoreKitWrapper
 import SwiftData
 import SwiftUI
 
 struct IncomesSampleData: PreviewModifier {
-    typealias Context = IncomesPlatformEnvironment
+    struct Context {
+        let modelContainer: ModelContainer
+        let notificationService: NotificationService
+        let remoteConfigurationService: RemoteConfigurationService
+        let tipController: IncomesTipController
+        let store: Store
+        let googleMobileAdsController: GoogleMobileAdsController
+    }
 
     static func makeSharedContext() throws -> Context {
         try makePreviewContext { previewContext in
@@ -24,7 +33,12 @@ struct IncomesSampleData: PreviewModifier {
 
     func body(content: Content, context: Context) -> some View {
         content
-            .incomesPreviewPlatformEnvironment(context)
+            .modelContainer(context.modelContainer)
+            .environment(context.notificationService)
+            .environment(context.remoteConfigurationService)
+            .environment(context.tipController)
+            .environment(context.store)
+            .environment(context.googleMobileAdsController)
     }
 }
 
@@ -32,15 +46,30 @@ extension IncomesSampleData {
     static func makePreviewContext(
         seed: (ModelContext) throws -> Void
     ) throws -> Context {
-        let modelContainer = try IncomesPlatformEnvironmentFactory.makePreviewModelContainer()
+        let modelContainer = try ModelContainer(
+            for: Item.self,
+            configurations: .init(isStoredInMemoryOnly: true)
+        )
         let previewContext = modelContainer.mainContext
         try seed(previewContext)
-        return MainActor.assumeIsolated {
-            IncomesPlatformEnvironmentFactory.make(
-                modelContainer: modelContainer,
-                platformMode: .preview
-            )
-        }
+
+        let notificationService = NotificationService(modelContainer: modelContainer)
+        let remoteConfigurationService = RemoteConfigurationService()
+        let tipController = IncomesTipController()
+        try? tipController.configureIfNeeded(hideAllTipsForTesting: true)
+        let store = Store()
+        let googleMobileAdsController = GoogleMobileAdsController(
+            adUnitID: Secret.admobNativeIDDev
+        )
+
+        return .init(
+            modelContainer: modelContainer,
+            notificationService: notificationService,
+            remoteConfigurationService: remoteConfigurationService,
+            tipController: tipController,
+            store: store,
+            googleMobileAdsController: googleMobileAdsController
+        )
     }
 
     static func prepareData(in context: ModelContext) async {

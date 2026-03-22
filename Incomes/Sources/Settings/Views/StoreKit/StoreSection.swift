@@ -1,12 +1,12 @@
-import MHPlatform
+import StoreKitWrapper
 import SwiftUI
 
 struct StoreSection: View {
-    @Environment(MHAppRuntime.self)
-    private var appRuntime
+    @Environment(Store.self)
+    private var store
 
     var body: some View {
-        appRuntime.subscriptionSectionView()
+        store.buildSubscriptionSection()
     }
 }
 

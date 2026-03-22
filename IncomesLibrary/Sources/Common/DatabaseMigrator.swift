@@ -1,5 +1,4 @@
 import Foundation
-import MHPlatform
 
 /// Migrates legacy database files into the shared store location.
 public enum DatabaseMigrator {
@@ -18,25 +17,37 @@ public enum DatabaseMigrator {
         currentURL: URL
     ) {
         guard fileManager.fileExists(atPath: legacyURL.path),
-              fileManager.fileExists(atPath: currentURL.path) == false else {
+              !fileManager.fileExists(atPath: currentURL.path) else {
             return
         }
 
         do {
-            let plan = MHStoreMigrationPlan(
-                legacyStoreURL: legacyURL,
-                currentStoreURL: currentURL
+            try fileManager.createDirectory(
+                at: currentURL.deletingLastPathComponent(),
+                withIntermediateDirectories: true
             )
 
-            let outcome = try MHStoreMigrator.migrateIfNeeded(
-                plan: plan,
-                fileManager: fileManager
+            let legacyDirectory = legacyURL.deletingLastPathComponent()
+            let currentDirectory = currentURL.deletingLastPathComponent()
+            let baseName = legacyURL.lastPathComponent
+
+            let directoryContents = try fileManager.contentsOfDirectory(
+                atPath: legacyDirectory.path
             )
-            if case .migrated = outcome {
-                _ = try MHStoreMigrator.removeLegacyStoreFilesIfNeeded(
-                    plan: plan,
-                    fileManager: fileManager
-                )
+            let candidateNames = directoryContents.filter { name in
+                name == baseName || name.hasPrefix(baseName + "-")
+            }
+
+            for name in candidateNames {
+                let source = legacyDirectory.appendingPathComponent(name)
+                let destination = currentDirectory.appendingPathComponent(name)
+                do {
+                    try fileManager.moveItem(at: source, to: destination)
+                } catch {
+                    if !fileManager.fileExists(atPath: destination.path) {
+                        try fileManager.copyItem(at: source, to: destination)
+                    }
+                }
             }
         } catch {
             assertionFailure("Store migration failed: \(error.localizedDescription)")
