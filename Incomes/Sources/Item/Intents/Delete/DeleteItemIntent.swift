@@ -6,15 +6,17 @@ struct DeleteItemIntent: AppIntent {
     private var item: ItemEntity // swiftlint:disable:this type_contents_order
 
     @Dependency private var modelContainer: ModelContainer // swiftlint:disable:this type_contents_order
+    @Dependency private var notificationService: NotificationService // swiftlint:disable:this type_contents_order
 
     static let title: LocalizedStringResource = .init("Delete Item", table: "AppIntents")
     static let isDiscoverable = false
 
     @MainActor
-    func perform() throws -> some IntentResult {
-        try ItemService.delete(
+    func perform() async throws -> some IntentResult {
+        try await ItemDeleteCoordinator.delete(
             context: modelContainer.mainContext,
-            item: item.model(in: modelContainer.mainContext)
+            item: item.model(in: modelContainer.mainContext),
+            notificationService: notificationService
         )
         return .result()
     }

@@ -23,6 +23,7 @@ struct CreateAndShowItemIntent: AppIntent {
     private var repeatCount: Int // swiftlint:disable:this type_contents_order
 
     @Dependency private var modelContainer: ModelContainer // swiftlint:disable:this type_contents_order
+    @Dependency private var notificationService: NotificationService // swiftlint:disable:this type_contents_order
 
     static let title: LocalizedStringResource = .init("Create and Show Item", table: "AppIntents")
 
@@ -38,16 +39,17 @@ struct CreateAndShowItemIntent: AppIntent {
     }
 
     @MainActor
-    func perform() throws -> some ProvidesDialog & ShowsSnippetView {
+    func perform() async throws -> some ProvidesDialog & ShowsSnippetView {
         do {
             try formInput.validate()
         } catch ItemFormInput.ValidationError.contentIsEmpty {
             throw ItemError.contentIsEmpty
         }
-        let item = try ItemService.create(
+        let item = try await ItemCreateCoordinator.create(
             context: modelContainer.mainContext,
             input: formInput,
-            repeatCount: repeatCount
+            repeatCount: repeatCount,
+            notificationService: notificationService
         )
         return .result(
             opensIntent: IncomesIntentRouteOpener.monthIntent(for: item.localDate),

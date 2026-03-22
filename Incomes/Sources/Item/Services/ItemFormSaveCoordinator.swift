@@ -16,13 +16,6 @@ enum ItemFormSaveCoordinator {
         let repeatMonthSelections: Set<RepeatMonthSelection>
     }
 
-    private enum MutationName {
-        static let create = "createItem"
-        static let updateThisItem = "updateItem.thisItem"
-        static let updateFutureItems = "updateItem.futureItems"
-        static let updateAllItems = "updateItem.allItems"
-    }
-
     @MainActor
     static func save(
         context: ModelContext,
@@ -31,26 +24,11 @@ enum ItemFormSaveCoordinator {
     ) async throws -> ItemFormSaveOutcome {
         switch request.mode {
         case .create:
-            _ = try await MHMutationWorkflow.runThrowing(
-                name: MutationName.create,
-                operation: {
-                    try ItemService.createWithOutcome(
-                        context: context,
-                        input: request.formInputData,
-                        repeatMonthSelections: request.repeatMonthSelections
-                    )
-                },
-                adapter: itemFormAdapter(
-                    notificationService: notificationService
-                ),
-                projection: .closures(
-                    afterSuccess: { result in
-                        result.outcome.followUpHints
-                    },
-                    returning: { _ in
-                        ()
-                    }
-                )
+            _ = try await ItemCreateCoordinator.create(
+                context: context,
+                input: request.formInputData,
+                repeatMonthSelections: request.repeatMonthSelections,
+                notificationService: notificationService
             )
             return .didSave
         case .edit:
@@ -93,8 +71,9 @@ enum ItemFormSaveCoordinator {
                     scope: scope
                 )
             },
-            adapter: itemFormAdapter(
-                notificationService: notificationService
+            adapter: ItemMutationAdapterFactory.make(
+                notificationService: notificationService,
+                includesReviewRequest: true
             ),
             projection: .closures(
                 afterSuccess: { outcome in
@@ -112,41 +91,11 @@ enum ItemFormSaveCoordinator {
     ) -> String {
         switch scope {
         case .thisItem:
-            MutationName.updateThisItem
+            ItemMutationWorkflowName.updateThisItem
         case .futureItems:
-            MutationName.updateFutureItems
+            ItemMutationWorkflowName.updateFutureItems
         case .allItems:
-            MutationName.updateAllItems
+            ItemMutationWorkflowName.updateAllItems
         }
-    }
-
-    @MainActor
-    private static func itemFormAdapter(
-        notificationService: NotificationService
-    ) -> MHMutationAdapter<Set<MutationOutcome.FollowUpHint>> {
-        let refreshNotificationSchedule: IncomesMutationWorkflow.NotificationScheduleRefresher = {
-            await IncomesMutationWorkflow.refreshNotificationSchedule(
-                notificationService: notificationService
-            )
-        }
-        let adapter = IncomesMutationWorkflow.followUpHintAdapter(
-            refreshNotificationSchedule: refreshNotificationSchedule
-        )
-        let reviewFlow = IncomesReviewSupport.flow(
-            context: .itemMutation,
-            source: #fileID
-        )
-        let reviewStep = reviewFlow.step(
-            name: "scheduleReviewRequest"
-        )
-
-        return adapter.appending(
-            [
-                .mainActor(name: "successHaptic") {
-                    Haptic.success.impact()
-                },
-                reviewStep
-            ]
-        )
     }
 }

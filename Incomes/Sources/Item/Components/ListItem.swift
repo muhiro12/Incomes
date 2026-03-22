@@ -14,6 +14,8 @@ struct ListItem {
     private var item
     @Environment(\.modelContext)
     private var context
+    @Environment(NotificationService.self)
+    private var notificationService
     @Environment(\.horizontalSizeClass)
     private var horizontalSizeClass
     @Environment(IncomesTipController.self)
@@ -87,14 +89,16 @@ private extension ListItem {
             isPresented: $isDeletePresented
         ) {
             Button(role: .destructive) {
-                do {
-                    try ItemService.delete(
-                        context: context,
-                        items: [item]
-                    )
-                    Haptic.success.impact()
-                } catch {
-                    assertionFailure(error.localizedDescription)
+                Task { @MainActor in
+                    do {
+                        try await ItemDeleteCoordinator.delete(
+                            context: context,
+                            items: [item],
+                            notificationService: notificationService
+                        )
+                    } catch {
+                        assertionFailure(error.localizedDescription)
+                    }
                 }
             } label: {
                 Text("Delete")

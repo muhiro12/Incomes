@@ -13,6 +13,8 @@ import SwiftUI
 struct MainNavigationView: View {
     @Environment(\.modelContext)
     private var context
+    @Environment(NotificationService.self)
+    private var notificationService
     @Environment(IncomesTipController.self)
     private var tipController
     @Environment(IncomesRouteInbox.self)
@@ -89,17 +91,19 @@ struct MainNavigationView: View {
                 isPresented: $router.isYearDeleteDialogPresented
             ) {
                 Button(role: .destructive) {
-                    do {
-                        try ItemService.delete(
-                            context: context,
-                            items: router.willDeleteItems
-                        )
-                        router.completeYearDeletion(
-                            selectedYearTag: selectedYearTag
-                        )
-                        Haptic.success.impact()
-                    } catch {
-                        assertionFailure(error.localizedDescription)
+                    Task { @MainActor in
+                        do {
+                            try await ItemDeleteCoordinator.delete(
+                                context: context,
+                                items: router.willDeleteItems,
+                                notificationService: notificationService
+                            )
+                            router.completeYearDeletion(
+                                selectedYearTag: selectedYearTag
+                            )
+                        } catch {
+                            assertionFailure(error.localizedDescription)
+                        }
                     }
                 } label: {
                     Text("Delete")

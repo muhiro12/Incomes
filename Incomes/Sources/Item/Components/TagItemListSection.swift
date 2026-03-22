@@ -13,6 +13,8 @@ struct TagItemListSection {
     private var tag
     @Environment(\.modelContext)
     private var context
+    @Environment(NotificationService.self)
+    private var notificationService
 
     @State private var isDialogPresented = false
     @State private var willDeleteItems: [Item] = []
@@ -55,14 +57,16 @@ extension TagItemListSection: View {
             isPresented: $isDialogPresented
         ) {
             Button(role: .destructive) {
-                do {
-                    try ItemService.delete(
-                        context: context,
-                        items: willDeleteItems
-                    )
-                    Haptic.success.impact()
-                } catch {
-                    assertionFailure(error.localizedDescription)
+                Task { @MainActor in
+                    do {
+                        try await ItemDeleteCoordinator.delete(
+                            context: context,
+                            items: willDeleteItems,
+                            notificationService: notificationService
+                        )
+                    } catch {
+                        assertionFailure(error.localizedDescription)
+                    }
                 }
             } label: {
                 Text("Delete")

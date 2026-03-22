@@ -25,6 +25,7 @@ struct CreateItemIntent: AppIntent {
     private var repeatCount: Int // swiftlint:disable:this type_contents_order
 
     @Dependency private var modelContainer: ModelContainer // swiftlint:disable:this type_contents_order
+    @Dependency private var notificationService: NotificationService // swiftlint:disable:this type_contents_order
 
     static let title: LocalizedStringResource = .init("Create Item", table: "AppIntents")
 
@@ -40,7 +41,7 @@ struct CreateItemIntent: AppIntent {
     }
 
     @MainActor
-    func perform() throws -> some ReturnsValue<ItemEntity> {
+    func perform() async throws -> some ReturnsValue<ItemEntity> {
         try validateFormInput()
 
         let currencyCode = AppStorage(
@@ -60,10 +61,11 @@ struct CreateItemIntent: AppIntent {
             throw $outgo.needsDisambiguationError(among: [amount])
         }
 
-        let item = try ItemService.create(
+        let item = try await ItemCreateCoordinator.create(
             context: modelContainer.mainContext,
             input: formInput,
-            repeatCount: repeatCount
+            repeatCount: repeatCount,
+            notificationService: notificationService
         )
         guard let entity = ItemEntity(item) else {
             throw ItemError.entityConversionFailed

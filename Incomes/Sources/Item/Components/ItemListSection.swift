@@ -11,6 +11,8 @@ import SwiftUI
 struct ItemListSection {
     @Environment(\.modelContext)
     private var context
+    @Environment(NotificationService.self)
+    private var notificationService
 
     @Query private var items: [Item]
 
@@ -59,14 +61,16 @@ extension ItemListSection: View {
             isPresented: $isDialogPresented
         ) {
             Button(role: .destructive) {
-                do {
-                    try ItemService.delete(
-                        context: context,
-                        items: willDeleteItems
-                    )
-                    Haptic.success.impact()
-                } catch {
-                    assertionFailure(error.localizedDescription)
+                Task { @MainActor in
+                    do {
+                        try await ItemDeleteCoordinator.delete(
+                            context: context,
+                            items: willDeleteItems,
+                            notificationService: notificationService
+                        )
+                    } catch {
+                        assertionFailure(error.localizedDescription)
+                    }
                 }
             } label: {
                 Text("Delete")
