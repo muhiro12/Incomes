@@ -144,6 +144,10 @@ If you only need required builds/tests based on local changes without `pre-commi
 bash ci_scripts/tasks/run_required_builds.sh
 ```
 
+If `pre-commit` is unavailable, `bash ci_scripts/tasks/pre_commit.sh` falls back
+to the equivalent direct SwiftLint commands when `swiftlint` is installed. If
+neither tool is installed, the script prints recovery instructions.
+
 If you only need the app build:
 
 ```sh
