@@ -201,6 +201,7 @@ fi
 
 needs_incomes_tests=false
 needs_incomes_library_tests=false
+needs_mhplatform_boundary_checks=false
 
 if grep -Eq '^Incomes/|^IncomesTests/|^Incomes\.xcodeproj/|^Widgets/|^Watch/' <<<"$changed_files"; then
   needs_incomes_tests=true
@@ -210,17 +211,28 @@ if grep -Eq '^IncomesLibrary/' <<<"$changed_files"; then
   needs_incomes_library_tests=true
 fi
 
-if ! $needs_incomes_tests && ! $needs_incomes_library_tests; then
-  echo "No changes under Incomes/, IncomesTests/, IncomesLibrary/, Widgets/, Watch/, or Incomes.xcodeproj/."
+if grep -Eq '^Incomes/|^IncomesTests/|^IncomesLibrary/|^Incomes\.xcodeproj/|^Widgets/|^Watch/|^ci_scripts/tasks/' <<<"$changed_files"; then
+  needs_mhplatform_boundary_checks=true
+fi
+
+if ! $needs_incomes_tests && ! $needs_incomes_library_tests && ! $needs_mhplatform_boundary_checks; then
+  echo "No changes under Incomes/, IncomesTests/, IncomesLibrary/, Widgets/, Watch/, Incomes.xcodeproj/, or ci_scripts/tasks/."
   if $should_run_pre_commit; then
-    run_note="pre-commit completed. No changes under Incomes/, IncomesTests/, IncomesLibrary/, Widgets/, Watch/, or Incomes.xcodeproj/. Build/test steps were skipped."
+    run_note="pre-commit completed. No changes under Incomes/, IncomesTests/, IncomesLibrary/, Widgets/, Watch/, Incomes.xcodeproj/, or ci_scripts/tasks/. Build/test steps were skipped."
   else
-    run_note="No changes under Incomes/, IncomesTests/, IncomesLibrary/, Widgets/, Watch/, or Incomes.xcodeproj/. Build/test steps were skipped."
+    run_note="No changes under Incomes/, IncomesTests/, IncomesLibrary/, Widgets/, Watch/, Incomes.xcodeproj/, or ci_scripts/tasks/. Build/test steps were skipped."
   fi
   exit 0
 fi
 
 run_note="Executed required CI steps based on local changes."
+
+if $needs_mhplatform_boundary_checks; then
+  run_logged_step \
+    "check_mhplatform_boundaries" \
+    "Check MHPlatform boundaries" \
+    bash "$repository_root/ci_scripts/tasks/check_mhplatform_boundaries.sh"
+fi
 
 if $needs_incomes_tests; then
   run_logged_step \
