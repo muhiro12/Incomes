@@ -12,30 +12,7 @@ import SwiftUI
 import TipKit
 
 struct ItemFormView: View {
-    enum Mode {
-        case create
-        case edit
-    }
-
-    enum Field {
-        case content
-        case income
-        case outgo
-        case category
-    }
-
-    enum DialogRoute {
-        case debug
-        case repeating
-    }
-
-    enum SheetRoute: String, Identifiable {
-        case assist
-
-        var id: String {
-            rawValue
-        }
-    }
+    enum Mode { case create, edit }
 
     @Environment(Tag.self)
     private var tag: Tag?
@@ -57,6 +34,7 @@ struct ItemFormView: View {
     @FocusState private var focusedField: Field?
     @State private var dialogRoute: DialogRoute?
     @State private var sheetRoute: SheetRoute?
+    @State private var errorMessage: String?
     @State private var model: ItemFormModel
 
     private let mode: Mode
@@ -220,6 +198,25 @@ struct ItemFormView: View {
         } message: {
             Text("Are you really going to use DebugMode?")
         }
+        .alert(
+            "Error",
+            isPresented: Binding(
+                get: {
+                    errorMessage != nil
+                },
+                set: { isPresented in
+                    if !isPresented {
+                        errorMessage = nil
+                    }
+                }
+            )
+        ) {
+            Button("OK", role: .cancel) {
+                errorMessage = nil
+            }
+        } message: {
+            Text(errorMessage ?? .empty)
+        }
         .onAppear {
             model.applyInitialContext(
                 item: item,
@@ -298,6 +295,8 @@ private extension ItemFormView {
     }
 
     func save() async {
+        let action: ItemFormMutationPresentationAction
+
         do {
             let outcome = try await ItemFormSaveCoordinator.save(
                 context: context,
@@ -309,22 +308,33 @@ private extension ItemFormView {
                 ),
                 notificationService: notificationService
             )
-            switch outcome {
-            case .requiresScopeSelection:
-                presentToRepeatingDialog()
-            case .didSave:
-                dismiss()
-            }
+            action = ItemFormMutationPresentationAction.action(
+                for: .success(outcome)
+            )
         } catch {
             assertionFailure(error.localizedDescription)
+            action = ItemFormMutationPresentationAction.action(
+                for: .failure(error)
+            )
         }
+
+        handle(action)
     }
 
     func saveForThisItem() async {
         guard let item else {
             assertionFailure()
+            handle(
+                .presentError(
+                    ItemFormMutationPresentationAction.resolvedErrorMessage(
+                        from: ItemError.itemNotFound
+                    )
+                )
+            )
             return
         }
+        let action: ItemFormMutationPresentationAction
+
         do {
             try await ItemFormSaveCoordinator.save(
                 scope: .thisItem,
@@ -333,17 +343,33 @@ private extension ItemFormView {
                 formInputData: model.formInputData,
                 notificationService: notificationService
             )
+            action = ItemFormMutationPresentationAction.dismissOnSuccessAction(
+                for: .success(())
+            )
         } catch {
             assertionFailure(error.localizedDescription)
+            action = ItemFormMutationPresentationAction.dismissOnSuccessAction(
+                for: .failure(error)
+            )
         }
-        dismiss()
+
+        handle(action)
     }
 
     func saveForFutureItems() async {
         guard let item else {
             assertionFailure()
+            handle(
+                .presentError(
+                    ItemFormMutationPresentationAction.resolvedErrorMessage(
+                        from: ItemError.itemNotFound
+                    )
+                )
+            )
             return
         }
+        let action: ItemFormMutationPresentationAction
+
         do {
             try await ItemFormSaveCoordinator.save(
                 scope: .futureItems,
@@ -352,17 +378,33 @@ private extension ItemFormView {
                 formInputData: model.formInputData,
                 notificationService: notificationService
             )
+            action = ItemFormMutationPresentationAction.dismissOnSuccessAction(
+                for: .success(())
+            )
         } catch {
             assertionFailure(error.localizedDescription)
+            action = ItemFormMutationPresentationAction.dismissOnSuccessAction(
+                for: .failure(error)
+            )
         }
-        dismiss()
+
+        handle(action)
     }
 
     func saveForAllItems() async {
         guard let item else {
             assertionFailure()
+            handle(
+                .presentError(
+                    ItemFormMutationPresentationAction.resolvedErrorMessage(
+                        from: ItemError.itemNotFound
+                    )
+                )
+            )
             return
         }
+        let action: ItemFormMutationPresentationAction
+
         do {
             try await ItemFormSaveCoordinator.save(
                 scope: .allItems,
@@ -371,13 +413,22 @@ private extension ItemFormView {
                 formInputData: model.formInputData,
                 notificationService: notificationService
             )
+            action = ItemFormMutationPresentationAction.dismissOnSuccessAction(
+                for: .success(())
+            )
         } catch {
             assertionFailure(error.localizedDescription)
+            action = ItemFormMutationPresentationAction.dismissOnSuccessAction(
+                for: .failure(error)
+            )
         }
-        dismiss()
+
+        handle(action)
     }
 
     func create() async {
+        let action: ItemFormMutationPresentationAction
+
         do {
             _ = try await ItemFormSaveCoordinator.save(
                 context: context,
@@ -390,10 +441,17 @@ private extension ItemFormView {
                 notificationService: notificationService
             )
             onCreate?()
+            action = ItemFormMutationPresentationAction.dismissOnSuccessAction(
+                for: .success(())
+            )
         } catch {
             assertionFailure(error.localizedDescription)
+            action = ItemFormMutationPresentationAction.dismissOnSuccessAction(
+                for: .failure(error)
+            )
         }
-        dismiss()
+
+        handle(action)
     }
 
     func cancel() {
@@ -409,6 +467,17 @@ private extension ItemFormView {
         dialogRoute = .repeating
     }
 
+    func handle(_ action: ItemFormMutationPresentationAction) {
+        switch action {
+        case .dismiss:
+            dismiss()
+        case .presentScopeSelection:
+            presentToRepeatingDialog()
+        case let .presentError(message):
+            errorMessage = message
+        }
+    }
+
     func isDialogPresented(_ route: DialogRoute) -> Binding<Bool> {
         .init(
             get: {
@@ -422,6 +491,28 @@ private extension ItemFormView {
                 }
             }
         )
+    }
+}
+
+private extension ItemFormView {
+    enum Field {
+        case content
+        case income
+        case outgo
+        case category
+    }
+
+    enum DialogRoute {
+        case debug
+        case repeating
+    }
+
+    enum SheetRoute: String, Identifiable {
+        case assist
+
+        var id: String {
+            rawValue
+        }
     }
 }
 
