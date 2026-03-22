@@ -70,7 +70,7 @@ finalize_run_artifacts() {
 
   if [[ $exit_code -ne 0 ]]; then
     overall_result="failure"
-    if [[ -z "$run_note" || "$run_note" == "Executed required CI steps based on local changes." ]]; then
+    if [[ "$run_note" != "A required step failed. Review failure details and logs." ]]; then
       run_note="A required step failed. Review failure details and logs."
     fi
   fi
@@ -174,6 +174,11 @@ if [[ "${CI_RUN_ENABLE_PRE_COMMIT:-0}" == "1" || "${CI_RUN_ENABLE_PRE_COMMIT:-}"
   should_run_pre_commit=true
 fi
 
+should_force_full=false
+if [[ "${CI_RUN_FORCE_FULL:-0}" == "1" || "${CI_RUN_FORCE_FULL:-}" == "true" ]]; then
+  should_force_full=true
+fi
+
 if $should_run_pre_commit; then
   run_logged_step \
     "pre_commit" \
@@ -181,51 +186,58 @@ if $should_run_pre_commit; then
     bash "$repository_root/ci_scripts/tasks/pre_commit.sh"
 fi
 
-changed_files=$(
-  {
-    git diff --name-only --cached
-    git diff --name-only
-    git ls-files --others --exclude-standard
-  } | sed '/^$/d' | sort -u
-)
-
-if [[ -z "$changed_files" ]]; then
-  echo "No local changes detected."
-  if $should_run_pre_commit; then
-    run_note="pre-commit completed. No local changes detected. Build/test steps were skipped."
-  else
-    run_note="No local changes detected. Build/test steps were skipped."
-  fi
-  exit 0
-fi
-
 needs_incomes_tests=false
 needs_incomes_library_tests=false
 needs_mhplatform_boundary_checks=false
-
-if grep -Eq '^Incomes/|^IncomesTests/|^Incomes\.xcodeproj/|^Widgets/|^Watch/' <<<"$changed_files"; then
+if $should_force_full; then
+  echo "Forcing full verification regardless of local changes."
   needs_incomes_tests=true
-fi
-
-if grep -Eq '^IncomesLibrary/' <<<"$changed_files"; then
   needs_incomes_library_tests=true
-fi
-
-if grep -Eq '^Incomes/|^IncomesTests/|^IncomesLibrary/|^Incomes\.xcodeproj/|^Widgets/|^Watch/|^ci_scripts/tasks/' <<<"$changed_files"; then
   needs_mhplatform_boundary_checks=true
-fi
+  run_note="Executed a forced full verification run regardless of local changes."
+else
+  changed_files=$(
+    {
+      git diff --name-only --cached
+      git diff --name-only
+      git ls-files --others --exclude-standard
+    } | sed '/^$/d' | sort -u
+  )
 
-if ! $needs_incomes_tests && ! $needs_incomes_library_tests && ! $needs_mhplatform_boundary_checks; then
-  echo "No changes under Incomes/, IncomesTests/, IncomesLibrary/, Widgets/, Watch/, Incomes.xcodeproj/, or ci_scripts/tasks/."
-  if $should_run_pre_commit; then
-    run_note="pre-commit completed. No changes under Incomes/, IncomesTests/, IncomesLibrary/, Widgets/, Watch/, Incomes.xcodeproj/, or ci_scripts/tasks/. Build/test steps were skipped."
-  else
-    run_note="No changes under Incomes/, IncomesTests/, IncomesLibrary/, Widgets/, Watch/, Incomes.xcodeproj/, or ci_scripts/tasks/. Build/test steps were skipped."
+  if [[ -z "$changed_files" ]]; then
+    echo "No local changes detected."
+    if $should_run_pre_commit; then
+      run_note="pre-commit completed. No local changes detected. Build/test steps were skipped."
+    else
+      run_note="No local changes detected. Build/test steps were skipped."
+    fi
+    exit 0
   fi
-  exit 0
-fi
 
-run_note="Executed required CI steps based on local changes."
+  if grep -Eq '^Incomes/|^IncomesTests/|^Incomes\.xcodeproj/|^Widgets/|^Watch/' <<<"$changed_files"; then
+    needs_incomes_tests=true
+  fi
+
+  if grep -Eq '^IncomesLibrary/' <<<"$changed_files"; then
+    needs_incomes_library_tests=true
+  fi
+
+  if grep -Eq '^Incomes/|^IncomesTests/|^IncomesLibrary/|^Incomes\.xcodeproj/|^Widgets/|^Watch/|^ci_scripts/tasks/' <<<"$changed_files"; then
+    needs_mhplatform_boundary_checks=true
+  fi
+
+  if ! $needs_incomes_tests && ! $needs_incomes_library_tests && ! $needs_mhplatform_boundary_checks; then
+    echo "No changes under Incomes/, IncomesTests/, IncomesLibrary/, Widgets/, Watch/, Incomes.xcodeproj/, or ci_scripts/tasks/."
+    if $should_run_pre_commit; then
+      run_note="pre-commit completed. No changes under Incomes/, IncomesTests/, IncomesLibrary/, Widgets/, Watch/, Incomes.xcodeproj/, or ci_scripts/tasks/. Build/test steps were skipped."
+    else
+      run_note="No changes under Incomes/, IncomesTests/, IncomesLibrary/, Widgets/, Watch/, Incomes.xcodeproj/, or ci_scripts/tasks/. Build/test steps were skipped."
+    fi
+    exit 0
+  fi
+
+  run_note="Executed required CI steps based on local changes."
+fi
 
 if $needs_mhplatform_boundary_checks; then
   run_logged_step \

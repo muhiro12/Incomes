@@ -126,13 +126,19 @@ reflect your release channel.
 
 ## Build and Test
 
-Use the helper scripts in `ci_scripts/` as needed. For full local verification:
+Use the helper scripts in `ci_scripts/` as needed. For incremental local verification with `pre-commit` plus required builds/tests based on local changes:
 
 ```sh
 bash ci_scripts/tasks/verify.sh
 ```
 
-If you only need required builds/tests based on local changes:
+For release-time verification or a clean-worktree full run, force the standard verify entrypoint to execute all required checks:
+
+```sh
+CI_RUN_FORCE_FULL=1 bash ci_scripts/tasks/verify.sh
+```
+
+If you only need required builds/tests based on local changes without `pre-commit`:
 
 ```sh
 bash ci_scripts/tasks/run_required_builds.sh
