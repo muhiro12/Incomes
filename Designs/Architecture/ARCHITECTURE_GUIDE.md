@@ -7,6 +7,9 @@ This guide defines the strict `domain-in-library, UI-as-adapter` policy for this
 Related document:
 [shared-service-design.md](./shared-service-design.md)
 
+Related decision:
+[0005-adapter-failure-surfacing-contract.md](../Decisions/0005-adapter-failure-surfacing-contract.md)
+
 ## Responsibility Boundaries
 
 | Layer | Owns | Must not own |
@@ -54,6 +57,23 @@ Domain mutations should expose change metadata through `MutationOutcome`:
 - `followUpHints` (`refreshNotificationSchedule`, `reloadWidgets`, `refreshWatchSnapshot`)
 
 Adapters decide which platform actions to execute from `followUpHints`.
+
+## Failure-Surfacing Contract
+
+Adapter-owned mutation and sync paths must classify failures by phase rather
+than relying on assertions or empty sentinel values.
+
+- Preflight and primary mutation failures block success and must be surfaced to
+  the current caller.
+- Post-commit follow-up failures are degraded-success cases: keep the committed
+  mutation result, but emit observable failure signals and prefer repairable
+  retries.
+- Sync transport, decode, and apply failures must stay distinguishable from a
+  legitimate zero-data snapshot.
+
+See
+[0005-adapter-failure-surfacing-contract.md](../Decisions/0005-adapter-failure-surfacing-contract.md)
+for the repository-level contract.
 
 ## SwiftData Boundary
 
