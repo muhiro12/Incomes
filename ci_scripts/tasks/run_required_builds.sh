@@ -199,39 +199,39 @@ if [[ -z "$changed_files" ]]; then
   exit 0
 fi
 
-needs_incomes_build=false
+needs_incomes_tests=false
 needs_incomes_library_tests=false
 
-if grep -Eq '^Incomes/|^Incomes\.xcodeproj/|^Widgets/|^Watch/' <<<"$changed_files"; then
-  needs_incomes_build=true
+if grep -Eq '^Incomes/|^IncomesTests/|^Incomes\.xcodeproj/|^Widgets/|^Watch/' <<<"$changed_files"; then
+  needs_incomes_tests=true
 fi
 
 if grep -Eq '^IncomesLibrary/' <<<"$changed_files"; then
   needs_incomes_library_tests=true
 fi
 
-if ! $needs_incomes_build && ! $needs_incomes_library_tests; then
-  echo "No changes under Incomes/, IncomesLibrary/, Widgets/, Watch/, or Incomes.xcodeproj/."
+if ! $needs_incomes_tests && ! $needs_incomes_library_tests; then
+  echo "No changes under Incomes/, IncomesTests/, IncomesLibrary/, Widgets/, Watch/, or Incomes.xcodeproj/."
   if $should_run_pre_commit; then
-    run_note="pre-commit completed. No changes under Incomes/, IncomesLibrary/, Widgets/, Watch/, or Incomes.xcodeproj/. Build/test steps were skipped."
+    run_note="pre-commit completed. No changes under Incomes/, IncomesTests/, IncomesLibrary/, Widgets/, Watch/, or Incomes.xcodeproj/. Build/test steps were skipped."
   else
-    run_note="No changes under Incomes/, IncomesLibrary/, Widgets/, Watch/, or Incomes.xcodeproj/. Build/test steps were skipped."
+    run_note="No changes under Incomes/, IncomesTests/, IncomesLibrary/, Widgets/, Watch/, or Incomes.xcodeproj/. Build/test steps were skipped."
   fi
   exit 0
 fi
 
 run_note="Executed required CI steps based on local changes."
 
-if $needs_incomes_build; then
+if $needs_incomes_tests; then
   run_logged_step \
     "check_models_directory_consistency" \
     "Check Models directory consistency" \
     bash "$repository_root/ci_scripts/tasks/check_models_directory_consistency.sh"
 
   run_logged_step \
-    "build_app" \
-    "Build Incomes scheme" \
-    bash "$repository_root/ci_scripts/tasks/build_app.sh"
+    "test_app" \
+    "Test Incomes scheme" \
+    bash "$repository_root/ci_scripts/tasks/test_app.sh"
 fi
 
 if $needs_incomes_library_tests; then
