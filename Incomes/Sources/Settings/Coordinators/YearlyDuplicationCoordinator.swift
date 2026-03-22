@@ -1,4 +1,5 @@
 import Foundation
+import MHPlatform
 import SwiftData
 
 enum YearlyDuplicationCoordinator {
@@ -113,21 +114,29 @@ enum YearlyDuplicationCoordinator {
             return nil
         }
 
-        let result = try YearlyItemDuplicator.applyWithOutcome(
-            plan: .init(
-                groups: [group],
-                entries: entries,
-                skippedDuplicateCount: 0
-            ),
-            context: context
-        )
+        let adapter = IncomesMutationWorkflow
+            .followUpHintAdapter(
+                refreshNotificationSchedule: refreshNotificationSchedule
+            )
 
-        await IncomesMutationWorkflow.perform(
-            followUpHints: result.outcome.followUpHints,
-            refreshNotificationSchedule: refreshNotificationSchedule
+        return try await MHMutationWorkflow.runThrowing(
+            name: "duplicateYearlyItems",
+            operation: {
+                try YearlyItemDuplicator.applyWithOutcome(
+                    plan: .init(
+                        groups: [group],
+                        entries: entries,
+                        skippedDuplicateCount: 0
+                    ),
+                    context: context
+                )
+            },
+            adapter: adapter,
+            projection: .keyPaths(
+                adapterValue: \.outcome.followUpHints,
+                resultValue: \.value
+            )
         )
-
-        return result.value
     }
 
     static func promoState(

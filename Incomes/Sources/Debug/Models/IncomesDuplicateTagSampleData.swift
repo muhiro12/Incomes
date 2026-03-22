@@ -2,7 +2,7 @@ import SwiftData
 import SwiftUI
 
 struct IncomesDuplicateTagSampleData: PreviewModifier {
-    typealias Context = IncomesSampleData.Context
+    typealias Context = IncomesPlatformEnvironment
 
     static func makeSharedContext() throws -> Context {
         try IncomesSampleData.makePreviewContext { previewContext in
@@ -20,11 +20,6 @@ struct IncomesDuplicateTagSampleData: PreviewModifier {
 
     func body(content: Content, context: Context) -> some View {
         content
-            .modelContainer(context.modelContainer)
-            .environment(context.notificationService)
-            .environment(context.remoteConfigurationService)
-            .environment(context.tipController)
-            .environment(context.store)
-            .environment(context.googleMobileAdsController)
+            .incomesPreviewPlatformEnvironment(context)
     }
 }

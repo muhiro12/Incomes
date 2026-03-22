@@ -5,6 +5,7 @@
 //  Created by Codex on 2025/09/08.
 //
 
+import MHPlatform
 import SwiftData
 
 enum ItemFormSaveCoordinator {
@@ -15,6 +16,13 @@ enum ItemFormSaveCoordinator {
         let repeatMonthSelections: Set<RepeatMonthSelection>
     }
 
+    private enum MutationName {
+        static let create = "createItem"
+        static let updateThisItem = "updateItem.thisItem"
+        static let updateFutureItems = "updateItem.futureItems"
+        static let updateAllItems = "updateItem.allItems"
+    }
+
     @MainActor
     static func save(
         context: ModelContext,
@@ -23,16 +31,27 @@ enum ItemFormSaveCoordinator {
     ) async throws -> ItemFormSaveOutcome {
         switch request.mode {
         case .create:
-            let result = try ItemService.createWithOutcome(
-                context: context,
-                input: request.formInputData,
-                repeatMonthSelections: request.repeatMonthSelections
+            _ = try await MHMutationWorkflow.runThrowing(
+                name: MutationName.create,
+                operation: {
+                    try ItemService.createWithOutcome(
+                        context: context,
+                        input: request.formInputData,
+                        repeatMonthSelections: request.repeatMonthSelections
+                    )
+                },
+                adapter: itemFormAdapter(
+                    notificationService: notificationService
+                ),
+                projection: .closures(
+                    afterSuccess: { result in
+                        result.outcome.followUpHints
+                    },
+                    returning: { _ in
+                        ()
+                    }
+                )
             )
-            await performFollowUpHints(
-                result.outcome.followUpHints,
-                notificationService: notificationService
-            )
-            Haptic.success.impact()
             return .didSave
         case .edit:
             guard let item = request.item else {
@@ -64,35 +83,70 @@ enum ItemFormSaveCoordinator {
         formInputData: ItemFormInput,
         notificationService: NotificationService
     ) async throws {
-        let outcome = try ItemService.updateWithOutcome(
-            context: context,
-            item: item,
-            input: formInputData,
-            scope: scope
+        _ = try await MHMutationWorkflow.runThrowing(
+            name: mutationName(for: scope),
+            operation: {
+                try ItemService.updateWithOutcome(
+                    context: context,
+                    item: item,
+                    input: formInputData,
+                    scope: scope
+                )
+            },
+            adapter: itemFormAdapter(
+                notificationService: notificationService
+            ),
+            projection: .closures(
+                afterSuccess: { outcome in
+                    outcome.followUpHints
+                },
+                returning: { _ in
+                    ()
+                }
+            )
         )
-        await performFollowUpHints(
-            outcome.followUpHints,
-            notificationService: notificationService
-        )
-        Haptic.success.impact()
     }
-}
 
-private extension ItemFormSaveCoordinator {
+    private static func mutationName(
+        for scope: ItemMutationScope
+    ) -> String {
+        switch scope {
+        case .thisItem:
+            MutationName.updateThisItem
+        case .futureItems:
+            MutationName.updateFutureItems
+        case .allItems:
+            MutationName.updateAllItems
+        }
+    }
+
     @MainActor
-    static func performFollowUpHints(
-        _ followUpHints: Set<MutationOutcome.FollowUpHint>,
+    private static func itemFormAdapter(
         notificationService: NotificationService
-    ) async {
+    ) -> MHMutationAdapter<Set<MutationOutcome.FollowUpHint>> {
         let refreshNotificationSchedule: IncomesMutationWorkflow.NotificationScheduleRefresher = {
             await IncomesMutationWorkflow.refreshNotificationSchedule(
                 notificationService: notificationService
             )
         }
-
-        await IncomesMutationWorkflow.perform(
-            followUpHints: followUpHints,
+        let adapter = IncomesMutationWorkflow.followUpHintAdapter(
             refreshNotificationSchedule: refreshNotificationSchedule
+        )
+        let reviewFlow = IncomesReviewSupport.flow(
+            context: .itemMutation,
+            source: #fileID
+        )
+        let reviewStep = reviewFlow.step(
+            name: "scheduleReviewRequest"
+        )
+
+        return adapter.appending(
+            [
+                .mainActor(name: "successHaptic") {
+                    Haptic.success.impact()
+                },
+                reviewStep
+            ]
         )
     }
 }

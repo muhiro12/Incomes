@@ -5,6 +5,7 @@
 //  Created by Hiromu Nakano on 2022/01/12.
 //
 
+import MHPlatform
 import SwiftData
 import SwiftUI
 import TipKit

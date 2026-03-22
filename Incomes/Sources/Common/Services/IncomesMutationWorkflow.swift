@@ -1,4 +1,5 @@
 import Foundation
+import MHPlatform
 
 enum IncomesMutationWorkflow {
     typealias NotificationScheduleRefresher = @MainActor @Sendable () async -> Void
@@ -12,19 +13,33 @@ enum IncomesMutationWorkflow {
     }
 
     @MainActor
-    static func perform(
-        followUpHints: Set<MutationOutcome.FollowUpHint>,
-        refreshNotificationSchedule: NotificationScheduleRefresher,
-        reloadWidgets: @MainActor @Sendable () -> Void = {
+    static func followUpHintAdapter(
+        refreshNotificationSchedule: @escaping NotificationScheduleRefresher,
+        reloadWidgets: @escaping @MainActor @Sendable () -> Void = {
             IncomesWidgetReloader.reloadAllWidgets()
         }
-    ) async {
-        if followUpHints.contains(.refreshNotificationSchedule) {
-            await refreshNotificationSchedule()
-        }
+    ) -> MHMutationAdapter<Set<MutationOutcome.FollowUpHint>> {
+        .init { followUpHints in
+            var steps = [MHMutationStep]()
 
-        if followUpHints.contains(.reloadWidgets) {
-            reloadWidgets()
+            if followUpHints.contains(.refreshNotificationSchedule) {
+                steps.append(
+                    .mainActor(name: "refreshNotificationSchedule") {
+                        await refreshNotificationSchedule()
+                    }
+                )
+            }
+
+            if followUpHints.contains(.reloadWidgets) {
+                steps.append(
+                    .mainActor(
+                        name: "reloadWidgets",
+                        action: reloadWidgets
+                    )
+                )
+            }
+
+            return steps
         }
     }
 }

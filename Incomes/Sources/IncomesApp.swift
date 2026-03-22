@@ -6,8 +6,7 @@
 //
 
 import AppIntents
-import GoogleMobileAdsWrapper
-import StoreKitWrapper
+import MHPlatform
 import SwiftData
 import SwiftUI
 import TipKit
@@ -19,68 +18,48 @@ struct IncomesApp: App {
     @AppStorage(StringAppStorageKey.lastLaunchedAppVersion, default: "")
     private var lastLaunchedAppVersion
 
-    private let sharedModelContainer: ModelContainer
-    private let sharedNotificationService: NotificationService
-    private let sharedRemoteConfigurationService: RemoteConfigurationService
-    private let sharedTipController: IncomesTipController
-    private let sharedStore: Store
-    private let sharedGoogleMobileAdsController: GoogleMobileAdsController
+    private let platformEnvironment: IncomesPlatformEnvironment
+    private let startupLogger = Self.logger(category: "AppStartup")
+
+    var body: some Scene {
+        WindowGroup {
+            ContentView()
+                .id(isICloudOn)
+                .incomesPlatformEnvironment(platformEnvironment)
+        }
+    }
 
     @MainActor
-    init() { // swiftlint:disable:this function_body_length type_contents_order
+    init() {
+        startupLogger.notice("app startup began")
         DatabaseMigrator.migrateSQLiteFilesIfNeeded()
-        let isICloudEnabled = UserDefaults.standard.bool(
-            forKey: BoolAppStorageKey.isICloudOn.rawValue
+        let isICloudEnabled = MHPreferenceStore().bool(
+            for: BoolAppStorageKey.isICloudOn.preferenceKey
         )
 
-        let modelContainer: ModelContainer
+        let platformEnvironment: IncomesPlatformEnvironment
         do {
-            modelContainer = try ModelContainer(
-                for: Item.self,
-                configurations: .init(
-                    url: Database.url,
-                    cloudKitDatabase: isICloudEnabled ? .automatic : .none
-                )
+            let modelContainer = try IncomesPlatformEnvironmentFactory.makeAppModelContainer(
+                isICloudEnabled: isICloudEnabled
+            )
+            platformEnvironment = Self.makePlatformEnvironment(
+                modelContainer: modelContainer
             )
         } catch {
             preconditionFailure("Failed to initialize model container: \(error)")
         }
 
-        let notificationService = NotificationService(modelContainer: modelContainer)
-        let remoteConfigurationService = RemoteConfigurationService()
-        let tipController = IncomesTipController()
-
-        sharedModelContainer = modelContainer
-        sharedNotificationService = notificationService
-        sharedRemoteConfigurationService = remoteConfigurationService
-        sharedTipController = tipController
-        sharedStore = .init()
-        sharedGoogleMobileAdsController = .init(
-            adUnitID: {
-                #if DEBUG
-                Secret.admobNativeIDDev
-                #else
-                Secret.admobNativeID
-                #endif
-            }()
-        )
+        self.platformEnvironment = platformEnvironment
+        startupLogger.notice("startup dependencies ready")
 
         AppDependencyManager.shared.add {
-            modelContainer
+            platformEnvironment.modelContainer
         }
         AppDependencyManager.shared.add {
-            notificationService
+            platformEnvironment.notificationService
         }
         AppDependencyManager.shared.add {
-            remoteConfigurationService
-        }
-
-        do {
-            try tipController.configureIfNeeded()
-        } catch {
-            #if DEBUG
-            assertionFailure(error.localizedDescription)
-            #endif
+            platformEnvironment.remoteConfigurationService
         }
 
         if let currentAppVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
@@ -88,18 +67,32 @@ struct IncomesApp: App {
         }
 
         IncomesShortcuts.updateAppShortcutParameters()
+        startupLogger.notice("startup wiring finished")
     }
+}
 
-    var body: some Scene {
-        WindowGroup {
-            ContentView()
-                .id(isICloudOn)
-                .modelContainer(sharedModelContainer)
-                .environment(sharedNotificationService)
-                .environment(sharedRemoteConfigurationService)
-                .environment(sharedTipController)
-                .environment(sharedStore)
-                .environment(sharedGoogleMobileAdsController)
-        }
+private extension IncomesApp {
+    @MainActor
+    static func makePlatformEnvironment(
+        modelContainer: ModelContainer
+    ) -> IncomesPlatformEnvironment {
+        IncomesPlatformEnvironmentFactory.make(
+            modelContainer: modelContainer,
+            platformMode: .production
+        )
+    }
+}
+
+extension IncomesApp {
+    nonisolated static let loggerFactory = MHLoggerFactory.osLogDefault
+
+    nonisolated static func logger(
+        category: String,
+        source: String = #fileID
+    ) -> MHLogger {
+        loggerFactory.logger(
+            category: category,
+            source: source
+        )
     }
 }

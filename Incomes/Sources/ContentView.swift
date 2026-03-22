@@ -5,24 +5,14 @@
 //  Created by Hiromu Nakano on 2020/04/08.
 //
 
-import GoogleMobileAdsWrapper
-import StoreKitWrapper
+import MHPlatform
 import SwiftUI
 
 struct ContentView {
-    @Environment(NotificationService.self)
-    private var notificationService
     @Environment(RemoteConfigurationService.self)
     private var remoteConfigurationService
-    @Environment(Store.self)
-    private var store
-    @Environment(GoogleMobileAdsController.self)
-    private var googleMobileAdsController
-
-    @Environment(\.scenePhase)
-    private var scenePhase
-    @Environment(\.requestReview)
-    private var requestReview
+    @Environment(MHAppRuntime.self)
+    private var appRuntime
 
     @AppStorage(BoolAppStorageKey.isSubscribeOn)
     private var isSubscribeOn
@@ -30,15 +20,12 @@ struct ContentView {
     private var isICloudOn
     @AppStorage(BoolAppStorageKey.isDebugOn)
     private var isDebugOn
-
-    @State private var isUpdateAlertPresented = false
-    @State private var incomingRoute: IncomesRoute?
 }
 
 extension ContentView: View {
     var body: some View {
-        MainNavigationView(incomingRoute: $incomingRoute)
-            .alert("Update Required", isPresented: $isUpdateAlertPresented) {
+        MainNavigationView()
+            .alert("Update Required", isPresented: isUpdateRequiredBinding) {
                 Button("Open App Store") {
                     if let appStoreURL = URL(
                         string: "https://apps.apple.com/jp/app/incomes/id1584472982"
@@ -53,65 +40,39 @@ extension ContentView: View {
                 #if DEBUG
                 isDebugOn = true
                 #endif
-
-                try? await remoteConfigurationService.load()
-                isUpdateAlertPresented = remoteConfigurationService.isUpdateRequired()
-
-                store.open(
-                    groupID: nil,
-                    productIDs: [Secret.productID]
-                ) { products in
-                    syncSubscriptionState(
-                        purchasedProductIDs: Set(products.map(\.id))
-                    )
-                }
-
-                googleMobileAdsController.start()
-                await notificationService.update()
-                applyPendingDeepLinkIfNeeded()
+                syncSubscriptionStateIfNeeded()
             }
-            .onChange(of: scenePhase) {
-                guard scenePhase == .active else {
-                    return
-                }
-                Task {
-                    try? await remoteConfigurationService.load()
-                    isUpdateAlertPresented = remoteConfigurationService.isUpdateRequired()
-                }
-                Task {
-                    await notificationService.update()
-                }
-                if ReviewRequestPolicy.shouldRequestReview(
-                    randomValue: Int.random(in: 0..<10), // swiftlint:disable:this no_magic_numbers
-                    maxExclusive: 10 // swiftlint:disable:this no_magic_numbers
-                ) {
-                    Task {
-                        try? await Task.sleep(for: .seconds(2)) // swiftlint:disable:this no_magic_numbers
-                        requestReview()
-                    }
-                }
-                applyPendingDeepLinkIfNeeded()
-            }
-            .onChange(of: notificationService.pendingDeepLinkURL) {
-                applyPendingDeepLinkIfNeeded()
-            }
-            .onOpenURL { url in
-                handleIncomingURL(url)
-            }
-            .onContinueUserActivity(NSUserActivityTypeBrowsingWeb) { userActivity in
-                guard let webpageURL = userActivity.webpageURL else {
-                    return
-                }
-                handleIncomingURL(webpageURL)
+            .onChange(of: appRuntime.premiumStatus) {
+                syncSubscriptionStateIfNeeded()
             }
     }
 }
 
 private extension ContentView {
+    var isUpdateRequiredBinding: Binding<Bool> {
+        .init(
+            get: {
+                remoteConfigurationService.isUpdateRequired()
+            },
+            set: { _ in
+                // Keep the alert driven by the latest remote configuration.
+            }
+        )
+    }
+
     @MainActor
-    func syncSubscriptionState(
-        purchasedProductIDs: Set<String>
-    ) {
+    func syncSubscriptionStateIfNeeded() {
+        let purchasedProductIDs: Set<String>
+
+        switch appRuntime.premiumStatus {
+        case .unknown:
+            return
+        case .inactive:
+            purchasedProductIDs = []
+        case .active:
+            purchasedProductIDs = [Secret.productID]
+        }
+
         let state = SubscriptionStateCalculator.calculate(
             purchasedProductIDs: purchasedProductIDs,
             productID: Secret.productID,
@@ -119,22 +80,6 @@ private extension ContentView {
         )
         isSubscribeOn = state.isSubscribeOn
         isICloudOn = state.isICloudOn
-    }
-
-    func applyPendingDeepLinkIfNeeded() {
-        if let intentDeepLinkURL = IncomesIntentRouteStore.consume() {
-            handleIncomingURL(intentDeepLinkURL)
-        }
-        if let notificationDeepLinkURL = notificationService.consumePendingDeepLinkURL() {
-            handleIncomingURL(notificationDeepLinkURL)
-        }
-    }
-
-    func handleIncomingURL(_ url: URL) {
-        guard let route = IncomesRouteParser.parse(url: url) else {
-            return
-        }
-        incomingRoute = route
     }
 }
 

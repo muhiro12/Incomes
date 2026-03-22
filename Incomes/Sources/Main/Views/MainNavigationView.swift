@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import MHPlatform
 import SwiftData
 import SwiftUI
 
@@ -14,11 +15,11 @@ struct MainNavigationView: View {
     private var context
     @Environment(IncomesTipController.self)
     private var tipController
+    @Environment(IncomesRouteInbox.self)
+    private var routeInbox
 
     @Query(.tags(.typeIs(.year), order: .reverse))
     private var yearTags: [Tag]
-
-    @Binding private var incomingRoute: IncomesRoute?
 
     @State private var router: MainNavigationRouter = .init()
 
@@ -53,12 +54,6 @@ struct MainNavigationView: View {
         )
     }
 
-    init( // swiftlint:disable:this type_contents_order
-        incomingRoute: Binding<IncomesRoute?> = .constant(nil)
-    ) {
-        _incomingRoute = incomingRoute
-    }
-
     var body: some View {
         @Bindable var router = router
 
@@ -84,7 +79,7 @@ struct MainNavigationView: View {
                             context: context,
                             yearTags: yearTags
                         ) {
-                            navigate(to: .yearlyDuplication)
+                            enqueueNavigation(to: .yearlyDuplication)
                         }
                     }
                 }
@@ -121,7 +116,7 @@ struct MainNavigationView: View {
             .toolbar {
                 ToolbarItem {
                     Button("Settings", systemImage: "gear") {
-                        navigate(to: .settings)
+                        enqueueNavigation(to: .settings)
                     }
                 }
             }
@@ -143,7 +138,7 @@ struct MainNavigationView: View {
                     )
                 } else if let selectedYearTag {
                     HomeListView { route in
-                        navigate(to: route)
+                        enqueueNavigation(to: route)
                     }
                     .environment(selectedYearTag)
                 }
@@ -178,7 +173,9 @@ struct MainNavigationView: View {
             item: $router.sheetRoute,
             onDismiss: {
                 router.itemDetailID = nil
-                applyPendingRouteAfterSettingsDismissalIfNeeded()
+                Task {
+                    applyPendingRouteAfterSettingsDismissalIfNeeded()
+                }
             },
             content: { sheetRoute in
                 switch sheetRoute {
@@ -206,8 +203,11 @@ struct MainNavigationView: View {
                 DuplicateTagNavigationView()
             }
         }
-        .onChange(of: incomingRoute) {
-            handleIncomingRoute()
+        .mhRouteHandler(routeInbox) { route in
+            try router.handleIncomingRoute(
+                route,
+                context: context
+            )
         }
         .onChange(of: yearTags) {
             tipController.refreshHasAnyItems(!yearTags.isEmpty)
@@ -221,8 +221,6 @@ struct MainNavigationView: View {
             loadState()
 
             tipController.refreshHasAnyItems(!yearTags.isEmpty)
-
-            handleIncomingRoute()
 
             await PhoneWatchBridge.shared.activate(modelContext: context)
         }
@@ -245,7 +243,11 @@ private extension MainNavigationView {
             router.selectYearTagID(yearTagID)
             return
         }
-        navigate(to: .year(year))
+        enqueueNavigation(to: .year(year))
+    }
+
+    func enqueueNavigation(to route: IncomesRoute) {
+        navigate(to: route)
     }
 
     func loadState() {
@@ -275,21 +277,6 @@ private extension MainNavigationView {
                 to: route,
                 context: context
             )
-        } catch {
-            assertionFailure(error.localizedDescription)
-        }
-    }
-
-    func handleIncomingRoute() {
-        do {
-            guard let route = incomingRoute else {
-                return
-            }
-            try router.handleIncomingRoute(
-                route,
-                context: context
-            )
-            incomingRoute = nil
         } catch {
             assertionFailure(error.localizedDescription)
         }
