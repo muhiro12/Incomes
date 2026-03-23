@@ -98,9 +98,16 @@ tasks.filter { $0.isCompleted }
 Agents MUST use one of these standardized entrypoints:
 
 ``` sh
-bash ci_scripts/tasks/run_required_builds.sh
-bash ci_scripts/tasks/verify.sh
+bash ci_scripts/tasks/verify_task_completion.sh
+bash ci_scripts/tasks/verify_repository_state.sh
 ```
+
+Agents may run `bash ci_scripts/tasks/check_environment.sh --profile verify`
+first to diagnose missing local prerequisites.
+`bash ci_scripts/tasks/verify_task_completion.sh` is the non-destructive
+verification gate.
+`bash ci_scripts/tasks/verify_pre_commit.sh` is the verification entrypoint
+used manually and by `.pre-commit-config.yaml`.
 
 CI run artifacts are written under `.build/ci/runs/<RUN_ID>/`.
 Each run stores `summary.md`, `commands.txt`, `meta.json`, `logs/`, `results/`, and `work/`.

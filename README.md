@@ -135,27 +135,62 @@ reflect your release channel.
 
 ## Build and Test
 
-Use the helper scripts in `ci_scripts/` as needed. For incremental local verification with `pre-commit` plus required builds/tests based on local changes:
+Use the helper scripts in `ci_scripts/` as needed. The repository contract is:
+
+- `bash ci_scripts/tasks/check_environment.sh --profile <format|build|verify>`
+  diagnoses missing local prerequisites before you start a tool-dependent flow.
+- `bash ci_scripts/tasks/verify_task_completion.sh` is the non-destructive
+  verification gate for Codex task completion.
+- `bash ci_scripts/tasks/verify_pre_commit.sh` is the verification entrypoint
+  used by Git `pre-commit` and by manual pre-commit checks.
+- `bash ci_scripts/tasks/verify_repository_state.sh` checks the current
+  repository state and still writes CI run artifacts.
+
+Before running the full verify gate, diagnose the local prerequisites:
 
 ```sh
-bash ci_scripts/tasks/verify.sh
+bash ci_scripts/tasks/check_environment.sh --profile verify
+```
+
+Then run the non-destructive verify gate:
+
+```sh
+bash ci_scripts/tasks/verify_task_completion.sh
 ```
 
 For release-time verification or a clean-worktree full run, force the standard verify entrypoint to execute all required checks:
 
 ```sh
-CI_RUN_FORCE_FULL=1 bash ci_scripts/tasks/verify.sh
+CI_RUN_FORCE_FULL=1 bash ci_scripts/tasks/verify_task_completion.sh
 ```
 
-If you only need required builds/tests based on local changes without `pre-commit`:
+If you only need the pre-commit verification flow:
 
 ```sh
-bash ci_scripts/tasks/run_required_builds.sh
+bash ci_scripts/tasks/verify_pre_commit.sh
 ```
 
-If `pre-commit` is unavailable, `bash ci_scripts/tasks/pre_commit.sh` falls back
-to the equivalent direct SwiftLint commands when `swiftlint` is installed. If
-neither tool is installed, the script prints recovery instructions.
+If you prefer to run the SwiftLint steps directly:
+
+```sh
+bash ci_scripts/tasks/format_swift.sh
+bash ci_scripts/tasks/lint_swift.sh
+```
+
+If you only need required builds/tests based on local changes:
+
+```sh
+bash ci_scripts/tasks/verify_repository_state.sh
+```
+
+If you want Git's `pre-commit` hook to enforce the same repository flow, install
+`pre-commit` in your local environment and run `pre-commit install`. The hook
+delegates to `bash ci_scripts/tasks/verify_pre_commit.sh` through the local
+`.pre-commit-config.yaml`.
+
+Legacy wrapper entrypoints remain available for existing automation:
+`verify.sh`, `pre_commit.sh`, `run_required_builds.sh`,
+`verify_before_commit.sh`, and `verify_local_changes.sh`.
 
 If you only need the app build:
 
