@@ -22,68 +22,49 @@ struct UpcomingProvider: AppIntentTimelineProvider {
 
     func timeline(for configuration: UpcomingConfigurationAppIntent, in _: Context) -> Timeline<UpcomingEntry> {
         let currentDate = Date.now
-        var entries: [UpcomingEntry] = .init()
-        for hourOffset in 0 ..< 5 where Calendar.current.date(byAdding: .hour, value: hourOffset, to: currentDate) != nil { // swiftlint:disable:this line_length no_magic_numbers
-            entries.append(makeEntry(now: currentDate, configuration: configuration))
+        let entries = WidgetEntryFactory.timelineDates(now: currentDate).map { _ in
+            makeEntry(now: currentDate, configuration: configuration)
         }
         return .init(entries: entries, policy: .atEnd)
     }
 
-    private func makeEntry(now: Date, configuration: UpcomingConfigurationAppIntent) -> UpcomingEntry { // swiftlint:disable:this function_body_length line_length
-        do {
-            let context = try ModelContainerFactory.sharedContext()
-
-            let item: Item?
-            switch configuration.direction {
-            case .next:
-                item = try ItemService.nextItem(context: context, date: now)
-            case .previous:
-                item = try ItemService.previousItem(context: context, date: now)
-            }
-
-            if let item {
-                let titleText: String = Formatting.shortDayTitle(from: item.localDate)
-                let detailText: String = item.content
-                let amount: Decimal = item.netIncome
-                let deepLinkURL: URL? = {
-                    if let itemID = try? item.id.base64Encoded() {
-                        return WidgetDeepLinkBuilder.itemURL(
-                            for: itemID
-                        )
-                    }
-                    return WidgetDeepLinkBuilder.monthURL(
-                        for: item.localDate
-                    )
-                }()
+    private func makeEntry(now: Date, configuration: UpcomingConfigurationAppIntent) -> UpcomingEntry {
+        let snapshot: WidgetUpcomingSnapshot = {
+            guard let context = try? ModelContainerFactory.sharedContext() else {
                 return .init(
-                    date: now,
-                    subtitleText: configuration.direction == .next ? "Next" : "Previous",
-                    titleText: .init(titleText),
-                    detailText: .init(detailText),
-                    amountText: .init(amount.asCurrency),
-                    isPositive: amount.isPlus || amount.isZero,
-                    deepLinkURL: deepLinkURL
+                    subtitleText: "Next",
+                    titleText: "Upcoming",
+                    detailText: "Error",
+                    amountText: "$0",
+                    isPositive: true,
+                    deepLinkURL: WidgetDeepLinkBuilder.homeURL()
                 )
             }
-            return .init(
-                date: now,
-                subtitleText: configuration.direction == .next ? "Next" : "Previous",
-                titleText: "Upcoming",
-                detailText: "No items",
-                amountText: "$0",
-                isPositive: true,
-                deepLinkURL: WidgetDeepLinkBuilder.homeURL()
+            return WidgetEntryFactory.upcomingSnapshot(
+                context: context,
+                now: now,
+                direction: configuration.direction.widgetUpcomingDirection,
+                deepLinkBuilder: .init(
+                    homeDeepLink: {
+                        WidgetDeepLinkBuilder.homeURL()
+                    },
+                    monthDeepLink: { date in
+                        WidgetDeepLinkBuilder.monthURL(for: date)
+                    },
+                    itemDeepLink: { itemID in
+                        WidgetDeepLinkBuilder.itemURL(for: itemID)
+                    }
+                )
             )
-        } catch {
-            return .init(
-                date: now,
-                subtitleText: "Next",
-                titleText: "Upcoming",
-                detailText: "Error",
-                amountText: "$0",
-                isPositive: true,
-                deepLinkURL: WidgetDeepLinkBuilder.homeURL()
-            )
-        }
+        }()
+        return .init(
+            date: now,
+            subtitleText: .init(snapshot.subtitleText),
+            titleText: .init(snapshot.titleText),
+            detailText: .init(snapshot.detailText),
+            amountText: .init(snapshot.amountText),
+            isPositive: snapshot.isPositive,
+            deepLinkURL: snapshot.deepLinkURL
+        )
     }
 }

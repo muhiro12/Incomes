@@ -1,6 +1,6 @@
 # Incomes Current Product and Architecture Overview
 
-Current as of March 5, 2026.
+Current as of March 23, 2026.
 
 ## Purpose
 
@@ -341,7 +341,7 @@ avoid semantic drift when duplicates exist.
 Accepted ADRs and the current codebase agree on one rule: reusable business
 logic belongs in `IncomesLibrary`.
 
-Current shared business entry points include:
+Current shared business entry points and shared snapshot builders include:
 
 - `ItemService`
 - `TagService`
@@ -350,6 +350,7 @@ Current shared business entry points include:
 - `UpcomingPaymentPlanner`
 - `DataMaintenanceService`
 - `SettingsStatusLoader`
+- `WidgetEntryFactory`
 
 ### 2. App target owns platform adapters
 
@@ -375,10 +376,27 @@ SwiftUI views currently own:
 - navigation decisions
 - confirmation dialogs
 - detail layout
+- small screen-scoped `@Observable` models owned by the screen root
 
 They are not supposed to become the source of truth for mutations,
 deduplication, yearly duplication rules, or calculations. Those rules are
 delegated to coordinators or shared services.
+
+Current screen-scoped presentation models include:
+
+- `MainNavigationRouter`
+- `MainNavigationSettingsCoordinator`
+- `MainNavigationYearDeletionModel`
+- `SettingsScreenModel`
+- `ItemFormPresentationModel`
+- `WatchHomeScreenModel`
+
+The primary iPhone shell still uses a year-based `NavigationSplitView`, but the
+root screen now composes dedicated sidebar, content, detail, and sheet
+presenter views instead of concentrating those responsibilities in one file.
+Routers are expected to stay focused on navigation state and route application.
+Settings-dismissal sequencing and similar flow glue live in feature-local
+coordinators instead of expanding router responsibility.
 
 ### 4. App Intents are adapters
 
@@ -419,6 +437,10 @@ Those routes can be:
 - emitted by notifications
 - opened from widgets
 - triggered by App Intents
+
+App-local helpers may still sequence presentation around those routes, such as
+dismissing Settings before applying a non-settings route, but the canonical
+route contract remains `IncomesRoute`.
 
 ### 7. Preview and sample-data infrastructure is first-class
 

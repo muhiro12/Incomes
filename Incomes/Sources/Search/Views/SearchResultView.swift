@@ -48,9 +48,11 @@ struct SearchResultView: View {
                     }
                 }
             } else {
-                ContentUnavailableView {
-                    Label("No Results", systemImage: "magnifyingglass")
-                }
+                ContentUnavailableView(
+                    "No Results",
+                    systemImage: "magnifyingglass",
+                    description: Text("Adjust your filters to find matching income items.")
+                )
             }
         }
         .navigationTitle("Results")

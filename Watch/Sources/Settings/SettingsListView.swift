@@ -10,12 +10,8 @@ import SwiftData
 import SwiftUI
 
 struct SettingsListView {
-    @Environment(\.modelContext)
-    private var context
     @AppStorage(BoolAppStorageKey.isDebugOn)
     private var isDebugOn
-
-    @State private var isReloading = false
 }
 
 extension SettingsListView: View {

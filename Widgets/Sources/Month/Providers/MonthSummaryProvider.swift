@@ -15,52 +15,49 @@ struct MonthSummaryProvider: AppIntentTimelineProvider {
     }
 
     func snapshot(for configuration: ConfigurationAppIntent, in _: Context) -> MonthSummaryEntry {
-        makeEntry(date: resolveTargetDate(from: configuration, now: Date.now), configuration: configuration)
+        makeEntry(
+            date: WidgetEntryFactory.targetDate(
+                for: configuration.targetMonth.widgetMonthOffset,
+                now: Date.now
+            ),
+            configuration: configuration
+        )
     }
 
     func timeline(for configuration: ConfigurationAppIntent, in _: Context) -> Timeline<MonthSummaryEntry> {
         let currentDate = Date.now
-        let targetDate: Date = resolveTargetDate(from: configuration, now: currentDate)
-        var entries: [MonthSummaryEntry] = .init()
-        for hourOffset in 0 ..< 5 where Calendar.current.date(byAdding: .hour, value: hourOffset, to: currentDate) != nil { // swiftlint:disable:this line_length no_magic_numbers
-            entries.append(makeEntry(date: targetDate, configuration: configuration))
+        let targetDate = WidgetEntryFactory.targetDate(
+            for: configuration.targetMonth.widgetMonthOffset,
+            now: currentDate
+        )
+        let entries = WidgetEntryFactory.timelineDates(now: currentDate).map { _ in
+            makeEntry(date: targetDate, configuration: configuration)
         }
         return .init(entries: entries, policy: .atEnd)
     }
 
     private func makeEntry(date: Date, configuration: ConfigurationAppIntent) -> MonthSummaryEntry {
-        let deepLinkURL = WidgetDeepLinkBuilder.monthURL(for: date)
-        do {
-            let context = try ModelContainerFactory.sharedContext()
-            let totals = try SummaryCalculator.monthlyTotals(context: context, date: date)
-            let totalIncomeText: String = totals.totalIncome.asCurrency
-            let totalOutgoText: String = totals.totalOutgo.asMinusCurrency
-            return .init(
-                date: date,
-                configuration: configuration,
-                totalIncomeText: totalIncomeText,
-                totalOutgoText: totalOutgoText,
-                deepLinkURL: deepLinkURL
-            )
-        } catch {
-            return .init(
-                date: date,
-                configuration: configuration,
-                totalIncomeText: "$0",
-                totalOutgoText: "-$0",
-                deepLinkURL: deepLinkURL
-            )
-        }
-    }
-
-    private func resolveTargetDate(from configuration: ConfigurationAppIntent, now: Date) -> Date {
-        switch configuration.targetMonth {
-        case .previousMonth:
-            return Calendar.current.date(byAdding: .month, value: -1, to: now) ?? now
-        case .currentMonth:
-            return now
-        case .nextMonth:
-            return Calendar.current.date(byAdding: .month, value: 1, to: now) ?? now
-        }
+        let snapshot: WidgetMonthSummarySnapshot = {
+            guard let context = try? ModelContainerFactory.sharedContext() else {
+                return .init(
+                    totalIncomeText: "$0",
+                    totalOutgoText: "-$0",
+                    deepLinkURL: WidgetDeepLinkBuilder.monthURL(for: date)
+                )
+            }
+            return WidgetEntryFactory.monthSummarySnapshot(
+                context: context,
+                date: date
+            ) { targetDate in
+                WidgetDeepLinkBuilder.monthURL(for: targetDate)
+            }
+        }()
+        return .init(
+            date: date,
+            configuration: configuration,
+            totalIncomeText: snapshot.totalIncomeText,
+            totalOutgoText: snapshot.totalOutgoText,
+            deepLinkURL: snapshot.deepLinkURL
+        )
     }
 }

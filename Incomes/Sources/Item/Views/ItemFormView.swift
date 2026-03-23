@@ -31,11 +31,9 @@ struct ItemFormView: View {
     @AppStorage(BoolAppStorageKey.isDebugOn)
     private var isDebugOn
 
-    @FocusState private var focusedField: Field?
-    @State private var dialogRoute: DialogRoute?
-    @State private var sheetRoute: SheetRoute?
-    @State private var errorMessage: String?
+    @FocusState private var focusedField: ItemFormFocusedField?
     @State private var model: ItemFormModel
+    @State private var presentation: ItemFormPresentationModel = .init()
 
     private let mode: Mode
     private let onCreate: (() -> Void)?
@@ -54,73 +52,20 @@ struct ItemFormView: View {
 
     var body: some View {
         @Bindable var model = model
+        @Bindable var presentation = presentation
 
-        Form { // swiftlint:disable:this closure_body_length
-            Section { // swiftlint:disable:this closure_body_length
-                DatePicker(selection: $model.date, displayedComponents: .date) {
-                    Text("Date")
-                }
-                HStack {
-                    Text("Content")
-                    Spacer()
-                    TextField(text: $model.content) {
-                        Text("Required")
-                    }
-                    .focused($focusedField, equals: .content)
-                    .multilineTextAlignment(.trailing)
-                }
-                HStack {
-                    Text("Income")
-                    TextField(text: $model.income) {
-                        Text("0")
-                    }
-                    .keyboardType(.numberPad)
-                    .focused($focusedField, equals: .income)
-                    .multilineTextAlignment(.trailing)
-                    .foregroundColor(model.income.isEmptyOrDecimal ? .primary : .red)
-                }
-                HStack {
-                    Text("Outgo")
-                    TextField(text: $model.outgo) {
-                        Text("0")
-                    }
-                    .keyboardType(.numberPad)
-                    .focused($focusedField, equals: .outgo)
-                    .multilineTextAlignment(.trailing)
-                    .foregroundColor(model.outgo.isEmptyOrDecimal ? .primary : .red)
-                }
-                HStack {
-                    Text("Category")
-                    Spacer()
-                    TextField(text: $model.category) {
-                        Text("Others")
-                    }
-                    .focused($focusedField, equals: .category)
-                    .multilineTextAlignment(.trailing)
-                }
-                Picker("Priority", selection: priorityValue) {
-                    ForEach(priorityRange, id: \.self) { value in
-                        Text("\(value)")
-                            .tag(value)
-                    }
-                }
-            } header: {
-                Text("Information")
-            }
-            if mode == .create {
-                Section {
-                    Toggle("Repeat", isOn: $model.isRepeatEnabled)
-                        .popoverTip(repeatItemsTip, arrowEdge: .bottom)
-                }
-                if model.isRepeatEnabled {
-                    Section("Repeat Months") {
-                        RepeatMonthPicker(
-                            selectedMonthSelections: $model.repeatMonthSelections,
-                            baseDate: model.date
-                        )
-                    }
-                }
-            }
+        Form {
+            ItemFormInformationSection(
+                model: model,
+                priorityRange: priorityRange,
+                priorityValue: priorityValue,
+                focusedField: $focusedField
+            )
+            ItemFormRepeatSection(
+                model: model,
+                mode: mode,
+                repeatItemsTip: repeatItemsTip
+            )
         }
         .scrollDismissesKeyboard(.interactively)
         .contentMargins(.bottom, .space(.s), for: .scrollContent)
@@ -162,7 +107,7 @@ struct ItemFormView: View {
             if #available(iOS 26.0, *) {
                 ToolbarItem(placement: .bottomBar) {
                     Button {
-                        sheetRoute = .assist
+                        presentation.sheetRoute = .assist
                     } label: {
                         Label("Assist", systemImage: "wand.and.stars")
                     }
@@ -202,22 +147,22 @@ struct ItemFormView: View {
             "Error",
             isPresented: Binding(
                 get: {
-                    errorMessage != nil
+                    presentation.errorMessage != nil
                 },
                 set: { isPresented in
                     if !isPresented {
-                        errorMessage = nil
+                        presentation.clearError()
                     }
                 }
             )
         ) {
             Button("OK", role: .cancel) {
-                errorMessage = nil
+                presentation.clearError()
             }
         } message: {
-            Text(errorMessage ?? .empty)
+            Text(presentation.errorMessage ?? .empty)
         }
-        .onAppear {
+        .task(id: initialContextTaskID) {
             model.applyInitialContext(
                 item: item,
                 tag: tag,
@@ -257,8 +202,7 @@ struct ItemFormView: View {
                 // no-op
             }
         }
-        .navigationViewStyle(StackNavigationViewStyle())
-        .sheet(item: $sheetRoute) { route in
+        .sheet(item: $presentation.sheetRoute) { route in
             switch route {
             case .assist:
                 if #available(iOS 26.0, *) {
@@ -274,6 +218,12 @@ struct ItemFormView: View {
 }
 
 private extension ItemFormView {
+    var initialContextTaskID: String {
+        let itemID = item.map { String(describing: $0.persistentModelID) } ?? .empty
+        let tagID = tag.map { String(describing: $0.persistentModelID) } ?? .empty
+        return "\(mode)-\(itemID)-\(tagID)"
+    }
+
     var priorityValue: Binding<Int> {
         .init(
             get: {
@@ -457,62 +407,34 @@ private extension ItemFormView {
     func cancel() {
         if model.content == "Enable Debug" {
             model.content = .empty
-            dialogRoute = .debug
+            presentation.presentDebugDialog()
             return
         }
         dismiss()
     }
 
-    func presentToRepeatingDialog() {
-        dialogRoute = .repeating
-    }
-
     func handle(_ action: ItemFormMutationPresentationAction) {
-        switch action {
+        switch presentation.handle(action) {
         case .dismiss:
             dismiss()
-        case .presentScopeSelection:
-            presentToRepeatingDialog()
-        case let .presentError(message):
-            errorMessage = message
+        case .idle:
+            break
         }
     }
 
-    func isDialogPresented(_ route: DialogRoute) -> Binding<Bool> {
+    func isDialogPresented(_ route: ItemFormDialogRoute) -> Binding<Bool> {
         .init(
             get: {
-                dialogRoute == route
+                presentation.dialogRoute == route
             },
             set: { isPresented in
                 if isPresented {
-                    dialogRoute = route
-                } else if dialogRoute == route {
-                    dialogRoute = nil
+                    presentation.dialogRoute = route
+                } else {
+                    presentation.clearDialog(route)
                 }
             }
         )
-    }
-}
-
-private extension ItemFormView {
-    enum Field {
-        case content
-        case income
-        case outgo
-        case category
-    }
-
-    enum DialogRoute {
-        case debug
-        case repeating
-    }
-
-    enum SheetRoute: String, Identifiable {
-        case assist
-
-        var id: String {
-            rawValue
-        }
     }
 }
 

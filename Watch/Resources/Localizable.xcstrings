@@ -240,6 +240,7 @@
       }
     },
     "No upcoming items" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -272,6 +273,9 @@
           }
         }
       }
+    },
+    "No Upcoming Items" : {
+
     },
     "Reload" : {
       "localizations" : {

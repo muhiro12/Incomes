@@ -16,7 +16,7 @@ Related decision:
 | --- | --- | --- |
 | Domain (`IncomesLibrary`) | Validation, calculations, repeat rules, duplication planning, search predicate building, maintenance rules, SwiftData schema/predicates/descriptors | App-specific side effects (notifications, WidgetKit reload, ads, StoreKit, WatchConnectivity orchestration, lifecycle wiring) |
 | Adapter (`Incomes`, `Watch`, `Widgets`, App Intents) | Parameter parsing, platform API calls, dependency wiring, follow-up orchestration based on domain outcomes | Domain branching duplicated from library |
-| View (SwiftUI) | Focus state, sheets, navigation state, formatting, view composition | Domain validation branching, business calculations, repeat/duplication rules |
+| View (SwiftUI) | Focus state, sheets, navigation state, screen-scoped `@Observable` presentation models, formatting, view composition | Domain validation branching, business calculations, repeat/duplication rules |
 
 ## View Rules
 
@@ -25,6 +25,7 @@ Allowed in views:
 - Focus and keyboard behavior
 - Sheet/dialog routing
 - Navigation and transient UI state
+- Small screen-scoped `@Observable` models owned by the root view
 - Display-only formatting
 
 Not allowed in views:
@@ -33,6 +34,23 @@ Not allowed in views:
 - Financial calculations
 - Repeat series decision rules
 - Duplication planning rules
+
+## Screen-Scoped Presentation Models
+
+When a screen grows beyond trivial local state, keep a small `@Observable`
+presentation model in the root view's `@State` and pass it downward with
+`@Bindable` or typed `@Environment(Type.self)`.
+
+Prefer this over:
+
+- `ObservableObject`
+- `EnvironmentObject`
+- adding feature-local sheet or dismissal sequencing into a broader router
+
+Current examples include `MainNavigationRouter`,
+`MainNavigationSettingsCoordinator`, `MainNavigationYearDeletionModel`,
+`SettingsScreenModel`, `ItemFormPresentationModel`, and
+`WatchHomeScreenModel`.
 
 ## Canonical Mutation Flow
 
@@ -97,21 +115,38 @@ API style decision:
 
 ## Current Hotspots and Minimal Refactor Plans
 
-1. App runtime integration should use the package-owned shells, not
-   handwritten root orchestration.
+1. App runtime integration should use the package-owned shells, and the
+   main navigation screen should stay decomposed into focused presentation
+   helpers.
    Files:
    - `Incomes/Sources/IncomesApp.swift`
    - `Incomes/Sources/ContentView.swift`
    - `Incomes/Sources/Debug/Models/IncomesSampleData.swift`
    - `Incomes/Sources/Common/Platform/*`
+   - `Incomes/Sources/Main/Views/MainNavigationView.swift`
+   - `Incomes/Sources/Main/Views/MainNavigationSidebarView.swift`
+   - `Incomes/Sources/Main/Views/MainNavigationContentColumn.swift`
+   - `Incomes/Sources/Main/Views/MainNavigationDetailColumn.swift`
+   - `Incomes/Sources/Main/Views/MainNavigationSheetPresenter.swift`
+   - `Incomes/Sources/Main/Views/MainNavigationRouter.swift`
+   - `Incomes/Sources/Main/Views/MainNavigationSettingsCoordinator.swift`
+   - `Incomes/Sources/Main/Views/MainNavigationYearDeletionModel.swift`
    Minimal plan:
    - Keep `IncomesPlatformEnvironmentFactory` focused on assembling
      `MHAppRuntimeBootstrap`, `MHAppRoutePipeline<IncomesRoute>`,
      `IncomesRouteBridge`, `MHReviewFlow`, and app services.
    - Keep `ContentView` focused on UI state synchronization and update
      alert presentation.
-   - Keep `MainNavigationView` responsible for app-specific navigation
-     meaning by registering the route handler after loading persisted state.
+   - Keep `MainNavigationView` as a thin `NavigationSplitView`
+     composition root that registers the route handler after loading
+     persisted state.
+   - Keep sidebar, content, detail, and sheet presentation split across
+     dedicated view files.
+   - Keep `MainNavigationRouter` limited to navigation state and route
+     application.
+   - Keep settings-dismissal deferral and similar flow sequencing in
+     `MainNavigationSettingsCoordinator` instead of expanding router
+     responsibility.
 
 2. Notification route payload configuration must stay defined in one adapter helper.
    File:

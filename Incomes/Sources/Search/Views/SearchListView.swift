@@ -70,12 +70,40 @@ struct SearchListView: View {
                 }
             }
         }
+        .overlay {
+            if isShowingEmptyState {
+                ContentUnavailableView(
+                    "No Matches",
+                    systemImage: "magnifyingglass",
+                    description: Text("Try another keyword or switch the search target.")
+                )
+            }
+        }
         .scrollDismissesKeyboard(.interactively)
         .navigationTitle("Search")
     }
 }
 
 private extension SearchListView {
+    var isShowingEmptyState: Bool {
+        switch selectedTarget {
+        case .content:
+            return selectedTarget.filteredTags(
+                contents,
+                searchText: searchText
+            ).isEmpty
+        case .category:
+            return selectedTarget.filteredTags(
+                categories,
+                searchText: searchText
+            ).isEmpty
+        case .balance,
+             .income,
+             .outgo:
+            return false
+        }
+    }
+
     func buildTagRows(tags: [Tag]) -> some View {
         ForEach(
             selectedTarget.filteredTags(tags, searchText: searchText)

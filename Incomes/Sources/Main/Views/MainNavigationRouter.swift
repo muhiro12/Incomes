@@ -21,47 +21,6 @@ final class MainNavigationRouter {
     var fullScreenRoute: MainNavigationFullScreenRoute?
     var settingsDestination: SettingsNavigationDestination?
     var itemDetailID: PersistentIdentifier?
-    var isYearDeleteDialogPresented = false
-    var willDeleteItems: [Item] = []
-    var willDeleteTags: [Tag] = []
-
-    private var pendingRouteAfterSettingsDismissal: IncomesRoute?
-
-    private var isSettingsPresented: Bool {
-        sheetRoute == .settings
-    }
-
-    func prepareYearDeletion(
-        from yearTags: [Tag],
-        indices: IndexSet
-    ) {
-        willDeleteTags = TagService.resolveTagsForDeletion(
-            from: yearTags,
-            indices: indices
-        )
-        willDeleteItems = TagService.resolveItemsForDeletion(
-            from: yearTags,
-            indices: indices
-        )
-        isYearDeleteDialogPresented = willDeleteTags.isNotEmpty
-    }
-
-    func completeYearDeletion(selectedYearTag: Tag?) {
-        if let selectedYearTag,
-           TagService.containsEquivalentTag(
-            selectedYearTag,
-            in: willDeleteTags
-           ) {
-            yearTagID = nil
-        }
-        clearYearDeletion()
-    }
-
-    func clearYearDeletion() {
-        isYearDeleteDialogPresented = false
-        willDeleteItems = []
-        willDeleteTags = []
-    }
 
     func loadState(context: ModelContext) throws {
         let state = try MainNavigationStateLoader.load(context: context)
@@ -95,40 +54,6 @@ final class MainNavigationRouter {
     ) throws {
         try apply(
             route: route,
-            context: context
-        )
-    }
-
-    func navigateFromSettings(
-        to route: IncomesRoute,
-        context: ModelContext
-    ) throws {
-        if isSettingsPresented, route.isSettingsScopeRoute {
-            try apply(
-                route: route,
-                context: context
-            )
-        } else if isSettingsPresented {
-            pendingRouteAfterSettingsDismissal = route
-            sheetRoute = nil
-        } else {
-            try apply(
-                route: route,
-                context: context
-            )
-        }
-    }
-
-    func applyPendingRouteAfterSettingsDismissalIfNeeded(
-        context: ModelContext
-    ) throws {
-        guard isSettingsPresented == false,
-              let pendingRouteAfterSettingsDismissal else {
-            return
-        }
-        self.pendingRouteAfterSettingsDismissal = nil
-        try apply(
-            route: pendingRouteAfterSettingsDismissal,
             context: context
         )
     }

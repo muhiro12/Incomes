@@ -24,6 +24,8 @@ struct MainNavigationView: View {
     private var yearTags: [Tag]
 
     @State private var router: MainNavigationRouter = .init()
+    @State private var settingsCoordinator: MainNavigationSettingsCoordinator = .init()
+    @State private var yearDeletionModel: MainNavigationYearDeletionModel = .init()
 
     private var selectedYearTag: Tag? {
         guard let yearTagID = router.yearTagID else {
@@ -45,76 +47,16 @@ struct MainNavigationView: View {
         )
     }
 
-    private var searchPredicateSelection: Binding<ItemPredicate?> {
-        .init(
-            get: {
-                router.predicate
-            },
-            set: { predicate in
-                router.selectSearchPredicate(predicate)
-            }
-        )
-    }
-
     var body: some View {
         @Bindable var router = router
 
-        NavigationSplitView(preferredCompactColumn: $router.preferredCompactColumn) { // swiftlint:disable:this closure_body_length line_length
-            Group {
-                if yearTags.isEmpty {
-                    CreateItemButton()
-                } else {
-                    List(selection: yearTagSelection) {
-                        ForEach(yearTags, id: \.persistentModelID) { yearTag in
-                            TagSummaryRow()
-                                .environment(yearTag)
-                                .tag(yearTag.persistentModelID)
-                        }
-                        .onDelete { indices in
-                            Haptic.warning.impact()
-                            router.prepareYearDeletion(
-                                from: yearTags,
-                                indices: indices
-                            )
-                        }
-                        YearlyDuplicationPromoSection(
-                            context: context,
-                            yearTags: yearTags
-                        ) {
-                            enqueueNavigation(to: .yearlyDuplication)
-                        }
-                    }
-                }
-            }
-            .confirmationDialog(
-                Text("Delete"),
-                isPresented: $router.isYearDeleteDialogPresented
-            ) {
-                Button(role: .destructive) {
-                    Task { @MainActor in
-                        do {
-                            try await ItemDeleteCoordinator.delete(
-                                context: context,
-                                items: router.willDeleteItems,
-                                notificationService: notificationService
-                            )
-                            router.completeYearDeletion(
-                                selectedYearTag: selectedYearTag
-                            )
-                        } catch {
-                            assertionFailure(error.localizedDescription)
-                        }
-                    }
-                } label: {
-                    Text("Delete")
-                }
-                Button(role: .cancel) {
-                    router.clearYearDeletion()
-                } label: {
-                    Text("Cancel")
-                }
-            } message: {
-                Text("Are you sure you want to delete these items?")
+        NavigationSplitView(preferredCompactColumn: $router.preferredCompactColumn) {
+            MainNavigationSidebarView(
+                yearTags: yearTags,
+                selectedYearTag: selectedYearTag,
+                yearTagSelection: yearTagSelection
+            ) { route in
+                enqueueNavigation(to: route)
             }
             .navigationTitle("Incomes")
             .toolbar {
@@ -133,19 +75,12 @@ struct MainNavigationView: View {
                     CreateItemButton()
                 }
             }
-        } content: { // swiftlint:disable:this closure_body_length
-            Group {
-                if router.isSearchPresented {
-                    SearchListView(
-                        selection: searchPredicateSelection,
-                        searchText: $router.searchText
-                    )
-                } else if let selectedYearTag {
-                    HomeListView { route in
-                        enqueueNavigation(to: route)
-                    }
-                    .environment(selectedYearTag)
-                }
+        } content: {
+            MainNavigationContentColumn(
+                hasAnyYears: yearTags.isNotEmpty,
+                selectedYearTag: selectedYearTag
+            ) { route in
+                enqueueNavigation(to: route)
             }
             .searchable(text: $router.searchText, isPresented: $router.isSearchPresented)
             .toolbar {
@@ -166,12 +101,7 @@ struct MainNavigationView: View {
                 }
             }
         } detail: {
-            if router.isSearchPresented {
-                SearchResultView(predicate: router.predicate ?? .none)
-            } else if let selectedTag = router.selectedTag {
-                ItemListGroup()
-                    .environment(selectedTag)
-            }
+            MainNavigationDetailColumn()
         }
         .sheet(
             item: $router.sheetRoute,
@@ -182,22 +112,12 @@ struct MainNavigationView: View {
                 }
             },
             content: { sheetRoute in
-                switch sheetRoute {
-                case .settings:
-                    SettingsNavigationView(
-                        incomingDestination: $router.settingsDestination
-                    ) { route in
-                        navigateFromSettings(to: route)
-                    }
-                    .incomesSheetPresentation()
-                case .yearlyDuplication:
-                    NavigationStack {
-                        YearlyDuplicationView()
-                    }
-                    .incomesSheetPresentation()
-                case .itemDetail:
-                    deepLinkedItemNavigationView()
-                        .incomesSheetPresentation()
+                MainNavigationSheetPresenter(
+                    route: sheetRoute,
+                    itemDetailID: router.itemDetailID,
+                    settingsDestination: $router.settingsDestination
+                ) { route in
+                    navigateFromSettings(to: route)
                 }
             }
         )
@@ -228,6 +148,9 @@ struct MainNavigationView: View {
 
             await PhoneWatchBridge.shared.activate(modelContext: context)
         }
+        .environment(router)
+        .environment(settingsCoordinator)
+        .environment(yearDeletionModel)
     }
 }
 
@@ -277,9 +200,18 @@ private extension MainNavigationView {
 
     func navigateFromSettings(to route: IncomesRoute) {
         do {
-            try router.navigateFromSettings(
+            try settingsCoordinator.navigateFromSettings(
                 to: route,
-                context: context
+                isSettingsPresented: router.sheetRoute == .settings,
+                applyRoute: {
+                    try router.navigate(
+                        to: route,
+                        context: context
+                    )
+                },
+                dismissSettings: {
+                    router.sheetRoute = nil
+                }
             )
         } catch {
             assertionFailure(error.localizedDescription)
@@ -288,53 +220,16 @@ private extension MainNavigationView {
 
     func applyPendingRouteAfterSettingsDismissalIfNeeded() {
         do {
-            try router.applyPendingRouteAfterSettingsDismissalIfNeeded(
-                context: context
-            )
+            try settingsCoordinator.applyPendingRouteAfterSettingsDismissalIfNeeded(
+                isSettingsPresented: router.sheetRoute == .settings
+            ) { route in
+                try router.navigate(
+                    to: route,
+                    context: context
+                )
+            }
         } catch {
             assertionFailure(error.localizedDescription)
-        }
-    }
-
-    @ViewBuilder
-    func deepLinkedItemNavigationView() -> some View {
-        if let itemDetailID = router.itemDetailID,
-           let item = try? context.fetchFirst(
-            .items(.idIs(itemDetailID))
-           ) {
-            ItemNavigationView()
-                .environment(item)
-        } else {
-            NavigationStack {
-                Text("Item not found")
-                    .navigationTitle("Item")
-                    .toolbar {
-                        ToolbarItem {
-                            CloseButton()
-                        }
-                    }
-            }
-        }
-    }
-}
-
-extension IncomesRoute {
-    var isSettingsScopeRoute: Bool {
-        switch self {
-        case .settings,
-             .settingsSubscription,
-             .settingsLicense,
-             .settingsDebug:
-            return true
-        case .home,
-             .yearSummary,
-             .yearlyDuplication,
-             .duplicateTags,
-             .year,
-             .month,
-             .item,
-             .search:
-            return false
         }
     }
 }

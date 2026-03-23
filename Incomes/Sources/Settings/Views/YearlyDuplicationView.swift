@@ -304,7 +304,10 @@ private extension YearlyDuplicationView {
         }
         .padding(.horizontal, Constants.selectionBarHorizontalPadding)
         .padding(.vertical, Constants.selectionBarVerticalPadding)
-        .background(.ultraThinMaterial)
+        .background(Color(.systemGroupedBackground))
+        .overlay(alignment: .bottom) {
+            Divider()
+        }
     }
 
     func yearMenu(

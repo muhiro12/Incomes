@@ -468,6 +468,9 @@
         }
       }
     },
+    "Adjust your filters to find matching income items." : {
+
+    },
     "All Items" : {
       "localizations" : {
         "en" : {
@@ -1080,6 +1083,12 @@
         }
       }
     },
+    "Choose a filter or enter an amount range to see matching items." : {
+
+    },
+    "Choose a year to review monthly summaries and items." : {
+
+    },
     "Close" : {
       "localizations" : {
         "en" : {
@@ -1284,6 +1293,12 @@
         }
       }
     },
+    "Create Your First Item" : {
+
+    },
+    "Create your first item to start organizing income by year." : {
+
+    },
     "Created" : {
       "localizations" : {
         "en" : {
@@ -1351,6 +1366,9 @@
           }
         }
       }
+    },
+    "Credit" : {
+
     },
     "Currency Code" : {
       "localizations" : {
@@ -2713,6 +2731,9 @@
       },
       "shouldTranslate" : false
     },
+    "Incomes could not open %@" : {
+
+    },
     "Information" : {
       "localizations" : {
         "en" : {
@@ -2780,6 +2801,9 @@
           }
         }
       }
+    },
+    "Invalid Link" : {
+
     },
     "Invalid month requested for summary generation." : {
       "localizations" : {
@@ -2916,6 +2940,9 @@
           }
         }
       }
+    },
+    "Item Not Found" : {
+
     },
     "Items" : {
       "localizations" : {
@@ -3325,6 +3352,9 @@
         }
       }
     },
+    "No Matches" : {
+
+    },
     "No Results" : {
       "localizations" : {
         "en" : {
@@ -3358,6 +3388,9 @@
           }
         }
       }
+    },
+    "No Years Yet" : {
+
     },
     "Notification permission will be requested when reminders are registered." : {
       "localizations" : {
@@ -3665,6 +3698,9 @@
         }
       }
     },
+    "Once you add an item, Incomes will organize it into a year timeline." : {
+
+    },
     "Open a month" : {
       "localizations" : {
         "en" : {
@@ -3970,6 +4006,9 @@
           }
         }
       }
+    },
+    "Pick a month or summary from the middle column to inspect item details." : {
+
     },
     "Please update Incomes to the latest version to continue using it." : {
       "localizations" : {
@@ -5059,6 +5098,12 @@
         }
       }
     },
+    "Search Results" : {
+
+    },
+    "Select a Month" : {
+
+    },
     "Select a month row to review the items recorded in that month." : {
       "localizations" : {
         "en" : {
@@ -5126,6 +5171,9 @@
           }
         }
       }
+    },
+    "Select a Year" : {
+
     },
     "Send test notification" : {
       "localizations" : {
@@ -5739,6 +5787,9 @@
         }
       }
     },
+    "The selected item is no longer available." : {
+
+    },
     "This is a repeating item." : {
       "localizations" : {
         "en" : {
@@ -5942,6 +5993,9 @@
           }
         }
       }
+    },
+    "Try another keyword or switch the search target." : {
+
     },
     "Turn this on for rent, salary, and other entries you reuse every month." : {
       "localizations" : {

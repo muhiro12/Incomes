@@ -17,71 +17,18 @@ struct ContentView {
 
     @Query(.items(.dateIsAfter(Date.now), order: .forward))
     private var upcomingCandidates: [Item]
-    @State private var isSettingsPresented = false
-    @State private var isReloading = false
+    @State private var model: WatchHomeScreenModel = .init()
 }
 
 extension ContentView: View {
     var body: some View {
-        NavigationStack { // swiftlint:disable:this closure_body_length
-            List { // swiftlint:disable:this closure_body_length
-                Section("Upcoming") {
-                    let itemsForDisplay: [Item] = {
-                        guard let first = upcomingCandidates.first else {
-                            return []
-                        }
-                        let firstDate = first.localDate
-                        return upcomingCandidates.filter { item in
-                            Calendar.current.isDate(item.localDate, inSameDayAs: firstDate)
-                        }
-                    }()
+        @Bindable var model = model
 
-                    if itemsForDisplay.isNotEmpty {
-                        ForEach(itemsForDisplay) { item in
-                            VStack {
-                                Text(item.content)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                HStack {
-                                    Text(item.localDate.formatted(.dateTime.month().day()))
-                                        .font(.footnote)
-                                    Text(item.netIncome.asCurrency)
-                                        .foregroundStyle(item.isNetIncomePositive ? .accent : .red)
-                                        .frame(maxWidth: .infinity, alignment: .trailing)
-                                }
-                            }
-                        }
-                    } else {
-                        Text("No upcoming items")
-                    }
-                }
-                Section {
-                    Button {
-                        guard !isReloading else {
-                            return
-                        }
-                        isReloading = true
-                        Task { @MainActor in
-                            await WatchDataSyncer.syncRecentMonths(context: context)
-                            isReloading = false
-                        }
-                    } label: {
-                        if isReloading {
-                            ProgressView()
-                        } else {
-                            Label("Reload", systemImage: "arrow.trianglehead.clockwise")
-                        }
-                    }
-                    .disabled(isReloading)
-                }
-                Section {
-                    Button("Settings", systemImage: "gear") {
-                        isSettingsPresented = true
-                    }
-                }
-            }
-            .navigationTitle("Incomes")
+        NavigationStack {
+            homeList(model: model)
+                .navigationTitle("Incomes")
         }
-        .sheet(isPresented: $isSettingsPresented) {
+        .sheet(isPresented: $model.isSettingsPresented) {
             NavigationStack {
                 SettingsListView()
             }
@@ -91,12 +38,92 @@ extension ContentView: View {
             isDebugOn = true
             #endif
 
-            // Activate phone sync and request recent items
-            isReloading = true
             await PhoneSyncClient.shared.activate()
-            await WatchDataSyncer.syncRecentMonths(context: context)
-            isReloading = false
+            await reloadRecentMonthsIfNeeded()
         }
+    }
+}
+
+private extension ContentView {
+    func homeList(
+        model: WatchHomeScreenModel
+    ) -> some View {
+        List {
+            upcomingSection(model: model)
+            reloadSection(model: model)
+            settingsSection(model: model)
+        }
+    }
+
+    @ViewBuilder
+    func upcomingSection(
+        model: WatchHomeScreenModel
+    ) -> some View {
+        let itemsForDisplay = model.displayedItems(
+            from: upcomingCandidates
+        )
+
+        Section("Upcoming") {
+            if itemsForDisplay.isNotEmpty {
+                ForEach(itemsForDisplay) { item in
+                    VStack {
+                        Text(item.content)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        HStack {
+                            Text(item.localDate.formatted(.dateTime.month().day()))
+                                .font(.footnote)
+                            Text(item.netIncome.asCurrency)
+                                .foregroundStyle(item.isNetIncomePositive ? .accent : .red)
+                                .frame(maxWidth: .infinity, alignment: .trailing)
+                        }
+                    }
+                }
+            } else {
+                ContentUnavailableView(
+                    "No Upcoming Items",
+                    systemImage: "calendar"
+                )
+            }
+        }
+    }
+
+    func reloadSection(
+        model: WatchHomeScreenModel
+    ) -> some View {
+        Section {
+            Button {
+                Task { @MainActor in
+                    await reloadRecentMonthsIfNeeded()
+                }
+            } label: {
+                if model.isReloading {
+                    ProgressView()
+                } else {
+                    Label("Reload", systemImage: "arrow.trianglehead.clockwise")
+                }
+            }
+            .disabled(model.isReloading)
+        }
+    }
+
+    func settingsSection(
+        model: WatchHomeScreenModel
+    ) -> some View {
+        Section {
+            Button("Settings", systemImage: "gear") {
+                model.isSettingsPresented = true
+            }
+        }
+    }
+
+    func reloadRecentMonthsIfNeeded() async {
+        guard model.beginReload() else {
+            return
+        }
+        defer {
+            model.finishReload()
+        }
+        await WatchDataSyncer.syncRecentMonths(context: context)
     }
 }
 

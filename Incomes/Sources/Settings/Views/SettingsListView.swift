@@ -1,10 +1,3 @@
-//
-//  SettingsListView.swift
-//  Incomes
-//
-//  Created by Hiromu Nakano on 2020/06/24.
-//
-
 import MHPlatform
 import SwiftData
 import SwiftUI
@@ -18,8 +11,6 @@ struct SettingsListView {
     @Environment(IncomesTipController.self)
     private var tipController
 
-    @Environment(\.locale)
-    private var locale
     @Environment(\.scenePhase)
     private var scenePhase
 
@@ -37,11 +28,7 @@ struct SettingsListView {
     @AppStorage(BoolAppStorageKey.isDebugOn)
     private var isDebugOn: Bool
 
-    @State private var isNotificationEnabled = true
-    @State private var isDeleteDialogPresented = false
-    @State private var isDeleteDebugDialogPresented = false
-    @State private var hasDuplicateTags = false
-    @State private var hasDebugData = false
+    @State private var model: SettingsScreenModel = .init()
 
     private let navigateToRoute: (IncomesRoute) -> Void
     private let subscriptionTip = SubscriptionTip()
@@ -58,88 +45,18 @@ struct SettingsListView {
 
 extension SettingsListView: View {
     var body: some View {
+        @Bindable var model = model
+
         List { // swiftlint:disable:this closure_body_length
-            if isSubscribeOn {
-                Toggle(isOn: $isICloudOn) {
-                    Text("iCloud On")
-                }
-            } else {
-                routeRowButton(
-                    "Subscription",
-                    route: .settingsSubscription
-                ) {
-                    tipController.donateDidOpenSubscription()
-                }
-                .popoverTip(subscriptionTip, arrowEdge: .top)
-            }
-            Section {
-                Picker(selection: $currencyCode) {
-                    ForEach(CurrencyCode.allCases, id: \.rawValue) { code in
-                        Text(code.displayName)
-                    }
-                } label: {
-                    Text("Currency Code")
-                }
-            }
-            Section("Push notification settings") { // swiftlint:disable:this closure_body_length
-                Toggle("Enable push notifications", isOn: $notificationSettings.isEnabled)
-                if isNotificationEnabled {
-                    HStack {
-                        Text("Notify for amounts over")
-                        Spacer()
-                        TextField(
-                            "Amount",
-                            value: $notificationSettings.thresholdAmount,
-                            format: .currency(code: locale.currency?.identifier ?? .empty)
-                        )
-                        .keyboardType(.numberPad)
-                        .multilineTextAlignment(.trailing)
-                        .frame(maxWidth: 120) // swiftlint:disable:this no_magic_numbers
-                    }
-                    Picker("Notify days before", selection: $notificationSettings.daysBeforeDueDate) {
-                        ForEach(0..<15) { dayOffset in // swiftlint:disable:this no_magic_numbers
-                            Text("\(dayOffset) days")
-                        }
-                    }
-                    DatePicker(
-                        "Notify time",
-                        selection: $notificationSettings.notifyTime,
-                        displayedComponents: .hourAndMinute
-                    )
-                    Button("Send test notification") {
-                        notificationService.sendTestNotification()
-                    }
-                }
-                switch notificationService.authorizationState {
-                case .authorized:
-                    Text("Notifications are enabled and will follow your in-app schedule.")
-                        .font(.footnote)
-                        .foregroundStyle(.secondary)
-                case .denied:
-                    Button("Open System Settings") {
-                        openSystemSettings()
-                    }
-                    Text("Notifications are currently denied in iOS Settings.")
-                        .font(.footnote)
-                        .foregroundStyle(.secondary)
-                case .notDetermined:
-                    Text("Notification permission will be requested when reminders are registered.")
-                        .font(.footnote)
-                        .foregroundStyle(.secondary)
-                }
-            }
-            Section {
-                yearlyDuplicationButton()
-                Button(role: .destructive) {
-                    Haptic.warning.impact()
-                    isDeleteDialogPresented = true
-                } label: {
-                    Text("Delete all")
-                }
-            } header: {
-                Text("Manage items")
-            }
-            if hasDuplicateTags {
+            subscriptionSection
+            currencySection
+            notificationSection(
+                model: model
+            )
+            dataManagementSection(
+                model: model
+            )
+            if model.hasDuplicateTags {
                 Section {
                     Button {
                         navigateToRoute(.duplicateTags)
@@ -155,11 +72,11 @@ extension SettingsListView: View {
                     }
                 }
             }
-            if hasDebugData {
+            if model.hasDebugData {
                 Section {
                     Button(role: .destructive) {
                         Haptic.warning.impact()
-                        isDeleteDebugDialogPresented = true
+                        model.presentDestructiveAction(.deleteDebugData)
                     } label: {
                         Text("Delete debug sample data")
                     }
@@ -215,14 +132,18 @@ extension SettingsListView: View {
         }
         .confirmationDialog(
             Text("Delete all"),
-            isPresented: $isDeleteDialogPresented
+            isPresented: destructiveActionBinding(
+                for: .deleteAll,
+                model: model
+            )
         ) {
             Button(role: .destructive) {
                 Task {
                     do {
                         try await DataMaintenanceService.resetAllData(context: context)
                         Haptic.success.impact()
-                        updateStatus()
+                        model.loadStatus(context: context)
+                        model.dismissDestructiveAction()
                     } catch {
                         assertionFailure(error.localizedDescription)
                     }
@@ -231,7 +152,7 @@ extension SettingsListView: View {
                 Text("Delete")
             }
             Button(role: .cancel) {
-                // no-op
+                model.dismissDestructiveAction()
             } label: {
                 Text("Cancel")
             }
@@ -240,13 +161,17 @@ extension SettingsListView: View {
         }
         .confirmationDialog(
             Text("Delete debug sample data"),
-            isPresented: $isDeleteDebugDialogPresented
+            isPresented: destructiveActionBinding(
+                for: .deleteDebugData,
+                model: model
+            )
         ) {
             Button(role: .destructive) {
                 do {
                     try DataMaintenanceService.deleteDebugData(context: context)
                     Haptic.success.impact()
-                    updateStatus()
+                    model.loadStatus(context: context)
+                    model.dismissDestructiveAction()
                 } catch {
                     assertionFailure(error.localizedDescription)
                 }
@@ -254,7 +179,7 @@ extension SettingsListView: View {
                 Text("Delete")
             }
             Button(role: .cancel) {
-                // no-op
+                model.dismissDestructiveAction()
             } label: {
                 Text("Cancel")
             }
@@ -262,40 +187,114 @@ extension SettingsListView: View {
             Text("This will remove debug sample items and tags. Continue?")
         }
         .task {
-            updateStatus()
-
-            isNotificationEnabled = notificationSettings.isEnabled
+            model.apply(notificationSettings: notificationSettings)
+            model.loadStatus(context: context)
+            await SettingsActionCoordinator.refreshNotifications(
+                notificationService: notificationService
+            )
+            await notificationService.refreshAuthorizationStatus()
+        }
+        .task(id: notificationSettings) {
+            withAnimation {
+                model.apply(notificationSettings: notificationSettings)
+            }
 
             await SettingsActionCoordinator.refreshNotifications(
                 notificationService: notificationService
             )
         }
-        .onChange(of: notificationSettings) {
-            withAnimation {
-                isNotificationEnabled = notificationSettings.isEnabled
-            }
-
-            Task {
-                await SettingsActionCoordinator.refreshNotifications(
-                    notificationService: notificationService
-                )
-            }
-        }
-        .onAppear {
-            updateStatus()
-        }
-        .onChange(of: scenePhase) {
+        .task(id: scenePhase) {
             guard scenePhase == .active else {
                 return
             }
-            Task {
-                await notificationService.refreshAuthorizationStatus()
-            }
+            await notificationService.refreshAuthorizationStatus()
         }
     }
 }
 
 private extension SettingsListView {
+    var subscriptionSection: some View {
+        Group {
+            if isSubscribeOn {
+                Section {
+                    Toggle(isOn: $isICloudOn) {
+                        Text("iCloud On")
+                    }
+                }
+            } else {
+                Section {
+                    routeRowButton(
+                        "Subscription",
+                        route: .settingsSubscription
+                    ) {
+                        tipController.donateDidOpenSubscription()
+                    }
+                    .popoverTip(subscriptionTip, arrowEdge: .top)
+                }
+            }
+        }
+    }
+
+    var currencySection: some View {
+        Section {
+            Picker(selection: $currencyCode) {
+                ForEach(CurrencyCode.allCases, id: \.rawValue) { code in
+                    Text(code.displayName)
+                }
+            } label: {
+                Text("Currency Code")
+            }
+        }
+    }
+
+    @ViewBuilder
+    func notificationSection(
+        model: SettingsScreenModel
+    ) -> some View {
+        SettingsNotificationSection(
+            notificationSettings: $notificationSettings,
+            model: model,
+            authorizationState: notificationService.authorizationState,
+            sendTestNotification: {
+                notificationService.sendTestNotification()
+            },
+            openSystemSettings: openSystemSettings
+        )
+    }
+
+    @ViewBuilder
+    func dataManagementSection(
+        model: SettingsScreenModel
+    ) -> some View {
+        Section {
+            yearlyDuplicationButton()
+            Button(role: .destructive) {
+                Haptic.warning.impact()
+                model.presentDestructiveAction(.deleteAll)
+            } label: {
+                Text("Delete all")
+            }
+        } header: {
+            Text("Manage items")
+        }
+    }
+
+    func destructiveActionBinding(
+        for action: SettingsScreenModel.DestructiveAction,
+        model: SettingsScreenModel
+    ) -> Binding<Bool> {
+        .init(
+            get: {
+                model.isPresenting(action)
+            },
+            set: { isPresented in
+                if !isPresented {
+                    model.dismissDestructiveAction()
+                }
+            }
+        )
+    }
+
     func routeRowButton(
         _ title: LocalizedStringKey,
         route: IncomesRoute,
@@ -332,28 +331,10 @@ private extension SettingsListView {
         }
     }
 
-    func updateStatus() {
-        do {
-            let status = try SettingsActionCoordinator.loadStatus(context: context)
-            hasDuplicateTags = status.hasDuplicateTags
-            hasDebugData = status.hasDebugData
-        } catch {
-            assertionFailure(error.localizedDescription)
-            hasDuplicateTags = false
-            hasDebugData = false
-        }
-    }
-
     func openSystemSettings() {
         guard let settingsURL = URL(string: UIApplication.openSettingsURLString) else {
             return
         }
         UIApplication.shared.open(settingsURL)
-    }
-}
-
-#Preview(traits: .modifier(IncomesSampleData())) {
-    NavigationStack {
-        SettingsListView()
     }
 }
