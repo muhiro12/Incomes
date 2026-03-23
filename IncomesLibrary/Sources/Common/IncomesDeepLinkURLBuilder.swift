@@ -3,7 +3,7 @@ import Foundation
 /// Builds universal-link deep link URLs used by external entry points.
 public enum IncomesDeepLinkURLBuilder {
     /// Returns the universal-link URL for `route`.
-    public static func routeURL(for route: IncomesRoute) -> URL? {
+    nonisolated public static func routeURL(for route: IncomesRoute) -> URL? {
         IncomesDeepLinkCodec.shared.url(
             for: route,
             transport: .universalLink
@@ -11,7 +11,7 @@ public enum IncomesDeepLinkURLBuilder {
     }
 
     /// Returns the preferred deep link for `route`, falling back to home when needed.
-    public static func preferredURL(for route: IncomesRoute) -> URL {
+    nonisolated public static func preferredURL(for route: IncomesRoute) -> URL {
         if let preferredURL = IncomesDeepLinkCodec.shared.preferredURL(for: route) {
             return preferredURL
         }
@@ -27,17 +27,17 @@ public enum IncomesDeepLinkURLBuilder {
     }
 
     /// Returns the universal-link URL for the home route.
-    public static func homeURL() -> URL? {
+    nonisolated public static func homeURL() -> URL? {
         routeURL(for: .home)
     }
 
     /// Returns the preferred deep link for the home route.
-    public static func preferredHomeURL() -> URL {
+    nonisolated public static func preferredHomeURL() -> URL {
         preferredURL(for: .home)
     }
 
     /// Returns the universal-link URL for the month containing `date`.
-    public static func monthURL(
+    nonisolated public static func monthURL(
         for date: Date,
         calendar: Calendar = .current
     ) -> URL? {
@@ -47,21 +47,21 @@ public enum IncomesDeepLinkURLBuilder {
     }
 
     /// Returns the universal-link URL for the item identified by `itemID`.
-    public static func itemURL(
+    nonisolated public static func itemURL(
         for itemID: String
     ) -> URL? {
         routeURL(for: .item(itemID))
     }
 
     /// Returns the preferred deep link for the item identified by `itemID`.
-    public static func preferredItemURL(
+    nonisolated public static func preferredItemURL(
         for itemID: String
     ) -> URL {
         preferredURL(for: .item(itemID))
     }
 
     /// Returns the preferred deep link for the month containing `date`.
-    public static func preferredMonthURL(
+    nonisolated public static func preferredMonthURL(
         for date: Date,
         calendar: Calendar = .current
     ) -> URL {
