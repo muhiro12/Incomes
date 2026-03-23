@@ -11,4 +11,10 @@ script_directory=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 repository_root=$(cd "$script_directory/../.." && pwd)
 cd "$repository_root"
 
-exec bash "$repository_root/ci_scripts/tasks/verify_repository_state.sh" "$@"
+if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+  echo "This script must run inside a git repository." >&2
+  exit 1
+fi
+
+echo "Running repository pre-commit recheck..."
+exec bash "$repository_root/ci_scripts/tasks/verify_task_completion.sh"
