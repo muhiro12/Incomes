@@ -146,6 +146,10 @@ Use the helper scripts in `ci_scripts/` as needed. The repository contract is:
 - `bash ci_scripts/tasks/verify_repository_state.sh` checks the current
   repository state and still writes CI run artifacts.
 
+SwiftLint is resolved from the `SimplyDanny/SwiftLintPlugins` package declared
+in `Incomes.xcodeproj`. The repository scripts do not require a separately
+installed `swiftlint` binary on your `PATH`.
+
 Before running the full verify gate, diagnose the local prerequisites:
 
 ```sh

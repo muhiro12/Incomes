@@ -108,6 +108,8 @@ first to diagnose missing local prerequisites.
 verification gate.
 `bash ci_scripts/tasks/verify_pre_commit.sh` is the verification entrypoint
 used manually and by `.pre-commit-config.yaml`.
+SwiftLint is resolved from the `SimplyDanny/SwiftLintPlugins` package declared
+in `Incomes.xcodeproj`, not from a separately installed `swiftlint` binary.
 
 CI run artifacts are written under `.build/ci/runs/<RUN_ID>/`.
 Each run stores `summary.md`, `commands.txt`, `meta.json`, `logs/`, `results/`, and `work/`.

@@ -11,6 +11,8 @@ script_directory=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 repository_root=$(cd "$script_directory/../.." && pwd)
 cd "$repository_root"
 
+source "$repository_root/ci_scripts/lib/swiftlint.sh"
+
 if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
   echo "This script must run inside a git repository." >&2
   exit 1
@@ -35,6 +37,8 @@ if [[ ${#swift_files[@]} -eq 0 ]]; then
   exit 0
 fi
 
+swiftlint_binary=$(ci_swiftlint_resolve_binary "$repository_root")
+
 echo "Formatting tracked Swift files with SwiftLint..."
-swiftlint lint --quiet --no-cache --fix --format "${swift_files[@]}"
+"$swiftlint_binary" lint --quiet --no-cache --fix --format "${swift_files[@]}"
 echo "Finished formatting tracked Swift files."
