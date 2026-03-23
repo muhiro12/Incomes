@@ -1,5 +1,5 @@
 {
-  "originHash" : "de8c9c89fccdbd6553ff8a5addbf57824d760442f636fe1e83c86a25819bd1e9",
+  "originHash" : "a8703a85887ed01c8d55e6f80043d368dff8bf3956e07ec35cbc7cb4e4521fc1",
   "pins" : [
     {
       "identity" : "googlemobileadswrapper",
@@ -15,8 +15,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/cybozu/LicenseList.git",
       "state" : {
-        "revision" : "56f1b5724138e4d9f60453b555edc80e43805503",
-        "version" : "2.2.0"
+        "revision" : "6740b7c6372d26c89bae227b5e9ee9793064e816",
+        "version" : "2.3.0"
       }
     },
     {
