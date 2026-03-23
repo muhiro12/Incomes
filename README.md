@@ -203,9 +203,8 @@ delegates to `bash ci_scripts/tasks/verify_pre_commit.sh` through the local
 `.pre-commit-config.yaml`, which reruns the same non-destructive verification
 gate used for Codex task completion.
 
-Legacy wrapper entrypoints remain available for existing automation:
-`verify.sh`, `pre_commit.sh`, `run_required_builds.sh`,
-`verify_before_commit.sh`, and `verify_local_changes.sh`.
+The scripts below are optional targeted helpers, not standardized repository
+entrypoints.
 
 If you only need the app build:
 
