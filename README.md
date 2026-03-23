@@ -86,6 +86,15 @@ Models.
 - **Preview infrastructure** – `IncomesPreview` provisions an in-memory store,
   sample data, and mock services so SwiftUI previews remain functional.
 
+## Platform package posture
+
+- `Incomes` intentionally adopts the full `MHPlatform` umbrella because the app
+  uses package-owned runtime surfaces plus route, mutation, and review shells.
+- `IncomesLibrary` intentionally adopts `MHPlatformCore` as the shared-library
+  umbrella for core-safe platform helpers.
+- This repository intentionally tracks MHPlatform with the 1.x semver range
+  `1.0.0..<2.0.0` instead of an exact tag or exact revision.
+
 ## Requirements
 
 - Xcode 16 or later with the iOS 18 and watchOS 11 SDKs installed.

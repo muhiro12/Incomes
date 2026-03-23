@@ -1,5 +1,5 @@
 import Foundation
-import MHNotificationPlans
+import MHPlatformCore
 import SwiftData
 
 /// Builds upcoming payment plans based on outgo thresholds and user settings.

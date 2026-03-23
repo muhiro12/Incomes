@@ -1,5 +1,5 @@
 import Foundation
-import MHPersistenceMaintenance
+import MHPlatformCore
 import SwiftData
 
 /// Shared maintenance operations that mutate stored data without any UI concerns.

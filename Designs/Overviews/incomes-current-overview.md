@@ -27,6 +27,13 @@ living in the app targets.
 | `Widgets` | Passive glanceable surface | Show month totals, month net income, next or previous item, deep-link back into the app |
 | `IncomesLibrary` | Shared domain layer | SwiftData models, predicates, calculators, yearly duplication, notification planning, maintenance services, routes |
 
+## Current Platform Package Posture
+
+- `Incomes` intentionally adopts the full `MHPlatform` umbrella.
+- `IncomesLibrary` intentionally adopts `MHPlatformCore`.
+- This repository intentionally tracks MHPlatform with the 1.x semver range
+  `1.0.0..<2.0.0`.
+
 ## Current End-User Features
 
 ### 1. Item capture and creation

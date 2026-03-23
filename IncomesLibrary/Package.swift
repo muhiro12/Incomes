@@ -23,7 +23,7 @@ let package = Package( // swiftlint:disable:this prefixed_toplevel_constant
         ),
         .package(
             url: "https://github.com/muhiro12/MHPlatform.git",
-            revision: "d62c61c90ec81ed4dbf7118b91b5473e1e46c9a2"
+            "1.0.0"..<"2.0.0"
         ),
         // Pin LicenseList to the upstream fix that restores plugin stability.
         .package(
@@ -40,19 +40,7 @@ let package = Package( // swiftlint:disable:this prefixed_toplevel_constant
                     package: "SwiftUtilities"
                 ),
                 .product(
-                    name: "MHDeepLinking",
-                    package: "MHPlatform"
-                ),
-                .product(
-                    name: "MHNotificationPlans",
-                    package: "MHPlatform"
-                ),
-                .product(
-                    name: "MHPersistenceMaintenance",
-                    package: "MHPlatform"
-                ),
-                .product(
-                    name: "MHPreferences",
+                    name: "MHPlatformCore",
                     package: "MHPlatform"
                 )
             ],

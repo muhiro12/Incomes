@@ -1,4 +1,4 @@
-import MHDeepLinking
+import MHPlatformCore
 
 /// Builds the shared deep-link codec used by Incomes routes.
 public enum IncomesDeepLinkCodec {

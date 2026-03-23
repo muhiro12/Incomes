@@ -5,7 +5,7 @@
 //  Created by Hiromu Nakano on 2020/06/24.
 //
 
-import MHPreferences
+import MHPlatformCore
 import SwiftUI
 
 public extension Decimal {

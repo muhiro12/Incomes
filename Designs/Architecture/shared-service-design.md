@@ -25,6 +25,14 @@ work across the iOS app, App Intents, Apple Watch, and widgets.
 | App-side platform support | `Incomes/Sources/Common/Platform` | `IncomesPlatformEnvironmentFactory`, `MHAppRuntimeBootstrap` assembly, `MHAppRoutePipeline<IncomesRoute>` assembly, `IncomesRouteBridge`, `MHReviewFlow` policy helpers |
 | Presentation orchestration | `Incomes` | SwiftUI views, navigation state, form state, app-side services in `Item/Services`, and coordinators in `Settings/Coordinators` |
 
+## MHPlatform Adoption
+
+- `Incomes` is the intentional `MHPlatform` umbrella adopter.
+- `IncomesLibrary` adopts `MHPlatformCore` and must not depend on the
+  full `MHPlatform` umbrella.
+- This repository intentionally uses the MHPlatform 1.x semver range
+  `1.0.0..<2.0.0`.
+
 ## Canonical Shared APIs
 
 The following types are the current shared entry points for business
@@ -68,8 +76,10 @@ App-side mutation call sites should prefer
 - `NotificationService` stays in `Incomes` and uses shared planning logic from
   `IncomesLibrary`.
 - `IncomesPlatformEnvironmentFactory` stays in `Incomes` because runtime,
-  route pipeline, and review flow assembly depend on `MHPlatform`, app
+  route pipeline, and review flow assembly depend on the `MHPlatform` umbrella, app
   secrets, and SwiftUI environment injection.
+- `IncomesLibrary` stays on `MHPlatformCore` so shared logic only sees
+  core-safe platform helpers.
 - `ContentView` stays thin because `MHAppRuntimeBootstrap` owns the runtime,
   lifecycle, and route-drain shell.
 - `MainNavigationView` registers its route handler through `IncomesRouteBridge`
