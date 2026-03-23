@@ -1,45 +1,66 @@
 import Foundation
 import MHPlatformCore
+import SwiftData
 
 /// Migrates legacy database files into the shared store location.
 public enum DatabaseMigrator {
     /// Moves the legacy SQLite store into the current location when required.
     public static func migrateSQLiteFilesIfNeeded() {
-        migrateSQLiteFilesIfNeeded(
-            fileManager: .default,
-            legacyURL: Database.legacyURL,
-            currentURL: Database.url
-        )
+        do {
+            try migrateSQLiteFilesIfNeeded(
+                fileManager: .default,
+                legacyURL: Database.legacyURL,
+                currentURL: Database.url
+            )
+        } catch {
+            assertionFailure("Store migration failed: \(error.localizedDescription)")
+        }
     }
 
     static func migrateSQLiteFilesIfNeeded(
         fileManager: FileManager,
         legacyURL: URL,
-        currentURL: URL
-    ) {
+        currentURL: URL,
+        validateMigration: @Sendable (
+            _ currentStoreURL: URL,
+            _ copiedFileNames: [String]
+        ) throws -> Void = validateMigratedStore
+    ) throws {
         guard fileManager.fileExists(atPath: legacyURL.path),
               fileManager.fileExists(atPath: currentURL.path) == false else {
             return
         }
 
-        do {
-            let plan = MHStoreMigrationPlan(
-                legacyStoreURL: legacyURL,
-                currentStoreURL: currentURL
-            )
+        let plan = MHStoreMigrationPlan(
+            legacyStoreURL: legacyURL,
+            currentStoreURL: currentURL
+        )
 
-            let outcome = try MHStoreMigrator.migrateIfNeeded(
+        let outcome = try MHStoreMigrator.migrateIfNeeded(
+            plan: plan,
+            fileManager: fileManager,
+            validateMigration: validateMigration
+        )
+        if case .migrated = outcome {
+            _ = try MHStoreMigrator.removeLegacyStoreFilesIfNeeded(
                 plan: plan,
                 fileManager: fileManager
             )
-            if case .migrated = outcome {
-                _ = try MHStoreMigrator.removeLegacyStoreFilesIfNeeded(
-                    plan: plan,
-                    fileManager: fileManager
-                )
-            }
-        } catch {
-            assertionFailure("Store migration failed: \(error.localizedDescription)")
         }
+    }
+}
+
+private extension DatabaseMigrator {
+    static func validateMigratedStore(
+        currentStoreURL: URL,
+        copiedFileNames _: [String]
+    ) throws {
+        _ = try ModelContainer(
+            for: Item.self,
+            configurations: .init(
+                url: currentStoreURL,
+                cloudKitDatabase: .none
+            )
+        )
     }
 }
