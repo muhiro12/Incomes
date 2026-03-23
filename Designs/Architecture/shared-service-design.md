@@ -30,6 +30,8 @@ work across the iOS app, App Intents, Apple Watch, and widgets.
 - `Incomes` is the intentional `MHPlatform` umbrella adopter.
 - `IncomesLibrary` adopts `MHPlatformCore` and must not depend on the
   full `MHPlatform` umbrella.
+- `Watch` intentionally stays on the narrower `MHPreferences` product.
+- `Widgets` intentionally stay off direct MHPlatform package adoption.
 - This repository intentionally uses the MHPlatform 1.x semver range
   `1.0.0..<2.0.0`.
 

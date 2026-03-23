@@ -92,8 +92,10 @@ Models.
   uses package-owned runtime surfaces plus route, mutation, and review shells.
 - `IncomesLibrary` intentionally adopts `MHPlatformCore` as the shared-library
   umbrella for core-safe platform helpers.
+- `Watch` intentionally stays on the narrower `MHPreferences` product.
+- `Widgets` intentionally stay off direct MHPlatform package adoption.
 - This repository intentionally tracks MHPlatform with the 1.x semver range
-  `1.0.0..<2.0.0` instead of an exact tag or exact revision.
+  `1.0.0..<2.0.0`.
 
 ## Requirements
 

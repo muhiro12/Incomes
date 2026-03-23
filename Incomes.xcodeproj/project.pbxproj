@@ -331,7 +331,6 @@
 			packageReferences = (
 				AD6C5A732E515E3000E1FBA0 /* XCLocalSwiftPackageReference "IncomesLibrary" */,
 				AD7F5C0C2F5B3186008D91F3 /* XCRemoteSwiftPackageReference "MHPlatform" */,
-				B00000012F7A000100000016 /* XCRemoteSwiftPackageReference "LicenseList" */,
 				B00000012F7A00010000000E /* XCRemoteSwiftPackageReference "SwiftUtilities" */,
 			);
 			productRefGroup = ADCF36A724A1D0F40011D6F5 /* Products */;
@@ -938,14 +937,6 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 1.0.0;
-			};
-		};
-		B00000012F7A000100000016 /* XCRemoteSwiftPackageReference "LicenseList" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/cybozu/LicenseList.git";
-			requirement = {
-				kind = revision;
-				revision = 10f88ce9241c56f605ef55f9509f1277001eaf54;
 			};
 		};
 		B00000012F7A00010000000E /* XCRemoteSwiftPackageReference "SwiftUtilities" */ = {

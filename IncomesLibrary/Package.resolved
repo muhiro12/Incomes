@@ -1,5 +1,5 @@
 {
-  "originHash" : "9961c09bf98a49fd8739c6e46e58a2cd337fb0b45191410413f0b94abdb6587f",
+  "originHash" : "de8c9c89fccdbd6553ff8a5addbf57824d760442f636fe1e83c86a25819bd1e9",
   "pins" : [
     {
       "identity" : "googlemobileadswrapper",
@@ -15,7 +15,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/cybozu/LicenseList.git",
       "state" : {
-        "revision" : "10f88ce9241c56f605ef55f9509f1277001eaf54"
+        "revision" : "56f1b5724138e4d9f60453b555edc80e43805503",
+        "version" : "2.2.0"
       }
     },
     {
@@ -23,8 +24,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/muhiro12/MHPlatform.git",
       "state" : {
-        "revision" : "d62c61c90ec81ed4dbf7118b91b5473e1e46c9a2",
-        "version" : "1.1.0"
+        "revision" : "8ae38bb43ec37c8370bcba9973ee43a727f59928",
+        "version" : "1.2.0"
       }
     },
     {

@@ -16,6 +16,11 @@ expected_mhplatform_minimum_version="1.0.0"
 package_manifest="IncomesLibrary/Package.swift"
 package_resolved="IncomesLibrary/Package.resolved"
 project_file="Incomes.xcodeproj/project.pbxproj"
+documentation_files=(
+  README.md
+  Designs/Architecture/shared-service-design.md
+  Designs/Overviews/incomes-current-overview.md
+)
 core_safe_modules=(
   MHDeepLinking
   MHLogging
@@ -172,6 +177,39 @@ direct_core_module_imports=$(
 if [[ -n "$direct_core_module_imports" ]]; then
   record_failure "IncomesLibrary/Sources must import MHPlatformCore instead of direct core-safe MHPlatform modules:
 $direct_core_module_imports"
+fi
+
+legacy_runtime_core_references=$(
+  rg \
+    --line-number \
+    'MHAppRuntimeCore' \
+    Incomes \
+    IncomesLibrary \
+    IncomesTests \
+    Watch \
+    Widgets \
+    README.md \
+    Designs \
+    -g '*.swift' \
+    -g '*.md' \
+    || true
+)
+
+if [[ -n "$legacy_runtime_core_references" ]]; then
+  record_failure "Legacy MHAppRuntimeCore references must be removed:
+$legacy_runtime_core_references"
+fi
+
+legacy_pinning_language=$(
+  rg \
+    --line-number \
+    'exact tag|exact revision' \
+    "${documentation_files[@]}" || true
+)
+
+if [[ -n "$legacy_pinning_language" ]]; then
+  record_failure "Documentation must not describe MHPlatform semver adoption as an exact-tag or exact-revision exception:
+$legacy_pinning_language"
 fi
 
 if [[ ${#failures[@]} -ne 0 ]]; then

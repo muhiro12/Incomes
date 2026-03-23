@@ -24,11 +24,6 @@ let package = Package( // swiftlint:disable:this prefixed_toplevel_constant
         .package(
             url: "https://github.com/muhiro12/MHPlatform.git",
             "1.0.0"..<"2.0.0"
-        ),
-        // Pin LicenseList to the upstream fix that restores plugin stability.
-        .package(
-            url: "https://github.com/cybozu/LicenseList.git",
-            revision: "10f88ce9241c56f605ef55f9509f1277001eaf54"
         )
     ],
     targets: [

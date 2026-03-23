@@ -1,7 +1,7 @@
 import Foundation
 @testable import Incomes
 import IncomesLibrary
-import MHAppRuntimeCore
+import MHAppRuntime
 import MHDeepLinking
 import MHRouteExecution
 import Testing
