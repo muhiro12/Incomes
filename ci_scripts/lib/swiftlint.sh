@@ -210,3 +210,52 @@ ci_swiftlint_resolve_binary() {
   echo "Could not locate the project-managed SwiftLint binary after resolving package dependencies." >&2
   return 1
 }
+
+ci_swiftlint_run() {
+  local repository_root=$1
+  local mode=$2
+  local empty_message
+  local start_message
+  local finish_message
+  local swiftlint_binary
+  local -a swift_files=()
+
+  case "$mode" in
+    format)
+      empty_message="No tracked Swift files found to format."
+      start_message="Formatting tracked Swift files with SwiftLint..."
+      finish_message="Finished formatting tracked Swift files."
+      ;;
+    lint)
+      empty_message="No tracked Swift files found to lint."
+      start_message="Linting tracked Swift files with SwiftLint..."
+      finish_message="Finished linting tracked Swift files."
+      ;;
+    *)
+      echo "Unknown SwiftLint mode: $mode" >&2
+      return 2
+      ;;
+  esac
+
+  while IFS= read -r -d '' file; do
+    swift_files+=("$file")
+  done < <(git ls-files -z -- '*.swift')
+
+  if [[ ${#swift_files[@]} -eq 0 ]]; then
+    echo "$empty_message"
+    return 0
+  fi
+
+  swiftlint_binary=$(ci_swiftlint_resolve_binary "$repository_root")
+
+  echo "$start_message"
+  case "$mode" in
+    format)
+      "$swiftlint_binary" lint --quiet --no-cache --fix --format "${swift_files[@]}"
+      ;;
+    lint)
+      "$swiftlint_binary" lint --quiet --no-cache --strict "${swift_files[@]}"
+      ;;
+  esac
+  echo "$finish_message"
+}

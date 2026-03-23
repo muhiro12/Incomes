@@ -1,22 +1,13 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-argument_count=$#
-if [[ $argument_count -ne 0 ]]; then
-  echo "This script does not accept arguments." >&2
-  exit 2
-fi
-
 script_directory=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
-repository_root=$(cd "$script_directory/../.." && pwd)
-cd "$repository_root"
+source "$script_directory/../lib/task_utils.sh"
+source "$script_directory/../lib/ci_runs.sh"
 
-source "$repository_root/ci_scripts/lib/ci_runs.sh"
-
-if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
-  echo "This script must run inside a git repository." >&2
-  exit 1
-fi
+ci_task_require_no_arguments "$@"
+ci_task_enter_repository "${BASH_SOURCE[0]}"
+repository_root=$CI_TASK_REPOSITORY_ROOT
 
 ci_root="$repository_root/.build/ci"
 runs_root="$ci_root/runs"
@@ -211,13 +202,13 @@ else
     needs_incomes_library_tests=true
   fi
 
-  if grep -Eq '^Incomes/|^IncomesTests/|^IncomesLibrary/|^Incomes\.xcodeproj/|^Widgets/|^Watch/|^ci_scripts/tasks/' <<<"$changed_files"; then
+  if grep -Eq '^Incomes/|^IncomesTests/|^IncomesLibrary/|^Incomes\.xcodeproj/|^Widgets/|^Watch/|^ci_scripts/' <<<"$changed_files"; then
     needs_mhplatform_boundary_checks=true
   fi
 
   if ! $needs_incomes_tests && ! $needs_incomes_library_tests && ! $needs_mhplatform_boundary_checks; then
-    echo "No changes under Incomes/, IncomesTests/, IncomesLibrary/, Widgets/, Watch/, Incomes.xcodeproj/, or ci_scripts/tasks/."
-    run_note="No changes under Incomes/, IncomesTests/, IncomesLibrary/, Widgets/, Watch/, Incomes.xcodeproj/, or ci_scripts/tasks/. Build/test steps were skipped."
+    echo "No changes under Incomes/, IncomesTests/, IncomesLibrary/, Widgets/, Watch/, Incomes.xcodeproj/, or ci_scripts/."
+    run_note="No changes under Incomes/, IncomesTests/, IncomesLibrary/, Widgets/, Watch/, Incomes.xcodeproj/, or ci_scripts/. Build/test steps were skipped."
     exit 0
   fi
 

@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+script_directory=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+source "$script_directory/../lib/task_utils.sh"
+
 usage() {
   cat <<'EOF' >&2
 Usage: bash ci_scripts/tasks/check_environment.sh --profile <format|build|verify>
@@ -23,9 +26,8 @@ case "$profile" in
     ;;
 esac
 
-script_directory=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
-repository_root=$(cd "$script_directory/../.." && pwd)
-cd "$repository_root"
+ci_task_enter_repository "${BASH_SOURCE[0]}"
+repository_root=$CI_TASK_REPOSITORY_ROOT
 
 failures=()
 next_steps=()

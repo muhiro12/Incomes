@@ -1,15 +1,12 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-argument_count=$#
-if [[ $argument_count -ne 0 ]]; then
-  echo "This script does not accept arguments." >&2
-  exit 2
-fi
-
 script_directory=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
-repository_root=$(cd "$script_directory/../.." && pwd)
-cd "$repository_root"
+source "$script_directory/../lib/task_utils.sh"
+
+ci_task_require_no_arguments "$@"
+ci_task_enter_repository "${BASH_SOURCE[0]}"
+repository_root=$CI_TASK_REPOSITORY_ROOT
 
 expected_mhplatform_remote="https://github.com/muhiro12/MHPlatform.git"
 expected_mhplatform_minimum_version="1.0.0"

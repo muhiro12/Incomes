@@ -138,6 +138,9 @@ reflect your release channel.
 ## Build and Test
 
 Use the helper scripts in `ci_scripts/` as needed. The repository contract is:
+Direct entrypoints live in `ci_scripts/tasks/`, shared shell helpers live in
+`ci_scripts/lib/`, and `ci_scripts/ci_post_clone.sh` is reserved for external
+post-clone CI setup.
 
 - `bash ci_scripts/tasks/check_environment.sh --profile <format|build|verify>`
   diagnoses missing local prerequisites before you start a tool-dependent flow.
