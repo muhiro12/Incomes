@@ -1,4 +1,6 @@
+import Foundation
 @testable import Incomes
+import SwiftData
 import Testing
 
 @MainActor
@@ -31,6 +33,7 @@ struct ItemCreateCoordinatorTests {
 
     @Test
     func create_creates_item_for_repeat_month_selections() async throws {
+        let currentDate = Date.now
         let modelContainer = try IncomesPlatformEnvironmentFactory.makePreviewModelContainer()
         let environment = IncomesPlatformEnvironmentFactory.make(
             modelContainer: modelContainer,
@@ -40,14 +43,19 @@ struct ItemCreateCoordinatorTests {
         let item = try await ItemCreateCoordinator.create(
             context: modelContainer.mainContext,
             input: .init(
-                date: .now,
+                date: currentDate,
                 content: "Rent",
                 incomeText: "0",
                 outgoText: "800",
                 category: "Housing",
                 priorityText: "1"
             ),
-            repeatMonthSelections: [.currentMonth],
+            repeatMonthSelections: [
+                .init(
+                    year: Calendar.current.component(.year, from: currentDate),
+                    month: Calendar.current.component(.month, from: currentDate)
+                )
+            ],
             notificationService: environment.notificationService
         )
 

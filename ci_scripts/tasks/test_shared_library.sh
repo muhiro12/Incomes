@@ -86,6 +86,7 @@ PLL_SOURCE_PACKAGES_PATH="$cloned_source_packages_directory" \
 xcodebuild \
   -project "$project_path" \
   -scheme "IncomesLibrary" \
+  -skipPackagePluginValidation \
   "${destination[@]}" \
   -derivedDataPath "$derived_data_path" \
   -resultBundlePath "$result_bundle_path" \

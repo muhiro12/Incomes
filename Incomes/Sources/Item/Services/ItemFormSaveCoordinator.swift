@@ -33,7 +33,6 @@ enum ItemFormSaveCoordinator {
             return .didSave
         case .edit:
             guard let item = request.item else {
-                assertionFailure()
                 throw ItemError.itemNotFound
             }
             if try ItemFormSaveDecision.requiresScopeSelection(

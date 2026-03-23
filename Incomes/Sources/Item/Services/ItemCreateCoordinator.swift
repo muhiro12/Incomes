@@ -13,10 +13,14 @@ enum ItemCreateCoordinator {
             context: context,
             notificationService: notificationService
         ) {
-            try ItemService.createWithOutcome(
+            let result = try ItemService.createWithOutcome(
                 context: context,
                 input: input,
                 repeatCount: repeatCount
+            )
+            return .init(
+                value: result.value.persistentModelID,
+                outcome: result.outcome
             )
         }
     }
@@ -32,21 +36,25 @@ enum ItemCreateCoordinator {
             context: context,
             notificationService: notificationService
         ) {
-            try ItemService.createWithOutcome(
+            let result = try ItemService.createWithOutcome(
                 context: context,
                 input: input,
                 repeatMonthSelections: repeatMonthSelections
+            )
+            return .init(
+                value: result.value.persistentModelID,
+                outcome: result.outcome
             )
         }
     }
 
     @MainActor
     private static func run(
-        context _: ModelContext,
+        context: ModelContext,
         notificationService: NotificationService,
-        operation: @escaping @MainActor () throws -> MutationResult<Item>
+        operation: @escaping @MainActor () throws -> MutationResult<PersistentIdentifier>
     ) async throws -> Item {
-        try await MHMutationWorkflow.runThrowing(
+        let itemID = try await MHMutationWorkflow.runThrowing(
             name: ItemMutationWorkflowName.create,
             operation: operation,
             adapter: ItemMutationAdapterFactory.make(
@@ -58,5 +66,11 @@ enum ItemCreateCoordinator {
                 resultValue: \.value
             )
         )
+
+        guard let item = try context.fetch(.items(.idIs(itemID), order: .forward)).first else {
+            throw ItemError.itemNotFound
+        }
+
+        return item
     }
 }

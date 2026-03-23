@@ -1,4 +1,6 @@
+import Foundation
 @testable import Incomes
+import SwiftData
 import Testing
 
 @MainActor

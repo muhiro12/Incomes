@@ -1,3 +1,4 @@
+import Foundation
 @testable import Incomes
 import Testing
 
@@ -26,7 +27,11 @@ struct ItemFormPresentationTests {
             for: .failure(ItemError.itemNotFound)
         )
 
-        #expect(action == .presentError("Item not found"))
+        #expect(
+            action == .presentError(
+                ItemError.itemNotFound.localizedDescription
+            )
+        )
     }
 
     @Test
@@ -35,6 +40,10 @@ struct ItemFormPresentationTests {
             for: .failure(ItemError.itemNotFound)
         )
 
-        #expect(action == .presentError("Item not found"))
+        #expect(
+            action == .presentError(
+                ItemError.itemNotFound.localizedDescription
+            )
+        )
     }
 }

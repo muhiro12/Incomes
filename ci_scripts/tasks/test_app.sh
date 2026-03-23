@@ -88,6 +88,7 @@ xcodebuild \
   -scheme "Incomes" \
   -only-testing:"IncomesTests" \
   -parallel-testing-enabled NO \
+  -skipPackagePluginValidation \
   "${destination[@]}" \
   -derivedDataPath "$derived_data_path" \
   -resultBundlePath "$result_bundle_path" \

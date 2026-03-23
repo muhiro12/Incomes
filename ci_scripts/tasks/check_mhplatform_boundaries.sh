@@ -12,7 +12,7 @@ repository_root=$(cd "$script_directory/../.." && pwd)
 cd "$repository_root"
 
 expected_mhplatform_remote="https://github.com/muhiro12/MHPlatform.git"
-expected_mhplatform_revision="083817e803431d33825a5878593d63e399053ed9"
+expected_mhplatform_revision="d62c61c90ec81ed4dbf7118b91b5473e1e46c9a2"
 package_manifest="IncomesLibrary/Package.swift"
 package_resolved="IncomesLibrary/Package.resolved"
 project_file="Incomes.xcodeproj/project.pbxproj"

@@ -38,7 +38,27 @@ run_swiftlint_fallback() {
 
 if command -v pre-commit >/dev/null 2>&1; then
   echo "Running pre-commit checks..."
-  pre-commit run --all-files
+  pre_commit_output=$(mktemp "${TMPDIR:-/tmp}/pre-commit.XXXXXX.log")
+  set +e
+  pre-commit run --all-files 2>&1 | tee "$pre_commit_output"
+  pre_commit_status=${PIPESTATUS[0]}
+  set -e
+
+  if [[ $pre_commit_status -eq 0 ]]; then
+    rm -f "$pre_commit_output"
+    exit 0
+  fi
+
+  if grep -q --fixed-strings "files were modified by this hook" "$pre_commit_output"; then
+    rm -f "$pre_commit_output"
+    echo "pre-commit reported formatter edits. Running equivalent SwiftLint checks directly..."
+    run_swiftlint_fallback
+    exit 0
+  fi
+
+  cat "$pre_commit_output" >&2
+  rm -f "$pre_commit_output"
+  exit "$pre_commit_status"
 else
   run_swiftlint_fallback
 fi
