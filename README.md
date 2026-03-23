@@ -139,10 +139,12 @@ Use the helper scripts in `ci_scripts/` as needed. The repository contract is:
 
 - `bash ci_scripts/tasks/check_environment.sh --profile <format|build|verify>`
   diagnoses missing local prerequisites before you start a tool-dependent flow.
+- `bash ci_scripts/tasks/format_swift.sh` is the explicit SwiftLint autofix
+  step to run after Swift edits and before the final verification gate.
 - `bash ci_scripts/tasks/verify_task_completion.sh` is the non-destructive
   verification gate for Codex task completion.
-- `bash ci_scripts/tasks/verify_pre_commit.sh` is the verification entrypoint
-  used by Git `pre-commit` and by manual pre-commit checks.
+- `bash ci_scripts/tasks/verify_pre_commit.sh` reruns the same non-destructive
+  verification gate for Git `pre-commit` and manual final rechecks.
 - `bash ci_scripts/tasks/verify_repository_state.sh` checks the current
   repository state and still writes CI run artifacts.
 
@@ -156,7 +158,13 @@ Before running the full verify gate, diagnose the local prerequisites:
 bash ci_scripts/tasks/check_environment.sh --profile verify
 ```
 
-Then run the non-destructive verify gate:
+After Swift edits, run the explicit autofix step:
+
+```sh
+bash ci_scripts/tasks/format_swift.sh
+```
+
+Then run the non-destructive full recheck:
 
 ```sh
 bash ci_scripts/tasks/verify_task_completion.sh
@@ -168,7 +176,7 @@ For release-time verification or a clean-worktree full run, force the standard v
 CI_RUN_FORCE_FULL=1 bash ci_scripts/tasks/verify_task_completion.sh
 ```
 
-If you only need the pre-commit verification flow:
+If you only need the final pre-commit recheck shell:
 
 ```sh
 bash ci_scripts/tasks/verify_pre_commit.sh
@@ -190,7 +198,8 @@ bash ci_scripts/tasks/verify_repository_state.sh
 If you want Git's `pre-commit` hook to enforce the same repository flow, install
 `pre-commit` in your local environment and run `pre-commit install`. The hook
 delegates to `bash ci_scripts/tasks/verify_pre_commit.sh` through the local
-`.pre-commit-config.yaml`.
+`.pre-commit-config.yaml`, which reruns the same non-destructive verification
+gate used for Codex task completion.
 
 Legacy wrapper entrypoints remain available for existing automation:
 `verify.sh`, `pre_commit.sh`, `run_required_builds.sh`,

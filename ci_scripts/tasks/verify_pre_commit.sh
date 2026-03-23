@@ -16,7 +16,5 @@ if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
   exit 1
 fi
 
-echo "Running repository pre-commit checks..."
-bash "$repository_root/ci_scripts/tasks/check_environment.sh" --profile format
-CI_SKIP_ENV_CHECK=1 bash "$repository_root/ci_scripts/tasks/format_swift.sh"
-CI_SKIP_ENV_CHECK=1 bash "$repository_root/ci_scripts/tasks/lint_swift.sh"
+echo "Running repository pre-commit recheck..."
+exec bash "$repository_root/ci_scripts/tasks/verify_task_completion.sh"
