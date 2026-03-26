@@ -11,18 +11,14 @@ struct DebugTagListView: View {
     @Query(.tags(.typeIs(.category)))
     private var categoryTags: [Tag]
 
-    private let navigateToRoute: (DebugRoute) -> Void
+    @Binding private var selectedTagID: Tag.ID?
 
-    init( // swiftlint:disable:this type_contents_order
-        navigateToRoute: @escaping (DebugRoute) -> Void = { _ in
-            // no-op
-        }
-    ) {
-        self.navigateToRoute = navigateToRoute
+    init(selection: Binding<Tag.ID?> = .constant(nil)) { // swiftlint:disable:this type_contents_order
+        _selectedTagID = selection
     }
 
     var body: some View {
-        List {
+        List(selection: $selectedTagID) {
             buildSection(from: yearTags) {
                 Text("Year")
             }
@@ -42,14 +38,10 @@ struct DebugTagListView: View {
     private func buildSection<Header: View>(from tags: [Tag], header: () -> Header) -> some View {
         Section {
             ForEach(tags) { tag in
-                Button {
-                    navigateToRoute(.tag(tag))
-                } label: {
-                    Text(tag.displayName)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .contentShape(Rectangle())
-                }
-                .buttonStyle(.plain)
+                Text(tag.displayName)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .contentShape(Rectangle())
+                    .tag(tag.persistentModelID)
             }
         } header: {
             header()

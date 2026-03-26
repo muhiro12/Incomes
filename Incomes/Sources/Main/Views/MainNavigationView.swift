@@ -13,6 +13,8 @@ import SwiftUI
 struct MainNavigationView: View {
     @Environment(\.modelContext)
     private var context
+    @Environment(\.horizontalSizeClass)
+    private var horizontalSizeClass
     @Environment(NotificationService.self)
     private var notificationService
     @Environment(IncomesTipController.self)
@@ -50,7 +52,19 @@ struct MainNavigationView: View {
     var body: some View {
         @Bindable var router = router
 
-        NavigationSplitView(preferredCompactColumn: $router.preferredCompactColumn) {
+        let compactColumnSelection = Binding<NavigationSplitViewColumn>(
+            get: {
+                self.router.preferredCompactColumn
+            },
+            set: { preferredCompactColumn in
+                self.router.syncPreferredCompactColumn(
+                    preferredCompactColumn,
+                    isCompact: horizontalSizeClass == .compact
+                )
+            }
+        )
+
+        NavigationSplitView(preferredCompactColumn: compactColumnSelection) {
             MainNavigationSidebarView(
                 yearTags: yearTags,
                 selectedYearTag: selectedYearTag,

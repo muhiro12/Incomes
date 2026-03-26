@@ -14,21 +14,17 @@ struct DuplicateTagListView: View {
     @Query(.tags(.typeIs(.category)))
     private var categoryTags: [Tag]
 
+    @Binding private var selectedTagID: Tag.ID?
+
     @State private var isResolveDialogPresented = false
     @State private var selectedTags = [Tag]()
 
-    private let navigateToRoute: (DuplicateTagRoute) -> Void
-
-    init( // swiftlint:disable:this type_contents_order
-        navigateToRoute: @escaping (DuplicateTagRoute) -> Void = { _ in
-            // no-op
-        }
-    ) {
-        self.navigateToRoute = navigateToRoute
+    init(selection: Binding<Tag.ID?> = .constant(nil)) { // swiftlint:disable:this type_contents_order
+        _selectedTagID = selection
     }
 
     var body: some View {
-        List {
+        List(selection: $selectedTagID) {
             buildSection(from: yearTags) {
                 Text("Year")
             }
@@ -101,14 +97,14 @@ struct DuplicateTagListView: View {
         return AnyView(
             Section {
                 ForEach(duplicates) { tag in
-                    Button {
-                        navigateToRoute(.tag(tag))
-                    } label: {
+                    HStack {
                         Text(tag.displayName)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .contentShape(Rectangle())
+                        Spacer()
+                        Text(tag.items.orEmpty.count.description)
+                            .foregroundStyle(.secondary)
                     }
-                    .buttonStyle(.plain)
+                    .contentShape(Rectangle())
+                    .tag(tag.persistentModelID)
                 }
             } header: {
                 HStack {

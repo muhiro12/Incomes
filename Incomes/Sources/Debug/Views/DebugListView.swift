@@ -46,7 +46,7 @@ extension DebugListView: View {
             if let tag = try? context.fetchFirst(.tags(.all)) {
                 Section {
                     Button {
-                        navigateToRoute(.tag(tag))
+                        navigateToRoute(.tag(tag.persistentModelID))
                     } label: {
                         Text("All Items")
                             .frame(maxWidth: .infinity, alignment: .leading)

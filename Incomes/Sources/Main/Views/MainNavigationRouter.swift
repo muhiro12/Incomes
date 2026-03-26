@@ -72,6 +72,32 @@ final class MainNavigationRouter {
         clearSearchState()
         preferredCompactColumn = yearTagID == nil ? .sidebar : .content
     }
+
+    func syncPreferredCompactColumn(
+        _ preferredCompactColumn: NavigationSplitViewColumn,
+        isCompact: Bool
+    ) {
+        self.preferredCompactColumn = preferredCompactColumn
+
+        guard isCompact else {
+            return
+        }
+
+        if preferredCompactColumn == .sidebar {
+            yearTagID = nil
+            selectedTag = nil
+            clearSearchState()
+            return
+        }
+
+        if preferredCompactColumn == .content {
+            if isSearchPresented {
+                predicate = nil
+            } else {
+                selectedTag = nil
+            }
+        }
+    }
 }
 
 private extension MainNavigationRouter {
