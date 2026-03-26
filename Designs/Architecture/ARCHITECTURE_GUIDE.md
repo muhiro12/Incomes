@@ -18,6 +18,16 @@ Related decision:
 | Adapter (`Incomes`, `Watch`, `Widgets`, App Intents) | Parameter parsing, platform API calls, dependency wiring, follow-up orchestration based on domain outcomes | Domain branching duplicated from library |
 | View (SwiftUI) | Focus state, sheets, navigation state, screen-scoped `@Observable` presentation models, formatting, view composition | Domain validation branching, business calculations, repeat/duplication rules |
 
+## Testing Boundary
+
+- Put reusable domain and decision-rule tests in `IncomesLibrary/Tests`.
+- Keep `IncomesTests` only for app-owned adapter wiring that cannot be
+  expressed at the library level, such as runtime bootstrap integration,
+  App Intent bridge storage, and follow-up hint execution.
+- Do not add unit tests for screen-scoped presentation models, routers, or
+  thin coordinators by default. If one of those areas needs durable coverage,
+  first prefer moving the reusable rule into `IncomesLibrary`.
+
 ## View Rules
 
 Allowed in views:
