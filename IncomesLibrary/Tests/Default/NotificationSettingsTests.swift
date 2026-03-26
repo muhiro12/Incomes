@@ -1,6 +1,6 @@
 //
 //  NotificationSettingsTests.swift
-//  IncomesTests
+//  IncomesLibraryTests
 //
 //  Created by Hiromu Nakano on 2025/10/11.
 //

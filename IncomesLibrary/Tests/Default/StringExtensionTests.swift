@@ -1,6 +1,6 @@
 //
 //  StringExtensionTests.swift
-//  IncomesTests
+//  IncomesLibraryTests
 //
 //  Created by Hiromu Nakano on 2020/04/11.
 //

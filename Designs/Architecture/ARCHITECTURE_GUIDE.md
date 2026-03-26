@@ -20,13 +20,13 @@ Related decision:
 
 ## Testing Boundary
 
-- Put reusable domain and decision-rule tests in `IncomesLibrary/Tests`.
-- Keep `IncomesTests` only for app-owned adapter wiring that cannot be
-  expressed at the library level, such as runtime bootstrap integration,
-  App Intent bridge storage, and follow-up hint execution.
+- Keep automated tests in `IncomesLibrary/Tests`.
+- Do not maintain a separate app-target unit test suite. App-owned adapters
+  should stay thin enough to verify through app builds and library-owned
+  decision-rule coverage.
 - Do not add unit tests for screen-scoped presentation models, routers, or
   thin coordinators by default. If one of those areas needs durable coverage,
-  first prefer moving the reusable rule into `IncomesLibrary`.
+  first move the reusable rule into `IncomesLibrary` and test it there.
 
 ## View Rules
 

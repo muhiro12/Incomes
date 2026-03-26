@@ -16,7 +16,6 @@
 		AD7162362E70BD9F00C4CFCE /* IncomesLibrary in Frameworks */ = {isa = PBXBuildFile; productRef = AD7162352E70BD9F00C4CFCE /* IncomesLibrary */; };
 		AD7F5C202F5B3186008D91F3 /* MHPlatform in Frameworks */ = {isa = PBXBuildFile; productRef = AD7F5C212F5B3186008D91F3 /* MHPlatform */; };
 		AD7F5C232F5B3186008D91F3 /* MHPreferences in Frameworks */ = {isa = PBXBuildFile; productRef = AD7F5C222F5B3186008D91F3 /* MHPreferences */; };
-		B00000012F7A000100000003 /* IncomesLibrary in Frameworks */ = {isa = PBXBuildFile; productRef = B00000012F7A000100000004 /* IncomesLibrary */; };
 		B00000012F7A000100000010 /* SwiftUtilities in Frameworks */ = {isa = PBXBuildFile; productRef = B00000012F7A00010000000F /* SwiftUtilities */; };
 		B00000012F7A000100000012 /* SwiftUtilities in Frameworks */ = {isa = PBXBuildFile; productRef = B00000012F7A000100000011 /* SwiftUtilities */; };
 		B00000012F7A000100000014 /* SwiftUtilities in Frameworks */ = {isa = PBXBuildFile; productRef = B00000012F7A000100000013 /* SwiftUtilities */; };
@@ -36,13 +35,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = AD7162192E70BC5C00C4CFCE;
 			remoteInfo = WidgetsExtension;
-		};
-		B00000012F7A000100000005 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = ADCF369E24A1D0F40011D6F5 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = ADCF36A524A1D0F40011D6F5;
-			remoteInfo = Incomes;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -79,7 +71,6 @@
 		ADCF36A624A1D0F40011D6F5 /* Incomes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Incomes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ADCF375E24A2FEAF0011D6F5 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		ADFA3E992E51617C005960FF /* IncomesLibrary */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = IncomesLibrary; sourceTree = "<group>"; };
-		B00000012F7A000100000001 /* IncomesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = IncomesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -103,7 +94,6 @@
 		AD6DB6D32E779B2B00E5BB78 /* Watch */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Watch; sourceTree = "<group>"; };
 		AD71621F2E70BC5C00C4CFCE /* Widgets */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (AD7162332E70BC5D00C4CFCE /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Widgets; sourceTree = "<group>"; };
 		ADA5778B2CB66D6200CE47E2 /* Incomes */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (ADC3C97E2D88983300B8ADDE /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Incomes; sourceTree = "<group>"; };
-		B00000012F7A000100000002 /* IncomesTests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = IncomesTests; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -138,14 +128,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		B00000012F7A000100000007 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				B00000012F7A000100000003 /* IncomesLibrary in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -154,7 +136,6 @@
 			children = (
 				ADFA3E992E51617C005960FF /* IncomesLibrary */,
 				ADA5778B2CB66D6200CE47E2 /* Incomes */,
-				B00000012F7A000100000002 /* IncomesTests */,
 				AD71621F2E70BC5C00C4CFCE /* Widgets */,
 				AD6DB6D32E779B2B00E5BB78 /* Watch */,
 				ADCF36A724A1D0F40011D6F5 /* Products */,
@@ -166,7 +147,6 @@
 			isa = PBXGroup;
 			children = (
 				ADCF36A624A1D0F40011D6F5 /* Incomes.app */,
-				B00000012F7A000100000001 /* IncomesTests.xctest */,
 				AD71621A2E70BC5C00C4CFCE /* Widgets.appex */,
 				AD6DB6D22E779B2B00E5BB78 /* Watch.app */,
 			);
@@ -264,30 +244,6 @@
 			productReference = ADCF36A624A1D0F40011D6F5 /* Incomes.app */;
 			productType = "com.apple.product-type.application";
 		};
-		B00000012F7A00010000000A /* IncomesTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = B00000012F7A00010000000D /* Build configuration list for PBXNativeTarget "IncomesTests" */;
-			buildPhases = (
-				B00000012F7A000100000006 /* Sources */,
-				B00000012F7A000100000007 /* Frameworks */,
-				B00000012F7A000100000008 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				B00000012F7A000100000009 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				B00000012F7A000100000002 /* IncomesTests */,
-			);
-			name = IncomesTests;
-			packageProductDependencies = (
-				B00000012F7A000100000004 /* IncomesLibrary */,
-			);
-			productName = IncomesTests;
-			productReference = B00000012F7A000100000001 /* IncomesTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -308,10 +264,6 @@
 					ADCF36A524A1D0F40011D6F5 = {
 						CreatedOnToolsVersion = 11.5;
 						LastSwiftMigration = 1150;
-					};
-					B00000012F7A00010000000A = {
-						CreatedOnToolsVersion = 26.0;
-						TestTargetID = ADCF36A524A1D0F40011D6F5;
 					};
 				};
 			};
@@ -339,7 +291,6 @@
 			projectRoot = "";
 			targets = (
 				ADCF36A524A1D0F40011D6F5 /* Incomes */,
-				B00000012F7A00010000000A /* IncomesTests */,
 				AD7162192E70BC5C00C4CFCE /* Widgets */,
 				AD6DB6D12E779B2B00E5BB78 /* Watch */,
 			);
@@ -362,13 +313,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		ADCF36A424A1D0F40011D6F5 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		B00000012F7A000100000008 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -399,13 +343,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		B00000012F7A000100000006 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -418,11 +355,6 @@
 			isa = PBXTargetDependency;
 			target = AD7162192E70BC5C00C4CFCE /* Widgets */;
 			targetProxy = AD71622D2E70BC5D00C4CFCE /* PBXContainerItemProxy */;
-		};
-		B00000012F7A000100000009 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = ADCF36A524A1D0F40011D6F5 /* Incomes */;
-			targetProxy = B00000012F7A000100000005 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -810,70 +742,6 @@
 			};
 			name = Release;
 		};
-		B00000012F7A00010000000B /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 66PKF55HK5;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MARKETING_VERSION = 5.6;
-				PRODUCT_BUNDLE_IDENTIFIER = com.muhiro12.IncomesTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 6.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Incomes.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Incomes";
-				TEST_TARGET_NAME = Incomes;
-			};
-			name = Debug;
-		};
-		B00000012F7A00010000000C /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 66PKF55HK5;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MARKETING_VERSION = 5.6;
-				PRODUCT_BUNDLE_IDENTIFIER = com.muhiro12.IncomesTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 6.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Incomes.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Incomes";
-				TEST_TARGET_NAME = Incomes;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -909,15 +777,6 @@
 			buildConfigurations = (
 				ADCF36D424A1D0F70011D6F5 /* Debug */,
 				ADCF36D524A1D0F70011D6F5 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		B00000012F7A00010000000D /* Build configuration list for PBXNativeTarget "IncomesTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				B00000012F7A00010000000B /* Debug */,
-				B00000012F7A00010000000C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -980,10 +839,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = AD7F5C0C2F5B3186008D91F3 /* XCRemoteSwiftPackageReference "MHPlatform" */;
 			productName = MHPreferences;
-		};
-		B00000012F7A000100000004 /* IncomesLibrary */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = IncomesLibrary;
 		};
 		B00000012F7A00010000000F /* SwiftUtilities */ = {
 			isa = XCSwiftPackageProductDependency;

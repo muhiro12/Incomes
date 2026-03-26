@@ -170,12 +170,12 @@ if [[ "${CI_SKIP_ENV_CHECK:-0}" == "1" || "${CI_SKIP_ENV_CHECK:-}" == "true" ]];
   should_skip_environment_check=true
 fi
 
-needs_incomes_tests=false
+needs_incomes_build=false
 needs_incomes_library_tests=false
 needs_mhplatform_boundary_checks=false
 if $should_force_full; then
   echo "Forcing full verification regardless of local changes."
-  needs_incomes_tests=true
+  needs_incomes_build=true
   needs_incomes_library_tests=true
   needs_mhplatform_boundary_checks=true
   run_note="Executed a forced full verification run regardless of local changes."
@@ -194,28 +194,28 @@ else
     exit 0
   fi
 
-  if grep -Eq '^Incomes/|^IncomesTests/|^Incomes\.xcodeproj/|^Widgets/|^Watch/' <<<"$changed_files"; then
-    needs_incomes_tests=true
+  if grep -Eq '^Incomes/|^IncomesLibrary/|^Incomes\.xcodeproj/|^Widgets/|^Watch/' <<<"$changed_files"; then
+    needs_incomes_build=true
   fi
 
-  if grep -Eq '^IncomesLibrary/' <<<"$changed_files"; then
+  if grep -Eq '^IncomesLibrary/|^Incomes\.xcodeproj/' <<<"$changed_files"; then
     needs_incomes_library_tests=true
   fi
 
-  if grep -Eq '^Incomes/|^IncomesTests/|^IncomesLibrary/|^Incomes\.xcodeproj/|^Widgets/|^Watch/|^ci_scripts/' <<<"$changed_files"; then
+  if grep -Eq '^Incomes/|^IncomesLibrary/|^Incomes\.xcodeproj/|^Widgets/|^Watch/|^ci_scripts/' <<<"$changed_files"; then
     needs_mhplatform_boundary_checks=true
   fi
 
-  if ! $needs_incomes_tests && ! $needs_incomes_library_tests && ! $needs_mhplatform_boundary_checks; then
-    echo "No changes under Incomes/, IncomesTests/, IncomesLibrary/, Widgets/, Watch/, Incomes.xcodeproj/, or ci_scripts/."
-    run_note="No changes under Incomes/, IncomesTests/, IncomesLibrary/, Widgets/, Watch/, Incomes.xcodeproj/, or ci_scripts/. Build/test steps were skipped."
+  if ! $needs_incomes_build && ! $needs_incomes_library_tests && ! $needs_mhplatform_boundary_checks; then
+    echo "No changes under Incomes/, IncomesLibrary/, Widgets/, Watch/, Incomes.xcodeproj/, or ci_scripts/."
+    run_note="No changes under Incomes/, IncomesLibrary/, Widgets/, Watch/, Incomes.xcodeproj/, or ci_scripts/. Build/test steps were skipped."
     exit 0
   fi
 
   run_note="Executed required CI steps based on local changes."
 fi
 
-if ! $should_skip_environment_check && { $needs_incomes_tests || $needs_incomes_library_tests; }; then
+if ! $should_skip_environment_check && { $needs_incomes_build || $needs_incomes_library_tests; }; then
   run_logged_step \
     "check_environment" \
     "Check build environment" \
@@ -229,16 +229,16 @@ if $needs_mhplatform_boundary_checks; then
     bash "$repository_root/ci_scripts/tasks/check_mhplatform_boundaries.sh"
 fi
 
-if $needs_incomes_tests; then
+if $needs_incomes_build; then
   run_logged_step \
     "check_models_directory_consistency" \
     "Check Models directory consistency" \
     bash "$repository_root/ci_scripts/tasks/check_models_directory_consistency.sh"
 
   run_logged_step \
-    "test_app" \
-    "Test Incomes scheme" \
-    bash "$repository_root/ci_scripts/tasks/test_app.sh"
+    "build_app" \
+    "Build Incomes scheme" \
+    bash "$repository_root/ci_scripts/tasks/build_app.sh"
 fi
 
 if $needs_incomes_library_tests; then

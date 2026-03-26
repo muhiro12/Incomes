@@ -141,7 +141,7 @@ if [[ -z "$incomes_target_block" ]] || ! grep -q --fixed-strings 'MHPlatform' <<
   record_failure "Incomes must remain the MHPlatform umbrella adopter."
 fi
 
-for target_name in Watch Widgets IncomesTests; do
+for target_name in Watch Widgets; do
   target_block=$(extract_project_block "$target_name")
   if [[ -n "$target_block" ]] && grep -q --fixed-strings 'MHPlatform' <<<"$target_block"; then
     record_failure "$target_name must not depend on the umbrella MHPlatform product."
@@ -182,7 +182,6 @@ legacy_runtime_core_references=$(
     'MHAppRuntimeCore' \
     Incomes \
     IncomesLibrary \
-    IncomesTests \
     Watch \
     Widgets \
     README.md \
