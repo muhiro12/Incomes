@@ -13,34 +13,10 @@ struct DuplicateTagView: View {
     }
 
     var body: some View {
-        ScrollView(.horizontal) { // swiftlint:disable:this closure_body_length
+        ScrollView(.horizontal) {
             LazyHStack(spacing: .zero) {
                 ForEach(tags) { tag in
-                    List {
-                        Section {
-                            ForEach(tag.items ?? []) { item in
-                                Text(item.content)
-                            }
-                        } header: {
-                            HStack {
-                                Text("\(tag.items?.count ?? .zero) Items")
-                                Spacer()
-                                Button {
-                                    isDeleteDialogPresented = true
-                                    selectedTag = tag
-                                } label: {
-                                    Label {
-                                        Text("Delete")
-                                    } icon: {
-                                        Image(systemName: "trash") // swiftlint:disable:this accessibility_label_for_image line_length
-                                    }
-                                }
-                                .font(.caption)
-                                .textCase(nil)
-                            }
-                        }
-                    }
-                    .frame(width: .component(.xl))
+                    duplicateTagColumn(for: tag)
                     if tag.id != tags.last?.id {
                         Divider()
                     }
@@ -101,6 +77,39 @@ struct DuplicateTagView: View {
             StatusToolbarItem("\(tags.count) Items")
         }
         .navigationTitle(tags.first?.displayName ?? "")
+    }
+}
+
+private extension DuplicateTagView {
+    func duplicateTagColumn(
+        for tag: Tag
+    ) -> some View {
+        List {
+            Section {
+                ForEach(tag.items ?? []) { item in
+                    DuplicateTagItemRow()
+                        .environment(item)
+                }
+            } header: {
+                HStack {
+                    Text("\(tag.items?.count ?? .zero) Items")
+                    Spacer()
+                    Button {
+                        isDeleteDialogPresented = true
+                        selectedTag = tag
+                    } label: {
+                        Label {
+                            Text("Delete")
+                        } icon: {
+                            Image(systemName: "trash")
+                        }
+                    }
+                    .font(.caption)
+                    .textCase(nil)
+                }
+            }
+        }
+        .frame(width: .component(.xl))
     }
 }
 

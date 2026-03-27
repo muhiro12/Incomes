@@ -39,18 +39,11 @@ struct DuplicateTagListView: View {
             }
         }
         .confirmationDialog(
-            Text("Resolve All"),
+            Text(resolveDialogTitle),
             isPresented: $isResolveDialogPresented
         ) {
             Button {
-                do {
-                    try TagService.resolveDuplicates(
-                        context: context,
-                        tags: selectedTags
-                    )
-                } catch {
-                    assertionFailure(error.localizedDescription)
-                }
+                resolveSelectedTags()
             } label: {
                 Text("Resolve")
             }
@@ -60,7 +53,7 @@ struct DuplicateTagListView: View {
                 Text("Cancel")
             }
         } message: {
-            Text("Are you sure you want to resolve all duplicate tags? This action cannot be undone.")
+            Text(resolveDialogMessage)
         }
         .navigationTitle("Duplicate Tags")
         .toolbar {
@@ -69,58 +62,115 @@ struct DuplicateTagListView: View {
             }
         }
     }
+}
 
-    private func buildSection<Header: View>(from tags: [Tag], header: () -> Header) -> some View {
-        let duplicates: [Tag]
-        do {
-            let type = tags.first?.type
-            duplicates = try {
-                if let type {
-                    return try TagService.duplicateTags(
-                        context: context,
-                        type: type
-                    )
+private extension DuplicateTagListView {
+    var resolveDialogTitle: LocalizedStringKey {
+        selectedTags.count > 1 ? "Resolve All" : "Resolve"
+    }
+
+    var resolveDialogMessage: LocalizedStringKey {
+        selectedTags.count > 1
+            ? "Are you sure you want to resolve all duplicate tags? This action cannot be undone."
+            : "Are you sure you want to resolve this duplicate tag? This action cannot be undone."
+    }
+
+    func buildSection<Header: View>(
+        from tags: [Tag],
+        header: () -> Header
+    ) -> some View {
+        let duplicates = duplicateTags(from: tags)
+        if duplicates.isEmpty {
+            return AnyView(EmptyView())
+        }
+
+        return AnyView(
+            Section {
+                ForEach(duplicates) { tag in
+                    duplicateTagRow(tag)
                 }
+            } header: {
+                sectionHeader(
+                    duplicates: duplicates,
+                    header: header
+                )
+            }
+        )
+    }
+
+    func duplicateTags(
+        from tags: [Tag]
+    ) -> [Tag] {
+        do {
+            guard let type = tags.first?.type else {
                 return []
-            }()
+            }
+            return try TagService.duplicateTags(
+                context: context,
+                type: type
+            )
             .sorted { left, right in
                 left.displayName < right.displayName
             }
         } catch {
             assertionFailure(error.localizedDescription)
-            duplicates = []
+            return []
         }
+    }
 
-        if duplicates.isEmpty {
-            return AnyView(EmptyView())
+    func duplicateTagRow(
+        _ tag: Tag
+    ) -> some View {
+        HStack {
+            Text(tag.displayName)
+            Spacer()
+            Text(tag.items.orEmpty.count.description)
+                .foregroundStyle(.secondary)
         }
-        return AnyView(
-            Section {
-                ForEach(duplicates) { tag in
-                    HStack {
-                        Text(tag.displayName)
-                        Spacer()
-                        Text(tag.items.orEmpty.count.description)
-                            .foregroundStyle(.secondary)
-                    }
-                    .contentShape(Rectangle())
-                    .tag(tag.persistentModelID)
-                }
-            } header: {
-                HStack {
-                    header()
-                    Spacer()
-                    Button {
-                        isResolveDialogPresented = true
-                        selectedTags = duplicates
-                    } label: {
-                        Text("Resolve All")
-                    }
-                    .font(.caption)
-                    .textCase(nil)
-                }
+        .contentShape(Rectangle())
+        .contextMenu {
+            Button("Open", systemImage: "arrow.right.circle") {
+                selectedTagID = tag.persistentModelID
             }
-        )
+            Button("Resolve", systemImage: "checkmark.seal") {
+                selectedTags = [tag]
+                isResolveDialogPresented = true
+            }
+            CopyTextContextMenuButton(
+                "Copy Name",
+                text: tag.displayName
+            )
+        }
+        .tag(tag.persistentModelID)
+    }
+
+    func sectionHeader<Header: View>(
+        duplicates: [Tag],
+        header: () -> Header
+    ) -> some View {
+        HStack {
+            header()
+            Spacer()
+            Button {
+                isResolveDialogPresented = true
+                selectedTags = duplicates
+            } label: {
+                Text("Resolve All")
+            }
+            .font(.caption)
+            .textCase(nil)
+        }
+    }
+
+    func resolveSelectedTags() {
+        do {
+            try TagService.resolveDuplicates(
+                context: context,
+                tags: selectedTags
+            )
+        } catch {
+            assertionFailure(error.localizedDescription)
+        }
     }
 }
 

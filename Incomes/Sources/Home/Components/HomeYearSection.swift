@@ -97,7 +97,7 @@ private extension HomeYearSection {
         showsTip: Bool
     ) -> some View {
         let button = Button {
-            guard let monthRoute = route(for: tag) else {
+            guard let monthRoute = monthRoute(for: tag) else {
                 return
             }
             tipController.donateDidOpenMonth()
@@ -109,6 +109,29 @@ private extension HomeYearSection {
                 .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
+        .contextMenu {
+            if let monthRoute = monthRoute(for: tag) {
+                Button("Open Month", systemImage: "calendar") {
+                    tipController.donateDidOpenMonth()
+                    navigateToRoute(monthRoute)
+                }
+            }
+            if let monthURL = monthURL(for: tag) {
+                Divider()
+                ShareLink(item: monthURL) {
+                    Label("Share Link", systemImage: "square.and.arrow.up")
+                }
+                CopyURLContextMenuButton("Copy Link", url: monthURL)
+            }
+            Divider()
+            Button(role: .destructive) {
+                Haptic.warning.impact()
+                willDeleteItems = tag.items.orEmpty
+                isDialogPresented = willDeleteItems.isNotEmpty
+            } label: {
+                Label("Delete", systemImage: "trash")
+            }
+        }
 
         if showsTip {
             button.popoverTip(monthListTip, arrowEdge: .top)
@@ -117,17 +140,13 @@ private extension HomeYearSection {
         }
     }
 
-    func route(for yearMonthTag: Tag) -> IncomesRoute? {
-        guard yearMonthTag.type == .yearMonth else {
-            return nil
-        }
-        guard let date = TagService.date(for: yearMonthTag) else {
-            return nil
-        }
-        let calendar = Calendar.current
-        return .month(
-            year: calendar.component(.year, from: date),
-            month: calendar.component(.month, from: date)
+    func monthRoute(for yearMonthTag: Tag) -> IncomesRoute? {
+        IncomesContextMenuLinkBuilder.monthRoute(for: yearMonthTag)
+    }
+
+    func monthURL(for yearMonthTag: Tag) -> URL? {
+        IncomesContextMenuLinkBuilder.preferredURL(
+            for: monthRoute(for: yearMonthTag)
         )
     }
 }

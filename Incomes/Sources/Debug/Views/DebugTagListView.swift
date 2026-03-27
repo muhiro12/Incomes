@@ -41,6 +41,15 @@ struct DebugTagListView: View {
                 Text(tag.displayName)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .contentShape(Rectangle())
+                    .contextMenu {
+                        Button("Inspect", systemImage: "arrow.right.circle") {
+                            selectedTagID = tag.persistentModelID
+                        }
+                        CopyTextContextMenuButton(
+                            "Copy Name",
+                            text: tag.displayName
+                        )
+                    }
                     .tag(tag.persistentModelID)
             }
         } header: {

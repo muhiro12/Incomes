@@ -109,8 +109,7 @@ private extension SearchListView {
             selectedTarget.filteredTags(tags, searchText: searchText)
         ) { tag in
             Button {
-                tipController.donateDidApplySearch()
-                predicate = .tagIs(tag)
+                applyTagFilter(tag)
             } label: {
                 HStack {
                     Text(tag.displayName)
@@ -120,6 +119,18 @@ private extension SearchListView {
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .contentShape(Rectangle())
+            }
+            .contextMenu {
+                Button(
+                    "Apply Filter",
+                    systemImage: "line.3.horizontal.decrease.circle"
+                ) {
+                    applyTagFilter(tag)
+                }
+                CopyTextContextMenuButton(
+                    "Copy Name",
+                    text: tag.displayName
+                )
             }
         }
     }
@@ -132,6 +143,11 @@ private extension SearchListView {
             TextField("Max", text: $maxValue)
                 .keyboardType(.numbersAndPunctuation)
         }
+    }
+
+    func applyTagFilter(_ tag: Tag) {
+        tipController.donateDidApplySearch()
+        predicate = .tagIs(tag)
     }
 }
 

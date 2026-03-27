@@ -62,21 +62,22 @@ private extension ListItem {
         }
         .buttonStyle(.plain)
         .contextMenu {
-            ShowItemButton {
-                detents = .large
-                route = .detail
-            }
-            EditItemButton {
-                route = .edit
-            }
-            DuplicateItemButton {
-                route = .duplicate
-            }
-            RecalculateItemButton()
-            DeleteItemButton {
-                Haptic.warning.impact()
-                isDeletePresented = true
-            }
+            ItemContextMenuActions(
+                showAction: {
+                    detents = .large
+                    route = .detail
+                },
+                editAction: {
+                    route = .edit
+                },
+                duplicateAction: {
+                    route = .duplicate
+                },
+                deleteAction: {
+                    Haptic.warning.impact()
+                    isDeletePresented = true
+                }
+            )
         } preview: {
             ItemPreviewNavigationView()
                 .environment(item)

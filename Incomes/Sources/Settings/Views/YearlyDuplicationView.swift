@@ -102,6 +102,24 @@ struct YearlyDuplicationView: View {
                             }
                         }
                         .padding(.vertical, Constants.proposalVerticalPadding)
+                        .contentShape(Rectangle())
+                        .contextMenu {
+                            Button("Edit", systemImage: "pencil") {
+                                presentItemForm(group: group)
+                            }
+                            .disabled(isCreated || entries.isEmpty)
+                            Button("Create", systemImage: "plus.circle") {
+                                Task { @MainActor in
+                                    await createGroupItems(group: group)
+                                }
+                            }
+                            .disabled(isCreated || entries.isEmpty)
+                            Divider()
+                            CopyTextContextMenuButton(
+                                "Copy Summary",
+                                text: proposalSummaryText(for: group)
+                            )
+                        }
                     }
                 }
                 Section("Preview") {
@@ -327,6 +345,21 @@ private extension YearlyDuplicationView {
             .pickerStyle(.menu)
             .frame(maxWidth: .infinity, alignment: .leading)
         }
+    }
+
+    func proposalSummaryText(
+        for group: YearlyItemDuplicationGroup
+    ) -> String {
+        [
+            group.content,
+            group.category.isNotEmpty ? group.category : nil,
+            "Dates: \(YearlyDuplicationCoordinator.monthDayListText(for: group))",
+            "Items: \(group.entryCount)",
+            "Income: \(YearlyDuplicationCoordinator.decimalString(from: group.averageIncome))",
+            "Outgo: \(YearlyDuplicationCoordinator.decimalString(from: group.averageOutgo))"
+        ]
+        .compactMap(\.self)
+        .joined(separator: "\n")
     }
 }
 

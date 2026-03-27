@@ -20,6 +20,22 @@ struct IncomesDeepLinkURLBuilderTests {
     }
 
     @Test
+    func preferred_url_builds_year_url() {
+        let url = IncomesDeepLinkURLBuilder.preferredURL(for: .year(2_026))
+        #expect(
+            url.absoluteString == "https://muhiro12.github.io/Incomes/year/2026"
+        )
+    }
+
+    @Test
+    func preferred_url_builds_year_summary_url() {
+        let url = IncomesDeepLinkURLBuilder.preferredURL(for: .yearSummary(2_026))
+        #expect(
+            url.absoluteString == "https://muhiro12.github.io/Incomes/year-summary/2026"
+        )
+    }
+
+    @Test
     func route_url_builds_item_url() {
         let url = IncomesDeepLinkURLBuilder.itemURL(for: "item-id")
         #expect(

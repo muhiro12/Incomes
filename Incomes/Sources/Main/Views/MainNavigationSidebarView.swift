@@ -28,18 +28,7 @@ struct MainNavigationSidebarView: View {
                 }
             } else {
                 List(selection: yearTagSelection) {
-                    ForEach(yearTags, id: \.persistentModelID) { yearTag in
-                        TagSummaryRow()
-                            .environment(yearTag)
-                            .tag(yearTag.persistentModelID)
-                    }
-                    .onDelete { indices in
-                        Haptic.warning.impact()
-                        yearDeletionModel.prepare(
-                            from: yearTags,
-                            indices: indices
-                        )
-                    }
+                    yearTagRows
                     YearlyDuplicationPromoSection(
                         context: context,
                         yearTags: yearTags
@@ -89,6 +78,70 @@ struct MainNavigationSidebarView: View {
             }
         } message: {
             Text("Are you sure you want to delete these items?")
+        }
+    }
+}
+
+private extension MainNavigationSidebarView {
+    var yearTagRows: some View {
+        ForEach(yearTags, id: \.persistentModelID) { yearTag in
+            yearTagRow(for: yearTag)
+        }
+        .onDelete { indices in
+            Haptic.warning.impact()
+            yearDeletionModel.prepare(
+                from: yearTags,
+                indices: indices
+            )
+        }
+    }
+
+    func yearTagRow(
+        for yearTag: Tag
+    ) -> some View {
+        TagSummaryRow()
+            .environment(yearTag)
+            .contextMenu {
+                yearContextMenu(for: yearTag)
+            }
+            .tag(yearTag.persistentModelID)
+    }
+
+    @ViewBuilder
+    func yearContextMenu(
+        for yearTag: Tag
+    ) -> some View {
+        if let yearSummaryRoute = IncomesContextMenuLinkBuilder.yearSummaryRoute(
+            for: yearTag
+        ) {
+            Button("Show Summary", systemImage: "chart.bar") {
+                onNavigate(yearSummaryRoute)
+            }
+        }
+        Button(
+            "Duplicate Year Items",
+            systemImage: "square.on.square"
+        ) {
+            onNavigate(.yearlyDuplication)
+        }
+        if let yearURL = IncomesContextMenuLinkBuilder.preferredURL(
+            for: IncomesContextMenuLinkBuilder.yearRoute(for: yearTag)
+        ) {
+            Divider()
+            ShareLink(item: yearURL) {
+                Label("Share Link", systemImage: "square.and.arrow.up")
+            }
+            CopyURLContextMenuButton("Copy Link", url: yearURL)
+        }
+        Divider()
+        Button(role: .destructive) {
+            Haptic.warning.impact()
+            yearDeletionModel.prepare(
+                from: [yearTag],
+                indices: IndexSet(integer: .zero)
+            )
+        } label: {
+            Label("Delete", systemImage: "trash")
         }
     }
 }

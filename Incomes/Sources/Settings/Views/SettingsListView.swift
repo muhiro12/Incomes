@@ -111,6 +111,12 @@ extension SettingsListView: View {
                         Text("\(version) (\(build))")
                             .foregroundStyle(.secondary)
                     }
+                    .contextMenu {
+                        CopyTextContextMenuButton(
+                            "Copy Version",
+                            text: "\(version) (\(build))"
+                        )
+                    }
                 }
             }
             ShortcutsLinkSection()
