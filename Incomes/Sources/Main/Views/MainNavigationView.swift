@@ -139,6 +139,8 @@ struct MainNavigationView: View {
             switch fullScreenRoute {
             case .duplicateTags:
                 DuplicateTagNavigationView()
+            case .orphanTags:
+                OrphanTagNavigationView()
             }
         }
         .mhRouteHandler(routeInbox) { route in

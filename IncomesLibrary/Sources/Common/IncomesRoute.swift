@@ -8,6 +8,7 @@ public enum IncomesRoute: Equatable, Sendable {
     case yearSummary(Int)
     case yearlyDuplication
     case duplicateTags
+    case orphanTags
     case year(Int)
     case month(year: Int, month: Int)
     case item(String)

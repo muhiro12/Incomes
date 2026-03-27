@@ -136,6 +136,8 @@ private extension MainNavigationRouter {
             sheetRoute = .yearlyDuplication
         case .duplicateTags:
             fullScreenRoute = .duplicateTags
+        case .orphanTags:
+            fullScreenRoute = .orphanTags
         case .itemDetail(let itemID):
             itemDetailID = itemID
             sheetRoute = .itemDetail

@@ -92,6 +92,14 @@ struct IncomesRouteParserTests {
     }
 
     @Test
+    func parse_custom_scheme_orphan_tags_route() {
+        let route = IncomesRouteParser.parse(
+            url: testURL("incomes://orphan-tags")
+        )
+        #expect(route == .orphanTags)
+    }
+
+    @Test
     func parse_universal_link_route_with_prefix() {
         let route = IncomesRouteParser.parse(
             url: testURL("https://muhiro12.github.io/Incomes/month/2026-01")

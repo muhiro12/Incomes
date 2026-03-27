@@ -22,6 +22,8 @@ public enum MainNavigationRouteOutcome {
     case yearlyDuplication
     /// Opens duplicate-tag management.
     case duplicateTags
+    /// Opens orphan-tag review.
+    case orphanTags
     /// Opens the detail screen for the specified item.
     case itemDetail(itemID: PersistentIdentifier)
 }

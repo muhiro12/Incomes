@@ -27,6 +27,7 @@ struct MainNavigationRouteExecutorTests { // swiftlint:disable:this type_body_le
              .settingsDebug,
              .yearlyDuplication,
              .duplicateTags,
+             .orphanTags,
              .itemDetail:
             Issue.record("Expected .settings outcome.")
         }
@@ -49,6 +50,7 @@ struct MainNavigationRouteExecutorTests { // swiftlint:disable:this type_body_le
              .settingsDebug,
              .yearlyDuplication,
              .duplicateTags,
+             .orphanTags,
              .itemDetail:
             Issue.record("Expected .settingsSubscription outcome.")
         }
@@ -71,6 +73,7 @@ struct MainNavigationRouteExecutorTests { // swiftlint:disable:this type_body_le
              .settingsDebug,
              .yearlyDuplication,
              .duplicateTags,
+             .orphanTags,
              .itemDetail:
             Issue.record("Expected .settingsLicense outcome.")
         }
@@ -93,6 +96,7 @@ struct MainNavigationRouteExecutorTests { // swiftlint:disable:this type_body_le
              .settingsLicense,
              .yearlyDuplication,
              .duplicateTags,
+             .orphanTags,
              .itemDetail:
             Issue.record("Expected .settingsDebug outcome.")
         }
@@ -122,6 +126,7 @@ struct MainNavigationRouteExecutorTests { // swiftlint:disable:this type_body_le
              .settingsDebug,
              .yearlyDuplication,
              .duplicateTags,
+             .orphanTags,
              .itemDetail:
             Issue.record("Expected .destination outcome for year summary route.")
         }
@@ -144,6 +149,7 @@ struct MainNavigationRouteExecutorTests { // swiftlint:disable:this type_body_le
              .settingsLicense,
              .settingsDebug,
              .duplicateTags,
+             .orphanTags,
              .itemDetail:
             Issue.record("Expected .yearlyDuplication outcome.")
         }
@@ -166,8 +172,32 @@ struct MainNavigationRouteExecutorTests { // swiftlint:disable:this type_body_le
              .settingsLicense,
              .settingsDebug,
              .yearlyDuplication,
+             .orphanTags,
              .itemDetail:
             Issue.record("Expected .duplicateTags outcome.")
+        }
+    }
+
+    @Test
+    func execute_returns_orphan_tags_for_orphan_tags_route() throws {
+        let outcome = try MainNavigationRouteExecutor.execute(
+            route: .orphanTags,
+            context: context
+        )
+
+        switch outcome {
+        case .orphanTags:
+            break
+        case .destination,
+             .search,
+             .settings,
+             .settingsSubscription,
+             .settingsLicense,
+             .settingsDebug,
+             .yearlyDuplication,
+             .duplicateTags,
+             .itemDetail:
+            Issue.record("Expected .orphanTags outcome.")
         }
     }
 
@@ -188,6 +218,7 @@ struct MainNavigationRouteExecutorTests { // swiftlint:disable:this type_body_le
              .settingsDebug,
              .yearlyDuplication,
              .duplicateTags,
+             .orphanTags,
              .itemDetail:
             Issue.record("Expected .search outcome.")
         }
@@ -216,6 +247,7 @@ struct MainNavigationRouteExecutorTests { // swiftlint:disable:this type_body_le
              .settingsDebug,
              .yearlyDuplication,
              .duplicateTags,
+             .orphanTags,
              .itemDetail:
             Issue.record("Expected .destination outcome for year route.")
         }
@@ -250,6 +282,7 @@ struct MainNavigationRouteExecutorTests { // swiftlint:disable:this type_body_le
              .settingsDebug,
              .yearlyDuplication,
              .duplicateTags,
+             .orphanTags,
              .itemDetail:
             Issue.record("Expected .destination outcome for month route.")
         }
@@ -285,6 +318,7 @@ struct MainNavigationRouteExecutorTests { // swiftlint:disable:this type_body_le
              .settingsDebug,
              .yearlyDuplication,
              .duplicateTags,
+             .orphanTags,
              .itemDetail:
             Issue.record("Expected .destination outcome for home route.")
         }
@@ -318,7 +352,8 @@ struct MainNavigationRouteExecutorTests { // swiftlint:disable:this type_body_le
              .settingsLicense,
              .settingsDebug,
              .yearlyDuplication,
-             .duplicateTags:
+             .duplicateTags,
+             .orphanTags:
             Issue.record("Expected .itemDetail outcome for item route.")
         }
     }
@@ -340,6 +375,7 @@ struct MainNavigationRouteExecutorTests { // swiftlint:disable:this type_body_le
              .settingsDebug,
              .yearlyDuplication,
              .duplicateTags,
+             .orphanTags,
              .itemDetail:
             Issue.record("Expected fallback .destination outcome for invalid item route.")
         }

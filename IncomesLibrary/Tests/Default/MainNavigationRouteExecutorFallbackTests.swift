@@ -26,6 +26,7 @@ struct MainNavigationRouteExecutorFallbackTests {
              .settingsDebug,
              .yearlyDuplication,
              .duplicateTags,
+             .orphanTags,
              .itemDetail:
             Issue.record("Expected a home fallback destination.")
         }
@@ -64,6 +65,7 @@ struct MainNavigationRouteExecutorFallbackTests {
              .settingsDebug,
              .yearlyDuplication,
              .duplicateTags,
+             .orphanTags,
              .itemDetail:
             Issue.record("Expected a home fallback destination.")
         }

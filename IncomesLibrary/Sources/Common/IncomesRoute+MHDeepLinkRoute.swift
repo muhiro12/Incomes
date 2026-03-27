@@ -20,6 +20,8 @@ extension IncomesRoute: MHDeepLinkRoute {
             .init(pathComponents: ["yearly-duplication"])
         case .duplicateTags:
             .init(pathComponents: ["duplicate-tags"])
+        case .orphanTags:
+            .init(pathComponents: ["orphan-tags"])
         case .year(let year):
             .init(pathComponents: ["year", String(format: "%04d", year)])
         case let .month(year, month):
@@ -79,8 +81,9 @@ extension IncomesRoute: MHDeepLinkRoute {
             return Self.parseYearSummaryRoute(from: pathComponents)
         case "yearly-duplication":
             return .yearlyDuplication
-        case "duplicate-tags":
-            return .duplicateTags
+        case "duplicate-tags",
+             "orphan-tags":
+            return Self.parseTagManagementRoute(destination: destination)
         case "year":
             return Self.parseYearRoute(from: pathComponents)
         case "month":
@@ -122,6 +125,19 @@ extension IncomesRoute: MHDeepLinkRoute {
             return nil
         }
         return .yearSummary(year)
+    }
+
+    private static func parseTagManagementRoute(
+        destination: String
+    ) -> IncomesRoute? {
+        switch destination {
+        case "duplicate-tags":
+            return .duplicateTags
+        case "orphan-tags":
+            return .orphanTags
+        default:
+            return nil
+        }
     }
 
     private static func parseYearRoute(from pathComponents: [String]) -> IncomesRoute? {

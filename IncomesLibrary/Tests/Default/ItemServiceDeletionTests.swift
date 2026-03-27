@@ -81,4 +81,33 @@ struct ItemServiceDeletionTests {
 
         #expect(fetchItems(context).isEmpty)
     }
+
+    @Test
+    func deleteAll_removes_items_and_orphaned_derived_tags() throws {
+        _ = try Item.create(
+            context: context,
+            date: shiftedDate("2001-01-01T00:00:00Z"),
+            content: "A",
+            income: 0,
+            outgo: 10,
+            category: "Category",
+            priority: 0,
+            repeatID: .init()
+        )
+        _ = try Item.create(
+            context: context,
+            date: shiftedDate("2001-02-01T00:00:00Z"),
+            content: "B",
+            income: 0,
+            outgo: 20,
+            category: "Category",
+            priority: 0,
+            repeatID: .init()
+        )
+
+        try ItemService.deleteAll(context: context)
+
+        #expect(fetchItems(context).isEmpty)
+        #expect(try context.fetchCount(.tags(.all)) == 0)
+    }
 }

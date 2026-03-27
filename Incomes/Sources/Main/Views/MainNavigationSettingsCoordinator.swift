@@ -46,6 +46,7 @@ extension IncomesRoute {
              .yearSummary,
              .yearlyDuplication,
              .duplicateTags,
+             .orphanTags,
              .year,
              .month,
              .item,

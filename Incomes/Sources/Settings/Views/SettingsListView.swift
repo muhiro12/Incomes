@@ -56,12 +56,21 @@ extension SettingsListView: View {
             dataManagementSection(
                 model: model
             )
-            if model.hasDuplicateTags {
+            if model.hasDuplicateTags || model.hasOrphanTags {
                 Section {
-                    Button {
-                        navigateToRoute(.duplicateTags)
-                    } label: {
-                        Text("Resolve duplicate tags")
+                    if model.hasDuplicateTags {
+                        Button {
+                            navigateToRoute(.duplicateTags)
+                        } label: {
+                            Text("Resolve duplicate tags")
+                        }
+                    }
+                    if model.hasOrphanTags {
+                        Button {
+                            navigateToRoute(.orphanTags)
+                        } label: {
+                            Text("Review orphan tags")
+                        }
                     }
                 } header: {
                     HStack {

@@ -38,6 +38,8 @@ public enum MainNavigationRouteExecutor {
             return .yearlyDuplication
         case .duplicateTags:
             return .duplicateTags
+        case .orphanTags:
+            return .orphanTags
         case .year(let year):
             return .destination(
                 yearTagID: try resolveYearTagID(

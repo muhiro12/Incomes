@@ -7,9 +7,11 @@ public enum SettingsStatusLoader {
         context: ModelContext
     ) throws -> SettingsStatus {
         let hasDuplicateTags = try TagService.hasDuplicates(context: context)
+        let hasOrphanTags = try TagService.hasOrphanTags(context: context)
         let hasDebugData = try ItemService.hasDebugData(context: context)
         return .init(
             hasDuplicateTags: hasDuplicateTags,
+            hasOrphanTags: hasOrphanTags,
             hasDebugData: hasDebugData
         )
     }

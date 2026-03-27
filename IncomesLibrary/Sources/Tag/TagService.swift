@@ -51,6 +51,11 @@ public enum TagService {
         try !duplicateTags(context: context).isEmpty
     }
 
+    /// True when unused tags exist in the store.
+    public static func hasOrphanTags(context: ModelContext) throws -> Bool {
+        try !orphanTags(context: context).isEmpty
+    }
+
     /// Returns one representative per duplicate tag group in the store.
     public static func duplicateTags(
         context: ModelContext
@@ -72,6 +77,25 @@ public enum TagService {
         )
     }
 
+    /// Returns every unused tag in the store.
+    public static func orphanTags(
+        context: ModelContext
+    ) throws -> [Tag] {
+        try getAll(context: context).filter { tag in
+            isOrphan(tag: tag)
+        }
+    }
+
+    /// Returns every unused tag of `type`.
+    public static func orphanTags(
+        context: ModelContext,
+        type: TagType
+    ) throws -> [Tag] {
+        try context.fetch(.tags(.typeIs(type))).filter { tag in
+            isOrphan(tag: tag)
+        }
+    }
+
     /// Merges `tags` into the first tag, reattaching item relationships.
     public static func mergeDuplicates(tags: [Tag]) {
         guard let parent = tags.first else {
@@ -80,11 +104,25 @@ public enum TagService {
         let children = tags.filter { tag in
             tag.id != parent.id
         }
-        let childItems = children.flatMap { tag in
-            tag.items ?? []
-        }
+        let childIDs = Set(children.map(\.id))
+        let childItems = Array(
+            Dictionary(
+                grouping: children.flatMap { tag in
+                    referencingItems(for: tag)
+                },
+                by: \.id
+            )
+            .values
+            .compactMap(\.first)
+        )
         for item in childItems {
-            var tags = item.tags ?? []
+            var tags = item.tags.orEmpty.filter { tag in
+                !childIDs.contains(tag.id)
+            }
+            guard tags.contains(parent) == false else {
+                item.modify(tags: tags)
+                continue
+            }
             tags.append(parent)
             item.modify(tags: tags)
         }
@@ -118,9 +156,38 @@ public enum TagService {
         )
     }
 
-    /// Deletes a single tag.
-    public static func delete(tag: Tag) {
+    /// True when `tag` is unused by every item in the current store.
+    public static func isOrphan(tag: Tag) -> Bool {
+        referencingItems(for: tag).isEmpty
+    }
+
+    /// Deletes a single unused tag.
+    @discardableResult
+    public static func delete(tag: Tag) -> Bool {
+        guard isOrphan(tag: tag) else {
+            return false
+        }
         tag.delete()
+        return true
+    }
+
+    static func deleteUnused(tags: [Tag]) {
+        let uniqueTags = Dictionary(
+            grouping: tags,
+            by: \.id
+        )
+        .compactMap(\.value.first)
+        uniqueTags.forEach { tag in
+            delete(tag: tag)
+        }
+    }
+
+    /// Deletes every unused tag in the store.
+    public static func deleteAllOrphanTags(context: ModelContext) throws {
+        let orphanTags = try orphanTags(context: context)
+        orphanTags.forEach { tag in
+            delete(tag: tag)
+        }
     }
 
     /// Deletes all tags in the store.
@@ -205,6 +272,21 @@ public enum TagService {
 }
 
 private extension TagService {
+    static func referencingItems(for tag: Tag) -> [Item] {
+        guard
+            let context = tag.modelContext,
+            let items = try? context.fetch(.items(.all))
+        else {
+            return tag.items.orEmpty
+        }
+
+        return items.filter { item in
+            item.tags.orEmpty.contains { itemTag in
+                itemTag.id == tag.id
+            }
+        }
+    }
+
     static func matchingItems(for tag: Tag) -> [Item] {
         let fallbackItems = tag.items.orEmpty
         guard

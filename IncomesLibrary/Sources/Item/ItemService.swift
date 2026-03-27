@@ -232,11 +232,13 @@ public enum ItemService { // swiftlint:disable:this type_body_length
             )
         }
 
+        let tagsToCleanup = cleanupCandidateTags(from: items)
         let deletedIDs = Set(items.map(\.persistentModelID))
         let deletedDates = items.map(\.localDate)
         for item in items {
             item.delete()
         }
+        TagService.deleteUnused(tags: tagsToCleanup)
         if let startDate = deletedDates.min() {
             try BalanceCalculator.calculate(in: context, after: startDate)
         }
@@ -264,9 +266,11 @@ public enum ItemService { // swiftlint:disable:this type_body_length
     /// Deletes all items and recalculates balances.
     public static func deleteAll(context: ModelContext) throws {
         let items = try context.fetch(FetchDescriptor<Item>())
+        let tagsToCleanup = cleanupCandidateTags(from: items)
         items.forEach { item in
             item.delete()
         }
+        TagService.deleteUnused(tags: tagsToCleanup)
         try BalanceCalculator.calculate(in: context, for: items)
     }
 
@@ -374,6 +378,7 @@ public enum ItemService { // swiftlint:disable:this type_body_length
             item: item,
             scope: scope
         )
+        let tagsToCleanup = cleanupCandidateTags(from: affectedItems)
         let beforeDates = affectedItems.map(\.localDate)
         let updatedIDs = Set(affectedItems.map(\.persistentModelID))
 
@@ -413,6 +418,7 @@ public enum ItemService { // swiftlint:disable:this type_body_length
             )
         }
 
+        TagService.deleteUnused(tags: tagsToCleanup)
         let afterDates = affectedItems.map(\.localDate)
         let candidateDates = beforeDates + afterDates + [input.date]
         return .init(
@@ -917,6 +923,19 @@ private extension ItemService {
             return try context.fetch(
                 .items(.repeatIDIs(item.repeatID))
             )
+        }
+    }
+
+    static func cleanupCandidateTags(from items: [Item]) -> [Tag] {
+        items.flatMap { item in
+            item.tags.orEmpty.filter { tag in
+                switch tag.type {
+                case .year, .yearMonth, .content, .category:
+                    return true
+                case .debug, .none:
+                    return false
+                }
+            }
         }
     }
 

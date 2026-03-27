@@ -53,6 +53,15 @@ struct IncomesRouteURLBuilderTests {
     }
 
     @Test
+    func build_custom_scheme_url_for_orphan_tags() {
+        let route = IncomesRoute.orphanTags
+        let url = IncomesRouteURLBuilder.customSchemeURL(for: route)
+        #expect(
+            url?.absoluteString == "incomes://orphan-tags"
+        )
+    }
+
+    @Test
     func build_custom_scheme_url_for_settings_subscription() {
         let route = IncomesRoute.settingsSubscription
         let url = IncomesRouteURLBuilder.customSchemeURL(for: route)

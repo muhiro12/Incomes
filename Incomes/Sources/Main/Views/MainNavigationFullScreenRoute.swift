@@ -7,6 +7,7 @@
 
 enum MainNavigationFullScreenRoute: String, Identifiable {
     case duplicateTags
+    case orphanTags
 
     var id: String {
         rawValue
