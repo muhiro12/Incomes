@@ -15,6 +15,9 @@ work across the iOS app, App Intents, Apple Watch, and widgets.
   and mutations belong in shared services.
 - `IncomesLibrary` remains a single module unless there is a stronger reason
   than code organization alone.
+- Thin targets here are responsibility-thin. They may still contain UI shells,
+  lifecycle wiring, and framework adapters so long as reusable rules stay in
+  `IncomesLibrary`.
 
 ## Responsibility Boundaries
 
@@ -23,6 +26,7 @@ work across the iOS app, App Intents, Apple Watch, and widgets.
 | Shared domain logic | `IncomesLibrary` | `Item`, `Tag`, predicates, `ItemService`, `TagService`, `SummaryCalculator`, `YearlyItemDuplicator`, `DataMaintenanceService`, `UpcomingPaymentPlanner`, `SettingsStatusLoader` |
 | Apple framework adapters | `Incomes` | `ItemInferenceService`, `NotificationService`, App Intent types, deep-link routing, StoreKit, ads |
 | App-side platform support | `Incomes/Sources/Common/Platform` | `IncomesPlatformEnvironmentFactory`, `MHAppRuntimeBootstrap` assembly, `MHAppRoutePipeline<IncomesRoute>` assembly, `IncomesRouteBridge`, `MHReviewFlow` policy helpers |
+| Watch and widget adapters | `Watch`, `Widgets` | WatchConnectivity transport, widget timeline providers, target-local screen state, entry presentation |
 | Presentation orchestration | `Incomes` | SwiftUI views, navigation state, form state, app-side services in `Item/Services`, and coordinators in `Settings/Coordinators` |
 
 ## MHPlatform Adoption
@@ -50,6 +54,10 @@ operations:
 - `SummaryCalculator`
 - `DataMaintenanceService.deleteAllData(context:)`
 - `DataMaintenanceService.deleteDebugData(context:)`
+- `WatchSyncReply`
+- `WatchSyncFailure`
+- `WatchSyncFailurePhase`
+- `WatchSyncService.applySnapshot(context:items:baseDate:monthOffsets:)`
 
 App-side mutation call sites should prefer
 `MHMutationWorkflow.runThrowing(... projection:)` over local wrapper APIs.
@@ -65,11 +73,22 @@ App-side mutation call sites should prefer
    library API.
 4. Keep platform-specific types out of `IncomesLibrary`. Convert them at the
    boundary into library models or value types.
-5. Treat hidden intents as acceptable when the capability is useful but the
+5. Shared serialization contracts used by multiple targets belong in
+   `IncomesLibrary`, even when transport happens through Apple-only APIs such as
+   WatchConnectivity.
+6. Treat hidden intents as acceptable when the capability is useful but the
    shortcut should not be broadly discoverable.
-6. If glue code is app-only but reused by multiple app entry points, factor it
+7. If glue code is app-only but reused by multiple app entry points, factor it
    into `Incomes/Sources/Common/Platform` instead of moving it into
    `IncomesLibrary`.
+
+## Test Posture
+
+- Keep repository-owned unit tests in `IncomesLibrary/Tests`.
+- Do not add separate unit test targets for `Incomes`, `Watch`, or `Widgets`
+  unless the repository policy itself changes.
+- If an adapter needs durable coverage, first extract the reusable rule or wire
+  contract into `IncomesLibrary` and test it there.
 
 ## Current Examples
 
@@ -80,6 +99,10 @@ App-side mutation call sites should prefer
 - `IncomesPlatformEnvironmentFactory` stays in `Incomes` because runtime,
   route pipeline, and review flow assembly depend on the `MHPlatform` umbrella, app
   secrets, and SwiftUI environment injection.
+- `PhoneWatchBridge` and `PhoneSyncClient` stay in the app targets because they
+  own WatchConnectivity transport, while `WatchSyncReply` and
+  `WatchSyncService` stay in `IncomesLibrary` because the sync contract and
+  apply rules are shared.
 - `IncomesLibrary` stays on `MHPlatformCore` so shared logic only sees
   core-safe platform helpers.
 - `ContentView` stays thin because `MHAppRuntimeBootstrap` owns the runtime,

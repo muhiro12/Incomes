@@ -50,6 +50,7 @@ private extension ContentView {
     ) -> some View {
         List {
             upcomingSection(model: model)
+            syncStatusSection(model: model)
             reloadSection(model: model)
             settingsSection(model: model)
         }
@@ -87,6 +88,37 @@ private extension ContentView {
         }
     }
 
+    @ViewBuilder
+    func syncStatusSection(
+        model: WatchHomeScreenModel
+    ) -> some View {
+        switch model.syncStatus {
+        case .reloading:
+            Section("Sync") {
+                Label("Reloading", systemImage: "arrow.trianglehead.clockwise")
+                Text("Syncing recent months from your iPhone.")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+            }
+        case let .failed(failure):
+            Section("Sync") {
+                Label("Sync Failed", systemImage: "exclamationmark.triangle")
+                Text(failure.message)
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+            }
+        case .emptySuccess:
+            Section("Sync") {
+                Label("No Recent Items", systemImage: "checkmark.circle")
+                Text("Recent month sync completed without returning any items.")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+            }
+        case .none:
+            EmptyView()
+        }
+    }
+
     func reloadSection(
         model: WatchHomeScreenModel
     ) -> some View {
@@ -120,10 +152,8 @@ private extension ContentView {
         guard model.beginReload() else {
             return
         }
-        defer {
-            model.finishReload()
-        }
-        await WatchDataSyncer.syncRecentMonths(context: context)
+        let reply = await WatchDataSyncer.syncRecentMonths(context: context)
+        model.finishReload(with: reply)
     }
 }
 

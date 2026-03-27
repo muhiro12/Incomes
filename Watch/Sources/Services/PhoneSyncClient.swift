@@ -44,25 +44,43 @@ final class PhoneSyncClient: NSObject {
         return
     }
 
-    nonisolated func requestRecentItems() async -> [ItemWire] {
+    nonisolated func requestRecentItems() async -> WatchSyncReply {
         guard WCSession.default.isReachable else {
-            return []
+            return .failed(
+                phase: .sessionUnreachable,
+                message: "Phone session is not reachable."
+            )
         }
 
-        let request = ItemsRequest(baseEpoch: Date().timeIntervalSince1970, monthOffsets: [-1, 0, 1])
-        guard let data = try? JSONEncoder().encode(request) else {
-            return []
+        let request = ItemsRequest(
+            baseEpoch: Date().timeIntervalSince1970,
+            monthOffsets: [-1, 0, 1]
+        )
+        let data: Data
+        do {
+            data = try JSONEncoder().encode(request)
+        } catch {
+            return .failed(
+                phase: .requestEncode,
+                error: error
+            )
         }
 
         return await withCheckedContinuation { continuation in
             WCSession.default.sendMessageData(
                 data,
                 replyHandler: { response in
-                    let payload = (try? JSONDecoder().decode(ItemsPayload.self, from: response)) ?? .init(items: [])
-                    continuation.resume(returning: payload.items)
+                    continuation.resume(
+                        returning: WatchSyncReply.decodeResponse(response)
+                    )
                 },
-                errorHandler: { _ in
-                    continuation.resume(returning: [])
+                errorHandler: { error in
+                    continuation.resume(
+                        returning: .failed(
+                            phase: .transport,
+                            error: error
+                        )
+                    )
                 }
             )
         }

@@ -18,15 +18,29 @@ Related decision:
 | Adapter (`Incomes`, `Watch`, `Widgets`, App Intents) | Parameter parsing, platform API calls, dependency wiring, follow-up orchestration based on domain outcomes | Domain branching duplicated from library |
 | View (SwiftUI) | Focus state, sheets, navigation state, screen-scoped `@Observable` presentation models, formatting, view composition | Domain validation branching, business calculations, repeat/duplication rules |
 
+## Thin-Target Clarification
+
+- "Thin target" in this repository means responsibility-thin, not
+  line-count-thin.
+- `Incomes`, `Watch`, `Widgets`, and App Intents may legitimately own SwiftUI
+  shells, route intake, lifecycle wiring, WatchConnectivity transport,
+  notification delivery, and other Apple-framework adapters.
+- A target is still considered thin when reusable finance rules, mutation
+  decisions, shared snapshot building, and sync wire contracts continue to live
+  in `IncomesLibrary`.
+
 ## Testing Boundary
 
 - Keep automated tests in `IncomesLibrary/Tests`.
-- Do not maintain a separate app-target unit test suite. App-owned adapters
-  should stay thin enough to verify through app builds and library-owned
-  decision-rule coverage.
+- Do not maintain separate unit test targets for `Incomes`, `Watch`, or
+  `Widgets`. App-owned adapters should stay thin enough to verify through
+  builds and library-owned decision-rule coverage.
 - Do not add unit tests for screen-scoped presentation models, routers, or
   thin coordinators by default. If one of those areas needs durable coverage,
   first move the reusable rule into `IncomesLibrary` and test it there.
+- When adapter flows need durable sync or serialization coverage, move the wire
+  contract into `IncomesLibrary` and test it there instead of growing
+  target-local test suites.
 
 ## View Rules
 
@@ -76,6 +90,14 @@ App Intents must follow the same domain path:
 
 Intent files may convert domain errors to App Intent errors, but must not re-implement domain rules.
 
+The same adapter rule applies to `Watch` and `Widgets`:
+
+- `Watch` should keep transport, timing, and small screen models locally while
+  delegating shared item queries, snapshot apply rules, and sync reply models
+  to `IncomesLibrary`.
+- `Widgets` should keep timeline providers and entry presentation locally while
+  delegating shared calculations and snapshot building to `IncomesLibrary`.
+
 ## MutationOutcome Contract
 
 Domain mutations should expose change metadata through `MutationOutcome`:
@@ -98,6 +120,12 @@ than relying on assertions or empty sentinel values.
   retries.
 - Sync transport, decode, and apply failures must stay distinguishable from a
   legitimate zero-data snapshot.
+
+Current shared sync contract:
+
+- `WatchSyncReply`
+- `WatchSyncFailure`
+- `WatchSyncFailurePhase`
 
 See
 [0005-adapter-failure-surfacing-contract.md](../Decisions/0005-adapter-failure-surfacing-contract.md)

@@ -107,4 +107,45 @@ struct WatchSyncPlanningTests {
         #expect(contents == Set(["AUG-NEW", "SEP-NEW", "OCT-NEW"]))
         #expect(!contents.contains("JULY-OLD"))
     }
+
+    @Test
+    func applySnapshot_accepts_empty_snapshot_as_successful_full_clear() throws {
+        let base = shiftedDate("2000-09-15T12:00:00Z")
+        let aug = try #require(
+            Calendar.current.date(byAdding: .month, value: -1, to: base)
+        )
+        let sep = base
+        let nov = try #require(
+            Calendar.current.date(byAdding: .month, value: 2, to: base)
+        )
+
+        for (date, content) in [(aug, "AUG-OLD"), (sep, "SEP-OLD"), (nov, "NOV-KEPT")] {
+            _ = try createItem(
+                context: context,
+                date: date,
+                content: content,
+                income: 100,
+                outgo: 0,
+                category: "Test",
+                priority: 0,
+                repeatCount: 1
+            )
+        }
+
+        let outcome = try WatchSyncService.applySnapshot(
+            context: context,
+            items: [],
+            baseDate: base,
+            monthOffsets: [-1, 0, 1]
+        )
+
+        #expect(outcome.followUpHints.contains(.reloadWidgets))
+        #expect(outcome.followUpHints.contains(.refreshWatchSnapshot))
+        #expect(outcome.changedIDs.created.isEmpty)
+        #expect(outcome.changedIDs.deleted.count == 3)
+
+        let remaining = try context.fetch(FetchDescriptor<Item>())
+        let contents = Set(remaining.map(\.content))
+        #expect(contents.isEmpty)
+    }
 }

@@ -81,10 +81,32 @@ Models.
 - **Database migration** – `DatabaseMigrator` moves legacy SQLite files into the
   shared container on first launch so long-time users keep their history.
 - **WatchConnectivity bridge** – `PhoneWatchBridge` answers watch requests with
-  filtered payloads, while `PhoneSyncClient` manages activation and message
-  replies on watchOS.
+  typed `WatchSyncReply` payloads, while `PhoneSyncClient` manages activation
+  and message replies on watchOS.
 - **Preview infrastructure** – `IncomesPreview` provisions an in-memory store,
   sample data, and mock services so SwiftUI previews remain functional.
+
+## Architecture records
+
+- Thin targets in this repository are responsibility-thin, not line-count-thin.
+  `Incomes`, `Watch`, `Widgets`, and App Intents may still own SwiftUI shells,
+  lifecycle wiring, routing, and framework adapters, but reusable finance rules
+  and shared sync contracts belong in `IncomesLibrary`.
+- `IncomesLibrary` owns the shared SwiftData model, mutation/query services,
+  widget snapshot builders, and cross-target sync types such as
+  `WatchSyncReply`.
+- `Incomes`, `Watch`, `Widgets`, and App Intents consume those shared APIs and
+  remain the place for Apple-specific integration work such as notifications,
+  WatchConnectivity, WidgetKit, StoreKit, ads, and Foundation Models.
+- Automated unit tests stay in `IncomesLibrary/Tests`. This repository does not
+  add separate unit test targets for `Incomes`, `Watch`, or `Widgets`; those
+  adapters are verified through builds plus shared-library tests.
+- Start detailed architecture reading from
+  [ARCHITECTURE_GUIDE.md](Designs/Architecture/ARCHITECTURE_GUIDE.md),
+  [shared-service-design.md](Designs/Architecture/shared-service-design.md),
+  [incomes-current-overview.md](Designs/Overviews/incomes-current-overview.md),
+  and
+  [incomes-architecture-conformance-audit.md](Designs/Overviews/incomes-architecture-conformance-audit.md).
 
 ## Platform package posture
 

@@ -1,6 +1,6 @@
 # Incomes Current Product and Architecture Overview
 
-Current as of March 23, 2026.
+Current as of March 26, 2026.
 
 ## Purpose
 
@@ -449,6 +449,30 @@ route contract remains `IncomesRoute`.
   debugging.
 - The preview stack also injects notification, configuration, store, and ad
   services so the UI stays operable in isolation.
+
+## Architecture Conformance
+
+- The repository still follows the intended split of one shared business
+  library plus thin adapter targets: `IncomesLibrary` owns reusable finance
+  rules, while `Incomes`, `Watch`, `Widgets`, and App Intents own platform
+  wiring and presentation.
+- "Thin" in this codebase means responsibility-thin rather than small in raw
+  lines of code. The iPhone app target still legitimately contains SwiftUI
+  composition, runtime setup, notification delivery, route handling, and other
+  Apple-only adapters.
+- Cross-target reuse remains centered on shared entry points such as
+  `ItemService`, `TagService`, `SummaryCalculator`, `YearlyItemDuplicator`,
+  `WidgetEntryFactory`, `WatchSyncReply`, and `WatchSyncService`.
+- The repository still keeps automated unit tests in `IncomesLibrary/Tests`
+  instead of adding separate unit test targets for `Incomes`, `Watch`, or
+  `Widgets`.
+- Apple-only exceptions remain intentional. Current examples are
+  `NotificationService`, `ItemInferenceService`, `PhoneWatchBridge`,
+  `PhoneSyncClient`, StoreKit integration, WidgetKit timeline providers, and
+  screen-scoped SwiftUI models.
+- Watch sync failure surfacing now follows ADR 0005 explicitly by using a typed
+  shared reply contract so transport, decode, apply, and legitimate zero-item
+  success no longer collapse into the same empty sentinel.
 
 ## Canonical Shared Behaviors
 
