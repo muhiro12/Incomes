@@ -80,14 +80,14 @@ private extension BalanceChartSection {
                     stacking: .unstacked
                 )
                 .foregroundStyle(.tint)
-                .interpolationMethod(.catmullRom)
+                .interpolationMethod(.linear)
                 .opacity(Constants.areaMarkOpacity)
                 LineMark(
                     x: .value("Date", date(of: item)),
                     y: .value("Amount", balance(of: item))
                 )
                 .foregroundStyle(.tint)
-                .interpolationMethod(.catmullRom)
+                .interpolationMethod(.linear)
                 .lineStyle(.init(lineWidth: Constants.lineMarkWidth))
             }
         }
