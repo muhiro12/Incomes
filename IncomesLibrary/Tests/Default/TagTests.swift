@@ -18,6 +18,27 @@ struct TagTests {
     }
 
     @Test
+    func create_reuses_existing_tag_for_same_name_and_type() throws {
+        let first = try Tag.create(
+            context: context,
+            name: "Shared",
+            type: .content
+        )
+        let second = try Tag.create(
+            context: context,
+            name: "Shared",
+            type: .content
+        )
+
+        #expect(first.id == second.id)
+        #expect(
+            try context.fetchCount(
+                .tags(.nameIs("Shared", type: .content))
+            ) == 1
+        )
+    }
+
+    @Test
     func hasDeficit_returns_true_when_any_item_has_negative_balance() throws {
         _ = try createItem(
             context: context,

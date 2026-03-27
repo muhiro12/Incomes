@@ -55,12 +55,14 @@ public enum TagPredicate {
             }
         case let .nameContains(name, type):
             let typeID = type.rawValue
-            let hiragana = name.applyingTransform(.hiraganaToKatakana, reverse: true).orEmpty
-            let katakana = name.applyingTransform(.hiraganaToKatakana, reverse: false).orEmpty
+            let variants = TagTextSupport.storedNameQueryVariants(for: name)
+            let raw = variants.raw
+            let hiragana = variants.hiragana
+            let katakana = variants.katakana
             return #Predicate { tag in
                 tag.typeID == typeID
                     && (
-                        tag.name.localizedStandardContains(name)
+                        tag.name.localizedStandardContains(raw)
                             || tag.name.localizedStandardContains(hiragana)
                             || tag.name.localizedStandardContains(katakana)
                     )

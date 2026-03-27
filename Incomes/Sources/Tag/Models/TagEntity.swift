@@ -73,19 +73,9 @@ extension TagEntity {
     }
 
     var displayName: String {
-        switch type {
-        case .year:
-            name.dateValueWithoutLocale(.yyyy)?.stringValue(.yyyy) ?? name
-        case .yearMonth:
-            name.dateValueWithoutLocale(.yyyyMM)?.stringValue(.yyyyMMM) ?? name
-        case .content:
-            name
-        case .category:
-            name.isNotEmpty ? name : "Others"
-        case .debug:
-            name
-        case .none:
-            name
-        }
+        TagTextSupport.displayName(
+            name: name,
+            type: type
+        )
     }
 }

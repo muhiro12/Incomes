@@ -58,7 +58,11 @@ enum SearchTarget: CaseIterable {
         }
 
         return tags.filter { tag in
-            searchText.isEmpty || tag.displayName.normalizedContains(searchText)
+            searchText.isEmpty || TagTextSupport.matchesDisplayName(
+                name: tag.name,
+                type: tag.type,
+                query: searchText
+            )
         }
     }
 }

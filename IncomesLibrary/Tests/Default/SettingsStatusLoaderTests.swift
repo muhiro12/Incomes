@@ -62,4 +62,26 @@ struct SettingsStatusLoaderTests {
         #expect(refreshedStatus.hasDuplicateTags == false)
         #expect(refreshedStatus.hasDebugData == false)
     }
+
+    @Test
+    func load_returns_false_after_duplicate_tags_are_resolved() throws {
+        _ = Tag.createIgnoringDuplicates(
+            context: context,
+            name: "A",
+            type: .content
+        )
+        _ = Tag.createIgnoringDuplicates(
+            context: context,
+            name: "A",
+            type: .content
+        )
+
+        let initialStatus = try SettingsStatusLoader.load(context: context)
+        #expect(initialStatus.hasDuplicateTags == true)
+
+        try TagService.resolveAllDuplicates(context: context)
+
+        let resolvedStatus = try SettingsStatusLoader.load(context: context)
+        #expect(resolvedStatus.hasDuplicateTags == false)
+    }
 }

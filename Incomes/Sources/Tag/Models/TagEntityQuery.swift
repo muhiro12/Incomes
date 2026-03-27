@@ -27,8 +27,6 @@ struct TagEntityQuery: EntityStringQuery {
     @MainActor
     func entities(matching string: String) throws -> [TagEntity] {
         let tags = try TagService.getAll(context: modelContainer.mainContext)
-        let hiragana = string.applyingTransform(.hiraganaToKatakana, reverse: true).orEmpty
-        let katakana = string.applyingTransform(.hiraganaToKatakana, reverse: false).orEmpty
         return [
             TagType.year,
             .yearMonth,
@@ -39,10 +37,9 @@ struct TagEntityQuery: EntityStringQuery {
             guard let tag = tags.first(
                 where: { item in
                     item.type == type
-                        && (
-                            item.name.localizedStandardContains(string)
-                                || item.name.localizedStandardContains(hiragana)
-                                || item.name.localizedStandardContains(katakana)
+                        && TagTextSupport.matchesStoredName(
+                            item.name,
+                            query: string
                         )
                 }
             ) else {

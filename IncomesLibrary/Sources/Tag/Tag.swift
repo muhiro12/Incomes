@@ -43,20 +43,10 @@ extension Tag { // swiftlint:disable:this extension_access_modifier
 
     /// A localized or user-friendly name for the tag.
     public var displayName: String {
-        switch type {
-        case .year:
-            name.dateValueWithoutLocale(.yyyy)?.stringValue(.yyyy) ?? name
-        case .yearMonth:
-            name.dateValueWithoutLocale(.yyyyMM)?.stringValue(.yyyyMMM) ?? name
-        case .content:
-            name
-        case .category:
-            name.isNotEmpty ? name : "Others"
-        case .debug:
-            name
-        case .none:
-            name
-        }
+        TagTextSupport.displayName(
+            name: name,
+            type: type
+        )
     }
 
     /// Sum of `income` across related items.
