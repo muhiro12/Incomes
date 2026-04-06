@@ -132,7 +132,9 @@ private extension CategoryChartSection {
     var incomeObjects: [(title: String, value: Decimal, ratio: Double, label: String)] { // swiftlint:disable:this large_tuple line_length
         let source: [Item] = items.filter(\.income.isNotZero)
         let grouped: [String: [Item]] = .init(grouping: source) { item in
-            item.category?.displayName ?? "Others"
+            CategoryNameSupport.displayName(
+                forStoredName: item.category?.name
+            )
         }
         let total = grouped.values
             .flatMap(\.self)
@@ -156,7 +158,9 @@ private extension CategoryChartSection {
     var outgoObjects: [(title: String, value: Decimal, ratio: Double, label: String)] { // swiftlint:disable:this large_tuple line_length
         let source: [Item] = items.filter(\.outgo.isNotZero)
         let grouped: [String: [Item]] = .init(grouping: source) { item in
-            item.category?.displayName ?? "Others"
+            CategoryNameSupport.displayName(
+                forStoredName: item.category?.name
+            )
         }
         let total = grouped.values
             .flatMap(\.self)

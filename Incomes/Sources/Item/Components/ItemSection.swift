@@ -35,8 +35,12 @@ struct ItemSection: View {
             HStack {
                 Text("Category")
                 Spacer()
-                Text(item.category?.displayName ?? .empty)
-                    .foregroundStyle(.secondary)
+                Text(
+                    CategoryNameSupport.displayName(
+                        forStoredName: item.category?.name
+                    )
+                )
+                .foregroundStyle(.secondary)
             }
         } header: {
             Text("Information")

@@ -13,6 +13,8 @@ struct SearchListView: View {
     @Environment(IncomesTipController.self)
     private var tipController
 
+    @Query(.items(.all))
+    private var items: [Item]
     @Query(.tags(.typeIs(.content)))
     private var contents: [Tag]
     @Query(.tags(.typeIs(.category)))
@@ -49,7 +51,7 @@ struct SearchListView: View {
                 case .content:
                     buildTagRows(tags: contents)
                 case .category:
-                    buildTagRows(tags: categories)
+                    buildCategoryRows(facets: categoryFacets)
                 case .balance,
                      .income,
                      .outgo:
@@ -85,6 +87,14 @@ struct SearchListView: View {
 }
 
 private extension SearchListView {
+    var categoryFacets: [CategoryFacet] {
+        CategoryFacetService.filteredFacets(
+            tags: categories,
+            items: items,
+            query: searchText
+        )
+    }
+
     var isShowingEmptyState: Bool {
         switch selectedTarget {
         case .content:
@@ -93,10 +103,7 @@ private extension SearchListView {
                 searchText: searchText
             ).isEmpty
         case .category:
-            return selectedTarget.filteredTags(
-                categories,
-                searchText: searchText
-            ).isEmpty
+            return categoryFacets.isEmpty
         case .balance,
              .income,
              .outgo:
@@ -135,6 +142,35 @@ private extension SearchListView {
         }
     }
 
+    func buildCategoryRows(facets: [CategoryFacet]) -> some View {
+        ForEach(facets) { facet in
+            Button {
+                applyCategoryFilter(facet)
+            } label: {
+                HStack {
+                    Text(facet.displayName)
+                    Spacer()
+                    Text(facet.count.description)
+                        .foregroundStyle(.secondary)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .contentShape(Rectangle())
+            }
+            .contextMenu {
+                Button(
+                    "Apply Filter",
+                    systemImage: "line.3.horizontal.decrease.circle"
+                ) {
+                    applyCategoryFilter(facet)
+                }
+                CopyTextContextMenuButton(
+                    "Copy Name",
+                    text: facet.displayName
+                )
+            }
+        }
+    }
+
     func buildCurrencyRows() -> some View {
         HStack(spacing: 40) { // swiftlint:disable:this no_magic_numbers
             TextField("Min", text: $minValue)
@@ -148,6 +184,11 @@ private extension SearchListView {
     func applyTagFilter(_ tag: Tag) {
         tipController.donateDidApplySearch()
         predicate = .tagIs(tag)
+    }
+
+    func applyCategoryFilter(_ facet: CategoryFacet) {
+        tipController.donateDidApplySearch()
+        predicate = .idsAre(facet.itemIDs)
     }
 }
 

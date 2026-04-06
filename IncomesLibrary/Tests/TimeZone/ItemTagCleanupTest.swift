@@ -40,11 +40,29 @@ struct ItemTagCleanupTest {
         )
 
         #expect(try context.fetchCount(.tags(.nameIs(originalDate.stringValueWithoutLocale(.yyyy), type: .year))) == 0)
-        #expect(try context.fetchCount(.tags(.nameIs(originalDate.stringValueWithoutLocale(.yyyyMM), type: .yearMonth))) == 0)
+        #expect(
+            try context.fetchCount(
+                .tags(
+                    .nameIs(
+                        originalDate.stringValueWithoutLocale(.yyyyMM),
+                        type: .yearMonth
+                    )
+                )
+            ) == 0
+        )
         #expect(try context.fetchCount(.tags(.nameIs("Old Content", type: .content))) == 0)
         #expect(try context.fetchCount(.tags(.nameIs("Old Category", type: .category))) == 0)
         #expect(try context.fetchCount(.tags(.nameIs(updatedDate.stringValueWithoutLocale(.yyyy), type: .year))) == 1)
-        #expect(try context.fetchCount(.tags(.nameIs(updatedDate.stringValueWithoutLocale(.yyyyMM), type: .yearMonth))) == 1)
+        #expect(
+            try context.fetchCount(
+                .tags(
+                    .nameIs(
+                        updatedDate.stringValueWithoutLocale(.yyyyMM),
+                        type: .yearMonth
+                    )
+                )
+            ) == 1
+        )
         #expect(try context.fetchCount(.tags(.nameIs("New Content", type: .content))) == 1)
         #expect(try context.fetchCount(.tags(.nameIs("New Category", type: .category))) == 1)
     }

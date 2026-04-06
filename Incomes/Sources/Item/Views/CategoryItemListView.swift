@@ -52,7 +52,7 @@ extension CategoryItemListView: View {
 
 private extension CategoryItemListView {
     var items: [Item] {
-        tag.items.orEmpty
+        TagService.items(for: tag)
     }
 
     var yearStrings: [String] {

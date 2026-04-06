@@ -140,7 +140,9 @@ private extension SummaryCalculator {
 
     static func categoryTotals(for items: [Item]) -> [String: CategoryTotals] {
         items.reduce(into: [String: CategoryTotals]()) { result, item in
-            let category = item.category?.displayName ?? "Others"
+            let category = CategoryNameSupport.displayName(
+                forStoredName: item.category?.name
+            )
             var totals = result[category] ?? .init()
             totals.income += item.income
             totals.outgo += item.outgo

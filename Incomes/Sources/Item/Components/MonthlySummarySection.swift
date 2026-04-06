@@ -257,7 +257,9 @@ private extension MonthlySummarySection {
             content: item.content,
             income: item.income,
             outgo: item.outgo,
-            category: item.category?.displayName ?? "Others"
+            category: CategoryNameSupport.displayName(
+                forStoredName: item.category?.name
+            )
         )
     }
 

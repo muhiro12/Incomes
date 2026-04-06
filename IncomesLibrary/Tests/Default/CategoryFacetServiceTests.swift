@@ -1,0 +1,119 @@
+import Foundation
+@testable import IncomesLibrary
+import SwiftData
+import Testing
+
+struct CategoryFacetServiceTests {
+    let context: ModelContext
+
+    init() {
+        context = testContext
+    }
+
+    @Test
+    func facets_group_others_like_values_into_a_single_bucket() throws {
+        let blankItem = try createItem(
+            content: "Blank",
+            category: .empty
+        )
+        let explicitOthersItem = try createItem(
+            content: "Stored Others",
+            category: "Others"
+        )
+        let nilItem = try createItem(
+            content: "Nil Category",
+            category: "ToRemove"
+        )
+        removeCategory(from: nilItem)
+        _ = blankItem
+        _ = explicitOthersItem
+        _ = Tag.createIgnoringDuplicates(
+            context: context,
+            name: "Travel",
+            type: .category
+        )
+
+        let facets = CategoryFacetService.facets(
+            tags: try context.fetch(.tags(.typeIs(.category))),
+            items: try context.fetch(.items(.all))
+        )
+
+        let othersFacet = try #require(facets.first { facet in
+            facet.displayName == "Others"
+        })
+        let travelFacet = try #require(facets.first { facet in
+            facet.displayName == "Travel"
+        })
+
+        #expect(othersFacet.count == 3)
+        #expect(Set(othersFacet.storedNames) == ["", "Others"])
+        #expect(travelFacet.count == 0)
+    }
+
+    @Test
+    func facets_include_others_when_only_nil_category_items_exist() throws {
+        let item = try createItem(
+            content: "Nil Only",
+            category: "Temporary"
+        )
+        removeCategory(from: item)
+
+        let facets = CategoryFacetService.facets(
+            tags: try context.fetch(.tags(.typeIs(.category))),
+            items: try context.fetch(.items(.all))
+        )
+
+        let othersFacet = try #require(facets.first { facet in
+            facet.displayName == "Others"
+        })
+
+        #expect(othersFacet.count == 1)
+        #expect(othersFacet.storedNames.isEmpty)
+    }
+
+    @Test
+    func filteredFacets_matches_others_display_name() throws {
+        let item = try createItem(
+            content: "Blank",
+            category: .empty
+        )
+        _ = item
+
+        let facets = CategoryFacetService.filteredFacets(
+            tags: try context.fetch(.tags(.typeIs(.category))),
+            items: try context.fetch(.items(.all)),
+            query: "Others"
+        )
+
+        #expect(facets.count == 1)
+        #expect(facets.first?.displayName == "Others")
+    }
+}
+
+private extension CategoryFacetServiceTests {
+    func createItem(
+        content: String,
+        category: String
+    ) throws -> Item {
+        try Item.create(
+            context: context,
+            date: .now,
+            content: content,
+            income: .zero,
+            outgo: 10,
+            category: category,
+            priority: 0,
+            repeatID: .init()
+        )
+    }
+
+    func removeCategory(
+        from item: Item
+    ) {
+        item.modify(
+            tags: item.tags.orEmpty.filter { tag in
+                tag.type != .category
+            }
+        )
+    }
+}

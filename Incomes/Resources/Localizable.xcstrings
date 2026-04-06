@@ -434,6 +434,9 @@
       },
       "shouldTranslate" : false
     },
+    "0 Items" : {
+
+    },
     "Add one item to start tracking income, outgo, and balance." : {
       "localizations" : {
         "en" : {
@@ -604,6 +607,9 @@
         }
       }
     },
+    "Apply Filter" : {
+
+    },
     "Are you really going to set PreviewData?" : {
       "localizations" : {
         "en" : {
@@ -706,6 +712,9 @@
         }
       }
     },
+    "Are you sure you want to delete all orphan tags? This action cannot be undone." : {
+
+    },
     "Are you sure you want to delete these items?" : {
       "localizations" : {
         "en" : {
@@ -773,6 +782,9 @@
           }
         }
       }
+    },
+    "Are you sure you want to delete this orphan tag? This action cannot be undone." : {
+
     },
     "Are you sure you want to delete this tag? This action cannot be undone." : {
       "localizations" : {
@@ -875,6 +887,9 @@
           }
         }
       }
+    },
+    "Are you sure you want to resolve this duplicate tag? This action cannot be undone." : {
+
     },
     "Assist" : {
       "localizations" : {
@@ -1114,6 +1129,12 @@
         }
       }
     },
+    "Choose a debug destination from the sidebar to inspect its items." : {
+
+    },
+    "Choose a duplicate tag from the sidebar to review and resolve it." : {
+
+    },
     "Choose a filter or enter an amount range to see matching items." : {
       "localizations" : {
         "en" : {
@@ -1181,6 +1202,15 @@
           }
         }
       }
+    },
+    "Choose an unused tag from the sidebar to review and clean up." : {
+
+    },
+    "Cleanup" : {
+
+    },
+    "Cleanup All" : {
+
     },
     "Close" : {
       "localizations" : {
@@ -1317,6 +1347,18 @@
           }
         }
       }
+    },
+    "Copy Link" : {
+
+    },
+    "Copy Name" : {
+
+    },
+    "Copy Summary" : {
+
+    },
+    "Copy Version" : {
+
     },
     "Create" : {
       "localizations" : {
@@ -1896,6 +1938,9 @@
         }
       }
     },
+    "Description" : {
+
+    },
     "Display Name" : {
       "localizations" : {
         "en" : {
@@ -2269,6 +2314,9 @@
           }
         }
       }
+    },
+    "Duplicate Year Items" : {
+
     },
     "Edit" : {
       "localizations" : {
@@ -2984,6 +3032,9 @@
           }
         }
       }
+    },
+    "Inspect" : {
+
     },
     "Inspect item details" : {
       "localizations" : {
@@ -4073,6 +4124,9 @@
         }
       }
     },
+    "Open" : {
+
+    },
     "Open a month" : {
       "localizations" : {
         "en" : {
@@ -4141,6 +4195,9 @@
         }
       }
     },
+    "Open Month" : {
+
+    },
     "Open Subscription to unlock iCloud sync and remove ads across the app." : {
       "localizations" : {
         "en" : {
@@ -4208,6 +4265,9 @@
           }
         }
       }
+    },
+    "Orphan Tags" : {
+
     },
     "Others" : {
       "localizations" : {
@@ -5195,6 +5255,9 @@
         }
       }
     },
+    "Review orphan tags" : {
+
+    },
     "Review proposals" : {
       "localizations" : {
         "en" : {
@@ -5535,6 +5598,12 @@
         }
       }
     },
+    "Select a Debug Target" : {
+
+    },
+    "Select a Duplicate Tag" : {
+
+    },
     "Select a Month" : {
       "localizations" : {
         "en" : {
@@ -5671,6 +5740,9 @@
         }
       }
     },
+    "Select an Orphan Tag" : {
+
+    },
     "Send test notification" : {
       "localizations" : {
         "en" : {
@@ -5773,6 +5845,9 @@
         }
       }
     },
+    "Share Link" : {
+
+    },
     "Show" : {
       "localizations" : {
         "en" : {
@@ -5840,6 +5915,9 @@
           }
         }
       }
+    },
+    "Show Summary" : {
+
     },
     "Show tips again" : {
       "localizations" : {
@@ -6384,6 +6462,9 @@
           }
         }
       }
+    },
+    "This unused tag is no longer referenced by any items." : {
+
     },
     "This will remove debug sample items and tags. Continue?" : {
       "localizations" : {

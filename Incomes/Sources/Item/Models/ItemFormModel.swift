@@ -94,7 +94,9 @@ extension ItemFormModel {
             priority = "\(item.priority)"
             income = item.income.isNotZero ? item.income.description : .empty
             outgo = item.outgo.isNotZero ? item.outgo.description : .empty
-            category = item.category?.displayName ?? .empty
+            category = CategoryNameSupport.displayName(
+                forStoredName: item.category?.name
+            )
             syncRepeatMonthSelectionsWithBaseDate()
             return
         }
@@ -108,7 +110,9 @@ extension ItemFormModel {
             case .content:
                 content = tag.name
             case .category:
-                category = tag.name
+                category = CategoryNameSupport.displayName(
+                    forStoredName: tag.name
+                )
             case .debug:
                 break
             case .none:

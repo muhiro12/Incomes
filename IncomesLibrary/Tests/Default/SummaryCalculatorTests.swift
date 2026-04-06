@@ -184,6 +184,45 @@ struct SummaryCalculatorTests {
     }
 
     @Test
+    func categoryComparison_maps_nil_category_to_others() throws {
+        let currentItem = try createSummaryItem(
+            date: "2024-07-03T00:00:00Z",
+            content: "Refund",
+            income: 50,
+            outgo: .zero,
+            category: "Temporary"
+        )
+        currentItem.modify(
+            tags: currentItem.tags.orEmpty.filter { tag in
+                tag.type != .category
+            }
+        )
+
+        let previousItem = try createSummaryItem(
+            date: "2024-06-20T00:00:00Z",
+            content: "Snacks",
+            income: .zero,
+            outgo: 30,
+            category: "Temporary"
+        )
+        previousItem.modify(
+            tags: previousItem.tags.orEmpty.filter { tag in
+                tag.type != .category
+            }
+        )
+
+        let comparisons = try SummaryCalculator.categoryComparison(
+            context: context,
+            date: shiftedDate("2024-07-15T00:00:00Z")
+        )
+
+        let comparison = try #require(comparisons.first)
+        #expect(comparison.category == "Others")
+        #expect(comparison.currentIncome == 50)
+        #expect(comparison.previousOutgo == 30)
+    }
+
+    @Test
     func categoryComparison_sorts_by_largest_absolute_delta_then_category_name() throws {
         _ = try createSummaryItem(
             date: "2024-08-01T00:00:00Z",

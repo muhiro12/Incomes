@@ -190,6 +190,13 @@ public enum TagService {
         }
     }
 
+    /// Returns every item matching the semantic meaning of `tag`.
+    public static func items(
+        for tag: Tag
+    ) -> [Item] {
+        matchingItems(for: tag).sorted()
+    }
+
     /// Deletes all tags in the store.
     public static func deleteAll(context: ModelContext) throws {
         let tags = try context.fetch(FetchDescriptor<Tag>())
@@ -216,11 +223,10 @@ public enum TagService {
         for tag: Tag,
         yearString: String
     ) -> [Item] {
-        matchingItems(for: tag)
+        items(for: tag)
             .filter { item in
                 item.localDate.stringValueWithoutLocale(.yyyy) == yearString
             }
-            .sorted()
     }
 
     /// Returns unique year strings for the tag items in descending order.
@@ -228,7 +234,7 @@ public enum TagService {
         for tag: Tag
     ) -> [String] {
         Set(
-            matchingItems(for: tag).map { item in
+            items(for: tag).map { item in
                 item.localDate.stringValueWithoutLocale(.yyyy)
             }
         )
@@ -306,7 +312,10 @@ private extension TagService {
             case .content:
                 return item.content == tag.name
             case .category:
-                return item.category?.name == tag.name
+                return CategoryNameSupport.areEquivalent(
+                    item.category?.name,
+                    tag.name
+                )
             case .debug:
                 return item.tags.orEmpty.contains { itemTag in
                     itemTag.id == tag.id

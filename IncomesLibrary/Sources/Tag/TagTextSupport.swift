@@ -15,7 +15,7 @@ public enum TagTextSupport {
         case .content:
             name
         case .category:
-            name.isNotEmpty ? name : "Others"
+            CategoryNameSupport.displayName(forStoredName: name)
         case .debug:
             name
         case .none:

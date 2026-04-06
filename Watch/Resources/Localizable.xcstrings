@@ -205,6 +205,9 @@
         }
       }
     },
+    "No Recent Items" : {
+
+    },
     "No tags" : {
       "localizations" : {
         "en" : {
@@ -308,6 +311,9 @@
         }
       }
     },
+    "Recent month sync completed without returning any items." : {
+
+    },
     "Reload" : {
       "localizations" : {
         "en" : {
@@ -341,6 +347,9 @@
           }
         }
       }
+    },
+    "Reloading" : {
+
     },
     "Removes debug sample items and their tags." : {
       "localizations" : {
@@ -409,6 +418,15 @@
           }
         }
       }
+    },
+    "Sync" : {
+
+    },
+    "Sync Failed" : {
+
+    },
+    "Syncing recent months from your iPhone." : {
+
     },
     "Tags" : {
       "localizations" : {
