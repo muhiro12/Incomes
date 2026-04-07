@@ -86,4 +86,18 @@ struct ItemFormInputTests {
             try invalidIncome.validate()
         }
     }
+
+    @Test
+    func storedCategory_normalizes_legacy_others_literal() {
+        let input = ItemFormInput(
+            date: .now,
+            content: "Content",
+            incomeText: "100",
+            outgoText: "0",
+            category: "Others",
+            priorityText: "1"
+        )
+
+        #expect(input.storedCategory.isEmpty)
+    }
 }

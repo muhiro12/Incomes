@@ -3,6 +3,8 @@ import Foundation
 import Testing
 
 struct CategoryNameSupportTests {
+    private let japaneseOthers = "その他"
+
     @Test
     func isOthersLike_treats_nil_empty_and_others_as_uncategorized() {
         #expect(CategoryNameSupport.isOthersLike(nil))
@@ -12,25 +14,29 @@ struct CategoryNameSupportTests {
     }
 
     @Test
-    func displayName_returns_others_for_uncategorized_values() {
+    func displayName_returns_localized_others_for_uncategorized_values() {
         #expect(
             CategoryNameSupport.displayName(
-                forStoredName: nil
-            ) == "Others"
+                forStoredName: nil,
+                othersDisplayName: japaneseOthers
+            ) == japaneseOthers
         )
         #expect(
             CategoryNameSupport.displayName(
-                forStoredName: .empty
-            ) == "Others"
+                forStoredName: .empty,
+                othersDisplayName: japaneseOthers
+            ) == japaneseOthers
         )
         #expect(
             CategoryNameSupport.displayName(
-                forStoredName: "Others"
-            ) == "Others"
+                forStoredName: "Others",
+                othersDisplayName: japaneseOthers
+            ) == japaneseOthers
         )
         #expect(
             CategoryNameSupport.displayName(
-                forStoredName: "Food"
+                forStoredName: "Food",
+                othersDisplayName: japaneseOthers
             ) == "Food"
         )
     }
@@ -42,5 +48,49 @@ struct CategoryNameSupportTests {
         #expect(CategoryNameSupport.areEquivalent(.empty, "Others"))
         #expect(CategoryNameSupport.areEquivalent("Food", "Food"))
         #expect(CategoryNameSupport.areEquivalent("Food", "Others") == false)
+    }
+
+    @Test
+    func normalizedStoredName_maps_localized_others_aliases_to_empty() {
+        #expect(
+            CategoryNameSupport.normalizedStoredName(
+                forUserInput: japaneseOthers,
+                othersDisplayName: japaneseOthers
+            ).isEmpty
+        )
+        #expect(
+            CategoryNameSupport.normalizedStoredName(
+                forUserInput: "Others",
+                othersDisplayName: japaneseOthers
+            ).isEmpty
+        )
+        #expect(
+            CategoryNameSupport.normalizedStoredName(
+                forUserInput: "Food",
+                othersDisplayName: japaneseOthers
+            ) == "Food"
+        )
+    }
+
+    @Test
+    func matchesOthersDisplayName_matches_legacy_and_localized_aliases() {
+        #expect(
+            CategoryNameSupport.matchesOthersDisplayName(
+                query: "その",
+                othersDisplayName: japaneseOthers
+            )
+        )
+        #expect(
+            CategoryNameSupport.matchesOthersDisplayName(
+                query: "Oth",
+                othersDisplayName: japaneseOthers
+            )
+        )
+        #expect(
+            CategoryNameSupport.matchesOthersDisplayName(
+                query: "Food",
+                othersDisplayName: japaneseOthers
+            ) == false
+        )
     }
 }

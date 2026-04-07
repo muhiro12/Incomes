@@ -3,13 +3,16 @@ import Foundation
 import Testing
 
 struct TagTextSupportTests {
+    private let japaneseOthers = "その他"
+
     @Test
-    func displayName_formats_empty_category_as_others() {
+    func displayName_formats_empty_category_as_localized_others() {
         #expect(
             TagTextSupport.displayName(
                 name: .empty,
-                type: .category
-            ) == "Others"
+                type: .category,
+                categoryOthersDisplayName: japaneseOthers
+            ) == japaneseOthers
         )
     }
 
@@ -44,12 +47,21 @@ struct TagTextSupportTests {
     }
 
     @Test
-    func matchesDisplayName_uses_formatted_category_name() {
+    func matchesDisplayName_uses_localized_category_name() {
         #expect(
             TagTextSupport.matchesDisplayName(
                 name: .empty,
                 type: .category,
-                query: "Others"
+                query: japaneseOthers,
+                categoryOthersDisplayName: japaneseOthers
+            )
+        )
+        #expect(
+            TagTextSupport.matchesDisplayName(
+                name: .empty,
+                type: .category,
+                query: "Others",
+                categoryOthersDisplayName: japaneseOthers
             )
         )
     }

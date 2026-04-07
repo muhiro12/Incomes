@@ -37,9 +37,16 @@ struct TagEntityQuery: EntityStringQuery {
             guard let tag = tags.first(
                 where: { item in
                     item.type == type
-                        && TagTextSupport.matchesStoredName(
-                            item.name,
-                            query: string
+                        && (
+                            TagTextSupport.matchesStoredName(
+                                item.name,
+                                query: string
+                            )
+                            || TagTextSupport.matchesDisplayName(
+                                name: item.name,
+                                type: item.type,
+                                query: string
+                            )
                         )
                 }
             ) else {

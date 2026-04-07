@@ -27,7 +27,7 @@ public enum ItemService { // swiftlint:disable:this type_body_length
             content: input.content,
             income: input.income,
             outgo: input.outgo,
-            category: input.category,
+            category: input.storedCategory,
             priority: input.priority,
             repeatMonthSelections: repeatMonthSelections
         )
@@ -60,7 +60,7 @@ public enum ItemService { // swiftlint:disable:this type_body_length
             content: input.content,
             income: input.income,
             outgo: input.outgo,
-            category: input.category,
+            category: input.storedCategory,
             priority: input.priority,
             repeatCount: repeatCount
         )
@@ -378,6 +378,7 @@ public enum ItemService { // swiftlint:disable:this type_body_length
             item: item,
             scope: scope
         )
+        let storedCategory = input.storedCategory
         let tagsToCleanup = cleanupCandidateTags(from: affectedItems)
         let beforeDates = affectedItems.map(\.localDate)
         let updatedIDs = Set(affectedItems.map(\.persistentModelID))
@@ -391,7 +392,7 @@ public enum ItemService { // swiftlint:disable:this type_body_length
                 content: input.content,
                 income: input.income,
                 outgo: input.outgo,
-                category: input.category,
+                category: storedCategory,
                 priority: input.priority
             )
         case .futureItems:
@@ -402,7 +403,7 @@ public enum ItemService { // swiftlint:disable:this type_body_length
                 content: input.content,
                 income: input.income,
                 outgo: input.outgo,
-                category: input.category,
+                category: storedCategory,
                 priority: input.priority
             )
         case .allItems:
@@ -413,7 +414,7 @@ public enum ItemService { // swiftlint:disable:this type_body_length
                 content: input.content,
                 income: input.income,
                 outgo: input.outgo,
-                category: input.category,
+                category: storedCategory,
                 priority: input.priority
             )
         }

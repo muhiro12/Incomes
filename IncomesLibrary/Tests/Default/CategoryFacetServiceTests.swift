@@ -5,6 +5,8 @@ import Testing
 
 struct CategoryFacetServiceTests {
     let context: ModelContext
+    let japaneseOthers = "その他"
+    let testOutgo: Decimal = 10
 
     init() {
         context = testContext
@@ -35,11 +37,12 @@ struct CategoryFacetServiceTests {
 
         let facets = CategoryFacetService.facets(
             tags: try context.fetch(.tags(.typeIs(.category))),
-            items: try context.fetch(.items(.all))
+            items: try context.fetch(.items(.all)),
+            othersDisplayName: japaneseOthers
         )
 
         let othersFacet = try #require(facets.first { facet in
-            facet.displayName == "Others"
+            facet.displayName == japaneseOthers
         })
         let travelFacet = try #require(facets.first { facet in
             facet.displayName == "Travel"
@@ -47,7 +50,7 @@ struct CategoryFacetServiceTests {
 
         #expect(othersFacet.count == 3)
         #expect(Set(othersFacet.storedNames) == ["", "Others"])
-        #expect(travelFacet.count == 0)
+        #expect(travelFacet.itemIDs.isEmpty)
     }
 
     @Test
@@ -60,11 +63,12 @@ struct CategoryFacetServiceTests {
 
         let facets = CategoryFacetService.facets(
             tags: try context.fetch(.tags(.typeIs(.category))),
-            items: try context.fetch(.items(.all))
+            items: try context.fetch(.items(.all)),
+            othersDisplayName: japaneseOthers
         )
 
         let othersFacet = try #require(facets.first { facet in
-            facet.displayName == "Others"
+            facet.displayName == japaneseOthers
         })
 
         #expect(othersFacet.count == 1)
@@ -72,7 +76,7 @@ struct CategoryFacetServiceTests {
     }
 
     @Test
-    func filteredFacets_matches_others_display_name() throws {
+    func filteredFacets_matches_localized_others_display_name() throws {
         let item = try createItem(
             content: "Blank",
             category: .empty
@@ -82,11 +86,31 @@ struct CategoryFacetServiceTests {
         let facets = CategoryFacetService.filteredFacets(
             tags: try context.fetch(.tags(.typeIs(.category))),
             items: try context.fetch(.items(.all)),
-            query: "Others"
+            query: japaneseOthers,
+            othersDisplayName: japaneseOthers
         )
 
         #expect(facets.count == 1)
-        #expect(facets.first?.displayName == "Others")
+        #expect(facets.first?.displayName == japaneseOthers)
+    }
+
+    @Test
+    func filteredFacets_matches_legacy_others_query_for_localized_bucket() throws {
+        let item = try createItem(
+            content: "Blank",
+            category: .empty
+        )
+        _ = item
+
+        let facets = CategoryFacetService.filteredFacets(
+            tags: try context.fetch(.tags(.typeIs(.category))),
+            items: try context.fetch(.items(.all)),
+            query: "Others",
+            othersDisplayName: japaneseOthers
+        )
+
+        #expect(facets.count == 1)
+        #expect(facets.first?.displayName == japaneseOthers)
     }
 }
 
@@ -100,7 +124,7 @@ private extension CategoryFacetServiceTests {
             date: .now,
             content: content,
             income: .zero,
-            outgo: 10,
+            outgo: testOutgo,
             category: category,
             priority: 0,
             repeatID: .init()

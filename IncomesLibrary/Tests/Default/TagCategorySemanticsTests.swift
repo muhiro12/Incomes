@@ -5,6 +5,7 @@ import Testing
 
 struct TagCategorySemanticsTests {
     let context: ModelContext
+    let testOutgo: Decimal = 10
 
     init() {
         context = testContext
@@ -89,7 +90,7 @@ private extension TagCategorySemanticsTests {
             date: .now,
             content: content,
             income: .zero,
-            outgo: 10,
+            outgo: testOutgo,
             category: category,
             priority: 0,
             repeatID: .init()

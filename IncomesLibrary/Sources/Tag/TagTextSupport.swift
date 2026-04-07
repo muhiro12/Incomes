@@ -5,7 +5,8 @@ public enum TagTextSupport {
     /// Returns the user-facing label for a stored tag name and type.
     public static func displayName(
         name: String,
-        type: TagType?
+        type: TagType?,
+        categoryOthersDisplayName: String = CategoryNameSupport.localizedOthersDisplayName
     ) -> String {
         switch type {
         case .year:
@@ -15,7 +16,10 @@ public enum TagTextSupport {
         case .content:
             name
         case .category:
-            CategoryNameSupport.displayName(forStoredName: name)
+            CategoryNameSupport.displayName(
+                forStoredName: name,
+                othersDisplayName: categoryOthersDisplayName
+            )
         case .debug:
             name
         case .none:
@@ -38,11 +42,21 @@ public enum TagTextSupport {
     public static func matchesDisplayName(
         name: String,
         type: TagType?,
-        query: String
+        query: String,
+        categoryOthersDisplayName: String = CategoryNameSupport.localizedOthersDisplayName
     ) -> Bool {
-        displayName(
+        if type == .category,
+           CategoryNameSupport.isOthersLike(name) {
+            return CategoryNameSupport.matchesOthersDisplayName(
+                query: query,
+                othersDisplayName: categoryOthersDisplayName
+            )
+        }
+
+        return displayName(
             name: name,
-            type: type
+            type: type,
+            categoryOthersDisplayName: categoryOthersDisplayName
         )
         .normalizedContains(query)
     }

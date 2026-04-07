@@ -178,7 +178,11 @@ struct SummaryCalculatorTests {
         )
 
         let comparison = try #require(comparisons.first)
-        #expect(comparison.category == "Others")
+        #expect(
+            comparison.category == CategoryNameSupport.displayName(
+                forStoredName: nil
+            )
+        )
         #expect(comparison.currentIncome == 50)
         #expect(comparison.previousOutgo == 30)
     }
@@ -217,7 +221,11 @@ struct SummaryCalculatorTests {
         )
 
         let comparison = try #require(comparisons.first)
-        #expect(comparison.category == "Others")
+        #expect(
+            comparison.category == CategoryNameSupport.displayName(
+                forStoredName: nil
+            )
+        )
         #expect(comparison.currentIncome == 50)
         #expect(comparison.previousOutgo == 30)
     }

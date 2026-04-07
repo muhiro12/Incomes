@@ -39,7 +39,11 @@ struct TagDisplayNameTests {
     @Test
     func displayName_returns_others_for_empty_category() throws {
         let tag = try Tag.create(context: context, name: "", type: .category)
-        #expect(tag.displayName == "Others")
+        #expect(
+            tag.displayName == CategoryNameSupport.displayName(
+                forStoredName: nil
+            )
+        )
     }
 
     @Test

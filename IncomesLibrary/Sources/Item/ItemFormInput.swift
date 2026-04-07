@@ -64,6 +64,13 @@ public struct ItemFormInput {
         priorityText.intValue
     }
 
+    /// Category value normalized for persistence.
+    public var storedCategory: String {
+        CategoryNameSupport.normalizedStoredName(
+            forUserInput: category
+        )
+    }
+
     /// Validates form values and throws a specific validation error.
     public func validate() throws {
         guard content.isNotEmpty else {
