@@ -20,6 +20,10 @@ final class MainNavigationYearDeletionModel {
             indices: indices
         )
         isDialogPresented = tagsToDelete.isNotEmpty
+        debugLog(
+            "prepare indices=\(indices) tags=\(tagNames(tagsToDelete)) "
+                + "items=\(itemsToDelete.count)"
+        )
     }
 
     func complete(
@@ -33,6 +37,11 @@ final class MainNavigationYearDeletionModel {
            ) {
             onDeletedSelectedYear()
         }
+        debugLog(
+            "complete selectedYearTag=\(selectedYearTag?.displayName ?? "nil") "
+                + "tags=\(tagNames(tagsToDelete)) "
+                + "items=\(itemsToDelete.count)"
+        )
         clear()
     }
 
@@ -40,5 +49,21 @@ final class MainNavigationYearDeletionModel {
         isDialogPresented = false
         itemsToDelete = []
         tagsToDelete = []
+    }
+}
+
+private extension MainNavigationYearDeletionModel {
+    func debugLog(
+        _ message: String
+    ) {
+        #if DEBUG
+        print("[MainNavigationYearDeletionModel] \(message)")
+        #endif
+    }
+
+    func tagNames(
+        _ tags: [Tag]
+    ) -> String {
+        tags.map(\.displayName).joined(separator: ", ")
     }
 }

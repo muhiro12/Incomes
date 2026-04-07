@@ -53,6 +53,11 @@ struct MainNavigationSidebarView: View {
         ) {
             Button(role: .destructive) {
                 Task { @MainActor in
+                    debugLogYearDeletion(
+                        "confirm selectedYearTag=\(selectedYearTag?.displayName ?? "nil") "
+                            + "tags=\(tagNames(yearDeletionModel.tagsToDelete)) "
+                            + "items=\(yearDeletionModel.itemsToDelete.count)"
+                    )
                     do {
                         try await ItemDeleteCoordinator.delete(
                             context: context,
@@ -92,6 +97,10 @@ private extension MainNavigationSidebarView {
             yearDeletionModel.prepare(
                 from: yearTags,
                 indices: indices
+            )
+            debugLogYearDeletion(
+                "request indices=\(indices) tags=\(tagNames(yearDeletionModel.tagsToDelete)) "
+                    + "items=\(yearDeletionModel.itemsToDelete.count)"
             )
         }
     }
@@ -140,8 +149,27 @@ private extension MainNavigationSidebarView {
                 from: [yearTag],
                 indices: IndexSet(integer: .zero)
             )
+            debugLogYearDeletion(
+                "contextMenu tag=\(yearTag.displayName) "
+                    + "tags=\(tagNames(yearDeletionModel.tagsToDelete)) "
+                    + "items=\(yearDeletionModel.itemsToDelete.count)"
+            )
         } label: {
             Label("Delete", systemImage: "trash")
         }
+    }
+
+    func debugLogYearDeletion(
+        _ message: String
+    ) {
+        #if DEBUG
+        print("[MainNavigationSidebarView] \(message)")
+        #endif
+    }
+
+    func tagNames(
+        _ tags: [Tag]
+    ) -> String {
+        tags.map(\.displayName).joined(separator: ", ")
     }
 }
