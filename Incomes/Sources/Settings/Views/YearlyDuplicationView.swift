@@ -1,3 +1,4 @@
+// swiftlint:disable file_length
 //
 //  YearlyDuplicationView.swift
 //  Incomes
@@ -36,9 +37,19 @@ struct YearlyDuplicationView: View {
     @State private var createdGroupIDs = Set<UUID>()
     @State private var resultMessage: String?
     @State private var errorMessage: String?
+    @State private var isLoadingPlan = false
+    @State private var planLoadGeneration = 0
 
     var body: some View {
         Form { // swiftlint:disable:this closure_body_length
+            if isLoadingPlan {
+                Section {
+                    HStack {
+                        ProgressView()
+                        Text("Loading proposals...")
+                    }
+                }
+            }
             if let plan {
                 Section("Proposals") { // swiftlint:disable:this closure_body_length
                     ForEach(plan.groups, id: \.id) { group in // swiftlint:disable:this closure_body_length
@@ -148,20 +159,15 @@ struct YearlyDuplicationView: View {
         }
         .onAppear {
             alignYearSelections(preserveCurrentSelection: false)
-            previewPlan()
         }
         .onChange(of: yearTags) {
-            alignYearSelections(preserveCurrentSelection: plan != nil)
-            previewPlan()
-        }
-        .onChange(of: sourceYear) {
-            previewPlan()
-        }
-        .onChange(of: targetYear) {
-            previewPlan()
+            alignYearSelections(preserveCurrentSelection: plan != nil || isLoadingPlan)
         }
         .contentMargins(.bottom, .space(.s), for: .scrollContent)
         .toolbarRole(.editor)
+        .task(id: planReloadKey) {
+            await loadPreviewPlan()
+        }
         .sheet(item: $route) { route in
             switch route {
             case .itemForm(let draft):
@@ -242,18 +248,56 @@ private extension YearlyDuplicationView {
         }
     }
 
-    func previewPlan() {
+    var yearTagsSignature: String {
+        yearTags.map(\.name).joined(separator: ",")
+    }
+
+    var planReloadKey: String {
+        "\(sourceYear)-\(targetYear)-\(yearTagsSignature)"
+    }
+
+    @MainActor
+    func loadPreviewPlan() async {
+        planLoadGeneration += 1
+        let generation = planLoadGeneration
+
+        isLoadingPlan = true
+        plan = nil
+        createdGroupIDs.removeAll()
+        route = nil
+        errorMessage = nil
+
+        await Task.yield()
+
+        guard generation == planLoadGeneration, !Task.isCancelled else {
+            return
+        }
+
         do {
-            plan = try YearlyDuplicationCoordinator.previewPlan(
+            let previewPlan = try YearlyDuplicationCoordinator.previewPlan(
                 context: context,
                 sourceYear: sourceYear,
                 targetYear: targetYear
             )
-            createdGroupIDs.removeAll()
-            route = nil
+
+            guard generation == planLoadGeneration, !Task.isCancelled else {
+                return
+            }
+
+            plan = previewPlan
         } catch {
+            guard generation == planLoadGeneration, !Task.isCancelled else {
+                return
+            }
+
             errorMessage = error.localizedDescription
         }
+
+        guard generation == planLoadGeneration else {
+            return
+        }
+
+        isLoadingPlan = false
     }
 
     func createGroupItems(group: YearlyItemDuplicationGroup) async {
@@ -368,3 +412,4 @@ private extension YearlyDuplicationView {
         YearlyDuplicationView()
     }
 }
+// swiftlint:enable file_length

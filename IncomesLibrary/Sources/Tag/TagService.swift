@@ -48,22 +48,34 @@ public enum TagService {
 
     /// True when duplicate tags exist in the store.
     public static func hasDuplicates(context: ModelContext) throws -> Bool {
-        try !duplicateTags(context: context).isEmpty
+        try TagType.allCases.contains { type in
+            try !duplicateTags(
+                context: context,
+                type: type
+            ).isEmpty
+        }
     }
 
     /// True when unused tags exist in the store.
     public static func hasOrphanTags(context: ModelContext) throws -> Bool {
-        try !orphanTags(context: context).isEmpty
+        try TagType.allCases.contains { type in
+            try !orphanTags(
+                context: context,
+                type: type
+            ).isEmpty
+        }
     }
 
     /// Returns one representative per duplicate tag group in the store.
     public static func duplicateTags(
         context: ModelContext
     ) throws -> [Tag] {
-        try findDuplicates(
-            context: context,
-            tags: getAll(context: context)
-        )
+        try TagType.allCases.flatMap { type in
+            try duplicateTags(
+                context: context,
+                type: type
+            )
+        }
     }
 
     /// Returns one representative per duplicate tag group for a specific type.
@@ -81,8 +93,11 @@ public enum TagService {
     public static func orphanTags(
         context: ModelContext
     ) throws -> [Tag] {
-        try getAll(context: context).filter { tag in
-            isOrphan(tag: tag)
+        try TagType.allCases.flatMap { type in
+            try orphanTags(
+                context: context,
+                type: type
+            )
         }
     }
 
@@ -279,48 +294,45 @@ public enum TagService {
 
 private extension TagService {
     static func referencingItems(for tag: Tag) -> [Item] {
-        guard
-            let context = tag.modelContext,
-            let items = try? context.fetch(.items(.all))
-        else {
-            return tag.items.orEmpty
-        }
-
-        return items.filter { item in
-            item.tags.orEmpty.contains { itemTag in
-                itemTag.id == tag.id
-            }
-        }
+        directItems(for: tag)
     }
 
     static func matchingItems(for tag: Tag) -> [Item] {
-        let fallbackItems = tag.items.orEmpty
-        guard
-            let context = tag.modelContext,
-            let tagType = tag.type,
-            let items = try? context.fetch(.items(.all))
-        else {
-            return fallbackItems
+        guard let tagType = tag.type else {
+            return directItems(for: tag)
+        }
+
+        switch tagType {
+        case .year,
+             .yearMonth,
+             .content,
+             .debug:
+            return directItems(for: tag)
+        case .category:
+            return categoryMatchingItems(for: tag)
+        }
+    }
+
+    static func directItems(for tag: Tag) -> [Item] {
+        tag.items.orEmpty.filter { item in
+            item.isDeleted == false
+        }
+    }
+
+    static func categoryMatchingItems(for tag: Tag) -> [Item] {
+        let directItems = directItems(for: tag)
+
+        guard CategoryNameSupport.isOthersLike(tag.name),
+              let context = tag.modelContext,
+              let items = try? context.fetch(.items(.all)) else {
+            return directItems
         }
 
         return items.filter { item in
-            switch tagType {
-            case .year:
-                return item.localDate.stringValueWithoutLocale(.yyyy) == tag.name
-            case .yearMonth:
-                return item.localDate.stringValueWithoutLocale(.yyyyMM) == tag.name
-            case .content:
-                return item.content == tag.name
-            case .category:
-                return CategoryNameSupport.areEquivalent(
-                    item.category?.name,
-                    tag.name
-                )
-            case .debug:
-                return item.tags.orEmpty.contains { itemTag in
-                    itemTag.id == tag.id
-                }
-            }
+            CategoryNameSupport.areEquivalent(
+                item.category?.name,
+                tag.name
+            )
         }
     }
 }

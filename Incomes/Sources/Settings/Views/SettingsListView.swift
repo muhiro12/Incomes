@@ -203,11 +203,10 @@ extension SettingsListView: View {
         }
         .task {
             model.apply(notificationSettings: notificationSettings)
-            model.loadStatus(context: context)
-            await SettingsActionCoordinator.refreshNotifications(
-                notificationService: notificationService
-            )
             await notificationService.refreshAuthorizationStatus()
+        }
+        .task {
+            await loadDeferredSettingsState()
         }
         .task(id: notificationSettings) {
             withAnimation {
@@ -222,8 +221,22 @@ extension SettingsListView: View {
             guard scenePhase == .active else {
                 return
             }
+
             await notificationService.refreshAuthorizationStatus()
         }
+    }
+}
+
+private extension SettingsListView {
+    @MainActor
+    func loadDeferredSettingsState() async {
+        await Task.yield()
+
+        model.loadStatus(context: context)
+
+        await SettingsActionCoordinator.refreshNotifications(
+            notificationService: notificationService
+        )
     }
 }
 

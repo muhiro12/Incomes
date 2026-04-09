@@ -58,6 +58,66 @@ struct TagOrphanTests {
     }
 
     @Test
+    func isOrphan_returns_false_for_attached_tag() throws {
+        let item = try Item.create(
+            context: context,
+            date: .now,
+            content: "Used Content",
+            income: .zero,
+            outgo: .zero,
+            category: "Used Category",
+            priority: 0,
+            repeatID: .init()
+        )
+        let contentTag = try #require(item.tags?.first { tag in
+            tag.type == .content
+        })
+
+        #expect(TagService.isOrphan(tag: contentTag) == false)
+    }
+
+    @Test
+    func isOrphan_returns_true_for_unused_tag() {
+        let tag = Tag.createIgnoringDuplicates(
+            context: context,
+            name: "Unused Content",
+            type: .content
+        )
+
+        #expect(TagService.isOrphan(tag: tag))
+    }
+
+    @Test
+    func isOrphan_returns_true_after_relation_is_removed_and_saved() throws {
+        let item = try Item.create(
+            context: context,
+            date: .now,
+            content: "Used Content",
+            income: .zero,
+            outgo: .zero,
+            category: "Used Category",
+            priority: 0,
+            repeatID: .init()
+        )
+        let debugTag = Tag.createIgnoringDuplicates(
+            context: context,
+            name: "Attached Debug",
+            type: .debug
+        )
+        item.modify(tags: item.tags.orEmpty + [debugTag])
+
+        try context.save()
+
+        item.modify(tags: item.tags.orEmpty.filter { tag in
+            tag.id != debugTag.id
+        })
+
+        try context.save()
+
+        #expect(TagService.isOrphan(tag: debugTag))
+    }
+
+    @Test
     func deleteAllOrphanTags_removes_only_unused_tags() throws {
         let item = try Item.create(
             context: context,

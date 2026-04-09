@@ -22,6 +22,8 @@ struct YearlyDuplicationPromoSection: View {
     @State private var yearlyDuplicationProposal: YearlyItemDuplicationGroup?
     @State private var yearlyDuplicationSourceYear: Int?
     @State private var yearlyDuplicationTargetYear: Int?
+    @State private var hasResolvedPromoVisibility = false
+    @State private var promoLoadGeneration = 0
 
     private let yearlyDuplicationTip = YearlyDuplicationTip()
 
@@ -77,26 +79,41 @@ struct YearlyDuplicationPromoSection: View {
                 }
             }
         }
-        .onAppear {
-            updateYearlyDuplicationPromo()
+        .task {
+            await resolveYearlyDuplicationPromoVisibility()
         }
-        .onChange(of: yearTags) {
+        .onChange(of: yearTagsSignature) {
             if showYearlyDuplicationPromo {
-                loadYearlyDuplicationProposal()
+                Task {
+                    await loadYearlyDuplicationProposal()
+                }
             }
         }
     }
 }
 
 private extension YearlyDuplicationPromoSection {
-    func updateYearlyDuplicationPromo() {
+    var yearTagsSignature: String {
+        yearTags.map(\.name).joined(separator: ",")
+    }
+
+    @MainActor
+    func resolveYearlyDuplicationPromoVisibility() async {
+        guard !hasResolvedPromoVisibility else {
+            return
+        }
+
+        hasResolvedPromoVisibility = true
+
         guard !isYearlyDuplicationPromoDismissed else {
             resetPromoState()
             return
         }
+
         showYearlyDuplicationPromo = YearlyDuplicationCoordinator.shouldShowPromo()
+
         if showYearlyDuplicationPromo {
-            loadYearlyDuplicationProposal()
+            await loadYearlyDuplicationProposal()
         } else {
             resetPromoState()
         }
@@ -104,6 +121,7 @@ private extension YearlyDuplicationPromoSection {
 
     func dismissYearlyDuplicationPromo() {
         isYearlyDuplicationPromoDismissed = true
+        promoLoadGeneration += 1
         resetPromoState()
     }
 
@@ -116,15 +134,35 @@ private extension YearlyDuplicationPromoSection {
         .popoverTip(yearlyDuplicationTip, arrowEdge: .top)
     }
 
-    func loadYearlyDuplicationProposal() {
+    @MainActor
+    func loadYearlyDuplicationProposal() async {
+        promoLoadGeneration += 1
+        let generation = promoLoadGeneration
+
+        await Task.yield()
+
+        guard generation == promoLoadGeneration,
+              !Task.isCancelled,
+              !isYearlyDuplicationPromoDismissed else {
+            return
+        }
+
         if let result = YearlyDuplicationCoordinator.promoState(
             context: context,
             yearTags: yearTags
         ) {
+            guard generation == promoLoadGeneration, !Task.isCancelled else {
+                return
+            }
+
             yearlyDuplicationProposal = result.proposal
             yearlyDuplicationSourceYear = result.sourceYear
             yearlyDuplicationTargetYear = result.targetYear
         } else {
+            guard generation == promoLoadGeneration else {
+                return
+            }
+
             resetPromoState()
         }
     }
