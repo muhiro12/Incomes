@@ -11,30 +11,55 @@ import SwiftUI
 
 struct CategoryChartSection: View {
     @Query private var items: [Item]
-
-    init(_ descriptor: FetchDescriptor<Item>) { // swiftlint:disable:this type_contents_order
-        _items = .init(descriptor)
-    }
-
-    init(yearScopedTo date: Date) { // swiftlint:disable:this type_contents_order
-        // Fetch year scope; apply non-zero filters in-memory
-        _items = .init(.items(.dateIsSameYearAs(date)))
-    }
+    private let allowsExpansion: Bool
 
     var body: some View {
         Section {
-            VStack(spacing: .space(.l)) {
-                incomeContent
-                outgoContent
+            ZoomableChartSection(
+                title: "Category",
+                transitionID: "category",
+                allowsExpansion: allowsExpansion
+            ) {
+                chartContent
+            } detail: {
+                ScrollView {
+                    chartContent
+                        .padding(.vertical)
+                }
+                .scrollIndicators(.hidden)
             }
-            .padding(.horizontal)
         } header: {
             Text("Category")
         }
     }
+
+    init(
+        _ descriptor: FetchDescriptor<Item>,
+        allowsExpansion: Bool = true
+    ) {
+        _items = .init(descriptor)
+        self.allowsExpansion = allowsExpansion
+    }
+
+    init(
+        yearScopedTo date: Date,
+        allowsExpansion: Bool = true
+    ) {
+        // Fetch year scope; apply non-zero filters in-memory
+        _items = .init(.items(.dateIsSameYearAs(date)))
+        self.allowsExpansion = allowsExpansion
+    }
 }
 
 private extension CategoryChartSection {
+    var chartContent: some View {
+        VStack(spacing: .space(.l)) {
+            incomeContent
+            outgoContent
+        }
+        .padding(.horizontal)
+    }
+
     @ViewBuilder var incomeContent: some View {
         VStack(alignment: .leading, spacing: .space(.xs)) {
             Text("Income")

@@ -19,9 +19,18 @@ struct IntentChartSectionGroup {
 extension IntentChartSectionGroup: View {
     var body: some View {
         Group {
-            BalanceChartSection(descriptor)
-            IncomeAndOutgoChartSection(descriptor)
-            CategoryChartSection(descriptor)
+            BalanceChartSection(
+                descriptor,
+                allowsExpansion: false
+            )
+            IncomeAndOutgoChartSection(
+                descriptor,
+                allowsExpansion: false
+            )
+            CategoryChartSection(
+                descriptor,
+                allowsExpansion: false
+            )
         }
         .safeAreaPadding()
     }

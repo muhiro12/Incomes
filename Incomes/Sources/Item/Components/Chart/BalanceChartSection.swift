@@ -12,40 +12,35 @@ import SwiftUI
 struct BalanceChartSection: View {
     @Query private var items: [Item]
 
-    @State private var isDetailPresented = false
+    private let allowsExpansion: Bool
 
     var body: some View {
         Section {
-            Button {
-                isDetailPresented = true
-            } label: {
+            ZoomableChartSection(
+                title: "Balance",
+                transitionID: "balance",
+                allowsExpansion: allowsExpansion
+            ) {
                 chart()
                     .frame(height: .component(.l))
                     .padding()
-            }
-            .buttonStyle(.plain)
-            .fullScreenCover(isPresented: $isDetailPresented) {
-                NavigationStack {
-                    chart()
-                        .chartScrollableAxes(.horizontal)
-                        .chartScrollPosition(initialX: Date.now)
-                        .padding()
-                        .navigationTitle("Balance")
-                        .navigationBarTitleDisplayMode(.inline)
-                        .toolbar {
-                            ToolbarItem {
-                                CloseButton()
-                            }
-                        }
-                }
+            } detail: {
+                chart()
+                    .chartScrollableAxes(.horizontal)
+                    .chartScrollPosition(initialX: Date.now)
+                    .padding()
             }
         } header: {
             Text("Balance")
         }
     }
 
-    init(_ descriptor: FetchDescriptor<Item>) {
+    init(
+        _ descriptor: FetchDescriptor<Item>,
+        allowsExpansion: Bool = true
+    ) {
         _items = Query(descriptor)
+        self.allowsExpansion = allowsExpansion
     }
 }
 
