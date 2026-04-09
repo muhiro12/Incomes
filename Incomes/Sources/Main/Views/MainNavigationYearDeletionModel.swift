@@ -1,8 +1,13 @@
 import Foundation
+import MHPlatform
 
 @MainActor
 @Observable
 final class MainNavigationYearDeletionModel {
+    private let logger = IncomesApp.logger(
+        category: "MainNavigationYearDeletion"
+    )
+
     var isDialogPresented = false
     var itemsToDelete: [Item] = []
     var tagsToDelete: [Tag] = []
@@ -20,9 +25,13 @@ final class MainNavigationYearDeletionModel {
             indices: indices
         )
         isDialogPresented = tagsToDelete.isNotEmpty
-        debugLog(
-            "prepare indices=\(indices) tags=\(tagNames(tagsToDelete)) "
-                + "items=\(itemsToDelete.count)"
+        logger.debug(
+            "year deletion prepared",
+            metadata: [
+                "indices": String(describing: indices),
+                "tags": tagNames(tagsToDelete),
+                "items": "\(itemsToDelete.count)"
+            ]
         )
     }
 
@@ -39,10 +48,13 @@ final class MainNavigationYearDeletionModel {
            ) {
             onDeletedSelectedYear()
         }
-        debugLog(
-            "complete selectedYearTag=\(selectedYearTag?.displayName ?? "nil") "
-                + "tags=\(tagNames(tagsToDelete)) "
-                + "items=\(itemsToDelete.count)"
+        logger.debug(
+            "year deletion completed",
+            metadata: [
+                "selected_year_tag": selectedYearTag?.displayName ?? "nil",
+                "tags": tagNames(tagsToDelete),
+                "items": "\(itemsToDelete.count)"
+            ]
         )
         clear()
     }
@@ -55,14 +67,6 @@ final class MainNavigationYearDeletionModel {
 }
 
 private extension MainNavigationYearDeletionModel {
-    func debugLog(
-        _ message: String
-    ) {
-        #if DEBUG
-        print("[MainNavigationYearDeletionModel] \(message)")
-        #endif
-    }
-
     func tagNames(
         _ tags: [Tag]
     ) -> String {
