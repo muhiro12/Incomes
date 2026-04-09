@@ -52,27 +52,14 @@ struct MainNavigationSidebarView: View {
             )
         ) {
             Button(role: .destructive) {
-                Task { @MainActor in
-                    debugLogYearDeletion(
-                        "confirm selectedYearTag=\(selectedYearTag?.displayName ?? "nil") "
-                            + "tags=\(tagNames(yearDeletionModel.tagsToDelete)) "
-                            + "items=\(yearDeletionModel.itemsToDelete.count)"
-                    )
-                    do {
-                        try await ItemDeleteCoordinator.delete(
-                            context: context,
-                            items: yearDeletionModel.itemsToDelete,
-                            notificationService: notificationService
-                        )
-                        yearDeletionModel.complete(
-                            selectedYearTag: selectedYearTag
-                        ) {
-                            router.selectYearTagID(nil)
-                        }
-                    } catch {
-                        assertionFailure(error.localizedDescription)
-                    }
-                }
+                let selectedYearTag = selectedYearTag
+                let tagsToDelete = yearDeletionModel.tagsToDelete
+                let itemsToDelete = yearDeletionModel.itemsToDelete
+                confirmYearDeletion(
+                    selectedYearTag: selectedYearTag,
+                    tagsToDelete: tagsToDelete,
+                    itemsToDelete: itemsToDelete
+                )
             } label: {
                 Text("Delete")
             }
@@ -165,6 +152,36 @@ private extension MainNavigationSidebarView {
         #if DEBUG
         print("[MainNavigationSidebarView] \(message)")
         #endif
+    }
+
+    func confirmYearDeletion(
+        selectedYearTag: Tag?,
+        tagsToDelete: [Tag],
+        itemsToDelete: [Item]
+    ) {
+        Task { @MainActor in
+            debugLogYearDeletion(
+                "confirm selectedYearTag=\(selectedYearTag?.displayName ?? "nil") "
+                    + "tags=\(tagNames(tagsToDelete)) "
+                    + "items=\(itemsToDelete.count)"
+            )
+            do {
+                try await ItemDeleteCoordinator.delete(
+                    context: context,
+                    items: itemsToDelete,
+                    notificationService: notificationService
+                )
+                yearDeletionModel.complete(
+                    selectedYearTag: selectedYearTag,
+                    tagsToDelete: tagsToDelete,
+                    itemsToDelete: itemsToDelete
+                ) {
+                    router.selectYearTagID(nil)
+                }
+            } catch {
+                assertionFailure(error.localizedDescription)
+            }
+        }
     }
 
     func tagNames(

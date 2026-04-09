@@ -28,6 +28,8 @@ final class MainNavigationYearDeletionModel {
 
     func complete(
         selectedYearTag: Tag?,
+        tagsToDelete: [Tag],
+        itemsToDelete: [Item],
         onDeletedSelectedYear: () -> Void
     ) {
         if let selectedYearTag,
