@@ -3,9 +3,8 @@ import SwiftData
 import SwiftUI
 
 struct MainNavigationSidebarView: View {
-    private let logger = IncomesApp.logger(
-        category: "MainNavigationSidebar"
-    )
+    @Environment(MHLoggingBootstrap.self)
+    private var logging
 
     @Environment(\.modelContext)
     private var context
@@ -88,15 +87,16 @@ private extension MainNavigationSidebarView {
             Haptic.warning.impact()
             yearDeletionModel.prepare(
                 from: yearTags,
-                indices: indices
+                indices: indices,
+                logger: yearDeletionLogger
             )
-            logger.debug(
-                "year deletion requested",
-                metadata: [
-                    "indices": String(describing: indices),
-                    "tags": tagNames(yearDeletionModel.tagsToDelete),
-                    "items": "\(yearDeletionModel.itemsToDelete.count)"
-                ]
+            sidebarLogger.debug(
+                "year_deletion.requested",
+                metadata: IncomesLogging.metadata(
+                    ("index_count", IncomesLogging.count(indices.count)),
+                    ("tag_count", IncomesLogging.count(yearDeletionModel.tagsToDelete.count)),
+                    ("item_count", IncomesLogging.count(yearDeletionModel.itemsToDelete.count))
+                )
             )
         }
     }
@@ -143,15 +143,16 @@ private extension MainNavigationSidebarView {
             Haptic.warning.impact()
             yearDeletionModel.prepare(
                 from: [yearTag],
-                indices: IndexSet(integer: .zero)
+                indices: IndexSet(integer: .zero),
+                logger: yearDeletionLogger
             )
-            logger.debug(
-                "year deletion context menu prepared",
-                metadata: [
-                    "tag": yearTag.displayName,
-                    "tags": tagNames(yearDeletionModel.tagsToDelete),
-                    "items": "\(yearDeletionModel.itemsToDelete.count)"
-                ]
+            sidebarLogger.debug(
+                "year_deletion.context_menu_prepared",
+                metadata: IncomesLogging.metadata(
+                    ("selected_year_present", "true"),
+                    ("tag_count", IncomesLogging.count(yearDeletionModel.tagsToDelete.count)),
+                    ("item_count", IncomesLogging.count(yearDeletionModel.itemsToDelete.count))
+                )
             )
         } label: {
             Label("Delete", systemImage: "trash")
@@ -164,24 +165,26 @@ private extension MainNavigationSidebarView {
         itemsToDelete: [Item]
     ) {
         Task { @MainActor in
-            logger.debug(
-                "year deletion confirmed",
-                metadata: [
-                    "selected_year_tag": selectedYearTag?.displayName ?? "nil",
-                    "tags": tagNames(tagsToDelete),
-                    "items": "\(itemsToDelete.count)"
-                ]
+            sidebarLogger.notice(
+                "year_deletion.confirmed",
+                metadata: IncomesLogging.metadata(
+                    ("selected_year_present", IncomesLogging.bool(selectedYearTag != nil)),
+                    ("tag_count", IncomesLogging.count(tagsToDelete.count)),
+                    ("item_count", IncomesLogging.count(itemsToDelete.count))
+                )
             )
             do {
                 try await ItemDeleteCoordinator.delete(
                     context: context,
                     items: itemsToDelete,
-                    notificationService: notificationService
+                    notificationService: notificationService,
+                    logger: itemMutationLogger
                 )
                 yearDeletionModel.complete(
                     selectedYearTag: selectedYearTag,
                     tagsToDelete: tagsToDelete,
-                    itemsToDelete: itemsToDelete
+                    itemsToDelete: itemsToDelete,
+                    logger: yearDeletionLogger
                 ) {
                     router.selectYearTagID(nil)
                 }
@@ -190,10 +193,30 @@ private extension MainNavigationSidebarView {
             }
         }
     }
+}
 
-    func tagNames(
-        _ tags: [Tag]
-    ) -> String {
-        tags.map(\.displayName).joined(separator: ", ")
+private extension MainNavigationSidebarView {
+    var sidebarLogger: MHLogger {
+        IncomesLogging.logger(
+            logging: logging,
+            category: IncomesLogging.Category.mainNavigationSidebar,
+            source: #fileID
+        )
+    }
+
+    var yearDeletionLogger: MHLogger {
+        IncomesLogging.logger(
+            logging: logging,
+            category: IncomesLogging.Category.mainNavigationYearDeletion,
+            source: #fileID
+        )
+    }
+
+    var itemMutationLogger: MHLogger {
+        IncomesLogging.logger(
+            logging: logging,
+            category: IncomesLogging.Category.itemMutation,
+            source: #fileID
+        )
     }
 }

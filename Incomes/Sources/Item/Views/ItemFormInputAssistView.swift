@@ -5,6 +5,7 @@
 //  Created by Codex on 2025/09/08.
 //
 
+import MHPlatform
 import PhotosUI
 import SwiftUI
 
@@ -37,6 +38,8 @@ struct ItemFormInputAssistView: View {
     private var dismiss
     @Environment(ItemFormModel.self)
     private var model
+    @Environment(MHLoggingBootstrap.self)
+    private var logging
 
     @State private var importRoute: ImportRoute?
     @State private var isApplyingInference = false
@@ -226,7 +229,8 @@ private extension ItemFormInputAssistView {
         do {
             let updatedInput = try await ItemFormInferenceApplier.apply(
                 text: scanner.recognizedText,
-                currentInput: model.formInputData
+                currentInput: model.formInputData,
+                logger: inferenceLogger
             )
             model.apply(updatedInput)
             dismiss()
@@ -237,9 +241,25 @@ private extension ItemFormInputAssistView {
 }
 
 @available(iOS 26.0, *)
+private extension ItemFormInputAssistView {
+    var inferenceLogger: MHLogger {
+        IncomesLogging.logger(
+            logging: logging,
+            category: IncomesLogging.Category.inference,
+            source: #fileID
+        )
+    }
+}
+
+@available(iOS 26.0, *)
 #Preview {
     NavigationStack {
         ItemFormInputAssistView()
             .environment(ItemFormModel())
+            .environment(
+                MainActor.assumeIsolated {
+                    IncomesLogging.makeBootstrap()
+                }
+            )
     }
 }

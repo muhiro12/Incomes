@@ -22,6 +22,8 @@ struct ItemFormView: View {
     private var tipController
     @Environment(NotificationService.self)
     private var notificationService
+    @Environment(MHLoggingBootstrap.self)
+    private var logging
 
     @Environment(Item.self)
     private var item: Item?
@@ -256,7 +258,9 @@ private extension ItemFormView {
                     formInputData: model.formInputData,
                     repeatMonthSelections: model.effectiveRepeatMonthSelections
                 ),
-                notificationService: notificationService
+                notificationService: notificationService,
+                logger: itemMutationLogger,
+                reviewLogger: reviewLogger
             )
             action = ItemFormMutationPresentationAction.action(
                 for: .success(outcome)
@@ -291,7 +295,9 @@ private extension ItemFormView {
                 context: context,
                 item: item,
                 formInputData: model.formInputData,
-                notificationService: notificationService
+                notificationService: notificationService,
+                logger: itemMutationLogger,
+                reviewLogger: reviewLogger
             )
             action = ItemFormMutationPresentationAction.dismissOnSuccessAction(
                 for: .success(())
@@ -326,7 +332,9 @@ private extension ItemFormView {
                 context: context,
                 item: item,
                 formInputData: model.formInputData,
-                notificationService: notificationService
+                notificationService: notificationService,
+                logger: itemMutationLogger,
+                reviewLogger: reviewLogger
             )
             action = ItemFormMutationPresentationAction.dismissOnSuccessAction(
                 for: .success(())
@@ -361,7 +369,9 @@ private extension ItemFormView {
                 context: context,
                 item: item,
                 formInputData: model.formInputData,
-                notificationService: notificationService
+                notificationService: notificationService,
+                logger: itemMutationLogger,
+                reviewLogger: reviewLogger
             )
             action = ItemFormMutationPresentationAction.dismissOnSuccessAction(
                 for: .success(())
@@ -388,7 +398,9 @@ private extension ItemFormView {
                     formInputData: model.formInputData,
                     repeatMonthSelections: model.effectiveRepeatMonthSelections
                 ),
-                notificationService: notificationService
+                notificationService: notificationService,
+                logger: itemMutationLogger,
+                reviewLogger: reviewLogger
             )
             onCreate?()
             action = ItemFormMutationPresentationAction.dismissOnSuccessAction(
@@ -434,6 +446,24 @@ private extension ItemFormView {
                     presentation.clearDialog(route)
                 }
             }
+        )
+    }
+}
+
+private extension ItemFormView {
+    var itemMutationLogger: MHLogger {
+        IncomesLogging.logger(
+            logging: logging,
+            category: IncomesLogging.Category.itemMutation,
+            source: #fileID
+        )
+    }
+
+    var reviewLogger: MHLogger {
+        IncomesLogging.logger(
+            logging: logging,
+            category: IncomesLogging.Category.reviewFlow,
+            source: #fileID
         )
     }
 }

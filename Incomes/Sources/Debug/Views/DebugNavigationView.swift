@@ -5,14 +5,18 @@
 //  Created by Hiromu Nakano on 9/20/24.
 //
 
+import MHPlatform
 import SwiftData
 import SwiftUI
 
 struct DebugNavigationView: View {
     private enum DebugNavigationDestination: Hashable {
+        case diagnostics
         case tagList
     }
 
+    @Environment(MHLoggingBootstrap.self)
+    private var logging
     @Environment(\.modelContext)
     private var context
     @Environment(\.horizontalSizeClass)
@@ -32,6 +36,8 @@ struct DebugNavigationView: View {
                     for: DebugNavigationDestination.self
                 ) { destination in
                     switch destination {
+                    case .diagnostics:
+                        MHLogConsoleView(logging: logging)
                     case .tagList:
                         DebugTagListView(
                             selection: selectedTagIDBinding
@@ -100,6 +106,8 @@ private extension DebugNavigationView {
         case .allTags:
             selectedTagID = nil
             path = [.tagList]
+        case .diagnostics:
+            path = [.diagnostics]
         case .tag(let tagID):
             selectedTagID = tagID
             preferredCompactColumn = .detail

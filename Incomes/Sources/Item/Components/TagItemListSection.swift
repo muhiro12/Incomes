@@ -5,6 +5,7 @@
 //  Created by Hiromu Nakano on 10/7/24.
 //
 
+import MHPlatform
 import SwiftData
 import SwiftUI
 
@@ -15,6 +16,8 @@ struct TagItemListSection {
     private var context
     @Environment(NotificationService.self)
     private var notificationService
+    @Environment(MHLoggingBootstrap.self)
+    private var logging
 
     @State private var isDialogPresented = false
     @State private var willDeleteItems: [Item] = []
@@ -62,7 +65,8 @@ extension TagItemListSection: View {
                         try await ItemDeleteCoordinator.delete(
                             context: context,
                             items: willDeleteItems,
-                            notificationService: notificationService
+                            notificationService: notificationService,
+                            logger: itemMutationLogger
                         )
                     } catch {
                         assertionFailure(error.localizedDescription)
@@ -87,6 +91,14 @@ private extension TagItemListSection {
         TagService.items(
             for: tag,
             yearString: yearString
+        )
+    }
+
+    var itemMutationLogger: MHLogger {
+        IncomesLogging.logger(
+            logging: logging,
+            category: IncomesLogging.Category.itemMutation,
+            source: #fileID
         )
     }
 }

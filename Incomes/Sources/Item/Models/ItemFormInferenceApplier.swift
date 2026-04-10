@@ -6,11 +6,19 @@
 //
 
 import Foundation
+import MHPlatform
 
 @available(iOS 26.0, *)
 enum ItemFormInferenceApplier {
-    static func apply(text: String, currentInput: ItemFormInput) async throws -> ItemFormInput {
-        let inference = try await ItemInferenceService.inferForm(text: text)
+    static func apply(
+        text: String,
+        currentInput: ItemFormInput,
+        logger: MHLogger
+    ) async throws -> ItemFormInput {
+        let inference = try await ItemInferenceService.inferForm(
+            text: text,
+            logger: logger
+        )
         let update = ItemFormInferenceMapper.map(
             dateString: inference.date,
             content: inference.content,
@@ -18,7 +26,21 @@ enum ItemFormInferenceApplier {
             outgo: inference.outgo,
             category: inference.category
         )
-        return apply(update: update, to: currentInput)
+        let updatedInput = apply(
+            update: update,
+            to: currentInput
+        )
+        logger.notice(
+            "inference.apply_completed",
+            metadata: IncomesLogging.metadata(
+                ("date_present", updatedInput.date == currentInput.date ? "unchanged" : "updated"),
+                ("content_present", IncomesLogging.presence(updatedInput.content)),
+                ("income_present", IncomesLogging.presence(updatedInput.incomeText)),
+                ("outgo_present", IncomesLogging.presence(updatedInput.outgoText)),
+                ("category_present", IncomesLogging.presence(updatedInput.category))
+            )
+        )
+        return updatedInput
     }
 
     static func apply(update: ItemFormInferenceUpdate, to currentInput: ItemFormInput) -> ItemFormInput {

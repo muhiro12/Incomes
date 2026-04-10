@@ -7,14 +7,26 @@
 
 import Foundation
 import FoundationModels
+import MHPlatform
 
 @available(iOS 26.0, *)
 enum ItemInferenceService {
-    static func inferForm(text: String) async throws -> ItemFormInference {
+    // swiftlint:disable function_body_length
+    static func inferForm(
+        text: String,
+        logger: MHLogger
+    ) async throws -> ItemFormInference {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyyMMdd"
         let today = formatter.string(from: Date())
         let languageCode = Locale.current.language.languageCode?.identifier ?? "en"
+        logger.notice(
+            "inference.requested",
+            metadata: IncomesLogging.metadata(
+                ("language_code", languageCode),
+                ("text_length", IncomesLogging.count(text.count))
+            )
+        )
         // swiftlint:disable line_length
         let session = LanguageModelSession(
             instructions: """
@@ -41,10 +53,35 @@ enum ItemInferenceService {
             Text: \(text)
             """
         // swiftlint:enable line_length
-        let response = try await session.respond(
-            to: prompt,
-            generating: ItemFormInference.self
-        )
-        return response.content
+        do {
+            let response = try await session.respond(
+                to: prompt,
+                generating: ItemFormInference.self
+            )
+            logger.notice(
+                "inference.completed",
+                metadata: IncomesLogging.metadata(
+                    ("language_code", languageCode),
+                    ("text_length", IncomesLogging.count(text.count))
+                )
+            )
+            return response.content
+        } catch {
+            let inferenceMetadata = IncomesLogging.metadata(
+                ("language_code", languageCode),
+                ("text_length", IncomesLogging.count(text.count))
+            )
+            let failureMetadata = inferenceMetadata.merging(
+                IncomesLogging.errorMetadata(error)
+            ) { current, _ in
+                current
+            }
+            logger.error(
+                "inference.failed",
+                metadata: failureMetadata
+            )
+            throw error
+        }
     }
+    // swiftlint:enable function_body_length
 }

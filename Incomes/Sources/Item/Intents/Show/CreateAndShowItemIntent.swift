@@ -6,6 +6,7 @@
 //
 
 import AppIntents
+import MHPlatform
 import SwiftData
 
 struct CreateAndShowItemIntent: AppIntent {
@@ -24,6 +25,7 @@ struct CreateAndShowItemIntent: AppIntent {
 
     @Dependency private var modelContainer: ModelContainer // swiftlint:disable:this type_contents_order
     @Dependency private var notificationService: NotificationService // swiftlint:disable:this type_contents_order
+    @Dependency private var logging: MHLoggingBootstrap // swiftlint:disable:this type_contents_order
 
     static let title: LocalizedStringResource = .init("Create and Show Item", table: "AppIntents")
 
@@ -49,7 +51,9 @@ struct CreateAndShowItemIntent: AppIntent {
             context: modelContainer.mainContext,
             input: formInput,
             repeatCount: repeatCount,
-            notificationService: notificationService
+            notificationService: notificationService,
+            logger: intentLogger,
+            reviewLogger: reviewLogger
         )
         return .result(
             opensIntent: IncomesIntentRouteOpener.monthIntent(for: item.localDate),
@@ -58,5 +62,23 @@ struct CreateAndShowItemIntent: AppIntent {
             IntentItemSection()
                 .environment(item)
         }
+    }
+}
+
+private extension CreateAndShowItemIntent {
+    @MainActor var intentLogger: MHLogger {
+        IncomesLogging.logger(
+            logging: logging,
+            category: IncomesLogging.Category.appIntent,
+            source: #fileID
+        )
+    }
+
+    @MainActor var reviewLogger: MHLogger {
+        IncomesLogging.logger(
+            logging: logging,
+            category: IncomesLogging.Category.reviewFlow,
+            source: #fileID
+        )
     }
 }

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import MHPlatform
 import SwiftData
 @preconcurrency import WatchConnectivity
 
@@ -24,11 +25,16 @@ nonisolated private let kPhoneWatchResponseEncodeFallbackData = Data(
 )
 
 nonisolated private func phoneWatchEncodedReplyData(
-    _ reply: WatchSyncReply
+    _ reply: WatchSyncReply,
+    logger: MHLogger? = nil
 ) -> Data {
     do {
         return try kPhoneWatchReplyEncoder.encode(reply)
     } catch {
+        logger?.error(
+            "watch_sync.response_encode_failed",
+            metadata: IncomesLogging.errorMetadata(error)
+        )
         let fallbackReply = WatchSyncReply.failed(
             phase: .responseEncode,
             error: error
@@ -40,19 +46,22 @@ nonisolated private func phoneWatchEncodedReplyData(
 
 nonisolated private func phoneWatchFailedReplyData(
     phase: WatchSyncFailurePhase,
-    message: String
+    message: String,
+    logger: MHLogger? = nil
 ) -> Data {
     phoneWatchEncodedReplyData(
         .failed(
             phase: phase,
             message: message
-        )
+        ),
+        logger: logger
     )
 }
 
 final class PhoneWatchBridge: NSObject {
     static let shared = PhoneWatchBridge()
 
+    nonisolated(unsafe) private var logger: MHLogger?
     private weak var modelContext: ModelContext?
     private var activationWaiters: [CheckedContinuation<Void, Never>] = []
     private var isActivating = false
@@ -62,17 +71,24 @@ final class PhoneWatchBridge: NSObject {
         super.init()
     }
 
-    func activate(modelContext: ModelContext) async {
+    func activate(
+        modelContext: ModelContext,
+        logger: MHLogger
+    ) async {
+        self.logger = logger
         self.modelContext = modelContext
         guard WCSession.isSupported() else {
+            logger.info("watch_sync.unsupported")
             return
         }
         let session = WCSession.default
         session.delegate = self
         if hasActivated || session.activationState == .activated {
             hasActivated = true
+            logger.info("watch_sync.activation_reused")
             return
         }
+        logger.notice("watch_sync.activation_requested")
         await withCheckedContinuation { [weak self] continuation in
             guard let self else {
                 return
@@ -121,10 +137,31 @@ final class PhoneWatchBridge: NSObject {
 }
 
 nonisolated extension PhoneWatchBridge: WCSessionDelegate {
-    func session(_: WCSession, activationDidCompleteWith state: WCSessionActivationState, error _: Error?) {
+    func session(_: WCSession, activationDidCompleteWith state: WCSessionActivationState, error: Error?) {
         Task { @MainActor in
             hasActivated = (state == .activated)
             isActivating = false
+            if let error {
+                let activationMetadata = IncomesLogging.metadata(
+                    ("activated", IncomesLogging.bool(state == .activated))
+                )
+                let failureMetadata = activationMetadata.merging(
+                    IncomesLogging.errorMetadata(error)
+                ) { current, _ in
+                    current
+                }
+                logger?.error(
+                    "watch_sync.activation_failed",
+                    metadata: failureMetadata
+                )
+            } else {
+                logger?.notice(
+                    "watch_sync.activation_completed",
+                    metadata: IncomesLogging.metadata(
+                        ("activated", IncomesLogging.bool(state == .activated))
+                    )
+                )
+            }
             let waiters = activationWaiters
             activationWaiters.removeAll()
             waiters.forEach { waiter in
@@ -142,6 +179,7 @@ nonisolated extension PhoneWatchBridge: WCSessionDelegate {
         Task { @MainActor in
             hasActivated = false
             isActivating = true
+            logger?.warning("watch_sync.deactivated")
             session.activate()
         }
     }
@@ -154,6 +192,10 @@ nonisolated extension PhoneWatchBridge: WCSessionDelegate {
                 from: messageData
             )
         } catch {
+            logger?.error(
+                "watch_sync.request_decode_failed",
+                metadata: IncomesLogging.errorMetadata(error)
+            )
             let failureReply = WatchSyncReply.failed(
                 phase: .requestDecode,
                 error: error
@@ -176,18 +218,35 @@ nonisolated extension PhoneWatchBridge: WCSessionDelegate {
             return
         }
         Task { @MainActor in
+            logger?.notice(
+                "watch_sync.request_received",
+                metadata: IncomesLogging.metadata(
+                    ("month_offset_count", IncomesLogging.count(request.monthOffsets.count))
+                )
+            )
             handleRecentItems(request: request, replyHandler: replyHandler)
         }
     }
 
+    // swiftlint:disable function_body_length
     @MainActor
-    private func handleRecentItems(request: ItemsRequest, replyHandler: (Data) -> Void) {
+    private func handleRecentItems(
+        request: ItemsRequest,
+        replyHandler: (Data) -> Void
+    ) {
         let baseDate = Date(timeIntervalSince1970: request.baseEpoch)
         guard let context = modelContext else {
+            logger?.error(
+                "watch_sync.missing_context",
+                metadata: IncomesLogging.metadata(
+                    ("month_offset_count", IncomesLogging.count(request.monthOffsets.count))
+                )
+            )
             replyHandler(
                 phoneWatchFailedReplyData(
                     phase: .missingContext,
-                    message: "Model context is not available for watch sync."
+                    message: "Model context is not available for watch sync.",
+                    logger: logger
                 )
             )
             return
@@ -201,16 +260,38 @@ nonisolated extension PhoneWatchBridge: WCSessionDelegate {
             )
             replyHandler(
                 phoneWatchEncodedReplyData(
-                    .success(items: wires)
+                    .success(items: wires),
+                    logger: logger
+                )
+            )
+            logger?.notice(
+                "watch_sync.reply_completed",
+                metadata: IncomesLogging.metadata(
+                    ("month_offset_count", IncomesLogging.count(request.monthOffsets.count)),
+                    ("item_count", IncomesLogging.count(wires.count))
                 )
             )
         } catch {
+            let requestMetadata = IncomesLogging.metadata(
+                ("month_offset_count", IncomesLogging.count(request.monthOffsets.count))
+            )
+            let failureMetadata = requestMetadata.merging(
+                IncomesLogging.errorMetadata(error)
+            ) { current, _ in
+                current
+            }
+            logger?.error(
+                "watch_sync.item_fetch_failed",
+                metadata: failureMetadata
+            )
             replyHandler(
                 phoneWatchFailedReplyData(
                     phase: .itemFetch,
-                    message: error.localizedDescription
+                    message: error.localizedDescription,
+                    logger: logger
                 )
             )
         }
     }
+    // swiftlint:enable function_body_length
 }

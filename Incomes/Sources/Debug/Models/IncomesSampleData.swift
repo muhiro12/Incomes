@@ -33,12 +33,16 @@ extension IncomesSampleData {
         seed: (ModelContext) throws -> Void
     ) throws -> Context {
         let modelContainer = try IncomesPlatformEnvironmentFactory.makePreviewModelContainer()
+        let logging = MainActor.assumeIsolated {
+            IncomesLogging.makeBootstrap()
+        }
         let previewContext = modelContainer.mainContext
         try seed(previewContext)
         return MainActor.assumeIsolated {
             IncomesPlatformEnvironmentFactory.make(
                 modelContainer: modelContainer,
-                platformMode: .preview
+                platformMode: .preview,
+                logging: logging
             )
         }
     }

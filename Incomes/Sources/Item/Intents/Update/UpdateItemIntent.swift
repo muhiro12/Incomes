@@ -23,6 +23,7 @@ struct UpdateItemIntent: AppIntent {
 
     @Dependency private var modelContainer: ModelContainer // swiftlint:disable:this type_contents_order
     @Dependency private var notificationService: NotificationService // swiftlint:disable:this type_contents_order
+    @Dependency private var logging: MHLoggingBootstrap // swiftlint:disable:this type_contents_order
 
     static let title: LocalizedStringResource = .init("Update Item", table: "AppIntents")
     static let isDiscoverable = false
@@ -65,13 +66,31 @@ struct UpdateItemIntent: AppIntent {
             item: model,
             input: formInput,
             scope: scope.scope,
-            notificationService: notificationService
+            notificationService: notificationService,
+            logger: intentLogger,
+            reviewLogger: reviewLogger
         )
         return .result(value: entity)
     }
 }
 
 private extension UpdateItemIntent {
+    @MainActor var intentLogger: MHLogger {
+        IncomesLogging.logger(
+            logging: logging,
+            category: IncomesLogging.Category.appIntent,
+            source: #fileID
+        )
+    }
+
+    @MainActor var reviewLogger: MHLogger {
+        IncomesLogging.logger(
+            logging: logging,
+            category: IncomesLogging.Category.reviewFlow,
+            source: #fileID
+        )
+    }
+
     func validateFormInput() throws {
         do {
             try formInput.validate()

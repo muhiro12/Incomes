@@ -5,21 +5,13 @@ enum ItemMutationAdapterFactory {
     static func make(
         notificationService: NotificationService,
         includesReviewRequest: Bool,
-        reviewSource: String = #fileID
+        reviewLogger: MHLogger? = nil
     ) -> MHMutationAdapter<Set<MutationOutcome.FollowUpHint>> {
         let refreshNotificationSchedule: IncomesMutationWorkflow.NotificationScheduleRefresher = {
             await IncomesMutationWorkflow.refreshNotificationSchedule(
                 notificationService: notificationService
             )
         }
-        let reviewStep = IncomesReviewSupport
-            .flow(
-                context: .itemMutation,
-                source: reviewSource
-            )
-            .step(
-                name: "scheduleReviewRequest"
-            )
 
         var steps: [MHMutationStep] = [
             .mainActor(name: "successHaptic") {
@@ -27,7 +19,18 @@ enum ItemMutationAdapterFactory {
             }
         ]
         if includesReviewRequest {
-            steps.append(reviewStep)
+            guard let reviewLogger else {
+                preconditionFailure("reviewLogger is required when includesReviewRequest is true")
+            }
+            steps.append(
+                MHReviewFlow(
+                    policy: IncomesReviewSupport.policy(for: .itemMutation),
+                    logger: reviewLogger
+                )
+                .step(
+                    name: "scheduleReviewRequest"
+                )
+            )
         }
 
         return IncomesMutationWorkflow

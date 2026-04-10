@@ -6,6 +6,7 @@ typealias IncomesRouteInbox = MHObservableRouteInbox<IncomesRoute>
 typealias IncomesRoutePipeline = MHAppRoutePipeline<IncomesRoute>
 
 struct IncomesPlatformEnvironment {
+    let logging: MHLoggingBootstrap
     let modelContainer: ModelContainer
     let notificationService: NotificationService
     let remoteConfigurationService: RemoteConfigurationService
@@ -34,6 +35,7 @@ extension View {
         _ environment: IncomesPlatformEnvironment
     ) -> some View {
         modelContainer(environment.modelContainer)
+            .environment(environment.logging)
             .environment(environment.notificationService)
             .environment(environment.remoteConfigurationService)
             .environment(environment.tipController)

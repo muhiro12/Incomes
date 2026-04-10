@@ -11,10 +11,7 @@ import UserNotifications
 
 extension NotificationService {
     var notificationLogger: MHLogger {
-        IncomesApp.logger(
-            category: "NotificationRoute",
-            source: #fileID
-        )
+        routeLogger
     }
 
     func deliverNotificationRoute(
@@ -40,11 +37,26 @@ extension NotificationService {
 
         switch deliveredOutcome.source {
         case .payload:
-            notificationLogger.info("notification route resolved")
+            notificationLogger.info(
+                "notification_route.resolved",
+                metadata: IncomesLogging.metadata(
+                    ("route_source", "payload")
+                )
+            )
         case .fallback:
-            notificationLogger.notice("notification route resolved via legacy month fallback")
+            notificationLogger.warning(
+                "notification_route.resolved",
+                metadata: IncomesLogging.metadata(
+                    ("route_source", "legacy_fallback")
+                )
+            )
         case .noRoute:
-            notificationLogger.info("notification route resolution returned no route")
+            notificationLogger.info(
+                "notification_route.no_route",
+                metadata: IncomesLogging.metadata(
+                    ("route_source", "none")
+                )
+            )
         }
     }
 }

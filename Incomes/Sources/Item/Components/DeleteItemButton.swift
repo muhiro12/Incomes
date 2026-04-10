@@ -5,6 +5,7 @@
 //  Created by Hiromu Nakano on 10/18/24.
 //
 
+import MHPlatform
 import SwiftData
 import SwiftUI
 
@@ -15,6 +16,8 @@ struct DeleteItemButton {
     private var context
     @Environment(NotificationService.self)
     private var notificationService
+    @Environment(MHLoggingBootstrap.self)
+    private var logging
 
     @State private var isDialogPresented = false
 
@@ -51,7 +54,8 @@ extension DeleteItemButton: View {
                         try await ItemDeleteCoordinator.delete(
                             context: context,
                             item: item,
-                            notificationService: notificationService
+                            notificationService: notificationService,
+                            logger: itemMutationLogger
                         )
                     } catch {
                         assertionFailure(error.localizedDescription)
@@ -68,6 +72,14 @@ extension DeleteItemButton: View {
         } message: {
             Text("Are you sure you want to delete this item?")
         }
+    }
+
+    var itemMutationLogger: MHLogger {
+        IncomesLogging.logger(
+            logging: logging,
+            category: IncomesLogging.Category.itemMutation,
+            source: #fileID
+        )
     }
 }
 

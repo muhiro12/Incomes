@@ -5,6 +5,7 @@
 //  Created by Hiromu Nakano on 2020/04/11.
 //
 
+import MHPlatform
 import SwiftData
 import SwiftUI
 import TipKit
@@ -16,6 +17,8 @@ struct ListItem {
     private var context
     @Environment(NotificationService.self)
     private var notificationService
+    @Environment(MHLoggingBootstrap.self)
+    private var logging
     @Environment(\.horizontalSizeClass)
     private var horizontalSizeClass
     @Environment(IncomesTipController.self)
@@ -95,7 +98,8 @@ private extension ListItem {
                         try await ItemDeleteCoordinator.delete(
                             context: context,
                             items: [item],
-                            notificationService: notificationService
+                            notificationService: notificationService,
+                            logger: itemMutationLogger
                         )
                     } catch {
                         assertionFailure(error.localizedDescription)
@@ -145,6 +149,16 @@ private extension ListItem {
             ItemFormNavigationView(mode: .create)
                 .incomesSheetPresentation()
         }
+    }
+}
+
+private extension ListItem {
+    var itemMutationLogger: MHLogger {
+        IncomesLogging.logger(
+            logging: logging,
+            category: IncomesLogging.Category.itemMutation,
+            source: #fileID
+        )
     }
 }
 

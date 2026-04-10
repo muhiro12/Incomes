@@ -15,6 +15,8 @@ struct MainNavigationView: View {
     private var context
     @Environment(\.horizontalSizeClass)
     private var horizontalSizeClass
+    @Environment(MHLoggingBootstrap.self)
+    private var logging
     @Environment(NotificationService.self)
     private var notificationService
     @Environment(IncomesTipController.self)
@@ -162,7 +164,10 @@ struct MainNavigationView: View {
 
             tipController.refreshHasAnyItems(!yearTags.isEmpty)
 
-            await PhoneWatchBridge.shared.activate(modelContext: context)
+            await PhoneWatchBridge.shared.activate(
+                modelContext: context,
+                logger: watchSyncLogger
+            )
         }
         .environment(router)
         .environment(settingsCoordinator)
@@ -247,6 +252,16 @@ private extension MainNavigationView {
         } catch {
             assertionFailure(error.localizedDescription)
         }
+    }
+}
+
+private extension MainNavigationView {
+    var watchSyncLogger: MHLogger {
+        IncomesLogging.logger(
+            logging: logging,
+            category: IncomesLogging.Category.watchSync,
+            source: #fileID
+        )
     }
 }
 

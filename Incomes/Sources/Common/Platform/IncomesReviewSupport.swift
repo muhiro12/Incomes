@@ -13,10 +13,12 @@ enum IncomesReviewSupport {
     }
 
     static func logger(
+        logging: MHLoggingBootstrap,
         source: String = #fileID
     ) -> MHLogger {
-        IncomesApp.logger(
-            category: "ReviewFlow",
+        IncomesLogging.logger(
+            logging: logging,
+            category: IncomesLogging.Category.reviewFlow,
             source: source
         )
     }
@@ -41,11 +43,15 @@ enum IncomesReviewSupport {
 
     static func flow(
         context: Context,
+        logging: MHLoggingBootstrap,
         source: String = #fileID
     ) -> MHReviewFlow {
         .init(
             policy: policy(for: context),
-            logger: logger(source: source)
+            logger: logger(
+                logging: logging,
+                source: source
+            )
         )
     }
 }

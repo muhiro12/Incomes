@@ -26,6 +26,7 @@ struct CreateItemIntent: AppIntent {
 
     @Dependency private var modelContainer: ModelContainer // swiftlint:disable:this type_contents_order
     @Dependency private var notificationService: NotificationService // swiftlint:disable:this type_contents_order
+    @Dependency private var logging: MHLoggingBootstrap // swiftlint:disable:this type_contents_order
 
     static let title: LocalizedStringResource = .init("Create Item", table: "AppIntents")
 
@@ -65,7 +66,9 @@ struct CreateItemIntent: AppIntent {
             context: modelContainer.mainContext,
             input: formInput,
             repeatCount: repeatCount,
-            notificationService: notificationService
+            notificationService: notificationService,
+            logger: intentLogger,
+            reviewLogger: reviewLogger
         )
         guard let entity = ItemEntity(item) else {
             throw ItemError.entityConversionFailed
@@ -75,6 +78,22 @@ struct CreateItemIntent: AppIntent {
 }
 
 private extension CreateItemIntent {
+    @MainActor var intentLogger: MHLogger {
+        IncomesLogging.logger(
+            logging: logging,
+            category: IncomesLogging.Category.appIntent,
+            source: #fileID
+        )
+    }
+
+    @MainActor var reviewLogger: MHLogger {
+        IncomesLogging.logger(
+            logging: logging,
+            category: IncomesLogging.Category.reviewFlow,
+            source: #fileID
+        )
+    }
+
     func validateFormInput() throws {
         do {
             try formInput.validate()

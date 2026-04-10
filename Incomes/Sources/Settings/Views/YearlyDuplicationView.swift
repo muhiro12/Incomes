@@ -6,6 +6,7 @@
 //  Created by Codex on 2025/09/08.
 //
 
+import MHPlatform
 import SwiftData
 import SwiftUI
 
@@ -25,6 +26,8 @@ struct YearlyDuplicationView: View {
     private var context
     @Environment(NotificationService.self)
     private var notificationService
+    @Environment(MHLoggingBootstrap.self)
+    private var logging
 
     @Query(.tags(.typeIs(.year), order: .reverse))
     private var yearTags: [Tag]
@@ -277,7 +280,8 @@ private extension YearlyDuplicationView {
             let previewPlan = try YearlyDuplicationCoordinator.previewPlan(
                 context: context,
                 sourceYear: sourceYear,
-                targetYear: targetYear
+                targetYear: targetYear,
+                logger: yearlyDuplicationLogger
             )
 
             guard generation == planLoadGeneration, !Task.isCancelled else {
@@ -309,7 +313,8 @@ private extension YearlyDuplicationView {
                 group: group,
                 in: plan,
                 context: context,
-                refreshNotificationSchedule: refreshNotificationSchedule
+                refreshNotificationSchedule: refreshNotificationSchedule,
+                logger: yearlyDuplicationLogger
             ) else {
                 return
             }
@@ -404,6 +409,16 @@ private extension YearlyDuplicationView {
         ]
         .compactMap(\.self)
         .joined(separator: "\n")
+    }
+}
+
+private extension YearlyDuplicationView {
+    var yearlyDuplicationLogger: MHLogger {
+        IncomesLogging.logger(
+            logging: logging,
+            category: IncomesLogging.Category.yearlyDuplication,
+            source: #fileID
+        )
     }
 }
 

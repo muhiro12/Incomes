@@ -43,6 +43,18 @@ extension DebugListView: View {
                     Text("Debug option")
                 }
             }
+            if isDebugOn {
+                Section {
+                    Button {
+                        navigateToRoute(.diagnostics)
+                    } label: {
+                        Text("Diagnostics Console")
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .contentShape(Rectangle())
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
             if let tag = try? context.fetchFirst(.tags(.all)) {
                 Section {
                     Button {

@@ -28,6 +28,8 @@ final class NotificationService: NSObject {
     }
 
     private let modelContainer: ModelContainer
+    private let logger: MHLogger
+    let routeLogger: MHLogger
     let routeDestination: any MHDeepLinkURLDestination
 
     private(set) var hasNotification = false
@@ -36,9 +38,20 @@ final class NotificationService: NSObject {
 
     init(
         modelContainer: ModelContainer,
-        routeDestination: any MHDeepLinkURLDestination
+        routeDestination: any MHDeepLinkURLDestination,
+        logging: MHLoggingBootstrap
     ) {
         self.modelContainer = modelContainer
+        logger = IncomesLogging.logger(
+            logging: logging,
+            category: IncomesLogging.Category.notification,
+            source: #fileID
+        )
+        routeLogger = IncomesLogging.logger(
+            logging: logging,
+            category: IncomesLogging.Category.notificationRoute,
+            source: #fileID
+        )
         self.routeDestination = routeDestination
         super.init()
         UNUserNotificationCenter.current().delegate = self
@@ -54,23 +67,48 @@ final class NotificationService: NSObject {
                 UpcomingPaymentNotificationPresentation.previewRequestIdentifierPrefix
             ]
         )
+        logger.info(
+            "notification.register_requested",
+            metadata: IncomesLogging.metadata(
+                ("request_count", IncomesLogging.count(requests.count))
+            )
+        )
 
         let status = await MHNotificationOrchestrator.requestAuthorizationIfNeeded(
             center: center,
             options: [.badge, .sound, .alert, .carPlay, .providesAppNotificationSettings]
         )
         authorizationState = .init(status: status)
+        logger.notice(
+            "notification.authorization_updated",
+            metadata: IncomesLogging.metadata(
+                ("authorization_status", authorizationState.logValue)
+            )
+        )
 
         _ = await MHNotificationOrchestrator.replaceManagedPendingRequests(
             center: center,
             requests: requests,
             matcher: matcher
         )
+        logger.notice(
+            "notification.schedule_replaced",
+            metadata: IncomesLogging.metadata(
+                ("request_count", IncomesLogging.count(requests.count))
+            )
+        )
     }
 
     func update() async {
         await refreshAuthorizationStatus()
         hasNotification = await deliveredNotificationIdentifiers().isNotEmpty
+        logger.info(
+            "notification.state_updated",
+            metadata: IncomesLogging.metadata(
+                ("authorization_status", authorizationState.logValue),
+                ("has_notification", IncomesLogging.bool(hasNotification))
+            )
+        )
     }
 
     func refresh() async {
@@ -86,11 +124,23 @@ final class NotificationService: NSObject {
 
         hasNotification = false
         shouldShowNotification = false
+        logger.notice(
+            "notification.delivered_cleared",
+            metadata: IncomesLogging.metadata(
+                ("cleared_count", IncomesLogging.count(deliveredIdentifiers.count))
+            )
+        )
     }
 
     func refreshAuthorizationStatus() async {
         let settings = await UNUserNotificationCenter.current().notificationSettings()
         authorizationState = .init(status: settings.authorizationStatus)
+        logger.info(
+            "notification.authorization_refreshed",
+            metadata: IncomesLogging.metadata(
+                ("authorization_status", authorizationState.logValue)
+            )
+        )
     }
 
     func sendTestNotification() {
@@ -98,6 +148,12 @@ final class NotificationService: NSObject {
             context: modelContainer.mainContext,
             date: .now
         ) else {
+            logger.warning(
+                "notification.test_skipped",
+                metadata: IncomesLogging.metadata(
+                    ("failure_reason", "no_item")
+                )
+            )
             return
         }
 
@@ -114,6 +170,12 @@ final class NotificationService: NSObject {
             settings: settings,
             now: .now
         ).first?.previewPresentation() else { // swiftlint:disable:this multiline_function_chains
+            logger.warning(
+                "notification.test_skipped",
+                metadata: IncomesLogging.metadata(
+                    ("failure_reason", "no_presentation")
+                )
+            )
             return
         }
 
@@ -123,6 +185,12 @@ final class NotificationService: NSObject {
             trigger: trigger
         )
         UNUserNotificationCenter.current().add(request)
+        logger.notice(
+            "notification.test_scheduled",
+            metadata: IncomesLogging.metadata(
+                ("request_identifier_present", "true")
+            )
+        )
     }
 }
 
@@ -131,6 +199,7 @@ extension NotificationService: UNUserNotificationCenterDelegate {
                                 willPresent _: UNNotification) async -> UNNotificationPresentationOptions { // swiftlint:disable:this async_without_await line_length
         Task {
             hasNotification = true
+            logger.info("notification.will_present")
         }
         return [.badge, .sound, .list, .banner]
     }
@@ -139,6 +208,15 @@ extension NotificationService: UNUserNotificationCenterDelegate {
                                 didReceive response: UNNotificationResponse) async { // swiftlint:disable:this async_without_await line_length
         Task {
             shouldShowNotification = true
+            logger.notice(
+                "notification.response_received",
+                metadata: IncomesLogging.metadata(
+                    ("action_identifier", response.actionIdentifier),
+                    ("managed_identifier", IncomesLogging.bool(
+                        isManagedNotificationIdentifier(response.notification.request.identifier)
+                    ))
+                )
+            )
             await deliverNotificationRoute(from: response)
         }
     }
@@ -146,7 +224,7 @@ extension NotificationService: UNUserNotificationCenterDelegate {
     func userNotificationCenter(_: UNUserNotificationCenter,
                                 openSettingsFor _: UNNotification?) {
         Task {
-            notificationLogger.info("notification settings route requested")
+            logger.info("notification.settings_route_requested")
             await routeDestination.setPendingURL(
                 IncomesDeepLinkURLBuilder.preferredURL(for: .settings)
             )
@@ -277,6 +355,17 @@ private extension NotificationService {
 }
 
 private extension NotificationService.AuthorizationState {
+    var logValue: String {
+        switch self {
+        case .notDetermined:
+            "not_determined"
+        case .authorized:
+            "authorized"
+        case .denied:
+            "denied"
+        }
+    }
+
     init(status: UNAuthorizationStatus) {
         switch status {
         case .authorized,

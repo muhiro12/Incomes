@@ -10,6 +10,8 @@ struct SettingsListView {
     private var notificationService
     @Environment(IncomesTipController.self)
     private var tipController
+    @Environment(MHLoggingBootstrap.self)
+    var logging
 
     @Environment(\.scenePhase)
     private var scenePhase
@@ -85,6 +87,12 @@ extension SettingsListView: View {
                 Section {
                     Button(role: .destructive) {
                         Haptic.warning.impact()
+                        dataMaintenanceLogger.notice(
+                            "debug_data.delete_requested",
+                            metadata: IncomesLogging.metadata(
+                                ("has_debug_data", IncomesLogging.bool(model.hasDebugData))
+                            )
+                        )
                         model.presentDestructiveAction(.deleteDebugData)
                     } label: {
                         Text("Delete debug sample data")
@@ -154,12 +162,18 @@ extension SettingsListView: View {
         ) {
             Button(role: .destructive) {
                 Task {
+                    dataMaintenanceLogger.notice("delete_all.requested")
                     do {
                         try await DataMaintenanceService.resetAllData(context: context)
                         Haptic.success.impact()
                         model.loadStatus(context: context)
                         model.dismissDestructiveAction()
+                        dataMaintenanceLogger.notice("delete_all.completed")
                     } catch {
+                        dataMaintenanceLogger.error(
+                            "delete_all.failed",
+                            metadata: IncomesLogging.errorMetadata(error)
+                        )
                         assertionFailure(error.localizedDescription)
                     }
                 }
@@ -183,11 +197,22 @@ extension SettingsListView: View {
         ) {
             Button(role: .destructive) {
                 do {
+                    dataMaintenanceLogger.notice(
+                        "debug_data.delete_confirmed",
+                        metadata: IncomesLogging.metadata(
+                            ("has_debug_data", IncomesLogging.bool(model.hasDebugData))
+                        )
+                    )
                     try DataMaintenanceService.deleteDebugData(context: context)
                     Haptic.success.impact()
                     model.loadStatus(context: context)
                     model.dismissDestructiveAction()
+                    dataMaintenanceLogger.notice("debug_data.delete_completed")
                 } catch {
+                    dataMaintenanceLogger.error(
+                        "debug_data.delete_failed",
+                        metadata: IncomesLogging.errorMetadata(error)
+                    )
                     assertionFailure(error.localizedDescription)
                 }
             } label: {
@@ -298,6 +323,7 @@ private extension SettingsListView {
             yearlyDuplicationButton()
             Button(role: .destructive) {
                 Haptic.warning.impact()
+                dataMaintenanceLogger.notice("delete_all.prompt_presented")
                 model.presentDestructiveAction(.deleteAll)
             } label: {
                 Text("Delete all")

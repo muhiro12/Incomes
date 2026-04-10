@@ -20,7 +20,9 @@ enum ItemFormSaveCoordinator {
     static func save(
         context: ModelContext,
         request: Request,
-        notificationService: NotificationService
+        notificationService: NotificationService,
+        logger: MHLogger,
+        reviewLogger: MHLogger
     ) async throws -> ItemFormSaveOutcome {
         switch request.mode {
         case .create:
@@ -28,17 +30,33 @@ enum ItemFormSaveCoordinator {
                 context: context,
                 input: request.formInputData,
                 repeatMonthSelections: request.repeatMonthSelections,
-                notificationService: notificationService
+                notificationService: notificationService,
+                logger: logger,
+                reviewLogger: reviewLogger
             )
             return .didSave
         case .edit:
             guard let item = request.item else {
+                logger.error(
+                    "item_save.failed",
+                    metadata: IncomesLogging.metadata(
+                        ("mode", "edit"),
+                        ("failure_reason", "missing_item")
+                    )
+                )
                 throw ItemError.itemNotFound
             }
             if try ItemFormSaveDecision.requiresScopeSelection(
                 context: context,
                 item: item
             ) {
+                logger.notice(
+                    "item_save.scope_selection_required",
+                    metadata: IncomesLogging.metadata(
+                        ("mode", "edit"),
+                        ("item_id_present", "true")
+                    )
+                )
                 return .requiresScopeSelection
             }
             try await save(
@@ -46,44 +64,77 @@ enum ItemFormSaveCoordinator {
                 context: context,
                 item: item,
                 formInputData: request.formInputData,
-                notificationService: notificationService
+                notificationService: notificationService,
+                logger: logger,
+                reviewLogger: reviewLogger
             )
             return .didSave
         }
     }
 
+    // swiftlint:disable function_parameter_count
     @MainActor
     static func save(
         scope: ItemMutationScope,
         context: ModelContext,
         item: Item,
         formInputData: ItemFormInput,
-        notificationService: NotificationService
+        notificationService: NotificationService,
+        logger: MHLogger,
+        reviewLogger: MHLogger
     ) async throws {
-        _ = try await MHMutationWorkflow.runThrowing(
-            name: mutationName(for: scope),
-            operation: {
-                try ItemService.updateWithOutcome(
-                    context: context,
-                    item: item,
-                    input: formInputData,
-                    scope: scope
-                )
-            },
-            adapter: ItemMutationAdapterFactory.make(
-                notificationService: notificationService,
-                includesReviewRequest: true
-            ),
-            projection: .closures(
-                afterSuccess: { outcome in
-                    outcome.followUpHints
+        let metadata = IncomesLogging.metadata(
+            ("mode", "edit"),
+            ("scope", scope.logValue),
+            ("item_id_present", "true"),
+            ("category_present", IncomesLogging.presence(formInputData.category)),
+            ("content_present", IncomesLogging.presence(formInputData.content))
+        )
+        logger.notice(
+            "item_save.requested",
+            metadata: metadata
+        )
+
+        do {
+            _ = try await MHMutationWorkflow.runThrowing(
+                name: mutationName(for: scope),
+                operation: {
+                    try ItemService.updateWithOutcome(
+                        context: context,
+                        item: item,
+                        input: formInputData,
+                        scope: scope
+                    )
                 },
-                returning: { _ in
-                    ()
+                adapter: ItemMutationAdapterFactory.make(
+                    notificationService: notificationService,
+                    includesReviewRequest: true,
+                    reviewLogger: reviewLogger
+                ),
+                projection: .closures(
+                    afterSuccess: { outcome in
+                        outcome.followUpHints
+                    },
+                    returning: { _ in
+                        ()
+                    }
+                )
+            )
+            logger.notice(
+                "item_save.completed",
+                metadata: metadata
+            )
+        } catch {
+            logger.error(
+                "item_save.failed",
+                metadata: metadata.merging(IncomesLogging.errorMetadata(error)) { current, _ in
+                    current
                 }
             )
-        )
+            throw error
+        }
     }
+    // swiftlint:enable function_parameter_count
 
     private static func mutationName(
         for scope: ItemMutationScope
@@ -95,6 +146,19 @@ enum ItemFormSaveCoordinator {
             ItemMutationWorkflowName.updateFutureItems
         case .allItems:
             ItemMutationWorkflowName.updateAllItems
+        }
+    }
+}
+
+private extension ItemMutationScope {
+    var logValue: String {
+        switch self {
+        case .thisItem:
+            "this_item"
+        case .futureItems:
+            "future_items"
+        case .allItems:
+            "all_items"
         }
     }
 }

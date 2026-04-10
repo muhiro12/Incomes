@@ -24,22 +24,35 @@ enum IncomesPlatformEnvironmentFactory {
     @MainActor
     static func make(
         modelContainer: ModelContainer,
-        platformMode: IncomesPlatformMode
+        platformMode: IncomesPlatformMode,
+        logging: MHLoggingBootstrap
     ) -> IncomesPlatformEnvironment {
         let routeInbox = makeRouteInbox()
-        let routePipeline = makeRoutePipeline(routeInbox: routeInbox)
+        let routePipeline = makeRoutePipeline(
+            routeInbox: routeInbox,
+            logging: logging
+        )
         let notificationService = NotificationService(
             modelContainer: modelContainer,
-            routeDestination: routePipeline.inbox
+            routeDestination: routePipeline.inbox,
+            logging: logging
         )
-        let remoteConfigurationService = RemoteConfigurationService()
+        let remoteConfigurationService = RemoteConfigurationService(
+            logger: IncomesLogging.logger(
+                logging: logging,
+                category: IncomesLogging.Category.remoteConfiguration,
+                source: #fileID
+            )
+        )
         let tipController = makeTipController(for: platformMode)
         let reviewFlow = IncomesReviewSupport.flow(
             context: .appActivation,
+            logging: logging,
             source: #fileID
         )
 
         return .init(
+            logging: logging,
             modelContainer: modelContainer,
             notificationService: notificationService,
             remoteConfigurationService: remoteConfigurationService,
@@ -78,12 +91,14 @@ enum IncomesPlatformEnvironmentFactory {
 
     @MainActor
     private static func makeRoutePipeline(
-        routeInbox: IncomesRouteInbox
+        routeInbox: IncomesRouteInbox,
+        logging: MHLoggingBootstrap
     ) -> MHAppRoutePipeline<IncomesRoute> {
         MHAppRoutePipeline(
             routeLifecycle: .init(
-                logger: IncomesApp.logger(
-                    category: "RouteExecution",
+                logger: IncomesLogging.logger(
+                    logging: logging,
+                    category: IncomesLogging.Category.routeExecution,
                     source: #fileID
                 ),
                 initialReadiness: false,
@@ -93,14 +108,26 @@ enum IncomesPlatformEnvironmentFactory {
             routeInbox: routeInbox,
             pendingSources: pendingURLSources()
         ) { error in
-            handleRoutePipelineFailure(error)
+            handleRoutePipelineFailure(
+                error,
+                logger: IncomesLogging.logger(
+                    logging: logging,
+                    category: IncomesLogging.Category.routeExecution,
+                    source: #fileID
+                )
+            )
         }
     }
 
     @MainActor
     private static func handleRoutePipelineFailure(
-        _ error: any Error
+        _ error: any Error,
+        logger: MHLogger
     ) {
+        logger.error(
+            "route_pipeline.failure",
+            metadata: IncomesLogging.errorMetadata(error)
+        )
         assertionFailure(error.localizedDescription)
     }
 

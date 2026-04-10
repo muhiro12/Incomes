@@ -4,17 +4,14 @@ import MHPlatform
 @MainActor
 @Observable
 final class MainNavigationYearDeletionModel {
-    private let logger = IncomesApp.logger(
-        category: "MainNavigationYearDeletion"
-    )
-
     var isDialogPresented = false
     var itemsToDelete: [Item] = []
     var tagsToDelete: [Tag] = []
 
     func prepare(
         from yearTags: [Tag],
-        indices: IndexSet
+        indices: IndexSet,
+        logger: MHLogger
     ) {
         tagsToDelete = TagService.resolveTagsForDeletion(
             from: yearTags,
@@ -26,12 +23,12 @@ final class MainNavigationYearDeletionModel {
         )
         isDialogPresented = tagsToDelete.isNotEmpty
         logger.debug(
-            "year deletion prepared",
-            metadata: [
-                "indices": String(describing: indices),
-                "tags": tagNames(tagsToDelete),
-                "items": "\(itemsToDelete.count)"
-            ]
+            "year_deletion.prepared",
+            metadata: IncomesLogging.metadata(
+                ("index_count", IncomesLogging.count(indices.count)),
+                ("tag_count", IncomesLogging.count(tagsToDelete.count)),
+                ("item_count", IncomesLogging.count(itemsToDelete.count))
+            )
         )
     }
 
@@ -39,6 +36,7 @@ final class MainNavigationYearDeletionModel {
         selectedYearTag: Tag?,
         tagsToDelete: [Tag],
         itemsToDelete: [Item],
+        logger: MHLogger,
         onDeletedSelectedYear: () -> Void
     ) {
         if let selectedYearTag,
@@ -49,12 +47,12 @@ final class MainNavigationYearDeletionModel {
             onDeletedSelectedYear()
         }
         logger.debug(
-            "year deletion completed",
-            metadata: [
-                "selected_year_tag": selectedYearTag?.displayName ?? "nil",
-                "tags": tagNames(tagsToDelete),
-                "items": "\(itemsToDelete.count)"
-            ]
+            "year_deletion.completed",
+            metadata: IncomesLogging.metadata(
+                ("selected_year_present", IncomesLogging.bool(selectedYearTag != nil)),
+                ("tag_count", IncomesLogging.count(tagsToDelete.count)),
+                ("item_count", IncomesLogging.count(itemsToDelete.count))
+            )
         )
         clear()
     }
@@ -63,13 +61,5 @@ final class MainNavigationYearDeletionModel {
         isDialogPresented = false
         itemsToDelete = []
         tagsToDelete = []
-    }
-}
-
-private extension MainNavigationYearDeletionModel {
-    func tagNames(
-        _ tags: [Tag]
-    ) -> String {
-        tags.map(\.displayName).joined(separator: ", ")
     }
 }

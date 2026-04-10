@@ -5,6 +5,7 @@
 //  Created by Hiromu Nakano on 10/7/24.
 //
 
+import MHPlatform
 import SwiftData
 import SwiftUI
 import TipKit
@@ -14,6 +15,8 @@ struct HomeYearSection: View {
     private var context
     @Environment(NotificationService.self)
     private var notificationService
+    @Environment(MHLoggingBootstrap.self)
+    private var logging
     @Environment(IncomesTipController.self)
     private var tipController
 
@@ -70,7 +73,8 @@ struct HomeYearSection: View {
                         try await ItemDeleteCoordinator.delete(
                             context: context,
                             items: willDeleteItems,
-                            notificationService: notificationService
+                            notificationService: notificationService,
+                            logger: itemMutationLogger
                         )
                     } catch {
                         assertionFailure(error.localizedDescription)
@@ -147,6 +151,16 @@ private extension HomeYearSection {
     func monthURL(for yearMonthTag: Tag) -> URL? {
         IncomesContextMenuLinkBuilder.preferredURL(
             for: monthRoute(for: yearMonthTag)
+        )
+    }
+}
+
+private extension HomeYearSection {
+    var itemMutationLogger: MHLogger {
+        IncomesLogging.logger(
+            logging: logging,
+            category: IncomesLogging.Category.itemMutation,
+            source: #fileID
         )
     }
 }
