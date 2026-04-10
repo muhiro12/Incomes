@@ -16,6 +16,7 @@
 		AD7162362E70BD9F00C4CFCE /* IncomesLibrary in Frameworks */ = {isa = PBXBuildFile; productRef = AD7162352E70BD9F00C4CFCE /* IncomesLibrary */; };
 		AD7F5C202F5B3186008D91F3 /* MHPlatform in Frameworks */ = {isa = PBXBuildFile; productRef = AD7F5C212F5B3186008D91F3 /* MHPlatform */; };
 		AD7F5C232F5B3186008D91F3 /* MHPreferences in Frameworks */ = {isa = PBXBuildFile; productRef = AD7F5C222F5B3186008D91F3 /* MHPreferences */; };
+		ADB890132F89BF4C00C59D93 /* MHDesign in Frameworks */ = {isa = PBXBuildFile; productRef = ADB890122F89BF4C00C59D93 /* MHDesign */; };
 		B00000012F7A000100000010 /* SwiftUtilities in Frameworks */ = {isa = PBXBuildFile; productRef = B00000012F7A00010000000F /* SwiftUtilities */; };
 		B00000012F7A000100000012 /* SwiftUtilities in Frameworks */ = {isa = PBXBuildFile; productRef = B00000012F7A000100000011 /* SwiftUtilities */; };
 		B00000012F7A000100000014 /* SwiftUtilities in Frameworks */ = {isa = PBXBuildFile; productRef = B00000012F7A000100000013 /* SwiftUtilities */; };
@@ -125,6 +126,7 @@
 				AD7F5C202F5B3186008D91F3 /* MHPlatform in Frameworks */,
 				AD6C5A752E515E3000E1FBA0 /* IncomesLibrary in Frameworks */,
 				B00000012F7A000100000010 /* SwiftUtilities in Frameworks */,
+				ADB890132F89BF4C00C59D93 /* MHDesign in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -239,6 +241,7 @@
 				AD6C5A742E515E3000E1FBA0 /* IncomesLibrary */,
 				AD7F5C212F5B3186008D91F3 /* MHPlatform */,
 				B00000012F7A00010000000F /* SwiftUtilities */,
+				ADB890122F89BF4C00C59D93 /* MHDesign */,
 			);
 			productName = Incomes;
 			productReference = ADCF36A624A1D0F40011D6F5 /* Incomes.app */;
@@ -285,6 +288,7 @@
 				AD7F5C0C2F5B3186008D91F3 /* XCRemoteSwiftPackageReference "MHPlatform" */,
 				B00000012F7A000100000017 /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */,
 				B00000012F7A00010000000E /* XCRemoteSwiftPackageReference "SwiftUtilities" */,
+				ADB890112F89BF4C00C59D93 /* XCRemoteSwiftPackageReference "MHUI" */,
 			);
 			productRefGroup = ADCF36A724A1D0F40011D6F5 /* Products */;
 			projectDirPath = "";
@@ -793,7 +797,15 @@
 /* Begin XCRemoteSwiftPackageReference section */
 		AD7F5C0C2F5B3186008D91F3 /* XCRemoteSwiftPackageReference "MHPlatform" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/muhiro12/MHPlatform.git";
+			repositoryURL = "https://github.com/muhiro12/MHPlatform";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+		ADB890112F89BF4C00C59D93 /* XCRemoteSwiftPackageReference "MHUI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/muhiro12/MHUI";
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 1.0.0;
@@ -839,6 +851,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = AD7F5C0C2F5B3186008D91F3 /* XCRemoteSwiftPackageReference "MHPlatform" */;
 			productName = MHPreferences;
+		};
+		ADB890122F89BF4C00C59D93 /* MHDesign */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = ADB890112F89BF4C00C59D93 /* XCRemoteSwiftPackageReference "MHUI" */;
+			productName = MHDesign;
 		};
 		B00000012F7A00010000000F /* SwiftUtilities */ = {
 			isa = XCSwiftPackageProductDependency;
