@@ -8,6 +8,10 @@
 import SwiftUI
 
 struct RepeatCountPicker {
+    private enum Constants {
+        static let wheelSize: CGFloat = 80
+    }
+
     @Binding private var selection: Int
 
     init(selection: Binding<Int>) {
@@ -30,8 +34,8 @@ extension RepeatCountPicker: View {
             .pickerStyle(WheelPickerStyle())
             .labelsHidden()
             .frame(
-                width: .component(.s),
-                height: .component(.s)
+                width: Constants.wheelSize,
+                height: Constants.wheelSize
             )
             .clipped()
         }

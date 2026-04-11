@@ -5,21 +5,28 @@
 //  Created by Codex on 2025/09/08.
 //
 
+import MHDesign
 import SwiftUI
 
 struct RepeatMonthPicker: View {
     @Binding private var selectedMonthSelections: Set<RepeatMonthSelection>
     private let baseDate: Date
     private let calendar: Calendar
+    @Environment(\.mhDesignMetrics)
+    private var designMetrics
 
-    private let columns = [
-        GridItem(.flexible(), spacing: 8), // swiftlint:disable:this no_magic_numbers
-        GridItem(.flexible(), spacing: 8), // swiftlint:disable:this no_magic_numbers
-        GridItem(.flexible(), spacing: 8), // swiftlint:disable:this no_magic_numbers
-        GridItem(.flexible(), spacing: 8) // swiftlint:disable:this no_magic_numbers
-    ]
+    var body: some View {
+        VStack(alignment: .leading, spacing: designMetrics.spacing.control) {
+            ForEach(years, id: \.self) { year in
+                yearSection(for: year)
+            }
+            Text(String(localized: "Base month is always included."))
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+        }
+    }
 
-    init( // swiftlint:disable:this type_contents_order
+    init(
         selectedMonthSelections: Binding<Set<RepeatMonthSelection>>,
         baseDate: Date,
         calendar: Calendar = .current
@@ -28,48 +35,85 @@ struct RepeatMonthPicker: View {
         self.baseDate = baseDate
         self.calendar = calendar
     }
+}
 
-    var body: some View {
-        let years = RepeatMonthSelectionRules.allowedYears(
+private extension RepeatMonthPicker {
+    private enum Constants {
+        static let borderLineWidth: CGFloat = 1
+        static let selectedBackgroundOpacity = 0.2
+    }
+
+    var years: [Int] {
+        RepeatMonthSelectionRules.allowedYears(
             baseDate: baseDate,
             calendar: calendar
         )
-        VStack(alignment: .leading, spacing: 16) { // swiftlint:disable:this closure_body_length no_magic_numbers
-            ForEach(years, id: \.self) { year in
-                VStack(alignment: .leading, spacing: 8) { // swiftlint:disable:this no_magic_numbers
-                    Text(verbatim: "\(year)")
-                        .font(.subheadline.weight(.semibold))
-                        .foregroundStyle(.secondary)
-                    LazyVGrid(columns: columns, spacing: 8) { // swiftlint:disable:this no_magic_numbers
-                        ForEach(1...12, id: \.self) { month in // swiftlint:disable:this no_magic_numbers
-                            let selection = RepeatMonthSelection(year: year, month: month)
-                            Button {
-                                toggleSelection(selection)
-                            } label: {
-                                Text(verbatim: monthLabel(for: selection))
-                                    .font(.callout)
-                                    .frame(maxWidth: .infinity)
-                                    .padding(.vertical, 8) // swiftlint:disable:this no_magic_numbers
-                            }
-                            .buttonStyle(.plain)
-                            .background(backgroundColor(for: selection))
-                            .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous)) // swiftlint:disable:this line_length no_magic_numbers
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 8, style: .continuous) // swiftlint:disable:this line_length no_magic_numbers
-                                    .stroke(borderColor(for: selection), lineWidth: 1)
-                            )
-                            .disabled(selection == baseSelection)
-                        }
-                    }
-                }
-            }
-            Text(String(localized: "Base month is always included."))
-                .font(.footnote)
+    }
+
+    var columns: [GridItem] {
+        [
+            GridItem(.flexible(), spacing: designMetrics.spacing.inline),
+            GridItem(.flexible(), spacing: designMetrics.spacing.inline),
+            GridItem(.flexible(), spacing: designMetrics.spacing.inline),
+            GridItem(.flexible(), spacing: designMetrics.spacing.inline)
+        ]
+    }
+
+    var baseSelection: RepeatMonthSelection {
+        RepeatMonthSelectionRules.baseSelection(
+            baseDate: baseDate,
+            calendar: calendar
+        )
+    }
+
+    func yearSection(for year: Int) -> some View {
+        VStack(alignment: .leading, spacing: designMetrics.spacing.inline) {
+            Text(verbatim: "\(year)")
+                .font(.subheadline.weight(.semibold))
                 .foregroundStyle(.secondary)
+            monthGrid(for: year)
         }
     }
 
-    func toggleSelection(_ selection: RepeatMonthSelection) { // swiftlint:disable:this type_contents_order
+    func monthGrid(for year: Int) -> some View {
+        LazyVGrid(columns: columns, spacing: designMetrics.spacing.inline) {
+            ForEach(1...12, id: \.self) { month in // swiftlint:disable:this no_magic_numbers
+                monthButton(for: .init(year: year, month: month))
+            }
+        }
+    }
+
+    func monthButton(for selection: RepeatMonthSelection) -> some View {
+        Button {
+            toggleSelection(selection)
+        } label: {
+            Text(verbatim: monthLabel(for: selection))
+                .font(.callout)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, designMetrics.spacing.inline)
+        }
+        .buttonStyle(.plain)
+        .background(backgroundColor(for: selection))
+        .clipShape(
+            RoundedRectangle(
+                cornerRadius: designMetrics.radius.control,
+                style: .continuous
+            )
+        )
+        .overlay(
+            RoundedRectangle(
+                cornerRadius: designMetrics.radius.control,
+                style: .continuous
+            )
+            .stroke(
+                borderColor(for: selection),
+                lineWidth: Constants.borderLineWidth
+            )
+        )
+        .disabled(selection == baseSelection)
+    }
+
+    func toggleSelection(_ selection: RepeatMonthSelection) {
         guard selection != baseSelection else {
             return
         }
@@ -80,25 +124,25 @@ struct RepeatMonthPicker: View {
         }
     }
 
-    func backgroundColor(for selection: RepeatMonthSelection) -> Color { // swiftlint:disable:this type_contents_order
+    func backgroundColor(for selection: RepeatMonthSelection) -> Color {
         if isSelected(selection) {
-            return Color.accentColor.opacity(0.2) // swiftlint:disable:this no_magic_numbers
+            return Color.accentColor.opacity(Constants.selectedBackgroundOpacity)
         }
         return Color(.secondarySystemBackground)
     }
 
-    func borderColor(for selection: RepeatMonthSelection) -> Color { // swiftlint:disable:this type_contents_order
+    func borderColor(for selection: RepeatMonthSelection) -> Color {
         if isSelected(selection) {
             return Color.accentColor
         }
         return Color(.separator)
     }
 
-    func isSelected(_ selection: RepeatMonthSelection) -> Bool { // swiftlint:disable:this type_contents_order
+    func isSelected(_ selection: RepeatMonthSelection) -> Bool {
         selectedMonthSelections.contains(selection)
     }
 
-    func monthLabel(for selection: RepeatMonthSelection) -> String { // swiftlint:disable:this type_contents_order
+    func monthLabel(for selection: RepeatMonthSelection) -> String {
         guard let date = date(for: selection) else {
             return "\(selection.month)"
         }
@@ -107,22 +151,15 @@ struct RepeatMonthPicker: View {
         return "\(month)/\(day)"
     }
 
-    func date(for selection: RepeatMonthSelection) -> Date? { // swiftlint:disable:this type_contents_order
+    func date(for selection: RepeatMonthSelection) -> Date? {
         let monthOffset = monthOffset(for: selection)
         return calendar.date(byAdding: .month, value: monthOffset, to: baseDate)
     }
 
-    func monthOffset(for selection: RepeatMonthSelection) -> Int { // swiftlint:disable:this type_contents_order
+    func monthOffset(for selection: RepeatMonthSelection) -> Int {
         RepeatMonthSelectionRules.monthOffset(
             from: baseDate,
             to: selection,
-            calendar: calendar
-        )
-    }
-
-    var baseSelection: RepeatMonthSelection {
-        RepeatMonthSelectionRules.baseSelection(
-            baseDate: baseDate,
             calendar: calendar
         )
     }

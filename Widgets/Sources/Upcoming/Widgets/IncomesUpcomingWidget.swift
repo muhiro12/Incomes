@@ -1,56 +1,35 @@
+import MHDesign
 import SwiftUI
 import WidgetKit
 
 struct IncomesUpcomingWidget {
+    // swiftlint:disable:next type_contents_order
     private let kind: String = "com.muhiro12.Incomes.Widgets.Upcoming"
-}
 
-extension IncomesUpcomingWidget: Widget {
-    var body: some WidgetConfiguration {
-        AppIntentConfiguration(kind: kind, intent: UpcomingConfigurationAppIntent.self, provider: UpcomingProvider()) { entry in // swiftlint:disable:this closure_body_length line_length
-            ViewThatFits(in: .horizontal) { // swiftlint:disable:this closure_body_length
-                // Medium (roomy) layout: horizontal split
-                HStack(alignment: .center, spacing: .space(.m)) {
-                    VStack(alignment: .leading, spacing: .space(.xs)) {
-                        Text(entry.titleText)
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
-                            .singleLine()
-                        HStack(spacing: .space(.s)) {
-                            Text(entry.subtitleText)
-                                .font(.caption2)
-                                .foregroundStyle(.secondary)
-                                .singleLine()
-                            Text("•")
-                                .foregroundStyle(.tertiary)
-                            Text(entry.detailText)
-                                .font(.footnote)
-                                .singleLine()
-                        }
-                    }
-                    Spacer(minLength: 0)
-                    HStack(spacing: .space(.s)) {
-                        Image(systemName: entry.isPositive ? "chevron.up" : "chevron.down")
-                            .font(.subheadline.weight(.semibold))
-                            .symbolRenderingMode(.hierarchical)
-                            .foregroundStyle(entry.isPositive ? .green : .red)
-                        Text(entry.amountText)
-                            .font(.title2.weight(.semibold))
-                            .monospacedDigit()
-                            .lineLimit(1)
-                            .minimumScaleFactor(0.8) // swiftlint:disable:this no_magic_numbers
-                    }
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-                .padding(.space(.m))
+    private struct ContentView: View {
+        @Environment(\.mhDesignMetrics)
+        private var designMetrics
 
-                // Small (compact) layout: vertical stack
-                VStack(alignment: .leading, spacing: .space(.s)) {
+        private let contentSpacing: CGFloat = 4
+        private let compactMinScaleFactor = 0.85
+        let entry: UpcomingEntry
+        private let mediumMinScaleFactor = 0.8
+
+        var body: some View {
+            ViewThatFits(in: .horizontal) {
+                mediumLayout
+                compactLayout
+            }
+        }
+
+        @ViewBuilder private var mediumLayout: some View {
+            HStack(alignment: .center, spacing: designMetrics.spacing.control) {
+                VStack(alignment: .leading, spacing: contentSpacing) {
                     Text(entry.titleText)
-                        .font(.footnote)
+                        .font(.subheadline)
                         .foregroundStyle(.secondary)
                         .singleLine()
-                    HStack(spacing: .space(.s)) {
+                    HStack(spacing: designMetrics.spacing.inline) {
                         Text(entry.subtitleText)
                             .font(.caption2)
                             .foregroundStyle(.secondary)
@@ -61,23 +40,72 @@ extension IncomesUpcomingWidget: Widget {
                             .font(.footnote)
                             .singleLine()
                     }
-                    HStack(spacing: .space(.s)) {
-                        Image(systemName: entry.isPositive ? "chevron.up" : "chevron.down")
-                            .font(.caption.weight(.semibold))
-                            .symbolRenderingMode(.hierarchical)
-                            .foregroundStyle(entry.isPositive ? .green : .red)
-                        Text(entry.amountText)
-                            .font(.headline.weight(.semibold))
-                            .monospacedDigit()
-                            .lineLimit(1)
-                            .minimumScaleFactor(0.85) // swiftlint:disable:this no_magic_numbers
-                    }
                 }
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-                .padding(.space(.s))
+                Spacer(minLength: 0)
+                HStack(spacing: designMetrics.spacing.inline) {
+                    amountIcon
+                        .font(.subheadline.weight(.semibold))
+                    Text(entry.amountText)
+                        .font(.title2.weight(.semibold))
+                        .monospacedDigit()
+                        .lineLimit(1)
+                        .minimumScaleFactor(mediumMinScaleFactor)
+                }
             }
-            .containerBackground(.fill.tertiary, for: .widget)
-            .widgetURL(entry.deepLinkURL)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+            .padding(designMetrics.spacing.control)
+        }
+
+        @ViewBuilder private var compactLayout: some View {
+            VStack(alignment: .leading, spacing: designMetrics.spacing.inline) {
+                Text(entry.titleText)
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+                    .singleLine()
+                HStack(spacing: designMetrics.spacing.inline) {
+                    Text(entry.subtitleText)
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                        .singleLine()
+                    Text("•")
+                        .foregroundStyle(.tertiary)
+                    Text(entry.detailText)
+                        .font(.footnote)
+                        .singleLine()
+                }
+                HStack(spacing: designMetrics.spacing.inline) {
+                    amountIcon
+                        .font(.caption.weight(.semibold))
+                    Text(entry.amountText)
+                        .font(.headline.weight(.semibold))
+                        .monospacedDigit()
+                        .lineLimit(1)
+                        .minimumScaleFactor(compactMinScaleFactor)
+                }
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+            .padding(designMetrics.spacing.inline)
+        }
+
+        private var amountIcon: some View {
+            Image(systemName: entry.isPositive ? "chevron.up" : "chevron.down")
+                .symbolRenderingMode(.hierarchical)
+                .foregroundStyle(entry.isPositive ? .green : .red)
+                .accessibilityHidden(true)
+        }
+    }
+}
+
+extension IncomesUpcomingWidget: Widget {
+    var body: some WidgetConfiguration {
+        AppIntentConfiguration(
+            kind: kind,
+            intent: UpcomingConfigurationAppIntent.self,
+            provider: UpcomingProvider()
+        ) { entry in
+            ContentView(entry: entry)
+                .containerBackground(.fill.tertiary, for: .widget)
+                .widgetURL(entry.deepLinkURL)
         }
         .configurationDisplayName("Upcoming Item")
         .description("Shows the next or previous item")

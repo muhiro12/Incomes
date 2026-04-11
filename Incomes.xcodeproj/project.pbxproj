@@ -17,6 +17,7 @@
 		AD7F5C202F5B3186008D91F3 /* MHPlatform in Frameworks */ = {isa = PBXBuildFile; productRef = AD7F5C212F5B3186008D91F3 /* MHPlatform */; };
 		AD7F5C232F5B3186008D91F3 /* MHPreferences in Frameworks */ = {isa = PBXBuildFile; productRef = AD7F5C222F5B3186008D91F3 /* MHPreferences */; };
 		ADB890132F89BF4C00C59D93 /* MHDesign in Frameworks */ = {isa = PBXBuildFile; productRef = ADB890122F89BF4C00C59D93 /* MHDesign */; };
+		B10000012F8A000100000002 /* MHDesign in Frameworks */ = {isa = PBXBuildFile; productRef = B10000012F8A000100000001 /* MHDesign */; };
 		B00000012F7A000100000010 /* SwiftUtilities in Frameworks */ = {isa = PBXBuildFile; productRef = B00000012F7A00010000000F /* SwiftUtilities */; };
 		B00000012F7A000100000012 /* SwiftUtilities in Frameworks */ = {isa = PBXBuildFile; productRef = B00000012F7A000100000011 /* SwiftUtilities */; };
 		B00000012F7A000100000014 /* SwiftUtilities in Frameworks */ = {isa = PBXBuildFile; productRef = B00000012F7A000100000013 /* SwiftUtilities */; };
@@ -114,6 +115,7 @@
 			files = (
 				AD71621E2E70BC5C00C4CFCE /* SwiftUI.framework in Frameworks */,
 				AD7162362E70BD9F00C4CFCE /* IncomesLibrary in Frameworks */,
+				B10000012F8A000100000002 /* MHDesign in Frameworks */,
 				B00000012F7A000100000014 /* SwiftUtilities in Frameworks */,
 				AD71621C2E70BC5C00C4CFCE /* WidgetKit.framework in Frameworks */,
 			);
@@ -211,6 +213,7 @@
 			name = Widgets;
 			packageProductDependencies = (
 				AD7162352E70BD9F00C4CFCE /* IncomesLibrary */,
+				B10000012F8A000100000001 /* MHDesign */,
 				B00000012F7A000100000013 /* SwiftUtilities */,
 			);
 			productName = WidgetsExtension;
@@ -797,7 +800,7 @@
 /* Begin XCRemoteSwiftPackageReference section */
 		AD7F5C0C2F5B3186008D91F3 /* XCRemoteSwiftPackageReference "MHPlatform" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/muhiro12/MHPlatform";
+			repositoryURL = "https://github.com/muhiro12/MHPlatform.git";
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 1.0.0;
@@ -853,6 +856,11 @@
 			productName = MHPreferences;
 		};
 		ADB890122F89BF4C00C59D93 /* MHDesign */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = ADB890112F89BF4C00C59D93 /* XCRemoteSwiftPackageReference "MHUI" */;
+			productName = MHDesign;
+		};
+		B10000012F8A000100000001 /* MHDesign */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = ADB890112F89BF4C00C59D93 /* XCRemoteSwiftPackageReference "MHUI" */;
 			productName = MHDesign;

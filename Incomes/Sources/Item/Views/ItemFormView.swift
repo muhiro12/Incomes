@@ -6,6 +6,7 @@
 //  Created by Hiromu Nakano on 2020/04/10.
 //
 
+import MHDesign
 import MHPlatform
 import SwiftData
 import SwiftUI
@@ -29,6 +30,8 @@ struct ItemFormView: View {
     private var item: Item?
     @Environment(\.modelContext)
     private var context
+    @Environment(\.mhDesignMetrics)
+    private var designMetrics
 
     @AppStorage(\.isDebugOn)
     private var isDebugOn
@@ -70,7 +73,7 @@ struct ItemFormView: View {
             )
         }
         .scrollDismissesKeyboard(.interactively)
-        .contentMargins(.bottom, .space(.s), for: .scrollContent)
+        .contentMargins(.bottom, designMetrics.spacing.inline, for: .scrollContent)
         .toolbarRole(.editor)
         .navigationTitle(model.content.isNotEmpty ? Text(model.content) : Text("Create"))
         .toolbar {
@@ -121,7 +124,7 @@ struct ItemFormView: View {
         .gesture(
             DragGesture()
                 .onChanged { value in
-                    guard abs(value.translation.height) > .space(.s) else {
+                    guard abs(value.translation.height) > designMetrics.spacing.inline else {
                         return
                     }
                     focusedField = nil

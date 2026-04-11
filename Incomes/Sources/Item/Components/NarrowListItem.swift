@@ -9,6 +9,11 @@ import SwiftData
 import SwiftUI
 
 struct NarrowListItem: View {
+    private enum Constants {
+        static let balanceColumnWidth: CGFloat = 80
+        static let dateColumnWidth: CGFloat = 64
+    }
+
     @Environment(Item.self)
     private var item
 
@@ -18,7 +23,7 @@ struct NarrowListItem: View {
                 .font(.subheadline)
                 .singleLine()
                 .truncationMode(.head)
-                .frame(width: .component(.xs), alignment: .leading)
+                .frame(width: Constants.dateColumnWidth, alignment: .leading)
             Divider()
             Spacer()
             VStack(alignment: .trailing, spacing: .zero) {
@@ -32,7 +37,7 @@ struct NarrowListItem: View {
             Divider()
             Text(item.balance.asCurrency)
                 .singleLine()
-                .frame(width: .component(.s), alignment: .trailing)
+                .frame(width: Constants.balanceColumnWidth, alignment: .trailing)
                 .foregroundColor(item.balance.isMinus ? .red : .primary)
         }
     }

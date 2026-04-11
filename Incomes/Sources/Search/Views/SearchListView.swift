@@ -5,6 +5,7 @@
 //  Created by Hiromu Nakano on 2025/05/07.
 //
 
+import MHDesign
 import SwiftData
 import SwiftUI
 import TipKit
@@ -12,6 +13,8 @@ import TipKit
 struct SearchListView: View {
     @Environment(IncomesTipController.self)
     private var tipController
+    @Environment(\.mhDesignMetrics)
+    private var designMetrics
 
     @Query(.items(.all))
     private var items: [Item]
@@ -172,7 +175,7 @@ private extension SearchListView {
     }
 
     func buildCurrencyRows() -> some View {
-        HStack(spacing: 40) { // swiftlint:disable:this no_magic_numbers
+        HStack(spacing: designMetrics.spacing.screen) {
             TextField("Min", text: $minValue)
                 .keyboardType(.numbersAndPunctuation)
             Text("~")

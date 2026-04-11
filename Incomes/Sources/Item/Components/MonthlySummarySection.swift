@@ -6,12 +6,19 @@
 //
 
 import FoundationModels
+import MHDesign
 import MHPlatform
 import SwiftData
 import SwiftUI
 
 @available(iOS 26.0, *)
 struct MonthlySummarySection: View {
+    private enum Constants {
+        static let popoverIdealWidth: CGFloat = 320
+        static let popoverMaximumWidth: CGFloat = 360
+        static let popoverMinimumWidth: CGFloat = 280
+    }
+
     private struct SummarySourceSnapshot: Equatable {
         let id: String
         let date: Date
@@ -35,6 +42,8 @@ struct MonthlySummarySection: View {
 
     @AppStorage(\.currencyCode, default: "")
     private var currencyCode
+    @Environment(\.mhDesignMetrics)
+    private var designMetrics
 
     @AppStorage(\.isDebugOn)
     private var isDebugOn
@@ -152,59 +161,72 @@ private extension MonthlySummarySection {
     }
 
     @ViewBuilder private var summaryPopover: some View {
-        VStack(alignment: .leading, spacing: .space(.s)) { // swiftlint:disable:this closure_body_length
+        VStack(alignment: .leading, spacing: designMetrics.spacing.inline) {
             Text("Monthly Summary")
                 .font(.headline)
 
-            if let generatedSummary {
-                Text(generatedSummary)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .textSelection(.enabled)
-            } else if isGenerating {
-                HStack(spacing: .space(.s)) {
-                    ProgressView()
-                    Spacer()
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
-            } else {
-                Button("Generate Summary") {
-                    Task {
-                        await generateSummary(
-                            presentsErrors: true,
-                            forceRegeneration: true
-                        )
-                    }
-                }
-                .buttonStyle(.bordered)
-            }
+            summaryContent
 
             Text("Generated on device. Your financial data stays on this device.")
                 .font(.footnote)
                 .foregroundStyle(.secondary)
 
             if generatedSummary != nil {
-                Button("Regenerate Summary") {
-                    Task {
-                        await generateSummary(
-                            presentsErrors: true,
-                            forceRegeneration: true
-                        )
-                    }
-                }
-                .buttonStyle(.bordered)
-                .disabled(isGenerating)
+                regenerateSummaryButton
             }
         }
-        .frame(minWidth: 280, idealWidth: 320, maxWidth: 360, alignment: .leading) // swiftlint:disable:this line_length no_magic_numbers
+        .frame(
+            minWidth: Constants.popoverMinimumWidth,
+            idealWidth: Constants.popoverIdealWidth,
+            maxWidth: Constants.popoverMaximumWidth,
+            alignment: .leading
+        )
         .padding()
+    }
+
+    @ViewBuilder private var summaryContent: some View {
+        if let generatedSummary {
+            Text(generatedSummary)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .textSelection(.enabled)
+        } else if isGenerating {
+            HStack(spacing: designMetrics.spacing.inline) {
+                ProgressView()
+                Spacer()
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+        } else {
+            generateSummaryButton(title: "Generate Summary")
+        }
+    }
+
+    private var regenerateSummaryButton: some View {
+        generateSummaryButton(title: "Regenerate Summary")
+            .disabled(isGenerating)
     }
 
     private var summarySourceSnapshots: [SummarySourceSnapshot] {
         currentItems.map(snapshot(for:)) + previousItems.map(snapshot(for:))
     }
 
+    static func previousMonthDate(from date: Date) -> Date {
+        Calendar.utc.date(byAdding: .month, value: -1, to: date) ?? date
+    }
+
+    private func generateSummaryButton(title: LocalizedStringKey) -> some View {
+        Button(title) {
+            Task {
+                await generateSummary(
+                    presentsErrors: true,
+                    forceRegeneration: true
+                )
+            }
+        }
+        .buttonStyle(.bordered)
+    }
+
     @MainActor
-    func generateSummary( // swiftlint:disable:this type_contents_order
+    func generateSummary(
         presentsErrors: Bool,
         forceRegeneration: Bool
     ) async {
@@ -250,7 +272,7 @@ private extension MonthlySummarySection {
         }
     }
 
-    private func snapshot(for item: Item) -> SummarySourceSnapshot { // swiftlint:disable:this type_contents_order
+    private func snapshot(for item: Item) -> SummarySourceSnapshot {
         .init(
             id: String(describing: item.persistentModelID),
             date: item.utcDate,
@@ -263,20 +285,16 @@ private extension MonthlySummarySection {
         )
     }
 
-    func clearGeneratedSummary() { // swiftlint:disable:this type_contents_order
+    func clearGeneratedSummary() {
         generatedSummary = nil
         errorMessage = nil
     }
 
-    func resolvedErrorMessage(from error: Error) -> String { // swiftlint:disable:this type_contents_order
+    func resolvedErrorMessage(from error: Error) -> String {
         if let localizedError = error as? LocalizedError,
            let description = localizedError.errorDescription {
             return description
         }
         return error.localizedDescription
-    }
-
-    static func previousMonthDate(from date: Date) -> Date {
-        Calendar.utc.date(byAdding: .month, value: -1, to: date) ?? date
     }
 }

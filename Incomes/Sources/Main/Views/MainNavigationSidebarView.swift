@@ -34,7 +34,6 @@ struct MainNavigationSidebarView: View {
                 List(selection: yearTagSelection) {
                     yearTagRows
                     YearlyDuplicationPromoSection(
-                        context: context,
                         yearTags: yearTags
                     ) {
                         onNavigate(.yearlyDuplication)

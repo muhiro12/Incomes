@@ -2,6 +2,10 @@ import SwiftData
 import SwiftUI
 
 struct DuplicateTagView: View {
+    private enum Constants {
+        static let columnWidth: CGFloat = 320
+    }
+
     @Query private var tags: [Tag]
 
     @State private var isMergeDialogPresented = false
@@ -109,7 +113,7 @@ private extension DuplicateTagView {
                 }
             }
         }
-        .frame(width: .component(.xl))
+        .frame(width: Constants.columnWidth)
     }
 }
 

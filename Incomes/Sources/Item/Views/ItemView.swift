@@ -1,3 +1,4 @@
+import MHDesign
 import MHPlatform
 import SwiftData
 import SwiftUI
@@ -10,6 +11,8 @@ struct ItemView {
 
     @AppStorage(\.isDebugOn)
     private var isDebugOn
+    @Environment(\.mhDesignMetrics)
+    private var designMetrics
 }
 
 extension ItemView: View {
@@ -25,7 +28,7 @@ extension ItemView: View {
                 DeleteItemButton()
             }
         }
-        .contentMargins(.bottom, .space(.s), for: .scrollContent)
+        .contentMargins(.bottom, designMetrics.spacing.inline, for: .scrollContent)
         .toolbarRole(.editor)
         .navigationTitle(item.content)
         .toolbar {

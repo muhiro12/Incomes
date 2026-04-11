@@ -6,11 +6,14 @@
 //
 
 import Charts
+import MHDesign
 import SwiftData
 import SwiftUI
 
 struct IncomeAndOutgoChartSection: View {
     @Query private var items: [Item]
+    @Environment(\.mhDesignMetrics)
+    private var designMetrics
 
     private let allowsExpansion: Bool
 
@@ -22,13 +25,13 @@ struct IncomeAndOutgoChartSection: View {
                 allowsExpansion: allowsExpansion
             ) {
                 chart()
-                    .frame(height: .component(.l))
-                    .padding()
+                    .frame(height: Constants.sectionHeight)
+                    .padding(designMetrics.spacing.control)
             } detail: {
                 chart()
                     .chartScrollableAxes(.horizontal)
                     .chartScrollPosition(initialX: Date.now)
-                    .padding()
+                    .padding(designMetrics.spacing.control)
             }
         } header: {
             Text("Income and Outgo")
@@ -46,15 +49,15 @@ struct IncomeAndOutgoChartSection: View {
 
 private extension IncomeAndOutgoChartSection {
     private enum Constants {
-        static let zeroRuleYValue: Double = .zero
-        static let zeroRuleOpacity = 0.25
-        static let zeroRuleLineWidth: CGFloat = 1
-        static let zeroRuleDashLength: CGFloat = 4
-        static let incomeBarOpacity = 0.6
-        static let outgoBarOpacity = 0.6
-        static let xAxisMonthStride = 3
         static let axisGridOpacity = 0.2
         static let axisTickOpacity = 0.4
+        static let barOpacity = 0.6
+        static let sectionHeight: CGFloat = 240
+        static let zeroRuleDashLength: CGFloat = 4
+        static let zeroRuleLineWidth: CGFloat = 1
+        static let zeroRuleOpacity = 0.25
+        static let zeroRuleYValue: Double = .zero
+        static let xAxisMonthStride = 3
     }
 
     func chart() -> some View {
@@ -76,7 +79,7 @@ private extension IncomeAndOutgoChartSection {
                         stacking: .unstacked
                     )
                     .foregroundStyle(.green)
-                    .opacity(Constants.incomeBarOpacity)
+                    .opacity(Constants.barOpacity)
                 }
                 if outgo(of: item).isNotZero {
                     BarMark(
@@ -85,7 +88,7 @@ private extension IncomeAndOutgoChartSection {
                         stacking: .unstacked
                     )
                     .foregroundStyle(.red)
-                    .opacity(Constants.outgoBarOpacity)
+                    .opacity(Constants.barOpacity)
                 }
             }
         }

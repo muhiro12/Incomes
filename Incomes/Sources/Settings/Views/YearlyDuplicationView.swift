@@ -6,20 +6,18 @@
 //  Created by Codex on 2025/09/08.
 //
 
+import MHDesign
 import MHPlatform
 import SwiftData
 import SwiftUI
 
 struct YearlyDuplicationView: View {
     private enum Constants {
-        static let proposalVerticalSpacing: CGFloat = 8
+        static let menuSpacing: CGFloat = 4
         static let proposalVerticalPadding: CGFloat = 4
-        static let targetYearRange = 10
         static let selectionBarSpacing: CGFloat = 6
-        static let selectionColumnsSpacing: CGFloat = 16
-        static let selectionBarHorizontalPadding: CGFloat = 16
-        static let selectionBarVerticalPadding: CGFloat = 10
-        static let menuVerticalSpacing: CGFloat = 4
+        static let selectionBarVerticalPadding: CGFloat = 12
+        static let targetYearRange = 10
     }
 
     @Environment(\.modelContext)
@@ -28,6 +26,8 @@ struct YearlyDuplicationView: View {
     private var notificationService
     @Environment(MHLoggingBootstrap.self)
     private var logging
+    @Environment(\.mhDesignMetrics)
+    private var designMetrics
 
     @Query(.tags(.typeIs(.year), order: .reverse))
     private var yearTags: [Tag]
@@ -61,7 +61,7 @@ struct YearlyDuplicationView: View {
                             in: plan
                         )
                         let isCreated = createdGroupIDs.contains(group.id)
-                        VStack(alignment: .leading, spacing: Constants.proposalVerticalSpacing) { // swiftlint:disable:this closure_body_length line_length
+                        VStack(alignment: .leading, spacing: designMetrics.spacing.inline) { // swiftlint:disable:this closure_body_length line_length
                             HStack {
                                 Text(group.content)
                                     .font(.headline)
@@ -166,7 +166,7 @@ struct YearlyDuplicationView: View {
         .onChange(of: yearTags) {
             alignYearSelections(preserveCurrentSelection: plan != nil || isLoadingPlan)
         }
-        .contentMargins(.bottom, .space(.s), for: .scrollContent)
+        .contentMargins(.bottom, designMetrics.spacing.inline, for: .scrollContent)
         .toolbarRole(.editor)
         .task(id: planReloadKey) {
             await loadPreviewPlan()
@@ -356,7 +356,7 @@ private extension YearlyDuplicationView {
             Text("Year Range")
                 .font(.caption)
                 .foregroundStyle(.secondary)
-            HStack(alignment: .top, spacing: Constants.selectionColumnsSpacing) {
+            HStack(alignment: .top, spacing: designMetrics.spacing.control) {
                 yearMenu(
                     title: "Source Year",
                     selection: $sourceYear,
@@ -369,7 +369,7 @@ private extension YearlyDuplicationView {
                 )
             }
         }
-        .padding(.horizontal, Constants.selectionBarHorizontalPadding)
+        .padding(.horizontal, designMetrics.spacing.control)
         .padding(.vertical, Constants.selectionBarVerticalPadding)
         .background(Color(.systemGroupedBackground))
         .overlay(alignment: .bottom) {
@@ -382,7 +382,7 @@ private extension YearlyDuplicationView {
         selection: Binding<Int>,
         years: [Int]
     ) -> some View {
-        VStack(alignment: .leading, spacing: Constants.menuVerticalSpacing) {
+        VStack(alignment: .leading, spacing: Constants.menuSpacing) {
             Text(title)
                 .font(.caption2)
                 .foregroundStyle(.secondary)

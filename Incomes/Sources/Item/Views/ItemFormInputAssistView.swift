@@ -5,6 +5,7 @@
 //  Created by Codex on 2025/09/08.
 //
 
+import MHDesign
 import MHPlatform
 import PhotosUI
 import SwiftUI
@@ -19,27 +20,14 @@ struct ItemFormInputAssistView: View {
         }
     }
 
-    private enum Constants {
-        static let placeholderTopPadding: CGFloat = 10
-        static let placeholderLeadingPadding: CGFloat = 8
-        static let textEditorMinimumHeight: CGFloat = 220
-        static let textEditorPadding: CGFloat = 8
-        static let cardCornerRadius: CGFloat = 12
-        static let cardBorderOpacity = 0.18
-        static let cardBorderLineWidth: CGFloat = 1
-
-        static let rowInsetTop: CGFloat = 8
-        static let rowInsetLeading: CGFloat = 16
-        static let rowInsetBottom: CGFloat = 12
-        static let rowInsetTrailing: CGFloat = 16
-    }
-
     @Environment(\.dismiss)
     private var dismiss
     @Environment(ItemFormModel.self)
     private var model
     @Environment(MHLoggingBootstrap.self)
     private var logging
+    @Environment(\.mhDesignMetrics)
+    private var designMetrics
 
     @State private var importRoute: ImportRoute?
     @State private var isApplyingInference = false
@@ -59,7 +47,7 @@ struct ItemFormInputAssistView: View {
             importSection()
         }
         .formStyle(.grouped)
-        .contentMargins(.bottom, .space(.s), for: .scrollContent)
+        .contentMargins(.bottom, designMetrics.spacing.inline, for: .scrollContent)
         .toolbarRole(.editor)
         .navigationTitle("Text Capture")
         .navigationBarTitleDisplayMode(.inline)
@@ -132,6 +120,15 @@ struct ItemFormInputAssistView: View {
 
 @available(iOS 26.0, *)
 private extension ItemFormInputAssistView {
+    private enum Constants {
+        static let cardBorderLineWidth: CGFloat = 1
+        static let cardBorderOpacity = 0.18
+        static let cardCornerRadius: CGFloat = 12
+        static let placeholderTopPadding: CGFloat = 12
+        static let rowInsetBottom: CGFloat = 12
+        static let textEditorMinimumHeight: CGFloat = 220
+    }
+
     func importSection() -> some View {
         Section {
             PhotosPicker(selection: $selectedItem, matching: .images) {
@@ -160,32 +157,38 @@ private extension ItemFormInputAssistView {
                     Text("Paste or capture text to extract details.")
                         .foregroundStyle(.secondary)
                         .padding(.top, Constants.placeholderTopPadding)
-                        .padding(.leading, Constants.placeholderLeadingPadding)
+                        .padding(.leading, designMetrics.spacing.inline)
                 }
 
                 TextEditor(text: recognizedText)
                     .scrollContentBackground(.hidden)
                     .frame(minHeight: Constants.textEditorMinimumHeight)
-                    .padding(Constants.textEditorPadding)
+                    .padding(designMetrics.spacing.inline)
                     .background(
-                        RoundedRectangle(cornerRadius: Constants.cardCornerRadius, style: .continuous)
-                            .fill(Color(uiColor: .secondarySystemBackground))
+                        RoundedRectangle(
+                            cornerRadius: Constants.cardCornerRadius,
+                            style: .continuous
+                        )
+                        .fill(Color(uiColor: .secondarySystemBackground))
                     )
                     .accessibilityLabel("Captured text")
             }
             .overlay(
-                RoundedRectangle(cornerRadius: Constants.cardCornerRadius, style: .continuous)
-                    .stroke(
-                        Color.secondary.opacity(Constants.cardBorderOpacity),
-                        lineWidth: Constants.cardBorderLineWidth
-                    )
+                RoundedRectangle(
+                    cornerRadius: Constants.cardCornerRadius,
+                    style: .continuous
+                )
+                .stroke(
+                    Color.secondary.opacity(Constants.cardBorderOpacity),
+                    lineWidth: Constants.cardBorderLineWidth
+                )
             )
             .listRowInsets(
                 .init(
-                    top: Constants.rowInsetTop,
-                    leading: Constants.rowInsetLeading,
+                    top: designMetrics.spacing.inline,
+                    leading: designMetrics.spacing.control,
                     bottom: Constants.rowInsetBottom,
-                    trailing: Constants.rowInsetTrailing
+                    trailing: designMetrics.spacing.control
                 )
             )
         } header: {

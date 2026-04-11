@@ -1,8 +1,176 @@
+import MHDesign
 import SwiftUI
 import WidgetKit
 
 struct IncomesMonthWidget {
+    // swiftlint:disable:next type_contents_order
     private let kind: String = "com.muhiro12.Incomes.Widgets.Month"
+
+    private struct ContentView: View {
+        @Environment(\.mhDesignMetrics)
+        private var designMetrics
+
+        private let compactAmountIconWidth: CGFloat = 14
+        private let compactMinScaleFactor = 0.7
+        private let compactVerticalSpacing: CGFloat = 4
+        let entry: MonthSummaryEntry
+        private let mediumMinScaleFactor = 0.8
+        private let monthInfoSpacing: CGFloat = 4
+
+        var body: some View {
+            ViewThatFits(in: .horizontal) {
+                mediumRoomyLayout
+                mediumCompactLayout
+                smallLayout
+            }
+        }
+
+        private var mediumRoomyLayout: some View {
+            HStack(alignment: .center, spacing: designMetrics.spacing.control) {
+                monthInfo(font: .subheadline)
+                Spacer(minLength: 0)
+                amountGrid(
+                    amountFont: .title2.weight(.semibold),
+                    iconFont: .subheadline.weight(.semibold),
+                    verticalSpacing: designMetrics.spacing.inline,
+                    minimumScaleFactor: mediumMinScaleFactor
+                )
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+            .padding(designMetrics.spacing.control)
+        }
+
+        private var mediumCompactLayout: some View {
+            HStack(alignment: .center, spacing: designMetrics.spacing.inline) {
+                monthInfo(font: .footnote)
+                Spacer(minLength: 0)
+                amountGrid(
+                    amountFont: .title3.weight(.semibold),
+                    iconFont: .caption.weight(.semibold),
+                    verticalSpacing: compactVerticalSpacing,
+                    minimumScaleFactor: compactMinScaleFactor
+                )
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+            .padding(designMetrics.spacing.control)
+        }
+
+        private var smallLayout: some View {
+            VStack(alignment: .leading, spacing: designMetrics.spacing.inline) {
+                monthInfo(font: .footnote)
+                smallAmountRow(
+                    systemName: "chevron.up",
+                    foregroundStyle: .green,
+                    text: entry.totalIncomeText
+                )
+                smallAmountRow(
+                    systemName: "chevron.down",
+                    foregroundStyle: .red,
+                    text: entry.totalOutgoText
+                )
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+            .padding(designMetrics.spacing.inline)
+        }
+
+        @ViewBuilder
+        private func monthInfo(font: Font) -> some View {
+            VStack(alignment: .leading, spacing: monthInfoSpacing) {
+                Text(IncomesMonthWidget.monthTitle(from: entry.date))
+                    .font(font)
+                    .foregroundStyle(.secondary)
+                    .singleLine()
+                Text("Income / Outgo")
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+                    .singleLine()
+            }
+        }
+
+        private func amountGrid(
+            amountFont: Font,
+            iconFont: Font,
+            verticalSpacing: CGFloat,
+            minimumScaleFactor: CGFloat
+        ) -> some View {
+            Grid(
+                alignment: .trailing,
+                horizontalSpacing: designMetrics.spacing.inline,
+                verticalSpacing: verticalSpacing
+            ) {
+                GridRow {
+                    amountIcon(
+                        systemName: "chevron.up",
+                        foregroundStyle: .green,
+                        font: iconFont
+                    )
+                    amountText(
+                        entry.totalIncomeText,
+                        font: amountFont,
+                        minimumScaleFactor: minimumScaleFactor
+                    )
+                }
+                GridRow {
+                    amountIcon(
+                        systemName: "chevron.down",
+                        foregroundStyle: .red,
+                        font: iconFont
+                    )
+                    amountText(
+                        entry.totalOutgoText,
+                        font: amountFont,
+                        minimumScaleFactor: minimumScaleFactor
+                    )
+                }
+            }
+        }
+
+        private func amountText(
+            _ text: String,
+            font: Font,
+            minimumScaleFactor: CGFloat
+        ) -> some View {
+            Text(text)
+                .font(font)
+                .monospacedDigit()
+                .lineLimit(1)
+                .minimumScaleFactor(minimumScaleFactor)
+        }
+
+        private func smallAmountRow(
+            systemName: String,
+            foregroundStyle: Color,
+            text: String
+        ) -> some View {
+            HStack(spacing: designMetrics.spacing.inline) {
+                amountIcon(
+                    systemName: systemName,
+                    foregroundStyle: foregroundStyle,
+                    font: .caption.weight(.semibold)
+                )
+                .frame(
+                    width: compactAmountIconWidth,
+                    alignment: .leading
+                )
+                Text(text)
+                    .font(.footnote.weight(.semibold))
+                    .monospacedDigit()
+                    .singleLine()
+            }
+        }
+
+        private func amountIcon(
+            systemName: String,
+            foregroundStyle: Color,
+            font: Font
+        ) -> some View {
+            Image(systemName: systemName)
+                .font(font)
+                .symbolRenderingMode(.hierarchical)
+                .foregroundStyle(foregroundStyle)
+                .accessibilityHidden(true)
+        }
+    }
 
     // MARK: - Helpers
     private static func monthTitle(from date: Date) -> String {
@@ -12,128 +180,14 @@ struct IncomesMonthWidget {
 
 extension IncomesMonthWidget: Widget {
     var body: some WidgetConfiguration {
-        AppIntentConfiguration(kind: kind, intent: ConfigurationAppIntent.self, provider: MonthSummaryProvider()) { entry in // swiftlint:disable:this closure_body_length line_length
-            ViewThatFits(in: .horizontal) { // swiftlint:disable:this closure_body_length
-                // Medium (roomy) layout: horizontal split
-                HStack(alignment: .center, spacing: .space(.m)) { // swiftlint:disable:this closure_body_length
-                    VStack(alignment: .leading, spacing: .space(.xs)) {
-                        Text(Self.monthTitle(from: entry.date))
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
-                            .singleLine()
-                        Text("Income / Outgo")
-                            .font(.caption2)
-                            .foregroundStyle(.secondary)
-                            .singleLine()
-                    }
-                    Spacer(minLength: 0)
-                    Grid(alignment: .trailing, horizontalSpacing: .space(.s), verticalSpacing: .space(.s)) {
-                        GridRow {
-                            Image(systemName: "chevron.up")
-                                .font(.subheadline.weight(.semibold))
-                                .symbolRenderingMode(.hierarchical)
-                                .foregroundStyle(.green)
-                            Text(entry.totalIncomeText)
-                                .font(.title2.weight(.semibold))
-                                .monospacedDigit()
-                                .lineLimit(1)
-                                .minimumScaleFactor(0.8) // swiftlint:disable:this no_magic_numbers
-                        }
-                        GridRow {
-                            Image(systemName: "chevron.down")
-                                .font(.subheadline.weight(.semibold))
-                                .symbolRenderingMode(.hierarchical)
-                                .foregroundStyle(.red)
-                            Text(entry.totalOutgoText)
-                                .font(.title2.weight(.semibold))
-                                .monospacedDigit()
-                                .lineLimit(1)
-                                .minimumScaleFactor(0.8) // swiftlint:disable:this no_magic_numbers
-                        }
-                    }
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-                .padding(.space(.m))
-
-                // Medium (compact) layout: horizontal split
-                HStack(alignment: .center, spacing: .space(.s)) { // swiftlint:disable:this closure_body_length
-                    VStack(alignment: .leading, spacing: .space(.xs)) {
-                        Text(Self.monthTitle(from: entry.date))
-                            .font(.footnote)
-                            .foregroundStyle(.secondary)
-                            .singleLine()
-                        Text("Income / Outgo")
-                            .font(.caption2)
-                            .foregroundStyle(.secondary)
-                            .singleLine()
-                    }
-                    Spacer(minLength: 0)
-                    Grid(alignment: .trailing, horizontalSpacing: .space(.s), verticalSpacing: .space(.xs)) {
-                        GridRow {
-                            Image(systemName: "chevron.up")
-                                .font(.caption.weight(.semibold))
-                                .symbolRenderingMode(.hierarchical)
-                                .foregroundStyle(.green)
-                            Text(entry.totalIncomeText)
-                                .font(.title3.weight(.semibold))
-                                .monospacedDigit()
-                                .lineLimit(1)
-                                .minimumScaleFactor(0.7) // swiftlint:disable:this no_magic_numbers
-                        }
-                        GridRow {
-                            Image(systemName: "chevron.down")
-                                .font(.caption.weight(.semibold))
-                                .symbolRenderingMode(.hierarchical)
-                                .foregroundStyle(.red)
-                            Text(entry.totalOutgoText)
-                                .font(.title3.weight(.semibold))
-                                .monospacedDigit()
-                                .lineLimit(1)
-                                .minimumScaleFactor(0.7) // swiftlint:disable:this no_magic_numbers
-                        }
-                    }
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-                .padding(.space(.m))
-
-                // Small (compact) layout: vertical stack
-                VStack(alignment: .leading, spacing: .space(.s)) {
-                    Text(Self.monthTitle(from: entry.date))
-                        .font(.footnote)
-                        .foregroundStyle(.secondary)
-                        .singleLine()
-                    Text("Income / Outgo")
-                        .font(.caption2)
-                        .foregroundStyle(.secondary)
-                        .singleLine()
-                    HStack(spacing: .space(.s)) {
-                        Image(systemName: "chevron.up")
-                            .font(.caption.weight(.semibold))
-                            .symbolRenderingMode(.hierarchical)
-                            .foregroundStyle(.green)
-                            .frame(width: 14, alignment: .leading) // swiftlint:disable:this no_magic_numbers
-                        Text(entry.totalIncomeText)
-                            .font(.footnote.weight(.semibold))
-                            .monospacedDigit()
-                            .singleLine()
-                    }
-                    HStack(spacing: .space(.s)) {
-                        Image(systemName: "chevron.down")
-                            .font(.caption.weight(.semibold))
-                            .symbolRenderingMode(.hierarchical)
-                            .foregroundStyle(.red)
-                            .frame(width: 14, alignment: .leading) // swiftlint:disable:this no_magic_numbers
-                        Text(entry.totalOutgoText)
-                            .font(.footnote.weight(.semibold))
-                            .monospacedDigit()
-                            .singleLine()
-                    }
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-                .padding(.space(.s))
-            }
-            .containerBackground(.fill.tertiary, for: .widget)
-            .widgetURL(entry.deepLinkURL)
+        AppIntentConfiguration(
+            kind: kind,
+            intent: ConfigurationAppIntent.self,
+            provider: MonthSummaryProvider()
+        ) { entry in
+            ContentView(entry: entry)
+                .containerBackground(.fill.tertiary, for: .widget)
+                .widgetURL(entry.deepLinkURL)
         }
         .configurationDisplayName("Incomes")
         .description("This month's items and balance")

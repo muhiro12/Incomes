@@ -1,8 +1,11 @@
+import MHDesign
 import SwiftUI
 
 struct SettingsNotificationSection: View {
     @Environment(\.locale)
     private var locale
+    @Environment(\.mhDesignMetrics)
+    private var designMetrics
 
     @Binding private var notificationSettings: NotificationSettings
 
@@ -47,7 +50,7 @@ private extension SettingsNotificationSection {
                 )
                 .keyboardType(.numberPad)
                 .multilineTextAlignment(.trailing)
-                .frame(maxWidth: 120) // swiftlint:disable:this no_magic_numbers
+                .frame(maxWidth: designMetrics.layout.compactKeyValueMinimumValueWidth)
             }
             Picker("Notify days before", selection: $notificationSettings.daysBeforeDueDate) {
                 ForEach(0..<15) { dayOffset in // swiftlint:disable:this no_magic_numbers

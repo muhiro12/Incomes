@@ -5,6 +5,7 @@
 //  Created by Hiromu Nakano on 2022/01/17.
 //
 
+import MHDesign
 import MHPlatform
 import SwiftUI
 
@@ -16,6 +17,8 @@ struct AdvertisementSection {
 
     @Environment(MHAppRuntime.self)
     private var appRuntime
+    @Environment(\.mhDesignMetrics)
+    private var designMetrics
 
     private let size: Size
 
@@ -29,7 +32,7 @@ extension AdvertisementSection: View {
         Section {
             appRuntime.nativeAdView(size: size.runtimeSize)
                 .frame(maxWidth: .infinity)
-                .padding(.space(.s))
+                .padding(designMetrics.spacing.inline)
         }
     }
 }

@@ -6,11 +6,14 @@
 //
 
 import Charts
+import MHDesign
 import SwiftData
 import SwiftUI
 
 struct CategoryChartSection: View {
     @Query private var items: [Item]
+    @Environment(\.mhDesignMetrics)
+    private var designMetrics
     private let allowsExpansion: Bool
 
     var body: some View {
@@ -52,16 +55,26 @@ struct CategoryChartSection: View {
 }
 
 private extension CategoryChartSection {
+    private enum Constants {
+        static let contentSpacing: CGFloat = 4
+        static let innerRadiusRatio = 0.618
+        static let legendMarkerSize: CGFloat = 6
+        static let legendTopPadding: CGFloat = 4
+        static let outerRadiusInset: CGFloat = 10
+        static let sectionHeight: CGFloat = 240
+        static let sectorCornerRadius: CGFloat = 4
+    }
+
     var chartContent: some View {
-        VStack(spacing: .space(.l)) {
+        VStack(spacing: designMetrics.spacing.section) {
             incomeContent
             outgoContent
         }
-        .padding(.horizontal)
+        .padding(.horizontal, designMetrics.spacing.control)
     }
 
     @ViewBuilder var incomeContent: some View {
-        VStack(alignment: .leading, spacing: .space(.xs)) {
+        VStack(alignment: .leading, spacing: Constants.contentSpacing) {
             Text("Income")
                 .font(.headline)
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -72,11 +85,11 @@ private extension CategoryChartSection {
                             object.title,
                             decimalToDouble(object.value)
                         ),
-                        innerRadius: .ratio(0.618), // swiftlint:disable:this no_magic_numbers
-                        outerRadius: .inset(10), // swiftlint:disable:this no_magic_numbers
+                        innerRadius: .ratio(Constants.innerRadiusRatio),
+                        outerRadius: .inset(Constants.outerRadiusInset),
                         angularInset: 1
                     )
-                    .cornerRadius(4) // swiftlint:disable:this no_magic_numbers
+                    .cornerRadius(Constants.sectorCornerRadius)
                     .foregroundStyle(by: .value("Category", object.label))
                 }
                 .chartForegroundStyleScale { (label: String) in
@@ -85,13 +98,13 @@ private extension CategoryChartSection {
                 .chartLegend(.hidden)
                 totalLabel(amount: incomeTotal)
             }
-            .frame(height: .component(.xl))
+            .frame(height: Constants.sectionHeight)
             incomeLegend
         }
     }
 
     @ViewBuilder var outgoContent: some View {
-        VStack(alignment: .leading, spacing: .space(.xs)) {
+        VStack(alignment: .leading, spacing: Constants.contentSpacing) {
             Text("Outgo")
                 .font(.headline)
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -102,11 +115,11 @@ private extension CategoryChartSection {
                             object.title,
                             decimalToDouble(object.value)
                         ),
-                        innerRadius: .ratio(0.618), // swiftlint:disable:this no_magic_numbers
-                        outerRadius: .inset(10), // swiftlint:disable:this no_magic_numbers
+                        innerRadius: .ratio(Constants.innerRadiusRatio),
+                        outerRadius: .inset(Constants.outerRadiusInset),
                         angularInset: 1
                     )
-                    .cornerRadius(4) // swiftlint:disable:this no_magic_numbers
+                    .cornerRadius(Constants.sectorCornerRadius)
                     .foregroundStyle(by: .value("Category", object.label))
                 }
                 .chartForegroundStyleScale { (label: String) in
@@ -115,15 +128,15 @@ private extension CategoryChartSection {
                 .chartLegend(.hidden)
                 totalLabel(amount: outgoTotal)
             }
-            .frame(height: .component(.xl))
+            .frame(height: Constants.sectionHeight)
             outgoLegend
         }
-        .padding(.top, .space(.s))
+        .padding(.top, designMetrics.spacing.inline)
     }
 
     @ViewBuilder
     func totalLabel(amount: Decimal) -> some View { // swiftlint:disable:this type_contents_order
-        VStack(spacing: 4) { // swiftlint:disable:this no_magic_numbers
+        VStack(spacing: Constants.contentSpacing) {
             Text("Total")
                 .font(.caption)
                 .foregroundStyle(.secondary)
@@ -253,8 +266,8 @@ private extension CategoryChartSection {
         colorScale: [String: Color]
     ) -> some View {
         let columns: [GridItem] = [
-            .init(.flexible(), spacing: .space(.s), alignment: .leading),
-            .init(.flexible(), spacing: .space(.s), alignment: .leading)
+            .init(.flexible(), spacing: designMetrics.spacing.inline, alignment: .leading),
+            .init(.flexible(), spacing: designMetrics.spacing.inline, alignment: .leading)
         ]
         LazyVGrid(columns: columns, alignment: .leading) {
             ForEach(objects, id: \.label) { object in
@@ -262,7 +275,10 @@ private extension CategoryChartSection {
                     HStack {
                         Circle()
                             .fill(colorScale[object.label] ?? .secondary)
-                            .frame(width: 6, height: 6) // swiftlint:disable:this no_magic_numbers
+                            .frame(
+                                width: Constants.legendMarkerSize,
+                                height: Constants.legendMarkerSize
+                            )
                         Text(object.title)
                             .font(.caption.bold())
                             .foregroundStyle(.secondary)
@@ -271,7 +287,10 @@ private extension CategoryChartSection {
                     HStack {
                         Circle()
                             .fill(.clear)
-                            .frame(width: 6, height: 6) // swiftlint:disable:this no_magic_numbers
+                            .frame(
+                                width: Constants.legendMarkerSize,
+                                height: Constants.legendMarkerSize
+                            )
                         Text("\(percentString(for: object.ratio)), \(object.value.asCurrency)")
                             .font(.caption2)
                             .foregroundStyle(.secondary)
@@ -280,12 +299,12 @@ private extension CategoryChartSection {
                 }
             }
         }
-        .padding(.top, .space(.xs))
+        .padding(.top, Constants.legendTopPadding)
     }
 
     func ratioFor(value: Decimal, total: Decimal) -> Double {
         guard total.isNotZero else {
-            return 0
+            return .zero
         }
         let totalValue = decimalToDouble(total)
         let currentValue = decimalToDouble(value)

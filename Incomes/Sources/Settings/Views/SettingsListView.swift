@@ -1,3 +1,4 @@
+import MHDesign
 import MHPlatform
 import SwiftData
 import SwiftUI
@@ -15,6 +16,8 @@ struct SettingsListView {
 
     @Environment(\.scenePhase)
     private var scenePhase
+    @Environment(\.mhDesignMetrics)
+    private var designMetrics
 
     @Query(.tags(.typeIs(.year)))
     private var yearTags: [Tag]
@@ -78,7 +81,7 @@ extension SettingsListView: View {
                     HStack {
                         Text("Manage tags")
                         Circle()
-                            .frame(width: .icon(.xs))
+                            .frame(width: designMetrics.spacing.inline)
                             .foregroundStyle(.orange)
                     }
                 }
@@ -101,7 +104,7 @@ extension SettingsListView: View {
                     HStack {
                         Text("Debug data")
                         Circle()
-                            .frame(width: .icon(.xs))
+                            .frame(width: designMetrics.spacing.inline)
                             .foregroundStyle(.red)
                     }
                 } footer: {

@@ -6,11 +6,14 @@
 //
 
 import Charts
+import MHDesign
 import SwiftData
 import SwiftUI
 
 struct BalanceChartSection: View {
     @Query private var items: [Item]
+    @Environment(\.mhDesignMetrics)
+    private var designMetrics
 
     private let allowsExpansion: Bool
 
@@ -22,13 +25,13 @@ struct BalanceChartSection: View {
                 allowsExpansion: allowsExpansion
             ) {
                 chart()
-                    .frame(height: .component(.l))
-                    .padding()
+                    .frame(height: Constants.sectionHeight)
+                    .padding(designMetrics.spacing.control)
             } detail: {
                 chart()
                     .chartScrollableAxes(.horizontal)
                     .chartScrollPosition(initialX: Date.now)
-                    .padding()
+                    .padding(designMetrics.spacing.control)
             }
         } header: {
             Text("Balance")
@@ -46,15 +49,16 @@ struct BalanceChartSection: View {
 
 private extension BalanceChartSection {
     private enum Constants {
-        static let zeroRuleYValue: Double = .zero
-        static let zeroRuleOpacity = 0.25
-        static let zeroRuleLineWidth: CGFloat = 1
-        static let zeroRuleDashLength: CGFloat = 4
-        static let areaMarkOpacity = 0.2
-        static let lineMarkWidth: CGFloat = 2
-        static let xAxisMonthStride = 3
         static let axisGridOpacity = 0.2
         static let axisTickOpacity = 0.4
+        static let areaMarkOpacity = 0.2
+        static let lineMarkWidth: CGFloat = 2
+        static let sectionHeight: CGFloat = 240
+        static let zeroRuleDashLength: CGFloat = 4
+        static let zeroRuleLineWidth: CGFloat = 1
+        static let zeroRuleOpacity = 0.25
+        static let zeroRuleYValue: Double = .zero
+        static let xAxisMonthStride = 3
     }
 
     func chart() -> some View {
