@@ -13,24 +13,22 @@ import TipKit
 
 @main
 struct IncomesApp: App {
-    @AppStorage(BoolAppStorageKey.isICloudOn)
-    private var isICloudOn
-    @AppStorage(StringAppStorageKey.lastLaunchedAppVersion, default: "")
-    private var lastLaunchedAppVersion
-
     private let platformEnvironment: IncomesPlatformEnvironment
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .id(isICloudOn)
-                .incomesPlatformEnvironment(platformEnvironment)
+            IncomesAppRootView(
+                platformEnvironment: platformEnvironment
+            )
         }
     }
 
     // swiftlint:disable function_body_length
     @MainActor
     init() {
+        _ = IncomesPreferenceLifecycle.runSynchronously()
+
+        let preferenceStore = MHPreferenceStore()
         let logging = IncomesLogging.makeBootstrap()
         let startupLogger = IncomesLogging.logger(
             logging: logging,
@@ -42,8 +40,8 @@ struct IncomesApp: App {
         startupLogger.notice("database_migration.begin")
         DatabaseMigrator.migrateSQLiteFilesIfNeeded()
         startupLogger.notice("database_migration.completed")
-        let isICloudEnabled = MHPreferenceStore().bool(
-            for: BoolAppStorageKey.isICloudOn.preferenceKey
+        let isICloudEnabled = preferenceStore.bool(
+            for: BoolAppStorageKey.isICloudOn.preferenceDescriptor
         )
         startupLogger.notice(
             "platform_environment.build_requested",
@@ -97,7 +95,10 @@ struct IncomesApp: App {
         startupLogger.notice("startup.dependencies_registered")
 
         if let currentAppVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
-            lastLaunchedAppVersion = currentAppVersion
+            preferenceStore.set(
+                currentAppVersion,
+                for: StringAppStorageKey.lastLaunchedAppVersion.preferenceDescriptor
+            )
             startupLogger.notice(
                 "app_version.recorded",
                 metadata: IncomesLogging.metadata(

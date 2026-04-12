@@ -6,13 +6,15 @@
 //
 
 import MHPlatformCore
-import SwiftUI
 
-public enum StringAppStorageKey: String, MHStringPreferenceKeyRepresentable {
+public enum StringAppStorageKey: String, CaseIterable, MHStringPrefDescriptorRepresentable {
     case currencyCode = "R8k2Z3tL"
     case lastLaunchedAppVersion = "j4N7v2Qk"
 
-    public var preferenceKey: MHStringPreferenceKey {
-        .init(storageKey: rawValue)
+    public var preferenceDescriptor: MHStringPreferenceDescriptor {
+        .init(
+            storageKey: rawValue,
+            defaultSelection: .standard
+        )
     }
 }

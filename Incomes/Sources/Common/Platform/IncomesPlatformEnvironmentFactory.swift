@@ -75,7 +75,6 @@ enum IncomesPlatformEnvironmentFactory {
         .init(
             subscriptionProductIDs: [Secret.productID],
             nativeAdUnitID: nativeAdUnitID(for: platformMode),
-            preferencesSuiteName: AppGroup.id,
             showsLicenses: true
         )
     }

@@ -3,10 +3,14 @@ import MHPlatform
 
 enum IncomesIntentRouteStore {
     private static let pendingDeepLinkURLKey = "pendingIntentDeepLinkURL"
-    private static let deepLinkStore = MHDeepLinkStore(
-        suiteName: AppGroup.id,
-        key: pendingDeepLinkURLKey
-    )
+    private static let deepLinkStore = UserDefaults(
+        suiteName: AppGroup.id
+    ).map { userDefaults in
+        MHDeepLinkStore(
+            userDefaults: userDefaults,
+            key: pendingDeepLinkURLKey
+        )
+    }
 
     static var source: MHDeepLinkStore? {
         deepLinkStore

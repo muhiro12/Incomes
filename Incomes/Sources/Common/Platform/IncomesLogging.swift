@@ -19,8 +19,15 @@ enum IncomesLogging {
         nonisolated static let yearlyDuplication = "YearlyDuplication"
     }
 
-    private static let snapshotKey = MHCodablePreferenceKey<[MHLogEvent]>(
-        storageKey: "incomes.logging.snapshot"
+    private static let snapshotStorageDescriptors = MHLogSnapshotStorageDescriptors(
+        current: .init(
+            storageKey: "incomes.logging.current-session",
+            defaultSelection: .suite(AppGroup.id)
+        ),
+        previous: .init(
+            storageKey: "incomes.logging.previous-session",
+            defaultSelection: .suite(AppGroup.id)
+        )
     )
 
     static var policy: MHLogPolicy {
@@ -36,11 +43,14 @@ enum IncomesLogging {
 
     @MainActor
     static func makeBootstrap() -> MHLoggingBootstrap {
-        let userDefaults = UserDefaults(suiteName: AppGroup.id) ?? .standard
+        guard let userDefaults = UserDefaults(suiteName: AppGroup.id) else {
+            preconditionFailure("Failed to resolve App Group defaults.")
+        }
+
         return .init(
             policy: policy,
             subsystem: Bundle.main.bundleIdentifier,
-            snapshotKey: snapshotKey,
+            snapshotStorageDescriptors: snapshotStorageDescriptors,
             snapshotStore: .init(userDefaults: userDefaults)
         )
     }

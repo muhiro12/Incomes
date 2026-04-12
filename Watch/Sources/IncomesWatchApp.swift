@@ -13,6 +13,8 @@ struct IncomesWatchApp: App {
     private let sharedModelContainer: ModelContainer
 
     init() { // swiftlint:disable:this type_contents_order
+        _ = IncomesPreferenceLifecycle.runSynchronously()
+
         // Migrate possible legacy DB files into App Group first
         DatabaseMigrator.migrateSQLiteFilesIfNeeded()
 
