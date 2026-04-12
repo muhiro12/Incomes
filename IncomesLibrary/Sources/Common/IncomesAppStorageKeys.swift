@@ -1,4 +1,4 @@
-/// Central catalog of app-owned `UserDefaults` and `AppStorage` keys.
+/// Central catalog of app-owned AppStorage keys.
 public enum IncomesAppStorageKeys {
     public enum Standard: String, CaseIterable {
         case isSubscribeOn = "a018f613"
