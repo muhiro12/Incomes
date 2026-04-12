@@ -2,11 +2,6 @@ import Foundation
 import MHPlatform
 
 enum IncomesLogging {
-    private enum SnapshotStorageKey {
-        static let current = "c4R8m2Qx"
-        static let previous = "p7V3k9Hs"
-    }
-
     enum Category {
         nonisolated static let appIntent = "AppIntent"
         nonisolated static let appStartup = "AppStartup"
@@ -26,11 +21,11 @@ enum IncomesLogging {
 
     private static let snapshotStorageDescriptors = MHLogSnapshotStorageDescriptors(
         current: .init(
-            storageKey: SnapshotStorageKey.current,
+            storageKey: IncomesAppStorageKeys.Standard.currentLogSnapshot.rawValue,
             defaultSelection: .standard
         ),
         previous: .init(
-            storageKey: SnapshotStorageKey.previous,
+            storageKey: IncomesAppStorageKeys.Standard.previousLogSnapshot.rawValue,
             defaultSelection: .standard
         )
     )

@@ -1,13 +1,24 @@
 import MHPlatformCore
 
-public enum BoolAppStorageKey: String, CaseIterable, MHBoolPrefDescriptorRepresentable {
-    case isSubscribeOn = "a018f613"
-    case isICloudOn = "X7b9C4tZ"
-    case isDebugOn = "a1B2c3D4"
+public enum BoolAppStorageKey: CaseIterable, MHBoolPrefDescriptorRepresentable {
+    case isSubscribeOn
+    case isICloudOn
+    case isDebugOn
+
+    public var storageKey: String {
+        switch self {
+        case .isSubscribeOn:
+            IncomesAppStorageKeys.Standard.isSubscribeOn.rawValue
+        case .isICloudOn:
+            IncomesAppStorageKeys.Standard.isICloudOn.rawValue
+        case .isDebugOn:
+            IncomesAppStorageKeys.Standard.isDebugOn.rawValue
+        }
+    }
 
     public var preferenceDescriptor: MHBoolPreferenceDescriptor {
         .init(
-            storageKey: rawValue,
+            storageKey: storageKey,
             defaultSelection: .standard,
             default: false
         )

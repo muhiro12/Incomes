@@ -1,11 +1,18 @@
 import MHPlatformCore
 
-public enum NotificationSettingsAppStorageKey: String, CaseIterable, MHStringPrefDescriptorRepresentable {
-    case notificationSettings = "A3b9Z1xQ"
+public enum NotificationSettingsAppStorageKey: CaseIterable, MHStringPrefDescriptorRepresentable {
+    case notificationSettings
+
+    public var storageKey: String {
+        switch self {
+        case .notificationSettings:
+            IncomesAppStorageKeys.Standard.notificationSettings.rawValue
+        }
+    }
 
     public var preferenceDescriptor: MHStringPreferenceDescriptor {
         .init(
-            storageKey: rawValue,
+            storageKey: storageKey,
             defaultSelection: .standard
         )
     }

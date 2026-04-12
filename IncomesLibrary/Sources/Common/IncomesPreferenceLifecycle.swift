@@ -3,13 +3,9 @@ import MHPlatformCore
 
 /// Coordinates preference migration and cleanup for Incomes-owned AppStorage keys.
 public enum IncomesPreferenceLifecycle {
-    private enum StorageKey {
-        static let migrationState = "N6q1Lm8Z"
-    }
-
     /// Persistent state descriptor used by the shared preference lifecycle service.
     public static let migrationStateDescriptor = MHPreferenceMigrationStateDescriptor(
-        storageKey: StorageKey.migrationState,
+        storageKey: IncomesAppStorageKeys.Standard.preferenceMigrationState.rawValue,
         defaultSelection: .standard
     )
 

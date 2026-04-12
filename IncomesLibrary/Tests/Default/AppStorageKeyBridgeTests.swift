@@ -8,7 +8,7 @@ struct AppStorageKeyBridgeTests {
         let descriptor = BoolAppStorageKey.isSubscribeOn.preferenceDescriptor
 
         #expect(
-            descriptor.storageKey == BoolAppStorageKey.isSubscribeOn.rawValue
+            descriptor.storageKey == BoolAppStorageKey.isSubscribeOn.storageKey
         )
         #expect(
             descriptor.defaultSelection == .standard
@@ -20,7 +20,7 @@ struct AppStorageKeyBridgeTests {
         let descriptor = StringAppStorageKey.currencyCode.preferenceDescriptor
 
         #expect(
-            descriptor.storageKey == StringAppStorageKey.currencyCode.rawValue
+            descriptor.storageKey == StringAppStorageKey.currencyCode.storageKey
         )
         #expect(
             descriptor.defaultSelection == .standard
@@ -32,7 +32,7 @@ struct AppStorageKeyBridgeTests {
         let descriptor = NotificationSettingsAppStorageKey.notificationSettings.preferenceDescriptor
 
         #expect(
-            descriptor.storageKey == NotificationSettingsAppStorageKey.notificationSettings.rawValue
+            descriptor.storageKey == NotificationSettingsAppStorageKey.notificationSettings.storageKey
         )
         #expect(
             descriptor.defaultSelection == .standard

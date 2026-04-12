@@ -7,13 +7,22 @@
 
 import MHPlatformCore
 
-public enum StringAppStorageKey: String, CaseIterable, MHStringPrefDescriptorRepresentable {
-    case currencyCode = "R8k2Z3tL"
-    case lastLaunchedAppVersion = "j4N7v2Qk"
+public enum StringAppStorageKey: CaseIterable, MHStringPrefDescriptorRepresentable {
+    case currencyCode
+    case lastLaunchedAppVersion
+
+    public var storageKey: String {
+        switch self {
+        case .currencyCode:
+            IncomesAppStorageKeys.Standard.currencyCode.rawValue
+        case .lastLaunchedAppVersion:
+            IncomesAppStorageKeys.Standard.lastLaunchedAppVersion.rawValue
+        }
+    }
 
     public var preferenceDescriptor: MHStringPreferenceDescriptor {
         .init(
-            storageKey: rawValue,
+            storageKey: storageKey,
             defaultSelection: .standard
         )
     }
