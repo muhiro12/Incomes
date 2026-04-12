@@ -2,6 +2,11 @@ import Foundation
 import MHPlatform
 
 enum IncomesLogging {
+    private enum SnapshotStorageKey {
+        static let current = "c4R8m2Qx"
+        static let previous = "p7V3k9Hs"
+    }
+
     enum Category {
         nonisolated static let appIntent = "AppIntent"
         nonisolated static let appStartup = "AppStartup"
@@ -21,12 +26,12 @@ enum IncomesLogging {
 
     private static let snapshotStorageDescriptors = MHLogSnapshotStorageDescriptors(
         current: .init(
-            storageKey: "incomes.logging.current-session",
-            defaultSelection: .suite(AppGroup.id)
+            storageKey: SnapshotStorageKey.current,
+            defaultSelection: .standard
         ),
         previous: .init(
-            storageKey: "incomes.logging.previous-session",
-            defaultSelection: .suite(AppGroup.id)
+            storageKey: SnapshotStorageKey.previous,
+            defaultSelection: .standard
         )
     )
 
@@ -43,15 +48,10 @@ enum IncomesLogging {
 
     @MainActor
     static func makeBootstrap() -> MHLoggingBootstrap {
-        guard let userDefaults = UserDefaults(suiteName: AppGroup.id) else {
-            preconditionFailure("Failed to resolve App Group defaults.")
-        }
-
-        return .init(
+        .init(
             policy: policy,
             subsystem: Bundle.main.bundleIdentifier,
-            snapshotStorageDescriptors: snapshotStorageDescriptors,
-            snapshotStore: .init(userDefaults: userDefaults)
+            snapshotStorageDescriptors: snapshotStorageDescriptors
         )
     }
 

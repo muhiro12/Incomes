@@ -27,6 +27,7 @@ struct IncomesApp: App {
     @MainActor
     init() {
         _ = IncomesPreferenceLifecycle.runSynchronously()
+        IncomesAppGroupUserDefaultsCleanup.removeUnknownKeys()
 
         let preferenceStore = MHPreferenceStore()
         let logging = IncomesLogging.makeBootstrap()
