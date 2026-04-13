@@ -170,10 +170,10 @@ post-clone CI setup.
   step to run after Swift edits and before the final verification gate.
 - `bash ci_scripts/tasks/verify_task_completion.sh` is the non-destructive
   verification gate for Codex task completion.
-- `bash ci_scripts/tasks/verify_pre_commit.sh` reruns the same non-destructive
-  verification gate for Git `pre-commit` and manual final rechecks.
 - `bash ci_scripts/tasks/verify_repository_state.sh` checks the current
   repository state and still writes CI run artifacts.
+- `bash ci_scripts/tasks/verify_pre_push.sh` is the optional Git `pre-push`
+  wrapper for the same non-destructive verification gate.
 
 SwiftLint is resolved from the `SimplyDanny/SwiftLintPlugins` package declared
 in `Incomes.xcodeproj`. The repository scripts do not require a separately
@@ -203,12 +203,6 @@ For release-time verification or a clean-worktree full run, force the standard v
 CI_RUN_FORCE_FULL=1 bash ci_scripts/tasks/verify_task_completion.sh
 ```
 
-If you only need the final pre-commit recheck shell:
-
-```sh
-bash ci_scripts/tasks/verify_pre_commit.sh
-```
-
 If you prefer to run the SwiftLint steps directly:
 
 ```sh
@@ -222,11 +216,14 @@ If you only need required builds/tests based on local changes:
 bash ci_scripts/tasks/verify_repository_state.sh
 ```
 
-If you want Git's `pre-commit` hook to enforce the same repository flow, install
-`pre-commit` in your local environment and run `pre-commit install`. The hook
-delegates to `bash ci_scripts/tasks/verify_pre_commit.sh` through the local
-`.pre-commit-config.yaml`, which reruns the same non-destructive verification
-gate used for Codex task completion.
+If you want Git's `pre-push` hook to enforce the same repository flow, configure
+the hook to delegate to `bash ci_scripts/tasks/verify_pre_push.sh`.
+
+If you only need the optional `pre-push` wrapper shell:
+
+```sh
+bash ci_scripts/tasks/verify_pre_push.sh
+```
 
 The scripts below are optional targeted helpers, not standardized repository
 entrypoints.

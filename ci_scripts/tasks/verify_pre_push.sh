@@ -8,5 +8,5 @@ ci_task_require_no_arguments "$@"
 ci_task_enter_repository "${BASH_SOURCE[0]}"
 repository_root=$CI_TASK_REPOSITORY_ROOT
 
-echo "Running repository pre-commit recheck..."
+echo "Running repository pre-push verification..."
 exec bash "$repository_root/ci_scripts/tasks/verify_task_completion.sh"
