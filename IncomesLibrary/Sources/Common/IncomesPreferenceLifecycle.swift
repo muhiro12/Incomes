@@ -41,18 +41,6 @@ public enum IncomesPreferenceLifecycle {
 }
 
 private extension IncomesPreferenceLifecycle {
-    static func currentDescriptors() -> [any MHStorageDescriptorProtocol] {
-        let descriptors = MHPreferenceDescriptors()
-        return [
-            descriptors.isSubscribeOn,
-            descriptors.isICloudOn,
-            descriptors.isDebugOn,
-            descriptors.currencyCode,
-            descriptors.lastLaunchedAppVersion,
-            descriptors.notificationSettings
-        ]
-    }
-
     final class PreferenceLifecycleOutcomeBox: @unchecked Sendable {
         private let lock = NSLock()
         private let semaphore = DispatchSemaphore(value: 0)
@@ -81,5 +69,17 @@ private extension IncomesPreferenceLifecycle {
 
             return outcome
         }
+    }
+
+    static func currentDescriptors() -> [any MHStorageDescriptorProtocol] {
+        let descriptors = MHPreferenceDescriptors()
+        return [
+            descriptors.isSubscribeOn,
+            descriptors.isICloudOn,
+            descriptors.isDebugOn,
+            descriptors.currencyCode,
+            descriptors.lastLaunchedAppVersion,
+            descriptors.notificationSettings
+        ]
     }
 }

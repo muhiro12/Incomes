@@ -10,7 +10,7 @@ import SwiftData
 import SwiftUI
 
 struct SettingsListView {
-    @AppStorage(BoolAppStorageKey.isDebugOn)
+    @AppStorage(\.isDebugOn)
     private var isDebugOn
 }
 

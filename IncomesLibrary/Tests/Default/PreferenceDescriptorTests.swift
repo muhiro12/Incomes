@@ -27,10 +27,12 @@ struct PreferenceDescriptorTests {
         let descriptors = MHPreferenceDescriptors()
 
         #expect(
-            descriptors.currencyCode.storageKey == IncomesUserDefaultsKeys.Standard.currencyCode.rawValue
+            descriptors.currencyCode.storageKey
+                == IncomesUserDefaultsKeys.Standard.currencyCode.rawValue
         )
         #expect(
-            descriptors.lastLaunchedAppVersion.storageKey == IncomesUserDefaultsKeys.Standard.lastLaunchedAppVersion.rawValue
+            descriptors.lastLaunchedAppVersion.storageKey
+                == IncomesUserDefaultsKeys.Standard.lastLaunchedAppVersion.rawValue
         )
         #expect(descriptors.currencyCode.defaultSelection == .standard)
         #expect(descriptors.lastLaunchedAppVersion.defaultSelection == .standard)
@@ -41,7 +43,8 @@ struct PreferenceDescriptorTests {
         let descriptors = MHPreferenceDescriptors()
 
         #expect(
-            descriptors.notificationSettings.storageKey == IncomesUserDefaultsKeys.Standard.notificationSettings.rawValue
+            descriptors.notificationSettings.storageKey
+                == IncomesUserDefaultsKeys.Standard.notificationSettings.rawValue
         )
         #expect(descriptors.notificationSettings.defaultSelection == .standard)
     }

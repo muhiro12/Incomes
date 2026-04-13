@@ -12,7 +12,7 @@ import SwiftUI
 struct ContentView {
     @Environment(\.modelContext)
     private var context
-    @AppStorage(BoolAppStorageKey.isDebugOn)
+    @AppStorage(\.isDebugOn)
     private var isDebugOn
 
     @Query(.items(.dateIsAfter(Date.now), order: .forward))

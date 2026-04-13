@@ -69,6 +69,10 @@ ci_swiftlint_local_home_directory() {
   printf '%s\n' "$shared_directory/home"
 }
 
+ci_swiftlint_global_derived_data_directory() {
+  printf '%s\n' "${CI_XCODE_GLOBAL_DERIVED_DATA_DIR:-$HOME/Library/Developer/Xcode/DerivedData}"
+}
+
 ci_swiftlint_prepare_directories() {
   local repository_root=$1
   local shared_directory
@@ -109,6 +113,7 @@ ci_swiftlint_find_binary() {
   local repository_root=$1
   local source_packages_directory
   local derived_data_directory
+  local global_derived_data_directory
   local search_root
   local candidate
 
@@ -119,6 +124,7 @@ ci_swiftlint_find_binary() {
 
   source_packages_directory=$(ci_swiftlint_source_packages_directory "$repository_root")
   derived_data_directory=$(ci_swiftlint_derived_data_directory "$repository_root")
+  global_derived_data_directory=$(ci_swiftlint_global_derived_data_directory)
 
   for search_root in \
     "$source_packages_directory" \
@@ -141,6 +147,21 @@ ci_swiftlint_find_binary() {
       return 0
     fi
   done
+
+  if [[ -d "$global_derived_data_directory" ]]; then
+    candidate=$(
+      find \
+        "$global_derived_data_directory" \
+        -path '*/SourcePackages/artifacts/*/SwiftLintBinary.artifactbundle/macos/swiftlint' \
+        -type f \
+        -print 2>/dev/null | LC_ALL=C sort | head -n 1
+    )
+
+    if [[ -n "$candidate" ]]; then
+      printf '%s\n' "$candidate"
+      return 0
+    fi
+  fi
 
   return 1
 }

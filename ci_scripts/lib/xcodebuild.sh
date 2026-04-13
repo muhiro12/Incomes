@@ -39,6 +39,53 @@ ci_xcodebuild_results_directory() {
   printf '%s\n' "${CI_RUN_RESULTS_DIR:-${AI_RUN_RESULTS_DIR:-$work_directory/results}}"
 }
 
+ci_xcodebuild_global_derived_data_directory() {
+  printf '%s\n' "${CI_XCODE_GLOBAL_DERIVED_DATA_DIR:-$HOME/Library/Developer/Xcode/DerivedData}"
+}
+
+ci_xcodebuild_seed_binary_artifacts_from_global_cache() {
+  local repository_root=$1
+  local cache_directory
+  local local_artifacts_directory
+  local global_derived_data_directory
+  local artifact_directory
+  local relative_artifact_path
+  local source_artifact_directory
+
+  cache_directory=$(ci_xcodebuild_cache_directory "$repository_root")
+  local_artifacts_directory="$cache_directory/source_packages/artifacts"
+  global_derived_data_directory=$(ci_xcodebuild_global_derived_data_directory)
+
+  if [[ ! -d "$local_artifacts_directory" || ! -d "$global_derived_data_directory" ]]; then
+    return 0
+  fi
+
+  while IFS= read -r -d '' artifact_directory; do
+    if [[ "$artifact_directory" == *"/artifacts/extract/"* ]]; then
+      continue
+    fi
+
+    if find "$artifact_directory" -mindepth 1 -print -quit | grep -q .; then
+      continue
+    fi
+
+    relative_artifact_path=${artifact_directory#"$local_artifacts_directory"/}
+    source_artifact_directory=$(
+      find \
+        "$global_derived_data_directory" \
+        -path "*/SourcePackages/artifacts/$relative_artifact_path" \
+        -type d \
+        -print 2>/dev/null | LC_ALL=C sort | head -n 1
+    )
+
+    if [[ -z "$source_artifact_directory" ]]; then
+      continue
+    fi
+
+    cp -R "$source_artifact_directory"/. "$artifact_directory"/
+  done < <(find "$local_artifacts_directory" -mindepth 2 -maxdepth 2 -type d -print0)
+}
+
 ci_xcodebuild_prepare_directories() {
   local repository_root=$1
   local shared_directory
@@ -66,6 +113,8 @@ ci_xcodebuild_prepare_directories() {
     "$shared_directory/tmp" \
     "$derived_data_directory" \
     "$results_directory"
+
+  ci_xcodebuild_seed_binary_artifacts_from_global_cache "$repository_root"
 }
 
 ci_xcodebuild_resolve_simulator_identifier() {
