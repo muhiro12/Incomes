@@ -7,7 +7,7 @@ struct NotificationSettingsRawValueTests {
     func rawValueRoundTripsLegacyStringBackedRepresentation() {
         var settings = NotificationSettings()
         settings.isEnabled = false
-        settings.thresholdAmount = 1234.56
+        settings.thresholdAmount = 1_234.56
         settings.daysBeforeDueDate = 5
         settings.notifyTime = .now
 

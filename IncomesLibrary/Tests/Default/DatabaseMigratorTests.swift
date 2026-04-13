@@ -41,16 +41,21 @@ struct DatabaseMigratorTests {
     }
 
     @Test
-    func migrateSQLiteFilesIfNeeded_does_nothing_when_current_exists() throws {
+    func migrateSQLiteFilesIfNeeded_overwrites_current_files_and_removes_stale_sidecars() throws {
         let fileManager: FileManager = .default
         let sandbox = try makeSandbox(fileManager: fileManager)
+        let legacyData = Data("legacy".utf8)
+        let staleData = Data("stale".utf8)
 
         defer {
             try? fileManager.removeItem(at: sandbox.baseDirectory)
         }
 
-        #expect(fileManager.createFile(atPath: sandbox.legacyURL.path, contents: Data()))
-        #expect(fileManager.createFile(atPath: sandbox.currentURL.path, contents: Data()))
+        #expect(fileManager.createFile(atPath: sandbox.legacyURL.path, contents: legacyData))
+        #expect(fileManager.createFile(atPath: sandbox.legacyWalURL.path, contents: legacyData))
+        #expect(fileManager.createFile(atPath: sandbox.currentURL.path, contents: staleData))
+        #expect(fileManager.createFile(atPath: sandbox.currentWalURL.path, contents: staleData))
+        #expect(fileManager.createFile(atPath: sandbox.currentShmURL.path, contents: staleData))
 
         try DatabaseMigrator.migrateSQLiteFilesIfNeeded(
             fileManager: fileManager,
@@ -59,8 +64,11 @@ struct DatabaseMigratorTests {
             validateMigration: noOpValidation
         )
 
-        #expect(fileManager.fileExists(atPath: sandbox.legacyURL.path))
-        #expect(fileManager.fileExists(atPath: sandbox.currentURL.path))
+        #expect(try Data(contentsOf: sandbox.currentURL) == legacyData)
+        #expect(try Data(contentsOf: sandbox.currentWalURL) == legacyData)
+        #expect(!fileManager.fileExists(atPath: sandbox.currentShmURL.path))
+        #expect(!fileManager.fileExists(atPath: sandbox.legacyURL.path))
+        #expect(!fileManager.fileExists(atPath: sandbox.legacyWalURL.path))
     }
 
     @Test
@@ -115,6 +123,56 @@ struct DatabaseMigratorTests {
         #expect(fileManager.fileExists(atPath: sandbox.legacyWalURL.path))
         #expect(!fileManager.fileExists(atPath: sandbox.currentURL.path))
         #expect(!fileManager.fileExists(atPath: sandbox.currentWalURL.path))
+    }
+
+    @Test
+    func migrateSQLiteFilesIfNeeded_skips_when_legacy_store_is_missing() throws {
+        let fileManager: FileManager = .default
+        let sandbox = try makeSandbox(fileManager: fileManager)
+        let currentData = Data("current".utf8)
+
+        defer {
+            try? fileManager.removeItem(at: sandbox.baseDirectory)
+        }
+
+        #expect(fileManager.createFile(atPath: sandbox.currentURL.path, contents: currentData))
+        #expect(fileManager.createFile(atPath: sandbox.currentShmURL.path, contents: currentData))
+        #expect(fileManager.createFile(atPath: sandbox.currentWalURL.path, contents: currentData))
+
+        try DatabaseMigrator.migrateSQLiteFilesIfNeeded(
+            fileManager: fileManager,
+            legacyURL: sandbox.legacyURL,
+            currentURL: sandbox.currentURL,
+            validateMigration: noOpValidation
+        )
+
+        #expect(try Data(contentsOf: sandbox.currentURL) == currentData)
+        #expect(try Data(contentsOf: sandbox.currentShmURL) == currentData)
+        #expect(try Data(contentsOf: sandbox.currentWalURL) == currentData)
+    }
+
+    @Test
+    func migrateSQLiteFilesIfNeeded_skips_when_store_locations_match() throws {
+        let fileManager: FileManager = .default
+        let sandbox = try makeSandbox(fileManager: fileManager)
+        let legacyData = Data("legacy".utf8)
+
+        defer {
+            try? fileManager.removeItem(at: sandbox.baseDirectory)
+        }
+
+        #expect(fileManager.createFile(atPath: sandbox.legacyURL.path, contents: legacyData))
+        #expect(fileManager.createFile(atPath: sandbox.legacyWalURL.path, contents: legacyData))
+
+        try DatabaseMigrator.migrateSQLiteFilesIfNeeded(
+            fileManager: fileManager,
+            legacyURL: sandbox.legacyURL,
+            currentURL: sandbox.legacyURL,
+            validateMigration: noOpValidation
+        )
+
+        #expect(try Data(contentsOf: sandbox.legacyURL) == legacyData)
+        #expect(try Data(contentsOf: sandbox.legacyWalURL) == legacyData)
     }
 
     @Test
