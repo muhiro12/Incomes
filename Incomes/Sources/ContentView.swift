@@ -96,12 +96,14 @@ private extension ContentView {
         case .inactive:
             purchasedProductIDs = []
         case .active:
-            purchasedProductIDs = [Secret.productID]
+            purchasedProductIDs = [
+                IncomesMonetizationConfiguration.subscriptionProductID
+            ]
         }
 
         let state = SubscriptionStateCalculator.calculate(
             purchasedProductIDs: purchasedProductIDs,
-            productID: Secret.productID,
+            productID: IncomesMonetizationConfiguration.subscriptionProductID,
             isICloudOn: isICloudOn
         )
         isSubscribeOn = state.isSubscribeOn

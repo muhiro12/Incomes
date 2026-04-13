@@ -25,7 +25,7 @@
 ## Build from source
 
 1. Clone the repository.
-2. Create `Incomes/Configurations/Secret.swift` (and mirror it to `Watch/Configurations`) with your App Group, StoreKit product ID and AdMob unit IDs.
+2. If you are using your own identifiers, update `IncomesLibrary/Sources/Common/AppGroup.swift`, the entitlements files under `Incomes/Configurations`, `Watch/Configurations`, and `Widgets/Configurations`, plus `Incomes/Sources/Common/Platform/IncomesMonetizationConfiguration.swift`.
 3. Open `Incomes.xcodeproj` in Xcode 16 or later and run the **Incomes** scheme on an iOS 18 simulator or device.
 
 See the [README](../../README.md) for detailed setup instructions, testing commands and remote configuration notes.

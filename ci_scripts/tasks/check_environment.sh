@@ -81,27 +81,8 @@ check_swiftlint_environment() {
 }
 
 check_build_environment() {
-  local incomes_secret_path="Incomes/Configurations/Secret.swift"
-  local watch_secret_path="Watch/Configurations/Secret.swift"
-
   ensure_command "xcodebuild" "Install Xcode and ensure xcodebuild is available from the command line."
   ensure_command "xcrun" "Install Xcode command line tools and ensure xcrun is available."
-
-  if [[ ! -f "$incomes_secret_path" && ! -f "$watch_secret_path" ]]; then
-    record_failure "Missing files: $incomes_secret_path and $watch_secret_path"
-    record_next_step "Create $incomes_secret_path and copy it to $watch_secret_path."
-    return 0
-  fi
-
-  if [[ ! -f "$incomes_secret_path" ]]; then
-    record_failure "Missing file: $incomes_secret_path"
-    record_next_step "Create $incomes_secret_path with your local StoreKit and AdMob values."
-  fi
-
-  if [[ ! -f "$watch_secret_path" ]]; then
-    record_failure "Missing file: $watch_secret_path"
-    record_next_step "Copy $incomes_secret_path to $watch_secret_path."
-  fi
 }
 
 case "$profile" in

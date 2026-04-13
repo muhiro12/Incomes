@@ -73,7 +73,9 @@ enum IncomesPlatformEnvironmentFactory {
         for platformMode: IncomesPlatformMode
     ) -> MHAppConfiguration {
         .init(
-            subscriptionProductIDs: [Secret.productID],
+            subscriptionProductIDs: [
+                IncomesMonetizationConfiguration.subscriptionProductID
+            ],
             nativeAdUnitID: nativeAdUnitID(for: platformMode),
             showsLicenses: true
         )
@@ -157,12 +159,12 @@ enum IncomesPlatformEnvironmentFactory {
         switch platformMode {
         case .production:
             #if DEBUG
-            Secret.admobNativeIDDev
+            IncomesMonetizationConfiguration.nativeAdUnitIDDev
             #else
-            Secret.admobNativeID
+            IncomesMonetizationConfiguration.nativeAdUnitID
             #endif
         case .preview:
-            Secret.admobNativeIDDev
+            IncomesMonetizationConfiguration.nativeAdUnitIDDev
         }
     }
 

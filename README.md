@@ -134,19 +134,12 @@ Follow these steps to run a local build:
 1. Clone the repository and open the project directory.
 2. Update bundle identifiers and the app group constant to match your
    provisioning profile if you are not using the production identifiers.
-3. Create `Incomes/Configurations/Secret.swift` and copy it to
-   `Watch/Configurations/Secret.swift` with your StoreKit product ID and AdMob
-   unit IDs:
-
-   ```swift
-   enum Secret {
-       static let groupID = "group.com.example.incomes"
-       static let productID = "com.example.incomes.premium"
-       static let admobNativeID = "ca-app-pub-xxxxxxxxxxxxxxxx/yyyyyyyyyy"
-       static let admobNativeIDDev = "ca-app-pub-3940256099942544/3986624511"
-   }
-   ```
-
+3. If you are shipping a fork with your own identifiers, update
+   `IncomesLibrary/Sources/Common/AppGroup.swift`,
+   `Incomes/Configurations/Incomes.entitlements`,
+   `Watch/Configurations/Watch.entitlements`,
+   `Widgets/Configurations/Widgets.entitlements`, and
+   `Incomes/Sources/Common/Platform/IncomesMonetizationConfiguration.swift`.
 4. Open `Incomes.xcodeproj` in Xcode, select the **Incomes** scheme, and run on
    an iOS 18 simulator or device. Enable the **IncomesWatch** and **Widgets**
    schemes if you want to test the companion experiences.
