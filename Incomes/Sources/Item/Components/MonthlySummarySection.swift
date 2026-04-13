@@ -33,10 +33,10 @@ struct MonthlySummarySection: View {
     @Environment(\.locale)
     private var locale
 
-    @AppStorage(StringAppStorageKey.currencyCode, default: "")
+    @AppStorage(\.currencyCode, default: "")
     private var currencyCode
 
-    @AppStorage(BoolAppStorageKey.isDebugOn)
+    @AppStorage(\.isDebugOn)
     private var isDebugOn
 
     @Query private var currentItems: [Item]

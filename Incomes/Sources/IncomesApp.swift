@@ -27,7 +27,7 @@ struct IncomesApp: App {
     @MainActor
     init() {
         _ = IncomesPreferenceLifecycle.runSynchronously()
-        IncomesAppGroupAppStorageCleanup.removeUnknownKeys()
+        IncomesAppGroupUserDefaultsCleanup.removeUnknownKeys()
 
         let preferenceStore = MHPreferenceStore()
         let logging = IncomesLogging.makeBootstrap()
@@ -42,7 +42,7 @@ struct IncomesApp: App {
         DatabaseMigrator.migrateSQLiteFilesIfNeeded()
         startupLogger.notice("database_migration.completed")
         let isICloudEnabled = preferenceStore.bool(
-            for: BoolAppStorageKey.isICloudOn.preferenceDescriptor
+            for: \.isICloudOn
         )
         startupLogger.notice(
             "platform_environment.build_requested",
@@ -98,7 +98,7 @@ struct IncomesApp: App {
         if let currentAppVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
             preferenceStore.set(
                 currentAppVersion,
-                for: StringAppStorageKey.lastLaunchedAppVersion.preferenceDescriptor
+                for: \.lastLaunchedAppVersion
             )
             startupLogger.notice(
                 "app_version.recorded",

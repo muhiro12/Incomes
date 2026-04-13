@@ -5,18 +5,15 @@
 //  Created by Hiromu Nakano on 2020/06/24.
 //
 
+import Foundation
 import MHPlatformCore
-import SwiftUI
 
 public extension Decimal {
     /// Formats the decimal using the currently selected currency code.
     var asCurrency: String {
         let formatter = NumberFormatter()
         formatter.numberStyle = .currency
-        formatter.currencyCode = AppStorage(
-            StringAppStorageKey.currencyCode,
-            default: ""
-        ).wrappedValue
+        formatter.currencyCode = MHPreferenceStore().string(for: \.currencyCode) ?? ""
         guard let currency = formatter.string(for: self) else {
             assertionFailure()
             return .empty

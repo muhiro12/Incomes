@@ -10,7 +10,7 @@ import SwiftData
 import SwiftUI
 
 struct ChartSectionGroup {
-    @AppStorage(BoolAppStorageKey.isSubscribeOn)
+    @AppStorage(\.isSubscribeOn)
     private var isSubscribeOn
 
     private let descriptor: FetchDescriptor<Item>

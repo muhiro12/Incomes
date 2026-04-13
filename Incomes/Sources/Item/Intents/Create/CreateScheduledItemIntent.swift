@@ -2,7 +2,6 @@ import AppIntents
 import Foundation
 import MHPlatform
 import SwiftData
-import SwiftUI
 
 struct CreateScheduledItemIntent: AppIntent {
     @Parameter(title: "Date", kind: .date)
@@ -42,10 +41,7 @@ struct CreateScheduledItemIntent: AppIntent {
     func perform() async throws -> some ReturnsValue<ItemEntity> {
         try validateFormInput()
 
-        let currencyCode = AppStorage(
-            StringAppStorageKey.currencyCode,
-            default: ""
-        ).wrappedValue
+        let currencyCode = MHPreferenceStore().string(for: \.currencyCode) ?? ""
         if let amount = ItemIntentCurrencyValidator.disambiguationAmount(
             amount: income,
             expectedCurrencyCode: currencyCode

@@ -19,15 +19,15 @@ struct SettingsListView {
     @Query(.tags(.typeIs(.year)))
     private var yearTags: [Tag]
 
-    @AppStorage(BoolAppStorageKey.isSubscribeOn)
+    @AppStorage(\.isSubscribeOn)
     private var isSubscribeOn: Bool
-    @AppStorage(BoolAppStorageKey.isICloudOn)
+    @AppStorage(\.isICloudOn)
     private var isICloudOn: Bool
-    @AppStorage(StringAppStorageKey.currencyCode, default: "")
+    @AppStorage(\.currencyCode, default: "")
     private var currencyCode: String
-    @AppStorage(NotificationSettingsAppStorageKey.notificationSettings, default: .init())
+    @AppStorage(\.notificationSettings, default: .init())
     private var notificationSettings: NotificationSettings
-    @AppStorage(BoolAppStorageKey.isDebugOn)
+    @AppStorage(\.isDebugOn)
     private var isDebugOn: Bool
 
     @State private var model: SettingsScreenModel = .init()

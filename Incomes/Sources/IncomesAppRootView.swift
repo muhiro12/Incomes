@@ -2,7 +2,7 @@ import MHPlatform
 import SwiftUI
 
 struct IncomesAppRootView: View {
-    @AppStorage(BoolAppStorageKey.isICloudOn)
+    @AppStorage(\.isICloudOn)
     private var isICloudOn
 
     let platformEnvironment: IncomesPlatformEnvironment

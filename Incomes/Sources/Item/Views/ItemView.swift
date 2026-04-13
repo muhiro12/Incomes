@@ -8,7 +8,7 @@ struct ItemView {
     @Environment(\.isPresented)
     private var isPresented
 
-    @AppStorage(BoolAppStorageKey.isDebugOn)
+    @AppStorage(\.isDebugOn)
     private var isDebugOn
 }
 

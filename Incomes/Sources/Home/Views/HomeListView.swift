@@ -15,7 +15,7 @@ struct HomeListView {
     @Environment(NotificationService.self)
     private var notificationService
 
-    @AppStorage(BoolAppStorageKey.isSubscribeOn)
+    @AppStorage(\.isSubscribeOn)
     private var isSubscribeOn
 
     private let navigateToRoute: (IncomesRoute) -> Void

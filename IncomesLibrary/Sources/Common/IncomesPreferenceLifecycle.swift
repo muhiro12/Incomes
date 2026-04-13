@@ -1,11 +1,11 @@
 import Foundation
 import MHPlatformCore
 
-/// Coordinates preference migration and cleanup for Incomes-owned AppStorage keys.
+/// Coordinates preference migration and cleanup for Incomes-owned preference descriptors.
 public enum IncomesPreferenceLifecycle {
     /// Persistent state descriptor used by the shared preference lifecycle service.
     public static let migrationStateDescriptor = MHPreferenceMigrationStateDescriptor(
-        storageKey: IncomesAppStorageKeys.Standard.preferenceMigrationState.rawValue,
+        storageKey: IncomesUserDefaultsKeys.Standard.preferenceMigrationState.rawValue,
         defaultSelection: .standard
     )
 
@@ -14,9 +14,7 @@ public enum IncomesPreferenceLifecycle {
         standardDomainName: String? = Bundle.main.bundleIdentifier
     ) -> MHPreferenceLifecycleOutcome {
         runSynchronously(
-            descriptors: PreferenceDescriptorRegistry.allCases.map { descriptor in
-                descriptor as any MHStorageDescriptorProtocol
-            },
+            descriptors: currentDescriptors(),
             migrationStateDescriptor: migrationStateDescriptor,
             standardDomainName: standardDomainName
         )
@@ -43,44 +41,16 @@ public enum IncomesPreferenceLifecycle {
 }
 
 private extension IncomesPreferenceLifecycle {
-    enum PreferenceDescriptorRegistry: CaseIterable, MHStorageDescriptorProtocol {
-        case isSubscribeOn
-        case isICloudOn
-        case isDebugOn
-        case currencyCode
-        case lastLaunchedAppVersion
-        case notificationSettings
-
-        var storageKey: String {
-            storageDescriptor.storageKey
-        }
-
-        var defaultSelection: MHUserDefaultsSelection {
-            storageDescriptor.defaultSelection
-        }
-
-        private var storageDescriptor: any MHStorageDescriptorProtocol {
-            switch self {
-            case .isSubscribeOn:
-                BoolAppStorageKey.isSubscribeOn.preferenceDescriptor
-            case .isICloudOn:
-                BoolAppStorageKey.isICloudOn.preferenceDescriptor
-            case .isDebugOn:
-                BoolAppStorageKey.isDebugOn.preferenceDescriptor
-            case .currencyCode:
-                StringAppStorageKey.currencyCode.preferenceDescriptor
-            case .lastLaunchedAppVersion:
-                StringAppStorageKey.lastLaunchedAppVersion.preferenceDescriptor
-            case .notificationSettings:
-                NotificationSettingsAppStorageKey.notificationSettings.preferenceDescriptor
-            }
-        }
-
-        func migrationSteps(
-            store: MHPreferenceStore
-        ) -> [MHPreferenceMigrationStep] {
-            storageDescriptor.migrationSteps(store: store)
-        }
+    static func currentDescriptors() -> [any MHStorageDescriptorProtocol] {
+        let descriptors = MHPreferenceDescriptors()
+        return [
+            descriptors.isSubscribeOn,
+            descriptors.isICloudOn,
+            descriptors.isDebugOn,
+            descriptors.currencyCode,
+            descriptors.lastLaunchedAppVersion,
+            descriptors.notificationSettings
+        ]
     }
 
     final class PreferenceLifecycleOutcomeBox: @unchecked Sendable {

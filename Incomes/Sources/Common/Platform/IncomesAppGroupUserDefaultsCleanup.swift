@@ -1,7 +1,7 @@
 import Foundation
 import MHPlatform
 
-enum IncomesAppGroupAppStorageCleanup {
+enum IncomesAppGroupUserDefaultsCleanup {
     @MainActor
     static func removeUnknownKeys() {
         guard let userDefaults = UserDefaults(suiteName: AppGroup.id) else {
@@ -16,7 +16,7 @@ enum IncomesAppGroupAppStorageCleanup {
     }
 }
 
-private extension IncomesAppGroupAppStorageCleanup {
+private extension IncomesAppGroupUserDefaultsCleanup {
     static let knownDescriptors: [MHRawStorageDescriptor] = [
         IncomesIntentRouteStore.appGroupStorageDescriptor
     ]

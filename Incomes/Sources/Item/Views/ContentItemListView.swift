@@ -15,7 +15,7 @@ struct ContentItemListView {
     @Environment(IncomesTipController.self)
     private var tipController
 
-    @AppStorage(BoolAppStorageKey.isSubscribeOn)
+    @AppStorage(\.isSubscribeOn)
     private var isSubscribeOn
 }
 

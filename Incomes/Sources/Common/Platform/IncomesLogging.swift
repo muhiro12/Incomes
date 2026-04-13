@@ -21,11 +21,11 @@ enum IncomesLogging {
 
     private static let snapshotStorageDescriptors = MHLogSnapshotStorageDescriptors(
         current: .init(
-            storageKey: IncomesAppStorageKeys.Standard.currentLogSnapshot.rawValue,
+            storageKey: IncomesUserDefaultsKeys.Standard.currentLogSnapshot.rawValue,
             defaultSelection: .standard
         ),
         previous: .init(
-            storageKey: IncomesAppStorageKeys.Standard.previousLogSnapshot.rawValue,
+            storageKey: IncomesUserDefaultsKeys.Standard.previousLogSnapshot.rawValue,
             defaultSelection: .standard
         )
     )

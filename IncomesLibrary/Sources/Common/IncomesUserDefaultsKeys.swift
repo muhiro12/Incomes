@@ -1,5 +1,5 @@
-/// Central catalog of app-owned AppStorage keys.
-public enum IncomesAppStorageKeys {
+/// Central catalog of app-owned UserDefaults keys.
+public enum IncomesUserDefaultsKeys {
     public enum Standard: String, CaseIterable {
         case isSubscribeOn = "a018f613"
         case isICloudOn = "X7b9C4tZ"

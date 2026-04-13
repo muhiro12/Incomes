@@ -19,7 +19,7 @@ struct DebugListView {
     @Query(.tags(.typeIs(.year)))
     private var yearTags: [Tag]
 
-    @AppStorage(BoolAppStorageKey.isDebugOn)
+    @AppStorage(\.isDebugOn)
     private var isDebugOn
 
     @State private var isDialogPresented = false

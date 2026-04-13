@@ -30,7 +30,7 @@ struct ItemFormView: View {
     @Environment(\.modelContext)
     private var context
 
-    @AppStorage(BoolAppStorageKey.isDebugOn)
+    @AppStorage(\.isDebugOn)
     private var isDebugOn
 
     @FocusState private var focusedField: ItemFormFocusedField?

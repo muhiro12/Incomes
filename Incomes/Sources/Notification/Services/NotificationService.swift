@@ -157,10 +157,7 @@ final class NotificationService: NSObject {
             return
         }
 
-        let settings: NotificationSettings = AppStorage(
-            NotificationSettingsAppStorageKey.notificationSettings,
-            default: NotificationSettings()
-        ).wrappedValue
+        let settings = currentNotificationSettings()
         let plan = UpcomingPaymentPlanner.PlannedPayment(
             item: item,
             notifyDate: Date.now.addingTimeInterval(1)
@@ -289,10 +286,7 @@ private extension NotificationService {
     }
 
     func buildUpcomingPaymentReminders() -> [UNNotificationRequest] {
-        let settings: NotificationSettings = AppStorage(
-            NotificationSettingsAppStorageKey.notificationSettings,
-            default: NotificationSettings()
-        ).wrappedValue
+        let settings = currentNotificationSettings()
         guard let plans = try? UpcomingPaymentPlanner.build(
             context: modelContainer.mainContext,
             settings: settings,
@@ -331,6 +325,17 @@ private extension NotificationService {
         default:
             return String(localized: "Due in \(daysUntilDue) days")
         }
+    }
+
+    func currentNotificationSettings() -> NotificationSettings {
+        let preferenceStore = MHPreferenceStore()
+
+        guard let rawValue = preferenceStore.string(for: \.notificationSettings),
+              let settings = NotificationSettings(rawValue: rawValue) else {
+            return .init()
+        }
+
+        return settings
     }
 
     func notificationInterruptionLevel(

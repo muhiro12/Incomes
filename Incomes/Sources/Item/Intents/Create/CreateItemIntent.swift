@@ -8,7 +8,6 @@
 import AppIntents
 import MHPlatform
 import SwiftData
-import SwiftUI
 
 struct CreateItemIntent: AppIntent {
     @Parameter(title: "Date", kind: .date)
@@ -45,10 +44,7 @@ struct CreateItemIntent: AppIntent {
     func perform() async throws -> some ReturnsValue<ItemEntity> {
         try validateFormInput()
 
-        let currencyCode = AppStorage(
-            StringAppStorageKey.currencyCode,
-            default: ""
-        ).wrappedValue
+        let currencyCode = MHPreferenceStore().string(for: \.currencyCode) ?? ""
         if let amount = ItemIntentCurrencyValidator.disambiguationAmount(
             amount: income,
             expectedCurrencyCode: currencyCode

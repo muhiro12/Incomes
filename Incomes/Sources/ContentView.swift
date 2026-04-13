@@ -16,11 +16,11 @@ struct ContentView {
     @Environment(IncomesRoutePipeline.self)
     private var routePipeline
 
-    @AppStorage(BoolAppStorageKey.isSubscribeOn)
+    @AppStorage(\.isSubscribeOn)
     private var isSubscribeOn
-    @AppStorage(BoolAppStorageKey.isICloudOn)
+    @AppStorage(\.isICloudOn)
     private var isICloudOn
-    @AppStorage(BoolAppStorageKey.isDebugOn)
+    @AppStorage(\.isDebugOn)
     private var isDebugOn
 }
 

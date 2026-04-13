@@ -8,7 +8,6 @@
 import AppIntents
 import MHPlatform
 import SwiftData
-import SwiftUI
 
 struct GetPreviousItemNetIncomeIntent: AppIntent {
     @Parameter(title: "Date", kind: .date)
@@ -27,10 +26,7 @@ struct GetPreviousItemNetIncomeIntent: AppIntent {
         guard let netIncome else {
             return .result(value: nil)
         }
-        let currencyCode = AppStorage(
-            StringAppStorageKey.currencyCode,
-            default: ""
-        ).wrappedValue
+        let currencyCode = MHPreferenceStore().string(for: \.currencyCode) ?? ""
         return .result(value: .init(amount: netIncome, currencyCode: currencyCode))
     }
 }

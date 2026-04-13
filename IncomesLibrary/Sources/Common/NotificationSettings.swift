@@ -8,7 +8,7 @@
 import Foundation
 
 /// User-configurable settings that control upcoming payment notifications.
-public struct NotificationSettings: AppStorageCodable {
+public struct NotificationSettings: Codable, Equatable, RawRepresentable, Sendable {
     /// Enables/disables upcoming payment notifications.
     public var isEnabled = true // swiftlint:disable:this type_contents_order
     /// Minimum outgo amount to trigger a notification.
@@ -21,6 +21,24 @@ public struct NotificationSettings: AppStorageCodable {
     /// Creates default settings.
     public init() { // swiftlint:disable:this type_contents_order
         // no-op
+    }
+
+    /// Decodes the existing string-backed `UserDefaults` representation.
+    public init?(rawValue: String) { // swiftlint:disable:this type_contents_order
+        guard let data = rawValue.data(using: .utf8),
+              let value = try? JSONDecoder().decode(Self.self, from: data) else {
+            return nil
+        }
+        self = value
+    }
+
+    /// Encodes the current settings to the legacy string-backed storage format.
+    public var rawValue: String {
+        guard let data = try? JSONEncoder().encode(self),
+              let rawValue = String(data: data, encoding: .utf8) else {
+            return ""
+        }
+        return rawValue
     }
 
     public init(from decoder: any Decoder) throws { // swiftlint:disable:this type_contents_order
