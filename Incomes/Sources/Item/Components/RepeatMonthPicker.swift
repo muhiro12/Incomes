@@ -96,13 +96,13 @@ private extension RepeatMonthPicker {
         .background(backgroundColor(for: selection))
         .clipShape(
             RoundedRectangle(
-                cornerRadius: designMetrics.radius.control,
+                cornerRadius: designMetrics.cornerRadius.control,
                 style: .continuous
             )
         )
         .overlay(
             RoundedRectangle(
-                cornerRadius: designMetrics.radius.control,
+                cornerRadius: designMetrics.cornerRadius.control,
                 style: .continuous
             )
             .stroke(

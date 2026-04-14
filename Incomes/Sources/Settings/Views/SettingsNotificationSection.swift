@@ -50,7 +50,7 @@ private extension SettingsNotificationSection {
                 )
                 .keyboardType(.numberPad)
                 .multilineTextAlignment(.trailing)
-                .frame(maxWidth: designMetrics.layout.compactKeyValueMinimumValueWidth)
+                .frame(maxWidth: designMetrics.layout.readableContentWidth)
             }
             Picker("Notify days before", selection: $notificationSettings.daysBeforeDueDate) {
                 ForEach(0..<15) { dayOffset in // swiftlint:disable:this no_magic_numbers
