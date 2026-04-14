@@ -1,5 +1,5 @@
 {
-  "originHash" : "6f1623de0e6ee80960efb03d393c6b53632e09c14fd80c61126d26965be68a45",
+  "originHash" : "0a3bf66259a5c4a37805c0beb4c8550ca10bfefcbb48e64435fbce41889a6e1b",
   "pins" : [
     {
       "identity" : "googlemobileadswrapper",
@@ -31,10 +31,10 @@
     {
       "identity" : "mhui",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/muhiro12/MHUI.git",
+      "location" : "https://github.com/muhiro12/MHUI",
       "state" : {
-        "revision" : "4805a54bd4040392a8bd1ec9880ff65273f15212",
-        "version" : "1.1.0"
+        "revision" : "fc146693ed3fff6c6b5d0c083b63c276a229fa18",
+        "version" : "1.2.0"
       }
     },
     {
