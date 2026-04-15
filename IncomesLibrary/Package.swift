@@ -22,7 +22,7 @@ let package = Package( // swiftlint:disable:this prefixed_toplevel_constant
             "1.0.0"..<"1.35.0"
         ),
         .package(
-            url: "https://github.com/muhiro12/MHPlatform.git",
+            url: "https://github.com/muhiro12/MHPlatform",
             "1.0.0"..<"2.0.0"
         )
     ],
