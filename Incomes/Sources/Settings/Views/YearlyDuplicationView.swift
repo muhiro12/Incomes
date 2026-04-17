@@ -13,10 +13,6 @@ import SwiftUI
 
 struct YearlyDuplicationView: View {
     private enum Constants {
-        static let menuSpacing: CGFloat = 4
-        static let proposalVerticalPadding: CGFloat = 4
-        static let selectionBarSpacing: CGFloat = 6
-        static let selectionBarVerticalPadding: CGFloat = 12
         static let targetYearRange = 10
     }
 
@@ -115,7 +111,7 @@ struct YearlyDuplicationView: View {
                                 .disabled(isCreated || entries.isEmpty)
                             }
                         }
-                        .padding(.vertical, Constants.proposalVerticalPadding)
+                        .padding(.vertical, proposalVerticalPadding)
                         .contentShape(Rectangle())
                         .contextMenu {
                             Button("Edit", systemImage: "pencil") {
@@ -352,7 +348,7 @@ private extension YearlyDuplicationView {
     }
 
     func yearSelectionBar() -> some View {
-        VStack(alignment: .leading, spacing: Constants.selectionBarSpacing) {
+        VStack(alignment: .leading, spacing: selectionBarSpacing) {
             Text("Year Range")
                 .font(.caption)
                 .foregroundStyle(.secondary)
@@ -369,8 +365,8 @@ private extension YearlyDuplicationView {
                 )
             }
         }
-        .padding(.horizontal, designMetrics.spacing.control)
-        .padding(.vertical, Constants.selectionBarVerticalPadding)
+        .padding(.horizontal, selectionBarHorizontalPadding)
+        .padding(.vertical, selectionBarVerticalPadding)
         .background(Color(.systemGroupedBackground))
         .overlay(alignment: .bottom) {
             Divider()
@@ -382,7 +378,7 @@ private extension YearlyDuplicationView {
         selection: Binding<Int>,
         years: [Int]
     ) -> some View {
-        VStack(alignment: .leading, spacing: Constants.menuSpacing) {
+        VStack(alignment: .leading, spacing: designMetrics.spacing.inline) {
             Text(title)
                 .font(.caption2)
                 .foregroundStyle(.secondary)
@@ -419,6 +415,22 @@ private extension YearlyDuplicationView {
             category: IncomesLogging.Category.yearlyDuplication,
             source: #fileID
         )
+    }
+
+    var proposalVerticalPadding: CGFloat {
+        designMetrics.spacing.inline
+    }
+
+    var selectionBarSpacing: CGFloat {
+        designMetrics.spacing.inline
+    }
+
+    var selectionBarHorizontalPadding: CGFloat {
+        designMetrics.layout.surface.insetHorizontal
+    }
+
+    var selectionBarVerticalPadding: CGFloat {
+        designMetrics.layout.surface.compactInsetVertical
     }
 }
 

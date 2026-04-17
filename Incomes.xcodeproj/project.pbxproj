@@ -21,6 +21,7 @@
 		B00000012F7A000100000012 /* SwiftUtilities in Frameworks */ = {isa = PBXBuildFile; productRef = B00000012F7A000100000011 /* SwiftUtilities */; };
 		B00000012F7A000100000014 /* SwiftUtilities in Frameworks */ = {isa = PBXBuildFile; productRef = B00000012F7A000100000013 /* SwiftUtilities */; };
 		B10000012F8A000100000002 /* MHDesign in Frameworks */ = {isa = PBXBuildFile; productRef = B10000012F8A000100000001 /* MHDesign */; };
+		B20000012F8A000100000002 /* MHDesign in Frameworks */ = {isa = PBXBuildFile; productRef = B20000012F8A000100000001 /* MHDesign */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -105,6 +106,7 @@
 			files = (
 				AD6DB6E32E779C5400E5BB78 /* IncomesLibrary in Frameworks */,
 				AD7F5C232F5B3186008D91F3 /* MHPreferences in Frameworks */,
+				B20000012F8A000100000002 /* MHDesign in Frameworks */,
 				B00000012F7A000100000012 /* SwiftUtilities in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -189,6 +191,7 @@
 			packageProductDependencies = (
 				AD6DB6E22E779C5400E5BB78 /* IncomesLibrary */,
 				AD7F5C222F5B3186008D91F3 /* MHPreferences */,
+				B20000012F8A000100000001 /* MHDesign */,
 				B00000012F7A000100000011 /* SwiftUtilities */,
 			);
 			productName = "Incomes (Watch) Watch App";
@@ -800,7 +803,7 @@
 /* Begin XCRemoteSwiftPackageReference section */
 		AD7F5C0C2F5B3186008D91F3 /* XCRemoteSwiftPackageReference "MHPlatform" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/muhiro12/MHPlatform";
+			repositoryURL = "https://github.com/muhiro12/MHPlatform.git";
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 1.0.0;
@@ -876,6 +879,11 @@
 			productName = SwiftUtilities;
 		};
 		B10000012F8A000100000001 /* MHDesign */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = ADB890112F89BF4C00C59D93 /* XCRemoteSwiftPackageReference "MHUI" */;
+			productName = MHDesign;
+		};
+		B20000012F8A000100000001 /* MHDesign */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = ADB890112F89BF4C00C59D93 /* XCRemoteSwiftPackageReference "MHUI" */;
 			productName = MHDesign;

@@ -5,6 +5,7 @@
 //  Created by Hiromu Nakano on 2025/09/15.
 //
 
+import MHDesign
 import MHPreferences
 import SwiftData
 import SwiftUI
@@ -14,6 +15,8 @@ struct ContentView {
     private var context
     @AppStorage(\.isDebugOn)
     private var isDebugOn
+    @Environment(\.mhDesignMetrics)
+    private var designMetrics
 
     @Query(.items(.dateIsAfter(Date.now), order: .forward))
     private var upcomingCandidates: [Item]
@@ -67,10 +70,10 @@ private extension ContentView {
         Section("Upcoming") {
             if itemsForDisplay.isNotEmpty {
                 ForEach(itemsForDisplay) { item in
-                    VStack {
+                    VStack(alignment: .leading, spacing: designMetrics.spacing.inline) {
                         Text(item.content)
                             .frame(maxWidth: .infinity, alignment: .leading)
-                        HStack {
+                        HStack(spacing: designMetrics.spacing.inline) {
                             Text(item.localDate.formatted(.dateTime.month().day()))
                                 .font(.footnote)
                             Text(item.netIncome.asCurrency)

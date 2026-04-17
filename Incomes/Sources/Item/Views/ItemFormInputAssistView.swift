@@ -123,9 +123,6 @@ private extension ItemFormInputAssistView {
     private enum Constants {
         static let cardBorderLineWidth: CGFloat = 1
         static let cardBorderOpacity = 0.18
-        static let cardCornerRadius: CGFloat = 12
-        static let placeholderTopPadding: CGFloat = 12
-        static let rowInsetBottom: CGFloat = 12
         static let textEditorMinimumHeight: CGFloat = 220
     }
 
@@ -156,17 +153,18 @@ private extension ItemFormInputAssistView {
                 if isRecognizedTextEmpty {
                     Text("Paste or capture text to extract details.")
                         .foregroundStyle(.secondary)
-                        .padding(.top, Constants.placeholderTopPadding)
-                        .padding(.leading, designMetrics.spacing.inline)
+                        .padding(.top, designMetrics.layout.surface.compactInsetVertical)
+                        .padding(.leading, designMetrics.layout.surface.compactInsetHorizontal)
                 }
 
                 TextEditor(text: recognizedText)
                     .scrollContentBackground(.hidden)
                     .frame(minHeight: Constants.textEditorMinimumHeight)
-                    .padding(designMetrics.spacing.inline)
+                    .padding(.horizontal, designMetrics.layout.surface.compactInsetHorizontal)
+                    .padding(.vertical, designMetrics.layout.surface.compactInsetVertical)
                     .background(
                         RoundedRectangle(
-                            cornerRadius: Constants.cardCornerRadius,
+                            cornerRadius: designMetrics.cornerRadius.surface,
                             style: .continuous
                         )
                         .fill(Color(uiColor: .secondarySystemBackground))
@@ -175,7 +173,7 @@ private extension ItemFormInputAssistView {
             }
             .overlay(
                 RoundedRectangle(
-                    cornerRadius: Constants.cardCornerRadius,
+                    cornerRadius: designMetrics.cornerRadius.surface,
                     style: .continuous
                 )
                 .stroke(
@@ -185,10 +183,10 @@ private extension ItemFormInputAssistView {
             )
             .listRowInsets(
                 .init(
-                    top: designMetrics.spacing.inline,
-                    leading: designMetrics.spacing.control,
-                    bottom: Constants.rowInsetBottom,
-                    trailing: designMetrics.spacing.control
+                    top: designMetrics.layout.surface.compactInsetVertical,
+                    leading: designMetrics.layout.surface.compactInsetHorizontal,
+                    bottom: designMetrics.layout.surface.compactInsetVertical,
+                    trailing: designMetrics.layout.surface.compactInsetHorizontal
                 )
             )
         } header: {

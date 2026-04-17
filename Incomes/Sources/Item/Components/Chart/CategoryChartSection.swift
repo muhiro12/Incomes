@@ -27,7 +27,7 @@ struct CategoryChartSection: View {
             } detail: {
                 ScrollView {
                     chartContent
-                        .padding(.vertical)
+                        .padding(.vertical, designMetrics.layout.surface.compactInsetVertical)
                 }
                 .scrollIndicators(.hidden)
             }
@@ -56,10 +56,8 @@ struct CategoryChartSection: View {
 
 private extension CategoryChartSection {
     private enum Constants {
-        static let contentSpacing: CGFloat = 4
         static let innerRadiusRatio = 0.618
         static let legendMarkerSize: CGFloat = 6
-        static let legendTopPadding: CGFloat = 4
         static let outerRadiusInset: CGFloat = 10
         static let sectionHeight: CGFloat = 240
         static let sectorCornerRadius: CGFloat = 4
@@ -70,11 +68,11 @@ private extension CategoryChartSection {
             incomeContent
             outgoContent
         }
-        .padding(.horizontal, designMetrics.spacing.control)
+        .padding(.horizontal, designMetrics.layout.surface.insetHorizontal)
     }
 
     @ViewBuilder var incomeContent: some View {
-        VStack(alignment: .leading, spacing: Constants.contentSpacing) {
+        VStack(alignment: .leading, spacing: designMetrics.spacing.inline) {
             Text("Income")
                 .font(.headline)
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -104,7 +102,7 @@ private extension CategoryChartSection {
     }
 
     @ViewBuilder var outgoContent: some View {
-        VStack(alignment: .leading, spacing: Constants.contentSpacing) {
+        VStack(alignment: .leading, spacing: designMetrics.spacing.inline) {
             Text("Outgo")
                 .font(.headline)
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -136,7 +134,7 @@ private extension CategoryChartSection {
 
     @ViewBuilder
     func totalLabel(amount: Decimal) -> some View { // swiftlint:disable:this type_contents_order
-        VStack(spacing: Constants.contentSpacing) {
+        VStack(spacing: designMetrics.spacing.inline) {
             Text("Total")
                 .font(.caption)
                 .foregroundStyle(.secondary)
@@ -299,7 +297,7 @@ private extension CategoryChartSection {
                 }
             }
         }
-        .padding(.top, Constants.legendTopPadding)
+        .padding(.top, designMetrics.spacing.inline)
     }
 
     func ratioFor(value: Decimal, total: Decimal) -> Double {

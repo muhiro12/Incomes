@@ -10,7 +10,6 @@ struct IncomesUpcomingWidget {
         @Environment(\.mhDesignMetrics)
         private var designMetrics
 
-        private let contentSpacing: CGFloat = 4
         private let compactMinScaleFactor = 0.85
         let entry: UpcomingEntry
         private let mediumMinScaleFactor = 0.8
@@ -24,7 +23,7 @@ struct IncomesUpcomingWidget {
 
         @ViewBuilder private var mediumLayout: some View {
             HStack(alignment: .center, spacing: designMetrics.spacing.control) {
-                VStack(alignment: .leading, spacing: contentSpacing) {
+                VStack(alignment: .leading, spacing: designMetrics.spacing.inline) {
                     Text(entry.titleText)
                         .font(.subheadline)
                         .foregroundStyle(.secondary)

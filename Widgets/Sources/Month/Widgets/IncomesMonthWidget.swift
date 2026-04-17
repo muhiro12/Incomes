@@ -12,10 +12,8 @@ struct IncomesMonthWidget {
 
         private let compactAmountIconWidth: CGFloat = 14
         private let compactMinScaleFactor = 0.7
-        private let compactVerticalSpacing: CGFloat = 4
         let entry: MonthSummaryEntry
         private let mediumMinScaleFactor = 0.8
-        private let monthInfoSpacing: CGFloat = 4
 
         var body: some View {
             ViewThatFits(in: .horizontal) {
@@ -47,7 +45,7 @@ struct IncomesMonthWidget {
                 amountGrid(
                     amountFont: .title3.weight(.semibold),
                     iconFont: .caption.weight(.semibold),
-                    verticalSpacing: compactVerticalSpacing,
+                    verticalSpacing: designMetrics.spacing.inline,
                     minimumScaleFactor: compactMinScaleFactor
                 )
             }
@@ -75,7 +73,7 @@ struct IncomesMonthWidget {
 
         @ViewBuilder
         private func monthInfo(font: Font) -> some View {
-            VStack(alignment: .leading, spacing: monthInfoSpacing) {
+            VStack(alignment: .leading, spacing: designMetrics.spacing.inline) {
                 Text(IncomesMonthWidget.monthTitle(from: entry.date))
                     .font(font)
                     .foregroundStyle(.secondary)

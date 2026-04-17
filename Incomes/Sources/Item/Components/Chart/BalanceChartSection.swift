@@ -26,12 +26,14 @@ struct BalanceChartSection: View {
             ) {
                 chart()
                     .frame(height: Constants.sectionHeight)
-                    .padding(designMetrics.spacing.control)
+                    .padding(.horizontal, designMetrics.layout.surface.insetHorizontal)
+                    .padding(.vertical, designMetrics.layout.surface.insetVertical)
             } detail: {
                 chart()
                     .chartScrollableAxes(.horizontal)
                     .chartScrollPosition(initialX: Date.now)
-                    .padding(designMetrics.spacing.control)
+                    .padding(.horizontal, designMetrics.layout.surface.insetHorizontal)
+                    .padding(.vertical, designMetrics.layout.surface.insetVertical)
             }
         } header: {
             Text("Balance")

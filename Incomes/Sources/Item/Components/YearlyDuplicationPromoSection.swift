@@ -11,10 +11,6 @@ import SwiftUI
 import TipKit
 
 struct YearlyDuplicationPromoSection: View {
-    private enum Constants {
-        static let proposalVerticalPadding: CGFloat = 4
-    }
-
     @Environment(IncomesTipController.self)
     private var tipController
     @Environment(\.modelContext)
@@ -65,7 +61,7 @@ struct YearlyDuplicationPromoSection: View {
                             .foregroundStyle(.secondary)
                         reviewProposalsButton()
                     }
-                    .padding(.vertical, Constants.proposalVerticalPadding)
+                    .padding(.vertical, designMetrics.spacing.inline)
                 } header: {
                     HStack {
                         Text("Yearly duplication")

@@ -89,8 +89,11 @@ private extension RepeatMonthPicker {
         } label: {
             Text(verbatim: monthLabel(for: selection))
                 .font(.callout)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, designMetrics.spacing.inline)
+                .padding(.horizontal, designMetrics.spacing.inline)
+                .frame(
+                    maxWidth: .infinity,
+                    minHeight: designMetrics.layout.control.minimumTouchTarget
+                )
         }
         .buttonStyle(.plain)
         .background(backgroundColor(for: selection))

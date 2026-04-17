@@ -10,7 +10,6 @@ struct IncomesMonthNetIncomeWidget {
         @Environment(\.mhDesignMetrics)
         private var designMetrics
 
-        private let contentSpacing: CGFloat = 4
         let entry: NetIncomeEntry
 
         var body: some View {
@@ -24,7 +23,7 @@ struct IncomesMonthNetIncomeWidget {
             HStack(alignment: .center, spacing: designMetrics.spacing.control) {
                 VStack(
                     alignment: .leading,
-                    spacing: contentSpacing
+                    spacing: designMetrics.spacing.inline
                 ) {
                     Text(IncomesMonthNetIncomeWidget.monthTitle(from: entry.date))
                         .font(.subheadline)

@@ -175,7 +175,7 @@ private extension SearchListView {
     }
 
     func buildCurrencyRows() -> some View {
-        HStack(spacing: designMetrics.spacing.screen) {
+        HStack(spacing: designMetrics.spacing.control) {
             TextField("Min", text: $minValue)
                 .keyboardType(.numbersAndPunctuation)
             Text("~")
