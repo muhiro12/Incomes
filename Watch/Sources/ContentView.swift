@@ -14,6 +14,8 @@ struct ContentView {
     private var isDebugOn
     @Environment(\.modelContext)
     private var context
+    @Environment(\.scenePhase)
+    private var scenePhase
 
     @Query(.items(.dateIsAfter(Date.now), order: .forward))
     private var upcomingCandidates: [Item]
@@ -38,8 +40,18 @@ extension ContentView: View {
             isDebugOn = true
             #endif
 
-            await PhoneSyncClient.shared.activate()
-            await reloadRecentMonthsIfNeeded()
+            await reloadRecentMonthsIfNeeded(
+                trigger: .initial
+            )
+        }
+        .task(id: scenePhase) {
+            guard scenePhase == .active else {
+                return
+            }
+
+            await reloadRecentMonthsIfNeeded(
+                trigger: .foreground
+            )
         }
     }
 }
@@ -106,30 +118,56 @@ private extension ContentView {
     func syncStatusSection(
         model: WatchHomeScreenModel
     ) -> some View {
-        switch model.syncStatus {
-        case .reloading:
-            Section("Sync") {
+        Section("Sync") {
+            switch model.syncStatus {
+            case .idle:
+                Label("Not Synced Yet", systemImage: "iphone.slash")
+                Text("Open the paired iPhone app if recent items do not appear.")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+            case .reloading:
                 Label("Reloading", systemImage: "arrow.trianglehead.clockwise")
                 Text("Syncing recent months from your iPhone.")
                     .font(.footnote)
                     .foregroundStyle(.secondary)
-            }
-        case let .failed(failure):
-            Section("Sync") {
-                Label("Sync Failed", systemImage: "exclamationmark.triangle")
+            case let .failed(failure):
+                Label(
+                    syncFailureTitle(for: failure),
+                    systemImage: syncFailureSystemImage(for: failure)
+                )
                 Text(failure.message)
                     .font(.footnote)
                     .foregroundStyle(.secondary)
-            }
-        case .emptySuccess:
-            Section("Sync") {
+                Text(syncFailureRecoveryText(for: failure))
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+            case .emptySuccess:
                 Label("No Recent Items", systemImage: "checkmark.circle")
                 Text("Recent month sync completed without returning any items.")
                     .font(.footnote)
                     .foregroundStyle(.secondary)
+            case .success:
+                Label("Synced", systemImage: "checkmark.circle")
+                Text("Recent items are up to date on Apple Watch.")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
             }
-        case .none:
-            EmptyView()
+
+            if let syncReferenceDate = model.lastSuccessfulSyncAt ?? model.lastSyncAttemptAt {
+                let timestampTitle: LocalizedStringKey = model.lastSuccessfulSyncAt == nil
+                    ? "Last Attempt"
+                    : "Last Updated"
+
+                LabeledContent(timestampTitle) {
+                    Text(
+                        syncReferenceDate.formatted(
+                            .dateTime.month().day().hour().minute()
+                        )
+                    )
+                    .foregroundStyle(.secondary)
+                }
+                .font(.footnote)
+            }
         }
     }
 
@@ -139,7 +177,9 @@ private extension ContentView {
         Section {
             Button {
                 Task { @MainActor in
-                    await reloadRecentMonthsIfNeeded()
+                    await reloadRecentMonthsIfNeeded(
+                        trigger: .manual
+                    )
                 }
             } label: {
                 if model.isReloading {
@@ -172,12 +212,70 @@ private extension ContentView {
         }
     }
 
-    func reloadRecentMonthsIfNeeded() async {
-        guard model.beginReload() else {
+    func reloadRecentMonthsIfNeeded(
+        trigger: WatchHomeScreenModel.ReloadTrigger
+    ) async {
+        guard model.beginReload(trigger: trigger) else {
             return
         }
+
+        await PhoneSyncClient.shared.activate()
         let reply = await WatchDataSyncer.syncRecentMonths(context: context)
         model.finishReload(with: reply)
+    }
+
+    func syncFailureTitle(
+        for failure: WatchSyncFailure
+    ) -> LocalizedStringKey {
+        switch failure.phase {
+        case .sessionUnreachable,
+             .transport:
+            return "iPhone Unreachable"
+        case .requestDecode,
+             .missingContext,
+             .itemFetch,
+             .responseEncode,
+             .requestEncode,
+             .responseDecode,
+             .snapshotApply:
+            return "Sync Failed"
+        }
+    }
+
+    func syncFailureSystemImage(
+        for failure: WatchSyncFailure
+    ) -> String {
+        switch failure.phase {
+        case .sessionUnreachable,
+             .transport:
+            return "iphone.slash"
+        case .requestDecode,
+             .missingContext,
+             .itemFetch,
+             .responseEncode,
+             .requestEncode,
+             .responseDecode,
+             .snapshotApply:
+            return "exclamationmark.triangle"
+        }
+    }
+
+    func syncFailureRecoveryText(
+        for failure: WatchSyncFailure
+    ) -> LocalizedStringKey {
+        switch failure.phase {
+        case .sessionUnreachable,
+             .transport:
+            return "Bring your iPhone nearby, then try Reload again."
+        case .requestDecode,
+             .missingContext,
+             .itemFetch,
+             .responseEncode,
+             .requestEncode,
+             .responseDecode,
+             .snapshotApply:
+            return "Open the paired iPhone app, then try Reload again."
+        }
     }
 }
 
