@@ -119,55 +119,8 @@ private extension ContentView {
         model: WatchHomeScreenModel
     ) -> some View {
         Section("Sync") {
-            switch model.syncStatus {
-            case .idle:
-                Label("Not Synced Yet", systemImage: "iphone.slash")
-                Text("Open the paired iPhone app if recent items do not appear.")
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
-            case .reloading:
-                Label("Reloading", systemImage: "arrow.trianglehead.clockwise")
-                Text("Syncing recent months from your iPhone.")
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
-            case let .failed(failure):
-                Label(
-                    syncFailureTitle(for: failure),
-                    systemImage: syncFailureSystemImage(for: failure)
-                )
-                Text(failure.message)
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
-                Text(syncFailureRecoveryText(for: failure))
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
-            case .emptySuccess:
-                Label("No Recent Items", systemImage: "checkmark.circle")
-                Text("Recent month sync completed without returning any items.")
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
-            case .success:
-                Label("Synced", systemImage: "checkmark.circle")
-                Text("Recent items are up to date on Apple Watch.")
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
-            }
-
-            if let syncReferenceDate = model.lastSuccessfulSyncAt ?? model.lastSyncAttemptAt {
-                let timestampTitle: LocalizedStringKey = model.lastSuccessfulSyncAt == nil
-                    ? "Last Attempt"
-                    : "Last Updated"
-
-                LabeledContent(timestampTitle) {
-                    Text(
-                        syncReferenceDate.formatted(
-                            .dateTime.month().day().hour().minute()
-                        )
-                    )
-                    .foregroundStyle(.secondary)
-                }
-                .font(.footnote)
-            }
+            syncStatusSummary(model: model)
+            syncTimestamp(model: model)
         }
     }
 
@@ -275,6 +228,66 @@ private extension ContentView {
              .responseDecode,
              .snapshotApply:
             return "Open the paired iPhone app, then try Reload again."
+        }
+    }
+
+    @ViewBuilder
+    func syncStatusSummary(
+        model: WatchHomeScreenModel
+    ) -> some View {
+        switch model.syncStatus {
+        case .idle:
+            Label("Not Synced Yet", systemImage: "iphone.slash")
+            Text("Open the paired iPhone app if recent items do not appear.")
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+        case .reloading:
+            Label("Reloading", systemImage: "arrow.trianglehead.clockwise")
+            Text("Syncing recent months from your iPhone.")
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+        case let .failed(failure):
+            Label(
+                syncFailureTitle(for: failure),
+                systemImage: syncFailureSystemImage(for: failure)
+            )
+            Text(failure.message)
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+            Text(syncFailureRecoveryText(for: failure))
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+        case .emptySuccess:
+            Label("No Recent Items", systemImage: "checkmark.circle")
+            Text("Recent month sync completed without returning any items.")
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+        case .success:
+            Label("Synced", systemImage: "checkmark.circle")
+            Text("Recent items are up to date on Apple Watch.")
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+        }
+    }
+
+    @ViewBuilder
+    func syncTimestamp(
+        model: WatchHomeScreenModel
+    ) -> some View {
+        if let syncReferenceDate = model.lastSuccessfulSyncAt ?? model.lastSyncAttemptAt {
+            let timestampTitle: LocalizedStringKey = model.lastSuccessfulSyncAt == nil
+                ? "Last Attempt"
+                : "Last Updated"
+
+            LabeledContent(timestampTitle) {
+                Text(
+                    syncReferenceDate.formatted(
+                        .dateTime.month().day().hour().minute()
+                    )
+                )
+                .foregroundStyle(.secondary)
+            }
+            .font(.footnote)
         }
     }
 }

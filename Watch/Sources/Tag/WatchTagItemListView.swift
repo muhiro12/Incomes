@@ -21,24 +21,3 @@ struct WatchTagItemListView: View {
         .navigationTitle(tag.displayName)
     }
 }
-
-#Preview {
-    WatchPreview {
-        WatchTagItemListPreview()
-    }
-}
-
-private struct WatchTagItemListPreview: View {
-    @Query(.tags(.typeIs(.category)))
-    private var categoryTags: [Tag]
-
-    var body: some View {
-        NavigationStack {
-            if let tag = categoryTags.first {
-                WatchTagItemListView(tag: tag)
-            } else {
-                Text("No tags")
-            }
-        }
-    }
-}

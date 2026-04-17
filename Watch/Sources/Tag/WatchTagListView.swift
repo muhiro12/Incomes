@@ -2,12 +2,10 @@ import SwiftData
 import SwiftUI
 
 struct WatchTagListView: View {
-    @Query
-    private var tags: [Tag]
-
     private let title: LocalizedStringKey
+    @Query private var tags: [Tag]
 
-    init(
+    init( // swiftlint:disable:this type_contents_order
         type: TagType? = nil,
         title: LocalizedStringKey = "Tags"
     ) {
