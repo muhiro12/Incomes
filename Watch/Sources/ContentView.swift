@@ -51,6 +51,7 @@ private extension ContentView {
         List {
             upcomingSection(model: model)
             syncStatusSection(model: model)
+            browseSection()
             reloadSection(model: model)
             settingsSection(model: model)
         }
@@ -148,6 +149,16 @@ private extension ContentView {
                 }
             }
             .disabled(model.isReloading)
+        }
+    }
+
+    func browseSection() -> some View {
+        Section {
+            NavigationLink {
+                WatchBrowseListView()
+            } label: {
+                Label("Browse", systemImage: "square.grid.2x2")
+            }
         }
     }
 

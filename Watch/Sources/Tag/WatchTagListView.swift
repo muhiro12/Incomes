@@ -1,34 +1,39 @@
-import MHDesign
 import SwiftData
 import SwiftUI
 
 struct WatchTagListView: View {
-    @Query(.tags(.all))
-    private var allTags: [Tag]
-    @Environment(\.mhDesignMetrics)
-    private var designMetrics
+    @Query
+    private var tags: [Tag]
+
+    private let title: LocalizedStringKey
+
+    init(
+        type: TagType? = nil,
+        title: LocalizedStringKey = "Tags"
+    ) {
+        if let type {
+            _tags = Query(.tags(.typeIs(type)))
+        } else {
+            _tags = Query(.tags(.all))
+        }
+        self.title = title
+    }
 
     var body: some View {
         List {
-            if allTags.isNotEmpty {
-                ForEach(allTags) { tag in
-                    VStack(alignment: .leading, spacing: designMetrics.spacing.inline) {
-                        Text(tag.displayName)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                        HStack(spacing: designMetrics.spacing.inline) {
-                            Text(tag.displayName)
-                                .font(.footnote)
-                            Text(tag.netIncome.asCurrency)
-                                .foregroundStyle(tag.netIncome.isPlus ? .accent : .red)
-                                .frame(maxWidth: .infinity, alignment: .trailing)
-                        }
+            if tags.isNotEmpty {
+                ForEach(tags) { tag in
+                    NavigationLink {
+                        WatchTagItemListView(tag: tag)
+                    } label: {
+                        WatchTagRow(tag: tag)
                     }
                 }
             } else {
                 Text("No tags")
             }
         }
-        .navigationTitle("Tags")
+        .navigationTitle(title)
     }
 }
 
