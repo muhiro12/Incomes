@@ -18,7 +18,7 @@ struct DebugTagListView: View {
     }
 
     var body: some View {
-        List(selection: $selectedTagID) {
+        List {
             buildSection(from: yearTags) {
                 Text("Year")
             }
@@ -38,19 +38,23 @@ struct DebugTagListView: View {
     private func buildSection<Header: View>(from tags: [Tag], header: () -> Header) -> some View {
         Section {
             ForEach(tags) { tag in
-                Text(tag.displayName)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .contentShape(Rectangle())
-                    .contextMenu {
-                        Button("Inspect", systemImage: "arrow.right.circle") {
-                            selectedTagID = tag.persistentModelID
-                        }
-                        CopyTextContextMenuButton(
-                            "Copy Name",
-                            text: tag.displayName
-                        )
+                Button {
+                    selectedTagID = tag.persistentModelID
+                } label: {
+                    Text(tag.displayName)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+                .contextMenu {
+                    Button("Inspect", systemImage: "arrow.right.circle") {
+                        selectedTagID = tag.persistentModelID
                     }
-                    .tag(tag.persistentModelID)
+                    CopyTextContextMenuButton(
+                        "Copy Name",
+                        text: tag.displayName
+                    )
+                }
             }
         } header: {
             header()

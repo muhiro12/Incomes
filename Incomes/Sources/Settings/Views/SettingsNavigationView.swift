@@ -21,12 +21,24 @@ struct SettingsNavigationView: View {
             )
             .navigationDestination(for: SettingsNavigationDestination.self) { destination in
                 switch destination {
+                case .root:
+                    EmptyView()
                 case .subscription:
                     StoreListView()
                 case .license:
                     LicenseView()
                 case .debug:
-                    DebugNavigationView()
+                    DebugNavigationView(
+                        navigateToCompactDestination: navigateToDestination
+                    )
+                case .debugDiagnostics:
+                    DebugDiagnosticsView()
+                case .debugAllTags:
+                    DebugAllTagsView(
+                        selection: debugTagSelectionBinding
+                    )
+                case .debugTag(let tagID):
+                    DebugTagItemListView(tagID: tagID)
                 }
             }
         }
@@ -50,12 +62,52 @@ struct SettingsNavigationView: View {
 }
 
 private extension SettingsNavigationView {
+    var debugTagSelectionBinding: Binding<Tag.ID?> {
+        .init(
+            get: {
+                guard case .debugTag(let tagID) = path.last else {
+                    return nil
+                }
+                return tagID
+            },
+            set: { tagID in
+                guard let tagID else {
+                    return
+                }
+                path.append(.debugTag(tagID))
+            }
+        )
+    }
+
     func applyIncomingDestinationIfNeeded() {
         guard let incomingDestination else {
             return
         }
-        path = [incomingDestination]
+        path = navigationPath(for: incomingDestination)
         self.incomingDestination = nil
+    }
+
+    func navigateToDestination(
+        _ destination: SettingsNavigationDestination
+    ) {
+        path.append(destination)
+    }
+
+    func navigationPath(
+        for destination: SettingsNavigationDestination
+    ) -> [SettingsNavigationDestination] {
+        switch destination {
+        case .root:
+            []
+        case .subscription,
+             .license,
+             .debug:
+            [destination]
+        case .debugDiagnostics,
+             .debugAllTags,
+             .debugTag:
+            [.debug, destination]
+        }
     }
 }
 

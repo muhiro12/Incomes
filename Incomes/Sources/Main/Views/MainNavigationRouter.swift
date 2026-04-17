@@ -111,18 +111,20 @@ private extension MainNavigationRouter {
         )
         switch outcome {
         case let .destination(yearTagID, selectedTag):
+            settingsDestination = nil
             self.yearTagID = yearTagID
             self.selectedTag = selectedTag
             clearSearchState()
             preferredCompactColumn = selectedTag == nil ? .content : .detail
         case .search(let query):
+            settingsDestination = nil
             isSearchPresented = true
             searchText = query ?? .empty
             predicate = nil
             preferredCompactColumn = .content
         case .settings:
             sheetRoute = .settings
-            settingsDestination = nil
+            settingsDestination = .root
         case .settingsSubscription:
             sheetRoute = .settings
             settingsDestination = .subscription
@@ -133,12 +135,16 @@ private extension MainNavigationRouter {
             sheetRoute = .settings
             settingsDestination = .debug
         case .yearlyDuplication:
+            settingsDestination = nil
             sheetRoute = .yearlyDuplication
         case .duplicateTags:
+            settingsDestination = nil
             fullScreenRoute = .duplicateTags
         case .orphanTags:
+            settingsDestination = nil
             fullScreenRoute = .orphanTags
         case .itemDetail(let itemID):
+            settingsDestination = nil
             itemDetailID = itemID
             sheetRoute = .itemDetail
         }
