@@ -26,7 +26,7 @@ final class WatchHomeScreenModel {
         return nil
     }
 
-    func displayedItems(
+    func nextUpcomingItems(
         from upcomingCandidates: [Item],
         calendar: Calendar = .current
     ) -> [Item] {
@@ -37,6 +37,28 @@ final class WatchHomeScreenModel {
         return upcomingCandidates.filter { item in
             calendar.isDate(item.localDate, inSameDayAs: firstDate)
         }
+    }
+
+    func laterUpcomingItems(
+        from upcomingCandidates: [Item],
+        calendar: Calendar = .current,
+        limit: Int = 3
+    ) -> [Item] {
+        guard let first = upcomingCandidates.first else {
+            return []
+        }
+
+        return upcomingCandidates.filter { item in
+            calendar.isDate(item.localDate, inSameDayAs: first.localDate) == false
+        }
+        .prefix(limit)
+        .map(\.self)
+    }
+
+    func nextUpcomingDate(
+        from upcomingCandidates: [Item]
+    ) -> Date? {
+        upcomingCandidates.first?.localDate
     }
 
     func beginReload() -> Bool {

@@ -171,6 +171,40 @@
         }
       }
     },
+    "Later" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Later"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Después"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ensuite"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "その後"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "稍后"
+          }
+        }
+      }
+    },
     "No items" : {
       "localizations" : {
         "en" : {
@@ -273,36 +307,36 @@
         }
       }
     },
-    "No Upcoming Items" : {
+    "No Upcoming Items In Range" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "No Upcoming Items"
+            "value" : "No Upcoming Items In Range"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "No hay elementos próximos"
+            "value" : "No hay próximos elementos en el rango"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Aucun élément à venir"
+            "value" : "Aucun élément à venir dans la plage"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "今後の項目はありません"
+            "value" : "同期範囲内に今後の項目はありません"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "没有即将到来的项目"
+            "value" : "同步范围内没有即将到来的项目"
           }
         }
       }
@@ -337,6 +371,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "最近几个月的同步已完成，但未返回任何项目。"
+          }
+        }
+      }
+    },
+    "Next" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Next"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Siguiente"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prochain"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "次"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "下一项"
           }
         }
       }
@@ -405,6 +473,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "重新加载中"
+          }
+        }
+      }
+    },
+    "The synced watch range does not include any future items right now." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The synced watch range does not include any future items right now."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El rango sincronizado del reloj no incluye elementos futuros en este momento."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La plage synchronisée de la montre ne contient actuellement aucun élément futur."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "現在、Watch に同期済みの範囲には今後の項目がありません。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "当前已同步到手表的范围内没有未来项目。"
           }
         }
       }

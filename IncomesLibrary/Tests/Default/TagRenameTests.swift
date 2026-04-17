@@ -35,17 +35,10 @@ struct TagRenameTests {
                 context: context,
                 name: "Food",
                 type: .category
-            )
+        )
         )
         let originalID = tag.id
-        let originalBalances = Dictionary(
-            uniqueKeysWithValues: fetchItems(context).map { item in
-                (
-                    item.persistentModelID,
-                    item.balance
-                )
-            }
-        )
+        let originalBalances = balanceMap()
 
         try TagService.renameCategory(
             context: context,
@@ -59,16 +52,7 @@ struct TagRenameTests {
         #expect(TagService.items(for: tag).count == 2)
         #expect(firstItem.category?.name == "Travel")
         #expect(secondItem.category?.name == "Travel")
-        #expect(
-            Dictionary(
-                uniqueKeysWithValues: fetchItems(context).map { item in
-                    (
-                        item.persistentModelID,
-                        item.balance
-                    )
-                }
-            ) == originalBalances
-        )
+        #expect(balanceMap() == originalBalances)
     }
 
     @Test
@@ -199,6 +183,19 @@ struct TagRenameTests {
             try context.fetchCount(
                 .tags(.nameIs("Food", type: .category))
             ) == 1
+        )
+    }
+}
+
+private extension TagRenameTests {
+    func balanceMap() -> [PersistentIdentifier: Decimal] {
+        Dictionary(
+            uniqueKeysWithValues: fetchItems(context).map { item in
+                (
+                    item.persistentModelID,
+                    item.balance
+                )
+            }
         )
     }
 }

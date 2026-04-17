@@ -5,18 +5,15 @@
 //  Created by Hiromu Nakano on 2025/09/15.
 //
 
-import MHDesign
 import MHPreferences
 import SwiftData
 import SwiftUI
 
 struct ContentView {
-    @Environment(\.modelContext)
-    private var context
     @AppStorage(\.isDebugOn)
     private var isDebugOn
-    @Environment(\.mhDesignMetrics)
-    private var designMetrics
+    @Environment(\.modelContext)
+    private var context
 
     @Query(.items(.dateIsAfter(Date.now), order: .forward))
     private var upcomingCandidates: [Item]
@@ -63,29 +60,42 @@ private extension ContentView {
     func upcomingSection(
         model: WatchHomeScreenModel
     ) -> some View {
-        let itemsForDisplay = model.displayedItems(
+        let nextItems = model.nextUpcomingItems(
+            from: upcomingCandidates
+        )
+        let laterItems = model.laterUpcomingItems(
             from: upcomingCandidates
         )
 
-        Section("Upcoming") {
-            if itemsForDisplay.isNotEmpty {
-                ForEach(itemsForDisplay) { item in
-                    VStack(alignment: .leading, spacing: designMetrics.spacing.inline) {
-                        Text(item.content)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                        HStack(spacing: designMetrics.spacing.inline) {
-                            Text(item.localDate.formatted(.dateTime.month().day()))
-                                .font(.footnote)
-                            Text(item.netIncome.asCurrency)
-                                .foregroundStyle(item.isNetIncomePositive ? .accent : .red)
-                                .frame(maxWidth: .infinity, alignment: .trailing)
-                        }
+        if nextItems.isNotEmpty {
+            Section("Next") {
+                if let nextDate = model.nextUpcomingDate(from: upcomingCandidates) {
+                    Text(nextDate.formatted(.dateTime.weekday().month().day()))
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                }
+
+                ForEach(nextItems) { item in
+                    WatchItemRow(
+                        item: item,
+                        showsDate: false
+                    )
+                }
+            }
+
+            if laterItems.isNotEmpty {
+                Section("Later") {
+                    ForEach(laterItems) { item in
+                        WatchItemRow(item: item)
                     }
                 }
-            } else {
+            }
+        } else {
+            Section("Next") {
                 ContentUnavailableView(
-                    "No Upcoming Items",
-                    systemImage: "calendar"
+                    "No Upcoming Items In Range",
+                    systemImage: "calendar.badge.exclamationmark",
+                    description: Text("The synced watch range does not include any future items right now.")
                 )
             }
         }
