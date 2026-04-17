@@ -33,6 +33,11 @@ public final class Tag {
         tag.typeID = type.rawValue
         return tag
     }
+
+    /// Service-only helper that updates the stored tag name in place.
+    func rename(storedName: String) {
+        name = storedName
+    }
 }
 
 extension Tag { // swiftlint:disable:this extension_access_modifier

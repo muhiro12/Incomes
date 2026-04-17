@@ -17,6 +17,8 @@ struct CategoryItemListView {
 
     @AppStorage(\.isSubscribeOn)
     private var isSubscribeOn
+
+    @State private var isRenameSheetPresented = false
 }
 
 extension CategoryItemListView: View {
@@ -38,7 +40,18 @@ extension CategoryItemListView: View {
             }
             tipController.donateDidViewItemList()
         }
+        .sheet(isPresented: $isRenameSheetPresented) {
+            CategoryRenameSheet(tag: tag)
+                .incomesSheetPresentation()
+        }
         .toolbar {
+            if canRenameCategory {
+                ToolbarItem {
+                    Button("Rename") {
+                        isRenameSheetPresented = true
+                    }
+                }
+            }
             StatusToolbarItem("\(items.count) Items")
         }
         .toolbar {
@@ -51,6 +64,11 @@ extension CategoryItemListView: View {
 }
 
 private extension CategoryItemListView {
+    var canRenameCategory: Bool {
+        tag.type == .category
+            && CategoryNameSupport.isOthersLike(tag.name) == false
+    }
+
     var items: [Item] {
         TagService.items(for: tag)
     }
