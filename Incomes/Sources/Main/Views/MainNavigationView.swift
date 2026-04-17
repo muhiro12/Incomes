@@ -76,7 +76,12 @@ struct MainNavigationView: View {
             }
             .navigationTitle("Incomes")
             .toolbar {
-                ToolbarItem {
+                ToolbarItemGroup {
+                    if horizontalSizeClass == .compact {
+                        Button("Search", systemImage: "magnifyingglass") {
+                            enqueueNavigation(to: .search(query: nil))
+                        }
+                    }
                     Button("Settings", systemImage: "gear") {
                         enqueueNavigation(to: .settings)
                     }

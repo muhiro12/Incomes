@@ -19,6 +19,7 @@ extension ItemView: View {
     var body: some View {
         List {
             ItemSection()
+            relatedHistorySection
             if isDebugOn {
                 DebugSection()
             }
@@ -37,6 +38,71 @@ extension ItemView: View {
                     CloseButton()
                 }
             }
+        }
+    }
+}
+
+private extension ItemView {
+    @ViewBuilder var relatedHistorySection: some View {
+        if let contentTag {
+            Section("Browse History") {
+                NavigationLink {
+                    ContentItemListView()
+                        .environment(contentTag)
+                } label: {
+                    historyRow(
+                        title: "Content",
+                        value: contentTag.displayName
+                    )
+                }
+                if let categoryTag {
+                    NavigationLink {
+                        CategoryItemListView()
+                            .environment(categoryTag)
+                    } label: {
+                        historyRow(
+                            title: "Category",
+                            value: categoryTag.displayName
+                        )
+                    }
+                }
+            }
+        } else if let categoryTag {
+            Section("Browse History") {
+                NavigationLink {
+                    CategoryItemListView()
+                        .environment(categoryTag)
+                } label: {
+                    historyRow(
+                        title: "Category",
+                        value: categoryTag.displayName
+                    )
+                }
+            }
+        }
+    }
+
+    var contentTag: Tag? {
+        item.tags?.first { tag in
+            tag.type == .content
+        }
+    }
+
+    var categoryTag: Tag? {
+        item.tags?.first { tag in
+            tag.type == .category
+        }
+    }
+
+    func historyRow(
+        title: LocalizedStringKey,
+        value: String
+    ) -> some View {
+        HStack {
+            Text(title)
+            Spacer()
+            Text(value)
+                .foregroundStyle(.secondary)
         }
     }
 }
