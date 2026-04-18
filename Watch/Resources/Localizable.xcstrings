@@ -1,70 +1,36 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "Debug" : {
+    "Bring your iPhone nearby, then try Reload again." : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Debug"
+            "value" : "Bring your iPhone nearby, then try Reload again."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Depuración"
+            "value" : "Acerca tu iPhone y vuelve a intentar Recargar."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Débogage"
+            "value" : "Rapprochez votre iPhone, puis réessayez Recharger."
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "デバッグ"
+            "value" : "iPhone を近くに置いてから、もう一度再読み込みしてください。"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "调试"
-          }
-        }
-      }
-    },
-    "Debug option" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Debug option"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Opción de depuración"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Option de débogage"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "デバッグオプション"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "调试选项"
+            "value" : "请将 iPhone 放到附近，然后再次尝试重新加载。"
           }
         }
       }
@@ -137,40 +103,6 @@
         }
       }
     },
-    "Bring your iPhone nearby, then try Reload again." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bring your iPhone nearby, then try Reload again."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Acerca tu iPhone y vuelve a intentar Recargar."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Rapprochez votre iPhone, puis réessayez Recharger."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "iPhone を近くに置いてから、もう一度再読み込みしてください。"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "请将 iPhone 放到附近，然后再次尝试重新加载。"
-          }
-        }
-      }
-    },
     "Contents" : {
       "localizations" : {
         "en" : {
@@ -201,6 +133,74 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "内容"
+          }
+        }
+      }
+    },
+    "Debug" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Debug"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Depuración"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Débogage"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "デバッグ"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "调试"
+          }
+        }
+      }
+    },
+    "Debug option" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Debug option"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opción de depuración"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Option de débogage"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "デバッグオプション"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "调试选项"
           }
         }
       }
@@ -273,74 +273,6 @@
         }
       }
     },
-    "Items" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Items"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Elementos"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Éléments"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "項目"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "项目"
-          }
-        }
-      }
-    },
-    "Months" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Months"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Meses"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mois"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "月"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "月份"
-          }
-        }
-      }
-    },
     "iPhone Unreachable" : {
       "localizations" : {
         "en" : {
@@ -371,6 +303,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "iPhone 不可达"
+          }
+        }
+      }
+    },
+    "Items" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Items"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elementos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Éléments"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "項目"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "项目"
           }
         }
       }
@@ -477,36 +443,70 @@
         }
       }
     },
-    "Not Synced Yet" : {
+    "Months" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Not Synced Yet"
+            "value" : "Months"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Aún no sincronizado"
+            "value" : "Meses"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pas encore synchronisé"
+            "value" : "Mois"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "まだ同期されていません"
+            "value" : "月"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "尚未同步"
+            "value" : "月份"
+          }
+        }
+      }
+    },
+    "Next" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Next"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Siguiente"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prochain"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "次"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "下一项"
           }
         }
       }
@@ -647,6 +647,40 @@
         }
       }
     },
+    "Not Synced Yet" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Not Synced Yet"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aún no sincronizado"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pas encore synchronisé"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "まだ同期されていません"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "尚未同步"
+          }
+        }
+      }
+    },
     "Open the paired iPhone app if recent items do not appear." : {
       "localizations" : {
         "en" : {
@@ -715,74 +749,6 @@
         }
       }
     },
-    "Recent month sync completed without returning any items." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Recent month sync completed without returning any items."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "La sincronización de los últimos meses se completó sin devolver ningún elemento."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "La synchronisation des derniers mois s’est terminée sans renvoyer d’éléments."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "直近数か月の同期は完了しましたが、項目は返されませんでした。"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "最近几个月的同步已完成，但未返回任何项目。"
-          }
-        }
-      }
-    },
-    "Next" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Next"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Siguiente"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Prochain"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "次"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "下一项"
-          }
-        }
-      }
-    },
     "Recent items are up to date on Apple Watch." : {
       "localizations" : {
         "en" : {
@@ -813,6 +779,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Apple Watch 上的最近项目已是最新状态。"
+          }
+        }
+      }
+    },
+    "Recent month sync completed without returning any items." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recent month sync completed without returning any items."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La sincronización de los últimos meses se completó sin devolver ningún elemento."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La synchronisation des derniers mois s’est terminée sans renvoyer d’éléments."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "直近数か月の同期は完了しましたが、項目は返されませんでした。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "最近几个月的同步已完成，但未返回任何项目。"
           }
         }
       }
@@ -885,40 +885,6 @@
         }
       }
     },
-    "The synced watch range does not include any future items right now." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "The synced watch range does not include any future items right now."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "El rango sincronizado del reloj no incluye elementos futuros en este momento."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "La plage synchronisée de la montre ne contient actuellement aucun élément futur."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "現在、Watch に同期済みの範囲には今後の項目がありません。"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "当前已同步到手表的范围内没有未来项目。"
-          }
-        }
-      }
-    },
     "Removes debug sample items and their tags." : {
       "localizations" : {
         "en" : {
@@ -983,40 +949,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "设置"
-          }
-        }
-      }
-    },
-    "Synced" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Synced"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sincronizado"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Synchronisé"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "同期済み"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "已同步"
           }
         }
       }
@@ -1089,6 +1021,40 @@
         }
       }
     },
+    "Synced" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Synced"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sincronizado"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Synchronisé"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "同期済み"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已同步"
+          }
+        }
+      }
+    },
     "Syncing recent months from your iPhone." : {
       "localizations" : {
         "en" : {
@@ -1157,7 +1123,42 @@
         }
       }
     },
+    "The synced watch range does not include any future items right now." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The synced watch range does not include any future items right now."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El rango sincronizado del reloj no incluye elementos futuros en este momento."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La plage synchronisée de la montre ne contient actuellement aucun élément futur."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "現在、Watch に同期済みの範囲には今後の項目がありません。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "当前已同步到手表的范围内没有未来项目。"
+          }
+        }
+      }
+    },
     "Upcoming" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
