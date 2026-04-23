@@ -35,7 +35,7 @@ struct TagRenameTests {
                 context: context,
                 name: "Food",
                 type: .category
-        )
+            )
         )
         let originalID = tag.id
         let originalBalances = balanceMap()

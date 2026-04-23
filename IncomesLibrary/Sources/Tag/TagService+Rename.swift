@@ -27,7 +27,7 @@ public extension TagService {
             name: normalizedTargetName,
             type: .category
         ),
-           existingTag.id != tag.id {
+        existingTag.id != tag.id {
             throw TagRenameError.duplicateTargetName
         }
 
