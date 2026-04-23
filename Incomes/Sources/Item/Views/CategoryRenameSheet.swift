@@ -21,31 +21,12 @@ struct CategoryRenameSheet: View {
     }
 
     var body: some View {
+        let previewResult = categoryRenamePreviewResult
+
         NavigationStack {
-            Form {
-                Section {
-                    TextField("Name", text: $draftName)
-                } header: {
-                    Text("Name")
-                }
-            }
-            .formStyle(.grouped)
-            .navigationTitle("Rename")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbarRole(.editor)
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") {
-                        dismiss()
-                    }
-                }
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Save") {
-                        save()
-                    }
-                    .disabled(!canSave)
-                }
-            }
+            renameForm(
+                for: previewResult
+            )
         }
         .alert(
             "Error",
@@ -70,41 +51,213 @@ struct CategoryRenameSheet: View {
 }
 
 private extension CategoryRenameSheet {
-    var canSave: Bool {
-        normalizedDraftName != nil
+    var categoryRenamePreviewResult: Result<TagRenamePreview, TagRenameError> {
+        do {
+            return .success(
+                try TagService.previewCategoryRename(
+                    context: context,
+                    tag: tag,
+                    to: draftName
+                )
+            )
+        } catch let error as TagRenameError {
+            return .failure(error)
+        } catch {
+            return .failure(.unsupportedType)
+        }
     }
 
-    var normalizedDraftName: String? {
-        let trimmedName = draftName.trimmingCharacters(
+    var trimmedDraftName: String {
+        draftName.trimmingCharacters(
             in: .whitespacesAndNewlines
         )
-        guard trimmedName.isNotEmpty else {
-            return nil
-        }
-
-        let normalizedTargetName = CategoryNameSupport.normalizedStoredName(
-            forUserInput: trimmedName
-        )
-        guard CategoryNameSupport.isOthersLike(normalizedTargetName) == false else {
-            return nil
-        }
-
-        return normalizedTargetName
     }
 
-    func save() {
-        guard let normalizedDraftName else {
-            errorMessage = String(
-                localized: "Enter a valid category name."
+    func renameForm(
+        for previewResult: Result<TagRenamePreview, TagRenameError>
+    ) -> some View {
+        Form {
+            Section {
+                TextField("Name", text: $draftName)
+            } header: {
+                Text("Name")
+            }
+
+            previewSection(
+                for: previewResult
             )
-            return
+        }
+        .formStyle(.grouped)
+        .navigationTitle("Rename")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbarRole(.editor)
+        .toolbar {
+            renameToolbar(
+                for: previewResult
+            )
+        }
+    }
+
+    @ToolbarContentBuilder
+    func renameToolbar(
+        for previewResult: Result<TagRenamePreview, TagRenameError>
+    ) -> some ToolbarContent {
+        ToolbarItem(placement: .cancellationAction) {
+            Button("Cancel") {
+                dismiss()
+            }
+        }
+        ToolbarItem(placement: .confirmationAction) {
+            Button("Save") {
+                save(
+                    using: previewResult
+                )
+            }
+            .disabled(
+                !canSave(
+                    for: previewResult
+                )
+            )
+        }
+    }
+
+    func canSave(
+        for previewResult: Result<TagRenamePreview, TagRenameError>
+    ) -> Bool {
+        switch previewResult {
+        case .success(let preview):
+            return preview.canApply
+        case .failure:
+            return false
+        }
+    }
+
+    @ViewBuilder
+    func previewSection(
+        for previewResult: Result<TagRenamePreview, TagRenameError>
+    ) -> some View {
+        Section("Preview") {
+            previewSectionContent(
+                for: previewResult
+            )
+        }
+    }
+
+    @ViewBuilder
+    func previewSectionContent(
+        for previewResult: Result<TagRenamePreview, TagRenameError>
+    ) -> some View {
+        previewRow(
+            title: "Current name",
+            value: tag.displayName
+        )
+
+        switch previewResult {
+        case .success(let preview):
+            previewDetails(
+                for: preview
+            )
+        case .failure(let error):
+            previewRow(
+                title: "New name",
+                value: trimmedDraftName
+            )
+            Text(error.renameErrorMessage)
+                .font(.footnote)
+                .foregroundStyle(.red)
+        }
+    }
+
+    @ViewBuilder
+    func previewDetails(
+        for preview: TagRenamePreview
+    ) -> some View {
+        previewRow(
+            title: "New name",
+            value: preview.normalizedTargetName ?? trimmedDraftName
+        )
+        Text(
+            String(
+                localized: "Affected items: \(preview.affectedItemCount)"
+            )
+        )
+        .foregroundStyle(.secondary)
+
+        if let statusMessage = previewStatusMessage(
+            for: preview
+        ) {
+            Text(statusMessage)
+                .font(.footnote)
+                .foregroundStyle(
+                    previewStatusColor(
+                        for: preview
+                    )
+                )
+        }
+    }
+
+    func previewRow(
+        title: LocalizedStringKey,
+        value: String
+    ) -> some View {
+        HStack {
+            Text(title)
+            Spacer()
+            Text(value)
+                .foregroundStyle(.secondary)
+                .multilineTextAlignment(.trailing)
+        }
+    }
+
+    func previewStatusMessage(
+        for preview: TagRenamePreview
+    ) -> String? {
+        if let validationError = preview.validationError {
+            return validationError.renameErrorMessage
+        }
+        if preview.isUnchanged {
+            return String(localized: "This name is unchanged.")
         }
 
+        return nil
+    }
+
+    func previewStatusColor(
+        for preview: TagRenamePreview
+    ) -> Color {
+        if preview.validationError != nil {
+            return .red
+        }
+
+        return .secondary
+    }
+
+    func save(
+        using previewResult: Result<TagRenamePreview, TagRenameError>
+    ) {
         do {
+            let preview = try previewResult.get()
+            guard let normalizedTargetName = preview.normalizedTargetName else {
+                errorMessage = String(
+                    localized: "Enter a valid category name."
+                )
+                return
+            }
+            if let validationError = preview.validationError {
+                errorMessage = validationError.renameErrorMessage
+                return
+            }
+            guard preview.isUnchanged == false else {
+                errorMessage = String(
+                    localized: "This name is unchanged."
+                )
+                return
+            }
+
             try TagService.renameCategory(
                 context: context,
                 tag: tag,
-                to: normalizedDraftName
+                to: normalizedTargetName
             )
             dismiss()
         } catch let error as TagRenameError {
