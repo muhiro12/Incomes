@@ -14,36 +14,58 @@ struct ItemSection: View {
 
     var body: some View {
         Section {
-            HStack {
-                Text("Date")
-                Spacer()
-                Text(item.localDate.stringValue(.yyyyMMMd))
-                    .foregroundStyle(.secondary)
-            }
-            HStack {
-                Text("Income")
-                Spacer()
-                Text(item.income.asCurrency)
-                    .foregroundStyle(.secondary)
-            }
-            HStack {
-                Text("Outgo")
-                Spacer()
-                Text(item.outgo.asMinusCurrency)
-                    .foregroundStyle(.secondary)
-            }
-            HStack {
-                Text("Category")
-                Spacer()
-                Text(
-                    CategoryNameSupport.displayName(
-                        forStoredName: item.category?.name
-                    )
-                )
-                .foregroundStyle(.secondary)
-            }
+            row(
+                title: "Date",
+                value: item.localDate.stringValue(.yyyyMMMd)
+            )
+            row(
+                title: "Income",
+                value: item.income.asCurrency
+            )
+            row(
+                title: "Outgo",
+                value: item.outgo.asMinusCurrency
+            )
+            categoryRow
         } header: {
             Text("Information")
+        }
+    }
+}
+
+private extension ItemSection {
+    @ViewBuilder var categoryRow: some View {
+        if let categoryTag = item.category {
+            NavigationLink {
+                CategoryItemListView()
+                    .environment(categoryTag)
+            } label: {
+                row(
+                    title: "Category",
+                    value: CategoryNameSupport.displayName(
+                        forStoredName: categoryTag.name
+                    )
+                )
+            }
+        } else {
+            row(
+                title: "Category",
+                value: CategoryNameSupport.displayName(
+                    forStoredName: nil
+                )
+            )
+        }
+    }
+
+    func row(
+        title: LocalizedStringKey,
+        value: String
+    ) -> some View {
+        HStack {
+            Text(title)
+            Spacer()
+            Text(value)
+                .foregroundStyle(.secondary)
         }
     }
 }
@@ -51,8 +73,10 @@ struct ItemSection: View {
 #Preview(traits: .modifier(IncomesSampleData())) {
     @Previewable @Query var items: [Item]
 
-    List {
-        ItemSection()
-            .environment(items[0])
+    NavigationStack {
+        List {
+            ItemSection()
+                .environment(items[0])
+        }
     }
 }
