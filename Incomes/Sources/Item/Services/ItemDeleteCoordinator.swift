@@ -65,7 +65,8 @@ enum ItemDeleteCoordinator {
                     returning: { _ in
                         ()
                     }
-                )
+                ),
+                onEvent: MHMutationWorkflowLogger(logger: logger).onEvent()
             )
             logger.notice(
                 "item_delete.completed",

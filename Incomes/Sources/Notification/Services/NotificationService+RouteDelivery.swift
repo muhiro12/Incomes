@@ -6,7 +6,7 @@
 //
 
 import Foundation
-@preconcurrency import MHPlatform
+import MHPlatform
 import UserNotifications
 
 extension NotificationService {

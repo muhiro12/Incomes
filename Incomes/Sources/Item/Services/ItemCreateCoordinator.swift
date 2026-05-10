@@ -93,10 +93,11 @@ enum ItemCreateCoordinator {
                     includesReviewRequest: true,
                     reviewLogger: reviewLogger
                 ),
-                projection: .keyPaths(
-                    adapterValue: \.outcome.followUpHints,
-                    resultValue: \.value
-                )
+                projection: .valueAndFollowUp(
+                    value: \.value,
+                    followUp: \.outcome.followUpHints
+                ),
+                onEvent: MHMutationWorkflowLogger(logger: logger).onEvent()
             )
 
             guard let item = try context.fetch(.items(.idIs(itemID), order: .forward)).first else {

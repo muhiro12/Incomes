@@ -13,7 +13,10 @@ public extension Decimal {
     var asCurrency: String {
         let formatter = NumberFormatter()
         formatter.numberStyle = .currency
-        formatter.currencyCode = MHPreferenceStore().string(for: \.currencyCode) ?? ""
+        formatter.currencyCode = MHPreferenceStore().string(
+            for: \.currencyCode,
+            default: ""
+        )
         guard let currency = formatter.string(for: self) else {
             assertionFailure()
             return .empty

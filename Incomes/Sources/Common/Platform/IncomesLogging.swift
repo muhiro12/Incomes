@@ -65,11 +65,7 @@ enum IncomesLogging {
     nonisolated static func metadata(
         _ pairs: (String, String?)...
     ) -> [String: String] {
-        pairs.reduce(into: [String: String]()) { partialResult, pair in
-            if let value = pair.1 {
-                partialResult[pair.0] = value
-            }
-        }
+        MHLogMetadata.metadata(pairs)
     }
 
     nonisolated static func bool(_ value: Bool) -> String {

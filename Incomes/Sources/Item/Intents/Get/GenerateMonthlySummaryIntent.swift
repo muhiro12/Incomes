@@ -17,7 +17,10 @@ struct GenerateMonthlySummaryIntent: AppIntent {
         let summary = try await MonthlySummaryGenerator.generate(
             modelContainer: modelContainer,
             date: date,
-            currencyCode: MHPreferenceStore().string(for: \.currencyCode) ?? "",
+            currencyCode: MHPreferenceStore().string(
+                for: \.currencyCode,
+                default: ""
+            ),
             locale: .current
         )
         return .result(value: summary)

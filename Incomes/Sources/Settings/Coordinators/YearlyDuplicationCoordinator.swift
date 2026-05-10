@@ -181,10 +181,11 @@ enum YearlyDuplicationCoordinator { // swiftlint:disable:this type_body_length
                     )
                 },
                 adapter: adapter,
-                projection: .keyPaths(
-                    adapterValue: \.outcome.followUpHints,
-                    resultValue: \.value
-                )
+                projection: .valueAndFollowUp(
+                    value: \.value,
+                    followUp: \.outcome.followUpHints
+                ),
+                onEvent: MHMutationWorkflowLogger(logger: logger).onEvent()
             )
             logger.notice(
                 "yearly_duplication.apply_completed",

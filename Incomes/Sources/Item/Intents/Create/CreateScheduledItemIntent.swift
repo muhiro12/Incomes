@@ -41,7 +41,10 @@ struct CreateScheduledItemIntent: AppIntent {
     func perform() async throws -> some ReturnsValue<ItemEntity> {
         try validateFormInput()
 
-        let currencyCode = MHPreferenceStore().string(for: \.currencyCode) ?? ""
+        let currencyCode = MHPreferenceStore().string(
+            for: \.currencyCode,
+            default: ""
+        )
         if let amount = ItemIntentCurrencyValidator.disambiguationAmount(
             amount: income,
             expectedCurrencyCode: currencyCode

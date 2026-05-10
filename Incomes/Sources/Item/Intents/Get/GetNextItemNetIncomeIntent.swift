@@ -26,7 +26,10 @@ struct GetNextItemNetIncomeIntent: AppIntent {
         guard let netIncome else {
             return .result(value: nil)
         }
-        let currencyCode = MHPreferenceStore().string(for: \.currencyCode) ?? ""
+        let currencyCode = MHPreferenceStore().string(
+            for: \.currencyCode,
+            default: ""
+        )
         return .result(value: .init(amount: netIncome, currencyCode: currencyCode))
     }
 }

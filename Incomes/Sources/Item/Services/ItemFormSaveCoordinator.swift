@@ -118,7 +118,8 @@ enum ItemFormSaveCoordinator {
                     returning: { _ in
                         ()
                     }
-                )
+                ),
+                onEvent: MHMutationWorkflowLogger(logger: logger).onEvent()
             )
             logger.notice(
                 "item_save.completed",

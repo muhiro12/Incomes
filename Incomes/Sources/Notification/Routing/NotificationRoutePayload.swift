@@ -1,5 +1,5 @@
 import Foundation
-@preconcurrency import MHPlatform
+import MHPlatform
 
 enum NotificationRoutePayload {
     private enum Key {

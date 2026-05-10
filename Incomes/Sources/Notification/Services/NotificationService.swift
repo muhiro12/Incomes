@@ -5,7 +5,7 @@
 //  Created by Hiromu Nakano on 2024/05/31.
 //
 
-@preconcurrency import MHPlatform
+import MHPlatform
 import SwiftData
 import SwiftUI
 import UserNotifications
