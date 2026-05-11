@@ -25,6 +25,7 @@ struct SearchListView: View {
 
     @Binding private var predicate: ItemPredicate?
     @Binding private var searchText: String
+    @Binding private var appliesInitialSearchText: Bool
 
     @State private var selectedTarget = SearchTarget.content
     @State private var minValue = String.empty
@@ -32,9 +33,14 @@ struct SearchListView: View {
 
     private let searchFiltersTip = SearchFiltersTip()
 
-    init(selection: Binding<ItemPredicate?>, searchText: Binding<String>) { // swiftlint:disable:this line_length type_contents_order
+    init( // swiftlint:disable:this type_contents_order
+        selection: Binding<ItemPredicate?>,
+        searchText: Binding<String>,
+        appliesInitialSearchText: Binding<Bool> = .constant(false)
+    ) {
         _predicate = selection
         _searchText = searchText
+        _appliesInitialSearchText = appliesInitialSearchText
     }
 
     var body: some View {
@@ -86,6 +92,12 @@ struct SearchListView: View {
         }
         .scrollDismissesKeyboard(.interactively)
         .navigationTitle("Search")
+        .task {
+            applyInitialSearchTextIfNeeded()
+        }
+        .onChange(of: contents.count) {
+            applyInitialSearchTextIfNeeded()
+        }
     }
 }
 
@@ -192,6 +204,34 @@ private extension SearchListView {
     func applyCategoryFilter(_ facet: CategoryFacet) {
         tipController.donateDidApplySearch()
         predicate = .idsAre(facet.itemIDs)
+    }
+
+    func applyInitialSearchTextIfNeeded() {
+        guard appliesInitialSearchText else {
+            return
+        }
+
+        guard searchText.isNotEmpty else {
+            appliesInitialSearchText = false
+            return
+        }
+
+        guard predicate == nil else {
+            appliesInitialSearchText = false
+            return
+        }
+
+        let matchingTags = selectedTarget.filteredTags(
+            contents,
+            searchText: searchText
+        )
+        guard matchingTags.count == 1,
+              let matchingTag = matchingTags.first else {
+            return
+        }
+
+        appliesInitialSearchText = false
+        applyTagFilter(matchingTag)
     }
 }
 

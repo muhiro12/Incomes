@@ -17,6 +17,7 @@ final class MainNavigationRouter {
     var searchText = ""
     var predicate: ItemPredicate?
     var isSearchPresented = false
+    var appliesInitialSearchText = false
     var sheetRoute: MainNavigationSheetRoute?
     var fullScreenRoute: MainNavigationFullScreenRoute?
     var settingsDestination: SettingsNavigationDestination?
@@ -60,6 +61,7 @@ final class MainNavigationRouter {
 
     func selectSearchPredicate(_ predicate: ItemPredicate?) {
         self.predicate = predicate
+        appliesInitialSearchText = false
         guard isSearchPresented else {
             return
         }
@@ -121,6 +123,7 @@ private extension MainNavigationRouter {
             isSearchPresented = true
             searchText = query ?? .empty
             predicate = nil
+            appliesInitialSearchText = query?.isNotEmpty == true
             preferredCompactColumn = .content
         case .settings:
             sheetRoute = .settings
@@ -154,5 +157,6 @@ private extension MainNavigationRouter {
         isSearchPresented = false
         searchText = .empty
         predicate = nil
+        appliesInitialSearchText = false
     }
 }

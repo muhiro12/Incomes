@@ -30,6 +30,17 @@ struct MainNavigationContentColumn: View {
         )
     }
 
+    private var appliesInitialSearchText: Binding<Bool> {
+        .init(
+            get: {
+                router.appliesInitialSearchText
+            },
+            set: { value in
+                router.appliesInitialSearchText = value
+            }
+        )
+    }
+
     var body: some View {
         content
             .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -41,7 +52,8 @@ private extension MainNavigationContentColumn {
         if router.isSearchPresented {
             SearchListView(
                 selection: searchPredicateSelection,
-                searchText: searchText
+                searchText: searchText,
+                appliesInitialSearchText: appliesInitialSearchText
             )
         } else if let selectedYearTag {
             HomeListView(
