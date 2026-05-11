@@ -38,6 +38,15 @@ struct DuplicateTagListView: View {
                 Text("Category")
             }
         }
+        .overlay {
+            if !hasAnyDuplicateTags {
+                ContentUnavailableView(
+                    "No Duplicate Tags",
+                    systemImage: "tag",
+                    description: Text("There are no duplicate tags to review.")
+                )
+            }
+        }
         .confirmationDialog(
             Text(resolveDialogTitle),
             isPresented: $isResolveDialogPresented
@@ -65,6 +74,13 @@ struct DuplicateTagListView: View {
 }
 
 private extension DuplicateTagListView {
+    var hasAnyDuplicateTags: Bool {
+        duplicateTags(from: yearTags).isNotEmpty
+            || duplicateTags(from: yearMonthTags).isNotEmpty
+            || duplicateTags(from: contentTags).isNotEmpty
+            || duplicateTags(from: categoryTags).isNotEmpty
+    }
+
     var resolveDialogTitle: LocalizedStringKey {
         selectedTags.count > 1 ? "Resolve All" : "Resolve"
     }

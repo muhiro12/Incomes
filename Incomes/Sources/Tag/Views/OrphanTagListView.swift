@@ -55,6 +55,15 @@ struct OrphanTagListView: View {
                 title: "Debug"
             )
         }
+        .overlay {
+            if !hasAnyOrphanTags {
+                ContentUnavailableView(
+                    "No Orphan Tags",
+                    systemImage: "tag",
+                    description: Text("There are no unused tags to clean up.")
+                )
+            }
+        }
         .confirmationDialog(
             Text("Cleanup All"),
             isPresented: $isCleanupDialogPresented
