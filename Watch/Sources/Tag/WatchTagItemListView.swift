@@ -2,6 +2,11 @@ import SwiftData
 import SwiftUI
 
 struct WatchTagItemListView: View {
+    private enum Layout {
+        static let headerLineLimit = 2
+        static let headerMinimumScaleFactor = 0.7
+    }
+
     let tag: Tag
 
     var items: [Item] {
@@ -10,6 +15,14 @@ struct WatchTagItemListView: View {
 
     var body: some View {
         List {
+            Section {
+                Text(tag.displayName)
+                    .font(.headline)
+                    .lineLimit(Layout.headerLineLimit)
+                    .minimumScaleFactor(Layout.headerMinimumScaleFactor)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
+
             if items.isNotEmpty {
                 ForEach(items) { item in
                     WatchItemRow(item: item)
@@ -18,6 +31,6 @@ struct WatchTagItemListView: View {
                 Text("No items")
             }
         }
-        .navigationTitle(tag.displayName)
+        .navigationTitle("Items")
     }
 }
