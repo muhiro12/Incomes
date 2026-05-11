@@ -14,6 +14,7 @@ Use this audit to catch issues that library tests and app builds cannot see:
 - obvious clipping, overlap, or unreadable text
 - broken sheets, popovers, sidebars, and split-view layouts
 - simulator-only coverage gaps that need human follow-up
+- visual issues a human release reviewer can spot from captured screenshots
 
 ## Relationship to Verification
 
@@ -47,7 +48,9 @@ The repository expectation is:
    report it as a coverage gap with the concrete blocker.
 5. Keep screenshots and findings in the audit report, not as committed test
    artifacts.
-6. Treat skipped targets and state-dependent coverage as explicit coverage
+6. Group screenshots by device, orientation, and screen so the report can be
+   used both as agent evidence and as a human release review gallery.
+7. Treat skipped targets and state-dependent coverage as explicit coverage
    gaps.
 
 ## Safety Rules
@@ -79,3 +82,7 @@ Reports should be evidence-backed and concise. Use the structure from
 
 When no issue is found, state that no blocking issue was observed in the
 audited coverage and still list remaining gaps.
+
+Screenshot evidence should be reviewable. Prefer inline images when the
+environment supports local image rendering, and call out screenshots that are
+sideways, cropped, blank, obscured, or otherwise insufficient for human review.
