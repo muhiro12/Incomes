@@ -119,3 +119,11 @@ Each run stores `summary.md`, `commands.txt`, `meta.json`, `logs/`, `results/`, 
 Shared CI directories are under `.build/ci/shared/` (`cache/`, `DerivedData/`, `tmp/`, `home/`).
 Only the newest 5 run directories are retained.
 The entire `.build/ci` directory is disposable.
+
+## Release UI Smoke Audit
+
+Release UI smoke auditing is separate from the standard verification
+entrypoint. When release or UI-sensitive work needs live Simulator evidence,
+use the global `$xcode-ui-smoke-auditor` skill and keep the audit
+non-destructive by default. Do not erase simulator data, reset containers, or
+add UI test targets solely for the audit unless explicitly requested.

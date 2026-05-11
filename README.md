@@ -167,6 +167,10 @@ post-clone CI setup.
   repository state and still writes CI run artifacts.
 - `bash ci_scripts/tasks/verify_pre_push.sh` is the optional Git `pre-push`
   wrapper for the same non-destructive verification gate.
+- Release UI smoke auditing is intentionally separate from the normal verify
+  gate. Use the global `$xcode-ui-smoke-auditor` skill and the
+  [release UI smoke audit guide](Designs/Architecture/release-ui-smoke-audit.md)
+  when a release or UI-sensitive change needs live Simulator evidence.
 
 SwiftLint is resolved from the `SimplyDanny/SwiftLintPlugins` package declared
 in `Incomes.xcodeproj`. The repository scripts do not require a separately
