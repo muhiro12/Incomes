@@ -74,7 +74,6 @@ struct ItemFormView: View {
         }
         .scrollDismissesKeyboard(.interactively)
         .contentMargins(.bottom, designMetrics.spacing.inline, for: .scrollContent)
-        .toolbarRole(.editor)
         .navigationTitle(model.content.isNotEmpty ? Text(model.content) : Text("Create"))
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {

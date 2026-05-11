@@ -48,7 +48,6 @@ struct ItemFormInputAssistView: View {
         }
         .formStyle(.grouped)
         .contentMargins(.bottom, designMetrics.spacing.inline, for: .scrollContent)
-        .toolbarRole(.editor)
         .navigationTitle("Text Capture")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {

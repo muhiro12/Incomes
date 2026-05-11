@@ -163,7 +163,6 @@ struct YearlyDuplicationView: View {
             alignYearSelections(preserveCurrentSelection: plan != nil || isLoadingPlan)
         }
         .contentMargins(.bottom, designMetrics.spacing.inline, for: .scrollContent)
-        .toolbarRole(.editor)
         .task(id: planReloadKey) {
             await loadPreviewPlan()
         }

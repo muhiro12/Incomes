@@ -90,7 +90,6 @@ private extension CategoryRenameSheet {
         .formStyle(.grouped)
         .navigationTitle("Rename")
         .navigationBarTitleDisplayMode(.inline)
-        .toolbarRole(.editor)
         .toolbar {
             renameToolbar(
                 for: previewResult

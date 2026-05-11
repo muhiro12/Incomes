@@ -29,7 +29,6 @@ extension ItemView: View {
             }
         }
         .contentMargins(.bottom, designMetrics.spacing.inline, for: .scrollContent)
-        .toolbarRole(.editor)
         .navigationTitle(item.content)
         .toolbar {
             if isPresented {
