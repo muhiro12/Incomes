@@ -40,9 +40,14 @@ The repository expectation is:
 2. Run release UI smoke only when preparing a release or when a UI-sensitive
    change needs live Simulator evidence.
 3. Prefer representative iPhone and iPad Simulator coverage when available.
-4. Keep screenshots and findings in the audit report, not as committed test
+   For iPad, treat landscape as the representative layout because sidebar and
+   split-view behavior are core release surfaces.
+4. Treat the Apple Watch app as companion target coverage. Audit it when the
+   available tool surface supports watchOS Simulator inspection; otherwise,
+   report it as a coverage gap with the concrete blocker.
+5. Keep screenshots and findings in the audit report, not as committed test
    artifacts.
-5. Treat skipped targets and state-dependent coverage as explicit coverage
+6. Treat skipped targets and state-dependent coverage as explicit coverage
    gaps.
 
 ## Safety Rules
