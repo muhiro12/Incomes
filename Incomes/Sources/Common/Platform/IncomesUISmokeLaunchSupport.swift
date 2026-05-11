@@ -9,8 +9,8 @@ enum IncomesUISmokeLaunchSupport {
     @MainActor
     static func prepareIfNeeded(
         modelContainer: ModelContainer,
-        arguments: [String] = ProcessInfo.processInfo.arguments,
-        logger: MHLogger
+        logger: MHLogger,
+        arguments: [String] = ProcessInfo.processInfo.arguments
     ) throws {
         guard arguments.contains(seedIfEmptyArgument) else {
             return
