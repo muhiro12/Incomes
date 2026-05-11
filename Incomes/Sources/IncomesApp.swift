@@ -51,19 +51,28 @@ struct IncomesApp: App {
             )
         )
 
+        var startupFailurePhase = "model_container"
         let platformEnvironment: IncomesPlatformEnvironment
         do {
             let modelContainer = try IncomesPlatformEnvironmentFactory.makeAppModelContainer(
                 isICloudEnabled: isICloudEnabled
             )
             startupLogger.notice("model_container.created")
+            #if DEBUG
+            startupFailurePhase = "ui_smoke_seed"
+            try IncomesUISmokeLaunchSupport.prepareIfNeeded(
+                modelContainer: modelContainer,
+                logger: startupLogger
+            )
+            #endif
+            startupFailurePhase = "platform_environment"
             platformEnvironment = Self.makePlatformEnvironment(
                 modelContainer: modelContainer,
                 logging: logging
             )
         } catch {
             let startupFailureMetadata = IncomesLogging.metadata(
-                ("phase", "model_container"),
+                ("phase", startupFailurePhase),
                 ("icloud_enabled", IncomesLogging.bool(isICloudEnabled))
             )
             let failureMetadata = startupFailureMetadata.merging(
