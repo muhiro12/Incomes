@@ -1,20 +1,25 @@
 //
 //  MonthlySummaryGenerationError.swift
-//  Incomes
+//  IncomesLibrary
 //
 //  Created by Codex on 2026/03/05.
 //
 
 import Foundation
 
+/// Failures that can stop monthly summary generation.
 @available(iOS 26.0, *)
-enum MonthlySummaryGenerationError: LocalizedError {
+public enum MonthlySummaryGenerationError: LocalizedError, Equatable, Sendable, CaseIterable {
+    /// The on-device language model is unavailable.
     case unavailableModel
+    /// The current locale is unsupported by the on-device language model.
     case unsupportedLocale
+    /// The requested month cannot be represented safely.
     case invalidYearMonth
+    /// Summary generation failed after the input context was prepared.
     case generationFailed
 
-    var errorDescription: String? {
+    public var errorDescription: String? {
         switch self {
         case .unavailableModel:
             return String(localized: "On-device monthly summaries are currently unavailable.")
