@@ -16,14 +16,9 @@ struct ShowThisMonthChartsIntent: AppIntent {
     @MainActor
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
         let date = Date.now
-        let items = try ItemQueryOperations.items(
-            context: modelContainer.mainContext,
+        return try ItemIntentShowResultSupport.datedChartList(
+            modelContainer: modelContainer,
             date: date
-        )
-        return ItemIntentShowResultSupport.chartList(
-            items,
-            defaultDate: date,
-            modelContainer: modelContainer
         )
     }
 }

@@ -87,6 +87,23 @@ enum ItemIntentShowResultSupport {
     }
 
     @MainActor
+    static func datedItemList(
+        modelContainer: ModelContainer,
+        date: Date
+    ) throws -> some ProvidesDialog & ShowsSnippetView {
+        let items = try ItemQueryOperations.items(
+            context: modelContainer.mainContext,
+            date: date
+        )
+        return itemList(
+            items,
+            defaultDate: date,
+            modelContainer: modelContainer,
+            successOpenDate: date
+        )
+    }
+
+    @MainActor
     static func chartList(
         _ items: [Item],
         defaultDate: Date,
@@ -106,6 +123,22 @@ enum ItemIntentShowResultSupport {
             IntentChartSectionGroup(.items(.idsAre(items.map(\.id))))
                 .modelContainer(modelContainer)
         }
+    }
+
+    @MainActor
+    static func datedChartList(
+        modelContainer: ModelContainer,
+        date: Date
+    ) throws -> some ProvidesDialog & ShowsSnippetView {
+        let items = try ItemQueryOperations.items(
+            context: modelContainer.mainContext,
+            date: date
+        )
+        return chartList(
+            items,
+            defaultDate: date,
+            modelContainer: modelContainer
+        )
     }
 
     private static func itemContentDialog(for item: Item) -> IntentDialog {
