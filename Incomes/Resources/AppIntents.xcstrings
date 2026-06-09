@@ -1242,6 +1242,7 @@
       }
     },
     "Recent Item" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1860,6 +1861,7 @@
       }
     },
     "Upcoming Item" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {

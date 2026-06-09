@@ -238,6 +238,7 @@
       }
     },
     "What did I do last in ${applicationName}" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringSet" : {
@@ -415,6 +416,7 @@
       }
     },
     "What’s next in ${applicationName}" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringSet" : {
