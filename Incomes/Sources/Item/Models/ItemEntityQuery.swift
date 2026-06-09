@@ -17,7 +17,7 @@ struct ItemEntityQuery: EntityStringQuery {
             context: modelContainer.mainContext,
             encodedIdentifiers: identifiers
         )
-        .compactMap(ItemEntity.init)
+        .map(ItemEntity.make)
     }
 
     @MainActor
@@ -26,7 +26,7 @@ struct ItemEntityQuery: EntityStringQuery {
             context: modelContainer.mainContext,
             matchingContent: string
         )
-        .compactMap(ItemEntity.init)
+        .map(ItemEntity.make)
     }
 
     @MainActor
@@ -35,6 +35,6 @@ struct ItemEntityQuery: EntityStringQuery {
             context: modelContainer.mainContext,
             date: .now
         )
-        .compactMap(ItemEntity.init)
+        .map(ItemEntity.make)
     }
 }
