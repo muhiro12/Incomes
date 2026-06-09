@@ -15,9 +15,9 @@ struct CreateAndShowItemIntent: AppIntent {
     @Parameter(title: "Content")
     private var content: String // swiftlint:disable:this type_contents_order
     @Parameter(title: "Income")
-    private var income: Double // swiftlint:disable:this type_contents_order
+    private var income: IntentCurrencyAmount // swiftlint:disable:this type_contents_order
     @Parameter(title: "Outgo")
-    private var outgo: Double // swiftlint:disable:this type_contents_order
+    private var outgo: IntentCurrencyAmount // swiftlint:disable:this type_contents_order
     @Parameter(title: "Category")
     private var category: String // swiftlint:disable:this type_contents_order
     @Parameter(title: "Repeat", default: 1, inclusiveRange: (1, 60)) // swiftlint:disable:this no_magic_numbers
@@ -33,8 +33,8 @@ struct CreateAndShowItemIntent: AppIntent {
         .init(
             date: date,
             content: content,
-            income: Decimal(income),
-            outgo: Decimal(outgo),
+            income: income.amount,
+            outgo: outgo.amount,
             category: category
         )
     }
@@ -46,6 +46,21 @@ struct CreateAndShowItemIntent: AppIntent {
         } catch ItemFormInput.ValidationError.contentIsEmpty {
             throw ItemError.contentIsEmpty
         }
+
+        let currencyCode = ItemIntentCurrencySupport.preferredCurrencyCode()
+        if let amount = ItemIntentCurrencySupport.disambiguationAmount(
+            amount: income,
+            expectedCurrencyCode: currencyCode
+        ) {
+            throw $income.needsDisambiguationError(among: [amount])
+        }
+        if let amount = ItemIntentCurrencySupport.disambiguationAmount(
+            amount: outgo,
+            expectedCurrencyCode: currencyCode
+        ) {
+            throw $outgo.needsDisambiguationError(among: [amount])
+        }
+
         let item = try await ItemCreateCoordinator.create(
             context: modelContainer.mainContext,
             input: formInput,
