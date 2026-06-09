@@ -20,6 +20,25 @@ enum ItemIntentCurrencySupport {
         )
     }
 
+    static func validate(
+        income: IntentCurrencyAmount,
+        incomeParameter: IntentParameter<IntentCurrencyAmount>,
+        outgo: IntentCurrencyAmount,
+        outgoParameter: IntentParameter<IntentCurrencyAmount>
+    ) throws {
+        let currencyCode = preferredCurrencyCode()
+        try validate(
+            amount: income,
+            parameter: incomeParameter,
+            expectedCurrencyCode: currencyCode
+        )
+        try validate(
+            amount: outgo,
+            parameter: outgoParameter,
+            expectedCurrencyCode: currencyCode
+        )
+    }
+
     static func disambiguationAmount(
         amount: IntentCurrencyAmount,
         expectedCurrencyCode: String
@@ -31,5 +50,18 @@ enum ItemIntentCurrencySupport {
             amount: amount.amount,
             currencyCode: expectedCurrencyCode
         )
+    }
+
+    private static func validate(
+        amount: IntentCurrencyAmount,
+        parameter: IntentParameter<IntentCurrencyAmount>,
+        expectedCurrencyCode: String
+    ) throws {
+        if let amount = disambiguationAmount(
+            amount: amount,
+            expectedCurrencyCode: expectedCurrencyCode
+        ) {
+            throw parameter.needsDisambiguationError(among: [amount])
+        }
     }
 }

@@ -46,20 +46,12 @@ struct CreateAndShowItemIntent: AppIntent {
         } catch ItemFormInput.ValidationError.contentIsEmpty {
             throw ItemError.contentIsEmpty
         }
-
-        let currencyCode = ItemIntentCurrencySupport.preferredCurrencyCode()
-        if let amount = ItemIntentCurrencySupport.disambiguationAmount(
-            amount: income,
-            expectedCurrencyCode: currencyCode
-        ) {
-            throw $income.needsDisambiguationError(among: [amount])
-        }
-        if let amount = ItemIntentCurrencySupport.disambiguationAmount(
-            amount: outgo,
-            expectedCurrencyCode: currencyCode
-        ) {
-            throw $outgo.needsDisambiguationError(among: [amount])
-        }
+        try ItemIntentCurrencySupport.validate(
+            income: income,
+            incomeParameter: $income,
+            outgo: outgo,
+            outgoParameter: $outgo
+        )
 
         let item = try await ItemCreateCoordinator.create(
             context: modelContainer.mainContext,

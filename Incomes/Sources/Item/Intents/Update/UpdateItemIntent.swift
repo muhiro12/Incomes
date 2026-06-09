@@ -41,20 +41,12 @@ struct UpdateItemIntent: AppIntent {
     @MainActor
     func perform() async throws -> some ReturnsValue<ItemEntity> {
         try validateFormInput()
-
-        let currencyCode = ItemIntentCurrencySupport.preferredCurrencyCode()
-        if let amount = ItemIntentCurrencySupport.disambiguationAmount(
-            amount: income,
-            expectedCurrencyCode: currencyCode
-        ) {
-            throw $income.needsDisambiguationError(among: [amount])
-        }
-        if let amount = ItemIntentCurrencySupport.disambiguationAmount(
-            amount: outgo,
-            expectedCurrencyCode: currencyCode
-        ) {
-            throw $outgo.needsDisambiguationError(among: [amount])
-        }
+        try ItemIntentCurrencySupport.validate(
+            income: income,
+            incomeParameter: $income,
+            outgo: outgo,
+            outgoParameter: $outgo
+        )
 
         let model = try item.model(in: modelContainer.mainContext)
         let entity = try await UpdateItemIntentMutationPerformer.perform(
