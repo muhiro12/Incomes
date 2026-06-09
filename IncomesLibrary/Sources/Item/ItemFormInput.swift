@@ -112,4 +112,66 @@ public struct ItemFormInput {
             throw ValidationError.invalidPriority
         }
     }
+
+    /// Returns a copy with `tag` applied as initial context.
+    public func applying(
+        tag: Tag,
+        currentDate: Date
+    ) -> Self {
+        switch tag.type {
+        case .year,
+             .yearMonth:
+            return replacing(
+                date: ItemFormInitialDateResolver.date(
+                    for: tag,
+                    currentDate: currentDate
+                )
+            )
+        case .content:
+            return replacing(content: tag.name)
+        case .category:
+            return replacing(
+                category: CategoryNameSupport.displayName(
+                    forStoredName: tag.name
+                )
+            )
+        case .debug, .none:
+            return self
+        }
+    }
+}
+
+private extension ItemFormInput {
+    func replacing(date: Date) -> ItemFormInput {
+        .init(
+            date: date,
+            content: content,
+            incomeText: incomeText,
+            outgoText: outgoText,
+            category: category,
+            priorityText: priorityText
+        )
+    }
+
+    func replacing(content: String) -> ItemFormInput {
+        .init(
+            date: date,
+            content: content,
+            incomeText: incomeText,
+            outgoText: outgoText,
+            category: category,
+            priorityText: priorityText
+        )
+    }
+
+    func replacing(category: String) -> ItemFormInput {
+        .init(
+            date: date,
+            content: content,
+            incomeText: incomeText,
+            outgoText: outgoText,
+            category: category,
+            priorityText: priorityText
+        )
+    }
 }

@@ -88,24 +88,13 @@ extension ItemFormModel {
         }
 
         if let tag {
-            switch tag.type {
-            case .year,
-                 .yearMonth:
-                date = ItemFormInitialDateResolver.date(
-                    for: tag,
+            apply(
+                formInputData.applying(
+                    tag: tag,
                     currentDate: currentDate
                 )
-            case .content:
-                content = tag.name
-            case .category:
-                category = CategoryNameSupport.displayName(
-                    forStoredName: tag.name
-                )
-            case .debug:
-                break
-            case .none:
-                break
-            }
+            )
+            return
         }
 
         syncRepeatMonthSelectionsWithBaseDate()

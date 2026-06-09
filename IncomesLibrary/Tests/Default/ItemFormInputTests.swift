@@ -149,4 +149,57 @@ struct ItemFormInputTests {
         #expect(input.category == "Service")
         #expect(input.priorityText == "3")
     }
+
+    @Test
+    func applying_year_month_tag_updates_date_and_preserves_other_values() throws {
+        let context = testContext
+        let input = ItemFormInput(
+            date: shiftedDate("2026-01-10T12:00:00Z"),
+            content: "Subscription",
+            incomeText: "100",
+            outgoText: .empty,
+            category: "Service",
+            priorityText: "3"
+        )
+        let tag = try Tag.create(context: context, name: "202605", type: .yearMonth)
+
+        let updatedInput = input.applying(
+            tag: tag,
+            currentDate: shiftedDate("2026-06-10T12:00:00Z")
+        )
+        let components = Calendar.current.dateComponents(
+            [.year, .month],
+            from: updatedInput.date
+        )
+
+        #expect(components.year == 2_026)
+        #expect(components.month == 5)
+        #expect(updatedInput.content == "Subscription")
+        #expect(updatedInput.incomeText == "100")
+        #expect(updatedInput.category == "Service")
+        #expect(updatedInput.priorityText == "3")
+    }
+
+    @Test
+    func applying_content_tag_updates_content_and_preserves_date() throws {
+        let context = testContext
+        let date = shiftedDate("2026-01-10T12:00:00Z")
+        let input = ItemFormInput(
+            date: date,
+            content: "Old",
+            incomeText: .empty,
+            outgoText: .empty,
+            category: .empty,
+            priorityText: "0"
+        )
+        let tag = try Tag.create(context: context, name: "Coffee", type: .content)
+
+        let updatedInput = input.applying(
+            tag: tag,
+            currentDate: shiftedDate("2026-06-10T12:00:00Z")
+        )
+
+        #expect(updatedInput.date == date)
+        #expect(updatedInput.content == "Coffee")
+    }
 }
