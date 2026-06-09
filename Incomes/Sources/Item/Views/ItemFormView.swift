@@ -282,9 +282,7 @@ private extension ItemFormView {
             assertionFailure()
             handle(
                 .presentError(
-                    ItemFormMutationPresentationAction.resolvedErrorMessage(
-                        from: ItemError.itemNotFound
-                    )
+                    ErrorMessageSupport.message(from: ItemError.itemNotFound)
                 )
             )
             return
@@ -319,9 +317,7 @@ private extension ItemFormView {
             assertionFailure()
             handle(
                 .presentError(
-                    ItemFormMutationPresentationAction.resolvedErrorMessage(
-                        from: ItemError.itemNotFound
-                    )
+                    ErrorMessageSupport.message(from: ItemError.itemNotFound)
                 )
             )
             return
@@ -356,9 +352,7 @@ private extension ItemFormView {
             assertionFailure()
             handle(
                 .presentError(
-                    ItemFormMutationPresentationAction.resolvedErrorMessage(
-                        from: ItemError.itemNotFound
-                    )
+                    ErrorMessageSupport.message(from: ItemError.itemNotFound)
                 )
             )
             return

@@ -249,7 +249,7 @@ private extension MonthlySummarySection {
                 return
             }
             if presentsErrors {
-                errorMessage = resolvedErrorMessage(from: error)
+                errorMessage = ErrorMessageSupport.message(from: error)
             }
         }
     }
@@ -257,13 +257,5 @@ private extension MonthlySummarySection {
     func clearGeneratedSummary() {
         generatedSummary = nil
         errorMessage = nil
-    }
-
-    func resolvedErrorMessage(from error: Error) -> String {
-        if let localizedError = error as? LocalizedError,
-           let description = localizedError.errorDescription {
-            return description
-        }
-        return error.localizedDescription
     }
 }
