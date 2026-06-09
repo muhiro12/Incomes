@@ -12,7 +12,7 @@ struct GetYearlyDuplicationTargetYearsIntent: AppIntent {
     func perform() -> some ReturnsValue<[Int]> {
         .result(
             value: YearlyItemDuplicationSelectionOperations.targetYears(
-                currentYear: currentYear ?? Calendar.current.component(.year, from: .now),
+                currentYear: currentYear ?? YearlyItemDuplicationSelectionOperations.currentYear(),
                 range: range
             )
         )

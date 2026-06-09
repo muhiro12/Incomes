@@ -11,6 +11,29 @@ struct YearlyItemDuplicationSuggestionTests {
     }
 
     @Test
+    func currentYear_returns_year_component_for_calendar() {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = TimeZone(secondsFromGMT: .zero) ?? .current
+
+        let year = YearlyItemDuplicationSelectionOperations.currentYear(
+            date: isoDate("2030-12-31T12:00:00Z"),
+            calendar: calendar
+        )
+
+        #expect(year == 2_030)
+    }
+
+    @Test
+    func initialSelectionState_returns_previous_and_current_year() {
+        let state = YearlyItemDuplicationSelectionOperations.initialSelectionState(
+            currentYear: 2_030
+        )
+
+        #expect(state.sourceYear == 2_029)
+        #expect(state.targetYear == 2_030)
+    }
+
+    @Test
     func availableSourceYears_returns_current_year_when_no_tags() {
         let years = YearlyItemDuplicationSelectionOperations.availableSourceYears(
             from: [],

@@ -158,7 +158,7 @@ enum YearlyDuplicationCoordinator {
 
     static func promoState(
         context: ModelContext,
-        currentYear: Int = Calendar.current.component(.year, from: .now)
+        currentYear: Int = YearlyItemDuplicationSelectionOperations.currentYear()
     ) -> PromoState? {
         let targetYears = YearlyItemDuplicationSelectionOperations.targetYears(
             currentYear: currentYear

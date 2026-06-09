@@ -3,10 +3,28 @@ import SwiftData
 
 /// Domain operations for yearly item duplication selections and suggestions.
 public enum YearlyItemDuplicationSelectionOperations {
+    /// Returns the year component for `date` in `calendar`.
+    public static func currentYear(
+        date: Date = .now,
+        calendar: Calendar = .current
+    ) -> Int {
+        calendar.component(.year, from: date)
+    }
+
+    /// Returns the default source/target year selection.
+    public static func initialSelectionState(
+        currentYear: Int = Self.currentYear()
+    ) -> YearlyItemDuplicationSelectionState {
+        .init(
+            sourceYear: currentYear - 1,
+            targetYear: currentYear
+        )
+    }
+
     /// Returns source years extracted from persisted year tags, or `currentYear` when none exist.
     public static func availableSourceYears(
         context: ModelContext,
-        currentYear: Int = Calendar.current.component(.year, from: .now)
+        currentYear: Int = Self.currentYear()
     ) throws -> [Int] {
         let yearTags = try context.fetch(.tags(.typeIs(.year), order: .reverse))
         return availableSourceYears(
@@ -18,7 +36,7 @@ public enum YearlyItemDuplicationSelectionOperations {
     /// Returns source years extracted from `yearTags`, or `currentYear` when none exist.
     public static func availableSourceYears(
         from yearTags: [Tag],
-        currentYear: Int = Calendar.current.component(.year, from: .now)
+        currentYear: Int = Self.currentYear()
     ) -> [Int] {
         let years = yearTags.compactMap { tag in
             YearlyItemDuplicationSupport.yearValue(from: tag)
@@ -31,7 +49,7 @@ public enum YearlyItemDuplicationSelectionOperations {
 
     /// Returns selectable target years centered around `currentYear`.
     public static func targetYears(
-        currentYear: Int = Calendar.current.component(.year, from: .now),
+        currentYear: Int = Self.currentYear(),
         range: Int = 10
     ) -> [Int] {
         Array((currentYear - range)...(currentYear + range)).sorted(by: >)
@@ -43,7 +61,7 @@ public enum YearlyItemDuplicationSelectionOperations {
         currentSourceYear: Int,
         currentTargetYear: Int,
         preserveCurrentSelection: Bool,
-        currentYear: Int = Calendar.current.component(.year, from: .now),
+        currentYear: Int = Self.currentYear(),
         targetYearRange: Int = 10,
         minimumGroupCount: Int = 3,
         options: YearlyItemDuplicationOptions = .init()
@@ -69,7 +87,7 @@ public enum YearlyItemDuplicationSelectionOperations {
         currentSourceYear: Int,
         currentTargetYear: Int,
         preserveCurrentSelection: Bool,
-        currentYear: Int = Calendar.current.component(.year, from: .now),
+        currentYear: Int = Self.currentYear(),
         targetYearRange: Int = 10,
         minimumGroupCount: Int = 3,
         options: YearlyItemDuplicationOptions = .init()
@@ -169,7 +187,7 @@ public enum YearlyItemDuplicationSelectionOperations {
                 )
             }
         }
-        let fallbackSourceYear = sourceYears.first ?? Calendar.current.component(.year, from: .now)
+        let fallbackSourceYear = sourceYears.first ?? Self.currentYear()
         let fallbackTargetYear = targetYears.contains(fallbackSourceYear + 1)
             ? fallbackSourceYear + 1
             : targetYears.first ?? fallbackSourceYear + 1

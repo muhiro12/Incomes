@@ -15,6 +15,10 @@ struct YearlyDuplicationView: View {
     private enum Constants {
         static let targetYearRange = 10
         static let minimumGroupCount = 3
+
+        static var initialSelectionState: YearlyItemDuplicationSelectionState {
+            YearlyItemDuplicationSelectionOperations.initialSelectionState()
+        }
     }
 
     @Environment(\.modelContext)
@@ -29,8 +33,8 @@ struct YearlyDuplicationView: View {
     @Query(.tags(.typeIs(.year), order: .reverse))
     private var yearTags: [Tag]
 
-    @State private var sourceYear = Calendar.current.component(.year, from: .now) - 1
-    @State private var targetYear = Calendar.current.component(.year, from: .now)
+    @State private var sourceYear = Constants.initialSelectionState.sourceYear
+    @State private var targetYear = Constants.initialSelectionState.targetYear
 
     @State private var route: YearlyDuplicationRoute?
     @State private var plan: YearlyItemDuplicationPlan?
@@ -222,7 +226,7 @@ struct YearlyDuplicationView: View {
 
 private extension YearlyDuplicationView {
     var currentYear: Int {
-        Calendar.current.component(.year, from: .now)
+        YearlyItemDuplicationSelectionOperations.currentYear()
     }
 
     var sourceYears: [Int] {
