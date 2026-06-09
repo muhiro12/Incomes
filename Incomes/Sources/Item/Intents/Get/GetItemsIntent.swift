@@ -23,7 +23,7 @@ struct GetItemsIntent: AppIntent {
             date: date
         )
         return .result(
-            value: try ItemIntentEntitySupport.entities(from: items)
+            value: try items.map(ItemEntity.make)
         )
     }
 }
