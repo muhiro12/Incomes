@@ -22,13 +22,7 @@ final class ItemFormModel {
             return
         }
 
-        let resolvedPriority = draft.priorityText.isEmpty ? "0" : draft.priorityText
-        date = draft.date
-        content = draft.content
-        priority = resolvedPriority
-        income = draft.incomeText
-        outgo = draft.outgoText
-        category = draft.category
+        apply(ItemFormInput(draft: draft))
         repeatMonthSelections = draft.repeatMonthSelections
         isRepeatEnabled = draft.isRepeatEnabled
     }

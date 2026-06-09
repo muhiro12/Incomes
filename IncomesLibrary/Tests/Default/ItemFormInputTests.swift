@@ -100,4 +100,30 @@ struct ItemFormInputTests {
 
         #expect(input.storedCategory.isEmpty)
     }
+
+    @Test
+    func init_with_draft_maps_values_and_resolves_empty_priority() {
+        let date = Date(timeIntervalSince1970: 1_000)
+        let draft = ItemFormDraft(
+            groupID: UUID(),
+            date: date,
+            content: "Subscription",
+            incomeText: "100",
+            outgoText: .empty,
+            category: "Service",
+            priorityText: .empty,
+            repeatMonthSelections: [
+                .init(year: 2_026, month: 1)
+            ]
+        )
+
+        let input = ItemFormInput(draft: draft)
+
+        #expect(input.date == date)
+        #expect(input.content == "Subscription")
+        #expect(input.incomeText == "100")
+        #expect(input.outgoText.isEmpty)
+        #expect(input.category == "Service")
+        #expect(input.priorityText == "0")
+    }
 }

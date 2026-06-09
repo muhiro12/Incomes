@@ -44,6 +44,18 @@ public struct ItemFormInput {
         self.priorityText = priorityText
     }
 
+    /// Creates an item form input snapshot from a draft.
+    public init(draft: ItemFormDraft) { // swiftlint:disable:this type_contents_order
+        self.init(
+            date: draft.date,
+            content: draft.content,
+            incomeText: draft.incomeText,
+            outgoText: draft.outgoText,
+            category: draft.category,
+            priorityText: draft.priorityText.isEmpty ? "0" : draft.priorityText
+        )
+    }
+
     /// True when all form values pass `validate()`.
     public var isValid: Bool {
         (try? validate()) != nil
