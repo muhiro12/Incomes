@@ -11,11 +11,10 @@ struct GetTagItemsIntent: AppIntent {
 
     @MainActor
     func perform() throws -> some ReturnsValue<[ItemEntity]> {
-        .result(
-            value: try TagIntentGetValueSupport.itemEntities(
-                for: tag,
-                context: modelContainer.mainContext
-            )
+        let model = try tag.model(in: modelContainer.mainContext)
+        let items = TagQueryOperations.items(for: model)
+        return .result(
+            value: try ItemIntentEntitySupport.entities(from: items)
         )
     }
 }

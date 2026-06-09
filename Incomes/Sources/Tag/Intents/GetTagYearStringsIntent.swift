@@ -11,11 +11,9 @@ struct GetTagYearStringsIntent: AppIntent {
 
     @MainActor
     func perform() throws -> some ReturnsValue<[String]> {
-        .result(
-            value: try TagIntentGetValueSupport.yearStrings(
-                for: tag,
-                context: modelContainer.mainContext
-            )
+        let model = try tag.model(in: modelContainer.mainContext)
+        return .result(
+            value: TagQueryOperations.yearStrings(for: model)
         )
     }
 }
