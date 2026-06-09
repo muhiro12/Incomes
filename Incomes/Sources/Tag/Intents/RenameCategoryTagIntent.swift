@@ -14,12 +14,10 @@ struct RenameCategoryTagIntent: AppIntent {
 
     @MainActor
     func perform() throws -> some ReturnsValue<TagEntity> {
-        let model = try tag.model(in: modelContainer.mainContext)
-        try TagRenameOperations.renameCategory(
-            context: modelContainer.mainContext,
-            tag: model,
-            to: newName
-        )
-        return .result(value: try TagEntity.make(from: model))
+        .result(value: try TagIntentMutationSupport.renameCategory(
+            tag: tag,
+            to: newName,
+            context: modelContainer.mainContext
+        ))
     }
 }
