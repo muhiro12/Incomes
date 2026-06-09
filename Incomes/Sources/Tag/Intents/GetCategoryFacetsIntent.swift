@@ -8,10 +8,10 @@ struct GetCategoryFacetsIntent: AppIntent {
 
     @MainActor
     func perform() throws -> some ReturnsValue<[String]> {
-        let names = try CategoryFacetOperations.facets(
-            context: modelContainer.mainContext
+        .result(
+            value: try TagIntentGetValueSupport.categoryFacetNames(
+                context: modelContainer.mainContext
+            )
         )
-        .map(\.displayName)
-        return .result(value: names)
     }
 }

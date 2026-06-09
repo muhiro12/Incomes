@@ -8,11 +8,10 @@ struct GetOrphanTagsIntent: AppIntent {
 
     @MainActor
     func perform() throws -> some ReturnsValue<[TagEntity]> {
-        let tags = try TagQueryOperations.orphanTags(
-            context: modelContainer.mainContext
-        )
-        return .result(
-            value: try TagIntentEntitySupport.entities(from: tags)
+        .result(
+            value: try TagIntentGetValueSupport.orphanTagEntities(
+                context: modelContainer.mainContext
+            )
         )
     }
 }

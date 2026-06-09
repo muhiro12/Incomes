@@ -12,9 +12,11 @@ struct GetTagDateIntent: AppIntent {
 
     @MainActor
     func perform() throws -> some ReturnsValue<Date?> {
-        let model = try tag.model(in: modelContainer.mainContext)
-        return .result(
-            value: TagQueryOperations.date(for: model)
+        .result(
+            value: try TagIntentGetValueSupport.date(
+                for: tag,
+                context: modelContainer.mainContext
+            )
         )
     }
 }

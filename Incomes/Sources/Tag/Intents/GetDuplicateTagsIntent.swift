@@ -8,11 +8,10 @@ struct GetDuplicateTagsIntent: AppIntent {
 
     @MainActor
     func perform() throws -> some ReturnsValue<[TagEntity]> {
-        let tags = try TagQueryOperations.duplicateTags(
-            context: modelContainer.mainContext
-        )
-        return .result(
-            value: try TagIntentEntitySupport.entities(from: tags)
+        .result(
+            value: try TagIntentGetValueSupport.duplicateTagEntities(
+                context: modelContainer.mainContext
+            )
         )
     }
 }

@@ -11,11 +11,11 @@ struct GetFilteredCategoryFacetsIntent: AppIntent {
 
     @MainActor
     func perform() throws -> some ReturnsValue<[String]> {
-        let names = try CategoryFacetOperations.filteredFacets(
-            context: modelContainer.mainContext,
-            query: query
+        .result(
+            value: try TagIntentGetValueSupport.filteredCategoryFacetNames(
+                context: modelContainer.mainContext,
+                query: query
+            )
         )
-        .map(\.displayName)
-        return .result(value: names)
     }
 }
