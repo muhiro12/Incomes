@@ -53,15 +53,6 @@ enum YearlyDuplicationCoordinator {
         }
     }
 
-    static func entries(
-        for group: YearlyItemDuplicationGroup,
-        in plan: YearlyItemDuplicationPlan
-    ) -> [YearlyItemDuplicationEntry] {
-        plan.entries.filter { entry in
-            entry.groupID == group.id
-        }
-    }
-
     static func createDraft(
         for group: YearlyItemDuplicationGroup,
         in plan: YearlyItemDuplicationPlan
@@ -92,8 +83,8 @@ enum YearlyDuplicationCoordinator {
         refreshNotificationSchedule: @escaping IncomesMutationWorkflow.NotificationScheduleRefresher,
         logger: MHLogger
     ) async throws -> YearlyItemDuplicationResult? {
-        let entries = entries(
-            for: group,
+        let entries = YearlyItemDuplicationPlanOperations.entries(
+            for: group.id,
             in: plan
         )
         let metadata = IncomesLogging.metadata(

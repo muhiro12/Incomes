@@ -53,8 +53,8 @@ struct YearlyDuplicationView: View {
             if let plan {
                 Section("Proposals") { // swiftlint:disable:this closure_body_length
                     ForEach(plan.groups, id: \.id) { group in // swiftlint:disable:this closure_body_length
-                        let entries = YearlyDuplicationCoordinator.entries(
-                            for: group,
+                        let entries = YearlyItemDuplicationPlanOperations.entries(
+                            for: group.id,
                             in: plan
                         )
                         let isCreated = createdGroupIDs.contains(group.id)
