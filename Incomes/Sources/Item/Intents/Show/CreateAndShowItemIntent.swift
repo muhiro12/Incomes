@@ -43,13 +43,13 @@ struct CreateAndShowItemIntent: AppIntent {
     func perform() async throws -> some ProvidesDialog & ShowsSnippetView {
         try ItemIntentFormInputSupport.validate(
             formInput: formInput,
-            contentParameter: $content
-        )
-        try ItemIntentCurrencySupport.validate(
             income: income,
-            incomeParameter: $income,
             outgo: outgo,
-            outgoParameter: $outgo
+            parameters: .init(
+                content: $content,
+                income: $income,
+                outgo: $outgo
+            )
         )
 
         let item = try await ItemIntentMutationSupport.createModel(

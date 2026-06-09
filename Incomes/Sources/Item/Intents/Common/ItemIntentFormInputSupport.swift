@@ -11,6 +11,25 @@ enum ItemIntentFormInputSupport {
 
     static func validate(
         formInput: ItemFormInput,
+        income: IntentCurrencyAmount,
+        outgo: IntentCurrencyAmount,
+        parameters: ItemIntentFormValidationParameters
+    ) throws {
+        try validate(
+            formInput: formInput,
+            contentParameter: parameters.content,
+            priorityParameter: parameters.priority
+        )
+        try ItemIntentCurrencySupport.validate(
+            income: income,
+            incomeParameter: parameters.income,
+            outgo: outgo,
+            outgoParameter: parameters.outgo
+        )
+    }
+
+    static func validate(
+        formInput: ItemFormInput,
         contentParameter: IntentParameter<String>,
         priorityParameter: IntentParameter<Int>? = nil
     ) throws {

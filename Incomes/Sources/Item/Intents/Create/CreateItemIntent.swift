@@ -43,13 +43,13 @@ struct CreateItemIntent: AppIntent {
     func perform() async throws -> some ReturnsValue<ItemEntity> {
         try ItemIntentFormInputSupport.validate(
             formInput: formInput,
-            contentParameter: $content
-        )
-        try ItemIntentCurrencySupport.validate(
             income: income,
-            incomeParameter: $income,
             outgo: outgo,
-            outgoParameter: $outgo
+            parameters: .init(
+                content: $content,
+                income: $income,
+                outgo: $outgo
+            )
         )
 
         let entity = try await ItemIntentMutationSupport.createEntity(

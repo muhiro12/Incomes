@@ -42,14 +42,14 @@ struct UpdateItemIntent: AppIntent {
     func perform() async throws -> some ReturnsValue<ItemEntity> {
         try ItemIntentFormInputSupport.validate(
             formInput: formInput,
-            contentParameter: $content,
-            priorityParameter: $priority
-        )
-        try ItemIntentCurrencySupport.validate(
             income: income,
-            incomeParameter: $income,
             outgo: outgo,
-            outgoParameter: $outgo
+            parameters: .init(
+                content: $content,
+                income: $income,
+                outgo: $outgo,
+                priority: $priority
+            )
         )
 
         let entity = try await ItemIntentMutationSupport.updateEntity(
