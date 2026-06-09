@@ -23,8 +23,8 @@
   App Intents.
 - **Apple Watch** – glanceable upcoming payments plus subscription management
   on the wrist.
-- **Widgets & Live Activities** – balance, upcoming and control widgets keep
-  finances visible in StandBy and on the Home Screen.
+- **Widgets** – balance, upcoming, and monthly views keep finances visible in
+  StandBy and on the Home Screen.
 
 ## Build from source
 
