@@ -20,9 +20,6 @@ struct RenameCategoryTagIntent: AppIntent {
             tag: model,
             to: newName
         )
-        guard let entity = TagEntity(model) else {
-            throw TagEntityError.conversionFailed
-        }
-        return .result(value: entity)
+        return .result(value: try TagEntity.make(from: model))
     }
 }

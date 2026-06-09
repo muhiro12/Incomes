@@ -51,6 +51,13 @@ extension TagEntity {
             typeID: model.typeID
         )
     }
+
+    static func make(from model: Tag) throws -> TagEntity {
+        guard let entity = TagEntity(model) else {
+            throw TagEntityError.conversionFailed
+        }
+        return entity
+    }
 }
 
 extension TagEntity: Hashable {

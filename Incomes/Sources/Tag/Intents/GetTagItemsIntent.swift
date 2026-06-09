@@ -12,8 +12,9 @@ struct GetTagItemsIntent: AppIntent {
     @MainActor
     func perform() throws -> some ReturnsValue<[ItemEntity]> {
         let model = try tag.model(in: modelContainer.mainContext)
+        let items = TagQueryOperations.items(for: model)
         return .result(
-            value: TagQueryOperations.items(for: model).compactMap(ItemEntity.init)
+            value: try ItemIntentEntitySupport.entities(from: items)
         )
     }
 }

@@ -12,7 +12,7 @@ struct GetDuplicateTagsIntent: AppIntent {
             context: modelContainer.mainContext
         )
         return .result(
-            value: tags.compactMap(TagEntity.init)
+            value: try TagIntentEntitySupport.entities(from: tags)
         )
     }
 }

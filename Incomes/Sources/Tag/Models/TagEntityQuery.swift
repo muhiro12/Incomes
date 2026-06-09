@@ -17,7 +17,7 @@ struct TagEntityQuery: EntityStringQuery {
             context: modelContainer.mainContext,
             ids: identifiers
         )
-        .compactMap(TagEntity.init)
+        .map(TagEntity.make)
     }
 
     @MainActor
@@ -26,7 +26,7 @@ struct TagEntityQuery: EntityStringQuery {
             context: modelContainer.mainContext,
             matching: string
         )
-        .compactMap(TagEntity.init)
+        .map(TagEntity.make)
     }
 
     @MainActor
@@ -34,6 +34,6 @@ struct TagEntityQuery: EntityStringQuery {
         try TagQueryOperations.representativeTags(
             context: modelContainer.mainContext
         )
-        .compactMap(TagEntity.init)
+        .map(TagEntity.make)
     }
 }
