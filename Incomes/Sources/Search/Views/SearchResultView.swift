@@ -18,28 +18,25 @@ struct SearchResultView: View {
         _items = Query(.items(predicate))
     }
 
-    private var groupedItems: [Date: [Item]] {
-        Dictionary(grouping: items) { item in
-            Calendar.current.startOfMonth(for: item.localDate)
-        }
-    }
-
-    private var sortedMonths: [Date] {
-        groupedItems.keys.sorted(by: >)
+    private var sections: [SearchResultSectionBuilder.Section] {
+        SearchResultSectionBuilder.sections(for: items)
     }
 
     var body: some View {
         Group {
             if items.isNotEmpty {
                 List {
-                    ForEach(Array(sortedMonths.enumerated()), id: \.element) { monthIndex, month in
-                        Section(month.formatted(.dateTime.year().month())) {
+                    ForEach(
+                        Array(sections.enumerated()),
+                        id: \.element.month
+                    ) { sectionIndex, section in
+                        Section(section.title) {
                             ForEach(
-                                Array((groupedItems[month] ?? []).enumerated()),
+                                Array(section.items.enumerated()),
                                 id: \.element.persistentModelID
                             ) { itemIndex, item in
                                 ListItem(
-                                    isItemDetailTipAnchor: monthIndex == .zero &&
+                                    isItemDetailTipAnchor: sectionIndex == .zero &&
                                         itemIndex == .zero
                                 )
                                 .environment(item)
