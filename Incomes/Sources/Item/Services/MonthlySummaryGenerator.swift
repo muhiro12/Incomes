@@ -111,7 +111,7 @@ enum MonthlySummaryGenerator {
             Return one short paragraph only.
             """
         let options = GenerationOptions(
-            samplingMode: .greedy,
+            sampling: .greedy,
             maximumResponseTokens: 220 // swiftlint:disable:this no_magic_numbers
         )
 
