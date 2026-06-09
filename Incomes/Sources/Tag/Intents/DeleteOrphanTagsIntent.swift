@@ -14,19 +14,16 @@ struct DeleteOrphanTagsIntent: AppIntent {
         let logger = intentLogger
         logger.notice("delete_orphan_tags.requested")
         do {
-            let tags = try TagQueryOperations.orphanTags(
-                context: modelContainer.mainContext
-            )
-            try TagMutationOperations.deleteAllOrphanTags(
+            let deletedCount = try TagMutationOperations.deleteAllOrphanTags(
                 context: modelContainer.mainContext
             )
             logger.notice(
                 "delete_orphan_tags.completed",
                 metadata: IncomesLogging.metadata(
-                    ("orphan_count", IncomesLogging.count(tags.count))
+                    ("orphan_count", IncomesLogging.count(deletedCount))
                 )
             )
-            return .result(value: tags.count)
+            return .result(value: deletedCount)
         } catch {
             logger.error(
                 "delete_orphan_tags.failed",

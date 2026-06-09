@@ -53,14 +53,17 @@ public enum TagMutationOperations {
         }
     }
 
-    /// Resolves every duplicate tag group in the store.
+    /// Resolves every duplicate tag group in the store and returns the resolved group count.
+    @discardableResult
     public static func resolveAllDuplicates(
         context: ModelContext
-    ) throws {
+    ) throws -> Int {
+        let duplicateTags = try TagQueryOperations.duplicateTags(context: context)
         try resolveDuplicates(
             context: context,
-            tags: TagQueryOperations.duplicateTags(context: context)
+            tags: duplicateTags
         )
+        return duplicateTags.count
     }
 
     /// Deletes a single unused tag.
@@ -84,12 +87,15 @@ public enum TagMutationOperations {
         }
     }
 
-    /// Deletes every unused tag in the store.
-    public static func deleteAllOrphanTags(context: ModelContext) throws {
+    /// Deletes every unused tag in the store and returns the deleted tag count.
+    @discardableResult
+    public static func deleteAllOrphanTags(context: ModelContext) throws -> Int {
         let orphanTags = try TagQueryOperations.orphanTags(context: context)
-        orphanTags.forEach { tag in
-            delete(tag: tag)
+        var deletedCount = 0
+        for tag in orphanTags where delete(tag: tag) {
+            deletedCount += 1
         }
+        return deletedCount
     }
 
     /// Deletes all tags in the store.

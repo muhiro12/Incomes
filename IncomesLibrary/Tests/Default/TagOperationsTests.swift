@@ -213,8 +213,9 @@ struct TagOperationsTests {
         _ = Tag.createIgnoringDuplicates(context: context, name: "B", type: .content)
         _ = Tag.createIgnoringDuplicates(context: context, name: "B", type: .content)
 
-        try TagMutationOperations.resolveAllDuplicates(context: context)
+        let resolvedCount = try TagMutationOperations.resolveAllDuplicates(context: context)
 
+        #expect(resolvedCount == 2)
         #expect(try context.fetchCount(.tags(.all)) == 2)
     }
 

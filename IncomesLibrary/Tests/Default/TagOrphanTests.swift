@@ -146,8 +146,9 @@ struct TagOrphanTests {
             type: .debug
         )
 
-        try TagMutationOperations.deleteAllOrphanTags(context: context)
+        let deletedCount = try TagMutationOperations.deleteAllOrphanTags(context: context)
 
+        #expect(deletedCount == 2)
         #expect(try context.fetchCount(.tags(.nameIs("Unused Content", type: .content))) == 0)
         #expect(try context.fetchCount(.tags(.nameIs("Unused Debug", type: .debug))) == 0)
         #expect(try context.fetchCount(.tags(.nameIs("Used Content", type: .content))) == 1)
