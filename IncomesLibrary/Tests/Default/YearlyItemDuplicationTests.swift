@@ -165,6 +165,42 @@ struct YearlyItemDuplicationTests { // swiftlint:disable:this type_body_length
     }
 
     @Test
+    func draft_returns_item_form_draft_for_group() throws {
+        _ = try createItem(
+            context: context,
+            date: shiftedDate("2024-01-05T12:00:00Z"),
+            content: "Subscription",
+            income: 100,
+            outgo: 10,
+            category: "Service",
+            priority: 0,
+            repeatCount: 3
+        )
+
+        let plan = try YearlyItemDuplicationPlanOperations.plan(
+            context: context,
+            sourceYear: 2_024,
+            targetYear: 2_025
+        )
+        let group = try #require(plan.groups.first)
+
+        let draft = try #require(
+            YearlyItemDuplicationPlanOperations.draft(
+                for: group.id,
+                in: plan
+            )
+        )
+
+        #expect(draft.groupID == group.id)
+        #expect(draft.content == "Subscription")
+        #expect(draft.category == "Service")
+        #expect(draft.incomeText == "100")
+        #expect(draft.outgoText == "10")
+        #expect(draft.repeatMonthSelections.count == 3)
+        #expect(draft.isRepeatEnabled)
+    }
+
+    @Test
     func plan_shifts_dates_by_year() throws {
         _ = try createItem(
             context: context,

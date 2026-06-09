@@ -17,7 +17,7 @@ public enum YearlyItemDuplicationPlanOperations {
     public static func draft(
         for groupID: UUID,
         in plan: YearlyItemDuplicationPlan
-    ) -> YearlyItemDuplicationDraft? {
+    ) -> ItemFormDraft? {
         guard let group = plan.groups.first(where: { itemGroup in
             itemGroup.id == groupID
         }) else {

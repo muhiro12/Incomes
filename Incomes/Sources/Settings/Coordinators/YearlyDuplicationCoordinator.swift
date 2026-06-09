@@ -57,21 +57,9 @@ enum YearlyDuplicationCoordinator {
         for group: YearlyItemDuplicationGroup,
         in plan: YearlyItemDuplicationPlan
     ) -> ItemFormDraft? {
-        guard let draft = YearlyItemDuplicationPlanOperations.draft(
+        YearlyItemDuplicationPlanOperations.draft(
             for: group.id,
             in: plan
-        ) else {
-            return nil
-        }
-        return .init(
-            groupID: draft.groupID,
-            date: draft.date,
-            content: draft.content,
-            incomeText: draft.incomeText,
-            outgoText: draft.outgoText,
-            category: draft.category,
-            priorityText: draft.priorityText,
-            repeatMonthSelections: draft.repeatMonthSelections
         )
     }
 
