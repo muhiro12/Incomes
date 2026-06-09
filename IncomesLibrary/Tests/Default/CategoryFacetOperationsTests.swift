@@ -35,9 +35,8 @@ struct CategoryFacetOperationsTests {
             type: .category
         )
 
-        let facets = CategoryFacetOperations.facets(
-            tags: try context.fetch(.tags(.typeIs(.category))),
-            items: try context.fetch(.items(.all)),
+        let facets = try CategoryFacetOperations.facets(
+            context: context,
             othersDisplayName: japaneseOthers
         )
 
@@ -83,9 +82,8 @@ struct CategoryFacetOperationsTests {
         )
         _ = item
 
-        let facets = CategoryFacetOperations.filteredFacets(
-            tags: try context.fetch(.tags(.typeIs(.category))),
-            items: try context.fetch(.items(.all)),
+        let facets = try CategoryFacetOperations.filteredFacets(
+            context: context,
             query: japaneseOthers,
             othersDisplayName: japaneseOthers
         )

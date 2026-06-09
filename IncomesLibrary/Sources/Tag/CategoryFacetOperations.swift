@@ -1,7 +1,20 @@
 import Foundation
+import SwiftData
 
 /// Builds logical category buckets from mixed stored tag and item state.
 public enum CategoryFacetOperations {
+    /// Returns logical category buckets from persisted category tags and items.
+    public static func facets(
+        context: ModelContext,
+        othersDisplayName: String = CategoryNameSupport.localizedOthersDisplayName
+    ) throws -> [CategoryFacet] {
+        try facets(
+            tags: context.fetch(.tags(.typeIs(.category))),
+            items: context.fetch(.items(.all)),
+            othersDisplayName: othersDisplayName
+        )
+    }
+
     /// Returns logical category buckets that merge uncategorized variants.
     public static func facets(
         tags: [Tag],
@@ -54,6 +67,20 @@ public enum CategoryFacetOperations {
 
                 return lhs.id < rhs.id
             }
+    }
+
+    /// Returns logical category buckets filtered by a user-facing query from persisted state.
+    public static func filteredFacets(
+        context: ModelContext,
+        query: String,
+        othersDisplayName: String = CategoryNameSupport.localizedOthersDisplayName
+    ) throws -> [CategoryFacet] {
+        try filteredFacets(
+            tags: context.fetch(.tags(.typeIs(.category))),
+            items: context.fetch(.items(.all)),
+            query: query,
+            othersDisplayName: othersDisplayName
+        )
     }
 
     /// Returns logical category buckets filtered by a user-facing query.

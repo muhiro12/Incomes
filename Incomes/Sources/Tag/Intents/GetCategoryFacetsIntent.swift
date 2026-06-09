@@ -8,11 +8,8 @@ struct GetCategoryFacetsIntent: AppIntent {
 
     @MainActor
     func perform() throws -> some ReturnsValue<[String]> {
-        let tags = try modelContainer.mainContext.fetch(.tags(.typeIs(.category)))
-        let items = try modelContainer.mainContext.fetch(.items(.all))
-        let names = CategoryFacetOperations.facets(
-            tags: tags,
-            items: items
+        let names = try CategoryFacetOperations.facets(
+            context: modelContainer.mainContext
         )
         .map(\.displayName)
         return .result(value: names)
