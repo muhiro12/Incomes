@@ -493,46 +493,6 @@ struct ItemOperationsTests { // swiftlint:disable:this type_body_length
     // MARK: - Next / Previous
 
     @Test
-    func nextItemDate_returns_next_local_date() throws {
-        _ = try createItem(
-            context: context,
-            date: shiftedDate("2000-01-01T12:00:00Z"),
-            content: "A",
-            income: 0,
-            outgo: 100,
-            category: "Test",
-            priority: 0,
-            repeatCount: 1
-        )
-        _ = try createItem(
-            context: context,
-            date: shiftedDate("2000-02-01T12:00:00Z"),
-            content: "B",
-            income: 0,
-            outgo: 100,
-            category: "Test",
-            priority: 0,
-            repeatCount: 1
-        )
-        let result = try #require(
-            try ItemQueryOperations.nextItemDate(
-                context: context,
-                date: shiftedDate("2000-01-15T00:00:00Z")
-            )
-        )
-        #expect(result == shiftedDate("2000-02-01T00:00:00Z"))
-    }
-
-    @Test
-    func nextItemDate_returns_nil_when_not_found() throws {
-        let result = try ItemQueryOperations.nextItemDate(
-            context: context,
-            date: shiftedDate("2001-01-01T00:00:00Z")
-        )
-        #expect(result == nil)
-    }
-
-    @Test
     func nextItem_returns_next_item() throws {
         _ = try createItem(
             context: context,
@@ -548,7 +508,7 @@ struct ItemOperationsTests { // swiftlint:disable:this type_body_length
             context: context,
             date: shiftedDate("2000-02-01T12:00:00Z"),
             content: "B",
-            income: 0,
+            income: 500,
             outgo: 200,
             category: "Test",
             priority: 0,
@@ -561,6 +521,8 @@ struct ItemOperationsTests { // swiftlint:disable:this type_body_length
             )
         )
         #expect(item.content == "B")
+        #expect(item.localDate == shiftedDate("2000-02-01T00:00:00Z"))
+        #expect(item.netIncome == 300)
     }
 
     @Test
@@ -592,118 +554,7 @@ struct ItemOperationsTests { // swiftlint:disable:this type_body_length
     }
 
     @Test
-    func nextItemNetIncome_returns_next_item_net_income() throws {
-        _ = try createItem(
-            context: context,
-            date: shiftedDate("2000-01-01T12:00:00Z"),
-            content: "A",
-            income: 0,
-            outgo: 100,
-            category: "Test",
-            priority: 0,
-            repeatCount: 1
-        )
-        _ = try createItem(
-            context: context,
-            date: shiftedDate("2000-02-01T12:00:00Z"),
-            content: "B",
-            income: 500,
-            outgo: 200,
-            category: "Test",
-            priority: 0,
-            repeatCount: 1
-        )
-
-        let netIncome = try ItemQueryOperations.nextItemNetIncome(
-            context: context,
-            date: shiftedDate("2000-01-15T00:00:00Z")
-        )
-
-        #expect(netIncome == 300)
-    }
-
-    @Test
-    func previousItemDate_returns_previous_local_date() throws {
-        _ = try createItem(
-            context: context,
-            date: shiftedDate("2000-01-01T12:00:00Z"),
-            content: "A",
-            income: 0,
-            outgo: 100,
-            category: "Test",
-            priority: 0,
-            repeatCount: 1
-        )
-        _ = try createItem(
-            context: context,
-            date: shiftedDate("2000-02-01T12:00:00Z"),
-            content: "B",
-            income: 0,
-            outgo: 100,
-            category: "Test",
-            priority: 0,
-            repeatCount: 1
-        )
-        let result = try #require(
-            try ItemQueryOperations.previousItemDate(
-                context: context,
-                date: shiftedDate("2000-02-15T00:00:00Z")
-            )
-        )
-        #expect(result == shiftedDate("2000-02-01T00:00:00Z"))
-    }
-
-    @Test
-    func previousItemDate_returns_nil_when_not_found() throws {
-        let result = try ItemQueryOperations.previousItemDate(
-            context: context,
-            date: shiftedDate("1999-01-01T00:00:00Z")
-        )
-        #expect(result == nil)
-    }
-
-    @Test
     func previousItem_returns_previous_item() throws {
-        _ = try createItem(
-            context: context,
-            date: shiftedDate("2000-01-01T12:00:00Z"),
-            content: "A",
-            income: 0,
-            outgo: 100,
-            category: "Test",
-            priority: 0,
-            repeatCount: 1
-        )
-        _ = try createItem(
-            context: context,
-            date: shiftedDate("2000-02-01T12:00:00Z"),
-            content: "B",
-            income: 0,
-            outgo: 200,
-            category: "Test",
-            priority: 0,
-            repeatCount: 1
-        )
-        let item = try #require(
-            try ItemQueryOperations.previousItem(
-                context: context,
-                date: shiftedDate("2000-02-15T00:00:00Z")
-            )
-        )
-        #expect(item.content == "B")
-    }
-
-    @Test
-    func previousItem_returns_nil_when_not_found() throws {
-        let result = try ItemQueryOperations.previousItem(
-            context: context,
-            date: shiftedDate("1999-01-01T00:00:00Z")
-        )
-        #expect(result == nil)
-    }
-
-    @Test
-    func previousItemNetIncome_returns_previous_item_net_income() throws {
         _ = try createItem(
             context: context,
             date: shiftedDate("2000-01-01T12:00:00Z"),
@@ -718,19 +569,30 @@ struct ItemOperationsTests { // swiftlint:disable:this type_body_length
             context: context,
             date: shiftedDate("2000-02-01T12:00:00Z"),
             content: "B",
-            income: 0,
-            outgo: 100,
+            income: 500,
+            outgo: 200,
             category: "Test",
             priority: 0,
             repeatCount: 1
         )
-
-        let netIncome = try ItemQueryOperations.previousItemNetIncome(
-            context: context,
-            date: shiftedDate("2000-01-15T00:00:00Z")
+        let item = try #require(
+            try ItemQueryOperations.previousItem(
+                context: context,
+                date: shiftedDate("2000-02-15T00:00:00Z")
+            )
         )
+        #expect(item.content == "B")
+        #expect(item.localDate == shiftedDate("2000-02-01T00:00:00Z"))
+        #expect(item.netIncome == 300)
+    }
 
-        #expect(netIncome == 500)
+    @Test
+    func previousItem_returns_nil_when_not_found() throws {
+        let result = try ItemQueryOperations.previousItem(
+            context: context,
+            date: shiftedDate("1999-01-01T00:00:00Z")
+        )
+        #expect(result == nil)
     }
 
     // MARK: - Update
