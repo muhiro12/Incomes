@@ -4481,6 +4481,9 @@
         }
       }
     },
+    "New Name" : {
+
+    },
     "No Duplicate Tags" : {
 
     },
@@ -5608,6 +5611,9 @@
           }
         }
       }
+    },
+    "Query" : {
+
     },
     "Recalculate" : {
       "localizations" : {
@@ -7275,6 +7281,9 @@
           }
         }
       }
+    },
+    "Tag" : {
+
     },
     "Tags" : {
       "localizations" : {

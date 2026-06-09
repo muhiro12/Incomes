@@ -87,10 +87,11 @@ public enum ItemUpdateOperations {
         )
     }
 
+    /// Updates a single item from raw values.
     @available(
-        *,
-        deprecated,
-        message: "Use update(context:item:input:scope:) instead."
+    *,
+    deprecated,
+    message: "Use update(context:item:input:scope:) instead."
     )
     public static func update( // swiftlint:disable:this function_parameter_count
         context: ModelContext,
@@ -176,10 +177,11 @@ public enum ItemUpdateOperations {
         }
     }
 
+    /// Updates all items in the same repeat series from raw values.
     @available(
-        *,
-        deprecated,
-        message: "Use update(context:item:input:scope:) with .allItems instead."
+    *,
+    deprecated,
+    message: "Use update(context:item:input:scope:) with .allItems instead."
     )
     public static func updateAll( // swiftlint:disable:this function_parameter_count
         context: ModelContext,
@@ -206,10 +208,11 @@ public enum ItemUpdateOperations {
         )
     }
 
+    /// Updates future items in the same repeat series from raw values.
     @available(
-        *,
-        deprecated,
-        message: "Use update(context:item:input:scope:) with .futureItems instead."
+    *,
+    deprecated,
+    message: "Use update(context:item:input:scope:) with .futureItems instead."
     )
     public static func updateFuture( // swiftlint:disable:this function_parameter_count
         context: ModelContext,

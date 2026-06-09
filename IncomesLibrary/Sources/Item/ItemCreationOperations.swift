@@ -95,10 +95,11 @@ public enum ItemCreationOperations {
         ).value
     }
 
+    /// Creates an item from raw values using a simple monthly repetition count.
     @available(
-        *,
-        deprecated,
-        message: "Use create(context:input:repeatCount:) instead."
+    *,
+    deprecated,
+    message: "Use create(context:input:repeatCount:) instead."
     )
     public static func create( // swiftlint:disable:this function_parameter_count
         context: ModelContext,
@@ -124,10 +125,11 @@ public enum ItemCreationOperations {
         ).value
     }
 
+    /// Creates an item from raw values and selected repeat months.
     @available(
-        *,
-        deprecated,
-        message: "Use create(context:input:repeatMonthSelections:) instead."
+    *,
+    deprecated,
+    message: "Use create(context:input:repeatMonthSelections:) instead."
     )
     public static func create( // swiftlint:disable:this function_parameter_count
         context: ModelContext,

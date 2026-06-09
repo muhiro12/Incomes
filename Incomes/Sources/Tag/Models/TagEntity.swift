@@ -78,4 +78,14 @@ extension TagEntity {
             type: type
         )
     }
+
+    func model(in context: ModelContext) throws -> Tag {
+        guard
+            let id = try? PersistentIdentifierCoder.decode(id),
+            let model = try context.fetchFirst(.tags(.idIs(id)))
+        else {
+            throw TagEntityError.tagNotFound
+        }
+        return model
+    }
 }
