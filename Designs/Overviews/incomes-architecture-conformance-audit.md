@@ -36,10 +36,10 @@ contract and watch UI state handling.
 - `IncomesLibrary` still owns the shared model, mutation/query services,
   planners, and snapshot builders.
 - Representative files:
-  - `IncomesLibrary/Sources/Item/ItemService.swift`
-  - `IncomesLibrary/Sources/Tag/TagService.swift`
+  - `IncomesLibrary/Sources/Item/Item*Operations.swift`
+  - `IncomesLibrary/Sources/Tag/Tag*Operations.swift`
   - `IncomesLibrary/Sources/Item/SummaryCalculator.swift`
-  - `IncomesLibrary/Sources/Item/YearlyItemDuplicator.swift`
+  - `IncomesLibrary/Sources/Item/YearlyItemDuplication*Operations.swift`
   - `IncomesLibrary/Sources/Common/WidgetEntryFactory.swift`
 
 ### Multiple targets still consume the same shared APIs

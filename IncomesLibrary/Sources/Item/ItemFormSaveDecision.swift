@@ -8,7 +8,7 @@ public enum ItemFormSaveDecision {
         context: ModelContext,
         item: Item
     ) throws -> Bool {
-        try ItemOperations.repeatItemsCount(
+        try ItemQueryOperations.repeatItemsCount(
             context: context,
             repeatID: item.repeatID
         ) > 1

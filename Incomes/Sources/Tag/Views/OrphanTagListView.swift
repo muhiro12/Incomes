@@ -70,7 +70,7 @@ struct OrphanTagListView: View {
         ) {
             Button(role: .destructive) {
                 do {
-                    try TagOperations.deleteAllOrphanTags(context: context)
+                    try TagMutationOperations.deleteAllOrphanTags(context: context)
                     selectedTagID = nil
                     onCleanupAll()
                     Haptic.success.impact()
@@ -109,19 +109,19 @@ struct OrphanTagListView: View {
 private extension OrphanTagListView {
     var hasAnyOrphanTags: Bool {
         yearTags.contains { tag in
-            TagOperations.isOrphan(tag: tag)
+            TagQueryOperations.isOrphan(tag: tag)
         }
         || yearMonthTags.contains { tag in
-            TagOperations.isOrphan(tag: tag)
+            TagQueryOperations.isOrphan(tag: tag)
         }
         || contentTags.contains { tag in
-            TagOperations.isOrphan(tag: tag)
+            TagQueryOperations.isOrphan(tag: tag)
         }
         || categoryTags.contains { tag in
-            TagOperations.isOrphan(tag: tag)
+            TagQueryOperations.isOrphan(tag: tag)
         }
         || debugTags.contains { tag in
-            TagOperations.isOrphan(tag: tag)
+            TagQueryOperations.isOrphan(tag: tag)
         }
     }
 
@@ -160,7 +160,7 @@ private extension OrphanTagListView {
 
     func orphanTags(from tags: [Tag]) -> [Tag] {
         tags.filter { tag in
-            TagOperations.isOrphan(tag: tag)
+            TagQueryOperations.isOrphan(tag: tag)
         }
         .sorted { left, right in
             left.displayName < right.displayName

@@ -27,7 +27,7 @@ struct ItemOperationsCanonicalTests {
             .init(year: 2_001, month: 1)
         ]
 
-        _ = try ItemOperations.create(
+        _ = try ItemCreationOperations.create(
             context: context,
             input: input,
             repeatMonthSelections: selections
@@ -61,7 +61,7 @@ struct ItemOperationsCanonicalTests {
             priorityText: "2"
         )
 
-        try ItemOperations.update(
+        try ItemUpdateOperations.update(
             context: context,
             item: item,
             input: input,
@@ -98,7 +98,7 @@ struct ItemOperationsCanonicalTests {
             priorityText: "3"
         )
 
-        try ItemOperations.update(
+        try ItemUpdateOperations.update(
             context: context,
             item: target,
             input: input,
@@ -132,7 +132,7 @@ struct ItemOperationsCanonicalTests {
             priorityText: "4"
         )
 
-        try ItemOperations.update(
+        try ItemUpdateOperations.update(
             context: context,
             item: item,
             input: input,

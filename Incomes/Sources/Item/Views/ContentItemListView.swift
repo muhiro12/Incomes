@@ -61,7 +61,7 @@ private extension ContentItemListView {
     }
 
     var yearStrings: [String] {
-        TagOperations.yearStrings(for: tag)
+        TagQueryOperations.yearStrings(for: tag)
     }
 }
 

@@ -12,7 +12,7 @@ struct YearlyItemDuplicationSuggestionTests {
 
     @Test
     func availableSourceYears_returns_current_year_when_no_tags() {
-        let years = YearlyItemDuplicator.availableSourceYears(
+        let years = YearlyItemDuplicationSelectionOperations.availableSourceYears(
             from: [],
             currentYear: 2_030
         )
@@ -22,7 +22,7 @@ struct YearlyItemDuplicationSuggestionTests {
 
     @Test
     func targetYears_returns_descending_range() {
-        let years = YearlyItemDuplicator.targetYears(
+        let years = YearlyItemDuplicationSelectionOperations.targetYears(
             currentYear: 2_024,
             range: 1
         )
@@ -59,12 +59,12 @@ struct YearlyItemDuplicationSuggestionTests {
         }
 
         let yearTags = try context.fetch(.tags(.typeIs(.year), order: .reverse))
-        let targetYears = YearlyItemDuplicator.targetYears(
+        let targetYears = YearlyItemDuplicationSelectionOperations.targetYears(
             currentYear: 2_024,
             range: 1
         )
 
-        let suggestion = YearlyItemDuplicator.suggestion(
+        let suggestion = YearlyItemDuplicationSelectionOperations.suggestion(
             context: context,
             yearTags: yearTags,
             targetYears: targetYears,
@@ -91,12 +91,12 @@ struct YearlyItemDuplicationSuggestionTests {
         )
 
         let yearTags = try context.fetch(.tags(.typeIs(.year), order: .reverse))
-        let targetYears = YearlyItemDuplicator.targetYears(
+        let targetYears = YearlyItemDuplicationSelectionOperations.targetYears(
             currentYear: 2_024,
             range: 1
         )
 
-        let suggestion = YearlyItemDuplicator.suggestion(
+        let suggestion = YearlyItemDuplicationSelectionOperations.suggestion(
             context: context,
             yearTags: yearTags,
             targetYears: targetYears,

@@ -6,8 +6,8 @@ public enum SettingsStatusLoader {
     public static func load(
         context: ModelContext
     ) throws -> SettingsStatus {
-        let hasDuplicateTags = try TagOperations.hasDuplicates(context: context)
-        let hasOrphanTags = try TagOperations.hasOrphanTags(context: context)
+        let hasDuplicateTags = try TagQueryOperations.hasDuplicates(context: context)
+        let hasOrphanTags = try TagQueryOperations.hasOrphanTags(context: context)
         let hasDebugData = try ItemSampleDataSeeder.hasDebugData(context: context)
         return .init(
             hasDuplicateTags: hasDuplicateTags,

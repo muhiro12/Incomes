@@ -48,7 +48,7 @@ extension ItemListSection: View {
             }
             .onDelete { indices in
                 Haptic.warning.impact()
-                willDeleteItems = ItemOperations.resolveItemsForDeletion(
+                willDeleteItems = ItemDeletionOperations.resolveItemsForDeletion(
                     from: items,
                     indices: indices
                 )

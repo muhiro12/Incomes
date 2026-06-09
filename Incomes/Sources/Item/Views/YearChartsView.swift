@@ -15,7 +15,7 @@ struct YearChartsView: View {
     private var context
 
     var date: Date {
-        TagOperations.date(for: tag) ?? .distantPast
+        TagQueryOperations.date(for: tag) ?? .distantPast
     }
 
     var body: some View {
@@ -24,7 +24,7 @@ struct YearChartsView: View {
         }
         .navigationTitle(date.stringValue(.yyyy))
         .toolbar {
-            if let count = try? ItemOperations.yearItemsCount(
+            if let count = try? ItemQueryOperations.yearItemsCount(
                 context: context,
                 date: date
             ) {

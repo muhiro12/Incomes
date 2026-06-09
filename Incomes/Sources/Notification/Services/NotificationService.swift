@@ -144,7 +144,7 @@ final class NotificationService: NSObject {
     }
 
     func sendTestNotification() {
-        guard let item = try? ItemOperations.nextItem(
+        guard let item = try? ItemQueryOperations.nextItem(
             context: modelContainer.mainContext,
             date: .now
         ) else {

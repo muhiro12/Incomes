@@ -61,13 +61,13 @@ struct TagTests {
             repeatCount: 1
         )
 
-        try ItemOperations.recalculate(
+        try ItemBalanceOperations.recalculate(
             context: context,
             date: .distantPast
         )
 
         let tag = try #require(
-            try TagOperations.getByName(
+            try TagQueryOperations.getByName(
                 context: context,
                 name: "2024",
                 type: .year
@@ -89,13 +89,13 @@ struct TagTests {
             repeatCount: 1
         )
 
-        try ItemOperations.recalculate(
+        try ItemBalanceOperations.recalculate(
             context: context,
             date: .distantPast
         )
 
         let tag = try #require(
-            try TagOperations.getByName(
+            try TagQueryOperations.getByName(
                 context: context,
                 name: "2024",
                 type: .year

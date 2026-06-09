@@ -22,7 +22,7 @@ public enum ItemSampleDataSeeder { // swiftlint:disable:this type_body_length
         ifEmptyOnly: Bool = false
     ) throws {
         if ifEmptyOnly {
-            let count = try ItemOperations.allItemsCount(context: context)
+            let count = try ItemQueryOperations.allItemsCount(context: context)
             guard count == .zero else {
                 return
             }
@@ -293,13 +293,13 @@ public enum ItemSampleDataSeeder { // swiftlint:disable:this type_body_length
         let debugTags = try context.fetch(.tags(.typeIs(.debug)))
         let items = debugTags.flatMap(\.items.orEmpty)
         try items.forEach { item in
-            try ItemOperations.delete(
+            try ItemDeletionOperations.delete(
                 context: context,
                 item: item
             )
         }
         debugTags.forEach { tag in
-            TagOperations.delete(tag: tag)
+            TagMutationOperations.delete(tag: tag)
         }
     }
 }

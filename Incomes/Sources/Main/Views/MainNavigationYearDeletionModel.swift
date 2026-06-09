@@ -13,11 +13,11 @@ final class MainNavigationYearDeletionModel {
         indices: IndexSet,
         logger: MHLogger
     ) {
-        tagsToDelete = TagOperations.resolveTagsForDeletion(
+        tagsToDelete = TagMutationOperations.resolveTagsForDeletion(
             from: yearTags,
             indices: indices
         )
-        itemsToDelete = TagOperations.resolveItemsForDeletion(
+        itemsToDelete = TagMutationOperations.resolveItemsForDeletion(
             from: yearTags,
             indices: indices
         )
@@ -40,7 +40,7 @@ final class MainNavigationYearDeletionModel {
         onDeletedSelectedYear: () -> Void
     ) {
         if let selectedYearTag,
-           TagOperations.containsEquivalentTag(
+           TagQueryOperations.containsEquivalentTag(
             selectedYearTag,
             in: tagsToDelete
            ) {

@@ -83,7 +83,7 @@ func createItem( // swiftlint:disable:this function_parameter_count
     priority: Int,
     repeatCount: Int = 1
 ) throws -> Item {
-    try ItemOperations.create(
+    try ItemCreationOperations.create(
         context: context,
         input: makeItemFormInput(
             date: date,
@@ -108,7 +108,7 @@ func createItem( // swiftlint:disable:this function_parameter_count
     priority: Int,
     repeatMonthSelections: Set<RepeatMonthSelection>
 ) throws -> Item {
-    try ItemOperations.create(
+    try ItemCreationOperations.create(
         context: context,
         input: makeItemFormInput(
             date: date,
@@ -133,7 +133,7 @@ func updateItem( // swiftlint:disable:this function_parameter_count
     priority: Int,
     scope: ItemMutationScope = .thisItem
 ) throws {
-    try ItemOperations.update(
+    try ItemUpdateOperations.update(
         context: context,
         item: item,
         input: makeItemFormInput(

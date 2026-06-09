@@ -13,7 +13,7 @@ struct DataMaintenanceTests {
 
     @Test
     func deleteAllData_removesItemsAndTags() throws {
-        _ = try ItemOperations.create(
+        _ = try ItemCreationOperations.create(
             context: context,
             input: makeItemFormInput(
                 date: shiftedDate("2001-01-01T00:00:00Z"),
@@ -34,7 +34,7 @@ struct DataMaintenanceTests {
 
     @Test
     func resetAllData_removesItemsAndTags() async throws {
-        _ = try ItemOperations.create(
+        _ = try ItemCreationOperations.create(
             context: context,
             input: makeItemFormInput(
                 date: shiftedDate("2001-01-01T00:00:00Z"),
@@ -56,7 +56,7 @@ struct DataMaintenanceTests {
     @Test
     func deleteDebugData_removesOnlySampleData() throws {
         try ItemSampleDataSeeder.seedTutorialData(context: context, baseDate: shiftedDate("2001-01-03T12:00:00Z"))
-        _ = try ItemOperations.create(
+        _ = try ItemCreationOperations.create(
             context: context,
             input: makeItemFormInput(
                 date: shiftedDate("2001-02-01T00:00:00Z"),

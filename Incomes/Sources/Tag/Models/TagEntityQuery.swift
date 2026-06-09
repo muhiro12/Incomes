@@ -14,7 +14,7 @@ struct TagEntityQuery: EntityStringQuery {
     @MainActor
     func entities(for identifiers: [TagEntity.ID]) throws -> [TagEntity] {
         try identifiers.compactMap { id in
-            guard let tag = try TagOperations.getByID(
+            guard let tag = try TagQueryOperations.getByID(
                 context: modelContainer.mainContext,
                 id: id
             ) else {
@@ -26,7 +26,7 @@ struct TagEntityQuery: EntityStringQuery {
 
     @MainActor
     func entities(matching string: String) throws -> [TagEntity] {
-        let tags = try TagOperations.getAll(context: modelContainer.mainContext)
+        let tags = try TagQueryOperations.getAll(context: modelContainer.mainContext)
         return [
             TagType.year,
             .yearMonth,
@@ -58,7 +58,7 @@ struct TagEntityQuery: EntityStringQuery {
 
     @MainActor
     func suggestedEntities() throws -> [TagEntity] {
-        let tags = try TagOperations.getAll(context: modelContainer.mainContext)
+        let tags = try TagQueryOperations.getAll(context: modelContainer.mainContext)
         return [
             TagType.year,
             .yearMonth,

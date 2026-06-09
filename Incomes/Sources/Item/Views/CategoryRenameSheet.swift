@@ -54,7 +54,7 @@ private extension CategoryRenameSheet {
     var categoryRenamePreviewResult: Result<TagRenamePreview, TagRenameError> {
         do {
             return .success(
-                try TagOperations.previewCategoryRename(
+                try TagRenameOperations.previewCategoryRename(
                     context: context,
                     tag: tag,
                     to: draftName
@@ -253,7 +253,7 @@ private extension CategoryRenameSheet {
                 return
             }
 
-            try TagOperations.renameCategory(
+            try TagRenameOperations.renameCategory(
                 context: context,
                 tag: tag,
                 to: normalizedTargetName

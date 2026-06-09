@@ -43,7 +43,7 @@ struct ItemOperationsDeletionTests {
             repeatID: .init()
         )
 
-        let resolved = ItemOperations.resolveItemsForDeletion(
+        let resolved = ItemDeletionOperations.resolveItemsForDeletion(
             from: [firstItem, secondItem, thirdItem],
             indices: IndexSet([0, 2])
         )
@@ -74,7 +74,7 @@ struct ItemOperationsDeletionTests {
             repeatID: .init()
         )
 
-        try ItemOperations.delete(
+        try ItemDeletionOperations.delete(
             context: context,
             items: [firstItem, secondItem]
         )
@@ -105,7 +105,7 @@ struct ItemOperationsDeletionTests {
             repeatID: .init()
         )
 
-        try ItemOperations.deleteAll(context: context)
+        try ItemDeletionOperations.deleteAll(context: context)
 
         #expect(fetchItems(context).isEmpty)
         #expect(try context.fetchCount(.tags(.all)) == 0)

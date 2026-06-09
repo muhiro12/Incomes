@@ -19,7 +19,7 @@ struct GetPreviousItemContentIntent: AppIntent {
     @MainActor
     func perform() throws -> some ReturnsValue<String?> {
         .result(
-            value: try ItemOperations.previousItemContent(
+            value: try ItemQueryOperations.previousItemContent(
                 context: modelContainer.mainContext,
                 date: date
             )

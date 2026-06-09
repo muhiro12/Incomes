@@ -611,7 +611,7 @@ struct ItemOperationsTest { // swiftlint:disable:this type_body_length
             priority: 0,
             )
         let item = try #require(fetchItems(context).first)
-        try ItemOperations.delete(
+        try ItemDeletionOperations.delete(
             context: context,
             item: item
         )
@@ -644,7 +644,7 @@ struct ItemOperationsTest { // swiftlint:disable:this type_body_length
             item.content == "RemoveMe"
         }
         try toDelete.forEach { item in
-            try ItemOperations.delete(context: context, item: item)
+            try ItemDeletionOperations.delete(context: context, item: item)
         }
 
         let remaining = try context.fetch(.items(.all))
@@ -665,7 +665,7 @@ struct ItemOperationsTest { // swiftlint:disable:this type_body_length
             priority: 0,
             )
         #expect(!fetchItems(context).isEmpty)
-        try ItemOperations.deleteAll(context: context)
+        try ItemDeletionOperations.deleteAll(context: context)
         #expect(fetchItems(context).isEmpty)
     }
 
@@ -712,7 +712,7 @@ struct ItemOperationsTest { // swiftlint:disable:this type_body_length
         let item = try #require(fetchItems(context).first)
         let oldBalance = item.balance
 
-        try ItemOperations.recalculate(
+        try ItemBalanceOperations.recalculate(
             context: context,
             date: isoDate("2023-12-01T00:00:00Z")
         )
@@ -754,7 +754,7 @@ struct ItemOperationsTest { // swiftlint:disable:this type_body_length
             priority: 0
         )
 
-        try ItemOperations.recalculate(
+        try ItemBalanceOperations.recalculate(
             context: context,
             date: isoDate("2024-01-15T00:00:00Z")
         )
@@ -786,7 +786,7 @@ struct ItemOperationsTest { // swiftlint:disable:this type_body_length
             priority: 0,
             )
 
-        try ItemOperations.recalculate(
+        try ItemBalanceOperations.recalculate(
             context: context,
             date: isoDate("2024-02-01T00:00:00Z")
         )

@@ -42,7 +42,7 @@ enum IncomesContextMenuLinkBuilder {
         for tag: Tag
     ) -> IncomesRoute? {
         guard tag.type == .yearMonth,
-              let date = TagOperations.date(for: tag) else {
+              let date = TagQueryOperations.date(for: tag) else {
             return nil
         }
         let calendar = Calendar.current

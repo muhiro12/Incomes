@@ -8,12 +8,12 @@ public enum MainNavigationStateLoader {
         context: ModelContext,
         date: Date = .now
     ) throws -> MainNavigationState {
-        let yearTag = try TagOperations.getByName(
+        let yearTag = try TagQueryOperations.getByName(
             context: context,
             name: date.stringValueWithoutLocale(.yyyy),
             type: .year
         )
-        let yearMonthTag = try TagOperations.getByName(
+        let yearMonthTag = try TagQueryOperations.getByName(
             context: context,
             name: date.stringValueWithoutLocale(.yyyyMM),
             type: .yearMonth

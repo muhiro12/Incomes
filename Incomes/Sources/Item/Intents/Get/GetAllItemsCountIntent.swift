@@ -8,6 +8,6 @@ struct GetAllItemsCountIntent: AppIntent {
 
     @MainActor
     func perform() throws -> some ReturnsValue<Int> {
-        .result(value: try ItemOperations.allItemsCount(context: modelContainer.mainContext))
+        .result(value: try ItemQueryOperations.allItemsCount(context: modelContainer.mainContext))
     }
 }

@@ -16,7 +16,7 @@ struct ShowThisMonthChartsIntent: AppIntent {
     @MainActor
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
         let date = Date.now
-        let items = try ItemOperations.items(
+        let items = try ItemQueryOperations.items(
             context: modelContainer.mainContext,
             date: date
         )

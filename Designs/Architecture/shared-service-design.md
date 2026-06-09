@@ -26,7 +26,7 @@ widgets.
 
 | Concern | Lives in | Examples |
 | --- | --- | --- |
-| Domain implementation | `IncomesLibrary` | `Item`, `Tag`, predicates, `ItemService`, `TagService`, `SummaryCalculator`, `YearlyItemDuplicator`, `DataMaintenanceService`, `UpcomingPaymentPlanner`, `SettingsStatusLoader` |
+| Domain implementation | `IncomesLibrary` | `Item`, `Tag`, predicates, `Item*Operations`, `Tag*Operations`, `SummaryCalculator`, `YearlyItemDuplication*Operations`, `DataMaintenance`, `UpcomingPaymentPlanner`, `SettingsStatusLoader` |
 | Apple framework adapters | `Incomes` | `ItemInferenceService`, `NotificationService`, App Intent types, deep-link routing, StoreKit, ads |
 | App-side platform support | `Incomes/Sources/Common/Platform` | `IncomesPlatformEnvironmentFactory`, `MHAppRuntimeBootstrap` assembly, `MHAppRoutePipeline<IncomesRoute>` assembly, `IncomesRouteBridge`, `MHReviewFlow` policy helpers |
 | Watch and widget surfaces | `Watch`, `Widgets` | WatchConnectivity transport, widget timeline providers, target-local screen state, entry presentation |
@@ -49,14 +49,14 @@ operations:
 
 - `ItemFormInput`
 - `ItemMutationScope`
-- `ItemService.create(context:input:repeatMonthSelections:)`
-- `ItemService.update(context:item:input:scope:)`
-- `TagService` duplicate-resolution and tag/date lookup helpers
-- `YearlyItemDuplicator.plan(context:sourceYear:targetYear:)`
-- `YearlyItemDuplicator.apply(plan:context:)`
+- `Item*Operations.create(context:input:repeatMonthSelections:)`
+- `Item*Operations.update(context:item:input:scope:)`
+- `Tag*Operations` duplicate-resolution and tag/date lookup helpers
+- `YearlyItemDuplicationPlanOperations.plan(context:sourceYear:targetYear:)`
+- `YearlyItemDuplicationApplyOperations.apply(plan:context:)`
 - `SummaryCalculator`
-- `DataMaintenanceService.deleteAllData(context:)`
-- `DataMaintenanceService.deleteDebugData(context:)`
+- `DataMaintenance.deleteAllData(context:)`
+- `DataMaintenance.deleteDebugData(context:)`
 - `WatchSyncReply`
 - `WatchSyncFailure`
 - `WatchSyncFailurePhase`
@@ -116,10 +116,10 @@ App-side mutation call sites should prefer
 - `MainNavigationView` registers its route handler through `IncomesRouteBridge`
   so the package owns route intake while the app still owns navigation meaning.
 - `YearlyDuplicationCoordinator` stays under `Settings/Coordinators` as an app-side adapter that delegates
-  duplication rules to `YearlyItemDuplicator` and uses package-owned mutation
+  duplication rules to `YearlyItemDuplication*Operations` and uses package-owned mutation
   projection strategies.
 - `ItemFormSaveCoordinator` stays under `Item/Services`, converts UI state into `ItemFormInput`, and calls
-  canonical `ItemService` APIs with package-owned mutation and review shells.
+  canonical `Item*Operations` APIs with package-owned mutation and review shells.
 
 ## Refactoring Heuristic
 

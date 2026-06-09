@@ -33,7 +33,7 @@ struct DuplicateTagView: View {
             isPresented: $isMergeDialogPresented
         ) {
             Button {
-                TagOperations.mergeDuplicates(tags: tags)
+                TagMutationOperations.mergeDuplicates(tags: tags)
             } label: {
                 Text("Merge")
             }
@@ -53,7 +53,7 @@ struct DuplicateTagView: View {
                 guard let selectedTag else {
                     return
                 }
-                TagOperations.delete(tag: selectedTag)
+                TagMutationOperations.delete(tag: selectedTag)
                 self.selectedTag = nil
                 Haptic.success.impact()
             } label: {

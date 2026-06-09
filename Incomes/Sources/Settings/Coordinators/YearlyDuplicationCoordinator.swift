@@ -18,7 +18,7 @@ enum YearlyDuplicationCoordinator { // swiftlint:disable:this type_body_length
         from yearTags: [Tag],
         currentYear: Int = Calendar.current.component(.year, from: .now)
     ) -> [Int] {
-        YearlyItemDuplicator.availableSourceYears(
+        YearlyItemDuplicationSelectionOperations.availableSourceYears(
             from: yearTags,
             currentYear: currentYear
         )
@@ -28,7 +28,7 @@ enum YearlyDuplicationCoordinator { // swiftlint:disable:this type_body_length
         currentYear: Int = Calendar.current.component(.year, from: .now),
         range: Int = 10
     ) -> [Int] {
-        YearlyItemDuplicator.targetYears(
+        YearlyItemDuplicationSelectionOperations.targetYears(
             currentYear: currentYear,
             range: range
         )
@@ -42,7 +42,7 @@ enum YearlyDuplicationCoordinator { // swiftlint:disable:this type_body_length
         preserveCurrentSelection: Bool,
         currentYear: Int = Calendar.current.component(.year, from: .now)
     ) -> SelectionState {
-        let state = YearlyItemDuplicator.selectionState(
+        let state = YearlyItemDuplicationSelectionOperations.selectionState(
             context: context,
             yearTags: yearTags,
             currentSourceYear: currentSourceYear,
@@ -72,7 +72,7 @@ enum YearlyDuplicationCoordinator { // swiftlint:disable:this type_body_length
             metadata: metadata
         )
         do {
-            let plan = try YearlyItemDuplicator.plan(
+            let plan = try YearlyItemDuplicationPlanOperations.plan(
                 context: context,
                 sourceYear: sourceYear,
                 targetYear: targetYear
@@ -114,7 +114,7 @@ enum YearlyDuplicationCoordinator { // swiftlint:disable:this type_body_length
         for group: YearlyItemDuplicationGroup,
         in plan: YearlyItemDuplicationPlan
     ) -> ItemFormDraft? {
-        guard let draft = YearlyItemDuplicator.draft(
+        guard let draft = YearlyItemDuplicationPlanOperations.draft(
             for: group.id,
             in: plan
         ) else {
@@ -171,7 +171,7 @@ enum YearlyDuplicationCoordinator { // swiftlint:disable:this type_body_length
             let result = try await MHMutationWorkflow.runThrowing(
                 name: "duplicateYearlyItems",
                 operation: {
-                    try YearlyItemDuplicator.applyWithOutcome(
+                    try YearlyItemDuplicationApplyOperations.applyWithOutcome(
                         plan: .init(
                             groups: [group],
                             entries: entries,
@@ -220,7 +220,7 @@ enum YearlyDuplicationCoordinator { // swiftlint:disable:this type_body_length
     ) -> PromoState? {
         let targetYears = targetYears(currentYear: currentYear)
         guard
-            let suggestion = YearlyItemDuplicator.suggestion(
+            let suggestion = YearlyItemDuplicationSelectionOperations.suggestion(
                 context: context,
                 yearTags: yearTags,
                 targetYears: targetYears,

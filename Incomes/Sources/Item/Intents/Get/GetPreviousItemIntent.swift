@@ -18,7 +18,7 @@ struct GetPreviousItemIntent: AppIntent {
 
     @MainActor
     func perform() throws -> some ReturnsValue<ItemEntity?> {
-        guard let item = try ItemOperations.previousItem(
+        guard let item = try ItemQueryOperations.previousItem(
             context: modelContainer.mainContext,
             date: date
         ) else {

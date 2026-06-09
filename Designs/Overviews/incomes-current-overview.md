@@ -343,12 +343,12 @@ logic belongs in `IncomesLibrary`.
 
 Current shared business entry points and shared snapshot builders include:
 
-- `ItemService`
-- `TagService`
+- `Item*Operations`
+- `Tag*Operations`
 - `SummaryCalculator`
-- `YearlyItemDuplicator`
+- `YearlyItemDuplication*Operations`
 - `UpcomingPaymentPlanner`
-- `DataMaintenanceService`
+- `DataMaintenance`
 - `SettingsStatusLoader`
 - `WidgetEntryFactory`
 
@@ -461,7 +461,7 @@ route contract remains `IncomesRoute`.
   composition, runtime setup, notification delivery, route handling, and other
   Apple-only adapters.
 - Cross-target reuse remains centered on shared entry points such as
-  `ItemService`, `TagService`, `SummaryCalculator`, `YearlyItemDuplicator`,
+  `Item*Operations`, `Tag*Operations`, `SummaryCalculator`, `YearlyItemDuplication*Operations`,
   `WidgetEntryFactory`, `WatchSyncReply`, and `WatchSyncService`.
 - The repository still keeps automated unit tests in `IncomesLibrary/Tests`
   instead of adding separate unit test targets for `Incomes`, `Watch`, or

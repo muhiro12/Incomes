@@ -57,7 +57,7 @@ struct HomeYearSection: View {
             .onDelete { indices in
                 Haptic.warning.impact()
                 isDialogPresented = true
-                willDeleteItems = TagOperations.resolveItemsForDeletion(
+                willDeleteItems = TagMutationOperations.resolveItemsForDeletion(
                     from: yearMonthTags,
                     indices: indices
                 )

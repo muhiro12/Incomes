@@ -94,12 +94,12 @@ public enum WidgetEntryFactory {
             let item: Item?
             switch direction {
             case .next:
-                item = try ItemOperations.nextItem(
+                item = try ItemQueryOperations.nextItem(
                     context: context,
                     date: now
                 )
             case .previous:
-                item = try ItemOperations.previousItem(
+                item = try ItemQueryOperations.previousItem(
                     context: context,
                     date: now
                 )

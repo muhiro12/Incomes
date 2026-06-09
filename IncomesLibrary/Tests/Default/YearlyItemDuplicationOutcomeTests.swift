@@ -23,12 +23,12 @@ struct YearlyItemDuplicationOutcomeTests {
             repeatCount: 3
         )
 
-        let plan = try YearlyItemDuplicator.plan(
+        let plan = try YearlyItemDuplicationPlanOperations.plan(
             context: context,
             sourceYear: 2_024,
             targetYear: 2_025
         )
-        let result = try YearlyItemDuplicator.applyWithOutcome(
+        let result = try YearlyItemDuplicationApplyOperations.applyWithOutcome(
             plan: plan,
             context: context
         )
@@ -63,13 +63,13 @@ struct YearlyItemDuplicationOutcomeTests {
             repeatCount: 3
         )
 
-        let plan = try YearlyItemDuplicator.plan(
+        let plan = try YearlyItemDuplicationPlanOperations.plan(
             context: context,
             sourceYear: 2_024,
             targetYear: 2_025
         )
         let targetGroup = try #require(plan.groups.first)
-        let result = try YearlyItemDuplicator.apply(
+        let result = try YearlyItemDuplicationApplyOperations.apply(
             groupID: targetGroup.id,
             in: plan,
             context: context

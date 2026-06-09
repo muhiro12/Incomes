@@ -35,13 +35,13 @@ struct ApplyYearlyDuplicationIntent: AppIntent {
             metadata: metadata
         )
         do {
-            let plan = try YearlyItemDuplicator.plan(
+            let plan = try YearlyItemDuplicationPlanOperations.plan(
                 context: modelContainer.mainContext,
                 sourceYear: sourceYear,
                 targetYear: targetYear,
                 options: duplicationOptions
             )
-            let result = try YearlyItemDuplicator.apply(
+            let result = try YearlyItemDuplicationApplyOperations.apply(
                 plan: plan,
                 context: modelContainer.mainContext
             )

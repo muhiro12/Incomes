@@ -116,7 +116,7 @@ final class PhoneWatchBridge: NSObject {
             ) else {
                 continue
             }
-            let items = try ItemOperations.items(
+            let items = try ItemQueryOperations.items(
                 context: context,
                 date: monthDate
             )

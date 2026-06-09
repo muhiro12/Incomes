@@ -1,8 +1,8 @@
 import Foundation
 import SwiftData
 
-/// Utilities to search, deduplicate, and manage `Tag` models.
-public enum TagOperations {
+/// Domain operations for querying `Tag` models.
+public enum TagQueryOperations {
     /// Returns all tags in the store.
     public static func getAll(context: ModelContext) throws -> [Tag] {
         try context.fetch(.tags(.all))
@@ -111,98 +111,9 @@ public enum TagOperations {
         }
     }
 
-    /// Merges `tags` into the first tag, reattaching item relationships.
-    public static func mergeDuplicates(tags: [Tag]) {
-        guard let parent = tags.first else {
-            return
-        }
-        let children = tags.filter { tag in
-            tag.id != parent.id
-        }
-        let childIDs = Set(children.map(\.id))
-        let childItems = Array(
-            Dictionary(
-                grouping: children.flatMap { tag in
-                    referencingItems(for: tag)
-                },
-                by: \.id
-            )
-            .values
-            .compactMap(\.first)
-        )
-        for item in childItems {
-            var tags = item.tags.orEmpty.filter { tag in
-                !childIDs.contains(tag.id)
-            }
-            guard tags.contains(parent) == false else {
-                item.modify(tags: tags)
-                continue
-            }
-            tags.append(parent)
-            item.modify(tags: tags)
-        }
-        children.forEach { child in
-            delete(tag: child)
-        }
-    }
-
-    /// Resolves duplicates for each tag in `tags` by searching and merging.
-    public static func resolveDuplicates(
-        context: ModelContext,
-        tags: [Tag]
-    ) throws {
-        for tag in tags {
-            let duplicates = try context.fetch(
-                .tags(.isSameWith(tag))
-            )
-            mergeDuplicates(
-                tags: duplicates
-            )
-        }
-    }
-
-    /// Resolves every duplicate tag group in the store.
-    public static func resolveAllDuplicates(
-        context: ModelContext
-    ) throws {
-        try resolveDuplicates(
-            context: context,
-            tags: duplicateTags(context: context)
-        )
-    }
-
     /// True when `tag` is unused by every item in the current store.
     public static func isOrphan(tag: Tag) -> Bool {
         referencingItems(for: tag).isEmpty
-    }
-
-    /// Deletes a single unused tag.
-    @discardableResult
-    public static func delete(tag: Tag) -> Bool {
-        guard isOrphan(tag: tag) else {
-            return false
-        }
-        tag.delete()
-        return true
-    }
-
-    static func deleteUnused(tags: [Tag]) {
-        let uniqueTags = Dictionary(
-            grouping: tags,
-            by: \.id
-        )
-        .compactMap(\.value.first)
-        uniqueTags.forEach { tag in
-            delete(tag: tag)
-        }
-    }
-
-    /// Deletes every unused tag in the store.
-    public static func deleteAllOrphanTags(context: ModelContext) throws {
-        let orphanTags = try orphanTags(context: context)
-        orphanTags.forEach { tag in
-            delete(tag: tag)
-        }
     }
 
     /// Returns every item matching the semantic meaning of `tag`.
@@ -210,27 +121,6 @@ public enum TagOperations {
         for tag: Tag
     ) -> [Item] {
         matchingItems(for: tag).sorted()
-    }
-
-    /// Deletes all tags in the store.
-    public static func deleteAll(context: ModelContext) throws {
-        let tags = try context.fetch(FetchDescriptor<Tag>())
-        tags.forEach { tag in
-            tag.delete()
-        }
-    }
-
-    /// Returns the selected tags for deletion based on list indices.
-    public static func resolveTagsForDeletion(
-        from tags: [Tag],
-        indices: IndexSet
-    ) -> [Tag] {
-        indices.compactMap { index in
-            guard tags.indices.contains(index) else {
-                return nil
-            }
-            return tags[index]
-        }
     }
 
     /// Returns items for a given tag and year string.
@@ -256,19 +146,6 @@ public enum TagOperations {
         .sorted(by: >)
     }
 
-    /// Resolves items for deletion based on selected tag indices.
-    public static func resolveItemsForDeletion(
-        from tags: [Tag],
-        indices: IndexSet
-    ) -> [Item] {
-        indices.flatMap { index -> [Item] in
-            guard tags.indices.contains(index) else {
-                return []
-            }
-            return matchingItems(for: tags[index])
-        }
-    }
-
     /// Returns a matching date for year and year-month tags.
     public static func date(for tag: Tag) -> Date? {
         switch tag.type {
@@ -290,9 +167,7 @@ public enum TagOperations {
             candidate.name == tag.name && candidate.typeID == tag.typeID
         }
     }
-}
 
-private extension TagOperations {
     static func referencingItems(for tag: Tag) -> [Item] {
         directItems(for: tag)
     }
@@ -312,7 +187,9 @@ private extension TagOperations {
             return categoryMatchingItems(for: tag)
         }
     }
+}
 
+private extension TagQueryOperations {
     static func directItems(for tag: Tag) -> [Item] {
         tag.items.orEmpty.filter { item in
             item.isDeleted == false

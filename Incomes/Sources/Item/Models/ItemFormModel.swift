@@ -164,7 +164,7 @@ private extension ItemFormModel {
 
         switch tag.type {
         case .year:
-            guard let tagDate = TagOperations.date(for: tag) else {
+            guard let tagDate = TagQueryOperations.date(for: tag) else {
                 return currentDate
             }
             let tagYear = calendar.component(.year, from: tagDate)
@@ -173,7 +173,7 @@ private extension ItemFormModel {
             }
             return tagDate
         case .yearMonth:
-            guard let tagDate = TagOperations.date(for: tag) else {
+            guard let tagDate = TagQueryOperations.date(for: tag) else {
                 return currentDate
             }
             let tagYear = calendar.component(.year, from: tagDate)

@@ -44,7 +44,7 @@ struct TagItemDeletionResolverTests {
             }
         )
 
-        let resolved = TagOperations.resolveItemsForDeletion(
+        let resolved = TagMutationOperations.resolveItemsForDeletion(
             from: [firstTag, secondTag],
             indices: IndexSet([1])
         )
@@ -59,7 +59,7 @@ struct TagItemDeletionResolverTests {
         let firstTag = try Tag.create(context: context, name: "2001", type: .year)
         let secondTag = try Tag.create(context: context, name: "2002", type: .year)
 
-        let resolved = TagOperations.resolveTagsForDeletion(
+        let resolved = TagMutationOperations.resolveTagsForDeletion(
             from: [firstTag, secondTag],
             indices: IndexSet([1])
         )
@@ -105,7 +105,7 @@ struct TagItemDeletionResolverTests {
             .tags(.typeIs(.year), order: .reverse)
         )
 
-        let resolved = TagOperations.resolveItemsForDeletion(
+        let resolved = TagMutationOperations.resolveItemsForDeletion(
             from: yearTags,
             indices: IndexSet(integer: 1)
         )
@@ -152,12 +152,12 @@ struct TagItemDeletionResolverTests {
         let yearTags = try context.fetch(
             .tags(.typeIs(.year), order: .reverse)
         )
-        let itemsToDelete = TagOperations.resolveItemsForDeletion(
+        let itemsToDelete = TagMutationOperations.resolveItemsForDeletion(
             from: yearTags,
             indices: IndexSet(integer: 1)
         )
 
-        try ItemOperations.delete(
+        try ItemDeletionOperations.delete(
             context: context,
             items: itemsToDelete
         )

@@ -35,7 +35,7 @@ struct PreviewYearlyDuplicationIntent: AppIntent {
             metadata: metadata
         )
         do {
-            let plan = try YearlyItemDuplicator.plan(
+            let plan = try YearlyItemDuplicationPlanOperations.plan(
                 context: modelContainer.mainContext,
                 sourceYear: sourceYear,
                 targetYear: targetYear,

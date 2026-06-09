@@ -47,7 +47,7 @@ struct TagItemYearStringsTests {
             try context.fetchFirst(.tags(.typeIs(.category)))
         )
 
-        let yearStrings = TagOperations.yearStrings(for: tag)
+        let yearStrings = TagQueryOperations.yearStrings(for: tag)
 
         #expect(yearStrings == ["2002", "2001"])
     }

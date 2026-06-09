@@ -18,7 +18,7 @@ struct ShowPreviousItemsIntent: AppIntent {
 
     @MainActor
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
-        let items = try ItemOperations.previousItems(
+        let items = try ItemQueryOperations.previousItems(
             context: modelContainer.mainContext,
             date: date
         )

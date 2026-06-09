@@ -10,7 +10,7 @@ struct WatchTagItemListView: View {
     let tag: Tag
 
     var items: [Item] {
-        TagOperations.items(for: tag)
+        TagQueryOperations.items(for: tag)
     }
 
     var body: some View {

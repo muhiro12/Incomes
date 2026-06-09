@@ -26,7 +26,7 @@ struct RecalculateBalancesIntent: AppIntent {
             )
         )
         do {
-            try ItemOperations.recalculate(
+            try ItemBalanceOperations.recalculate(
                 context: modelContainer.mainContext,
                 date: date
             )

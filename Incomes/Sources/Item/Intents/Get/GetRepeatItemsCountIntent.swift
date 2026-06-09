@@ -14,7 +14,7 @@ struct GetRepeatItemsCountIntent: AppIntent {
         guard let uuid = UUID(uuidString: repeatID) else {
             throw DebugError.default
         }
-        return .result(value: try ItemOperations.repeatItemsCount(
+        return .result(value: try ItemQueryOperations.repeatItemsCount(
             context: modelContainer.mainContext,
             repeatID: uuid
         ))

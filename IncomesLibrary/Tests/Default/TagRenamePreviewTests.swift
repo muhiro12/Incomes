@@ -18,7 +18,7 @@ struct TagRenamePreviewTests {
             itemCount: 1
         )
 
-        let preview = try TagOperations.previewCategoryRename(
+        let preview = try TagRenameOperations.previewCategoryRename(
             context: context,
             tag: tag,
             to: "  Food  "
@@ -38,7 +38,7 @@ struct TagRenamePreviewTests {
             itemCount: 2
         )
 
-        let preview = try TagOperations.previewCategoryRename(
+        let preview = try TagRenameOperations.previewCategoryRename(
             context: context,
             tag: tag,
             to: "Others"
@@ -62,7 +62,7 @@ struct TagRenamePreviewTests {
             itemCount: 1
         )
 
-        let preview = try TagOperations.previewCategoryRename(
+        let preview = try TagRenameOperations.previewCategoryRename(
             context: context,
             tag: sourceTag,
             to: "Travel"
@@ -82,7 +82,7 @@ struct TagRenamePreviewTests {
             itemCount: 3
         )
 
-        let preview = try TagOperations.previewCategoryRename(
+        let preview = try TagRenameOperations.previewCategoryRename(
             context: context,
             tag: tag,
             to: "Travel"
@@ -109,7 +109,7 @@ private extension TagRenamePreviewTests {
         }
 
         return try #require(
-            try TagOperations.getByName(
+            try TagQueryOperations.getByName(
                 context: context,
                 name: name,
                 type: .category

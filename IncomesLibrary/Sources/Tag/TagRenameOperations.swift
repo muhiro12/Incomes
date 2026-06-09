@@ -1,16 +1,17 @@
 import Foundation
 import SwiftData
 
-public extension TagOperations {
+/// Domain operations for renaming category tags.
+public enum TagRenameOperations {
     /// Returns a lightweight preview for renaming a category tag.
-    static func previewCategoryRename(
+    public static func previewCategoryRename(
         context: ModelContext,
         tag: Tag,
         to newName: String
     ) throws -> TagRenamePreview {
         try validateCategoryRenameSource(tag)
 
-        let affectedItemCount = items(for: tag).count
+        let affectedItemCount = TagQueryOperations.items(for: tag).count
         guard let normalizedTargetName = normalizedCategoryRenameTarget(
             newName
         ) else {
@@ -29,7 +30,7 @@ public extension TagOperations {
                 isUnchanged: true
             )
         }
-        if let existingTag = try getByName(
+        if let existingTag = try TagQueryOperations.getByName(
             context: context,
             name: normalizedTargetName,
             type: .category
@@ -52,7 +53,7 @@ public extension TagOperations {
     }
 
     /// Renames a used category tag without mutating item rows.
-    static func renameCategory(
+    public static func renameCategory(
         context: ModelContext,
         tag: Tag,
         to newName: String
@@ -78,7 +79,7 @@ public extension TagOperations {
     }
 }
 
-private extension TagOperations {
+private extension TagRenameOperations {
     static func validateCategoryRenameSource(
         _ tag: Tag
     ) throws {

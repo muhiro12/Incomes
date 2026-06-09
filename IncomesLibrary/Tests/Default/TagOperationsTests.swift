@@ -16,7 +16,7 @@ struct TagOperationsTests {
     func getAll_returns_all_tags() throws {
         _ = try Tag.create(context: context, name: "A", type: .year)
         _ = try Tag.create(context: context, name: "B", type: .content)
-        let tags = try TagOperations.getAll(context: context)
+        let tags = try TagQueryOperations.getAll(context: context)
         #expect(tags.count == 2)
     }
 
@@ -25,7 +25,7 @@ struct TagOperationsTests {
         let model = try Tag.create(context: context, name: "name", type: .content)
         let id = try PersistentIdentifierCoder.encode(model.id)
         let tagEntity = try #require(
-            try TagOperations.getByID(
+            try TagQueryOperations.getByID(
                 context: context,
                 id: id
             )
@@ -38,7 +38,7 @@ struct TagOperationsTests {
     func getByName_returns_matching_tag() throws {
         _ = try Tag.create(context: context, name: "name", type: .year)
         let tag = try #require(
-            try TagOperations.getByName(
+            try TagQueryOperations.getByName(
                 context: context,
                 name: "name",
                 type: .year
@@ -56,7 +56,7 @@ struct TagOperationsTests {
         let tag2 = Tag.createIgnoringDuplicates(context: context, name: "A", type: .year)
         let tag3 = Tag.createIgnoringDuplicates(context: context, name: "B", type: .yearMonth)
         let tag4 = Tag.createIgnoringDuplicates(context: context, name: "B", type: .yearMonth)
-        let result = TagOperations.findDuplicates(
+        let result = TagQueryOperations.findDuplicates(
             context: context,
             tags: [tag1, tag2, tag3, tag4]
         )
@@ -71,14 +71,14 @@ struct TagOperationsTests {
 
     @Test
     func hasDuplicates_detects_and_clears_duplicates() throws {
-        #expect(try TagOperations.hasDuplicates(context: context) == false)
+        #expect(try TagQueryOperations.hasDuplicates(context: context) == false)
         let tag1 = Tag.createIgnoringDuplicates(context: context, name: "A", type: .year)
         _ = Tag.createIgnoringDuplicates(context: context, name: "A", type: .year)
-        #expect(try TagOperations.hasDuplicates(context: context) == true)
-        TagOperations.mergeDuplicates(
+        #expect(try TagQueryOperations.hasDuplicates(context: context) == true)
+        TagMutationOperations.mergeDuplicates(
             tags: try context.fetch(.tags(.isSameWith(tag1)))
         )
-        #expect(try TagOperations.hasDuplicates(context: context) == false)
+        #expect(try TagQueryOperations.hasDuplicates(context: context) == false)
     }
 
     @Test
@@ -88,7 +88,7 @@ struct TagOperationsTests {
         _ = Tag.createIgnoringDuplicates(context: context, name: "B", type: .content)
         _ = Tag.createIgnoringDuplicates(context: context, name: "B", type: .content)
 
-        let duplicates = try TagOperations.duplicateTags(
+        let duplicates = try TagQueryOperations.duplicateTags(
             context: context,
             type: .year
         )
@@ -139,7 +139,7 @@ struct TagOperationsTests {
         let tag3 = try #require(item3.tags?.first { tag in
             tag.type == .content
         })
-        TagOperations.mergeDuplicates(
+        TagMutationOperations.mergeDuplicates(
             tags: [tag1, tag2, tag3]
         )
         #expect(try context.fetchCount(.tags(.nameIs("contentA", type: .content))) == 1)
@@ -155,7 +155,7 @@ struct TagOperationsTests {
         let tag1 = Tag.createIgnoringDuplicates(context: context, name: "contentA", type: .content)
         let tag2 = Tag.createIgnoringDuplicates(context: context, name: "contentA", type: .content)
         let tag3 = Tag.createIgnoringDuplicates(context: context, name: "contentA", type: .content)
-        TagOperations.mergeDuplicates(
+        TagMutationOperations.mergeDuplicates(
             tags: [tag1, tag2, tag3]
         )
         #expect(try context.fetchCount(.tags(.nameIs("contentA", type: .content))) == 1)
@@ -184,7 +184,7 @@ struct TagOperationsTests {
             type: .content
         )
         item.modify(tags: [parent, duplicate])
-        TagOperations.mergeDuplicates(tags: [parent, duplicate])
+        TagMutationOperations.mergeDuplicates(tags: [parent, duplicate])
         let contentTags = item.tags?.filter { tag in
             tag.id == parent.id
         }
@@ -199,7 +199,7 @@ struct TagOperationsTests {
         let tag4 = Tag.createIgnoringDuplicates(context: context, name: "B", type: .yearMonth)
         _ = Tag.createIgnoringDuplicates(context: context, name: "B", type: .yearMonth)
         #expect(try context.fetchCount(.tags(.all)) == 5)
-        try TagOperations.resolveDuplicates(
+        try TagMutationOperations.resolveDuplicates(
             context: context,
             tags: [tag1, tag4]
         )
@@ -213,7 +213,7 @@ struct TagOperationsTests {
         _ = Tag.createIgnoringDuplicates(context: context, name: "B", type: .content)
         _ = Tag.createIgnoringDuplicates(context: context, name: "B", type: .content)
 
-        try TagOperations.resolveAllDuplicates(context: context)
+        try TagMutationOperations.resolveAllDuplicates(context: context)
 
         #expect(try context.fetchCount(.tags(.all)) == 2)
     }
@@ -222,7 +222,7 @@ struct TagOperationsTests {
     func date_returns_date_for_year_tag() throws {
         let tag = try Tag.create(context: context, name: "2024", type: .year)
 
-        let date = try #require(TagOperations.date(for: tag))
+        let date = try #require(TagQueryOperations.date(for: tag))
 
         #expect(date.stringValueWithoutLocale(.yyyy) == "2024")
     }
@@ -231,7 +231,7 @@ struct TagOperationsTests {
     func date_returns_date_for_year_month_tag() throws {
         let tag = try Tag.create(context: context, name: "202402", type: .yearMonth)
 
-        let date = try #require(TagOperations.date(for: tag))
+        let date = try #require(TagQueryOperations.date(for: tag))
 
         #expect(date.stringValueWithoutLocale(.yyyyMM) == "202402")
     }
@@ -247,7 +247,7 @@ struct TagOperationsTests {
         let differentTag = try Tag.create(context: context, name: "2025", type: .year)
 
         #expect(
-            TagOperations.containsEquivalentTag(
+            TagQueryOperations.containsEquivalentTag(
                 target,
                 in: [sameSemanticTag, differentTag]
             )
