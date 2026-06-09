@@ -11,6 +11,15 @@ import SwiftData
 
 @available(iOS 26.0, *)
 enum MonthlySummaryGenerator {
+    static func canGenerate(locale: Locale) -> Bool {
+        do {
+            _ = try availableModel(for: locale)
+            return true
+        } catch {
+            return false
+        }
+    }
+
     @MainActor
     static func generate(
         context: ModelContext,

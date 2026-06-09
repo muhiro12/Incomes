@@ -5,7 +5,6 @@
 //  Created by Codex on 2026/03/04.
 //
 
-import FoundationModels
 import MHDesign
 import MHPlatform
 import SwiftData
@@ -37,7 +36,6 @@ struct MonthlySummarySection: View {
 
     @Query private var previousItems: [Item]
 
-    @State private var languageModel = SystemLanguageModel.default
     @State private var generatedSummary: String?
     @State private var isGenerating = false
     @State private var isPopoverPresented = false
@@ -108,10 +106,7 @@ private extension MonthlySummarySection {
         guard !currentItems.isEmpty else {
             return false
         }
-        guard languageModel.availability == .available else {
-            return false
-        }
-        return languageModel.supportsLocale(locale)
+        return MonthlySummaryGenerator.canGenerate(locale: locale)
     }
 
     private var generationInput: MonthlySummaryGenerationInput {
