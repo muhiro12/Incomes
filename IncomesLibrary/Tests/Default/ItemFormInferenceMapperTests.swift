@@ -31,6 +31,25 @@ struct ItemFormInferenceMapperTests {
     }
 
     @Test
+    func update_init_with_amounts_maps_values_to_text_fields() {
+        let date = Date(timeIntervalSince1970: 1_000)
+
+        let update = ItemFormInferenceUpdate(
+            date: date,
+            content: "Content",
+            income: 100,
+            outgo: 50,
+            category: "Category"
+        )
+
+        #expect(update.date == date)
+        #expect(update.content == "Content")
+        #expect(update.incomeText == "100")
+        #expect(update.outgoText == "50")
+        #expect(update.category == "Category")
+    }
+
+    @Test
     func update_applied_to_input_replaces_inferred_fields_and_preserves_priority() {
         let currentDate = Date(timeIntervalSince1970: 1_000)
         let inferredDate = Date(timeIntervalSince1970: 2_000)

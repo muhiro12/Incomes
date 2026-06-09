@@ -28,6 +28,23 @@ public struct ItemFormInferenceUpdate {
         self.category = category
     }
 
+    /// Creates an inferred item form update from typed amount values.
+    public init(
+        date: Date?,
+        content: String,
+        income: Decimal,
+        outgo: Decimal,
+        category: String
+    ) {
+        self.init(
+            date: date,
+            content: content,
+            incomeText: income.description,
+            outgoText: outgo.description,
+            category: category
+        )
+    }
+
     /// Applies the inferred values to the current form input.
     public func applied(to currentInput: ItemFormInput) -> ItemFormInput {
         .init(
