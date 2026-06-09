@@ -4,6 +4,23 @@ import Testing
 
 struct YearlyDuplicationPresentationTests {
     @Test
+    func suggestionText_returns_source_and_target_years() {
+        let suggestion = YearlyItemDuplicationSuggestion(
+            sourceYear: 2_024,
+            targetYear: 2_025,
+            plan: .init(
+                groups: [],
+                entries: [],
+                skippedDuplicateCount: .zero
+            )
+        )
+
+        let text = YearlyItemDuplicationPresentationBuilder.suggestionText(for: suggestion)
+
+        #expect(text == "2024 -> 2025")
+    }
+
+    @Test
     func summaryText_returns_plan_counts() {
         let context = testContext
         let groupID = UUID()

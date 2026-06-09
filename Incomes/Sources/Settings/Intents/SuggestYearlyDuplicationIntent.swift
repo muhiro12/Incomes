@@ -28,7 +28,7 @@ struct SuggestYearlyDuplicationIntent: AppIntent {
             return .result(value: nil)
         }
         return .result(
-            value: "\(suggestion.sourceYear) -> \(suggestion.targetYear)"
+            value: YearlyItemDuplicationPresentationBuilder.suggestionText(for: suggestion)
         )
     }
 }
