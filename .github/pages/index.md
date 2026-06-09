@@ -1,9 +1,5 @@
 # Incomes
 
-<p align="center">
-  <img src="../../Incomes/Resources/Assets.xcassets/AppIcon.appiconset/AppIcon.png" width="120" alt="Incomes app icon" />
-</p>
-
 **A modern budget manager built with SwiftUI, SwiftData and the latest Apple frameworks.**
 
 [![Download on the App Store](https://linkmaker.itunes.apple.com/assets/shared/badges/en-us/appstore-lrg.svg)](https://apps.apple.com/app/id1584472982)
