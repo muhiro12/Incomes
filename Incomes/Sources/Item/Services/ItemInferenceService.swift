@@ -25,15 +25,17 @@ enum ItemInferenceService {
                 ("text_length", IncomesLogging.count(text.count))
             )
         )
-        let session = LanguageModelSession(
-            instructions: ItemFormInferencePromptBuilder.instructions()
-        )
-        let prompt = ItemFormInferencePromptBuilder.prompt(
-            text: text,
-            currentDate: currentDate,
-            locale: locale
-        )
         do {
+            let model = try availableModel(for: locale)
+            let session = LanguageModelSession(
+                model: model,
+                instructions: ItemFormInferencePromptBuilder.instructions()
+            )
+            let prompt = ItemFormInferencePromptBuilder.prompt(
+                text: text,
+                currentDate: currentDate,
+                locale: locale
+            )
             let response = try await session.respond(
                 to: prompt,
                 generating: ItemFormInference.self
@@ -47,12 +49,13 @@ enum ItemInferenceService {
             )
             return response.content
         } catch {
+            let inferenceError = inferenceError(from: error)
             let inferenceMetadata = IncomesLogging.metadata(
                 ("language_code", languageCode),
                 ("text_length", IncomesLogging.count(text.count))
             )
             let failureMetadata = inferenceMetadata.merging(
-                IncomesLogging.errorMetadata(error)
+                IncomesLogging.errorMetadata(inferenceError)
             ) { current, _ in
                 current
             }
@@ -60,7 +63,43 @@ enum ItemInferenceService {
                 "inference.failed",
                 metadata: failureMetadata
             )
-            throw error
+            throw inferenceError
         }
+    }
+}
+
+@available(iOS 26.0, *)
+private extension ItemInferenceService {
+    static func availableModel(for locale: Locale) throws -> SystemLanguageModel {
+        let model = SystemLanguageModel.default
+        switch model.availability {
+        case .available:
+            break
+        case .unavailable:
+            throw ItemInferenceError.unavailableModel
+        }
+
+        guard model.supportsLocale(locale) else {
+            throw ItemInferenceError.unsupportedLocale
+        }
+
+        return model
+    }
+
+    static func inferenceError(from error: Error) -> ItemInferenceError {
+        if let error = error as? ItemInferenceError {
+            return error
+        }
+
+        if let error = error as? LanguageModelSession.GenerationError {
+            switch error {
+            case .unsupportedLanguageOrLocale:
+                return .unsupportedLocale
+            default:
+                return .generationFailed
+            }
+        }
+
+        return .generationFailed
     }
 }

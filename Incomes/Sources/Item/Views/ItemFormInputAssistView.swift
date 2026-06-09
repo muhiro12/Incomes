@@ -211,7 +211,7 @@ private extension ItemFormInputAssistView {
             }
             await scanImage(image)
         } catch {
-            errorMessage = error.localizedDescription
+            errorMessage = ErrorMessageSupport.message(from: error)
         }
     }
 
@@ -219,7 +219,7 @@ private extension ItemFormInputAssistView {
         do {
             try await scanner.scan(image)
         } catch {
-            errorMessage = error.localizedDescription
+            errorMessage = ErrorMessageSupport.message(from: error)
         }
     }
 
@@ -239,7 +239,7 @@ private extension ItemFormInputAssistView {
             model.apply(updatedInput)
             dismiss()
         } catch {
-            errorMessage = error.localizedDescription
+            errorMessage = ErrorMessageSupport.message(from: error)
         }
     }
 }
