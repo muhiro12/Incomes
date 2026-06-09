@@ -35,7 +35,7 @@ struct SuggestYearlyDuplicationIntent: AppIntent {
 
 private extension SuggestYearlyDuplicationIntent {
     var duplicationOptions: YearlyItemDuplicationOptions {
-        .init(
+        YearlyDuplicationIntentSupport.options(
             includeSingleItems: includeSingleItems,
             minimumRepeatItemCount: minimumRepeatItemCount,
             skipExistingItems: skipExistingItems

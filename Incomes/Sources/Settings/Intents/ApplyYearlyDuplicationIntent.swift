@@ -23,12 +23,12 @@ struct ApplyYearlyDuplicationIntent: AppIntent {
     @MainActor
     func perform() throws -> some ReturnsValue<Int> {
         let logger = intentLogger
-        let metadata = IncomesLogging.metadata(
-            ("source_year", String(sourceYear)),
-            ("target_year", String(targetYear)),
-            ("include_single_items", IncomesLogging.bool(includeSingleItems)),
-            ("minimum_repeat_item_count", String(minimumRepeatItemCount)),
-            ("skip_existing_items", IncomesLogging.bool(skipExistingItems))
+        let metadata = YearlyDuplicationIntentSupport.requestMetadata(
+            sourceYear: sourceYear,
+            targetYear: targetYear,
+            includeSingleItems: includeSingleItems,
+            minimumRepeatItemCount: minimumRepeatItemCount,
+            skipExistingItems: skipExistingItems
         )
         logger.notice(
             "apply_yearly_duplication.requested",
@@ -79,7 +79,7 @@ private extension ApplyYearlyDuplicationIntent {
     }
 
     var duplicationOptions: YearlyItemDuplicationOptions {
-        .init(
+        YearlyDuplicationIntentSupport.options(
             includeSingleItems: includeSingleItems,
             minimumRepeatItemCount: minimumRepeatItemCount,
             skipExistingItems: skipExistingItems
