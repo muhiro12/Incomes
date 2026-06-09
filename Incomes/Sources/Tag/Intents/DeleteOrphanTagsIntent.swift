@@ -14,7 +14,7 @@ struct DeleteOrphanTagsIntent: AppIntent {
         let logger = intentLogger
         logger.notice("delete_orphan_tags.requested")
         do {
-            let deletedCount = try TagIntentMutationSupport.deleteAllOrphanTags(
+            let deletedCount = try TagMutationOperations.deleteAllOrphanTags(
                 context: modelContainer.mainContext
             )
             logger.notice(

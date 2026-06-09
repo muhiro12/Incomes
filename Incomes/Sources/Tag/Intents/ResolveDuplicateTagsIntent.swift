@@ -14,7 +14,7 @@ struct ResolveDuplicateTagsIntent: AppIntent {
         let logger = intentLogger
         logger.notice("resolve_duplicate_tags.requested")
         do {
-            let resolvedCount = try TagIntentMutationSupport.resolveAllDuplicates(
+            let resolvedCount = try TagMutationOperations.resolveAllDuplicates(
                 context: modelContainer.mainContext
             )
             logger.notice(
