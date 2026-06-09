@@ -46,7 +46,7 @@ enum ItemIntentGetValueSupport {
         try await MonthlySummaryGenerator.generate(
             context: context,
             date: date,
-            currencyCode: ItemIntentCurrencySupport.preferredCurrencyCode(),
+            currencyCode: IncomesCurrencyPreference.preferredCurrencyCode(),
             locale: locale
         )
     }
