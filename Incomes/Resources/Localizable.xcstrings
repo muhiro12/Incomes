@@ -502,40 +502,6 @@
         }
       }
     },
-    "Affected items: %lld" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Affected items: %lld"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Elementos afectados: %lld"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Éléments affectés : %lld"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "影響項目数: %lld件"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "受影响项目：%lld项"
-          }
-        }
-      }
-    },
     "Add one item to start tracking income, outgo, and balance." : {
       "localizations" : {
         "en" : {
@@ -600,6 +566,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "调整筛选条件以查找匹配的收入项目。"
+          }
+        }
+      }
+    },
+    "Affected items: %lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Affected items: %lld"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elementos afectados: %lld"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Éléments affectés : %lld"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "影響項目数: %lld件"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "受影响项目：%lld项"
           }
         }
       }
@@ -4481,6 +4481,9 @@
         }
       }
     },
+    "No Duplicate Tags" : {
+
+    },
     "No Matches" : {
       "localizations" : {
         "en" : {
@@ -4514,6 +4517,9 @@
           }
         }
       }
+    },
+    "No Orphan Tags" : {
+
     },
     "No Results" : {
       "localizations" : {
@@ -7134,6 +7140,7 @@
       }
     },
     "Sorry, something went wrong. We're working to fix it." : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -7541,6 +7548,12 @@
         }
       }
     },
+    "There are no duplicate tags to review." : {
+
+    },
+    "There are no unused tags to clean up." : {
+
+    },
     "This category can't be renamed." : {
       "localizations" : {
         "en" : {
@@ -7609,40 +7622,6 @@
         }
       }
     },
-    "This name is unchanged." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "This name is unchanged."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Este nombre no ha cambiado."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ce nom est inchangé."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "この名前は変更されていません。"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "此名称未发生变化。"
-          }
-        }
-      }
-    },
     "This Item" : {
       "localizations" : {
         "en" : {
@@ -7673,6 +7652,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "此项目"
+          }
+        }
+      }
+    },
+    "This name is unchanged." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This name is unchanged."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Este nombre no ha cambiado."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ce nom est inchangé."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "この名前は変更されていません。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此名称未发生变化。"
           }
         }
       }
