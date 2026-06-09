@@ -19,21 +19,6 @@ struct MonthlySummarySection: View {
         static let popoverMinimumWidth: CGFloat = 280
     }
 
-    private struct SummarySourceSnapshot: Equatable {
-        let id: String
-        let date: Date
-        let content: String
-        let income: Decimal
-        let outgo: Decimal
-        let category: String
-    }
-
-    private struct SummaryGenerationInput: Equatable {
-        let snapshots: [SummarySourceSnapshot]
-        let currencyCode: String
-        let localeIdentifier: String
-    }
-
     @Environment(\.modelContext)
     private var context
 
@@ -129,9 +114,10 @@ private extension MonthlySummarySection {
         return languageModel.supportsLocale(locale)
     }
 
-    private var generationInput: SummaryGenerationInput {
+    private var generationInput: MonthlySummaryGenerationInput {
         .init(
-            snapshots: summarySourceSnapshots,
+            currentItems: currentItems,
+            previousItems: previousItems,
             currencyCode: currencyCode,
             localeIdentifier: locale.identifier
         )
@@ -209,10 +195,6 @@ private extension MonthlySummarySection {
             .disabled(isGenerating)
     }
 
-    private var summarySourceSnapshots: [SummarySourceSnapshot] {
-        currentItems.map(snapshot(for:)) + previousItems.map(snapshot(for:))
-    }
-
     private func generateSummaryButton(title: LocalizedStringKey) -> some View {
         Button(title) {
             Task {
@@ -270,19 +252,6 @@ private extension MonthlySummarySection {
                 errorMessage = resolvedErrorMessage(from: error)
             }
         }
-    }
-
-    private func snapshot(for item: Item) -> SummarySourceSnapshot {
-        .init(
-            id: String(describing: item.persistentModelID),
-            date: item.utcDate,
-            content: item.content,
-            income: item.income,
-            outgo: item.outgo,
-            category: CategoryNameSupport.displayName(
-                forStoredName: item.category?.name
-            )
-        )
     }
 
     func clearGeneratedSummary() {
