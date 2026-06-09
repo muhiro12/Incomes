@@ -4,6 +4,41 @@ import Testing
 
 struct YearlyDuplicationPresentationTests {
     @Test
+    func summaryText_returns_plan_counts() {
+        let context = testContext
+        let groupID = UUID()
+        let item = Item.createIgnoringDuplicates(
+            context: context,
+            date: date("2025-01-05T12:00:00Z"),
+            content: "Utility",
+            income: .zero,
+            outgo: 120,
+            category: "Bills",
+            priority: 0,
+            repeatID: .init()
+        )
+        let plan = YearlyItemDuplicationPlan(
+            groups: [
+                group(targetDates: [
+                    date("2026-01-05T12:00:00Z")
+                ])
+            ],
+            entries: [
+                .init(
+                    sourceItem: item,
+                    targetDate: date("2026-01-05T12:00:00Z"),
+                    groupID: groupID
+                )
+            ],
+            skippedDuplicateCount: 2
+        )
+
+        let text = YearlyItemDuplicationPresentationBuilder.summaryText(for: plan)
+
+        #expect(text == "1 groups / 1 items / 2 skipped")
+    }
+
+    @Test
     func monthDayListText_sorts_and_removes_duplicate_month_days() {
         var calendar = Calendar(identifier: .gregorian)
         calendar.timeZone = TimeZone(secondsFromGMT: .zero) ?? .current

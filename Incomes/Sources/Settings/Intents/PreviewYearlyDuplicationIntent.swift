@@ -53,8 +53,9 @@ struct PreviewYearlyDuplicationIntent: AppIntent {
                     current
                 }
             )
-            let summary = "\(plan.groups.count) groups / \(plan.entries.count) items / \(plan.skippedDuplicateCount) skipped" // swiftlint:disable:this line_length
-            return .result(value: summary)
+            return .result(
+                value: YearlyItemDuplicationPresentationBuilder.summaryText(for: plan)
+            )
         } catch {
             logger.error(
                 "preview_yearly_duplication.failed",

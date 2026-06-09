@@ -9,6 +9,11 @@ import Foundation
 
 /// Builds presentation values for yearly item duplication.
 public enum YearlyItemDuplicationPresentationBuilder {
+    /// Returns a concise summary for a yearly duplication plan.
+    public static func summaryText(for plan: YearlyItemDuplicationPlan) -> String {
+        "\(plan.groups.count) groups / \(plan.entries.count) items / \(plan.skippedDuplicateCount) skipped"
+    }
+
     /// Returns a sorted, de-duplicated month/day list for the group's target dates.
     public static func monthDayListText(
         for group: YearlyItemDuplicationGroup,
