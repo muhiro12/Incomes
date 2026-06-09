@@ -127,11 +127,13 @@ Models.
 
 ## Requirements
 
-- Xcode 16 or later with the iOS 18 and watchOS 11 SDKs installed.
+- Xcode 26 or later.
+- The app and widgets deploy to iOS 18 or later, and the watchOS companion
+  deploys to watchOS 11 or later.
 - An Apple Developer account configured for App Groups, iCloud, StoreKit 2,
   notifications, and ads.
-- A device or simulator that supports Foundation Models for on-device inference
-  features.
+- A device or simulator running iOS 26 or later with Foundation Models support
+  for on-device inference features.
 
 ## Setup
 
@@ -147,8 +149,9 @@ Follow these steps to run a local build:
    `Widgets/Configurations/Widgets.entitlements`, and
    `Incomes/Sources/Common/Platform/IncomesMonetizationConfiguration.swift`.
 4. Open `Incomes.xcodeproj` in Xcode, select the **Incomes** scheme, and run on
-   an iOS 18 simulator or device. Enable the **IncomesWatch** and **Widgets**
-   schemes if you want to test the companion experiences.
+   an iOS 18 or later simulator or device. Use an iOS 26 or later destination
+   when testing Foundation Models features. Enable the **IncomesWatch** and
+   **Widgets** schemes if you want to test the companion experiences.
 
 ### Remote configuration
 
