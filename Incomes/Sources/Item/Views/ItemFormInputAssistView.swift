@@ -28,6 +28,8 @@ struct ItemFormInputAssistView: View {
     private var logging
     @Environment(\.mhDesignMetrics)
     private var designMetrics
+    @Environment(\.locale)
+    private var locale
 
     @State private var importRoute: ImportRoute?
     @State private var isApplyingInference = false
@@ -230,6 +232,8 @@ private extension ItemFormInputAssistView {
             let updatedInput = try await ItemFormInferenceApplier.apply(
                 text: scanner.recognizedText,
                 currentInput: model.formInputData,
+                locale: locale,
+                currentDate: Date(),
                 logger: inferenceLogger
             )
             model.apply(updatedInput)

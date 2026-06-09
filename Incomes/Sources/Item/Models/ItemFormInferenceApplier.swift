@@ -13,10 +13,14 @@ enum ItemFormInferenceApplier {
     static func apply(
         text: String,
         currentInput: ItemFormInput,
+        locale: Locale,
+        currentDate: Date,
         logger: MHLogger
     ) async throws -> ItemFormInput {
         let inference = try await ItemInferenceService.inferForm(
             text: text,
+            locale: locale,
+            currentDate: currentDate,
             logger: logger
         )
         let update = ItemFormInferenceMapper.map(

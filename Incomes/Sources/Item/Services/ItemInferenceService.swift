@@ -13,9 +13,10 @@ import MHPlatform
 enum ItemInferenceService {
     static func inferForm(
         text: String,
+        locale: Locale,
+        currentDate: Date,
         logger: MHLogger
     ) async throws -> ItemFormInference {
-        let locale = Locale.current
         let languageCode = ItemFormInferencePromptBuilder.languageCode(for: locale)
         logger.notice(
             "inference.requested",
@@ -29,7 +30,7 @@ enum ItemInferenceService {
         )
         let prompt = ItemFormInferencePromptBuilder.prompt(
             text: text,
-            currentDate: Date(),
+            currentDate: currentDate,
             locale: locale
         )
         do {
