@@ -20,7 +20,7 @@ public enum MonthlySummaryNarrativeContextLoader {
         categoryComparisonLimit: Int = defaultCategoryComparisonLimit
     ) throws -> MonthlySummaryNarrativeBuilder.Context {
         let currentYearMonth = try yearMonth(from: date)
-        let previousDate = Calendar.utc.date(byAdding: .month, value: -1, to: date) ?? date
+        let previousDate = MonthlySummaryDateSupport.previousMonthDate(from: date)
         let previousYearMonth = try yearMonth(from: previousDate)
         let currentTotals = try SummaryCalculator.monthlyTotals(
             context: context,

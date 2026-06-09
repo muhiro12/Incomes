@@ -99,7 +99,7 @@ public enum SummaryCalculator {
         date: Date
     ) throws -> [CategoryComparison] {
         let currentItems = try ItemQueryOperations.items(context: context, date: date)
-        let previousMonthDate = Calendar.utc.date(byAdding: .month, value: -1, to: date) ?? date
+        let previousMonthDate = MonthlySummaryDateSupport.previousMonthDate(from: date)
         let previousItems = try ItemQueryOperations.items(context: context, date: previousMonthDate)
 
         let currentTotals = categoryTotals(for: currentItems)

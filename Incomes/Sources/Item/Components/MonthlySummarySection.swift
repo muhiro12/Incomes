@@ -65,7 +65,11 @@ struct MonthlySummarySection: View {
         self.date = date
         _currentItems = .init(.items(.dateIsSameMonthAs(date)))
         _previousItems = .init(
-            .items(.dateIsSameMonthAs(Self.previousMonthDate(from: date)))
+            .items(
+                .dateIsSameMonthAs(
+                    MonthlySummaryDateSupport.previousMonthDate(from: date)
+                )
+            )
         )
     }
 
@@ -207,10 +211,6 @@ private extension MonthlySummarySection {
 
     private var summarySourceSnapshots: [SummarySourceSnapshot] {
         currentItems.map(snapshot(for:)) + previousItems.map(snapshot(for:))
-    }
-
-    static func previousMonthDate(from date: Date) -> Date {
-        Calendar.utc.date(byAdding: .month, value: -1, to: date) ?? date
     }
 
     private func generateSummaryButton(title: LocalizedStringKey) -> some View {
