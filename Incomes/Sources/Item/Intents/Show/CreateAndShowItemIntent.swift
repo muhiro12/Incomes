@@ -60,13 +60,10 @@ struct CreateAndShowItemIntent: AppIntent {
             logger: intentLogger,
             reviewLogger: reviewLogger
         )
-        return .result(
-            opensIntent: IncomesIntentRouteOpener.monthIntent(for: item.localDate),
-            dialog: .init(stringLiteral: item.content)
-        ) {
-            IntentItemSection()
-                .environment(item)
-        }
+        return ItemIntentShowResultSupport.singleItem(
+            item,
+            defaultDate: item.localDate
+        )
     }
 }
 

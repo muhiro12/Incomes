@@ -18,22 +18,13 @@ struct ShowPreviousItemIntent: AppIntent {
 
     @MainActor
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
-        let defaultOpenIntent = IncomesIntentRouteOpener.monthIntent(for: date)
-        guard let item = try ItemQueryOperations.previousItem(
+        let item = try ItemQueryOperations.previousItem(
             context: modelContainer.mainContext,
             date: date
-        ) else {
-            return .result(
-                opensIntent: defaultOpenIntent,
-                dialog: .init(.init("Not Found", table: "AppIntents"))
-            )
-        }
-        return .result(
-            opensIntent: IncomesIntentRouteOpener.monthIntent(for: item.localDate),
-            dialog: .init(stringLiteral: item.content)
-        ) {
-            IntentItemSection()
-                .environment(item)
-        }
+        )
+        return ItemIntentShowResultSupport.singleItem(
+            item,
+            defaultDate: date
+        )
     }
 }
