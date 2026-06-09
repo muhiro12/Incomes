@@ -5,22 +5,22 @@ import AppIntents
 import Foundation
 
 @available(iOS 26.0, *)
-public struct ItemFormInference: AppEntity {
-    public static var typeDisplayRepresentation: TypeDisplayRepresentation {
+struct ItemFormInference: AppEntity {
+    static var typeDisplayRepresentation: TypeDisplayRepresentation {
         .init(name: "Item Form Inference")
     }
 
-    public static let defaultQuery = ItemFormInferenceQuery()
+    static let defaultQuery = ItemFormInferenceQuery()
 
-    public var date: String
-    public var content: String
-    public var income: Decimal
-    public var outgo: Decimal
-    public var category: String
+    var date: String
+    var content: String
+    var income: Decimal
+    var outgo: Decimal
+    var category: String
 
-    public var id: String { "\(date)-\(content)-\(category)" }
+    var id: String { "\(date)-\(content)-\(category)" }
 
-    public var displayRepresentation: DisplayRepresentation {
+    var displayRepresentation: DisplayRepresentation {
         .init(title: "\(content)", subtitle: "\(date)")
     }
 
