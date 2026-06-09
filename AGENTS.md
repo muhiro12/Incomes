@@ -1,7 +1,8 @@
 # AGENTS.md
 
-This document defines the **global agent behavior contract** shared across projects.  
-It contains only strict, minimal rules that agents must always follow.
+This document defines the **repository-specific agent behavior contract** for
+Incomes. It contains only strict, minimal rules that agents must follow when
+working in this repository.
 
 ## Agent Philosophy
 
