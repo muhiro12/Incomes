@@ -42,17 +42,14 @@ struct UpdateItemIntent: AppIntent {
     func perform() async throws -> some ReturnsValue<ItemEntity> {
         try validateFormInput()
 
-        let currencyCode = MHPreferenceStore().string(
-            for: \.currencyCode,
-            default: ""
-        )
-        if let amount = ItemIntentCurrencyValidator.disambiguationAmount(
+        let currencyCode = ItemIntentCurrencySupport.preferredCurrencyCode()
+        if let amount = ItemIntentCurrencySupport.disambiguationAmount(
             amount: income,
             expectedCurrencyCode: currencyCode
         ) {
             throw $income.needsDisambiguationError(among: [amount])
         }
-        if let amount = ItemIntentCurrencyValidator.disambiguationAmount(
+        if let amount = ItemIntentCurrencySupport.disambiguationAmount(
             amount: outgo,
             expectedCurrencyCode: currencyCode
         ) {

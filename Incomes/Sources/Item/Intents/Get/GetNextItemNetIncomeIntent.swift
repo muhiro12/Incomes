@@ -6,7 +6,6 @@
 //
 
 import AppIntents
-import MHPlatform
 import SwiftData
 
 struct GetNextItemNetIncomeIntent: AppIntent {
@@ -19,17 +18,11 @@ struct GetNextItemNetIncomeIntent: AppIntent {
 
     @MainActor
     func perform() throws -> some ReturnsValue<IntentCurrencyAmount?> {
-        let netIncome = try ItemQueryOperations.nextItemNetIncome(
-            context: modelContainer.mainContext,
-            date: date
-        )
-        guard let netIncome else {
-            return .result(value: nil)
-        }
-        let currencyCode = MHPreferenceStore().string(
-            for: \.currencyCode,
-            default: ""
-        )
-        return .result(value: .init(amount: netIncome, currencyCode: currencyCode))
+        .result(value: ItemIntentCurrencySupport.amount(
+            from: try ItemQueryOperations.nextItemNetIncome(
+                context: modelContainer.mainContext,
+                date: date
+            )
+        ))
     }
 }
