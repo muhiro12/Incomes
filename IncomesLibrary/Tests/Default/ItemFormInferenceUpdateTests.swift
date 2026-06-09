@@ -131,6 +131,10 @@ struct ItemFormInferenceUpdateTests {
         let result = update.applied(to: currentInput)
 
         #expect(result.date == currentDate)
+        #expect(result.content == "New content")
+        #expect(result.incomeText == "100")
+        #expect(result.outgoText == "50")
+        #expect(result.category == "New")
         #expect(result.priorityText == "3")
     }
 }
