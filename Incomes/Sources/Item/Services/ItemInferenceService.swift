@@ -18,15 +18,20 @@ enum ItemInferenceService {
         logger: MHLogger
     ) async throws -> ItemFormInference {
         let languageCode = ItemFormInferencePromptBuilder.languageCode(for: locale)
+        let metadata = IncomesLogging.metadata(
+            ("language_code", languageCode),
+            ("text_length", IncomesLogging.count(text.count))
+        )
         logger.notice(
             "inference.requested",
-            metadata: IncomesLogging.metadata(
-                ("language_code", languageCode),
-                ("text_length", IncomesLogging.count(text.count))
-            )
+            metadata: metadata
         )
         do {
-            let model = try availableModel(for: locale)
+            let model = try FoundationModelAvailabilitySupport.defaultModel(
+                for: locale,
+                unavailableModelError: ItemInferenceError.unavailableModel,
+                unsupportedLocaleError: ItemInferenceError.unsupportedLocale
+            )
             let session = LanguageModelSession(
                 model: model,
                 instructions: ItemFormInferencePromptBuilder.instructions()
@@ -42,19 +47,12 @@ enum ItemInferenceService {
             )
             logger.notice(
                 "inference.completed",
-                metadata: IncomesLogging.metadata(
-                    ("language_code", languageCode),
-                    ("text_length", IncomesLogging.count(text.count))
-                )
+                metadata: metadata
             )
             return response.content
         } catch {
             let inferenceError = inferenceError(from: error)
-            let inferenceMetadata = IncomesLogging.metadata(
-                ("language_code", languageCode),
-                ("text_length", IncomesLogging.count(text.count))
-            )
-            let failureMetadata = inferenceMetadata.merging(
+            let failureMetadata = metadata.merging(
                 IncomesLogging.errorMetadata(inferenceError)
             ) { current, _ in
                 current
@@ -70,33 +68,14 @@ enum ItemInferenceService {
 
 @available(iOS 26.0, *)
 private extension ItemInferenceService {
-    static func availableModel(for locale: Locale) throws -> SystemLanguageModel {
-        let model = SystemLanguageModel.default
-        switch model.availability {
-        case .available:
-            break
-        case .unavailable:
-            throw ItemInferenceError.unavailableModel
-        }
-
-        guard model.supportsLocale(locale) else {
-            throw ItemInferenceError.unsupportedLocale
-        }
-
-        return model
-    }
-
     static func inferenceError(from error: Error) -> ItemInferenceError {
         if let error = error as? ItemInferenceError {
             return error
         }
 
         if let error = error as? LanguageModelSession.GenerationError {
-            switch error {
-            case .unsupportedLanguageOrLocale:
+            if FoundationModelAvailabilitySupport.isUnsupportedLocaleError(error) {
                 return .unsupportedLocale
-            default:
-                return .generationFailed
             }
         }
 

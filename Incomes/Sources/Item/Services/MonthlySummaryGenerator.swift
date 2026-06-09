@@ -13,7 +13,11 @@ import SwiftData
 enum MonthlySummaryGenerator {
     static func canGenerate(locale: Locale) -> Bool {
         do {
-            _ = try availableModel(for: locale)
+            _ = try FoundationModelAvailabilitySupport.generalModel(
+                for: locale,
+                unavailableModelError: MonthlySummaryGenerationError.unavailableModel,
+                unsupportedLocaleError: MonthlySummaryGenerationError.unsupportedLocale
+            )
             return true
         } catch {
             return false
@@ -27,7 +31,11 @@ enum MonthlySummaryGenerator {
         currencyCode: String,
         locale: Locale
     ) async throws -> String {
-        let model = try availableModel(for: locale)
+        let model = try FoundationModelAvailabilitySupport.generalModel(
+            for: locale,
+            unavailableModelError: MonthlySummaryGenerationError.unavailableModel,
+            unsupportedLocaleError: MonthlySummaryGenerationError.unsupportedLocale
+        )
         let narrativeContext = try resolvedNarrativeContext(
             context: context,
             date: date,
@@ -45,22 +53,6 @@ enum MonthlySummaryGenerator {
 
 @available(iOS 26.0, *)
 private extension MonthlySummaryGenerator {
-    static func availableModel(for locale: Locale) throws -> SystemLanguageModel {
-        let model = SystemLanguageModel(useCase: .general)
-        switch model.availability {
-        case .available:
-            break
-        case .unavailable:
-            throw MonthlySummaryGenerationError.unavailableModel
-        }
-
-        guard model.supportsLocale(locale) else {
-            throw MonthlySummaryGenerationError.unsupportedLocale
-        }
-
-        return model
-    }
-
     static func generatedOrFallbackSummary(
         model: SystemLanguageModel,
         narrativeContext: MonthlySummaryNarrativeBuilder.Context,
@@ -87,16 +79,14 @@ private extension MonthlySummaryGenerator {
                 throw error
             }
         } catch let error as LanguageModelSession.GenerationError {
-            switch error {
-            case .unsupportedLanguageOrLocale:
+            if FoundationModelAvailabilitySupport.isUnsupportedLocaleError(error) {
                 throw MonthlySummaryGenerationError.unsupportedLocale
-            default:
-                return fallbackSummary(
-                    monthTitle: monthTitle,
-                    narrativeContext: narrativeContext,
-                    locale: locale
-                )
             }
+            return fallbackSummary(
+                monthTitle: monthTitle,
+                narrativeContext: narrativeContext,
+                locale: locale
+            )
         } catch {
             return fallbackSummary(
                 monthTitle: monthTitle,
