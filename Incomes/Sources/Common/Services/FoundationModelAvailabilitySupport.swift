@@ -3,10 +3,10 @@ import FoundationModels
 
 @available(iOS 26.0, *)
 enum FoundationModelAvailabilitySupport {
-    static func defaultModel(
+    static func defaultModel<Failure: Error>(
         for locale: Locale,
-        unavailableModelError: @autoclosure () -> any Error,
-        unsupportedLocaleError: @autoclosure () -> any Error
+        unavailableModelError: @autoclosure () -> Failure,
+        unsupportedLocaleError: @autoclosure () -> Failure
     ) throws -> SystemLanguageModel {
         try availableModel(
             SystemLanguageModel.default,
@@ -16,10 +16,10 @@ enum FoundationModelAvailabilitySupport {
         )
     }
 
-    static func generalModel(
+    static func generalModel<Failure: Error>(
         for locale: Locale,
-        unavailableModelError: @autoclosure () -> any Error,
-        unsupportedLocaleError: @autoclosure () -> any Error
+        unavailableModelError: @autoclosure () -> Failure,
+        unsupportedLocaleError: @autoclosure () -> Failure
     ) throws -> SystemLanguageModel {
         try availableModel(
             SystemLanguageModel(useCase: .general),
@@ -40,11 +40,11 @@ enum FoundationModelAvailabilitySupport {
         }
     }
 
-    private static func availableModel(
+    private static func availableModel<Failure: Error>(
         _ model: SystemLanguageModel,
         locale: Locale,
-        unavailableModelError: @autoclosure () -> any Error,
-        unsupportedLocaleError: @autoclosure () -> any Error
+        unavailableModelError: @autoclosure () -> Failure,
+        unsupportedLocaleError: @autoclosure () -> Failure
     ) throws -> SystemLanguageModel {
         switch model.availability {
         case .available:
