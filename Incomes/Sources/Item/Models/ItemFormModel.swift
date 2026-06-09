@@ -103,10 +103,12 @@ extension ItemFormModel {
 
         if let tag {
             switch tag.type {
-            case .year:
-                date = initialDate(for: tag, currentDate: currentDate)
-            case .yearMonth:
-                date = initialDate(for: tag, currentDate: currentDate)
+            case .year,
+                 .yearMonth:
+                date = ItemFormInitialDateResolver.date(
+                    for: tag,
+                    currentDate: currentDate
+                )
             case .content:
                 content = tag.name
             case .category:
@@ -150,40 +152,5 @@ extension ItemFormModel {
             repeatMonthSelections,
             baseDate: date
         )
-    }
-}
-
-private extension ItemFormModel {
-    func initialDate(
-        for tag: Tag,
-        currentDate: Date
-    ) -> Date {
-        let calendar = Calendar.current
-        let currentYear = calendar.component(.year, from: currentDate)
-        let currentMonth = calendar.component(.month, from: currentDate)
-
-        switch tag.type {
-        case .year:
-            guard let tagDate = TagQueryOperations.date(for: tag) else {
-                return currentDate
-            }
-            let tagYear = calendar.component(.year, from: tagDate)
-            if tagYear == currentYear {
-                return currentDate
-            }
-            return tagDate
-        case .yearMonth:
-            guard let tagDate = TagQueryOperations.date(for: tag) else {
-                return currentDate
-            }
-            let tagYear = calendar.component(.year, from: tagDate)
-            let tagMonth = calendar.component(.month, from: tagDate)
-            if tagYear == currentYear, tagMonth == currentMonth {
-                return currentDate
-            }
-            return tagDate
-        case .content, .category, .debug, .none:
-            return currentDate
-        }
     }
 }
