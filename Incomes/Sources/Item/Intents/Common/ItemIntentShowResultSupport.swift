@@ -32,9 +32,9 @@ enum ItemIntentShowResultSupport {
     static func relativeSingleItem(
         modelContainer: ModelContainer,
         date: Date,
-        direction: ItemIntentRelativeItemSupport.Direction
+        direction: ItemRelativeQueryCoordinator.Direction
     ) throws -> some ProvidesDialog & ShowsSnippetView {
-        let item = try ItemIntentRelativeItemSupport.item(
+        let item = try ItemRelativeQueryCoordinator.item(
             context: modelContainer.mainContext,
             date: date,
             direction: direction
@@ -72,9 +72,9 @@ enum ItemIntentShowResultSupport {
     static func relativeItemList(
         modelContainer: ModelContainer,
         date: Date,
-        direction: ItemIntentRelativeItemSupport.Direction
+        direction: ItemRelativeQueryCoordinator.Direction
     ) throws -> some ProvidesDialog & ShowsSnippetView {
-        let items = try ItemIntentRelativeItemSupport.items(
+        let items = try ItemRelativeQueryCoordinator.items(
             context: modelContainer.mainContext,
             date: date,
             direction: direction
