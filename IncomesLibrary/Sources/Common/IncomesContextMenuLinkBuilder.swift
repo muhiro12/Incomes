@@ -1,8 +1,9 @@
 import Foundation
-import SwiftData
 
-enum IncomesContextMenuLinkBuilder {
-    static func preferredURL(
+/// Builds routes and URLs for context-menu link actions.
+public enum IncomesContextMenuLinkBuilder {
+    /// Returns the preferred deep link for `route`.
+    public static func preferredURL(
         for route: IncomesRoute?
     ) -> URL? {
         guard let route else {
@@ -11,7 +12,8 @@ enum IncomesContextMenuLinkBuilder {
         return IncomesDeepLinkURLBuilder.preferredURL(for: route)
     }
 
-    static func preferredURL(
+    /// Returns the preferred item deep link for `item`.
+    public static func preferredURL(
         for item: Item
     ) -> URL? {
         guard let itemID = try? PersistentIdentifierCoder.encode(item.id) else {
@@ -20,7 +22,8 @@ enum IncomesContextMenuLinkBuilder {
         return IncomesDeepLinkURLBuilder.preferredItemURL(for: itemID)
     }
 
-    static func yearRoute(
+    /// Returns the year route represented by a year tag.
+    public static func yearRoute(
         for tag: Tag
     ) -> IncomesRoute? {
         guard let year = yearValue(from: tag) else {
@@ -29,7 +32,8 @@ enum IncomesContextMenuLinkBuilder {
         return .year(year)
     }
 
-    static func yearSummaryRoute(
+    /// Returns the year summary route represented by a year tag.
+    public static func yearSummaryRoute(
         for tag: Tag
     ) -> IncomesRoute? {
         guard let year = yearValue(from: tag) else {
@@ -38,7 +42,8 @@ enum IncomesContextMenuLinkBuilder {
         return .yearSummary(year)
     }
 
-    static func monthRoute(
+    /// Returns the month route represented by a year-month tag.
+    public static func monthRoute(
         for tag: Tag
     ) -> IncomesRoute? {
         guard tag.type == .yearMonth,
