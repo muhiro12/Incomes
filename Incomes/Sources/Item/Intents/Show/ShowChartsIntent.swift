@@ -18,9 +18,14 @@ struct ShowChartsIntent: AppIntent {
 
     @MainActor
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
-        try ItemIntentShowResultSupport.datedChartList(
-            modelContainer: modelContainer,
+        let items = try ItemQueryOperations.items(
+            context: modelContainer.mainContext,
             date: date
+        )
+        return ItemIntentShowResultSupport.chartList(
+            items,
+            defaultDate: date,
+            modelContainer: modelContainer
         )
     }
 }

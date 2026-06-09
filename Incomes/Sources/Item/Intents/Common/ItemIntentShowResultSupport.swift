@@ -29,23 +29,6 @@ enum ItemIntentShowResultSupport {
     }
 
     @MainActor
-    static func relativeSingleItem(
-        modelContainer: ModelContainer,
-        date: Date,
-        direction: ItemRelativeQueryCoordinator.Direction
-    ) throws -> some ProvidesDialog & ShowsSnippetView {
-        let item = try ItemRelativeQueryCoordinator.item(
-            context: modelContainer.mainContext,
-            date: date,
-            direction: direction
-        )
-        return singleItem(
-            item,
-            defaultDate: date
-        )
-    }
-
-    @MainActor
     static func itemList(
         _ items: [Item],
         defaultDate: Date,
@@ -69,41 +52,6 @@ enum ItemIntentShowResultSupport {
     }
 
     @MainActor
-    static func relativeItemList(
-        modelContainer: ModelContainer,
-        date: Date,
-        direction: ItemRelativeQueryCoordinator.Direction
-    ) throws -> some ProvidesDialog & ShowsSnippetView {
-        let items = try ItemRelativeQueryCoordinator.items(
-            context: modelContainer.mainContext,
-            date: date,
-            direction: direction
-        )
-        return itemList(
-            items,
-            defaultDate: date,
-            modelContainer: modelContainer
-        )
-    }
-
-    @MainActor
-    static func datedItemList(
-        modelContainer: ModelContainer,
-        date: Date
-    ) throws -> some ProvidesDialog & ShowsSnippetView {
-        let items = try ItemQueryOperations.items(
-            context: modelContainer.mainContext,
-            date: date
-        )
-        return itemList(
-            items,
-            defaultDate: date,
-            modelContainer: modelContainer,
-            successOpenDate: date
-        )
-    }
-
-    @MainActor
     static func chartList(
         _ items: [Item],
         defaultDate: Date,
@@ -123,22 +71,6 @@ enum ItemIntentShowResultSupport {
             IntentChartSectionGroup(.items(.idsAre(items.map(\.id))))
                 .modelContainer(modelContainer)
         }
-    }
-
-    @MainActor
-    static func datedChartList(
-        modelContainer: ModelContainer,
-        date: Date
-    ) throws -> some ProvidesDialog & ShowsSnippetView {
-        let items = try ItemQueryOperations.items(
-            context: modelContainer.mainContext,
-            date: date
-        )
-        return chartList(
-            items,
-            defaultDate: date,
-            modelContainer: modelContainer
-        )
     }
 
     private static func itemContentDialog(for item: Item) -> IntentDialog {

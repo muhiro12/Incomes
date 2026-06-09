@@ -16,10 +16,15 @@ struct ShowRecentItemsIntent: AppIntent {
     @MainActor
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
         let date = Date.now
-        return try ItemIntentShowResultSupport.relativeItemList(
-            modelContainer: modelContainer,
+        let items = try ItemRelativeQueryCoordinator.items(
+            context: modelContainer.mainContext,
             date: date,
             direction: .previous
+        )
+        return ItemIntentShowResultSupport.itemList(
+            items,
+            defaultDate: date,
+            modelContainer: modelContainer
         )
     }
 }
