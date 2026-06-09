@@ -41,7 +41,10 @@ struct CreateAndShowItemIntent: AppIntent {
 
     @MainActor
     func perform() async throws -> some ProvidesDialog & ShowsSnippetView {
-        try validateFormInput()
+        try ItemIntentFormInputSupport.validate(
+            formInput: formInput,
+            contentParameter: $content
+        )
         try ItemIntentCurrencySupport.validate(
             income: income,
             incomeParameter: $income,
@@ -82,15 +85,5 @@ private extension CreateAndShowItemIntent {
             category: IncomesLogging.Category.reviewFlow,
             source: #fileID
         )
-    }
-
-    func validateFormInput() throws {
-        do {
-            try formInput.validate()
-        } catch ItemFormInput.ValidationError.contentIsEmpty {
-            throw $content.needsValueError()
-        } catch {
-            throw error
-        }
     }
 }

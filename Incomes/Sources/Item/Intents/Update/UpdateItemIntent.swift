@@ -40,7 +40,11 @@ struct UpdateItemIntent: AppIntent {
 
     @MainActor
     func perform() async throws -> some ReturnsValue<ItemEntity> {
-        try validateFormInput()
+        try ItemIntentFormInputSupport.validate(
+            formInput: formInput,
+            contentParameter: $content,
+            priorityParameter: $priority
+        )
         try ItemIntentCurrencySupport.validate(
             income: income,
             incomeParameter: $income,
@@ -77,17 +81,5 @@ private extension UpdateItemIntent {
             category: IncomesLogging.Category.reviewFlow,
             source: #fileID
         )
-    }
-
-    func validateFormInput() throws {
-        do {
-            try formInput.validate()
-        } catch ItemFormInput.ValidationError.contentIsEmpty {
-            throw $content.needsValueError()
-        } catch ItemFormInput.ValidationError.invalidPriority {
-            throw $priority.needsValueError()
-        } catch {
-            throw error
-        }
     }
 }
