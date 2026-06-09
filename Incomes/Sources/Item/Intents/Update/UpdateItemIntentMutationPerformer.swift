@@ -22,10 +22,7 @@ enum UpdateItemIntentMutationPerformer {
             logger: logger,
             reviewLogger: reviewLogger
         )
-        guard let entity = ItemEntity(item) else {
-            throw ItemError.entityConversionFailed
-        }
-        return entity
+        return try ItemEntity.make(from: item)
     }
     // swiftlint:enable function_parameter_count
 }

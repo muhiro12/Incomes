@@ -70,6 +70,13 @@ extension ItemEntity {
             netIncome: model.netIncome
         )
     }
+
+    static func make(from model: Item) throws -> ItemEntity {
+        guard let entity = ItemEntity(model) else {
+            throw ItemError.entityConversionFailed
+        }
+        return entity
+    }
 }
 
 extension ItemEntity {

@@ -59,10 +59,7 @@ struct CreateScheduledItemIntent: AppIntent {
             logger: intentLogger,
             reviewLogger: reviewLogger
         )
-        guard let entity = ItemEntity(item) else {
-            throw ItemError.entityConversionFailed
-        }
-        return .result(value: entity)
+        return .result(value: try ItemEntity.make(from: item))
     }
 }
 
