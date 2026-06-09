@@ -16,7 +16,7 @@ enum ItemInferenceService {
         locale: Locale,
         currentDate: Date,
         logger: MHLogger
-    ) async throws -> ItemFormInference {
+    ) async throws -> ItemFormInferenceResult {
         let languageCode = ItemFormInferencePromptBuilder.languageCode(for: locale)
         let metadata = IncomesLogging.metadata(
             ("language_code", languageCode),
@@ -43,7 +43,7 @@ enum ItemInferenceService {
             )
             let response = try await session.respond(
                 to: prompt,
-                generating: ItemFormInference.self
+                generating: ItemFormInferenceResult.self
             )
             logger.notice(
                 "inference.completed",

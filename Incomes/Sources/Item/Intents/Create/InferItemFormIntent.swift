@@ -19,7 +19,7 @@ struct InferItemFormIntent: AppIntent {
             currentDate: Date(),
             logger: intentLogger
         )
-        return .result(value: result)
+        return .result(value: .init(result: result))
     }
 }
 

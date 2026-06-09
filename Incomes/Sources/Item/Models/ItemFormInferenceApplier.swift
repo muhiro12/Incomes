@@ -17,18 +17,18 @@ enum ItemFormInferenceApplier {
         currentDate: Date,
         logger: MHLogger
     ) async throws -> ItemFormInput {
-        let inference = try await ItemInferenceService.inferForm(
+        let result = try await ItemInferenceService.inferForm(
             text: text,
             locale: locale,
             currentDate: currentDate,
             logger: logger
         )
         let update = ItemFormInferenceUpdate(
-            dateString: inference.date,
-            content: inference.content,
-            income: inference.income,
-            outgo: inference.outgo,
-            category: inference.category
+            dateString: result.date,
+            content: result.content,
+            income: result.income,
+            outgo: result.outgo,
+            category: result.category
         )
         let updatedInput = update.applied(to: currentInput)
         logger.notice(
