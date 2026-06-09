@@ -74,6 +74,16 @@ public enum ItemQueryOperations {
     public static func previousItemContent(context: ModelContext, date: Date) throws -> String? {
         try previousItemModel(context: context, date: date)?.content
     }
+
+    /// Convenience: returns the net income of the next item after `date`.
+    public static func nextItemNetIncome(context: ModelContext, date: Date) throws -> Decimal? {
+        try nextItemModel(context: context, date: date)?.netIncome
+    }
+
+    /// Convenience: returns the net income of the previous item before `date`.
+    public static func previousItemNetIncome(context: ModelContext, date: Date) throws -> Decimal? {
+        try previousItemModel(context: context, date: date)?.netIncome
+    }
 }
 
 private extension ItemQueryOperations {

@@ -19,10 +19,10 @@ struct GetPreviousItemNetIncomeIntent: AppIntent {
 
     @MainActor
     func perform() throws -> some ReturnsValue<IntentCurrencyAmount?> {
-        let netIncome = try ItemQueryOperations.previousItem(
+        let netIncome = try ItemQueryOperations.previousItemNetIncome(
             context: modelContainer.mainContext,
             date: date
-        )?.netIncome
+        )
         guard let netIncome else {
             return .result(value: nil)
         }

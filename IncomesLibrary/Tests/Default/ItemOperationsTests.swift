@@ -507,6 +507,37 @@ struct ItemOperationsTests { // swiftlint:disable:this type_body_length
     }
 
     @Test
+    func nextItemNetIncome_returns_next_item_net_income() throws {
+        _ = try createItem(
+            context: context,
+            date: shiftedDate("2000-01-01T12:00:00Z"),
+            content: "A",
+            income: 0,
+            outgo: 100,
+            category: "Test",
+            priority: 0,
+            repeatCount: 1
+        )
+        _ = try createItem(
+            context: context,
+            date: shiftedDate("2000-02-01T12:00:00Z"),
+            content: "B",
+            income: 500,
+            outgo: 200,
+            category: "Test",
+            priority: 0,
+            repeatCount: 1
+        )
+
+        let netIncome = try ItemQueryOperations.nextItemNetIncome(
+            context: context,
+            date: shiftedDate("2000-01-15T00:00:00Z")
+        )
+
+        #expect(netIncome == 300)
+    }
+
+    @Test
     func previousItemDate_returns_previous_local_date() throws {
         _ = try createItem(
             context: context,
@@ -584,6 +615,37 @@ struct ItemOperationsTests { // swiftlint:disable:this type_body_length
             date: shiftedDate("1999-01-01T00:00:00Z")
         )
         #expect(result == nil)
+    }
+
+    @Test
+    func previousItemNetIncome_returns_previous_item_net_income() throws {
+        _ = try createItem(
+            context: context,
+            date: shiftedDate("2000-01-01T12:00:00Z"),
+            content: "A",
+            income: 700,
+            outgo: 200,
+            category: "Test",
+            priority: 0,
+            repeatCount: 1
+        )
+        _ = try createItem(
+            context: context,
+            date: shiftedDate("2000-02-01T12:00:00Z"),
+            content: "B",
+            income: 0,
+            outgo: 100,
+            category: "Test",
+            priority: 0,
+            repeatCount: 1
+        )
+
+        let netIncome = try ItemQueryOperations.previousItemNetIncome(
+            context: context,
+            date: shiftedDate("2000-01-15T00:00:00Z")
+        )
+
+        #expect(netIncome == 500)
     }
 
     // MARK: - Update
