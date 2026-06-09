@@ -15,7 +15,7 @@ struct GenerateMonthlySummaryIntent: AppIntent {
     @MainActor
     func perform() async throws -> some ReturnsValue<String> {
         let summary = try await MonthlySummaryGenerator.generate(
-            modelContainer: modelContainer,
+            context: modelContainer.mainContext,
             date: date,
             currencyCode: MHPreferenceStore().string(
                 for: \.currencyCode,

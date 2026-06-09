@@ -11,15 +11,16 @@ import SwiftData
 
 @available(iOS 26.0, *)
 enum MonthlySummaryGenerator {
+    @MainActor
     static func generate(
-        modelContainer: ModelContainer,
+        context: ModelContext,
         date: Date,
         currencyCode: String,
         locale: Locale
     ) async throws -> String {
         let model = try availableModel(for: locale)
         let narrativeContext = try resolvedNarrativeContext(
-            modelContainer: modelContainer,
+            context: context,
             date: date,
             currencyCode: currencyCode
         )
@@ -97,11 +98,10 @@ private extension MonthlySummaryGenerator {
     }
 
     private static func resolvedNarrativeContext(
-        modelContainer: ModelContainer,
+        context: ModelContext,
         date: Date,
         currencyCode: String
     ) throws -> MonthlySummaryNarrativeBuilder.Context {
-        let context = ModelContext(modelContainer)
         do {
             return try MonthlySummaryNarrativeContextLoader.load(
                 context: context,

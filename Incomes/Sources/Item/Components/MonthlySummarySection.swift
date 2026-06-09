@@ -250,7 +250,7 @@ private extension MonthlySummarySection {
 
         do {
             let summary = try await MonthlySummaryGenerator.generate(
-                modelContainer: context.container,
+                context: context,
                 date: date,
                 currencyCode: currencyCode,
                 locale: locale
