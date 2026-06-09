@@ -28,9 +28,8 @@ Models.
 
 ### Capture and inference
 
-- Capture receipts through the photo library or camera, or dictate statements
-  with Speech Recognition, then run on-device VisionKit OCR to assemble a
-  transcript.
+- Capture receipts through the photo library or camera, then run on-device
+  VisionKit text recognition to assemble a transcript.
 - Use Apple Foundation Models to infer the date, amounts, and category that
   pre-populate the item form or App Intent output, respecting the user’s
   locale.

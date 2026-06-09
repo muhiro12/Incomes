@@ -6,8 +6,8 @@
 
 ## Highlights
 
-- 📸 **Intelligent capture** – scan receipts with VisionKit, dictate with
-  SpeechKit or import photos, then let Foundation Models infer the form for you.
+- 📸 **Intelligent capture** – scan receipts or import photos with VisionKit,
+  then let Foundation Models infer the form for you.
 - 🧮 **Powerful logging** – handle recurring items, tags and balance
   calculations with one tap.
 - 📈 **Search & insights** – drill into months and categories with Swift Charts
