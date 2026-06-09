@@ -130,6 +130,20 @@ public enum SummaryCalculator {
             return left.category < right.category
         }
     }
+
+    /// Returns total income for the provided items.
+    public static func totalIncome(for items: [Item]) -> Decimal {
+        items.reduce(.zero) { result, item in
+            result + item.income
+        }
+    }
+
+    /// Returns total outgo for the provided items.
+    public static func totalOutgo(for items: [Item]) -> Decimal {
+        items.reduce(.zero) { result, item in
+            result + item.outgo
+        }
+    }
 }
 
 private extension SummaryCalculator {
