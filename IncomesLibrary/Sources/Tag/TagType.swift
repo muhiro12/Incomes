@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum TagType: String, CaseIterable {
+public enum TagType: String, CaseIterable, Sendable {
     case year = "aae8af65"
     case yearMonth = "27c9be4b"
     case content = "e2d390d9"

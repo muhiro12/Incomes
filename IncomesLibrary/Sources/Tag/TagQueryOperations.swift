@@ -10,13 +10,20 @@ public enum TagQueryOperations {
 
     /// Loads a `Tag` by Base64-encoded persistent identifier.
     public static func getByID(context: ModelContext, id: String) throws -> Tag? {
-        let persistentID = try PersistentIdentifier(base64Encoded: id)
+        let persistentID = try PersistentIdentifierCoder.decode(id)
         guard let tag = try context.fetchFirst(
             .tags(.idIs(persistentID))
         ) else {
             return nil
         }
         return tag
+    }
+
+    /// Loads tags by Base64-encoded persistent identifiers.
+    public static func getByIDs(context: ModelContext, ids: [String]) throws -> [Tag] {
+        try ids.compactMap { id in
+            try getByID(context: context, id: id)
+        }
     }
 
     /// Finds a tag by name and type.
@@ -27,6 +34,22 @@ public enum TagQueryOperations {
     ) throws -> Tag? {
         try context.fetchFirst(
             .tags(.nameIs(name, type: type))
+        )
+    }
+
+    /// Returns one representative tag for each user-facing tag type.
+    public static func representativeTags(context: ModelContext) throws -> [Tag] {
+        try representativeTags(in: getAll(context: context))
+    }
+
+    /// Returns one representative matching tag for each user-facing tag type.
+    public static func representativeTags(
+        context: ModelContext,
+        matching query: String
+    ) throws -> [Tag] {
+        try representativeTags(
+            in: getAll(context: context),
+            matching: query
         )
     }
 
@@ -190,6 +213,54 @@ public enum TagQueryOperations {
 }
 
 private extension TagQueryOperations {
+    static let representativeTagTypes: [TagType] = [
+        .year,
+        .yearMonth,
+        .content,
+        .category
+    ]
+
+    static func representativeTags(
+        in tags: [Tag],
+        matching query: String? = nil
+    ) -> [Tag] {
+        representativeTagTypes.compactMap { type in
+            tags.first { tag in
+                isRepresentativeMatch(
+                    tag: tag,
+                    type: type,
+                    query: query
+                )
+            }
+        }
+    }
+
+    static func isRepresentativeMatch(
+        tag: Tag,
+        type: TagType,
+        query: String?
+    ) -> Bool {
+        guard tag.type == type else {
+            return false
+        }
+        guard let query else {
+            return true
+        }
+        return matches(tag: tag, query: query)
+    }
+
+    static func matches(tag: Tag, query: String) -> Bool {
+        TagTextSupport.matchesStoredName(
+            tag.name,
+            query: query
+        )
+        || TagTextSupport.matchesDisplayName(
+            name: tag.name,
+            type: tag.type,
+            query: query
+        )
+    }
+
     static func directItems(for tag: Tag) -> [Item] {
         tag.items.orEmpty.filter { item in
             item.isDeleted == false

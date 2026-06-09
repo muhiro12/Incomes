@@ -13,67 +13,27 @@ struct TagEntityQuery: EntityStringQuery {
 
     @MainActor
     func entities(for identifiers: [TagEntity.ID]) throws -> [TagEntity] {
-        try identifiers.compactMap { id in
-            guard let tag = try TagQueryOperations.getByID(
-                context: modelContainer.mainContext,
-                id: id
-            ) else {
-                return nil
-            }
-            return .init(tag)
-        }
+        try TagQueryOperations.getByIDs(
+            context: modelContainer.mainContext,
+            ids: identifiers
+        )
+        .compactMap(TagEntity.init)
     }
 
     @MainActor
     func entities(matching string: String) throws -> [TagEntity] {
-        let tags = try TagQueryOperations.getAll(context: modelContainer.mainContext)
-        return [
-            TagType.year,
-            .yearMonth,
-            .content,
-            .category
-        ]
-        .compactMap { type in
-            guard let tag = tags.first(
-                where: { item in
-                    item.type == type
-                        && (
-                            TagTextSupport.matchesStoredName(
-                                item.name,
-                                query: string
-                            )
-                            || TagTextSupport.matchesDisplayName(
-                                name: item.name,
-                                type: item.type,
-                                query: string
-                            )
-                        )
-                }
-            ) else {
-                return nil
-            }
-            return .init(tag)
-        }
+        try TagQueryOperations.representativeTags(
+            context: modelContainer.mainContext,
+            matching: string
+        )
+        .compactMap(TagEntity.init)
     }
 
     @MainActor
     func suggestedEntities() throws -> [TagEntity] {
-        let tags = try TagQueryOperations.getAll(context: modelContainer.mainContext)
-        return [
-            TagType.year,
-            .yearMonth,
-            .content,
-            .category
-        ]
-        .compactMap { type in
-            guard let tag = tags.first(
-                where: { item in
-                    item.type == type
-                }
-            ) else {
-                return nil
-            }
-            return .init(tag)
-        }
+        try TagQueryOperations.representativeTags(
+            context: modelContainer.mainContext
+        )
+        .compactMap(TagEntity.init)
     }
 }
