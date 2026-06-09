@@ -3,6 +3,18 @@ import SwiftData
 
 /// Domain operations for yearly item duplication selections and suggestions.
 public enum YearlyItemDuplicationSelectionOperations {
+    /// Returns source years extracted from persisted year tags, or `currentYear` when none exist.
+    public static func availableSourceYears(
+        context: ModelContext,
+        currentYear: Int = Calendar.current.component(.year, from: .now)
+    ) throws -> [Int] {
+        let yearTags = try context.fetch(.tags(.typeIs(.year), order: .reverse))
+        return availableSourceYears(
+            from: yearTags,
+            currentYear: currentYear
+        )
+    }
+
     /// Returns source years extracted from `yearTags`, or `currentYear` when none exist.
     public static func availableSourceYears(
         from yearTags: [Tag],
@@ -65,6 +77,23 @@ public enum YearlyItemDuplicationSelectionOperations {
         return .init(
             sourceYear: sourceYear,
             targetYear: targetYear
+        )
+    }
+
+    /// Builds a suggested source and target year pair from available year tags.
+    public static func suggestion(
+        context: ModelContext,
+        targetYears: [Int],
+        minimumGroupCount: Int,
+        options: YearlyItemDuplicationOptions = .init()
+    ) throws -> YearlyItemDuplicationSuggestion? {
+        let yearTags = try context.fetch(.tags(.typeIs(.year), order: .reverse))
+        return suggestion(
+            context: context,
+            yearTags: yearTags,
+            targetYears: targetYears,
+            minimumGroupCount: minimumGroupCount,
+            options: options
         )
     }
 

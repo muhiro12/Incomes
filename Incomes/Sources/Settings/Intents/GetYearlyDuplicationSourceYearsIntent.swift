@@ -8,10 +8,9 @@ struct GetYearlyDuplicationSourceYearsIntent: AppIntent {
 
     @MainActor
     func perform() throws -> some ReturnsValue<[Int]> {
-        let yearTags = try modelContainer.mainContext.fetch(.tags(.typeIs(.year)))
-        return .result(
-            value: YearlyItemDuplicationSelectionOperations.availableSourceYears(
-                from: yearTags
+        .result(
+            value: try YearlyItemDuplicationSelectionOperations.availableSourceYears(
+                context: modelContainer.mainContext
             )
         )
     }

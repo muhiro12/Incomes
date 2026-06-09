@@ -17,11 +17,9 @@ struct SuggestYearlyDuplicationIntent: AppIntent {
 
     @MainActor
     func perform() throws -> some ReturnsValue<String?> {
-        let yearTags = try modelContainer.mainContext.fetch(.tags(.typeIs(.year)))
         let targetYears = YearlyItemDuplicationSelectionOperations.targetYears()
-        let suggestion = YearlyItemDuplicationSelectionOperations.suggestion(
+        let suggestion = try YearlyItemDuplicationSelectionOperations.suggestion(
             context: modelContainer.mainContext,
-            yearTags: yearTags,
             targetYears: targetYears,
             minimumGroupCount: minimumGroupCount,
             options: duplicationOptions
