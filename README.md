@@ -150,7 +150,7 @@ Follow these steps to run a local build:
    `Incomes/Sources/Common/Platform/IncomesMonetizationConfiguration.swift`.
 4. Open `Incomes.xcodeproj` in Xcode, select the **Incomes** scheme, and run on
    an iOS 18 or later simulator or device. Use an iOS 26 or later destination
-   when testing Foundation Models features. Enable the **IncomesWatch** and
+   when testing Foundation Models features. Enable the **Watch** and
    **Widgets** schemes if you want to test the companion experiences.
 
 ### Remote configuration
