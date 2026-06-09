@@ -38,8 +38,8 @@
    on an iOS 18 or later simulator or device. Use an iOS 26 or later
    destination when testing Foundation Models features.
 
-See the [README](../../README.md) for detailed setup instructions, testing
-commands and remote configuration notes.
+See the [README](https://github.com/muhiro12/Incomes#readme) for detailed setup
+instructions, testing commands and remote configuration notes.
 
 ## Links
 
