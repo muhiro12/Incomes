@@ -54,7 +54,9 @@ struct CreateScheduledItemIntent: AppIntent {
         let entity = try await ItemIntentMutationSupport.createScheduledEntity(
             context: modelContainer.mainContext,
             input: formInput,
-            repeatMonthSelections: try parsedRepeatMonthSelections(),
+            repeatMonthSelections: try ItemIntentFormInputSupport.repeatMonthSelections(
+                from: repeatMonths
+            ),
             notificationService: notificationService,
             logger: intentLogger,
             reviewLogger: reviewLogger
@@ -76,13 +78,5 @@ private extension CreateScheduledItemIntent {
             logging: logging,
             source: #fileID
         )
-    }
-
-    func parsedRepeatMonthSelections() throws -> Set<RepeatMonthSelection> {
-        do {
-            return try RepeatMonthSelectionParser.parse(repeatMonths)
-        } catch RepeatMonthSelectionParser.ParserError.invalidToken {
-            throw ItemError.invalidRepeatMonthSelections
-        }
     }
 }
