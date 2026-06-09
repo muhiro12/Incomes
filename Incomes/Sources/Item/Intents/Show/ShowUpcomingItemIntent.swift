@@ -16,9 +16,10 @@ struct ShowUpcomingItemIntent: AppIntent {
     @MainActor
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
         let date = Date.now
-        let item = try ItemQueryOperations.nextItem(
+        let item = try ItemIntentRelativeItemSupport.item(
             context: modelContainer.mainContext,
-            date: date
+            date: date,
+            direction: .next
         )
         return ItemIntentShowResultSupport.singleItem(
             item,

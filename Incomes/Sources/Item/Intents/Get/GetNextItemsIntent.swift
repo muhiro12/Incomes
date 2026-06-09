@@ -18,9 +18,10 @@ struct GetNextItemsIntent: AppIntent {
 
     @MainActor
     func perform() throws -> some ReturnsValue<[ItemEntity]> {
-        let items = try ItemQueryOperations.nextItems(
+        let items = try ItemIntentRelativeItemSupport.items(
             context: modelContainer.mainContext,
-            date: date
+            date: date,
+            direction: .next
         )
         return .result(
             value: try ItemIntentEntitySupport.entities(from: items)

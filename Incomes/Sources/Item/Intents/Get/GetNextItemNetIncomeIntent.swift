@@ -18,9 +18,10 @@ struct GetNextItemNetIncomeIntent: AppIntent {
 
     @MainActor
     func perform() throws -> some ReturnsValue<IntentCurrencyAmount?> {
-        let item = try ItemQueryOperations.nextItem(
+        let item = try ItemIntentRelativeItemSupport.item(
             context: modelContainer.mainContext,
-            date: date
+            date: date,
+            direction: .next
         )
         return .result(
             value: ItemIntentCurrencySupport.amount(from: item?.netIncome)
