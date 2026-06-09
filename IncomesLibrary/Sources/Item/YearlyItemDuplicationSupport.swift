@@ -57,10 +57,7 @@ enum YearlyItemDuplicationSupport {
     }
 
     static func decimalString(from value: Decimal) -> String {
-        var source = value
-        var rounded = Decimal.zero
-        NSDecimalRound(&rounded, &source, 0, .down)
-        return rounded.description
+        YearlyItemDuplicationPresentationBuilder.decimalString(from: value)
     }
 
     static func yearValue(from tag: Tag) -> Int? {

@@ -140,7 +140,7 @@ private extension YearlyDuplicationPromoSection {
     }
 
     func proposalDatesText(for proposal: YearlyItemDuplicationGroup) -> String.LocalizationValue {
-        "Dates: \(YearlyDuplicationCoordinator.monthDayListText(for: proposal))"
+        "Dates: \(YearlyItemDuplicationPresentationBuilder.monthDayListText(for: proposal))"
     }
 
     @MainActor

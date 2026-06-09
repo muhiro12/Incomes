@@ -190,41 +190,4 @@ enum YearlyDuplicationCoordinator {
         }
         return randomValue == 0
     }
-
-    static func monthDayListText(
-        for group: YearlyItemDuplicationGroup
-    ) -> String {
-        let calendar = Calendar.current
-        let monthDays = group.targetDates.map { date in
-            MonthDay(
-                month: calendar.component(.month, from: date),
-                day: calendar.component(.day, from: date)
-            )
-        }
-        let sortedMonthDays = Array(Set(monthDays)).sorted { left, right in
-            if left.month != right.month {
-                return left.month < right.month
-            }
-            return left.day < right.day
-        }
-        return sortedMonthDays
-            .map { monthDay in
-                "\(monthDay.month)/\(monthDay.day)"
-            }
-            .joined(separator: ", ")
-    }
-
-    static func decimalString(from value: Decimal) -> String {
-        var source = value
-        var rounded = Decimal.zero
-        NSDecimalRound(&rounded, &source, 0, .down)
-        return rounded.description
-    }
-}
-
-private extension YearlyDuplicationCoordinator {
-    struct MonthDay: Hashable {
-        let month: Int
-        let day: Int
-    }
 }

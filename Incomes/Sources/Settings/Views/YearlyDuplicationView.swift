@@ -79,7 +79,7 @@ struct YearlyDuplicationView: View {
                             }
                             Text(
                                 String(
-                                    localized: "Dates: \(YearlyDuplicationCoordinator.monthDayListText(for: group))"
+                                    localized: "Dates: \(YearlyItemDuplicationPresentationBuilder.monthDayListText(for: group))" // swiftlint:disable:this line_length
                                 )
                             )
                             .font(.footnote)
@@ -89,14 +89,14 @@ struct YearlyDuplicationView: View {
                                 .foregroundStyle(.secondary)
                             Text(
                                 String(
-                                    localized: "Income: \(YearlyDuplicationCoordinator.decimalString(from: group.averageIncome))" // swiftlint:disable:this line_length
+                                    localized: "Income: \(YearlyItemDuplicationPresentationBuilder.decimalString(from: group.averageIncome))" // swiftlint:disable:this line_length
                                 )
                             )
                             .font(.footnote)
                             .foregroundStyle(.secondary)
                             Text(
                                 String(
-                                    localized: "Outgo: \(YearlyDuplicationCoordinator.decimalString(from: group.averageOutgo))" // swiftlint:disable:this line_length
+                                    localized: "Outgo: \(YearlyItemDuplicationPresentationBuilder.decimalString(from: group.averageOutgo))" // swiftlint:disable:this line_length
                                 )
                             )
                             .font(.footnote)
@@ -406,10 +406,10 @@ private extension YearlyDuplicationView {
         [
             group.content,
             group.category.isNotEmpty ? group.category : nil,
-            "Dates: \(YearlyDuplicationCoordinator.monthDayListText(for: group))",
+            "Dates: \(YearlyItemDuplicationPresentationBuilder.monthDayListText(for: group))",
             "Items: \(group.entryCount)",
-            "Income: \(YearlyDuplicationCoordinator.decimalString(from: group.averageIncome))",
-            "Outgo: \(YearlyDuplicationCoordinator.decimalString(from: group.averageOutgo))"
+            "Income: \(YearlyItemDuplicationPresentationBuilder.decimalString(from: group.averageIncome))",
+            "Outgo: \(YearlyItemDuplicationPresentationBuilder.decimalString(from: group.averageOutgo))"
         ]
         .compactMap(\.self)
         .joined(separator: "\n")
