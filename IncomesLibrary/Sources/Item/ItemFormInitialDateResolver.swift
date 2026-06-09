@@ -1,9 +1,9 @@
 import Foundation
 
 /// Resolves the initial item form date from a tag context.
-public enum ItemFormInitialDateResolver {
+enum ItemFormInitialDateResolver {
     /// Returns the date that should initialize the form for `tag`.
-    public static func date(
+    static func date(
         for tag: Tag,
         currentDate: Date
     ) -> Date {
