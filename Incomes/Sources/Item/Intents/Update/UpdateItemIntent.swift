@@ -52,16 +52,18 @@ struct UpdateItemIntent: AppIntent {
             )
         )
 
-        let entity = try await ItemIntentMutationSupport.updateEntity(
-            context: modelContainer.mainContext,
-            item: item,
-            input: formInput,
+        let context = modelContainer.mainContext
+        let model = try item.model(in: context)
+        try await ItemFormSaveCoordinator.save(
             scope: scope.scope,
+            context: context,
+            item: model,
+            formInputData: formInput,
             notificationService: notificationService,
             logger: intentLogger,
             reviewLogger: reviewLogger
         )
-        return .result(value: entity)
+        return .result(value: try ItemEntity.make(from: model))
     }
 }
 

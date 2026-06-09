@@ -51,7 +51,7 @@ struct CreateScheduledItemIntent: AppIntent {
             )
         )
 
-        let entity = try await ItemIntentMutationSupport.createScheduledEntity(
+        let item = try await ItemCreateCoordinator.create(
             context: modelContainer.mainContext,
             input: formInput,
             repeatMonthSelections: try ItemIntentFormInputSupport.repeatMonthSelections(
@@ -61,7 +61,7 @@ struct CreateScheduledItemIntent: AppIntent {
             logger: intentLogger,
             reviewLogger: reviewLogger
         )
-        return .result(value: entity)
+        return .result(value: try ItemEntity.make(from: item))
     }
 }
 

@@ -52,7 +52,7 @@ struct CreateAndShowItemIntent: AppIntent {
             )
         )
 
-        let item = try await ItemIntentMutationSupport.createModel(
+        let item = try await ItemCreateCoordinator.create(
             context: modelContainer.mainContext,
             input: formInput,
             repeatCount: repeatCount,
