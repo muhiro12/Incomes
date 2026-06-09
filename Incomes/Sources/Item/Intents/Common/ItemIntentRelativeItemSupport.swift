@@ -1,4 +1,3 @@
-import AppIntents
 import Foundation
 import SwiftData
 
@@ -98,16 +97,16 @@ enum ItemIntentRelativeItemSupport {
         return item?.localDate
     }
 
-    static func netIncomeAmount(
+    static func netIncome(
         context: ModelContext,
         date: Date,
         direction: Direction
-    ) throws -> IntentCurrencyAmount? {
+    ) throws -> Decimal? {
         let item = try item(
             context: context,
             date: date,
             direction: direction
         )
-        return ItemIntentCurrencySupport.amount(from: item?.netIncome)
+        return item?.netIncome
     }
 }
