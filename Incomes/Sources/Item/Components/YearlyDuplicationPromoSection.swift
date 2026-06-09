@@ -194,8 +194,7 @@ private extension YearlyDuplicationPromoSection {
         }
 
         if let result = YearlyDuplicationCoordinator.promoState(
-            context: context,
-            yearTags: yearTags
+            context: context
         ) {
             guard generation == promoLoadGeneration, !Task.isCancelled else {
                 return

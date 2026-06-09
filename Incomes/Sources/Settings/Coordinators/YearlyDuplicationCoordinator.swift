@@ -215,14 +215,12 @@ enum YearlyDuplicationCoordinator { // swiftlint:disable:this type_body_length
 
     static func promoState(
         context: ModelContext,
-        yearTags: [Tag],
         currentYear: Int = Calendar.current.component(.year, from: .now)
     ) -> PromoState? {
         let targetYears = targetYears(currentYear: currentYear)
         guard
-            let suggestion = YearlyItemDuplicationSelectionOperations.suggestion(
+            let suggestion = try? YearlyItemDuplicationSelectionOperations.suggestion(
                 context: context,
-                yearTags: yearTags,
                 targetYears: targetYears,
                 minimumGroupCount: 3 // swiftlint:disable:this no_magic_numbers
             ),
