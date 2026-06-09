@@ -126,4 +126,27 @@ struct ItemFormInputTests {
         #expect(input.category == "Service")
         #expect(input.priorityText == "0")
     }
+
+    @Test
+    func init_with_item_maps_values_and_hides_zero_amounts() throws {
+        let context = testContext
+        let item = try createItem(
+            context: context,
+            date: shiftedDate("2026-01-10T12:00:00Z"),
+            content: "Subscription",
+            income: 0,
+            outgo: 250,
+            category: "Service",
+            priority: 3
+        )
+
+        let input = ItemFormInput(item: item)
+
+        #expect(input.date == item.localDate)
+        #expect(input.content == "Subscription")
+        #expect(input.incomeText.isEmpty)
+        #expect(input.outgoText == "250")
+        #expect(input.category == "Service")
+        #expect(input.priorityText == "3")
+    }
 }

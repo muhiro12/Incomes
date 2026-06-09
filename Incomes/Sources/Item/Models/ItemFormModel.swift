@@ -83,15 +83,7 @@ extension ItemFormModel {
         }
 
         if let item {
-            date = item.localDate
-            content = item.content
-            priority = "\(item.priority)"
-            income = item.income.isNotZero ? item.income.description : .empty
-            outgo = item.outgo.isNotZero ? item.outgo.description : .empty
-            category = CategoryNameSupport.displayName(
-                forStoredName: item.category?.name
-            )
-            syncRepeatMonthSelectionsWithBaseDate()
+            apply(ItemFormInput(item: item))
             return
         }
 

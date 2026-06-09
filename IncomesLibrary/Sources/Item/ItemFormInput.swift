@@ -56,6 +56,20 @@ public struct ItemFormInput {
         )
     }
 
+    /// Creates an item form input snapshot from an existing item.
+    public init(item: Item) { // swiftlint:disable:this type_contents_order
+        self.init(
+            date: item.localDate,
+            content: item.content,
+            incomeText: item.income.isNotZero ? item.income.description : .empty,
+            outgoText: item.outgo.isNotZero ? item.outgo.description : .empty,
+            category: CategoryNameSupport.displayName(
+                forStoredName: item.category?.name
+            ),
+            priorityText: "\(item.priority)"
+        )
+    }
+
     /// True when all form values pass `validate()`.
     public var isValid: Bool {
         (try? validate()) != nil
