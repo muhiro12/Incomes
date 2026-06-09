@@ -18,12 +18,11 @@ struct GetItemsIntent: AppIntent {
 
     @MainActor
     func perform() throws -> some ReturnsValue<[ItemEntity]> {
-        let items = try ItemQueryOperations.items(
-            context: modelContainer.mainContext,
-            date: date
-        )
-        return .result(
-            value: try ItemIntentEntitySupport.entities(from: items)
+        .result(
+            value: try ItemIntentGetValueSupport.entities(
+                context: modelContainer.mainContext,
+                date: date
+            )
         )
     }
 }

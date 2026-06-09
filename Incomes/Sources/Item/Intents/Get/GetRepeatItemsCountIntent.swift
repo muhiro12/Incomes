@@ -14,9 +14,11 @@ struct GetRepeatItemsCountIntent: AppIntent {
         guard let uuid = UUID(uuidString: repeatID) else {
             throw $repeatID.needsValueError()
         }
-        return .result(value: try ItemQueryOperations.repeatItemsCount(
-            context: modelContainer.mainContext,
-            repeatID: uuid
-        ))
+        return .result(
+            value: try ItemIntentGetValueSupport.repeatItemsCount(
+                context: modelContainer.mainContext,
+                repeatID: uuid
+            )
+        )
     }
 }

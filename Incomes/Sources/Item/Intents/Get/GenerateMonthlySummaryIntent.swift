@@ -13,10 +13,9 @@ struct GenerateMonthlySummaryIntent: AppIntent {
 
     @MainActor
     func perform() async throws -> some ReturnsValue<String> {
-        let summary = try await MonthlySummaryGenerator.generate(
+        let summary = try await ItemIntentGetValueSupport.monthlySummary(
             context: modelContainer.mainContext,
             date: date,
-            currencyCode: ItemIntentCurrencySupport.preferredCurrencyCode(),
             locale: .current
         )
         return .result(value: summary)
