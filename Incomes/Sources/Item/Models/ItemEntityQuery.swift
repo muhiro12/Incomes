@@ -13,30 +13,27 @@ struct ItemEntityQuery: EntityStringQuery {
 
     @MainActor
     func entities(for identifiers: [ItemEntity.ID]) throws -> [ItemEntity] {
-        try modelContainer.mainContext.fetch(
-            .items(
-                .idsAre(
-                    identifiers.map { identifier in
-                        try .init(base64Encoded: identifier)
-                    }
-                )
-            )
+        try ItemQueryOperations.items(
+            context: modelContainer.mainContext,
+            encodedIdentifiers: identifiers
         )
         .compactMap(ItemEntity.init)
     }
 
     @MainActor
     func entities(matching string: String) throws -> [ItemEntity] {
-        try modelContainer.mainContext.fetch(
-            .items(.contentContains(string))
+        try ItemQueryOperations.items(
+            context: modelContainer.mainContext,
+            matchingContent: string
         )
         .compactMap(ItemEntity.init)
     }
 
     @MainActor
     func suggestedEntities() throws -> [ItemEntity] {
-        try modelContainer.mainContext.fetch(
-            .items(.dateIsSameMonthAs(.now))
+        try ItemQueryOperations.items(
+            context: modelContainer.mainContext,
+            date: .now
         )
         .compactMap(ItemEntity.init)
     }

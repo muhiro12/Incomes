@@ -25,6 +25,27 @@ public enum ItemQueryOperations {
         )
     }
 
+    /// Returns items matching Base64-encoded persistent identifiers.
+    public static func items(
+        context: ModelContext,
+        encodedIdentifiers: [String]
+    ) throws -> [Item] {
+        let identifiers = try encodedIdentifiers.map(PersistentIdentifierCoder.decode)
+        return try context.fetch(
+            .items(.idsAre(identifiers))
+        )
+    }
+
+    /// Returns items whose content contains `string`.
+    public static func items(
+        context: ModelContext,
+        matchingContent string: String
+    ) throws -> [Item] {
+        try context.fetch(
+            .items(.contentContains(string))
+        )
+    }
+
     /// Returns the next item on or after `date`.
     public static func nextItem(context: ModelContext, date: Date) throws -> Item? {
         try nextItemModel(context: context, date: date)
