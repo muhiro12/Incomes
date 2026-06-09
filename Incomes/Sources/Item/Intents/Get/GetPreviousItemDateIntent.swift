@@ -18,13 +18,12 @@ struct GetPreviousItemDateIntent: AppIntent {
 
     @MainActor
     func perform() throws -> some ReturnsValue<Date?> {
-        let item = try ItemIntentRelativeItemSupport.item(
-            context: modelContainer.mainContext,
-            date: date,
-            direction: .previous
-        )
-        return .result(
-            value: item?.localDate
+        .result(
+            value: try ItemIntentRelativeItemSupport.localDate(
+                context: modelContainer.mainContext,
+                date: date,
+                direction: .previous
+            )
         )
     }
 }
