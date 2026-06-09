@@ -27,4 +27,16 @@ public struct ItemFormInferenceUpdate {
         self.outgoText = outgoText
         self.category = category
     }
+
+    /// Applies the inferred values to the current form input.
+    public func applied(to currentInput: ItemFormInput) -> ItemFormInput {
+        .init(
+            date: date ?? currentInput.date,
+            content: content,
+            incomeText: incomeText,
+            outgoText: outgoText,
+            category: category,
+            priorityText: currentInput.priorityText
+        )
+    }
 }

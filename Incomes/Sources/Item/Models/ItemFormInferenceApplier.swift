@@ -26,10 +26,7 @@ enum ItemFormInferenceApplier {
             outgo: inference.outgo,
             category: inference.category
         )
-        let updatedInput = apply(
-            update: update,
-            to: currentInput
-        )
+        let updatedInput = update.applied(to: currentInput)
         logger.notice(
             "inference.apply_completed",
             metadata: IncomesLogging.metadata(
@@ -41,17 +38,5 @@ enum ItemFormInferenceApplier {
             )
         )
         return updatedInput
-    }
-
-    static func apply(update: ItemFormInferenceUpdate, to currentInput: ItemFormInput) -> ItemFormInput {
-        let resolvedDate = update.date ?? currentInput.date
-        return .init(
-            date: resolvedDate,
-            content: update.content,
-            incomeText: update.incomeText,
-            outgoText: update.outgoText,
-            category: update.category,
-            priorityText: currentInput.priorityText
-        )
     }
 }
