@@ -2,10 +2,10 @@ import Foundation
 @testable import IncomesLibrary
 import Testing
 
-struct ItemFormInferenceMapperTests {
+struct ItemFormInferenceUpdateTests {
     @Test
-    func map_converts_fields_into_update() {
-        let update = ItemFormInferenceMapper.map(
+    func init_with_date_string_converts_fields_into_update() {
+        let update = ItemFormInferenceUpdate(
             dateString: "20250102",
             content: "Content",
             income: 100,
@@ -14,7 +14,7 @@ struct ItemFormInferenceMapperTests {
         )
 
         if update.date?.stringValueWithoutLocale(.yyyyMMdd) != "20250102" {
-            print("ItemFormInferenceMapperTests diagnostics: rawDateString=20250102")
+            print("ItemFormInferenceUpdateTests diagnostics: rawDateString=20250102")
             print("  update.date=\(String(describing: update.date))")
             if let date = update.date {
                 print("  formatted=\(date.stringValueWithoutLocale(.yyyyMMdd))")

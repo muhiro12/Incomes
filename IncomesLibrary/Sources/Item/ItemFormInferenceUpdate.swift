@@ -45,6 +45,23 @@ public struct ItemFormInferenceUpdate {
         )
     }
 
+    /// Creates an inferred item form update from generated date text and typed amount values.
+    public init(
+        dateString: String,
+        content: String,
+        income: Decimal,
+        outgo: Decimal,
+        category: String
+    ) {
+        self.init(
+            date: dateString.dateValueWithoutLocale(.yyyyMMdd),
+            content: content,
+            income: income,
+            outgo: outgo,
+            category: category
+        )
+    }
+
     /// Applies the inferred values to the current form input.
     public func applied(to currentInput: ItemFormInput) -> ItemFormInput {
         .init(

@@ -23,7 +23,7 @@ enum ItemFormInferenceApplier {
             currentDate: currentDate,
             logger: logger
         )
-        let update = ItemFormInferenceMapper.map(
+        let update = ItemFormInferenceUpdate(
             dateString: inference.date,
             content: inference.content,
             income: inference.income,
