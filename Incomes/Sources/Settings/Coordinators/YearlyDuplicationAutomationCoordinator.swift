@@ -1,6 +1,6 @@
 import SwiftData
 
-enum YearlyDuplicationIntentSupport {
+enum YearlyDuplicationAutomationCoordinator {
     struct ApplyResult {
         let createdCount: Int
         let groupCount: Int

@@ -10,7 +10,7 @@ struct GetYearlyDuplicationTargetYearsIntent: AppIntent {
 
     func perform() -> some ReturnsValue<[Int]> {
         .result(
-            value: YearlyDuplicationIntentSupport.targetYears(
+            value: YearlyDuplicationAutomationCoordinator.targetYears(
                 currentYear: currentYear,
                 range: range
             )

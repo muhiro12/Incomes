@@ -18,7 +18,7 @@ struct SuggestYearlyDuplicationIntent: AppIntent {
     @MainActor
     func perform() throws -> some ReturnsValue<String?> {
         .result(
-            value: try YearlyDuplicationIntentSupport.suggestionText(
+            value: try YearlyDuplicationAutomationCoordinator.suggestionText(
                 context: modelContainer.mainContext,
                 minimumGroupCount: minimumGroupCount,
                 options: duplicationOptions
@@ -29,7 +29,7 @@ struct SuggestYearlyDuplicationIntent: AppIntent {
 
 private extension SuggestYearlyDuplicationIntent {
     var duplicationOptions: YearlyItemDuplicationOptions {
-        YearlyDuplicationIntentSupport.options(
+        YearlyDuplicationAutomationCoordinator.options(
             includeSingleItems: includeSingleItems,
             minimumRepeatItemCount: minimumRepeatItemCount,
             skipExistingItems: skipExistingItems
