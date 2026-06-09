@@ -50,6 +50,36 @@ struct ItemFormInferenceUpdateTests {
     }
 
     @Test
+    func init_with_invalid_date_string_keeps_current_date_when_applied() {
+        let currentDate = Date(timeIntervalSince1970: 1_000)
+        let currentInput = ItemFormInput(
+            date: currentDate,
+            content: "Old content",
+            incomeText: "10",
+            outgoText: "20",
+            category: "Old",
+            priorityText: "3"
+        )
+        let update = ItemFormInferenceUpdate(
+            dateString: "invalid",
+            content: "New content",
+            income: 100,
+            outgo: 50,
+            category: "New"
+        )
+
+        let result = update.applied(to: currentInput)
+
+        #expect(update.date == nil)
+        #expect(result.date == currentDate)
+        #expect(result.content == "New content")
+        #expect(result.incomeText == "100")
+        #expect(result.outgoText == "50")
+        #expect(result.category == "New")
+        #expect(result.priorityText == "3")
+    }
+
+    @Test
     func update_applied_to_input_replaces_inferred_fields_and_preserves_priority() {
         let currentDate = Date(timeIntervalSince1970: 1_000)
         let inferredDate = Date(timeIntervalSince1970: 2_000)
