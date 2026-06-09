@@ -61,6 +61,27 @@ struct ItemFormInputTests {
     }
 
     @Test
+    func init_with_amounts_maps_values_to_text_fields() {
+        let date = Date(timeIntervalSince1970: 1_000)
+
+        let input = ItemFormInput(
+            date: date,
+            content: "Content",
+            income: 100,
+            outgo: 0,
+            category: "Category",
+            priority: 2
+        )
+
+        #expect(input.date == date)
+        #expect(input.content == "Content")
+        #expect(input.incomeText == "100")
+        #expect(input.outgoText == "0")
+        #expect(input.category == "Category")
+        #expect(input.priorityText == "2")
+    }
+
+    @Test
     func validate_throws_specific_errors() {
         let invalidContent = ItemFormInput(
             date: .now,

@@ -109,10 +109,10 @@ public enum ItemUpdateOperations {
             input: .init(
                 date: date,
                 content: content,
-                incomeText: income.description,
-                outgoText: outgo.description,
+                income: income,
+                outgo: outgo,
                 category: category,
-                priorityText: "\(priority)"
+                priority: priority
             ),
             scope: .thisItem
         )
@@ -199,10 +199,10 @@ public enum ItemUpdateOperations {
             input: .init(
                 date: date,
                 content: content,
-                incomeText: income.description,
-                outgoText: outgo.description,
+                income: income,
+                outgo: outgo,
                 category: category,
-                priorityText: "\(priority)"
+                priority: priority
             ),
             scope: .allItems
         )
@@ -230,10 +230,10 @@ public enum ItemUpdateOperations {
             input: .init(
                 date: date,
                 content: content,
-                incomeText: income.description,
-                outgoText: outgo.description,
+                income: income,
+                outgo: outgo,
                 category: category,
-                priorityText: "\(priority)"
+                priority: priority
             ),
             scope: .futureItems
         )

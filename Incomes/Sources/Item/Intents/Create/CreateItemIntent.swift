@@ -33,10 +33,9 @@ struct CreateItemIntent: AppIntent {
         .init(
             date: date,
             content: content,
-            incomeText: income.amount.description,
-            outgoText: outgo.amount.description,
-            category: category,
-            priorityText: "0"
+            income: income.amount,
+            outgo: outgo.amount,
+            category: category
         )
     }
 

@@ -90,10 +90,10 @@ private extension DataMaintenanceTests {
         .init(
             date: date,
             content: content,
-            incomeText: income.description,
-            outgoText: outgo.description,
+            income: income,
+            outgo: outgo,
             category: category,
-            priorityText: "\(priority)"
+            priority: priority
         )
     }
 }

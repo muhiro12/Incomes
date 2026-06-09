@@ -44,6 +44,25 @@ public struct ItemFormInput {
         self.priorityText = priorityText
     }
 
+    /// Creates an item form input snapshot from typed amount and priority values.
+    public init( // swiftlint:disable:this type_contents_order
+        date: Date,
+        content: String,
+        income: Decimal,
+        outgo: Decimal,
+        category: String,
+        priority: Int = 0
+    ) {
+        self.init(
+            date: date,
+            content: content,
+            incomeText: income.description,
+            outgoText: outgo.description,
+            category: category,
+            priorityText: "\(priority)"
+        )
+    }
+
     /// Creates an item form input snapshot from a draft.
     public init(draft: ItemFormDraft) { // swiftlint:disable:this type_contents_order
         self.init(

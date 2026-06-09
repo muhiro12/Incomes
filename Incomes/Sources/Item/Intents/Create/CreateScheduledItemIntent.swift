@@ -30,10 +30,10 @@ struct CreateScheduledItemIntent: AppIntent {
         .init(
             date: date,
             content: content,
-            incomeText: income.amount.description,
-            outgoText: outgo.amount.description,
+            income: income.amount,
+            outgo: outgo.amount,
             category: category,
-            priorityText: "\(priority)"
+            priority: priority
         )
     }
 

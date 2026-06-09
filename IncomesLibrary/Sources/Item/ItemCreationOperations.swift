@@ -116,10 +116,10 @@ public enum ItemCreationOperations {
             input: .init(
                 date: date,
                 content: content,
-                incomeText: income.description,
-                outgoText: outgo.description,
+                income: income,
+                outgo: outgo,
                 category: category,
-                priorityText: "\(priority)"
+                priority: priority
             ),
             repeatCount: repeatCount
         ).value
@@ -146,10 +146,10 @@ public enum ItemCreationOperations {
             input: .init(
                 date: date,
                 content: content,
-                incomeText: income.description,
-                outgoText: outgo.description,
+                income: income,
+                outgo: outgo,
                 category: category,
-                priorityText: "\(priority)"
+                priority: priority
             ),
             repeatMonthSelections: repeatMonthSelections
         ).value

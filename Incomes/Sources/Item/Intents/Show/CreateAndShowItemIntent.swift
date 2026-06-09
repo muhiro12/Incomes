@@ -33,10 +33,9 @@ struct CreateAndShowItemIntent: AppIntent {
         .init(
             date: date,
             content: content,
-            incomeText: Decimal(income).description,
-            outgoText: Decimal(outgo).description,
-            category: category,
-            priorityText: "0"
+            income: Decimal(income),
+            outgo: Decimal(outgo),
+            category: category
         )
     }
 
