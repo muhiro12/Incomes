@@ -14,6 +14,7 @@ import SwiftUI
 struct YearlyDuplicationView: View {
     private enum Constants {
         static let targetYearRange = 10
+        static let minimumGroupCount = 3
     }
 
     @Environment(\.modelContext)
@@ -225,14 +226,14 @@ private extension YearlyDuplicationView {
     }
 
     var sourceYears: [Int] {
-        YearlyDuplicationCoordinator.sourceYears(
+        YearlyItemDuplicationSelectionOperations.availableSourceYears(
             from: yearTags,
             currentYear: currentYear
         )
     }
 
     var targetYears: [Int] {
-        YearlyDuplicationCoordinator.targetYears(
+        YearlyItemDuplicationSelectionOperations.targetYears(
             currentYear: currentYear,
             range: Constants.targetYearRange
         )
@@ -334,13 +335,14 @@ private extension YearlyDuplicationView {
     }
 
     func alignYearSelections(preserveCurrentSelection: Bool) {
-        let selectionState = YearlyDuplicationCoordinator.selectionState(
+        let selectionState = YearlyItemDuplicationSelectionOperations.selectionState(
             context: context,
             yearTags: yearTags,
             currentSourceYear: sourceYear,
             currentTargetYear: targetYear,
             preserveCurrentSelection: preserveCurrentSelection,
-            currentYear: currentYear
+            currentYear: currentYear,
+            minimumGroupCount: Constants.minimumGroupCount
         )
         sourceYear = selectionState.sourceYear
         targetYear = selectionState.targetYear

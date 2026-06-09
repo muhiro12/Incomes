@@ -2,59 +2,11 @@ import Foundation
 import MHPlatform
 import SwiftData
 
-enum YearlyDuplicationCoordinator { // swiftlint:disable:this type_body_length
-    struct SelectionState {
-        let sourceYear: Int
-        let targetYear: Int
-    }
-
+enum YearlyDuplicationCoordinator {
     struct PromoState {
         let proposal: YearlyItemDuplicationGroup
         let sourceYear: Int
         let targetYear: Int
-    }
-
-    static func sourceYears(
-        from yearTags: [Tag],
-        currentYear: Int = Calendar.current.component(.year, from: .now)
-    ) -> [Int] {
-        YearlyItemDuplicationSelectionOperations.availableSourceYears(
-            from: yearTags,
-            currentYear: currentYear
-        )
-    }
-
-    static func targetYears(
-        currentYear: Int = Calendar.current.component(.year, from: .now),
-        range: Int = 10
-    ) -> [Int] {
-        YearlyItemDuplicationSelectionOperations.targetYears(
-            currentYear: currentYear,
-            range: range
-        )
-    }
-
-    static func selectionState(
-        context: ModelContext,
-        yearTags: [Tag],
-        currentSourceYear: Int,
-        currentTargetYear: Int,
-        preserveCurrentSelection: Bool,
-        currentYear: Int = Calendar.current.component(.year, from: .now)
-    ) -> SelectionState {
-        let state = YearlyItemDuplicationSelectionOperations.selectionState(
-            context: context,
-            yearTags: yearTags,
-            currentSourceYear: currentSourceYear,
-            currentTargetYear: currentTargetYear,
-            preserveCurrentSelection: preserveCurrentSelection,
-            currentYear: currentYear,
-            minimumGroupCount: 3 // swiftlint:disable:this no_magic_numbers
-        )
-        return .init(
-            sourceYear: state.sourceYear,
-            targetYear: state.targetYear
-        )
     }
 
     static func previewPlan(
@@ -217,7 +169,9 @@ enum YearlyDuplicationCoordinator { // swiftlint:disable:this type_body_length
         context: ModelContext,
         currentYear: Int = Calendar.current.component(.year, from: .now)
     ) -> PromoState? {
-        let targetYears = targetYears(currentYear: currentYear)
+        let targetYears = YearlyItemDuplicationSelectionOperations.targetYears(
+            currentYear: currentYear
+        )
         guard
             let suggestion = try? YearlyItemDuplicationSelectionOperations.suggestion(
                 context: context,
