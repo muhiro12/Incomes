@@ -15,7 +15,7 @@ struct GetRepeatItemsCountIntent: AppIntent {
             throw $repeatID.needsValueError()
         }
         return .result(
-            value: try ItemIntentGetValueSupport.repeatItemsCount(
+            value: try ItemQueryOperations.repeatItemsCount(
                 context: modelContainer.mainContext,
                 repeatID: uuid
             )

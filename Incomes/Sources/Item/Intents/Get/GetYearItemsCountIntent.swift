@@ -12,7 +12,7 @@ struct GetYearItemsCountIntent: AppIntent {
     @MainActor
     func perform() throws -> some ReturnsValue<Int> {
         .result(
-            value: try ItemIntentGetValueSupport.yearItemsCount(
+            value: try ItemQueryOperations.yearItemsCount(
                 context: modelContainer.mainContext,
                 date: date
             )
