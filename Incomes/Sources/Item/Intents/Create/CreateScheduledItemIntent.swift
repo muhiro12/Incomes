@@ -65,17 +65,15 @@ struct CreateScheduledItemIntent: AppIntent {
 
 private extension CreateScheduledItemIntent {
     @MainActor var intentLogger: MHLogger {
-        IncomesLogging.logger(
+        IncomesIntentLoggingSupport.appIntentLogger(
             logging: logging,
-            category: IncomesLogging.Category.appIntent,
             source: #fileID
         )
     }
 
     @MainActor var reviewLogger: MHLogger {
-        IncomesLogging.logger(
+        IncomesIntentLoggingSupport.reviewFlowLogger(
             logging: logging,
-            category: IncomesLogging.Category.reviewFlow,
             source: #fileID
         )
     }

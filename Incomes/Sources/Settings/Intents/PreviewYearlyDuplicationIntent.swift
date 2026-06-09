@@ -69,9 +69,8 @@ struct PreviewYearlyDuplicationIntent: AppIntent {
 
 private extension PreviewYearlyDuplicationIntent {
     @MainActor var intentLogger: MHLogger {
-        IncomesLogging.logger(
+        IncomesIntentLoggingSupport.appIntentLogger(
             logging: logging,
-            category: IncomesLogging.Category.appIntent,
             source: #fileID
         )
     }

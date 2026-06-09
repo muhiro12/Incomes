@@ -26,9 +26,8 @@ struct InferItemFormIntent: AppIntent {
 @available(iOS 26.0, *)
 private extension InferItemFormIntent {
     @MainActor var intentLogger: MHLogger {
-        IncomesLogging.logger(
+        IncomesIntentLoggingSupport.appIntentLogger(
             logging: logging,
-            category: IncomesLogging.Category.appIntent,
             source: #fileID
         )
     }
