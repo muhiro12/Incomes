@@ -15,9 +15,9 @@ struct DeleteItemIntent: AppIntent {
 
     @MainActor
     func perform() async throws -> some IntentResult {
-        try await ItemDeleteCoordinator.delete(
+        try await ItemIntentMutationSupport.delete(
+            item: item,
             context: modelContainer.mainContext,
-            item: item.model(in: modelContainer.mainContext),
             notificationService: notificationService,
             logger: intentLogger
         )

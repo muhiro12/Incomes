@@ -52,10 +52,9 @@ struct UpdateItemIntent: AppIntent {
             outgoParameter: $outgo
         )
 
-        let model = try item.model(in: modelContainer.mainContext)
-        let entity = try await UpdateItemIntentMutationPerformer.perform(
+        let entity = try await ItemIntentMutationSupport.updateEntity(
             context: modelContainer.mainContext,
-            item: model,
+            item: item,
             input: formInput,
             scope: scope.scope,
             notificationService: notificationService,

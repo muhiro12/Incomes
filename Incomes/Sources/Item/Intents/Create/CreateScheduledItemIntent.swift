@@ -51,7 +51,7 @@ struct CreateScheduledItemIntent: AppIntent {
             outgoParameter: $outgo
         )
 
-        let item = try await ItemCreateCoordinator.create(
+        let entity = try await ItemIntentMutationSupport.createScheduledEntity(
             context: modelContainer.mainContext,
             input: formInput,
             repeatMonthSelections: try parsedRepeatMonthSelections(),
@@ -59,7 +59,7 @@ struct CreateScheduledItemIntent: AppIntent {
             logger: intentLogger,
             reviewLogger: reviewLogger
         )
-        return .result(value: try ItemEntity.make(from: item))
+        return .result(value: entity)
     }
 }
 

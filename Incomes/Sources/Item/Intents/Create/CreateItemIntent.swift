@@ -52,7 +52,7 @@ struct CreateItemIntent: AppIntent {
             outgoParameter: $outgo
         )
 
-        let item = try await ItemCreateCoordinator.create(
+        let entity = try await ItemIntentMutationSupport.createEntity(
             context: modelContainer.mainContext,
             input: formInput,
             repeatCount: repeatCount,
@@ -60,7 +60,7 @@ struct CreateItemIntent: AppIntent {
             logger: intentLogger,
             reviewLogger: reviewLogger
         )
-        return .result(value: try ItemEntity.make(from: item))
+        return .result(value: entity)
     }
 }
 
