@@ -181,7 +181,7 @@ public enum MonthlySummaryNarrativeBuilder {
         context: Context,
         locale: Locale
     ) -> String {
-        let isJapanese = locale.language.languageCode?.identifier == "ja"
+        let isJapanese = LocaleLanguageCodeSupport.isJapanese(locale)
         let incomeText = currencyText(
             context.currentTotals.totalIncome,
             currencyCode: context.currentTotals.currencyCode,
@@ -284,7 +284,7 @@ private extension MonthlySummaryNarrativeBuilder {
         context: Context,
         locale: Locale
     ) -> String {
-        let isJapanese = locale.language.languageCode?.identifier == "ja"
+        let isJapanese = LocaleLanguageCodeSupport.isJapanese(locale)
         let previousTotals = context.previousTotals
         let hasPreviousMonthData =
             previousTotals.totalIncome.isNotZero ||
@@ -319,7 +319,7 @@ private extension MonthlySummaryNarrativeBuilder {
         _ comparison: CategoryComparison,
         locale: Locale
     ) -> String? {
-        let isJapanese = locale.language.languageCode?.identifier == "ja"
+        let isJapanese = LocaleLanguageCodeSupport.isJapanese(locale)
         let incomeMagnitude = abs(decimalToDouble(comparison.incomeDelta))
         let outgoMagnitude = abs(decimalToDouble(comparison.outgoDelta))
 

@@ -119,7 +119,7 @@ private extension MonthlySummaryGenerator {
         monthTitle: String,
         locale: Locale
     ) async throws -> String {
-        let languageCode = locale.language.languageCode?.identifier ?? "en"
+        let languageCode = LocaleLanguageCodeSupport.code(for: locale)
         let session = LanguageModelSession(
             model: model,
             instructions: MonthlySummaryNarrativeBuilder.instructions(

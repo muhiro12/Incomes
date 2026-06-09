@@ -46,7 +46,7 @@ public enum ItemFormInferencePromptBuilder {
 
     /// Returns the language code used for inference prompts.
     public static func languageCode(for locale: Locale) -> String {
-        locale.language.languageCode?.identifier ?? "en"
+        LocaleLanguageCodeSupport.code(for: locale)
     }
 }
 
