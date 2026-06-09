@@ -963,6 +963,12 @@
         }
       }
     },
+    "Get Yearly Duplication Source Years" : {
+
+    },
+    "Get Yearly Duplication Target Years" : {
+
+    },
     "Income: %@, Outgo: %@" : {
       "localizations" : {
         "en" : {
@@ -1747,6 +1753,9 @@
           }
         }
       }
+    },
+    "Suggest Yearly Duplication" : {
+
     },
     "Tag" : {
       "localizations" : {
