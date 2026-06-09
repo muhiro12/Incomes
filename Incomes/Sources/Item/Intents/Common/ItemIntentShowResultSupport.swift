@@ -29,6 +29,23 @@ enum ItemIntentShowResultSupport {
     }
 
     @MainActor
+    static func relativeSingleItem(
+        modelContainer: ModelContainer,
+        date: Date,
+        direction: ItemIntentRelativeItemSupport.Direction
+    ) throws -> some ProvidesDialog & ShowsSnippetView {
+        let item = try ItemIntentRelativeItemSupport.item(
+            context: modelContainer.mainContext,
+            date: date,
+            direction: direction
+        )
+        return singleItem(
+            item,
+            defaultDate: date
+        )
+    }
+
+    @MainActor
     static func itemList(
         _ items: [Item],
         defaultDate: Date,
@@ -49,6 +66,24 @@ enum ItemIntentShowResultSupport {
             IntentItemListSection(items)
                 .modelContainer(modelContainer)
         }
+    }
+
+    @MainActor
+    static func relativeItemList(
+        modelContainer: ModelContainer,
+        date: Date,
+        direction: ItemIntentRelativeItemSupport.Direction
+    ) throws -> some ProvidesDialog & ShowsSnippetView {
+        let items = try ItemIntentRelativeItemSupport.items(
+            context: modelContainer.mainContext,
+            date: date,
+            direction: direction
+        )
+        return itemList(
+            items,
+            defaultDate: date,
+            modelContainer: modelContainer
+        )
     }
 
     @MainActor

@@ -18,15 +18,10 @@ struct ShowPreviousItemsIntent: AppIntent {
 
     @MainActor
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
-        let items = try ItemIntentRelativeItemSupport.items(
-            context: modelContainer.mainContext,
+        try ItemIntentShowResultSupport.relativeItemList(
+            modelContainer: modelContainer,
             date: date,
             direction: .previous
-        )
-        return ItemIntentShowResultSupport.itemList(
-            items,
-            defaultDate: date,
-            modelContainer: modelContainer
         )
     }
 }

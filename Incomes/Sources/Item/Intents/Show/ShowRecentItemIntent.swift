@@ -16,14 +16,10 @@ struct ShowRecentItemIntent: AppIntent {
     @MainActor
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
         let date = Date.now
-        let item = try ItemIntentRelativeItemSupport.item(
-            context: modelContainer.mainContext,
+        return try ItemIntentShowResultSupport.relativeSingleItem(
+            modelContainer: modelContainer,
             date: date,
             direction: .previous
-        )
-        return ItemIntentShowResultSupport.singleItem(
-            item,
-            defaultDate: date
         )
     }
 }
