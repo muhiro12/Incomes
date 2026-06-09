@@ -31,8 +31,16 @@ public enum ItemQueryOperations {
         encodedIdentifier: String
     ) throws -> Item? {
         let identifier = try PersistentIdentifierCoder.decode(encodedIdentifier)
-        return try context.fetchFirst(
-            .items(.idIs(identifier))
+        return try item(context: context, persistentID: identifier)
+    }
+
+    /// Returns an item matching a persistent identifier.
+    public static func item(
+        context: ModelContext,
+        persistentID: PersistentIdentifier
+    ) throws -> Item? {
+        try context.fetchFirst(
+            .items(.idIs(persistentID))
         )
     }
 

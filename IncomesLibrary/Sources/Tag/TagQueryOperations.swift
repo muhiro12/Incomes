@@ -11,6 +11,14 @@ public enum TagQueryOperations {
     /// Loads a `Tag` by Base64-encoded persistent identifier.
     public static func getByID(context: ModelContext, id: String) throws -> Tag? {
         let persistentID = try PersistentIdentifierCoder.decode(id)
+        return try getByPersistentID(context: context, persistentID: persistentID)
+    }
+
+    /// Loads a `Tag` by persistent identifier.
+    public static func getByPersistentID(
+        context: ModelContext,
+        persistentID: PersistentIdentifier
+    ) throws -> Tag? {
         guard let tag = try context.fetchFirst(
             .tags(.idIs(persistentID))
         ) else {

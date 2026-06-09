@@ -86,7 +86,10 @@ private extension MainNavigationItemDetailSheet {
             return
         }
 
-        item = try? context.fetchFirst(.items(.idIs(itemDetailID)))
+        item = try? ItemQueryOperations.item(
+            context: context,
+            persistentID: itemDetailID
+        )
         hasAttemptedItemLoad = true
         isLoadingItem = false
     }

@@ -100,7 +100,10 @@ enum ItemCreateCoordinator {
                 onEvent: MHMutationWorkflowLogger(logger: logger).onEvent()
             )
 
-            guard let item = try context.fetch(.items(.idIs(itemID), order: .forward)).first else {
+            guard let item = try ItemQueryOperations.item(
+                context: context,
+                persistentID: itemID
+            ) else {
                 logger.error(
                     "item_create.failed",
                     metadata: metadata.merging(

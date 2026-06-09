@@ -27,6 +27,18 @@ struct TagEntityQueryOperationsTests {
     }
 
     @Test
+    func getByPersistentID_returns_matching_tag() throws {
+        let tag = try Tag.create(context: context, name: "Coffee", type: .content)
+
+        let result = try TagQueryOperations.getByPersistentID(
+            context: context,
+            persistentID: tag.id
+        )
+
+        #expect(result?.name == "Coffee")
+    }
+
+    @Test
     func representativeTags_returns_one_tag_for_each_user_facing_type() throws {
         _ = try Tag.create(context: context, name: "2026", type: .year)
         _ = try Tag.create(context: context, name: "202601", type: .yearMonth)
