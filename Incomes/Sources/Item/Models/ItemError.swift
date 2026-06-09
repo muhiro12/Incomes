@@ -8,15 +8,12 @@
 import Foundation
 
 enum ItemError: @preconcurrency IncomesError {
-    case contentIsEmpty
     case entityConversionFailed
     case itemNotFound
     case invalidRepeatMonthSelections
 
     var resource: LocalizedStringResource {
         switch self {
-        case .contentIsEmpty:
-            return .init(stringLiteral: "Content is empty")
         case .entityConversionFailed:
             return .init(stringLiteral: "Failed to convert item entity")
         case .itemNotFound:
