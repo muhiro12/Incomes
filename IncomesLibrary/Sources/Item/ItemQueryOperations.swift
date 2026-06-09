@@ -25,6 +25,17 @@ public enum ItemQueryOperations {
         )
     }
 
+    /// Returns an item matching a Base64-encoded persistent identifier.
+    public static func item(
+        context: ModelContext,
+        encodedIdentifier: String
+    ) throws -> Item? {
+        let identifier = try PersistentIdentifierCoder.decode(encodedIdentifier)
+        return try context.fetchFirst(
+            .items(.idIs(identifier))
+        )
+    }
+
     /// Returns items matching Base64-encoded persistent identifiers.
     public static func items(
         context: ModelContext,

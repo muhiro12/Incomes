@@ -78,10 +78,10 @@ extension ItemEntity {
     }
 
     func model(in context: ModelContext) throws -> Item {
-        guard
-            let id = try? PersistentIdentifierCoder.decode(id),
-            let model = try context.fetchFirst(.items(.idIs(id)))
-        else {
+        guard let model = try ItemQueryOperations.item(
+            context: context,
+            encodedIdentifier: id
+        ) else {
             throw ItemError.itemNotFound
         }
         return model
