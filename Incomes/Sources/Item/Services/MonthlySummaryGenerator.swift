@@ -87,6 +87,8 @@ private extension MonthlySummaryGenerator {
                 narrativeContext: narrativeContext,
                 locale: locale
             )
+        } catch let error as CancellationError {
+            throw error
         } catch {
             return fallbackSummary(
                 monthTitle: monthTitle,

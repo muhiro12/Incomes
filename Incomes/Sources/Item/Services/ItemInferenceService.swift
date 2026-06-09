@@ -51,6 +51,10 @@ enum ItemInferenceService {
             )
             return response.content
         } catch {
+            if error is CancellationError {
+                throw error
+            }
+
             let inferenceError = inferenceError(from: error)
             let failureMetadata = metadata.merging(
                 IncomesLogging.errorMetadata(inferenceError)
