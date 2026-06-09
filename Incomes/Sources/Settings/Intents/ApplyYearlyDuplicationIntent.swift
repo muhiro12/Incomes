@@ -35,23 +35,19 @@ struct ApplyYearlyDuplicationIntent: AppIntent {
             metadata: metadata
         )
         do {
-            let plan = try YearlyItemDuplicationPlanOperations.plan(
+            let result = try YearlyDuplicationIntentSupport.apply(
                 context: modelContainer.mainContext,
                 sourceYear: sourceYear,
                 targetYear: targetYear,
                 options: duplicationOptions
-            )
-            let result = try YearlyItemDuplicationApplyOperations.apply(
-                plan: plan,
-                context: modelContainer.mainContext
             )
             logger.notice(
                 "apply_yearly_duplication.completed",
                 metadata: metadata.merging(
                     IncomesLogging.metadata(
                         ("created_count", IncomesLogging.count(result.createdCount)),
-                        ("group_count", IncomesLogging.count(plan.groups.count)),
-                        ("item_count", IncomesLogging.count(plan.entries.count))
+                        ("group_count", IncomesLogging.count(result.groupCount)),
+                        ("item_count", IncomesLogging.count(result.itemCount))
                     )
                 ) { current, _ in
                     current

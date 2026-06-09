@@ -35,7 +35,7 @@ struct PreviewYearlyDuplicationIntent: AppIntent {
             metadata: metadata
         )
         do {
-            let plan = try YearlyItemDuplicationPlanOperations.plan(
+            let result = try YearlyDuplicationIntentSupport.preview(
                 context: modelContainer.mainContext,
                 sourceYear: sourceYear,
                 targetYear: targetYear,
@@ -45,16 +45,16 @@ struct PreviewYearlyDuplicationIntent: AppIntent {
                 "preview_yearly_duplication.completed",
                 metadata: metadata.merging(
                     IncomesLogging.metadata(
-                        ("group_count", IncomesLogging.count(plan.groups.count)),
-                        ("item_count", IncomesLogging.count(plan.entries.count)),
-                        ("skipped_count", IncomesLogging.count(plan.skippedDuplicateCount))
+                        ("group_count", IncomesLogging.count(result.groupCount)),
+                        ("item_count", IncomesLogging.count(result.itemCount)),
+                        ("skipped_count", IncomesLogging.count(result.skippedCount))
                     )
                 ) { current, _ in
                     current
                 }
             )
             return .result(
-                value: YearlyItemDuplicationPresentationBuilder.summaryText(for: plan)
+                value: result.summaryText
             )
         } catch {
             logger.error(
