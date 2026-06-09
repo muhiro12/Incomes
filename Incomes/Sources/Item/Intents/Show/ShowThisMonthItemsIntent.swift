@@ -23,8 +23,8 @@ struct ShowThisMonthItemsIntent: AppIntent {
         return ItemIntentShowResultSupport.itemList(
             items,
             defaultDate: date,
-            successOpenDate: date,
-            modelContainer: modelContainer
+            modelContainer: modelContainer,
+            successOpenDate: date
         )
     }
 }

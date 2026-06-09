@@ -18,11 +18,12 @@ struct GetNextItemsIntent: AppIntent {
 
     @MainActor
     func perform() throws -> some ReturnsValue<[ItemEntity]> {
-        .result(
-            value: try ItemQueryOperations.nextItems(
-                context: modelContainer.mainContext,
-                date: date
-            ).compactMap(ItemEntity.init) // swiftlint:disable:this multiline_function_chains
+        let items = try ItemQueryOperations.nextItems(
+            context: modelContainer.mainContext,
+            date: date
+        )
+        return .result(
+            value: try ItemIntentEntitySupport.entities(from: items)
         )
     }
 }

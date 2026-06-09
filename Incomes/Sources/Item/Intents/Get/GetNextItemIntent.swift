@@ -18,12 +18,12 @@ struct GetNextItemIntent: AppIntent {
 
     @MainActor
     func perform() throws -> some ReturnsValue<ItemEntity?> {
-        guard let item = try ItemQueryOperations.nextItem(
+        let item = try ItemQueryOperations.nextItem(
             context: modelContainer.mainContext,
             date: date
-        ) else {
-            return .result(value: nil)
-        }
-        return .result(value: .init(item))
+        )
+        return .result(
+            value: try ItemIntentEntitySupport.entity(from: item)
+        )
     }
 }

@@ -3,6 +3,10 @@ import Foundation
 import SwiftData
 
 enum ItemIntentShowResultSupport {
+    private static var notFoundDialog: IntentDialog {
+        .init(.init("Not Found", table: "AppIntents"))
+    }
+
     @MainActor
     static func singleItem(
         _ item: Item?,
@@ -28,8 +32,8 @@ enum ItemIntentShowResultSupport {
     static func itemList(
         _ items: [Item],
         defaultDate: Date,
-        successOpenDate: Date? = nil,
-        modelContainer: ModelContainer
+        modelContainer: ModelContainer,
+        successOpenDate: Date? = nil
     ) -> some ProvidesDialog & ShowsSnippetView {
         let defaultOpenIntent = IncomesIntentRouteOpener.monthIntent(for: defaultDate)
         guard let firstItem = items.first else {
@@ -67,10 +71,6 @@ enum ItemIntentShowResultSupport {
             IntentChartSectionGroup(.items(.idsAre(items.map(\.id))))
                 .modelContainer(modelContainer)
         }
-    }
-
-    private static var notFoundDialog: IntentDialog {
-        .init(.init("Not Found", table: "AppIntents"))
     }
 
     private static func itemContentDialog(for item: Item) -> IntentDialog {
