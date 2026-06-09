@@ -28,7 +28,7 @@ enum ItemIntentFormInputSupport {
         )
     }
 
-    static func validate(
+    private static func validate(
         formInput: ItemFormInput,
         contentParameter: IntentParameter<String>,
         priorityParameter: IntentParameter<Int>? = nil

@@ -31,7 +31,7 @@ enum ItemIntentCurrencySupport {
         )
     }
 
-    static func disambiguationAmount(
+    private static func disambiguationAmount(
         amount: IntentCurrencyAmount,
         expectedCurrencyCode: String
     ) -> IntentCurrencyAmount? {
