@@ -14,7 +14,7 @@ public struct ItemFormInferenceUpdate {
     public let category: String
 
     /// Creates an inferred item form update.
-    public init(
+    init(
         date: Date?,
         content: String,
         incomeText: String,
