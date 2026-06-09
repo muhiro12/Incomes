@@ -16,14 +16,14 @@ struct TagCategorySemanticsTests {
         try seedOthersLikeItems()
 
         let emptyTag = try #require(
-            try TagService.getByName(
+            try TagOperations.getByName(
                 context: context,
                 name: .empty,
                 type: .category
             )
         )
         let othersTag = try #require(
-            try TagService.getByName(
+            try TagOperations.getByName(
                 context: context,
                 name: "Others",
                 type: .category
@@ -36,8 +36,8 @@ struct TagCategorySemanticsTests {
             "Nil Category"
         ]
 
-        #expect(Set(TagService.items(for: emptyTag).map(\.content)) == expectedContents)
-        #expect(Set(TagService.items(for: othersTag).map(\.content)) == expectedContents)
+        #expect(Set(TagOperations.items(for: emptyTag).map(\.content)) == expectedContents)
+        #expect(Set(TagOperations.items(for: othersTag).map(\.content)) == expectedContents)
     }
 
     @Test
@@ -45,7 +45,7 @@ struct TagCategorySemanticsTests {
         try seedOthersLikeItems(includeExplicitOthers: false)
 
         let emptyTag = try #require(
-            try TagService.getByName(
+            try TagOperations.getByName(
                 context: context,
                 name: .empty,
                 type: .category

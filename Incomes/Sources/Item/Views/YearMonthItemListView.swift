@@ -71,11 +71,11 @@ private extension YearMonthItemListView {
     }
 
     var monthDate: Date? {
-        TagService.date(for: tag)
+        TagOperations.date(for: tag)
     }
 
     var yearStrings: [String] {
-        TagService.yearStrings(for: tag)
+        TagOperations.yearStrings(for: tag)
     }
 }
 

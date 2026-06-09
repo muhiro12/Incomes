@@ -121,7 +121,7 @@ private extension DuplicateTagListView {
             guard let type = tags.first?.type else {
                 return []
             }
-            return try TagService.duplicateTags(
+            return try TagOperations.duplicateTags(
                 context: context,
                 type: type
             )
@@ -180,7 +180,7 @@ private extension DuplicateTagListView {
 
     func resolveSelectedTags() {
         do {
-            try TagService.resolveDuplicates(
+            try TagOperations.resolveDuplicates(
                 context: context,
                 tags: selectedTags
             )

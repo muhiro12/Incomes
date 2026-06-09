@@ -19,7 +19,7 @@ struct GetNextItemContentIntent: AppIntent {
     @MainActor
     func perform() throws -> some ReturnsValue<String?> {
         .result(
-            value: try ItemService.nextItemContent(
+            value: try ItemOperations.nextItemContent(
                 context: modelContainer.mainContext,
                 date: date
             )

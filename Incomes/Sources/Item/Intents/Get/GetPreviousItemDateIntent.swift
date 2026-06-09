@@ -19,7 +19,7 @@ struct GetPreviousItemDateIntent: AppIntent {
     @MainActor
     func perform() throws -> some ReturnsValue<Date?> {
         .result(
-            value: try ItemService.previousItemDate(
+            value: try ItemOperations.previousItemDate(
                 context: modelContainer.mainContext,
                 date: date
             )

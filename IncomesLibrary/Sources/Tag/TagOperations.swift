@@ -2,7 +2,7 @@ import Foundation
 import SwiftData
 
 /// Utilities to search, deduplicate, and manage `Tag` models.
-public enum TagService {
+public enum TagOperations {
     /// Returns all tags in the store.
     public static func getAll(context: ModelContext) throws -> [Tag] {
         try context.fetch(.tags(.all))
@@ -292,7 +292,7 @@ public enum TagService {
     }
 }
 
-private extension TagService {
+private extension TagOperations {
     static func referencingItems(for tag: Tag) -> [Item] {
         directItems(for: tag)
     }

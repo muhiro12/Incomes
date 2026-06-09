@@ -3,7 +3,7 @@ import Foundation
 import SwiftData
 import Testing
 
-struct CategoryFacetServiceTests {
+struct CategoryFacetOperationsTests {
     let context: ModelContext
     let japaneseOthers = "その他"
     let testOutgo: Decimal = 10
@@ -35,7 +35,7 @@ struct CategoryFacetServiceTests {
             type: .category
         )
 
-        let facets = CategoryFacetService.facets(
+        let facets = CategoryFacetOperations.facets(
             tags: try context.fetch(.tags(.typeIs(.category))),
             items: try context.fetch(.items(.all)),
             othersDisplayName: japaneseOthers
@@ -61,7 +61,7 @@ struct CategoryFacetServiceTests {
         )
         removeCategory(from: item)
 
-        let facets = CategoryFacetService.facets(
+        let facets = CategoryFacetOperations.facets(
             tags: try context.fetch(.tags(.typeIs(.category))),
             items: try context.fetch(.items(.all)),
             othersDisplayName: japaneseOthers
@@ -83,7 +83,7 @@ struct CategoryFacetServiceTests {
         )
         _ = item
 
-        let facets = CategoryFacetService.filteredFacets(
+        let facets = CategoryFacetOperations.filteredFacets(
             tags: try context.fetch(.tags(.typeIs(.category))),
             items: try context.fetch(.items(.all)),
             query: japaneseOthers,
@@ -102,7 +102,7 @@ struct CategoryFacetServiceTests {
         )
         _ = item
 
-        let facets = CategoryFacetService.filteredFacets(
+        let facets = CategoryFacetOperations.filteredFacets(
             tags: try context.fetch(.tags(.typeIs(.category))),
             items: try context.fetch(.items(.all)),
             query: "Others",
@@ -114,7 +114,7 @@ struct CategoryFacetServiceTests {
     }
 }
 
-private extension CategoryFacetServiceTests {
+private extension CategoryFacetOperationsTests {
     func createItem(
         content: String,
         category: String

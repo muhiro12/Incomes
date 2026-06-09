@@ -4,7 +4,7 @@ import SwiftData
 import Testing
 
 @Suite(.serialized)
-struct ItemServiceCanonicalTests {
+struct ItemOperationsCanonicalTests {
     let context: ModelContext
 
     init() {
@@ -27,7 +27,7 @@ struct ItemServiceCanonicalTests {
             .init(year: 2_001, month: 1)
         ]
 
-        _ = try ItemService.create(
+        _ = try ItemOperations.create(
             context: context,
             input: input,
             repeatMonthSelections: selections
@@ -61,7 +61,7 @@ struct ItemServiceCanonicalTests {
             priorityText: "2"
         )
 
-        try ItemService.update(
+        try ItemOperations.update(
             context: context,
             item: item,
             input: input,
@@ -98,7 +98,7 @@ struct ItemServiceCanonicalTests {
             priorityText: "3"
         )
 
-        try ItemService.update(
+        try ItemOperations.update(
             context: context,
             item: target,
             input: input,
@@ -132,7 +132,7 @@ struct ItemServiceCanonicalTests {
             priorityText: "4"
         )
 
-        try ItemService.update(
+        try ItemOperations.update(
             context: context,
             item: item,
             input: input,

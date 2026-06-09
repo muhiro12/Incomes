@@ -24,7 +24,7 @@ enum ItemCreateCoordinator {
                 ("content_present", IncomesLogging.presence(input.content))
             )
         ) {
-            let result = try ItemService.createWithOutcome(
+            let result = try ItemOperations.createWithOutcome(
                 context: context,
                 input: input,
                 repeatCount: repeatCount
@@ -57,7 +57,7 @@ enum ItemCreateCoordinator {
                 ("content_present", IncomesLogging.presence(input.content))
             )
         ) {
-            let result = try ItemService.createWithOutcome(
+            let result = try ItemOperations.createWithOutcome(
                 context: context,
                 input: input,
                 repeatMonthSelections: repeatMonthSelections

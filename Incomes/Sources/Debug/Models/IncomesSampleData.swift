@@ -13,7 +13,7 @@ struct IncomesSampleData: PreviewModifier {
 
     static func makeSharedContext() throws -> Context {
         try makePreviewContext { previewContext in
-            try ItemService.seedSampleData(
+            try ItemSampleDataSeeder.seedSampleData(
                 context: previewContext,
                 profile: .preview,
                 ifEmptyOnly: true
@@ -48,7 +48,7 @@ extension IncomesSampleData {
     }
 
     static func prepareData(in context: ModelContext) async {
-        try? ItemService.seedSampleData(context: context, profile: .preview)
+        try? ItemSampleDataSeeder.seedSampleData(context: context, profile: .preview)
         var items = [Item]()
         var tags = [Tag]()
         while items.isEmpty || tags.isEmpty {
@@ -60,7 +60,7 @@ extension IncomesSampleData {
     }
 
     static func prepareDataIgnoringDuplicates(in context: ModelContext) {
-        try? ItemService.seedSampleData(
+        try? ItemSampleDataSeeder.seedSampleData(
             context: context,
             profile: .debug,
             ignoringDuplicates: true

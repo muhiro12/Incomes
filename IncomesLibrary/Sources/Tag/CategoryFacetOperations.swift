@@ -1,7 +1,7 @@
 import Foundation
 
 /// Builds logical category buckets from mixed stored tag and item state.
-public enum CategoryFacetService {
+public enum CategoryFacetOperations {
     /// Returns logical category buckets that merge uncategorized variants.
     public static func facets(
         tags: [Tag],
@@ -78,7 +78,7 @@ public enum CategoryFacetService {
     }
 }
 
-private extension CategoryFacetService {
+private extension CategoryFacetOperations {
     static func matches(
         facet: CategoryFacet,
         query: String,

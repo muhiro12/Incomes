@@ -49,7 +49,7 @@ enum ItemDeleteCoordinator {
                     ? ItemMutationWorkflowName.deleteItem
                     : ItemMutationWorkflowName.deleteItems,
                 operation: {
-                    try ItemService.deleteWithOutcome(
+                    try ItemOperations.deleteWithOutcome(
                         context: context,
                         items: items
                     )

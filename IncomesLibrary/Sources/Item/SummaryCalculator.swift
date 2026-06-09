@@ -77,7 +77,7 @@ public enum SummaryCalculator {
     ///   - date: Any date inside the target month.
     /// - Returns: The aggregated monthly totals.
     public static func monthlyTotals(context: ModelContext, date: Date) throws -> MonthlyTotals {
-        let items = try ItemService.items(context: context, date: date)
+        let items = try ItemOperations.items(context: context, date: date)
 
         let income: Decimal = items.reduce(.zero) { partial, item in
             partial + item.income
@@ -98,9 +98,9 @@ public enum SummaryCalculator {
         context: ModelContext,
         date: Date
     ) throws -> [CategoryComparison] {
-        let currentItems = try ItemService.items(context: context, date: date)
+        let currentItems = try ItemOperations.items(context: context, date: date)
         let previousMonthDate = Calendar.utc.date(byAdding: .month, value: -1, to: date) ?? date
-        let previousItems = try ItemService.items(context: context, date: previousMonthDate)
+        let previousItems = try ItemOperations.items(context: context, date: previousMonthDate)
 
         let currentTotals = categoryTotals(for: currentItems)
         let previousTotals = categoryTotals(for: previousItems)

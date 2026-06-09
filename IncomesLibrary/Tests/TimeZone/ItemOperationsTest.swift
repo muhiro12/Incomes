@@ -1,6 +1,6 @@
 // swiftlint:disable file_length
 //
-//  ItemServiceTest.swift
+//  ItemOperationsTest.swift
 //  Incomes
 //
 //  Created by Hiromu Nakano on 2025/04/25.
@@ -12,7 +12,7 @@ import SwiftData
 import Testing
 
 @Suite(.serialized)
-struct ItemServiceTest { // swiftlint:disable:this type_body_length
+struct ItemOperationsTest { // swiftlint:disable:this type_body_length
     let context: ModelContext
 
     init() {
@@ -611,7 +611,7 @@ struct ItemServiceTest { // swiftlint:disable:this type_body_length
             priority: 0,
             )
         let item = try #require(fetchItems(context).first)
-        try ItemService.delete(
+        try ItemOperations.delete(
             context: context,
             item: item
         )
@@ -644,7 +644,7 @@ struct ItemServiceTest { // swiftlint:disable:this type_body_length
             item.content == "RemoveMe"
         }
         try toDelete.forEach { item in
-            try ItemService.delete(context: context, item: item)
+            try ItemOperations.delete(context: context, item: item)
         }
 
         let remaining = try context.fetch(.items(.all))
@@ -665,7 +665,7 @@ struct ItemServiceTest { // swiftlint:disable:this type_body_length
             priority: 0,
             )
         #expect(!fetchItems(context).isEmpty)
-        try ItemService.deleteAll(context: context)
+        try ItemOperations.deleteAll(context: context)
         #expect(fetchItems(context).isEmpty)
     }
 
@@ -712,7 +712,7 @@ struct ItemServiceTest { // swiftlint:disable:this type_body_length
         let item = try #require(fetchItems(context).first)
         let oldBalance = item.balance
 
-        try ItemService.recalculate(
+        try ItemOperations.recalculate(
             context: context,
             date: isoDate("2023-12-01T00:00:00Z")
         )
@@ -754,7 +754,7 @@ struct ItemServiceTest { // swiftlint:disable:this type_body_length
             priority: 0
         )
 
-        try ItemService.recalculate(
+        try ItemOperations.recalculate(
             context: context,
             date: isoDate("2024-01-15T00:00:00Z")
         )
@@ -786,7 +786,7 @@ struct ItemServiceTest { // swiftlint:disable:this type_body_length
             priority: 0,
             )
 
-        try ItemService.recalculate(
+        try ItemOperations.recalculate(
             context: context,
             date: isoDate("2024-02-01T00:00:00Z")
         )

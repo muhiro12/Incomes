@@ -29,7 +29,7 @@ extension RecalculateItemButton: View {
             } else {
                 Task {
                     do {
-                        try ItemService.recalculate(
+                        try ItemOperations.recalculate(
                             context: context,
                             date: item.date
                         )

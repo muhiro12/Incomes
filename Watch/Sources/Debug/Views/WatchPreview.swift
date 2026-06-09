@@ -27,7 +27,7 @@ struct WatchPreview<Content: View>: View {
                 ProgressView()
                     .task {
                         do {
-                            try ItemService.seedTutorialDataIfNeeded(
+                            try ItemSampleDataSeeder.seedTutorialDataIfNeeded(
                                 context: previewModelContainer.mainContext
                             )
                         } catch {

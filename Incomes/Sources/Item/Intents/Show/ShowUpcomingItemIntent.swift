@@ -17,7 +17,7 @@ struct ShowUpcomingItemIntent: AppIntent {
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
         let date = Date.now
         let defaultOpenIntent = IncomesIntentRouteOpener.monthIntent(for: date)
-        guard let item = try ItemService.nextItem(
+        guard let item = try ItemOperations.nextItem(
             context: modelContainer.mainContext,
             date: date
         ) else {

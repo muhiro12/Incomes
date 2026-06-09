@@ -18,7 +18,7 @@ struct GetNextItemIntent: AppIntent {
 
     @MainActor
     func perform() throws -> some ReturnsValue<ItemEntity?> {
-        guard let item = try ItemService.nextItem(
+        guard let item = try ItemOperations.nextItem(
             context: modelContainer.mainContext,
             date: date
         ) else {

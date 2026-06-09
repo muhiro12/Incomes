@@ -99,7 +99,7 @@ enum ItemFormSaveCoordinator {
             _ = try await MHMutationWorkflow.runThrowing(
                 name: mutationName(for: scope),
                 operation: {
-                    try ItemService.updateWithOutcome(
+                    try ItemOperations.updateWithOutcome(
                         context: context,
                         item: item,
                         input: formInputData,

@@ -1,7 +1,7 @@
 import Foundation
 import SwiftData
 
-public extension TagService {
+public extension TagOperations {
     /// Returns a lightweight preview for renaming a category tag.
     static func previewCategoryRename(
         context: ModelContext,
@@ -78,7 +78,7 @@ public extension TagService {
     }
 }
 
-private extension TagService {
+private extension TagOperations {
     static func validateCategoryRenameSource(
         _ tag: Tag
     ) throws {

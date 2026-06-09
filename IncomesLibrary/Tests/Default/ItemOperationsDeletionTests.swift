@@ -3,7 +3,7 @@ import Foundation
 import SwiftData
 import Testing
 
-struct ItemServiceDeletionTests {
+struct ItemOperationsDeletionTests {
     let context: ModelContext
 
     init() {
@@ -43,7 +43,7 @@ struct ItemServiceDeletionTests {
             repeatID: .init()
         )
 
-        let resolved = ItemService.resolveItemsForDeletion(
+        let resolved = ItemOperations.resolveItemsForDeletion(
             from: [firstItem, secondItem, thirdItem],
             indices: IndexSet([0, 2])
         )
@@ -74,7 +74,7 @@ struct ItemServiceDeletionTests {
             repeatID: .init()
         )
 
-        try ItemService.delete(
+        try ItemOperations.delete(
             context: context,
             items: [firstItem, secondItem]
         )
@@ -105,7 +105,7 @@ struct ItemServiceDeletionTests {
             repeatID: .init()
         )
 
-        try ItemService.deleteAll(context: context)
+        try ItemOperations.deleteAll(context: context)
 
         #expect(fetchItems(context).isEmpty)
         #expect(try context.fetchCount(.tags(.all)) == 0)

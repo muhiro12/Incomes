@@ -3,7 +3,7 @@ import MHPlatformCore
 import SwiftData
 
 /// Shared maintenance operations that mutate stored data without any UI concerns.
-public enum DataMaintenanceService {
+public enum DataMaintenance {
     @MainActor
     private final class ResetContextBox: @unchecked Sendable {
         let context: ModelContext
@@ -13,14 +13,14 @@ public enum DataMaintenanceService {
         }
 
         func deleteAllData() throws {
-            try DataMaintenanceService.deleteAllData(context: context)
+            try DataMaintenance.deleteAllData(context: context)
         }
     }
 
     /// Deletes all items and tags from the store.
     public static func deleteAllData(context: ModelContext) throws {
-        try ItemService.deleteAll(context: context)
-        try TagService.deleteAll(context: context)
+        try ItemOperations.deleteAll(context: context)
+        try TagOperations.deleteAll(context: context)
     }
 
     /// Deletes all stored data through the shared reset orchestration flow.
@@ -42,6 +42,6 @@ public enum DataMaintenanceService {
 
     /// Deletes tutorial/debug sample data from the store.
     public static func deleteDebugData(context: ModelContext) throws {
-        try ItemService.deleteDebugData(context: context)
+        try ItemSampleDataSeeder.deleteDebugData(context: context)
     }
 }

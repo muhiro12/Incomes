@@ -20,7 +20,7 @@ public enum WatchSyncService {
         }
 
         let allItems = try context.fetch(FetchDescriptor<Item>())
-        let deleteOutcome = try ItemService.deleteWithOutcome(
+        let deleteOutcome = try ItemOperations.deleteWithOutcome(
             context: context,
             items: allItems
         )

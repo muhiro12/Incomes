@@ -22,7 +22,7 @@ struct SettingsStatusLoaderTests {
     func load_detects_duplicate_tags_and_debug_data() throws {
         _ = Tag.createIgnoringDuplicates(context: context, name: "A", type: .content)
         _ = Tag.createIgnoringDuplicates(context: context, name: "A", type: .content)
-        _ = try ItemService.seedSampleData(
+        _ = try ItemSampleDataSeeder.seedSampleData(
             context: context,
             profile: .debug,
             ignoringDuplicates: true
@@ -72,9 +72,9 @@ struct SettingsStatusLoaderTests {
         #expect(initialStatus.hasOrphanTags == true)
         #expect(initialStatus.hasDebugData == true)
 
-        TagService.delete(tag: firstTag)
-        TagService.delete(tag: secondTag)
-        TagService.delete(tag: debugTag)
+        TagOperations.delete(tag: firstTag)
+        TagOperations.delete(tag: secondTag)
+        TagOperations.delete(tag: debugTag)
 
         let refreshedStatus = try SettingsStatusLoader.load(context: context)
         #expect(refreshedStatus.hasDuplicateTags == false)
@@ -99,7 +99,7 @@ struct SettingsStatusLoaderTests {
         #expect(initialStatus.hasDuplicateTags == true)
         #expect(initialStatus.hasOrphanTags == true)
 
-        try TagService.resolveAllDuplicates(context: context)
+        try TagOperations.resolveAllDuplicates(context: context)
 
         let resolvedStatus = try SettingsStatusLoader.load(context: context)
         #expect(resolvedStatus.hasDuplicateTags == false)
@@ -117,7 +117,7 @@ struct SettingsStatusLoaderTests {
         let initialStatus = try SettingsStatusLoader.load(context: context)
         #expect(initialStatus.hasOrphanTags == true)
 
-        try TagService.deleteAllOrphanTags(context: context)
+        try TagOperations.deleteAllOrphanTags(context: context)
 
         let refreshedStatus = try SettingsStatusLoader.load(context: context)
         #expect(refreshedStatus.hasOrphanTags == false)

@@ -14,10 +14,10 @@ struct ResolveDuplicateTagsIntent: AppIntent {
         let logger = intentLogger
         logger.notice("resolve_duplicate_tags.requested")
         do {
-            let duplicates = try TagService.duplicateTags(
+            let duplicates = try TagOperations.duplicateTags(
                 context: modelContainer.mainContext
             )
-            try TagService.resolveDuplicates(
+            try TagOperations.resolveDuplicates(
                 context: modelContainer.mainContext,
                 tags: duplicates
             )

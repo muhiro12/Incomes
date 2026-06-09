@@ -5,7 +5,7 @@ import SwiftData
 import Testing
 
 @Suite(.serialized)
-struct ItemServiceTests { // swiftlint:disable:this type_body_length
+struct ItemOperationsTests { // swiftlint:disable:this type_body_length
     let context: ModelContext
 
     init() {
@@ -216,14 +216,14 @@ struct ItemServiceTests { // swiftlint:disable:this type_body_length
             repeatCount: 1
         )
         #expect(fetchItems(context).count == 2)
-        try ItemService.deleteAll(context: context)
+        try ItemOperations.deleteAll(context: context)
         #expect(fetchItems(context).isEmpty)
     }
 
     @Test
     func deleteAll_when_empty_is_noop() throws {
         #expect(fetchItems(context).isEmpty)
-        try ItemService.deleteAll(context: context)
+        try ItemOperations.deleteAll(context: context)
         #expect(fetchItems(context).isEmpty)
     }
 
@@ -240,7 +240,7 @@ struct ItemServiceTests { // swiftlint:disable:this type_body_length
             repeatCount: 1
         )
         #expect(!fetchItems(context).isEmpty)
-        try ItemService.delete(context: context, item: item)
+        try ItemOperations.delete(context: context, item: item)
         #expect(fetchItems(context).isEmpty)
     }
 
@@ -258,7 +258,7 @@ struct ItemServiceTests { // swiftlint:disable:this type_body_length
             priority: 0,
             repeatCount: 1
         )
-        let count = try ItemService.allItemsCount(context: context)
+        let count = try ItemOperations.allItemsCount(context: context)
         #expect(count == 1)
     }
 
@@ -274,7 +274,7 @@ struct ItemServiceTests { // swiftlint:disable:this type_body_length
             priority: 0,
             repeatCount: 2
         )
-        let count = try ItemService.repeatItemsCount(
+        let count = try ItemOperations.repeatItemsCount(
             context: context,
             repeatID: item.repeatID
         )
@@ -293,7 +293,7 @@ struct ItemServiceTests { // swiftlint:disable:this type_body_length
             priority: 0,
             repeatCount: 1
         )
-        let count = try ItemService.yearItemsCount(
+        let count = try ItemOperations.yearItemsCount(
             context: context,
             date: shiftedDate("2000-01-02T00:00:00Z")
         )
@@ -324,14 +324,14 @@ struct ItemServiceTests { // swiftlint:disable:this type_body_length
             priority: 0,
             repeatCount: 1
         )
-        let januaryItems = try ItemService.items(
+        let januaryItems = try ItemOperations.items(
             context: context,
             date: shiftedDate("2000-01-15T00:00:00Z")
         )
         #expect(januaryItems.count == 1)
         #expect(januaryItems.first?.content == "January")
 
-        let februaryItems = try ItemService.items(
+        let februaryItems = try ItemOperations.items(
             context: context,
             date: shiftedDate("2000-02-20T00:00:00Z")
         )
@@ -361,7 +361,7 @@ struct ItemServiceTests { // swiftlint:disable:this type_body_length
             priority: 0,
             repeatCount: 1
         )
-        let items = try ItemService.items(
+        let items = try ItemOperations.items(
             context: context,
             date: shiftedDate("2000-01-15T00:00:00Z")
         )
@@ -396,7 +396,7 @@ struct ItemServiceTests { // swiftlint:disable:this type_body_length
             priority: 0,
             repeatCount: 1
         )
-        let items = try ItemService.items(
+        let items = try ItemOperations.items(
             context: context,
             date: shiftedDate("2000-03-15T00:00:00Z")
         )
@@ -430,7 +430,7 @@ struct ItemServiceTests { // swiftlint:disable:this type_body_length
             repeatCount: 1
         )
         let result = try #require(
-            try ItemService.nextItemDate(
+            try ItemOperations.nextItemDate(
                 context: context,
                 date: shiftedDate("2000-01-15T00:00:00Z")
             )
@@ -440,7 +440,7 @@ struct ItemServiceTests { // swiftlint:disable:this type_body_length
 
     @Test
     func nextItemDate_returns_nil_when_not_found() throws {
-        let result = try ItemService.nextItemDate(
+        let result = try ItemOperations.nextItemDate(
             context: context,
             date: shiftedDate("2001-01-01T00:00:00Z")
         )
@@ -470,7 +470,7 @@ struct ItemServiceTests { // swiftlint:disable:this type_body_length
             repeatCount: 1
         )
         let item = try #require(
-            try ItemService.nextItem(
+            try ItemOperations.nextItem(
                 context: context,
                 date: shiftedDate("2000-01-15T00:00:00Z")
             )
@@ -490,7 +490,7 @@ struct ItemServiceTests { // swiftlint:disable:this type_body_length
             priority: 0,
             repeatCount: 1
         )
-        let result = try ItemService.nextItem(
+        let result = try ItemOperations.nextItem(
             context: context,
             date: shiftedDate("2000-03-01T00:00:00Z")
         )
@@ -499,7 +499,7 @@ struct ItemServiceTests { // swiftlint:disable:this type_body_length
 
     @Test
     func nextItem_returns_nil_when_not_found() throws {
-        let result = try ItemService.nextItem(
+        let result = try ItemOperations.nextItem(
             context: context,
             date: shiftedDate("2001-01-01T00:00:00Z")
         )
@@ -529,7 +529,7 @@ struct ItemServiceTests { // swiftlint:disable:this type_body_length
             repeatCount: 1
         )
         let result = try #require(
-            try ItemService.previousItemDate(
+            try ItemOperations.previousItemDate(
                 context: context,
                 date: shiftedDate("2000-02-15T00:00:00Z")
             )
@@ -539,7 +539,7 @@ struct ItemServiceTests { // swiftlint:disable:this type_body_length
 
     @Test
     func previousItemDate_returns_nil_when_not_found() throws {
-        let result = try ItemService.previousItemDate(
+        let result = try ItemOperations.previousItemDate(
             context: context,
             date: shiftedDate("1999-01-01T00:00:00Z")
         )
@@ -569,7 +569,7 @@ struct ItemServiceTests { // swiftlint:disable:this type_body_length
             repeatCount: 1
         )
         let item = try #require(
-            try ItemService.previousItem(
+            try ItemOperations.previousItem(
                 context: context,
                 date: shiftedDate("2000-02-15T00:00:00Z")
             )
@@ -579,7 +579,7 @@ struct ItemServiceTests { // swiftlint:disable:this type_body_length
 
     @Test
     func previousItem_returns_nil_when_not_found() throws {
-        let result = try ItemService.previousItem(
+        let result = try ItemOperations.previousItem(
             context: context,
             date: shiftedDate("1999-01-01T00:00:00Z")
         )
@@ -888,7 +888,7 @@ struct ItemServiceTests { // swiftlint:disable:this type_body_length
             category: item.category?.name ?? "",
             priority: 0,
             )
-        try ItemService.recalculate(
+        try ItemOperations.recalculate(
             context: context,
             date: shiftedDate("1999-12-01T00:00:00Z")
         )

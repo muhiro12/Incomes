@@ -96,7 +96,7 @@ private extension MainNavigationRouteExecutor {
         year: Int
     ) throws -> Tag.ID? {
         let yearTagName = String(format: "%04d", year)
-        let yearTag = try TagService.getByName(
+        let yearTag = try TagOperations.getByName(
             context: context,
             name: yearTagName,
             type: .year
@@ -110,7 +110,7 @@ private extension MainNavigationRouteExecutor {
         month: Int
     ) throws -> Tag? {
         let yearMonthTagName = String(format: "%04d%02d", year, month)
-        return try TagService.getByName(
+        return try TagOperations.getByName(
             context: context,
             name: yearMonthTagName,
             type: .yearMonth
@@ -122,7 +122,7 @@ private extension MainNavigationRouteExecutor {
         year: Int
     ) throws -> Tag? {
         let yearTagName = String(format: "%04d", year)
-        return try TagService.getByName(
+        return try TagOperations.getByName(
             context: context,
             name: yearTagName,
             type: .year

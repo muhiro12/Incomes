@@ -103,7 +103,7 @@ struct SearchListView: View {
 
 private extension SearchListView {
     var categoryFacets: [CategoryFacet] {
-        CategoryFacetService.filteredFacets(
+        CategoryFacetOperations.filteredFacets(
             tags: categories,
             items: items,
             query: searchText

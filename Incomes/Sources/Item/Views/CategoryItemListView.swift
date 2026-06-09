@@ -70,11 +70,11 @@ private extension CategoryItemListView {
     }
 
     var items: [Item] {
-        TagService.items(for: tag)
+        TagOperations.items(for: tag)
     }
 
     var yearStrings: [String] {
-        TagService.yearStrings(for: tag)
+        TagOperations.yearStrings(for: tag)
     }
 }
 

@@ -167,7 +167,7 @@ extension SettingsListView: View {
                 Task {
                     dataMaintenanceLogger.notice("delete_all.requested")
                     do {
-                        try await DataMaintenanceService.resetAllData(context: context)
+                        try await DataMaintenance.resetAllData(context: context)
                         Haptic.success.impact()
                         model.loadStatus(context: context)
                         model.dismissDestructiveAction()
@@ -206,7 +206,7 @@ extension SettingsListView: View {
                             ("has_debug_data", IncomesLogging.bool(model.hasDebugData))
                         )
                     )
-                    try DataMaintenanceService.deleteDebugData(context: context)
+                    try DataMaintenance.deleteDebugData(context: context)
                     Haptic.success.impact()
                     model.loadStatus(context: context)
                     model.dismissDestructiveAction()

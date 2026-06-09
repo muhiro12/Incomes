@@ -53,7 +53,7 @@ struct SuggestionButtonGroup: View {
 
 private extension SuggestionButtonGroup {
     var categoryFacets: [CategoryFacet] {
-        CategoryFacetService.filteredFacets(
+        CategoryFacetOperations.filteredFacets(
             tags: categoryTags,
             items: items,
             query: input

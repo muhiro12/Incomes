@@ -18,7 +18,7 @@ struct ShowItemsIntent: AppIntent {
 
     @MainActor
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
-        let items = try ItemService.items(
+        let items = try ItemOperations.items(
             context: modelContainer.mainContext,
             date: date
         )

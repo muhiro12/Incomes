@@ -21,7 +21,7 @@ struct MutationOutcomeTests {
             priorityText: "1"
         )
 
-        let result = try ItemService.createWithOutcome(
+        let result = try ItemOperations.createWithOutcome(
             context: context,
             input: input,
             repeatCount: 2
@@ -57,7 +57,7 @@ struct MutationOutcomeTests {
             priorityText: "1"
         )
 
-        let outcome = try ItemService.updateWithOutcome(
+        let outcome = try ItemOperations.updateWithOutcome(
             context: context,
             item: created,
             input: updateInput,
@@ -84,7 +84,7 @@ struct MutationOutcomeTests {
         )
         let items = try context.fetch(.items(.all))
 
-        let outcome = try ItemService.deleteWithOutcome(
+        let outcome = try ItemOperations.deleteWithOutcome(
             context: context,
             items: items
         )

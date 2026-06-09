@@ -111,7 +111,7 @@ public enum ItemPredicate {
                     item.content == content
                 }
             case .category:
-                let itemIDs = TagService.items(for: tag).map(\.id)
+                let itemIDs = TagOperations.items(for: tag).map(\.id)
                 return #Predicate { item in
                     itemIDs.contains(item.id)
                 }
