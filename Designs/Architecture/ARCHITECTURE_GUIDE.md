@@ -2,7 +2,12 @@
 
 ## Scope
 
-This guide defines the strict `domain-in-library, UI-as-adapter` policy for this repository.
+This guide defines the strict `domain-in-library, UI-as-adapter` policy for
+this repository. `IncomesLibrary` is the app's behavioral implementation:
+business rules, persistence schema, shared value contracts, and tested
+decision-making live there. `Incomes`, `Watch`, `Widgets`, App Intents, and
+Shortcuts are delivery surfaces that adapt the shared implementation to Apple
+frameworks and user interfaces.
 
 Related document:
 [shared-service-design.md](./shared-service-design.md)
@@ -14,8 +19,8 @@ Related decision:
 
 | Layer | Owns | Must not own |
 | --- | --- | --- |
-| Domain (`IncomesLibrary`) | Validation, calculations, repeat rules, duplication planning, search predicate building, maintenance rules, SwiftData schema/predicates/descriptors | App-specific side effects (notifications, WidgetKit reload, ads, StoreKit, WatchConnectivity orchestration, lifecycle wiring) |
-| Adapter (`Incomes`, `Watch`, `Widgets`, App Intents) | Parameter parsing, platform API calls, dependency wiring, follow-up orchestration based on domain outcomes | Domain branching duplicated from library |
+| Domain implementation (`IncomesLibrary`) | Validation, calculations, repeat rules, duplication planning, search predicate building, maintenance rules, SwiftData schema/predicates/descriptors, shared route and sync contracts | App-specific side effects (notifications, WidgetKit reload, ads, StoreKit, WatchConnectivity orchestration, lifecycle wiring), UI framework types, App Intent types |
+| Delivery surface / adapter (`Incomes`, `Watch`, `Widgets`, App Intents) | Parameter parsing, platform API calls, dependency wiring, follow-up orchestration based on domain outcomes | Domain branching duplicated from library |
 | View (SwiftUI) | Focus state, sheets, navigation state, screen-scoped `@Observable` presentation models, formatting, view composition | Domain validation branching, business calculations, repeat/duplication rules |
 
 ## Thin-Target Clarification
@@ -28,6 +33,9 @@ Related decision:
 - A target is still considered thin when reusable finance rules, mutation
   decisions, shared snapshot building, and sync wire contracts continue to live
   in `IncomesLibrary`.
+- A serious behavioral defect should be reproducible in `IncomesLibrary` tests.
+  If a defect can only exist in one surface, it should usually be limited to
+  presentation, platform delivery, or adapter wiring.
 
 ## Testing Boundary
 
@@ -89,6 +97,8 @@ App Intents must follow the same domain path:
 `AppIntent parameter parsing -> same Workflow/Adapter -> same IncomesLibrary service`
 
 Intent files may convert domain errors to App Intent errors, but must not re-implement domain rules.
+Intent-only entities, parameter summaries, snippet views, and shortcut phrases
+stay outside `IncomesLibrary` because they are adapter concerns.
 
 The same adapter rule applies to `Watch` and `Widgets`:
 

@@ -2,17 +2,20 @@
 
 ## Purpose
 
-This document describes the current boundary for shared business logic in
-Incomes. It explains where new code should live when the same operation must
-work across the iOS app, App Intents, Apple Watch, and widgets.
+This document describes the boundary between the shared implementation and the
+delivery surfaces in Incomes. It explains where new code should live when the
+same operation must work across the iOS app, App Intents, Apple Watch, and
+widgets.
 
 ## Core Principles
 
-- `IncomesLibrary` is the source of truth for shared business logic.
+- `IncomesLibrary` is the behavioral source of truth for the product.
 - `Incomes` owns SwiftUI presentation and adapters for Apple frameworks.
 - `AppIntent` types are adapters, not a second domain layer.
 - Views keep presentation state and navigation, but reusable business decisions
   and mutations belong in shared services.
+- Delivery surfaces should be able to fail visually or operationally without
+  invalidating the domain behavior covered by `IncomesLibrary` tests.
 - `IncomesLibrary` remains a single module unless there is a stronger reason
   than code organization alone.
 - Thin targets here are responsibility-thin. They may still contain UI shells,
@@ -23,10 +26,10 @@ work across the iOS app, App Intents, Apple Watch, and widgets.
 
 | Concern | Lives in | Examples |
 | --- | --- | --- |
-| Shared domain logic | `IncomesLibrary` | `Item`, `Tag`, predicates, `ItemService`, `TagService`, `SummaryCalculator`, `YearlyItemDuplicator`, `DataMaintenanceService`, `UpcomingPaymentPlanner`, `SettingsStatusLoader` |
+| Domain implementation | `IncomesLibrary` | `Item`, `Tag`, predicates, `ItemService`, `TagService`, `SummaryCalculator`, `YearlyItemDuplicator`, `DataMaintenanceService`, `UpcomingPaymentPlanner`, `SettingsStatusLoader` |
 | Apple framework adapters | `Incomes` | `ItemInferenceService`, `NotificationService`, App Intent types, deep-link routing, StoreKit, ads |
 | App-side platform support | `Incomes/Sources/Common/Platform` | `IncomesPlatformEnvironmentFactory`, `MHAppRuntimeBootstrap` assembly, `MHAppRoutePipeline<IncomesRoute>` assembly, `IncomesRouteBridge`, `MHReviewFlow` policy helpers |
-| Watch and widget adapters | `Watch`, `Widgets` | WatchConnectivity transport, widget timeline providers, target-local screen state, entry presentation |
+| Watch and widget surfaces | `Watch`, `Widgets` | WatchConnectivity transport, widget timeline providers, target-local screen state, entry presentation |
 | Presentation orchestration | `Incomes` | SwiftUI views, navigation state, form state, app-side services in `Item/Services`, and coordinators in `Settings/Coordinators` |
 
 ## MHPlatform Adoption
@@ -64,8 +67,8 @@ App-side mutation call sites should prefer
 
 ## Placement Rules
 
-1. If an operation is reusable across more than one surface, add or extend a
-   library service first.
+1. If an operation defines product behavior, add or extend a library service
+   first.
 2. If an operation depends on Apple-only frameworks, keep it in `Incomes` and
    make it call library APIs.
 3. If a view or intent starts recreating date parsing, duplicate resolution,
@@ -89,6 +92,9 @@ App-side mutation call sites should prefer
   unless the repository policy itself changes.
 - If an adapter needs durable coverage, first extract the reusable rule or wire
   contract into `IncomesLibrary` and test it there.
+- A broken surface should normally be a UI, routing, dependency wiring, or
+  platform-delivery failure. Business behavior regressions should be caught by
+  `IncomesLibrary` tests.
 
 ## Current Examples
 

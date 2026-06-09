@@ -173,11 +173,13 @@ fi
 needs_incomes_build=false
 needs_incomes_library_tests=false
 needs_mhplatform_boundary_checks=false
+needs_incomes_architecture_boundary_checks=false
 if $should_force_full; then
   echo "Forcing full verification regardless of local changes."
   needs_incomes_build=true
   needs_incomes_library_tests=true
   needs_mhplatform_boundary_checks=true
+  needs_incomes_architecture_boundary_checks=true
   run_note="Executed a forced full verification run regardless of local changes."
 else
   changed_files=$(
@@ -206,9 +208,13 @@ else
     needs_mhplatform_boundary_checks=true
   fi
 
-  if ! $needs_incomes_build && ! $needs_incomes_library_tests && ! $needs_mhplatform_boundary_checks; then
-    echo "No changes under Incomes/, IncomesLibrary/, Widgets/, Watch/, Incomes.xcodeproj/, or ci_scripts/."
-    run_note="No changes under Incomes/, IncomesLibrary/, Widgets/, Watch/, Incomes.xcodeproj/, or ci_scripts/. Build/test steps were skipped."
+  if grep -Eq '^IncomesLibrary/|^ci_scripts/|^Designs/Architecture/|^Designs/Decisions/|^README\.md$' <<<"$changed_files"; then
+    needs_incomes_architecture_boundary_checks=true
+  fi
+
+  if ! $needs_incomes_build && ! $needs_incomes_library_tests && ! $needs_mhplatform_boundary_checks && ! $needs_incomes_architecture_boundary_checks; then
+    echo "No changes under Incomes/, IncomesLibrary/, Widgets/, Watch/, Incomes.xcodeproj/, ci_scripts/, Designs/Architecture/, Designs/Decisions/, or README.md."
+    run_note="No changes under Incomes/, IncomesLibrary/, Widgets/, Watch/, Incomes.xcodeproj/, ci_scripts/, Designs/Architecture/, Designs/Decisions/, or README.md. Build/test steps were skipped."
     exit 0
   fi
 
@@ -227,6 +233,13 @@ if $needs_mhplatform_boundary_checks; then
     "check_mhplatform_boundaries" \
     "Check MHPlatform boundaries" \
     bash "$repository_root/ci_scripts/tasks/check_mhplatform_boundaries.sh"
+fi
+
+if $needs_incomes_architecture_boundary_checks; then
+  run_logged_step \
+    "check_incomes_architecture_boundaries" \
+    "Check Incomes architecture boundaries" \
+    bash "$repository_root/ci_scripts/tasks/check_incomes_architecture_boundaries.sh"
 fi
 
 if $needs_incomes_build; then

@@ -5,7 +5,7 @@
 //  Created by Hiromu Nakano on 9/11/24.
 //
 
-import SwiftUI
+import Foundation
 
 public enum CurrencyCode: String, CaseIterable {
     case system = ""
@@ -14,12 +14,12 @@ public enum CurrencyCode: String, CaseIterable {
     case cny = "CNY"
     case jpy = "JPY"
 
-    public var displayName: LocalizedStringKey {
+    public var displayName: LocalizedStringResource {
         switch self {
         case .system:
             "System"
         default:
-            .init(rawValue)
+            .init(stringLiteral: rawValue)
         }
     }
 }

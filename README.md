@@ -88,6 +88,9 @@ Models.
 
 ## Architecture records
 
+- `IncomesLibrary` is the app's behavioral source of truth. It owns the product
+  rules that should remain correct regardless of whether the user reaches them
+  through iOS, iPadOS, watchOS, widgets, App Intents, or Shortcuts.
 - Thin targets in this repository are responsibility-thin, not line-count-thin.
   `Incomes`, `Watch`, `Widgets`, and App Intents may still own SwiftUI shells,
   lifecycle wiring, routing, and framework adapters, but reusable finance rules
@@ -98,6 +101,9 @@ Models.
 - `Incomes`, `Watch`, `Widgets`, and App Intents consume those shared APIs and
   remain the place for Apple-specific integration work such as notifications,
   WatchConnectivity, WidgetKit, StoreKit, ads, and Foundation Models.
+- When `IncomesLibrary` is correctly tested, destructive product-behavior
+  regressions should be caught there; target-local failures should usually be
+  limited to presentation, routing, dependency wiring, or platform delivery.
 - Automated unit tests stay in `IncomesLibrary/Tests`. This repository does not
   add separate unit test targets for `Incomes`, `Watch`, or `Widgets`; those
   adapters are verified through builds plus shared-library tests.
