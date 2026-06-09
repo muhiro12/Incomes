@@ -40,6 +40,31 @@ public enum YearlyItemDuplicationSelectionOperations {
     /// Resolves source/target year selections for yearly duplication UI.
     public static func selectionState(
         context: ModelContext,
+        currentSourceYear: Int,
+        currentTargetYear: Int,
+        preserveCurrentSelection: Bool,
+        currentYear: Int = Calendar.current.component(.year, from: .now),
+        targetYearRange: Int = 10,
+        minimumGroupCount: Int = 3,
+        options: YearlyItemDuplicationOptions = .init()
+    ) throws -> YearlyItemDuplicationSelectionState {
+        let yearTags = try context.fetch(.tags(.typeIs(.year), order: .reverse))
+        return selectionState(
+            context: context,
+            yearTags: yearTags,
+            currentSourceYear: currentSourceYear,
+            currentTargetYear: currentTargetYear,
+            preserveCurrentSelection: preserveCurrentSelection,
+            currentYear: currentYear,
+            targetYearRange: targetYearRange,
+            minimumGroupCount: minimumGroupCount,
+            options: options
+        )
+    }
+
+    /// Resolves source/target year selections for yearly duplication UI.
+    public static func selectionState(
+        context: ModelContext,
         yearTags: [Tag],
         currentSourceYear: Int,
         currentTargetYear: Int,

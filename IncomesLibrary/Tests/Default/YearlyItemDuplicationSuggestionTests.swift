@@ -62,6 +62,33 @@ struct YearlyItemDuplicationSuggestionTests {
     }
 
     @Test
+    func selectionState_loads_persisted_year_tags() throws {
+        _ = try createItem(
+            context: context,
+            date: shiftedDate("2023-01-10T12:00:00Z"),
+            content: "Alpha",
+            income: .zero,
+            outgo: 200,
+            category: "Card",
+            priority: .zero,
+            repeatCount: 3
+        )
+
+        let state = try YearlyItemDuplicationSelectionOperations.selectionState(
+            context: context,
+            currentSourceYear: 2_020,
+            currentTargetYear: 2_021,
+            preserveCurrentSelection: false,
+            currentYear: 2_024,
+            targetYearRange: 1,
+            minimumGroupCount: 1
+        )
+
+        #expect(state.sourceYear == 2_023)
+        #expect(state.targetYear == 2_024)
+    }
+
+    @Test
     func suggestion_selects_latest_year_meeting_minimum_groups() throws {
         _ = try createItem(
             context: context,

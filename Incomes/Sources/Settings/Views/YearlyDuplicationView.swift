@@ -335,17 +335,20 @@ private extension YearlyDuplicationView {
     }
 
     func alignYearSelections(preserveCurrentSelection: Bool) {
-        let selectionState = YearlyItemDuplicationSelectionOperations.selectionState(
-            context: context,
-            yearTags: yearTags,
-            currentSourceYear: sourceYear,
-            currentTargetYear: targetYear,
-            preserveCurrentSelection: preserveCurrentSelection,
-            currentYear: currentYear,
-            minimumGroupCount: Constants.minimumGroupCount
-        )
-        sourceYear = selectionState.sourceYear
-        targetYear = selectionState.targetYear
+        do {
+            let selectionState = try YearlyItemDuplicationSelectionOperations.selectionState(
+                context: context,
+                currentSourceYear: sourceYear,
+                currentTargetYear: targetYear,
+                preserveCurrentSelection: preserveCurrentSelection,
+                currentYear: currentYear,
+                minimumGroupCount: Constants.minimumGroupCount
+            )
+            sourceYear = selectionState.sourceYear
+            targetYear = selectionState.targetYear
+        } catch {
+            errorMessage = error.localizedDescription
+        }
     }
 
     func yearSelectionBar() -> some View {
