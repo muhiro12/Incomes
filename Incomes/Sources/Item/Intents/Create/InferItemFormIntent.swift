@@ -5,6 +5,7 @@ import MHPlatform
 @available(iOS 26.0, *)
 struct InferItemFormIntent: AppIntent {
     static let title: LocalizedStringResource = .init("Infer Item Form", table: "AppIntents")
+    static let isDiscoverable = false
 
     @Parameter(title: "Text")
     private var text: String
