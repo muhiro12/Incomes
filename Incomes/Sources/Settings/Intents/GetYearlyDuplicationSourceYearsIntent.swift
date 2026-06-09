@@ -9,7 +9,7 @@ struct GetYearlyDuplicationSourceYearsIntent: AppIntent {
     @MainActor
     func perform() throws -> some ReturnsValue<[Int]> {
         .result(
-            value: try YearlyItemDuplicationSelectionOperations.availableSourceYears(
+            value: try YearlyDuplicationIntentSupport.sourceYears(
                 context: modelContainer.mainContext
             )
         )

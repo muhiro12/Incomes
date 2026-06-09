@@ -1,5 +1,4 @@
 import AppIntents
-import Foundation
 
 struct GetYearlyDuplicationTargetYearsIntent: AppIntent {
     @Parameter(title: "Current Year")
@@ -11,8 +10,8 @@ struct GetYearlyDuplicationTargetYearsIntent: AppIntent {
 
     func perform() -> some ReturnsValue<[Int]> {
         .result(
-            value: YearlyItemDuplicationSelectionOperations.targetYears(
-                currentYear: currentYear ?? YearlyItemDuplicationSelectionOperations.currentYear(),
+            value: YearlyDuplicationIntentSupport.targetYears(
+                currentYear: currentYear,
                 range: range
             )
         )

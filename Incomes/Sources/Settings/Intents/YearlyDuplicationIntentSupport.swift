@@ -85,6 +85,40 @@ enum YearlyDuplicationIntentSupport {
         )
     }
 
+    static func sourceYears(context: ModelContext) throws -> [Int] {
+        try YearlyItemDuplicationSelectionOperations.availableSourceYears(
+            context: context
+        )
+    }
+
+    nonisolated static func targetYears(
+        currentYear: Int?,
+        range: Int
+    ) -> [Int] {
+        YearlyItemDuplicationSelectionOperations.targetYears(
+            currentYear: currentYear ?? YearlyItemDuplicationSelectionOperations.currentYear(),
+            range: range
+        )
+    }
+
+    static func suggestionText(
+        context: ModelContext,
+        minimumGroupCount: Int,
+        options: YearlyItemDuplicationOptions
+    ) throws -> String? {
+        let targetYears = YearlyItemDuplicationSelectionOperations.targetYears()
+        let suggestion = try YearlyItemDuplicationSelectionOperations.suggestion(
+            context: context,
+            targetYears: targetYears,
+            minimumGroupCount: minimumGroupCount,
+            options: options
+        )
+        guard let suggestion else {
+            return nil
+        }
+        return YearlyItemDuplicationPresentationBuilder.suggestionText(for: suggestion)
+    }
+
     private static func plan(
         context: ModelContext,
         sourceYear: Int,

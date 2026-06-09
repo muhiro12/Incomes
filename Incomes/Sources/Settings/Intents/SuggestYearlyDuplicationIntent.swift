@@ -17,18 +17,12 @@ struct SuggestYearlyDuplicationIntent: AppIntent {
 
     @MainActor
     func perform() throws -> some ReturnsValue<String?> {
-        let targetYears = YearlyItemDuplicationSelectionOperations.targetYears()
-        let suggestion = try YearlyItemDuplicationSelectionOperations.suggestion(
-            context: modelContainer.mainContext,
-            targetYears: targetYears,
-            minimumGroupCount: minimumGroupCount,
-            options: duplicationOptions
-        )
-        guard let suggestion else {
-            return .result(value: nil)
-        }
-        return .result(
-            value: YearlyItemDuplicationPresentationBuilder.suggestionText(for: suggestion)
+        .result(
+            value: try YearlyDuplicationIntentSupport.suggestionText(
+                context: modelContainer.mainContext,
+                minimumGroupCount: minimumGroupCount,
+                options: duplicationOptions
+            )
         )
     }
 }
