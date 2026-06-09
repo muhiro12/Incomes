@@ -84,10 +84,13 @@ enum IncomesPlatformEnvironmentFactory {
     @MainActor
     private static func makeRouteInbox() -> IncomesRouteInbox {
         .init(
-            isDuplicate: ==
-        ) { _, error in
-            assertionFailure(error.localizedDescription)
-        }
+            isDuplicate: { route, otherRoute in
+                route == otherRoute
+            },
+            onFailure: { _, error in
+                assertionFailure(error.localizedDescription)
+            }
+        )
     }
 
     @MainActor
@@ -96,15 +99,16 @@ enum IncomesPlatformEnvironmentFactory {
         logging: MHLoggingBootstrap
     ) -> MHAppRoutePipeline<IncomesRoute> {
         MHAppRoutePipeline(
-            routeLifecycle: .init(
+            routeLifecycle: MHRouteLifecycle<IncomesRoute>(
                 logger: IncomesLogging.logger(
                     logging: logging,
                     category: IncomesLogging.Category.routeExecution,
                     source: #fileID
                 ),
-                initialReadiness: false,
-                isDuplicate: ==
-            ),
+                initialReadiness: false
+            ) { route, otherRoute in
+                route == otherRoute
+            },
             using: IncomesDeepLinkCodec.shared,
             routeInbox: routeInbox,
             pendingSources: pendingURLSources()
