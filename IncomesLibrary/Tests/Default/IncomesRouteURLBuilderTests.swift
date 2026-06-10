@@ -54,6 +54,26 @@ struct IncomesRouteURLBuilderTests {
     }
 
     @Test
+    func build_prefixless_universal_link_url_round_trips_with_matching_parser_settings() throws {
+        let url = try #require(
+            IncomesRouteURLBuilder.universalLinkURL(
+                for: .search(query: "gas"),
+                host: "example.com",
+                appPathPrefix: ""
+            )
+        )
+
+        let route = IncomesRouteParser.parse(
+            url: url,
+            allowedUniversalLinkHosts: ["example.com"],
+            universalLinkPathPrefix: ""
+        )
+
+        #expect(url.absoluteString == "https://example.com/search?q=gas")
+        #expect(route == .search(query: "gas"))
+    }
+
+    @Test
     func build_custom_scheme_url_for_yearly_duplication() {
         let route = IncomesRoute.yearlyDuplication
         let url = IncomesRouteURLBuilder.customSchemeURL(for: route)
