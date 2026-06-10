@@ -8,13 +8,18 @@
 import Foundation
 import SwiftData
 
-enum ItemRelativeQueryCoordinator {
-    enum Direction {
+/// Coordinates relative item queries around a reference date.
+public enum ItemRelativeQueryCoordinator {
+    /// Relative query direction from the reference date.
+    public enum Direction {
+        /// Query items on or after the reference date.
         case next
+        /// Query items on or before the reference date.
         case previous
     }
 
-    static func item(
+    /// Returns the nearest item in the requested direction.
+    public static func item(
         context: ModelContext,
         date: Date,
         direction: Direction
@@ -33,7 +38,8 @@ enum ItemRelativeQueryCoordinator {
         }
     }
 
-    static func items(
+    /// Returns all items on the same local day as the nearest relative item.
+    public static func items(
         context: ModelContext,
         date: Date,
         direction: Direction
@@ -52,7 +58,8 @@ enum ItemRelativeQueryCoordinator {
         }
     }
 
-    static func content(
+    /// Returns the content of the nearest item in the requested direction.
+    public static func content(
         context: ModelContext,
         date: Date,
         direction: Direction
@@ -65,7 +72,8 @@ enum ItemRelativeQueryCoordinator {
         return item?.content
     }
 
-    static func localDate(
+    /// Returns the local date of the nearest item in the requested direction.
+    public static func localDate(
         context: ModelContext,
         date: Date,
         direction: Direction
@@ -78,7 +86,8 @@ enum ItemRelativeQueryCoordinator {
         return item?.localDate
     }
 
-    static func netIncome(
+    /// Returns the net income of the nearest item in the requested direction.
+    public static func netIncome(
         context: ModelContext,
         date: Date,
         direction: Direction
