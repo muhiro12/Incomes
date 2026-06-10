@@ -82,7 +82,16 @@ struct YearlyDuplicationView: View {
         }
         .navigationTitle("Duplicate Year")
         .safeAreaInset(edge: .top) {
-            yearSelectionBar()
+            YearlyDuplicationYearSelectionBar(
+                sourceYear: $sourceYear,
+                targetYear: $targetYear,
+                sourceYears: sourceYears,
+                targetYears: targetYears,
+                inlineSpacing: designMetrics.spacing.inline,
+                controlSpacing: designMetrics.spacing.control,
+                horizontalPadding: designMetrics.layout.surface.insetHorizontal,
+                verticalPadding: designMetrics.layout.surface.compactInsetVertical
+            )
         }
         .toolbar {
             ToolbarItem {
@@ -289,51 +298,6 @@ private extension YearlyDuplicationView {
         }
     }
 
-    func yearSelectionBar() -> some View {
-        VStack(alignment: .leading, spacing: selectionBarSpacing) {
-            Text("Year Range")
-                .font(.caption)
-                .foregroundStyle(.secondary)
-            HStack(alignment: .top, spacing: designMetrics.spacing.control) {
-                yearMenu(
-                    title: "Source Year",
-                    selection: $sourceYear,
-                    years: sourceYears
-                )
-                yearMenu(
-                    title: "Target Year",
-                    selection: $targetYear,
-                    years: targetYears
-                )
-            }
-        }
-        .padding(.horizontal, selectionBarHorizontalPadding)
-        .padding(.vertical, selectionBarVerticalPadding)
-        .background(Color(.systemGroupedBackground))
-        .overlay(alignment: .bottom) {
-            Divider()
-        }
-    }
-
-    func yearMenu(
-        title: LocalizedStringKey,
-        selection: Binding<Int>,
-        years: [Int]
-    ) -> some View {
-        VStack(alignment: .leading, spacing: designMetrics.spacing.inline) {
-            Text(title)
-                .font(.caption2)
-                .foregroundStyle(.secondary)
-            Picker(title, selection: selection) {
-                ForEach(years, id: \.self) { year in
-                    Text(verbatim: "\(year)")
-                }
-            }
-            .pickerStyle(.menu)
-            .frame(maxWidth: .infinity, alignment: .leading)
-        }
-    }
-
     func proposalSummaryText(
         for group: YearlyItemDuplicationGroup
     ) -> String {
@@ -361,18 +325,6 @@ private extension YearlyDuplicationView {
 
     var proposalVerticalPadding: CGFloat {
         designMetrics.spacing.inline
-    }
-
-    var selectionBarSpacing: CGFloat {
-        designMetrics.spacing.inline
-    }
-
-    var selectionBarHorizontalPadding: CGFloat {
-        designMetrics.layout.surface.insetHorizontal
-    }
-
-    var selectionBarVerticalPadding: CGFloat {
-        designMetrics.layout.surface.compactInsetVertical
     }
 }
 
