@@ -33,6 +33,7 @@ forbidden_collaborators=(
   UpcomingPaymentNotificationPresentationBuilder
   SearchResultSectionBuilder
   WidgetEntryFactory
+  YearMonthComponentRules
   WatchSyncService
   SettingsStatusLoader
   SubscriptionStateCalculator
