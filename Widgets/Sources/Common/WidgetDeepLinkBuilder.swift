@@ -2,14 +2,17 @@ import Foundation
 
 enum WidgetDeepLinkBuilder {
     nonisolated static func monthURL(for date: Date) -> URL? {
-        IncomesDeepLinkURLBuilder.monthURL(for: date)
+        MainNavigationOperations.preferredURL(forMonthContaining: date)
     }
 
     nonisolated static func itemURL(for itemID: String) -> URL? {
-        IncomesDeepLinkURLBuilder.itemURL(for: itemID)
+        guard !itemID.isEmpty else {
+            return nil
+        }
+        return MainNavigationOperations.preferredURL(for: .item(itemID))
     }
 
     nonisolated static func homeURL() -> URL? {
-        IncomesDeepLinkURLBuilder.homeURL()
+        MainNavigationOperations.preferredURL(for: .home)
     }
 }

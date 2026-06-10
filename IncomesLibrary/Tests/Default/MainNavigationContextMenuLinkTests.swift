@@ -47,6 +47,15 @@ struct MainNavigationContextMenuLinkTests {
     }
 
     @Test
+    func preferred_url_returns_item_route_url_for_identifier() {
+        let url = MainNavigationOperations.preferredURL(for: .item("item-id"))
+
+        #expect(
+            url?.absoluteString == "https://muhiro12.github.io/Incomes/item?id=item-id"
+        )
+    }
+
+    @Test
     func preferred_url_returns_item_url() throws {
         let item = try createItem(
             context: context,
