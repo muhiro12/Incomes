@@ -109,8 +109,7 @@ struct ItemFormView: View {
                     } label: {
                         Label("Assist", systemImage: "wand.and.stars")
                     }
-                    .buttonStyle(.borderedProminent)
-                    .buttonBorderShape(.capsule)
+                    .buttonStyle(.glassProminent)
                 }
             }
         }
