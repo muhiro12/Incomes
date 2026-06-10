@@ -19,6 +19,28 @@ struct CreateItemButton {
 
 extension CreateItemButton: View {
     var body: some View {
+        styledCreateButton
+            .popoverTip(createItemTip)
+            .sheet(isPresented: $isCreateSheetPresented) {
+                ItemFormNavigationView(mode: .create)
+                    .incomesSheetPresentation()
+            }
+    }
+}
+
+private extension CreateItemButton {
+    @ViewBuilder var styledCreateButton: some View {
+        if #available(iOS 26.0, *) {
+            createButton
+                .buttonStyle(.glassProminent)
+        } else {
+            createButton
+                .buttonStyle(.borderedProminent)
+                .buttonBorderShape(.capsule)
+        }
+    }
+
+    var createButton: some View {
         Button {
             tipController.donateDidOpenCreateForm()
             isCreateSheetPresented = true
@@ -28,13 +50,6 @@ extension CreateItemButton: View {
             } icon: {
                 Image(systemName: "square.and.pencil")
             }
-        }
-        .buttonStyle(.borderedProminent)
-        .buttonBorderShape(.capsule)
-        .popoverTip(createItemTip)
-        .sheet(isPresented: $isCreateSheetPresented) {
-            ItemFormNavigationView(mode: .create)
-                .incomesSheetPresentation()
         }
     }
 }
