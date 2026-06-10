@@ -98,8 +98,9 @@ struct ItemWireTests {
         let emptySuccessReply = WatchSyncReply.success(items: [])
 
         #expect(!unreachableReply.shouldApplySnapshot)
+        #expect(!unreachableReply.isEmptySuccess)
         #expect(emptySuccessReply.shouldApplySnapshot)
-        #expect(emptySuccessReply.items.isEmpty)
+        #expect(emptySuccessReply.isEmptySuccess)
     }
 
     @Test

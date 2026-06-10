@@ -31,6 +31,11 @@ public struct WatchSyncReply: Codable, Sendable {
         isSuccess
     }
 
+    /// True when the reply succeeded without returning any item payloads.
+    public var isEmptySuccess: Bool {
+        isSuccess && items.isEmpty
+    }
+
     public static func success(items: [ItemWire]) -> Self {
         .init(
             status: .success,

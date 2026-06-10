@@ -37,7 +37,7 @@ final class WatchHomeScreenModel {
             return .failed(failure)
         }
 
-        if lastSyncReply.items.isEmpty {
+        if lastSyncReply.isEmptySuccess {
             return .emptySuccess
         }
 
