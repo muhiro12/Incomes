@@ -49,6 +49,7 @@ final class PhoneWatchBridge: NSObject {
         super.init()
     }
 
+    @MainActor
     func activate(
         modelContext: ModelContext,
         logger: MHLogger
@@ -79,39 +80,60 @@ final class PhoneWatchBridge: NSObject {
         }
         return
     }
+
+    @MainActor
+    private func completeActivation(
+        state: WCSessionActivationState,
+        error: (any Error)?
+    ) {
+        hasActivated = (state == .activated)
+        isActivating = false
+        if let error {
+            let activationMetadata = IncomesLogging.metadata(
+                ("activated", IncomesLogging.bool(state == .activated))
+            )
+            let failureMetadata = activationMetadata.merging(
+                IncomesLogging.errorMetadata(error)
+            ) { current, _ in
+                current
+            }
+            logger?.error(
+                "watch_sync.activation_failed",
+                metadata: failureMetadata
+            )
+        } else {
+            logger?.notice(
+                "watch_sync.activation_completed",
+                metadata: IncomesLogging.metadata(
+                    ("activated", IncomesLogging.bool(state == .activated))
+                )
+            )
+        }
+        let waiters = activationWaiters
+        activationWaiters.removeAll()
+        waiters.forEach { waiter in
+            waiter.resume()
+        }
+    }
+
+    @MainActor
+    private func reactivateAfterSessionDeactivation(
+        _ session: WCSession
+    ) {
+        hasActivated = false
+        isActivating = true
+        logger?.warning("watch_sync.deactivated")
+        session.activate()
+    }
 }
 
 nonisolated extension PhoneWatchBridge: WCSessionDelegate {
     func session(_: WCSession, activationDidCompleteWith state: WCSessionActivationState, error: Error?) {
         Task { @MainActor in
-            hasActivated = (state == .activated)
-            isActivating = false
-            if let error {
-                let activationMetadata = IncomesLogging.metadata(
-                    ("activated", IncomesLogging.bool(state == .activated))
-                )
-                let failureMetadata = activationMetadata.merging(
-                    IncomesLogging.errorMetadata(error)
-                ) { current, _ in
-                    current
-                }
-                logger?.error(
-                    "watch_sync.activation_failed",
-                    metadata: failureMetadata
-                )
-            } else {
-                logger?.notice(
-                    "watch_sync.activation_completed",
-                    metadata: IncomesLogging.metadata(
-                        ("activated", IncomesLogging.bool(state == .activated))
-                    )
-                )
-            }
-            let waiters = activationWaiters
-            activationWaiters.removeAll()
-            waiters.forEach { waiter in
-                waiter.resume()
-            }
+            completeActivation(
+                state: state,
+                error: error
+            )
         }
     }
 
@@ -120,12 +142,9 @@ nonisolated extension PhoneWatchBridge: WCSessionDelegate {
     }
 
     func sessionDidDeactivate(_ session: WCSession) {
-        // Re-activate if needed and notify waiters again
+        // Re-activate after the phone-side session deactivates.
         Task { @MainActor in
-            hasActivated = false
-            isActivating = true
-            logger?.warning("watch_sync.deactivated")
-            session.activate()
+            reactivateAfterSessionDeactivation(session)
         }
     }
 

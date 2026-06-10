@@ -19,6 +19,7 @@ final class PhoneSyncClient: NSObject {
         super.init()
     }
 
+    @MainActor
     func activate() async {
         guard WCSession.isSupported() else {
             return
@@ -42,6 +43,19 @@ final class PhoneSyncClient: NSObject {
             }
         }
         return
+    }
+
+    @MainActor
+    private func completeActivation(
+        state: WCSessionActivationState
+    ) {
+        hasActivated = (state == .activated)
+        isActivating = false
+        let waiters = activationWaiters
+        activationWaiters.removeAll()
+        waiters.forEach { waiter in
+            waiter.resume()
+        }
     }
 
     nonisolated func requestRecentItems(
@@ -88,13 +102,7 @@ final class PhoneSyncClient: NSObject {
 nonisolated extension PhoneSyncClient: WCSessionDelegate {
     func session(_: WCSession, activationDidCompleteWith state: WCSessionActivationState, error _: Error?) {
         Task { @MainActor in
-            hasActivated = (state == .activated)
-            isActivating = false
-            let waiters = activationWaiters
-            activationWaiters.removeAll()
-            waiters.forEach { waiter in
-                waiter.resume()
-            }
+            completeActivation(state: state)
         }
     }
 }
