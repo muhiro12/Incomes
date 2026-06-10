@@ -62,10 +62,7 @@ final class NotificationService: NSObject {
         let center = UNUserNotificationCenter.current()
         let requests = buildUpcomingPaymentReminders()
         let matcher = MHNotificationIdentifierMatcher(
-            prefixes: [
-                UpcomingPaymentNotificationPresentation.requestIdentifierPrefix,
-                UpcomingPaymentNotificationPresentation.previewRequestIdentifierPrefix
-            ]
+            prefixes: UpcomingPaymentNotificationPresentation.managedRequestIdentifierPrefixes
         )
         logger.info(
             "notification.register_requested",
@@ -210,7 +207,9 @@ extension NotificationService: UNUserNotificationCenterDelegate {
                 metadata: IncomesLogging.metadata(
                     ("action_identifier", response.actionIdentifier),
                     ("managed_identifier", IncomesLogging.bool(
-                        isManagedNotificationIdentifier(response.notification.request.identifier)
+                        UpcomingPaymentNotificationPresentation.isManagedRequestIdentifier(
+                            response.notification.request.identifier
+                        )
                     ))
                 )
             )
@@ -350,12 +349,7 @@ private extension NotificationService {
     func deliveredNotificationIdentifiers() async -> [String] {
         await UNUserNotificationCenter.current().deliveredNotifications() // swiftlint:disable:this line_length multiline_function_chains
             .map(\.request.identifier)
-            .filter(isManagedNotificationIdentifier)
-    }
-
-    func isManagedNotificationIdentifier(_ identifier: String) -> Bool {
-        identifier.hasPrefix(UpcomingPaymentNotificationPresentation.requestIdentifierPrefix) ||
-            identifier.hasPrefix(UpcomingPaymentNotificationPresentation.previewRequestIdentifierPrefix)
+            .filter(UpcomingPaymentNotificationPresentation.isManagedRequestIdentifier)
     }
 }
 

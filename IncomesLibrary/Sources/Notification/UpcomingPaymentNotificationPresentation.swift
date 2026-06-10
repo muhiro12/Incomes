@@ -8,6 +8,11 @@ public struct UpcomingPaymentNotificationPresentation: Sendable {
 
     public static let requestIdentifierPrefix = "upcoming-payment:"
     public static let previewRequestIdentifierPrefix = "upcoming-payment-preview:"
+    /// Request identifier prefixes managed by upcoming payment reminders.
+    public static let managedRequestIdentifierPrefixes: [String] = [
+        requestIdentifierPrefix,
+        previewRequestIdentifierPrefix
+    ]
 
     public let requestIdentifier: String
     public let primaryRouteURL: URL
@@ -57,6 +62,13 @@ public struct UpcomingPaymentNotificationPresentation: Sendable {
         self.amount = amount
         self.dueDate = dueDate
         self.notifyDate = notifyDate
+    }
+
+    /// Returns whether the request identifier belongs to upcoming payment reminders.
+    public static func isManagedRequestIdentifier(_ identifier: String) -> Bool {
+        managedRequestIdentifierPrefixes.contains { prefix in
+            identifier.hasPrefix(prefix)
+        }
     }
 
     public func previewPresentation() -> Self {
