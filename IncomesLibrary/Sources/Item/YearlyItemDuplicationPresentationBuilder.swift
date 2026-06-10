@@ -7,20 +7,16 @@
 
 import Foundation
 
-/// Builds presentation values for yearly item duplication.
-public enum YearlyItemDuplicationPresentationBuilder {
-    /// Returns a concise summary for a yearly duplication plan.
-    public static func summaryText(for plan: YearlyItemDuplicationPlan) -> String {
+enum YearlyItemDuplicationPresentationBuilder {
+    static func summaryText(for plan: YearlyItemDuplicationPlan) -> String {
         "\(plan.groups.count) groups / \(plan.entries.count) items / \(plan.skippedDuplicateCount) skipped"
     }
 
-    /// Returns a concise year range for a yearly duplication suggestion.
-    public static func suggestionText(for suggestion: YearlyItemDuplicationSuggestion) -> String {
+    static func suggestionText(for suggestion: YearlyItemDuplicationSuggestion) -> String {
         "\(suggestion.sourceYear) -> \(suggestion.targetYear)"
     }
 
-    /// Returns a sorted, de-duplicated month/day list for the group's target dates.
-    public static func monthDayListText(
+    static func monthDayListText(
         for group: YearlyItemDuplicationGroup,
         calendar: Calendar = .current
     ) -> String {
@@ -43,8 +39,7 @@ public enum YearlyItemDuplicationPresentationBuilder {
             .joined(separator: ", ")
     }
 
-    /// Returns a whole-number string by discarding fractional digits.
-    public static func decimalString(from value: Decimal) -> String {
+    static func decimalString(from value: Decimal) -> String {
         var source = value
         var rounded = Decimal.zero
         NSDecimalRound(&rounded, &source, 0, .down)

@@ -35,6 +35,7 @@ forbidden_collaborators=(
   DataMaintenance
   ItemRelativeQueryCoordinator
   ItemSearchPredicateBuilder
+  YearlyItemDuplicationPresentationBuilder
 )
 
 failures=()

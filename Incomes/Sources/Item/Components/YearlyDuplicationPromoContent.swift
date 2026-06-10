@@ -39,7 +39,7 @@ struct YearlyDuplicationPromoContent: View {
 
 private extension YearlyDuplicationPromoContent {
     var proposalDatesText: String.LocalizationValue {
-        "Dates: \(YearlyItemDuplicationPresentationBuilder.monthDayListText(for: promo.proposal))"
+        "Dates: \(YearlyDuplicationPresentationOperations.monthDayListText(for: promo.proposal))"
     }
 
     var reviewProposalsButton: some View {

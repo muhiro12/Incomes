@@ -19,14 +19,14 @@ struct YearlyDuplicationProposalRow: View {
                     .foregroundStyle(.secondary)
             }
             metadataText(
-                "Dates: \(YearlyItemDuplicationPresentationBuilder.monthDayListText(for: group))"
+                "Dates: \(YearlyDuplicationPresentationOperations.monthDayListText(for: group))"
             )
             metadataText("Items: \(group.entryCount)")
             metadataText(
-                "Income: \(YearlyItemDuplicationPresentationBuilder.decimalString(from: group.averageIncome))"
+                "Income: \(YearlyDuplicationPresentationOperations.decimalString(from: group.averageIncome))"
             )
             metadataText(
-                "Outgo: \(YearlyItemDuplicationPresentationBuilder.decimalString(from: group.averageOutgo))"
+                "Outgo: \(YearlyDuplicationPresentationOperations.decimalString(from: group.averageOutgo))"
             )
             actionRow
         }

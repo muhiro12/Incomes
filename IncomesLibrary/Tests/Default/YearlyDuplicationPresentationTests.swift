@@ -15,7 +15,7 @@ struct YearlyDuplicationPresentationTests {
             )
         )
 
-        let text = YearlyItemDuplicationPresentationBuilder.suggestionText(for: suggestion)
+        let text = YearlyDuplicationPresentationOperations.suggestionText(for: suggestion)
 
         #expect(text == "2024 -> 2025")
     }
@@ -50,7 +50,7 @@ struct YearlyDuplicationPresentationTests {
             skippedDuplicateCount: 2
         )
 
-        let text = YearlyItemDuplicationPresentationBuilder.summaryText(for: plan)
+        let text = YearlyDuplicationPresentationOperations.summaryText(for: plan)
 
         #expect(text == "1 groups / 1 items / 2 skipped")
     }
@@ -68,7 +68,7 @@ struct YearlyDuplicationPresentationTests {
             ]
         )
 
-        let text = YearlyItemDuplicationPresentationBuilder.monthDayListText(
+        let text = YearlyDuplicationPresentationOperations.monthDayListText(
             for: group,
             calendar: calendar
         )
@@ -78,7 +78,7 @@ struct YearlyDuplicationPresentationTests {
 
     @Test
     func decimalString_discards_fractional_digits() {
-        let text = YearlyItemDuplicationPresentationBuilder.decimalString(
+        let text = YearlyDuplicationPresentationOperations.decimalString(
             from: Decimal(string: "123.9") ?? .zero
         )
 

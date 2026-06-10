@@ -78,7 +78,7 @@ enum YearlyDuplicationAutomationCoordinator {
             options: options
         )
         return .init(
-            summaryText: YearlyItemDuplicationPresentationBuilder.summaryText(for: plan),
+            summaryText: YearlyDuplicationPresentationOperations.summaryText(for: plan),
             groupCount: plan.groups.count,
             itemCount: plan.entries.count,
             skippedCount: plan.skippedDuplicateCount
@@ -116,7 +116,7 @@ enum YearlyDuplicationAutomationCoordinator {
         guard let suggestion else {
             return nil
         }
-        return YearlyItemDuplicationPresentationBuilder.suggestionText(for: suggestion)
+        return YearlyDuplicationPresentationOperations.suggestionText(for: suggestion)
     }
 
     private static func plan(

@@ -285,10 +285,10 @@ private extension YearlyDuplicationView {
         [
             group.content,
             group.category.isNotEmpty ? group.category : nil,
-            "Dates: \(YearlyItemDuplicationPresentationBuilder.monthDayListText(for: group))",
+            "Dates: \(YearlyDuplicationPresentationOperations.monthDayListText(for: group))",
             "Items: \(group.entryCount)",
-            "Income: \(YearlyItemDuplicationPresentationBuilder.decimalString(from: group.averageIncome))",
-            "Outgo: \(YearlyItemDuplicationPresentationBuilder.decimalString(from: group.averageOutgo))"
+            "Income: \(YearlyDuplicationPresentationOperations.decimalString(from: group.averageIncome))",
+            "Outgo: \(YearlyDuplicationPresentationOperations.decimalString(from: group.averageOutgo))"
         ]
         .compactMap(\.self)
         .joined(separator: "\n")
