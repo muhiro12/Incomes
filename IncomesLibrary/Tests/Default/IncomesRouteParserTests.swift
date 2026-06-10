@@ -148,6 +148,14 @@ struct IncomesRouteParserTests {
     }
 
     @Test
+    func parse_universal_link_item_route_with_path_segment() {
+        let route = IncomesRouteParser.parse(
+            url: testURL("https://muhiro12.github.io/Incomes/item/item-id")
+        )
+        #expect(route == .item("item-id"))
+    }
+
+    @Test
     func parse_rejects_unknown_universal_link_host() {
         let route = IncomesRouteParser.parse(
             url: testURL("https://example.com/Incomes/settings")
