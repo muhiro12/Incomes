@@ -115,8 +115,8 @@ private extension MainNavigationSidebarView {
     func yearContextMenu(
         for yearTag: Tag
     ) -> some View {
-        if let yearSummaryRoute = IncomesContextMenuLinkBuilder.yearSummaryRoute(
-            for: yearTag
+        if let yearSummaryRoute = MainNavigationOperations.yearSummaryRoute(
+            forYearTag: yearTag
         ) {
             Button("Show Summary", systemImage: "chart.bar") {
                 onNavigate(yearSummaryRoute)
@@ -128,8 +128,8 @@ private extension MainNavigationSidebarView {
         ) {
             onNavigate(.yearlyDuplication)
         }
-        if let yearURL = IncomesContextMenuLinkBuilder.preferredURL(
-            for: IncomesContextMenuLinkBuilder.yearRoute(for: yearTag)
+        if let yearURL = MainNavigationOperations.preferredURL(
+            for: MainNavigationOperations.route(forYearTag: yearTag)
         ) {
             Divider()
             ShareLink(item: yearURL) {

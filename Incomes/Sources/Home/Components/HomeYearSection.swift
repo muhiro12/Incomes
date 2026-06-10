@@ -145,11 +145,11 @@ private extension HomeYearSection {
     }
 
     func monthRoute(for yearMonthTag: Tag) -> IncomesRoute? {
-        IncomesContextMenuLinkBuilder.monthRoute(for: yearMonthTag)
+        MainNavigationOperations.route(forYearMonthTag: yearMonthTag)
     }
 
     func monthURL(for yearMonthTag: Tag) -> URL? {
-        IncomesContextMenuLinkBuilder.preferredURL(
+        MainNavigationOperations.preferredURL(
             for: monthRoute(for: yearMonthTag)
         )
     }
