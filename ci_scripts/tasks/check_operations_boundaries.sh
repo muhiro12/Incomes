@@ -28,6 +28,7 @@ forbidden_collaborators=(
   ItemFormInferencePromptBuilder
   ItemFormSaveDecision
   ItemRepeatCountLimits
+  LocaleLanguageCodeSupport
   RepeatMonthSelectionRules
   UpcomingPaymentPlanner
   UpcomingPaymentNotificationPresentationBuilder

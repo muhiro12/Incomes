@@ -6,6 +6,15 @@ import Testing
 
 struct MonthlySummaryOperationsNarrativeTests {
     @Test
+    func languageCode_returnsLocaleLanguageIdentifier() {
+        #expect(
+            MonthlySummaryOperations.languageCode(
+                for: Locale(identifier: "ja_JP")
+            ) == "ja"
+        )
+    }
+
+    @Test
     func validatedSummary_accepts_only_current_month_totals() throws {
         let summary = try MonthlySummaryOperations.validatedSummary(
             "Income was 1,000. Outgo was 400 and net income was 600.",

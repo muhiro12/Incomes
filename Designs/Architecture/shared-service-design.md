@@ -69,7 +69,7 @@ operations and shared wire contracts:
 - `WidgetEntryOperations`
 - `WatchSyncOperations`
 - `UpcomingPaymentOperations`
-- `MonthlySummaryOperations`
+- `MonthlySummaryOperations` context, prompt, language, and fallback handling
 - `ItemFormInferenceOperations`
 - `SettingsStatusOperations`
 - `DataMaintenanceOperations`

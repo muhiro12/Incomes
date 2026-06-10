@@ -120,7 +120,7 @@ private extension MonthlySummaryGenerator {
         monthTitle: String,
         locale: Locale
     ) async throws -> String {
-        let languageCode = LocaleLanguageCodeSupport.code(for: locale)
+        let languageCode = MonthlySummaryOperations.languageCode(for: locale)
         let session = LanguageModelSession(
             model: model,
             instructions: MonthlySummaryOperations.instructions(

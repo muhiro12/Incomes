@@ -116,6 +116,11 @@ public enum MonthlySummaryOperations {
         MonthlySummaryDateSupport.previousMonthDate(from: date)
     }
 
+    /// Returns the language code used for monthly summary prompts.
+    public static func languageCode(for locale: Locale) -> String {
+        LocaleLanguageCodeSupport.code(for: locale)
+    }
+
     /// Loads the current month, previous month, and category comparison context.
     public static func loadContext(
         context: ModelContext,

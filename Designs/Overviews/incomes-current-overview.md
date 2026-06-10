@@ -496,7 +496,7 @@ The following behaviors are already centralized and should remain centralized:
 - repeat-aware item updates and scope-selection decisions
 - item deletion and affected-balance recalculation
 - duplicate tag detection and merge resolution
-- month totals, category comparison calculations, and monthly summary date rules
+- month totals, category comparisons, summary prompt language, and monthly summary date rules
 - yearly duplication planning, application, promo eligibility, and presentation summaries
 - notification planning for upcoming payments
 - whole-store deletion and debug-data deletion
