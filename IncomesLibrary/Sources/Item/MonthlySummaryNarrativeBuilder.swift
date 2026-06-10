@@ -152,7 +152,7 @@ public enum MonthlySummaryNarrativeBuilder {
         currentMonth = {
           year: \(context.currentTotals.year),
           month: \(context.currentTotals.month),
-          currencyCode: \(jsonStringLiteral(context.currentTotals.currencyCode)),
+          currencyCode: \(PromptLiteralSupport.jsonStringLiteral(context.currentTotals.currencyCode)),
           totalIncome: \(decimalString(context.currentTotals.totalIncome)),
           totalOutgo: \(decimalString(context.currentTotals.totalOutgo)),
           netIncome: \(decimalString(context.currentTotals.netIncome))
@@ -161,7 +161,7 @@ public enum MonthlySummaryNarrativeBuilder {
         previousMonth = {
           year: \(context.previousTotals.year),
           month: \(context.previousTotals.month),
-          currencyCode: \(jsonStringLiteral(context.previousTotals.currencyCode)),
+          currencyCode: \(PromptLiteralSupport.jsonStringLiteral(context.previousTotals.currencyCode)),
           totalIncome: \(decimalString(context.previousTotals.totalIncome)),
           totalOutgo: \(decimalString(context.previousTotals.totalOutgo)),
           netIncome: \(decimalString(context.previousTotals.netIncome))
@@ -263,7 +263,7 @@ private extension MonthlySummaryNarrativeBuilder {
         return comparisons.map { comparison in
             """
               {
-                category: \(jsonStringLiteral(comparison.category)),
+                category: \(PromptLiteralSupport.jsonStringLiteral(comparison.category)),
                 currentIncome: \(decimalString(comparison.currentIncome)),
                 previousIncome: \(decimalString(comparison.previousIncome)),
                 incomeDelta: \(decimalString(comparison.incomeDelta)),
@@ -274,18 +274,6 @@ private extension MonthlySummaryNarrativeBuilder {
             """
         }
         .joined(separator: ",\n")
-    }
-
-    static func jsonStringLiteral(_ text: String) -> String {
-        guard
-            let data = try? JSONEncoder().encode(text),
-            let literal = String(data: data, encoding: .utf8)
-        else {
-            assertionFailure()
-            return "\"\""
-        }
-
-        return literal
     }
 
     static func comparisonSentence(
