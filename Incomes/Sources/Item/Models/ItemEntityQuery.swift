@@ -13,28 +13,28 @@ struct ItemEntityQuery: EntityStringQuery {
 
     @MainActor
     func entities(for identifiers: [ItemEntity.ID]) throws -> [ItemEntity] {
-        try ItemQueryOperations.items(
+        let items = try ItemQueryOperations.items(
             context: modelContainer.mainContext,
             encodedIdentifiers: identifiers
         )
-        .map(ItemEntity.make)
+        return try ItemEntity.make(from: items)
     }
 
     @MainActor
     func entities(matching string: String) throws -> [ItemEntity] {
-        try ItemQueryOperations.items(
+        let items = try ItemQueryOperations.items(
             context: modelContainer.mainContext,
             matchingContent: string
         )
-        .map(ItemEntity.make)
+        return try ItemEntity.make(from: items)
     }
 
     @MainActor
     func suggestedEntities() throws -> [ItemEntity] {
-        try ItemQueryOperations.items(
+        let items = try ItemQueryOperations.items(
             context: modelContainer.mainContext,
             date: .now
         )
-        .map(ItemEntity.make)
+        return try ItemEntity.make(from: items)
     }
 }

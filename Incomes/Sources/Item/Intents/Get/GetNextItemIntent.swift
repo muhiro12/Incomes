@@ -24,7 +24,7 @@ struct GetNextItemIntent: AppIntent {
             direction: .next
         )
         return .result(
-            value: try item.map(ItemEntity.make)
+            value: try ItemEntity.make(from: item)
         )
     }
 }

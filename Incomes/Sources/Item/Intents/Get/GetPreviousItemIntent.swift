@@ -24,7 +24,7 @@ struct GetPreviousItemIntent: AppIntent {
             direction: .previous
         )
         return .result(
-            value: try item.map(ItemEntity.make)
+            value: try ItemEntity.make(from: item)
         )
     }
 }

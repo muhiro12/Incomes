@@ -77,6 +77,18 @@ extension ItemEntity {
         }
         return entity
     }
+
+    static func make(from model: Item?) throws -> ItemEntity? {
+        try model.map { item in
+            try make(from: item)
+        }
+    }
+
+    static func make(from models: [Item]) throws -> [ItemEntity] {
+        try models.map { item in
+            try make(from: item)
+        }
+    }
 }
 
 extension ItemEntity {
