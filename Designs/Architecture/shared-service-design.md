@@ -120,8 +120,13 @@ App-side mutation call sites should prefer
 - `YearlyDuplicationCoordinator` stays under `Settings/Coordinators` as an app-side adapter that delegates
   duplication rules to `YearlyItemDuplication*Operations` and uses package-owned mutation
   projection strategies.
-- `ItemFormSaveCoordinator` stays under `Item/Services`, converts UI state into `ItemFormInput`, and calls
-  canonical `Item*Operations` APIs with package-owned mutation and review shells.
+- `ItemFormSaveCoordinator` stays under `Item/Services`, converts UI state into
+  `ItemFormInput`, and calls canonical `Item*Operations` APIs through
+  `MHMutationWorkflow.runThrowing`.
+- `ItemMutationAdapterFactory` stays app-side because it combines generic
+  follow-up hint execution with item-specific haptics and review requests. Its
+  public entrypoints should describe the mutation purpose, such as save or
+  delete, instead of accepting boolean feature toggles.
 
 ## Refactoring Heuristic
 

@@ -217,6 +217,7 @@ API style decision:
    feature-specific mutation projections.
    Files:
    - `Incomes/Sources/Common/Services/IncomesMutationWorkflow.swift`
+   - `Incomes/Sources/Item/Services/ItemMutationAdapterFactory.swift`
    - `Incomes/Sources/Item/Services/ItemFormSaveCoordinator.swift`
    - `Incomes/Sources/Settings/Coordinators/YearlyDuplicationCoordinator.swift`
    Minimal plan:
@@ -224,8 +225,12 @@ API style decision:
      `IncomesMutationWorkflow`.
    - Use `MHMutationWorkflow.runThrowing(... projection:)` directly in
      coordinators instead of app-local wrapper APIs.
-   - Keep save-specific haptics and review scheduling in
-     `ItemFormSaveCoordinator`.
+   - Keep item mutation side effects out of the generic follow-up adapter.
+     `ItemMutationAdapterFactory` may assemble item-specific save/delete
+     adapters, but its public entrypoints should stay purpose-specific rather
+     than boolean-driven.
+   - Keep save-specific haptics and review scheduling explicit in the save
+     adapter path, and keep delete-specific adapters review-free.
 
 4. Watch sync should keep using the shared snapshot service rather than reintroducing target-local mutation rules.
    Files:
