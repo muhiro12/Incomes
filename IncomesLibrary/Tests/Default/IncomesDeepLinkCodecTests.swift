@@ -46,6 +46,20 @@ struct IncomesDeepLinkCodecTests {
     }
 
     @Test
+    func make_uses_custom_host_as_default_allowed_host() throws {
+        let codec = IncomesDeepLinkCodec.make(
+            host: "example.com",
+            appPathPrefix: "Budget"
+        )
+        let url = try #require(codec.preferredURL(for: .settings))
+
+        let route = codec.parse(url)
+
+        #expect(url.absoluteString == "https://example.com/Budget/settings")
+        #expect(route == .settings)
+    }
+
+    @Test
     func make_parses_universal_link_from_custom_allowed_host() {
         let codec = IncomesDeepLinkCodec.make(
             host: "example.com",
