@@ -177,6 +177,22 @@ public enum TagQueryOperations {
         .sorted(by: >)
     }
 
+    /// Returns tags whose rendered display name matches `query`.
+    public static func matchingDisplayNameTags(
+        in tags: [Tag],
+        query: String
+    ) -> [Tag] {
+        guard query.isEmpty == false else {
+            return tags
+        }
+        return tags.filter { tag in
+            matchesDisplayName(
+                tag: tag,
+                query: query
+            )
+        }
+    }
+
     /// Returns a matching date for year and year-month tags.
     public static func date(for tag: Tag) -> Date? {
         switch tag.type {
@@ -262,7 +278,14 @@ private extension TagQueryOperations {
             tag.name,
             query: query
         )
-        || TagTextSupport.matchesDisplayName(
+        || matchesDisplayName(
+            tag: tag,
+            query: query
+        )
+    }
+
+    static func matchesDisplayName(tag: Tag, query: String) -> Bool {
+        TagTextSupport.matchesDisplayName(
             name: tag.name,
             type: tag.type,
             query: query

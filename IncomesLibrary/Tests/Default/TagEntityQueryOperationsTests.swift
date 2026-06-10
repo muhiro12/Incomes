@@ -67,4 +67,30 @@ struct TagEntityQueryOperationsTests {
         #expect(tags.map(\.type) == [.content, .category])
         #expect(Set(tags.map(\.name)) == ["Coffee", "Coffee Shop"])
     }
+
+    @Test
+    func matchingDisplayNameTags_returnsAllTagsForEmptyQuery() throws {
+        let yearTag = try Tag.create(context: context, name: "2026", type: .year)
+        let contentTag = try Tag.create(context: context, name: "Coffee", type: .content)
+
+        let tags = TagQueryOperations.matchingDisplayNameTags(
+            in: [yearTag, contentTag],
+            query: .empty
+        )
+
+        #expect(tags.map(\.persistentModelID) == [yearTag.persistentModelID, contentTag.persistentModelID])
+    }
+
+    @Test
+    func matchingDisplayNameTags_matchesRenderedYearMonthText() throws {
+        let yearMonthTag = try Tag.create(context: context, name: "202601", type: .yearMonth)
+        let contentTag = try Tag.create(context: context, name: "Coffee", type: .content)
+
+        let tags = TagQueryOperations.matchingDisplayNameTags(
+            in: [yearMonthTag, contentTag],
+            query: yearMonthTag.displayName
+        )
+
+        #expect(tags.map(\.persistentModelID) == [yearMonthTag.persistentModelID])
+    }
 }

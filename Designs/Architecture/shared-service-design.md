@@ -57,7 +57,7 @@ operations and shared wire contracts:
 - `Item*Operations.create(context:input:repeatMonthSelections:)`
 - `Item*Operations.requiresScopeSelection(context:item:)`
 - `Item*Operations.update(context:item:input:scope:)`
-- `Tag*Operations` duplicate-resolution and tag/date lookup helpers
+- `Tag*Operations` duplicate-resolution, tag/date lookup, and display matching helpers
 - `YearlyItemDuplicationPlanOperations.plan(context:sourceYear:targetYear:)`
 - `YearlyItemDuplicationApplyOperations.apply(plan:context:)`
 - `YearlyDuplicationAutomationOperations`

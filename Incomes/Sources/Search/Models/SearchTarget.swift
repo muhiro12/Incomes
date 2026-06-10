@@ -57,13 +57,10 @@ enum SearchTarget: CaseIterable {
             return []
         }
 
-        return tags.filter { tag in
-            searchText.isEmpty || TagTextSupport.matchesDisplayName(
-                name: tag.name,
-                type: tag.type,
-                query: searchText
-            )
-        }
+        return TagQueryOperations.matchingDisplayNameTags(
+            in: tags,
+            query: searchText
+        )
     }
 }
 

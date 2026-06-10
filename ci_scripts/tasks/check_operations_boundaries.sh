@@ -38,6 +38,7 @@ forbidden_collaborators=(
   WatchSyncService
   SettingsStatusLoader
   SubscriptionStateCalculator
+  TagTextSupport
   DataMaintenance
   ItemRelativeQueryCoordinator
   ItemSearchPredicateBuilder
