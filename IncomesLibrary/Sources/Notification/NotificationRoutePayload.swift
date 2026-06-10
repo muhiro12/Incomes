@@ -1,7 +1,8 @@
 import Foundation
-import MHPlatform
+import MHPlatformCore
 
-enum NotificationRoutePayload {
+/// Builds and decodes notification route payloads for upcoming payment reminders.
+public enum NotificationRoutePayload {
     private enum Key {
         static let itemIdentifier = "itemIdentifier"
         static let notificationKind = "notificationKind"
@@ -14,9 +15,11 @@ enum NotificationRoutePayload {
         static let upcomingPayment = "upcoming-payment"
     }
 
-    static let viewMonthActionIdentifier = "upcoming-payment.view-month"
+    /// Notification action identifier for opening the reminder month.
+    public static let viewMonthActionIdentifier = "upcoming-payment.view-month"
 
-    static let codec: MHNotificationPayloadCodec = .init(
+    /// Codec configured for Incomes notification route payload keys.
+    public static let codec: MHNotificationPayloadCodec = .init(
         configuration: .init(
             keys: .init(
                 defaultRouteURL: Key.primaryDeepLinkURL,
@@ -30,7 +33,8 @@ enum NotificationRoutePayload {
         )
     )
 
-    static func userInfo(
+    /// Builds `UNNotificationContent.userInfo` values from a presentation.
+    public static func userInfo(
         for presentation: UpcomingPaymentNotificationPresentation
     ) -> [AnyHashable: Any] {
         codec.encode(
@@ -50,7 +54,8 @@ enum NotificationRoutePayload {
         )
     }
 
-    static func legacyFallbackRouteURL(
+    /// Returns the legacy month route URL for old notification payloads.
+    public static func legacyFallbackRouteURL(
         userInfo: [AnyHashable: Any],
         actionIdentifier: String
     ) -> URL? {
