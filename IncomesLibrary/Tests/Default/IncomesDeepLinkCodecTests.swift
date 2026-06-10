@@ -34,7 +34,6 @@ struct IncomesDeepLinkCodecTests {
     func make_builds_preferred_url_with_custom_host_and_prefix() {
         let codec = IncomesDeepLinkCodec.make(
             host: "example.com",
-            allowedUniversalLinkHosts: ["example.com"],
             appPathPrefix: "Budget"
         )
 
@@ -60,13 +59,13 @@ struct IncomesDeepLinkCodecTests {
     }
 
     @Test
-    func make_parses_universal_link_from_custom_allowed_host() {
+    func make_parses_universal_link_from_explicit_allowed_host() {
         let codec = IncomesDeepLinkCodec.make(
             host: "example.com",
-            allowedUniversalLinkHosts: ["example.com"],
+            allowedUniversalLinkHosts: ["links.example.com"],
             appPathPrefix: "Budget"
         )
-        let url = URL(string: "https://example.com/Budget/search?q=rent")
+        let url = URL(string: "https://links.example.com/Budget/search?q=rent")
 
         let route = url.flatMap(codec.parse)
 
