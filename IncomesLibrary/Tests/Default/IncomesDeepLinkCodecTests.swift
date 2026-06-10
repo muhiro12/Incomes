@@ -13,6 +13,24 @@ struct IncomesDeepLinkCodecTests {
     }
 
     @Test
+    func shared_codec_parses_default_custom_scheme_urls() {
+        let url = URL(string: "incomes://settings/subscription")
+
+        let route = url.flatMap(IncomesDeepLinkCodec.shared.parse)
+
+        #expect(route == .settingsSubscription)
+    }
+
+    @Test
+    func shared_codec_parses_default_universal_link_urls() {
+        let url = URL(string: "https://muhiro12.github.io/Incomes/month/2026-04")
+
+        let route = url.flatMap(IncomesDeepLinkCodec.shared.parse)
+
+        #expect(route == .month(year: 2_026, month: 4))
+    }
+
+    @Test
     func make_builds_preferred_url_with_custom_host_and_prefix() {
         let codec = IncomesDeepLinkCodec.make(
             host: "example.com",
