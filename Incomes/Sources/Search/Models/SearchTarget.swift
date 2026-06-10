@@ -45,7 +45,7 @@ enum SearchTarget: CaseIterable {
         guard let target = searchPredicateTarget else {
             return nil
         }
-        return ItemSearchPredicateBuilder.build(
+        return SearchResultOperations.currencyPredicate(
             target: target,
             minimumText: minimumText,
             maximumText: maximumText
@@ -68,7 +68,7 @@ enum SearchTarget: CaseIterable {
 }
 
 private extension SearchTarget {
-    var searchPredicateTarget: ItemSearchPredicateBuilder.Target? {
+    var searchPredicateTarget: SearchResultOperations.CurrencyTarget? {
         switch self {
         case .content,
              .category:

@@ -20,8 +20,10 @@ there. The module stays as one shared library for now.
 
 - Shared operations should be expressed through library services before they
   are reused elsewhere.
-- `Item*Operations`, `Tag*Operations`, `YearlyItemDuplication*Operations`, `SummaryCalculator`, and
-  `DataMaintenance` are primary shared entry points.
-- UI, App Intents, watchOS, and widgets should call the same shared APIs.
+- `Item*Operations`, `Tag*Operations`, `ItemSummaryOperations`,
+  `YearlyItemDuplication*Operations`, `WidgetEntryOperations`,
+  `WatchSyncOperations`, and similar `*Operations` facades are primary shared
+  business entry points.
+- UI, App Intents, watchOS, and widgets should call the same shared operations.
 - Compatibility wrappers may exist during migration, but new call sites should
   target the canonical shared APIs.

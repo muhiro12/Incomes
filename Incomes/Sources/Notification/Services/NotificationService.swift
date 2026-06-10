@@ -150,11 +150,11 @@ final class NotificationService: NSObject {
         }
 
         let settings = currentNotificationSettings()
-        let plan = UpcomingPaymentPlanner.PlannedPayment(
+        let plan = UpcomingPaymentOperations.PlannedPayment(
             item: item,
             notifyDate: Date.now.addingTimeInterval(1)
         )
-        guard let presentation = UpcomingPaymentNotificationPresentationBuilder.build(
+        guard let presentation = UpcomingPaymentOperations.notificationPresentations(
             plans: [plan],
             settings: settings,
             now: .now
@@ -281,7 +281,7 @@ private extension NotificationService {
 
     func buildUpcomingPaymentReminders() -> [UNNotificationRequest] {
         let settings = currentNotificationSettings()
-        guard let plans = try? UpcomingPaymentPlanner.build(
+        guard let plans = try? UpcomingPaymentOperations.build(
             context: modelContainer.mainContext,
             settings: settings,
             now: .now,
@@ -290,7 +290,7 @@ private extension NotificationService {
             return .empty
         }
 
-        let presentations = UpcomingPaymentNotificationPresentationBuilder.build(
+        let presentations = UpcomingPaymentOperations.notificationPresentations(
             plans: plans,
             settings: settings,
             now: .now

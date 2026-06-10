@@ -2,12 +2,12 @@
 
 ## Scope
 
-This guide defines the strict `domain-in-library, UI-as-adapter` policy for
-this repository. `IncomesLibrary` is the app's behavioral implementation:
-business rules, persistence schema, shared value contracts, and tested
-decision-making live there. `Incomes`, `Watch`, `Widgets`, App Intents, and
-Shortcuts are delivery surfaces that adapt the shared implementation to Apple
-frameworks and user interfaces.
+This guide defines the strict `business-logic-in-library, UI-as-adapter`
+policy for this repository. `IncomesLibrary` is the app's behavioral
+implementation: business rules, persistence schema, shared value contracts,
+and tested decision-making live there. `Incomes`, `Watch`, `Widgets`, App
+Intents, and Shortcuts are delivery surfaces that adapt the shared
+implementation to Apple frameworks and user interfaces.
 
 Related document:
 [shared-service-design.md](./shared-service-design.md)
@@ -15,13 +15,32 @@ Related document:
 Related decision:
 [0005-adapter-failure-surfacing-contract.md](../Decisions/0005-adapter-failure-surfacing-contract.md)
 
+Related decision:
+[0006-operations-as-business-use-case-boundary.md](../Decisions/0006-operations-as-business-use-case-boundary.md)
+
+## Public Business Boundary
+
+External delivery surfaces call business use cases through public
+`*Operations` facades in `IncomesLibrary`.
+
+`Operations` is the library's application layer. It may orchestrate models,
+value types, calculators, builders, planners, loaders, parsers, codecs, and
+persistence queries, but those collaborators should not become the primary
+public business interface for app, intent, watch, or widget surfaces.
+
+Public non-Operations contracts remain valid when they are value types, route
+or deep-link contracts, wire payloads, snapshot models, parsers, codecs,
+persistence setup, or development/platform support rather than externally
+invoked business use cases.
+
 ## Responsibility Boundaries
 
 | Layer | Owns | Must not own |
 | --- | --- | --- |
-| Domain implementation (`IncomesLibrary`) | Validation, calculations, repeat rules, duplication planning, search predicate building, maintenance rules, SwiftData schema/predicates/descriptors, shared route and sync contracts | App-specific side effects (notifications, WidgetKit reload, ads, StoreKit, WatchConnectivity orchestration, lifecycle wiring), UI framework types, App Intent types |
-| Delivery surface / adapter (`Incomes`, `Watch`, `Widgets`, App Intents) | Parameter parsing, platform API calls, dependency wiring, follow-up orchestration based on domain outcomes | Domain branching duplicated from library |
-| View (SwiftUI) | Focus state, sheets, navigation state, screen-scoped `@Observable` presentation models, formatting, view composition | Domain validation branching, business calculations, repeat/duplication rules |
+| Business implementation (`IncomesLibrary`) | Public `*Operations` facades, validation, calculations, repeat rules, duplication planning, search predicate building, maintenance rules, SwiftData schema/predicates/descriptors, shared route and sync contracts | App-specific side effects (notifications, WidgetKit reload, ads, StoreKit, WatchConnectivity orchestration, lifecycle wiring), UI framework types, App Intent types |
+| Collaborator (`IncomesLibrary`) | Models, value types, calculators, builders, planners, loaders, parsers, codecs, and persistence helpers used by `*Operations` | Primary external business-use-case entry points |
+| Delivery surface / adapter (`Incomes`, `Watch`, `Widgets`, App Intents) | Parameter parsing, platform API calls, dependency wiring, follow-up orchestration based on operation outcomes | Business branching duplicated from library |
+| View (SwiftUI) | Focus state, sheets, navigation state, screen-scoped `@Observable` presentation models, formatting, view composition | Business validation branching, financial calculations, repeat/duplication rules |
 
 ## Thin-Target Clarification
 
@@ -32,7 +51,7 @@ Related decision:
   notification delivery, and other Apple-framework adapters.
 - A target is still considered thin when reusable finance rules, mutation
   decisions, shared snapshot building, and sync wire contracts continue to live
-  in `IncomesLibrary`.
+  in `IncomesLibrary` and external business calls enter through `*Operations`.
 - A serious behavioral defect should be reproducible in `IncomesLibrary` tests.
   If a defect can only exist in one surface, it should usually be limited to
   presentation, platform delivery, or adapter wiring.
@@ -92,11 +111,11 @@ Adapters may orchestrate platform side effects after mutation completion, but mu
 
 ## App Intent Mapping
 
-App Intents must follow the same domain path:
+App Intents must follow the same business path:
 
-`AppIntent parameter parsing -> same Workflow/Adapter -> same IncomesLibrary service`
+`AppIntent parameter parsing -> same Workflow/Adapter -> IncomesLibrary *Operations`
 
-Intent files may convert domain errors to App Intent errors, but must not re-implement domain rules.
+Intent files may convert operation errors to App Intent errors, but must not re-implement business rules.
 Intent-only entities, parameter summaries, snippet views, and shortcut phrases
 stay outside `IncomesLibrary` because they are adapter concerns.
 
@@ -137,8 +156,8 @@ Current shared sync contract and snapshot services:
 - `WatchSyncReply`
 - `WatchSyncFailure`
 - `WatchSyncFailurePhase`
-- `WatchSyncService.recentItemWires(context:baseDate:monthOffsets:)`
-- `WatchSyncService.applySnapshot(context:items:baseDate:monthOffsets:)`
+- `WatchSyncOperations.recentItemWires(context:baseDate:monthOffsets:)`
+- `WatchSyncOperations.applySnapshot(context:items:baseDate:monthOffsets:)`
 
 See
 [0005-adapter-failure-surfacing-contract.md](../Decisions/0005-adapter-failure-surfacing-contract.md)
@@ -239,8 +258,8 @@ API style decision:
    reintroducing target-local snapshot or mutation rules.
    Files:
    - `Watch/Sources/Services/WatchDataSyncer.swift`
-   - `IncomesLibrary/Sources/Item/Sync/WatchSyncService.swift`
+   - `IncomesLibrary/Sources/Item/Sync/WatchSyncOperations.swift`
    Minimal plan:
    - Keep networking/timing in watch adapters.
    - Keep response snapshot building, snapshot apply, and reconciliation in
-     `WatchSyncService`.
+     `WatchSyncOperations`.

@@ -18,8 +18,8 @@ struct SearchResultView: View {
         _items = Query(.items(predicate))
     }
 
-    private var sections: [SearchResultSectionBuilder.Section] {
-        SearchResultSectionBuilder.sections(for: items)
+    private var sections: [SearchResultOperations.Section] {
+        SearchResultOperations.sections(for: items)
     }
 
     var body: some View {

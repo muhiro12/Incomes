@@ -1,5 +1,5 @@
 //
-//  UpcomingPaymentPlannerTests.swift
+//  UpcomingPaymentOperationsTests.swift
 //  IncomesLibraryTests
 //
 //  Created by Hiromu Nakano on 2025/10/11.
@@ -10,7 +10,7 @@ import Foundation
 import SwiftData
 import Testing
 
-struct UpcomingPaymentPlannerTests {
+struct UpcomingPaymentOperationsTests {
     let context: ModelContext
 
     init() {
@@ -33,7 +33,7 @@ struct UpcomingPaymentPlannerTests {
         var settings = NotificationSettings()
         settings.isEnabled = false
 
-        let plans = try UpcomingPaymentPlanner.build(
+        let plans = try UpcomingPaymentOperations.build(
             context: context,
             settings: settings,
             now: shiftedDate("2024-01-01T00:00:00Z")
@@ -68,7 +68,7 @@ struct UpcomingPaymentPlannerTests {
             )
         )
 
-        let plans = try UpcomingPaymentPlanner.build(
+        let plans = try UpcomingPaymentOperations.build(
             context: context,
             settings: settings,
             now: shiftedDate("2024-01-01T00:00:00Z")
@@ -131,7 +131,7 @@ struct UpcomingPaymentPlannerTests {
             )
         )
 
-        let plans = try UpcomingPaymentPlanner.build(
+        let plans = try UpcomingPaymentOperations.build(
             context: context,
             settings: settings,
             now: shiftedDate("2024-01-10T10:00:00Z")

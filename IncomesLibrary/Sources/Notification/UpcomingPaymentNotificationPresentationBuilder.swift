@@ -2,10 +2,10 @@ import Foundation
 import MHPlatformCore
 
 /// Builds display-ready notification payloads for upcoming payment reminders.
-public enum UpcomingPaymentNotificationPresentationBuilder { // swiftlint:disable:this type_name
+enum UpcomingPaymentNotificationPresentationBuilder { // swiftlint:disable:this type_name
     /// Builds sorted notification presentations for the provided planned payments.
-    public static func build(
-        plans: [UpcomingPaymentPlanner.PlannedPayment],
+    static func build(
+        plans: [UpcomingPaymentOperations.PlannedPayment],
         settings: NotificationSettings,
         now: Date,
         calendar: Calendar = .current
@@ -42,7 +42,7 @@ public enum UpcomingPaymentNotificationPresentationBuilder { // swiftlint:disabl
 
 private extension UpcomingPaymentNotificationPresentationBuilder {
     static func buildPresentation(
-        plan: UpcomingPaymentPlanner.PlannedPayment,
+        plan: UpcomingPaymentOperations.PlannedPayment,
         settings: NotificationSettings,
         now: Date,
         badgeCount: Int,

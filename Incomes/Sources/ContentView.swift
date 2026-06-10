@@ -101,7 +101,7 @@ private extension ContentView {
             ]
         }
 
-        let state = SubscriptionStateCalculator.calculate(
+        let state = SubscriptionStateOperations.calculate(
             purchasedProductIDs: purchasedProductIDs,
             productID: IncomesMonetizationConfiguration.subscriptionProductID,
             isICloudOn: isICloudOn

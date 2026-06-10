@@ -1,108 +1,14 @@
 import Foundation
 
 /// Builds deterministic monthly summary prompts, fallbacks, and validation.
-public enum MonthlySummaryNarrativeBuilder {
-    /// Data needed to build a monthly narrative prompt or deterministic fallback.
-    public struct Context: Equatable, Sendable {
-        /// Totals for the requested month.
-        public let currentTotals: MonthTotals
-        /// Totals for the previous month.
-        public let previousTotals: MonthTotals
-        /// Category-level comparisons sorted by significance.
-        public let categoryComparisons: [CategoryComparison]
-
-        /// Creates a monthly narrative context.
-        public init(
-            currentTotals: MonthTotals,
-            previousTotals: MonthTotals,
-            categoryComparisons: [CategoryComparison]
-        ) {
-            self.currentTotals = currentTotals
-            self.previousTotals = previousTotals
-            self.categoryComparisons = categoryComparisons
-        }
-    }
-
-    /// Monthly totals prepared for narrative generation.
-    public struct MonthTotals: Equatable, Sendable {
-        /// The calendar year for the month.
-        public let year: Int
-        /// The one-based month number.
-        public let month: Int
-        /// The currency code selected by the app.
-        public let currencyCode: String
-        /// Total income for the month.
-        public let totalIncome: Decimal
-        /// Total outgo for the month.
-        public let totalOutgo: Decimal
-        /// Net income for the month.
-        public let netIncome: Decimal
-
-        /// Creates monthly totals prepared for narrative generation.
-        public init(
-            year: Int,
-            month: Int,
-            currencyCode: String,
-            totalIncome: Decimal,
-            totalOutgo: Decimal,
-            netIncome: Decimal
-        ) {
-            self.year = year
-            self.month = month
-            self.currencyCode = currencyCode
-            self.totalIncome = totalIncome
-            self.totalOutgo = totalOutgo
-            self.netIncome = netIncome
-        }
-    }
-
-    /// Category comparison data prepared for narrative generation.
-    public struct CategoryComparison: Equatable, Sendable {
-        /// The category display name.
-        public let category: String
-        /// Current-month income total for this category.
-        public let currentIncome: Decimal
-        /// Previous-month income total for this category.
-        public let previousIncome: Decimal
-        /// Current income minus previous income for this category.
-        public let incomeDelta: Decimal
-        /// Current-month outgo total for this category.
-        public let currentOutgo: Decimal
-        /// Previous-month outgo total for this category.
-        public let previousOutgo: Decimal
-        /// Current outgo minus previous outgo for this category.
-        public let outgoDelta: Decimal
-
-        /// Creates category comparison data prepared for narrative generation.
-        public init(
-            category: String,
-            currentIncome: Decimal,
-            previousIncome: Decimal,
-            incomeDelta: Decimal,
-            currentOutgo: Decimal,
-            previousOutgo: Decimal,
-            outgoDelta: Decimal
-        ) {
-            self.category = category
-            self.currentIncome = currentIncome
-            self.previousIncome = previousIncome
-            self.incomeDelta = incomeDelta
-            self.currentOutgo = currentOutgo
-            self.previousOutgo = previousOutgo
-            self.outgoDelta = outgoDelta
-        }
-    }
-
-    /// Validation failures for generated monthly summary text.
-    public enum ValidationError: Error, Equatable {
-        /// The generated text was empty.
-        case emptySummary
-        /// The generated text contained a value that was not allowed.
-        case unsupportedNumber
-    }
+enum MonthlySummaryNarrativeBuilder {
+    typealias Context = MonthlySummaryOperations.Context
+    typealias MonthTotals = MonthlySummaryOperations.MonthTotals
+    typealias CategoryComparison = MonthlySummaryOperations.CategoryComparison
+    typealias ValidationError = MonthlySummaryOperations.ValidationError
 
     /// Builds Foundation Models instructions for monthly summary generation.
-    public static func instructions(languageCode: String) -> String {
+    static func instructions(languageCode: String) -> String {
         """
         You write concise monthly financial activity summaries for a household finance app.
         Use only the exact values provided in the prompt.
@@ -132,7 +38,7 @@ public enum MonthlySummaryNarrativeBuilder {
     }
 
     /// Builds a model prompt from deterministic monthly summary context.
-    public static func prompt(
+    static func prompt(
         monthTitle: String,
         localeIdentifier: String,
         languageCode: String,
@@ -176,7 +82,7 @@ public enum MonthlySummaryNarrativeBuilder {
     }
 
     /// Returns a deterministic fallback summary when model generation cannot be trusted.
-    public static func fallbackSummary(
+    static func fallbackSummary(
         monthTitle: String,
         context: Context,
         locale: Locale
@@ -218,7 +124,7 @@ public enum MonthlySummaryNarrativeBuilder {
     }
 
     /// Trims and validates generated text against the exact current-month totals.
-    public static func validatedSummary(
+    static func validatedSummary(
         _ summary: String,
         currentTotals: MonthTotals
     ) throws -> String {

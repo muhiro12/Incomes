@@ -3,7 +3,7 @@ import Foundation
 import SwiftData
 import Testing
 
-struct UpcomingPaymentNotificationPresentationBuilderTests { // swiftlint:disable:this type_name
+struct UpcomingPaymentOperationsPresentationTests { // swiftlint:disable:this type_name
     let context: ModelContext
 
     init() {
@@ -43,15 +43,15 @@ struct UpcomingPaymentNotificationPresentationBuilderTests { // swiftlint:disabl
             repeatCount: 1
         )
 
-        let firstPlan = UpcomingPaymentPlanner.PlannedPayment(
+        let firstPlan = UpcomingPaymentOperations.PlannedPayment(
             item: firstItem,
             notifyDate: shiftedDate("2024-01-17T09:00:00Z")
         )
-        let secondPlan = UpcomingPaymentPlanner.PlannedPayment(
+        let secondPlan = UpcomingPaymentOperations.PlannedPayment(
             item: secondItem,
             notifyDate: shiftedDate("2024-01-19T09:00:00Z")
         )
-        let thirdPlan = UpcomingPaymentPlanner.PlannedPayment(
+        let thirdPlan = UpcomingPaymentOperations.PlannedPayment(
             item: thirdItem,
             notifyDate: shiftedDate("2024-02-02T09:00:00Z")
         )
@@ -59,7 +59,7 @@ struct UpcomingPaymentNotificationPresentationBuilderTests { // swiftlint:disabl
         var settings = NotificationSettings()
         settings.thresholdAmount = 500
 
-        let presentations = UpcomingPaymentNotificationPresentationBuilder.build(
+        let presentations = UpcomingPaymentOperations.notificationPresentations(
             plans: [thirdPlan, secondPlan, firstPlan],
             settings: settings,
             now: shiftedDate("2024-01-01T00:00:00Z")
@@ -125,11 +125,11 @@ struct UpcomingPaymentNotificationPresentationBuilderTests { // swiftlint:disabl
             repeatCount: 1
         )
 
-        let lowAttentionPlan = UpcomingPaymentPlanner.PlannedPayment(
+        let lowAttentionPlan = UpcomingPaymentOperations.PlannedPayment(
             item: lowAttentionItem,
             notifyDate: shiftedDate("2024-01-14T09:00:00Z")
         )
-        let highAttentionPlan = UpcomingPaymentPlanner.PlannedPayment(
+        let highAttentionPlan = UpcomingPaymentOperations.PlannedPayment(
             item: highAttentionItem,
             notifyDate: shiftedDate("2024-01-10T09:00:00Z")
         )
@@ -137,7 +137,7 @@ struct UpcomingPaymentNotificationPresentationBuilderTests { // swiftlint:disabl
         var settings = NotificationSettings()
         settings.thresholdAmount = 500
 
-        let presentations = UpcomingPaymentNotificationPresentationBuilder.build(
+        let presentations = UpcomingPaymentOperations.notificationPresentations(
             plans: [lowAttentionPlan, highAttentionPlan],
             settings: settings,
             now: shiftedDate("2024-01-01T00:00:00Z")
@@ -182,11 +182,11 @@ struct UpcomingPaymentNotificationPresentationBuilderTests { // swiftlint:disabl
             repeatCount: 1
         )
 
-        let lowUrgencyPlan = UpcomingPaymentPlanner.PlannedPayment(
+        let lowUrgencyPlan = UpcomingPaymentOperations.PlannedPayment(
             item: lowUrgencyItem,
             notifyDate: shiftedDate("2024-01-10T09:00:00Z")
         )
-        let highUrgencyPlan = UpcomingPaymentPlanner.PlannedPayment(
+        let highUrgencyPlan = UpcomingPaymentOperations.PlannedPayment(
             item: highUrgencyItem,
             notifyDate: shiftedDate("2024-01-10T09:00:00Z")
         )
@@ -194,7 +194,7 @@ struct UpcomingPaymentNotificationPresentationBuilderTests { // swiftlint:disabl
         var settings = NotificationSettings()
         settings.thresholdAmount = 500
 
-        let presentations = UpcomingPaymentNotificationPresentationBuilder.build(
+        let presentations = UpcomingPaymentOperations.notificationPresentations(
             plans: [lowUrgencyPlan, highUrgencyPlan],
             settings: settings,
             now: shiftedDate("2024-01-01T00:00:00Z")

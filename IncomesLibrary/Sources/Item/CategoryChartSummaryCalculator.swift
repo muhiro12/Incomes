@@ -8,43 +8,11 @@
 import Foundation
 
 /// Utilities for building category chart summaries without app UI dependencies.
-public enum CategoryChartSummaryCalculator {
-    /// A value type that represents one category segment in a chart.
-    public struct Segment: Equatable, Sendable {
-        /// The display name of the category.
-        public let title: String
-        /// Aggregated amount for the category.
-        public let value: Decimal
-        /// `value` converted to `Double` for chart plotting.
-        public let plotValue: Double
-        /// Share of the category value within the total.
-        public let ratio: Double
-        /// Localized percentage text for `ratio`.
-        public let percentText: String
-        /// Legend label combining category, percentage, and amount.
-        public let label: String
-
-        /// Creates a new category chart segment.
-        public init(
-            title: String,
-            value: Decimal,
-            ratio: Double
-        ) {
-            self.title = title
-            self.value = value
-            plotValue = Self.decimalToDouble(value)
-            self.ratio = ratio
-            percentText = ratio.formatted(.percent.precision(.fractionLength(0)))
-            label = "\(title) \(percentText) • \(value.asCurrency)"
-        }
-
-        private static func decimalToDouble(_ value: Decimal) -> Double {
-            Double(value.description) ?? .zero
-        }
-    }
+enum CategoryChartSummaryCalculator {
+    typealias Segment = ItemSummaryOperations.ChartSegment
 
     /// Returns income chart segments grouped by category.
-    public static func incomeSegments(for items: [Item]) -> [Segment] {
+    static func incomeSegments(for items: [Item]) -> [Segment] {
         segments(
             for: items,
             amount: \.income
@@ -52,7 +20,7 @@ public enum CategoryChartSummaryCalculator {
     }
 
     /// Returns outgo chart segments grouped by category.
-    public static func outgoSegments(for items: [Item]) -> [Segment] {
+    static func outgoSegments(for items: [Item]) -> [Segment] {
         segments(
             for: items,
             amount: \.outgo

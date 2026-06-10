@@ -2,11 +2,11 @@ import Foundation
 @testable import IncomesLibrary
 import Testing
 
-struct ItemFormInferencePromptBuilderTests {
+struct ItemFormInferenceOperationsTests {
     @Test
     func languageCode_returns_locale_language() {
         #expect(
-            ItemFormInferencePromptBuilder.languageCode(
+            ItemFormInferenceOperations.languageCode(
                 for: Locale(identifier: "ja_JP")
             ) == "ja"
         )
@@ -14,7 +14,7 @@ struct ItemFormInferencePromptBuilderTests {
 
     @Test
     func instructions_describe_inference_role() {
-        let instructions = ItemFormInferencePromptBuilder.instructions()
+        let instructions = ItemFormInferenceOperations.instructions()
 
         #expect(instructions.contains("household accounting and budgeting app"))
         #expect(instructions.contains("expert accountant"))
@@ -22,7 +22,7 @@ struct ItemFormInferencePromptBuilderTests {
 
     @Test
     func prompt_includes_current_date_language_requirements_and_user_input() {
-        let prompt = ItemFormInferencePromptBuilder.prompt(
+        let prompt = ItemFormInferenceOperations.prompt(
             text: "Lunch yesterday 1200 yen",
             currentDate: localDate(year: 2_026, month: 6, day: 10),
             locale: Locale(identifier: "en_US")
@@ -36,7 +36,7 @@ struct ItemFormInferencePromptBuilderTests {
 
     @Test
     func prompt_escapes_user_input_as_json_string() {
-        let prompt = ItemFormInferencePromptBuilder.prompt(
+        let prompt = ItemFormInferenceOperations.prompt(
             text: "Lunch \"yesterday\"\nBackslash \\",
             currentDate: localDate(year: 2_026, month: 6, day: 10),
             locale: Locale(identifier: "en_US")
@@ -47,7 +47,7 @@ struct ItemFormInferencePromptBuilderTests {
 
     @Test
     func prompt_uses_japanese_language_code() {
-        let prompt = ItemFormInferencePromptBuilder.prompt(
+        let prompt = ItemFormInferenceOperations.prompt(
             text: "昨日の昼食 1200円",
             currentDate: localDate(year: 2_026, month: 6, day: 10),
             locale: Locale(identifier: "ja_JP")

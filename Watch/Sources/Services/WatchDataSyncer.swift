@@ -20,7 +20,7 @@ enum WatchDataSyncer {
         }
 
         do {
-            _ = try WatchSyncService.applySnapshot(
+            _ = try WatchSyncOperations.applySnapshot(
                 context: context,
                 items: reply.items,
                 baseDate: request.baseDate,

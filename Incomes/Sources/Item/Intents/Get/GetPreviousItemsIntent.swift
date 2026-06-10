@@ -18,7 +18,7 @@ struct GetPreviousItemsIntent: AppIntent {
 
     @MainActor
     func perform() throws -> some ReturnsValue<[ItemEntity]> {
-        let items = try ItemRelativeQueryCoordinator.items(
+        let items = try ItemRelativeQueryOperations.items(
             context: modelContainer.mainContext,
             date: date,
             direction: .previous

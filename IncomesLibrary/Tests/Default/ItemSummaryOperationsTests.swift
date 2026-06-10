@@ -1,5 +1,5 @@
 //
-//  SummaryCalculatorTests.swift
+//  ItemSummaryOperationsTests.swift
 //  IncomesLibraryTests
 //
 //  Created by Hiromu Nakano on 2025/10/11.
@@ -10,7 +10,7 @@ import Foundation
 import SwiftData
 import Testing
 
-struct SummaryCalculatorTests {
+struct ItemSummaryOperationsTests {
     let context: ModelContext
 
     init() {
@@ -19,7 +19,7 @@ struct SummaryCalculatorTests {
 
     @Test
     func monthlyTotals_returns_zero_when_month_has_no_items() throws {
-        let totals = try SummaryCalculator.monthlyTotals(
+        let totals = try ItemSummaryOperations.monthlyTotals(
             context: context,
             date: shiftedDate("2024-01-15T00:00:00Z")
         )
@@ -53,7 +53,7 @@ struct SummaryCalculatorTests {
             category: "Misc"
         )
 
-        let totals = try SummaryCalculator.monthlyTotals(
+        let totals = try ItemSummaryOperations.monthlyTotals(
             context: context,
             date: shiftedDate("2024-02-10T00:00:00Z")
         )
@@ -65,7 +65,7 @@ struct SummaryCalculatorTests {
 
     @Test
     func categoryComparison_returns_empty_when_current_and_previous_months_have_no_items() throws {
-        let comparisons = try SummaryCalculator.categoryComparison(
+        let comparisons = try ItemSummaryOperations.categoryComparison(
             context: context,
             date: shiftedDate("2024-04-15T00:00:00Z")
         )
@@ -83,7 +83,7 @@ struct SummaryCalculatorTests {
             category: "Bonus"
         )
 
-        let comparisons = try SummaryCalculator.categoryComparison(
+        let comparisons = try ItemSummaryOperations.categoryComparison(
             context: context,
             date: shiftedDate("2024-05-15T00:00:00Z")
         )
@@ -109,7 +109,7 @@ struct SummaryCalculatorTests {
             category: "Housing"
         )
 
-        let comparisons = try SummaryCalculator.categoryComparison(
+        let comparisons = try ItemSummaryOperations.categoryComparison(
             context: context,
             date: shiftedDate("2024-06-15T00:00:00Z")
         )
@@ -142,7 +142,7 @@ struct SummaryCalculatorTests {
             category: "Work"
         )
 
-        let comparisons = try SummaryCalculator.categoryComparison(
+        let comparisons = try ItemSummaryOperations.categoryComparison(
             context: context,
             date: shiftedDate("2024-01-15T00:00:00Z")
         )
@@ -172,7 +172,7 @@ struct SummaryCalculatorTests {
             category: .empty
         )
 
-        let comparisons = try SummaryCalculator.categoryComparison(
+        let comparisons = try ItemSummaryOperations.categoryComparison(
             context: context,
             date: shiftedDate("2024-07-15T00:00:00Z")
         )
@@ -215,7 +215,7 @@ struct SummaryCalculatorTests {
             }
         )
 
-        let comparisons = try SummaryCalculator.categoryComparison(
+        let comparisons = try ItemSummaryOperations.categoryComparison(
             context: context,
             date: shiftedDate("2024-07-15T00:00:00Z")
         )
@@ -261,7 +261,7 @@ struct SummaryCalculatorTests {
             category: "Gamma"
         )
 
-        let comparisons = try SummaryCalculator.categoryComparison(
+        let comparisons = try ItemSummaryOperations.categoryComparison(
             context: context,
             date: shiftedDate("2024-09-15T00:00:00Z")
         )
@@ -270,7 +270,7 @@ struct SummaryCalculatorTests {
     }
 }
 
-private extension SummaryCalculatorTests {
+private extension ItemSummaryOperationsTests {
     @discardableResult
     func createSummaryItem(
         date: String,

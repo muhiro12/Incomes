@@ -3,7 +3,7 @@ import Foundation
 import SwiftData
 import Testing
 
-struct MonthlySummaryContextLoaderTests {
+struct MonthlySummaryOperationsContextTests {
     let context: ModelContext
 
     init() {
@@ -34,7 +34,7 @@ struct MonthlySummaryContextLoaderTests {
             category: "Housing"
         )
 
-        let narrativeContext = try MonthlySummaryNarrativeContextLoader.load(
+        let narrativeContext = try MonthlySummaryOperations.loadContext(
             context: context,
             date: shiftedDate("2024-01-15T00:00:00Z"),
             currencyCode: "JPY"
@@ -85,7 +85,7 @@ struct MonthlySummaryContextLoaderTests {
             category: "Small"
         )
 
-        let narrativeContext = try MonthlySummaryNarrativeContextLoader.load(
+        let narrativeContext = try MonthlySummaryOperations.loadContext(
             context: context,
             date: shiftedDate("2024-02-15T00:00:00Z"),
             currencyCode: "USD",
@@ -96,7 +96,7 @@ struct MonthlySummaryContextLoaderTests {
     }
 }
 
-private extension MonthlySummaryContextLoaderTests {
+private extension MonthlySummaryOperationsContextTests {
     @discardableResult
     func createSummaryItem(
         date: String,

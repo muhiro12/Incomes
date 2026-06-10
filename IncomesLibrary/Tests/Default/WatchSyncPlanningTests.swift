@@ -90,7 +90,7 @@ struct WatchSyncPlanningTests {
             )
         ]
 
-        let outcome = try WatchSyncService.applySnapshot(
+        let outcome = try WatchSyncOperations.applySnapshot(
             context: context,
             items: incoming,
             baseDate: base,
@@ -128,7 +128,7 @@ struct WatchSyncPlanningTests {
         }
         createSyncItem(date: outsideMonth, content: "OUTSIDE")
 
-        let wires = try WatchSyncService.recentItemWires(
+        let wires = try WatchSyncOperations.recentItemWires(
             context: context,
             baseDate: base,
             monthOffsets: ItemsRequest.recentMonthOffsets
@@ -138,7 +138,7 @@ struct WatchSyncPlanningTests {
                 .stringValueWithoutLocale(.yyyyMM)
         }.mapValues(\.count)
 
-        #expect(wires.count == WatchSyncService.recentItemsResponseLimit)
+        #expect(wires.count == WatchSyncOperations.recentItemsResponseLimit)
         #expect(countsByYearMonth[previousMonth.stringValueWithoutLocale(.yyyyMM)] == 50)
         #expect(countsByYearMonth[base.stringValueWithoutLocale(.yyyyMM)] == 50)
         #expect(countsByYearMonth[nextMonth.stringValueWithoutLocale(.yyyyMM)] == 20)
@@ -169,7 +169,7 @@ struct WatchSyncPlanningTests {
             )
         }
 
-        let outcome = try WatchSyncService.applySnapshot(
+        let outcome = try WatchSyncOperations.applySnapshot(
             context: context,
             items: [],
             baseDate: base,

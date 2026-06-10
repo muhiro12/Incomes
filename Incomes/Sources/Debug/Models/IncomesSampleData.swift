@@ -18,7 +18,7 @@ struct IncomesSampleData: PreviewModifier {
                 profile: .preview,
                 ifEmptyOnly: true
             )
-            try BalanceCalculator.calculate(in: previewContext, after: .distantPast)
+            try ItemBalanceOperations.recalculate(context: previewContext, date: .distantPast)
         }
     }
 
@@ -56,7 +56,7 @@ extension IncomesSampleData {
             items = (try? context.fetch(.items(.all))) ?? []
             tags = (try? context.fetch(.tags(.all))) ?? []
         }
-        try? BalanceCalculator.calculate(in: context, for: items)
+        try? ItemBalanceOperations.recalculate(context: context, items: items)
     }
 
     static func prepareDataIgnoringDuplicates(in context: ModelContext) {
@@ -66,7 +66,7 @@ extension IncomesSampleData {
             ignoringDuplicates: true
         )
         let items = (try? context.fetch(.items(.all))) ?? []
-        try? BalanceCalculator.calculate(in: context, for: items)
+        try? ItemBalanceOperations.recalculate(context: context, items: items)
         _ = (try? context.fetch(.tags(.all))) ?? []
     }
 

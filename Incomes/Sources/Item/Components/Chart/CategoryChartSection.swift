@@ -154,19 +154,19 @@ private extension CategoryChartSection {
 
 private extension CategoryChartSection {
     var incomeTotal: Decimal {
-        SummaryCalculator.totalIncome(for: items)
+        ItemSummaryOperations.totalIncome(for: items)
     }
 
     var outgoTotal: Decimal {
-        SummaryCalculator.totalOutgo(for: items)
+        ItemSummaryOperations.totalOutgo(for: items)
     }
 
-    var incomeObjects: [CategoryChartSummaryCalculator.Segment] {
-        CategoryChartSummaryCalculator.incomeSegments(for: items)
+    var incomeObjects: [ItemSummaryOperations.ChartSegment] {
+        ItemSummaryOperations.incomeSegments(for: items)
     }
 
-    var outgoObjects: [CategoryChartSummaryCalculator.Segment] {
-        CategoryChartSummaryCalculator.outgoSegments(for: items)
+    var outgoObjects: [ItemSummaryOperations.ChartSegment] {
+        ItemSummaryOperations.outgoSegments(for: items)
     }
 
     var incomeColorScale: [String: Color] {
@@ -212,7 +212,7 @@ private extension CategoryChartSection {
 
     @ViewBuilder
     func legendList(
-        objects: [CategoryChartSummaryCalculator.Segment],
+        objects: [ItemSummaryOperations.ChartSegment],
         colorScale: [String: Color]
     ) -> some View {
         let columns: [GridItem] = [

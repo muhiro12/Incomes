@@ -3,7 +3,7 @@ import Foundation
 import SwiftData
 import Testing
 
-struct SearchResultSectionBuilderTests {
+struct SearchResultOperationsTests {
     let context: ModelContext
 
     init() {
@@ -25,7 +25,7 @@ struct SearchResultSectionBuilderTests {
             content: "February"
         )
 
-        let sections = SearchResultSectionBuilder.sections(
+        let sections = SearchResultOperations.sections(
             for: [januaryItem, marchItem, februaryItem]
         )
 
@@ -48,7 +48,7 @@ struct SearchResultSectionBuilderTests {
             content: "First"
         )
 
-        let sections = SearchResultSectionBuilder.sections(
+        let sections = SearchResultOperations.sections(
             for: [secondItem, firstItem]
         )
 
@@ -59,13 +59,13 @@ struct SearchResultSectionBuilderTests {
 
     @Test
     func sections_return_empty_for_empty_items() {
-        let sections = SearchResultSectionBuilder.sections(for: [])
+        let sections = SearchResultOperations.sections(for: [])
 
         #expect(sections.isEmpty)
     }
 }
 
-private extension SearchResultSectionBuilderTests {
+private extension SearchResultOperationsTests {
     enum TestAmount {
         static let income: Decimal = 100
         static let outgo: Decimal = .zero

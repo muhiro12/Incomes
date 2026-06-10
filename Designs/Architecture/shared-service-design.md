@@ -4,16 +4,18 @@
 
 This document describes the boundary between the shared implementation and the
 delivery surfaces in Incomes. It explains where new code should live when the
-same operation must work across the iOS app, App Intents, Apple Watch, and
-widgets.
+same business use case must work across the iOS app, App Intents, Apple Watch,
+and widgets.
 
 ## Core Principles
 
 - `IncomesLibrary` is the behavioral source of truth for the product.
+- Public business use cases that delivery surfaces call are exposed through
+  `*Operations` facades.
 - `Incomes` owns SwiftUI presentation and adapters for Apple frameworks.
 - `AppIntent` types are adapters, not a second domain layer.
 - Views keep presentation state and navigation, but reusable business decisions
-  and mutations belong in shared services.
+  and mutations belong in shared operations.
 - Delivery surfaces should be able to fail visually or operationally without
   invalidating the domain behavior covered by `IncomesLibrary` tests.
 - `IncomesLibrary` remains a single module unless there is a stronger reason
@@ -26,7 +28,8 @@ widgets.
 
 | Concern | Lives in | Examples |
 | --- | --- | --- |
-| Domain implementation | `IncomesLibrary` | `Item`, `Tag`, predicates, `Item*Operations`, `Tag*Operations`, `SummaryCalculator`, `YearlyItemDuplication*Operations`, `DataMaintenance`, `UpcomingPaymentPlanner`, `SettingsStatusLoader` |
+| Business operations | `IncomesLibrary` | `Item*Operations`, `Tag*Operations`, `ItemSummaryOperations`, `YearlyItemDuplication*Operations`, `WidgetEntryOperations`, `WatchSyncOperations`, `UpcomingPaymentOperations`, `SettingsStatusOperations`, `DataMaintenanceOperations` |
+| Library collaborators and contracts | `IncomesLibrary` | `Item`, `Tag`, predicates, calculators, builders, planners, loaders, parsers, codecs, route contracts, wire payloads, snapshot models |
 | Apple framework adapters | `Incomes` | `ItemInferenceService`, `NotificationService`, App Intent types, deep-link routing, StoreKit, ads |
 | App-side platform support | `Incomes/Sources/Common/Platform` | `IncomesPlatformEnvironmentFactory`, `MHAppRuntimeBootstrap` assembly, `MHAppRoutePipeline<IncomesRoute>` assembly, `IncomesRouteBridge`, `MHReviewFlow` policy helpers |
 | Watch and widget surfaces | `Watch`, `Widgets` | WatchConnectivity transport, widget timeline providers, target-local screen state, entry presentation |
@@ -54,30 +57,35 @@ operations and shared wire contracts:
 - `Tag*Operations` duplicate-resolution and tag/date lookup helpers
 - `YearlyItemDuplicationPlanOperations.plan(context:sourceYear:targetYear:)`
 - `YearlyItemDuplicationApplyOperations.apply(plan:context:)`
-- `SummaryCalculator`
-- `DataMaintenance.deleteAllData(context:)`
-- `DataMaintenance.deleteDebugData(context:)`
+- `ItemSummaryOperations`
+- `SearchResultOperations`
+- `WidgetEntryOperations`
+- `WatchSyncOperations`
+- `UpcomingPaymentOperations`
+- `MonthlySummaryOperations`
+- `ItemFormInferenceOperations`
+- `SettingsStatusOperations`
+- `DataMaintenanceOperations`
+- `SubscriptionStateOperations`
 - `NotificationRoutePayload`
 - `UpcomingPaymentNotificationPresentation`
 - `ItemsRequest`
 - `WatchSyncReply`
 - `WatchSyncFailure`
 - `WatchSyncFailurePhase`
-- `WatchSyncService.recentItemWires(context:baseDate:monthOffsets:)`
-- `WatchSyncService.applySnapshot(context:items:baseDate:monthOffsets:)`
 
 App-side mutation call sites should prefer
 `MHMutationWorkflow.runThrowing(... projection:)` over local wrapper APIs.
 
 ## Placement Rules
 
-1. If an operation defines product behavior, add or extend a library service
-   first.
+1. If an operation defines product behavior, add or extend a library
+   `*Operations` facade first.
 2. If an operation depends on Apple-only frameworks, keep it in `Incomes` and
    make it call library APIs.
-3. If a view or intent starts recreating date parsing, duplicate resolution,
-   yearly duplication planning, or mutation rules, treat that as a missing
-   library API.
+3. If a view, intent, widget, or watch target starts calling helper
+   collaborators or recreating date parsing, duplicate resolution, yearly
+   duplication planning, or mutation rules, treat that as a missing operation.
 4. Keep platform-specific types out of `IncomesLibrary`. Convert them at the
    boundary into library models or value types.
 5. Shared serialization contracts used by multiple targets belong in
@@ -104,14 +112,15 @@ App-side mutation call sites should prefer
 
 - `ItemInferenceService` depends on Foundation Models, so it stays in
   `Incomes` and returns values that fit the shared item form flow.
-- `NotificationService` stays in `Incomes` and uses shared planning,
-  presentation, identifier, and route payload contracts from `IncomesLibrary`.
+- `NotificationService` stays in `Incomes` and uses shared notification
+  planning operations, presentation contracts, identifier rules, and route
+  payload contracts from `IncomesLibrary`.
 - `IncomesPlatformEnvironmentFactory` stays in `Incomes` because runtime,
   route pipeline, and review flow assembly depend on the `MHPlatform` umbrella, app
   secrets, and SwiftUI environment injection.
 - `PhoneWatchBridge` and `PhoneSyncClient` stay in the app targets because they
   own WatchConnectivity transport, while `WatchSyncReply` and
-  `WatchSyncService` stay in `IncomesLibrary` because the sync contract,
+  `WatchSyncOperations` stay in `IncomesLibrary` because the sync contract,
   response snapshot building, and apply rules are shared.
 - `IncomesLibrary` stays on `MHPlatformCore` so shared logic only sees
   core-safe platform helpers.
@@ -133,6 +142,7 @@ App-side mutation call sites should prefer
 ## Refactoring Heuristic
 
 When a business rule is duplicated, the default fix is to move the rule into
-`IncomesLibrary` rather than duplicating it in another view, intent, or target.
+`IncomesLibrary` and expose it through `*Operations` rather than duplicating it
+in another view, intent, or target.
 When the duplicated code is still Apple-framework glue, the default fix is to
 extract it into `Incomes/Sources/Common/Platform`.

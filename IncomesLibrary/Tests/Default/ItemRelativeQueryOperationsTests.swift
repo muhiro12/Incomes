@@ -2,7 +2,7 @@
 import SwiftData
 import Testing
 
-struct ItemRelativeQueryCoordinatorTests {
+struct ItemRelativeQueryOperationsTests {
     let context: ModelContext
 
     init() {
@@ -30,12 +30,12 @@ struct ItemRelativeQueryCoordinatorTests {
             priority: 0
         )
 
-        let nextItem = try ItemRelativeQueryCoordinator.item(
+        let nextItem = try ItemRelativeQueryOperations.item(
             context: context,
             date: shiftedDate("2000-01-02T00:00:00Z"),
             direction: .next
         )
-        let previousItem = try ItemRelativeQueryCoordinator.item(
+        let previousItem = try ItemRelativeQueryOperations.item(
             context: context,
             date: shiftedDate("2000-01-02T00:00:00Z"),
             direction: .previous
@@ -75,7 +75,7 @@ struct ItemRelativeQueryCoordinatorTests {
             priority: 0
         )
 
-        let items = try ItemRelativeQueryCoordinator.items(
+        let items = try ItemRelativeQueryOperations.items(
             context: context,
             date: shiftedDate("2000-01-02T00:00:00Z"),
             direction: .next
@@ -114,7 +114,7 @@ struct ItemRelativeQueryCoordinatorTests {
             priority: 0
         )
 
-        let items = try ItemRelativeQueryCoordinator.items(
+        let items = try ItemRelativeQueryOperations.items(
             context: context,
             date: shiftedDate("2000-01-02T00:00:00Z"),
             direction: .previous
@@ -136,17 +136,17 @@ struct ItemRelativeQueryCoordinatorTests {
         )
         let referenceDate = shiftedDate("2000-01-02T00:00:00Z")
 
-        let content = try ItemRelativeQueryCoordinator.content(
+        let content = try ItemRelativeQueryOperations.content(
             context: context,
             date: referenceDate,
             direction: .next
         )
-        let localDate = try ItemRelativeQueryCoordinator.localDate(
+        let localDate = try ItemRelativeQueryOperations.localDate(
             context: context,
             date: referenceDate,
             direction: .next
         )
-        let netIncome = try ItemRelativeQueryCoordinator.netIncome(
+        let netIncome = try ItemRelativeQueryOperations.netIncome(
             context: context,
             date: referenceDate,
             direction: .next
@@ -170,27 +170,27 @@ struct ItemRelativeQueryCoordinatorTests {
         )
         let referenceDate = shiftedDate("2000-01-02T00:00:00Z")
 
-        let item = try ItemRelativeQueryCoordinator.item(
+        let item = try ItemRelativeQueryOperations.item(
             context: context,
             date: referenceDate,
             direction: .previous
         )
-        let items = try ItemRelativeQueryCoordinator.items(
+        let items = try ItemRelativeQueryOperations.items(
             context: context,
             date: referenceDate,
             direction: .previous
         )
-        let content = try ItemRelativeQueryCoordinator.content(
+        let content = try ItemRelativeQueryOperations.content(
             context: context,
             date: referenceDate,
             direction: .previous
         )
-        let localDate = try ItemRelativeQueryCoordinator.localDate(
+        let localDate = try ItemRelativeQueryOperations.localDate(
             context: context,
             date: referenceDate,
             direction: .previous
         )
-        let netIncome = try ItemRelativeQueryCoordinator.netIncome(
+        let netIncome = try ItemRelativeQueryOperations.netIncome(
             context: context,
             date: referenceDate,
             direction: .previous

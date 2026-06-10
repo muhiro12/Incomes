@@ -1,5 +1,5 @@
 //
-//  ItemRelativeQueryCoordinator.swift
+//  ItemRelativeQueryOperations.swift
 //  Incomes
 //
 //  Created by Codex on 2026/06/10.
@@ -9,7 +9,7 @@ import Foundation
 import SwiftData
 
 /// Coordinates relative item queries around a reference date.
-public enum ItemRelativeQueryCoordinator {
+public enum ItemRelativeQueryOperations {
     /// Relative query direction from the reference date.
     public enum Direction {
         /// Query items on or after the reference date.

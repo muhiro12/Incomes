@@ -3,7 +3,7 @@ import Foundation
 import SwiftData
 import Testing
 
-struct SettingsStatusLoaderTests {
+struct SettingsStatusOperationsTests {
     let context: ModelContext
 
     init() {
@@ -12,7 +12,7 @@ struct SettingsStatusLoaderTests {
 
     @Test
     func load_returns_false_when_empty() throws {
-        let status = try SettingsStatusLoader.load(context: context)
+        let status = try SettingsStatusOperations.load(context: context)
         #expect(status.hasDuplicateTags == false)
         #expect(status.hasOrphanTags == false)
         #expect(status.hasDebugData == false)
@@ -28,7 +28,7 @@ struct SettingsStatusLoaderTests {
             ignoringDuplicates: true
         )
 
-        let status = try SettingsStatusLoader.load(context: context)
+        let status = try SettingsStatusOperations.load(context: context)
         #expect(status.hasDuplicateTags == true)
         #expect(status.hasOrphanTags == true)
         #expect(status.hasDebugData == true)
@@ -42,7 +42,7 @@ struct SettingsStatusLoaderTests {
             type: .content
         )
 
-        let status = try SettingsStatusLoader.load(context: context)
+        let status = try SettingsStatusOperations.load(context: context)
 
         #expect(status.hasDuplicateTags == false)
         #expect(status.hasOrphanTags == true)
@@ -67,7 +67,7 @@ struct SettingsStatusLoaderTests {
             type: .debug
         )
 
-        let initialStatus = try SettingsStatusLoader.load(context: context)
+        let initialStatus = try SettingsStatusOperations.load(context: context)
         #expect(initialStatus.hasDuplicateTags == true)
         #expect(initialStatus.hasOrphanTags == true)
         #expect(initialStatus.hasDebugData == true)
@@ -76,7 +76,7 @@ struct SettingsStatusLoaderTests {
         TagMutationOperations.delete(tag: secondTag)
         TagMutationOperations.delete(tag: debugTag)
 
-        let refreshedStatus = try SettingsStatusLoader.load(context: context)
+        let refreshedStatus = try SettingsStatusOperations.load(context: context)
         #expect(refreshedStatus.hasDuplicateTags == false)
         #expect(refreshedStatus.hasOrphanTags == false)
         #expect(refreshedStatus.hasDebugData == false)
@@ -95,13 +95,13 @@ struct SettingsStatusLoaderTests {
             type: .content
         )
 
-        let initialStatus = try SettingsStatusLoader.load(context: context)
+        let initialStatus = try SettingsStatusOperations.load(context: context)
         #expect(initialStatus.hasDuplicateTags == true)
         #expect(initialStatus.hasOrphanTags == true)
 
         try TagMutationOperations.resolveAllDuplicates(context: context)
 
-        let resolvedStatus = try SettingsStatusLoader.load(context: context)
+        let resolvedStatus = try SettingsStatusOperations.load(context: context)
         #expect(resolvedStatus.hasDuplicateTags == false)
         #expect(resolvedStatus.hasOrphanTags == true)
     }
@@ -114,12 +114,12 @@ struct SettingsStatusLoaderTests {
             type: .content
         )
 
-        let initialStatus = try SettingsStatusLoader.load(context: context)
+        let initialStatus = try SettingsStatusOperations.load(context: context)
         #expect(initialStatus.hasOrphanTags == true)
 
         try TagMutationOperations.deleteAllOrphanTags(context: context)
 
-        let refreshedStatus = try SettingsStatusLoader.load(context: context)
+        let refreshedStatus = try SettingsStatusOperations.load(context: context)
         #expect(refreshedStatus.hasOrphanTags == false)
     }
 }

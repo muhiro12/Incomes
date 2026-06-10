@@ -3,7 +3,7 @@ import MHPlatformCore
 import SwiftData
 
 /// Builds upcoming payment plans based on outgo thresholds and user settings.
-public enum UpcomingPaymentPlanner {
+public enum UpcomingPaymentOperations {
     /// A planned notification for a specific item and notify time.
     public struct PlannedPayment {
         /// The target item that triggers a reminder.
@@ -91,9 +91,24 @@ public enum UpcomingPaymentPlanner {
             )
         }
     }
+
+    /// Builds sorted notification presentations for planned payments.
+    public static func notificationPresentations(
+        plans: [PlannedPayment],
+        settings: NotificationSettings,
+        now: Date,
+        calendar: Calendar = .current
+    ) -> [UpcomingPaymentNotificationPresentation] {
+        UpcomingPaymentNotificationPresentationBuilder.build(
+            plans: plans,
+            settings: settings,
+            now: now,
+            calendar: calendar
+        )
+    }
 }
 
-private extension UpcomingPaymentPlanner {
+private extension UpcomingPaymentOperations {
     static func reminderPolicy(
         from settings: NotificationSettings,
         limit: Int,

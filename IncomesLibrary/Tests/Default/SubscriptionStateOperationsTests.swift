@@ -2,10 +2,10 @@ import Foundation
 @testable import IncomesLibrary
 import Testing
 
-struct SubscriptionStateCalculatorTests {
+struct SubscriptionStateOperationsTests {
     @Test
     func calculate_turns_off_iCloud_when_not_subscribed() {
-        let state = SubscriptionStateCalculator.calculate(
+        let state = SubscriptionStateOperations.calculate(
             purchasedProductIDs: ["other.product"],
             productID: "com.example.product",
             isICloudOn: true
@@ -17,7 +17,7 @@ struct SubscriptionStateCalculatorTests {
 
     @Test
     func calculate_keeps_iCloud_on_when_subscribed() {
-        let state = SubscriptionStateCalculator.calculate(
+        let state = SubscriptionStateOperations.calculate(
             purchasedProductIDs: ["com.example.product"],
             productID: "com.example.product",
             isICloudOn: true
@@ -29,7 +29,7 @@ struct SubscriptionStateCalculatorTests {
 
     @Test
     func calculate_keeps_iCloud_off_when_subscribed() {
-        let state = SubscriptionStateCalculator.calculate(
+        let state = SubscriptionStateOperations.calculate(
             purchasedProductIDs: ["com.example.product"],
             productID: "com.example.product",
             isICloudOn: false

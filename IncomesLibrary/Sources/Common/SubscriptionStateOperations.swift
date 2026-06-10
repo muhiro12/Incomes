@@ -1,5 +1,5 @@
 /// Resolves `SubscriptionState` from purchase and iCloud inputs.
-public enum SubscriptionStateCalculator {
+public enum SubscriptionStateOperations {
     /// Builds a subscription state for the given purchase set and iCloud toggle.
     public static func calculate(
         purchasedProductIDs: Set<String>,

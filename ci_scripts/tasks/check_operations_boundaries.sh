@@ -1,0 +1,70 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+script_directory=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+source "$script_directory/../lib/task_utils.sh"
+
+ci_task_require_no_arguments "$@"
+ci_task_enter_repository "${BASH_SOURCE[0]}"
+repository_root=$CI_TASK_REPOSITORY_ROOT
+
+surface_sources=(
+  "$repository_root/Incomes/Sources"
+  "$repository_root/Watch/Sources"
+  "$repository_root/Widgets/Sources"
+)
+
+forbidden_collaborators=(
+  SummaryCalculator
+  BalanceCalculator
+  CategoryChartSummaryCalculator
+  MonthlySummaryNarrativeBuilder
+  MonthlySummaryNarrativeContextLoader
+  ItemFormInferencePromptBuilder
+  UpcomingPaymentPlanner
+  UpcomingPaymentNotificationPresentationBuilder
+  SearchResultSectionBuilder
+  WidgetEntryFactory
+  WatchSyncService
+  SettingsStatusLoader
+  SubscriptionStateCalculator
+  DataMaintenance
+  ItemRelativeQueryCoordinator
+  ItemSearchPredicateBuilder
+)
+
+failures=()
+
+record_failure() {
+  failures+=("$1")
+}
+
+collaborator_pattern=$(
+  IFS='|'
+  printf '%s' "${forbidden_collaborators[*]}"
+)
+
+collaborator_matches=$(
+  rg \
+    --line-number \
+    "\\b(${collaborator_pattern})\\b" \
+    "${surface_sources[@]}" \
+    -g '*.swift' || true
+)
+
+if [[ -n "$collaborator_matches" ]]; then
+  record_failure "Delivery surfaces must call public *Operations for business use cases:
+$collaborator_matches"
+fi
+
+if [[ ${#failures[@]} -ne 0 ]]; then
+  echo "Operations boundary check failed." >&2
+
+  for failure in "${failures[@]}"; do
+    printf -- '- %s\n' "$failure" >&2
+  done
+
+  exit 1
+fi
+
+echo "Operations boundary check passed."

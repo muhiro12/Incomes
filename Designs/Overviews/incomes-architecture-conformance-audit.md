@@ -38,9 +38,9 @@ contract and watch UI state handling.
 - Representative files:
   - `IncomesLibrary/Sources/Item/Item*Operations.swift`
   - `IncomesLibrary/Sources/Tag/Tag*Operations.swift`
-  - `IncomesLibrary/Sources/Item/SummaryCalculator.swift`
+  - `IncomesLibrary/Sources/Item/ItemSummaryOperations.swift`
   - `IncomesLibrary/Sources/Item/YearlyItemDuplication*Operations.swift`
-  - `IncomesLibrary/Sources/Common/WidgetEntryFactory.swift`
+  - `IncomesLibrary/Sources/Common/WidgetEntryOperations.swift`
 
 ### Multiple targets still consume the same shared APIs
 
@@ -85,7 +85,7 @@ contract and watch UI state handling.
   - `Watch/Sources/Services/WatchDataSyncer.swift`
   - `Watch/Sources/Services/PhoneSyncClient.swift`
   - `Widgets/Sources/Month/Providers/MonthSummaryProvider.swift`
-  - `IncomesLibrary/Sources/Item/Sync/WatchSyncService.swift`
+  - `IncomesLibrary/Sources/Item/Sync/WatchSyncOperations.swift`
 
 ## Corrected Drift
 

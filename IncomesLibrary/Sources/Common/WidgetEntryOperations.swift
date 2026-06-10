@@ -2,7 +2,7 @@ import Foundation
 import SwiftData
 
 /// Creates widget timeline dates and display snapshots from shared data.
-public enum WidgetEntryFactory {
+public enum WidgetEntryOperations {
     /// Returns hourly timeline entries starting from the provided date.
     public static func timelineDates(
         now: Date,
@@ -39,7 +39,7 @@ public enum WidgetEntryFactory {
     ) -> WidgetMonthSummarySnapshot {
         let deepLinkURL = deepLinkBuilder(date)
         do {
-            let totals = try SummaryCalculator.monthlyTotals(
+            let totals = try ItemSummaryOperations.monthlyTotals(
                 context: context,
                 date: date
             )
@@ -65,7 +65,7 @@ public enum WidgetEntryFactory {
     ) -> WidgetNetIncomeSnapshot {
         let deepLinkURL = deepLinkBuilder(date)
         do {
-            let totals = try SummaryCalculator.monthlyTotals(
+            let totals = try ItemSummaryOperations.monthlyTotals(
                 context: context,
                 date: date
             )

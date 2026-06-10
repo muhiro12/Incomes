@@ -16,7 +16,7 @@ struct NetIncomeProvider: AppIntentTimelineProvider {
 
     func snapshot(for configuration: ConfigurationAppIntent, in _: Context) -> NetIncomeEntry {
         makeEntry(
-            date: WidgetEntryFactory.targetDate(
+            date: WidgetEntryOperations.targetDate(
                 for: configuration.targetMonth.widgetMonthOffset,
                 now: Date.now
             ),
@@ -26,11 +26,11 @@ struct NetIncomeProvider: AppIntentTimelineProvider {
 
     func timeline(for configuration: ConfigurationAppIntent, in _: Context) -> Timeline<NetIncomeEntry> {
         let currentDate = Date.now
-        let targetDate = WidgetEntryFactory.targetDate(
+        let targetDate = WidgetEntryOperations.targetDate(
             for: configuration.targetMonth.widgetMonthOffset,
             now: currentDate
         )
-        let entries = WidgetEntryFactory.timelineDates(now: currentDate).map { _ in
+        let entries = WidgetEntryOperations.timelineDates(now: currentDate).map { _ in
             makeEntry(date: targetDate, configuration: configuration)
         }
         return .init(entries: entries, policy: .atEnd)
@@ -45,7 +45,7 @@ struct NetIncomeProvider: AppIntentTimelineProvider {
                     deepLinkURL: WidgetDeepLinkBuilder.monthURL(for: date)
                 )
             }
-            return WidgetEntryFactory.netIncomeSnapshot(
+            return WidgetEntryOperations.netIncomeSnapshot(
                 context: context,
                 date: date
             ) { targetDate in

@@ -2,18 +2,18 @@ import Foundation
 @testable import IncomesLibrary
 import Testing
 
-struct WidgetEntryFactoryTests {
+struct WidgetEntryOperationsTests {
     let context = testContext
 
     @Test
     func target_date_applies_requested_month_offset() {
         let now = isoDate("2026-03-15T00:00:00Z")
 
-        let previousDate = WidgetEntryFactory.targetDate(
+        let previousDate = WidgetEntryOperations.targetDate(
             for: .previous,
             now: now
         )
-        let nextDate = WidgetEntryFactory.targetDate(
+        let nextDate = WidgetEntryOperations.targetDate(
             for: .next,
             now: now
         )
@@ -26,7 +26,7 @@ struct WidgetEntryFactoryTests {
     func timeline_dates_create_hourly_entries() {
         let now = isoDate("2026-03-15T00:00:00Z")
 
-        let dates = WidgetEntryFactory.timelineDates(now: now)
+        let dates = WidgetEntryOperations.timelineDates(now: now)
 
         #expect(dates.count == 5)
         #expect(dates.first == now)
@@ -60,12 +60,12 @@ struct WidgetEntryFactoryTests {
             category: "Housing",
             priority: 0
         )
-        let totals = try SummaryCalculator.monthlyTotals(
+        let totals = try ItemSummaryOperations.monthlyTotals(
             context: context,
             date: date
         )
 
-        let snapshot = WidgetEntryFactory.monthSummarySnapshot(
+        let snapshot = WidgetEntryOperations.monthSummarySnapshot(
             context: context,
             date: date
         ) { targetDate in
@@ -99,7 +99,7 @@ struct WidgetEntryFactoryTests {
             priority: 0
         )
 
-        let nextSnapshot = WidgetEntryFactory.upcomingSnapshot(
+        let nextSnapshot = WidgetEntryOperations.upcomingSnapshot(
             context: context,
             now: now,
             direction: .next,

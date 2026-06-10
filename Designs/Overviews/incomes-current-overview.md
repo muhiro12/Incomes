@@ -345,15 +345,17 @@ Current shared business entry points and shared snapshot builders include:
 
 - `Item*Operations`
 - `Tag*Operations`
-- `SummaryCalculator`
+- `ItemSummaryOperations`
 - `YearlyItemDuplication*Operations`
-- `UpcomingPaymentPlanner`
-- `DataMaintenance`
-- `SettingsStatusLoader`
-- `WidgetEntryFactory`
+- `UpcomingPaymentOperations`
+- `MonthlySummaryOperations`
+- `ItemFormInferenceOperations`
+- `DataMaintenanceOperations`
+- `SettingsStatusOperations`
+- `WidgetEntryOperations`
 - `ItemsRequest`
 - `WatchSyncReply`
-- `WatchSyncService` recent snapshot building and snapshot apply
+- `WatchSyncOperations` recent snapshot building and snapshot apply
 
 ### 2. App target owns platform adapters
 
@@ -464,9 +466,9 @@ route contract remains `IncomesRoute`.
   composition, runtime setup, notification delivery, route handling, and other
   Apple-only adapters.
 - Cross-target reuse remains centered on shared entry points such as
-  `Item*Operations`, `Tag*Operations`, `SummaryCalculator`, `YearlyItemDuplication*Operations`,
-  `WidgetEntryFactory`, `ItemsRequest`, `WatchSyncReply`, and
-  `WatchSyncService`.
+  `Item*Operations`, `Tag*Operations`, `ItemSummaryOperations`,
+  `YearlyItemDuplication*Operations`, `WidgetEntryOperations`,
+  `ItemsRequest`, `WatchSyncReply`, and `WatchSyncOperations`.
 - The repository still keeps automated unit tests in `IncomesLibrary/Tests`
   instead of adding separate unit test targets for `Incomes`, `Watch`, or
   `Widgets`.
@@ -477,7 +479,7 @@ route contract remains `IncomesRoute`.
 - Watch sync failure surfacing now follows ADR 0005 explicitly by using a typed
   shared reply contract so transport, decode, apply, and legitimate zero-item
   success no longer collapse into the same empty sentinel.
-- Watch sync response snapshot building is centralized in `WatchSyncService`,
+- Watch sync response snapshot building is centralized in `WatchSyncOperations`,
   while WatchConnectivity transport remains adapter-owned.
 
 ## Canonical Shared Behaviors

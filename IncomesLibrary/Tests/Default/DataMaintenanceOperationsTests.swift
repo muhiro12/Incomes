@@ -4,7 +4,7 @@ import SwiftData
 import Testing
 
 @MainActor
-struct DataMaintenanceTests {
+struct DataMaintenanceOperationsTests {
     let context: ModelContext
 
     init() {
@@ -26,7 +26,7 @@ struct DataMaintenanceTests {
             repeatCount: 1
         )
 
-        try DataMaintenance.deleteAllData(context: context)
+        try DataMaintenanceOperations.deleteAllData(context: context)
 
         #expect(try context.fetchCount(.items(.all)) == 0)
         #expect(try context.fetchCount(.tags(.all)) == 0)
@@ -47,7 +47,7 @@ struct DataMaintenanceTests {
             repeatCount: 1
         )
 
-        try await DataMaintenance.resetAllData(context: context)
+        try await DataMaintenanceOperations.resetAllData(context: context)
 
         #expect(try context.fetchCount(.items(.all)) == 0)
         #expect(try context.fetchCount(.tags(.all)) == 0)
@@ -69,7 +69,7 @@ struct DataMaintenanceTests {
             repeatCount: 1
         )
 
-        try DataMaintenance.deleteDebugData(context: context)
+        try DataMaintenanceOperations.deleteDebugData(context: context)
 
         let items = try context.fetch(.items(.all))
         #expect(items.count == 1)
@@ -78,7 +78,7 @@ struct DataMaintenanceTests {
     }
 }
 
-private extension DataMaintenanceTests {
+private extension DataMaintenanceOperationsTests {
     func makeItemFormInput( // swiftlint:disable:this function_parameter_count
         date: Date,
         content: String,

@@ -1,7 +1,7 @@
 import SwiftData
 
 /// Loads derived status flags for the settings screen.
-public enum SettingsStatusLoader {
+public enum SettingsStatusOperations {
     /// Computes the current settings status from the store.
     public static func load(
         context: ModelContext

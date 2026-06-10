@@ -1,9 +1,9 @@
 import Foundation
 
 /// Builds deterministic instructions and prompts for item form inference.
-public enum ItemFormInferencePromptBuilder {
+enum ItemFormInferencePromptBuilder {
     /// Builds the system instructions for item form inference.
-    public static func instructions() -> String {
+    static func instructions() -> String {
         """
         You are a professional financial advisor for a household accounting and budgeting app.
         Carefully extract and output the necessary fields from user input as an expert accountant.
@@ -12,7 +12,7 @@ public enum ItemFormInferencePromptBuilder {
     }
 
     /// Builds the user prompt for item form inference.
-    public static func prompt(
+    static func prompt(
         text: String,
         currentDate: Date,
         locale: Locale
@@ -45,7 +45,7 @@ public enum ItemFormInferencePromptBuilder {
     }
 
     /// Returns the language code used for inference prompts.
-    public static func languageCode(for locale: Locale) -> String {
+    static func languageCode(for locale: Locale) -> String {
         LocaleLanguageCodeSupport.code(for: locale)
     }
 }

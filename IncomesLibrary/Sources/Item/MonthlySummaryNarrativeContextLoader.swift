@@ -2,23 +2,20 @@ import Foundation
 import SwiftData
 
 /// Loads monthly summary narrative context from persisted items.
-public enum MonthlySummaryNarrativeContextLoader {
-    /// Loading failures for monthly summary narrative context.
-    public enum LoadingError: Error, Equatable {
-        /// The requested date could not be represented as a supported year and month.
-        case invalidYearMonth
-    }
+enum MonthlySummaryNarrativeContextLoader {
+    typealias LoadingError = MonthlySummaryOperations.LoadingError
 
     /// Default number of category comparison rows included in summary context.
-    public static let defaultCategoryComparisonLimit = 8
+    static let defaultCategoryComparisonLimit =
+        MonthlySummaryOperations.defaultCategoryComparisonLimit
 
     /// Loads the current month, previous month, and category comparison context.
-    public static func load(
+    static func load(
         context: ModelContext,
         date: Date,
         currencyCode: String,
         categoryComparisonLimit: Int = defaultCategoryComparisonLimit
-    ) throws -> MonthlySummaryNarrativeBuilder.Context {
+    ) throws -> MonthlySummaryOperations.Context {
         let currentYearMonth = try yearMonth(from: date)
         let previousDate = MonthlySummaryDateSupport.previousMonthDate(from: date)
         let previousYearMonth = try yearMonth(from: previousDate)
@@ -36,7 +33,7 @@ public enum MonthlySummaryNarrativeContextLoader {
         )
         .prefix(max(.zero, categoryComparisonLimit))
         .map { comparison in
-            MonthlySummaryNarrativeBuilder.CategoryComparison(
+            MonthlySummaryOperations.CategoryComparison(
                 category: comparison.category,
                 currentIncome: comparison.currentIncome,
                 previousIncome: comparison.previousIncome,

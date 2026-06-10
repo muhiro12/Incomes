@@ -3,7 +3,7 @@ import Foundation
 import SwiftData
 import Testing
 
-struct CategoryChartSummaryTests {
+struct ItemSummaryChartOperationsTests {
     let context: ModelContext
 
     init() {
@@ -14,15 +14,15 @@ struct CategoryChartSummaryTests {
     func totalIncome_and_totalOutgo_return_aggregated_values() throws {
         let items = try makeItems()
 
-        #expect(SummaryCalculator.totalIncome(for: items) == TestAmount.totalIncome)
-        #expect(SummaryCalculator.totalOutgo(for: items) == TestAmount.totalOutgo)
+        #expect(ItemSummaryOperations.totalIncome(for: items) == TestAmount.totalIncome)
+        #expect(ItemSummaryOperations.totalOutgo(for: items) == TestAmount.totalOutgo)
     }
 
     @Test
     func incomeSegments_group_filter_and_sort_income() throws {
         let items = try makeItems()
 
-        let segments = CategoryChartSummaryCalculator.incomeSegments(for: items)
+        let segments = ItemSummaryOperations.incomeSegments(for: items)
 
         #expect(segments.map(\.title) == ["Work", "Gift"])
         #expect(segments.map(\.value) == [TestAmount.workIncome, TestAmount.giftIncome])
@@ -54,7 +54,7 @@ struct CategoryChartSummaryTests {
             )
         ]
 
-        let segments = CategoryChartSummaryCalculator.incomeSegments(for: items)
+        let segments = ItemSummaryOperations.incomeSegments(for: items)
 
         #expect(segments.map(\.title) == ["Alpha", "Beta"])
         #expect(segments.map(\.value) == [TestAmount.tieIncome, TestAmount.tieIncome])
@@ -64,7 +64,7 @@ struct CategoryChartSummaryTests {
     func outgoSegments_group_filter_and_sort_outgo() throws {
         let items = try makeItems()
 
-        let segments = CategoryChartSummaryCalculator.outgoSegments(for: items)
+        let segments = ItemSummaryOperations.outgoSegments(for: items)
 
         #expect(segments.map(\.title) == ["Food", "Housing"])
         #expect(segments.map(\.value) == [TestAmount.foodOutgo, TestAmount.housingOutgo])
@@ -74,7 +74,7 @@ struct CategoryChartSummaryTests {
     }
 }
 
-private extension CategoryChartSummaryTests {
+private extension ItemSummaryChartOperationsTests {
     enum TestAmount {
         static let workIncome: Decimal = 1_000
         static let giftIncome: Decimal = 500

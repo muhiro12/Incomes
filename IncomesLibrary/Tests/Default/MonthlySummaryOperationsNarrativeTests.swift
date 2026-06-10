@@ -4,10 +4,10 @@ import Foundation
 @testable import IncomesLibrary
 import Testing
 
-struct MonthlySummaryNarrativeBuilderTests {
+struct MonthlySummaryOperationsNarrativeTests {
     @Test
     func validatedSummary_accepts_only_current_month_totals() throws {
-        let summary = try MonthlySummaryNarrativeBuilder.validatedSummary(
+        let summary = try MonthlySummaryOperations.validatedSummary(
             "Income was 1,000. Outgo was 400 and net income was 600.",
             currentTotals: kCurrentTotals
         )
@@ -17,7 +17,7 @@ struct MonthlySummaryNarrativeBuilderTests {
 
     @Test
     func validatedSummary_accepts_unicode_minus_for_current_month_totals() throws {
-        let currentTotals = MonthlySummaryNarrativeBuilder.MonthTotals(
+        let currentTotals = MonthlySummaryOperations.MonthTotals(
             year: 2_026,
             month: 6,
             currencyCode: "USD",
@@ -26,7 +26,7 @@ struct MonthlySummaryNarrativeBuilderTests {
             netIncome: -600
         )
 
-        let summary = try MonthlySummaryNarrativeBuilder.validatedSummary(
+        let summary = try MonthlySummaryOperations.validatedSummary(
             "Income was 1,000. Outgo was 1,600 and net income was −600.",
             currentTotals: currentTotals
         )
@@ -36,8 +36,8 @@ struct MonthlySummaryNarrativeBuilderTests {
 
     @Test
     func validatedSummary_rejects_empty_text() {
-        #expect(throws: MonthlySummaryNarrativeBuilder.ValidationError.emptySummary) {
-            _ = try MonthlySummaryNarrativeBuilder.validatedSummary(
+        #expect(throws: MonthlySummaryOperations.ValidationError.emptySummary) {
+            _ = try MonthlySummaryOperations.validatedSummary(
                 "   ",
                 currentTotals: kCurrentTotals
             )
@@ -46,8 +46,8 @@ struct MonthlySummaryNarrativeBuilderTests {
 
     @Test
     func validatedSummary_rejects_numbers_not_in_current_month_totals() {
-        #expect(throws: MonthlySummaryNarrativeBuilder.ValidationError.unsupportedNumber) {
-            _ = try MonthlySummaryNarrativeBuilder.validatedSummary(
+        #expect(throws: MonthlySummaryOperations.ValidationError.unsupportedNumber) {
+            _ = try MonthlySummaryOperations.validatedSummary(
                 "Income was 1000 and previous income was 900.",
                 currentTotals: kCurrentTotals
             )
@@ -56,7 +56,7 @@ struct MonthlySummaryNarrativeBuilderTests {
 
     @Test
     func prompt_escapes_category_text_as_json_string() {
-        let context = MonthlySummaryNarrativeBuilder.Context(
+        let context = MonthlySummaryOperations.Context(
             currentTotals: .init(
                 year: kCurrentTotals.year,
                 month: kCurrentTotals.month,
@@ -85,7 +85,7 @@ struct MonthlySummaryNarrativeBuilderTests {
                 )
             ]
         )
-        let prompt = MonthlySummaryNarrativeBuilder.prompt(
+        let prompt = MonthlySummaryOperations.prompt(
             monthTitle: "2026 Jun",
             localeIdentifier: "en_US",
             languageCode: "en",
@@ -101,7 +101,7 @@ struct MonthlySummaryNarrativeBuilderTests {
 
     @Test
     func fallbackSummary_describes_notable_category_change() {
-        let summary = MonthlySummaryNarrativeBuilder.fallbackSummary(
+        let summary = MonthlySummaryOperations.fallbackSummary(
             monthTitle: "2026 Jun",
             context: kContext,
             locale: Locale(identifier: "en_US")
@@ -112,7 +112,7 @@ struct MonthlySummaryNarrativeBuilderTests {
     }
 }
 
-private let kCurrentTotals = MonthlySummaryNarrativeBuilder.MonthTotals(
+private let kCurrentTotals = MonthlySummaryOperations.MonthTotals(
     year: 2_026,
     month: 6,
     currencyCode: "USD",
@@ -121,7 +121,7 @@ private let kCurrentTotals = MonthlySummaryNarrativeBuilder.MonthTotals(
     netIncome: 600
 )
 
-private let kPreviousTotals = MonthlySummaryNarrativeBuilder.MonthTotals(
+private let kPreviousTotals = MonthlySummaryOperations.MonthTotals(
     year: 2_026,
     month: 5,
     currencyCode: "USD",
@@ -130,7 +130,7 @@ private let kPreviousTotals = MonthlySummaryNarrativeBuilder.MonthTotals(
     netIncome: 650
 )
 
-private let kContext = MonthlySummaryNarrativeBuilder.Context(
+private let kContext = MonthlySummaryOperations.Context(
     currentTotals: kCurrentTotals,
     previousTotals: kPreviousTotals,
     categoryComparisons: [

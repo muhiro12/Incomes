@@ -55,7 +55,7 @@ enum MonthlySummaryGenerator {
 private extension MonthlySummaryGenerator {
     static func generatedOrFallbackSummary(
         model: SystemLanguageModel,
-        narrativeContext: MonthlySummaryNarrativeBuilder.Context,
+        narrativeContext: MonthlySummaryOperations.Context,
         date: Date,
         locale: Locale
     ) async throws -> String {
@@ -102,32 +102,32 @@ private extension MonthlySummaryGenerator {
         context: ModelContext,
         date: Date,
         currencyCode: String
-    ) throws -> MonthlySummaryNarrativeBuilder.Context {
+    ) throws -> MonthlySummaryOperations.Context {
         do {
-            return try MonthlySummaryNarrativeContextLoader.load(
+            return try MonthlySummaryOperations.loadContext(
                 context: context,
                 date: date,
                 currencyCode: currencyCode
             )
-        } catch MonthlySummaryNarrativeContextLoader.LoadingError.invalidYearMonth {
+        } catch MonthlySummaryOperations.LoadingError.invalidYearMonth {
             throw MonthlySummaryGenerationError.invalidYearMonth
         }
     }
 
     static func generatedSummary(
         model: SystemLanguageModel,
-        narrativeContext: MonthlySummaryNarrativeBuilder.Context,
+        narrativeContext: MonthlySummaryOperations.Context,
         monthTitle: String,
         locale: Locale
     ) async throws -> String {
         let languageCode = LocaleLanguageCodeSupport.code(for: locale)
         let session = LanguageModelSession(
             model: model,
-            instructions: MonthlySummaryNarrativeBuilder.instructions(
+            instructions: MonthlySummaryOperations.instructions(
                 languageCode: languageCode
             )
         )
-        let prompt = MonthlySummaryNarrativeBuilder.prompt(
+        let prompt = MonthlySummaryOperations.prompt(
             monthTitle: monthTitle,
             localeIdentifier: locale.identifier,
             languageCode: languageCode,
@@ -142,7 +142,7 @@ private extension MonthlySummaryGenerator {
             generating: MonthlyNarrative.self,
             options: options
         )
-        return try MonthlySummaryNarrativeBuilder.validatedSummary(
+        return try MonthlySummaryOperations.validatedSummary(
             response.content.summary,
             currentTotals: narrativeContext.currentTotals
         )
@@ -150,10 +150,10 @@ private extension MonthlySummaryGenerator {
 
     static func fallbackSummary(
         monthTitle: String,
-        narrativeContext: MonthlySummaryNarrativeBuilder.Context,
+        narrativeContext: MonthlySummaryOperations.Context,
         locale: Locale
     ) -> String {
-        MonthlySummaryNarrativeBuilder.fallbackSummary(
+        MonthlySummaryOperations.fallbackSummary(
             monthTitle: monthTitle,
             context: narrativeContext,
             locale: locale

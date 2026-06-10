@@ -17,7 +17,7 @@ enum ItemInferenceService {
         currentDate: Date,
         logger: MHLogger
     ) async throws -> ItemFormInferenceResult {
-        let languageCode = ItemFormInferencePromptBuilder.languageCode(for: locale)
+        let languageCode = ItemFormInferenceOperations.languageCode(for: locale)
         let metadata = IncomesLogging.metadata(
             ("language_code", languageCode),
             ("text_length", IncomesLogging.count(text.count))
@@ -34,9 +34,9 @@ enum ItemInferenceService {
             )
             let session = LanguageModelSession(
                 model: model,
-                instructions: ItemFormInferencePromptBuilder.instructions()
+                instructions: ItemFormInferenceOperations.instructions()
             )
-            let prompt = ItemFormInferencePromptBuilder.prompt(
+            let prompt = ItemFormInferenceOperations.prompt(
                 text: text,
                 currentDate: currentDate,
                 locale: locale

@@ -1,5 +1,5 @@
 //
-//  SearchResultSectionBuilder.swift
+//  SearchResultOperations.swift
 //  IncomesLibrary
 //
 //  Builds month sections for item search results.
@@ -8,7 +8,14 @@
 import Foundation
 
 /// Builds month-based sections for item search results.
-public enum SearchResultSectionBuilder {
+public enum SearchResultOperations {
+    /// Supported numeric search targets.
+    public enum CurrencyTarget: Sendable {
+        case balance
+        case income
+        case outgo
+    }
+
     /// A month section containing matching items.
     public struct Section {
         /// First day of the represented local month.
@@ -37,5 +44,31 @@ public enum SearchResultSectionBuilder {
                     items: groupedItems[month] ?? []
                 )
             }
+    }
+
+    /// Builds an item predicate for a numeric search range.
+    public static func currencyPredicate(
+        target: CurrencyTarget,
+        minimumText: String,
+        maximumText: String
+    ) -> ItemPredicate {
+        ItemSearchPredicateBuilder.build(
+            target: target.searchPredicateTarget,
+            minimumText: minimumText,
+            maximumText: maximumText
+        )
+    }
+}
+
+private extension SearchResultOperations.CurrencyTarget {
+    var searchPredicateTarget: ItemSearchPredicateBuilder.Target {
+        switch self {
+        case .balance:
+            return .balance
+        case .income:
+            return .income
+        case .outgo:
+            return .outgo
+        }
     }
 }

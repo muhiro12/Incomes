@@ -2,7 +2,7 @@ import Foundation
 import SwiftData
 
 /// Synchronizes watch snapshots into the shared item store.
-public enum WatchSyncService {
+public enum WatchSyncOperations {
     static let recentItemsPerMonthLimit = 50
     static let recentItemsResponseLimit = 120
 
@@ -96,7 +96,7 @@ public enum WatchSyncService {
     }
 }
 
-private extension WatchSyncService {
+private extension WatchSyncOperations {
     static func allowedYearMonths(
         baseDate: Date,
         monthOffsets: [Int]

@@ -195,7 +195,7 @@ nonisolated extension PhoneWatchBridge: WCSessionDelegate {
         }
 
         do {
-            let wires = try WatchSyncService.recentItemWires(
+            let wires = try WatchSyncOperations.recentItemWires(
                 context: context,
                 baseDate: request.baseDate,
                 monthOffsets: request.monthOffsets

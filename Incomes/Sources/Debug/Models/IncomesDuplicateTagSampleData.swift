@@ -14,7 +14,7 @@ struct IncomesDuplicateTagSampleData: PreviewModifier {
             try IncomesSampleData.prepareDuplicateTagPreviewData(
                 in: previewContext
             )
-            try BalanceCalculator.calculate(in: previewContext, after: .distantPast)
+            try ItemBalanceOperations.recalculate(context: previewContext, date: .distantPast)
         }
     }
 

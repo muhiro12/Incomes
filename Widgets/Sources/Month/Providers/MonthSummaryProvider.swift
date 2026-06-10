@@ -16,7 +16,7 @@ struct MonthSummaryProvider: AppIntentTimelineProvider {
 
     func snapshot(for configuration: ConfigurationAppIntent, in _: Context) -> MonthSummaryEntry {
         makeEntry(
-            date: WidgetEntryFactory.targetDate(
+            date: WidgetEntryOperations.targetDate(
                 for: configuration.targetMonth.widgetMonthOffset,
                 now: Date.now
             ),
@@ -26,11 +26,11 @@ struct MonthSummaryProvider: AppIntentTimelineProvider {
 
     func timeline(for configuration: ConfigurationAppIntent, in _: Context) -> Timeline<MonthSummaryEntry> {
         let currentDate = Date.now
-        let targetDate = WidgetEntryFactory.targetDate(
+        let targetDate = WidgetEntryOperations.targetDate(
             for: configuration.targetMonth.widgetMonthOffset,
             now: currentDate
         )
-        let entries = WidgetEntryFactory.timelineDates(now: currentDate).map { _ in
+        let entries = WidgetEntryOperations.timelineDates(now: currentDate).map { _ in
             makeEntry(date: targetDate, configuration: configuration)
         }
         return .init(entries: entries, policy: .atEnd)
@@ -45,7 +45,7 @@ struct MonthSummaryProvider: AppIntentTimelineProvider {
                     deepLinkURL: WidgetDeepLinkBuilder.monthURL(for: date)
                 )
             }
-            return WidgetEntryFactory.monthSummarySnapshot(
+            return WidgetEntryOperations.monthSummarySnapshot(
                 context: context,
                 date: date
             ) { targetDate in
