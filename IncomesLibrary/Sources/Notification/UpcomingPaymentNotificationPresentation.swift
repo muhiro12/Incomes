@@ -71,6 +71,28 @@ public struct UpcomingPaymentNotificationPresentation: Sendable {
         }
     }
 
+    /// Returns the scheduled reminder request identifier for a target content identifier.
+    public static func requestIdentifier(
+        for targetContentIdentifier: String
+    ) -> String {
+        requestIdentifierPrefix + targetContentIdentifier
+    }
+
+    /// Returns the target content identifier encoded in a scheduled reminder request identifier.
+    public static func targetContentIdentifier(
+        fromRequestIdentifier requestIdentifier: String
+    ) -> String {
+        guard requestIdentifier.hasPrefix(requestIdentifierPrefix) else {
+            return requestIdentifier
+        }
+        return String(requestIdentifier.dropFirst(requestIdentifierPrefix.count))
+    }
+
+    /// Returns the thread identifier for upcoming payment reminders in a month.
+    public static func threadIdentifier(year: Int, month: Int) -> String {
+        "\(requestIdentifierPrefix)\(String(format: "%04d-%02d", year, month))"
+    }
+
     public func previewPresentation() -> Self {
         .init(
             requestIdentifier: Self.previewRequestIdentifierPrefix + targetContentIdentifier,

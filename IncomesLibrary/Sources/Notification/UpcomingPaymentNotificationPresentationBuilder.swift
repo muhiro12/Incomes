@@ -62,7 +62,9 @@ private extension UpcomingPaymentNotificationPresentationBuilder {
 
         return .init(
             requestIdentifier: plan.reminderPlan?.identifier
-                ?? UpcomingPaymentNotificationPresentation.requestIdentifierPrefix + itemIdentifier,
+                ?? UpcomingPaymentNotificationPresentation.requestIdentifier(
+                    for: itemIdentifier
+                ),
             primaryRouteURL: primaryRouteURL,
             secondaryRouteURL: secondaryRouteURL,
             threadIdentifier: plan.reminderPlan?.threadIdentifier
@@ -102,7 +104,10 @@ private extension UpcomingPaymentNotificationPresentationBuilder {
     static func threadIdentifier(for dueDate: Date, calendar: Calendar) -> String {
         let year = calendar.component(.year, from: dueDate)
         let month = calendar.component(.month, from: dueDate)
-        return "\(UpcomingPaymentNotificationPresentation.requestIdentifierPrefix)\(String(format: "%04d-%02d", year, month))" // swiftlint:disable:this line_length
+        return UpcomingPaymentNotificationPresentation.threadIdentifier(
+            year: year,
+            month: month
+        )
     }
 
     static func relevanceScore(

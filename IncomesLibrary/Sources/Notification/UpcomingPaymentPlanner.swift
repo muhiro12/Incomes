@@ -162,11 +162,9 @@ private extension UpcomingPaymentPlanner {
     static func plannedPaymentStableIdentifier(
         from identifier: String
     ) -> String {
-        let prefix = UpcomingPaymentNotificationPresentation.requestIdentifierPrefix
-        guard identifier.hasPrefix(prefix) else {
-            return identifier
-        }
-        return String(identifier.dropFirst(prefix.count))
+        UpcomingPaymentNotificationPresentation.targetContentIdentifier(
+            fromRequestIdentifier: identifier
+        )
     }
 
     static func primaryRouteURL(for item: Item) -> URL {
