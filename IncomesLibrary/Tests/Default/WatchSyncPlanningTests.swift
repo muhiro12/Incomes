@@ -94,7 +94,7 @@ struct WatchSyncPlanningTests {
             context: context,
             items: incoming,
             baseDate: base,
-            monthOffsets: [-1, 0, 1]
+            monthOffsets: ItemsRequest.recentMonthOffsets
         )
 
         #expect(outcome.followUpHints.contains(.reloadWidgets))
@@ -136,7 +136,7 @@ struct WatchSyncPlanningTests {
             context: context,
             items: [],
             baseDate: base,
-            monthOffsets: [-1, 0, 1]
+            monthOffsets: ItemsRequest.recentMonthOffsets
         )
 
         #expect(outcome.followUpHints.contains(.reloadWidgets))

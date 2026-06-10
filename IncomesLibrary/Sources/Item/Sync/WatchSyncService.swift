@@ -8,7 +8,7 @@ public enum WatchSyncService {
         context: ModelContext,
         items: [ItemWire],
         baseDate: Date = .now,
-        monthOffsets: [Int] = [-1, 0, 1]
+        monthOffsets: [Int] = ItemsRequest.recentMonthOffsets
     ) throws -> MutationOutcome {
         let allowedYearMonths = allowedYearMonths(
             baseDate: baseDate,

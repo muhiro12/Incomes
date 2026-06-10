@@ -9,11 +9,19 @@ struct ItemWireTests {
 
     @Test
     func itemsRequest_roundTrips_via_JSON() throws {
-        let request = ItemsRequest(baseEpoch: 1_725_000_000, monthOffsets: [-1, 0, 1])
+        let request = ItemsRequest(
+            baseEpoch: 1_725_000_000,
+            monthOffsets: ItemsRequest.recentMonthOffsets
+        )
         let data = try JSONEncoder().encode(request)
         let decoded = try #require(try? JSONDecoder().decode(ItemsRequest.self, from: data))
         #expect(decoded.baseEpoch == request.baseEpoch)
         #expect(decoded.monthOffsets == request.monthOffsets)
+    }
+
+    @Test
+    func itemsRequest_recentMonthOffsets_coverPreviousCurrentAndNextMonth() {
+        #expect(ItemsRequest.recentMonthOffsets == [-1, 0, 1])
     }
 
     @Test

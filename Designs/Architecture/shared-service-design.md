@@ -59,6 +59,7 @@ operations and shared wire contracts:
 - `DataMaintenance.deleteDebugData(context:)`
 - `NotificationRoutePayload`
 - `UpcomingPaymentNotificationPresentation`
+- `ItemsRequest`
 - `WatchSyncReply`
 - `WatchSyncFailure`
 - `WatchSyncFailurePhase`

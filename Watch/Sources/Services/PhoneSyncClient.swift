@@ -54,7 +54,7 @@ final class PhoneSyncClient: NSObject {
 
         let request = ItemsRequest(
             baseEpoch: Date().timeIntervalSince1970,
-            monthOffsets: [-1, 0, 1]
+            monthOffsets: ItemsRequest.recentMonthOffsets
         )
         let data: Data
         do {
