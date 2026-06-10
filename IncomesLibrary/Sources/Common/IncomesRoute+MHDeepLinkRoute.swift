@@ -103,11 +103,11 @@ extension IncomesRoute: MHDeepLinkRoute {
     }
 
     private static func parseSettingsRoute(from pathComponents: [String]) -> IncomesRoute? {
-        guard pathComponents.count >= 2 else { // swiftlint:disable:this no_magic_numbers
+        guard let settingsDetail = pathComponents.dropFirst().first else {
             return .settings
         }
 
-        switch pathComponents[1].lowercased() {
+        switch settingsDetail.lowercased() {
         case "subscription":
             return .settingsSubscription
         case "license":
@@ -120,8 +120,8 @@ extension IncomesRoute: MHDeepLinkRoute {
     }
 
     private static func parseYearSummaryRoute(from pathComponents: [String]) -> IncomesRoute? {
-        guard pathComponents.count >= 2, // swiftlint:disable:this no_magic_numbers
-              let year = Self.parseYear(pathComponents[1]) else {
+        guard let yearValue = pathComponents.dropFirst().first,
+              let year = Self.parseYear(yearValue) else {
             return nil
         }
         return .yearSummary(year)
@@ -141,8 +141,8 @@ extension IncomesRoute: MHDeepLinkRoute {
     }
 
     private static func parseYearRoute(from pathComponents: [String]) -> IncomesRoute? {
-        guard pathComponents.count >= 2, // swiftlint:disable:this no_magic_numbers
-              let year = Self.parseYear(pathComponents[1]) else {
+        guard let yearValue = pathComponents.dropFirst().first,
+              let year = Self.parseYear(yearValue) else {
             return nil
         }
         return .year(year)
@@ -160,9 +160,9 @@ extension IncomesRoute: MHDeepLinkRoute {
             return nil
         }
 
-        if segments.count >= 2 { // swiftlint:disable:this no_magic_numbers
+        if let monthValue = segments.dropFirst().first {
             guard let year = parseYear(firstSegment),
-                  let month = parseMonth(segments[1]) else {
+                  let month = parseMonth(monthValue) else {
                 return nil
             }
             return .month(year: year, month: month)
