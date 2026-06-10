@@ -347,6 +347,7 @@ Current shared business entry points and shared snapshot builders include:
 - `Tag*Operations`
 - `ItemSummaryOperations`
 - `YearlyItemDuplication*Operations`
+- `YearlyDuplicationPresentationOperations`
 - `UpcomingPaymentOperations`
 - `MonthlySummaryOperations`
 - `ItemFormInferenceOperations`
@@ -467,8 +468,9 @@ route contract remains `IncomesRoute`.
   Apple-only adapters.
 - Cross-target reuse remains centered on shared entry points such as
   `Item*Operations`, `Tag*Operations`, `ItemSummaryOperations`,
-  `YearlyItemDuplication*Operations`, `WidgetEntryOperations`,
-  `ItemsRequest`, `WatchSyncReply`, and `WatchSyncOperations`.
+  `YearlyItemDuplication*Operations`, `YearlyDuplicationPresentationOperations`,
+  `WidgetEntryOperations`, `ItemsRequest`, `WatchSyncReply`, and
+  `WatchSyncOperations`.
 - The repository still keeps automated unit tests in `IncomesLibrary/Tests`
   instead of adding separate unit test targets for `Incomes`, `Watch`, or
   `Widgets`.
@@ -491,7 +493,7 @@ The following behaviors are already centralized and should remain centralized:
 - item deletion and affected-balance recalculation
 - duplicate tag detection and merge resolution
 - month totals and category comparison calculations
-- yearly duplication planning and application
+- yearly duplication planning, application, and presentation summaries
 - notification planning for upcoming payments
 - whole-store deletion and debug-data deletion
 - settings status loading for duplicate tags and debug data
