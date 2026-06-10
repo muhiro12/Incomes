@@ -59,6 +59,7 @@ operations and shared wire contracts:
 - `YearlyItemDuplicationApplyOperations.apply(plan:context:)`
 - `YearlyDuplicationAutomationOperations`
 - `YearlyDuplicationPresentationOperations`
+- `YearlyDuplicationPromoOperations`
 - `ItemSummaryOperations`
 - `SearchResultOperations`
 - `MainNavigationOperations`

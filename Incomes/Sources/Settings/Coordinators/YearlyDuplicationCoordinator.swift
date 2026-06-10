@@ -3,12 +3,6 @@ import MHPlatform
 import SwiftData
 
 enum YearlyDuplicationCoordinator {
-    struct PromoState {
-        let proposal: YearlyItemDuplicationGroup
-        let sourceYear: Int
-        let targetYear: Int
-    }
-
     static func previewPlan(
         context: ModelContext,
         sourceYear: Int,
@@ -109,41 +103,6 @@ enum YearlyDuplicationCoordinator {
             )
             throw error
         }
-    }
-
-    static func promoState(
-        context: ModelContext,
-        currentYear: Int = YearlyItemDuplicationSelectionOperations.currentYear()
-    ) -> PromoState? {
-        let targetYears = YearlyItemDuplicationSelectionOperations.targetYears(
-            currentYear: currentYear
-        )
-        guard
-            let suggestion = try? YearlyItemDuplicationSelectionOperations.suggestion(
-                context: context,
-                targetYears: targetYears,
-                minimumGroupCount: 3 // swiftlint:disable:this no_magic_numbers
-            ),
-            let proposal = suggestion.plan.groups.first
-        else {
-            return nil
-        }
-        return .init(
-            proposal: proposal,
-            sourceYear: suggestion.sourceYear,
-            targetYear: suggestion.targetYear
-        )
-    }
-
-    static func shouldShowPromo(
-        date: Date = .now,
-        randomValue: Int = Int.random(in: 0..<3) // swiftlint:disable:this no_magic_numbers
-    ) -> Bool {
-        let month = Calendar.current.component(.month, from: date)
-        guard [11, 12, 1, 2].contains(month) else { // swiftlint:disable:this no_magic_numbers
-            return false
-        }
-        return randomValue == 0
     }
 }
 

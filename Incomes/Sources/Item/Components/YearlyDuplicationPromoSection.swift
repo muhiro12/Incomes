@@ -127,7 +127,7 @@ private extension YearlyDuplicationPromoSection {
             return
         }
 
-        showYearlyDuplicationPromo = YearlyDuplicationCoordinator.shouldShowPromo()
+        showYearlyDuplicationPromo = YearlyDuplicationPromoOperations.shouldShow()
 
         if showYearlyDuplicationPromo {
             await loadYearlyDuplicationProposal()
@@ -160,7 +160,7 @@ private extension YearlyDuplicationPromoSection {
             return
         }
 
-        if let result = YearlyDuplicationCoordinator.promoState(
+        if let result = YearlyDuplicationPromoOperations.state(
             context: context
         ) {
             guard generation == promoLoadGeneration, !Task.isCancelled else {
