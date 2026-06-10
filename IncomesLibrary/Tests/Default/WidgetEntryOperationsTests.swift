@@ -118,7 +118,7 @@ struct WidgetEntryOperationsTests {
     @Test
     func upcoming_snapshot_uses_requested_direction() throws {
         let now = isoDate("2026-03-15T00:00:00Z")
-        try createItem(
+        let nextItem = try createItem(
             context: context,
             date: isoDate("2026-03-20T00:00:00Z"),
             content: "Salary",
@@ -136,6 +136,7 @@ struct WidgetEntryOperationsTests {
             category: "Housing",
             priority: 0
         )
+        let nextItemID = try PersistentIdentifierCoder.encode(nextItem.id)
 
         let nextSnapshot = WidgetEntryOperations.upcomingSnapshot(
             context: context,
@@ -157,6 +158,10 @@ struct WidgetEntryOperationsTests {
         #expect(nextSnapshot.subtitleText == "Next")
         #expect(nextSnapshot.detailText == "Salary")
         #expect(nextSnapshot.isPositive)
-        #expect(nextSnapshot.deepLinkURL != nil)
+        #expect(
+            nextSnapshot.deepLinkURL == IncomesDeepLinkURLBuilder.preferredItemURL(
+                for: nextItemID
+            )
+        )
     }
 }

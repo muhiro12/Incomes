@@ -117,8 +117,8 @@ public enum WidgetEntryOperations {
             }
 
             let amount = item.netIncome
-            let deepLinkURL: URL? = {
-                if let itemID = try? item.id.base64Encoded() {
+            let deepLinkURL: URL = {
+                if let itemID = try? PersistentIdentifierCoder.encode(item.id) {
                     return deepLinkBuilder.itemDeepLink(itemID)
                 }
                 return deepLinkBuilder.monthDeepLink(item.localDate)

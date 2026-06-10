@@ -7,7 +7,7 @@ public struct WidgetUpcomingSnapshot: Equatable, Sendable {
     public let detailText: String
     public let amountText: String
     public let isPositive: Bool
-    public let deepLinkURL: URL?
+    public let deepLinkURL: URL
 
     /// Creates an upcoming item widget snapshot.
     public init(
@@ -16,7 +16,7 @@ public struct WidgetUpcomingSnapshot: Equatable, Sendable {
         detailText: String,
         amountText: String,
         isPositive: Bool,
-        deepLinkURL: URL?
+        deepLinkURL: URL
     ) {
         self.subtitleText = subtitleText
         self.titleText = titleText
