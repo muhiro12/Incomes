@@ -358,6 +358,7 @@ Current shared business entry points and shared snapshot builders include:
 - `SettingsStatusOperations`
 - `WidgetEntryOperations`
 - `ErrorMessageOperations`
+- `SampleDataOperations`
 - `RemoteConfigurationOperations`
 - `ItemsRequest`
 - `WatchSyncReply`

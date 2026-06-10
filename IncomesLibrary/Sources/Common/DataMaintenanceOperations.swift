@@ -42,6 +42,6 @@ public enum DataMaintenanceOperations {
 
     /// Deletes tutorial/debug sample data from the store.
     public static func deleteDebugData(context: ModelContext) throws {
-        try ItemSampleDataSeeder.deleteDebugData(context: context)
+        try SampleDataOperations.deleteDebugData(context: context)
     }
 }

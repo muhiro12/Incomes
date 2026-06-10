@@ -55,7 +55,11 @@ struct DataMaintenanceOperationsTests {
 
     @Test
     func deleteDebugData_removesOnlySampleData() throws {
-        try ItemSampleDataSeeder.seedTutorialData(context: context, baseDate: shiftedDate("2001-01-03T12:00:00Z"))
+        try SampleDataOperations.seed(
+            context: context,
+            profile: .tutorial,
+            baseDate: shiftedDate("2001-01-03T12:00:00Z")
+        )
         _ = try ItemCreationOperations.create(
             context: context,
             input: makeItemFormInput(
@@ -74,7 +78,7 @@ struct DataMaintenanceOperationsTests {
         let items = try context.fetch(.items(.all))
         #expect(items.count == 1)
         #expect(items.first?.content == "custom")
-        #expect(try ItemSampleDataSeeder.hasDebugData(context: context) == false)
+        #expect(try SampleDataOperations.hasDebugData(context: context) == false)
     }
 }
 

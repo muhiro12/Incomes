@@ -6,7 +6,7 @@ struct IncomesDuplicateTagSampleData: PreviewModifier {
 
     static func makeSharedContext() throws -> Context {
         try IncomesSampleData.makePreviewContext { previewContext in
-            try ItemSampleDataSeeder.seedSampleData(
+            try SampleDataOperations.seed(
                 context: previewContext,
                 profile: .preview,
                 ifEmptyOnly: true

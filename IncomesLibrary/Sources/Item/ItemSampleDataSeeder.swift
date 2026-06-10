@@ -2,9 +2,9 @@ import Foundation
 import SwiftData
 
 /// Seeds sample datasets used by previews, tutorials, and debug tooling.
-public enum ItemSampleDataSeeder { // swiftlint:disable:this type_body_length
+enum ItemSampleDataSeeder { // swiftlint:disable:this type_body_length
     /// Preset datasets used when seeding sample data.
-    public enum SampleDataProfile {
+    enum SampleDataProfile {
         /// Rich sample data used for debug flows.
         case debug
         /// Lightweight tutorial sample data.
@@ -14,7 +14,7 @@ public enum ItemSampleDataSeeder { // swiftlint:disable:this type_body_length
     }
 
     /// Seeds sample data for various profiles (debug/tutorial/preview).
-    public static func seedSampleData(
+    static func seedSampleData(
         context: ModelContext,
         profile: SampleDataProfile,
         baseDate: Date = .now,
@@ -44,7 +44,7 @@ public enum ItemSampleDataSeeder { // swiftlint:disable:this type_body_length
     }
 
     /// Seeds rich preview/debug data (large dataset).
-    public static func seedPreviewData( // swiftlint:disable:this function_body_length
+    static func seedPreviewData( // swiftlint:disable:this function_body_length
         context: ModelContext,
         baseDate: Date = .now
     ) throws {
@@ -193,7 +193,7 @@ public enum ItemSampleDataSeeder { // swiftlint:disable:this type_body_length
     }
 
     /// Seeds a minimal preview dataset that ignores duplicate tag creation.
-    public static func seedPreviewDataIgnoringDuplicates(
+    static func seedPreviewDataIgnoringDuplicates(
         context: ModelContext,
         baseDate: Date = .now
     ) throws {
@@ -222,7 +222,7 @@ public enum ItemSampleDataSeeder { // swiftlint:disable:this type_body_length
     }
 
     /// Seed lightweight tutorial/debug items if the store is empty.
-    public static func seedTutorialDataIfNeeded(
+    static func seedTutorialDataIfNeeded(
         context: ModelContext,
         baseDate: Date = .now
     ) throws {
@@ -236,7 +236,7 @@ public enum ItemSampleDataSeeder { // swiftlint:disable:this type_body_length
     }
 
     /// Seed lightweight tutorial items (always, without emptiness check).
-    public static func seedTutorialData(
+    static func seedTutorialData(
         context: ModelContext,
         baseDate: Date = .now
     ) throws {
@@ -284,12 +284,12 @@ public enum ItemSampleDataSeeder { // swiftlint:disable:this type_body_length
     }
 
     /// Returns whether tutorial/debug data exists.
-    public static func hasDebugData(context: ModelContext) throws -> Bool {
+    static func hasDebugData(context: ModelContext) throws -> Bool {
         try !context.fetch(.tags(.typeIs(.debug))).isEmpty
     }
 
     /// Deletes items and tags associated with tutorial/debug data.
-    public static func deleteDebugData(context: ModelContext) throws {
+    static func deleteDebugData(context: ModelContext) throws {
         let debugTags = try context.fetch(.tags(.typeIs(.debug)))
         let items = debugTags.flatMap(\.items.orEmpty)
         try items.forEach { item in

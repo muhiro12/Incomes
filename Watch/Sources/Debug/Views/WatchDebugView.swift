@@ -60,7 +60,7 @@ extension WatchDebugView: View {
 private extension WatchDebugView {
     func refreshDebugPresence() {
         do {
-            hasDebugData = try ItemSampleDataSeeder.hasDebugData(context: context)
+            hasDebugData = try SampleDataOperations.hasDebugData(context: context)
         } catch {
             assertionFailure(error.localizedDescription)
             hasDebugData = false
@@ -73,7 +73,7 @@ private extension WatchDebugView {
             isDeleting = false
         }
         do {
-            try ItemSampleDataSeeder.deleteDebugData(context: context)
+            try SampleDataOperations.deleteDebugData(context: context)
             refreshDebugPresence()
         } catch {
             assertionFailure(error.localizedDescription)

@@ -3,7 +3,7 @@ import Foundation
 import SwiftData
 import Testing
 
-struct ItemSampleDataSeederTests {
+struct SampleDataOperationsTests {
     let context: ModelContext
 
     init() {
@@ -14,7 +14,7 @@ struct ItemSampleDataSeederTests {
 
     @Test
     func seedTutorialDataIfNeeded_creates_items_and_debug_tag() throws {
-        try ItemSampleDataSeeder.seedTutorialDataIfNeeded(
+        try SampleDataOperations.seedTutorialIfNeeded(
             context: context,
             baseDate: shiftedDate("2000-01-03T12:00:00Z")
         )
@@ -29,11 +29,11 @@ struct ItemSampleDataSeederTests {
 
     @Test
     func seedTutorialDataIfNeeded_is_idempotent_when_not_empty() throws {
-        try ItemSampleDataSeeder.seedTutorialDataIfNeeded(
+        try SampleDataOperations.seedTutorialIfNeeded(
             context: context,
             baseDate: shiftedDate("2000-01-03T12:00:00Z")
         )
-        try ItemSampleDataSeeder.seedTutorialDataIfNeeded(
+        try SampleDataOperations.seedTutorialIfNeeded(
             context: context,
             baseDate: shiftedDate("2000-01-10T12:00:00Z")
         )
@@ -42,7 +42,7 @@ struct ItemSampleDataSeederTests {
 
     @Test
     func seedSampleData_creates_debug_items_when_ignoring_duplicates() throws {
-        try ItemSampleDataSeeder.seedSampleData(
+        try SampleDataOperations.seed(
             context: context,
             profile: .debug,
             baseDate: shiftedDate("2000-01-03T12:00:00Z"),
@@ -51,7 +51,7 @@ struct ItemSampleDataSeederTests {
         )
 
         #expect(fetchItems(context).count == 24)
-        #expect(try ItemSampleDataSeeder.hasDebugData(context: context))
+        #expect(try SampleDataOperations.hasDebugData(context: context))
     }
 
     @Test
@@ -67,7 +67,7 @@ struct ItemSampleDataSeederTests {
             repeatCount: 1
         )
 
-        try ItemSampleDataSeeder.seedSampleData(
+        try SampleDataOperations.seed(
             context: context,
             profile: .preview,
             baseDate: shiftedDate("2000-01-03T12:00:00Z"),
@@ -82,17 +82,17 @@ struct ItemSampleDataSeederTests {
 
     @Test
     func deleteDebugData_removes_items_and_tags() throws {
-        try ItemSampleDataSeeder.seedTutorialDataIfNeeded(
+        try SampleDataOperations.seedTutorialIfNeeded(
             context: context,
             baseDate: shiftedDate("2000-01-03T12:00:00Z")
         )
-        #expect(try ItemSampleDataSeeder.hasDebugData(context: context))
+        #expect(try SampleDataOperations.hasDebugData(context: context))
 
-        try ItemSampleDataSeeder.deleteDebugData(context: context)
+        try SampleDataOperations.deleteDebugData(context: context)
 
         let debugTags = try context.fetch(.tags(.typeIs(.debug)))
         #expect(debugTags.isEmpty)
         #expect(fetchItems(context).isEmpty)
-        #expect(!(try ItemSampleDataSeeder.hasDebugData(context: context)))
+        #expect(!(try SampleDataOperations.hasDebugData(context: context)))
     }
 }

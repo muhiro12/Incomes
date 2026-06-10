@@ -8,7 +8,7 @@ public enum SettingsStatusOperations {
     ) throws -> SettingsStatus {
         let hasDuplicateTags = try TagQueryOperations.hasDuplicates(context: context)
         let hasOrphanTags = try TagQueryOperations.hasOrphanTags(context: context)
-        let hasDebugData = try ItemSampleDataSeeder.hasDebugData(context: context)
+        let hasDebugData = try SampleDataOperations.hasDebugData(context: context)
         return .init(
             hasDuplicateTags: hasDuplicateTags,
             hasOrphanTags: hasOrphanTags,

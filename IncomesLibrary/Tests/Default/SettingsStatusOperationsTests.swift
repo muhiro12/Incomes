@@ -22,7 +22,7 @@ struct SettingsStatusOperationsTests {
     func load_detects_duplicate_tags_and_debug_data() throws {
         _ = Tag.createIgnoringDuplicates(context: context, name: "A", type: .content)
         _ = Tag.createIgnoringDuplicates(context: context, name: "A", type: .content)
-        _ = try ItemSampleDataSeeder.seedSampleData(
+        try SampleDataOperations.seed(
             context: context,
             profile: .debug,
             ignoringDuplicates: true

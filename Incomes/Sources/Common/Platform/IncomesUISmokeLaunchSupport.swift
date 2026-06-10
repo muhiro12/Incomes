@@ -25,7 +25,7 @@ enum IncomesUISmokeLaunchSupport {
             )
         )
 
-        try ItemSampleDataSeeder.seedSampleData(
+        try SampleDataOperations.seed(
             context: context,
             profile: .preview,
             ifEmptyOnly: true
