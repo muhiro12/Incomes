@@ -1,7 +1,7 @@
 import Foundation
 
 enum WidgetDeepLinkBuilder {
-    nonisolated static func monthURL(for date: Date) -> URL? {
+    nonisolated static func monthURL(for date: Date) -> URL {
         MainNavigationOperations.preferredMonthURL(for: date)
     }
 
@@ -12,7 +12,7 @@ enum WidgetDeepLinkBuilder {
         return MainNavigationOperations.preferredRouteURL(for: .item(itemID))
     }
 
-    nonisolated static func homeURL() -> URL? {
+    nonisolated static func homeURL() -> URL {
         MainNavigationOperations.preferredRouteURL(for: .home)
     }
 }
