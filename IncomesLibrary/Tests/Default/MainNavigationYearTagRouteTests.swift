@@ -2,7 +2,7 @@
 import SwiftData
 import Testing
 
-struct MainNavigationOperationsYearTagRouteTests {
+struct MainNavigationYearTagRouteTests {
     let context: ModelContext
 
     init() {
