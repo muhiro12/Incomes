@@ -29,12 +29,12 @@ struct CreateItemIntent: AppIntent {
 
     static let title: LocalizedStringResource = .init("Create Item", table: "AppIntents")
 
-    private var formInput: ItemFormInput {
-        .init(
+    @MainActor private var formInput: ItemFormInput {
+        ItemIntentFormInputSupport.formInput(
             date: date,
             content: content,
-            income: income.amount,
-            outgo: outgo.amount,
+            income: income,
+            outgo: outgo,
             category: category
         )
     }

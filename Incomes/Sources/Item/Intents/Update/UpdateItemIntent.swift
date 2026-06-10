@@ -27,12 +27,12 @@ struct UpdateItemIntent: AppIntent {
     static let title: LocalizedStringResource = .init("Update Item", table: "AppIntents")
     static let isDiscoverable = false
 
-    private var formInput: ItemFormInput {
-        .init(
+    @MainActor private var formInput: ItemFormInput {
+        ItemIntentFormInputSupport.formInput(
             date: date,
             content: content,
-            income: income.amount,
-            outgo: outgo.amount,
+            income: income,
+            outgo: outgo,
             category: category,
             priority: priority
         )

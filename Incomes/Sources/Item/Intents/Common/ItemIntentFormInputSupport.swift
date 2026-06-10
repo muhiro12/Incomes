@@ -1,6 +1,34 @@
 import AppIntents
+import Foundation
 
 enum ItemIntentFormInputSupport {
+    static func formInput(
+        date: Date,
+        content: String,
+        income: IntentCurrencyAmount,
+        outgo: IntentCurrencyAmount,
+        category: String,
+        priority: Int? = nil
+    ) -> ItemFormInput {
+        if let priority {
+            return .init(
+                date: date,
+                content: content,
+                income: income.amount,
+                outgo: outgo.amount,
+                category: category,
+                priority: priority
+            )
+        }
+        return .init(
+            date: date,
+            content: content,
+            income: income.amount,
+            outgo: outgo.amount,
+            category: category
+        )
+    }
+
     static func repeatMonthSelections(from value: String) throws -> Set<RepeatMonthSelection> {
         do {
             return try RepeatMonthSelectionParser.parse(value)
