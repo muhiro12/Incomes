@@ -15,8 +15,12 @@ public enum UpcomingPaymentNotificationPresentationBuilder { // swiftlint:disabl
                 return lhs.notifyDate < rhs.notifyDate
             }
 
-            let lhsIdentifier = itemIdentifier(for: lhs.item)
-            let rhsIdentifier = itemIdentifier(for: rhs.item)
+            let lhsIdentifier = UpcomingPaymentItemTargetSupport.targetContentIdentifier(
+                for: lhs.item
+            )
+            let rhsIdentifier = UpcomingPaymentItemTargetSupport.targetContentIdentifier(
+                for: rhs.item
+            )
             if lhsIdentifier != rhsIdentifier {
                 return lhsIdentifier < rhsIdentifier
             }
@@ -44,12 +48,16 @@ private extension UpcomingPaymentNotificationPresentationBuilder {
         badgeCount: Int,
         calendar: Calendar
     ) -> UpcomingPaymentNotificationPresentation {
-        let itemIdentifier = itemIdentifier(for: plan.item)
-        let primaryRouteURL = plan.reminderPlan?.primaryRouteURL ?? primaryRouteURL(for: plan.item)
-        let secondaryRouteURL = plan.reminderPlan?.secondaryRouteURL ?? IncomesDeepLinkURLBuilder.preferredMonthURL( // swiftlint:disable:this line_length
-            for: plan.item.localDate,
-            calendar: calendar
+        let itemIdentifier = UpcomingPaymentItemTargetSupport.targetContentIdentifier(
+            for: plan.item
         )
+        let primaryRouteURL = plan.reminderPlan?.primaryRouteURL ??
+            UpcomingPaymentItemTargetSupport.primaryRouteURL(for: plan.item)
+        let secondaryRouteURL = plan.reminderPlan?.secondaryRouteURL ??
+            UpcomingPaymentItemTargetSupport.secondaryRouteURL(
+                for: plan.item,
+                calendar: calendar
+            )
         let referenceDate = max(plan.notifyDate, now)
         let daysUntilDue = plan.reminderPlan?.daysUntilDue ?? max(
             0,
@@ -85,20 +93,6 @@ private extension UpcomingPaymentNotificationPresentationBuilder {
             dueDate: plan.item.localDate,
             notifyDate: plan.notifyDate
         )
-    }
-
-    static func primaryRouteURL(for item: Item) -> URL {
-        if let itemID = try? PersistentIdentifierCoder.encode(item.id) {
-            return IncomesDeepLinkURLBuilder.preferredItemURL(for: itemID)
-        }
-        return IncomesDeepLinkURLBuilder.preferredMonthURL(for: item.localDate)
-    }
-
-    static func itemIdentifier(for item: Item) -> String {
-        if let itemID = try? PersistentIdentifierCoder.encode(item.id) {
-            return itemID
-        }
-        return String(describing: item.persistentModelID)
     }
 
     static func threadIdentifier(for dueDate: Date, calendar: Calendar) -> String {

@@ -60,7 +60,9 @@ public enum UpcomingPaymentPlanner {
         let itemsByIdentifier = Dictionary(
             uniqueKeysWithValues: items.map { item in
                 (
-                    itemIdentifier(for: item),
+                    UpcomingPaymentItemTargetSupport.targetContentIdentifier(
+                        for: item
+                    ),
                     item
                 )
             }
@@ -128,15 +130,19 @@ private extension UpcomingPaymentPlanner {
         for item: Item,
         calendar: Calendar
     ) -> MHReminderCandidate {
-        let stableIdentifier = itemIdentifier(for: item)
+        let stableIdentifier = UpcomingPaymentItemTargetSupport.targetContentIdentifier(
+            for: item
+        )
         return .init(
             stableIdentifier: stableIdentifier,
             title: item.content,
             amount: item.outgo,
             dueDate: item.localDate,
-            primaryRouteURL: primaryRouteURL(for: item),
-            secondaryRouteURL: IncomesDeepLinkURLBuilder.preferredMonthURL(
-                for: item.localDate,
+            primaryRouteURL: UpcomingPaymentItemTargetSupport.primaryRouteURL(
+                for: item
+            ),
+            secondaryRouteURL: UpcomingPaymentItemTargetSupport.secondaryRouteURL(
+                for: item,
                 calendar: calendar
             )
         )
@@ -165,19 +171,5 @@ private extension UpcomingPaymentPlanner {
         UpcomingPaymentNotificationPresentation.targetContentIdentifier(
             fromRequestIdentifier: identifier
         )
-    }
-
-    static func primaryRouteURL(for item: Item) -> URL {
-        if let itemID = try? PersistentIdentifierCoder.encode(item.id) {
-            return IncomesDeepLinkURLBuilder.preferredItemURL(for: itemID)
-        }
-        return IncomesDeepLinkURLBuilder.preferredMonthURL(for: item.localDate)
-    }
-
-    static func itemIdentifier(for item: Item) -> String {
-        if let itemID = try? PersistentIdentifierCoder.encode(item.id) {
-            return itemID
-        }
-        return String(describing: item.persistentModelID)
     }
 }
