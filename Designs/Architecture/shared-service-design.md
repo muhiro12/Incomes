@@ -31,7 +31,7 @@ and widgets.
 | Business operations | `IncomesLibrary` | `Item*Operations`, `Tag*Operations`, `ItemSummaryOperations`, `YearlyItemDuplication*Operations`, `WidgetEntryOperations`, `WatchSyncOperations`, `UpcomingPaymentOperations`, `SettingsStatusOperations`, `DataMaintenanceOperations` |
 | Library collaborators and contracts | `IncomesLibrary` | `Item`, `Tag`, predicates, calculators, builders, planners, loaders, parsers, codecs, route contracts, wire payloads, snapshot models |
 | Apple framework adapters | `Incomes` | `ItemInferenceService`, `NotificationService`, App Intent types, deep-link routing, StoreKit, ads |
-| App-side platform support | `Incomes/Sources/Common/Platform` | `IncomesPlatformEnvironmentFactory`, `MHAppRuntimeBootstrap` assembly, `MHAppRoutePipeline<IncomesRoute>` assembly, `IncomesRouteBridge`, `MHReviewFlow` policy helpers, Foundation Models availability helpers, WidgetKit reload helpers, preference access helpers |
+| App-side platform support | `Incomes/Sources/Common/Platform` | `IncomesPlatformEnvironmentFactory`, `MHAppRuntimeBootstrap` assembly, `MHAppRoutePipeline<IncomesRoute>` assembly, `IncomesRouteBridge`, `MHReviewFlow` policy helpers, Foundation Models availability helpers, WidgetKit reload helpers, preference access helpers, pasteboard helpers |
 | Watch and widget surfaces | `Watch`, `Widgets` | WatchConnectivity transport, widget timeline providers, target-local screen state, entry presentation |
 | Presentation orchestration | `Incomes` | SwiftUI views, navigation state, form state, app-side services in `Item/Services`, and coordinators in `Settings/Coordinators` |
 
@@ -133,6 +133,9 @@ App-side mutation call sites should prefer
 - `IncomesCurrencyPreference` stays under `Common/Platform` because App Intent
   adapters use it to read the app preference store before calling shared
   operations.
+- `IncomesPasteboardWriter` stays under `Common/Platform` because common
+  context-menu components use it to perform UIKit pasteboard and haptic side
+  effects.
 - `NotificationService` stays in `Incomes` and uses shared notification
   planning operations, presentation contracts, identifier rules, and route
   payload contracts from `IncomesLibrary`.
