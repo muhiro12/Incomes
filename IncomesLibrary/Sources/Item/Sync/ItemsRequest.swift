@@ -24,4 +24,19 @@ public struct ItemsRequest: Codable, Sendable {
             monthOffsets: recentMonthOffsets
         )
     }
+
+    public static func requestData(
+        for request: Self
+    ) throws -> Data {
+        try JSONEncoder().encode(request)
+    }
+
+    public static func decodeRequest(
+        _ data: Data
+    ) throws -> Self {
+        try JSONDecoder().decode(
+            Self.self,
+            from: data
+        )
+    }
 }

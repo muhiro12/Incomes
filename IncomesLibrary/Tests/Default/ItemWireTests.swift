@@ -13,8 +13,8 @@ struct ItemWireTests {
             baseEpoch: 1_725_000_000,
             monthOffsets: ItemsRequest.recentMonthOffsets
         )
-        let data = try JSONEncoder().encode(request)
-        let decoded = try #require(try? JSONDecoder().decode(ItemsRequest.self, from: data))
+        let data = try ItemsRequest.requestData(for: request)
+        let decoded = try ItemsRequest.decodeRequest(data)
         #expect(decoded.baseEpoch == request.baseEpoch)
         #expect(decoded.monthOffsets == request.monthOffsets)
     }

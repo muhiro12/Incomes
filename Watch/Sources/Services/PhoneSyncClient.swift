@@ -56,7 +56,7 @@ final class PhoneSyncClient: NSObject {
 
         let data: Data
         do {
-            data = try JSONEncoder().encode(request)
+            data = try ItemsRequest.requestData(for: request)
         } catch {
             return .failed(
                 phase: .requestEncode,

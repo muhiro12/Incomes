@@ -135,10 +135,7 @@ nonisolated extension PhoneWatchBridge: WCSessionDelegate {
     func session(_: WCSession, didReceiveMessageData messageData: Data, replyHandler: @escaping @Sendable (Data) -> Void) { // swiftlint:disable:this line_length
         let request: ItemsRequest
         do {
-            request = try JSONDecoder().decode(
-                ItemsRequest.self,
-                from: messageData
-            )
+            request = try ItemsRequest.decodeRequest(messageData)
         } catch {
             logger?.error(
                 "watch_sync.request_decode_failed",
