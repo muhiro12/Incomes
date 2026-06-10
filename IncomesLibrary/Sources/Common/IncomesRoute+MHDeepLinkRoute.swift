@@ -72,27 +72,29 @@ extension IncomesRoute: MHDeepLinkRoute {
         pathComponents: [String],
         queryItems: [URLQueryItem]
     ) -> IncomesRoute? {
+        let routeSegments = pathComponents.dropFirst()
+
         switch destination {
         case "home":
             return .home
         case "settings":
-            return Self.parseSettingsRoute(from: pathComponents.dropFirst())
+            return Self.parseSettingsRoute(from: routeSegments)
         case "year-summary":
-            return Self.parseYearSummaryRoute(from: pathComponents.dropFirst())
+            return Self.parseYearSummaryRoute(from: routeSegments)
         case "yearly-duplication":
             return .yearlyDuplication
         case "duplicate-tags",
              "orphan-tags":
             return Self.parseTagManagementRoute(destination: destination)
         case "year":
-            return Self.parseYearRoute(from: pathComponents.dropFirst())
+            return Self.parseYearRoute(from: routeSegments)
         case "month":
             return Self.parseMonthRoute(
-                from: pathComponents.dropFirst()
+                from: routeSegments
             )
         case "item":
             return Self.parseItemRoute(
-                from: pathComponents.dropFirst(),
+                from: routeSegments,
                 queryItems: queryItems
             )
         case "search":
