@@ -257,6 +257,7 @@ API style decision:
 4. Watch sync should keep using the shared snapshot service rather than
    reintroducing target-local snapshot or mutation rules.
    Files:
+   - `Incomes/Sources/Common/Platform/PhoneWatchBridge.swift`
    - `Watch/Sources/Services/WatchDataSyncer.swift`
    - `IncomesLibrary/Sources/Item/Sync/WatchSyncOperations.swift`
    Minimal plan:

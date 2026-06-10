@@ -109,7 +109,7 @@ contract and watch UI state handling.
 - Representative files:
   - `IncomesLibrary/Sources/Item/Sync/ItemsRequest.swift`
   - `IncomesLibrary/Sources/Item/Sync/WatchSyncReply.swift`
-  - `Incomes/Sources/Common/Services/PhoneWatchBridge.swift`
+  - `Incomes/Sources/Common/Platform/PhoneWatchBridge.swift`
   - `Watch/Sources/Services/PhoneSyncClient.swift`
   - `Watch/Sources/Services/WatchDataSyncer.swift`
   - `Watch/Sources/WatchHomeScreenModel.swift`

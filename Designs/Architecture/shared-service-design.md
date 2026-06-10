@@ -31,7 +31,7 @@ and widgets.
 | Business operations | `IncomesLibrary` | `Item*Operations`, `Tag*Operations`, `ItemSummaryOperations`, `YearlyItemDuplication*Operations`, `WidgetEntryOperations`, `WatchSyncOperations`, `UpcomingPaymentOperations`, `SettingsStatusOperations`, `DataMaintenanceOperations` |
 | Library collaborators and contracts | `IncomesLibrary` | `Item`, `Tag`, predicates, calculators, builders, planners, loaders, parsers, codecs, route contracts, wire payloads, snapshot models |
 | Apple framework adapters | `Incomes` | `ItemInferenceService`, `NotificationService`, App Intent types, deep-link routing, StoreKit, ads |
-| App-side platform support | `Incomes/Sources/Common/Platform` | `IncomesPlatformEnvironmentFactory`, `MHAppRuntimeBootstrap` assembly, `MHAppRoutePipeline<IncomesRoute>` assembly, `IncomesRouteBridge`, `MHReviewFlow` policy helpers, Foundation Models availability helpers, WidgetKit reload helpers, preference access helpers, pasteboard helpers |
+| App-side platform support | `Incomes/Sources/Common/Platform` | `IncomesPlatformEnvironmentFactory`, `MHAppRuntimeBootstrap` assembly, `MHAppRoutePipeline<IncomesRoute>` assembly, `IncomesRouteBridge`, `MHReviewFlow` policy helpers, Foundation Models availability helpers, WidgetKit reload helpers, preference access helpers, pasteboard helpers, WatchConnectivity phone bridge |
 | Watch and widget surfaces | `Watch`, `Widgets` | WatchConnectivity transport, widget timeline providers, target-local screen state, entry presentation |
 | Presentation orchestration | `Incomes` | SwiftUI views, navigation state, form state, app-side services in `Item/Services`, and coordinators in `Settings/Coordinators` |
 
@@ -142,10 +142,11 @@ App-side mutation call sites should prefer
 - `IncomesPlatformEnvironmentFactory` stays in `Incomes` because runtime,
   route pipeline, and review flow assembly depend on the `MHPlatform` umbrella, app
   secrets, and SwiftUI environment injection.
-- `PhoneWatchBridge` and `PhoneSyncClient` stay in the app targets because they
-  own WatchConnectivity transport, while `WatchSyncReply` and
-  `WatchSyncOperations` stay in `IncomesLibrary` because the sync contract,
-  response snapshot building, and apply rules are shared.
+- `PhoneWatchBridge` stays under `Common/Platform` because it owns the phone-side
+  WatchConnectivity transport and maps requests into `WatchSyncOperations`.
+  `PhoneSyncClient` stays in the watch target for watch-side transport, while
+  `WatchSyncReply` and `WatchSyncOperations` stay in `IncomesLibrary` because
+  the sync contract, response snapshot building, and apply rules are shared.
 - `IncomesLibrary` stays on `MHPlatformCore` so shared logic only sees
   core-safe platform helpers.
 - `ContentView` stays thin because `MHAppRuntimeBootstrap` owns the runtime,
