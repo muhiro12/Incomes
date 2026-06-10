@@ -3,6 +3,15 @@ import SwiftData
 
 /// Domain operations for creating `Item` models.
 public enum ItemCreationOperations {
+    /// The minimum repeat count accepted by user-facing creation inputs.
+    public static let minimumRepeatCount = ItemRepeatCountLimits.minimum
+    /// The maximum repeat count accepted by user-facing creation inputs.
+    public static let maximumRepeatCount = ItemRepeatCountLimits.maximum
+    /// The default repeat count for user-facing creation inputs.
+    public static let defaultRepeatCount = ItemRepeatCountLimits.defaultValue
+    /// The selectable repeat count range for user-facing creation inputs.
+    public static let repeatCountRange = ItemRepeatCountLimits.range
+
     /// Creates an item and optional repeating items, and returns mutation metadata.
     public static func createWithOutcome(
         context: ModelContext,

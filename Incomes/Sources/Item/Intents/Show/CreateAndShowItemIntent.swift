@@ -20,6 +20,7 @@ struct CreateAndShowItemIntent: AppIntent {
     private var outgo: IntentCurrencyAmount // swiftlint:disable:this type_contents_order
     @Parameter(title: "Category")
     private var category: String // swiftlint:disable:this type_contents_order
+    // App Intents requires compile-time literals for parameter metadata.
     @Parameter(title: "Repeat", default: 1, inclusiveRange: (1, 60)) // swiftlint:disable:this no_magic_numbers
     private var repeatCount: Int // swiftlint:disable:this type_contents_order
 

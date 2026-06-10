@@ -12,6 +12,14 @@ struct ItemOperationsCanonicalTests {
     }
 
     @Test
+    func create_exposesRepeatCountInputLimits() {
+        #expect(ItemCreationOperations.minimumRepeatCount == 1)
+        #expect(ItemCreationOperations.maximumRepeatCount == 60)
+        #expect(ItemCreationOperations.defaultRepeatCount == 1)
+        #expect(ItemCreationOperations.repeatCountRange == 1...60)
+    }
+
+    @Test
     func create_withSharedInput_createsItemsForSelectedMonths() throws {
         let input: ItemFormInput = .init(
             date: shiftedDate("2000-04-03T12:00:00Z"),

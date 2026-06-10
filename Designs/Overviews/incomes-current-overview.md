@@ -492,7 +492,7 @@ route contract remains `IncomesRoute`.
 
 The following behaviors are already centralized and should remain centralized:
 
-- item creation, repeat generation, and repeat-month selection rules
+- item creation, repeat generation, repeat count limits, and repeat-month selection rules
 - repeat-aware item updates and scope-selection decisions
 - item deletion and affected-balance recalculation
 - duplicate tag detection and merge resolution
