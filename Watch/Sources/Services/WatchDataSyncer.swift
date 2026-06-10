@@ -12,9 +12,8 @@ enum WatchDataSyncer {
     static func syncRecentMonths(
         context: ModelContext
     ) async -> WatchSyncReply {
-        let baseDate = Date()
-        let monthOffsets = ItemsRequest.recentMonthOffsets
-        let reply = await PhoneSyncClient.shared.requestRecentItems()
+        let request = ItemsRequest.recent()
+        let reply = await PhoneSyncClient.shared.requestRecentItems(request)
 
         guard reply.shouldApplySnapshot else {
             return reply
@@ -24,8 +23,8 @@ enum WatchDataSyncer {
             _ = try WatchSyncService.applySnapshot(
                 context: context,
                 items: reply.items,
-                baseDate: baseDate,
-                monthOffsets: monthOffsets
+                baseDate: request.baseDate,
+                monthOffsets: request.monthOffsets
             )
             return reply
         } catch {

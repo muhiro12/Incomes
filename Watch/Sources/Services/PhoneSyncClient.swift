@@ -44,7 +44,9 @@ final class PhoneSyncClient: NSObject {
         return
     }
 
-    nonisolated func requestRecentItems() async -> WatchSyncReply {
+    nonisolated func requestRecentItems(
+        _ request: ItemsRequest
+    ) async -> WatchSyncReply {
         guard WCSession.default.isReachable else {
             return .failed(
                 phase: .sessionUnreachable,
@@ -52,10 +54,6 @@ final class PhoneSyncClient: NSObject {
             )
         }
 
-        let request = ItemsRequest(
-            baseEpoch: Date().timeIntervalSince1970,
-            monthOffsets: ItemsRequest.recentMonthOffsets
-        )
         let data: Data
         do {
             data = try JSONEncoder().encode(request)

@@ -25,6 +25,16 @@ struct ItemWireTests {
     }
 
     @Test
+    func itemsRequest_recent_usesBaseDateAndRecentOffsets() {
+        let baseDate = Date(timeIntervalSince1970: 1_725_000_000)
+        let request = ItemsRequest.recent(baseDate: baseDate)
+
+        #expect(request.baseEpoch == baseDate.timeIntervalSince1970)
+        #expect(request.baseDate == baseDate)
+        #expect(request.monthOffsets == ItemsRequest.recentMonthOffsets)
+    }
+
+    @Test
     func watchSyncReply_success_roundTrips_via_JSON() throws {
         let items = [
             ItemWire(dateEpoch: 1_725_000_000, content: "Salary", income: 3_000, outgo: 0, category: "Salary"),

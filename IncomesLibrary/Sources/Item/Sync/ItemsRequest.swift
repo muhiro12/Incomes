@@ -7,8 +7,21 @@ public struct ItemsRequest: Codable, Sendable {
     public let baseEpoch: Double
     public let monthOffsets: [Int]
 
+    public var baseDate: Date {
+        Date(timeIntervalSince1970: baseEpoch)
+    }
+
     public init(baseEpoch: Double, monthOffsets: [Int]) {
         self.baseEpoch = baseEpoch
         self.monthOffsets = monthOffsets
+    }
+
+    public static func recent(
+        baseDate: Date = .now
+    ) -> Self {
+        .init(
+            baseEpoch: baseDate.timeIntervalSince1970,
+            monthOffsets: recentMonthOffsets
+        )
     }
 }

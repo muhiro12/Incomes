@@ -173,7 +173,6 @@ nonisolated extension PhoneWatchBridge: WCSessionDelegate {
         request: ItemsRequest,
         replyHandler: (Data) -> Void
     ) {
-        let baseDate = Date(timeIntervalSince1970: request.baseEpoch)
         guard let context = modelContext else {
             logger?.error(
                 "watch_sync.missing_context",
@@ -194,7 +193,7 @@ nonisolated extension PhoneWatchBridge: WCSessionDelegate {
         do {
             let wires = try WatchSyncService.recentItemWires(
                 context: context,
-                baseDate: baseDate,
+                baseDate: request.baseDate,
                 monthOffsets: request.monthOffsets
             )
             replyHandler(
