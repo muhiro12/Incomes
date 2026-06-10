@@ -63,7 +63,6 @@ enum YearlyDuplicationCoordinator {
         )
     }
 
-    // swiftlint:disable function_body_length
     static func apply(
         group: YearlyItemDuplicationGroup,
         in plan: YearlyItemDuplicationPlan,
@@ -75,17 +74,13 @@ enum YearlyDuplicationCoordinator {
             for: group.id,
             in: plan
         )
-        let metadata = IncomesLogging.metadata(
-            ("group_count", "1"),
-            ("item_count", IncomesLogging.count(entries.count)),
-            ("skipped_count", IncomesLogging.count(plan.skippedDuplicateCount)),
-            ("category_present", IncomesLogging.presence(group.category))
+        let metadata = applyMetadata(
+            group: group,
+            entries: entries,
+            plan: plan
         )
         guard entries.isNotEmpty else {
-            logger.info(
-                "yearly_duplication.apply_skipped",
-                metadata: metadata
-            )
+            logSkippedApply(metadata: metadata, logger: logger)
             return nil
         }
         logger.notice(
@@ -93,56 +88,28 @@ enum YearlyDuplicationCoordinator {
             metadata: metadata
         )
 
-        let adapter = IncomesMutationWorkflow
-            .followUpHintAdapter(
-                refreshNotificationSchedule: refreshNotificationSchedule
-            )
-
         do {
-            let result = try await MHMutationWorkflow.runThrowing(
-                name: "duplicateYearlyItems",
-                operation: {
-                    try YearlyItemDuplicationApplyOperations.applyWithOutcome(
-                        plan: .init(
-                            groups: [group],
-                            entries: entries,
-                            skippedDuplicateCount: 0
-                        ),
-                        context: context
-                    )
-                },
-                adapter: adapter,
-                projection: .valueAndFollowUp(
-                    value: \.value,
-                    followUp: \.outcome.followUpHints
-                ),
-                onEvent: MHMutationWorkflowLogger(logger: logger).onEvent()
+            let result = try await runApplyWorkflow(
+                group: group,
+                entries: entries,
+                context: context,
+                refreshNotificationSchedule: refreshNotificationSchedule,
+                logger: logger
             )
-            logger.notice(
-                "yearly_duplication.apply_completed",
-                metadata: metadata.merging(
-                    IncomesLogging.metadata(
-                        ("created_count", IncomesLogging.count(result.createdCount))
-                    )
-                ) { current, _ in
-                    current
-                }
+            logCompletedApply(
+                result: result,
+                metadata: metadata,
+                logger: logger
             )
             return result
         } catch {
-            let failureMetadata = metadata.merging(
-                IncomesLogging.errorMetadata(error)
-            ) { current, _ in
-                current
-            }
             logger.error(
                 "yearly_duplication.apply_failed",
-                metadata: failureMetadata
+                metadata: failureMetadata(metadata, error: error)
             )
             throw error
         }
     }
-    // swiftlint:enable function_body_length
 
     static func promoState(
         context: ModelContext,
@@ -177,5 +144,107 @@ enum YearlyDuplicationCoordinator {
             return false
         }
         return randomValue == 0
+    }
+}
+
+private extension YearlyDuplicationCoordinator {
+    static func applyMetadata(
+        group: YearlyItemDuplicationGroup,
+        entries: [YearlyItemDuplicationEntry],
+        plan: YearlyItemDuplicationPlan
+    ) -> [String: String] {
+        IncomesLogging.metadata(
+            ("group_count", "1"),
+            ("item_count", IncomesLogging.count(entries.count)),
+            ("skipped_count", IncomesLogging.count(plan.skippedDuplicateCount)),
+            ("category_present", IncomesLogging.presence(group.category))
+        )
+    }
+
+    static func logSkippedApply(
+        metadata: [String: String],
+        logger: MHLogger
+    ) {
+        logger.info(
+            "yearly_duplication.apply_skipped",
+            metadata: metadata
+        )
+    }
+
+    static func runApplyWorkflow(
+        group: YearlyItemDuplicationGroup,
+        entries: [YearlyItemDuplicationEntry],
+        context: ModelContext,
+        refreshNotificationSchedule: @escaping IncomesMutationWorkflow.NotificationScheduleRefresher,
+        logger: MHLogger
+    ) async throws -> YearlyItemDuplicationResult {
+        let adapter = IncomesMutationWorkflow.followUpHintAdapter(
+            refreshNotificationSchedule: refreshNotificationSchedule
+        )
+        return try await MHMutationWorkflow.runThrowing(
+            name: "duplicateYearlyItems",
+            operation: {
+                try YearlyItemDuplicationApplyOperations.applyWithOutcome(
+                    plan: singleGroupApplyPlan(
+                        group: group,
+                        entries: entries
+                    ),
+                    context: context
+                )
+            },
+            adapter: adapter,
+            projection: .valueAndFollowUp(
+                value: \.value,
+                followUp: \.outcome.followUpHints
+            ),
+            onEvent: MHMutationWorkflowLogger(logger: logger).onEvent()
+        )
+    }
+
+    static func singleGroupApplyPlan(
+        group: YearlyItemDuplicationGroup,
+        entries: [YearlyItemDuplicationEntry]
+    ) -> YearlyItemDuplicationPlan {
+        .init(
+            groups: [group],
+            entries: entries,
+            skippedDuplicateCount: 0
+        )
+    }
+
+    static func logCompletedApply(
+        result: YearlyItemDuplicationResult,
+        metadata: [String: String],
+        logger: MHLogger
+    ) {
+        logger.notice(
+            "yearly_duplication.apply_completed",
+            metadata: completedMetadata(
+                metadata,
+                result: result
+            )
+        )
+    }
+
+    static func completedMetadata(
+        _ metadata: [String: String],
+        result: YearlyItemDuplicationResult
+    ) -> [String: String] {
+        metadata.merging(
+            IncomesLogging.metadata(
+                ("created_count", IncomesLogging.count(result.createdCount))
+            )
+        ) { current, _ in
+            current
+        }
+    }
+
+    static func failureMetadata(
+        _ metadata: [String: String],
+        error: any Error
+    ) -> [String: String] {
+        metadata.merging(IncomesLogging.errorMetadata(error)) { current, _ in
+            current
+        }
     }
 }
