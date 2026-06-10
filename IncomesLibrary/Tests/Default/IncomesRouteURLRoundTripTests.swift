@@ -17,6 +17,27 @@ struct IncomesRouteURLRoundTripTests {
         }
     }
 
+    @Test
+    func route_url_builders_reject_unparseable_routes() {
+        for route in unparseableRoutes() {
+            #expect(IncomesRouteURLBuilder.customSchemeURL(for: route) == nil)
+            #expect(IncomesRouteURLBuilder.universalLinkURL(for: route) == nil)
+        }
+    }
+
+    @Test
+    func route_url_builders_normalize_empty_search_query() throws {
+        let customSchemeURL = try #require(
+            IncomesRouteURLBuilder.customSchemeURL(for: .search(query: ""))
+        )
+        let universalLinkURL = try #require(
+            IncomesRouteURLBuilder.universalLinkURL(for: .search(query: ""))
+        )
+
+        #expect(IncomesRouteParser.parse(url: customSchemeURL) == .search(query: nil))
+        #expect(IncomesRouteParser.parse(url: universalLinkURL) == .search(query: nil))
+    }
+
     private func assertRoundTripURLs(
         using makeURL: (IncomesRoute) -> URL?
     ) throws {
@@ -44,6 +65,15 @@ struct IncomesRouteURLRoundTripTests {
             .item("item-id"),
             .search(query: "rent"),
             .search(query: nil)
+        ]
+    }
+
+    private func unparseableRoutes() -> [IncomesRoute] {
+        [
+            .year(0),
+            .yearSummary(0),
+            .month(year: 2_026, month: 13),
+            .item("")
         ]
     }
 }

@@ -52,6 +52,22 @@ struct IncomesDeepLinkURLBuilderTests {
     }
 
     @Test
+    func item_url_returns_nil_for_empty_identifier() {
+        let url = IncomesDeepLinkURLBuilder.itemURL(for: "")
+
+        #expect(url == nil)
+    }
+
+    @Test
+    func preferred_item_url_falls_back_to_home_for_empty_identifier() {
+        let url = IncomesDeepLinkURLBuilder.preferredItemURL(for: "")
+
+        #expect(
+            url.absoluteString == "https://muhiro12.github.io/Incomes/home"
+        )
+    }
+
+    @Test
     func month_url_builds_month_route_from_date_components() {
         var calendar = Calendar(identifier: .gregorian)
         guard let utcTimeZone = TimeZone(secondsFromGMT: 0) else {

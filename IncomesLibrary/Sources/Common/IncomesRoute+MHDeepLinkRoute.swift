@@ -7,6 +7,39 @@ private enum RoutePathSegmentCount {
 }
 
 extension IncomesRoute: MHDeepLinkRoute {
+    var canonicalDeepLinkRoute: IncomesRoute? {
+        switch self {
+        case .year(let year):
+            guard YearMonthComponentRules.isValidYear(year) else {
+                return nil
+            }
+            return self
+        case .yearSummary(let year):
+            guard YearMonthComponentRules.isValidYear(year) else {
+                return nil
+            }
+            return self
+        case let .month(year, month):
+            guard YearMonthComponentRules.isValidYear(year),
+                  YearMonthComponentRules.isValidMonth(month) else {
+                return nil
+            }
+            return self
+        case .item(let itemID):
+            guard itemID.isNotEmpty else {
+                return nil
+            }
+            return self
+        case .search(let query):
+            guard query?.isNotEmpty != false else {
+                return .search(query: nil)
+            }
+            return self
+        default:
+            return self
+        }
+    }
+
     public var deepLinkDescriptor: MHDeepLinkDescriptor {
         switch self {
         case .home:

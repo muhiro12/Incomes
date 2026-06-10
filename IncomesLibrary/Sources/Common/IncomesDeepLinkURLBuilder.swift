@@ -4,18 +4,18 @@ import Foundation
 public enum IncomesDeepLinkURLBuilder {
     /// Returns the universal-link URL for `route`.
     nonisolated public static func routeURL(for route: IncomesRoute) -> URL? {
-        IncomesDeepLinkCodec.shared.url(
-            for: route,
-            transport: .universalLink
-        )
+        IncomesRouteURLBuilder.universalLinkURL(for: route)
     }
 
     /// Returns the preferred deep link for `route`, falling back to home when needed.
     nonisolated public static func preferredURL(for route: IncomesRoute) -> URL {
-        if let preferredURL = IncomesDeepLinkCodec.shared.preferredURL(for: route) {
+        if let preferredURL = IncomesRouteURLBuilder.universalLinkURL(for: route) {
             return preferredURL
         }
-        if let homeURL = IncomesDeepLinkCodec.shared.preferredURL(for: .home) {
+        if let customSchemeURL = IncomesRouteURLBuilder.customSchemeURL(for: route) {
+            return customSchemeURL
+        }
+        if let homeURL = IncomesRouteURLBuilder.universalLinkURL(for: .home) {
             return homeURL
         }
         guard let fallbackURL = URL(

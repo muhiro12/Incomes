@@ -13,7 +13,11 @@ public enum IncomesRouteURLBuilder {
     public static func customSchemeURL(
         for route: IncomesRoute
     ) -> URL? {
-        IncomesDeepLinkCodec.shared.url(
+        guard let route = route.canonicalDeepLinkRoute else {
+            return nil
+        }
+
+        return IncomesDeepLinkCodec.shared.url(
             for: route,
             transport: .customScheme
         )
@@ -25,6 +29,10 @@ public enum IncomesRouteURLBuilder {
         host: String = defaultUniversalLinkHost,
         appPathPrefix: String = defaultUniversalLinkPathPrefix
     ) -> URL? {
+        guard let route = route.canonicalDeepLinkRoute else {
+            return nil
+        }
+
         let codec = IncomesDeepLinkCodec.make(
             host: host,
             appPathPrefix: appPathPrefix
