@@ -54,7 +54,7 @@ extension ItemFormModel {
     }
 
     var baseSelection: RepeatMonthSelection {
-        RepeatMonthSelectionRules.baseSelection(baseDate: date)
+        RepeatMonthSelectionOperations.baseSelection(baseDate: date)
     }
 
     var effectiveRepeatMonthSelections: Set<RepeatMonthSelection> {
@@ -123,7 +123,7 @@ extension ItemFormModel {
     }
 
     func syncRepeatMonthSelectionsWithBaseDate() {
-        repeatMonthSelections = RepeatMonthSelectionRules.normalized(
+        repeatMonthSelections = RepeatMonthSelectionOperations.normalized(
             repeatMonthSelections,
             baseDate: date
         )

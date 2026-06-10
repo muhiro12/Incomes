@@ -26,6 +26,7 @@ forbidden_collaborators=(
   MonthlySummaryNarrativeContextLoader
   ItemFormInferencePromptBuilder
   ItemFormSaveDecision
+  RepeatMonthSelectionRules
   UpcomingPaymentPlanner
   UpcomingPaymentNotificationPresentationBuilder
   SearchResultSectionBuilder

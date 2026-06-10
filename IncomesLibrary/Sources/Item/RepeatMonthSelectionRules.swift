@@ -1,9 +1,9 @@
 import Foundation
 
 /// Shared rules for validating and normalizing repeat month selections.
-public enum RepeatMonthSelectionRules {
+enum RepeatMonthSelectionRules {
     /// Returns the base selection derived from `baseDate`.
-    public static func baseSelection(
+    static func baseSelection(
         baseDate: Date,
         calendar: Calendar = .current
     ) -> RepeatMonthSelection {
@@ -14,7 +14,7 @@ public enum RepeatMonthSelectionRules {
     }
 
     /// Returns the allowed years for repeating items.
-    public static func allowedYears(
+    static func allowedYears(
         baseDate: Date,
         calendar: Calendar = .current
     ) -> [Int] {
@@ -23,7 +23,7 @@ public enum RepeatMonthSelectionRules {
     }
 
     /// Returns true when `selection` is valid for `baseDate`.
-    public static func isValid(
+    static func isValid(
         _ selection: RepeatMonthSelection,
         baseDate: Date,
         calendar: Calendar = .current
@@ -37,7 +37,7 @@ public enum RepeatMonthSelectionRules {
     }
 
     /// Returns normalized selections with invalid values removed and base month included.
-    public static func normalized(
+    static func normalized(
         _ selections: Set<RepeatMonthSelection>,
         baseDate: Date,
         calendar: Calendar = .current
@@ -61,7 +61,7 @@ public enum RepeatMonthSelectionRules {
     }
 
     /// Returns the month offset from `baseDate` to `selection`.
-    public static func monthOffset(
+    static func monthOffset(
         from baseDate: Date,
         to selection: RepeatMonthSelection,
         calendar: Calendar = .current

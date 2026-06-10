@@ -52,6 +52,7 @@ operations and shared wire contracts:
 
 - `ItemFormInput`
 - `ItemMutationScope`
+- `RepeatMonthSelectionOperations`
 - `Item*Operations.create(context:input:repeatMonthSelections:)`
 - `Item*Operations.requiresScopeSelection(context:item:)`
 - `Item*Operations.update(context:item:input:scope:)`

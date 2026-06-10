@@ -44,7 +44,7 @@ private extension RepeatMonthPicker {
     }
 
     var years: [Int] {
-        RepeatMonthSelectionRules.allowedYears(
+        RepeatMonthSelectionOperations.allowedYears(
             baseDate: baseDate,
             calendar: calendar
         )
@@ -60,7 +60,7 @@ private extension RepeatMonthPicker {
     }
 
     var baseSelection: RepeatMonthSelection {
-        RepeatMonthSelectionRules.baseSelection(
+        RepeatMonthSelectionOperations.baseSelection(
             baseDate: baseDate,
             calendar: calendar
         )
@@ -160,7 +160,7 @@ private extension RepeatMonthPicker {
     }
 
     func monthOffset(for selection: RepeatMonthSelection) -> Int {
-        RepeatMonthSelectionRules.monthOffset(
+        RepeatMonthSelectionOperations.monthOffset(
             from: baseDate,
             to: selection,
             calendar: calendar

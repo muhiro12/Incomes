@@ -2,7 +2,7 @@ import Foundation
 @testable import IncomesLibrary
 import Testing
 
-struct RepeatMonthSelectionRulesTests {
+struct RepeatMonthSelectionOperationsTests {
     @Test
     func normalized_filters_invalid_entries_and_keeps_base_selection() {
         let baseDate = shiftedDate("2024-05-10T12:00:00Z")
@@ -14,7 +14,7 @@ struct RepeatMonthSelectionRulesTests {
             .init(year: 2_024, month: 0)
         ]
 
-        let normalized = RepeatMonthSelectionRules.normalized(
+        let normalized = RepeatMonthSelectionOperations.normalized(
             selections,
             baseDate: baseDate
         )
@@ -31,7 +31,7 @@ struct RepeatMonthSelectionRulesTests {
         let baseDate = shiftedDate("2024-11-20T12:00:00Z")
         let target: RepeatMonthSelection = .init(year: 2_025, month: 2)
 
-        let offset = RepeatMonthSelectionRules.monthOffset(
+        let offset = RepeatMonthSelectionOperations.monthOffset(
             from: baseDate,
             to: target
         )
