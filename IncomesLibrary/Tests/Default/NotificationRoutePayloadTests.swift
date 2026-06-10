@@ -4,6 +4,18 @@ import Testing
 
 struct NotificationRoutePayloadTests {
     @Test
+    func actionIdentifiers_preserveNotificationActionValues() {
+        #expect(
+            NotificationRoutePayload.viewItemActionIdentifier ==
+                "upcoming-payment.view-item"
+        )
+        #expect(
+            NotificationRoutePayload.viewMonthActionIdentifier ==
+                "upcoming-payment.view-month"
+        )
+    }
+
+    @Test
     func userInfo_encodes_upcoming_payment_routes_and_metadata() throws {
         let primaryRouteURL = try url("incomes://item?id=rent")
         let secondaryRouteURL = try url("incomes://month?year=2026&month=1")

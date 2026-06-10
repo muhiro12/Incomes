@@ -16,11 +16,6 @@ final class NotificationService: NSObject {
         static let upcomingPaymentActions = "upcoming-payment.actions"
     }
 
-    private enum NotificationActionIdentifier {
-        static let viewItem = "upcoming-payment.view-item"
-        static let viewMonth = NotificationRoutePayload.viewMonthActionIdentifier
-    }
-
     enum AuthorizationState {
         case notDetermined
         case authorized
@@ -236,11 +231,11 @@ private extension NotificationService {
                     identifier: NotificationCategoryIdentifier.upcomingPaymentActions,
                     actions: [
                         .init(
-                            identifier: NotificationActionIdentifier.viewItem,
+                            identifier: NotificationRoutePayload.viewItemActionIdentifier,
                             title: String(localized: "View Item")
                         ),
                         .init(
-                            identifier: NotificationActionIdentifier.viewMonth,
+                            identifier: NotificationRoutePayload.viewMonthActionIdentifier,
                             title: String(localized: "View Month")
                         )
                     ]

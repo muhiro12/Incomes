@@ -15,6 +15,9 @@ public enum NotificationRoutePayload {
         static let upcomingPayment = "upcoming-payment"
     }
 
+    /// Notification action identifier for opening the reminder item.
+    public static let viewItemActionIdentifier = "upcoming-payment.view-item"
+
     /// Notification action identifier for opening the reminder month.
     public static let viewMonthActionIdentifier = "upcoming-payment.view-month"
 
