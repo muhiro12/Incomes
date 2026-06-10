@@ -69,7 +69,6 @@ enum ItemCreateCoordinator {
         }
     }
 
-    // swiftlint:disable function_body_length
     @MainActor
     private static func run(
         context: ModelContext,
@@ -85,59 +84,118 @@ enum ItemCreateCoordinator {
         )
 
         do {
-            let itemID = try await MHMutationWorkflow.runThrowing(
-                name: ItemMutationWorkflowName.create,
-                operation: operation,
-                adapter: ItemMutationAdapterFactory.makeForSave(
-                    notificationService: notificationService,
-                    reviewLogger: reviewLogger
-                ),
-                projection: .valueAndFollowUp(
-                    value: \.value,
-                    followUp: \.outcome.followUpHints
-                ),
-                onEvent: MHMutationWorkflowLogger(logger: logger).onEvent()
+            let itemID = try await runCreateWorkflow(
+                notificationService: notificationService,
+                reviewLogger: reviewLogger,
+                logger: logger,
+                operation: operation
             )
-
-            guard let item = try ItemQueryOperations.item(
+            let item = try createdItem(
                 context: context,
-                persistentID: itemID
-            ) else {
-                logger.error(
-                    "item_create.failed",
-                    metadata: metadata.merging(
-                        IncomesLogging.metadata(
-                            ("phase", "fetch_created_item"),
-                            ("item_id_present", "true")
-                        )
-                    ) { current, _ in
-                        current
-                    }
-                )
-                throw ItemError.itemNotFound
-            }
-
-            logger.notice(
-                "item_create.completed",
-                metadata: metadata.merging(
-                    IncomesLogging.metadata(
-                        ("item_id_present", "true")
-                    )
-                ) { current, _ in
-                    current
-                }
+                itemID: itemID,
+                metadata: metadata,
+                logger: logger
+            )
+            logCompletedCreation(
+                metadata: metadata,
+                logger: logger
             )
             return item
         } catch {
             logger.error(
                 "item_create.failed",
-                metadata: metadata.merging(IncomesLogging.errorMetadata(error)) { current, _ in
-                    current
-                }
+                metadata: failureMetadata(metadata, error: error)
             )
             throw error
         }
     }
-    // swiftlint:enable function_body_length
     // swiftlint:enable function_parameter_count
+}
+
+private extension ItemCreateCoordinator {
+    @MainActor
+    static func runCreateWorkflow(
+        notificationService: NotificationService,
+        reviewLogger: MHLogger,
+        logger: MHLogger,
+        operation: @escaping @MainActor () throws -> MutationResult<PersistentIdentifier>
+    ) async throws -> PersistentIdentifier {
+        try await MHMutationWorkflow.runThrowing(
+            name: ItemMutationWorkflowName.create,
+            operation: operation,
+            adapter: ItemMutationAdapterFactory.makeForSave(
+                notificationService: notificationService,
+                reviewLogger: reviewLogger
+            ),
+            projection: .valueAndFollowUp(
+                value: \.value,
+                followUp: \.outcome.followUpHints
+            ),
+            onEvent: MHMutationWorkflowLogger(logger: logger).onEvent()
+        )
+    }
+
+    static func createdItem(
+        context: ModelContext,
+        itemID: PersistentIdentifier,
+        metadata: [String: String],
+        logger: MHLogger
+    ) throws -> Item {
+        guard let item = try ItemQueryOperations.item(
+            context: context,
+            persistentID: itemID
+        ) else {
+            logger.error(
+                "item_create.failed",
+                metadata: missingCreatedItemMetadata(metadata)
+            )
+            throw ItemError.itemNotFound
+        }
+
+        return item
+    }
+
+    static func logCompletedCreation(
+        metadata: [String: String],
+        logger: MHLogger
+    ) {
+        logger.notice(
+            "item_create.completed",
+            metadata: createdItemMetadata(metadata)
+        )
+    }
+
+    static func createdItemMetadata(
+        _ metadata: [String: String]
+    ) -> [String: String] {
+        metadata.merging(
+            IncomesLogging.metadata(
+                ("item_id_present", "true")
+            )
+        ) { current, _ in
+            current
+        }
+    }
+
+    static func missingCreatedItemMetadata(
+        _ metadata: [String: String]
+    ) -> [String: String] {
+        metadata.merging(
+            IncomesLogging.metadata(
+                ("phase", "fetch_created_item"),
+                ("item_id_present", "true")
+            )
+        ) { current, _ in
+            current
+        }
+    }
+
+    static func failureMetadata(
+        _ metadata: [String: String],
+        error: any Error
+    ) -> [String: String] {
+        metadata.merging(IncomesLogging.errorMetadata(error)) { current, _ in
+            current
+        }
+    }
 }
