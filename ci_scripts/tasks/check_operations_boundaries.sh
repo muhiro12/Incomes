@@ -49,6 +49,7 @@ forbidden_collaborators=(
   IncomesContextMenuLinkBuilder
   CategoryNameSupport
   ErrorMessageSupport
+  VersionComparator
 )
 
 failures=()

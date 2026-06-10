@@ -69,6 +69,9 @@ final class RemoteConfigurationService {
               Bundle.main.bundleIdentifier?.contains("playgrounds") == false else {
             return false
         }
-        return VersionComparator.isUpdateRequired(current: current, required: required)
+        return RemoteConfigurationOperations.isUpdateRequired(
+            currentVersion: current,
+            requiredVersion: required
+        )
     }
 }
