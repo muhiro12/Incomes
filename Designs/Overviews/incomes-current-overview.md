@@ -479,9 +479,9 @@ route contract remains `IncomesRoute`.
   instead of adding separate unit test targets for `Incomes`, `Watch`, or
   `Widgets`.
 - Apple-only exceptions remain intentional. Current examples are
-  `NotificationService`, `ItemInferenceService`, `PhoneWatchBridge`,
-  `PhoneSyncClient`, StoreKit integration, WidgetKit timeline providers, and
-  screen-scoped SwiftUI models.
+  `NotificationService`, `ItemInferenceService`, `MonthlySummaryGenerator`,
+  `PhoneWatchBridge`, `PhoneSyncClient`, StoreKit integration, WidgetKit
+  timeline providers, and screen-scoped SwiftUI models.
 - Watch sync failure surfacing now follows ADR 0005 explicitly by using a typed
   shared reply contract so transport, decode, apply, and legitimate zero-item
   success no longer collapse into the same empty sentinel.

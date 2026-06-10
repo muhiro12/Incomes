@@ -116,6 +116,9 @@ App-side mutation call sites should prefer
 
 - `ItemInferenceService` depends on Foundation Models, so it stays in
   `Incomes` and returns values that fit the shared item form flow.
+- `MonthlySummaryGenerator` depends on Foundation Models, so it stays in
+  `Incomes` while prompt construction, fallback summaries, validation, and
+  deterministic context loading stay behind `MonthlySummaryOperations`.
 - `NotificationService` stays in `Incomes` and uses shared notification
   planning operations, presentation contracts, identifier rules, and route
   payload contracts from `IncomesLibrary`.
