@@ -495,7 +495,7 @@ The following behaviors are already centralized and should remain centralized:
 - item creation, repeat generation, repeat count limits, and repeat-month selection rules
 - repeat-aware item updates and scope-selection decisions
 - item deletion and affected-balance recalculation
-- duplicate tag detection, display matching, and merge resolution
+- duplicate tag detection, category display, display matching, and merge resolution
 - month totals, category comparisons, summary prompt language, and monthly summary date rules
 - yearly duplication planning, application, promo eligibility, and presentation summaries
 - notification planning for upcoming payments

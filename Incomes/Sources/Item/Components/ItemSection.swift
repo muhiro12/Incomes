@@ -42,16 +42,14 @@ private extension ItemSection {
             } label: {
                 row(
                     title: "Category",
-                    value: CategoryNameSupport.displayName(
-                        forStoredName: categoryTag.name
-                    )
+                    value: categoryTag.displayName
                 )
             }
         } else {
             row(
                 title: "Category",
-                value: CategoryNameSupport.displayName(
-                    forStoredName: nil
+                value: CategoryFacetOperations.displayName(
+                    forStoredCategoryName: nil
                 )
             )
         }

@@ -46,6 +46,7 @@ forbidden_collaborators=(
   YearlyDuplicationAutomationCoordinator
   MainNavigationStateLoader
   MainNavigationRouteExecutor
+  CategoryNameSupport
 )
 
 failures=()

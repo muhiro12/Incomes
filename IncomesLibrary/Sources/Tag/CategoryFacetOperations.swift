@@ -3,10 +3,15 @@ import SwiftData
 
 /// Builds logical category buckets from mixed stored tag and item state.
 public enum CategoryFacetOperations {
+    /// Default user-facing label for uncategorized category buckets.
+    public static var defaultOthersDisplayName: String {
+        CategoryNameSupport.localizedOthersDisplayName
+    }
+
     /// Returns logical category buckets from persisted category tags and items.
     public static func facets(
         context: ModelContext,
-        othersDisplayName: String = CategoryNameSupport.localizedOthersDisplayName
+        othersDisplayName: String = Self.defaultOthersDisplayName
     ) throws -> [CategoryFacet] {
         try facets(
             tags: context.fetch(.tags(.typeIs(.category))),
@@ -19,7 +24,7 @@ public enum CategoryFacetOperations {
     public static func facets(
         tags: [Tag],
         items: [Item],
-        othersDisplayName: String = CategoryNameSupport.localizedOthersDisplayName
+        othersDisplayName: String = Self.defaultOthersDisplayName
     ) -> [CategoryFacet] {
         let itemIDsByKey = Dictionary(grouping: items) { item in
             CategoryNameSupport.canonicalKey(
@@ -69,10 +74,21 @@ public enum CategoryFacetOperations {
             }
     }
 
+    /// Returns the user-facing display name for a stored category value.
+    public static func displayName(
+        forStoredCategoryName storedName: String?,
+        othersDisplayName: String = Self.defaultOthersDisplayName
+    ) -> String {
+        CategoryNameSupport.displayName(
+            forStoredName: storedName,
+            othersDisplayName: othersDisplayName
+        )
+    }
+
     /// Returns user-facing category bucket display names from persisted state.
     public static func displayNames(
         context: ModelContext,
-        othersDisplayName: String = CategoryNameSupport.localizedOthersDisplayName
+        othersDisplayName: String = Self.defaultOthersDisplayName
     ) throws -> [String] {
         try displayNames(
             facets: facets(
@@ -93,7 +109,7 @@ public enum CategoryFacetOperations {
     public static func filteredFacets(
         context: ModelContext,
         query: String,
-        othersDisplayName: String = CategoryNameSupport.localizedOthersDisplayName
+        othersDisplayName: String = Self.defaultOthersDisplayName
     ) throws -> [CategoryFacet] {
         try filteredFacets(
             tags: context.fetch(.tags(.typeIs(.category))),
@@ -108,7 +124,7 @@ public enum CategoryFacetOperations {
         tags: [Tag],
         items: [Item],
         query: String,
-        othersDisplayName: String = CategoryNameSupport.localizedOthersDisplayName
+        othersDisplayName: String = Self.defaultOthersDisplayName
     ) -> [CategoryFacet] {
         facets(
             tags: tags,
@@ -128,7 +144,7 @@ public enum CategoryFacetOperations {
     public static func filteredDisplayNames(
         context: ModelContext,
         query: String,
-        othersDisplayName: String = CategoryNameSupport.localizedOthersDisplayName
+        othersDisplayName: String = Self.defaultOthersDisplayName
     ) throws -> [String] {
         try displayNames(
             facets: filteredFacets(

@@ -112,6 +112,34 @@ struct CategoryFacetOperationsTests {
     }
 
     @Test
+    func displayName_returns_localized_name_for_stored_category_value() {
+        #expect(
+            CategoryFacetOperations.displayName(
+                forStoredCategoryName: nil,
+                othersDisplayName: japaneseOthers
+            ) == japaneseOthers
+        )
+        #expect(
+            CategoryFacetOperations.displayName(
+                forStoredCategoryName: .empty,
+                othersDisplayName: japaneseOthers
+            ) == japaneseOthers
+        )
+        #expect(
+            CategoryFacetOperations.displayName(
+                forStoredCategoryName: "Others",
+                othersDisplayName: japaneseOthers
+            ) == japaneseOthers
+        )
+        #expect(
+            CategoryFacetOperations.displayName(
+                forStoredCategoryName: "Travel",
+                othersDisplayName: japaneseOthers
+            ) == "Travel"
+        )
+    }
+
+    @Test
     func displayNames_returns_sorted_facet_names() throws {
         let item = try createItem(
             content: "Blank",

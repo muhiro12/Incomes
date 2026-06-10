@@ -3,6 +3,12 @@ import SwiftData
 
 /// Domain operations for renaming category tags.
 public enum TagRenameOperations {
+    /// Returns whether `tag` can be renamed as a user-managed category.
+    public static func canRenameCategory(_ tag: Tag) -> Bool {
+        tag.type == .category
+            && CategoryNameSupport.isOthersLike(tag.name) == false
+    }
+
     /// Returns a lightweight preview for renaming a category tag.
     public static func previewCategoryRename(
         context: ModelContext,

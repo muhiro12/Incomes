@@ -65,8 +65,7 @@ extension CategoryItemListView: View {
 
 private extension CategoryItemListView {
     var canRenameCategory: Bool {
-        tag.type == .category
-            && CategoryNameSupport.isOthersLike(tag.name) == false
+        TagRenameOperations.canRenameCategory(tag)
     }
 
     var items: [Item] {
