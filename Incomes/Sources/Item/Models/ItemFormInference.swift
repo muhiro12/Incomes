@@ -18,7 +18,15 @@ struct ItemFormInference: AppEntity {
     var outgo: Decimal
     var category: String
 
-    var id: String { "\(date)-\(content)-\(category)" }
+    var id: String {
+        [
+            date,
+            content,
+            income.description,
+            outgo.description,
+            category
+        ].joined(separator: "|")
+    }
 
     var displayRepresentation: DisplayRepresentation {
         .init(title: "\(content)", subtitle: "\(date)")
