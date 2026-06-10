@@ -44,39 +44,20 @@ struct YearlyDuplicationView: View {
     @State private var planLoadGeneration = 0
 
     var body: some View {
-        Form { // swiftlint:disable:this closure_body_length
+        Form {
             if isLoadingPlan {
-                Section {
-                    HStack {
-                        ProgressView()
-                        Text("Loading proposals...")
-                    }
-                }
+                YearlyDuplicationLoadingSection()
             }
             if let plan {
-                Section("Proposals") {
-                    ForEach(plan.groups, id: \.id) { group in
-                        let entries = YearlyItemDuplicationPlanOperations.entries(
-                            for: group.id,
-                            in: plan
-                        )
-                        let isCreated = createdGroupIDs.contains(group.id)
-                        YearlyDuplicationProposalRow(
-                            group: group,
-                            isCreated: isCreated,
-                            isActionDisabled: isCreated || entries.isEmpty,
-                            inlineSpacing: designMetrics.spacing.inline,
-                            verticalPadding: proposalVerticalPadding,
-                            summaryText: proposalSummaryText(for: group),
-                            edit: {
-                                presentItemForm(group: group)
-                            },
-                            create: {
-                                createGroup(group)
-                            }
-                        )
-                    }
-                }
+                YearlyDuplicationProposalsSection(
+                    plan: plan,
+                    createdGroupIDs: createdGroupIDs,
+                    inlineSpacing: designMetrics.spacing.inline,
+                    verticalPadding: proposalVerticalPadding,
+                    summaryText: proposalSummaryText,
+                    edit: presentItemForm,
+                    create: createGroup
+                )
                 YearlyDuplicationPreviewSection(plan: plan)
             }
         }
