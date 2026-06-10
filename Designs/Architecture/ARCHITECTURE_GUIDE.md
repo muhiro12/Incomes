@@ -196,18 +196,22 @@ API style decision:
      `MainNavigationSettingsCoordinator` instead of expanding router
      responsibility.
 
-2. Notification route payload configuration must stay defined in one adapter helper.
+2. Notification delivery contracts must keep shared payload and identifier
+   rules in the library while framework delivery stays adapter-owned.
    File:
    - `Incomes/Sources/Notification/Services/NotificationService.swift`
    - `Incomes/Sources/Notification/Services/NotificationService+RouteDelivery.swift`
-   - `Incomes/Sources/Notification/Routing/NotificationRoutePayload.swift`
+   - `IncomesLibrary/Sources/Notification/NotificationRoutePayload.swift`
+   - `IncomesLibrary/Sources/Notification/UpcomingPaymentNotificationPresentation.swift`
    Minimal plan:
-   - Keep payload codec, metadata keys, and legacy month fallback logic
-     in a single adapter helper.
-   - Keep `UNUserNotificationCenter` integration and presentation
-     assembly in `NotificationService`.
-   - Deliver decoded route URLs into the package-owned route pipeline
-     through `IncomesRouteBridge` instead of storing app-local pending routes.
+   - Keep payload codec, metadata keys, action route identifiers, legacy month
+     fallback logic, and upcoming-payment request identifier matching in
+     `IncomesLibrary`.
+   - Keep `UNUserNotificationCenter` categories, authorization, scheduling,
+     and content assembly in `NotificationService`.
+   - Keep notification response delivery in `NotificationService+RouteDelivery`
+     by decoding the shared payload contract and delivering route URLs through
+     `IncomesRouteBridge` instead of storing app-local pending routes.
 
 3. Generic mutation follow-up execution must stay separate from
    feature-specific mutation projections.

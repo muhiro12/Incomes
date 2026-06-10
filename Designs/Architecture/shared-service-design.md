@@ -45,7 +45,7 @@ widgets.
 ## Canonical Shared APIs
 
 The following types are the current shared entry points for business
-operations:
+operations and shared wire contracts:
 
 - `ItemFormInput`
 - `ItemMutationScope`
@@ -57,6 +57,8 @@ operations:
 - `SummaryCalculator`
 - `DataMaintenance.deleteAllData(context:)`
 - `DataMaintenance.deleteDebugData(context:)`
+- `NotificationRoutePayload`
+- `UpcomingPaymentNotificationPresentation`
 - `WatchSyncReply`
 - `WatchSyncFailure`
 - `WatchSyncFailurePhase`
@@ -100,8 +102,8 @@ App-side mutation call sites should prefer
 
 - `ItemInferenceService` depends on Foundation Models, so it stays in
   `Incomes` and returns values that fit the shared item form flow.
-- `NotificationService` stays in `Incomes` and uses shared planning logic from
-  `IncomesLibrary`.
+- `NotificationService` stays in `Incomes` and uses shared planning,
+  presentation, identifier, and route payload contracts from `IncomesLibrary`.
 - `IncomesPlatformEnvironmentFactory` stays in `Incomes` because runtime,
   route pipeline, and review flow assembly depend on the `MHPlatform` umbrella, app
   secrets, and SwiftUI environment injection.
