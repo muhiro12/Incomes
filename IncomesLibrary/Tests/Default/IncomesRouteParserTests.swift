@@ -44,6 +44,14 @@ struct IncomesRouteParserTests {
     }
 
     @Test
+    func parse_custom_scheme_item_route_with_path_segment() {
+        let route = IncomesRouteParser.parse(
+            url: testURL("incomes://item/item-id")
+        )
+        #expect(route == .item("item-id"))
+    }
+
+    @Test
     func parse_custom_scheme_settings_route() {
         let route = IncomesRouteParser.parse(
             url: testURL("incomes://settings")
