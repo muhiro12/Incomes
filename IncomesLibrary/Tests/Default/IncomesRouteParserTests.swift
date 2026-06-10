@@ -28,6 +28,14 @@ struct IncomesRouteParserTests {
     }
 
     @Test
+    func parse_custom_scheme_month_route_split_components() {
+        let route = IncomesRouteParser.parse(
+            url: testURL("incomes://month/2026/02")
+        )
+        #expect(route == .month(year: 2_026, month: 2))
+    }
+
+    @Test
     func parse_custom_scheme_item_route_with_query() {
         let route = IncomesRouteParser.parse(
             url: testURL("incomes://item?id=item-id")
