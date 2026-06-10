@@ -111,6 +111,11 @@ public enum MonthlySummaryOperations {
     /// Default number of category comparison rows included in summary context.
     public static let defaultCategoryComparisonLimit = 8
 
+    /// Returns a date in the month before `date` using the UTC calendar.
+    public static func previousMonthDate(from date: Date) -> Date {
+        MonthlySummaryDateSupport.previousMonthDate(from: date)
+    }
+
     /// Loads the current month, previous month, and category comparison context.
     public static func loadContext(
         context: ModelContext,

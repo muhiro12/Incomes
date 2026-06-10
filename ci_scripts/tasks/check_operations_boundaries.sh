@@ -22,6 +22,7 @@ forbidden_collaborators=(
   SummaryCalculator
   BalanceCalculator
   CategoryChartSummaryCalculator
+  MonthlySummaryDateSupport
   MonthlySummaryNarrativeBuilder
   MonthlySummaryNarrativeContextLoader
   ItemFormInferencePromptBuilder

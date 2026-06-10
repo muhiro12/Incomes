@@ -8,9 +8,9 @@
 import Foundation
 
 /// Provides shared date calculations for monthly summaries.
-public enum MonthlySummaryDateSupport {
+enum MonthlySummaryDateSupport {
     /// Returns a date in the month before `date` using the UTC calendar.
-    public static func previousMonthDate(from date: Date) -> Date {
+    static func previousMonthDate(from date: Date) -> Date {
         Calendar.utc.date(byAdding: .month, value: -1, to: date) ?? date
     }
 }

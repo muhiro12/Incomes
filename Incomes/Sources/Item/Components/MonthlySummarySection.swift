@@ -50,7 +50,7 @@ struct MonthlySummarySection: View {
         _previousItems = .init(
             .items(
                 .dateIsSameMonthAs(
-                    MonthlySummaryDateSupport.previousMonthDate(from: date)
+                    MonthlySummaryOperations.previousMonthDate(from: date)
                 )
             )
         )

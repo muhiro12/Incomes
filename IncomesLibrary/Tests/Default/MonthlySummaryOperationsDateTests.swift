@@ -2,12 +2,12 @@ import Foundation
 @testable import IncomesLibrary
 import Testing
 
-struct MonthlySummaryDateSupportTests {
+struct MonthlySummaryOperationsDateTests {
     @Test
     func previousMonthDate_uses_utc_calendar() {
         let date = isoDate("2024-03-31T15:00:00Z")
 
-        let previousDate = MonthlySummaryDateSupport.previousMonthDate(from: date)
+        let previousDate = MonthlySummaryOperations.previousMonthDate(from: date)
         let components = Calendar.utc.dateComponents(
             [.year, .month, .day],
             from: previousDate
@@ -19,7 +19,7 @@ struct MonthlySummaryDateSupportTests {
     }
 }
 
-private extension MonthlySummaryDateSupportTests {
+private extension MonthlySummaryOperationsDateTests {
     func isoDate(_ string: String) -> Date {
         guard let date = ISO8601DateFormatter().date(from: string) else {
             preconditionFailure("Invalid ISO8601 date string: \(string)")
