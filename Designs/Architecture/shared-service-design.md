@@ -60,6 +60,7 @@ operations and shared wire contracts:
 - `YearlyDuplicationPresentationOperations`
 - `ItemSummaryOperations`
 - `SearchResultOperations`
+- `MainNavigationOperations`
 - `WidgetEntryOperations`
 - `WatchSyncOperations`
 - `UpcomingPaymentOperations`

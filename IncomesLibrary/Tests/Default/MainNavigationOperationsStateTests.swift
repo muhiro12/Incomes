@@ -3,7 +3,7 @@ import Foundation
 import SwiftData
 import Testing
 
-struct MainNavigationStateLoaderTests {
+struct MainNavigationOperationsStateTests {
     let context: ModelContext
 
     init() {
@@ -12,7 +12,7 @@ struct MainNavigationStateLoaderTests {
 
     @Test
     func load_returns_nil_tags_when_store_is_empty() throws {
-        let state = try MainNavigationStateLoader.load(
+        let state = try MainNavigationOperations.loadState(
             context: context
         )
         #expect(state.yearTag == nil)
@@ -33,7 +33,7 @@ struct MainNavigationStateLoaderTests {
             type: .yearMonth
         )
 
-        let state = try MainNavigationStateLoader.load(
+        let state = try MainNavigationOperations.loadState(
             context: context,
             date: date
         )

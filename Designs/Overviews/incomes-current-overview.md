@@ -351,6 +351,7 @@ Current shared business entry points and shared snapshot builders include:
 - `UpcomingPaymentOperations`
 - `MonthlySummaryOperations`
 - `ItemFormInferenceOperations`
+- `MainNavigationOperations`
 - `DataMaintenanceOperations`
 - `SettingsStatusOperations`
 - `WidgetEntryOperations`
@@ -469,8 +470,8 @@ route contract remains `IncomesRoute`.
 - Cross-target reuse remains centered on shared entry points such as
   `Item*Operations`, `Tag*Operations`, `ItemSummaryOperations`,
   `YearlyItemDuplication*Operations`, `YearlyDuplicationPresentationOperations`,
-  `WidgetEntryOperations`, `ItemsRequest`, `WatchSyncReply`, and
-  `WatchSyncOperations`.
+  `MainNavigationOperations`, `WidgetEntryOperations`, `ItemsRequest`,
+  `WatchSyncReply`, and `WatchSyncOperations`.
 - The repository still keeps automated unit tests in `IncomesLibrary/Tests`
   instead of adding separate unit test targets for `Incomes`, `Watch`, or
   `Widgets`.

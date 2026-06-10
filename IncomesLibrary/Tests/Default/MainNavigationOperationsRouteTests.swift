@@ -3,7 +3,7 @@ import Foundation
 import SwiftData
 import Testing
 
-struct MainNavigationRouteExecutorTests { // swiftlint:disable:this type_body_length
+struct MainNavigationOperationsRouteTests { // swiftlint:disable:this type_body_length
     let context: ModelContext
 
     init() {
@@ -12,7 +12,7 @@ struct MainNavigationRouteExecutorTests { // swiftlint:disable:this type_body_le
 
     @Test
     func execute_returns_settings_for_settings_route() throws {
-        let outcome = try MainNavigationRouteExecutor.execute(
+        let outcome = try MainNavigationOperations.execute(
             route: .settings,
             context: context
         )
@@ -35,7 +35,7 @@ struct MainNavigationRouteExecutorTests { // swiftlint:disable:this type_body_le
 
     @Test
     func execute_returns_settings_subscription_for_settings_subscription_route() throws {
-        let outcome = try MainNavigationRouteExecutor.execute(
+        let outcome = try MainNavigationOperations.execute(
             route: .settingsSubscription,
             context: context
         )
@@ -58,7 +58,7 @@ struct MainNavigationRouteExecutorTests { // swiftlint:disable:this type_body_le
 
     @Test
     func execute_returns_settings_license_for_settings_license_route() throws {
-        let outcome = try MainNavigationRouteExecutor.execute(
+        let outcome = try MainNavigationOperations.execute(
             route: .settingsLicense,
             context: context
         )
@@ -81,7 +81,7 @@ struct MainNavigationRouteExecutorTests { // swiftlint:disable:this type_body_le
 
     @Test
     func execute_returns_settings_debug_for_settings_debug_route() throws {
-        let outcome = try MainNavigationRouteExecutor.execute(
+        let outcome = try MainNavigationOperations.execute(
             route: .settingsDebug,
             context: context
         )
@@ -109,7 +109,7 @@ struct MainNavigationRouteExecutorTests { // swiftlint:disable:this type_body_le
             name: "2026",
             type: .year
         )
-        let outcome = try MainNavigationRouteExecutor.execute(
+        let outcome = try MainNavigationOperations.execute(
             route: .yearSummary(2_026),
             context: context
         )
@@ -134,7 +134,7 @@ struct MainNavigationRouteExecutorTests { // swiftlint:disable:this type_body_le
 
     @Test
     func execute_returns_yearly_duplication_for_yearly_duplication_route() throws {
-        let outcome = try MainNavigationRouteExecutor.execute(
+        let outcome = try MainNavigationOperations.execute(
             route: .yearlyDuplication,
             context: context
         )
@@ -157,7 +157,7 @@ struct MainNavigationRouteExecutorTests { // swiftlint:disable:this type_body_le
 
     @Test
     func execute_returns_duplicate_tags_for_duplicate_tags_route() throws {
-        let outcome = try MainNavigationRouteExecutor.execute(
+        let outcome = try MainNavigationOperations.execute(
             route: .duplicateTags,
             context: context
         )
@@ -180,7 +180,7 @@ struct MainNavigationRouteExecutorTests { // swiftlint:disable:this type_body_le
 
     @Test
     func execute_returns_orphan_tags_for_orphan_tags_route() throws {
-        let outcome = try MainNavigationRouteExecutor.execute(
+        let outcome = try MainNavigationOperations.execute(
             route: .orphanTags,
             context: context
         )
@@ -203,7 +203,7 @@ struct MainNavigationRouteExecutorTests { // swiftlint:disable:this type_body_le
 
     @Test
     func execute_returns_search_for_search_route() throws {
-        let outcome = try MainNavigationRouteExecutor.execute(
+        let outcome = try MainNavigationOperations.execute(
             route: .search(query: "rent"),
             context: context
         )
@@ -231,7 +231,7 @@ struct MainNavigationRouteExecutorTests { // swiftlint:disable:this type_body_le
             name: "2026",
             type: .year
         )
-        let outcome = try MainNavigationRouteExecutor.execute(
+        let outcome = try MainNavigationOperations.execute(
             route: .year(2_026),
             context: context
         )
@@ -265,7 +265,7 @@ struct MainNavigationRouteExecutorTests { // swiftlint:disable:this type_body_le
             name: "202602",
             type: .yearMonth
         )
-        let outcome = try MainNavigationRouteExecutor.execute(
+        let outcome = try MainNavigationOperations.execute(
             route: .month(year: 2_026, month: 2),
             context: context
         )
@@ -301,7 +301,7 @@ struct MainNavigationRouteExecutorTests { // swiftlint:disable:this type_body_le
             name: now.stringValueWithoutLocale(.yyyyMM),
             type: .yearMonth
         )
-        let outcome = try MainNavigationRouteExecutor.execute(
+        let outcome = try MainNavigationOperations.execute(
             route: .home,
             context: context
         )
@@ -337,7 +337,7 @@ struct MainNavigationRouteExecutorTests { // swiftlint:disable:this type_body_le
             repeatID: UUID()
         )
         let itemID = try PersistentIdentifierCoder.encode(item.id)
-        let outcome = try MainNavigationRouteExecutor.execute(
+        let outcome = try MainNavigationOperations.execute(
             route: .item(itemID),
             context: context
         )
@@ -360,7 +360,7 @@ struct MainNavigationRouteExecutorTests { // swiftlint:disable:this type_body_le
 
     @Test
     func execute_falls_back_to_destination_for_invalid_item_route() throws {
-        let outcome = try MainNavigationRouteExecutor.execute(
+        let outcome = try MainNavigationOperations.execute(
             route: .item("invalid"),
             context: context
         )

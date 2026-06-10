@@ -2,13 +2,13 @@ import Foundation
 @testable import IncomesLibrary
 import Testing
 
-struct MainNavigationRouteExecutorFallbackTests {
+struct MainNavigationOperationsFallbackTests {
     let context = testContext
 
     @Test
     func execute_item_route_falls_back_to_home_for_invalid_identifier() throws {
-        let expectedState = try MainNavigationStateLoader.load(context: context)
-        let outcome = try MainNavigationRouteExecutor.execute(
+        let expectedState = try MainNavigationOperations.loadState(context: context)
+        let outcome = try MainNavigationOperations.execute(
             route: .item("invalid"),
             context: context
         )
@@ -45,9 +45,9 @@ struct MainNavigationRouteExecutorFallbackTests {
         )
         let itemID = try item.id.base64Encoded()
         context.delete(item)
-        let expectedState = try MainNavigationStateLoader.load(context: context)
+        let expectedState = try MainNavigationOperations.loadState(context: context)
 
-        let outcome = try MainNavigationRouteExecutor.execute(
+        let outcome = try MainNavigationOperations.execute(
             route: .item(itemID),
             context: context
         )
