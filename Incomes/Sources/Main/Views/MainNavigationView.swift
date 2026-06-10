@@ -192,7 +192,7 @@ private extension MainNavigationView {
             return
         }
         guard let year = Int(yearTag.name),
-              1...9_999 ~= year else { // swiftlint:disable:this no_magic_numbers
+              YearMonthComponentRules.isValidYear(year) else {
             router.selectYearTagID(yearTagID)
             return
         }

@@ -64,7 +64,7 @@ private extension IncomesContextMenuLinkBuilder {
     ) -> Int? {
         guard tag.type == .year,
               let year = Int(tag.name),
-              1...9_999 ~= year else { // swiftlint:disable:this no_magic_numbers
+              YearMonthComponentRules.isValidYear(year) else {
             return nil
         }
         return year

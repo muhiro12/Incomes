@@ -203,7 +203,7 @@ extension IncomesRoute: MHDeepLinkRoute {
     static func parseYear(_ value: String) -> Int? {
         guard value.count == 4, // swiftlint:disable:this no_magic_numbers
               let year = Int(value),
-              1...9_999 ~= year else { // swiftlint:disable:this no_magic_numbers
+              YearMonthComponentRules.isValidYear(year) else {
             return nil
         }
         return year
@@ -211,7 +211,7 @@ extension IncomesRoute: MHDeepLinkRoute {
 
     static func parseMonth(_ value: String) -> Int? {
         guard let month = Int(value),
-              1...12 ~= month else { // swiftlint:disable:this no_magic_numbers
+              YearMonthComponentRules.isValidMonth(month) else {
             return nil
         }
         return month

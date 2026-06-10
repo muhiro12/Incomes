@@ -74,8 +74,8 @@ private extension MonthlySummaryNarrativeContextLoader {
         let components = Calendar.utc.dateComponents([.year, .month], from: date)
         guard let year = components.year,
               let month = components.month,
-              (1...9_999).contains(year), // swiftlint:disable:this no_magic_numbers
-              (1...12).contains(month) else { // swiftlint:disable:this no_magic_numbers
+              YearMonthComponentRules.isValidYear(year),
+              YearMonthComponentRules.isValidMonth(month) else {
             throw LoadingError.invalidYearMonth
         }
         return (year, month)

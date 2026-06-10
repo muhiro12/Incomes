@@ -2,11 +2,6 @@ import Foundation
 
 /// Shared rules for validating and normalizing repeat month selections.
 public enum RepeatMonthSelectionRules {
-    /// The valid month component range.
-    public static let allowedMonths = 1...monthsPerYear
-    /// The number of months in one calendar year.
-    public static let monthsPerYear = 12
-
     /// Returns the base selection derived from `baseDate`.
     public static func baseSelection(
         baseDate: Date,
@@ -33,7 +28,7 @@ public enum RepeatMonthSelectionRules {
         baseDate: Date,
         calendar: Calendar = .current
     ) -> Bool {
-        let isValidMonth = allowedMonths.contains(selection.month)
+        let isValidMonth = YearMonthComponentRules.isValidMonth(selection.month)
         let isValidYear = allowedYears(
             baseDate: baseDate,
             calendar: calendar
@@ -73,7 +68,7 @@ public enum RepeatMonthSelectionRules {
     ) -> Int {
         let baseYear = calendar.component(.year, from: baseDate)
         let baseMonth = calendar.component(.month, from: baseDate)
-        return (selection.year - baseYear) * monthsPerYear
+        return (selection.year - baseYear) * YearMonthComponentRules.monthsPerYear
             + (selection.month - baseMonth)
     }
 }

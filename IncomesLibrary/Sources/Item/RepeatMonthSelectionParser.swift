@@ -26,8 +26,8 @@ public enum RepeatMonthSelectionParser {
             guard compactValue.count == 6, // swiftlint:disable:this no_magic_numbers
                   let year = Int(compactValue.prefix(4)), // swiftlint:disable:this no_magic_numbers
                   let month = Int(compactValue.suffix(2)), // swiftlint:disable:this no_magic_numbers
-                  (1...9_999).contains(year), // swiftlint:disable:this no_magic_numbers
-                  RepeatMonthSelectionRules.allowedMonths.contains(month) else {
+                  YearMonthComponentRules.isValidYear(year),
+                  YearMonthComponentRules.isValidMonth(month) else {
                 throw ParserError.invalidToken(token)
             }
             selections.insert(.init(year: year, month: month))
