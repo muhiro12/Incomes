@@ -1,4 +1,3 @@
-// swiftlint:disable file_length
 //
 //  ItemFormView.swift
 //  Incomes
@@ -76,42 +75,16 @@ struct ItemFormView: View {
         .contentMargins(.bottom, designMetrics.spacing.inline, for: .scrollContent)
         .navigationTitle(model.content.isNotEmpty ? Text(model.content) : Text("Create"))
         .toolbar {
-            ToolbarItem(placement: .cancellationAction) {
-                Button(action: cancel) {
-                    Text("Cancel")
-                }
-            }
-            ToolbarItem(placement: .primaryAction) {
-                Button {
-                    submit()
-                } label: {
-                    Text(mode == .create ? "Create" : "Save")
-                }
-                .bold()
-                .disabled(!model.isValid)
-            }
-        }
-        .toolbar {
-            ToolbarItem(placement: .keyboard) {
-                SuggestionButtonGroup(input: $model.content, type: .content)
-                    .hidden(focusedField != .content)
-            }
-            ToolbarItem(placement: .keyboard) {
-                SuggestionButtonGroup(input: $model.category, type: .category)
-                    .hidden(focusedField != .category)
-            }
-        }
-        .toolbar {
-            if #available(iOS 26.0, *) {
-                ToolbarItem(placement: .bottomBar) {
-                    Button {
-                        presentAssist()
-                    } label: {
-                        Label("Assist", systemImage: "wand.and.stars")
-                    }
-                    .buttonStyle(.glassProminent)
-                }
-            }
+            ItemFormToolbarContent(
+                mode: mode,
+                isValid: model.isValid,
+                focusedField: focusedField,
+                content: $model.content,
+                category: $model.category,
+                cancel: cancel,
+                submit: submit,
+                presentAssist: presentAssist
+            )
         }
         .gesture(
             DragGesture()
@@ -406,4 +379,3 @@ private extension ItemFormView {
         ItemFormView(mode: .create)
     }
 }
-// swiftlint:enable file_length
