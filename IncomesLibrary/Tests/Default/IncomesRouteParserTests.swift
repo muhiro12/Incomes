@@ -116,6 +116,14 @@ struct IncomesRouteParserTests {
     }
 
     @Test
+    func parse_universal_link_split_month_route_with_prefix() {
+        let route = IncomesRouteParser.parse(
+            url: testURL("https://muhiro12.github.io/Incomes/month/2026/02")
+        )
+        #expect(route == .month(year: 2_026, month: 2))
+    }
+
+    @Test
     func parse_universal_link_route_without_prefix() {
         let route = IncomesRouteParser.parse(
             url: testURL("https://muhiro12.github.io/year/2025")
