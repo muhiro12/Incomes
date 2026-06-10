@@ -88,11 +88,11 @@ extension IncomesRoute: MHDeepLinkRoute {
             return Self.parseYearRoute(from: pathComponents)
         case "month":
             return Self.parseMonthRoute(
-                from: Array(pathComponents.dropFirst())
+                from: pathComponents.dropFirst()
             )
         case "item":
             return Self.parseItemRoute(
-                from: Array(pathComponents.dropFirst()),
+                from: pathComponents.dropFirst(),
                 queryItems: queryItems
             )
         case "search":
@@ -155,7 +155,7 @@ extension IncomesRoute: MHDeepLinkRoute {
         return .search(query: query)
     }
 
-    private static func parseMonthRoute(from segments: [String]) -> IncomesRoute? {
+    private static func parseMonthRoute(from segments: ArraySlice<String>) -> IncomesRoute? {
         guard let firstSegment = segments.first else {
             return nil
         }
@@ -182,7 +182,7 @@ extension IncomesRoute: MHDeepLinkRoute {
     }
 
     static func parseItemRoute(
-        from segments: [String],
+        from segments: ArraySlice<String>,
         queryItems: [URLQueryItem]
     ) -> IncomesRoute? {
         if let itemID = segments.first,
