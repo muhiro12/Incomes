@@ -1,4 +1,3 @@
-// swiftlint:disable file_length
 //
 //  YearlyDuplicationView.swift
 //  Incomes
@@ -55,86 +54,27 @@ struct YearlyDuplicationView: View {
                 }
             }
             if let plan {
-                Section("Proposals") { // swiftlint:disable:this closure_body_length
-                    ForEach(plan.groups, id: \.id) { group in // swiftlint:disable:this closure_body_length
+                Section("Proposals") {
+                    ForEach(plan.groups, id: \.id) { group in
                         let entries = YearlyItemDuplicationPlanOperations.entries(
                             for: group.id,
                             in: plan
                         )
                         let isCreated = createdGroupIDs.contains(group.id)
-                        VStack(alignment: .leading, spacing: designMetrics.spacing.inline) { // swiftlint:disable:this closure_body_length line_length
-                            HStack {
-                                Text(group.content)
-                                    .font(.headline)
-                                if isCreated {
-                                    Text(String(localized: "Created"))
-                                        .font(.footnote)
-                                        .foregroundStyle(.secondary)
-                                }
-                            }
-                            if group.category.isNotEmpty {
-                                Text(group.category)
-                                    .font(.footnote)
-                                    .foregroundStyle(.secondary)
-                            }
-                            Text(
-                                String(
-                                    localized: "Dates: \(YearlyItemDuplicationPresentationBuilder.monthDayListText(for: group))" // swiftlint:disable:this line_length
-                                )
-                            )
-                            .font(.footnote)
-                            .foregroundStyle(.secondary)
-                            Text(String(localized: "Items: \(group.entryCount)"))
-                                .font(.footnote)
-                                .foregroundStyle(.secondary)
-                            Text(
-                                String(
-                                    localized: "Income: \(YearlyItemDuplicationPresentationBuilder.decimalString(from: group.averageIncome))" // swiftlint:disable:this line_length
-                                )
-                            )
-                            .font(.footnote)
-                            .foregroundStyle(.secondary)
-                            Text(
-                                String(
-                                    localized: "Outgo: \(YearlyItemDuplicationPresentationBuilder.decimalString(from: group.averageOutgo))" // swiftlint:disable:this line_length
-                                )
-                            )
-                            .font(.footnote)
-                            .foregroundStyle(.secondary)
-                            HStack {
-                                Button("Edit") {
-                                    presentItemForm(group: group)
-                                }
-                                .buttonStyle(.bordered)
-                                .disabled(isCreated || entries.isEmpty)
-                                Button("Create") {
-                                    Task { @MainActor in
-                                        await createGroupItems(group: group)
-                                    }
-                                }
-                                .buttonStyle(.borderedProminent)
-                                .disabled(isCreated || entries.isEmpty)
-                            }
-                        }
-                        .padding(.vertical, proposalVerticalPadding)
-                        .contentShape(Rectangle())
-                        .contextMenu {
-                            Button("Edit", systemImage: "pencil") {
+                        YearlyDuplicationProposalRow(
+                            group: group,
+                            isCreated: isCreated,
+                            isActionDisabled: isCreated || entries.isEmpty,
+                            inlineSpacing: designMetrics.spacing.inline,
+                            verticalPadding: proposalVerticalPadding,
+                            summaryText: proposalSummaryText(for: group),
+                            edit: {
                                 presentItemForm(group: group)
+                            },
+                            create: {
+                                createGroup(group)
                             }
-                            .disabled(isCreated || entries.isEmpty)
-                            Button("Create", systemImage: "plus.circle") {
-                                Task { @MainActor in
-                                    await createGroupItems(group: group)
-                                }
-                            }
-                            .disabled(isCreated || entries.isEmpty)
-                            Divider()
-                            CopyTextContextMenuButton(
-                                "Copy Summary",
-                                text: proposalSummaryText(for: group)
-                            )
-                        }
+                        )
                     }
                 }
                 Section("Preview") {
@@ -325,6 +265,12 @@ private extension YearlyDuplicationView {
         }
     }
 
+    func createGroup(_ group: YearlyItemDuplicationGroup) {
+        Task { @MainActor in
+            await createGroupItems(group: group)
+        }
+    }
+
     func presentItemForm(group: YearlyItemDuplicationGroup) {
         guard let plan else {
             return
@@ -447,4 +393,3 @@ private extension YearlyDuplicationView {
         YearlyDuplicationView()
     }
 }
-// swiftlint:enable file_length
