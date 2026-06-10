@@ -244,7 +244,7 @@ private extension MonthlySummarySection {
                 return
             }
             if presentsErrors {
-                errorMessage = ErrorMessageSupport.message(from: error)
+                errorMessage = ErrorMessageOperations.message(from: error)
             }
         }
     }

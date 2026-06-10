@@ -163,7 +163,7 @@ private extension ItemFormInputAssistView {
             }
             await scanImage(image)
         } catch {
-            errorMessage = ErrorMessageSupport.message(from: error)
+            errorMessage = ErrorMessageOperations.message(from: error)
         }
     }
 
@@ -171,7 +171,7 @@ private extension ItemFormInputAssistView {
         do {
             try await scanner.scan(image)
         } catch {
-            errorMessage = ErrorMessageSupport.message(from: error)
+            errorMessage = ErrorMessageOperations.message(from: error)
         }
     }
 
@@ -191,7 +191,7 @@ private extension ItemFormInputAssistView {
             model.apply(updatedInput)
             dismiss()
         } catch {
-            errorMessage = ErrorMessageSupport.message(from: error)
+            errorMessage = ErrorMessageOperations.message(from: error)
         }
     }
 }

@@ -47,6 +47,7 @@ forbidden_collaborators=(
   MainNavigationStateLoader
   MainNavigationRouteExecutor
   CategoryNameSupport
+  ErrorMessageSupport
 )
 
 failures=()

@@ -2,7 +2,7 @@ import Foundation
 @testable import IncomesLibrary
 import Testing
 
-struct ErrorMessageSupportTests {
+struct ErrorMessageOperationsTests {
     private struct LocalizedTestError: LocalizedError {
         var errorDescription: String? {
             "Localized message"
@@ -11,7 +11,7 @@ struct ErrorMessageSupportTests {
 
     @Test
     func message_prefers_localized_error_description() {
-        let message = ErrorMessageSupport.message(
+        let message = ErrorMessageOperations.message(
             from: LocalizedTestError()
         )
 
@@ -21,11 +21,11 @@ struct ErrorMessageSupportTests {
     @Test
     func message_falls_back_to_localized_description() {
         let error = NSError(
-            domain: "ErrorMessageSupportTests",
+            domain: "ErrorMessageOperationsTests",
             code: 1,
             userInfo: [NSLocalizedDescriptionKey: "Fallback message"]
         )
 
-        #expect(ErrorMessageSupport.message(from: error) == "Fallback message")
+        #expect(ErrorMessageOperations.message(from: error) == "Fallback message")
     }
 }

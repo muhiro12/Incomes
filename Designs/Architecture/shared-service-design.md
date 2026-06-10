@@ -66,6 +66,7 @@ operations and shared wire contracts:
 - `ItemSummaryOperations`
 - `SearchResultOperations`
 - `MainNavigationOperations` route and state resolution
+- `ErrorMessageOperations`
 - `WidgetEntryOperations`
 - `WatchSyncOperations`
 - `UpcomingPaymentOperations`

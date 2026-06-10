@@ -24,7 +24,7 @@ extension ItemFormMutationPresentationAction {
             .presentScopeSelection
         case let .failure(error):
             .presentError(
-                ErrorMessageSupport.message(from: error)
+                ErrorMessageOperations.message(from: error)
             )
         }
     }
@@ -37,7 +37,7 @@ extension ItemFormMutationPresentationAction {
             .dismiss
         case let .failure(error):
             .presentError(
-                ErrorMessageSupport.message(from: error)
+                ErrorMessageOperations.message(from: error)
             )
         }
     }
