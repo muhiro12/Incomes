@@ -113,4 +113,17 @@ struct ItemWireTests {
         #expect(reply.failure?.phase == .snapshotApply)
         #expect(!reply.shouldApplySnapshot)
     }
+
+    @Test
+    func watchSyncFailurePhase_connectivityFailures_are_classified() {
+        #expect(WatchSyncFailurePhase.sessionUnreachable.isConnectivityFailure)
+        #expect(WatchSyncFailurePhase.transport.isConnectivityFailure)
+        #expect(!WatchSyncFailurePhase.requestDecode.isConnectivityFailure)
+        #expect(!WatchSyncFailurePhase.missingContext.isConnectivityFailure)
+        #expect(!WatchSyncFailurePhase.itemFetch.isConnectivityFailure)
+        #expect(!WatchSyncFailurePhase.responseEncode.isConnectivityFailure)
+        #expect(!WatchSyncFailurePhase.requestEncode.isConnectivityFailure)
+        #expect(!WatchSyncFailurePhase.responseDecode.isConnectivityFailure)
+        #expect(!WatchSyncFailurePhase.snapshotApply.isConnectivityFailure)
+    }
 }
