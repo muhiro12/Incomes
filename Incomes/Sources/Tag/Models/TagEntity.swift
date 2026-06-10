@@ -58,6 +58,12 @@ extension TagEntity {
         }
         return entity
     }
+
+    static func make(from models: [Tag]) throws -> [TagEntity] {
+        try models.map { model in
+            try make(from: model)
+        }
+    }
 }
 
 extension TagEntity: Hashable {

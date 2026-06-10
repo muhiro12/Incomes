@@ -13,27 +13,27 @@ struct TagEntityQuery: EntityStringQuery {
 
     @MainActor
     func entities(for identifiers: [TagEntity.ID]) throws -> [TagEntity] {
-        try TagQueryOperations.getByIDs(
+        let tags = try TagQueryOperations.getByIDs(
             context: modelContainer.mainContext,
             ids: identifiers
         )
-        .map(TagEntity.make)
+        return try TagEntity.make(from: tags)
     }
 
     @MainActor
     func entities(matching string: String) throws -> [TagEntity] {
-        try TagQueryOperations.representativeTags(
+        let tags = try TagQueryOperations.representativeTags(
             context: modelContainer.mainContext,
             matching: string
         )
-        .map(TagEntity.make)
+        return try TagEntity.make(from: tags)
     }
 
     @MainActor
     func suggestedEntities() throws -> [TagEntity] {
-        try TagQueryOperations.representativeTags(
+        let tags = try TagQueryOperations.representativeTags(
             context: modelContainer.mainContext
         )
-        .map(TagEntity.make)
+        return try TagEntity.make(from: tags)
     }
 }

@@ -12,7 +12,7 @@ struct GetOrphanTagsIntent: AppIntent {
             context: modelContainer.mainContext
         )
         return .result(
-            value: try tags.map(TagEntity.make)
+            value: try TagEntity.make(from: tags)
         )
     }
 }
