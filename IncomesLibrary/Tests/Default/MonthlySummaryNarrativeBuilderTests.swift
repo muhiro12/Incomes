@@ -36,15 +36,30 @@ struct MonthlySummaryNarrativeBuilderTests {
     }
 
     @Test
-    func prompt_escapes_category_quotes() {
+    func prompt_escapes_category_text_as_json_string() {
+        let context = MonthlySummaryNarrativeBuilder.Context(
+            currentTotals: kCurrentTotals,
+            previousTotals: kPreviousTotals,
+            categoryComparisons: [
+                .init(
+                    category: "Food \"Takeout\"\nBackslash \\",
+                    currentIncome: .zero,
+                    previousIncome: .zero,
+                    incomeDelta: .zero,
+                    currentOutgo: 300,
+                    previousOutgo: 100,
+                    outgoDelta: 200
+                )
+            ]
+        )
         let prompt = MonthlySummaryNarrativeBuilder.prompt(
             monthTitle: "2026 Jun",
             localeIdentifier: "en_US",
             languageCode: "en",
-            context: kContext
+            context: context
         )
 
-        #expect(prompt.contains(#"category: "Food \"Takeout\"""#))
+        #expect(prompt.contains(#"category: "Food \"Takeout\"\nBackslash \\""#))
         #expect(prompt.contains("totalIncome: 1000"))
         #expect(prompt.contains("previousMonth = {"))
     }

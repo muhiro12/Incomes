@@ -263,7 +263,7 @@ private extension MonthlySummaryNarrativeBuilder {
         return comparisons.map { comparison in
             """
               {
-                category: "\(escapedText(comparison.category))",
+                category: \(jsonStringLiteral(comparison.category)),
                 currentIncome: \(decimalString(comparison.currentIncome)),
                 previousIncome: \(decimalString(comparison.previousIncome)),
                 incomeDelta: \(decimalString(comparison.incomeDelta)),
@@ -276,8 +276,16 @@ private extension MonthlySummaryNarrativeBuilder {
         .joined(separator: ",\n")
     }
 
-    static func escapedText(_ text: String) -> String {
-        text.replacingOccurrences(of: "\"", with: "\\\"")
+    static func jsonStringLiteral(_ text: String) -> String {
+        guard
+            let data = try? JSONEncoder().encode(text),
+            let literal = String(data: data, encoding: .utf8)
+        else {
+            assertionFailure()
+            return "\"\""
+        }
+
+        return literal
     }
 
     static func comparisonSentence(
