@@ -83,13 +83,7 @@ struct ItemFormView: View {
             }
             ToolbarItem(placement: .primaryAction) {
                 Button {
-                    Task { @MainActor in
-                        if mode == .create {
-                            await create()
-                        } else {
-                            await save()
-                        }
-                    }
+                    submit()
                 } label: {
                     Text(mode == .create ? "Create" : "Save")
                 }
@@ -111,7 +105,7 @@ struct ItemFormView: View {
             if #available(iOS 26.0, *) {
                 ToolbarItem(placement: .bottomBar) {
                     Button {
-                        presentation.sheetRoute = .assist
+                        presentAssist()
                     } label: {
                         Label("Assist", systemImage: "wand.and.stars")
                     }
@@ -189,17 +183,17 @@ struct ItemFormView: View {
         ) {
             Button("Save for this item only") {
                 Task { @MainActor in
-                    await saveForThisItem()
+                    await save(scope: .thisItem)
                 }
             }
             Button("Save for future items") {
                 Task { @MainActor in
-                    await saveForFutureItems()
+                    await save(scope: .futureItems)
                 }
             }
             Button("Save for all items") {
                 Task { @MainActor in
-                    await saveForAllItems()
+                    await save(scope: .allItems)
                 }
             }
             Button("Cancel", role: .cancel) {
@@ -248,6 +242,20 @@ private extension ItemFormView {
         }
     }
 
+    func submit() {
+        Task { @MainActor in
+            if mode == .create {
+                await create()
+            } else {
+                await save()
+            }
+        }
+    }
+
+    func presentAssist() {
+        presentation.sheetRoute = .assist
+    }
+
     func save() async {
         let action: ItemFormMutationPresentationAction
 
@@ -277,7 +285,7 @@ private extension ItemFormView {
         handle(action)
     }
 
-    func saveForThisItem() async {
+    func save(scope: ItemMutationScope) async {
         guard let item else {
             assertionFailure()
             handle(
@@ -291,77 +299,7 @@ private extension ItemFormView {
 
         do {
             try await ItemFormSaveCoordinator.save(
-                scope: .thisItem,
-                context: context,
-                item: item,
-                formInputData: model.formInputData,
-                notificationService: notificationService,
-                logger: itemMutationLogger,
-                reviewLogger: reviewLogger
-            )
-            action = ItemFormMutationPresentationAction.dismissOnSuccessAction(
-                for: .success(())
-            )
-        } catch {
-            assertionFailure(error.localizedDescription)
-            action = ItemFormMutationPresentationAction.dismissOnSuccessAction(
-                for: .failure(error)
-            )
-        }
-
-        handle(action)
-    }
-
-    func saveForFutureItems() async {
-        guard let item else {
-            assertionFailure()
-            handle(
-                .presentError(
-                    ErrorMessageSupport.message(from: ItemError.itemNotFound)
-                )
-            )
-            return
-        }
-        let action: ItemFormMutationPresentationAction
-
-        do {
-            try await ItemFormSaveCoordinator.save(
-                scope: .futureItems,
-                context: context,
-                item: item,
-                formInputData: model.formInputData,
-                notificationService: notificationService,
-                logger: itemMutationLogger,
-                reviewLogger: reviewLogger
-            )
-            action = ItemFormMutationPresentationAction.dismissOnSuccessAction(
-                for: .success(())
-            )
-        } catch {
-            assertionFailure(error.localizedDescription)
-            action = ItemFormMutationPresentationAction.dismissOnSuccessAction(
-                for: .failure(error)
-            )
-        }
-
-        handle(action)
-    }
-
-    func saveForAllItems() async {
-        guard let item else {
-            assertionFailure()
-            handle(
-                .presentError(
-                    ErrorMessageSupport.message(from: ItemError.itemNotFound)
-                )
-            )
-            return
-        }
-        let action: ItemFormMutationPresentationAction
-
-        do {
-            try await ItemFormSaveCoordinator.save(
-                scope: .allItems,
+                scope: scope,
                 context: context,
                 item: item,
                 formInputData: model.formInputData,
