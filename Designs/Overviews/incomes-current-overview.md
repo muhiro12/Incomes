@@ -353,7 +353,7 @@ Current shared business entry points and shared snapshot builders include:
 - `WidgetEntryFactory`
 - `ItemsRequest`
 - `WatchSyncReply`
-- `WatchSyncService`
+- `WatchSyncService` recent snapshot building and snapshot apply
 
 ### 2. App target owns platform adapters
 
@@ -477,6 +477,8 @@ route contract remains `IncomesRoute`.
 - Watch sync failure surfacing now follows ADR 0005 explicitly by using a typed
   shared reply contract so transport, decode, apply, and legitimate zero-item
   success no longer collapse into the same empty sentinel.
+- Watch sync response snapshot building is centralized in `WatchSyncService`,
+  while WatchConnectivity transport remains adapter-owned.
 
 ## Canonical Shared Behaviors
 

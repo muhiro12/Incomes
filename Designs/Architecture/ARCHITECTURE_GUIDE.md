@@ -131,12 +131,14 @@ than relying on assertions or empty sentinel values.
 - Sync transport, decode, and apply failures must stay distinguishable from a
   legitimate zero-data snapshot.
 
-Current shared sync contract:
+Current shared sync contract and snapshot services:
 
 - `ItemsRequest`
 - `WatchSyncReply`
 - `WatchSyncFailure`
 - `WatchSyncFailurePhase`
+- `WatchSyncService.recentItemWires(context:baseDate:monthOffsets:)`
+- `WatchSyncService.applySnapshot(context:items:baseDate:monthOffsets:)`
 
 See
 [0005-adapter-failure-surfacing-contract.md](../Decisions/0005-adapter-failure-surfacing-contract.md)
@@ -233,10 +235,12 @@ API style decision:
    - Keep save-specific haptics and review scheduling explicit in the save
      adapter path, and keep delete-specific adapters review-free.
 
-4. Watch sync should keep using the shared snapshot service rather than reintroducing target-local mutation rules.
+4. Watch sync should keep using the shared snapshot service rather than
+   reintroducing target-local snapshot or mutation rules.
    Files:
    - `Watch/Sources/Services/WatchDataSyncer.swift`
    - `IncomesLibrary/Sources/Item/Sync/WatchSyncService.swift`
    Minimal plan:
    - Keep networking/timing in watch adapters.
-   - Keep snapshot apply and reconciliation in `WatchSyncService`.
+   - Keep response snapshot building, snapshot apply, and reconciliation in
+     `WatchSyncService`.

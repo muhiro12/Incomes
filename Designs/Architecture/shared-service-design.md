@@ -63,6 +63,7 @@ operations and shared wire contracts:
 - `WatchSyncReply`
 - `WatchSyncFailure`
 - `WatchSyncFailurePhase`
+- `WatchSyncService.recentItemWires(context:baseDate:monthOffsets:)`
 - `WatchSyncService.applySnapshot(context:items:baseDate:monthOffsets:)`
 
 App-side mutation call sites should prefer
@@ -110,8 +111,8 @@ App-side mutation call sites should prefer
   secrets, and SwiftUI environment injection.
 - `PhoneWatchBridge` and `PhoneSyncClient` stay in the app targets because they
   own WatchConnectivity transport, while `WatchSyncReply` and
-  `WatchSyncService` stay in `IncomesLibrary` because the sync contract and
-  apply rules are shared.
+  `WatchSyncService` stay in `IncomesLibrary` because the sync contract,
+  response snapshot building, and apply rules are shared.
 - `IncomesLibrary` stays on `MHPlatformCore` so shared logic only sees
   core-safe platform helpers.
 - `ContentView` stays thin because `MHAppRuntimeBootstrap` owns the runtime,
