@@ -69,12 +69,50 @@ struct WidgetEntryOperationsTests {
             context: context,
             date: date
         ) { targetDate in
-            URL(string: "https://example.com/\(targetDate.timeIntervalSince1970)")
+            IncomesDeepLinkURLBuilder.preferredMonthURL(for: targetDate)
         }
 
         #expect(snapshot.totalIncomeText == totals.totalIncome.asCurrency)
         #expect(snapshot.totalOutgoText == totals.totalOutgo.asMinusCurrency)
-        #expect(snapshot.deepLinkURL != nil)
+        #expect(snapshot.deepLinkURL == IncomesDeepLinkURLBuilder.preferredMonthURL(for: date))
+    }
+
+    @Test
+    func net_income_snapshot_uses_summary_calculator_output() throws {
+        let date = isoDate("2026-04-15T00:00:00Z")
+        try createItem(
+            context: context,
+            date: date,
+            content: "Salary",
+            income: 3_000,
+            outgo: .zero,
+            category: "Income",
+            priority: 0
+        )
+        try createItem(
+            context: context,
+            date: date,
+            content: "Utilities",
+            income: .zero,
+            outgo: 500,
+            category: "Life",
+            priority: 0
+        )
+        let totals = try ItemSummaryOperations.monthlyTotals(
+            context: context,
+            date: date
+        )
+
+        let snapshot = WidgetEntryOperations.netIncomeSnapshot(
+            context: context,
+            date: date
+        ) { targetDate in
+            IncomesDeepLinkURLBuilder.preferredMonthURL(for: targetDate)
+        }
+
+        #expect(snapshot.netIncomeText == totals.netIncome.asCurrency)
+        #expect(snapshot.isPositive == true)
+        #expect(snapshot.deepLinkURL == IncomesDeepLinkURLBuilder.preferredMonthURL(for: date))
     }
 
     @Test

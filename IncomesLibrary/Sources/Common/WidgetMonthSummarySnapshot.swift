@@ -4,13 +4,13 @@ import Foundation
 public struct WidgetMonthSummarySnapshot: Equatable, Sendable {
     public let totalIncomeText: String
     public let totalOutgoText: String
-    public let deepLinkURL: URL?
+    public let deepLinkURL: URL
 
     /// Creates a month summary widget snapshot.
     public init(
         totalIncomeText: String,
         totalOutgoText: String,
-        deepLinkURL: URL?
+        deepLinkURL: URL
     ) {
         self.totalIncomeText = totalIncomeText
         self.totalOutgoText = totalOutgoText

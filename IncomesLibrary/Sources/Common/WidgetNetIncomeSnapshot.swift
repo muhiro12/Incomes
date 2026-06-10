@@ -4,13 +4,13 @@ import Foundation
 public struct WidgetNetIncomeSnapshot: Equatable, Sendable {
     public let netIncomeText: String
     public let isPositive: Bool
-    public let deepLinkURL: URL?
+    public let deepLinkURL: URL
 
     /// Creates a net income widget snapshot.
     public init(
         netIncomeText: String,
         isPositive: Bool,
-        deepLinkURL: URL?
+        deepLinkURL: URL
     ) {
         self.netIncomeText = netIncomeText
         self.isPositive = isPositive

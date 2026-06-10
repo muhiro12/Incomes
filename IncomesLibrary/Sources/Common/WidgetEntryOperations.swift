@@ -35,7 +35,7 @@ public enum WidgetEntryOperations {
     public static func monthSummarySnapshot(
         context: ModelContext,
         date: Date,
-        deepLinkBuilder: (Date) -> URL?
+        deepLinkBuilder: (Date) -> URL
     ) -> WidgetMonthSummarySnapshot {
         let deepLinkURL = deepLinkBuilder(date)
         do {
@@ -61,7 +61,7 @@ public enum WidgetEntryOperations {
     public static func netIncomeSnapshot(
         context: ModelContext,
         date: Date,
-        deepLinkBuilder: (Date) -> URL?
+        deepLinkBuilder: (Date) -> URL
     ) -> WidgetNetIncomeSnapshot {
         let deepLinkURL = deepLinkBuilder(date)
         do {
