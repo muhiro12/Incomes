@@ -133,6 +133,7 @@ than relying on assertions or empty sentinel values.
 
 Current shared sync contract:
 
+- `ItemsRequest`
 - `WatchSyncReply`
 - `WatchSyncFailure`
 - `WatchSyncFailurePhase`

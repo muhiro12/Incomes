@@ -351,6 +351,9 @@ Current shared business entry points and shared snapshot builders include:
 - `DataMaintenance`
 - `SettingsStatusLoader`
 - `WidgetEntryFactory`
+- `ItemsRequest`
+- `WatchSyncReply`
+- `WatchSyncService`
 
 ### 2. App target owns platform adapters
 
@@ -462,7 +465,8 @@ route contract remains `IncomesRoute`.
   Apple-only adapters.
 - Cross-target reuse remains centered on shared entry points such as
   `Item*Operations`, `Tag*Operations`, `SummaryCalculator`, `YearlyItemDuplication*Operations`,
-  `WidgetEntryFactory`, `WatchSyncReply`, and `WatchSyncService`.
+  `WidgetEntryFactory`, `ItemsRequest`, `WatchSyncReply`, and
+  `WatchSyncService`.
 - The repository still keeps automated unit tests in `IncomesLibrary/Tests`
   instead of adding separate unit test targets for `Incomes`, `Watch`, or
   `Widgets`.

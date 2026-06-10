@@ -99,7 +99,7 @@ contract and watch UI state handling.
   - Transport, decode, and apply failures were not distinguishable from a
     legitimate zero-item sync result, which violated ADR 0005.
 - Current correction:
-  - `IncomesLibrary` now defines `WatchSyncReply`,
+  - `IncomesLibrary` now defines `ItemsRequest`, `WatchSyncReply`,
     `WatchSyncFailurePhase`, and `WatchSyncFailure`.
   - `PhoneWatchBridge` replies with typed success or failure payloads.
   - `PhoneSyncClient` and `WatchDataSyncer` now preserve transport, decode,
@@ -107,6 +107,7 @@ contract and watch UI state handling.
   - `WatchHomeScreenModel` and `Watch` `ContentView` now distinguish
     reloading, sync failure, and successful empty sync on screen.
 - Representative files:
+  - `IncomesLibrary/Sources/Item/Sync/ItemsRequest.swift`
   - `IncomesLibrary/Sources/Item/Sync/WatchSyncReply.swift`
   - `Incomes/Sources/Common/Services/PhoneWatchBridge.swift`
   - `Watch/Sources/Services/PhoneSyncClient.swift`
