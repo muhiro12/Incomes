@@ -40,7 +40,7 @@ public enum ItemFormInferencePromptBuilder {
               and treat relative time expressions (like '来月', '先月') accurately.
             - Output only the result values, no explanation, format, or extra words.
 
-            Text: \(text)
+            User input JSON string: \(jsonStringLiteral(text))
             """
     }
 
@@ -58,5 +58,17 @@ private extension ItemFormInferencePromptBuilder {
         formatter.timeZone = .current
         formatter.dateFormat = "yyyyMMdd"
         return formatter.string(from: date)
+    }
+
+    static func jsonStringLiteral(_ text: String) -> String {
+        guard
+            let data = try? JSONEncoder().encode(text),
+            let literal = String(data: data, encoding: .utf8)
+        else {
+            assertionFailure()
+            return "\"\""
+        }
+
+        return literal
     }
 }

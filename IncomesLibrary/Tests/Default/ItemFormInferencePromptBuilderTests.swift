@@ -21,7 +21,7 @@ struct ItemFormInferencePromptBuilderTests {
     }
 
     @Test
-    func prompt_includes_current_date_language_requirements_and_text() {
+    func prompt_includes_current_date_language_requirements_and_user_input() {
         let prompt = ItemFormInferencePromptBuilder.prompt(
             text: "Lunch yesterday 1200 yen",
             currentDate: localDate(year: 2_026, month: 6, day: 10),
@@ -31,7 +31,18 @@ struct ItemFormInferencePromptBuilderTests {
         #expect(prompt.contains("Today's date is: 20260610"))
         #expect(prompt.contains("Respond ONLY with the values in the language: en"))
         #expect(prompt.contains("- date (yyyyMMdd)"))
-        #expect(prompt.contains("Text: Lunch yesterday 1200 yen"))
+        #expect(prompt.contains(#"User input JSON string: "Lunch yesterday 1200 yen""#))
+    }
+
+    @Test
+    func prompt_escapes_user_input_as_json_string() {
+        let prompt = ItemFormInferencePromptBuilder.prompt(
+            text: "Lunch \"yesterday\"\nBackslash \\",
+            currentDate: localDate(year: 2_026, month: 6, day: 10),
+            locale: Locale(identifier: "en_US")
+        )
+
+        #expect(prompt.contains(#"User input JSON string: "Lunch \"yesterday\"\nBackslash \\""#))
     }
 
     @Test
