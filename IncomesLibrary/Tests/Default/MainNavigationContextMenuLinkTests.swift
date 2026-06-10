@@ -27,6 +27,17 @@ struct MainNavigationContextMenuLinkTests {
     }
 
     @Test
+    func preferred_url_returns_month_url_for_date() {
+        let url = MainNavigationOperations.preferredURL(
+            forMonthContaining: shiftedDate("2026-04-10T12:00:00Z")
+        )
+
+        #expect(
+            url?.absoluteString == "https://muhiro12.github.io/Incomes/month/2026-04"
+        )
+    }
+
+    @Test
     func preferred_url_returns_item_url() throws {
         let item = try createItem(
             context: context,

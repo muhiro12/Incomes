@@ -65,7 +65,7 @@ operations and shared wire contracts:
 - `YearlyDuplicationPromoOperations`
 - `ItemSummaryOperations`
 - `SearchResultOperations`
-- `MainNavigationOperations` route, context-menu link, and state resolution
+- `MainNavigationOperations` route, deep-link, context-menu link, and state resolution
 - `ErrorMessageOperations`
 - `WidgetEntryOperations`
 - `WatchSyncOperations`
