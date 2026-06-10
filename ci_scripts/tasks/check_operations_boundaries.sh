@@ -29,6 +29,7 @@ forbidden_collaborators=(
   ItemFormInferenceIdentifier
   ItemFormSaveDecision
   ItemRepeatCountLimits
+  RepeatMonthSelectionParser
   LocaleLanguageCodeSupport
   RepeatMonthSelectionRules
   UpcomingPaymentPlanner

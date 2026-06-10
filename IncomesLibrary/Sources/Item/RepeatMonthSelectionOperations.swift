@@ -2,9 +2,23 @@ import Foundation
 
 /// Operations for repeat-month selection behavior shared by item form surfaces.
 public enum RepeatMonthSelectionOperations {
+    /// Parse error for invalid repeat-month selection text.
+    public enum ParseError: Error, Equatable, Sendable {
+        case invalidToken(String)
+    }
+
     /// The valid month component range for repeat-month selections.
     public static var validMonths: ClosedRange<Int> {
         YearMonthComponentRules.validMonths
+    }
+
+    /// Parses text such as `202501, 2025-02` into repeat-month selections.
+    public static func parse(_ value: String) throws -> Set<RepeatMonthSelection> {
+        do {
+            return try RepeatMonthSelectionParser.parse(value)
+        } catch RepeatMonthSelectionParser.ParserError.invalidToken(let token) {
+            throw ParseError.invalidToken(token)
+        }
     }
 
     /// Returns the base selection derived from `baseDate`.

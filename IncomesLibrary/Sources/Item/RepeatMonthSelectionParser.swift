@@ -1,14 +1,14 @@
 import Foundation
 
 /// Parses repeat month selections from user-facing text.
-public enum RepeatMonthSelectionParser {
+enum RepeatMonthSelectionParser {
     /// Parse error for invalid repeat month text.
-    public enum ParserError: Error, Equatable, Sendable {
+    enum ParserError: Error, Equatable, Sendable {
         case invalidToken(String)
     }
 
     /// Parses text such as `202501, 2025-02` into repeat month selections.
-    public static func parse(_ value: String) throws -> Set<RepeatMonthSelection> {
+    static func parse(_ value: String) throws -> Set<RepeatMonthSelection> {
         let trimmedValue = value.trimmingCharacters(in: .whitespacesAndNewlines)
         guard trimmedValue.isNotEmpty else {
             return []
