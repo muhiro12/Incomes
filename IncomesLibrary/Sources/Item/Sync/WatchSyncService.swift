@@ -3,6 +3,35 @@ import SwiftData
 
 /// Synchronizes watch snapshots into the shared item store.
 public enum WatchSyncService {
+    static let recentItemsPerMonthLimit = 50
+    static let recentItemsResponseLimit = 120
+
+    /// Builds recent item wire snapshots for the requested month window.
+    public static func recentItemWires(
+        context: ModelContext,
+        baseDate: Date,
+        monthOffsets: [Int] = ItemsRequest.recentMonthOffsets
+    ) throws -> [ItemWire] {
+        var wires = [ItemWire]()
+        for monthOffset in monthOffsets {
+            guard let monthDate = Calendar.current.date(
+                byAdding: .month,
+                value: monthOffset,
+                to: baseDate
+            ) else {
+                continue
+            }
+            let items = try ItemQueryOperations.items(
+                context: context,
+                date: monthDate
+            )
+            for item in items.prefix(recentItemsPerMonthLimit) {
+                wires.append(.init(item: item))
+            }
+        }
+        return Array(wires.prefix(recentItemsResponseLimit))
+    }
+
     /// Applies watch snapshot items for the requested month window.
     public static func applySnapshot(
         context: ModelContext,
@@ -89,5 +118,17 @@ private extension WatchSyncService {
             return nil
         }
         return minDate...maxDate
+    }
+}
+
+private extension ItemWire {
+    init(item: Item) {
+        self.init(
+            dateEpoch: item.localDate.timeIntervalSince1970,
+            content: item.content,
+            income: Double(item.income.description) ?? .zero,
+            outgo: Double(item.outgo.description) ?? .zero,
+            category: item.category?.name ?? ""
+        )
     }
 }

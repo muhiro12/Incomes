@@ -109,6 +109,43 @@ struct WatchSyncPlanningTests {
     }
 
     @Test
+    func recentItemWires_limitsItemsPerMonthAndResponse() throws {
+        let base = shiftedDate("2000-09-15T12:00:00Z")
+        let previousMonth = try #require(
+            Calendar.current.date(byAdding: .month, value: -1, to: base)
+        )
+        let nextMonth = try #require(
+            Calendar.current.date(byAdding: .month, value: 1, to: base)
+        )
+        let outsideMonth = try #require(
+            Calendar.current.date(byAdding: .month, value: 2, to: base)
+        )
+
+        for itemIndex in 0..<60 {
+            createSyncItem(date: previousMonth, content: "PREV-\(itemIndex)")
+            createSyncItem(date: base, content: "BASE-\(itemIndex)")
+            createSyncItem(date: nextMonth, content: "NEXT-\(itemIndex)")
+        }
+        createSyncItem(date: outsideMonth, content: "OUTSIDE")
+
+        let wires = try WatchSyncService.recentItemWires(
+            context: context,
+            baseDate: base,
+            monthOffsets: ItemsRequest.recentMonthOffsets
+        )
+        let countsByYearMonth = Dictionary(grouping: wires) { wire in
+            Date(timeIntervalSince1970: wire.dateEpoch)
+                .stringValueWithoutLocale(.yyyyMM)
+        }.mapValues(\.count)
+
+        #expect(wires.count == WatchSyncService.recentItemsResponseLimit)
+        #expect(countsByYearMonth[previousMonth.stringValueWithoutLocale(.yyyyMM)] == 50)
+        #expect(countsByYearMonth[base.stringValueWithoutLocale(.yyyyMM)] == 50)
+        #expect(countsByYearMonth[nextMonth.stringValueWithoutLocale(.yyyyMM)] == 20)
+        #expect(countsByYearMonth[outsideMonth.stringValueWithoutLocale(.yyyyMM)] == nil)
+    }
+
+    @Test
     func applySnapshot_accepts_empty_snapshot_as_successful_full_clear() throws {
         let base = shiftedDate("2000-09-15T12:00:00Z")
         let aug = try #require(
@@ -147,5 +184,21 @@ struct WatchSyncPlanningTests {
         let remaining = try context.fetch(FetchDescriptor<Item>())
         let contents = Set(remaining.map(\.content))
         #expect(contents.isEmpty)
+    }
+
+    private func createSyncItem(
+        date: Date,
+        content: String
+    ) {
+        _ = Item.createIgnoringDuplicates(
+            context: context,
+            date: date,
+            content: content,
+            income: 100,
+            outgo: 0,
+            category: "Sync",
+            priority: 0,
+            repeatID: .init()
+        )
     }
 }

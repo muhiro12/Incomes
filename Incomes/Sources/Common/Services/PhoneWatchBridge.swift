@@ -82,39 +82,6 @@ final class PhoneWatchBridge: NSObject {
         }
         return
     }
-
-    private func recentItemWires(
-        context: ModelContext,
-        baseDate: Date,
-        monthOffsets: [Int]
-    ) throws -> [ItemWire] {
-        var wires = [ItemWire]()
-        for offset in monthOffsets {
-            guard let monthDate = Calendar.current.date(
-                byAdding: .month,
-                value: offset,
-                to: baseDate
-            ) else {
-                continue
-            }
-            let items = try ItemQueryOperations.items(
-                context: context,
-                date: monthDate
-            )
-            for item in items.prefix(50) { // swiftlint:disable:this no_magic_numbers
-                wires.append(
-                    .init(
-                        dateEpoch: item.localDate.timeIntervalSince1970,
-                        content: item.content,
-                        income: Double(item.income.description) ?? .zero,
-                        outgo: Double(item.outgo.description) ?? .zero,
-                        category: item.category?.name ?? ""
-                    )
-                )
-            }
-        }
-        return Array(wires.prefix(120)) // swiftlint:disable:this no_magic_numbers
-    }
 }
 
 nonisolated extension PhoneWatchBridge: WCSessionDelegate {
@@ -225,7 +192,7 @@ nonisolated extension PhoneWatchBridge: WCSessionDelegate {
         }
 
         do {
-            let wires = try recentItemWires(
+            let wires = try WatchSyncService.recentItemWires(
                 context: context,
                 baseDate: baseDate,
                 monthOffsets: request.monthOffsets
