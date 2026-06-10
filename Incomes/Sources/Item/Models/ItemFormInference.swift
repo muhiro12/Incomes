@@ -25,7 +25,9 @@ struct ItemFormInference: AppEntity {
             income.description,
             outgo.description,
             category
-        ].joined(separator: "|")
+        ]
+        .map(Self.idComponent)
+        .joined()
     }
 
     var displayRepresentation: DisplayRepresentation {
@@ -38,5 +40,12 @@ struct ItemFormInference: AppEntity {
         income = result.income
         outgo = result.outgo
         category = result.category
+    }
+}
+
+@available(iOS 26.0, *)
+private extension ItemFormInference {
+    static func idComponent(_ value: String) -> String {
+        "\(value.count):\(value)"
     }
 }
