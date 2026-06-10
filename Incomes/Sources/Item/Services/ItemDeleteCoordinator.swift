@@ -54,9 +54,8 @@ enum ItemDeleteCoordinator {
                         items: items
                     )
                 },
-                adapter: ItemMutationAdapterFactory.make(
-                    notificationService: notificationService,
-                    includesReviewRequest: false
+                adapter: ItemMutationAdapterFactory.makeForDelete(
+                    notificationService: notificationService
                 ),
                 projection: .closures(
                     afterSuccess: { outcome in

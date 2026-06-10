@@ -2,10 +2,37 @@ import MHPlatform
 
 enum ItemMutationAdapterFactory {
     @MainActor
+    static func makeForSave(
+        notificationService: NotificationService,
+        reviewLogger: MHLogger
+    ) -> MHMutationAdapter<Set<MutationOutcome.FollowUpHint>> {
+        make(
+            notificationService: notificationService,
+            additionalSteps: [
+                successHapticStep(),
+                reviewRequestStep(logger: reviewLogger)
+            ]
+        )
+    }
+
+    @MainActor
+    static func makeForDelete(
+        notificationService: NotificationService
+    ) -> MHMutationAdapter<Set<MutationOutcome.FollowUpHint>> {
+        make(
+            notificationService: notificationService,
+            additionalSteps: [
+                successHapticStep()
+            ]
+        )
+    }
+}
+
+private extension ItemMutationAdapterFactory {
+    @MainActor
     static func make(
         notificationService: NotificationService,
-        includesReviewRequest: Bool,
-        reviewLogger: MHLogger? = nil
+        additionalSteps: [MHMutationStep]
     ) -> MHMutationAdapter<Set<MutationOutcome.FollowUpHint>> {
         let refreshNotificationSchedule: IncomesMutationWorkflow.NotificationScheduleRefresher = {
             await IncomesMutationWorkflow.refreshNotificationSchedule(
@@ -13,30 +40,26 @@ enum ItemMutationAdapterFactory {
             )
         }
 
-        var steps: [MHMutationStep] = [
-            .mainActor(name: "successHaptic") {
-                Haptic.success.impact()
-            }
-        ]
-        if includesReviewRequest {
-            guard let reviewLogger else {
-                preconditionFailure("reviewLogger is required when includesReviewRequest is true")
-            }
-            steps.append(
-                MHReviewFlow(
-                    policy: IncomesReviewSupport.policy(for: .itemMutation),
-                    logger: reviewLogger
-                )
-                .step(
-                    name: "scheduleReviewRequest"
-                )
-            )
-        }
-
         return IncomesMutationWorkflow
             .followUpHintAdapter(
                 refreshNotificationSchedule: refreshNotificationSchedule
             )
-            .appending(steps)
+            .appending(additionalSteps)
+    }
+
+    static func successHapticStep() -> MHMutationStep {
+        .mainActor(name: "successHaptic") {
+            Haptic.success.impact()
+        }
+    }
+
+    static func reviewRequestStep(logger: MHLogger) -> MHMutationStep {
+        MHReviewFlow(
+            policy: IncomesReviewSupport.policy(for: .itemMutation),
+            logger: logger
+        )
+        .step(
+            name: "scheduleReviewRequest"
+        )
     }
 }

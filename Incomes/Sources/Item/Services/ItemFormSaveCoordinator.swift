@@ -106,9 +106,8 @@ enum ItemFormSaveCoordinator {
                         scope: scope
                     )
                 },
-                adapter: ItemMutationAdapterFactory.make(
+                adapter: ItemMutationAdapterFactory.makeForSave(
                     notificationService: notificationService,
-                    includesReviewRequest: true,
                     reviewLogger: reviewLogger
                 ),
                 projection: .closures(

@@ -88,9 +88,8 @@ enum ItemCreateCoordinator {
             let itemID = try await MHMutationWorkflow.runThrowing(
                 name: ItemMutationWorkflowName.create,
                 operation: operation,
-                adapter: ItemMutationAdapterFactory.make(
+                adapter: ItemMutationAdapterFactory.makeForSave(
                     notificationService: notificationService,
-                    includesReviewRequest: true,
                     reviewLogger: reviewLogger
                 ),
                 projection: .valueAndFollowUp(
