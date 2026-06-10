@@ -168,6 +168,18 @@ struct IncomesRouteParserTests {
     }
 
     @Test
+    func parse_returns_nil_for_item_route_with_empty_identifier() {
+        let customSchemeRoute = IncomesRouteParser.parse(
+            url: testURL("incomes://item?id=")
+        )
+        let universalLinkRoute = IncomesRouteParser.parse(
+            url: testURL("https://muhiro12.github.io/Incomes/item?id=")
+        )
+        #expect(customSchemeRoute == nil)
+        #expect(universalLinkRoute == nil)
+    }
+
+    @Test
     func parse_rejects_unknown_universal_link_host() {
         let route = IncomesRouteParser.parse(
             url: testURL("https://example.com/Incomes/settings")
