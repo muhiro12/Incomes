@@ -23,7 +23,6 @@ struct IncomesApp: App {
         }
     }
 
-    // swiftlint:disable function_body_length
     @MainActor
     init() {
         _ = IncomesPreferenceLifecycle.runSynchronously()
@@ -41,6 +40,35 @@ struct IncomesApp: App {
         startupLogger.notice("database_migration.begin")
         DatabaseMigrator.migrateSQLiteFilesIfNeeded()
         startupLogger.notice("database_migration.completed")
+
+        let platformEnvironment = Self.makePlatformEnvironment(
+            preferenceStore: preferenceStore,
+            logging: logging,
+            startupLogger: startupLogger
+        )
+        self.platformEnvironment = platformEnvironment
+        startupLogger.notice("startup.dependencies_ready")
+
+        Self.registerDependencies(
+            platformEnvironment,
+            startupLogger: startupLogger
+        )
+        Self.recordCurrentAppVersion(
+            preferenceStore: preferenceStore,
+            startupLogger: startupLogger
+        )
+        IncomesShortcuts.updateAppShortcutParameters()
+        startupLogger.notice("startup.ready")
+    }
+}
+
+private extension IncomesApp {
+    @MainActor
+    static func makePlatformEnvironment(
+        preferenceStore: MHPreferenceStore,
+        logging: MHLoggingBootstrap,
+        startupLogger: MHLogger
+    ) -> IncomesPlatformEnvironment {
         let isICloudEnabled = preferenceStore.bool(
             for: \.isICloudOn
         )
@@ -52,7 +80,6 @@ struct IncomesApp: App {
         )
 
         var startupFailurePhase = "model_container"
-        let platformEnvironment: IncomesPlatformEnvironment
         do {
             let modelContainer = try IncomesPlatformEnvironmentFactory.makeAppModelContainer(
                 isICloudEnabled: isICloudEnabled
@@ -66,30 +93,38 @@ struct IncomesApp: App {
             )
             #endif
             startupFailurePhase = "platform_environment"
-            platformEnvironment = Self.makePlatformEnvironment(
+            return Self.makePlatformEnvironment(
                 modelContainer: modelContainer,
                 logging: logging
             )
         } catch {
-            let startupFailureMetadata = IncomesLogging.metadata(
-                ("phase", startupFailurePhase),
-                ("icloud_enabled", IncomesLogging.bool(isICloudEnabled))
-            )
-            let failureMetadata = startupFailureMetadata.merging(
-                IncomesLogging.errorMetadata(error)
-            ) { current, _ in
-                current
-            }
-            startupLogger.critical(
-                "startup.failed",
-                metadata: failureMetadata
+            logStartupFailure(
+                error,
+                phase: startupFailurePhase,
+                isICloudEnabled: isICloudEnabled,
+                startupLogger: startupLogger
             )
             preconditionFailure("Failed to initialize model container: \(error)")
         }
+    }
 
-        self.platformEnvironment = platformEnvironment
-        startupLogger.notice("startup.dependencies_ready")
+    @MainActor
+    static func makePlatformEnvironment(
+        modelContainer: ModelContainer,
+        logging: MHLoggingBootstrap
+    ) -> IncomesPlatformEnvironment {
+        IncomesPlatformEnvironmentFactory.make(
+            modelContainer: modelContainer,
+            platformMode: .production,
+            logging: logging
+        )
+    }
 
+    @MainActor
+    static func registerDependencies(
+        _ platformEnvironment: IncomesPlatformEnvironment,
+        startupLogger: MHLogger
+    ) {
         AppDependencyManager.shared.add {
             platformEnvironment.logging
         }
@@ -103,36 +138,44 @@ struct IncomesApp: App {
             platformEnvironment.remoteConfigurationService
         }
         startupLogger.notice("startup.dependencies_registered")
-
-        if let currentAppVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
-            preferenceStore.set(
-                currentAppVersion,
-                for: \.lastLaunchedAppVersion
-            )
-            startupLogger.notice(
-                "app_version.recorded",
-                metadata: IncomesLogging.metadata(
-                    ("app_version", currentAppVersion)
-                )
-            )
-        }
-
-        IncomesShortcuts.updateAppShortcutParameters()
-        startupLogger.notice("startup.ready")
     }
-    // swiftlint:enable function_body_length
-}
 
-private extension IncomesApp {
-    @MainActor
-    static func makePlatformEnvironment(
-        modelContainer: ModelContainer,
-        logging: MHLoggingBootstrap
-    ) -> IncomesPlatformEnvironment {
-        IncomesPlatformEnvironmentFactory.make(
-            modelContainer: modelContainer,
-            platformMode: .production,
-            logging: logging
+    static func recordCurrentAppVersion(
+        preferenceStore: MHPreferenceStore,
+        startupLogger: MHLogger
+    ) {
+        guard let currentAppVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String else {
+            return
+        }
+        preferenceStore.set(
+            currentAppVersion,
+            for: \.lastLaunchedAppVersion
+        )
+        startupLogger.notice(
+            "app_version.recorded",
+            metadata: IncomesLogging.metadata(
+                ("app_version", currentAppVersion)
+            )
+        )
+    }
+
+    static func logStartupFailure(
+        _ error: any Error,
+        phase: String,
+        isICloudEnabled: Bool,
+        startupLogger: MHLogger
+    ) {
+        let startupFailureMetadata = IncomesLogging.metadata(
+            ("phase", phase),
+            ("icloud_enabled", IncomesLogging.bool(isICloudEnabled))
+        )
+        startupLogger.critical(
+            "startup.failed",
+            metadata: startupFailureMetadata.merging(
+                IncomesLogging.errorMetadata(error)
+            ) { current, _ in
+                current
+            }
         )
     }
 }
