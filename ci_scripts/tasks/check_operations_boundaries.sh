@@ -14,6 +14,10 @@ surface_sources=(
   "$repository_root/Widgets/Sources"
 )
 
+library_sources=(
+  "$repository_root/IncomesLibrary/Sources"
+)
+
 forbidden_collaborators=(
   SummaryCalculator
   BalanceCalculator
@@ -55,6 +59,19 @@ collaborator_matches=$(
 if [[ -n "$collaborator_matches" ]]; then
   record_failure "Delivery surfaces must call public *Operations for business use cases:
 $collaborator_matches"
+fi
+
+public_collaborator_declarations=$(
+  rg \
+    --line-number \
+    "^[[:space:]]*(public|open)[[:space:]]+(final[[:space:]]+class|class|struct|enum|actor)[[:space:]]+(${collaborator_pattern})\\b" \
+    "${library_sources[@]}" \
+    -g '*.swift' || true
+)
+
+if [[ -n "$public_collaborator_declarations" ]]; then
+  record_failure "Business collaborators must remain internal implementation details:
+$public_collaborator_declarations"
 fi
 
 if [[ ${#failures[@]} -ne 0 ]]; then
