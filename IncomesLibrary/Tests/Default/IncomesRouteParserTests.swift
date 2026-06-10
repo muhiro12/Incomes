@@ -192,6 +192,14 @@ struct IncomesRouteParserTests {
     }
 
     @Test
+    func parse_returns_nil_for_invalid_universal_link_split_month() {
+        let route = IncomesRouteParser.parse(
+            url: testURL("https://muhiro12.github.io/Incomes/month/2026/13")
+        )
+        #expect(route == nil)
+    }
+
+    @Test
     func parse_returns_nil_for_versioned_custom_scheme_url() {
         let route = IncomesRouteParser.parse(
             url: testURL("incomes://v1/month/2026-01")
