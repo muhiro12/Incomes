@@ -7,6 +7,7 @@ struct MonthSummaryProvider: AppIntentTimelineProvider {
         let date = Date.now
         return .init(
             date: date,
+            targetDate: date,
             configuration: .init(),
             totalIncomeText: "$0",
             totalOutgoText: "-$0",
@@ -15,10 +16,12 @@ struct MonthSummaryProvider: AppIntentTimelineProvider {
     }
 
     func snapshot(for configuration: ConfigurationAppIntent, in _: Context) -> MonthSummaryEntry {
-        makeEntry(
-            date: WidgetEntryOperations.targetDate(
+        let date = Date.now
+        return makeEntry(
+            date: date,
+            targetDate: WidgetEntryOperations.targetDate(
                 for: configuration.targetMonth.widgetMonthOffset,
-                now: Date.now
+                now: date
             ),
             configuration: configuration
         )
@@ -26,34 +29,42 @@ struct MonthSummaryProvider: AppIntentTimelineProvider {
 
     func timeline(for configuration: ConfigurationAppIntent, in _: Context) -> Timeline<MonthSummaryEntry> {
         let currentDate = Date.now
-        let targetDate = WidgetEntryOperations.targetDate(
-            for: configuration.targetMonth.widgetMonthOffset,
-            now: currentDate
-        )
-        let entries = WidgetEntryOperations.timelineDates(now: currentDate).map { _ in
-            makeEntry(date: targetDate, configuration: configuration)
+        let entries = WidgetEntryOperations.timelineDates(now: currentDate).map { date in
+            makeEntry(
+                date: date,
+                targetDate: WidgetEntryOperations.targetDate(
+                    for: configuration.targetMonth.widgetMonthOffset,
+                    now: date
+                ),
+                configuration: configuration
+            )
         }
         return .init(entries: entries, policy: .atEnd)
     }
 
-    private func makeEntry(date: Date, configuration: ConfigurationAppIntent) -> MonthSummaryEntry {
+    private func makeEntry(
+        date: Date,
+        targetDate: Date,
+        configuration: ConfigurationAppIntent
+    ) -> MonthSummaryEntry {
         let snapshot: WidgetMonthSummarySnapshot = {
             guard let context = try? ModelContainerFactory.sharedContext() else {
                 return .init(
                     totalIncomeText: "$0",
                     totalOutgoText: "-$0",
-                    deepLinkURL: WidgetDeepLinkBuilder.monthURL(for: date)
+                    deepLinkURL: WidgetDeepLinkBuilder.monthURL(for: targetDate)
                 )
             }
             return WidgetEntryOperations.monthSummarySnapshot(
                 context: context,
-                date: date
+                date: targetDate
             ) { targetDate in
                 WidgetDeepLinkBuilder.monthURL(for: targetDate)
             }
         }()
         return .init(
             date: date,
+            targetDate: targetDate,
             configuration: configuration,
             totalIncomeText: snapshot.totalIncomeText,
             totalOutgoText: snapshot.totalOutgoText,

@@ -22,8 +22,8 @@ struct UpcomingProvider: AppIntentTimelineProvider {
 
     func timeline(for configuration: UpcomingConfigurationAppIntent, in _: Context) -> Timeline<UpcomingEntry> {
         let currentDate = Date.now
-        let entries = WidgetEntryOperations.timelineDates(now: currentDate).map { _ in
-            makeEntry(now: currentDate, configuration: configuration)
+        let entries = WidgetEntryOperations.timelineDates(now: currentDate).map { date in
+            makeEntry(now: date, configuration: configuration)
         }
         return .init(entries: entries, policy: .atEnd)
     }

@@ -25,7 +25,7 @@ struct IncomesMonthNetIncomeWidget {
                     alignment: .leading,
                     spacing: designMetrics.spacing.inline
                 ) {
-                    Text(IncomesMonthNetIncomeWidget.monthTitle(from: entry.date))
+                    Text(IncomesMonthNetIncomeWidget.monthTitle(from: entry.targetDate))
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                         .singleLine()
@@ -50,7 +50,7 @@ struct IncomesMonthNetIncomeWidget {
 
         @ViewBuilder private var compactLayout: some View {
             VStack(alignment: .leading, spacing: designMetrics.spacing.inline) {
-                Text(IncomesMonthNetIncomeWidget.monthTitle(from: entry.date))
+                Text(IncomesMonthNetIncomeWidget.monthTitle(from: entry.targetDate))
                     .font(.footnote)
                     .foregroundStyle(.secondary)
                     .singleLine()
@@ -105,6 +105,7 @@ extension IncomesMonthNetIncomeWidget: Widget {
 } timeline: {
     NetIncomeEntry(
         date: .now,
+        targetDate: .now,
         configuration: .init(),
         netIncomeText: "$1,234",
         isPositive: true,
@@ -117,6 +118,7 @@ extension IncomesMonthNetIncomeWidget: Widget {
 } timeline: {
     NetIncomeEntry(
         date: .now,
+        targetDate: .now,
         configuration: .init(),
         netIncomeText: "$1,234",
         isPositive: true,

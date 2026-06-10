@@ -3,6 +3,7 @@ import WidgetKit
 
 struct MonthSummaryEntry: TimelineEntry {
     let date: Date
+    let targetDate: Date
     let configuration: ConfigurationAppIntent
     let totalIncomeText: String
     let totalOutgoText: String
