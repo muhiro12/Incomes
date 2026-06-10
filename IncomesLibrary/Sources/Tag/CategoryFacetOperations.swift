@@ -69,6 +69,26 @@ public enum CategoryFacetOperations {
             }
     }
 
+    /// Returns user-facing category bucket display names from persisted state.
+    public static func displayNames(
+        context: ModelContext,
+        othersDisplayName: String = CategoryNameSupport.localizedOthersDisplayName
+    ) throws -> [String] {
+        try displayNames(
+            facets: facets(
+                context: context,
+                othersDisplayName: othersDisplayName
+            )
+        )
+    }
+
+    /// Returns user-facing display names for category buckets.
+    public static func displayNames(
+        facets: [CategoryFacet]
+    ) -> [String] {
+        facets.map(\.displayName)
+    }
+
     /// Returns logical category buckets filtered by a user-facing query from persisted state.
     public static func filteredFacets(
         context: ModelContext,
@@ -102,6 +122,21 @@ public enum CategoryFacetOperations {
                 othersDisplayName: othersDisplayName
             )
         }
+    }
+
+    /// Returns filtered user-facing category bucket display names from persisted state.
+    public static func filteredDisplayNames(
+        context: ModelContext,
+        query: String,
+        othersDisplayName: String = CategoryNameSupport.localizedOthersDisplayName
+    ) throws -> [String] {
+        try displayNames(
+            facets: filteredFacets(
+                context: context,
+                query: query,
+                othersDisplayName: othersDisplayName
+            )
+        )
     }
 }
 

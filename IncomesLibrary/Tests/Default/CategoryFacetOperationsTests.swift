@@ -110,6 +110,49 @@ struct CategoryFacetOperationsTests {
         #expect(facets.count == 1)
         #expect(facets.first?.displayName == japaneseOthers)
     }
+
+    @Test
+    func displayNames_returns_sorted_facet_names() throws {
+        let item = try createItem(
+            content: "Blank",
+            category: .empty
+        )
+        _ = item
+        _ = Tag.createIgnoringDuplicates(
+            context: context,
+            name: "Travel",
+            type: .category
+        )
+
+        let facets = try CategoryFacetOperations.facets(
+            context: context,
+            othersDisplayName: japaneseOthers
+        )
+        let displayNames = try CategoryFacetOperations.displayNames(
+            context: context,
+            othersDisplayName: japaneseOthers
+        )
+
+        #expect(displayNames == facets.map(\.displayName))
+        #expect(Set(displayNames) == [japaneseOthers, "Travel"])
+    }
+
+    @Test
+    func filteredDisplayNames_returns_filtered_facet_names() throws {
+        let item = try createItem(
+            content: "Blank",
+            category: .empty
+        )
+        _ = item
+
+        let displayNames = try CategoryFacetOperations.filteredDisplayNames(
+            context: context,
+            query: japaneseOthers,
+            othersDisplayName: japaneseOthers
+        )
+
+        #expect(displayNames == [japaneseOthers])
+    }
 }
 
 private extension CategoryFacetOperationsTests {

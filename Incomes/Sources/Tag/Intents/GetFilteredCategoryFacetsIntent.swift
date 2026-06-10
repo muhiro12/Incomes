@@ -12,11 +12,10 @@ struct GetFilteredCategoryFacetsIntent: AppIntent {
     @MainActor
     func perform() throws -> some ReturnsValue<[String]> {
         .result(
-            value: try CategoryFacetOperations.filteredFacets(
+            value: try CategoryFacetOperations.filteredDisplayNames(
                 context: modelContainer.mainContext,
                 query: query
             )
-            .map(\.displayName)
         )
     }
 }
