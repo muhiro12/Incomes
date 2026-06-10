@@ -2,6 +2,11 @@ import Foundation
 
 /// Operations for repeat-month selection behavior shared by item form surfaces.
 public enum RepeatMonthSelectionOperations {
+    /// The valid month component range for repeat-month selections.
+    public static var validMonths: ClosedRange<Int> {
+        YearMonthComponentRules.validMonths
+    }
+
     /// Returns the base selection derived from `baseDate`.
     public static func baseSelection(
         baseDate: Date,

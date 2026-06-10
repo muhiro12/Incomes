@@ -77,7 +77,7 @@ private extension RepeatMonthPicker {
 
     func monthGrid(for year: Int) -> some View {
         LazyVGrid(columns: columns, spacing: designMetrics.spacing.inline) {
-            ForEach(YearMonthComponentRules.validMonths, id: \.self) { month in
+            ForEach(RepeatMonthSelectionOperations.validMonths, id: \.self) { month in
                 monthButton(for: .init(year: year, month: month))
             }
         }

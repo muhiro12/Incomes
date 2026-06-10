@@ -4,6 +4,11 @@ import Testing
 
 struct RepeatMonthSelectionOperationsTests {
     @Test
+    func validMonths_returns_calendar_month_range() {
+        #expect(RepeatMonthSelectionOperations.validMonths == 1...12)
+    }
+
+    @Test
     func normalized_filters_invalid_entries_and_keeps_base_selection() {
         let baseDate = shiftedDate("2024-05-10T12:00:00Z")
         let selections: Set<RepeatMonthSelection> = [
