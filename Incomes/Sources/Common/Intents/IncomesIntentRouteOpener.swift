@@ -1,18 +1,9 @@
 import Foundation
 
 enum IncomesIntentRouteOpener {
-    private static var fallbackHomeURL: URL {
-        guard let homeURL = MainNavigationOperations.preferredURL(for: .home) else {
-            preconditionFailure("Failed to build fallback home URL.")
-        }
-        return homeURL
-    }
-
     static func monthIntent(for date: Date) -> OpenIncomesRouteIntent {
         .init(
-            url: MainNavigationOperations.preferredURL(
-                forMonthContaining: date
-            ) ?? fallbackHomeURL
+            url: MainNavigationOperations.preferredMonthURL(for: date)
         )
     }
 
@@ -21,6 +12,8 @@ enum IncomesIntentRouteOpener {
     }
 
     static func routeIntent(for route: IncomesRoute) -> OpenIncomesRouteIntent {
-        .init(url: MainNavigationOperations.preferredURL(for: route) ?? fallbackHomeURL)
+        .init(
+            url: MainNavigationOperations.preferredRouteURL(for: route)
+        )
     }
 }

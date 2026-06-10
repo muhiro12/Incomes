@@ -23,6 +23,11 @@ public enum MainNavigationOperations {
         IncomesContextMenuLinkBuilder.preferredURL(for: route)
     }
 
+    /// Returns the preferred deep link for `route`, falling back to home when needed.
+    public static func preferredRouteURL(for route: IncomesRoute) -> URL {
+        IncomesDeepLinkURLBuilder.preferredURL(for: route)
+    }
+
     /// Returns the preferred deep link for the month containing `date`.
     public static func preferredURL(
         forMonthContaining date: Date,
@@ -33,6 +38,17 @@ public enum MainNavigationOperations {
                 year: calendar.component(.year, from: date),
                 month: calendar.component(.month, from: date)
             )
+        )
+    }
+
+    /// Returns the preferred deep link for the month containing `date`.
+    public static func preferredMonthURL(
+        for date: Date,
+        calendar: Calendar = .current
+    ) -> URL {
+        IncomesDeepLinkURLBuilder.preferredMonthURL(
+            for: date,
+            calendar: calendar
         )
     }
 

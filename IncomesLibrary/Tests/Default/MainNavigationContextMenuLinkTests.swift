@@ -36,6 +36,15 @@ struct MainNavigationContextMenuLinkTests {
     }
 
     @Test
+    func preferred_route_url_returns_fallback_url_for_invalid_route() {
+        let url = MainNavigationOperations.preferredRouteURL(for: .year(0))
+
+        #expect(
+            url.absoluteString == "https://muhiro12.github.io/Incomes/home"
+        )
+    }
+
+    @Test
     func preferred_url_returns_month_url_for_date() {
         let url = MainNavigationOperations.preferredURL(
             forMonthContaining: shiftedDate("2026-04-10T12:00:00Z")
@@ -43,6 +52,17 @@ struct MainNavigationContextMenuLinkTests {
 
         #expect(
             url?.absoluteString == "https://muhiro12.github.io/Incomes/month/2026-04"
+        )
+    }
+
+    @Test
+    func preferred_month_url_returns_month_url_for_date() {
+        let url = MainNavigationOperations.preferredMonthURL(
+            for: shiftedDate("2026-04-10T12:00:00Z")
+        )
+
+        #expect(
+            url.absoluteString == "https://muhiro12.github.io/Incomes/month/2026-04"
         )
     }
 
