@@ -1,20 +1,55 @@
 import SwiftData
 
-enum YearlyDuplicationAutomationCoordinator {
-    struct ApplyResult {
-        let createdCount: Int
-        let groupCount: Int
-        let itemCount: Int
+/// Automation operations for yearly item duplication App Intent flows.
+public enum YearlyDuplicationAutomationOperations {
+    /// Result summary for applying yearly duplication from an automation surface.
+    public struct ApplyResult: Sendable {
+        /// Number of items created.
+        public let createdCount: Int
+        /// Number of planned groups.
+        public let groupCount: Int
+        /// Number of planned items.
+        public let itemCount: Int
+
+        /// Creates an automation apply result.
+        public init(
+            createdCount: Int,
+            groupCount: Int,
+            itemCount: Int
+        ) {
+            self.createdCount = createdCount
+            self.groupCount = groupCount
+            self.itemCount = itemCount
+        }
     }
 
-    struct PreviewResult {
-        let summaryText: String
-        let groupCount: Int
-        let itemCount: Int
-        let skippedCount: Int
+    /// Result summary for previewing yearly duplication from an automation surface.
+    public struct PreviewResult: Sendable {
+        /// Human-readable plan summary.
+        public let summaryText: String
+        /// Number of planned groups.
+        public let groupCount: Int
+        /// Number of planned items.
+        public let itemCount: Int
+        /// Number of skipped duplicates.
+        public let skippedCount: Int
+
+        /// Creates an automation preview result.
+        public init(
+            summaryText: String,
+            groupCount: Int,
+            itemCount: Int,
+            skippedCount: Int
+        ) {
+            self.summaryText = summaryText
+            self.groupCount = groupCount
+            self.itemCount = itemCount
+            self.skippedCount = skippedCount
+        }
     }
 
-    nonisolated static func options(
+    /// Returns yearly duplication options from automation parameters.
+    public static func options(
         includeSingleItems: Bool,
         minimumRepeatItemCount: Int,
         skipExistingItems: Bool
@@ -26,29 +61,14 @@ enum YearlyDuplicationAutomationCoordinator {
         )
     }
 
-    nonisolated static func requestMetadata(
-        sourceYear: Int,
-        targetYear: Int,
-        includeSingleItems: Bool,
-        minimumRepeatItemCount: Int,
-        skipExistingItems: Bool
-    ) -> [String: String] {
-        IncomesLogging.metadata(
-            ("source_year", String(sourceYear)),
-            ("target_year", String(targetYear)),
-            ("include_single_items", IncomesLogging.bool(includeSingleItems)),
-            ("minimum_repeat_item_count", String(minimumRepeatItemCount)),
-            ("skip_existing_items", IncomesLogging.bool(skipExistingItems))
-        )
-    }
-
-    static func apply(
+    /// Applies yearly duplication for the selected source and target years.
+    public static func apply(
         context: ModelContext,
         sourceYear: Int,
         targetYear: Int,
         options: YearlyItemDuplicationOptions
     ) throws -> ApplyResult {
-        let plan = try plan(
+        let plan = try YearlyItemDuplicationPlanOperations.plan(
             context: context,
             sourceYear: sourceYear,
             targetYear: targetYear,
@@ -65,13 +85,14 @@ enum YearlyDuplicationAutomationCoordinator {
         )
     }
 
-    static func preview(
+    /// Previews yearly duplication for the selected source and target years.
+    public static func preview(
         context: ModelContext,
         sourceYear: Int,
         targetYear: Int,
         options: YearlyItemDuplicationOptions
     ) throws -> PreviewResult {
-        let plan = try plan(
+        let plan = try YearlyItemDuplicationPlanOperations.plan(
             context: context,
             sourceYear: sourceYear,
             targetYear: targetYear,
@@ -85,13 +106,15 @@ enum YearlyDuplicationAutomationCoordinator {
         )
     }
 
-    static func sourceYears(context: ModelContext) throws -> [Int] {
+    /// Returns available source years for yearly duplication.
+    public static func sourceYears(context: ModelContext) throws -> [Int] {
         try YearlyItemDuplicationSelectionOperations.availableSourceYears(
             context: context
         )
     }
 
-    nonisolated static func targetYears(
+    /// Returns selectable target years.
+    public static func targetYears(
         currentYear: Int?,
         range: Int
     ) -> [Int] {
@@ -101,7 +124,8 @@ enum YearlyDuplicationAutomationCoordinator {
         )
     }
 
-    static func suggestionText(
+    /// Returns a human-readable yearly duplication suggestion.
+    public static func suggestionText(
         context: ModelContext,
         minimumGroupCount: Int,
         options: YearlyItemDuplicationOptions
@@ -117,19 +141,5 @@ enum YearlyDuplicationAutomationCoordinator {
             return nil
         }
         return YearlyDuplicationPresentationOperations.suggestionText(for: suggestion)
-    }
-
-    private static func plan(
-        context: ModelContext,
-        sourceYear: Int,
-        targetYear: Int,
-        options: YearlyItemDuplicationOptions
-    ) throws -> YearlyItemDuplicationPlan {
-        try YearlyItemDuplicationPlanOperations.plan(
-            context: context,
-            sourceYear: sourceYear,
-            targetYear: targetYear,
-            options: options
-        )
     }
 }

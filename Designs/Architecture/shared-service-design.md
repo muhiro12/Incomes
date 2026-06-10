@@ -57,6 +57,7 @@ operations and shared wire contracts:
 - `Tag*Operations` duplicate-resolution and tag/date lookup helpers
 - `YearlyItemDuplicationPlanOperations.plan(context:sourceYear:targetYear:)`
 - `YearlyItemDuplicationApplyOperations.apply(plan:context:)`
+- `YearlyDuplicationAutomationOperations`
 - `YearlyDuplicationPresentationOperations`
 - `ItemSummaryOperations`
 - `SearchResultOperations`

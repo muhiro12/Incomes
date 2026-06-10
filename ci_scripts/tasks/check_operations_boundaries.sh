@@ -36,6 +36,7 @@ forbidden_collaborators=(
   ItemRelativeQueryCoordinator
   ItemSearchPredicateBuilder
   YearlyItemDuplicationPresentationBuilder
+  YearlyDuplicationAutomationCoordinator
   MainNavigationStateLoader
   MainNavigationRouteExecutor
 )

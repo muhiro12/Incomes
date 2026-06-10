@@ -23,7 +23,7 @@ struct ApplyYearlyDuplicationIntent: AppIntent {
     @MainActor
     func perform() throws -> some ReturnsValue<Int> {
         let logger = intentLogger
-        let metadata = YearlyDuplicationAutomationCoordinator.requestMetadata(
+        let metadata = YearlyDuplicationIntentSupport.requestMetadata(
             sourceYear: sourceYear,
             targetYear: targetYear,
             includeSingleItems: includeSingleItems,
@@ -35,7 +35,7 @@ struct ApplyYearlyDuplicationIntent: AppIntent {
             metadata: metadata
         )
         do {
-            let result = try YearlyDuplicationAutomationCoordinator.apply(
+            let result = try YearlyDuplicationAutomationOperations.apply(
                 context: modelContainer.mainContext,
                 sourceYear: sourceYear,
                 targetYear: targetYear,
@@ -75,7 +75,7 @@ private extension ApplyYearlyDuplicationIntent {
     }
 
     var duplicationOptions: YearlyItemDuplicationOptions {
-        YearlyDuplicationAutomationCoordinator.options(
+        YearlyDuplicationAutomationOperations.options(
             includeSingleItems: includeSingleItems,
             minimumRepeatItemCount: minimumRepeatItemCount,
             skipExistingItems: skipExistingItems
