@@ -108,7 +108,7 @@ extension IncomesMonthNetIncomeWidget: Widget {
         configuration: .init(),
         netIncomeText: "$1,234",
         isPositive: true,
-        deepLinkURL: nil
+        deepLinkURL: WidgetDeepLinkBuilder.monthURL(for: .now)
     )
 }
 
@@ -120,6 +120,6 @@ extension IncomesMonthNetIncomeWidget: Widget {
         configuration: .init(),
         netIncomeText: "$1,234",
         isPositive: true,
-        deepLinkURL: nil
+        deepLinkURL: WidgetDeepLinkBuilder.monthURL(for: .now)
     )
 }

@@ -201,7 +201,7 @@ extension IncomesMonthWidget: Widget {
         configuration: .init(),
         totalIncomeText: "$1,200",
         totalOutgoText: "-$800",
-        deepLinkURL: nil
+        deepLinkURL: WidgetDeepLinkBuilder.monthURL(for: .now)
     )
 }
 
@@ -213,6 +213,6 @@ extension IncomesMonthWidget: Widget {
         configuration: .init(),
         totalIncomeText: "$1,200",
         totalOutgoText: "-$800",
-        deepLinkURL: nil
+        deepLinkURL: WidgetDeepLinkBuilder.monthURL(for: .now)
     )
 }
