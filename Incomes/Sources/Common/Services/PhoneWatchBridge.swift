@@ -180,25 +180,16 @@ nonisolated extension PhoneWatchBridge: WCSessionDelegate {
         }
     }
 
-    // swiftlint:disable function_body_length
     @MainActor
     private func handleRecentItems(
         request: ItemsRequest,
         replyHandler: (Data) -> Void
     ) {
+        let metadata = requestMetadata(for: request)
         guard let context = modelContext else {
-            logger?.error(
-                "watch_sync.missing_context",
-                metadata: IncomesLogging.metadata(
-                    ("month_offset_count", IncomesLogging.count(request.monthOffsets.count))
-                )
-            )
-            replyHandler(
-                phoneWatchFailedReplyData(
-                    phase: .missingContext,
-                    message: "Model context is not available for watch sync.",
-                    logger: logger
-                )
+            replyMissingContext(
+                metadata: metadata,
+                replyHandler: replyHandler
             )
             return
         }
@@ -209,40 +200,105 @@ nonisolated extension PhoneWatchBridge: WCSessionDelegate {
                 baseDate: request.baseDate,
                 monthOffsets: request.monthOffsets
             )
-            replyHandler(
-                phoneWatchEncodedReplyData(
-                    .success(items: wires),
-                    logger: logger
-                )
-            )
-            logger?.notice(
-                "watch_sync.reply_completed",
-                metadata: IncomesLogging.metadata(
-                    ("month_offset_count", IncomesLogging.count(request.monthOffsets.count)),
-                    ("item_count", IncomesLogging.count(wires.count))
-                )
+            replySuccess(
+                wires: wires,
+                metadata: metadata,
+                replyHandler: replyHandler
             )
         } catch {
-            let requestMetadata = IncomesLogging.metadata(
-                ("month_offset_count", IncomesLogging.count(request.monthOffsets.count))
-            )
-            let failureMetadata = requestMetadata.merging(
-                IncomesLogging.errorMetadata(error)
-            ) { current, _ in
-                current
-            }
-            logger?.error(
-                "watch_sync.item_fetch_failed",
-                metadata: failureMetadata
-            )
-            replyHandler(
-                phoneWatchFailedReplyData(
-                    phase: .itemFetch,
-                    message: error.localizedDescription,
-                    logger: logger
-                )
+            replyItemFetchFailure(
+                error: error,
+                metadata: metadata,
+                replyHandler: replyHandler
             )
         }
     }
-    // swiftlint:enable function_body_length
+
+    private func requestMetadata(
+        for request: ItemsRequest
+    ) -> [String: String] {
+        IncomesLogging.metadata(
+            ("month_offset_count", IncomesLogging.count(request.monthOffsets.count))
+        )
+    }
+
+    @MainActor
+    private func replyMissingContext(
+        metadata: [String: String],
+        replyHandler: (Data) -> Void
+    ) {
+        logger?.error(
+            "watch_sync.missing_context",
+            metadata: metadata
+        )
+        replyHandler(
+            phoneWatchFailedReplyData(
+                phase: .missingContext,
+                message: "Model context is not available for watch sync.",
+                logger: logger
+            )
+        )
+    }
+
+    @MainActor
+    private func replySuccess(
+        wires: [ItemWire],
+        metadata: [String: String],
+        replyHandler: (Data) -> Void
+    ) {
+        replyHandler(
+            phoneWatchEncodedReplyData(
+                .success(items: wires),
+                logger: logger
+            )
+        )
+        logger?.notice(
+            "watch_sync.reply_completed",
+            metadata: completedReplyMetadata(
+                metadata,
+                itemCount: wires.count
+            )
+        )
+    }
+
+    @MainActor
+    private func replyItemFetchFailure(
+        error: any Error,
+        metadata: [String: String],
+        replyHandler: (Data) -> Void
+    ) {
+        logger?.error(
+            "watch_sync.item_fetch_failed",
+            metadata: failureMetadata(metadata, error: error)
+        )
+        replyHandler(
+            phoneWatchFailedReplyData(
+                phase: .itemFetch,
+                message: error.localizedDescription,
+                logger: logger
+            )
+        )
+    }
+
+    private func completedReplyMetadata(
+        _ metadata: [String: String],
+        itemCount: Int
+    ) -> [String: String] {
+        metadata.merging(
+            IncomesLogging.metadata(
+                ("item_count", IncomesLogging.count(itemCount))
+            )
+        ) { current, _ in
+            current
+        }
+    }
+
+    private func failureMetadata(
+        _ metadata: [String: String],
+        error: any Error
+    ) -> [String: String] {
+        metadata.merging(IncomesLogging.errorMetadata(error)) { current, _ in
+            current
+        }
+    }
 }
