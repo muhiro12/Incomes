@@ -1,9 +1,9 @@
 import Foundation
 
 /// Builds stable identifiers for generated item form inference values.
-public enum ItemFormInferenceIdentifier {
+enum ItemFormInferenceIdentifier {
     /// Builds an identifier from all generated item form inference fields.
-    public static func make(
+    static func make(
         date: String,
         content: String,
         income: Decimal,

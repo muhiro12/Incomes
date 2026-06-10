@@ -56,6 +56,46 @@ struct ItemFormInferenceOperationsTests {
         #expect(prompt.contains("Respond ONLY with the values in the language: ja"))
         #expect(prompt.contains("like '来月', '先月'"))
     }
+
+    @Test
+    func stableIdentifier_includes_all_generated_fields() {
+        let firstIdentifier = ItemFormInferenceOperations.stableIdentifier(
+            date: "20260610",
+            content: "Salary",
+            income: 100,
+            outgo: 0,
+            category: "Work"
+        )
+        let secondIdentifier = ItemFormInferenceOperations.stableIdentifier(
+            date: "20260610",
+            content: "Salary",
+            income: 0,
+            outgo: 100,
+            category: "Work"
+        )
+
+        #expect(firstIdentifier != secondIdentifier)
+    }
+
+    @Test
+    func stableIdentifier_keeps_components_unambiguous_when_values_include_separator_characters() {
+        let firstIdentifier = ItemFormInferenceOperations.stableIdentifier(
+            date: "20260610",
+            content: "A|B",
+            income: 1,
+            outgo: 2,
+            category: "C"
+        )
+        let secondIdentifier = ItemFormInferenceOperations.stableIdentifier(
+            date: "20260610|A",
+            content: "B",
+            income: 1,
+            outgo: 2,
+            category: "C"
+        )
+
+        #expect(firstIdentifier != secondIdentifier)
+    }
 }
 
 private func localDate(year: Int, month: Int, day: Int) -> Date {

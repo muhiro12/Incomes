@@ -26,6 +26,7 @@ forbidden_collaborators=(
   MonthlySummaryNarrativeBuilder
   MonthlySummaryNarrativeContextLoader
   ItemFormInferencePromptBuilder
+  ItemFormInferenceIdentifier
   ItemFormSaveDecision
   ItemRepeatCountLimits
   LocaleLanguageCodeSupport

@@ -19,7 +19,7 @@ struct ItemFormInference: AppEntity {
     var category: String
 
     var id: String {
-        ItemFormInferenceIdentifier.make(
+        ItemFormInferenceOperations.stableIdentifier(
             date: date,
             content: content,
             income: income,

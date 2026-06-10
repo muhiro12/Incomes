@@ -24,4 +24,21 @@ public enum ItemFormInferenceOperations {
     public static func languageCode(for locale: Locale) -> String {
         ItemFormInferencePromptBuilder.languageCode(for: locale)
     }
+
+    /// Returns a stable identifier for generated item form inference values.
+    public static func stableIdentifier(
+        date: String,
+        content: String,
+        income: Decimal,
+        outgo: Decimal,
+        category: String
+    ) -> String {
+        ItemFormInferenceIdentifier.make(
+            date: date,
+            content: content,
+            income: income,
+            outgo: outgo,
+            category: category
+        )
+    }
 }
