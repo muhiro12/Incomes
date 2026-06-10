@@ -40,6 +40,24 @@ struct WidgetEntryOperationsTests {
     }
 
     @Test
+    func timeline_dates_return_empty_for_non_positive_entry_counts() {
+        let now = isoDate("2026-03-15T00:00:00Z")
+
+        #expect(
+            WidgetEntryOperations.timelineDates(
+                now: now,
+                entryCount: 0
+            ).isEmpty
+        )
+        #expect(
+            WidgetEntryOperations.timelineDates(
+                now: now,
+                entryCount: -1
+            ).isEmpty
+        )
+    }
+
+    @Test
     func month_summary_snapshot_uses_summary_calculator_output() throws {
         let date = isoDate("2026-03-15T00:00:00Z")
         try createItem(

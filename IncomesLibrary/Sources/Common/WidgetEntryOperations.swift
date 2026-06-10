@@ -9,7 +9,11 @@ public enum WidgetEntryOperations {
         calendar: Calendar = .current,
         entryCount: Int = 5
     ) -> [Date] {
-        (0..<entryCount).compactMap { hourOffset in
+        guard entryCount > 0 else {
+            return []
+        }
+
+        return (0..<entryCount).compactMap { hourOffset in
             calendar.date(
                 byAdding: .hour,
                 value: hourOffset,
