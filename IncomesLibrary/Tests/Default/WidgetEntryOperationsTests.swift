@@ -105,13 +105,13 @@ struct WidgetEntryOperationsTests {
             direction: .next,
             deepLinkBuilder: .init(
                 homeDeepLink: {
-                    URL(string: "https://example.com/home")
+                    IncomesDeepLinkURLBuilder.preferredURL(for: .home)
                 },
                 monthDeepLink: { date in
-                    URL(string: "https://example.com/month/\(date.timeIntervalSince1970)")
+                    IncomesDeepLinkURLBuilder.preferredMonthURL(for: date)
                 },
                 itemDeepLink: { itemID in
-                    URL(string: "https://example.com/item/\(itemID)")
+                    IncomesDeepLinkURLBuilder.preferredItemURL(for: itemID)
                 }
             )
         )
