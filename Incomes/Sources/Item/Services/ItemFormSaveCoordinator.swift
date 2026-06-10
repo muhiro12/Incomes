@@ -46,7 +46,7 @@ enum ItemFormSaveCoordinator {
                 )
                 throw ItemError.itemNotFound
             }
-            if try ItemFormSaveDecision.requiresScopeSelection(
+            if try ItemUpdateOperations.requiresScopeSelection(
                 context: context,
                 item: item
             ) {

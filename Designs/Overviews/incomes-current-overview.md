@@ -493,7 +493,7 @@ route contract remains `IncomesRoute`.
 The following behaviors are already centralized and should remain centralized:
 
 - item creation and repeat generation
-- repeat-aware item updates
+- repeat-aware item updates and scope-selection decisions
 - item deletion and affected-balance recalculation
 - duplicate tag detection and merge resolution
 - month totals and category comparison calculations

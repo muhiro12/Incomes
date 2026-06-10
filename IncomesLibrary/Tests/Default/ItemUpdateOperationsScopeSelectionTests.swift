@@ -3,7 +3,7 @@ import Foundation
 import SwiftData
 import Testing
 
-struct ItemFormSaveDecisionTests {
+struct ItemUpdateOperationsScopeSelectionTests {
     let context: ModelContext
 
     init() {
@@ -23,7 +23,7 @@ struct ItemFormSaveDecisionTests {
             repeatID: .init()
         )
 
-        let requiresSelection = try ItemFormSaveDecision.requiresScopeSelection(
+        let requiresSelection = try ItemUpdateOperations.requiresScopeSelection(
             context: context,
             item: item
         )
@@ -54,7 +54,7 @@ struct ItemFormSaveDecisionTests {
             repeatID: repeatID
         )
 
-        let requiresSelection = try ItemFormSaveDecision.requiresScopeSelection(
+        let requiresSelection = try ItemUpdateOperations.requiresScopeSelection(
             context: context,
             item: item
         )

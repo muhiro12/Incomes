@@ -3,6 +3,17 @@ import SwiftData
 
 /// Domain operations for updating `Item` models.
 public enum ItemUpdateOperations {
+    /// Returns true when updating `item` should ask which repeat scope to use.
+    public static func requiresScopeSelection(
+        context: ModelContext,
+        item: Item
+    ) throws -> Bool {
+        try ItemFormSaveDecision.requiresScopeSelection(
+            context: context,
+            item: item
+        )
+    }
+
     /// Updates a single item with shared form input and the given mutation scope.
     public static func update(
         context: ModelContext,

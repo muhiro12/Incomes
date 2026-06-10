@@ -53,6 +53,7 @@ operations and shared wire contracts:
 - `ItemFormInput`
 - `ItemMutationScope`
 - `Item*Operations.create(context:input:repeatMonthSelections:)`
+- `Item*Operations.requiresScopeSelection(context:item:)`
 - `Item*Operations.update(context:item:input:scope:)`
 - `Tag*Operations` duplicate-resolution and tag/date lookup helpers
 - `YearlyItemDuplicationPlanOperations.plan(context:sourceYear:targetYear:)`
