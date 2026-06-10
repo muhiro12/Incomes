@@ -217,7 +217,7 @@ extension NotificationService: UNUserNotificationCenterDelegate {
         Task {
             logger.info("notification.settings_route_requested")
             await routeDestination.setPendingURL(
-                IncomesDeepLinkURLBuilder.preferredURL(for: .settings)
+                MainNavigationOperations.preferredURL(for: .settings)
             )
         }
     }

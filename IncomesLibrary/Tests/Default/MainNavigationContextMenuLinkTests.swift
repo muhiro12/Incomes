@@ -18,6 +18,15 @@ struct MainNavigationContextMenuLinkTests {
     }
 
     @Test
+    func preferred_url_returns_settings_route_url() {
+        let url = MainNavigationOperations.preferredURL(for: .settings)
+
+        #expect(
+            url?.absoluteString == "https://muhiro12.github.io/Incomes/settings"
+        )
+    }
+
+    @Test
     func preferred_url_returns_route_url() {
         let url = MainNavigationOperations.preferredURL(for: .year(2_026))
 
