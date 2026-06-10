@@ -235,7 +235,7 @@ public enum MonthlySummaryNarrativeBuilder {
         let posixLocale = Locale(identifier: "en_US_POSIX")
 
         for token in numericTokens(in: trimmedSummary) {
-            let normalizedToken = token.replacingOccurrences(of: ",", with: "")
+            let normalizedToken = normalizedNumericToken(token)
             guard let numericValue = Decimal(string: normalizedToken, locale: posixLocale) else {
                 throw ValidationError.unsupportedNumber
             }
@@ -373,6 +373,12 @@ private extension MonthlySummaryNarrativeBuilder {
         return regularExpression.matches(in: text, range: range).compactMap { result in
             Range(result.range, in: text).map { String(text[$0]) }
         }
+    }
+
+    static func normalizedNumericToken(_ token: String) -> String {
+        token
+            .replacingOccurrences(of: ",", with: "")
+            .replacingOccurrences(of: "−", with: "-")
     }
 
     static func decimalToDouble(_ value: Decimal) -> Double {

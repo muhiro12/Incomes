@@ -16,6 +16,25 @@ struct MonthlySummaryNarrativeBuilderTests {
     }
 
     @Test
+    func validatedSummary_accepts_unicode_minus_for_current_month_totals() throws {
+        let currentTotals = MonthlySummaryNarrativeBuilder.MonthTotals(
+            year: 2_026,
+            month: 6,
+            currencyCode: "USD",
+            totalIncome: 1_000,
+            totalOutgo: 1_600,
+            netIncome: -600
+        )
+
+        let summary = try MonthlySummaryNarrativeBuilder.validatedSummary(
+            "Income was 1,000. Outgo was 1,600 and net income was −600.",
+            currentTotals: currentTotals
+        )
+
+        #expect(summary == "Income was 1,000. Outgo was 1,600 and net income was −600.")
+    }
+
+    @Test
     func validatedSummary_rejects_empty_text() {
         #expect(throws: MonthlySummaryNarrativeBuilder.ValidationError.emptySummary) {
             _ = try MonthlySummaryNarrativeBuilder.validatedSummary(
