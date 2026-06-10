@@ -23,9 +23,9 @@ public enum RepeatMonthSelectionParser {
         var selections = Set<RepeatMonthSelection>()
         for token in tokens {
             let compactValue = token.replacingOccurrences(of: "-", with: "")
-            guard compactValue.count == 6, // swiftlint:disable:this no_magic_numbers
-                  let year = Int(compactValue.prefix(4)), // swiftlint:disable:this no_magic_numbers
-                  let month = Int(compactValue.suffix(2)), // swiftlint:disable:this no_magic_numbers
+            guard compactValue.count == YearMonthComponentRules.compactYearMonthDigitCount,
+                  let year = Int(compactValue.prefix(YearMonthComponentRules.yearDigitCount)),
+                  let month = Int(compactValue.suffix(YearMonthComponentRules.monthDigitCount)),
                   YearMonthComponentRules.isValidYear(year),
                   YearMonthComponentRules.isValidMonth(month) else {
                 throw ParserError.invalidToken(token)

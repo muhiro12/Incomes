@@ -169,12 +169,12 @@ extension IncomesRoute: MHDeepLinkRoute {
         }
 
         let compactValue = firstSegment.replacingOccurrences(of: "-", with: "")
-        guard compactValue.count == 6, // swiftlint:disable:this no_magic_numbers
+        guard compactValue.count == YearMonthComponentRules.compactYearMonthDigitCount,
               let year = parseYear(
-                String(compactValue.prefix(4)) // swiftlint:disable:this no_magic_numbers
+                String(compactValue.prefix(YearMonthComponentRules.yearDigitCount))
               ),
               let month = parseMonth(
-                String(compactValue.suffix(2)) // swiftlint:disable:this no_magic_numbers
+                String(compactValue.suffix(YearMonthComponentRules.monthDigitCount))
               ) else {
             return nil
         }
@@ -201,7 +201,7 @@ extension IncomesRoute: MHDeepLinkRoute {
     }
 
     static func parseYear(_ value: String) -> Int? {
-        guard value.count == 4, // swiftlint:disable:this no_magic_numbers
+        guard value.count == YearMonthComponentRules.yearDigitCount,
               let year = Int(value),
               YearMonthComponentRules.isValidYear(year) else {
             return nil

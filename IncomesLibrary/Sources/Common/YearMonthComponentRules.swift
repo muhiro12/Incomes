@@ -1,5 +1,11 @@
 /// Shared limits for persisted and routed year-month components.
 public enum YearMonthComponentRules {
+    /// The fixed digit count for zero-padded year components.
+    public static let yearDigitCount = 4
+    /// The fixed digit count for zero-padded month components.
+    public static let monthDigitCount = 2
+    /// The fixed digit count for compact `yyyyMM` values.
+    public static let compactYearMonthDigitCount = yearDigitCount + monthDigitCount
     /// The valid year component range.
     public static let validYears = 1...9_999
     /// The number of months in one calendar year.
