@@ -1,5 +1,18 @@
 import Foundation
 
+private let kResponseEncodeFallbackData = Data(
+    """
+    {
+      "status":"failure",
+      "items":[],
+      "failure":{
+        "phase":"responseEncode",
+        "message":"Failed to encode watch sync reply"
+      }
+    }
+    """.utf8
+)
+
 public struct WatchSyncReply: Codable, Sendable {
     public enum Status: String, Codable, Sendable, Equatable {
         case success
@@ -54,6 +67,23 @@ public struct WatchSyncReply: Codable, Sendable {
             phase: phase,
             message: error.localizedDescription
         )
+    }
+
+    public static func responseData(
+        for reply: Self
+    ) throws -> Data {
+        try JSONEncoder().encode(reply)
+    }
+
+    public static func responseEncodingFailureData(
+        error: any Error
+    ) -> Data {
+        let fallbackReply = Self.failed(
+            phase: .responseEncode,
+            error: error
+        )
+        return (try? responseData(for: fallbackReply))
+            ?? kResponseEncodeFallbackData
     }
 
     public static func decodeResponse(_ data: Data) -> Self {

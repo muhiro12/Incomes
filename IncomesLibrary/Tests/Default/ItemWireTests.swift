@@ -68,6 +68,18 @@ struct ItemWireTests {
     }
 
     @Test
+    func watchSyncReply_responseEncodingFailureData_returnsResponseEncodeFailure() {
+        let data = WatchSyncReply.responseEncodingFailureData(
+            error: SampleFailure.snapshotApply
+        )
+        let decoded = WatchSyncReply.decodeResponse(data)
+
+        #expect(decoded.status == .failure)
+        #expect(!decoded.shouldApplySnapshot)
+        #expect(decoded.failure?.phase == .responseEncode)
+    }
+
+    @Test
     func watchSyncReply_failureAndEmptySuccess_remain_distinguishable_for_snapshot_apply() {
         let unreachableReply = WatchSyncReply.failed(
             phase: .sessionUnreachable,

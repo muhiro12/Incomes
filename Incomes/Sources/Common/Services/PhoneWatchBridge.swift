@@ -10,37 +10,18 @@ import MHPlatform
 import SwiftData
 @preconcurrency import WatchConnectivity
 
-nonisolated private let kPhoneWatchReplyEncoder = JSONEncoder()
-nonisolated private let kPhoneWatchResponseEncodeFallbackData = Data(
-    """
-    {
-      "status":"failure",
-      "items":[],
-      "failure":{
-        "phase":"responseEncode",
-        "message":"Failed to encode watch sync reply"
-      }
-    }
-    """.utf8
-)
-
 nonisolated private func phoneWatchEncodedReplyData(
     _ reply: WatchSyncReply,
     logger: MHLogger? = nil
 ) -> Data {
     do {
-        return try kPhoneWatchReplyEncoder.encode(reply)
+        return try WatchSyncReply.responseData(for: reply)
     } catch {
         logger?.error(
             "watch_sync.response_encode_failed",
             metadata: IncomesLogging.errorMetadata(error)
         )
-        let fallbackReply = WatchSyncReply.failed(
-            phase: .responseEncode,
-            error: error
-        )
-        return (try? kPhoneWatchReplyEncoder.encode(fallbackReply))
-            ?? kPhoneWatchResponseEncodeFallbackData
+        return WatchSyncReply.responseEncodingFailureData(error: error)
     }
 }
 
@@ -200,20 +181,11 @@ nonisolated extension PhoneWatchBridge: WCSessionDelegate {
                 phase: .requestDecode,
                 error: error
             )
-            let failureData = (try? JSONEncoder().encode(failureReply)) ?? Data(
-                """
-                {
-                  "status":"failure",
-                  "items":[],
-                  "failure":{
-                    "phase":"responseEncode",
-                    "message":"Failed to encode watch sync reply"
-                  }
-                }
-                """.utf8
-            )
             replyHandler(
-                failureData
+                phoneWatchEncodedReplyData(
+                    failureReply,
+                    logger: logger
+                )
             )
             return
         }
