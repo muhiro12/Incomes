@@ -76,16 +76,16 @@ extension IncomesRoute: MHDeepLinkRoute {
         case "home":
             return .home
         case "settings":
-            return Self.parseSettingsRoute(from: pathComponents)
+            return Self.parseSettingsRoute(from: pathComponents.dropFirst())
         case "year-summary":
-            return Self.parseYearSummaryRoute(from: pathComponents)
+            return Self.parseYearSummaryRoute(from: pathComponents.dropFirst())
         case "yearly-duplication":
             return .yearlyDuplication
         case "duplicate-tags",
              "orphan-tags":
             return Self.parseTagManagementRoute(destination: destination)
         case "year":
-            return Self.parseYearRoute(from: pathComponents)
+            return Self.parseYearRoute(from: pathComponents.dropFirst())
         case "month":
             return Self.parseMonthRoute(
                 from: pathComponents.dropFirst()
@@ -102,8 +102,8 @@ extension IncomesRoute: MHDeepLinkRoute {
         }
     }
 
-    private static func parseSettingsRoute(from pathComponents: [String]) -> IncomesRoute? {
-        guard let settingsDetail = pathComponents.dropFirst().first else {
+    private static func parseSettingsRoute(from segments: ArraySlice<String>) -> IncomesRoute? {
+        guard let settingsDetail = segments.first else {
             return .settings
         }
 
@@ -119,8 +119,8 @@ extension IncomesRoute: MHDeepLinkRoute {
         }
     }
 
-    private static func parseYearSummaryRoute(from pathComponents: [String]) -> IncomesRoute? {
-        guard let yearValue = pathComponents.dropFirst().first,
+    private static func parseYearSummaryRoute(from segments: ArraySlice<String>) -> IncomesRoute? {
+        guard let yearValue = segments.first,
               let year = Self.parseYear(yearValue) else {
             return nil
         }
@@ -140,8 +140,8 @@ extension IncomesRoute: MHDeepLinkRoute {
         }
     }
 
-    private static func parseYearRoute(from pathComponents: [String]) -> IncomesRoute? {
-        guard let yearValue = pathComponents.dropFirst().first,
+    private static func parseYearRoute(from segments: ArraySlice<String>) -> IncomesRoute? {
+        guard let yearValue = segments.first,
               let year = Self.parseYear(yearValue) else {
             return nil
         }
