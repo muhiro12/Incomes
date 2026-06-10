@@ -179,6 +179,25 @@ struct IncomesRouteParserTests {
         #expect(universalLinkRoute == nil)
     }
 
+    @Test(
+        "parse returns nil for routes with extra path segments",
+        arguments: [
+            "incomes://home/extra", "incomes://settings/subscription/extra",
+            "incomes://year-summary/2026/extra", "incomes://yearly-duplication/extra",
+            "incomes://duplicate-tags/extra", "incomes://orphan-tags/extra",
+            "incomes://year/2026/extra", "incomes://month/2026-02/extra",
+            "incomes://month/2026/02/extra", "incomes://item/item-id/extra",
+            "incomes://search/extra?q=rent",
+            "https://muhiro12.github.io/Incomes/month/2026/02/extra"
+        ]
+    )
+    func parse_returns_nil_for_routes_with_extra_path_segments(
+        value: String
+    ) {
+        let route = IncomesRouteParser.parse(url: testURL(value))
+        #expect(route == nil)
+    }
+
     @Test
     func parse_rejects_unknown_universal_link_host() {
         let route = IncomesRouteParser.parse(

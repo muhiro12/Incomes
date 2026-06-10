@@ -1,6 +1,11 @@
 import Foundation
 import MHPlatformCore
 
+private enum RoutePathSegmentCount {
+    static let single = 1
+    static let splitMonth = 2
+}
+
 extension IncomesRoute: MHDeepLinkRoute {
     public var deepLinkDescriptor: MHDeepLinkDescriptor {
         switch self {
@@ -76,16 +81,25 @@ extension IncomesRoute: MHDeepLinkRoute {
 
         switch destination {
         case "home":
-            return .home
+            return Self.parseRouteWithoutSegments(
+                .home,
+                from: routeSegments
+            )
         case "settings":
             return Self.parseSettingsRoute(from: routeSegments)
         case "year-summary":
             return Self.parseYearSummaryRoute(from: routeSegments)
         case "yearly-duplication":
-            return .yearlyDuplication
+            return Self.parseRouteWithoutSegments(
+                .yearlyDuplication,
+                from: routeSegments
+            )
         case "duplicate-tags",
              "orphan-tags":
-            return Self.parseTagManagementRoute(destination: destination)
+            return Self.parseTagManagementRoute(
+                destination: destination,
+                segments: routeSegments
+            )
         case "year":
             return Self.parseYearRoute(from: routeSegments)
         case "month":
@@ -98,13 +112,30 @@ extension IncomesRoute: MHDeepLinkRoute {
                 queryItems: queryItems
             )
         case "search":
-            return Self.parseSearchRoute(queryItems: queryItems)
+            return Self.parseSearchRoute(
+                from: routeSegments,
+                queryItems: queryItems
+            )
         default:
             return nil
         }
     }
 
+    private static func parseRouteWithoutSegments(
+        _ route: IncomesRoute,
+        from segments: ArraySlice<String>
+    ) -> IncomesRoute? {
+        guard segments.isEmpty else {
+            return nil
+        }
+        return route
+    }
+
     private static func parseSettingsRoute(from segments: ArraySlice<String>) -> IncomesRoute? {
+        guard segments.count <= RoutePathSegmentCount.single else {
+            return nil
+        }
+
         guard let settingsDetail = segments.first else {
             return .settings
         }
@@ -122,7 +153,8 @@ extension IncomesRoute: MHDeepLinkRoute {
     }
 
     private static func parseYearSummaryRoute(from segments: ArraySlice<String>) -> IncomesRoute? {
-        guard let yearValue = segments.first,
+        guard segments.count == RoutePathSegmentCount.single,
+              let yearValue = segments.first,
               let year = Self.parseYear(yearValue) else {
             return nil
         }
@@ -130,8 +162,13 @@ extension IncomesRoute: MHDeepLinkRoute {
     }
 
     private static func parseTagManagementRoute(
-        destination: String
+        destination: String,
+        segments: ArraySlice<String>
     ) -> IncomesRoute? {
+        guard segments.isEmpty else {
+            return nil
+        }
+
         switch destination {
         case "duplicate-tags":
             return .duplicateTags
@@ -143,14 +180,22 @@ extension IncomesRoute: MHDeepLinkRoute {
     }
 
     private static func parseYearRoute(from segments: ArraySlice<String>) -> IncomesRoute? {
-        guard let yearValue = segments.first,
+        guard segments.count == RoutePathSegmentCount.single,
+              let yearValue = segments.first,
               let year = Self.parseYear(yearValue) else {
             return nil
         }
         return .year(year)
     }
 
-    private static func parseSearchRoute(queryItems: [URLQueryItem]) -> IncomesRoute {
+    private static func parseSearchRoute(
+        from segments: ArraySlice<String>,
+        queryItems: [URLQueryItem]
+    ) -> IncomesRoute? {
+        guard segments.isEmpty else {
+            return nil
+        }
+
         let query = queryItems.first { queryItem in
             queryItem.name == "q"
         }?.value
@@ -158,7 +203,8 @@ extension IncomesRoute: MHDeepLinkRoute {
     }
 
     private static func parseMonthRoute(from segments: ArraySlice<String>) -> IncomesRoute? {
-        guard let firstSegment = segments.first else {
+        guard RoutePathSegmentCount.single...RoutePathSegmentCount.splitMonth ~= segments.count,
+              let firstSegment = segments.first else {
             return nil
         }
 
@@ -187,8 +233,14 @@ extension IncomesRoute: MHDeepLinkRoute {
         from segments: ArraySlice<String>,
         queryItems: [URLQueryItem]
     ) -> IncomesRoute? {
-        if let itemID = segments.first,
-           itemID.isNotEmpty {
+        guard segments.count <= RoutePathSegmentCount.single else {
+            return nil
+        }
+
+        if let itemID = segments.first {
+            guard itemID.isNotEmpty else {
+                return nil
+            }
             return .item(itemID)
         }
 
