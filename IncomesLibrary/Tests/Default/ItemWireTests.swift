@@ -90,6 +90,30 @@ struct ItemWireTests {
     }
 
     @Test
+    func watchSyncReply_encodedResponseData_reportsEncodingFailureAndReturnsFallback() {
+        let reply = WatchSyncReply.success(
+            items: [
+                .init(
+                    dateEpoch: .nan,
+                    content: "Invalid",
+                    income: 0,
+                    outgo: 0,
+                    category: "Invalid"
+                )
+            ]
+        )
+        var capturedError: (any Error)?
+        let data = WatchSyncReply.encodedResponseData(for: reply) { error in
+            capturedError = error
+        }
+        let decoded = WatchSyncReply.decodeResponse(data)
+
+        #expect(capturedError != nil)
+        #expect(decoded.status == .failure)
+        #expect(decoded.failure?.phase == .responseEncode)
+    }
+
+    @Test
     func watchSyncReply_failureAndEmptySuccess_remain_distinguishable_for_snapshot_apply() {
         let unreachableReply = WatchSyncReply.failed(
             phase: .sessionUnreachable,

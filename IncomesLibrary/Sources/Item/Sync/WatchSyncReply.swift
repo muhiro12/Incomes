@@ -80,6 +80,19 @@ public struct WatchSyncReply: Codable, Sendable {
         try JSONEncoder().encode(reply)
     }
 
+    /// Encodes a reply, falling back to a response-encode failure payload.
+    public static func encodedResponseData(
+        for reply: Self,
+        onEncodingFailure: (any Error) -> Void
+    ) -> Data {
+        do {
+            return try responseData(for: reply)
+        } catch {
+            onEncodingFailure(error)
+            return responseEncodingFailureData(error: error)
+        }
+    }
+
     public static func responseEncodingFailureData(
         error: any Error
     ) -> Data {

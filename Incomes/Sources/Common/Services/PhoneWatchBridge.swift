@@ -14,14 +14,11 @@ nonisolated private func phoneWatchEncodedReplyData(
     _ reply: WatchSyncReply,
     logger: MHLogger? = nil
 ) -> Data {
-    do {
-        return try WatchSyncReply.responseData(for: reply)
-    } catch {
+    WatchSyncReply.encodedResponseData(for: reply) { error in
         logger?.error(
             "watch_sync.response_encode_failed",
             metadata: IncomesLogging.errorMetadata(error)
         )
-        return WatchSyncReply.responseEncodingFailureData(error: error)
     }
 }
 
