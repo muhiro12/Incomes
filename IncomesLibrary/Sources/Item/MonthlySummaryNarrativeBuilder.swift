@@ -152,7 +152,7 @@ public enum MonthlySummaryNarrativeBuilder {
         currentMonth = {
           year: \(context.currentTotals.year),
           month: \(context.currentTotals.month),
-          currencyCode: "\(context.currentTotals.currencyCode)",
+          currencyCode: \(jsonStringLiteral(context.currentTotals.currencyCode)),
           totalIncome: \(decimalString(context.currentTotals.totalIncome)),
           totalOutgo: \(decimalString(context.currentTotals.totalOutgo)),
           netIncome: \(decimalString(context.currentTotals.netIncome))
@@ -161,7 +161,7 @@ public enum MonthlySummaryNarrativeBuilder {
         previousMonth = {
           year: \(context.previousTotals.year),
           month: \(context.previousTotals.month),
-          currencyCode: "\(context.previousTotals.currencyCode)",
+          currencyCode: \(jsonStringLiteral(context.previousTotals.currencyCode)),
           totalIncome: \(decimalString(context.previousTotals.totalIncome)),
           totalOutgo: \(decimalString(context.previousTotals.totalOutgo)),
           netIncome: \(decimalString(context.previousTotals.netIncome))

@@ -38,8 +38,22 @@ struct MonthlySummaryNarrativeBuilderTests {
     @Test
     func prompt_escapes_category_text_as_json_string() {
         let context = MonthlySummaryNarrativeBuilder.Context(
-            currentTotals: kCurrentTotals,
-            previousTotals: kPreviousTotals,
+            currentTotals: .init(
+                year: kCurrentTotals.year,
+                month: kCurrentTotals.month,
+                currencyCode: "USD \"Cash\" \\",
+                totalIncome: kCurrentTotals.totalIncome,
+                totalOutgo: kCurrentTotals.totalOutgo,
+                netIncome: kCurrentTotals.netIncome
+            ),
+            previousTotals: .init(
+                year: kPreviousTotals.year,
+                month: kPreviousTotals.month,
+                currencyCode: "JPY \"Bank\" \\",
+                totalIncome: kPreviousTotals.totalIncome,
+                totalOutgo: kPreviousTotals.totalOutgo,
+                netIncome: kPreviousTotals.netIncome
+            ),
             categoryComparisons: [
                 .init(
                     category: "Food \"Takeout\"\nBackslash \\",
@@ -59,6 +73,8 @@ struct MonthlySummaryNarrativeBuilderTests {
             context: context
         )
 
+        #expect(prompt.contains(#"currencyCode: "USD \"Cash\" \\""#))
+        #expect(prompt.contains(#"currencyCode: "JPY \"Bank\" \\""#))
         #expect(prompt.contains(#"category: "Food \"Takeout\"\nBackslash \\""#))
         #expect(prompt.contains("totalIncome: 1000"))
         #expect(prompt.contains("previousMonth = {"))
