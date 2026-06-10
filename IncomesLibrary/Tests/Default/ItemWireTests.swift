@@ -41,8 +41,8 @@ struct ItemWireTests {
             ItemWire(dateEpoch: 1_725_086_400, content: "Rent", income: 0, outgo: 1_200, category: "Housing")
         ]
         let reply = WatchSyncReply.success(items: items)
-        let data = try JSONEncoder().encode(reply)
-        let decoded = try #require(try? JSONDecoder().decode(WatchSyncReply.self, from: data))
+        let data = try WatchSyncReply.responseData(for: reply)
+        let decoded = WatchSyncReply.decodeResponse(data)
         #expect(decoded.status == .success)
         #expect(decoded.items.count == 2)
         #expect(decoded.failure == nil)
@@ -59,8 +59,8 @@ struct ItemWireTests {
                 message: "Phone session is not reachable."
             )
         )
-        let data = try JSONEncoder().encode(reply)
-        let decoded = try #require(try? JSONDecoder().decode(WatchSyncReply.self, from: data))
+        let data = try WatchSyncReply.responseData(for: reply)
+        let decoded = WatchSyncReply.decodeResponse(data)
         #expect(decoded.status == .failure)
         #expect(decoded.items.isEmpty)
         #expect(!decoded.shouldApplySnapshot)
