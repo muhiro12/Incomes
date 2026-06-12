@@ -106,6 +106,37 @@ public enum UpcomingPaymentOperations {
             calendar: calendar
         )
     }
+
+    /// Builds a preview presentation for the next item test notification.
+    public static func testNotificationPresentation(
+        context: ModelContext,
+        settings: NotificationSettings,
+        now: Date,
+        notifyDate: Date,
+        calendar: Calendar = .current
+    ) throws -> UpcomingPaymentTestNoticeResult {
+        guard let item = try ItemQueryOperations.nextItem(
+            context: context,
+            date: now
+        ) else {
+            return .unavailable(.noItem)
+        }
+
+        let plan = PlannedPayment(
+            item: item,
+            notifyDate: notifyDate
+        )
+        guard let presentation = notificationPresentations(
+            plans: [plan],
+            settings: settings,
+            now: now,
+            calendar: calendar
+        ).first?.previewPresentation() else {
+            return .unavailable(.noPresentation)
+        }
+
+        return .presentation(presentation)
+    }
 }
 
 private extension UpcomingPaymentOperations {

@@ -136,39 +136,36 @@ final class NotificationService: NSObject {
     }
 
     func sendTestNotification() {
-        guard let item = try? ItemQueryOperations.nextItem(
-            context: modelContainer.mainContext,
-            date: .now
-        ) else {
-            logger.warning(
-                "notification.test_skipped",
-                metadata: IncomesLogging.metadata(
-                    ("failure_reason", "no_item")
-                )
-            )
-            return
-        }
-
+        let now = Date.now
+        let triggerInterval: TimeInterval = 1
         let settings = currentNotificationSettings()
-        let plan = UpcomingPaymentOperations.PlannedPayment(
-            item: item,
-            notifyDate: Date.now.addingTimeInterval(1)
-        )
-        guard let presentation = UpcomingPaymentOperations.notificationPresentations(
-            plans: [plan],
-            settings: settings,
-            now: .now
-        ).first?.previewPresentation() else { // swiftlint:disable:this multiline_function_chains
+        let result: UpcomingPaymentTestNoticeResult
+        do {
+            result = try UpcomingPaymentOperations.testNotificationPresentation(
+                context: modelContainer.mainContext,
+                settings: settings,
+                now: now,
+                notifyDate: now.addingTimeInterval(triggerInterval)
+            )
+        } catch {
             logger.warning(
                 "notification.test_skipped",
                 metadata: IncomesLogging.metadata(
-                    ("failure_reason", "no_presentation")
+                    ("failure_reason", "operation_failed")
                 )
             )
             return
         }
 
-        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+        guard case .presentation(let presentation) = result else {
+            logSkippedTestNotification(result)
+            return
+        }
+
+        let trigger = UNTimeIntervalNotificationTrigger(
+            timeInterval: triggerInterval,
+            repeats: false
+        )
         let request = buildNotificationRequest(
             presentation: presentation,
             trigger: trigger
@@ -178,6 +175,23 @@ final class NotificationService: NSObject {
             "notification.test_scheduled",
             metadata: IncomesLogging.metadata(
                 ("request_identifier_present", "true")
+            )
+        )
+    }
+}
+
+private extension NotificationService {
+    func logSkippedTestNotification(
+        _ result: UpcomingPaymentTestNoticeResult
+    ) {
+        guard case .unavailable(let reason) = result else {
+            return
+        }
+
+        logger.warning(
+            "notification.test_skipped",
+            metadata: IncomesLogging.metadata(
+                ("failure_reason", reason.rawValue)
             )
         )
     }
