@@ -199,7 +199,7 @@ private extension MonthlySummarySection {
                 )
             }
         }
-        .buttonStyle(.glassProminent)
+        .incomesProminentControlStyle()
     }
 
     @MainActor

@@ -9,6 +9,10 @@ import SwiftData
 import SwiftUI
 
 struct SuggestionButtonGroup: View {
+    private enum Constants {
+        static let controlSpacing: CGFloat = 8
+    }
+
     @Query private var suggestions: [Tag]
     @Query(.tags(.typeIs(.category)))
     private var categoryTags: [Tag]
@@ -28,24 +32,8 @@ struct SuggestionButtonGroup: View {
 
     var body: some View {
         ScrollView(.horizontal) {
-            HStack {
-                if type == .category {
-                    ForEach(categoryFacets) { facet in
-                        Button(facet.displayName) {
-                            Haptic.selectionChanged.impact()
-                            input = facet.displayName
-                        }
-                        Divider()
-                    }
-                } else {
-                    ForEach(suggestions) { suggestion in
-                        Button(suggestion.name) {
-                            Haptic.selectionChanged.impact()
-                            input = suggestion.name
-                        }
-                        Divider()
-                    }
-                }
+            IncomesLiquidGlassControlGroup(spacing: Constants.controlSpacing) {
+                suggestionButtons
             }
         }
     }
@@ -58,6 +46,36 @@ private extension SuggestionButtonGroup {
             items: items,
             query: input
         )
+    }
+
+    @ViewBuilder var suggestionButtons: some View {
+        HStack(spacing: Constants.controlSpacing) {
+            if type == .category {
+                ForEach(categoryFacets) { facet in
+                    suggestionButton(title: facet.displayName) {
+                        input = facet.displayName
+                    }
+                }
+            } else {
+                ForEach(suggestions) { suggestion in
+                    suggestionButton(title: suggestion.name) {
+                        input = suggestion.name
+                    }
+                }
+            }
+        }
+    }
+
+    func suggestionButton(
+        title: String,
+        action: @escaping () -> Void
+    ) -> some View {
+        Button(title) {
+            Haptic.selectionChanged.impact()
+            action()
+        }
+        .incomesSecondaryControlStyle()
+        .controlSize(.small)
     }
 }
 

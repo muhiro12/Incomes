@@ -60,13 +60,15 @@ private extension YearlyDuplicationProposalRow {
     }
 
     var actionRow: some View {
-        HStack {
-            Button("Edit", action: edit)
-                .buttonStyle(.bordered)
-                .disabled(isActionDisabled)
-            Button("Create", action: create)
-                .buttonStyle(.borderedProminent)
-                .disabled(isActionDisabled)
+        IncomesLiquidGlassControlGroup(spacing: inlineSpacing) {
+            HStack(spacing: inlineSpacing) {
+                Button("Edit", action: edit)
+                    .incomesSecondaryControlStyle()
+                    .disabled(isActionDisabled)
+                Button("Create", action: create)
+                    .incomesProminentControlStyle()
+                    .disabled(isActionDisabled)
+            }
         }
     }
 

@@ -44,7 +44,7 @@ private extension YearlyDuplicationPromoContent {
 
     var reviewProposalsButton: some View {
         Button("Review proposals", action: reviewProposals)
-            .buttonStyle(.bordered)
+            .incomesSecondaryControlStyle()
             .popoverTip(yearlyDuplicationTip, arrowEdge: .top)
     }
 }

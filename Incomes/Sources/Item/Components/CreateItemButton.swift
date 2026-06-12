@@ -30,14 +30,8 @@ extension CreateItemButton: View {
 
 private extension CreateItemButton {
     @ViewBuilder var styledCreateButton: some View {
-        if #available(iOS 26.0, *) {
-            createButton
-                .buttonStyle(.glassProminent)
-        } else {
-            createButton
-                .buttonStyle(.borderedProminent)
-                .buttonBorderShape(.capsule)
-        }
+        createButton
+            .incomesProminentControlStyle()
     }
 
     var createButton: some View {

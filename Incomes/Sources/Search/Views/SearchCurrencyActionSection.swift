@@ -12,6 +12,7 @@ struct SearchCurrencyActionSection: View {
                     systemImage: "magnifyingglass",
                     action: applySearch
                 )
+                .incomesProminentControlStyle()
             }
         }
     }

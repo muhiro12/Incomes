@@ -38,7 +38,7 @@ struct ItemFormToolbarContent: ToolbarContent {
                 Button(action: presentAssist) {
                     Label("Assist", systemImage: "wand.and.stars")
                 }
-                .buttonStyle(.glassProminent)
+                .incomesProminentControlStyle()
             }
         }
     }
