@@ -38,11 +38,6 @@ struct RepeatMonthPicker: View {
 }
 
 private extension RepeatMonthPicker {
-    private enum Constants {
-        static let borderLineWidth: CGFloat = 1
-        static let selectedBackgroundOpacity = 0.2
-    }
-
     var years: [Int] {
         RepeatMonthSelectionOperations.allowedYears(
             baseDate: baseDate,
@@ -76,44 +71,23 @@ private extension RepeatMonthPicker {
     }
 
     func monthGrid(for year: Int) -> some View {
-        LazyVGrid(columns: columns, spacing: designMetrics.spacing.inline) {
-            ForEach(RepeatMonthSelectionOperations.validMonths, id: \.self) { month in
-                monthButton(for: .init(year: year, month: month))
+        IncomesLiquidGlassControlGroup(spacing: designMetrics.spacing.inline) {
+            LazyVGrid(columns: columns, spacing: designMetrics.spacing.inline) {
+                ForEach(RepeatMonthSelectionOperations.validMonths, id: \.self) { month in
+                    monthButton(for: .init(year: year, month: month))
+                }
             }
         }
     }
 
     func monthButton(for selection: RepeatMonthSelection) -> some View {
-        Button {
+        RepeatMonthButton(
+            title: monthLabel(for: selection),
+            isIncluded: isIncluded(selection),
+            isBaseSelection: selection == baseSelection
+        ) {
             toggleSelection(selection)
-        } label: {
-            Text(verbatim: monthLabel(for: selection))
-                .font(.callout)
-                .padding(.horizontal, designMetrics.spacing.inline)
-                .frame(
-                    maxWidth: .infinity,
-                    minHeight: designMetrics.layout.control.minimumTouchTarget
-                )
         }
-        .buttonStyle(.plain)
-        .background(backgroundColor(for: selection))
-        .clipShape(
-            RoundedRectangle(
-                cornerRadius: designMetrics.cornerRadius.control,
-                style: .continuous
-            )
-        )
-        .overlay(
-            RoundedRectangle(
-                cornerRadius: designMetrics.cornerRadius.control,
-                style: .continuous
-            )
-            .stroke(
-                borderColor(for: selection),
-                lineWidth: Constants.borderLineWidth
-            )
-        )
-        .disabled(selection == baseSelection)
     }
 
     func toggleSelection(_ selection: RepeatMonthSelection) {
@@ -127,22 +101,12 @@ private extension RepeatMonthPicker {
         }
     }
 
-    func backgroundColor(for selection: RepeatMonthSelection) -> Color {
-        if isSelected(selection) {
-            return Color.accentColor.opacity(Constants.selectedBackgroundOpacity)
-        }
-        return Color(.secondarySystemBackground)
-    }
-
-    func borderColor(for selection: RepeatMonthSelection) -> Color {
-        if isSelected(selection) {
-            return Color.accentColor
-        }
-        return Color(.separator)
-    }
-
     func isSelected(_ selection: RepeatMonthSelection) -> Bool {
         selectedMonthSelections.contains(selection)
+    }
+
+    func isIncluded(_ selection: RepeatMonthSelection) -> Bool {
+        selection == baseSelection || isSelected(selection)
     }
 
     func monthLabel(for selection: RepeatMonthSelection) -> String {

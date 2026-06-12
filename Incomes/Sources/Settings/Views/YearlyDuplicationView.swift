@@ -71,7 +71,8 @@ struct YearlyDuplicationView: View {
                 inlineSpacing: designMetrics.spacing.inline,
                 controlSpacing: designMetrics.spacing.control,
                 horizontalPadding: designMetrics.layout.surface.insetHorizontal,
-                verticalPadding: designMetrics.layout.surface.compactInsetVertical
+                verticalPadding: designMetrics.layout.surface.compactInsetVertical,
+                surfaceCornerRadius: designMetrics.cornerRadius.surface
             )
         }
         .toolbar {
