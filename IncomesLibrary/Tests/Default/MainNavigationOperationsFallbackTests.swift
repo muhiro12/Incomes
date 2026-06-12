@@ -1,5 +1,6 @@
 import Foundation
 @testable import IncomesLibrary
+import SwiftData
 import Testing
 
 struct MainNavigationOperationsFallbackTests {

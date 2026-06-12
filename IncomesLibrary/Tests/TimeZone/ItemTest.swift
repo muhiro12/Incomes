@@ -7,6 +7,7 @@
 
 import Foundation
 @testable import IncomesLibrary
+import SwiftData
 import Testing
 
 @Suite(.serialized)
