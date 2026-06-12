@@ -85,7 +85,7 @@ enum YearlyDuplicationCoordinator {
         do {
             let result = try await runApplyWorkflow(
                 group: group,
-                entries: entries,
+                plan: plan,
                 context: context,
                 refreshNotificationSchedule: refreshNotificationSchedule,
                 logger: logger
@@ -132,7 +132,7 @@ private extension YearlyDuplicationCoordinator {
 
     static func runApplyWorkflow(
         group: YearlyItemDuplicationGroup,
-        entries: [YearlyItemDuplicationEntry],
+        plan: YearlyItemDuplicationPlan,
         context: ModelContext,
         refreshNotificationSchedule: @escaping IncomesMutationWorkflow.NotificationScheduleRefresher,
         logger: MHLogger
@@ -143,13 +143,14 @@ private extension YearlyDuplicationCoordinator {
         return try await MHMutationWorkflow.runThrowing(
             name: "duplicateYearlyItems",
             operation: {
-                try YearlyItemDuplicationApplyOperations.applyWithOutcome(
-                    plan: singleGroupApplyPlan(
-                        group: group,
-                        entries: entries
-                    ),
+                guard let result = try YearlyItemDuplicationApplyOperations.applyWithOutcome(
+                    groupID: group.id,
+                    in: plan,
                     context: context
-                )
+                ) else {
+                    throw YearlyItemDuplicationError.missingGroup(group.id)
+                }
+                return result
             },
             adapter: adapter,
             projection: .valueAndFollowUp(
@@ -157,17 +158,6 @@ private extension YearlyDuplicationCoordinator {
                 followUp: \.outcome.followUpHints
             ),
             onEvent: MHMutationWorkflowLogger(logger: logger).onEvent()
-        )
-    }
-
-    static func singleGroupApplyPlan(
-        group: YearlyItemDuplicationGroup,
-        entries: [YearlyItemDuplicationEntry]
-    ) -> YearlyItemDuplicationPlan {
-        .init(
-            groups: [group],
-            entries: entries,
-            skippedDuplicateCount: 0
         )
     }
 

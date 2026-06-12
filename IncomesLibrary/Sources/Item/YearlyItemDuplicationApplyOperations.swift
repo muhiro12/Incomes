@@ -23,6 +23,21 @@ public enum YearlyItemDuplicationApplyOperations {
         context: ModelContext,
         overrides: [UUID: YearlyItemDuplicationGroupAmount] = [:]
     ) throws -> YearlyItemDuplicationResult? {
+        try applyWithOutcome(
+            groupID: groupID,
+            in: plan,
+            context: context,
+            overrides: overrides
+        )?.value
+    }
+
+    /// Applies a single group from a plan and returns mutation metadata.
+    public static func applyWithOutcome(
+        groupID: UUID,
+        in plan: YearlyItemDuplicationPlan,
+        context: ModelContext,
+        overrides: [UUID: YearlyItemDuplicationGroupAmount] = [:]
+    ) throws -> MutationResult<YearlyItemDuplicationResult>? {
         let entries = YearlyItemDuplicationPlanOperations.entries(
             for: groupID,
             in: plan
@@ -32,7 +47,7 @@ public enum YearlyItemDuplicationApplyOperations {
         }), entries.isNotEmpty else {
             return nil
         }
-        return try apply(
+        return try applyWithOutcome(
             plan: YearlyItemDuplicationSupport.singleGroupPlan(
                 group: group,
                 entries: entries
