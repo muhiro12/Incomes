@@ -17,9 +17,6 @@
 		AD7F5C202F5B3186008D91F3 /* MHPlatform in Frameworks */ = {isa = PBXBuildFile; productRef = AD7F5C212F5B3186008D91F3 /* MHPlatform */; };
 		AD7F5C232F5B3186008D91F3 /* MHPreferences in Frameworks */ = {isa = PBXBuildFile; productRef = AD7F5C222F5B3186008D91F3 /* MHPreferences */; };
 		ADB890132F89BF4C00C59D93 /* MHDesign in Frameworks */ = {isa = PBXBuildFile; productRef = ADB890122F89BF4C00C59D93 /* MHDesign */; };
-		B00000012F7A000100000010 /* SwiftUtilities in Frameworks */ = {isa = PBXBuildFile; productRef = B00000012F7A00010000000F /* SwiftUtilities */; };
-		B00000012F7A000100000012 /* SwiftUtilities in Frameworks */ = {isa = PBXBuildFile; productRef = B00000012F7A000100000011 /* SwiftUtilities */; };
-		B00000012F7A000100000014 /* SwiftUtilities in Frameworks */ = {isa = PBXBuildFile; productRef = B00000012F7A000100000013 /* SwiftUtilities */; };
 		B10000012F8A000100000002 /* MHDesign in Frameworks */ = {isa = PBXBuildFile; productRef = B10000012F8A000100000001 /* MHDesign */; };
 		B20000012F8A000100000002 /* MHDesign in Frameworks */ = {isa = PBXBuildFile; productRef = B20000012F8A000100000001 /* MHDesign */; };
 /* End PBXBuildFile section */
@@ -107,7 +104,6 @@
 				AD6DB6E32E779C5400E5BB78 /* IncomesLibrary in Frameworks */,
 				AD7F5C232F5B3186008D91F3 /* MHPreferences in Frameworks */,
 				B20000012F8A000100000002 /* MHDesign in Frameworks */,
-				B00000012F7A000100000012 /* SwiftUtilities in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -118,7 +114,6 @@
 				AD71621E2E70BC5C00C4CFCE /* SwiftUI.framework in Frameworks */,
 				AD7162362E70BD9F00C4CFCE /* IncomesLibrary in Frameworks */,
 				B10000012F8A000100000002 /* MHDesign in Frameworks */,
-				B00000012F7A000100000014 /* SwiftUtilities in Frameworks */,
 				AD71621C2E70BC5C00C4CFCE /* WidgetKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -129,7 +124,6 @@
 			files = (
 				AD7F5C202F5B3186008D91F3 /* MHPlatform in Frameworks */,
 				AD6C5A752E515E3000E1FBA0 /* IncomesLibrary in Frameworks */,
-				B00000012F7A000100000010 /* SwiftUtilities in Frameworks */,
 				ADB890132F89BF4C00C59D93 /* MHDesign in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -192,7 +186,6 @@
 				AD6DB6E22E779C5400E5BB78 /* IncomesLibrary */,
 				AD7F5C222F5B3186008D91F3 /* MHPreferences */,
 				B20000012F8A000100000001 /* MHDesign */,
-				B00000012F7A000100000011 /* SwiftUtilities */,
 			);
 			productName = "Incomes (Watch) Watch App";
 			productReference = AD6DB6D22E779B2B00E5BB78 /* Watch.app */;
@@ -217,7 +210,6 @@
 			packageProductDependencies = (
 				AD7162352E70BD9F00C4CFCE /* IncomesLibrary */,
 				B10000012F8A000100000001 /* MHDesign */,
-				B00000012F7A000100000013 /* SwiftUtilities */,
 			);
 			productName = WidgetsExtension;
 			productReference = AD71621A2E70BC5C00C4CFCE /* Widgets.appex */;
@@ -246,7 +238,6 @@
 			packageProductDependencies = (
 				AD6C5A742E515E3000E1FBA0 /* IncomesLibrary */,
 				AD7F5C212F5B3186008D91F3 /* MHPlatform */,
-				B00000012F7A00010000000F /* SwiftUtilities */,
 				ADB890122F89BF4C00C59D93 /* MHDesign */,
 			);
 			productName = Incomes;
@@ -293,7 +284,6 @@
 				AD6C5A732E515E3000E1FBA0 /* XCLocalSwiftPackageReference "IncomesLibrary" */,
 				AD7F5C0C2F5B3186008D91F3 /* XCRemoteSwiftPackageReference "MHPlatform" */,
 				B00000012F7A000100000017 /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */,
-				B00000012F7A00010000000E /* XCRemoteSwiftPackageReference "SwiftUtilities" */,
 				ADB890112F89BF4C00C59D93 /* XCRemoteSwiftPackageReference "MHUI" */,
 			);
 			productRefGroup = ADCF36A724A1D0F40011D6F5 /* Products */;
@@ -817,14 +807,6 @@
 				minimumVersion = 1.0.0;
 			};
 		};
-		B00000012F7A00010000000E /* XCRemoteSwiftPackageReference "SwiftUtilities" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/muhiro12/SwiftUtilities";
-			requirement = {
-				kind = exactVersion;
-				version = 1.34.0;
-			};
-		};
 		B00000012F7A000100000017 /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SimplyDanny/SwiftLintPlugins";
@@ -862,21 +844,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = ADB890112F89BF4C00C59D93 /* XCRemoteSwiftPackageReference "MHUI" */;
 			productName = MHDesign;
-		};
-		B00000012F7A00010000000F /* SwiftUtilities */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = B00000012F7A00010000000E /* XCRemoteSwiftPackageReference "SwiftUtilities" */;
-			productName = SwiftUtilities;
-		};
-		B00000012F7A000100000011 /* SwiftUtilities */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = B00000012F7A00010000000E /* XCRemoteSwiftPackageReference "SwiftUtilities" */;
-			productName = SwiftUtilities;
-		};
-		B00000012F7A000100000013 /* SwiftUtilities */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = B00000012F7A00010000000E /* XCRemoteSwiftPackageReference "SwiftUtilities" */;
-			productName = SwiftUtilities;
 		};
 		B10000012F8A000100000001 /* MHDesign */ = {
 			isa = XCSwiftPackageProductDependency;
