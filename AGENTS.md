@@ -3,11 +3,6 @@
 This document defines the **repository-specific agent behavior contract** for
 Incomes.
 
-Keep this file self-contained enough for agents working from a fresh clone.
-Repeat portable rules here when they are required to work safely in this
-repository; keep local-machine-only routing, broad development philosophy, and
-cross-repository principles outside the repository.
-
 ## Agent Philosophy
 
 - Follow existing repository conventions as the source of truth.
