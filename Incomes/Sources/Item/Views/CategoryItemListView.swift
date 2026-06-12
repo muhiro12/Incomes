@@ -23,13 +23,18 @@ struct CategoryItemListView {
 
 extension CategoryItemListView: View {
     var body: some View {
-        List(Array(yearStrings.enumerated()), id: \.element) { index, yearString in
-            TagItemListSection(
-                yearString: yearString,
-                showsItemDetailTip: index == .zero
-            )
-            if !isSubscribeOn {
-                AdvertisementSection(.medium)
+        let currentYearStrings = yearStrings
+        let firstYearString = currentYearStrings.first
+
+        List {
+            ForEach(currentYearStrings, id: \.self) { yearString in
+                TagItemListSection(
+                    yearString: yearString,
+                    showsItemDetailTip: yearString == firstYearString
+                )
+                if !isSubscribeOn {
+                    AdvertisementSection(.medium)
+                }
             }
         }
         .listStyle(.grouped)

@@ -23,21 +23,18 @@ struct SearchResultView: View {
     }
 
     var body: some View {
+        let resultSections = sections
+        let firstItemID = resultSections.first?.items.first?.persistentModelID
+
         Group {
             if !items.isEmpty {
                 List {
-                    ForEach(
-                        Array(sections.enumerated()),
-                        id: \.element.month
-                    ) { sectionIndex, section in
+                    ForEach(resultSections, id: \.month) { section in
                         Section(section.title) {
-                            ForEach(
-                                Array(section.items.enumerated()),
-                                id: \.element.persistentModelID
-                            ) { itemIndex, item in
+                            ForEach(section.items, id: \.persistentModelID) { item in
                                 ListItem(
-                                    isItemDetailTipAnchor: sectionIndex == .zero &&
-                                        itemIndex == .zero
+                                    isItemDetailTipAnchor:
+                                        item.persistentModelID == firstItemID
                                 )
                                 .environment(item)
                             }

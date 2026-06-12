@@ -21,18 +21,23 @@ struct ContentItemListView {
 
 extension ContentItemListView: View {
     var body: some View {
-        List(Array(yearStrings.enumerated()), id: \.element) { index, yearString in
-            ItemListSection(
-                .items(.tagAndYear(tag: tag, yearString: yearString)),
-                title: .init(
-                    yearString
-                        .dateValueWithoutLocale(.yyyy)?
-                        .stringValue(.yyyy) ?? ""
-                ),
-                showsItemDetailTip: index == .zero
-            )
-            if !isSubscribeOn {
-                AdvertisementSection(.medium)
+        let currentYearStrings = yearStrings
+        let firstYearString = currentYearStrings.first
+
+        List {
+            ForEach(currentYearStrings, id: \.self) { yearString in
+                ItemListSection(
+                    .items(.tagAndYear(tag: tag, yearString: yearString)),
+                    title: .init(
+                        yearString
+                            .dateValueWithoutLocale(.yyyy)?
+                            .stringValue(.yyyy) ?? ""
+                    ),
+                    showsItemDetailTip: yearString == firstYearString
+                )
+                if !isSubscribeOn {
+                    AdvertisementSection(.medium)
+                }
             }
         }
         .listStyle(.grouped)

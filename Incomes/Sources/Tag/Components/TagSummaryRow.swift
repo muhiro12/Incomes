@@ -19,7 +19,7 @@ struct TagSummaryRow: View {
                 .foregroundStyle(tag.hasDeficit ? Color.red : Color.primary)
             Text("(\((tag.items ?? []).count))")
                 .font(.caption)
-                .foregroundColor(.secondary)
+                .foregroundStyle(.secondary)
             Spacer()
             VStack(alignment: .trailing) {
                 Text(tag.income.asCurrency)

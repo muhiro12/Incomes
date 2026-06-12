@@ -36,18 +36,21 @@ struct TagItemListSection {
 
 extension TagItemListSection: View {
     var body: some View {
+        let currentItems = items
+        let firstItemID = currentItems.first?.persistentModelID
+
         Section {
-            ForEach(
-                Array(items.enumerated()),
-                id: \.element.persistentModelID
-            ) { index, item in
-                ListItem(isItemDetailTipAnchor: showsItemDetailTip && index == .zero)
-                    .environment(item)
+            ForEach(currentItems, id: \.persistentModelID) { item in
+                ListItem(
+                    isItemDetailTipAnchor: showsItemDetailTip &&
+                        item.persistentModelID == firstItemID
+                )
+                .environment(item)
             }
             .onDelete { indices in
                 Haptic.warning.impact()
                 willDeleteItems = ItemDeletionOperations.resolveItemsForDeletion(
-                    from: items,
+                    from: currentItems,
                     indices: indices
                 )
                 isDialogPresented = true

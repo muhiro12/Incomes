@@ -44,14 +44,13 @@ struct HomeYearSection: View {
     }
 
     var body: some View {
+        let firstYearMonthTagID = yearMonthTags.first?.persistentModelID
+
         Section {
-            ForEach(
-                Array(yearMonthTags.enumerated()),
-                id: \.element.persistentModelID
-            ) { index, tag in
+            ForEach(yearMonthTags, id: \.persistentModelID) { tag in
                 buildMonthButton(
                     for: tag,
-                    showsTip: index == .zero
+                    showsTip: tag.persistentModelID == firstYearMonthTagID
                 )
             }
             .onDelete { indices in
@@ -95,12 +94,11 @@ struct HomeYearSection: View {
 }
 
 private extension HomeYearSection {
-    @ViewBuilder
     func buildMonthButton(
         for tag: Tag,
         showsTip: Bool
     ) -> some View {
-        let button = Button {
+        Button {
             guard let monthRoute = monthRoute(for: tag) else {
                 return
             }
@@ -136,12 +134,7 @@ private extension HomeYearSection {
                 Label("Delete", systemImage: "trash")
             }
         }
-
-        if showsTip {
-            button.popoverTip(monthListTip, arrowEdge: .top)
-        } else {
-            button
-        }
+        .popoverTip(showsTip ? monthListTip : nil, arrowEdge: .top)
     }
 
     func monthRoute(for yearMonthTag: Tag) -> IncomesRoute? {

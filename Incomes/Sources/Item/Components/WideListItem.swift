@@ -44,13 +44,13 @@ struct WideListItem: View {
             .font(.footnote)
             .lineLimit(1)
             .minimumScaleFactor(IncomesTextScaling.minimumScaleFactor)
-            .foregroundColor(.secondary)
+            .foregroundStyle(.secondary)
             Divider()
             Text(item.balance.asCurrency)
                 .lineLimit(1)
                 .minimumScaleFactor(IncomesTextScaling.minimumScaleFactor)
                 .frame(width: Constants.balanceColumnWidth, alignment: .trailing)
-                .foregroundColor(item.balance < .zero ? .red : .primary)
+                .foregroundStyle(item.balance < .zero ? Color.red : Color.primary)
         }
     }
 }

@@ -33,7 +33,7 @@ struct NarrowListItem: View {
                     .font(.footnote)
                     .lineLimit(1)
                     .minimumScaleFactor(IncomesTextScaling.minimumScaleFactor)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
             }
             Spacer()
             Divider()
@@ -41,7 +41,7 @@ struct NarrowListItem: View {
                 .lineLimit(1)
                 .minimumScaleFactor(IncomesTextScaling.minimumScaleFactor)
                 .frame(width: Constants.balanceColumnWidth, alignment: .trailing)
-                .foregroundColor(item.balance < .zero ? .red : .primary)
+                .foregroundStyle(item.balance < .zero ? Color.red : Color.primary)
         }
     }
 }

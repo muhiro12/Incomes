@@ -38,12 +38,11 @@ struct ListItem {
 
 extension ListItem: View {
     var body: some View {
-        if isItemDetailTipAnchor {
-            button
-                .popoverTip(itemDetailTip, arrowEdge: .top)
-        } else {
-            button
-        }
+        button
+            .popoverTip(
+                isItemDetailTipAnchor ? itemDetailTip : nil,
+                arrowEdge: .top
+            )
     }
 }
 

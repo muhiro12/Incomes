@@ -80,7 +80,7 @@ struct ItemFormInformationSection: View {
             .keyboardType(.numberPad)
             .focused(focusedField, equals: field)
             .multilineTextAlignment(.trailing)
-            .foregroundColor(isValid ? .primary : .red)
+            .foregroundStyle(isValid ? Color.primary : Color.red)
         }
     }
 }
