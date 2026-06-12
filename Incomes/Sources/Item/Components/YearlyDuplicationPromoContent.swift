@@ -12,10 +12,10 @@ struct YearlyDuplicationPromoContent: View {
         VStack(alignment: .leading, spacing: inlineSpacing) {
             Text("Duplicate Year")
                 .font(.headline)
-            Text(String(localized: "Year: \(promo.sourceYear) -> \(promo.targetYear)"))
+            Text("Year: \(promo.sourceYear) -> \(promo.targetYear)")
                 .font(.footnote)
                 .foregroundStyle(.secondary)
-            Text(String(localized: "Sample proposal"))
+            Text("Sample proposal")
                 .font(.caption)
                 .foregroundStyle(.secondary)
             Text(promo.proposal.content)
@@ -25,10 +25,10 @@ struct YearlyDuplicationPromoContent: View {
                     .font(.footnote)
                     .foregroundStyle(.secondary)
             }
-            Text(String(localized: proposalDatesText))
+            Text(proposalDatesText)
                 .font(.footnote)
                 .foregroundStyle(.secondary)
-            Text(String(localized: "Items: \(promo.proposal.entryCount)"))
+            Text("Items: \(promo.proposal.entryCount)")
                 .font(.footnote)
                 .foregroundStyle(.secondary)
             reviewProposalsButton
@@ -38,7 +38,7 @@ struct YearlyDuplicationPromoContent: View {
 }
 
 private extension YearlyDuplicationPromoContent {
-    var proposalDatesText: String.LocalizationValue {
+    var proposalDatesText: LocalizedStringKey {
         "Dates: \(YearlyDuplicationPresentationOperations.monthDayListText(for: promo.proposal))"
     }
 

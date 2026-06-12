@@ -20,7 +20,7 @@ struct RepeatMonthPicker: View {
             ForEach(years, id: \.self) { year in
                 yearSection(for: year)
             }
-            Text(String(localized: "Base month is always included."))
+            Text("Base month is always included.")
                 .font(.footnote)
                 .foregroundStyle(.secondary)
         }

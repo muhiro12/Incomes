@@ -9,7 +9,12 @@ import Foundation
 
 enum YearlyItemDuplicationPresentationBuilder {
     static func summaryText(for plan: YearlyItemDuplicationPlan) -> String {
-        "\(plan.groups.count) groups / \(plan.entries.count) items / \(plan.skippedDuplicateCount) skipped"
+        String.localizedStringWithFormat(
+            String(localized: "%lld groups / %lld items / %lld skipped"),
+            plan.groups.count,
+            plan.entries.count,
+            plan.skippedDuplicateCount
+        )
     }
 
     static func suggestionText(for suggestion: YearlyItemDuplicationSuggestion) -> String {

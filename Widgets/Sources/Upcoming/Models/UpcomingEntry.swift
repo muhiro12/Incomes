@@ -4,10 +4,10 @@ import WidgetKit
 
 struct UpcomingEntry: TimelineEntry {
     let date: Date
-    let subtitleText: LocalizedStringKey
-    let titleText: LocalizedStringKey
-    let detailText: LocalizedStringKey
-    let amountText: LocalizedStringKey
+    let subtitleText: Text
+    let titleText: Text
+    let detailText: Text
+    let amountText: String
     let isPositive: Bool
     let deepLinkURL: URL
 }

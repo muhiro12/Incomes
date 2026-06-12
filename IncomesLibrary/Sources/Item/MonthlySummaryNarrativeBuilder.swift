@@ -87,7 +87,6 @@ enum MonthlySummaryNarrativeBuilder {
         context: Context,
         locale: Locale
     ) -> String {
-        let isJapanese = LocaleLanguageCodeSupport.isJapanese(locale)
         let incomeText = currencyText(
             context.currentTotals.totalIncome,
             currencyCode: context.currentTotals.currencyCode,
@@ -108,19 +107,15 @@ enum MonthlySummaryNarrativeBuilder {
             locale: locale
         )
 
-        if isJapanese {
-            return [
-                "\(monthTitle)の収入は\(incomeText)でした。",
-                "支出は\(outgoText)で、収支は\(netText)でした。",
-                comparisonSentence
-            ].joined()
-        }
-
-        return [
-            "Income for \(monthTitle) was \(incomeText).",
-            "Outgo was \(outgoText), and the net result was \(netText).",
+        return localizedFormattedString(
+            key: "Income for %@ was %@. Outgo was %@, and the net result was %@. %@",
+            locale: locale,
+            monthTitle,
+            incomeText,
+            outgoText,
+            netText,
             comparisonSentence
-        ].joined(separator: " ")
+        )
     }
 
     /// Trims and validates generated text against the exact current-month totals.
@@ -186,17 +181,16 @@ private extension MonthlySummaryNarrativeBuilder {
         context: Context,
         locale: Locale
     ) -> String {
-        let isJapanese = LocaleLanguageCodeSupport.isJapanese(locale)
         let previousTotals = context.previousTotals
         let hasPreviousMonthData =
             previousTotals.totalIncome.isNotZero ||
             previousTotals.totalOutgo.isNotZero
 
         guard hasPreviousMonthData else {
-            if isJapanese {
-                return "前月との比較に十分なデータはありません。"
-            }
-            return "There is not enough previous-month data for a reliable comparison."
+            return localizedString(
+                key: "There is not enough previous-month data for a reliable comparison.",
+                locale: locale
+            )
         }
 
         let notableChanges = context.categoryComparisons.compactMap { comparison in
@@ -204,24 +198,28 @@ private extension MonthlySummaryNarrativeBuilder {
         }
 
         guard notableChanges.isNotEmpty else {
-            if isJapanese {
-                return "前月と比べて大きなカテゴリ変化はありませんでした。"
-            }
-            return "There were no major category-level changes from the previous month."
+            return localizedString(
+                key: "There were no major category-level changes from the previous month.",
+                locale: locale
+            )
         }
 
         let selectedChanges = Array(notableChanges.prefix(2)) // swiftlint:disable:this no_magic_numbers
-        if isJapanese {
-            return "前月と比べると、\(selectedChanges.joined(separator: "、"))。"
-        }
-        return "Compared with the previous month, \(selectedChanges.joined(separator: ", "))."
+        let listFormatter = ListFormatter()
+        listFormatter.locale = locale
+        let selectedChangeText = listFormatter.string(from: selectedChanges)
+            ?? selectedChanges.joined(separator: ", ")
+        return localizedFormattedString(
+            key: "Compared with the previous month, %@.",
+            locale: locale,
+            selectedChangeText
+        )
     }
 
     static func comparisonDescription(
         _ comparison: CategoryComparison,
         locale: Locale
     ) -> String? {
-        let isJapanese = LocaleLanguageCodeSupport.isJapanese(locale)
         let incomeMagnitude = abs(decimalToDouble(comparison.incomeDelta))
         let outgoMagnitude = abs(decimalToDouble(comparison.outgoDelta))
 
@@ -232,28 +230,36 @@ private extension MonthlySummaryNarrativeBuilder {
 
         if outgoMagnitude >= incomeMagnitude,
            comparison.outgoDelta.isNotZero {
-            if isJapanese {
-                return comparison.outgoDelta.isPlus
-                    ? "\(comparison.category)の支出が増えました"
-                    : "\(comparison.category)の支出が減りました"
+            if comparison.outgoDelta.isPlus {
+                return localizedString(
+                    key: "%@ spending increased",
+                    locale: locale,
+                    comparison.category
+                )
             }
-            return comparison.outgoDelta.isPlus
-                ? "\(comparison.category) spending increased"
-                : "\(comparison.category) spending decreased"
+            return localizedString(
+                key: "%@ spending decreased",
+                locale: locale,
+                comparison.category
+            )
         }
 
         guard comparison.incomeDelta.isNotZero else {
             return nil
         }
 
-        if isJapanese {
-            return comparison.incomeDelta.isPlus
-                ? "\(comparison.category)の収入が増えました"
-                : "\(comparison.category)の収入が減りました"
+        if comparison.incomeDelta.isPlus {
+            return localizedString(
+                key: "%@ income increased",
+                locale: locale,
+                comparison.category
+            )
         }
-        return comparison.incomeDelta.isPlus
-            ? "\(comparison.category) income increased"
-            : "\(comparison.category) income decreased"
+        return localizedString(
+            key: "%@ income decreased",
+            locale: locale,
+            comparison.category
+        )
     }
 
     static func currencyText(
@@ -289,5 +295,56 @@ private extension MonthlySummaryNarrativeBuilder {
 
     static func decimalToDouble(_ value: Decimal) -> Double {
         Double(value.description) ?? .zero
+    }
+
+    static func localizedString(
+        key: String.LocalizationValue,
+        locale: Locale
+    ) -> String {
+        String(
+            localized: key,
+            bundle: .module,
+            locale: locale
+        )
+    }
+
+    static func localizedString(
+        key: String.LocalizationValue,
+        locale: Locale,
+        _ arguments: CVarArg...
+    ) -> String {
+        localizedFormattedString(
+            key: key,
+            locale: locale,
+            arguments: arguments
+        )
+    }
+
+    static func localizedFormattedString(
+        key: String.LocalizationValue,
+        locale: Locale,
+        _ arguments: CVarArg...
+    ) -> String {
+        localizedFormattedString(
+            key: key,
+            locale: locale,
+            arguments: arguments
+        )
+    }
+
+    static func localizedFormattedString(
+        key: String.LocalizationValue,
+        locale: Locale,
+        arguments: [CVarArg]
+    ) -> String {
+        let format = localizedString(
+            key: key,
+            locale: locale
+        )
+        return String(
+            format: format,
+            locale: locale,
+            arguments: arguments
+        )
     }
 }

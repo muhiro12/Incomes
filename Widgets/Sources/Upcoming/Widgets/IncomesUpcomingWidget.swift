@@ -24,18 +24,18 @@ struct IncomesUpcomingWidget {
         @ViewBuilder private var mediumLayout: some View {
             HStack(alignment: .center, spacing: designMetrics.spacing.control) {
                 VStack(alignment: .leading, spacing: designMetrics.spacing.inline) {
-                    Text(entry.titleText)
+                    entry.titleText
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                         .singleLine()
                     HStack(spacing: designMetrics.spacing.inline) {
-                        Text(entry.subtitleText)
+                        entry.subtitleText
                             .font(.caption2)
                             .foregroundStyle(.secondary)
                             .singleLine()
                         Text("•")
                             .foregroundStyle(.tertiary)
-                        Text(entry.detailText)
+                        entry.detailText
                             .font(.footnote)
                             .singleLine()
                     }
@@ -44,7 +44,7 @@ struct IncomesUpcomingWidget {
                 HStack(spacing: designMetrics.spacing.inline) {
                     amountIcon
                         .font(.subheadline.weight(.semibold))
-                    Text(entry.amountText)
+                    Text(verbatim: entry.amountText)
                         .font(.title2.weight(.semibold))
                         .monospacedDigit()
                         .lineLimit(1)
@@ -57,25 +57,25 @@ struct IncomesUpcomingWidget {
 
         @ViewBuilder private var compactLayout: some View {
             VStack(alignment: .leading, spacing: designMetrics.spacing.inline) {
-                Text(entry.titleText)
+                entry.titleText
                     .font(.footnote)
                     .foregroundStyle(.secondary)
                     .singleLine()
                 HStack(spacing: designMetrics.spacing.inline) {
-                    Text(entry.subtitleText)
+                    entry.subtitleText
                         .font(.caption2)
                         .foregroundStyle(.secondary)
                         .singleLine()
                     Text("•")
                         .foregroundStyle(.tertiary)
-                    Text(entry.detailText)
+                    entry.detailText
                         .font(.footnote)
                         .singleLine()
                 }
                 HStack(spacing: designMetrics.spacing.inline) {
                     amountIcon
                         .font(.caption.weight(.semibold))
-                    Text(entry.amountText)
+                    Text(verbatim: entry.amountText)
                         .font(.headline.weight(.semibold))
                         .monospacedDigit()
                         .lineLimit(1)
@@ -117,9 +117,9 @@ extension IncomesUpcomingWidget: Widget {
 } timeline: {
     UpcomingEntry(
         date: .now,
-        subtitleText: "Next",
-        titleText: "Sep 14 (Sat)",
-        detailText: "Utility bill",
+        subtitleText: Text("Next"),
+        titleText: Text(verbatim: "Sep 14 (Sat)"),
+        detailText: Text(verbatim: "Utility bill"),
         amountText: "-$80",
         isPositive: false,
         deepLinkURL: WidgetDeepLinkBuilder.homeURL()
@@ -131,9 +131,9 @@ extension IncomesUpcomingWidget: Widget {
 } timeline: {
     UpcomingEntry(
         date: .now,
-        subtitleText: "Next",
-        titleText: "Sep 14 (Sat)",
-        detailText: "Grocery",
+        subtitleText: Text("Next"),
+        titleText: Text(verbatim: "Sep 14 (Sat)"),
+        detailText: Text(verbatim: "Grocery"),
         amountText: "-$45",
         isPositive: false,
         deepLinkURL: WidgetDeepLinkBuilder.homeURL()

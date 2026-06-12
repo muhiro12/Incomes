@@ -52,7 +52,7 @@ private extension YearlyDuplicationProposalRow {
             Text(group.content)
                 .font(.headline)
             if isCreated {
-                Text(String(localized: "Created"))
+                Text("Created")
                     .font(.footnote)
                     .foregroundStyle(.secondary)
             }
@@ -71,9 +71,9 @@ private extension YearlyDuplicationProposalRow {
     }
 
     func metadataText(
-        _ value: String.LocalizationValue
+        _ value: LocalizedStringKey
     ) -> some View {
-        Text(String(localized: value))
+        Text(value)
             .font(.footnote)
             .foregroundStyle(.secondary)
     }

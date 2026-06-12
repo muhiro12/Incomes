@@ -4,12 +4,18 @@ import SwiftUI
 import WidgetKit
 
 struct UpcomingProvider: AppIntentTimelineProvider {
+    private enum EntryTextRole {
+        case subtitle
+        case title
+        case detail
+    }
+
     func placeholder(in _: Context) -> UpcomingEntry {
         .init(
             date: Date.now,
-            subtitleText: "Next",
-            titleText: "Upcoming",
-            detailText: "No items",
+            subtitleText: Text("Next"),
+            titleText: Text("Upcoming"),
+            detailText: Text("No items"),
             amountText: "$0",
             isPositive: true,
             deepLinkURL: WidgetDeepLinkBuilder.homeURL()
@@ -59,12 +65,52 @@ struct UpcomingProvider: AppIntentTimelineProvider {
         }()
         return .init(
             date: now,
-            subtitleText: .init(snapshot.subtitleText),
-            titleText: .init(snapshot.titleText),
-            detailText: .init(snapshot.detailText),
-            amountText: .init(snapshot.amountText),
+            subtitleText: entryText(snapshot.subtitleText, role: .subtitle),
+            titleText: entryText(snapshot.titleText, role: .title),
+            detailText: entryText(snapshot.detailText, role: .detail),
+            amountText: snapshot.amountText,
             isPositive: snapshot.isPositive,
             deepLinkURL: snapshot.deepLinkURL
         )
+    }
+
+    private func entryText(_ value: String, role: EntryTextRole) -> Text {
+        switch role {
+        case .subtitle:
+            subtitleText(value)
+        case .title:
+            titleText(value)
+        case .detail:
+            detailText(value)
+        }
+    }
+
+    private func subtitleText(_ value: String) -> Text {
+        switch value {
+        case "Next":
+            Text("Next")
+        case "Previous":
+            Text("Previous")
+        default:
+            Text(verbatim: value)
+        }
+    }
+
+    private func titleText(_ value: String) -> Text {
+        if value == "Upcoming" {
+            return Text("Upcoming")
+        }
+        return Text(verbatim: value)
+    }
+
+    private func detailText(_ value: String) -> Text {
+        switch value {
+        case "Error":
+            Text("Error")
+        case "No items":
+            Text("No items")
+        default:
+            Text(verbatim: value)
+        }
     }
 }
