@@ -24,6 +24,8 @@ public extension DateFormatter {
     }
 
     /// Returns a locale-independent formatter using the template as a fixed date format.
+    /// The time zone intentionally follows Foundation's default time zone so
+    /// date-only user values continue to follow the app's current calendar day.
     static func fixed(_ template: Template) -> DateFormatter {
         let formatter = DateFormatter()
         formatter.dateFormat = template.rawValue
