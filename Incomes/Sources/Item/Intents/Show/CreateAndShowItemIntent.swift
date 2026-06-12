@@ -15,11 +15,12 @@ struct CreateAndShowItemIntent: AppIntent {
     @Parameter(title: "Content")
     private var content: String // swiftlint:disable:this type_contents_order
     @Parameter(title: "Income")
-    private var income: Double // swiftlint:disable:this type_contents_order
+    private var income: IntentCurrencyAmount // swiftlint:disable:this type_contents_order
     @Parameter(title: "Outgo")
-    private var outgo: Double // swiftlint:disable:this type_contents_order
+    private var outgo: IntentCurrencyAmount // swiftlint:disable:this type_contents_order
     @Parameter(title: "Category")
     private var category: String // swiftlint:disable:this type_contents_order
+    // App Intents requires compile-time literals for parameter metadata.
     @Parameter(title: "Repeat", default: 1, inclusiveRange: (1, 60)) // swiftlint:disable:this no_magic_numbers
     private var repeatCount: Int // swiftlint:disable:this type_contents_order
 
@@ -29,24 +30,29 @@ struct CreateAndShowItemIntent: AppIntent {
 
     static let title: LocalizedStringResource = .init("Create and Show Item", table: "AppIntents")
 
-    private var formInput: ItemFormInput {
-        .init(
+    @MainActor private var formInput: ItemFormInput {
+        ItemIntentFormInputSupport.formInput(
             date: date,
             content: content,
-            incomeText: Decimal(income).description,
-            outgoText: Decimal(outgo).description,
-            category: category,
-            priorityText: "0"
+            income: income,
+            outgo: outgo,
+            category: category
         )
     }
 
     @MainActor
     func perform() async throws -> some ProvidesDialog & ShowsSnippetView {
-        do {
-            try formInput.validate()
-        } catch ItemFormInput.ValidationError.contentIsEmpty {
-            throw ItemError.contentIsEmpty
-        }
+        try ItemIntentFormInputSupport.validate(
+            formInput: formInput,
+            income: income,
+            outgo: outgo,
+            parameters: .init(
+                content: $content,
+                income: $income,
+                outgo: $outgo
+            )
+        )
+
         let item = try await ItemCreateCoordinator.create(
             context: modelContainer.mainContext,
             input: formInput,
@@ -55,29 +61,24 @@ struct CreateAndShowItemIntent: AppIntent {
             logger: intentLogger,
             reviewLogger: reviewLogger
         )
-        return .result(
-            opensIntent: IncomesIntentRouteOpener.monthIntent(for: item.localDate),
-            dialog: .init(stringLiteral: item.content)
-        ) {
-            IntentItemSection()
-                .environment(item)
-        }
+        return ItemIntentShowResultSupport.singleItem(
+            item,
+            defaultDate: item.localDate
+        )
     }
 }
 
 private extension CreateAndShowItemIntent {
     @MainActor var intentLogger: MHLogger {
-        IncomesLogging.logger(
+        IncomesIntentLoggingSupport.appIntentLogger(
             logging: logging,
-            category: IncomesLogging.Category.appIntent,
             source: #fileID
         )
     }
 
     @MainActor var reviewLogger: MHLogger {
-        IncomesLogging.logger(
+        IncomesIntentLoggingSupport.reviewFlowLogger(
             logging: logging,
-            category: IncomesLogging.Category.reviewFlow,
             source: #fileID
         )
     }

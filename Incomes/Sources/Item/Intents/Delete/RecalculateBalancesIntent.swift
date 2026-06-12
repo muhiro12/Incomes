@@ -14,9 +14,8 @@ struct RecalculateBalancesIntent: AppIntent {
 
     @MainActor
     func perform() throws -> some IntentResult {
-        let logger = IncomesLogging.logger(
+        let logger = IncomesIntentLoggingSupport.appIntentLogger(
             logging: logging,
-            category: IncomesLogging.Category.appIntent,
             source: #fileID
         )
         logger.notice(
@@ -26,7 +25,7 @@ struct RecalculateBalancesIntent: AppIntent {
             )
         )
         do {
-            try ItemService.recalculate(
+            try ItemBalanceOperations.recalculate(
                 context: modelContainer.mainContext,
                 date: date
             )

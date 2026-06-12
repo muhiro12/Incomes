@@ -6,7 +6,7 @@ struct IncomesDuplicateTagSampleData: PreviewModifier {
 
     static func makeSharedContext() throws -> Context {
         try IncomesSampleData.makePreviewContext { previewContext in
-            try ItemService.seedSampleData(
+            try SampleDataOperations.seed(
                 context: previewContext,
                 profile: .preview,
                 ifEmptyOnly: true
@@ -14,7 +14,7 @@ struct IncomesDuplicateTagSampleData: PreviewModifier {
             try IncomesSampleData.prepareDuplicateTagPreviewData(
                 in: previewContext
             )
-            try BalanceCalculator.calculate(in: previewContext, after: .distantPast)
+            try ItemBalanceOperations.recalculate(context: previewContext, date: .distantPast)
         }
     }
 

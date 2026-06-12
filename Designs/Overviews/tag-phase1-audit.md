@@ -25,7 +25,7 @@ tests, not production behavior changes.
   tags in the store.
 - Deleting that same item afterward still left six tags in the store.
 - Relevant code paths are `IncomesLibrary/Sources/Item/Item.swift` and
-  `IncomesLibrary/Sources/Item/ItemService.swift`.
+  `IncomesLibrary/Sources/Item/Item*Operations.swift`.
 - Phase 1 does not change this behavior. Cleanup and orphan-tag policy are
   deferred to phase 2.
 

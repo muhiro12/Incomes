@@ -1,9 +1,9 @@
 import Foundation
 
 /// Shared formatting and matching helpers for derived tag text.
-public enum TagTextSupport {
+enum TagTextSupport {
     /// Returns the user-facing label for a stored tag name and type.
-    public static func displayName(
+    static func displayName(
         name: String,
         type: TagType?,
         categoryOthersDisplayName: String = CategoryNameSupport.localizedOthersDisplayName
@@ -28,7 +28,7 @@ public enum TagTextSupport {
     }
 
     /// Matches a query against the stored tag name, including kana variants.
-    public static func matchesStoredName(
+    static func matchesStoredName(
         _ storedName: String,
         query: String
     ) -> Bool {
@@ -39,7 +39,7 @@ public enum TagTextSupport {
     }
 
     /// Matches a query against the rendered display name for a tag.
-    public static func matchesDisplayName(
+    static func matchesDisplayName(
         name: String,
         type: TagType?,
         query: String,

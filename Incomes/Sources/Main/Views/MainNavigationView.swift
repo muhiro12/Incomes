@@ -191,12 +191,11 @@ private extension MainNavigationView {
         }) else {
             return
         }
-        guard let year = Int(yearTag.name),
-              1...9_999 ~= year else { // swiftlint:disable:this no_magic_numbers
+        if let route = MainNavigationOperations.route(forYearTag: yearTag) {
+            enqueueNavigation(to: route)
+        } else {
             router.selectYearTagID(yearTagID)
-            return
         }
-        enqueueNavigation(to: .year(year))
     }
 
     func enqueueNavigation(to route: IncomesRoute) {

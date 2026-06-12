@@ -22,13 +22,7 @@ final class ItemFormModel {
             return
         }
 
-        let resolvedPriority = draft.priorityText.isEmpty ? "0" : draft.priorityText
-        date = draft.date
-        content = draft.content
-        priority = resolvedPriority
-        income = draft.incomeText
-        outgo = draft.outgoText
-        category = draft.category
+        apply(ItemFormInput(draft: draft))
         repeatMonthSelections = draft.repeatMonthSelections
         isRepeatEnabled = draft.isRepeatEnabled
     }
@@ -60,7 +54,7 @@ extension ItemFormModel {
     }
 
     var baseSelection: RepeatMonthSelection {
-        RepeatMonthSelectionRules.baseSelection(baseDate: date)
+        RepeatMonthSelectionOperations.baseSelection(baseDate: date)
     }
 
     var effectiveRepeatMonthSelections: Set<RepeatMonthSelection> {
@@ -89,35 +83,18 @@ extension ItemFormModel {
         }
 
         if let item {
-            date = item.localDate
-            content = item.content
-            priority = "\(item.priority)"
-            income = item.income.isNotZero ? item.income.description : .empty
-            outgo = item.outgo.isNotZero ? item.outgo.description : .empty
-            category = CategoryNameSupport.displayName(
-                forStoredName: item.category?.name
-            )
-            syncRepeatMonthSelectionsWithBaseDate()
+            apply(ItemFormInput(item: item))
             return
         }
 
         if let tag {
-            switch tag.type {
-            case .year:
-                date = initialDate(for: tag, currentDate: currentDate)
-            case .yearMonth:
-                date = initialDate(for: tag, currentDate: currentDate)
-            case .content:
-                content = tag.name
-            case .category:
-                category = CategoryNameSupport.displayName(
-                    forStoredName: tag.name
+            apply(
+                formInputData.applying(
+                    tag: tag,
+                    currentDate: currentDate
                 )
-            case .debug:
-                break
-            case .none:
-                break
-            }
+            )
+            return
         }
 
         syncRepeatMonthSelectionsWithBaseDate()
@@ -146,44 +123,9 @@ extension ItemFormModel {
     }
 
     func syncRepeatMonthSelectionsWithBaseDate() {
-        repeatMonthSelections = RepeatMonthSelectionRules.normalized(
+        repeatMonthSelections = RepeatMonthSelectionOperations.normalized(
             repeatMonthSelections,
             baseDate: date
         )
-    }
-}
-
-private extension ItemFormModel {
-    func initialDate(
-        for tag: Tag,
-        currentDate: Date
-    ) -> Date {
-        let calendar = Calendar.current
-        let currentYear = calendar.component(.year, from: currentDate)
-        let currentMonth = calendar.component(.month, from: currentDate)
-
-        switch tag.type {
-        case .year:
-            guard let tagDate = TagService.date(for: tag) else {
-                return currentDate
-            }
-            let tagYear = calendar.component(.year, from: tagDate)
-            if tagYear == currentYear {
-                return currentDate
-            }
-            return tagDate
-        case .yearMonth:
-            guard let tagDate = TagService.date(for: tag) else {
-                return currentDate
-            }
-            let tagYear = calendar.component(.year, from: tagDate)
-            let tagMonth = calendar.component(.month, from: tagDate)
-            if tagYear == currentYear, tagMonth == currentMonth {
-                return currentDate
-            }
-            return tagDate
-        case .content, .category, .debug, .none:
-            return currentDate
-        }
     }
 }

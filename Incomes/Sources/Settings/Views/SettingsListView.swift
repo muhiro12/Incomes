@@ -52,7 +52,7 @@ extension SettingsListView: View {
     var body: some View {
         @Bindable var model = model
 
-        List { // swiftlint:disable:this closure_body_length
+        List {
             subscriptionSection
             currencySection
             notificationSection(
@@ -61,84 +61,9 @@ extension SettingsListView: View {
             dataManagementSection(
                 model: model
             )
-            if model.hasDuplicateTags || model.hasOrphanTags {
-                Section {
-                    if model.hasDuplicateTags {
-                        Button {
-                            navigateToRoute(.duplicateTags)
-                        } label: {
-                            Text("Resolve duplicate tags")
-                        }
-                    }
-                    if model.hasOrphanTags {
-                        Button {
-                            navigateToRoute(.orphanTags)
-                        } label: {
-                            Text("Review orphan tags")
-                        }
-                    }
-                } header: {
-                    HStack {
-                        Text("Manage tags")
-                        Circle()
-                            .frame(width: designMetrics.spacing.inline)
-                            .foregroundStyle(.orange)
-                    }
-                }
-            }
-            if model.hasDebugData {
-                Section {
-                    Button(role: .destructive) {
-                        Haptic.warning.impact()
-                        dataMaintenanceLogger.notice(
-                            "debug_data.delete_requested",
-                            metadata: IncomesLogging.metadata(
-                                ("has_debug_data", IncomesLogging.bool(model.hasDebugData))
-                            )
-                        )
-                        model.presentDestructiveAction(.deleteDebugData)
-                    } label: {
-                        Text("Delete debug sample data")
-                    }
-                } header: {
-                    HStack {
-                        Text("Debug data")
-                        Circle()
-                            .frame(width: designMetrics.spacing.inline)
-                            .foregroundStyle(.red)
-                    }
-                } footer: {
-                    Text("Removes debug sample items and their tags.")
-                }
-            }
-            Section {
-                Button("Show tips again") {
-                    do {
-                        try tipController.resetTips(hasAnyItems: !yearTags.isEmpty)
-                    } catch {
-                        assertionFailure(error.localizedDescription)
-                    }
-                }
-                routeRowButton(
-                    "License",
-                    route: .settingsLicense
-                )
-                if let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String,
-                   let build = Bundle.main.infoDictionary?["CFBundleVersion"] as? String {
-                    HStack {
-                        Text("Version")
-                        Spacer()
-                        Text("\(version) (\(build))")
-                            .foregroundStyle(.secondary)
-                    }
-                    .contextMenu {
-                        CopyTextContextMenuButton(
-                            "Copy Version",
-                            text: "\(version) (\(build))"
-                        )
-                    }
-                }
-            }
+            tagMaintenanceSection(model: model)
+            debugDataSection(model: model)
+            aboutSection
             ShortcutsLinkSection()
             if isDebugOn {
                 Section {
@@ -167,7 +92,7 @@ extension SettingsListView: View {
                 Task {
                     dataMaintenanceLogger.notice("delete_all.requested")
                     do {
-                        try await DataMaintenanceService.resetAllData(context: context)
+                        try await DataMaintenanceOperations.resetAllData(context: context)
                         Haptic.success.impact()
                         model.loadStatus(context: context)
                         model.dismissDestructiveAction()
@@ -206,7 +131,7 @@ extension SettingsListView: View {
                             ("has_debug_data", IncomesLogging.bool(model.hasDebugData))
                         )
                     )
-                    try DataMaintenanceService.deleteDebugData(context: context)
+                    try DataMaintenanceOperations.deleteDebugData(context: context)
                     Haptic.success.impact()
                     model.loadStatus(context: context)
                     model.dismissDestructiveAction()
@@ -303,6 +228,24 @@ private extension SettingsListView {
         }
     }
 
+    var appVersionText: String? {
+        guard let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String,
+              let build = Bundle.main.infoDictionary?["CFBundleVersion"] as? String else {
+            return nil
+        }
+        return "\(version) (\(build))"
+    }
+
+    var aboutSection: some View {
+        SettingsAboutSection(
+            showTipsAgain: resetTips,
+            openLicense: {
+                navigateToRoute(.settingsLicense)
+            },
+            versionText: appVersionText
+        )
+    }
+
     @ViewBuilder
     func notificationSection(
         model: SettingsScreenModel
@@ -336,6 +279,57 @@ private extension SettingsListView {
         }
     }
 
+    func resetTips() {
+        do {
+            try tipController.resetTips(hasAnyItems: !yearTags.isEmpty)
+        } catch {
+            assertionFailure(error.localizedDescription)
+        }
+    }
+
+    @ViewBuilder
+    func tagMaintenanceSection(
+        model: SettingsScreenModel
+    ) -> some View {
+        SettingsTagMaintenanceSection(
+            hasDuplicateTags: model.hasDuplicateTags,
+            hasOrphanTags: model.hasOrphanTags,
+            indicatorSize: designMetrics.spacing.inline,
+            openDuplicateTags: {
+                navigateToRoute(.duplicateTags)
+            },
+            openOrphanTags: {
+                navigateToRoute(.orphanTags)
+            }
+        )
+    }
+
+    @ViewBuilder
+    func debugDataSection(
+        model: SettingsScreenModel
+    ) -> some View {
+        SettingsDebugDataSection(
+            hasDebugData: model.hasDebugData,
+            deleteDebugData: {
+                promptDeleteDebugData(model: model)
+            },
+            indicatorSize: designMetrics.spacing.inline
+        )
+    }
+
+    func promptDeleteDebugData(
+        model: SettingsScreenModel
+    ) {
+        Haptic.warning.impact()
+        dataMaintenanceLogger.notice(
+            "debug_data.delete_requested",
+            metadata: IncomesLogging.metadata(
+                ("has_debug_data", IncomesLogging.bool(model.hasDebugData))
+            )
+        )
+        model.presentDestructiveAction(.deleteDebugData)
+    }
+
     func destructiveActionBinding(
         for action: SettingsScreenModel.DestructiveAction,
         model: SettingsScreenModel
@@ -367,6 +361,7 @@ private extension SettingsListView {
                 Image(systemName: "chevron.right")
                     .font(.footnote.weight(.semibold))
                     .foregroundStyle(.tertiary)
+                    .accessibilityHidden(true)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .contentShape(Rectangle())

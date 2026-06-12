@@ -122,7 +122,7 @@ extension IncomesUpcomingWidget: Widget {
         detailText: "Utility bill",
         amountText: "-$80",
         isPositive: false,
-        deepLinkURL: nil
+        deepLinkURL: WidgetDeepLinkBuilder.homeURL()
     )
 }
 
@@ -136,6 +136,6 @@ extension IncomesUpcomingWidget: Widget {
         detailText: "Grocery",
         amountText: "-$45",
         isPositive: false,
-        deepLinkURL: nil
+        deepLinkURL: WidgetDeepLinkBuilder.homeURL()
     )
 }

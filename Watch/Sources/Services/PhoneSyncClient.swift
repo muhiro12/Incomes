@@ -19,6 +19,7 @@ final class PhoneSyncClient: NSObject {
         super.init()
     }
 
+    @MainActor
     func activate() async {
         guard WCSession.isSupported() else {
             return
@@ -44,7 +45,22 @@ final class PhoneSyncClient: NSObject {
         return
     }
 
-    nonisolated func requestRecentItems() async -> WatchSyncReply {
+    @MainActor
+    private func completeActivation(
+        state: WCSessionActivationState
+    ) {
+        hasActivated = (state == .activated)
+        isActivating = false
+        let waiters = activationWaiters
+        activationWaiters.removeAll()
+        waiters.forEach { waiter in
+            waiter.resume()
+        }
+    }
+
+    nonisolated func requestRecentItems(
+        _ request: ItemsRequest
+    ) async -> WatchSyncReply {
         guard WCSession.default.isReachable else {
             return .failed(
                 phase: .sessionUnreachable,
@@ -52,13 +68,9 @@ final class PhoneSyncClient: NSObject {
             )
         }
 
-        let request = ItemsRequest(
-            baseEpoch: Date().timeIntervalSince1970,
-            monthOffsets: [-1, 0, 1]
-        )
         let data: Data
         do {
-            data = try JSONEncoder().encode(request)
+            data = try ItemsRequest.requestData(for: request)
         } catch {
             return .failed(
                 phase: .requestEncode,
@@ -90,13 +102,7 @@ final class PhoneSyncClient: NSObject {
 nonisolated extension PhoneSyncClient: WCSessionDelegate {
     func session(_: WCSession, activationDidCompleteWith state: WCSessionActivationState, error _: Error?) {
         Task { @MainActor in
-            hasActivated = (state == .activated)
-            isActivating = false
-            let waiters = activationWaiters
-            activationWaiters.removeAll()
-            waiters.forEach { waiter in
-                waiter.resume()
-            }
+            completeActivation(state: state)
         }
     }
 }

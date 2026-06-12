@@ -56,20 +56,10 @@ struct IncomesShortcuts: AppShortcutsProvider {
             systemImageName: "chart.pie"
         )
         AppShortcut(
-            intent: ShowUpcomingItemIntent(),
-            phrases: [
-                "What’s next in \(.applicationName)",
-                "Show me the next thing in \(.applicationName)",
-                "Show upcoming item in \(.applicationName)",
-                "Reveal the upcoming entry in \(.applicationName)"
-            ],
-            shortTitle: LocalizedStringResource("Upcoming Item", table: "AppIntents"),
-            systemImageName: "arrow.down.circle"
-        )
-        AppShortcut(
             intent: ShowUpcomingItemsIntent(),
             phrases: [
                 "What’s coming up in \(.applicationName)",
+                "What’s next in \(.applicationName)",
                 "Show me what’s next in \(.applicationName)",
                 "Show upcoming items in \(.applicationName)",
                 "Check what’s coming in \(.applicationName)"
@@ -78,20 +68,10 @@ struct IncomesShortcuts: AppShortcutsProvider {
             systemImageName: "list.dash.header.rectangle"
         )
         AppShortcut(
-            intent: ShowRecentItemIntent(),
-            phrases: [
-                "What did I do last in \(.applicationName)",
-                "Show me the latest item in \(.applicationName)",
-                "Show recent item in \(.applicationName)",
-                "Reveal most recent item in \(.applicationName)"
-            ],
-            shortTitle: LocalizedStringResource("Recent Item", table: "AppIntents"),
-            systemImageName: "arrow.up.circle"
-        )
-        AppShortcut(
             intent: ShowRecentItemsIntent(),
             phrases: [
                 "What did I record recently in \(.applicationName)",
+                "What did I do last in \(.applicationName)",
                 "Show me recent records in \(.applicationName)",
                 "Show recent items in \(.applicationName)",
                 "Most recent items with \(.applicationName)"

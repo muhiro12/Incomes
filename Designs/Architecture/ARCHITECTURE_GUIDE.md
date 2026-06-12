@@ -2,7 +2,12 @@
 
 ## Scope
 
-This guide defines the strict `domain-in-library, UI-as-adapter` policy for this repository.
+This guide defines the strict `business-logic-in-library, UI-as-adapter`
+policy for this repository. `IncomesLibrary` is the app's behavioral
+implementation: business rules, persistence schema, shared value contracts,
+and tested decision-making live there. `Incomes`, `Watch`, `Widgets`, App
+Intents, and Shortcuts are delivery surfaces that adapt the shared
+implementation to Apple frameworks and user interfaces.
 
 Related document:
 [shared-service-design.md](./shared-service-design.md)
@@ -10,13 +15,32 @@ Related document:
 Related decision:
 [0005-adapter-failure-surfacing-contract.md](../Decisions/0005-adapter-failure-surfacing-contract.md)
 
+Related decision:
+[0006-operations-as-business-use-case-boundary.md](../Decisions/0006-operations-as-business-use-case-boundary.md)
+
+## Public Business Boundary
+
+External delivery surfaces call business use cases through public
+`*Operations` facades in `IncomesLibrary`.
+
+`Operations` is the library's application layer. It may orchestrate models,
+value types, calculators, builders, planners, loaders, parsers, codecs, and
+persistence queries, but those collaborators should not become the primary
+public business interface for app, intent, watch, or widget surfaces.
+
+Public non-Operations contracts remain valid when they are value types, route
+or deep-link contracts, wire payloads, snapshot models, parsers, codecs,
+persistence setup, or development/platform support rather than externally
+invoked business use cases.
+
 ## Responsibility Boundaries
 
 | Layer | Owns | Must not own |
 | --- | --- | --- |
-| Domain (`IncomesLibrary`) | Validation, calculations, repeat rules, duplication planning, search predicate building, maintenance rules, SwiftData schema/predicates/descriptors | App-specific side effects (notifications, WidgetKit reload, ads, StoreKit, WatchConnectivity orchestration, lifecycle wiring) |
-| Adapter (`Incomes`, `Watch`, `Widgets`, App Intents) | Parameter parsing, platform API calls, dependency wiring, follow-up orchestration based on domain outcomes | Domain branching duplicated from library |
-| View (SwiftUI) | Focus state, sheets, navigation state, screen-scoped `@Observable` presentation models, formatting, view composition | Domain validation branching, business calculations, repeat/duplication rules |
+| Business implementation (`IncomesLibrary`) | Public `*Operations` facades, validation, calculations, repeat rules, duplication planning, search predicate building, maintenance rules, SwiftData schema/predicates/descriptors, shared route and sync contracts | App-specific side effects (notifications, WidgetKit reload, ads, StoreKit, WatchConnectivity orchestration, lifecycle wiring), UI framework types, App Intent types |
+| Collaborator (`IncomesLibrary`) | Models, value types, calculators, builders, planners, loaders, parsers, codecs, and persistence helpers used by `*Operations` | Primary external business-use-case entry points |
+| Delivery surface / adapter (`Incomes`, `Watch`, `Widgets`, App Intents) | Parameter parsing, platform API calls, dependency wiring, follow-up orchestration based on operation outcomes | Business branching duplicated from library |
+| View (SwiftUI) | Focus state, sheets, navigation state, screen-scoped `@Observable` presentation models, formatting, view composition | Business validation branching, financial calculations, repeat/duplication rules |
 
 ## Thin-Target Clarification
 
@@ -27,7 +51,10 @@ Related decision:
   notification delivery, and other Apple-framework adapters.
 - A target is still considered thin when reusable finance rules, mutation
   decisions, shared snapshot building, and sync wire contracts continue to live
-  in `IncomesLibrary`.
+  in `IncomesLibrary` and external business calls enter through `*Operations`.
+- A serious behavioral defect should be reproducible in `IncomesLibrary` tests.
+  If a defect can only exist in one surface, it should usually be limited to
+  presentation, platform delivery, or adapter wiring.
 
 ## Testing Boundary
 
@@ -84,11 +111,13 @@ Adapters may orchestrate platform side effects after mutation completion, but mu
 
 ## App Intent Mapping
 
-App Intents must follow the same domain path:
+App Intents must follow the same business path:
 
-`AppIntent parameter parsing -> same Workflow/Adapter -> same IncomesLibrary service`
+`AppIntent parameter parsing -> same Workflow/Adapter -> IncomesLibrary *Operations`
 
-Intent files may convert domain errors to App Intent errors, but must not re-implement domain rules.
+Intent files may convert operation errors to App Intent errors, but must not re-implement business rules.
+Intent-only entities, parameter summaries, snippet views, and shortcut phrases
+stay outside `IncomesLibrary` because they are adapter concerns.
 
 The same adapter rule applies to `Watch` and `Widgets`:
 
@@ -121,11 +150,14 @@ than relying on assertions or empty sentinel values.
 - Sync transport, decode, and apply failures must stay distinguishable from a
   legitimate zero-data snapshot.
 
-Current shared sync contract:
+Current shared sync contract and snapshot services:
 
+- `ItemsRequest`
 - `WatchSyncReply`
 - `WatchSyncFailure`
 - `WatchSyncFailurePhase`
+- `WatchSyncOperations.recentItemWires(context:baseDate:monthOffsets:)`
+- `WatchSyncOperations.applySnapshot(context:items:baseDate:monthOffsets:)`
 
 See
 [0005-adapter-failure-surfacing-contract.md](../Decisions/0005-adapter-failure-surfacing-contract.md)
@@ -186,23 +218,28 @@ API style decision:
      `MainNavigationSettingsCoordinator` instead of expanding router
      responsibility.
 
-2. Notification route payload configuration must stay defined in one adapter helper.
+2. Notification delivery contracts must keep shared payload and identifier
+   rules in the library while framework delivery stays adapter-owned.
    File:
    - `Incomes/Sources/Notification/Services/NotificationService.swift`
    - `Incomes/Sources/Notification/Services/NotificationService+RouteDelivery.swift`
-   - `Incomes/Sources/Notification/Routing/NotificationRoutePayload.swift`
+   - `IncomesLibrary/Sources/Notification/NotificationRoutePayload.swift`
+   - `IncomesLibrary/Sources/Notification/UpcomingPaymentNotificationPresentation.swift`
    Minimal plan:
-   - Keep payload codec, metadata keys, and legacy month fallback logic
-     in a single adapter helper.
-   - Keep `UNUserNotificationCenter` integration and presentation
-     assembly in `NotificationService`.
-   - Deliver decoded route URLs into the package-owned route pipeline
-     through `IncomesRouteBridge` instead of storing app-local pending routes.
+   - Keep payload codec, metadata keys, action route identifiers, legacy month
+     fallback logic, and upcoming-payment request identifier matching in
+     `IncomesLibrary`.
+   - Keep `UNUserNotificationCenter` categories, authorization, scheduling,
+     and content assembly in `NotificationService`.
+   - Keep notification response delivery in `NotificationService+RouteDelivery`
+     by decoding the shared payload contract and delivering route URLs through
+     `IncomesRouteBridge` instead of storing app-local pending routes.
 
 3. Generic mutation follow-up execution must stay separate from
    feature-specific mutation projections.
    Files:
    - `Incomes/Sources/Common/Services/IncomesMutationWorkflow.swift`
+   - `Incomes/Sources/Item/Services/ItemMutationAdapterFactory.swift`
    - `Incomes/Sources/Item/Services/ItemFormSaveCoordinator.swift`
    - `Incomes/Sources/Settings/Coordinators/YearlyDuplicationCoordinator.swift`
    Minimal plan:
@@ -210,13 +247,20 @@ API style decision:
      `IncomesMutationWorkflow`.
    - Use `MHMutationWorkflow.runThrowing(... projection:)` directly in
      coordinators instead of app-local wrapper APIs.
-   - Keep save-specific haptics and review scheduling in
-     `ItemFormSaveCoordinator`.
+   - Keep item mutation side effects out of the generic follow-up adapter.
+     `ItemMutationAdapterFactory` may assemble item-specific save/delete
+     adapters, but its public entrypoints should stay purpose-specific rather
+     than boolean-driven.
+   - Keep save-specific haptics and review scheduling explicit in the save
+     adapter path, and keep delete-specific adapters review-free.
 
-4. Watch sync should keep using the shared snapshot service rather than reintroducing target-local mutation rules.
+4. Watch sync should keep using the shared snapshot service rather than
+   reintroducing target-local snapshot or mutation rules.
    Files:
+   - `Incomes/Sources/Common/Platform/PhoneWatchBridge.swift`
    - `Watch/Sources/Services/WatchDataSyncer.swift`
-   - `IncomesLibrary/Sources/Item/Sync/WatchSyncService.swift`
+   - `IncomesLibrary/Sources/Item/Sync/WatchSyncOperations.swift`
    Minimal plan:
    - Keep networking/timing in watch adapters.
-   - Keep snapshot apply and reconciliation in `WatchSyncService`.
+   - Keep response snapshot building, snapshot apply, and reconciliation in
+     `WatchSyncOperations`.

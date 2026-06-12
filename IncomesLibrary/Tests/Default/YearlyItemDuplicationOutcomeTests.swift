@@ -23,12 +23,12 @@ struct YearlyItemDuplicationOutcomeTests {
             repeatCount: 3
         )
 
-        let plan = try YearlyItemDuplicator.plan(
+        let plan = try YearlyItemDuplicationPlanOperations.plan(
             context: context,
             sourceYear: 2_024,
             targetYear: 2_025
         )
-        let result = try YearlyItemDuplicator.applyWithOutcome(
+        let result = try YearlyItemDuplicationApplyOperations.applyWithOutcome(
             plan: plan,
             context: context
         )
@@ -63,13 +63,13 @@ struct YearlyItemDuplicationOutcomeTests {
             repeatCount: 3
         )
 
-        let plan = try YearlyItemDuplicator.plan(
+        let plan = try YearlyItemDuplicationPlanOperations.plan(
             context: context,
             sourceYear: 2_024,
             targetYear: 2_025
         )
         let targetGroup = try #require(plan.groups.first)
-        let result = try YearlyItemDuplicator.apply(
+        let result = try YearlyItemDuplicationApplyOperations.apply(
             groupID: targetGroup.id,
             in: plan,
             context: context
@@ -77,5 +77,49 @@ struct YearlyItemDuplicationOutcomeTests {
 
         #expect(result != nil)
         #expect(result?.createdCount == targetGroup.entryCount)
+    }
+
+    @Test
+    func applyWithOutcome_groupID_reports_created_ids_and_hints() throws {
+        _ = try createItem(
+            context: context,
+            date: shiftedDate("2024-01-10T12:00:00Z"),
+            content: "Rent",
+            income: 0,
+            outgo: 100,
+            category: "Housing",
+            priority: 0,
+            repeatCount: 3
+        )
+        _ = try createItem(
+            context: context,
+            date: shiftedDate("2024-02-20T12:00:00Z"),
+            content: "Salary",
+            income: 300,
+            outgo: 0,
+            category: "Work",
+            priority: 0,
+            repeatCount: 3
+        )
+
+        let plan = try YearlyItemDuplicationPlanOperations.plan(
+            context: context,
+            sourceYear: 2_024,
+            targetYear: 2_025
+        )
+        let targetGroup = try #require(plan.groups.first)
+        let result = try #require(
+            try YearlyItemDuplicationApplyOperations.applyWithOutcome(
+                groupID: targetGroup.id,
+                in: plan,
+                context: context
+            )
+        )
+
+        #expect(result.value.createdCount == targetGroup.entryCount)
+        #expect(result.outcome.changedIDs.created.count == targetGroup.entryCount)
+        #expect(result.outcome.followUpHints.contains(.reloadWidgets))
+        #expect(result.outcome.followUpHints.contains(.refreshNotificationSchedule))
+        #expect(result.outcome.affectedDateRange != nil)
     }
 }

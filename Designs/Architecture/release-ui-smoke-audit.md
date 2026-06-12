@@ -3,8 +3,8 @@
 ## Purpose
 
 Release UI smoke auditing is a release-time visual confidence pass for the
-real app running in Simulator. It complements the repository's build and
-shared-library test posture without replacing it.
+real app running in Simulator. It complements the repository's XcodeBuildMCP
+build, shared-library test, and static rule-check posture without replacing it.
 
 Use this audit to catch issues that library tests and app builds cannot see:
 
@@ -18,16 +18,12 @@ Use this audit to catch issues that library tests and app builds cannot see:
 
 ## Relationship to Verification
 
-The standard completion gate remains:
-
-```sh
-bash ci_scripts/tasks/verify_task_completion.sh
-```
-
-That gate verifies repository health through environment checks, SwiftLint,
-the required app build, and `IncomesLibrary` tests. Release UI smoke auditing
-is separate from that gate and should not be added to the normal task
-completion flow by default.
+Standard task verification is MCP-first: use XcodeBuildMCP for app build,
+shared-library test, runtime logs, screenshots, and UI snapshots, then run
+`bash ci_scripts/tasks/check_repository_rules.sh` for SwiftLint and
+repository-specific static architecture checks. Release UI smoke auditing is a
+separate release-confidence pass and should not be added to every task by
+default.
 
 ## Workflow
 
@@ -37,7 +33,7 @@ the live UI hierarchy, capturing screenshots, and reporting findings.
 
 The repository expectation is:
 
-1. Run the normal verification gate for code readiness.
+1. Run MCP build/test checks and retained repository rules for code readiness.
 2. Run release UI smoke only when preparing a release or when a UI-sensitive
    change needs live Simulator evidence.
 3. Prefer representative iPhone and iPad Simulator coverage when available.

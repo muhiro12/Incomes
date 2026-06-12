@@ -343,14 +343,26 @@ logic belongs in `IncomesLibrary`.
 
 Current shared business entry points and shared snapshot builders include:
 
-- `ItemService`
-- `TagService`
-- `SummaryCalculator`
-- `YearlyItemDuplicator`
-- `UpcomingPaymentPlanner`
-- `DataMaintenanceService`
-- `SettingsStatusLoader`
-- `WidgetEntryFactory`
+- `Item*Operations`
+- `Tag*Operations`
+- `ItemSummaryOperations`
+- `YearlyItemDuplication*Operations`
+- `YearlyDuplicationAutomationOperations`
+- `YearlyDuplicationPresentationOperations`
+- `YearlyDuplicationPromoOperations`
+- `UpcomingPaymentOperations`
+- `MonthlySummaryOperations`
+- `ItemFormInferenceOperations`
+- `MainNavigationOperations`
+- `DataMaintenanceOperations`
+- `SettingsStatusOperations`
+- `WidgetEntryOperations`
+- `ErrorMessageOperations`
+- `SampleDataOperations`
+- `RemoteConfigurationOperations`
+- `ItemsRequest`
+- `WatchSyncReply`
+- `WatchSyncOperations` recent snapshot building and snapshot apply
 
 ### 2. App target owns platform adapters
 
@@ -461,29 +473,35 @@ route contract remains `IncomesRoute`.
   composition, runtime setup, notification delivery, route handling, and other
   Apple-only adapters.
 - Cross-target reuse remains centered on shared entry points such as
-  `ItemService`, `TagService`, `SummaryCalculator`, `YearlyItemDuplicator`,
-  `WidgetEntryFactory`, `WatchSyncReply`, and `WatchSyncService`.
+  `Item*Operations`, `Tag*Operations`, `ItemSummaryOperations`,
+  `YearlyItemDuplication*Operations`, `YearlyDuplicationAutomationOperations`,
+  `YearlyDuplicationPresentationOperations`, `YearlyDuplicationPromoOperations`,
+  `MainNavigationOperations`, `WidgetEntryOperations`,
+  `ErrorMessageOperations`, `ItemsRequest`, `WatchSyncReply`, and
+  `WatchSyncOperations`.
 - The repository still keeps automated unit tests in `IncomesLibrary/Tests`
   instead of adding separate unit test targets for `Incomes`, `Watch`, or
   `Widgets`.
 - Apple-only exceptions remain intentional. Current examples are
-  `NotificationService`, `ItemInferenceService`, `PhoneWatchBridge`,
-  `PhoneSyncClient`, StoreKit integration, WidgetKit timeline providers, and
-  screen-scoped SwiftUI models.
+  `NotificationService`, `ItemInferenceService`, `MonthlySummaryGenerator`,
+  `PhoneWatchBridge`, `PhoneSyncClient`, StoreKit integration, WidgetKit
+  timeline providers, and screen-scoped SwiftUI models.
 - Watch sync failure surfacing now follows ADR 0005 explicitly by using a typed
   shared reply contract so transport, decode, apply, and legitimate zero-item
   success no longer collapse into the same empty sentinel.
+- Watch sync response snapshot building is centralized in `WatchSyncOperations`,
+  while WatchConnectivity transport remains adapter-owned.
 
 ## Canonical Shared Behaviors
 
 The following behaviors are already centralized and should remain centralized:
 
-- item creation and repeat generation
-- repeat-aware item updates
+- item creation, repeat generation, repeat count limits, and repeat-month selection rules
+- repeat-aware item updates and scope-selection decisions
 - item deletion and affected-balance recalculation
-- duplicate tag detection and merge resolution
-- month totals and category comparison calculations
-- yearly duplication planning and application
+- duplicate tag detection, category display, display matching, and merge resolution
+- month totals, category comparisons, summary prompt language, and monthly summary date rules
+- yearly duplication planning, application, promo eligibility, and presentation summaries
 - notification planning for upcoming payments
 - whole-store deletion and debug-data deletion
 - settings status loading for duplicate tags and debug data

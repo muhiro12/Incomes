@@ -44,7 +44,7 @@ private extension RepeatMonthPicker {
     }
 
     var years: [Int] {
-        RepeatMonthSelectionRules.allowedYears(
+        RepeatMonthSelectionOperations.allowedYears(
             baseDate: baseDate,
             calendar: calendar
         )
@@ -60,7 +60,7 @@ private extension RepeatMonthPicker {
     }
 
     var baseSelection: RepeatMonthSelection {
-        RepeatMonthSelectionRules.baseSelection(
+        RepeatMonthSelectionOperations.baseSelection(
             baseDate: baseDate,
             calendar: calendar
         )
@@ -77,7 +77,7 @@ private extension RepeatMonthPicker {
 
     func monthGrid(for year: Int) -> some View {
         LazyVGrid(columns: columns, spacing: designMetrics.spacing.inline) {
-            ForEach(1...12, id: \.self) { month in // swiftlint:disable:this no_magic_numbers
+            ForEach(RepeatMonthSelectionOperations.validMonths, id: \.self) { month in
                 monthButton(for: .init(year: year, month: month))
             }
         }
@@ -160,7 +160,7 @@ private extension RepeatMonthPicker {
     }
 
     func monthOffset(for selection: RepeatMonthSelection) -> Int {
-        RepeatMonthSelectionRules.monthOffset(
+        RepeatMonthSelectionOperations.monthOffset(
             from: baseDate,
             to: selection,
             calendar: calendar

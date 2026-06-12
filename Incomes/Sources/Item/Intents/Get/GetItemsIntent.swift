@@ -18,11 +18,12 @@ struct GetItemsIntent: AppIntent {
 
     @MainActor
     func perform() throws -> some ReturnsValue<[ItemEntity]> {
-        .result(
-            value: try ItemService.items(
-                context: modelContainer.mainContext,
-                date: date
-            ).compactMap(ItemEntity.init) // swiftlint:disable:this multiline_function_chains
+        let items = try ItemQueryOperations.items(
+            context: modelContainer.mainContext,
+            date: date
+        )
+        return .result(
+            value: try ItemEntity.make(from: items)
         )
     }
 }

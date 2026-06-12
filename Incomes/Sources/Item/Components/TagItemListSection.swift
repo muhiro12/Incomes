@@ -46,7 +46,7 @@ extension TagItemListSection: View {
             }
             .onDelete { indices in
                 Haptic.warning.impact()
-                willDeleteItems = ItemService.resolveItemsForDeletion(
+                willDeleteItems = ItemDeletionOperations.resolveItemsForDeletion(
                     from: items,
                     indices: indices
                 )
@@ -88,7 +88,7 @@ extension TagItemListSection: View {
 
 private extension TagItemListSection {
     var items: [Item] {
-        TagService.items(
+        TagQueryOperations.items(
             for: tag,
             yearString: yearString
         )

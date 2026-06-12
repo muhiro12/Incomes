@@ -13,3 +13,22 @@ public enum WatchSyncFailurePhase: String, Codable, Sendable, Equatable {
     case snapshotApply = "snapshotApply"
 }
 // swiftlint:enable redundant_string_enum_value
+
+public extension WatchSyncFailurePhase {
+    /// True when the failure indicates the paired iPhone could not be reached.
+    var isConnectivityFailure: Bool {
+        switch self {
+        case .sessionUnreachable,
+             .transport:
+            true
+        case .requestDecode,
+             .missingContext,
+             .itemFetch,
+             .responseEncode,
+             .requestEncode,
+             .responseDecode,
+             .snapshotApply:
+            false
+        }
+    }
+}

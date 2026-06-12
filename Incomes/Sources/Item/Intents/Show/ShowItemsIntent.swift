@@ -18,23 +18,15 @@ struct ShowItemsIntent: AppIntent {
 
     @MainActor
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
-        let items = try ItemService.items(
+        let items = try ItemQueryOperations.items(
             context: modelContainer.mainContext,
             date: date
         )
-        let openIntent = IncomesIntentRouteOpener.monthIntent(for: date)
-        guard items.isNotEmpty else {
-            return .result(
-                opensIntent: openIntent,
-                dialog: .init(.init("Not Found", table: "AppIntents"))
-            )
-        }
-        return .result(
-            opensIntent: openIntent,
-            dialog: .init(stringLiteral: date.stringValue(.yyyyMMM))
-        ) {
-            IntentItemListSection(items)
-                .modelContainer(modelContainer)
-        }
+        return ItemIntentShowResultSupport.itemList(
+            items,
+            defaultDate: date,
+            modelContainer: modelContainer,
+            successOpenDate: date
+        )
     }
 }

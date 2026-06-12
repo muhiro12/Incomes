@@ -34,7 +34,10 @@ private extension DuplicateTagNavigationView {
         guard let selectedTagID else {
             return nil
         }
-        return try? context.fetchFirst(.tags(.idIs(selectedTagID)))
+        return try? TagQueryOperations.getByPersistentID(
+            context: context,
+            persistentID: selectedTagID
+        )
     }
 
     var preferredCompactColumnBinding: Binding<NavigationSplitViewColumn> {

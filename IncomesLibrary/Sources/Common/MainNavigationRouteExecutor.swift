@@ -1,10 +1,8 @@
 import Foundation
 import SwiftData
 
-/// Resolves an `IncomesRoute` into a navigation outcome for main navigation UI state.
-public enum MainNavigationRouteExecutor {
-    /// Resolves `route` into the destination or modal state for main navigation.
-    public static func execute( // swiftlint:disable:this cyclomatic_complexity function_body_length
+enum MainNavigationRouteExecutor {
+    static func execute( // swiftlint:disable:this cyclomatic_complexity function_body_length
         route: IncomesRoute,
         context: ModelContext
     ) throws -> MainNavigationRouteOutcome {
@@ -96,7 +94,7 @@ private extension MainNavigationRouteExecutor {
         year: Int
     ) throws -> Tag.ID? {
         let yearTagName = String(format: "%04d", year)
-        let yearTag = try TagService.getByName(
+        let yearTag = try TagQueryOperations.getByName(
             context: context,
             name: yearTagName,
             type: .year
@@ -110,7 +108,7 @@ private extension MainNavigationRouteExecutor {
         month: Int
     ) throws -> Tag? {
         let yearMonthTagName = String(format: "%04d%02d", year, month)
-        return try TagService.getByName(
+        return try TagQueryOperations.getByName(
             context: context,
             name: yearMonthTagName,
             type: .yearMonth
@@ -122,7 +120,7 @@ private extension MainNavigationRouteExecutor {
         year: Int
     ) throws -> Tag? {
         let yearTagName = String(format: "%04d", year)
-        return try TagService.getByName(
+        return try TagQueryOperations.getByName(
             context: context,
             name: yearTagName,
             type: .year

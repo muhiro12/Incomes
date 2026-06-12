@@ -13,7 +13,7 @@ those decisions become hard to reuse and easy to diverge from other surfaces.
 
 Views own presentation state, local interaction state, and navigation. Reusable
 business decisions and mutations belong in shared services such as
-`ItemService`, `TagService`, and `YearlyItemDuplicator`. App-side coordinators
+`Item*Operations`, `Tag*Operations`, and `YearlyItemDuplication*Operations`. App-side coordinators
 may orchestrate UI flows, but they should delegate the actual rules.
 
 ## Consequences

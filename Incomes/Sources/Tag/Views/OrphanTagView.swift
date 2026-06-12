@@ -33,7 +33,7 @@ struct OrphanTagView: View {
             isPresented: $isDeleteDialogPresented
         ) {
             Button(role: .destructive) {
-                if TagService.delete(tag: tag) {
+                if TagMutationOperations.delete(tag: tag) {
                     onDelete()
                     Haptic.success.impact()
                 } else {

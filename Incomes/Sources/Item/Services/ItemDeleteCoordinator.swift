@@ -17,7 +17,6 @@ enum ItemDeleteCoordinator {
         )
     }
 
-    // swiftlint:disable function_body_length
     @MainActor
     static func delete(
         context: ModelContext,
@@ -26,47 +25,22 @@ enum ItemDeleteCoordinator {
         logger: MHLogger
     ) async throws {
         guard items.isNotEmpty else {
-            logger.info(
-                "item_delete.skipped",
-                metadata: IncomesLogging.metadata(
-                    ("item_count", "0")
-                )
-            )
+            logSkippedDelete(logger: logger)
             return
         }
 
-        let metadata = IncomesLogging.metadata(
-            ("item_count", IncomesLogging.count(items.count))
-        )
+        let metadata = deleteMetadata(for: items)
         logger.notice(
             "item_delete.requested",
             metadata: metadata
         )
 
         do {
-            _ = try await MHMutationWorkflow.runThrowing(
-                name: items.count == 1
-                    ? ItemMutationWorkflowName.deleteItem
-                    : ItemMutationWorkflowName.deleteItems,
-                operation: {
-                    try ItemService.deleteWithOutcome(
-                        context: context,
-                        items: items
-                    )
-                },
-                adapter: ItemMutationAdapterFactory.make(
-                    notificationService: notificationService,
-                    includesReviewRequest: false
-                ),
-                projection: .closures(
-                    afterSuccess: { outcome in
-                        outcome.followUpHints
-                    },
-                    returning: { _ in
-                        ()
-                    }
-                ),
-                onEvent: MHMutationWorkflowLogger(logger: logger).onEvent()
+            try await runDeleteWorkflow(
+                context: context,
+                items: items,
+                notificationService: notificationService,
+                logger: logger
             )
             logger.notice(
                 "item_delete.completed",
@@ -75,12 +49,77 @@ enum ItemDeleteCoordinator {
         } catch {
             logger.error(
                 "item_delete.failed",
-                metadata: metadata.merging(IncomesLogging.errorMetadata(error)) { current, _ in
-                    current
-                }
+                metadata: failureMetadata(metadata, error: error)
             )
             throw error
         }
     }
-    // swiftlint:enable function_body_length
+}
+
+private extension ItemDeleteCoordinator {
+    static func logSkippedDelete(
+        logger: MHLogger
+    ) {
+        logger.info(
+            "item_delete.skipped",
+            metadata: IncomesLogging.metadata(
+                ("item_count", "0")
+            )
+        )
+    }
+
+    @MainActor
+    static func runDeleteWorkflow(
+        context: ModelContext,
+        items: [Item],
+        notificationService: NotificationService,
+        logger: MHLogger
+    ) async throws {
+        _ = try await MHMutationWorkflow.runThrowing(
+            name: deleteWorkflowName(for: items),
+            operation: {
+                try ItemDeletionOperations.deleteWithOutcome(
+                    context: context,
+                    items: items
+                )
+            },
+            adapter: ItemMutationAdapterFactory.makeForDelete(
+                notificationService: notificationService
+            ),
+            projection: .closures(
+                afterSuccess: { outcome in
+                    outcome.followUpHints
+                },
+                returning: { _ in
+                    ()
+                }
+            ),
+            onEvent: MHMutationWorkflowLogger(logger: logger).onEvent()
+        )
+    }
+
+    static func deleteWorkflowName(
+        for items: [Item]
+    ) -> String {
+        items.count == 1
+            ? ItemMutationWorkflowName.deleteItem
+            : ItemMutationWorkflowName.deleteItems
+    }
+
+    static func deleteMetadata(
+        for items: [Item]
+    ) -> [String: String] {
+        IncomesLogging.metadata(
+            ("item_count", IncomesLogging.count(items.count))
+        )
+    }
+
+    static func failureMetadata(
+        _ metadata: [String: String],
+        error: any Error
+    ) -> [String: String] {
+        metadata.merging(IncomesLogging.errorMetadata(error)) { current, _ in
+            current
+        }
+    }
 }

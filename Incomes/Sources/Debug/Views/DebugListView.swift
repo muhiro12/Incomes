@@ -37,67 +37,16 @@ struct DebugListView {
 
 extension DebugListView: View {
     var body: some View {
-        List { // swiftlint:disable:this closure_body_length
-            Section {
-                Toggle(isOn: $isDebugOn) {
-                    Text("Debug option")
-                }
-            }
+        List {
+            debugOptionSection
             if isDebugOn {
-                Section {
-                    Button {
-                        navigateToRoute(.diagnostics)
-                    } label: {
-                        Text("Diagnostics Console")
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .contentShape(Rectangle())
-                    }
-                    .buttonStyle(.plain)
-                }
+                debugDiagnosticsSection
             }
-            if let tag = try? context.fetchFirst(.tags(.all)) {
-                Section {
-                    Button {
-                        navigateToRoute(.tag(tag.persistentModelID))
-                    } label: {
-                        Text("All Items")
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .contentShape(Rectangle())
-                    }
-                    .buttonStyle(.plain)
-                    Button {
-                        navigateToRoute(.allTags)
-                    } label: {
-                        Text("All Tags")
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .contentShape(Rectangle())
-                    }
-                    .buttonStyle(.plain)
-                }
+            if let tag = firstTag {
+                debugNavigationSection(tag: tag)
             }
-            Section {
-                Button {
-                    isDialogPresented = true
-                } label: {
-                    Text("Set PreviewData")
-                }
-                .disabled(!isDebugOn)
-            }
-            Section("TipKit") {
-                Button("Reset Tips") {
-                    do {
-                        try tipController.resetTips(hasAnyItems: !yearTags.isEmpty)
-                    } catch {
-                        assertionFailure(error.localizedDescription)
-                    }
-                }
-                Button("Show All Tips For Testing") {
-                    Tips.showAllTipsForTesting()
-                }
-                Button("Hide All Tips For Testing") {
-                    Tips.hideAllTipsForTesting()
-                }
-            }
+            debugPreviewDataSection
+            debugTipsSection
             StoreSection()
             AdvertisementSection(.medium)
             AdvertisementSection(.small)
@@ -132,6 +81,84 @@ extension DebugListView: View {
             ToolbarItem {
                 CloseButton()
             }
+        }
+    }
+}
+
+private extension DebugListView {
+    var firstTag: Tag? {
+        (try? TagQueryOperations.getAll(context: context))?.first
+    }
+
+    var debugOptionSection: some View {
+        Section {
+            Toggle(isOn: $isDebugOn) {
+                Text("Debug option")
+            }
+        }
+    }
+
+    var debugDiagnosticsSection: some View {
+        Section {
+            debugNavigationButton("Diagnostics Console") {
+                navigateToRoute(.diagnostics)
+            }
+        }
+    }
+
+    var debugPreviewDataSection: some View {
+        Section {
+            Button {
+                isDialogPresented = true
+            } label: {
+                Text("Set PreviewData")
+            }
+            .disabled(!isDebugOn)
+        }
+    }
+
+    var debugTipsSection: some View {
+        Section("TipKit") {
+            Button("Reset Tips", action: resetTips)
+            Button("Show All Tips For Testing") {
+                Tips.showAllTipsForTesting()
+            }
+            Button("Hide All Tips For Testing") {
+                Tips.hideAllTipsForTesting()
+            }
+        }
+    }
+
+    func debugNavigationSection(
+        tag: Tag
+    ) -> some View {
+        Section {
+            debugNavigationButton("All Items") {
+                navigateToRoute(.tag(tag.persistentModelID))
+            }
+            debugNavigationButton("All Tags") {
+                navigateToRoute(.allTags)
+            }
+        }
+    }
+
+    func debugNavigationButton(
+        _ title: LocalizedStringKey,
+        action: @escaping () -> Void
+    ) -> some View {
+        Button(action: action) {
+            Text(title)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+    }
+
+    func resetTips() {
+        do {
+            try tipController.resetTips(hasAnyItems: !yearTags.isEmpty)
+        } catch {
+            assertionFailure(error.localizedDescription)
         }
     }
 }

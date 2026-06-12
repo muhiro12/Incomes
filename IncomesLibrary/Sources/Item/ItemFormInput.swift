@@ -44,6 +44,51 @@ public struct ItemFormInput {
         self.priorityText = priorityText
     }
 
+    /// Creates an item form input snapshot from typed amount and priority values.
+    public init( // swiftlint:disable:this type_contents_order
+        date: Date,
+        content: String,
+        income: Decimal,
+        outgo: Decimal,
+        category: String,
+        priority: Int = 0
+    ) {
+        self.init(
+            date: date,
+            content: content,
+            incomeText: income.description,
+            outgoText: outgo.description,
+            category: category,
+            priorityText: "\(priority)"
+        )
+    }
+
+    /// Creates an item form input snapshot from a draft.
+    public init(draft: ItemFormDraft) { // swiftlint:disable:this type_contents_order
+        self.init(
+            date: draft.date,
+            content: draft.content,
+            incomeText: draft.incomeText,
+            outgoText: draft.outgoText,
+            category: draft.category,
+            priorityText: draft.priorityText.isEmpty ? "0" : draft.priorityText
+        )
+    }
+
+    /// Creates an item form input snapshot from an existing item.
+    public init(item: Item) { // swiftlint:disable:this type_contents_order
+        self.init(
+            date: item.localDate,
+            content: item.content,
+            incomeText: item.income.isNotZero ? item.income.description : .empty,
+            outgoText: item.outgo.isNotZero ? item.outgo.description : .empty,
+            category: CategoryNameSupport.displayName(
+                forStoredName: item.category?.name
+            ),
+            priorityText: "\(item.priority)"
+        )
+    }
+
     /// True when all form values pass `validate()`.
     public var isValid: Bool {
         (try? validate()) != nil
@@ -85,5 +130,67 @@ public struct ItemFormInput {
         guard priorityText.isEmptyOrInt else {
             throw ValidationError.invalidPriority
         }
+    }
+
+    /// Returns a copy with `tag` applied as initial context.
+    public func applying(
+        tag: Tag,
+        currentDate: Date
+    ) -> Self {
+        switch tag.type {
+        case .year,
+             .yearMonth:
+            return replacing(
+                date: ItemFormInitialDateResolver.date(
+                    for: tag,
+                    currentDate: currentDate
+                )
+            )
+        case .content:
+            return replacing(content: tag.name)
+        case .category:
+            return replacing(
+                category: CategoryNameSupport.displayName(
+                    forStoredName: tag.name
+                )
+            )
+        case .debug, .none:
+            return self
+        }
+    }
+}
+
+private extension ItemFormInput {
+    func replacing(date: Date) -> ItemFormInput {
+        .init(
+            date: date,
+            content: content,
+            incomeText: incomeText,
+            outgoText: outgoText,
+            category: category,
+            priorityText: priorityText
+        )
+    }
+
+    func replacing(content: String) -> ItemFormInput {
+        .init(
+            date: date,
+            content: content,
+            incomeText: incomeText,
+            outgoText: outgoText,
+            category: category,
+            priorityText: priorityText
+        )
+    }
+
+    func replacing(category: String) -> ItemFormInput {
+        .init(
+            date: date,
+            content: content,
+            incomeText: incomeText,
+            outgoText: outgoText,
+            category: category,
+            priorityText: priorityText
+        )
     }
 }

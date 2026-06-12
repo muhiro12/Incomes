@@ -28,9 +28,8 @@ Models.
 
 ### Capture and inference
 
-- Capture receipts through the photo library or camera, or dictate statements
-  with Speech Recognition, then run on-device VisionKit OCR to assemble a
-  transcript.
+- Capture receipts through the photo library or camera, then run on-device
+  VisionKit text recognition to assemble a transcript.
 - Use Apple Foundation Models to infer the date, amounts, and category that
   pre-populate the item form or App Intent output, respecting the user’s
   locale.
@@ -88,6 +87,9 @@ Models.
 
 ## Architecture records
 
+- `IncomesLibrary` is the app's behavioral source of truth. It owns the product
+  rules that should remain correct regardless of whether the user reaches them
+  through iOS, iPadOS, watchOS, widgets, App Intents, or Shortcuts.
 - Thin targets in this repository are responsibility-thin, not line-count-thin.
   `Incomes`, `Watch`, `Widgets`, and App Intents may still own SwiftUI shells,
   lifecycle wiring, routing, and framework adapters, but reusable finance rules
@@ -98,6 +100,9 @@ Models.
 - `Incomes`, `Watch`, `Widgets`, and App Intents consume those shared APIs and
   remain the place for Apple-specific integration work such as notifications,
   WatchConnectivity, WidgetKit, StoreKit, ads, and Foundation Models.
+- When `IncomesLibrary` is correctly tested, destructive product-behavior
+  regressions should be caught there; target-local failures should usually be
+  limited to presentation, routing, dependency wiring, or platform delivery.
 - Automated unit tests stay in `IncomesLibrary/Tests`. This repository does not
   add separate unit test targets for `Incomes`, `Watch`, or `Widgets`; those
   adapters are verified through builds plus shared-library tests.
@@ -121,11 +126,13 @@ Models.
 
 ## Requirements
 
-- Xcode 16 or later with the iOS 18 and watchOS 11 SDKs installed.
+- Xcode 26 or later.
+- The app and widgets deploy to iOS 18 or later, and the watchOS companion
+  deploys to watchOS 11 or later.
 - An Apple Developer account configured for App Groups, iCloud, StoreKit 2,
   notifications, and ads.
-- A device or simulator that supports Foundation Models for on-device inference
-  features.
+- A device or simulator running iOS 26 or later with Foundation Models support
+  for on-device inference features.
 
 ## Setup
 
@@ -141,8 +148,9 @@ Follow these steps to run a local build:
    `Widgets/Configurations/Widgets.entitlements`, and
    `Incomes/Sources/Common/Platform/IncomesMonetizationConfiguration.swift`.
 4. Open `Incomes.xcodeproj` in Xcode, select the **Incomes** scheme, and run on
-   an iOS 18 simulator or device. Enable the **IncomesWatch** and **Widgets**
-   schemes if you want to test the companion experiences.
+   an iOS 18 or later simulator or device. Use an iOS 26 or later destination
+   when testing Foundation Models features. Enable the **Watch** and
+   **Widgets** schemes if you want to test the companion experiences.
 
 ### Remote configuration
 
@@ -152,23 +160,26 @@ reflect your release channel.
 
 ## Build and Test
 
-Use the helper scripts in `ci_scripts/` as needed. The repository contract is:
-Direct entrypoints live in `ci_scripts/tasks/`, shared shell helpers live in
+Use Xcode and XcodeBuildMCP for Apple build, test, run, Simulator, runtime log,
+screenshot, and UI snapshot verification. Xcode Cloud owns formal CI builds,
+tests, and archives.
+
+The remaining helper scripts in `ci_scripts/` are intentionally small. Direct
+entrypoints live in `ci_scripts/tasks/`, shared shell helpers live in
 `ci_scripts/lib/`, and `ci_scripts/ci_post_clone.sh` is reserved for external
 post-clone CI setup.
 
-- `bash ci_scripts/tasks/check_environment.sh --profile <format|build|verify>`
-  diagnoses missing local prerequisites before you start a tool-dependent flow.
+- `bash ci_scripts/tasks/check_environment.sh --profile <swiftlint|rules>`
+  diagnoses missing local prerequisites before running the retained scripts.
 - `bash ci_scripts/tasks/format_swift.sh` is the explicit SwiftLint autofix
-  step to run after Swift edits and before the final verification gate.
-- `bash ci_scripts/tasks/verify_task_completion.sh` is the non-destructive
-  verification gate for Codex task completion.
-- `bash ci_scripts/tasks/verify_repository_state.sh` checks the current
-  repository state and still writes CI run artifacts.
-- `bash ci_scripts/tasks/verify_pre_push.sh` is the optional Git `pre-push`
-  wrapper for the same non-destructive verification gate.
-- Release UI smoke auditing is intentionally separate from the normal verify
-  gate. Use the global `$xcode-ui-smoke-auditor` skill and the
+  step to run after Swift edits.
+- `bash ci_scripts/tasks/lint_swift.sh` runs the project-managed SwiftLint
+  binary without requiring a separately installed `swiftlint` command.
+- `bash ci_scripts/tasks/check_repository_rules.sh` runs SwiftLint plus the
+  repository-specific static architecture checks that are not naturally covered
+  by XcodeBuildMCP.
+- Release UI smoke auditing uses XcodeBuildMCP live Simulator evidence. Use the
+  global `$xcode-ui-smoke-auditor` skill and the
   [release UI smoke audit guide](Designs/Architecture/release-ui-smoke-audit.md)
   when a release or UI-sensitive change needs live Simulator evidence.
 
@@ -176,10 +187,10 @@ SwiftLint is resolved from the `SimplyDanny/SwiftLintPlugins` package declared
 in `Incomes.xcodeproj`. The repository scripts do not require a separately
 installed `swiftlint` binary on your `PATH`.
 
-Before running the full verify gate, diagnose the local prerequisites:
+Before running retained script checks, diagnose the local prerequisites:
 
 ```sh
-bash ci_scripts/tasks/check_environment.sh --profile verify
+bash ci_scripts/tasks/check_environment.sh --profile rules
 ```
 
 After Swift edits, run the explicit autofix step:
@@ -188,16 +199,10 @@ After Swift edits, run the explicit autofix step:
 bash ci_scripts/tasks/format_swift.sh
 ```
 
-Then run the non-destructive full recheck:
+Then run the retained repository rule checks:
 
 ```sh
-bash ci_scripts/tasks/verify_task_completion.sh
-```
-
-For release-time verification or a clean-worktree full run, force the standard verify entrypoint to execute all required checks:
-
-```sh
-CI_RUN_FORCE_FULL=1 bash ci_scripts/tasks/verify_task_completion.sh
+bash ci_scripts/tasks/check_repository_rules.sh
 ```
 
 If you prefer to run the SwiftLint steps directly:
@@ -207,42 +212,12 @@ bash ci_scripts/tasks/format_swift.sh
 bash ci_scripts/tasks/lint_swift.sh
 ```
 
-If you only need required builds/tests based on local changes:
+For app build checks, use XcodeBuildMCP `build_sim` with the `Incomes` scheme.
+For shared-library tests, use XcodeBuildMCP `test_sim` with the
+`IncomesLibrary` scheme. For runtime or UI-sensitive checks, use XcodeBuildMCP
+`build_run_sim`, `launch_app_sim`, `snapshot_ui`, and `screenshot`.
 
-```sh
-bash ci_scripts/tasks/verify_repository_state.sh
-```
-
-If you want Git's `pre-push` hook to enforce the same repository flow, configure
-the hook to delegate to `bash ci_scripts/tasks/verify_pre_push.sh`.
-
-If you only need the optional `pre-push` wrapper shell:
-
-```sh
-bash ci_scripts/tasks/verify_pre_push.sh
-```
-
-The scripts below are optional targeted helpers, not standardized repository
-entrypoints.
-
-If you only need the app build:
-
-```sh
-bash ci_scripts/tasks/build_app.sh
-```
-
-If you only need library tests:
-
-```sh
-bash ci_scripts/tasks/test_shared_library.sh
-```
-
-### CI artifact layout
-
-CI helper scripts write all generated artifacts under `.build/ci/`.
-Run-scoped outputs are stored in `.build/ci/runs/<RUN_ID>/` (summary, commands,
-meta, logs, results, work), while shared caches and build state live in
-`.build/ci/shared/` (`cache/`, `DerivedData/`, `tmp/`, `home/`).
+Helper scripts may write disposable cache data under `.build/ci/shared/`.
 
 ## Useful links
 

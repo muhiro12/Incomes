@@ -26,87 +26,57 @@ struct CreateScheduledItemIntent: AppIntent {
     static let title: LocalizedStringResource = .init("Create Scheduled Item", table: "AppIntents")
     static let isDiscoverable = false
 
-    private var formInput: ItemFormInput {
-        .init(
+    @MainActor private var formInput: ItemFormInput {
+        ItemIntentFormInputSupport.formInput(
             date: date,
             content: content,
-            incomeText: income.amount.description,
-            outgoText: outgo.amount.description,
+            income: income,
+            outgo: outgo,
             category: category,
-            priorityText: "\(priority)"
+            priority: priority
         )
     }
 
     @MainActor
     func perform() async throws -> some ReturnsValue<ItemEntity> {
-        try validateFormInput()
-
-        let currencyCode = MHPreferenceStore().string(
-            for: \.currencyCode,
-            default: ""
+        try ItemIntentFormInputSupport.validate(
+            formInput: formInput,
+            income: income,
+            outgo: outgo,
+            parameters: .init(
+                content: $content,
+                income: $income,
+                outgo: $outgo,
+                priority: $priority
+            )
         )
-        if let amount = ItemIntentCurrencyValidator.disambiguationAmount(
-            amount: income,
-            expectedCurrencyCode: currencyCode
-        ) {
-            throw $income.needsDisambiguationError(among: [amount])
-        }
-        if let amount = ItemIntentCurrencyValidator.disambiguationAmount(
-            amount: outgo,
-            expectedCurrencyCode: currencyCode
-        ) {
-            throw $outgo.needsDisambiguationError(among: [amount])
-        }
 
         let item = try await ItemCreateCoordinator.create(
             context: modelContainer.mainContext,
             input: formInput,
-            repeatMonthSelections: try parsedRepeatMonthSelections(),
+            repeatMonthSelections: try ItemIntentFormInputSupport.repeatMonthSelections(
+                from: repeatMonths
+            ),
             notificationService: notificationService,
             logger: intentLogger,
             reviewLogger: reviewLogger
         )
-        guard let entity = ItemEntity(item) else {
-            throw ItemError.entityConversionFailed
-        }
-        return .result(value: entity)
+        return .result(value: try ItemEntity.make(from: item))
     }
 }
 
 private extension CreateScheduledItemIntent {
     @MainActor var intentLogger: MHLogger {
-        IncomesLogging.logger(
+        IncomesIntentLoggingSupport.appIntentLogger(
             logging: logging,
-            category: IncomesLogging.Category.appIntent,
             source: #fileID
         )
     }
 
     @MainActor var reviewLogger: MHLogger {
-        IncomesLogging.logger(
+        IncomesIntentLoggingSupport.reviewFlowLogger(
             logging: logging,
-            category: IncomesLogging.Category.reviewFlow,
             source: #fileID
         )
-    }
-
-    func validateFormInput() throws {
-        do {
-            try formInput.validate()
-        } catch ItemFormInput.ValidationError.contentIsEmpty {
-            throw $content.needsValueError()
-        } catch ItemFormInput.ValidationError.invalidPriority {
-            throw $priority.needsValueError()
-        } catch {
-            throw error
-        }
-    }
-
-    func parsedRepeatMonthSelections() throws -> Set<RepeatMonthSelection> {
-        do {
-            return try RepeatMonthSelectionParser.parse(repeatMonths)
-        } catch RepeatMonthSelectionParser.ParserError.invalidToken {
-            throw ItemError.invalidRepeatMonthSelections
-        }
     }
 }

@@ -33,7 +33,7 @@ struct YearlyItemDuplicationTests { // swiftlint:disable:this type_body_length
             repeatCount: 3
         )
 
-        let plan = try YearlyItemDuplicator.plan(
+        let plan = try YearlyItemDuplicationPlanOperations.plan(
             context: context,
             sourceYear: 2_024,
             targetYear: 2_025
@@ -66,7 +66,7 @@ struct YearlyItemDuplicationTests { // swiftlint:disable:this type_body_length
         )
 
         let options = YearlyItemDuplicationOptions(includeSingleItems: true)
-        let plan = try YearlyItemDuplicator.plan(
+        let plan = try YearlyItemDuplicationPlanOperations.plan(
             context: context,
             sourceYear: 2_024,
             targetYear: 2_025,
@@ -109,7 +109,7 @@ struct YearlyItemDuplicationTests { // swiftlint:disable:this type_body_length
             repeatCount: 1
         )
 
-        let plan = try YearlyItemDuplicator.plan(
+        let plan = try YearlyItemDuplicationPlanOperations.plan(
             context: context,
             sourceYear: 2_024,
             targetYear: 2_025
@@ -151,7 +151,7 @@ struct YearlyItemDuplicationTests { // swiftlint:disable:this type_body_length
             repeatCount: 1
         )
 
-        let plan = try YearlyItemDuplicator.plan(
+        let plan = try YearlyItemDuplicationPlanOperations.plan(
             context: context,
             sourceYear: 2_024,
             targetYear: 2_025
@@ -162,6 +162,42 @@ struct YearlyItemDuplicationTests { // swiftlint:disable:this type_body_length
         #expect(group.averageIncome == 200)
         #expect(group.averageOutgo == 20)
         #expect(group.entryCount == 3)
+    }
+
+    @Test
+    func draft_returns_item_form_draft_for_group() throws {
+        _ = try createItem(
+            context: context,
+            date: shiftedDate("2024-01-05T12:00:00Z"),
+            content: "Subscription",
+            income: 100,
+            outgo: 10,
+            category: "Service",
+            priority: 0,
+            repeatCount: 3
+        )
+
+        let plan = try YearlyItemDuplicationPlanOperations.plan(
+            context: context,
+            sourceYear: 2_024,
+            targetYear: 2_025
+        )
+        let group = try #require(plan.groups.first)
+
+        let draft = try #require(
+            YearlyItemDuplicationPlanOperations.draft(
+                for: group.id,
+                in: plan
+            )
+        )
+
+        #expect(draft.groupID == group.id)
+        #expect(draft.content == "Subscription")
+        #expect(draft.category == "Service")
+        #expect(draft.incomeText == "100")
+        #expect(draft.outgoText == "10")
+        #expect(draft.repeatMonthSelections.count == 3)
+        #expect(draft.isRepeatEnabled)
     }
 
     @Test
@@ -178,7 +214,7 @@ struct YearlyItemDuplicationTests { // swiftlint:disable:this type_body_length
         )
 
         let options = YearlyItemDuplicationOptions(includeSingleItems: true)
-        let plan = try YearlyItemDuplicator.plan(
+        let plan = try YearlyItemDuplicationPlanOperations.plan(
             context: context,
             sourceYear: 2_024,
             targetYear: 2_025,
@@ -225,12 +261,12 @@ struct YearlyItemDuplicationTests { // swiftlint:disable:this type_body_length
             repeatCount: 1
         )
 
-        let plan = try YearlyItemDuplicator.plan(
+        let plan = try YearlyItemDuplicationPlanOperations.plan(
             context: context,
             sourceYear: 2_024,
             targetYear: 2_025
         )
-        let result = try YearlyItemDuplicator.apply(
+        let result = try YearlyItemDuplicationApplyOperations.apply(
             plan: plan,
             context: context
         )
@@ -278,12 +314,12 @@ struct YearlyItemDuplicationTests { // swiftlint:disable:this type_body_length
         )
         let sourceRepeatIDs = Set(sourceItems.map(\.repeatID))
 
-        let plan = try YearlyItemDuplicator.plan(
+        let plan = try YearlyItemDuplicationPlanOperations.plan(
             context: context,
             sourceYear: 2_024,
             targetYear: 2_025
         )
-        let result = try YearlyItemDuplicator.apply(
+        let result = try YearlyItemDuplicationApplyOperations.apply(
             plan: plan,
             context: context
         )
@@ -325,7 +361,7 @@ struct YearlyItemDuplicationTests { // swiftlint:disable:this type_body_length
         )
 
         let options = YearlyItemDuplicationOptions(includeSingleItems: true)
-        let plan = try YearlyItemDuplicator.plan(
+        let plan = try YearlyItemDuplicationPlanOperations.plan(
             context: context,
             sourceYear: 2_024,
             targetYear: 2_025,

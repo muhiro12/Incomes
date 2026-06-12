@@ -29,7 +29,7 @@ extension ItemContextMenuActions: View {
         EditItemButton(action: editAction)
         DuplicateItemButton(action: duplicateAction)
         RecalculateItemButton()
-        if let itemURL = IncomesContextMenuLinkBuilder.preferredURL(for: item) {
+        if let itemURL = MainNavigationOperations.preferredURL(for: item) {
             Divider()
             ShareLink(item: itemURL) {
                 Label("Share Link", systemImage: "square.and.arrow.up")

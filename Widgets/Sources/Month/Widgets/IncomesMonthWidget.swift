@@ -74,7 +74,7 @@ struct IncomesMonthWidget {
         @ViewBuilder
         private func monthInfo(font: Font) -> some View {
             VStack(alignment: .leading, spacing: designMetrics.spacing.inline) {
-                Text(IncomesMonthWidget.monthTitle(from: entry.date))
+                Text(IncomesMonthWidget.monthTitle(from: entry.targetDate))
                     .font(font)
                     .foregroundStyle(.secondary)
                     .singleLine()
@@ -198,10 +198,11 @@ extension IncomesMonthWidget: Widget {
 } timeline: {
     MonthSummaryEntry(
         date: .now,
+        targetDate: .now,
         configuration: .init(),
         totalIncomeText: "$1,200",
         totalOutgoText: "-$800",
-        deepLinkURL: nil
+        deepLinkURL: WidgetDeepLinkBuilder.monthURL(for: .now)
     )
 }
 
@@ -210,9 +211,10 @@ extension IncomesMonthWidget: Widget {
 } timeline: {
     MonthSummaryEntry(
         date: .now,
+        targetDate: .now,
         configuration: .init(),
         totalIncomeText: "$1,200",
         totalOutgoText: "-$800",
-        deepLinkURL: nil
+        deepLinkURL: WidgetDeepLinkBuilder.monthURL(for: .now)
     )
 }

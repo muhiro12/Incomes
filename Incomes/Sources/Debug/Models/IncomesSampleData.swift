@@ -13,12 +13,12 @@ struct IncomesSampleData: PreviewModifier {
 
     static func makeSharedContext() throws -> Context {
         try makePreviewContext { previewContext in
-            try ItemService.seedSampleData(
+            try SampleDataOperations.seed(
                 context: previewContext,
                 profile: .preview,
                 ifEmptyOnly: true
             )
-            try BalanceCalculator.calculate(in: previewContext, after: .distantPast)
+            try ItemBalanceOperations.recalculate(context: previewContext, date: .distantPast)
         }
     }
 
@@ -48,26 +48,26 @@ extension IncomesSampleData {
     }
 
     static func prepareData(in context: ModelContext) async {
-        try? ItemService.seedSampleData(context: context, profile: .preview)
+        try? SampleDataOperations.seed(context: context, profile: .preview)
         var items = [Item]()
         var tags = [Tag]()
         while items.isEmpty || tags.isEmpty {
             try? await Task.sleep(for: .seconds(0.2)) // swiftlint:disable:this no_magic_numbers
-            items = (try? context.fetch(.items(.all))) ?? []
-            tags = (try? context.fetch(.tags(.all))) ?? []
+            items = (try? ItemQueryOperations.items(context: context)) ?? []
+            tags = (try? TagQueryOperations.getAll(context: context)) ?? []
         }
-        try? BalanceCalculator.calculate(in: context, for: items)
+        try? ItemBalanceOperations.recalculate(context: context, items: items)
     }
 
     static func prepareDataIgnoringDuplicates(in context: ModelContext) {
-        try? ItemService.seedSampleData(
+        try? SampleDataOperations.seed(
             context: context,
             profile: .debug,
             ignoringDuplicates: true
         )
-        let items = (try? context.fetch(.items(.all))) ?? []
-        try? BalanceCalculator.calculate(in: context, for: items)
-        _ = (try? context.fetch(.tags(.all))) ?? []
+        let items = (try? ItemQueryOperations.items(context: context)) ?? []
+        try? ItemBalanceOperations.recalculate(context: context, items: items)
+        _ = (try? TagQueryOperations.getAll(context: context)) ?? []
     }
 
     static func prepareDuplicateTagPreviewData(
@@ -75,7 +75,7 @@ extension IncomesSampleData {
     ) throws {
         let previewDuplicateCount = 2
         let duplicateCategoryName = String(localized: "Credit")
-        let items = try context.fetch(.items(.all))
+        let items = try ItemQueryOperations.items(context: context)
         let sourceItems = items.filter { item in
             item.category?.name == duplicateCategoryName
         }

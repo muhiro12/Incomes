@@ -27,78 +27,58 @@ struct UpdateItemIntent: AppIntent {
     static let title: LocalizedStringResource = .init("Update Item", table: "AppIntents")
     static let isDiscoverable = false
 
-    private var formInput: ItemFormInput {
-        .init(
+    @MainActor private var formInput: ItemFormInput {
+        ItemIntentFormInputSupport.formInput(
             date: date,
             content: content,
-            incomeText: income.amount.description,
-            outgoText: outgo.amount.description,
+            income: income,
+            outgo: outgo,
             category: category,
-            priorityText: "\(priority)"
+            priority: priority
         )
     }
 
     @MainActor
     func perform() async throws -> some ReturnsValue<ItemEntity> {
-        try validateFormInput()
-
-        let currencyCode = MHPreferenceStore().string(
-            for: \.currencyCode,
-            default: ""
+        try ItemIntentFormInputSupport.validate(
+            formInput: formInput,
+            income: income,
+            outgo: outgo,
+            parameters: .init(
+                content: $content,
+                income: $income,
+                outgo: $outgo,
+                priority: $priority
+            )
         )
-        if let amount = ItemIntentCurrencyValidator.disambiguationAmount(
-            amount: income,
-            expectedCurrencyCode: currencyCode
-        ) {
-            throw $income.needsDisambiguationError(among: [amount])
-        }
-        if let amount = ItemIntentCurrencyValidator.disambiguationAmount(
-            amount: outgo,
-            expectedCurrencyCode: currencyCode
-        ) {
-            throw $outgo.needsDisambiguationError(among: [amount])
-        }
 
-        let model = try item.model(in: modelContainer.mainContext)
-        let entity = try await UpdateItemIntentMutationPerformer.perform(
-            context: modelContainer.mainContext,
-            item: model,
-            input: formInput,
+        let context = modelContainer.mainContext
+        let model = try item.model(in: context)
+        try await ItemFormSaveCoordinator.save(
             scope: scope.scope,
+            context: context,
+            item: model,
+            formInputData: formInput,
             notificationService: notificationService,
             logger: intentLogger,
             reviewLogger: reviewLogger
         )
-        return .result(value: entity)
+        return .result(value: try ItemEntity.make(from: model))
     }
 }
 
 private extension UpdateItemIntent {
     @MainActor var intentLogger: MHLogger {
-        IncomesLogging.logger(
+        IncomesIntentLoggingSupport.appIntentLogger(
             logging: logging,
-            category: IncomesLogging.Category.appIntent,
             source: #fileID
         )
     }
 
     @MainActor var reviewLogger: MHLogger {
-        IncomesLogging.logger(
+        IncomesIntentLoggingSupport.reviewFlowLogger(
             logging: logging,
-            category: IncomesLogging.Category.reviewFlow,
             source: #fileID
         )
-    }
-
-    func validateFormInput() throws {
-        do {
-            try formInput.validate()
-        } catch ItemFormInput.ValidationError.contentIsEmpty {
-            throw $content.needsValueError()
-        } catch ItemFormInput.ValidationError.invalidPriority {
-            throw $priority.needsValueError()
-        } catch {
-            throw error
-        }
     }
 }

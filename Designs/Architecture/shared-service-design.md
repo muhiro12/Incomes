@@ -2,17 +2,22 @@
 
 ## Purpose
 
-This document describes the current boundary for shared business logic in
-Incomes. It explains where new code should live when the same operation must
-work across the iOS app, App Intents, Apple Watch, and widgets.
+This document describes the boundary between the shared implementation and the
+delivery surfaces in Incomes. It explains where new code should live when the
+same business use case must work across the iOS app, App Intents, Apple Watch,
+and widgets.
 
 ## Core Principles
 
-- `IncomesLibrary` is the source of truth for shared business logic.
+- `IncomesLibrary` is the behavioral source of truth for the product.
+- Public business use cases that delivery surfaces call are exposed through
+  `*Operations` facades.
 - `Incomes` owns SwiftUI presentation and adapters for Apple frameworks.
 - `AppIntent` types are adapters, not a second domain layer.
 - Views keep presentation state and navigation, but reusable business decisions
-  and mutations belong in shared services.
+  and mutations belong in shared operations.
+- Delivery surfaces should be able to fail visually or operationally without
+  invalidating the domain behavior covered by `IncomesLibrary` tests.
 - `IncomesLibrary` remains a single module unless there is a stronger reason
   than code organization alone.
 - Thin targets here are responsibility-thin. They may still contain UI shells,
@@ -23,10 +28,11 @@ work across the iOS app, App Intents, Apple Watch, and widgets.
 
 | Concern | Lives in | Examples |
 | --- | --- | --- |
-| Shared domain logic | `IncomesLibrary` | `Item`, `Tag`, predicates, `ItemService`, `TagService`, `SummaryCalculator`, `YearlyItemDuplicator`, `DataMaintenanceService`, `UpcomingPaymentPlanner`, `SettingsStatusLoader` |
+| Business operations | `IncomesLibrary` | `Item*Operations`, `Tag*Operations`, `ItemSummaryOperations`, `YearlyItemDuplication*Operations`, `WidgetEntryOperations`, `WatchSyncOperations`, `UpcomingPaymentOperations`, `SettingsStatusOperations`, `DataMaintenanceOperations` |
+| Library collaborators and contracts | `IncomesLibrary` | `Item`, `Tag`, predicates, calculators, builders, planners, loaders, parsers, codecs, route contracts, wire payloads, snapshot models |
 | Apple framework adapters | `Incomes` | `ItemInferenceService`, `NotificationService`, App Intent types, deep-link routing, StoreKit, ads |
-| App-side platform support | `Incomes/Sources/Common/Platform` | `IncomesPlatformEnvironmentFactory`, `MHAppRuntimeBootstrap` assembly, `MHAppRoutePipeline<IncomesRoute>` assembly, `IncomesRouteBridge`, `MHReviewFlow` policy helpers |
-| Watch and widget adapters | `Watch`, `Widgets` | WatchConnectivity transport, widget timeline providers, target-local screen state, entry presentation |
+| App-side platform support | `Incomes/Sources/Common/Platform` | `IncomesPlatformEnvironmentFactory`, `MHAppRuntimeBootstrap` assembly, `MHAppRoutePipeline<IncomesRoute>` assembly, `IncomesRouteBridge`, `MHReviewFlow` policy helpers, Foundation Models availability helpers, WidgetKit reload helpers, preference access helpers, App Group route store, pasteboard helpers, WatchConnectivity phone bridge |
+| Watch and widget surfaces | `Watch`, `Widgets` | WatchConnectivity transport, widget timeline providers, target-local screen state, entry presentation |
 | Presentation orchestration | `Incomes` | SwiftUI views, navigation state, form state, app-side services in `Item/Services`, and coordinators in `Settings/Coordinators` |
 
 ## MHPlatform Adoption
@@ -42,35 +48,54 @@ work across the iOS app, App Intents, Apple Watch, and widgets.
 ## Canonical Shared APIs
 
 The following types are the current shared entry points for business
-operations:
+operations and shared wire contracts:
 
 - `ItemFormInput`
 - `ItemMutationScope`
-- `ItemService.create(context:input:repeatMonthSelections:)`
-- `ItemService.update(context:item:input:scope:)`
-- `TagService` duplicate-resolution and tag/date lookup helpers
-- `YearlyItemDuplicator.plan(context:sourceYear:targetYear:)`
-- `YearlyItemDuplicator.apply(plan:context:)`
-- `SummaryCalculator`
-- `DataMaintenanceService.deleteAllData(context:)`
-- `DataMaintenanceService.deleteDebugData(context:)`
+- `RepeatMonthSelectionOperations`
+- `ItemCreationOperations` repeat count limits
+- `Item*Operations.create(context:input:repeatMonthSelections:)`
+- `Item*Operations.requiresScopeSelection(context:item:)`
+- `Item*Operations.update(context:item:input:scope:)`
+- `Tag*Operations` duplicate-resolution, tag/date lookup, category display, and display matching helpers
+- `YearlyItemDuplicationPlanOperations.plan(context:sourceYear:targetYear:)`
+- `YearlyItemDuplicationApplyOperations.apply(plan:context:)`
+- `YearlyDuplicationAutomationOperations`
+- `YearlyDuplicationPresentationOperations`
+- `YearlyDuplicationPromoOperations`
+- `ItemSummaryOperations`
+- `SearchResultOperations`
+- `MainNavigationOperations` route, deep-link, context-menu link, and state resolution
+- `ErrorMessageOperations`
+- `WidgetEntryOperations`
+- `WatchSyncOperations`
+- `SampleDataOperations`
+- `RemoteConfigurationOperations`
+- `UpcomingPaymentOperations`
+- `MonthlySummaryOperations` context, prompt, language, and fallback handling
+- `ItemFormInferenceOperations`
+- `SettingsStatusOperations`
+- `DataMaintenanceOperations`
+- `SubscriptionStateOperations`
+- `NotificationRoutePayload`
+- `UpcomingPaymentNotificationPresentation`
+- `ItemsRequest`
 - `WatchSyncReply`
 - `WatchSyncFailure`
 - `WatchSyncFailurePhase`
-- `WatchSyncService.applySnapshot(context:items:baseDate:monthOffsets:)`
 
 App-side mutation call sites should prefer
 `MHMutationWorkflow.runThrowing(... projection:)` over local wrapper APIs.
 
 ## Placement Rules
 
-1. If an operation is reusable across more than one surface, add or extend a
-   library service first.
+1. If an operation defines product behavior, add or extend a library
+   `*Operations` facade first.
 2. If an operation depends on Apple-only frameworks, keep it in `Incomes` and
    make it call library APIs.
-3. If a view or intent starts recreating date parsing, duplicate resolution,
-   yearly duplication planning, or mutation rules, treat that as a missing
-   library API.
+3. If a view, intent, widget, or watch target starts calling helper
+   collaborators or recreating date parsing, duplicate resolution, yearly
+   duplication planning, or mutation rules, treat that as a missing operation.
 4. Keep platform-specific types out of `IncomesLibrary`. Convert them at the
    boundary into library models or value types.
 5. Shared serialization contracts used by multiple targets belong in
@@ -89,20 +114,42 @@ App-side mutation call sites should prefer
   unless the repository policy itself changes.
 - If an adapter needs durable coverage, first extract the reusable rule or wire
   contract into `IncomesLibrary` and test it there.
+- A broken surface should normally be a UI, routing, dependency wiring, or
+  platform-delivery failure. Business behavior regressions should be caught by
+  `IncomesLibrary` tests.
 
 ## Current Examples
 
 - `ItemInferenceService` depends on Foundation Models, so it stays in
   `Incomes` and returns values that fit the shared item form flow.
-- `NotificationService` stays in `Incomes` and uses shared planning logic from
-  `IncomesLibrary`.
+- `MonthlySummaryGenerator` depends on Foundation Models, so it stays in
+  `Incomes` while prompt construction, fallback summaries, validation, and
+  deterministic context loading stay behind `MonthlySummaryOperations`.
+- `FoundationModelAvailabilitySupport` stays under `Common/Platform` because it
+  is reusable app-side glue for Apple Foundation Models availability checks,
+  not shared product behavior.
+- `IncomesWidgetReloader` stays under `Common/Platform` because it maps shared
+  mutation follow-up hints to WidgetKit timeline reload side effects.
+- `IncomesCurrencyPreference` stays under `Common/Platform` because App Intent
+  adapters use it to read the app preference store before calling shared
+  operations.
+- `IncomesIntentRouteStore` stays under `Common/Platform` because App Intents
+  write App Group pending route URLs there and the app route pipeline consumes
+  it as a platform deep-link source.
+- `IncomesPasteboardWriter` stays under `Common/Platform` because common
+  context-menu components use it to perform UIKit pasteboard and haptic side
+  effects.
+- `NotificationService` stays in `Incomes` and uses shared notification
+  planning operations, presentation contracts, identifier rules, and route
+  payload contracts from `IncomesLibrary`.
 - `IncomesPlatformEnvironmentFactory` stays in `Incomes` because runtime,
   route pipeline, and review flow assembly depend on the `MHPlatform` umbrella, app
   secrets, and SwiftUI environment injection.
-- `PhoneWatchBridge` and `PhoneSyncClient` stay in the app targets because they
-  own WatchConnectivity transport, while `WatchSyncReply` and
-  `WatchSyncService` stay in `IncomesLibrary` because the sync contract and
-  apply rules are shared.
+- `PhoneWatchBridge` stays under `Common/Platform` because it owns the phone-side
+  WatchConnectivity transport and maps requests into `WatchSyncOperations`.
+  `PhoneSyncClient` stays in the watch target for watch-side transport, while
+  `WatchSyncReply` and `WatchSyncOperations` stay in `IncomesLibrary` because
+  the sync contract, response snapshot building, and apply rules are shared.
 - `IncomesLibrary` stays on `MHPlatformCore` so shared logic only sees
   core-safe platform helpers.
 - `ContentView` stays thin because `MHAppRuntimeBootstrap` owns the runtime,
@@ -110,14 +157,20 @@ App-side mutation call sites should prefer
 - `MainNavigationView` registers its route handler through `IncomesRouteBridge`
   so the package owns route intake while the app still owns navigation meaning.
 - `YearlyDuplicationCoordinator` stays under `Settings/Coordinators` as an app-side adapter that delegates
-  duplication rules to `YearlyItemDuplicator` and uses package-owned mutation
+  duplication rules to `YearlyItemDuplication*Operations` and uses package-owned mutation
   projection strategies.
-- `ItemFormSaveCoordinator` stays under `Item/Services`, converts UI state into `ItemFormInput`, and calls
-  canonical `ItemService` APIs with package-owned mutation and review shells.
+- `ItemFormSaveCoordinator` stays under `Item/Services`, converts UI state into
+  `ItemFormInput`, and calls canonical `Item*Operations` APIs through
+  `MHMutationWorkflow.runThrowing`.
+- `ItemMutationAdapterFactory` stays app-side because it combines generic
+  follow-up hint execution with item-specific haptics and review requests. Its
+  public entrypoints should describe the mutation purpose, such as save or
+  delete, instead of accepting boolean feature toggles.
 
 ## Refactoring Heuristic
 
 When a business rule is duplicated, the default fix is to move the rule into
-`IncomesLibrary` rather than duplicating it in another view, intent, or target.
+`IncomesLibrary` and expose it through `*Operations` rather than duplicating it
+in another view, intent, or target.
 When the duplicated code is still Apple-framework glue, the default fix is to
 extract it into `Incomes/Sources/Common/Platform`.

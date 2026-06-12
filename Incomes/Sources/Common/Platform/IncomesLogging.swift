@@ -5,7 +5,7 @@ enum IncomesLogging {
     enum Category {
         nonisolated static let appIntent = "AppIntent"
         nonisolated static let appStartup = "AppStartup"
-        nonisolated static let dataMaintenance = "DataMaintenance"
+        nonisolated static let dataMaintenance = "data_maintenance"
         nonisolated static let inference = "Inference"
         nonisolated static let itemMutation = "ItemMutation"
         nonisolated static let mainNavigationSidebar = "MainNavigationSidebar"

@@ -15,9 +15,10 @@ struct DeleteItemIntent: AppIntent {
 
     @MainActor
     func perform() async throws -> some IntentResult {
+        let context = modelContainer.mainContext
         try await ItemDeleteCoordinator.delete(
-            context: modelContainer.mainContext,
-            item: item.model(in: modelContainer.mainContext),
+            context: context,
+            item: item.model(in: context),
             notificationService: notificationService,
             logger: intentLogger
         )
@@ -27,9 +28,8 @@ struct DeleteItemIntent: AppIntent {
 
 private extension DeleteItemIntent {
     @MainActor var intentLogger: MHLogger {
-        IncomesLogging.logger(
+        IncomesIntentLoggingSupport.appIntentLogger(
             logging: logging,
-            category: IncomesLogging.Category.appIntent,
             source: #fileID
         )
     }

@@ -81,7 +81,7 @@ private extension CategoryChartSection {
                     SectorMark(
                         angle: .value(
                             object.title,
-                            decimalToDouble(object.value)
+                            object.plotValue
                         ),
                         innerRadius: .ratio(Constants.innerRadiusRatio),
                         outerRadius: .inset(Constants.outerRadiusInset),
@@ -111,7 +111,7 @@ private extension CategoryChartSection {
                     SectorMark(
                         angle: .value(
                             object.title,
-                            decimalToDouble(object.value)
+                            object.plotValue
                         ),
                         innerRadius: .ratio(Constants.innerRadiusRatio),
                         outerRadius: .inset(Constants.outerRadiusInset),
@@ -154,67 +154,19 @@ private extension CategoryChartSection {
 
 private extension CategoryChartSection {
     var incomeTotal: Decimal {
-        items.reduce(.zero) { result, item in
-            result + item.income
-        }
+        ItemSummaryOperations.totalIncome(for: items)
     }
 
     var outgoTotal: Decimal {
-        items.reduce(.zero) { result, item in
-            result + item.outgo
-        }
+        ItemSummaryOperations.totalOutgo(for: items)
     }
 
-    var incomeObjects: [(title: String, value: Decimal, ratio: Double, label: String)] { // swiftlint:disable:this large_tuple line_length
-        let source: [Item] = items.filter(\.income.isNotZero)
-        let grouped: [String: [Item]] = .init(grouping: source) { item in
-            CategoryNameSupport.displayName(
-                forStoredName: item.category?.name
-            )
-        }
-        let total = grouped.values
-            .flatMap(\.self)
-            .reduce(.zero) { result, item in
-                result + item.income
-            }
-        return grouped.map { displayName, items in
-            let value = items.reduce(.zero) { result, item in
-                result + item.income
-            }
-            let ratio = ratioFor(value: value, total: total)
-            let percent = percentString(for: ratio)
-            let label = "\(displayName) \(percent) • \(value.asCurrency)"
-            return (title: displayName, value: value, ratio: ratio, label: label)
-        }
-        .sorted { left, right in
-            left.value > right.value
-        }
+    var incomeObjects: [ItemSummaryOperations.ChartSegment] {
+        ItemSummaryOperations.incomeSegments(for: items)
     }
 
-    var outgoObjects: [(title: String, value: Decimal, ratio: Double, label: String)] { // swiftlint:disable:this large_tuple line_length
-        let source: [Item] = items.filter(\.outgo.isNotZero)
-        let grouped: [String: [Item]] = .init(grouping: source) { item in
-            CategoryNameSupport.displayName(
-                forStoredName: item.category?.name
-            )
-        }
-        let total = grouped.values
-            .flatMap(\.self)
-            .reduce(.zero) { result, item in
-                result + item.outgo
-            }
-        return grouped.map { displayName, items in
-            let value = items.reduce(.zero) { result, item in
-                result + item.outgo
-            }
-            let ratio = ratioFor(value: value, total: total)
-            let percent = percentString(for: ratio)
-            let label = "\(displayName) \(percent) • \(value.asCurrency)"
-            return (title: displayName, value: value, ratio: ratio, label: label)
-        }
-        .sorted { left, right in
-            left.value > right.value
-        }
+    var outgoObjects: [ItemSummaryOperations.ChartSegment] {
+        ItemSummaryOperations.outgoSegments(for: items)
     }
 
     var incomeColorScale: [String: Color] {
@@ -260,7 +212,7 @@ private extension CategoryChartSection {
 
     @ViewBuilder
     func legendList(
-        objects: [(title: String, value: Decimal, ratio: Double, label: String)], // swiftlint:disable:this large_tuple
+        objects: [ItemSummaryOperations.ChartSegment],
         colorScale: [String: Color]
     ) -> some View {
         let columns: [GridItem] = [
@@ -289,7 +241,7 @@ private extension CategoryChartSection {
                                 width: Constants.legendMarkerSize,
                                 height: Constants.legendMarkerSize
                             )
-                        Text("\(percentString(for: object.ratio)), \(object.value.asCurrency)")
+                        Text("\(object.percentText), \(object.value.asCurrency)")
                             .font(.caption2)
                             .foregroundStyle(.secondary)
                             .frame(maxWidth: .infinity, alignment: .leading)
@@ -298,23 +250,6 @@ private extension CategoryChartSection {
             }
         }
         .padding(.top, designMetrics.spacing.inline)
-    }
-
-    func ratioFor(value: Decimal, total: Decimal) -> Double {
-        guard total.isNotZero else {
-            return .zero
-        }
-        let totalValue = decimalToDouble(total)
-        let currentValue = decimalToDouble(value)
-        return currentValue / totalValue
-    }
-
-    func percentString(for ratio: Double) -> String {
-        ratio.formatted(.percent.precision(.fractionLength(0)))
-    }
-
-    private func decimalToDouble(_ value: Decimal) -> Double {
-        Double(value.description) ?? .zero
     }
 }
 

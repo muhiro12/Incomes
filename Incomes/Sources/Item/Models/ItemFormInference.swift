@@ -1,37 +1,42 @@
 //
 //  ItemFormInference.swift
 //  Incomes
-//
-//  Moved from IncomesLibrary to app to avoid AppIntents in the library.
-//
-
 import AppIntents
 import Foundation
-import FoundationModels
 
 @available(iOS 26.0, *)
-@Generable
-public struct ItemFormInference: AppEntity {
-    public static var typeDisplayRepresentation: TypeDisplayRepresentation {
+struct ItemFormInference: AppEntity {
+    static var typeDisplayRepresentation: TypeDisplayRepresentation {
         .init(name: "Item Form Inference")
     }
 
-    public static let defaultQuery = ItemFormInferenceQuery()
+    static let defaultQuery = ItemFormInferenceQuery()
 
-    @Guide(description: "Date formatted as yyyyMMdd")
-    public var date: String
-    @Guide(description: "Item content")
-    public var content: String
-    @Guide(description: "Income amount")
-    public var income: Decimal
-    @Guide(description: "Outgo amount")
-    public var outgo: Decimal
-    @Guide(description: "Category name")
-    public var category: String
+    var date: String
+    var content: String
+    var income: Decimal
+    var outgo: Decimal
+    var category: String
 
-    public var id: String { "\(date)-\(content)-\(category)" }
+    var id: String {
+        ItemFormInferenceOperations.stableIdentifier(
+            date: date,
+            content: content,
+            income: income,
+            outgo: outgo,
+            category: category
+        )
+    }
 
-    public var displayRepresentation: DisplayRepresentation {
+    var displayRepresentation: DisplayRepresentation {
         .init(title: "\(content)", subtitle: "\(date)")
+    }
+
+    init(result: ItemFormInferenceResult) {
+        date = result.date
+        content = result.content
+        income = result.income
+        outgo = result.outgo
+        category = result.category
     }
 }

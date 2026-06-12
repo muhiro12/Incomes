@@ -97,11 +97,11 @@ private extension HomeListView {
     }
 
     var yearSummaryRoute: IncomesRoute? {
-        IncomesContextMenuLinkBuilder.yearSummaryRoute(for: yearTag)
+        MainNavigationOperations.yearSummaryRoute(forYearTag: yearTag)
     }
 
     var yearSummaryURL: URL? {
-        IncomesContextMenuLinkBuilder.preferredURL(for: yearSummaryRoute)
+        MainNavigationOperations.preferredURL(for: yearSummaryRoute)
     }
 }
 

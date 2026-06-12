@@ -1,0 +1,74 @@
+//
+//  SearchResultOperations.swift
+//  IncomesLibrary
+//
+//  Builds month sections for item search results.
+//
+
+import Foundation
+
+/// Builds month-based sections for item search results.
+public enum SearchResultOperations {
+    /// Supported numeric search targets.
+    public enum CurrencyTarget: Sendable {
+        case balance
+        case income
+        case outgo
+    }
+
+    /// A month section containing matching items.
+    public struct Section {
+        /// First day of the represented local month.
+        public let month: Date
+        /// Display title for the represented month.
+        public var title: String {
+            month.formatted(.dateTime.year().month())
+        }
+        /// Items belonging to the represented month.
+        public let items: [Item]
+    }
+
+    /// Groups items by local month and returns sections from newest to oldest.
+    public static func sections(
+        for items: [Item],
+        calendar: Calendar = .current
+    ) -> [Section] {
+        let groupedItems = Dictionary(grouping: items) { item in
+            calendar.startOfMonth(for: item.localDate)
+        }
+        return groupedItems.keys
+            .sorted(by: >)
+            .map { month in
+                .init(
+                    month: month,
+                    items: groupedItems[month] ?? []
+                )
+            }
+    }
+
+    /// Builds an item predicate for a numeric search range.
+    public static func currencyPredicate(
+        target: CurrencyTarget,
+        minimumText: String,
+        maximumText: String
+    ) -> ItemPredicate {
+        ItemSearchPredicateBuilder.build(
+            target: target.searchPredicateTarget,
+            minimumText: minimumText,
+            maximumText: maximumText
+        )
+    }
+}
+
+private extension SearchResultOperations.CurrencyTarget {
+    var searchPredicateTarget: ItemSearchPredicateBuilder.Target {
+        switch self {
+        case .balance:
+            return .balance
+        case .income:
+            return .income
+        case .outgo:
+            return .outgo
+        }
+    }
+}

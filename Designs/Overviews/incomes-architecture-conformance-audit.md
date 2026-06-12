@@ -36,11 +36,11 @@ contract and watch UI state handling.
 - `IncomesLibrary` still owns the shared model, mutation/query services,
   planners, and snapshot builders.
 - Representative files:
-  - `IncomesLibrary/Sources/Item/ItemService.swift`
-  - `IncomesLibrary/Sources/Tag/TagService.swift`
-  - `IncomesLibrary/Sources/Item/SummaryCalculator.swift`
-  - `IncomesLibrary/Sources/Item/YearlyItemDuplicator.swift`
-  - `IncomesLibrary/Sources/Common/WidgetEntryFactory.swift`
+  - `IncomesLibrary/Sources/Item/Item*Operations.swift`
+  - `IncomesLibrary/Sources/Tag/Tag*Operations.swift`
+  - `IncomesLibrary/Sources/Item/ItemSummaryOperations.swift`
+  - `IncomesLibrary/Sources/Item/YearlyItemDuplication*Operations.swift`
+  - `IncomesLibrary/Sources/Common/WidgetEntryOperations.swift`
 
 ### Multiple targets still consume the same shared APIs
 
@@ -85,7 +85,7 @@ contract and watch UI state handling.
   - `Watch/Sources/Services/WatchDataSyncer.swift`
   - `Watch/Sources/Services/PhoneSyncClient.swift`
   - `Widgets/Sources/Month/Providers/MonthSummaryProvider.swift`
-  - `IncomesLibrary/Sources/Item/Sync/WatchSyncService.swift`
+  - `IncomesLibrary/Sources/Item/Sync/WatchSyncOperations.swift`
 
 ## Corrected Drift
 
@@ -99,7 +99,7 @@ contract and watch UI state handling.
   - Transport, decode, and apply failures were not distinguishable from a
     legitimate zero-item sync result, which violated ADR 0005.
 - Current correction:
-  - `IncomesLibrary` now defines `WatchSyncReply`,
+  - `IncomesLibrary` now defines `ItemsRequest`, `WatchSyncReply`,
     `WatchSyncFailurePhase`, and `WatchSyncFailure`.
   - `PhoneWatchBridge` replies with typed success or failure payloads.
   - `PhoneSyncClient` and `WatchDataSyncer` now preserve transport, decode,
@@ -107,8 +107,9 @@ contract and watch UI state handling.
   - `WatchHomeScreenModel` and `Watch` `ContentView` now distinguish
     reloading, sync failure, and successful empty sync on screen.
 - Representative files:
+  - `IncomesLibrary/Sources/Item/Sync/ItemsRequest.swift`
   - `IncomesLibrary/Sources/Item/Sync/WatchSyncReply.swift`
-  - `Incomes/Sources/Common/Services/PhoneWatchBridge.swift`
+  - `Incomes/Sources/Common/Platform/PhoneWatchBridge.swift`
   - `Watch/Sources/Services/PhoneSyncClient.swift`
   - `Watch/Sources/Services/WatchDataSyncer.swift`
   - `Watch/Sources/WatchHomeScreenModel.swift`

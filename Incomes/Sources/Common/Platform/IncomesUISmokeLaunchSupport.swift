@@ -17,7 +17,7 @@ enum IncomesUISmokeLaunchSupport {
         }
 
         let context = modelContainer.mainContext
-        let itemCountBeforeSeed = try ItemService.allItemsCount(context: context)
+        let itemCountBeforeSeed = try ItemQueryOperations.allItemsCount(context: context)
         logger.notice(
             "ui_smoke.seed_if_empty_requested",
             metadata: IncomesLogging.metadata(
@@ -25,13 +25,13 @@ enum IncomesUISmokeLaunchSupport {
             )
         )
 
-        try ItemService.seedSampleData(
+        try SampleDataOperations.seed(
             context: context,
             profile: .preview,
             ifEmptyOnly: true
         )
 
-        let itemCountAfterSeed = try ItemService.allItemsCount(context: context)
+        let itemCountAfterSeed = try ItemQueryOperations.allItemsCount(context: context)
         logger.notice(
             "ui_smoke.seed_if_empty_completed",
             metadata: IncomesLogging.metadata(

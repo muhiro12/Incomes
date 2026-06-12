@@ -12,16 +12,16 @@ reimplemented, which creates parity gaps with the main app UI.
 ## Decision
 
 Treat `AppIntent` types as adapter code. They may validate parameters, convert
-entities, call shared services, and optionally open routes in the app. They do
-not become the source of truth for business rules.
+entities, call shared `*Operations`, and optionally open routes in the app.
+They do not become the source of truth for business rules.
 
 ## Consequences
 
-- Shared operations should have intent adapters that call library APIs rather
-  than reconstructing the behavior directly.
+- Shared operations should have intent adapters that call library `*Operations`
+  rather than reconstructing the behavior directly.
 - `isDiscoverable = false` is acceptable when an operation should be supported
   without being broadly surfaced in Shortcuts.
-- If an intent needs custom business branching or raw fetching, that is a sign
-  that the shared library API is incomplete.
+- If an intent needs custom business branching, raw fetching, or direct helper
+  calls, that is a sign that the shared library operation is incomplete.
 - UI and App Intents should stay aligned by depending on the same canonical
-  services.
+  operations.

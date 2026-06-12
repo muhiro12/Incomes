@@ -1,5 +1,4 @@
 import AppIntents
-import MHPlatform
 import SwiftData
 
 @available(iOS 26.0, *)
@@ -15,12 +14,9 @@ struct GenerateMonthlySummaryIntent: AppIntent {
     @MainActor
     func perform() async throws -> some ReturnsValue<String> {
         let summary = try await MonthlySummaryGenerator.generate(
-            modelContainer: modelContainer,
+            context: modelContainer.mainContext,
             date: date,
-            currencyCode: MHPreferenceStore().string(
-                for: \.currencyCode,
-                default: ""
-            ),
+            currencyCode: IncomesCurrencyPreference.preferredCurrencyCode(),
             locale: .current
         )
         return .result(value: summary)

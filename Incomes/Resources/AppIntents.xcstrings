@@ -429,6 +429,9 @@
         }
       }
     },
+    "Delete Orphan Tags" : {
+
+    },
     "Generate Monthly Summary" : {
       "localizations" : {
         "en" : {
@@ -496,6 +499,15 @@
           }
         }
       }
+    },
+    "Get Category Facets" : {
+
+    },
+    "Get Duplicate Tags" : {
+
+    },
+    "Get Filtered Category Facets" : {
+
     },
     "Get Items" : {
       "localizations" : {
@@ -701,6 +713,9 @@
         }
       }
     },
+    "Get Orphan Tags" : {
+
+    },
     "Get Previous Item" : {
       "localizations" : {
         "en" : {
@@ -905,6 +920,15 @@
         }
       }
     },
+    "Get Tag Date" : {
+
+    },
+    "Get Tag Items" : {
+
+    },
+    "Get Tag Years" : {
+
+    },
     "Get Year Items Count" : {
       "localizations" : {
         "en" : {
@@ -938,6 +962,12 @@
           }
         }
       }
+    },
+    "Get Yearly Duplication Source Years" : {
+
+    },
+    "Get Yearly Duplication Target Years" : {
+
     },
     "Income: %@, Outgo: %@" : {
       "localizations" : {
@@ -1212,6 +1242,7 @@
       }
     },
     "Recent Item" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1278,6 +1309,9 @@
           }
         }
       }
+    },
+    "Rename Category Tag" : {
+
     },
     "Resolve Duplicate Tags" : {
       "localizations" : {
@@ -1721,6 +1755,9 @@
         }
       }
     },
+    "Suggest Yearly Duplication" : {
+
+    },
     "Tag" : {
       "localizations" : {
         "en" : {
@@ -1824,6 +1861,7 @@
       }
     },
     "Upcoming Item" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {

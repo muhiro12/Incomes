@@ -31,7 +31,7 @@ struct TagRenameTests {
             priority: 0
         )
         let tag = try #require(
-            try TagService.getByName(
+            try TagQueryOperations.getByName(
                 context: context,
                 name: "Food",
                 type: .category
@@ -40,7 +40,7 @@ struct TagRenameTests {
         let originalID = tag.id
         let originalBalances = balanceMap()
 
-        try TagService.renameCategory(
+        try TagRenameOperations.renameCategory(
             context: context,
             tag: tag,
             to: "Travel"
@@ -49,7 +49,7 @@ struct TagRenameTests {
         #expect(tag.id == originalID)
         #expect(tag.name == "Travel")
         #expect(tag.displayName == "Travel")
-        #expect(TagService.items(for: tag).count == 2)
+        #expect(TagQueryOperations.items(for: tag).count == 2)
         #expect(firstItem.category?.name == "Travel")
         #expect(secondItem.category?.name == "Travel")
         #expect(balanceMap() == originalBalances)
@@ -82,7 +82,7 @@ struct TagRenameTests {
         let duplicateTarget = try #require(secondTag)
 
         #expect(throws: TagRenameError.duplicateTargetName) {
-            try TagService.renameCategory(
+            try TagRenameOperations.renameCategory(
                 context: context,
                 tag: tag,
                 to: duplicateTarget.name
@@ -106,7 +106,7 @@ struct TagRenameTests {
         )
 
         #expect(throws: TagRenameError.uncategorizedSource) {
-            try TagService.renameCategory(
+            try TagRenameOperations.renameCategory(
                 context: context,
                 tag: tag,
                 to: "Travel"
@@ -130,7 +130,7 @@ struct TagRenameTests {
         )
 
         #expect(throws: TagRenameError.invalidTarget) {
-            try TagService.renameCategory(
+            try TagRenameOperations.renameCategory(
                 context: context,
                 tag: tag,
                 to: "Others"
@@ -147,7 +147,7 @@ struct TagRenameTests {
         )
 
         #expect(throws: TagRenameError.unsupportedType) {
-            try TagService.renameCategory(
+            try TagRenameOperations.renameCategory(
                 context: context,
                 tag: yearTag,
                 to: "2025"
@@ -171,7 +171,7 @@ struct TagRenameTests {
         )
         let originalID = tag.id
 
-        try TagService.renameCategory(
+        try TagRenameOperations.renameCategory(
             context: context,
             tag: tag,
             to: "  Food  "

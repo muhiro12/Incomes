@@ -28,9 +28,25 @@ struct IncomesRouteParserTests {
     }
 
     @Test
+    func parse_custom_scheme_month_route_split_components() {
+        let route = IncomesRouteParser.parse(
+            url: testURL("incomes://month/2026/02")
+        )
+        #expect(route == .month(year: 2_026, month: 2))
+    }
+
+    @Test
     func parse_custom_scheme_item_route_with_query() {
         let route = IncomesRouteParser.parse(
             url: testURL("incomes://item?id=item-id")
+        )
+        #expect(route == .item("item-id"))
+    }
+
+    @Test
+    func parse_custom_scheme_item_route_with_path_segment() {
+        let route = IncomesRouteParser.parse(
+            url: testURL("incomes://item/item-id")
         )
         #expect(route == .item("item-id"))
     }
@@ -108,6 +124,14 @@ struct IncomesRouteParserTests {
     }
 
     @Test
+    func parse_universal_link_split_month_route_with_prefix() {
+        let route = IncomesRouteParser.parse(
+            url: testURL("https://muhiro12.github.io/Incomes/month/2026/02")
+        )
+        #expect(route == .month(year: 2_026, month: 2))
+    }
+
+    @Test
     func parse_universal_link_route_without_prefix() {
         let route = IncomesRouteParser.parse(
             url: testURL("https://muhiro12.github.io/year/2025")
@@ -121,6 +145,57 @@ struct IncomesRouteParserTests {
             url: testURL("https://muhiro12.github.io/Incomes/item?id=item-id")
         )
         #expect(route == .item("item-id"))
+    }
+
+    @Test
+    func parse_universal_link_item_route_with_path_segment() {
+        let route = IncomesRouteParser.parse(
+            url: testURL("https://muhiro12.github.io/Incomes/item/item-id")
+        )
+        #expect(route == .item("item-id"))
+    }
+
+    @Test
+    func parse_returns_nil_for_item_route_without_identifier() {
+        let customSchemeRoute = IncomesRouteParser.parse(
+            url: testURL("incomes://item")
+        )
+        let universalLinkRoute = IncomesRouteParser.parse(
+            url: testURL("https://muhiro12.github.io/Incomes/item")
+        )
+        #expect(customSchemeRoute == nil)
+        #expect(universalLinkRoute == nil)
+    }
+
+    @Test
+    func parse_returns_nil_for_item_route_with_empty_identifier() {
+        let customSchemeRoute = IncomesRouteParser.parse(
+            url: testURL("incomes://item?id=")
+        )
+        let universalLinkRoute = IncomesRouteParser.parse(
+            url: testURL("https://muhiro12.github.io/Incomes/item?id=")
+        )
+        #expect(customSchemeRoute == nil)
+        #expect(universalLinkRoute == nil)
+    }
+
+    @Test(
+        "parse returns nil for routes with extra path segments",
+        arguments: [
+            "incomes://home/extra", "incomes://settings/subscription/extra",
+            "incomes://year-summary/2026/extra", "incomes://yearly-duplication/extra",
+            "incomes://duplicate-tags/extra", "incomes://orphan-tags/extra",
+            "incomes://year/2026/extra", "incomes://month/2026-02/extra",
+            "incomes://month/2026/02/extra", "incomes://item/item-id/extra",
+            "incomes://search/extra?q=rent",
+            "https://muhiro12.github.io/Incomes/month/2026/02/extra"
+        ]
+    )
+    func parse_returns_nil_for_routes_with_extra_path_segments(
+        value: String
+    ) {
+        let route = IncomesRouteParser.parse(url: testURL(value))
+        #expect(route == nil)
     }
 
     @Test
@@ -163,6 +238,22 @@ struct IncomesRouteParserTests {
     func parse_returns_nil_for_invalid_month() {
         let route = IncomesRouteParser.parse(
             url: testURL("incomes://month/2026-13")
+        )
+        #expect(route == nil)
+    }
+
+    @Test
+    func parse_returns_nil_for_invalid_split_month() {
+        let route = IncomesRouteParser.parse(
+            url: testURL("incomes://month/2026/13")
+        )
+        #expect(route == nil)
+    }
+
+    @Test
+    func parse_returns_nil_for_invalid_universal_link_split_month() {
+        let route = IncomesRouteParser.parse(
+            url: testURL("https://muhiro12.github.io/Incomes/month/2026/13")
         )
         #expect(route == nil)
     }

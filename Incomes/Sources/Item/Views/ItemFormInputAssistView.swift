@@ -28,6 +28,8 @@ struct ItemFormInputAssistView: View {
     private var logging
     @Environment(\.mhDesignMetrics)
     private var designMetrics
+    @Environment(\.locale)
+    private var locale
 
     @State private var importRoute: ImportRoute?
     @State private var isApplyingInference = false
@@ -119,12 +121,6 @@ struct ItemFormInputAssistView: View {
 
 @available(iOS 26.0, *)
 private extension ItemFormInputAssistView {
-    private enum Constants {
-        static let cardBorderLineWidth: CGFloat = 1
-        static let cardBorderOpacity = 0.18
-        static let textEditorMinimumHeight: CGFloat = 220
-    }
-
     func importSection() -> some View {
         Section {
             PhotosPicker(selection: $selectedItem, matching: .images) {
@@ -147,52 +143,10 @@ private extension ItemFormInputAssistView {
         recognizedText: Binding<String>,
         isRecognizedTextEmpty: Bool
     ) -> some View {
-        Section { // swiftlint:disable:this closure_body_length
-            ZStack(alignment: .topLeading) {
-                if isRecognizedTextEmpty {
-                    Text("Paste or capture text to extract details.")
-                        .foregroundStyle(.secondary)
-                        .padding(.top, designMetrics.layout.surface.compactInsetVertical)
-                        .padding(.leading, designMetrics.layout.surface.compactInsetHorizontal)
-                }
-
-                TextEditor(text: recognizedText)
-                    .scrollContentBackground(.hidden)
-                    .frame(minHeight: Constants.textEditorMinimumHeight)
-                    .padding(.horizontal, designMetrics.layout.surface.compactInsetHorizontal)
-                    .padding(.vertical, designMetrics.layout.surface.compactInsetVertical)
-                    .background(
-                        RoundedRectangle(
-                            cornerRadius: designMetrics.cornerRadius.surface,
-                            style: .continuous
-                        )
-                        .fill(Color(uiColor: .secondarySystemBackground))
-                    )
-                    .accessibilityLabel("Captured text")
-            }
-            .overlay(
-                RoundedRectangle(
-                    cornerRadius: designMetrics.cornerRadius.surface,
-                    style: .continuous
-                )
-                .stroke(
-                    Color.secondary.opacity(Constants.cardBorderOpacity),
-                    lineWidth: Constants.cardBorderLineWidth
-                )
-            )
-            .listRowInsets(
-                .init(
-                    top: designMetrics.layout.surface.compactInsetVertical,
-                    leading: designMetrics.layout.surface.compactInsetHorizontal,
-                    bottom: designMetrics.layout.surface.compactInsetVertical,
-                    trailing: designMetrics.layout.surface.compactInsetHorizontal
-                )
-            )
-        } header: {
-            Text("Recognized Text")
-        } footer: {
-            Text("We will extract date, amounts, category, and priority from this text.")
-        }
+        ItemFormRecognizedTextSection(
+            recognizedText: recognizedText,
+            isRecognizedTextEmpty: isRecognizedTextEmpty
+        )
     }
 
     private func scanReceipt() async {
@@ -209,7 +163,7 @@ private extension ItemFormInputAssistView {
             }
             await scanImage(image)
         } catch {
-            errorMessage = error.localizedDescription
+            errorMessage = ErrorMessageOperations.message(from: error)
         }
     }
 
@@ -217,7 +171,7 @@ private extension ItemFormInputAssistView {
         do {
             try await scanner.scan(image)
         } catch {
-            errorMessage = error.localizedDescription
+            errorMessage = ErrorMessageOperations.message(from: error)
         }
     }
 
@@ -230,12 +184,14 @@ private extension ItemFormInputAssistView {
             let updatedInput = try await ItemFormInferenceApplier.apply(
                 text: scanner.recognizedText,
                 currentInput: model.formInputData,
+                locale: locale,
+                currentDate: Date(),
                 logger: inferenceLogger
             )
             model.apply(updatedInput)
             dismiss()
         } catch {
-            errorMessage = error.localizedDescription
+            errorMessage = ErrorMessageOperations.message(from: error)
         }
     }
 }

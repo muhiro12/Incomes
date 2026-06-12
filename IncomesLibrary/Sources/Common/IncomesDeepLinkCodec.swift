@@ -8,9 +8,21 @@ public enum IncomesDeepLinkCodec {
     /// Creates a codec configured for Incomes deep-link transports.
     public static func make(
         host: String = IncomesRouteURLDefaults.universalLinkHost,
-        allowedUniversalLinkHosts: Set<String> = [
-            IncomesRouteURLDefaults.universalLinkHost
-        ],
+        appPathPrefix: String = IncomesRouteURLDefaults.universalLinkPathPrefix,
+        preferredTransport: MHDeepLinkTransport = .universalLink
+    ) -> MHDeepLinkCodec<IncomesRoute> {
+        make(
+            host: host,
+            allowedUniversalLinkHosts: [host],
+            appPathPrefix: appPathPrefix,
+            preferredTransport: preferredTransport
+        )
+    }
+
+    /// Creates a codec configured for specific accepted universal-link hosts.
+    public static func make(
+        host: String,
+        allowedUniversalLinkHosts: Set<String>,
         appPathPrefix: String = IncomesRouteURLDefaults.universalLinkPathPrefix,
         preferredTransport: MHDeepLinkTransport = .universalLink
     ) -> MHDeepLinkCodec<IncomesRoute> {
@@ -22,6 +34,20 @@ public enum IncomesDeepLinkCodec {
                 universalLinkPathPrefix: appPathPrefix,
                 preferredTransport: preferredTransport
             )
+        )
+    }
+
+    /// Creates a codec using the default preferred host with specific accepted hosts.
+    public static func make(
+        allowedUniversalLinkHosts: Set<String>,
+        appPathPrefix: String = IncomesRouteURLDefaults.universalLinkPathPrefix,
+        preferredTransport: MHDeepLinkTransport = .universalLink
+    ) -> MHDeepLinkCodec<IncomesRoute> {
+        make(
+            host: IncomesRouteURLDefaults.universalLinkHost,
+            allowedUniversalLinkHosts: allowedUniversalLinkHosts,
+            appPathPrefix: appPathPrefix,
+            preferredTransport: preferredTransport
         )
     }
 }

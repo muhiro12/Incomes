@@ -9,7 +9,7 @@ import SwiftData
 
 enum SettingsActionCoordinator {
     static func loadStatus(context: ModelContext) throws -> SettingsStatus {
-        try SettingsStatusLoader.load(context: context)
+        try SettingsStatusOperations.load(context: context)
     }
 
     static func refreshNotifications(notificationService: NotificationService) async {

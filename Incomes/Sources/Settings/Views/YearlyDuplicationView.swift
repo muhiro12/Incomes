@@ -1,4 +1,3 @@
-// swiftlint:disable file_length
 //
 //  YearlyDuplicationView.swift
 //  Incomes
@@ -14,6 +13,11 @@ import SwiftUI
 struct YearlyDuplicationView: View {
     private enum Constants {
         static let targetYearRange = 10
+        static let minimumGroupCount = 3
+
+        static var initialSelectionState: YearlyItemDuplicationSelectionState {
+            YearlyItemDuplicationSelectionOperations.initialSelectionState()
+        }
     }
 
     @Environment(\.modelContext)
@@ -28,8 +32,8 @@ struct YearlyDuplicationView: View {
     @Query(.tags(.typeIs(.year), order: .reverse))
     private var yearTags: [Tag]
 
-    @State private var sourceYear = Calendar.current.component(.year, from: .now) - 1
-    @State private var targetYear = Calendar.current.component(.year, from: .now)
+    @State private var sourceYear = Constants.initialSelectionState.sourceYear
+    @State private var targetYear = Constants.initialSelectionState.targetYear
 
     @State private var route: YearlyDuplicationRoute?
     @State private var plan: YearlyItemDuplicationPlan?
@@ -40,116 +44,35 @@ struct YearlyDuplicationView: View {
     @State private var planLoadGeneration = 0
 
     var body: some View {
-        Form { // swiftlint:disable:this closure_body_length
+        Form {
             if isLoadingPlan {
-                Section {
-                    HStack {
-                        ProgressView()
-                        Text("Loading proposals...")
-                    }
-                }
+                YearlyDuplicationLoadingSection()
             }
             if let plan {
-                Section("Proposals") { // swiftlint:disable:this closure_body_length
-                    ForEach(plan.groups, id: \.id) { group in // swiftlint:disable:this closure_body_length
-                        let entries = YearlyDuplicationCoordinator.entries(
-                            for: group,
-                            in: plan
-                        )
-                        let isCreated = createdGroupIDs.contains(group.id)
-                        VStack(alignment: .leading, spacing: designMetrics.spacing.inline) { // swiftlint:disable:this closure_body_length line_length
-                            HStack {
-                                Text(group.content)
-                                    .font(.headline)
-                                if isCreated {
-                                    Text(String(localized: "Created"))
-                                        .font(.footnote)
-                                        .foregroundStyle(.secondary)
-                                }
-                            }
-                            if group.category.isNotEmpty {
-                                Text(group.category)
-                                    .font(.footnote)
-                                    .foregroundStyle(.secondary)
-                            }
-                            Text(
-                                String(
-                                    localized: "Dates: \(YearlyDuplicationCoordinator.monthDayListText(for: group))"
-                                )
-                            )
-                            .font(.footnote)
-                            .foregroundStyle(.secondary)
-                            Text(String(localized: "Items: \(group.entryCount)"))
-                                .font(.footnote)
-                                .foregroundStyle(.secondary)
-                            Text(
-                                String(
-                                    localized: "Income: \(YearlyDuplicationCoordinator.decimalString(from: group.averageIncome))" // swiftlint:disable:this line_length
-                                )
-                            )
-                            .font(.footnote)
-                            .foregroundStyle(.secondary)
-                            Text(
-                                String(
-                                    localized: "Outgo: \(YearlyDuplicationCoordinator.decimalString(from: group.averageOutgo))" // swiftlint:disable:this line_length
-                                )
-                            )
-                            .font(.footnote)
-                            .foregroundStyle(.secondary)
-                            HStack {
-                                Button("Edit") {
-                                    presentItemForm(group: group)
-                                }
-                                .buttonStyle(.bordered)
-                                .disabled(isCreated || entries.isEmpty)
-                                Button("Create") {
-                                    Task { @MainActor in
-                                        await createGroupItems(group: group)
-                                    }
-                                }
-                                .buttonStyle(.borderedProminent)
-                                .disabled(isCreated || entries.isEmpty)
-                            }
-                        }
-                        .padding(.vertical, proposalVerticalPadding)
-                        .contentShape(Rectangle())
-                        .contextMenu {
-                            Button("Edit", systemImage: "pencil") {
-                                presentItemForm(group: group)
-                            }
-                            .disabled(isCreated || entries.isEmpty)
-                            Button("Create", systemImage: "plus.circle") {
-                                Task { @MainActor in
-                                    await createGroupItems(group: group)
-                                }
-                            }
-                            .disabled(isCreated || entries.isEmpty)
-                            Divider()
-                            CopyTextContextMenuButton(
-                                "Copy Summary",
-                                text: proposalSummaryText(for: group)
-                            )
-                        }
-                    }
-                }
-                Section("Preview") {
-                    Text(String(localized: "Groups: \(plan.groups.count)"))
-                    Text(String(localized: "Items: \(plan.entries.count)"))
-                    if plan.skippedDuplicateCount > .zero {
-                        Text(String(localized: "Skipped duplicates: \(plan.skippedDuplicateCount)"))
-                            .foregroundStyle(.secondary)
-                    }
-                    if plan.groups.isNotEmpty {
-                        Text(String(localized: "Select a proposal to edit or create it directly."))
-                            .font(.footnote)
-                            .foregroundStyle(.secondary)
-                    }
-                }
+                YearlyDuplicationProposalsSection(
+                    plan: plan,
+                    createdGroupIDs: createdGroupIDs,
+                    inlineSpacing: designMetrics.spacing.inline,
+                    verticalPadding: proposalVerticalPadding,
+                    summaryText: proposalSummaryText,
+                    edit: presentItemForm,
+                    create: createGroup
+                )
+                YearlyDuplicationPreviewSection(plan: plan)
             }
         }
         .navigationTitle("Duplicate Year")
         .safeAreaInset(edge: .top) {
-            yearSelectionBar()
+            YearlyDuplicationYearSelectionBar(
+                sourceYear: $sourceYear,
+                targetYear: $targetYear,
+                sourceYears: sourceYears,
+                targetYears: targetYears,
+                inlineSpacing: designMetrics.spacing.inline,
+                controlSpacing: designMetrics.spacing.control,
+                horizontalPadding: designMetrics.layout.surface.insetHorizontal,
+                verticalPadding: designMetrics.layout.surface.compactInsetVertical
+            )
         }
         .toolbar {
             ToolbarItem {
@@ -221,18 +144,18 @@ struct YearlyDuplicationView: View {
 
 private extension YearlyDuplicationView {
     var currentYear: Int {
-        Calendar.current.component(.year, from: .now)
+        YearlyItemDuplicationSelectionOperations.currentYear()
     }
 
     var sourceYears: [Int] {
-        YearlyDuplicationCoordinator.sourceYears(
+        YearlyItemDuplicationSelectionOperations.availableSourceYears(
             from: yearTags,
             currentYear: currentYear
         )
     }
 
     var targetYears: [Int] {
-        YearlyDuplicationCoordinator.targetYears(
+        YearlyItemDuplicationSelectionOperations.targetYears(
             currentYear: currentYear,
             range: Constants.targetYearRange
         )
@@ -320,6 +243,12 @@ private extension YearlyDuplicationView {
         }
     }
 
+    func createGroup(_ group: YearlyItemDuplicationGroup) {
+        Task { @MainActor in
+            await createGroupItems(group: group)
+        }
+    }
+
     func presentItemForm(group: YearlyItemDuplicationGroup) {
         guard let plan else {
             return
@@ -334,60 +263,19 @@ private extension YearlyDuplicationView {
     }
 
     func alignYearSelections(preserveCurrentSelection: Bool) {
-        let selectionState = YearlyDuplicationCoordinator.selectionState(
-            context: context,
-            yearTags: yearTags,
-            currentSourceYear: sourceYear,
-            currentTargetYear: targetYear,
-            preserveCurrentSelection: preserveCurrentSelection,
-            currentYear: currentYear
-        )
-        sourceYear = selectionState.sourceYear
-        targetYear = selectionState.targetYear
-    }
-
-    func yearSelectionBar() -> some View {
-        VStack(alignment: .leading, spacing: selectionBarSpacing) {
-            Text("Year Range")
-                .font(.caption)
-                .foregroundStyle(.secondary)
-            HStack(alignment: .top, spacing: designMetrics.spacing.control) {
-                yearMenu(
-                    title: "Source Year",
-                    selection: $sourceYear,
-                    years: sourceYears
-                )
-                yearMenu(
-                    title: "Target Year",
-                    selection: $targetYear,
-                    years: targetYears
-                )
-            }
-        }
-        .padding(.horizontal, selectionBarHorizontalPadding)
-        .padding(.vertical, selectionBarVerticalPadding)
-        .background(Color(.systemGroupedBackground))
-        .overlay(alignment: .bottom) {
-            Divider()
-        }
-    }
-
-    func yearMenu(
-        title: LocalizedStringKey,
-        selection: Binding<Int>,
-        years: [Int]
-    ) -> some View {
-        VStack(alignment: .leading, spacing: designMetrics.spacing.inline) {
-            Text(title)
-                .font(.caption2)
-                .foregroundStyle(.secondary)
-            Picker(title, selection: selection) {
-                ForEach(years, id: \.self) { year in
-                    Text(verbatim: "\(year)")
-                }
-            }
-            .pickerStyle(.menu)
-            .frame(maxWidth: .infinity, alignment: .leading)
+        do {
+            let selectionState = try YearlyItemDuplicationSelectionOperations.selectionState(
+                context: context,
+                currentSourceYear: sourceYear,
+                currentTargetYear: targetYear,
+                preserveCurrentSelection: preserveCurrentSelection,
+                currentYear: currentYear,
+                minimumGroupCount: Constants.minimumGroupCount
+            )
+            sourceYear = selectionState.sourceYear
+            targetYear = selectionState.targetYear
+        } catch {
+            errorMessage = error.localizedDescription
         }
     }
 
@@ -397,10 +285,10 @@ private extension YearlyDuplicationView {
         [
             group.content,
             group.category.isNotEmpty ? group.category : nil,
-            "Dates: \(YearlyDuplicationCoordinator.monthDayListText(for: group))",
+            "Dates: \(YearlyDuplicationPresentationOperations.monthDayListText(for: group))",
             "Items: \(group.entryCount)",
-            "Income: \(YearlyDuplicationCoordinator.decimalString(from: group.averageIncome))",
-            "Outgo: \(YearlyDuplicationCoordinator.decimalString(from: group.averageOutgo))"
+            "Income: \(YearlyDuplicationPresentationOperations.decimalString(from: group.averageIncome))",
+            "Outgo: \(YearlyDuplicationPresentationOperations.decimalString(from: group.averageOutgo))"
         ]
         .compactMap(\.self)
         .joined(separator: "\n")
@@ -419,18 +307,6 @@ private extension YearlyDuplicationView {
     var proposalVerticalPadding: CGFloat {
         designMetrics.spacing.inline
     }
-
-    var selectionBarSpacing: CGFloat {
-        designMetrics.spacing.inline
-    }
-
-    var selectionBarHorizontalPadding: CGFloat {
-        designMetrics.layout.surface.insetHorizontal
-    }
-
-    var selectionBarVerticalPadding: CGFloat {
-        designMetrics.layout.surface.compactInsetVertical
-    }
 }
 
 #Preview(traits: .modifier(IncomesSampleData())) {
@@ -438,4 +314,3 @@ private extension YearlyDuplicationView {
         YearlyDuplicationView()
     }
 }
-// swiftlint:enable file_length

@@ -1,0 +1,801 @@
+// swiftlint:disable file_length
+//
+//  ItemOperationsTest.swift
+//  Incomes
+//
+//  Created by Hiromu Nakano on 2025/04/25.
+//
+
+import Foundation
+@testable import IncomesLibrary
+import SwiftData
+import Testing
+
+@Suite(.serialized)
+struct ItemOperationsTest { // swiftlint:disable:this type_body_length
+    let context: ModelContext
+
+    init() {
+        context = testContext
+    }
+
+    @discardableResult
+    func createTestItem( // swiftlint:disable:this function_parameter_count
+        date: Date,
+        content: String,
+        income: Decimal,
+        outgo: Decimal,
+        category: String,
+        priority: Int,
+        repeatCount: Int = 1
+    ) throws -> Item {
+        try createItem(
+            context: context,
+            date: date,
+            content: content,
+            income: income,
+            outgo: outgo,
+            category: category,
+            priority: priority,
+            repeatCount: repeatCount
+        )
+    }
+
+    func updateTestItem( // swiftlint:disable:this function_parameter_count
+        item: Item,
+        date: Date,
+        content: String,
+        income: Decimal,
+        outgo: Decimal,
+        category: String,
+        priority: Int,
+        scope: ItemMutationScope = .thisItem
+    ) throws {
+        try updateItem(
+            context: context,
+            item: item,
+            date: date,
+            content: content,
+            income: income,
+            outgo: outgo,
+            category: category,
+            priority: priority,
+            scope: scope
+        )
+    }
+
+    // MARK: - Fetch
+
+    @Test("item returns first item if available", arguments: timeZones)
+    func item(_ timeZone: TimeZone) throws {
+        TimeZone.ReferenceType.default = timeZone
+
+        _ = try createTestItem(
+            date: isoDate("2024-01-01T00:00:00Z"),
+            content: "First",
+            income: 100,
+            outgo: 50,
+            category: "Test",
+            priority: 0,
+            )
+        let item = try #require(try context.fetchFirst(.items(.all)))
+        #expect(item.content == "First")
+    }
+
+    @Test("item with predicate returns only matching item", arguments: timeZones)
+    func itemWithPredicate(_ timeZone: TimeZone) throws {
+        TimeZone.ReferenceType.default = timeZone
+
+        _ = try createTestItem(
+            date: isoDate("2024-01-01T00:00:00Z"),
+            content: "Food",
+            income: 0,
+            outgo: 500,
+            category: "Food",
+            priority: 0,
+            )
+        _ = try createTestItem(
+            date: isoDate("2024-01-01T00:00:00Z"),
+            content: "Transport",
+            income: 0,
+            outgo: 300,
+            category: "Transport",
+            priority: 0,
+            )
+        let predicate = ItemPredicate.outgoIsGreaterThanOrEqualTo(amount: 400, onOrAfter: isoDate("2024-01-01T00:00:00Z")) // swiftlint:disable:this line_length
+        let item = try #require(try context.fetchFirst(.items(predicate)))
+        #expect(item.content == "Food")
+    }
+
+    @Test("items returns all items", arguments: timeZones)
+    func items(_ timeZone: TimeZone) throws {
+        TimeZone.ReferenceType.default = timeZone
+
+        _ = try createTestItem(
+            date: isoDate("2024-01-01T00:00:00Z"),
+            content: "One",
+            income: 100,
+            outgo: 0,
+            category: "Test",
+            priority: 0,
+            )
+        _ = try createTestItem(
+            date: isoDate("2024-01-02T00:00:00Z"),
+            content: "Two",
+            income: 200,
+            outgo: 0,
+            category: "Test",
+            priority: 0,
+            )
+        let items = try context.fetch(.items(.all))
+        #expect(items.count == 2)
+    }
+
+    @Test("items with predicate filters matching items", arguments: timeZones)
+    func itemsWithPredicate(_ timeZone: TimeZone) throws {
+        TimeZone.ReferenceType.default = timeZone
+
+        _ = try createTestItem(
+            date: isoDate("2024-01-01T00:00:00Z"),
+            content: "Match",
+            income: 0,
+            outgo: 800,
+            category: "Filtered",
+            priority: 0,
+            )
+        _ = try createTestItem(
+            date: isoDate("2024-01-01T00:00:00Z"),
+            content: "NoMatch",
+            income: 0,
+            outgo: 200,
+            category: "Filtered",
+            priority: 0,
+            )
+        let predicate = ItemPredicate.outgoIsGreaterThanOrEqualTo(amount: 500, onOrAfter: isoDate("2024-01-01T00:00:00Z")) // swiftlint:disable:this line_length
+        let filtered = try context.fetch(.items(predicate))
+        #expect(filtered.count == 1)
+        #expect(filtered.first?.content == "Match")
+    }
+
+    @Test("itemsCount returns correct count", arguments: timeZones)
+    func itemsCount(_ timeZone: TimeZone) throws {
+        TimeZone.ReferenceType.default = timeZone
+
+        _ = try createTestItem(
+            date: isoDate("2024-01-01T00:00:00Z"),
+            content: "Only",
+            income: 300,
+            outgo: 100,
+            category: "Test",
+            priority: 0,
+            )
+        let count = try context.fetchCount(.items(.all))
+        #expect(count == 1)
+    }
+
+    @Test("itemsCount with predicate counts only matching items", arguments: timeZones)
+    func itemsCountWithPredicate(_ timeZone: TimeZone) throws {
+        TimeZone.ReferenceType.default = timeZone
+
+        _ = try createTestItem(
+            date: isoDate("2024-01-01T00:00:00Z"),
+            content: "X",
+            income: 0,
+            outgo: 900,
+            category: "Filtered",
+            priority: 0,
+            )
+        _ = try createTestItem(
+            date: isoDate("2024-01-01T00:00:00Z"),
+            content: "Y",
+            income: 0,
+            outgo: 100,
+            category: "Filtered",
+            priority: 0,
+            )
+        let predicate = ItemPredicate.outgoIsGreaterThanOrEqualTo(amount: 800, onOrAfter: isoDate("2024-01-01T00:00:00Z")) // swiftlint:disable:this line_length
+        let count = try context.fetchCount(.items(predicate))
+        #expect(count == 1)
+    }
+
+    // MARK: - Create
+
+    @Test("create item with correct balance", arguments: timeZones)
+    func create(_ timeZone: TimeZone) throws {
+        TimeZone.ReferenceType.default = timeZone
+
+        _ = try createTestItem(
+            date: isoDate("2024-01-01T00:00:00Z"),
+            content: "Lunch",
+            income: 1_000,
+            outgo: 300,
+            category: "Food",
+            priority: 0,
+            )
+        let item = try #require(fetchItems(context).first)
+        #expect(item.balance == 700)
+    }
+
+    @Test("create with repeatCount 3 creates 3 items with same repeatID", arguments: timeZones)
+    func createWithRepeat(_ timeZone: TimeZone) throws {
+        TimeZone.ReferenceType.default = timeZone
+
+        _ = try createTestItem(
+            date: isoDate("2024-01-01T00:00:00Z"),
+            content: "Rent",
+            income: 0,
+            outgo: 100_000,
+            category: "Housing",
+            priority: 0,
+            repeatCount: 3
+        )
+        let items = fetchItems(context)
+        #expect(items.count == 3)
+        #expect(Set(items.map(\.repeatID)).count == 1)
+    }
+
+    @Test("create with zero repeatCount still creates one item", arguments: timeZones)
+    func createWithZeroRepeat(_ timeZone: TimeZone) throws {
+        TimeZone.ReferenceType.default = timeZone
+
+        _ = try createTestItem(
+            date: isoDate("2024-03-01T00:00:00Z"),
+            content: "Single",
+            income: 100,
+            outgo: 50,
+            category: "Solo",
+            priority: 0,
+            repeatCount: 0
+        )
+        let items = fetchItems(context)
+        #expect(items.count == 1)
+        #expect(items.first?.content == "Single")
+    }
+
+    @Test("create with zero income and outgo results in zero balance", arguments: timeZones)
+    func createWithZeroAmounts(_ timeZone: TimeZone) throws {
+        TimeZone.ReferenceType.default = timeZone
+
+        _ = try createTestItem(
+            date: isoDate("2024-03-01T00:00:00Z"),
+            content: "Neutral",
+            income: 0,
+            outgo: 0,
+            category: "Empty",
+            priority: 0,
+            )
+        let item = try #require(fetchItems(context).first)
+        #expect(item.balance == 0)
+    }
+
+    @Test("create with duplicate category names does not break", arguments: timeZones)
+    func createWithDuplicateCategoryNames(_ timeZone: TimeZone) throws {
+        TimeZone.ReferenceType.default = timeZone
+
+        for _ in 0..<2 {
+            _ = try createTestItem(
+                date: isoDate("2024-03-01T00:00:00Z"),
+                content: "Repeated",
+                income: 100,
+                outgo: 50,
+                category: "Shared",
+                priority: 0,
+                )
+        }
+        let items = fetchItems(context)
+        #expect(items.count == 2)
+        #expect(Set(items.map(\.category?.name)).count == 1)
+    }
+
+    @Test("create with end-of-month date generates all repeating items", arguments: timeZones)
+    func createEndOfMonthRepeatingItems(_ timeZone: TimeZone) throws {
+        TimeZone.ReferenceType.default = timeZone
+
+        _ = try createTestItem(
+            date: isoDate("2024-01-31T00:00:00Z"),
+            content: "EndMonth",
+            income: 100,
+            outgo: 0,
+            category: "Test",
+            priority: 0,
+            repeatCount: 3
+        )
+        let items = try context.fetch(.items(.all)).sorted { first, second in
+            first.utcDate < second.utcDate
+        }
+        #expect(items.count == 3)
+        let months = items.map { item in
+            item.utcDate.stringValueWithoutLocale(.yyyyMM)
+        }
+        #expect(months == ["202401", "202402", "202403"])
+    }
+
+    @Test("create stores date near midnight UTC correctly", arguments: timeZones)
+    func createWithMidnightBoundary(_ timeZone: TimeZone) throws {
+        TimeZone.ReferenceType.default = timeZone
+
+        let boundaryDate = shiftedDate("2024-03-15T00:00:00Z")
+        let item = try createTestItem(
+            date: boundaryDate,
+            content: "MidnightUTC",
+            income: 100,
+            outgo: 0,
+            category: "Test",
+            priority: 0,
+            )
+        let found = try #require(try context.fetchFirst(.items(.idIs(item.id))))
+        #expect(found.utcDate == isoDate("2024-03-15T00:00:00Z"))
+    }
+
+    @Test("create stores JST midnight as UTC start of day", arguments: timeZones)
+    func createStoresJSTMidnightAsUTCStartOfDay(_ timeZone: TimeZone) throws {
+        TimeZone.ReferenceType.default = timeZone
+
+        let jstDate = shiftedDate("2024-03-15T09:00:00Z")  // 00:00 UTC
+        let item = try createTestItem(
+            date: jstDate,
+            content: "JSTToUTC",
+            income: 100,
+            outgo: 0,
+            category: "Test",
+            priority: 0,
+            )
+        let found = try #require(try context.fetchFirst(.items(.idIs(item.id))))
+        #expect(found.utcDate == isoDate("2024-03-15T00:00:00Z"))
+    }
+
+    @Test("create rounds input date to start of day UTC", arguments: timeZones)
+    func createRoundsDateToStartOfDay(_ timeZone: TimeZone) throws {
+        TimeZone.ReferenceType.default = timeZone
+
+        let inputDate = isoDate("2024-03-15T10:30:00Z")
+        let expectedDate = Calendar.utc.startOfDay(for: inputDate)
+        let item = try createTestItem(
+            date: inputDate,
+            content: "RoundedTime",
+            income: 100,
+            outgo: 0,
+            category: "Test",
+            priority: 0,
+            )
+        let found = try #require(try context.fetchFirst(.items(.idIs(item.id))))
+        #expect(found.utcDate == expectedDate)
+    }
+
+    // MARK: - Update
+
+    @Test("update changes item values and recalculates balance", arguments: timeZones)
+    func update(_ timeZone: TimeZone) throws {
+        TimeZone.ReferenceType.default = timeZone
+
+        _ = try createTestItem(
+            date: shiftedDate("2024-01-01T00:00:00Z"),
+            content: "Initial",
+            income: 100,
+            outgo: 50,
+            category: "Misc",
+            priority: 0,
+            )
+        var item = try #require(fetchItems(context).first)
+        try updateTestItem(
+            item: item,
+            date: shiftedDate("2024-01-02T00:00:00Z"),
+            content: "Updated",
+            income: 150,
+            outgo: 100,
+            category: "UpdatedCat",
+            priority: 0
+        )
+        item = try #require(fetchItems(context).first)
+        #expect(item.balance == 50)
+        #expect(item.content == "Updated")
+        #expect(item.utcDate == isoDate("2024-01-02T00:00:00Z"))
+    }
+
+    @Test("update assigns new repeatID", arguments: timeZones)
+    func updateAssignsNewRepeatID(_ timeZone: TimeZone) throws {
+        TimeZone.ReferenceType.default = timeZone
+
+        _ = try createTestItem(
+            date: isoDate("2024-01-01T00:00:00Z"),
+            content: "Initial",
+            income: 100,
+            outgo: 0,
+            category: "Original",
+            priority: 0,
+            )
+        let item = try #require(fetchItems(context).first)
+        let oldRepeatID = item.repeatID
+
+        try updateTestItem(
+            item: item,
+            date: item.utcDate,
+            content: "Changed",
+            income: 200,
+            outgo: 0,
+            category: "Updated",
+            priority: 0
+        )
+        let updated = try #require(fetchItems(context).first)
+        #expect(updated.repeatID != oldRepeatID)
+    }
+
+    @Test("update changes date and maintains correct ordering", arguments: timeZones)
+    func updateChangesDateOrdering(_ timeZone: TimeZone) throws {
+        TimeZone.ReferenceType.default = timeZone
+
+        _ = try createTestItem(
+            date: isoDate("2024-01-01T00:00:00Z"),
+            content: "First",
+            income: 100,
+            outgo: 0,
+            category: "SortTest",
+            priority: 0,
+            )
+        _ = try createTestItem(
+            date: isoDate("2024-01-02T00:00:00Z"),
+            content: "Second",
+            income: 100,
+            outgo: 0,
+            category: "SortTest",
+            priority: 0,
+            )
+        var items = try context.fetch(.items(.all)).sorted { lhs, rhs in
+            lhs.utcDate < rhs.utcDate
+        }
+        #expect(items[0].content == "First")
+
+        try updateTestItem(
+            item: items[1],
+            date: isoDate("2023-12-31T00:00:00Z"),
+            content: items[1].content,
+            income: items[1].income,
+            outgo: items[1].outgo,
+            category: items[1].category?.name ?? "",
+            priority: 0
+        )
+
+        items = try context.fetch(.items(.all)).sorted { lhs, rhs in
+            lhs.utcDate < rhs.utcDate
+        }
+        #expect(items[0].content == "Second")
+    }
+
+    @Test("updateForFutureItems updates only items after the target date in the repeat group", arguments: timeZones)
+    func updateForFutureItems(_ timeZone: TimeZone) throws {
+        TimeZone.ReferenceType.default = timeZone
+
+        _ = try createTestItem(
+            date: isoDate("2024-01-01T00:00:00Z"),
+            content: "Subscription",
+            income: 0,
+            outgo: 1_000,
+            category: "Media",
+            priority: 0,
+            repeatCount: 3
+        )
+        let items = try context.fetch(.items(.all)).sorted { lhs, rhs in
+            lhs.utcDate < rhs.utcDate
+        }
+        let target = items[1] // middle item
+        try updateTestItem(
+            item: target,
+            date: target.utcDate,
+            content: "UpdatedSub",
+            income: 0,
+            outgo: 1_200,
+            category: "Entertainment",
+            priority: 0,
+            scope: .futureItems
+        )
+        let result = try context.fetch(.items(.all)).sorted { lhs, rhs in
+            lhs.utcDate < rhs.utcDate
+        }
+        #expect(result[0].content == "Subscription")
+        #expect(result[1].content == "UpdatedSub")
+        #expect(result[2].content == "UpdatedSub")
+        #expect(result[1].outgo == 1_200)
+        #expect(result[2].category?.name == "Entertainment")
+    }
+
+    @Test("updateForFutureItems updates only target if it's the last item", arguments: timeZones)
+    func updateFutureLastOnly(_ timeZone: TimeZone) throws {
+        TimeZone.ReferenceType.default = timeZone
+
+        _ = try createTestItem(
+            date: isoDate("2024-01-01T00:00:00Z"),
+            content: "Monthly",
+            income: 100,
+            outgo: 0,
+            category: "Bills",
+            priority: 0,
+            repeatCount: 3
+        )
+        let items = try context.fetch(.items(.all)).sorted { lhs, rhs in
+            lhs.utcDate < rhs.utcDate
+        }
+        let last = items[2]
+
+        try updateTestItem(
+            item: last,
+            date: last.utcDate,
+            content: "Changed",
+            income: 200,
+            outgo: 0,
+            category: "BillsUpdated",
+            priority: 0,
+            scope: .futureItems
+        )
+        let result = try context.fetch(.items(.all)).sorted { lhs, rhs in
+            lhs.utcDate < rhs.utcDate
+        }
+        #expect(result[0].content == "Monthly")
+        #expect(result[1].content == "Monthly")
+        #expect(result[2].content == "Changed")
+    }
+
+    @Test("updateForFutureItems on non-repeating item updates only itself", arguments: timeZones)
+    func updateFutureSingleRepeat(_ timeZone: TimeZone) throws {
+        TimeZone.ReferenceType.default = timeZone
+
+        _ = try createTestItem(
+            date: isoDate("2024-01-01T00:00:00Z"),
+            content: "Solo",
+            income: 0,
+            outgo: 50,
+            category: "OneTime",
+            priority: 0,
+            )
+        let item = try #require(fetchItems(context).first)
+        try updateTestItem(
+            item: item,
+            date: item.utcDate,
+            content: "SoloUpdated",
+            income: 100,
+            outgo: 50,
+            category: "OneTimeUpdated",
+            priority: 0,
+            scope: .futureItems
+        )
+        let updated = try #require(fetchItems(context).first)
+        #expect(updated.content == "SoloUpdated")
+        #expect(updated.income == 100)
+    }
+
+    @Test("updateForAllItems updates all items in the repeat group", arguments: timeZones)
+    func updateForAllItems(_ timeZone: TimeZone) throws {
+        TimeZone.ReferenceType.default = timeZone
+
+        let item = try createTestItem(
+            date: isoDate("2024-02-01T00:00:00Z"),
+            content: "Gym",
+            income: 0,
+            outgo: 8_000,
+            category: "Health",
+            priority: 0,
+            repeatCount: 3
+        )
+        _ = try context.fetch(.items(.all))
+        let target = try #require(try context.fetchFirst(.items(.idIs(item.id))))
+        try updateTestItem(
+            item: target,
+            date: target.utcDate,
+            content: "Fitness",
+            income: 0,
+            outgo: 7_000,
+            category: "Wellness",
+            priority: 0,
+            scope: .allItems
+        )
+        let updatedItems = try context.fetch(.items(.all))
+        #expect(updatedItems.count == 3)
+        for item in updatedItems {
+            #expect(item.content == "Fitness")
+            #expect(item.outgo == 7_000)
+            #expect(item.category?.name == "Wellness")
+        }
+    }
+
+    // MARK: - Delete
+
+    @Test("delete removes the specified item", arguments: timeZones)
+    func delete(_ timeZone: TimeZone) throws {
+        TimeZone.ReferenceType.default = timeZone
+
+        _ = try createTestItem(
+            date: isoDate("2024-04-01T00:00:00Z"),
+            content: "ToDelete",
+            income: 100,
+            outgo: 0,
+            category: "Temp",
+            priority: 0,
+            )
+        let item = try #require(fetchItems(context).first)
+        try ItemDeletionOperations.delete(
+            context: context,
+            item: item
+        )
+        let items = try context.fetch(.items(.all))
+        #expect(items.isEmpty)
+    }
+
+    @Test("delete with multiple items removes only specified ones", arguments: timeZones)
+    func deleteMultipleItems(_ timeZone: TimeZone) throws {
+        TimeZone.ReferenceType.default = timeZone
+
+        _ = try createTestItem(
+            date: isoDate("2024-01-01T00:00:00Z"),
+            content: "KeepMe",
+            income: 100,
+            outgo: 0,
+            category: "General",
+            priority: 0,
+            )
+        _ = try createTestItem(
+            date: isoDate("2024-01-02T00:00:00Z"),
+            content: "RemoveMe",
+            income: 100,
+            outgo: 0,
+            category: "General",
+            priority: 0,
+            )
+        let allItems = try context.fetch(.items(.all))
+        let toDelete = allItems.filter { item in
+            item.content == "RemoveMe"
+        }
+        try toDelete.forEach { item in
+            try ItemDeletionOperations.delete(context: context, item: item)
+        }
+
+        let remaining = try context.fetch(.items(.all))
+        #expect(remaining.count == 1)
+        #expect(remaining.first?.content == "KeepMe")
+    }
+
+    @Test("deleteAll clears all items", arguments: timeZones)
+    func deleteAll(_ timeZone: TimeZone) throws {
+        TimeZone.ReferenceType.default = timeZone
+
+        _ = try createTestItem(
+            date: isoDate("2024-01-01T00:00:00Z"),
+            content: "DeleteMe",
+            income: 0,
+            outgo: 100,
+            category: "Tmp",
+            priority: 0,
+            )
+        #expect(!fetchItems(context).isEmpty)
+        try ItemDeletionOperations.deleteAll(context: context)
+        #expect(fetchItems(context).isEmpty)
+    }
+
+    // MARK: - Calculate balance
+
+    @Test("recalculate reflects updated outgo via update", arguments: timeZones)
+    func recalculate(_ timeZone: TimeZone) throws {
+        TimeZone.ReferenceType.default = timeZone
+
+        _ = try createTestItem(
+            date: isoDate("2024-01-01T00:00:00Z"),
+            content: "AdjustMe",
+            income: 100,
+            outgo: 50,
+            category: "Test",
+            priority: 0,
+            )
+        var item = try #require(fetchItems(context).first)
+        try updateTestItem(
+            item: item,
+            date: item.utcDate,
+            content: item.content,
+            income: item.income,
+            outgo: 90,
+            category: item.category?.name ?? "",
+            priority: 0
+        )
+        item = try #require(fetchItems(context).first)
+        #expect(item.balance == 10)
+    }
+
+    @Test("recalculate does not alter already correct balance", arguments: timeZones)
+    func recalculateNoChange(_ timeZone: TimeZone) throws {
+        TimeZone.ReferenceType.default = timeZone
+
+        _ = try createTestItem(
+            date: isoDate("2024-01-01T00:00:00Z"),
+            content: "Stable",
+            income: 100,
+            outgo: 60,
+            category: "Check",
+            priority: 0,
+            )
+        let item = try #require(fetchItems(context).first)
+        let oldBalance = item.balance
+
+        try ItemBalanceOperations.recalculate(
+            context: context,
+            date: isoDate("2023-12-01T00:00:00Z")
+        )
+
+        let reloaded = try #require(fetchItems(context).first)
+        #expect(reloaded.balance == oldBalance)
+    }
+
+    @Test("recalculate only affects items after the specified date", arguments: timeZones)
+    func recalculatePartial(_ timeZone: TimeZone) throws {
+        TimeZone.ReferenceType.default = timeZone
+
+        _ = try createTestItem(
+            date: isoDate("2024-01-01T00:00:00Z"),
+            content: "Before",
+            income: 100,
+            outgo: 50,
+            category: "Split",
+            priority: 0,
+            )
+        _ = try createTestItem(
+            date: isoDate("2024-02-01T00:00:00Z"),
+            content: "After",
+            income: 200,
+            outgo: 80,
+            category: "Split",
+            priority: 0,
+            )
+        var items = try context.fetch(.items(.all)).sorted { lhs, rhs in
+            lhs.utcDate < rhs.utcDate
+        }
+        try updateTestItem(
+            item: items[1],
+            date: items[1].utcDate,
+            content: items[1].content,
+            income: 500,
+            outgo: 80,
+            category: items[1].category?.name ?? "",
+            priority: 0
+        )
+
+        try ItemBalanceOperations.recalculate(
+            context: context,
+            date: isoDate("2024-01-15T00:00:00Z")
+        )
+        items = try context.fetch(.items(.all)).sorted { lhs, rhs in
+            lhs.utcDate < rhs.utcDate
+        }
+        #expect(items[0].balance == 50)
+        #expect(items[1].balance == 470)
+    }
+
+    @Test("recalculate is correct across time zone boundaries", arguments: timeZones)
+    func recalculateWithTimeZoneBoundaries(_ timeZone: TimeZone) throws {
+        TimeZone.ReferenceType.default = timeZone
+
+        _ = try createTestItem(
+            date: shiftedDate("2024-02-28T15:00:00Z"),  // JST: 2024-02-29 00:00
+            content: "EarlyMar",
+            income: 300,
+            outgo: 50,
+            category: "TZTest",
+            priority: 0,
+            )
+        _ = try createTestItem(
+            date: shiftedDate("2024-02-28T14:00:00Z"),  // JST: 2024-02-28 23:00
+            content: "LateFeb",
+            income: 500,
+            outgo: 100,
+            category: "TZTest",
+            priority: 0,
+            )
+
+        try ItemBalanceOperations.recalculate(
+            context: context,
+            date: isoDate("2024-02-01T00:00:00Z")
+        )
+        let items = try context.fetch(.items(.all))
+
+        #expect(items[0].content == "LateFeb")
+        #expect(items[0].balance == 650)
+        #expect(items[1].content == "EarlyMar")
+        #expect(items[1].balance == 250)
+    }
+}
+// swiftlint:enable file_length

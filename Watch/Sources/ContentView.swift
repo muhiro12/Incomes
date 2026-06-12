@@ -180,55 +180,28 @@ private extension ContentView {
     func syncFailureTitle(
         for failure: WatchSyncFailure
     ) -> LocalizedStringKey {
-        switch failure.phase {
-        case .sessionUnreachable,
-             .transport:
+        if failure.phase.isConnectivityFailure {
             return "iPhone Unreachable"
-        case .requestDecode,
-             .missingContext,
-             .itemFetch,
-             .responseEncode,
-             .requestEncode,
-             .responseDecode,
-             .snapshotApply:
-            return "Sync Failed"
         }
+        return "Sync Failed"
     }
 
     func syncFailureSystemImage(
         for failure: WatchSyncFailure
     ) -> String {
-        switch failure.phase {
-        case .sessionUnreachable,
-             .transport:
+        if failure.phase.isConnectivityFailure {
             return "iphone.slash"
-        case .requestDecode,
-             .missingContext,
-             .itemFetch,
-             .responseEncode,
-             .requestEncode,
-             .responseDecode,
-             .snapshotApply:
-            return "exclamationmark.triangle"
         }
+        return "exclamationmark.triangle"
     }
 
     func syncFailureRecoveryText(
         for failure: WatchSyncFailure
     ) -> LocalizedStringKey {
-        switch failure.phase {
-        case .sessionUnreachable,
-             .transport:
+        if failure.phase.isConnectivityFailure {
             return "Bring your iPhone nearby, then try Reload again."
-        case .requestDecode,
-             .missingContext,
-             .itemFetch,
-             .responseEncode,
-             .requestEncode,
-             .responseDecode,
-             .snapshotApply:
-            return "Open the paired iPhone app, then try Reload again."
         }
+        return "Open the paired iPhone app, then try Reload again."
     }
 
     @ViewBuilder

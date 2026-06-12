@@ -2,10 +2,10 @@ import Foundation
 import MHPlatformCore
 
 /// Builds display-ready notification payloads for upcoming payment reminders.
-public enum UpcomingPaymentNotificationPresentationBuilder { // swiftlint:disable:this type_name
+enum UpcomingPaymentNotificationPresentationBuilder { // swiftlint:disable:this type_name
     /// Builds sorted notification presentations for the provided planned payments.
-    public static func build(
-        plans: [UpcomingPaymentPlanner.PlannedPayment],
+    static func build(
+        plans: [UpcomingPaymentOperations.PlannedPayment],
         settings: NotificationSettings,
         now: Date,
         calendar: Calendar = .current
@@ -15,8 +15,12 @@ public enum UpcomingPaymentNotificationPresentationBuilder { // swiftlint:disabl
                 return lhs.notifyDate < rhs.notifyDate
             }
 
-            let lhsIdentifier = itemIdentifier(for: lhs.item)
-            let rhsIdentifier = itemIdentifier(for: rhs.item)
+            let lhsIdentifier = UpcomingPaymentItemTargetSupport.targetContentIdentifier(
+                for: lhs.item
+            )
+            let rhsIdentifier = UpcomingPaymentItemTargetSupport.targetContentIdentifier(
+                for: rhs.item
+            )
             if lhsIdentifier != rhsIdentifier {
                 return lhsIdentifier < rhsIdentifier
             }
@@ -38,18 +42,22 @@ public enum UpcomingPaymentNotificationPresentationBuilder { // swiftlint:disabl
 
 private extension UpcomingPaymentNotificationPresentationBuilder {
     static func buildPresentation(
-        plan: UpcomingPaymentPlanner.PlannedPayment,
+        plan: UpcomingPaymentOperations.PlannedPayment,
         settings: NotificationSettings,
         now: Date,
         badgeCount: Int,
         calendar: Calendar
     ) -> UpcomingPaymentNotificationPresentation {
-        let itemIdentifier = itemIdentifier(for: plan.item)
-        let primaryRouteURL = plan.reminderPlan?.primaryRouteURL ?? primaryRouteURL(for: plan.item)
-        let secondaryRouteURL = plan.reminderPlan?.secondaryRouteURL ?? IncomesDeepLinkURLBuilder.preferredMonthURL( // swiftlint:disable:this line_length
-            for: plan.item.localDate,
-            calendar: calendar
+        let itemIdentifier = UpcomingPaymentItemTargetSupport.targetContentIdentifier(
+            for: plan.item
         )
+        let primaryRouteURL = plan.reminderPlan?.primaryRouteURL ??
+            UpcomingPaymentItemTargetSupport.primaryRouteURL(for: plan.item)
+        let secondaryRouteURL = plan.reminderPlan?.secondaryRouteURL ??
+            UpcomingPaymentItemTargetSupport.secondaryRouteURL(
+                for: plan.item,
+                calendar: calendar
+            )
         let referenceDate = max(plan.notifyDate, now)
         let daysUntilDue = plan.reminderPlan?.daysUntilDue ?? max(
             0,
@@ -62,7 +70,9 @@ private extension UpcomingPaymentNotificationPresentationBuilder {
 
         return .init(
             requestIdentifier: plan.reminderPlan?.identifier
-                ?? UpcomingPaymentNotificationPresentation.requestIdentifierPrefix + itemIdentifier,
+                ?? UpcomingPaymentNotificationPresentation.requestIdentifier(
+                    for: itemIdentifier
+                ),
             primaryRouteURL: primaryRouteURL,
             secondaryRouteURL: secondaryRouteURL,
             threadIdentifier: plan.reminderPlan?.threadIdentifier
@@ -85,24 +95,13 @@ private extension UpcomingPaymentNotificationPresentationBuilder {
         )
     }
 
-    static func primaryRouteURL(for item: Item) -> URL {
-        if let itemID = try? PersistentIdentifierCoder.encode(item.id) {
-            return IncomesDeepLinkURLBuilder.preferredItemURL(for: itemID)
-        }
-        return IncomesDeepLinkURLBuilder.preferredMonthURL(for: item.localDate)
-    }
-
-    static func itemIdentifier(for item: Item) -> String {
-        if let itemID = try? PersistentIdentifierCoder.encode(item.id) {
-            return itemID
-        }
-        return String(describing: item.persistentModelID)
-    }
-
     static func threadIdentifier(for dueDate: Date, calendar: Calendar) -> String {
         let year = calendar.component(.year, from: dueDate)
         let month = calendar.component(.month, from: dueDate)
-        return "\(UpcomingPaymentNotificationPresentation.requestIdentifierPrefix)\(String(format: "%04d-%02d", year, month))" // swiftlint:disable:this line_length
+        return UpcomingPaymentNotificationPresentation.threadIdentifier(
+            year: year,
+            month: month
+        )
     }
 
     static func relevanceScore(

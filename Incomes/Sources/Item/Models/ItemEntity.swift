@@ -70,6 +70,25 @@ extension ItemEntity {
             netIncome: model.netIncome
         )
     }
+
+    static func make(from model: Item) throws -> ItemEntity {
+        guard let entity = ItemEntity(model) else {
+            throw ItemError.entityConversionFailed
+        }
+        return entity
+    }
+
+    static func make(from model: Item?) throws -> ItemEntity? {
+        try model.map { item in
+            try make(from: item)
+        }
+    }
+
+    static func make(from models: [Item]) throws -> [ItemEntity] {
+        try models.map { item in
+            try make(from: item)
+        }
+    }
 }
 
 extension ItemEntity {
@@ -78,10 +97,10 @@ extension ItemEntity {
     }
 
     func model(in context: ModelContext) throws -> Item {
-        guard
-            let id = try? PersistentIdentifierCoder.decode(id),
-            let model = try context.fetchFirst(.items(.idIs(id)))
-        else {
+        guard let model = try ItemQueryOperations.item(
+            context: context,
+            encodedIdentifier: id
+        ) else {
             throw ItemError.itemNotFound
         }
         return model

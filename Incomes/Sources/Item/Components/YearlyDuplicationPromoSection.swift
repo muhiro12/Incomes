@@ -8,7 +8,6 @@
 import MHDesign
 import SwiftData
 import SwiftUI
-import TipKit
 
 struct YearlyDuplicationPromoSection: View {
     @Environment(IncomesTipController.self)
@@ -29,39 +28,15 @@ struct YearlyDuplicationPromoSection: View {
     @State private var hasResolvedPromoVisibility = false
     @State private var promoLoadGeneration = 0
 
-    private let yearlyDuplicationTip = YearlyDuplicationTip()
-
     var body: some View {
-        Group { // swiftlint:disable:this closure_body_length
+        Group {
             if let promo = resolvedPromo {
                 Section {
-                    VStack(alignment: .leading, spacing: designMetrics.spacing.inline) {
-                        Text("Duplicate Year")
-                            .font(.headline)
-                        Text(String(localized: "Year: \(promo.sourceYear) -> \(promo.targetYear)"))
-                            .font(.footnote)
-                            .foregroundStyle(.secondary)
-                        Text(String(localized: "Sample proposal"))
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                        Text(promo.proposal.content)
-                            .font(.subheadline.weight(.semibold))
-                        if promo.proposal.category.isNotEmpty {
-                            Text(promo.proposal.category)
-                                .font(.footnote)
-                                .foregroundStyle(.secondary)
-                        }
-                        Text(
-                            String(localized: proposalDatesText(for: promo.proposal))
-                        )
-                        .font(.footnote)
-                        .foregroundStyle(.secondary)
-                        Text(String(localized: "Items: \(promo.proposal.entryCount)"))
-                            .font(.footnote)
-                            .foregroundStyle(.secondary)
-                        reviewProposalsButton()
-                    }
-                    .padding(.vertical, designMetrics.spacing.inline)
+                    YearlyDuplicationPromoContent(
+                        promo: promo,
+                        inlineSpacing: designMetrics.spacing.inline,
+                        reviewProposals: reviewProposals
+                    )
                 } header: {
                     HStack {
                         Text("Yearly duplication")
@@ -139,10 +114,6 @@ private extension YearlyDuplicationPromoSection {
         )
     }
 
-    func proposalDatesText(for proposal: YearlyItemDuplicationGroup) -> String.LocalizationValue {
-        "Dates: \(YearlyDuplicationCoordinator.monthDayListText(for: proposal))"
-    }
-
     @MainActor
     func resolveYearlyDuplicationPromoVisibility() async {
         guard !hasResolvedPromoVisibility else {
@@ -156,7 +127,7 @@ private extension YearlyDuplicationPromoSection {
             return
         }
 
-        showYearlyDuplicationPromo = YearlyDuplicationCoordinator.shouldShowPromo()
+        showYearlyDuplicationPromo = YearlyDuplicationPromoOperations.shouldShow()
 
         if showYearlyDuplicationPromo {
             await loadYearlyDuplicationProposal()
@@ -171,13 +142,9 @@ private extension YearlyDuplicationPromoSection {
         resetPromoState()
     }
 
-    func reviewProposalsButton() -> some View {
-        Button("Review proposals") {
-            tipController.donateDidOpenYearlyDuplication()
-            onReview()
-        }
-        .buttonStyle(.bordered)
-        .popoverTip(yearlyDuplicationTip, arrowEdge: .top)
+    func reviewProposals() {
+        tipController.donateDidOpenYearlyDuplication()
+        onReview()
     }
 
     @MainActor
@@ -193,9 +160,8 @@ private extension YearlyDuplicationPromoSection {
             return
         }
 
-        if let result = YearlyDuplicationCoordinator.promoState(
-            context: context,
-            yearTags: yearTags
+        if let result = YearlyDuplicationPromoOperations.state(
+            context: context
         ) {
             guard generation == promoLoadGeneration, !Task.isCancelled else {
                 return

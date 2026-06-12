@@ -53,7 +53,7 @@ struct TagItemFilteringTests {
             }
         )
 
-        let items = TagService.items(
+        let items = TagQueryOperations.items(
             for: tag,
             yearString: firstDate.stringValueWithoutLocale(.yyyy)
         )
@@ -103,7 +103,7 @@ struct TagItemFilteringTests {
         )
         let categoryTag = try #require(fetchedCategoryTag)
 
-        let items = TagService.items(
+        let items = TagQueryOperations.items(
             for: categoryTag,
             yearString: firstDate.stringValueWithoutLocale(.yyyy)
         )
@@ -155,7 +155,7 @@ struct TagItemFilteringTests {
         )
         let categoryTag = try #require(fetchedCategoryTag)
 
-        let items = TagService.items(
+        let items = TagQueryOperations.items(
             for: categoryTag,
             yearString: firstDate.stringValueWithoutLocale(.yyyy)
         )
@@ -229,7 +229,7 @@ struct TagItemFilteringTests {
             }
             print("  match[\(index)] id=\(match.persistentModelID) items=\(match.items.orEmpty.count) years=\(itemYears)") // swiftlint:disable:this line_length
         }
-        let filtered = TagService.items(for: tag, yearString: yearString)
+        let filtered = TagQueryOperations.items(for: tag, yearString: yearString)
         let filteredYears = filtered.map { item in
             item.year?.name ?? "nil"
         }

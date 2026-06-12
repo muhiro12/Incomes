@@ -18,23 +18,15 @@ struct ShowPreviousItemsIntent: AppIntent {
 
     @MainActor
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {
-        let items = try ItemService.previousItems(
+        let items = try ItemRelativeQueryOperations.items(
             context: modelContainer.mainContext,
-            date: date
+            date: date,
+            direction: .previous
         )
-        let defaultOpenIntent = IncomesIntentRouteOpener.monthIntent(for: date)
-        guard items.isNotEmpty else {
-            return .result(
-                opensIntent: defaultOpenIntent,
-                dialog: .init(.init("Not Found", table: "AppIntents"))
-            )
-        }
-        return .result(
-            opensIntent: IncomesIntentRouteOpener.monthIntent(for: items[0].localDate),
-            dialog: .init(stringLiteral: date.stringValue(.yyyyMMM))
-        ) {
-            IntentItemListSection(items)
-                .modelContainer(modelContainer)
-        }
+        return ItemIntentShowResultSupport.itemList(
+            items,
+            defaultDate: date,
+            modelContainer: modelContainer
+        )
     }
 }

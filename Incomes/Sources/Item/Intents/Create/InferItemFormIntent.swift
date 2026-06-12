@@ -1,10 +1,11 @@
 import AppIntents
-import FoundationModels
+import Foundation
 import MHPlatform
 
 @available(iOS 26.0, *)
 struct InferItemFormIntent: AppIntent {
     static let title: LocalizedStringResource = .init("Infer Item Form", table: "AppIntents")
+    static let isDiscoverable = false
 
     @Parameter(title: "Text")
     private var text: String
@@ -14,18 +15,19 @@ struct InferItemFormIntent: AppIntent {
     func perform() async throws -> some ReturnsValue<ItemFormInference> {
         let result = try await ItemInferenceService.inferForm(
             text: text,
+            locale: .current,
+            currentDate: Date(),
             logger: intentLogger
         )
-        return .result(value: result)
+        return .result(value: .init(result: result))
     }
 }
 
 @available(iOS 26.0, *)
 private extension InferItemFormIntent {
     @MainActor var intentLogger: MHLogger {
-        IncomesLogging.logger(
+        IncomesIntentLoggingSupport.appIntentLogger(
             logging: logging,
-            category: IncomesLogging.Category.appIntent,
             source: #fileID
         )
     }

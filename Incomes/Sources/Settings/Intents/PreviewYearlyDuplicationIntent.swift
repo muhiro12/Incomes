@@ -23,19 +23,19 @@ struct PreviewYearlyDuplicationIntent: AppIntent {
     @MainActor
     func perform() throws -> some ReturnsValue<String> {
         let logger = intentLogger
-        let metadata = IncomesLogging.metadata(
-            ("source_year", String(sourceYear)),
-            ("target_year", String(targetYear)),
-            ("include_single_items", IncomesLogging.bool(includeSingleItems)),
-            ("minimum_repeat_item_count", String(minimumRepeatItemCount)),
-            ("skip_existing_items", IncomesLogging.bool(skipExistingItems))
+        let metadata = YearlyDuplicationIntentSupport.requestMetadata(
+            sourceYear: sourceYear,
+            targetYear: targetYear,
+            includeSingleItems: includeSingleItems,
+            minimumRepeatItemCount: minimumRepeatItemCount,
+            skipExistingItems: skipExistingItems
         )
         logger.notice(
             "preview_yearly_duplication.requested",
             metadata: metadata
         )
         do {
-            let plan = try YearlyItemDuplicator.plan(
+            let result = try YearlyDuplicationAutomationOperations.preview(
                 context: modelContainer.mainContext,
                 sourceYear: sourceYear,
                 targetYear: targetYear,
@@ -45,16 +45,17 @@ struct PreviewYearlyDuplicationIntent: AppIntent {
                 "preview_yearly_duplication.completed",
                 metadata: metadata.merging(
                     IncomesLogging.metadata(
-                        ("group_count", IncomesLogging.count(plan.groups.count)),
-                        ("item_count", IncomesLogging.count(plan.entries.count)),
-                        ("skipped_count", IncomesLogging.count(plan.skippedDuplicateCount))
+                        ("group_count", IncomesLogging.count(result.groupCount)),
+                        ("item_count", IncomesLogging.count(result.itemCount)),
+                        ("skipped_count", IncomesLogging.count(result.skippedCount))
                     )
                 ) { current, _ in
                     current
                 }
             )
-            let summary = "\(plan.groups.count) groups / \(plan.entries.count) items / \(plan.skippedDuplicateCount) skipped" // swiftlint:disable:this line_length
-            return .result(value: summary)
+            return .result(
+                value: result.summaryText
+            )
         } catch {
             logger.error(
                 "preview_yearly_duplication.failed",
@@ -69,15 +70,14 @@ struct PreviewYearlyDuplicationIntent: AppIntent {
 
 private extension PreviewYearlyDuplicationIntent {
     @MainActor var intentLogger: MHLogger {
-        IncomesLogging.logger(
+        IncomesIntentLoggingSupport.appIntentLogger(
             logging: logging,
-            category: IncomesLogging.Category.appIntent,
             source: #fileID
         )
     }
 
     var duplicationOptions: YearlyItemDuplicationOptions {
-        .init(
+        YearlyDuplicationAutomationOperations.options(
             includeSingleItems: includeSingleItems,
             minimumRepeatItemCount: minimumRepeatItemCount,
             skipExistingItems: skipExistingItems

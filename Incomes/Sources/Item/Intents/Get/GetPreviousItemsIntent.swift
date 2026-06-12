@@ -18,11 +18,13 @@ struct GetPreviousItemsIntent: AppIntent {
 
     @MainActor
     func perform() throws -> some ReturnsValue<[ItemEntity]> {
-        .result(
-            value: try ItemService.previousItems(
-                context: modelContainer.mainContext,
-                date: date
-            ).compactMap(ItemEntity.init) // swiftlint:disable:this multiline_function_chains
+        let items = try ItemRelativeQueryOperations.items(
+            context: modelContainer.mainContext,
+            date: date,
+            direction: .previous
+        )
+        return .result(
+            value: try ItemEntity.make(from: items)
         )
     }
 }

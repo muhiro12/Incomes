@@ -1,4 +1,3 @@
-// swiftlint:disable file_length
 //
 //  ItemFormView.swift
 //  Incomes
@@ -76,49 +75,16 @@ struct ItemFormView: View {
         .contentMargins(.bottom, designMetrics.spacing.inline, for: .scrollContent)
         .navigationTitle(model.content.isNotEmpty ? Text(model.content) : Text("Create"))
         .toolbar {
-            ToolbarItem(placement: .cancellationAction) {
-                Button(action: cancel) {
-                    Text("Cancel")
-                }
-            }
-            ToolbarItem(placement: .primaryAction) {
-                Button {
-                    Task { @MainActor in
-                        if mode == .create {
-                            await create()
-                        } else {
-                            await save()
-                        }
-                    }
-                } label: {
-                    Text(mode == .create ? "Create" : "Save")
-                }
-                .bold()
-                .disabled(!model.isValid)
-            }
-        }
-        .toolbar {
-            ToolbarItem(placement: .keyboard) {
-                SuggestionButtonGroup(input: $model.content, type: .content)
-                    .hidden(focusedField != .content)
-            }
-            ToolbarItem(placement: .keyboard) {
-                SuggestionButtonGroup(input: $model.category, type: .category)
-                    .hidden(focusedField != .category)
-            }
-        }
-        .toolbar {
-            if #available(iOS 26.0, *) {
-                ToolbarItem(placement: .bottomBar) {
-                    Button {
-                        presentation.sheetRoute = .assist
-                    } label: {
-                        Label("Assist", systemImage: "wand.and.stars")
-                    }
-                    .buttonStyle(.borderedProminent)
-                    .buttonBorderShape(.capsule)
-                }
-            }
+            ItemFormToolbarContent(
+                mode: mode,
+                isValid: model.isValid,
+                focusedField: focusedField,
+                content: $model.content,
+                category: $model.category,
+                cancel: cancel,
+                submit: submit,
+                presentAssist: presentAssist
+            )
         }
         .gesture(
             DragGesture()
@@ -189,17 +155,17 @@ struct ItemFormView: View {
         ) {
             Button("Save for this item only") {
                 Task { @MainActor in
-                    await saveForThisItem()
+                    await save(scope: .thisItem)
                 }
             }
             Button("Save for future items") {
                 Task { @MainActor in
-                    await saveForFutureItems()
+                    await save(scope: .futureItems)
                 }
             }
             Button("Save for all items") {
                 Task { @MainActor in
-                    await saveForAllItems()
+                    await save(scope: .allItems)
                 }
             }
             Button("Cancel", role: .cancel) {
@@ -248,6 +214,20 @@ private extension ItemFormView {
         }
     }
 
+    func submit() {
+        Task { @MainActor in
+            if mode == .create {
+                await create()
+            } else {
+                await save()
+            }
+        }
+    }
+
+    func presentAssist() {
+        presentation.sheetRoute = .assist
+    }
+
     func save() async {
         let action: ItemFormMutationPresentationAction
 
@@ -277,14 +257,12 @@ private extension ItemFormView {
         handle(action)
     }
 
-    func saveForThisItem() async {
+    func save(scope: ItemMutationScope) async {
         guard let item else {
             assertionFailure()
             handle(
                 .presentError(
-                    ItemFormMutationPresentationAction.resolvedErrorMessage(
-                        from: ItemError.itemNotFound
-                    )
+                    ErrorMessageOperations.message(from: ItemError.itemNotFound)
                 )
             )
             return
@@ -293,81 +271,7 @@ private extension ItemFormView {
 
         do {
             try await ItemFormSaveCoordinator.save(
-                scope: .thisItem,
-                context: context,
-                item: item,
-                formInputData: model.formInputData,
-                notificationService: notificationService,
-                logger: itemMutationLogger,
-                reviewLogger: reviewLogger
-            )
-            action = ItemFormMutationPresentationAction.dismissOnSuccessAction(
-                for: .success(())
-            )
-        } catch {
-            assertionFailure(error.localizedDescription)
-            action = ItemFormMutationPresentationAction.dismissOnSuccessAction(
-                for: .failure(error)
-            )
-        }
-
-        handle(action)
-    }
-
-    func saveForFutureItems() async {
-        guard let item else {
-            assertionFailure()
-            handle(
-                .presentError(
-                    ItemFormMutationPresentationAction.resolvedErrorMessage(
-                        from: ItemError.itemNotFound
-                    )
-                )
-            )
-            return
-        }
-        let action: ItemFormMutationPresentationAction
-
-        do {
-            try await ItemFormSaveCoordinator.save(
-                scope: .futureItems,
-                context: context,
-                item: item,
-                formInputData: model.formInputData,
-                notificationService: notificationService,
-                logger: itemMutationLogger,
-                reviewLogger: reviewLogger
-            )
-            action = ItemFormMutationPresentationAction.dismissOnSuccessAction(
-                for: .success(())
-            )
-        } catch {
-            assertionFailure(error.localizedDescription)
-            action = ItemFormMutationPresentationAction.dismissOnSuccessAction(
-                for: .failure(error)
-            )
-        }
-
-        handle(action)
-    }
-
-    func saveForAllItems() async {
-        guard let item else {
-            assertionFailure()
-            handle(
-                .presentError(
-                    ItemFormMutationPresentationAction.resolvedErrorMessage(
-                        from: ItemError.itemNotFound
-                    )
-                )
-            )
-            return
-        }
-        let action: ItemFormMutationPresentationAction
-
-        do {
-            try await ItemFormSaveCoordinator.save(
-                scope: .allItems,
+                scope: scope,
                 context: context,
                 item: item,
                 formInputData: model.formInputData,
@@ -475,4 +379,3 @@ private extension ItemFormView {
         ItemFormView(mode: .create)
     }
 }
-// swiftlint:enable file_length

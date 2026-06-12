@@ -18,7 +18,7 @@ struct TagRenamePreviewTests {
             itemCount: 1
         )
 
-        let preview = try TagService.previewCategoryRename(
+        let preview = try TagRenameOperations.previewCategoryRename(
             context: context,
             tag: tag,
             to: "  Food  "
@@ -38,7 +38,7 @@ struct TagRenamePreviewTests {
             itemCount: 2
         )
 
-        let preview = try TagService.previewCategoryRename(
+        let preview = try TagRenameOperations.previewCategoryRename(
             context: context,
             tag: tag,
             to: "Others"
@@ -62,7 +62,7 @@ struct TagRenamePreviewTests {
             itemCount: 1
         )
 
-        let preview = try TagService.previewCategoryRename(
+        let preview = try TagRenameOperations.previewCategoryRename(
             context: context,
             tag: sourceTag,
             to: "Travel"
@@ -76,13 +76,42 @@ struct TagRenamePreviewTests {
     }
 
     @Test
+    func canRenameCategory_only_allows_user_managed_category_tags() throws {
+        let categoryTag = try Tag.create(
+            context: context,
+            name: "Food",
+            type: .category
+        )
+        let emptyCategoryTag = try Tag.create(
+            context: context,
+            name: .empty,
+            type: .category
+        )
+        let legacyOthersTag = try Tag.create(
+            context: context,
+            name: "Others",
+            type: .category
+        )
+        let contentTag = try Tag.create(
+            context: context,
+            name: "Food",
+            type: .content
+        )
+
+        #expect(TagRenameOperations.canRenameCategory(categoryTag))
+        #expect(TagRenameOperations.canRenameCategory(emptyCategoryTag) == false)
+        #expect(TagRenameOperations.canRenameCategory(legacyOthersTag) == false)
+        #expect(TagRenameOperations.canRenameCategory(contentTag) == false)
+    }
+
+    @Test
     func previewCategoryRename_reports_affected_item_count_for_valid_rename() throws {
         let tag = try createCategoryTag(
             name: "Food",
             itemCount: 3
         )
 
-        let preview = try TagService.previewCategoryRename(
+        let preview = try TagRenameOperations.previewCategoryRename(
             context: context,
             tag: tag,
             to: "Travel"
@@ -109,7 +138,7 @@ private extension TagRenamePreviewTests {
         }
 
         return try #require(
-            try TagService.getByName(
+            try TagQueryOperations.getByName(
                 context: context,
                 name: name,
                 type: .category

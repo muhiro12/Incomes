@@ -8,20 +8,16 @@
 import AppIntents
 
 @available(iOS 26.0, *)
-public struct ItemFormInferenceQuery: EntityStringQuery {
-    public init() {
-        // no-op
-    }
-
-    public func entities(for _: [String]) -> [ItemFormInference] {
+struct ItemFormInferenceQuery: EntityStringQuery {
+    func entities(for _: [String]) -> [ItemFormInference] {
         []
     }
 
-    public func entities(matching _: String) -> [ItemFormInference] {
+    func entities(matching _: String) -> [ItemFormInference] {
         []
     }
 
-    public func suggestedEntities() -> [ItemFormInference] {
+    func suggestedEntities() -> [ItemFormInference] {
         []
     }
 }

@@ -5,7 +5,6 @@
 //  Created by Codex on 2026/03/04.
 //
 
-import FoundationModels
 import MHDesign
 import MHPlatform
 import SwiftData
@@ -17,21 +16,6 @@ struct MonthlySummarySection: View {
         static let popoverIdealWidth: CGFloat = 320
         static let popoverMaximumWidth: CGFloat = 360
         static let popoverMinimumWidth: CGFloat = 280
-    }
-
-    private struct SummarySourceSnapshot: Equatable {
-        let id: String
-        let date: Date
-        let content: String
-        let income: Decimal
-        let outgo: Decimal
-        let category: String
-    }
-
-    private struct SummaryGenerationInput: Equatable {
-        let snapshots: [SummarySourceSnapshot]
-        let currencyCode: String
-        let localeIdentifier: String
     }
 
     @Environment(\.modelContext)
@@ -52,7 +36,6 @@ struct MonthlySummarySection: View {
 
     @Query private var previousItems: [Item]
 
-    @State private var languageModel = SystemLanguageModel.default
     @State private var generatedSummary: String?
     @State private var isGenerating = false
     @State private var isPopoverPresented = false
@@ -65,7 +48,11 @@ struct MonthlySummarySection: View {
         self.date = date
         _currentItems = .init(.items(.dateIsSameMonthAs(date)))
         _previousItems = .init(
-            .items(.dateIsSameMonthAs(Self.previousMonthDate(from: date)))
+            .items(
+                .dateIsSameMonthAs(
+                    MonthlySummaryOperations.previousMonthDate(from: date)
+                )
+            )
         )
     }
 
@@ -119,15 +106,13 @@ private extension MonthlySummarySection {
         guard !currentItems.isEmpty else {
             return false
         }
-        guard languageModel.availability == .available else {
-            return false
-        }
-        return languageModel.supportsLocale(locale)
+        return MonthlySummaryGenerator.canGenerate(locale: locale)
     }
 
-    private var generationInput: SummaryGenerationInput {
+    private var generationInput: MonthlySummaryGenerationInput {
         .init(
-            snapshots: summarySourceSnapshots,
+            currentItems: currentItems,
+            previousItems: previousItems,
             currencyCode: currencyCode,
             localeIdentifier: locale.identifier
         )
@@ -205,14 +190,6 @@ private extension MonthlySummarySection {
             .disabled(isGenerating)
     }
 
-    private var summarySourceSnapshots: [SummarySourceSnapshot] {
-        currentItems.map(snapshot(for:)) + previousItems.map(snapshot(for:))
-    }
-
-    static func previousMonthDate(from date: Date) -> Date {
-        Calendar.utc.date(byAdding: .month, value: -1, to: date) ?? date
-    }
-
     private func generateSummaryButton(title: LocalizedStringKey) -> some View {
         Button(title) {
             Task {
@@ -222,7 +199,7 @@ private extension MonthlySummarySection {
                 )
             }
         }
-        .buttonStyle(.bordered)
+        .buttonStyle(.glassProminent)
     }
 
     @MainActor
@@ -250,7 +227,7 @@ private extension MonthlySummarySection {
 
         do {
             let summary = try await MonthlySummaryGenerator.generate(
-                modelContainer: context.container,
+                context: context,
                 date: date,
                 currencyCode: currencyCode,
                 locale: locale
@@ -267,34 +244,13 @@ private extension MonthlySummarySection {
                 return
             }
             if presentsErrors {
-                errorMessage = resolvedErrorMessage(from: error)
+                errorMessage = ErrorMessageOperations.message(from: error)
             }
         }
-    }
-
-    private func snapshot(for item: Item) -> SummarySourceSnapshot {
-        .init(
-            id: String(describing: item.persistentModelID),
-            date: item.utcDate,
-            content: item.content,
-            income: item.income,
-            outgo: item.outgo,
-            category: CategoryNameSupport.displayName(
-                forStoredName: item.category?.name
-            )
-        )
     }
 
     func clearGeneratedSummary() {
         generatedSummary = nil
         errorMessage = nil
-    }
-
-    func resolvedErrorMessage(from error: Error) -> String {
-        if let localizedError = error as? LocalizedError,
-           let description = localizedError.errorDescription {
-            return description
-        }
-        return error.localizedDescription
     }
 }

@@ -16,11 +16,6 @@ final class NotificationService: NSObject {
         static let upcomingPaymentActions = "upcoming-payment.actions"
     }
 
-    private enum NotificationActionIdentifier {
-        static let viewItem = "upcoming-payment.view-item"
-        static let viewMonth = NotificationRoutePayload.viewMonthActionIdentifier
-    }
-
     enum AuthorizationState {
         case notDetermined
         case authorized
@@ -62,10 +57,7 @@ final class NotificationService: NSObject {
         let center = UNUserNotificationCenter.current()
         let requests = buildUpcomingPaymentReminders()
         let matcher = MHNotificationIdentifierMatcher(
-            prefixes: [
-                UpcomingPaymentNotificationPresentation.requestIdentifierPrefix,
-                UpcomingPaymentNotificationPresentation.previewRequestIdentifierPrefix
-            ]
+            prefixes: UpcomingPaymentNotificationPresentation.managedRequestIdentifierPrefixes
         )
         logger.info(
             "notification.register_requested",
@@ -144,39 +136,36 @@ final class NotificationService: NSObject {
     }
 
     func sendTestNotification() {
-        guard let item = try? ItemService.nextItem(
-            context: modelContainer.mainContext,
-            date: .now
-        ) else {
-            logger.warning(
-                "notification.test_skipped",
-                metadata: IncomesLogging.metadata(
-                    ("failure_reason", "no_item")
-                )
-            )
-            return
-        }
-
+        let now = Date.now
+        let triggerInterval: TimeInterval = 1
         let settings = currentNotificationSettings()
-        let plan = UpcomingPaymentPlanner.PlannedPayment(
-            item: item,
-            notifyDate: Date.now.addingTimeInterval(1)
-        )
-        guard let presentation = UpcomingPaymentNotificationPresentationBuilder.build(
-            plans: [plan],
-            settings: settings,
-            now: .now
-        ).first?.previewPresentation() else { // swiftlint:disable:this multiline_function_chains
+        let result: UpcomingPaymentTestNoticeResult
+        do {
+            result = try UpcomingPaymentOperations.testNotificationPresentation(
+                context: modelContainer.mainContext,
+                settings: settings,
+                now: now,
+                notifyDate: now.addingTimeInterval(triggerInterval)
+            )
+        } catch {
             logger.warning(
                 "notification.test_skipped",
                 metadata: IncomesLogging.metadata(
-                    ("failure_reason", "no_presentation")
+                    ("failure_reason", "operation_failed")
                 )
             )
             return
         }
 
-        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+        guard case .presentation(let presentation) = result else {
+            logSkippedTestNotification(result)
+            return
+        }
+
+        let trigger = UNTimeIntervalNotificationTrigger(
+            timeInterval: triggerInterval,
+            repeats: false
+        )
         let request = buildNotificationRequest(
             presentation: presentation,
             trigger: trigger
@@ -186,6 +175,23 @@ final class NotificationService: NSObject {
             "notification.test_scheduled",
             metadata: IncomesLogging.metadata(
                 ("request_identifier_present", "true")
+            )
+        )
+    }
+}
+
+private extension NotificationService {
+    func logSkippedTestNotification(
+        _ result: UpcomingPaymentTestNoticeResult
+    ) {
+        guard case .unavailable(let reason) = result else {
+            return
+        }
+
+        logger.warning(
+            "notification.test_skipped",
+            metadata: IncomesLogging.metadata(
+                ("failure_reason", reason.rawValue)
             )
         )
     }
@@ -210,7 +216,9 @@ extension NotificationService: UNUserNotificationCenterDelegate {
                 metadata: IncomesLogging.metadata(
                     ("action_identifier", response.actionIdentifier),
                     ("managed_identifier", IncomesLogging.bool(
-                        isManagedNotificationIdentifier(response.notification.request.identifier)
+                        UpcomingPaymentNotificationPresentation.isManagedRequestIdentifier(
+                            response.notification.request.identifier
+                        )
                     ))
                 )
             )
@@ -223,7 +231,7 @@ extension NotificationService: UNUserNotificationCenterDelegate {
         Task {
             logger.info("notification.settings_route_requested")
             await routeDestination.setPendingURL(
-                IncomesDeepLinkURLBuilder.preferredURL(for: .settings)
+                MainNavigationOperations.preferredURL(for: .settings)
             )
         }
     }
@@ -237,11 +245,11 @@ private extension NotificationService {
                     identifier: NotificationCategoryIdentifier.upcomingPaymentActions,
                     actions: [
                         .init(
-                            identifier: NotificationActionIdentifier.viewItem,
+                            identifier: NotificationRoutePayload.viewItemActionIdentifier,
                             title: String(localized: "View Item")
                         ),
                         .init(
-                            identifier: NotificationActionIdentifier.viewMonth,
+                            identifier: NotificationRoutePayload.viewMonthActionIdentifier,
                             title: String(localized: "View Month")
                         )
                     ]
@@ -287,7 +295,7 @@ private extension NotificationService {
 
     func buildUpcomingPaymentReminders() -> [UNNotificationRequest] {
         let settings = currentNotificationSettings()
-        guard let plans = try? UpcomingPaymentPlanner.build(
+        guard let plans = try? UpcomingPaymentOperations.build(
             context: modelContainer.mainContext,
             settings: settings,
             now: .now,
@@ -296,7 +304,7 @@ private extension NotificationService {
             return .empty
         }
 
-        let presentations = UpcomingPaymentNotificationPresentationBuilder.build(
+        let presentations = UpcomingPaymentOperations.notificationPresentations(
             plans: plans,
             settings: settings,
             now: .now
@@ -350,12 +358,7 @@ private extension NotificationService {
     func deliveredNotificationIdentifiers() async -> [String] {
         await UNUserNotificationCenter.current().deliveredNotifications() // swiftlint:disable:this line_length multiline_function_chains
             .map(\.request.identifier)
-            .filter(isManagedNotificationIdentifier)
-    }
-
-    func isManagedNotificationIdentifier(_ identifier: String) -> Bool {
-        identifier.hasPrefix(UpcomingPaymentNotificationPresentation.requestIdentifierPrefix) ||
-            identifier.hasPrefix(UpcomingPaymentNotificationPresentation.previewRequestIdentifierPrefix)
+            .filter(UpcomingPaymentNotificationPresentation.isManagedRequestIdentifier)
     }
 }
 

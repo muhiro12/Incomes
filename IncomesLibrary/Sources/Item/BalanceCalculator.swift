@@ -9,9 +9,9 @@ import Foundation
 import SwiftData
 
 /// Recalculates running balances for ordered items.
-public enum BalanceCalculator {
+enum BalanceCalculator {
     /// Recalculates balances starting from the earliest date covered by `items`.
-    public static func calculate(in context: ModelContext, for items: [Item]) throws {
+    static func calculate(in context: ModelContext, for items: [Item]) throws {
         if let date = items.map(\.localDate).min() {
             try calculate(in: context, after: date)
         } else {
@@ -20,7 +20,7 @@ public enum BalanceCalculator {
     }
 
     /// Recalculates balances for all items on or after `date`.
-    public static func calculate(in context: ModelContext, after date: Date) throws {
+    static func calculate(in context: ModelContext, after date: Date) throws {
         let allItems = try context.fetch(.items(.all, order: .forward))
 
         guard let separatorIndex = allItems.firstIndex(where: { item in

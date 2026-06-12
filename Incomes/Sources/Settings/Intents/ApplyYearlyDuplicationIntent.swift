@@ -23,35 +23,31 @@ struct ApplyYearlyDuplicationIntent: AppIntent {
     @MainActor
     func perform() throws -> some ReturnsValue<Int> {
         let logger = intentLogger
-        let metadata = IncomesLogging.metadata(
-            ("source_year", String(sourceYear)),
-            ("target_year", String(targetYear)),
-            ("include_single_items", IncomesLogging.bool(includeSingleItems)),
-            ("minimum_repeat_item_count", String(minimumRepeatItemCount)),
-            ("skip_existing_items", IncomesLogging.bool(skipExistingItems))
+        let metadata = YearlyDuplicationIntentSupport.requestMetadata(
+            sourceYear: sourceYear,
+            targetYear: targetYear,
+            includeSingleItems: includeSingleItems,
+            minimumRepeatItemCount: minimumRepeatItemCount,
+            skipExistingItems: skipExistingItems
         )
         logger.notice(
             "apply_yearly_duplication.requested",
             metadata: metadata
         )
         do {
-            let plan = try YearlyItemDuplicator.plan(
+            let result = try YearlyDuplicationAutomationOperations.apply(
                 context: modelContainer.mainContext,
                 sourceYear: sourceYear,
                 targetYear: targetYear,
                 options: duplicationOptions
-            )
-            let result = try YearlyItemDuplicator.apply(
-                plan: plan,
-                context: modelContainer.mainContext
             )
             logger.notice(
                 "apply_yearly_duplication.completed",
                 metadata: metadata.merging(
                     IncomesLogging.metadata(
                         ("created_count", IncomesLogging.count(result.createdCount)),
-                        ("group_count", IncomesLogging.count(plan.groups.count)),
-                        ("item_count", IncomesLogging.count(plan.entries.count))
+                        ("group_count", IncomesLogging.count(result.groupCount)),
+                        ("item_count", IncomesLogging.count(result.itemCount))
                     )
                 ) { current, _ in
                     current
@@ -72,15 +68,14 @@ struct ApplyYearlyDuplicationIntent: AppIntent {
 
 private extension ApplyYearlyDuplicationIntent {
     @MainActor var intentLogger: MHLogger {
-        IncomesLogging.logger(
+        IncomesIntentLoggingSupport.appIntentLogger(
             logging: logging,
-            category: IncomesLogging.Category.appIntent,
             source: #fileID
         )
     }
 
     var duplicationOptions: YearlyItemDuplicationOptions {
-        .init(
+        YearlyDuplicationAutomationOperations.options(
             includeSingleItems: includeSingleItems,
             minimumRepeatItemCount: minimumRepeatItemCount,
             skipExistingItems: skipExistingItems

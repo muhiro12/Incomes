@@ -9,7 +9,10 @@ struct DebugTagItemListView: View {
 
     var body: some View {
         Group {
-            if let tag = try? context.fetchFirst(.tags(.idIs(tagID))) {
+            if let tag = try? TagQueryOperations.getByPersistentID(
+                context: context,
+                persistentID: tagID
+            ) {
                 ItemListGroup()
                     .environment(tag)
             } else {

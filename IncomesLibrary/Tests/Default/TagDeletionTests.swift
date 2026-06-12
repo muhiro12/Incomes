@@ -14,7 +14,7 @@ struct TagDeletionTests {
     func delete_removes_unused_tag() throws {
         let tag = try Tag.create(context: context, name: "name", type: .year)
         #expect(try context.fetchCount(.tags(.all)) == 1)
-        TagService.delete(tag: tag)
+        TagMutationOperations.delete(tag: tag)
         #expect(try context.fetchCount(.tags(.all)) == 0)
     }
 
@@ -36,7 +36,7 @@ struct TagDeletionTests {
             }
         )
 
-        TagService.delete(tag: contentTag)
+        TagMutationOperations.delete(tag: contentTag)
 
         #expect(try context.fetchCount(.items(.all)) == 1)
         #expect(try context.fetchCount(.tags(.nameIs("Coffee", type: .content))) == 1)
@@ -53,14 +53,14 @@ struct TagDeletionTests {
         _ = try Tag.create(context: context, name: "A", type: .content)
         _ = try Tag.create(context: context, name: "B", type: .content)
         #expect(try context.fetchCount(.tags(.all)) == 2)
-        try TagService.deleteAll(context: context)
+        try TagMutationOperations.deleteAll(context: context)
         #expect(try context.fetchCount(.tags(.all)) == 0)
     }
 
     @Test
     func deleteAll_when_empty_is_noop() throws {
         #expect(try context.fetchCount(.tags(.all)) == 0)
-        try TagService.deleteAll(context: context)
+        try TagMutationOperations.deleteAll(context: context)
         #expect(try context.fetchCount(.tags(.all)) == 0)
     }
 }

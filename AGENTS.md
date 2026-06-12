@@ -1,7 +1,8 @@
 # AGENTS.md
 
-This document defines the **global agent behavior contract** shared across projects.  
-It contains only strict, minimal rules that agents must always follow.
+This document defines the **repository-specific agent behavior contract** for
+Incomes. It contains only strict, minimal rules that agents must follow when
+working in this repository.
 
 ## Agent Philosophy
 
@@ -95,30 +96,34 @@ tasks.filter { $0.isCompleted }
 
 ## Build and Test Entry Point
 
-Agents MUST use this standardized verification entrypoint:
+Agents MUST prefer XcodeBuildMCP for Apple build, test, run, Simulator,
+runtime log, screenshot, and UI snapshot verification.
+
+For app compile checks, use XcodeBuildMCP `build_sim` with the `Incomes`
+scheme. For shared-library tests, use XcodeBuildMCP `test_sim` with the
+`IncomesLibrary` scheme. For runtime or UI-sensitive checks, use
+XcodeBuildMCP `build_run_sim`, `launch_app_sim`, `snapshot_ui`, and
+`screenshot` as appropriate.
+
+When Swift files are edited, agents should run:
 
 ``` sh
-bash ci_scripts/tasks/verify_task_completion.sh
+bash ci_scripts/tasks/format_swift.sh
 ```
 
-Agents may run `bash ci_scripts/tasks/check_environment.sh --profile verify`
-first to diagnose missing local prerequisites.
-When Swift files are edited, agents should run
-`bash ci_scripts/tasks/format_swift.sh` before the final verification gate.
-`bash ci_scripts/tasks/verify_task_completion.sh` is the non-destructive
-verification gate.
-`bash ci_scripts/tasks/verify_pre_push.sh` is the optional Git `pre-push`
-wrapper for the same non-destructive verification gate.
-`bash ci_scripts/tasks/verify_repository_state.sh` is the supplemental
-repository-state verification entrypoint that still writes CI run artifacts.
+Agents should also run the retained repository rule checks:
+
+``` sh
+bash ci_scripts/tasks/check_repository_rules.sh
+```
+
+`check_repository_rules.sh` runs SwiftLint plus repository-specific static
+architecture checks that are not naturally covered by XcodeBuildMCP.
 SwiftLint is resolved from the `SimplyDanny/SwiftLintPlugins` package declared
 in `Incomes.xcodeproj`, not from a separately installed `swiftlint` binary.
+Xcode Cloud owns formal CI builds, tests, and archives.
 
-CI run artifacts are written under `.build/ci/runs/<RUN_ID>/`.
-Each run stores `summary.md`, `commands.txt`, `meta.json`, `logs/`, `results/`, and `work/`.
-Shared CI directories are under `.build/ci/shared/` (`cache/`, `DerivedData/`, `tmp/`, `home/`).
-Only the newest 5 run directories are retained.
-The entire `.build/ci` directory is disposable.
+Helper scripts may write disposable cache data under `.build/ci/shared/`.
 
 ## Release UI Smoke Audit
 

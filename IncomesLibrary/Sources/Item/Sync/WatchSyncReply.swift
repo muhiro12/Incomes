@@ -1,5 +1,18 @@
 import Foundation
 
+private let kResponseEncodeFallbackData = Data(
+    """
+    {
+      "status":"failure",
+      "items":[],
+      "failure":{
+        "phase":"responseEncode",
+        "message":"Failed to encode watch sync reply"
+      }
+    }
+    """.utf8
+)
+
 public struct WatchSyncReply: Codable, Sendable {
     public enum Status: String, Codable, Sendable, Equatable {
         case success
@@ -16,6 +29,11 @@ public struct WatchSyncReply: Codable, Sendable {
 
     public var shouldApplySnapshot: Bool {
         isSuccess
+    }
+
+    /// True when the reply succeeded without returning any item payloads.
+    public var isEmptySuccess: Bool {
+        isSuccess && items.isEmpty
     }
 
     public static func success(items: [ItemWire]) -> Self {
@@ -54,6 +72,36 @@ public struct WatchSyncReply: Codable, Sendable {
             phase: phase,
             message: error.localizedDescription
         )
+    }
+
+    public static func responseData(
+        for reply: Self
+    ) throws -> Data {
+        try JSONEncoder().encode(reply)
+    }
+
+    /// Encodes a reply, falling back to a response-encode failure payload.
+    public static func encodedResponseData(
+        for reply: Self,
+        onEncodingFailure: (any Error) -> Void
+    ) -> Data {
+        do {
+            return try responseData(for: reply)
+        } catch {
+            onEncodingFailure(error)
+            return responseEncodingFailureData(error: error)
+        }
+    }
+
+    public static func responseEncodingFailureData(
+        error: any Error
+    ) -> Data {
+        let fallbackReply = Self.failed(
+            phase: .responseEncode,
+            error: error
+        )
+        return (try? responseData(for: fallbackReply))
+            ?? kResponseEncodeFallbackData
     }
 
     public static func decodeResponse(_ data: Data) -> Self {

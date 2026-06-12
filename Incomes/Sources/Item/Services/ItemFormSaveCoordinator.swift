@@ -46,7 +46,7 @@ enum ItemFormSaveCoordinator {
                 )
                 throw ItemError.itemNotFound
             }
-            if try ItemFormSaveDecision.requiresScopeSelection(
+            if try ItemUpdateOperations.requiresScopeSelection(
                 context: context,
                 item: item
             ) {
@@ -99,16 +99,15 @@ enum ItemFormSaveCoordinator {
             _ = try await MHMutationWorkflow.runThrowing(
                 name: mutationName(for: scope),
                 operation: {
-                    try ItemService.updateWithOutcome(
+                    try ItemUpdateOperations.updateWithOutcome(
                         context: context,
                         item: item,
                         input: formInputData,
                         scope: scope
                     )
                 },
-                adapter: ItemMutationAdapterFactory.make(
+                adapter: ItemMutationAdapterFactory.makeForSave(
                     notificationService: notificationService,
-                    includesReviewRequest: true,
                     reviewLogger: reviewLogger
                 ),
                 projection: .closures(

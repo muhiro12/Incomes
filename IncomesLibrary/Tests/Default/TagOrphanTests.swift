@@ -34,7 +34,7 @@ struct TagOrphanTests {
         )
         item.modify(tags: item.tags.orEmpty + [attachedDebugTag])
 
-        let orphanTags = try TagService.orphanTags(context: context)
+        let orphanTags = try TagQueryOperations.orphanTags(context: context)
 
         #expect(orphanTags.count == 5)
         #expect(orphanTags.contains { tag in
@@ -73,7 +73,7 @@ struct TagOrphanTests {
             tag.type == .content
         })
 
-        #expect(TagService.isOrphan(tag: contentTag) == false)
+        #expect(TagQueryOperations.isOrphan(tag: contentTag) == false)
     }
 
     @Test
@@ -84,7 +84,7 @@ struct TagOrphanTests {
             type: .content
         )
 
-        #expect(TagService.isOrphan(tag: tag))
+        #expect(TagQueryOperations.isOrphan(tag: tag))
     }
 
     @Test
@@ -114,7 +114,7 @@ struct TagOrphanTests {
 
         try context.save()
 
-        #expect(TagService.isOrphan(tag: debugTag))
+        #expect(TagQueryOperations.isOrphan(tag: debugTag))
     }
 
     @Test
@@ -146,8 +146,9 @@ struct TagOrphanTests {
             type: .debug
         )
 
-        try TagService.deleteAllOrphanTags(context: context)
+        let deletedCount = try TagMutationOperations.deleteAllOrphanTags(context: context)
 
+        #expect(deletedCount == 2)
         #expect(try context.fetchCount(.tags(.nameIs("Unused Content", type: .content))) == 0)
         #expect(try context.fetchCount(.tags(.nameIs("Unused Debug", type: .debug))) == 0)
         #expect(try context.fetchCount(.tags(.nameIs("Used Content", type: .content))) == 1)

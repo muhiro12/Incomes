@@ -8,7 +8,6 @@
 import MHDesign
 import SwiftData
 import SwiftUI
-import TipKit
 
 struct SearchListView: View {
     @Environment(IncomesTipController.self)
@@ -31,8 +30,6 @@ struct SearchListView: View {
     @State private var minValue = String.empty
     @State private var maxValue = String.empty
 
-    private let searchFiltersTip = SearchFiltersTip()
-
     init( // swiftlint:disable:this type_contents_order
         selection: Binding<ItemPredicate?>,
         searchText: Binding<String>,
@@ -44,42 +41,22 @@ struct SearchListView: View {
     }
 
     var body: some View {
-        List { // swiftlint:disable:this closure_body_length
-            Section("Target") {
-                Picker("Target", selection: $selectedTarget) {
-                    ForEach(SearchTarget.allCases, id: \.self) { target in
-                        Text(target.value)
-                            .tag(target)
-                    }
-                }
-                .pickerStyle(.menu)
-                .popoverTip(searchFiltersTip, arrowEdge: .top)
-            }
-            Section("Filter") {
-                switch selectedTarget {
-                case .content:
-                    buildTagRows(tags: contents)
-                case .category:
-                    buildCategoryRows(facets: categoryFacets)
-                case .balance,
-                     .income,
-                     .outgo:
-                    buildCurrencyRows()
-                }
-            }
-            if selectedTarget.isForCurrency {
-                Section {
-                    Button("Search", systemImage: "magnifyingglass") {
-                        if let newPredicate = selectedTarget.predicate(
-                            minimumText: minValue,
-                            maximumText: maxValue
-                        ) {
-                            tipController.donateDidApplySearch()
-                            predicate = newPredicate
-                        }
-                    }
-                }
-            }
+        List {
+            SearchTargetSection(selectedTarget: $selectedTarget)
+            SearchFilterSection(
+                selectedTarget: selectedTarget,
+                contentTags: filteredContentTags,
+                categoryFacets: categoryFacets,
+                minValue: $minValue,
+                maxValue: $maxValue,
+                controlSpacing: designMetrics.spacing.control,
+                applyTagFilter: applyTagFilter,
+                applyCategoryFilter: applyCategoryFilter
+            )
+            SearchCurrencyActionSection(
+                isVisible: selectedTarget.isForCurrency,
+                applySearch: applyCurrencyFilter
+            )
         }
         .overlay {
             if isShowingEmptyState {
@@ -102,8 +79,15 @@ struct SearchListView: View {
 }
 
 private extension SearchListView {
+    var filteredContentTags: [Tag] {
+        selectedTarget.filteredTags(
+            contents,
+            searchText: searchText
+        )
+    }
+
     var categoryFacets: [CategoryFacet] {
-        CategoryFacetService.filteredFacets(
+        CategoryFacetOperations.filteredFacets(
             tags: categories,
             items: items,
             query: searchText
@@ -113,86 +97,13 @@ private extension SearchListView {
     var isShowingEmptyState: Bool {
         switch selectedTarget {
         case .content:
-            return selectedTarget.filteredTags(
-                contents,
-                searchText: searchText
-            ).isEmpty
+            return filteredContentTags.isEmpty
         case .category:
             return categoryFacets.isEmpty
         case .balance,
              .income,
              .outgo:
             return false
-        }
-    }
-
-    func buildTagRows(tags: [Tag]) -> some View {
-        ForEach(
-            selectedTarget.filteredTags(tags, searchText: searchText)
-        ) { tag in
-            Button {
-                applyTagFilter(tag)
-            } label: {
-                HStack {
-                    Text(tag.displayName)
-                    Spacer()
-                    Text(tag.items.orEmpty.count.description)
-                        .foregroundStyle(.secondary)
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .contentShape(Rectangle())
-            }
-            .contextMenu {
-                Button(
-                    "Apply Filter",
-                    systemImage: "line.3.horizontal.decrease.circle"
-                ) {
-                    applyTagFilter(tag)
-                }
-                CopyTextContextMenuButton(
-                    "Copy Name",
-                    text: tag.displayName
-                )
-            }
-        }
-    }
-
-    func buildCategoryRows(facets: [CategoryFacet]) -> some View {
-        ForEach(facets) { facet in
-            Button {
-                applyCategoryFilter(facet)
-            } label: {
-                HStack {
-                    Text(facet.displayName)
-                    Spacer()
-                    Text(facet.count.description)
-                        .foregroundStyle(.secondary)
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .contentShape(Rectangle())
-            }
-            .contextMenu {
-                Button(
-                    "Apply Filter",
-                    systemImage: "line.3.horizontal.decrease.circle"
-                ) {
-                    applyCategoryFilter(facet)
-                }
-                CopyTextContextMenuButton(
-                    "Copy Name",
-                    text: facet.displayName
-                )
-            }
-        }
-    }
-
-    func buildCurrencyRows() -> some View {
-        HStack(spacing: designMetrics.spacing.control) {
-            TextField("Min", text: $minValue)
-                .keyboardType(.numbersAndPunctuation)
-            Text("~")
-            TextField("Max", text: $maxValue)
-                .keyboardType(.numbersAndPunctuation)
         }
     }
 
@@ -204,6 +115,18 @@ private extension SearchListView {
     func applyCategoryFilter(_ facet: CategoryFacet) {
         tipController.donateDidApplySearch()
         predicate = .idsAre(facet.itemIDs)
+    }
+
+    func applyCurrencyFilter() {
+        guard let newPredicate = selectedTarget.predicate(
+            minimumText: minValue,
+            maximumText: maxValue
+        ) else {
+            return
+        }
+
+        tipController.donateDidApplySearch()
+        predicate = newPredicate
     }
 
     func applyInitialSearchTextIfNeeded() {

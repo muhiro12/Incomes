@@ -1,16 +1,16 @@
 import Foundation
 
 /// Builds search predicates from currency range inputs.
-public enum ItemSearchPredicateBuilder {
+enum ItemSearchPredicateBuilder {
     /// Supported numeric search targets.
-    public enum Target: Sendable {
+    enum Target: Sendable {
         case balance
         case income
         case outgo
     }
 
     /// Builds an `ItemPredicate` from text inputs.
-    public static func build(
+    static func build(
         target: Target,
         minimumText: String,
         maximumText: String

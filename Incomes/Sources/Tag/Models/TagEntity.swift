@@ -32,11 +32,13 @@ final class TagEntity: AppEntity {
     let id: String
     let name: String
     let typeID: String
+    let displayName: String
 
-    init(id: String, name: String, typeID: String) {
+    init(id: String, name: String, typeID: String, displayName: String) {
         self.id = id
         self.name = name
         self.typeID = typeID
+        self.displayName = displayName
     }
 }
 
@@ -48,8 +50,22 @@ extension TagEntity {
         self.init(
             id: encodedID,
             name: model.name,
-            typeID: model.typeID
+            typeID: model.typeID,
+            displayName: model.displayName
         )
+    }
+
+    static func make(from model: Tag) throws -> TagEntity {
+        guard let entity = TagEntity(model) else {
+            throw TagEntityError.conversionFailed
+        }
+        return entity
+    }
+
+    static func make(from models: [Tag]) throws -> [TagEntity] {
+        try models.map { model in
+            try make(from: model)
+        }
     }
 }
 
@@ -72,10 +88,13 @@ extension TagEntity {
         TagType(rawValue: typeID)
     }
 
-    var displayName: String {
-        TagTextSupport.displayName(
-            name: name,
-            type: type
-        )
+    func model(in context: ModelContext) throws -> Tag {
+        guard let model = try TagQueryOperations.getByID(
+            context: context,
+            id: id
+        ) else {
+            throw TagEntityError.tagNotFound
+        }
+        return model
     }
 }

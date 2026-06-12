@@ -82,7 +82,7 @@ struct ItemTagCleanupTest {
             priority: 0
         )
 
-        try ItemService.delete(
+        try ItemDeletionOperations.delete(
             context: context,
             item: item
         )
@@ -119,7 +119,7 @@ struct ItemTagCleanupTest {
             priority: 0
         )
 
-        try ItemService.delete(
+        try ItemDeletionOperations.delete(
             context: context,
             item: firstItem
         )

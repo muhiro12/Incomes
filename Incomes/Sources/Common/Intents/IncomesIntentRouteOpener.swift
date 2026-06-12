@@ -2,7 +2,9 @@ import Foundation
 
 enum IncomesIntentRouteOpener {
     static func monthIntent(for date: Date) -> OpenIncomesRouteIntent {
-        .init(url: IncomesDeepLinkURLBuilder.preferredMonthURL(for: date))
+        .init(
+            url: MainNavigationOperations.preferredMonthURL(for: date)
+        )
     }
 
     static func homeIntent() -> OpenIncomesRouteIntent {
@@ -10,6 +12,8 @@ enum IncomesIntentRouteOpener {
     }
 
     static func routeIntent(for route: IncomesRoute) -> OpenIncomesRouteIntent {
-        .init(url: IncomesDeepLinkURLBuilder.preferredURL(for: route))
+        .init(
+            url: MainNavigationOperations.preferredRouteURL(for: route)
+        )
     }
 }

@@ -24,7 +24,7 @@ final class MainNavigationRouter {
     var itemDetailID: PersistentIdentifier?
 
     func loadState(context: ModelContext) throws {
-        let state = try MainNavigationStateLoader.load(context: context)
+        let state = try MainNavigationOperations.loadState(context: context)
         yearTagID = state.yearTag?.persistentModelID
         selectedTag = state.yearMonthTag
         if state.yearTag == nil {
@@ -107,7 +107,7 @@ private extension MainNavigationRouter {
         route: IncomesRoute,
         context: ModelContext
     ) throws {
-        let outcome = try MainNavigationRouteExecutor.execute(
+        let outcome = try MainNavigationOperations.execute(
             route: route,
             context: context
         )

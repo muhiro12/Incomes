@@ -18,12 +18,13 @@ struct GetPreviousItemIntent: AppIntent {
 
     @MainActor
     func perform() throws -> some ReturnsValue<ItemEntity?> {
-        guard let item = try ItemService.previousItem(
+        let item = try ItemRelativeQueryOperations.item(
             context: modelContainer.mainContext,
-            date: date
-        ) else {
-            return .result(value: nil)
-        }
-        return .result(value: .init(item))
+            date: date,
+            direction: .previous
+        )
+        return .result(
+            value: try ItemEntity.make(from: item)
+        )
     }
 }

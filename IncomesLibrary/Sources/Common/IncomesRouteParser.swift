@@ -12,10 +12,12 @@ public enum IncomesRouteParser {
     /// Parses `url` into an `IncomesRoute` when it matches a supported transport.
     public static func parse(
         url: URL,
-        allowedUniversalLinkHosts: Set<String> = universalLinkHosts
+        allowedUniversalLinkHosts: Set<String> = universalLinkHosts,
+        universalLinkPathPrefix: String = IncomesRouteURLDefaults.universalLinkPathPrefix
     ) -> IncomesRoute? {
         let codec = IncomesDeepLinkCodec.make(
-            allowedUniversalLinkHosts: allowedUniversalLinkHosts
+            allowedUniversalLinkHosts: allowedUniversalLinkHosts,
+            appPathPrefix: universalLinkPathPrefix
         )
         return codec.parse(url)
     }

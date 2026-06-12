@@ -14,20 +14,16 @@ struct ResolveDuplicateTagsIntent: AppIntent {
         let logger = intentLogger
         logger.notice("resolve_duplicate_tags.requested")
         do {
-            let duplicates = try TagService.duplicateTags(
+            let resolvedCount = try TagMutationOperations.resolveAllDuplicates(
                 context: modelContainer.mainContext
-            )
-            try TagService.resolveDuplicates(
-                context: modelContainer.mainContext,
-                tags: duplicates
             )
             logger.notice(
                 "resolve_duplicate_tags.completed",
                 metadata: IncomesLogging.metadata(
-                    ("duplicate_count", IncomesLogging.count(duplicates.count))
+                    ("duplicate_count", IncomesLogging.count(resolvedCount))
                 )
             )
-            return .result(value: duplicates.count)
+            return .result(value: resolvedCount)
         } catch {
             logger.error(
                 "resolve_duplicate_tags.failed",
@@ -40,9 +36,8 @@ struct ResolveDuplicateTagsIntent: AppIntent {
 
 private extension ResolveDuplicateTagsIntent {
     @MainActor var intentLogger: MHLogger {
-        IncomesLogging.logger(
+        IncomesIntentLoggingSupport.appIntentLogger(
             logging: logging,
-            category: IncomesLogging.Category.appIntent,
             source: #fileID
         )
     }
