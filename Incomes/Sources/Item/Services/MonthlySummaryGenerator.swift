@@ -134,7 +134,7 @@ private extension MonthlySummaryGenerator {
             context: narrativeContext
         )
         let options = GenerationOptions(
-            samplingMode: .greedy,
+            sampling: .greedy,
             maximumResponseTokens: 220 // swiftlint:disable:this no_magic_numbers
         )
         let response = try await session.respond(
