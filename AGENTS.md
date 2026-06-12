@@ -1,97 +1,16 @@
 # AGENTS.md
 
-This document defines the **repository-specific agent behavior contract** for
-Incomes.
+Repository-specific agent contract for Incomes.
 
-## Agent Philosophy
+## Repository Rules
 
-- Follow existing repository conventions as the source of truth.
-- Do not invent architecture or workflows.
-- When uncertain, prefer leaving TODO comments rather than guessing.
-- Prefer **minimal, safe changes** over large refactors.
-
-## Naming and Language Rules
-
-Use English for:
-
-- Branch names
-- Code comments
-- Documentation
-- Identifiers
-
-Avoid non-English text unless required for UI localization or legal content.
-
-## Markdown Guidelines
-
-All Markdown files must follow:
-
-https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md
-
-## Swift Code Guidelines
-
-### Follow SwiftLint rules
-
-All Swift code must comply with the project's SwiftLint configuration.
-
-### Avoid abbreviated variable names
-
-#### Preferred
-
-- `result`
-- `image`
-- `button`
-
-#### Not preferred
-
-- `res`
-- `img`
-- `btn`
-
-### Use `.init(...)` when return type is explicit
-
-#### Preferred
-
-``` swift
-var user: User {
-    .init(name: "Alice")
-}
-```
-
-#### Not preferred
-
-``` swift
-var user: User {
-    User(name: "Alice")
-}
-```
-
-### Multiline control-flow formatting
-
-Do NOT use single-line bodies for control-flow statements or trailing closures.
-
-#### Preferred
-
-```swift
-guard let currentUser else {
-    return
-}
-
-if isDebugMode {
-    logger.debug("Entering debug state")
-}
-
-tasks.filter { task in
-    task.isCompleted
-}
-```
-
-#### Not preferred
-
-```swift
-guard let currentUser else { return }
-if isDebugMode { logger.debug("Entering debug state") }
-tasks.filter { $0.isCompleted }
-```
+- Use English for branch names, code comments, documentation, and identifiers
+  unless UI localization or legal content requires otherwise.
+- Follow existing architecture and source style; keep changes small and
+  repository-local.
+- Markdown must follow
+  <https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md>.
+- Swift code must comply with the repository SwiftLint configuration.
 
 ## Build and Test Entry Point
 
@@ -130,8 +49,7 @@ Helper scripts may write disposable cache data under `.build/ci/shared/`.
 
 ## Release UI Smoke Audit
 
-Release UI smoke auditing is separate from the standard verification
-entrypoint. When release or UI-sensitive work needs live Simulator evidence,
-use the global `$xcode-ui-smoke-auditor` skill and keep the audit
-non-destructive by default. Do not erase simulator data, reset containers, or
-add UI test targets solely for the audit unless explicitly requested.
+Release UI smoke auditing is separate from the standard verification entrypoint.
+Keep it non-destructive by default: do not erase simulator data, reset
+containers, or add UI test targets solely for the audit unless explicitly
+requested.
