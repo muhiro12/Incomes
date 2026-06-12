@@ -243,14 +243,14 @@ ci_swiftlint_run() {
 
   case "$mode" in
     format)
-      empty_message="No tracked Swift files found to format."
-      start_message="Formatting tracked Swift files with SwiftLint..."
-      finish_message="Finished formatting tracked Swift files."
+      empty_message="No Swift files found to format."
+      start_message="Formatting Swift files with SwiftLint..."
+      finish_message="Finished formatting Swift files."
       ;;
     lint)
-      empty_message="No tracked Swift files found to lint."
-      start_message="Linting tracked Swift files with SwiftLint..."
-      finish_message="Finished linting tracked Swift files."
+      empty_message="No Swift files found to lint."
+      start_message="Linting Swift files with SwiftLint..."
+      finish_message="Finished linting Swift files."
       ;;
     *)
       echo "Unknown SwiftLint mode: $mode" >&2
@@ -260,7 +260,10 @@ ci_swiftlint_run() {
 
   while IFS= read -r -d '' file; do
     swift_files+=("$file")
-  done < <(git ls-files -z -- '*.swift')
+  done < <(
+    git ls-files -z -- '*.swift'
+    git ls-files -z --others --exclude-standard -- '*.swift'
+  )
 
   if [[ ${#swift_files[@]} -eq 0 ]]; then
     echo "$empty_message"
