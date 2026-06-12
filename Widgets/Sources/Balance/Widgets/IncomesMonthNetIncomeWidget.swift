@@ -28,11 +28,13 @@ struct IncomesMonthNetIncomeWidget {
                     Text(IncomesMonthNetIncomeWidget.monthTitle(from: entry.targetDate))
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
-                        .singleLine()
+                        .lineLimit(1)
+                        .minimumScaleFactor(WidgetTextScaling.minimumScaleFactor)
                     Text("Net Income")
                         .font(.caption2)
                         .foregroundStyle(.secondary)
-                        .singleLine()
+                        .lineLimit(1)
+                        .minimumScaleFactor(WidgetTextScaling.minimumScaleFactor)
                 }
                 Spacer(minLength: 0)
                 HStack(spacing: designMetrics.spacing.inline) {
@@ -41,7 +43,8 @@ struct IncomesMonthNetIncomeWidget {
                     Text(entry.netIncomeText)
                         .font(.title2.weight(.semibold))
                         .monospacedDigit()
-                        .singleLine()
+                        .lineLimit(1)
+                        .minimumScaleFactor(WidgetTextScaling.minimumScaleFactor)
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
@@ -53,18 +56,21 @@ struct IncomesMonthNetIncomeWidget {
                 Text(IncomesMonthNetIncomeWidget.monthTitle(from: entry.targetDate))
                     .font(.footnote)
                     .foregroundStyle(.secondary)
-                    .singleLine()
+                    .lineLimit(1)
+                    .minimumScaleFactor(WidgetTextScaling.minimumScaleFactor)
                 Text("Net Income")
                     .font(.caption2)
                     .foregroundStyle(.secondary)
-                    .singleLine()
+                    .lineLimit(1)
+                    .minimumScaleFactor(WidgetTextScaling.minimumScaleFactor)
                 HStack(spacing: designMetrics.spacing.inline) {
                     amountIcon
                         .font(.footnote.weight(.semibold))
                     Text(entry.netIncomeText)
                         .font(.headline.weight(.semibold))
                         .monospacedDigit()
-                        .singleLine()
+                        .lineLimit(1)
+                        .minimumScaleFactor(WidgetTextScaling.minimumScaleFactor)
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)

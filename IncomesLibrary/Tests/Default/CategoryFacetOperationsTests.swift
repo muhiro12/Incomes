@@ -16,7 +16,7 @@ struct CategoryFacetOperationsTests {
     func facets_group_others_like_values_into_a_single_bucket() throws {
         let blankItem = try createItem(
             content: "Blank",
-            category: .empty
+            category: ""
         )
         let explicitOthersItem = try createItem(
             content: "Stored Others",
@@ -78,7 +78,7 @@ struct CategoryFacetOperationsTests {
     func filteredFacets_matches_localized_others_display_name() throws {
         let item = try createItem(
             content: "Blank",
-            category: .empty
+            category: ""
         )
         _ = item
 
@@ -96,7 +96,7 @@ struct CategoryFacetOperationsTests {
     func filteredFacets_matches_legacy_others_query_for_localized_bucket() throws {
         let item = try createItem(
             content: "Blank",
-            category: .empty
+            category: ""
         )
         _ = item
 
@@ -121,7 +121,7 @@ struct CategoryFacetOperationsTests {
         )
         #expect(
             CategoryFacetOperations.displayName(
-                forStoredCategoryName: .empty,
+                forStoredCategoryName: "",
                 othersDisplayName: japaneseOthers
             ) == japaneseOthers
         )
@@ -143,7 +143,7 @@ struct CategoryFacetOperationsTests {
     func displayNames_returns_sorted_facet_names() throws {
         let item = try createItem(
             content: "Blank",
-            category: .empty
+            category: ""
         )
         _ = item
         _ = Tag.createIgnoringDuplicates(
@@ -169,7 +169,7 @@ struct CategoryFacetOperationsTests {
     func filteredDisplayNames_returns_filtered_facet_names() throws {
         let item = try createItem(
             content: "Blank",
-            category: .empty
+            category: ""
         )
         _ = item
 
@@ -204,7 +204,7 @@ private extension CategoryFacetOperationsTests {
         from item: Item
     ) {
         item.modify(
-            tags: item.tags.orEmpty.filter { tag in
+            tags: (item.tags ?? []).filter { tag in
                 tag.type != .category
             }
         )

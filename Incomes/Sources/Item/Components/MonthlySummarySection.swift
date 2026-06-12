@@ -92,7 +92,7 @@ struct MonthlySummarySection: View {
                     errorMessage = nil
                 }
             } message: {
-                Text(errorMessage ?? .empty)
+                Text(errorMessage ?? "")
             }
     }
 }

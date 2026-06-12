@@ -8,7 +8,7 @@ struct CategoryNameSupportTests {
     @Test
     func isOthersLike_treats_nil_empty_and_others_as_uncategorized() {
         #expect(CategoryNameSupport.isOthersLike(nil))
-        #expect(CategoryNameSupport.isOthersLike(.empty))
+        #expect(CategoryNameSupport.isOthersLike(""))
         #expect(CategoryNameSupport.isOthersLike("Others"))
         #expect(CategoryNameSupport.isOthersLike("Food") == false)
     }
@@ -23,7 +23,7 @@ struct CategoryNameSupportTests {
         )
         #expect(
             CategoryNameSupport.displayName(
-                forStoredName: .empty,
+                forStoredName: "",
                 othersDisplayName: japaneseOthers
             ) == japaneseOthers
         )
@@ -43,9 +43,9 @@ struct CategoryNameSupportTests {
 
     @Test
     func areEquivalent_treats_uncategorized_values_as_the_same_bucket() {
-        #expect(CategoryNameSupport.areEquivalent(nil, .empty))
+        #expect(CategoryNameSupport.areEquivalent(nil, ""))
         #expect(CategoryNameSupport.areEquivalent(nil, "Others"))
-        #expect(CategoryNameSupport.areEquivalent(.empty, "Others"))
+        #expect(CategoryNameSupport.areEquivalent("", "Others"))
         #expect(CategoryNameSupport.areEquivalent("Food", "Food"))
         #expect(CategoryNameSupport.areEquivalent("Food", "Others") == false)
     }

@@ -19,18 +19,18 @@ public extension Decimal {
         )
         guard let currency = formatter.string(for: self) else {
             assertionFailure()
-            return .empty
+            return ""
         }
         return currency
     }
 
     /// Formats the decimal as a negative currency string when the value is non-zero.
     var asMinusCurrency: String {
-        guard isNotZero else {
+        guard self != .zero else {
             return asCurrency
         }
-        guard asCurrency.isNotEmpty else {
-            return .empty
+        guard !asCurrency.isEmpty else {
+            return ""
         }
         return "-" + asCurrency
     }

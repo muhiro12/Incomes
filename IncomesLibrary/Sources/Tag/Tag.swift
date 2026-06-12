@@ -12,9 +12,9 @@ import SwiftData
 @Model
 public final class Tag {
     /// Stored tag name value.
-    public private(set) var name = String.empty
+    public private(set) var name = ""
     /// Stored raw tag type identifier.
-    public private(set) var typeID = String.empty
+    public private(set) var typeID = ""
 
     /// Items that currently reference this tag.
     public private(set) var items: [Item]? // swiftlint:disable:this discouraged_optional_collection
@@ -56,14 +56,14 @@ extension Tag { // swiftlint:disable:this extension_access_modifier
 
     /// Sum of `income` across related items.
     public var income: Decimal {
-        items.orEmpty.reduce(.zero) { partial, item in
+        (items ?? []).reduce(.zero) { partial, item in
             partial + item.income
         }
     }
 
     /// Sum of `outgo` across related items.
     public var outgo: Decimal {
-        items.orEmpty.reduce(.zero) { partial, item in
+        (items ?? []).reduce(.zero) { partial, item in
             partial + item.outgo
         }
     }
@@ -76,7 +76,9 @@ extension Tag { // swiftlint:disable:this extension_access_modifier
     /// True when any related item has a negative running balance (deficit).
     /// Used for quick visual warnings in summary lists.
     public var hasDeficit: Bool {
-        items.orEmpty.contains(where: \.balance.isMinus)
+        (items ?? []).contains { item in
+            item.balance < .zero
+        }
     }
 }
 

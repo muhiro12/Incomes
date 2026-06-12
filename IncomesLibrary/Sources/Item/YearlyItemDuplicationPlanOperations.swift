@@ -37,7 +37,7 @@ public enum YearlyItemDuplicationPlanOperations {
             incomeText: YearlyItemDuplicationSupport.decimalString(from: group.averageIncome),
             outgoText: YearlyItemDuplicationSupport.decimalString(from: group.averageOutgo),
             category: group.category,
-            priorityText: .empty,
+            priorityText: "",
             repeatMonthSelections: YearlyItemDuplicationSupport.repeatMonthSelections(from: entries)
         )
     }
@@ -87,7 +87,7 @@ public enum YearlyItemDuplicationPlanOperations {
                     options: options
                 )
                 skippedDuplicateCount += buildResult.skippedDuplicateCount
-                if buildResult.entries.isNotEmpty {
+                if !buildResult.entries.isEmpty {
                     entries.append(contentsOf: buildResult.entries)
                     let group = YearlyItemDuplicationSupport.makeGroup(
                         id: groupID,
@@ -124,7 +124,7 @@ public enum YearlyItemDuplicationPlanOperations {
                 options: options
             )
             skippedDuplicateCount += buildResult.skippedDuplicateCount
-            if buildResult.entries.isNotEmpty {
+            if !buildResult.entries.isEmpty {
                 entries.append(contentsOf: buildResult.entries)
                 let group = YearlyItemDuplicationSupport.makeGroup(
                     id: groupID,

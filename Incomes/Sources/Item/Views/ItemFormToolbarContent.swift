@@ -23,13 +23,15 @@ struct ItemFormToolbarContent: ToolbarContent {
             .bold()
             .disabled(!isValid)
         }
-        ToolbarItem(placement: .keyboard) {
-            SuggestionButtonGroup(input: $content, type: .content)
-                .hidden(focusedField != .content)
+        if focusedField == .content {
+            ToolbarItem(placement: .keyboard) {
+                SuggestionButtonGroup(input: $content, type: .content)
+            }
         }
-        ToolbarItem(placement: .keyboard) {
-            SuggestionButtonGroup(input: $category, type: .category)
-                .hidden(focusedField != .category)
+        if focusedField == .category {
+            ToolbarItem(placement: .keyboard) {
+                SuggestionButtonGroup(input: $category, type: .category)
+            }
         }
         if #available(iOS 26.0, *) {
             ToolbarItem(placement: .bottomBar) {

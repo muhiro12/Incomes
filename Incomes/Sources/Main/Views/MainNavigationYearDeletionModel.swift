@@ -21,7 +21,7 @@ final class MainNavigationYearDeletionModel {
             from: yearTags,
             indices: indices
         )
-        isDialogPresented = tagsToDelete.isNotEmpty
+        isDialogPresented = !tagsToDelete.isEmpty
         logger.debug(
             "year_deletion.prepared",
             metadata: IncomesLogging.metadata(

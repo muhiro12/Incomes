@@ -7,7 +7,7 @@ struct WatchItemListView: View {
 
     var body: some View {
         List {
-            if allItems.isNotEmpty {
+            if !allItems.isEmpty {
                 ForEach(allItems) { item in
                     WatchItemRow(item: item)
                 }

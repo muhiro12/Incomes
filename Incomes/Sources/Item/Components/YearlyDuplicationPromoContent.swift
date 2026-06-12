@@ -20,7 +20,7 @@ struct YearlyDuplicationPromoContent: View {
                 .foregroundStyle(.secondary)
             Text(promo.proposal.content)
                 .font(.subheadline.weight(.semibold))
-            if promo.proposal.category.isNotEmpty {
+            if !promo.proposal.category.isEmpty {
                 Text(promo.proposal.category)
                     .font(.footnote)
                     .foregroundStyle(.secondary)

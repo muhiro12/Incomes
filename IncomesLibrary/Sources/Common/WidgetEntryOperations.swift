@@ -75,7 +75,7 @@ public enum WidgetEntryOperations {
             )
             return .init(
                 netIncomeText: totals.netIncome.asCurrency,
-                isPositive: totals.netIncome.isPlus || totals.netIncome.isZero,
+                isPositive: totals.netIncome > .zero || totals.netIncome == .zero,
                 deepLinkURL: deepLinkURL
             )
         } catch {
@@ -133,7 +133,7 @@ public enum WidgetEntryOperations {
                 titleText: Formatting.shortDayTitle(from: item.localDate),
                 detailText: item.content,
                 amountText: amount.asCurrency,
-                isPositive: amount.isPlus || amount.isZero,
+                isPositive: amount > .zero || amount == .zero,
                 deepLinkURL: deepLinkURL
             )
         } catch {

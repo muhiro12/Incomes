@@ -16,9 +16,10 @@ struct TitleListItem: View {
         HStack {
             Text(item.content)
                 .font(.headline)
-                .singleLine()
+                .lineLimit(1)
+                .minimumScaleFactor(IncomesTextScaling.minimumScaleFactor)
             Spacer()
-            PositiveNetIncomeIndicator(isVisible: item.netIncome.isPlus)
+            PositiveNetIncomeIndicator(isVisible: item.netIncome > .zero)
         }
     }
 }

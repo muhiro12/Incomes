@@ -27,7 +27,7 @@ extension ContentItemListView: View {
                 title: .init(
                     yearString
                         .dateValueWithoutLocale(.yyyy)?
-                        .stringValue(.yyyy) ?? .empty
+                        .stringValue(.yyyy) ?? ""
                 ),
                 showsItemDetailTip: index == .zero
             )
@@ -38,7 +38,7 @@ extension ContentItemListView: View {
         .listStyle(.grouped)
         .navigationTitle(tag.displayName)
         .task(id: items.count) {
-            guard items.isNotEmpty else {
+            guard !items.isEmpty else {
                 return
             }
             tipController.donateDidViewItemList()
@@ -57,7 +57,7 @@ extension ContentItemListView: View {
 
 private extension ContentItemListView {
     var items: [Item] {
-        tag.items.orEmpty
+        tag.items ?? []
     }
 
     var yearStrings: [String] {

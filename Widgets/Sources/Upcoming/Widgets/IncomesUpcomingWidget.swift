@@ -27,17 +27,20 @@ struct IncomesUpcomingWidget {
                     entry.titleText
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
-                        .singleLine()
+                        .lineLimit(1)
+                        .minimumScaleFactor(WidgetTextScaling.minimumScaleFactor)
                     HStack(spacing: designMetrics.spacing.inline) {
                         entry.subtitleText
                             .font(.caption2)
                             .foregroundStyle(.secondary)
-                            .singleLine()
+                            .lineLimit(1)
+                            .minimumScaleFactor(WidgetTextScaling.minimumScaleFactor)
                         Text("•")
                             .foregroundStyle(.tertiary)
                         entry.detailText
                             .font(.footnote)
-                            .singleLine()
+                            .lineLimit(1)
+                            .minimumScaleFactor(WidgetTextScaling.minimumScaleFactor)
                     }
                 }
                 Spacer(minLength: 0)
@@ -60,17 +63,20 @@ struct IncomesUpcomingWidget {
                 entry.titleText
                     .font(.footnote)
                     .foregroundStyle(.secondary)
-                    .singleLine()
+                    .lineLimit(1)
+                    .minimumScaleFactor(WidgetTextScaling.minimumScaleFactor)
                 HStack(spacing: designMetrics.spacing.inline) {
                     entry.subtitleText
                         .font(.caption2)
                         .foregroundStyle(.secondary)
-                        .singleLine()
+                        .lineLimit(1)
+                        .minimumScaleFactor(WidgetTextScaling.minimumScaleFactor)
                     Text("•")
                         .foregroundStyle(.tertiary)
                     entry.detailText
                         .font(.footnote)
-                        .singleLine()
+                        .lineLimit(1)
+                        .minimumScaleFactor(WidgetTextScaling.minimumScaleFactor)
                 }
                 HStack(spacing: designMetrics.spacing.inline) {
                     amountIcon

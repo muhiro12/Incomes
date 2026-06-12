@@ -35,7 +35,7 @@ extension CategoryItemListView: View {
         .listStyle(.grouped)
         .navigationTitle(tag.displayName)
         .task(id: items.count) {
-            guard items.isNotEmpty else {
+            guard !items.isEmpty else {
                 return
             }
             tipController.donateDidViewItemList()

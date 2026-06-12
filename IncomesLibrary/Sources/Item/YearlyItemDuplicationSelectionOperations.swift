@@ -166,7 +166,7 @@ public enum YearlyItemDuplicationSelectionOperations {
         minimumGroupCount: Int,
         options: YearlyItemDuplicationOptions = .init()
     ) -> YearlyItemDuplicationSuggestion? {
-        guard sourceYears.isNotEmpty, targetYears.isNotEmpty else {
+        guard !sourceYears.isEmpty, !targetYears.isEmpty else {
             return nil
         }
         for year in sourceYears {

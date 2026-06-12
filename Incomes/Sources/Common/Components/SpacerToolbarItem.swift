@@ -22,7 +22,7 @@ struct SpacerToolbarItem: ToolbarContent {
                 Button(action: {
                     // no-op
                 }, label: {
-                    Label(String.empty, systemImage: .empty)
+                    Label("", systemImage: "")
                 })
                 .accessibilityHidden(true)
                 .disabled(true)

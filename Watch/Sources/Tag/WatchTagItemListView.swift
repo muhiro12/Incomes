@@ -23,7 +23,7 @@ struct WatchTagItemListView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
 
-            if items.isNotEmpty {
+            if !items.isEmpty {
                 ForEach(items) { item in
                     WatchItemRow(item: item)
                 }

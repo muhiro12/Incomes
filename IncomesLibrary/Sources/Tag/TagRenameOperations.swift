@@ -103,7 +103,7 @@ private extension TagRenameOperations {
         let trimmedName = rawName.trimmingCharacters(
             in: .whitespacesAndNewlines
         )
-        guard trimmedName.isNotEmpty else {
+        guard !trimmedName.isEmpty else {
             return nil
         }
 

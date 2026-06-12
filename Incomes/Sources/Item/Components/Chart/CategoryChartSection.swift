@@ -56,8 +56,11 @@ struct CategoryChartSection: View {
 
 private extension CategoryChartSection {
     private enum Constants {
+        static let firstColorRank = 0
         static let innerRadiusRatio = 0.618
         static let legendMarkerSize: CGFloat = 6
+        static let maximumColorAdjustment = 80.0
+        static let minimumColorVariantCount = 2
         static let outerRadiusInset: CGFloat = 10
         static let sectionHeight: CGFloat = 240
         static let sectorCornerRadius: CGFloat = 4
@@ -200,14 +203,14 @@ private extension CategoryChartSection {
     }
 
     func adjustedChartColor(forRank index: Int, totalCount: Int, baseColor: Color) -> Color {
-        guard totalCount > 1 else {
+        guard totalCount >= Constants.minimumColorVariantCount else {
             return baseColor
         }
-        let clampedIndex = min(max(index, 0), totalCount - 1)
-        let progress = Double(clampedIndex) / Double(totalCount - 1)
-        let maxAdjustment = 80.0
-        let percentage = maxAdjustment * progress
-        return baseColor.adjusted(by: percentage)
+        let lastColorRank = totalCount - 1
+        let clampedIndex = min(max(index, Constants.firstColorRank), lastColorRank)
+        let progress = Double(clampedIndex) / Double(lastColorRank)
+        let percentage = Constants.maximumColorAdjustment * progress
+        return ChartColorAdjustment.adjustedColor(baseColor, by: percentage)
     }
 
     @ViewBuilder

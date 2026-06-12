@@ -98,7 +98,7 @@ struct MainNavigationView: View {
             }
         } content: {
             MainNavigationContentColumn(
-                hasAnyYears: yearTags.isNotEmpty,
+                hasAnyYears: !yearTags.isEmpty,
                 selectedYearTag: selectedYearTag
             ) { route in
                 enqueueNavigation(to: route)

@@ -24,7 +24,7 @@ final class ItemEntity: AppEntity {
             title: .init("\(date.stringValue(.yyyyMMMd)) \(content)", table: "AppIntents"),
             subtitle: .init("Income: \(income.asCurrency), Outgo: \(outgo.asCurrency)", table: "AppIntents"),
             image: .init(
-                systemName: netIncome.isPlus ? "arrow.up.circle.fill" : "arrow.down.circle.fill"
+                systemName: netIncome > .zero ? "arrow.up.circle.fill" : "arrow.down.circle.fill"
             ),
             synonyms: [
                 .init("\(content)", table: "AppIntents")
@@ -93,7 +93,7 @@ extension ItemEntity {
 
 extension ItemEntity {
     var isNetIncomePositive: Bool {
-        netIncome.isPlus
+        netIncome > .zero
     }
 
     func model(in context: ModelContext) throws -> Item {

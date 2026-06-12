@@ -84,7 +84,7 @@ struct TagRenamePreviewTests {
         )
         let emptyCategoryTag = try Tag.create(
             context: context,
-            name: .empty,
+            name: "",
             type: .category
         )
         let legacyOthersTag = try Tag.create(

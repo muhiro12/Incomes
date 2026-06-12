@@ -24,7 +24,7 @@ enum ItemDeleteCoordinator {
         notificationService: NotificationService,
         logger: MHLogger
     ) async throws {
-        guard items.isNotEmpty else {
+        guard !items.isEmpty else {
             logSkippedDelete(logger: logger)
             return
         }

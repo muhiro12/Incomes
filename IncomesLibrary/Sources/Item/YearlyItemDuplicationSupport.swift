@@ -75,7 +75,7 @@ enum YearlyItemDuplicationSupport {
     }
 
     static func duplicationKey(targetDate: Date, item: Item) -> DuplicationKey {
-        let categoryName = item.category?.name ?? .empty
+        let categoryName = item.category?.name ?? ""
         let normalizedDate = Calendar.current.startOfDay(for: targetDate)
         return .init(
             date: normalizedDate,
@@ -87,7 +87,7 @@ enum YearlyItemDuplicationSupport {
     }
 
     static func fallbackGroupingKey(for item: Item) -> FallbackGroupingKey {
-        let categoryName = item.category?.name ?? .empty
+        let categoryName = item.category?.name ?? ""
         return .init(
             content: item.content,
             category: categoryName
@@ -174,8 +174,8 @@ enum YearlyItemDuplicationSupport {
         items: [Item],
         targetDates: [Date]
     ) -> YearlyItemDuplicationGroup {
-        let content = items.first?.content ?? .empty
-        let category = items.first?.category?.name ?? .empty
+        let content = items.first?.content ?? ""
+        let category = items.first?.category?.name ?? ""
         let averageIncome = averageValue(items.map(\.income))
         let averageOutgo = averageValue(items.map(\.outgo))
         return .init(
@@ -190,7 +190,7 @@ enum YearlyItemDuplicationSupport {
     }
 
     static func averageValue(_ values: [Decimal]) -> Decimal {
-        guard values.isNotEmpty else {
+        guard !values.isEmpty else {
             return .zero
         }
         let total = values.reduce(.zero, +)

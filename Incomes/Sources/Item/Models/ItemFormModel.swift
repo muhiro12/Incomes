@@ -4,11 +4,11 @@ import SwiftData
 @Observable
 final class ItemFormModel {
     var date: Date = .now
-    var content: String = .empty
+    var content: String = ""
     var priority: String = "0"
-    var income: String = .empty
-    var outgo: String = .empty
-    var category: String = .empty
+    var income: String = ""
+    var outgo: String = ""
+    var category: String = ""
     var repeatMonthSelections: Set<RepeatMonthSelection> = []
     var isRepeatEnabled = false
 

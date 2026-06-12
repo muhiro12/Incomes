@@ -46,7 +46,7 @@ private extension SettingsNotificationSection {
                 TextField(
                     "Amount",
                     value: $notificationSettings.thresholdAmount,
-                    format: .currency(code: locale.currency?.identifier ?? .empty)
+                    format: .currency(code: locale.currency?.identifier ?? "")
                 )
                 .keyboardType(.numberPad)
                 .multilineTextAlignment(.trailing)

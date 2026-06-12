@@ -77,11 +77,11 @@ extension TagTextSupport {
             hiragana: query.applyingTransform(
                 .hiraganaToKatakana,
                 reverse: true
-            ).orEmpty,
+            ) ?? "",
             katakana: query.applyingTransform(
                 .hiraganaToKatakana,
                 reverse: false
-            ).orEmpty
+            ) ?? ""
         )
     }
 }

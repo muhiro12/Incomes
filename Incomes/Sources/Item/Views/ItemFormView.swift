@@ -73,7 +73,7 @@ struct ItemFormView: View {
         }
         .scrollDismissesKeyboard(.interactively)
         .contentMargins(.bottom, designMetrics.spacing.inline, for: .scrollContent)
-        .navigationTitle(model.content.isNotEmpty ? Text(model.content) : Text("Create"))
+        .navigationTitle(!model.content.isEmpty ? Text(model.content) : Text("Create"))
         .toolbar {
             ItemFormToolbarContent(
                 mode: mode,
@@ -130,7 +130,7 @@ struct ItemFormView: View {
                 presentation.clearError()
             }
         } message: {
-            Text(presentation.errorMessage ?? .empty)
+            Text(presentation.errorMessage ?? "")
         }
         .task(id: initialContextTaskID) {
             model.applyInitialContext(
@@ -189,8 +189,8 @@ struct ItemFormView: View {
 
 private extension ItemFormView {
     var initialContextTaskID: String {
-        let itemID = item.map { String(describing: $0.persistentModelID) } ?? .empty
-        let tagID = tag.map { String(describing: $0.persistentModelID) } ?? .empty
+        let itemID = item.map { String(describing: $0.persistentModelID) } ?? ""
+        let tagID = tag.map { String(describing: $0.persistentModelID) } ?? ""
         return "\(mode)-\(itemID)-\(tagID)"
     }
 
@@ -324,7 +324,7 @@ private extension ItemFormView {
 
     func cancel() {
         if model.content == "Enable Debug" {
-            model.content = .empty
+            model.content = ""
             presentation.presentDebugDialog()
             return
         }

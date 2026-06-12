@@ -24,7 +24,7 @@ struct SearchResultView: View {
 
     var body: some View {
         Group {
-            if items.isNotEmpty {
+            if !items.isEmpty {
                 List {
                     ForEach(
                         Array(sections.enumerated()),
@@ -54,7 +54,7 @@ struct SearchResultView: View {
         }
         .navigationTitle("Results")
         .task(id: items.count) {
-            guard items.isNotEmpty else {
+            guard !items.isEmpty else {
                 return
             }
             tipController.donateDidViewItemList()

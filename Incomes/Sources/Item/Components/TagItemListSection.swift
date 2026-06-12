@@ -53,7 +53,7 @@ extension TagItemListSection: View {
                 isDialogPresented = true
             }
         } header: {
-            Text(yearString.dateValueWithoutLocale(.yyyy)?.stringValue(.yyyy) ?? .empty)
+            Text(yearString.dateValueWithoutLocale(.yyyy)?.stringValue(.yyyy) ?? "")
         }
         .confirmationDialog(
             Text("Delete"),

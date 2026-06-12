@@ -376,7 +376,7 @@ private extension SettingsListView {
             navigateToRoute(.yearlyDuplication)
         }
 
-        if yearTags.isNotEmpty {
+        if !yearTags.isEmpty {
             button.popoverTip(yearlyDuplicationTip, arrowEdge: .top)
         } else {
             button

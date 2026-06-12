@@ -17,7 +17,7 @@ struct TagSummaryRow: View {
             Text(tag.displayName)
                 .font(.headline)
                 .foregroundStyle(tag.hasDeficit ? Color.red : Color.primary)
-            Text("(\(tag.items.orEmpty.count))")
+            Text("(\((tag.items ?? []).count))")
                 .font(.caption)
                 .foregroundColor(.secondary)
             Spacer()
@@ -27,7 +27,7 @@ struct TagSummaryRow: View {
             }
             .font(.subheadline)
             .foregroundStyle(.secondary)
-            PositiveNetIncomeIndicator(isVisible: tag.netIncome.isPlus)
+            PositiveNetIncomeIndicator(isVisible: tag.netIncome > .zero)
         }
     }
 }

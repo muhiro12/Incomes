@@ -132,7 +132,7 @@ private extension OrphanTagListView {
     ) -> some View {
         let unusedTags = orphanTags(from: tags)
 
-        if unusedTags.isNotEmpty {
+        if !unusedTags.isEmpty {
             Section(title) {
                 ForEach(unusedTags) { tag in
                     HStack {

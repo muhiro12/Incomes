@@ -130,8 +130,8 @@ private extension HomeYearSection {
             Divider()
             Button(role: .destructive) {
                 Haptic.warning.impact()
-                willDeleteItems = tag.items.orEmpty
-                isDialogPresented = willDeleteItems.isNotEmpty
+                willDeleteItems = tag.items ?? []
+                isDialogPresented = !willDeleteItems.isEmpty
             } label: {
                 Label("Delete", systemImage: "trash")
             }

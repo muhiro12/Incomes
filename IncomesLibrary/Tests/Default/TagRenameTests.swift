@@ -99,7 +99,7 @@ struct TagRenameTests {
                 content: "First",
                 income: 100,
                 outgo: 20,
-                category: .empty,
+                category: "",
                 priority: 0
             )
             .category

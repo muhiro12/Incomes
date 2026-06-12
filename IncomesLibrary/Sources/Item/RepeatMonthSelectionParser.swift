@@ -10,7 +10,7 @@ enum RepeatMonthSelectionParser {
     /// Parses text such as `202501, 2025-02` into repeat month selections.
     static func parse(_ value: String) throws -> Set<RepeatMonthSelection> {
         let trimmedValue = value.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard trimmedValue.isNotEmpty else {
+        guard !trimmedValue.isEmpty else {
             return []
         }
 

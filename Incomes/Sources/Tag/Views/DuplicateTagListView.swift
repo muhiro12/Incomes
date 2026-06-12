@@ -75,10 +75,10 @@ struct DuplicateTagListView: View {
 
 private extension DuplicateTagListView {
     var hasAnyDuplicateTags: Bool {
-        duplicateTags(from: yearTags).isNotEmpty
-            || duplicateTags(from: yearMonthTags).isNotEmpty
-            || duplicateTags(from: contentTags).isNotEmpty
-            || duplicateTags(from: categoryTags).isNotEmpty
+        !duplicateTags(from: yearTags).isEmpty
+            || !duplicateTags(from: yearMonthTags).isEmpty
+            || !duplicateTags(from: contentTags).isEmpty
+            || !duplicateTags(from: categoryTags).isEmpty
     }
 
     var resolveDialogTitle: LocalizedStringKey {
@@ -140,7 +140,7 @@ private extension DuplicateTagListView {
         HStack {
             Text(tag.displayName)
             Spacer()
-            Text(tag.items.orEmpty.count.description)
+            Text((tag.items ?? []).count.description)
                 .foregroundStyle(.secondary)
         }
         .contentShape(Rectangle())

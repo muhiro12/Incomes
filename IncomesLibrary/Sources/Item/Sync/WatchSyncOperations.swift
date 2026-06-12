@@ -56,7 +56,7 @@ public enum WatchSyncOperations {
 
         var createdItems = [Item]()
         for yearMonth in allowedYearMonths {
-            for wire in groupedIncomingItems[yearMonth].orEmpty {
+            for wire in groupedIncomingItems[yearMonth] ?? [] {
                 let item = try Item.create(
                     context: context,
                     date: Date(timeIntervalSince1970: wire.dateEpoch),
@@ -71,7 +71,7 @@ public enum WatchSyncOperations {
             }
         }
 
-        if createdItems.isNotEmpty {
+        if !createdItems.isEmpty {
             try BalanceCalculator.calculate(
                 in: context,
                 for: createdItems

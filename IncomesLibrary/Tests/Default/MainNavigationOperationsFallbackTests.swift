@@ -44,7 +44,7 @@ struct MainNavigationOperationsFallbackTests {
             category: "Income",
             priority: 0
         )
-        let itemID = try item.id.base64Encoded()
+        let itemID = try PersistentIdentifierCoder.encode(item.id)
         context.delete(item)
         let expectedState = try MainNavigationOperations.loadState(context: context)
 

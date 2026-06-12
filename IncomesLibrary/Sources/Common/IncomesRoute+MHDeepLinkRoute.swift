@@ -26,12 +26,12 @@ extension IncomesRoute: MHDeepLinkRoute {
             }
             return self
         case .item(let itemID):
-            guard itemID.isNotEmpty else {
+            guard !itemID.isEmpty else {
                 return nil
             }
             return self
         case .search(let query):
-            guard query?.isNotEmpty != false else {
+            guard query?.isEmpty != true else {
                 return .search(query: nil)
             }
             return self
@@ -72,14 +72,14 @@ extension IncomesRoute: MHDeepLinkRoute {
         case .item(let itemID):
             .init(
                 pathComponents: ["item"],
-                queryItems: itemID.isNotEmpty ? [
+                queryItems: !itemID.isEmpty ? [
                     .init(name: "id", value: itemID)
                 ] : []
             )
         case .search(let query):
             .init(
                 pathComponents: ["search"],
-                queryItems: query?.isNotEmpty == true ? [
+                queryItems: query?.isEmpty == false ? [
                     .init(name: "q", value: query)
                 ] : []
             )
@@ -271,7 +271,7 @@ extension IncomesRoute: MHDeepLinkRoute {
         }
 
         if let itemID = segments.first {
-            guard itemID.isNotEmpty else {
+            guard !itemID.isEmpty else {
                 return nil
             }
             return .item(itemID)
@@ -281,7 +281,7 @@ extension IncomesRoute: MHDeepLinkRoute {
             queryItem.name == "id"
         }?.value
         guard let itemID,
-              itemID.isNotEmpty else {
+              !itemID.isEmpty else {
             return nil
         }
         return .item(itemID)

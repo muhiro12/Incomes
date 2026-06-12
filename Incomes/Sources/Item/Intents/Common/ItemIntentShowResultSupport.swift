@@ -58,7 +58,7 @@ enum ItemIntentShowResultSupport {
         modelContainer: ModelContainer
     ) -> some ProvidesDialog & ShowsSnippetView {
         let openIntent = IncomesIntentRouteOpener.monthIntent(for: defaultDate)
-        guard items.isNotEmpty else {
+        guard !items.isEmpty else {
             return .result(
                 opensIntent: openIntent,
                 dialog: notFoundDialog

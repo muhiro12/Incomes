@@ -121,9 +121,9 @@ private extension MainNavigationRouter {
         case .search(let query):
             settingsDestination = nil
             isSearchPresented = true
-            searchText = query ?? .empty
+            searchText = query ?? ""
             predicate = nil
-            appliesInitialSearchText = query?.isNotEmpty == true
+            appliesInitialSearchText = query?.isEmpty == false
             preferredCompactColumn = .content
         case .settings:
             sheetRoute = .settings
@@ -155,7 +155,7 @@ private extension MainNavigationRouter {
 
     func clearSearchState() {
         isSearchPresented = false
-        searchText = .empty
+        searchText = ""
         predicate = nil
         appliesInitialSearchText = false
     }

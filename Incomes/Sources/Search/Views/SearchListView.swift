@@ -27,8 +27,8 @@ struct SearchListView: View {
     @Binding private var appliesInitialSearchText: Bool
 
     @State private var selectedTarget = SearchTarget.content
-    @State private var minValue = String.empty
-    @State private var maxValue = String.empty
+    @State private var minValue = ""
+    @State private var maxValue = ""
 
     init( // swiftlint:disable:this type_contents_order
         selection: Binding<ItemPredicate?>,
@@ -134,7 +134,7 @@ private extension SearchListView {
             return
         }
 
-        guard searchText.isNotEmpty else {
+        guard !searchText.isEmpty else {
             appliesInitialSearchText = false
             return
         }
@@ -162,7 +162,7 @@ private extension SearchListView {
     NavigationStack {
         SearchListView(
             selection: .constant(.all),
-            searchText: .constant(.empty)
+            searchText: .constant("")
         )
     }
 }

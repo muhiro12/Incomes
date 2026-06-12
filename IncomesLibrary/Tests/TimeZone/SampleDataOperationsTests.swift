@@ -24,7 +24,9 @@ struct SampleDataOperationsTests {
 
         let debugTags = try context.fetch(.tags(.typeIs(.debug)))
         #expect(!debugTags.isEmpty)
-        #expect(debugTags.flatMap(\.items.orEmpty).count == 3)
+        #expect(debugTags.flatMap { tag in
+            tag.items ?? []
+        }.count == 3)
     }
 
     @Test

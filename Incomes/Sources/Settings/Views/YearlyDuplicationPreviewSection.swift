@@ -11,7 +11,7 @@ struct YearlyDuplicationPreviewSection: View {
                 Text("Skipped duplicates: \(plan.skippedDuplicateCount)")
                     .foregroundStyle(.secondary)
             }
-            if plan.groups.isNotEmpty {
+            if !plan.groups.isEmpty {
                 Text("Select a proposal to edit or create it directly.")
                     .font(.footnote)
                     .foregroundStyle(.secondary)

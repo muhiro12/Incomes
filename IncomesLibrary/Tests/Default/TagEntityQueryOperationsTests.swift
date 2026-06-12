@@ -75,7 +75,7 @@ struct TagEntityQueryOperationsTests {
 
         let tags = TagQueryOperations.matchingDisplayNameTags(
             in: [yearTag, contentTag],
-            query: .empty
+            query: ""
         )
 
         #expect(tags.map(\.persistentModelID) == [yearTag.persistentModelID, contentTag.persistentModelID])

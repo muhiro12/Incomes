@@ -9,7 +9,7 @@ struct TagTextSupportTests {
     func displayName_formats_empty_category_as_localized_others() {
         #expect(
             TagTextSupport.displayName(
-                name: .empty,
+                name: "",
                 type: .category,
                 categoryOthersDisplayName: japaneseOthers
             ) == japaneseOthers
@@ -50,7 +50,7 @@ struct TagTextSupportTests {
     func matchesDisplayName_uses_localized_category_name() {
         #expect(
             TagTextSupport.matchesDisplayName(
-                name: .empty,
+                name: "",
                 type: .category,
                 query: japaneseOthers,
                 categoryOthersDisplayName: japaneseOthers
@@ -58,7 +58,7 @@ struct TagTextSupportTests {
         )
         #expect(
             TagTextSupport.matchesDisplayName(
-                name: .empty,
+                name: "",
                 type: .category,
                 query: "Others",
                 categoryOthersDisplayName: japaneseOthers

@@ -73,7 +73,7 @@ enum YearlyDuplicationCoordinator {
             entries: entries,
             plan: plan
         )
-        guard entries.isNotEmpty else {
+        guard !entries.isEmpty else {
             logSkippedApply(metadata: metadata, logger: logger)
             return nil
         }

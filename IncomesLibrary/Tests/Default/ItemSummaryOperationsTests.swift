@@ -162,14 +162,14 @@ struct ItemSummaryOperationsTests {
             content: "Refund",
             income: 50,
             outgo: .zero,
-            category: .empty
+            category: ""
         )
         _ = try createSummaryItem(
             date: "2024-06-20T00:00:00Z",
             content: "Snacks",
             income: .zero,
             outgo: 30,
-            category: .empty
+            category: ""
         )
 
         let comparisons = try ItemSummaryOperations.categoryComparison(
@@ -197,7 +197,7 @@ struct ItemSummaryOperationsTests {
             category: "Temporary"
         )
         currentItem.modify(
-            tags: currentItem.tags.orEmpty.filter { tag in
+            tags: (currentItem.tags ?? []).filter { tag in
                 tag.type != .category
             }
         )
@@ -210,7 +210,7 @@ struct ItemSummaryOperationsTests {
             category: "Temporary"
         )
         previousItem.modify(
-            tags: previousItem.tags.orEmpty.filter { tag in
+            tags: (previousItem.tags ?? []).filter { tag in
                 tag.type != .category
             }
         )

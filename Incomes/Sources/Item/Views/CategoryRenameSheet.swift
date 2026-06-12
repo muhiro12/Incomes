@@ -45,7 +45,7 @@ struct CategoryRenameSheet: View {
                 errorMessage = nil
             }
         } message: {
-            Text(errorMessage ?? .empty)
+            Text(errorMessage ?? "")
         }
     }
 }

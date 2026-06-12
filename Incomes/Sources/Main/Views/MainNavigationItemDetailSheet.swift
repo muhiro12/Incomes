@@ -36,7 +36,7 @@ private extension MainNavigationItemDetailSheet {
     var itemDetailTaskID: String {
         itemDetailID.map { persistentID in
             String(describing: persistentID)
-        } ?? .empty
+        } ?? ""
     }
 
     var loadingView: some View {

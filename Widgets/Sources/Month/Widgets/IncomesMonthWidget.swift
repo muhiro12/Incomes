@@ -77,11 +77,13 @@ struct IncomesMonthWidget {
                 Text(IncomesMonthWidget.monthTitle(from: entry.targetDate))
                     .font(font)
                     .foregroundStyle(.secondary)
-                    .singleLine()
+                    .lineLimit(1)
+                    .minimumScaleFactor(WidgetTextScaling.minimumScaleFactor)
                 Text("Income / Outgo")
                     .font(.caption2)
                     .foregroundStyle(.secondary)
-                    .singleLine()
+                    .lineLimit(1)
+                    .minimumScaleFactor(WidgetTextScaling.minimumScaleFactor)
             }
         }
 
@@ -153,7 +155,8 @@ struct IncomesMonthWidget {
                 Text(text)
                     .font(.footnote.weight(.semibold))
                     .monospacedDigit()
-                    .singleLine()
+                    .lineLimit(1)
+                    .minimumScaleFactor(WidgetTextScaling.minimumScaleFactor)
             }
         }
 

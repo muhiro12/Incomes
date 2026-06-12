@@ -9,7 +9,7 @@ struct ItemFormDraftTests {
             groupID: UUID(),
             date: Date(timeIntervalSince1970: 0),
             content: "Rent",
-            incomeText: .empty,
+            incomeText: "",
             outgoText: "100",
             category: "Home",
             repeatMonthSelections: [
@@ -28,7 +28,7 @@ struct ItemFormDraftTests {
             groupID: UUID(),
             date: Date(timeIntervalSince1970: 0),
             content: "Rent",
-            incomeText: .empty,
+            incomeText: "",
             outgoText: "100",
             category: "Home",
             repeatMonthSelections: [

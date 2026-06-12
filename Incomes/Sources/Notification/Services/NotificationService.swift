@@ -93,7 +93,8 @@ final class NotificationService: NSObject {
 
     func update() async {
         await refreshAuthorizationStatus()
-        hasNotification = await deliveredNotificationIdentifiers().isNotEmpty
+        let deliveredIdentifiers = await deliveredNotificationIdentifiers()
+        hasNotification = !deliveredIdentifiers.isEmpty
         logger.info(
             "notification.state_updated",
             metadata: IncomesLogging.metadata(
@@ -108,7 +109,7 @@ final class NotificationService: NSObject {
         try? await center.setBadgeCount(0)
 
         let deliveredIdentifiers = await deliveredNotificationIdentifiers()
-        if deliveredIdentifiers.isNotEmpty {
+        if !deliveredIdentifiers.isEmpty {
             center.removeDeliveredNotifications(
                 withIdentifiers: deliveredIdentifiers
             )
@@ -301,7 +302,7 @@ private extension NotificationService {
             now: .now,
             limit: 20 // swiftlint:disable:this no_magic_numbers
         ) else {
-            return .empty
+            return []
         }
 
         let presentations = UpcomingPaymentOperations.notificationPresentations(

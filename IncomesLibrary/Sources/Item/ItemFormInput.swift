@@ -80,8 +80,8 @@ public struct ItemFormInput {
         self.init(
             date: item.localDate,
             content: item.content,
-            incomeText: item.income.isNotZero ? item.income.description : .empty,
-            outgoText: item.outgo.isNotZero ? item.outgo.description : .empty,
+            incomeText: item.income != .zero ? item.income.description : "",
+            outgoText: item.outgo != .zero ? item.outgo.description : "",
             category: CategoryNameSupport.displayName(
                 forStoredName: item.category?.name
             ),
@@ -118,7 +118,7 @@ public struct ItemFormInput {
 
     /// Validates form values and throws a specific validation error.
     public func validate() throws {
-        guard content.isNotEmpty else {
+        guard !content.isEmpty else {
             throw ValidationError.contentIsEmpty
         }
         guard incomeText.isEmptyOrDecimal else {

@@ -18,7 +18,7 @@ struct TagCategorySemanticsTests {
         let emptyTag = try #require(
             try TagQueryOperations.getByName(
                 context: context,
-                name: .empty,
+                name: "",
                 type: .category
             )
         )
@@ -47,7 +47,7 @@ struct TagCategorySemanticsTests {
         let emptyTag = try #require(
             try TagQueryOperations.getByName(
                 context: context,
-                name: .empty,
+                name: "",
                 type: .category
             )
         )
@@ -64,7 +64,7 @@ private extension TagCategorySemanticsTests {
     ) throws {
         _ = try createItem(
             content: "Blank",
-            category: .empty
+            category: ""
         )
 
         if includeExplicitOthers {
@@ -101,7 +101,7 @@ private extension TagCategorySemanticsTests {
         from item: Item
     ) {
         item.modify(
-            tags: item.tags.orEmpty.filter { tag in
+            tags: (item.tags ?? []).filter { tag in
                 tag.type != .category
             }
         )

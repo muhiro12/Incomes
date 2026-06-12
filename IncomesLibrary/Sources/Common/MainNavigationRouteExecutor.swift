@@ -61,9 +61,7 @@ enum MainNavigationRouteExecutor {
                 selectedTag: yearMonthTag
             )
         case .item(let itemID):
-            guard let persistentID = try? PersistentIdentifier(
-                base64Encoded: itemID
-            ) else {
+            guard let persistentID = try? PersistentIdentifierCoder.decode(itemID) else {
                 return try fallbackHomeDestination(context: context)
             }
             guard try context.fetchFirst(

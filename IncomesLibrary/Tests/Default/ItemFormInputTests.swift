@@ -130,9 +130,9 @@ struct ItemFormInputTests {
             date: date,
             content: "Subscription",
             incomeText: "100",
-            outgoText: .empty,
+            outgoText: "",
             category: "Service",
-            priorityText: .empty,
+            priorityText: "",
             repeatMonthSelections: [
                 .init(year: 2_026, month: 1)
             ]
@@ -178,7 +178,7 @@ struct ItemFormInputTests {
             date: shiftedDate("2026-01-10T12:00:00Z"),
             content: "Subscription",
             incomeText: "100",
-            outgoText: .empty,
+            outgoText: "",
             category: "Service",
             priorityText: "3"
         )
@@ -208,9 +208,9 @@ struct ItemFormInputTests {
         let input = ItemFormInput(
             date: date,
             content: "Old",
-            incomeText: .empty,
-            outgoText: .empty,
-            category: .empty,
+            incomeText: "",
+            outgoText: "",
+            category: "",
             priorityText: "0"
         )
         let tag = try Tag.create(context: context, name: "Coffee", type: .content)

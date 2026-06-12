@@ -23,7 +23,7 @@ public enum TagMutationOperations {
             .compactMap(\.first)
         )
         for item in childItems {
-            var tags = item.tags.orEmpty.filter { tag in
+            var tags = (item.tags ?? []).filter { tag in
                 !childIDs.contains(tag.id)
             }
             guard tags.contains(parent) == false else {
@@ -72,7 +72,7 @@ public enum TagMutationOperations {
         guard TagQueryOperations.isOrphan(tag: tag) else {
             return false
         }
-        tag.delete()
+        tag.modelContext?.delete(tag)
         return true
     }
 
@@ -102,7 +102,7 @@ public enum TagMutationOperations {
     public static func deleteAll(context: ModelContext) throws {
         let tags = try context.fetch(FetchDescriptor<Tag>())
         tags.forEach { tag in
-            tag.delete()
+            tag.modelContext?.delete(tag)
         }
     }
 

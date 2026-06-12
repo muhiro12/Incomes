@@ -107,10 +107,10 @@ private extension SummaryCalculator {
     }
 
     static func hasAnyValue(_ comparison: CategoryComparison) -> Bool {
-        comparison.currentIncome.isNotZero ||
-            comparison.previousIncome.isNotZero ||
-            comparison.currentOutgo.isNotZero ||
-            comparison.previousOutgo.isNotZero
+        comparison.currentIncome != .zero ||
+            comparison.previousIncome != .zero ||
+            comparison.currentOutgo != .zero ||
+            comparison.previousOutgo != .zero
     }
 
     static func maximumAbsoluteDelta(for comparison: CategoryComparison) -> Decimal {
@@ -120,6 +120,6 @@ private extension SummaryCalculator {
     }
 
     static func absoluteValue(_ value: Decimal) -> Decimal {
-        value.isMinus ? value * -1 : value
+        value < .zero ? value * -1 : value
     }
 }

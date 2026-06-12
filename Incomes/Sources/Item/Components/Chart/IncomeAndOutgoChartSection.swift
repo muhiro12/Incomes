@@ -74,7 +74,7 @@ private extension IncomeAndOutgoChartSection {
                 )
 
             ForEach(items) { item in
-                if income(of: item).isNotZero {
+                if income(of: item) != .zero {
                     BarMark(
                         x: .value("Date", date(of: item)),
                         y: .value("Amount", income(of: item)),
@@ -83,7 +83,7 @@ private extension IncomeAndOutgoChartSection {
                     .foregroundStyle(.green)
                     .opacity(Constants.barOpacity)
                 }
-                if outgo(of: item).isNotZero {
+                if outgo(of: item) != .zero {
                     BarMark(
                         x: .value("Date", date(of: item)),
                         y: .value("Amount", outgo(of: item)),

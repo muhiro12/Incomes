@@ -32,7 +32,7 @@ enum CategoryNameSupport {
             return othersDisplayName
         }
 
-        return storedName.orEmpty
+        return storedName ?? ""
     }
 
     /// Returns the normalized stored value for user-entered category text.
@@ -44,7 +44,7 @@ enum CategoryNameSupport {
             userInput,
             othersDisplayName: othersDisplayName
         ) {
-            return .empty
+            return ""
         }
 
         return userInput
@@ -84,7 +84,7 @@ extension CategoryNameSupport {
             return othersCanonicalKey
         }
 
-        return storedName.orEmpty
+        return storedName ?? ""
     }
 
     private static func isOthersInput(
@@ -105,6 +105,8 @@ extension CategoryNameSupport {
         othersDisplayName: String
     ) -> [String] {
         [othersStoredName, othersDisplayName]
-            .filter(\.isNotEmpty)
+            .filter { alias in
+                !alias.isEmpty
+            }
     }
 }

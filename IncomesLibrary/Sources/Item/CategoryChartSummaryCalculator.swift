@@ -34,7 +34,7 @@ private extension CategoryChartSummaryCalculator {
         amount: KeyPath<Item, Decimal>
     ) -> [Segment] {
         let groupedItems = Dictionary(grouping: items.filter { item in
-            item[keyPath: amount].isNotZero
+            item[keyPath: amount] != .zero
         }) { item in
             CategoryNameSupport.displayName(
                 forStoredName: item.category?.name
@@ -64,7 +64,7 @@ private extension CategoryChartSummaryCalculator {
     }
 
     static func ratio(for value: Decimal, total: Decimal) -> Double {
-        guard total.isNotZero else {
+        guard total != .zero else {
             return .zero
         }
         let totalValue = decimalToDouble(total)

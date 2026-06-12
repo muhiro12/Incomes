@@ -224,10 +224,10 @@ struct TagItemFilteringTests {
         )) ?? []
         print("TagItemFilteringTests diagnostics: name=\(tag.name) type=\(tagType) matches=\(matchingTags.count)")
         for (index, match) in matchingTags.enumerated() {
-            let itemYears = match.items.orEmpty.map { item in
+            let itemYears = (match.items ?? []).map { item in
                 item.year?.name ?? "nil"
             }
-            print("  match[\(index)] id=\(match.persistentModelID) items=\(match.items.orEmpty.count) years=\(itemYears)") // swiftlint:disable:this line_length
+            print("  match[\(index)] id=\(match.persistentModelID) items=\((match.items ?? []).count) years=\(itemYears)") // swiftlint:disable:this line_length
         }
         let filtered = TagQueryOperations.items(for: tag, yearString: yearString)
         let filteredYears = filtered.map { item in

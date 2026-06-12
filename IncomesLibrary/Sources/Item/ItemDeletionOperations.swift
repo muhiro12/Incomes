@@ -35,7 +35,7 @@ public enum ItemDeletionOperations {
         context: ModelContext,
         items: [Item]
     ) throws -> MutationOutcome {
-        guard items.isNotEmpty else {
+        guard !items.isEmpty else {
             return .init(
                 changedIDs: .init(),
                 affectedDateRange: nil,
@@ -47,7 +47,7 @@ public enum ItemDeletionOperations {
         let deletedIDs = Set(items.map(\.persistentModelID))
         let deletedDates = items.map(\.localDate)
         for item in items {
-            item.delete()
+            item.modelContext?.delete(item)
         }
         TagMutationOperations.deleteUnused(tags: tagsToCleanup)
         if let startDate = deletedDates.min() {
@@ -79,7 +79,7 @@ public enum ItemDeletionOperations {
         let items = try context.fetch(FetchDescriptor<Item>())
         let tagsToCleanup = ItemMutationSupport.cleanupCandidateTags(from: items)
         items.forEach { item in
-            item.delete()
+            item.modelContext?.delete(item)
         }
         TagMutationOperations.deleteUnused(tags: tagsToCleanup)
         try BalanceCalculator.calculate(in: context, for: items)

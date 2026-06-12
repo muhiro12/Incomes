@@ -15,7 +15,7 @@ public final class Item {
     @available(iOS, deprecated: 100000.0, message: "Use `utcDate` (UTC) or `localDate` (current calendar) instead.")
     public private(set) var date = Date(timeIntervalSinceReferenceDate: .zero)
     /// User-entered item description.
-    public private(set) var content = String.empty
+    public private(set) var content = ""
     /// Income amount assigned to the item.
     public private(set) var income = Decimal.zero
     /// Outgo amount assigned to the item.
@@ -152,7 +152,7 @@ extension Item { // swiftlint:disable:this extension_access_modifier
 
     /// True when `netIncome >= 0`.
     public var isNetIncomePositive: Bool {
-        netIncome.isPlus
+        netIncome > .zero
     }
 
     /// Year tag if present.

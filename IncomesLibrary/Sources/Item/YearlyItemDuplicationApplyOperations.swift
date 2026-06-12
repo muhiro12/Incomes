@@ -44,7 +44,7 @@ public enum YearlyItemDuplicationApplyOperations {
         )
         guard let group = plan.groups.first(where: { itemGroup in
             itemGroup.id == groupID
-        }), entries.isNotEmpty else {
+        }), !entries.isEmpty else {
             return nil
         }
         return try applyWithOutcome(
@@ -85,7 +85,7 @@ public enum YearlyItemDuplicationApplyOperations {
             let amount = overrides[groupID]
                 ?? defaultAmountsByGroupID[groupID]
             for entry in entries {
-                let categoryName = entry.sourceItem.category?.name ?? .empty
+                let categoryName = entry.sourceItem.category?.name ?? ""
                 let incomeValue = amount?.income ?? entry.sourceItem.income
                 let outgoValue = amount?.outgo ?? entry.sourceItem.outgo
                 let item = try Item.create(

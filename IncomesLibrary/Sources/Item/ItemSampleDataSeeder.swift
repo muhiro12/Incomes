@@ -291,7 +291,9 @@ enum ItemSampleDataSeeder { // swiftlint:disable:this type_body_length
     /// Deletes items and tags associated with tutorial/debug data.
     static func deleteDebugData(context: ModelContext) throws {
         let debugTags = try context.fetch(.tags(.typeIs(.debug)))
-        let items = debugTags.flatMap(\.items.orEmpty)
+        let items = debugTags.flatMap { tag in
+            tag.items ?? []
+        }
         try items.forEach { item in
             try ItemDeletionOperations.delete(
                 context: context,
@@ -308,7 +310,7 @@ private extension ItemSampleDataSeeder {
     static func attachSampleTag(to item: Item, context: ModelContext) throws {
         let sampleName = String(localized: "Sample Data")
         let debugTag = try Tag.create(context: context, name: sampleName, type: .debug)
-        var currentTags = item.tags.orEmpty
+        var currentTags = item.tags ?? []
         currentTags.append(debugTag)
         item.modify(tags: currentTags)
     }

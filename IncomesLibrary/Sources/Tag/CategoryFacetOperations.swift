@@ -50,7 +50,7 @@ public enum CategoryFacetOperations {
 
         return keys
             .map { key in
-                let storedNames = storedNamesByKey[key].orEmpty
+                let storedNames = storedNamesByKey[key] ?? []
                 let representativeName = storedNames.first
                 return CategoryFacet(
                     id: key,
@@ -59,7 +59,7 @@ public enum CategoryFacetOperations {
                         othersDisplayName: othersDisplayName
                     ),
                     storedNames: storedNames,
-                    itemIDs: itemIDsByKey[key].orEmpty
+                    itemIDs: itemIDsByKey[key] ?? []
                 )
             }
             .sorted { lhs, rhs in

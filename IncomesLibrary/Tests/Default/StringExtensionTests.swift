@@ -9,20 +9,6 @@
 import Testing
 
 enum StringExtensionTests {
-    struct IsNotEmptyTests {
-        @Test("Text returns true")
-        func text_returns_true() {
-            let string = "text"
-            #expect(string.isNotEmpty)
-        }
-
-        @Test("Empty returns false")
-        func empty_returns_false() {
-            let string = ""
-            #expect(!string.isNotEmpty)
-        }
-    }
-
     struct IsEmptyOrDecimalTests {
         @Test("Empty returns true")
         func empty_returns_true() {

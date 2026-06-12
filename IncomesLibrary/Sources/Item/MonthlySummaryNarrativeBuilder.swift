@@ -124,7 +124,7 @@ enum MonthlySummaryNarrativeBuilder {
         currentTotals: MonthTotals
     ) throws -> String {
         let trimmedSummary = summary.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard trimmedSummary.isNotEmpty else {
+        guard !trimmedSummary.isEmpty else {
             throw ValidationError.emptySummary
         }
 
@@ -183,8 +183,8 @@ private extension MonthlySummaryNarrativeBuilder {
     ) -> String {
         let previousTotals = context.previousTotals
         let hasPreviousMonthData =
-            previousTotals.totalIncome.isNotZero ||
-            previousTotals.totalOutgo.isNotZero
+            previousTotals.totalIncome != .zero ||
+            previousTotals.totalOutgo != .zero
 
         guard hasPreviousMonthData else {
             return localizedString(
@@ -197,7 +197,7 @@ private extension MonthlySummaryNarrativeBuilder {
             comparisonDescription(comparison, locale: locale)
         }
 
-        guard notableChanges.isNotEmpty else {
+        guard !notableChanges.isEmpty else {
             return localizedString(
                 key: "There were no major category-level changes from the previous month.",
                 locale: locale
@@ -229,8 +229,8 @@ private extension MonthlySummaryNarrativeBuilder {
         }
 
         if outgoMagnitude >= incomeMagnitude,
-           comparison.outgoDelta.isNotZero {
-            if comparison.outgoDelta.isPlus {
+           comparison.outgoDelta != .zero {
+            if comparison.outgoDelta > .zero {
                 return localizedString(
                     key: "%@ spending increased",
                     locale: locale,
@@ -244,11 +244,11 @@ private extension MonthlySummaryNarrativeBuilder {
             )
         }
 
-        guard comparison.incomeDelta.isNotZero else {
+        guard comparison.incomeDelta != .zero else {
             return nil
         }
 
-        if comparison.incomeDelta.isPlus {
+        if comparison.incomeDelta > .zero {
             return localizedString(
                 key: "%@ income increased",
                 locale: locale,

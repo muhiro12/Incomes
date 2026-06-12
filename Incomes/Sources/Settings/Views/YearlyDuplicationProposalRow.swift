@@ -13,7 +13,7 @@ struct YearlyDuplicationProposalRow: View {
     var body: some View {
         VStack(alignment: .leading, spacing: inlineSpacing) {
             titleRow
-            if group.category.isNotEmpty {
+            if !group.category.isEmpty {
                 Text(group.category)
                     .font(.footnote)
                     .foregroundStyle(.secondary)

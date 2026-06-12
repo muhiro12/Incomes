@@ -114,7 +114,7 @@ struct ItemFormInputAssistView: View {
                 errorMessage = nil
             }
         } message: {
-            Text(errorMessage ?? .empty)
+            Text(errorMessage ?? "")
         }
     }
 }

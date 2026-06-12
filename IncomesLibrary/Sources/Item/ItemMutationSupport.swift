@@ -42,7 +42,7 @@ enum ItemMutationSupport {
 
     static func cleanupCandidateTags(from items: [Item]) -> [Tag] {
         items.flatMap { item in
-            item.tags.orEmpty.filter { tag in
+            (item.tags ?? []).filter { tag in
                 switch tag.type {
                 case .year, .yearMonth, .content, .category:
                     return true

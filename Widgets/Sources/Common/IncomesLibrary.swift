@@ -6,4 +6,3 @@
 //
 
 @_exported import IncomesLibrary
-@_exported import SwiftUtilities

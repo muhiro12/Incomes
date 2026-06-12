@@ -32,7 +32,7 @@ struct TagOrphanTests {
             name: "Attached Debug",
             type: .debug
         )
-        item.modify(tags: item.tags.orEmpty + [attachedDebugTag])
+        item.modify(tags: (item.tags ?? []) + [attachedDebugTag])
 
         let orphanTags = try TagQueryOperations.orphanTags(context: context)
 
@@ -104,11 +104,11 @@ struct TagOrphanTests {
             name: "Attached Debug",
             type: .debug
         )
-        item.modify(tags: item.tags.orEmpty + [debugTag])
+        item.modify(tags: (item.tags ?? []) + [debugTag])
 
         try context.save()
 
-        item.modify(tags: item.tags.orEmpty.filter { tag in
+        item.modify(tags: (item.tags ?? []).filter { tag in
             tag.id != debugTag.id
         })
 
@@ -134,7 +134,7 @@ struct TagOrphanTests {
             name: "Attached Debug",
             type: .debug
         )
-        item.modify(tags: item.tags.orEmpty + [attachedDebugTag])
+        item.modify(tags: (item.tags ?? []) + [attachedDebugTag])
         _ = Tag.createIgnoringDuplicates(
             context: context,
             name: "Unused Content",

@@ -48,7 +48,7 @@ extension YearMonthItemListView: View {
         .listStyle(.grouped)
         .navigationTitle(tag.displayName)
         .task(id: items.count) {
-            guard items.isNotEmpty else {
+            guard !items.isEmpty else {
                 return
             }
             tipController.donateDidViewItemList()
@@ -67,7 +67,7 @@ extension YearMonthItemListView: View {
 
 private extension YearMonthItemListView {
     var items: [Item] {
-        tag.items.orEmpty
+        tag.items ?? []
     }
 
     var monthDate: Date? {

@@ -118,7 +118,7 @@ struct YearlyDuplicationView: View {
                 errorMessage = nil
             }
         } message: {
-            Text(errorMessage ?? .empty)
+            Text(errorMessage ?? "")
         }
         .alert(
             "Completed",
@@ -137,7 +137,7 @@ struct YearlyDuplicationView: View {
                 resultMessage = nil
             }
         } message: {
-            Text(resultMessage ?? .empty)
+            Text(resultMessage ?? "")
         }
     }
 }
@@ -284,7 +284,7 @@ private extension YearlyDuplicationView {
     ) -> String {
         [
             group.content,
-            group.category.isNotEmpty ? group.category : nil,
+            !group.category.isEmpty ? group.category : nil,
             "Dates: \(YearlyDuplicationPresentationOperations.monthDayListText(for: group))",
             "Items: \(group.entryCount)",
             "Income: \(YearlyDuplicationPresentationOperations.decimalString(from: group.averageIncome))",

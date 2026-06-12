@@ -50,7 +50,7 @@ struct MonthlySummaryGenerationInputTests {
             category: "Temporary"
         )
         item.modify(
-            tags: item.tags.orEmpty.filter { tag in
+            tags: (item.tags ?? []).filter { tag in
                 tag.type != .category
             }
         )

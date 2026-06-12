@@ -14,7 +14,7 @@ struct OrphanTagView: View {
                 Text(tag.displayName)
             }
             Section("Name") {
-                Text(tag.name.isNotEmpty ? tag.name : "(empty)")
+                Text(!tag.name.isEmpty ? tag.name : "(empty)")
             }
             if let type = tag.type {
                 Section("Type") {

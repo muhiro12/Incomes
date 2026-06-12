@@ -80,7 +80,7 @@ private extension ContentView {
             from: upcomingCandidates
         )
 
-        if nextItems.isNotEmpty {
+        if !nextItems.isEmpty {
             Section("Next") {
                 if let nextDate = model.nextUpcomingDate(from: upcomingCandidates) {
                     Text(nextDate.formatted(.dateTime.weekday().month().day()))
@@ -96,7 +96,7 @@ private extension ContentView {
                 }
             }
 
-            if laterItems.isNotEmpty {
+            if !laterItems.isEmpty {
                 Section("Later") {
                     ForEach(laterItems) { item in
                         WatchItemRow(item: item)

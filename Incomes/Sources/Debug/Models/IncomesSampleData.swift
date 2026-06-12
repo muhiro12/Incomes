@@ -90,7 +90,7 @@ extension IncomesSampleData {
                 name: duplicateCategoryName,
                 type: .category
             )
-            var tags = item.tags.orEmpty
+            var tags = item.tags ?? []
             tags.append(duplicateTag)
             item.modify(tags: tags)
         }

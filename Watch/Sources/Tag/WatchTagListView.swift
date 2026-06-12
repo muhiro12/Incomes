@@ -19,7 +19,7 @@ struct WatchTagListView: View {
 
     var body: some View {
         List {
-            if tags.isNotEmpty {
+            if !tags.isEmpty {
                 ForEach(tags) { tag in
                     NavigationLink {
                         WatchTagItemListView(tag: tag)

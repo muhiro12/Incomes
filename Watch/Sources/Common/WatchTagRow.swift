@@ -16,7 +16,7 @@ extension WatchTagRow: View {
 
             HStack(spacing: designMetrics.spacing.inline) {
                 Text(tag.netIncome.asCurrency)
-                    .foregroundStyle(tag.netIncome.isPlus ? .accent : .red)
+                    .foregroundStyle(tag.netIncome > .zero ? .accent : .red)
                     .frame(maxWidth: .infinity, alignment: .trailing)
             }
             .font(.footnote)

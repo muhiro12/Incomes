@@ -23,7 +23,7 @@ extension DebugSection: View {
             DebugValueRow(title: "Priority", value: item.priority.description)
             DebugValueRow(title: "RepeatID", value: item.repeatID.description)
             DebugValueRow(title: "Balance", value: item.balance.description)
-            DebugTagsRow(tags: item.tags.orEmpty)
+            DebugTagsRow(tags: item.tags ?? [])
         } header: {
             Text("Debug")
         }

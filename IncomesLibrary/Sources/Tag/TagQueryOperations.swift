@@ -293,7 +293,7 @@ private extension TagQueryOperations {
     }
 
     static func directItems(for tag: Tag) -> [Item] {
-        tag.items.orEmpty.filter { item in
+        (tag.items ?? []).filter { item in
             item.isDeleted == false
         }
     }
