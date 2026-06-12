@@ -6,13 +6,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Advertising revenue"
+            "value" : "Ad revenue"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ingresos publicitarios"
+            "value" : "Ingresos por anuncios"
           }
         },
         "fr" : {
@@ -40,7 +40,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Apple card"
+            "value" : "Apple Card"
           }
         },
         "es" : {
@@ -58,13 +58,13 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "アップルカード"
+            "value" : "Appleカード"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "苹果卡"
+            "value" : "Apple 卡"
           }
         }
       }
@@ -74,31 +74,31 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Car"
+            "value" : "Car loan"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Coche"
+            "value" : "Préstamo del coche"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Voiture"
+            "value" : "Crédit auto"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "車"
+            "value" : "自動車ローン"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "汽车"
+            "value" : "车贷"
           }
         }
       }
@@ -108,25 +108,25 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Credit"
+            "value" : "Credit card"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Crédito"
+            "value" : "Tarjeta de crédito"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Crédit"
+            "value" : "Carte de crédit"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "クレジット"
+            "value" : "クレジットカード"
           }
         },
         "zh-Hans" : {
@@ -142,25 +142,25 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Food"
+            "value" : "Food & dining"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Comida"
+            "value" : "Comida y restaurantes"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Alimentation"
+            "value" : "Repas et courses"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "食費"
+            "value" : "食費・外食"
           }
         },
         "zh-Hans" : {
@@ -176,19 +176,19 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Grocery"
+            "value" : "Groceries"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Comestibles"
+            "value" : "Supermercado"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Épicerie"
+            "value" : "Courses"
           }
         },
         "ja" : {
@@ -200,7 +200,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "杂货"
+            "value" : "食品杂货"
           }
         }
       }
@@ -210,31 +210,31 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "House"
+            "value" : "Mortgage"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Casa"
+            "value" : "Hipoteca"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Maison"
+            "value" : "Prêt immobilier"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "家"
+            "value" : "住宅ローン"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "房屋"
+            "value" : "房贷"
           }
         }
       }
@@ -278,31 +278,31 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Insurance"
+            "value" : "Insurance premium"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Seguro"
+            "value" : "Prima de seguro"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Assurance"
+            "value" : "Prime d’assurance"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "保険"
+            "value" : "保険料"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "保险"
+            "value" : "保险费"
           }
         }
       }
@@ -312,31 +312,31 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Invalid month requested for summary generation."
+            "value" : "Choose a valid month to generate a summary."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Se solicitó un mes no válido para generar el resumen."
+            "value" : "Elige un mes válido para generar un resumen."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Un mois non valide a été demandé pour générer le résumé."
+            "value" : "Choisissez un mois valide pour générer un résumé."
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "サマリー生成に無効な月が指定されました。"
+            "value" : "サマリーを生成するには有効な月を選択してください。"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "请求了无效的月份来生成摘要。"
+            "value" : "请选择有效月份来生成摘要。"
           }
         }
       }
@@ -358,7 +358,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Carte Citron"
+            "value" : "Carte citron"
           }
         },
         "ja" : {
@@ -380,19 +380,19 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Loan"
+            "value" : "Loans"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Préstamo"
+            "value" : "Préstamos"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Prêt"
+            "value" : "Prêts"
           }
         },
         "ja" : {
@@ -414,31 +414,31 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "On-device item inference is currently unavailable."
+            "value" : "Item suggestions are currently unavailable on this device."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "La inferencia de elementos en el dispositivo no está disponible en este momento."
+            "value" : "Las sugerencias de elementos no están disponibles en este dispositivo en este momento."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "L’inférence d’éléments sur l’appareil est actuellement indisponible."
+            "value" : "Les suggestions d’éléments ne sont pas disponibles sur cet appareil pour le moment."
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "オンデバイスの項目推定は現在利用できません。"
+            "value" : "このデバイスでは現在、項目の候補を利用できません。"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "设备端项目推断当前不可用。"
+            "value" : "此设备目前无法使用项目建议。"
           }
         }
       }
@@ -448,31 +448,31 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "On-device item inference is unavailable in the current language."
+            "value" : "Item suggestions are not available for the current language."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "La inferencia de elementos en el dispositivo no está disponible en el idioma actual."
+            "value" : "Las sugerencias de elementos no están disponibles para el idioma actual."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "L’inférence d’éléments sur l’appareil n’est pas disponible dans la langue actuelle."
+            "value" : "Les suggestions d’éléments ne sont pas disponibles dans la langue actuelle."
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "オンデバイスの項目推定は現在の言語では利用できません。"
+            "value" : "現在の言語では項目の候補を利用できません。"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "设备端项目推断在当前语言下不可用。"
+            "value" : "当前语言无法使用项目建议。"
           }
         }
       }
@@ -482,31 +482,31 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "On-device monthly summaries are currently unavailable."
+            "value" : "Monthly summaries are currently unavailable on this device."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Los resúmenes mensuales en el dispositivo no están disponibles en este momento."
+            "value" : "Los resúmenes mensuales no están disponibles en este dispositivo en este momento."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Les résumés mensuels sur l'appareil sont actuellement indisponibles."
+            "value" : "Les résumés mensuels ne sont pas disponibles sur cet appareil pour le moment."
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "オンデバイスの月次サマリーは現在利用できません。"
+            "value" : "このデバイスでは現在、月次サマリーを利用できません。"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "设备端月度摘要当前不可用。"
+            "value" : "此设备目前无法使用月度摘要。"
           }
         }
       }
@@ -516,31 +516,31 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "On-device monthly summaries are unavailable in the current language."
+            "value" : "Monthly summaries are not available for the current language."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Los resúmenes mensuales en el dispositivo no están disponibles en el idioma actual."
+            "value" : "Los resúmenes mensuales no están disponibles para el idioma actual."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Les résumés mensuels sur l'appareil ne sont pas disponibles dans la langue actuelle."
+            "value" : "Les résumés mensuels ne sont pas disponibles dans la langue actuelle."
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "オンデバイスの月次サマリーは現在の言語では利用できません。"
+            "value" : "現在の言語では月次サマリーを利用できません。"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "设备端月度摘要在当前语言下不可用。"
+            "value" : "当前语言无法使用月度摘要。"
           }
         }
       }
@@ -562,7 +562,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Carte Orange"
+            "value" : "Carte orange"
           }
         },
         "ja" : {
@@ -584,7 +584,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Others"
+            "value" : "Other"
           }
         },
         "es" : {
@@ -618,31 +618,31 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Payday"
+            "value" : "Paycheck"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Día de pago"
+            "value" : "Nómina"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Jour de paie"
+            "value" : "Paie"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "給料日"
+            "value" : "給与"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "发薪日"
+            "value" : "工资入账"
           }
         }
       }
@@ -652,31 +652,31 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pension"
+            "value" : "Pension contribution"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pensión"
+            "value" : "Aporte a la pensión"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Retraite"
+            "value" : "Cotisation retraite"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "年金"
+            "value" : "年金保険料"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "养老金"
+            "value" : "养老金缴费"
           }
         }
       }
@@ -754,7 +754,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sample Data"
+            "value" : "Sample data"
           }
         },
         "es" : {
@@ -766,7 +766,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Données d'exemple"
+            "value" : "Données d’exemple"
           }
         },
         "ja" : {
@@ -822,31 +822,31 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tax"
+            "value" : "Taxes & insurance"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Impuesto"
+            "value" : "Impuestos y seguros"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Impôt"
+            "value" : "Impôts et assurances"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "税金"
+            "value" : "税金・保険"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "税"
+            "value" : "税费和保险"
           }
         }
       }
@@ -856,13 +856,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Unable to generate the monthly summary."
+            "value" : "Unable to generate monthly summary."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "No se puede generar el resumen mensual."
+            "value" : "No se pudo generar el resumen mensual."
           }
         },
         "fr" : {
@@ -874,7 +874,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "月次サマリーを生成できません。"
+            "value" : "月次サマリーを生成できませんでした。"
           }
         },
         "zh-Hans" : {
@@ -890,31 +890,31 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Unable to infer item details."
+            "value" : "Unable to fill in item details."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "No se pueden inferir los detalles del elemento."
+            "value" : "No se pudieron completar los detalles del elemento."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Impossible de déduire les détails de l’élément."
+            "value" : "Impossible de compléter les détails de l’élément."
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "項目の詳細を推定できません。"
+            "value" : "項目の詳細を入力できませんでした。"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "无法推断项目详细信息。"
+            "value" : "无法补全项目详细信息。"
           }
         }
       }

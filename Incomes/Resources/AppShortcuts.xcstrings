@@ -237,66 +237,6 @@
         }
       }
     },
-    "What did I do last in ${applicationName}" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringSet" : {
-            "state" : "translated",
-            "values" : [
-              "What did I do last in ${applicationName}",
-              "Show me the latest item in ${applicationName}",
-              "Show recent item in ${applicationName}",
-              "Reveal most recent item in ${applicationName}"
-            ]
-          }
-        },
-        "es" : {
-          "stringSet" : {
-            "state" : "translated",
-            "values" : [
-              "¿Qué hice por última vez en ${applicationName}?",
-              "Muéstrame el último elemento en ${applicationName}",
-              "Mostrar elemento reciente en ${applicationName}",
-              "Revelar el elemento más reciente en ${applicationName}"
-            ]
-          }
-        },
-        "fr" : {
-          "stringSet" : {
-            "state" : "translated",
-            "values" : [
-              "Qu'ai-je fait en dernier dans ${applicationName} ?",
-              "Montre-moi le dernier élément dans ${applicationName}",
-              "Afficher l'élément récent dans ${applicationName}",
-              "Révéler l'élément le plus récent dans ${applicationName}"
-            ]
-          }
-        },
-        "ja" : {
-          "stringSet" : {
-            "state" : "translated",
-            "values" : [
-              "${applicationName}で最後に行ったことは？",
-              "${applicationName}の最新アイテムを表示",
-              "${applicationName}の最近のアイテムを表示",
-              "${applicationName}の最新の記録を表示"
-            ]
-          }
-        },
-        "zh-Hans" : {
-          "stringSet" : {
-            "state" : "translated",
-            "values" : [
-              "我上次在${applicationName}中做了什么？",
-              "显示${applicationName}中的最新项目",
-              "显示${applicationName}中的最近项目",
-              "显示${applicationName}中最新的记录"
-            ]
-          }
-        }
-      }
-    },
     "What did I record recently in ${applicationName}" : {
       "localizations" : {
         "en" : {
@@ -410,66 +350,6 @@
               "显示${applicationName}中的下一步",
               "显示${applicationName}中的即将到来的项目",
               "查看${applicationName}接下来的内容"
-            ]
-          }
-        }
-      }
-    },
-    "What’s next in ${applicationName}" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringSet" : {
-            "state" : "translated",
-            "values" : [
-              "What’s next in ${applicationName}",
-              "Show me the next thing in ${applicationName}",
-              "Show upcoming item in ${applicationName}",
-              "Reveal the upcoming entry in ${applicationName}"
-            ]
-          }
-        },
-        "es" : {
-          "stringSet" : {
-            "state" : "translated",
-            "values" : [
-              "¿Qué sigue en ${applicationName}?",
-              "Muéstrame lo siguiente en ${applicationName}",
-              "Mostrar próximo elemento en ${applicationName}",
-              "Revelar la próxima entrada en ${applicationName}"
-            ]
-          }
-        },
-        "fr" : {
-          "stringSet" : {
-            "state" : "translated",
-            "values" : [
-              "Quelle est la prochaine étape dans ${applicationName} ?",
-              "Montre-moi la prochaine chose dans ${applicationName}",
-              "Afficher l'élément à venir dans ${applicationName}",
-              "Révéler la prochaine entrée dans ${applicationName}"
-            ]
-          }
-        },
-        "ja" : {
-          "stringSet" : {
-            "state" : "translated",
-            "values" : [
-              "${applicationName}で次は何？",
-              "${applicationName}で次のことを表示",
-              "${applicationName}の次のアイテムを表示",
-              "${applicationName}の次の記録を表示"
-            ]
-          }
-        },
-        "zh-Hans" : {
-          "stringSet" : {
-            "state" : "translated",
-            "values" : [
-              "${applicationName}接下来是什么？",
-              "显示${applicationName}中的下一个事项",
-              "显示${applicationName}中的即将到来的项目",
-              "显示${applicationName}中的下一个记录"
             ]
           }
         }
