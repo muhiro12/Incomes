@@ -87,7 +87,7 @@ extension DebugListView: View {
 
 private extension DebugListView {
     var firstTag: Tag? {
-        try? context.fetchFirst(.tags(.all))
+        (try? TagQueryOperations.getAll(context: context))?.first
     }
 
     var debugOptionSection: some View {

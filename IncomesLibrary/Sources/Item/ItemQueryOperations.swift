@@ -8,6 +8,11 @@ public enum ItemQueryOperations {
         try context.fetchCount(.items(.all))
     }
 
+    /// Returns all items in the store.
+    public static func items(context: ModelContext) throws -> [Item] {
+        try context.fetch(.items(.all))
+    }
+
     /// Returns number of items in the same repeat series.
     public static func repeatItemsCount(context: ModelContext, repeatID: UUID) throws -> Int {
         try context.fetchCount(.items(.repeatIDIs(repeatID)))

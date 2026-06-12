@@ -79,6 +79,19 @@ if [[ -n "$collaborator_matches" ]]; then
 $collaborator_matches"
 fi
 
+direct_persistence_matches=$(
+  rg \
+    --line-number \
+    "\bcontext\.fetch(First|Count)?\(" \
+    "${surface_sources[@]}" \
+    -g '*.swift' || true
+)
+
+if [[ -n "$direct_persistence_matches" ]]; then
+  record_failure "Delivery surfaces must use public *Operations instead of direct ModelContext fetches:
+$direct_persistence_matches"
+fi
+
 public_collaborator_declarations=$(
   rg \
     --line-number \

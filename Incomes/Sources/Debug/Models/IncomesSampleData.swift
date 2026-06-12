@@ -53,8 +53,8 @@ extension IncomesSampleData {
         var tags = [Tag]()
         while items.isEmpty || tags.isEmpty {
             try? await Task.sleep(for: .seconds(0.2)) // swiftlint:disable:this no_magic_numbers
-            items = (try? context.fetch(.items(.all))) ?? []
-            tags = (try? context.fetch(.tags(.all))) ?? []
+            items = (try? ItemQueryOperations.items(context: context)) ?? []
+            tags = (try? TagQueryOperations.getAll(context: context)) ?? []
         }
         try? ItemBalanceOperations.recalculate(context: context, items: items)
     }
@@ -65,9 +65,9 @@ extension IncomesSampleData {
             profile: .debug,
             ignoringDuplicates: true
         )
-        let items = (try? context.fetch(.items(.all))) ?? []
+        let items = (try? ItemQueryOperations.items(context: context)) ?? []
         try? ItemBalanceOperations.recalculate(context: context, items: items)
-        _ = (try? context.fetch(.tags(.all))) ?? []
+        _ = (try? TagQueryOperations.getAll(context: context)) ?? []
     }
 
     static func prepareDuplicateTagPreviewData(
@@ -75,7 +75,7 @@ extension IncomesSampleData {
     ) throws {
         let previewDuplicateCount = 2
         let duplicateCategoryName = String(localized: "Credit")
-        let items = try context.fetch(.items(.all))
+        let items = try ItemQueryOperations.items(context: context)
         let sourceItems = items.filter { item in
             item.category?.name == duplicateCategoryName
         }

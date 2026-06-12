@@ -303,6 +303,34 @@ struct ItemOperationsTests { // swiftlint:disable:this type_body_length
     // MARK: - Fetch items
 
     @Test
+    func items_returns_all_items() throws {
+        _ = try createItem(
+            context: context,
+            date: shiftedDate("2000-01-01T12:00:00Z"),
+            content: "Old",
+            income: 100,
+            outgo: 0,
+            category: "Test",
+            priority: 0,
+            repeatCount: 1
+        )
+        _ = try createItem(
+            context: context,
+            date: shiftedDate("2000-02-01T12:00:00Z"),
+            content: "New",
+            income: 200,
+            outgo: 0,
+            category: "Test",
+            priority: 0,
+            repeatCount: 1
+        )
+
+        let items = try ItemQueryOperations.items(context: context)
+
+        #expect(items.map(\.content) == ["New", "Old"])
+    }
+
+    @Test
     func items_returns_items_for_month() throws {
         _ = try createItem(
             context: context,

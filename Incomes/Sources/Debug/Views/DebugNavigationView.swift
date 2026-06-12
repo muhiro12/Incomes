@@ -149,7 +149,10 @@ private extension DebugNavigationView {
     }
 
     func tag(for tagID: Tag.ID) -> Tag? {
-        try? context.fetchFirst(.tags(.idIs(tagID)))
+        try? TagQueryOperations.getByPersistentID(
+            context: context,
+            persistentID: tagID
+        )
     }
 
     func navigateToCompactRoute(to route: DebugRoute) {
