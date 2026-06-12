@@ -24,8 +24,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/muhiro12/MHPlatform.git",
       "state" : {
-        "revision" : "d3891d550645ab9bdd37e8256c8a4c43c052a786",
-        "version" : "1.9.0"
+        "revision" : "6d799808f7bca2a2f07cdc02dc495afe919b06cb",
+        "version" : "1.10.0"
       }
     },
     {
@@ -33,8 +33,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/muhiro12/MHUI",
       "state" : {
-        "revision" : "a6dd7f776ef4eefe0db37667d6943d55a09ed794",
-        "version" : "1.5.0"
+        "revision" : "52ac6d8472a6ac8ca9b66e388f378a1cc94599c1",
+        "version" : "1.6.0"
       }
     },
     {
