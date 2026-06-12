@@ -1,8 +1,12 @@
 # AGENTS.md
 
 This document defines the **repository-specific agent behavior contract** for
-Incomes. It contains only strict, minimal rules that agents must follow when
-working in this repository.
+Incomes.
+
+Keep this file self-contained enough for agents working from a fresh clone.
+Repeat portable rules here when they are required to work safely in this
+repository; keep local-machine-only routing, broad development philosophy, and
+cross-repository principles outside the repository.
 
 ## Agent Philosophy
 
@@ -98,6 +102,10 @@ tasks.filter { $0.isCompleted }
 
 Agents MUST prefer XcodeBuildMCP for Apple build, test, run, Simulator,
 runtime log, screenshot, and UI snapshot verification.
+
+Before the first XcodeBuildMCP build, test, or run call in a session, run
+XcodeBuildMCP `session_show_defaults`. If defaults do not point at this
+repository, set them for the current session before continuing.
 
 For app compile checks, use XcodeBuildMCP `build_sim` with the `Incomes`
 scheme. For shared-library tests, use XcodeBuildMCP `test_sim` with the
