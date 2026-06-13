@@ -13,11 +13,13 @@ struct TagSummaryRow: View {
     private var tag
 
     var body: some View {
+        let itemCount = (tag.items ?? []).count
+
         HStack {
             Text(tag.displayName)
                 .font(.headline)
                 .foregroundStyle(tag.hasDeficit ? Color.red : Color.primary)
-            Text("(\((tag.items ?? []).count))")
+            Text("(\(itemCount))")
                 .font(.caption)
                 .foregroundStyle(.secondary)
             Spacer()
@@ -28,6 +30,32 @@ struct TagSummaryRow: View {
             .font(.subheadline)
             .foregroundStyle(.secondary)
             PositiveNetIncomeIndicator(isVisible: tag.netIncome > .zero)
+        }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(Text(tag.displayName))
+        .accessibilityValue(accessibilityValue(itemCount: itemCount))
+    }
+}
+
+private extension TagSummaryRow {
+    func accessibilityValue(itemCount: Int) -> Text {
+        if tag.netIncome > .zero {
+            Text(
+                """
+                Items: \(itemCount, format: .number), \
+                Income: \(tag.income.asCurrency), \
+                Outgo: \(tag.outgo.asMinusCurrency), \
+                Positive net income
+                """
+            )
+        } else {
+            Text(
+                """
+                Items: \(itemCount, format: .number), \
+                Income: \(tag.income.asCurrency), \
+                Outgo: \(tag.outgo.asMinusCurrency)
+                """
+            )
         }
     }
 }
