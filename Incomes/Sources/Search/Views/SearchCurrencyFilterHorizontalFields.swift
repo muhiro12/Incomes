@@ -9,15 +9,13 @@ struct SearchCurrencyFilterHorizontalFields: View {
     var body: some View {
         HStack(spacing: controlSpacing) {
             SearchCurrencyFilterTextField(
-                title: "Min",
-                accessibilityLabel: "Minimum amount",
+                title: "Minimum Amount",
                 value: $minValue,
                 submitSearch: applySearch
             )
             SearchCurrencyFilterRangeSeparator()
             SearchCurrencyFilterTextField(
-                title: "Max",
-                accessibilityLabel: "Maximum amount",
+                title: "Maximum Amount",
                 value: $maxValue,
                 submitSearch: applySearch
             )

@@ -2,7 +2,6 @@ import SwiftUI
 
 struct SearchCurrencyFilterTextField: View {
     let title: LocalizedStringKey
-    let accessibilityLabel: LocalizedStringKey
 
     @Binding var value: String
 
@@ -15,6 +14,6 @@ struct SearchCurrencyFilterTextField: View {
         .keyboardType(.numbersAndPunctuation)
         .submitLabel(.search)
         .onSubmit(submitSearch)
-        .accessibilityLabel(Text(accessibilityLabel))
+        .accessibilityLabel(Text(title))
     }
 }

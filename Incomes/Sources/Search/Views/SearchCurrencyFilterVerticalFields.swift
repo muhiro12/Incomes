@@ -9,14 +9,12 @@ struct SearchCurrencyFilterVerticalFields: View {
     var body: some View {
         VStack(alignment: .leading, spacing: controlSpacing) {
             SearchCurrencyFilterTextField(
-                title: "Min",
-                accessibilityLabel: "Minimum amount",
+                title: "Minimum Amount",
                 value: $minValue,
                 submitSearch: applySearch
             )
             SearchCurrencyFilterTextField(
-                title: "Max",
-                accessibilityLabel: "Maximum amount",
+                title: "Maximum Amount",
                 value: $maxValue,
                 submitSearch: applySearch
             )
