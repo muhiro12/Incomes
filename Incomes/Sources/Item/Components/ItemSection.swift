@@ -14,56 +14,21 @@ struct ItemSection: View {
 
     var body: some View {
         Section {
-            row(
+            ItemInformationRow(
                 title: "Date",
                 value: item.localDate.stringValue(.yyyyMMMd)
             )
-            row(
+            ItemInformationRow(
                 title: "Income",
                 value: item.income.asCurrency
             )
-            row(
+            ItemInformationRow(
                 title: "Outgo",
                 value: item.outgo.asMinusCurrency
             )
-            categoryRow
+            ItemCategoryInformationRow()
         } header: {
             Text("Information")
-        }
-    }
-}
-
-private extension ItemSection {
-    @ViewBuilder var categoryRow: some View {
-        if let categoryTag = item.category {
-            NavigationLink {
-                CategoryItemListView()
-                    .environment(categoryTag)
-            } label: {
-                row(
-                    title: "Category",
-                    value: categoryTag.displayName
-                )
-            }
-        } else {
-            row(
-                title: "Category",
-                value: CategoryFacetOperations.displayName(
-                    forStoredCategoryName: nil
-                )
-            )
-        }
-    }
-
-    func row(
-        title: LocalizedStringKey,
-        value: String
-    ) -> some View {
-        HStack {
-            Text(title)
-            Spacer()
-            Text(value)
-                .foregroundStyle(.secondary)
         }
     }
 }
