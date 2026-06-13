@@ -41,7 +41,7 @@ struct MainNavigationSidebarView: View {
             }
         }
         .confirmationDialog(
-            Text("Delete"),
+            deletionDialogTitle,
             isPresented: Binding(
                 get: {
                     yearDeletionModel.isDialogPresented
@@ -150,6 +150,14 @@ private extension MainNavigationSidebarView {
 }
 
 private extension MainNavigationSidebarView {
+    var deletionDialogTitle: Text {
+        if yearDeletionModel.tagsToDelete.count == 1,
+           let yearTag = yearDeletionModel.tagsToDelete.first {
+            return Text("Delete \(yearTag.displayName)")
+        }
+        return Text("Delete")
+    }
+
     var sidebarLogger: MHLogger {
         IncomesLogging.logger(
             logging: logging,

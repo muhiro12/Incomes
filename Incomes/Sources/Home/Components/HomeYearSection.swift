@@ -20,6 +20,7 @@ struct HomeYearSection: View {
     @Query private var yearMonthTags: [Tag]
 
     @State private var isDialogPresented = false
+    @State private var deletionDisplayName: String?
     @State private var willDeleteItems: [Item] = []
 
     private let navigateToRoute: (IncomesRoute) -> Void
@@ -62,8 +63,19 @@ struct HomeYearSection: View {
             }
         }
         .confirmationDialog(
-            Text("Delete"),
-            isPresented: $isDialogPresented
+            deletionDialogTitle,
+            isPresented: Binding(
+                get: {
+                    isDialogPresented
+                },
+                set: { isPresented in
+                    if isPresented {
+                        isDialogPresented = true
+                    } else {
+                        clearDeletionRequest()
+                    }
+                }
+            )
         ) {
             Button(role: .destructive) {
                 Task { @MainActor in
@@ -74,6 +86,7 @@ struct HomeYearSection: View {
                             notificationService: notificationService,
                             logger: itemMutationLogger
                         )
+                        clearDeletionRequest()
                     } catch {
                         assertionFailure(error.localizedDescription)
                     }
@@ -82,7 +95,7 @@ struct HomeYearSection: View {
                 Text("Delete")
             }
             Button(role: .cancel) {
-                willDeleteItems = []
+                clearDeletionRequest()
             } label: {
                 Text("Cancel")
             }
@@ -95,21 +108,37 @@ struct HomeYearSection: View {
 private extension HomeYearSection {
     func requestMonthDeletion(for tag: Tag) {
         requestDeletion(
-            items: tag.items ?? []
+            items: tag.items ?? [],
+            displayName: tag.displayName
         )
     }
 
     func requestDeletion(
         items: [Item],
-        allowsEmptySelection: Bool = false
+        allowsEmptySelection: Bool = false,
+        displayName: String? = nil
     ) {
         Haptic.warning.impact()
+        deletionDisplayName = displayName
         willDeleteItems = items
         isDialogPresented = allowsEmptySelection || !items.isEmpty
+    }
+
+    func clearDeletionRequest() {
+        isDialogPresented = false
+        deletionDisplayName = nil
+        willDeleteItems = []
     }
 }
 
 private extension HomeYearSection {
+    var deletionDialogTitle: Text {
+        if let deletionDisplayName {
+            return Text("Delete \(deletionDisplayName)")
+        }
+        return Text("Delete")
+    }
+
     var itemMutationLogger: MHLogger {
         IncomesLogging.logger(
             logging: logging,
