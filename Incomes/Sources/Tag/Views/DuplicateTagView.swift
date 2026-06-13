@@ -3,9 +3,12 @@ import SwiftUI
 
 struct DuplicateTagView: View {
     private enum Constants {
-        static let columnWidth: CGFloat = 320
+        static let compactVisibleColumnCount = 1
+        static let regularVisibleColumnCount = 2
     }
 
+    @Environment(\.horizontalSizeClass)
+    private var horizontalSizeClass
     @Query private var tags: [Tag]
 
     @State private var isMergeDialogPresented = false
@@ -20,13 +23,26 @@ struct DuplicateTagView: View {
         ScrollView(.horizontal) {
             LazyHStack(spacing: .zero) {
                 ForEach(tags) { tag in
-                    duplicateTagColumn(for: tag)
-                    if tag.id != tags.last?.id {
-                        Divider()
+                    HStack(spacing: .zero) {
+                        DuplicateTagColumn(items: tag.items ?? []) {
+                            presentDeleteDialog(for: tag)
+                        }
+
+                        if shouldShowDivider(after: tag) {
+                            Divider()
+                        }
                     }
+                    .containerRelativeFrame(
+                        .horizontal,
+                        count: visibleColumnCount,
+                        span: 1,
+                        spacing: .zero
+                    )
                 }
             }
+            .scrollTargetLayout()
         }
+        .scrollTargetBehavior(.viewAligned)
         .background(Color(.systemGroupedBackground))
         .confirmationDialog(
             Text("Merge"),
@@ -85,37 +101,19 @@ struct DuplicateTagView: View {
 }
 
 private extension DuplicateTagView {
-    func duplicateTagColumn(
-        for tag: Tag
-    ) -> some View {
-        let itemCount = tag.items?.count ?? .zero
+    var visibleColumnCount: Int {
+        horizontalSizeClass == .regular
+            ? Constants.regularVisibleColumnCount
+            : Constants.compactVisibleColumnCount
+    }
 
-        return List {
-            Section {
-                ForEach(tag.items ?? []) { item in
-                    DuplicateTagItemRow()
-                        .environment(item)
-                }
-            } header: {
-                HStack {
-                    ItemCountStatusToolbarItem.localizedText(count: itemCount)
-                    Spacer()
-                    Button {
-                        isDeleteDialogPresented = true
-                        selectedTag = tag
-                    } label: {
-                        Label {
-                            Text("Delete")
-                        } icon: {
-                            Image(systemName: "trash")
-                        }
-                    }
-                    .font(.caption)
-                    .textCase(nil)
-                }
-            }
-        }
-        .frame(width: Constants.columnWidth)
+    func shouldShowDivider(after tag: Tag) -> Bool {
+        tag.persistentModelID != tags.last?.persistentModelID
+    }
+
+    func presentDeleteDialog(for tag: Tag) {
+        isDeleteDialogPresented = true
+        selectedTag = tag
     }
 }
 
