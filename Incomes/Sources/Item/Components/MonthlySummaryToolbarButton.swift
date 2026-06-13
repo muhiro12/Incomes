@@ -42,7 +42,7 @@ private extension MonthlySummaryToolbarButton {
 
     var accessibilityValue: Text {
         if isWaitingForInitialSummary {
-            return Text("Generating")
+            return Text("Generating Summary")
         }
         return Text("")
     }

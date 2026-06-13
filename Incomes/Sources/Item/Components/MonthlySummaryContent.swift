@@ -13,11 +13,7 @@ struct MonthlySummaryContent: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .textSelection(.enabled)
         } else if isGenerating {
-            HStack(spacing: spacing) {
-                ProgressView()
-                Spacer()
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
+            MonthlySummaryGeneratingContent(spacing: spacing)
         } else {
             MonthlySummaryGenerateButton(
                 title: "Generate Summary",
