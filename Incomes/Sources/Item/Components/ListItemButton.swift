@@ -32,6 +32,10 @@ struct ListItemButton: View {
             ListItemButtonLabel()
         }
         .buttonStyle(.plain)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(Text(item.content))
+        .accessibilityValue(accessibilityValue)
+        .accessibilityHint(Text("Open item details"))
         .popoverTip(
             isItemDetailTipAnchor ? itemDetailTip : nil,
             arrowEdge: .top
@@ -95,6 +99,31 @@ struct ListItemButton: View {
 }
 
 private extension ListItemButton {
+    var accessibilityValue: Text {
+        if item.netIncome > .zero {
+            Text(
+                """
+                Date: \(item.localDate, format: .dateTime.year().month().day()), \
+                Income: \(item.income.asCurrency), \
+                Outgo: \(item.outgo.asMinusCurrency), \
+                Net income: \(item.netIncome.asCurrency), \
+                Balance: \(item.balance.asCurrency), \
+                Positive net income
+                """
+            )
+        } else {
+            Text(
+                """
+                Date: \(item.localDate, format: .dateTime.year().month().day()), \
+                Income: \(item.income.asCurrency), \
+                Outgo: \(item.outgo.asMinusCurrency), \
+                Net income: \(item.netIncome.asCurrency), \
+                Balance: \(item.balance.asCurrency)
+                """
+            )
+        }
+    }
+
     var itemMutationLogger: MHLogger {
         IncomesLogging.logger(
             logging: logging,
