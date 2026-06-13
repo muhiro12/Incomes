@@ -1,12 +1,6 @@
-import MHDesign
 import SwiftUI
 
 struct SettingsNotificationDetailsRows: View {
-    @Environment(\.locale)
-    private var locale
-    @Environment(\.mhDesignMetrics)
-    private var designMetrics
-
     @Binding var notificationSettings: NotificationSettings
 
     let isNotificationEnabled: Bool
@@ -14,18 +8,9 @@ struct SettingsNotificationDetailsRows: View {
 
     var body: some View {
         if isNotificationEnabled {
-            HStack {
-                Text("Notify for amounts over")
-                Spacer()
-                TextField(
-                    "Amount",
-                    value: $notificationSettings.thresholdAmount,
-                    format: .currency(code: locale.currency?.identifier ?? "")
-                )
-                .keyboardType(.numberPad)
-                .multilineTextAlignment(.trailing)
-                .frame(maxWidth: designMetrics.layout.readableContentWidth)
-            }
+            SettingsNotificationAmountThresholdRow(
+                thresholdAmount: $notificationSettings.thresholdAmount
+            )
             Picker("Notify days before", selection: $notificationSettings.daysBeforeDueDate) {
                 ForEach(0..<15) { dayOffset in // swiftlint:disable:this no_magic_numbers
                     Text("\(dayOffset) days")
@@ -36,9 +21,12 @@ struct SettingsNotificationDetailsRows: View {
                 selection: $notificationSettings.notifyTime,
                 displayedComponents: .hourAndMinute
             )
-            Button("Send test notification") {
+            Button {
                 sendTestNotification()
+            } label: {
+                Label("Send test notification", systemImage: "bell.badge")
             }
+            .accessibilityHint(Text("Sends a test notification with the current settings."))
         }
     }
 }

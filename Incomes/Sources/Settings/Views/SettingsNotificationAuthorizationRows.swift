@@ -11,9 +11,12 @@ struct SettingsNotificationAuthorizationRows: View {
                 "Notifications are enabled and will follow your in-app schedule."
             )
         case .denied:
-            Button("Open System Settings") {
+            Button {
                 openSystemSettings()
+            } label: {
+                Label("Open System Settings", systemImage: "gearshape")
             }
+            .accessibilityHint(Text("Opens iOS Settings to change notification permission."))
             notificationFootnote(
                 "Notifications are currently denied in iOS Settings."
             )
