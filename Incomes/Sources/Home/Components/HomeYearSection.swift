@@ -8,7 +8,6 @@
 import MHPlatform
 import SwiftData
 import SwiftUI
-import TipKit
 
 struct HomeYearSection: View {
     @Environment(\.modelContext)
@@ -17,8 +16,6 @@ struct HomeYearSection: View {
     private var notificationService
     @Environment(MHLoggingBootstrap.self)
     private var logging
-    @Environment(IncomesTipController.self)
-    private var tipController
 
     @Query private var yearMonthTags: [Tag]
 
@@ -26,7 +23,6 @@ struct HomeYearSection: View {
     @State private var willDeleteItems: [Item] = []
 
     private let navigateToRoute: (IncomesRoute) -> Void
-    private let monthListTip = MonthListTip()
 
     init( // swiftlint:disable:this type_contents_order
         yearTag: Tag,
@@ -48,17 +44,20 @@ struct HomeYearSection: View {
 
         Section {
             ForEach(yearMonthTags, id: \.persistentModelID) { tag in
-                buildMonthButton(
-                    for: tag,
-                    showsTip: tag.persistentModelID == firstYearMonthTagID
+                HomeMonthRowButton(
+                    tag: tag,
+                    showsTip: tag.persistentModelID == firstYearMonthTagID,
+                    navigateToRoute: navigateToRoute,
+                    requestDelete: requestMonthDeletion
                 )
             }
             .onDelete { indices in
-                Haptic.warning.impact()
-                isDialogPresented = true
-                willDeleteItems = TagMutationOperations.resolveItemsForDeletion(
-                    from: yearMonthTags,
-                    indices: indices
+                requestDeletion(
+                    items: TagMutationOperations.resolveItemsForDeletion(
+                        from: yearMonthTags,
+                        indices: indices
+                    ),
+                    allowsEmptySelection: true
                 )
             }
         }
@@ -94,57 +93,19 @@ struct HomeYearSection: View {
 }
 
 private extension HomeYearSection {
-    func buildMonthButton(
-        for tag: Tag,
-        showsTip: Bool
-    ) -> some View {
-        Button {
-            guard let monthRoute = monthRoute(for: tag) else {
-                return
-            }
-            tipController.donateDidOpenMonth()
-            navigateToRoute(monthRoute)
-        } label: {
-            TagSummaryRow()
-                .environment(tag)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .contentShape(Rectangle())
-        }
-        .buttonStyle(.plain)
-        .contextMenu {
-            if let monthRoute = monthRoute(for: tag) {
-                Button("Open Month", systemImage: "calendar") {
-                    tipController.donateDidOpenMonth()
-                    navigateToRoute(monthRoute)
-                }
-            }
-            if let monthURL = monthURL(for: tag) {
-                Divider()
-                ShareLink(item: monthURL) {
-                    Label("Share Link", systemImage: "square.and.arrow.up")
-                }
-                CopyURLContextMenuButton("Copy Link", url: monthURL)
-            }
-            Divider()
-            Button(role: .destructive) {
-                Haptic.warning.impact()
-                willDeleteItems = tag.items ?? []
-                isDialogPresented = !willDeleteItems.isEmpty
-            } label: {
-                Label("Delete", systemImage: "trash")
-            }
-        }
-        .popoverTip(showsTip ? monthListTip : nil, arrowEdge: .top)
-    }
-
-    func monthRoute(for yearMonthTag: Tag) -> IncomesRoute? {
-        MainNavigationOperations.route(forYearMonthTag: yearMonthTag)
-    }
-
-    func monthURL(for yearMonthTag: Tag) -> URL? {
-        MainNavigationOperations.preferredURL(
-            for: monthRoute(for: yearMonthTag)
+    func requestMonthDeletion(for tag: Tag) {
+        requestDeletion(
+            items: tag.items ?? []
         )
+    }
+
+    func requestDeletion(
+        items: [Item],
+        allowsEmptySelection: Bool = false
+    ) {
+        Haptic.warning.impact()
+        willDeleteItems = items
+        isDialogPresented = allowsEmptySelection || !items.isEmpty
     }
 }
 
