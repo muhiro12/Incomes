@@ -8,79 +8,30 @@ struct ItemFormInformationSection: View {
 
     var body: some View {
         Section("Information") {
-            dateRow
-            contentRow
-            amountRow(
-                title: "Income",
-                text: $model.income,
-                field: .income,
-                isValid: model.income.isEmptyOrDecimal
+            ItemFormDateRow(date: $model.date)
+            ItemFormTextFieldRow(
+                title: "Content",
+                text: $model.content,
+                placeholder: "Required",
+                field: .content,
+                focusedField: focusedField
             )
-            amountRow(
-                title: "Outgo",
-                text: $model.outgo,
-                field: .outgo,
-                isValid: model.outgo.isEmptyOrDecimal
+            ItemFormAmountRows(
+                income: $model.income,
+                outgo: $model.outgo,
+                focusedField: focusedField
             )
-            categoryRow
-            priorityRow
-        }
-    }
-
-    private var dateRow: some View {
-        DatePicker(selection: $model.date, displayedComponents: .date) {
-            Text("Date")
-        }
-    }
-
-    private var contentRow: some View {
-        HStack {
-            Text("Content")
-            Spacer()
-            TextField(text: $model.content) {
-                Text("Required")
-            }
-            .focused(focusedField, equals: .content)
-            .multilineTextAlignment(.trailing)
-        }
-    }
-
-    private var categoryRow: some View {
-        HStack {
-            Text("Category")
-            Spacer()
-            TextField(text: $model.category) {
-                Text("Others")
-            }
-            .focused(focusedField, equals: .category)
-            .multilineTextAlignment(.trailing)
-        }
-    }
-
-    private var priorityRow: some View {
-        Picker("Priority", selection: priorityValue) {
-            ForEach(priorityRange, id: \.self) { value in
-                Text("\(value)")
-                    .tag(value)
-            }
-        }
-    }
-
-    private func amountRow(
-        title: LocalizedStringKey,
-        text: Binding<String>,
-        field: ItemFormFocusedField,
-        isValid: Bool
-    ) -> some View {
-        HStack {
-            Text(title)
-            TextField(text: text) {
-                Text("0")
-            }
-            .keyboardType(.numberPad)
-            .focused(focusedField, equals: field)
-            .multilineTextAlignment(.trailing)
-            .foregroundStyle(isValid ? Color.primary : Color.red)
+            ItemFormTextFieldRow(
+                title: "Category",
+                text: $model.category,
+                placeholder: "Others",
+                field: .category,
+                focusedField: focusedField
+            )
+            ItemFormPriorityRow(
+                priorityRange: priorityRange,
+                priorityValue: priorityValue
+            )
         }
     }
 }

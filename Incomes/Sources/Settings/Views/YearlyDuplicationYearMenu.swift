@@ -13,7 +13,7 @@ struct YearlyDuplicationYearMenu: View {
                 .foregroundStyle(.secondary)
             Picker(title, selection: $selection) {
                 ForEach(years, id: \.self) { year in
-                    Text(verbatim: "\(year)")
+                    Text(year, format: .number.grouping(.never))
                 }
             }
             .pickerStyle(.menu)

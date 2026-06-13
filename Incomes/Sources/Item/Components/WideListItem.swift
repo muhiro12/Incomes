@@ -21,7 +21,7 @@ struct WideListItem: View {
 
     var body: some View {
         HStack {
-            Text(item.localDate.stringValue(.MMMd))
+            Text(item.localDate, format: .dateTime.month().day())
                 .font(.subheadline)
                 .lineLimit(1)
                 .minimumScaleFactor(IncomesTextScaling.minimumScaleFactor)

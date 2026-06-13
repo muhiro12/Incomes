@@ -11,7 +11,9 @@ struct RepeatMonthButton: View {
     @Environment(\.mhDesignMetrics)
     private var designMetrics
 
-    let title: String
+    let date: Date?
+    let fallbackMonth: Int
+    let calendar: Calendar
     let isIncluded: Bool
     let isBaseSelection: Bool
     let action: () -> Void
@@ -37,7 +39,8 @@ struct RepeatMonthButton: View {
 private extension RepeatMonthButton {
     var button: some View {
         Button(action: action) {
-            Text(verbatim: title)
+            labelText
+                .environment(\.calendar, calendar)
                 .font(.callout)
                 .padding(.horizontal, designMetrics.spacing.inline)
                 .frame(
@@ -50,6 +53,13 @@ private extension RepeatMonthButton {
         .accessibilityValue(accessibilitySelectionValue)
         .accessibilityHint(accessibilityHint)
         .accessibilityAddTraits(isIncluded ? .isSelected : [])
+    }
+
+    var labelText: Text {
+        guard let date else {
+            return Text(fallbackMonth, format: .number)
+        }
+        return Text(date, format: .dateTime.month().day())
     }
 
     var buttonBorder: some View {
