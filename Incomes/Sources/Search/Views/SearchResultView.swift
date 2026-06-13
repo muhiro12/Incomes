@@ -26,29 +26,10 @@ struct SearchResultView: View {
         let resultSections = sections
         let firstItemID = resultSections.first?.items.first?.persistentModelID
 
-        Group {
-            if !items.isEmpty {
-                List {
-                    ForEach(resultSections, id: \.month) { section in
-                        Section(section.title) {
-                            ForEach(section.items, id: \.persistentModelID) { item in
-                                ListItem(
-                                    isItemDetailTipAnchor:
-                                        item.persistentModelID == firstItemID
-                                )
-                                .environment(item)
-                            }
-                        }
-                    }
-                }
-            } else {
-                ContentUnavailableView(
-                    "No Results",
-                    systemImage: "magnifyingglass",
-                    description: Text("Adjust your filters to find matching income items.")
-                )
-            }
-        }
+        SearchResultContent(
+            sections: resultSections,
+            firstItemID: firstItemID
+        )
         .navigationTitle("Results")
         .task(id: items.count) {
             guard !items.isEmpty else {

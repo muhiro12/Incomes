@@ -7,12 +7,9 @@ struct SearchCurrencyActionSection: View {
     var body: some View {
         if isVisible {
             Section {
-                Button(
-                    "Search",
-                    systemImage: "magnifyingglass",
-                    action: applySearch
-                )
-                .incomesProminentControlStyle()
+                IncomesLiquidGlassControlGroup {
+                    SearchCurrencyActionButton(applySearch: applySearch)
+                }
             }
         }
     }
