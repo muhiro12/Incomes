@@ -5,7 +5,7 @@ struct YearlyDuplicationProposalCreateButton: View {
     let create: () -> Void
 
     var body: some View {
-        Button("Create", action: create)
+        Button("Create", systemImage: "plus.circle", action: create)
             .incomesProminentControlStyle()
             .disabled(isActionDisabled)
     }

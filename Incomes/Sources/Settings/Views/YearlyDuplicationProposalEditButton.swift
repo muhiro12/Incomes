@@ -5,7 +5,7 @@ struct YearlyDuplicationProposalEditButton: View {
     let edit: () -> Void
 
     var body: some View {
-        Button("Edit", action: edit)
+        Button("Edit", systemImage: "pencil", action: edit)
             .incomesSecondaryControlStyle()
             .disabled(isActionDisabled)
     }
