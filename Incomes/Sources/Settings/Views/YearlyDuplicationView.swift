@@ -283,13 +283,21 @@ private extension YearlyDuplicationView {
     func proposalSummaryText(
         for group: YearlyItemDuplicationGroup
     ) -> String {
-        [
+        let datesText = YearlyDuplicationPresentationOperations.monthDayListText(for: group)
+        let incomeText = YearlyDuplicationPresentationOperations.decimalString(
+            from: group.averageIncome
+        )
+        let outgoText = YearlyDuplicationPresentationOperations.decimalString(
+            from: group.averageOutgo
+        )
+
+        return [
             group.content,
             !group.category.isEmpty ? group.category : nil,
-            "Dates: \(YearlyDuplicationPresentationOperations.monthDayListText(for: group))",
-            "Items: \(group.entryCount)",
-            "Income: \(YearlyDuplicationPresentationOperations.decimalString(from: group.averageIncome))",
-            "Outgo: \(YearlyDuplicationPresentationOperations.decimalString(from: group.averageOutgo))"
+            String(localized: "Dates: \(datesText)"),
+            String(localized: "Items: \(group.entryCount)"),
+            String(localized: "Income: \(incomeText)"),
+            String(localized: "Outgo: \(outgoText)")
         ]
         .compactMap(\.self)
         .joined(separator: "\n")
