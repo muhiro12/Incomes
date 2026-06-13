@@ -24,7 +24,7 @@ struct HomeSummaryButton: View {
             }
         }
         .buttonStyle(.plain)
-        .accessibilityHint(Text("Open year summary"))
+        .accessibilityHint(Text("Show Summary"))
         .contextMenu {
             if let yearSummaryRoute {
                 Button("Show Summary", systemImage: "chart.bar") {
