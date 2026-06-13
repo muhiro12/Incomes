@@ -28,7 +28,12 @@ struct YearlyDuplicationProposalRow: View {
             metadataText(
                 "Outgo: \(YearlyDuplicationPresentationOperations.decimalString(from: group.averageOutgo))"
             )
-            actionRow
+            YearlyDuplicationProposalActionRow(
+                inlineSpacing: inlineSpacing,
+                isActionDisabled: isActionDisabled,
+                edit: edit,
+                create: create
+            )
         }
         .padding(.vertical, verticalPadding)
         .contentShape(Rectangle())
@@ -55,19 +60,6 @@ private extension YearlyDuplicationProposalRow {
                 Text("Created")
                     .font(.footnote)
                     .foregroundStyle(.secondary)
-            }
-        }
-    }
-
-    var actionRow: some View {
-        IncomesLiquidGlassControlGroup(spacing: inlineSpacing) {
-            HStack(spacing: inlineSpacing) {
-                Button("Edit", action: edit)
-                    .incomesSecondaryControlStyle()
-                    .disabled(isActionDisabled)
-                Button("Create", action: create)
-                    .incomesProminentControlStyle()
-                    .disabled(isActionDisabled)
             }
         }
     }

@@ -3,7 +3,6 @@ import SwiftUI
 struct SettingsDebugDataSection: View {
     let hasDebugData: Bool
     let deleteDebugData: () -> Void
-    let indicatorSize: CGFloat
 
     var body: some View {
         if hasDebugData {
@@ -14,9 +13,10 @@ struct SettingsDebugDataSection: View {
             } header: {
                 HStack {
                     Text("Debug data")
-                    Circle()
-                        .frame(width: indicatorSize)
+                    Image(systemName: "exclamationmark.circle.fill")
+                        .font(.caption.weight(.semibold))
                         .foregroundStyle(.red)
+                        .accessibilityHidden(true)
                 }
             } footer: {
                 Text("Removes debug sample items and their tags.")

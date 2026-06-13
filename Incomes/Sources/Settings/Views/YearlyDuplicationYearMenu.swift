@@ -17,6 +17,7 @@ struct YearlyDuplicationYearMenu: View {
                 }
             }
             .pickerStyle(.menu)
+            .incomesSecondaryControlStyle()
             .frame(maxWidth: .infinity, alignment: .leading)
         }
     }

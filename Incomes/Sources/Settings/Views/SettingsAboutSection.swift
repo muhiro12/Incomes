@@ -8,19 +8,10 @@ struct SettingsAboutSection: View {
     var body: some View {
         Section {
             Button("Show tips again", action: showTipsAgain)
-            Button(action: openLicense) {
-                HStack {
-                    Text("License")
-                    Spacer()
-                    Image(systemName: "chevron.right")
-                        .font(.footnote.weight(.semibold))
-                        .foregroundStyle(.tertiary)
-                        .accessibilityHidden(true)
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .contentShape(Rectangle())
-            }
-            .buttonStyle(.plain)
+            SettingsNavigationRowButton(
+                title: "License",
+                action: openLicense
+            )
             if let versionText {
                 HStack {
                     Text("Version")

@@ -10,9 +10,11 @@ struct YearlyDuplicationYearMenuGroup: View {
     let controlSpacing: CGFloat
 
     var body: some View {
-        ViewThatFits(in: .horizontal) {
-            horizontalLayout
-            verticalLayout
+        IncomesLiquidGlassControlGroup(spacing: controlSpacing) {
+            ViewThatFits(in: .horizontal) {
+                horizontalLayout
+                verticalLayout
+            }
         }
     }
 }

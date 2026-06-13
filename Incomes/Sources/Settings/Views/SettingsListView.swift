@@ -1,8 +1,6 @@
-import MHDesign
 import MHPlatform
 import SwiftData
 import SwiftUI
-import TipKit
 
 struct SettingsListView {
     @Environment(\.modelContext)
@@ -16,8 +14,6 @@ struct SettingsListView {
 
     @Environment(\.scenePhase)
     private var scenePhase
-    @Environment(\.mhDesignMetrics)
-    private var designMetrics
 
     @Query(.tags(.typeIs(.year)))
     private var yearTags: [Tag]
@@ -36,8 +32,6 @@ struct SettingsListView {
     @State private var model: SettingsScreenModel = .init()
 
     private let navigateToRoute: (IncomesRoute) -> Void
-    private let subscriptionTip = SubscriptionTip()
-    private let yearlyDuplicationTip = YearlyDuplicationTip()
 
     init(
         navigateToRoute: @escaping (IncomesRoute) -> Void = { _ in
@@ -53,8 +47,12 @@ extension SettingsListView: View {
         @Bindable var model = model
 
         List {
-            subscriptionSection
-            currencySection
+            SettingsSubscriptionSection(
+                isSubscribeOn: isSubscribeOn,
+                isICloudOn: $isICloudOn,
+                openSubscription: openSubscription
+            )
+            SettingsCurrencySection(currencyCode: $currencyCode)
             notificationSection(
                 model: model
             )
@@ -67,10 +65,9 @@ extension SettingsListView: View {
             ShortcutsLinkSection()
             if isDebugOn {
                 Section {
-                    routeRowButton(
-                        "Debug",
-                        route: .settingsDebug
-                    )
+                    SettingsNavigationRowButton(title: "Debug") {
+                        navigateToRoute(.settingsDebug)
+                    }
                 }
             }
         }
@@ -194,40 +191,6 @@ private extension SettingsListView {
 }
 
 private extension SettingsListView {
-    var subscriptionSection: some View {
-        Group {
-            if isSubscribeOn {
-                Section {
-                    Toggle(isOn: $isICloudOn) {
-                        Text("iCloud On")
-                    }
-                }
-            } else {
-                Section {
-                    routeRowButton(
-                        "Subscription",
-                        route: .settingsSubscription
-                    ) {
-                        tipController.donateDidOpenSubscription()
-                    }
-                    .popoverTip(subscriptionTip, arrowEdge: .top)
-                }
-            }
-        }
-    }
-
-    var currencySection: some View {
-        Section {
-            Picker(selection: $currencyCode) {
-                ForEach(CurrencyCode.allCases, id: \.rawValue) { code in
-                    Text(code.displayName)
-                }
-            } label: {
-                Text("Currency Code")
-            }
-        }
-    }
-
     var appVersionText: String? {
         guard let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String,
               let build = Bundle.main.infoDictionary?["CFBundleVersion"] as? String else {
@@ -246,7 +209,6 @@ private extension SettingsListView {
         )
     }
 
-    @ViewBuilder
     func notificationSection(
         model: SettingsScreenModel
     ) -> some View {
@@ -261,22 +223,14 @@ private extension SettingsListView {
         )
     }
 
-    @ViewBuilder
     func dataManagementSection(
         model: SettingsScreenModel
     ) -> some View {
-        Section {
-            yearlyDuplicationButton()
-            Button(role: .destructive) {
-                Haptic.warning.impact()
-                dataMaintenanceLogger.notice("delete_all.prompt_presented")
-                model.presentDestructiveAction(.deleteAll)
-            } label: {
-                Text("Delete all")
-            }
-        } header: {
-            Text("Manage items")
-        }
+        SettingsDataManagementSection(
+            showsYearlyDuplicationTip: !yearTags.isEmpty,
+            duplicateYearItems: duplicateYearItems,
+            deleteAllItems: deleteAllItemsAction(model: model)
+        )
     }
 
     func resetTips() {
@@ -287,14 +241,12 @@ private extension SettingsListView {
         }
     }
 
-    @ViewBuilder
     func tagMaintenanceSection(
         model: SettingsScreenModel
     ) -> some View {
         SettingsTagMaintenanceSection(
             hasDuplicateTags: model.hasDuplicateTags,
             hasOrphanTags: model.hasOrphanTags,
-            indicatorSize: designMetrics.spacing.inline,
             openDuplicateTags: {
                 navigateToRoute(.duplicateTags)
             },
@@ -304,17 +256,41 @@ private extension SettingsListView {
         )
     }
 
-    @ViewBuilder
     func debugDataSection(
         model: SettingsScreenModel
     ) -> some View {
         SettingsDebugDataSection(
             hasDebugData: model.hasDebugData,
-            deleteDebugData: {
-                promptDeleteDebugData(model: model)
-            },
-            indicatorSize: designMetrics.spacing.inline
+            deleteDebugData: debugDataDeleteAction(model: model)
         )
+    }
+
+    func debugDataDeleteAction(
+        model: SettingsScreenModel
+    ) -> () -> Void {
+        {
+            promptDeleteDebugData(model: model)
+        }
+    }
+
+    func duplicateYearItems() {
+        tipController.donateDidOpenYearlyDuplication()
+        navigateToRoute(.yearlyDuplication)
+    }
+
+    func openSubscription() {
+        tipController.donateDidOpenSubscription()
+        navigateToRoute(.settingsSubscription)
+    }
+
+    func deleteAllItemsAction(
+        model: SettingsScreenModel
+    ) -> () -> Void {
+        {
+            Haptic.warning.impact()
+            dataMaintenanceLogger.notice("delete_all.prompt_presented")
+            model.presentDestructiveAction(.deleteAll)
+        }
     }
 
     func promptDeleteDebugData(
@@ -344,43 +320,6 @@ private extension SettingsListView {
                 }
             }
         )
-    }
-
-    func routeRowButton(
-        _ title: LocalizedStringKey,
-        route: IncomesRoute,
-        action: (() -> Void)? = nil
-    ) -> some View {
-        Button {
-            action?()
-            navigateToRoute(route)
-        } label: {
-            HStack {
-                Text(title)
-                Spacer()
-                Image(systemName: "chevron.right")
-                    .font(.footnote.weight(.semibold))
-                    .foregroundStyle(.tertiary)
-                    .accessibilityHidden(true)
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .contentShape(Rectangle())
-        }
-        .buttonStyle(.plain)
-    }
-
-    @ViewBuilder
-    func yearlyDuplicationButton() -> some View {
-        let button = Button("Duplicate year items") {
-            tipController.donateDidOpenYearlyDuplication()
-            navigateToRoute(.yearlyDuplication)
-        }
-
-        if !yearTags.isEmpty {
-            button.popoverTip(yearlyDuplicationTip, arrowEdge: .top)
-        } else {
-            button
-        }
     }
 
     func openSystemSettings() {

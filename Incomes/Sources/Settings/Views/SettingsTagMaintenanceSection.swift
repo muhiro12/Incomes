@@ -3,7 +3,6 @@ import SwiftUI
 struct SettingsTagMaintenanceSection: View {
     let hasDuplicateTags: Bool
     let hasOrphanTags: Bool
-    let indicatorSize: CGFloat
     let openDuplicateTags: () -> Void
     let openOrphanTags: () -> Void
 
@@ -19,9 +18,10 @@ struct SettingsTagMaintenanceSection: View {
             } header: {
                 HStack {
                     Text("Manage tags")
-                    Circle()
-                        .frame(width: indicatorSize)
+                    Image(systemName: "exclamationmark.circle.fill")
+                        .font(.caption.weight(.semibold))
                         .foregroundStyle(.orange)
+                        .accessibilityHidden(true)
                 }
             }
         }
