@@ -63,6 +63,20 @@ struct SearchResultOperationsTests {
 
         #expect(sections.isEmpty)
     }
+
+    @Test
+    func currency_predicate_parses_grouped_amounts() {
+        let predicate = SearchResultOperations.currencyPredicate(
+            target: .income,
+            minimumText: "1,000",
+            maximumText: "2,500.50"
+        )
+
+        #expect(predicate == .incomeIsBetween(
+            min: 1_000,
+            max: Decimal(string: "2500.50") ?? .zero
+        ))
+    }
 }
 
 private extension SearchResultOperationsTests {
