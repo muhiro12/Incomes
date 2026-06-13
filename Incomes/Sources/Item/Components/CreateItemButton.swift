@@ -19,7 +19,8 @@ struct CreateItemButton {
 
 extension CreateItemButton: View {
     var body: some View {
-        styledCreateButton
+        createButton
+            .incomesProminentControlStyle()
             .popoverTip(createItemTip)
             .sheet(isPresented: $isCreateSheetPresented) {
                 ItemFormNavigationView(mode: .create)
@@ -29,11 +30,6 @@ extension CreateItemButton: View {
 }
 
 private extension CreateItemButton {
-    @ViewBuilder var styledCreateButton: some View {
-        createButton
-            .incomesProminentControlStyle()
-    }
-
     var createButton: some View {
         Button {
             tipController.donateDidOpenCreateForm()
