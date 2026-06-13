@@ -98,7 +98,7 @@ private extension DuplicateTagView {
                 }
             } header: {
                 HStack {
-                    Text("\(itemCount, format: .number) Items")
+                    ItemCountStatusToolbarItem.localizedText(count: itemCount)
                     Spacer()
                     Button {
                         isDeleteDialogPresented = true

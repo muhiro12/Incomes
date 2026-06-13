@@ -32,24 +32,19 @@ struct TagSummaryRow: View {
 
 private extension TagSummaryRow {
     func accessibilityValue(itemCount: Int) -> Text {
+        let summary = Text("Items: \(itemCount)") +
+            Text(verbatim: ", ") +
+            Text("Income: \(tag.income.asCurrency)") +
+            Text(verbatim: ", ") +
+            Text("Outgo: \(tag.outgo.asMinusCurrency)")
+
         if tag.netIncome > .zero {
-            Text(
-                """
-                Items: \(itemCount, format: .number), \
-                Income: \(tag.income.asCurrency), \
-                Outgo: \(tag.outgo.asMinusCurrency), \
-                Positive net income
-                """
-            )
-        } else {
-            Text(
-                """
-                Items: \(itemCount, format: .number), \
-                Income: \(tag.income.asCurrency), \
-                Outgo: \(tag.outgo.asMinusCurrency)
-                """
-            )
+            return summary +
+                Text(verbatim: ", ") +
+                Text("Positive net income")
         }
+
+        return summary
     }
 }
 
