@@ -5,15 +5,11 @@
 //  Created by Hiromu Nakano on 2025/04/19.
 //
 
-import Charts
-import MHDesign
 import SwiftData
 import SwiftUI
 
 struct IncomeAndOutgoChartSection: View {
     @Query private var items: [Item]
-    @Environment(\.mhDesignMetrics)
-    private var designMetrics
 
     private let allowsExpansion: Bool
 
@@ -24,16 +20,13 @@ struct IncomeAndOutgoChartSection: View {
                 transitionID: "incomeAndOutgo",
                 allowsExpansion: allowsExpansion
             ) {
-                chart()
-                    .frame(height: Constants.sectionHeight)
-                    .padding(.horizontal, designMetrics.layout.surface.insetHorizontal)
-                    .padding(.vertical, designMetrics.layout.surface.insetVertical)
+                TimelineChartPreview {
+                    IncomeAndOutgoChart(items: items)
+                }
             } detail: {
-                chart()
-                    .chartScrollableAxes(.horizontal)
-                    .chartScrollPosition(initialX: Date.now)
-                    .padding(.horizontal, designMetrics.layout.surface.insetHorizontal)
-                    .padding(.vertical, designMetrics.layout.surface.insetVertical)
+                TimelineChartDetail {
+                    IncomeAndOutgoChart(items: items)
+                }
             }
         } header: {
             Text("Income and Outgo")
@@ -46,84 +39,6 @@ struct IncomeAndOutgoChartSection: View {
     ) {
         _items = Query(descriptor)
         self.allowsExpansion = allowsExpansion
-    }
-}
-
-private extension IncomeAndOutgoChartSection {
-    private enum Constants {
-        static let axisGridOpacity = 0.2
-        static let axisTickOpacity = 0.4
-        static let barOpacity = 0.6
-        static let sectionHeight: CGFloat = 240
-        static let zeroRuleDashLength: CGFloat = 4
-        static let zeroRuleLineWidth: CGFloat = 1
-        static let zeroRuleOpacity = 0.25
-        static let zeroRuleYValue: Double = .zero
-        static let xAxisMonthStride = 3
-    }
-
-    func chart() -> some View {
-        Chart {
-            RuleMark(y: .value("Zero", Constants.zeroRuleYValue))
-                .foregroundStyle(.secondary.opacity(Constants.zeroRuleOpacity))
-                .lineStyle(
-                    .init(
-                        lineWidth: Constants.zeroRuleLineWidth,
-                        dash: [Constants.zeroRuleDashLength]
-                    )
-                )
-
-            ForEach(items) { item in
-                if income(of: item) != .zero {
-                    BarMark(
-                        x: .value("Date", date(of: item)),
-                        y: .value("Amount", income(of: item)),
-                        stacking: .unstacked
-                    )
-                    .foregroundStyle(.green)
-                    .opacity(Constants.barOpacity)
-                }
-                if outgo(of: item) != .zero {
-                    BarMark(
-                        x: .value("Date", date(of: item)),
-                        y: .value("Amount", outgo(of: item)),
-                        stacking: .unstacked
-                    )
-                    .foregroundStyle(.red)
-                    .opacity(Constants.barOpacity)
-                }
-            }
-        }
-        .chartXAxis {
-            AxisMarks(values: .stride(by: .month, count: Constants.xAxisMonthStride)) { _ in
-                AxisGridLine()
-                    .foregroundStyle(.secondary.opacity(Constants.axisGridOpacity))
-                AxisTick()
-                    .foregroundStyle(.secondary.opacity(Constants.axisTickOpacity))
-                AxisValueLabel()
-            }
-        }
-        .chartYAxis {
-            AxisMarks(position: .trailing) { _ in
-                AxisGridLine()
-                    .foregroundStyle(.secondary.opacity(Constants.axisGridOpacity))
-                AxisTick()
-                    .foregroundStyle(.secondary.opacity(Constants.axisTickOpacity))
-                AxisValueLabel()
-            }
-        }
-    }
-
-    func date(of item: Item) -> Date {
-        item.localDate
-    }
-
-    func income(of item: Item) -> Decimal {
-        item.income
-    }
-
-    func outgo(of item: Item) -> Decimal {
-        item.outgo * -1
     }
 }
 
