@@ -21,7 +21,7 @@ struct ItemFormAmountRow: View {
                 if !isValid {
                     Image(systemName: "exclamationmark.circle.fill")
                         .foregroundStyle(.red)
-                        .accessibilityLabel("Invalid amount")
+                        .accessibilityHidden(true)
                 }
             }
         }
@@ -30,9 +30,12 @@ struct ItemFormAmountRow: View {
 
 private extension ItemFormAmountRow {
     var accessibilityHint: Text {
-        if isValid {
-            return Text(verbatim: "")
+        if !isValid {
+            return Text("Invalid amount") +
+                Text(verbatim: ". ") +
+                Text("Enter a number.")
         }
+
         return Text("Enter a number.")
     }
 }
