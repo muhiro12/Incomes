@@ -36,9 +36,9 @@ struct ItemFormToolbarContent: ToolbarContent {
         if #available(iOS 26.0, *) {
             ToolbarItem(placement: .bottomBar) {
                 Button(action: presentAssist) {
-                    Label("Assist", systemImage: "wand.and.stars")
+                    Label("Text Capture", systemImage: "wand.and.stars")
                 }
-                .incomesProminentControlStyle()
+                .incomesSecondaryControlStyle()
             }
         }
     }
