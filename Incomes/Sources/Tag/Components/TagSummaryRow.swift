@@ -14,23 +14,16 @@ struct TagSummaryRow: View {
 
     var body: some View {
         let itemCount = (tag.items ?? []).count
+        let hasPositiveNetIncome = tag.netIncome > .zero
 
-        HStack {
-            Text(tag.displayName)
-                .font(.headline)
-                .foregroundStyle(tag.hasDeficit ? Color.red : Color.primary)
-            Text("(\(itemCount))")
-                .font(.caption)
-                .foregroundStyle(.secondary)
-            Spacer()
-            VStack(alignment: .trailing) {
-                Text(tag.income.asCurrency)
-                Text(tag.outgo.asMinusCurrency)
-            }
-            .font(.subheadline)
-            .foregroundStyle(.secondary)
-            PositiveNetIncomeIndicator(isVisible: tag.netIncome > .zero)
-        }
+        TagSummaryRowContent(
+            displayName: tag.displayName,
+            itemCount: itemCount,
+            incomeText: tag.income.asCurrency,
+            outgoText: tag.outgo.asMinusCurrency,
+            hasDeficit: tag.hasDeficit,
+            hasPositiveNetIncome: hasPositiveNetIncome
+        )
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(Text(tag.displayName))
         .accessibilityValue(accessibilityValue(itemCount: itemCount))
