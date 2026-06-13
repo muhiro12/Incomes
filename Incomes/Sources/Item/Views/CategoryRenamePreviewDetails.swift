@@ -16,9 +16,14 @@ struct CategoryRenamePreviewDetails: View {
             Text("Affected items")
         }
         if let validationError = preview.validationError {
-            Text(validationError.renameErrorMessage)
-                .font(.footnote)
-                .foregroundStyle(.red)
+            Label {
+                Text(validationError.renameErrorMessage)
+            } icon: {
+                Image(systemName: "exclamationmark.circle.fill")
+            }
+            .font(.footnote)
+            .foregroundStyle(.red)
+            .accessibilityLabel(Text("Error: \(validationError.renameErrorMessage)"))
         } else if preview.isUnchanged {
             Text("This name is unchanged.")
                 .font(.footnote)

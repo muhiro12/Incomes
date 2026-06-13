@@ -9,8 +9,13 @@ struct CategoryRenamePreviewFailureDetails: View {
             title: "New name",
             value: trimmedDraftName
         )
-        Text(error.renameErrorMessage)
-            .font(.footnote)
-            .foregroundStyle(.red)
+        Label {
+            Text(error.renameErrorMessage)
+        } icon: {
+            Image(systemName: "exclamationmark.circle.fill")
+        }
+        .font(.footnote)
+        .foregroundStyle(.red)
+        .accessibilityLabel(Text("Error: \(error.renameErrorMessage)"))
     }
 }
