@@ -31,6 +31,9 @@ struct SettingsTagMaintenanceSection: View {
                         .foregroundStyle(.orange)
                         .accessibilityHidden(true)
                 }
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel(Text("Manage tags, attention needed"))
+                .accessibilityAddTraits(.isHeader)
             }
         }
     }

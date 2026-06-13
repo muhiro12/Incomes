@@ -18,6 +18,9 @@ struct SettingsDebugDataSection: View {
                         .foregroundStyle(.red)
                         .accessibilityHidden(true)
                 }
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel(Text("Debug data, attention needed"))
+                .accessibilityAddTraits(.isHeader)
             } footer: {
                 Text("Removes debug sample items and their tags.")
             }
