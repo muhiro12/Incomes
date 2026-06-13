@@ -7,36 +7,16 @@ struct SearchCurrencyFilterFields: View {
 
     var body: some View {
         ViewThatFits {
-            horizontalLayout
-            verticalLayout
+            SearchCurrencyFilterHorizontalFields(
+                minValue: $minValue,
+                maxValue: $maxValue,
+                controlSpacing: controlSpacing
+            )
+            SearchCurrencyFilterVerticalFields(
+                minValue: $minValue,
+                maxValue: $maxValue,
+                controlSpacing: controlSpacing
+            )
         }
-    }
-}
-
-private extension SearchCurrencyFilterFields {
-    var horizontalLayout: some View {
-        HStack(spacing: controlSpacing) {
-            minimumTextField
-            Text("~")
-                .accessibilityHidden(true)
-            maximumTextField
-        }
-    }
-
-    var verticalLayout: some View {
-        VStack(alignment: .leading, spacing: controlSpacing) {
-            minimumTextField
-            maximumTextField
-        }
-    }
-
-    var minimumTextField: some View {
-        TextField("Min", text: $minValue)
-            .keyboardType(.numbersAndPunctuation)
-    }
-
-    var maximumTextField: some View {
-        TextField("Max", text: $maxValue)
-            .keyboardType(.numbersAndPunctuation)
     }
 }
