@@ -25,10 +25,31 @@ struct CategoryChartPanel: View {
                 CategoryChartTotalLabel(amount: total)
             }
             .frame(height: CategoryChartMetrics.sectionHeight)
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel(Text(title))
+            .accessibilityValue(accessibilityValue)
             CategoryChartLegend(
                 segments: segments,
                 colorScale: colorScale
             )
         }
+    }
+}
+
+private extension CategoryChartPanel {
+    var accessibilityValue: Text {
+        guard let largestSegment = segments.max(by: { lhs, rhs in
+            lhs.value < rhs.value
+        }) else {
+            return Text("Total: \(total.asCurrency), No categories")
+        }
+        return Text(
+            """
+            Total: \(total.asCurrency), \
+            Largest category: \(largestSegment.title), \
+            \(largestSegment.percentText), \
+            \(largestSegment.value.asCurrency)
+            """
+        )
     }
 }
