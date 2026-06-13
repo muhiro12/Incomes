@@ -5,12 +5,8 @@ struct CloseButton: View {
     private var dismiss
 
     var body: some View {
-        if #available(iOS 26.0, *) {
-            button
-                .buttonStyle(.glass)
-        } else {
-            button
-        }
+        button
+            .incomesDismissControlStyle()
     }
 
     private var button: some View {

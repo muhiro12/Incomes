@@ -21,6 +21,15 @@ extension View {
     }
 
     @ViewBuilder
+    func incomesDismissControlStyle() -> some View {
+        if #available(iOS 26.0, *) {
+            buttonStyle(.glass)
+        } else {
+            buttonStyle(.borderless)
+        }
+    }
+
+    @ViewBuilder
     func incomesGlassSurface(cornerRadius: CGFloat) -> some View {
         if #available(iOS 26.0, *) {
             incomesGlassEffect(cornerRadius: cornerRadius)

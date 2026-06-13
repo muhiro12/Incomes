@@ -17,7 +17,7 @@ struct YearlyDuplicationPromoSectionHeader: View {
                 }
                 .labelStyle(.iconOnly)
             }
-            .yearlyDuplicationPromoDismissButtonStyle()
+            .incomesDismissControlStyle()
             .accessibilityLabel(Text("Close"))
         }
     }
@@ -31,17 +31,6 @@ struct YearlyDuplicationPromoSectionHeader: View {
             Image(systemName: "xmark.circle.fill")
                 .foregroundStyle(.secondary)
                 .accessibilityHidden(true)
-        }
-    }
-}
-
-private extension View {
-    @ViewBuilder
-    func yearlyDuplicationPromoDismissButtonStyle() -> some View {
-        if #available(iOS 26.0, *) {
-            buttonStyle(.glass)
-        } else {
-            buttonStyle(.borderless)
         }
     }
 }
