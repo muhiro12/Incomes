@@ -13,7 +13,7 @@ struct ItemFormAmountRow: View {
                 TextField(text: $text) {
                     Text("0")
                 }
-                .keyboardType(.numberPad)
+                .keyboardType(.decimalPad)
                 .focused(focusedField, equals: field)
                 .multilineTextAlignment(.trailing)
                 .foregroundStyle(isValid ? Color.primary : Color.red)

@@ -36,7 +36,7 @@ private extension SettingsNotificationAmountThresholdRow {
             value: $thresholdAmount,
             format: .currency(code: currencyCode)
         )
-        .keyboardType(.numberPad)
+        .keyboardType(.decimalPad)
         .multilineTextAlignment(.trailing)
         .frame(maxWidth: designMetrics.layout.readableContentWidth)
         .accessibilityLabel(Text("Notification amount threshold"))
