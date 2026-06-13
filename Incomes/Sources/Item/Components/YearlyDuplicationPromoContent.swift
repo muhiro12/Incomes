@@ -1,12 +1,9 @@
 import SwiftUI
-import TipKit
 
 struct YearlyDuplicationPromoContent: View {
     let promo: YearlyDuplicationPromoSection.ResolvedPromo
     let inlineSpacing: CGFloat
     let reviewProposals: () -> Void
-
-    private let yearlyDuplicationTip = YearlyDuplicationTip()
 
     var body: some View {
         IncomesLiquidGlassControlGroup(spacing: inlineSpacing) {
@@ -23,7 +20,9 @@ struct YearlyDuplicationPromoContent: View {
                     itemCount: promo.proposal.entryCount,
                     spacing: inlineSpacing
                 )
-                reviewProposalsButton
+                YearlyDuplicationPromoReviewButton(
+                    reviewProposals: reviewProposals
+                )
             }
         }
         .padding(.vertical, inlineSpacing)
@@ -33,11 +32,5 @@ struct YearlyDuplicationPromoContent: View {
 private extension YearlyDuplicationPromoContent {
     var proposalDatesText: LocalizedStringKey {
         "Dates: \(YearlyDuplicationPresentationOperations.monthDayListText(for: promo.proposal))"
-    }
-
-    var reviewProposalsButton: some View {
-        Button("Review proposals", action: reviewProposals)
-            .incomesSecondaryControlStyle()
-            .popoverTip(yearlyDuplicationTip, arrowEdge: .top)
     }
 }
