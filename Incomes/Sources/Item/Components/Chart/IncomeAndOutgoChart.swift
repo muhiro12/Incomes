@@ -5,6 +5,10 @@ struct IncomeAndOutgoChart: View {
     let items: [Item]
 
     var body: some View {
+        let totalIncome = ItemSummaryOperations.totalIncome(for: items)
+        let totalOutgo = ItemSummaryOperations.totalOutgo(for: items)
+        let netIncome = totalIncome - totalOutgo
+
         Chart {
             RuleMark(y: .value("Zero", TimelineChartMetrics.zeroRuleYValue))
                 .foregroundStyle(.secondary.opacity(TimelineChartMetrics.zeroRuleOpacity))
@@ -54,5 +58,33 @@ struct IncomeAndOutgoChart: View {
                 AxisValueLabel()
             }
         }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(Text("Income and Outgo chart"))
+        .accessibilityValue(
+            accessibilityValue(
+                totalIncome: totalIncome,
+                totalOutgo: totalOutgo,
+                netIncome: netIncome
+            )
+        )
+    }
+}
+
+private extension IncomeAndOutgoChart {
+    func accessibilityValue(
+        totalIncome: Decimal,
+        totalOutgo: Decimal,
+        netIncome: Decimal
+    ) -> Text {
+        guard !items.isEmpty else {
+            return Text("No items")
+        }
+        return Text(
+            """
+            Total income: \(totalIncome.asCurrency), \
+            Total outgo: \(totalOutgo.asMinusCurrency), \
+            Net income: \(netIncome.asCurrency)
+            """
+        )
     }
 }

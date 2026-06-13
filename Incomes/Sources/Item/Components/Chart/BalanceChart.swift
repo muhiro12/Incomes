@@ -51,5 +51,39 @@ struct BalanceChart: View {
                 AxisValueLabel()
             }
         }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(Text("Balance chart"))
+        .accessibilityValue(accessibilityValue)
+    }
+}
+
+private extension BalanceChart {
+    var accessibilityValue: Text {
+        guard let latestItem,
+              let highestBalance,
+              let lowestBalance else {
+            return Text("No items")
+        }
+        return Text(
+            """
+            Latest balance: \(latestItem.balance.asCurrency), \
+            Highest balance: \(highestBalance.asCurrency), \
+            Lowest balance: \(lowestBalance.asCurrency)
+            """
+        )
+    }
+
+    var latestItem: Item? {
+        items.max { lhs, rhs in
+            lhs.localDate < rhs.localDate
+        }
+    }
+
+    var highestBalance: Decimal? {
+        items.map(\.balance).max()
+    }
+
+    var lowestBalance: Decimal? {
+        items.map(\.balance).min()
     }
 }
