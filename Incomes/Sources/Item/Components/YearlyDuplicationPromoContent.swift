@@ -9,29 +9,22 @@ struct YearlyDuplicationPromoContent: View {
     private let yearlyDuplicationTip = YearlyDuplicationTip()
 
     var body: some View {
-        VStack(alignment: .leading, spacing: inlineSpacing) {
-            Text("Duplicate Year")
-                .font(.headline)
-            Text("Year: \(promo.sourceYear) -> \(promo.targetYear)")
-                .font(.footnote)
-                .foregroundStyle(.secondary)
-            Text("Sample proposal")
-                .font(.caption)
-                .foregroundStyle(.secondary)
-            Text(promo.proposal.content)
-                .font(.subheadline.weight(.semibold))
-            if !promo.proposal.category.isEmpty {
-                Text(promo.proposal.category)
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
+        IncomesLiquidGlassControlGroup(spacing: inlineSpacing) {
+            VStack(alignment: .leading, spacing: inlineSpacing) {
+                YearlyDuplicationPromoHeader(
+                    sourceYear: promo.sourceYear,
+                    targetYear: promo.targetYear,
+                    spacing: inlineSpacing
+                )
+                YearlyDuplicationPromoProposalSummary(
+                    content: promo.proposal.content,
+                    category: promo.proposal.category,
+                    datesText: proposalDatesText,
+                    itemCount: promo.proposal.entryCount,
+                    spacing: inlineSpacing
+                )
+                reviewProposalsButton
             }
-            Text(proposalDatesText)
-                .font(.footnote)
-                .foregroundStyle(.secondary)
-            Text("Items: \(promo.proposal.entryCount)")
-                .font(.footnote)
-                .foregroundStyle(.secondary)
-            reviewProposalsButton
         }
         .padding(.vertical, inlineSpacing)
     }
