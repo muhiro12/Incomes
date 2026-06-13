@@ -89,7 +89,7 @@ struct ListItemButton: View {
                 Text("Cancel")
             }
         } message: {
-            Text("Are you sure you want to delete this item?")
+            ItemDeletionConfirmationMessage(itemCount: 1)
         }
     }
 }

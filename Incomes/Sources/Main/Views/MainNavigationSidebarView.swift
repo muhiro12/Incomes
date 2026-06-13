@@ -71,7 +71,9 @@ struct MainNavigationSidebarView: View {
                 Text("Cancel")
             }
         } message: {
-            Text("Are you sure you want to delete these items?")
+            ItemDeletionConfirmationMessage(
+                itemCount: yearDeletionModel.itemsToDelete.count
+            )
         }
     }
 }
