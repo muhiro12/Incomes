@@ -34,6 +34,12 @@ struct SearchResultView: View {
         .toolbar {
             ItemCountStatusToolbarItem(count: items.count)
         }
+        .toolbar {
+            SpacerToolbarItem(placement: .bottomBar)
+            ToolbarItem(placement: .bottomBar) {
+                CreateItemButton()
+            }
+        }
         .task(id: items.count) {
             guard !items.isEmpty else {
                 return
