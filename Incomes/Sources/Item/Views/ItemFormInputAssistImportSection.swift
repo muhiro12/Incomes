@@ -1,8 +1,12 @@
+import MHDesign
 import PhotosUI
 import SwiftUI
 
 @available(iOS 26.0, *)
 struct ItemFormInputAssistImportSection: View {
+    @Environment(\.mhDesignMetrics)
+    private var designMetrics
+
     @Binding private var selectedItem: PhotosPickerItem?
 
     private let isImportDisabled: Bool
@@ -20,8 +24,13 @@ struct ItemFormInputAssistImportSection: View {
 
     var body: some View {
         Section {
-            photoLibraryPicker
-            cameraButton
+            ItemFormInputAssistImportControls(
+                selectedItem: $selectedItem,
+                isImportDisabled: isImportDisabled,
+                controlSpacing: designMetrics.spacing.control,
+                openCamera: openCamera
+            )
+            .listRowInsets(rowInsets)
         } header: {
             Text("Import")
         }
@@ -30,19 +39,12 @@ struct ItemFormInputAssistImportSection: View {
 
 @available(iOS 26.0, *)
 private extension ItemFormInputAssistImportSection {
-    var photoLibraryPicker: some View {
-        PhotosPicker(selection: $selectedItem, matching: .images) {
-            Label("Photo Library", systemImage: "photo.on.rectangle")
-        }
-        .labelStyle(.titleAndIcon)
-        .disabled(isImportDisabled)
-    }
-
-    var cameraButton: some View {
-        Button(action: openCamera) {
-            Label("Camera", systemImage: "camera")
-        }
-        .labelStyle(.titleAndIcon)
-        .disabled(isImportDisabled)
+    var rowInsets: EdgeInsets {
+        .init(
+            top: designMetrics.layout.surface.compactInsetVertical,
+            leading: designMetrics.layout.surface.compactInsetHorizontal,
+            bottom: designMetrics.layout.surface.compactInsetVertical,
+            trailing: designMetrics.layout.surface.compactInsetHorizontal
+        )
     }
 }
