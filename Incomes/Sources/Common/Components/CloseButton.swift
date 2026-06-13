@@ -5,9 +5,27 @@ struct CloseButton: View {
     private var dismiss
 
     var body: some View {
+        if #available(iOS 26.0, *) {
+            button
+                .buttonStyle(.glass)
+        } else {
+            button
+        }
+    }
+
+    private var button: some View {
         Button {
             dismiss()
         } label: {
+            label
+        }
+        .accessibilityLabel(Text("Close"))
+    }
+
+    private var label: some View {
+        Label {
+            Text("Close")
+        } icon: {
             if #available(iOS 26.0, *) {
                 Image(systemName: "xmark")
                     .foregroundStyle(Color.secondary)
@@ -22,12 +40,12 @@ struct CloseButton: View {
                     .accessibilityHidden(true)
             }
         }
-        .accessibilityLabel(Text("Close"))
+        .labelStyle(.iconOnly)
     }
 }
 
 #Preview {
-    NavigationView {
+    NavigationStack {
         List {
             CloseButton()
         }
