@@ -38,13 +38,21 @@ private extension TagSummaryRow {
             Text(verbatim: ", ") +
             Text("Outgo: \(tag.outgo.asMinusCurrency)")
 
+        var result = summary
+
+        if tag.hasDeficit {
+            result = result +
+                Text(verbatim: ", ") +
+                Text("Contains deficit items")
+        }
+
         if tag.netIncome > .zero {
-            return summary +
+            result = result +
                 Text(verbatim: ", ") +
                 Text("Positive net income")
         }
 
-        return summary
+        return result
     }
 }
 

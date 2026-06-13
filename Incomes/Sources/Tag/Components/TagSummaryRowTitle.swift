@@ -16,6 +16,12 @@ struct TagSummaryRowTitle: View {
                 .font(.headline)
                 .foregroundStyle(hasDeficit ? Color.red : Color.primary)
                 .lineLimit(Constants.lineLimit)
+            if hasDeficit {
+                Image(systemName: "exclamationmark.circle.fill")
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(.red)
+                    .accessibilityHidden(true)
+            }
             Text("(\(itemCount))")
                 .font(.caption)
                 .foregroundStyle(.secondary)
