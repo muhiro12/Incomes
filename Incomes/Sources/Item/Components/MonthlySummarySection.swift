@@ -5,19 +5,12 @@
 //  Created by Codex on 2026/03/04.
 //
 
-import MHDesign
 import MHPlatform
 import SwiftData
 import SwiftUI
 
 @available(iOS 26.0, *)
 struct MonthlySummarySection: View {
-    private enum Constants {
-        static let popoverIdealWidth: CGFloat = 320
-        static let popoverMaximumWidth: CGFloat = 360
-        static let popoverMinimumWidth: CGFloat = 280
-    }
-
     @Environment(\.modelContext)
     private var context
 
@@ -26,8 +19,6 @@ struct MonthlySummarySection: View {
 
     @AppStorage(\.currencyCode, default: "")
     private var currencyCode
-    @Environment(\.mhDesignMetrics)
-    private var designMetrics
 
     @AppStorage(\.isDebugOn)
     private var isDebugOn
@@ -140,66 +131,22 @@ private extension MonthlySummarySection {
         }
         .accessibilityLabel(Text("Monthly Summary"))
         .popover(isPresented: $isPopoverPresented, arrowEdge: .top) {
-            summaryPopover
-                .presentationCompactAdaptation(.popover)
+            MonthlySummaryPopover(
+                generatedSummary: generatedSummary,
+                isGenerating: isGenerating,
+                generateSummary: generateSummaryFromPopover
+            )
+            .presentationCompactAdaptation(.popover)
         }
     }
 
-    @ViewBuilder private var summaryPopover: some View {
-        VStack(alignment: .leading, spacing: designMetrics.spacing.inline) {
-            Text("Monthly Summary")
-                .font(.headline)
-
-            summaryContent
-
-            Text("Generated on device. Your financial data stays on this device.")
-                .font(.footnote)
-                .foregroundStyle(.secondary)
-
-            if generatedSummary != nil {
-                regenerateSummaryButton
-            }
+    func generateSummaryFromPopover() {
+        Task {
+            await generateSummary(
+                presentsErrors: true,
+                forceRegeneration: true
+            )
         }
-        .frame(
-            minWidth: Constants.popoverMinimumWidth,
-            idealWidth: Constants.popoverIdealWidth,
-            maxWidth: Constants.popoverMaximumWidth,
-            alignment: .leading
-        )
-        .padding()
-    }
-
-    @ViewBuilder private var summaryContent: some View {
-        if let generatedSummary {
-            Text(generatedSummary)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .textSelection(.enabled)
-        } else if isGenerating {
-            HStack(spacing: designMetrics.spacing.inline) {
-                ProgressView()
-                Spacer()
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-        } else {
-            generateSummaryButton(title: "Generate Summary")
-        }
-    }
-
-    private var regenerateSummaryButton: some View {
-        generateSummaryButton(title: "Regenerate Summary")
-            .disabled(isGenerating)
-    }
-
-    private func generateSummaryButton(title: LocalizedStringKey) -> some View {
-        Button(title) {
-            Task {
-                await generateSummary(
-                    presentsErrors: true,
-                    forceRegeneration: true
-                )
-            }
-        }
-        .incomesProminentControlStyle()
     }
 
     @MainActor

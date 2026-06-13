@@ -214,8 +214,10 @@ private extension SettingsListView {
     ) -> some View {
         SettingsNotificationSection(
             notificationSettings: $notificationSettings,
-            model: model,
-            authorizationState: notificationService.authorizationState,
+            isNotificationEnabled: model.isNotificationEnabled,
+            authorizationPresentation: model.authorizationPresentation(
+                for: notificationService.authorizationState
+            ),
             sendTestNotification: {
                 notificationService.sendTestNotification()
             },
