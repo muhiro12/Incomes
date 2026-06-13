@@ -76,25 +76,15 @@ struct MainNavigationView: View {
             }
             .navigationTitle("Incomes")
             .toolbar {
-                ToolbarItemGroup {
-                    if horizontalSizeClass == .compact {
-                        Button("Search", systemImage: "magnifyingglass") {
-                            enqueueNavigation(to: .search(query: nil))
-                        }
-                    }
-                    Button("Settings", systemImage: "gear") {
+                MainNavigationSidebarToolbarContent(
+                    isCompact: horizontalSizeClass == .compact,
+                    openSearch: {
+                        enqueueNavigation(to: .search(query: nil))
+                    },
+                    openSettings: {
                         enqueueNavigation(to: .settings)
                     }
-                }
-            }
-            .toolbar {
-                TodayStatusToolbarItem()
-            }
-            .toolbar {
-                SpacerToolbarItem(placement: .bottomBar)
-                ToolbarItem(placement: .bottomBar) {
-                    CreateItemButton()
-                }
+                )
             }
         } content: {
             MainNavigationContentColumn(
@@ -105,21 +95,7 @@ struct MainNavigationView: View {
             }
             .searchable(text: $router.searchText, isPresented: $router.isSearchPresented)
             .toolbar {
-                TodayStatusToolbarItem()
-            }
-            .toolbar {
-                if #available(iOS 26.0, *) {
-                    DefaultToolbarItem(kind: .search, placement: .bottomBar)
-                }
-                SpacerToolbarItem(placement: .bottomBar)
-                ToolbarItem(placement: .bottomBar) {
-                    if let selectedYearTag {
-                        CreateItemButton()
-                            .environment(selectedYearTag)
-                    } else {
-                        CreateItemButton()
-                    }
-                }
+                MainNavigationContentToolbarContent(selectedYearTag: selectedYearTag)
             }
         } detail: {
             MainNavigationDetailColumn()
