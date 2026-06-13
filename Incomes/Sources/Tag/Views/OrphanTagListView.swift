@@ -33,26 +33,46 @@ struct OrphanTagListView: View {
     }
 
     var body: some View {
+        let yearOrphanTags = orphanTags(from: yearTags)
+        let yearMonthOrphanTags = orphanTags(from: yearMonthTags)
+        let contentOrphanTags = orphanTags(from: contentTags)
+        let categoryOrphanTags = orphanTags(from: categoryTags)
+        let debugOrphanTags = orphanTags(from: debugTags)
+        let hasAnyOrphanTags = containsOrphanTags(
+            in: [
+                yearOrphanTags,
+                yearMonthOrphanTags,
+                contentOrphanTags,
+                categoryOrphanTags,
+                debugOrphanTags
+            ]
+        )
+
         List(selection: $selectedTagID) {
-            buildSection(
-                from: yearTags,
-                title: "Year"
+            OrphanTagSection(
+                title: "Year",
+                orphanTags: yearOrphanTags,
+                selectedTagID: $selectedTagID
             )
-            buildSection(
-                from: yearMonthTags,
-                title: "YearMonth"
+            OrphanTagSection(
+                title: "YearMonth",
+                orphanTags: yearMonthOrphanTags,
+                selectedTagID: $selectedTagID
             )
-            buildSection(
-                from: contentTags,
-                title: "Content"
+            OrphanTagSection(
+                title: "Content",
+                orphanTags: contentOrphanTags,
+                selectedTagID: $selectedTagID
             )
-            buildSection(
-                from: categoryTags,
-                title: "Category"
+            OrphanTagSection(
+                title: "Category",
+                orphanTags: categoryOrphanTags,
+                selectedTagID: $selectedTagID
             )
-            buildSection(
-                from: debugTags,
-                title: "Debug"
+            OrphanTagSection(
+                title: "Debug",
+                orphanTags: debugOrphanTags,
+                selectedTagID: $selectedTagID
             )
         }
         .overlay {
@@ -68,18 +88,7 @@ struct OrphanTagListView: View {
             Text("Cleanup All"),
             isPresented: $isCleanupDialogPresented
         ) {
-            Button(role: .destructive) {
-                do {
-                    try TagMutationOperations.deleteAllOrphanTags(context: context)
-                    selectedTagID = nil
-                    onCleanupAll()
-                    Haptic.success.impact()
-                } catch {
-                    assertionFailure(error.localizedDescription)
-                }
-            } label: {
-                Text("Cleanup")
-            }
+            Button("Cleanup", role: .destructive, action: cleanupAllOrphanTags)
             Button(role: .cancel) {
                 // no-op
             } label: {
@@ -92,11 +101,7 @@ struct OrphanTagListView: View {
         .toolbar {
             ToolbarItem {
                 if hasAnyOrphanTags {
-                    Button {
-                        isCleanupDialogPresented = true
-                    } label: {
-                        Text("Cleanup All")
-                    }
+                    Button("Cleanup All", action: presentCleanupDialog)
                 }
             }
             ToolbarItem {
@@ -107,54 +112,9 @@ struct OrphanTagListView: View {
 }
 
 private extension OrphanTagListView {
-    var hasAnyOrphanTags: Bool {
-        yearTags.contains { tag in
-            TagQueryOperations.isOrphan(tag: tag)
-        }
-        || yearMonthTags.contains { tag in
-            TagQueryOperations.isOrphan(tag: tag)
-        }
-        || contentTags.contains { tag in
-            TagQueryOperations.isOrphan(tag: tag)
-        }
-        || categoryTags.contains { tag in
-            TagQueryOperations.isOrphan(tag: tag)
-        }
-        || debugTags.contains { tag in
-            TagQueryOperations.isOrphan(tag: tag)
-        }
-    }
-
-    @ViewBuilder
-    func buildSection(
-        from tags: [Tag],
-        title: String
-    ) -> some View {
-        let unusedTags = orphanTags(from: tags)
-
-        if !unusedTags.isEmpty {
-            Section(title) {
-                ForEach(unusedTags) { tag in
-                    HStack {
-                        Text(tag.displayName)
-                        Spacer()
-                        Text("0")
-                            .foregroundStyle(.secondary)
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .contentShape(Rectangle())
-                    .contextMenu {
-                        Button("Open", systemImage: "arrow.right.circle") {
-                            selectedTagID = tag.persistentModelID
-                        }
-                        CopyTextContextMenuButton(
-                            "Copy Name",
-                            text: tag.displayName
-                        )
-                    }
-                    .tag(tag.persistentModelID)
-                }
-            }
+    func containsOrphanTags(in orphanTagGroups: [[Tag]]) -> Bool {
+        orphanTagGroups.contains { orphanTags in
+            !orphanTags.isEmpty
         }
     }
 
@@ -164,6 +124,21 @@ private extension OrphanTagListView {
         }
         .sorted { left, right in
             left.displayName < right.displayName
+        }
+    }
+
+    func presentCleanupDialog() {
+        isCleanupDialogPresented = true
+    }
+
+    func cleanupAllOrphanTags() {
+        do {
+            try TagMutationOperations.deleteAllOrphanTags(context: context)
+            selectedTagID = nil
+            onCleanupAll()
+            Haptic.success.impact()
+        } catch {
+            assertionFailure(error.localizedDescription)
         }
     }
 }
