@@ -24,8 +24,15 @@ struct CategoryRenameSheet: View {
         let previewResult = categoryRenamePreviewResult
 
         NavigationStack {
-            renameForm(
-                for: previewResult
+            CategoryRenameForm(
+                draftName: $draftName,
+                currentName: tag.displayName,
+                trimmedDraftName: trimmedDraftName,
+                previewResult: previewResult,
+                cancel: {
+                    dismiss()
+                },
+                save: save
             )
         }
         .alert(
@@ -73,55 +80,8 @@ private extension CategoryRenameSheet {
         )
     }
 
-    func renameForm(
-        for previewResult: Result<TagRenamePreview, TagRenameError>
-    ) -> some View {
-        Form {
-            Section {
-                TextField("Name", text: $draftName)
-            } header: {
-                Text("Name")
-            }
-
-            CategoryRenamePreviewSection(
-                currentName: tag.displayName,
-                trimmedDraftName: trimmedDraftName,
-                previewResult: previewResult
-            )
-        }
-        .formStyle(.grouped)
-        .navigationTitle("Rename")
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            CategoryRenameToolbarContent(
-                canSave: canSave(
-                    for: previewResult
-                ),
-                cancel: {
-                    dismiss()
-                },
-                save: {
-                    save(
-                        using: previewResult
-                    )
-                }
-            )
-        }
-    }
-
-    func canSave(
-        for previewResult: Result<TagRenamePreview, TagRenameError>
-    ) -> Bool {
-        switch previewResult {
-        case .success(let preview):
-            return preview.canApply
-        case .failure:
-            return false
-        }
-    }
-
     func save(
-        using previewResult: Result<TagRenamePreview, TagRenameError>
+        _ previewResult: Result<TagRenamePreview, TagRenameError>
     ) {
         do {
             let preview = try previewResult.get()
