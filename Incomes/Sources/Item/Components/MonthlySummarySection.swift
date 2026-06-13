@@ -51,11 +51,14 @@ struct MonthlySummarySection: View {
         Color.clear
             .frame(width: .zero, height: .zero)
             .toolbar {
-                if shouldDisplaySummaryControl {
-                    ToolbarItem(placement: .topBarTrailing) {
-                        summaryToolbarButton
-                    }
-                }
+                MonthlySummaryToolbarContent(
+                    isVisible: shouldDisplaySummaryControl,
+                    generatedSummary: generatedSummary,
+                    isGenerating: isGenerating,
+                    isPopoverPresented: $isPopoverPresented,
+                    generateInitialSummary: generateInitialSummaryFromToolbar,
+                    generateSummary: generateSummaryFromPopover
+                )
             }
             .task(id: generationInput) {
                 await generateSummary(
@@ -109,34 +112,16 @@ private extension MonthlySummarySection {
         )
     }
 
-    private var summaryToolbarButton: some View {
-        Button {
-            isPopoverPresented = true
-            if generatedSummary == nil,
-               !isGenerating {
-                Task {
-                    await generateSummary(
-                        presentsErrors: true,
-                        forceRegeneration: false
-                    )
-                }
-            }
-        } label: {
-            if isGenerating,
-               generatedSummary == nil {
-                ProgressView()
-            } else {
-                Image(systemName: "sparkles")
-            }
+    func generateInitialSummaryFromToolbar() {
+        guard generatedSummary == nil,
+              !isGenerating else {
+            return
         }
-        .accessibilityLabel(Text("Monthly Summary"))
-        .popover(isPresented: $isPopoverPresented, arrowEdge: .top) {
-            MonthlySummaryPopover(
-                generatedSummary: generatedSummary,
-                isGenerating: isGenerating,
-                generateSummary: generateSummaryFromPopover
+        Task {
+            await generateSummary(
+                presentsErrors: true,
+                forceRegeneration: false
             )
-            .presentationCompactAdaptation(.popover)
         }
     }
 

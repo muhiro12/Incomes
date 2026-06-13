@@ -18,9 +18,7 @@ struct MonthlySummaryPopover: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: designMetrics.spacing.inline) {
-            Text("Monthly Summary")
-                .font(.headline)
-
+            MonthlySummaryHeader(spacing: designMetrics.spacing.inline)
             MonthlySummaryContent(
                 generatedSummary: generatedSummary,
                 isGenerating: isGenerating,

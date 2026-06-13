@@ -7,8 +7,10 @@ struct MonthlySummaryGenerateButton: View {
     let action: () -> Void
 
     var body: some View {
-        Button(title, action: action)
-            .incomesProminentControlStyle()
-            .disabled(isDisabled)
+        Button(action: action) {
+            Label(title, systemImage: "sparkles")
+        }
+        .incomesProminentControlStyle()
+        .disabled(isDisabled)
     }
 }
