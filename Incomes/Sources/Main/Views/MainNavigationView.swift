@@ -88,7 +88,7 @@ struct MainNavigationView: View {
                 }
             }
             .toolbar {
-                StatusToolbarItem("Today: \(Date.now.stringValue(.yyyyMMMd))")
+                TodayStatusToolbarItem()
             }
             .toolbar {
                 SpacerToolbarItem(placement: .bottomBar)
@@ -105,7 +105,7 @@ struct MainNavigationView: View {
             }
             .searchable(text: $router.searchText, isPresented: $router.isSearchPresented)
             .toolbar {
-                StatusToolbarItem("Today: \(Date.now.stringValue(.yyyyMMMd))")
+                TodayStatusToolbarItem()
             }
             .toolbar {
                 if #available(iOS 26.0, *) {

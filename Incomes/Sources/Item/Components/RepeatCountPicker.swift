@@ -26,7 +26,7 @@ extension RepeatCountPicker: View {
             Spacer()
             Picker(selection: $selection) {
                 ForEach(ItemCreationOperations.repeatCountRange, id: \.self) { count in
-                    Text(count.description)
+                    Text(count, format: .number)
                 }
             } label: {
                 Text("Repeat")

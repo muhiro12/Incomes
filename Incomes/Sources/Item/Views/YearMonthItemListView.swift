@@ -57,7 +57,7 @@ extension YearMonthItemListView: View {
             tipController.donateDidViewItemList()
         }
         .toolbar {
-            StatusToolbarItem("\(items.count) Items")
+            ItemCountStatusToolbarItem(count: items.count)
         }
         .toolbar {
             SpacerToolbarItem(placement: .bottomBar)

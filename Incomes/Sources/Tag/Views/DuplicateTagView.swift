@@ -78,7 +78,7 @@ struct DuplicateTagView: View {
             ToolbarItem {
                 CloseButton()
             }
-            StatusToolbarItem("\(tags.count) Items")
+            ItemCountStatusToolbarItem(count: tags.count)
         }
         .navigationTitle(tags.first?.displayName ?? "")
     }
@@ -88,7 +88,9 @@ private extension DuplicateTagView {
     func duplicateTagColumn(
         for tag: Tag
     ) -> some View {
-        List {
+        let itemCount = tag.items?.count ?? .zero
+
+        return List {
             Section {
                 ForEach(tag.items ?? []) { item in
                     DuplicateTagItemRow()
@@ -96,7 +98,7 @@ private extension DuplicateTagView {
                 }
             } header: {
                 HStack {
-                    Text("\(tag.items?.count ?? .zero) Items")
+                    Text("\(itemCount, format: .number) Items")
                     Spacer()
                     Button {
                         isDeleteDialogPresented = true

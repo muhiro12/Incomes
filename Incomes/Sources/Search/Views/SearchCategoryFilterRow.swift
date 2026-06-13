@@ -11,7 +11,7 @@ struct SearchCategoryFilterRow: View {
             HStack {
                 Text(facet.displayName)
                 Spacer()
-                Text(facet.count.description)
+                Text(facet.count, format: .number)
                     .foregroundStyle(.secondary)
             }
             .frame(maxWidth: .infinity, alignment: .leading)

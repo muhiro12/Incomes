@@ -11,7 +11,7 @@ struct SearchTagFilterRow: View {
             HStack {
                 Text(tag.displayName)
                 Spacer()
-                Text((tag.items ?? []).count.description)
+                Text((tag.items ?? []).count, format: .number)
                     .foregroundStyle(.secondary)
             }
             .frame(maxWidth: .infinity, alignment: .leading)

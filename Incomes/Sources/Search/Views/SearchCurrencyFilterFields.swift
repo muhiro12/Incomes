@@ -6,12 +6,37 @@ struct SearchCurrencyFilterFields: View {
     let controlSpacing: CGFloat
 
     var body: some View {
-        HStack(spacing: controlSpacing) {
-            TextField("Min", text: $minValue)
-                .keyboardType(.numbersAndPunctuation)
-            Text("~")
-            TextField("Max", text: $maxValue)
-                .keyboardType(.numbersAndPunctuation)
+        ViewThatFits {
+            horizontalLayout
+            verticalLayout
         }
+    }
+}
+
+private extension SearchCurrencyFilterFields {
+    var horizontalLayout: some View {
+        HStack(spacing: controlSpacing) {
+            minimumTextField
+            Text("~")
+                .accessibilityHidden(true)
+            maximumTextField
+        }
+    }
+
+    var verticalLayout: some View {
+        VStack(alignment: .leading, spacing: controlSpacing) {
+            minimumTextField
+            maximumTextField
+        }
+    }
+
+    var minimumTextField: some View {
+        TextField("Min", text: $minValue)
+            .keyboardType(.numbersAndPunctuation)
+    }
+
+    var maximumTextField: some View {
+        TextField("Max", text: $maxValue)
+            .keyboardType(.numbersAndPunctuation)
     }
 }

@@ -57,7 +57,7 @@ extension CategoryItemListView: View {
                     }
                 }
             }
-            StatusToolbarItem("\(items.count) Items")
+            ItemCountStatusToolbarItem(count: items.count)
         }
         .toolbar {
             SpacerToolbarItem(placement: .bottomBar)
