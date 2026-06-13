@@ -17,9 +17,9 @@ struct MainNavigationItemDetailSheet: View {
                 ItemNavigationView()
                     .environment(item)
             } else if shouldShowLoadingView {
-                loadingView
+                MainNavigationItemLoadingContent()
             } else {
-                unavailableView
+                MainNavigationItemUnavailableContent()
             }
         }
         .task(id: itemDetailTaskID) {
@@ -37,34 +37,6 @@ private extension MainNavigationItemDetailSheet {
         itemDetailID.map { persistentID in
             String(describing: persistentID)
         } ?? ""
-    }
-
-    var loadingView: some View {
-        NavigationStack {
-            ProgressView()
-                .navigationTitle("Item")
-                .toolbar {
-                    ToolbarItem {
-                        CloseButton()
-                    }
-                }
-        }
-    }
-
-    var unavailableView: some View {
-        NavigationStack {
-            ContentUnavailableView(
-                "Item Not Found",
-                systemImage: "doc.text.magnifyingglass",
-                description: Text("The selected item is no longer available.")
-            )
-            .navigationTitle("Item")
-            .toolbar {
-                ToolbarItem {
-                    CloseButton()
-                }
-            }
-        }
     }
 
     @MainActor
