@@ -2,7 +2,7 @@ import SwiftUI
 
 @available(iOS 26.0, *)
 struct ItemFormInputAssistToolbarContent: ToolbarContent {
-    let isProcessing: Bool
+    let processingState: ItemFormInputAssistProcessingState?
     let isDoneDisabled: Bool
     let cancel: () -> Void
     let done: () -> Void
@@ -13,10 +13,16 @@ struct ItemFormInputAssistToolbarContent: ToolbarContent {
         }
         ToolbarItem(placement: .confirmationAction) {
             Button(action: done) {
-                if isProcessing {
-                    ProgressView()
-                        .controlSize(.small)
-                        .accessibilityLabel(Text("Processing"))
+                if let processingState {
+                    Label {
+                        Text("Processing")
+                    } icon: {
+                        ProgressView()
+                            .controlSize(.small)
+                            .accessibilityHidden(true)
+                    }
+                    .labelStyle(.titleAndIcon)
+                    .accessibilityLabel(Text(processingState.title))
                 } else {
                     Text("Done")
                 }

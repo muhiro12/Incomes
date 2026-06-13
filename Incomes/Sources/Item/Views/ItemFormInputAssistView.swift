@@ -39,18 +39,19 @@ struct ItemFormInputAssistView: View {
 
     var body: some View {
         @Bindable var scanner = scanner
-        let isProcessing = isApplyingInference || scanner.isScanning
+        let currentProcessingState = processingState(
+            isApplyingInference: isApplyingInference,
+            isScanning: scanner.isScanning
+        )
+        let isProcessing = currentProcessingState != nil
 
         Form {
             ItemFormRecognizedTextSection(
                 recognizedText: $scanner.recognizedText,
                 isRecognizedTextEmpty: scanner.recognizedText.isEmpty
             )
-            if let processingState = processingState(
-                isApplyingInference: isApplyingInference,
-                isScanning: scanner.isScanning
-            ) {
-                ItemFormInputAssistProcessingSection(state: processingState)
+            if let currentProcessingState {
+                ItemFormInputAssistProcessingSection(state: currentProcessingState)
             }
             ItemFormInputAssistImportSection(
                 selectedItem: $selectedItem,
@@ -65,7 +66,7 @@ struct ItemFormInputAssistView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ItemFormInputAssistToolbarContent(
-                isProcessing: isProcessing,
+                processingState: currentProcessingState,
                 isDoneDisabled: isDoneDisabled(
                     recognizedText: scanner.recognizedText,
                     isProcessing: isProcessing
