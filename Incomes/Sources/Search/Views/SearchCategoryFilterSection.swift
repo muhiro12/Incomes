@@ -6,11 +6,15 @@ struct SearchCategoryFilterSection: View {
 
     var body: some View {
         Section("Filter") {
-            ForEach(facets) { facet in
-                SearchCategoryFilterRow(
-                    facet: facet,
-                    applyFilter: applyFilter
-                )
+            if facets.isEmpty {
+                SearchEmptyStateContent()
+            } else {
+                ForEach(facets) { facet in
+                    SearchCategoryFilterRow(
+                        facet: facet,
+                        applyFilter: applyFilter
+                    )
+                }
             }
         }
     }

@@ -6,11 +6,15 @@ struct SearchContentFilterSection: View {
 
     var body: some View {
         Section("Filter") {
-            ForEach(tags) { tag in
-                SearchTagFilterRow(
-                    tag: tag,
-                    applyFilter: applyFilter
-                )
+            if tags.isEmpty {
+                SearchEmptyStateContent()
+            } else {
+                ForEach(tags) { tag in
+                    SearchTagFilterRow(
+                        tag: tag,
+                        applyFilter: applyFilter
+                    )
+                }
             }
         }
     }

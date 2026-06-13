@@ -52,9 +52,6 @@ struct SearchListView: View {
             applyCategoryFilter: applyCategoryFilter,
             applyCurrencyFilter: applyCurrencyFilter
         )
-        .overlay {
-            SearchEmptyStateOverlay(isVisible: isShowingEmptyState)
-        }
         .scrollDismissesKeyboard(.interactively)
         .navigationTitle("Search")
         .modifier(
@@ -84,19 +81,6 @@ private extension SearchListView {
             items: items,
             query: searchText
         )
-    }
-
-    var isShowingEmptyState: Bool {
-        switch selectedTarget {
-        case .content:
-            return filteredContentTags.isEmpty
-        case .category:
-            return categoryFacets.isEmpty
-        case .balance,
-             .income,
-             .outgo:
-            return false
-        }
     }
 
     func applyTagFilter(_ tag: Tag) {
