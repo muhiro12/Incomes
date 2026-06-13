@@ -52,7 +52,7 @@ extension CategoryItemListView: View {
         .toolbar {
             if canRenameCategory {
                 ToolbarItem {
-                    Button("Rename") {
+                    Button("Rename", systemImage: "pencil") {
                         isRenameSheetPresented = true
                     }
                 }
