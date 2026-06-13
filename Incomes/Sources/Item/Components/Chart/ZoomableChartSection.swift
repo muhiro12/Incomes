@@ -15,12 +15,16 @@ struct ZoomableChartSection<Preview: View, Detail: View>: View {
             Button {
                 isDetailPresented = true
             } label: {
-                preview()
-                    .matchedTransitionSource(
-                        id: transitionID,
-                        in: transitionNamespace
-                    )
-                    .contentShape(.rect)
+                ZStack(alignment: .topTrailing) {
+                    preview()
+                        .matchedTransitionSource(
+                            id: transitionID,
+                            in: transitionNamespace
+                        )
+                    ChartExpansionIndicator()
+                        .padding(ChartExpansionIndicatorMetrics.outerPadding)
+                }
+                .contentShape(.rect)
             }
             .buttonStyle(.plain)
             .accessibilityLabel(Text(title))
