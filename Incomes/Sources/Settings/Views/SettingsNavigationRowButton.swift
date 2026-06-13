@@ -11,8 +11,7 @@ struct SettingsNavigationRowButton: View {
                 Label {
                     Text(title)
                 } icon: {
-                    Image(systemName: systemImage)
-                        .foregroundStyle(.secondary)
+                    SettingsNavigationRowIcon(systemImage: systemImage)
                 }
                 Spacer()
                 Image(systemName: "chevron.right")
