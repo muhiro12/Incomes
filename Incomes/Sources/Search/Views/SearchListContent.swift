@@ -21,6 +21,7 @@ struct SearchListContent: View {
                 minValue: $minValue,
                 maxValue: $maxValue,
                 controlSpacing: controlSpacing,
+                applySearch: applyCurrencyFilter,
                 applyTagFilter: applyTagFilter,
                 applyCategoryFilter: applyCategoryFilter
             )

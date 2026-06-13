@@ -7,6 +7,7 @@ struct SearchFilterSection: View {
     @Binding var minValue: String
     @Binding var maxValue: String
     let controlSpacing: CGFloat
+    let applySearch: () -> Void
     let applyTagFilter: (Tag) -> Void
     let applyCategoryFilter: (CategoryFacet) -> Void
 
@@ -28,7 +29,8 @@ struct SearchFilterSection: View {
             SearchCurrencyFilterSection(
                 minValue: $minValue,
                 maxValue: $maxValue,
-                controlSpacing: controlSpacing
+                controlSpacing: controlSpacing,
+                applySearch: applySearch
             )
         }
     }
