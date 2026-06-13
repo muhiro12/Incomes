@@ -21,11 +21,22 @@ Before the first XcodeBuildMCP build, test, or run call in a session, run
 XcodeBuildMCP `session_show_defaults`. If defaults do not point at this
 repository, set them for the current session before continuing.
 
-For app compile checks, use XcodeBuildMCP `build_sim` with the `Incomes`
-scheme. For shared-library tests, use XcodeBuildMCP `test_sim` with the
-`IncomesLibrary` scheme. For runtime or UI-sensitive checks, use
-XcodeBuildMCP `build_run_sim`, `launch_app_sim`, `snapshot_ui`, and
-`screenshot` as appropriate.
+Treat library tests, surface builds, and runtime/UI evidence as separate
+verification capabilities. Choose the smallest set that proves the current
+change, and prefer stronger evidence when public APIs, wire contracts,
+SwiftData schema, app lifecycle wiring, or visible UI behavior are affected.
+
+- For shared-library logic, model, or test changes, use XcodeBuildMCP
+  `test_sim` with the `IncomesLibrary` scheme.
+- For public `IncomesLibrary` APIs, `*Operations`, shared sync contracts,
+  SwiftData schema, or adapter-facing contracts, also use XcodeBuildMCP
+  `build_sim` with the `Incomes` scheme.
+- For app compile checks, use XcodeBuildMCP `build_sim` with the `Incomes`
+  scheme.
+- For Watch or Widgets target changes, use XcodeBuildMCP `build_sim` with the
+  `Watch` or `Widgets` scheme that matches the changed surface.
+- For runtime or UI-sensitive changes, use XcodeBuildMCP `build_run_sim`,
+  `launch_app_sim`, `snapshot_ui`, and `screenshot` as appropriate.
 
 When Swift files are edited, agents should run:
 

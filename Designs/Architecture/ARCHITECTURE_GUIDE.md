@@ -68,6 +68,9 @@ invoked business use cases.
 - When adapter flows need durable sync or serialization coverage, move the wire
   contract into `IncomesLibrary` and test it there instead of growing
   target-local test suites.
+- Use live runtime or UI evidence for presentation, navigation, and platform
+  integration risk, not as a default substitute for library-owned behavior
+  tests and surface builds.
 
 ## View Rules
 
