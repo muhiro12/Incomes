@@ -30,10 +30,34 @@ struct DuplicateTagListView: View {
         let categoryDuplicateTags = duplicateTags(from: categoryTags)
 
         List(selection: $selectedTagID) {
-            duplicateSection(title: "Year", duplicates: yearDuplicateTags)
-            duplicateSection(title: "YearMonth", duplicates: yearMonthDuplicateTags)
-            duplicateSection(title: "Content", duplicates: contentDuplicateTags)
-            duplicateSection(title: "Category", duplicates: categoryDuplicateTags)
+            DuplicateTagSection(
+                title: "Year",
+                duplicates: yearDuplicateTags,
+                selectedTagID: $selectedTagID,
+                selectedTags: $selectedTags,
+                isResolveDialogPresented: $isResolveDialogPresented
+            )
+            DuplicateTagSection(
+                title: "YearMonth",
+                duplicates: yearMonthDuplicateTags,
+                selectedTagID: $selectedTagID,
+                selectedTags: $selectedTags,
+                isResolveDialogPresented: $isResolveDialogPresented
+            )
+            DuplicateTagSection(
+                title: "Content",
+                duplicates: contentDuplicateTags,
+                selectedTagID: $selectedTagID,
+                selectedTags: $selectedTags,
+                isResolveDialogPresented: $isResolveDialogPresented
+            )
+            DuplicateTagSection(
+                title: "Category",
+                duplicates: categoryDuplicateTags,
+                selectedTagID: $selectedTagID,
+                selectedTags: $selectedTags,
+                isResolveDialogPresented: $isResolveDialogPresented
+            )
         }
         .overlay {
             if !hasAnyDuplicateTags(
@@ -55,11 +79,7 @@ struct DuplicateTagListView: View {
             Text(resolveDialogTitle),
             isPresented: $isResolveDialogPresented
         ) {
-            Button {
-                resolveSelectedTags()
-            } label: {
-                Text("Resolve")
-            }
+            Button("Resolve", action: resolveSelectedTags)
             Button(role: .cancel) {
                 // no-op
             } label: {
@@ -86,22 +106,6 @@ private extension DuplicateTagListView {
         selectedTags.count > 1
             ? "Are you sure you want to resolve all duplicate tags? This action cannot be undone."
             : "Are you sure you want to resolve this duplicate tag? This action cannot be undone."
-    }
-
-    @ViewBuilder
-    func duplicateSection(
-        title: LocalizedStringKey,
-        duplicates: [Tag]
-    ) -> some View {
-        if !duplicates.isEmpty {
-            DuplicateTagSection(
-                title: title,
-                duplicates: duplicates,
-                selectedTagID: $selectedTagID,
-                selectedTags: $selectedTags,
-                isResolveDialogPresented: $isResolveDialogPresented
-            )
-        }
     }
 
     func hasAnyDuplicateTags(

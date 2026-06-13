@@ -11,14 +11,16 @@ struct DuplicateTagSectionHeader: View {
         HStack {
             Text(title)
             Spacer()
-            Button {
-                isResolveDialogPresented = true
-                selectedTags = duplicates
-            } label: {
-                Text("Resolve All")
-            }
-            .font(.caption)
-            .textCase(nil)
+            Button("Resolve All", action: presentResolveAllDialog)
+                .font(.caption)
+                .textCase(nil)
         }
+    }
+}
+
+private extension DuplicateTagSectionHeader {
+    func presentResolveAllDialog() {
+        isResolveDialogPresented = true
+        selectedTags = duplicates
     }
 }
