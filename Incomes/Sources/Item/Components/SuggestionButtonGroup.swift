@@ -33,7 +33,13 @@ struct SuggestionButtonGroup: View {
     var body: some View {
         ScrollView(.horizontal) {
             IncomesLiquidGlassControlGroup(spacing: Constants.controlSpacing) {
-                suggestionButtons
+                SuggestionButtonContent(
+                    type: type,
+                    suggestions: suggestions,
+                    categoryFacets: categoryFacets,
+                    input: $input,
+                    controlSpacing: Constants.controlSpacing
+                )
             }
         }
     }
@@ -46,36 +52,6 @@ private extension SuggestionButtonGroup {
             items: items,
             query: input
         )
-    }
-
-    @ViewBuilder var suggestionButtons: some View {
-        HStack(spacing: Constants.controlSpacing) {
-            if type == .category {
-                ForEach(categoryFacets) { facet in
-                    suggestionButton(title: facet.displayName) {
-                        input = facet.displayName
-                    }
-                }
-            } else {
-                ForEach(suggestions) { suggestion in
-                    suggestionButton(title: suggestion.name) {
-                        input = suggestion.name
-                    }
-                }
-            }
-        }
-    }
-
-    func suggestionButton(
-        title: String,
-        action: @escaping () -> Void
-    ) -> some View {
-        Button(title) {
-            Haptic.selectionChanged.impact()
-            action()
-        }
-        .incomesSecondaryControlStyle()
-        .controlSize(.small)
     }
 }
 
