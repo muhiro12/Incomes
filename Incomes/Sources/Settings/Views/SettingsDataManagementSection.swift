@@ -28,6 +28,9 @@ struct SettingsDataManagementSection: View {
 
 private extension SettingsDataManagementSection {
     var duplicateYearItemsButton: some View {
-        Button("Duplicate year items", action: duplicateYearItems)
+        SettingsNavigationRowButton(
+            title: "Duplicate year items",
+            action: duplicateYearItems
+        )
     }
 }

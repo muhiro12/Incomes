@@ -18,5 +18,6 @@ struct SettingsNavigationRowButton: View {
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
+        .accessibilityHint(Text("Open"))
     }
 }

@@ -10,10 +10,16 @@ struct SettingsTagMaintenanceSection: View {
         if hasDuplicateTags || hasOrphanTags {
             Section {
                 if hasDuplicateTags {
-                    Button("Resolve duplicate tags", action: openDuplicateTags)
+                    SettingsNavigationRowButton(
+                        title: "Resolve duplicate tags",
+                        action: openDuplicateTags
+                    )
                 }
                 if hasOrphanTags {
-                    Button("Review orphan tags", action: openOrphanTags)
+                    SettingsNavigationRowButton(
+                        title: "Review orphan tags",
+                        action: openOrphanTags
+                    )
                 }
             } header: {
                 HStack {
