@@ -83,39 +83,28 @@ private extension CategoryRenameSheet {
                 Text("Name")
             }
 
-            previewSection(
-                for: previewResult
+            CategoryRenamePreviewSection(
+                currentName: tag.displayName,
+                trimmedDraftName: trimmedDraftName,
+                previewResult: previewResult
             )
         }
         .formStyle(.grouped)
         .navigationTitle("Rename")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
-            renameToolbar(
-                for: previewResult
-            )
-        }
-    }
-
-    @ToolbarContentBuilder
-    func renameToolbar(
-        for previewResult: Result<TagRenamePreview, TagRenameError>
-    ) -> some ToolbarContent {
-        ToolbarItem(placement: .cancellationAction) {
-            Button("Cancel") {
-                dismiss()
-            }
-        }
-        ToolbarItem(placement: .confirmationAction) {
-            Button("Save") {
-                save(
-                    using: previewResult
-                )
-            }
-            .disabled(
-                !canSave(
+            CategoryRenameToolbarContent(
+                canSave: canSave(
                     for: previewResult
-                )
+                ),
+                cancel: {
+                    dismiss()
+                },
+                save: {
+                    save(
+                        using: previewResult
+                    )
+                }
             )
         }
     }
@@ -129,106 +118,6 @@ private extension CategoryRenameSheet {
         case .failure:
             return false
         }
-    }
-
-    @ViewBuilder
-    func previewSection(
-        for previewResult: Result<TagRenamePreview, TagRenameError>
-    ) -> some View {
-        Section("Preview") {
-            previewSectionContent(
-                for: previewResult
-            )
-        }
-    }
-
-    @ViewBuilder
-    func previewSectionContent(
-        for previewResult: Result<TagRenamePreview, TagRenameError>
-    ) -> some View {
-        previewRow(
-            title: "Current name",
-            value: tag.displayName
-        )
-
-        switch previewResult {
-        case .success(let preview):
-            previewDetails(
-                for: preview
-            )
-        case .failure(let error):
-            previewRow(
-                title: "New name",
-                value: trimmedDraftName
-            )
-            Text(error.renameErrorMessage)
-                .font(.footnote)
-                .foregroundStyle(.red)
-        }
-    }
-
-    @ViewBuilder
-    func previewDetails(
-        for preview: TagRenamePreview
-    ) -> some View {
-        previewRow(
-            title: "New name",
-            value: preview.normalizedTargetName ?? trimmedDraftName
-        )
-        Text(
-            String(
-                localized: "Affected items: \(preview.affectedItemCount)"
-            )
-        )
-        .foregroundStyle(.secondary)
-
-        if let statusMessage = previewStatusMessage(
-            for: preview
-        ) {
-            Text(statusMessage)
-                .font(.footnote)
-                .foregroundStyle(
-                    previewStatusColor(
-                        for: preview
-                    )
-                )
-        }
-    }
-
-    func previewRow(
-        title: LocalizedStringKey,
-        value: String
-    ) -> some View {
-        HStack {
-            Text(title)
-            Spacer()
-            Text(value)
-                .foregroundStyle(.secondary)
-                .multilineTextAlignment(.trailing)
-        }
-    }
-
-    func previewStatusMessage(
-        for preview: TagRenamePreview
-    ) -> String? {
-        if let validationError = preview.validationError {
-            return validationError.renameErrorMessage
-        }
-        if preview.isUnchanged {
-            return String(localized: "This name is unchanged.")
-        }
-
-        return nil
-    }
-
-    func previewStatusColor(
-        for preview: TagRenamePreview
-    ) -> Color {
-        if preview.validationError != nil {
-            return .red
-        }
-
-        return .secondary
     }
 
     func save(
@@ -267,7 +156,7 @@ private extension CategoryRenameSheet {
     }
 }
 
-private extension TagRenameError {
+extension TagRenameError {
     var renameErrorMessage: String {
         switch self {
         case .unsupportedType,
