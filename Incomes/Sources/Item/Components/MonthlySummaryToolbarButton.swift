@@ -20,7 +20,9 @@ struct MonthlySummaryToolbarButton: View {
                 Image(systemName: "sparkles")
             }
         }
+        .incomesSecondaryControlStyle()
         .accessibilityLabel(Text("Monthly Summary"))
+        .accessibilityValue(accessibilityValue)
         .popover(isPresented: $isPopoverPresented, arrowEdge: .top) {
             MonthlySummaryPopover(
                 generatedSummary: generatedSummary,
@@ -36,5 +38,12 @@ struct MonthlySummaryToolbarButton: View {
 private extension MonthlySummaryToolbarButton {
     var isWaitingForInitialSummary: Bool {
         isGenerating && generatedSummary == nil
+    }
+
+    var accessibilityValue: Text {
+        if isWaitingForInitialSummary {
+            return Text("Generating")
+        }
+        return Text("")
     }
 }
