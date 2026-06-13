@@ -1,6 +1,10 @@
 import SwiftUI
 
 struct SettingsNotificationDetailsRows: View {
+    private enum Constants {
+        static let dayOffsetRange = 0..<15
+    }
+
     @Binding var notificationSettings: NotificationSettings
 
     let isNotificationEnabled: Bool
@@ -12,8 +16,9 @@ struct SettingsNotificationDetailsRows: View {
                 thresholdAmount: $notificationSettings.thresholdAmount
             )
             Picker("Notify days before", selection: $notificationSettings.daysBeforeDueDate) {
-                ForEach(0..<15) { dayOffset in // swiftlint:disable:this no_magic_numbers
-                    Text("\(dayOffset) days")
+                ForEach(Constants.dayOffsetRange, id: \.self) { dayOffset in
+                    SettingsNotificationDayOffsetLabel(dayOffset: dayOffset)
+                        .tag(dayOffset)
                 }
             }
             DatePicker(
