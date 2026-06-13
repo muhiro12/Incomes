@@ -10,5 +10,6 @@ struct CategoryChartLegendMarker: View {
                 width: CategoryChartMetrics.legendMarkerSize,
                 height: CategoryChartMetrics.legendMarkerSize
             )
+            .accessibilityHidden(true)
     }
 }
