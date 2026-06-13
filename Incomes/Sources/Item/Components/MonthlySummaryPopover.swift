@@ -17,33 +17,35 @@ struct MonthlySummaryPopover: View {
     let generateSummary: () -> Void
 
     var body: some View {
-        VStack(alignment: .leading, spacing: designMetrics.spacing.inline) {
-            MonthlySummaryHeader(spacing: designMetrics.spacing.inline)
-            MonthlySummaryContent(
-                generatedSummary: generatedSummary,
-                isGenerating: isGenerating,
-                spacing: designMetrics.spacing.inline,
-                generateSummary: generateSummary
-            )
-
-            Text("Generated on device. Your financial data stays on this device.")
-                .font(.footnote)
-                .foregroundStyle(.secondary)
-
-            if generatedSummary != nil {
-                MonthlySummaryGenerateButton(
-                    title: "Regenerate Summary",
-                    isDisabled: isGenerating,
-                    action: generateSummary
+        IncomesLiquidGlassControlGroup(spacing: designMetrics.spacing.inline) {
+            VStack(alignment: .leading, spacing: designMetrics.spacing.inline) {
+                MonthlySummaryHeader(spacing: designMetrics.spacing.inline)
+                MonthlySummaryContent(
+                    generatedSummary: generatedSummary,
+                    isGenerating: isGenerating,
+                    spacing: designMetrics.spacing.inline,
+                    generateSummary: generateSummary
                 )
+
+                Text("Generated on device. Your financial data stays on this device.")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+
+                if generatedSummary != nil {
+                    MonthlySummaryGenerateButton(
+                        title: "Regenerate Summary",
+                        isDisabled: isGenerating,
+                        action: generateSummary
+                    )
+                }
             }
+            .frame(
+                minWidth: Constants.popoverMinimumWidth,
+                idealWidth: Constants.popoverIdealWidth,
+                maxWidth: Constants.popoverMaximumWidth,
+                alignment: .leading
+            )
+            .padding()
         }
-        .frame(
-            minWidth: Constants.popoverMinimumWidth,
-            idealWidth: Constants.popoverIdealWidth,
-            maxWidth: Constants.popoverMaximumWidth,
-            alignment: .leading
-        )
-        .padding()
     }
 }
