@@ -10,7 +10,7 @@ struct ItemFormInputAssistImportControlLayout: View {
     let openCamera: () -> Void
 
     var body: some View {
-        ViewThatFits {
+        ViewThatFits(in: .horizontal) {
             HStack(spacing: controlSpacing) {
                 ItemFormInputAssistPhotoLibraryPicker(
                     selectedItem: $selectedItem,
