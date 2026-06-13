@@ -179,7 +179,6 @@ post-clone CI setup.
   repository-specific static architecture checks that are not naturally covered
   by XcodeBuildMCP.
 - Release UI smoke auditing uses XcodeBuildMCP live Simulator evidence. Use the
-  global `$xcode-ui-smoke-auditor` skill and the
   [release UI smoke audit guide](Designs/Architecture/release-ui-smoke-audit.md)
   when a release or UI-sensitive change needs live Simulator evidence.
 
@@ -216,6 +215,10 @@ For app build checks, use XcodeBuildMCP `build_sim` with the `Incomes` scheme.
 For shared-library tests, use XcodeBuildMCP `test_sim` with the
 `IncomesLibrary` scheme. For runtime or UI-sensitive checks, use XcodeBuildMCP
 `build_run_sim`, `launch_app_sim`, `snapshot_ui`, and `screenshot`.
+Treat these as separate verification capabilities: library tests prove shared
+business behavior, surface builds prove adapter integration, and runtime or UI
+evidence is reserved for changes that affect visible behavior or live platform
+integration.
 
 Helper scripts may write disposable cache data under `.build/ci/shared/`.
 
