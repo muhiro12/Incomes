@@ -46,6 +46,12 @@ struct ItemFormInputAssistView: View {
                 recognizedText: $scanner.recognizedText,
                 isRecognizedTextEmpty: scanner.recognizedText.isEmpty
             )
+            if let processingState = processingState(
+                isApplyingInference: isApplyingInference,
+                isScanning: scanner.isScanning
+            ) {
+                ItemFormInputAssistProcessingSection(state: processingState)
+            }
             ItemFormInputAssistImportSection(
                 selectedItem: $selectedItem,
                 isImportDisabled: isProcessing
@@ -123,6 +129,19 @@ private extension ItemFormInputAssistView {
         recognizedText
             .trimmingCharacters(in: .whitespacesAndNewlines)
             .isEmpty || isProcessing
+    }
+
+    func processingState(
+        isApplyingInference: Bool,
+        isScanning: Bool
+    ) -> ItemFormInputAssistProcessingState? {
+        if isApplyingInference {
+            return .applyingSuggestions
+        }
+        if isScanning {
+            return .scanningImage
+        }
+        return nil
     }
 
     private func scanReceipt() async {
