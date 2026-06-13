@@ -41,40 +41,32 @@ struct SearchListView: View {
     }
 
     var body: some View {
-        List {
-            SearchTargetSection(selectedTarget: $selectedTarget)
-            SearchFilterSection(
-                selectedTarget: selectedTarget,
-                contentTags: filteredContentTags,
-                categoryFacets: categoryFacets,
-                minValue: $minValue,
-                maxValue: $maxValue,
-                controlSpacing: designMetrics.spacing.control,
-                applyTagFilter: applyTagFilter,
-                applyCategoryFilter: applyCategoryFilter
-            )
-            SearchCurrencyActionSection(
-                isVisible: selectedTarget.isForCurrency,
-                applySearch: applyCurrencyFilter
-            )
-        }
+        SearchListContent(
+            selectedTarget: $selectedTarget,
+            contentTags: filteredContentTags,
+            categoryFacets: categoryFacets,
+            minValue: $minValue,
+            maxValue: $maxValue,
+            controlSpacing: designMetrics.spacing.control,
+            applyTagFilter: applyTagFilter,
+            applyCategoryFilter: applyCategoryFilter,
+            applyCurrencyFilter: applyCurrencyFilter
+        )
         .overlay {
-            if isShowingEmptyState {
-                ContentUnavailableView(
-                    "No Matches",
-                    systemImage: "magnifyingglass",
-                    description: Text("Try another keyword or switch the search target.")
-                )
-            }
+            SearchEmptyStateOverlay(isVisible: isShowingEmptyState)
         }
         .scrollDismissesKeyboard(.interactively)
         .navigationTitle("Search")
-        .task {
-            applyInitialSearchTextIfNeeded()
-        }
-        .onChange(of: contents.count) {
-            applyInitialSearchTextIfNeeded()
-        }
+        .modifier(
+            SearchInitialTextModifier(
+                selectedTarget: selectedTarget,
+                contentTags: contents,
+                predicate: $predicate,
+                searchText: $searchText,
+                appliesInitialSearchText: $appliesInitialSearchText,
+                applyTagFilter: applyTagFilter
+            )
+        )
     }
 }
 
@@ -127,34 +119,6 @@ private extension SearchListView {
 
         tipController.donateDidApplySearch()
         predicate = newPredicate
-    }
-
-    func applyInitialSearchTextIfNeeded() {
-        guard appliesInitialSearchText else {
-            return
-        }
-
-        guard !searchText.isEmpty else {
-            appliesInitialSearchText = false
-            return
-        }
-
-        guard predicate == nil else {
-            appliesInitialSearchText = false
-            return
-        }
-
-        let matchingTags = selectedTarget.filteredTags(
-            contents,
-            searchText: searchText
-        )
-        guard matchingTags.count == 1,
-              let matchingTag = matchingTags.first else {
-            return
-        }
-
-        appliesInitialSearchText = false
-        applyTagFilter(matchingTag)
     }
 }
 
