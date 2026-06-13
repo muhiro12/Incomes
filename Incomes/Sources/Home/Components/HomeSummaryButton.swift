@@ -18,10 +18,10 @@ struct HomeSummaryButton: View {
             }
             navigateToRoute(yearSummaryRoute)
         } label: {
-            TagSummaryRow()
-                .environment(yearTag)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .contentShape(Rectangle())
+            NavigationRowLabel {
+                TagSummaryRow()
+                    .environment(yearTag)
+            }
         }
         .buttonStyle(.plain)
         .accessibilityHint(Text("Open year summary"))

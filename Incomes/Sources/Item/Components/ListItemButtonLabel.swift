@@ -5,13 +5,12 @@ struct ListItemButtonLabel: View {
     private var horizontalSizeClass
 
     var body: some View {
-        Group {
+        NavigationRowLabel {
             if horizontalSizeClass == .regular {
                 WideListItem()
             } else {
                 NarrowListItem()
             }
         }
-        .contentShape(.rect)
     }
 }

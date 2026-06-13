@@ -23,10 +23,10 @@ struct HomeMonthRowButton: View {
         Button {
             openMonth()
         } label: {
-            TagSummaryRow()
-                .environment(tag)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .contentShape(Rectangle())
+            NavigationRowLabel {
+                TagSummaryRow()
+                    .environment(tag)
+            }
         }
         .buttonStyle(.plain)
         .accessibilityHint(Text("Open month details"))

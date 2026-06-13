@@ -7,20 +7,13 @@ struct SettingsNavigationRowButton: View {
 
     var body: some View {
         Button(action: action) {
-            HStack {
+            NavigationRowLabel {
                 Label {
                     Text(title)
                 } icon: {
                     SettingsNavigationRowIcon(systemImage: systemImage)
                 }
-                Spacer()
-                Image(systemName: "chevron.right")
-                    .font(.footnote.weight(.semibold))
-                    .foregroundStyle(.tertiary)
-                    .accessibilityHidden(true)
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
         .accessibilityHint(Text("Open"))
