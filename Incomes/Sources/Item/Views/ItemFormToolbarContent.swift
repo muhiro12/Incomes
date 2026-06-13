@@ -18,7 +18,11 @@ struct ItemFormToolbarContent: ToolbarContent {
         }
         ToolbarItem(placement: .primaryAction) {
             Button(action: submit) {
-                Text(mode == .create ? "Create" : "Save")
+                if mode == .create {
+                    Text("Create")
+                } else {
+                    Text("Save")
+                }
             }
             .bold()
             .disabled(!isValid)
