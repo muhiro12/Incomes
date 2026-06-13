@@ -7,7 +7,7 @@ struct ItemDeletionConfirmationMessage: View {
         if itemCount == 1 {
             Text("Are you sure you want to delete this item?")
         } else {
-            Text("Are you sure you want to delete \(itemCount) items?")
+            Text("Are you sure you want to delete these items?")
         }
     }
 }
