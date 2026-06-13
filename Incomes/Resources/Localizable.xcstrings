@@ -343,6 +343,74 @@
         }
       }
     },
+    "Add income items with categories to see this chart." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add income items with categories to see this chart."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Añade elementos de ingreso con categorías para ver este gráfico."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajoutez des éléments de revenu avec des catégories pour afficher ce graphique."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "カテゴリ付きの収入アイテムを追加すると、このグラフを表示できます。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "添加带分类的收入项目后即可查看此图表。"
+          }
+        }
+      }
+    },
+    "Add outgo items with categories to see this chart." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add outgo items with categories to see this chart."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Añade elementos de egreso con categorías para ver este gráfico."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajoutez des éléments de dépense avec des catégories pour afficher ce graphique."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "カテゴリ付きの支出アイテムを追加すると、このグラフを表示できます。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "添加带分类的支出项目后即可查看此图表。"
+          }
+        }
+      }
+    },
     "Adjust your filters to find matching items." : {
       "localizations" : {
         "en" : {
@@ -4528,6 +4596,40 @@
         }
       }
     },
+    "No Income Categories" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No Income Categories"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No hay categorías de ingreso"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucune catégorie de revenu"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "収入カテゴリがありません"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "没有收入分类"
+          }
+        }
+      }
+    },
     "No Matches" : {
       "localizations" : {
         "en" : {
@@ -4558,6 +4660,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "没有匹配项"
+          }
+        }
+      }
+    },
+    "No Outgo Categories" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No Outgo Categories"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No hay categorías de egreso"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucune catégorie de dépense"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "支出カテゴリがありません"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "没有支出分类"
           }
         }
       }

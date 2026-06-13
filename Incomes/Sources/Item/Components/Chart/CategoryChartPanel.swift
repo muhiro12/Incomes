@@ -10,28 +10,37 @@ struct CategoryChartPanel: View {
     let total: Decimal
     let colorScale: [String: Color]
     let fallbackColor: Color
+    let emptyStateTitle: LocalizedStringKey
+    let emptyStateMessage: LocalizedStringKey
 
     var body: some View {
         VStack(alignment: .leading, spacing: designMetrics.spacing.inline) {
             Text(title)
                 .font(.headline)
                 .frame(maxWidth: .infinity, alignment: .leading)
-            ZStack {
-                CategoryChartDonutChart(
-                    segments: segments,
-                    colorScale: colorScale,
-                    fallbackColor: fallbackColor
+            if segments.isEmpty {
+                CategoryChartEmptyState(
+                    title: emptyStateTitle,
+                    message: emptyStateMessage
                 )
-                CategoryChartTotalLabel(amount: total)
+            } else {
+                ZStack {
+                    CategoryChartDonutChart(
+                        segments: segments,
+                        colorScale: colorScale,
+                        fallbackColor: fallbackColor
+                    )
+                    CategoryChartTotalLabel(amount: total)
+                }
+                .frame(height: CategoryChartMetrics.sectionHeight)
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel(Text(title))
+                .accessibilityValue(accessibilityValue)
+                CategoryChartLegend(
+                    segments: segments,
+                    colorScale: colorScale
+                )
             }
-            .frame(height: CategoryChartMetrics.sectionHeight)
-            .accessibilityElement(children: .ignore)
-            .accessibilityLabel(Text(title))
-            .accessibilityValue(accessibilityValue)
-            CategoryChartLegend(
-                segments: segments,
-                colorScale: colorScale
-            )
         }
     }
 }
@@ -41,7 +50,7 @@ private extension CategoryChartPanel {
         guard let largestSegment = segments.max(by: { lhs, rhs in
             lhs.value < rhs.value
         }) else {
-            return Text("Total: \(total.asCurrency), No categories")
+            return Text("")
         }
         return Text(
             """

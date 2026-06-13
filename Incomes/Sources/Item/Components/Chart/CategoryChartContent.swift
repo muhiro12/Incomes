@@ -19,14 +19,18 @@ struct CategoryChartContent: View {
                 segments: incomeSegments,
                 total: incomeTotal,
                 colorScale: incomeColorScale,
-                fallbackColor: .accent
+                fallbackColor: .accent,
+                emptyStateTitle: "No Income Categories",
+                emptyStateMessage: "Add income items with categories to see this chart."
             )
             CategoryChartPanel(
                 title: "Outgo",
                 segments: outgoSegments,
                 total: outgoTotal,
                 colorScale: outgoColorScale,
-                fallbackColor: .red
+                fallbackColor: .red,
+                emptyStateTitle: "No Outgo Categories",
+                emptyStateMessage: "Add outgo items with categories to see this chart."
             )
             .padding(.top, designMetrics.spacing.inline)
         }
