@@ -10,6 +10,7 @@ struct SettingsAboutSection: View {
             Button("Show tips again", action: showTipsAgain)
             SettingsNavigationRowButton(
                 title: "License",
+                systemImage: "doc.text",
                 action: openLicense
             )
             if let versionText {

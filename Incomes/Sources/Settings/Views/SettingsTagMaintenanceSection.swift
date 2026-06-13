@@ -12,12 +12,14 @@ struct SettingsTagMaintenanceSection: View {
                 if hasDuplicateTags {
                     SettingsNavigationRowButton(
                         title: "Resolve duplicate tags",
+                        systemImage: "tag",
                         action: openDuplicateTags
                     )
                 }
                 if hasOrphanTags {
                     SettingsNavigationRowButton(
                         title: "Review orphan tags",
+                        systemImage: "tag.slash",
                         action: openOrphanTags
                     )
                 }

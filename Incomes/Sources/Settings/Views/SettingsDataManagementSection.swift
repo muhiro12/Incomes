@@ -30,6 +30,7 @@ private extension SettingsDataManagementSection {
     var duplicateYearItemsButton: some View {
         SettingsNavigationRowButton(
             title: "Duplicate year items",
+            systemImage: "calendar.badge.plus",
             action: duplicateYearItems
         )
     }

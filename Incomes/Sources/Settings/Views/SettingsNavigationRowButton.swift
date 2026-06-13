@@ -2,12 +2,18 @@ import SwiftUI
 
 struct SettingsNavigationRowButton: View {
     let title: LocalizedStringKey
+    let systemImage: String
     let action: () -> Void
 
     var body: some View {
         Button(action: action) {
             HStack {
-                Text(title)
+                Label {
+                    Text(title)
+                } icon: {
+                    Image(systemName: systemImage)
+                        .foregroundStyle(.secondary)
+                }
                 Spacer()
                 Image(systemName: "chevron.right")
                     .font(.footnote.weight(.semibold))

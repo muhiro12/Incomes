@@ -65,7 +65,10 @@ extension SettingsListView: View {
             ShortcutsLinkSection()
             if isDebugOn {
                 Section {
-                    SettingsNavigationRowButton(title: "Debug") {
+                    SettingsNavigationRowButton(
+                        title: "Debug",
+                        systemImage: "ladybug"
+                    ) {
                         navigateToRoute(.settingsDebug)
                     }
                 }

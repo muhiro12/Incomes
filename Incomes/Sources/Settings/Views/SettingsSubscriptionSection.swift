@@ -19,6 +19,7 @@ struct SettingsSubscriptionSection: View {
             Section {
                 SettingsNavigationRowButton(
                     title: "Subscription",
+                    systemImage: "creditcard",
                     action: openSubscription
                 )
                 .popoverTip(subscriptionTip, arrowEdge: .top)
