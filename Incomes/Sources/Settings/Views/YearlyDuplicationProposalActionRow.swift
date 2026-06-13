@@ -8,38 +8,12 @@ struct YearlyDuplicationProposalActionRow: View {
 
     var body: some View {
         IncomesLiquidGlassControlGroup(spacing: inlineSpacing) {
-            ViewThatFits(in: .horizontal) {
-                horizontalActions
-                verticalActions
-            }
+            YearlyDuplicationProposalActionLayout(
+                inlineSpacing: inlineSpacing,
+                isActionDisabled: isActionDisabled,
+                edit: edit,
+                create: create
+            )
         }
-    }
-}
-
-private extension YearlyDuplicationProposalActionRow {
-    var horizontalActions: some View {
-        HStack(spacing: inlineSpacing) {
-            editButton
-            createButton
-        }
-    }
-
-    var verticalActions: some View {
-        VStack(alignment: .leading, spacing: inlineSpacing) {
-            editButton
-            createButton
-        }
-    }
-
-    var editButton: some View {
-        Button("Edit", action: edit)
-            .incomesSecondaryControlStyle()
-            .disabled(isActionDisabled)
-    }
-
-    var createButton: some View {
-        Button("Create", action: create)
-            .incomesProminentControlStyle()
-            .disabled(isActionDisabled)
     }
 }
