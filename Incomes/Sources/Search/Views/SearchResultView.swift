@@ -31,6 +31,9 @@ struct SearchResultView: View {
             firstItemID: firstItemID
         )
         .navigationTitle("Results")
+        .toolbar {
+            ItemCountStatusToolbarItem(count: items.count)
+        }
         .task(id: items.count) {
             guard !items.isEmpty else {
                 return

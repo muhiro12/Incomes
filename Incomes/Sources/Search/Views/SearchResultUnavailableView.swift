@@ -5,7 +5,7 @@ struct SearchResultUnavailableView: View {
         ContentUnavailableView(
             "No Results",
             systemImage: "magnifyingglass",
-            description: Text("Adjust your filters to find matching income items.")
+            description: Text("Adjust your filters to find matching items.")
         )
     }
 }

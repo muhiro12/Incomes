@@ -343,36 +343,36 @@
         }
       }
     },
-    "Adjust your filters to find matching income items." : {
+    "Adjust your filters to find matching items." : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Adjust your filters to find matching income items."
+            "value" : "Adjust your filters to find matching items."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ajusta los filtros para encontrar elementos de ingresos coincidentes."
+            "value" : "Ajusta los filtros para encontrar elementos coincidentes."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ajustez vos filtres pour trouver les éléments de revenus correspondants."
+            "value" : "Ajustez vos filtres pour trouver les éléments correspondants."
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "条件を調整して、一致する収入項目を見つけてください。"
+            "value" : "条件を調整して、一致する項目を見つけてください。"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "调整筛选条件以查找匹配的收入项目。"
+            "value" : "调整筛选条件以查找匹配的项目。"
           }
         }
       }
