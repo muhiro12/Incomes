@@ -48,7 +48,7 @@ struct DuplicateTagView: View {
             Text("Merge"),
             isPresented: $isMergeDialogPresented
         ) {
-            Button {
+            Button(role: .destructive) {
                 TagMutationOperations.mergeDuplicates(tags: tags)
             } label: {
                 Text("Merge")

@@ -79,7 +79,7 @@ struct DuplicateTagListView: View {
             Text(resolveDialogTitle),
             isPresented: $isResolveDialogPresented
         ) {
-            Button("Resolve", action: resolveSelectedTags)
+            Button("Resolve", role: .destructive, action: resolveSelectedTags)
             Button(role: .cancel) {
                 // no-op
             } label: {
