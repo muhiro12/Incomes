@@ -42,42 +42,37 @@ struct ItemFormInputAssistView: View {
         let isProcessing = isApplyingInference || scanner.isScanning
 
         Form {
-            recognizedTextSection(
+            ItemFormRecognizedTextSection(
                 recognizedText: $scanner.recognizedText,
                 isRecognizedTextEmpty: scanner.recognizedText.isEmpty
             )
-            importSection()
+            ItemFormInputAssistImportSection(
+                selectedItem: $selectedItem,
+                isImportDisabled: isProcessing
+            ) {
+                importRoute = .camera
+            }
         }
         .formStyle(.grouped)
         .contentMargins(.bottom, designMetrics.spacing.inline, for: .scrollContent)
         .navigationTitle("Text Capture")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
-            ToolbarItem(placement: .cancellationAction) {
-                Button {
+            ItemFormInputAssistToolbarContent(
+                isProcessing: isProcessing,
+                isDoneDisabled: isDoneDisabled(
+                    recognizedText: scanner.recognizedText,
+                    isProcessing: isProcessing
+                ),
+                cancel: {
                     dismiss()
-                } label: {
-                    Text("Cancel")
-                }
-            }
-            ToolbarItem(placement: .confirmationAction) {
-                Button {
+                },
+                done: {
                     Task {
                         await applyInferenceAndClose()
                     }
-                } label: {
-                    if isProcessing {
-                        ProgressView()
-                    } else {
-                        Text("Done")
-                    }
                 }
-                .disabled(
-                    scanner.recognizedText
-                        .trimmingCharacters(in: .whitespacesAndNewlines)
-                        .isEmpty || isProcessing
-                )
-            }
+            )
         }
         .sheet(item: $importRoute) { route in
             switch route {
@@ -121,32 +116,13 @@ struct ItemFormInputAssistView: View {
 
 @available(iOS 26.0, *)
 private extension ItemFormInputAssistView {
-    func importSection() -> some View {
-        Section {
-            PhotosPicker(selection: $selectedItem, matching: .images) {
-                Label("Photo Library", systemImage: "photo.on.rectangle")
-            }
-            .labelStyle(.titleAndIcon)
-
-            Button {
-                importRoute = .camera
-            } label: {
-                Label("Camera", systemImage: "camera")
-            }
-            .labelStyle(.titleAndIcon)
-        } header: {
-            Text("Import")
-        }
-    }
-
-    func recognizedTextSection(
-        recognizedText: Binding<String>,
-        isRecognizedTextEmpty: Bool
-    ) -> some View {
-        ItemFormRecognizedTextSection(
-            recognizedText: recognizedText,
-            isRecognizedTextEmpty: isRecognizedTextEmpty
-        )
+    func isDoneDisabled(
+        recognizedText: String,
+        isProcessing: Bool
+    ) -> Bool {
+        recognizedText
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .isEmpty || isProcessing
     }
 
     private func scanReceipt() async {
