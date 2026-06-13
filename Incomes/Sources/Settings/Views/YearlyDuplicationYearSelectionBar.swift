@@ -13,22 +13,24 @@ struct YearlyDuplicationYearSelectionBar: View {
     let surfaceCornerRadius: CGFloat
 
     var body: some View {
-        VStack(alignment: .leading, spacing: inlineSpacing) {
-            Text("Year Range")
-                .font(.caption)
-                .foregroundStyle(.secondary)
-            YearlyDuplicationYearMenuGroup(
-                sourceYear: $sourceYear,
-                targetYear: $targetYear,
-                sourceYears: sourceYears,
-                targetYears: targetYears,
-                inlineSpacing: inlineSpacing,
-                controlSpacing: controlSpacing
-            )
+        IncomesLiquidGlassControlGroup(spacing: controlSpacing) {
+            VStack(alignment: .leading, spacing: inlineSpacing) {
+                Text("Year Range")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                YearlyDuplicationYearMenuGroup(
+                    sourceYear: $sourceYear,
+                    targetYear: $targetYear,
+                    sourceYears: sourceYears,
+                    targetYears: targetYears,
+                    inlineSpacing: inlineSpacing,
+                    controlSpacing: controlSpacing
+                )
+            }
+            .padding(.horizontal, horizontalPadding)
+            .padding(.vertical, verticalPadding)
+            .incomesGlassSurface(cornerRadius: surfaceCornerRadius)
         }
-        .padding(.horizontal, horizontalPadding)
-        .padding(.vertical, verticalPadding)
-        .incomesGlassSurface(cornerRadius: surfaceCornerRadius)
         .padding(.horizontal, horizontalPadding)
         .padding(.vertical, verticalPadding)
         .background(Color(.systemGroupedBackground))
