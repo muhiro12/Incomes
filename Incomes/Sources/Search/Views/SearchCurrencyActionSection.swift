@@ -8,12 +8,10 @@ struct SearchCurrencyActionSection: View {
     var body: some View {
         if isVisible {
             Section {
-                IncomesLiquidGlassControlGroup {
-                    SearchCurrencyActionButton(
-                        isEnabled: isEnabled,
-                        applySearch: applySearch
-                    )
-                }
+                SearchCurrencyActionButton(
+                    isEnabled: isEnabled,
+                    applySearch: applySearch
+                )
             }
         }
     }
