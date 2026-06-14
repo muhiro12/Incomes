@@ -67,7 +67,8 @@ extension SettingsListView: View {
                 Section {
                     SettingsNavigationRowButton(
                         title: "Debug",
-                        systemImage: "ladybug"
+                        systemImage: "ladybug",
+                        accessibilityHint: "Opens debug settings."
                     ) {
                         navigateToRoute(.settingsDebug)
                     }

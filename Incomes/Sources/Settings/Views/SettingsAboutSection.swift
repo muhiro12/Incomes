@@ -11,6 +11,7 @@ struct SettingsAboutSection: View {
             SettingsNavigationRowButton(
                 title: "License",
                 systemImage: "doc.text",
+                accessibilityHint: "Opens license information.",
                 action: openLicense
             )
             if let versionText {

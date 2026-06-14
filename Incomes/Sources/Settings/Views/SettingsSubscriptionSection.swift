@@ -20,6 +20,7 @@ struct SettingsSubscriptionSection: View {
                 SettingsNavigationRowButton(
                     title: "Subscription",
                     systemImage: "creditcard",
+                    accessibilityHint: "Opens subscription settings.",
                     action: openSubscription
                 )
                 .popoverTip(subscriptionTip, arrowEdge: .top)

@@ -13,6 +13,7 @@ struct SettingsTagMaintenanceSection: View {
                     SettingsNavigationRowButton(
                         title: "Resolve duplicate tags",
                         systemImage: "tag",
+                        accessibilityHint: "Opens duplicate tag cleanup.",
                         action: openDuplicateTags
                     )
                 }
@@ -20,6 +21,7 @@ struct SettingsTagMaintenanceSection: View {
                     SettingsNavigationRowButton(
                         title: "Review orphan tags",
                         systemImage: "tag.slash",
+                        accessibilityHint: "Opens orphan tag cleanup.",
                         action: openOrphanTags
                     )
                 }

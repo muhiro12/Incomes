@@ -3,6 +3,7 @@ import SwiftUI
 struct SettingsNavigationRowButton: View {
     let title: LocalizedStringKey
     let systemImage: String
+    let accessibilityHint: LocalizedStringKey
     let action: () -> Void
 
     var body: some View {
@@ -16,5 +17,6 @@ struct SettingsNavigationRowButton: View {
             }
         }
         .buttonStyle(.plain)
+        .accessibilityHint(Text(accessibilityHint))
     }
 }

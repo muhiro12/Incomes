@@ -31,6 +31,7 @@ private extension SettingsDataManagementSection {
         SettingsNavigationRowButton(
             title: "Duplicate year items",
             systemImage: "calendar.badge.plus",
+            accessibilityHint: "Opens yearly duplication proposals.",
             action: duplicateYearItems
         )
     }
