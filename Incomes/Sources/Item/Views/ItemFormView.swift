@@ -138,15 +138,13 @@ struct ItemFormView: View {
                 currentDate: .now
             )
         }
-        .onChange(of: model.date) {
-            model.handleDateChange()
-        }
-        .onChange(of: model.isRepeatEnabled) {
-            model.handleRepeatEnabledChange()
-            if model.isRepeatEnabled, mode == .create {
-                tipController.donateDidEnableRepeat()
-            }
-        }
+        .modifier(
+            ItemFormChangeHandlingModifier(
+                model: self.model,
+                mode: mode,
+                tipController: tipController
+            )
+        )
         .confirmationDialog(
             "This is a repeating item.",
             isPresented: isDialogPresented(.repeating),
