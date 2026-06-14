@@ -3,6 +3,7 @@ import SwiftUI
 struct ItemFormToolbarContent: ToolbarContent {
     let mode: ItemFormView.Mode
     let isValid: Bool
+    let primaryActionAccessibilityHint: LocalizedStringKey
     let focusedField: ItemFormFocusedField?
     @Binding var content: String
     @Binding var category: String
@@ -26,6 +27,7 @@ struct ItemFormToolbarContent: ToolbarContent {
             }
             .bold()
             .disabled(!isValid)
+            .accessibilityHint(Text(primaryActionAccessibilityHint))
         }
         if focusedField == .content {
             ToolbarItem(placement: .keyboard) {

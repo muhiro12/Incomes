@@ -77,6 +77,7 @@ struct ItemFormView: View {
             ItemFormToolbarContent(
                 mode: mode,
                 isValid: model.isValid,
+                primaryActionAccessibilityHint: primaryActionAccessibilityHint,
                 focusedField: focusedField,
                 content: $model.content,
                 category: $model.category,
@@ -198,6 +199,28 @@ private extension ItemFormView {
         case .edit:
             .edit
         }
+    }
+
+    var primaryActionAccessibilityHint: LocalizedStringKey {
+        guard !model.isValid else {
+            switch mode {
+            case .create:
+                return "Creates this item."
+            case .edit:
+                return "Saves changes to this item."
+            }
+        }
+
+        if model.content.isEmpty {
+            return "Enter content to enable this action."
+        }
+        if !model.income.isEmptyOrDecimal || !model.outgo.isEmptyOrDecimal {
+            return "Enter valid amounts to enable this action."
+        }
+        if !model.priority.isEmptyOrInt {
+            return "Enter a valid priority to enable this action."
+        }
+        return "Complete the form to enable this action."
     }
 
     func submit() {
