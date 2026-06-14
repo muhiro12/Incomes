@@ -14,6 +14,10 @@ struct CategoryChartTotalLabel: View {
                 .foregroundStyle(.secondary)
             Text(amount.asCurrency)
                 .font(.headline)
+                .lineLimit(1)
+                .minimumScaleFactor(IncomesTextScaling.minimumScaleFactor)
+                .frame(maxWidth: CategoryChartMetrics.totalLabelMaximumWidth)
         }
+        .multilineTextAlignment(.center)
     }
 }

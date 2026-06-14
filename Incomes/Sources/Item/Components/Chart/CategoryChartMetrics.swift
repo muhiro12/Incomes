@@ -9,4 +9,5 @@ enum CategoryChartMetrics {
     static let outerRadiusInset: CGFloat = 10
     static let sectionHeight: CGFloat = 240
     static let sectorCornerRadius: CGFloat = 4
+    static let totalLabelMaximumWidth: CGFloat = 132
 }
