@@ -1,3 +1,4 @@
+import SwiftData
 import SwiftUI
 
 struct NarrowListItemAccessibilityLayout: View {
@@ -12,17 +13,12 @@ struct NarrowListItemAccessibilityLayout: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: Constants.verticalSpacing) {
-            HStack(alignment: .firstTextBaseline, spacing: Constants.horizontalSpacing) {
-                Text(item.localDate, format: .dateTime.month().day())
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-                Spacer(minLength: Constants.horizontalSpacing)
-                Text(item.balance.asCurrency)
-                    .font(.headline)
-                    .lineLimit(1)
-                    .minimumScaleFactor(IncomesTextScaling.minimumScaleFactor)
-                    .foregroundStyle(item.balance < .zero ? Color.red : Color.primary)
-            }
+            NarrowListItemAccessibilityHeader(
+                date: item.localDate,
+                balanceText: item.balance.asCurrency,
+                isBalanceNegative: item.balance < .zero,
+                horizontalSpacing: Constants.horizontalSpacing
+            )
             HStack(alignment: .top, spacing: Constants.horizontalSpacing) {
                 Text(item.content)
                     .font(.headline)
@@ -36,4 +32,16 @@ struct NarrowListItemAccessibilityLayout: View {
         }
         .padding(.vertical, Constants.verticalSpacing)
     }
+}
+
+#Preview("Accessibility Size", traits: .modifier(IncomesSampleData())) {
+    @Previewable @Query var items: [Item]
+
+    List {
+        NarrowListItemAccessibilityLayout()
+            .environment(items[0])
+        NarrowListItemAccessibilityLayout()
+            .environment(items[1])
+    }
+    .environment(\.dynamicTypeSize, .accessibility3)
 }
