@@ -33,6 +33,15 @@ struct YearlyDuplicationYearSelectionBar: View {
         }
         .padding(.horizontal, horizontalPadding)
         .padding(.vertical, verticalPadding)
-        .background(Color(.systemGroupedBackground))
+        .background(backgroundColor)
+    }
+}
+
+private extension YearlyDuplicationYearSelectionBar {
+    var backgroundColor: Color {
+        if #available(iOS 26.0, *) {
+            return .clear
+        }
+        return Color(.systemGroupedBackground)
     }
 }
