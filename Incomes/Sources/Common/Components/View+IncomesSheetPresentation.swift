@@ -5,8 +5,13 @@ private enum IncomesSheetPresentation {
 }
 
 extension View {
+    @ViewBuilder
     func incomesSheetPresentation() -> some View {
-        presentationDragIndicator(.visible)
-            .presentationCornerRadius(IncomesSheetPresentation.cornerRadius)
+        if #available(iOS 26.0, *) {
+            presentationDragIndicator(.visible)
+        } else {
+            presentationDragIndicator(.visible)
+                .presentationCornerRadius(IncomesSheetPresentation.cornerRadius)
+        }
     }
 }
