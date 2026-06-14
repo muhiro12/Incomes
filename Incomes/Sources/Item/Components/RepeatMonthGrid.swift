@@ -2,10 +2,17 @@ import MHDesign
 import SwiftUI
 
 struct RepeatMonthGrid: View {
+    private enum Constants {
+        static let defaultColumnCount = 4
+        static let accessibilityColumnCount = 2
+    }
+
     @Binding private var selectedMonthSelections: Set<RepeatMonthSelection>
 
     @Environment(\.mhDesignMetrics)
     private var designMetrics
+    @Environment(\.dynamicTypeSize)
+    private var dynamicTypeSize
 
     private let year: Int
     private let baseDate: Date
@@ -41,11 +48,16 @@ struct RepeatMonthGrid: View {
 
 private extension RepeatMonthGrid {
     var columns: [GridItem] {
-        [
-            GridItem(.flexible(), spacing: designMetrics.spacing.inline),
-            GridItem(.flexible(), spacing: designMetrics.spacing.inline),
-            GridItem(.flexible(), spacing: designMetrics.spacing.inline),
-            GridItem(.flexible(), spacing: designMetrics.spacing.inline)
-        ]
+        .init(
+            repeating: GridItem(.flexible(), spacing: designMetrics.spacing.inline),
+            count: columnCount
+        )
+    }
+
+    var columnCount: Int {
+        if dynamicTypeSize.isAccessibilitySize {
+            return Constants.accessibilityColumnCount
+        }
+        return Constants.defaultColumnCount
     }
 }
