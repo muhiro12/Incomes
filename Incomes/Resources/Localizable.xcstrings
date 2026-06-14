@@ -1261,6 +1261,40 @@
         }
       }
     },
+    "Change the selected years or add more repeated yearly entries to generate proposals." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Change the selected years or add more repeated yearly entries to generate proposals."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cambia los años seleccionados o añade más entradas anuales repetidas para generar propuestas."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Changez les années sélectionnées ou ajoutez plus d’entrées annuelles répétées pour générer des propositions."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "選択年を変更するか、毎年繰り返す項目を追加すると提案を作成できます。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "更改所选年份，或添加更多每年重复的条目来生成提案。"
+          }
+        }
+      }
+    },
     "Choose a debug destination from the sidebar to inspect its items." : {
       "localizations" : {
         "en" : {
@@ -4830,6 +4864,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "没有未使用标签"
+          }
+        }
+      }
+    },
+    "No Proposals" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No Proposals"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No hay propuestas"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucune proposition"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "提案はありません"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "没有提案"
           }
         }
       }
