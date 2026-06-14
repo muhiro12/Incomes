@@ -6,6 +6,9 @@ struct ItemFormInformationSection: View {
     let focusedField: FocusState<ItemFormFocusedField?>.Binding
 
     var body: some View {
+        let isIncomeValid = model.income.isEmptyOrDecimal
+        let isOutgoValid = model.outgo.isEmptyOrDecimal
+
         Section("Information") {
             ItemFormDateRow(date: $model.date)
             ItemFormTextFieldRow(
@@ -18,8 +21,13 @@ struct ItemFormInformationSection: View {
             ItemFormAmountRows(
                 income: $model.income,
                 outgo: $model.outgo,
+                isIncomeValid: isIncomeValid,
+                isOutgoValid: isOutgoValid,
                 focusedField: focusedField
             )
+            if !isIncomeValid || !isOutgoValid {
+                ItemFormAmountValidationMessage()
+            }
             ItemFormTextFieldRow(
                 title: "Category",
                 text: $model.category,
