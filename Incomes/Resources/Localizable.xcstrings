@@ -2417,6 +2417,40 @@
         }
       }
     },
+    "Debug data, attention needed" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Debug data, attention needed"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Datos de depuración, requiere atención"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Données de débogage, attention requise"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "デバッグデータ、確認が必要"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "调试数据，需要注意"
+          }
+        }
+      }
+    },
     "Debug Items" : {
       "localizations" : {
         "en" : {
@@ -4664,6 +4698,40 @@
         }
       }
     },
+    "Manage tags, attention needed" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Manage tags, attention needed"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gestionar etiquetas, requiere atención"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gérer les étiquettes, attention requise"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "タグ管理、確認が必要"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "管理标签，需要注意"
+          }
+        }
+      }
+    },
     "Maximum Amount" : {
       "localizations" : {
         "en" : {
@@ -5514,6 +5582,40 @@
         }
       }
     },
+    "Notification amount threshold" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notification amount threshold"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Umbral de importe de notificación"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seuil de montant de notification"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "通知する金額のしきい値"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "通知金额阈值"
+          }
+        }
+      }
+    },
     "Notify for amounts over" : {
       "localizations" : {
         "en" : {
@@ -5986,6 +6088,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "打开系统设置"
+          }
+        }
+      }
+    },
+    "Opens iOS Settings to change notification permission." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opens iOS Settings to change notification permission."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abre los ajustes de iOS para cambiar el permiso de notificaciones."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ouvre les réglages iOS pour modifier l’autorisation de notification."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iOS設定を開いて通知の許可を変更します。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "打开 iOS 设置以更改通知权限。"
           }
         }
       }
@@ -7958,6 +8094,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "发送测试通知"
+          }
+        }
+      }
+    },
+    "Sends a test notification with the current settings." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sends a test notification with the current settings."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Envía una notificación de prueba con los ajustes actuales."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Envoie une notification de test avec les réglages actuels."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "現在の設定でテスト通知を送信します。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "使用当前设置发送测试通知。"
           }
         }
       }
