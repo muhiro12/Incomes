@@ -11,17 +11,21 @@ struct ItemCategoryInformationRow: View {
                     .environment(categoryTag)
             } label: {
                 ItemInformationRow(
-                    title: "Category",
-                    value: categoryTag.displayName
-                )
+                    title: "Category"
+                ) {
+                    Text(categoryTag.displayName)
+                }
             }
         } else {
             ItemInformationRow(
-                title: "Category",
-                value: CategoryFacetOperations.displayName(
-                    forStoredCategoryName: nil
+                title: "Category"
+            ) {
+                Text(
+                    CategoryFacetOperations.displayName(
+                        forStoredCategoryName: nil
+                    )
                 )
-            )
+            }
         }
     }
 }

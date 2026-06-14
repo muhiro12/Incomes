@@ -15,17 +15,16 @@ struct ItemSection: View {
     var body: some View {
         Section {
             ItemInformationRow(
-                title: "Date",
-                value: item.localDate.stringValue(.yyyyMMMd)
-            )
-            ItemInformationRow(
-                title: "Income",
-                value: item.income.asCurrency
-            )
-            ItemInformationRow(
-                title: "Outgo",
-                value: item.outgo.asMinusCurrency
-            )
+                title: "Date"
+            ) {
+                Text(item.localDate, format: .dateTime.year().month().day())
+            }
+            ItemInformationRow(title: "Income") {
+                Text(item.income.asCurrency)
+            }
+            ItemInformationRow(title: "Outgo") {
+                Text(item.outgo.asMinusCurrency)
+            }
             ItemCategoryInformationRow()
         } header: {
             Text("Information")
