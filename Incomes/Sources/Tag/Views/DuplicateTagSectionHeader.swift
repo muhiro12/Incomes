@@ -11,7 +11,7 @@ struct DuplicateTagSectionHeader: View {
         HStack {
             Text(title)
             Spacer()
-            Button("Resolve All", action: presentResolveAllDialog)
+            Button("Resolve All", role: .destructive, action: presentResolveAllDialog)
                 .font(.caption)
                 .textCase(nil)
         }

@@ -101,7 +101,7 @@ struct OrphanTagListView: View {
         .toolbar {
             ToolbarItem {
                 if hasAnyOrphanTags {
-                    Button("Cleanup All", action: presentCleanupDialog)
+                    Button("Cleanup All", role: .destructive, action: presentCleanupDialog)
                 }
             }
             ToolbarItem {

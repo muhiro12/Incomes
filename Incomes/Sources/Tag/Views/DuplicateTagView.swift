@@ -85,11 +85,10 @@ struct DuplicateTagView: View {
         }
         .toolbar {
             ToolbarItem {
-                Button {
+                Button("Merge", role: .destructive) {
                     isMergeDialogPresented = true
-                } label: {
-                    Text("Merge")
                 }
+                .disabled(!canMergeTags)
             }
             ToolbarItem {
                 CloseButton()
@@ -101,6 +100,10 @@ struct DuplicateTagView: View {
 }
 
 private extension DuplicateTagView {
+    var canMergeTags: Bool {
+        tags.count > 1
+    }
+
     var visibleColumnCount: Int {
         horizontalSizeClass == .regular
             ? Constants.regularVisibleColumnCount

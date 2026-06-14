@@ -17,7 +17,12 @@ struct DuplicateTagRow: View {
         .contentShape(Rectangle())
         .contextMenu {
             Button("Open", systemImage: "arrow.right.circle", action: openTag)
-            Button("Resolve", systemImage: "checkmark.seal", action: presentResolveDialog)
+            Button(
+                "Resolve",
+                systemImage: "checkmark.seal",
+                role: .destructive,
+                action: presentResolveDialog
+            )
             CopyTextContextMenuButton(
                 "Copy Name",
                 text: tag.displayName
