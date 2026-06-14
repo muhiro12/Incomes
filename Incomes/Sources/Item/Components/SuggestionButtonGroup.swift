@@ -42,6 +42,9 @@ struct SuggestionButtonGroup: View {
                 )
             }
         }
+        .contentMargins(.horizontal, Constants.controlSpacing, for: .scrollContent)
+        .scrollClipDisabled()
+        .scrollIndicators(.hidden)
     }
 }
 
