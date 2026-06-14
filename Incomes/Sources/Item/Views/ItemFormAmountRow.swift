@@ -31,9 +31,7 @@ struct ItemFormAmountRow: View {
 private extension ItemFormAmountRow {
     var accessibilityHint: Text {
         if !isValid {
-            return Text("Invalid amount") +
-                Text(verbatim: ". ") +
-                Text("Enter a number.")
+            return Text("Invalid amount. Enter a number.")
         }
 
         return Text("Enter a number.")

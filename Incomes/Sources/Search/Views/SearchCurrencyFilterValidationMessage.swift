@@ -3,9 +3,7 @@ import SwiftUI
 struct SearchCurrencyFilterValidationMessage: View {
     var body: some View {
         Label {
-            Text("Invalid amount") +
-                Text(verbatim: ". ") +
-                Text("Enter a number.")
+            Text("Invalid amount. Enter a number.")
         } icon: {
             Image(systemName: "exclamationmark.circle.fill")
                 .accessibilityHidden(true)
