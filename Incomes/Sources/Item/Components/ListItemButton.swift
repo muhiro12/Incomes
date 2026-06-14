@@ -14,6 +14,8 @@ struct ListItemButton: View {
     private var logging
     @Environment(IncomesTipController.self)
     private var tipController
+    @Environment(\.locale)
+    private var locale
 
     @State private var detents = PresentationDetent.medium
     @State private var isDeletePresented = false
@@ -100,28 +102,34 @@ struct ListItemButton: View {
 
 private extension ListItemButton {
     var accessibilityValue: Text {
+        Text(verbatim: accessibilityValueParts
+                .formatted(.list(type: .and).locale(locale)))
+    }
+
+    var accessibilityValueParts: [String] {
+        var parts = [
+            String(localized: "Date: \(accessibilityDateText)"),
+            String(localized: "Income: \(item.income.asCurrency)"),
+            String(localized: "Outgo: \(item.outgo.asMinusCurrency)"),
+            String(localized: "Net income: \(item.netIncome.asCurrency)"),
+            String(localized: "Balance: \(item.balance.asCurrency)")
+        ]
+
         if item.netIncome > .zero {
-            Text(
-                """
-                Date: \(item.localDate, format: .dateTime.year().month().day()), \
-                Income: \(item.income.asCurrency), \
-                Outgo: \(item.outgo.asMinusCurrency), \
-                Net income: \(item.netIncome.asCurrency), \
-                Balance: \(item.balance.asCurrency), \
-                Positive net income
-                """
-            )
-        } else {
-            Text(
-                """
-                Date: \(item.localDate, format: .dateTime.year().month().day()), \
-                Income: \(item.income.asCurrency), \
-                Outgo: \(item.outgo.asMinusCurrency), \
-                Net income: \(item.netIncome.asCurrency), \
-                Balance: \(item.balance.asCurrency)
-                """
-            )
+            parts.append(String(localized: "Positive net income"))
         }
+
+        return parts
+    }
+
+    var accessibilityDateText: String {
+        item.localDate.formatted(
+            .dateTime
+                .year()
+                .month()
+                .day()
+                .locale(locale)
+        )
     }
 
     var itemMutationLogger: MHLogger {
