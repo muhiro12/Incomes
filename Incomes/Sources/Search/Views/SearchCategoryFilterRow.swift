@@ -8,14 +8,10 @@ struct SearchCategoryFilterRow: View {
         Button {
             applyFilter(facet)
         } label: {
-            HStack {
-                Text(facet.displayName)
-                Spacer()
-                Text(facet.count, format: .number)
-                    .foregroundStyle(.secondary)
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .contentShape(Rectangle())
+            SearchFilterRowLabel(
+                title: facet.displayName,
+                count: facet.count
+            )
         }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(Text(facet.displayName))

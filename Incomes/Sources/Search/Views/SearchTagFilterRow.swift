@@ -10,14 +10,10 @@ struct SearchTagFilterRow: View {
         Button {
             applyFilter(tag)
         } label: {
-            HStack {
-                Text(tag.displayName)
-                Spacer()
-                Text(itemCount, format: .number)
-                    .foregroundStyle(.secondary)
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .contentShape(Rectangle())
+            SearchFilterRowLabel(
+                title: tag.displayName,
+                count: itemCount
+            )
         }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(Text(tag.displayName))
