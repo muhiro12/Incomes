@@ -16,6 +16,5 @@ struct SettingsNavigationRowButton: View {
             }
         }
         .buttonStyle(.plain)
-        .accessibilityHint(Text("Open"))
     }
 }
