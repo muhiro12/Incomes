@@ -14,6 +14,7 @@ struct ItemFormTextFieldRow: View {
             }
             .focused(focusedField, equals: field)
             .multilineTextAlignment(.trailing)
+            .accessibilityLabel(Text(title))
         }
     }
 }

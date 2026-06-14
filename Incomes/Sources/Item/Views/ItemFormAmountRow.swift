@@ -17,6 +17,7 @@ struct ItemFormAmountRow: View {
                 .focused(focusedField, equals: field)
                 .multilineTextAlignment(.trailing)
                 .foregroundStyle(isValid ? Color.primary : Color.red)
+                .accessibilityLabel(Text(title))
                 .accessibilityHint(accessibilityHint)
                 if !isValid {
                     Image(systemName: "exclamationmark.circle.fill")
