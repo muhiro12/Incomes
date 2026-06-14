@@ -3,17 +3,12 @@ import SwiftUI
 struct ListItemSheetContent: View {
     let route: ListItemRoute
 
-    @Binding private var detents: PresentationDetent
+    @Binding private var detailPresentationDetent: PresentationDetent
 
     var body: some View {
         switch route {
         case .detail:
-            ItemNavigationView()
-                .presentationDetents(
-                    [.medium, .large],
-                    selection: $detents
-                )
-                .incomesSheetPresentation()
+            ItemDetailSheetContent(selectedDetent: $detailPresentationDetent)
         case .edit:
             ItemFormNavigationView(mode: .edit)
                 .incomesSheetPresentation()
@@ -25,9 +20,9 @@ struct ListItemSheetContent: View {
 
     init(
         route: ListItemRoute,
-        detents: Binding<PresentationDetent>
+        detailPresentationDetent: Binding<PresentationDetent>
     ) {
         self.route = route
-        self._detents = detents
+        self._detailPresentationDetent = detailPresentationDetent
     }
 }

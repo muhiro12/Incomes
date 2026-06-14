@@ -12,6 +12,7 @@ struct ShowItemButton {
     @Environment(IncomesTipController.self)
     private var tipController
 
+    @State private var detailPresentationDetent = PresentationDetent.medium
     @State private var isDetailSheetPresented = false
 
     private let action: (() -> Void)?
@@ -28,6 +29,7 @@ extension ShowItemButton: View {
             if let action {
                 action()
             } else {
+                detailPresentationDetent = .medium
                 isDetailSheetPresented = true
             }
         } label: {
@@ -40,9 +42,7 @@ extension ShowItemButton: View {
         .accessibilityLabel(Text("Show Item Details"))
         .accessibilityHint(Text("Opens item details."))
         .sheet(isPresented: $isDetailSheetPresented) {
-            ItemNavigationView()
-                .presentationDetents([.medium, .large])
-                .incomesSheetPresentation()
+            ItemDetailSheetContent(selectedDetent: $detailPresentationDetent)
         }
     }
 }

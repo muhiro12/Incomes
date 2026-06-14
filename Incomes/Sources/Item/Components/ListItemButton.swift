@@ -17,7 +17,7 @@ struct ListItemButton: View {
     @Environment(\.locale)
     private var locale
 
-    @State private var detents = PresentationDetent.medium
+    @State private var detailPresentationDetent = PresentationDetent.medium
     @State private var isDeletePresented = false
     @State private var route: ListItemRoute?
 
@@ -27,7 +27,7 @@ struct ListItemButton: View {
 
     var body: some View {
         Button {
-            detents = .medium
+            detailPresentationDetent = .medium
             tipController.donateDidOpenItemDetail()
             route = .detail
         } label: {
@@ -45,7 +45,7 @@ struct ListItemButton: View {
         .contextMenu {
             ItemContextMenuActions(
                 showAction: {
-                    detents = .large
+                    detailPresentationDetent = .large
                     route = .detail
                 },
                 editAction: {
@@ -66,7 +66,7 @@ struct ListItemButton: View {
         .sheet(item: $route) { route in
             ListItemSheetContent(
                 route: route,
-                detents: $detents
+                detailPresentationDetent: $detailPresentationDetent
             )
         }
         .confirmationDialog(
