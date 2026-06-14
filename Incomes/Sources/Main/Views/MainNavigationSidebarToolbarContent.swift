@@ -13,9 +13,6 @@ struct MainNavigationSidebarToolbarContent: ToolbarContent {
             Button("Settings", systemImage: "gear", action: openSettings)
         }
         TodayStatusToolbarItem()
-        SpacerToolbarItem(placement: .bottomBar)
-        ToolbarItem(placement: .bottomBar) {
-            CreateItemButton()
-        }
+        CreateItemBottomToolbarContent()
     }
 }

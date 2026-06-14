@@ -22,6 +22,7 @@ struct YearChartsView: View {
         List {
             ChartSectionGroup(yearScopedTo: date)
         }
+        .listStyle(.grouped)
         .navigationTitle(Text(date, format: .dateTime.year()))
         .toolbar {
             if let count = try? ItemQueryOperations.yearItemsCount(
@@ -32,10 +33,7 @@ struct YearChartsView: View {
             }
         }
         .toolbar {
-            SpacerToolbarItem(placement: .bottomBar)
-            ToolbarItem(placement: .bottomBar) {
-                CreateItemButton()
-            }
+            CreateItemBottomToolbarContent()
         }
     }
 }
