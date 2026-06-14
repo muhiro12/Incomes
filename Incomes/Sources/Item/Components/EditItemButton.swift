@@ -33,6 +33,7 @@ extension EditItemButton: View {
                 Image(systemName: "pencil")
             }
         }
+        .accessibilityHint(Text("Opens the item form for editing."))
         .sheet(isPresented: $isEditSheetPresented) {
             ItemFormNavigationView(mode: .edit)
                 .incomesSheetPresentation()

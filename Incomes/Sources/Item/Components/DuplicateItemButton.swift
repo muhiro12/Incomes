@@ -33,6 +33,7 @@ extension DuplicateItemButton: View {
                 Image(systemName: "document.on.document")
             }
         }
+        .accessibilityHint(Text("Opens a new item form copied from this item."))
         .sheet(isPresented: $isDuplicateSheetPresented) {
             ItemFormNavigationView(mode: .create)
                 .incomesSheetPresentation()

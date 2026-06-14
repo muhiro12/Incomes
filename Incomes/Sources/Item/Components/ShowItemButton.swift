@@ -37,6 +37,7 @@ extension ShowItemButton: View {
                 Image(systemName: "doc.text.magnifyingglass")
             }
         }
+        .accessibilityHint(Text("Opens item details."))
         .sheet(isPresented: $isDetailSheetPresented) {
             ItemNavigationView()
                 .presentationDetents([.medium, .large])

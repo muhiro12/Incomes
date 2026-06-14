@@ -44,6 +44,7 @@ extension DeleteItemButton: View {
                 Image(systemName: "trash")
             }
         }
+        .accessibilityHint(Text("Asks for confirmation before deleting this item."))
         .confirmationDialog(
             Text("Delete \(item.content)"),
             isPresented: $isDialogPresented
