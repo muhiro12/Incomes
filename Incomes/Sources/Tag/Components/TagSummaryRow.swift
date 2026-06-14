@@ -11,6 +11,8 @@ import SwiftUI
 struct TagSummaryRow: View {
     @Environment(Tag.self)
     private var tag
+    @Environment(\.locale)
+    private var locale
 
     var body: some View {
         let itemCount = (tag.items ?? []).count
@@ -32,27 +34,26 @@ struct TagSummaryRow: View {
 
 private extension TagSummaryRow {
     func accessibilityValue(itemCount: Int) -> Text {
-        let summary = Text("Items: \(itemCount)") +
-            Text(verbatim: ", ") +
-            Text("Income: \(tag.income.asCurrency)") +
-            Text(verbatim: ", ") +
-            Text("Outgo: \(tag.outgo.asMinusCurrency)")
+        Text(verbatim: accessibilityValueParts(itemCount: itemCount)
+                .formatted(.list(type: .and).locale(locale)))
+    }
 
-        var result = summary
+    func accessibilityValueParts(itemCount: Int) -> [String] {
+        var parts = [
+            String(localized: "Items: \(itemCount)"),
+            String(localized: "Income: \(tag.income.asCurrency)"),
+            String(localized: "Outgo: \(tag.outgo.asMinusCurrency)")
+        ]
 
         if tag.hasDeficit {
-            result = result +
-                Text(verbatim: ", ") +
-                Text("Contains deficit items")
+            parts.append(String(localized: "Contains deficit items"))
         }
 
         if tag.netIncome > .zero {
-            result = result +
-                Text(verbatim: ", ") +
-                Text("Positive net income")
+            parts.append(String(localized: "Positive net income"))
         }
 
-        return result
+        return parts
     }
 }
 
