@@ -44,6 +44,7 @@ extension DeleteItemButton: View {
                 Image(systemName: "trash")
             }
         }
+        .accessibilityLabel(Text("Delete Item"))
         .accessibilityHint(Text("Asks for confirmation before deleting this item."))
         .confirmationDialog(
             Text("Delete \(item.content)"),

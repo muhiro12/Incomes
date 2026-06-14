@@ -22,6 +22,8 @@ extension CreateItemButton: View {
         createButton
             .incomesProminentControlStyle()
             .popoverTip(createItemTip)
+            .accessibilityLabel(Text("Create Item"))
+            .accessibilityHint(Text("Opens the item form."))
             .sheet(isPresented: $isCreateSheetPresented) {
                 ItemFormNavigationView(mode: .create)
                     .incomesSheetPresentation()
