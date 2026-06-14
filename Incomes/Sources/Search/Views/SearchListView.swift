@@ -47,6 +47,8 @@ struct SearchListView: View {
             categoryFacets: categoryFacets,
             minValue: $minValue,
             maxValue: $maxValue,
+            isMinimumValueValid: minValue.isEmptyOrDecimal,
+            isMaximumValueValid: maxValue.isEmptyOrDecimal,
             controlSpacing: designMetrics.spacing.control,
             applyTagFilter: applyTagFilter,
             applyCategoryFilter: applyCategoryFilter,
@@ -83,6 +85,10 @@ private extension SearchListView {
         )
     }
 
+    var isCurrencyFilterValid: Bool {
+        minValue.isEmptyOrDecimal && maxValue.isEmptyOrDecimal
+    }
+
     func applyTagFilter(_ tag: Tag) {
         tipController.donateDidApplySearch()
         predicate = .tagIs(tag)
@@ -94,6 +100,10 @@ private extension SearchListView {
     }
 
     func applyCurrencyFilter() {
+        guard isCurrencyFilterValid else {
+            return
+        }
+
         guard let newPredicate = selectedTarget.predicate(
             minimumText: minValue,
             maximumText: maxValue

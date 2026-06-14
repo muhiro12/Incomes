@@ -6,6 +6,8 @@ struct SearchListContent: View {
     let categoryFacets: [CategoryFacet]
     @Binding var minValue: String
     @Binding var maxValue: String
+    let isMinimumValueValid: Bool
+    let isMaximumValueValid: Bool
     let controlSpacing: CGFloat
     let applyTagFilter: (Tag) -> Void
     let applyCategoryFilter: (CategoryFacet) -> Void
@@ -20,6 +22,8 @@ struct SearchListContent: View {
                 categoryFacets: categoryFacets,
                 minValue: $minValue,
                 maxValue: $maxValue,
+                isMinimumValueValid: isMinimumValueValid,
+                isMaximumValueValid: isMaximumValueValid,
                 controlSpacing: controlSpacing,
                 applySearch: applyCurrencyFilter,
                 applyTagFilter: applyTagFilter,
@@ -27,6 +31,7 @@ struct SearchListContent: View {
             )
             SearchCurrencyActionSection(
                 isVisible: selectedTarget.isForCurrency,
+                isEnabled: isMinimumValueValid && isMaximumValueValid,
                 applySearch: applyCurrencyFilter
             )
         }

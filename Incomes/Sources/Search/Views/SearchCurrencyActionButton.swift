@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct SearchCurrencyActionButton: View {
+    let isEnabled: Bool
     let applySearch: () -> Void
 
     var body: some View {
@@ -9,5 +10,6 @@ struct SearchCurrencyActionButton: View {
                 .frame(maxWidth: .infinity)
         }
         .incomesProminentControlStyle()
+        .disabled(!isEnabled)
     }
 }

@@ -5,6 +5,7 @@ struct SearchCurrencyFilterTextField: View {
 
     @Binding var value: String
 
+    let isValid: Bool
     let submitSearch: () -> Void
 
     var body: some View {
@@ -13,7 +14,21 @@ struct SearchCurrencyFilterTextField: View {
         }
         .keyboardType(.numbersAndPunctuation)
         .submitLabel(.search)
+        .foregroundStyle(isValid ? Color.primary : Color.red)
         .onSubmit(submitSearch)
         .accessibilityLabel(Text(title))
+        .accessibilityHint(accessibilityHint)
+    }
+}
+
+private extension SearchCurrencyFilterTextField {
+    var accessibilityHint: Text {
+        if !isValid {
+            return Text("Invalid amount") +
+                Text(verbatim: ". ") +
+                Text("Enter a number.")
+        }
+
+        return Text("Enter a number.")
     }
 }
