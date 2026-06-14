@@ -16,7 +16,7 @@ struct SearchCategoryFilterRow: View {
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(Text(facet.displayName))
         .accessibilityValue(ItemCountStatusToolbarItem.localizedText(count: facet.count))
-        .accessibilityHint(Text("Apply Filter"))
+        .accessibilityHint(Text("Shows items in this category."))
         .contextMenu {
             Button(
                 "Apply Filter",

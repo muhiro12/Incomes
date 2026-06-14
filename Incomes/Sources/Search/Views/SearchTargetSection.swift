@@ -28,6 +28,8 @@ struct SearchTargetSection: View {
             }
             .pickerStyle(.menu)
             .popoverTip(searchFiltersTip, arrowEdge: .top)
+            .accessibilityValue(Text(selectedTarget.value))
+            .accessibilityHint(Text("Changes which item field the search uses."))
         }
     }
 }

@@ -18,7 +18,7 @@ struct SearchTagFilterRow: View {
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(Text(tag.displayName))
         .accessibilityValue(ItemCountStatusToolbarItem.localizedText(count: itemCount))
-        .accessibilityHint(Text("Apply Filter"))
+        .accessibilityHint(Text("Shows items with this content."))
         .contextMenu {
             Button(
                 "Apply Filter",

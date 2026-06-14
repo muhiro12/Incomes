@@ -11,5 +11,16 @@ struct SearchCurrencyActionButton: View {
         }
         .incomesProminentControlStyle()
         .disabled(!isEnabled)
+        .accessibilityHint(accessibilityHint)
+    }
+}
+
+private extension SearchCurrencyActionButton {
+    var accessibilityHint: Text {
+        if isEnabled {
+            return Text("Shows matching items for this amount range.")
+        }
+
+        return Text("Enter a valid amount range to search.")
     }
 }
