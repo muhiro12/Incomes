@@ -13,6 +13,16 @@ struct ItemFormInputAssistCameraButton: View {
         .labelStyle(.titleAndIcon)
         .incomesSecondaryControlStyle()
         .disabled(isImportDisabled)
-        .accessibilityHint(Text("Captures an image to scan text."))
+        .accessibilityHint(accessibilityHint)
+    }
+}
+
+@available(iOS 26.0, *)
+private extension ItemFormInputAssistCameraButton {
+    var accessibilityHint: Text {
+        if isImportDisabled {
+            return Text("Wait for the current text capture to finish.")
+        }
+        return Text("Captures an image to scan text.")
     }
 }

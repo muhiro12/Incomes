@@ -15,6 +15,16 @@ struct ItemFormInputAssistPhotoLibraryPicker: View {
         .labelStyle(.titleAndIcon)
         .incomesSecondaryControlStyle()
         .disabled(isImportDisabled)
-        .accessibilityHint(Text("Chooses an image to scan text."))
+        .accessibilityHint(accessibilityHint)
+    }
+}
+
+@available(iOS 26.0, *)
+private extension ItemFormInputAssistPhotoLibraryPicker {
+    var accessibilityHint: Text {
+        if isImportDisabled {
+            return Text("Wait for the current text capture to finish.")
+        }
+        return Text("Chooses an image to scan text.")
     }
 }

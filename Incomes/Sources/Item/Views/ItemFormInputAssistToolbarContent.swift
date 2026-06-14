@@ -28,6 +28,20 @@ struct ItemFormInputAssistToolbarContent: ToolbarContent {
                 }
             }
             .disabled(isDoneDisabled)
+            .accessibilityHint(doneAccessibilityHint)
         }
+    }
+}
+
+@available(iOS 26.0, *)
+private extension ItemFormInputAssistToolbarContent {
+    var doneAccessibilityHint: Text {
+        if let processingState {
+            return Text("Wait until \(processingState.title) finishes.")
+        }
+        if isDoneDisabled {
+            return Text("Capture or enter text to apply suggestions.")
+        }
+        return Text("Applies suggestions to the item form.")
     }
 }
