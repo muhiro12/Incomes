@@ -3,6 +3,7 @@ import SwiftUI
 struct SearchResultContent: View {
     let sections: [SearchResultOperations.Section]
     let firstItemID: Item.ID?
+    let refineSearch: (() -> Void)?
 
     var body: some View {
         if !sections.isEmpty {
@@ -11,7 +12,7 @@ struct SearchResultContent: View {
                 firstItemID: firstItemID
             )
         } else {
-            SearchResultUnavailableView()
+            SearchResultUnavailableView(refineSearch: refineSearch)
         }
     }
 }

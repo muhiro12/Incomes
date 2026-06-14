@@ -14,7 +14,13 @@ struct SearchResultView: View {
 
     @Query private var items: [Item]
 
-    init(predicate: ItemPredicate) { // swiftlint:disable:this type_contents_order
+    let refineSearch: (() -> Void)?
+
+    init( // swiftlint:disable:this type_contents_order
+        predicate: ItemPredicate,
+        refineSearch: (() -> Void)? = nil
+    ) {
+        self.refineSearch = refineSearch
         _items = Query(.items(predicate))
     }
 
@@ -28,7 +34,8 @@ struct SearchResultView: View {
 
         SearchResultContent(
             sections: resultSections,
-            firstItemID: firstItemID
+            firstItemID: firstItemID,
+            refineSearch: refineSearch
         )
         .navigationTitle("Results")
         .toolbar {
