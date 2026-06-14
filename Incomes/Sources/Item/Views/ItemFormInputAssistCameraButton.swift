@@ -13,5 +13,6 @@ struct ItemFormInputAssistCameraButton: View {
         .labelStyle(.titleAndIcon)
         .incomesSecondaryControlStyle()
         .disabled(isImportDisabled)
+        .accessibilityHint(Text("Captures an image to scan text."))
     }
 }

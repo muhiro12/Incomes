@@ -15,5 +15,6 @@ struct ItemFormInputAssistPhotoLibraryPicker: View {
         .labelStyle(.titleAndIcon)
         .incomesSecondaryControlStyle()
         .disabled(isImportDisabled)
+        .accessibilityHint(Text("Chooses an image to scan text."))
     }
 }
