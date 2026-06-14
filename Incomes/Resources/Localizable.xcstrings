@@ -2,7 +2,7 @@
   "sourceLanguage" : "en",
   "strings" : {
     "" : {
-
+      "shouldTranslate" : false
     },
     "(%lld)" : {
       "shouldTranslate" : false
@@ -167,13 +167,13 @@
               "one" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "%lld artículo"
+                  "value" : "%lld elemento"
                 }
               },
               "other" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "%lld artículos"
+                  "value" : "%lld elementos"
                 }
               }
             }
@@ -185,13 +185,13 @@
               "one" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "%lld article"
+                  "value" : "%lld élément"
                 }
               },
               "other" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "%lld articles"
+                  "value" : "%lld éléments"
                 }
               }
             }
@@ -203,13 +203,13 @@
               "one" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "%lld アイテム"
+                  "value" : "%lld件の項目"
                 }
               },
               "other" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "%lld アイテム"
+                  "value" : "%lld件の項目"
                 }
               }
             }
@@ -366,7 +366,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "カテゴリ付きの収入アイテムを追加すると、このグラフを表示できます。"
+            "value" : "カテゴリ付きの収入項目を追加すると、このグラフを表示できます。"
           }
         },
         "zh-Hans" : {
@@ -400,7 +400,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "カテゴリ付きの支出アイテムを追加すると、このグラフを表示できます。"
+            "value" : "カテゴリ付きの支出項目を追加すると、このグラフを表示できます。"
           }
         },
         "zh-Hans" : {
@@ -490,19 +490,19 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Todos los artículos"
+            "value" : "Todos los elementos"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tous les articles"
+            "value" : "Tous les éléments"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "すべてのアイテム"
+            "value" : "すべての項目"
           }
         },
         "zh-Hans" : {
@@ -762,19 +762,19 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "¿Estás seguro de que quieres eliminar todos los artículos?"
+            "value" : "¿Estás seguro de que quieres eliminar todos los elementos?"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Êtes-vous sûr de vouloir supprimer tous les articles ?"
+            "value" : "Êtes-vous sûr de vouloir supprimer tous les éléments ?"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "全てのアイテムを削除してもよろしいですか？"
+            "value" : "すべての項目を削除してもよろしいですか？"
           }
         },
         "zh-Hans" : {
@@ -864,19 +864,19 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "¿Estás seguro de que quieres eliminar este artículo?"
+            "value" : "¿Estás seguro de que quieres eliminar este elemento?"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Êtes-vous sûr de vouloir supprimer cet article ?"
+            "value" : "Êtes-vous sûr de vouloir supprimer cet élément ?"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "このアイテムを削除してもよろしいですか？"
+            "value" : "この項目を削除してもよろしいですか？"
           }
         },
         "zh-Hans" : {
@@ -1012,7 +1012,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "全てのタグの重複を解消しますか？この操作は取り消せません。"
+            "value" : "すべてのタグの重複を解消しますか？この操作は取り消せません。"
           }
         },
         "zh-Hans" : {
@@ -2644,7 +2644,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "全て削除"
+            "value" : "すべて削除"
           }
         },
         "zh-Hans" : {
@@ -3222,7 +3222,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "年次アイテムを複製"
+            "value" : "年次項目を複製"
           }
         },
         "zh-Hans" : {
@@ -3494,7 +3494,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "アイテムエンティティの変換に失敗しました"
+            "value" : "項目エンティティの変換に失敗しました"
           }
         },
         "zh-Hans" : {
@@ -3596,7 +3596,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "以降のアイテム"
+            "value" : "以降の項目"
           }
         },
         "zh-Hans" : {
@@ -3902,7 +3902,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "単発アイテムを含める"
+            "value" : "単発項目を含める"
           }
         },
         "zh-Hans" : {
@@ -4313,7 +4313,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "アイテム"
+            "value" : "項目"
           }
         },
         "zh-Hans" : {
@@ -4347,7 +4347,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "アイテムフォームの推測"
+            "value" : "項目フォームの推測"
           }
         },
         "zh-Hans" : {
@@ -4381,7 +4381,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "アイテムが見つかりません"
+            "value" : "項目が見つかりません"
           }
         },
         "zh-Hans" : {
@@ -4415,7 +4415,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "アイテムが見つかりません"
+            "value" : "項目が見つかりません"
           }
         },
         "zh-Hans" : {
@@ -4437,19 +4437,19 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Artículos"
+            "value" : "Elementos"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Articles"
+            "value" : "Éléments"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "アイテム"
+            "value" : "項目"
           }
         },
         "zh-Hans" : {
@@ -4483,7 +4483,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "アイテム: %lld"
+            "value" : "項目: %lld"
           }
         },
         "zh-Hans" : {
@@ -4653,7 +4653,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "アイテムを読み込み中"
+            "value" : "項目を読み込み中"
           }
         },
         "zh-Hans" : {
@@ -4709,19 +4709,19 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Gestionar artículos"
+            "value" : "Gestionar elementos"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Gérer les articles"
+            "value" : "Gérer les éléments"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "アイテムを管理する"
+            "value" : "項目を管理する"
           }
         },
         "zh-Hans" : {
@@ -5027,7 +5027,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "繰り返しアイテムの最小件数"
+            "value" : "繰り返し項目の最小件数"
           }
         },
         "zh-Hans" : {
@@ -5333,7 +5333,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "アイテムがありません"
+            "value" : "項目がありません"
           }
         },
         "zh-Hans" : {
@@ -6993,7 +6993,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Supprime les éléments d’exemple de débogage et leurs tags."
+            "value" : "Supprime les éléments d’exemple de débogage et leurs étiquettes."
           }
         },
         "ja" : {
@@ -7373,7 +7373,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "全て解消"
+            "value" : "すべて解消"
           }
         },
         "zh-Hans" : {
@@ -7639,13 +7639,13 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Enregistrer pour tous les articles"
+            "value" : "Enregistrer pour tous les éléments"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "全てのアイテムを保存"
+            "value" : "すべての項目を保存"
           }
         },
         "zh-Hans" : {
@@ -7673,13 +7673,13 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Enregistrer pour les articles futurs"
+            "value" : "Enregistrer pour les éléments futurs"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "今後のアイテムも保存"
+            "value" : "今後の項目も保存"
           }
         },
         "zh-Hans" : {
@@ -7707,13 +7707,13 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Enregistrer uniquement pour cet article"
+            "value" : "Enregistrer uniquement pour cet élément"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "このアイテムのみ保存"
+            "value" : "この項目のみ保存"
           }
         },
         "zh-Hans" : {
@@ -7815,7 +7815,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "今月のアイテムをデバイス上で確認しています。"
+            "value" : "今月の項目をデバイス上で確認しています。"
           }
         },
         "zh-Hans" : {
@@ -8529,7 +8529,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "既存のアイテムをスキップ"
+            "value" : "既存の項目をスキップ"
           }
         },
         "zh-Hans" : {
@@ -9141,7 +9141,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "このアイテム"
+            "value" : "この項目"
           }
         },
         "zh-Hans" : {
@@ -9237,7 +9237,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Cela supprimera les éléments et tags d’exemple de débogage. Continuer ?"
+            "value" : "Cela supprimera les éléments et étiquettes d’exemple de débogage. Continuer ?"
           }
         },
         "ja" : {
@@ -9685,7 +9685,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Utilisez des tags ou des fourchettes de montants pour affiner les résultats avant d’ouvrir des éléments."
+            "value" : "Utilisez des étiquettes ou des fourchettes de montants pour affiner les résultats avant d’ouvrir des éléments."
           }
         },
         "ja" : {
@@ -9759,7 +9759,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "アイテムを表示"
+            "value" : "項目を表示"
           }
         },
         "zh-Hans" : {
