@@ -2,6 +2,9 @@ import Charts
 import SwiftUI
 
 struct BalanceChart: View {
+    @Environment(\.locale)
+    private var locale
+
     let items: [Item]
 
     var body: some View {
@@ -64,13 +67,12 @@ private extension BalanceChart {
               let lowestBalance else {
             return Text("No items")
         }
-        return Text(
-            """
-            Latest balance: \(latestItem.balance.asCurrency), \
-            Highest balance: \(highestBalance.asCurrency), \
-            Lowest balance: \(lowestBalance.asCurrency)
-            """
+        return Text(verbatim: accessibilityValueParts(
+            latestBalance: latestItem.balance,
+            highestBalance: highestBalance,
+            lowestBalance: lowestBalance
         )
+        .formatted(.list(type: .and).locale(locale)))
     }
 
     var latestItem: Item? {
@@ -85,5 +87,17 @@ private extension BalanceChart {
 
     var lowestBalance: Decimal? {
         items.map(\.balance).min()
+    }
+
+    func accessibilityValueParts(
+        latestBalance: Decimal,
+        highestBalance: Decimal,
+        lowestBalance: Decimal
+    ) -> [String] {
+        [
+            String(localized: "Latest balance: \(latestBalance.asCurrency)"),
+            String(localized: "Highest balance: \(highestBalance.asCurrency)"),
+            String(localized: "Lowest balance: \(lowestBalance.asCurrency)")
+        ]
     }
 }

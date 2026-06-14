@@ -2,6 +2,9 @@ import Charts
 import SwiftUI
 
 struct IncomeAndOutgoChart: View {
+    @Environment(\.locale)
+    private var locale
+
     let items: [Item]
 
     var body: some View {
@@ -79,12 +82,23 @@ private extension IncomeAndOutgoChart {
         guard !items.isEmpty else {
             return Text("No items")
         }
-        return Text(
-            """
-            Total income: \(totalIncome.asCurrency), \
-            Total outgo: \(totalOutgo.asMinusCurrency), \
-            Net income: \(netIncome.asCurrency)
-            """
+        return Text(verbatim: accessibilityValueParts(
+            totalIncome: totalIncome,
+            totalOutgo: totalOutgo,
+            netIncome: netIncome
         )
+        .formatted(.list(type: .and).locale(locale)))
+    }
+
+    func accessibilityValueParts(
+        totalIncome: Decimal,
+        totalOutgo: Decimal,
+        netIncome: Decimal
+    ) -> [String] {
+        [
+            String(localized: "Total income: \(totalIncome.asCurrency)"),
+            String(localized: "Total outgo: \(totalOutgo.asMinusCurrency)"),
+            String(localized: "Net income: \(netIncome.asCurrency)")
+        ]
     }
 }
