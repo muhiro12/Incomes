@@ -7,30 +7,14 @@ struct YearlyDuplicationPromoSectionHeader: View {
         HStack {
             Text("Yearly duplication")
             Spacer()
-            Button {
+            Button(role: .cancel) {
                 dismiss()
             } label: {
-                Label {
-                    Text("Close")
-                } icon: {
-                    closeIcon
-                }
-                .labelStyle(.iconOnly)
+                CloseButtonLabel()
             }
             .incomesDismissControlStyle()
             .accessibilityLabel(Text("Close"))
-        }
-    }
-
-    @ViewBuilder private var closeIcon: some View {
-        if #available(iOS 26.0, *) {
-            Image(systemName: "xmark")
-                .foregroundStyle(.secondary)
-                .accessibilityHidden(true)
-        } else {
-            Image(systemName: "xmark.circle.fill")
-                .foregroundStyle(.secondary)
-                .accessibilityHidden(true)
+            .accessibilityHint(Text("Dismisses the yearly duplication suggestion."))
         }
     }
 }
