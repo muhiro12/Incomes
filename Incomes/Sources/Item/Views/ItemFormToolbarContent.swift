@@ -38,6 +38,7 @@ struct ItemFormToolbarContent: ToolbarContent {
             }
         }
         if #available(iOS 26.0, *) {
+            SpacerToolbarItem(placement: .bottomBar)
             ToolbarItem(placement: .bottomBar) {
                 Button(action: presentAssist) {
                     Label("Text Capture", systemImage: "wand.and.stars")
