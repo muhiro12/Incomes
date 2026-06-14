@@ -8,6 +8,7 @@ struct MainNavigationYearTagRow: View {
     var body: some View {
         TagSummaryRow()
             .environment(yearTag)
+            .accessibilityHint(Text("Shows months and summary for this year."))
             .contextMenu {
                 MainNavigationYearContextMenu(
                     yearTag: yearTag,

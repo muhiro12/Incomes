@@ -29,7 +29,7 @@ struct HomeMonthRowButton: View {
             }
         }
         .buttonStyle(.plain)
-        .accessibilityHint(Text("View Month"))
+        .accessibilityHint(Text("Opens this month's item list."))
         .contextMenu {
             if let monthRoute {
                 Button("View Month", systemImage: "calendar") {
