@@ -30,7 +30,7 @@ struct YearlyDuplicationPromoContent: View {
 }
 
 private extension YearlyDuplicationPromoContent {
-    var proposalDatesText: LocalizedStringKey {
-        "Dates: \(YearlyDuplicationPresentationOperations.monthDayListText(for: promo.proposal))"
+    var proposalDatesText: String {
+        YearlyDuplicationPresentationOperations.monthDayListText(for: promo.proposal)
     }
 }

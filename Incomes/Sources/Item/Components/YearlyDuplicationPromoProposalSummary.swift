@@ -3,7 +3,7 @@ import SwiftUI
 struct YearlyDuplicationPromoProposalSummary: View {
     let content: String
     let category: String
-    let datesText: LocalizedStringKey
+    let datesText: String
     let itemCount: Int
     let spacing: CGFloat
 
@@ -19,12 +19,12 @@ struct YearlyDuplicationPromoProposalSummary: View {
                     .font(.footnote)
                     .foregroundStyle(.secondary)
             }
-            Text(datesText)
-                .font(.footnote)
-                .foregroundStyle(.secondary)
-            Text("Items: \(itemCount)")
-                .font(.footnote)
-                .foregroundStyle(.secondary)
+            YearlyDuplicationMetadataRow("Dates") {
+                Text(datesText)
+            }
+            YearlyDuplicationMetadataRow("Items") {
+                Text(itemCount, format: .number)
+            }
         }
     }
 }
