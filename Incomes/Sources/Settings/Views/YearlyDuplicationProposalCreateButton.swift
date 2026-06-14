@@ -8,5 +8,6 @@ struct YearlyDuplicationProposalCreateButton: View {
         Button("Create", systemImage: "plus.circle", action: create)
             .incomesProminentControlStyle()
             .disabled(isActionDisabled)
+            .accessibilityHint(Text("Creates items from this proposal."))
     }
 }
