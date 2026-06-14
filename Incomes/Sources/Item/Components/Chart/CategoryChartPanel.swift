@@ -4,6 +4,8 @@ import SwiftUI
 struct CategoryChartPanel: View {
     @Environment(\.mhDesignMetrics)
     private var designMetrics
+    @Environment(\.locale)
+    private var locale
 
     let title: LocalizedStringKey
     let segments: [ItemSummaryOperations.ChartSegment]
@@ -47,18 +49,27 @@ struct CategoryChartPanel: View {
 
 private extension CategoryChartPanel {
     var accessibilityValue: Text {
-        guard let largestSegment = segments.max(by: { lhs, rhs in
-            lhs.value < rhs.value
-        }) else {
-            return Text("")
+        guard let largestSegment else {
+            return Text("No items")
         }
-        return Text(
-            """
-            Total: \(total.asCurrency), \
-            Largest category: \(largestSegment.title), \
-            \(largestSegment.percentText), \
-            \(largestSegment.value.asCurrency)
-            """
-        )
+        return Text(verbatim: accessibilityValueParts(largestSegment: largestSegment)
+                        .formatted(.list(type: .and).locale(locale)))
+    }
+
+    var largestSegment: ItemSummaryOperations.ChartSegment? {
+        segments.max { lhs, rhs in
+            lhs.value < rhs.value
+        }
+    }
+
+    func accessibilityValueParts(
+        largestSegment: ItemSummaryOperations.ChartSegment
+    ) -> [String] {
+        [
+            String(localized: "Total: \(total.asCurrency)"),
+            String(localized: "Largest category: \(largestSegment.title)"),
+            String(localized: "Share: \(largestSegment.percentText)"),
+            String(localized: "Amount: \(largestSegment.value.asCurrency)")
+        ]
     }
 }
