@@ -39,14 +39,17 @@ struct RepeatMonthButton: View {
 private extension RepeatMonthButton {
     var button: some View {
         Button(action: action) {
-            labelText
-                .environment(\.calendar, calendar)
-                .font(.callout)
-                .padding(.horizontal, designMetrics.spacing.inline)
-                .frame(
-                    maxWidth: .infinity,
-                    minHeight: designMetrics.layout.control.minimumTouchTarget
-                )
+            HStack(spacing: designMetrics.spacing.control) {
+                labelText
+                    .environment(\.calendar, calendar)
+                selectionIndicator
+            }
+            .font(.callout)
+            .padding(.horizontal, designMetrics.spacing.inline)
+            .frame(
+                maxWidth: .infinity,
+                minHeight: designMetrics.layout.control.minimumTouchTarget
+            )
         }
         .buttonStyle(.plain)
         .disabled(isBaseSelection)
@@ -60,6 +63,15 @@ private extension RepeatMonthButton {
             return Text(fallbackMonth, format: .number)
         }
         return Text(date, format: .dateTime.month().day())
+    }
+
+    @ViewBuilder var selectionIndicator: some View {
+        if isIncluded {
+            Image(systemName: "checkmark.circle.fill")
+                .font(.caption.weight(.semibold))
+                .foregroundStyle(Color.accentColor)
+                .accessibilityHidden(true)
+        }
     }
 
     var buttonBorder: some View {
