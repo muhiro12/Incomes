@@ -2,8 +2,15 @@ import MHDesign
 import SwiftUI
 
 struct CategoryChartLegend: View {
+    private enum Constants {
+        static let accessibilityColumnCount = 1
+        static let defaultColumnCount = 2
+    }
+
     @Environment(\.mhDesignMetrics)
     private var designMetrics
+    @Environment(\.dynamicTypeSize)
+    private var dynamicTypeSize
 
     let segments: [ItemSummaryOperations.ChartSegment]
     let colorScale: [String: Color]
@@ -23,9 +30,20 @@ struct CategoryChartLegend: View {
 
 private extension CategoryChartLegend {
     var columns: [GridItem] {
-        [
-            .init(.flexible(), spacing: designMetrics.spacing.inline, alignment: .leading),
-            .init(.flexible(), spacing: designMetrics.spacing.inline, alignment: .leading)
-        ]
+        .init(
+            repeating: .init(
+                .flexible(),
+                spacing: designMetrics.spacing.inline,
+                alignment: .leading
+            ),
+            count: columnCount
+        )
+    }
+
+    var columnCount: Int {
+        if dynamicTypeSize.isAccessibilitySize {
+            return Constants.accessibilityColumnCount
+        }
+        return Constants.defaultColumnCount
     }
 }
