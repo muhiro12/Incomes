@@ -62,7 +62,6 @@ struct ItemFormView: View {
             ItemFormInformationSection(
                 model: model,
                 priorityRange: priorityRange,
-                priorityValue: priorityValue,
                 focusedField: $focusedField
             )
             ItemFormRepeatSection(
@@ -192,17 +191,6 @@ private extension ItemFormView {
         let itemID = item.map { String(describing: $0.persistentModelID) } ?? ""
         let tagID = tag.map { String(describing: $0.persistentModelID) } ?? ""
         return "\(mode)-\(itemID)-\(tagID)"
-    }
-
-    var priorityValue: Binding<Int> {
-        .init(
-            get: {
-                model.priorityValue
-            },
-            set: { newValue in
-                model.priorityValue = newValue
-            }
-        )
     }
 
     var saveMode: ItemFormSaveMode {

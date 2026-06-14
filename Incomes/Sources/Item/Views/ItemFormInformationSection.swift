@@ -3,7 +3,6 @@ import SwiftUI
 struct ItemFormInformationSection: View {
     @Bindable var model: ItemFormModel
     let priorityRange: ClosedRange<Int>
-    let priorityValue: Binding<Int>
     let focusedField: FocusState<ItemFormFocusedField?>.Binding
 
     var body: some View {
@@ -30,7 +29,7 @@ struct ItemFormInformationSection: View {
             )
             ItemFormPriorityRow(
                 priorityRange: priorityRange,
-                priorityValue: priorityValue
+                priorityValue: $model.priorityValue
             )
         }
     }
