@@ -138,6 +138,12 @@ enum StringExtensionTests {
             let string = "1abc"
             #expect(string.decimalValue == 0)
         }
+
+        @Test("Grouped partial text returns 0")
+        func grouped_partial_text_returns_zero() {
+            let string = "1,000abc"
+            #expect(string.decimalValue == 0)
+        }
     }
 
     struct IsEmptyOrIntTests {

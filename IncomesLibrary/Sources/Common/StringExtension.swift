@@ -33,8 +33,28 @@ private enum DecimalTextParser {
         formatter.generatesDecimalNumbers = true
         formatter.locale = locale
         formatter.numberStyle = .decimal
+        var parsedObject: AnyObject?
+        var parsedRange = NSRange(
+            location: .zero,
+            length: text.utf16.count
+        )
 
-        return formatter.number(from: text)?.decimalValue
+        do {
+            try formatter.getObjectValue(
+                &parsedObject,
+                for: text,
+                range: &parsedRange
+            )
+        } catch {
+            return nil
+        }
+
+        guard parsedRange.location == .zero,
+              parsedRange.length == text.utf16.count else {
+            return nil
+        }
+
+        return parsedObject as? Decimal
     }
 }
 
