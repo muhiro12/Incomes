@@ -30,12 +30,35 @@ extension View {
     }
 
     @ViewBuilder
-    func incomesGlassSurface(cornerRadius: CGFloat) -> some View {
+    func incomesGlassSurface(
+        cornerRadius: CGFloat,
+        tint: Color? = nil,
+        isInteractive: Bool = false
+    ) -> some View {
+        incomesGlassSurface(
+            cornerRadius: cornerRadius,
+            tint: tint,
+            isInteractive: isInteractive,
+            fallbackStyle: .regularMaterial
+        )
+    }
+
+    @ViewBuilder
+    func incomesGlassSurface<FallbackStyle: ShapeStyle>(
+        cornerRadius: CGFloat,
+        tint: Color?,
+        isInteractive: Bool,
+        fallbackStyle: FallbackStyle
+    ) -> some View {
         if #available(iOS 26.0, *) {
-            incomesGlassEffect(cornerRadius: cornerRadius)
+            incomesGlassEffect(
+                cornerRadius: cornerRadius,
+                tint: tint,
+                isInteractive: isInteractive
+            )
         } else {
             background(
-                .regularMaterial,
+                fallbackStyle,
                 in: RoundedRectangle(
                     cornerRadius: cornerRadius,
                     style: .continuous

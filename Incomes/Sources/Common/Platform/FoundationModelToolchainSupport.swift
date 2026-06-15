@@ -2,6 +2,7 @@ import FoundationModels
 
 @available(iOS 26.0, *)
 enum FoundationModelToolchainSupport {
+    // Keep SDK 27 source spelling isolated so feature code remains buildable with Xcode 26.
     static func isUnsupportedLocaleError(_ error: Error) -> Bool {
         #if compiler(>=6.4)
         if #available(iOS 27.0, *),

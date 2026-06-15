@@ -8,16 +8,11 @@ struct YearlyDuplicationPromoIcon: View {
     }
 
     var body: some View {
-        if #available(iOS 26.0, *) {
-            iconImage
-                .incomesGlassEffect(
-                    cornerRadius: Constants.cornerRadius,
-                    tint: Color.accentColor.opacity(Constants.tintOpacity)
-                )
-        } else {
-            iconImage
-                .incomesGlassSurface(cornerRadius: Constants.cornerRadius)
-        }
+        iconImage
+            .incomesGlassSurface(
+                cornerRadius: Constants.cornerRadius,
+                tint: Color.accentColor.opacity(Constants.tintOpacity)
+            )
     }
 }
 

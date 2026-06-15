@@ -10,17 +10,11 @@ struct ChartExpansionIndicator: View {
     }
 
     var body: some View {
-        if #available(iOS 26.0, *) {
-            label
-                .incomesGlassEffect(
-                    cornerRadius: ChartExpansionIndicatorMetrics.cornerRadius,
-                    isInteractive: true
-                )
-                .accessibilityHidden(true)
-        } else {
-            label
-                .incomesGlassSurface(cornerRadius: ChartExpansionIndicatorMetrics.cornerRadius)
-                .accessibilityHidden(true)
-        }
+        label
+            .incomesGlassSurface(
+                cornerRadius: ChartExpansionIndicatorMetrics.cornerRadius,
+                isInteractive: true
+            )
+            .accessibilityHidden(true)
     }
 }

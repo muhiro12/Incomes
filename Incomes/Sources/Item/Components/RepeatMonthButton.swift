@@ -19,20 +19,14 @@ struct RepeatMonthButton: View {
     let action: () -> Void
 
     var body: some View {
-        if #available(iOS 26.0, *) {
-            button
-                .incomesGlassEffect(
-                    cornerRadius: designMetrics.cornerRadius.control,
-                    tint: glassTint,
-                    isInteractive: !isBaseSelection
-                )
-                .overlay(buttonBorder)
-        } else {
-            button
-                .background(fallbackBackgroundColor)
-                .clipShape(buttonShape)
-                .overlay(buttonBorder)
-        }
+        button
+            .incomesGlassSurface(
+                cornerRadius: designMetrics.cornerRadius.control,
+                tint: glassTint,
+                isInteractive: !isBaseSelection,
+                fallbackStyle: fallbackBackgroundColor
+            )
+            .overlay(buttonBorder)
     }
 }
 
@@ -103,7 +97,6 @@ private extension RepeatMonthButton {
         return Color(.secondarySystemBackground)
     }
 
-    @available(iOS 26.0, *)
     var glassTint: Color? {
         guard isIncluded else {
             return nil
