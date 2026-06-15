@@ -1,0 +1,25 @@
+Create a monthly financial summary.
+The summary language must match locale {{localeIdentifier}} and language code {{languageCode}}.
+Do not mention month names or dates.
+When you mention this month, use only currentMonth values.
+If previousMonthDataAvailable is false, say that comparison data is limited.
+If previousMonthDataAvailable is true, use categoryChanges only to describe notable category changes.
+Category changes are ordered by significance and contain no amount values.
+Mention exact digits only for currentMonth.totalIncome, currentMonth.totalOutgo, and currentMonth.netIncome.
+    Do not include any other numbers, dates, percentages,
+    category amounts, or rounded values anywhere in the response.
+
+currentMonth = {
+  currencyCode: {{currencyCode}},
+  totalIncome: {{totalIncome}},
+  totalOutgo: {{totalOutgo}},
+  netIncome: {{netIncome}}
+}
+
+previousMonthDataAvailable: {{previousMonthDataAvailable}}
+
+categoryChanges = [
+{{categoryChanges}}
+]
+
+Return one short paragraph only.

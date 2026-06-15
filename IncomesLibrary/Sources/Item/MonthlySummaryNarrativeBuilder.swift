@@ -9,30 +9,14 @@ enum MonthlySummaryNarrativeBuilder {
 
     /// Builds Foundation Models instructions for monthly summary generation.
     static func instructions(languageCode: String) -> String {
-        """
-        You write short monthly financial activity summaries for a household finance app.
-        Use only the trusted values provided in the prompt.
-        Treat currentMonth as the source of truth for statements about this month.
-        Mention numeric values only for currentMonth.totalIncome,
-        currentMonth.totalOutgo, and currentMonth.netIncome.
-        If you mention those current-month values, copy the digits exactly as written in currentMonth.
-        Do not mention any other numbers, dates, percentages, counts, rounded units,
-        converted values, previous-month totals, or category amounts.
-        Do not spell out amounts in words or use rounded units like thousand, million, 万, or 億.
-        Use categoryChanges only to describe category-level increase or decrease directions.
-        Respond only in the language: \(languageCode).
-        Never reply in English unless the requested language is English.
-        If the requested language is Japanese, write every sentence in Japanese.
-        Write 3 to 6 plain sentences.
-        Do not use bullets, headings, or lists.
-        Describe total income, total outgo, and the net result.
-        Mention notable category-level increases or decreases compared with the previous month
-        when supported by the provided data.
-        Do not provide financial advice, recommendations, judgments, or warnings.
-        If previous-month data is missing or too sparse to support a comparison,
-        say that briefly instead of inventing trends.
-        Keep the response short and factual.
-        """
+        FoundationModelPromptTemplate(
+            resourceName: "monthly-summary-instructions"
+        )
+        .render(
+            replacements: [
+                "languageCode": languageCode
+            ]
+        )
     }
 
     /// Builds a model prompt from deterministic monthly summary context.
@@ -46,33 +30,23 @@ enum MonthlySummaryNarrativeBuilder {
             ? categoryChangeLines(from: context.categoryComparisons)
             : "  "
 
-        return """
-        Create a monthly financial summary.
-        The summary language must match locale \(localeIdentifier) and language code \(languageCode).
-        Do not mention month names or dates.
-        When you mention this month, use only currentMonth values.
-        If previousMonthDataAvailable is false, say that comparison data is limited.
-        If previousMonthDataAvailable is true, use categoryChanges only to describe notable category changes.
-        Category changes are ordered by significance and contain no amount values.
-        Mention exact digits only for currentMonth.totalIncome, currentMonth.totalOutgo, and currentMonth.netIncome.
-            Do not include any other numbers, dates, percentages,
-            category amounts, or rounded values anywhere in the response.
-
-        currentMonth = {
-          currencyCode: \(PromptLiteralSupport.jsonStringLiteral(context.currentTotals.currencyCode)),
-          totalIncome: \(decimalString(context.currentTotals.totalIncome)),
-          totalOutgo: \(decimalString(context.currentTotals.totalOutgo)),
-          netIncome: \(decimalString(context.currentTotals.netIncome))
-        }
-
-        previousMonthDataAvailable: \(hasPreviousMonthData)
-
-        categoryChanges = [
-        \(categoryChangeLines)
-        ]
-
-        Return one short paragraph only.
-        """
+        return FoundationModelPromptTemplate(
+            resourceName: "monthly-summary-user-prompt"
+        )
+        .render(
+            replacements: [
+                "localeIdentifier": localeIdentifier,
+                "languageCode": languageCode,
+                "currencyCode": PromptLiteralSupport.jsonStringLiteral(
+                    context.currentTotals.currencyCode
+                ),
+                "totalIncome": decimalString(context.currentTotals.totalIncome),
+                "totalOutgo": decimalString(context.currentTotals.totalOutgo),
+                "netIncome": decimalString(context.currentTotals.netIncome),
+                "previousMonthDataAvailable": String(hasPreviousMonthData),
+                "categoryChanges": categoryChangeLines
+            ]
+        )
     }
 
     /// Returns a deterministic fallback summary when model generation cannot be trusted.

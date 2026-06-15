@@ -1,0 +1,6 @@
+Extract one item for a household finance form.
+
+Current date (yyyyMMdd): {{currentDate}}
+Requested language code: {{languageCode}}
+Locale identifier: {{localeIdentifier}}
+User input JSON string: {{userInputJSONString}}
