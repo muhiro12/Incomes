@@ -62,7 +62,6 @@ struct ItemFormView: View {
             ItemFormInformationSection(
                 model: model,
                 priorityRange: priorityRange,
-                priorityValue: priorityValue,
                 focusedField: $focusedField
             )
             ItemFormRepeatSection(
@@ -78,6 +77,7 @@ struct ItemFormView: View {
             ItemFormToolbarContent(
                 mode: mode,
                 isValid: model.isValid,
+                primaryActionAccessibilityHint: primaryActionAccessibilityHint,
                 focusedField: focusedField,
                 content: $model.content,
                 category: $model.category,
@@ -139,15 +139,13 @@ struct ItemFormView: View {
                 currentDate: .now
             )
         }
-        .onChange(of: model.date) {
-            model.handleDateChange()
-        }
-        .onChange(of: model.isRepeatEnabled) {
-            model.handleRepeatEnabledChange()
-            if model.isRepeatEnabled, mode == .create {
-                tipController.donateDidEnableRepeat()
-            }
-        }
+        .modifier(
+            ItemFormChangeHandlingModifier(
+                model: self.model,
+                mode: mode,
+                tipController: tipController
+            )
+        )
         .confirmationDialog(
             "This is a repeating item.",
             isPresented: isDialogPresented(.repeating),
@@ -194,17 +192,6 @@ private extension ItemFormView {
         return "\(mode)-\(itemID)-\(tagID)"
     }
 
-    var priorityValue: Binding<Int> {
-        .init(
-            get: {
-                model.priorityValue
-            },
-            set: { newValue in
-                model.priorityValue = newValue
-            }
-        )
-    }
-
     var saveMode: ItemFormSaveMode {
         switch mode {
         case .create:
@@ -212,6 +199,28 @@ private extension ItemFormView {
         case .edit:
             .edit
         }
+    }
+
+    var primaryActionAccessibilityHint: LocalizedStringKey {
+        guard !model.isValid else {
+            switch mode {
+            case .create:
+                return "Creates this item."
+            case .edit:
+                return "Saves changes to this item."
+            }
+        }
+
+        if model.content.isEmpty {
+            return "Enter content to enable this action."
+        }
+        if !model.income.isEmptyOrDecimal || !model.outgo.isEmptyOrDecimal {
+            return "Enter valid amounts to enable this action."
+        }
+        if !model.priority.isEmptyOrInt {
+            return "Enter a valid priority to enable this action."
+        }
+        return "Complete the form to enable this action."
     }
 
     func submit() {

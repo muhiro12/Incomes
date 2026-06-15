@@ -15,8 +15,8 @@ enum ItemSearchPredicateBuilder {
         minimumText: String,
         maximumText: String
     ) -> ItemPredicate {
-        let minimumValue = Decimal(string: minimumText) ?? -Decimal.greatestFiniteMagnitude
-        let maximumValue = Decimal(string: maximumText) ?? Decimal.greatestFiniteMagnitude
+        let minimumValue = minimumText.parsedDecimalValue ?? -Decimal.greatestFiniteMagnitude
+        let maximumValue = maximumText.parsedDecimalValue ?? Decimal.greatestFiniteMagnitude
 
         switch target {
         case .balance:

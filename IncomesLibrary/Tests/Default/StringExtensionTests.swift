@@ -5,6 +5,7 @@
 //  Created by Hiromu Nakano on 2020/04/11.
 //
 
+import Foundation
 @testable import IncomesLibrary
 import Testing
 
@@ -64,6 +65,18 @@ enum StringExtensionTests {
             #expect(string.isEmptyOrDecimal)
         }
 
+        @Test("Partial text returns false")
+        func partial_text_returns_false() {
+            let string = "1abc"
+            #expect(!string.isEmptyOrDecimal)
+        }
+
+        @Test("Grouped partial text returns false")
+        func grouped_partial_text_returns_false() {
+            let string = "1,000abc"
+            #expect(!string.isEmptyOrDecimal)
+        }
+
         @Test("Int32 upper limit returns true")
         func int32_upper_limit_returns_true() {
             let string = "2147483647"
@@ -106,6 +119,30 @@ enum StringExtensionTests {
         func int_returns_decimal() {
             let string = "1000"
             #expect(string.decimalValue == 1_000)
+        }
+
+        @Test("Int with comma returns decimal")
+        func int_with_comma_returns_decimal() {
+            let string = "1,000"
+            #expect(string.decimalValue == 1_000)
+        }
+
+        @Test("Decimal with comma returns decimal")
+        func decimal_with_comma_returns_decimal() {
+            let string = "1,000.50"
+            #expect(string.decimalValue == Decimal(string: "1000.50") ?? .zero)
+        }
+
+        @Test("Partial text returns 0")
+        func partial_text_returns_zero() {
+            let string = "1abc"
+            #expect(string.decimalValue == 0)
+        }
+
+        @Test("Grouped partial text returns 0")
+        func grouped_partial_text_returns_zero() {
+            let string = "1,000abc"
+            #expect(string.decimalValue == 0)
         }
     }
 

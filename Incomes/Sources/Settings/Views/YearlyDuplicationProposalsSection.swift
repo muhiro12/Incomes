@@ -12,26 +12,30 @@ struct YearlyDuplicationProposalsSection: View {
 
     var body: some View {
         Section("Proposals") {
-            ForEach(plan.groups, id: \.id) { group in
-                let entries = YearlyItemDuplicationPlanOperations.entries(
-                    for: group.id,
-                    in: plan
-                )
-                let isCreated = createdGroupIDs.contains(group.id)
-                YearlyDuplicationProposalRow(
-                    group: group,
-                    isCreated: isCreated,
-                    isActionDisabled: isCreated || entries.isEmpty,
-                    inlineSpacing: inlineSpacing,
-                    verticalPadding: verticalPadding,
-                    summaryText: summaryText(group),
-                    edit: {
-                        edit(group)
-                    },
-                    create: {
-                        create(group)
-                    }
-                )
+            if plan.groups.isEmpty {
+                YearlyDuplicationNoProposalsView()
+            } else {
+                ForEach(plan.groups, id: \.id) { group in
+                    let entries = YearlyItemDuplicationPlanOperations.entries(
+                        for: group.id,
+                        in: plan
+                    )
+                    let isCreated = createdGroupIDs.contains(group.id)
+                    YearlyDuplicationProposalRow(
+                        group: group,
+                        isCreated: isCreated,
+                        isActionDisabled: isCreated || entries.isEmpty,
+                        inlineSpacing: inlineSpacing,
+                        verticalPadding: verticalPadding,
+                        summaryText: summaryText(group),
+                        edit: {
+                            edit(group)
+                        },
+                        create: {
+                            create(group)
+                        }
+                    )
+                }
             }
         }
     }

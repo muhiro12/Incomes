@@ -7,25 +7,33 @@
 
 import SwiftUI
 
-struct StatusToolbarItem: ToolbarContent {
-    private let content: LocalizedStringResource
+struct StatusToolbarItem<Content: View>: ToolbarContent {
+    private let content: Content
 
-    init(_ content: LocalizedStringResource) { // swiftlint:disable:this type_contents_order
-        self.content = content
+    init(@ViewBuilder content: () -> Content) { // swiftlint:disable:this type_contents_order
+        self.content = content()
     }
 
     var body: some ToolbarContent {
         if #available(iOS 26.0, *) {
             ToolbarItem(placement: .largeSubtitle) {
-                Text(content)
+                content
                     .foregroundStyle(.secondary)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
         } else {
             ToolbarItem(placement: .status) {
-                Text(content)
+                content
                     .font(.footnote)
             }
+        }
+    }
+}
+
+extension StatusToolbarItem where Content == Text {
+    init(_ content: LocalizedStringResource) {
+        self.init {
+            Text(content)
         }
     }
 }

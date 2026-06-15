@@ -23,16 +23,15 @@ struct MainNavigationSidebarView: View {
     var body: some View {
         Group {
             if yearTags.isEmpty {
-                ContentUnavailableView {
-                    Label("No Years Yet", systemImage: "calendar.badge.plus")
-                } description: {
-                    Text("Create your first item to start organizing income by year.")
-                } actions: {
-                    CreateItemButton()
-                }
+                MainNavigationSidebarEmptyContent()
             } else {
-                List(selection: yearTagSelection) {
-                    yearTagRows
+                MainNavigationSidebarList(
+                    yearTags: yearTags,
+                    yearTagSelection: yearTagSelection,
+                    onNavigate: onNavigate,
+                    onDeleteYearTags: requestYearDeletion,
+                    onDeleteYearTag: requestYearDeletion
+                ) {
                     YearlyDuplicationPromoSection(
                         yearTags: yearTags
                     ) {
@@ -42,7 +41,7 @@ struct MainNavigationSidebarView: View {
             }
         }
         .confirmationDialog(
-            Text("Delete"),
+            deletionDialogTitle,
             isPresented: Binding(
                 get: {
                     yearDeletionModel.isDialogPresented
@@ -72,92 +71,14 @@ struct MainNavigationSidebarView: View {
                 Text("Cancel")
             }
         } message: {
-            Text("Are you sure you want to delete these items?")
+            ItemDeletionConfirmationMessage(
+                itemCount: yearDeletionModel.itemsToDelete.count
+            )
         }
     }
 }
 
 private extension MainNavigationSidebarView {
-    var yearTagRows: some View {
-        ForEach(yearTags, id: \.persistentModelID) { yearTag in
-            yearTagRow(for: yearTag)
-        }
-        .onDelete { indices in
-            Haptic.warning.impact()
-            yearDeletionModel.prepare(
-                from: yearTags,
-                indices: indices,
-                logger: yearDeletionLogger
-            )
-            sidebarLogger.debug(
-                "year_deletion.requested",
-                metadata: IncomesLogging.metadata(
-                    ("index_count", IncomesLogging.count(indices.count)),
-                    ("tag_count", IncomesLogging.count(yearDeletionModel.tagsToDelete.count)),
-                    ("item_count", IncomesLogging.count(yearDeletionModel.itemsToDelete.count))
-                )
-            )
-        }
-    }
-
-    func yearTagRow(
-        for yearTag: Tag
-    ) -> some View {
-        TagSummaryRow()
-            .environment(yearTag)
-            .contextMenu {
-                yearContextMenu(for: yearTag)
-            }
-            .tag(yearTag.persistentModelID)
-    }
-
-    @ViewBuilder
-    func yearContextMenu(
-        for yearTag: Tag
-    ) -> some View {
-        if let yearSummaryRoute = MainNavigationOperations.yearSummaryRoute(
-            forYearTag: yearTag
-        ) {
-            Button("Show Summary", systemImage: "chart.bar") {
-                onNavigate(yearSummaryRoute)
-            }
-        }
-        Button(
-            "Duplicate Year Items",
-            systemImage: "square.on.square"
-        ) {
-            onNavigate(.yearlyDuplication)
-        }
-        if let yearURL = MainNavigationOperations.preferredURL(
-            for: MainNavigationOperations.route(forYearTag: yearTag)
-        ) {
-            Divider()
-            ShareLink(item: yearURL) {
-                Label("Share Link", systemImage: "square.and.arrow.up")
-            }
-            CopyURLContextMenuButton("Copy Link", url: yearURL)
-        }
-        Divider()
-        Button(role: .destructive) {
-            Haptic.warning.impact()
-            yearDeletionModel.prepare(
-                from: [yearTag],
-                indices: IndexSet(integer: .zero),
-                logger: yearDeletionLogger
-            )
-            sidebarLogger.debug(
-                "year_deletion.context_menu_prepared",
-                metadata: IncomesLogging.metadata(
-                    ("selected_year_present", "true"),
-                    ("tag_count", IncomesLogging.count(yearDeletionModel.tagsToDelete.count)),
-                    ("item_count", IncomesLogging.count(yearDeletionModel.itemsToDelete.count))
-                )
-            )
-        } label: {
-            Label("Delete", systemImage: "trash")
-        }
-    }
-
     func confirmYearDeletion(
         selectedYearTag: Tag?,
         tagsToDelete: [Tag],
@@ -192,9 +113,51 @@ private extension MainNavigationSidebarView {
             }
         }
     }
+
+    func requestYearDeletion(indices: IndexSet) {
+        Haptic.warning.impact()
+        yearDeletionModel.prepare(
+            from: yearTags,
+            indices: indices,
+            logger: yearDeletionLogger
+        )
+        sidebarLogger.debug(
+            "year_deletion.requested",
+            metadata: IncomesLogging.metadata(
+                ("index_count", IncomesLogging.count(indices.count)),
+                ("tag_count", IncomesLogging.count(yearDeletionModel.tagsToDelete.count)),
+                ("item_count", IncomesLogging.count(yearDeletionModel.itemsToDelete.count))
+            )
+        )
+    }
+
+    func requestYearDeletion(yearTag: Tag) {
+        Haptic.warning.impact()
+        yearDeletionModel.prepare(
+            from: [yearTag],
+            indices: IndexSet(integer: .zero),
+            logger: yearDeletionLogger
+        )
+        sidebarLogger.debug(
+            "year_deletion.context_menu_prepared",
+            metadata: IncomesLogging.metadata(
+                ("selected_year_present", "true"),
+                ("tag_count", IncomesLogging.count(yearDeletionModel.tagsToDelete.count)),
+                ("item_count", IncomesLogging.count(yearDeletionModel.itemsToDelete.count))
+            )
+        )
+    }
 }
 
 private extension MainNavigationSidebarView {
+    var deletionDialogTitle: Text {
+        if yearDeletionModel.tagsToDelete.count == 1,
+           let yearTag = yearDeletionModel.tagsToDelete.first {
+            return Text("Delete \(yearTag.displayName)")
+        }
+        return Text("Delete")
+    }
+
     var sidebarLogger: MHLogger {
         IncomesLogging.logger(
             logging: logging,

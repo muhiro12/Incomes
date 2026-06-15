@@ -42,38 +42,24 @@ struct MainNavigationContentColumn: View {
     }
 
     var body: some View {
-        content
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-    }
-}
-
-private extension MainNavigationContentColumn {
-    @ViewBuilder var content: some View {
-        if router.isSearchPresented {
-            SearchListView(
-                selection: searchPredicateSelection,
-                searchText: searchText,
-                appliesInitialSearchText: appliesInitialSearchText
-            )
-        } else if let selectedYearTag {
-            HomeListView(
-                navigateToRoute: onNavigate
-            )
-            .environment(selectedYearTag)
-        } else if hasAnyYears {
-            ContentUnavailableView(
-                "Select a Year",
-                systemImage: "calendar",
-                description: Text("Choose a year to review monthly summaries and items.")
-            )
-        } else {
-            ContentUnavailableView {
-                Label("Create Your First Item", systemImage: "square.and.pencil")
-            } description: {
-                Text("Once you add an item, Incomes will organize it into a year timeline.")
-            } actions: {
-                CreateItemButton()
+        Group {
+            if router.isSearchPresented {
+                MainNavigationSearchContent(
+                    searchPredicateSelection: searchPredicateSelection,
+                    searchText: searchText,
+                    appliesInitialSearchText: appliesInitialSearchText
+                )
+            } else if let selectedYearTag {
+                MainNavigationYearContent(
+                    selectedYearTag: selectedYearTag,
+                    onNavigate: onNavigate
+                )
+            } else if hasAnyYears {
+                MainNavigationSelectYearContent()
+            } else {
+                MainNavigationEmptyYearsContent()
             }
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }

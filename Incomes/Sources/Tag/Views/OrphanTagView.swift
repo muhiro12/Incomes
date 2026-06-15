@@ -62,7 +62,7 @@ struct OrphanTagView: View {
             ToolbarItem {
                 CloseButton()
             }
-            StatusToolbarItem("0 Items")
+            ItemCountStatusToolbarItem(count: .zero)
         }
     }
 }

@@ -19,8 +19,11 @@ struct CreateItemButton {
 
 extension CreateItemButton: View {
     var body: some View {
-        styledCreateButton
+        createButton
+            .incomesProminentControlStyle()
             .popoverTip(createItemTip)
+            .accessibilityLabel(Text("Create Item"))
+            .accessibilityHint(Text("Opens the item form."))
             .sheet(isPresented: $isCreateSheetPresented) {
                 ItemFormNavigationView(mode: .create)
                     .incomesSheetPresentation()
@@ -29,17 +32,6 @@ extension CreateItemButton: View {
 }
 
 private extension CreateItemButton {
-    @ViewBuilder var styledCreateButton: some View {
-        if #available(iOS 26.0, *) {
-            createButton
-                .buttonStyle(.glassProminent)
-        } else {
-            createButton
-                .buttonStyle(.borderedProminent)
-                .buttonBorderShape(.capsule)
-        }
-    }
-
     var createButton: some View {
         Button {
             tipController.donateDidOpenCreateForm()

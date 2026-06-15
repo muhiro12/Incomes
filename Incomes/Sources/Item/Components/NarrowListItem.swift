@@ -9,39 +9,14 @@ import SwiftData
 import SwiftUI
 
 struct NarrowListItem: View {
-    private enum Constants {
-        static let balanceColumnWidth: CGFloat = 80
-        static let dateColumnWidth: CGFloat = 64
-    }
-
-    @Environment(Item.self)
-    private var item
+    @Environment(\.dynamicTypeSize)
+    private var dynamicTypeSize
 
     var body: some View {
-        HStack {
-            Text(item.localDate.stringValue(.MMMd))
-                .font(.subheadline)
-                .lineLimit(1)
-                .minimumScaleFactor(IncomesTextScaling.minimumScaleFactor)
-                .truncationMode(.head)
-                .frame(width: Constants.dateColumnWidth, alignment: .leading)
-            Divider()
-            Spacer()
-            VStack(alignment: .trailing, spacing: .zero) {
-                TitleListItem()
-                Text(item.netIncome.asCurrency)
-                    .font(.footnote)
-                    .lineLimit(1)
-                    .minimumScaleFactor(IncomesTextScaling.minimumScaleFactor)
-                    .foregroundColor(.secondary)
-            }
-            Spacer()
-            Divider()
-            Text(item.balance.asCurrency)
-                .lineLimit(1)
-                .minimumScaleFactor(IncomesTextScaling.minimumScaleFactor)
-                .frame(width: Constants.balanceColumnWidth, alignment: .trailing)
-                .foregroundColor(item.balance < .zero ? .red : .primary)
+        if dynamicTypeSize.isAccessibilitySize {
+            NarrowListItemAccessibilityLayout()
+        } else {
+            NarrowListItemStandardLayout()
         }
     }
 }

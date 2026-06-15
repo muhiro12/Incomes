@@ -14,7 +14,13 @@ struct SearchResultView: View {
 
     @Query private var items: [Item]
 
-    init(predicate: ItemPredicate) { // swiftlint:disable:this type_contents_order
+    let refineSearch: (() -> Void)?
+
+    init( // swiftlint:disable:this type_contents_order
+        predicate: ItemPredicate,
+        refineSearch: (() -> Void)? = nil
+    ) {
+        self.refineSearch = refineSearch
         _items = Query(.items(predicate))
     }
 
@@ -23,36 +29,21 @@ struct SearchResultView: View {
     }
 
     var body: some View {
-        Group {
-            if !items.isEmpty {
-                List {
-                    ForEach(
-                        Array(sections.enumerated()),
-                        id: \.element.month
-                    ) { sectionIndex, section in
-                        Section(section.title) {
-                            ForEach(
-                                Array(section.items.enumerated()),
-                                id: \.element.persistentModelID
-                            ) { itemIndex, item in
-                                ListItem(
-                                    isItemDetailTipAnchor: sectionIndex == .zero &&
-                                        itemIndex == .zero
-                                )
-                                .environment(item)
-                            }
-                        }
-                    }
-                }
-            } else {
-                ContentUnavailableView(
-                    "No Results",
-                    systemImage: "magnifyingglass",
-                    description: Text("Adjust your filters to find matching income items.")
-                )
-            }
-        }
+        let resultSections = sections
+        let firstItemID = resultSections.first?.items.first?.persistentModelID
+
+        SearchResultContent(
+            sections: resultSections,
+            firstItemID: firstItemID,
+            refineSearch: refineSearch
+        )
         .navigationTitle("Results")
+        .toolbar {
+            ItemCountStatusToolbarItem(count: items.count)
+        }
+        .toolbar {
+            CreateItemToolbarContent()
+        }
         .task(id: items.count) {
             guard !items.isEmpty else {
                 return

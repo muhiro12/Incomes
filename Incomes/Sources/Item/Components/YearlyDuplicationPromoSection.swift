@@ -38,18 +38,9 @@ struct YearlyDuplicationPromoSection: View {
                         reviewProposals: reviewProposals
                     )
                 } header: {
-                    HStack {
-                        Text("Yearly duplication")
-                        Spacer()
-                        Button {
-                            dismissYearlyDuplicationPromo()
-                        } label: {
-                            Image(systemName: "xmark.circle.fill")
-                                .foregroundStyle(.secondary)
-                        }
-                        .buttonStyle(.borderless)
-                        .accessibilityLabel(Text("Close"))
-                    }
+                    YearlyDuplicationPromoSectionHeader(
+                        dismiss: dismissYearlyDuplicationPromo
+                    )
                 }
             }
         }

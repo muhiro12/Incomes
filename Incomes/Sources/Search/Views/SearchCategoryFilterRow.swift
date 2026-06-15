@@ -8,15 +8,15 @@ struct SearchCategoryFilterRow: View {
         Button {
             applyFilter(facet)
         } label: {
-            HStack {
-                Text(facet.displayName)
-                Spacer()
-                Text(facet.count.description)
-                    .foregroundStyle(.secondary)
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .contentShape(Rectangle())
+            SearchFilterRowLabel(
+                title: facet.displayName,
+                count: facet.count
+            )
         }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(Text(facet.displayName))
+        .accessibilityValue(ItemCountStatusToolbarItem.localizedText(count: facet.count))
+        .accessibilityHint(Text("Shows items in this category."))
         .contextMenu {
             Button(
                 "Apply Filter",

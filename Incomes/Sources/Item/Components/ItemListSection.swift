@@ -38,13 +38,15 @@ struct ItemListSection {
 
 extension ItemListSection: View {
     var body: some View {
+        let firstItemID = items.first?.persistentModelID
+
         Section {
-            ForEach(
-                Array(items.enumerated()),
-                id: \.element.persistentModelID
-            ) { index, item in
-                ListItem(isItemDetailTipAnchor: showsItemDetailTip && index == .zero)
-                    .environment(item)
+            ForEach(items, id: \.persistentModelID) { item in
+                ListItem(
+                    isItemDetailTipAnchor: showsItemDetailTip &&
+                        item.persistentModelID == firstItemID
+                )
+                .environment(item)
             }
             .onDelete { indices in
                 Haptic.warning.impact()
@@ -85,7 +87,7 @@ extension ItemListSection: View {
                 Text("Cancel")
             }
         } message: {
-            Text("Are you sure you want to delete this item?")
+            ItemDeletionConfirmationMessage(itemCount: willDeleteItems.count)
         }
     }
 

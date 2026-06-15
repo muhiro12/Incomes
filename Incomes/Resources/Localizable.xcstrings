@@ -2,7 +2,7 @@
   "sourceLanguage" : "en",
   "strings" : {
     "" : {
-
+      "shouldTranslate" : false
     },
     "(%lld)" : {
       "shouldTranslate" : false
@@ -167,13 +167,13 @@
               "one" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "%lld artículo"
+                  "value" : "%lld elemento"
                 }
               },
               "other" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "%lld artículos"
+                  "value" : "%lld elementos"
                 }
               }
             }
@@ -185,13 +185,13 @@
               "one" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "%lld article"
+                  "value" : "%lld élément"
                 }
               },
               "other" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "%lld articles"
+                  "value" : "%lld éléments"
                 }
               }
             }
@@ -203,13 +203,13 @@
               "one" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "%lld アイテム"
+                  "value" : "%lld件の項目"
                 }
               },
               "other" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "%lld アイテム"
+                  "value" : "%lld件の項目"
                 }
               }
             }
@@ -343,36 +343,104 @@
         }
       }
     },
-    "Adjust your filters to find matching income items." : {
+    "Add income items with categories to see this chart." : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Adjust your filters to find matching income items."
+            "value" : "Add income items with categories to see this chart."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ajusta los filtros para encontrar elementos de ingresos coincidentes."
+            "value" : "Añade elementos de ingreso con categorías para ver este gráfico."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ajustez vos filtres pour trouver les éléments de revenus correspondants."
+            "value" : "Ajoutez des éléments de revenu avec des catégories pour afficher ce graphique."
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "条件を調整して、一致する収入項目を見つけてください。"
+            "value" : "カテゴリ付きの収入項目を追加すると、このグラフを表示できます。"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "调整筛选条件以查找匹配的收入项目。"
+            "value" : "添加带分类的收入项目后即可查看此图表。"
+          }
+        }
+      }
+    },
+    "Add outgo items with categories to see this chart." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add outgo items with categories to see this chart."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Añade elementos de egreso con categorías para ver este gráfico."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajoutez des éléments de dépense avec des catégories pour afficher ce graphique."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "カテゴリ付きの支出項目を追加すると、このグラフを表示できます。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "添加带分类的支出项目后即可查看此图表。"
+          }
+        }
+      }
+    },
+    "Adjust your filters to find matching items." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adjust your filters to find matching items."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajusta los filtros para encontrar elementos coincidentes."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajustez vos filtres pour trouver les éléments correspondants."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "条件を調整して、一致する項目を見つけてください。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "调整筛选条件以查找匹配的项目。"
           }
         }
       }
@@ -422,19 +490,19 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Todos los artículos"
+            "value" : "Todos los elementos"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tous les articles"
+            "value" : "Tous les éléments"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "すべてのアイテム"
+            "value" : "すべての項目"
           }
         },
         "zh-Hans" : {
@@ -513,6 +581,40 @@
         }
       }
     },
+    "Amount: %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Amount: %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Importe: %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Montant : %@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "金額: %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "金额: %@"
+          }
+        }
+      }
+    },
     "Apply Filter" : {
       "localizations" : {
         "en" : {
@@ -581,6 +683,40 @@
         }
       }
     },
+    "Applying Suggestions" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Applying Suggestions"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aplicando sugerencias"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Application des suggestions"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "提案を適用中"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在应用建议"
+          }
+        }
+      }
+    },
     "Are you really going to use DebugMode?" : {
       "localizations" : {
         "en" : {
@@ -626,19 +762,19 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "¿Estás seguro de que quieres eliminar todos los artículos?"
+            "value" : "¿Estás seguro de que quieres eliminar todos los elementos?"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Êtes-vous sûr de vouloir supprimer tous les articles ?"
+            "value" : "Êtes-vous sûr de vouloir supprimer tous les éléments ?"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "全てのアイテムを削除してもよろしいですか？"
+            "value" : "すべての項目を削除してもよろしいですか？"
           }
         },
         "zh-Hans" : {
@@ -728,19 +864,19 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "¿Estás seguro de que quieres eliminar este artículo?"
+            "value" : "¿Estás seguro de que quieres eliminar este elemento?"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Êtes-vous sûr de vouloir supprimer cet article ?"
+            "value" : "Êtes-vous sûr de vouloir supprimer cet élément ?"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "このアイテムを削除してもよろしいですか？"
+            "value" : "この項目を削除してもよろしいですか？"
           }
         },
         "zh-Hans" : {
@@ -876,7 +1012,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "全てのタグの重複を解消しますか？この操作は取り消せません。"
+            "value" : "すべてのタグの重複を解消しますか？この操作は取り消せません。"
           }
         },
         "zh-Hans" : {
@@ -985,6 +1121,74 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "余额"
+          }
+        }
+      }
+    },
+    "Balance: %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Balance: %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saldo: %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Solde : %@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "残高: %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "余额: %@"
+          }
+        }
+      }
+    },
+    "Balance chart" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Balance chart"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gráfico de saldo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Graphique du solde"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "残高グラフ"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "余额图表"
           }
         }
       }
@@ -1155,6 +1359,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "类别"
+          }
+        }
+      }
+    },
+    "Change the selected years or add more repeated yearly entries to generate proposals." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Change the selected years or add more repeated yearly entries to generate proposals."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cambia los años seleccionados o añade más entradas anuales repetidas para generar propuestas."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Changez les années sélectionnées ou ajoutez plus d’entrées annuelles répétées pour générer des propositions."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "選択年を変更するか、毎年繰り返す項目を追加すると提案を作成できます。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "更改所选年份，或添加更多每年重复的条目来生成提案。"
           }
         }
       }
@@ -1495,6 +1733,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "内容"
+          }
+        }
+      }
+    },
+    "Contains deficit items" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Contains deficit items"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Contiene elementos deficitarios"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Contient des éléments déficitaires"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "赤字項目を含みます"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "包含赤字项目"
           }
         }
       }
@@ -2009,6 +2281,74 @@
         }
       }
     },
+    "Date: %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Date: %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fecha: %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Date : %@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "日付: %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "日期: %@"
+          }
+        }
+      }
+    },
+    "Dates" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dates"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fechas"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dates"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "日付"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "日期"
+          }
+        }
+      }
+    },
     "Dates: %@" : {
       "localizations" : {
         "en" : {
@@ -2107,6 +2447,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "调试数据"
+          }
+        }
+      }
+    },
+    "Debug data, attention needed" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Debug data, attention needed"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Datos de depuración, requiere atención"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Données de débogage, attention requise"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "デバッグデータ、確認が必要"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "调试数据，需要注意"
           }
         }
       }
@@ -2270,7 +2644,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "全て削除"
+            "value" : "すべて削除"
           }
         },
         "zh-Hans" : {
@@ -2417,6 +2791,74 @@
         }
       }
     },
+    "Dismisses the current screen." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dismisses the current screen."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cierra la pantalla actual."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ferme l’écran actuel."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "現在の画面を閉じます。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "关闭当前屏幕。"
+          }
+        }
+      }
+    },
+    "Dismisses the yearly duplication suggestion." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dismisses the yearly duplication suggestion."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Descarta la sugerencia de duplicación anual."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ferme la suggestion de duplication annuelle."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "年次複製の提案を閉じます。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "关闭年度复制建议。"
+          }
+        }
+      }
+    },
     "Done" : {
       "localizations" : {
         "en" : {
@@ -2447,6 +2889,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "完成"
+          }
+        }
+      }
+    },
+    "Enter a number." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter a number."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Introduce un número."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saisissez un nombre."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "数値を入力してください。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请输入数字。"
           }
         }
       }
@@ -2746,7 +3222,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "年次アイテムを複製"
+            "value" : "年次項目を複製"
           }
         },
         "zh-Hans" : {
@@ -2927,6 +3403,40 @@
         }
       }
     },
+    "Expand" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Expand"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ampliar"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Agrandir"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "拡大"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "展开"
+          }
+        }
+      }
+    },
     "Explore Premium" : {
       "localizations" : {
         "en" : {
@@ -2984,7 +3494,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "アイテムエンティティの変換に失敗しました"
+            "value" : "項目エンティティの変換に失敗しました"
           }
         },
         "zh-Hans" : {
@@ -3086,7 +3596,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "以降のアイテム"
+            "value" : "以降の項目"
           }
         },
         "zh-Hans" : {
@@ -3127,6 +3637,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "生成摘要"
+          }
+        }
+      }
+    },
+    "Generating Summary" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Generating Summary"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Generando resumen"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Génération du résumé"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "要約を生成中"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在生成摘要"
           }
         }
       }
@@ -3233,6 +3777,40 @@
         }
       }
     },
+    "Highest balance: %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Highest balance: %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saldo más alto: %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Solde le plus élevé : %@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "最高残高: %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "最高余额: %@"
+          }
+        }
+      }
+    },
     "iCloud On" : {
       "localizations" : {
         "en" : {
@@ -3324,7 +3902,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "単発アイテムを含める"
+            "value" : "単発項目を含める"
           }
         },
         "zh-Hans" : {
@@ -3403,6 +3981,40 @@
         }
       }
     },
+    "Income and Outgo chart" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Income and Outgo chart"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gráfico de ingresos y egresos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Graphique des revenus et dépenses"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "収支グラフ"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "收入与支出图表"
+          }
+        }
+      }
+    },
     "Income: %@" : {
       "localizations" : {
         "en" : {
@@ -3470,6 +4082,74 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Incomes 无法打开 %@"
+          }
+        }
+      }
+    },
+    "Invalid amount" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Invalid amount"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Importe no válido"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Montant non valide"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "無効な金額"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "金额无效"
+          }
+        }
+      }
+    },
+    "Invalid amount. Enter a number." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Invalid amount. Enter a number."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Importe no válido. Introduce un número."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Montant non valide. Saisissez un nombre."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "無効な金額です。数値を入力してください。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "金额无效。请输入数字。"
           }
         }
       }
@@ -3633,7 +4313,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "アイテム"
+            "value" : "項目"
           }
         },
         "zh-Hans" : {
@@ -3667,7 +4347,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "アイテムフォームの推測"
+            "value" : "項目フォームの推測"
           }
         },
         "zh-Hans" : {
@@ -3701,7 +4381,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "アイテムが見つかりません"
+            "value" : "項目が見つかりません"
           }
         },
         "zh-Hans" : {
@@ -3735,7 +4415,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "アイテムが見つかりません"
+            "value" : "項目が見つかりません"
           }
         },
         "zh-Hans" : {
@@ -3757,19 +4437,19 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Artículos"
+            "value" : "Elementos"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Articles"
+            "value" : "Éléments"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "アイテム"
+            "value" : "項目"
           }
         },
         "zh-Hans" : {
@@ -3803,13 +4483,81 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "アイテム: %lld"
+            "value" : "項目: %lld"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "项目: %lld"
+          }
+        }
+      }
+    },
+    "Largest category: %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Largest category: %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Categoría principal: %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Catégorie principale : %@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "最大カテゴリ: %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "最大分类: %@"
+          }
+        }
+      }
+    },
+    "Latest balance: %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Latest balance: %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saldo más reciente: %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Solde le plus récent : %@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "最新残高: %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "最新余额: %@"
           }
         }
       }
@@ -3882,6 +4630,74 @@
         }
       }
     },
+    "Loading Item" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loading Item"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cargando elemento"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chargement de l’élément"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "項目を読み込み中"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在加载项目"
+          }
+        }
+      }
+    },
+    "Lowest balance: %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lowest balance: %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saldo más bajo: %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Solde le plus bas : %@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "最低残高: %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "最低余额: %@"
+          }
+        }
+      }
+    },
     "Manage items" : {
       "localizations" : {
         "en" : {
@@ -3893,19 +4709,19 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Gestionar artículos"
+            "value" : "Gestionar elementos"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Gérer les articles"
+            "value" : "Gérer les éléments"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "アイテムを管理する"
+            "value" : "項目を管理する"
           }
         },
         "zh-Hans" : {
@@ -3984,6 +4800,74 @@
         }
       }
     },
+    "Manage tags, attention needed" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Manage tags, attention needed"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gestionar etiquetas, requiere atención"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gérer les étiquettes, attention requise"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "タグ管理、確認が必要"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "管理标签，需要注意"
+          }
+        }
+      }
+    },
+    "Maximum Amount" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maximum Amount"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Monto máximo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Montant maximum"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "最大金額"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "最高金额"
+          }
+        }
+      }
+    },
     "Merge" : {
       "localizations" : {
         "en" : {
@@ -4052,6 +4936,40 @@
         }
       }
     },
+    "Minimum Amount" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Minimum Amount"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Monto mínimo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Montant minimum"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "最小金額"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "最低金额"
+          }
+        }
+      }
+    },
     "Minimum Group Count" : {
       "localizations" : {
         "en" : {
@@ -4109,7 +5027,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "繰り返しアイテムの最小件数"
+            "value" : "繰り返し項目の最小件数"
           }
         },
         "zh-Hans" : {
@@ -4222,6 +5140,40 @@
         }
       }
     },
+    "Net income: %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Net income: %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ingreso neto: %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Revenu net : %@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "純収入: %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "净收入: %@"
+          }
+        }
+      }
+    },
     "New name" : {
       "localizations" : {
         "en" : {
@@ -4324,6 +5276,74 @@
         }
       }
     },
+    "No Income Categories" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No Income Categories"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No hay categorías de ingreso"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucune catégorie de revenu"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "収入カテゴリがありません"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "没有收入分类"
+          }
+        }
+      }
+    },
+    "No items" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No items"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No hay elementos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucun élément"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "項目がありません"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "没有项目"
+          }
+        }
+      }
+    },
     "No Matches" : {
       "localizations" : {
         "en" : {
@@ -4358,6 +5378,40 @@
         }
       }
     },
+    "No Outgo Categories" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No Outgo Categories"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No hay categorías de egreso"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucune catégorie de dépense"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "支出カテゴリがありません"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "没有支出分类"
+          }
+        }
+      }
+    },
     "No Orphan Tags" : {
       "localizations" : {
         "en" : {
@@ -4388,6 +5442,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "没有未使用标签"
+          }
+        }
+      }
+    },
+    "No Proposals" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No Proposals"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No hay propuestas"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucune proposition"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "提案はありません"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "没有提案"
           }
         }
       }
@@ -4596,6 +5684,40 @@
         }
       }
     },
+    "Notification amount threshold" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notification amount threshold"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Umbral de importe de notificación"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seuil de montant de notification"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "通知する金額のしきい値"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "通知金额阈值"
+          }
+        }
+      }
+    },
     "Notify for amounts over" : {
       "localizations" : {
         "en" : {
@@ -4698,6 +5820,40 @@
         }
       }
     },
+    "On due date" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "On due date"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El día de vencimiento"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le jour de l’échéance"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "期限日当日"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "到期当天"
+          }
+        }
+      }
+    },
     "Once you add an item, Incomes will organize it into a year timeline." : {
       "localizations" : {
         "en" : {
@@ -4728,6 +5884,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "添加项目后，Incomes 会按年份整理。"
+          }
+        }
+      }
+    },
+    "Not Selected" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Not Selected"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No seleccionado"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Non sélectionné"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "未選択"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "未选择"
           }
         }
       }
@@ -4868,6 +6058,74 @@
         }
       }
     },
+    "Open expanded chart" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open expanded chart"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abrir gráfico ampliado"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ouvrir le graphique agrandi"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "拡大したグラフを開く"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "打开展开的图表"
+          }
+        }
+      }
+    },
+    "Open item details" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open item details"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abrir detalles del elemento"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ouvrir les détails de l’élément"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "項目の詳細を開く"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "打开项目详情"
+          }
+        }
+      }
+    },
     "Open Subscription to unlock iCloud sync and remove ads across the app." : {
       "localizations" : {
         "en" : {
@@ -4932,6 +6190,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "打开系统设置"
+          }
+        }
+      }
+    },
+    "Opens iOS Settings to change notification permission." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opens iOS Settings to change notification permission."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abre los ajustes de iOS para cambiar el permiso de notificaciones."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ouvre les réglages iOS pour modifier l’autorisation de notification."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iOS設定を開いて通知の許可を変更します。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "打开 iOS 设置以更改通知权限。"
           }
         }
       }
@@ -5310,6 +6602,40 @@
         }
       }
     },
+    "Processing" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Processing"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Procesando"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Traitement en cours"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "処理中"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在处理"
+          }
+        }
+      }
+    },
     "Preview" : {
       "localizations" : {
         "en" : {
@@ -5548,6 +6874,40 @@
         }
       }
     },
+    "Reading text from the selected image." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reading text from the selected image."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Leyendo texto de la imagen seleccionada."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lecture du texte de l'image sélectionnée."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "選択した画像からテキストを読み取っています。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在从所选图像读取文本。"
+          }
+        }
+      }
+    },
     "Recognized Text" : {
       "localizations" : {
         "en" : {
@@ -5633,7 +6993,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Supprime les éléments d’exemple de débogage et leurs tags."
+            "value" : "Supprime les éléments d’exemple de débogage et leurs étiquettes."
           }
         },
         "ja" : {
@@ -6013,7 +7373,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "全て解消"
+            "value" : "すべて解消"
           }
         },
         "zh-Hans" : {
@@ -6279,13 +7639,13 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Enregistrer pour tous les articles"
+            "value" : "Enregistrer pour tous les éléments"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "全てのアイテムを保存"
+            "value" : "すべての項目を保存"
           }
         },
         "zh-Hans" : {
@@ -6313,13 +7673,13 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Enregistrer pour les articles futurs"
+            "value" : "Enregistrer pour les éléments futurs"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "今後のアイテムも保存"
+            "value" : "今後の項目も保存"
           }
         },
         "zh-Hans" : {
@@ -6347,19 +7707,53 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Enregistrer uniquement pour cet article"
+            "value" : "Enregistrer uniquement pour cet élément"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "このアイテムのみ保存"
+            "value" : "この項目のみ保存"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "仅保存此项目"
+          }
+        }
+      }
+    },
+    "Scanning Image" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scanning Image"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Escaneando imagen"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Analyse de l'image"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "画像をスキャン中"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在扫描图像"
           }
         }
       }
@@ -6394,6 +7788,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "范围"
+          }
+        }
+      }
+    },
+    "Reviewing this month's items on device." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reviewing this month's items on device."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Revisando los elementos de este mes en el dispositivo."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Analyse des éléments de ce mois-ci sur l'appareil."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "今月の項目をデバイス上で確認しています。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在设备上查看本月的项目。"
           }
         }
       }
@@ -6670,6 +8098,40 @@
         }
       }
     },
+    "Selected" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Selected"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seleccionado"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sélectionné"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "選択済み"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已选择"
+          }
+        }
+      }
+    },
     "Select an Orphan Tag" : {
       "localizations" : {
         "en" : {
@@ -6738,6 +8200,40 @@
         }
       }
     },
+    "Sends a test notification with the current settings." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sends a test notification with the current settings."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Envía una notificación de prueba con los ajustes actuales."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Envoie une notification de test avec les réglages actuels."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "現在の設定でテスト通知を送信します。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "使用当前设置发送测试通知。"
+          }
+        }
+      }
+    },
     "Set PreviewData" : {
       "localizations" : {
         "en" : {
@@ -6802,6 +8298,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "设置"
+          }
+        }
+      }
+    },
+    "Share: %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Share: %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Porcentaje: %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Part : %@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "割合: %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "占比: %@"
           }
         }
       }
@@ -6999,7 +8529,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "既存のアイテムをスキップ"
+            "value" : "既存の項目をスキップ"
           }
         },
         "zh-Hans" : {
@@ -7108,6 +8638,448 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "订阅"
+          }
+        }
+      }
+    },
+    "Incomes Premium" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Incomes Premium"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Incomes Premium"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Incomes Premium"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Incomesプレミアム"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Incomes 高级版"
+          }
+        }
+      }
+    },
+    "Loading Plan" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loading Plan"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cargando plan"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chargement du forfait"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "プランを読み込み中"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在加载方案"
+          }
+        }
+      }
+    },
+    "Monthly Plan" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Monthly Plan"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plan mensual"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Forfait mensuel"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "月額プラン"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "月度方案"
+          }
+        }
+      }
+    },
+    "Privacy Policy" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Privacy Policy"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Política de privacidad"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Politique de confidentialité"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "プライバシーポリシー"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "隐私政策"
+          }
+        }
+      }
+    },
+    "Purchase pending." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Purchase pending."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Compra pendiente."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Achat en attente."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "購入は保留中です。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "购买待处理。"
+          }
+        }
+      }
+    },
+    "Restore Purchases" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restore Purchases"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restaurar compras"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restaurer les achats"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "購入を復元"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "恢复购买"
+          }
+        }
+      }
+    },
+    "Restore requested." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restore requested."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restauración solicitada."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restauration demandée."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "復元をリクエストしました。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已请求恢复。"
+          }
+        }
+      }
+    },
+    "Subscribe" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Subscribe"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Suscribirse"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "S’abonner"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "登録"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "订阅"
+          }
+        }
+      }
+    },
+    "Subscription updated." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Subscription updated."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Suscripción actualizada."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abonnement mis à jour."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "サブスクリプションを更新しました。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "订阅已更新。"
+          }
+        }
+      }
+    },
+    "Sync items with iCloud and browse without ads." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sync items with iCloud and browse without ads."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sincroniza elementos con iCloud y navega sin anuncios."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Synchronisez les éléments avec iCloud et consultez l’app sans publicité."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloudで項目を同期し、広告なしで閲覧できます。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "使用 iCloud 同步项目并无广告浏览。"
+          }
+        }
+      }
+    },
+    "Terms of Service" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terms of Service"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Términos del servicio"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conditions d’utilisation"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "利用規約"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "服务条款"
+          }
+        }
+      }
+    },
+    "Unable to complete purchase." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unable to complete purchase."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se pudo completar la compra."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossible de finaliser l’achat."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "購入を完了できませんでした。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法完成购买。"
+          }
+        }
+      }
+    },
+    "Unable to load subscription." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unable to load subscription."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se pudo cargar la suscripción."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossible de charger l’abonnement."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "サブスクリプションを読み込めませんでした。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法加载订阅。"
           }
         }
       }
@@ -7611,7 +9583,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "このアイテム"
+            "value" : "この項目"
           }
         },
         "zh-Hans" : {
@@ -7707,7 +9679,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Cela supprimera les éléments et tags d’exemple de débogage. Continuer ?"
+            "value" : "Cela supprimera les éléments et étiquettes d’exemple de débogage. Continuer ?"
           }
         },
         "ja" : {
@@ -7761,6 +9733,40 @@
         }
       }
     },
+    "Toggles this repeat month." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toggles this repeat month."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Activa o desactiva este mes de repetición."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Active ou désactive ce mois de répétition."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "この繰り返し月の選択を切り替えます。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "切换此重复月份。"
+          }
+        }
+      }
+    },
     "Total" : {
       "localizations" : {
         "en" : {
@@ -7791,6 +9797,108 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "总计"
+          }
+        }
+      }
+    },
+    "Total: %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Total: %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Total: %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Total : %@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "合計: %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "总计: %@"
+          }
+        }
+      }
+    },
+    "Total income: %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Total income: %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ingresos totales: %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Revenu total : %@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "収入合計: %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "收入总计: %@"
+          }
+        }
+      }
+    },
+    "Total outgo: %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Total outgo: %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Egresos totales: %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dépenses totales : %@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "支出合計: %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "支出总计: %@"
           }
         }
       }
@@ -7965,6 +10073,40 @@
         }
       }
     },
+    "Updating the form fields from captured text." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Updating the form fields from captured text."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Actualizando los campos del formulario desde el texto capturado."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mise à jour des champs du formulaire à partir du texte capturé."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "取り込んだテキストからフォーム項目を更新しています。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在根据捕捉的文本更新表单字段。"
+          }
+        }
+      }
+    },
     "URL" : {
       "shouldTranslate" : false
     },
@@ -7985,7 +10127,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Utilisez des tags ou des fourchettes de montants pour affiner les résultats avant d’ouvrir des éléments."
+            "value" : "Utilisez des étiquettes ou des fourchettes de montants pour affiner les résultats avant d’ouvrir des éléments."
           }
         },
         "ja" : {
@@ -8059,7 +10201,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "アイテムを表示"
+            "value" : "項目を表示"
           }
         },
         "zh-Hans" : {

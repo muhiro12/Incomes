@@ -3,9 +3,12 @@ import SwiftUI
 
 struct DuplicateTagView: View {
     private enum Constants {
-        static let columnWidth: CGFloat = 320
+        static let compactVisibleColumnCount = 1
+        static let regularVisibleColumnCount = 2
     }
 
+    @Environment(\.horizontalSizeClass)
+    private var horizontalSizeClass
     @Query private var tags: [Tag]
 
     @State private var isMergeDialogPresented = false
@@ -20,19 +23,32 @@ struct DuplicateTagView: View {
         ScrollView(.horizontal) {
             LazyHStack(spacing: .zero) {
                 ForEach(tags) { tag in
-                    duplicateTagColumn(for: tag)
-                    if tag.id != tags.last?.id {
-                        Divider()
+                    HStack(spacing: .zero) {
+                        DuplicateTagColumn(items: tag.items ?? []) {
+                            presentDeleteDialog(for: tag)
+                        }
+
+                        if shouldShowDivider(after: tag) {
+                            Divider()
+                        }
                     }
+                    .containerRelativeFrame(
+                        .horizontal,
+                        count: visibleColumnCount,
+                        span: 1,
+                        spacing: .zero
+                    )
                 }
             }
+            .scrollTargetLayout()
         }
+        .scrollTargetBehavior(.viewAligned)
         .background(Color(.systemGroupedBackground))
         .confirmationDialog(
             Text("Merge"),
             isPresented: $isMergeDialogPresented
         ) {
-            Button {
+            Button(role: .destructive) {
                 TagMutationOperations.mergeDuplicates(tags: tags)
             } label: {
                 Text("Merge")
@@ -69,51 +85,38 @@ struct DuplicateTagView: View {
         }
         .toolbar {
             ToolbarItem {
-                Button {
+                Button("Merge", role: .destructive) {
                     isMergeDialogPresented = true
-                } label: {
-                    Text("Merge")
                 }
+                .disabled(!canMergeTags)
             }
             ToolbarItem {
                 CloseButton()
             }
-            StatusToolbarItem("\(tags.count) Items")
+            ItemCountStatusToolbarItem(count: tags.count)
         }
         .navigationTitle(tags.first?.displayName ?? "")
     }
 }
 
 private extension DuplicateTagView {
-    func duplicateTagColumn(
-        for tag: Tag
-    ) -> some View {
-        List {
-            Section {
-                ForEach(tag.items ?? []) { item in
-                    DuplicateTagItemRow()
-                        .environment(item)
-                }
-            } header: {
-                HStack {
-                    Text("\(tag.items?.count ?? .zero) Items")
-                    Spacer()
-                    Button {
-                        isDeleteDialogPresented = true
-                        selectedTag = tag
-                    } label: {
-                        Label {
-                            Text("Delete")
-                        } icon: {
-                            Image(systemName: "trash")
-                        }
-                    }
-                    .font(.caption)
-                    .textCase(nil)
-                }
-            }
-        }
-        .frame(width: Constants.columnWidth)
+    var canMergeTags: Bool {
+        tags.count > 1
+    }
+
+    var visibleColumnCount: Int {
+        horizontalSizeClass == .regular
+            ? Constants.regularVisibleColumnCount
+            : Constants.compactVisibleColumnCount
+    }
+
+    func shouldShowDivider(after tag: Tag) -> Bool {
+        tag.persistentModelID != tags.last?.persistentModelID
+    }
+
+    func presentDeleteDialog(for tag: Tag) {
+        isDeleteDialogPresented = true
+        selectedTag = tag
     }
 }
 

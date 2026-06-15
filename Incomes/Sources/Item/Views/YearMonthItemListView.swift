@@ -23,12 +23,15 @@ struct YearMonthItemListView {
 
 extension YearMonthItemListView: View {
     var body: some View {
+        let currentYearStrings = yearStrings
+        let firstYearString = currentYearStrings.first
+
         ZStack {
             List {
-                ForEach(Array(yearStrings.enumerated()), id: \.element) { index, yearString in
+                ForEach(currentYearStrings, id: \.self) { yearString in
                     ItemListSection(
                         .items(.tagAndYear(tag: tag, yearString: yearString)),
-                        showsItemDetailTip: index == .zero
+                        showsItemDetailTip: yearString == firstYearString
                     )
                     if !isSubscribeOn {
                         AdvertisementSection(.medium)
@@ -54,13 +57,10 @@ extension YearMonthItemListView: View {
             tipController.donateDidViewItemList()
         }
         .toolbar {
-            StatusToolbarItem("\(items.count) Items")
+            ItemCountStatusToolbarItem(count: items.count)
         }
         .toolbar {
-            SpacerToolbarItem(placement: .bottomBar)
-            ToolbarItem(placement: .bottomBar) {
-                CreateItemButton()
-            }
+            CreateItemToolbarContent()
         }
     }
 }

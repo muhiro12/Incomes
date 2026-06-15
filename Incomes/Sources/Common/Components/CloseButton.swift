@@ -5,29 +5,19 @@ struct CloseButton: View {
     private var dismiss
 
     var body: some View {
-        Button {
+        Button(role: .cancel) {
             dismiss()
         } label: {
-            if #available(iOS 26.0, *) {
-                Image(systemName: "xmark")
-                    .foregroundStyle(Color.secondary)
-                    .accessibilityHidden(true)
-            } else {
-                Image(systemName: "xmark.circle.fill")
-                    .foregroundStyle(
-                        Color.secondary,
-                        FillShapeStyle.fill
-                    )
-                    .font(.title2)
-                    .accessibilityHidden(true)
-            }
+            CloseButtonLabel()
         }
         .accessibilityLabel(Text("Close"))
+        .accessibilityHint(Text("Dismisses the current screen."))
+        .incomesDismissControlStyle()
     }
 }
 
 #Preview {
-    NavigationView {
+    NavigationStack {
         List {
             CloseButton()
         }

@@ -1,50 +1,36 @@
 import SwiftUI
-import TipKit
 
 struct YearlyDuplicationPromoContent: View {
     let promo: YearlyDuplicationPromoSection.ResolvedPromo
     let inlineSpacing: CGFloat
     let reviewProposals: () -> Void
 
-    private let yearlyDuplicationTip = YearlyDuplicationTip()
-
     var body: some View {
-        VStack(alignment: .leading, spacing: inlineSpacing) {
-            Text("Duplicate Year")
-                .font(.headline)
-            Text("Year: \(promo.sourceYear) -> \(promo.targetYear)")
-                .font(.footnote)
-                .foregroundStyle(.secondary)
-            Text("Sample proposal")
-                .font(.caption)
-                .foregroundStyle(.secondary)
-            Text(promo.proposal.content)
-                .font(.subheadline.weight(.semibold))
-            if !promo.proposal.category.isEmpty {
-                Text(promo.proposal.category)
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
+        IncomesLiquidGlassControlGroup(spacing: inlineSpacing) {
+            VStack(alignment: .leading, spacing: inlineSpacing) {
+                YearlyDuplicationPromoHeader(
+                    sourceYear: promo.sourceYear,
+                    targetYear: promo.targetYear,
+                    spacing: inlineSpacing
+                )
+                YearlyDuplicationPromoProposalSummary(
+                    content: promo.proposal.content,
+                    category: promo.proposal.category,
+                    datesText: proposalDatesText,
+                    itemCount: promo.proposal.entryCount,
+                    spacing: inlineSpacing
+                )
+                YearlyDuplicationPromoReviewButton(
+                    reviewProposals: reviewProposals
+                )
             }
-            Text(proposalDatesText)
-                .font(.footnote)
-                .foregroundStyle(.secondary)
-            Text("Items: \(promo.proposal.entryCount)")
-                .font(.footnote)
-                .foregroundStyle(.secondary)
-            reviewProposalsButton
         }
         .padding(.vertical, inlineSpacing)
     }
 }
 
 private extension YearlyDuplicationPromoContent {
-    var proposalDatesText: LocalizedStringKey {
-        "Dates: \(YearlyDuplicationPresentationOperations.monthDayListText(for: promo.proposal))"
-    }
-
-    var reviewProposalsButton: some View {
-        Button("Review proposals", action: reviewProposals)
-            .buttonStyle(.bordered)
-            .popoverTip(yearlyDuplicationTip, arrowEdge: .top)
+    var proposalDatesText: String {
+        YearlyDuplicationPresentationOperations.monthDayListText(for: promo.proposal)
     }
 }

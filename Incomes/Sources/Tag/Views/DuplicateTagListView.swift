@@ -24,22 +24,50 @@ struct DuplicateTagListView: View {
     }
 
     var body: some View {
+        let yearDuplicateTags = duplicateTags(from: yearTags)
+        let yearMonthDuplicateTags = duplicateTags(from: yearMonthTags)
+        let contentDuplicateTags = duplicateTags(from: contentTags)
+        let categoryDuplicateTags = duplicateTags(from: categoryTags)
+
         List(selection: $selectedTagID) {
-            buildSection(from: yearTags) {
-                Text("Year")
-            }
-            buildSection(from: yearMonthTags) {
-                Text("YearMonth")
-            }
-            buildSection(from: contentTags) {
-                Text("Content")
-            }
-            buildSection(from: categoryTags) {
-                Text("Category")
-            }
+            DuplicateTagSection(
+                title: "Year",
+                duplicates: yearDuplicateTags,
+                selectedTagID: $selectedTagID,
+                selectedTags: $selectedTags,
+                isResolveDialogPresented: $isResolveDialogPresented
+            )
+            DuplicateTagSection(
+                title: "YearMonth",
+                duplicates: yearMonthDuplicateTags,
+                selectedTagID: $selectedTagID,
+                selectedTags: $selectedTags,
+                isResolveDialogPresented: $isResolveDialogPresented
+            )
+            DuplicateTagSection(
+                title: "Content",
+                duplicates: contentDuplicateTags,
+                selectedTagID: $selectedTagID,
+                selectedTags: $selectedTags,
+                isResolveDialogPresented: $isResolveDialogPresented
+            )
+            DuplicateTagSection(
+                title: "Category",
+                duplicates: categoryDuplicateTags,
+                selectedTagID: $selectedTagID,
+                selectedTags: $selectedTags,
+                isResolveDialogPresented: $isResolveDialogPresented
+            )
         }
         .overlay {
-            if !hasAnyDuplicateTags {
+            if !hasAnyDuplicateTags(
+                in: [
+                    yearDuplicateTags,
+                    yearMonthDuplicateTags,
+                    contentDuplicateTags,
+                    categoryDuplicateTags
+                ]
+            ) {
                 ContentUnavailableView(
                     "No Duplicate Tags",
                     systemImage: "tag",
@@ -51,11 +79,7 @@ struct DuplicateTagListView: View {
             Text(resolveDialogTitle),
             isPresented: $isResolveDialogPresented
         ) {
-            Button {
-                resolveSelectedTags()
-            } label: {
-                Text("Resolve")
-            }
+            Button("Resolve", role: .destructive, action: resolveSelectedTags)
             Button(role: .cancel) {
                 // no-op
             } label: {
@@ -74,13 +98,6 @@ struct DuplicateTagListView: View {
 }
 
 private extension DuplicateTagListView {
-    var hasAnyDuplicateTags: Bool {
-        !duplicateTags(from: yearTags).isEmpty
-            || !duplicateTags(from: yearMonthTags).isEmpty
-            || !duplicateTags(from: contentTags).isEmpty
-            || !duplicateTags(from: categoryTags).isEmpty
-    }
-
     var resolveDialogTitle: LocalizedStringKey {
         selectedTags.count > 1 ? "Resolve All" : "Resolve"
     }
@@ -91,27 +108,12 @@ private extension DuplicateTagListView {
             : "Are you sure you want to resolve this duplicate tag? This action cannot be undone."
     }
 
-    func buildSection<Header: View>(
-        from tags: [Tag],
-        header: () -> Header
-    ) -> some View {
-        let duplicates = duplicateTags(from: tags)
-        if duplicates.isEmpty {
-            return AnyView(EmptyView())
+    func hasAnyDuplicateTags(
+        in duplicateTagGroups: [[Tag]]
+    ) -> Bool {
+        duplicateTagGroups.contains { duplicateTags in
+            !duplicateTags.isEmpty
         }
-
-        return AnyView(
-            Section {
-                ForEach(duplicates) { tag in
-                    duplicateTagRow(tag)
-                }
-            } header: {
-                sectionHeader(
-                    duplicates: duplicates,
-                    header: header
-                )
-            }
-        )
     }
 
     func duplicateTags(
@@ -131,50 +133,6 @@ private extension DuplicateTagListView {
         } catch {
             assertionFailure(error.localizedDescription)
             return []
-        }
-    }
-
-    func duplicateTagRow(
-        _ tag: Tag
-    ) -> some View {
-        HStack {
-            Text(tag.displayName)
-            Spacer()
-            Text((tag.items ?? []).count.description)
-                .foregroundStyle(.secondary)
-        }
-        .contentShape(Rectangle())
-        .contextMenu {
-            Button("Open", systemImage: "arrow.right.circle") {
-                selectedTagID = tag.persistentModelID
-            }
-            Button("Resolve", systemImage: "checkmark.seal") {
-                selectedTags = [tag]
-                isResolveDialogPresented = true
-            }
-            CopyTextContextMenuButton(
-                "Copy Name",
-                text: tag.displayName
-            )
-        }
-        .tag(tag.persistentModelID)
-    }
-
-    func sectionHeader<Header: View>(
-        duplicates: [Tag],
-        header: () -> Header
-    ) -> some View {
-        HStack {
-            header()
-            Spacer()
-            Button {
-                isResolveDialogPresented = true
-                selectedTags = duplicates
-            } label: {
-                Text("Resolve All")
-            }
-            .font(.caption)
-            .textCase(nil)
         }
     }
 

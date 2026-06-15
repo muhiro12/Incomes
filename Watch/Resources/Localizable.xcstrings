@@ -871,7 +871,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Supprime les éléments d’exemple de débogage et leurs tags."
+            "value" : "Supprime les éléments d’exemple de débogage et leurs étiquettes."
           }
         },
         "ja" : {

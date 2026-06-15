@@ -5,18 +5,20 @@ struct SearchTagFilterRow: View {
     let applyFilter: (Tag) -> Void
 
     var body: some View {
+        let itemCount = (tag.items ?? []).count
+
         Button {
             applyFilter(tag)
         } label: {
-            HStack {
-                Text(tag.displayName)
-                Spacer()
-                Text((tag.items ?? []).count.description)
-                    .foregroundStyle(.secondary)
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .contentShape(Rectangle())
+            SearchFilterRowLabel(
+                title: tag.displayName,
+                count: itemCount
+            )
         }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(Text(tag.displayName))
+        .accessibilityValue(ItemCountStatusToolbarItem.localizedText(count: itemCount))
+        .accessibilityHint(Text("Shows items with this content."))
         .contextMenu {
             Button(
                 "Apply Filter",

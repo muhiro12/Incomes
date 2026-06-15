@@ -8,7 +8,6 @@
 import MHPlatform
 import SwiftData
 import SwiftUI
-import TipKit
 
 struct HomeYearSection: View {
     @Environment(\.modelContext)
@@ -17,16 +16,14 @@ struct HomeYearSection: View {
     private var notificationService
     @Environment(MHLoggingBootstrap.self)
     private var logging
-    @Environment(IncomesTipController.self)
-    private var tipController
 
     @Query private var yearMonthTags: [Tag]
 
     @State private var isDialogPresented = false
+    @State private var deletionDisplayName: String?
     @State private var willDeleteItems: [Item] = []
 
     private let navigateToRoute: (IncomesRoute) -> Void
-    private let monthListTip = MonthListTip()
 
     init( // swiftlint:disable:this type_contents_order
         yearTag: Tag,
@@ -44,28 +41,41 @@ struct HomeYearSection: View {
     }
 
     var body: some View {
+        let firstYearMonthTagID = yearMonthTags.first?.persistentModelID
+
         Section {
-            ForEach(
-                Array(yearMonthTags.enumerated()),
-                id: \.element.persistentModelID
-            ) { index, tag in
-                buildMonthButton(
-                    for: tag,
-                    showsTip: index == .zero
+            ForEach(yearMonthTags, id: \.persistentModelID) { tag in
+                HomeMonthRowButton(
+                    tag: tag,
+                    showsTip: tag.persistentModelID == firstYearMonthTagID,
+                    navigateToRoute: navigateToRoute,
+                    requestDelete: requestMonthDeletion
                 )
             }
             .onDelete { indices in
-                Haptic.warning.impact()
-                isDialogPresented = true
-                willDeleteItems = TagMutationOperations.resolveItemsForDeletion(
-                    from: yearMonthTags,
-                    indices: indices
+                requestDeletion(
+                    items: TagMutationOperations.resolveItemsForDeletion(
+                        from: yearMonthTags,
+                        indices: indices
+                    ),
+                    allowsEmptySelection: true
                 )
             }
         }
         .confirmationDialog(
-            Text("Delete"),
-            isPresented: $isDialogPresented
+            deletionDialogTitle,
+            isPresented: Binding(
+                get: {
+                    isDialogPresented
+                },
+                set: { isPresented in
+                    if isPresented {
+                        isDialogPresented = true
+                    } else {
+                        clearDeletionRequest()
+                    }
+                }
+            )
         ) {
             Button(role: .destructive) {
                 Task { @MainActor in
@@ -76,6 +86,7 @@ struct HomeYearSection: View {
                             notificationService: notificationService,
                             logger: itemMutationLogger
                         )
+                        clearDeletionRequest()
                     } catch {
                         assertionFailure(error.localizedDescription)
                     }
@@ -84,78 +95,50 @@ struct HomeYearSection: View {
                 Text("Delete")
             }
             Button(role: .cancel) {
-                willDeleteItems = []
+                clearDeletionRequest()
             } label: {
                 Text("Cancel")
             }
         } message: {
-            Text("Are you sure you want to delete this item?")
+            ItemDeletionConfirmationMessage(itemCount: willDeleteItems.count)
         }
     }
 }
 
 private extension HomeYearSection {
-    @ViewBuilder
-    func buildMonthButton(
-        for tag: Tag,
-        showsTip: Bool
-    ) -> some View {
-        let button = Button {
-            guard let monthRoute = monthRoute(for: tag) else {
-                return
-            }
-            tipController.donateDidOpenMonth()
-            navigateToRoute(monthRoute)
-        } label: {
-            TagSummaryRow()
-                .environment(tag)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .contentShape(Rectangle())
-        }
-        .buttonStyle(.plain)
-        .contextMenu {
-            if let monthRoute = monthRoute(for: tag) {
-                Button("Open Month", systemImage: "calendar") {
-                    tipController.donateDidOpenMonth()
-                    navigateToRoute(monthRoute)
-                }
-            }
-            if let monthURL = monthURL(for: tag) {
-                Divider()
-                ShareLink(item: monthURL) {
-                    Label("Share Link", systemImage: "square.and.arrow.up")
-                }
-                CopyURLContextMenuButton("Copy Link", url: monthURL)
-            }
-            Divider()
-            Button(role: .destructive) {
-                Haptic.warning.impact()
-                willDeleteItems = tag.items ?? []
-                isDialogPresented = !willDeleteItems.isEmpty
-            } label: {
-                Label("Delete", systemImage: "trash")
-            }
-        }
-
-        if showsTip {
-            button.popoverTip(monthListTip, arrowEdge: .top)
-        } else {
-            button
-        }
-    }
-
-    func monthRoute(for yearMonthTag: Tag) -> IncomesRoute? {
-        MainNavigationOperations.route(forYearMonthTag: yearMonthTag)
-    }
-
-    func monthURL(for yearMonthTag: Tag) -> URL? {
-        MainNavigationOperations.preferredURL(
-            for: monthRoute(for: yearMonthTag)
+    func requestMonthDeletion(for tag: Tag) {
+        requestDeletion(
+            items: tag.items ?? [],
+            displayName: tag.displayName
         )
     }
+
+    func requestDeletion(
+        items: [Item],
+        allowsEmptySelection: Bool = false,
+        displayName: String? = nil
+    ) {
+        Haptic.warning.impact()
+        deletionDisplayName = displayName
+        willDeleteItems = items
+        isDialogPresented = allowsEmptySelection || !items.isEmpty
+    }
+
+    func clearDeletionRequest() {
+        isDialogPresented = false
+        deletionDisplayName = nil
+        willDeleteItems = []
+    }
 }
 
 private extension HomeYearSection {
+    var deletionDialogTitle: Text {
+        if let deletionDisplayName {
+            return Text("Delete \(deletionDisplayName)")
+        }
+        return Text("Delete")
+    }
+
     var itemMutationLogger: MHLogger {
         IncomesLogging.logger(
             logging: logging,

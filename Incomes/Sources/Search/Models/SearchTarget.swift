@@ -29,6 +29,21 @@ enum SearchTarget: CaseIterable {
         }
     }
 
+    var systemImageName: String {
+        switch self {
+        case .content:
+            "doc.text"
+        case .category:
+            "tag"
+        case .balance:
+            "equal.circle"
+        case .income:
+            "arrow.down.circle"
+        case .outgo:
+            "arrow.up.circle"
+        }
+    }
+
     var isForCurrency: Bool {
         switch self {
         case .content,

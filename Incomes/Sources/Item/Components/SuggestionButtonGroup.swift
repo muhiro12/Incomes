@@ -9,6 +9,10 @@ import SwiftData
 import SwiftUI
 
 struct SuggestionButtonGroup: View {
+    private enum Constants {
+        static let controlSpacing: CGFloat = 8
+    }
+
     @Query private var suggestions: [Tag]
     @Query(.tags(.typeIs(.category)))
     private var categoryTags: [Tag]
@@ -28,26 +32,19 @@ struct SuggestionButtonGroup: View {
 
     var body: some View {
         ScrollView(.horizontal) {
-            HStack {
-                if type == .category {
-                    ForEach(categoryFacets) { facet in
-                        Button(facet.displayName) {
-                            Haptic.selectionChanged.impact()
-                            input = facet.displayName
-                        }
-                        Divider()
-                    }
-                } else {
-                    ForEach(suggestions) { suggestion in
-                        Button(suggestion.name) {
-                            Haptic.selectionChanged.impact()
-                            input = suggestion.name
-                        }
-                        Divider()
-                    }
-                }
+            IncomesLiquidGlassControlGroup(spacing: Constants.controlSpacing) {
+                SuggestionButtonContent(
+                    type: type,
+                    suggestions: suggestions,
+                    categoryFacets: categoryFacets,
+                    input: $input,
+                    controlSpacing: Constants.controlSpacing
+                )
             }
         }
+        .contentMargins(.horizontal, Constants.controlSpacing, for: .scrollContent)
+        .scrollClipDisabled()
+        .scrollIndicators(.hidden)
     }
 }
 

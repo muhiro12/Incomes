@@ -71,7 +71,13 @@ enum MainNavigationRouteExecutor {
             }
             return .itemDetail(itemID: persistentID)
         case .search(let query):
-            return .search(query: query)
+            return .search(
+                query: query,
+                predicate: try resolveSearchPredicate(
+                    context: context,
+                    query: query
+                )
+            )
         }
     }
 }
@@ -123,5 +129,32 @@ private extension MainNavigationRouteExecutor {
             name: yearTagName,
             type: .year
         )
+    }
+
+    static func resolveSearchPredicate(
+        context: ModelContext,
+        query: String?
+    ) throws -> ItemPredicate? {
+        guard let query = query?.trimmingCharacters(in: .whitespacesAndNewlines),
+              !query.isEmpty else {
+            return nil
+        }
+
+        let contentTags = try context.fetch(.tags(.typeIs(.content)))
+        let matchingTags = TagQueryOperations.matchingDisplayNameTags(
+            in: contentTags,
+            query: query
+        )
+        let exactMatches = matchingTags.filter { tag in
+            tag.displayName.localizedStandardCompare(query) == .orderedSame
+        }
+        let resolvedMatches = exactMatches.isEmpty ? matchingTags : exactMatches
+
+        guard resolvedMatches.count == 1,
+              let matchingTag = resolvedMatches.first else {
+            return nil
+        }
+
+        return .tagIs(matchingTag)
     }
 }

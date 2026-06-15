@@ -11,25 +11,34 @@ struct ZoomableChartSection<Preview: View, Detail: View>: View {
     private let detail: () -> Detail
 
     var body: some View {
-        Group {
-            if allowsExpansion {
-                Button {
-                    isDetailPresented = true
-                } label: {
+        if allowsExpansion {
+            Button {
+                isDetailPresented = true
+            } label: {
+                ZStack(alignment: .topTrailing) {
                     preview()
                         .matchedTransitionSource(
                             id: transitionID,
                             in: transitionNamespace
                         )
-                        .contentShape(.rect)
+                    ChartExpansionIndicator()
+                        .padding(ChartExpansionIndicatorMetrics.outerPadding)
                 }
-                .buttonStyle(.plain)
-                .fullScreenCover(isPresented: $isDetailPresented) {
-                    detailPresentation
-                }
-            } else {
-                preview()
+                .contentShape(.rect)
             }
+            .buttonStyle(.plain)
+            .accessibilityLabel(Text(title))
+            .accessibilityHint(Text("Open expanded chart"))
+            .fullScreenCover(isPresented: $isDetailPresented) {
+                ZoomableChartDetailPresentation(
+                    title: title,
+                    transitionID: transitionID,
+                    transitionNamespace: transitionNamespace,
+                    detail: detail
+                )
+            }
+        } else {
+            preview()
         }
     }
 
@@ -45,26 +54,5 @@ struct ZoomableChartSection<Preview: View, Detail: View>: View {
         self.allowsExpansion = allowsExpansion
         self.preview = preview
         self.detail = detail
-    }
-}
-
-private extension ZoomableChartSection {
-    var detailPresentation: some View {
-        NavigationStack {
-            detail()
-                .navigationTitle(title)
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                    ToolbarItem {
-                        CloseButton()
-                    }
-                }
-        }
-        .navigationTransition(
-            .zoom(
-                sourceID: transitionID,
-                in: transitionNamespace
-            )
-        )
     }
 }

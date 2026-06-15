@@ -3,6 +3,7 @@ import SwiftUI
 struct ItemFormToolbarContent: ToolbarContent {
     let mode: ItemFormView.Mode
     let isValid: Bool
+    let primaryActionAccessibilityHint: LocalizedStringKey
     let focusedField: ItemFormFocusedField?
     @Binding var content: String
     @Binding var category: String
@@ -18,10 +19,15 @@ struct ItemFormToolbarContent: ToolbarContent {
         }
         ToolbarItem(placement: .primaryAction) {
             Button(action: submit) {
-                Text(mode == .create ? "Create" : "Save")
+                if mode == .create {
+                    Text("Create")
+                } else {
+                    Text("Save")
+                }
             }
             .bold()
             .disabled(!isValid)
+            .accessibilityHint(Text(primaryActionAccessibilityHint))
         }
         if focusedField == .content {
             ToolbarItem(placement: .keyboard) {
@@ -34,11 +40,13 @@ struct ItemFormToolbarContent: ToolbarContent {
             }
         }
         if #available(iOS 26.0, *) {
+            SpacerToolbarItem(placement: .bottomBar)
             ToolbarItem(placement: .bottomBar) {
                 Button(action: presentAssist) {
-                    Label("Assist", systemImage: "wand.and.stars")
+                    Label("Text Capture", systemImage: "wand.and.stars")
                 }
-                .buttonStyle(.glassProminent)
+                .incomesSecondaryControlStyle()
+                .accessibilityHint(Text("Opens text capture to extract item details."))
             }
         }
     }

@@ -39,45 +39,47 @@ struct ItemFormInputAssistView: View {
 
     var body: some View {
         @Bindable var scanner = scanner
-        let isProcessing = isApplyingInference || scanner.isScanning
+        let currentProcessingState = processingState(
+            isApplyingInference: isApplyingInference,
+            isScanning: scanner.isScanning
+        )
+        let isProcessing = currentProcessingState != nil
 
         Form {
-            recognizedTextSection(
+            ItemFormRecognizedTextSection(
                 recognizedText: $scanner.recognizedText,
                 isRecognizedTextEmpty: scanner.recognizedText.isEmpty
             )
-            importSection()
+            if let currentProcessingState {
+                ItemFormInputAssistProcessingSection(state: currentProcessingState)
+            }
+            ItemFormInputAssistImportSection(
+                selectedItem: $selectedItem,
+                isImportDisabled: isProcessing
+            ) {
+                importRoute = .camera
+            }
         }
         .formStyle(.grouped)
         .contentMargins(.bottom, designMetrics.spacing.inline, for: .scrollContent)
         .navigationTitle("Text Capture")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
-            ToolbarItem(placement: .cancellationAction) {
-                Button {
+            ItemFormInputAssistToolbarContent(
+                processingState: currentProcessingState,
+                isDoneDisabled: isDoneDisabled(
+                    recognizedText: scanner.recognizedText,
+                    isProcessing: isProcessing
+                ),
+                cancel: {
                     dismiss()
-                } label: {
-                    Text("Cancel")
-                }
-            }
-            ToolbarItem(placement: .confirmationAction) {
-                Button {
+                },
+                done: {
                     Task {
                         await applyInferenceAndClose()
                     }
-                } label: {
-                    if isProcessing {
-                        ProgressView()
-                    } else {
-                        Text("Done")
-                    }
                 }
-                .disabled(
-                    scanner.recognizedText
-                        .trimmingCharacters(in: .whitespacesAndNewlines)
-                        .isEmpty || isProcessing
-                )
-            }
+            )
         }
         .sheet(item: $importRoute) { route in
             switch route {
@@ -121,32 +123,26 @@ struct ItemFormInputAssistView: View {
 
 @available(iOS 26.0, *)
 private extension ItemFormInputAssistView {
-    func importSection() -> some View {
-        Section {
-            PhotosPicker(selection: $selectedItem, matching: .images) {
-                Label("Photo Library", systemImage: "photo.on.rectangle")
-            }
-            .labelStyle(.titleAndIcon)
-
-            Button {
-                importRoute = .camera
-            } label: {
-                Label("Camera", systemImage: "camera")
-            }
-            .labelStyle(.titleAndIcon)
-        } header: {
-            Text("Import")
-        }
+    func isDoneDisabled(
+        recognizedText: String,
+        isProcessing: Bool
+    ) -> Bool {
+        recognizedText
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .isEmpty || isProcessing
     }
 
-    func recognizedTextSection(
-        recognizedText: Binding<String>,
-        isRecognizedTextEmpty: Bool
-    ) -> some View {
-        ItemFormRecognizedTextSection(
-            recognizedText: recognizedText,
-            isRecognizedTextEmpty: isRecognizedTextEmpty
-        )
+    func processingState(
+        isApplyingInference: Bool,
+        isScanning: Bool
+    ) -> ItemFormInputAssistProcessingState? {
+        if isApplyingInference {
+            return .applyingSuggestions
+        }
+        if isScanning {
+            return .scanningImage
+        }
+        return nil
     }
 
     private func scanReceipt() async {

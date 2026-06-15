@@ -18,7 +18,12 @@ struct RepeatMonthPicker: View {
     var body: some View {
         VStack(alignment: .leading, spacing: designMetrics.spacing.control) {
             ForEach(years, id: \.self) { year in
-                yearSection(for: year)
+                RepeatMonthYearSection(
+                    selectedMonthSelections: $selectedMonthSelections,
+                    year: year,
+                    baseDate: baseDate,
+                    calendar: calendar
+                )
             }
             Text("Base month is always included.")
                 .font(.footnote)
@@ -38,131 +43,9 @@ struct RepeatMonthPicker: View {
 }
 
 private extension RepeatMonthPicker {
-    private enum Constants {
-        static let borderLineWidth: CGFloat = 1
-        static let selectedBackgroundOpacity = 0.2
-    }
-
     var years: [Int] {
         RepeatMonthSelectionOperations.allowedYears(
             baseDate: baseDate,
-            calendar: calendar
-        )
-    }
-
-    var columns: [GridItem] {
-        [
-            GridItem(.flexible(), spacing: designMetrics.spacing.inline),
-            GridItem(.flexible(), spacing: designMetrics.spacing.inline),
-            GridItem(.flexible(), spacing: designMetrics.spacing.inline),
-            GridItem(.flexible(), spacing: designMetrics.spacing.inline)
-        ]
-    }
-
-    var baseSelection: RepeatMonthSelection {
-        RepeatMonthSelectionOperations.baseSelection(
-            baseDate: baseDate,
-            calendar: calendar
-        )
-    }
-
-    func yearSection(for year: Int) -> some View {
-        VStack(alignment: .leading, spacing: designMetrics.spacing.inline) {
-            Text(verbatim: "\(year)")
-                .font(.subheadline.weight(.semibold))
-                .foregroundStyle(.secondary)
-            monthGrid(for: year)
-        }
-    }
-
-    func monthGrid(for year: Int) -> some View {
-        LazyVGrid(columns: columns, spacing: designMetrics.spacing.inline) {
-            ForEach(RepeatMonthSelectionOperations.validMonths, id: \.self) { month in
-                monthButton(for: .init(year: year, month: month))
-            }
-        }
-    }
-
-    func monthButton(for selection: RepeatMonthSelection) -> some View {
-        Button {
-            toggleSelection(selection)
-        } label: {
-            Text(verbatim: monthLabel(for: selection))
-                .font(.callout)
-                .padding(.horizontal, designMetrics.spacing.inline)
-                .frame(
-                    maxWidth: .infinity,
-                    minHeight: designMetrics.layout.control.minimumTouchTarget
-                )
-        }
-        .buttonStyle(.plain)
-        .background(backgroundColor(for: selection))
-        .clipShape(
-            RoundedRectangle(
-                cornerRadius: designMetrics.cornerRadius.control,
-                style: .continuous
-            )
-        )
-        .overlay(
-            RoundedRectangle(
-                cornerRadius: designMetrics.cornerRadius.control,
-                style: .continuous
-            )
-            .stroke(
-                borderColor(for: selection),
-                lineWidth: Constants.borderLineWidth
-            )
-        )
-        .disabled(selection == baseSelection)
-    }
-
-    func toggleSelection(_ selection: RepeatMonthSelection) {
-        guard selection != baseSelection else {
-            return
-        }
-        if selectedMonthSelections.contains(selection) {
-            selectedMonthSelections.remove(selection)
-        } else {
-            selectedMonthSelections.insert(selection)
-        }
-    }
-
-    func backgroundColor(for selection: RepeatMonthSelection) -> Color {
-        if isSelected(selection) {
-            return Color.accentColor.opacity(Constants.selectedBackgroundOpacity)
-        }
-        return Color(.secondarySystemBackground)
-    }
-
-    func borderColor(for selection: RepeatMonthSelection) -> Color {
-        if isSelected(selection) {
-            return Color.accentColor
-        }
-        return Color(.separator)
-    }
-
-    func isSelected(_ selection: RepeatMonthSelection) -> Bool {
-        selectedMonthSelections.contains(selection)
-    }
-
-    func monthLabel(for selection: RepeatMonthSelection) -> String {
-        guard let date = date(for: selection) else {
-            return "\(selection.month)"
-        }
-        let month = calendar.component(.month, from: date)
-        let day = calendar.component(.day, from: date)
-        return "\(month)/\(day)"
-    }
-
-    func date(for selection: RepeatMonthSelection) -> Date? {
-        let monthOffset = monthOffset(for: selection)
-        return calendar.date(byAdding: .month, value: monthOffset, to: baseDate)
-    }
-
-    func monthOffset(for selection: RepeatMonthSelection) -> Int {
-        RepeatMonthSelectionOperations.monthOffset(
-            from: baseDate,
-            to: selection,
             calendar: calendar
         )
     }

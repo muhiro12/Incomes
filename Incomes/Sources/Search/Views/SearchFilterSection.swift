@@ -6,36 +6,36 @@ struct SearchFilterSection: View {
     let categoryFacets: [CategoryFacet]
     @Binding var minValue: String
     @Binding var maxValue: String
+    let isMinimumValueValid: Bool
+    let isMaximumValueValid: Bool
     let controlSpacing: CGFloat
+    let applySearch: () -> Void
     let applyTagFilter: (Tag) -> Void
     let applyCategoryFilter: (CategoryFacet) -> Void
 
     var body: some View {
-        Section("Filter") {
-            switch selectedTarget {
-            case .content:
-                ForEach(contentTags) { tag in
-                    SearchTagFilterRow(
-                        tag: tag,
-                        applyFilter: applyTagFilter
-                    )
-                }
-            case .category:
-                ForEach(categoryFacets) { facet in
-                    SearchCategoryFilterRow(
-                        facet: facet,
-                        applyFilter: applyCategoryFilter
-                    )
-                }
-            case .balance,
-                 .income,
-                 .outgo:
-                SearchCurrencyFilterFields(
-                    minValue: $minValue,
-                    maxValue: $maxValue,
-                    controlSpacing: controlSpacing
-                )
-            }
+        switch selectedTarget {
+        case .content:
+            SearchContentFilterSection(
+                tags: contentTags,
+                applyFilter: applyTagFilter
+            )
+        case .category:
+            SearchCategoryFilterSection(
+                facets: categoryFacets,
+                applyFilter: applyCategoryFilter
+            )
+        case .balance,
+             .income,
+             .outgo:
+            SearchCurrencyFilterSection(
+                minValue: $minValue,
+                maxValue: $maxValue,
+                isMinimumValueValid: isMinimumValueValid,
+                isMaximumValueValid: isMaximumValueValid,
+                controlSpacing: controlSpacing,
+                applySearch: applySearch
+            )
         }
     }
 }
