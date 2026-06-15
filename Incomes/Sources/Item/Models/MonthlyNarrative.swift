@@ -10,6 +10,6 @@ import FoundationModels
 @available(iOS 26.0, *)
 @Generable
 struct MonthlyNarrative {
-    @Guide(description: "A single 3 to 6 sentence paragraph describing the month.")
+    @Guide(description: "One plain 3 to 6 sentence paragraph.")
     var summary: String
 }

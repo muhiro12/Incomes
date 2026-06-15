@@ -10,18 +10,16 @@ enum MonthlySummaryNarrativeBuilder {
     /// Builds Foundation Models instructions for monthly summary generation.
     static func instructions(languageCode: String) -> String {
         """
-        You write concise monthly financial activity summaries for a household finance app.
-        Use only the exact values provided in the prompt.
+        You write short monthly financial activity summaries for a household finance app.
+        Use only the trusted values provided in the prompt.
         Treat currentMonth as the source of truth for statements about this month.
-        Treat previousMonth as the source of truth for statements about the previous month.
-        Never swap currentMonth and previousMonth.
-        Never add, combine, double-count, or infer numbers that are not explicitly provided.
         Mention numeric values only for currentMonth.totalIncome,
         currentMonth.totalOutgo, and currentMonth.netIncome.
         If you mention those current-month values, copy the digits exactly as written in currentMonth.
-        Do not mention any other numbers, dates, percentages, counts, rounded units, or converted values.
+        Do not mention any other numbers, dates, percentages, counts, rounded units,
+        converted values, previous-month totals, or category amounts.
         Do not spell out amounts in words or use rounded units like thousand, million, 万, or 億.
-        Do not recompute monthly totals from categoryComparisons because the list may be truncated.
+        Use categoryChanges only to describe category-level increase or decrease directions.
         Respond only in the language: \(languageCode).
         Never reply in English unless the requested language is English.
         If the requested language is Japanese, write every sentence in Japanese.
@@ -39,42 +37,38 @@ enum MonthlySummaryNarrativeBuilder {
 
     /// Builds a model prompt from deterministic monthly summary context.
     static func prompt(
-        monthTitle: String,
         localeIdentifier: String,
         languageCode: String,
         context: Context
     ) -> String {
-        """
-        Create a monthly financial summary for \(monthTitle).
+        let hasPreviousMonthData = previousMonthDataAvailable(in: context)
+        let categoryChangeLines = hasPreviousMonthData
+            ? categoryChangeLines(from: context.categoryComparisons)
+            : "  "
+
+        return """
+        Create a monthly financial summary.
         The summary language must match locale \(localeIdentifier) and language code \(languageCode).
+        Do not mention month names or dates.
         When you mention this month, use only currentMonth values.
-        When you mention the previous month, say "previous month" explicitly and use only previousMonth values.
-        Current month must never use previous-month totals.
-        Use categoryComparisons only to describe notable category changes.
+        If previousMonthDataAvailable is false, say that comparison data is limited.
+        If previousMonthDataAvailable is true, use categoryChanges only to describe notable category changes.
+        Category changes are ordered by significance and contain no amount values.
         Mention exact digits only for currentMonth.totalIncome, currentMonth.totalOutgo, and currentMonth.netIncome.
             Do not include any other numbers, dates, percentages,
             category amounts, or rounded values anywhere in the response.
 
         currentMonth = {
-          year: \(context.currentTotals.year),
-          month: \(context.currentTotals.month),
           currencyCode: \(PromptLiteralSupport.jsonStringLiteral(context.currentTotals.currencyCode)),
           totalIncome: \(decimalString(context.currentTotals.totalIncome)),
           totalOutgo: \(decimalString(context.currentTotals.totalOutgo)),
           netIncome: \(decimalString(context.currentTotals.netIncome))
         }
 
-        previousMonth = {
-          year: \(context.previousTotals.year),
-          month: \(context.previousTotals.month),
-          currencyCode: \(PromptLiteralSupport.jsonStringLiteral(context.previousTotals.currencyCode)),
-          totalIncome: \(decimalString(context.previousTotals.totalIncome)),
-          totalOutgo: \(decimalString(context.previousTotals.totalOutgo)),
-          netIncome: \(decimalString(context.previousTotals.netIncome))
-        }
+        previousMonthDataAvailable: \(hasPreviousMonthData)
 
-        categoryComparisons = [
-        \(comparisonLines(from: context.categoryComparisons))
+        categoryChanges = [
+        \(categoryChangeLines)
         ]
 
         Return one short paragraph only.
@@ -156,25 +150,59 @@ private extension MonthlySummaryNarrativeBuilder {
         value.description
     }
 
-    static func comparisonLines(from comparisons: [CategoryComparison]) -> String {
-        guard !comparisons.isEmpty else {
+    static func previousMonthDataAvailable(in context: Context) -> Bool {
+        context.previousTotals.totalIncome != .zero ||
+            context.previousTotals.totalOutgo != .zero
+    }
+
+    static func categoryChangeLines(from comparisons: [CategoryComparison]) -> String {
+        let changes = comparisons.compactMap { comparison in
+            categoryChangeLine(from: comparison)
+        }
+
+        guard !changes.isEmpty else {
             return "  "
         }
 
-        return comparisons.map { comparison in
+        return changes.map { change in
             """
               {
-                category: \(PromptLiteralSupport.jsonStringLiteral(comparison.category)),
-                currentIncome: \(decimalString(comparison.currentIncome)),
-                previousIncome: \(decimalString(comparison.previousIncome)),
-                incomeDelta: \(decimalString(comparison.incomeDelta)),
-                currentOutgo: \(decimalString(comparison.currentOutgo)),
-                previousOutgo: \(decimalString(comparison.previousOutgo)),
-                outgoDelta: \(decimalString(comparison.outgoDelta))
+                category: \(PromptLiteralSupport.jsonStringLiteral(change.category)),
+                change: \(PromptLiteralSupport.jsonStringLiteral(change.change))
               }
             """
         }
         .joined(separator: ",\n")
+    }
+
+    static func categoryChangeLine(from comparison: CategoryComparison) -> (
+        category: String,
+        change: String
+    )? {
+        let incomeMagnitude = abs(decimalToDouble(comparison.incomeDelta))
+        let outgoMagnitude = abs(decimalToDouble(comparison.outgoDelta))
+
+        if incomeMagnitude == .zero,
+           outgoMagnitude == .zero {
+            return nil
+        }
+
+        if outgoMagnitude >= incomeMagnitude,
+           comparison.outgoDelta != .zero {
+            let change = comparison.outgoDelta > .zero
+                ? "outgoIncreased"
+                : "outgoDecreased"
+            return (comparison.category, change)
+        }
+
+        guard comparison.incomeDelta != .zero else {
+            return nil
+        }
+
+        let change = comparison.incomeDelta > .zero
+            ? "incomeIncreased"
+            : "incomeDecreased"
+        return (comparison.category, change)
     }
 
     static func comparisonSentence(

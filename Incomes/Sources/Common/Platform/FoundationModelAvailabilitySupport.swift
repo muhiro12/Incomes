@@ -29,15 +29,29 @@ enum FoundationModelAvailabilitySupport {
         )
     }
 
-    static func isUnsupportedLocaleError(
-        _ error: LanguageModelSession.GenerationError
-    ) -> Bool {
-        switch error {
-        case .unsupportedLanguageOrLocale:
-            return true
-        default:
-            return false
+    static func isUnsupportedLocaleError(_ error: Error) -> Bool {
+        if #unavailable(iOS 27.0) {
+            if let error = error as? LanguageModelSession.GenerationError {
+                switch error {
+                case .unsupportedLanguageOrLocale:
+                    return true
+                default:
+                    break
+                }
+            }
         }
+
+        if #available(iOS 27.0, *),
+           let error = error as? LanguageModelError {
+            switch error {
+            case .unsupportedLanguageOrLocale:
+                return true
+            default:
+                break
+            }
+        }
+
+        return false
     }
 
     private static func availableModel<Failure: Error>(

@@ -64,7 +64,7 @@ struct MonthlySummaryOperationsNarrativeTests {
     }
 
     @Test
-    func prompt_escapes_category_text_as_json_string() {
+    func prompt_escapes_category_text_as_json_string_and_omits_category_amounts() {
         let context = MonthlySummaryOperations.Context(
             currentTotals: .init(
                 year: kCurrentTotals.year,
@@ -95,17 +95,58 @@ struct MonthlySummaryOperationsNarrativeTests {
             ]
         )
         let prompt = MonthlySummaryOperations.prompt(
-            monthTitle: "2026 Jun",
             localeIdentifier: "en_US",
             languageCode: "en",
             context: context
         )
 
         #expect(prompt.contains(#"currencyCode: "USD \"Cash\" \\""#))
-        #expect(prompt.contains(#"currencyCode: "JPY \"Bank\" \\""#))
         #expect(prompt.contains(#"category: "Food \"Takeout\"\nBackslash \\""#))
+        #expect(prompt.contains(#"change: "outgoIncreased""#))
         #expect(prompt.contains("totalIncome: 1000"))
-        #expect(prompt.contains("previousMonth = {"))
+        #expect(prompt.contains("previousMonthDataAvailable: true"))
+        #expect(!prompt.contains("year: 2026"))
+        #expect(!prompt.contains("month: 6"))
+        #expect(!prompt.contains("currentOutgo: 300"))
+        #expect(!prompt.contains("previousOutgo: 100"))
+        #expect(!prompt.contains("outgoDelta: 200"))
+        #expect(!prompt.contains("previousMonth = {"))
+    }
+
+    @Test
+    func prompt_marks_previous_month_data_unavailable_and_omits_category_changes_without_totals() {
+        let context = MonthlySummaryOperations.Context(
+            currentTotals: kCurrentTotals,
+            previousTotals: .init(
+                year: 2_026,
+                month: 5,
+                currencyCode: "USD",
+                totalIncome: .zero,
+                totalOutgo: .zero,
+                netIncome: .zero
+            ),
+            categoryComparisons: [
+                .init(
+                    category: "Food",
+                    currentIncome: .zero,
+                    previousIncome: .zero,
+                    incomeDelta: .zero,
+                    currentOutgo: 300,
+                    previousOutgo: .zero,
+                    outgoDelta: 300
+                )
+            ]
+        )
+        let prompt = MonthlySummaryOperations.prompt(
+            localeIdentifier: "en_US",
+            languageCode: "en",
+            context: context
+        )
+
+        #expect(prompt.contains("previousMonthDataAvailable: false"))
+        #expect(!prompt.contains(#"category: "Food""#))
+        #expect(!prompt.contains(#"change: "outgoIncreased""#))
+        #expect(!prompt.contains("previousMonth = {"))
     }
 
     @Test

@@ -77,10 +77,8 @@ private extension ItemInferenceService {
             return error
         }
 
-        if let error = error as? LanguageModelSession.GenerationError {
-            if FoundationModelAvailabilitySupport.isUnsupportedLocaleError(error) {
-                return .unsupportedLocale
-            }
+        if FoundationModelAvailabilitySupport.isUnsupportedLocaleError(error) {
+            return .unsupportedLocale
         }
 
         return .generationFailed

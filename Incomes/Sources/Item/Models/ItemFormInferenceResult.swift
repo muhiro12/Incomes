@@ -11,14 +11,12 @@ import FoundationModels
 @available(iOS 26.0, *)
 @Generable
 struct ItemFormInferenceResult {
-    @Guide(description: "Date formatted as yyyyMMdd")
+    @Guide(description: "yyyyMMdd date")
     var date: String
-    @Guide(description: "Item content")
     var content: String
-    @Guide(description: "Income amount")
+    @Guide(description: "Positive income amount, or 0")
     var income: Decimal
-    @Guide(description: "Outgo amount")
+    @Guide(description: "Positive outgo amount, or 0")
     var outgo: Decimal
-    @Guide(description: "Category name")
     var category: String
 }

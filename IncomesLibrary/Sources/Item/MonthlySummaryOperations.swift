@@ -143,13 +143,11 @@ public enum MonthlySummaryOperations {
 
     /// Builds a model prompt from deterministic monthly summary context.
     public static func prompt(
-        monthTitle: String,
         localeIdentifier: String,
         languageCode: String,
         context: Context
     ) -> String {
         MonthlySummaryNarrativeBuilder.prompt(
-            monthTitle: monthTitle,
             localeIdentifier: localeIdentifier,
             languageCode: languageCode,
             context: context

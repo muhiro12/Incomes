@@ -64,7 +64,6 @@ private extension MonthlySummaryGenerator {
             return try await generatedSummary(
                 model: model,
                 narrativeContext: narrativeContext,
-                monthTitle: monthTitle,
                 locale: locale
             )
         } catch let error as MonthlySummaryGenerationError {
@@ -78,15 +77,8 @@ private extension MonthlySummaryGenerator {
             case .unavailableModel, .unsupportedLocale, .invalidYearMonth:
                 throw error
             }
-        } catch let error as LanguageModelSession.GenerationError {
-            if FoundationModelAvailabilitySupport.isUnsupportedLocaleError(error) {
-                throw MonthlySummaryGenerationError.unsupportedLocale
-            }
-            return fallbackSummary(
-                monthTitle: monthTitle,
-                narrativeContext: narrativeContext,
-                locale: locale
-            )
+        } catch let error where FoundationModelAvailabilitySupport.isUnsupportedLocaleError(error) {
+            throw MonthlySummaryGenerationError.unsupportedLocale
         } catch let error as CancellationError {
             throw error
         } catch {
@@ -117,7 +109,6 @@ private extension MonthlySummaryGenerator {
     static func generatedSummary(
         model: SystemLanguageModel,
         narrativeContext: MonthlySummaryOperations.Context,
-        monthTitle: String,
         locale: Locale
     ) async throws -> String {
         let languageCode = MonthlySummaryOperations.languageCode(for: locale)
@@ -128,7 +119,6 @@ private extension MonthlySummaryGenerator {
             )
         )
         let prompt = MonthlySummaryOperations.prompt(
-            monthTitle: monthTitle,
             localeIdentifier: locale.identifier,
             languageCode: languageCode,
             context: narrativeContext
