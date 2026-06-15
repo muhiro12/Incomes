@@ -8,8 +8,8 @@
 import FoundationModels
 
 @available(iOS 26.0, *)
-@Generable
-struct MonthlyNarrative {
-    @Guide(description: "One plain 3 to 6 sentence paragraph.")
+@Generable(description: "A short monthly financial summary for one household finance month.")
+struct MonthlyNarrative: Sendable {
+    @Guide(description: "One plain 3 to 6 sentence paragraph with only allowed numeric values.")
     var summary: String
 }

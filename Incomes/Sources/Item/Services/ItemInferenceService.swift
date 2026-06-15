@@ -32,19 +32,20 @@ enum ItemInferenceService {
                 unavailableModelError: ItemInferenceError.unavailableModel,
                 unsupportedLocaleError: ItemInferenceError.unsupportedLocale
             )
-            let session = LanguageModelSession(
-                model: model,
-                instructions: ItemFormInferenceOperations.instructions()
-            )
+            let instructions = ItemFormInferenceOperations.instructions()
+            let session = LanguageModelSession(model: model) {
+                instructions
+            }
             let prompt = ItemFormInferenceOperations.prompt(
                 text: text,
                 currentDate: currentDate,
                 locale: locale
             )
             let response = try await session.respond(
-                to: prompt,
                 generating: ItemFormInferenceResult.self
-            )
+            ) {
+                prompt
+            }
             logger.notice(
                 "inference.completed",
                 metadata: metadata

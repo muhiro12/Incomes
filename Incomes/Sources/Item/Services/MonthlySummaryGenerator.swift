@@ -112,12 +112,12 @@ private extension MonthlySummaryGenerator {
         locale: Locale
     ) async throws -> String {
         let languageCode = MonthlySummaryOperations.languageCode(for: locale)
-        let session = LanguageModelSession(
-            model: model,
-            instructions: MonthlySummaryOperations.instructions(
-                languageCode: languageCode
-            )
+        let instructions = MonthlySummaryOperations.instructions(
+            languageCode: languageCode
         )
+        let session = LanguageModelSession(model: model) {
+            instructions
+        }
         let prompt = MonthlySummaryOperations.prompt(
             localeIdentifier: locale.identifier,
             languageCode: languageCode,
@@ -127,10 +127,11 @@ private extension MonthlySummaryGenerator {
             maximumResponseTokens: 220 // swiftlint:disable:this no_magic_numbers
         )
         let response = try await session.respond(
-            to: prompt,
             generating: MonthlyNarrative.self,
             options: options
-        )
+        ) {
+            prompt
+        }
         return try MonthlySummaryOperations.validatedSummary(
             response.content.summary,
             currentTotals: narrativeContext.currentTotals
