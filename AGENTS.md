@@ -12,6 +12,19 @@ Repository-specific agent contract for Incomes.
   <https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md>.
 - Swift code must comply with the repository SwiftLint configuration.
 
+## Toolchain Compatibility
+
+- Treat the selected latest Xcode as the default local development toolchain.
+- While the selected latest Xcode is newer than the current App Store
+  submission toolchain, keep the current App Store Xcode buildable.
+- Prefer latest SDK and API spelling in product code, then isolate older
+  toolchain backports behind small support helpers with compiler and
+  availability checks. Keep the latest branch first and the fallback explicit.
+- For Foundation Models, Apple Intelligence, App Intents, widgets, build
+  settings, and other beta-sensitive SDK surfaces, verify both the selected
+  latest Xcode and the current App Store Xcode when changing implementation or
+  interfaces.
+
 ## Build and Test Entry Point
 
 Agents MUST prefer XcodeBuildMCP for Apple build, test, run, Simulator,

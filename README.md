@@ -126,7 +126,9 @@ Models.
 
 ## Requirements
 
-- Xcode 26 or later.
+- Xcode 26 or later. Day-to-day development may use the selected latest Xcode,
+  but the current App Store Xcode should keep building while beta SDK APIs are
+  isolated behind compatibility helpers.
 - The app and widgets deploy to iOS 18 or later, and the watchOS companion
   deploys to watchOS 11 or later.
 - An Apple Developer account configured for App Groups, iCloud, StoreKit 2,
