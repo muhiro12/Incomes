@@ -16,7 +16,9 @@ public enum AppGroup {
         guard let url = FileManager.default.containerURL(
             forSecurityApplicationGroupIdentifier: id
         ) else {
-            preconditionFailure("Failed to resolve App Group container URL.")
+            preconditionFailure(
+                "Failed to resolve App Group container URL. Verify the app is signed with the App Group entitlement."
+            )
         }
         return url
     }()

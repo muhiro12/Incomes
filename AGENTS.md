@@ -50,6 +50,9 @@ SwiftData schema, app lifecycle wiring, or visible UI behavior are affected.
   `Watch` or `Widgets` scheme that matches the changed surface.
 - For runtime or UI-sensitive changes, use XcodeBuildMCP `build_run_sim`,
   `launch_app_sim`, `snapshot_ui`, and `screenshot` as appropriate.
+- For runtime or UI checks, do not disable code signing. The app needs signed
+  App Group entitlements at launch, so reserve `CODE_SIGNING_ALLOWED=NO` for
+  compile-only builds.
 
 When Swift files are edited, agents should run:
 
