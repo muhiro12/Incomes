@@ -8,6 +8,6 @@ struct MainNavigationContentToolbarContent: ToolbarContent {
         if #available(iOS 26.0, *) {
             DefaultToolbarItem(kind: .search, placement: .bottomBar)
         }
-        CreateItemBottomToolbarContent(tag: selectedYearTag)
+        CreateItemToolbarContent(tag: selectedYearTag)
     }
 }

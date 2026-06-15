@@ -42,7 +42,7 @@ struct SearchResultView: View {
             ItemCountStatusToolbarItem(count: items.count)
         }
         .toolbar {
-            CreateItemBottomToolbarContent()
+            CreateItemToolbarContent()
         }
         .task(id: items.count) {
             guard !items.isEmpty else {

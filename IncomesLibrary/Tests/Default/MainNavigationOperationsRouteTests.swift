@@ -209,8 +209,9 @@ struct MainNavigationOperationsRouteTests { // swiftlint:disable:this type_body_
         )
 
         switch outcome {
-        case .search(let query):
+        case let .search(query, predicate):
             #expect(query == "rent")
+            #expect(predicate == nil)
         case .destination,
              .settings,
              .settingsSubscription,

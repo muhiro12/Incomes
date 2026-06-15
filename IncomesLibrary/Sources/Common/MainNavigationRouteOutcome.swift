@@ -8,8 +8,11 @@ public enum MainNavigationRouteOutcome {
             yearTagID: Tag.ID?,
             selectedTag: Tag?
          )
-    /// Opens search with an optional prefilled query.
-    case search(query: String?)
+    /// Opens search with an optional prefilled query and resolved result filter.
+    case search(
+            query: String?,
+            predicate: ItemPredicate?
+         )
     /// Opens the settings root screen.
     case settings
     /// Opens the subscription settings screen.

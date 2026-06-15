@@ -1,22 +1,12 @@
 import SwiftUI
-import TipKit
 
 struct SettingsDataManagementSection: View {
-    let showsYearlyDuplicationTip: Bool
     let duplicateYearItems: () -> Void
     let deleteAllItems: () -> Void
 
-    private let yearlyDuplicationTip = YearlyDuplicationTip()
-
     var body: some View {
         Section {
-            if showsYearlyDuplicationTip {
-                duplicateYearItemsButton
-                    .popoverTip(yearlyDuplicationTip, arrowEdge: .top)
-            } else {
-                duplicateYearItemsButton
-            }
-
+            duplicateYearItemsButton
             Button(role: .destructive, action: deleteAllItems) {
                 Text("Delete all")
             }

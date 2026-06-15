@@ -33,7 +33,7 @@ struct YearChartsView: View {
             }
         }
         .toolbar {
-            CreateItemBottomToolbarContent()
+            CreateItemToolbarContent()
         }
     }
 }

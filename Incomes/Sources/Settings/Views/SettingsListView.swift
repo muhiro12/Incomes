@@ -233,7 +233,6 @@ private extension SettingsListView {
         model: SettingsScreenModel
     ) -> some View {
         SettingsDataManagementSection(
-            showsYearlyDuplicationTip: !yearTags.isEmpty,
             duplicateYearItems: duplicateYearItems,
             deleteAllItems: deleteAllItemsAction(model: model)
         )

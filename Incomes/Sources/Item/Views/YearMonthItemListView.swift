@@ -60,7 +60,7 @@ extension YearMonthItemListView: View {
             ItemCountStatusToolbarItem(count: items.count)
         }
         .toolbar {
-            CreateItemBottomToolbarContent()
+            CreateItemToolbarContent()
         }
     }
 }

@@ -118,13 +118,13 @@ private extension MainNavigationRouter {
             self.selectedTag = selectedTag
             clearSearchState()
             preferredCompactColumn = selectedTag == nil ? .content : .detail
-        case .search(let query):
+        case let .search(query, predicate):
             settingsDestination = nil
             isSearchPresented = true
             searchText = query ?? ""
-            predicate = nil
-            appliesInitialSearchText = query?.isEmpty == false
-            preferredCompactColumn = .content
+            self.predicate = predicate
+            appliesInitialSearchText = predicate == nil && query?.isEmpty == false
+            preferredCompactColumn = predicate == nil ? .content : .detail
         case .settings:
             sheetRoute = .settings
             settingsDestination = .root

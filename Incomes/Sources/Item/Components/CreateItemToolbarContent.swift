@@ -1,11 +1,10 @@
 import SwiftUI
 
-struct CreateItemBottomToolbarContent: ToolbarContent {
+struct CreateItemToolbarContent: ToolbarContent {
     private let tag: Tag?
 
     var body: some ToolbarContent {
-        SpacerToolbarItem(placement: .bottomBar)
-        ToolbarItem(placement: .bottomBar) {
+        ToolbarItem(placement: .topBarTrailing) {
             if let tag {
                 CreateItemButton()
                     .environment(tag)
