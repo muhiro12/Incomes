@@ -123,8 +123,7 @@ private extension MonthlySummaryGenerator {
             languageCode: languageCode,
             context: narrativeContext
         )
-        let options = GenerationOptions(
-            samplingMode: .greedy,
+        let options = greedyGenerationOptions(
             maximumResponseTokens: 220 // swiftlint:disable:this no_magic_numbers
         )
         let response = try await session.respond(
@@ -136,6 +135,20 @@ private extension MonthlySummaryGenerator {
             response.content.summary,
             currentTotals: narrativeContext.currentTotals
         )
+    }
+
+    static func greedyGenerationOptions(maximumResponseTokens: Int) -> GenerationOptions {
+        #if compiler(>=6.4)
+        GenerationOptions(
+            samplingMode: .greedy,
+            maximumResponseTokens: maximumResponseTokens
+        )
+        #else
+        GenerationOptions(
+            sampling: .greedy,
+            maximumResponseTokens: maximumResponseTokens
+        )
+        #endif
     }
 
     static func fallbackSummary(
