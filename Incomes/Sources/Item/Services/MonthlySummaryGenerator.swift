@@ -49,6 +49,33 @@ enum MonthlySummaryGenerator {
             locale: locale
         )
     }
+
+    static func generate(
+        currentItems: [Item],
+        previousItems: [Item],
+        date: Date,
+        currencyCode: String,
+        locale: Locale
+    ) async throws -> String {
+        let model = try FoundationModelAvailabilitySupport.generalModel(
+            for: locale,
+            unavailableModelError: MonthlySummaryGenerationError.unavailableModel,
+            unsupportedLocaleError: MonthlySummaryGenerationError.unsupportedLocale
+        )
+        let narrativeContext = try resolvedNarrativeContext(
+            currentItems: currentItems,
+            previousItems: previousItems,
+            date: date,
+            currencyCode: currencyCode
+        )
+
+        return try await generatedOrFallbackSummary(
+            model: model,
+            narrativeContext: narrativeContext,
+            date: date,
+            locale: locale
+        )
+    }
 }
 
 @available(iOS 26.0, *)
@@ -98,6 +125,24 @@ private extension MonthlySummaryGenerator {
         do {
             return try MonthlySummaryOperations.loadContext(
                 context: context,
+                date: date,
+                currencyCode: currencyCode
+            )
+        } catch MonthlySummaryOperations.LoadingError.invalidYearMonth {
+            throw MonthlySummaryGenerationError.invalidYearMonth
+        }
+    }
+
+    private static func resolvedNarrativeContext(
+        currentItems: [Item],
+        previousItems: [Item],
+        date: Date,
+        currencyCode: String
+    ) throws -> MonthlySummaryOperations.Context {
+        do {
+            return try MonthlySummaryOperations.context(
+                currentItems: currentItems,
+                previousItems: previousItems,
                 date: date,
                 currencyCode: currencyCode
             )

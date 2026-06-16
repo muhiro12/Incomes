@@ -300,18 +300,18 @@ private extension MonthlySummaryNarrativeBuilder {
     }
 
     static func localizedString(
-        key: String.LocalizationValue,
+        key: String,
         locale: Locale
     ) -> String {
-        String(
-            localized: key,
-            bundle: .module,
-            locale: locale
+        localizationBundle(for: locale).localizedString(
+            forKey: key,
+            value: nil,
+            table: nil
         )
     }
 
     static func localizedString(
-        key: String.LocalizationValue,
+        key: String,
         locale: Locale,
         _ arguments: CVarArg...
     ) -> String {
@@ -323,7 +323,7 @@ private extension MonthlySummaryNarrativeBuilder {
     }
 
     static func localizedFormattedString(
-        key: String.LocalizationValue,
+        key: String,
         locale: Locale,
         _ arguments: CVarArg...
     ) -> String {
@@ -335,7 +335,7 @@ private extension MonthlySummaryNarrativeBuilder {
     }
 
     static func localizedFormattedString(
-        key: String.LocalizationValue,
+        key: String,
         locale: Locale,
         arguments: [CVarArg]
     ) -> String {
@@ -348,5 +348,26 @@ private extension MonthlySummaryNarrativeBuilder {
             locale: locale,
             arguments: arguments
         )
+    }
+
+    static func localizationBundle(for locale: Locale) -> Bundle {
+        let candidateIdentifiers = [
+            locale.identifier.replacingOccurrences(of: "_", with: "-"),
+            locale.language.languageCode?.identifier
+        ]
+        .compactMap(\.self)
+
+        for identifier in candidateIdentifiers {
+            guard let path = Bundle.module.path(
+                forResource: identifier,
+                ofType: "lproj"
+            ),
+            let bundle = Bundle(path: path) else {
+                continue
+            }
+            return bundle
+        }
+
+        return .module
     }
 }

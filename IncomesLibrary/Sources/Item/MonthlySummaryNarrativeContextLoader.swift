@@ -37,10 +37,8 @@ enum MonthlySummaryNarrativeContextLoader {
                 category: comparison.category,
                 currentIncome: comparison.currentIncome,
                 previousIncome: comparison.previousIncome,
-                incomeDelta: comparison.incomeDelta,
                 currentOutgo: comparison.currentOutgo,
-                previousOutgo: comparison.previousOutgo,
-                outgoDelta: comparison.outgoDelta
+                previousOutgo: comparison.previousOutgo
             )
         }
 
@@ -50,16 +48,61 @@ enum MonthlySummaryNarrativeContextLoader {
                 month: currentYearMonth.month,
                 currencyCode: currencyCode,
                 totalIncome: currentTotals.totalIncome,
-                totalOutgo: currentTotals.totalOutgo,
-                netIncome: currentTotals.netIncome
+                totalOutgo: currentTotals.totalOutgo
             ),
             previousTotals: .init(
                 year: previousYearMonth.year,
                 month: previousYearMonth.month,
                 currencyCode: currencyCode,
                 totalIncome: previousTotals.totalIncome,
-                totalOutgo: previousTotals.totalOutgo,
-                netIncome: previousTotals.netIncome
+                totalOutgo: previousTotals.totalOutgo
+            ),
+            categoryComparisons: Array(categoryComparisons)
+        )
+    }
+
+    /// Builds current month, previous month, and category comparison context from provided items.
+    static func load(
+        currentItems: [Item],
+        previousItems: [Item],
+        date: Date,
+        currencyCode: String,
+        categoryComparisonLimit: Int = defaultCategoryComparisonLimit
+    ) throws -> MonthlySummaryOperations.Context {
+        let currentYearMonth = try yearMonth(from: date)
+        let previousDate = MonthlySummaryDateSupport.previousMonthDate(from: date)
+        let previousYearMonth = try yearMonth(from: previousDate)
+        let currentTotals = SummaryCalculator.monthlyTotals(for: currentItems)
+        let previousTotals = SummaryCalculator.monthlyTotals(for: previousItems)
+        let categoryComparisons = SummaryCalculator.categoryComparison(
+            currentItems: currentItems,
+            previousItems: previousItems
+        )
+        .prefix(max(.zero, categoryComparisonLimit))
+        .map { comparison in
+            MonthlySummaryOperations.CategoryComparison(
+                category: comparison.category,
+                currentIncome: comparison.currentIncome,
+                previousIncome: comparison.previousIncome,
+                currentOutgo: comparison.currentOutgo,
+                previousOutgo: comparison.previousOutgo
+            )
+        }
+
+        return .init(
+            currentTotals: .init(
+                year: currentYearMonth.year,
+                month: currentYearMonth.month,
+                currencyCode: currencyCode,
+                totalIncome: currentTotals.totalIncome,
+                totalOutgo: currentTotals.totalOutgo
+            ),
+            previousTotals: .init(
+                year: previousYearMonth.year,
+                month: previousYearMonth.month,
+                currencyCode: currencyCode,
+                totalIncome: previousTotals.totalIncome,
+                totalOutgo: previousTotals.totalOutgo
             ),
             categoryComparisons: Array(categoryComparisons)
         )

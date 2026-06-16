@@ -21,6 +21,11 @@ enum SummaryCalculator {
     static func monthlyTotals(context: ModelContext, date: Date) throws -> MonthlyTotals {
         let items = try ItemQueryOperations.items(context: context, date: date)
 
+        return monthlyTotals(for: items)
+    }
+
+    /// Calculates totals for the provided items.
+    static func monthlyTotals(for items: [Item]) -> MonthlyTotals {
         let income: Decimal = items.reduce(.zero) { partial, item in
             partial + item.income
         }
@@ -44,6 +49,17 @@ enum SummaryCalculator {
         let previousMonthDate = MonthlySummaryDateSupport.previousMonthDate(from: date)
         let previousItems = try ItemQueryOperations.items(context: context, date: previousMonthDate)
 
+        return categoryComparison(
+            currentItems: currentItems,
+            previousItems: previousItems
+        )
+    }
+
+    /// Compares category totals for provided current and previous month items.
+    static func categoryComparison(
+        currentItems: [Item],
+        previousItems: [Item]
+    ) -> [CategoryComparison] {
         let currentTotals = categoryTotals(for: currentItems)
         let previousTotals = categoryTotals(for: previousItems)
         let categories = Set(currentTotals.keys).union(previousTotals.keys)

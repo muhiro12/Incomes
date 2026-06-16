@@ -45,15 +45,14 @@ public enum MonthlySummaryOperations {
             month: Int,
             currencyCode: String,
             totalIncome: Decimal,
-            totalOutgo: Decimal,
-            netIncome: Decimal
+            totalOutgo: Decimal
         ) {
             self.year = year
             self.month = month
             self.currencyCode = currencyCode
             self.totalIncome = totalIncome
             self.totalOutgo = totalOutgo
-            self.netIncome = netIncome
+            netIncome = totalIncome - totalOutgo
         }
     }
 
@@ -79,18 +78,16 @@ public enum MonthlySummaryOperations {
             category: String,
             currentIncome: Decimal,
             previousIncome: Decimal,
-            incomeDelta: Decimal,
             currentOutgo: Decimal,
-            previousOutgo: Decimal,
-            outgoDelta: Decimal
+            previousOutgo: Decimal
         ) {
             self.category = category
             self.currentIncome = currentIncome
             self.previousIncome = previousIncome
-            self.incomeDelta = incomeDelta
+            incomeDelta = currentIncome - previousIncome
             self.currentOutgo = currentOutgo
             self.previousOutgo = previousOutgo
-            self.outgoDelta = outgoDelta
+            outgoDelta = currentOutgo - previousOutgo
         }
     }
 
@@ -130,6 +127,23 @@ public enum MonthlySummaryOperations {
     ) throws -> Context {
         try MonthlySummaryNarrativeContextLoader.load(
             context: context,
+            date: date,
+            currencyCode: currencyCode,
+            categoryComparisonLimit: categoryComparisonLimit
+        )
+    }
+
+    /// Builds monthly summary context from the exact items selected by the caller.
+    public static func context(
+        currentItems: [Item],
+        previousItems: [Item],
+        date: Date,
+        currencyCode: String,
+        categoryComparisonLimit: Int = defaultCategoryComparisonLimit
+    ) throws -> Context {
+        try MonthlySummaryNarrativeContextLoader.load(
+            currentItems: currentItems,
+            previousItems: previousItems,
             date: date,
             currencyCode: currencyCode,
             categoryComparisonLimit: categoryComparisonLimit

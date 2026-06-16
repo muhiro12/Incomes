@@ -42,9 +42,13 @@ extension YearMonthItemListView: View {
                 }
             }
             if isDebugOn,
-               let monthDate {
+               let monthDate,
+               let summaryItemsDescriptor {
                 if #available(iOS 26.0, *) {
-                    MonthlySummarySection(date: monthDate)
+                    MonthlySummarySection(
+                        date: monthDate,
+                        currentItemsDescriptor: summaryItemsDescriptor
+                    )
                 }
             }
         }
@@ -76,6 +80,13 @@ private extension YearMonthItemListView {
 
     var yearStrings: [String] {
         TagQueryOperations.yearStrings(for: tag)
+    }
+
+    var summaryItemsDescriptor: FetchDescriptor<Item>? {
+        guard let yearString = yearStrings.first else {
+            return nil
+        }
+        return .items(.tagAndYear(tag: tag, yearString: yearString))
     }
 }
 

@@ -11,9 +11,6 @@ import SwiftUI
 
 @available(iOS 26.0, *)
 struct MonthlySummarySection: View {
-    @Environment(\.modelContext)
-    private var context
-
     @Environment(\.locale)
     private var locale
 
@@ -34,18 +31,6 @@ struct MonthlySummarySection: View {
     @State private var activeRequestID: UUID?
 
     private let date: Date
-
-    init(date: Date) { // swiftlint:disable:this type_contents_order
-        self.date = date
-        _currentItems = .init(.items(.dateIsSameMonthAs(date)))
-        _previousItems = .init(
-            .items(
-                .dateIsSameMonthAs(
-                    MonthlySummaryOperations.previousMonthDate(from: date)
-                )
-            )
-        )
-    }
 
     var body: some View {
         Color.clear
@@ -88,6 +73,21 @@ struct MonthlySummarySection: View {
             } message: {
                 Text(errorMessage ?? "")
             }
+    }
+
+    init(
+        date: Date,
+        currentItemsDescriptor: FetchDescriptor<Item>? = nil
+    ) {
+        self.date = date
+        _currentItems = .init(currentItemsDescriptor ?? .items(.dateIsSameMonthAs(date)))
+        _previousItems = .init(
+            .items(
+                .dateIsSameMonthAs(
+                    MonthlySummaryOperations.previousMonthDate(from: date)
+                )
+            )
+        )
     }
 }
 
@@ -159,7 +159,8 @@ private extension MonthlySummarySection {
 
         do {
             let summary = try await MonthlySummaryGenerator.generate(
-                context: context,
+                currentItems: currentItems,
+                previousItems: previousItems,
                 date: date,
                 currencyCode: currencyCode,
                 locale: locale

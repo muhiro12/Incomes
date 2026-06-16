@@ -31,8 +31,7 @@ struct MonthlySummaryOperationsNarrativeTests {
             month: 6,
             currencyCode: "USD",
             totalIncome: 1_000,
-            totalOutgo: 1_600,
-            netIncome: -600
+            totalOutgo: 1_600
         )
 
         let summary = try MonthlySummaryOperations.validatedSummary(
@@ -71,26 +70,22 @@ struct MonthlySummaryOperationsNarrativeTests {
                 month: kCurrentTotals.month,
                 currencyCode: "USD \"Cash\" \\",
                 totalIncome: kCurrentTotals.totalIncome,
-                totalOutgo: kCurrentTotals.totalOutgo,
-                netIncome: kCurrentTotals.netIncome
+                totalOutgo: kCurrentTotals.totalOutgo
             ),
             previousTotals: .init(
                 year: kPreviousTotals.year,
                 month: kPreviousTotals.month,
                 currencyCode: "JPY \"Bank\" \\",
                 totalIncome: kPreviousTotals.totalIncome,
-                totalOutgo: kPreviousTotals.totalOutgo,
-                netIncome: kPreviousTotals.netIncome
+                totalOutgo: kPreviousTotals.totalOutgo
             ),
             categoryComparisons: [
                 .init(
                     category: "Food \"Takeout\"\nBackslash \\",
                     currentIncome: .zero,
                     previousIncome: .zero,
-                    incomeDelta: .zero,
                     currentOutgo: 300,
-                    previousOutgo: 100,
-                    outgoDelta: 200
+                    previousOutgo: 100
                 )
             ]
         )
@@ -122,18 +117,15 @@ struct MonthlySummaryOperationsNarrativeTests {
                 month: 5,
                 currencyCode: "USD",
                 totalIncome: .zero,
-                totalOutgo: .zero,
-                netIncome: .zero
+                totalOutgo: .zero
             ),
             categoryComparisons: [
                 .init(
                     category: "Food",
                     currentIncome: .zero,
                     previousIncome: .zero,
-                    incomeDelta: .zero,
                     currentOutgo: 300,
-                    previousOutgo: .zero,
-                    outgoDelta: 300
+                    previousOutgo: .zero
                 )
             ]
         )
@@ -167,8 +159,7 @@ private let kCurrentTotals = MonthlySummaryOperations.MonthTotals(
     month: 6,
     currencyCode: "USD",
     totalIncome: 1_000,
-    totalOutgo: 400,
-    netIncome: 600
+    totalOutgo: 400
 )
 
 private let kPreviousTotals = MonthlySummaryOperations.MonthTotals(
@@ -176,8 +167,7 @@ private let kPreviousTotals = MonthlySummaryOperations.MonthTotals(
     month: 5,
     currencyCode: "USD",
     totalIncome: 900,
-    totalOutgo: 250,
-    netIncome: 650
+    totalOutgo: 250
 )
 
 private let kContext = MonthlySummaryOperations.Context(
@@ -188,10 +178,8 @@ private let kContext = MonthlySummaryOperations.Context(
             category: "Food \"Takeout\"",
             currentIncome: .zero,
             previousIncome: .zero,
-            incomeDelta: .zero,
             currentOutgo: 300,
-            previousOutgo: 100,
-            outgoDelta: 200
+            previousOutgo: 100
         )
     ]
 )
