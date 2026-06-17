@@ -45,7 +45,6 @@ struct ItemFormToolbarContent: ToolbarContent {
                 Button(action: presentAssist) {
                     Label("Text Capture", systemImage: "wand.and.stars")
                 }
-                .incomesSecondaryControlStyle()
                 .accessibilityHint(Text("Opens text capture to extract item details."))
             }
         }

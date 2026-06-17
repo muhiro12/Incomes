@@ -6,10 +6,10 @@ struct CreateItemToolbarContent: ToolbarContent {
     var body: some ToolbarContent {
         ToolbarItem(placement: .topBarTrailing) {
             if let tag {
-                CreateItemButton()
+                CreateItemButton(presentation: .toolbar)
                     .environment(tag)
             } else {
-                CreateItemButton()
+                CreateItemButton(presentation: .toolbar)
             }
         }
     }

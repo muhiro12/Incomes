@@ -20,7 +20,6 @@ struct MonthlySummaryToolbarButton: View {
                 Image(systemName: "sparkles")
             }
         }
-        .incomesSecondaryControlStyle()
         .accessibilityLabel(accessibilityLabel)
         .popover(isPresented: $isPopoverPresented, arrowEdge: .top) {
             MonthlySummaryPopover(

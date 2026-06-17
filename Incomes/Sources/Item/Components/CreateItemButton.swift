@@ -9,18 +9,27 @@ import SwiftUI
 import TipKit
 
 struct CreateItemButton {
+    enum Presentation {
+        case contentAction
+        case toolbar
+    }
+
     @Environment(IncomesTipController.self)
     private var tipController
 
     @State private var isCreateSheetPresented = false
 
+    private let presentation: Presentation
     private let createItemTip = CreateItemTip()
+
+    init(presentation: Presentation = .contentAction) {
+        self.presentation = presentation
+    }
 }
 
 extension CreateItemButton: View {
     var body: some View {
-        createButton
-            .incomesProminentControlStyle()
+        styledCreateButton
             .popoverTip(createItemTip)
             .accessibilityLabel(Text("Create Item"))
             .accessibilityHint(Text("Opens the item form."))
@@ -32,6 +41,16 @@ extension CreateItemButton: View {
 }
 
 private extension CreateItemButton {
+    @ViewBuilder var styledCreateButton: some View {
+        switch presentation {
+        case .contentAction:
+            createButton
+                .incomesProminentControlStyle()
+        case .toolbar:
+            createButton
+        }
+    }
+
     var createButton: some View {
         Button {
             tipController.donateDidOpenCreateForm()

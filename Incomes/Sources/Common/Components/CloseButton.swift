@@ -12,7 +12,6 @@ struct CloseButton: View {
         }
         .accessibilityLabel(Text("Close"))
         .accessibilityHint(Text("Dismisses the current screen."))
-        .incomesDismissControlStyle()
     }
 }
 
