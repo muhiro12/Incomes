@@ -26,9 +26,10 @@ enum MonthlySummaryNarrativeBuilder {
         context: Context
     ) -> String {
         let hasPreviousMonthData = previousMonthDataAvailable(in: context)
-        let categoryChangeLines = hasPreviousMonthData
-            ? categoryChangeLines(from: context.categoryComparisons)
-            : "  "
+        let comparisonFacts = comparisonFacts(
+            hasPreviousMonthData: hasPreviousMonthData,
+            categoryComparisons: context.categoryComparisons
+        )
 
         return FoundationModelPromptTemplate(
             resourceName: "monthly-summary-user-prompt"
@@ -43,8 +44,7 @@ enum MonthlySummaryNarrativeBuilder {
                 "totalIncome": decimalString(context.currentTotals.totalIncome),
                 "totalOutgo": decimalString(context.currentTotals.totalOutgo),
                 "netIncome": decimalString(context.currentTotals.netIncome),
-                "previousMonthDataAvailable": String(hasPreviousMonthData),
-                "categoryChanges": categoryChangeLines
+                "comparisonFacts": comparisonFacts
             ]
         )
     }
@@ -91,31 +91,10 @@ enum MonthlySummaryNarrativeBuilder {
         _ summary: String,
         currentTotals: MonthTotals
     ) throws -> String {
-        let trimmedSummary = summary.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !trimmedSummary.isEmpty else {
-            throw ValidationError.emptySummary
-        }
-
-        let allowedNumbers: [Decimal] = [
-            currentTotals.totalIncome,
-            currentTotals.totalOutgo,
-            currentTotals.netIncome
-        ]
-        let posixLocale = Locale(identifier: "en_US_POSIX")
-
-        for token in numericTokens(in: trimmedSummary) {
-            let normalizedToken = normalizedNumericToken(token)
-            guard let numericValue = Decimal(string: normalizedToken, locale: posixLocale) else {
-                throw ValidationError.unsupportedNumber
-            }
-            guard allowedNumbers.contains(where: { allowedNumber in
-                allowedNumber == numericValue
-            }) else {
-                throw ValidationError.unsupportedNumber
-            }
-        }
-
-        return trimmedSummary
+        try MonthlySummaryNarrativeValidator.validatedSummary(
+            summary,
+            currentTotals: currentTotals
+        )
     }
 }
 
@@ -129,30 +108,35 @@ private extension MonthlySummaryNarrativeBuilder {
             context.previousTotals.totalOutgo != .zero
     }
 
-    static func categoryChangeLines(from comparisons: [CategoryComparison]) -> String {
-        let changes = comparisons.compactMap { comparison in
-            categoryChangeLine(from: comparison)
-        }
-
-        guard !changes.isEmpty else {
-            return "  "
-        }
-
-        return changes.map { change in
-            """
-              {
-                category: \(PromptLiteralSupport.jsonStringLiteral(change.category)),
-                change: \(PromptLiteralSupport.jsonStringLiteral(change.change))
-              }
+    static func comparisonFacts(
+        hasPreviousMonthData: Bool,
+        categoryComparisons: [CategoryComparison]
+    ) -> String {
+        guard hasPreviousMonthData else {
+            return """
+            - Previous-month data is not sufficient for a reliable comparison.
+            - Briefly say comparison data is limited.
             """
         }
-        .joined(separator: ",\n")
+
+        let facts = categoryComparisons.compactMap { comparison in
+            comparisonFact(from: comparison)
+        }
+
+        guard !facts.isEmpty else {
+            return """
+            - Previous-month data is available.
+            - No major category-level changes are available to mention.
+            """
+        }
+
+        return facts.map { fact in
+            "- \(fact)"
+        }
+        .joined(separator: "\n")
     }
 
-    static func categoryChangeLine(from comparison: CategoryComparison) -> (
-        category: String,
-        change: String
-    )? {
+    static func comparisonFact(from comparison: CategoryComparison) -> String? {
         let incomeMagnitude = abs(decimalToDouble(comparison.incomeDelta))
         let outgoMagnitude = abs(decimalToDouble(comparison.outgoDelta))
 
@@ -163,20 +147,24 @@ private extension MonthlySummaryNarrativeBuilder {
 
         if outgoMagnitude >= incomeMagnitude,
            comparison.outgoDelta != .zero {
-            let change = comparison.outgoDelta > .zero
-                ? "outgoIncreased"
-                : "outgoDecreased"
-            return (comparison.category, change)
+            let direction = comparison.outgoDelta > .zero
+                ? "spending increased"
+                : "spending decreased"
+            return "Category \(categoryLiteral(comparison.category)) \(direction)."
         }
 
         guard comparison.incomeDelta != .zero else {
             return nil
         }
 
-        let change = comparison.incomeDelta > .zero
-            ? "incomeIncreased"
-            : "incomeDecreased"
-        return (comparison.category, change)
+        let direction = comparison.incomeDelta > .zero
+            ? "income increased"
+            : "income decreased"
+        return "Category \(categoryLiteral(comparison.category)) \(direction)."
+    }
+
+    static func categoryLiteral(_ category: String) -> String {
+        PromptLiteralSupport.jsonStringLiteral(category)
     }
 
     static func comparisonSentence(
@@ -274,25 +262,6 @@ private extension MonthlySummaryNarrativeBuilder {
         formatter.currencyCode = currencyCode
         formatter.locale = locale
         return formatter.string(for: value) ?? value.description
-    }
-
-    static func numericTokens(in text: String) -> [String] {
-        let pattern = #"[-+−]?\d[\d,]*(?:\.\d+)?"#
-        guard let regularExpression = try? NSRegularExpression(pattern: pattern) else {
-            assertionFailure()
-            return []
-        }
-
-        let range = NSRange(text.startIndex..., in: text)
-        return regularExpression.matches(in: text, range: range).compactMap { result in
-            Range(result.range, in: text).map { String(text[$0]) }
-        }
-    }
-
-    static func normalizedNumericToken(_ token: String) -> String {
-        token
-            .replacingOccurrences(of: ",", with: "")
-            .replacingOccurrences(of: "−", with: "-")
     }
 
     static func decimalToDouble(_ value: Decimal) -> Double {

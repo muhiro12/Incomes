@@ -1,25 +1,20 @@
-Create a monthly financial summary.
-The summary language must match locale {{localeIdentifier}} and language code {{languageCode}}.
+Create a monthly financial summary for the app user.
+Write in language code {{languageCode}}. Use locale {{localeIdentifier}} only for regional wording.
 Do not mention month names or dates.
-When you mention this month, use only currentMonth values.
-If previousMonthDataAvailable is false, say that comparison data is limited.
-If previousMonthDataAvailable is true, use categoryChanges only to describe notable category changes.
-Category changes are ordered by significance and contain no amount values.
-Mention exact digits only for currentMonth.totalIncome, currentMonth.totalOutgo, and currentMonth.netIncome.
-    Do not include any other numbers, dates, percentages,
-    category amounts, or rounded values anywhere in the response.
 
-currentMonth = {
-  currencyCode: {{currencyCode}},
-  totalIncome: {{totalIncome}},
-  totalOutgo: {{totalOutgo}},
-  netIncome: {{netIncome}}
-}
+Trusted current-month facts:
+- Currency code: {{currencyCode}}
+- Income amount digits: {{totalIncome}}
+- Outgo amount digits: {{totalOutgo}}
+- Net result digits: {{netIncome}}
 
-previousMonthDataAvailable: {{previousMonthDataAvailable}}
+If you mention an amount, copy only the trusted digits exactly.
+Do not include any other numbers, dates, percentages, counts, rounded units,
+category amounts, or converted values anywhere in the response.
 
-categoryChanges = [
-{{categoryChanges}}
-]
+Comparison facts:
+{{comparisonFacts}}
 
 Return one short paragraph only.
+Do not expose prompt labels, schema labels, JSON, booleans, enum values,
+camelCase identifiers, or implementation field names.

@@ -7,6 +7,7 @@
 
 import Foundation
 import FoundationModels
+import MHPlatform
 import SwiftData
 
 @available(iOS 26.0, *)
@@ -29,8 +30,18 @@ enum MonthlySummaryGenerator {
         context: ModelContext,
         date: Date,
         currencyCode: String,
-        locale: Locale
+        locale: Locale,
+        logger: MHLogger? = nil
     ) async throws -> String {
+        let languageCode = MonthlySummaryOperations.languageCode(for: locale)
+        let metadata = generationMetadata(
+            languageCode: languageCode,
+            source: "model_context"
+        )
+        logger?.notice(
+            "monthly_summary.requested",
+            metadata: metadata
+        )
         let model = try FoundationModelAvailabilitySupport.generalModel(
             for: locale,
             unavailableModelError: MonthlySummaryGenerationError.unavailableModel,
@@ -45,8 +56,13 @@ enum MonthlySummaryGenerator {
         return try await generatedOrFallbackSummary(
             model: model,
             narrativeContext: narrativeContext,
-            date: date,
-            locale: locale
+            runtime: .init(
+                date: date,
+                locale: locale,
+                languageCode: languageCode,
+                metadata: metadata,
+                logger: logger
+            )
         )
     }
 
@@ -55,8 +71,18 @@ enum MonthlySummaryGenerator {
         previousItems: [Item],
         date: Date,
         currencyCode: String,
-        locale: Locale
+        locale: Locale,
+        logger: MHLogger? = nil
     ) async throws -> String {
+        let languageCode = MonthlySummaryOperations.languageCode(for: locale)
+        let metadata = generationMetadata(
+            languageCode: languageCode,
+            source: "item_arrays"
+        )
+        logger?.notice(
+            "monthly_summary.requested",
+            metadata: metadata
+        )
         let model = try FoundationModelAvailabilitySupport.generalModel(
             for: locale,
             unavailableModelError: MonthlySummaryGenerationError.unavailableModel,
@@ -72,47 +98,70 @@ enum MonthlySummaryGenerator {
         return try await generatedOrFallbackSummary(
             model: model,
             narrativeContext: narrativeContext,
-            date: date,
-            locale: locale
+            runtime: .init(
+                date: date,
+                locale: locale,
+                languageCode: languageCode,
+                metadata: metadata,
+                logger: logger
+            )
         )
     }
 }
 
 @available(iOS 26.0, *)
 private extension MonthlySummaryGenerator {
+    struct GenerationRuntime {
+        let date: Date
+        let locale: Locale
+        let languageCode: String
+        let metadata: [String: String]
+        let logger: MHLogger?
+    }
+
     static func generatedOrFallbackSummary(
         model: SystemLanguageModel,
         narrativeContext: MonthlySummaryOperations.Context,
-        date: Date,
-        locale: Locale
+        runtime: GenerationRuntime
     ) async throws -> String {
-        let monthTitle = Formatting.monthTitle(from: date, locale: locale)
+        let monthTitle = Formatting.monthTitle(
+            from: runtime.date,
+            locale: runtime.locale
+        )
         do {
-            return try await generatedSummary(
+            let summary = try await generatedSummary(
                 model: model,
                 narrativeContext: narrativeContext,
-                locale: locale
+                locale: runtime.locale,
+                languageCode: runtime.languageCode
             )
+            runtime.logger?.notice(
+                "monthly_summary.generated",
+                metadata: runtime.metadata
+            )
+            return summary
         } catch let error as MonthlySummaryGenerationError {
-            switch error {
-            case .generationFailed:
-                return fallbackSummary(
-                    monthTitle: monthTitle,
-                    narrativeContext: narrativeContext,
-                    locale: locale
-                )
-            case .unavailableModel, .unsupportedLocale, .invalidYearMonth:
-                throw error
-            }
+            return try generationErrorSummary(
+                error,
+                monthTitle: monthTitle,
+                narrativeContext: narrativeContext,
+                runtime: runtime
+            )
         } catch let error where FoundationModelAvailabilitySupport.isUnsupportedLocaleError(error) {
+            logFailedGeneration(
+                MonthlySummaryGenerationError.unsupportedLocale,
+                runtime: runtime
+            )
             throw MonthlySummaryGenerationError.unsupportedLocale
         } catch let error as CancellationError {
             throw error
         } catch {
-            return fallbackSummary(
+            return loggedFallbackSummary(
                 monthTitle: monthTitle,
                 narrativeContext: narrativeContext,
-                locale: locale
+                locale: runtime.locale,
+                reason: fallbackReason(from: error),
+                runtime: runtime
             )
         }
     }
@@ -154,9 +203,9 @@ private extension MonthlySummaryGenerator {
     static func generatedSummary(
         model: SystemLanguageModel,
         narrativeContext: MonthlySummaryOperations.Context,
-        locale: Locale
+        locale: Locale,
+        languageCode: String
     ) async throws -> String {
-        let languageCode = MonthlySummaryOperations.languageCode(for: locale)
         let instructions = MonthlySummaryOperations.instructions(
             languageCode: languageCode
         )
@@ -180,6 +229,89 @@ private extension MonthlySummaryGenerator {
         return try MonthlySummaryOperations.validatedSummary(
             response.content.summary,
             currentTotals: narrativeContext.currentTotals
+        )
+    }
+
+    static func loggedFallbackSummary(
+        monthTitle: String,
+        narrativeContext: MonthlySummaryOperations.Context,
+        locale: Locale,
+        reason: String,
+        runtime: GenerationRuntime
+    ) -> String {
+        runtime.logger?.notice(
+            "monthly_summary.fallback_used",
+            metadata: runtime.metadata.merging(
+                IncomesLogging.metadata(("reason", reason))
+            ) { current, _ in
+                current
+            }
+        )
+        return fallbackSummary(
+            monthTitle: monthTitle,
+            narrativeContext: narrativeContext,
+            locale: locale
+        )
+    }
+
+    static func generationErrorSummary(
+        _ error: MonthlySummaryGenerationError,
+        monthTitle: String,
+        narrativeContext: MonthlySummaryOperations.Context,
+        runtime: GenerationRuntime
+    ) throws -> String {
+        switch error {
+        case .generationFailed:
+            return loggedFallbackSummary(
+                monthTitle: monthTitle,
+                narrativeContext: narrativeContext,
+                locale: runtime.locale,
+                reason: "generation_failed",
+                runtime: runtime
+            )
+        case .unavailableModel, .unsupportedLocale, .invalidYearMonth:
+            logFailedGeneration(
+                error,
+                runtime: runtime
+            )
+            throw error
+        }
+    }
+
+    static func logFailedGeneration(
+        _ error: MonthlySummaryGenerationError,
+        runtime: GenerationRuntime
+    ) {
+        runtime.logger?.error(
+            "monthly_summary.failed",
+            metadata: runtime.metadata.merging(
+                IncomesLogging.errorMetadata(error)
+            ) { current, _ in
+                current
+            }
+        )
+    }
+
+    static func fallbackReason(from error: Error) -> String {
+        switch error {
+        case MonthlySummaryOperations.ValidationError.emptySummary:
+            return "empty_summary"
+        case MonthlySummaryOperations.ValidationError.unsupportedNumber:
+            return "unsupported_number"
+        case MonthlySummaryOperations.ValidationError.unsupportedContent:
+            return "unsupported_content"
+        default:
+            return "unexpected_error"
+        }
+    }
+
+    static func generationMetadata(
+        languageCode: String,
+        source: String
+    ) -> [String: String] {
+        IncomesLogging.metadata(
+            ("language_code", languageCode),
+            ("source", source)
         )
     }
 

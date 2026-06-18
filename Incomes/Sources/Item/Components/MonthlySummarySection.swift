@@ -11,6 +11,9 @@ import SwiftUI
 
 @available(iOS 26.0, *)
 struct MonthlySummarySection: View {
+    @Environment(MHLoggingBootstrap.self)
+    private var logging
+
     @Environment(\.locale)
     private var locale
 
@@ -112,6 +115,14 @@ private extension MonthlySummarySection {
         )
     }
 
+    var monthlySummaryLogger: MHLogger {
+        IncomesLogging.logger(
+            logging: logging,
+            category: IncomesLogging.Category.inference,
+            source: #fileID
+        )
+    }
+
     func generateInitialSummaryFromToolbar() {
         guard generatedSummary == nil,
               !isGenerating else {
@@ -163,7 +174,8 @@ private extension MonthlySummarySection {
                 previousItems: previousItems,
                 date: date,
                 currencyCode: currencyCode,
-                locale: locale
+                locale: locale,
+                logger: monthlySummaryLogger
             )
             guard !Task.isCancelled,
                   activeRequestID == requestID,

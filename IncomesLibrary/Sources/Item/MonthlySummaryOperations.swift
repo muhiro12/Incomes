@@ -97,6 +97,8 @@ public enum MonthlySummaryOperations {
         case emptySummary
         /// The generated text contained a value that was not allowed.
         case unsupportedNumber
+        /// The generated text exposed prompt internals or implementation labels.
+        case unsupportedContent
     }
 
     /// Loading failures for monthly summary context.
