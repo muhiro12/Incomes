@@ -48,7 +48,12 @@ struct MainNavigationContentColumn: View {
                     searchPredicateSelection: searchPredicateSelection,
                     searchText: searchText,
                     appliesInitialSearchText: appliesInitialSearchText
-                )
+                ) { isCompact in
+                    router.dismissSearch()
+                    router.restoreSidebarAfterSearchDismissalIfNeeded(
+                        isCompact: isCompact
+                    )
+                }
             } else if let selectedYearTag {
                 MainNavigationYearContent(
                     selectedYearTag: selectedYearTag,

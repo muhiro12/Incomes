@@ -136,9 +136,7 @@ struct MainNavigationView: View {
             tipController.refreshHasAnyItems(!yearTags.isEmpty)
         }
         .onChange(of: router.isSearchPresented) {
-            if router.isSearchPresented {
-                tipController.donateDidOpenSearch()
-            }
+            handleSearchPresentationChange()
         }
         .task {
             loadState()
@@ -232,6 +230,17 @@ private extension MainNavigationView {
         } catch {
             assertionFailure(error.localizedDescription)
         }
+    }
+
+    func handleSearchPresentationChange() {
+        if router.isSearchPresented {
+            tipController.donateDidOpenSearch()
+            return
+        }
+
+        router.restoreSidebarAfterSearchDismissalIfNeeded(
+            isCompact: horizontalSizeClass != .regular
+        )
     }
 }
 
