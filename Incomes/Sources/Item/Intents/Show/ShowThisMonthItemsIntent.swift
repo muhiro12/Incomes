@@ -9,9 +9,9 @@ import AppIntents
 import SwiftData
 
 struct ShowThisMonthItemsIntent: AppIntent {
-    @Dependency private var modelContainer: ModelContainer // swiftlint:disable:this type_contents_order
-
     static let title: LocalizedStringResource = .init("Show This Month's Items", table: "AppIntents")
+
+    @Dependency private var modelContainer: ModelContainer
 
     @MainActor
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {

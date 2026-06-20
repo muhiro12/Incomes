@@ -132,10 +132,10 @@ struct ItemFormInputTests {
             incomeText: "100",
             outgoText: "",
             category: "Service",
-            priorityText: "",
             repeatMonthSelections: [
                 .init(year: 2_026, month: 1)
-            ]
+            ],
+            priorityText: ""
         )
 
         let input = ItemFormInput(draft: draft)
@@ -153,12 +153,14 @@ struct ItemFormInputTests {
         let context = testContext
         let item = try createItem(
             context: context,
-            date: shiftedDate("2026-01-10T12:00:00Z"),
-            content: "Subscription",
-            income: 0,
-            outgo: 250,
-            category: "Service",
-            priority: 3
+            input: .init(
+                date: shiftedDate("2026-01-10T12:00:00Z"),
+                content: "Subscription",
+                income: 0,
+                outgo: 250,
+                category: "Service",
+                priority: 3
+            )
         )
 
         let input = ItemFormInput(item: item)

@@ -15,11 +15,13 @@ struct DuplicateTagView: View {
     @State private var isDeleteDialogPresented = false
     @State private var selectedTag: Tag?
 
-    init(_ tag: Tag) { // swiftlint:disable:this type_contents_order
+    init(_ tag: Tag) {
         _tags = Query(.tags(.isSameWith(tag)))
     }
+}
 
-    var body: some View {
+extension DuplicateTagView {
+    @ViewBuilder var body: some View {
         ScrollView(.horizontal) {
             LazyHStack(spacing: .zero) {
                 ForEach(tags) { tag in

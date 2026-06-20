@@ -11,11 +11,13 @@ import SwiftUI
 struct IntentItemListSection: View {
     private var items: [Item]
 
-    init(_ items: [Item]) { // swiftlint:disable:this type_contents_order
+    init(_ items: [Item]) {
         self.items = items
     }
+}
 
-    var body: some View {
+extension IntentItemListSection {
+    @ViewBuilder var body: some View {
         Section {
             ForEach(items) { item in
                 NarrowListItem()

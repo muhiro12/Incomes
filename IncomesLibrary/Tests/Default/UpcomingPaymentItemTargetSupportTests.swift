@@ -56,12 +56,14 @@ private extension UpcomingPaymentItemTargetSupportTests {
     func item() throws -> Item {
         try createItem(
             context: context,
-            date: shiftedDate("2026-01-10T00:00:00Z"),
-            content: "Rent",
-            income: .zero,
-            outgo: Self.outgo,
-            category: "Housing",
-            priority: 0,
+            input: .init(
+                date: shiftedDate("2026-01-10T00:00:00Z"),
+                content: "Rent",
+                income: .zero,
+                outgo: Self.outgo,
+                category: "Housing",
+                priority: 0
+            ),
             repeatCount: 1
         )
     }

@@ -3,29 +3,29 @@ import MHPlatform
 import SwiftData
 
 struct UpdateItemIntent: AppIntent {
-    @Parameter(title: "Item")
-    private var item: ItemEntity // swiftlint:disable:this type_contents_order
-    @Parameter(title: "Date", kind: .date)
-    private var date: Date // swiftlint:disable:this type_contents_order
-    @Parameter(title: "Content")
-    private var content: String // swiftlint:disable:this type_contents_order
-    @Parameter(title: "Income")
-    private var income: IntentCurrencyAmount // swiftlint:disable:this type_contents_order
-    @Parameter(title: "Outgo")
-    private var outgo: IntentCurrencyAmount // swiftlint:disable:this type_contents_order
-    @Parameter(title: "Category")
-    private var category: String // swiftlint:disable:this type_contents_order
-    @Parameter(title: "Priority", default: 0, inclusiveRange: (0, 10)) // swiftlint:disable:this no_magic_numbers
-    private var priority: Int // swiftlint:disable:this type_contents_order
-    @Parameter(title: "Scope", default: .thisItem)
-    private var scope: ItemMutationScopeIntentValue // swiftlint:disable:this type_contents_order
-
-    @Dependency private var modelContainer: ModelContainer // swiftlint:disable:this type_contents_order
-    @Dependency private var notificationService: NotificationService // swiftlint:disable:this type_contents_order
-    @Dependency private var logging: MHLoggingBootstrap // swiftlint:disable:this type_contents_order
-
     static let title: LocalizedStringResource = .init("Update Item", table: "AppIntents")
     static let isDiscoverable = false
+
+    @Parameter(title: "Item")
+    private var item: ItemEntity
+    @Parameter(title: "Date", kind: .date)
+    private var date: Date
+    @Parameter(title: "Content")
+    private var content: String
+    @Parameter(title: "Income")
+    private var income: IntentCurrencyAmount
+    @Parameter(title: "Outgo")
+    private var outgo: IntentCurrencyAmount
+    @Parameter(title: "Category")
+    private var category: String
+    @Parameter(title: "Priority", default: 0, inclusiveRange: (0, 10)) // swiftlint:disable:this no_magic_numbers
+    private var priority: Int
+    @Parameter(title: "Scope", default: .thisItem)
+    private var scope: ItemMutationScopeIntentValue
+
+    @Dependency private var modelContainer: ModelContainer
+    @Dependency private var notificationService: NotificationService
+    @Dependency private var logging: MHLoggingBootstrap
 
     @MainActor private var formInput: ItemFormInput {
         ItemIntentFormInputSupport.formInput(
@@ -59,9 +59,7 @@ struct UpdateItemIntent: AppIntent {
             context: context,
             item: model,
             formInputData: formInput,
-            notificationService: notificationService,
-            logger: intentLogger,
-            reviewLogger: reviewLogger
+            dependencies: mutationDependencies
         )
         return .result(value: try ItemEntity.make(from: model))
     }
@@ -79,6 +77,14 @@ private extension UpdateItemIntent {
         IncomesIntentLoggingSupport.reviewFlowLogger(
             logging: logging,
             source: #fileID
+        )
+    }
+
+    @MainActor var mutationDependencies: ItemMutationWorkflowDependencies {
+        .init(
+            notificationService: notificationService,
+            logger: intentLogger,
+            reviewLogger: reviewLogger
         )
     }
 }

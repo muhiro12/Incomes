@@ -53,23 +53,11 @@ public enum WatchSyncOperations {
             context: context,
             items: allItems
         )
-
-        var createdItems = [Item]()
-        for yearMonth in allowedYearMonths {
-            for wire in groupedIncomingItems[yearMonth] ?? [] {
-                let item = try Item.create(
-                    context: context,
-                    date: Date(timeIntervalSince1970: wire.dateEpoch),
-                    content: wire.content,
-                    income: .init(wire.income),
-                    outgo: .init(wire.outgo),
-                    category: wire.category,
-                    priority: 0,
-                    repeatID: .init()
-                )
-                createdItems.append(item)
-            }
-        }
+        let createdItems = try createItems(
+            context: context,
+            groupedIncomingItems: groupedIncomingItems,
+            allowedYearMonths: allowedYearMonths
+        )
 
         if !createdItems.isEmpty {
             try BalanceCalculator.calculate(
@@ -78,6 +66,45 @@ public enum WatchSyncOperations {
             )
         }
 
+        return snapshotOutcome(
+            createdItems: createdItems,
+            deleteOutcome: deleteOutcome
+        )
+    }
+}
+
+private extension WatchSyncOperations {
+    static func createItems(
+        context: ModelContext,
+        groupedIncomingItems: [String: [ItemWire]],
+        allowedYearMonths: Set<String>
+    ) throws -> [Item] {
+        try allowedYearMonths.flatMap { yearMonth in
+            try (groupedIncomingItems[yearMonth] ?? []).map { wire in
+                try createItem(context: context, wire: wire)
+            }
+        }
+    }
+
+    static func createItem(context: ModelContext, wire: ItemWire) throws -> Item {
+        try Item.create(
+            context: context,
+            values: .init(
+                date: Date(timeIntervalSince1970: wire.dateEpoch),
+                content: wire.content,
+                income: .init(wire.income),
+                outgo: .init(wire.outgo),
+                category: wire.category,
+                priority: 0
+            ),
+            repeatID: .init()
+        )
+    }
+
+    static func snapshotOutcome(
+        createdItems: [Item],
+        deleteOutcome: MutationOutcome
+    ) -> MutationOutcome {
         let createdIDs = Set(createdItems.map(\.persistentModelID))
         let createdDates = createdItems.map(\.localDate)
         let affectedDateRange = dateRange(
@@ -94,20 +121,19 @@ public enum WatchSyncOperations {
             followUpHints: [.reloadWidgets, .refreshWatchSnapshot]
         )
     }
-}
 
-private extension WatchSyncOperations {
     static func allowedYearMonths(
         baseDate: Date,
         monthOffsets: [Int]
     ) -> Set<String> {
         Set(
             monthOffsets.compactMap { monthOffset in
-                Calendar.current.date(
+                let date = Calendar.current.date(
                     byAdding: .month,
                     value: monthOffset,
                     to: baseDate
-                )?.stringValueWithoutLocale(.yyyyMM) // swiftlint:disable:this multiline_function_chains
+                )
+                return date?.stringValueWithoutLocale(.yyyyMM)
             }
         )
     }

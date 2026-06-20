@@ -27,68 +27,6 @@ public struct ItemFormInput {
     /// Priority value entered as text.
     public let priorityText: String
 
-    /// Creates an item form input snapshot.
-    public init( // swiftlint:disable:this type_contents_order
-        date: Date,
-        content: String,
-        incomeText: String,
-        outgoText: String,
-        category: String,
-        priorityText: String
-    ) {
-        self.date = date
-        self.content = content
-        self.incomeText = incomeText
-        self.outgoText = outgoText
-        self.category = category
-        self.priorityText = priorityText
-    }
-
-    /// Creates an item form input snapshot from typed amount and priority values.
-    public init( // swiftlint:disable:this type_contents_order
-        date: Date,
-        content: String,
-        income: Decimal,
-        outgo: Decimal,
-        category: String,
-        priority: Int = 0
-    ) {
-        self.init(
-            date: date,
-            content: content,
-            incomeText: income.description,
-            outgoText: outgo.description,
-            category: category,
-            priorityText: "\(priority)"
-        )
-    }
-
-    /// Creates an item form input snapshot from a draft.
-    public init(draft: ItemFormDraft) { // swiftlint:disable:this type_contents_order
-        self.init(
-            date: draft.date,
-            content: draft.content,
-            incomeText: draft.incomeText,
-            outgoText: draft.outgoText,
-            category: draft.category,
-            priorityText: draft.priorityText.isEmpty ? "0" : draft.priorityText
-        )
-    }
-
-    /// Creates an item form input snapshot from an existing item.
-    public init(item: Item) { // swiftlint:disable:this type_contents_order
-        self.init(
-            date: item.localDate,
-            content: item.content,
-            incomeText: item.income != .zero ? item.income.description : "",
-            outgoText: item.outgo != .zero ? item.outgo.description : "",
-            category: CategoryNameSupport.displayName(
-                forStoredName: item.category?.name
-            ),
-            priorityText: "\(item.priority)"
-        )
-    }
-
     /// True when all form values pass `validate()`.
     public var isValid: Bool {
         (try? validate()) != nil
@@ -113,6 +51,68 @@ public struct ItemFormInput {
     public var storedCategory: String {
         CategoryNameSupport.normalizedStoredName(
             forUserInput: category
+        )
+    }
+
+    /// Creates an item form input snapshot.
+    public init(
+        date: Date,
+        content: String,
+        incomeText: String,
+        outgoText: String,
+        category: String,
+        priorityText: String
+    ) {
+        self.date = date
+        self.content = content
+        self.incomeText = incomeText
+        self.outgoText = outgoText
+        self.category = category
+        self.priorityText = priorityText
+    }
+
+    /// Creates an item form input snapshot from typed amount and priority values.
+    public init(
+        date: Date,
+        content: String,
+        income: Decimal,
+        outgo: Decimal,
+        category: String,
+        priority: Int = 0
+    ) {
+        self.init(
+            date: date,
+            content: content,
+            incomeText: income.description,
+            outgoText: outgo.description,
+            category: category,
+            priorityText: "\(priority)"
+        )
+    }
+
+    /// Creates an item form input snapshot from a draft.
+    public init(draft: ItemFormDraft) {
+        self.init(
+            date: draft.date,
+            content: draft.content,
+            incomeText: draft.incomeText,
+            outgoText: draft.outgoText,
+            category: draft.category,
+            priorityText: draft.priorityText.isEmpty ? "0" : draft.priorityText
+        )
+    }
+
+    /// Creates an item form input snapshot from an existing item.
+    public init(item: Item) {
+        self.init(
+            date: item.localDate,
+            content: item.content,
+            incomeText: item.income != .zero ? item.income.description : "",
+            outgoText: item.outgo != .zero ? item.outgo.description : "",
+            category: CategoryNameSupport.displayName(
+                forStoredName: item.category?.name
+            ),
+            priorityText: "\(item.priority)"
         )
     }
 

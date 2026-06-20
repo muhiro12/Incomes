@@ -13,7 +13,7 @@ import SwiftUI
 struct IncomesWatchApp: App {
     private let sharedModelContainer: ModelContainer
 
-    init() { // swiftlint:disable:this type_contents_order
+    init() {
         _ = IncomesPreferenceLifecycle.runSynchronously()
 
         // Migrate possible legacy DB files into App Group first
@@ -34,8 +34,10 @@ struct IncomesWatchApp: App {
 
         sharedModelContainer = modelContainer
     }
+}
 
-    var body: some Scene {
+extension IncomesWatchApp {
+    @SceneBuilder var body: some Scene {
         WindowGroup {
             ContentView()
                 .modelContainer(sharedModelContainer)

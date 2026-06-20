@@ -14,21 +14,25 @@ struct TagRenameTests {
     func renameCategory_updates_name_without_changing_identity_or_balances() throws {
         let firstItem = try createItem(
             context: context,
-            date: shiftedDate("2024-01-01T00:00:00Z"),
-            content: "First",
-            income: 100,
-            outgo: 20,
-            category: "Food",
-            priority: 0
+            input: .init(
+                date: shiftedDate("2024-01-01T00:00:00Z"),
+                content: "First",
+                income: 100,
+                outgo: 20,
+                category: "Food",
+                priority: 0
+            )
         )
         let secondItem = try createItem(
             context: context,
-            date: shiftedDate("2024-01-02T00:00:00Z"),
-            content: "Second",
-            income: 50,
-            outgo: 10,
-            category: "Food",
-            priority: 0
+            input: .init(
+                date: shiftedDate("2024-01-02T00:00:00Z"),
+                content: "Second",
+                income: 50,
+                outgo: 10,
+                category: "Food",
+                priority: 0
+            )
         )
         let tag = try #require(
             try TagQueryOperations.getByName(
@@ -59,22 +63,26 @@ struct TagRenameTests {
     func renameCategory_rejects_duplicate_target_name() throws {
         let firstTag = try createItem(
             context: context,
-            date: shiftedDate("2024-01-01T00:00:00Z"),
-            content: "First",
-            income: 100,
-            outgo: 20,
-            category: "Food",
-            priority: 0
+            input: .init(
+                date: shiftedDate("2024-01-01T00:00:00Z"),
+                content: "First",
+                income: 100,
+                outgo: 20,
+                category: "Food",
+                priority: 0
+            )
         )
         .category
         let secondTag = try createItem(
             context: context,
-            date: shiftedDate("2024-01-02T00:00:00Z"),
-            content: "Second",
-            income: 100,
-            outgo: 20,
-            category: "Travel",
-            priority: 0
+            input: .init(
+                date: shiftedDate("2024-01-02T00:00:00Z"),
+                content: "Second",
+                income: 100,
+                outgo: 20,
+                category: "Travel",
+                priority: 0
+            )
         )
         .category
 
@@ -95,12 +103,14 @@ struct TagRenameTests {
         let tag = try #require(
             createItem(
                 context: context,
-                date: shiftedDate("2024-01-01T00:00:00Z"),
-                content: "First",
-                income: 100,
-                outgo: 20,
-                category: "",
-                priority: 0
+                input: .init(
+                    date: shiftedDate("2024-01-01T00:00:00Z"),
+                    content: "First",
+                    income: 100,
+                    outgo: 20,
+                    category: "",
+                    priority: 0
+                )
             )
             .category
         )
@@ -119,12 +129,14 @@ struct TagRenameTests {
         let tag = try #require(
             createItem(
                 context: context,
-                date: shiftedDate("2024-01-01T00:00:00Z"),
-                content: "First",
-                income: 100,
-                outgo: 20,
-                category: "Food",
-                priority: 0
+                input: .init(
+                    date: shiftedDate("2024-01-01T00:00:00Z"),
+                    content: "First",
+                    income: 100,
+                    outgo: 20,
+                    category: "Food",
+                    priority: 0
+                )
             )
             .category
         )
@@ -160,12 +172,14 @@ struct TagRenameTests {
         let tag = try #require(
             createItem(
                 context: context,
-                date: shiftedDate("2024-01-01T00:00:00Z"),
-                content: "First",
-                income: 100,
-                outgo: 20,
-                category: "Food",
-                priority: 0
+                input: .init(
+                    date: shiftedDate("2024-01-01T00:00:00Z"),
+                    content: "First",
+                    income: 100,
+                    outgo: 20,
+                    category: "Food",
+                    priority: 0
+                )
             )
             .category
         )

@@ -77,12 +77,14 @@ private extension YearlyDuplicationAutomationTests {
     func createRepeatItems(sourceYear: Int = 2_024) throws {
         try createItem(
             context: context,
-            date: shiftedDate("\(sourceYear)-01-10T12:00:00Z"),
-            content: "Rent",
-            income: .zero,
-            outgo: 100,
-            category: "Housing",
-            priority: .zero,
+            input: .init(
+                date: shiftedDate("\(sourceYear)-01-10T12:00:00Z"),
+                content: "Rent",
+                income: .zero,
+                outgo: 100,
+                category: "Housing",
+                priority: .zero
+            ),
             repeatCount: TestValue.repeatCount
         )
     }

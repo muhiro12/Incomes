@@ -99,7 +99,7 @@ public enum UpcomingPaymentOperations {
         now: Date,
         calendar: Calendar = .current
     ) -> [UpcomingPaymentNotificationPresentation] {
-        UpcomingPaymentNotificationPresentationBuilder.build(
+        UpcomingPaymentPresentationBuilder.build(
             plans: plans,
             settings: settings,
             now: now,
@@ -140,6 +140,8 @@ public enum UpcomingPaymentOperations {
 }
 
 private extension UpcomingPaymentOperations {
+    static let defaultNotificationHour = 20
+
     static func reminderPolicy(
         from settings: NotificationSettings,
         limit: Int,
@@ -166,10 +168,20 @@ private extension UpcomingPaymentOperations {
             [.hour, .minute],
             from: settings.notifyTime
         )
-        return MHNotificationTime(
-            hour: components.hour ?? 20, // swiftlint:disable:this no_magic_numbers
+        if let notificationTime = MHNotificationTime(
+            hour: components.hour ?? defaultNotificationHour,
             minute: components.minute ?? .zero
-        ) ?? .init(hour: 20, minute: .zero)! // swiftlint:disable:this force_unwrapping no_magic_numbers
+        ) {
+            return notificationTime
+        }
+
+        guard let fallbackNotificationTime = MHNotificationTime(
+            hour: defaultNotificationHour,
+            minute: .zero
+        ) else {
+            preconditionFailure("Default notification time must be valid.")
+        }
+        return fallbackNotificationTime
     }
 
     static func reminderCandidate(

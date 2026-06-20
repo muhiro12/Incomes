@@ -148,7 +148,11 @@ nonisolated extension PhoneWatchBridge: WCSessionDelegate {
         }
     }
 
-    func session(_: WCSession, didReceiveMessageData messageData: Data, replyHandler: @escaping @Sendable (Data) -> Void) { // swiftlint:disable:this line_length
+    func session(
+        _: WCSession,
+        didReceiveMessageData messageData: Data,
+        replyHandler: @escaping @Sendable (Data) -> Void
+    ) {
         let request: ItemsRequest
         do {
             request = try ItemsRequest.decodeRequest(messageData)

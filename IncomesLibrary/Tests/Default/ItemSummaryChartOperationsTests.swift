@@ -36,21 +36,25 @@ struct ItemSummaryChartOperationsTests {
         let items = [
             try createItem(
                 context: context,
-                date: shiftedDate("2024-01-01T12:00:00Z"),
-                content: "Beta",
-                income: TestAmount.tieIncome,
-                outgo: 0,
-                category: "Beta",
-                priority: 0
+                input: .init(
+                    date: shiftedDate("2024-01-01T12:00:00Z"),
+                    content: "Beta",
+                    income: TestAmount.tieIncome,
+                    outgo: 0,
+                    category: "Beta",
+                    priority: 0
+                )
             ),
             try createItem(
                 context: context,
-                date: shiftedDate("2024-01-02T12:00:00Z"),
-                content: "Alpha",
-                income: TestAmount.tieIncome,
-                outgo: 0,
-                category: "Alpha",
-                priority: 0
+                input: .init(
+                    date: shiftedDate("2024-01-02T12:00:00Z"),
+                    content: "Alpha",
+                    income: TestAmount.tieIncome,
+                    outgo: 0,
+                    category: "Alpha",
+                    priority: 0
+                )
             )
         ]
 
@@ -91,39 +95,47 @@ private extension ItemSummaryChartOperationsTests {
         [
             try createItem(
                 context: context,
-                date: shiftedDate("2024-01-01T12:00:00Z"),
-                content: "Salary",
-                income: TestAmount.workIncome,
-                outgo: 0,
-                category: "Work",
-                priority: 0
+                input: .init(
+                    date: shiftedDate("2024-01-01T12:00:00Z"),
+                    content: "Salary",
+                    income: TestAmount.workIncome,
+                    outgo: 0,
+                    category: "Work",
+                    priority: 0
+                )
             ),
             try createItem(
                 context: context,
-                date: shiftedDate("2024-01-02T12:00:00Z"),
-                content: "Gift",
-                income: TestAmount.giftIncome,
-                outgo: 0,
-                category: "Gift",
-                priority: 0
+                input: .init(
+                    date: shiftedDate("2024-01-02T12:00:00Z"),
+                    content: "Gift",
+                    income: TestAmount.giftIncome,
+                    outgo: 0,
+                    category: "Gift",
+                    priority: 0
+                )
             ),
             try createItem(
                 context: context,
-                date: shiftedDate("2024-01-03T12:00:00Z"),
-                content: "Groceries",
-                income: 0,
-                outgo: TestAmount.foodOutgo,
-                category: "Food",
-                priority: 0
+                input: .init(
+                    date: shiftedDate("2024-01-03T12:00:00Z"),
+                    content: "Groceries",
+                    income: 0,
+                    outgo: TestAmount.foodOutgo,
+                    category: "Food",
+                    priority: 0
+                )
             ),
             try createItem(
                 context: context,
-                date: shiftedDate("2024-01-04T12:00:00Z"),
-                content: "Rent",
-                income: 0,
-                outgo: TestAmount.housingOutgo,
-                category: "Housing",
-                priority: 0
+                input: .init(
+                    date: shiftedDate("2024-01-04T12:00:00Z"),
+                    content: "Rent",
+                    income: 0,
+                    outgo: TestAmount.housingOutgo,
+                    category: "Housing",
+                    priority: 0
+                )
             )
         ]
     }

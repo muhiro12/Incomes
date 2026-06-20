@@ -7,6 +7,8 @@ enum MonthlySummaryNarrativeBuilder {
     typealias CategoryComparison = MonthlySummaryOperations.CategoryComparison
     typealias ValidationError = MonthlySummaryOperations.ValidationError
 
+    private static let maximumSelectedChangeCount = 2
+
     /// Builds Foundation Models instructions for monthly summary generation.
     static func instructions(languageCode: String) -> String {
         FoundationModelPromptTemplate(
@@ -194,7 +196,7 @@ private extension MonthlySummaryNarrativeBuilder {
             )
         }
 
-        let selectedChanges = Array(notableChanges.prefix(2)) // swiftlint:disable:this no_magic_numbers
+        let selectedChanges = Array(notableChanges.prefix(maximumSelectedChangeCount))
         let listFormatter = ListFormatter()
         listFormatter.locale = locale
         let selectedChangeText = listFormatter.string(from: selectedChanges)

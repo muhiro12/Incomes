@@ -22,7 +22,7 @@ struct OrphanTagListView: View {
 
     private let onCleanupAll: () -> Void
 
-    init( // swiftlint:disable:this type_contents_order
+    init(
         selection: Binding<Tag.ID?> = .constant(nil),
         onCleanupAll: @escaping () -> Void = {
             // no-op
@@ -31,8 +31,10 @@ struct OrphanTagListView: View {
         _selectedTagID = selection
         self.onCleanupAll = onCleanupAll
     }
+}
 
-    var body: some View {
+extension OrphanTagListView {
+    @ViewBuilder var body: some View {
         let yearOrphanTags = orphanTags(from: yearTags)
         let yearMonthOrphanTags = orphanTags(from: yearMonthTags)
         let contentOrphanTags = orphanTags(from: contentTags)

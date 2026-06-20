@@ -1,5 +1,4 @@
-// // swiftlint:disable:this file_name
-//  DecimalExtension.swift
+//  Decimal+Currency.swift
 //  Incomes
 //
 //  Created by Hiromu Nakano on 2020/06/24.

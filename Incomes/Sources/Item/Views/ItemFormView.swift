@@ -44,7 +44,7 @@ struct ItemFormView: View {
     private let priorityRange = 0...10
     private let repeatItemsTip = RepeatItemsTip()
 
-    init( // swiftlint:disable:this type_contents_order
+    init(
         mode: Mode,
         draft: ItemFormDraft? = nil,
         onCreate: (() -> Void)? = nil
@@ -53,8 +53,10 @@ struct ItemFormView: View {
         self.onCreate = onCreate
         _model = State(initialValue: .init(draft: draft))
     }
+}
 
-    var body: some View {
+extension ItemFormView {
+    @ViewBuilder var body: some View {
         @Bindable var model = model
         @Bindable var presentation = presentation
 
@@ -249,9 +251,7 @@ private extension ItemFormView {
                     formInputData: model.formInputData,
                     repeatMonthSelections: model.effectiveRepeatMonthSelections
                 ),
-                notificationService: notificationService,
-                logger: itemMutationLogger,
-                reviewLogger: reviewLogger
+                dependencies: mutationDependencies
             )
             action = ItemFormMutationPresentationAction.action(
                 for: .success(outcome)
@@ -284,9 +284,7 @@ private extension ItemFormView {
                 context: context,
                 item: item,
                 formInputData: model.formInputData,
-                notificationService: notificationService,
-                logger: itemMutationLogger,
-                reviewLogger: reviewLogger
+                dependencies: mutationDependencies
             )
             action = ItemFormMutationPresentationAction.dismissOnSuccessAction(
                 for: .success(())
@@ -313,9 +311,7 @@ private extension ItemFormView {
                     formInputData: model.formInputData,
                     repeatMonthSelections: model.effectiveRepeatMonthSelections
                 ),
-                notificationService: notificationService,
-                logger: itemMutationLogger,
-                reviewLogger: reviewLogger
+                dependencies: mutationDependencies
             )
             onCreate?()
             action = ItemFormMutationPresentationAction.dismissOnSuccessAction(
@@ -379,6 +375,14 @@ private extension ItemFormView {
             logging: logging,
             category: IncomesLogging.Category.reviewFlow,
             source: #fileID
+        )
+    }
+
+    var mutationDependencies: ItemMutationWorkflowDependencies {
+        .init(
+            notificationService: notificationService,
+            logger: itemMutationLogger,
+            reviewLogger: reviewLogger
         )
     }
 }

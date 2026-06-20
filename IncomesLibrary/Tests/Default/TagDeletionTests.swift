@@ -22,12 +22,14 @@ struct TagDeletionTests {
     func delete_does_not_remove_item_or_tag_when_tag_is_still_in_use() throws {
         let item = try Item.create(
             context: context,
-            date: shiftedDate("2024-01-01T00:00:00Z"),
-            content: "Coffee",
-            income: .zero,
-            outgo: 500,
-            category: "Food",
-            priority: 0,
+            values: .init(
+                date: shiftedDate("2024-01-01T00:00:00Z"),
+                content: "Coffee",
+                income: .zero,
+                outgo: 500,
+                category: "Food",
+                priority: 0
+            ),
             repeatID: .init()
         )
         let contentTag = try #require(

@@ -1,3 +1,5 @@
+// swiftlint:disable prefixed_toplevel_constant
+
 import Foundation
 @testable import IncomesLibrary
 import SwiftData
@@ -17,21 +19,21 @@ var testContext: ModelContext {
     }
 }
 
-@MainActor let isoDate: (String) -> Date = { string in // swiftlint:disable:this prefixed_toplevel_constant
+@MainActor let isoDate: (String) -> Date = { string in
     guard let date = ISO8601DateFormatter().date(from: string) else {
         preconditionFailure("Invalid ISO8601 date string: \(string)")
     }
     return date
 }
 
-@MainActor let shiftedDate: (String) -> Date = { string in // swiftlint:disable:this prefixed_toplevel_constant
+@MainActor let shiftedDate: (String) -> Date = { string in
     Calendar.current.shiftedDate(
         componentsFrom: isoDate(string),
         in: .utc
     )
 }
 
-let timeZones: [TimeZone] = [ // swiftlint:disable:this prefixed_toplevel_constant
+let timeZones: [TimeZone] = [
     timeZone(identifier: "Asia/Tokyo"),
     timeZone(identifier: "Europe/London"),
     timeZone(identifier: "America/New_York"),
@@ -47,142 +49,68 @@ func fetchItems(_ context: ModelContext) -> [Item] {
     }
 }
 
-func makeItemFormInput( // swiftlint:disable:this function_parameter_count
-    date: Date,
-    content: String,
-    income: Decimal,
-    outgo: Decimal,
-    category: String,
-    priority: Int
-) -> ItemFormInput {
-    .init(
-        date: date,
-        content: content,
-        income: income,
-        outgo: outgo,
-        category: category,
-        priority: priority
-    )
-}
-
 @discardableResult
-func createItem( // swiftlint:disable:this function_parameter_count
+func createItem(
     context: ModelContext,
-    date: Date,
-    content: String,
-    income: Decimal,
-    outgo: Decimal,
-    category: String,
-    priority: Int,
+    input: ItemFormInput,
     repeatCount: Int = 1
 ) throws -> Item {
     try ItemCreationOperations.create(
         context: context,
-        input: makeItemFormInput(
-            date: date,
-            content: content,
-            income: income,
-            outgo: outgo,
-            category: category,
-            priority: priority
-        ),
+        input: input,
         repeatCount: repeatCount
     )
 }
 
 @discardableResult
-func createItem( // swiftlint:disable:this function_parameter_count
+func createItem(
     context: ModelContext,
-    date: Date,
-    content: String,
-    income: Decimal,
-    outgo: Decimal,
-    category: String,
-    priority: Int,
+    input: ItemFormInput,
     repeatMonthSelections: Set<RepeatMonthSelection>
 ) throws -> Item {
     try ItemCreationOperations.create(
         context: context,
-        input: makeItemFormInput(
-            date: date,
-            content: content,
-            income: income,
-            outgo: outgo,
-            category: category,
-            priority: priority
-        ),
+        input: input,
         repeatMonthSelections: repeatMonthSelections
     )
 }
 
-func updateItem( // swiftlint:disable:this function_parameter_count
+func updateItem(
     context: ModelContext,
     item: Item,
-    date: Date,
-    content: String,
-    income: Decimal,
-    outgo: Decimal,
-    category: String,
-    priority: Int,
+    input: ItemFormInput,
     scope: ItemMutationScope = .thisItem
 ) throws {
     try ItemUpdateOperations.update(
         context: context,
         item: item,
-        input: makeItemFormInput(
-            date: date,
-            content: content,
-            income: income,
-            outgo: outgo,
-            category: category,
-            priority: priority
-        ),
+        input: input,
         scope: scope
     )
 }
 
-func updateAllItems( // swiftlint:disable:this function_parameter_count
+func updateAllItems(
     context: ModelContext,
     item: Item,
-    date: Date,
-    content: String,
-    income: Decimal,
-    outgo: Decimal,
-    category: String,
-    priority: Int
+    input: ItemFormInput
 ) throws {
     try updateItem(
         context: context,
         item: item,
-        date: date,
-        content: content,
-        income: income,
-        outgo: outgo,
-        category: category,
-        priority: priority,
+        input: input,
         scope: .allItems
     )
 }
 
-func updateFutureItems( // swiftlint:disable:this function_parameter_count
+func updateFutureItems(
     context: ModelContext,
     item: Item,
-    date: Date,
-    content: String,
-    income: Decimal,
-    outgo: Decimal,
-    category: String,
-    priority: Int
+    input: ItemFormInput
 ) throws {
     try updateItem(
         context: context,
         item: item,
-        date: date,
-        content: content,
-        income: income,
-        outgo: outgo,
-        category: category,
-        priority: priority,
+        input: input,
         scope: .futureItems
     )
 }
@@ -193,3 +121,4 @@ private func timeZone(identifier: String) -> TimeZone {
     }
     return timeZone
 }
+// swiftlint:enable prefixed_toplevel_constant

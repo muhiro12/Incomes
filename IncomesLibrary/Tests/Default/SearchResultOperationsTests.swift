@@ -91,12 +91,14 @@ private extension SearchResultOperationsTests {
     ) throws -> Item {
         try createItem(
             context: context,
-            date: shiftedDate(dateString),
-            content: content,
-            income: TestAmount.income,
-            outgo: TestAmount.outgo,
-            category: "Test",
-            priority: 0
+            input: .init(
+                date: shiftedDate(dateString),
+                content: content,
+                income: TestAmount.income,
+                outgo: TestAmount.outgo,
+                category: "Test",
+                priority: 0
+            )
         )
     }
 }

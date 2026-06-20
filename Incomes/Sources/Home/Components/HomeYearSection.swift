@@ -25,7 +25,7 @@ struct HomeYearSection: View {
 
     private let navigateToRoute: (IncomesRoute) -> Void
 
-    init( // swiftlint:disable:this type_contents_order
+    init(
         yearTag: Tag,
         navigateToRoute: @escaping (IncomesRoute) -> Void = { _ in
             // no-op
@@ -39,8 +39,10 @@ struct HomeYearSection: View {
         )
         self.navigateToRoute = navigateToRoute
     }
+}
 
-    var body: some View {
+extension HomeYearSection {
+    @ViewBuilder var body: some View {
         let firstYearMonthTagID = yearMonthTags.first?.persistentModelID
 
         Section {

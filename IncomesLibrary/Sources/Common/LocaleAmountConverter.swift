@@ -9,6 +9,10 @@ import Foundation
 
 /// Converts amounts from a base USD value into a rough locale-sensitive scale.
 public enum LocaleAmountConverter {
+    private enum ConversionMultiplier {
+        static let cny: Decimal = 20
+    }
+
     /// Converts a base USD amount to an approximate local currency magnitude.
     /// - Parameters:
     ///   - baseUSD: Amount in USD used as a baseline.
@@ -23,7 +27,7 @@ public enum LocaleAmountConverter {
              .eur:
             multiplier = 1
         case .cny:
-            multiplier = 20 // swiftlint:disable:this no_magic_numbers
+            multiplier = ConversionMultiplier.cny
         case .jpy:
             multiplier = 100
         default:

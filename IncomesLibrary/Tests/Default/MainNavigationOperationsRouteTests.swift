@@ -3,13 +3,15 @@ import Foundation
 import SwiftData
 import Testing
 
-struct MainNavigationOperationsRouteTests { // swiftlint:disable:this type_body_length
+struct MainNavigationOperationsRouteTests {
     let context: ModelContext
 
     init() {
         context = testContext
     }
+}
 
+extension MainNavigationOperationsRouteTests {
     @Test
     func execute_returns_settings_for_settings_route() throws {
         let outcome = try MainNavigationOperations.execute(
@@ -329,12 +331,14 @@ struct MainNavigationOperationsRouteTests { // swiftlint:disable:this type_body_
     func execute_returns_item_detail_for_item_route() throws {
         let item = try Item.create(
             context: context,
-            date: .now,
-            content: "Rent",
-            income: 1_000,
-            outgo: 400,
-            category: "Fixed",
-            priority: 1,
+            values: .init(
+                date: .now,
+                content: "Rent",
+                income: 1_000,
+                outgo: 400,
+                category: "Fixed",
+                priority: 1
+            ),
             repeatID: UUID()
         )
         let itemID = try PersistentIdentifierCoder.encode(item.id)

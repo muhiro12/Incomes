@@ -190,12 +190,14 @@ private extension CategoryFacetOperationsTests {
     ) throws -> Item {
         try Item.create(
             context: context,
-            date: .now,
-            content: content,
-            income: .zero,
-            outgo: testOutgo,
-            category: category,
-            priority: 0,
+            values: .init(
+                date: .now,
+                content: content,
+                income: .zero,
+                outgo: testOutgo,
+                category: category,
+                priority: 0
+            ),
             repeatID: .init()
         )
     }

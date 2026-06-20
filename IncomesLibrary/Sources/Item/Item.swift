@@ -28,6 +28,7 @@ public final class Item {
     public private(set) var balance = Decimal.zero
 
     /// Derived tags currently attached to the item.
+    /// SwiftData represents to-many relationships as optionals before faulting.
     @Relationship(inverse: \Tag.items)
     public private(set) var tags: [Tag]? // swiftlint:disable:this discouraged_optional_collection
 
@@ -36,43 +37,45 @@ public final class Item {
     }
 
     /// Creates a new item and attaches year/month/content/category tags.
-    public static func create(context: ModelContext, // swiftlint:disable:this function_parameter_count
-                              date: Date,
-                              content: String,
-                              income: Decimal,
-                              outgo: Decimal,
-                              category: String,
-                              priority: Int,
-                              repeatID: UUID) throws -> Item {
+    public static func create(
+        context: ModelContext,
+        values: ItemStoredValues,
+        repeatID: UUID
+    ) throws -> Item {
         let item = Item()
         context.insert(item)
 
-        item.date = Calendar.utc.startOfDay(for: Calendar.utc.shiftedDate(componentsFrom: date, in: .current))
-        item.content = content
-        item.income = income
-        item.outgo = outgo
-        item.priority = priority
+        item.date = Calendar.utc.startOfDay(
+            for: Calendar.utc.shiftedDate(
+                componentsFrom: values.date,
+                in: .current
+            )
+        )
+        item.content = values.content
+        item.income = values.income
+        item.outgo = values.outgo
+        item.priority = values.priority
         item.repeatID = repeatID
 
         item.tags = [
             try .create(
                 context: context,
-                name: date.stringValueWithoutLocale(.yyyy),
+                name: values.date.stringValueWithoutLocale(.yyyy),
                 type: .year
             ),
             try .create(
                 context: context,
-                name: date.stringValueWithoutLocale(.yyyyMM),
+                name: values.date.stringValueWithoutLocale(.yyyyMM),
                 type: .yearMonth
             ),
             try .create(
                 context: context,
-                name: content,
+                name: values.content,
                 type: .content
             ),
             try .create(
                 context: context,
-                name: category,
+                name: values.category,
                 type: .category
             )
         ]
@@ -81,18 +84,20 @@ public final class Item {
     }
 
     /// Updates core fields and reattaches derived tags based on the new values.
-    public func modify(date: Date, // swiftlint:disable:this function_parameter_count
-                       content: String,
-                       income: Decimal,
-                       outgo: Decimal,
-                       category: String,
-                       priority: Int,
-                       repeatID: UUID) throws {
-        self.date = Calendar.utc.startOfDay(for: Calendar.utc.shiftedDate(componentsFrom: date, in: .current))
-        self.content = content
-        self.income = income
-        self.outgo = outgo
-        self.priority = priority
+    public func modify(
+        values: ItemStoredValues,
+        repeatID: UUID
+    ) throws {
+        self.date = Calendar.utc.startOfDay(
+            for: Calendar.utc.shiftedDate(
+                componentsFrom: values.date,
+                in: .current
+            )
+        )
+        self.content = values.content
+        self.income = values.income
+        self.outgo = values.outgo
+        self.priority = values.priority
         self.repeatID = repeatID
 
         guard let context = modelContext else {
@@ -102,22 +107,22 @@ public final class Item {
         self.tags = [
             try .create(
                 context: context,
-                name: date.stringValueWithoutLocale(.yyyy),
+                name: values.date.stringValueWithoutLocale(.yyyy),
                 type: .year
             ),
             try .create(
                 context: context,
-                name: date.stringValueWithoutLocale(.yyyyMM),
+                name: values.date.stringValueWithoutLocale(.yyyyMM),
                 type: .yearMonth
             ),
             try .create(
                 context: context,
-                name: content,
+                name: values.content,
                 type: .content
             ),
             try .create(
                 context: context,
-                name: category,
+                name: values.category,
                 type: .category
             )
         ]
@@ -134,36 +139,36 @@ public final class Item {
     }
 }
 
-extension Item { // swiftlint:disable:this extension_access_modifier
+public extension Item {
     /// UTC date persisted in the store.
-    public var utcDate: Date {
+    var utcDate: Date {
         date
     }
 
     /// Local calendar date derived from `utcDate`.
-    public var localDate: Date {
+    var localDate: Date {
         Calendar.current.shiftedDate(componentsFrom: utcDate, in: .utc)
     }
 
     /// `income - outgo`.
-    public var netIncome: Decimal {
+    var netIncome: Decimal {
         income - outgo
     }
 
     /// True when `netIncome >= 0`.
-    public var isNetIncomePositive: Bool {
+    var isNetIncomePositive: Bool {
         netIncome > .zero
     }
 
     /// Year tag if present.
-    public var year: Tag? {
+    var year: Tag? {
         tags?.first { tag in
             tag.type == .year
         }
     }
 
     /// Category tag if present.
-    public var category: Tag? {
+    var category: Tag? {
         tags?.first { tag in
             tag.type == .category
         }
@@ -187,45 +192,47 @@ extension Item: Comparable {
 
 // MARK: - Test
 
-extension Item { // swiftlint:disable:this extension_access_modifier
+public extension Item {
     /// Testing helper: creates an item without checking duplicate tags.
-    public static func createIgnoringDuplicates(context: ModelContext, // swiftlint:disable:this function_parameter_count line_length
-                                                date: Date,
-                                                content: String,
-                                                income: Decimal,
-                                                outgo: Decimal,
-                                                category: String,
-                                                priority: Int,
-                                                repeatID: UUID) -> Item {
+    static func createIgnoringDuplicates(
+        context: ModelContext,
+        values: ItemStoredValues,
+        repeatID: UUID
+    ) -> Item {
         let item = Item()
         context.insert(item)
 
-        item.date = Calendar.utc.startOfDay(for: Calendar.utc.shiftedDate(componentsFrom: date, in: .current))
-        item.content = content
-        item.income = income
-        item.outgo = outgo
-        item.priority = priority
+        item.date = Calendar.utc.startOfDay(
+            for: Calendar.utc.shiftedDate(
+                componentsFrom: values.date,
+                in: .current
+            )
+        )
+        item.content = values.content
+        item.income = values.income
+        item.outgo = values.outgo
+        item.priority = values.priority
         item.repeatID = repeatID
 
         item.tags = [
             .createIgnoringDuplicates(
                 context: context,
-                name: date.stringValueWithoutLocale(.yyyy),
+                name: values.date.stringValueWithoutLocale(.yyyy),
                 type: .year
             ),
             .createIgnoringDuplicates(
                 context: context,
-                name: date.stringValueWithoutLocale(.yyyyMM),
+                name: values.date.stringValueWithoutLocale(.yyyyMM),
                 type: .yearMonth
             ),
             .createIgnoringDuplicates(
                 context: context,
-                name: content,
+                name: values.content,
                 type: .content
             ),
             .createIgnoringDuplicates(
                 context: context,
-                name: category,
+                name: values.category,
                 type: .category
             )
         ]

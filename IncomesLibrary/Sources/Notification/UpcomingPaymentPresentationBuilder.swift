@@ -2,7 +2,7 @@ import Foundation
 import MHPlatformCore
 
 /// Builds display-ready notification payloads for upcoming payment reminders.
-enum UpcomingPaymentNotificationPresentationBuilder { // swiftlint:disable:this type_name
+enum UpcomingPaymentPresentationBuilder {
     /// Builds sorted notification presentations for the provided planned payments.
     static func build(
         plans: [UpcomingPaymentOperations.PlannedPayment],
@@ -40,7 +40,21 @@ enum UpcomingPaymentNotificationPresentationBuilder { // swiftlint:disable:this 
     }
 }
 
-private extension UpcomingPaymentNotificationPresentationBuilder {
+private extension UpcomingPaymentPresentationBuilder {
+    enum RelevanceScoring {
+        static let baseScore = 0.40
+        static let dueTodayBoost = 0.40
+        static let dueTomorrowBoost = 0.30
+        static let dueInTwoDays = 2
+        static let dueInTwoDaysBoost = 0.20
+        static let dueInThreeToFiveDays = 3...5
+        static let dueInThreeToFiveDaysBoost = 0.10
+        static let maximumAmountRatio = 3.0
+        static let maximumAmountBoost = 0.20
+        static let minimumScore = 0.40
+        static let maximumScore = 1.0
+    }
+
     static func buildPresentation(
         plan: UpcomingPaymentOperations.PlannedPayment,
         settings: NotificationSettings,
@@ -109,17 +123,16 @@ private extension UpcomingPaymentNotificationPresentationBuilder {
         thresholdAmount: Decimal,
         daysUntilDue: Int
     ) -> Double {
-        let baseScore = 0.40
         let dueDateBoost: Double
         switch daysUntilDue {
         case ...0:
-            dueDateBoost = 0.40 // swiftlint:disable:this no_magic_numbers
+            dueDateBoost = RelevanceScoring.dueTodayBoost
         case 1:
-            dueDateBoost = 0.30 // swiftlint:disable:this no_magic_numbers
-        case 2: // swiftlint:disable:this no_magic_numbers
-            dueDateBoost = 0.20 // swiftlint:disable:this no_magic_numbers
-        case 3...5: // swiftlint:disable:this no_magic_numbers
-            dueDateBoost = 0.10 // swiftlint:disable:this no_magic_numbers
+            dueDateBoost = RelevanceScoring.dueTomorrowBoost
+        case RelevanceScoring.dueInTwoDays:
+            dueDateBoost = RelevanceScoring.dueInTwoDaysBoost
+        case RelevanceScoring.dueInThreeToFiveDays:
+            dueDateBoost = RelevanceScoring.dueInThreeToFiveDaysBoost
         default:
             dueDateBoost = 0.0
         }
@@ -128,12 +141,22 @@ private extension UpcomingPaymentNotificationPresentationBuilder {
         if thresholdAmount > .zero {
             let amountValue = Double(amount.description) ?? .zero
             let thresholdValue = Double(thresholdAmount.description) ?? .zero
-            let ratio = min(max(amountValue / thresholdValue, 0.0), 3.0) // swiftlint:disable:this no_magic_numbers
-            amountBoost = (ratio / 3.0) * 0.20 // swiftlint:disable:this no_magic_numbers
+            let ratio = min(
+                max(amountValue / thresholdValue, .zero),
+                RelevanceScoring.maximumAmountRatio
+            )
+            amountBoost = (ratio / RelevanceScoring.maximumAmountRatio) *
+                RelevanceScoring.maximumAmountBoost
         } else {
             amountBoost = 0.0
         }
 
-        return min(max(baseScore + dueDateBoost + amountBoost, 0.40), 1.0) // swiftlint:disable:this no_magic_numbers
+        return min(
+            max(
+                RelevanceScoring.baseScore + dueDateBoost + amountBoost,
+                RelevanceScoring.minimumScore
+            ),
+            RelevanceScoring.maximumScore
+        )
     }
 }

@@ -4,6 +4,12 @@ import SwiftData
 import Testing
 
 struct TagItemFilteringTests {
+    struct YearFixture {
+        let firstItem: Item
+        let secondItem: Item
+        let yearString: String
+    }
+
     let context: ModelContext
 
     init() {
@@ -11,93 +17,24 @@ struct TagItemFilteringTests {
     }
 
     @Test
-    func items_filters_by_year_string_and_sorts() throws { // swiftlint:disable:this function_body_length
-        let firstDate = shiftedDate("2001-01-01T00:00:00Z")
-        let secondDate = shiftedDate("2001-03-01T00:00:00Z")
-        let thirdDate = shiftedDate("2002-01-01T00:00:00Z")
-
-        let firstItem = try Item.create(
-            context: context,
-            date: firstDate,
-            content: "First",
-            income: 0,
-            outgo: 1,
-            category: "Category",
-            priority: 0,
-            repeatID: .init()
-        )
-        let secondItem = try Item.create(
-            context: context,
-            date: secondDate,
-            content: "Second",
-            income: 0,
-            outgo: 2,
-            category: "Category",
-            priority: 0,
-            repeatID: .init()
-        )
-        _ = try Item.create(
-            context: context,
-            date: thirdDate,
-            content: "Third",
-            income: 0,
-            outgo: 3,
-            category: "Category",
-            priority: 0,
-            repeatID: .init()
-        )
-
+    func items_filters_by_year_string_and_sorts() throws {
+        let fixture = try seedYearFilteringItems(includeThirdYear: true)
         let tag = try #require(
-            firstItem.tags?.first { tag in
+            fixture.firstItem.tags?.first { tag in
                 tag.type == .category
             }
         )
-
         let items = TagQueryOperations.items(
             for: tag,
-            yearString: firstDate.stringValueWithoutLocale(.yyyy)
+            yearString: fixture.yearString
         )
 
-        if items.count != 2
-            || items.first?.id != secondItem.id
-            || items.last?.id != firstItem.id {
-            logDiagnostics(
-                tag: tag,
-                yearString: firstDate.stringValueWithoutLocale(.yyyy)
-            )
-        }
-
-        #expect(items.count == 2)
-        #expect(items.first?.id == secondItem.id)
-        #expect(items.last?.id == firstItem.id)
+        assertYearFilteredItems(items, fixture: fixture, tag: tag)
     }
 
     @Test
     func items_filters_by_year_string_after_refetch() throws {
-        let firstDate = shiftedDate("2001-01-01T00:00:00Z")
-        let secondDate = shiftedDate("2001-03-01T00:00:00Z")
-
-        let firstItem = try Item.create(
-            context: context,
-            date: firstDate,
-            content: "First",
-            income: 0,
-            outgo: 1,
-            category: "Category",
-            priority: 0,
-            repeatID: .init()
-        )
-        let secondItem = try Item.create(
-            context: context,
-            date: secondDate,
-            content: "Second",
-            income: 0,
-            outgo: 2,
-            category: "Category",
-            priority: 0,
-            repeatID: .init()
-        )
-
+        let fixture = try seedYearFilteringItems()
         let fetchedCategoryTag = try context.fetchFirst(
             .tags(.nameIs("Category", type: .category))
         )
@@ -105,49 +42,15 @@ struct TagItemFilteringTests {
 
         let items = TagQueryOperations.items(
             for: categoryTag,
-            yearString: firstDate.stringValueWithoutLocale(.yyyy)
+            yearString: fixture.yearString
         )
 
-        if items.count != 2
-            || items.first?.id != secondItem.id
-            || items.last?.id != firstItem.id {
-            logDiagnostics(
-                tag: categoryTag,
-                yearString: firstDate.stringValueWithoutLocale(.yyyy)
-            )
-        }
-
-        #expect(items.count == 2)
-        #expect(items.first?.id == secondItem.id)
-        #expect(items.last?.id == firstItem.id)
+        assertYearFilteredItems(items, fixture: fixture, tag: categoryTag)
     }
 
     @Test
     func items_filters_by_year_string_after_save() throws {
-        let firstDate = shiftedDate("2001-01-01T00:00:00Z")
-        let secondDate = shiftedDate("2001-03-01T00:00:00Z")
-
-        let firstItem = try Item.create(
-            context: context,
-            date: firstDate,
-            content: "First",
-            income: 0,
-            outgo: 1,
-            category: "Category",
-            priority: 0,
-            repeatID: .init()
-        )
-        let secondItem = try Item.create(
-            context: context,
-            date: secondDate,
-            content: "Second",
-            income: 0,
-            outgo: 2,
-            category: "Category",
-            priority: 0,
-            repeatID: .init()
-        )
-
+        let fixture = try seedYearFilteringItems()
         try context.save()
 
         let fetchedCategoryTag = try context.fetchFirst(
@@ -157,43 +60,36 @@ struct TagItemFilteringTests {
 
         let items = TagQueryOperations.items(
             for: categoryTag,
-            yearString: firstDate.stringValueWithoutLocale(.yyyy)
+            yearString: fixture.yearString
         )
 
-        if items.count != 2
-            || items.first?.id != secondItem.id
-            || items.last?.id != firstItem.id {
-            logDiagnostics(
-                tag: categoryTag,
-                yearString: firstDate.stringValueWithoutLocale(.yyyy)
-            )
-        }
-
-        #expect(items.count == 2)
-        #expect(items.first?.id == secondItem.id)
-        #expect(items.last?.id == firstItem.id)
+        assertYearFilteredItems(items, fixture: fixture, tag: categoryTag)
     }
 
     @Test
     func category_tag_is_deduplicated_for_same_name() throws {
         _ = try Item.create(
             context: context,
-            date: shiftedDate("2001-01-01T00:00:00Z"),
-            content: "First",
-            income: 0,
-            outgo: 1,
-            category: "Category",
-            priority: 0,
+            values: .init(
+                date: shiftedDate("2001-01-01T00:00:00Z"),
+                content: "First",
+                income: 0,
+                outgo: 1,
+                category: "Category",
+                priority: 0
+            ),
             repeatID: .init()
         )
         _ = try Item.create(
             context: context,
-            date: shiftedDate("2001-03-01T00:00:00Z"),
-            content: "Second",
-            income: 0,
-            outgo: 2,
-            category: "Category",
-            priority: 0,
+            values: .init(
+                date: shiftedDate("2001-03-01T00:00:00Z"),
+                content: "Second",
+                income: 0,
+                outgo: 2,
+                category: "Category",
+                priority: 0
+            ),
             repeatID: .init()
         )
 
@@ -209,6 +105,73 @@ struct TagItemFilteringTests {
         }
 
         #expect(matchingTags.count == 1)
+    }
+
+    private func seedYearFilteringItems(
+        includeThirdYear: Bool = false
+    ) throws -> YearFixture {
+        let firstDate = shiftedDate("2001-01-01T00:00:00Z")
+        let secondDate = shiftedDate("2001-03-01T00:00:00Z")
+        let firstItem = try createFilteringItem(
+            date: firstDate,
+            content: "First",
+            outgo: 1
+        )
+        let secondItem = try createFilteringItem(
+            date: secondDate,
+            content: "Second",
+            outgo: 2
+        )
+        if includeThirdYear {
+            _ = try createFilteringItem(
+                date: shiftedDate("2002-01-01T00:00:00Z"),
+                content: "Third",
+                outgo: 3
+            )
+        }
+        return .init(
+            firstItem: firstItem,
+            secondItem: secondItem,
+            yearString: firstDate.stringValueWithoutLocale(.yyyy)
+        )
+    }
+
+    private func createFilteringItem(
+        date: Date,
+        content: String,
+        outgo: Decimal
+    ) throws -> Item {
+        try Item.create(
+            context: context,
+            values: .init(
+                date: date,
+                content: content,
+                income: 0,
+                outgo: outgo,
+                category: "Category",
+                priority: 0
+            ),
+            repeatID: .init()
+        )
+    }
+
+    private func assertYearFilteredItems(
+        _ items: [Item],
+        fixture: YearFixture,
+        tag: IncomesLibrary.Tag
+    ) {
+        if items.count != 2
+            || items.first?.id != fixture.secondItem.id
+            || items.last?.id != fixture.firstItem.id {
+            logDiagnostics(
+                tag: tag,
+                yearString: fixture.yearString
+            )
+        }
+
+        #expect(items.count == 2)
+        #expect(items.first?.id == fixture.secondItem.id)
+        #expect(items.last?.id == fixture.firstItem.id)
     }
 
     private func logDiagnostics(

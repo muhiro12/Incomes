@@ -9,9 +9,9 @@ import AppIntents
 import SwiftData
 
 struct ShowUpcomingItemIntent: AppIntent {
-    @Dependency private var modelContainer: ModelContainer // swiftlint:disable:this type_contents_order
-
     static let title: LocalizedStringResource = .init("Show Upcoming Item", table: "AppIntents")
+
+    @Dependency private var modelContainer: ModelContainer
 
     @MainActor
     func perform() throws -> some ProvidesDialog & ShowsSnippetView {

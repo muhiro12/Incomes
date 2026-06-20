@@ -2,9 +2,9 @@ import AppIntents
 import SwiftData
 
 struct GetCategoryFacetsIntent: AppIntent {
-    @Dependency private var modelContainer: ModelContainer // swiftlint:disable:this type_contents_order
-
     static let title: LocalizedStringResource = .init("Get Category Facets", table: "AppIntents")
+
+    @Dependency private var modelContainer: ModelContainer
 
     @MainActor
     func perform() throws -> some ReturnsValue<[String]> {

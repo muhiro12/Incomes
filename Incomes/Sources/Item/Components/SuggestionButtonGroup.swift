@@ -22,15 +22,17 @@ struct SuggestionButtonGroup: View {
     @Binding private var input: String
     private let type: TagType
 
-    init(input: Binding<String>, type: TagType) { // swiftlint:disable:this type_contents_order
+    init(input: Binding<String>, type: TagType) {
         _input = input
         self.type = type
         _suggestions = Query(
             .tags(.nameContains(input.wrappedValue, type: type))
         )
     }
+}
 
-    var body: some View {
+extension SuggestionButtonGroup {
+    @ViewBuilder var body: some View {
         ScrollView(.horizontal) {
             IncomesLiquidGlassControlGroup(spacing: Constants.controlSpacing) {
                 SuggestionButtonContent(

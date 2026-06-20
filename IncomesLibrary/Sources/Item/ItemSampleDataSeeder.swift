@@ -1,8 +1,10 @@
 import Foundation
 import SwiftData
 
+// swiftlint:disable no_magic_numbers
+
 /// Seeds sample datasets used by previews, tutorials, and debug tooling.
-enum ItemSampleDataSeeder { // swiftlint:disable:this type_body_length
+enum ItemSampleDataSeeder {
     /// Preset datasets used when seeding sample data.
     enum SampleDataProfile {
         /// Rich sample data used for debug flows.
@@ -44,146 +46,33 @@ enum ItemSampleDataSeeder { // swiftlint:disable:this type_body_length
     }
 
     /// Seeds rich preview/debug data (large dataset).
-    static func seedPreviewData( // swiftlint:disable:this function_body_length
+    static func seedPreviewData(
         context: ModelContext,
         baseDate: Date = .now
     ) throws {
-        let startOfYear = Calendar.current.startOfYear(for: baseDate)
-        guard
-            let dayA = Calendar.current.date(byAdding: .day, value: 0, to: startOfYear),
-            let dayB = Calendar.current.date(byAdding: .day, value: 6, to: startOfYear), // swiftlint:disable:this line_length no_magic_numbers
-            let dayC = Calendar.current.date(byAdding: .day, value: 12, to: startOfYear), // swiftlint:disable:this line_length no_magic_numbers
-            let dayD = Calendar.current.date(byAdding: .day, value: 18, to: startOfYear), // swiftlint:disable:this line_length no_magic_numbers
-            let dayE = Calendar.current.date(byAdding: .day, value: 24, to: startOfYear) // swiftlint:disable:this line_length no_magic_numbers
-        else {
+        guard let daySet = PreviewDaySet(baseDate: baseDate) else {
             return
-        }
-
-        let monthShift: (Int, Date) -> Date = { value, date in
-            Calendar.current.date(byAdding: .month, value: value, to: date) ?? date
         }
 
         _ = try Item.create(
             context: context,
-            date: monthShift(-1, dayD),
-            content: String(localized: "Payday"),
-            income: LocaleAmountConverter.localizedAmount(baseUSD: 4_500), // swiftlint:disable:this no_magic_numbers
-            outgo: LocaleAmountConverter.localizedAmount(baseUSD: 0),
-            category: String(localized: "Salary"),
-            priority: 0,
+            values: previewItemValues(
+                daySet: daySet,
+                monthOffset: -1,
+                template: paydayTemplate()
+            ),
             repeatID: .init()
         )
 
-        var created = [Item]()
-        for index in 0..<24 { // swiftlint:disable:this no_magic_numbers
-            created.append(
-                try Item.create(
+        let created = try previewMonthOffsets().flatMap { monthOffset in
+            try previewItemTemplates().map { template in
+                try createPreviewItem(
                     context: context,
-                    date: monthShift(index, dayD),
-                    content: String(localized: "Payday"),
-                    income: LocaleAmountConverter.localizedAmount(baseUSD: 4_500), // swiftlint:disable:this line_length no_magic_numbers
-                    outgo: LocaleAmountConverter.localizedAmount(baseUSD: 0),
-                    category: String(localized: "Salary"),
-                    priority: 0,
-                    repeatID: .init()
+                    daySet: daySet,
+                    monthOffset: monthOffset,
+                    template: template
                 )
-            )
-            created.append(
-                try Item.create(
-                    context: context,
-                    date: monthShift(index, dayD),
-                    content: String(localized: "Advertising revenue"),
-                    income: LocaleAmountConverter.localizedAmount(baseUSD: 500), // swiftlint:disable:this line_length no_magic_numbers
-                    outgo: LocaleAmountConverter.localizedAmount(baseUSD: 0),
-                    category: String(localized: "Salary"),
-                    priority: 0,
-                    repeatID: .init()
-                )
-            )
-            created.append(
-                try Item.create(
-                    context: context,
-                    date: monthShift(index, dayB),
-                    content: String(localized: "Apple card"),
-                    income: LocaleAmountConverter.localizedAmount(baseUSD: 0),
-                    outgo: LocaleAmountConverter.localizedAmount(baseUSD: 900), // swiftlint:disable:this line_length no_magic_numbers
-                    category: String(localized: "Credit"),
-                    priority: 0,
-                    repeatID: .init()
-                )
-            )
-            created.append(
-                try Item.create(
-                    context: context,
-                    date: monthShift(index, dayA),
-                    content: String(localized: "Orange card"),
-                    income: LocaleAmountConverter.localizedAmount(baseUSD: 0),
-                    outgo: LocaleAmountConverter.localizedAmount(baseUSD: 600), // swiftlint:disable:this line_length no_magic_numbers
-                    category: String(localized: "Credit"),
-                    priority: 0,
-                    repeatID: .init()
-                )
-            )
-            created.append(
-                try Item.create(
-                    context: context,
-                    date: monthShift(index, dayD),
-                    content: String(localized: "Lemon card"),
-                    income: LocaleAmountConverter.localizedAmount(baseUSD: 0),
-                    outgo: LocaleAmountConverter.localizedAmount(baseUSD: 500), // swiftlint:disable:this line_length no_magic_numbers
-                    category: String(localized: "Credit"),
-                    priority: 0,
-                    repeatID: .init()
-                )
-            )
-            created.append(
-                try Item.create(
-                    context: context,
-                    date: monthShift(index, dayE),
-                    content: String(localized: "House"),
-                    income: LocaleAmountConverter.localizedAmount(baseUSD: 0),
-                    outgo: LocaleAmountConverter.localizedAmount(baseUSD: 1_800), // swiftlint:disable:this line_length no_magic_numbers
-                    category: String(localized: "Loan"),
-                    priority: 0,
-                    repeatID: .init()
-                )
-            )
-            created.append(
-                try Item.create(
-                    context: context,
-                    date: monthShift(index, dayC),
-                    content: String(localized: "Car"),
-                    income: LocaleAmountConverter.localizedAmount(baseUSD: 0),
-                    outgo: LocaleAmountConverter.localizedAmount(baseUSD: 300), // swiftlint:disable:this line_length no_magic_numbers
-                    category: String(localized: "Loan"),
-                    priority: 0,
-                    repeatID: .init()
-                )
-            )
-            created.append(
-                try Item.create(
-                    context: context,
-                    date: monthShift(index, dayA),
-                    content: String(localized: "Insurance"),
-                    income: LocaleAmountConverter.localizedAmount(baseUSD: 0),
-                    outgo: LocaleAmountConverter.localizedAmount(baseUSD: 250), // swiftlint:disable:this line_length no_magic_numbers
-                    category: String(localized: "Tax"),
-                    priority: 0,
-                    repeatID: .init()
-                )
-            )
-            created.append(
-                try Item.create(
-                    context: context,
-                    date: monthShift(index, dayE),
-                    content: String(localized: "Pension"),
-                    income: LocaleAmountConverter.localizedAmount(baseUSD: 0),
-                    outgo: LocaleAmountConverter.localizedAmount(baseUSD: 300), // swiftlint:disable:this line_length no_magic_numbers
-                    category: String(localized: "Tax"),
-                    priority: 0,
-                    repeatID: .init()
-                )
-            )
+            }
         }
 
         try BalanceCalculator.calculate(in: context, for: created)
@@ -198,19 +87,21 @@ enum ItemSampleDataSeeder { // swiftlint:disable:this type_body_length
         baseDate: Date = .now
     ) throws {
         var created = [Item]()
-        for index in 0..<24 { // swiftlint:disable:this no_magic_numbers
+        for index in 0..<24 {
             guard let date = Calendar.current.date(byAdding: .month, value: index, to: baseDate) else {
                 continue
             }
             created.append(
                 Item.createIgnoringDuplicates(
                     context: context,
-                    date: date,
-                    content: String(localized: "Pension"),
-                    income: LocaleAmountConverter.localizedAmount(baseUSD: 0),
-                    outgo: LocaleAmountConverter.localizedAmount(baseUSD: 36), // swiftlint:disable:this line_length no_magic_numbers
-                    category: String(localized: "Tax"),
-                    priority: 0,
+                    values: .init(
+                        date: date,
+                        content: String(localized: "Pension"),
+                        income: LocaleAmountConverter.localizedAmount(baseUSD: 0),
+                        outgo: LocaleAmountConverter.localizedAmount(baseUSD: 36),
+                        category: String(localized: "Tax"),
+                        priority: 0
+                    ),
                     repeatID: .init()
                 )
             )
@@ -242,40 +133,50 @@ enum ItemSampleDataSeeder { // swiftlint:disable:this type_body_length
     ) throws {
         let firstDate = baseDate
         let secondDate = Calendar.current.date(byAdding: .day, value: -1, to: baseDate) ?? baseDate
-        let thirdDate = Calendar.current.date(byAdding: .day, value: -2, to: baseDate) ?? baseDate // swiftlint:disable:this line_length no_magic_numbers
+        let thirdDate = Calendar.current.date(
+            byAdding: .day,
+            value: -2,
+            to: baseDate
+        ) ?? baseDate
 
         let incomeItem = try Item.create(
             context: context,
-            date: firstDate,
-            content: String(localized: "Salary"),
-            income: LocaleAmountConverter.localizedAmount(baseUSD: 3_000), // swiftlint:disable:this no_magic_numbers
-            outgo: .zero,
-            category: String(localized: "Salary"),
-            priority: 0,
+            values: .init(
+                date: firstDate,
+                content: String(localized: "Salary"),
+                income: LocaleAmountConverter.localizedAmount(baseUSD: 3_000),
+                outgo: .zero,
+                category: String(localized: "Salary"),
+                priority: 0
+            ),
             repeatID: .init()
         )
         try attachSampleTag(to: incomeItem, context: context)
 
         let rentItem = try Item.create(
             context: context,
-            date: secondDate,
-            content: String(localized: "Rent"),
-            income: .zero,
-            outgo: LocaleAmountConverter.localizedAmount(baseUSD: 1_200), // swiftlint:disable:this no_magic_numbers
-            category: String(localized: "Housing"),
-            priority: 0,
+            values: .init(
+                date: secondDate,
+                content: String(localized: "Rent"),
+                income: .zero,
+                outgo: LocaleAmountConverter.localizedAmount(baseUSD: 1_200),
+                category: String(localized: "Housing"),
+                priority: 0
+            ),
             repeatID: .init()
         )
         try attachSampleTag(to: rentItem, context: context)
 
         let groceryItem = try Item.create(
             context: context,
-            date: thirdDate,
-            content: String(localized: "Grocery"),
-            income: .zero,
-            outgo: LocaleAmountConverter.localizedAmount(baseUSD: 45), // swiftlint:disable:this no_magic_numbers
-            category: String(localized: "Food"),
-            priority: 0,
+            values: .init(
+                date: thirdDate,
+                content: String(localized: "Grocery"),
+                income: .zero,
+                outgo: LocaleAmountConverter.localizedAmount(baseUSD: 45),
+                category: String(localized: "Food"),
+                priority: 0
+            ),
             repeatID: .init()
         )
         try attachSampleTag(to: groceryItem, context: context)
@@ -305,6 +206,8 @@ enum ItemSampleDataSeeder { // swiftlint:disable:this type_body_length
         }
     }
 }
+
+// swiftlint:enable no_magic_numbers
 
 private extension ItemSampleDataSeeder {
     static func attachSampleTag(to item: Item, context: ModelContext) throws {

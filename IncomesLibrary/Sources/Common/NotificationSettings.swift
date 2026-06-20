@@ -10,8 +10,9 @@ import Foundation
 /// User-configurable settings that control upcoming payment notifications.
 public struct NotificationSettings: Codable, Equatable, RawRepresentable, Sendable {
     private enum Defaults {
+        static let thresholdBaseUSDAmount: Decimal = 500
         static let thresholdAmount = LocaleAmountConverter.localizedAmount(
-            baseUSD: 500 // swiftlint:disable:this no_magic_numbers
+            baseUSD: thresholdBaseUSDAmount
         )
         static let daysBeforeDueDate = 3
         static let notifyHour = 20

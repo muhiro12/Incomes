@@ -79,12 +79,14 @@ struct MainNavigationContextMenuLinkTests {
     func preferred_url_returns_item_url() throws {
         let item = try createItem(
             context: context,
-            date: shiftedDate("2000-01-01T12:00:00Z"),
-            content: "A",
-            income: 100,
-            outgo: 0,
-            category: "Test",
-            priority: 0,
+            input: .init(
+                date: shiftedDate("2000-01-01T12:00:00Z"),
+                content: "A",
+                income: 100,
+                outgo: 0,
+                category: "Test",
+                priority: 0
+            ),
             repeatCount: 1
         )
         let itemID = try PersistentIdentifierCoder.encode(item.id)

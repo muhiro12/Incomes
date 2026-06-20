@@ -1,4 +1,4 @@
-import SwiftData // swiftlint:disable:this file_name
+import SwiftData
 
 extension ModelContext {
     /// Fetches the first model matching the given descriptor.

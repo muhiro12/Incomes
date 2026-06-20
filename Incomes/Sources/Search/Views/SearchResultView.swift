@@ -16,19 +16,21 @@ struct SearchResultView: View {
 
     let refineSearch: (() -> Void)?
 
-    init( // swiftlint:disable:this type_contents_order
+    private var sections: [SearchResultOperations.Section] {
+        SearchResultOperations.sections(for: items)
+    }
+
+    init(
         predicate: ItemPredicate,
         refineSearch: (() -> Void)? = nil
     ) {
         self.refineSearch = refineSearch
         _items = Query(.items(predicate))
     }
+}
 
-    private var sections: [SearchResultOperations.Section] {
-        SearchResultOperations.sections(for: items)
-    }
-
-    var body: some View {
+extension SearchResultView {
+    @ViewBuilder var body: some View {
         let resultSections = sections
         let firstItemID = resultSections.first?.items.first?.persistentModelID
 
@@ -61,6 +63,6 @@ struct SearchResultView: View {
 
 #Preview(traits: .modifier(IncomesSampleData())) {
     NavigationStack {
-        SearchResultView(predicate: .none)
+        SearchResultView(predicate: .matchingNone)
     }
 }

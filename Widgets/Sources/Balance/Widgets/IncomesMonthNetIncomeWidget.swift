@@ -3,16 +3,13 @@ import SwiftUI
 import WidgetKit
 
 struct IncomesMonthNetIncomeWidget {
-    // swiftlint:disable:next type_contents_order
-    private let kind: String = "com.muhiro12.Incomes.Widgets.MonthNetIncome"
-
     private struct ContentView: View {
         @Environment(\.mhDesignMetrics)
         private var designMetrics
 
         let entry: NetIncomeEntry
 
-        var body: some View {
+        @ViewBuilder var body: some View {
             ViewThatFits(in: .horizontal) {
                 mediumLayout
                 compactLayout
@@ -83,6 +80,8 @@ struct IncomesMonthNetIncomeWidget {
                 .accessibilityHidden(true)
         }
     }
+
+    private let kind = "com.muhiro12.Incomes.Widgets.MonthNetIncome"
 
     private static func monthTitle(from date: Date) -> String {
         Formatting.monthTitle(from: date)

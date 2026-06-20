@@ -13,14 +13,16 @@ struct CategoryRenameSheet: View {
     @State private var draftName: String
     @State private var errorMessage: String?
 
-    init(tag: Tag) { // swiftlint:disable:this type_contents_order
+    init(tag: Tag) {
         self.tag = tag
         _draftName = .init(
             initialValue: tag.displayName
         )
     }
+}
 
-    var body: some View {
+extension CategoryRenameSheet {
+    @ViewBuilder var body: some View {
         let previewResult = categoryRenamePreviewResult
 
         NavigationStack {

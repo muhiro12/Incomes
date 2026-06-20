@@ -47,22 +47,26 @@ struct YearlyItemDuplicationSuggestionTests {
     func availableSourceYears_loads_persisted_year_tags() throws {
         _ = try createItem(
             context: context,
-            date: shiftedDate("2022-01-10T12:00:00Z"),
-            content: "Old",
-            income: .zero,
-            outgo: 100,
-            category: "Other",
-            priority: .zero,
+            input: .init(
+                date: shiftedDate("2022-01-10T12:00:00Z"),
+                content: "Old",
+                income: .zero,
+                outgo: 100,
+                category: "Other",
+                priority: .zero
+            ),
             repeatCount: 1
         )
         _ = try createItem(
             context: context,
-            date: shiftedDate("2024-01-10T12:00:00Z"),
-            content: "Recent",
-            income: .zero,
-            outgo: 200,
-            category: "Other",
-            priority: .zero,
+            input: .init(
+                date: shiftedDate("2024-01-10T12:00:00Z"),
+                content: "Recent",
+                income: .zero,
+                outgo: 200,
+                category: "Other",
+                priority: .zero
+            ),
             repeatCount: 1
         )
 
@@ -88,12 +92,14 @@ struct YearlyItemDuplicationSuggestionTests {
     func selectionState_loads_persisted_year_tags() throws {
         _ = try createItem(
             context: context,
-            date: shiftedDate("2023-01-10T12:00:00Z"),
-            content: "Alpha",
-            income: .zero,
-            outgo: 200,
-            category: "Card",
-            priority: .zero,
+            input: .init(
+                date: shiftedDate("2023-01-10T12:00:00Z"),
+                content: "Alpha",
+                income: .zero,
+                outgo: 200,
+                category: "Card",
+                priority: .zero
+            ),
             repeatCount: 3
         )
 
@@ -115,12 +121,14 @@ struct YearlyItemDuplicationSuggestionTests {
     func suggestion_selects_latest_year_meeting_minimum_groups() throws {
         _ = try createItem(
             context: context,
-            date: shiftedDate("2024-04-10T12:00:00Z"),
-            content: "Solo",
-            income: 0,
-            outgo: 120,
-            category: "Other",
-            priority: 0,
+            input: .init(
+                date: shiftedDate("2024-04-10T12:00:00Z"),
+                content: "Solo",
+                income: 0,
+                outgo: 120,
+                category: "Other",
+                priority: 0
+            ),
             repeatCount: 3
         )
 
@@ -129,12 +137,14 @@ struct YearlyItemDuplicationSuggestionTests {
             let dateString = "2023-0\(month)-10T12:00:00Z"
             _ = try createItem(
                 context: context,
-                date: shiftedDate(dateString),
-                content: content,
-                income: 0,
-                outgo: 200,
-                category: "Card",
-                priority: 0,
+                input: .init(
+                    date: shiftedDate(dateString),
+                    content: content,
+                    income: 0,
+                    outgo: 200,
+                    category: "Card",
+                    priority: 0
+                ),
                 repeatCount: 3
             )
         }
@@ -162,12 +172,14 @@ struct YearlyItemDuplicationSuggestionTests {
     func suggestion_falls_back_when_no_year_meets_threshold() throws {
         _ = try createItem(
             context: context,
-            date: shiftedDate("2024-06-10T12:00:00Z"),
-            content: "Solo",
-            income: 0,
-            outgo: 100,
-            category: "Other",
-            priority: 0,
+            input: .init(
+                date: shiftedDate("2024-06-10T12:00:00Z"),
+                content: "Solo",
+                income: 0,
+                outgo: 100,
+                category: "Other",
+                priority: 0
+            ),
             repeatCount: 3
         )
 
@@ -197,12 +209,14 @@ struct YearlyItemDuplicationSuggestionTests {
             let dateString = "2023-0\(month)-10T12:00:00Z"
             _ = try createItem(
                 context: context,
-                date: shiftedDate(dateString),
-                content: content,
-                income: .zero,
-                outgo: 200,
-                category: "Card",
-                priority: .zero,
+                input: .init(
+                    date: shiftedDate(dateString),
+                    content: content,
+                    income: .zero,
+                    outgo: 200,
+                    category: "Card",
+                    priority: .zero
+                ),
                 repeatCount: 3
             )
         }

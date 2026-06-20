@@ -10,11 +10,13 @@ import SwiftUI
 struct SpacerToolbarItem: ToolbarContent {
     private let placement: ToolbarItemPlacement
 
-    init(placement: ToolbarItemPlacement = .automatic) { // swiftlint:disable:this type_contents_order
+    init(placement: ToolbarItemPlacement = .automatic) {
         self.placement = placement
     }
+}
 
-    var body: some ToolbarContent {
+extension SpacerToolbarItem {
+    @ToolbarContentBuilder var body: some ToolbarContent {
         if #available(iOS 26.0, *) {
             ToolbarSpacer(placement: placement)
         } else {

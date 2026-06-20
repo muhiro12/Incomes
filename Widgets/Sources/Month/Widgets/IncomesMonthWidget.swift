@@ -3,9 +3,6 @@ import SwiftUI
 import WidgetKit
 
 struct IncomesMonthWidget {
-    // swiftlint:disable:next type_contents_order
-    private let kind: String = "com.muhiro12.Incomes.Widgets.Month"
-
     private struct ContentView: View {
         @Environment(\.mhDesignMetrics)
         private var designMetrics
@@ -15,7 +12,7 @@ struct IncomesMonthWidget {
         let entry: MonthSummaryEntry
         private let mediumMinScaleFactor = 0.8
 
-        var body: some View {
+        @ViewBuilder var body: some View {
             ViewThatFits(in: .horizontal) {
                 mediumRoomyLayout
                 mediumCompactLayout
@@ -174,6 +171,8 @@ struct IncomesMonthWidget {
     }
 
     // MARK: - Helpers
+    private let kind = "com.muhiro12.Incomes.Widgets.Month"
+
     private static func monthTitle(from date: Date) -> String {
         Formatting.monthTitle(from: date)
     }

@@ -19,11 +19,13 @@ struct DuplicateTagListView: View {
     @State private var isResolveDialogPresented = false
     @State private var selectedTags = [Tag]()
 
-    init(selection: Binding<Tag.ID?> = .constant(nil)) { // swiftlint:disable:this type_contents_order
+    init(selection: Binding<Tag.ID?> = .constant(nil)) {
         _selectedTagID = selection
     }
+}
 
-    var body: some View {
+extension DuplicateTagListView {
+    @ViewBuilder var body: some View {
         let yearDuplicateTags = duplicateTags(from: yearTags)
         let yearMonthDuplicateTags = duplicateTags(from: yearMonthTags)
         let contentDuplicateTags = duplicateTags(from: contentTags)

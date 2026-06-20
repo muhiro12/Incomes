@@ -20,9 +20,7 @@ enum ItemFormSaveCoordinator {
     static func save(
         context: ModelContext,
         request: Request,
-        notificationService: NotificationService,
-        logger: MHLogger,
-        reviewLogger: MHLogger
+        dependencies: ItemMutationWorkflowDependencies
     ) async throws -> ItemFormSaveOutcome {
         switch request.mode {
         case .create:
@@ -30,14 +28,12 @@ enum ItemFormSaveCoordinator {
                 context: context,
                 input: request.formInputData,
                 repeatMonthSelections: request.repeatMonthSelections,
-                notificationService: notificationService,
-                logger: logger,
-                reviewLogger: reviewLogger
+                dependencies: dependencies
             )
             return .didSave
         case .edit:
             guard let item = request.item else {
-                logger.error(
+                dependencies.logger.error(
                     "item_save.failed",
                     metadata: IncomesLogging.metadata(
                         ("mode", "edit"),
@@ -50,7 +46,7 @@ enum ItemFormSaveCoordinator {
                 context: context,
                 item: item
             ) {
-                logger.notice(
+                dependencies.logger.notice(
                     "item_save.scope_selection_required",
                     metadata: IncomesLogging.metadata(
                         ("mode", "edit"),
@@ -64,24 +60,19 @@ enum ItemFormSaveCoordinator {
                 context: context,
                 item: item,
                 formInputData: request.formInputData,
-                notificationService: notificationService,
-                logger: logger,
-                reviewLogger: reviewLogger
+                dependencies: dependencies
             )
             return .didSave
         }
     }
 
-    // swiftlint:disable function_parameter_count
     @MainActor
     static func save(
         scope: ItemMutationScope,
         context: ModelContext,
         item: Item,
         formInputData: ItemFormInput,
-        notificationService: NotificationService,
-        logger: MHLogger,
-        reviewLogger: MHLogger
+        dependencies: ItemMutationWorkflowDependencies
     ) async throws {
         let metadata = IncomesLogging.metadata(
             ("mode", "edit"),
@@ -90,7 +81,7 @@ enum ItemFormSaveCoordinator {
             ("category_present", IncomesLogging.presence(formInputData.category)),
             ("content_present", IncomesLogging.presence(formInputData.content))
         )
-        logger.notice(
+        dependencies.logger.notice(
             "item_save.requested",
             metadata: metadata
         )
@@ -107,8 +98,8 @@ enum ItemFormSaveCoordinator {
                     )
                 },
                 adapter: ItemMutationAdapterFactory.makeForSave(
-                    notificationService: notificationService,
-                    reviewLogger: reviewLogger
+                    notificationService: dependencies.notificationService,
+                    reviewLogger: dependencies.reviewLogger
                 ),
                 projection: .closures(
                     afterSuccess: { outcome in
@@ -118,14 +109,14 @@ enum ItemFormSaveCoordinator {
                         ()
                     }
                 ),
-                onEvent: MHMutationWorkflowLogger(logger: logger).onEvent()
+                onEvent: MHMutationWorkflowLogger(logger: dependencies.logger).onEvent()
             )
-            logger.notice(
+            dependencies.logger.notice(
                 "item_save.completed",
                 metadata: metadata
             )
         } catch {
-            logger.error(
+            dependencies.logger.error(
                 "item_save.failed",
                 metadata: metadata.merging(IncomesLogging.errorMetadata(error)) { current, _ in
                     current
@@ -134,7 +125,6 @@ enum ItemFormSaveCoordinator {
             throw error
         }
     }
-    // swiftlint:enable function_parameter_count
 
     private static func mutationName(
         for scope: ItemMutationScope

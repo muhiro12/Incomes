@@ -42,22 +42,26 @@ struct TagTests {
     func hasDeficit_returns_true_when_any_item_has_negative_balance() throws {
         _ = try createItem(
             context: context,
-            date: shiftedDate("2024-01-01T00:00:00Z"),
-            content: "First",
-            income: .zero,
-            outgo: 100,
-            category: "Category",
-            priority: 0,
+            input: .init(
+                date: shiftedDate("2024-01-01T00:00:00Z"),
+                content: "First",
+                income: .zero,
+                outgo: 100,
+                category: "Category",
+                priority: 0
+            ),
             repeatCount: 1
         )
         _ = try createItem(
             context: context,
-            date: shiftedDate("2024-01-02T00:00:00Z"),
-            content: "Second",
-            income: 200,
-            outgo: .zero,
-            category: "Category",
-            priority: 0,
+            input: .init(
+                date: shiftedDate("2024-01-02T00:00:00Z"),
+                content: "Second",
+                income: 200,
+                outgo: .zero,
+                category: "Category",
+                priority: 0
+            ),
             repeatCount: 1
         )
 
@@ -80,12 +84,14 @@ struct TagTests {
     func hasDeficit_returns_false_when_all_items_have_non_negative_balance() throws {
         _ = try createItem(
             context: context,
-            date: shiftedDate("2024-02-01T00:00:00Z"),
-            content: "Positive",
-            income: 200,
-            outgo: 100,
-            category: "Category",
-            priority: 0,
+            input: .init(
+                date: shiftedDate("2024-02-01T00:00:00Z"),
+                content: "Positive",
+                income: 200,
+                outgo: 100,
+                category: "Category",
+                priority: 0
+            ),
             repeatCount: 1
         )
 

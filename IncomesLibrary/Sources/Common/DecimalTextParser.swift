@@ -1,4 +1,4 @@
-import Foundation // swiftlint:disable:this file_name
+import Foundation
 
 private enum DecimalTextParser {
     private static var parsingLocales: [Locale] {

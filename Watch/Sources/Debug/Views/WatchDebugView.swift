@@ -15,39 +15,14 @@ struct WatchDebugView {
 
 extension WatchDebugView: View {
     var body: some View {
-        List { // swiftlint:disable:this closure_body_length
-            Section {
-                Toggle(isOn: $isDebugOn) {
-                    Text("Debug option")
-                }
-            }
-            Section {
-                NavigationLink {
-                    WatchItemListView()
-                } label: {
-                    Label("Items", systemImage: "list.bullet")
-                }
-                NavigationLink {
-                    WatchTagListView()
-                } label: {
-                    Label("Tags", systemImage: "tag")
-                }
-            }
+        List {
+            WatchDebugOptionSection(isDebugOn: $isDebugOn)
+            WatchDebugNavigationSection()
             if hasDebugData {
-                Section {
-                    Button(role: .destructive) {
-                        deleteDebugData()
-                    } label: {
-                        if isDeleting {
-                            ProgressView()
-                        } else {
-                            Text("Delete debug sample data")
-                        }
-                    }
-                    .disabled(isDeleting)
-                } footer: {
-                    Text("Removes debug sample items and their tags.")
-                }
+                WatchDebugSampleDataSection(
+                    isDeleting: isDeleting,
+                    deleteDebugData: deleteDebugData
+                )
             }
         }
         .navigationTitle("Debug")

@@ -2,12 +2,12 @@ import AppIntents
 import SwiftData
 
 struct GetYearItemsCountIntent: AppIntent {
-    @Parameter(title: "Date", kind: .date)
-    private var date: Date // swiftlint:disable:this type_contents_order
-
-    @Dependency private var modelContainer: ModelContainer // swiftlint:disable:this type_contents_order
-
     static let title: LocalizedStringResource = .init("Get Year Items Count", table: "AppIntents")
+
+    @Parameter(title: "Date", kind: .date)
+    private var date: Date
+
+    @Dependency private var modelContainer: ModelContainer
 
     @MainActor
     func perform() throws -> some ReturnsValue<Int> {

@@ -3,9 +3,6 @@ import SwiftUI
 import WidgetKit
 
 struct IncomesUpcomingWidget {
-    // swiftlint:disable:next type_contents_order
-    private let kind: String = "com.muhiro12.Incomes.Widgets.Upcoming"
-
     private struct ContentView: View {
         @Environment(\.mhDesignMetrics)
         private var designMetrics
@@ -14,7 +11,7 @@ struct IncomesUpcomingWidget {
         let entry: UpcomingEntry
         private let mediumMinScaleFactor = 0.8
 
-        var body: some View {
+        @ViewBuilder var body: some View {
             ViewThatFits(in: .horizontal) {
                 mediumLayout
                 compactLayout
@@ -99,6 +96,8 @@ struct IncomesUpcomingWidget {
                 .accessibilityHidden(true)
         }
     }
+
+    private let kind = "com.muhiro12.Incomes.Widgets.Upcoming"
 }
 
 extension IncomesUpcomingWidget: Widget {

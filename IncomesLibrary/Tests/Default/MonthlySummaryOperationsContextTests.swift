@@ -187,12 +187,14 @@ private extension MonthlySummaryOperationsContextTests {
     ) throws -> Item {
         try createItem(
             context: context,
-            date: shiftedDate(date),
-            content: content,
-            income: income,
-            outgo: outgo,
-            category: category,
-            priority: 0,
+            input: .init(
+                date: shiftedDate(date),
+                content: content,
+                income: income,
+                outgo: outgo,
+                category: category,
+                priority: 0
+            ),
             repeatCount: 1
         )
     }

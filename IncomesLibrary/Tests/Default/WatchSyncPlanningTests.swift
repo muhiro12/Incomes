@@ -4,6 +4,14 @@ import SwiftData
 import Testing
 
 struct WatchSyncPlanningTests {
+    struct SnapshotReplacementDates {
+        let base: Date
+        let july: Date
+        let aug: Date
+        let sep: Date
+        let oct: Date
+    }
+
     let context: ModelContext
 
     init() {
@@ -11,89 +19,14 @@ struct WatchSyncPlanningTests {
     }
 
     @Test
-    func applySnapshot_replaces_store_with_allowed_month_items() throws { // swiftlint:disable:this function_body_length
-        // Base: 2000-09-15
-        let base = shiftedDate("2000-09-15T12:00:00Z")
-        let july = try #require(
-            Calendar.current.date(byAdding: .month, value: -2, to: base)
-        )
-        let aug = try #require(
-            Calendar.current.date(byAdding: .month, value: -1, to: base)
-        )
-        let sep = base
-        let oct = try #require(
-            Calendar.current.date(byAdding: .month, value: 1, to: base)
-        )
-
-        _ = try createItem(
-            context: context,
-            date: july,
-            content: "JULY-OLD",
-            income: 100,
-            outgo: 0,
-            category: "Test",
-            priority: 0,
-            repeatCount: 1
-        )
-        _ = try createItem(
-            context: context,
-            date: aug,
-            content: "AUG-OLD",
-            income: 100,
-            outgo: 0,
-            category: "Test",
-            priority: 0,
-            repeatCount: 1
-        )
-        _ = try createItem(
-            context: context,
-            date: sep,
-            content: "SEP-OLD",
-            income: 100,
-            outgo: 0,
-            category: "Test",
-            priority: 0,
-            repeatCount: 1
-        )
-        _ = try createItem(
-            context: context,
-            date: oct,
-            content: "OCT-OLD",
-            income: 100,
-            outgo: 0,
-            category: "Test",
-            priority: 0,
-            repeatCount: 1
-        )
-
-        let incoming: [ItemWire] = [
-            .init(
-                dateEpoch: aug.timeIntervalSince1970,
-                content: "AUG-NEW",
-                income: 200,
-                outgo: 0,
-                category: "Sync"
-            ),
-            .init(
-                dateEpoch: sep.timeIntervalSince1970,
-                content: "SEP-NEW",
-                income: 300,
-                outgo: 0,
-                category: "Sync"
-            ),
-            .init(
-                dateEpoch: oct.timeIntervalSince1970,
-                content: "OCT-NEW",
-                income: 400,
-                outgo: 0,
-                category: "Sync"
-            )
-        ]
+    func applySnapshot_replaces_store_with_allowed_month_items() throws {
+        let dates = try snapshotReplacementDates()
+        try seedSnapshotReplacementItems(dates: dates)
 
         let outcome = try WatchSyncOperations.applySnapshot(
             context: context,
-            items: incoming,
-            baseDate: base,
+            items: snapshotReplacementIncomingItems(dates: dates),
+            baseDate: dates.base,
             monthOffsets: ItemsRequest.recentMonthOffsets
         )
 
@@ -159,12 +92,14 @@ struct WatchSyncPlanningTests {
         for (date, content) in [(aug, "AUG-OLD"), (sep, "SEP-OLD"), (nov, "NOV-KEPT")] {
             _ = try createItem(
                 context: context,
-                date: date,
-                content: content,
-                income: 100,
-                outgo: 0,
-                category: "Test",
-                priority: 0,
+                input: .init(
+                    date: date,
+                    content: content,
+                    income: 100,
+                    outgo: 0,
+                    category: "Test",
+                    priority: 0
+                ),
                 repeatCount: 1
             )
         }
@@ -192,13 +127,80 @@ struct WatchSyncPlanningTests {
     ) {
         _ = Item.createIgnoringDuplicates(
             context: context,
-            date: date,
-            content: content,
-            income: 100,
-            outgo: 0,
-            category: "Sync",
-            priority: 0,
+            values: .init(
+                date: date,
+                content: content,
+                income: 100,
+                outgo: 0,
+                category: "Sync",
+                priority: 0
+            ),
             repeatID: .init()
+        )
+    }
+
+    private func snapshotReplacementDates() throws -> SnapshotReplacementDates {
+        let base = shiftedDate("2000-09-15T12:00:00Z")
+        return try .init(
+            base: base,
+            july: shiftedMonth(-2, from: base),
+            aug: shiftedMonth(-1, from: base),
+            sep: base,
+            oct: shiftedMonth(1, from: base)
+        )
+    }
+
+    private func shiftedMonth(_ value: Int, from date: Date) throws -> Date {
+        try #require(
+            Calendar.current.date(byAdding: .month, value: value, to: date)
+        )
+    }
+
+    private func seedSnapshotReplacementItems(
+        dates: SnapshotReplacementDates
+    ) throws {
+        try [
+            (dates.july, "JULY-OLD"),
+            (dates.aug, "AUG-OLD"),
+            (dates.sep, "SEP-OLD"),
+            (dates.oct, "OCT-OLD")
+        ].forEach { date, content in
+            _ = try createItem(
+                context: context,
+                input: .init(
+                    date: date,
+                    content: content,
+                    income: 100,
+                    outgo: 0,
+                    category: "Test",
+                    priority: 0
+                ),
+                repeatCount: 1
+            )
+        }
+    }
+
+    private func snapshotReplacementIncomingItems(
+        dates: SnapshotReplacementDates
+    ) -> [ItemWire] {
+        [
+            snapshotItemWire(date: dates.aug, content: "AUG-NEW", income: 200),
+            snapshotItemWire(date: dates.sep, content: "SEP-NEW", income: 300),
+            snapshotItemWire(date: dates.oct, content: "OCT-NEW", income: 400)
+        ]
+    }
+
+    private func snapshotItemWire(
+        date: Date,
+        content: String,
+        income: Double
+    ) -> ItemWire {
+        .init(
+            dateEpoch: date.timeIntervalSince1970,
+            content: content,
+            income: income,
+            outgo: 0,
+            category: "Sync"
         )
     }
 }

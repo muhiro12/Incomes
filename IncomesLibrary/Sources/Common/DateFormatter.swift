@@ -1,4 +1,4 @@
-import Foundation // swiftlint:disable:this file_name
+import Foundation
 
 public extension DateFormatter {
     /// A small set of date format templates used across Incomes.

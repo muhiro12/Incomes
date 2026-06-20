@@ -3,15 +3,15 @@ import MHPlatform
 import SwiftData
 
 struct DeleteItemIntent: AppIntent {
-    @Parameter(title: "Item")
-    private var item: ItemEntity // swiftlint:disable:this type_contents_order
-
-    @Dependency private var modelContainer: ModelContainer // swiftlint:disable:this type_contents_order
-    @Dependency private var notificationService: NotificationService // swiftlint:disable:this type_contents_order
-    @Dependency private var logging: MHLoggingBootstrap // swiftlint:disable:this type_contents_order
-
     static let title: LocalizedStringResource = .init("Delete Item", table: "AppIntents")
     static let isDiscoverable = false
+
+    @Parameter(title: "Item")
+    private var item: ItemEntity
+
+    @Dependency private var modelContainer: ModelContainer
+    @Dependency private var notificationService: NotificationService
+    @Dependency private var logging: MHLoggingBootstrap
 
     @MainActor
     func perform() async throws -> some IntentResult {

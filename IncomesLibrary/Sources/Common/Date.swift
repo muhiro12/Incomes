@@ -1,4 +1,4 @@
-import Foundation // swiftlint:disable:this file_name
+import Foundation
 
 public extension Date {
     /// Formats the date using a locale-aware formatter derived from the given template.

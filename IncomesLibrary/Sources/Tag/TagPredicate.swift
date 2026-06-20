@@ -13,7 +13,7 @@ public enum TagPredicate {
     /// Matches every tag.
     case all
     /// Matches no tags.
-    case none // swiftlint:disable:this discouraged_none_name
+    case matchingNone
     /// Matches a tag with the specified persistent identifier.
     case idIs(Tag.ID)
     /// Matches tags with the same name and type as the given tag.
@@ -31,7 +31,7 @@ public enum TagPredicate {
         switch self {
         case .all:
             return .true
-        case .none:
+        case .matchingNone:
             return .false
         case .idIs(let id):
             return #Predicate { tag in

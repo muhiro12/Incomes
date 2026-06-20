@@ -1,4 +1,4 @@
-import Foundation // swiftlint:disable:this file_name
+import Foundation
 
 extension Calendar {
     /// A Gregorian calendar fixed to the UTC time zone.

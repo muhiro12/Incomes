@@ -20,51 +20,57 @@ struct ItemTagCleanupTest {
 
         let item = try createItem(
             context: context,
-            date: originalDate,
-            content: "Old Content",
-            income: 100,
-            outgo: 20,
-            category: "Old Category",
-            priority: 0
+            input: .init(
+                date: originalDate,
+                content: "Old Content",
+                income: 100,
+                outgo: 20,
+                category: "Old Category",
+                priority: 0
+            )
         )
 
         try updateItem(
             context: context,
             item: item,
-            date: updatedDate,
-            content: "New Content",
-            income: 200,
-            outgo: 50,
-            category: "New Category",
-            priority: 1
+            input: .init(
+                date: updatedDate,
+                content: "New Content",
+                income: 200,
+                outgo: 50,
+                category: "New Category",
+                priority: 1
+            )
         )
 
-        #expect(try context.fetchCount(.tags(.nameIs(originalDate.stringValueWithoutLocale(.yyyy), type: .year))) == 0)
-        #expect(
-            try context.fetchCount(
-                .tags(
-                    .nameIs(
-                        originalDate.stringValueWithoutLocale(.yyyyMM),
-                        type: .yearMonth
-                    )
-                )
-            ) == 0
+        try assertDerivedTagCount(
+            date: originalDate,
+            content: "Old Content",
+            category: "Old Category",
+            count: 0
         )
-        #expect(try context.fetchCount(.tags(.nameIs("Old Content", type: .content))) == 0)
-        #expect(try context.fetchCount(.tags(.nameIs("Old Category", type: .category))) == 0)
-        #expect(try context.fetchCount(.tags(.nameIs(updatedDate.stringValueWithoutLocale(.yyyy), type: .year))) == 1)
-        #expect(
-            try context.fetchCount(
-                .tags(
-                    .nameIs(
-                        updatedDate.stringValueWithoutLocale(.yyyyMM),
-                        type: .yearMonth
-                    )
-                )
-            ) == 1
+        try assertDerivedTagCount(
+            date: updatedDate,
+            content: "New Content",
+            category: "New Category",
+            count: 1
         )
-        #expect(try context.fetchCount(.tags(.nameIs("New Content", type: .content))) == 1)
-        #expect(try context.fetchCount(.tags(.nameIs("New Category", type: .category))) == 1)
+    }
+
+    func assertDerivedTagCount(
+        date: Date,
+        content: String,
+        category: String,
+        count: Int
+    ) throws {
+        #expect(try tagCount(date.stringValueWithoutLocale(.yyyy), type: .year) == count)
+        #expect(try tagCount(date.stringValueWithoutLocale(.yyyyMM), type: .yearMonth) == count)
+        #expect(try tagCount(content, type: .content) == count)
+        #expect(try tagCount(category, type: .category) == count)
+    }
+
+    func tagCount(_ name: String, type: TagType) throws -> Int {
+        try context.fetchCount(.tags(.nameIs(name, type: type)))
     }
 
     @Test("delete removes orphaned derived tags for the last item", arguments: timeZones)
@@ -74,12 +80,14 @@ struct ItemTagCleanupTest {
         let date = isoDate("2024-04-01T00:00:00Z")
         let item = try createItem(
             context: context,
-            date: date,
-            content: "ToDelete",
-            income: 100,
-            outgo: .zero,
-            category: "Temp",
-            priority: 0
+            input: .init(
+                date: date,
+                content: "ToDelete",
+                income: 100,
+                outgo: .zero,
+                category: "Temp",
+                priority: 0
+            )
         )
 
         try ItemDeletionOperations.delete(
@@ -102,21 +110,25 @@ struct ItemTagCleanupTest {
         let secondDate = isoDate("2024-04-02T00:00:00Z")
         let firstItem = try createItem(
             context: context,
-            date: firstDate,
-            content: "Shared Content",
-            income: 100,
-            outgo: .zero,
-            category: "Shared Category",
-            priority: 0
+            input: .init(
+                date: firstDate,
+                content: "Shared Content",
+                income: 100,
+                outgo: .zero,
+                category: "Shared Category",
+                priority: 0
+            )
         )
         _ = try createItem(
             context: context,
-            date: secondDate,
-            content: "Shared Content",
-            income: 200,
-            outgo: .zero,
-            category: "Shared Category",
-            priority: 0
+            input: .init(
+                date: secondDate,
+                content: "Shared Content",
+                income: 200,
+                outgo: .zero,
+                category: "Shared Category",
+                priority: 0
+            )
         )
 
         try ItemDeletionOperations.delete(
@@ -142,12 +154,14 @@ struct ItemTagCleanupTest {
 
         _ = try createItem(
             context: context,
-            date: isoDate("2024-01-01T00:00:00Z"),
-            content: "Gym",
-            income: .zero,
-            outgo: 8_000,
-            category: "Health",
-            priority: 0,
+            input: .init(
+                date: isoDate("2024-01-01T00:00:00Z"),
+                content: "Gym",
+                income: .zero,
+                outgo: 8_000,
+                category: "Health",
+                priority: 0
+            ),
             repeatCount: 3
         )
         let items = try context.fetch(.items(.all)).sorted { lhs, rhs in
@@ -158,12 +172,14 @@ struct ItemTagCleanupTest {
         try updateItem(
             context: context,
             item: fetchedItem,
-            date: fetchedItem.utcDate,
-            content: "Fitness",
-            income: .zero,
-            outgo: 7_000,
-            category: "Wellness",
-            priority: 0,
+            input: .init(
+                date: fetchedItem.utcDate,
+                content: "Fitness",
+                income: .zero,
+                outgo: 7_000,
+                category: "Wellness",
+                priority: 0
+            ),
             scope: .futureItems
         )
 

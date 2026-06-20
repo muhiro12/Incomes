@@ -9,7 +9,7 @@ struct SettingsNotificationSection: View {
     private let sendTestNotification: () -> Void
     private let openSystemSettings: () -> Void
 
-    init( // swiftlint:disable:this type_contents_order
+    init(
         notificationSettings: Binding<NotificationSettings>,
         isNotificationEnabled: Bool,
         authorizationPresentation: SettingsScreenModel.AuthorizationPresentation,
@@ -22,8 +22,10 @@ struct SettingsNotificationSection: View {
         self.sendTestNotification = sendTestNotification
         self.openSystemSettings = openSystemSettings
     }
+}
 
-    var body: some View {
+extension SettingsNotificationSection {
+    @ViewBuilder var body: some View {
         Section("Push notification settings") {
             Toggle("Enable push notifications", isOn: $notificationSettings.isEnabled)
             SettingsNotificationDetailsRows(

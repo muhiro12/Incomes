@@ -40,12 +40,14 @@ struct MutationOutcomeTests {
     func updateWithOutcome_reports_updated_ids() throws {
         let created = try createItem(
             context: context,
-            date: shiftedDate("2024-03-10T12:00:00Z"),
-            content: "Subscription",
-            income: 100,
-            outgo: 0,
-            category: "Service",
-            priority: 0,
+            input: .init(
+                date: shiftedDate("2024-03-10T12:00:00Z"),
+                content: "Subscription",
+                income: 100,
+                outgo: 0,
+                category: "Service",
+                priority: 0
+            ),
             repeatCount: 3
         )
         let updateInput: ItemFormInput = .init(
@@ -74,12 +76,14 @@ struct MutationOutcomeTests {
     func deleteWithOutcome_reports_deleted_ids() throws {
         _ = try createItem(
             context: context,
-            date: shiftedDate("2024-06-01T12:00:00Z"),
-            content: "Delete Me",
-            income: 0,
-            outgo: 10,
-            category: "Test",
-            priority: 0,
+            input: .init(
+                date: shiftedDate("2024-06-01T12:00:00Z"),
+                content: "Delete Me",
+                income: 0,
+                outgo: 10,
+                category: "Test",
+                priority: 0
+            ),
             repeatCount: 1
         )
         let items = try context.fetch(.items(.all))

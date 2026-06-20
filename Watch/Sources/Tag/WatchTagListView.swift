@@ -5,7 +5,7 @@ struct WatchTagListView: View {
     private let title: LocalizedStringKey
     @Query private var tags: [Tag]
 
-    init( // swiftlint:disable:this type_contents_order
+    init(
         type: TagType? = nil,
         title: LocalizedStringKey = "Tags"
     ) {
@@ -16,8 +16,10 @@ struct WatchTagListView: View {
         }
         self.title = title
     }
+}
 
-    var body: some View {
+extension WatchTagListView {
+    @ViewBuilder var body: some View {
         List {
             if !tags.isEmpty {
                 ForEach(tags) { tag in

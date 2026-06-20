@@ -2,17 +2,39 @@ import Foundation
 import SwiftData
 
 enum MainNavigationRouteExecutor {
-    static func execute( // swiftlint:disable:this cyclomatic_complexity function_body_length
+    static func execute(
         route: IncomesRoute,
         context: ModelContext
     ) throws -> MainNavigationRouteOutcome {
         switch route {
+        case .home,
+             .settings,
+             .settingsSubscription,
+             .settingsLicense,
+             .settingsDebug,
+             .yearlyDuplication,
+             .duplicateTags,
+             .orphanTags:
+            return try executeStaticRoute(route, context: context)
+        case .yearSummary,
+             .year,
+             .month:
+            return try executeDateRoute(route, context: context)
+        case .item,
+             .search:
+            return try executeEntityRoute(route, context: context)
+        }
+    }
+}
+
+private extension MainNavigationRouteExecutor {
+    static func executeStaticRoute(
+        _ route: IncomesRoute,
+        context: ModelContext
+    ) throws -> MainNavigationRouteOutcome {
+        switch route {
         case .home:
-            let state = try MainNavigationStateLoader.load(context: context)
-            return .destination(
-                yearTagID: state.yearTag?.persistentModelID,
-                selectedTag: state.yearMonthTag
-            )
+            return try fallbackHomeDestination(context: context)
         case .settings:
             return .settings
         case .settingsSubscription:
@@ -21,6 +43,23 @@ enum MainNavigationRouteExecutor {
             return .settingsLicense
         case .settingsDebug:
             return .settingsDebug
+        case .yearlyDuplication:
+            return .yearlyDuplication
+        case .duplicateTags:
+            return .duplicateTags
+        case .orphanTags:
+            return .orphanTags
+        default:
+            assertionFailure()
+            return try fallbackHomeDestination(context: context)
+        }
+    }
+
+    static func executeDateRoute(
+        _ route: IncomesRoute,
+        context: ModelContext
+    ) throws -> MainNavigationRouteOutcome {
+        switch route {
         case .yearSummary(let year):
             return .destination(
                 yearTagID: try resolveYearTagID(
@@ -32,12 +71,6 @@ enum MainNavigationRouteExecutor {
                     year: year
                 )
             )
-        case .yearlyDuplication:
-            return .yearlyDuplication
-        case .duplicateTags:
-            return .duplicateTags
-        case .orphanTags:
-            return .orphanTags
         case .year(let year):
             return .destination(
                 yearTagID: try resolveYearTagID(
@@ -60,6 +93,17 @@ enum MainNavigationRouteExecutor {
                 yearTagID: yearTagID,
                 selectedTag: yearMonthTag
             )
+        default:
+            assertionFailure()
+            return try fallbackHomeDestination(context: context)
+        }
+    }
+
+    static func executeEntityRoute(
+        _ route: IncomesRoute,
+        context: ModelContext
+    ) throws -> MainNavigationRouteOutcome {
+        switch route {
         case .item(let itemID):
             guard let persistentID = try? PersistentIdentifierCoder.decode(itemID) else {
                 return try fallbackHomeDestination(context: context)
@@ -78,11 +122,12 @@ enum MainNavigationRouteExecutor {
                     query: query
                 )
             )
+        default:
+            assertionFailure()
+            return try fallbackHomeDestination(context: context)
         }
     }
-}
 
-private extension MainNavigationRouteExecutor {
     static func fallbackHomeDestination(
         context: ModelContext
     ) throws -> MainNavigationRouteOutcome {

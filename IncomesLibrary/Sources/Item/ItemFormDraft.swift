@@ -25,15 +25,15 @@ public struct ItemFormDraft: Identifiable, Hashable, Sendable {
 
     /// Creates an item form draft.
     public init(
-        id: UUID = UUID(), // swiftlint:disable:this function_default_parameter_at_end
         groupID: UUID,
         date: Date,
         content: String,
         incomeText: String,
         outgoText: String,
         category: String,
-        priorityText: String = "0", // swiftlint:disable:this function_default_parameter_at_end
-        repeatMonthSelections: Set<RepeatMonthSelection>
+        repeatMonthSelections: Set<RepeatMonthSelection>,
+        id: UUID = UUID(),
+        priorityText: String = "0"
     ) {
         self.id = id
         self.groupID = groupID

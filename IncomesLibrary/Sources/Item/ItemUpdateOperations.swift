@@ -30,67 +30,105 @@ public enum ItemUpdateOperations {
     }
 
     /// Updates item(s) and returns mutation metadata.
-    public static func updateWithOutcome( // swiftlint:disable:this function_body_length
+    public static func updateWithOutcome(
         context: ModelContext,
         item: Item,
         input: ItemFormInput,
         scope: ItemMutationScope
     ) throws -> MutationOutcome {
         try input.validate()
+        let values = ItemStoredValues(formInput: input)
 
         let affectedItems = try ItemMutationSupport.itemsForMutationScope(
             context: context,
             item: item,
             scope: scope
         )
-        let storedCategory = input.storedCategory
-        let tagsToCleanup = ItemMutationSupport.cleanupCandidateTags(from: affectedItems)
-        let beforeDates = affectedItems.map(\.localDate)
-        let updatedIDs = Set(affectedItems.map(\.persistentModelID))
+        let snapshot = ItemUpdateSnapshot(items: affectedItems)
 
+        try updateItems(
+            context: context,
+            item: item,
+            values: values,
+            scope: scope
+        )
+
+        TagMutationOperations.deleteUnused(tags: snapshot.tagsToCleanup)
+        return updateOutcome(
+            snapshot: snapshot,
+            affectedItems: affectedItems,
+            inputDate: values.date
+        )
+    }
+
+    /// Updates a set of repeating items specified by `descriptor` using the delta
+    /// between the original item's date and the new value date, then recalculates balances.
+    public static func updateRepeatingItems(
+        context: ModelContext,
+        item: Item,
+        values: ItemStoredValues,
+        descriptor: FetchDescriptor<Item>
+    ) throws {
+        let dateShift = Calendar.current.dateComponents(
+            [.year, .month, .day],
+            from: item.localDate,
+            to: values.date
+        )
+        let repeatID = UUID()
+        let items = try context.fetch(descriptor)
+        let recalcDate = try updateRepeatingItems(
+            items: items,
+            dateShift: dateShift,
+            values: values,
+            repeatID: repeatID
+        )
+        try BalanceCalculator.calculate(
+            in: context,
+            after: recalcDate ?? values.date
+        )
+    }
+}
+
+private extension ItemUpdateOperations {
+    struct ItemUpdateSnapshot {
+        let tagsToCleanup: [Tag]
+        let beforeDates: [Date]
+        let updatedIDs: Set<PersistentIdentifier>
+
+        init(items: [Item]) {
+            self.tagsToCleanup = ItemMutationSupport.cleanupCandidateTags(from: items)
+            self.beforeDates = items.map(\.localDate)
+            self.updatedIDs = Set(items.map(\.persistentModelID))
+        }
+    }
+
+    static func updateItems(
+        context: ModelContext,
+        item: Item,
+        values: ItemStoredValues,
+        scope: ItemMutationScope
+    ) throws {
         switch scope {
         case .thisItem:
-            try updateSingleItem(
-                context: context,
-                item: item,
-                date: input.date,
-                content: input.content,
-                income: input.income,
-                outgo: input.outgo,
-                category: storedCategory,
-                priority: input.priority
-            )
+            try updateSingleItem(context: context, item: item, values: values)
         case .futureItems:
-            try updateFutureItems(
-                context: context,
-                item: item,
-                date: input.date,
-                content: input.content,
-                income: input.income,
-                outgo: input.outgo,
-                category: storedCategory,
-                priority: input.priority
-            )
+            try updateFutureItems(context: context, item: item, values: values)
         case .allItems:
-            try updateAllItems(
-                context: context,
-                item: item,
-                date: input.date,
-                content: input.content,
-                income: input.income,
-                outgo: input.outgo,
-                category: storedCategory,
-                priority: input.priority
-            )
+            try updateAllItems(context: context, item: item, values: values)
         }
+    }
 
-        TagMutationOperations.deleteUnused(tags: tagsToCleanup)
+    static func updateOutcome(
+        snapshot: ItemUpdateSnapshot,
+        affectedItems: [Item],
+        inputDate: Date
+    ) -> MutationOutcome {
         let afterDates = affectedItems.map(\.localDate)
-        let candidateDates = beforeDates + afterDates + [input.date]
+        let candidateDates = snapshot.beforeDates + afterDates + [inputDate]
         return .init(
             changedIDs: .init(
                 created: [],
-                updated: updatedIDs,
+                updated: snapshot.updatedIDs,
                 deleted: []
             ),
             affectedDateRange: ItemMutationSupport.dateRange(from: candidateDates),
@@ -98,226 +136,42 @@ public enum ItemUpdateOperations {
         )
     }
 
-    /// Updates a single item from raw values.
-    @available(
-    *,
-    deprecated,
-    message: "Use update(context:item:input:scope:) instead."
-    )
-    public static func update( // swiftlint:disable:this function_parameter_count
+    static func updateSingleItem(
         context: ModelContext,
         item: Item,
-        date: Date,
-        content: String,
-        income: Decimal,
-        outgo: Decimal,
-        category: String,
-        priority: Int
-    ) throws {
-        _ = try updateWithOutcome(
-            context: context,
-            item: item,
-            input: .init(
-                date: date,
-                content: content,
-                income: income,
-                outgo: outgo,
-                category: category,
-                priority: priority
-            ),
-            scope: .thisItem
-        )
-    }
-
-    /// Updates a set of repeating items specified by `descriptor` using the delta
-    /// between the original item's date and the new `date`, then recalculates balances.
-    public static func updateRepeatingItems( // swiftlint:disable:this function_parameter_count
-        context: ModelContext,
-        item: Item,
-        date: Date,
-        content: String,
-        income: Decimal,
-        outgo: Decimal,
-        category: String,
-        priority: Int,
-        descriptor: FetchDescriptor<Item>
-    ) throws {
-        let components = Calendar.current.dateComponents(
-            [.year, .month, .day],
-            from: item.localDate,
-            to: date
-        )
-        let repeatID = UUID()
-        let items = try context.fetch(descriptor)
-        var earliestOriginalDate: Date?
-        var earliestUpdatedDate: Date?
-        try items.forEach { item in
-            let originalDate = item.localDate
-            if let earliest = earliestOriginalDate {
-                earliestOriginalDate = min(earliest, originalDate)
-            } else {
-                earliestOriginalDate = originalDate
-            }
-            guard let newDate = Calendar.current.date(byAdding: components, to: originalDate) else {
-                assertionFailure()
-                return
-            }
-            if let earliest = earliestUpdatedDate {
-                earliestUpdatedDate = min(earliest, newDate)
-            } else {
-                earliestUpdatedDate = newDate
-            }
-            try item.modify(
-                date: newDate,
-                content: content,
-                income: income,
-                outgo: outgo,
-                category: category,
-                priority: priority,
-                repeatID: repeatID
-            )
-        }
-        if let earliestOriginalDate, let earliestUpdatedDate {
-            try BalanceCalculator.calculate(in: context, after: min(earliestOriginalDate, earliestUpdatedDate))
-        } else if let earliestOriginalDate {
-            try BalanceCalculator.calculate(in: context, after: earliestOriginalDate)
-        } else if let earliestUpdatedDate {
-            try BalanceCalculator.calculate(in: context, after: earliestUpdatedDate)
-        } else {
-            try BalanceCalculator.calculate(in: context, after: date)
-        }
-    }
-
-    /// Updates all items in the same repeat series from raw values.
-    @available(
-    *,
-    deprecated,
-    message: "Use update(context:item:input:scope:) with .allItems instead."
-    )
-    public static func updateAll( // swiftlint:disable:this function_parameter_count
-        context: ModelContext,
-        item: Item,
-        date: Date,
-        content: String,
-        income: Decimal,
-        outgo: Decimal,
-        category: String,
-        priority: Int
-    ) throws {
-        _ = try updateWithOutcome(
-            context: context,
-            item: item,
-            input: .init(
-                date: date,
-                content: content,
-                income: income,
-                outgo: outgo,
-                category: category,
-                priority: priority
-            ),
-            scope: .allItems
-        )
-    }
-
-    /// Updates future items in the same repeat series from raw values.
-    @available(
-    *,
-    deprecated,
-    message: "Use update(context:item:input:scope:) with .futureItems instead."
-    )
-    public static func updateFuture( // swiftlint:disable:this function_parameter_count
-        context: ModelContext,
-        item: Item,
-        date: Date,
-        content: String,
-        income: Decimal,
-        outgo: Decimal,
-        category: String,
-        priority: Int
-    ) throws {
-        _ = try updateWithOutcome(
-            context: context,
-            item: item,
-            input: .init(
-                date: date,
-                content: content,
-                income: income,
-                outgo: outgo,
-                category: category,
-                priority: priority
-            ),
-            scope: .futureItems
-        )
-    }
-}
-
-private extension ItemUpdateOperations {
-    static func updateSingleItem( // swiftlint:disable:this function_parameter_count
-        context: ModelContext,
-        item: Item,
-        date: Date,
-        content: String,
-        income: Decimal,
-        outgo: Decimal,
-        category: String,
-        priority: Int
+        values: ItemStoredValues
     ) throws {
         let originalDate = item.localDate
         try item.modify(
-            date: date,
-            content: content,
-            income: income,
-            outgo: outgo,
-            category: category,
-            priority: priority,
+            values: values,
             repeatID: .init()
         )
         let recalcDate = min(originalDate, item.localDate)
         try BalanceCalculator.calculate(in: context, after: recalcDate)
     }
 
-    static func updateAllItems( // swiftlint:disable:this function_parameter_count
+    static func updateAllItems(
         context: ModelContext,
         item: Item,
-        date: Date,
-        content: String,
-        income: Decimal,
-        outgo: Decimal,
-        category: String,
-        priority: Int
+        values: ItemStoredValues
     ) throws {
         try updateRepeatingItems(
             context: context,
             item: item,
-            date: date,
-            content: content,
-            income: income,
-            outgo: outgo,
-            category: category,
-            priority: priority,
+            values: values,
             descriptor: .items(.repeatIDIs(item.repeatID))
         )
     }
 
-    static func updateFutureItems( // swiftlint:disable:this function_parameter_count
+    static func updateFutureItems(
         context: ModelContext,
         item: Item,
-        date: Date,
-        content: String,
-        income: Decimal,
-        outgo: Decimal,
-        category: String,
-        priority: Int
+        values: ItemStoredValues
     ) throws {
         try updateRepeatingItems(
             context: context,
             item: item,
-            date: date,
-            content: content,
-            income: income,
-            outgo: outgo,
-            category: category,
-            priority: priority,
+            values: values,
             descriptor: .items(
                 .repeatIDAndDateIsAfter(
                     repeatID: item.repeatID,
@@ -325,5 +179,48 @@ private extension ItemUpdateOperations {
                 )
             )
         )
+    }
+
+    static func updateRepeatingItems(
+        items: [Item],
+        dateShift: DateComponents,
+        values: ItemStoredValues,
+        repeatID: UUID
+    ) throws -> Date? {
+        var recalcDate: Date?
+        try items.forEach { item in
+            let originalDate = item.localDate
+            guard let newDate = Calendar.current.date(byAdding: dateShift, to: originalDate) else {
+                assertionFailure()
+                return
+            }
+            recalcDate = earliestDate(
+                among: recalcDate,
+                originalDate,
+                newDate
+            )
+            try item.modify(
+                values: values.replacing(date: newDate),
+                repeatID: repeatID
+            )
+        }
+        return recalcDate
+    }
+
+    static func earliestDate(_ firstDate: Date?, _ secondDate: Date) -> Date {
+        if let firstDate {
+            min(firstDate, secondDate)
+        } else {
+            secondDate
+        }
+    }
+
+    static func earliestDate(
+        among currentDate: Date?,
+        _ candidateDates: Date...
+    ) -> Date? {
+        candidateDates.reduce(currentDate) { earliest, candidate in
+            earliestDate(earliest, candidate)
+        }
     }
 }

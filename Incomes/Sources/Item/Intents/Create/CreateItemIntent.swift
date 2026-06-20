@@ -10,25 +10,25 @@ import MHPlatform
 import SwiftData
 
 struct CreateItemIntent: AppIntent {
+    static let title: LocalizedStringResource = .init("Create Item", table: "AppIntents")
+
     @Parameter(title: "Date", kind: .date)
-    private var date: Date // swiftlint:disable:this type_contents_order
+    private var date: Date
     @Parameter(title: "Content")
-    private var content: String // swiftlint:disable:this type_contents_order
+    private var content: String
     @Parameter(title: "Income")
-    private var income: IntentCurrencyAmount // swiftlint:disable:this type_contents_order
+    private var income: IntentCurrencyAmount
     @Parameter(title: "Outgo")
-    private var outgo: IntentCurrencyAmount // swiftlint:disable:this type_contents_order
+    private var outgo: IntentCurrencyAmount
     @Parameter(title: "Category")
-    private var category: String // swiftlint:disable:this type_contents_order
+    private var category: String
     // App Intents requires compile-time literals for parameter metadata.
     @Parameter(title: "Repeat", default: 1, inclusiveRange: (1, 60)) // swiftlint:disable:this no_magic_numbers
-    private var repeatCount: Int // swiftlint:disable:this type_contents_order
+    private var repeatCount: Int
 
-    @Dependency private var modelContainer: ModelContainer // swiftlint:disable:this type_contents_order
-    @Dependency private var notificationService: NotificationService // swiftlint:disable:this type_contents_order
-    @Dependency private var logging: MHLoggingBootstrap // swiftlint:disable:this type_contents_order
-
-    static let title: LocalizedStringResource = .init("Create Item", table: "AppIntents")
+    @Dependency private var modelContainer: ModelContainer
+    @Dependency private var notificationService: NotificationService
+    @Dependency private var logging: MHLoggingBootstrap
 
     @MainActor private var formInput: ItemFormInput {
         ItemIntentFormInputSupport.formInput(
@@ -57,9 +57,7 @@ struct CreateItemIntent: AppIntent {
             context: modelContainer.mainContext,
             input: formInput,
             repeatCount: repeatCount,
-            notificationService: notificationService,
-            logger: intentLogger,
-            reviewLogger: reviewLogger
+            dependencies: mutationDependencies
         )
         return .result(value: try ItemEntity.make(from: item))
     }
@@ -77,6 +75,14 @@ private extension CreateItemIntent {
         IncomesIntentLoggingSupport.reviewFlowLogger(
             logging: logging,
             source: #fileID
+        )
+    }
+
+    @MainActor var mutationDependencies: ItemMutationWorkflowDependencies {
+        .init(
+            notificationService: notificationService,
+            logger: intentLogger,
+            reviewLogger: reviewLogger
         )
     }
 }

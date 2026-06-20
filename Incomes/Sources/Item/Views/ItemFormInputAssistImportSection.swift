@@ -12,7 +12,7 @@ struct ItemFormInputAssistImportSection: View {
     private let isImportDisabled: Bool
     private let openCamera: () -> Void
 
-    init( // swiftlint:disable:this type_contents_order
+    init(
         selectedItem: Binding<PhotosPickerItem?>,
         isImportDisabled: Bool,
         openCamera: @escaping () -> Void
@@ -21,8 +21,11 @@ struct ItemFormInputAssistImportSection: View {
         self.isImportDisabled = isImportDisabled
         self.openCamera = openCamera
     }
+}
 
-    var body: some View {
+@available(iOS 26.0, *)
+extension ItemFormInputAssistImportSection {
+    @ViewBuilder var body: some View {
         Section {
             ItemFormInputAssistImportControls(
                 selectedItem: $selectedItem,

@@ -1,4 +1,4 @@
-import Foundation // swiftlint:disable:this file_name
+import Foundation
 
 public extension String {
     /// True when the string is blank or can be parsed as an integer.

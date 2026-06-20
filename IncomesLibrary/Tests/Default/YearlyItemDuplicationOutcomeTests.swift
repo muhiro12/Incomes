@@ -14,12 +14,14 @@ struct YearlyItemDuplicationOutcomeTests {
     func applyWithOutcome_reports_created_ids_and_hints() throws {
         _ = try createItem(
             context: context,
-            date: shiftedDate("2024-01-10T12:00:00Z"),
-            content: "Rent",
-            income: 0,
-            outgo: 100,
-            category: "Housing",
-            priority: 0,
+            input: .init(
+                date: shiftedDate("2024-01-10T12:00:00Z"),
+                content: "Rent",
+                income: 0,
+                outgo: 100,
+                category: "Housing",
+                priority: 0
+            ),
             repeatCount: 3
         )
 
@@ -44,22 +46,26 @@ struct YearlyItemDuplicationOutcomeTests {
     func apply_groupID_applies_only_target_group() throws {
         _ = try createItem(
             context: context,
-            date: shiftedDate("2024-01-10T12:00:00Z"),
-            content: "Rent",
-            income: 0,
-            outgo: 100,
-            category: "Housing",
-            priority: 0,
+            input: .init(
+                date: shiftedDate("2024-01-10T12:00:00Z"),
+                content: "Rent",
+                income: 0,
+                outgo: 100,
+                category: "Housing",
+                priority: 0
+            ),
             repeatCount: 3
         )
         _ = try createItem(
             context: context,
-            date: shiftedDate("2024-02-20T12:00:00Z"),
-            content: "Salary",
-            income: 300,
-            outgo: 0,
-            category: "Work",
-            priority: 0,
+            input: .init(
+                date: shiftedDate("2024-02-20T12:00:00Z"),
+                content: "Salary",
+                income: 300,
+                outgo: 0,
+                category: "Work",
+                priority: 0
+            ),
             repeatCount: 3
         )
 
@@ -83,22 +89,26 @@ struct YearlyItemDuplicationOutcomeTests {
     func applyWithOutcome_groupID_reports_created_ids_and_hints() throws {
         _ = try createItem(
             context: context,
-            date: shiftedDate("2024-01-10T12:00:00Z"),
-            content: "Rent",
-            income: 0,
-            outgo: 100,
-            category: "Housing",
-            priority: 0,
+            input: .init(
+                date: shiftedDate("2024-01-10T12:00:00Z"),
+                content: "Rent",
+                income: 0,
+                outgo: 100,
+                category: "Housing",
+                priority: 0
+            ),
             repeatCount: 3
         )
         _ = try createItem(
             context: context,
-            date: shiftedDate("2024-02-20T12:00:00Z"),
-            content: "Salary",
-            income: 300,
-            outgo: 0,
-            category: "Work",
-            priority: 0,
+            input: .init(
+                date: shiftedDate("2024-02-20T12:00:00Z"),
+                content: "Salary",
+                income: 300,
+                outgo: 0,
+                category: "Work",
+                priority: 0
+            ),
             repeatCount: 3
         )
 

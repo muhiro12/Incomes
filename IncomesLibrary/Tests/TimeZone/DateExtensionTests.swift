@@ -10,11 +10,13 @@ import Foundation
 import Testing
 
 @Suite(.serialized)
-struct DateExtensionTests { // swiftlint:disable:this type_body_length
-    init() { // swiftlint:disable:this type_contents_order
+struct DateExtensionTests {
+    init() {
         TimeZone.ReferenceType.default = .current
     }
+}
 
+extension DateExtensionTests {
     // MARK: - Default Locale (parameterized by timeZones)
 
     struct DefaultLocaleTests {

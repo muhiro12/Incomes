@@ -3,12 +3,12 @@ import Foundation
 import SwiftData
 
 struct GetTagDateIntent: AppIntent {
-    @Parameter(title: "Tag")
-    private var tag: TagEntity // swiftlint:disable:this type_contents_order
-
-    @Dependency private var modelContainer: ModelContainer // swiftlint:disable:this type_contents_order
-
     static let title: LocalizedStringResource = .init("Get Tag Date", table: "AppIntents")
+
+    @Parameter(title: "Tag")
+    private var tag: TagEntity
+
+    @Dependency private var modelContainer: ModelContainer
 
     @MainActor
     func perform() throws -> some ReturnsValue<Date?> {

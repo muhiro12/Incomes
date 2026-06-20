@@ -30,7 +30,7 @@ struct SearchListView: View {
     @State private var minValue = ""
     @State private var maxValue = ""
 
-    init( // swiftlint:disable:this type_contents_order
+    init(
         selection: Binding<ItemPredicate?>,
         searchText: Binding<String>,
         appliesInitialSearchText: Binding<Bool> = .constant(false)
@@ -39,8 +39,10 @@ struct SearchListView: View {
         _searchText = searchText
         _appliesInitialSearchText = appliesInitialSearchText
     }
+}
 
-    var body: some View {
+extension SearchListView {
+    @ViewBuilder var body: some View {
         SearchListContent(
             selectedTarget: $selectedTarget,
             contentTags: filteredContentTags,

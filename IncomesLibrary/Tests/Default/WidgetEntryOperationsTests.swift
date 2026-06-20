@@ -63,21 +63,25 @@ struct WidgetEntryOperationsTests {
         let date = isoDate("2026-03-15T00:00:00Z")
         try createItem(
             context: context,
-            date: date,
-            content: "Salary",
-            income: 2_000,
-            outgo: .zero,
-            category: "Income",
-            priority: 0
+            input: .init(
+                date: date,
+                content: "Salary",
+                income: 2_000,
+                outgo: .zero,
+                category: "Income",
+                priority: 0
+            )
         )
         try createItem(
             context: context,
-            date: date,
-            content: "Rent",
-            income: .zero,
-            outgo: 800,
-            category: "Housing",
-            priority: 0
+            input: .init(
+                date: date,
+                content: "Rent",
+                income: .zero,
+                outgo: 800,
+                category: "Housing",
+                priority: 0
+            )
         )
         let totals = try ItemSummaryOperations.monthlyTotals(
             context: context,
@@ -101,21 +105,25 @@ struct WidgetEntryOperationsTests {
         let date = isoDate("2026-04-15T00:00:00Z")
         try createItem(
             context: context,
-            date: date,
-            content: "Salary",
-            income: 3_000,
-            outgo: .zero,
-            category: "Income",
-            priority: 0
+            input: .init(
+                date: date,
+                content: "Salary",
+                income: 3_000,
+                outgo: .zero,
+                category: "Income",
+                priority: 0
+            )
         )
         try createItem(
             context: context,
-            date: date,
-            content: "Utilities",
-            income: .zero,
-            outgo: 500,
-            category: "Life",
-            priority: 0
+            input: .init(
+                date: date,
+                content: "Utilities",
+                income: .zero,
+                outgo: 500,
+                category: "Life",
+                priority: 0
+            )
         )
         let totals = try ItemSummaryOperations.monthlyTotals(
             context: context,
@@ -139,21 +147,25 @@ struct WidgetEntryOperationsTests {
         let now = isoDate("2026-03-15T00:00:00Z")
         let nextItem = try createItem(
             context: context,
-            date: isoDate("2026-03-20T00:00:00Z"),
-            content: "Salary",
-            income: 2_000,
-            outgo: .zero,
-            category: "Income",
-            priority: 0
+            input: .init(
+                date: isoDate("2026-03-20T00:00:00Z"),
+                content: "Salary",
+                income: 2_000,
+                outgo: .zero,
+                category: "Income",
+                priority: 0
+            )
         )
         try createItem(
             context: context,
-            date: isoDate("2026-03-10T00:00:00Z"),
-            content: "Rent",
-            income: .zero,
-            outgo: 800,
-            category: "Housing",
-            priority: 0
+            input: .init(
+                date: isoDate("2026-03-10T00:00:00Z"),
+                content: "Rent",
+                income: .zero,
+                outgo: 800,
+                category: "Housing",
+                priority: 0
+            )
         )
         let nextItemID = try PersistentIdentifierCoder.encode(nextItem.id)
 

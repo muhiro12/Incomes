@@ -84,12 +84,14 @@ private extension YearlyDuplicationPromoOperationsTests {
     func createRepeatItems() throws {
         try createItem(
             context: context,
-            date: shiftedDate("\(TestValue.sourceYear)-01-10T12:00:00Z"),
-            content: "Rent",
-            income: .zero,
-            outgo: TestValue.outgo,
-            category: "Housing",
-            priority: .zero,
+            input: .init(
+                date: shiftedDate("\(TestValue.sourceYear)-01-10T12:00:00Z"),
+                content: "Rent",
+                income: .zero,
+                outgo: TestValue.outgo,
+                category: "Housing",
+                priority: .zero
+            ),
             repeatCount: TestValue.repeatCount
         )
     }

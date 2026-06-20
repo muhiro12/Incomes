@@ -3,11 +3,11 @@ import MHPlatform
 import SwiftData
 
 struct DeleteOrphanTagsIntent: AppIntent {
-    @Dependency private var modelContainer: ModelContainer // swiftlint:disable:this type_contents_order
-    @Dependency private var logging: MHLoggingBootstrap // swiftlint:disable:this type_contents_order
-
     static let title: LocalizedStringResource = .init("Delete Orphan Tags", table: "AppIntents")
     static let isDiscoverable = false
+
+    @Dependency private var modelContainer: ModelContainer
+    @Dependency private var logging: MHLoggingBootstrap
 
     @MainActor
     func perform() throws -> some ReturnsValue<Int> {

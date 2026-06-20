@@ -12,6 +12,8 @@ import SwiftData
 
 @available(iOS 26.0, *)
 enum MonthlySummaryGenerator {
+    private static let maximumNarrativeResponseTokens = 220
+
     static func canGenerate(locale: Locale) -> Bool {
         do {
             _ = try FoundationModelAvailabilitySupport.generalModel(
@@ -218,7 +220,7 @@ private extension MonthlySummaryGenerator {
             context: narrativeContext
         )
         let options = FoundationModelToolchainSupport.greedyGenerationOptions(
-            maximumResponseTokens: 220 // swiftlint:disable:this no_magic_numbers
+            maximumResponseTokens: maximumNarrativeResponseTokens
         )
         let response = try await session.respond(
             generating: MonthlyNarrative.self,

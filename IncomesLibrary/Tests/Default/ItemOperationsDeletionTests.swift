@@ -14,32 +14,38 @@ struct ItemOperationsDeletionTests {
     func resolveItemsForDeletion_returns_selected_items() throws {
         let firstItem = try Item.create(
             context: context,
-            date: shiftedDate("2001-01-01T00:00:00Z"),
-            content: "A",
-            income: 0,
-            outgo: 10,
-            category: "Category",
-            priority: 0,
+            values: .init(
+                date: shiftedDate("2001-01-01T00:00:00Z"),
+                content: "A",
+                income: 0,
+                outgo: 10,
+                category: "Category",
+                priority: 0
+            ),
             repeatID: .init()
         )
         let secondItem = try Item.create(
             context: context,
-            date: shiftedDate("2001-02-01T00:00:00Z"),
-            content: "B",
-            income: 0,
-            outgo: 20,
-            category: "Category",
-            priority: 0,
+            values: .init(
+                date: shiftedDate("2001-02-01T00:00:00Z"),
+                content: "B",
+                income: 0,
+                outgo: 20,
+                category: "Category",
+                priority: 0
+            ),
             repeatID: .init()
         )
         let thirdItem = try Item.create(
             context: context,
-            date: shiftedDate("2001-03-01T00:00:00Z"),
-            content: "C",
-            income: 0,
-            outgo: 30,
-            category: "Category",
-            priority: 0,
+            values: .init(
+                date: shiftedDate("2001-03-01T00:00:00Z"),
+                content: "C",
+                income: 0,
+                outgo: 30,
+                category: "Category",
+                priority: 0
+            ),
             repeatID: .init()
         )
 
@@ -55,22 +61,26 @@ struct ItemOperationsDeletionTests {
     func delete_removes_all_provided_items() throws {
         let firstItem = try Item.create(
             context: context,
-            date: shiftedDate("2001-01-01T00:00:00Z"),
-            content: "A",
-            income: 0,
-            outgo: 10,
-            category: "Category",
-            priority: 0,
+            values: .init(
+                date: shiftedDate("2001-01-01T00:00:00Z"),
+                content: "A",
+                income: 0,
+                outgo: 10,
+                category: "Category",
+                priority: 0
+            ),
             repeatID: .init()
         )
         let secondItem = try Item.create(
             context: context,
-            date: shiftedDate("2001-02-01T00:00:00Z"),
-            content: "B",
-            income: 0,
-            outgo: 20,
-            category: "Category",
-            priority: 0,
+            values: .init(
+                date: shiftedDate("2001-02-01T00:00:00Z"),
+                content: "B",
+                income: 0,
+                outgo: 20,
+                category: "Category",
+                priority: 0
+            ),
             repeatID: .init()
         )
 
@@ -86,22 +96,26 @@ struct ItemOperationsDeletionTests {
     func deleteAll_removes_items_and_orphaned_derived_tags() throws {
         _ = try Item.create(
             context: context,
-            date: shiftedDate("2001-01-01T00:00:00Z"),
-            content: "A",
-            income: 0,
-            outgo: 10,
-            category: "Category",
-            priority: 0,
+            values: .init(
+                date: shiftedDate("2001-01-01T00:00:00Z"),
+                content: "A",
+                income: 0,
+                outgo: 10,
+                category: "Category",
+                priority: 0
+            ),
             repeatID: .init()
         )
         _ = try Item.create(
             context: context,
-            date: shiftedDate("2001-02-01T00:00:00Z"),
-            content: "B",
-            income: 0,
-            outgo: 20,
-            category: "Category",
-            priority: 0,
+            values: .init(
+                date: shiftedDate("2001-02-01T00:00:00Z"),
+                content: "B",
+                income: 0,
+                outgo: 20,
+                category: "Category",
+                priority: 0
+            ),
             repeatID: .init()
         )
 

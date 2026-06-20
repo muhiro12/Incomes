@@ -10,22 +10,26 @@ struct ItemDerivedTagTest {
     func modifyKeepsOnlyUpdatedDerivedTags() throws {
         let item = try Item.create(
             context: context,
-            date: shiftedDate("2024-01-01T00:00:00Z"),
-            content: "Old Content",
-            income: 100,
-            outgo: 20,
-            category: "Old Category",
-            priority: 0,
+            values: .init(
+                date: shiftedDate("2024-01-01T00:00:00Z"),
+                content: "Old Content",
+                income: 100,
+                outgo: 20,
+                category: "Old Category",
+                priority: 0
+            ),
             repeatID: UUID()
         )
 
         try item.modify(
-            date: shiftedDate("2025-02-01T00:00:00Z"),
-            content: "New Content",
-            income: 200,
-            outgo: 50,
-            category: "New Category",
-            priority: 1,
+            values: .init(
+                date: shiftedDate("2025-02-01T00:00:00Z"),
+                content: "New Content",
+                income: 200,
+                outgo: 50,
+                category: "New Category",
+                priority: 1
+            ),
             repeatID: item.repeatID
         )
 

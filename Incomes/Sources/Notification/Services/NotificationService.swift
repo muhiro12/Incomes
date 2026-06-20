@@ -12,8 +12,9 @@ import UserNotifications
 
 @Observable
 final class NotificationService: NSObject {
-    private enum NotificationCategoryIdentifier {
+    private enum NotificationConstant {
         static let upcomingPaymentActions = "upcoming-payment.actions"
+        static let upcomingPayments = 20
     }
 
     enum AuthorizationState {
@@ -199,18 +200,22 @@ private extension NotificationService {
 }
 
 extension NotificationService: UNUserNotificationCenterDelegate {
-    func userNotificationCenter(_: UNUserNotificationCenter,
-                                willPresent _: UNNotification) async -> UNNotificationPresentationOptions { // swiftlint:disable:this async_without_await line_length
-        Task {
+    func userNotificationCenter(
+        _: UNUserNotificationCenter,
+        willPresent _: UNNotification
+    ) async -> UNNotificationPresentationOptions {
+        await MainActor.run {
             hasNotification = true
             logger.info("notification.will_present")
         }
         return [.badge, .sound, .list, .banner]
     }
 
-    func userNotificationCenter(_: UNUserNotificationCenter,
-                                didReceive response: UNNotificationResponse) async { // swiftlint:disable:this async_without_await line_length
-        Task {
+    func userNotificationCenter(
+        _: UNUserNotificationCenter,
+        didReceive response: UNNotificationResponse
+    ) async {
+        await MainActor.run {
             shouldShowNotification = true
             logger.notice(
                 "notification.response_received",
@@ -223,8 +228,8 @@ extension NotificationService: UNUserNotificationCenterDelegate {
                     ))
                 )
             )
-            await deliverNotificationRoute(from: response)
         }
+        await deliverNotificationRoute(from: response)
     }
 
     func userNotificationCenter(_: UNUserNotificationCenter,
@@ -243,7 +248,7 @@ private extension NotificationService {
         MHNotificationOrchestrator.registerCategories(
             [
                 .init(
-                    identifier: NotificationCategoryIdentifier.upcomingPaymentActions,
+                    identifier: NotificationConstant.upcomingPaymentActions,
                     actions: [
                         .init(
                             identifier: NotificationRoutePayload.viewItemActionIdentifier,
@@ -271,7 +276,7 @@ private extension NotificationService {
             localized: "Due on \(presentation.dueDate.formatted(.dateTime.weekday().month().day()))"
         )
         content.sound = .default
-        content.categoryIdentifier = NotificationCategoryIdentifier.upcomingPaymentActions
+        content.categoryIdentifier = NotificationConstant.upcomingPaymentActions
         content.threadIdentifier = presentation.threadIdentifier
         content.targetContentIdentifier = presentation.targetContentIdentifier
         content.relevanceScore = presentation.relevanceScore
@@ -300,7 +305,7 @@ private extension NotificationService {
             context: modelContainer.mainContext,
             settings: settings,
             now: .now,
-            limit: 20 // swiftlint:disable:this no_magic_numbers
+            limit: NotificationConstant.upcomingPayments
         ) else {
             return []
         }
@@ -357,7 +362,8 @@ private extension NotificationService {
     }
 
     func deliveredNotificationIdentifiers() async -> [String] {
-        await UNUserNotificationCenter.current().deliveredNotifications() // swiftlint:disable:this line_length multiline_function_chains
+        let notifications = await UNUserNotificationCenter.current().deliveredNotifications()
+        return notifications
             .map(\.request.identifier)
             .filter(UpcomingPaymentNotificationPresentation.isManagedRequestIdentifier)
     }

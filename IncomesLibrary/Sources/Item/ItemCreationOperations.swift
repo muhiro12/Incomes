@@ -19,14 +19,10 @@ public enum ItemCreationOperations {
         repeatMonthSelections: Set<RepeatMonthSelection>
     ) throws -> MutationResult<Item> {
         try input.validate()
+        let values = ItemStoredValues(formInput: input)
         let item = try createItem(
             context: context,
-            date: input.date,
-            content: input.content,
-            income: input.income,
-            outgo: input.outgo,
-            category: input.storedCategory,
-            priority: input.priority,
+            values: values,
             repeatMonthSelections: repeatMonthSelections
         )
         let createdItems = try context.fetch(
@@ -52,14 +48,10 @@ public enum ItemCreationOperations {
         repeatCount: Int
     ) throws -> MutationResult<Item> {
         try input.validate()
+        let values = ItemStoredValues(formInput: input)
         let item = try createItem(
             context: context,
-            date: input.date,
-            content: input.content,
-            income: input.income,
-            outgo: input.outgo,
-            category: input.storedCategory,
-            priority: input.priority,
+            values: values,
             repeatCount: repeatCount
         )
         let createdItems = try context.fetch(
@@ -103,89 +95,19 @@ public enum ItemCreationOperations {
             repeatCount: repeatCount
         ).value
     }
-
-    /// Creates an item from raw values using a simple monthly repetition count.
-    @available(
-    *,
-    deprecated,
-    message: "Use create(context:input:repeatCount:) instead."
-    )
-    public static func create( // swiftlint:disable:this function_parameter_count
-        context: ModelContext,
-        date: Date,
-        content: String,
-        income: Decimal,
-        outgo: Decimal,
-        category: String,
-        priority: Int,
-        repeatCount: Int
-    ) throws -> Item {
-        try createWithOutcome(
-            context: context,
-            input: .init(
-                date: date,
-                content: content,
-                income: income,
-                outgo: outgo,
-                category: category,
-                priority: priority
-            ),
-            repeatCount: repeatCount
-        ).value
-    }
-
-    /// Creates an item from raw values and selected repeat months.
-    @available(
-    *,
-    deprecated,
-    message: "Use create(context:input:repeatMonthSelections:) instead."
-    )
-    public static func create( // swiftlint:disable:this function_parameter_count
-        context: ModelContext,
-        date: Date,
-        content: String,
-        income: Decimal,
-        outgo: Decimal,
-        category: String,
-        priority: Int,
-        repeatMonthSelections: Set<RepeatMonthSelection>
-    ) throws -> Item {
-        try createWithOutcome(
-            context: context,
-            input: .init(
-                date: date,
-                content: content,
-                income: income,
-                outgo: outgo,
-                category: category,
-                priority: priority
-            ),
-            repeatMonthSelections: repeatMonthSelections
-        ).value
-    }
 }
 
 private extension ItemCreationOperations {
-    static func createItem( // swiftlint:disable:this function_parameter_count
+    static func createItem(
         context: ModelContext,
-        date: Date,
-        content: String,
-        income: Decimal,
-        outgo: Decimal,
-        category: String,
-        priority: Int,
+        values: ItemStoredValues,
         repeatCount: Int
     ) throws -> Item {
         var items = [Item]()
         let repeatID = UUID()
         let item = try Item.create(
             context: context,
-            date: date,
-            content: content,
-            income: income,
-            outgo: outgo,
-            category: category,
-            priority: priority,
+            values: values,
             repeatID: repeatID
         )
         items.append(item)
@@ -193,18 +115,17 @@ private extension ItemCreationOperations {
             guard index > .zero else {
                 continue
             }
-            guard let repeatingDate = Calendar.current.date(byAdding: .month, value: index, to: date) else {
+            guard let repeatingDate = Calendar.current.date(
+                byAdding: .month,
+                value: index,
+                to: values.date
+            ) else {
                 assertionFailure()
                 continue
             }
             let repeatItem = try Item.create(
                 context: context,
-                date: repeatingDate,
-                content: content,
-                income: income,
-                outgo: outgo,
-                category: category,
-                priority: priority,
+                values: values.replacing(date: repeatingDate),
                 repeatID: repeatID
             )
             items.append(repeatItem)
@@ -214,81 +135,92 @@ private extension ItemCreationOperations {
         return item
     }
 
-    static func createItem( // swiftlint:disable:this function_body_length function_parameter_count
+    static func createItem(
         context: ModelContext,
-        date: Date,
-        content: String,
-        income: Decimal,
-        outgo: Decimal,
-        category: String,
-        priority: Int,
+        values: ItemStoredValues,
         repeatMonthSelections: Set<RepeatMonthSelection>
     ) throws -> Item {
         let calendar = Calendar.current
-        let baseSelection = RepeatMonthSelectionRules.baseSelection(
-            baseDate: date,
-            calendar: calendar
-        )
-        let baseYear = baseSelection.year
-        let baseMonth = baseSelection.month
         let selections = RepeatMonthSelectionRules.normalized(
             repeatMonthSelections,
-            baseDate: date,
+            baseDate: values.date,
             calendar: calendar
         )
-
-        var items = [Item]()
         let repeatID = UUID()
         let item = try Item.create(
             context: context,
-            date: date,
-            content: content,
-            income: income,
-            outgo: outgo,
-            category: category,
-            priority: priority,
+            values: values,
             repeatID: repeatID
         )
-        items.append(item)
+        let items = try [item] + repeatMonthItems(
+            context: context,
+            values: values,
+            repeatID: repeatID,
+            selections: selections,
+            calendar: calendar
+        )
 
-        let sortedSelections = selections.sorted { left, right in
+        items.forEach(context.insert)
+        try BalanceCalculator.calculate(in: context, for: items)
+        return item
+    }
+
+    static func repeatMonthItems(
+        context: ModelContext,
+        values: ItemStoredValues,
+        repeatID: UUID,
+        selections: Set<RepeatMonthSelection>,
+        calendar: Calendar
+    ) throws -> [Item] {
+        let baseSelection = RepeatMonthSelectionRules.baseSelection(
+            baseDate: values.date,
+            calendar: calendar
+        )
+        return try sortedSelections(selections).compactMap { selection in
+            guard selection != baseSelection else {
+                return nil
+            }
+            guard let repeatingDate = repeatDate(
+                from: values.date,
+                to: selection,
+                calendar: calendar
+            ) else {
+                assertionFailure()
+                return nil
+            }
+            return try Item.create(
+                context: context,
+                values: values.replacing(date: repeatingDate),
+                repeatID: repeatID
+            )
+        }
+    }
+
+    static func sortedSelections(
+        _ selections: Set<RepeatMonthSelection>
+    ) -> [RepeatMonthSelection] {
+        selections.sorted { left, right in
             if left.year != right.year {
                 return left.year < right.year
             }
             return left.month < right.month
         }
-        for selection in sortedSelections {
-            guard selection.year != baseYear || selection.month != baseMonth else {
-                continue
-            }
-            let monthOffset = RepeatMonthSelectionRules.monthOffset(
-                from: date,
-                to: selection,
-                calendar: calendar
-            )
-            guard let repeatingDate = calendar.date(
-                byAdding: .month,
-                value: monthOffset,
-                to: date
-            ) else {
-                assertionFailure()
-                continue
-            }
-            let repeatItem = try Item.create(
-                context: context,
-                date: repeatingDate,
-                content: content,
-                income: income,
-                outgo: outgo,
-                category: category,
-                priority: priority,
-                repeatID: repeatID
-            )
-            items.append(repeatItem)
-        }
+    }
 
-        items.forEach(context.insert)
-        try BalanceCalculator.calculate(in: context, for: items)
-        return item
+    static func repeatDate(
+        from baseDate: Date,
+        to selection: RepeatMonthSelection,
+        calendar: Calendar
+    ) -> Date? {
+        let monthOffset = RepeatMonthSelectionRules.monthOffset(
+            from: baseDate,
+            to: selection,
+            calendar: calendar
+        )
+        return calendar.date(
+            byAdding: .month,
+            value: monthOffset,
+            to: baseDate
+        )
     }
 }

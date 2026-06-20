@@ -51,12 +51,14 @@ struct ItemOperationsCanonicalTests {
     func update_withThisItemScope_updatesOnlyTheTargetItem() throws {
         let item = try createItem(
             context: context,
-            date: shiftedDate("2000-01-01T12:00:00Z"),
-            content: "before",
-            income: 100,
-            outgo: 0,
-            category: "category",
-            priority: 0,
+            input: .init(
+                date: shiftedDate("2000-01-01T12:00:00Z"),
+                content: "before",
+                income: 100,
+                outgo: 0,
+                category: "category",
+                priority: 0
+            ),
             repeatCount: 3
         )
         let originalRepeatID = item.repeatID
@@ -87,12 +89,14 @@ struct ItemOperationsCanonicalTests {
     func update_withFutureItemsScope_updatesOnlyFutureItems() throws {
         _ = try createItem(
             context: context,
-            date: shiftedDate("2000-01-01T12:00:00Z"),
-            content: "before",
-            income: 100,
-            outgo: 0,
-            category: "category",
-            priority: 0,
+            input: .init(
+                date: shiftedDate("2000-01-01T12:00:00Z"),
+                content: "before",
+                income: 100,
+                outgo: 0,
+                category: "category",
+                priority: 0
+            ),
             repeatCount: 3
         )
         let items = try context.fetch(.items(.all, order: .forward))
@@ -123,12 +127,14 @@ struct ItemOperationsCanonicalTests {
     func update_withAllItemsScope_updatesEntireSeries() throws {
         let item = try createItem(
             context: context,
-            date: shiftedDate("2000-01-01T12:00:00Z"),
-            content: "before",
-            income: 100,
-            outgo: 0,
-            category: "category",
-            priority: 0,
+            input: .init(
+                date: shiftedDate("2000-01-01T12:00:00Z"),
+                content: "before",
+                income: 100,
+                outgo: 0,
+                category: "category",
+                priority: 0
+            ),
             repeatCount: 3
         )
         let input: ItemFormInput = .init(

@@ -282,12 +282,14 @@ private extension DatabaseMigratorTests {
         let legacyContext = legacyContainer.mainContext
         _ = try Item.create(
             context: legacyContext,
-            date: .now,
-            content: "Salary",
-            income: 100,
-            outgo: .zero,
-            category: "Work",
-            priority: .zero,
+            values: .init(
+                date: .now,
+                content: "Salary",
+                income: 100,
+                outgo: .zero,
+                category: "Work",
+                priority: .zero
+            ),
             repeatID: UUID()
         )
         try legacyContext.save()

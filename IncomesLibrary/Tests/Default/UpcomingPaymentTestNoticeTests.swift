@@ -64,12 +64,14 @@ struct UpcomingPaymentTestNoticeTests {
     func makeNextItem() throws -> Item {
         try createItem(
             context: context,
-            date: shiftedDate("2024-01-12T00:00:00Z"),
-            content: "Insurance",
-            income: .zero,
-            outgo: 800,
-            category: "Bills",
-            priority: 0,
+            input: .init(
+                date: shiftedDate("2024-01-12T00:00:00Z"),
+                content: "Insurance",
+                income: .zero,
+                outgo: 800,
+                category: "Bills",
+                priority: 0
+            ),
             repeatCount: 1
         )
     }

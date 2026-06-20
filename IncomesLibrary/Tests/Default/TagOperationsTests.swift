@@ -100,45 +100,12 @@ struct TagOperationsTests {
 
     @Test
     func mergeDuplicates_merges_given_tags() throws {
-        let item1 = try Item.create(
-            context: context,
-            date: .now,
-            content: "contentA",
-            income: .zero,
-            outgo: .zero,
-            category: "",
-            priority: 0,
-            repeatID: .init()
-        )
-        let item2 = try Item.create(
-            context: context,
-            date: .now,
-            content: "contentB",
-            income: .zero,
-            outgo: .zero,
-            category: "",
-            priority: 0,
-            repeatID: .init()
-        )
-        let item3 = try Item.create(
-            context: context,
-            date: .now,
-            content: "contentC",
-            income: .zero,
-            outgo: .zero,
-            category: "",
-            priority: 0,
-            repeatID: .init()
-        )
-        let tag1 = try #require(item1.tags?.first { tag in
-            tag.type == .content
-        })
-        let tag2 = try #require(item2.tags?.first { tag in
-            tag.type == .content
-        })
-        let tag3 = try #require(item3.tags?.first { tag in
-            tag.type == .content
-        })
+        let item1 = try createContentItem("contentA")
+        let item2 = try createContentItem("contentB")
+        let item3 = try createContentItem("contentC")
+        let tag1 = try contentTag(for: item1)
+        let tag2 = try contentTag(for: item2)
+        let tag3 = try contentTag(for: item3)
         TagMutationOperations.mergeDuplicates(
             tags: [tag1, tag2, tag3]
         )
@@ -148,6 +115,27 @@ struct TagOperationsTests {
         #expect(item1.tags?.contains(tag1) == true)
         #expect(item2.tags?.contains(tag1) == true)
         #expect(item3.tags?.contains(tag1) == true)
+    }
+
+    func createContentItem(_ content: String) throws -> Item {
+        try Item.create(
+            context: context,
+            values: .init(
+                date: .now,
+                content: content,
+                income: .zero,
+                outgo: .zero,
+                category: "",
+                priority: 0
+            ),
+            repeatID: .init()
+        )
+    }
+
+    func contentTag(for item: Item) throws -> IncomesLibrary.Tag {
+        try #require(item.tags?.first { tag in
+            tag.type == .content
+        })
     }
 
     @Test
@@ -165,12 +153,14 @@ struct TagOperationsTests {
     func mergeDuplicates_does_not_leave_parent_duplicated_on_items() throws {
         let item = Item.createIgnoringDuplicates(
             context: context,
-            date: .now,
-            content: "content",
-            income: .zero,
-            outgo: .zero,
-            category: "",
-            priority: 0,
+            values: .init(
+                date: .now,
+                content: "content",
+                income: .zero,
+                outgo: .zero,
+                category: "",
+                priority: 0
+            ),
             repeatID: .init()
         )
         let parent = try #require(

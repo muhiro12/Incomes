@@ -21,12 +21,14 @@ struct UpcomingPaymentOperationsTests {
     func build_returns_empty_when_disabled() throws {
         _ = try createItem(
             context: context,
-            date: shiftedDate("2024-01-10T00:00:00Z"),
-            content: "Rent",
-            income: .zero,
-            outgo: 1_000,
-            category: "Housing",
-            priority: 0,
+            input: .init(
+                date: shiftedDate("2024-01-10T00:00:00Z"),
+                content: "Rent",
+                income: .zero,
+                outgo: 1_000,
+                category: "Housing",
+                priority: 0
+            ),
             repeatCount: 1
         )
 
@@ -46,12 +48,14 @@ struct UpcomingPaymentOperationsTests {
     func build_returns_planned_payment_with_expected_date() throws {
         let item = try createItem(
             context: context,
-            date: shiftedDate("2024-01-10T00:00:00Z"),
-            content: "Insurance",
-            income: .zero,
-            outgo: 800,
-            category: "Bills",
-            priority: 0,
+            input: .init(
+                date: shiftedDate("2024-01-10T00:00:00Z"),
+                content: "Insurance",
+                income: .zero,
+                outgo: 800,
+                category: "Bills",
+                priority: 0
+            ),
             repeatCount: 1
         )
 
@@ -99,22 +103,26 @@ struct UpcomingPaymentOperationsTests {
     func build_excludes_items_when_notification_date_is_not_future() throws {
         _ = try createItem(
             context: context,
-            date: shiftedDate("2024-01-11T00:00:00Z"),
-            content: "Past Notice",
-            income: .zero,
-            outgo: 600,
-            category: "Bills",
-            priority: 0,
+            input: .init(
+                date: shiftedDate("2024-01-11T00:00:00Z"),
+                content: "Past Notice",
+                income: .zero,
+                outgo: 600,
+                category: "Bills",
+                priority: 0
+            ),
             repeatCount: 1
         )
         _ = try createItem(
             context: context,
-            date: shiftedDate("2024-01-20T00:00:00Z"),
-            content: "Future Notice",
-            income: .zero,
-            outgo: 600,
-            category: "Bills",
-            priority: 0,
+            input: .init(
+                date: shiftedDate("2024-01-20T00:00:00Z"),
+                content: "Future Notice",
+                income: .zero,
+                outgo: 600,
+                category: "Bills",
+                priority: 0
+            ),
             repeatCount: 1
         )
 

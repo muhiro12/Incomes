@@ -13,7 +13,7 @@ public enum ItemPredicate {
     /// Matches every item.
     case all
     /// Matches no items.
-    case none // swiftlint:disable:this discouraged_none_name
+    case matchingNone
     // MARK: ID
     /// Matches an item with the specified persistent identifier.
     case idIs(PersistentIdentifier)
@@ -63,7 +63,7 @@ public enum ItemPredicate {
         switch self {
         case .all:
             return .true
-        case .none:
+        case .matchingNone:
             return .false
 
         // MARK: - ID

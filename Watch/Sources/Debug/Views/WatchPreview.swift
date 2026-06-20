@@ -7,7 +7,7 @@ struct WatchPreview<Content: View>: View {
     private let content: () -> Content
     private let previewModelContainer: ModelContainer
 
-    init(@ViewBuilder content: @escaping () -> Content) { // swiftlint:disable:this type_contents_order
+    init(@ViewBuilder content: @escaping () -> Content) {
         self.content = content
         do {
             previewModelContainer = try .init(
@@ -18,8 +18,10 @@ struct WatchPreview<Content: View>: View {
             preconditionFailure("Failed to initialize preview model container: \(error)")
         }
     }
+}
 
-    var body: some View {
+extension WatchPreview {
+    @ViewBuilder var body: some View {
         Group {
             if isReady {
                 content()

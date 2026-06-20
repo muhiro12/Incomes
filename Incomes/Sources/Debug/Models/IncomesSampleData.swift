@@ -5,11 +5,15 @@
 //  Created by Hiromu Nakano on 2024/06/17.
 //
 
+// swiftlint:disable no_magic_numbers
+
 import SwiftData
 import SwiftUI
 
 struct IncomesSampleData: PreviewModifier {
     typealias Context = IncomesPlatformEnvironment
+
+    private static let dataPreparationPollingInterval = Duration.seconds(0.2)
 
     static func makeSharedContext() throws -> Context {
         try makePreviewContext { previewContext in
@@ -27,6 +31,8 @@ struct IncomesSampleData: PreviewModifier {
             .incomesPreviewPlatformEnvironment(context)
     }
 }
+
+// swiftlint:enable no_magic_numbers
 
 extension IncomesSampleData {
     static func makePreviewContext(
@@ -52,7 +58,7 @@ extension IncomesSampleData {
         var items = [Item]()
         var tags = [Tag]()
         while items.isEmpty || tags.isEmpty {
-            try? await Task.sleep(for: .seconds(0.2)) // swiftlint:disable:this no_magic_numbers
+            try? await Task.sleep(for: dataPreparationPollingInterval)
             items = (try? ItemQueryOperations.items(context: context)) ?? []
             tags = (try? TagQueryOperations.getAll(context: context)) ?? []
         }

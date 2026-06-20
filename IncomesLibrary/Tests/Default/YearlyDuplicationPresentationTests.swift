@@ -26,12 +26,14 @@ struct YearlyDuplicationPresentationTests {
         let groupID = UUID()
         let item = Item.createIgnoringDuplicates(
             context: context,
-            date: date("2025-01-05T12:00:00Z"),
-            content: "Utility",
-            income: .zero,
-            outgo: 120,
-            category: "Bills",
-            priority: 0,
+            values: .init(
+                date: date("2025-01-05T12:00:00Z"),
+                content: "Utility",
+                income: .zero,
+                outgo: 120,
+                category: "Bills",
+                priority: 0
+            ),
             repeatID: .init()
         )
         let plan = YearlyItemDuplicationPlan(

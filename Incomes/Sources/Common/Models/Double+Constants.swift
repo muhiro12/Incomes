@@ -1,5 +1,4 @@
-// // swiftlint:disable:this file_name
-//  DoubleConstant.swift
+//  Double+Constants.swift
 //  Incomes
 //
 //  Created by Hiromu Nakano on 2023/10/04.

@@ -1,4 +1,4 @@
-import Foundation // swiftlint:disable:this file_name
+import Foundation
 
 extension StringProtocol {
     /// Returns true when both strings match after full-width and Hiragana normalization.

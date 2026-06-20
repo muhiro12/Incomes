@@ -2,21 +2,16 @@ import MHPlatform
 import SwiftData
 
 enum ItemCreateCoordinator {
-    // swiftlint:disable function_parameter_count
     @MainActor
     static func create(
         context: ModelContext,
         input: ItemFormInput,
         repeatCount: Int,
-        notificationService: NotificationService,
-        logger: MHLogger,
-        reviewLogger: MHLogger
+        dependencies: ItemMutationWorkflowDependencies
     ) async throws -> Item {
         try await run(
             context: context,
-            notificationService: notificationService,
-            logger: logger,
-            reviewLogger: reviewLogger,
+            dependencies: dependencies,
             metadata: IncomesLogging.metadata(
                 ("mode", "repeat_count"),
                 ("repeat_count", IncomesLogging.count(repeatCount)),
@@ -41,15 +36,11 @@ enum ItemCreateCoordinator {
         context: ModelContext,
         input: ItemFormInput,
         repeatMonthSelections: Set<RepeatMonthSelection>,
-        notificationService: NotificationService,
-        logger: MHLogger,
-        reviewLogger: MHLogger
+        dependencies: ItemMutationWorkflowDependencies
     ) async throws -> Item {
         try await run(
             context: context,
-            notificationService: notificationService,
-            logger: logger,
-            reviewLogger: reviewLogger,
+            dependencies: dependencies,
             metadata: IncomesLogging.metadata(
                 ("mode", "repeat_months"),
                 ("repeat_month_count", IncomesLogging.count(repeatMonthSelections.count)),
@@ -72,66 +63,59 @@ enum ItemCreateCoordinator {
     @MainActor
     private static func run(
         context: ModelContext,
-        notificationService: NotificationService,
-        logger: MHLogger,
-        reviewLogger: MHLogger,
+        dependencies: ItemMutationWorkflowDependencies,
         metadata: [String: String],
         operation: @escaping @MainActor () throws -> MutationResult<PersistentIdentifier>
     ) async throws -> Item {
-        logger.notice(
+        dependencies.logger.notice(
             "item_create.requested",
             metadata: metadata
         )
 
         do {
             let itemID = try await runCreateWorkflow(
-                notificationService: notificationService,
-                reviewLogger: reviewLogger,
-                logger: logger,
+                dependencies: dependencies,
                 operation: operation
             )
             let item = try createdItem(
                 context: context,
                 itemID: itemID,
                 metadata: metadata,
-                logger: logger
+                logger: dependencies.logger
             )
             logCompletedCreation(
                 metadata: metadata,
-                logger: logger
+                logger: dependencies.logger
             )
             return item
         } catch {
-            logger.error(
+            dependencies.logger.error(
                 "item_create.failed",
                 metadata: failureMetadata(metadata, error: error)
             )
             throw error
         }
     }
-    // swiftlint:enable function_parameter_count
 }
 
 private extension ItemCreateCoordinator {
     @MainActor
     static func runCreateWorkflow(
-        notificationService: NotificationService,
-        reviewLogger: MHLogger,
-        logger: MHLogger,
+        dependencies: ItemMutationWorkflowDependencies,
         operation: @escaping @MainActor () throws -> MutationResult<PersistentIdentifier>
     ) async throws -> PersistentIdentifier {
         try await MHMutationWorkflow.runThrowing(
             name: ItemMutationWorkflowName.create,
             operation: operation,
             adapter: ItemMutationAdapterFactory.makeForSave(
-                notificationService: notificationService,
-                reviewLogger: reviewLogger
+                notificationService: dependencies.notificationService,
+                reviewLogger: dependencies.reviewLogger
             ),
             projection: .valueAndFollowUp(
                 value: \.value,
                 followUp: \.outcome.followUpHints
             ),
-            onEvent: MHMutationWorkflowLogger(logger: logger).onEvent()
+            onEvent: MHMutationWorkflowLogger(logger: dependencies.logger).onEvent()
         )
     }
 

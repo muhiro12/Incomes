@@ -4,14 +4,14 @@ import SwiftData
 
 @available(iOS 26.0, *)
 struct GenerateMonthlySummaryIntent: AppIntent {
-    @Parameter(title: "Date", kind: .date)
-    private var date: Date // swiftlint:disable:this type_contents_order
-
-    @Dependency private var modelContainer: ModelContainer // swiftlint:disable:this type_contents_order
-    @Dependency private var logging: MHLoggingBootstrap // swiftlint:disable:this type_contents_order
-
     static let title: LocalizedStringResource = .init("Generate Monthly Summary", table: "AppIntents")
     static let isDiscoverable = false
+
+    @Parameter(title: "Date", kind: .date)
+    private var date: Date
+
+    @Dependency private var modelContainer: ModelContainer
+    @Dependency private var logging: MHLoggingBootstrap
 
     @MainActor var intentLogger: MHLogger {
         IncomesIntentLoggingSupport.appIntentLogger(

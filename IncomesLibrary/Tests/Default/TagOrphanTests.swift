@@ -19,12 +19,14 @@ struct TagOrphanTests {
         _ = Tag.createIgnoringDuplicates(context: context, name: "Unused Debug", type: .debug)
         let item = try Item.create(
             context: context,
-            date: .now,
-            content: "Used Content",
-            income: .zero,
-            outgo: .zero,
-            category: "Used Category",
-            priority: 0,
+            values: .init(
+                date: .now,
+                content: "Used Content",
+                income: .zero,
+                outgo: .zero,
+                category: "Used Category",
+                priority: 0
+            ),
             repeatID: .init()
         )
         let attachedDebugTag = Tag.createIgnoringDuplicates(
@@ -61,12 +63,14 @@ struct TagOrphanTests {
     func isOrphan_returns_false_for_attached_tag() throws {
         let item = try Item.create(
             context: context,
-            date: .now,
-            content: "Used Content",
-            income: .zero,
-            outgo: .zero,
-            category: "Used Category",
-            priority: 0,
+            values: .init(
+                date: .now,
+                content: "Used Content",
+                income: .zero,
+                outgo: .zero,
+                category: "Used Category",
+                priority: 0
+            ),
             repeatID: .init()
         )
         let contentTag = try #require(item.tags?.first { tag in
@@ -91,12 +95,14 @@ struct TagOrphanTests {
     func isOrphan_returns_true_after_relation_is_removed_and_saved() throws {
         let item = try Item.create(
             context: context,
-            date: .now,
-            content: "Used Content",
-            income: .zero,
-            outgo: .zero,
-            category: "Used Category",
-            priority: 0,
+            values: .init(
+                date: .now,
+                content: "Used Content",
+                income: .zero,
+                outgo: .zero,
+                category: "Used Category",
+                priority: 0
+            ),
             repeatID: .init()
         )
         let debugTag = Tag.createIgnoringDuplicates(
@@ -121,12 +127,14 @@ struct TagOrphanTests {
     func deleteAllOrphanTags_removes_only_unused_tags() throws {
         let item = try Item.create(
             context: context,
-            date: .now,
-            content: "Used Content",
-            income: .zero,
-            outgo: .zero,
-            category: "Used Category",
-            priority: 0,
+            values: .init(
+                date: .now,
+                content: "Used Content",
+                income: .zero,
+                outgo: .zero,
+                category: "Used Category",
+                priority: 0
+            ),
             repeatID: .init()
         )
         let attachedDebugTag = Tag.createIgnoringDuplicates(

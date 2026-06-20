@@ -37,12 +37,14 @@ struct MainNavigationOperationsFallbackTests {
     func execute_item_route_falls_back_to_home_when_item_is_missing() throws {
         let item = try createItem(
             context: context,
-            date: isoDate("2026-03-15T00:00:00Z"),
-            content: "Salary",
-            income: 2_000,
-            outgo: .zero,
-            category: "Income",
-            priority: 0
+            input: .init(
+                date: isoDate("2026-03-15T00:00:00Z"),
+                content: "Salary",
+                income: 2_000,
+                outgo: .zero,
+                category: "Income",
+                priority: 0
+            )
         )
         let itemID = try PersistentIdentifierCoder.encode(item.id)
         context.delete(item)

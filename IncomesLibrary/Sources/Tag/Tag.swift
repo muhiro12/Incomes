@@ -17,6 +17,7 @@ public final class Tag {
     public private(set) var typeID = ""
 
     /// Items that currently reference this tag.
+    /// SwiftData represents to-many relationships as optionals before faulting.
     public private(set) var items: [Item]? // swiftlint:disable:this discouraged_optional_collection
 
     private init() {
@@ -40,14 +41,14 @@ public final class Tag {
     }
 }
 
-extension Tag { // swiftlint:disable:this extension_access_modifier
+public extension Tag {
     /// The strongly-typed tag kind, derived from `typeID`.
-    public var type: TagType? {
+    var type: TagType? {
         TagType(rawValue: typeID)
     }
 
     /// A localized or user-friendly name for the tag.
-    public var displayName: String {
+    var displayName: String {
         TagTextSupport.displayName(
             name: name,
             type: type
@@ -55,27 +56,27 @@ extension Tag { // swiftlint:disable:this extension_access_modifier
     }
 
     /// Sum of `income` across related items.
-    public var income: Decimal {
+    var income: Decimal {
         (items ?? []).reduce(.zero) { partial, item in
             partial + item.income
         }
     }
 
     /// Sum of `outgo` across related items.
-    public var outgo: Decimal {
+    var outgo: Decimal {
         (items ?? []).reduce(.zero) { partial, item in
             partial + item.outgo
         }
     }
 
     /// Convenience: `income - outgo`.
-    public var netIncome: Decimal {
+    var netIncome: Decimal {
         income - outgo
     }
 
     /// True when any related item has a negative running balance (deficit).
     /// Used for quick visual warnings in summary lists.
-    public var hasDeficit: Bool {
+    var hasDeficit: Bool {
         (items ?? []).contains { item in
             item.balance < .zero
         }
@@ -98,9 +99,9 @@ extension Tag: Hashable {
 
 // MARK: - Test
 
-extension Tag { // swiftlint:disable:this extension_access_modifier
+public extension Tag {
     /// Testing helper: creates a tag without checking duplicates.
-    public static func createIgnoringDuplicates(context: ModelContext, name: String, type: TagType) -> Tag {
+    static func createIgnoringDuplicates(context: ModelContext, name: String, type: TagType) -> Tag {
         let tag = Tag()
         context.insert(tag)
         tag.name = name

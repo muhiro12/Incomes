@@ -14,22 +14,26 @@ struct TagItemDeletionResolverTests {
     func resolveItemsForDeletion_returns_items_from_selected_tags() throws {
         let firstItem = try Item.create(
             context: context,
-            date: shiftedDate("2001-01-01T00:00:00Z"),
-            content: "First",
-            income: 0,
-            outgo: 1,
-            category: "Category",
-            priority: 0,
+            values: .init(
+                date: shiftedDate("2001-01-01T00:00:00Z"),
+                content: "First",
+                income: 0,
+                outgo: 1,
+                category: "Category",
+                priority: 0
+            ),
             repeatID: .init()
         )
         let secondItem = try Item.create(
             context: context,
-            date: shiftedDate("2001-02-01T00:00:00Z"),
-            content: "Second",
-            income: 0,
-            outgo: 2,
-            category: "Category",
-            priority: 0,
+            values: .init(
+                date: shiftedDate("2001-02-01T00:00:00Z"),
+                content: "Second",
+                income: 0,
+                outgo: 2,
+                category: "Category",
+                priority: 0
+            ),
             repeatID: .init()
         )
 
@@ -72,32 +76,38 @@ struct TagItemDeletionResolverTests {
     func resolveItemsForDeletion_returns_all_items_in_selected_year() throws {
         let januaryItem = try Item.create(
             context: context,
-            date: shiftedDate("2001-01-01T00:00:00Z"),
-            content: "January",
-            income: 0,
-            outgo: 1,
-            category: "Category",
-            priority: 0,
+            values: .init(
+                date: shiftedDate("2001-01-01T00:00:00Z"),
+                content: "January",
+                income: 0,
+                outgo: 1,
+                category: "Category",
+                priority: 0
+            ),
             repeatID: .init()
         )
         let februaryItem = try Item.create(
             context: context,
-            date: shiftedDate("2001-02-01T00:00:00Z"),
-            content: "February",
-            income: 0,
-            outgo: 2,
-            category: "Category",
-            priority: 0,
+            values: .init(
+                date: shiftedDate("2001-02-01T00:00:00Z"),
+                content: "February",
+                income: 0,
+                outgo: 2,
+                category: "Category",
+                priority: 0
+            ),
             repeatID: .init()
         )
         let marchItem = try Item.create(
             context: context,
-            date: shiftedDate("2002-03-01T00:00:00Z"),
-            content: "March",
-            income: 0,
-            outgo: 3,
-            category: "Category",
-            priority: 0,
+            values: .init(
+                date: shiftedDate("2002-03-01T00:00:00Z"),
+                content: "March",
+                income: 0,
+                outgo: 3,
+                category: "Category",
+                priority: 0
+            ),
             repeatID: .init()
         )
 
@@ -118,35 +128,20 @@ struct TagItemDeletionResolverTests {
 
     @Test
     func delete_items_resolved_from_year_tag_removes_only_selected_year() throws {
-        _ = try Item.create(
-            context: context,
-            date: shiftedDate("2001-01-01T00:00:00Z"),
+        _ = try createYearTaggedItem(
+            date: "2001-01-01T00:00:00Z",
             content: "January",
-            income: 0,
-            outgo: 1,
-            category: "Category",
-            priority: 0,
-            repeatID: .init()
+            outgo: 1
         )
-        _ = try Item.create(
-            context: context,
-            date: shiftedDate("2001-02-01T00:00:00Z"),
+        _ = try createYearTaggedItem(
+            date: "2001-02-01T00:00:00Z",
             content: "February",
-            income: 0,
-            outgo: 2,
-            category: "Category",
-            priority: 0,
-            repeatID: .init()
+            outgo: 2
         )
-        let remainingItem = try Item.create(
-            context: context,
-            date: shiftedDate("2002-03-01T00:00:00Z"),
+        let remainingItem = try createYearTaggedItem(
+            date: "2002-03-01T00:00:00Z",
             content: "March",
-            income: 0,
-            outgo: 3,
-            category: "Category",
-            priority: 0,
-            repeatID: .init()
+            outgo: 3
         )
 
         let yearTags = try context.fetch(
@@ -162,6 +157,29 @@ struct TagItemDeletionResolverTests {
             items: itemsToDelete
         )
 
+        try assertOnlyRemainingItem(remainingItem)
+    }
+
+    func createYearTaggedItem(
+        date: String,
+        content: String,
+        outgo: Decimal
+    ) throws -> Item {
+        try Item.create(
+            context: context,
+            values: .init(
+                date: shiftedDate(date),
+                content: content,
+                income: 0,
+                outgo: outgo,
+                category: "Category",
+                priority: 0
+            ),
+            repeatID: .init()
+        )
+    }
+
+    func assertOnlyRemainingItem(_ remainingItem: Item) throws {
         let remainingIDs = Set(fetchItems(context).map(\.id))
         #expect(remainingIDs == [remainingItem.id])
         #expect(try context.fetchCount(.tags(.nameIs("2001", type: .year))) == 0)

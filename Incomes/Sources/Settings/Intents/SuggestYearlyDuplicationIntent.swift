@@ -2,18 +2,20 @@ import AppIntents
 import SwiftData
 
 struct SuggestYearlyDuplicationIntent: AppIntent {
-    @Parameter(title: "Minimum Group Count", default: 3, inclusiveRange: (1, 60)) // swiftlint:disable:this line_length no_magic_numbers
-    private var minimumGroupCount: Int // swiftlint:disable:this type_contents_order
-    @Parameter(title: "Include Single Items", default: false)
-    private var includeSingleItems: Bool // swiftlint:disable:this type_contents_order
-    @Parameter(title: "Minimum Repeat Item Count", default: 3, inclusiveRange: (1, 60)) // swiftlint:disable:this line_length no_magic_numbers
-    private var minimumRepeatItemCount: Int // swiftlint:disable:this type_contents_order
-    @Parameter(title: "Skip Existing Items", default: true)
-    private var skipExistingItems: Bool // swiftlint:disable:this type_contents_order
-
-    @Dependency private var modelContainer: ModelContainer // swiftlint:disable:this type_contents_order
-
     static let title: LocalizedStringResource = .init("Suggest Yearly Duplication", table: "AppIntents")
+
+    // swiftlint:disable no_magic_numbers
+    @Parameter(title: "Minimum Group Count", default: 3, inclusiveRange: (1, 60))
+    private var minimumGroupCount: Int
+    @Parameter(title: "Include Single Items", default: false)
+    private var includeSingleItems: Bool
+    @Parameter(title: "Minimum Repeat Item Count", default: 3, inclusiveRange: (1, 60))
+    private var minimumRepeatItemCount: Int
+    // swiftlint:enable no_magic_numbers
+    @Parameter(title: "Skip Existing Items", default: true)
+    private var skipExistingItems: Bool
+
+    @Dependency private var modelContainer: ModelContainer
 
     @MainActor
     func perform() throws -> some ReturnsValue<String?> {

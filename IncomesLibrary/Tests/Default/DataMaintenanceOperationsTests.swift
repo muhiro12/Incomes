@@ -15,7 +15,7 @@ struct DataMaintenanceOperationsTests {
     func deleteAllData_removesItemsAndTags() throws {
         _ = try ItemCreationOperations.create(
             context: context,
-            input: makeItemFormInput(
+            input: .init(
                 date: shiftedDate("2001-01-01T00:00:00Z"),
                 content: "content",
                 income: 100,
@@ -36,7 +36,7 @@ struct DataMaintenanceOperationsTests {
     func resetAllData_removesItemsAndTags() async throws {
         _ = try ItemCreationOperations.create(
             context: context,
-            input: makeItemFormInput(
+            input: .init(
                 date: shiftedDate("2001-01-01T00:00:00Z"),
                 content: "content",
                 income: 100,
@@ -62,7 +62,7 @@ struct DataMaintenanceOperationsTests {
         )
         _ = try ItemCreationOperations.create(
             context: context,
-            input: makeItemFormInput(
+            input: .init(
                 date: shiftedDate("2001-02-01T00:00:00Z"),
                 content: "custom",
                 income: 100,
@@ -79,25 +79,5 @@ struct DataMaintenanceOperationsTests {
         #expect(items.count == 1)
         #expect(items.first?.content == "custom")
         #expect(try SampleDataOperations.hasDebugData(context: context) == false)
-    }
-}
-
-private extension DataMaintenanceOperationsTests {
-    func makeItemFormInput( // swiftlint:disable:this function_parameter_count
-        date: Date,
-        content: String,
-        income: Decimal,
-        outgo: Decimal,
-        category: String,
-        priority: Int
-    ) -> ItemFormInput {
-        .init(
-            date: date,
-            content: content,
-            income: income,
-            outgo: outgo,
-            category: category,
-            priority: priority
-        )
     }
 }
