@@ -31,9 +31,9 @@ and widgets.
 | Business operations | `IncomesLibrary` | `Item*Operations`, `Tag*Operations`, `ItemSummaryOperations`, `YearlyItemDuplication*Operations`, `WidgetEntryOperations`, `WatchSyncOperations`, `UpcomingPaymentOperations`, `SettingsStatusOperations`, `DataMaintenanceOperations` |
 | Library collaborators and contracts | `IncomesLibrary` | `Item`, `Tag`, predicates, calculators, builders, planners, loaders, parsers, codecs, route contracts, wire payloads, snapshot models |
 | Apple framework adapters | `Incomes` | `ItemInferenceService`, `NotificationService`, App Intent types, deep-link routing, StoreKit, ads |
-| App-side platform support | `Incomes/Sources/Common/Platform` | `IncomesPlatformEnvironmentFactory`, `MHAppRuntimeBootstrap` assembly, `MHAppRoutePipeline<IncomesRoute>` assembly, `IncomesRouteBridge`, `MHReviewFlow` policy helpers, Foundation Models availability helpers, WidgetKit reload helpers, preference access helpers, App Group route store, pasteboard helpers, WatchConnectivity phone bridge |
+| App-side platform support | `Incomes/Sources/Platform` | `IncomesPlatformEnvironmentFactory`, `MHAppRuntimeBootstrap` assembly, `MHAppRoutePipeline<IncomesRoute>` assembly, `IncomesRouteBridge`, `MHReviewFlow` policy helpers, Foundation Models availability helpers, WidgetKit reload helpers, preference access helpers, App Group route store, pasteboard helpers, WatchConnectivity phone bridge |
 | Watch and widget surfaces | `Watch`, `Widgets` | WatchConnectivity transport, widget timeline providers, target-local screen state, entry presentation |
-| Presentation orchestration | `Incomes` | SwiftUI views, navigation state, form state, app-side services in `Item/Services`, and coordinators in `Settings/Coordinators` |
+| Presentation orchestration | `Incomes` | SwiftUI views, navigation state, form state, app workflows in `App/Workflows`, item mutation coordinators in `Features/Item/Mutation`, and settings coordinators in `Features/Settings` |
 
 ## MHPlatform Adoption
 
@@ -104,7 +104,7 @@ App-side mutation call sites should prefer
 6. Treat hidden intents as acceptable when the capability is useful but the
    shortcut should not be broadly discoverable.
 7. If glue code is app-only but reused by multiple app entry points, factor it
-   into `Incomes/Sources/Common/Platform` instead of moving it into
+   into `Incomes/Sources/Platform` instead of moving it into
    `IncomesLibrary`.
 
 ## Test Posture
@@ -125,18 +125,18 @@ App-side mutation call sites should prefer
 - `MonthlySummaryGenerator` depends on Foundation Models, so it stays in
   `Incomes` while prompt construction, fallback summaries, validation, and
   deterministic context loading stay behind `MonthlySummaryOperations`.
-- `FoundationModelAvailabilitySupport` stays under `Common/Platform` because it
+- `FoundationModelAvailabilitySupport` stays under `Platform` because it
   is reusable app-side glue for Apple Foundation Models availability checks,
   not shared product behavior.
-- `IncomesWidgetReloader` stays under `Common/Platform` because it maps shared
+- `IncomesWidgetReloader` stays under `Platform` because it maps shared
   mutation follow-up hints to WidgetKit timeline reload side effects.
-- `IncomesCurrencyPreference` stays under `Common/Platform` because App Intent
+- `IncomesCurrencyPreference` stays under `Platform` because App Intent
   adapters use it to read the app preference store before calling shared
   operations.
-- `IncomesIntentRouteStore` stays under `Common/Platform` because App Intents
+- `IncomesIntentRouteStore` stays under `Platform` because App Intents
   write App Group pending route URLs there and the app route pipeline consumes
   it as a platform deep-link source.
-- `IncomesPasteboardWriter` stays under `Common/Platform` because common
+- `IncomesPasteboardWriter` stays under `Platform` because common
   context-menu components use it to perform UIKit pasteboard and haptic side
   effects.
 - `NotificationService` stays in `Incomes` and uses shared notification
@@ -145,7 +145,7 @@ App-side mutation call sites should prefer
 - `IncomesPlatformEnvironmentFactory` stays in `Incomes` because runtime,
   route pipeline, and review flow assembly depend on the `MHPlatform` umbrella, app
   secrets, and SwiftUI environment injection.
-- `PhoneWatchBridge` stays under `Common/Platform` because it owns the phone-side
+- `PhoneWatchBridge` stays under `Platform` because it owns the phone-side
   WatchConnectivity transport and maps requests into `WatchSyncOperations`.
   `PhoneSyncClient` stays in the watch target for watch-side transport, while
   `WatchSyncReply` and `WatchSyncOperations` stay in `IncomesLibrary` because
@@ -156,13 +156,14 @@ App-side mutation call sites should prefer
   lifecycle, and route-drain shell.
 - `MainNavigationView` registers its route handler through `IncomesRouteBridge`
   so the package owns route intake while the app still owns navigation meaning.
-- `YearlyDuplicationCoordinator` stays under `Settings/Coordinators` as an app-side adapter that delegates
-  duplication rules to `YearlyItemDuplication*Operations` and uses package-owned mutation
-  projection strategies.
-- `ItemFormSaveCoordinator` stays under `Item/Services`, converts UI state into
+- `YearlyDuplicationCoordinator` stays under
+  `Features/Settings/YearlyDuplication/Coordinators` as an app-side adapter
+  that delegates duplication rules to `YearlyItemDuplication*Operations` and
+  uses package-owned mutation projection strategies.
+- `ItemFormSaveCoordinator` stays under `Features/Item/Mutation`, converts UI state into
   `ItemFormInput`, and calls canonical `Item*Operations` APIs through
   `MHMutationWorkflow.runThrowing`.
-- `ItemMutationAdapterFactory` stays app-side because it combines generic
+- `ItemMutationAdapterFactory` stays under `Features/Item/Mutation` because it combines generic
   follow-up hint execution with item-specific haptics and review requests. Its
   public entrypoints should describe the mutation purpose, such as save or
   delete, instead of accepting boolean feature toggles.
@@ -173,4 +174,4 @@ When a business rule is duplicated, the default fix is to move the rule into
 `IncomesLibrary` and expose it through `*Operations` rather than duplicating it
 in another view, intent, or target.
 When the duplicated code is still Apple-framework glue, the default fix is to
-extract it into `Incomes/Sources/Common/Platform`.
+extract it into `Incomes/Sources/Platform`.

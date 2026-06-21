@@ -1,6 +1,6 @@
 # Incomes Architecture Conformance Audit
 
-Current as of March 26, 2026.
+Current as of June 22, 2026.
 
 ## Purpose
 
@@ -40,14 +40,14 @@ contract and watch UI state handling.
   - `IncomesLibrary/Sources/Tag/Tag*Operations.swift`
   - `IncomesLibrary/Sources/Item/ItemSummaryOperations.swift`
   - `IncomesLibrary/Sources/Item/YearlyItemDuplication*Operations.swift`
-  - `IncomesLibrary/Sources/Common/WidgetEntryOperations.swift`
+  - `IncomesLibrary/Sources/Widgets/WidgetEntryOperations.swift`
 
 ### Multiple targets still consume the same shared APIs
 
 - The iPhone app, watch app, and widgets all depend on the local
   `IncomesLibrary` package product from `Incomes.xcodeproj`.
 - Representative files:
-  - `Incomes/Sources/Common/IncomesLibrary.swift`
+  - `Incomes/Sources/App/IncomesLibrary.swift`
   - `Watch/Sources/Common/IncomesLibrary.swift`
   - `Widgets/Sources/Common/IncomesLibrary.swift`
   - `Incomes.xcodeproj/project.pbxproj`
@@ -71,9 +71,9 @@ contract and watch UI state handling.
 - This is acceptable because reusable finance rules still route through shared
   services instead of being duplicated in the targets.
 - Representative files:
-  - `Incomes/Sources/IncomesApp.swift`
-  - `Incomes/Sources/Common/Platform/IncomesPlatformEnvironmentFactory.swift`
-  - `Incomes/Sources/Item/Services/ItemFormSaveCoordinator.swift`
+  - `Incomes/Sources/App/IncomesApp.swift`
+  - `Incomes/Sources/Platform/IncomesPlatformEnvironmentFactory.swift`
+  - `Incomes/Sources/Features/Item/Mutation/ItemFormSaveCoordinator.swift`
 
 ### Watch and widget targets keep target-local glue while reusing shared rules
 
@@ -85,7 +85,7 @@ contract and watch UI state handling.
   - `Watch/Sources/Services/WatchDataSyncer.swift`
   - `Watch/Sources/Services/PhoneSyncClient.swift`
   - `Widgets/Sources/Month/Providers/MonthSummaryProvider.swift`
-  - `IncomesLibrary/Sources/Item/Sync/WatchSyncOperations.swift`
+  - `IncomesLibrary/Sources/WatchSync/WatchSyncOperations.swift`
 
 ## Corrected Drift
 
@@ -107,9 +107,9 @@ contract and watch UI state handling.
   - `WatchHomeScreenModel` and `Watch` `ContentView` now distinguish
     reloading, sync failure, and successful empty sync on screen.
 - Representative files:
-  - `IncomesLibrary/Sources/Item/Sync/ItemsRequest.swift`
-  - `IncomesLibrary/Sources/Item/Sync/WatchSyncReply.swift`
-  - `Incomes/Sources/Common/Platform/PhoneWatchBridge.swift`
+  - `IncomesLibrary/Sources/WatchSync/ItemsRequest.swift`
+  - `IncomesLibrary/Sources/WatchSync/WatchSyncReply.swift`
+  - `Incomes/Sources/Platform/PhoneWatchBridge.swift`
   - `Watch/Sources/Services/PhoneSyncClient.swift`
   - `Watch/Sources/Services/WatchDataSyncer.swift`
   - `Watch/Sources/WatchHomeScreenModel.swift`
