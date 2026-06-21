@@ -48,8 +48,8 @@ contract and watch UI state handling.
   `IncomesLibrary` package product from `Incomes.xcodeproj`.
 - Representative files:
   - `Incomes/Sources/App/IncomesLibrary.swift`
-  - `Watch/Sources/Common/IncomesLibrary.swift`
-  - `Widgets/Sources/Common/IncomesLibrary.swift`
+  - `Watch/Sources/App/IncomesLibrary.swift`
+  - `Widgets/Sources/App/IncomesLibrary.swift`
   - `Incomes.xcodeproj/project.pbxproj`
 
 ### Tests remain library-centered
@@ -82,9 +82,9 @@ contract and watch UI state handling.
 - Shared query, calculation, and snapshot apply logic remains in
   `IncomesLibrary`.
 - Representative files:
-  - `Watch/Sources/Services/WatchDataSyncer.swift`
-  - `Watch/Sources/Services/PhoneSyncClient.swift`
-  - `Widgets/Sources/Month/Providers/MonthSummaryProvider.swift`
+  - `Watch/Sources/Platform/Sync/WatchDataSyncer.swift`
+  - `Watch/Sources/Platform/Sync/PhoneSyncClient.swift`
+  - `Widgets/Sources/Features/Month/Providers/MonthSummaryProvider.swift`
   - `IncomesLibrary/Sources/WatchSync/WatchSyncOperations.swift`
 
 ## Corrected Drift
@@ -110,10 +110,10 @@ contract and watch UI state handling.
   - `IncomesLibrary/Sources/WatchSync/ItemsRequest.swift`
   - `IncomesLibrary/Sources/WatchSync/WatchSyncReply.swift`
   - `Incomes/Sources/Platform/PhoneWatchBridge.swift`
-  - `Watch/Sources/Services/PhoneSyncClient.swift`
-  - `Watch/Sources/Services/WatchDataSyncer.swift`
-  - `Watch/Sources/WatchHomeScreenModel.swift`
-  - `Watch/Sources/ContentView.swift`
+  - `Watch/Sources/Platform/Sync/PhoneSyncClient.swift`
+  - `Watch/Sources/Platform/Sync/WatchDataSyncer.swift`
+  - `Watch/Sources/App/WatchHomeScreenModel.swift`
+  - `Watch/Sources/App/ContentView.swift`
 
 ## Notes
 

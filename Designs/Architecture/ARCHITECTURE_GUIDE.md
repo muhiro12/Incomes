@@ -261,7 +261,7 @@ API style decision:
    reintroducing target-local snapshot or mutation rules.
    Files:
    - `Incomes/Sources/Platform/PhoneWatchBridge.swift`
-   - `Watch/Sources/Services/WatchDataSyncer.swift`
+   - `Watch/Sources/Platform/Sync/WatchDataSyncer.swift`
    - `IncomesLibrary/Sources/WatchSync/WatchSyncOperations.swift`
    Minimal plan:
    - Keep networking/timing in watch adapters.
