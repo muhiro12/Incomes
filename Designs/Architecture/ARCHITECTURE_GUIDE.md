@@ -192,18 +192,18 @@ API style decision:
    main navigation screen should stay decomposed into focused presentation
    helpers.
    Files:
-   - `Incomes/Sources/IncomesApp.swift`
-   - `Incomes/Sources/ContentView.swift`
-   - `Incomes/Sources/Debug/Models/IncomesSampleData.swift`
-   - `Incomes/Sources/Common/Platform/*`
-   - `Incomes/Sources/Main/Views/MainNavigationView.swift`
-   - `Incomes/Sources/Main/Views/MainNavigationSidebarView.swift`
-   - `Incomes/Sources/Main/Views/MainNavigationContentColumn.swift`
-   - `Incomes/Sources/Main/Views/MainNavigationDetailColumn.swift`
-   - `Incomes/Sources/Main/Views/MainNavigationSheetPresenter.swift`
-   - `Incomes/Sources/Main/Views/MainNavigationRouter.swift`
-   - `Incomes/Sources/Main/Views/MainNavigationSettingsCoordinator.swift`
-   - `Incomes/Sources/Main/Views/MainNavigationYearDeletionModel.swift`
+   - `Incomes/Sources/App/IncomesApp.swift`
+   - `Incomes/Sources/App/ContentView.swift`
+   - `Incomes/Sources/Features/Debug/Models/IncomesSampleData.swift`
+   - `Incomes/Sources/Platform/*`
+   - `Incomes/Sources/Features/Main/Views/MainNavigationView.swift`
+   - `Incomes/Sources/Features/Main/Views/MainNavigationSidebarView.swift`
+   - `Incomes/Sources/Features/Main/Views/MainNavigationContentColumn.swift`
+   - `Incomes/Sources/Features/Main/Views/MainNavigationDetailColumn.swift`
+   - `Incomes/Sources/Features/Main/Views/MainNavigationSheetPresenter.swift`
+   - `Incomes/Sources/Features/Main/Views/MainNavigationRouter.swift`
+   - `Incomes/Sources/Features/Main/Views/MainNavigationSettingsCoordinator.swift`
+   - `Incomes/Sources/Features/Main/Views/MainNavigationYearDeletionModel.swift`
    Minimal plan:
    - Keep `IncomesPlatformEnvironmentFactory` focused on assembling
      `MHAppRuntimeBootstrap`, `MHAppRoutePipeline<IncomesRoute>`,
@@ -224,8 +224,8 @@ API style decision:
 2. Notification delivery contracts must keep shared payload and identifier
    rules in the library while framework delivery stays adapter-owned.
    File:
-   - `Incomes/Sources/Notification/Services/NotificationService.swift`
-   - `Incomes/Sources/Notification/Services/NotificationService+RouteDelivery.swift`
+   - `Incomes/Sources/Features/Notification/Services/NotificationService.swift`
+   - `Incomes/Sources/Features/Notification/Services/NotificationService+RouteDelivery.swift`
    - `IncomesLibrary/Sources/Notification/NotificationRoutePayload.swift`
    - `IncomesLibrary/Sources/Notification/UpcomingPaymentNotificationPresentation.swift`
    Minimal plan:
@@ -241,10 +241,10 @@ API style decision:
 3. Generic mutation follow-up execution must stay separate from
    feature-specific mutation projections.
    Files:
-   - `Incomes/Sources/Common/Services/IncomesMutationWorkflow.swift`
-   - `Incomes/Sources/Item/Services/ItemMutationAdapterFactory.swift`
-   - `Incomes/Sources/Item/Services/ItemFormSaveCoordinator.swift`
-   - `Incomes/Sources/Settings/Coordinators/YearlyDuplicationCoordinator.swift`
+   - `Incomes/Sources/App/Workflows/IncomesMutationWorkflow.swift`
+   - `Incomes/Sources/Features/Item/Mutation/ItemMutationAdapterFactory.swift`
+   - `Incomes/Sources/Features/Item/Mutation/ItemFormSaveCoordinator.swift`
+   - `Incomes/Sources/Features/Settings/YearlyDuplication/Coordinators/YearlyDuplicationCoordinator.swift`
    Minimal plan:
    - Keep generic follow-up hint execution in
      `IncomesMutationWorkflow`.
@@ -260,9 +260,9 @@ API style decision:
 4. Watch sync should keep using the shared snapshot service rather than
    reintroducing target-local snapshot or mutation rules.
    Files:
-   - `Incomes/Sources/Common/Platform/PhoneWatchBridge.swift`
-   - `Watch/Sources/Services/WatchDataSyncer.swift`
-   - `IncomesLibrary/Sources/Item/Sync/WatchSyncOperations.swift`
+   - `Incomes/Sources/Platform/PhoneWatchBridge.swift`
+   - `Watch/Sources/Platform/Sync/WatchDataSyncer.swift`
+   - `IncomesLibrary/Sources/WatchSync/WatchSyncOperations.swift`
    Minimal plan:
    - Keep networking/timing in watch adapters.
    - Keep response snapshot building, snapshot apply, and reconciliation in

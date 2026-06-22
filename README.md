@@ -144,11 +144,11 @@ Follow these steps to run a local build:
 2. Update bundle identifiers and the app group constant to match your
    provisioning profile if you are not using the production identifiers.
 3. If you are shipping a fork with your own identifiers, update
-   `IncomesLibrary/Sources/Common/AppGroup.swift`,
+   `IncomesLibrary/Sources/Persistence/AppGroup.swift`,
    `Incomes/Configurations/Incomes.entitlements`,
    `Watch/Configurations/Watch.entitlements`,
    `Widgets/Configurations/Widgets.entitlements`, and
-   `Incomes/Sources/Common/Platform/IncomesMonetizationConfiguration.swift`.
+   `Incomes/Sources/Platform/IncomesMonetizationConfiguration.swift`.
 4. Open `Incomes.xcodeproj` in Xcode, select the **Incomes** scheme, and run on
    an iOS 18 or later simulator or device. Use an iOS 26 or later destination
    when testing Foundation Models features. Enable the **Watch** and
