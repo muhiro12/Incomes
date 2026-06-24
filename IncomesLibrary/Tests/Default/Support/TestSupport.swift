@@ -19,14 +19,14 @@ var testContext: ModelContext {
     }
 }
 
-@MainActor let isoDate: (String) -> Date = { string in
+func isoDate(_ string: String) -> Date {
     guard let date = ISO8601DateFormatter().date(from: string) else {
         preconditionFailure("Invalid ISO8601 date string: \(string)")
     }
     return date
 }
 
-@MainActor let shiftedDate: (String) -> Date = { string in
+func shiftedDate(_ string: String) -> Date {
     Calendar.current.shiftedDate(
         componentsFrom: isoDate(string),
         in: .utc

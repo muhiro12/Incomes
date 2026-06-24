@@ -8,7 +8,7 @@ ci_task_require_no_arguments "$@"
 ci_task_enter_repository "${BASH_SOURCE[0]}"
 repository_root=$CI_TASK_REPOSITORY_ROOT
 
-expected_mhplatform_remote="https://github.com/muhiro12/MHPlatform.git"
+expected_mhplatform_remote="https://github.com/muhiro12/MHPlatform"
 expected_mhplatform_minimum_version="1.0.0"
 package_manifest="IncomesLibrary/Package.swift"
 package_resolved="IncomesLibrary/Package.resolved"

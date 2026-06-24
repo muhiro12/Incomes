@@ -182,6 +182,7 @@ enum IncomesPlatformEnvironmentFactory {
     ) -> MHAppRuntimeBootstrap {
         .init(
             configuration: configuration,
+            routePipeline: routePipeline,
             lifecyclePlan: .init(
                 commonTasks: [
                     .init(name: "loadRemoteConfiguration") {
@@ -198,8 +199,7 @@ enum IncomesPlatformEnvironmentFactory {
                     reviewFlow.task(name: "requestReview")
                 ],
                 skipFirstActivePhase: true
-            ),
-            routePipeline: routePipeline
+            )
         )
     }
 

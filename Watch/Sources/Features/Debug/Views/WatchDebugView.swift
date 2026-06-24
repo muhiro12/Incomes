@@ -1,4 +1,5 @@
 import MHPreferences
+import MHPreferencesUI
 import SwiftData
 import SwiftUI
 
