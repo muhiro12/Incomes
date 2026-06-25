@@ -5,6 +5,21 @@ import Testing
 extension ItemOperationsTest {
     // MARK: - Update
 
+    // Date-move fixtures use literal values to keep balance expectations readable.
+    // swiftlint:disable no_magic_numbers
+    @Test("update recalculates balances when date moves later in UTC")
+    func updateRecalculatesBalancesWhenDateMovesLater() throws {
+        let originalTimeZone = TimeZone.ReferenceType.default
+        TimeZone.ReferenceType.default = try #require(TimeZone(secondsFromGMT: 0))
+        defer {
+            TimeZone.ReferenceType.default = originalTimeZone
+        }
+
+        let itemToMove = try seedDateMoveLaterItems()
+        try moveItemLater(itemToMove)
+        try assertDateMoveLaterBalances()
+    }
+
     @Test("update changes item values and recalculates balance", arguments: timeZones)
     func update(_ timeZone: TimeZone) throws {
         TimeZone.ReferenceType.default = timeZone
@@ -68,6 +83,75 @@ extension ItemOperationsTest {
         let updated = try #require(fetchItems(context).first)
         #expect(updated.repeatID != oldRepeatID)
     }
+
+    func seedDateMoveLaterItems() throws -> Item {
+        _ = try createDateMoveLaterItem(
+            date: "2000-01-01T12:00:00Z",
+            content: "First",
+            income: 100,
+            outgo: 0
+        )
+        let itemToMove = try createDateMoveLaterItem(
+            date: "2000-01-02T12:00:00Z",
+            content: "Second",
+            income: 0,
+            outgo: 50
+        )
+        _ = try createDateMoveLaterItem(
+            date: "2000-01-03T12:00:00Z",
+            content: "Third",
+            income: 10,
+            outgo: 0
+        )
+        return itemToMove
+    }
+
+    func createDateMoveLaterItem(
+        date: String,
+        content: String,
+        income: Decimal,
+        outgo: Decimal
+    ) throws -> Item {
+        try createItem(
+            context: context,
+            input: .init(
+                date: shiftedDate(date),
+                content: content,
+                income: income,
+                outgo: outgo,
+                category: "Test",
+                priority: 0
+            ),
+            repeatCount: 1
+        )
+    }
+
+    func moveItemLater(_ item: Item) throws {
+        try updateItem(
+            context: context,
+            item: item,
+            input: .init(
+                date: shiftedDate("2000-01-04T12:00:00Z"),
+                content: "Second",
+                income: 0,
+                outgo: 50,
+                category: "Test",
+                priority: 0
+            )
+        )
+    }
+
+    func assertDateMoveLaterBalances() throws {
+        let items = try context.fetch(.items(.all, order: .forward))
+        #expect(items.count == 3)
+        #expect(items[0].utcDate == isoDate("2000-01-01T00:00:00Z"))
+        #expect(items[1].utcDate == isoDate("2000-01-03T00:00:00Z"))
+        #expect(items[2].utcDate == isoDate("2000-01-04T00:00:00Z"))
+        #expect(items[0].balance == 100)
+        #expect(items[1].balance == 110)
+        #expect(items[2].balance == 60)
+    }
+    // swiftlint:enable no_magic_numbers
 
     @Test("update changes date and maintains correct ordering", arguments: timeZones)
     func updateChangesDateOrdering(_ timeZone: TimeZone) throws {
