@@ -1,3 +1,6 @@
+# Project - Local files
+.build/
+
 # Finder
 .DS_Store
 
