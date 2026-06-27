@@ -38,6 +38,7 @@ struct ItemFormView: View {
     @FocusState private var focusedField: ItemFormFocusedField?
     @State private var model: ItemFormModel
     @State private var presentation: ItemFormPresentationModel = .init()
+    @State private var balanceProjectionConfirmation: ItemFormBalanceProjectionConfirmation?
 
     private let mode: Mode
     private let onCreate: (() -> Void)?
@@ -134,6 +135,25 @@ extension ItemFormView {
         } message: {
             Text(presentation.errorMessage ?? "")
         }
+        .alert(
+            "Projected Deficit",
+            isPresented: isBalanceProjectionConfirmationPresented
+        ) {
+            if let balanceProjectionConfirmation {
+                Button(balanceProjectionConfirmation.primaryActionTitle) {
+                    let action = balanceProjectionConfirmation.action
+                    self.balanceProjectionConfirmation = nil
+                    Task { @MainActor in
+                        await perform(action)
+                    }
+                }
+            }
+            Button("Review", role: .cancel) {
+                balanceProjectionConfirmation = nil
+            }
+        } message: {
+            Text(balanceProjectionConfirmation?.message ?? "")
+        }
         .task(id: initialContextTaskID) {
             model.applyInitialContext(
                 item: item,
@@ -155,17 +175,17 @@ extension ItemFormView {
         ) {
             Button("Save for this item only") {
                 Task { @MainActor in
-                    await save(scope: .thisItem)
+                    await requestSave(scope: .thisItem)
                 }
             }
             Button("Save for future items") {
                 Task { @MainActor in
-                    await save(scope: .futureItems)
+                    await requestSave(scope: .futureItems)
                 }
             }
             Button("Save for all items") {
                 Task { @MainActor in
-                    await save(scope: .allItems)
+                    await requestSave(scope: .allItems)
                 }
             }
             Button("Cancel", role: .cancel) {
@@ -194,15 +214,6 @@ private extension ItemFormView {
         return "\(mode)-\(itemID)-\(tagID)"
     }
 
-    var saveMode: ItemFormSaveMode {
-        switch mode {
-        case .create:
-            .create
-        case .edit:
-            .edit
-        }
-    }
-
     var primaryActionAccessibilityHint: LocalizedStringKey {
         guard !model.isValid else {
             switch mode {
@@ -228,9 +239,9 @@ private extension ItemFormView {
     func submit() {
         Task { @MainActor in
             if mode == .create {
-                await create()
+                await requestCreate()
             } else {
-                await save()
+                await requestSave()
             }
         }
     }
@@ -239,34 +250,110 @@ private extension ItemFormView {
         presentation.sheetRoute = .assist
     }
 
-    func save() async {
-        let action: ItemFormMutationPresentationAction
-
-        do {
-            let outcome = try await ItemFormSaveCoordinator.save(
-                context: context,
-                request: .init(
-                    mode: saveMode,
-                    item: item,
-                    formInputData: model.formInputData,
-                    repeatMonthSelections: model.effectiveRepeatMonthSelections
-                ),
-                dependencies: mutationDependencies
-            )
-            action = ItemFormMutationPresentationAction.action(
-                for: .success(outcome)
-            )
-        } catch {
-            assertionFailure(error.localizedDescription)
-            action = ItemFormMutationPresentationAction.action(
-                for: .failure(error)
-            )
-        }
-
-        handle(action)
+    var isBalanceProjectionConfirmationPresented: Binding<Bool> {
+        .init(
+            get: {
+                balanceProjectionConfirmation != nil
+            },
+            set: { isPresented in
+                if !isPresented {
+                    balanceProjectionConfirmation = nil
+                }
+            }
+        )
     }
 
-    func save(scope: ItemMutationScope) async {
+    func requestCreate() async {
+        do {
+            let projection = try ItemBalanceProjectionOperations.previewCreate(
+                context: context,
+                input: model.formInputData,
+                repeatMonthSelections: model.effectiveRepeatMonthSelections
+            )
+            guard !projection.hasNegativeBalance else {
+                balanceProjectionConfirmation = .init(
+                    action: .create,
+                    projection: projection
+                )
+                return
+            }
+            await performCreate()
+        } catch {
+            assertionFailure(error.localizedDescription)
+            handle(
+                .presentError(
+                    ErrorMessageOperations.message(from: error)
+                )
+            )
+        }
+    }
+
+    func requestSave() async {
+        guard let item else {
+            assertionFailure()
+            handle(
+                .presentError(
+                    ErrorMessageOperations.message(from: ItemError.itemNotFound)
+                )
+            )
+            return
+        }
+        do {
+            if try ItemUpdateOperations.requiresScopeSelection(
+                context: context,
+                item: item
+            ) {
+                handle(.presentScopeSelection)
+                return
+            }
+            await requestSave(scope: .thisItem)
+        } catch {
+            assertionFailure(error.localizedDescription)
+            handle(
+                .presentError(
+                    ErrorMessageOperations.message(from: error)
+                )
+            )
+        }
+    }
+
+    func requestSave(scope: ItemMutationScope) async {
+        guard let item else {
+            assertionFailure()
+            handle(
+                .presentError(
+                    ErrorMessageOperations.message(from: ItemError.itemNotFound)
+                )
+            )
+            return
+        }
+
+        do {
+            let projection = try ItemBalanceProjectionOperations.previewUpdate(
+                context: context,
+                item: item,
+                input: model.formInputData,
+                scope: scope
+            )
+            guard !projection.hasNegativeBalance else {
+                balanceProjectionConfirmation = .init(
+                    action: .update(scope),
+                    projection: projection
+                )
+                return
+            }
+            await performSave(scope: scope)
+        } catch {
+            assertionFailure(error.localizedDescription)
+            handle(
+                .presentError(
+                    ErrorMessageOperations.message(from: error)
+                )
+            )
+        }
+    }
+
+    func performSave(scope: ItemMutationScope) async {
         guard let item else {
             assertionFailure()
             handle(
@@ -299,7 +386,7 @@ private extension ItemFormView {
         handle(action)
     }
 
-    func create() async {
+    func performCreate() async {
         let action: ItemFormMutationPresentationAction
 
         do {
@@ -325,6 +412,15 @@ private extension ItemFormView {
         }
 
         handle(action)
+    }
+
+    func perform(_ action: ItemFormBalanceProjectionConfirmation.Action) async {
+        switch action {
+        case .create:
+            await performCreate()
+        case let .update(scope):
+            await performSave(scope: scope)
+        }
     }
 
     func cancel() {
