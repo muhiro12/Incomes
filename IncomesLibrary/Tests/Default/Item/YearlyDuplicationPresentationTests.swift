@@ -86,6 +86,16 @@ struct YearlyDuplicationPresentationTests {
 
         #expect(text == "123")
     }
+
+    @Test
+    func decimalString_groups_whole_digits() {
+        let text = YearlyDuplicationPresentationOperations.decimalString(
+            from: Decimal(string: "1234567.9") ?? .zero,
+            locale: Locale(identifier: "en_US")
+        )
+
+        #expect(text == "1,234,567")
+    }
 }
 
 private extension YearlyDuplicationPresentationTests {

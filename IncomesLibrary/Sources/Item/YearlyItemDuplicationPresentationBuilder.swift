@@ -44,11 +44,20 @@ enum YearlyItemDuplicationPresentationBuilder {
             .joined(separator: ", ")
     }
 
-    static func decimalString(from value: Decimal) -> String {
+    static func decimalString(
+        from value: Decimal,
+        locale: Locale = .current
+    ) -> String {
         var source = value
         var rounded = Decimal.zero
         NSDecimalRound(&rounded, &source, 0, .down)
-        return rounded.description
+        let formatter = NumberFormatter()
+        formatter.locale = locale
+        formatter.numberStyle = .decimal
+        formatter.usesGroupingSeparator = true
+        formatter.maximumFractionDigits = 0
+        formatter.minimumFractionDigits = 0
+        return formatter.string(for: rounded) ?? rounded.description
     }
 }
 

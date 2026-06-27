@@ -23,8 +23,14 @@ public enum YearlyDuplicationPresentationOperations {
         )
     }
 
-    /// Returns a whole-number string by discarding fractional digits.
-    public static func decimalString(from value: Decimal) -> String {
-        YearlyItemDuplicationPresentationBuilder.decimalString(from: value)
+    /// Returns a grouped whole-number string by discarding fractional digits.
+    public static func decimalString(
+        from value: Decimal,
+        locale: Locale = .current
+    ) -> String {
+        YearlyItemDuplicationPresentationBuilder.decimalString(
+            from: value,
+            locale: locale
+        )
     }
 }
