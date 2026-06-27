@@ -143,9 +143,10 @@ private extension ItemBalanceProjectionOperations {
         replacingItemIDs: Set<PersistentIdentifier>,
         affectedDates: [Date]
     ) throws -> Projection {
-        let existingRows = try context.fetch(
+        let existingItems = try context.fetch(
             .items(.all, order: .forward)
-        ).map { item in
+        )
+        let existingRows = existingItems.map { item in
             projectedRow(item: item)
         }
         let unchangedRows = existingRows.filter { row in

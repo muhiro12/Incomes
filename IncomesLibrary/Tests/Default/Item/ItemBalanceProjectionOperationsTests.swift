@@ -5,6 +5,19 @@ import Testing
 
 @Suite(.serialized)
 struct ItemBalanceProjectionOperationsTests {
+    private struct ItemProjectionTestState: Equatable {
+        let utcDate: Date
+        let content: String
+        let income: Decimal
+        let outgo: Decimal
+        let balance: Decimal
+    }
+
+    private struct MonthKey: Hashable {
+        let year: Int
+        let month: Int
+    }
+
     let context: ModelContext
 
     init() {
@@ -146,61 +159,50 @@ struct ItemBalanceProjectionOperationsTests {
         #expect(projection.monthlyBalances == actualMonthlyBalances)
         #expect(projection.minimumBalance == -300)
     }
-}
 
-private struct ItemProjectionTestState: Equatable {
-    let utcDate: Date
-    let content: String
-    let income: Decimal
-    let outgo: Decimal
-    let balance: Decimal
-}
-
-private func itemStates(
-    _ context: ModelContext
-) throws -> [ItemProjectionTestState] {
-    try context.fetch(.items(.all, order: .forward)).map { item in
-        .init(
-            utcDate: item.utcDate,
-            content: item.content,
-            income: item.income,
-            outgo: item.outgo,
-            balance: item.balance
-        )
-    }
-}
-
-private func monthlyBalances(
-    context: ModelContext,
-    from date: Date
-) throws -> [ItemBalanceProjectionOperations.MonthlyBalance] {
-    let calendar = Calendar.current
-    let items = try context.fetch(
-        .items(.all, order: .forward)
-    ).filter { item in
-        item.localDate >= date
-    }
-    var balancesByMonth = [MonthKey: ItemBalanceProjectionOperations.MonthlyBalance]()
-    var orderedKeys = [MonthKey]()
-    items.forEach { item in
-        let key: MonthKey = .init(
-            year: calendar.component(.year, from: item.localDate),
-            month: calendar.component(.month, from: item.localDate)
-        )
-        if balancesByMonth[key] == nil {
-            orderedKeys.append(key)
+    private func itemStates(
+        _ context: ModelContext
+    ) throws -> [ItemProjectionTestState] {
+        let items = try context.fetch(.items(.all, order: .forward))
+        return items.map { item in
+            .init(
+                utcDate: item.utcDate,
+                content: item.content,
+                income: item.income,
+                outgo: item.outgo,
+                balance: item.balance
+            )
         }
-        balancesByMonth[key] = .init(
-            monthDate: calendar.startOfMonth(for: item.localDate),
-            balance: item.balance
-        )
     }
-    return orderedKeys.compactMap { key in
-        balancesByMonth[key]
-    }
-}
 
-private struct MonthKey: Hashable {
-    let year: Int
-    let month: Int
+    private func monthlyBalances(
+        context: ModelContext,
+        from date: Date
+    ) throws -> [ItemBalanceProjectionOperations.MonthlyBalance] {
+        let calendar = Calendar.current
+        let fetchedItems = try context.fetch(
+            .items(.all, order: .forward)
+        )
+        let items = fetchedItems.filter { item in
+            item.localDate >= date
+        }
+        var balancesByMonth = [MonthKey: ItemBalanceProjectionOperations.MonthlyBalance]()
+        var orderedKeys = [MonthKey]()
+        items.forEach { item in
+            let key: MonthKey = .init(
+                year: calendar.component(.year, from: item.localDate),
+                month: calendar.component(.month, from: item.localDate)
+            )
+            if balancesByMonth[key] == nil {
+                orderedKeys.append(key)
+            }
+            balancesByMonth[key] = .init(
+                monthDate: calendar.startOfMonth(for: item.localDate),
+                balance: item.balance
+            )
+        }
+        return orderedKeys.compactMap { key in
+            balancesByMonth[key]
+        }
+    }
 }

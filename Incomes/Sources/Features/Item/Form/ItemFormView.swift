@@ -15,35 +15,35 @@ struct ItemFormView: View {
     enum Mode { case create, edit }
 
     @Environment(Tag.self)
-    private var tag: Tag?
+    var tag: Tag?
     @Environment(\.dismiss)
-    private var dismiss
+    var dismiss
     @Environment(IncomesTipController.self)
-    private var tipController
+    var tipController
     @Environment(NotificationService.self)
-    private var notificationService
+    var notificationService
     @Environment(MHLoggingBootstrap.self)
-    private var logging
+    var logging
 
     @Environment(Item.self)
-    private var item: Item?
+    var item: Item?
     @Environment(\.modelContext)
-    private var context
+    var context
     @Environment(\.mhDesignMetrics)
-    private var designMetrics
+    var designMetrics
 
     @AppStorage(\.isDebugOn)
-    private var isDebugOn
+    var isDebugOn
 
-    @FocusState private var focusedField: ItemFormFocusedField?
+    @FocusState var focusedField: ItemFormFocusedField?
     @State private var model: ItemFormModel
     @State private var presentation: ItemFormPresentationModel = .init()
     @State private var balanceProjectionConfirmation: ItemFormBalanceProjectionConfirmation?
 
-    private let mode: Mode
-    private let onCreate: (() -> Void)?
-    private let priorityRange = 0...10
-    private let repeatItemsTip = RepeatItemsTip()
+    let mode: Mode
+    let onCreate: (() -> Void)?
+    let priorityRange = 0...10
+    let repeatItemsTip = RepeatItemsTip()
 
     init(
         mode: Mode,
@@ -207,279 +207,20 @@ extension ItemFormView {
     }
 }
 
-private extension ItemFormView {
-    var initialContextTaskID: String {
-        let itemID = item.map { String(describing: $0.persistentModelID) } ?? ""
-        let tagID = tag.map { String(describing: $0.persistentModelID) } ?? ""
-        return "\(mode)-\(itemID)-\(tagID)"
+extension ItemFormView {
+    var formModel: ItemFormModel {
+        get { model }
+        nonmutating set { model = newValue }
     }
 
-    var primaryActionAccessibilityHint: LocalizedStringKey {
-        guard !model.isValid else {
-            switch mode {
-            case .create:
-                return "Creates this item."
-            case .edit:
-                return "Saves changes to this item."
-            }
-        }
-
-        if model.content.isEmpty {
-            return "Enter content to enable this action."
-        }
-        if !model.income.isEmptyOrDecimal || !model.outgo.isEmptyOrDecimal {
-            return "Enter valid amounts to enable this action."
-        }
-        if !model.priority.isEmptyOrInt {
-            return "Enter a valid priority to enable this action."
-        }
-        return "Complete the form to enable this action."
+    var formPresentation: ItemFormPresentationModel {
+        get { presentation }
+        nonmutating set { presentation = newValue }
     }
 
-    func submit() {
-        Task { @MainActor in
-            if mode == .create {
-                await requestCreate()
-            } else {
-                await requestSave()
-            }
-        }
-    }
-
-    func presentAssist() {
-        presentation.sheetRoute = .assist
-    }
-
-    var isBalanceProjectionConfirmationPresented: Binding<Bool> {
-        .init(
-            get: {
-                balanceProjectionConfirmation != nil
-            },
-            set: { isPresented in
-                if !isPresented {
-                    balanceProjectionConfirmation = nil
-                }
-            }
-        )
-    }
-
-    func requestCreate() async {
-        do {
-            let projection = try ItemBalanceProjectionOperations.previewCreate(
-                context: context,
-                input: model.formInputData,
-                repeatMonthSelections: model.effectiveRepeatMonthSelections
-            )
-            guard !projection.hasNegativeBalance else {
-                balanceProjectionConfirmation = .init(
-                    action: .create,
-                    projection: projection
-                )
-                return
-            }
-            await performCreate()
-        } catch {
-            assertionFailure(error.localizedDescription)
-            handle(
-                .presentError(
-                    ErrorMessageOperations.message(from: error)
-                )
-            )
-        }
-    }
-
-    func requestSave() async {
-        guard let item else {
-            assertionFailure()
-            handle(
-                .presentError(
-                    ErrorMessageOperations.message(from: ItemError.itemNotFound)
-                )
-            )
-            return
-        }
-        do {
-            if try ItemUpdateOperations.requiresScopeSelection(
-                context: context,
-                item: item
-            ) {
-                handle(.presentScopeSelection)
-                return
-            }
-            await requestSave(scope: .thisItem)
-        } catch {
-            assertionFailure(error.localizedDescription)
-            handle(
-                .presentError(
-                    ErrorMessageOperations.message(from: error)
-                )
-            )
-        }
-    }
-
-    func requestSave(scope: ItemMutationScope) async {
-        guard let item else {
-            assertionFailure()
-            handle(
-                .presentError(
-                    ErrorMessageOperations.message(from: ItemError.itemNotFound)
-                )
-            )
-            return
-        }
-
-        do {
-            let projection = try ItemBalanceProjectionOperations.previewUpdate(
-                context: context,
-                item: item,
-                input: model.formInputData,
-                scope: scope
-            )
-            guard !projection.hasNegativeBalance else {
-                balanceProjectionConfirmation = .init(
-                    action: .update(scope),
-                    projection: projection
-                )
-                return
-            }
-            await performSave(scope: scope)
-        } catch {
-            assertionFailure(error.localizedDescription)
-            handle(
-                .presentError(
-                    ErrorMessageOperations.message(from: error)
-                )
-            )
-        }
-    }
-
-    func performSave(scope: ItemMutationScope) async {
-        guard let item else {
-            assertionFailure()
-            handle(
-                .presentError(
-                    ErrorMessageOperations.message(from: ItemError.itemNotFound)
-                )
-            )
-            return
-        }
-        let action: ItemFormMutationPresentationAction
-
-        do {
-            try await ItemFormSaveCoordinator.save(
-                scope: scope,
-                context: context,
-                item: item,
-                formInputData: model.formInputData,
-                dependencies: mutationDependencies
-            )
-            action = ItemFormMutationPresentationAction.dismissOnSuccessAction(
-                for: .success(())
-            )
-        } catch {
-            assertionFailure(error.localizedDescription)
-            action = ItemFormMutationPresentationAction.dismissOnSuccessAction(
-                for: .failure(error)
-            )
-        }
-
-        handle(action)
-    }
-
-    func performCreate() async {
-        let action: ItemFormMutationPresentationAction
-
-        do {
-            _ = try await ItemFormSaveCoordinator.save(
-                context: context,
-                request: .init(
-                    mode: .create,
-                    item: item,
-                    formInputData: model.formInputData,
-                    repeatMonthSelections: model.effectiveRepeatMonthSelections
-                ),
-                dependencies: mutationDependencies
-            )
-            onCreate?()
-            action = ItemFormMutationPresentationAction.dismissOnSuccessAction(
-                for: .success(())
-            )
-        } catch {
-            assertionFailure(error.localizedDescription)
-            action = ItemFormMutationPresentationAction.dismissOnSuccessAction(
-                for: .failure(error)
-            )
-        }
-
-        handle(action)
-    }
-
-    func perform(_ action: ItemFormBalanceProjectionConfirmation.Action) async {
-        switch action {
-        case .create:
-            await performCreate()
-        case let .update(scope):
-            await performSave(scope: scope)
-        }
-    }
-
-    func cancel() {
-        if model.content == "Enable Debug" {
-            model.content = ""
-            presentation.presentDebugDialog()
-            return
-        }
-        dismiss()
-    }
-
-    func handle(_ action: ItemFormMutationPresentationAction) {
-        switch presentation.handle(action) {
-        case .dismiss:
-            dismiss()
-        case .idle:
-            break
-        }
-    }
-
-    func isDialogPresented(_ route: ItemFormDialogRoute) -> Binding<Bool> {
-        .init(
-            get: {
-                presentation.dialogRoute == route
-            },
-            set: { isPresented in
-                if isPresented {
-                    presentation.dialogRoute = route
-                } else {
-                    presentation.clearDialog(route)
-                }
-            }
-        )
-    }
-}
-
-private extension ItemFormView {
-    var itemMutationLogger: MHLogger {
-        IncomesLogging.logger(
-            logging: logging,
-            category: IncomesLogging.Category.itemMutation,
-            source: #fileID
-        )
-    }
-
-    var reviewLogger: MHLogger {
-        IncomesLogging.logger(
-            logging: logging,
-            category: IncomesLogging.Category.reviewFlow,
-            source: #fileID
-        )
-    }
-
-    var mutationDependencies: ItemMutationWorkflowDependencies {
-        .init(
-            notificationService: notificationService,
-            logger: itemMutationLogger,
-            reviewLogger: reviewLogger
-        )
+    var formBalanceProjectionConfirmation: ItemFormBalanceProjectionConfirmation? {
+        get { balanceProjectionConfirmation }
+        nonmutating set { balanceProjectionConfirmation = newValue }
     }
 }
 
