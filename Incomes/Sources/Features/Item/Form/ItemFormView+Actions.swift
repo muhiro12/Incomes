@@ -29,19 +29,6 @@ extension ItemFormView {
         return "Complete the form to enable this action."
     }
 
-    var isBalanceProjectionConfirmationPresented: Binding<Bool> {
-        .init(
-            get: {
-                formBalanceProjectionConfirmation != nil
-            },
-            set: { isPresented in
-                if !isPresented {
-                    formBalanceProjectionConfirmation = nil
-                }
-            }
-        )
-    }
-
     func submit() {
         Task { @MainActor in
             if mode == .create {
@@ -56,29 +43,12 @@ extension ItemFormView {
         formPresentation.sheetRoute = .assist
     }
 
+    func presentBalanceProjection() {
+        formPresentation.sheetRoute = .balanceProjection
+    }
+
     func requestCreate() async {
-        do {
-            let projection = try ItemBalanceProjectionOperations.previewCreate(
-                context: context,
-                input: formModel.formInputData,
-                repeatMonthSelections: formModel.effectiveRepeatMonthSelections
-            )
-            guard !projection.hasNegativeBalance else {
-                formBalanceProjectionConfirmation = .init(
-                    action: .create,
-                    projection: projection
-                )
-                return
-            }
-            await performCreate()
-        } catch {
-            assertionFailure(error.localizedDescription)
-            handle(
-                .presentError(
-                    ErrorMessageOperations.message(from: error)
-                )
-            )
-        }
+        await performCreate()
     }
 
     func requestSave() async {
@@ -111,39 +81,7 @@ extension ItemFormView {
     }
 
     func requestSave(scope: ItemMutationScope) async {
-        guard let item else {
-            assertionFailure()
-            handle(
-                .presentError(
-                    ErrorMessageOperations.message(from: ItemError.itemNotFound)
-                )
-            )
-            return
-        }
-
-        do {
-            let projection = try ItemBalanceProjectionOperations.previewUpdate(
-                context: context,
-                item: item,
-                input: formModel.formInputData,
-                scope: scope
-            )
-            guard !projection.hasNegativeBalance else {
-                formBalanceProjectionConfirmation = .init(
-                    action: .update(scope),
-                    projection: projection
-                )
-                return
-            }
-            await performSave(scope: scope)
-        } catch {
-            assertionFailure(error.localizedDescription)
-            handle(
-                .presentError(
-                    ErrorMessageOperations.message(from: error)
-                )
-            )
-        }
+        await performSave(scope: scope)
     }
 
     func performSave(scope: ItemMutationScope) async {
@@ -205,15 +143,6 @@ extension ItemFormView {
         }
 
         handle(action)
-    }
-
-    func perform(_ action: ItemFormBalanceProjectionConfirmation.Action) async {
-        switch action {
-        case .create:
-            await performCreate()
-        case let .update(scope):
-            await performSave(scope: scope)
-        }
     }
 
     func cancel() {

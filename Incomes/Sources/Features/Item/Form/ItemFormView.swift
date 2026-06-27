@@ -38,7 +38,6 @@ struct ItemFormView: View {
     @FocusState var focusedField: ItemFormFocusedField?
     @State private var model: ItemFormModel
     @State private var presentation: ItemFormPresentationModel = .init()
-    @State private var balanceProjectionConfirmation: ItemFormBalanceProjectionConfirmation?
 
     let mode: Mode
     let onCreate: (() -> Void)?
@@ -72,6 +71,12 @@ extension ItemFormView {
                 mode: mode,
                 repeatItemsTip: repeatItemsTip
             )
+            Section {
+                Button(action: presentBalanceProjection) {
+                    Label("Preview Balance", systemImage: "chart.line.uptrend.xyaxis")
+                }
+                .disabled(!model.isValid)
+            }
         }
         .scrollDismissesKeyboard(.interactively)
         .contentMargins(.bottom, designMetrics.spacing.inline, for: .scrollContent)
@@ -135,25 +140,6 @@ extension ItemFormView {
         } message: {
             Text(presentation.errorMessage ?? "")
         }
-        .alert(
-            "Projected Deficit",
-            isPresented: isBalanceProjectionConfirmationPresented
-        ) {
-            if let balanceProjectionConfirmation {
-                Button(balanceProjectionConfirmation.primaryActionTitle) {
-                    let action = balanceProjectionConfirmation.action
-                    self.balanceProjectionConfirmation = nil
-                    Task { @MainActor in
-                        await perform(action)
-                    }
-                }
-            }
-            Button("Review", role: .cancel) {
-                balanceProjectionConfirmation = nil
-            }
-        } message: {
-            Text(balanceProjectionConfirmation?.message ?? "")
-        }
         .task(id: initialContextTaskID) {
             model.applyInitialContext(
                 item: item,
@@ -202,6 +188,16 @@ extension ItemFormView {
                     }
                     .incomesSheetPresentation()
                 }
+            case .balanceProjection:
+                NavigationStack {
+                    ItemFormBalanceProjectionSheet(
+                        mode: mode,
+                        item: item,
+                        input: model.formInputData,
+                        repeatMonthSelections: model.effectiveRepeatMonthSelections
+                    )
+                }
+                .incomesSheetPresentation()
             }
         }
     }
@@ -216,11 +212,6 @@ extension ItemFormView {
     var formPresentation: ItemFormPresentationModel {
         get { presentation }
         nonmutating set { presentation = newValue }
-    }
-
-    var formBalanceProjectionConfirmation: ItemFormBalanceProjectionConfirmation? {
-        get { balanceProjectionConfirmation }
-        nonmutating set { balanceProjectionConfirmation = newValue }
     }
 }
 
