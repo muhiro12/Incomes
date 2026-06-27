@@ -15,34 +15,34 @@ struct ItemFormView: View {
     enum Mode { case create, edit }
 
     @Environment(Tag.self)
-    private var tag: Tag?
+    var tag: Tag?
     @Environment(\.dismiss)
-    private var dismiss
+    var dismiss
     @Environment(IncomesTipController.self)
-    private var tipController
+    var tipController
     @Environment(NotificationService.self)
-    private var notificationService
+    var notificationService
     @Environment(MHLoggingBootstrap.self)
-    private var logging
+    var logging
 
     @Environment(Item.self)
-    private var item: Item?
+    var item: Item?
     @Environment(\.modelContext)
-    private var context
+    var context
     @Environment(\.mhDesignMetrics)
-    private var designMetrics
+    var designMetrics
 
     @AppStorage(\.isDebugOn)
-    private var isDebugOn
+    var isDebugOn
 
-    @FocusState private var focusedField: ItemFormFocusedField?
+    @FocusState var focusedField: ItemFormFocusedField?
     @State private var model: ItemFormModel
     @State private var presentation: ItemFormPresentationModel = .init()
 
-    private let mode: Mode
-    private let onCreate: (() -> Void)?
-    private let priorityRange = 0...10
-    private let repeatItemsTip = RepeatItemsTip()
+    let mode: Mode
+    let onCreate: (() -> Void)?
+    let priorityRange = 0...10
+    let repeatItemsTip = RepeatItemsTip()
 
     init(
         mode: Mode,
@@ -71,6 +71,12 @@ extension ItemFormView {
                 mode: mode,
                 repeatItemsTip: repeatItemsTip
             )
+            Section {
+                Button(action: presentBalanceProjection) {
+                    Label("Preview Balance", systemImage: "chart.line.uptrend.xyaxis")
+                }
+                .disabled(!model.isValid)
+            }
         }
         .scrollDismissesKeyboard(.interactively)
         .contentMargins(.bottom, designMetrics.spacing.inline, for: .scrollContent)
@@ -155,17 +161,17 @@ extension ItemFormView {
         ) {
             Button("Save for this item only") {
                 Task { @MainActor in
-                    await save(scope: .thisItem)
+                    await requestSave(scope: .thisItem)
                 }
             }
             Button("Save for future items") {
                 Task { @MainActor in
-                    await save(scope: .futureItems)
+                    await requestSave(scope: .futureItems)
                 }
             }
             Button("Save for all items") {
                 Task { @MainActor in
-                    await save(scope: .allItems)
+                    await requestSave(scope: .allItems)
                 }
             }
             Button("Cancel", role: .cancel) {
@@ -182,208 +188,30 @@ extension ItemFormView {
                     }
                     .incomesSheetPresentation()
                 }
-            }
-        }
-    }
-}
-
-private extension ItemFormView {
-    var initialContextTaskID: String {
-        let itemID = item.map { String(describing: $0.persistentModelID) } ?? ""
-        let tagID = tag.map { String(describing: $0.persistentModelID) } ?? ""
-        return "\(mode)-\(itemID)-\(tagID)"
-    }
-
-    var saveMode: ItemFormSaveMode {
-        switch mode {
-        case .create:
-            .create
-        case .edit:
-            .edit
-        }
-    }
-
-    var primaryActionAccessibilityHint: LocalizedStringKey {
-        guard !model.isValid else {
-            switch mode {
-            case .create:
-                return "Creates this item."
-            case .edit:
-                return "Saves changes to this item."
-            }
-        }
-
-        if model.content.isEmpty {
-            return "Enter content to enable this action."
-        }
-        if !model.income.isEmptyOrDecimal || !model.outgo.isEmptyOrDecimal {
-            return "Enter valid amounts to enable this action."
-        }
-        if !model.priority.isEmptyOrInt {
-            return "Enter a valid priority to enable this action."
-        }
-        return "Complete the form to enable this action."
-    }
-
-    func submit() {
-        Task { @MainActor in
-            if mode == .create {
-                await create()
-            } else {
-                await save()
-            }
-        }
-    }
-
-    func presentAssist() {
-        presentation.sheetRoute = .assist
-    }
-
-    func save() async {
-        let action: ItemFormMutationPresentationAction
-
-        do {
-            let outcome = try await ItemFormSaveCoordinator.save(
-                context: context,
-                request: .init(
-                    mode: saveMode,
-                    item: item,
-                    formInputData: model.formInputData,
-                    repeatMonthSelections: model.effectiveRepeatMonthSelections
-                ),
-                dependencies: mutationDependencies
-            )
-            action = ItemFormMutationPresentationAction.action(
-                for: .success(outcome)
-            )
-        } catch {
-            assertionFailure(error.localizedDescription)
-            action = ItemFormMutationPresentationAction.action(
-                for: .failure(error)
-            )
-        }
-
-        handle(action)
-    }
-
-    func save(scope: ItemMutationScope) async {
-        guard let item else {
-            assertionFailure()
-            handle(
-                .presentError(
-                    ErrorMessageOperations.message(from: ItemError.itemNotFound)
-                )
-            )
-            return
-        }
-        let action: ItemFormMutationPresentationAction
-
-        do {
-            try await ItemFormSaveCoordinator.save(
-                scope: scope,
-                context: context,
-                item: item,
-                formInputData: model.formInputData,
-                dependencies: mutationDependencies
-            )
-            action = ItemFormMutationPresentationAction.dismissOnSuccessAction(
-                for: .success(())
-            )
-        } catch {
-            assertionFailure(error.localizedDescription)
-            action = ItemFormMutationPresentationAction.dismissOnSuccessAction(
-                for: .failure(error)
-            )
-        }
-
-        handle(action)
-    }
-
-    func create() async {
-        let action: ItemFormMutationPresentationAction
-
-        do {
-            _ = try await ItemFormSaveCoordinator.save(
-                context: context,
-                request: .init(
-                    mode: .create,
-                    item: item,
-                    formInputData: model.formInputData,
-                    repeatMonthSelections: model.effectiveRepeatMonthSelections
-                ),
-                dependencies: mutationDependencies
-            )
-            onCreate?()
-            action = ItemFormMutationPresentationAction.dismissOnSuccessAction(
-                for: .success(())
-            )
-        } catch {
-            assertionFailure(error.localizedDescription)
-            action = ItemFormMutationPresentationAction.dismissOnSuccessAction(
-                for: .failure(error)
-            )
-        }
-
-        handle(action)
-    }
-
-    func cancel() {
-        if model.content == "Enable Debug" {
-            model.content = ""
-            presentation.presentDebugDialog()
-            return
-        }
-        dismiss()
-    }
-
-    func handle(_ action: ItemFormMutationPresentationAction) {
-        switch presentation.handle(action) {
-        case .dismiss:
-            dismiss()
-        case .idle:
-            break
-        }
-    }
-
-    func isDialogPresented(_ route: ItemFormDialogRoute) -> Binding<Bool> {
-        .init(
-            get: {
-                presentation.dialogRoute == route
-            },
-            set: { isPresented in
-                if isPresented {
-                    presentation.dialogRoute = route
-                } else {
-                    presentation.clearDialog(route)
+            case .balanceProjection:
+                NavigationStack {
+                    ItemFormBalanceProjectionSheet(
+                        mode: mode,
+                        item: item,
+                        input: model.formInputData,
+                        repeatMonthSelections: model.effectiveRepeatMonthSelections
+                    )
                 }
+                .incomesSheetPresentation()
             }
-        )
+        }
     }
 }
 
-private extension ItemFormView {
-    var itemMutationLogger: MHLogger {
-        IncomesLogging.logger(
-            logging: logging,
-            category: IncomesLogging.Category.itemMutation,
-            source: #fileID
-        )
+extension ItemFormView {
+    var formModel: ItemFormModel {
+        get { model }
+        nonmutating set { model = newValue }
     }
 
-    var reviewLogger: MHLogger {
-        IncomesLogging.logger(
-            logging: logging,
-            category: IncomesLogging.Category.reviewFlow,
-            source: #fileID
-        )
-    }
-
-    var mutationDependencies: ItemMutationWorkflowDependencies {
-        .init(
-            notificationService: notificationService,
-            logger: itemMutationLogger,
-            reviewLogger: reviewLogger
-        )
+    var formPresentation: ItemFormPresentationModel {
+        get { presentation }
+        nonmutating set { presentation = newValue }
     }
 }
 
