@@ -32,11 +32,15 @@ extension ItemBalanceProjectionPlanner {
         guard let affectedDateRange else {
             return nil
         }
-        let upperBound = rows.filter { row in
+        let latestRowDate = rows.filter { row in
             row.localDate >= affectedDateRange.lowerBound
         }
         .map(\.localDate)
-        .max() ?? affectedDateRange.upperBound
+        .max()
+        let upperBound = max(
+            latestRowDate ?? affectedDateRange.upperBound,
+            affectedDateRange.upperBound
+        )
         return affectedDateRange.lowerBound...upperBound
     }
 

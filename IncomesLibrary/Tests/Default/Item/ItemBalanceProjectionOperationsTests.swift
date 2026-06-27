@@ -117,6 +117,33 @@ struct ItemBalanceProjectionOperationsTests {
     }
 
     @Test
+    func previewUpdateComparison_keeps_original_upper_bound_when_date_moves_earlier() throws {
+        let target = try createSalary(date: "2000-03-01T12:00:00Z")
+        let input = ItemFormInput(
+            date: shiftedDate("2000-02-01T12:00:00Z"),
+            content: "Salary",
+            income: 100,
+            outgo: 0,
+            category: "category",
+            priority: 0
+        )
+        let beforeState = try itemStates(context)
+
+        let comparison = try ItemBalanceProjectionOperations.previewUpdateComparison(
+            context: context,
+            item: target,
+            input: input,
+            scope: .thisItem
+        )
+
+        #expect(try itemStates(context) == beforeState)
+        #expect(comparison.current.monthlyBalances.map(\.balance) == [0, 100])
+        #expect(comparison.projected.monthlyBalances.map(\.balance) == [100, 100])
+        #expect(comparison.monthlyBalances.map(\.difference) == [100, 0])
+        #expect(comparison.latestBalanceDifference == 0)
+    }
+
+    @Test
     func previewUpdateFuture_matches_actual_balances_without_pre_mutating() throws {
         _ = try createItem(
             context: context,
