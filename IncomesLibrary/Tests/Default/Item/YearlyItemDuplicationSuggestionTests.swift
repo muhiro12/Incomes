@@ -24,13 +24,21 @@ struct YearlyItemDuplicationSuggestionTests {
     }
 
     @Test
-    func initialSelectionState_returns_previous_and_current_year() {
-        let state = YearlyItemDuplicationSelectionOperations.initialSelectionState(
+    func initialSourceYear_returns_previous_year() {
+        let sourceYear = YearlyItemDuplicationSelectionOperations.initialSourceYear(
             currentYear: 2_030
         )
 
-        #expect(state.sourceYear == 2_029)
-        #expect(state.targetYear == 2_030)
+        #expect(sourceYear == 2_029)
+    }
+
+    @Test
+    func initialTargetYear_returns_current_year() {
+        let targetYear = YearlyItemDuplicationSelectionOperations.initialTargetYear(
+            currentYear: 2_030
+        )
+
+        #expect(targetYear == 2_030)
     }
 
     @Test
@@ -89,7 +97,7 @@ struct YearlyItemDuplicationSuggestionTests {
     }
 
     @Test
-    func selectionState_loads_persisted_year_tags() throws {
+    func alignSelection_loads_persisted_year_tags() throws {
         _ = try createItem(
             context: context,
             input: .init(
@@ -103,18 +111,20 @@ struct YearlyItemDuplicationSuggestionTests {
             repeatCount: 3
         )
 
-        let state = try YearlyItemDuplicationSelectionOperations.selectionState(
+        var sourceYear = 2_020
+        var targetYear = 2_021
+        try YearlyItemDuplicationSelectionOperations.alignSelection(
             context: context,
-            currentSourceYear: 2_020,
-            currentTargetYear: 2_021,
+            sourceYear: &sourceYear,
+            targetYear: &targetYear,
             preserveCurrentSelection: false,
             currentYear: 2_024,
             targetYearRange: 1,
             minimumGroupCount: 1
         )
 
-        #expect(state.sourceYear == 2_023)
-        #expect(state.targetYear == 2_024)
+        #expect(sourceYear == 2_023)
+        #expect(targetYear == 2_024)
     }
 
     @Test

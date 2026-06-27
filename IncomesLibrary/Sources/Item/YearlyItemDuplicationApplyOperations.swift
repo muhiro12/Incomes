@@ -3,16 +3,14 @@ import SwiftData
 
 /// Domain operations for applying yearly item duplication plans.
 public enum YearlyItemDuplicationApplyOperations {
-    /// Applies `plan` using optional amount overrides and returns a result summary.
+    /// Applies `plan` and returns a result summary.
     public static func apply(
         plan: YearlyItemDuplicationPlan,
-        context: ModelContext,
-        overrides: [UUID: YearlyItemDuplicationGroupAmount] = [:]
+        context: ModelContext
     ) throws -> YearlyItemDuplicationResult {
         try applyWithOutcome(
             plan: plan,
-            context: context,
-            overrides: overrides
+            context: context
         ).value
     }
 
@@ -20,14 +18,12 @@ public enum YearlyItemDuplicationApplyOperations {
     public static func apply(
         groupID: UUID,
         in plan: YearlyItemDuplicationPlan,
-        context: ModelContext,
-        overrides: [UUID: YearlyItemDuplicationGroupAmount] = [:]
+        context: ModelContext
     ) throws -> YearlyItemDuplicationResult? {
         try applyWithOutcome(
             groupID: groupID,
             in: plan,
-            context: context,
-            overrides: overrides
+            context: context
         )?.value
     }
 
@@ -35,8 +31,7 @@ public enum YearlyItemDuplicationApplyOperations {
     public static func applyWithOutcome(
         groupID: UUID,
         in plan: YearlyItemDuplicationPlan,
-        context: ModelContext,
-        overrides: [UUID: YearlyItemDuplicationGroupAmount] = [:]
+        context: ModelContext
     ) throws -> MutationResult<YearlyItemDuplicationResult>? {
         let entries = YearlyItemDuplicationPlanOperations.entries(
             for: groupID,
@@ -52,21 +47,18 @@ public enum YearlyItemDuplicationApplyOperations {
                 group: group,
                 entries: entries
             ),
-            context: context,
-            overrides: overrides
+            context: context
         )
     }
 
     /// Applies a plan and returns mutation metadata.
     public static func applyWithOutcome(
         plan: YearlyItemDuplicationPlan,
-        context: ModelContext,
-        overrides: [UUID: YearlyItemDuplicationGroupAmount] = [:]
+        context: ModelContext
     ) throws -> MutationResult<YearlyItemDuplicationResult> {
         let createdItems = try createItems(
             plan: plan,
-            context: context,
-            overrides: overrides
+            context: context
         )
         try BalanceCalculator.calculate(in: context, for: createdItems)
         return .init(
@@ -79,18 +71,16 @@ public enum YearlyItemDuplicationApplyOperations {
 private extension YearlyItemDuplicationApplyOperations {
     static func createItems(
         plan: YearlyItemDuplicationPlan,
-        context: ModelContext,
-        overrides: [UUID: YearlyItemDuplicationGroupAmount]
+        context: ModelContext
     ) throws -> [Item] {
-        let groupedEntries = Dictionary(grouping: plan.entries) { entry in
-            entry.groupID
-        }
-        let defaultAmountsByGroupID = defaultAmountsByGroupID(for: plan)
-        return try groupedEntries.flatMap { groupID, entries in
-            let amount = overrides[groupID] ?? defaultAmountsByGroupID[groupID]
+        try plan.groups.flatMap { group in
+            let entries = YearlyItemDuplicationPlanOperations.entries(
+                for: group.id,
+                in: plan
+            )
             return try createItems(
                 entries: entries,
-                amount: amount,
+                group: group,
                 context: context
             )
         }
@@ -98,14 +88,14 @@ private extension YearlyItemDuplicationApplyOperations {
 
     static func createItems(
         entries: [YearlyItemDuplicationEntry],
-        amount: YearlyItemDuplicationGroupAmount?,
+        group: YearlyItemDuplicationGroup,
         context: ModelContext
     ) throws -> [Item] {
         let repeatID = UUID()
         return try entries.map { entry in
             try createItem(
                 entry: entry,
-                amount: amount,
+                group: group,
                 context: context,
                 repeatID: repeatID
             )
@@ -114,7 +104,7 @@ private extension YearlyItemDuplicationApplyOperations {
 
     static func createItem(
         entry: YearlyItemDuplicationEntry,
-        amount: YearlyItemDuplicationGroupAmount?,
+        group: YearlyItemDuplicationGroup,
         context: ModelContext,
         repeatID: UUID
     ) throws -> Item {
@@ -123,8 +113,8 @@ private extension YearlyItemDuplicationApplyOperations {
             values: .init(
                 date: entry.targetDate,
                 content: entry.sourceItem.content,
-                income: amount?.income ?? entry.sourceItem.income,
-                outgo: amount?.outgo ?? entry.sourceItem.outgo,
+                income: group.averageIncome,
+                outgo: group.averageOutgo,
                 category: entry.sourceItem.category?.name ?? "",
                 priority: 0
             ),
@@ -153,22 +143,6 @@ private extension YearlyItemDuplicationApplyOperations {
             ),
             affectedDateRange: YearlyItemDuplicationSupport.dateRange(from: createdDates),
             followUpHints: YearlyItemDuplicationSupport.followUpHints
-        )
-    }
-
-    static func defaultAmountsByGroupID(
-        for plan: YearlyItemDuplicationPlan
-    ) -> [UUID: YearlyItemDuplicationGroupAmount] {
-        Dictionary(
-            uniqueKeysWithValues: plan.groups.map { group in
-                (
-                    group.id,
-                    YearlyItemDuplicationGroupAmount(
-                        income: group.averageIncome,
-                        outgo: group.averageOutgo
-                    )
-                )
-            }
         )
     }
 }

@@ -15,8 +15,12 @@ struct YearlyDuplicationView: View {
         static let targetYearRange = 10
         static let minimumGroupCount = 3
 
-        static var initialSelectionState: YearlyItemDuplicationSelectionState {
-            YearlyItemDuplicationSelectionOperations.initialSelectionState()
+        static var initialSourceYear: Int {
+            YearlyItemDuplicationSelectionOperations.initialSourceYear()
+        }
+
+        static var initialTargetYear: Int {
+            YearlyItemDuplicationSelectionOperations.initialTargetYear()
         }
     }
 
@@ -32,8 +36,8 @@ struct YearlyDuplicationView: View {
     @Query(.tags(.typeIs(.year), order: .reverse))
     private var yearTags: [Tag]
 
-    @State private var sourceYear = Constants.initialSelectionState.sourceYear
-    @State private var targetYear = Constants.initialSelectionState.targetYear
+    @State private var sourceYear = Constants.initialSourceYear
+    @State private var targetYear = Constants.initialTargetYear
 
     @State private var route: YearlyDuplicationRoute?
     @State private var plan: YearlyItemDuplicationPlan?
@@ -265,16 +269,18 @@ private extension YearlyDuplicationView {
 
     func alignYearSelections(preserveCurrentSelection: Bool) {
         do {
-            let selectionState = try YearlyItemDuplicationSelectionOperations.selectionState(
+            var alignedSourceYear = sourceYear
+            var alignedTargetYear = targetYear
+            try YearlyItemDuplicationSelectionOperations.alignSelection(
                 context: context,
-                currentSourceYear: sourceYear,
-                currentTargetYear: targetYear,
+                sourceYear: &alignedSourceYear,
+                targetYear: &alignedTargetYear,
                 preserveCurrentSelection: preserveCurrentSelection,
                 currentYear: currentYear,
                 minimumGroupCount: Constants.minimumGroupCount
             )
-            sourceYear = selectionState.sourceYear
-            targetYear = selectionState.targetYear
+            sourceYear = alignedSourceYear
+            targetYear = alignedTargetYear
         } catch {
             errorMessage = error.localizedDescription
         }

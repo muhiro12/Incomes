@@ -11,14 +11,18 @@ public enum YearlyItemDuplicationSelectionOperations {
         calendar.component(.year, from: date)
     }
 
-    /// Returns the default source/target year selection.
-    public static func initialSelectionState(
+    /// Returns the default source year selection.
+    public static func initialSourceYear(
         currentYear: Int = Self.currentYear()
-    ) -> YearlyItemDuplicationSelectionState {
-        .init(
-            sourceYear: currentYear - 1,
-            targetYear: currentYear
-        )
+    ) -> Int {
+        currentYear - 1
+    }
+
+    /// Returns the default target year selection.
+    public static func initialTargetYear(
+        currentYear: Int = Self.currentYear()
+    ) -> Int {
+        currentYear
     }
 
     /// Returns source years extracted from persisted year tags, or `currentYear` when none exist.
@@ -55,23 +59,23 @@ public enum YearlyItemDuplicationSelectionOperations {
         Array((currentYear - range)...(currentYear + range)).sorted(by: >)
     }
 
-    /// Resolves source/target year selections for yearly duplication UI.
-    public static func selectionState(
+    /// Aligns source/target year selections for yearly duplication UI.
+    public static func alignSelection(
         context: ModelContext,
-        currentSourceYear: Int,
-        currentTargetYear: Int,
+        sourceYear: inout Int,
+        targetYear: inout Int,
         preserveCurrentSelection: Bool,
         currentYear: Int = Self.currentYear(),
         targetYearRange: Int = 10,
         minimumGroupCount: Int = 3,
         options: YearlyItemDuplicationOptions = .init()
-    ) throws -> YearlyItemDuplicationSelectionState {
+    ) throws {
         let yearTags = try context.fetch(.tags(.typeIs(.year), order: .reverse))
-        return selectionState(
+        alignSelection(
             context: context,
             yearTags: yearTags,
-            currentSourceYear: currentSourceYear,
-            currentTargetYear: currentTargetYear,
+            sourceYear: &sourceYear,
+            targetYear: &targetYear,
             preserveCurrentSelection: preserveCurrentSelection,
             currentYear: currentYear,
             targetYearRange: targetYearRange,
@@ -80,18 +84,18 @@ public enum YearlyItemDuplicationSelectionOperations {
         )
     }
 
-    /// Resolves source/target year selections for yearly duplication UI.
-    public static func selectionState(
+    /// Aligns source/target year selections for yearly duplication UI.
+    public static func alignSelection(
         context: ModelContext,
         yearTags: [Tag],
-        currentSourceYear: Int,
-        currentTargetYear: Int,
+        sourceYear: inout Int,
+        targetYear: inout Int,
         preserveCurrentSelection: Bool,
         currentYear: Int = Self.currentYear(),
         targetYearRange: Int = 10,
         minimumGroupCount: Int = 3,
         options: YearlyItemDuplicationOptions = .init()
-    ) -> YearlyItemDuplicationSelectionState {
+    ) {
         let sourceYears = availableSourceYears(
             from: yearTags,
             currentYear: currentYear
@@ -111,16 +115,12 @@ public enum YearlyItemDuplicationSelectionOperations {
         )
         let suggestedSourceYear = suggestion?.sourceYear ?? defaultSourceYear
         let suggestedTargetYear = suggestion?.targetYear ?? defaultTargetYear
-        let sourceYear = preserveCurrentSelection && sourceYears.contains(currentSourceYear)
-            ? currentSourceYear
+        sourceYear = preserveCurrentSelection && sourceYears.contains(sourceYear)
+            ? sourceYear
             : suggestedSourceYear
-        let targetYear = preserveCurrentSelection && targetYears.contains(currentTargetYear)
-            ? currentTargetYear
+        targetYear = preserveCurrentSelection && targetYears.contains(targetYear)
+            ? targetYear
             : suggestedTargetYear
-        return .init(
-            sourceYear: sourceYear,
-            targetYear: targetYear
-        )
     }
 
     /// Builds a suggested source and target year pair from available year tags.
