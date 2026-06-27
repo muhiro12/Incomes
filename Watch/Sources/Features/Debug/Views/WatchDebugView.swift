@@ -11,7 +11,6 @@ struct WatchDebugView {
     private var isDebugOn
 
     @State private var hasDebugData = false
-    @State private var isDeleting = false
 }
 
 extension WatchDebugView: View {
@@ -21,7 +20,6 @@ extension WatchDebugView: View {
             WatchDebugNavigationSection()
             if hasDebugData {
                 WatchDebugSampleDataSection(
-                    isDeleting: isDeleting,
                     deleteDebugData: deleteDebugData
                 )
             }
@@ -44,10 +42,6 @@ private extension WatchDebugView {
     }
 
     func deleteDebugData() {
-        isDeleting = true
-        defer {
-            isDeleting = false
-        }
         do {
             try SampleDataOperations.deleteDebugData(context: context)
             refreshDebugPresence()
