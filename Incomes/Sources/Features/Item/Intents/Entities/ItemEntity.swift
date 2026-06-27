@@ -8,8 +8,7 @@
 import AppIntents
 import SwiftData
 
-@Observable
-final class ItemEntity: AppEntity {
+struct ItemEntity: AppEntity {
     static let defaultQuery = ItemEntityQuery()
 
     static var typeDisplayRepresentation: TypeDisplayRepresentation {
@@ -57,7 +56,7 @@ final class ItemEntity: AppEntity {
 }
 
 extension ItemEntity {
-    convenience init?(_ model: Item) {
+    init?(_ model: Item) {
         guard let encodedID = try? PersistentIdentifierCoder.encode(model.id) else {
             return nil
         }
