@@ -8,9 +8,10 @@ struct ItemFormInferenceUpdateTests {
         let update = ItemFormInferenceUpdate(
             dateString: "20250102",
             content: "Content",
-            income: 100,
+            income: 1_000,
             outgo: 50,
-            category: "Category"
+            category: "Category",
+            locale: Locale(identifier: "en_US")
         )
 
         if update.date?.stringValueWithoutLocale(.yyyyMMdd) != "20250102" {
@@ -25,7 +26,7 @@ struct ItemFormInferenceUpdateTests {
 
         #expect(update.date?.stringValueWithoutLocale(.yyyyMMdd) == "20250102")
         #expect(update.content == "Content")
-        #expect(update.incomeText == "100")
+        #expect(update.incomeText == "1,000")
         #expect(update.outgoText == "50")
         #expect(update.category == "Category")
     }
@@ -38,14 +39,15 @@ struct ItemFormInferenceUpdateTests {
             date: date,
             content: "Content",
             income: 100,
-            outgo: 50,
-            category: "Category"
+            outgo: 1_250,
+            category: "Category",
+            locale: Locale(identifier: "en_US")
         )
 
         #expect(update.date == date)
         #expect(update.content == "Content")
         #expect(update.incomeText == "100")
-        #expect(update.outgoText == "50")
+        #expect(update.outgoText == "1,250")
         #expect(update.category == "Category")
     }
 

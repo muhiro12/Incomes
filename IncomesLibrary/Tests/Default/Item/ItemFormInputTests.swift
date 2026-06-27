@@ -67,16 +67,17 @@ struct ItemFormInputTests {
         let input = ItemFormInput(
             date: date,
             content: "Content",
-            income: 100,
-            outgo: 0,
+            income: 1_000,
+            outgo: Decimal(string: "2500.5") ?? .zero,
             category: "Category",
-            priority: 2
+            priority: 2,
+            locale: Locale(identifier: "en_US")
         )
 
         #expect(input.date == date)
         #expect(input.content == "Content")
-        #expect(input.incomeText == "100")
-        #expect(input.outgoText == "0")
+        #expect(input.incomeText == "1,000")
+        #expect(input.outgoText == "2,500.5")
         #expect(input.category == "Category")
         #expect(input.priorityText == "2")
     }
@@ -157,18 +158,21 @@ struct ItemFormInputTests {
                 date: shiftedDate("2026-01-10T12:00:00Z"),
                 content: "Subscription",
                 income: 0,
-                outgo: 250,
+                outgo: 1_250,
                 category: "Service",
                 priority: 3
             )
         )
 
-        let input = ItemFormInput(item: item)
+        let input = ItemFormInput(
+            item: item,
+            locale: Locale(identifier: "en_US")
+        )
 
         #expect(input.date == item.localDate)
         #expect(input.content == "Subscription")
         #expect(input.incomeText.isEmpty)
-        #expect(input.outgoText == "250")
+        #expect(input.outgoText == "1,250")
         #expect(input.category == "Service")
         #expect(input.priorityText == "3")
     }

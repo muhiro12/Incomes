@@ -78,13 +78,14 @@ public struct ItemFormInput {
         income: Decimal,
         outgo: Decimal,
         category: String,
-        priority: Int = 0
+        priority: Int = 0,
+        locale: Locale = .current
     ) {
         self.init(
             date: date,
             content: content,
-            incomeText: income.description,
-            outgoText: outgo.description,
+            incomeText: income.groupedDecimalText(locale: locale),
+            outgoText: outgo.groupedDecimalText(locale: locale),
             category: category,
             priorityText: "\(priority)"
         )
@@ -103,12 +104,22 @@ public struct ItemFormInput {
     }
 
     /// Creates an item form input snapshot from an existing item.
-    public init(item: Item) {
+    public init(
+        item: Item,
+        locale: Locale = .current
+    ) {
+        let incomeText = item.income != .zero
+            ? item.income.groupedDecimalText(locale: locale)
+            : ""
+        let outgoText = item.outgo != .zero
+            ? item.outgo.groupedDecimalText(locale: locale)
+            : ""
+
         self.init(
             date: item.localDate,
             content: item.content,
-            incomeText: item.income != .zero ? item.income.description : "",
-            outgoText: item.outgo != .zero ? item.outgo.description : "",
+            incomeText: incomeText,
+            outgoText: outgoText,
             category: CategoryNameSupport.displayName(
                 forStoredName: item.category?.name
             ),

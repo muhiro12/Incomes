@@ -34,13 +34,14 @@ public struct ItemFormInferenceUpdate {
         content: String,
         income: Decimal,
         outgo: Decimal,
-        category: String
+        category: String,
+        locale: Locale = .current
     ) {
         self.init(
             date: date,
             content: content,
-            incomeText: income.description,
-            outgoText: outgo.description,
+            incomeText: income.groupedDecimalText(locale: locale),
+            outgoText: outgo.groupedDecimalText(locale: locale),
             category: category
         )
     }
@@ -51,14 +52,16 @@ public struct ItemFormInferenceUpdate {
         content: String,
         income: Decimal,
         outgo: Decimal,
-        category: String
+        category: String,
+        locale: Locale = .current
     ) {
         self.init(
             date: dateString.dateValueWithoutLocale(.yyyyMMdd),
             content: content,
             income: income,
             outgo: outgo,
-            category: category
+            category: category,
+            locale: locale
         )
     }
 

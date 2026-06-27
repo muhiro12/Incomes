@@ -18,11 +18,11 @@ extension DebugSection: View {
         Section {
             DebugValueRow(title: "Date", value: item.date.description)
             DebugValueRow(title: "Content", value: item.content)
-            DebugValueRow(title: "Income", value: item.income.description)
-            DebugValueRow(title: "Outgo", value: item.outgo.description)
+            DebugValueRow(title: "Income", value: item.income.groupedDecimalText())
+            DebugValueRow(title: "Outgo", value: item.outgo.groupedDecimalText())
             DebugValueRow(title: "Priority", value: item.priority.description)
             DebugValueRow(title: "RepeatID", value: item.repeatID.description)
-            DebugValueRow(title: "Balance", value: item.balance.description)
+            DebugValueRow(title: "Balance", value: item.balance.groupedDecimalText())
             DebugTagsRow(tags: item.tags ?? [])
         } header: {
             Text("Debug")

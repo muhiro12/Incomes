@@ -4,11 +4,11 @@ Do not mention month names or dates.
 
 Trusted current-month facts:
 - Currency code: {{currencyCode}}
-- Income amount digits: {{totalIncome}}
-- Outgo amount digits: {{totalOutgo}}
-- Net result digits: {{netIncome}}
+- Income amount text: {{totalIncome}}
+- Outgo amount text: {{totalOutgo}}
+- Net result text: {{netIncome}}
 
-If you mention an amount, copy only the trusted digits exactly.
+If you mention an amount, copy only the trusted amount text exactly.
 Do not include any other numbers, dates, percentages, counts, rounded units,
 category amounts, or converted values anywhere in the response.
 

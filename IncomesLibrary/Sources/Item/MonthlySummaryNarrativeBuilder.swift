@@ -102,7 +102,7 @@ enum MonthlySummaryNarrativeBuilder {
 
 private extension MonthlySummaryNarrativeBuilder {
     static func decimalString(_ value: Decimal) -> String {
-        value.description
+        value.groupedDecimalText(locale: Locale(identifier: "en_US"))
     }
 
     static func previousMonthDataAvailable(in context: Context) -> Bool {
@@ -263,7 +263,7 @@ private extension MonthlySummaryNarrativeBuilder {
         formatter.numberStyle = .currency
         formatter.currencyCode = currencyCode
         formatter.locale = locale
-        return formatter.string(for: value) ?? value.description
+        return formatter.string(for: value) ?? value.groupedDecimalText(locale: locale)
     }
 
     static func decimalToDouble(_ value: Decimal) -> Double {

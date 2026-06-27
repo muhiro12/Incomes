@@ -125,7 +125,7 @@ struct MonthlySummaryOperationsNarrativeTests {
         #expect(
             prompt.contains(#"- Category "Food \"Takeout\"\nBackslash \\" spending increased."#)
         )
-        #expect(prompt.contains("Income amount digits: 1000"))
+        #expect(prompt.contains("Income amount text: 1,000"))
         #expect(prompt.contains("Previous-month data is available") == false)
         #expect(!prompt.contains("year: 2026"))
         #expect(!prompt.contains("month: 6"))

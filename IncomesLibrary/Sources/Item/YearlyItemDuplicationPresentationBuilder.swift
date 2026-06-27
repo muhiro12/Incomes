@@ -51,13 +51,7 @@ enum YearlyItemDuplicationPresentationBuilder {
         var source = value
         var rounded = Decimal.zero
         NSDecimalRound(&rounded, &source, 0, .down)
-        let formatter = NumberFormatter()
-        formatter.locale = locale
-        formatter.numberStyle = .decimal
-        formatter.usesGroupingSeparator = true
-        formatter.maximumFractionDigits = 0
-        formatter.minimumFractionDigits = 0
-        return formatter.string(for: rounded) ?? rounded.description
+        return rounded.groupedDecimalText(locale: locale)
     }
 }
 
