@@ -1,6 +1,28 @@
 import SwiftUI
 
 extension ItemFormView {
+    var incomeBinding: Binding<String> {
+        .init(
+            get: {
+                formModel.income
+            },
+            set: { text in
+                formModel.updateIncomeText(text)
+            }
+        )
+    }
+
+    var outgoBinding: Binding<String> {
+        .init(
+            get: {
+                formModel.outgo
+            },
+            set: { text in
+                formModel.updateOutgoText(text)
+            }
+        )
+    }
+
     var initialContextTaskID: String {
         let itemID = item.map { String(describing: $0.persistentModelID) } ?? ""
         let tagID = tag.map { String(describing: $0.persistentModelID) } ?? ""

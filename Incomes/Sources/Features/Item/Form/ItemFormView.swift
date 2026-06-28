@@ -63,6 +63,8 @@ extension ItemFormView {
         Form {
             ItemFormInformationSection(
                 model: model,
+                income: incomeBinding,
+                outgo: outgoBinding,
                 priorityRange: priorityRange,
                 focusedField: $focusedField
             )

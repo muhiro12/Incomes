@@ -2,12 +2,14 @@ import SwiftUI
 
 struct ItemFormInformationSection: View {
     @Bindable var model: ItemFormModel
+    @Binding var income: String
+    @Binding var outgo: String
     let priorityRange: ClosedRange<Int>
     let focusedField: FocusState<ItemFormFocusedField?>.Binding
 
     var body: some View {
-        let isIncomeValid = model.income.isEmptyOrDecimal
-        let isOutgoValid = model.outgo.isEmptyOrDecimal
+        let isIncomeValid = income.isEmptyOrDecimal
+        let isOutgoValid = outgo.isEmptyOrDecimal
 
         Section("Information") {
             ItemFormDateRow(date: $model.date)
@@ -19,8 +21,8 @@ struct ItemFormInformationSection: View {
                 focusedField: focusedField
             )
             ItemFormAmountRows(
-                income: $model.income,
-                outgo: $model.outgo,
+                income: $income,
+                outgo: $outgo,
                 isIncomeValid: isIncomeValid,
                 isOutgoValid: isOutgoValid,
                 focusedField: focusedField

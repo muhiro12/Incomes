@@ -6,16 +6,8 @@ final class ItemFormModel {
     var date: Date = .now
     var content: String = ""
     var priority: String = "0"
-    var income: String = "" {
-        didSet {
-            income = income.groupedDecimalInputText()
-        }
-    }
-    var outgo: String = "" {
-        didSet {
-            outgo = outgo.groupedDecimalInputText()
-        }
-    }
+    private(set) var income: String = ""
+    private(set) var outgo: String = ""
     var category: String = ""
     var repeatMonthSelections: Set<RepeatMonthSelection> = []
     var isRepeatEnabled = false
@@ -111,11 +103,19 @@ extension ItemFormModel {
     func apply(_ formInput: ItemFormInput) {
         date = formInput.date
         content = formInput.content
-        income = formInput.incomeText
-        outgo = formInput.outgoText
+        updateIncomeText(formInput.incomeText)
+        updateOutgoText(formInput.outgoText)
         category = formInput.category
         priority = formInput.priorityText
         syncRepeatMonthSelectionsWithBaseDate()
+    }
+
+    func updateIncomeText(_ text: String) {
+        income = text.groupedDecimalInputText()
+    }
+
+    func updateOutgoText(_ text: String) {
+        outgo = text.groupedDecimalInputText()
     }
 
     func handleDateChange() {
