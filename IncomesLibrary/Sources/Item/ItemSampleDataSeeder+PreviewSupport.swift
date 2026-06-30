@@ -65,10 +65,10 @@ extension ItemSampleDataSeeder {
     static func paydayTemplate() -> PreviewItemTemplate {
         .init(
             day: .fourth,
-            content: String(localized: "Payday"),
+            content: String(localized: "Payday", table: "SampleData", bundle: .module),
             incomeBaseUSD: 4_500,
             outgoBaseUSD: 0,
-            category: String(localized: "Salary")
+            category: String(localized: "Salary", table: "SampleData", bundle: .module)
         )
     }
 
@@ -84,10 +84,10 @@ extension ItemSampleDataSeeder {
             paydayTemplate(),
             .init(
                 day: .fourth,
-                content: String(localized: "Advertising revenue"),
+                content: String(localized: "Advertising revenue", table: "SampleData", bundle: .module),
                 incomeBaseUSD: 500,
                 outgoBaseUSD: 0,
-                category: String(localized: "Salary")
+                category: String(localized: "Salary", table: "SampleData", bundle: .module)
             )
         ]
     }
@@ -96,24 +96,24 @@ extension ItemSampleDataSeeder {
         [
             .init(
                 day: .second,
-                content: String(localized: "Apple card"),
+                content: String(localized: "Apple card", table: "SampleData", bundle: .module),
                 incomeBaseUSD: 0,
                 outgoBaseUSD: 900,
-                category: String(localized: "Credit")
+                category: String(localized: "Credit", table: "SampleData", bundle: .module)
             ),
             .init(
                 day: .first,
-                content: String(localized: "Orange card"),
+                content: String(localized: "Orange card", table: "SampleData", bundle: .module),
                 incomeBaseUSD: 0,
                 outgoBaseUSD: 600,
-                category: String(localized: "Credit")
+                category: String(localized: "Credit", table: "SampleData", bundle: .module)
             ),
             .init(
                 day: .fourth,
-                content: String(localized: "Lemon card"),
+                content: String(localized: "Lemon card", table: "SampleData", bundle: .module),
                 incomeBaseUSD: 0,
                 outgoBaseUSD: 500,
-                category: String(localized: "Credit")
+                category: String(localized: "Credit", table: "SampleData", bundle: .module)
             )
         ]
     }
@@ -122,17 +122,17 @@ extension ItemSampleDataSeeder {
         [
             .init(
                 day: .fifth,
-                content: String(localized: "House"),
+                content: String(localized: "House", table: "SampleData", bundle: .module),
                 incomeBaseUSD: 0,
                 outgoBaseUSD: 1_800,
-                category: String(localized: "Loan")
+                category: String(localized: "Loan", table: "SampleData", bundle: .module)
             ),
             .init(
                 day: .third,
-                content: String(localized: "Car"),
+                content: String(localized: "Car", table: "SampleData", bundle: .module),
                 incomeBaseUSD: 0,
                 outgoBaseUSD: 300,
-                category: String(localized: "Loan")
+                category: String(localized: "Loan", table: "SampleData", bundle: .module)
             )
         ]
     }
@@ -141,17 +141,17 @@ extension ItemSampleDataSeeder {
         [
             .init(
                 day: .first,
-                content: String(localized: "Insurance"),
+                content: String(localized: "Insurance", table: "SampleData", bundle: .module),
                 incomeBaseUSD: 0,
                 outgoBaseUSD: 250,
-                category: String(localized: "Tax")
+                category: String(localized: "Tax", table: "SampleData", bundle: .module)
             ),
             .init(
                 day: .fifth,
-                content: String(localized: "Pension"),
+                content: String(localized: "Pension", table: "SampleData", bundle: .module),
                 incomeBaseUSD: 0,
                 outgoBaseUSD: 300,
-                category: String(localized: "Tax")
+                category: String(localized: "Tax", table: "SampleData", bundle: .module)
             )
         ]
     }
