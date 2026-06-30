@@ -50,6 +50,11 @@ public enum SampleDataOperations {
     public static func deleteDebugData(context: ModelContext) throws {
         try ItemSampleDataSeeder.deleteDebugData(context: context)
     }
+
+    /// Seeds duplicate category tags for duplicate-tag previews.
+    public static func seedDuplicateTagPreviewData(context: ModelContext) throws {
+        try ItemSampleDataSeeder.seedDuplicateTagPreviewData(context: context)
+    }
 }
 
 private extension SampleDataOperations.Profile {

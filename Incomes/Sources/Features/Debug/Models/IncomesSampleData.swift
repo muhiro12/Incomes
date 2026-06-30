@@ -79,26 +79,6 @@ extension IncomesSampleData {
     static func prepareDuplicateTagPreviewData(
         in context: ModelContext
     ) throws {
-        let previewDuplicateCount = 2
-        let duplicateCategoryName = String(localized: "Credit")
-        let items = try ItemQueryOperations.items(context: context)
-        let sourceItems = items.filter { item in
-            item.category?.name == duplicateCategoryName
-        }
-
-        guard sourceItems.count >= previewDuplicateCount else {
-            return
-        }
-
-        for item in sourceItems.prefix(previewDuplicateCount) {
-            let duplicateTag = Tag.createIgnoringDuplicates(
-                context: context,
-                name: duplicateCategoryName,
-                type: .category
-            )
-            var tags = item.tags ?? []
-            tags.append(duplicateTag)
-            item.modify(tags: tags)
-        }
+        try SampleDataOperations.seedDuplicateTagPreviewData(context: context)
     }
 }

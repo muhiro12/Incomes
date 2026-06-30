@@ -96,10 +96,10 @@ enum ItemSampleDataSeeder {
                     context: context,
                     values: .init(
                         date: date,
-                        content: String(localized: "Pension"),
+                        content: String(localized: "Pension", table: "SampleData", bundle: .module),
                         income: LocaleAmountConverter.localizedAmount(baseUSD: 0),
                         outgo: LocaleAmountConverter.localizedAmount(baseUSD: 36),
-                        category: String(localized: "Tax"),
+                        category: String(localized: "Tax", table: "SampleData", bundle: .module),
                         priority: 0
                     ),
                     repeatID: .init()
@@ -143,10 +143,10 @@ enum ItemSampleDataSeeder {
             context: context,
             values: .init(
                 date: firstDate,
-                content: String(localized: "Salary"),
+                content: String(localized: "Salary", table: "SampleData", bundle: .module),
                 income: LocaleAmountConverter.localizedAmount(baseUSD: 3_000),
                 outgo: .zero,
-                category: String(localized: "Salary"),
+                category: String(localized: "Salary", table: "SampleData", bundle: .module),
                 priority: 0
             ),
             repeatID: .init()
@@ -157,10 +157,10 @@ enum ItemSampleDataSeeder {
             context: context,
             values: .init(
                 date: secondDate,
-                content: String(localized: "Rent"),
+                content: String(localized: "Rent", table: "SampleData", bundle: .module),
                 income: .zero,
                 outgo: LocaleAmountConverter.localizedAmount(baseUSD: 1_200),
-                category: String(localized: "Housing"),
+                category: String(localized: "Housing", table: "SampleData", bundle: .module),
                 priority: 0
             ),
             repeatID: .init()
@@ -171,10 +171,10 @@ enum ItemSampleDataSeeder {
             context: context,
             values: .init(
                 date: thirdDate,
-                content: String(localized: "Grocery"),
+                content: String(localized: "Grocery", table: "SampleData", bundle: .module),
                 income: .zero,
                 outgo: LocaleAmountConverter.localizedAmount(baseUSD: 45),
-                category: String(localized: "Food"),
+                category: String(localized: "Food", table: "SampleData", bundle: .module),
                 priority: 0
             ),
             repeatID: .init()
@@ -205,13 +205,38 @@ enum ItemSampleDataSeeder {
             TagMutationOperations.delete(tag: tag)
         }
     }
+
+    /// Seeds duplicate category tags for duplicate-tag previews.
+    static func seedDuplicateTagPreviewData(context: ModelContext) throws {
+        let previewDuplicateCount = 2
+        let duplicateCategoryName = String(localized: "Credit", table: "SampleData", bundle: .module)
+        let items = try ItemQueryOperations.items(context: context)
+        let sourceItems = items.filter { item in
+            item.category?.name == duplicateCategoryName
+        }
+
+        guard sourceItems.count >= previewDuplicateCount else {
+            return
+        }
+
+        for item in sourceItems.prefix(previewDuplicateCount) {
+            let duplicateTag = Tag.createIgnoringDuplicates(
+                context: context,
+                name: duplicateCategoryName,
+                type: .category
+            )
+            var tags = item.tags ?? []
+            tags.append(duplicateTag)
+            item.modify(tags: tags)
+        }
+    }
 }
 
 // swiftlint:enable no_magic_numbers
 
 private extension ItemSampleDataSeeder {
     static func attachSampleTag(to item: Item, context: ModelContext) throws {
-        let sampleName = String(localized: "Sample Data")
+        let sampleName = String(localized: "Sample Data", table: "SampleData", bundle: .module)
         let debugTag = try Tag.create(context: context, name: sampleName, type: .debug)
         var currentTags = item.tags ?? []
         currentTags.append(debugTag)

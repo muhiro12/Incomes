@@ -82,6 +82,21 @@ struct SampleDataOperationsTests {
         #expect(fetchItems(context).count == 1)
     }
 
+    @Test
+    func seedDuplicateTagPreviewData_creates_duplicate_category_tags() throws {
+        try SampleDataOperations.seed(
+            context: context,
+            profile: .preview,
+            baseDate: shiftedDate("2000-01-03T12:00:00Z"),
+            ifEmptyOnly: false
+        )
+        #expect(try SettingsStatusOperations.load(context: context).hasDuplicateTags == false)
+
+        try SampleDataOperations.seedDuplicateTagPreviewData(context: context)
+
+        #expect(try SettingsStatusOperations.load(context: context).hasDuplicateTags)
+    }
+
     // MARK: - Delete
 
     @Test

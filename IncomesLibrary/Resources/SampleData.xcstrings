@@ -1,614 +1,614 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "%lld groups / %lld items / %lld skipped" : {
+    "Advertising revenue" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%1$lld groups / %2$lld items / %3$lld skipped"
+            "value" : "Ad revenue"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%1$lld grupos / %2$lld elementos / %3$lld omitidos"
+            "value" : "Ingresos por anuncios"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%1$lld groupes / %2$lld éléments / %3$lld ignorés"
+            "value" : "Revenus publicitaires"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%1$lldグループ / %2$lld項目 / %3$lld件スキップ"
+            "value" : "広告収入"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%1$lld 个分组 / %2$lld 个项目 / 已跳过 %3$lld 个"
+            "value" : "广告收入"
           }
         }
       }
     },
-    "Invalid month requested for summary generation." : {
+    "Apple card" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Choose a valid month to generate a summary."
+            "value" : "Apple Card"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Elige un mes válido para generar un resumen."
+            "value" : "Tarjeta Apple"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Choisissez un mois valide pour générer un résumé."
+            "value" : "Carte Apple"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "サマリーを生成するには有効な月を選択してください。"
+            "value" : "Appleカード"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "请选择有效月份来生成摘要。"
+            "value" : "Apple 卡"
           }
         }
       }
     },
-    "Compared with the previous month, %@." : {
+    "Car" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Compared with the previous month, %1$@."
+            "value" : "Car loan"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "En comparación con el mes anterior, %1$@."
+            "value" : "Préstamo del coche"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Par rapport au mois précédent, %1$@."
+            "value" : "Crédit auto"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "前月と比べると、%1$@。"
+            "value" : "自動車ローン"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "与上月相比，%1$@。"
+            "value" : "车贷"
           }
         }
       }
     },
-    "%@ income decreased" : {
+    "Credit" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%1$@ income decreased"
+            "value" : "Credit card"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "disminuyeron los ingresos de %1$@"
+            "value" : "Tarjeta de crédito"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "les revenus de %1$@ ont diminué"
+            "value" : "Carte de crédit"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%1$@の収入が減りました"
+            "value" : "クレジットカード"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%1$@收入减少"
+            "value" : "信用卡"
           }
         }
       }
     },
-    "%@ income increased" : {
+    "Food" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%1$@ income increased"
+            "value" : "Food & dining"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "aumentaron los ingresos de %1$@"
+            "value" : "Comida y restaurantes"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "les revenus de %1$@ ont augmenté"
+            "value" : "Repas et courses"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%1$@の収入が増えました"
+            "value" : "食費・外食"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%1$@收入增加"
+            "value" : "餐饮"
           }
         }
       }
     },
-    "There is not enough previous-month data for a reliable comparison." : {
+    "Grocery" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "There is not enough previous-month data for a reliable comparison."
+            "value" : "Groceries"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "No hay suficientes datos del mes anterior para una comparación fiable."
+            "value" : "Supermercado"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Les données du mois précédent sont insuffisantes pour une comparaison fiable."
+            "value" : "Courses"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "前月との比較に十分なデータはありません。"
+            "value" : "食料品"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "没有足够的上月数据进行可靠比较。"
+            "value" : "食品杂货"
           }
         }
       }
     },
-    "There were no major category-level changes from the previous month." : {
+    "House" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "There were no major category-level changes from the previous month."
+            "value" : "Mortgage"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "No hubo cambios importantes por categoría respecto al mes anterior."
+            "value" : "Hipoteca"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Aucun changement important par catégorie par rapport au mois précédent."
+            "value" : "Prêt immobilier"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "前月と比べて大きなカテゴリ変化はありませんでした。"
+            "value" : "住宅ローン"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "与上月相比，类别层面没有明显变化。"
+            "value" : "房贷"
           }
         }
       }
     },
-    "%@ spending decreased" : {
+    "Housing" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%1$@ spending decreased"
+            "value" : "Housing"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "disminuyó el gasto en %1$@"
+            "value" : "Vivienda"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "les dépenses de %1$@ ont diminué"
+            "value" : "Logement"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%1$@の支出が減りました"
+            "value" : "住宅"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%1$@支出减少"
+            "value" : "住房"
           }
         }
       }
     },
-    "%@ spending increased" : {
+    "Insurance" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%1$@ spending increased"
+            "value" : "Insurance premium"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "aumentó el gasto en %1$@"
+            "value" : "Prima de seguro"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "les dépenses de %1$@ ont augmenté"
+            "value" : "Prime d’assurance"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%1$@の支出が増えました"
+            "value" : "保険料"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%1$@支出增加"
+            "value" : "保险费"
           }
         }
       }
     },
-    "Income for %@ was %@. Outgo was %@, and the net result was %@. %@" : {
+    "Lemon card" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Income for %1$@ was %2$@. Outgo was %3$@, and the net result was %4$@. %5$@"
+            "value" : "Lemon card"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Los ingresos de %1$@ fueron %2$@. Los gastos fueron %3$@, y el resultado neto fue %4$@. %5$@"
+            "value" : "Tarjeta limón"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Les revenus de %1$@ étaient de %2$@. Les dépenses étaient de %3$@, pour un solde net de %4$@. %5$@"
+            "value" : "Carte citron"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%1$@の収入は%2$@でした。支出は%3$@で、収支は%4$@でした。%5$@"
+            "value" : "レモンカード"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%1$@的收入为%2$@。支出为%3$@，净结果为%4$@。%5$@"
+            "value" : "柠檬卡"
           }
         }
       }
     },
-    "On-device item inference is currently unavailable." : {
+    "Loan" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Item suggestions are currently unavailable on this device."
+            "value" : "Loans"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Las sugerencias de elementos no están disponibles en este dispositivo en este momento."
+            "value" : "Préstamos"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Les suggestions d’éléments ne sont pas disponibles sur cet appareil pour le moment."
+            "value" : "Prêts"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "このデバイスでは現在、項目の候補を利用できません。"
+            "value" : "ローン"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "此设备目前无法使用项目建议。"
+            "value" : "贷款"
           }
         }
       }
     },
-    "On-device item inference is unavailable in the current language." : {
+    "Orange card" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Item suggestions are not available for the current language."
+            "value" : "Orange card"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Las sugerencias de elementos no están disponibles para el idioma actual."
+            "value" : "Tarjeta naranja"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Les suggestions d’éléments ne sont pas disponibles dans la langue actuelle."
+            "value" : "Carte orange"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "現在の言語では項目の候補を利用できません。"
+            "value" : "オレンジカード"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "当前语言无法使用项目建议。"
+            "value" : "橙子卡"
           }
         }
       }
     },
-    "On-device monthly summaries are currently unavailable." : {
+    "Payday" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Monthly summaries are currently unavailable on this device."
+            "value" : "Paycheck"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Los resúmenes mensuales no están disponibles en este dispositivo en este momento."
+            "value" : "Nómina"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Les résumés mensuels ne sont pas disponibles sur cet appareil pour le moment."
+            "value" : "Paie"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "このデバイスでは現在、月次サマリーを利用できません。"
+            "value" : "給与"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "此设备目前无法使用月度摘要。"
+            "value" : "工资入账"
           }
         }
       }
     },
-    "On-device monthly summaries are unavailable in the current language." : {
+    "Pension" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Monthly summaries are not available for the current language."
+            "value" : "Pension contribution"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Los resúmenes mensuales no están disponibles para el idioma actual."
+            "value" : "Aporte a la pensión"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Les résumés mensuels ne sont pas disponibles dans la langue actuelle."
+            "value" : "Cotisation retraite"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "現在の言語では月次サマリーを利用できません。"
+            "value" : "年金保険料"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "当前语言无法使用月度摘要。"
+            "value" : "养老金缴费"
           }
         }
       }
     },
-    "Others" : {
+    "Rent" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Other"
+            "value" : "Rent"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Otros"
+            "value" : "Alquiler"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Autres"
+            "value" : "Loyer"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "その他"
+            "value" : "家賃"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "其他"
+            "value" : "房租"
           }
         }
       }
     },
-    "System" : {
+    "Salary" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "System"
+            "value" : "Salary"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sistema"
+            "value" : "Salario"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Système"
+            "value" : "Salaire"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "システム"
+            "value" : "給料"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "系统"
+            "value" : "工资"
           }
         }
       }
     },
-    "Unable to generate the monthly summary." : {
+    "Sample Data" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Unable to generate monthly summary."
+            "value" : "Sample data"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "No se pudo generar el resumen mensual."
+            "value" : "Datos de muestra"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Impossible de générer le résumé mensuel."
+            "value" : "Données d’exemple"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "月次サマリーを生成できませんでした。"
+            "value" : "サンプルデータ"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "无法生成月度摘要。"
+            "value" : "示例数据"
           }
         }
       }
     },
-    "Unable to infer item details." : {
+    "Tax" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Unable to fill in item details."
+            "value" : "Taxes & insurance"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "No se pudieron completar los detalles del elemento."
+            "value" : "Impuestos y seguros"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Impossible de compléter les détails de l’élément."
+            "value" : "Impôts et assurances"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "項目の詳細を入力できませんでした。"
+            "value" : "税金・保険"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "无法补全项目详细信息。"
+            "value" : "税费和保险"
           }
         }
       }
