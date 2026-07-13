@@ -2,10 +2,13 @@ import Foundation
 import MHPlatform
 
 enum IncomesIntentRouteStore {
-    static let appGroupStorageDescriptor = MHRawStorageDescriptor(
-        storageKey: IncomesUserDefaultsKeys.AppGroup.pendingDeepLinkURL.rawValue,
-        defaultSelection: .suite(AppGroup.id)
-    )
+    static let appGroupStorageDescriptor: MHRawStorageDescriptor = {
+        let descriptor = MHPreferenceDescriptors().pendingDeepLinkURL
+        return .init(
+            storageKey: descriptor.storageKey,
+            defaultSelection: descriptor.defaultSelection
+        )
+    }()
 
     private static let deepLinkStore = MHDeepLinkStore(
         key: appGroupStorageDescriptor

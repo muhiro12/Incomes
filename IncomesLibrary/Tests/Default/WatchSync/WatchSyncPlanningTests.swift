@@ -39,6 +39,53 @@ struct WatchSyncPlanningTests {
         let contents = Set(remaining.map(\.content))
         #expect(contents == Set(["AUG-NEW", "SEP-NEW", "OCT-NEW"]))
         #expect(!contents.contains("JULY-OLD"))
+
+        let verificationContext = ModelContext(context.container)
+        let persistedIDs = Set(
+            try verificationContext.fetch(FetchDescriptor<Item>())
+                .map(\.persistentModelID)
+        )
+        #expect(outcome.changedIDs.created == persistedIDs)
+    }
+
+    @Test
+    func applySnapshot_rollsBackReplacementForUnsupportedAmount() throws {
+        let base = shiftedDate("2000-09-15T12:00:00Z")
+        _ = try createItem(
+            context: context,
+            input: .init(
+                date: base,
+                content: "Existing",
+                income: 100,
+                outgo: .zero,
+                category: "Sync"
+            )
+        )
+        let unsupportedAmount = try #require(
+            Decimal(string: "100000000000000")
+        )
+
+        #expect(throws: ItemAmountPolicy.ValidationError.unsupportedStoredAmount) {
+            try WatchSyncOperations.applySnapshot(
+                context: context,
+                items: [
+                    .init(
+                        dateEpoch: base.timeIntervalSince1970,
+                        content: "Invalid",
+                        income: unsupportedAmount,
+                        outgo: .zero,
+                        category: "Sync"
+                    )
+                ],
+                baseDate: base,
+                monthOffsets: [.zero]
+            )
+        }
+
+        let verificationContext = ModelContext(context.container)
+        let persistedItems = try verificationContext.fetch(FetchDescriptor<Item>())
+        #expect(persistedItems.map(\.content) == ["Existing"])
+        #expect(context.hasChanges == false)
     }
 
     @Test
@@ -193,7 +240,7 @@ struct WatchSyncPlanningTests {
     private func snapshotItemWire(
         date: Date,
         content: String,
-        income: Double
+        income: Decimal
     ) -> ItemWire {
         .init(
             dateEpoch: date.timeIntervalSince1970,

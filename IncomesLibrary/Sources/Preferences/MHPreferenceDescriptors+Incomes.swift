@@ -29,11 +29,25 @@ public extension MHPreferenceDescriptors {
         )
     }
 
-    /// Currency code preference persisted in the standard defaults domain.
+    /// Currency code shared by the app and its extensions through the App Group.
     var currencyCode: MHStringPreferenceDescriptor {
         .init(
-            storageKey: IncomesUserDefaultsKeys.Standard.currencyCode.rawValue,
-            defaultSelection: .standard
+            storageKey: IncomesUserDefaultsKeys.AppGroup.currencyCode.rawValue,
+            defaultSelection: .suite(AppGroup.id),
+            legacySources: [
+                .init(
+                    storageKey: IncomesUserDefaultsKeys.Standard.currencyCode.rawValue,
+                    selection: .standard
+                )
+            ]
+        )
+    }
+
+    /// Pending deep link shared by app-owned processes through the App Group.
+    var pendingDeepLinkURL: MHStringPreferenceDescriptor {
+        .init(
+            storageKey: IncomesUserDefaultsKeys.AppGroup.pendingDeepLinkURL.rawValue,
+            defaultSelection: .suite(AppGroup.id)
         )
     }
 

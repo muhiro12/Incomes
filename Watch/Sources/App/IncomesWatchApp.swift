@@ -16,9 +16,6 @@ struct IncomesWatchApp: App {
     init() {
         _ = IncomesPreferenceLifecycle.runSynchronously()
 
-        // Migrate possible legacy DB files into App Group first
-        DatabaseMigrator.migrateSQLiteFilesIfNeeded()
-
         let modelContainer: ModelContainer
         do {
             modelContainer = try ModelContainer(

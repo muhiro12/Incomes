@@ -50,9 +50,21 @@ extension ContentView: View {
                 return
             }
 
+            applyPendingApplicationSnapshotIfNeeded()
             await reloadRecentMonthsIfNeeded(
                 trigger: .foreground
             )
+        }
+        .onReceive(
+            NotificationCenter.default.publisher(
+                for: .watchSyncApplicationContextDidChange
+            )
+        ) { _ in
+            guard scenePhase == .active else {
+                return
+            }
+
+            applyPendingApplicationSnapshotIfNeeded()
         }
     }
 }
@@ -174,7 +186,34 @@ private extension ContentView {
         }
 
         await PhoneSyncClient.shared.activate()
-        let reply = await WatchDataSyncer.syncRecentMonths(context: context)
+        let request = ItemsRequest.recent()
+        let reply = await WatchDataSyncer.syncRecentMonths(
+            context: context,
+            request: request
+        )
+        PhoneSyncClient.shared.recordPullResult(
+            reply,
+            request: request
+        )
+        model.finishReload(with: reply)
+        applyPendingApplicationSnapshotIfNeeded()
+    }
+
+    func applyPendingApplicationSnapshotIfNeeded() {
+        guard model.isReloading == false,
+              let snapshot = PhoneSyncClient.shared.takePendingApplicationSnapshot(),
+              model.beginReload(trigger: .applicationContext) else {
+            return
+        }
+
+        let reply = WatchDataSyncer.applyApplicationSnapshot(
+            snapshot,
+            context: context
+        )
+        PhoneSyncClient.shared.recordApplicationContextResult(
+            reply,
+            snapshot: snapshot
+        )
         model.finishReload(with: reply)
     }
 

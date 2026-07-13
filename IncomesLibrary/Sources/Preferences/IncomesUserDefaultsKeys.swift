@@ -13,6 +13,7 @@ public enum IncomesUserDefaultsKeys {
     }
 
     public enum AppGroup: String, CaseIterable {
+        case currencyCode = "R8k2Z3tL"
         case pendingDeepLinkURL = "d2T9w4Bn"
     }
 }

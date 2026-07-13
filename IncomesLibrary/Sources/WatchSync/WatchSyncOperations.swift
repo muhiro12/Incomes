@@ -39,36 +39,44 @@ public enum WatchSyncOperations {
         baseDate: Date = .now,
         monthOffsets: [Int] = ItemsRequest.recentMonthOffsets
     ) throws -> MutationOutcome {
-        let allowedYearMonths = allowedYearMonths(
-            baseDate: baseDate,
-            monthOffsets: monthOffsets
-        )
-        let groupedIncomingItems = Dictionary(grouping: items) { wire in
-            Date(timeIntervalSince1970: wire.dateEpoch)
-                .stringValueWithoutLocale(.yyyyMM)
-        }
-
-        let allItems = try context.fetch(FetchDescriptor<Item>())
-        let deleteOutcome = try ItemDeletionOperations.deleteWithOutcome(
+        try ModelContextMutationOperations.run(
             context: context,
-            items: allItems
-        )
-        let createdItems = try createItems(
-            context: context,
-            groupedIncomingItems: groupedIncomingItems,
-            allowedYearMonths: allowedYearMonths
-        )
+            operation: {
+                let allowedYearMonths = allowedYearMonths(
+                    baseDate: baseDate,
+                    monthOffsets: monthOffsets
+                )
+                let groupedIncomingItems = Dictionary(grouping: items) { wire in
+                    Date(timeIntervalSince1970: wire.dateEpoch)
+                        .stringValueWithoutLocale(.yyyyMM)
+                }
 
-        if !createdItems.isEmpty {
-            try BalanceCalculator.calculate(
-                in: context,
-                for: createdItems
-            )
-        }
+                let allItems = try context.fetch(FetchDescriptor<Item>())
+                let deleteOutcome = try ItemDeletionOperations.deleteWithoutSavingWithOutcome(
+                    context: context,
+                    items: allItems
+                )
+                let createdItems = try createItems(
+                    context: context,
+                    groupedIncomingItems: groupedIncomingItems,
+                    allowedYearMonths: allowedYearMonths
+                )
 
-        return snapshotOutcome(
-            createdItems: createdItems,
-            deleteOutcome: deleteOutcome
+                if !createdItems.isEmpty {
+                    try BalanceCalculator.calculate(
+                        in: context,
+                        for: createdItems
+                    )
+                }
+
+                return (createdItems: createdItems, deleteOutcome: deleteOutcome)
+            },
+            afterSave: { mutation in
+                snapshotOutcome(
+                    createdItems: mutation.createdItems,
+                    deleteOutcome: mutation.deleteOutcome
+                )
+            }
         )
     }
 }
@@ -92,8 +100,8 @@ private extension WatchSyncOperations {
             values: .init(
                 date: Date(timeIntervalSince1970: wire.dateEpoch),
                 content: wire.content,
-                income: .init(wire.income),
-                outgo: .init(wire.outgo),
+                income: wire.income,
+                outgo: wire.outgo,
                 category: wire.category,
                 priority: 0
             ),
@@ -152,8 +160,8 @@ private extension ItemWire {
         self.init(
             dateEpoch: item.localDate.timeIntervalSince1970,
             content: item.content,
-            income: Double(item.income.description) ?? .zero,
-            outgo: Double(item.outgo.description) ?? .zero,
+            income: item.income,
+            outgo: item.outgo,
             category: item.category?.name ?? ""
         )
     }

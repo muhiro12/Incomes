@@ -12,6 +12,16 @@ enum SettingsActionCoordinator {
         try SettingsStatusOperations.load(context: context)
     }
 
+    static func resetAllData(
+        context: ModelContext,
+        notificationService: NotificationService
+    ) async throws {
+        try await DataMaintenanceOperations.resetAllData(context: context)
+        await IncomesMutationWorkflow.refreshAllDataSurfaces(
+            notificationService: notificationService
+        )
+    }
+
     static func refreshNotifications(notificationService: NotificationService) async {
         await IncomesMutationWorkflow.refreshNotificationSchedule(
             notificationService: notificationService

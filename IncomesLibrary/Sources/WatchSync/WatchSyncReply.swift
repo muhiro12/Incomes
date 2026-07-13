@@ -21,6 +21,10 @@ public struct WatchSyncReply: Codable, Sendable {
 
     public let status: Status
     public let items: [ItemWire]
+    /// Currency code selected by the paired iPhone, when supplied by the sender.
+    public let currencyCode: String?
+    /// Time at which the paired iPhone generated this snapshot.
+    public let phoneGeneratedEpoch: Double?
     public let failure: WatchSyncFailure?
 
     public var isSuccess: Bool {
@@ -36,10 +40,16 @@ public struct WatchSyncReply: Codable, Sendable {
         isSuccess && items.isEmpty
     }
 
-    public static func success(items: [ItemWire]) -> Self {
+    public static func success(
+        items: [ItemWire],
+        currencyCode: String? = nil,
+        phoneGeneratedEpoch: Double? = nil
+    ) -> Self {
         .init(
             status: .success,
             items: items,
+            currencyCode: currencyCode,
+            phoneGeneratedEpoch: phoneGeneratedEpoch,
             failure: nil
         )
     }
@@ -48,6 +58,8 @@ public struct WatchSyncReply: Codable, Sendable {
         .init(
             status: .failure,
             items: [],
+            currencyCode: nil,
+            phoneGeneratedEpoch: nil,
             failure: failure
         )
     }

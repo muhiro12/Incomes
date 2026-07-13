@@ -6,15 +6,41 @@
 //
 
 import Foundation
+import MHPreferences
 import SwiftData
 
 enum WatchDataSyncer {
     static func syncRecentMonths(
-        context: ModelContext
+        context: ModelContext,
+        request: ItemsRequest = .recent()
     ) async -> WatchSyncReply {
-        let request = ItemsRequest.recent()
         let reply = await PhoneSyncClient.shared.requestRecentItems(request)
 
+        return apply(
+            reply: reply,
+            request: request,
+            context: context
+        )
+    }
+
+    static func applyApplicationSnapshot(
+        _ snapshot: WatchSyncApplicationContext.Snapshot,
+        context: ModelContext
+    ) -> WatchSyncReply {
+        apply(
+            reply: snapshot.reply,
+            request: snapshot.request,
+            context: context
+        )
+    }
+}
+
+private extension WatchDataSyncer {
+    static func apply(
+        reply: WatchSyncReply,
+        request: ItemsRequest,
+        context: ModelContext
+    ) -> WatchSyncReply {
         guard reply.shouldApplySnapshot else {
             return reply
         }
@@ -26,6 +52,12 @@ enum WatchDataSyncer {
                 baseDate: request.baseDate,
                 monthOffsets: request.monthOffsets
             )
+            if let currencyCode = reply.currencyCode {
+                MHPreferenceStore().set(
+                    currencyCode,
+                    for: \.currencyCode
+                )
+            }
             return reply
         } catch {
             return .failed(

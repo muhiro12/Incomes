@@ -21,6 +21,7 @@ struct RenameCategoryTagIntent: AppIntent {
             tag: model,
             to: newName
         )
+        IncomesMutationWorkflow.requestWatchSnapshotRefresh()
         return .result(value: try TagEntity.make(from: model))
     }
 }
