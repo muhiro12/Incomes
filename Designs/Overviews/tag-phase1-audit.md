@@ -15,19 +15,15 @@ tests, not production behavior changes.
 - Shared tag display and matching rules now live in one library helper and back
   `Tag`, `TagPredicate`, `TagEntityQuery`, and app-side search filtering.
 
-## Confirmed Phase 2 Risk
+## Phase 2 Risk Resolution
 
-- Orphaned tags remain after item updates and deletes.
-- This was reproduced on March 27, 2026 with Xcode snippet execution against
-  `Incomes.xcodeproj` without mutating repository files.
-- Updating a single item from `Old Content` and `Old Category` to
-  `New Content` and `New Category` left both the old and new content/category
-  tags in the store.
-- Deleting that same item afterward still left six tags in the store.
-- Relevant code paths are `IncomesLibrary/Sources/Item/Item.swift` and
-  `IncomesLibrary/Sources/Item/Item*Operations.swift`.
-- Phase 1 does not change this behavior. Cleanup and orphan-tag policy are
-  deferred to phase 2.
+- Item updates and deletes now collect the affected derived tags and remove
+  those that no longer have any items.
+- The cleanup is part of the same explicit save-or-rollback mutation boundary
+  as the item change, so a persistence failure cannot leave a partially applied
+  item/tag result.
+- Time-zone regression coverage verifies cleanup after both single-item update
+  and deletion paths.
 
 ## Coverage Added In Phase 1
 

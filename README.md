@@ -3,7 +3,7 @@
 ## Overview
 
 Incomes is a SwiftUI budgeting app that keeps personal finances organised across
-iPhone, Apple Watch, and widgets. It stores data with SwiftData in a shared app
+iPhone, iPad, Apple Watch, and widgets. It stores data with SwiftData in a shared app
 group container, optionally syncs through CloudKit, and layers on StoreKit 2
 subscriptions, Google Mobile Ads, and App Intents powered by Apple Foundation
 Models.
@@ -57,13 +57,16 @@ Models.
 
 - Share data through a single SwiftData store located in the app group
   container, with legacy SQLite migration for existing users.
-- Sync recent transactions to watchOS by replying to WatchConnectivity requests
-  with trimmed JSON payloads and recalculating balances after import.
+- Keep recent watchOS transactions current with replaceable WatchConnectivity
+  application-context snapshots, plus a manual request/reply refresh path.
+- Preserve exact decimal strings and the selected currency code across phone and
+  watch payloads while remaining compatible with older payloads.
 
 ### Premium, sync, and remote configuration
 
-- Open the StoreKit 2 paywall to manage premium subscriptions, automatically
-  toggle iCloud sync, and start Google Mobile Ads placements.
+- Open the StoreKit 2 paywall to manage premium subscriptions and iCloud sync.
+- Use Google UMP to refresh privacy choices before starting Mobile Ads or
+  requesting native placements for non-premium users.
 - Fetch `.config.json` from GitHub at launch to learn about required versions or
   feature flags, and prompt users to update when needed.
 
@@ -79,9 +82,10 @@ Models.
   using your own bundle identifiers.
 - **Database migration** – `DatabaseMigrator` moves legacy SQLite files into the
   shared container on first launch so long-time users keep their history.
-- **WatchConnectivity bridge** – `PhoneWatchBridge` answers watch requests with
-  typed `WatchSyncReply` payloads, while `PhoneSyncClient` manages activation
-  and message replies on watchOS.
+- **WatchConnectivity bridge** – `PhoneWatchBridge` publishes the latest
+  replaceable application-context snapshot and answers manual requests with
+  typed `WatchSyncReply` payloads, while `PhoneSyncClient` rejects stale
+  snapshots on watchOS.
 - **Preview infrastructure** – `IncomesPreview` provisions an in-memory store,
   sample data, and mock services so SwiftUI previews remain functional.
 
@@ -131,8 +135,8 @@ Models.
   isolated behind compatibility helpers.
 - The app and widgets deploy to iOS 18 or later, and the watchOS companion
   deploys to watchOS 11 or later.
-- An Apple Developer account configured for App Groups, iCloud, StoreKit 2,
-  notifications, and ads.
+- An Apple Developer account configured for App Groups, iCloud, and StoreKit 2,
+  plus valid Google Mobile Ads configuration when testing monetization.
 - A device or simulator running iOS 26 or later with Foundation Models support
   for on-device inference features.
 

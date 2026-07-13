@@ -1,6 +1,6 @@
 # Incomes Current Product and Architecture Overview
 
-Current as of March 26, 2026.
+Current as of July 13, 2026.
 
 ## Purpose
 
@@ -8,7 +8,7 @@ Incomes is a SwiftUI household finance app centered on scheduled income and
 outgo tracking. The product is implemented as one shared domain library plus
 multiple surfaces:
 
-- An iPhone app for full data entry, browsing, analytics, settings, and
+- An iPhone and iPad app for full data entry, browsing, analytics, settings, and
   maintenance
 - An Apple Watch companion focused on recent and upcoming items
 - WidgetKit widgets for month summaries, net income, and upcoming items
@@ -23,7 +23,7 @@ living in the app targets.
 | Surface | Current role | Key responsibilities |
 | --- | --- | --- |
 | `Incomes` | Primary product surface | Data entry, browsing, charts, search, notifications, subscription, sync settings, ads, deep links, App Intents, debug tools |
-| `Watch` | Lightweight companion | Show upcoming items, reload recent months from phone, inspect items in debug mode |
+| `Watch` | Lightweight companion | Show upcoming items, receive the latest recent-month snapshot, manually reload from phone, inspect items in debug mode |
 | `Widgets` | Passive glanceable surface | Show month totals, month net income, next or previous item, deep-link back into the app |
 | `IncomesLibrary` | Shared domain layer | SwiftData models, predicates, calculators, yearly duplication, notification planning, maintenance services, routes |
 
@@ -179,7 +179,10 @@ living in the app targets.
 - Show open-source license information.
 - Show app version and build number.
 - Show reusable TipKit education flows again on demand.
-- Show Google Mobile Ads native placements when premium is not active.
+- Refresh Google UMP consent information at launch and expose privacy choices
+  when required.
+- Start Google Mobile Ads and show native placements only when consent permits
+  ad requests and premium is not active.
 
 ### 11. Remote configuration and update gating
 
@@ -220,6 +223,8 @@ living in the app targets.
   - show next, previous, upcoming, or recent item screens
 - Treat non-user-facing operational intents as hidden adapters rather than
   public shortcut features.
+- Require device authentication before private finance intents run, while
+  keeping route-only intents available for opening the app.
 
 ### 13. Tips, prompts, and review nudges
 
@@ -249,9 +254,13 @@ living in the app targets.
 ## Apple Watch Features
 
 - Store data in the same domain model format as the iPhone app.
-- On launch, activate `WatchConnectivity` and request recent items from the
-  phone.
+- On launch, activate `WatchConnectivity` and apply the newest available
+  application-context snapshot from the phone.
 - Sync a trimmed snapshot for the previous, current, and next month only.
+- Publish replaceable phone-side snapshots after relevant mutations and keep a
+  manual request/reply reload path.
+- Reject delayed snapshots older than the latest accepted sync watermark.
+- Preserve decimal amount text and the selected currency code in sync payloads.
 - Replace local watch data for those months during sync.
 - Show the upcoming day of items on the main watch screen.
 - Show a manual reload action.
@@ -333,6 +342,8 @@ avoid semantic drift when duplicates exist.
 - Running balance is persisted on each item.
 - Balance is recalculated from the earliest affected date after item creates,
   updates, deletes, sync replacements, and sample-data seeding.
+- Public mutation operations save explicitly and roll back their entire unit of
+  work when persistence fails.
 
 ## Current Architecture and Design Policies
 
