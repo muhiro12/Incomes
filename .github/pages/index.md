@@ -12,7 +12,7 @@
   calculations with one tap.
 - 📈 **Search & insights** – drill into months and categories with Swift Charts
   and rich filters.
-- 🔔 **Stay ahead** – fine-tune push reminders, lead times and thresholds for
+- 🔔 **Stay ahead** – fine-tune local reminders, lead times and thresholds for
   upcoming payments.
 - 🌐 **Premium sync** – unlock iCloud syncing, ad removal and StoreKit-managed
   subscriptions.
@@ -21,8 +21,8 @@
 
 - **iPhone & iPad** – full budgeting experience with charts, Siri Shortcuts and
   App Intents.
-- **Apple Watch** – glanceable upcoming payments plus subscription management
-  on the wrist.
+- **Apple Watch** – browse recent and upcoming items, then reload the latest
+  data from the paired iPhone.
 - **Widgets** – balance, upcoming, and monthly views keep finances visible in
   StandBy and on the Home Screen.
 
@@ -30,10 +30,10 @@
 
 1. Clone the repository.
 2. If you are using your own identifiers, update
-   `IncomesLibrary/Sources/Common/AppGroup.swift`, the entitlements files under
-   `Incomes/Configurations`, `Watch/Configurations`, and
+   `IncomesLibrary/Sources/Persistence/AppGroup.swift`, the entitlements files
+   under `Incomes/Configurations`, `Watch/Configurations`, and
    `Widgets/Configurations`, plus
-   `Incomes/Sources/Common/Platform/IncomesMonetizationConfiguration.swift`.
+   `Incomes/Sources/Platform/IncomesMonetizationConfiguration.swift`.
 3. Open `Incomes.xcodeproj` in Xcode 26 or later and run the **Incomes** scheme
    on an iOS 18 or later simulator or device. Use an iOS 26 or later
    destination when testing Foundation Models features.
