@@ -37,25 +37,10 @@ extension CategoryRenameSheet {
                 save: save
             )
         }
-        .alert(
-            "Error",
-            isPresented: Binding(
-                get: {
-                    errorMessage != nil
-                },
-                set: { isPresented in
-                    if !isPresented {
-                        errorMessage = nil
-                    }
-                }
-            )
-        ) {
-            Button("OK", role: .cancel) {
-                errorMessage = nil
-            }
-        } message: {
-            Text(errorMessage ?? "")
-        }
+        .incomesErrorAlert(
+            "Unable to Rename Category",
+            message: $errorMessage
+        )
     }
 }
 
@@ -109,6 +94,7 @@ private extension CategoryRenameSheet {
                 tag: tag,
                 to: normalizedTargetName
             )
+            IncomesMutationWorkflow.requestWatchSnapshotRefresh()
             dismiss()
         } catch let error as TagRenameError {
             errorMessage = error.renameErrorMessage

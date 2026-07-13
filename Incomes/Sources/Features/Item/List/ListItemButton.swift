@@ -18,6 +18,7 @@ struct ListItemButton: View {
     private var locale
 
     @State private var detailPresentationDetent = PresentationDetent.medium
+    @State private var errorMessage: String?
     @State private var isDeletePresented = false
     @State private var route: ListItemRoute?
 
@@ -83,7 +84,7 @@ struct ListItemButton: View {
                             logger: itemMutationLogger
                         )
                     } catch {
-                        assertionFailure(error.localizedDescription)
+                        errorMessage = ErrorMessageOperations.message(from: error)
                     }
                 }
             } label: {
@@ -97,6 +98,10 @@ struct ListItemButton: View {
         } message: {
             ItemDeletionConfirmationMessage(itemCount: 1)
         }
+        .incomesErrorAlert(
+            "Unable to Delete Item",
+            message: $errorMessage
+        )
     }
 }
 
@@ -108,15 +113,35 @@ private extension ListItemButton {
 
     var accessibilityValueParts: [String] {
         var parts = [
-            String(localized: "Date: \(accessibilityDateText)"),
-            String(localized: "Income: \(item.income.asCurrency)"),
-            String(localized: "Outgo: \(item.outgo.asMinusCurrency)"),
-            String(localized: "Net income: \(item.netIncome.asCurrency)"),
-            String(localized: "Balance: \(item.balance.asCurrency)")
+            String(
+                localized: "Date: \(accessibilityDateText)",
+                locale: locale
+            ),
+            String(
+                localized: "Income: \(item.income.asCurrency)",
+                locale: locale
+            ),
+            String(
+                localized: "Outgo: \(item.outgo.asMinusCurrency)",
+                locale: locale
+            ),
+            String(
+                localized: "Net income: \(item.netIncome.asCurrency)",
+                locale: locale
+            ),
+            String(
+                localized: "Balance: \(item.balance.asCurrency)",
+                locale: locale
+            )
         ]
 
-        if item.netIncome > .zero {
-            parts.append(String(localized: "Positive net income"))
+        if ItemSummaryOperations.isNonnegativeNetIncome(item.netIncome) {
+            parts.append(
+                String(
+                    localized: "No net loss",
+                    locale: locale
+                )
+            )
         }
 
         return parts

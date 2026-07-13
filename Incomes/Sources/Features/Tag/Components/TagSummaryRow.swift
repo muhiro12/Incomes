@@ -15,42 +15,82 @@ struct TagSummaryRow: View {
     private var locale
 
     var body: some View {
-        let itemCount = (tag.items ?? []).count
-        let hasPositiveNetIncome = tag.netIncome > .zero
+        let summary = tag.summary
+        let incomeText = summary.income.asCurrency
+        let outgoText = summary.outgo.asMinusCurrency
 
         TagSummaryRowContent(
             displayName: tag.displayName,
-            itemCount: itemCount,
-            incomeText: tag.income.asCurrency,
-            outgoText: tag.outgo.asMinusCurrency,
-            hasDeficit: tag.hasDeficit,
-            hasPositiveNetIncome: hasPositiveNetIncome
+            itemCount: summary.itemCount,
+            incomeText: incomeText,
+            outgoText: outgoText,
+            hasDeficit: summary.hasDeficit,
+            hasNonnegativeNetIncome: ItemSummaryOperations.isNonnegativeNetIncome(
+                summary.netIncome
+            )
         )
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(Text(tag.displayName))
-        .accessibilityValue(accessibilityValue(itemCount: itemCount))
+        .accessibilityValue(
+            accessibilityValue(
+                summary: summary,
+                incomeText: incomeText,
+                outgoText: outgoText
+            )
+        )
     }
 }
 
 private extension TagSummaryRow {
-    func accessibilityValue(itemCount: Int) -> Text {
-        Text(verbatim: accessibilityValueParts(itemCount: itemCount)
-                .formatted(.list(type: .and).locale(locale)))
+    func accessibilityValue(
+        summary: TagSummary,
+        incomeText: String,
+        outgoText: String
+    ) -> Text {
+        Text(verbatim: accessibilityValueParts(
+            summary: summary,
+            incomeText: incomeText,
+            outgoText: outgoText
+        )
+        .formatted(.list(type: .and).locale(locale)))
     }
 
-    func accessibilityValueParts(itemCount: Int) -> [String] {
+    func accessibilityValueParts(
+        summary: TagSummary,
+        incomeText: String,
+        outgoText: String
+    ) -> [String] {
         var parts = [
-            String(localized: "Items: \(itemCount)"),
-            String(localized: "Income: \(tag.income.asCurrency)"),
-            String(localized: "Outgo: \(tag.outgo.asMinusCurrency)")
+            String(
+                localized: "Items: \(summary.itemCount)",
+                locale: locale
+            ),
+            String(
+                localized: "Income: \(incomeText)",
+                locale: locale
+            ),
+            String(
+                localized: "Outgo: \(outgoText)",
+                locale: locale
+            )
         ]
 
-        if tag.hasDeficit {
-            parts.append(String(localized: "Contains deficit items"))
+        if summary.hasDeficit {
+            parts.append(
+                String(
+                    localized: "Contains deficit items",
+                    locale: locale
+                )
+            )
         }
 
-        if tag.netIncome > .zero {
-            parts.append(String(localized: "Positive net income"))
+        if ItemSummaryOperations.isNonnegativeNetIncome(summary.netIncome) {
+            parts.append(
+                String(
+                    localized: "No net loss",
+                    locale: locale
+                )
+            )
         }
 
         return parts

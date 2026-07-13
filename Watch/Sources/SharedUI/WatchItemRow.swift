@@ -22,7 +22,11 @@ extension WatchItemRow: View {
                 }
 
                 Text(item.netIncome.asCurrency)
-                    .foregroundStyle(item.isNetIncomePositive ? .accent : .red)
+                    .foregroundStyle(
+                        ItemSummaryOperations.isNonnegativeNetIncome(item.netIncome)
+                            ? .accent
+                            : .red
+                    )
                     .frame(maxWidth: .infinity, alignment: .trailing)
             }
         }

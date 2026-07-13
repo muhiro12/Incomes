@@ -23,20 +23,33 @@ struct UpcomingProvider: AppIntentTimelineProvider {
     }
 
     func snapshot(for configuration: UpcomingConfigurationAppIntent, in _: Context) -> UpcomingEntry {
-        makeEntry(now: Date.now, configuration: configuration)
+        makeEntry(
+            context: try? ModelContainerFactory.sharedContext(),
+            now: Date.now,
+            configuration: configuration
+        )
     }
 
     func timeline(for configuration: UpcomingConfigurationAppIntent, in _: Context) -> Timeline<UpcomingEntry> {
         let currentDate = Date.now
+        let modelContext = try? ModelContainerFactory.sharedContext()
         let entries = WidgetEntryOperations.timelineDates(now: currentDate).map { date in
-            makeEntry(now: date, configuration: configuration)
+            makeEntry(
+                context: modelContext,
+                now: date,
+                configuration: configuration
+            )
         }
         return .init(entries: entries, policy: .atEnd)
     }
 
-    private func makeEntry(now: Date, configuration: UpcomingConfigurationAppIntent) -> UpcomingEntry {
+    private func makeEntry(
+        context: ModelContext?,
+        now: Date,
+        configuration: UpcomingConfigurationAppIntent
+    ) -> UpcomingEntry {
         let snapshot: WidgetUpcomingSnapshot = {
-            guard let context = try? ModelContainerFactory.sharedContext() else {
+            guard let context else {
                 return .init(
                     subtitleText: "Next",
                     titleText: "Upcoming",

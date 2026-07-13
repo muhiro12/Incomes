@@ -24,7 +24,11 @@ struct NarrowListItemAccessibilityLayout: View {
                     .font(.headline)
                     .lineLimit(Constants.titleLineLimit)
                     .layoutPriority(1)
-                PositiveNetIncomeIndicator(isVisible: item.netIncome > .zero)
+                NonnegativeNetIncomeIndicator(
+                    isVisible: ItemSummaryOperations.isNonnegativeNetIncome(
+                        item.netIncome
+                    )
+                )
             }
             Text(item.netIncome.asCurrency)
                 .font(.subheadline)

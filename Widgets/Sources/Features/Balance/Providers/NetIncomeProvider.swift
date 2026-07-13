@@ -18,6 +18,7 @@ struct NetIncomeProvider: AppIntentTimelineProvider {
     func snapshot(for configuration: ConfigurationAppIntent, in _: Context) -> NetIncomeEntry {
         let date = Date.now
         return makeEntry(
+            context: try? ModelContainerFactory.sharedContext(),
             date: date,
             targetDate: WidgetEntryOperations.targetDate(
                 for: configuration.targetMonth.widgetMonthOffset,
@@ -29,8 +30,10 @@ struct NetIncomeProvider: AppIntentTimelineProvider {
 
     func timeline(for configuration: ConfigurationAppIntent, in _: Context) -> Timeline<NetIncomeEntry> {
         let currentDate = Date.now
+        let modelContext = try? ModelContainerFactory.sharedContext()
         let entries = WidgetEntryOperations.timelineDates(now: currentDate).map { date in
             makeEntry(
+                context: modelContext,
                 date: date,
                 targetDate: WidgetEntryOperations.targetDate(
                     for: configuration.targetMonth.widgetMonthOffset,
@@ -43,12 +46,13 @@ struct NetIncomeProvider: AppIntentTimelineProvider {
     }
 
     private func makeEntry(
+        context: ModelContext?,
         date: Date,
         targetDate: Date,
         configuration: ConfigurationAppIntent
     ) -> NetIncomeEntry {
         let snapshot: WidgetNetIncomeSnapshot = {
-            guard let context = try? ModelContainerFactory.sharedContext() else {
+            guard let context else {
                 return .init(
                     netIncomeText: "$0",
                     isPositive: true,

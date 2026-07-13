@@ -57,25 +57,10 @@ struct MonthlySummarySection: View {
             .onChange(of: generationInput) { _, _ in
                 clearGeneratedSummary()
             }
-            .alert(
-                "Error",
-                isPresented: Binding(
-                    get: {
-                        errorMessage != nil
-                    },
-                    set: { isPresented in
-                        if !isPresented {
-                            errorMessage = nil
-                        }
-                    }
-                )
-            ) {
-                Button("OK", role: .cancel) {
-                    errorMessage = nil
-                }
-            } message: {
-                Text(errorMessage ?? "")
-            }
+            .incomesErrorAlert(
+                "Unable to Generate Summary",
+                message: $errorMessage
+            )
     }
 
     init(

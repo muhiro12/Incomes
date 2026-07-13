@@ -20,6 +20,10 @@
 		ADB890132F89BF4C00C59D93 /* MHDesign in Frameworks */ = {isa = PBXBuildFile; productRef = ADB890122F89BF4C00C59D93 /* MHDesign */; };
 		B10000012F8A000100000002 /* MHDesign in Frameworks */ = {isa = PBXBuildFile; productRef = B10000012F8A000100000001 /* MHDesign */; };
 		B20000012F8A000100000002 /* MHDesign in Frameworks */ = {isa = PBXBuildFile; productRef = B20000012F8A000100000001 /* MHDesign */; };
+		C30100012FA0000100000001 /* MHAppRuntimeDefaults in Frameworks */ = {isa = PBXBuildFile; productRef = C30200012FA0000100000001 /* MHAppRuntimeDefaults */; };
+		C30100022FA0000100000001 /* MHAppRuntimeLicenses in Frameworks */ = {isa = PBXBuildFile; productRef = C30200022FA0000100000001 /* MHAppRuntimeLicenses */; };
+		C30100032FA0000100000001 /* GoogleMobileAdsWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = C30200032FA0000100000001 /* GoogleMobileAdsWrapper */; };
+		C30100042FA0000100000001 /* GoogleUserMessagingPlatform in Frameworks */ = {isa = PBXBuildFile; productRef = C30200042FA0000100000001 /* GoogleUserMessagingPlatform */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -124,6 +128,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C30100032FA0000100000001 /* GoogleMobileAdsWrapper in Frameworks */,
+				C30100042FA0000100000001 /* GoogleUserMessagingPlatform in Frameworks */,
+				C30100012FA0000100000001 /* MHAppRuntimeDefaults in Frameworks */,
+				C30100022FA0000100000001 /* MHAppRuntimeLicenses in Frameworks */,
 				AD7F5C202F5B3186008D91F3 /* MHPlatform in Frameworks */,
 				AD6C5A752E515E3000E1FBA0 /* IncomesLibrary in Frameworks */,
 				ADB890132F89BF4C00C59D93 /* MHDesign in Frameworks */,
@@ -240,6 +248,10 @@
 			name = Incomes;
 			packageProductDependencies = (
 				AD6C5A742E515E3000E1FBA0 /* IncomesLibrary */,
+				C30200032FA0000100000001 /* GoogleMobileAdsWrapper */,
+				C30200042FA0000100000001 /* GoogleUserMessagingPlatform */,
+				C30200012FA0000100000001 /* MHAppRuntimeDefaults */,
+				C30200022FA0000100000001 /* MHAppRuntimeLicenses */,
 				AD7F5C212F5B3186008D91F3 /* MHPlatform */,
 				ADB890122F89BF4C00C59D93 /* MHDesign */,
 			);
@@ -288,6 +300,8 @@
 				AD7F5C0C2F5B3186008D91F3 /* XCRemoteSwiftPackageReference "MHPlatform" */,
 				B00000012F7A000100000017 /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */,
 				ADB890112F89BF4C00C59D93 /* XCRemoteSwiftPackageReference "MHUI" */,
+				C30300012FA0000100000001 /* XCRemoteSwiftPackageReference "GoogleMobileAdsWrapper" */,
+				C30400012FA0000100000001 /* XCRemoteSwiftPackageReference "swift-package-manager-google-user-messaging-platform" */,
 			);
 			productRefGroup = ADCF36A724A1D0F40011D6F5 /* Products */;
 			projectDirPath = "";
@@ -818,6 +832,22 @@
 				minimumVersion = 0.0.0;
 			};
 		};
+		C30300012FA0000100000001 /* XCRemoteSwiftPackageReference "GoogleMobileAdsWrapper" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/muhiro12/GoogleMobileAdsWrapper.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.3.0;
+			};
+		};
+		C30400012FA0000100000001 /* XCRemoteSwiftPackageReference "swift-package-manager-google-user-messaging-platform" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/googleads/swift-package-manager-google-user-messaging-platform.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.1.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -862,6 +892,26 @@
 			isa = XCSwiftPackageProductDependency;
 			package = ADB890112F89BF4C00C59D93 /* XCRemoteSwiftPackageReference "MHUI" */;
 			productName = MHDesign;
+		};
+		C30200012FA0000100000001 /* MHAppRuntimeDefaults */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AD7F5C0C2F5B3186008D91F3 /* XCRemoteSwiftPackageReference "MHPlatform" */;
+			productName = MHAppRuntimeDefaults;
+		};
+		C30200022FA0000100000001 /* MHAppRuntimeLicenses */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AD7F5C0C2F5B3186008D91F3 /* XCRemoteSwiftPackageReference "MHPlatform" */;
+			productName = MHAppRuntimeLicenses;
+		};
+		C30200032FA0000100000001 /* GoogleMobileAdsWrapper */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C30300012FA0000100000001 /* XCRemoteSwiftPackageReference "GoogleMobileAdsWrapper" */;
+			productName = GoogleMobileAdsWrapper;
+		};
+		C30200042FA0000100000001 /* GoogleUserMessagingPlatform */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C30400012FA0000100000001 /* XCRemoteSwiftPackageReference "swift-package-manager-google-user-messaging-platform" */;
+			productName = GoogleUserMessagingPlatform;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

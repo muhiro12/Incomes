@@ -75,7 +75,7 @@ public enum WidgetEntryOperations {
             )
             return .init(
                 netIncomeText: totals.netIncome.asCurrency,
-                isPositive: totals.netIncome > .zero || totals.netIncome == .zero,
+                isPositive: isNonnegativeNetIncome(totals.netIncome),
                 deepLinkURL: deepLinkURL
             )
         } catch {
@@ -133,7 +133,7 @@ public enum WidgetEntryOperations {
                 titleText: Formatting.shortDayTitle(from: item.localDate),
                 detailText: item.content,
                 amountText: amount.asCurrency,
-                isPositive: amount > .zero || amount == .zero,
+                isPositive: isNonnegativeNetIncome(amount),
                 deepLinkURL: deepLinkURL
             )
         } catch {
@@ -157,5 +157,11 @@ public enum WidgetEntryOperations {
         case .previous:
             return "Previous"
         }
+    }
+
+    private static func isNonnegativeNetIncome(
+        _ netIncome: Decimal
+    ) -> Bool {
+        ItemSummaryOperations.isNonnegativeNetIncome(netIncome)
     }
 }

@@ -19,7 +19,11 @@ struct TitleListItem: View {
                 .lineLimit(1)
                 .minimumScaleFactor(IncomesTextScaling.minimumScaleFactor)
             Spacer()
-            PositiveNetIncomeIndicator(isVisible: item.netIncome > .zero)
+            NonnegativeNetIncomeIndicator(
+                isVisible: ItemSummaryOperations.isNonnegativeNetIncome(
+                    item.netIncome
+                )
+            )
         }
     }
 }

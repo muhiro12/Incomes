@@ -25,7 +25,7 @@ struct IncomeAndOutgoChart: View {
             ForEach(items) { item in
                 if item.income != .zero {
                     BarMark(
-                        x: .value("Date", item.localDate),
+                        x: .value("Date", item.localDate, unit: .day),
                         y: .value("Amount", item.income),
                         stacking: .unstacked
                     )
@@ -34,7 +34,7 @@ struct IncomeAndOutgoChart: View {
                 }
                 if item.outgo != .zero {
                     BarMark(
-                        x: .value("Date", item.localDate),
+                        x: .value("Date", item.localDate, unit: .day),
                         y: .value("Amount", item.outgo * -1),
                         stacking: .unstacked
                     )
@@ -49,7 +49,7 @@ struct IncomeAndOutgoChart: View {
                     .foregroundStyle(.secondary.opacity(TimelineChartMetrics.axisGridOpacity))
                 AxisTick()
                     .foregroundStyle(.secondary.opacity(TimelineChartMetrics.axisTickOpacity))
-                AxisValueLabel()
+                AxisValueLabel(anchor: .top)
             }
         }
         .chartYAxis {
@@ -58,7 +58,7 @@ struct IncomeAndOutgoChart: View {
                     .foregroundStyle(.secondary.opacity(TimelineChartMetrics.axisGridOpacity))
                 AxisTick()
                     .foregroundStyle(.secondary.opacity(TimelineChartMetrics.axisTickOpacity))
-                AxisValueLabel()
+                AxisValueLabel(anchor: .leading)
             }
         }
         .accessibilityElement(children: .ignore)
@@ -96,9 +96,18 @@ private extension IncomeAndOutgoChart {
         netIncome: Decimal
     ) -> [String] {
         [
-            String(localized: "Total income: \(totalIncome.asCurrency)"),
-            String(localized: "Total outgo: \(totalOutgo.asMinusCurrency)"),
-            String(localized: "Net income: \(netIncome.asCurrency)")
+            String(
+                localized: "Total income: \(totalIncome.asCurrency)",
+                locale: locale
+            ),
+            String(
+                localized: "Total outgo: \(totalOutgo.asMinusCurrency)",
+                locale: locale
+            ),
+            String(
+                localized: "Net income: \(netIncome.asCurrency)",
+                locale: locale
+            )
         ]
     }
 }

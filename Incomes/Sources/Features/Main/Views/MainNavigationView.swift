@@ -17,8 +17,6 @@ struct MainNavigationView: View {
     private var horizontalSizeClass
     @Environment(MHLoggingBootstrap.self)
     private var logging
-    @Environment(NotificationService.self)
-    private var notificationService
     @Environment(IncomesTipController.self)
     private var tipController
     @Environment(IncomesRouteInbox.self)
@@ -30,6 +28,7 @@ struct MainNavigationView: View {
     @State private var router: MainNavigationRouter = .init()
     @State private var settingsCoordinator: MainNavigationSettingsCoordinator = .init()
     @State private var yearDeletionModel: MainNavigationYearDeletionModel = .init()
+    @State private var errorAlertPresentation: ErrorAlertPresentation?
 
     private var selectedYearTag: Tag? {
         guard let yearTagID = router.yearTagID else {
@@ -127,10 +126,17 @@ struct MainNavigationView: View {
             }
         }
         .mhRouteHandler(routeInbox) { route in
-            try router.handleIncomingRoute(
-                route,
-                context: context
-            )
+            do {
+                try router.handleIncomingRoute(
+                    route,
+                    context: context
+                )
+            } catch {
+                presentNavigationError(
+                    title: "Unable to Open Destination",
+                    error: error
+                )
+            }
         }
         .onChange(of: yearTags) {
             tipController.refreshHasAnyItems(!yearTags.isEmpty)
@@ -148,6 +154,7 @@ struct MainNavigationView: View {
                 logger: watchSyncLogger
             )
         }
+        .incomesErrorAlert($errorAlertPresentation)
         .environment(router)
         .environment(settingsCoordinator)
         .environment(yearDeletionModel)
@@ -182,7 +189,10 @@ private extension MainNavigationView {
                 context: context
             )
         } catch {
-            assertionFailure(error.localizedDescription)
+            presentNavigationError(
+                title: "Unable to Restore Navigation",
+                error: error
+            )
         }
     }
 
@@ -193,7 +203,10 @@ private extension MainNavigationView {
                 context: context
             )
         } catch {
-            assertionFailure(error.localizedDescription)
+            presentNavigationError(
+                title: "Unable to Open Destination",
+                error: error
+            )
         }
     }
 
@@ -213,7 +226,10 @@ private extension MainNavigationView {
                 }
             )
         } catch {
-            assertionFailure(error.localizedDescription)
+            presentNavigationError(
+                title: "Unable to Open Destination",
+                error: error
+            )
         }
     }
 
@@ -228,8 +244,21 @@ private extension MainNavigationView {
                 )
             }
         } catch {
-            assertionFailure(error.localizedDescription)
+            presentNavigationError(
+                title: "Unable to Open Destination",
+                error: error
+            )
         }
+    }
+
+    func presentNavigationError(
+        title: LocalizedStringKey,
+        error: Error
+    ) {
+        errorAlertPresentation = .init(
+            title: title,
+            error: error
+        )
     }
 
     func handleSearchPresentationChange() {

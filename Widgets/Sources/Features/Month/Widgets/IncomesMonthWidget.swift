@@ -56,12 +56,14 @@ struct IncomesMonthWidget {
                 smallAmountRow(
                     systemName: "chevron.up",
                     foregroundStyle: .green,
-                    text: entry.totalIncomeText
+                    text: entry.totalIncomeText,
+                    accessibilityLabel: "Income"
                 )
                 smallAmountRow(
                     systemName: "chevron.down",
                     foregroundStyle: .red,
-                    text: entry.totalOutgoText
+                    text: entry.totalOutgoText,
+                    accessibilityLabel: "Outgo"
                 )
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
@@ -104,7 +106,8 @@ struct IncomesMonthWidget {
                     amountText(
                         entry.totalIncomeText,
                         font: amountFont,
-                        minimumScaleFactor: minimumScaleFactor
+                        minimumScaleFactor: minimumScaleFactor,
+                        accessibilityLabel: "Income"
                     )
                 }
                 GridRow {
@@ -116,7 +119,8 @@ struct IncomesMonthWidget {
                     amountText(
                         entry.totalOutgoText,
                         font: amountFont,
-                        minimumScaleFactor: minimumScaleFactor
+                        minimumScaleFactor: minimumScaleFactor,
+                        accessibilityLabel: "Outgo"
                     )
                 }
             }
@@ -125,19 +129,24 @@ struct IncomesMonthWidget {
         private func amountText(
             _ text: String,
             font: Font,
-            minimumScaleFactor: CGFloat
+            minimumScaleFactor: CGFloat,
+            accessibilityLabel: LocalizedStringKey
         ) -> some View {
             Text(text)
                 .font(font)
                 .monospacedDigit()
                 .lineLimit(1)
                 .minimumScaleFactor(minimumScaleFactor)
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel(Text(accessibilityLabel))
+                .accessibilityValue(Text(verbatim: text))
         }
 
         private func smallAmountRow(
             systemName: String,
             foregroundStyle: Color,
-            text: String
+            text: String,
+            accessibilityLabel: LocalizedStringKey
         ) -> some View {
             HStack(spacing: designMetrics.spacing.inline) {
                 amountIcon(
@@ -155,6 +164,9 @@ struct IncomesMonthWidget {
                     .lineLimit(1)
                     .minimumScaleFactor(WidgetTextScaling.minimumScaleFactor)
             }
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel(Text(accessibilityLabel))
+            .accessibilityValue(Text(verbatim: text))
         }
 
         private func amountIcon(

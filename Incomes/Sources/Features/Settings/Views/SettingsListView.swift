@@ -9,12 +9,13 @@ struct SettingsListView {
     private var notificationService
     @Environment(IncomesTipController.self)
     private var tipController
+    @Environment(IncomesAdsConsentController.self)
+    private var adsConsentController
     @Environment(MHLoggingBootstrap.self)
     var logging
 
     @Environment(\.scenePhase)
     private var scenePhase
-
     @Query(.tags(.typeIs(.year)))
     private var yearTags: [Tag]
 
@@ -30,6 +31,7 @@ struct SettingsListView {
     private var isDebugOn: Bool
 
     @State private var model: SettingsScreenModel = .init()
+    @State private var errorAlertPresentation: ErrorAlertPresentation?
 
     private let navigateToRoute: (IncomesRoute) -> Void
 
@@ -53,12 +55,8 @@ extension SettingsListView: View {
                 openSubscription: openSubscription
             )
             SettingsCurrencySection(currencyCode: $currencyCode)
-            notificationSection(
-                model: model
-            )
-            dataManagementSection(
-                model: model
-            )
+            notificationSection(model: model)
+            dataManagementSection(model: model)
             tagMaintenanceSection(model: model)
             debugDataSection(model: model)
             aboutSection
@@ -93,17 +91,22 @@ extension SettingsListView: View {
                 Task {
                     dataMaintenanceLogger.notice("delete_all.requested")
                     do {
-                        try await DataMaintenanceOperations.resetAllData(context: context)
+                        try await SettingsActionCoordinator.resetAllData(
+                            context: context, notificationService: notificationService
+                        )
                         Haptic.success.impact()
-                        model.loadStatus(context: context)
                         model.dismissDestructiveAction()
                         dataMaintenanceLogger.notice("delete_all.completed")
+                        loadSettingsStatus(model: model)
                     } catch {
                         dataMaintenanceLogger.error(
                             "delete_all.failed",
                             metadata: IncomesLogging.errorMetadata(error)
                         )
-                        assertionFailure(error.localizedDescription)
+                        presentError(
+                            title: "Unable to Delete Data",
+                            error: error
+                        )
                     }
                 }
             } label: {
@@ -125,24 +128,8 @@ extension SettingsListView: View {
             )
         ) {
             Button(role: .destructive) {
-                do {
-                    dataMaintenanceLogger.notice(
-                        "debug_data.delete_confirmed",
-                        metadata: IncomesLogging.metadata(
-                            ("has_debug_data", IncomesLogging.bool(model.hasDebugData))
-                        )
-                    )
-                    try DataMaintenanceOperations.deleteDebugData(context: context)
-                    Haptic.success.impact()
-                    model.loadStatus(context: context)
-                    model.dismissDestructiveAction()
-                    dataMaintenanceLogger.notice("debug_data.delete_completed")
-                } catch {
-                    dataMaintenanceLogger.error(
-                        "debug_data.delete_failed",
-                        metadata: IncomesLogging.errorMetadata(error)
-                    )
-                    assertionFailure(error.localizedDescription)
+                Task {
+                    await deleteDebugData(model: model)
                 }
             } label: {
                 Text("Delete")
@@ -154,6 +141,11 @@ extension SettingsListView: View {
             }
         } message: {
             Text("This will remove debug sample items and tags. Continue?")
+        }
+        .incomesErrorAlert($errorAlertPresentation)
+        .onChange(of: currencyCode) {
+            IncomesWidgetReloader.reloadAllWidgets()
+            PhoneWatchBridge.shared.requestSnapshotRefresh()
         }
         .task {
             model.apply(notificationSettings: notificationSettings)
@@ -186,7 +178,7 @@ private extension SettingsListView {
     func loadDeferredSettingsState() async {
         await Task.yield()
 
-        model.loadStatus(context: context)
+        loadSettingsStatus(model: model)
 
         await SettingsActionCoordinator.refreshNotifications(
             notificationService: notificationService
@@ -206,6 +198,8 @@ private extension SettingsListView {
     var aboutSection: some View {
         SettingsAboutSection(
             showTipsAgain: resetTips,
+            showsPrivacyOptions: adsConsentController.isPrivacyOptionsRequired,
+            showPrivacyOptions: showPrivacyOptions,
             openLicense: {
                 navigateToRoute(.settingsLicense)
             },
@@ -242,7 +236,23 @@ private extension SettingsListView {
         do {
             try tipController.resetTips(hasAnyItems: !yearTags.isEmpty)
         } catch {
-            assertionFailure(error.localizedDescription)
+            presentError(
+                title: "Unable to Reset Tips",
+                error: error
+            )
+        }
+    }
+
+    func showPrivacyOptions() {
+        adsConsentController.presentPrivacyOptions { error in
+            guard let error else {
+                return
+            }
+
+            presentError(
+                title: "Unable to Show Privacy Choices",
+                error: error
+            )
         }
     }
 
@@ -311,6 +321,37 @@ private extension SettingsListView {
         model.presentDestructiveAction(.deleteDebugData)
     }
 
+    @MainActor
+    func deleteDebugData(
+        model: SettingsScreenModel
+    ) async {
+        do {
+            dataMaintenanceLogger.notice(
+                "debug_data.delete_confirmed",
+                metadata: IncomesLogging.metadata(
+                    ("has_debug_data", IncomesLogging.bool(model.hasDebugData))
+                )
+            )
+            try DataMaintenanceOperations.deleteDebugData(context: context)
+            await IncomesMutationWorkflow.refreshAllDataSurfaces(
+                notificationService: notificationService
+            )
+            Haptic.success.impact()
+            model.dismissDestructiveAction()
+            dataMaintenanceLogger.notice("debug_data.delete_completed")
+            loadSettingsStatus(model: model)
+        } catch {
+            dataMaintenanceLogger.error(
+                "debug_data.delete_failed",
+                metadata: IncomesLogging.errorMetadata(error)
+            )
+            presentError(
+                title: "Unable to Delete Data",
+                error: error
+            )
+        }
+    }
+
     func destructiveActionBinding(
         for action: SettingsScreenModel.DestructiveAction,
         model: SettingsScreenModel
@@ -324,6 +365,29 @@ private extension SettingsListView {
                     model.dismissDestructiveAction()
                 }
             }
+        )
+    }
+
+    func loadSettingsStatus(
+        model: SettingsScreenModel
+    ) {
+        do {
+            try model.loadStatus(context: context)
+        } catch {
+            presentError(
+                title: "Unable to Load Settings",
+                error: error
+            )
+        }
+    }
+
+    func presentError(
+        title: LocalizedStringKey,
+        error: Error
+    ) {
+        errorAlertPresentation = .init(
+            title: title,
+            error: error
         )
     }
 

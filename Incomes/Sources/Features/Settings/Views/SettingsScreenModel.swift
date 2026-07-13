@@ -40,18 +40,11 @@ final class SettingsScreenModel {
 
     func loadStatus(
         context: ModelContext
-    ) {
-        do {
-            let status = try SettingsActionCoordinator.loadStatus(context: context)
-            hasDuplicateTags = status.hasDuplicateTags
-            hasOrphanTags = status.hasOrphanTags
-            hasDebugData = status.hasDebugData
-        } catch {
-            assertionFailure(error.localizedDescription)
-            hasDuplicateTags = false
-            hasOrphanTags = false
-            hasDebugData = false
-        }
+    ) throws {
+        let status = try SettingsActionCoordinator.loadStatus(context: context)
+        hasDuplicateTags = status.hasDuplicateTags
+        hasOrphanTags = status.hasOrphanTags
+        hasDebugData = status.hasDebugData
     }
 
     func presentDestructiveAction(

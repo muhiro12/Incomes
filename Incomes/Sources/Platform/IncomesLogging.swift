@@ -76,10 +76,6 @@ enum IncomesLogging {
         String(value)
     }
 
-    nonisolated static func optionalInt(_ value: Int?) -> String? {
-        value.map(String.init)
-    }
-
     nonisolated static func presence(_ value: String?) -> String {
         guard let value,
               value.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false else {

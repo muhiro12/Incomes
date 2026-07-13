@@ -20,7 +20,7 @@ struct BalanceChart: View {
 
             ForEach(items) { item in
                 AreaMark(
-                    x: .value("Date", item.localDate),
+                    x: .value("Date", item.localDate, unit: .day),
                     y: .value("Amount", item.balance),
                     stacking: .unstacked
                 )
@@ -28,7 +28,7 @@ struct BalanceChart: View {
                 .interpolationMethod(.linear)
                 .opacity(TimelineChartMetrics.areaMarkOpacity)
                 LineMark(
-                    x: .value("Date", item.localDate),
+                    x: .value("Date", item.localDate, unit: .day),
                     y: .value("Amount", item.balance)
                 )
                 .foregroundStyle(.tint)
@@ -42,7 +42,7 @@ struct BalanceChart: View {
                     .foregroundStyle(.secondary.opacity(TimelineChartMetrics.axisGridOpacity))
                 AxisTick()
                     .foregroundStyle(.secondary.opacity(TimelineChartMetrics.axisTickOpacity))
-                AxisValueLabel()
+                AxisValueLabel(anchor: .top)
             }
         }
         .chartYAxis {
@@ -51,7 +51,7 @@ struct BalanceChart: View {
                     .foregroundStyle(.secondary.opacity(TimelineChartMetrics.axisGridOpacity))
                 AxisTick()
                     .foregroundStyle(.secondary.opacity(TimelineChartMetrics.axisTickOpacity))
-                AxisValueLabel()
+                AxisValueLabel(anchor: .leading)
             }
         }
         .accessibilityElement(children: .ignore)
@@ -95,9 +95,18 @@ private extension BalanceChart {
         lowestBalance: Decimal
     ) -> [String] {
         [
-            String(localized: "Latest balance: \(latestBalance.asCurrency)"),
-            String(localized: "Highest balance: \(highestBalance.asCurrency)"),
-            String(localized: "Lowest balance: \(lowestBalance.asCurrency)")
+            String(
+                localized: "Latest balance: \(latestBalance.asCurrency)",
+                locale: locale
+            ),
+            String(
+                localized: "Highest balance: \(highestBalance.asCurrency)",
+                locale: locale
+            ),
+            String(
+                localized: "Lowest balance: \(lowestBalance.asCurrency)",
+                locale: locale
+            )
         ]
     }
 }

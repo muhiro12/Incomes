@@ -50,6 +50,11 @@ enum IncomesPlatformEnvironmentFactory {
             logging: logging,
             source: #fileID
         )
+        let appConfiguration = makeAppConfiguration(for: platformMode)
+        let adsConsentController = makeAdsConsentController(
+            configuration: appConfiguration,
+            logging: logging
+        )
 
         return .init(
             logging: logging,
@@ -59,8 +64,12 @@ enum IncomesPlatformEnvironmentFactory {
             tipController: tipController,
             routeInbox: routeInbox,
             routePipeline: routePipeline,
+            adsConsentController: adsConsentController,
             runtimeBootstrap: makeRuntimeBootstrap(
-                configuration: makeAppConfiguration(for: platformMode),
+                runtime: IncomesAppRuntimeFactory.make(
+                    configuration: appConfiguration,
+                    adsConsentController: adsConsentController
+                ),
                 routePipeline: routePipeline,
                 remoteConfigurationService: remoteConfigurationService,
                 notificationService: notificationService,
@@ -78,6 +87,21 @@ enum IncomesPlatformEnvironmentFactory {
             ],
             nativeAdUnitID: nativeAdUnitID(for: platformMode),
             showsLicenses: true
+        )
+    }
+
+    @MainActor
+    private static func makeAdsConsentController(
+        configuration: MHAppConfiguration,
+        logging: MHLoggingBootstrap
+    ) -> IncomesAdsConsentController {
+        .init(
+            adUnitID: configuration.nativeAdUnitID,
+            logger: IncomesLogging.logger(
+                logging: logging,
+                category: IncomesAdsConsentController.loggingCategory,
+                source: #fileID
+            )
         )
     }
 
@@ -174,14 +198,14 @@ enum IncomesPlatformEnvironmentFactory {
 
     @MainActor
     private static func makeRuntimeBootstrap(
-        configuration: MHAppConfiguration,
+        runtime: MHAppRuntime,
         routePipeline: MHAppRoutePipeline<IncomesRoute>,
         remoteConfigurationService: RemoteConfigurationService,
         notificationService: NotificationService,
         reviewFlow: MHReviewFlow
     ) -> MHAppRuntimeBootstrap {
         .init(
-            configuration: configuration,
+            runtime: runtime,
             routePipeline: routePipeline,
             lifecyclePlan: .init(
                 commonTasks: [

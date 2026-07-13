@@ -66,10 +66,22 @@ private extension CategoryChartPanel {
         largestSegment: ItemSummaryOperations.ChartSegment
     ) -> [String] {
         [
-            String(localized: "Total: \(total.asCurrency)"),
-            String(localized: "Largest category: \(largestSegment.title)"),
-            String(localized: "Share: \(largestSegment.percentText)"),
-            String(localized: "Amount: \(largestSegment.value.asCurrency)")
+            String(
+                localized: "Total: \(total.asCurrency)",
+                locale: locale
+            ),
+            String(
+                localized: "Largest category: \(largestSegment.title)",
+                locale: locale
+            ),
+            String(
+                localized: "Share: \(largestSegment.percentText)",
+                locale: locale
+            ),
+            String(
+                localized: "Amount: \(largestSegment.value.asCurrency)",
+                locale: locale
+            )
         ]
     }
 }
