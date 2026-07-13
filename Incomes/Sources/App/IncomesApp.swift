@@ -37,9 +37,6 @@ struct IncomesApp: App {
         )
 
         startupLogger.notice("startup.begin")
-        startupLogger.notice("database_migration.begin")
-        DatabaseMigrator.migrateSQLiteFilesIfNeeded()
-        startupLogger.notice("database_migration.completed")
 
         let platformEnvironment = Self.makePlatformEnvironment(
             preferenceStore: preferenceStore,
@@ -79,8 +76,13 @@ private extension IncomesApp {
             )
         )
 
-        var startupFailurePhase = "model_container"
+        var startupFailurePhase = "database_migration"
         do {
+            startupLogger.notice("database_migration.begin")
+            try DatabaseMigrator.migrateSQLiteFilesIfNeededOrThrow()
+            startupLogger.notice("database_migration.completed")
+
+            startupFailurePhase = "model_container"
             let modelContainer = try IncomesPlatformEnvironmentFactory.makeAppModelContainer(
                 isICloudEnabled: isICloudEnabled
             )

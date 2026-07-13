@@ -161,5 +161,6 @@ struct TagOrphanTests {
         #expect(try context.fetchCount(.tags(.nameIs("Unused Debug", type: .debug))) == 0)
         #expect(try context.fetchCount(.tags(.nameIs("Used Content", type: .content))) == 1)
         #expect(try context.fetchCount(.tags(.nameIs("Attached Debug", type: .debug))) == 1)
+        #expect(context.hasChanges == false)
     }
 }

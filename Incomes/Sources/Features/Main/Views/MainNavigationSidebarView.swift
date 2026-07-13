@@ -15,6 +15,8 @@ struct MainNavigationSidebarView: View {
     @Environment(MainNavigationYearDeletionModel.self)
     private var yearDeletionModel
 
+    @State private var errorMessage: String?
+
     let yearTags: [Tag]
     let selectedYearTag: Tag?
     let yearTagSelection: Binding<Tag.ID?>
@@ -47,9 +49,7 @@ struct MainNavigationSidebarView: View {
                     yearDeletionModel.isDialogPresented
                 },
                 set: { isPresented in
-                    if !isPresented {
-                        yearDeletionModel.clear()
-                    }
+                    yearDeletionModel.isDialogPresented = isPresented
                 }
             )
         ) {
@@ -75,6 +75,10 @@ struct MainNavigationSidebarView: View {
                 itemCount: yearDeletionModel.itemsToDelete.count
             )
         }
+        .incomesErrorAlert(
+            "Unable to Delete Items",
+            message: $errorMessage
+        )
     }
 }
 
@@ -109,7 +113,7 @@ private extension MainNavigationSidebarView {
                     router.selectYearTagID(nil)
                 }
             } catch {
-                assertionFailure(error.localizedDescription)
+                errorMessage = ErrorMessageOperations.message(from: error)
             }
         }
     }

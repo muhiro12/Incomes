@@ -23,7 +23,7 @@ public enum YearlyDuplicationPresentationOperations {
         )
     }
 
-    /// Returns a grouped whole-number string by discarding fractional digits.
+    /// Returns the grouped decimal string for a normalized duplication amount.
     public static func decimalString(
         from value: Decimal,
         locale: Locale = .current

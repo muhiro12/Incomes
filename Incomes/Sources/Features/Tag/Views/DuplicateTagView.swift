@@ -7,6 +7,8 @@ struct DuplicateTagView: View {
         static let regularVisibleColumnCount = 2
     }
 
+    @Environment(\.modelContext)
+    private var context
     @Environment(\.horizontalSizeClass)
     private var horizontalSizeClass
     @Query private var tags: [Tag]
@@ -14,6 +16,7 @@ struct DuplicateTagView: View {
     @State private var isMergeDialogPresented = false
     @State private var isDeleteDialogPresented = false
     @State private var selectedTag: Tag?
+    @State private var errorAlertPresentation: ErrorAlertPresentation?
 
     init(_ tag: Tag) {
         _tags = Query(.tags(.isSameWith(tag)))
@@ -51,7 +54,7 @@ extension DuplicateTagView {
             isPresented: $isMergeDialogPresented
         ) {
             Button(role: .destructive) {
-                TagMutationOperations.mergeDuplicates(tags: tags)
+                mergeTags()
             } label: {
                 Text("Merge")
             }
@@ -71,9 +74,7 @@ extension DuplicateTagView {
                 guard let selectedTag else {
                     return
                 }
-                TagMutationOperations.delete(tag: selectedTag)
-                self.selectedTag = nil
-                Haptic.success.impact()
+                deleteTag(selectedTag)
             } label: {
                 Text("Delete")
             }
@@ -85,6 +86,7 @@ extension DuplicateTagView {
         } message: {
             Text("Are you sure you want to delete this tag? This action cannot be undone.")
         }
+        .incomesErrorAlert($errorAlertPresentation)
         .toolbar {
             ToolbarItem {
                 Button("Merge", role: .destructive) {
@@ -119,6 +121,41 @@ private extension DuplicateTagView {
     func presentDeleteDialog(for tag: Tag) {
         isDeleteDialogPresented = true
         selectedTag = tag
+    }
+
+    func mergeTags() {
+        do {
+            try TagMutationOperations.mergeDuplicates(
+                context: context,
+                tags: tags
+            )
+            Haptic.success.impact()
+        } catch {
+            errorAlertPresentation = .init(
+                title: "Unable to Update Tags",
+                error: error
+            )
+        }
+    }
+
+    func deleteTag(_ tag: Tag) {
+        do {
+            guard try TagMutationOperations.delete(
+                context: context,
+                tag: tag
+            ) else {
+                Haptic.warning.impact()
+                return
+            }
+
+            selectedTag = nil
+            Haptic.success.impact()
+        } catch {
+            errorAlertPresentation = .init(
+                title: "Unable to Update Tags",
+                error: error
+            )
+        }
     }
 }
 

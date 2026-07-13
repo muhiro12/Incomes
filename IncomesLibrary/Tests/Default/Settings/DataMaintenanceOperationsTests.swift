@@ -5,6 +5,10 @@ import Testing
 
 @MainActor
 struct DataMaintenanceOperationsTests {
+    private enum ExpectedError: Error {
+        case failed
+    }
+
     let context: ModelContext
 
     init() {
@@ -30,6 +34,39 @@ struct DataMaintenanceOperationsTests {
 
         #expect(try context.fetchCount(.items(.all)) == 0)
         #expect(try context.fetchCount(.tags(.all)) == 0)
+        #expect(context.hasChanges == false)
+    }
+
+    @Test
+    func deleteAllData_rollsBackItemDeletionWhenLaterStepThrows() throws {
+        _ = try ItemCreationOperations.create(
+            context: context,
+            input: .init(
+                date: shiftedDate("2001-01-01T00:00:00Z"),
+                content: "content",
+                income: 100,
+                outgo: 0,
+                category: "category",
+                priority: 0
+            ),
+            repeatCount: 1
+        )
+        let itemCount = try context.fetchCount(.items(.all))
+        let tagCount = try context.fetchCount(.tags(.all))
+        let injectedFailure: () throws -> Void = {
+            throw ExpectedError.failed
+        }
+
+        #expect(throws: ExpectedError.failed) {
+            try DataMaintenanceOperations.deleteAllData(
+                context: context,
+                afterDeletingItems: injectedFailure
+            )
+        }
+
+        #expect(try context.fetchCount(.items(.all)) == itemCount)
+        #expect(try context.fetchCount(.tags(.all)) == tagCount)
+        #expect(context.hasChanges == false)
     }
 
     @Test
@@ -79,5 +116,6 @@ struct DataMaintenanceOperationsTests {
         #expect(items.count == 1)
         #expect(items.first?.content == "custom")
         #expect(try SampleDataOperations.hasDebugData(context: context) == false)
+        #expect(context.hasChanges == false)
     }
 }

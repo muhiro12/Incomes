@@ -7,14 +7,19 @@ public enum DatabaseMigrator {
     /// Moves the legacy SQLite store into the current location when required.
     public static func migrateSQLiteFilesIfNeeded() {
         do {
-            try migrateSQLiteFilesIfNeeded(
-                fileManager: .default,
-                legacyURL: Database.legacyURL,
-                currentURL: Database.url
-            )
+            try migrateSQLiteFilesIfNeededOrThrow()
         } catch {
             assertionFailure("Store migration failed: \(error.localizedDescription)")
         }
+    }
+
+    /// Moves the legacy SQLite store and surfaces failures to the caller.
+    public static func migrateSQLiteFilesIfNeededOrThrow() throws {
+        try migrateSQLiteFilesIfNeeded(
+            fileManager: .default,
+            legacyURL: Database.legacyURL,
+            currentURL: Database.url
+        )
     }
 
     static func migrateSQLiteFilesIfNeeded(

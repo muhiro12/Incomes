@@ -9,9 +9,4 @@ enum LocaleLanguageCodeSupport {
     ) -> String {
         locale.language.languageCode?.identifier ?? defaultCode
     }
-
-    /// Returns whether `locale` resolves to Japanese.
-    static func isJapanese(_ locale: Locale) -> Bool {
-        code(for: locale) == "ja"
-    }
 }

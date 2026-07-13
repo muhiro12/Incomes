@@ -30,6 +30,13 @@ struct ItemSummaryOperationsTests {
     }
 
     @Test
+    func netIncomeSign_treatsZeroAsNonnegativeAcrossSurfaces() {
+        #expect(ItemSummaryOperations.isNonnegativeNetIncome(1))
+        #expect(ItemSummaryOperations.isNonnegativeNetIncome(.zero))
+        #expect(!ItemSummaryOperations.isNonnegativeNetIncome(-1))
+    }
+
+    @Test
     func monthlyTotals_returns_aggregated_values_for_month() throws {
         _ = try createSummaryItem(
             date: "2024-02-02T00:00:00Z",

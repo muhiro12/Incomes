@@ -17,12 +17,6 @@ final class NotificationService: NSObject {
         static let upcomingPayments = 20
     }
 
-    enum AuthorizationState {
-        case notDetermined
-        case authorized
-        case denied
-    }
-
     private let modelContainer: ModelContainer
     private let logger: MHLogger
     let routeLogger: MHLogger
@@ -56,7 +50,16 @@ final class NotificationService: NSObject {
 
     func register() async {
         let center = UNUserNotificationCenter.current()
-        let requests = buildUpcomingPaymentReminders()
+        let requests: [UNNotificationRequest]
+        do {
+            requests = try buildUpcomingPaymentReminders()
+        } catch {
+            logger.error(
+                "notification.schedule_planning_failed",
+                metadata: IncomesLogging.errorMetadata(error)
+            )
+            return
+        }
         let matcher = MHNotificationIdentifierMatcher(
             prefixes: UpcomingPaymentNotificationPresentation.managedRequestIdentifierPrefixes
         )
@@ -299,16 +302,14 @@ private extension NotificationService {
         NotificationRoutePayload.userInfo(for: presentation)
     }
 
-    func buildUpcomingPaymentReminders() -> [UNNotificationRequest] {
+    func buildUpcomingPaymentReminders() throws -> [UNNotificationRequest] {
         let settings = currentNotificationSettings()
-        guard let plans = try? UpcomingPaymentOperations.build(
+        let plans = try UpcomingPaymentOperations.build(
             context: modelContainer.mainContext,
             settings: settings,
             now: .now,
             limit: NotificationConstant.upcomingPayments
-        ) else {
-            return []
-        }
+        )
 
         let presentations = UpcomingPaymentOperations.notificationPresentations(
             plans: plans,
@@ -366,33 +367,5 @@ private extension NotificationService {
         return notifications
             .map(\.request.identifier)
             .filter(UpcomingPaymentNotificationPresentation.isManagedRequestIdentifier)
-    }
-}
-
-private extension NotificationService.AuthorizationState {
-    var logValue: String {
-        switch self {
-        case .notDetermined:
-            "not_determined"
-        case .authorized:
-            "authorized"
-        case .denied:
-            "denied"
-        }
-    }
-
-    init(status: UNAuthorizationStatus) {
-        switch status {
-        case .authorized,
-             .ephemeral,
-             .provisional:
-            self = .authorized
-        case .denied:
-            self = .denied
-        case .notDetermined:
-            self = .notDetermined
-        @unknown default:
-            self = .denied
-        }
     }
 }

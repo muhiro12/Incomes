@@ -16,6 +16,7 @@ struct TagDeletionTests {
         #expect(try context.fetchCount(.tags(.all)) == 1)
         TagMutationOperations.delete(tag: tag)
         #expect(try context.fetchCount(.tags(.all)) == 0)
+        #expect(context.hasChanges == false)
     }
 
     @Test
@@ -57,6 +58,7 @@ struct TagDeletionTests {
         #expect(try context.fetchCount(.tags(.all)) == 2)
         try TagMutationOperations.deleteAll(context: context)
         #expect(try context.fetchCount(.tags(.all)) == 0)
+        #expect(context.hasChanges == false)
     }
 
     @Test

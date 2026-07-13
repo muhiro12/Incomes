@@ -39,26 +39,28 @@ public enum ItemUpdateOperations {
         try input.validate()
         let values = ItemStoredValues(formInput: input)
 
-        let affectedItems = try ItemMutationSupport.itemsForMutationScope(
-            context: context,
-            item: item,
-            scope: scope
-        )
-        let snapshot = ItemUpdateSnapshot(items: affectedItems)
+        return try ModelContextMutationOperations.run(context: context) {
+            let affectedItems = try ItemMutationSupport.itemsForMutationScope(
+                context: context,
+                item: item,
+                scope: scope
+            )
+            let snapshot = ItemUpdateSnapshot(items: affectedItems)
 
-        try updateItems(
-            context: context,
-            item: item,
-            values: values,
-            scope: scope
-        )
+            try updateItems(
+                context: context,
+                item: item,
+                values: values,
+                scope: scope
+            )
 
-        TagMutationOperations.deleteUnused(tags: snapshot.tagsToCleanup)
-        return updateOutcome(
-            snapshot: snapshot,
-            affectedItems: affectedItems,
-            inputDate: values.date
-        )
+            TagMutationOperations.deleteUnused(tags: snapshot.tagsToCleanup)
+            return updateOutcome(
+                snapshot: snapshot,
+                affectedItems: affectedItems,
+                inputDate: values.date
+            )
+        }
     }
 
     /// Updates a set of repeating items specified by `descriptor` using the delta
@@ -69,23 +71,14 @@ public enum ItemUpdateOperations {
         values: ItemStoredValues,
         descriptor: FetchDescriptor<Item>
     ) throws {
-        let dateShift = Calendar.current.dateComponents(
-            [.year, .month, .day],
-            from: item.localDate,
-            to: values.date
-        )
-        let repeatID = UUID()
-        let items = try context.fetch(descriptor)
-        let recalcDate = try updateRepeatingItems(
-            items: items,
-            dateShift: dateShift,
-            values: values,
-            repeatID: repeatID
-        )
-        try BalanceCalculator.calculate(
-            in: context,
-            after: recalcDate ?? values.date
-        )
+        try ModelContextMutationOperations.run(context: context) {
+            try updateRepeatingItemsWithoutSaving(
+                context: context,
+                item: item,
+                values: values,
+                descriptor: descriptor
+            )
+        }
     }
 }
 
@@ -116,6 +109,31 @@ private extension ItemUpdateOperations {
         case .allItems:
             try updateAllItems(context: context, item: item, values: values)
         }
+    }
+
+    static func updateRepeatingItemsWithoutSaving(
+        context: ModelContext,
+        item: Item,
+        values: ItemStoredValues,
+        descriptor: FetchDescriptor<Item>
+    ) throws {
+        let dateShift = Calendar.current.dateComponents(
+            [.year, .month, .day],
+            from: item.localDate,
+            to: values.date
+        )
+        let repeatID = UUID()
+        let items = try context.fetch(descriptor)
+        let recalcDate = try updateRepeatingItems(
+            items: items,
+            dateShift: dateShift,
+            values: values,
+            repeatID: repeatID
+        )
+        try BalanceCalculator.calculate(
+            in: context,
+            after: recalcDate ?? values.date
+        )
     }
 
     static func updateOutcome(
@@ -155,7 +173,7 @@ private extension ItemUpdateOperations {
         item: Item,
         values: ItemStoredValues
     ) throws {
-        try updateRepeatingItems(
+        try updateRepeatingItemsWithoutSaving(
             context: context,
             item: item,
             values: values,
@@ -168,7 +186,7 @@ private extension ItemUpdateOperations {
         item: Item,
         values: ItemStoredValues
     ) throws {
-        try updateRepeatingItems(
+        try updateRepeatingItemsWithoutSaving(
             context: context,
             item: item,
             values: values,

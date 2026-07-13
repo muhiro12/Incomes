@@ -105,12 +105,18 @@ private extension YearlyItemDuplicationPlanOperations {
 
         mutating func addGroup(from items: [Item]) {
             let groupID = UUID()
+            let groupValues = YearlyItemDuplicationSupport.groupValues(
+                from: items
+            )
             let buildResult = YearlyItemDuplicationSupport.buildGroupEntries(
                 from: items,
-                groupID: groupID,
-                yearShift: input.yearShift,
-                existingKeys: input.existingKeys,
-                options: options
+                configuration: .init(
+                    groupID: groupID,
+                    yearShift: input.yearShift,
+                    existingKeys: input.existingKeys,
+                    groupValues: groupValues,
+                    options: options
+                )
             )
             skippedDuplicateCount += buildResult.skippedDuplicateCount
             guard !buildResult.entries.isEmpty else {
@@ -120,7 +126,7 @@ private extension YearlyItemDuplicationPlanOperations {
             groups.append(
                 YearlyItemDuplicationSupport.makeGroup(
                     id: groupID,
-                    items: items,
+                    values: groupValues,
                     targetDates: buildResult.targetDates
                 )
             )

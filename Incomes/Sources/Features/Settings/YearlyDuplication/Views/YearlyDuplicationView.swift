@@ -106,25 +106,10 @@ struct YearlyDuplicationView: View {
                 .incomesSheetPresentation()
             }
         }
-        .alert(
-            "Error",
-            isPresented: Binding(
-                get: {
-                    errorMessage != nil
-                },
-                set: { isPresented in
-                    if !isPresented {
-                        errorMessage = nil
-                    }
-                }
-            )
-        ) {
-            Button("OK", role: .cancel) {
-                errorMessage = nil
-            }
-        } message: {
-            Text(errorMessage ?? "")
-        }
+        .incomesErrorAlert(
+            "Unable to Duplicate Items",
+            message: $errorMessage
+        )
         .alert(
             "Completed",
             isPresented: Binding(

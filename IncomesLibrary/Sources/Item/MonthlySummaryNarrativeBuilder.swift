@@ -5,7 +5,6 @@ enum MonthlySummaryNarrativeBuilder {
     typealias Context = MonthlySummaryOperations.Context
     typealias MonthTotals = MonthlySummaryOperations.MonthTotals
     typealias CategoryComparison = MonthlySummaryOperations.CategoryComparison
-    typealias ValidationError = MonthlySummaryOperations.ValidationError
 
     private static let maximumSelectedChangeCount = 2
 

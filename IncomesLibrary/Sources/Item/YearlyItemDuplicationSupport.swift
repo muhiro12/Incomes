@@ -14,10 +14,25 @@ enum YearlyItemDuplicationSupport {
         let category: String
     }
 
+    struct GroupValues {
+        let content: String
+        let category: String
+        let averageIncome: Decimal
+        let averageOutgo: Decimal
+    }
+
     struct GroupBuildResult {
         let entries: [YearlyItemDuplicationEntry]
         let targetDates: [Date]
         let skippedDuplicateCount: Int
+    }
+
+    struct GroupBuildConfiguration {
+        let groupID: UUID
+        let yearShift: Int
+        let existingKeys: Set<DuplicationKey>
+        let groupValues: GroupValues
+        let options: YearlyItemDuplicationOptions
     }
 
     static let followUpHints: Set<MutationOutcome.FollowUpHint> = [
@@ -75,14 +90,44 @@ enum YearlyItemDuplicationSupport {
     }
 
     static func duplicationKey(targetDate: Date, item: Item) -> DuplicationKey {
-        let categoryName = item.category?.name ?? ""
-        let normalizedDate = Calendar.current.startOfDay(for: targetDate)
-        return .init(
-            date: normalizedDate,
+        duplicationKey(
+            targetDate: targetDate,
             content: item.content,
             income: item.income,
             outgo: item.outgo,
-            category: categoryName
+            category: item.category?.name ?? ""
+        )
+    }
+
+    static func duplicationKey(
+        targetDate: Date,
+        item: Item,
+        income: Decimal,
+        outgo: Decimal
+    ) -> DuplicationKey {
+        duplicationKey(
+            targetDate: targetDate,
+            content: item.content,
+            income: income,
+            outgo: outgo,
+            category: item.category?.name ?? ""
+        )
+    }
+
+    static func duplicationKey(
+        targetDate: Date,
+        content: String,
+        income: Decimal,
+        outgo: Decimal,
+        category: String
+    ) -> DuplicationKey {
+        let normalizedDate = Calendar.current.startOfDay(for: targetDate)
+        return .init(
+            date: normalizedDate,
+            content: content,
+            income: income,
+            outgo: outgo,
+            category: category
         )
     }
 
@@ -127,10 +172,7 @@ enum YearlyItemDuplicationSupport {
 
     static func buildGroupEntries(
         from items: [Item],
-        groupID: UUID,
-        yearShift: Int,
-        existingKeys: Set<DuplicationKey>,
-        options: YearlyItemDuplicationOptions
+        configuration: GroupBuildConfiguration
     ) -> GroupBuildResult {
         var entries = [YearlyItemDuplicationEntry]()
         var targetDates = [Date]()
@@ -138,7 +180,7 @@ enum YearlyItemDuplicationSupport {
         for item in items {
             guard let targetDate = shiftDate(
                 item.localDate,
-                yearShift: yearShift
+                yearShift: configuration.yearShift
             ) else {
                 assertionFailure()
                 continue
@@ -147,14 +189,16 @@ enum YearlyItemDuplicationSupport {
             let entry = YearlyItemDuplicationEntry(
                 sourceItem: item,
                 targetDate: targetDate,
-                groupID: groupID
+                groupID: configuration.groupID
             )
-            if options.skipExistingItems {
+            if configuration.options.skipExistingItems {
                 let key = duplicationKey(
                     targetDate: targetDate,
-                    item: item
+                    item: item,
+                    income: configuration.groupValues.averageIncome,
+                    outgo: configuration.groupValues.averageOutgo
                 )
-                if existingKeys.contains(key) {
+                if configuration.existingKeys.contains(key) {
                     skippedDuplicateCount += 1
                     continue
                 }
@@ -171,30 +215,38 @@ enum YearlyItemDuplicationSupport {
 
     static func makeGroup(
         id: UUID,
-        items: [Item],
+        values: GroupValues,
         targetDates: [Date]
     ) -> YearlyItemDuplicationGroup {
-        let content = items.first?.content ?? ""
-        let category = items.first?.category?.name ?? ""
-        let averageIncome = averageValue(items.map(\.income))
-        let averageOutgo = averageValue(items.map(\.outgo))
-        return .init(
+        .init(
             id: id,
-            content: content,
-            category: category,
-            averageIncome: averageIncome,
-            averageOutgo: averageOutgo,
+            content: values.content,
+            category: values.category,
+            averageIncome: values.averageIncome,
+            averageOutgo: values.averageOutgo,
             entryCount: targetDates.count,
             targetDates: targetDates.sorted()
         )
     }
 
-    static func averageValue(_ values: [Decimal]) -> Decimal {
+    static func groupValues(from items: [Item]) -> GroupValues {
+        .init(
+            content: items.first?.content ?? "",
+            category: items.first?.category?.name ?? "",
+            averageIncome: normalizedAverageValue(items.map(\.income)),
+            averageOutgo: normalizedAverageValue(items.map(\.outgo))
+        )
+    }
+
+    static func normalizedAverageValue(_ values: [Decimal]) -> Decimal {
         guard !values.isEmpty else {
             return .zero
         }
         let total = values.reduce(.zero, +)
         let count = Decimal(values.count)
-        return total / count
+        var average = total / count
+        var normalizedAverage = Decimal.zero
+        NSDecimalRound(&normalizedAverage, &average, 0, .down)
+        return normalizedAverage
     }
 }

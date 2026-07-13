@@ -19,6 +19,7 @@ struct OrphanTagListView: View {
     @Binding private var selectedTagID: Tag.ID?
 
     @State private var isCleanupDialogPresented = false
+    @State private var errorMessage: String?
 
     private let onCleanupAll: () -> Void
 
@@ -110,6 +111,10 @@ extension OrphanTagListView {
                 CloseButton()
             }
         }
+        .incomesErrorAlert(
+            "Unable to Update Tags",
+            message: $errorMessage
+        )
     }
 }
 
@@ -140,7 +145,7 @@ private extension OrphanTagListView {
             onCleanupAll()
             Haptic.success.impact()
         } catch {
-            assertionFailure(error.localizedDescription)
+            errorMessage = ErrorMessageOperations.message(from: error)
         }
     }
 }

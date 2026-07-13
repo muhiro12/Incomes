@@ -25,8 +25,9 @@ public extension Decimal {
 
     /// Formats the decimal as a negative currency string when the value is non-zero.
     var asMinusCurrency: String {
-        let currency = asCurrency
-        guard self != .zero else {
+        let magnitude = abs(self)
+        let currency = magnitude.asCurrency
+        guard magnitude != .zero else {
             return currency
         }
         guard !currency.isEmpty else {

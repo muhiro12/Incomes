@@ -79,12 +79,12 @@ struct YearlyDuplicationPresentationTests {
     }
 
     @Test
-    func decimalString_discards_fractional_digits() {
+    func decimalString_preservesProvidedFractionalDigits() {
         let text = YearlyDuplicationPresentationOperations.decimalString(
             from: Decimal(string: "123.9") ?? .zero
         )
 
-        #expect(text == "123")
+        #expect(text == "123.9")
     }
 
     @Test
@@ -94,7 +94,7 @@ struct YearlyDuplicationPresentationTests {
             locale: Locale(identifier: "en_US")
         )
 
-        #expect(text == "1,234,567")
+        #expect(text == "1,234,567.9")
     }
 }
 

@@ -32,7 +32,7 @@ struct ItemFormAmountRow: View {
 private extension ItemFormAmountRow {
     var accessibilityHint: Text {
         if !isValid {
-            return Text("Invalid amount. Enter a number.")
+            return Text("Enter a valid amount with up to 14 digits.")
         }
 
         return Text("Enter a number.")

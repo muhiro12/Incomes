@@ -194,6 +194,7 @@ struct TagOperationsTests {
             tags: [tag1, tag4]
         )
         #expect(try context.fetchCount(.tags(.all)) == 2)
+        #expect(context.hasChanges == false)
     }
 
     @Test
@@ -207,6 +208,7 @@ struct TagOperationsTests {
 
         #expect(resolvedCount == 2)
         #expect(try context.fetchCount(.tags(.all)) == 2)
+        #expect(context.hasChanges == false)
     }
 
     @Test

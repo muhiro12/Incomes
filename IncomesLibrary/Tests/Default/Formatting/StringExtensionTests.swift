@@ -133,6 +133,45 @@ enum StringExtensionTests {
             #expect(string.decimalValue == Decimal(string: "1000.50") ?? .zero)
         }
 
+        @Test("Spanish grouped integer uses the primary locale")
+        func spanish_grouped_integer_uses_primary_locale() {
+            let value = "10.000".parsedDecimalValue(
+                locale: Locale(identifier: "es_ES")
+            )
+
+            #expect(value == 10_000)
+        }
+
+        @Test("Spanish decimal separator uses the primary locale")
+        func spanish_decimal_separator_uses_primary_locale() {
+            let value = "1,5".parsedDecimalValue(
+                locale: Locale(identifier: "es_ES")
+            )
+
+            #expect(value == Decimal(string: "1.5"))
+        }
+
+        @Test("English grouped integer remains supported")
+        func english_grouped_integer_remains_supported() {
+            let value = "10,000".parsedDecimalValue(
+                locale: Locale(identifier: "en_US")
+            )
+
+            #expect(value == 10_000)
+        }
+
+        @Test("Large decimal input preserves exact precision")
+        func large_decimal_input_preserves_exact_precision() throws {
+            let expected = try #require(
+                Decimal(string: "99999999999.999")
+            )
+            let value = "99,999,999,999.999".parsedDecimalValue(
+                locale: Locale(identifier: "en_US")
+            )
+
+            #expect(value == expected)
+        }
+
         @Test("Partial text returns 0")
         func partial_text_returns_zero() {
             let string = "1abc"

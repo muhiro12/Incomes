@@ -27,6 +27,7 @@ struct SampleDataOperationsTests {
         #expect(debugTags.flatMap { tag in
             tag.items ?? []
         }.count == 3)
+        #expect(context.hasChanges == false)
     }
 
     @Test
@@ -40,6 +41,7 @@ struct SampleDataOperationsTests {
             baseDate: shiftedDate("2000-01-10T12:00:00Z")
         )
         #expect(fetchItems(context).count == 3)
+        #expect(context.hasChanges == false)
     }
 
     @Test
@@ -54,6 +56,7 @@ struct SampleDataOperationsTests {
 
         #expect(fetchItems(context).count == 24)
         #expect(try SampleDataOperations.hasDebugData(context: context))
+        #expect(context.hasChanges == false)
     }
 
     @Test
@@ -95,6 +98,7 @@ struct SampleDataOperationsTests {
         try SampleDataOperations.seedDuplicateTagPreviewData(context: context)
 
         #expect(try SettingsStatusOperations.load(context: context).hasDuplicateTags)
+        #expect(context.hasChanges == false)
     }
 
     // MARK: - Delete
@@ -113,5 +117,6 @@ struct SampleDataOperationsTests {
         #expect(debugTags.isEmpty)
         #expect(fetchItems(context).isEmpty)
         #expect(!(try SampleDataOperations.hasDebugData(context: context)))
+        #expect(context.hasChanges == false)
     }
 }

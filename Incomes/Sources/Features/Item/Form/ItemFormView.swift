@@ -123,25 +123,10 @@ extension ItemFormView {
         } message: {
             Text("Are you really going to use DebugMode?")
         }
-        .alert(
-            "Error",
-            isPresented: Binding(
-                get: {
-                    presentation.errorMessage != nil
-                },
-                set: { isPresented in
-                    if !isPresented {
-                        presentation.clearError()
-                    }
-                }
-            )
-        ) {
-            Button("OK", role: .cancel) {
-                presentation.clearError()
-            }
-        } message: {
-            Text(presentation.errorMessage ?? "")
-        }
+        .incomesErrorAlert(
+            "Unable to Save Item",
+            message: $presentation.errorMessage
+        )
         .task(id: initialContextTaskID) {
             model.applyInitialContext(
                 item: item,

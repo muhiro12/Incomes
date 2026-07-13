@@ -1,10 +1,13 @@
 import SwiftUI
 
 struct OrphanTagView: View {
+    @Environment(\.modelContext)
+    private var context
     @Environment(Tag.self)
     private var tag
 
     @State private var isDeleteDialogPresented = false
+    @State private var errorAlertPresentation: ErrorAlertPresentation?
 
     let onDelete: () -> Void
 
@@ -33,12 +36,7 @@ struct OrphanTagView: View {
             isPresented: $isDeleteDialogPresented
         ) {
             Button(role: .destructive) {
-                if TagMutationOperations.delete(tag: tag) {
-                    onDelete()
-                    Haptic.success.impact()
-                } else {
-                    Haptic.warning.impact()
-                }
+                deleteTag()
             } label: {
                 Text("Delete")
             }
@@ -50,6 +48,7 @@ struct OrphanTagView: View {
         } message: {
             Text("Are you sure you want to delete this orphan tag? This action cannot be undone.")
         }
+        .incomesErrorAlert($errorAlertPresentation)
         .navigationTitle(tag.displayName)
         .toolbar {
             ToolbarItem {
@@ -68,6 +67,26 @@ struct OrphanTagView: View {
 }
 
 private extension OrphanTagView {
+    func deleteTag() {
+        do {
+            guard try TagMutationOperations.delete(
+                context: context,
+                tag: tag
+            ) else {
+                Haptic.warning.impact()
+                return
+            }
+
+            onDelete()
+            Haptic.success.impact()
+        } catch {
+            errorAlertPresentation = .init(
+                title: "Unable to Update Tags",
+                error: error
+            )
+        }
+    }
+
     func typeTitle(
         _ type: TagType
     ) -> String {

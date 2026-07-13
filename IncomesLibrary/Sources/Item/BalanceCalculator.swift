@@ -43,6 +43,10 @@ enum BalanceCalculator {
             }
         )
 
+        guard balances.allSatisfy(ItemAmountPolicy.isSupported) else {
+            throw ItemAmountPolicy.ValidationError.unsupportedBalance
+        }
+
         zip(targetList, balances).forEach { item, balance in
             item.modify(balance: balance)
         }

@@ -8,8 +8,9 @@ struct ItemFormInformationSection: View {
     let focusedField: FocusState<ItemFormFocusedField?>.Binding
 
     var body: some View {
-        let isIncomeValid = income.isEmptyOrDecimal
-        let isOutgoValid = outgo.isEmptyOrDecimal
+        let formInput = model.formInputData
+        let isIncomeValid = formInput.isIncomeValid
+        let isOutgoValid = formInput.isOutgoValid
 
         Section("Information") {
             ItemFormDateRow(date: $model.date)

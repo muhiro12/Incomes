@@ -40,6 +40,69 @@ struct YearlyItemDuplicationOutcomeTests {
         #expect(result.outcome.followUpHints.contains(.reloadWidgets))
         #expect(result.outcome.followUpHints.contains(.refreshNotificationSchedule))
         #expect(result.outcome.affectedDateRange != nil)
+
+        let targetYearDate = try #require(
+            Calendar.current.date(
+                from: DateComponents(year: 2_025, month: 1, day: 1)
+            )
+        )
+        let verificationContext = ModelContext(context.container)
+        let persistedItems = try verificationContext.fetch(
+            .items(.dateIsSameYearAs(targetYearDate))
+        )
+        let persistedIDs = Set(
+            persistedItems.map(\.persistentModelID)
+        )
+        #expect(result.outcome.changedIDs.created == persistedIDs)
+    }
+
+    @Test
+    func applyWithOutcome_rollsBackWhenGroupContainsNegativeAmount() throws {
+        let sourceItem = try createItem(
+            context: context,
+            input: .init(
+                date: shiftedDate("2024-01-10T12:00:00Z"),
+                content: "Rent",
+                income: 100,
+                outgo: .zero,
+                category: "Housing"
+            )
+        )
+        let groupID = UUID()
+        let targetDate = shiftedDate("2025-01-10T12:00:00Z")
+        let plan = YearlyItemDuplicationPlan(
+            groups: [
+                .init(
+                    id: groupID,
+                    content: sourceItem.content,
+                    category: sourceItem.category?.name ?? "",
+                    averageIncome: -1,
+                    averageOutgo: .zero,
+                    entryCount: 1,
+                    targetDates: [targetDate]
+                )
+            ],
+            entries: [
+                .init(
+                    sourceItem: sourceItem,
+                    targetDate: targetDate,
+                    groupID: groupID
+                )
+            ],
+            skippedDuplicateCount: .zero
+        )
+
+        #expect(throws: ItemAmountPolicy.ValidationError.negativeStoredAmount) {
+            try YearlyItemDuplicationApplyOperations.applyWithOutcome(
+                plan: plan,
+                context: context
+            )
+        }
+
+        let verificationContext = ModelContext(context.container)
+        let persistedItems = try verificationContext.fetch(FetchDescriptor<Item>())
+        #expect(persistedItems.map(\.content) == ["Rent"])
+        #expect(context.hasChanges == false)
     }
 
     @Test

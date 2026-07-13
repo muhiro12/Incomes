@@ -42,6 +42,11 @@ public final class Item {
         values: ItemStoredValues,
         repeatID: UUID
     ) throws -> Item {
+        try ItemAmountPolicy.validateStoredAmounts(
+            income: values.income,
+            outgo: values.outgo
+        )
+
         let item = Item()
         context.insert(item)
 
@@ -88,6 +93,11 @@ public final class Item {
         values: ItemStoredValues,
         repeatID: UUID
     ) throws {
+        try ItemAmountPolicy.validateStoredAmounts(
+            income: values.income,
+            outgo: values.outgo
+        )
+
         self.date = Calendar.utc.startOfDay(
             for: Calendar.utc.shiftedDate(
                 componentsFrom: values.date,
@@ -155,7 +165,7 @@ public extension Item {
         income - outgo
     }
 
-    /// True when `netIncome >= 0`.
+    /// True when `netIncome > 0`.
     var isNetIncomePositive: Bool {
         netIncome > .zero
     }

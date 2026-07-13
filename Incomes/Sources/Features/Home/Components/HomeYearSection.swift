@@ -21,6 +21,7 @@ struct HomeYearSection: View {
 
     @State private var isDialogPresented = false
     @State private var deletionDisplayName: String?
+    @State private var errorMessage: String?
     @State private var willDeleteItems: [Item] = []
 
     private let navigateToRoute: (IncomesRoute) -> Void
@@ -66,31 +67,21 @@ extension HomeYearSection {
         }
         .confirmationDialog(
             deletionDialogTitle,
-            isPresented: Binding(
-                get: {
-                    isDialogPresented
-                },
-                set: { isPresented in
-                    if isPresented {
-                        isDialogPresented = true
-                    } else {
-                        clearDeletionRequest()
-                    }
-                }
-            )
+            isPresented: $isDialogPresented
         ) {
             Button(role: .destructive) {
+                let itemsToDelete = willDeleteItems
                 Task { @MainActor in
                     do {
                         try await ItemDeleteCoordinator.delete(
                             context: context,
-                            items: willDeleteItems,
+                            items: itemsToDelete,
                             notificationService: notificationService,
                             logger: itemMutationLogger
                         )
                         clearDeletionRequest()
                     } catch {
-                        assertionFailure(error.localizedDescription)
+                        errorMessage = ErrorMessageOperations.message(from: error)
                     }
                 }
             } label: {
@@ -104,6 +95,10 @@ extension HomeYearSection {
         } message: {
             ItemDeletionConfirmationMessage(itemCount: willDeleteItems.count)
         }
+        .incomesErrorAlert(
+            "Unable to Delete Items",
+            message: $errorMessage
+        )
     }
 }
 
