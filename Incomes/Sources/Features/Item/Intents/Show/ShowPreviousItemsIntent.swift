@@ -10,6 +10,7 @@ import SwiftData
 
 struct ShowPreviousItemsIntent: AppIntent {
     static let title: LocalizedStringResource = .init("Show Previous Items", table: "AppIntents")
+    static let authenticationPolicy: IntentAuthenticationPolicy = .requiresAuthentication
 
     @Parameter(title: "Date", kind: .date)
     private var date: Date

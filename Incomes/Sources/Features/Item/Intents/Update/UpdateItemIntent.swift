@@ -4,6 +4,7 @@ import SwiftData
 
 struct UpdateItemIntent: AppIntent {
     static let title: LocalizedStringResource = .init("Update Item", table: "AppIntents")
+    static let authenticationPolicy: IntentAuthenticationPolicy = .requiresAuthentication
     static let isDiscoverable = false
 
     @Parameter(title: "Item")

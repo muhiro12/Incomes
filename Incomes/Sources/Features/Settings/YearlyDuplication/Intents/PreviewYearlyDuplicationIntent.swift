@@ -4,6 +4,7 @@ import SwiftData
 
 struct PreviewYearlyDuplicationIntent: AppIntent {
     static let title: LocalizedStringResource = .init("Preview Yearly Duplication", table: "AppIntents")
+    static let authenticationPolicy: IntentAuthenticationPolicy = .requiresAuthentication
     static let isDiscoverable = false
 
     @Parameter(title: "Source Year")

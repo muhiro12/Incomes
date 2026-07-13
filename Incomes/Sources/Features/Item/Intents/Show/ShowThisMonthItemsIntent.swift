@@ -10,6 +10,7 @@ import SwiftData
 
 struct ShowThisMonthItemsIntent: AppIntent {
     static let title: LocalizedStringResource = .init("Show This Month's Items", table: "AppIntents")
+    static let authenticationPolicy: IntentAuthenticationPolicy = .requiresAuthentication
 
     @Dependency private var modelContainer: ModelContainer
 

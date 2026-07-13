@@ -10,6 +10,7 @@ import SwiftData
 
 struct ShowChartsIntent: AppIntent {
     static let title: LocalizedStringResource = .init("Show Charts", table: "AppIntents")
+    static let authenticationPolicy: IntentAuthenticationPolicy = .requiresAuthentication
 
     @Parameter(title: "Date", kind: .date)
     private var date: Date

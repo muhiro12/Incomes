@@ -10,6 +10,7 @@ import SwiftData
 
 struct GetNextItemIntent: AppIntent {
     static let title: LocalizedStringResource = .init("Get Next Item", table: "AppIntents")
+    static let authenticationPolicy: IntentAuthenticationPolicy = .requiresAuthentication
 
     @Parameter(title: "Date", kind: .date)
     private var date: Date

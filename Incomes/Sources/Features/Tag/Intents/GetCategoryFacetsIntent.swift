@@ -3,6 +3,7 @@ import SwiftData
 
 struct GetCategoryFacetsIntent: AppIntent {
     static let title: LocalizedStringResource = .init("Get Category Facets", table: "AppIntents")
+    static let authenticationPolicy: IntentAuthenticationPolicy = .requiresAuthentication
 
     @Dependency private var modelContainer: ModelContainer
 

@@ -5,6 +5,7 @@ import SwiftData
 
 struct CreateScheduledItemIntent: AppIntent {
     static let title: LocalizedStringResource = .init("Create Scheduled Item", table: "AppIntents")
+    static let authenticationPolicy: IntentAuthenticationPolicy = .requiresAuthentication
     static let isDiscoverable = false
 
     @Parameter(title: "Date", kind: .date)
