@@ -121,11 +121,6 @@ public enum ItemSummaryOperations {
         SummaryCalculator.totalOutgo(for: items)
     }
 
-    /// Returns whether a net income should use the nonnegative presentation.
-    public static func isNonnegativeNetIncome(_ netIncome: Decimal) -> Bool {
-        netIncome >= .zero
-    }
-
     /// Returns income chart segments grouped by category.
     public static func incomeSegments(for items: [Item]) -> [ChartSegment] {
         CategoryChartSummaryCalculator.incomeSegments(for: items)

@@ -17,7 +17,6 @@ struct DuplicateTagListView: View {
     @Binding private var selectedTagID: Tag.ID?
 
     @State private var isResolveDialogPresented = false
-    @State private var errorMessage: String?
     @State private var selectedTags = [Tag]()
 
     init(selection: Binding<Tag.ID?> = .constant(nil)) {
@@ -27,76 +26,11 @@ struct DuplicateTagListView: View {
 
 extension DuplicateTagListView {
     @ViewBuilder var body: some View {
-        let yearResult = duplicateTags(from: yearTags)
-        let yearMonthResult = duplicateTags(from: yearMonthTags)
-        let contentResult = duplicateTags(from: contentTags)
-        let categoryResult = duplicateTags(from: categoryTags)
-        let queryResults = [
-            yearResult,
-            yearMonthResult,
-            contentResult,
-            categoryResult
-        ]
+        let yearDuplicateTags = duplicateTags(from: yearTags)
+        let yearMonthDuplicateTags = duplicateTags(from: yearMonthTags)
+        let contentDuplicateTags = duplicateTags(from: contentTags)
+        let categoryDuplicateTags = duplicateTags(from: categoryTags)
 
-        Group {
-            if let queryErrorMessage = queryResults.compactMap(\.errorMessage).first {
-                ContentUnavailableView(
-                    "Unable to Load Duplicate Tags",
-                    systemImage: "exclamationmark.triangle",
-                    description: Text(verbatim: queryErrorMessage)
-                )
-            } else {
-                duplicateTagList(
-                    yearDuplicateTags: yearResult.tags,
-                    yearMonthDuplicateTags: yearMonthResult.tags,
-                    contentDuplicateTags: contentResult.tags,
-                    categoryDuplicateTags: categoryResult.tags
-                )
-            }
-        }
-        .confirmationDialog(
-            Text(resolveDialogTitle),
-            isPresented: $isResolveDialogPresented
-        ) {
-            Button("Resolve", role: .destructive, action: resolveSelectedTags)
-            Button(role: .cancel) {
-                // no-op
-            } label: {
-                Text("Cancel")
-            }
-        } message: {
-            Text(resolveDialogMessage)
-        }
-        .navigationTitle("Duplicate Tags")
-        .toolbar {
-            ToolbarItem {
-                CloseButton()
-            }
-        }
-        .incomesErrorAlert(
-            "Unable to Update Tags",
-            message: $errorMessage
-        )
-    }
-}
-
-private extension DuplicateTagListView {
-    var resolveDialogTitle: LocalizedStringKey {
-        selectedTags.count > 1 ? "Resolve All" : "Resolve"
-    }
-
-    var resolveDialogMessage: LocalizedStringKey {
-        selectedTags.count > 1
-            ? "Are you sure you want to resolve all duplicate tags? This action cannot be undone."
-            : "Are you sure you want to resolve this duplicate tag? This action cannot be undone."
-    }
-
-    func duplicateTagList(
-        yearDuplicateTags: [Tag],
-        yearMonthDuplicateTags: [Tag],
-        contentDuplicateTags: [Tag],
-        categoryDuplicateTags: [Tag]
-    ) -> some View {
         List(selection: $selectedTagID) {
             DuplicateTagSection(
                 title: "Year",
@@ -143,6 +77,37 @@ private extension DuplicateTagListView {
                 )
             }
         }
+        .confirmationDialog(
+            Text(resolveDialogTitle),
+            isPresented: $isResolveDialogPresented
+        ) {
+            Button("Resolve", role: .destructive, action: resolveSelectedTags)
+            Button(role: .cancel) {
+                // no-op
+            } label: {
+                Text("Cancel")
+            }
+        } message: {
+            Text(resolveDialogMessage)
+        }
+        .navigationTitle("Duplicate Tags")
+        .toolbar {
+            ToolbarItem {
+                CloseButton()
+            }
+        }
+    }
+}
+
+private extension DuplicateTagListView {
+    var resolveDialogTitle: LocalizedStringKey {
+        selectedTags.count > 1 ? "Resolve All" : "Resolve"
+    }
+
+    var resolveDialogMessage: LocalizedStringKey {
+        selectedTags.count > 1
+            ? "Are you sure you want to resolve all duplicate tags? This action cannot be undone."
+            : "Are you sure you want to resolve this duplicate tag? This action cannot be undone."
     }
 
     func hasAnyDuplicateTags(
@@ -155,26 +120,21 @@ private extension DuplicateTagListView {
 
     func duplicateTags(
         from tags: [Tag]
-    ) -> (tags: [Tag], errorMessage: String?) {
+    ) -> [Tag] {
         do {
             guard let type = tags.first?.type else {
-                return (tags: [], errorMessage: nil)
+                return []
             }
-            return (
-                tags: try TagQueryOperations.duplicateTags(
-                    context: context,
-                    type: type
-                )
-                .sorted { left, right in
-                    left.displayName < right.displayName
-                },
-                errorMessage: nil
+            return try TagQueryOperations.duplicateTags(
+                context: context,
+                type: type
             )
+            .sorted { left, right in
+                left.displayName < right.displayName
+            }
         } catch {
-            return (
-                tags: [],
-                errorMessage: ErrorMessageOperations.message(from: error)
-            )
+            assertionFailure(error.localizedDescription)
+            return []
         }
     }
 
@@ -184,11 +144,8 @@ private extension DuplicateTagListView {
                 context: context,
                 tags: selectedTags
             )
-            selectedTagID = nil
-            selectedTags = []
-            Haptic.success.impact()
         } catch {
-            errorMessage = ErrorMessageOperations.message(from: error)
+            assertionFailure(error.localizedDescription)
         }
     }
 }

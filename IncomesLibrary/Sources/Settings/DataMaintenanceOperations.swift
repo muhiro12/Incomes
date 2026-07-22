@@ -19,18 +19,8 @@ public enum DataMaintenanceOperations {
 
     /// Deletes all items and tags from the store.
     public static func deleteAllData(context: ModelContext) throws {
-        try deleteAllData(context: context, afterDeletingItems: nil)
-    }
-
-    static func deleteAllData(
-        context: ModelContext,
-        afterDeletingItems: (() throws -> Void)?
-    ) throws {
-        try ModelContextMutationOperations.run(context: context) {
-            try ItemDeletionOperations.deleteAllWithoutSaving(context: context)
-            try afterDeletingItems?()
-            try TagMutationOperations.deleteAllWithoutSaving(context: context)
-        }
+        try ItemDeletionOperations.deleteAll(context: context)
+        try TagMutationOperations.deleteAll(context: context)
     }
 
     /// Deletes all stored data through the shared reset orchestration flow.

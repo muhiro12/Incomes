@@ -20,7 +20,6 @@ struct TagItemListSection {
     private var logging
 
     @State private var isDialogPresented = false
-    @State private var errorMessage: String?
     @State private var willDeleteItems: [Item] = []
 
     private let yearString: String
@@ -72,9 +71,8 @@ extension TagItemListSection: View {
                             notificationService: notificationService,
                             logger: itemMutationLogger
                         )
-                        willDeleteItems = []
                     } catch {
-                        errorMessage = ErrorMessageOperations.message(from: error)
+                        assertionFailure(error.localizedDescription)
                     }
                 }
             } label: {
@@ -88,10 +86,6 @@ extension TagItemListSection: View {
         } message: {
             ItemDeletionConfirmationMessage(itemCount: willDeleteItems.count)
         }
-        .incomesErrorAlert(
-            "Unable to Delete Items",
-            message: $errorMessage
-        )
     }
 }
 

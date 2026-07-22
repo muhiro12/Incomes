@@ -14,6 +14,21 @@ enum ItemFormMutationPresentationAction: Equatable {
 }
 
 extension ItemFormMutationPresentationAction {
+    static func action(
+        for result: Result<ItemFormSaveOutcome, Error>
+    ) -> ItemFormMutationPresentationAction {
+        switch result {
+        case .success(.didSave):
+            .dismiss
+        case .success(.requiresScopeSelection):
+            .presentScopeSelection
+        case let .failure(error):
+            .presentError(
+                ErrorMessageOperations.message(from: error)
+            )
+        }
+    }
+
     static func dismissOnSuccessAction(
         for result: Result<Void, Error>
     ) -> ItemFormMutationPresentationAction {

@@ -23,24 +23,6 @@ enum ItemSampleDataSeeder {
         ignoringDuplicates: Bool = false,
         ifEmptyOnly: Bool = false
     ) throws {
-        try ModelContextMutationOperations.run(context: context) {
-            try seedSampleDataWithoutSaving(
-                context: context,
-                profile: profile,
-                baseDate: baseDate,
-                ignoringDuplicates: ignoringDuplicates,
-                ifEmptyOnly: ifEmptyOnly
-            )
-        }
-    }
-
-    static func seedSampleDataWithoutSaving(
-        context: ModelContext,
-        profile: SampleDataProfile,
-        baseDate: Date,
-        ignoringDuplicates: Bool,
-        ifEmptyOnly: Bool
-    ) throws {
         if ifEmptyOnly {
             let count = try ItemQueryOperations.allItemsCount(context: context)
             guard count == .zero else {
@@ -209,36 +191,23 @@ enum ItemSampleDataSeeder {
 
     /// Deletes items and tags associated with tutorial/debug data.
     static func deleteDebugData(context: ModelContext) throws {
-        try ModelContextMutationOperations.run(context: context) {
-            let debugTags = try context.fetch(.tags(.typeIs(.debug)))
-            let items = Array(
-                Dictionary(
-                    grouping: debugTags.flatMap { tag in
-                        tag.items ?? []
-                    },
-                    by: \.id
-                )
-                .values
-                .compactMap(\.first)
-            )
-            _ = try ItemDeletionOperations.deleteWithoutSavingWithOutcome(
+        let debugTags = try context.fetch(.tags(.typeIs(.debug)))
+        let items = debugTags.flatMap { tag in
+            tag.items ?? []
+        }
+        try items.forEach { item in
+            try ItemDeletionOperations.delete(
                 context: context,
-                items: items
+                item: item
             )
-            TagMutationOperations.deleteUnused(tags: debugTags)
+        }
+        debugTags.forEach { tag in
+            TagMutationOperations.delete(tag: tag)
         }
     }
 
     /// Seeds duplicate category tags for duplicate-tag previews.
     static func seedDuplicateTagPreviewData(context: ModelContext) throws {
-        try ModelContextMutationOperations.run(context: context) {
-            try seedDuplicateTagPreviewDataWithoutSaving(context: context)
-        }
-    }
-
-    static func seedDuplicateTagPreviewDataWithoutSaving(
-        context: ModelContext
-    ) throws {
         let previewDuplicateCount = 2
         let duplicateCategoryName = String(localized: "Credit", table: "SampleData", bundle: .module)
         let items = try ItemQueryOperations.items(context: context)

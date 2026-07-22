@@ -55,46 +55,31 @@ public extension Tag {
         )
     }
 
-    /// Item count, totals, and deficit state computed in one relationship scan.
-    var summary: TagSummary {
-        let relatedItems = items ?? []
-        var income = Decimal.zero
-        var outgo = Decimal.zero
-        var hasDeficit = false
-
-        for item in relatedItems {
-            income += item.income
-            outgo += item.outgo
-            hasDeficit = hasDeficit || item.balance < .zero
-        }
-
-        return .init(
-            itemCount: relatedItems.count,
-            income: income,
-            outgo: outgo,
-            hasDeficit: hasDeficit
-        )
-    }
-
     /// Sum of `income` across related items.
     var income: Decimal {
-        summary.income
+        (items ?? []).reduce(.zero) { partial, item in
+            partial + item.income
+        }
     }
 
     /// Sum of `outgo` across related items.
     var outgo: Decimal {
-        summary.outgo
+        (items ?? []).reduce(.zero) { partial, item in
+            partial + item.outgo
+        }
     }
 
     /// Convenience: `income - outgo`.
     var netIncome: Decimal {
-        summary.netIncome
+        income - outgo
     }
 
     /// True when any related item has a negative running balance (deficit).
     /// Used for quick visual warnings in summary lists.
     var hasDeficit: Bool {
-        summary.hasDeficit
+        (items ?? []).contains { item in
+            item.balance < .zero
+        }
     }
 }
 

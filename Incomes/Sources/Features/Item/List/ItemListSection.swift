@@ -20,7 +20,6 @@ struct ItemListSection {
     @Query private var items: [Item]
 
     @State private var isDialogPresented = false
-    @State private var errorMessage: String?
     @State private var willDeleteItems: [Item] = []
 
     private let title: LocalizedStringKey?
@@ -75,9 +74,8 @@ extension ItemListSection: View {
                             notificationService: notificationService,
                             logger: itemMutationLogger
                         )
-                        willDeleteItems = []
                     } catch {
-                        errorMessage = ErrorMessageOperations.message(from: error)
+                        assertionFailure(error.localizedDescription)
                     }
                 }
             } label: {
@@ -91,10 +89,6 @@ extension ItemListSection: View {
         } message: {
             ItemDeletionConfirmationMessage(itemCount: willDeleteItems.count)
         }
-        .incomesErrorAlert(
-            "Unable to Delete Items",
-            message: $errorMessage
-        )
     }
 
     var itemMutationLogger: MHLogger {

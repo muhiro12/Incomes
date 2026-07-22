@@ -4,49 +4,6 @@ import Testing
 
 struct ItemFormInputTests {
     @Test
-    func typedAmountsUseTheSuppliedLocaleWhenParsed() {
-        let input = ItemFormInput(
-            date: .now,
-            content: "Salary",
-            income: 10_000,
-            outgo: 1_500,
-            category: "Income",
-            locale: Locale(identifier: "es_ES")
-        )
-
-        #expect(input.income == 10_000)
-        #expect(input.outgo == 1_500)
-    }
-
-    @Test
-    func amountValidationEnforcesTheSwiftDataPersistenceBoundary() throws {
-        let supportedAmount = try #require(
-            Decimal(string: "99999999999.999")
-        )
-        let unsupportedAmount = try #require(
-            Decimal(string: "999999999999.999")
-        )
-
-        #expect(ItemAmountPolicy.isSupported(supportedAmount))
-        #expect(!ItemAmountPolicy.isSupported(unsupportedAmount))
-
-        let input = ItemFormInput(
-            date: .now,
-            content: "Oversized",
-            incomeText: "999999999999.999",
-            outgoText: "0",
-            category: "Test",
-            priorityText: "0",
-            locale: Locale(identifier: "en_US")
-        )
-
-        #expect(input.isIncomeValid == false)
-        #expect(throws: ItemFormInput.ValidationError.invalidIncome) {
-            try input.validate()
-        }
-    }
-
-    @Test
     func isValid_requires_content_and_valid_numbers() {
         let invalidContent = ItemFormInput(
             date: .now,

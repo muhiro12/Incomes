@@ -48,7 +48,10 @@ enum YearlyItemDuplicationPresentationBuilder {
         from value: Decimal,
         locale: Locale = .current
     ) -> String {
-        value.groupedDecimalText(locale: locale)
+        var source = value
+        var rounded = Decimal.zero
+        NSDecimalRound(&rounded, &source, 0, .down)
+        return rounded.groupedDecimalText(locale: locale)
     }
 }
 

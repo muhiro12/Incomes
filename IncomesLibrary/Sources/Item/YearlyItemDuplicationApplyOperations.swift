@@ -56,22 +56,14 @@ public enum YearlyItemDuplicationApplyOperations {
         plan: YearlyItemDuplicationPlan,
         context: ModelContext
     ) throws -> MutationResult<YearlyItemDuplicationResult> {
-        try ModelContextMutationOperations.run(
-            context: context,
-            operation: {
-                let createdItems = try createItems(
-                    plan: plan,
-                    context: context
-                )
-                try BalanceCalculator.calculate(in: context, for: createdItems)
-                return createdItems
-            },
-            afterSave: { createdItems in
-                .init(
-                    value: duplicationResult(plan: plan, createdItems: createdItems),
-                    outcome: mutationOutcome(createdItems: createdItems)
-                )
-            }
+        let createdItems = try createItems(
+            plan: plan,
+            context: context
+        )
+        try BalanceCalculator.calculate(in: context, for: createdItems)
+        return .init(
+            value: duplicationResult(plan: plan, createdItems: createdItems),
+            outcome: mutationOutcome(createdItems: createdItems)
         )
     }
 }

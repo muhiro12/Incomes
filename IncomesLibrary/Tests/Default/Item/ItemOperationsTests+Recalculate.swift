@@ -37,6 +37,5 @@ extension ItemOperationsTests {
         )
         let result = try #require(fetchItems(context).first)
         #expect(result.balance == 10)
-        #expect(context.hasChanges == false)
     }
 }

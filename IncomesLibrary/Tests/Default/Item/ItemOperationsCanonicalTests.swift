@@ -19,32 +19,6 @@ struct ItemOperationsCanonicalTests {
         #expect(ItemCreationOperations.repeatCountRange == 1...60)
     }
 
-    @Test(arguments: [-1, 61])
-    func create_rejectsUnsupportedRepeatCountsWithoutMutation(
-        repeatCount: Int
-    ) throws {
-        let context = testContext
-        let input: ItemFormInput = .init(
-            date: shiftedDate("2000-04-03T12:00:00Z"),
-            content: "content",
-            incomeText: "200",
-            outgoText: "100",
-            category: "category",
-            priorityText: "1"
-        )
-
-        #expect(
-            throws: ItemCreationOperations.ValidationError.repeatCountOutOfRange(repeatCount)
-        ) {
-            try ItemCreationOperations.create(
-                context: context,
-                input: input,
-                repeatCount: repeatCount
-            )
-        }
-        #expect(try context.fetchCount(FetchDescriptor<Item>()) == .zero)
-    }
-
     @Test
     func create_withSharedInput_createsItemsForSelectedMonths() throws {
         let input: ItemFormInput = .init(
@@ -71,31 +45,6 @@ struct ItemOperationsCanonicalTests {
         #expect(items.count == 3)
         #expect(Set(items.map(\.repeatID)).count == 1)
         #expect(Set(items.map(\.priority)) == [1])
-    }
-
-    @Test
-    func createWithOutcome_reportsIdentifiersResolvableFromFreshContext() throws {
-        let input = ItemFormInput(
-            date: shiftedDate("2000-04-03T12:00:00Z"),
-            content: "Persistent IDs",
-            income: 200,
-            outgo: 100,
-            category: "Test",
-            locale: Locale(identifier: "en_US")
-        )
-
-        let result = try ItemCreationOperations.createWithOutcome(
-            context: context,
-            input: input,
-            repeatCount: 3
-        )
-
-        let verificationContext = ModelContext(context.container)
-        let persistedIDs = Set(
-            try verificationContext.fetch(FetchDescriptor<Item>())
-                .map(\.persistentModelID)
-        )
-        #expect(result.outcome.changedIDs.created == persistedIDs)
     }
 
     @Test

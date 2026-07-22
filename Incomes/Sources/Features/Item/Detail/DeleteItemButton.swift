@@ -20,7 +20,6 @@ struct DeleteItemButton {
     private var logging
 
     @State private var isDialogPresented = false
-    @State private var errorMessage: String?
 
     private let action: (() -> Void)?
 
@@ -61,7 +60,7 @@ extension DeleteItemButton: View {
                             logger: itemMutationLogger
                         )
                     } catch {
-                        errorMessage = ErrorMessageOperations.message(from: error)
+                        assertionFailure(error.localizedDescription)
                     }
                 }
             } label: {
@@ -75,10 +74,6 @@ extension DeleteItemButton: View {
         } message: {
             ItemDeletionConfirmationMessage(itemCount: 1)
         }
-        .incomesErrorAlert(
-            "Unable to Delete Item",
-            message: $errorMessage
-        )
     }
 
     var itemMutationLogger: MHLogger {

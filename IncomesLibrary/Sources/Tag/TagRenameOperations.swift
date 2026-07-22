@@ -79,11 +79,9 @@ public enum TagRenameOperations {
             return
         }
 
-        try ModelContextMutationOperations.run(context: context) {
-            tag.rename(
-                storedName: normalizedTargetName
-            )
-        }
+        tag.rename(
+            storedName: normalizedTargetName
+        )
     }
 }
 

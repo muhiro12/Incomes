@@ -38,4 +38,8 @@ final class ItemFormPresentationModel {
             dialogRoute = nil
         }
     }
+
+    func clearError() {
+        errorMessage = nil
+    }
 }

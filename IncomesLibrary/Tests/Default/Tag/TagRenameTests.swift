@@ -57,7 +57,6 @@ struct TagRenameTests {
         #expect(firstItem.category?.name == "Travel")
         #expect(secondItem.category?.name == "Travel")
         #expect(balanceMap() == originalBalances)
-        #expect(context.hasChanges == false)
     }
 
     @Test

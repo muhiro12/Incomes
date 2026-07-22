@@ -14,8 +14,6 @@ struct RecalculateItemButton {
     @Environment(\.modelContext)
     private var context
 
-    @State private var errorMessage: String?
-
     private let action: (() -> Void)?
 
     init(action: (() -> Void)? = nil) {
@@ -37,15 +35,11 @@ extension RecalculateItemButton: View {
                         )
                         Haptic.success.impact()
                     } catch {
-                        errorMessage = ErrorMessageOperations.message(from: error)
+                        assertionFailure(error.localizedDescription)
                     }
                 }
             }
         }
-        .incomesErrorAlert(
-            "Unable to Recalculate Balance",
-            message: $errorMessage
-        )
     }
 }
 

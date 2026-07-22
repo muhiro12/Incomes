@@ -187,50 +187,6 @@ extension YearlyItemDuplicationTests {
     }
 
     @Test
-    func plan_normalizesNonterminatingAverageForDraftDeduplicationAndPersistence() throws {
-        try insertNonterminatingAverageScenario()
-
-        let plan = try YearlyItemDuplicationPlanOperations.plan(
-            context: context,
-            sourceYear: 2_024,
-            targetYear: 2_025
-        )
-
-        let group = try #require(plan.groups.first)
-        #expect(group.averageIncome == 100)
-        #expect(group.averageOutgo == 1)
-        #expect(plan.skippedDuplicateCount == 1)
-        #expect(plan.entries.count == 2)
-        let draft = try #require(
-            YearlyItemDuplicationPlanOperations.draft(
-                for: group.id,
-                in: plan
-            )
-        )
-        #expect(draft.incomeText == "100")
-        #expect(draft.outgoText == "1")
-
-        let result = try YearlyItemDuplicationApplyOperations.apply(
-            plan: plan,
-            context: context
-        )
-        #expect(result.createdCount == 2)
-
-        let targetYearDate = try #require(
-            Calendar.current.date(
-                from: DateComponents(year: 2_025, month: 1, day: 1)
-            )
-        )
-        let targetItems = try context.fetch(
-            .items(.dateIsSameYearAs(targetYearDate))
-        )
-        #expect(targetItems.count == 3)
-        #expect(targetItems.allSatisfy { item in
-            item.income == 100 && item.outgo == 1
-        })
-    }
-
-    @Test
     func draft_returns_item_form_draft_for_group() throws {
         _ = try createItem(
             context: context,
@@ -296,62 +252,5 @@ extension YearlyItemDuplicationTests {
         #expect(calendar.component(.year, from: entry.targetDate) == 2_025)
         #expect(calendar.component(.month, from: entry.targetDate) == 1)
         #expect(calendar.component(.day, from: entry.targetDate) == 31)
-    }
-}
-
-private extension YearlyItemDuplicationTests {
-    func insertNonterminatingAverageScenario() throws {
-        let repeatID = UUID()
-        let recurringIncome: Decimal = 101
-        let recurringOutgo: Decimal = 2
-        let sourceValues = [
-            nonterminatingAverageSourceValues(
-                date: "2024-01-05T12:00:00Z",
-                income: 100,
-                outgo: 1
-            ),
-            nonterminatingAverageSourceValues(
-                date: "2024-02-05T12:00:00Z",
-                income: recurringIncome,
-                outgo: recurringOutgo
-            ),
-            nonterminatingAverageSourceValues(
-                date: "2024-03-05T12:00:00Z",
-                income: recurringIncome,
-                outgo: recurringOutgo
-            )
-        ]
-        for values in sourceValues {
-            _ = try Item.create(
-                context: context,
-                values: values,
-                repeatID: repeatID
-            )
-        }
-        _ = try Item.create(
-            context: context,
-            values: nonterminatingAverageSourceValues(
-                date: "2025-02-05T12:00:00Z",
-                income: 100,
-                outgo: 1
-            ),
-            repeatID: .init()
-        )
-        try context.save()
-    }
-
-    func nonterminatingAverageSourceValues(
-        date: String,
-        income: Decimal,
-        outgo: Decimal
-    ) -> ItemStoredValues {
-        .init(
-            date: shiftedDate(date),
-            content: "Subscription",
-            income: income,
-            outgo: outgo,
-            category: "Service",
-            priority: .zero
-        )
     }
 }

@@ -14,8 +14,6 @@ public struct ItemFormInput {
         case invalidPriority
     }
 
-    private let parsingLocale: Locale
-
     /// Selected local date for the item.
     public let date: Date
     /// Item description text.
@@ -34,24 +32,14 @@ public struct ItemFormInput {
         (try? validate()) != nil
     }
 
-    /// True when the income text is parseable and safe to persist.
-    public var isIncomeValid: Bool {
-        isAmountTextValid(incomeText)
-    }
-
-    /// True when the outgo text is parseable and safe to persist.
-    public var isOutgoValid: Bool {
-        isAmountTextValid(outgoText)
-    }
-
     /// Income value parsed from `incomeText`.
     public var income: Decimal {
-        incomeText.parsedDecimalValue(locale: parsingLocale) ?? .zero
+        incomeText.decimalValue
     }
 
     /// Outgo value parsed from `outgoText`.
     public var outgo: Decimal {
-        outgoText.parsedDecimalValue(locale: parsingLocale) ?? .zero
+        outgoText.decimalValue
     }
 
     /// Priority value parsed from `priorityText`.
@@ -73,10 +61,8 @@ public struct ItemFormInput {
         incomeText: String,
         outgoText: String,
         category: String,
-        priorityText: String,
-        locale: Locale = .current
+        priorityText: String
     ) {
-        self.parsingLocale = locale
         self.date = date
         self.content = content
         self.incomeText = incomeText
@@ -101,8 +87,7 @@ public struct ItemFormInput {
             incomeText: income.groupedDecimalText(locale: locale),
             outgoText: outgo.groupedDecimalText(locale: locale),
             category: category,
-            priorityText: "\(priority)",
-            locale: locale
+            priorityText: "\(priority)"
         )
     }
 
@@ -114,8 +99,7 @@ public struct ItemFormInput {
             incomeText: draft.incomeText,
             outgoText: draft.outgoText,
             category: draft.category,
-            priorityText: draft.priorityText.isEmpty ? "0" : draft.priorityText,
-            locale: .current
+            priorityText: draft.priorityText.isEmpty ? "0" : draft.priorityText
         )
     }
 
@@ -139,8 +123,7 @@ public struct ItemFormInput {
             category: CategoryNameSupport.displayName(
                 forStoredName: item.category?.name
             ),
-            priorityText: "\(item.priority)",
-            locale: locale
+            priorityText: "\(item.priority)"
         )
     }
 
@@ -149,10 +132,10 @@ public struct ItemFormInput {
         guard !content.isEmpty else {
             throw ValidationError.contentIsEmpty
         }
-        guard isIncomeValid else {
+        guard incomeText.isEmptyOrDecimal else {
             throw ValidationError.invalidIncome
         }
-        guard isOutgoValid else {
+        guard outgoText.isEmptyOrDecimal else {
             throw ValidationError.invalidOutgo
         }
         guard priorityText.isEmptyOrInt else {
@@ -189,16 +172,6 @@ public struct ItemFormInput {
 }
 
 private extension ItemFormInput {
-    func isAmountTextValid(_ text: String) -> Bool {
-        if text.isEmpty {
-            return true
-        }
-        guard let amount = text.parsedDecimalValue(locale: parsingLocale) else {
-            return false
-        }
-        return amount >= .zero && ItemAmountPolicy.isSupported(amount)
-    }
-
     func replacing(date: Date) -> ItemFormInput {
         .init(
             date: date,
@@ -206,8 +179,7 @@ private extension ItemFormInput {
             incomeText: incomeText,
             outgoText: outgoText,
             category: category,
-            priorityText: priorityText,
-            locale: parsingLocale
+            priorityText: priorityText
         )
     }
 
@@ -218,8 +190,7 @@ private extension ItemFormInput {
             incomeText: incomeText,
             outgoText: outgoText,
             category: category,
-            priorityText: priorityText,
-            locale: parsingLocale
+            priorityText: priorityText
         )
     }
 
@@ -230,8 +201,7 @@ private extension ItemFormInput {
             incomeText: incomeText,
             outgoText: outgoText,
             category: category,
-            priorityText: priorityText,
-            locale: parsingLocale
+            priorityText: priorityText
         )
     }
 }

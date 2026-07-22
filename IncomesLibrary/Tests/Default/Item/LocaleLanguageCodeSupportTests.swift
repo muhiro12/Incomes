@@ -21,4 +21,10 @@ struct LocaleLanguageCodeSupportTests {
             ) == "en"
         )
     }
+
+    @Test
+    func isJapanese_returns_true_for_japanese_locale() {
+        #expect(LocaleLanguageCodeSupport.isJapanese(Locale(identifier: "ja_JP")))
+        #expect(LocaleLanguageCodeSupport.isJapanese(Locale(identifier: "en_US")) == false)
+    }
 }

@@ -3,12 +3,6 @@ import SwiftData
 
 /// Domain operations for creating `Item` models.
 public enum ItemCreationOperations {
-    /// Validation failures for item creation inputs outside the form itself.
-    public enum ValidationError: Error, Equatable, Sendable {
-        /// The repeat count is negative or exceeds the supported upper bound.
-        case repeatCountOutOfRange(Int)
-    }
-
     /// The minimum repeat count accepted by user-facing creation inputs.
     public static let minimumRepeatCount = ItemRepeatCountLimits.minimum
     /// The maximum repeat count accepted by user-facing creation inputs.
@@ -26,26 +20,24 @@ public enum ItemCreationOperations {
     ) throws -> MutationResult<Item> {
         try input.validate()
         let values = ItemStoredValues(formInput: input)
-
-        return try ModelContextMutationOperations.run(
+        let item = try createItem(
             context: context,
-            operation: {
-                let item = try createItem(
-                    context: context,
-                    values: values,
-                    repeatMonthSelections: repeatMonthSelections
-                )
-                let createdItems = try context.fetch(
-                    .items(.repeatIDIs(item.repeatID))
-                )
-                return (item: item, createdItems: createdItems)
-            },
-            afterSave: { mutation in
-                creationResult(
-                    item: mutation.item,
-                    createdItems: mutation.createdItems
-                )
-            }
+            values: values,
+            repeatMonthSelections: repeatMonthSelections
+        )
+        let createdItems = try context.fetch(
+            .items(.repeatIDIs(item.repeatID))
+        )
+        let createdIDs = Set(createdItems.map(\.persistentModelID))
+        return .init(
+            value: item,
+            outcome: .init(
+                changedIDs: .init(created: createdIDs),
+                affectedDateRange: ItemMutationSupport.dateRange(
+                    from: createdItems.map(\.localDate)
+                ),
+                followUpHints: ItemMutationSupport.followUpHints
+            )
         )
     }
 
@@ -55,31 +47,26 @@ public enum ItemCreationOperations {
         input: ItemFormInput,
         repeatCount: Int
     ) throws -> MutationResult<Item> {
-        guard repeatCount == .zero || repeatCountRange.contains(repeatCount) else {
-            throw ValidationError.repeatCountOutOfRange(repeatCount)
-        }
         try input.validate()
         let values = ItemStoredValues(formInput: input)
-
-        return try ModelContextMutationOperations.run(
+        let item = try createItem(
             context: context,
-            operation: {
-                let item = try createItem(
-                    context: context,
-                    values: values,
-                    repeatCount: repeatCount
-                )
-                let createdItems = try context.fetch(
-                    .items(.repeatIDIs(item.repeatID))
-                )
-                return (item: item, createdItems: createdItems)
-            },
-            afterSave: { mutation in
-                creationResult(
-                    item: mutation.item,
-                    createdItems: mutation.createdItems
-                )
-            }
+            values: values,
+            repeatCount: repeatCount
+        )
+        let createdItems = try context.fetch(
+            .items(.repeatIDIs(item.repeatID))
+        )
+        let createdIDs = Set(createdItems.map(\.persistentModelID))
+        return .init(
+            value: item,
+            outcome: .init(
+                changedIDs: .init(created: createdIDs),
+                affectedDateRange: ItemMutationSupport.dateRange(
+                    from: createdItems.map(\.localDate)
+                ),
+                followUpHints: ItemMutationSupport.followUpHints
+            )
         )
     }
 
@@ -111,23 +98,6 @@ public enum ItemCreationOperations {
 }
 
 private extension ItemCreationOperations {
-    static func creationResult(
-        item: Item,
-        createdItems: [Item]
-    ) -> MutationResult<Item> {
-        let createdIDs = Set(createdItems.map(\.persistentModelID))
-        return .init(
-            value: item,
-            outcome: .init(
-                changedIDs: .init(created: createdIDs),
-                affectedDateRange: ItemMutationSupport.dateRange(
-                    from: createdItems.map(\.localDate)
-                ),
-                followUpHints: ItemMutationSupport.followUpHints
-            )
-        )
-    }
-
     static func createItem(
         context: ModelContext,
         values: ItemStoredValues,

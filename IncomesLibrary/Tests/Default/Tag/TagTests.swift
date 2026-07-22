@@ -109,45 +109,4 @@ struct TagTests {
         )
         #expect(tag.hasDeficit == false)
     }
-
-    @Test
-    func summary_aggregatesRelatedItems() throws {
-        _ = try createItem(
-            context: context,
-            input: .init(
-                date: shiftedDate("2024-03-01T00:00:00Z"),
-                content: "First",
-                income: .zero,
-                outgo: 100,
-                category: "Category",
-                priority: .zero
-            )
-        )
-        _ = try createItem(
-            context: context,
-            input: .init(
-                date: shiftedDate("2024-03-02T00:00:00Z"),
-                content: "Second",
-                income: 250,
-                outgo: 50,
-                category: "Category",
-                priority: .zero
-            )
-        )
-
-        let tag = try #require(
-            try TagQueryOperations.getByName(
-                context: context,
-                name: "202403",
-                type: .yearMonth
-            )
-        )
-        let summary = tag.summary
-
-        #expect(summary.itemCount == 2)
-        #expect(summary.income == 250)
-        #expect(summary.outgo == 150)
-        #expect(summary.netIncome == 100)
-        #expect(summary.hasDeficit)
-    }
 }

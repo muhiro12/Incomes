@@ -43,18 +43,6 @@ public enum ItemDeletionOperations {
             )
         }
 
-        return try ModelContextMutationOperations.run(context: context) {
-            try deleteWithoutSavingWithOutcome(
-                context: context,
-                items: items
-            )
-        }
-    }
-
-    static func deleteWithoutSavingWithOutcome(
-        context: ModelContext,
-        items: [Item]
-    ) throws -> MutationOutcome {
         let tagsToCleanup = ItemMutationSupport.cleanupCandidateTags(from: items)
         let deletedIDs = Set(items.map(\.persistentModelID))
         let deletedDates = items.map(\.localDate)
@@ -88,12 +76,6 @@ public enum ItemDeletionOperations {
 
     /// Deletes all items and recalculates balances.
     public static func deleteAll(context: ModelContext) throws {
-        try ModelContextMutationOperations.run(context: context) {
-            try deleteAllWithoutSaving(context: context)
-        }
-    }
-
-    static func deleteAllWithoutSaving(context: ModelContext) throws {
         let items = try context.fetch(FetchDescriptor<Item>())
         let tagsToCleanup = ItemMutationSupport.cleanupCandidateTags(from: items)
         items.forEach { item in
