@@ -166,9 +166,9 @@ reflect your release channel.
 
 ## Build and Test
 
-Use Xcode and the Xcode-native integration available in the agent environment
-for Apple build, test, run, Simulator, runtime-log, Preview, live UI, and
-screenshot evidence. Xcode Cloud owns formal CI builds, tests, and archives.
+Use Xcode and XcodeBuildMCP for Apple build, test, run, Simulator, runtime log,
+screenshot, and UI snapshot verification. Xcode Cloud owns formal CI builds,
+tests, and archives.
 
 The remaining helper scripts in `ci_scripts/` are intentionally small. Direct
 entrypoints live in `ci_scripts/tasks/`, shared shell helpers live in
@@ -183,11 +183,10 @@ post-clone CI setup.
   binary without requiring a separately installed `swiftlint` command.
 - `bash ci_scripts/tasks/check_repository_rules.sh` runs SwiftLint plus the
   repository-specific static architecture checks that are not naturally covered
-  by the available Xcode-native integration.
-- Release UI smoke auditing uses live Simulator evidence from that integration.
-  Use the [release UI smoke audit
-  guide](Designs/Architecture/release-ui-smoke-audit.md) when a release or
-  UI-sensitive change needs live Simulator evidence.
+  by XcodeBuildMCP.
+- Release UI smoke auditing uses XcodeBuildMCP live Simulator evidence. Use the
+  [release UI smoke audit guide](Designs/Architecture/release-ui-smoke-audit.md)
+  when a release or UI-sensitive change needs live Simulator evidence.
 
 SwiftLint is resolved from the `SimplyDanny/SwiftLintPlugins` package declared
 in `Incomes.xcodeproj`. The repository scripts do not require a separately
@@ -218,12 +217,10 @@ bash ci_scripts/tasks/format_swift.sh
 bash ci_scripts/tasks/lint_swift.sh
 ```
 
-For app build checks, use the available Xcode-native build capability with
-project `Incomes.xcodeproj`, scheme `Incomes`, and a discovered iOS Simulator
-destination. For shared-library tests, use the integration's test capability
-with the `IncomesLibrary` scheme. For runtime or UI-sensitive checks, add a
-targeted run, runtime-log review, Preview rendering when appropriate, and live
-UI or screenshot evidence.
+For app build checks, use XcodeBuildMCP `build_sim` with the `Incomes` scheme.
+For shared-library tests, use XcodeBuildMCP `test_sim` with the
+`IncomesLibrary` scheme. For runtime or UI-sensitive checks, use XcodeBuildMCP
+`build_run_sim`, `launch_app_sim`, `snapshot_ui`, and `screenshot`.
 Treat these as separate verification capabilities: library tests prove shared
 business behavior, surface builds prove adapter integration, and runtime or UI
 evidence is reserved for changes that affect visible behavior or live platform
