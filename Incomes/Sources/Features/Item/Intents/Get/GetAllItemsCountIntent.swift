@@ -3,7 +3,6 @@ import SwiftData
 
 struct GetAllItemsCountIntent: AppIntent {
     static let title: LocalizedStringResource = .init("Get All Items Count", table: "AppIntents")
-    static let authenticationPolicy: IntentAuthenticationPolicy = .requiresAuthentication
 
     @Dependency private var modelContainer: ModelContainer
 

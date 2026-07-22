@@ -3,7 +3,6 @@ import SwiftData
 
 struct GetRepeatItemsCountIntent: AppIntent {
     static let title: LocalizedStringResource = .init("Get Repeat Items Count", table: "AppIntents")
-    static let authenticationPolicy: IntentAuthenticationPolicy = .requiresAuthentication
 
     @Parameter(title: "Repeat ID")
     private var repeatID: String

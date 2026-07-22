@@ -5,7 +5,6 @@ import SwiftData
 @available(iOS 26.0, *)
 struct GenerateMonthlySummaryIntent: AppIntent {
     static let title: LocalizedStringResource = .init("Generate Monthly Summary", table: "AppIntents")
-    static let authenticationPolicy: IntentAuthenticationPolicy = .requiresAuthentication
     static let isDiscoverable = false
 
     @Parameter(title: "Date", kind: .date)

@@ -3,7 +3,6 @@ import SwiftData
 
 struct GetYearItemsCountIntent: AppIntent {
     static let title: LocalizedStringResource = .init("Get Year Items Count", table: "AppIntents")
-    static let authenticationPolicy: IntentAuthenticationPolicy = .requiresAuthentication
 
     @Parameter(title: "Date", kind: .date)
     private var date: Date

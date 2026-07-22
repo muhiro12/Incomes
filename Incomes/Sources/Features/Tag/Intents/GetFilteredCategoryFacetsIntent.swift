@@ -3,7 +3,6 @@ import SwiftData
 
 struct GetFilteredCategoryFacetsIntent: AppIntent {
     static let title: LocalizedStringResource = .init("Get Filtered Category Facets", table: "AppIntents")
-    static let authenticationPolicy: IntentAuthenticationPolicy = .requiresAuthentication
 
     @Parameter(title: "Query")
     private var query: String

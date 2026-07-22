@@ -4,7 +4,6 @@ import SwiftData
 
 struct DeleteItemIntent: AppIntent {
     static let title: LocalizedStringResource = .init("Delete Item", table: "AppIntents")
-    static let authenticationPolicy: IntentAuthenticationPolicy = .requiresAuthentication
     static let isDiscoverable = false
 
     @Parameter(title: "Item")

@@ -10,7 +10,6 @@ import SwiftData
 
 struct ShowUpcomingItemsIntent: AppIntent {
     static let title: LocalizedStringResource = .init("Show Upcoming Items", table: "AppIntents")
-    static let authenticationPolicy: IntentAuthenticationPolicy = .requiresAuthentication
 
     @Dependency private var modelContainer: ModelContainer
 

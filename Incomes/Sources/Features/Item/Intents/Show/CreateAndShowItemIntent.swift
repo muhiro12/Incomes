@@ -11,7 +11,6 @@ import SwiftData
 
 struct CreateAndShowItemIntent: AppIntent {
     static let title: LocalizedStringResource = .init("Create and Show Item", table: "AppIntents")
-    static let authenticationPolicy: IntentAuthenticationPolicy = .requiresAuthentication
 
     @Parameter(title: "Date", kind: .date)
     private var date: Date

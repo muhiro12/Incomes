@@ -3,7 +3,6 @@ import SwiftData
 
 struct GetOrphanTagsIntent: AppIntent {
     static let title: LocalizedStringResource = .init("Get Orphan Tags", table: "AppIntents")
-    static let authenticationPolicy: IntentAuthenticationPolicy = .requiresAuthentication
 
     @Dependency private var modelContainer: ModelContainer
 

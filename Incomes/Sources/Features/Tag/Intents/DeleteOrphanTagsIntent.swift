@@ -4,7 +4,6 @@ import SwiftData
 
 struct DeleteOrphanTagsIntent: AppIntent {
     static let title: LocalizedStringResource = .init("Delete Orphan Tags", table: "AppIntents")
-    static let authenticationPolicy: IntentAuthenticationPolicy = .requiresAuthentication
     static let isDiscoverable = false
 
     @Dependency private var modelContainer: ModelContainer

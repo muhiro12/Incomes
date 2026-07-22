@@ -4,7 +4,6 @@ import SwiftData
 
 struct RecalculateBalancesIntent: AppIntent {
     static let title: LocalizedStringResource = .init("Recalculate Balances", table: "AppIntents")
-    static let authenticationPolicy: IntentAuthenticationPolicy = .requiresAuthentication
     static let isDiscoverable = false
 
     @Parameter(title: "Date", kind: .date)

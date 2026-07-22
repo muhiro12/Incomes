@@ -10,7 +10,6 @@ import SwiftData
 
 struct GetPreviousItemNetIncomeIntent: AppIntent {
     static let title: LocalizedStringResource = .init("Get Previous Item Net Income", table: "AppIntents")
-    static let authenticationPolicy: IntentAuthenticationPolicy = .requiresAuthentication
 
     @Parameter(title: "Date", kind: .date)
     private var date: Date

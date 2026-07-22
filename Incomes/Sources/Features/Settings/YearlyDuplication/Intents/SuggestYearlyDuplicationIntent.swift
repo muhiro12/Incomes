@@ -3,7 +3,6 @@ import SwiftData
 
 struct SuggestYearlyDuplicationIntent: AppIntent {
     static let title: LocalizedStringResource = .init("Suggest Yearly Duplication", table: "AppIntents")
-    static let authenticationPolicy: IntentAuthenticationPolicy = .requiresAuthentication
 
     // swiftlint:disable no_magic_numbers
     @Parameter(title: "Minimum Group Count", default: 3, inclusiveRange: (1, 60))

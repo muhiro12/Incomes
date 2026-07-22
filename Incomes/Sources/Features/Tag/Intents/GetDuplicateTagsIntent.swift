@@ -3,7 +3,6 @@ import SwiftData
 
 struct GetDuplicateTagsIntent: AppIntent {
     static let title: LocalizedStringResource = .init("Get Duplicate Tags", table: "AppIntents")
-    static let authenticationPolicy: IntentAuthenticationPolicy = .requiresAuthentication
 
     @Dependency private var modelContainer: ModelContainer
 

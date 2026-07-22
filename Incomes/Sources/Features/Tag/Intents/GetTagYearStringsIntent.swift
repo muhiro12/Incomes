@@ -3,7 +3,6 @@ import SwiftData
 
 struct GetTagYearStringsIntent: AppIntent {
     static let title: LocalizedStringResource = .init("Get Tag Years", table: "AppIntents")
-    static let authenticationPolicy: IntentAuthenticationPolicy = .requiresAuthentication
 
     @Parameter(title: "Tag")
     private var tag: TagEntity

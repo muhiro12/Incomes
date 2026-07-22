@@ -4,7 +4,6 @@ import SwiftData
 
 struct ResolveDuplicateTagsIntent: AppIntent {
     static let title: LocalizedStringResource = .init("Resolve Duplicate Tags", table: "AppIntents")
-    static let authenticationPolicy: IntentAuthenticationPolicy = .requiresAuthentication
     static let isDiscoverable = false
 
     @Dependency private var modelContainer: ModelContainer
