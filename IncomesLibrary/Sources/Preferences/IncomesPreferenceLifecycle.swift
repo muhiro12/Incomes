@@ -78,7 +78,6 @@ private extension IncomesPreferenceLifecycle {
             descriptors.isICloudOn,
             descriptors.isDebugOn,
             descriptors.currencyCode,
-            descriptors.pendingDeepLinkURL,
             descriptors.lastLaunchedAppVersion,
             descriptors.notificationSettings
         ]

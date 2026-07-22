@@ -28,33 +28,14 @@ struct PreferenceDescriptorTests {
 
         #expect(
             descriptors.currencyCode.storageKey
-                == IncomesUserDefaultsKeys.AppGroup.currencyCode.rawValue
+                == IncomesUserDefaultsKeys.Standard.currencyCode.rawValue
         )
         #expect(
             descriptors.lastLaunchedAppVersion.storageKey
                 == IncomesUserDefaultsKeys.Standard.lastLaunchedAppVersion.rawValue
         )
-        #expect(descriptors.currencyCode.defaultSelection == .suite(AppGroup.id))
-        #expect(
-            descriptors.currencyCode.legacySources == [
-                .init(
-                    storageKey: IncomesUserDefaultsKeys.Standard.currencyCode.rawValue,
-                    selection: .standard
-                )
-            ]
-        )
+        #expect(descriptors.currencyCode.defaultSelection == .standard)
         #expect(descriptors.lastLaunchedAppVersion.defaultSelection == .standard)
-    }
-
-    @Test("App Group descriptors preserve their shared storage contract")
-    func appGroupDescriptorsPreserveSharedStorageContract() {
-        let descriptor = MHPreferenceDescriptors().pendingDeepLinkURL
-
-        #expect(
-            descriptor.storageKey
-                == IncomesUserDefaultsKeys.AppGroup.pendingDeepLinkURL.rawValue
-        )
-        #expect(descriptor.defaultSelection == .suite(AppGroup.id))
     }
 
     @Test("Notification settings descriptor preserves legacy storage key")

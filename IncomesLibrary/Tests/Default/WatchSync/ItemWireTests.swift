@@ -40,111 +40,15 @@ struct ItemWireTests {
             ItemWire(dateEpoch: 1_725_000_000, content: "Salary", income: 3_000, outgo: 0, category: "Salary"),
             ItemWire(dateEpoch: 1_725_086_400, content: "Rent", income: 0, outgo: 1_200, category: "Housing")
         ]
-        let reply = WatchSyncReply.success(
-            items: items,
-            currencyCode: "JPY",
-            phoneGeneratedEpoch: 1_725_086_500
-        )
+        let reply = WatchSyncReply.success(items: items)
         let data = try WatchSyncReply.responseData(for: reply)
         let decoded = WatchSyncReply.decodeResponse(data)
         #expect(decoded.status == .success)
         #expect(decoded.items.count == 2)
-        #expect(decoded.currencyCode == "JPY")
-        #expect(decoded.phoneGeneratedEpoch == 1_725_086_500)
         #expect(decoded.failure == nil)
         #expect(decoded.shouldApplySnapshot)
         #expect(decoded.items.first?.content == "Salary")
         #expect(decoded.items.last?.category == "Housing")
-    }
-
-    @Test
-    func itemWire_roundTrip_preservesExactDecimalAmounts() throws {
-        let income = try #require(
-            Decimal(string: "12345678901234567890.123456789")
-        )
-        let outgo = try #require(
-            Decimal(string: "0.00000000123456789")
-        )
-        let wire = ItemWire(
-            dateEpoch: 1_725_000_000,
-            content: "Exact",
-            income: income,
-            outgo: outgo,
-            category: "Precision"
-        )
-
-        let data = try JSONEncoder().encode(wire)
-        let decoded = try JSONDecoder().decode(ItemWire.self, from: data)
-
-        #expect(decoded.income == income)
-        #expect(decoded.outgo == outgo)
-    }
-
-    @Test
-    func itemWire_acceptsLegacyDoubleInitializerInputs() {
-        let income: Double = 12.5
-        let outgo: Double = 3.25
-        let wire = ItemWire(
-            dateEpoch: 1_725_000_000,
-            content: "Compatible",
-            income: income,
-            outgo: outgo,
-            category: "Legacy"
-        )
-
-        #expect(wire.income == 12.5)
-        #expect(wire.outgo == 3.25)
-    }
-
-    @Test
-    func itemWire_versionTwoEncoding_remainsReadableByLegacyDoubleDecoder() throws {
-        let wire = ItemWire(
-            dateEpoch: 1_725_000_000,
-            content: "Compatible",
-            income: 12.5,
-            outgo: 3.25,
-            category: "Legacy"
-        )
-
-        let data = try JSONEncoder().encode(wire)
-        let legacyWire = try JSONDecoder().decode(
-            LegacyItemWire.self,
-            from: data
-        )
-        let object = try #require(
-            JSONSerialization.jsonObject(with: data) as? [String: Any]
-        )
-
-        #expect(legacyWire.income == 12.5)
-        #expect(legacyWire.outgo == 3.25)
-        #expect(object["schemaVersion"] as? Int == ItemWire.currentSchemaVersion)
-        #expect(object["incomeDecimal"] as? String == "12.5")
-        #expect(object["outgoDecimal"] as? String == "3.25")
-    }
-
-    @Test
-    func itemWire_decodesLegacyDoublePayloadWithoutVersion() throws {
-        let data = Data(
-            #"{"dateEpoch":1725000000,"content":"Legacy","income":12.5,"outgo":3.25,"category":"Compatibility"}"#.utf8
-        )
-
-        let decoded = try JSONDecoder().decode(ItemWire.self, from: data)
-
-        #expect(decoded.income == 12.5)
-        #expect(decoded.outgo == 3.25)
-    }
-
-    @Test
-    func watchSyncReply_decodesLegacyPayloadWithoutCurrencyCode() {
-        let data = Data(
-            #"{"status":"success","items":[],"failure":null}"#.utf8
-        )
-
-        let decoded = WatchSyncReply.decodeResponse(data)
-
-        #expect(decoded.isSuccess)
-        #expect(decoded.currencyCode == nil)
-        #expect(decoded.phoneGeneratedEpoch == nil)
     }
 
     @Test

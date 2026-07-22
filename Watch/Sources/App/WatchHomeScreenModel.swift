@@ -7,7 +7,6 @@ final class WatchHomeScreenModel {
         case initial
         case foreground
         case manual
-        case applicationContext
     }
 
     enum SyncStatus {
@@ -101,8 +100,6 @@ final class WatchHomeScreenModel {
             if hasRequestedInitialReload == false {
                 hasRequestedInitialReload = true
             }
-        case .applicationContext:
-            break
         }
 
         isReloading = true

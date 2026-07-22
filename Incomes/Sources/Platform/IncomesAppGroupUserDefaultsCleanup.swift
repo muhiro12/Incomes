@@ -17,16 +17,7 @@ enum IncomesAppGroupUserDefaultsCleanup {
 }
 
 private extension IncomesAppGroupUserDefaultsCleanup {
-    static let knownDescriptors: [MHRawStorageDescriptor] = {
-        let descriptors = MHPreferenceDescriptors()
-        return [
-            descriptors.currencyCode,
-            descriptors.pendingDeepLinkURL
-        ].map { descriptor in
-            .init(
-                storageKey: descriptor.storageKey,
-                defaultSelection: descriptor.defaultSelection
-            )
-        }
-    }()
+    static let knownDescriptors: [MHRawStorageDescriptor] = [
+        IncomesIntentRouteStore.appGroupStorageDescriptor
+    ]
 }
