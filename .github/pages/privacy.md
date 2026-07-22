@@ -31,12 +31,10 @@ or generated summaries to a developer-operated AI service.
 
 ## Advertising and privacy messaging SDKs
 
-The iOS app integrates the Google Mobile Ads SDK and Google User Messaging
-Platform (UMP). At startup, Incomes asks UMP to update the applicable consent
-information. When a premium subscription is not active, Incomes presents a
-privacy message when required. Google Mobile Ads is initialized, and native ad
-requests are enabled, only after UMP reports that ads may be requested and the
-user is eligible to see ads.
+The iOS app integrates the Google Mobile Ads SDK. The SDK is initialized during
+app startup, and Incomes presents native ads when a premium subscription is not
+active. The Google package also embeds the Google User Messaging Platform (UMP)
+SDK, which provides privacy and consent messaging capabilities.
 
 According to Google's SDK documentation and the privacy manifests bundled with
 the current SDKs, Google may process information such as IP-derived coarse
@@ -77,10 +75,9 @@ the Google advertising SDKs are described in the advertising section above.
 ## Choices and retention
 
 Users can delete budget records in the app, disable iCloud sync in Incomes,
-manage camera access in system Settings, review privacy choices from the
-Incomes Settings screen when required, and purchase premium access to remove ad
-presentation. Local and iCloud retention are otherwise controlled through the
-app and Apple's device and iCloud settings.
+manage camera access in system Settings, and purchase premium access to remove
+ad presentation. Local and iCloud retention are otherwise controlled through
+the app and Apple's device and iCloud settings.
 
 ## Children's privacy
 
