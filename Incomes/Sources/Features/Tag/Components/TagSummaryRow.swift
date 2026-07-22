@@ -15,82 +15,42 @@ struct TagSummaryRow: View {
     private var locale
 
     var body: some View {
-        let summary = tag.summary
-        let incomeText = summary.income.asCurrency
-        let outgoText = summary.outgo.asMinusCurrency
+        let itemCount = (tag.items ?? []).count
+        let hasPositiveNetIncome = tag.netIncome > .zero
 
         TagSummaryRowContent(
             displayName: tag.displayName,
-            itemCount: summary.itemCount,
-            incomeText: incomeText,
-            outgoText: outgoText,
-            hasDeficit: summary.hasDeficit,
-            hasNonnegativeNetIncome: ItemSummaryOperations.isNonnegativeNetIncome(
-                summary.netIncome
-            )
+            itemCount: itemCount,
+            incomeText: tag.income.asCurrency,
+            outgoText: tag.outgo.asMinusCurrency,
+            hasDeficit: tag.hasDeficit,
+            hasPositiveNetIncome: hasPositiveNetIncome
         )
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(Text(tag.displayName))
-        .accessibilityValue(
-            accessibilityValue(
-                summary: summary,
-                incomeText: incomeText,
-                outgoText: outgoText
-            )
-        )
+        .accessibilityValue(accessibilityValue(itemCount: itemCount))
     }
 }
 
 private extension TagSummaryRow {
-    func accessibilityValue(
-        summary: TagSummary,
-        incomeText: String,
-        outgoText: String
-    ) -> Text {
-        Text(verbatim: accessibilityValueParts(
-            summary: summary,
-            incomeText: incomeText,
-            outgoText: outgoText
-        )
-        .formatted(.list(type: .and).locale(locale)))
+    func accessibilityValue(itemCount: Int) -> Text {
+        Text(verbatim: accessibilityValueParts(itemCount: itemCount)
+                .formatted(.list(type: .and).locale(locale)))
     }
 
-    func accessibilityValueParts(
-        summary: TagSummary,
-        incomeText: String,
-        outgoText: String
-    ) -> [String] {
+    func accessibilityValueParts(itemCount: Int) -> [String] {
         var parts = [
-            String(
-                localized: "Items: \(summary.itemCount)",
-                locale: locale
-            ),
-            String(
-                localized: "Income: \(incomeText)",
-                locale: locale
-            ),
-            String(
-                localized: "Outgo: \(outgoText)",
-                locale: locale
-            )
+            String(localized: "Items: \(itemCount)"),
+            String(localized: "Income: \(tag.income.asCurrency)"),
+            String(localized: "Outgo: \(tag.outgo.asMinusCurrency)")
         ]
 
-        if summary.hasDeficit {
-            parts.append(
-                String(
-                    localized: "Contains deficit items",
-                    locale: locale
-                )
-            )
+        if tag.hasDeficit {
+            parts.append(String(localized: "Contains deficit items"))
         }
 
-        if ItemSummaryOperations.isNonnegativeNetIncome(summary.netIncome) {
-            parts.append(
-                String(
-                    localized: "No net loss",
-                    locale: locale
-                )
-            )
+        if tag.netIncome > .zero {
+            parts.append(String(localized: "Positive net income"))
         }
 
         return parts

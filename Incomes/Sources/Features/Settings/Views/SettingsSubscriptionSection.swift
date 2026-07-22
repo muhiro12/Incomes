@@ -12,10 +12,8 @@ struct SettingsSubscriptionSection: View {
         if isSubscribeOn {
             Section {
                 Toggle(isOn: $isICloudOn) {
-                    Text("iCloud Sync")
+                    Text("iCloud On")
                 }
-            } footer: {
-                Text("Restart Incomes to apply changes. The current iCloud sync setting remains active until then.")
             }
         } else {
             Section {

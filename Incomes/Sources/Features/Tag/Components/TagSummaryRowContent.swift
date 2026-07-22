@@ -6,7 +6,7 @@ struct TagSummaryRowContent: View {
     let incomeText: String
     let outgoText: String
     let hasDeficit: Bool
-    let hasNonnegativeNetIncome: Bool
+    let hasPositiveNetIncome: Bool
 
     var body: some View {
         ViewThatFits(in: .horizontal) {
@@ -16,7 +16,7 @@ struct TagSummaryRowContent: View {
                 incomeText: incomeText,
                 outgoText: outgoText,
                 hasDeficit: hasDeficit,
-                hasNonnegativeNetIncome: hasNonnegativeNetIncome
+                hasPositiveNetIncome: hasPositiveNetIncome
             )
             TagSummaryRowVerticalLayout(
                 displayName: displayName,
@@ -24,7 +24,7 @@ struct TagSummaryRowContent: View {
                 incomeText: incomeText,
                 outgoText: outgoText,
                 hasDeficit: hasDeficit,
-                hasNonnegativeNetIncome: hasNonnegativeNetIncome
+                hasPositiveNetIncome: hasPositiveNetIncome
             )
         }
     }

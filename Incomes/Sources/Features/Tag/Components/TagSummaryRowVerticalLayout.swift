@@ -11,7 +11,7 @@ struct TagSummaryRowVerticalLayout: View {
     let incomeText: String
     let outgoText: String
     let hasDeficit: Bool
-    let hasNonnegativeNetIncome: Bool
+    let hasPositiveNetIncome: Bool
 
     var body: some View {
         VStack(alignment: .leading, spacing: Constants.verticalSpacing) {
@@ -26,7 +26,7 @@ struct TagSummaryRowVerticalLayout: View {
                     outgoText: outgoText,
                     alignment: .leading
                 )
-                NonnegativeNetIncomeIndicator(isVisible: hasNonnegativeNetIncome)
+                PositiveNetIncomeIndicator(isVisible: hasPositiveNetIncome)
             }
         }
     }

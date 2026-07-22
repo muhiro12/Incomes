@@ -17,8 +17,6 @@ struct AdvertisementSection {
 
     @Environment(MHAppRuntime.self)
     private var appRuntime
-    @Environment(IncomesAdsConsentController.self)
-    private var adsConsentController
     @Environment(\.mhDesignMetrics)
     private var designMetrics
 
@@ -30,14 +28,11 @@ struct AdvertisementSection {
 }
 
 extension AdvertisementSection: View {
-    @ViewBuilder var body: some View {
-        if appRuntime.premiumStatus == .inactive,
-           adsConsentController.isAdsReady {
-            Section {
-                appRuntime.nativeAdView(size: size.runtimeSize)
-                    .frame(maxWidth: .infinity)
-                    .padding(designMetrics.spacing.inline)
-            }
+    var body: some View {
+        Section {
+            appRuntime.nativeAdView(size: size.runtimeSize)
+                .frame(maxWidth: .infinity)
+                .padding(designMetrics.spacing.inline)
         }
     }
 }

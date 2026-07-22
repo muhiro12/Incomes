@@ -26,8 +26,8 @@ struct SettingsNotificationSection: View {
 
 extension SettingsNotificationSection {
     @ViewBuilder var body: some View {
-        Section("Payment Reminders") {
-            Toggle("Enable Payment Reminders", isOn: $notificationSettings.isEnabled)
+        Section("Push notification settings") {
+            Toggle("Enable push notifications", isOn: $notificationSettings.isEnabled)
             SettingsNotificationDetailsRows(
                 notificationSettings: $notificationSettings,
                 isNotificationEnabled: isNotificationEnabled,

@@ -99,10 +99,25 @@ struct ItemFormInputAssistView: View {
                 await scanReceipt()
             }
         }
-        .incomesErrorAlert(
-            "Unable to Analyze Input",
-            message: $errorMessage
-        )
+        .alert(
+            "Error",
+            isPresented: Binding(
+                get: {
+                    errorMessage != nil
+                },
+                set: { isPresented in
+                    if !isPresented {
+                        errorMessage = nil
+                    }
+                }
+            )
+        ) {
+            Button("OK", role: .cancel) {
+                errorMessage = nil
+            }
+        } message: {
+            Text(errorMessage ?? "")
+        }
     }
 }
 

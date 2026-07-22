@@ -13,7 +13,6 @@ struct IncomesPlatformEnvironment {
     let tipController: IncomesTipController
     let routeInbox: IncomesRouteInbox
     let routePipeline: IncomesRoutePipeline
-    let adsConsentController: IncomesAdsConsentController
     let runtimeBootstrap: MHAppRuntimeBootstrap
 }
 
@@ -42,6 +41,5 @@ extension View {
             .environment(environment.tipController)
             .environment(environment.routeInbox)
             .environment(environment.routePipeline)
-            .environment(environment.adsConsentController)
     }
 }

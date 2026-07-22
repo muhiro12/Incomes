@@ -1,5 +1,5 @@
 //
-//  NonnegativeNetIncomeIndicator.swift
+//  PositiveNetIncomeIndicator.swift
 //  Incomes
 //
 //  Created by Hiromu Nakano on 2026/06/10.
@@ -7,13 +7,13 @@
 
 import SwiftUI
 
-struct NonnegativeNetIncomeIndicator: View {
+struct PositiveNetIncomeIndicator: View {
     let isVisible: Bool
 
     var body: some View {
         Image(systemName: "chevron.up")
             .foregroundStyle(isVisible ? .accent : .clear)
-            .accessibilityLabel(Text("No net loss"))
+            .accessibilityLabel(Text("Positive net income"))
             .accessibilityHidden(!isVisible)
     }
 }

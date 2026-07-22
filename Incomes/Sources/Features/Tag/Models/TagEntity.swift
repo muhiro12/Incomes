@@ -83,6 +83,10 @@ extension TagEntity: Hashable {
 }
 
 extension TagEntity {
+    var type: TagType? {
+        TagType(rawValue: typeID)
+    }
+
     func model(in context: ModelContext) throws -> Tag {
         guard let model = try TagQueryOperations.getByID(
             context: context,

@@ -23,7 +23,7 @@ struct ItemEntity: AppEntity {
             title: .init("\(date.stringValue(.yyyyMMMd)) \(content)", table: "AppIntents"),
             subtitle: .init("Income: \(income.asCurrency), Outgo: \(outgo.asCurrency)", table: "AppIntents"),
             image: .init(
-                systemName: netIncomeSystemName
+                systemName: netIncome > .zero ? "arrow.up.circle.fill" : "arrow.down.circle.fill"
             ),
             synonyms: [
                 .init("\(content)", table: "AppIntents")
@@ -91,14 +91,8 @@ extension ItemEntity {
 }
 
 extension ItemEntity {
-    var netIncomeSystemName: String {
-        if netIncome > .zero {
-            return "arrow.up.circle.fill"
-        }
-        if netIncome < .zero {
-            return "arrow.down.circle.fill"
-        }
-        return "minus.circle.fill"
+    var isNetIncomePositive: Bool {
+        netIncome > .zero
     }
 
     func model(in context: ModelContext) throws -> Item {

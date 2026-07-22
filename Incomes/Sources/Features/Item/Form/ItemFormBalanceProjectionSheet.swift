@@ -17,8 +17,6 @@ struct ItemFormBalanceProjectionSheet: View {
     private var dismiss
     @Environment(\.modelContext)
     private var context
-    @Environment(\.locale)
-    private var locale
 
     @State private var comparison: ItemBalanceProjectionOperations.Comparison?
     @State private var errorMessage: String?
@@ -132,7 +130,7 @@ private extension ItemFormBalanceProjectionSheet {
             .frame(height: Metrics.chartHeight)
             .accessibilityElement(children: .ignore)
             .accessibilityLabel(Text("Balance projection chart"))
-            .accessibilityValue(chartAccessibilityValue(comparison))
+            .accessibilityValue(Text(chartAccessibilityValue(comparison)))
 
             HStack {
                 Label("Current", systemImage: "minus")
@@ -298,34 +296,12 @@ private extension ItemFormBalanceProjectionSheet {
 
     func chartAccessibilityValue(
         _ comparison: ItemBalanceProjectionOperations.Comparison
-    ) -> Text {
-        Text(
-            verbatim: chartAccessibilityValueParts(comparison)
-                .formatted(.list(type: .and).locale(locale))
-        )
-    }
-
-    func chartAccessibilityValueParts(
-        _ comparison: ItemBalanceProjectionOperations.Comparison
-    ) -> [String] {
-        let projectedBalance = comparison.projected.latestBalance?.asCurrency ?? "-"
-        let difference = comparison.latestBalanceDifference?.asSignedCurrency ?? "-"
-        let lowestBalance = comparison.projected.minimumBalance?.asCurrency ?? "-"
-
-        return [
-            String(
-                localized: "Projected balance: \(projectedBalance)",
-                locale: locale
-            ),
-            String(
-                localized: "Change: \(difference)",
-                locale: locale
-            ),
-            String(
-                localized: "Lowest balance: \(lowestBalance)",
-                locale: locale
-            )
-        ]
+    ) -> String {
+        [
+            "Projected balance: \(comparison.projected.latestBalance?.asCurrency ?? "-")",
+            "Change: \(comparison.latestBalanceDifference?.asSignedCurrency ?? "-")",
+            "Lowest balance: \(comparison.projected.minimumBalance?.asCurrency ?? "-")"
+        ].joined(separator: ", ")
     }
 }
 
