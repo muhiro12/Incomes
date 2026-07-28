@@ -4761,36 +4761,36 @@
         }
       }
     },
-    "iCloud On" : {
+    "iCloud Sync" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "iCloud On"
+            "value" : "iCloud Sync"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "iCloud activado"
+            "value" : "Sincronización con iCloud"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "iCloud activé"
+            "value" : "Synchronisation iCloud"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "iCloudオン"
+            "value" : "iCloud同期"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "iCloud 开启"
+            "value" : "iCloud 同步"
           }
         }
       }
@@ -9010,6 +9010,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "解决重复标签"
+          }
+        }
+      }
+    },
+    "Restart Incomes to apply changes. The current iCloud sync setting remains active until then." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restart Incomes to apply changes. The current iCloud sync setting remains active until then."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Los cambios se aplican tras reiniciar Incomes. Hasta entonces, la configuración actual de sincronización con iCloud sigue activa."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les modifications s’appliquent après le redémarrage d’Incomes. D’ici là, le réglage actuel de synchronisation iCloud reste actif."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "変更はIncomesの再起動後に適用されます。それまでは、現在のiCloud同期設定が引き続き有効です。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "更改将在重新启动 Incomes 后生效。在此之前，当前的 iCloud 同步设置仍然有效。"
           }
         }
       }
