@@ -12,7 +12,7 @@ struct TagSummaryRowHorizontalLayout: View {
     let incomeText: String
     let outgoText: String
     let hasDeficit: Bool
-    let hasPositiveNetIncome: Bool
+    let netIncomePresentation: ItemSummaryOperations.NetIncomePresentation
 
     var body: some View {
         HStack(alignment: .center, spacing: Constants.spacing) {
@@ -28,7 +28,7 @@ struct TagSummaryRowHorizontalLayout: View {
                 outgoText: outgoText,
                 alignment: .trailing
             )
-            PositiveNetIncomeIndicator(isVisible: hasPositiveNetIncome)
+            PositiveNetIncomeIndicator(presentation: netIncomePresentation)
         }
     }
 }

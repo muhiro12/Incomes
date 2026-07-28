@@ -95,9 +95,18 @@ private extension BalanceChart {
         lowestBalance: Decimal
     ) -> [String] {
         [
-            String(localized: "Latest balance: \(latestBalance.asCurrency)"),
-            String(localized: "Highest balance: \(highestBalance.asCurrency)"),
-            String(localized: "Lowest balance: \(lowestBalance.asCurrency)")
+            String(
+                localized: "Latest balance: \(latestBalance.currencyText(locale: locale))",
+                locale: locale
+            ),
+            String(
+                localized: "Highest balance: \(highestBalance.currencyText(locale: locale))",
+                locale: locale
+            ),
+            String(
+                localized: "Lowest balance: \(lowestBalance.currencyText(locale: locale))",
+                locale: locale
+            )
         ]
     }
 }

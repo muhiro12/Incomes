@@ -16,7 +16,9 @@ struct TagSummaryRow: View {
 
     var body: some View {
         let itemCount = (tag.items ?? []).count
-        let hasPositiveNetIncome = tag.netIncome > .zero
+        let netIncomePresentation = ItemSummaryOperations.netIncomePresentation(
+            for: tag.netIncome
+        )
 
         TagSummaryRowContent(
             displayName: tag.displayName,
@@ -24,7 +26,7 @@ struct TagSummaryRow: View {
             incomeText: tag.income.asCurrency,
             outgoText: tag.outgo.asMinusCurrency,
             hasDeficit: tag.hasDeficit,
-            hasPositiveNetIncome: hasPositiveNetIncome
+            netIncomePresentation: netIncomePresentation
         )
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(Text(tag.displayName))
@@ -33,6 +35,17 @@ struct TagSummaryRow: View {
 }
 
 private extension TagSummaryRow {
+    var netIncomeAccessibilityText: String {
+        switch ItemSummaryOperations.netIncomePresentation(for: tag.netIncome) {
+        case .positive:
+            String(localized: "Positive net income", locale: locale)
+        case .neutral:
+            String(localized: "Zero net income", locale: locale)
+        case .negative:
+            String(localized: "Negative net income", locale: locale)
+        }
+    }
+
     func accessibilityValue(itemCount: Int) -> Text {
         Text(verbatim: accessibilityValueParts(itemCount: itemCount)
                 .formatted(.list(type: .and).locale(locale)))
@@ -40,18 +53,30 @@ private extension TagSummaryRow {
 
     func accessibilityValueParts(itemCount: Int) -> [String] {
         var parts = [
-            String(localized: "Items: \(itemCount)"),
-            String(localized: "Income: \(tag.income.asCurrency)"),
-            String(localized: "Outgo: \(tag.outgo.asMinusCurrency)")
+            String(
+                localized: "Items: \(itemCount)",
+                locale: locale
+            ),
+            String(
+                localized: "Income: \(tag.income.currencyText(locale: locale))",
+                locale: locale
+            ),
+            String(
+                localized: "Outgo: \(tag.outgo.minusCurrencyText(locale: locale))",
+                locale: locale
+            )
         ]
 
         if tag.hasDeficit {
-            parts.append(String(localized: "Contains deficit items"))
+            parts.append(
+                String(
+                    localized: "Contains deficit items",
+                    locale: locale
+                )
+            )
         }
 
-        if tag.netIncome > .zero {
-            parts.append(String(localized: "Positive net income"))
-        }
+        parts.append(netIncomeAccessibilityText)
 
         return parts
     }

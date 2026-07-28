@@ -7,25 +7,51 @@
 import Foundation
 import MHPlatformCore
 
+enum DecimalCurrencyFormatter {
+    static func currencyText(
+        for value: Decimal,
+        currencyCode: String,
+        locale: Locale
+    ) -> String? {
+        let formatter = NumberFormatter()
+        formatter.locale = locale
+        formatter.numberStyle = .currency
+        formatter.currencyCode = currencyCode
+        return formatter.string(for: value)
+    }
+}
+
 public extension Decimal {
     /// Formats the decimal using the currently selected currency code.
     var asCurrency: String {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .currency
-        formatter.currencyCode = MHPreferenceStore().string(
+        currencyText()
+    }
+
+    /// Formats the decimal as a negative currency string when the value is non-zero.
+    var asMinusCurrency: String {
+        minusCurrencyText()
+    }
+
+    /// Formats the decimal using the selected currency code and `locale`.
+    func currencyText(locale: Locale = .current) -> String {
+        let currencyCode = MHPreferenceStore().string(
             for: \.currencyCode,
             default: ""
         )
-        guard let currency = formatter.string(for: self) else {
+        guard let currency = DecimalCurrencyFormatter.currencyText(
+            for: self,
+            currencyCode: currencyCode,
+            locale: locale
+        ) else {
             assertionFailure()
             return ""
         }
         return currency
     }
 
-    /// Formats the decimal as a negative currency string when the value is non-zero.
-    var asMinusCurrency: String {
-        let currency = asCurrency
+    /// Formats a non-zero decimal as negative currency using `locale`.
+    func minusCurrencyText(locale: Locale = .current) -> String {
+        let currency = currencyText(locale: locale)
         guard self != .zero else {
             return currency
         }

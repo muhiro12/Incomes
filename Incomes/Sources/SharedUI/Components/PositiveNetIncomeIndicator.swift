@@ -8,12 +8,24 @@
 import SwiftUI
 
 struct PositiveNetIncomeIndicator: View {
-    let isVisible: Bool
+    let presentation: ItemSummaryOperations.NetIncomePresentation
 
     var body: some View {
         Image(systemName: "chevron.up")
-            .foregroundStyle(isVisible ? .accent : .clear)
-            .accessibilityLabel(Text("Positive net income"))
-            .accessibilityHidden(!isVisible)
+            .foregroundStyle(presentation == .positive ? .accent : .clear)
+            .accessibilityLabel(accessibilityLabel)
+    }
+}
+
+private extension PositiveNetIncomeIndicator {
+    var accessibilityLabel: Text {
+        switch presentation {
+        case .positive:
+            Text("Positive net income")
+        case .neutral:
+            Text("Zero net income")
+        case .negative:
+            Text("Negative net income")
+        }
     }
 }

@@ -108,18 +108,42 @@ private extension ListItemButton {
 
     var accessibilityValueParts: [String] {
         var parts = [
-            String(localized: "Date: \(accessibilityDateText)"),
-            String(localized: "Income: \(item.income.asCurrency)"),
-            String(localized: "Outgo: \(item.outgo.asMinusCurrency)"),
-            String(localized: "Net income: \(item.netIncome.asCurrency)"),
-            String(localized: "Balance: \(item.balance.asCurrency)")
+            String(
+                localized: "Date: \(accessibilityDateText)",
+                locale: locale
+            ),
+            String(
+                localized: "Income: \(item.income.currencyText(locale: locale))",
+                locale: locale
+            ),
+            String(
+                localized: "Outgo: \(item.outgo.minusCurrencyText(locale: locale))",
+                locale: locale
+            ),
+            String(
+                localized: "Net income: \(item.netIncome.currencyText(locale: locale))",
+                locale: locale
+            ),
+            String(
+                localized: "Balance: \(item.balance.currencyText(locale: locale))",
+                locale: locale
+            )
         ]
 
-        if item.netIncome > .zero {
-            parts.append(String(localized: "Positive net income"))
-        }
+        parts.append(netIncomeAccessibilityText)
 
         return parts
+    }
+
+    var netIncomeAccessibilityText: String {
+        switch ItemSummaryOperations.netIncomePresentation(for: item.netIncome) {
+        case .positive:
+            String(localized: "Positive net income", locale: locale)
+        case .neutral:
+            String(localized: "Zero net income", locale: locale)
+        case .negative:
+            String(localized: "Negative net income", locale: locale)
+        }
     }
 
     var accessibilityDateText: String {

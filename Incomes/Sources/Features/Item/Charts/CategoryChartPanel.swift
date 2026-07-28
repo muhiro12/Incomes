@@ -65,11 +65,28 @@ private extension CategoryChartPanel {
     func accessibilityValueParts(
         largestSegment: ItemSummaryOperations.ChartSegment
     ) -> [String] {
-        [
-            String(localized: "Total: \(total.asCurrency)"),
-            String(localized: "Largest category: \(largestSegment.title)"),
-            String(localized: "Share: \(largestSegment.percentText)"),
-            String(localized: "Amount: \(largestSegment.value.asCurrency)")
+        let percentText = largestSegment.ratio.formatted(
+            .percent
+                .precision(.fractionLength(0))
+                .locale(locale)
+        )
+        return [
+            String(
+                localized: "Total: \(total.currencyText(locale: locale))",
+                locale: locale
+            ),
+            String(
+                localized: "Largest category: \(largestSegment.title)",
+                locale: locale
+            ),
+            String(
+                localized: "Share: \(percentText)",
+                locale: locale
+            ),
+            String(
+                localized: "Amount: \(largestSegment.value.currencyText(locale: locale))",
+                locale: locale
+            )
         ]
     }
 }

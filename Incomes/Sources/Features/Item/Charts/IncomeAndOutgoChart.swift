@@ -96,9 +96,18 @@ private extension IncomeAndOutgoChart {
         netIncome: Decimal
     ) -> [String] {
         [
-            String(localized: "Total income: \(totalIncome.asCurrency)"),
-            String(localized: "Total outgo: \(totalOutgo.asMinusCurrency)"),
-            String(localized: "Net income: \(netIncome.asCurrency)")
+            String(
+                localized: "Total income: \(totalIncome.currencyText(locale: locale))",
+                locale: locale
+            ),
+            String(
+                localized: "Total outgo: \(totalOutgo.minusCurrencyText(locale: locale))",
+                locale: locale
+            ),
+            String(
+                localized: "Net income: \(netIncome.currencyText(locale: locale))",
+                locale: locale
+            )
         ]
     }
 }
