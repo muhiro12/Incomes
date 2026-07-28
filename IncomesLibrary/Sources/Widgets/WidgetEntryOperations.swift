@@ -75,13 +75,15 @@ public enum WidgetEntryOperations {
             )
             return .init(
                 netIncomeText: totals.netIncome.asCurrency,
-                isPositive: totals.netIncome > .zero || totals.netIncome == .zero,
+                netIncomePresentation: ItemSummaryOperations.netIncomePresentation(
+                    for: totals.netIncome
+                ),
                 deepLinkURL: deepLinkURL
             )
         } catch {
             return .init(
                 netIncomeText: "$0",
-                isPositive: true,
+                netIncomePresentation: .neutral,
                 deepLinkURL: deepLinkURL
             )
         }
@@ -95,19 +97,11 @@ public enum WidgetEntryOperations {
         deepLinkBuilder: WidgetUpcomingDeepLinkBuilder
     ) -> WidgetUpcomingSnapshot {
         do {
-            let item: Item?
-            switch direction {
-            case .next:
-                item = try ItemQueryOperations.nextItem(
-                    context: context,
-                    date: now
-                )
-            case .previous:
-                item = try ItemQueryOperations.previousItem(
-                    context: context,
-                    date: now
-                )
-            }
+            let item = try upcomingItem(
+                context: context,
+                now: now,
+                direction: direction
+            )
 
             guard let item else {
                 return .init(
@@ -115,12 +109,15 @@ public enum WidgetEntryOperations {
                     titleText: "Upcoming",
                     detailText: "No items",
                     amountText: "$0",
-                    isPositive: true,
+                    netIncomePresentation: .neutral,
                     deepLinkURL: deepLinkBuilder.homeDeepLink()
                 )
             }
 
             let amount = item.netIncome
+            let presentation = ItemSummaryOperations.netIncomePresentation(
+                for: amount
+            )
             let deepLinkURL: URL = {
                 if let itemID = try? PersistentIdentifierCoder.encode(item.id) {
                     return deepLinkBuilder.itemDeepLink(itemID)
@@ -133,7 +130,7 @@ public enum WidgetEntryOperations {
                 titleText: Formatting.shortDayTitle(from: item.localDate),
                 detailText: item.content,
                 amountText: amount.asCurrency,
-                isPositive: amount > .zero || amount == .zero,
+                netIncomePresentation: presentation,
                 deepLinkURL: deepLinkURL
             )
         } catch {
@@ -142,8 +139,27 @@ public enum WidgetEntryOperations {
                 titleText: "Upcoming",
                 detailText: "Error",
                 amountText: "$0",
-                isPositive: true,
+                netIncomePresentation: .neutral,
                 deepLinkURL: deepLinkBuilder.homeDeepLink()
+            )
+        }
+    }
+
+    private static func upcomingItem(
+        context: ModelContext,
+        now: Date,
+        direction: WidgetUpcomingDirection
+    ) throws -> Item? {
+        switch direction {
+        case .next:
+            return try ItemQueryOperations.nextItem(
+                context: context,
+                date: now
+            )
+        case .previous:
+            return try ItemQueryOperations.previousItem(
+                context: context,
+                date: now
             )
         }
     }

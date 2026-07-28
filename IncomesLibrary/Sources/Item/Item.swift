@@ -155,7 +155,7 @@ public extension Item {
         income - outgo
     }
 
-    /// True when `netIncome >= 0`.
+    /// True when `netIncome > 0`.
     var isNetIncomePositive: Bool {
         netIncome > .zero
     }

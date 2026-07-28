@@ -3,6 +3,16 @@ import SwiftData
 
 /// Shared item reporting operations used by app, widget, and intent surfaces.
 public enum ItemSummaryOperations {
+    /// Shared presentation rule for net income across app surfaces.
+    public enum NetIncomePresentation: Equatable, Sendable {
+        /// Net income is strictly greater than zero.
+        case positive
+        /// Net income is exactly zero.
+        case neutral
+        /// Net income is strictly less than zero.
+        case negative
+    }
+
     /// A value type that represents monthly totals.
     public struct MonthlyTotals: Sendable {
         /// Sum of all item incomes within the target month.
@@ -119,6 +129,19 @@ public enum ItemSummaryOperations {
     /// Returns total outgo for the provided items.
     public static func totalOutgo(for items: [Item]) -> Decimal {
         SummaryCalculator.totalOutgo(for: items)
+    }
+
+    /// Classifies net income for consistent colors, symbols, and labels.
+    public static func netIncomePresentation(
+        for netIncome: Decimal
+    ) -> NetIncomePresentation {
+        if netIncome > .zero {
+            return .positive
+        }
+        if netIncome < .zero {
+            return .negative
+        }
+        return .neutral
     }
 
     /// Returns income chart segments grouped by category.

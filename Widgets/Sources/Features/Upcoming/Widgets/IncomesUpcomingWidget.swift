@@ -90,10 +90,32 @@ struct IncomesUpcomingWidget {
         }
 
         private var amountIcon: some View {
-            Image(systemName: entry.isPositive ? "chevron.up" : "chevron.down")
+            Image(systemName: amountSystemName)
                 .symbolRenderingMode(.hierarchical)
-                .foregroundStyle(entry.isPositive ? .green : .red)
+                .foregroundStyle(amountColor)
                 .accessibilityHidden(true)
+        }
+
+        private var amountColor: Color {
+            switch entry.netIncomePresentation {
+            case .positive:
+                .green
+            case .neutral:
+                .secondary
+            case .negative:
+                .red
+            }
+        }
+
+        private var amountSystemName: String {
+            switch entry.netIncomePresentation {
+            case .positive:
+                "chevron.up"
+            case .neutral:
+                "minus"
+            case .negative:
+                "chevron.down"
+            }
         }
     }
 
@@ -126,7 +148,7 @@ extension IncomesUpcomingWidget: Widget {
         titleText: Text(verbatim: "Sep 14 (Sat)"),
         detailText: Text(verbatim: "Utility bill"),
         amountText: "-$80",
-        isPositive: false,
+        netIncomePresentation: .negative,
         deepLinkURL: WidgetDeepLinkBuilder.homeURL()
     )
 }
@@ -140,7 +162,7 @@ extension IncomesUpcomingWidget: Widget {
         titleText: Text(verbatim: "Sep 14 (Sat)"),
         detailText: Text(verbatim: "Grocery"),
         amountText: "-$45",
-        isPositive: false,
+        netIncomePresentation: .negative,
         deepLinkURL: WidgetDeepLinkBuilder.homeURL()
     )
 }

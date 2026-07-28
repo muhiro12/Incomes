@@ -6,6 +6,6 @@ struct NetIncomeEntry: TimelineEntry {
     let targetDate: Date
     let configuration: ConfigurationAppIntent
     let netIncomeText: String
-    let isPositive: Bool
+    let netIncomePresentation: ItemSummaryOperations.NetIncomePresentation
     let deepLinkURL: URL
 }

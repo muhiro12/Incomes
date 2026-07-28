@@ -10,7 +10,7 @@ struct NetIncomeProvider: AppIntentTimelineProvider {
             targetDate: date,
             configuration: .init(),
             netIncomeText: "$0",
-            isPositive: true,
+            netIncomePresentation: .neutral,
             deepLinkURL: WidgetDeepLinkBuilder.monthURL(for: date)
         )
     }
@@ -51,7 +51,7 @@ struct NetIncomeProvider: AppIntentTimelineProvider {
             guard let context = try? ModelContainerFactory.sharedContext() else {
                 return .init(
                     netIncomeText: "$0",
-                    isPositive: true,
+                    netIncomePresentation: .neutral,
                     deepLinkURL: WidgetDeepLinkBuilder.monthURL(for: targetDate)
                 )
             }
@@ -67,7 +67,7 @@ struct NetIncomeProvider: AppIntentTimelineProvider {
             targetDate: targetDate,
             configuration: configuration,
             netIncomeText: snapshot.netIncomeText,
-            isPositive: snapshot.isPositive,
+            netIncomePresentation: snapshot.netIncomePresentation,
             deepLinkURL: snapshot.deepLinkURL
         )
     }

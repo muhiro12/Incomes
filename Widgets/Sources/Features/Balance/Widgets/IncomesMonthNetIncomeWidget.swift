@@ -75,9 +75,31 @@ struct IncomesMonthNetIncomeWidget {
         }
 
         private var amountIcon: some View {
-            Image(systemName: entry.isPositive ? "chevron.up" : "chevron.down")
-                .foregroundStyle(entry.isPositive ? .green : .red)
+            Image(systemName: amountSystemName)
+                .foregroundStyle(amountColor)
                 .accessibilityHidden(true)
+        }
+
+        private var amountColor: Color {
+            switch entry.netIncomePresentation {
+            case .positive:
+                .green
+            case .neutral:
+                .secondary
+            case .negative:
+                .red
+            }
+        }
+
+        private var amountSystemName: String {
+            switch entry.netIncomePresentation {
+            case .positive:
+                "chevron.up"
+            case .neutral:
+                "minus"
+            case .negative:
+                "chevron.down"
+            }
         }
     }
 
@@ -113,7 +135,7 @@ extension IncomesMonthNetIncomeWidget: Widget {
         targetDate: .now,
         configuration: .init(),
         netIncomeText: "$1,234",
-        isPositive: true,
+        netIncomePresentation: .positive,
         deepLinkURL: WidgetDeepLinkBuilder.monthURL(for: .now)
     )
 }
@@ -126,7 +148,7 @@ extension IncomesMonthNetIncomeWidget: Widget {
         targetDate: .now,
         configuration: .init(),
         netIncomeText: "$1,234",
-        isPositive: true,
+        netIncomePresentation: .positive,
         deepLinkURL: WidgetDeepLinkBuilder.monthURL(for: .now)
     )
 }

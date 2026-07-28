@@ -17,7 +17,7 @@ struct UpcomingProvider: AppIntentTimelineProvider {
             titleText: Text("Upcoming"),
             detailText: Text("No items"),
             amountText: "$0",
-            isPositive: true,
+            netIncomePresentation: .neutral,
             deepLinkURL: WidgetDeepLinkBuilder.homeURL()
         )
     }
@@ -42,7 +42,7 @@ struct UpcomingProvider: AppIntentTimelineProvider {
                     titleText: "Upcoming",
                     detailText: "Error",
                     amountText: "$0",
-                    isPositive: true,
+                    netIncomePresentation: .neutral,
                     deepLinkURL: WidgetDeepLinkBuilder.homeURL()
                 )
             }
@@ -69,7 +69,7 @@ struct UpcomingProvider: AppIntentTimelineProvider {
             titleText: entryText(snapshot.titleText, role: .title),
             detailText: entryText(snapshot.detailText, role: .detail),
             amountText: snapshot.amountText,
-            isPositive: snapshot.isPositive,
+            netIncomePresentation: snapshot.netIncomePresentation,
             deepLinkURL: snapshot.deepLinkURL
         )
     }

@@ -16,10 +16,21 @@ extension WatchTagRow: View {
 
             HStack(spacing: designMetrics.spacing.inline) {
                 Text(tag.netIncome.asCurrency)
-                    .foregroundStyle(tag.netIncome > .zero ? .accent : .red)
+                    .foregroundStyle(netIncomeColor)
                     .frame(maxWidth: .infinity, alignment: .trailing)
             }
             .font(.footnote)
+        }
+    }
+
+    private var netIncomeColor: Color {
+        switch ItemSummaryOperations.netIncomePresentation(for: tag.netIncome) {
+        case .positive:
+            .accentColor
+        case .neutral:
+            .secondary
+        case .negative:
+            .red
         }
     }
 }

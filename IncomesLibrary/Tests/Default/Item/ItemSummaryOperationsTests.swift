@@ -30,6 +30,22 @@ struct ItemSummaryOperationsTests {
     }
 
     @Test
+    func net_income_presentation_distinguishes_all_signs() {
+        #expect(
+            ItemSummaryOperations.netIncomePresentation(for: 1)
+                == .positive
+        )
+        #expect(
+            ItemSummaryOperations.netIncomePresentation(for: .zero)
+                == .neutral
+        )
+        #expect(
+            ItemSummaryOperations.netIncomePresentation(for: -1)
+                == .negative
+        )
+    }
+
+    @Test
     func monthlyTotals_returns_aggregated_values_for_month() throws {
         _ = try createSummaryItem(
             date: "2024-02-02T00:00:00Z",

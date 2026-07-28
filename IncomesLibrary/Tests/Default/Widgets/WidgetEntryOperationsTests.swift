@@ -138,8 +138,41 @@ struct WidgetEntryOperationsTests {
         }
 
         #expect(snapshot.netIncomeText == totals.netIncome.asCurrency)
-        #expect(snapshot.isPositive == true)
+        #expect(snapshot.netIncomePresentation == .positive)
         #expect(snapshot.deepLinkURL == IncomesDeepLinkURLBuilder.preferredMonthURL(for: date))
+    }
+
+    @Test
+    func net_income_snapshot_distinguishes_zero_and_negative_values() throws {
+        let zeroDate = isoDate("2026-05-15T00:00:00Z")
+        let negativeDate = isoDate("2026-06-15T00:00:00Z")
+        try createItem(
+            context: context,
+            input: .init(
+                date: negativeDate,
+                content: "Rent",
+                income: .zero,
+                outgo: 800,
+                category: "Housing",
+                priority: 0
+            )
+        )
+
+        let zeroSnapshot = WidgetEntryOperations.netIncomeSnapshot(
+            context: context,
+            date: zeroDate
+        ) { targetDate in
+            IncomesDeepLinkURLBuilder.preferredMonthURL(for: targetDate)
+        }
+        let negativeSnapshot = WidgetEntryOperations.netIncomeSnapshot(
+            context: context,
+            date: negativeDate
+        ) { targetDate in
+            IncomesDeepLinkURLBuilder.preferredMonthURL(for: targetDate)
+        }
+
+        #expect(zeroSnapshot.netIncomePresentation == .neutral)
+        #expect(negativeSnapshot.netIncomePresentation == .negative)
     }
 
     @Test
@@ -188,10 +221,69 @@ struct WidgetEntryOperationsTests {
 
         #expect(nextSnapshot.subtitleText == "Next")
         #expect(nextSnapshot.detailText == "Salary")
-        #expect(nextSnapshot.isPositive)
+        #expect(nextSnapshot.netIncomePresentation == .positive)
         #expect(
             nextSnapshot.deepLinkURL == IncomesDeepLinkURLBuilder.preferredItemURL(
                 for: nextItemID
+            )
+        )
+    }
+
+    @Test
+    func upcoming_snapshot_distinguishes_zero_and_negative_values() throws {
+        let zeroDate = isoDate("2026-07-20T00:00:00Z")
+        let negativeDate = isoDate("2026-08-20T00:00:00Z")
+        try createItem(
+            context: context,
+            input: .init(
+                date: zeroDate,
+                content: "Transfer",
+                income: 100,
+                outgo: 100,
+                category: "Other",
+                priority: 0
+            )
+        )
+        try createItem(
+            context: context,
+            input: .init(
+                date: negativeDate,
+                content: "Rent",
+                income: .zero,
+                outgo: 800,
+                category: "Housing",
+                priority: 0
+            )
+        )
+
+        let zeroSnapshot = upcomingSnapshot(
+            now: isoDate("2026-07-15T00:00:00Z")
+        )
+        let negativeSnapshot = upcomingSnapshot(
+            now: isoDate("2026-08-15T00:00:00Z")
+        )
+
+        #expect(zeroSnapshot.netIncomePresentation == .neutral)
+        #expect(negativeSnapshot.netIncomePresentation == .negative)
+    }
+}
+
+private extension WidgetEntryOperationsTests {
+    func upcomingSnapshot(now: Date) -> WidgetUpcomingSnapshot {
+        WidgetEntryOperations.upcomingSnapshot(
+            context: context,
+            now: now,
+            direction: .next,
+            deepLinkBuilder: .init(
+                homeDeepLink: {
+                    IncomesDeepLinkURLBuilder.preferredURL(for: .home)
+                },
+                monthDeepLink: { date in
+                    IncomesDeepLinkURLBuilder.preferredMonthURL(for: date)
+                },
+                itemDeepLink: { itemID in
+                    IncomesDeepLinkURLBuilder.preferredItemURL(for: itemID)
+                }
             )
         )
     }

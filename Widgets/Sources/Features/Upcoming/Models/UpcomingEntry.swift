@@ -8,6 +8,6 @@ struct UpcomingEntry: TimelineEntry {
     let titleText: Text
     let detailText: Text
     let amountText: String
-    let isPositive: Bool
+    let netIncomePresentation: ItemSummaryOperations.NetIncomePresentation
     let deepLinkURL: URL
 }
