@@ -143,6 +143,9 @@ struct MainNavigationView: View {
 
             tipController.refreshHasAnyItems(!yearTags.isEmpty)
 
+            await IncomesMutationWorkflow.refreshNotificationSchedule(
+                notificationService: notificationService
+            )
             await PhoneWatchBridge.shared.activate(
                 modelContext: context,
                 logger: watchSyncLogger

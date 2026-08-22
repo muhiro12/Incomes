@@ -162,21 +162,14 @@ extension SettingsListView: View {
         .task {
             await loadDeferredSettingsState()
         }
-        .task(id: notificationSettings) {
-            withAnimation {
-                model.apply(notificationSettings: notificationSettings)
-            }
-
-            await SettingsActionCoordinator.refreshNotifications(
-                notificationService: notificationService
-            )
-        }
-        .task(id: scenePhase) {
+        .onChange(of: scenePhase) {
             guard scenePhase == .active else {
                 return
             }
 
-            await notificationService.refreshAuthorizationStatus()
+            Task {
+                await notificationService.refreshAuthorizationStatus()
+            }
         }
     }
 }
@@ -187,10 +180,6 @@ private extension SettingsListView {
         await Task.yield()
 
         model.loadStatus(context: context)
-
-        await SettingsActionCoordinator.refreshNotifications(
-            notificationService: notificationService
-        )
     }
 }
 
@@ -213,11 +202,34 @@ private extension SettingsListView {
         )
     }
 
+    var notificationSettingsBinding: Binding<NotificationSettings> {
+        .init(
+            get: {
+                notificationSettings
+            },
+            set: { newSettings in
+                guard newSettings != notificationSettings else {
+                    return
+                }
+
+                notificationSettings = newSettings
+                withAnimation {
+                    model.apply(notificationSettings: newSettings)
+                }
+                Task {
+                    await SettingsActionCoordinator.refreshNotifications(
+                        notificationService: notificationService
+                    )
+                }
+            }
+        )
+    }
+
     func notificationSection(
         model: SettingsScreenModel
     ) -> some View {
         SettingsNotificationSection(
-            notificationSettings: $notificationSettings,
+            notificationSettings: notificationSettingsBinding,
             isNotificationEnabled: model.isNotificationEnabled,
             authorizationPresentation: model.authorizationPresentation(
                 for: notificationService.authorizationState

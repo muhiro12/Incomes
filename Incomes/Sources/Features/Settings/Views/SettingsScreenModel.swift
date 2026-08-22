@@ -22,6 +22,10 @@ final class SettingsScreenModel {
     private(set) var hasDebugData = false
 
     func apply(notificationSettings: NotificationSettings) {
+        guard isNotificationEnabled != notificationSettings.isEnabled else {
+            return
+        }
+
         isNotificationEnabled = notificationSettings.isEnabled
     }
 

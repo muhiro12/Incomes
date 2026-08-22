@@ -12,8 +12,6 @@ import SwiftUI
 struct HomeListView {
     @Environment(Tag.self)
     private var yearTag
-    @Environment(NotificationService.self)
-    private var notificationService
 
     @AppStorage(\.isSubscribeOn)
     private var isSubscribeOn
@@ -46,11 +44,6 @@ extension HomeListView: View {
         }
         .listStyle(.insetGrouped)
         .navigationTitle(yearTag.displayName)
-        .task {
-            await IncomesMutationWorkflow.refreshNotificationSchedule(
-                notificationService: notificationService
-            )
-        }
     }
 }
 
