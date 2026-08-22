@@ -20,6 +20,7 @@ struct ContentView {
 
     @Query(.items(.dateIsAfter(Date.now), order: .forward))
     private var upcomingCandidates: [Item]
+    @State private var phoneSyncClient = PhoneSyncClient.shared
     @State private var model: WatchHomeScreenModel = .init()
 }
 
@@ -43,6 +44,15 @@ extension ContentView: View {
 
             await reloadRecentMonthsIfNeeded(
                 trigger: .initial
+            )
+        }
+        .task(id: phoneSyncClient.snapshotRefreshSignalID) {
+            guard phoneSyncClient.snapshotRefreshSignalID != nil else {
+                return
+            }
+
+            await reloadRecentMonthsIfNeeded(
+                trigger: .phoneMutation
             )
         }
         .task(id: scenePhase) {
@@ -173,7 +183,7 @@ private extension ContentView {
             return
         }
 
-        await PhoneSyncClient.shared.activate()
+        await phoneSyncClient.activate()
         let reply = await WatchDataSyncer.syncRecentMonths(context: context)
         model.finishReload(with: reply)
     }

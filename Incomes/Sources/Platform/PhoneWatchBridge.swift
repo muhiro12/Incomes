@@ -44,6 +44,7 @@ final class PhoneWatchBridge: NSObject {
     private var activationWaiters: [CheckedContinuation<Void, Never>] = []
     private var isActivating = false
     private var hasActivated = false
+    private var hasPendingSnapshotRefresh = false
 
     override private init() {
         super.init()
@@ -65,6 +66,7 @@ final class PhoneWatchBridge: NSObject {
         if hasActivated || session.activationState == .activated {
             hasActivated = true
             logger.info("watch_sync.activation_reused")
+            publishPendingSnapshotRefreshIfNeeded(session: session)
             return
         }
         logger.notice("watch_sync.activation_requested")
@@ -79,6 +81,31 @@ final class PhoneWatchBridge: NSObject {
             }
         }
         return
+    }
+
+    @MainActor
+    func requestSnapshotRefresh() {
+        guard WCSession.isSupported() else {
+            logger?.info("watch_sync.snapshot_refresh_unsupported")
+            return
+        }
+
+        hasPendingSnapshotRefresh = true
+
+        let session = WCSession.default
+        session.delegate = self
+
+        guard session.activationState == .activated else {
+            logger?.info("watch_sync.snapshot_refresh_deferred")
+            if !isActivating {
+                isActivating = true
+                session.activate()
+            }
+            return
+        }
+
+        hasActivated = true
+        publishPendingSnapshotRefreshIfNeeded(session: session)
     }
 
     @MainActor
@@ -109,6 +136,9 @@ final class PhoneWatchBridge: NSObject {
                 )
             )
         }
+        if hasActivated {
+            publishPendingSnapshotRefreshIfNeeded(session: .default)
+        }
         let waiters = activationWaiters
         activationWaiters.removeAll()
         waiters.forEach { waiter in
@@ -124,6 +154,36 @@ final class PhoneWatchBridge: NSObject {
         isActivating = true
         logger?.warning("watch_sync.deactivated")
         session.activate()
+    }
+
+    @MainActor
+    private func publishPendingSnapshotRefreshIfNeeded(
+        session: WCSession
+    ) {
+        guard hasPendingSnapshotRefresh,
+              session.activationState == .activated else {
+            return
+        }
+
+        guard session.isPaired,
+              session.isWatchAppInstalled else {
+            logger?.info("watch_sync.snapshot_refresh_counterpart_unavailable")
+            return
+        }
+
+        let signal = WatchSyncRefreshSignal()
+        do {
+            try session.updateApplicationContext(
+                signal.applicationContext
+            )
+            hasPendingSnapshotRefresh = false
+            logger?.notice("watch_sync.snapshot_refresh_requested")
+        } catch {
+            logger?.error(
+                "watch_sync.snapshot_refresh_failed",
+                metadata: IncomesLogging.errorMetadata(error)
+            )
+        }
     }
 }
 
@@ -145,6 +205,12 @@ nonisolated extension PhoneWatchBridge: WCSessionDelegate {
         // Re-activate after the phone-side session deactivates.
         Task { @MainActor in
             reactivateAfterSessionDeactivation(session)
+        }
+    }
+
+    func sessionWatchStateDidChange(_ session: WCSession) {
+        Task { @MainActor in
+            publishPendingSnapshotRefreshIfNeeded(session: session)
         }
     }
 

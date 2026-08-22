@@ -7,6 +7,7 @@ final class WatchHomeScreenModel {
         case initial
         case foreground
         case manual
+        case phoneMutation
     }
 
     enum SyncStatus {
@@ -96,7 +97,8 @@ final class WatchHomeScreenModel {
             guard hasRequestedInitialReload else {
                 return false
             }
-        case .manual:
+        case .manual,
+             .phoneMutation:
             if hasRequestedInitialReload == false {
                 hasRequestedInitialReload = true
             }
