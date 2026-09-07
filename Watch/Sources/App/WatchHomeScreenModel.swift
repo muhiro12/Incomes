@@ -24,6 +24,7 @@ final class WatchHomeScreenModel {
     private(set) var lastSyncAttemptAt: Date?
     private(set) var lastSuccessfulSyncAt: Date?
     private var hasRequestedInitialReload = false
+    private var hasPendingPhoneMutation = false
 
     var syncStatus: SyncStatus {
         if isReloading {
@@ -84,6 +85,9 @@ final class WatchHomeScreenModel {
         trigger: ReloadTrigger
     ) -> Bool {
         guard isReloading == false else {
+            if case .phoneMutation = trigger {
+                hasPendingPhoneMutation = true
+            }
             return false
         }
 
@@ -112,7 +116,9 @@ final class WatchHomeScreenModel {
         with reply: WatchSyncReply,
         now: Date = .now
     ) {
-        isReloading = false
+        // Keep the current worker active until mutations received during sync are covered.
+        isReloading = hasPendingPhoneMutation
+        hasPendingPhoneMutation = false
         lastSyncReply = reply
         lastSyncAttemptAt = now
 

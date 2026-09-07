@@ -184,8 +184,10 @@ private extension ContentView {
         }
 
         await phoneSyncClient.activate()
-        let reply = await WatchDataSyncer.syncRecentMonths(context: context)
-        model.finishReload(with: reply)
+        repeat {
+            let reply = await WatchDataSyncer.syncRecentMonths(context: context)
+            model.finishReload(with: reply)
+        } while model.isReloading
     }
 
     func syncFailureTitle(
