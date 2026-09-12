@@ -1,8 +1,8 @@
 # Incomes release tools
 
 This macOS SwiftPM package uses Apogee's command plugin for the Incomes 6.x
-release cycle. It pins Apogee **0.2.0** at
-`2aa9026ddd19e8492325329540044e6d364e5111`; commit `Package.resolved` with any
+release cycle. It pins Apogee **0.4.0** at
+`c1b60dd84ef5492fcc93210315bfd268fc089462`; commit `Package.resolved` with any
 deliberate dependency update. No app target links Apogee.
 
 Use the selected Xcode 27 RC (27A266a), followed by stable Xcode 27, for both
@@ -59,7 +59,7 @@ Do not copy 5.x notes into a 6.x release or create placeholder remote versions.
 
 ## Authentication
 
-Apogee 0.2.0 requires a team API key; individual API keys are unsupported.
+Apogee 0.4.0 requires a team API key; individual API keys are unsupported.
 An Account Holder or Admin can generate one in App Store Connect under
 **Users and Access > Integrations > App Store Connect API > Team Keys**.
 Select the role needed for the intended operations. Team keys can access every
@@ -131,6 +131,6 @@ in private validation notes for the Apogee adoption handoff.
    applying. Monitor with `release-status`; confirm publication separately.
 
 No operation runs automatically from an app build or Git push in this package.
-Use Apogee's [adoption guide](https://github.com/muhiro12/Apogee/blob/0.2.0/docs/adoption.md)
+Use Apogee's [adoption guide](https://github.com/muhiro12/Apogee/blob/0.4.0/docs/adoption.md)
 for command boundaries and failure recovery. Move to Apogee 1.x only after its
 publication and real-account read/write validation are complete.

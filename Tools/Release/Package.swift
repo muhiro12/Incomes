@@ -6,6 +6,6 @@ let package = Package( // swiftlint:disable:this prefixed_toplevel_constant
     name: "IncomesReleaseTools",
     platforms: [.macOS(.v15)],
     dependencies: [
-        .package(url: "https://github.com/muhiro12/Apogee.git", exact: "0.2.0")
+        .package(url: "https://github.com/muhiro12/Apogee.git", exact: "0.4.0")
     ]
 )
