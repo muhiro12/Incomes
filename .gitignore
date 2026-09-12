@@ -1,6 +1,10 @@
 # Project - Local files
 .build/
 
+# Unpublished release metadata and local plans
+/AppStore/Metadata/
+/AppStore/Plans/
+
 # Finder
 .DS_Store
 

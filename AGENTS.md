@@ -14,16 +14,26 @@ Repository-specific agent contract for Incomes.
 
 ## Toolchain Compatibility
 
-- Treat the selected latest Xcode as the default local development toolchain.
-- While the selected latest Xcode is newer than the current App Store
-  submission toolchain, keep the current App Store Xcode buildable.
-- Prefer latest SDK and API spelling in product code, then isolate older
-  toolchain backports behind small support helpers with compiler and
-  availability checks. Keep the latest branch first and the fallback explicit.
-- For Foundation Models, Apple Intelligence, App Intents, widgets, build
-  settings, and other beta-sensitive SDK surfaces, verify both the selected
-  latest Xcode and the current App Store Xcode when changing implementation or
-  interfaces.
+- Develop Incomes 6.x on `develop`. Keep `main` available for the 5.x release
+  until the 6.x release is ready to merge; bring applicable 5.x fixes forward.
+- Use Xcode 27 RC (27A266a) as the initial development and release toolchain
+  for 6.x. Verify `xcode-select -p` and `xcodebuild -version` before Apple builds.
+  Adopt the corresponding stable Xcode 27 release when available.
+- Xcode 26 compatibility is not required on `develop`. Keep deployment-target
+  availability checks; changing the toolchain does not raise the supported OS.
+- Use the same selected Xcode 27 release for local release verification and
+  the 6.x Xcode Cloud workflow. Keep the 5.x Cloud workflow on its release
+  branch and toolchain until that release is complete.
+
+## Release Tools
+
+- Use the dedicated macOS package in `Tools/Release` for Apogee release
+  operations. Pin an exact published version and retain `Package.resolved`.
+- Keep Apogee out of the app, library, Watch, and Widgets dependency graphs.
+- Follow `Tools/Release/README.md` for local validation, authentication, and
+  staged App Store Connect operations. Start with read-only release status.
+- Before remote writes, review the exact app, version, locales, and full dry-run
+  diff. Keep credentials and remote plans outside tracked repository files.
 
 ## Build and Test Entry Point
 
@@ -33,6 +43,9 @@ runtime log, screenshot, and UI snapshot verification.
 Before the first XcodeBuildMCP build, test, or run call in a session, run
 XcodeBuildMCP `session_show_defaults`. If defaults do not point at this
 repository, set them for the current session before continuing.
+
+If XcodeBuildMCP is unavailable, use the official Xcode integration or Apple
+command-line tools for the same scheme and evidence, and report the fallback.
 
 Treat library tests, surface builds, and runtime/UI evidence as separate
 verification capabilities. Choose the smallest set that proves the current

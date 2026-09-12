@@ -126,9 +126,8 @@ Models.
 
 ## Requirements
 
-- Xcode 26 or later. Day-to-day development may use the selected latest Xcode,
-  but the current App Store Xcode should keep building while beta SDK APIs are
-  isolated behind compatibility helpers.
+- Xcode 27 RC (27A266a), followed by the corresponding stable Xcode 27 release,
+  for both development and release builds of Incomes 6.x.
 - The app and widgets deploy to iOS 18 or later, and the watchOS companion
   deploys to watchOS 11 or later.
 - An Apple Developer account configured for App Groups, iCloud, StoreKit 2,
@@ -140,7 +139,8 @@ Models.
 
 Follow these steps to run a local build:
 
-1. Clone the repository and open the project directory.
+1. Clone the repository, check out `develop` for Incomes 6.x, and open the
+   project directory. `main` retains the 5.x release until 6.x is ready.
 2. Update bundle identifiers and the app group constant to match your
    provisioning profile if you are not using the production identifiers.
 3. If you are shipping a fork with your own identifiers, update
@@ -223,6 +223,18 @@ evidence is reserved for changes that affect visible behavior or live platform
 integration.
 
 Helper scripts may write disposable cache data under `.build/ci/shared/`.
+
+## Release operations
+
+Incomes 6.x uses [Apogee release tools](Tools/Release/README.md) in a separate
+macOS SwiftPM package. The package pins Apogee independently of the app and
+supports local metadata validation, release status, and reviewed metadata,
+build-attachment, and submission operations.
+
+Xcode Cloud continues to own formal builds, tests, archives, and binary upload.
+The 6.x workflow must target `develop` and Xcode 27, while the 5.x workflow
+retains its release branch and toolchain. Apogee does not create App Store
+versions or choose publication timing.
 
 ## Useful links
 

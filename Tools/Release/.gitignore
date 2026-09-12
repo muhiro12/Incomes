@@ -1,0 +1,4 @@
+.swiftpm/
+.env
+.env.*
+*.p8
