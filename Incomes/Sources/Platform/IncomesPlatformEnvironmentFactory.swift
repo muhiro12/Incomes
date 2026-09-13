@@ -17,7 +17,10 @@ enum IncomesPlatformEnvironmentFactory {
     static func makePreviewModelContainer() throws -> ModelContainer {
         try ModelContainer(
             for: Item.self,
-            configurations: .init(isStoredInMemoryOnly: true)
+            configurations: .init(
+                isStoredInMemoryOnly: true,
+                cloudKitDatabase: .none
+            )
         )
     }
 
