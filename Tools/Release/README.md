@@ -1,9 +1,13 @@
 # Incomes release tools
 
 This macOS SwiftPM package uses Apogee's command plugin for the Incomes 6.x
-release cycle. It pins Apogee **0.5.0** at
-`2e152742953592a9c129f79655eeb2ab969faeed`; commit `Package.resolved` with any
+release cycle. It pins Apogee **1.0** at
+`ced812230149a1c2db7155e054a02af18c6d21c9`; commit `Package.resolved` with any
 deliberate dependency update. No app target links Apogee.
+
+The public Git tag is `1.0`. SwiftPM requires the normalized three-component
+version `1.0.0` in `Package.swift` and records it in `Package.resolved`.
+Check the resolved revision as well as the version when updating.
 
 Use the selected Xcode 27 RC (27A266a), followed by stable Xcode 27, for both
 development and release verification. Run these commands from the repository
@@ -59,7 +63,7 @@ Do not copy 5.x notes into a 6.x release or create placeholder remote versions.
 
 ## Authentication
 
-Apogee 0.5.0 requires a team API key; individual API keys are unsupported.
+Apogee 1.0 requires a team API key; individual API keys are unsupported.
 An Account Holder or Admin can generate one in App Store Connect under
 **Users and Access > Integrations > App Store Connect API > Team Keys**.
 Select the role needed for the intended operations. Team keys can access every
@@ -113,6 +117,11 @@ state before retrying: locale writes are sequential and do not roll back.
 Keep the tag, resolved SHA, toolchain, commands, results, and remaining limits
 in private validation notes for the Apogee adoption handoff.
 
+If final release copy is not ready, explicitly approved temporary text can
+validate writes on the actual editable version. Record whether that text remains
+or was restored, and replace any remaining temporary text before submission.
+Successful metadata validation does not authorize review submission or release.
+
 ## Subsequent 6.x releases
 
 1. Develop on `main`; the `5.12` tag preserves the released 5.x baseline.
@@ -132,6 +141,7 @@ in private validation notes for the Apogee adoption handoff.
    applying. Monitor with `release-status`; confirm publication separately.
 
 No operation runs automatically from an app build or Git push in this package.
-Use Apogee's [adoption guide](https://github.com/muhiro12/Apogee/blob/0.5.0/docs/adoption.md)
-for command boundaries and failure recovery. Move to Apogee 1.x only after its
-publication and real-account read/write validation are complete.
+Use Apogee's [adoption guide](https://github.com/muhiro12/Apogee/blob/1.0/docs/adoption.md)
+for command boundaries and failure recovery. After dependency updates, verify
+the published tag and resolved revision, run local metadata validation, and
+check release status and a fresh metadata dry run before the next write.
