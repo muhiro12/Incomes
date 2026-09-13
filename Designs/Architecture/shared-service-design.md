@@ -43,7 +43,8 @@ and widgets.
 - `Watch` intentionally stays on the narrower `MHPreferences` product.
 - `Widgets` intentionally stay off direct MHPlatform package adoption.
 - This repository intentionally uses the MHPlatform 1.x semver range
-  `1.0.0..<2.0.0`.
+  `1.13.0..<2.0.0` to retain verified purchase identifiers independently of
+  product metadata and use the updated native ad adapters.
 
 ## Canonical Shared APIs
 

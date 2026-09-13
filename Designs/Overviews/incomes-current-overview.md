@@ -34,7 +34,7 @@ living in the app targets.
 - `Watch` intentionally stays on the narrower `MHPreferences` product.
 - `Widgets` intentionally stay off direct MHPlatform package adoption.
 - This repository intentionally tracks MHPlatform with the 1.x semver range
-  `1.0.0..<2.0.0`.
+  `1.13.0..<2.0.0`.
 
 ## Current End-User Features
 

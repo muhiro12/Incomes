@@ -9,7 +9,7 @@ ci_task_enter_repository "${BASH_SOURCE[0]}"
 repository_root=$CI_TASK_REPOSITORY_ROOT
 
 expected_mhplatform_remote="https://github.com/muhiro12/MHPlatform"
-expected_mhplatform_minimum_version="1.0.0"
+expected_mhplatform_minimum_version="1.13.0"
 package_manifest="IncomesLibrary/Package.swift"
 package_resolved="IncomesLibrary/Package.resolved"
 project_file="Incomes.xcodeproj/project.pbxproj"
@@ -72,8 +72,8 @@ mhplatform_manifest_block=$(extract_manifest_dependency_block "$expected_mhplatf
 if [[ -z "$mhplatform_manifest_block" ]]; then
   record_failure "IncomesLibrary/Package.swift must reference the canonical MHPlatform remote."
 else
-  if ! grep -q --fixed-strings "\"1.0.0\"..<\"2.0.0\"" <<<"$mhplatform_manifest_block"; then
-    record_failure "IncomesLibrary/Package.swift must declare the MHPlatform 1.x semver range 1.0.0..<2.0.0."
+  if ! grep -q --fixed-strings "\"$expected_mhplatform_minimum_version\"..<\"2.0.0\"" <<<"$mhplatform_manifest_block"; then
+    record_failure "IncomesLibrary/Package.swift must declare the MHPlatform 1.x semver range $expected_mhplatform_minimum_version..<2.0.0."
   fi
 
   if grep -q --fixed-strings 'branch:' <<<"$mhplatform_manifest_block"; then
