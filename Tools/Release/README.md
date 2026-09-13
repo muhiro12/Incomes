@@ -91,8 +91,8 @@ swift package --package-path Tools/Release plugin \
 ```
 
 Compare the version, attached build, review submissions, release type, and
-earliest release date with App Store Connect. Leave the 5.x submission and
-publication process intact. Reading status does not validate remote writes.
+earliest release date with App Store Connect. The released 5.12 version provides
+a read-only baseline. Reading status does not validate remote writes.
 
 For the first metadata write, use an existing editable version intended for a
 real release. Agree on the version, locales, and complete text, then save the
@@ -115,10 +115,11 @@ in private validation notes for the Apogee adoption handoff.
 
 ## Subsequent 6.x releases
 
-1. Develop on `develop`; bring applicable fixes forward from the 5.x `main`.
+1. Develop on `main`; the `5.12` tag preserves the released 5.x baseline.
 2. Verify library behavior, affected app surfaces, and relevant runtime flows.
-   Use the same Xcode 27 release in the dedicated 6.x Xcode Cloud workflow.
-   Keep the 5.x workflow's branch, toolchain, and distribution settings intact.
+   The Xcode Cloud workflow targets `main` with **Latest Beta or Release**.
+   Match local release verification to the actual Xcode version recorded for
+   the candidate's Cloud build.
 3. Use Xcode Cloud to build, test, archive, and upload the intended candidate.
    Apogee does not build or upload app binaries.
 4. Prepare an App Store version, locales, publication timing, and any review,

@@ -14,16 +14,17 @@ Repository-specific agent contract for Incomes.
 
 ## Toolchain Compatibility
 
-- Develop Incomes 6.x on `develop`. Keep `main` available for the 5.x release
-  until the 6.x release is ready to merge; bring applicable 5.x fixes forward.
+- Develop Incomes 6.x on `main`. The `5.12` tag preserves the released 5.x
+  baseline; branch from it if a separate 5.x maintenance release is needed.
 - Use Xcode 27 RC (27A266a) as the initial development and release toolchain
   for 6.x. Verify `xcode-select -p` and `xcodebuild -version` before Apple builds.
   Adopt the corresponding stable Xcode 27 release when available.
-- Xcode 26 compatibility is not required on `develop`. Keep deployment-target
+- Xcode 26 compatibility is not required for 6.x. Keep deployment-target
   availability checks; changing the toolchain does not raise the supported OS.
-- Use the same selected Xcode 27 release for local release verification and
-  the 6.x Xcode Cloud workflow. Keep the 5.x Cloud workflow on its release
-  branch and toolchain until that release is complete.
+- The Xcode Cloud workflow targets `main` with **Latest Beta or Release**.
+  Check the actual Xcode version in each candidate's build record and use
+  that same version for local release verification; the rolling selection
+  can change independently of the local installation.
 
 ## Release Tools
 

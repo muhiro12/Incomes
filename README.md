@@ -139,8 +139,8 @@ Models.
 
 Follow these steps to run a local build:
 
-1. Clone the repository, check out `develop` for Incomes 6.x, and open the
-   project directory. `main` retains the 5.x release until 6.x is ready.
+1. Clone the repository, check out `main` for Incomes 6.x, and open the project
+   directory. The `5.12` tag preserves the released 5.x baseline.
 2. Update bundle identifiers and the app group constant to match your
    provisioning profile if you are not using the production identifiers.
 3. If you are shipping a fork with your own identifiers, update
@@ -232,9 +232,10 @@ supports local metadata validation, release status, and reviewed metadata,
 build-attachment, and submission operations.
 
 Xcode Cloud continues to own formal builds, tests, archives, and binary upload.
-The 6.x workflow must target `develop` and Xcode 27, while the 5.x workflow
-retains its release branch and toolchain. Apogee does not create App Store
-versions or choose publication timing.
+The workflow targets `main` with **Latest Beta or Release**. Check the actual
+Xcode version in each candidate's build record and match it for local release
+verification. Apogee does not create App Store versions or choose publication
+timing.
 
 ## Useful links
 
