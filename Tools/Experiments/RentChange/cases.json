@@ -1,0 +1,12 @@
+[
+  {"id":"canonical","text":"来月から家賃が5,000円増える","expected":{"target":"家賃","amountMode":"increase","amountYen":5000,"startMonth":"2026-10","endMonth":"","cancelled":false}},
+  {"id":"kanji_amount","text":"来月から家賃が五千円高くなる","expected":{"target":"家賃","amountMode":"increase","amountYen":5000,"startMonth":"2026-10","endMonth":"","cancelled":false}},
+  {"id":"explicit_month","text":"2026年10月から家賃を5000円増やす","expected":{"target":"家賃","amountMode":"increase","amountYen":5000,"startMonth":"2026-10","endMonth":"","cancelled":false}},
+  {"id":"new_total","text":"来月から家賃が8万円から8万5千円になる","expected":{"target":"家賃","amountMode":"total","amountYen":85000,"startMonth":"2026-10","endMonth":"","cancelled":false}},
+  {"id":"missing_amount","text":"来月から家賃が増える","expected":{"target":"家賃","amountMode":"missing","amountYen":0,"startMonth":"2026-10","endMonth":"","cancelled":false}},
+  {"id":"missing_month","text":"家賃を5000円上げて","expected":{"target":"家賃","amountMode":"increase","amountYen":5000,"startMonth":"","endMonth":"","cancelled":false}},
+  {"id":"missing_target","text":"来月から5000円増える","expected":{"target":"","amountMode":"increase","amountYen":5000,"startMonth":"2026-10","endMonth":"","cancelled":false}},
+  {"id":"one_month","text":"来月だけ家賃が5000円増える","expected":{"target":"家賃","amountMode":"increase","amountYen":5000,"startMonth":"2026-10","endMonth":"2026-10","cancelled":false}},
+  {"id":"bounded_range","text":"2026年10月から12月まで家賃が毎月5000円増える","expected":{"target":"家賃","amountMode":"increase","amountYen":5000,"startMonth":"2026-10","endMonth":"2026-12","cancelled":false}},
+  {"id":"cancelled","text":"来月から家賃を5000円増やしたい。やっぱりキャンセルして、変更しない。","expected":{"cancelled":true}}
+]

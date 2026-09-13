@@ -1,0 +1,47 @@
+{
+  "type" : "object",
+  "required" : [
+    "target",
+    "amountMode",
+    "amountYen",
+    "startMonth",
+    "endMonth",
+    "cancelled"
+  ],
+  "x-order" : [
+    "target",
+    "amountMode",
+    "amountYen",
+    "startMonth",
+    "endMonth",
+    "cancelled"
+  ],
+  "additionalProperties" : false,
+  "title" : "RentChange",
+  "properties" : {
+    "amountMode" : {
+      "type" : "string",
+      "description" : "increase for an explicit increase; total for an explicit new total; missing if no amount is stated."
+    },
+    "target" : {
+      "type" : "string",
+      "description" : "Payment name explicitly mentioned, such as 家賃; empty if missing."
+    },
+    "amountYen" : {
+      "type" : "integer",
+      "description" : "Explicit amount in whole yen. Convert 5千円 to 5000. Use 0 only when missing. Never calculate a difference between totals."
+    },
+    "endMonth" : {
+      "type" : "string",
+      "description" : "Last affected month as YYYY-MM only when specified. Empty for an ongoing change."
+    },
+    "startMonth" : {
+      "type" : "string",
+      "description" : "First affected month as YYYY-MM. Today is 2026-09-13, so 来月 is 2026-10. Empty when unspecified."
+    },
+    "cancelled" : {
+      "type" : "boolean",
+      "description" : "True only when the user cancels the change."
+    }
+  }
+}
