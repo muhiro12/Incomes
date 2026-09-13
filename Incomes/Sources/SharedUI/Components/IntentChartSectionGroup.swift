@@ -5,6 +5,7 @@
 //  Created by Hiromu Nakano on 2025/05/23.
 //
 
+import MHDesign
 import SwiftData
 import SwiftUI
 
@@ -33,6 +34,7 @@ extension IntentChartSectionGroup: View {
             )
         }
         .safeAreaPadding()
+        .mhDesignMetrics(.incomes)
     }
 }
 

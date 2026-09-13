@@ -46,6 +46,17 @@ and widgets.
   `1.13.0..<2.0.0` to retain verified purchase identifiers independently of
   product metadata and use the updated native ad adapters.
 
+## MHDesign Adoption
+
+- `Incomes`, `Watch`, and `Widgets` adopt the `MHDesign` product from MHUI.
+- The app keeps native SwiftUI containers and its existing presentation styles.
+  Package updates do not opt the app into the full MHUI theme or chrome.
+- `MHDesignMetrics.incomes` owns the app's established spacing, corner radii,
+  and layout dimensions. The app and preview environment, standalone input
+  assist preview, and App Intent chart snippet use the same metrics.
+- Watch and widget layouts use the package's unchanged inline and control
+  spacing values.
+
 ## Canonical Shared APIs
 
 The following types are the current shared entry points for business
