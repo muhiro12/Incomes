@@ -198,7 +198,7 @@ ci_swiftlint_resolve_binary() {
   temporary_directory=$(ci_swiftlint_temporary_directory "$repository_root")
   local_home_directory=$(ci_swiftlint_local_home_directory "$repository_root")
 
-  resolve_output=$(mktemp "${TMPDIR:-/tmp}/swiftlint-resolve.XXXXXX.log")
+  resolve_output=$(mktemp "${TMPDIR:-/tmp}/swiftlint-resolve.XXXXXX")
   echo "Resolving project-managed SwiftLint binary..." >&2
   set +e
   HOME="$local_home_directory" \
