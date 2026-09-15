@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 
 @available(iOS 26.0, *)
 struct ItemFormInputAssistCameraButton: View {
@@ -6,14 +7,20 @@ struct ItemFormInputAssistCameraButton: View {
     let openCamera: () -> Void
 
     var body: some View {
-        Button(action: openCamera) {
-            Label("Camera", systemImage: "camera")
-                .frame(maxWidth: .infinity)
+        if UIImagePickerController.isSourceTypeAvailable(.camera) {
+            Button {
+                if UIImagePickerController.isSourceTypeAvailable(.camera) {
+                    openCamera()
+                }
+            } label: {
+                Label("Camera", systemImage: "camera")
+                    .frame(maxWidth: .infinity)
+            }
+            .labelStyle(.titleAndIcon)
+            .incomesSecondaryControlStyle()
+            .disabled(isImportDisabled)
+            .accessibilityHint(accessibilityHint)
         }
-        .labelStyle(.titleAndIcon)
-        .incomesSecondaryControlStyle()
-        .disabled(isImportDisabled)
-        .accessibilityHint(accessibilityHint)
     }
 }
 
