@@ -2,8 +2,12 @@
 
 ## Overview
 
-Incomes is a SwiftUI budgeting app that keeps personal finances organised across
-iPhone, Apple Watch, and widgets. It stores data with SwiftData in a shared app
+Incomes is a budget planner for looking ahead at future balances and deciding
+how to use your money. Planned income and expenses form the basis of that
+outlook; recurring items, balance charts, and month/year views help users keep
+their plan current across iPhone, Apple Watch, and widgets.
+
+The app uses SwiftUI and stores data with SwiftData in a shared app
 group container, optionally syncs through CloudKit, and layers on StoreKit 2
 subscriptions, Google Mobile Ads, and App Intents powered by Apple Foundation
 Models.

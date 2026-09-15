@@ -1,25 +1,34 @@
 # Incomes
 
-**A modern budget manager built with SwiftUI, SwiftData and the latest Apple frameworks.**
+**See your future balance. Plan your budget.**
+
+Incomes is a budget planner for deciding how to use your money with the future
+in view. Enter planned income and expenses, follow your balance over time, and
+use that outlook to decide your budget.
+
+Your outlook follows the income and expenses you enter. Keep your plan current
+as your upcoming payments change.
 
 [![Download on the App Store](https://linkmaker.itunes.apple.com/assets/shared/badges/en-us/appstore-lrg.svg)](https://apps.apple.com/app/id1584472982)
 
 ## Highlights
 
-- 📸 **Intelligent capture** – scan receipts or import photos with VisionKit,
-  then let Foundation Models infer the form for you.
-- 🧮 **Powerful logging** – handle recurring items, tags and balance
-  calculations with one tap.
-- 📈 **Search & insights** – drill into months and categories with Swift Charts
-  and rich filters.
-- 🔔 **Stay ahead** – fine-tune push reminders, lead times and thresholds for
-  upcoming payments.
-- 🌐 **Premium sync** – unlock iCloud syncing, ad removal and StoreKit-managed
-  subscriptions.
+- **See the balance ahead** – view how planned income and expenses shape your
+  balance over time.
+- **Plan recurring payments** – organise regular income and expenses alongside
+  individual payments.
+- **Explore your plan** – use month and year views, categories, and search to
+  find the payments behind your balance.
+- **Keep upcoming payments in view** – use reminders, Apple Watch, and widgets
+  to check your schedule.
+- **Spend less time entering details** – capture text from receipts or photos
+  and review suggested item details on supported devices.
+- **Keep your plan in sync** – a subscription enables iCloud sync and removes
+  ads.
 
 ## Platforms
 
-- **iPhone & iPad** – full budgeting experience with charts, Siri Shortcuts and
+- **iPhone & iPad** – budget planning with balance charts, Siri Shortcuts and
   App Intents.
 - **Apple Watch** – glanceable upcoming payments plus subscription management
   on the wrist.
@@ -34,7 +43,7 @@
    `Incomes/Configurations`, `Watch/Configurations`, and
    `Widgets/Configurations`, plus
    `Incomes/Sources/Common/Platform/IncomesMonetizationConfiguration.swift`.
-3. Open `Incomes.xcodeproj` in Xcode 26 or later and run the **Incomes** scheme
+3. Open `Incomes.xcodeproj` in Xcode 27 or later and run the **Incomes** scheme
    on an iOS 18 or later simulator or device. Use an iOS 26 or later
    destination when testing Foundation Models features.
 
