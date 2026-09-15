@@ -59,6 +59,15 @@ Validation needs no API credentials and makes no App Store Connect requests.
 SwiftPM may download dependencies. It validates UTF-8 input and safe paths,
 not Apple's locale support, length limits, permissions, or version editability.
 An empty file requests clearing a field; omit files for fields left unchanged.
+
+Release notes are plain text. When copying a draft from chat or a Markdown
+document, copy only the content inside any code block; exclude opening and
+closing fences such as triple backticks and any language label. Apogee's
+validation does not detect these presentation wrappers. Review every locale's
+complete text in the dry-run diff, including the first and last lines, before
+applying it. After publication, check the actual storefront text as well as
+the App Store Connect values.
+
 Do not copy 5.x notes into a 6.x release or create placeholder remote versions.
 
 ## Authentication
