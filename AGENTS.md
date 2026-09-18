@@ -38,32 +38,36 @@ Repository-specific agent contract for Incomes.
 
 ## Build and Test Entry Point
 
-Agents MUST prefer XcodeBuildMCP for Apple build, test, run, Simulator,
-runtime log, screenshot, and UI snapshot verification.
+Prefer the active Xcode-native integration and official Apple tooling for
+project discovery, build, test, run, runtime logs, Preview rendering, live UI
+inspection, and screenshots. Resolve current actions from the available tool
+inventory. If the integration cannot provide the required evidence, use Apple
+command-line tools for the same scheme and destination and report the gap.
 
-Before the first XcodeBuildMCP build, test, or run call in a session, run
-XcodeBuildMCP `session_show_defaults`. If defaults do not point at this
-repository, set them for the current session before continuing.
-
-If XcodeBuildMCP is unavailable, use the official Xcode integration or Apple
-command-line tools for the same scheme and evidence, and report the fallback.
+Before changing Xcode's active selection, discover the open projects, schemes,
+and destinations, identify `Incomes.xcodeproj`, and record the original scheme
+and destination. Switch only to discovered values. End interaction sessions
+and stop runs started solely for verification. Restore the original scheme
+first, rediscover its valid destinations, restore the original destination,
+and confirm the final selection. Report any selection that cannot be restored.
 
 Treat library tests, surface builds, and runtime/UI evidence as separate
 verification capabilities. Choose the smallest set that proves the current
 change, and prefer stronger evidence when public APIs, wire contracts,
 SwiftData schema, app lifecycle wiring, or visible UI behavior are affected.
 
-- For shared-library logic, model, or test changes, use XcodeBuildMCP
-  `test_sim` with the `IncomesLibrary` scheme.
+- For shared-library logic, model, or test changes, run the `IncomesLibrary`
+  scheme's tests on a discovered iOS Simulator destination.
 - For public `IncomesLibrary` APIs, `*Operations`, shared sync contracts,
-  SwiftData schema, or adapter-facing contracts, also use XcodeBuildMCP
-  `build_sim` with the `Incomes` scheme.
-- For app compile checks, use XcodeBuildMCP `build_sim` with the `Incomes`
-  scheme.
-- For Watch or Widgets target changes, use XcodeBuildMCP `build_sim` with the
-  `Watch` or `Widgets` scheme that matches the changed surface.
-- For runtime or UI-sensitive changes, use XcodeBuildMCP `build_run_sim`,
-  `launch_app_sim`, `snapshot_ui`, and `screenshot` as appropriate.
+  SwiftData schema, or adapter-facing contracts, also build the `Incomes`
+  scheme on a discovered iOS Simulator destination.
+- For app compile checks, build the `Incomes` scheme on an iOS Simulator.
+- For Widgets target changes, build the `Widgets` scheme on an iOS Simulator.
+- For Watch target changes, build the `Watch` scheme on a watchOS Simulator.
+  For Watch product linkage changes, also build `Incomes` to check embedding.
+  Paired-device delivery remains separate runtime evidence.
+- For runtime or UI-sensitive changes, add a targeted run, runtime-log review,
+  Preview rendering when appropriate, and live UI or screenshot evidence.
 - For runtime or UI checks, do not disable code signing. The app needs signed
   App Group entitlements at launch, so reserve `CODE_SIGNING_ALLOWED=NO` for
   compile-only builds.
@@ -81,7 +85,7 @@ bash ci_scripts/tasks/check_repository_rules.sh
 ```
 
 `check_repository_rules.sh` runs SwiftLint plus repository-specific static
-architecture checks that are not naturally covered by XcodeBuildMCP.
+architecture checks that are not covered by the Xcode-native integration.
 SwiftLint is resolved from the `SimplyDanny/SwiftLintPlugins` package declared
 in `Incomes.xcodeproj`, not from a separately installed `swiftlint` binary.
 Xcode Cloud owns formal CI builds, tests, and archives.

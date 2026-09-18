@@ -3,7 +3,7 @@
 ## Purpose
 
 Release UI smoke auditing is a release-time visual confidence pass for the
-real app running in Simulator. It complements the repository's XcodeBuildMCP
+real app running in Simulator. It complements the repository's Xcode-native
 build, shared-library test, and static rule-check posture without replacing it.
 
 Use this audit to catch issues that library tests and app builds cannot see:
@@ -18,22 +18,22 @@ Use this audit to catch issues that library tests and app builds cannot see:
 
 ## Relationship to Verification
 
-Standard task verification is MCP-first: use XcodeBuildMCP for app build,
-shared-library test, runtime logs, screenshots, and UI snapshots, then run
+Follow [AGENTS.md](../../AGENTS.md) for Xcode-native build and shared-library
+test evidence, scheme and destination selection, and restoration. Run
 `bash ci_scripts/tasks/check_repository_rules.sh` for SwiftLint and
-repository-specific static architecture checks. Release UI smoke auditing is a
-separate release-confidence pass and should not be added to every task by
-default.
+repository-specific static architecture checks. Release UI smoke auditing adds
+runtime logs, screenshots, and live UI inspection when needed; it is a separate
+release-confidence pass and should not be added to every task by default.
 
 ## Workflow
 
-Use the global `$xcode-ui-smoke-auditor` skill when performing this audit.
-The skill owns the XcodeBuildMCP details for building, launching, inspecting
-the live UI hierarchy, capturing screenshots, and reporting findings.
+Use the `xcode-ui-smoke-auditor` skill when available; otherwise follow the
+workflow below. Resolve build, run, runtime-log, UI inspection, and screenshot
+actions from the active Xcode-native integration's tool inventory.
 
 The repository expectation is:
 
-1. Run MCP build/test checks and retained repository rules for code readiness.
+1. Run Xcode-native build/test checks and retained repository rules.
 2. Run release UI smoke only when preparing a release or when a UI-sensitive
    change needs live Simulator evidence.
 3. Prefer representative iPhone and iPad Simulator coverage when available.
@@ -66,15 +66,14 @@ Release UI smoke auditing is non-destructive by default.
 
 ## Reporting
 
-Reports should be evidence-backed and concise. Use the structure from
-`$xcode-ui-smoke-auditor`:
+Reports should be evidence-backed and concise. Include:
 
 1. `blocking issues`
 2. `warnings`
 3. `notes`
 4. `coverage gaps`
 5. `screenshots`
-6. `session defaults`
+6. `scheme, destination, and restoration result`
 
 When no issue is found, state that no blocking issue was observed in the
 audited coverage and still list remaining gaps.
