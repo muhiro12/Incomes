@@ -1,13 +1,13 @@
 # Incomes release tools
 
 This macOS SwiftPM package uses Apogee's command plugin for the Incomes 6.x
-release cycle. It pins Apogee **1.0** at
-`ced812230149a1c2db7155e054a02af18c6d21c9`; commit `Package.resolved` with any
+release cycle. It pins Apogee **1.3.0** at
+`e72fee32a7f3a4ea288e1ed1b69798deee7bfe92`; commit `Package.resolved` with any
 deliberate dependency update. No app target links Apogee.
 
-The public Git tag is `1.0`. SwiftPM requires the normalized three-component
-version `1.0.0` in `Package.swift` and records it in `Package.resolved`.
-Check the resolved revision as well as the version when updating.
+Apogee publishes three-component semantic version tags, so the Git tag, the
+`Package.swift` requirement, and the `Package.resolved` version all read
+`1.3.0`. Check the resolved revision as well as the version when updating.
 
 Use the selected Xcode 27 RC (27A266a), followed by stable Xcode 27, for both
 development and release verification. Run these commands from the repository
@@ -72,7 +72,7 @@ Do not copy 5.x notes into a 6.x release or create placeholder remote versions.
 
 ## Authentication
 
-Apogee 1.0 requires a team API key; individual API keys are unsupported.
+Apogee requires a team API key; individual API keys are unsupported.
 An Account Holder or Admin can generate one in App Store Connect under
 **Users and Access > Integrations > App Store Connect API > Team Keys**.
 Select the role needed for the intended operations. Team keys can access every
@@ -140,17 +140,23 @@ Successful metadata validation does not authorize review submission or release.
    the candidate's Cloud build.
 3. Use Xcode Cloud to build, test, archive, and upload the intended candidate.
    Apogee does not build or upload app binaries.
-4. Prepare an App Store version, locales, publication timing, and any review,
-   privacy, screenshot, or subscription updates in App Store Connect.
+4. Prepare the App Store version, locales, publication timing, and any review,
+   privacy, or subscription updates. `create-version` can create a missing
+   version for manual release, and `update-version-settings` can change
+   copyright or release policy; both plan first and apply only when approved.
+   Locale creation and review declarations stay in App Store Connect.
 5. Validate metadata, inspect release status, and review/apply the intended
-   metadata update. Attach an exact processed build through a separate
+   metadata update. `read-metadata` exports the stored remote values, and
+   `update-screenshots` applies verified screenshots once private recovery
+   originals exist. Attach an exact processed build through a separate
    `attach-build --dry-run`, followed by its approved `--apply`.
 6. Treat `submit-for-review` as a separate release decision after all evidence
-   is ready. Check its dry run, attached build, and publication timing before
-   applying. Monitor with `release-status`; confirm publication separately.
+   is ready. Read `build-feedback` for the candidate build, then check the dry
+   run, attached build, and publication timing before applying. Monitor with
+   `release-status`; confirm publication separately.
 
 No operation runs automatically from an app build or Git push in this package.
-Use Apogee's [adoption guide](https://github.com/muhiro12/Apogee/blob/1.0/docs/adoption.md)
+Use Apogee's [adoption guide](https://github.com/muhiro12/Apogee/blob/1.3.0/docs/adoption.md)
 for command boundaries and failure recovery. After dependency updates, verify
 the published tag and resolved revision, run local metadata validation, and
 check release status and a fresh metadata dry run before the next write.

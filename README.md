@@ -234,14 +234,16 @@ Helper scripts may write disposable cache data under `.build/ci/shared/`.
 
 Incomes 6.x uses [Apogee release tools](Tools/Release/README.md) in a separate
 macOS SwiftPM package. The package pins Apogee independently of the app and
-supports local metadata validation, release status, and reviewed metadata,
+supports local metadata validation, read-only release status, metadata, and
+TestFlight feedback inspection, and reviewed version, metadata, screenshot,
 build-attachment, and submission operations.
 
 Xcode Cloud continues to own formal builds, tests, archives, and binary upload.
 The workflow targets `main` with **Latest Beta or Release**. Check the actual
 Xcode version in each candidate's build record and match it for local release
-verification. Apogee does not create App Store versions or choose publication
-timing.
+verification. Apogee creates App Store versions and changes publication policy
+only through explicit, reviewed operations, and never builds or uploads
+binaries.
 
 ## Useful links
 
