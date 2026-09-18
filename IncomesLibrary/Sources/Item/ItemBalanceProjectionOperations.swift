@@ -187,4 +187,66 @@ public enum ItemBalanceProjectionOperations {
             scope: scope
         )
     }
+
+    /// Reviews a proposed item creation so it can be applied without a second confirmation.
+    public static func reviewCreate(
+        context: ModelContext,
+        input: ItemFormInput,
+        repeatMonthSelections: Set<RepeatMonthSelection>
+    ) throws -> ItemBalanceProjectionReview {
+        try ItemBalanceProjectionPlanner.createReview(
+            context: context,
+            input: input,
+            repeatMonthSelections: repeatMonthSelections
+        )
+    }
+
+    /// Reviews a proposed item update so the reviewed scope can be applied later.
+    public static func reviewUpdate(
+        context: ModelContext,
+        item: Item,
+        input: ItemFormInput,
+        scope: ItemMutationScope
+    ) throws -> ItemBalanceProjectionReview {
+        try ItemBalanceProjectionPlanner.updateReview(
+            context: context,
+            item: item,
+            input: input,
+            scope: scope
+        )
+    }
+
+    /// Validates a reviewed creation against the current draft and stored records.
+    ///
+    /// Throws `ItemBalanceProjectionReviewError` when the reviewed proposal no longer applies.
+    public static func validateCreateReview(
+        context: ModelContext,
+        review: ItemBalanceProjectionReview,
+        input: ItemFormInput,
+        repeatMonthSelections: Set<RepeatMonthSelection>
+    ) throws {
+        try ItemBalanceProjectionReviewValidator.validateCreateReview(
+            context: context,
+            review: review,
+            input: input,
+            repeatMonthSelections: repeatMonthSelections
+        )
+    }
+
+    /// Validates a reviewed update and returns the reviewed repeat scope to apply.
+    ///
+    /// Throws `ItemBalanceProjectionReviewError` when the reviewed proposal no longer applies.
+    public static func validateUpdateReview(
+        context: ModelContext,
+        review: ItemBalanceProjectionReview,
+        item: Item,
+        input: ItemFormInput
+    ) throws -> ItemMutationScope {
+        try ItemBalanceProjectionReviewValidator.validateUpdateReview(
+            context: context,
+            review: review,
+            item: item,
+            input: input
+        )
+    }
 }

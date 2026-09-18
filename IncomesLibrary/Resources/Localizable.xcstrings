@@ -612,6 +612,142 @@
           }
         }
       }
+    },
+    "This entry changed after the last balance preview. Preview the balance again." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This entry changed after the last balance preview. Preview the balance again."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esta entrada cambió después de la última vista previa del saldo. Vuelve a previsualizar el saldo."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cette saisie a changé depuis le dernier aperçu du solde. Affichez de nouveau l’aperçu du solde."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "残高プレビュー後に入力が変更されました。もう一度残高をプレビューしてください。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "上次预览余额后此条目已更改。请重新预览余额。"
+          }
+        }
+      }
+    },
+    "The last balance preview no longer matches this entry. Preview it again." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The last balance preview no longer matches this entry. Preview it again."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La última vista previa del saldo ya no coincide con esta entrada. Vuelve a previsualizarla."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le dernier aperçu du solde ne correspond plus à cette saisie. Affichez-le de nouveau."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "前回の残高プレビューはこの入力と一致しません。もう一度プレビューしてください。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "上次的余额预览与此条目不再匹配。请重新预览。"
+          }
+        }
+      }
+    },
+    "Your records changed after the last balance preview. Preview the balance again." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your records changed after the last balance preview. Preview the balance again."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tus registros cambiaron después de la última vista previa del saldo. Vuelve a previsualizar el saldo."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vos enregistrements ont changé depuis le dernier aperçu du solde. Affichez de nouveau l’aperçu du solde."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "残高プレビュー後に記録が変更されました。もう一度残高をプレビューしてください。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "上次预览余额后你的记录已更改。请重新预览余额。"
+          }
+        }
+      }
+    },
+    "The reviewed item is no longer available. Nothing was saved." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The reviewed item is no longer available. Nothing was saved."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El elemento revisado ya no está disponible. No se guardó nada."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L’élément vérifié n’est plus disponible. Rien n’a été enregistré."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "確認した項目は利用できなくなりました。保存は行われていません。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已确认的项目不再可用。未保存任何内容。"
+          }
+        }
+      }
     }
   },
   "version" : "1.1"

@@ -41,6 +41,28 @@ public enum ItemCreationOperations {
         )
     }
 
+    /// Creates item(s) for an explicitly reviewed projection after revalidating it.
+    ///
+    /// Validation and creation run without suspension in the calling context.
+    public static func createWithOutcome(
+        context: ModelContext,
+        input: ItemFormInput,
+        repeatMonthSelections: Set<RepeatMonthSelection>,
+        review: ItemBalanceProjectionReview
+    ) throws -> MutationResult<Item> {
+        try ItemBalanceProjectionOperations.validateCreateReview(
+            context: context,
+            review: review,
+            input: input,
+            repeatMonthSelections: repeatMonthSelections
+        )
+        return try createWithOutcome(
+            context: context,
+            input: input,
+            repeatMonthSelections: repeatMonthSelections
+        )
+    }
+
     /// Creates an item with monthly repeat count, and returns mutation metadata.
     public static func createWithOutcome(
         context: ModelContext,

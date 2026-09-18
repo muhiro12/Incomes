@@ -33,6 +33,32 @@ enum ItemBalanceProjectionPlanner {
         input: ItemFormInput,
         repeatMonthSelections: Set<RepeatMonthSelection>
     ) throws -> Comparison {
+        try createReview(
+            context: context,
+            input: input,
+            repeatMonthSelections: repeatMonthSelections
+        ).comparison
+    }
+
+    static func previewUpdateComparison(
+        context: ModelContext,
+        item: Item,
+        input: ItemFormInput,
+        scope: ItemMutationScope
+    ) throws -> Comparison {
+        try updateReview(
+            context: context,
+            item: item,
+            input: input,
+            scope: scope
+        ).comparison
+    }
+
+    static func createReview(
+        context: ModelContext,
+        input: ItemFormInput,
+        repeatMonthSelections: Set<RepeatMonthSelection>
+    ) throws -> ItemBalanceProjectionReview {
         try input.validate()
         let values = ItemStoredValues(formInput: input)
         let plannedValues = creationValues(
@@ -45,25 +71,35 @@ enum ItemBalanceProjectionPlanner {
                 tieBreaker: "projection.create.\(index)"
             )
         }
-        return try comparison(
+        return try review(
             context: context,
-            changedRows: changedRows,
-            replacingItemIDs: [],
-            affectedDates: changedRows.map(\.localDate)
+            request: .init(
+                target: .create(repeatMonthSelections: repeatMonthSelections),
+                draft: .init(storedValues: values),
+                changedRows: changedRows,
+                replacingItemIDs: [],
+                affectedItems: [],
+                affectedDates: changedRows.map(\.localDate)
+            )
         )
     }
 
-    static func previewUpdateComparison(
+    static func updateReview(
         context: ModelContext,
         item: Item,
         input: ItemFormInput,
         scope: ItemMutationScope
-    ) throws -> Comparison {
+    ) throws -> ItemBalanceProjectionReview {
         try input.validate()
         let values = ItemStoredValues(formInput: input)
-        let updates = try plannedUpdates(
+        let affectedItems = try ItemMutationSupport.itemsForMutationScope(
             context: context,
             item: item,
+            scope: scope
+        )
+        let updates = plannedUpdates(
+            item: item,
+            affectedItems: affectedItems,
             values: values,
             scope: scope
         )
@@ -73,142 +109,24 @@ enum ItemBalanceProjectionPlanner {
                 tieBreaker: String(describing: update.itemID)
             )
         }
-        return try comparison(
+        return try review(
             context: context,
-            changedRows: changedRows,
-            replacingItemIDs: Set(updates.map(\.itemID)),
-            affectedDates: updates.map(\.originalDate) + changedRows.map(\.localDate)
+            request: .init(
+                target: .update(
+                    itemID: item.persistentModelID,
+                    scope: scope
+                ),
+                draft: .init(storedValues: values),
+                changedRows: changedRows,
+                replacingItemIDs: Set(updates.map(\.itemID)),
+                affectedItems: affectedItems,
+                affectedDates: updates.map(\.originalDate) + changedRows.map(\.localDate)
+            )
         )
     }
 }
 
 private extension ItemBalanceProjectionPlanner {
-    static func comparison(
-        context: ModelContext,
-        changedRows: [ProjectedRow],
-        replacingItemIDs: Set<PersistentIdentifier>,
-        affectedDates: [Date]
-    ) throws -> Comparison {
-        let existingItems = try context.fetch(
-            .items(.all, order: .forward)
-        )
-        let existingRows = existingItems.map { item in
-            projectedRow(item: item)
-        }
-        let unchangedRows = existingRows.filter { row in
-            guard let itemID = row.itemID else {
-                return true
-            }
-            return !replacingItemIDs.contains(itemID)
-        }
-        let projectedRows = sortedRows(unchangedRows + changedRows)
-        let affectedDateRange = dateRange(from: affectedDates)
-        let projectionDateRange = projectedDateRange(
-            rows: projectedRows,
-            affectedDateRange: affectedDateRange
-        )
-        let current = projection(
-            rows: existingRows,
-            dateRange: projectionDateRange,
-            affectedDateRange: affectedDateRange,
-            changedItemCount: 0
-        )
-        let projected = projection(
-            rows: projectedRows,
-            dateRange: projectionDateRange,
-            affectedDateRange: affectedDateRange,
-            changedItemCount: changedRows.count
-        )
-        return .init(
-            current: current,
-            projected: projected,
-            monthlyBalances: monthlyComparisons(
-                current: current.monthlyBalances,
-                projected: projected.monthlyBalances
-            )
-        )
-    }
-
-    static func projection(
-        rows: [ProjectedRow],
-        dateRange: ClosedRange<Date>?,
-        affectedDateRange: ClosedRange<Date>?,
-        changedItemCount: Int
-    ) -> Projection {
-        let rows = sortedRows(rows)
-        let balances = BalanceCalculator.calculateBalances(
-            startingFrom: .zero,
-            inputs: rows.map { row in
-                .init(netIncome: row.netIncome)
-            }
-        )
-        let balancedRows = zip(rows, balances).map { row, balance in
-            BalancedProjectedRow(
-                row: row,
-                balance: balance
-            )
-        }
-        return projection(
-            balancedRows: balancedRows,
-            dateRange: dateRange,
-            affectedDateRange: affectedDateRange,
-            changedItemCount: changedItemCount
-        )
-    }
-
-    static func projection(
-        balancedRows: [BalancedProjectedRow],
-        dateRange: ClosedRange<Date>?,
-        affectedDateRange: ClosedRange<Date>?,
-        changedItemCount: Int
-    ) -> Projection {
-        let rowsInRange = rows(
-            from: balancedRows,
-            dateRange: dateRange
-        )
-        let startingBalance = startingBalance(
-            from: balancedRows,
-            dateRange: dateRange
-        )
-        let minimumBalance = minimumBalance(
-            startingBalance: startingBalance,
-            rowsInRange: rowsInRange
-        )
-        return .init(
-            dateRange: dateRange,
-            affectedDateRange: affectedDateRange,
-            minimumBalance: minimumBalance,
-            firstNegativeDate: firstNegativeDate(
-                startingBalance: startingBalance,
-                rowsInRange: rowsInRange,
-                dateRange: dateRange
-            ),
-            latestBalance: rowsInRange.last?.balance ?? startingBalance,
-            monthlyBalances: monthlyBalances(
-                from: balancedRows,
-                dateRange: dateRange
-            ),
-            changedItemCount: changedItemCount
-        )
-    }
-
-    static func minimumBalance(
-        startingBalance: Decimal?,
-        rowsInRange: [BalancedProjectedRow]
-    ) -> Decimal? {
-        let minimumRowBalance = rowsInRange.map(\.balance).min()
-        guard let startingBalance else {
-            return minimumRowBalance
-        }
-        guard let minimumRowBalance else {
-            return startingBalance
-        }
-        guard startingBalance < .zero else {
-            return minimumRowBalance
-        }
-        return min(startingBalance, minimumRowBalance)
-    }
-
     static func creationValues(
         values: ItemStoredValues,
         repeatMonthSelections: Set<RepeatMonthSelection>
@@ -238,11 +156,11 @@ private extension ItemBalanceProjectionPlanner {
     }
 
     static func plannedUpdates(
-        context: ModelContext,
         item: Item,
+        affectedItems: [Item],
         values: ItemStoredValues,
         scope: ItemMutationScope
-    ) throws -> [PlannedUpdate] {
+    ) -> [PlannedUpdate] {
         switch scope {
         case .thisItem:
             return [
@@ -254,26 +172,19 @@ private extension ItemBalanceProjectionPlanner {
             ]
         case .futureItems,
              .allItems:
-            return try repeatingUpdates(
-                context: context,
+            return repeatingUpdates(
                 item: item,
-                values: values,
-                scope: scope
+                affectedItems: affectedItems,
+                values: values
             )
         }
     }
 
     static func repeatingUpdates(
-        context: ModelContext,
         item: Item,
-        values: ItemStoredValues,
-        scope: ItemMutationScope
-    ) throws -> [PlannedUpdate] {
-        let affectedItems = try ItemMutationSupport.itemsForMutationScope(
-            context: context,
-            item: item,
-            scope: scope
-        )
+        affectedItems: [Item],
+        values: ItemStoredValues
+    ) -> [PlannedUpdate] {
         let dateShift = Calendar.current.dateComponents(
             [.year, .month, .day],
             from: item.localDate,
@@ -293,18 +204,6 @@ private extension ItemBalanceProjectionPlanner {
                 values: values.replacing(date: newDate)
             )
         }
-    }
-
-    static func projectedRow(item: Item) -> ProjectedRow {
-        .init(
-            itemID: item.persistentModelID,
-            utcDate: item.utcDate,
-            localDate: item.localDate,
-            content: item.content,
-            priority: item.priority,
-            netIncome: item.netIncome,
-            tieBreaker: String(describing: item.persistentModelID)
-        )
     }
 
     static func projectedRow(

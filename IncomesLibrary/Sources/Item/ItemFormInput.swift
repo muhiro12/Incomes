@@ -1,7 +1,7 @@
 import Foundation
 
 /// Normalized date and text inputs for creating or updating an item.
-public struct ItemFormInput {
+public struct ItemFormInput: Equatable {
     /// Validation errors for item form values.
     public enum ValidationError: Error, Equatable {
         /// Content is required.

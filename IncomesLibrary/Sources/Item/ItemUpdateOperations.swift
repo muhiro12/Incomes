@@ -61,6 +61,29 @@ public enum ItemUpdateOperations {
         )
     }
 
+    /// Updates item(s) for an explicitly reviewed projection after revalidating it.
+    ///
+    /// Validation and mutation run without suspension in the calling context.
+    public static func updateWithOutcome(
+        context: ModelContext,
+        item: Item,
+        input: ItemFormInput,
+        review: ItemBalanceProjectionReview
+    ) throws -> MutationOutcome {
+        let scope = try ItemBalanceProjectionOperations.validateUpdateReview(
+            context: context,
+            review: review,
+            item: item,
+            input: input
+        )
+        return try updateWithOutcome(
+            context: context,
+            item: item,
+            input: input,
+            scope: scope
+        )
+    }
+
     /// Updates a set of repeating items specified by `descriptor` using the delta
     /// between the original item's date and the new value date, then recalculates balances.
     public static func updateRepeatingItems(
