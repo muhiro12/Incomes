@@ -66,20 +66,48 @@ extension ItemFormView {
     }
 
     func presentBalanceProjection() {
+        focusedField = nil
         formPresentation.sheetRoute = .balanceProjection
     }
 
+    func applyBalanceProjectionReview(
+        _ review: ItemBalanceProjectionReview
+    ) {
+        formPresentation.applyBalanceProjectionReview(review)
+    }
+
+    func requiresNewBalanceProjection() -> Bool {
+        guard formPresentation.requiresBalanceProjectionReview else {
+            return false
+        }
+        presentBalanceProjection()
+        return true
+    }
+
     func requestCreate() async {
+        guard !requiresNewBalanceProjection() else {
+            return
+        }
         await performCreate()
     }
 
     func requestSave() async {
+        guard !requiresNewBalanceProjection() else {
+            return
+        }
         guard let item else {
             assertionFailure()
             handle(
                 .presentError(
                     ErrorMessageOperations.message(from: ItemError.itemNotFound)
                 )
+            )
+            return
+        }
+        if let review = formPresentation.balanceProjectionReview {
+            await performSave(
+                scope: review.scope ?? .thisItem,
+                review: review
             )
             return
         }
@@ -103,10 +131,16 @@ extension ItemFormView {
     }
 
     func requestSave(scope: ItemMutationScope) async {
-        await performSave(scope: scope)
+        await performSave(
+            scope: scope,
+            review: nil
+        )
     }
 
-    func performSave(scope: ItemMutationScope) async {
+    func performSave(
+        scope: ItemMutationScope,
+        review: ItemBalanceProjectionReview?
+    ) async {
         guard let item else {
             assertionFailure()
             handle(
@@ -116,6 +150,12 @@ extension ItemFormView {
             )
             return
         }
+        guard formPresentation.beginSubmission() else {
+            return
+        }
+        defer {
+            formPresentation.endSubmission()
+        }
         let action: ItemFormMutationPresentationAction
 
         do {
@@ -124,22 +164,26 @@ extension ItemFormView {
                 context: context,
                 item: item,
                 formInputData: formModel.formInputData,
-                dependencies: mutationDependencies
+                dependencies: mutationDependencies,
+                review: review
             )
             action = ItemFormMutationPresentationAction.dismissOnSuccessAction(
                 for: .success(())
             )
         } catch {
-            assertionFailure(error.localizedDescription)
-            action = ItemFormMutationPresentationAction.dismissOnSuccessAction(
-                for: .failure(error)
-            )
+            action = mutationFailureAction(for: error)
         }
 
         handle(action)
     }
 
     func performCreate() async {
+        guard formPresentation.beginSubmission() else {
+            return
+        }
+        defer {
+            formPresentation.endSubmission()
+        }
         let action: ItemFormMutationPresentationAction
 
         do {
@@ -149,7 +193,8 @@ extension ItemFormView {
                     mode: .create,
                     item: item,
                     formInputData: formModel.formInputData,
-                    repeatMonthSelections: formModel.effectiveRepeatMonthSelections
+                    repeatMonthSelections: formModel.effectiveRepeatMonthSelections,
+                    review: formPresentation.balanceProjectionReview
                 ),
                 dependencies: mutationDependencies
             )
@@ -158,16 +203,31 @@ extension ItemFormView {
                 for: .success(())
             )
         } catch {
-            assertionFailure(error.localizedDescription)
-            action = ItemFormMutationPresentationAction.dismissOnSuccessAction(
-                for: .failure(error)
-            )
+            action = mutationFailureAction(for: error)
         }
 
         handle(action)
     }
 
+    /// Maps a failed submission to a presentation action, keeping the draft in place.
+    func mutationFailureAction(
+        for error: any Error
+    ) -> ItemFormMutationPresentationAction {
+        guard let reviewError = error as? ItemBalanceProjectionReviewError else {
+            return .presentError(
+                ErrorMessageOperations.message(from: error)
+            )
+        }
+        formPresentation.clearBalanceProjectionReview()
+        return .presentError(
+            ErrorMessageOperations.message(from: reviewError)
+        )
+    }
+
     func cancel() {
+        guard !formPresentation.isSubmitting else {
+            return
+        }
         if formModel.content == "Enable Debug" {
             formModel.content = ""
             formPresentation.presentDebugDialog()

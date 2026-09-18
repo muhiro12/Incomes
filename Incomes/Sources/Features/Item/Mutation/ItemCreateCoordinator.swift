@@ -36,7 +36,8 @@ enum ItemCreateCoordinator {
         context: ModelContext,
         input: ItemFormInput,
         repeatMonthSelections: Set<RepeatMonthSelection>,
-        dependencies: ItemMutationWorkflowDependencies
+        dependencies: ItemMutationWorkflowDependencies,
+        review: ItemBalanceProjectionReview? = nil
     ) async throws -> Item {
         try await run(
             context: context,
@@ -44,14 +45,16 @@ enum ItemCreateCoordinator {
             metadata: IncomesLogging.metadata(
                 ("mode", "repeat_months"),
                 ("repeat_month_count", IncomesLogging.count(repeatMonthSelections.count)),
+                ("reviewed", review != nil ? "true" : "false"),
                 ("category_present", IncomesLogging.presence(input.category)),
                 ("content_present", IncomesLogging.presence(input.content))
             )
         ) {
-            let result = try ItemCreationOperations.createWithOutcome(
+            let result = try createResult(
                 context: context,
                 input: input,
-                repeatMonthSelections: repeatMonthSelections
+                repeatMonthSelections: repeatMonthSelections,
+                review: review
             )
             return .init(
                 value: result.value.persistentModelID,
@@ -99,6 +102,29 @@ enum ItemCreateCoordinator {
 }
 
 private extension ItemCreateCoordinator {
+    /// Revalidates a reviewed projection and creates the items without suspending in between.
+    @MainActor
+    static func createResult(
+        context: ModelContext,
+        input: ItemFormInput,
+        repeatMonthSelections: Set<RepeatMonthSelection>,
+        review: ItemBalanceProjectionReview?
+    ) throws -> MutationResult<Item> {
+        guard let review else {
+            return try ItemCreationOperations.createWithOutcome(
+                context: context,
+                input: input,
+                repeatMonthSelections: repeatMonthSelections
+            )
+        }
+        return try ItemCreationOperations.createWithOutcome(
+            context: context,
+            input: input,
+            repeatMonthSelections: repeatMonthSelections,
+            review: review
+        )
+    }
+
     @MainActor
     static func runCreateWorkflow(
         dependencies: ItemMutationWorkflowDependencies,

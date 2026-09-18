@@ -2,6 +2,7 @@ import SwiftUI
 
 struct ItemFormChangeHandlingModifier: ViewModifier {
     let model: ItemFormModel
+    let presentation: ItemFormPresentationModel
     let mode: ItemFormView.Mode
     let tipController: IncomesTipController
 
@@ -15,6 +16,9 @@ struct ItemFormChangeHandlingModifier: ViewModifier {
                 if isRepeatEnabled, mode == .create {
                     tipController.donateDidEnableRepeat()
                 }
+            }
+            .onChange(of: model.draftChangeKey) { _, _ in
+                presentation.clearBalanceProjectionReview()
             }
     }
 }

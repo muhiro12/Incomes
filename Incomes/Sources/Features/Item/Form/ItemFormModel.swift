@@ -53,6 +53,13 @@ extension ItemFormModel {
         formInputData.isValid
     }
 
+    var draftChangeKey: ItemFormDraftChangeKey {
+        .init(
+            input: formInputData,
+            repeatMonthSelections: effectiveRepeatMonthSelections
+        )
+    }
+
     var baseSelection: RepeatMonthSelection {
         RepeatMonthSelectionOperations.baseSelection(baseDate: date)
     }

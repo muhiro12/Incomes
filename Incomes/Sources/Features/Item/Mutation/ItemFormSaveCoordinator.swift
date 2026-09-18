@@ -14,6 +14,7 @@ enum ItemFormSaveCoordinator {
         let item: Item?
         let formInputData: ItemFormInput
         let repeatMonthSelections: Set<RepeatMonthSelection>
+        let review: ItemBalanceProjectionReview?
     }
 
     @MainActor
@@ -28,41 +29,16 @@ enum ItemFormSaveCoordinator {
                 context: context,
                 input: request.formInputData,
                 repeatMonthSelections: request.repeatMonthSelections,
-                dependencies: dependencies
+                dependencies: dependencies,
+                review: request.review
             )
             return .didSave
         case .edit:
-            guard let item = request.item else {
-                dependencies.logger.error(
-                    "item_save.failed",
-                    metadata: IncomesLogging.metadata(
-                        ("mode", "edit"),
-                        ("failure_reason", "missing_item")
-                    )
-                )
-                throw ItemError.itemNotFound
-            }
-            if try ItemUpdateOperations.requiresScopeSelection(
+            return try await saveEdit(
                 context: context,
-                item: item
-            ) {
-                dependencies.logger.notice(
-                    "item_save.scope_selection_required",
-                    metadata: IncomesLogging.metadata(
-                        ("mode", "edit"),
-                        ("item_id_present", "true")
-                    )
-                )
-                return .requiresScopeSelection
-            }
-            try await save(
-                scope: .thisItem,
-                context: context,
-                item: item,
-                formInputData: request.formInputData,
+                request: request,
                 dependencies: dependencies
             )
-            return .didSave
         }
     }
 
@@ -72,12 +48,14 @@ enum ItemFormSaveCoordinator {
         context: ModelContext,
         item: Item,
         formInputData: ItemFormInput,
-        dependencies: ItemMutationWorkflowDependencies
+        dependencies: ItemMutationWorkflowDependencies,
+        review: ItemBalanceProjectionReview? = nil
     ) async throws {
         let metadata = IncomesLogging.metadata(
             ("mode", "edit"),
             ("scope", scope.logValue),
             ("item_id_present", "true"),
+            ("reviewed", review != nil ? "true" : "false"),
             ("category_present", IncomesLogging.presence(formInputData.category)),
             ("content_present", IncomesLogging.presence(formInputData.content))
         )
@@ -90,11 +68,12 @@ enum ItemFormSaveCoordinator {
             _ = try await MHMutationWorkflow.runThrowing(
                 name: mutationName(for: scope),
                 operation: {
-                    try ItemUpdateOperations.updateWithOutcome(
+                    try updateOutcome(
                         context: context,
                         item: item,
-                        input: formInputData,
-                        scope: scope
+                        formInputData: formInputData,
+                        scope: scope,
+                        review: review
                     )
                 },
                 adapter: ItemMutationAdapterFactory.makeForSave(
@@ -111,10 +90,7 @@ enum ItemFormSaveCoordinator {
                 ),
                 onEvent: MHMutationWorkflowLogger(logger: dependencies.logger).onEvent()
             )
-            dependencies.logger.notice(
-                "item_save.completed",
-                metadata: metadata
-            )
+            dependencies.logger.notice("item_save.completed", metadata: metadata)
         } catch {
             dependencies.logger.error(
                 "item_save.failed",
@@ -124,6 +100,72 @@ enum ItemFormSaveCoordinator {
             )
             throw error
         }
+    }
+
+    @MainActor
+    private static func saveEdit(
+        context: ModelContext,
+        request: Request,
+        dependencies: ItemMutationWorkflowDependencies
+    ) async throws -> ItemFormSaveOutcome {
+        guard let item = request.item else {
+            dependencies.logger.error(
+                "item_save.failed",
+                metadata: IncomesLogging.metadata(
+                    ("mode", "edit"),
+                    ("failure_reason", "missing_item")
+                )
+            )
+            throw ItemError.itemNotFound
+        }
+        if request.review == nil,
+           try ItemUpdateOperations.requiresScopeSelection(
+            context: context,
+            item: item
+           ) {
+            dependencies.logger.notice(
+                "item_save.scope_selection_required",
+                metadata: IncomesLogging.metadata(
+                    ("mode", "edit"),
+                    ("item_id_present", "true")
+                )
+            )
+            return .requiresScopeSelection
+        }
+        try await save(
+            scope: request.review?.scope ?? .thisItem,
+            context: context,
+            item: item,
+            formInputData: request.formInputData,
+            dependencies: dependencies,
+            review: request.review
+        )
+        return .didSave
+    }
+
+    /// Revalidates a reviewed projection and applies the update without suspending in between.
+    @MainActor
+    private static func updateOutcome(
+        context: ModelContext,
+        item: Item,
+        formInputData: ItemFormInput,
+        scope: ItemMutationScope,
+        review: ItemBalanceProjectionReview?
+    ) throws -> MutationOutcome {
+        guard let review else {
+            return try ItemUpdateOperations.updateWithOutcome(
+                context: context,
+                item: item,
+                input: formInputData,
+                scope: scope
+            )
+        }
+        return try ItemUpdateOperations.updateWithOutcome(
+            context: context,
+            item: item,
+            input: formInputData,
+            review: review
+        )
     }
 
     private static func mutationName(

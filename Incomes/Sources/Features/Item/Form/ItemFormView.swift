@@ -78,15 +78,25 @@ extension ItemFormView {
                     Label("Preview Balance", systemImage: "chart.line.uptrend.xyaxis")
                 }
                 .disabled(!model.isValid)
+                if let review = presentation.balanceProjectionReview {
+                    ItemFormReviewedProjectionSummary(review: review)
+                }
+            } footer: {
+                if presentation.requiresBalanceProjectionReview {
+                    Text("Preview the balance again before saving.")
+                } else if presentation.balanceProjectionReview != nil {
+                    Text("Saving applies this reviewed change. Editing this entry needs a new preview.")
+                }
             }
         }
+        .interactiveDismissDisabled(presentation.isSubmitting)
         .scrollDismissesKeyboard(.interactively)
         .contentMargins(.bottom, designMetrics.spacing.inline, for: .scrollContent)
         .navigationTitle(!model.content.isEmpty ? Text(model.content) : Text("Create"))
         .toolbar {
             ItemFormToolbarContent(
                 mode: mode,
-                isValid: model.isValid,
+                isValid: model.isValid && !presentation.isSubmitting,
                 primaryActionAccessibilityHint: primaryActionAccessibilityHint,
                 focusedField: focusedField,
                 content: $model.content,
@@ -152,6 +162,7 @@ extension ItemFormView {
         .modifier(
             ItemFormChangeHandlingModifier(
                 model: self.model,
+                presentation: self.presentation,
                 mode: mode,
                 tipController: tipController
             )
@@ -196,12 +207,15 @@ extension ItemFormView {
                         mode: mode,
                         item: item,
                         input: model.formInputData,
-                        repeatMonthSelections: model.effectiveRepeatMonthSelections
+                        repeatMonthSelections: model.effectiveRepeatMonthSelections,
+                        reviewedScope: presentation.reviewedScope,
+                        onReview: applyBalanceProjectionReview
                     )
                 }
                 .incomesSheetPresentation()
             }
         }
+        .disabled(presentation.isSubmitting)
     }
 }
 

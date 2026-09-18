@@ -1,16 +1,9 @@
-import Charts
 import SwiftData
 import SwiftUI
 
 struct ItemFormBalanceProjectionSheet: View {
     private enum Metrics {
-        static let chartHeight: CGFloat = 220
-        static let currentLineWidth: CGFloat = 2
-        static let projectedLineWidth: CGFloat = 3
         static let monthlyValueSpacing: CGFloat = 2
-        static let zeroRuleDashLength: CGFloat = 4
-        static let zeroRuleLineWidth: CGFloat = 1
-        static let zeroRuleOpacity = 0.35
     }
 
     @Environment(\.dismiss)
@@ -19,30 +12,43 @@ struct ItemFormBalanceProjectionSheet: View {
     private var context
     @Environment(\.locale)
     private var locale
+    @Environment(\.dynamicTypeSize)
+    private var dynamicTypeSize
 
-    @State private var comparison: ItemBalanceProjectionOperations.Comparison?
+    @State private var review: ItemBalanceProjectionReview?
     @State private var errorMessage: String?
     @State private var isLoading = false
     @State private var canChooseScope = false
-    @State private var selectedScope: ItemMutationScope = .thisItem
+    @State private var selectedScope: ItemMutationScope
 
     let mode: ItemFormView.Mode
     let item: Item?
     let input: ItemFormInput
     let repeatMonthSelections: Set<RepeatMonthSelection>
+    let onReview: (ItemBalanceProjectionReview) -> Void
 
+    init(
+        mode: ItemFormView.Mode,
+        item: Item?,
+        input: ItemFormInput,
+        repeatMonthSelections: Set<RepeatMonthSelection>,
+        reviewedScope: ItemMutationScope?,
+        onReview: @escaping (ItemBalanceProjectionReview) -> Void
+    ) {
+        self.mode = mode
+        self.item = item
+        self.input = input
+        self.repeatMonthSelections = repeatMonthSelections
+        self.onReview = onReview
+        _selectedScope = State(initialValue: reviewedScope ?? .thisItem)
+    }
+}
+
+extension ItemFormBalanceProjectionSheet {
     var body: some View {
         List {
             if canChooseScope {
-                Section {
-                    Picker("Scope", selection: $selectedScope) {
-                        ForEach(ItemMutationScope.balanceProjectionScopes, id: \.self) { scope in
-                            Text(scope.balanceProjectionTitle)
-                                .tag(scope)
-                        }
-                    }
-                    .pickerStyle(.segmented)
-                }
+                scopeSection
             }
 
             if isLoading {
@@ -51,10 +57,11 @@ struct ItemFormBalanceProjectionSheet: View {
                 }
             } else if let errorMessage {
                 projectionUnavailableContent(errorMessage)
-            } else if let comparison {
-                summarySection(comparison)
-                chartSection(comparison)
-                monthlyBalanceSection(comparison)
+            } else if let review {
+                summarySection(review.comparison)
+                affectedRecordsSection(review)
+                ItemFormBalanceProjectionChartSection(comparison: review.comparison)
+                monthlyBalanceSection(review.comparison)
             } else {
                 ContentUnavailableView(
                     "No Projection",
@@ -64,10 +71,15 @@ struct ItemFormBalanceProjectionSheet: View {
         }
         .navigationTitle("Balance Projection")
         .toolbar {
-            ToolbarItem(placement: .confirmationAction) {
-                Button("Done") {
+            ToolbarItem(placement: .cancellationAction) {
+                Button("Cancel") {
                     dismiss()
                 }
+            }
+            ToolbarItem(placement: .confirmationAction) {
+                Button("Done", action: confirmReview)
+                    .disabled(review == nil)
+                    .accessibilityHint(Text("Keeps this projection for the next save."))
             }
         }
         .task {
@@ -80,6 +92,32 @@ struct ItemFormBalanceProjectionSheet: View {
 }
 
 private extension ItemFormBalanceProjectionSheet {
+    var scopeSection: some View {
+        Section {
+            if dynamicTypeSize.isAccessibilitySize {
+                scopePicker(usesCompactTitles: false)
+            } else {
+                scopePicker(usesCompactTitles: true)
+                    .pickerStyle(.segmented)
+            }
+        }
+    }
+
+    func scopePicker(
+        usesCompactTitles: Bool
+    ) -> some View {
+        Picker("Scope", selection: $selectedScope) {
+            ForEach(ItemMutationScope.balanceProjectionScopes, id: \.self) { scope in
+                Text(
+                    usesCompactTitles
+                        ? scope.balanceProjectionTitle
+                        : scope.balanceProjectionScopeTitle
+                )
+                .tag(scope)
+            }
+        }
+    }
+
     @ViewBuilder
     func projectionUnavailableContent(
         _ message: String
@@ -96,106 +134,92 @@ private extension ItemFormBalanceProjectionSheet {
         _ comparison: ItemBalanceProjectionOperations.Comparison
     ) -> some View {
         Section {
+            LabeledContent("Balance Before Change") {
+                Text(comparison.current.latestBalance?.asCurrency ?? "-")
+                    .foregroundStyle(
+                        ItemFormBalanceProjectionFormatting.balanceStyle(
+                            for: comparison.current.latestBalance
+                        )
+                    )
+            }
             LabeledContent("Projected Balance") {
                 Text(comparison.projected.latestBalance?.asCurrency ?? "-")
-                    .foregroundStyle(balanceStyle(for: comparison.projected.latestBalance))
+                    .foregroundStyle(
+                        ItemFormBalanceProjectionFormatting.balanceStyle(
+                            for: comparison.projected.latestBalance
+                        )
+                    )
             }
             if let difference = comparison.latestBalanceDifference {
                 LabeledContent("Change") {
-                    Text(difference.asSignedCurrency)
-                        .foregroundStyle(changeStyle(for: difference))
+                    Text(verbatim: difference.asSignedCurrency)
+                        .foregroundStyle(
+                            ItemFormBalanceProjectionFormatting.changeStyle(for: difference)
+                        )
                 }
             }
-            LabeledContent("Lowest Balance") {
-                Text(comparison.projected.minimumBalance?.asCurrency ?? "-")
-                    .foregroundStyle(balanceStyle(for: comparison.projected.minimumBalance))
-            }
-            if let firstNegativeDate = comparison.projected.firstNegativeDate {
-                LabeledContent("First Negative") {
-                    Text(Formatting.shortDayTitle(from: firstNegativeDate))
-                        .foregroundStyle(.red)
-                }
+            minimumBalanceContent(comparison)
+        }
+    }
+
+    @ViewBuilder
+    func minimumBalanceContent(
+        _ comparison: ItemBalanceProjectionOperations.Comparison
+    ) -> some View {
+        LabeledContent("Lowest Balance") {
+            Text(comparison.projected.minimumBalance?.asCurrency ?? "-")
+                .foregroundStyle(
+                    ItemFormBalanceProjectionFormatting.balanceStyle(
+                        for: comparison.projected.minimumBalance
+                    )
+                )
+        }
+        if let firstNegativeDate = comparison.projected.firstNegativeDate {
+            LabeledContent("First Negative") {
+                Text(ItemFormBalanceProjectionFormatting.dateText(firstNegativeDate, locale: locale))
+                    .foregroundStyle(.red)
             }
         }
     }
 
     @ViewBuilder
-    func chartSection(
-        _ comparison: ItemBalanceProjectionOperations.Comparison
+    func affectedRecordsSection(
+        _ review: ItemBalanceProjectionReview
     ) -> some View {
         Section {
-            Chart {
-                zeroRuleMark()
-                currentBalanceMarks(comparison)
-                projectedBalanceMarks(comparison)
+            LabeledContent("Affected Items") {
+                Text(review.changedItemCount, format: .number)
             }
-            .frame(height: Metrics.chartHeight)
-            .accessibilityElement(children: .ignore)
-            .accessibilityLabel(Text("Balance projection chart"))
-            .accessibilityValue(chartAccessibilityValue(comparison))
-
-            HStack {
-                Label("Current", systemImage: "minus")
-                    .foregroundStyle(.secondary)
-                Spacer()
-                Label("Projected", systemImage: "minus")
-                    .foregroundStyle(.tint)
+            if let affectedDateRange = review.affectedDateRange {
+                LabeledContent("Affected Dates") {
+                    Text(
+                        verbatim: ItemFormBalanceProjectionFormatting.dateRangeText(
+                            affectedDateRange,
+                            locale: locale
+                        )
+                    )
+                }
             }
-            .font(.caption)
+            if let projectedDateRange = review.projectedDateRange {
+                LabeledContent("Projected Through") {
+                    Text(ItemFormBalanceProjectionFormatting.dateText(projectedDateRange.upperBound, locale: locale))
+                }
+            }
+        } footer: {
+            horizonFooter(review)
         }
     }
 
-    @ChartContentBuilder
-    func zeroRuleMark() -> some ChartContent {
-        RuleMark(y: .value("Zero", Double.zero))
-            .foregroundStyle(.secondary.opacity(Metrics.zeroRuleOpacity))
-            .lineStyle(
-                .init(
-                    lineWidth: Metrics.zeroRuleLineWidth,
-                    dash: [Metrics.zeroRuleDashLength]
-                )
-            )
-    }
-
-    @ChartContentBuilder
-    func currentBalanceMarks(
-        _ comparison: ItemBalanceProjectionOperations.Comparison
-    ) -> some ChartContent {
-        ForEach(comparison.monthlyBalances) { month in
-            LineMark(
-                x: .value("Month", month.monthDate),
-                y: .value("Current", month.currentBalance)
-            )
-            .foregroundStyle(.secondary)
-            .interpolationMethod(.linear)
-            .lineStyle(.init(lineWidth: Metrics.currentLineWidth))
-
-            PointMark(
-                x: .value("Month", month.monthDate),
-                y: .value("Current", month.currentBalance)
-            )
-            .foregroundStyle(.secondary)
-        }
-    }
-
-    @ChartContentBuilder
-    func projectedBalanceMarks(
-        _ comparison: ItemBalanceProjectionOperations.Comparison
-    ) -> some ChartContent {
-        ForEach(comparison.monthlyBalances) { month in
-            LineMark(
-                x: .value("Month", month.monthDate),
-                y: .value("Projected", month.projectedBalance)
-            )
-            .foregroundStyle(.tint)
-            .interpolationMethod(.linear)
-            .lineStyle(.init(lineWidth: Metrics.projectedLineWidth))
-
-            PointMark(
-                x: .value("Month", month.monthDate),
-                y: .value("Projected", month.projectedBalance)
-            )
-            .foregroundStyle(.tint)
+    @ViewBuilder
+    func horizonFooter(
+        _ review: ItemBalanceProjectionReview
+    ) -> some View {
+        if let horizon = review.projectedDateRange?.upperBound {
+            let horizonText = ItemFormBalanceProjectionFormatting.dateText(horizon, locale: locale)
+            Text("""
+                 Based on saved items and this proposed change, through \(horizonText). \
+                 Unrecorded payments are not included.
+                 """)
         }
     }
 
@@ -208,14 +232,29 @@ private extension ItemFormBalanceProjectionSheet {
                 LabeledContent(Formatting.monthTitle(from: month.monthDate)) {
                     VStack(alignment: .trailing, spacing: Metrics.monthlyValueSpacing) {
                         Text(month.projectedBalance.asCurrency)
-                            .foregroundStyle(balanceStyle(for: month.projectedBalance))
-                        Text(month.difference.asSignedCurrency)
+                            .foregroundStyle(
+                                ItemFormBalanceProjectionFormatting.balanceStyle(
+                                    for: month.projectedBalance
+                                )
+                            )
+                        Text(verbatim: month.difference.asSignedCurrency)
                             .font(.caption)
-                            .foregroundStyle(changeStyle(for: month.difference))
+                            .foregroundStyle(
+                                ItemFormBalanceProjectionFormatting.changeStyle(
+                                    for: month.difference
+                                )
+                            )
                     }
                 }
             }
         }
+    }
+
+    func confirmReview() {
+        if let review {
+            onReview(review)
+        }
+        dismiss()
     }
 
     func loadInitialProjection() {
@@ -234,10 +273,10 @@ private extension ItemFormBalanceProjectionSheet {
         }
 
         do {
-            comparison = try balanceProjectionComparison()
+            review = try balanceProjectionReview()
             errorMessage = nil
         } catch {
-            comparison = nil
+            review = nil
             errorMessage = ErrorMessageOperations.message(from: error)
         }
     }
@@ -253,10 +292,10 @@ private extension ItemFormBalanceProjectionSheet {
         )
     }
 
-    func balanceProjectionComparison() throws -> ItemBalanceProjectionOperations.Comparison {
+    func balanceProjectionReview() throws -> ItemBalanceProjectionReview {
         switch mode {
         case .create:
-            return try ItemBalanceProjectionOperations.previewCreateComparison(
+            return try ItemBalanceProjectionOperations.reviewCreate(
                 context: context,
                 input: input,
                 repeatMonthSelections: repeatMonthSelections
@@ -265,7 +304,7 @@ private extension ItemFormBalanceProjectionSheet {
             guard let item else {
                 throw ItemError.itemNotFound
             }
-            return try ItemBalanceProjectionOperations.previewUpdateComparison(
+            return try ItemBalanceProjectionOperations.reviewUpdate(
                 context: context,
                 item: item,
                 input: input,
@@ -273,93 +312,25 @@ private extension ItemFormBalanceProjectionSheet {
             )
         }
     }
-
-    func balanceStyle(
-        for balance: Decimal?
-    ) -> Color {
-        guard let balance,
-              balance < .zero else {
-            return .primary
-        }
-        return .red
-    }
-
-    func changeStyle(
-        for difference: Decimal
-    ) -> Color {
-        if difference < .zero {
-            return .red
-        }
-        if difference > .zero {
-            return .green
-        }
-        return .secondary
-    }
-
-    func chartAccessibilityValue(
-        _ comparison: ItemBalanceProjectionOperations.Comparison
-    ) -> Text {
-        Text(
-            verbatim: chartAccessibilityValueParts(comparison)
-                .formatted(.list(type: .and).locale(locale))
-        )
-    }
-
-    func chartAccessibilityValueParts(
-        _ comparison: ItemBalanceProjectionOperations.Comparison
-    ) -> [String] {
-        let projectedBalance = comparison.projected.latestBalance?
-            .currencyText(locale: locale) ?? "-"
-        let difference = comparison.latestBalanceDifference?
-            .signedCurrencyText(locale: locale) ?? "-"
-        let lowestBalance = comparison.projected.minimumBalance?
-            .currencyText(locale: locale) ?? "-"
-
-        return [
-            String(
-                localized: "Projected balance: \(projectedBalance)",
-                locale: locale
-            ),
-            String(
-                localized: "Change: \(difference)",
-                locale: locale
-            ),
-            String(
-                localized: "Lowest balance: \(lowestBalance)",
-                locale: locale
-            )
-        ]
-    }
 }
 
-private extension ItemMutationScope {
-    static let balanceProjectionScopes: [ItemMutationScope] = [
-        .thisItem,
-        .futureItems,
-        .allItems
-    ]
-
-    var balanceProjectionTitle: LocalizedStringKey {
-        switch self {
-        case .thisItem:
-            "This"
-        case .futureItems:
-            "Future"
-        case .allItems:
-            "All"
+#Preview("Create Review", traits: .modifier(IncomesSampleData())) {
+    NavigationStack {
+        ItemFormBalanceProjectionSheet(
+            mode: .create,
+            item: nil,
+            input: .init(
+                date: .now,
+                content: "Rent",
+                incomeText: "0",
+                outgoText: "85000",
+                category: "Housing",
+                priorityText: "0"
+            ),
+            repeatMonthSelections: [],
+            reviewedScope: nil
+        ) { _ in
+            // Previewing never applies the proposed mutation.
         }
-    }
-}
-
-private extension Decimal {
-    var asSignedCurrency: String {
-        signedCurrencyText()
-    }
-
-    func signedCurrencyText(locale: Locale = .current) -> String {
-        if self > .zero {
-            return "+\(currencyText(locale: locale))"
-        }
-        return currencyText(locale: locale)
     }
 }
