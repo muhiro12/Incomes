@@ -23,7 +23,7 @@ in-memory with CloudKit disabled.
 
 | Entity | Stored field | Default / relationship |
 | --- | --- | --- |
-| Item | utcDate | Reference-date zero; originalName remains date |
+| Item | date | Reference-date zero; exposed as utcDate / localDate |
 | Item | content | Empty string |
 | Item | income, outgo, balance | Decimal zero |
 | Item | priority | Integer zero |
@@ -53,26 +53,21 @@ were portable values, or use them as cross-device business identifiers.
 ## Historical schemas
 
 Schema versions describe storage and are independent of marketing versions.
-The repository's release tags contain three historical SwiftData shapes.
-The current source model adds a rename with explicit original-name metadata:
+The repository's release tags contain these three SwiftData shapes:
 
 | Schema | Release tags | Difference |
 | --- | --- | --- |
 | V0 (0.0.0) | 2.0 through 2.4.2 | Also contains legacy group and startOfYear |
 | V1 (1.0.0) | 2.5 through 5.2 | Removes the two legacy fields |
-| V2 (2.0.0) | 5.3 through 5.12 | Adds priority with default zero |
-| V3 (3.0.0) | Current 6.x | Renames date to utcDate with originalName: date |
+| V2 (2.0.0) | 5.3 through 5.12 and current 6.x | Adds priority with default zero |
 
-V0 to V1, V1 to V2, and V2 to V3 use lightweight stages. The V0 field removal
-reflects the change already shipped in 2.5; retained tag relationships carry category
+V0 to V1 and V1 to V2 use lightweight stages. The V0 field removal reflects
+the change already shipped in 2.5; retained tag relationships carry category
 membership. This does not add a recovery path for old records whose category
 exists only in the removed `group` field. Such legacy data needs a separately
 verified transformation before claiming full archival recovery.
 
-The current `Item` and `Tag` names alias models nested in `IncomesSchemaV3`.
-The current date attribute uses `@Attribute(originalName: "date")`. Queries
-and sort descriptors use the persisted `utcDate` property directly; `localDate`
-remains a computed calendar conversion. Historical schemas retain `date`.
+The current `Item` and `Tag` names alias models nested in `IncomesSchemaV2`.
 Historical schemas refer to their own model types, never to those current
 aliases. Preserve stored declarations, defaults, names, and relationship
 metadata in every shipped schema. Methods and computed properties may evolve
@@ -148,3 +143,23 @@ outside the reconstructed-fixture coverage.
 The two sample sources were inspected from the external sample cache; their
 Apple pages were checked on 2026-09-19. No sample was downloaded, replaced,
 vended into this repository, or deleted during this audit.
+
+## Preserve the deployed date field
+
+The stored Item attribute remains `date`, which maps to CloudKit's `CD_date`
+under Apple's [record mapping](https://developer.apple.com/documentation/coredata/reading-cloudkit-records-for-core-data).
+The library exposes the computed `utcDate` and `localDate` properties to app
+clients; database predicates and sort descriptors use the internal stored
+attribute.
+
+On iOS 27.0, a simulator export with `@Attribute(originalName: "date")` on a
+stored `utcDate` property succeeded but produced `CD_utcDate` in the exported
+record. The rename metadata preserved local migration values, but did not keep
+the deployed CloudKit field identity. That experimental schema was not shipped
+and is not part of the release migration plan. Do not repeat this rename based
+only on successful local migration tests or successful CloudKit exports.
+
+The schema contract test guards the persisted attribute name. Before changing a
+synced field, verify its exported record representation, a fresh import, and
+compatibility with supported older clients. Never deploy a development schema
+change merely because an export succeeded.

@@ -9,11 +9,11 @@ import Foundation
 import SwiftData
 
 /// Current tag model used by app and library clients.
-public typealias Tag = IncomesSchemaV3.Tag
+public typealias Tag = IncomesSchemaV2.Tag
 
 // @Model requires explicit public access on each model declaration.
 // swiftlint:disable:next extension_access_modifier
-extension IncomesSchemaV3 {
+extension IncomesSchemaV2 {
     /// A classification tag that groups related items (e.g., year, month, category).
     @Model
     public final class Tag {

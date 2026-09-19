@@ -21,7 +21,7 @@ struct SchemaMigrationTests {
         let repeatID = UUID()
         let identifier = try seedUnversionedStore(at: url, version: version, repeatID: repeatID)
 
-        if version <= prioritySchemaVersion {
+        if version < prioritySchemaVersion {
             #expect(throws: (any Error).self) {
                 try ModelContainerFactory.readOnly(at: url)
             }
@@ -31,6 +31,15 @@ struct SchemaMigrationTests {
         try verifyReadOnlyStore(at: url)
         // Release the container and reopen again to verify durable, repeatable startup.
         try verifyStore(at: url, version: version, repeatID: repeatID, identifier: identifier)
+    }
+
+    @Test
+    func itemPreservesDeployedCloudKitDateAttribute() throws {
+        let schema = Schema(versionedSchema: IncomesSchemaV2.self)
+        let item = try #require(schema.entities.first { $0.name == "Item" })
+        // CloudKit exports the current attribute name, even with originalName metadata.
+        #expect(item.attributesByName["date"] != nil)
+        #expect(item.attributesByName["utcDate"] == nil)
     }
 
     @Test
