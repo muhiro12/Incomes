@@ -41,7 +41,7 @@ struct DatabaseMigratorTests {
     }
 
     @Test
-    func migrateSQLiteFilesIfNeeded_overwrites_current_files_and_removes_stale_sidecars() throws {
+    func migrateSQLiteFilesIfNeeded_preserves_both_stores_when_locations_conflict() throws {
         let fileManager: FileManager = .default
         let sandbox = try makeSandbox(fileManager: fileManager)
         let legacyData = Data("legacy".utf8)
@@ -57,18 +57,20 @@ struct DatabaseMigratorTests {
         #expect(fileManager.createFile(atPath: sandbox.currentWalURL.path, contents: staleData))
         #expect(fileManager.createFile(atPath: sandbox.currentShmURL.path, contents: staleData))
 
-        try DatabaseMigrator.migrateSQLiteFilesIfNeeded(
-            fileManager: fileManager,
-            legacyURL: sandbox.legacyURL,
-            currentURL: sandbox.currentURL,
-            validateMigration: noOpValidation
-        )
+        #expect(throws: DatabaseMigrator.RelocationError.conflictingStores) {
+            try DatabaseMigrator.migrateSQLiteFilesIfNeeded(
+                fileManager: fileManager,
+                legacyURL: sandbox.legacyURL,
+                currentURL: sandbox.currentURL,
+                validateMigration: noOpValidation
+            )
+        }
 
-        #expect(try Data(contentsOf: sandbox.currentURL) == legacyData)
-        #expect(try Data(contentsOf: sandbox.currentWalURL) == legacyData)
-        #expect(!fileManager.fileExists(atPath: sandbox.currentShmURL.path))
-        #expect(!fileManager.fileExists(atPath: sandbox.legacyURL.path))
-        #expect(!fileManager.fileExists(atPath: sandbox.legacyWalURL.path))
+        #expect(try Data(contentsOf: sandbox.currentURL) == staleData)
+        #expect(try Data(contentsOf: sandbox.currentWalURL) == staleData)
+        #expect(try Data(contentsOf: sandbox.currentShmURL) == staleData)
+        #expect(try Data(contentsOf: sandbox.legacyURL) == legacyData)
+        #expect(try Data(contentsOf: sandbox.legacyWalURL) == legacyData)
     }
 
     @Test
