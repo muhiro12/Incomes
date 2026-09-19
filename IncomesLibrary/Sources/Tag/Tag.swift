@@ -8,36 +8,43 @@
 import Foundation
 import SwiftData
 
-/// A classification tag that groups related items (e.g., year, month, category).
-@Model
-public final class Tag {
-    /// Stored tag name value.
-    public private(set) var name = ""
-    /// Stored raw tag type identifier.
-    public private(set) var typeID = ""
+/// Current tag model used by app and library clients.
+public typealias Tag = IncomesSchemaV2.Tag
 
-    /// Items that currently reference this tag.
-    /// SwiftData represents to-many relationships as optionals before faulting.
-    public private(set) var items: [Item]? // swiftlint:disable:this discouraged_optional_collection
+// @Model requires explicit public access on each model declaration.
+// swiftlint:disable:next extension_access_modifier
+extension IncomesSchemaV2 {
+    /// A classification tag that groups related items (e.g., year, month, category).
+    @Model
+    public final class Tag {
+        /// Stored tag name value.
+        public private(set) var name = ""
+        /// Stored raw tag type identifier.
+        public private(set) var typeID = ""
 
-    private init() {
-        // no-op
-    }
+        /// Items that currently reference this tag.
+        /// SwiftData represents to-many relationships as optionals before faulting.
+        public private(set) var items: [Item]? // swiftlint:disable:this discouraged_optional_collection
 
-    /// Creates or returns an existing tag with the given `name` and `type`.
-    public static func create(context: ModelContext, name: String, type: TagType) throws -> Tag {
-        let tag = try context.fetchFirst(
-            .tags(.nameIs(name, type: type))
-        ) ?? .init()
-        context.insert(tag)
-        tag.name = name
-        tag.typeID = type.rawValue
-        return tag
-    }
+        private init() {
+            // no-op
+        }
 
-    /// Service-only helper that updates the stored tag name in place.
-    func rename(storedName: String) {
-        name = storedName
+        /// Creates or returns an existing tag with the given `name` and `type`.
+        public static func create(context: ModelContext, name: String, type: TagType) throws -> Tag {
+            let tag = try context.fetchFirst(
+                .tags(.nameIs(name, type: type))
+            ) ?? .init()
+            context.insert(tag)
+            tag.name = name
+            tag.typeID = type.rawValue
+            return tag
+        }
+
+        /// Service-only helper that updates the stored tag name in place.
+        func rename(storedName: String) {
+            name = storedName
+        }
     }
 }
 

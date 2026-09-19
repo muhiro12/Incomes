@@ -5,9 +5,8 @@ enum IncomesPlatformEnvironmentFactory {
     static func makeAppModelContainer(
         isICloudEnabled: Bool
     ) throws -> ModelContainer {
-        try ModelContainer(
-            for: Item.self,
-            configurations: .init(
+        try ModelContainerFactory.make(
+            configuration: .init(
                 url: Database.url,
                 cloudKitDatabase: isICloudEnabled ? .automatic : .none
             )
@@ -15,13 +14,7 @@ enum IncomesPlatformEnvironmentFactory {
     }
 
     static func makePreviewModelContainer() throws -> ModelContainer {
-        try ModelContainer(
-            for: Item.self,
-            configurations: .init(
-                isStoredInMemoryOnly: true,
-                cloudKitDatabase: .none
-            )
-        )
+        try ModelContainerFactory.inMemory()
     }
 
     @MainActor

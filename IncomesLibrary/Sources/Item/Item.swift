@@ -8,134 +8,141 @@
 import Foundation
 import SwiftData
 
-/// A financial record representing one income/outgo entry with tags.
-@Model
-public final class Item {
-    /// Persisted UTC start-of-day date backing `utcDate` and `localDate`.
-    @available(iOS, deprecated: 100000.0, message: "Use `utcDate` (UTC) or `localDate` (current calendar) instead.")
-    public private(set) var date = Date(timeIntervalSinceReferenceDate: .zero)
-    /// User-entered item description.
-    public private(set) var content = ""
-    /// Income amount assigned to the item.
-    public private(set) var income = Decimal.zero
-    /// Outgo amount assigned to the item.
-    public private(set) var outgo = Decimal.zero
-    /// Display priority used when multiple items share the same day.
-    public private(set) var priority = 0
-    /// Identifier shared by items in the same repeat series.
-    public private(set) var repeatID = UUID()
-    /// Running balance after applying this item.
-    public private(set) var balance = Decimal.zero
+/// Current item model used by app and library clients.
+public typealias Item = IncomesSchemaV2.Item
 
-    /// Derived tags currently attached to the item.
-    /// SwiftData represents to-many relationships as optionals before faulting.
-    @Relationship(inverse: \Tag.items)
-    public private(set) var tags: [Tag]? // swiftlint:disable:this discouraged_optional_collection
+// @Model requires explicit public access on each model declaration.
+// swiftlint:disable:next extension_access_modifier
+extension IncomesSchemaV2 {
+    /// A financial record representing one income/outgo entry with tags.
+    @Model
+    public final class Item {
+        /// Persisted UTC start-of-day date backing `utcDate` and `localDate`.
+        @available(iOS, deprecated: 100000.0, message: "Use `utcDate` (UTC) or `localDate` (current calendar) instead.")
+        public private(set) var date = Date(timeIntervalSinceReferenceDate: .zero)
+        /// User-entered item description.
+        public private(set) var content = ""
+        /// Income amount assigned to the item.
+        public private(set) var income = Decimal.zero
+        /// Outgo amount assigned to the item.
+        public private(set) var outgo = Decimal.zero
+        /// Display priority used when multiple items share the same day.
+        public private(set) var priority = 0
+        /// Identifier shared by items in the same repeat series.
+        public private(set) var repeatID = UUID()
+        /// Running balance after applying this item.
+        public private(set) var balance = Decimal.zero
 
-    private init() {
-        // no-op
-    }
+        /// Derived tags currently attached to the item.
+        /// SwiftData represents to-many relationships as optionals before faulting.
+        @Relationship(inverse: \Tag.items)
+        public private(set) var tags: [Tag]? // swiftlint:disable:this discouraged_optional_collection
 
-    /// Creates a new item and attaches year/month/content/category tags.
-    public static func create(
-        context: ModelContext,
-        values: ItemStoredValues,
-        repeatID: UUID
-    ) throws -> Item {
-        let item = Item()
-        context.insert(item)
-
-        item.date = Calendar.utc.startOfDay(
-            for: Calendar.utc.shiftedDate(
-                componentsFrom: values.date,
-                in: .current
-            )
-        )
-        item.content = values.content
-        item.income = values.income
-        item.outgo = values.outgo
-        item.priority = values.priority
-        item.repeatID = repeatID
-
-        item.tags = [
-            try .create(
-                context: context,
-                name: values.date.stringValueWithoutLocale(.yyyy),
-                type: .year
-            ),
-            try .create(
-                context: context,
-                name: values.date.stringValueWithoutLocale(.yyyyMM),
-                type: .yearMonth
-            ),
-            try .create(
-                context: context,
-                name: values.content,
-                type: .content
-            ),
-            try .create(
-                context: context,
-                name: values.category,
-                type: .category
-            )
-        ]
-
-        return item
-    }
-
-    /// Updates core fields and reattaches derived tags based on the new values.
-    public func modify(
-        values: ItemStoredValues,
-        repeatID: UUID
-    ) throws {
-        self.date = Calendar.utc.startOfDay(
-            for: Calendar.utc.shiftedDate(
-                componentsFrom: values.date,
-                in: .current
-            )
-        )
-        self.content = values.content
-        self.income = values.income
-        self.outgo = values.outgo
-        self.priority = values.priority
-        self.repeatID = repeatID
-
-        guard let context = modelContext else {
-            return
+        private init() {
+            // no-op
         }
 
-        self.tags = [
-            try .create(
-                context: context,
-                name: values.date.stringValueWithoutLocale(.yyyy),
-                type: .year
-            ),
-            try .create(
-                context: context,
-                name: values.date.stringValueWithoutLocale(.yyyyMM),
-                type: .yearMonth
-            ),
-            try .create(
-                context: context,
-                name: values.content,
-                type: .content
-            ),
-            try .create(
-                context: context,
-                name: values.category,
-                type: .category
+        /// Creates a new item and attaches year/month/content/category tags.
+        public static func create(
+            context: ModelContext,
+            values: ItemStoredValues,
+            repeatID: UUID
+        ) throws -> Item {
+            let item = Item()
+            context.insert(item)
+
+            item.date = Calendar.utc.startOfDay(
+                for: Calendar.utc.shiftedDate(
+                    componentsFrom: values.date,
+                    in: .current
+                )
             )
-        ]
-    }
+            item.content = values.content
+            item.income = values.income
+            item.outgo = values.outgo
+            item.priority = values.priority
+            item.repeatID = repeatID
 
-    /// Updates the computed balance field.
-    public func modify(balance: Decimal) {
-        self.balance = balance
-    }
+            item.tags = [
+                try .create(
+                    context: context,
+                    name: values.date.stringValueWithoutLocale(.yyyy),
+                    type: .year
+                ),
+                try .create(
+                    context: context,
+                    name: values.date.stringValueWithoutLocale(.yyyyMM),
+                    type: .yearMonth
+                ),
+                try .create(
+                    context: context,
+                    name: values.content,
+                    type: .content
+                ),
+                try .create(
+                    context: context,
+                    name: values.category,
+                    type: .category
+                )
+            ]
 
-    /// Replaces current tags with `tags`.
-    public func modify(tags: [Tag]) {
-        self.tags = tags
+            return item
+        }
+
+        /// Updates core fields and reattaches derived tags based on the new values.
+        public func modify(
+            values: ItemStoredValues,
+            repeatID: UUID
+        ) throws {
+            self.date = Calendar.utc.startOfDay(
+                for: Calendar.utc.shiftedDate(
+                    componentsFrom: values.date,
+                    in: .current
+                )
+            )
+            self.content = values.content
+            self.income = values.income
+            self.outgo = values.outgo
+            self.priority = values.priority
+            self.repeatID = repeatID
+
+            guard let context = modelContext else {
+                return
+            }
+
+            self.tags = [
+                try .create(
+                    context: context,
+                    name: values.date.stringValueWithoutLocale(.yyyy),
+                    type: .year
+                ),
+                try .create(
+                    context: context,
+                    name: values.date.stringValueWithoutLocale(.yyyyMM),
+                    type: .yearMonth
+                ),
+                try .create(
+                    context: context,
+                    name: values.content,
+                    type: .content
+                ),
+                try .create(
+                    context: context,
+                    name: values.category,
+                    type: .category
+                )
+            ]
+        }
+
+        /// Updates the computed balance field.
+        public func modify(balance: Decimal) {
+            self.balance = balance
+        }
+
+        /// Replaces current tags with `tags`.
+        public func modify(tags: [Tag]) {
+            self.tags = tags
+        }
     }
 }
 
