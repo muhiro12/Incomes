@@ -134,6 +134,10 @@ struct MainNavigationView: View {
         }
         .onChange(of: yearTags) {
             tipController.refreshHasAnyItems(!yearTags.isEmpty)
+            if let yearTagID = router.yearTagID,
+               !yearTags.contains(where: { $0.persistentModelID == yearTagID }) {
+                router.selectYearTagID(nil)
+            }
         }
         .onChange(of: router.isSearchPresented) {
             handleSearchPresentationChange()
