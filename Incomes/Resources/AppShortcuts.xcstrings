@@ -244,6 +244,7 @@
             "state" : "translated",
             "values" : [
               "What did I record recently in ${applicationName}",
+              "What did I do last in ${applicationName}",
               "Show me recent records in ${applicationName}",
               "Show recent items in ${applicationName}",
               "Most recent items with ${applicationName}"
@@ -255,6 +256,7 @@
             "state" : "translated",
             "values" : [
               "¿Qué he registrado recientemente en ${applicationName}?",
+              "¿Qué hice por última vez en ${applicationName}?",
               "Muéstrame los registros recientes en ${applicationName}",
               "Mostrar elementos recientes en ${applicationName}",
               "Elementos más recientes con ${applicationName}"
@@ -266,6 +268,7 @@
             "state" : "translated",
             "values" : [
               "Qu'ai-je enregistré récemment dans ${applicationName} ?",
+              "Qu'ai-je fait en dernier dans ${applicationName} ?",
               "Montre-moi les enregistrements récents dans ${applicationName}",
               "Afficher les éléments récents dans ${applicationName}",
               "Les éléments les plus récents avec ${applicationName}"
@@ -277,6 +280,7 @@
             "state" : "translated",
             "values" : [
               "最近${applicationName}に記録した内容は？",
+              "${applicationName}で最後にしたことは？",
               "${applicationName}の最近の記録を表示",
               "${applicationName}の最近のアイテムを表示",
               "${applicationName}の最新の記録を表示"
@@ -288,6 +292,7 @@
             "state" : "translated",
             "values" : [
               "我最近在${applicationName}中记录了什么？",
+              "我上次在${applicationName}中做了什么？",
               "显示${applicationName}中的最近记录",
               "显示${applicationName}中的最近项目",
               "显示${applicationName}中最新的记录"
@@ -303,6 +308,7 @@
             "state" : "translated",
             "values" : [
               "What’s coming up in ${applicationName}",
+              "What’s next in ${applicationName}",
               "Show me what’s next in ${applicationName}",
               "Show upcoming items in ${applicationName}",
               "Check what’s coming in ${applicationName}"
@@ -314,6 +320,7 @@
             "state" : "translated",
             "values" : [
               "¿Qué viene después en ${applicationName}?",
+              "¿Qué sigue en ${applicationName}?",
               "Muéstrame lo siguiente en ${applicationName}",
               "Mostrar elementos próximos en ${applicationName}",
               "Revisar lo que viene en ${applicationName}"
@@ -325,6 +332,7 @@
             "state" : "translated",
             "values" : [
               "Qu'est-ce qui arrive ensuite dans ${applicationName} ?",
+              "Quelle est la suite dans ${applicationName} ?",
               "Montre-moi ce qui arrive ensuite dans ${applicationName}",
               "Afficher les éléments à venir dans ${applicationName}",
               "Vérifier ce qui arrive dans ${applicationName}"
@@ -336,6 +344,7 @@
             "state" : "translated",
             "values" : [
               "${applicationName}で次に予定されていることは？",
+              "${applicationName}の次の予定は？",
               "${applicationName}で次に何があるか表示",
               "${applicationName}の今後のアイテムを表示",
               "${applicationName}で今後の予定を確認"
@@ -347,6 +356,7 @@
             "state" : "translated",
             "values" : [
               "${applicationName}接下来有什么安排？",
+              "${applicationName}中的下一项是什么？",
               "显示${applicationName}中的下一步",
               "显示${applicationName}中的即将到来的项目",
               "查看${applicationName}接下来的内容"
