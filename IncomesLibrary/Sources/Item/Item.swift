@@ -9,17 +9,17 @@ import Foundation
 import SwiftData
 
 /// Current item model used by app and library clients.
-public typealias Item = IncomesSchemaV2.Item
+public typealias Item = IncomesSchemaV3.Item
 
 // @Model requires explicit public access on each model declaration.
 // swiftlint:disable:next extension_access_modifier
-extension IncomesSchemaV2 {
+extension IncomesSchemaV3 {
     /// A financial record representing one income/outgo entry with tags.
     @Model
     public final class Item {
-        /// Persisted UTC start-of-day date backing `utcDate` and `localDate`.
-        @available(iOS, deprecated: 100000.0, message: "Use `utcDate` (UTC) or `localDate` (current calendar) instead.")
-        public private(set) var date = Date(timeIntervalSinceReferenceDate: .zero)
+        /// Persisted UTC start-of-day date, retaining the original store attribute name.
+        @Attribute(originalName: "date")
+        public private(set) var utcDate = Date(timeIntervalSinceReferenceDate: .zero)
         /// User-entered item description.
         public private(set) var content = ""
         /// Income amount assigned to the item.
@@ -51,7 +51,7 @@ extension IncomesSchemaV2 {
             let item = Item()
             context.insert(item)
 
-            item.date = Calendar.utc.startOfDay(
+            item.utcDate = Calendar.utc.startOfDay(
                 for: Calendar.utc.shiftedDate(
                     componentsFrom: values.date,
                     in: .current
@@ -94,7 +94,7 @@ extension IncomesSchemaV2 {
             values: ItemStoredValues,
             repeatID: UUID
         ) throws {
-            self.date = Calendar.utc.startOfDay(
+            self.utcDate = Calendar.utc.startOfDay(
                 for: Calendar.utc.shiftedDate(
                     componentsFrom: values.date,
                     in: .current
@@ -147,11 +147,6 @@ extension IncomesSchemaV2 {
 }
 
 public extension Item {
-    /// UTC date persisted in the store.
-    var utcDate: Date {
-        date
-    }
-
     /// Local calendar date derived from `utcDate`.
     var localDate: Date {
         Calendar.current.shiftedDate(componentsFrom: utcDate, in: .utc)
@@ -209,7 +204,7 @@ public extension Item {
         let item = Item()
         context.insert(item)
 
-        item.date = Calendar.utc.startOfDay(
+        item.utcDate = Calendar.utc.startOfDay(
             for: Calendar.utc.shiftedDate(
                 componentsFrom: values.date,
                 in: .current

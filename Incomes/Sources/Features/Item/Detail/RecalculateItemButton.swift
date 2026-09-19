@@ -31,7 +31,7 @@ extension RecalculateItemButton: View {
                     do {
                         try ItemBalanceOperations.recalculate(
                             context: context,
-                            date: item.date
+                            date: item.utcDate
                         )
                         Haptic.success.impact()
                     } catch {

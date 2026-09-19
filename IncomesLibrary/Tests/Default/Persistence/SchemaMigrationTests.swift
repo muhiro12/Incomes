@@ -7,7 +7,7 @@ import Testing
 struct SchemaMigrationTests {
     private let historicalDate = Date(timeIntervalSinceReferenceDate: 123_456)
     private let historicalPriority = 7
-    private let currentSchemaVersion = 2
+    private let prioritySchemaVersion = 2
     private let expectedItemCount = 2
 
     @Test(arguments: [0, 1, 2])
@@ -21,7 +21,7 @@ struct SchemaMigrationTests {
         let repeatID = UUID()
         let identifier = try seedUnversionedStore(at: url, version: version, repeatID: repeatID)
 
-        if version < currentSchemaVersion {
+        if version <= prioritySchemaVersion {
             #expect(throws: (any Error).self) {
                 try ModelContainerFactory.readOnly(at: url)
             }
@@ -57,7 +57,7 @@ struct SchemaMigrationTests {
             try? FileManager.default.removeItem(at: directory)
         }
         let url = directory.appendingPathComponent("Incomes.sqlite")
-        _ = try seedUnversionedStore(at: url, version: currentSchemaVersion, repeatID: UUID())
+        _ = try seedUnversionedStore(at: url, version: prioritySchemaVersion, repeatID: UUID())
         try deleteSharedTag(at: url)
         let container = try ModelContainerFactory.make(configuration: .init(url: url, cloudKitDatabase: .none))
         let items = try container.mainContext.fetch(FetchDescriptor<Item>())
@@ -169,11 +169,15 @@ private extension SchemaMigrationTests {
         let resolvedItem = context.model(for: decodedIdentifier) as? Item
         #expect(resolvedItem?.content == item.content)
         #expect(item.utcDate == historicalDate)
+        let matchingItems = try context.fetch(.items(.dateIsSameDayAs(item.localDate)))
+        #expect(matchingItems.count == 1)
+        let matchingItem = try #require(matchingItems.first)
+        #expect(try PersistentIdentifierCoder.encode(matchingItem.persistentModelID) == identifier)
         #expect(item.income == Decimal(string: "12345.67"))
         #expect(item.outgo == Decimal(string: "89.12"))
         #expect(item.balance == Decimal(string: "-42.25"))
         #expect(item.repeatID == repeatID)
-        #expect(item.priority == (version < currentSchemaVersion ? 0 : historicalPriority))
+        #expect(item.priority == (version < prioritySchemaVersion ? 0 : historicalPriority))
         let tag = try #require(item.tags?.first)
         #expect(tag.name == "Shared category")
         #expect(tag.typeID == "a7a130f4")

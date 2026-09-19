@@ -6,7 +6,7 @@ public enum ModelContainerFactory {
     /// Opens a store with the complete migration plan. Only the host app owns migration.
     public static func make(configuration: ModelConfiguration) throws -> ModelContainer {
         try .init(
-            for: Schema(versionedSchema: IncomesSchemaV2.self),
+            for: Schema(versionedSchema: IncomesSchemaV3.self),
             migrationPlan: IncomesSchemaMigrationPlan.self,
             configurations: [configuration]
         )
@@ -35,7 +35,7 @@ extension ModelContainerFactory {
             throw CocoaError(.fileReadNoSuchFile)
         }
         return try .init(
-            for: Schema(versionedSchema: IncomesSchemaV2.self),
+            for: Schema(versionedSchema: IncomesSchemaV3.self),
             configurations: [.init(url: url, allowsSave: false, cloudKitDatabase: .none)]
         )
     }

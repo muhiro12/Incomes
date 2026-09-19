@@ -16,7 +16,7 @@ struct DebugSection {
 extension DebugSection: View {
     var body: some View {
         Section {
-            DebugValueRow(title: "Date", value: item.date.description)
+            DebugValueRow(title: "Date", value: item.utcDate.description)
             DebugValueRow(title: "Content", value: item.content)
             DebugValueRow(title: "Income", value: item.income.groupedDecimalText())
             DebugValueRow(title: "Outgo", value: item.outgo.groupedDecimalText())

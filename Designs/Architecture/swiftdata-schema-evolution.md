@@ -23,7 +23,7 @@ in-memory with CloudKit disabled.
 
 | Entity | Stored field | Default / relationship |
 | --- | --- | --- |
-| Item | date | Reference-date zero; exposed as utcDate / localDate |
+| Item | utcDate | Reference-date zero; originalName remains date |
 | Item | content | Empty string |
 | Item | income, outgo, balance | Decimal zero |
 | Item | priority | Integer zero |
@@ -53,21 +53,26 @@ were portable values, or use them as cross-device business identifiers.
 ## Historical schemas
 
 Schema versions describe storage and are independent of marketing versions.
-The repository's release tags contain these three SwiftData shapes:
+The repository's release tags contain three historical SwiftData shapes.
+The current source model adds a rename with explicit original-name metadata:
 
 | Schema | Release tags | Difference |
 | --- | --- | --- |
 | V0 (0.0.0) | 2.0 through 2.4.2 | Also contains legacy group and startOfYear |
 | V1 (1.0.0) | 2.5 through 5.2 | Removes the two legacy fields |
-| V2 (2.0.0) | 5.3 through 5.12 and current 6.x | Adds priority with default zero |
+| V2 (2.0.0) | 5.3 through 5.12 | Adds priority with default zero |
+| V3 (3.0.0) | Current 6.x | Renames date to utcDate with originalName: date |
 
-V0 to V1 and V1 to V2 use lightweight stages. The V0 field removal reflects
-the change already shipped in 2.5; retained tag relationships carry category
+V0 to V1, V1 to V2, and V2 to V3 use lightweight stages. The V0 field removal
+reflects the change already shipped in 2.5; retained tag relationships carry category
 membership. This does not add a recovery path for old records whose category
 exists only in the removed `group` field. Such legacy data needs a separately
 verified transformation before claiming full archival recovery.
 
-The current `Item` and `Tag` names alias models nested in `IncomesSchemaV2`.
+The current `Item` and `Tag` names alias models nested in `IncomesSchemaV3`.
+The current date attribute uses `@Attribute(originalName: "date")`. Queries
+and sort descriptors use the persisted `utcDate` property directly; `localDate`
+remains a computed calendar conversion. Historical schemas retain `date`.
 Historical schemas refer to their own model types, never to those current
 aliases. Preserve stored declarations, defaults, names, and relationship
 metadata in every shipped schema. Methods and computed properties may evolve
