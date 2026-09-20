@@ -111,8 +111,22 @@ encoded persistent IDs, shared tag inverses, repeated reopen, and nullify
 behavior. These are reconstructed historical shapes compiled with the current
 SDK, not store artifacts produced by every originally shipped executable.
 
-`DatabaseMigratorTests` verifies copied-store opening, preservation on validation
-failure, and preservation of both stores on a location conflict. A passing
+`ReleasedStoreSchemaMigrationTests` upgrades a committed store that was written
+by the `5.12` tag's own compiled library, not by a shape reconstructed in this
+tree. It checks amounts, outgo order, priority defaults, repeat identity, tag
+relationships, balances, date order, and a resolvable encoded persistent
+identifier; it reopens the already-current store to prove the upgrade is
+idempotent; it opens the upgraded store through the read-only extension path;
+and it confirms a corrupted store fails to open with the file left untouched.
+The fixture and its provenance live in
+`IncomesLibrary/Tests/Default/Fixtures/ReleasedStore-5.12/`. A store written by
+the App Store binary's own interface would additionally cover data created
+through the released UI.
+
+`DatabaseMigratorTests` and `DatabaseMigratorRecoveryTests` verify copied-store
+opening, record-level preservation, relocation idempotence, interruption,
+unwritable destinations, preservation on validation failure, and preservation of
+both stores on a location conflict. A passing
 local migration is not proof of CloudKit convergence or production-schema
 compatibility. Before release, also validate archived-store copies from actual
 shipped apps, supported older runtimes, fresh cloud imports, two-device sync,
