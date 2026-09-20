@@ -43,6 +43,9 @@ struct IncomesMonthNetIncomeWidget {
                         .lineLimit(1)
                         .minimumScaleFactor(WidgetTextScaling.minimumScaleFactor)
                 }
+                .accessibilityElement(children: .combine)
+                .accessibilityLabel(amountAccessibilityLabel)
+                .accessibilityValue(Text(entry.netIncomeText))
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
             .padding(designMetrics.spacing.control)
@@ -69,6 +72,9 @@ struct IncomesMonthNetIncomeWidget {
                         .lineLimit(1)
                         .minimumScaleFactor(WidgetTextScaling.minimumScaleFactor)
                 }
+                .accessibilityElement(children: .combine)
+                .accessibilityLabel(amountAccessibilityLabel)
+                .accessibilityValue(Text(entry.netIncomeText))
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
             .padding(designMetrics.spacing.inline)
@@ -83,7 +89,7 @@ struct IncomesMonthNetIncomeWidget {
         private var amountColor: Color {
             switch entry.netIncomePresentation {
             case .positive:
-                .green
+                .accentColor
             case .neutral:
                 .secondary
             case .negative:
@@ -92,13 +98,17 @@ struct IncomesMonthNetIncomeWidget {
         }
 
         private var amountSystemName: String {
+            entry.netIncomePresentation.symbolName
+        }
+
+        private var amountAccessibilityLabel: Text {
             switch entry.netIncomePresentation {
             case .positive:
-                "chevron.up"
+                Text("Positive net income")
             case .neutral:
-                "minus"
+                Text("Zero net income")
             case .negative:
-                "chevron.down"
+                Text("Negative net income")
             }
         }
     }

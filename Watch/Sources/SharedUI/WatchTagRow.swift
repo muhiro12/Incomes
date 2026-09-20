@@ -15,22 +15,44 @@ extension WatchTagRow: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
 
             HStack(spacing: designMetrics.spacing.inline) {
+                Spacer(minLength: .zero)
+                // A symbol keeps the direction readable without relying on color.
+                Image(systemName: netIncomePresentation.symbolName)
+                    .foregroundStyle(netIncomeColor)
+                    .accessibilityHidden(true)
                 Text(tag.netIncome.asCurrency)
                     .foregroundStyle(netIncomeColor)
-                    .frame(maxWidth: .infinity, alignment: .trailing)
             }
             .font(.footnote)
+            .accessibilityElement(children: .combine)
+            .accessibilityLabel(netIncomeAccessibilityLabel)
+            .accessibilityValue(Text(tag.netIncome.asCurrency))
         }
     }
 
+    private var netIncomePresentation: ItemSummaryOperations.NetIncomePresentation {
+        ItemSummaryOperations.netIncomePresentation(for: tag.netIncome)
+    }
+
     private var netIncomeColor: Color {
-        switch ItemSummaryOperations.netIncomePresentation(for: tag.netIncome) {
+        switch netIncomePresentation {
         case .positive:
             .accentColor
         case .neutral:
             .secondary
         case .negative:
             .red
+        }
+    }
+
+    private var netIncomeAccessibilityLabel: Text {
+        switch netIncomePresentation {
+        case .positive:
+            Text("Positive net income")
+        case .neutral:
+            Text("Zero net income")
+        case .negative:
+            Text("Negative net income")
         }
     }
 }

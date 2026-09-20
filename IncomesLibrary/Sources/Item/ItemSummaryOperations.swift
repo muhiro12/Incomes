@@ -11,6 +11,18 @@ public enum ItemSummaryOperations {
         case neutral
         /// Net income is strictly less than zero.
         case negative
+
+        /// Symbol every surface uses for this direction, so the shape never differs.
+        public var symbolName: String {
+            switch self {
+            case .positive:
+                "chevron.up"
+            case .neutral:
+                "minus"
+            case .negative:
+                "chevron.down"
+            }
+        }
     }
 
     /// A value type that represents monthly totals.

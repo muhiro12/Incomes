@@ -41,18 +41,25 @@ struct IncomesUpcomingWidget {
                     }
                 }
                 Spacer(minLength: 0)
-                HStack(spacing: designMetrics.spacing.inline) {
-                    amountIcon
-                        .font(.subheadline.weight(.semibold))
-                    Text(verbatim: entry.amountText)
-                        .font(.title2.weight(.semibold))
-                        .monospacedDigit()
-                        .lineLimit(1)
-                        .minimumScaleFactor(mediumMinScaleFactor)
-                }
+                mediumAmount
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
             .padding(designMetrics.spacing.control)
+        }
+
+        @ViewBuilder private var mediumAmount: some View {
+            HStack(spacing: designMetrics.spacing.inline) {
+                amountIcon
+                    .font(.subheadline.weight(.semibold))
+                Text(verbatim: entry.amountText)
+                    .font(.title2.weight(.semibold))
+                    .monospacedDigit()
+                    .lineLimit(1)
+                    .minimumScaleFactor(mediumMinScaleFactor)
+            }
+            .accessibilityElement(children: .combine)
+            .accessibilityLabel(amountAccessibilityLabel)
+            .accessibilityValue(Text(verbatim: entry.amountText))
         }
 
         @ViewBuilder private var compactLayout: some View {
@@ -84,6 +91,9 @@ struct IncomesUpcomingWidget {
                         .lineLimit(1)
                         .minimumScaleFactor(compactMinScaleFactor)
                 }
+                .accessibilityElement(children: .combine)
+                .accessibilityLabel(amountAccessibilityLabel)
+                .accessibilityValue(Text(verbatim: entry.amountText))
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
             .padding(designMetrics.spacing.inline)
@@ -99,7 +109,7 @@ struct IncomesUpcomingWidget {
         private var amountColor: Color {
             switch entry.netIncomePresentation {
             case .positive:
-                .green
+                .accentColor
             case .neutral:
                 .secondary
             case .negative:
@@ -108,13 +118,17 @@ struct IncomesUpcomingWidget {
         }
 
         private var amountSystemName: String {
+            entry.netIncomePresentation.symbolName
+        }
+
+        private var amountAccessibilityLabel: Text {
             switch entry.netIncomePresentation {
             case .positive:
-                "chevron.up"
+                Text("Positive net income")
             case .neutral:
-                "minus"
+                Text("Zero net income")
             case .negative:
-                "chevron.down"
+                Text("Negative net income")
             }
         }
     }

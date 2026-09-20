@@ -11,21 +11,11 @@ struct PositiveNetIncomeIndicator: View {
     let presentation: ItemSummaryOperations.NetIncomePresentation
 
     var body: some View {
-        Image(systemName: "chevron.up")
+        Image(systemName: ItemSummaryOperations.NetIncomePresentation.positive.symbolName)
             .foregroundStyle(presentation == .positive ? .accent : .clear)
-            .accessibilityLabel(accessibilityLabel)
-    }
-}
-
-private extension PositiveNetIncomeIndicator {
-    var accessibilityLabel: Text {
-        switch presentation {
-        case .positive:
-            Text("Positive net income")
-        case .neutral:
-            Text("Zero net income")
-        case .negative:
-            Text("Negative net income")
-        }
+            .accessibilityLabel(Text("Positive net income"))
+            // Nothing is drawn for the other directions, so VoiceOver stays
+            // silent there instead of describing an invisible state.
+            .accessibilityHidden(presentation != .positive)
     }
 }
