@@ -10,6 +10,10 @@ public struct ItemFormInput: Equatable {
         case invalidIncome
         /// Outgo text is not a valid decimal.
         case invalidOutgo
+        /// Income is a number the store cannot keep without changing its value.
+        case unsupportedIncome
+        /// Outgo is a number the store cannot keep without changing its value.
+        case unsupportedOutgo
         /// Priority text is not a valid integer.
         case invalidPriority
     }
@@ -132,11 +136,21 @@ public struct ItemFormInput: Equatable {
         guard !content.isEmpty else {
             throw ValidationError.contentIsEmpty
         }
-        guard incomeText.isEmptyOrDecimal else {
+        switch incomeText.decimalRejection {
+        case .none:
+            break
+        case .notANumber:
             throw ValidationError.invalidIncome
+        case .unsupportedAmount:
+            throw ValidationError.unsupportedIncome
         }
-        guard outgoText.isEmptyOrDecimal else {
+        switch outgoText.decimalRejection {
+        case .none:
+            break
+        case .notANumber:
             throw ValidationError.invalidOutgo
+        case .unsupportedAmount:
+            throw ValidationError.unsupportedOutgo
         }
         guard priorityText.isEmptyOrInt else {
             throw ValidationError.invalidPriority

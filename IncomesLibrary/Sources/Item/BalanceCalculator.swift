@@ -42,6 +42,13 @@ enum BalanceCalculator {
                 .init(netIncome: item.netIncome)
             }
         )
+        // Decimal addition returns a non-finite value on overflow, so the
+        // recalculation is rejected before any balance is written.
+        guard balances.allSatisfy({ balance in
+            !balance.isNaN
+        }) else {
+            throw ItemAmountError.balanceOutOfRange
+        }
 
         zip(targetList, balances).forEach { item, balance in
             item.modify(balance: balance)

@@ -195,6 +195,8 @@ enum YearlyItemDuplicationSupport {
         }
         let total = values.reduce(.zero, +)
         let count = Decimal(values.count)
-        return total / count
+        // Division can produce more digits than the store keeps, so the derived
+        // average is rounded here instead of being rounded silently on save.
+        return AmountPrecision.storableValue(total / count)
     }
 }

@@ -11768,6 +11768,40 @@
         }
       }
     },
+    "This amount is too large or too detailed to save exactly. Enter a shorter amount." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This amount is too large or too detailed to save exactly. Enter a shorter amount."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Este importe es demasiado grande o detallado para guardarse con exactitud. Introduce un importe más corto."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ce montant est trop grand ou trop détaillé pour être enregistré exactement. Saisissez un montant plus court."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "この金額は大きすぎるか細かすぎるため、正確に保存できません。より短い金額を入力してください。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此金额过大或过于精细，无法精确保存。请输入更短的金额。"
+          }
+        }
+      }
+    },
     "This category can't be renamed." : {
       "localizations" : {
         "en" : {

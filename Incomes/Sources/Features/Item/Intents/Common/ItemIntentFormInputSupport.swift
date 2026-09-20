@@ -45,8 +45,7 @@ enum ItemIntentFormInputSupport {
     ) throws {
         try validate(
             formInput: formInput,
-            contentParameter: parameters.content,
-            priorityParameter: parameters.priority
+            parameters: parameters
         )
         try ItemIntentCurrencySupport.validate(
             income: income,
@@ -58,15 +57,20 @@ enum ItemIntentFormInputSupport {
 
     private static func validate(
         formInput: ItemFormInput,
-        contentParameter: IntentParameter<String>,
-        priorityParameter: IntentParameter<Int>? = nil
+        parameters: ItemIntentFormValidationParameters
     ) throws {
         do {
             try formInput.validate()
         } catch ItemFormInput.ValidationError.contentIsEmpty {
-            throw contentParameter.needsValueError()
+            throw parameters.content.needsValueError()
+        } catch ItemFormInput.ValidationError.invalidIncome,
+                ItemFormInput.ValidationError.unsupportedIncome {
+            throw parameters.income.needsValueError()
+        } catch ItemFormInput.ValidationError.invalidOutgo,
+                ItemFormInput.ValidationError.unsupportedOutgo {
+            throw parameters.outgo.needsValueError()
         } catch ItemFormInput.ValidationError.invalidPriority {
-            guard let priorityParameter else {
+            guard let priorityParameter = parameters.priority else {
                 throw ItemFormInput.ValidationError.invalidPriority
             }
             throw priorityParameter.needsValueError()

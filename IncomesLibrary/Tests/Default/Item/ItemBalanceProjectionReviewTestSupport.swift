@@ -14,10 +14,10 @@ enum ItemBalanceProjectionReviewTestSupport {
     }
 
     static let rentOutgo: Decimal = 100
-    static let movedRentOutgo: Decimal = 250.5
-    static let detachedRentOutgo: Decimal = 87.65
+    static let movedRentOutgo = Decimal(string: "250.5") ?? .zero
+    static let detachedRentOutgo = Decimal(string: "87.65") ?? .zero
     static let decoyAmount: Decimal = 40
-    static let bonusIncome: Decimal = 1_234.56
+    static let bonusIncome = Decimal(string: "1234.56") ?? .zero
     static let changedDraftOutgo: Decimal = 999
 
     static var rentInput: ItemFormInput {
