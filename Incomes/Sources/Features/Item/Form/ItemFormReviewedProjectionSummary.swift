@@ -32,13 +32,34 @@ struct ItemFormReviewedProjectionSummary: View {
                     Text(verbatim: difference.asSignedCurrency)
                 }
             }
-            if review.comparison.projected.hasNegativeBalance {
-                Label(
-                    "Balance becomes negative",
-                    systemImage: "exclamationmark.triangle.fill"
-                )
-                .foregroundStyle(.red)
-            }
+            negativeBalanceLabel
+        }
+    }
+
+    @ViewBuilder private var negativeBalanceLabel: some View {
+        // A plan that is already negative must not read as if this change
+        // caused the deficit.
+        switch review.comparison.negativeBalanceOutcome {
+        case .staysNonNegative:
+            EmptyView()
+        case .newlyNegative:
+            Label(
+                "Balance becomes negative",
+                systemImage: "exclamationmark.triangle.fill"
+            )
+            .foregroundStyle(.red)
+        case .earlierNegative:
+            Label(
+                "Balance goes negative earlier",
+                systemImage: "exclamationmark.triangle.fill"
+            )
+            .foregroundStyle(.red)
+        case .alreadyNegative:
+            Label(
+                "Balance is already negative",
+                systemImage: "exclamationmark.circle"
+            )
+            .foregroundStyle(.secondary)
         }
     }
 }

@@ -175,10 +175,31 @@ private extension ItemFormBalanceProjectionSheet {
                 )
         }
         if let firstNegativeDate = comparison.projected.firstNegativeDate {
-            LabeledContent("First Negative") {
+            LabeledContent(negativeBalanceTitle(comparison)) {
                 Text(ItemFormBalanceProjectionFormatting.dateText(firstNegativeDate, locale: locale))
                     .foregroundStyle(.red)
             }
+        }
+        if case .earlierNegative(_, let currentDate) = comparison.negativeBalanceOutcome {
+            LabeledContent("Currently Negative From") {
+                Text(ItemFormBalanceProjectionFormatting.dateText(currentDate, locale: locale))
+                    .foregroundStyle(.secondary)
+            }
+        }
+    }
+
+    /// Names the negative balance so an existing deficit is not read as new.
+    func negativeBalanceTitle(
+        _ comparison: ItemBalanceProjectionOperations.Comparison
+    ) -> LocalizedStringKey {
+        switch comparison.negativeBalanceOutcome {
+        case .staysNonNegative,
+             .newlyNegative:
+            "Becomes Negative"
+        case .earlierNegative:
+            "Negative Earlier From"
+        case .alreadyNegative:
+            "Already Negative From"
         }
     }
 

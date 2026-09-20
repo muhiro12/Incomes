@@ -63,6 +63,22 @@ public enum ItemBalanceProjectionOperations {
             return projectedBalance - currentBalance
         }
 
+        /// How the proposed change affects a negative balance in the covered range.
+        public var negativeBalanceOutcome: NegativeBalanceOutcome {
+            guard let projectedDate = projected.firstNegativeDate else {
+                return .staysNonNegative
+            }
+            guard let currentDate = current.firstNegativeDate else {
+                return .newlyNegative(date: projectedDate)
+            }
+            // An earlier first negative date means the change brings a deficit
+            // forward even though the plan was already going negative.
+            if projectedDate < currentDate {
+                return .earlierNegative(date: projectedDate, currentDate: currentDate)
+            }
+            return .alreadyNegative(date: projectedDate)
+        }
+
         /// Difference between the projected and current minimum balances.
         public var minimumBalanceDifference: Decimal? {
             guard let currentBalance = current.minimumBalance,
