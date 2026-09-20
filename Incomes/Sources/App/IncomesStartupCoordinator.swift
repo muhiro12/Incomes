@@ -42,9 +42,8 @@ final class IncomesStartupCoordinator {
 
 private extension IncomesStartupCoordinator {
     func makeState() -> State {
-        let isICloudEnabled = preferenceStore.bool(
-            for: \.isICloudOn
-        )
+        let isICloudEnabled = IncomesStartupDebugOptions.isICloudForced
+            || preferenceStore.bool(for: \.isICloudOn)
         startupLogger.notice(
             "platform_environment.build_requested",
             metadata: IncomesLogging.metadata(
@@ -55,11 +54,11 @@ private extension IncomesStartupCoordinator {
         var failurePhase = IncomesStartupFailurePhase.databaseMigration
         do {
             startupLogger.notice("database_migration.begin")
-            try IncomesStartupFailureSimulation.failIfRequested(phase: .databaseMigration)
+            try IncomesStartupDebugOptions.failIfRequested(phase: .databaseMigration)
             try DatabaseMigrator.migrateSQLiteFilesIfNeeded()
             startupLogger.notice("database_migration.completed")
             failurePhase = .modelContainer
-            try IncomesStartupFailureSimulation.failIfRequested(phase: .modelContainer)
+            try IncomesStartupDebugOptions.failIfRequested(phase: .modelContainer)
             let modelContainer = try IncomesPlatformEnvironmentFactory.makeAppModelContainer(
                 isICloudEnabled: isICloudEnabled
             )
