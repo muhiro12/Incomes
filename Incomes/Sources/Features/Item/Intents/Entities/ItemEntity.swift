@@ -92,14 +92,9 @@ extension ItemEntity {
 
 extension ItemEntity {
     var netIncomeSystemName: String {
-        switch ItemSummaryOperations.netIncomePresentation(for: netIncome) {
-        case .positive:
-            "arrow.up.circle.fill"
-        case .neutral:
-            "minus.circle.fill"
-        case .negative:
-            "arrow.down.circle.fill"
-        }
+        // The filled circle is the entity-image variant of the shared symbol,
+        // so Shortcuts shows the same direction shape as every other surface.
+        "\(ItemSummaryOperations.netIncomePresentation(for: netIncome).symbolName).circle.fill"
     }
 
     func model(in context: ModelContext) throws -> Item {

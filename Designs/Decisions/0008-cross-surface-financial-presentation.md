@@ -26,7 +26,9 @@ Presentation follows one matrix on every surface:
 | Negative | `chevron.down` | red | "Negative net income" |
 
 - The symbol comes from `NetIncomePresentation.symbolName`, so no surface picks
-  its own shape.
+  its own shape. Where a surface needs a filled badge instead of a bare glyph,
+  such as an App Intents entity image, it uses the `.circle.fill` variant of the
+  same symbol rather than a different shape.
 - Color is never the only signal. Every surface that colors an amount also
   draws the symbol or states the direction in its accessibility label.
 - Accessibility must match what is drawn. The app's list indicator marks only a
