@@ -183,14 +183,19 @@ public enum MonthlySummaryOperations {
         )
     }
 
-    /// Trims and validates generated text against the exact current-month totals.
+    /// Trims and validates generated text against the month's own data.
+    ///
+    /// The language code decides whether a Latin word in the narrative can be
+    /// genuine, so a translated summary cannot keep an English source fragment.
     public static func validatedSummary(
         _ summary: String,
-        currentTotals: MonthTotals
+        context: Context,
+        languageCode: String
     ) throws -> String {
         try MonthlySummaryNarrativeBuilder.validatedSummary(
             summary,
-            currentTotals: currentTotals
+            context: context,
+            languageCode: languageCode
         )
     }
 }

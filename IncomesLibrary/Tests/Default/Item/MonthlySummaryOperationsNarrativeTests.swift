@@ -18,7 +18,8 @@ struct MonthlySummaryOperationsNarrativeTests {
     func validatedSummary_accepts_only_current_month_totals() throws {
         let summary = try MonthlySummaryOperations.validatedSummary(
             "Income was 1,000. Outgo was 400 and net income was 600.",
-            currentTotals: kCurrentTotals
+            context: kContext,
+            languageCode: "en"
         )
 
         #expect(summary == "Income was 1,000. Outgo was 400 and net income was 600.")
@@ -36,7 +37,12 @@ struct MonthlySummaryOperationsNarrativeTests {
 
         let summary = try MonthlySummaryOperations.validatedSummary(
             "Income was 1,000. Outgo was 1,600 and net income was −600.",
-            currentTotals: currentTotals
+            context: .init(
+                currentTotals: currentTotals,
+                previousTotals: kPreviousTotals,
+                categoryComparisons: []
+            ),
+            languageCode: "en"
         )
 
         #expect(summary == "Income was 1,000. Outgo was 1,600 and net income was −600.")
@@ -47,7 +53,8 @@ struct MonthlySummaryOperationsNarrativeTests {
         #expect(throws: MonthlySummaryOperations.ValidationError.emptySummary) {
             _ = try MonthlySummaryOperations.validatedSummary(
                 "   ",
-                currentTotals: kCurrentTotals
+                context: kContext,
+                languageCode: "en"
             )
         }
     }
@@ -57,7 +64,8 @@ struct MonthlySummaryOperationsNarrativeTests {
         #expect(throws: MonthlySummaryOperations.ValidationError.unsupportedNumber) {
             _ = try MonthlySummaryOperations.validatedSummary(
                 "Income was 1000 and previous income was 900.",
-                currentTotals: kCurrentTotals
+                context: kContext,
+                languageCode: "en"
             )
         }
     }
@@ -70,9 +78,59 @@ struct MonthlySummaryOperationsNarrativeTests {
                 currentMonth.totalIncome is 1000. currentMonth.totalOutgo is 400. \
                 currentMonth.netIncome is 600.
                 """,
-                currentTotals: kCurrentTotals
+                context: kContext,
+                languageCode: "en"
             )
         }
+    }
+
+    @Test
+    func validatedSummary_rejects_english_fragment_in_a_japanese_summary() {
+        // Observed from the on-device model: "総出go" mixes the English source
+        // term into the Japanese translation.
+        #expect(throws: MonthlySummaryOperations.ValidationError.unsupportedContent) {
+            _ = try MonthlySummaryOperations.validatedSummary(
+                "総収入は1,000、総出goは400、純結果は600です。",
+                context: kContext,
+                languageCode: "ja"
+            )
+        }
+    }
+
+    @Test
+    func validatedSummary_accepts_a_japanese_summary_using_only_its_own_data() throws {
+        let summary = try MonthlySummaryOperations.validatedSummary(
+            "収入は1,000でした。支出は400で、収支は600でした。",
+            context: kContext,
+            languageCode: "ja"
+        )
+
+        #expect(summary == "収入は1,000でした。支出は400で、収支は600でした。")
+    }
+
+    @Test
+    func validatedSummary_accepts_a_category_name_written_in_latin_letters() throws {
+        let context = MonthlySummaryOperations.Context(
+            currentTotals: kCurrentTotals,
+            previousTotals: kPreviousTotals,
+            categoryComparisons: [
+                .init(
+                    category: "Amazon",
+                    currentIncome: .zero,
+                    previousIncome: .zero,
+                    currentOutgo: 300,
+                    previousOutgo: 100
+                )
+            ]
+        )
+
+        let summary = try MonthlySummaryOperations.validatedSummary(
+            "収入は1,000でした。支出は400で、Amazonの支出が増えました。",
+            context: context,
+            languageCode: "ja"
+        )
+
+        #expect(summary.contains("Amazon"))
     }
 
     @Test
@@ -83,7 +141,8 @@ struct MonthlySummaryOperationsNarrativeTests {
                 Income was 1000. Outgo was 400 and net income was 600. \
                 categoryChanges include outgoIncreased in Food.
                 """,
-                currentTotals: kCurrentTotals
+                context: kContext,
+                languageCode: "en"
             )
         }
     }

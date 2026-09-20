@@ -230,7 +230,8 @@ private extension MonthlySummaryGenerator {
         }
         return try MonthlySummaryOperations.validatedSummary(
             response.content.summary,
-            currentTotals: narrativeContext.currentTotals
+            context: narrativeContext,
+            languageCode: languageCode
         )
     }
 

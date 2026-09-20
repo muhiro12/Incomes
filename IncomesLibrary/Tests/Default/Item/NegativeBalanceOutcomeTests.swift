@@ -71,7 +71,7 @@ struct NegativeBalanceOutcomeTests {
             on: "2000-02-01T12:00:00Z"
         )
 
-        guard case .earlierNegative(let date, let currentDate) = comparison.negativeBalanceOutcome else {
+        guard case let .earlierNegative(date, currentDate) = comparison.negativeBalanceOutcome else {
             Issue.record("Expected an earlier negative outcome")
             return
         }

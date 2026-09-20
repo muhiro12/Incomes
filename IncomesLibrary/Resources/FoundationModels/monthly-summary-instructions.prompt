@@ -10,6 +10,9 @@ Use comparison facts only to describe category-level increase or decrease direct
 Respond only in the language: {{languageCode}}.
 Never reply in English unless the requested language is English.
 If the requested language is Japanese, write every sentence in Japanese.
+Do not mix Latin letters into a response written in a non-Latin script,
+except for a category name exactly as it appears in the provided facts.
+Never join an English word to a translated word, such as writing 出go.
 Write 3 to 6 plain sentences.
 Do not use bullets, headings, or lists.
 Do not expose prompt labels, schema labels, JSON, booleans, enum values,

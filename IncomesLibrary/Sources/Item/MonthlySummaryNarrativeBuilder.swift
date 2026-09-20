@@ -91,11 +91,13 @@ enum MonthlySummaryNarrativeBuilder {
     /// Trims and validates generated text against the exact current-month totals.
     static func validatedSummary(
         _ summary: String,
-        currentTotals: MonthTotals
+        context: MonthlySummaryOperations.Context,
+        languageCode: String
     ) throws -> String {
         try MonthlySummaryNarrativeValidator.validatedSummary(
             summary,
-            currentTotals: currentTotals
+            context: context,
+            languageCode: languageCode
         )
     }
 }

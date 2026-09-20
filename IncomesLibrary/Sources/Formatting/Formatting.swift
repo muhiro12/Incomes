@@ -6,7 +6,9 @@ public enum Formatting {
     public static func monthTitle(from date: Date, locale: Locale = .current) -> String {
         let formatter = DateFormatter()
         formatter.locale = locale
-        formatter.dateFormat = "yyyy MMM"
+        // A fixed pattern reads as "2026 9月" in Japanese; the template lets the
+        // locale place the year and month as that language writes them.
+        formatter.setLocalizedDateFormatFromTemplate("yMMM")
         return formatter.string(from: date)
     }
 

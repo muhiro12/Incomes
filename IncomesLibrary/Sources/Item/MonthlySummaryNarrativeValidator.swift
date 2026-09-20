@@ -7,7 +7,8 @@ enum MonthlySummaryNarrativeValidator {
 
     static func validatedSummary(
         _ summary: String,
-        currentTotals: MonthTotals
+        context: MonthlySummaryOperations.Context,
+        languageCode: String
     ) throws -> String {
         let trimmedSummary = summary.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmedSummary.isEmpty else {
@@ -16,10 +17,17 @@ enum MonthlySummaryNarrativeValidator {
         guard containsUnsupportedContent(trimmedSummary) == false else {
             throw ValidationError.unsupportedContent
         }
+        guard containsUnexpectedLatinTerm(
+            trimmedSummary,
+            context: context,
+            languageCode: languageCode
+        ) == false else {
+            throw ValidationError.unsupportedContent
+        }
 
         try validateNumericTokens(
             in: trimmedSummary,
-            currentTotals: currentTotals
+            currentTotals: context.currentTotals
         )
         return trimmedSummary
     }
@@ -41,6 +49,61 @@ private extension MonthlySummaryNarrativeValidator {
             "outgoDecreased",
             "currencyCode"
         ]
+    }
+
+    /// True when a non-Latin narrative contains a Latin word the data never provided.
+    ///
+    /// A model writing Japanese can emit fragments such as "総出go", mixing the
+    /// English source term into the translation. Category names and the currency
+    /// code are the only Latin words the data can legitimately contribute.
+    static func containsUnexpectedLatinTerm(
+        _ text: String,
+        context: MonthlySummaryOperations.Context,
+        languageCode: String
+    ) -> Bool {
+        guard usesNonLatinScript(languageCode) else {
+            return false
+        }
+        let allowedTerms = allowedLatinTerms(in: context)
+
+        return latinTerms(in: text).contains { term in
+            allowedTerms.contains(term.lowercased()) == false
+        }
+    }
+
+    static func usesNonLatinScript(_ languageCode: String) -> Bool {
+        let language = Locale.Language(identifier: languageCode)
+        guard let script = language.script?.identifier else {
+            return false
+        }
+        return script != "Latn"
+    }
+
+    static func allowedLatinTerms(
+        in context: MonthlySummaryOperations.Context
+    ) -> Set<String> {
+        var terms = Set<String>()
+        terms.insert(context.currentTotals.currencyCode.lowercased())
+        terms.insert(context.previousTotals.currencyCode.lowercased())
+        for comparison in context.categoryComparisons {
+            for term in latinTerms(in: comparison.category) {
+                terms.insert(term.lowercased())
+            }
+        }
+        return terms
+    }
+
+    static func latinTerms(in text: String) -> [String] {
+        let pattern = #"[A-Za-z]+"#
+        guard let regularExpression = try? NSRegularExpression(pattern: pattern) else {
+            assertionFailure()
+            return []
+        }
+
+        let range = NSRange(text.startIndex..., in: text)
+        return regularExpression.matches(in: text, range: range).compactMap { result in
+            Range(result.range, in: text).map { String(text[$0]) }
+        }
     }
 
     static func validateNumericTokens(

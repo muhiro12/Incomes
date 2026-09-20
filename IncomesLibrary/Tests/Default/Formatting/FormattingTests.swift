@@ -29,7 +29,24 @@ struct FormattingTests {
     func monthTitle_formats_expected_string() {
         let date = utcDate(2_024, 3, 15, 10, 30, 0)
         let result = Formatting.monthTitle(from: date, locale: enUS)
-        #expect(result == "2024 Mar")
+        #expect(result == "Mar 2024")
+    }
+
+    @Test("A month title follows the order each language writes")
+    func monthTitle_follows_locale_order() {
+        let date = utcDate(2_024, 3, 15, 10, 30, 0)
+        #expect(
+            Formatting.monthTitle(
+                from: date,
+                locale: .init(identifier: "ja_JP")
+            ) == "2024年3月"
+        )
+        #expect(
+            Formatting.monthTitle(
+                from: date,
+                locale: .init(identifier: "zh_Hans_CN")
+            ) == "2024年3月"
+        )
     }
 
     @Test
