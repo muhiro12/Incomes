@@ -42,7 +42,10 @@ let package = Package( // swiftlint:disable:this prefixed_toplevel_constant
         .testTarget(
             name: "IncomesLibraryTests",
             dependencies: ["IncomesLibrary"],
-            path: "Tests/Default"
+            path: "Tests/Default",
+            resources: [
+                .copy("Fixtures")
+            ]
         ),
         .testTarget(
             name: "IncomesLibraryTimeZoneTests",

@@ -13,13 +13,20 @@ import TipKit
 
 @main
 struct IncomesApp: App {
-    private let platformEnvironment: IncomesPlatformEnvironment
+    @State private var startupCoordinator: IncomesStartupCoordinator
 
     var body: some Scene {
         WindowGroup {
-            IncomesAppRootView(
-                platformEnvironment: platformEnvironment
-            )
+            switch startupCoordinator.state {
+            case .ready(let platformEnvironment):
+                IncomesAppRootView(
+                    platformEnvironment: platformEnvironment
+                )
+            case .recoveryRequired(let phase):
+                IncomesStartupRecoveryView(phase: phase) {
+                    startupCoordinator.retry()
+                }
+            }
         }
     }
 
@@ -38,109 +45,22 @@ struct IncomesApp: App {
 
         startupLogger.notice("startup.begin")
 
-        let platformEnvironment = Self.makePlatformEnvironment(
-            preferenceStore: preferenceStore,
-            logging: logging,
-            startupLogger: startupLogger
-        )
-        self.platformEnvironment = platformEnvironment
-        startupLogger.notice("startup.dependencies_ready")
-
-        Self.registerDependencies(
-            platformEnvironment,
-            startupLogger: startupLogger
+        _startupCoordinator = .init(
+            wrappedValue: .init(
+                preferenceStore: preferenceStore,
+                logging: logging,
+                startupLogger: startupLogger
+            )
         )
         Self.recordCurrentAppVersion(
             preferenceStore: preferenceStore,
             startupLogger: startupLogger
         )
         IncomesShortcuts.updateAppShortcutParameters()
-        startupLogger.notice("startup.ready")
     }
 }
 
 private extension IncomesApp {
-    @MainActor
-    static func makePlatformEnvironment(
-        preferenceStore: MHPreferenceStore,
-        logging: MHLoggingBootstrap,
-        startupLogger: MHLogger
-    ) -> IncomesPlatformEnvironment {
-        let isICloudEnabled = preferenceStore.bool(
-            for: \.isICloudOn
-        )
-        startupLogger.notice(
-            "platform_environment.build_requested",
-            metadata: IncomesLogging.metadata(
-                ("icloud_enabled", IncomesLogging.bool(isICloudEnabled))
-            )
-        )
-
-        var startupFailurePhase = "database_migration"
-        do {
-            startupLogger.notice("database_migration.begin")
-            try DatabaseMigrator.migrateSQLiteFilesIfNeeded()
-            startupLogger.notice("database_migration.completed")
-            startupFailurePhase = "model_container"
-            let modelContainer = try IncomesPlatformEnvironmentFactory.makeAppModelContainer(
-                isICloudEnabled: isICloudEnabled
-            )
-            startupLogger.notice("model_container.created")
-            #if DEBUG
-            startupFailurePhase = "ui_smoke_seed"
-            try IncomesUISmokeLaunchSupport.prepareIfNeeded(
-                modelContainer: modelContainer,
-                logger: startupLogger
-            )
-            #endif
-            startupFailurePhase = "platform_environment"
-            return Self.makePlatformEnvironment(
-                modelContainer: modelContainer,
-                logging: logging
-            )
-        } catch {
-            logStartupFailure(
-                error,
-                phase: startupFailurePhase,
-                isICloudEnabled: isICloudEnabled,
-                startupLogger: startupLogger
-            )
-            preconditionFailure("Failed to initialize model container: \(error)")
-        }
-    }
-
-    @MainActor
-    static func makePlatformEnvironment(
-        modelContainer: ModelContainer,
-        logging: MHLoggingBootstrap
-    ) -> IncomesPlatformEnvironment {
-        IncomesPlatformEnvironmentFactory.make(
-            modelContainer: modelContainer,
-            platformMode: .production,
-            logging: logging
-        )
-    }
-
-    @MainActor
-    static func registerDependencies(
-        _ platformEnvironment: IncomesPlatformEnvironment,
-        startupLogger: MHLogger
-    ) {
-        AppDependencyManager.shared.add {
-            platformEnvironment.logging
-        }
-        AppDependencyManager.shared.add {
-            platformEnvironment.modelContainer
-        }
-        AppDependencyManager.shared.add {
-            platformEnvironment.notificationService
-        }
-        AppDependencyManager.shared.add {
-            platformEnvironment.remoteConfigurationService
-        }
-        startupLogger.notice("startup.dependencies_registered")
-    }
-
     static func recordCurrentAppVersion(
         preferenceStore: MHPreferenceStore,
         startupLogger: MHLogger
@@ -157,26 +77,6 @@ private extension IncomesApp {
             metadata: IncomesLogging.metadata(
                 ("app_version", currentAppVersion)
             )
-        )
-    }
-
-    static func logStartupFailure(
-        _ error: any Error,
-        phase: String,
-        isICloudEnabled: Bool,
-        startupLogger: MHLogger
-    ) {
-        let startupFailureMetadata = IncomesLogging.metadata(
-            ("phase", phase),
-            ("icloud_enabled", IncomesLogging.bool(isICloudEnabled))
-        )
-        startupLogger.critical(
-            "startup.failed",
-            metadata: startupFailureMetadata.merging(
-                IncomesLogging.errorMetadata(error)
-            ) { current, _ in
-                current
-            }
         )
     }
 }
