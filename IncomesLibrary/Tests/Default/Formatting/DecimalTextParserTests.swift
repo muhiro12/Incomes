@@ -18,6 +18,18 @@ struct DecimalTextParserTests {
         #expect(DecimalTextParser.rejection(for: unsupportedText, locale: english) == .unsupportedAmount)
     }
 
+    @Test("Digits lost by Decimal parsing are rejected before conversion")
+    func parser_rounding_cannot_bypass_precision_validation() {
+        let longInteger = "1" + String(repeating: "0", count: 60) + "1"
+        let longFraction = "0.1" + String(repeating: "0", count: 60) + "1"
+        for text in [longInteger, longFraction, "-" + longInteger, longInteger + "e-60"] {
+            #expect(DecimalTextParser.parse(text, locale: english) == nil)
+            #expect(DecimalTextParser.rejection(for: text, locale: english) == .unsupportedAmount)
+        }
+        #expect(DecimalTextParser.parse("1e60", locale: english) == Decimal(string: "1e60"))
+        #expect(DecimalTextParser.parse("1.230000e2", locale: english) == Decimal(123))
+    }
+
     @Test("A fraction beyond the supported precision is rejected, not rounded")
     func fraction_beyond_supported_precision_is_rejected() {
         let text = "0." + unsupportedText

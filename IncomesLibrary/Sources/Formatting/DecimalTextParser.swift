@@ -89,7 +89,12 @@ enum DecimalTextParser {
         // `Decimal(string:)` returns nil outside its exponent range, and the
         // store keeps fewer digits than `Decimal` itself, so an amount that
         // cannot be kept exactly is rejected instead of silently changed.
-        guard let decimal = Decimal(string: plainText, locale: posixLocale),
+        let significand = plainText.prefix { character in
+            character != "e" && character != "E"
+        }
+        guard AmountPrecision.significantDigitCount(in: String(significand))
+                <= AmountPrecision.maximumSignificantDigits,
+              let decimal = Decimal(string: plainText, locale: posixLocale),
               AmountPrecision.isExactlyStorable(decimal) else {
             return .rejected(.unsupportedAmount)
         }
