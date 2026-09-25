@@ -19,7 +19,7 @@ extension ItemBalanceProjectionPlanner {
         let existingItems = try context.fetch(
             .items(.all, order: .forward)
         )
-        let plan = projectionPlan(
+        let plan = try projectionPlan(
             existingItems: existingItems,
             request: request
         )
@@ -30,7 +30,7 @@ extension ItemBalanceProjectionPlanner {
                 plan: plan,
                 affectedItems: request.affectedItems
             ),
-            comparison: comparison(from: plan)
+            comparison: try comparison(from: plan)
         )
     }
 }
@@ -49,9 +49,9 @@ private extension ItemBalanceProjectionPlanner {
     static func projectionPlan(
         existingItems: [Item],
         request: ReviewRequest
-    ) -> ProjectionPlan {
-        let existingRows = existingItems.map { item in
-            projectedRow(item: item)
+    ) throws -> ProjectionPlan {
+        let existingRows = try existingItems.map { item in
+            try projectedRow(item: item)
         }
         let unchangedRows = existingRows.filter { row in
             guard let itemID = row.itemID else {
@@ -63,7 +63,7 @@ private extension ItemBalanceProjectionPlanner {
         let affectedDateRange = dateRange(from: request.affectedDates)
         return .init(
             existingItems: existingItems,
-            balancedExistingRows: balancedRows(existingRows),
+            balancedExistingRows: try balancedRows(existingRows),
             projectedRows: projectedRows,
             affectedDateRange: affectedDateRange,
             projectionDateRange: projectedDateRange(
@@ -74,14 +74,14 @@ private extension ItemBalanceProjectionPlanner {
         )
     }
 
-    static func comparison(from plan: ProjectionPlan) -> Comparison {
+    static func comparison(from plan: ProjectionPlan) throws -> Comparison {
         let current = projection(
             balancedRows: plan.balancedExistingRows,
             dateRange: plan.projectionDateRange,
             affectedDateRange: plan.affectedDateRange,
             changedItemCount: 0
         )
-        let projected = projection(
+        let projected = try projection(
             rows: plan.projectedRows,
             dateRange: plan.projectionDateRange,
             affectedDateRange: plan.affectedDateRange,
@@ -149,9 +149,9 @@ private extension ItemBalanceProjectionPlanner {
 
     static func balancedRows(
         _ rows: [ProjectedRow]
-    ) -> [BalancedProjectedRow] {
+    ) throws -> [BalancedProjectedRow] {
         let orderedRows = sortedRows(rows)
-        let balances = BalanceCalculator.calculateBalances(
+        let balances = try BalanceCalculator.calculateBalances(
             startingFrom: .zero,
             inputs: orderedRows.map { row in
                 .init(netIncome: row.netIncome)
@@ -170,9 +170,9 @@ private extension ItemBalanceProjectionPlanner {
         dateRange: ClosedRange<Date>?,
         affectedDateRange: ClosedRange<Date>?,
         changedItemCount: Int
-    ) -> Projection {
+    ) throws -> Projection {
         projection(
-            balancedRows: balancedRows(rows),
+            balancedRows: try balancedRows(rows),
             dateRange: dateRange,
             affectedDateRange: affectedDateRange,
             changedItemCount: changedItemCount
@@ -231,14 +231,14 @@ private extension ItemBalanceProjectionPlanner {
         return min(startingBalance, minimumRowBalance)
     }
 
-    static func projectedRow(item: Item) -> ProjectedRow {
+    static func projectedRow(item: Item) throws -> ProjectedRow {
         .init(
             itemID: item.persistentModelID,
             utcDate: item.utcDate,
             localDate: item.localDate,
             content: item.content,
             priority: item.priority,
-            netIncome: item.netIncome,
+            netIncome: try BalanceCalculator.netIncome(income: item.income, outgo: item.outgo),
             tieBreaker: String(describing: item.persistentModelID)
         )
     }

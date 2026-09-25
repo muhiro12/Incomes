@@ -30,15 +30,18 @@ so amount handling could change a value without telling anyone:
 - Derived amounts, such as the yearly-duplication average, are rounded to the
   supported precision in the library at the moment they are calculated. Entered
   amounts are never rounded or clamped.
-- A running balance that leaves the representable range is refused before any
-  balance is written, so a non-finite value cannot be persisted.
+- Input precision is checked before Decimal conversion can discard digits.
+- Running balances and pre-save projections reject arithmetic precision loss
+  and results beyond the verified stored precision before writing any balance.
+  Both use the same checked calculation; the editable draft stays available.
 
 ## Consequences
 
 - `AmountPrecision` owns the limit, and every adapter reaches it through the
   shared parsing and validation contracts rather than repeating a rule.
 - Records created before this decision keep their stored values. They remain
-  readable, exportable, and editable, because a value already in the store is
-  within the supported precision by definition.
+  readable and exportable. Recalculating a legacy record can require amount
+  correction if the resulting balance cannot be calculated and stored exactly.
+  Mutation rollback and durable-save recovery remain a separate contract.
 - Raising the limit later requires new persistence evidence that the store
   keeps the additional digits through a save and reopen.

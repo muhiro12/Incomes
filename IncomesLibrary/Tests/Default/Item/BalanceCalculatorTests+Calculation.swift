@@ -4,8 +4,8 @@ import Testing
 extension BalanceCalculatorTests {
     struct CalculationTests {
         @Test("Balance calculation accumulates net incomes from the previous balance")
-        func calculation_accumulates_net_incomes_from_previous_balance() {
-            let balances = BalanceCalculator.calculateBalances(
+        func calculation_accumulates_net_incomes_from_previous_balance() throws {
+            let balances = try BalanceCalculator.calculateBalances(
                 startingFrom: 500,
                 inputs: [
                     .init(netIncome: 100),
@@ -18,8 +18,8 @@ extension BalanceCalculatorTests {
         }
 
         @Test("Balance calculation returns no balances for empty inputs")
-        func calculation_returns_empty_result_for_empty_inputs() {
-            let balances = BalanceCalculator.calculateBalances(
+        func calculation_returns_empty_result_for_empty_inputs() throws {
+            let balances = try BalanceCalculator.calculateBalances(
                 startingFrom: 500,
                 inputs: []
             )

@@ -36,19 +36,12 @@ enum BalanceCalculator {
         let previousBalance = allItems.prefix(upTo: separatorIndex).last?.balance ?? 0
 
         let targetList = allItems.suffix(from: separatorIndex)
-        let balances = calculateBalances(
+        let balances = try calculateBalances(
             startingFrom: previousBalance,
-            inputs: targetList.map { item in
-                .init(netIncome: item.netIncome)
+            inputs: try targetList.map { item in
+                .init(netIncome: try netIncome(income: item.income, outgo: item.outgo))
             }
         )
-        // Decimal addition returns a non-finite value on overflow, so the
-        // recalculation is rejected before any balance is written.
-        guard balances.allSatisfy({ balance in
-            !balance.isNaN
-        }) else {
-            throw ItemAmountError.balanceOutOfRange
-        }
 
         zip(targetList, balances).forEach { item, balance in
             item.modify(balance: balance)
@@ -58,10 +51,35 @@ enum BalanceCalculator {
     static func calculateBalances(
         startingFrom previousBalance: Decimal,
         inputs: [CalculationInput]
-    ) -> [Decimal] {
-        inputs.reduce(into: [Decimal]()) { result, input in
-            let lastBalance = result.last ?? previousBalance
-            result.append(lastBalance + input.netIncome)
+    ) throws -> [Decimal] {
+        try inputs.reduce(into: [Decimal]()) { result, input in
+            var lastBalance = result.last ?? previousBalance
+            var netIncome = input.netIncome
+            var balance = Decimal.zero
+            let error = NSDecimalAdd(&balance, &lastBalance, &netIncome, .plain)
+            guard error == .noError,
+                  AmountPrecision.isExactlyStorable(balance),
+                  balance - lastBalance == netIncome,
+                  balance - netIncome == lastBalance else {
+                throw ItemAmountError.balanceOutOfRange
+            }
+            result.append(balance)
         }
+    }
+
+    /// Checks subtraction before an already-rounded net income can hide lost digits.
+    static func netIncome(income: Decimal, outgo: Decimal) throws -> Decimal {
+        var income = income
+        var outgo = outgo
+        var result = Decimal.zero
+        // Subtraction can report no error after dropping a small operand.
+        // Check both inverse relations as well as Foundation's status.
+        guard NSDecimalSubtract(&result, &income, &outgo, .plain) == .noError,
+              !result.isNaN,
+              result + outgo == income,
+              income - result == outgo else {
+            throw ItemAmountError.balanceOutOfRange
+        }
+        return result
     }
 }

@@ -65,8 +65,8 @@ enum ItemBalanceProjectionPlanner {
             values: values,
             repeatMonthSelections: repeatMonthSelections
         )
-        let changedRows = plannedValues.enumerated().map { index, values in
-            projectedRow(
+        let changedRows = try plannedValues.enumerated().map { index, values in
+            try projectedRow(
                 values: values,
                 tieBreaker: "projection.create.\(index)"
             )
@@ -103,8 +103,8 @@ enum ItemBalanceProjectionPlanner {
             values: values,
             scope: scope
         )
-        let changedRows = updates.map { update in
-            projectedRow(
+        let changedRows = try updates.map { update in
+            try projectedRow(
                 values: update.values,
                 tieBreaker: String(describing: update.itemID)
             )
@@ -209,7 +209,7 @@ private extension ItemBalanceProjectionPlanner {
     static func projectedRow(
         values: ItemStoredValues,
         tieBreaker: String
-    ) -> ProjectedRow {
+    ) throws -> ProjectedRow {
         let utcDate = normalizedUTCDate(for: values.date)
         return .init(
             itemID: nil,
@@ -220,7 +220,7 @@ private extension ItemBalanceProjectionPlanner {
             ),
             content: values.content,
             priority: values.priority,
-            netIncome: values.income - values.outgo,
+            netIncome: try BalanceCalculator.netIncome(income: values.income, outgo: values.outgo),
             tieBreaker: tieBreaker
         )
     }

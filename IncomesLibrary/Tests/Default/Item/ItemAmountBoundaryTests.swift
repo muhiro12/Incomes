@@ -132,6 +132,58 @@ struct ItemAmountBoundaryTests {
         })
     }
 
+    @Test("Inexact balance calculations are refused before writing any balance",
+          arguments: ["1e60", "999999999999999"])
+    func inexact_balances_are_refused(largeText: String) throws {
+        let context = testContext
+        let large = try #require(Decimal(string: largeText))
+        var items = [Item]()
+        for (index, income) in [large, Decimal(2)].enumerated() {
+            let item = try Item.create(
+                context: context,
+                values: .init(
+                    date: shiftedDate("2025-0\(index + 4)-10T12:00:00Z"),
+                    content: "Exact \(index)",
+                    income: income,
+                    outgo: .zero,
+                    category: "Boundary",
+                    priority: 0
+                ),
+                repeatID: UUID()
+            )
+            items.append(item)
+        }
+        let originalBalances = items.map(\.balance)
+        #expect(throws: ItemAmountError.balanceOutOfRange) {
+            try BalanceCalculator.calculate(in: context, after: .distantPast)
+        }
+        #expect(items.map(\.balance) == originalBalances)
+    }
+
+    @Test("A projection refuses a lost amount without changing the draft or store")
+    func inexact_projection_is_refused() throws {
+        let context = testContext
+        let input = ItemFormInput(
+            date: shiftedDate("2025-04-10T12:00:00Z"),
+            content: "Exact",
+            incomeText: "1" + String(repeating: "0", count: 60),
+            outgoText: "1",
+            category: "Boundary",
+            priorityText: "0"
+        )
+        #expect(input.isValid)
+        #expect(throws: ItemAmountError.balanceOutOfRange) {
+            _ = try ItemBalanceProjectionOperations.previewCreateComparison(
+                context: context,
+                input: input,
+                repeatMonthSelections: []
+            )
+        }
+        #expect(fetchItems(context).isEmpty)
+        #expect(!context.hasChanges)
+        #expect(input.outgoText == "1")
+    }
+
     @Test("Yearly duplication keeps the exact amount of every duplicated item")
     func yearly_duplication_keeps_exact_amounts() throws {
         let context = testContext
@@ -217,17 +269,17 @@ private extension ItemAmountBoundaryTests {
         )
         let context = container.mainContext
         for (offset, amount) in amounts.enumerated() {
-            try createItem(
+            _ = try Item.create(
                 context: context,
-                input: .init(
+                values: .init(
                     date: shiftedDate("2025-0\(offset + 1)-10T12:00:00Z"),
                     content: "Amount \(offset)",
                     income: amount.income,
                     outgo: amount.outgo,
                     category: "Boundary",
-                    priority: 0,
-                    locale: english
-                )
+                    priority: 0
+                ),
+                repeatID: UUID()
             )
         }
         try context.save()
