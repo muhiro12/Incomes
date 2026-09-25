@@ -36,7 +36,6 @@ struct ReleasedStoreSchemaMigrationTests {
     @Test("A corrupt store fails to open and is left untouched")
     func corrupt_store_fails_without_reset() throws {
         try withFixtureStore { url in
-            let originalSize = try Data(contentsOf: url).count
             var corrupted = try Data(contentsOf: url)
             corrupted.replaceSubrange(
                 0..<corruptedHeaderLength,
@@ -49,7 +48,7 @@ struct ReleasedStoreSchemaMigrationTests {
                     configuration: .init(url: url, cloudKitDatabase: .none)
                 )
             }
-            #expect(try Data(contentsOf: url).count == originalSize)
+            #expect(try Data(contentsOf: url) == corrupted)
         }
     }
 }
