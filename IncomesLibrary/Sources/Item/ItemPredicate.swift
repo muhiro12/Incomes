@@ -53,6 +53,9 @@ public enum ItemPredicate {
     // MARK: - Balance
     /// Matches items whose running balance falls within the inclusive range.
     case balanceIsBetween(min: Decimal, max: Decimal)
+    // MARK: Conditions
+    /// Matches items that satisfy every validated search condition.
+    case matchesSearchConditions(ItemSearchConditions)
     // MARK: RepeatID
     /// Matches items in the specified repeat series.
     case repeatIDIs(UUID)
@@ -222,6 +225,11 @@ public enum ItemPredicate {
                 min <= item.balance && item.balance <= max
             }
 
+        // MARK: - Conditions
+
+        case .matchesSearchConditions(let conditions):
+            return Self.searchConditionsPredicate(conditions)
+
         // MARK: - RepeatID
 
         case .repeatIDIs(let repeatID):
@@ -239,6 +247,40 @@ public enum ItemPredicate {
 }
 
 extension ItemPredicate: Hashable {}
+
+private extension ItemPredicate {
+    static func searchConditionsPredicate(
+        _ conditions: ItemSearchConditions
+    ) -> Predicate<Item> {
+        let periodBounds: (start: Date, end: Date)?
+        if let period = conditions.period {
+            guard let bounds = period.storedDateBounds else {
+                return .false
+            }
+            periodBounds = bounds
+        } else {
+            periodBounds = nil
+        }
+        let start = periodBounds?.start ?? .distantPast
+        let end = periodBounds?.end ?? .distantFuture
+        let content = conditions.content ?? ""
+        let matchesAnyContent = conditions.content == nil
+        let incomeMinimum = conditions.income?.minimum ?? -Decimal.greatestFiniteMagnitude
+        let incomeMaximum = conditions.income?.maximum ?? Decimal.greatestFiniteMagnitude
+        let outgoMinimum = conditions.outgo?.minimum ?? -Decimal.greatestFiniteMagnitude
+        let outgoMaximum = conditions.outgo?.maximum ?? Decimal.greatestFiniteMagnitude
+
+        return #Predicate { item in
+            start <= item.date
+                && item.date <= end
+                && (matchesAnyContent || item.content.localizedStandardContains(content))
+                && incomeMinimum <= item.income
+                && item.income <= incomeMaximum
+                && outgoMinimum <= item.outgo
+                && item.outgo <= outgoMaximum
+        }
+    }
+}
 
 public extension FetchDescriptor where T == Item {
     /// Convenience factory for a `FetchDescriptor<Item>` using an `ItemPredicate`.

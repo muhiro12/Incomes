@@ -1,0 +1,4 @@
+Extract search conditions from the request.
+
+Current year and month (yyyy-MM): {{currentYearMonth}}
+Request JSON string: {{requestJSONString}}
