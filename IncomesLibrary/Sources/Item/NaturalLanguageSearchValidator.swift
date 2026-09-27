@@ -13,7 +13,6 @@ enum NaturalLanguageSearchValidator {
     static let supportedRelativeMonthOffsets = -maximumMonthOffset...maximumMonthOffset
 
     private static let monthsPerYear = 12
-    private static let amountLocale = Locale(identifier: "en_US")
     private static let groundingOptions: String.CompareOptions = [
         .caseInsensitive,
         .diacriticInsensitive,
@@ -36,6 +35,23 @@ enum NaturalLanguageSearchValidator {
         "remove",
         "rename",
         "update"
+    ]
+    // Results are limited and never complete ledger totals, so calculation
+    // requests are refused before generation instead of listing items.
+    private static let calculationWords: Set<String> = [
+        "average",
+        "averages",
+        "sum",
+        "total",
+        "totals"
+    ]
+    private static let calculationPhrases = [
+        "how much",
+        "いくら",
+        "合計",
+        "平均",
+        "総額",
+        "集計"
     ]
     private static let mutationPhrases = [
         "コピー",
@@ -64,6 +80,9 @@ enum NaturalLanguageSearchValidator {
         guard !asksToChangeData(trimmedRequest) else {
             throw NaturalLanguageSearchError.unsupportedAction
         }
+        guard !asksToCalculate(trimmedRequest) else {
+            throw NaturalLanguageSearchError.unsupportedCalculation
+        }
         return trimmedRequest
     }
 
@@ -75,53 +94,53 @@ enum NaturalLanguageSearchValidator {
     ) throws -> ItemSearchConditions {
         let validRequest = try validatedRequest(request)
 
-        guard extraction.intent == .search else {
-            throw NaturalLanguageSearchError.unsupportedRequest
-        }
-
         let unsupportedTerms = extraction.unsupportedTerms.compactMap(nonEmptyText)
         guard unsupportedTerms.isEmpty else {
             throw NaturalLanguageSearchError.unsupportedTerms(unsupportedTerms)
         }
 
+        var grounding = NaturalLanguageSearchGrounding(request: validRequest)
+        let period = try period(
+            from: extraction,
+            currentDate: currentDate,
+            calendar: calendar,
+            grounding: &grounding
+        )
+        let income = try amountRange(
+            extraction.amounts,
+            target: .income,
+            grounding: &grounding
+        )
+        let outgo = try amountRange(
+            extraction.amounts,
+            target: .outgo,
+            grounding: &grounding
+        )
+        let content = try content(
+            extraction.content,
+            request: validRequest
+        )
+        if let content {
+            guard grounding.useNumbers(inContent: content) else {
+                throw NaturalLanguageSearchError.overlappingContent
+            }
+        }
+        let unusedNumbers = grounding.unusedNumberTexts
+        guard unusedNumbers.isEmpty else {
+            throw NaturalLanguageSearchError.unusedNumbers(unusedNumbers)
+        }
+
         let conditions = ItemSearchConditions(
-            period: try period(
-                from: extraction,
-                currentDate: currentDate,
-                calendar: calendar
-            ),
-            content: try content(
-                extraction.content,
-                request: validRequest
-            ),
-            income: try amountRange(
-                extraction.income,
-                target: .income
-            ),
-            outgo: try amountRange(
-                extraction.outgo,
-                target: .outgo
-            )
+            period: period,
+            content: content,
+            income: income,
+            outgo: outgo
         )
 
         guard !conditions.isUnconstrained else {
             throw NaturalLanguageSearchError.noConditions
         }
         return conditions
-    }
-}
-
-private extension NaturalLanguageSearchValidator {
-    static func asksToChangeData(_ request: String) -> Bool {
-        let words = request
-            .lowercased()
-            .components(separatedBy: CharacterSet.letters.inverted)
-        if words.contains(where: mutationWords.contains) {
-            return true
-        }
-        return mutationPhrases.contains { phrase in
-            request.contains(phrase)
-        }
     }
 
     static func nonEmptyText(_ text: String?) -> String? {
@@ -131,11 +150,46 @@ private extension NaturalLanguageSearchValidator {
         }
         return trimmedText
     }
+}
+
+private extension NaturalLanguageSearchValidator {
+    static func asksToChangeData(_ request: String) -> Bool {
+        contains(
+            words: mutationWords,
+            phrases: mutationPhrases,
+            in: request
+        )
+    }
+
+    static func asksToCalculate(_ request: String) -> Bool {
+        contains(
+            words: calculationWords,
+            phrases: calculationPhrases,
+            in: request
+        )
+    }
+
+    static func contains(
+        words: Set<String>,
+        phrases: [String],
+        in request: String
+    ) -> Bool {
+        let lowercasedRequest = request.lowercased()
+        let requestWords = lowercasedRequest
+            .components(separatedBy: CharacterSet.letters.inverted)
+        if requestWords.contains(where: words.contains) {
+            return true
+        }
+        return phrases.contains { phrase in
+            lowercasedRequest.contains(phrase)
+        }
+    }
 
     static func period(
         from extraction: NaturalLanguageSearchExtraction,
         currentDate: Date,
-        calendar: Calendar
+        calendar: Calendar,
+        grounding: inout NaturalLanguageSearchGrounding
     ) throws -> ItemSearchPeriod? {
         let current = currentYearMonth(
             of: currentDate,
@@ -156,18 +210,26 @@ private extension NaturalLanguageSearchValidator {
             currentYear: current.year
         )
 
+        let period: ItemSearchPeriod?
         switch (relativePeriod, explicitPeriod) {
         case (nil, nil):
-            return nil
-        case let (period?, nil),
-             let (nil, period?):
-            return period
+            period = nil
+        case let (relativePeriod?, nil):
+            period = relativePeriod
+        case let (nil, explicitPeriod?):
+            period = explicitPeriod
         case let (relativePeriod?, explicitPeriod?):
             guard relativePeriod == explicitPeriod else {
                 throw NaturalLanguageSearchError.contradictoryMonth
             }
-            return relativePeriod
+            period = relativePeriod
         }
+        try grounding.useMonth(
+            relativeOffset: extraction.relativeMonthOffset,
+            year: extraction.year,
+            month: extraction.month
+        )
+        return period
     }
 
     static func currentYearMonth(
@@ -228,46 +290,5 @@ private extension NaturalLanguageSearchValidator {
             throw NaturalLanguageSearchError.ungroundedContent
         }
         return content
-    }
-
-    static func amountRange(
-        _ bounds: NaturalLanguageSearchExtraction.AmountBounds?,
-        target: NaturalLanguageSearchError.AmountTarget
-    ) throws -> ItemSearchAmountRange? {
-        guard let bounds else {
-            return nil
-        }
-        let minimumText = nonEmptyText(bounds.minimum)
-        let maximumText = nonEmptyText(bounds.maximum)
-        guard minimumText != nil || maximumText != nil else {
-            throw NaturalLanguageSearchError.missingAmount(target)
-        }
-        guard bounds.minimum == nil || minimumText != nil,
-              bounds.maximum == nil || maximumText != nil else {
-            throw NaturalLanguageSearchError.invalidAmount(target)
-        }
-        let minimum = try minimumText.map { text in
-            try amount(text, target: target)
-        }
-        let maximum = try maximumText.map { text in
-            try amount(text, target: target)
-        }
-        guard let range = ItemSearchAmountRange(
-            minimum: minimum,
-            maximum: maximum
-        ) else {
-            throw NaturalLanguageSearchError.invertedRange(target)
-        }
-        return range
-    }
-
-    static func amount(
-        _ text: String,
-        target: NaturalLanguageSearchError.AmountTarget
-    ) throws -> Decimal {
-        guard let value = DecimalTextParser.parse(text, locale: amountLocale) else {
-            throw NaturalLanguageSearchError.invalidAmount(target)
-        }
-        return value
     }
 }

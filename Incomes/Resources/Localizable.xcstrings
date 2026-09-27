@@ -1083,6 +1083,40 @@
         }
       }
     },
+    "Only inclusive amount limits, such as at least or at most, are supported." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Only inclusive amount limits, such as at least or at most, are supported."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Solo se admiten límites de importe inclusivos, como «al menos» o «como máximo»."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seules les limites de montant incluses, comme « au moins » ou « au plus », sont prises en charge."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "金額は「以上」「以下」のように、その金額を含む条件のみ指定できます。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "金额仅支持包含边界的条件，例如“不少于”或“不超过”。"
+          }
+        }
+      }
+    },
     "Preview the balance again before saving." : {
       "localizations" : {
         "en" : {
@@ -1283,6 +1317,244 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "开始日期"
+          }
+        }
+      }
+    },
+    "The interpreted amount isn't in your request." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The interpreted amount isn't in your request."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El importe interpretado no aparece en tu solicitud."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le montant interprété ne figure pas dans votre demande."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "読み取った金額が入力文に含まれていません。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "解析出的金额不在请求中。"
+          }
+        }
+      }
+    },
+    "The interpreted item name repeats another condition." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The interpreted item name repeats another condition."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El nombre interpretado repite otra condición."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le nom interprété reprend un autre critère."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "読み取った項目名に別の検索条件が含まれています。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "解析出的项目名称重复了其他条件。"
+          }
+        }
+      }
+    },
+    "The interpreted month or year isn't in your request." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The interpreted month or year isn't in your request."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El mes o el año interpretados no aparecen en tu solicitud."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le mois ou l’année interprétés ne figurent pas dans votre demande."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "読み取った年月が入力文に含まれていません。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "解析出的年月不在请求中。"
+          }
+        }
+      }
+    },
+    "The month in your request wasn't interpreted." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The month in your request wasn't interpreted."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se ha interpretado el mes de tu solicitud."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le mois indiqué dans votre demande n’a pas été interprété."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "入力文の月を読み取れませんでした。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "未能解析请求中的月份。"
+          }
+        }
+      }
+    },
+    "The request gives more than one lower or upper limit for the same amount." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The request gives more than one lower or upper limit for the same amount."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La solicitud indica más de un límite inferior o superior para el mismo importe."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La demande indique plusieurs limites inférieures ou supérieures pour le même montant."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "同じ金額に下限または上限が複数指定されています。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请求为同一金额指定了多个下限或上限。"
+          }
+        }
+      }
+    },
+    "These numbers weren't used as search conditions: %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "These numbers weren't used as search conditions: %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Estos números no se han usado como condiciones de búsqueda: %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ces nombres n’ont pas été utilisés comme critères : %@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "検索条件として使われなかった数値があります：%@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "以下数值未用作搜索条件：%@"
+          }
+        }
+      }
+    },
+    "This search only finds saved items. It can't calculate totals or averages." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This search only finds saved items. It can't calculate totals or averages."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esta búsqueda solo encuentra registros guardados. No puede calcular totales ni promedios."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cette recherche trouve uniquement des éléments enregistrés. Elle ne peut pas calculer de totaux ni de moyennes."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "保存済みの収支を検索する機能です。合計や平均は計算できません。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此搜索仅查找已保存的收支，无法计算合计或平均值。"
           }
         }
       }
@@ -14456,40 +14728,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "无法解析此请求。"
-          }
-        }
-      }
-    },
-    "The request doesn't look like a search for saved items." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "The request doesn't look like a search for saved items."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "La solicitud no parece buscar registros guardados."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "La demande ne semble pas porter sur la recherche d’éléments enregistrés."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "保存済みの収支を検索する内容として読み取れませんでした。"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "此请求似乎不是在查找已保存的收支。"
           }
         }
       }

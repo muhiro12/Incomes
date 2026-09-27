@@ -20,8 +20,9 @@ enum NaturalLanguageSearchInterpreter {
 
     /// Extracts and validates search conditions for one submission.
     ///
-    /// Only the request text and the captured month go to the model; saved
-    /// items are never sent. Requests and responses are not logged.
+    /// Only the request text goes to the model; the captured date resolves
+    /// relative months during validation, and saved items are never sent.
+    /// Requests and responses are not logged.
     static func conditions(
         for submission: NaturalLanguageSearchState.Submission,
         calendar: Calendar,
@@ -63,9 +64,7 @@ private extension NaturalLanguageSearchInterpreter {
             instructions
         }
         let prompt = NaturalLanguageSearchOperations.prompt(
-            request: submission.request,
-            currentDate: submission.currentDate,
-            calendar: calendar
+            request: submission.request
         )
         let options = FoundationModelToolchainSupport.greedyGenerationOptions(
             maximumResponseTokens: maximumResponseTokens

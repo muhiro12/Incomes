@@ -1,77 +1,119 @@
 import FoundationModels
 
+// Each condition is an explicit choice, such as notStated or an empty list,
+// rather than an optional property. With optional properties the on-device
+// model filled every field and invented months and bounds.
 @available(iOS 26.0, *)
-@Generable(description: "Search conditions for saved household finance items, extracted from one request.")
+@Generable(description: "Conditions that one request states for finding saved household finance items.")
 struct NaturalLanguageSearchInference: Sendable {
     @Generable
-    enum Intent {
-        case search
-        case unsupported
+    enum MonthCondition {
+        case notStated
+        case relative(monthsFromCurrentMonth: Int)
+        case named(month: Int, writtenYear: Int?)
     }
 
-    @Generable(description: "Inclusive amount bounds written as plain numbers.")
-    struct AmountBounds: Sendable {
-        @Guide(description: "Inclusive lower bound as a plain number. Omit when the request states no lower bound.")
-        var minimum: String?
-        @Guide(description: "Inclusive upper bound as a plain number. Omit when the request states no upper bound.")
-        var maximum: String?
+    @Generable
+    struct AmountCondition: Sendable {
+        @Guide(description: "The number exactly as the request writes it.")
+        var number: String
+        @Guide(description: """
+        atLeast and atMost include the number, as in 以上 and 以下. strictlyAbove and \
+        strictlyBelow exclude it, as in より多い and 未満.
+        """)
+        var comparison: Comparison
+        var target: Target
     }
 
-    @Guide(description: "search when the request only asks to find saved items; otherwise unsupported.")
-    var intent: Intent
+    @Generable
+    enum Comparison {
+        case atLeast
+        case atMost
+        case exactly
+        case strictlyAbove
+        case strictlyBelow
+    }
+
+    @Generable
+    enum Target {
+        case income
+        case outgo
+    }
+
     @Guide(description: """
-    Months relative to the current month: 0 for this month, 1 for next month, -1 for \
-    last month. Omit unless the request uses a relative month.
+    relative only for words such as next month or 来月. named for a month name such \
+    as June or a number with 月 such as 4月. Otherwise notStated.
     """)
-    var relativeMonthOffset: Int?
-    @Guide(description: "Four-digit year. Omit unless the request states the year.")
-    var year: Int?
-    @Guide(description: "Month number from 1 to 12. Omit unless the request names a month.")
-    var month: Int?
-    @Guide(description: "Words copied exactly from the request that item names must contain. Omit when absent.")
-    var contentText: String?
-    @Guide(description: "Income bounds. Omit unless the request limits income.")
-    var income: AmountBounds?
-    @Guide(description: "Outgo bounds. Omit unless the request limits outgo or spending.")
-    var outgo: AmountBounds?
+    var month: MonthCondition
     @Guide(description: """
-    Request words that no other field represents exactly. Empty when every condition is \
-    represented.
+    Words copied exactly from the request that item names must contain, or an empty \
+    string.
     """)
+    var contentText: String
+    @Guide(description: """
+    One entry for each income or outgo number in the request. Empty when the request \
+    writes no amount.
+    """)
+    var amounts: [AmountCondition]
+    @Guide(description: "Request words no field above represents.")
     var unsupportedTerms: [String]
 
     var extraction: NaturalLanguageSearchExtraction {
-        .init(
-            intent: intent.extractionIntent,
-            relativeMonthOffset: relativeMonthOffset,
-            year: year,
-            month: month,
+        var extraction = NaturalLanguageSearchExtraction(
             content: contentText,
-            income: income?.extractionBounds,
-            outgo: outgo?.extractionBounds,
+            amounts: amounts.map(\.extractionCondition),
             unsupportedTerms: unsupportedTerms
+        )
+        switch month {
+        case .notStated:
+            break
+        case .relative(let offset):
+            extraction.relativeMonthOffset = offset
+        case let .named(number, writtenYear):
+            extraction.month = number
+            extraction.year = writtenYear
+        }
+        return extraction
+    }
+}
+
+@available(iOS 26.0, *)
+private extension NaturalLanguageSearchInference.AmountCondition {
+    var extractionCondition: NaturalLanguageSearchExtraction.AmountCondition {
+        .init(
+            target: target.extractionTarget,
+            comparison: comparison.extractionComparison,
+            amount: number
         )
     }
 }
 
 @available(iOS 26.0, *)
-private extension NaturalLanguageSearchInference.Intent {
-    var extractionIntent: NaturalLanguageSearchExtraction.Intent {
+private extension NaturalLanguageSearchInference.Comparison {
+    var extractionComparison: NaturalLanguageSearchExtraction.AmountComparison {
         switch self {
-        case .search:
-            return .search
-        case .unsupported:
-            return .unsupported
+        case .atLeast:
+            return .atLeast
+        case .atMost:
+            return .atMost
+        case .exactly:
+            return .exactly
+        case .strictlyAbove:
+            return .moreThan
+        case .strictlyBelow:
+            return .lessThan
         }
     }
 }
 
 @available(iOS 26.0, *)
-private extension NaturalLanguageSearchInference.AmountBounds {
-    var extractionBounds: NaturalLanguageSearchExtraction.AmountBounds {
-        .init(
-            minimum: minimum,
-            maximum: maximum
-        )
+private extension NaturalLanguageSearchInference.Target {
+    var extractionTarget: NaturalLanguageSearchExtraction.AmountTarget {
+        switch self {
+        case .income:
+            return .income
+        case .outgo:
+            return .outgo
+        }
     }
 }

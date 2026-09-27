@@ -32,20 +32,16 @@ public enum NaturalLanguageSearchOperations {
     }
 
     /// Builds the user prompt for one already validated request.
-    public static func prompt(
-        request: String,
-        currentDate: Date,
-        calendar: Calendar
-    ) -> String {
+    ///
+    /// The prompt carries only the request. Relative months are resolved
+    /// against the captured date during validation, so the model never sees
+    /// a current date it could copy into explicit month fields.
+    public static func prompt(request: String) -> String {
         FoundationModelPromptTemplate(
             resourceName: "natural-language-search-user-prompt"
         )
         .render(
             replacements: [
-                "currentYearMonth": currentYearMonthText(
-                    from: currentDate,
-                    calendar: calendar
-                ),
                 "requestJSONString": PromptLiteralSupport.jsonStringLiteral(request)
             ]
         )
@@ -118,17 +114,5 @@ public enum NaturalLanguageSearchOperations {
 private extension NaturalLanguageSearchOperations {
     static func boundedLimit(_ limit: Int) -> Int {
         max(1, min(limit, resultLimit))
-    }
-
-    static func currentYearMonthText(
-        from date: Date,
-        calendar: Calendar
-    ) -> String {
-        let formatter = DateFormatter()
-        formatter.calendar = .init(identifier: .gregorian)
-        formatter.locale = .init(identifier: "en_US_POSIX")
-        formatter.timeZone = calendar.timeZone
-        formatter.dateFormat = "yyyy-MM"
-        return formatter.string(from: date)
     }
 }
