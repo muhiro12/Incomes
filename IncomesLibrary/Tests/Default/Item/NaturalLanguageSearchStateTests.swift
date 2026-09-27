@@ -88,7 +88,7 @@ struct NaturalLanguageSearchStateTests {
         var state = NaturalLanguageSearchState()
         state.submit(request: "rent", currentDate: currentDate)
         state.complete(try #require(state.pendingSubmission), with: .success(rentConditions))
-        state.submit(request: "subscriptions", currentDate: currentDate)
+        state.submit(request: "coffee", currentDate: currentDate)
 
         #expect(state.conditions == nil)
 

@@ -83,6 +83,10 @@ enum NaturalLanguageSearchValidator {
         guard !asksToCalculate(trimmedRequest) else {
             throw NaturalLanguageSearchError.unsupportedCalculation
         }
+        let unsupportedTerms = NaturalLanguageSearchUnsupportedTerms.find(in: trimmedRequest)
+        guard unsupportedTerms.isEmpty else {
+            throw NaturalLanguageSearchError.unsupportedTerms(unsupportedTerms)
+        }
         return trimmedRequest
     }
 

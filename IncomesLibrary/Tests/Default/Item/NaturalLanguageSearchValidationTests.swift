@@ -209,7 +209,7 @@ struct NaturalLanguageSearchValidationTests {
         #expect(throws: NaturalLanguageSearchError.ungroundedContent) {
             try conditions(
                 .init(relativeMonthOffset: 1, content: "Netflix"),
-                request: "subscriptions next month"
+                request: "coffee next month"
             )
         }
     }

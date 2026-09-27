@@ -23,7 +23,7 @@ struct NaturalLanguageSearchGrounding {
     /// One number written in the request.
     struct Number: Equatable {
         let text: String
-        let value: Decimal
+        let value: Decimal?
         let role: NumberRole
         var isUsed = false
     }
@@ -140,7 +140,10 @@ struct NaturalLanguageSearchGrounding {
     /// already uses, such as an amount phrase copied into the item name.
     mutating func useNumbers(inContent content: String) -> Bool {
         Self.numbers(in: Self.normalized(content)).allSatisfy { number in
-            use(number.value, roles: [.plain, .year, .month, .unsupported])
+            guard let value = number.value else {
+                return false
+            }
+            return use(value, roles: [.plain, .year, .month, .unsupported])
         }
     }
 }
@@ -184,12 +187,7 @@ private extension NaturalLanguageSearchGrounding {
                 return nil
             }
             let numberText = String(text[matchRange])
-            guard let value = Decimal(
-                string: numberText.replacingOccurrences(of: ",", with: ""),
-                locale: posixLocale
-            ) else {
-                return nil
-            }
+            let value = DecimalTextParser.parse(numberText, locale: Locale(identifier: "en_US"))
             return .init(
                 text: numberText,
                 value: value,
