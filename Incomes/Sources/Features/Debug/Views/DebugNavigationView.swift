@@ -13,6 +13,7 @@ struct DebugNavigationView: View {
     private enum DebugDetailRoot: Equatable {
         case placeholder
         case diagnostics
+        case naturalLanguageSearch
         case tagList
         case tag(Tag.ID)
     }
@@ -79,6 +80,8 @@ private extension DebugNavigationView {
             case .diagnostics:
                 MHLogConsoleView(logging: logging)
                     .navigationTitle("Diagnostics Console")
+            case .naturalLanguageSearch:
+                DebugNaturalLanguageSearchView()
             case .tagList:
                 DebugTagListView(
                     selection: tagSelectionBinding
@@ -161,6 +164,8 @@ private extension DebugNavigationView {
             navigateToCompactDestination(.debugAllTags)
         case .diagnostics:
             navigateToCompactDestination(.debugDiagnostics)
+        case .naturalLanguageSearch:
+            navigateToCompactDestination(.debugNaturalLanguageSearch)
         case .tag(let tagID):
             navigateToCompactDestination(.debugTag(tagID))
         }
@@ -173,6 +178,9 @@ private extension DebugNavigationView {
             detailTagPath = []
         case .diagnostics:
             detailRoot = .diagnostics
+            detailTagPath = []
+        case .naturalLanguageSearch:
+            detailRoot = .naturalLanguageSearch
             detailTagPath = []
         case .tag(let tagID):
             detailRoot = .tag(tagID)

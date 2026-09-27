@@ -20,26 +20,7 @@ struct SettingsNavigationView: View {
                 navigateToRoute: navigateToRoute
             )
             .navigationDestination(for: SettingsNavigationDestination.self) { destination in
-                switch destination {
-                case .root:
-                    EmptyView()
-                case .subscription:
-                    StoreListView()
-                case .license:
-                    LicenseView()
-                case .debug:
-                    DebugNavigationView(
-                        navigateToCompactDestination: navigateToDestination
-                    )
-                case .debugDiagnostics:
-                    DebugDiagnosticsView()
-                case .debugAllTags:
-                    DebugAllTagsView(
-                        selection: debugTagSelectionBinding
-                    )
-                case .debugTag(let tagID):
-                    DebugTagItemListView(tagID: tagID)
-                }
+                destinationView(destination)
             }
         }
         .task {
@@ -79,6 +60,37 @@ private extension SettingsNavigationView {
         )
     }
 
+    @ViewBuilder
+    func destinationView(_ destination: SettingsNavigationDestination) -> some View {
+        switch destination {
+        case .root:
+            EmptyView()
+        case .subscription:
+            StoreListView()
+        case .license:
+            LicenseView()
+        case .debug:
+            DebugNavigationView(
+                navigateToCompactDestination: navigateToDestination
+            )
+        case .debugDiagnostics:
+            DebugDiagnosticsView()
+        case .debugNaturalLanguageSearch:
+            DebugNaturalLanguageSearchView()
+                .toolbar {
+                    ToolbarItem {
+                        CloseButton()
+                    }
+                }
+        case .debugAllTags:
+            DebugAllTagsView(
+                selection: debugTagSelectionBinding
+            )
+        case .debugTag(let tagID):
+            DebugTagItemListView(tagID: tagID)
+        }
+    }
+
     func applyIncomingDestinationIfNeeded() {
         guard let incomingDestination else {
             return
@@ -104,6 +116,7 @@ private extension SettingsNavigationView {
              .debug:
             [destination]
         case .debugDiagnostics,
+             .debugNaturalLanguageSearch,
              .debugAllTags,
              .debugTag:
             [.debug, destination]

@@ -4,6 +4,7 @@ enum SettingsNavigationDestination: Hashable {
     case license
     case debug
     case debugDiagnostics
+    case debugNaturalLanguageSearch
     case debugAllTags
     case debugTag(Tag.ID)
 }

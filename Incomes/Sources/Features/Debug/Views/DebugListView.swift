@@ -103,6 +103,9 @@ private extension DebugListView {
             debugNavigationButton("Diagnostics Console") {
                 navigateToRoute(.diagnostics)
             }
+            debugNavigationButton("Natural Language Search") {
+                navigateToRoute(.naturalLanguageSearch)
+            }
         }
     }
 
