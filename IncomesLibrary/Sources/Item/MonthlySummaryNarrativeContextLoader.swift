@@ -33,7 +33,7 @@ enum MonthlySummaryNarrativeContextLoader {
         )
         .prefix(max(.zero, categoryComparisonLimit))
         .map { comparison in
-            MonthlySummaryOperations.CategoryComparison(
+            try MonthlySummaryOperations.CategoryComparison(
                 category: comparison.category,
                 currentIncome: comparison.currentIncome,
                 previousIncome: comparison.previousIncome,
@@ -42,7 +42,7 @@ enum MonthlySummaryNarrativeContextLoader {
             )
         }
 
-        return .init(
+        return try .init(
             currentTotals: .init(
                 year: currentYearMonth.year,
                 month: currentYearMonth.month,
@@ -72,15 +72,15 @@ enum MonthlySummaryNarrativeContextLoader {
         let currentYearMonth = try yearMonth(from: date)
         let previousDate = MonthlySummaryDateSupport.previousMonthDate(from: date)
         let previousYearMonth = try yearMonth(from: previousDate)
-        let currentTotals = SummaryCalculator.monthlyTotals(for: currentItems)
-        let previousTotals = SummaryCalculator.monthlyTotals(for: previousItems)
-        let categoryComparisons = SummaryCalculator.categoryComparison(
+        let currentTotals = try SummaryCalculator.monthlyTotals(for: currentItems)
+        let previousTotals = try SummaryCalculator.monthlyTotals(for: previousItems)
+        let categoryComparisons = try SummaryCalculator.categoryComparison(
             currentItems: currentItems,
             previousItems: previousItems
         )
         .prefix(max(.zero, categoryComparisonLimit))
         .map { comparison in
-            MonthlySummaryOperations.CategoryComparison(
+            try MonthlySummaryOperations.CategoryComparison(
                 category: comparison.category,
                 currentIncome: comparison.currentIncome,
                 previousIncome: comparison.previousIncome,
@@ -89,7 +89,7 @@ enum MonthlySummaryNarrativeContextLoader {
             )
         }
 
-        return .init(
+        return try .init(
             currentTotals: .init(
                 year: currentYearMonth.year,
                 month: currentYearMonth.month,

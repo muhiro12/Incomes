@@ -27,7 +27,7 @@ struct MonthlySummaryOperationsNarrativeTests {
 
     @Test
     func validatedSummary_accepts_unicode_minus_for_current_month_totals() throws {
-        let currentTotals = MonthlySummaryOperations.MonthTotals(
+        let currentTotals = try MonthlySummaryOperations.MonthTotals(
             year: 2_026,
             month: 6,
             currencyCode: "USD",
@@ -110,7 +110,7 @@ struct MonthlySummaryOperationsNarrativeTests {
 
     @Test
     func validatedSummary_accepts_a_category_name_written_in_latin_letters() throws {
-        let context = MonthlySummaryOperations.Context(
+        let context = try MonthlySummaryOperations.Context(
             currentTotals: kCurrentTotals,
             previousTotals: kPreviousTotals,
             categoryComparisons: [
@@ -148,8 +148,8 @@ struct MonthlySummaryOperationsNarrativeTests {
     }
 
     @Test
-    func prompt_describes_category_changes_without_machine_keys_or_category_amounts() {
-        let context = MonthlySummaryOperations.Context(
+    func prompt_describes_category_changes_without_machine_keys_or_category_amounts() throws {
+        let context = try MonthlySummaryOperations.Context(
             currentTotals: .init(
                 year: kCurrentTotals.year,
                 month: kCurrentTotals.month,
@@ -197,8 +197,8 @@ struct MonthlySummaryOperationsNarrativeTests {
     }
 
     @Test
-    func prompt_marks_previous_month_data_limited_and_omits_category_changes_without_totals() {
-        let context = MonthlySummaryOperations.Context(
+    func prompt_marks_previous_month_data_limited_and_omits_category_changes_without_totals() throws {
+        let context = try MonthlySummaryOperations.Context(
             currentTotals: kCurrentTotals,
             previousTotals: .init(
                 year: 2_026,
@@ -242,34 +242,49 @@ struct MonthlySummaryOperationsNarrativeTests {
     }
 }
 
-private let kCurrentTotals = MonthlySummaryOperations.MonthTotals(
-    year: 2_026,
-    month: 6,
-    currencyCode: "USD",
-    totalIncome: 1_000,
-    totalOutgo: 400
-)
+private let kCurrentTotals = fixture {
+    try MonthlySummaryOperations.MonthTotals(
+        year: 2_026,
+        month: 6,
+        currencyCode: "USD",
+        totalIncome: 1_000,
+        totalOutgo: 400
+    )
+}
 
-private let kPreviousTotals = MonthlySummaryOperations.MonthTotals(
-    year: 2_026,
-    month: 5,
-    currencyCode: "USD",
-    totalIncome: 900,
-    totalOutgo: 250
-)
+private let kPreviousTotals = fixture {
+    try MonthlySummaryOperations.MonthTotals(
+        year: 2_026,
+        month: 5,
+        currencyCode: "USD",
+        totalIncome: 900,
+        totalOutgo: 250
+    )
+}
 
-private let kContext = MonthlySummaryOperations.Context(
-    currentTotals: kCurrentTotals,
-    previousTotals: kPreviousTotals,
-    categoryComparisons: [
-        .init(
-            category: "Food \"Takeout\"",
-            currentIncome: .zero,
-            previousIncome: .zero,
-            currentOutgo: 300,
-            previousOutgo: 100
-        )
-    ]
-)
+private let kContext = fixture {
+    try MonthlySummaryOperations.Context(
+        currentTotals: kCurrentTotals,
+        previousTotals: kPreviousTotals,
+        categoryComparisons: [
+            .init(
+                category: "Food \"Takeout\"",
+                currentIncome: .zero,
+                previousIncome: .zero,
+                currentOutgo: 300,
+                previousOutgo: 100
+            )
+        ]
+    )
+}
+
+/// Builds a constant fixture whose exact amounts cannot fail to calculate.
+private func fixture<Value>(_ make: () throws -> Value) -> Value {
+    do {
+        return try make()
+    } catch {
+        preconditionFailure("Invalid fixture: \(error)")
+    }
+}
 
 // swiftlint:enable no_magic_numbers

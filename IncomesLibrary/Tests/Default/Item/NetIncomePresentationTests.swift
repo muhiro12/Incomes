@@ -30,8 +30,8 @@ struct NetIncomePresentationTests {
     }
 
     @Test("Zero net income is neutral, never reported as a profit")
-    func zero_is_neutral() {
-        let totals = ItemSummaryOperations.MonthlyTotals(
+    func zero_is_neutral() throws {
+        let totals = try ItemSummaryOperations.MonthlyTotals(
             totalIncome: Decimal(1_000),
             totalOutgo: Decimal(1_000)
         )

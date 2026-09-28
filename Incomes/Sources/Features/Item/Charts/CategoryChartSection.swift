@@ -16,40 +16,25 @@ struct CategoryChartSection: View {
     private let allowsExpansion: Bool
 
     var body: some View {
-        let incomeSegments = ItemSummaryOperations.incomeSegments(for: items)
-        let outgoSegments = ItemSummaryOperations.outgoSegments(for: items)
-        let incomeTotal = ItemSummaryOperations.totalIncome(for: items)
-        let outgoTotal = ItemSummaryOperations.totalOutgo(for: items)
-        let incomeColorScale = colorScale(for: incomeSegments, baseColor: .accent)
-        let outgoColorScale = colorScale(for: outgoSegments, baseColor: .red)
-
         Section {
-            ZoomableChartSection(
-                title: "Category",
-                transitionID: "category",
-                allowsExpansion: allowsExpansion
-            ) {
-                CategoryChartContent(
-                    incomeSegments: incomeSegments,
-                    outgoSegments: outgoSegments,
-                    incomeTotal: incomeTotal,
-                    outgoTotal: outgoTotal,
-                    incomeColorScale: incomeColorScale,
-                    outgoColorScale: outgoColorScale
-                )
-            } detail: {
-                ScrollView {
-                    CategoryChartContent(
-                        incomeSegments: incomeSegments,
-                        outgoSegments: outgoSegments,
-                        incomeTotal: incomeTotal,
-                        outgoTotal: outgoTotal,
-                        incomeColorScale: incomeColorScale,
-                        outgoColorScale: outgoColorScale
-                    )
-                    .padding(.vertical, designMetrics.layout.surface.compactInsetVertical)
+            switch Result(catching: chartSummary) {
+            case .success(let summary):
+                ZoomableChartSection(
+                    title: "Category",
+                    transitionID: "category",
+                    allowsExpansion: allowsExpansion
+                ) {
+                    chartContent(summary)
+                } detail: {
+                    ScrollView {
+                        chartContent(summary)
+                            .padding(.vertical, designMetrics.layout.surface.compactInsetVertical)
+                    }
+                    .scrollIndicators(.hidden)
                 }
-                .scrollIndicators(.hidden)
+            case .failure(let error):
+                Text(ErrorMessageOperations.message(from: error))
+                    .foregroundStyle(.secondary)
             }
         } header: {
             Text("Category")
@@ -75,6 +60,33 @@ struct CategoryChartSection: View {
 }
 
 private extension CategoryChartSection {
+    struct ChartSummary {
+        let incomeSegments: [ItemSummaryOperations.ChartSegment]
+        let outgoSegments: [ItemSummaryOperations.ChartSegment]
+        let incomeTotal: Decimal
+        let outgoTotal: Decimal
+    }
+
+    func chartSummary() throws -> ChartSummary {
+        .init(
+            incomeSegments: try ItemSummaryOperations.incomeSegments(for: items),
+            outgoSegments: try ItemSummaryOperations.outgoSegments(for: items),
+            incomeTotal: try ItemSummaryOperations.totalIncome(for: items),
+            outgoTotal: try ItemSummaryOperations.totalOutgo(for: items)
+        )
+    }
+
+    func chartContent(_ summary: ChartSummary) -> some View {
+        CategoryChartContent(
+            incomeSegments: summary.incomeSegments,
+            outgoSegments: summary.outgoSegments,
+            incomeTotal: summary.incomeTotal,
+            outgoTotal: summary.outgoTotal,
+            incomeColorScale: colorScale(for: summary.incomeSegments, baseColor: .accent),
+            outgoColorScale: colorScale(for: summary.outgoSegments, baseColor: .red)
+        )
+    }
+
     func colorScale(
         for segments: [ItemSummaryOperations.ChartSegment],
         baseColor: Color
@@ -108,5 +120,11 @@ private extension CategoryChartSection {
 #Preview(traits: .modifier(IncomesSampleData())) {
     List {
         CategoryChartSection(yearScopedTo: .now)
+    }
+}
+
+#Preview("Inexact totals", traits: .modifier(IncomesInexactTotalSampleData())) {
+    List {
+        CategoryChartSection(.items(.all))
     }
 }

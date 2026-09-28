@@ -53,14 +53,9 @@ enum BalanceCalculator {
         inputs: [CalculationInput]
     ) throws -> [Decimal] {
         try inputs.reduce(into: [Decimal]()) { result, input in
-            var lastBalance = result.last ?? previousBalance
-            var netIncome = input.netIncome
-            var balance = Decimal.zero
-            let error = NSDecimalAdd(&balance, &lastBalance, &netIncome, .plain)
-            guard error == .noError,
-                  AmountPrecision.isExactlyStorable(balance),
-                  balance - lastBalance == netIncome,
-                  balance - netIncome == lastBalance else {
+            let lastBalance = result.last ?? previousBalance
+            guard let balance = ExactAmountArithmetic.sum(lastBalance, input.netIncome),
+                  AmountPrecision.isExactlyStorable(balance) else {
                 throw ItemAmountError.balanceOutOfRange
             }
             result.append(balance)
@@ -69,15 +64,7 @@ enum BalanceCalculator {
 
     /// Checks subtraction before an already-rounded net income can hide lost digits.
     static func netIncome(income: Decimal, outgo: Decimal) throws -> Decimal {
-        var income = income
-        var outgo = outgo
-        var result = Decimal.zero
-        // Subtraction can report no error after dropping a small operand.
-        // Check both inverse relations as well as Foundation's status.
-        guard NSDecimalSubtract(&result, &income, &outgo, .plain) == .noError,
-              !result.isNaN,
-              result + outgo == income,
-              income - result == outgo else {
+        guard let result = ExactAmountArithmetic.difference(income, outgo) else {
             throw ItemAmountError.balanceOutOfRange
         }
         return result

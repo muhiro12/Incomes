@@ -50,8 +50,8 @@ struct MonthSummaryProvider: AppIntentTimelineProvider {
         let snapshot: WidgetMonthSummarySnapshot = {
             guard let context = try? ModelContainerFactory.sharedContext() else {
                 return .init(
-                    totalIncomeText: "$0",
-                    totalOutgoText: "-$0",
+                    totalIncomeText: ItemSummaryOperations.unavailableAmountText,
+                    totalOutgoText: ItemSummaryOperations.unavailableAmountText,
                     deepLinkURL: WidgetDeepLinkBuilder.monthURL(for: targetDate)
                 )
             }

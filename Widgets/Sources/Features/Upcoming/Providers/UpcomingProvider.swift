@@ -41,7 +41,7 @@ struct UpcomingProvider: AppIntentTimelineProvider {
                     subtitleText: "Next",
                     titleText: "Upcoming",
                     detailText: "Error",
-                    amountText: "$0",
+                    amountText: ItemSummaryOperations.unavailableAmountText,
                     netIncomePresentation: .neutral,
                     deepLinkURL: WidgetDeepLinkBuilder.homeURL()
                 )

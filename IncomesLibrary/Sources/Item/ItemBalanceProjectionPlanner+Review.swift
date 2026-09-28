@@ -33,6 +33,20 @@ extension ItemBalanceProjectionPlanner {
             comparison: try comparison(from: plan)
         )
     }
+
+    /// Refuses new rows whose running balances could not be stored exactly.
+    ///
+    /// Call this before inserting records so a refusal leaves no partial changes.
+    static func validateBalances(
+        context: ModelContext,
+        newRows: [ProjectedRow]
+    ) throws {
+        let existingRows = try context.fetch(
+            .items(.all, order: .forward)
+        )
+        .map(projectedRow(item:))
+        _ = try balancedRows(existingRows + newRows)
+    }
 }
 
 private extension ItemBalanceProjectionPlanner {

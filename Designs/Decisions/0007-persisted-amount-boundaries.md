@@ -34,6 +34,10 @@ so amount handling could change a value without telling anyone:
 - Running balances and pre-save projections reject arithmetic precision loss
   and results beyond the verified stored precision before writing any balance.
   Both use the same checked calculation; the editable draft stays available.
+- Reporting totals, category deltas, and yearly-average source sums also reject
+  inexact arithmetic. Unavailable totals are shown as an error or an unavailable
+  amount, never as zero. Average division may round to the stored precision but
+  must reject overflow, underflow, and nonfinite results.
 
 ## Consequences
 

@@ -20,18 +20,30 @@ extension WatchTagRow: View {
                 Image(systemName: netIncomePresentation.symbolName)
                     .foregroundStyle(netIncomeColor)
                     .accessibilityHidden(true)
-                Text(tag.netIncome.asCurrency)
+                Text(netIncomeText)
                     .foregroundStyle(netIncomeColor)
             }
             .font(.footnote)
             .accessibilityElement(children: .combine)
             .accessibilityLabel(netIncomeAccessibilityLabel)
-            .accessibilityValue(Text(tag.netIncome.asCurrency))
+            .accessibilityValue(Text(netIncomeAccessibilityValue))
+        }
+    }
+
+    private var netIncomeText: String {
+        (try? tag.netIncome)?.asCurrency ?? ItemSummaryOperations.unavailableAmountText
+    }
+
+    private var netIncomeAccessibilityValue: String {
+        do {
+            return try tag.netIncome.asCurrency
+        } catch {
+            return ErrorMessageOperations.message(from: error)
         }
     }
 
     private var netIncomePresentation: ItemSummaryOperations.NetIncomePresentation {
-        ItemSummaryOperations.netIncomePresentation(for: tag.netIncome)
+        ItemSummaryOperations.netIncomePresentation(for: (try? tag.netIncome) ?? .zero)
     }
 
     private var netIncomeColor: Color {
@@ -46,7 +58,10 @@ extension WatchTagRow: View {
     }
 
     private var netIncomeAccessibilityLabel: Text {
-        switch netIncomePresentation {
+        guard (try? tag.netIncome) != nil else {
+            return Text(tag.displayName)
+        }
+        return switch netIncomePresentation {
         case .positive:
             Text("Positive net income")
         case .neutral:

@@ -63,22 +63,27 @@ public extension Tag {
     }
 
     /// Sum of `income` across related items.
+    /// - Throws: `ItemAmountError.totalOutOfRange` when the total is not exact.
     var income: Decimal {
-        (items ?? []).reduce(.zero) { partial, item in
-            partial + item.income
+        get throws {
+            try ExactAmountArithmetic.checkedTotal((items ?? []).map(\.income))
         }
     }
 
     /// Sum of `outgo` across related items.
+    /// - Throws: `ItemAmountError.totalOutOfRange` when the total is not exact.
     var outgo: Decimal {
-        (items ?? []).reduce(.zero) { partial, item in
-            partial + item.outgo
+        get throws {
+            try ExactAmountArithmetic.checkedTotal((items ?? []).map(\.outgo))
         }
     }
 
     /// Convenience: `income - outgo`.
+    /// - Throws: `ItemAmountError.totalOutOfRange` when a total or the difference is not exact.
     var netIncome: Decimal {
-        income - outgo
+        get throws {
+            try ExactAmountArithmetic.checkedDifference(income, outgo)
+        }
     }
 
     /// True when any related item has a negative running balance (deficit).

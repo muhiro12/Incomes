@@ -8,10 +8,6 @@ struct IncomeAndOutgoChart: View {
     let items: [Item]
 
     var body: some View {
-        let totalIncome = ItemSummaryOperations.totalIncome(for: items)
-        let totalOutgo = ItemSummaryOperations.totalOutgo(for: items)
-        let netIncome = totalIncome - totalOutgo
-
         Chart {
             RuleMark(y: .value("Zero", TimelineChartMetrics.zeroRuleYValue))
                 .foregroundStyle(.secondary.opacity(TimelineChartMetrics.zeroRuleOpacity))
@@ -63,49 +59,39 @@ struct IncomeAndOutgoChart: View {
         }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(Text("Income and Outgo chart"))
-        .accessibilityValue(
-            accessibilityValue(
-                totalIncome: totalIncome,
-                totalOutgo: totalOutgo,
-                netIncome: netIncome
-            )
-        )
+        .accessibilityValue(accessibilityValue)
     }
 }
 
 private extension IncomeAndOutgoChart {
-    func accessibilityValue(
-        totalIncome: Decimal,
-        totalOutgo: Decimal,
-        netIncome: Decimal
-    ) -> Text {
+    var accessibilityValue: Text {
         guard !items.isEmpty else {
             return Text("No items")
         }
-        return Text(verbatim: accessibilityValueParts(
-            totalIncome: totalIncome,
-            totalOutgo: totalOutgo,
-            netIncome: netIncome
-        )
-        .formatted(.list(type: .and).locale(locale)))
+        do {
+            return Text(verbatim: accessibilityValueParts(
+                totals: try ItemSummaryOperations.totals(for: items)
+            )
+            .formatted(.list(type: .and).locale(locale)))
+        } catch {
+            return Text(ErrorMessageOperations.message(from: error))
+        }
     }
 
     func accessibilityValueParts(
-        totalIncome: Decimal,
-        totalOutgo: Decimal,
-        netIncome: Decimal
+        totals: ItemSummaryOperations.MonthlyTotals
     ) -> [String] {
         [
             String(
-                localized: "Total income: \(totalIncome.currencyText(locale: locale))",
+                localized: "Total income: \(totals.totalIncome.currencyText(locale: locale))",
                 locale: locale
             ),
             String(
-                localized: "Total outgo: \(totalOutgo.minusCurrencyText(locale: locale))",
+                localized: "Total outgo: \(totals.totalOutgo.minusCurrencyText(locale: locale))",
                 locale: locale
             ),
             String(
-                localized: "Net income: \(netIncome.currencyText(locale: locale))",
+                localized: "Net income: \(totals.netIncome.currencyText(locale: locale))",
                 locale: locale
             )
         ]

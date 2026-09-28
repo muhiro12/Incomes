@@ -173,11 +173,11 @@ enum YearlyItemDuplicationSupport {
         id: UUID,
         items: [Item],
         targetDates: [Date]
-    ) -> YearlyItemDuplicationGroup {
+    ) throws -> YearlyItemDuplicationGroup {
         let content = items.first?.content ?? ""
         let category = items.first?.category?.name ?? ""
-        let averageIncome = averageValue(items.map(\.income))
-        let averageOutgo = averageValue(items.map(\.outgo))
+        let averageIncome = try averageValue(items.map(\.income))
+        let averageOutgo = try averageValue(items.map(\.outgo))
         return .init(
             id: id,
             content: content,
@@ -189,14 +189,30 @@ enum YearlyItemDuplicationSupport {
         )
     }
 
-    static func averageValue(_ values: [Decimal]) -> Decimal {
+    /// Returns the average rounded once to the stored precision.
+    /// - Throws: `ItemAmountError.totalOutOfRange` when the source total is not exact.
+    static func averageValue(_ values: [Decimal]) throws -> Decimal {
         guard !values.isEmpty else {
             return .zero
         }
-        let total = values.reduce(.zero, +)
-        let count = Decimal(values.count)
+        // Cancelling amounts such as `10^40 + 1 - 10^40` would otherwise lose the
+        // small operand before division, so the source total must be exact.
+        var total = try ExactAmountArithmetic.checkedTotal(values)
+        var count = Decimal(values.count)
+        var average = Decimal.zero
+        let divisionStatus = NSDecimalDivide(&average, &total, &count, .plain)
+        guard divisionStatus == .noError || divisionStatus == .lossOfPrecision,
+              !average.isNaN,
+              total == .zero || average != .zero else {
+            throw ItemAmountError.totalOutOfRange
+        }
         // Division can produce more digits than the store keeps, so the derived
         // average is rounded here instead of being rounded silently on save.
-        return AmountPrecision.storableValue(total / count)
+        let storedAverage = AmountPrecision.storableValue(average)
+        guard AmountPrecision.isExactlyStorable(storedAverage),
+              total == .zero || storedAverage != .zero else {
+            throw ItemAmountError.totalOutOfRange
+        }
+        return storedAverage
     }
 }

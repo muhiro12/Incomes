@@ -53,9 +53,10 @@ public enum WidgetEntryOperations {
                 deepLinkURL: deepLinkURL
             )
         } catch {
+            // A failed fetch or inexact total must not be shown as a zero amount.
             return .init(
-                totalIncomeText: "$0",
-                totalOutgoText: "-$0",
+                totalIncomeText: ItemSummaryOperations.unavailableAmountText,
+                totalOutgoText: ItemSummaryOperations.unavailableAmountText,
                 deepLinkURL: deepLinkURL
             )
         }
@@ -81,8 +82,9 @@ public enum WidgetEntryOperations {
                 deepLinkURL: deepLinkURL
             )
         } catch {
+            // A failed fetch or inexact total must not be shown as a zero amount.
             return .init(
-                netIncomeText: "$0",
+                netIncomeText: ItemSummaryOperations.unavailableAmountText,
                 netIncomePresentation: .neutral,
                 deepLinkURL: deepLinkURL
             )
@@ -138,7 +140,7 @@ public enum WidgetEntryOperations {
                 subtitleText: "Next",
                 titleText: "Upcoming",
                 detailText: "Error",
-                amountText: "$0",
+                amountText: ItemSummaryOperations.unavailableAmountText,
                 netIncomePresentation: .neutral,
                 deepLinkURL: deepLinkBuilder.homeDeepLink()
             )

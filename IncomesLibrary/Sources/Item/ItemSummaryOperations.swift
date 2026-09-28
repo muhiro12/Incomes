@@ -35,10 +35,11 @@ public enum ItemSummaryOperations {
         public let netIncome: Decimal
 
         /// Creates a new `MonthlyTotals` value.
-        public init(totalIncome: Decimal, totalOutgo: Decimal) {
+        /// - Throws: `ItemAmountError.totalOutOfRange` when the net income is not exact.
+        public init(totalIncome: Decimal, totalOutgo: Decimal) throws {
             self.totalIncome = totalIncome
             self.totalOutgo = totalOutgo
-            netIncome = totalIncome - totalOutgo
+            netIncome = try ExactAmountArithmetic.checkedDifference(totalIncome, totalOutgo)
         }
     }
 
@@ -60,20 +61,21 @@ public enum ItemSummaryOperations {
         public let outgoDelta: Decimal
 
         /// Creates a new category comparison value.
+        /// - Throws: `ItemAmountError.totalOutOfRange` when a delta is not exact.
         public init(
             category: String,
             currentIncome: Decimal,
             previousIncome: Decimal,
             currentOutgo: Decimal,
             previousOutgo: Decimal
-        ) {
+        ) throws {
             self.category = category
             self.currentIncome = currentIncome
             self.previousIncome = previousIncome
-            incomeDelta = currentIncome - previousIncome
+            incomeDelta = try ExactAmountArithmetic.checkedDifference(currentIncome, previousIncome)
             self.currentOutgo = currentOutgo
             self.previousOutgo = previousOutgo
-            outgoDelta = currentOutgo - previousOutgo
+            outgoDelta = try ExactAmountArithmetic.checkedDifference(currentOutgo, previousOutgo)
         }
     }
 
@@ -111,6 +113,12 @@ public enum ItemSummaryOperations {
         }
     }
 
+    /// Placeholder shown instead of an amount that cannot be calculated exactly.
+    ///
+    /// Surfaces pair it with `ItemAmountError.totalOutOfRange` for assistive
+    /// technologies, so a refused total is never displayed as zero.
+    public static let unavailableAmountText = "—"
+
     /// Calculates totals for the month that contains `date`.
     public static func monthlyTotals(
         context: ModelContext,
@@ -134,13 +142,21 @@ public enum ItemSummaryOperations {
     }
 
     /// Returns total income for the provided items.
-    public static func totalIncome(for items: [Item]) -> Decimal {
-        SummaryCalculator.totalIncome(for: items)
+    /// - Throws: `ItemAmountError.totalOutOfRange` when the total is not exact.
+    public static func totalIncome(for items: [Item]) throws -> Decimal {
+        try SummaryCalculator.totalIncome(for: items)
     }
 
     /// Returns total outgo for the provided items.
-    public static func totalOutgo(for items: [Item]) -> Decimal {
-        SummaryCalculator.totalOutgo(for: items)
+    /// - Throws: `ItemAmountError.totalOutOfRange` when the total is not exact.
+    public static func totalOutgo(for items: [Item]) throws -> Decimal {
+        try SummaryCalculator.totalOutgo(for: items)
+    }
+
+    /// Returns exact totals for the provided items.
+    /// - Throws: `ItemAmountError.totalOutOfRange` when a total or the net income is not exact.
+    public static func totals(for items: [Item]) throws -> MonthlyTotals {
+        try SummaryCalculator.monthlyTotals(for: items)
     }
 
     /// Classifies net income for consistent colors, symbols, and labels.
@@ -157,12 +173,14 @@ public enum ItemSummaryOperations {
     }
 
     /// Returns income chart segments grouped by category.
-    public static func incomeSegments(for items: [Item]) -> [ChartSegment] {
-        CategoryChartSummaryCalculator.incomeSegments(for: items)
+    /// - Throws: `ItemAmountError.totalOutOfRange` when a category total is not exact.
+    public static func incomeSegments(for items: [Item]) throws -> [ChartSegment] {
+        try CategoryChartSummaryCalculator.incomeSegments(for: items)
     }
 
     /// Returns outgo chart segments grouped by category.
-    public static func outgoSegments(for items: [Item]) -> [ChartSegment] {
-        CategoryChartSummaryCalculator.outgoSegments(for: items)
+    /// - Throws: `ItemAmountError.totalOutOfRange` when a category total is not exact.
+    public static func outgoSegments(for items: [Item]) throws -> [ChartSegment] {
+        try CategoryChartSummaryCalculator.outgoSegments(for: items)
     }
 }

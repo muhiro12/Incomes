@@ -56,6 +56,8 @@ public enum YearlyItemDuplicationApplyOperations {
         plan: YearlyItemDuplicationPlan,
         context: ModelContext
     ) throws -> MutationResult<YearlyItemDuplicationResult> {
+        // Refuse before inserting so an unsupported balance leaves no partial duplicates.
+        try validateBalances(plan: plan, context: context)
         let createdItems = try createItems(
             plan: plan,
             context: context
@@ -69,6 +71,38 @@ public enum YearlyItemDuplicationApplyOperations {
 }
 
 private extension YearlyItemDuplicationApplyOperations {
+    static func validateBalances(
+        plan: YearlyItemDuplicationPlan,
+        context: ModelContext
+    ) throws {
+        try ItemBalanceProjectionPlanner.validateCreationBalances(
+            context: context,
+            values: plan.groups.flatMap { group in
+                YearlyItemDuplicationPlanOperations.entries(
+                    for: group.id,
+                    in: plan
+                )
+                .map { entry in
+                    storedValues(entry: entry, group: group)
+                }
+            }
+        )
+    }
+
+    static func storedValues(
+        entry: YearlyItemDuplicationEntry,
+        group: YearlyItemDuplicationGroup
+    ) -> ItemStoredValues {
+        .init(
+            date: entry.targetDate,
+            content: entry.sourceItem.content,
+            income: group.averageIncome,
+            outgo: group.averageOutgo,
+            category: entry.sourceItem.category?.name ?? "",
+            priority: 0
+        )
+    }
+
     static func createItems(
         plan: YearlyItemDuplicationPlan,
         context: ModelContext
@@ -110,14 +144,7 @@ private extension YearlyItemDuplicationApplyOperations {
     ) throws -> Item {
         try Item.create(
             context: context,
-            values: .init(
-                date: entry.targetDate,
-                content: entry.sourceItem.content,
-                income: group.averageIncome,
-                outgo: group.averageOutgo,
-                category: entry.sourceItem.category?.name ?? "",
-                priority: 0
-            ),
+            values: storedValues(entry: entry, group: group),
             repeatID: repeatID
         )
     }

@@ -14,15 +14,15 @@ struct ItemSummaryChartOperationsTests {
     func totalIncome_and_totalOutgo_return_aggregated_values() throws {
         let items = try makeItems()
 
-        #expect(ItemSummaryOperations.totalIncome(for: items) == TestAmount.totalIncome)
-        #expect(ItemSummaryOperations.totalOutgo(for: items) == TestAmount.totalOutgo)
+        #expect(try ItemSummaryOperations.totalIncome(for: items) == TestAmount.totalIncome)
+        #expect(try ItemSummaryOperations.totalOutgo(for: items) == TestAmount.totalOutgo)
     }
 
     @Test
     func incomeSegments_group_filter_and_sort_income() throws {
         let items = try makeItems()
 
-        let segments = ItemSummaryOperations.incomeSegments(for: items)
+        let segments = try ItemSummaryOperations.incomeSegments(for: items)
 
         #expect(segments.map(\.title) == ["Work", "Gift"])
         #expect(segments.map(\.value) == [TestAmount.workIncome, TestAmount.giftIncome])
@@ -58,7 +58,7 @@ struct ItemSummaryChartOperationsTests {
             )
         ]
 
-        let segments = ItemSummaryOperations.incomeSegments(for: items)
+        let segments = try ItemSummaryOperations.incomeSegments(for: items)
 
         #expect(segments.map(\.title) == ["Alpha", "Beta"])
         #expect(segments.map(\.value) == [TestAmount.tieIncome, TestAmount.tieIncome])
@@ -68,7 +68,7 @@ struct ItemSummaryChartOperationsTests {
     func outgoSegments_group_filter_and_sort_outgo() throws {
         let items = try makeItems()
 
-        let segments = ItemSummaryOperations.outgoSegments(for: items)
+        let segments = try ItemSummaryOperations.outgoSegments(for: items)
 
         #expect(segments.map(\.title) == ["Food", "Housing"])
         #expect(segments.map(\.value) == [TestAmount.foodOutgo, TestAmount.housingOutgo])

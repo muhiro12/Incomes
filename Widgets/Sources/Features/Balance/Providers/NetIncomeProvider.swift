@@ -50,7 +50,7 @@ struct NetIncomeProvider: AppIntentTimelineProvider {
         let snapshot: WidgetNetIncomeSnapshot = {
             guard let context = try? ModelContainerFactory.sharedContext() else {
                 return .init(
-                    netIncomeText: "$0",
+                    netIncomeText: ItemSummaryOperations.unavailableAmountText,
                     netIncomePresentation: .neutral,
                     deepLinkURL: WidgetDeepLinkBuilder.monthURL(for: targetDate)
                 )

@@ -12,16 +12,16 @@ enum CategoryChartSummaryCalculator {
     typealias Segment = ItemSummaryOperations.ChartSegment
 
     /// Returns income chart segments grouped by category.
-    static func incomeSegments(for items: [Item]) -> [Segment] {
-        segments(
+    static func incomeSegments(for items: [Item]) throws -> [Segment] {
+        try segments(
             for: items,
             amount: \.income
         )
     }
 
     /// Returns outgo chart segments grouped by category.
-    static func outgoSegments(for items: [Item]) -> [Segment] {
-        segments(
+    static func outgoSegments(for items: [Item]) throws -> [Segment] {
+        try segments(
             for: items,
             amount: \.outgo
         )
@@ -32,7 +32,7 @@ private extension CategoryChartSummaryCalculator {
     static func segments(
         for items: [Item],
         amount: KeyPath<Item, Decimal>
-    ) -> [Segment] {
+    ) throws -> [Segment] {
         let groupedItems = Dictionary(grouping: items.filter { item in
             item[keyPath: amount] != .zero
         }) { item in
@@ -40,15 +40,17 @@ private extension CategoryChartSummaryCalculator {
                 forStoredName: item.category?.name
             )
         }
-        let total = groupedItems.values
-            .flatMap(\.self)
-            .reduce(.zero) { result, item in
-                result + item[keyPath: amount]
+        let total = try ExactAmountArithmetic.checkedTotal(
+            groupedItems.values.flatMap(\.self).map { item in
+                item[keyPath: amount]
             }
-        return groupedItems.map { displayName, items in
-            let value = items.reduce(.zero) { result, item in
-                result + item[keyPath: amount]
-            }
+        )
+        return try groupedItems.map { displayName, items in
+            let value = try ExactAmountArithmetic.checkedTotal(
+                items.map { item in
+                    item[keyPath: amount]
+                }
+            )
             return .init(
                 title: displayName,
                 value: value,

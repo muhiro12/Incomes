@@ -35,6 +35,40 @@
         }
       }
     },
+    "The total cannot be calculated exactly. Review the income and outgo amounts and try again." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The total cannot be calculated exactly. Review the income and outgo amounts and try again."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "合計を正確に計算できません。収入と支出の金額を確認して、もう一度お試しください。"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se puede calcular el total con exactitud. Revisa los importes de ingresos y gastos e inténtalo de nuevo."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le total ne peut pas être calculé exactement. Vérifiez les montants des revenus et des dépenses, puis réessayez."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法精确计算合计。请检查收入和支出金额，然后重试。"
+          }
+        }
+      }
+    },
     "%lld groups / %lld items / %lld skipped" : {
       "localizations" : {
         "en" : {

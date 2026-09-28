@@ -124,6 +124,22 @@ enum ItemBalanceProjectionPlanner {
             )
         )
     }
+
+    /// Refuses creating `values` when a resulting running balance could not be stored exactly.
+    static func validateCreationBalances(
+        context: ModelContext,
+        values: [ItemStoredValues]
+    ) throws {
+        try validateBalances(
+            context: context,
+            newRows: values.enumerated().map { index, values in
+                try projectedRow(
+                    values: values,
+                    tieBreaker: "projection.planned.\(index)"
+                )
+            }
+        )
+    }
 }
 
 private extension ItemBalanceProjectionPlanner {

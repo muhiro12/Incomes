@@ -21,19 +21,16 @@ enum SummaryCalculator {
     static func monthlyTotals(context: ModelContext, date: Date) throws -> MonthlyTotals {
         let items = try ItemQueryOperations.items(context: context, date: date)
 
-        return monthlyTotals(for: items)
+        return try monthlyTotals(for: items)
     }
 
     /// Calculates totals for the provided items.
-    static func monthlyTotals(for items: [Item]) -> MonthlyTotals {
-        let income: Decimal = items.reduce(.zero) { partial, item in
-            partial + item.income
-        }
-        let outgo: Decimal = items.reduce(.zero) { partial, item in
-            partial + item.outgo
-        }
-
-        return .init(totalIncome: income, totalOutgo: outgo)
+    /// - Throws: `ItemAmountError.totalOutOfRange` when a total is not exact.
+    static func monthlyTotals(for items: [Item]) throws -> MonthlyTotals {
+        try .init(
+            totalIncome: totalIncome(for: items),
+            totalOutgo: totalOutgo(for: items)
+        )
     }
 
     /// Compares category totals for the month containing `date` with the previous month.
@@ -49,25 +46,26 @@ enum SummaryCalculator {
         let previousMonthDate = MonthlySummaryDateSupport.previousMonthDate(from: date)
         let previousItems = try ItemQueryOperations.items(context: context, date: previousMonthDate)
 
-        return categoryComparison(
+        return try categoryComparison(
             currentItems: currentItems,
             previousItems: previousItems
         )
     }
 
     /// Compares category totals for provided current and previous month items.
+    /// - Throws: `ItemAmountError.totalOutOfRange` when a total or delta is not exact.
     static func categoryComparison(
         currentItems: [Item],
         previousItems: [Item]
-    ) -> [CategoryComparison] {
-        let currentTotals = categoryTotals(for: currentItems)
-        let previousTotals = categoryTotals(for: previousItems)
+    ) throws -> [CategoryComparison] {
+        let currentTotals = try categoryTotals(for: currentItems)
+        let previousTotals = try categoryTotals(for: previousItems)
         let categories = Set(currentTotals.keys).union(previousTotals.keys)
 
-        return categories.compactMap { category in
+        return try categories.compactMap { category in
             let currentTotal = currentTotals[category] ?? .init()
             let previousTotal = previousTotals[category] ?? .init()
-            let comparison = CategoryComparison(
+            let comparison = try CategoryComparison(
                 category: category,
                 currentIncome: currentTotal.income,
                 previousIncome: previousTotal.income,
@@ -90,17 +88,15 @@ enum SummaryCalculator {
     }
 
     /// Returns total income for the provided items.
-    static func totalIncome(for items: [Item]) -> Decimal {
-        items.reduce(.zero) { result, item in
-            result + item.income
-        }
+    /// - Throws: `ItemAmountError.totalOutOfRange` when the total is not exact.
+    static func totalIncome(for items: [Item]) throws -> Decimal {
+        try ExactAmountArithmetic.checkedTotal(items.map(\.income))
     }
 
     /// Returns total outgo for the provided items.
-    static func totalOutgo(for items: [Item]) -> Decimal {
-        items.reduce(.zero) { result, item in
-            result + item.outgo
-        }
+    /// - Throws: `ItemAmountError.totalOutOfRange` when the total is not exact.
+    static func totalOutgo(for items: [Item]) throws -> Decimal {
+        try ExactAmountArithmetic.checkedTotal(items.map(\.outgo))
     }
 }
 
@@ -110,15 +106,16 @@ private extension SummaryCalculator {
         var outgo: Decimal = .zero
     }
 
-    static func categoryTotals(for items: [Item]) -> [String: CategoryTotals] {
-        items.reduce(into: [String: CategoryTotals]()) { result, item in
+    static func categoryTotals(for items: [Item]) throws -> [String: CategoryTotals] {
+        try items.reduce(into: [String: CategoryTotals]()) { result, item in
             let category = CategoryNameSupport.displayName(
                 forStoredName: item.category?.name
             )
-            var totals = result[category] ?? .init()
-            totals.income += item.income
-            totals.outgo += item.outgo
-            result[category] = totals
+            let totals = result[category] ?? .init()
+            result[category] = .init(
+                income: try ExactAmountArithmetic.checkedTotal([totals.income, item.income]),
+                outgo: try ExactAmountArithmetic.checkedTotal([totals.outgo, item.outgo])
+            )
         }
     }
 

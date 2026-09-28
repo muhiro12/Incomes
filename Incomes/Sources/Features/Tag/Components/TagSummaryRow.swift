@@ -17,14 +17,14 @@ struct TagSummaryRow: View {
     var body: some View {
         let itemCount = (tag.items ?? []).count
         let netIncomePresentation = ItemSummaryOperations.netIncomePresentation(
-            for: tag.netIncome
+            for: (try? tag.netIncome) ?? .zero
         )
 
         TagSummaryRowContent(
             displayName: tag.displayName,
             itemCount: itemCount,
-            incomeText: tag.income.asCurrency,
-            outgoText: tag.outgo.asMinusCurrency,
+            incomeText: (try? tag.income)?.asCurrency ?? ItemSummaryOperations.unavailableAmountText,
+            outgoText: (try? tag.outgo)?.asMinusCurrency ?? ItemSummaryOperations.unavailableAmountText,
             hasDeficit: tag.hasDeficit,
             netIncomePresentation: netIncomePresentation
         )
@@ -36,7 +36,13 @@ struct TagSummaryRow: View {
 
 private extension TagSummaryRow {
     var netIncomeAccessibilityText: String {
-        switch ItemSummaryOperations.netIncomePresentation(for: tag.netIncome) {
+        let netIncome: Decimal
+        do {
+            netIncome = try tag.netIncome
+        } catch {
+            return ErrorMessageOperations.message(from: error)
+        }
+        return switch ItemSummaryOperations.netIncomePresentation(for: netIncome) {
         case .positive:
             String(localized: "Positive net income", locale: locale)
         case .neutral:
@@ -52,17 +58,26 @@ private extension TagSummaryRow {
     }
 
     func accessibilityValueParts(itemCount: Int) -> [String] {
+        let itemCountText = String(
+            localized: "Items: \(itemCount)",
+            locale: locale
+        )
+        let income: Decimal
+        let outgo: Decimal
+        do {
+            income = try tag.income
+            outgo = try tag.outgo
+        } catch {
+            return [itemCountText, ErrorMessageOperations.message(from: error)]
+        }
         var parts = [
+            itemCountText,
             String(
-                localized: "Items: \(itemCount)",
+                localized: "Income: \(income.currencyText(locale: locale))",
                 locale: locale
             ),
             String(
-                localized: "Income: \(tag.income.currencyText(locale: locale))",
-                locale: locale
-            ),
-            String(
-                localized: "Outgo: \(tag.outgo.minusCurrencyText(locale: locale))",
+                localized: "Outgo: \(outgo.minusCurrencyText(locale: locale))",
                 locale: locale
             )
         ]

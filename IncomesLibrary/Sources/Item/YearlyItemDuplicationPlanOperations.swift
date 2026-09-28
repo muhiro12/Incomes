@@ -56,8 +56,8 @@ public enum YearlyItemDuplicationPlanOperations {
             options: options
         )
         var builder = PlanBuilder(input: input, options: options)
-        builder.addRepeatGroups()
-        builder.addFallbackGroups()
+        try builder.addRepeatGroups()
+        try builder.addFallbackGroups()
         return builder.makePlan()
     }
 }
@@ -78,20 +78,20 @@ private extension YearlyItemDuplicationPlanOperations {
         var skippedDuplicateCount = 0
         var fallbackCandidates = [Item]()
 
-        mutating func addRepeatGroups() {
+        mutating func addRepeatGroups() throws {
             let groupedItemsByRepeatID = Dictionary(grouping: input.sourceItems) { item in
                 item.repeatID
             }
             for (_, items) in groupedItemsByRepeatID {
                 if items.count >= input.minimumRepeatItemCount {
-                    addGroup(from: items)
+                    try addGroup(from: items)
                 } else {
                     fallbackCandidates.append(contentsOf: items)
                 }
             }
         }
 
-        mutating func addFallbackGroups() {
+        mutating func addFallbackGroups() throws {
             let groupedItemsByFallbackKey = Dictionary(grouping: fallbackCandidates) { item in
                 YearlyItemDuplicationSupport.fallbackGroupingKey(for: item)
             }
@@ -99,11 +99,11 @@ private extension YearlyItemDuplicationPlanOperations {
                 guard shouldIncludeFallbackGroup(items) else {
                     continue
                 }
-                addGroup(from: items)
+                try addGroup(from: items)
             }
         }
 
-        mutating func addGroup(from items: [Item]) {
+        mutating func addGroup(from items: [Item]) throws {
             let groupID = UUID()
             let buildResult = YearlyItemDuplicationSupport.buildGroupEntries(
                 from: items,
@@ -118,7 +118,7 @@ private extension YearlyItemDuplicationPlanOperations {
             }
             entries.append(contentsOf: buildResult.entries)
             groups.append(
-                YearlyItemDuplicationSupport.makeGroup(
+                try YearlyItemDuplicationSupport.makeGroup(
                     id: groupID,
                     items: items,
                     targetDates: buildResult.targetDates

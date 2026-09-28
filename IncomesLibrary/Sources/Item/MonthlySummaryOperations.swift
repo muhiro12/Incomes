@@ -40,19 +40,20 @@ public enum MonthlySummaryOperations {
         public let netIncome: Decimal
 
         /// Creates monthly totals prepared for narrative generation.
+        /// - Throws: `ItemAmountError.totalOutOfRange` when the net income is not exact.
         public init(
             year: Int,
             month: Int,
             currencyCode: String,
             totalIncome: Decimal,
             totalOutgo: Decimal
-        ) {
+        ) throws {
             self.year = year
             self.month = month
             self.currencyCode = currencyCode
             self.totalIncome = totalIncome
             self.totalOutgo = totalOutgo
-            netIncome = totalIncome - totalOutgo
+            netIncome = try ExactAmountArithmetic.checkedDifference(totalIncome, totalOutgo)
         }
     }
 
@@ -74,20 +75,21 @@ public enum MonthlySummaryOperations {
         public let outgoDelta: Decimal
 
         /// Creates category comparison data prepared for narrative generation.
+        /// - Throws: `ItemAmountError.totalOutOfRange` when a delta is not exact.
         public init(
             category: String,
             currentIncome: Decimal,
             previousIncome: Decimal,
             currentOutgo: Decimal,
             previousOutgo: Decimal
-        ) {
+        ) throws {
             self.category = category
             self.currentIncome = currentIncome
             self.previousIncome = previousIncome
-            incomeDelta = currentIncome - previousIncome
+            incomeDelta = try ExactAmountArithmetic.checkedDifference(currentIncome, previousIncome)
             self.currentOutgo = currentOutgo
             self.previousOutgo = previousOutgo
-            outgoDelta = currentOutgo - previousOutgo
+            outgoDelta = try ExactAmountArithmetic.checkedDifference(currentOutgo, previousOutgo)
         }
     }
 
