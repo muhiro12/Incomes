@@ -28,6 +28,19 @@ struct IncomesPreferenceLifecycleTests {
         )
         assertCleanupReports(outcome, for: testContext)
     }
+
+    @Test
+    func registry_allowlistsEveryAppOwnedStandardKey() {
+        let registry = IncomesPreferenceLifecycle.registry
+        let allowlistedStorageKeys = Set(
+            registry.descriptors.map(\.storageKey) + [registry.migrationStateDescriptor.storageKey]
+        )
+        let appOwnedStorageKeys = Set(
+            IncomesUserDefaultsKeys.Standard.allCases.map(\.rawValue)
+        )
+
+        #expect(appOwnedStorageKeys.subtracting(allowlistedStorageKeys).isEmpty)
+    }
 }
 
 private extension IncomesPreferenceLifecycleTests {

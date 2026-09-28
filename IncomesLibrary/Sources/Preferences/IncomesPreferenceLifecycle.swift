@@ -26,15 +26,30 @@ public enum IncomesPreferenceLifecycle {
 }
 
 private extension IncomesPreferenceLifecycle {
+    /// Exact keys that StoreKit writes to the app's standard defaults domain.
+    static let storeKitStorageKeys = [
+        "SKSubscriptionStatusUpdatesLastChecked",
+        "SKTransactionUpdatesLastChecked"
+    ]
+
     static func currentDescriptors() -> [any MHStorageDescriptorProtocol] {
         let descriptors = MHPreferenceDescriptors()
-        return [
+        let appDescriptors: [any MHStorageDescriptorProtocol] = [
             descriptors.isSubscribeOn,
             descriptors.isICloudOn,
             descriptors.isDebugOn,
             descriptors.currencyCode,
             descriptors.lastLaunchedAppVersion,
-            descriptors.notificationSettings
+            descriptors.notificationSettings,
+            IncomesLogSnapshotStorage.descriptors.current,
+            IncomesLogSnapshotStorage.descriptors.previous
         ]
+        let externalDescriptors = storeKitStorageKeys.map { storageKey in
+            MHRawStorageDescriptor(
+                storageKey: storageKey,
+                defaultSelection: .standard
+            )
+        }
+        return appDescriptors + externalDescriptors
     }
 }

@@ -19,17 +19,6 @@ enum IncomesLogging {
         nonisolated static let yearlyDuplication = "YearlyDuplication"
     }
 
-    private static let snapshotStorageDescriptors = MHLogSnapshotStorageDescriptors(
-        current: .init(
-            storageKey: IncomesUserDefaultsKeys.Standard.currentLogSnapshot.rawValue,
-            defaultSelection: .standard
-        ),
-        previous: .init(
-            storageKey: IncomesUserDefaultsKeys.Standard.previousLogSnapshot.rawValue,
-            defaultSelection: .standard
-        )
-    )
-
     static var policy: MHLogPolicy {
         #if DEBUG
         .debugDefault
@@ -46,7 +35,7 @@ enum IncomesLogging {
         .init(
             policy: policy,
             subsystem: Bundle.main.bundleIdentifier,
-            snapshotStorageDescriptors: snapshotStorageDescriptors
+            snapshotStorageDescriptors: IncomesLogSnapshotStorage.descriptors
         )
     }
 

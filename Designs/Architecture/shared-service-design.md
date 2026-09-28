@@ -48,6 +48,10 @@ and widgets.
 - Native ad placements choose `MHNativeAdLayout.compact` or `.media`. The ad
   view takes the proposed row width and its natural height; the app owns the
   surrounding list section, padding, and any frame constraints.
+- App and Watch startup run `IncomesPreferenceLifecycle.registry`
+  synchronously before preference consumers. Its cleanup allowlist covers every
+  app-owned standard-domain key, including both log snapshot slots, plus the
+  exact keys StoreKit writes to that domain.
 
 ## MHDesign Adoption
 
