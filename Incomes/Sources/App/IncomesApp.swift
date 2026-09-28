@@ -32,7 +32,7 @@ struct IncomesApp: App {
 
     @MainActor
     init() {
-        _ = IncomesPreferenceLifecycle.runSynchronously()
+        let preferenceLifecycleOutcome = IncomesPreferenceLifecycle.runSynchronously()
         IncomesAppGroupUserDefaultsCleanup.removeUnknownKeys()
 
         let preferenceStore = MHPreferenceStore()
@@ -44,6 +44,10 @@ struct IncomesApp: App {
         )
 
         startupLogger.notice("startup.begin")
+        Self.recordPreferenceLifecycle(
+            preferenceLifecycleOutcome,
+            startupLogger: startupLogger
+        )
 
         _startupCoordinator = .init(
             wrappedValue: .init(
@@ -61,6 +65,36 @@ struct IncomesApp: App {
 }
 
 private extension IncomesApp {
+    static func recordPreferenceLifecycle(
+        _ outcome: MHPreferenceLifecycleOutcome,
+        startupLogger: MHLogger
+    ) {
+        switch outcome.migrationOutcome {
+        case .succeeded:
+            let removedKeyCount = outcome.cleanupReports.reduce(0) { count, cleanupReport in
+                count + cleanupReport.report.removedStorageKeys.count
+            }
+            startupLogger.notice(
+                "preferences.prepared",
+                metadata: IncomesLogging.metadata(
+                    ("removed_key_count", IncomesLogging.count(removedKeyCount))
+                )
+            )
+        case let .failed(error, failedStepID, _, _):
+            let failureMetadata = IncomesLogging.metadata(
+                ("failed_step_id", failedStepID)
+            )
+            startupLogger.error(
+                "preferences.migration_failed",
+                metadata: failureMetadata.merging(
+                    IncomesLogging.errorMetadata(error)
+                ) { current, _ in
+                    current
+                }
+            )
+        }
+    }
+
     static func recordCurrentAppVersion(
         preferenceStore: MHPreferenceStore,
         startupLogger: MHLogger

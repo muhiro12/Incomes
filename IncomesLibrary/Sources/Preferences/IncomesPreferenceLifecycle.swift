@@ -9,68 +9,23 @@ public enum IncomesPreferenceLifecycle {
         defaultSelection: .standard
     )
 
+    /// Complete current storage allowlist and migration-state slot for app startup.
+    public static let registry = MHPreferenceRegistry(
+        descriptors: currentDescriptors(),
+        migrationStateDescriptor: migrationStateDescriptor
+    )
+
     /// Runs the preference lifecycle synchronously before app-owned preference access begins.
     public static func runSynchronously(
         standardDomainName: String? = Bundle.main.bundleIdentifier
     ) -> MHPreferenceLifecycleOutcome {
-        runSynchronously(
-            descriptors: currentDescriptors(),
-            migrationStateDescriptor: migrationStateDescriptor,
+        registry.runSynchronously(
             standardDomainName: standardDomainName
         )
-    }
-
-    static func runSynchronously(
-        descriptors: [any MHStorageDescriptorProtocol],
-        migrationStateDescriptor: MHPreferenceMigrationStateDescriptor,
-        standardDomainName: String? = Bundle.main.bundleIdentifier
-    ) -> MHPreferenceLifecycleOutcome {
-        let outcomeBox = PreferenceLifecycleOutcomeBox()
-
-        Task.detached(priority: .userInitiated) {
-            let outcome = await MHPreferenceLifecycleService.run(
-                descriptors: descriptors,
-                migrationStateDescriptor: migrationStateDescriptor,
-                standardDomainName: standardDomainName
-            )
-            outcomeBox.store(outcome)
-        }
-
-        return outcomeBox.wait()
     }
 }
 
 private extension IncomesPreferenceLifecycle {
-    final class PreferenceLifecycleOutcomeBox: @unchecked Sendable {
-        private let lock = NSLock()
-        private let semaphore = DispatchSemaphore(value: 0)
-        private var outcome: MHPreferenceLifecycleOutcome?
-
-        func store(
-            _ outcome: MHPreferenceLifecycleOutcome
-        ) {
-            lock.lock()
-            self.outcome = outcome
-            lock.unlock()
-            semaphore.signal()
-        }
-
-        func wait() -> MHPreferenceLifecycleOutcome {
-            semaphore.wait()
-
-            lock.lock()
-            defer {
-                lock.unlock()
-            }
-
-            guard let outcome else {
-                preconditionFailure("Preference lifecycle did not produce an outcome.")
-            }
-
-            return outcome
-        }
-    }
-
     static func currentDescriptors() -> [any MHStorageDescriptorProtocol] {
         let descriptors = MHPreferenceDescriptors()
         return [

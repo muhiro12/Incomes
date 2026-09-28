@@ -5,7 +5,7 @@ import Testing
 
 struct IncomesPreferenceLifecycleTests {
     @Test
-    func runSynchronously_migratesLegacyValuesAndCleansTouchedDomains() throws {
+    func registryRunSynchronously_migratesLegacyValuesAndCleansTouchedDomains() throws {
         let testContext = try makeTestContext()
 
         defer {
@@ -15,10 +15,11 @@ struct IncomesPreferenceLifecycleTests {
 
         seedPreferences(for: testContext)
 
-        let outcome = IncomesPreferenceLifecycle.runSynchronously(
+        let registry = MHPreferenceRegistry(
             descriptors: testContext.descriptors,
             migrationStateDescriptor: testContext.migrationStateDescriptor
         )
+        let outcome = registry.runSynchronously()
 
         assertPreferenceState(for: testContext)
         assertMigrationOutcome(
