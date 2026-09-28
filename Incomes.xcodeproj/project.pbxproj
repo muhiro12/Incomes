@@ -807,7 +807,7 @@
 			repositoryURL = "https://github.com/muhiro12/MHUI";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.20.0;
+				minimumVersion = 2.3.0;
 			};
 		};
 		B00000012F7A000100000017 /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */ = {
