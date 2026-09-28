@@ -3,7 +3,6 @@ import SwiftUI
 
 struct RepeatMonthButton: View {
     private enum Constants {
-        static let borderLineWidth: CGFloat = 1
         static let selectedBackgroundOpacity = 0.2
         static let selectedGlassTintOpacity = 0.22
     }
@@ -72,7 +71,7 @@ private extension RepeatMonthButton {
         buttonShape
             .stroke(
                 borderColor,
-                lineWidth: Constants.borderLineWidth
+                lineWidth: designMetrics.strokeWidth
             )
     }
 
