@@ -58,11 +58,9 @@ and widgets.
 - `Incomes`, `Watch`, and `Widgets` adopt the `MHDesign` product from MHUI.
 - The app keeps native SwiftUI containers and its existing presentation styles.
   Package updates do not opt the app into the full MHUI theme or chrome.
-- `MHDesignMetrics.incomes` owns the app's established spacing, corner radii,
-  and layout dimensions. The app and preview environment, standalone input
-  assist preview, and App Intent chart snippet use the same metrics.
-- Watch and widget layouts use the package's unchanged inline and control
-  spacing values.
+- Every surface reads `MHDesignMetrics.standard`, the shared eight-point
+  baseline, from the environment default. The app does not pin earlier
+  package values; review affected layouts when MHDesign changes that baseline.
 
 ## Canonical Shared APIs
 

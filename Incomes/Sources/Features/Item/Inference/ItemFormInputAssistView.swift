@@ -214,5 +214,4 @@ private extension ItemFormInputAssistView {
                 }
             )
     }
-    .mhDesignMetrics(.incomes)
 }

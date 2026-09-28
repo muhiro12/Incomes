@@ -1,4 +1,3 @@
-import MHDesign
 import SwiftData
 import SwiftUI
 
@@ -28,6 +27,5 @@ struct IncomesInexactTotalSampleData: PreviewModifier {
     func body(content: Content, context: ModelContainer) -> some View {
         content
             .modelContainer(context)
-            .mhDesignMetrics(.incomes)
     }
 }

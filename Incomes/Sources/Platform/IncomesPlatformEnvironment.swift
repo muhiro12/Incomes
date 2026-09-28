@@ -1,4 +1,3 @@
-import MHDesign
 import MHPlatform
 import SwiftData
 import SwiftUI
@@ -36,7 +35,6 @@ extension View {
         _ environment: IncomesPlatformEnvironment
     ) -> some View {
         modelContainer(environment.modelContainer)
-            .mhDesignMetrics(.incomes)
             .environment(environment.logging)
             .environment(environment.notificationService)
             .environment(environment.remoteConfigurationService)
