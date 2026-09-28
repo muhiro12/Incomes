@@ -33,7 +33,7 @@ extension CategoryItemListView: View {
                     showsItemDetailTip: yearString == firstYearString
                 )
                 if !isSubscribeOn {
-                    AdvertisementSection(.medium)
+                    AdvertisementSection(.media)
                 }
             }
         }

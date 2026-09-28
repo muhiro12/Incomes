@@ -36,7 +36,7 @@ extension ContentItemListView: View {
                     showsItemDetailTip: yearString == firstYearString
                 )
                 if !isSubscribeOn {
-                    AdvertisementSection(.medium)
+                    AdvertisementSection(.media)
                 }
             }
         }

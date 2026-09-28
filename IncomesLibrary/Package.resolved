@@ -1,13 +1,13 @@
 {
-  "originHash" : "149cfea5e2390ecb9b9599e9ff726d8a50235580d86127538e407e97bfed79fe",
+  "originHash" : "b8ab25626322fbf106abd794e277ddf3915017a64f75eab9bc60aa49408b4550",
   "pins" : [
     {
       "identity" : "googlemobileadswrapper",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/muhiro12/GoogleMobileAdsWrapper",
       "state" : {
-        "revision" : "7ff5322c261c2df336983b7bc4191a170ac1f718",
-        "version" : "1.4.0"
+        "revision" : "99611421e24b72353f26ec5f8c722de8f43e94a0",
+        "version" : "2.0.0"
       }
     },
     {
@@ -24,8 +24,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/muhiro12/MHPlatform",
       "state" : {
-        "revision" : "7c6eb2b9ae9c12ba7f486af136ed85505c5d3975",
-        "version" : "1.13.0"
+        "revision" : "f33318bfac7228a0aa49563b256fb3553a74c4c2",
+        "version" : "1.14.0"
       }
     },
     {

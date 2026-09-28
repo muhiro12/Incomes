@@ -799,7 +799,7 @@
 			repositoryURL = "https://github.com/muhiro12/MHPlatform";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.13.0;
+				minimumVersion = 1.14.0;
 			};
 		};
 		ADB890112F89BF4C00C59D93 /* XCRemoteSwiftPackageReference "MHUI" */ = {

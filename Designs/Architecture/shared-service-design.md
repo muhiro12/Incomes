@@ -43,8 +43,11 @@ and widgets.
 - `Watch` intentionally stays on the narrower `MHPreferences` product.
 - `Widgets` intentionally stay off direct MHPlatform package adoption.
 - This repository intentionally uses the MHPlatform 1.x semver range
-  `1.13.0..<2.0.0` to retain verified purchase identifiers independently of
-  product metadata and use the updated native ad adapters.
+  `1.14.0..<2.0.0` to retain verified purchase identifiers independently of
+  product metadata and use layout-based native ads.
+- Native ad placements choose `MHNativeAdLayout.compact` or `.media`. The ad
+  view takes the proposed row width and its natural height; the app owns the
+  surrounding list section, padding, and any frame constraints.
 
 ## MHDesign Adoption
 

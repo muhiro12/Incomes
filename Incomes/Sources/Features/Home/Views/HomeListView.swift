@@ -35,7 +35,7 @@ extension HomeListView: View {
                 navigateToRoute: navigateToRoute
             )
             if !isSubscribeOn {
-                AdvertisementSection(.small)
+                AdvertisementSection(.compact)
             }
             HomeSummarySection(
                 yearTag: yearTag,

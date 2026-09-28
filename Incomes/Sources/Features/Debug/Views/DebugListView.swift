@@ -48,8 +48,8 @@ extension DebugListView: View {
             debugPreviewDataSection
             debugTipsSection
             StoreSection()
-            AdvertisementSection(.medium)
-            AdvertisementSection(.small)
+            AdvertisementSection(.media)
+            AdvertisementSection(.compact)
             ShortcutsLinkSection()
         }
         .confirmationDialog(

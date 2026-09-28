@@ -32,7 +32,7 @@ extension ChartSectionGroup: View {
         BalanceChartSection(descriptor)
         IncomeAndOutgoChartSection(descriptor)
         if !isSubscribeOn {
-            AdvertisementSection(.medium)
+            AdvertisementSection(.media)
         }
         if let date = yearScopedDate {
             CategoryChartSection(yearScopedTo: date)

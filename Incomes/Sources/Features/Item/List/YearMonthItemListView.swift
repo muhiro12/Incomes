@@ -34,7 +34,7 @@ extension YearMonthItemListView: View {
                         showsItemDetailTip: yearString == firstYearString
                     )
                     if !isSubscribeOn {
-                        AdvertisementSection(.medium)
+                        AdvertisementSection(.media)
                     }
                     ChartSectionGroup(
                         .items(.tagAndYear(tag: tag, yearString: yearString))
