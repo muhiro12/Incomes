@@ -87,6 +87,9 @@ For a future storage change:
    own verification with older clients.
 5. Verify extension-first startup and host migration, then verify cloud import
    and export on signed devices before release.
+6. Add the matching Incomes file version described in
+   [Data import and export](data-import-export.md): freeze the previous
+   payload, add a forward conversion, and commit a fixture for the new version.
 
 ## Relocation failures
 
