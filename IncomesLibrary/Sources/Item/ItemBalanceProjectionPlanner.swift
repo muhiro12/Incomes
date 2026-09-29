@@ -130,8 +130,23 @@ enum ItemBalanceProjectionPlanner {
         context: ModelContext,
         values: [ItemStoredValues]
     ) throws {
+        try validateReplacementBalances(
+            context: context,
+            removedItemIDs: [],
+            values: values
+        )
+    }
+
+    /// Refuses removing `removedItemIDs` and creating `values` when a resulting
+    /// running balance could not be stored exactly.
+    static func validateReplacementBalances(
+        context: ModelContext,
+        removedItemIDs: Set<PersistentIdentifier>,
+        values: [ItemStoredValues]
+    ) throws {
         try validateBalances(
             context: context,
+            removedItemIDs: removedItemIDs,
             newRows: values.enumerated().map { index, values in
                 try projectedRow(
                     values: values,

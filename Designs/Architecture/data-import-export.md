@@ -171,7 +171,8 @@ the remaining decisions stay small.
 
 - An empty store without iCloud sync imports every item directly.
 - **Replace** makes the store inside the file's selection equal to the file.
-  The preview lists the items that will be removed and added.
+  The preview lists the items that will be removed and added. Matched items
+  stay in place, so their identifiers, links, and series are kept.
 - **Merge** never removes a record unless the person asks for it:
   - Matched items are left unchanged.
   - Each change group keeps the current items by default. The person can instead

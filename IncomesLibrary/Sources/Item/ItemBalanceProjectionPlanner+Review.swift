@@ -34,16 +34,20 @@ extension ItemBalanceProjectionPlanner {
         )
     }
 
-    /// Refuses new rows whose running balances could not be stored exactly.
+    /// Refuses new rows whose running balances, without `removedItemIDs`, could not be stored exactly.
     ///
     /// Call this before inserting records so a refusal leaves no partial changes.
     static func validateBalances(
         context: ModelContext,
+        removedItemIDs: Set<PersistentIdentifier>,
         newRows: [ProjectedRow]
     ) throws {
         let existingRows = try context.fetch(
             .items(.all, order: .forward)
         )
+        .filter { item in
+            !removedItemIDs.contains(item.persistentModelID)
+        }
         .map(projectedRow(item:))
         _ = try balancedRows(existingRows + newRows)
     }
