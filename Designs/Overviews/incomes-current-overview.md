@@ -176,6 +176,9 @@ living in the app targets.
 - Gate iCloud sync behind the premium subscription state.
 - Disable iCloud sync automatically when premium is not active.
 - Allow currency code selection from all supported currency codes.
+- Export every item to a versioned Incomes file through the system exporter.
+- Import an Incomes file after reviewing its difference from the saved items,
+  either directly into an empty store or by merging or replacing.
 - Show open-source license information.
 - Show app version and build number.
 - Show reusable TipKit education flows again on demand.
