@@ -1,8 +1,10 @@
 import SwiftUI
 import UniformTypeIdentifiers
 
-struct ItemCSVDocument: FileDocument {
-    static var readableContentTypes: [UTType] { [.commaSeparatedText] }
+struct IncomesFileDocument: FileDocument {
+    static var readableContentTypes: [UTType] {
+        [.incomesData]
+    }
 
     let data: Data
 

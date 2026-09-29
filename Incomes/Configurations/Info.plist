@@ -260,5 +260,25 @@
 	<array>
 		<string>remote-notification</string>
 	</array>
+	<key>UTExportedTypeDeclarations</key>
+	<array>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.json</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Incomes Data</string>
+			<key>UTTypeIdentifier</key>
+			<string>com.muhiro12.incomes.data</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>incomes</string>
+				</array>
+			</dict>
+		</dict>
+	</array>
 </dict>
 </plist>

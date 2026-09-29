@@ -7,9 +7,9 @@ struct SettingsDataManagementSection: View {
     var body: some View {
         Section {
             NavigationLink {
-                ItemExportView()
+                DataExportView()
             } label: {
-                Label("Export CSV", systemImage: "square.and.arrow.up")
+                Label("Export data", systemImage: "square.and.arrow.up")
             }
             duplicateYearItemsButton
             Button(role: .destructive, action: deleteAllItems) {
