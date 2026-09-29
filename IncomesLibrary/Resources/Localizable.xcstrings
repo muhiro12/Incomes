@@ -1,176 +1,6 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "The balance cannot be calculated exactly. Review the income and outgo amounts and try again." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "The balance cannot be calculated exactly. Review the income and outgo amounts and try again."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "残高を正確に計算できません。収入と支出の金額を確認して、もう一度お試しください。"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No se puede calcular el saldo con exactitud. Revisa los importes de ingresos y gastos e inténtalo de nuevo."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Le solde ne peut pas être calculé exactement. Vérifiez les montants des revenus et des dépenses, puis réessayez."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "无法精确计算余额。请检查收入和支出金额，然后重试。"
-          }
-        }
-      }
-    },
-    "The total cannot be calculated exactly. Review the income and outgo amounts and try again." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "The total cannot be calculated exactly. Review the income and outgo amounts and try again."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "合計を正確に計算できません。収入と支出の金額を確認して、もう一度お試しください。"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No se puede calcular el total con exactitud. Revisa los importes de ingresos y gastos e inténtalo de nuevo."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Le total ne peut pas être calculé exactement. Vérifiez les montants des revenus et des dépenses, puis réessayez."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "无法精确计算合计。请检查收入和支出金额，然后重试。"
-          }
-        }
-      }
-    },
-    "%lld groups / %lld items / %lld skipped" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%1$lld groups / %2$lld items / %3$lld skipped"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%1$lld grupos / %2$lld elementos / %3$lld omitidos"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%1$lld groupes / %2$lld éléments / %3$lld ignorés"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%1$lldグループ / %2$lld項目 / %3$lld件スキップ"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%1$lld 个分组 / %2$lld 个项目 / 已跳过 %3$lld 个"
-          }
-        }
-      }
-    },
-    "Invalid month requested for summary generation." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Choose a valid month to generate a summary."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Elige un mes válido para generar un resumen."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Choisissez un mois valide pour générer un résumé."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "サマリーを生成するには有効な月を選択してください。"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "请选择有效月份来生成摘要。"
-          }
-        }
-      }
-    },
-    "Compared with the previous month, %@." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Compared with the previous month, %1$@."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "En comparación con el mes anterior, %1$@."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Par rapport au mois précédent, %1$@."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "前月と比べると、%1$@。"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "与上月相比，%1$@。"
-          }
-        }
-      }
-    },
     "%@ income decreased" : {
       "localizations" : {
         "en" : {
@@ -235,74 +65,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%1$@收入增加"
-          }
-        }
-      }
-    },
-    "There is not enough previous-month data for a reliable comparison." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "There is not enough previous-month data for a reliable comparison."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No hay suficientes datos del mes anterior para una comparación fiable."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Les données du mois précédent sont insuffisantes pour une comparaison fiable."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "前月との比較に十分なデータはありません。"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "没有足够的上月数据进行可靠比较。"
-          }
-        }
-      }
-    },
-    "There were no major category-level changes from the previous month." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "There were no major category-level changes from the previous month."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No hubo cambios importantes por categoría respecto al mes anterior."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Aucun changement important par catégorie par rapport au mois précédent."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "前月と比べて大きなカテゴリ変化はありませんでした。"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "与上月相比，类别层面没有明显变化。"
           }
         }
       }
@@ -375,6 +137,74 @@
         }
       }
     },
+    "%lld groups / %lld items / %lld skipped" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld groups / %2$lld items / %3$lld skipped"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld grupos / %2$lld elementos / %3$lld omitidos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld groupes / %2$lld éléments / %3$lld ignorés"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lldグループ / %2$lld項目 / %3$lld件スキップ"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld 个分组 / %2$lld 个项目 / 已跳过 %3$lld 个"
+          }
+        }
+      }
+    },
+    "Compared with the previous month, %@." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Compared with the previous month, %1$@."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En comparación con el mes anterior, %1$@."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Par rapport au mois précédent, %1$@."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "前月と比べると、%1$@。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "与上月相比，%1$@。"
+          }
+        }
+      }
+    },
     "Income for %@ was %@. Outgo was %@, and the net result was %@. %@" : {
       "localizations" : {
         "en" : {
@@ -405,6 +235,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%1$@的收入为%2$@。支出为%3$@，净结果为%4$@。%5$@"
+          }
+        }
+      }
+    },
+    "Invalid month requested for summary generation." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose a valid month to generate a summary."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elige un mes válido para generar un resumen."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choisissez un mois valide pour générer un résumé."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "サマリーを生成するには有効な月を選択してください。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请选择有效月份来生成摘要。"
           }
         }
       }
@@ -613,6 +477,244 @@
         }
       }
     },
+    "The balance cannot be calculated exactly. Review the income and outgo amounts and try again." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The balance cannot be calculated exactly. Review the income and outgo amounts and try again."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se puede calcular el saldo con exactitud. Revisa los importes de ingresos y gastos e inténtalo de nuevo."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le solde ne peut pas être calculé exactement. Vérifiez les montants des revenus et des dépenses, puis réessayez."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "残高を正確に計算できません。収入と支出の金額を確認して、もう一度お試しください。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法精确计算余额。请检查收入和支出金额，然后重试。"
+          }
+        }
+      }
+    },
+    "The last balance preview no longer matches this entry. Preview it again." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The last balance preview no longer matches this entry. Preview it again."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La última vista previa del saldo ya no coincide con esta entrada. Vuelve a previsualizarla."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le dernier aperçu du solde ne correspond plus à cette saisie. Affichez-le de nouveau."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "前回の残高プレビューはこの入力と一致しません。もう一度プレビューしてください。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "上次的余额预览与此条目不再匹配。请重新预览。"
+          }
+        }
+      }
+    },
+    "The reviewed item is no longer available. Nothing was saved." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The reviewed item is no longer available. Nothing was saved."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El elemento revisado ya no está disponible. No se guardó nada."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L’élément vérifié n’est plus disponible. Rien n’a été enregistré."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "確認した項目は利用できなくなりました。保存は行われていません。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已确认的项目不再可用。未保存任何内容。"
+          }
+        }
+      }
+    },
+    "The total cannot be calculated exactly. Review the income and outgo amounts and try again." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The total cannot be calculated exactly. Review the income and outgo amounts and try again."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se puede calcular el total con exactitud. Revisa los importes de ingresos y gastos e inténtalo de nuevo."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le total ne peut pas être calculé exactement. Vérifiez les montants des revenus et des dépenses, puis réessayez."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "合計を正確に計算できません。収入と支出の金額を確認して、もう一度お試しください。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法精确计算合计。请检查收入和支出金额，然后重试。"
+          }
+        }
+      }
+    },
+    "There is not enough previous-month data for a reliable comparison." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "There is not enough previous-month data for a reliable comparison."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No hay suficientes datos del mes anterior para una comparación fiable."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les données du mois précédent sont insuffisantes pour une comparaison fiable."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "前月との比較に十分なデータはありません。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "没有足够的上月数据进行可靠比较。"
+          }
+        }
+      }
+    },
+    "There were no major category-level changes from the previous month." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "There were no major category-level changes from the previous month."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No hubo cambios importantes por categoría respecto al mes anterior."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucun changement important par catégorie par rapport au mois précédent."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "前月と比べて大きなカテゴリ変化はありませんでした。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "与上月相比，类别层面没有明显变化。"
+          }
+        }
+      }
+    },
+    "This entry changed after the last balance preview. Preview the balance again." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This entry changed after the last balance preview. Preview the balance again."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esta entrada cambió después de la última vista previa del saldo. Vuelve a previsualizar el saldo."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cette saisie a changé depuis le dernier aperçu du solde. Affichez de nouveau l’aperçu du solde."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "残高プレビュー後に入力が変更されました。もう一度残高をプレビューしてください。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "上次预览余额后此条目已更改。请重新预览余额。"
+          }
+        }
+      }
+    },
     "Unable to generate the monthly summary." : {
       "localizations" : {
         "en" : {
@@ -681,74 +783,6 @@
         }
       }
     },
-    "This entry changed after the last balance preview. Preview the balance again." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "This entry changed after the last balance preview. Preview the balance again."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Esta entrada cambió después de la última vista previa del saldo. Vuelve a previsualizar el saldo."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cette saisie a changé depuis le dernier aperçu du solde. Affichez de nouveau l’aperçu du solde."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "残高プレビュー後に入力が変更されました。もう一度残高をプレビューしてください。"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "上次预览余额后此条目已更改。请重新预览余额。"
-          }
-        }
-      }
-    },
-    "The last balance preview no longer matches this entry. Preview it again." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "The last balance preview no longer matches this entry. Preview it again."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "La última vista previa del saldo ya no coincide con esta entrada. Vuelve a previsualizarla."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Le dernier aperçu du solde ne correspond plus à cette saisie. Affichez-le de nouveau."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "前回の残高プレビューはこの入力と一致しません。もう一度プレビューしてください。"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "上次的余额预览与此条目不再匹配。请重新预览。"
-          }
-        }
-      }
-    },
     "Your records changed after the last balance preview. Preview the balance again." : {
       "localizations" : {
         "en" : {
@@ -779,40 +813,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "上次预览余额后你的记录已更改。请重新预览余额。"
-          }
-        }
-      }
-    },
-    "The reviewed item is no longer available. Nothing was saved." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "The reviewed item is no longer available. Nothing was saved."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "El elemento revisado ya no está disponible. No se guardó nada."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "L’élément vérifié n’est plus disponible. Rien n’a été enregistré."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "確認した項目は利用できなくなりました。保存は行われていません。"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "已确认的项目不再可用。未保存任何内容。"
           }
         }
       }
