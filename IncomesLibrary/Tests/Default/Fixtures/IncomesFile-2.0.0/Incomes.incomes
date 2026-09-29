@@ -1,0 +1,75 @@
+{
+  "exportedAt" : "2026-09-29T00:00:00Z",
+  "format" : "com.muhiro12.incomes.data",
+  "items" : [
+    {
+      "balance" : "-85000",
+      "category" : "Housing",
+      "content" : "Rent",
+      "date" : "2026-01-25",
+      "income" : "0",
+      "outgo" : "85000",
+      "priority" : 0,
+      "repeatID" : "0E6F9A40-1C2B-4D3E-8F70-000000000001"
+    },
+    {
+      "balance" : "225000.5",
+      "category" : "Work",
+      "content" : "Salary",
+      "date" : "2026-01-25",
+      "income" : "310000.5",
+      "outgo" : "0",
+      "priority" : 0,
+      "repeatID" : "0E6F9A40-1C2B-4D3E-8F70-000000000002"
+    },
+    {
+      "balance" : "223520.5",
+      "category" : "",
+      "content" : "Coffee \"beans\"\nand filters",
+      "date" : "2026-02-03",
+      "income" : "0",
+      "outgo" : "1480",
+      "priority" : 0,
+      "repeatID" : "0E6F9A40-1C2B-4D3E-8F70-000000000003"
+    },
+    {
+      "balance" : "138520.5",
+      "category" : "Housing",
+      "content" : "Rent",
+      "date" : "2026-02-25",
+      "income" : "0",
+      "outgo" : "85000",
+      "priority" : 1,
+      "repeatID" : "0E6F9A40-1C2B-4D3E-8F70-000000000001"
+    },
+    {
+      "balance" : "141400.75",
+      "category" : "住まい",
+      "content" : "Refund",
+      "date" : "2026-02-25",
+      "income" : "-120",
+      "outgo" : "-3000.25",
+      "priority" : 0,
+      "repeatID" : "0E6F9A40-1C2B-4D3E-8F70-000000000004"
+    },
+    {
+      "balance" : "56400.75",
+      "category" : "Housing",
+      "content" : "Rent",
+      "date" : "2026-03-25",
+      "income" : "0",
+      "outgo" : "85000",
+      "priority" : 0,
+      "repeatID" : "0E6F9A40-1C2B-4D3E-8F70-000000000001"
+    }
+  ],
+  "schemaVersion" : "2.0.0",
+  "selection" : {
+    "filters" : [
+
+    ]
+  },
+  "settings" : {
+    "currencyCode" : "JPY"
+  }
+}
