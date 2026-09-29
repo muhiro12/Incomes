@@ -171,6 +171,40 @@
         }
       }
     },
+    "A newer version of Incomes created this file. Update Incomes and try again." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A newer version of Incomes created this file. Update Incomes and try again."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Este archivo se creó con una versión más reciente de Incomes. Actualiza Incomes e inténtalo de nuevo."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ce fichier a été créé par une version plus récente d’Incomes. Mettez à jour Incomes et réessayez."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "このファイルは新しいバージョンのIncomesで作成されました。Incomesをアップデートしてから、もう一度お試しください。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此文件由较新版本的 Incomes 创建。请更新 Incomes 后重试。"
+          }
+        }
+      }
+    },
     "Compared with the previous month, %@." : {
       "localizations" : {
         "en" : {
@@ -269,6 +303,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "请选择有效月份来生成摘要。"
+          }
+        }
+      }
+    },
+    "Item %lld in the file has an invalid value." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Item %lld in the file has an invalid value."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El elemento %lld del archivo tiene un valor no válido."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L’élément %lld du fichier contient une valeur non valide."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ファイルの%lld件目の項目に無効な値があります。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "文件中第 %lld 个项目包含无效的值。"
           }
         }
       }
@@ -715,6 +783,142 @@
         }
       }
     },
+    "This file is damaged and cannot be read." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This file is damaged and cannot be read."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Este archivo está dañado y no se puede leer."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ce fichier est endommagé et ne peut pas être lu."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "このファイルは破損しているため読み込めません。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此文件已损坏，无法读取。"
+          }
+        }
+      }
+    },
+    "This file is not an Incomes data file, or it is damaged." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This file is not an Incomes data file, or it is damaged."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Este archivo no es un archivo de datos de Incomes o está dañado."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ce fichier n’est pas un fichier de données Incomes, ou il est endommagé."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "このファイルはIncomesのデータファイルではないか、破損しています。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此文件不是 Incomes 数据文件，或已损坏。"
+          }
+        }
+      }
+    },
+    "This file is too large to import." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This file is too large to import."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Este archivo es demasiado grande para importarlo."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ce fichier est trop volumineux pour être importé."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "このファイルは大きすぎるため取り込めません。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此文件太大，无法导入。"
+          }
+        }
+      }
+    },
+    "This version of the file is not supported." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This version of the file is not supported."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esta versión del archivo no es compatible."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cette version du fichier n’est pas prise en charge."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "このバージョンのファイルには対応していません。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "不支持此版本的文件。"
+          }
+        }
+      }
+    },
     "Unable to generate the monthly summary." : {
       "localizations" : {
         "en" : {
@@ -779,6 +983,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "无法补全项目详细信息。"
+          }
+        }
+      }
+    },
+    "Your data changed while you were reviewing. Review the import again." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your data changed while you were reviewing. Review the import again."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tus datos cambiaron mientras los revisabas. Vuelve a revisar la importación."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vos données ont changé pendant la vérification. Vérifiez à nouveau l’importation."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "確認中にデータが変更されました。もう一度内容を確認してください。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "你在查看期间数据发生了更改。请重新查看导入内容。"
           }
         }
       }

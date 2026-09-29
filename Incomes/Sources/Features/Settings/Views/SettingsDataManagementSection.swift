@@ -11,6 +11,11 @@ struct SettingsDataManagementSection: View {
             } label: {
                 Label("Export data", systemImage: "square.and.arrow.up")
             }
+            NavigationLink {
+                DataImportView()
+            } label: {
+                Label("Import data", systemImage: "square.and.arrow.down")
+            }
             duplicateYearItemsButton
             Button(role: .destructive, action: deleteAllItems) {
                 Text("Delete all")

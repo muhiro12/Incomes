@@ -10,3 +10,22 @@ public enum ItemImportOperations {
         try IncomesFileCodec.decode(data)
     }
 }
+
+public extension ItemImportOperations {
+    /// Returns the file's item count and date extent, shown like `Item.localDate`.
+    static func overview(
+        contents: IncomesFileContents,
+        calendar: Calendar = .current
+    ) -> ItemExportOverview {
+        let dates = contents.items.map(\.date)
+        return .init(
+            totalCount: contents.items.count,
+            firstDate: dates.min().map { date in
+                calendar.shiftedDate(componentsFrom: date, in: .utc)
+            },
+            lastDate: dates.max().map { date in
+                calendar.shiftedDate(componentsFrom: date, in: .utc)
+            }
+        )
+    }
+}
