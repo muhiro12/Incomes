@@ -17,15 +17,16 @@ struct DuplicateTagRow: View {
         .contentShape(Rectangle())
         .contextMenu {
             Button("Open", systemImage: "arrow.right.circle", action: openTag)
+            CopyTextContextMenuButton(
+                "Copy Name",
+                text: tag.displayName
+            )
+            Divider()
             Button(
                 "Resolve",
                 systemImage: "checkmark.seal",
                 role: .destructive,
                 action: presentResolveDialog
-            )
-            CopyTextContextMenuButton(
-                "Copy Name",
-                text: tag.displayName
             )
         }
         .tag(tag.persistentModelID)
