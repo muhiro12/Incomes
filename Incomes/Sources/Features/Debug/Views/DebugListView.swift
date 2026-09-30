@@ -45,7 +45,7 @@ extension DebugListView: View {
             if let tag = firstTag {
                 debugNavigationSection(tag: tag)
             }
-            debugPreviewDataSection
+            debugSampleDataSection
             debugTipsSection
             StoreSection()
             AdvertisementSection(.media)
@@ -53,7 +53,7 @@ extension DebugListView: View {
             ShortcutsLinkSection()
         }
         .confirmationDialog(
-            Text("Set PreviewData"),
+            Text("Add Sample Data"),
             isPresented: $isDialogPresented
         ) {
             Button(role: .destructive) {
@@ -77,7 +77,7 @@ extension DebugListView: View {
                 Text("Cancel")
             }
         } message: {
-            Text("Are you really going to set PreviewData?")
+            Text("Add sample data to your items?")
         }
         .navigationTitle("Debug")
         .toolbar {
@@ -112,12 +112,12 @@ private extension DebugListView {
         }
     }
 
-    var debugPreviewDataSection: some View {
+    var debugSampleDataSection: some View {
         Section {
             Button {
                 isDialogPresented = true
             } label: {
-                Text("Set PreviewData")
+                Text("Add Sample Data")
             }
             .disabled(!isDebugOn)
         }

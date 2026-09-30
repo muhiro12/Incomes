@@ -7,7 +7,7 @@ struct YearlyDuplicationTip: Tip {
     }
 
     var message: Text? {
-        Text("Review repeated yearly entries and create the next year's set faster.")
+        Text("Review repeated yearly items and create the next year's set faster.")
     }
 
     var image: Image? {

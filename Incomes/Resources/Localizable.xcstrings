@@ -304,6 +304,40 @@
         }
       }
     },
+    "Add Sample Data" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add Sample Data"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Añadir datos de muestra"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajouter des données d’exemple"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "サンプルデータを追加"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "添加示例数据"
+          }
+        }
+      }
+    },
     "Add income items with categories to see this chart." : {
       "localizations" : {
         "en" : {
@@ -402,6 +436,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "添加带分类的支出项目后即可查看此图表。"
+          }
+        }
+      }
+    },
+    "Add sample data to your items?" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add sample data to your items?"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Añadir datos de muestra a tus elementos?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajouter des données d’exemple à vos éléments ?"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "項目にサンプルデータを追加しますか？"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "要向项目中添加示例数据吗？"
           }
         }
       }
@@ -871,7 +939,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "端末内の言語モデルが文章を検索条件に変換します。読み違える場合があるため、条件を確認してください。保存済みの収支は読み取るだけで、変更しません。"
+            "value" : "端末内の言語モデルが文章を検索条件に変換します。読み違える場合があるため、条件を確認してください。保存済みの項目は読み取るだけで、変更しません。"
           }
         },
         "zh-Hans" : {
@@ -980,74 +1048,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "正在应用建议"
-          }
-        }
-      }
-    },
-    "Are you really going to set PreviewData?" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Are you really going to set PreviewData?"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "¿Realmente vas a configurar los datos de vista previa?"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Voulez-vous vraiment définir les données de prévisualisation ?"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "プレビュー用データを設定しますか？"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "你确定要设置预览数据吗？"
-          }
-        }
-      }
-    },
-    "Are you really going to use DebugMode?" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Are you really going to use DebugMode?"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "¿Realmente vas a usar el modo de depuración?"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Voulez-vous vraiment utiliser le mode débogage ?"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "デバッグモードを使用しますか？"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "你确定要使用调试模式吗？"
           }
         }
       }
@@ -2242,24 +2242,24 @@
         }
       }
     },
-    "Change the selected years or add more repeated yearly entries to generate proposals." : {
+    "Change the selected years or add more repeated yearly items to generate proposals." : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Change the selected years or add more repeated yearly entries to generate proposals."
+            "value" : "Change the selected years or add more repeated yearly items to generate proposals."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Cambia los años seleccionados o añade más entradas anuales repetidas para generar propuestas."
+            "value" : "Cambia los años seleccionados o añade más elementos anuales repetidos para generar propuestas."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Changez les années sélectionnées ou ajoutez plus d’entrées annuelles répétées pour générer des propositions."
+            "value" : "Changez les années sélectionnées ou ajoutez plus d’éléments annuels répétés pour générer des propositions."
           }
         },
         "ja" : {
@@ -2271,7 +2271,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "更改所选年份，或添加更多每年重复的条目来生成提案。"
+            "value" : "更改所选年份，或添加更多每年重复的项目来生成提案。"
           }
         }
       }
@@ -4577,7 +4577,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "年次項目の複製"
+            "value" : "年次項目を複製"
           }
         },
         "zh-Hans" : {
@@ -5631,7 +5631,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "端末内で生成した条件には誤りがある場合があります。すべての条件に一致する収支を検索します。"
+            "value" : "端末内で生成した条件には誤りがある場合があります。すべての条件に一致する項目を検索します。"
           }
         },
         "zh-Hans" : {
@@ -8456,7 +8456,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "この条件に一致する収支はありません。"
+            "value" : "この条件に一致する項目はありません。"
           }
         },
         "zh-Hans" : {
@@ -10042,7 +10042,7 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ingresos netos positivos"
+            "value" : "Ingreso neto positivo"
           }
         },
         "fr" : {
@@ -11629,24 +11629,24 @@
         }
       }
     },
-    "Review repeated yearly entries and create the next year's set faster." : {
+    "Review repeated yearly items and create the next year's set faster." : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Review repeated yearly entries and create the next year's set faster."
+            "value" : "Review repeated yearly items and create the next year's set faster."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Revisa entradas anuales repetidas y crea más rápido el conjunto del próximo año."
+            "value" : "Revisa elementos anuales repetidos y crea más rápido el conjunto del próximo año."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Passez en revue les entrées annuelles répétées et créez plus vite le jeu de l’année suivante."
+            "value" : "Passez en revue les éléments annuels répétés et créez plus vite le jeu de l’année suivante."
           }
         },
         "ja" : {
@@ -11658,7 +11658,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "查看每年重复的条目，更快创建下一年的整套项目。"
+            "value" : "查看每年重复的项目，更快创建下一年的整套项目。"
           }
         }
       }
@@ -11924,7 +11924,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "保存済みの収支"
+            "value" : "保存済みの項目"
           }
         },
         "zh-Hans" : {
@@ -12547,40 +12547,6 @@
         }
       }
     },
-    "Set PreviewData" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Set PreviewData"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Establecer datos de vista previa"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Définir les données d'aperçu"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "プレビュー用データを設定"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "设置预览数据"
-          }
-        }
-      }
-    },
     "Settings" : {
       "localizations" : {
         "en" : {
@@ -12910,7 +12876,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "一致する収支の先頭%lld件を表示しています。ほかの収支を表示するには条件を絞ってください。"
+            "value" : "一致する項目の先頭%lld件を表示しています。ほかの項目を表示するには条件を絞ってください。"
           }
         },
         "zh-Hans" : {
@@ -13250,7 +13216,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "ひと月、項目名に含む文字、収入・支出の金額範囲を指定できます。すべての条件に一致する収支を検索します。"
+            "value" : "ひと月、項目名に含む文字、収入・支出の金額範囲を指定できます。すべての条件に一致する項目を検索します。"
           }
         },
         "zh-Hans" : {
@@ -14610,7 +14576,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "保存済みの収支を検索する機能です。追加・変更・削除はできません。"
+            "value" : "保存済みの項目を検索する機能です。追加・変更・削除はできません。"
           }
         },
         "zh-Hans" : {
@@ -14644,7 +14610,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "保存済みの収支を検索する機能です。合計や平均は計算できません。"
+            "value" : "保存済みの項目を検索する機能です。合計や平均は計算できません。"
           }
         },
         "zh-Hans" : {
@@ -14998,36 +14964,70 @@
         }
       }
     },
-    "Turn this on for rent, salary, and other entries you reuse every month." : {
+    "Turn on the debug option?" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Turn this on for rent, salary, and other entries you reuse every month."
+            "value" : "Turn on the debug option?"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Actívalo para el alquiler, el salario y otras entradas que reutilizas cada mes."
+            "value" : "¿Activar la opción de depuración?"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Activez cette option pour le loyer, le salaire et les autres entrées que vous réutilisez chaque mois."
+            "value" : "Activer l’option de débogage ?"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "家賃や給与など、毎月使う入力にはこれをオンにします。"
+            "value" : "デバッグオプションをオンにしますか？"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "对房租、工资等每月都会重复的记录开启此选项。"
+            "value" : "要开启调试选项吗？"
+          }
+        }
+      }
+    },
+    "Turn this on for rent, salary, and other items you reuse every month." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Turn this on for rent, salary, and other items you reuse every month."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Actívalo para el alquiler, el salario y otros elementos que reutilizas cada mes."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Activez cette option pour le loyer, le salaire et les autres éléments que vous réutilisez chaque mois."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "家賃や給与など、毎月使う項目にはこれをオンにします。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "对房租、工资等每月都会重复的项目开启此选项。"
           }
         }
       }

@@ -99,7 +99,7 @@
           "stringSet" : {
             "state" : "translated",
             "values" : [
-              "${applicationName}でアイテムを作成して表示",
+              "${applicationName}で項目を作成して表示",
               "${applicationName}に記録を追加して表示",
               "${applicationName}で取引を登録して表示",
               "${applicationName}で作成してすぐに確認"

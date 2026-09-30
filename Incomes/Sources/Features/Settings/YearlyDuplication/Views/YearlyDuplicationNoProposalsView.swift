@@ -6,7 +6,7 @@ struct YearlyDuplicationNoProposalsView: View {
             "No Proposals",
             systemImage: "doc.text.magnifyingglass",
             description: Text(
-                "Change the selected years or add more repeated yearly entries to generate proposals."
+                "Change the selected years or add more repeated yearly items to generate proposals."
             )
         )
     }

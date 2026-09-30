@@ -69,13 +69,13 @@
               "one" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "%lld アイテム"
+                  "value" : "%lld件の項目"
                 }
               },
               "other" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "%lld アイテム"
+                  "value" : "%lld件の項目"
                 }
               }
             }
@@ -218,7 +218,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "年次アイテム複製を適用"
+            "value" : "年次複製を適用"
           }
         },
         "zh-Hans" : {
@@ -252,7 +252,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "アイテムを作成して表示"
+            "value" : "項目を作成して表示"
           }
         },
         "zh-Hans" : {
@@ -286,7 +286,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "アイテムを作成"
+            "value" : "項目を作成"
           }
         },
         "zh-Hans" : {
@@ -320,7 +320,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "予定アイテムを作成"
+            "value" : "予定の項目を作成"
           }
         },
         "zh-Hans" : {
@@ -354,7 +354,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "アイテムを削除"
+            "value" : "項目を削除"
           }
         },
         "zh-Hans" : {
@@ -456,7 +456,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "すべてのアイテム数を取得"
+            "value" : "すべての項目数を取得"
           }
         },
         "zh-Hans" : {
@@ -592,7 +592,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "アイテムを取得"
+            "value" : "項目を取得"
           }
         },
         "zh-Hans" : {
@@ -626,7 +626,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "次のアイテムを取得"
+            "value" : "次の項目を取得"
           }
         },
         "zh-Hans" : {
@@ -660,7 +660,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "次のアイテムの内容を取得"
+            "value" : "次の項目の内容を取得"
           }
         },
         "zh-Hans" : {
@@ -694,7 +694,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "次のアイテムの日付を取得"
+            "value" : "次の項目の日付を取得"
           }
         },
         "zh-Hans" : {
@@ -728,7 +728,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "次のアイテムの純利益を取得"
+            "value" : "次の項目の純収入を取得"
           }
         },
         "zh-Hans" : {
@@ -762,7 +762,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "次のアイテム一覧を取得"
+            "value" : "次の項目一覧を取得"
           }
         },
         "zh-Hans" : {
@@ -830,7 +830,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "前のアイテムを取得"
+            "value" : "前の項目を取得"
           }
         },
         "zh-Hans" : {
@@ -864,7 +864,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "前のアイテムの内容を取得"
+            "value" : "前の項目の内容を取得"
           }
         },
         "zh-Hans" : {
@@ -898,7 +898,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "前のアイテムの日付を取得"
+            "value" : "前の項目の日付を取得"
           }
         },
         "zh-Hans" : {
@@ -932,7 +932,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "前のアイテムの純利益を取得"
+            "value" : "前の項目の純収入を取得"
           }
         },
         "zh-Hans" : {
@@ -966,7 +966,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "前のアイテム一覧を取得"
+            "value" : "前の項目一覧を取得"
           }
         },
         "zh-Hans" : {
@@ -1000,7 +1000,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "繰り返しアイテム数を取得"
+            "value" : "繰り返し項目数を取得"
           }
         },
         "zh-Hans" : {
@@ -1136,7 +1136,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "年間アイテム数を取得"
+            "value" : "年間項目数を取得"
           }
         },
         "zh-Hans" : {
@@ -1272,7 +1272,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "アイテムフォームを推測"
+            "value" : "項目の入力内容を推測"
           }
         },
         "zh-Hans" : {
@@ -1306,7 +1306,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "アイテム"
+            "value" : "項目"
           }
         },
         "zh-Hans" : {
@@ -1442,7 +1442,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "年次アイテム複製をプレビュー"
+            "value" : "年次複製をプレビュー"
           }
         },
         "zh-Hans" : {
@@ -1510,7 +1510,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "直近のアイテム一覧"
+            "value" : "最近の項目一覧"
           }
         },
         "zh-Hans" : {
@@ -1646,7 +1646,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "アイテム一覧を表示"
+            "value" : "項目一覧を表示"
           }
         },
         "zh-Hans" : {
@@ -1680,7 +1680,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "次のアイテムを表示"
+            "value" : "次の項目を表示"
           }
         },
         "zh-Hans" : {
@@ -1714,7 +1714,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "次のアイテム一覧を表示"
+            "value" : "次の項目一覧を表示"
           }
         },
         "zh-Hans" : {
@@ -1748,7 +1748,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "前のアイテムを表示"
+            "value" : "前の項目を表示"
           }
         },
         "zh-Hans" : {
@@ -1782,7 +1782,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "前のアイテム一覧を表示"
+            "value" : "前の項目一覧を表示"
           }
         },
         "zh-Hans" : {
@@ -1816,7 +1816,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "直近のアイテムを表示"
+            "value" : "最近の項目を表示"
           }
         },
         "zh-Hans" : {
@@ -1850,7 +1850,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "直近のアイテム一覧を表示"
+            "value" : "最近の項目一覧を表示"
           }
         },
         "zh-Hans" : {
@@ -1918,7 +1918,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "今月のアイテム一覧を表示"
+            "value" : "今月の項目一覧を表示"
           }
         },
         "zh-Hans" : {
@@ -1952,7 +1952,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "今後のアイテムを表示"
+            "value" : "今後の項目を表示"
           }
         },
         "zh-Hans" : {
@@ -1986,7 +1986,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "今後のアイテム一覧を表示"
+            "value" : "今後の項目一覧を表示"
           }
         },
         "zh-Hans" : {
@@ -2122,7 +2122,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "今月のアイテム一覧"
+            "value" : "今月の項目一覧"
           }
         },
         "zh-Hans" : {
@@ -2156,7 +2156,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "今後のアイテム一覧"
+            "value" : "今後の項目一覧"
           }
         },
         "zh-Hans" : {
@@ -2190,7 +2190,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "アイテムを更新"
+            "value" : "項目を更新"
           }
         },
         "zh-Hans" : {

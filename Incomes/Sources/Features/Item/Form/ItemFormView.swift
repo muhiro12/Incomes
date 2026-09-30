@@ -131,7 +131,7 @@ extension ItemFormView {
                 Text("Cancel")
             }
         } message: {
-            Text("Are you really going to use DebugMode?")
+            Text("Turn on the debug option?")
         }
         .alert(
             "Error",

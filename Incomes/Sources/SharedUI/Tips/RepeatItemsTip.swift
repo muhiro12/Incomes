@@ -7,7 +7,7 @@ struct RepeatItemsTip: Tip {
     }
 
     var message: Text? {
-        Text("Turn this on for rent, salary, and other entries you reuse every month.")
+        Text("Turn this on for rent, salary, and other items you reuse every month.")
     }
 
     var image: Image? {

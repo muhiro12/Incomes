@@ -12,7 +12,7 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Beneficio neto negativo"
+            "value" : "Ingreso neto negativo"
           }
         },
         "fr" : {
@@ -24,7 +24,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "収支はマイナス"
+            "value" : "純収入がマイナス"
           }
         },
         "zh-Hans" : {
@@ -46,7 +46,7 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Beneficio neto positivo"
+            "value" : "Ingreso neto positivo"
           }
         },
         "fr" : {
@@ -58,7 +58,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "収支はプラス"
+            "value" : "純収入がプラス"
           }
         },
         "zh-Hans" : {
@@ -80,7 +80,7 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Beneficio neto cero"
+            "value" : "Ingreso neto cero"
           }
         },
         "fr" : {
@@ -92,7 +92,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "収支はゼロ"
+            "value" : "純収入がゼロ"
           }
         },
         "zh-Hans" : {
@@ -163,7 +163,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "今後のウィジェットの方向を設定"
+            "value" : "今後の項目ウィジェットの表示方向を設定"
           }
         },
         "zh-Hans" : {
@@ -438,7 +438,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "収支"
+            "value" : "純収入"
           }
         },
         "zh-Hans" : {
@@ -812,7 +812,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "予定"
+            "value" : "今後の項目"
           }
         },
         "zh-Hans" : {
@@ -846,7 +846,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "今後の設定"
+            "value" : "今後の項目の設定"
           }
         },
         "zh-Hans" : {

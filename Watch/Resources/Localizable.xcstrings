@@ -457,7 +457,7 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Beneficio neto negativo"
+            "value" : "Ingreso neto negativo"
           }
         },
         "fr" : {
@@ -469,7 +469,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "収支はマイナス"
+            "value" : "純収入がマイナス"
           }
         },
         "zh-Hans" : {
@@ -763,7 +763,7 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Beneficio neto positivo"
+            "value" : "Ingreso neto positivo"
           }
         },
         "fr" : {
@@ -775,7 +775,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "収支はプラス"
+            "value" : "純収入がプラス"
           }
         },
         "zh-Hans" : {
@@ -1205,7 +1205,7 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Beneficio neto cero"
+            "value" : "Ingreso neto cero"
           }
         },
         "fr" : {
@@ -1217,7 +1217,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "収支はゼロ"
+            "value" : "純収入がゼロ"
           }
         },
         "zh-Hans" : {
