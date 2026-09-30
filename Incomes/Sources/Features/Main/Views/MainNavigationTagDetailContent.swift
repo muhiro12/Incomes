@@ -9,9 +9,9 @@ struct MainNavigationTagDetailContent {
 
     private let selectedTagID: Tag.ID
 
-    init(selectedTag: Tag) {
-        selectedTagID = selectedTag.persistentModelID
-        _tags = .init(.tags(.idIs(selectedTag.persistentModelID)))
+    init(selectedTagID: Tag.ID) {
+        self.selectedTagID = selectedTagID
+        _tags = .init(.tags(.idIs(selectedTagID)))
     }
 }
 

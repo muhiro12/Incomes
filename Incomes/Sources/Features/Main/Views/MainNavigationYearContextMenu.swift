@@ -1,7 +1,9 @@
 import SwiftUI
 
 struct MainNavigationYearContextMenu: View {
-    let yearTag: Tag
+    @Environment(Tag.self)
+    private var yearTag
+
     let onNavigate: (IncomesRoute) -> Void
     let onDelete: (Tag) -> Void
 

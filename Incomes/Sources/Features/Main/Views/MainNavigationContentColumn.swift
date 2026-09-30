@@ -1,11 +1,12 @@
 import SwiftUI
 
 struct MainNavigationContentColumn: View {
+    @Environment(Tag.self)
+    private var selectedYearTag: Tag?
     @Environment(MainNavigationRouter.self)
     private var router
 
     let hasAnyYears: Bool
-    let selectedYearTag: Tag?
     let onNavigate: (IncomesRoute) -> Void
 
     private var searchPredicateSelection: Binding<ItemPredicate?> {
@@ -54,11 +55,8 @@ struct MainNavigationContentColumn: View {
                         isCompact: isCompact
                     )
                 }
-            } else if let selectedYearTag {
-                MainNavigationYearContent(
-                    selectedYearTag: selectedYearTag,
-                    onNavigate: onNavigate
-                )
+            } else if selectedYearTag != nil {
+                HomeListView(navigateToRoute: onNavigate)
             } else if hasAnyYears {
                 MainNavigationSelectYearContent()
             } else {

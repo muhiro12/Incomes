@@ -26,14 +26,14 @@ struct HomeYearSection: View {
     private let navigateToRoute: (IncomesRoute) -> Void
 
     init(
-        yearTag: Tag,
+        yearName: String,
         navigateToRoute: @escaping (IncomesRoute) -> Void = { _ in
             // no-op
         }
     ) {
         _yearMonthTags = Query(
             .tags(
-                .nameStartsWith(yearTag.name, type: .yearMonth),
+                .nameStartsWith(yearName, type: .yearMonth),
                 order: .reverse
             )
         )
@@ -48,11 +48,11 @@ extension HomeYearSection {
         Section {
             ForEach(yearMonthTags, id: \.persistentModelID) { tag in
                 HomeMonthRowButton(
-                    tag: tag,
                     showsTip: tag.persistentModelID == firstYearMonthTagID,
                     navigateToRoute: navigateToRoute,
                     requestDelete: requestMonthDeletion
                 )
+                .environment(tag)
             }
             .onDelete { indices in
                 requestDeletion(
@@ -157,7 +157,7 @@ private extension HomeYearSection {
         if let yearTag = tags.first(where: { tag in
             tag.name == Date.now.stringValueWithoutLocale(.yyyy)
         }) {
-            HomeYearSection(yearTag: yearTag)
+            HomeYearSection(yearName: yearTag.name)
         } else {
             EmptyView()
         }

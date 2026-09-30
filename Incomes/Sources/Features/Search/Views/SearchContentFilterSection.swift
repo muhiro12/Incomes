@@ -11,9 +11,9 @@ struct SearchContentFilterSection: View {
             } else {
                 ForEach(tags) { tag in
                     SearchTagFilterRow(
-                        tag: tag,
                         applyFilter: applyFilter
                     )
+                    .environment(tag)
                 }
             }
         }

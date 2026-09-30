@@ -31,14 +31,13 @@ extension HomeListView: View {
     var body: some View {
         List {
             HomeYearSection(
-                yearTag: yearTag,
+                yearName: yearTag.name,
                 navigateToRoute: navigateToRoute
             )
             if !isSubscribeOn {
                 AdvertisementSection(.compact)
             }
             HomeSummarySection(
-                yearTag: yearTag,
                 navigateToRoute: navigateToRoute
             )
         }

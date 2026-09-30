@@ -8,13 +8,11 @@
 import SwiftUI
 
 struct HomeSummarySection: View {
-    let yearTag: Tag
     let navigateToRoute: (IncomesRoute) -> Void
 
     var body: some View {
         Section("Summary") {
             HomeSummaryButton(
-                yearTag: yearTag,
                 navigateToRoute: navigateToRoute
             )
         }

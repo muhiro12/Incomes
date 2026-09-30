@@ -9,10 +9,11 @@ import SwiftUI
 import TipKit
 
 struct HomeMonthRowButton: View {
+    @Environment(Tag.self)
+    private var tag
     @Environment(IncomesTipController.self)
     private var tipController
 
-    let tag: Tag
     let showsTip: Bool
     let navigateToRoute: (IncomesRoute) -> Void
     let requestDelete: (Tag) -> Void
@@ -25,7 +26,6 @@ struct HomeMonthRowButton: View {
         } label: {
             NavigationRowLabel {
                 TagSummaryRow()
-                    .environment(tag)
             }
         }
         .buttonStyle(.plain)

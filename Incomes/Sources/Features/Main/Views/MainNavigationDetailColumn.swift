@@ -9,7 +9,7 @@ struct MainNavigationDetailColumn: View {
             if router.isSearchPresented {
                 MainNavigationSearchDetailContent(predicate: router.predicate)
             } else if let selectedTag = router.selectedTag {
-                MainNavigationTagDetailContent(selectedTag: selectedTag)
+                MainNavigationTagDetailContent(selectedTagID: selectedTag.persistentModelID)
             } else {
                 MainNavigationSelectMonthContent()
             }

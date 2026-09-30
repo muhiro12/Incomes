@@ -100,15 +100,15 @@ struct MainNavigationView: View {
             }
         } content: {
             MainNavigationContentColumn(
-                hasAnyYears: !yearTags.isEmpty,
-                selectedYearTag: selectedYearTag
+                hasAnyYears: !yearTags.isEmpty
             ) { route in
                 enqueueNavigation(to: route)
             }
             .searchable(text: $router.searchText, isPresented: $router.isSearchPresented)
             .toolbar {
-                MainNavigationContentToolbarContent(selectedYearTag: selectedYearTag)
+                MainNavigationContentToolbarContent()
             }
+            .environment(selectedYearTag)
         } detail: {
             MainNavigationDetailColumn()
         }

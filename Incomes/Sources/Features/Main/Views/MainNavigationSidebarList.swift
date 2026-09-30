@@ -12,10 +12,10 @@ struct MainNavigationSidebarList<Footer: View>: View {
         List(selection: yearTagSelection) {
             ForEach(yearTags, id: \.persistentModelID) { yearTag in
                 MainNavigationYearTagRow(
-                    yearTag: yearTag,
                     onNavigate: onNavigate,
                     onDelete: onDeleteYearTag
                 )
+                .environment(yearTag)
             }
             .onDelete(perform: onDeleteYearTags)
 

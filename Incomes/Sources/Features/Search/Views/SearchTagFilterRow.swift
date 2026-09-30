@@ -1,7 +1,9 @@
 import SwiftUI
 
 struct SearchTagFilterRow: View {
-    let tag: Tag
+    @Environment(Tag.self)
+    private var tag
+
     let applyFilter: (Tag) -> Void
 
     var body: some View {

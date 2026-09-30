@@ -8,7 +8,9 @@
 import SwiftUI
 
 struct HomeSummaryButton: View {
-    let yearTag: Tag
+    @Environment(Tag.self)
+    private var yearTag
+
     let navigateToRoute: (IncomesRoute) -> Void
 
     var body: some View {
@@ -20,7 +22,6 @@ struct HomeSummaryButton: View {
         } label: {
             NavigationRowLabel {
                 TagSummaryRow()
-                    .environment(yearTag)
             }
         }
         .buttonStyle(.plain)
