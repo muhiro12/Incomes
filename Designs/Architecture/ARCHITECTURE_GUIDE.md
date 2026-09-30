@@ -209,6 +209,9 @@ Do not mirror that graph into presentation entities or copy query results into
   or sheet boundary. Descendants use `@Environment(Item.self)` or
   `@Environment(Tag.self)`, including optional reads for create flows. Do not
   relay the same selected model through view initializer chains.
+  Give a destination requiring a model a concrete environment inside its
+  non-optional selection branch. Clearing an outer optional selection must not
+  remove that model while SwiftUI finishes dismissing the destination.
 - Follow an existing model's relationships for data belonging to that graph.
   Keep semantic grouping and sorting in `TagQueryOperations`; a relationship
   traversal is not a reason to issue another query.

@@ -55,8 +55,9 @@ struct MainNavigationContentColumn: View {
                         isCompact: isCompact
                     )
                 }
-            } else if selectedYearTag != nil {
+            } else if let selectedYearTag {
                 HomeListView(navigateToRoute: onNavigate)
+                    .environment(selectedYearTag)
             } else if hasAnyYears {
                 MainNavigationSelectYearContent()
             } else {
