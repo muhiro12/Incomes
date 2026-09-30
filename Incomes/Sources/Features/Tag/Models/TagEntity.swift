@@ -66,6 +66,14 @@ extension TagEntity {
             try make(from: model)
         }
     }
+
+    /// Identifies `model` for onscreen context without building the whole entity.
+    static func entityIdentifier(for model: Tag) -> EntityIdentifier? {
+        guard let encodedID = try? PersistentIdentifierCoder.encode(model.id) else {
+            return nil
+        }
+        return .init(for: Self.self, identifier: encodedID)
+    }
 }
 
 extension TagEntity: Hashable {

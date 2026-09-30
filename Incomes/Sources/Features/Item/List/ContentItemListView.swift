@@ -42,6 +42,7 @@ extension ContentItemListView: View {
         }
         .listStyle(.grouped)
         .navigationTitle(tag.displayName)
+        .tagEntityIdentifier(tag)
         .task(id: items.count) {
             guard !items.isEmpty else {
                 return

@@ -5,6 +5,7 @@
 //  Created by Hiromu Nakano on 2024/05/31.
 //
 
+import AppIntents
 import MHPlatform
 import SwiftData
 import SwiftUI
@@ -285,6 +286,14 @@ private extension NotificationService {
         )
         content.badge = .init(value: presentation.badgeCount)
         content.userInfo = buildUserInfo(for: presentation)
+        if #available(iOS 27.0, *),
+           let itemIdentifier = ItemEntity.entityIdentifier(
+            forEncodedID: presentation.targetContentIdentifier
+           ) {
+            // Each reminder is about one stored item, so Siri can resolve
+            // "this payment" from the notification.
+            content.appEntityIdentifiers = [itemIdentifier]
+        }
 
         return .init(
             identifier: presentation.requestIdentifier,

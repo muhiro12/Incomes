@@ -38,6 +38,7 @@ struct ListItemButton: View {
         .accessibilityLabel(Text(item.content))
         .accessibilityValue(accessibilityValue)
         .accessibilityHint(Text("Open item details"))
+        .itemEntityIdentifier(item)
         .popoverTip(
             isItemDetailTipAnchor ? itemDetailTip : nil,
             arrowEdge: .top

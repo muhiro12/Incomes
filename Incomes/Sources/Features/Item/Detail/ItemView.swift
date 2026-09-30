@@ -30,6 +30,7 @@ extension ItemView: View {
         }
         .contentMargins(.bottom, designMetrics.spacing.inline, for: .scrollContent)
         .navigationTitle(item.content)
+        .itemEntityIdentifier(item)
         .toolbar {
             if isPresented {
                 ToolbarItem {

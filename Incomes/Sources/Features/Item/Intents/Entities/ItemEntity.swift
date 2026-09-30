@@ -88,6 +88,24 @@ extension ItemEntity {
             try make(from: item)
         }
     }
+
+    /// Identifies `model` for onscreen and notification context without
+    /// building the whole entity.
+    static func entityIdentifier(for model: Item) -> EntityIdentifier? {
+        guard let encodedID = try? PersistentIdentifierCoder.encode(model.id) else {
+            return nil
+        }
+        return .init(for: Self.self, identifier: encodedID)
+    }
+
+    /// Identifies the item behind an encoded persistent identifier, or returns
+    /// `nil` when the string does not name an item.
+    static func entityIdentifier(forEncodedID encodedID: String) -> EntityIdentifier? {
+        guard (try? PersistentIdentifierCoder.decode(encodedID)) != nil else {
+            return nil
+        }
+        return .init(for: Self.self, identifier: encodedID)
+    }
 }
 
 extension ItemEntity {
