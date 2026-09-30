@@ -11,6 +11,8 @@ public enum SampleDataOperations {
         case tutorial
         /// Sample data used by SwiftUI previews.
         case preview
+        /// Monthly amounts large enough to exercise compact chart axis labels.
+        case largeAmounts
     }
 
     /// Seeds sample data for various profiles.
@@ -66,6 +68,8 @@ private extension SampleDataOperations.Profile {
             .tutorial
         case .preview:
             .preview
+        case .largeAmounts:
+            .largeAmounts
         }
     }
 }

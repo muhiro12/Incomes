@@ -49,3 +49,9 @@ struct BalanceChartSection: View {
         BalanceChartSection(.items(.dateIsSameYearAs(.now)))
     }
 }
+
+#Preview("Large Amounts", traits: .modifier(IncomesLargeAmountSampleData())) {
+    List {
+        BalanceChartSection(.items(.dateIsSameYearAs(.now)))
+    }
+}

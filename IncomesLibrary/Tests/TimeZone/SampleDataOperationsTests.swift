@@ -97,6 +97,26 @@ struct SampleDataOperationsTests {
         #expect(try SettingsStatusOperations.load(context: context).hasDuplicateTags)
     }
 
+    @Test
+    func seedLargeAmounts_spans_positive_and_negative_millions() throws {
+        try SampleDataOperations.seed(
+            context: context,
+            profile: .largeAmounts,
+            baseDate: shiftedDate("2000-06-03T12:00:00Z")
+        )
+
+        let items = fetchItems(context)
+        let balances = items.map(\.balance)
+        #expect(items.count == 12)
+        #expect(Set(items.map { item in
+            Calendar.current.component(.year, from: item.localDate)
+        }) == [2_000])
+        #expect(balances.max() == 1_250_000)
+        #expect(balances.min() == -1_750_000)
+        #expect(items.contains { $0.outgo == 1_000_000 })
+        #expect(try SampleDataOperations.hasDebugData(context: context))
+    }
+
     // MARK: - Delete
 
     @Test

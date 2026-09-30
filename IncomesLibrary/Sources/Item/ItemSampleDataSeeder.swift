@@ -13,9 +13,11 @@ enum ItemSampleDataSeeder {
         case tutorial
         /// Sample data used by SwiftUI previews.
         case preview
+        /// Monthly amounts large enough to exercise compact chart axis labels.
+        case largeAmounts
     }
 
-    /// Seeds sample data for various profiles (debug/tutorial/preview).
+    /// Seeds sample data for various profiles.
     static func seedSampleData(
         context: ModelContext,
         profile: SampleDataProfile,
@@ -42,6 +44,8 @@ enum ItemSampleDataSeeder {
         case .preview:
             // Use rich dataset to support various preview screens.
             try seedPreviewData(context: context, baseDate: baseDate)
+        case .largeAmounts:
+            try seedLargeAmountData(context: context, baseDate: baseDate)
         }
     }
 
@@ -234,7 +238,7 @@ enum ItemSampleDataSeeder {
 
 // swiftlint:enable no_magic_numbers
 
-private extension ItemSampleDataSeeder {
+extension ItemSampleDataSeeder {
     static func attachSampleTag(to item: Item, context: ModelContext) throws {
         let sampleName = String(localized: "Sample Data", table: "SampleData", bundle: .module)
         let debugTag = try Tag.create(context: context, name: sampleName, type: .debug)

@@ -49,3 +49,9 @@ struct IncomeAndOutgoChartSection: View {
         IncomeAndOutgoChartSection(.items(.dateIsSameYearAs(.now)))
     }
 }
+
+#Preview("Large Amounts", traits: .modifier(IncomesLargeAmountSampleData())) {
+    List {
+        IncomeAndOutgoChartSection(.items(.dateIsSameYearAs(.now)))
+    }
+}
