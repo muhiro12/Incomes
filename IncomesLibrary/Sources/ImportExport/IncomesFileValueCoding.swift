@@ -41,6 +41,7 @@ enum IncomesFileValueCoding {
             }
         }
         guard hasOnlyDigits,
+              AmountPrecision.significantDigitCount(in: text) <= AmountPrecision.maximumSignificantDigits,
               let value = Decimal(string: text, locale: posixLocale),
               AmountPrecision.isExactlyStorable(value) else {
             return nil

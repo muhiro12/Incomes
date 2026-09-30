@@ -125,6 +125,9 @@ struct IncomesFileCodecTests {
         ("income", #""abc""#),
         ("income", #""1,000""#),
         ("income", #""1234567890123456""#),
+        ("income", #""1.000000000000000000000000000000000000000000000000001""#),
+        ("outgo", #""-1.000000000000000000000000000000000000000000000000001""#),
+        ("balance", #""1.000000000000000000000000000000000000000000000000001""#),
         ("income", #"" 1""#),
         ("income", #""1.""#),
         ("outgo", #""--1""#),
@@ -164,6 +167,20 @@ struct IncomesFileCodecTests {
         #expect(throws: ItemImportError.invalidItem(index: 2, field: .outgo)) {
             try ItemImportOperations.read(data: data)
         }
+    }
+
+    @Test(arguments: ["1.00000000000000000000000000000000000000000000000000", "00001.25000", "-0.01000"])
+    func exact_amounts_with_redundant_zeros_are_accepted(text: String) throws {
+        let data = try modified { object in
+            var items = object["items"] as? [[String: Any]] ?? []
+            items[0]["income"] = text
+            object["items"] = items
+        }
+        let contents = try ItemImportOperations.read(data: data)
+        let salary = try #require(contents.items.first { item in
+            item.content == "Salary"
+        })
+        #expect(salary.income == Decimal(string: text, locale: .init(identifier: "en_US_POSIX")))
     }
 
     @Test
