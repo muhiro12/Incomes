@@ -54,7 +54,7 @@ struct IncomeAndOutgoChart: View {
                     .foregroundStyle(.secondary.opacity(TimelineChartMetrics.axisGridOpacity))
                 AxisTick()
                     .foregroundStyle(.secondary.opacity(TimelineChartMetrics.axisTickOpacity))
-                AxisValueLabel()
+                AxisValueLabel(format: .chartAxisAmount(locale: locale))
             }
         }
         .accessibilityElement(children: .ignore)
