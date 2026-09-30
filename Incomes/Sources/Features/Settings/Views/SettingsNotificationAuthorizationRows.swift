@@ -1,39 +1,18 @@
 import SwiftUI
 
+/// Actionable rows for the current notification permission.
 struct SettingsNotificationAuthorizationRows: View {
     let authorizationPresentation: SettingsScreenModel.AuthorizationPresentation
     let openSystemSettings: () -> Void
 
     var body: some View {
-        switch authorizationPresentation {
-        case .authorized:
-            notificationFootnote(
-                "Notifications are enabled and will follow your in-app schedule."
-            )
-        case .denied:
+        if authorizationPresentation == .denied {
             Button {
                 openSystemSettings()
             } label: {
                 Label("Open System Settings", systemImage: "gearshape")
             }
             .accessibilityHint(Text("Opens iOS Settings to change notification permission."))
-            notificationFootnote(
-                "Notifications are currently denied in iOS Settings."
-            )
-        case .notDetermined:
-            notificationFootnote(
-                "Notification permission will be requested when reminders are registered."
-            )
         }
-    }
-}
-
-private extension SettingsNotificationAuthorizationRows {
-    func notificationFootnote(
-        _ text: LocalizedStringKey
-    ) -> some View {
-        Text(text)
-            .font(.footnote)
-            .foregroundStyle(.secondary)
     }
 }

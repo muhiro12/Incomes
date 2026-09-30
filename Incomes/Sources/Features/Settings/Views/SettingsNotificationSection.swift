@@ -26,7 +26,7 @@ struct SettingsNotificationSection: View {
 
 extension SettingsNotificationSection {
     @ViewBuilder var body: some View {
-        Section("Push notification settings") {
+        Section {
             Toggle("Enable push notifications", isOn: $notificationSettings.isEnabled)
             SettingsNotificationDetailsRows(
                 notificationSettings: $notificationSettings,
@@ -36,6 +36,12 @@ extension SettingsNotificationSection {
             SettingsNotificationAuthorizationRows(
                 authorizationPresentation: authorizationPresentation,
                 openSystemSettings: openSystemSettings
+            )
+        } header: {
+            Text("Push notification settings")
+        } footer: {
+            SettingsNotificationAuthorizationFooter(
+                authorizationPresentation: authorizationPresentation
             )
         }
     }
@@ -48,6 +54,24 @@ extension SettingsNotificationSection {
                 notificationSettings: .constant(.init()),
                 isNotificationEnabled: true,
                 authorizationPresentation: .authorized,
+                sendTestNotification: {
+                    // no-op
+                },
+                openSystemSettings: {
+                    // no-op
+                }
+            )
+        }
+    }
+}
+
+#Preview("Denied", traits: .modifier(IncomesSampleData())) {
+    NavigationStack {
+        List {
+            SettingsNotificationSection(
+                notificationSettings: .constant(.init()),
+                isNotificationEnabled: true,
+                authorizationPresentation: .denied,
                 sendTestNotification: {
                     // no-op
                 },
