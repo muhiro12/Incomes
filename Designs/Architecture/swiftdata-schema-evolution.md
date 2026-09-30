@@ -55,11 +55,15 @@ were portable values, or use them as cross-device business identifiers.
 Schema versions describe storage and are independent of marketing versions.
 The repository's release tags contain these three SwiftData shapes:
 
+<!-- markdownlint-disable MD013 -->
+
 | Schema | Release tags | Difference |
 | --- | --- | --- |
 | V0 (0.0.0) | 2.0 through 2.4.2 | Also contains legacy group and startOfYear |
 | V1 (1.0.0) | 2.5 through 5.2 | Removes the two legacy fields |
 | V2 (2.0.0) | 5.3 through 5.12 and current 6.x | Adds priority with default zero |
+
+<!-- markdownlint-enable MD013 -->
 
 V0 to V1 and V1 to V2 use lightweight stages. The V0 field removal reflects
 the change already shipped in 2.5; retained tag relationships carry category

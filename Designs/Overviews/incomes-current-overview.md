@@ -20,12 +20,16 @@ living in the app targets.
 
 ## Product Surface Summary
 
+<!-- markdownlint-disable MD013 -->
+
 | Surface | Current role | Key responsibilities |
 | --- | --- | --- |
 | `Incomes` | Primary product surface | Data entry, browsing, charts, search, notifications, subscription, sync settings, ads, deep links, App Intents, debug tools |
 | `Watch` | Lightweight companion | Show upcoming items, reload recent months from phone, inspect items in debug mode |
 | `Widgets` | Passive glanceable surface | Show month totals, month net income, next or previous item, deep-link back into the app |
 | `IncomesLibrary` | Shared domain layer | SwiftData models, predicates, calculators, yearly duplication, notification planning, maintenance services, routes |
+
+<!-- markdownlint-enable MD013 -->
 
 ## Current Platform Package Posture
 
@@ -500,12 +504,15 @@ route contract remains `IncomesRoute`.
 
 The following behaviors are already centralized and should remain centralized:
 
-- item creation, repeat generation, repeat count limits, and repeat-month selection rules
+- item creation, repeat generation, repeat count limits, and repeat-month
+  selection rules
 - repeat-aware item updates and scope-selection decisions
 - item deletion and affected-balance recalculation
 - duplicate tag detection, category display, display matching, and merge resolution
-- month totals, category comparisons, summary prompt language, and monthly summary date rules
-- yearly duplication planning, application, promo eligibility, and presentation summaries
+- month totals, category comparisons, summary prompt language, and monthly
+  summary date rules
+- yearly duplication planning, application, promo eligibility, and presentation
+  summaries
 - notification planning for upcoming payments
 - whole-store deletion and debug-data deletion
 - settings status loading for duplicate tags and debug data

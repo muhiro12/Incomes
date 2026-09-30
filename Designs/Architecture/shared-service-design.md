@@ -26,6 +26,8 @@ and widgets.
 
 ## Responsibility Boundaries
 
+<!-- markdownlint-disable MD013 -->
+
 | Concern | Lives in | Examples |
 | --- | --- | --- |
 | Business operations | `IncomesLibrary` | `Item*Operations`, `Tag*Operations`, `ItemSummaryOperations`, `YearlyItemDuplication*Operations`, `WidgetEntryOperations`, `WatchSyncOperations`, `UpcomingPaymentOperations`, `SettingsStatusOperations`, `DataMaintenanceOperations` |
@@ -34,6 +36,8 @@ and widgets.
 | App-side platform support | `Incomes/Sources/Platform` | `IncomesPlatformEnvironmentFactory`, `MHAppRuntimeBootstrap` assembly, `MHAppRoutePipeline<IncomesRoute>` assembly, `IncomesRouteBridge`, `MHReviewFlow` policy helpers, Foundation Models availability helpers, WidgetKit reload helpers, preference access helpers, App Group route store, pasteboard helpers, WatchConnectivity phone bridge |
 | Watch and widget surfaces | `Watch`, `Widgets` | WatchConnectivity transport, widget timeline providers, target-local screen state, entry presentation |
 | Presentation orchestration | `Incomes` | SwiftUI views, navigation state, form state, app workflows in `App/Workflows`, item mutation coordinators in `Features/Item/Mutation`, and settings coordinators in `Features/Settings` |
+
+<!-- markdownlint-enable MD013 -->
 
 ## MHPlatform Adoption
 
@@ -74,7 +78,8 @@ operations and shared wire contracts:
 - `Item*Operations.create(context:input:repeatMonthSelections:)`
 - `Item*Operations.requiresScopeSelection(context:item:)`
 - `Item*Operations.update(context:item:input:scope:)`
-- `Tag*Operations` duplicate-resolution, tag/date lookup, category display, and display matching helpers
+- `Tag*Operations` duplicate-resolution, tag/date lookup, category display, and
+  display matching helpers
 - `YearlyItemDuplicationPlanOperations.plan(context:sourceYear:targetYear:)`
 - `YearlyItemDuplicationApplyOperations.apply(plan:context:)`
 - `YearlyDuplicationAutomationOperations`
@@ -160,8 +165,8 @@ App-side mutation call sites should prefer
   planning operations, presentation contracts, identifier rules, and route
   payload contracts from `IncomesLibrary`.
 - `IncomesPlatformEnvironmentFactory` stays in `Incomes` because runtime,
-  route pipeline, and review flow assembly depend on the `MHPlatform` umbrella, app
-  secrets, and SwiftUI environment injection.
+  route pipeline, and review flow assembly depend on the `MHPlatform` umbrella,
+  app secrets, and SwiftUI environment injection.
 - `PhoneWatchBridge` stays under `Platform` because it owns the phone-side
   WatchConnectivity transport and maps requests into `WatchSyncOperations`.
   `PhoneSyncClient` stays in the watch target for watch-side transport, while
@@ -177,11 +182,12 @@ App-side mutation call sites should prefer
   `Features/Settings/YearlyDuplication/Coordinators` as an app-side adapter
   that delegates duplication rules to `YearlyItemDuplication*Operations` and
   uses package-owned mutation projection strategies.
-- `ItemFormSaveCoordinator` stays under `Features/Item/Mutation`, converts UI state into
-  `ItemFormInput`, and calls canonical `Item*Operations` APIs through
+- `ItemFormSaveCoordinator` stays under `Features/Item/Mutation`, converts UI
+  state into `ItemFormInput`, and calls canonical `Item*Operations` APIs through
   `MHMutationWorkflow.runThrowing`.
-- `ItemMutationAdapterFactory` stays under `Features/Item/Mutation` because it combines generic
-  follow-up hint execution with item-specific haptics and review requests. Its
+- `ItemMutationAdapterFactory` stays under `Features/Item/Mutation` because it
+  combines generic follow-up hint execution with item-specific haptics and
+  review requests. Its
   public entrypoints should describe the mutation purpose, such as save or
   delete, instead of accepting boolean feature toggles.
 
