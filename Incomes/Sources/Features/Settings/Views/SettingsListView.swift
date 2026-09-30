@@ -46,6 +46,8 @@ extension SettingsListView: View {
     var body: some View {
         @Bindable var model = model
 
+        // Sections follow the user's tasks: account, display, reminders, item
+        // data, conditional maintenance, about, and the Debug and Shortcuts links.
         List {
             SettingsSubscriptionSection(
                 isSubscribeOn: isSubscribeOn,
@@ -62,7 +64,6 @@ extension SettingsListView: View {
             tagMaintenanceSection(model: model)
             debugDataSection(model: model)
             aboutSection
-            ShortcutsLinkSection()
             if isDebugOn {
                 Section {
                     SettingsNavigationRowButton(
@@ -74,6 +75,7 @@ extension SettingsListView: View {
                     }
                 }
             }
+            ShortcutsLinkSection()
         }
         .scrollDismissesKeyboard(.interactively)
         .navigationTitle("Settings")
