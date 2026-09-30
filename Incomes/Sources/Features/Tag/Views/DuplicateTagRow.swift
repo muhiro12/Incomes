@@ -1,7 +1,8 @@
 import SwiftUI
 
 struct DuplicateTagRow: View {
-    let tag: Tag
+    @Environment(Tag.self)
+    private var tag
 
     @Binding var selectedTagID: Tag.ID?
     @Binding var selectedTags: [Tag]

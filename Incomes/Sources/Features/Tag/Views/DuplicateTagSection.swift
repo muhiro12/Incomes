@@ -13,11 +13,11 @@ struct DuplicateTagSection: View {
             Section {
                 ForEach(duplicates) { tag in
                     DuplicateTagRow(
-                        tag: tag,
                         selectedTagID: $selectedTagID,
                         selectedTags: $selectedTags,
                         isResolveDialogPresented: $isResolveDialogPresented
                     )
+                    .environment(tag)
                 }
             } header: {
                 DuplicateTagSectionHeader(

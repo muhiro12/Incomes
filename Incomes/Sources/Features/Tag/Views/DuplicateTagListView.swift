@@ -121,20 +121,12 @@ private extension DuplicateTagListView {
     func duplicateTags(
         from tags: [Tag]
     ) -> [Tag] {
-        do {
-            guard let type = tags.first?.type else {
-                return []
-            }
-            return try TagQueryOperations.duplicateTags(
-                context: context,
-                type: type
-            )
-            .sorted { left, right in
-                left.displayName < right.displayName
-            }
-        } catch {
-            assertionFailure(error.localizedDescription)
-            return []
+        TagQueryOperations.findDuplicates(
+            context: context,
+            tags: tags
+        )
+        .sorted { left, right in
+            left.displayName < right.displayName
         }
     }
 

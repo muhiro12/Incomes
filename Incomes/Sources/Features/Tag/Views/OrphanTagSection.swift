@@ -11,9 +11,9 @@ struct OrphanTagSection: View {
             Section(title) {
                 ForEach(orphanTags) { tag in
                     OrphanTagRow(
-                        tag: tag,
                         selectedTagID: $selectedTagID
                     )
+                    .environment(tag)
                 }
             }
         }

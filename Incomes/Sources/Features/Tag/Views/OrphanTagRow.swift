@@ -1,7 +1,8 @@
 import SwiftUI
 
 struct OrphanTagRow: View {
-    let tag: Tag
+    @Environment(Tag.self)
+    private var tag
 
     @Binding var selectedTagID: Tag.ID?
 
