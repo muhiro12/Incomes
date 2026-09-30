@@ -23,6 +23,33 @@ final class MainNavigationRouter {
     var settingsDestination: SettingsNavigationDestination?
     var itemDetailID: PersistentIdentifier?
 
+    @ObservationIgnored private var hasAppliedIncomingRoute = false
+
+    /// Selects today's year and month, then the selection the scene restored.
+    /// An incoming route from a link, widget, notification, or intent always
+    /// wins, whichever arrives first.
+    func loadInitialState(
+        restoredRoute: IncomesRoute?,
+        context: ModelContext
+    ) throws {
+        guard !hasAppliedIncomingRoute else {
+            return
+        }
+        try loadState(context: context)
+        guard let restoredRoute,
+              case let .destination(yearTagID, selectedTag) = try MainNavigationOperations.execute(
+                route: restoredRoute,
+                context: context
+              ),
+              let yearTagID else {
+            // A deleted year keeps today's default instead of an empty selection.
+            return
+        }
+        self.yearTagID = yearTagID
+        self.selectedTag = selectedTag
+        preferredCompactColumn = selectedTag == nil ? .content : .detail
+    }
+
     func loadState(context: ModelContext) throws {
         let state = try MainNavigationOperations.loadState(context: context)
         yearTagID = state.yearTag?.persistentModelID
@@ -47,6 +74,7 @@ final class MainNavigationRouter {
             route: route,
             context: context
         )
+        hasAppliedIncomingRoute = true
     }
 
     func navigate(

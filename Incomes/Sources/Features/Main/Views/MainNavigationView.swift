@@ -27,6 +27,11 @@ struct MainNavigationView: View {
     @Query(.tags(.typeIs(.year), order: .reverse))
     private var yearTags: [Tag]
 
+    // Scene storage lives as long as the scene session, so a closed window
+    // starts again from today's month while a relaunched scene keeps its place.
+    @SceneStorage("MainNavigation.restorableRoute")
+    private var restorableRouteURL: URL?
+
     @State private var router: MainNavigationRouter = .init()
     @State private var settingsCoordinator: MainNavigationSettingsCoordinator = .init()
     @State private var yearDeletionModel: MainNavigationYearDeletionModel = .init()
@@ -38,6 +43,13 @@ struct MainNavigationView: View {
         return yearTags.first { yearTag in
             yearTag.persistentModelID == yearTagID
         }
+    }
+
+    private var restorableRoute: IncomesRoute? {
+        MainNavigationOperations.restorableRoute(
+            yearTag: selectedYearTag,
+            selectedTag: router.selectedTag
+        )
     }
 
     private var yearTagSelection: Binding<Tag.ID?> {
@@ -142,8 +154,11 @@ struct MainNavigationView: View {
         .onChange(of: router.isSearchPresented) {
             handleSearchPresentationChange()
         }
+        .onChange(of: restorableRoute) {
+            restorableRouteURL = MainNavigationOperations.restorationURL(for: restorableRoute)
+        }
         .task {
-            loadState()
+            loadInitialState()
 
             tipController.refreshHasAnyItems(!yearTags.isEmpty)
 
@@ -183,9 +198,12 @@ private extension MainNavigationView {
         navigate(to: route)
     }
 
-    func loadState() {
+    func loadInitialState() {
         do {
-            try router.loadState(
+            try router.loadInitialState(
+                restoredRoute: restorableRouteURL.flatMap(
+                    MainNavigationOperations.restorableRoute(from:)
+                ),
                 context: context
             )
         } catch {
