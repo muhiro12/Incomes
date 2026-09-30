@@ -78,9 +78,10 @@ Models.
 
 ## Architecture and technologies
 
-- **SwiftData + App Group** – all targets read and write through a shared model
-  container rooted at `group.com.muhiro12.Incomes`; update `AppGroup.id` when
-  using your own bundle identifiers.
+- **SwiftData + App Group** – the host app owns writes and migration in the
+  store rooted at `group.com.muhiro12.Incomes`; widgets open it read-only.
+  Watch uses an isolated in-memory store populated by phone snapshots. Update
+  `AppGroup.id` when using your own bundle identifiers.
 - **Database migration** – `DatabaseMigrator` moves legacy SQLite files into the
   shared container on first launch so long-time users keep their history.
 - **WatchConnectivity bridge** – `PhoneWatchBridge` answers watch requests with

@@ -35,12 +35,15 @@ invoked business use cases.
 
 ## Responsibility Boundaries
 
+<!-- markdownlint-disable MD013 -->
 | Layer | Owns | Must not own |
 | --- | --- | --- |
 | Business implementation (`IncomesLibrary`) | Public `*Operations` facades, validation, calculations, repeat rules, duplication planning, search predicate building, maintenance rules, SwiftData schema/predicates/descriptors, shared route and sync contracts | App-specific side effects (notifications, WidgetKit reload, ads, StoreKit, WatchConnectivity orchestration, lifecycle wiring), UI framework types, App Intent types |
 | Collaborator (`IncomesLibrary`) | Models, value types, calculators, builders, planners, loaders, parsers, codecs, and persistence helpers used by `*Operations` | Primary external business-use-case entry points |
 | Delivery surface / adapter (`Incomes`, `Watch`, `Widgets`, App Intents) | Parameter parsing, platform API calls, dependency wiring, follow-up orchestration based on operation outcomes | Business branching duplicated from library |
 | View (SwiftUI) | Focus state, sheets, navigation state, screen-scoped `@Observable` presentation models, formatting, view composition | Business validation branching, financial calculations, repeat/duplication rules |
+
+<!-- markdownlint-enable MD013 -->
 
 ## Thin-Target Clarification
 
@@ -108,9 +111,13 @@ Current examples include `MainNavigationRouter`,
 
 ## Canonical Mutation Flow
 
-`View -> Workflow/Adapter (Incomes target) -> IncomesLibrary service -> SwiftData write -> Observation/@Query updates`
+```text
+View -> Workflow/Adapter -> IncomesLibrary *Operations
+     -> SwiftData write -> Observation/@Query updates
+```
 
-Adapters may orchestrate platform side effects after mutation completion, but mutation rules and changed-entity decisions come from `IncomesLibrary`.
+Adapters may orchestrate platform side effects after mutation completion, but
+mutation rules and changed-entity decisions come from `IncomesLibrary`.
 
 ## App Intent Mapping
 
@@ -118,7 +125,8 @@ App Intents must follow the same business path:
 
 `AppIntent parameter parsing -> same Workflow/Adapter -> IncomesLibrary *Operations`
 
-Intent files may convert operation errors to App Intent errors, but must not re-implement business rules.
+Intent files may convert operation errors to App Intent errors, but must not
+re-implement business rules.
 Intent-only entities, parameter summaries, snippet views, and shortcut phrases
 stay outside `IncomesLibrary` because they are adapter concerns.
 
@@ -176,7 +184,7 @@ Keep in `IncomesLibrary`:
 
 Keep in app targets:
 
-- `ModelContainer` construction
+- Store configuration and calls to `ModelContainerFactory`
 - CloudKit on/off policy
 - App/scene lifecycle wiring
 - Platform side effects (notifications, widgets, watch bridge, ads, StoreKit)
@@ -184,7 +192,76 @@ Keep in app targets:
 API style decision:
 
 - Continue accepting `ModelContext` in library APIs.
-- Rationale: current codebase is `@Query`/Observation-first and already centered on `mainContext`; introducing `ModelActor` now would increase migration cost without directly improving this boundary policy.
+- Rationale: current codebase is `@Query`/Observation-first and already centered
+  on `mainContext`; introducing `ModelActor` now would increase migration cost
+  without directly improving this boundary policy.
+
+### Live App Data Flow
+
+The main SwiftUI app uses `Item` and `Tag` as its canonical live model graph.
+Do not mirror that graph into presentation entities or copy query results into
+`@State` to synchronize them manually after a mutation.
+
+- Independently read live store collections with `@Query` at the consuming
+  feature or navigation surface. Configure predicates and sort descriptors
+  through small initializer inputs such as a year name, date, ID, or descriptor.
+- Supply one current model with `.environment(model)` at the row, destination,
+  or sheet boundary. Descendants use `@Environment(Item.self)` or
+  `@Environment(Tag.self)`, including optional reads for create flows. Do not
+  relay the same selected model through view initializer chains.
+- Follow an existing model's relationships for data belonging to that graph.
+  Keep semantic grouping and sorting in `TagQueryOperations`; a relationship
+  traversal is not a reason to issue another query.
+- Resolve route or intent IDs once through the owning `*Operations`. Add a
+  live query only when the destination also needs collection membership or
+  deletion observation.
+- Keep explicit inputs for bindings, closures, query configuration, form
+  drafts, review snapshots, and features operating on several peer models.
+  Selection and deletion candidates are transient presentation state, not a
+  second model graph.
+- Mutations enter public `*Operations` through the appropriate workflow or
+  adapter. SwiftData observation updates the live UI. Do not create or save
+  durable records directly in views.
+
+Form inputs and balance reviews have a different lifetime from live records.
+`ItemFormModel` owns an editable value draft; category rename receives an
+initial name value while reading its live `Tag` from the environment. Watch
+wire values, widget snapshots, App Intent entities, AI extraction schemas,
+and import/export records remain purpose-specific boundary contracts.
+`ResultsObserver` is reserved for an evidenced non-view observable consumer;
+it does not replace ordinary SwiftUI `@Query` reads by default.
+
+### Current Read Ownership
+
+Paths below are relative to `Incomes/Sources/Features` unless stated otherwise.
+
+<!-- markdownlint-disable MD013 -->
+| Surface | Read ownership |
+| --- | --- |
+| `Main/Views/MainNavigationView.swift` | Year-tag query supports sidebar membership, selection validation, restoration, and the selected year context; the shell does not fetch all items. Sidebar helpers receive the same collection plus selection/deletion inputs. |
+| `Main/Views/MainNavigationTagDetailContent.swift` | A persistent-ID query detects removal of the selected tag and clears the route. The resulting live tag enters the detail subtree through environment. |
+| `Main/Views/MainNavigationItemDetailSheet.swift` | One-shot item-ID resolution through `ItemQueryOperations`, then environment propagation. |
+| `Home/Components/HomeYearSection.swift` | Queries month tags by year name. Year and month tags have no direct relationship to each other, so this is an independent collection read. |
+| `Home/Components/HomeSummaryButton.swift`, `Home/Components/HomeMonthRowButton.swift` | Current tag comes from environment; summary content follows its item relationships. |
+| `Item/List/ItemListSection.swift`, `Search/Views/SearchResultView.swift`, `Item/Charts/*Section.swift` | Feature-owned item queries configured with predicates or descriptors; rows receive the selected item through environment. |
+| `Item/List/TagItemListSection.swift` | Reads the selected tag's item graph through `TagQueryOperations`, including year filtering, without a view-level re-fetch. |
+| `Search/Views/SearchListView.swift`, `Item/Form/SuggestionButtonGroup.swift` | Feature-owned tag/item queries support filtering and semantic category facets. Their helpers receive collections or facet values; individual content rows receive a tag environment. |
+| `Item/Form/ItemFormView.swift`, `Item/Form/ItemFormBalanceProjectionSheet.swift`, `Tag/CategoryRename/CategoryRenameSheet.swift` | Live item/tag environment plus separate value drafts and operation-produced reviews. Opening a sheet does not save a record. |
+| `Tag/Views/DuplicateTagView.swift`, `Tag/Views/OrphanTagView.swift` | Duplicate comparison queries several peer tags; orphan detail uses its current tag environment. Candidate lists and confirmation state retain their explicit roles. |
+| `Settings/ImportExport/DataExportView.swift`, `Settings/ImportExport/DataExportButton.swift` | Live item queries for overview and export availability; export creates value records at the file/worker boundary. |
+
+<!-- markdownlint-enable MD013 -->
+
+`TagQueryOperations` deliberately resolves Others-like category aliases against
+item data when the selected tag's direct relationship is insufficient. Search
+and suggestions use `CategoryFacetOperations` for the same semantic grouping.
+Do not replace this product behavior with a bare relationship traversal merely
+to reduce query count.
+
+Store setup also has distinct ownership: the host app selects configuration and
+owns migration, widgets open the shared store without saving or migrating, and
+Watch applies phone snapshots to an isolated in-memory container. The schema
+and factory implementation remain in `IncomesLibrary`.
 
 ## Current Hotspots and Minimal Refactor Plans
 

@@ -12,6 +12,15 @@ Repository-specific agent contract for Incomes.
   <https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md>.
 - Swift code must comply with the repository SwiftLint configuration.
 
+## SwiftData App Data Flow
+
+- Use live `Item` and `Tag` models in SwiftUI. Independent collections use
+  feature-owned `@Query`; selected models use typed environment propagation.
+- Keep form drafts, snapshots, routes, and external representations as values
+  with their own lifetimes. Durable writes enter public `*Operations`.
+- Follow the read-ownership rules and justified query boundaries in
+  [the architecture guide](Designs/Architecture/ARCHITECTURE_GUIDE.md#live-app-data-flow).
+
 ## Toolchain Compatibility
 
 - Develop Incomes 6.x on `main`. The `5.12` tag preserves the released 5.x

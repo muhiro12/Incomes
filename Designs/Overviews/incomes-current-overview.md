@@ -332,8 +332,9 @@ avoid semantic drift when duplicates exist.
   into the shared container on first launch.
 - The iPhone app can build its model container with CloudKit enabled or
   disabled, based on the stored premium sync setting.
-- Widgets and watch-related helpers read the same schema through shared
-  container factories or snapshot payloads.
+- Widgets open the shared store read-only without running migrations.
+- Watch uses the same schema in an isolated in-memory store populated by
+  phone snapshot payloads.
 
 ### Balance behavior
 
@@ -409,6 +410,14 @@ Current screen-scoped presentation models include:
 - `SettingsScreenModel`
 - `ItemFormPresentationModel`
 - `WatchHomeScreenModel`
+
+The main app presents live SwiftData `Item` and `Tag` models. Independent
+collections use feature-owned `@Query`, while current models flow into rows,
+details, and sheets through typed environment. Relationship-derived item lists
+reuse `TagQueryOperations`. Form drafts, projection reviews, sync snapshots,
+and App Intent entities retain their distinct meanings and lifetimes. See
+[Live App Data Flow](../Architecture/ARCHITECTURE_GUIDE.md#live-app-data-flow)
+for read ownership and the selected-tag deletion query boundary.
 
 The primary iPhone shell still uses a year-based `NavigationSplitView`, but the
 root screen now composes dedicated sidebar, content, detail, and sheet
