@@ -86,8 +86,10 @@ Models.
 - **WatchConnectivity bridge** – `PhoneWatchBridge` answers watch requests with
   typed `WatchSyncReply` payloads, while `PhoneSyncClient` manages activation
   and message replies on watchOS.
-- **Preview infrastructure** – `IncomesPreview` provisions an in-memory store,
-  sample data, and mock services so SwiftUI previews remain functional.
+- **Preview infrastructure** – `IncomesSampleData` provisions an in-memory
+  store, a named sample-data profile, and mock services so SwiftUI previews
+  remain functional. See
+  [Sample Data Profiles](Designs/Architecture/sample-data-profiles.md).
 
 ## Architecture records
 

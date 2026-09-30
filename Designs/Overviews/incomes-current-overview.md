@@ -240,8 +240,8 @@ living in the app targets.
 ### 14. Debug and internal maintenance features
 
 - Enable or disable a debug option.
-- Seed rich preview or tutorial-style sample data.
-- Seed duplicate-prone sample data intentionally for duplicate tag testing.
+- Seed the standard sample ledger, a large ledger for performance checks, or
+  sample data with duplicate tags for duplicate tag testing.
 - View all items and all tags from debug navigation.
 - Reset or force-show TipKit state for testing.
 - Inspect ads and subscription screens from debug mode.
@@ -460,8 +460,9 @@ route contract remains `IncomesRoute`.
 ### 7. Preview and sample-data infrastructure is first-class
 
 - SwiftUI previews use an in-memory model container.
-- Shared sample data seeding produces realistic finance data for previews and
-  debugging.
+- Shared sample data seeding produces realistic finance data for previews,
+  debugging, UI smoke runs, and tests through named profiles; see
+  [Sample Data Profiles](../Architecture/sample-data-profiles.md).
 - The preview stack also injects notification, configuration, store, and ad
   services so the UI stays operable in isolation.
 
