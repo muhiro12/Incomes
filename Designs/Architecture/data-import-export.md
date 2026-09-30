@@ -129,7 +129,8 @@ The first file version is `2.0.0`. Files were never written for earlier schemas.
 2. Compare the file with the store and show the difference.
 3. Apply the chosen policy only after explicit confirmation. The operation
    inserts, deletes, removes unused tags, and recalculates balances. The
-   caller's mutation workflow saves once.
+   app calls `ItemImportOperations.applyAndSaveWithOutcome`, which saves once
+   in an isolated context before the mutation workflow runs follow-ups.
 
 Before a policy that changes existing records, the confirmation recommends
 exporting the current data first and offers that export directly.
@@ -189,9 +190,19 @@ otherwise.
 
 ### Store changes after review
 
-The operation recalculates the difference immediately before applying it. If
-the store no longer produces the difference the person reviewed, the import is
-refused with `storeChangedSinceReview` and the preview must be shown again.
+The review captures every store item's identity and values, including matched
+items and recurrence. The operation rechecks this snapshot immediately before
+applying it. A changed store or pending edits in the review context refuse the
+import with `storeChangedSinceReview`, and the preview must be shown again.
+
+The import owns an isolated context with autosave disabled. It saves once after
+validation; a failure rolls back only its own changes. Other pending edits are
+never saved or discarded by import. Created identifiers are returned only after
+the save succeeds, and notifications, widgets, and Watch refresh afterward.
+An adopted currency is set after a successful save and before those refreshes.
+A currency-setting change during review requires a fresh adoption choice.
+Validation errors reach the screen unchanged so a stale review is refreshed;
+post-save follow-up failures are logged without reporting an unsaved import.
 
 ### iCloud sync
 

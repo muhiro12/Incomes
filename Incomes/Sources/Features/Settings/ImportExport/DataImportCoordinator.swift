@@ -14,6 +14,7 @@ enum DataImportCoordinator {
     static func apply(
         _ request: Request,
         context: ModelContext,
+        didSave: @MainActor () -> Void,
         refreshNotificationSchedule: @escaping IncomesMutationWorkflow.NotificationScheduleRefresher,
         logger: MHLogger
     ) async throws -> ItemImportResult {
@@ -23,29 +24,20 @@ enum DataImportCoordinator {
         )
         logger.notice("data_import.apply_requested", metadata: metadata)
         do {
-            let adapter = IncomesMutationWorkflow.followUpHintAdapter(
-                refreshNotificationSchedule: refreshNotificationSchedule
+            // Keep typed validation errors intact so the screen can refresh a stale review.
+            let mutation = try ItemImportOperations.applyAndSaveWithOutcome(
+                contents: request.contents,
+                reviewed: request.difference,
+                policy: request.policy,
+                context: context
             )
-            let result = try await MHMutationWorkflow.runThrowing(
-                name: "importItems",
-                operation: {
-                    let mutation = try ItemImportOperations.applyWithOutcome(
-                        contents: request.contents,
-                        reviewed: request.difference,
-                        policy: request.policy,
-                        context: context
-                    )
-                    // Save before follow-ups so widgets, Watch, and notifications read the imported data.
-                    try context.save()
-                    return mutation
-                },
-                adapter: adapter,
-                projection: .valueAndFollowUp(
-                    value: \.value,
-                    followUp: \.outcome.followUpHints
-                ),
-                onEvent: MHMutationWorkflowLogger(logger: logger).onEvent()
+            didSave()
+            await performFollowUps(
+                for: mutation,
+                refreshNotificationSchedule: refreshNotificationSchedule,
+                logger: logger
             )
+            let result = mutation.value
             logger.notice(
                 "data_import.apply_completed",
                 metadata: metadata.merging(
@@ -59,8 +51,6 @@ enum DataImportCoordinator {
             )
             return result
         } catch {
-            // Discard any partial insertions or deletions that were not saved.
-            context.rollback()
             logger.error(
                 "data_import.apply_failed",
                 metadata: metadata.merging(IncomesLogging.errorMetadata(error)) { current, _ in
@@ -73,6 +63,33 @@ enum DataImportCoordinator {
 }
 
 private extension DataImportCoordinator {
+    static func performFollowUps(
+        for mutation: MutationResult<ItemImportResult>,
+        refreshNotificationSchedule: @escaping IncomesMutationWorkflow.NotificationScheduleRefresher,
+        logger: MHLogger
+    ) async {
+        let adapter = IncomesMutationWorkflow.followUpHintAdapter(
+            refreshNotificationSchedule: refreshNotificationSchedule
+        )
+        do {
+            _ = try await MHMutationWorkflow.runThrowing(
+                name: "importItems",
+                operation: {
+                    mutation
+                },
+                adapter: adapter,
+                projection: .valueAndFollowUp(
+                    value: \.value,
+                    followUp: \.outcome.followUpHints
+                ),
+                onEvent: MHMutationWorkflowLogger(logger: logger).onEvent()
+            )
+        } catch {
+            // The import is already saved. A follow-up failure must not invite a duplicate retry.
+            logger.warning("data_import.follow_up_failed", metadata: IncomesLogging.errorMetadata(error))
+        }
+    }
+
     static func policyName(_ policy: ItemImportPolicy) -> String {
         switch policy {
         case .replace:

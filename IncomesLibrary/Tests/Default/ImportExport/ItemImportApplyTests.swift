@@ -161,6 +161,28 @@ struct ItemImportApplyTests {
     }
 
     @Test
+    func a_matched_items_recurrence_change_invalidates_the_review() throws {
+        let context = testContext
+        let item = try createItem(context: context, day: "2026-03-08", content: "Rent", outgo: 80_000)
+        let contents = makeContents([
+            fileItem(day: "2026-03-08", content: "Rent", outgo: 80_000),
+            fileItem(day: "2026-03-09", content: "Book", outgo: 2_000)
+        ])
+        let difference = try ItemImportOperations.difference(contents: contents, context: context)
+        #expect(difference.matchedCount == 1)
+        try item.modify(values: IncomesFileItem(item: item).storedValues, repeatID: UUID())
+        #expect(throws: ItemImportError.storeChangedSinceReview) {
+            try ItemImportOperations.applyWithOutcome(
+                contents: contents,
+                reviewed: difference,
+                policy: .replace,
+                context: context
+            )
+        }
+        #expect(fetchItems(context).map(\.content) == ["Rent"])
+    }
+
+    @Test
     func replace_validates_balances_without_the_items_it_removes() throws {
         let context = testContext
         try createItem(context: context, day: "2026-03-08", content: "Savings", income: 999_999_999_999_999)
@@ -193,6 +215,25 @@ struct ItemImportApplyTests {
         )
         #expect(result.value == .init(addedCount: 0, removedCount: 0, unchangedCount: 1))
         #expect(result.outcome.followUpHints.isEmpty)
+    }
+
+    @Test
+    func import_recalculates_matched_predecessors_before_new_items() throws {
+        let context = testContext
+        let salary = try createItem(context: context, day: "2026-03-08", content: "Salary", income: 100)
+        salary.modify(balance: 1)
+        let contents = makeContents([
+            fileItem(day: "2026-03-08", content: "Salary", income: 100),
+            fileItem(day: "2026-03-09", content: "Book", outgo: 10)
+        ])
+        let difference = try ItemImportOperations.difference(contents: contents, context: context)
+        _ = try ItemImportOperations.applyWithOutcome(
+            contents: contents,
+            reviewed: difference,
+            policy: .merge(.init()),
+            context: context
+        )
+        #expect(fetchItems(context).sorted(by: >).map(\.balance) == [100, 90])
     }
 }
 

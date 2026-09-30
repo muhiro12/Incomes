@@ -31,6 +31,8 @@ public struct ItemImportDifference: Equatable, Sendable {
     public let storeOnlyItems: [StoreItem]
     /// Store items inside the file's selection.
     public let storeItemCount: Int
+    /// Complete review snapshot, including matched identities and recurrence.
+    let reviewedStoreItems: [StoreItem]
 }
 
 public extension ItemImportDifference {

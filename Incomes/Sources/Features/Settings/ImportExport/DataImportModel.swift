@@ -107,10 +107,12 @@ extension DataImportModel {
     /// Applies the reviewed difference; returns true on success.
     func apply(
         context: ModelContext,
+        didSave: @MainActor () -> Void,
         refreshNotificationSchedule: @escaping IncomesMutationWorkflow.NotificationScheduleRefresher,
         logger: MHLogger
     ) async -> Bool {
-        guard let contents,
+        guard !isReading, !isApplying,
+              let contents,
               let difference else {
             return false
         }
@@ -126,6 +128,7 @@ extension DataImportModel {
                     policy: policy
                 ),
                 context: context,
+                didSave: didSave,
                 refreshNotificationSchedule: refreshNotificationSchedule,
                 logger: logger
             )
@@ -172,6 +175,17 @@ extension DataImportModel {
         decisions = .init()
         adoptsFileCurrency = false
     }
+
+    /// A currency change needs a fresh choice before import can replace that setting.
+    func validateCurrencyForApply(_ currencyCode: String) -> Bool {
+        guard currencyCode == currentCurrencyCode else {
+            currentCurrencyCode = currencyCode
+            adoptsFileCurrency = false
+            errorMessage = Self.message(for: ItemImportError.storeChangedSinceReview)
+            return false
+        }
+        return true
+    }
 }
 
 private extension DataImportModel {
@@ -210,6 +224,7 @@ private extension DataImportModel {
         do {
             difference = try ItemImportOperations.difference(contents: contents, context: context)
             decisions = .init()
+            adoptsFileCurrency = false
         } catch {
             errorMessage = Self.message(for: error)
         }

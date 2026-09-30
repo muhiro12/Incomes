@@ -40,6 +40,7 @@ struct DataImportView: View {
                 }
             }
         }
+        .disabled(model.isApplying)
         .navigationTitle("Import data")
         .fileImporter(
             isPresented: $isChoosingFile,
@@ -206,16 +207,21 @@ private extension DataImportView {
     }
 
     func apply() {
+        guard model.validateCurrencyForApply(resolvedCurrencyCode) else {
+            return
+        }
         let fileCurrencyCode = model.adoptsFileCurrency ? model.differingFileCurrencyCode : nil
         Task {
-            let isApplied = await model.apply(
+            _ = await model.apply(
                 context: context,
+                didSave: {
+                    if let fileCurrencyCode {
+                        currencyCode = fileCurrencyCode
+                    }
+                },
                 refreshNotificationSchedule: refreshNotificationSchedule,
                 logger: logger
             )
-            if isApplied, let fileCurrencyCode {
-                currencyCode = fileCurrencyCode
-            }
         }
     }
 }

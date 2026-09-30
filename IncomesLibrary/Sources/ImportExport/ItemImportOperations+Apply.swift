@@ -48,8 +48,9 @@ public extension ItemImportOperations {
         }
         TagMutationOperations.deleteUnused(tags: tagsToCleanup)
         let changedDates = createdItems.map(\.localDate) + removedDates
-        if let startDate = changedDates.min() {
-            try BalanceCalculator.calculate(in: context, after: startDate)
+        if !changedDates.isEmpty {
+            // Recovery must not inherit a stale stored balance from a matched predecessor.
+            try BalanceCalculator.calculate(in: context, after: .distantPast)
         }
         return .init(
             value: plan.result,

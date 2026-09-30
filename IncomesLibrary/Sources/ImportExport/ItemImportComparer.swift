@@ -53,7 +53,8 @@ enum ItemImportComparer {
             storeOnlyItems: unmatchedStoreItems.filter { storeItem in
                 !changeGroupIDs.contains(groupID(for: storeItem.item))
             },
-            storeItemCount: storeItems.count
+            storeItemCount: storeItems.count,
+            reviewedStoreItems: orderedStoreItems
         )
     }
 }
