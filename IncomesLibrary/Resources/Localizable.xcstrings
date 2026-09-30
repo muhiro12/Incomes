@@ -1021,6 +1021,40 @@
         }
       }
     },
+    "Your data exceeds the file size supported by this version of Incomes." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your data exceeds the file size supported by this version of Incomes."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tus datos superan el tamaño de archivo admitido por esta versión de Incomes."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vos données dépassent la taille de fichier prise en charge par cette version d’Incomes."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "データがこのバージョンのIncomesで対応するファイルサイズを超えています。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "你的数据超过了此版本 Incomes 支持的文件大小。"
+          }
+        }
+      }
+    },
     "Your records changed after the last balance preview. Preview the balance again." : {
       "localizations" : {
         "en" : {

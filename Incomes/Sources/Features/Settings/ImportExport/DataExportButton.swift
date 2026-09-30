@@ -17,6 +17,7 @@ struct DataExportButton: View {
     @State private var isExporting = false
     @State private var isPreparing = false
     @State private var hasExportError = false
+    @State private var exportErrorMessage: String?
     @State private var preparationTask: Task<Void, Never>?
 
     let title: LocalizedStringKey
@@ -53,6 +54,7 @@ struct DataExportButton: View {
                     metadata: IncomesLogging.errorMetadata(error)
                 )
                 hasExportError = true
+                exportErrorMessage = nil
             }
         }
         .alert("Export failed", isPresented: $hasExportError) {
@@ -60,7 +62,11 @@ struct DataExportButton: View {
                 // The alert dismisses automatically.
             }
         } message: {
-            Text("Your data has not changed. Please try exporting again.")
+            if let exportErrorMessage {
+                Text(exportErrorMessage)
+            } else {
+                Text("Your data has not changed. Please try exporting again.")
+            }
         }
         .onDisappear {
             preparationTask?.cancel()
@@ -92,23 +98,27 @@ private extension DataExportButton {
         )
         isPreparing = true
         preparationTask = Task {
-            let data = await Task.detached(priority: .userInitiated) {
-                try? ItemExportOperations.incomesFileData(
-                    fileItems: fileItems,
-                    currencyCode: code
-                )
+            let result = await Task.detached(priority: .userInitiated) {
+                Result {
+                    try ItemExportOperations.incomesFileData(
+                        fileItems: fileItems,
+                        currencyCode: code
+                    )
+                }
             }.value
             guard !Task.isCancelled else {
                 return
             }
             isPreparing = false
-            guard let data else {
+            switch result {
+            case .failure(let error):
                 logger.error("data_export.encoding_failed")
+                exportErrorMessage = (error as? ItemExportError)?.localizedDescription
                 hasExportError = true
-                return
+            case .success(let data):
+                document = .init(data: data)
+                isExporting = true
             }
-            document = .init(data: data)
-            isExporting = true
         }
     }
 }

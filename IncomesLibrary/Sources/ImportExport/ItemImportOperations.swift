@@ -9,6 +9,24 @@ public enum ItemImportOperations {
     public static func read(data: Data) throws -> IncomesFileContents {
         try IncomesFileCodec.decode(data)
     }
+
+    /// Reads at most the supported size plus one byte, even when the file grows during reading.
+    /// The caller owns security-scoped access when the URL comes from a file picker.
+    public static func read(at url: URL) throws -> IncomesFileContents {
+        let handle = try FileHandle(forReadingFrom: url)
+        defer {
+            try? handle.close()
+        }
+        var data = Data()
+        while let chunk = try handle.read(upToCount: maximumFileByteCount + 1 - data.count),
+              !chunk.isEmpty {
+            data.append(chunk)
+            guard data.count <= maximumFileByteCount else {
+                throw ItemImportError.fileTooLarge
+            }
+        }
+        return try read(data: data)
+    }
 }
 
 public extension ItemImportOperations {

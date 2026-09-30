@@ -120,6 +120,38 @@ struct IncomesFileCodecTests {
         }
     }
 
+    @Test
+    func oversized_export_is_rejected_instead_of_writing_an_unreadable_file() throws {
+        let item = IncomesFileItem(
+            date: exportedAt,
+            content: String(repeating: "x", count: ItemImportOperations.maximumFileByteCount),
+            income: .zero,
+            outgo: .zero,
+            category: "",
+            priority: .zero,
+            repeatID: uuid(1),
+            balance: nil
+        )
+        #expect(throws: ItemExportError.fileTooLarge) {
+            try encode([item])
+        }
+    }
+
+    @Test
+    func file_reader_preserves_valid_contents_and_rejects_oversized_files() throws {
+        let url = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        defer {
+            try? FileManager.default.removeItem(at: url)
+        }
+        let data = try encode(makeItems())
+        try data.write(to: url)
+        #expect(try ItemImportOperations.read(at: url) == ItemImportOperations.read(data: data))
+        try Data(count: ItemImportOperations.maximumFileByteCount + 1).write(to: url)
+        #expect(throws: ItemImportError.fileTooLarge) {
+            try ItemImportOperations.read(at: url)
+        }
+    }
+
     @Test(arguments: [
         ("income", #""1e5""#),
         ("income", #""abc""#),

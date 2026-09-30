@@ -43,6 +43,10 @@ The file is UTF-8 JSON with sorted keys and indentation, so the same records
 always produce the same bytes. The file extension is `incomes`, and its type
 `com.muhiro12.incomes.data` conforms to `public.json`.
 
+Reading and writing share a 32 MiB limit. Export refuses a larger payload so it
+cannot produce a file this version cannot restore. The URL reader bounds the
+bytes loaded even if the file size changes after selection.
+
 ```json
 {
   "exportedAt": "2026-09-29T03:04:05Z",

@@ -200,7 +200,7 @@ private extension DataImportModel {
         guard fileSize <= ItemImportOperations.maximumFileByteCount else {
             throw ItemImportError.fileTooLarge
         }
-        return try ItemImportOperations.read(data: .init(contentsOf: url))
+        return try ItemImportOperations.read(at: url)
     }
 
     static func isCloudSyncEnabled(context: ModelContext) -> Bool {

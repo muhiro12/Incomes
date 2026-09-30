@@ -32,7 +32,11 @@ enum IncomesFileCodec {
         )
         let encoder = JSONEncoder()
         encoder.outputFormatting = [.sortedKeys, .prettyPrinted, .withoutEscapingSlashes]
-        return try encoder.encode(file)
+        let data = try encoder.encode(file)
+        guard data.count <= maximumByteCount else {
+            throw ItemExportError.fileTooLarge
+        }
+        return data
     }
 
     /// Decodes any readable version into the current representation, validating every item.
