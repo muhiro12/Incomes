@@ -3,27 +3,14 @@ import SwiftData
 
 // swiftlint:disable no_magic_numbers
 
-/// Seeds sample datasets used by previews, tutorials, and debug tooling.
+/// Seeds the sample-data profiles that `SampleDataOperations` exposes.
 enum ItemSampleDataSeeder {
-    /// Preset datasets used when seeding sample data.
-    enum SampleDataProfile {
-        /// Rich sample data used for debug flows.
-        case debug
-        /// Lightweight tutorial sample data.
-        case tutorial
-        /// Sample data used by SwiftUI previews.
-        case preview
-        /// Monthly amounts large enough to exercise compact chart axis labels.
-        case largeAmounts
-    }
-
-    /// Seeds sample data for various profiles.
-    static func seedSampleData(
+    static func seed(
         context: ModelContext,
-        profile: SampleDataProfile,
-        baseDate: Date = .now,
-        ignoringDuplicates: Bool = false,
-        ifEmptyOnly: Bool = false
+        profile: SampleDataOperations.Profile,
+        baseDate: Date,
+        locale: Locale,
+        ifEmptyOnly: Bool
     ) throws {
         if ifEmptyOnly {
             let count = try ItemQueryOperations.allItemsCount(context: context)
@@ -33,107 +20,81 @@ enum ItemSampleDataSeeder {
         }
 
         switch profile {
-        case .debug:
-            if ignoringDuplicates {
-                try seedPreviewDataIgnoringDuplicates(context: context, baseDate: baseDate)
-            } else {
-                try seedPreviewData(context: context, baseDate: baseDate)
-            }
-        case .tutorial:
-            try seedTutorialData(context: context, baseDate: baseDate)
-        case .preview:
-            // Use rich dataset to support various preview screens.
-            try seedPreviewData(context: context, baseDate: baseDate)
+        case .minimal:
+            try seedMinimalData(context: context, baseDate: baseDate, locale: locale)
+        case .standard:
+            _ = try seedLedger(
+                context: context,
+                baseDate: baseDate,
+                locale: locale,
+                monthOffsets: standardMonthOffsets()
+            )
+        case .largeLedger:
+            _ = try seedLedger(
+                context: context,
+                baseDate: baseDate,
+                locale: locale,
+                monthOffsets: largeLedgerMonthOffsets()
+            )
+        case .duplicateTags:
+            let items = try seedLedger(
+                context: context,
+                baseDate: baseDate,
+                locale: locale,
+                monthOffsets: standardMonthOffsets()
+            )
+            duplicateTags(of: items, context: context)
         case .largeAmounts:
             try seedLargeAmountData(context: context, baseDate: baseDate)
+        case .inexactTotals:
+            try seedInexactTotalData(context: context, baseDate: baseDate)
         }
     }
 
-    /// Seeds rich preview/debug data (large dataset).
-    static func seedPreviewData(
+    /// Seeds the monthly templates for each month offset from the start of
+    /// `baseDate`'s year, after an opening payday in the preceding month.
+    static func seedLedger(
         context: ModelContext,
-        baseDate: Date = .now
-    ) throws {
-        guard let daySet = PreviewDaySet(baseDate: baseDate) else {
-            return
+        baseDate: Date,
+        locale: Locale,
+        monthOffsets: Range<Int>
+    ) throws -> [Item] {
+        guard let daySet = LedgerDaySet(baseDate: baseDate) else {
+            return []
         }
 
-        _ = try Item.create(
+        let openingPayday = try createLedgerItem(
             context: context,
-            values: previewItemValues(
-                daySet: daySet,
-                monthOffset: -1,
-                template: paydayTemplate()
-            ),
-            repeatID: .init()
+            daySet: daySet,
+            monthOffset: monthOffsets.lowerBound - 1,
+            template: paydayTemplate(),
+            locale: locale
         )
-
-        let created = try previewMonthOffsets().flatMap { monthOffset in
-            try previewItemTemplates().map { template in
-                try createPreviewItem(
+        let monthlyItems = try monthOffsets.flatMap { monthOffset in
+            try ledgerItemTemplates().map { template in
+                try createLedgerItem(
                     context: context,
                     daySet: daySet,
                     monthOffset: monthOffset,
-                    template: template
+                    template: template,
+                    locale: locale
                 )
             }
         }
+        let created = [openingPayday] + monthlyItems
 
         try BalanceCalculator.calculate(in: context, for: created)
         try created.forEach { item in
             try attachSampleTag(to: item, context: context)
         }
+        return created
     }
 
-    /// Seeds a minimal preview dataset that ignores duplicate tag creation.
-    static func seedPreviewDataIgnoringDuplicates(
+    /// Seeds three items over the two days before `baseDate`.
+    static func seedMinimalData(
         context: ModelContext,
-        baseDate: Date = .now
-    ) throws {
-        var created = [Item]()
-        for index in 0..<24 {
-            guard let date = Calendar.current.date(byAdding: .month, value: index, to: baseDate) else {
-                continue
-            }
-            created.append(
-                Item.createIgnoringDuplicates(
-                    context: context,
-                    values: .init(
-                        date: date,
-                        content: String(localized: "Pension", table: "SampleData", bundle: .module),
-                        income: LocaleAmountConverter.localizedAmount(baseUSD: 0),
-                        outgo: LocaleAmountConverter.localizedAmount(baseUSD: 36),
-                        category: String(localized: "Tax", table: "SampleData", bundle: .module),
-                        priority: 0
-                    ),
-                    repeatID: .init()
-                )
-            )
-        }
-        try BalanceCalculator.calculate(in: context, for: created)
-        try created.forEach { item in
-            try attachSampleTag(to: item, context: context)
-        }
-    }
-
-    /// Seed lightweight tutorial/debug items if the store is empty.
-    static func seedTutorialDataIfNeeded(
-        context: ModelContext,
-        baseDate: Date = .now
-    ) throws {
-        try seedSampleData(
-            context: context,
-            profile: .tutorial,
-            baseDate: baseDate,
-            ignoringDuplicates: false,
-            ifEmptyOnly: true
-        )
-    }
-
-    /// Seed lightweight tutorial items (always, without emptiness check).
-    static func seedTutorialData(
-        context: ModelContext,
-        baseDate: Date = .now
+        baseDate: Date,
+        locale: Locale
     ) throws {
         let firstDate = baseDate
         let secondDate = Calendar.current.date(byAdding: .day, value: -1, to: baseDate) ?? baseDate
@@ -148,7 +109,7 @@ enum ItemSampleDataSeeder {
             values: .init(
                 date: firstDate,
                 content: String(localized: "Salary", table: "SampleData", bundle: .module),
-                income: LocaleAmountConverter.localizedAmount(baseUSD: 3_000),
+                income: LocaleAmountConverter.localizedAmount(baseUSD: 3_000, locale: locale),
                 outgo: .zero,
                 category: String(localized: "Salary", table: "SampleData", bundle: .module),
                 priority: 0
@@ -163,7 +124,7 @@ enum ItemSampleDataSeeder {
                 date: secondDate,
                 content: String(localized: "Rent", table: "SampleData", bundle: .module),
                 income: .zero,
-                outgo: LocaleAmountConverter.localizedAmount(baseUSD: 1_200),
+                outgo: LocaleAmountConverter.localizedAmount(baseUSD: 1_200, locale: locale),
                 category: String(localized: "Housing", table: "SampleData", bundle: .module),
                 priority: 0
             ),
@@ -177,7 +138,7 @@ enum ItemSampleDataSeeder {
                 date: thirdDate,
                 content: String(localized: "Grocery", table: "SampleData", bundle: .module),
                 income: .zero,
-                outgo: LocaleAmountConverter.localizedAmount(baseUSD: 45),
+                outgo: LocaleAmountConverter.localizedAmount(baseUSD: 45, locale: locale),
                 category: String(localized: "Food", table: "SampleData", bundle: .module),
                 priority: 0
             ),
@@ -188,12 +149,12 @@ enum ItemSampleDataSeeder {
         try BalanceCalculator.calculate(in: context, for: [incomeItem, rentItem, groceryItem])
     }
 
-    /// Returns whether tutorial/debug data exists.
+    /// Returns whether sample data exists.
     static func hasDebugData(context: ModelContext) throws -> Bool {
         try !context.fetch(.tags(.typeIs(.debug))).isEmpty
     }
 
-    /// Deletes items and tags associated with tutorial/debug data.
+    /// Deletes items and tags associated with sample data.
     static func deleteDebugData(context: ModelContext) throws {
         let debugTags = try context.fetch(.tags(.typeIs(.debug)))
         let items = debugTags.flatMap { tag in
@@ -207,31 +168,6 @@ enum ItemSampleDataSeeder {
         }
         debugTags.forEach { tag in
             TagMutationOperations.delete(tag: tag)
-        }
-    }
-
-    /// Seeds duplicate category tags for duplicate-tag previews.
-    static func seedDuplicateTagPreviewData(context: ModelContext) throws {
-        let previewDuplicateCount = 2
-        let duplicateCategoryName = String(localized: "Credit", table: "SampleData", bundle: .module)
-        let items = try ItemQueryOperations.items(context: context)
-        let sourceItems = items.filter { item in
-            item.category?.name == duplicateCategoryName
-        }
-
-        guard sourceItems.count >= previewDuplicateCount else {
-            return
-        }
-
-        for item in sourceItems.prefix(previewDuplicateCount) {
-            let duplicateTag = Tag.createIgnoringDuplicates(
-                context: context,
-                name: duplicateCategoryName,
-                type: .category
-            )
-            var tags = item.tags ?? []
-            tags.append(duplicateTag)
-            item.modify(tags: tags)
         }
     }
 }

@@ -57,7 +57,7 @@ struct DataMaintenanceOperationsTests {
     func deleteDebugData_removesOnlySampleData() throws {
         try SampleDataOperations.seed(
             context: context,
-            profile: .tutorial,
+            profile: .minimal,
             baseDate: shiftedDate("2001-01-03T12:00:00Z")
         )
         _ = try ItemCreationOperations.create(

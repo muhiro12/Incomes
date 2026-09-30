@@ -26,8 +26,10 @@ extension WatchPreview {
                 ProgressView()
                     .task {
                         do {
-                            try SampleDataOperations.seedTutorialIfNeeded(
-                                context: previewModelContainer.mainContext
+                            try SampleDataOperations.seed(
+                                context: previewModelContainer.mainContext,
+                                profile: .minimal,
+                                ifEmptyOnly: true
                             )
                         } catch {
                             assertionFailure(error.localizedDescription)

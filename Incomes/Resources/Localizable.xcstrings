@@ -10099,36 +10099,70 @@
         }
       }
     },
-    "Prepare ignoring duplicates" : {
+    "Prepare duplicate tags" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Prepare ignoring duplicates"
+            "value" : "Prepare duplicate tags"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Preparar ignorando duplicados"
+            "value" : "Preparar etiquetas duplicadas"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Préparer en ignorant les doublons"
+            "value" : "Préparer des étiquettes en double"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "重複を無視して準備"
+            "value" : "重複タグを準備"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "忽略重复项准备"
+            "value" : "准备重复标签"
+          }
+        }
+      }
+    },
+    "Prepare large ledger" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prepare large ledger"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Preparar un registro grande"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Préparer un registre volumineux"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "大量のデータを準備"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "准备大量数据"
           }
         }
       }

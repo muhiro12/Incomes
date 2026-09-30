@@ -1,11 +1,11 @@
 import Foundation
 import SwiftData
 
-// Sample fixtures intentionally encode representative day offsets and amounts.
+// The ledger templates intentionally encode representative day offsets and amounts.
 // swiftlint:disable no_magic_numbers
 
 extension ItemSampleDataSeeder {
-    enum PreviewDay {
+    enum LedgerDay {
         case first
         case second
         case third
@@ -13,7 +13,7 @@ extension ItemSampleDataSeeder {
         case fifth
     }
 
-    struct PreviewDaySet {
+    struct LedgerDaySet {
         let firstDay: Date
         let secondDay: Date
         let thirdDay: Date
@@ -38,7 +38,7 @@ extension ItemSampleDataSeeder {
             self.fifthDay = fifthDay
         }
 
-        func date(for day: PreviewDay) -> Date {
+        func date(for day: LedgerDay) -> Date {
             switch day {
             case .first:
                 firstDay
@@ -54,15 +54,15 @@ extension ItemSampleDataSeeder {
         }
     }
 
-    struct PreviewItemTemplate {
-        let day: PreviewDay
+    struct LedgerItemTemplate {
+        let day: LedgerDay
         let content: String
         let incomeBaseUSD: Decimal
         let outgoBaseUSD: Decimal
         let category: String
     }
 
-    static func paydayTemplate() -> PreviewItemTemplate {
+    static func paydayTemplate() -> LedgerItemTemplate {
         .init(
             day: .fourth,
             content: String(localized: "Payday", table: "SampleData", bundle: .module),
@@ -72,14 +72,14 @@ extension ItemSampleDataSeeder {
         )
     }
 
-    static func previewItemTemplates() -> [PreviewItemTemplate] {
+    static func ledgerItemTemplates() -> [LedgerItemTemplate] {
         salaryTemplates()
             + creditTemplates()
             + loanTemplates()
             + taxTemplates()
     }
 
-    static func salaryTemplates() -> [PreviewItemTemplate] {
+    static func salaryTemplates() -> [LedgerItemTemplate] {
         [
             paydayTemplate(),
             .init(
@@ -92,7 +92,7 @@ extension ItemSampleDataSeeder {
         ]
     }
 
-    static func creditTemplates() -> [PreviewItemTemplate] {
+    static func creditTemplates() -> [LedgerItemTemplate] {
         [
             .init(
                 day: .second,
@@ -118,7 +118,7 @@ extension ItemSampleDataSeeder {
         ]
     }
 
-    static func loanTemplates() -> [PreviewItemTemplate] {
+    static func loanTemplates() -> [LedgerItemTemplate] {
         [
             .init(
                 day: .fifth,
@@ -137,7 +137,7 @@ extension ItemSampleDataSeeder {
         ]
     }
 
-    static func taxTemplates() -> [PreviewItemTemplate] {
+    static func taxTemplates() -> [LedgerItemTemplate] {
         [
             .init(
                 day: .first,
@@ -156,14 +156,21 @@ extension ItemSampleDataSeeder {
         ]
     }
 
-    static func previewMonthOffsets() -> Range<Int> {
+    /// Two years starting at the base year.
+    static func standardMonthOffsets() -> Range<Int> {
         0..<24
     }
 
-    static func previewItemValues(
-        daySet: PreviewDaySet,
+    /// Ten years that end with the standard ledger's two years.
+    static func largeLedgerMonthOffsets() -> Range<Int> {
+        -96..<24
+    }
+
+    static func ledgerItemValues(
+        daySet: LedgerDaySet,
         monthOffset: Int,
-        template: PreviewItemTemplate
+        template: LedgerItemTemplate,
+        locale: Locale
     ) -> ItemStoredValues {
         let date = Calendar.current.date(
             byAdding: .month,
@@ -173,25 +180,27 @@ extension ItemSampleDataSeeder {
         return .init(
             date: date,
             content: template.content,
-            income: LocaleAmountConverter.localizedAmount(baseUSD: template.incomeBaseUSD),
-            outgo: LocaleAmountConverter.localizedAmount(baseUSD: template.outgoBaseUSD),
+            income: LocaleAmountConverter.localizedAmount(baseUSD: template.incomeBaseUSD, locale: locale),
+            outgo: LocaleAmountConverter.localizedAmount(baseUSD: template.outgoBaseUSD, locale: locale),
             category: template.category,
             priority: 0
         )
     }
 
-    static func createPreviewItem(
+    static func createLedgerItem(
         context: ModelContext,
-        daySet: PreviewDaySet,
+        daySet: LedgerDaySet,
         monthOffset: Int,
-        template: PreviewItemTemplate
+        template: LedgerItemTemplate,
+        locale: Locale
     ) throws -> Item {
         try Item.create(
             context: context,
-            values: previewItemValues(
+            values: ledgerItemValues(
                 daySet: daySet,
                 monthOffset: monthOffset,
-                template: template
+                template: template,
+                locale: locale
             ),
             repeatID: .init()
         )

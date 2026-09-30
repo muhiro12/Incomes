@@ -24,8 +24,7 @@ struct SettingsStatusOperationsTests {
         _ = Tag.createIgnoringDuplicates(context: context, name: "A", type: .content)
         try SampleDataOperations.seed(
             context: context,
-            profile: .debug,
-            ignoringDuplicates: true
+            profile: .minimal
         )
 
         let status = try SettingsStatusOperations.load(context: context)

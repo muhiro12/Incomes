@@ -57,16 +57,19 @@ extension DebugListView: View {
             isPresented: $isDialogPresented
         ) {
             Button(role: .destructive) {
-                Task {
-                    await IncomesSampleData.prepareData(in: context)
-                }
+                prepareSampleData(.standard)
             } label: {
                 Text("Prepare")
             }
             Button(role: .destructive) {
-                IncomesSampleData.prepareDataIgnoringDuplicates(in: context)
+                prepareSampleData(.duplicateTags)
             } label: {
-                Text("Prepare ignoring duplicates")
+                Text("Prepare duplicate tags")
+            }
+            Button(role: .destructive) {
+                prepareSampleData(.largeLedger)
+            } label: {
+                Text("Prepare large ledger")
             }
             Button(role: .cancel) {
                 // no-op
@@ -155,6 +158,14 @@ private extension DebugListView {
                 .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
+    }
+
+    func prepareSampleData(_ profile: SampleDataOperations.Profile) {
+        do {
+            try SampleDataOperations.seed(context: context, profile: profile)
+        } catch {
+            assertionFailure(error.localizedDescription)
+        }
     }
 
     func resetTips() {

@@ -1,31 +1,16 @@
 import SwiftData
 import SwiftUI
 
+/// Previews with amounts whose totals cannot be represented exactly in an in-memory store.
 struct IncomesInexactTotalSampleData: PreviewModifier {
-    private static let largeExponent = 40
+    typealias Context = IncomesPlatformEnvironment
 
-    static func makeSharedContext() throws -> ModelContainer {
-        let container = try ModelContainerFactory.inMemory()
-        for amount in [Decimal(sign: .plus, exponent: largeExponent, significand: 1), 1] {
-            _ = try Item.create(
-                context: container.mainContext,
-                values: .init(
-                    date: .now,
-                    content: "Preview",
-                    income: amount,
-                    outgo: amount,
-                    category: "Preview",
-                    priority: 0
-                ),
-                repeatID: UUID()
-            )
-        }
-        try container.mainContext.save()
-        return container
+    static func makeSharedContext() throws -> Context {
+        try IncomesSampleData.makePreviewContext(profile: .inexactTotals)
     }
 
-    func body(content: Content, context: ModelContainer) -> some View {
+    func body(content: Content, context: Context) -> some View {
         content
-            .modelContainer(context)
+            .incomesPreviewPlatformEnvironment(context)
     }
 }

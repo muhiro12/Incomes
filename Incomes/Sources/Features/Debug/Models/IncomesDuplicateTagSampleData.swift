@@ -1,21 +1,12 @@
 import SwiftData
 import SwiftUI
 
+/// Previews with the standard ledger plus duplicate tags of every type in an in-memory store.
 struct IncomesDuplicateTagSampleData: PreviewModifier {
     typealias Context = IncomesPlatformEnvironment
 
     static func makeSharedContext() throws -> Context {
-        try IncomesSampleData.makePreviewContext { previewContext in
-            try SampleDataOperations.seed(
-                context: previewContext,
-                profile: .preview,
-                ifEmptyOnly: true
-            )
-            try IncomesSampleData.prepareDuplicateTagPreviewData(
-                in: previewContext
-            )
-            try ItemBalanceOperations.recalculate(context: previewContext, date: .distantPast)
-        }
+        try IncomesSampleData.makePreviewContext(profile: .duplicateTags)
     }
 
     func body(content: Content, context: Context) -> some View {
