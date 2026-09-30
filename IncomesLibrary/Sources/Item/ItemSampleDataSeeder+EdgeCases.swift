@@ -5,6 +5,11 @@ import SwiftData
 // swiftlint:disable no_magic_numbers
 
 extension ItemSampleDataSeeder {
+    /// The standard ledger category whose items receive duplicate tags.
+    static var duplicateTagCategoryName: String {
+        String(localized: "Credit", table: "SampleData", bundle: .module)
+    }
+
     /// Seeds one item per month whose amounts swing the balance across
     /// roughly ±1,000,000, independent of the current locale's currency.
     static func seedLargeAmountData(
@@ -86,11 +91,6 @@ extension ItemSampleDataSeeder {
             )
             try attachSampleTag(to: item, context: context)
         }
-    }
-
-    /// The standard ledger category whose items receive duplicate tags.
-    static var duplicateTagCategoryName: String {
-        String(localized: "Credit", table: "SampleData", bundle: .module)
     }
 
     /// Re-tags two of the given items with duplicates of their tags, so every

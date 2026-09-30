@@ -59,7 +59,7 @@ user's store:
   seeds an in-memory, CloudKit-disabled container. The Watch preview wrapper
   also uses an in-memory container.
 - Tests seed in-memory contexts.
-- Debug "Set PreviewData" requires the Debug option and a confirmation, then
+- Debug "Add Sample Data" requires the Debug option and a confirmation, then
   adds the chosen profile to the user's store.
 - UI smoke seeding runs only in Debug builds, only with the
   `--incomes-ui-smoke-seed-if-empty` launch argument, and only when the store

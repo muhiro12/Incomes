@@ -1,5 +1,10 @@
 import Foundation
 
+private enum ChartAxisAmountFormat {
+    // Three digits keep intermediate ticks such as 1.25M distinct from 1.2M.
+    static let significantDigits = 1...3
+}
+
 public extension FormatStyle where Self == Decimal.FormatStyle {
     /// Formats chart axis amounts as compact, locale-aware numbers.
     ///
@@ -12,9 +17,4 @@ public extension FormatStyle where Self == Decimal.FormatStyle {
             .notation(.compactName)
             .precision(.significantDigits(ChartAxisAmountFormat.significantDigits))
     }
-}
-
-private enum ChartAxisAmountFormat {
-    // Three digits keep intermediate ticks such as 1.25M distinct from 1.2M.
-    static let significantDigits = 1...3
 }
