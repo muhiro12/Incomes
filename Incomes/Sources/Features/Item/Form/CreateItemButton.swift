@@ -35,6 +35,7 @@ extension CreateItemButton: View {
             .accessibilityHint(Text("Opens the item form."))
             .sheet(isPresented: $isCreateSheetPresented) {
                 ItemFormNavigationView(mode: .create)
+                    .environment(nil as Item?)
                     .incomesSheetPresentation()
             }
     }

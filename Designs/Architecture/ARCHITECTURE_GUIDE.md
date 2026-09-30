@@ -228,8 +228,11 @@ Do not mirror that graph into presentation entities or copy query results into
 
 Form inputs and balance reviews have a different lifetime from live records.
 `ItemFormModel` owns an editable value draft; category rename receives an
-initial name value while reading its live `Tag` from the environment. Watch
-wire values, widget snapshots, App Intent entities, AI extraction schemas,
+initial name value while reading its live `Tag` from the environment. Ordinary
+creation clears any ancestor `Item` at the sheet boundary while retaining the
+tag context. The separate duplicate action deliberately uses its source item
+to initialize a new draft. Watch wire values, widget snapshots, App Intent
+entities, AI extraction schemas,
 and import/export records remain purpose-specific boundary contracts.
 `ResultsObserver` is reserved for an evidenced non-view observable consumer;
 it does not replace ordinary SwiftUI `@Query` reads by default.
@@ -260,6 +263,11 @@ item data when the selected tag's direct relationship is insufficient. Search
 and suggestions use `CategoryFacetOperations` for the same semantic grouping.
 Do not replace this product behavior with a bare relationship traversal merely
 to reduce query count.
+
+Duplicate-tag lists group their current `@Query` results through
+`TagQueryOperations.findDuplicates` instead of fetching the same tags again.
+Both duplicate and orphan rows receive their current tag through environment;
+the containing sections still accept the peer collections and selection state.
 
 Store setup also has distinct ownership: the host app selects configuration and
 owns migration, widgets open the shared store without saving or migrating, and
