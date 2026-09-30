@@ -7,16 +7,15 @@ struct CategoryRenameSheet: View {
     private var dismiss
     @Environment(\.modelContext)
     private var context
-
-    let tag: Tag
+    @Environment(Tag.self)
+    private var tag
 
     @State private var draftName: String
     @State private var errorMessage: String?
 
-    init(tag: Tag) {
-        self.tag = tag
+    init(initialName: String) {
         _draftName = .init(
-            initialValue: tag.displayName
+            initialValue: initialName
         )
     }
 }

@@ -205,7 +205,6 @@ extension ItemFormView {
                 NavigationStack {
                     ItemFormBalanceProjectionSheet(
                         mode: mode,
-                        item: item,
                         input: model.formInputData,
                         repeatMonthSelections: model.effectiveRepeatMonthSelections,
                         reviewedScope: presentation.reviewedScope,

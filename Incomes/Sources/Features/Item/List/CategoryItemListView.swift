@@ -47,7 +47,7 @@ extension CategoryItemListView: View {
             tipController.donateDidViewItemList()
         }
         .sheet(isPresented: $isRenameSheetPresented) {
-            CategoryRenameSheet(tag: tag)
+            CategoryRenameSheet(initialName: tag.displayName)
                 .incomesSheetPresentation()
         }
         .toolbar {

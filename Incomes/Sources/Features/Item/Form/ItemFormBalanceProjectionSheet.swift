@@ -14,6 +14,8 @@ struct ItemFormBalanceProjectionSheet: View {
     private var locale
     @Environment(\.dynamicTypeSize)
     private var dynamicTypeSize
+    @Environment(Item.self)
+    private var item: Item?
 
     @State private var review: ItemBalanceProjectionReview?
     @State private var errorMessage: String?
@@ -22,21 +24,18 @@ struct ItemFormBalanceProjectionSheet: View {
     @State private var selectedScope: ItemMutationScope
 
     let mode: ItemFormView.Mode
-    let item: Item?
     let input: ItemFormInput
     let repeatMonthSelections: Set<RepeatMonthSelection>
     let onReview: (ItemBalanceProjectionReview) -> Void
 
     init(
         mode: ItemFormView.Mode,
-        item: Item?,
         input: ItemFormInput,
         repeatMonthSelections: Set<RepeatMonthSelection>,
         reviewedScope: ItemMutationScope?,
         onReview: @escaping (ItemBalanceProjectionReview) -> Void
     ) {
         self.mode = mode
-        self.item = item
         self.input = input
         self.repeatMonthSelections = repeatMonthSelections
         self.onReview = onReview
@@ -339,7 +338,6 @@ private extension ItemFormBalanceProjectionSheet {
     NavigationStack {
         ItemFormBalanceProjectionSheet(
             mode: .create,
-            item: nil,
             input: .init(
                 date: .now,
                 content: "Rent",
