@@ -175,7 +175,7 @@ the remaining decisions stay small.
 ### Policies
 
 - An empty store without iCloud sync imports every item directly.
-- **Replace** makes the store inside the file's selection equal to the file.
+- **Replace** makes the item values inside the file's selection equal to the file.
   The preview lists the items that will be removed and added. Matched items
   stay in place, so their identifiers, links, and series are kept.
 - **Merge** never removes a record unless the person asks for it:
@@ -185,7 +185,11 @@ the remaining decisions stay small.
   - Additions are inserted by default and can be excluded one by one.
   - Store-only items are kept.
 
-Imported items keep their repeat IDs, so series membership survives a restore.
+Newly inserted items keep the file's repeat IDs. Matched items keep the store's
+current series, even when the file records different repeat IDs. Import does
+not reconcile those identities, so a partial restore into an existing store
+does not guarantee reconstruction of a whole exported series. Import into an
+empty store preserves the file's complete series membership.
 Balances are validated for the final result before any record changes.
 
 When the file's currency differs from the current setting, the confirmation

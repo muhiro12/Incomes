@@ -19,6 +19,9 @@ the system exporter; cancelling saves nothing.
 The default file name is `Incomes yyyy-MM-dd.incomes`. The file contains
 financial records, so the screen asks the person to keep it private.
 
+This version supports files up to 32 MiB. A larger export is refused with an
+error rather than writing a file the app cannot reopen; existing data is kept.
+
 ## Import
 
 The person chooses a file in the system picker. Incomes reads and validates the
@@ -41,9 +44,14 @@ whole file before showing anything, then compares it with the saved items.
   devices, and that changes not yet received from them may duplicate or
   reappear.
 
-Balances are always recalculated. If the saved items change while the person
+When import adds or removes items, all balances are recalculated. If saved items
+have changed while the person
 is reviewing, the import stops and the review is shown again. A failed import
 leaves the saved items unchanged.
+
+New items keep the file's repeat-series identifiers. Equal items already in the
+store keep their current series and links. Import does not combine different
+series identities; restoring into an empty store preserves the exported series.
 
 ## Errors
 
