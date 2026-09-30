@@ -182,7 +182,7 @@ struct MonthlySummaryOperationsNarrativeTests {
 
         #expect(prompt.contains(#"Currency code: "USD \"Cash\" \\""#))
         #expect(
-            prompt.contains(#"- Category "Food \"Takeout\"\nBackslash \\" spending increased."#)
+            prompt.contains(#"- Category "Food \"Takeout\"\nBackslash \\" outgo increased."#)
         )
         #expect(prompt.contains("Income amount text: 1,000"))
         #expect(prompt.contains("Previous-month data is available") == false)
@@ -238,7 +238,7 @@ struct MonthlySummaryOperationsNarrativeTests {
         )
 
         #expect(summary.contains("Income for 2026 Jun was"))
-        #expect(summary.contains("Food \"Takeout\" spending increased"))
+        #expect(summary.contains("Food \"Takeout\" outgo increased"))
     }
 }
 

@@ -132,7 +132,7 @@ struct MonthlySummaryOperationsContextTests {
         #expect(narrativeContext.categoryComparisons.map(\.incomeDelta) == [FallbackScenario.workDelta, .zero])
         #expect(narrativeContext.categoryComparisons.map(\.outgoDelta) == [.zero, FallbackScenario.foodDelta])
         #expect(summary.contains("2026年6月の収入は¥100,000でした"))
-        #expect(summary.contains("支出は¥35,000で、収支は¥65,000でした"))
+        #expect(summary.contains("支出は¥35,000で、純収入は¥65,000でした"))
         #expect(summary.contains("Workの収入が増えました"))
         #expect(summary.contains("Foodの支出が増えました"))
     }

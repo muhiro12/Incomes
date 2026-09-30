@@ -69,12 +69,12 @@
         }
       }
     },
-    "%@ spending decreased" : {
+    "%@ outgo decreased" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%1$@ spending decreased"
+            "value" : "%1$@ outgo decreased"
           }
         },
         "es" : {
@@ -103,12 +103,12 @@
         }
       }
     },
-    "%@ spending increased" : {
+    "%@ outgo increased" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%1$@ spending increased"
+            "value" : "%1$@ outgo increased"
           }
         },
         "es" : {
@@ -239,36 +239,36 @@
         }
       }
     },
-    "Income for %@ was %@. Outgo was %@, and the net result was %@. %@" : {
+    "Income for %@ was %@. Outgo was %@, and the net income was %@. %@" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Income for %1$@ was %2$@. Outgo was %3$@, and the net result was %4$@. %5$@"
+            "value" : "Income for %1$@ was %2$@. Outgo was %3$@, and the net income was %4$@. %5$@"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Los ingresos de %1$@ fueron %2$@. Los gastos fueron %3$@, y el resultado neto fue %4$@. %5$@"
+            "value" : "Los ingresos de %1$@ fueron %2$@. Los gastos fueron %3$@, y el ingreso neto fue %4$@. %5$@"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Les revenus de %1$@ étaient de %2$@. Les dépenses étaient de %3$@, pour un solde net de %4$@. %5$@"
+            "value" : "Les revenus de %1$@ étaient de %2$@. Les dépenses étaient de %3$@, pour un revenu net de %4$@. %5$@"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%1$@の収入は%2$@でした。支出は%3$@で、収支は%4$@でした。%5$@"
+            "value" : "%1$@の収入は%2$@でした。支出は%3$@で、純収入は%4$@でした。%5$@"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%1$@的收入为%2$@。支出为%3$@，净结果为%4$@。%5$@"
+            "value" : "%1$@的收入为%2$@。支出为%3$@，净收入为%4$@。%5$@"
           }
         }
       }

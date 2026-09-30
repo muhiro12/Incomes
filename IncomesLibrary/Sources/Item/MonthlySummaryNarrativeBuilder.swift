@@ -78,7 +78,7 @@ enum MonthlySummaryNarrativeBuilder {
         )
 
         return localizedFormattedString(
-            key: "Income for %@ was %@. Outgo was %@, and the net result was %@. %@",
+            key: "Income for %@ was %@. Outgo was %@, and the net income was %@. %@",
             locale: locale,
             monthTitle,
             incomeText,
@@ -152,8 +152,8 @@ private extension MonthlySummaryNarrativeBuilder {
         if outgoMagnitude >= incomeMagnitude,
            comparison.outgoDelta != .zero {
             let direction = comparison.outgoDelta > .zero
-                ? "spending increased"
-                : "spending decreased"
+                ? "outgo increased"
+                : "outgo decreased"
             return "Category \(categoryLiteral(comparison.category)) \(direction)."
         }
 
@@ -226,13 +226,13 @@ private extension MonthlySummaryNarrativeBuilder {
            comparison.outgoDelta != .zero {
             if comparison.outgoDelta > .zero {
                 return localizedString(
-                    key: "%@ spending increased",
+                    key: "%@ outgo increased",
                     locale: locale,
                     comparison.category
                 )
             }
             return localizedString(
-                key: "%@ spending decreased",
+                key: "%@ outgo decreased",
                 locale: locale,
                 comparison.category
             )
