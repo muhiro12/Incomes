@@ -32,7 +32,7 @@ struct ItemFormInputAssistView: View {
     private var locale
 
     @State private var importRoute: ImportRoute?
-    @State private var isApplyingInference = false
+    @State private var inferenceState = ItemFormInferenceState()
     @State private var errorMessage: String?
     @State private var selectedItem: PhotosPickerItem?
     @State private var scanner: ImageTextScanner = .init()
@@ -40,7 +40,7 @@ struct ItemFormInputAssistView: View {
     var body: some View {
         @Bindable var scanner = scanner
         let currentProcessingState = processingState(
-            isApplyingInference: isApplyingInference,
+            isApplyingInference: inferenceState.pendingRequest != nil,
             isScanning: scanner.isScanning
         )
         let isProcessing = currentProcessingState != nil
@@ -72,14 +72,29 @@ struct ItemFormInputAssistView: View {
                     isProcessing: isProcessing
                 ),
                 cancel: {
+                    inferenceState.cancel()
                     dismiss()
                 },
                 done: {
-                    Task {
-                        await applyInferenceAndClose()
-                    }
+                    errorMessage = nil
+                    inferenceState.submit(
+                        text: scanner.recognizedText,
+                        currentInput: model.formInputData
+                    )
                 }
             )
+        }
+        .task(id: inferenceState.pendingRequest) {
+            await applyInferenceAndClose()
+        }
+        .onDisappear {
+            inferenceState.cancel()
+        }
+        .onChange(of: scanner.recognizedText) {
+            inferenceState.cancel()
+        }
+        .onChange(of: model.draftChangeKey) {
+            inferenceState.cancel()
         }
         .sheet(item: $importRoute) { route in
             switch route {
@@ -172,23 +187,43 @@ private extension ItemFormInputAssistView {
     }
 
     private func applyInferenceAndClose() async {
-        isApplyingInference = true
-        defer {
-            isApplyingInference = false
+        guard !Task.isCancelled,
+              let request = inferenceState.pendingRequest else {
+            return
         }
         do {
             let updatedInput = try await ItemFormInferenceApplier.apply(
-                text: scanner.recognizedText,
-                currentInput: model.formInputData,
+                text: request.text,
+                currentInput: request.input,
                 locale: locale,
                 currentDate: Date(),
                 logger: inferenceLogger
             )
+            try Task.checkCancellation()
+            guard completeInference(request) else {
+                return
+            }
             model.apply(updatedInput)
             dismiss()
+        } catch is CancellationError {
+            if inferenceState.pendingRequest == request {
+                inferenceState.cancel()
+            }
         } catch {
+            guard !Task.isCancelled,
+                  completeInference(request) else {
+                return
+            }
             errorMessage = ErrorMessageOperations.message(from: error)
         }
+    }
+
+    private func completeInference(_ request: ItemFormInferenceState.Request) -> Bool {
+        inferenceState.complete(
+            request,
+            currentText: scanner.recognizedText,
+            currentInput: model.formInputData
+        )
     }
 }
 
