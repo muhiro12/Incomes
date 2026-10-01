@@ -119,6 +119,25 @@ View -> Workflow/Adapter -> IncomesLibrary *Operations
 Adapters may orchestrate platform side effects after mutation completion, but
 mutation rules and changed-entity decisions come from `IncomesLibrary`.
 
+### Item Creation Save Boundary
+
+The form and creation intents use `ItemCreationOperations.createAndSaveWithOutcome`
+through `ItemCreateCoordinator`. The caller context must be clean: pending edits
+refuse creation without saving or rolling back those edits. Form drafts remain
+value types and do not make the context dirty.
+
+Creation, reviewed-projection validation, balance recalculation, and one explicit
+save run synchronously in that same context. This preserves existing live model
+references and their observed balances. Autosave is temporarily disabled and its
+previous setting is restored. On failure, rollback is limited to this operation's
+changes because the context was clean at entry. A successful result contains
+created identifiers captured after save; notification, widget, Watch, success
+haptic, and review follow-ups start only after that result is returned.
+
+The `create` and `createWithOutcome` APIs continue to stage changes for library
+composition. They do not establish a durable success boundary. This contract is
+limited to new item creation; other mutations need their own save contract.
+
 ## App Intent Mapping
 
 App Intents must follow the same business path:

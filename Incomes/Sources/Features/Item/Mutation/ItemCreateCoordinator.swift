@@ -19,7 +19,7 @@ enum ItemCreateCoordinator {
                 ("content_present", IncomesLogging.presence(input.content))
             )
         ) {
-            let result = try ItemCreationOperations.createWithOutcome(
+            let result = try ItemCreationOperations.createAndSaveWithOutcome(
                 context: context,
                 input: input,
                 repeatCount: repeatCount
@@ -111,13 +111,13 @@ private extension ItemCreateCoordinator {
         review: ItemBalanceProjectionReview?
     ) throws -> MutationResult<Item> {
         guard let review else {
-            return try ItemCreationOperations.createWithOutcome(
+            return try ItemCreationOperations.createAndSaveWithOutcome(
                 context: context,
                 input: input,
                 repeatMonthSelections: repeatMonthSelections
             )
         }
-        return try ItemCreationOperations.createWithOutcome(
+        return try ItemCreationOperations.createAndSaveWithOutcome(
             context: context,
             input: input,
             repeatMonthSelections: repeatMonthSelections,
