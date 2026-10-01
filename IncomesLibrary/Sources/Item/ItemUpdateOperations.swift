@@ -38,6 +38,8 @@ public enum ItemUpdateOperations {
     ) throws -> MutationOutcome {
         try input.validate()
         let values = ItemStoredValues(formInput: input)
+        // Refuse inexact arithmetic before changing live records or derived tags.
+        _ = try BalanceCalculator.netIncome(income: values.income, outgo: values.outgo)
 
         let affectedItems = try ItemMutationSupport.itemsForMutationScope(
             context: context,
