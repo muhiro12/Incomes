@@ -48,6 +48,12 @@ public enum WatchSyncOperations {
                 .stringValueWithoutLocale(.yyyyMM)
         }
 
+        // Reject inexact row arithmetic before deleting the previous cache.
+        try validateNetIncome(
+            groupedIncomingItems: groupedIncomingItems,
+            allowedYearMonths: allowedYearMonths
+        )
+
         let allItems = try context.fetch(FetchDescriptor<Item>())
         let deleteOutcome = try ItemDeletionOperations.deleteWithOutcome(
             context: context,
@@ -74,6 +80,20 @@ public enum WatchSyncOperations {
 }
 
 private extension WatchSyncOperations {
+    static func validateNetIncome(
+        groupedIncomingItems: [String: [ItemWire]],
+        allowedYearMonths: Set<String>
+    ) throws {
+        for yearMonth in allowedYearMonths {
+            for wire in groupedIncomingItems[yearMonth] ?? [] {
+                _ = try BalanceCalculator.netIncome(
+                    income: .init(wire.income),
+                    outgo: .init(wire.outgo)
+                )
+            }
+        }
+    }
+
     static func createItems(
         context: ModelContext,
         groupedIncomingItems: [String: [ItemWire]],
