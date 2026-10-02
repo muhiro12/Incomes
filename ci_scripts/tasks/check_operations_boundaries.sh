@@ -8,6 +8,11 @@ ci_task_require_no_arguments "$@"
 ci_task_enter_repository "${BASH_SOURCE[0]}"
 repository_root=$CI_TASK_REPOSITORY_ROOT
 
+if ! command -v rg >/dev/null 2>&1; then
+  echo "Source boundary check could not run: ripgrep is unavailable." >&2
+  exit 2
+fi
+
 surface_sources=(
   "$repository_root/Incomes/Sources"
   "$repository_root/Watch/Sources"
@@ -66,39 +71,60 @@ collaborator_pattern=$(
   printf '%s' "${forbidden_collaborators[*]}"
 )
 
+set +e
 collaborator_matches=$(
   rg \
     --line-number \
     "\\b(${collaborator_pattern})\\b" \
     "${surface_sources[@]}" \
-    -g '*.swift' || true
+    -g '*.swift'
 )
+search_status=$?
+set -e
+if (( search_status > 1 )); then
+  echo "Source boundary check could not run: ripgrep exited $search_status." >&2
+  exit 2
+fi
 
 if [[ -n "$collaborator_matches" ]]; then
   record_failure "Delivery surfaces must call public *Operations for business use cases:
 $collaborator_matches"
 fi
 
+set +e
 direct_persistence_matches=$(
   rg \
     --line-number \
     "\bcontext\.fetch(First|Count)?\(" \
     "${surface_sources[@]}" \
-    -g '*.swift' || true
+    -g '*.swift'
 )
+search_status=$?
+set -e
+if (( search_status > 1 )); then
+  echo "Source boundary check could not run: ripgrep exited $search_status." >&2
+  exit 2
+fi
 
 if [[ -n "$direct_persistence_matches" ]]; then
   record_failure "Delivery surfaces must use public *Operations instead of direct ModelContext fetches:
 $direct_persistence_matches"
 fi
 
+set +e
 public_collaborator_declarations=$(
   rg \
     --line-number \
     "^[[:space:]]*(public|open)[[:space:]]+(final[[:space:]]+class|class|struct|enum|actor)[[:space:]]+(${collaborator_pattern})\\b" \
     "${library_sources[@]}" \
-    -g '*.swift' || true
+    -g '*.swift'
 )
+search_status=$?
+set -e
+if (( search_status > 1 )); then
+  echo "Source boundary check could not run: ripgrep exited $search_status." >&2
+  exit 2
+fi
 
 if [[ -n "$public_collaborator_declarations" ]]; then
   record_failure "Business collaborators must remain internal implementation details:
