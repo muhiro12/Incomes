@@ -18,8 +18,9 @@ Use this audit to catch issues that library tests and app builds cannot see:
 
 ## Relationship to Verification
 
-Follow [AGENTS.md](../../AGENTS.md) for Xcode-native build and shared-library
-test evidence, scheme and destination selection, and restoration. Run
+Follow [Build and Test](../../README.md#build-and-test) for Xcode-native
+build and shared-library test evidence, selection restoration, and runtime
+signing requirements. Run
 `bash ci_scripts/tasks/check_repository_rules.sh` for SwiftLint and
 repository-specific static architecture checks. Release UI smoke auditing adds
 runtime logs, screenshots, and live UI inspection when needed; it is a separate

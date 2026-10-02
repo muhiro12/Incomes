@@ -114,7 +114,7 @@ Models.
   add separate unit test targets for `Incomes`, `Watch`, or `Widgets`; those
   adapters are verified through builds plus shared-library tests.
 - Start detailed architecture reading from
-  [ARCHITECTURE_GUIDE.md](Designs/Architecture/ARCHITECTURE_GUIDE.md),
+  [ARCHITECTURE_GUIDE.md](Designs/Architecture/ARCHITECTURE_GUIDE.md#live-app-data-flow),
   [shared-service-design.md](Designs/Architecture/shared-service-design.md),
   [incomes-current-overview.md](Designs/Overviews/incomes-current-overview.md),
   and
@@ -171,9 +171,13 @@ reflect your release channel.
 
 Use Xcode and the active Xcode-native integration for Apple build, test, run,
 Simulator, runtime logs, Preview rendering, screenshots, and live UI inspection.
-[AGENTS.md](AGENTS.md) defines scheme selection, evidence requirements, and
-restoration of Xcode's original selection. Xcode Cloud owns formal CI builds,
-tests, and archives.
+Xcode Cloud owns formal CI builds, tests, and archives.
+
+Before changing Xcode selection, record the original scheme and destination,
+switch only to discovered values, and end sessions or runs started solely for
+verification. Restore the original scheme first, rediscover its destinations,
+restore the original destination, and confirm the selection. Report failed
+restoration.
 
 The remaining helper scripts in `ci_scripts/` are intentionally small. Direct
 entrypoints live in `ci_scripts/tasks/`, shared shell helpers live in
@@ -222,14 +226,28 @@ bash ci_scripts/tasks/format_swift.sh
 bash ci_scripts/tasks/lint_swift.sh
 ```
 
-For app build checks, build the `Incomes` scheme. For shared-library tests,
-run the `IncomesLibrary` scheme's tests. Use discovered iOS Simulator
-destinations and resolve the required build, test, run, log, and UI actions
-from the active integration's tool inventory.
-Treat these as separate verification capabilities: library tests prove shared
-business behavior, surface builds prove adapter integration, and runtime or UI
-evidence is reserved for changes that affect visible behavior or live platform
-integration.
+Choose verification by the changed boundary and resolve actions from the
+active integration's tool inventory:
+
+- Shared-library logic, model, or test changes: run the `IncomesLibrary`
+  scheme's tests on a discovered iOS Simulator.
+- Public library APIs, `*Operations`, shared sync or wire contracts, SwiftData
+  schema, or adapter-facing contracts: also build the `Incomes` consumer scheme.
+- App compile checks: build `Incomes` on a discovered iOS Simulator.
+- Widgets changes: build `Widgets` on a discovered iOS Simulator.
+- Watch changes: build `Watch` on a discovered watchOS Simulator. Product
+  linkage changes also need an `Incomes` embedding build; paired-device
+  delivery remains separate runtime evidence.
+- Runtime or UI-sensitive changes: add a targeted run and runtime-log review,
+  with Preview, live UI, or screenshot evidence appropriate to the change.
+
+Runtime and UI checks require signed App Group entitlements at launch. Do not
+disable signing for these checks; `CODE_SIGNING_ALLOWED=NO` is limited to
+compile-only builds. Library tests, surface builds, and runtime/UI evidence
+prove different boundaries.
+
+Follow the repository SwiftLint configuration and existing Swift source style.
+Markdown follows the [markdownlint rules](https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md).
 
 Helper scripts may write disposable cache data under `.build/ci/shared/`.
 
