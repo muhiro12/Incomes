@@ -193,6 +193,9 @@ post-clone CI setup.
 - `bash ci_scripts/tasks/check_repository_rules.sh` runs SwiftLint plus the
   repository-specific static architecture checks that are not naturally covered
   by the Xcode-native integration.
+- The [push verification pilot](Designs/Architecture/push-verification-pilot.md)
+  records actual verification evidence and compares it with the exact outgoing
+  branch updates. Its hook is local setup, and required checks remain explicit.
 - Release UI smoke auditing uses live Simulator evidence. Use the
   [release UI smoke audit guide](Designs/Architecture/release-ui-smoke-audit.md)
   when a release or UI-sensitive change needs live Simulator evidence.
