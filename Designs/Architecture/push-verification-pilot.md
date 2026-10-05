@@ -121,7 +121,7 @@ python3 ci_scripts/tasks/check_push_verification.py <remote-name> <remote-locati
 with the exact Git stdin. After a successful match it still runs the existing
 `check_repository_rules.sh`. This preserves the previous rules; their repeated
 cost has not yet been removed. Receipt absence stops before claiming readiness.
-Manual push, Codex, and Claude use the same check when they invoke this local
+Manual Git and agent clients use the same check when they invoke this local
 Git process and effective hook. Provider API writes, other hosts, hook bypass,
 and GUI clients using another implementation are not covered.
 
