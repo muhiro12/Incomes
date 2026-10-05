@@ -9,6 +9,8 @@ import copy
 import hashlib
 import json
 import os
+import shutil
+import sys
 from pathlib import Path
 import subprocess
 import tempfile
@@ -33,12 +35,29 @@ class PushVerificationTests(unittest.TestCase):
         self.tip = self.git("rev-parse", "HEAD")
         self.store = self.root / ".git/push-verification"
         self.store.mkdir()
+        self.git("remote", "add", "origin", "fixture://private")
+        self.environment = {"fixture": "isolated", "xcodebuild": "Synthetic Xcode", "swift": "Synthetic Swift"}
+        self.binary_directory = self.root / ".git" / "fixture-tools"
+        self.binary_directory.mkdir()
+        self.original_path = os.environ["PATH"]
+        self.make_binary("betterleaks", "import sys\nprint('1.9.0')\n")
+        self.make_binary("xcrun", "import sys\nprint('Synthetic Xcode' if sys.argv[1] == 'xcodebuild' else 'Synthetic Swift')\n")
+        os.environ["PATH"] = str(self.binary_directory) + os.pathsep + self.original_path
+        self.receipt_path = self.store / "destinations" / hashlib.sha256(b"fixture://private").hexdigest() / "receipt.json"
+        self.receipt_path.parent.mkdir(parents=True)
         self.update = self.tuple(self.tip, "refs/heads/main", self.base)
         self.receipt = self.make_receipt([self.update])
         self.save()
 
     def tearDown(self):
+        os.environ["PATH"] = self.original_path
         self.temporary.cleanup()
+
+    def make_binary(self, name, code):
+        import sys
+        binary = self.binary_directory / name
+        binary.write_text(f"#!{sys.executable}\n" + code)
+        binary.chmod(0o700)
 
     def git(self, *args):
         q = subprocess.run(["git", *args], cwd=self.root, capture_output=True, text=True,
@@ -58,7 +77,7 @@ class PushVerificationTests(unittest.TestCase):
     def tuple(self, oid, ref, old):
         return {"local_ref": oid, "local_oid": oid, "remote_ref": ref, "remote_oid": old}
 
-    def record(self, name, oid=None):
+    def record(self, name, oid=None, kind=None):
         oid = oid or self.tip
         directory = self.store / name
         directory.mkdir(exist_ok=True)
@@ -68,13 +87,36 @@ class PushVerificationTests(unittest.TestCase):
                   "clean": True, "status_sha256": hashlib.sha256(b"").hexdigest()}
         result = {"schema_version": 1,
                   "source": {"before": source, "after": source, "stable_clean_snapshot": True},
-                  "environment": {"fixture": "isolated"},
+                  "environment": self.environment,
                   "verification": {"ran": True, "argv": ["fixture-only"], "exit_code": 0, "status": "passed"},
                   "diagnostics": {"complete_captured_output": True, "warning_count": 0,
                                   "error_count": 0, "warnings": [], "errors": []},
-                  "tests": {"executed": 1, "failed": 0, "skipped": 0},
+                  "tests": {"executed": 2, "failed": 0, "skipped": 0},
                   "artifacts": [{"path": "output.log", "sha256": hashlib.sha256(log.read_bytes()).hexdigest()}],
                   "evidence_errors": []}
+        if kind in {"build", "tests"}:
+            scheme = "Incomes" if kind == "build" else "IncomesLibrary"
+            result["verification"]["argv"] = ["xcrun", "xcodebuild", "-scheme", scheme,
+                "-resultBundlePath", "fixture-only.xcresult", "build" if kind == "build" else "test"]
+            if kind == "tests":
+                result["verification"]["argv"] += ["-testPlan", "IncomesLibrary"]
+            build = {"status": "succeeded", "errorCount": 0, "warningCount": 0,
+                     "analyzerWarningCount": 0, "errors": [], "warnings": [], "analyzerWarnings": []}
+            result["native"] = {"complete_scope": True, "build": build}
+            exports = {"native-build.json": build, "original-result.json": copy.deepcopy(result)}
+            result["producer"] = "ci-verify-xcode-result-review"
+            if kind == "tests":
+                summary = {"result": "Passed", "passedTests": 2, "totalTestCount": 2, "failedTests": 0,
+                           "skippedTests": 0, "expectedFailures": 0, "runtimeWarnings": [], "testFailures": []}
+                bundles = {"IncomesLibraryTests": "Passed", "IncomesLibraryTimeZoneTests": "Passed"}
+                result["native"].update(tests=summary, test_targets=bundles)
+                exports.update({"native-tests.json": summary, "native-test-tree.json": {
+                    "testNodes": [{"nodeType": "Unit test bundle", "name": name, "result": status}
+                                  for name, status in bundles.items()]}})
+            for filename, value in exports.items():
+                path = directory / filename
+                path.write_text(json.dumps(value))
+                result["artifacts"].append({"path": filename, "sha256": hashlib.sha256(path.read_bytes()).hexdigest()})
         (directory / "result.json").write_text(json.dumps(result))
         return name + "/result.json"
 
@@ -87,30 +129,46 @@ class PushVerificationTests(unittest.TestCase):
                 args.extend(["--not", item["remote_oid"]])
             commits.update(self.git(*args).splitlines())
             oid = item["local_oid"]
-            path = self.record("quality-" + oid, oid)
+            paths = {kind: self.record("quality-" + oid + "-" + kind, oid, kind)
+                     for kind in ("build", "tests", "lint")}
             quality[oid] = {"tree": self.git("rev-parse", oid + "^{tree}"),
-                            "environment": {"fixture": "isolated"},
+                            "environment": self.environment,
                             "checks": {kind: {"status": "passed", "evidence": path,
                                              "scope": "synthetic fixture", "skipped": 0}
-                                       for kind in ["build", "tests", "lint"]}}
+                                       for kind, path in paths.items()}}
             quality[oid]["checks"]["diagnostics"] = {
-                "status": "passed", "evidence": [path], "scope": "all fixture records"}
+                "status": "passed", "evidence": list(paths.values()), "scope": "all fixture records"}
         review = self.store / "contextual-review.txt"
         review.write_text("Synthetic review of all listed fixture commits.\n")
-        scan_report = self.store / "scan-report.json"
-        scan_report.write_text("[]\n")
-        return {"schema_version": 1, "common_git_dir": str(self.root / ".git"),
+        scans = []
+        for item in updates:
+            name = "scan-" + hashlib.sha256(item["remote_ref"].encode()).hexdigest()
+            base = None if item["remote_oid"] == ZERO else item["remote_oid"]
+            report = self.store / (name + ".json")
+            args = ["rev-list", item["local_oid"]] + (["--not", base] if base else [])
+            report.write_text(json.dumps({"status": "clean", "scanner": "betterleaks",
+                "scanner_version": "1.9.0", "head": item["local_oid"], "base": base,
+                "new_ref": base is None, "validation": False, "commits": sorted(self.git(*args).splitlines()),
+                "findings": []}))
+            evidence = self.record(name)
+            record_path = self.store / evidence
+            record = json.loads(record_path.read_text())
+            record["verification"]["argv"] = ["python3", "publication_tools.py", "scan", "--head", item["local_oid"], "--report", str(report)]
+            record["verification"]["argv"] += ["--base", base] if base else ["--new-ref"]
+            record_path.write_text(json.dumps(record))
+            scans.append({"update": item, "evidence": evidence, "report": report.name,
+                          "sha256": hashlib.sha256(report.read_bytes()).hexdigest()})
+        return {"schema_version": 2, "common_git_dir": str(self.root / ".git"),
                 "destination": {"remote_name": "origin", "location_sha256": hashlib.sha256(b"fixture://private").hexdigest()},
                 "updates": sorted(updates, key=lambda item: item["remote_ref"]), "quality": quality,
                 "publication": {"commits": sorted(commits), "uninspected": [],
-                    "mechanical": {"status": "passed", "scanner": "gitleaks", "scanner_version": "synthetic",
-                                   "commits": sorted(commits), "evidence": self.record("scanner"),
-                                   "report": "scan-report.json", "sha256": hashlib.sha256(scan_report.read_bytes()).hexdigest()},
+                    "mechanical": {"status": "passed", "scanner": "betterleaks", "scanner_version": "1.9.0",
+                                   "commits": sorted(commits), "scans": scans},
                     "contextual": {"status": "passed", "commits": sorted(commits),
                                    "report": "contextual-review.txt", "sha256": hashlib.sha256(review.read_bytes()).hexdigest()}}}
 
     def save(self):
-        (self.store / "receipt.json").write_text(json.dumps(self.receipt))
+        self.receipt_path.write_text(json.dumps(self.receipt))
 
     def run_check(self, updates=None, remote="fixture://private"):
         updates = updates if updates is not None else [self.update]
@@ -131,7 +189,7 @@ class PushVerificationTests(unittest.TestCase):
         self.assertIn("not independently proved", q.stdout)
 
     def test_missing_receipt_rejects(self):
-        (self.store / "receipt.json").unlink()
+        self.receipt_path.unlink()
         self.assertEqual(self.run_check().returncode, 1)
 
     def test_destination_mismatch_rejects(self):
@@ -142,7 +200,7 @@ class PushVerificationTests(unittest.TestCase):
             with self.subTest(key=key):
                 update = dict(self.update)
                 update[key] = value
-                self.assert_rejected("source SHA, refs", [update])
+                self.assert_rejected("source ref" if key == "local_oid" else "source SHA, refs", [update])
 
     def test_dirty_separate_work_does_not_replace_committed_snapshot(self):
         self.write("Sources/value.swift", "uncommitted separate work\n")
@@ -185,7 +243,7 @@ class PushVerificationTests(unittest.TestCase):
         self.assert_rejected("Outgoing history", [update])
 
     def test_docs_only_reuse_and_code_change_rejection(self):
-        original_record = self.receipt["quality"][self.tip]["checks"]["build"]["evidence"]
+        original_records = {kind: self.receipt["quality"][self.tip]["checks"][kind]["evidence"] for kind in ("build", "tests", "lint")}
         old = self.tip
         self.write("README.md", "Only prose changed\n")
         self.commit("Explain usage")
@@ -194,8 +252,8 @@ class PushVerificationTests(unittest.TestCase):
         self.receipt = self.make_receipt([update])
         checks = self.receipt["quality"][doc_tip]["checks"]
         for kind in ["build", "tests", "lint"]:
-            checks[kind].update(status="reused", evidence=original_record)
-        checks["diagnostics"]["evidence"] = [original_record]
+            checks[kind].update(status="reused", evidence=original_records[kind])
+        checks["diagnostics"]["evidence"] = list(original_records.values())
         self.save()
         self.assertEqual(self.run_check([update]).returncode, 0)
         self.write("Sources/value.swift", "let value = 4\n")
@@ -205,8 +263,8 @@ class PushVerificationTests(unittest.TestCase):
         self.receipt = self.make_receipt([update])
         checks = self.receipt["quality"][code_tip]["checks"]
         for kind in ["build", "tests", "lint"]:
-            checks[kind].update(status="reused", evidence=original_record)
-        checks["diagnostics"]["evidence"] = [original_record]
+            checks[kind].update(status="reused", evidence=original_records[kind])
+        checks["diagnostics"]["evidence"] = list(original_records.values())
         self.assert_rejected("changed build/test/lint inputs", [update])
 
     def test_secret_added_then_removed_remains_in_review_scope(self):
@@ -234,7 +292,7 @@ class PushVerificationTests(unittest.TestCase):
         path = self.store / self.receipt["quality"][self.tip]["checks"]["build"]["evidence"]
         original = json.loads(path.read_text())
         for changes in [{"verification": {"ran": False}}, {"verification": {"status": "failed", "exit_code": 7}},
-                        {"diagnostics": {"warning_count": 1}}, {"tests": {"executed": 0}}]:
+                        {"diagnostics": {"warning_count": 1}}]:
             with self.subTest(changes=changes):
                 record = copy.deepcopy(original)
                 for field, values in changes.items():
@@ -247,17 +305,20 @@ class PushVerificationTests(unittest.TestCase):
 
     def test_environment_change_and_uninspected_artifact_reject(self):
         self.receipt["quality"][self.tip]["environment"] = {"fixture": "changed toolchain"}
-        self.assert_rejected("environments differ")
-        self.receipt["quality"][self.tip]["environment"] = {"fixture": "isolated"}
+        self.assert_rejected("toolchain changed")
+        self.receipt["quality"][self.tip]["environment"] = self.environment
         self.receipt["publication"]["uninspected"] = ["binary fixture"]
         self.assert_rejected("remain uninspected")
 
     def test_scanner_report_findings_and_tamper_are_not_ai_clean_claims(self):
-        path = self.store / "scan-report.json"
-        path.write_text('[{"RuleID":"synthetic-fixture"}]')
-        self.receipt["publication"]["mechanical"]["sha256"] = hashlib.sha256(path.read_bytes()).hexdigest()
+        scan = self.receipt["publication"]["mechanical"]["scans"][0]
+        path = self.store / scan["report"]
+        data = json.loads(path.read_text())
+        data["findings"] = [{"RuleID": "synthetic-fixture"}]
+        path.write_text(json.dumps(data))
+        scan["sha256"] = hashlib.sha256(path.read_bytes()).hexdigest()
         self.assert_rejected("scanner report has findings")
-        path.write_text("[]")
+        path.write_text("{}")
         self.assert_rejected("scanner report changed")
 
     def test_merge_side_history_is_included(self):
@@ -282,7 +343,104 @@ class PushVerificationTests(unittest.TestCase):
         self.assert_rejected("Shallow history")
 
 
-    def test_hook_preserves_existing_rules_after_successful_match(self):
+    def test_scanner_missing_or_unsupported_version_rejects(self):
+        binary = self.binary_directory / "betterleaks"
+        for version in ("2.0.0-rc.1", "1.9.1"):
+            self.make_binary("betterleaks", f"print({version!r})\n")
+            self.assert_rejected("Unsupported Betterleaks")
+        binary.unlink()
+        (self.binary_directory / "python3").symlink_to(sys.executable)
+        (self.binary_directory / "git").symlink_to(shutil.which("git"))
+        os.environ["PATH"] = str(self.binary_directory)
+        self.assert_rejected("Betterleaks is missing")
+
+    def test_incomplete_native_tests_or_subset_cannot_clear_quality(self):
+        path = self.store / self.receipt["quality"][self.tip]["checks"]["tests"]["evidence"]
+        original = json.loads(path.read_text())
+        for mutation in (lambda r: r["tests"].update(executed=0),
+                         lambda r: r["tests"].update(skipped=1),
+                         lambda r: r["native"].update(complete_scope=False),
+                         lambda r: r["verification"]["argv"].append("-only-testing:IncomesLibraryTests/OneTest")):
+            record = copy.deepcopy(original)
+            mutation(record)
+            path.write_text(json.dumps(record))
+            self.assertEqual(self.run_check().returncode, 1)
+
+    def test_scanner_command_must_bind_engine_report_and_range(self):
+        scan = self.receipt["publication"]["mechanical"]["scans"][0]
+        path = self.store / scan["evidence"]
+        original = json.loads(path.read_text())
+        for mutation in (lambda a: a.__setitem__(1, "unrelated.py"),
+                         lambda a: a.__setitem__(a.index("--report") + 1, "other.json"),
+                         lambda a: a.extend(["--head", self.tip])):
+            record = copy.deepcopy(original)
+            mutation(record["verification"]["argv"])
+            path.write_text(json.dumps(record))
+            self.assertEqual(self.run_check().returncode, 1)
+
+    def test_stale_toolchain_requires_new_quality_evidence(self):
+        self.make_binary("xcrun", "print('Different Xcode or Swift')\n")
+        self.assert_rejected("toolchain changed")
+
+    def test_invalid_source_or_destination_ref_rejects(self):
+        for field, value in (("remote_ref", "refs/heads/bad..name"),
+                             ("remote_ref", "refs/tags/release"),
+                             ("local_ref", "refs/heads/absent")):
+            update = dict(self.update)
+            update[field] = value
+            self.save()
+            self.assertEqual(self.run_check([update]).returncode, 1)
+
+    def test_missing_duplicate_or_wrong_range_scans_reject(self):
+        mechanical = self.receipt["publication"]["mechanical"]
+        original = copy.deepcopy(mechanical)
+        mechanical["scans"] = []
+        self.assert_rejected("Every proposed ref")
+        self.receipt["publication"]["mechanical"] = copy.deepcopy(original)
+        scan = self.receipt["publication"]["mechanical"]["scans"][0]
+        path = self.store / scan["report"]
+        data = json.loads(path.read_text())
+        for field, value in (("validation", True), ("scanner_version", "2.0.0-rc.1"),
+                             ("head", self.base), ("commits", [])):
+            changed = dict(data)
+            changed[field] = value
+            path.write_text(json.dumps(changed))
+            scan["sha256"] = hashlib.sha256(path.read_bytes()).hexdigest()
+            self.assert_rejected("unsupported coverage")
+        path.write_text(json.dumps(data))
+        scan["sha256"] = hashlib.sha256(path.read_bytes()).hexdigest()
+
+    def test_independent_destination_receipts_do_not_overwrite(self):
+        second = "fixture://secondary"
+        self.git("remote", "add", "secondary", second)
+        path = self.store / "destinations" / hashlib.sha256(second.encode()).hexdigest() / "receipt.json"
+        path.parent.mkdir()
+        receipt = copy.deepcopy(self.receipt)
+        receipt["destination"] = {"remote_name": "secondary", "location_sha256": hashlib.sha256(second.encode()).hexdigest()}
+        path.write_text(json.dumps(receipt))
+        lines = " ".join(self.update[key] for key in ("local_ref", "local_oid", "remote_ref", "remote_oid")) + "\n"
+        result = subprocess.run(["python3", str(CHECKER), "secondary", second], cwd=self.root,
+                                input=lines, capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(self.run_check().returncode, 0)
+        path.unlink()
+        result = subprocess.run(["python3", str(CHECKER), "secondary", second], cwd=self.root,
+                                input=lines, capture_output=True, text=True)
+        self.assertEqual(result.returncode, 1)
+
+    def test_explicit_reviewed_git_url_is_supported(self):
+        url = "https://example.invalid/reviewed-repository.git"
+        receipt = copy.deepcopy(self.receipt)
+        receipt["destination"] = {"remote_name": url, "location_sha256": hashlib.sha256(url.encode()).hexdigest()}
+        path = self.store / "destinations" / hashlib.sha256(url.encode()).hexdigest() / "receipt.json"
+        path.parent.mkdir()
+        path.write_text(json.dumps(receipt))
+        lines = " ".join(self.update[key] for key in ("local_ref", "local_oid", "remote_ref", "remote_oid")) + "\n"
+        result = subprocess.run(["python3", str(CHECKER), url, url], cwd=self.root,
+                                input=lines, capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0, result.stderr)
+
+    def test_thin_hook_matches_evidence_without_repeating_rules(self):
         self.write("ci_scripts/tasks/check_repository_rules.sh",
                    "#!/bin/bash\necho retained > .git/retained-rule-ran\n")
         destination = self.root / "ci_scripts/tasks/check_push_verification.py"
@@ -290,15 +448,13 @@ class PushVerificationTests(unittest.TestCase):
         hook = self.root / ".git/hooks/pre-push"
         hook.write_text("#!/bin/bash\nset -euo pipefail\n"
                         "repository_root=$(git rev-parse --show-toplevel)\ncd \"$repository_root\"\n"
-                        "python3 \"$repository_root/ci_scripts/tasks/check_push_verification.py\" \"$@\"\n"
-                        "exec bash \"$repository_root/ci_scripts/tasks/check_repository_rules.sh\"\n")
+                        "exec python3 \"$repository_root/ci_scripts/tasks/check_push_verification.py\" \"$@\"\n")
         lines = " ".join(self.update[key] for key in ["local_ref", "local_oid", "remote_ref", "remote_oid"]) + "\n"
         q = subprocess.run(["bash", str(hook), "origin", "fixture://private"], cwd=self.root,
                            input=lines, capture_output=True, text=True)
         self.assertEqual(q.returncode, 0, q.stdout + q.stderr)
-        self.assertEqual((self.root / ".git/retained-rule-ran").read_text(), "retained\n")
-        (self.root / ".git/retained-rule-ran").unlink()
-        (self.store / "receipt.json").unlink()
+        self.assertFalse((self.root / ".git/retained-rule-ran").exists())
+        self.receipt_path.unlink()
         q = subprocess.run(["bash", str(hook), "origin", "fixture://private"], cwd=self.root,
                            input=lines, capture_output=True, text=True)
         self.assertEqual(q.returncode, 1)

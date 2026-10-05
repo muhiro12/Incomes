@@ -20,10 +20,6 @@ struct DatabaseMigratorTests {
         let fileManager: FileManager = .default
         let sandbox = try makeSandbox(fileManager: fileManager)
 
-        defer {
-            try? fileManager.removeItem(at: sandbox.baseDirectory)
-        }
-
         #expect(fileManager.createFile(atPath: sandbox.legacyURL.path, contents: Data()))
         #expect(fileManager.createFile(atPath: sandbox.legacyShmURL.path, contents: Data()))
         #expect(fileManager.createFile(atPath: sandbox.legacyWalURL.path, contents: Data()))
@@ -46,10 +42,6 @@ struct DatabaseMigratorTests {
         let sandbox = try makeSandbox(fileManager: fileManager)
         let legacyData = Data("legacy".utf8)
         let staleData = Data("stale".utf8)
-
-        defer {
-            try? fileManager.removeItem(at: sandbox.baseDirectory)
-        }
 
         #expect(fileManager.createFile(atPath: sandbox.legacyURL.path, contents: legacyData))
         #expect(fileManager.createFile(atPath: sandbox.legacyWalURL.path, contents: legacyData))
@@ -78,10 +70,6 @@ struct DatabaseMigratorTests {
         let fileManager: FileManager = .default
         let sandbox = try makeSandbox(fileManager: fileManager)
 
-        defer {
-            try? fileManager.removeItem(at: sandbox.baseDirectory)
-        }
-
         #expect(fileManager.createFile(atPath: sandbox.legacyURL.path, contents: Data()))
         #expect(fileManager.createFile(atPath: sandbox.legacyShmURL.path, contents: Data()))
         #expect(fileManager.createFile(atPath: sandbox.legacyWalURL.path, contents: Data()))
@@ -103,10 +91,6 @@ struct DatabaseMigratorTests {
     func migrateSQLiteFilesIfNeeded_rolls_back_current_files_when_validation_fails() throws {
         let fileManager: FileManager = .default
         let sandbox = try makeSandbox(fileManager: fileManager)
-
-        defer {
-            try? fileManager.removeItem(at: sandbox.baseDirectory)
-        }
 
         #expect(fileManager.createFile(atPath: sandbox.legacyURL.path, contents: Data()))
         #expect(fileManager.createFile(atPath: sandbox.legacyWalURL.path, contents: Data()))
@@ -133,10 +117,6 @@ struct DatabaseMigratorTests {
         let sandbox = try makeSandbox(fileManager: fileManager)
         let currentData = Data("current".utf8)
 
-        defer {
-            try? fileManager.removeItem(at: sandbox.baseDirectory)
-        }
-
         #expect(fileManager.createFile(atPath: sandbox.currentURL.path, contents: currentData))
         #expect(fileManager.createFile(atPath: sandbox.currentShmURL.path, contents: currentData))
         #expect(fileManager.createFile(atPath: sandbox.currentWalURL.path, contents: currentData))
@@ -159,10 +139,6 @@ struct DatabaseMigratorTests {
         let sandbox = try makeSandbox(fileManager: fileManager)
         let legacyData = Data("legacy".utf8)
 
-        defer {
-            try? fileManager.removeItem(at: sandbox.baseDirectory)
-        }
-
         #expect(fileManager.createFile(atPath: sandbox.legacyURL.path, contents: legacyData))
         #expect(fileManager.createFile(atPath: sandbox.legacyWalURL.path, contents: legacyData))
 
@@ -182,10 +158,6 @@ struct DatabaseMigratorTests {
     func migrateSQLiteFilesIfNeeded_validates_copied_swiftdata_store() throws {
         let fileManager: FileManager = .default
         let sandbox = try makeSandbox(fileManager: fileManager)
-
-        defer {
-            try? fileManager.removeItem(at: sandbox.baseDirectory)
-        }
 
         try seedStore(at: sandbox.legacyURL)
 
@@ -246,10 +218,7 @@ private extension DatabaseMigratorTests {
     func makeSandbox(
         fileManager: FileManager
     ) throws -> Sandbox {
-        let baseDirectory = fileManager.temporaryDirectory.appendingPathComponent(
-            UUID().uuidString,
-            isDirectory: true
-        )
+        let baseDirectory = try persistentTestDirectory(fileManager: fileManager)
         let legacyDirectory = baseDirectory.appendingPathComponent("legacy", isDirectory: true)
         let currentDirectory = baseDirectory.appendingPathComponent("current", isDirectory: true)
 

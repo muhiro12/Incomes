@@ -115,6 +115,19 @@ func updateFutureItems(
     )
 }
 
+/// CoreData may retain store handles beyond ModelContainer's lexical scope.
+/// Keep the uniquely named directory until the test process exits; verification
+/// cleans only the reported fixture directories after all tests have finished.
+func persistentTestDirectory(fileManager: FileManager) throws -> URL {
+    let directory = fileManager.temporaryDirectory.appendingPathComponent(
+        "IncomesLibraryTests-" + UUID().uuidString,
+        isDirectory: true
+    )
+    try fileManager.createDirectory(at: directory, withIntermediateDirectories: true)
+    print("IncomesLibrary persistent fixture directory: " + directory.path)
+    return directory
+}
+
 private func timeZone(identifier: String) -> TimeZone {
     guard let timeZone = TimeZone(identifier: identifier) else {
         preconditionFailure("Invalid time zone identifier: \(identifier)")

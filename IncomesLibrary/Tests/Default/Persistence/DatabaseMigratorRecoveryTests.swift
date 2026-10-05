@@ -142,10 +142,7 @@ private extension DatabaseMigratorRecoveryTests {
 
     func withSandbox(_ body: (Sandbox) throws -> Void) throws {
         let fileManager: FileManager = .default
-        let baseDirectory = fileManager.temporaryDirectory.appendingPathComponent(
-            UUID().uuidString,
-            isDirectory: true
-        )
+        let baseDirectory = try persistentTestDirectory(fileManager: fileManager)
         let legacyDirectory = baseDirectory.appendingPathComponent("legacy", isDirectory: true)
         let currentDirectory = baseDirectory.appendingPathComponent("current", isDirectory: true)
         try fileManager.createDirectory(at: legacyDirectory, withIntermediateDirectories: true)

@@ -1,156 +1,117 @@
 # Push Verification Pilot
 
-This pilot separates verification from the final Git scope check. The agent
-runs and reviews the required checks before a meaningful push. A small local
-pre-push check then compares the private evidence with every proposed branch
-update. It performs no build, scan, network request, or automatic installation.
+The agent prepares and reviews evidence before a meaningful push. A thin local
+pre-push hook then compares that private evidence with every proposed branch
+update. It runs no build, lint, scanner, network request, or installation. It
+probes the current scanner version and Apple toolchain to reject stale evidence.
 
-The five requirements are build success, zero errors and warnings in the
-required diagnostic scope, test success, lint success, and no unresolved
+The five requirements are actual app build success, zero real errors/warnings,
+successful full library tests, successful lint/static rules, and no unresolved
 publication findings. Small commits do not trigger this aggregate procedure.
 Xcode Cloud remains responsible for formal builds, tests, archives, and upload
-after the commit is shared; it cannot prevent disclosure on that initial push.
+after sharing; it cannot prevent disclosure on the initial push.
 
 ## Prepare Actual Evidence
 
-Use the existing Build and Test contract in the root README to select library
-tests and affected app, widget, watch, and consumer surfaces. Resolve the active
-Xcode capabilities and restore any selection changed for verification. Do not
-use a successful script or pilot fixture as evidence of an app build or library
-test. Keep autofix separate from the final non-mutating lint check.
+Follow the root README's Build and Test contract. Use a clean committed source
+snapshot, selected Xcode, assigned Simulator, resolved dependency pins, full
+`IncomesLibrary` test plan, and normal `Incomes` consumer build. An isolated
+checkout can verify an intended OID without touching another task's worktree.
+Keep formatting separate from final lint; fixtures are not application evidence.
 
-The `ci-verify-and-summarize` skill can retain actual command output:
+Use the existing `ci-verify-and-summarize` skill's execution helper to retain full
+output, actual argv/exit, source OID/tree, and environment. For official Xcode CLI
+fallbacks, retain an explicit new result bundle, then use its
+`review_xcode_evidence.py` adapter. See that skill's
+`references/xcode-result-review.md` for complete native export, exact negative-test
+review, and optional owned-fixture cleanup. Build evidence must select `Incomes`;
+tests must select `IncomesLibrary` and its full plan, with both
+`IncomesLibraryTests` and `IncomesLibraryTimeZoneTests` passed. Partial-test flags,
+missing exports, native/captured warnings, failures, and skips do not clear QA.
 
-```sh
-bash /path/to/ci-verify-and-summarize/scripts/run_verify_and_summarize.sh \
-  --evidence-dir /private/new-run-directory \
-  --require-clean-diagnostics -- bash ci_scripts/tasks/check_repository_rules.sh
-```
+The library/test route currently has no App Intents implementation. Its CLI test
+invocation uses `LM_SKIP_METADATA_EXTRACTION=YES` to omit irrelevant metadata
+extraction, following Apple's task producer. Reassess that setting if the library
+adopts App Intents. The normal app build retains metadata extraction. Quiet-warning
+options are not used. Deliberate read-only save/migration and corrupt-store logs
+require exact, source-bound review against passed native negative tests; original
+logs and candidate counts remain retained. Persistent test DB roots stay alive
+until test-process exit and are cleaned only by their exact emitted paths after
+the assigned Simulator stops; Simulator may already have removed them.
 
-For a documented official-tool fallback, use `--tool` followed by its literal
-argv instead of adding a shell wrapper. Include the selected scheme,
-configuration, destination, test plan, result-bundle path, resolved dependencies,
-and actual Xcode/SDK in the evidence context. Captured CLI output does not prove
-that an integration exposed all native issues: inspect full native results and
-required test coverage, including skips. The helper records every recognized
-captured diagnostic, not just its short display samples.
+## Publication and Private Receipt
 
-Verification must correspond to a clean committed snapshot before and after
-execution. If the current worktree contains separate uncommitted work, verify
-the intended OID in an isolated snapshot. Do not stage, stash, or delete another
-task's changes. A later HEAD does not invalidate an explicit earlier OID, but
-new input changes invalidate the affected evidence.
+The shared `git-publication-review` skill owns portable rg/Betterleaks setup and
+passive outgoing-history scanning. Check its README/setup reference on each host;
+do not rely on a Codex application bundle or silently replace an absent tool.
+This adapter supports Betterleaks **1.9.0**. Another version requires an explicit
+adapter review. Validation of possible credentials is disabled; reports are
+redacted. A clean scan does not replace contextual review of private information,
+commit metadata, binaries, LFS pointers, submodules, and scanner exclusions.
 
-## Private Receipt
+Freshly observe all intended destinations, visibility, and refs before reviewing.
+Every branch contributes all commits reachable from its proposed new OID but
+not its observed old OID, including merge side history and added-then-removed
+content. A new branch conservatively requires its full history. Review all push
+URLs and default-added refs; a final-tree diff or stale tracking ref is insufficient.
 
-Resolve the common Git directory with:
+Resolve the store with `git rev-parse --path-format=absolute --git-common-dir`.
+Keep evidence under its private `push-verification/` directory. Receipt paths are
+`destinations/<SHA256-of-exact-push-location>/receipt.json`; artifacts are relative
+to the store. Each destination has a separate receipt. Never store credential-bearing
+URLs in a receipt. The version-2 fields are:
 
-```sh
-git rev-parse --path-format=absolute --git-common-dir
-```
+- `schema_version`: `2`; `common_git_dir`: resolved repository identity.
+- `destination`: `remote_name` and exact `location_sha256` supplied by Git.
+- `updates`: every full `local_ref`, `local_oid`, `remote_ref`, and `remote_oid`
+  from Git's pre-push stdin. Each local ref must resolve to that immutable OID.
+- `quality`: keyed by every sent OID, with tree, recorded environment, and
+  `checks` for `build`, `tests`, `lint`, and `diagnostics`. Check entries have
+  `passed`/`reused`, relative `result.json` evidence, and scope. Tests also require
+  `skipped: 0`. Diagnostics reference the complete set of those three records.
+  Build/tests require hash-bound original execution and full native exports from
+  the shared adapter; lint retains its actual full output. Related environments
+  must match each other and the current Xcode/Swift probes.
+- `publication`: sorted full outgoing `commits`, empty `uninspected`, and separate
+  `mechanical` and `contextual` records covering that exact union. Mechanical has
+  `status: passed`, `scanner: betterleaks`, `scanner_version: 1.9.0`, `commits`,
+  and a `scans` array with exactly one entry per update: exact `update`, actual
+  execution `evidence`, safe JSON `report`, and its `sha256`. Each report and argv
+  must match `publication_tools.py scan` and that immutable base/head or new-ref
+  range. Contextual has `status: passed`, `commits`, private report and `sha256`.
 
-Store `push-verification/receipt.json`, evidence directories, a scanner JSON
-report, and a contextual review there. Keep these out of committed files.
-Evidence paths are relative to this store. Symlinked, missing, changed, malformed,
-failed, and unexecuted evidence is rejected. Only the producing command can
-supply its actual exit/output; an agent's summary is not a substitute.
+Execution records remain schema version 1. Missing, changed, malformed, failed,
+symlinked, unexecuted, stale, or differently scoped evidence blocks the update.
+Version-1 Gitleaks receipts are incompatible and must be regenerated. Never
+relabel another scanner's summary or fabricate native success.
 
-The receipt's version-1 fields are:
+## Scope, Reuse, and Hook Recovery
 
-- `schema_version`: `1`.
-- `common_git_dir`: the resolved repository identity.
-- `destination`: `remote_name` and `location_sha256`, the SHA-256 of the exact
-  push location supplied by Git. Do not store credential-bearing remote URLs.
-- `updates`: every `local_ref`, `local_oid`, `remote_ref`, and `remote_oid` from
-  Git's pre-push stdin. Use full OIDs. The agent must review the intended
-  destination's visibility, freshly observed refs, and any future publication.
-- `quality`: keyed by every sent OID. Each entry has its tree OID, the recorded
-  environment, and `checks` for `build`, `tests`, `lint`, and `diagnostics`.
-  Build/tests/lint entries specify `passed` or `reused`, a relative `result.json`
-  reference, and the reviewed scope. Tests require positive execution, zero
-  failures, and zero unresolved skips in both the tool record and entry.
-  Diagnostics specify `passed`, scope, and the complete set of those evidence
-  references. Each referenced record must have zero captured errors/warnings.
-- `publication`: the sorted full outgoing commit list, empty `uninspected`,
-  and separate `mechanical` and `contextual` records for that same commit list.
-  Mechanical evidence includes `passed`, scanner/version, actual run evidence,
-  a relative JSON report, and its hash. This initial pilot supports Gitleaks
-  reports with no findings; a custom regex or unavailable scanner is not an
-  equivalent pass. Contextual evidence includes `passed`, the private report
-  path, and its hash. The agent must review private information, commit/tag
-  metadata, relevant content, and unexpected binary/LFS/submodule disclosure.
+The pilot supports fast-forward and new branch updates. Force updates, deletion,
+tags, shallow/partial/grafted histories, and unsupported tools need separate
+review. Multiple refs must all match and have QA. Each destination invocation
+is checked independently; Git publication across destinations is not atomic.
+Other hosts, provider API writes, bypass, and clients that do not invoke this
+Git process/effective hook are outside its coverage.
 
-The execution-record shape is described by the verification skill. Native
-results must be exported with the same source/result/output references and
-reviewed for their actual scope; connection/configuration alone is not evidence.
-Do not create a passed native record when the result or required issues are
-unavailable. Receipt entries require the same environment across the related
-results; the agent must refresh the real SDK/toolchain/dependency context before
-reusing them. The checker does not independently interrogate Xcode.
+Quality can be reused from an ancestor only for changes limited to `README.md`
+and Markdown under `Designs/`, which are not current build/test/lint inputs.
+Resources, project files, locks, scripts, tests, and generated docs invalidate
+reuse. New outgoing history and metadata always require new publication review.
 
-## History and Reuse
+The Incomes-only hook changes directory to the repository root and executes
+`python3 ci_scripts/tasks/check_push_verification.py <remote-name> <remote-location>`
+with Git's exact stdin. Retained static rules run during evidence preparation;
+the hook does not repeat them. Before activation, require real application QA
+and an end-to-end pass with matching actual evidence plus failing-case fixtures.
 
-Each updated branch contributes all commits reachable from its new OID that are
-not reachable from the observed old OID. Merge side histories are included.
-A new branch conservatively requires its full reachable history. A secret added
-and later removed still requires review. Stale tracking refs, final-tree diffs,
-and first-parent summaries do not clear publication.
+Retain installed hook bytes, hash, and executable mode privately before replacing
+it. Compare the current hash before installation; leave global `core.hooksPath`
+alone. For recovery, compare against the installed hash before restoring saved
+bytes/mode so later work is not overwritten. Hooks and receipts are local;
+cloning the repository does not install them.
 
-This initial pilot handles fast-forward branch updates and new branches.
-Force updates, deletions, tags, and incomplete/shallow object histories are
-outside the pilot and stop for a separate review. Multiple refs must all match
-and have quality evidence. Additional refs introduced by defaults are not
-silently accepted.
-
-Build/test/lint evidence can be reused from an ancestor only when changes are
-limited to `README.md` and Markdown under `Designs/`. These prose-only paths are
-not inputs in the current Incomes build/test/lint contract. Resources, project
-files, package locks, scripts, fixtures, and generated documentation are excluded.
-Reassess this narrow allowlist if the architecture changes. New history and
-metadata always need an updated publication review, even with an identical tree.
-Do not synthesize a first baseline from old or missing results.
-
-## Local Hook and Recovery
-
-The Incomes-only pilot hook first runs:
-
-```sh
-python3 ci_scripts/tasks/check_push_verification.py <remote-name> <remote-location>
-```
-
-with the exact Git stdin. After a successful match it still runs the existing
-`check_repository_rules.sh`. This preserves the previous rules; their repeated
-cost has not yet been removed. Receipt absence stops before claiming readiness.
-Manual Git and agent clients use the same check when they invoke this local
-Git process and effective hook. Provider API writes, other hosts, hook bypass,
-and GUI clients using another implementation are not covered.
-
-Before replacing an installed hook, retain its bytes, hash, and executable mode
-outside tracked content. Install only in this repository after confirming the
-current hash; do not change global `core.hooksPath`. To restore, first compare
-against the installed pilot hash so later work is not overwritten, then restore
-the saved file and mode. The checker and documentation are tracked; hook state
-and receipts are local and are not installed by cloning the repository.
-
-## Limits and Current Readiness
-
-The shared `git-publication-review` skill now owns adopted rg/Betterleaks setup,
-version preflight and passive outgoing-history scanning. Those tools must be
-installed and checked on each host. This version-1 receipt checker still accepts
-Gitleaks only; a Betterleaks summary is not a compatible report and must not be
-relabeled. Deliberate receipt-adapter work and full application evidence remain
-necessary before activating the pilot hook. Tool installation and synthetic
-scanner fixtures do not establish that readiness.
-
-Matching OIDs, reports, and hashes detects missing evidence, scope confusion,
-and changed outputs. It does not prove execution authenticity: the same OS
-user can forge evidence or alter the checker. Neither a clean scanner report
-nor contextual AI review proves that no private information exists. No signing
-service or new monitoring framework is added.
-
-The pilot's isolated fixtures are synthetic process checks. They are not app
-builds, library tests, or real secret scans. A missing scanner, native result,
-required test, or diagnostic coverage remains unavailable, so no complete
-push-ready receipt may be issued until it is resolved. Persistent data recovery
-and raw/serialized/OS contracts still need the relevant semantic review;
-build/test/lint success alone cannot establish their compatibility.
+Hashes/OIDs detect missing or mismatched evidence, not execution authenticity
+against the same OS user. Clean mechanical/contextual reviews cannot prove the
+absence of all private information. Persistent raw/serialized/OS contracts still
+need semantic review; passing QA alone does not establish compatibility.

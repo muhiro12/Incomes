@@ -56,14 +56,8 @@ struct ReleasedStoreSchemaMigrationTests {
 private extension ReleasedStoreSchemaMigrationTests {
     func withFixtureStore(_ body: (URL) throws -> Void) throws {
         let fileManager: FileManager = .default
-        let directory = fileManager.temporaryDirectory.appendingPathComponent(
-            UUID().uuidString,
-            isDirectory: true
-        )
+        let directory = try persistentTestDirectory(fileManager: fileManager)
         try fileManager.createDirectory(at: directory, withIntermediateDirectories: true)
-        defer {
-            try? fileManager.removeItem(at: directory)
-        }
 
         for suffix in ["", "-wal", "-shm"] {
             let name = Database.fileName + suffix

@@ -12,11 +12,8 @@ struct SchemaMigrationTests {
 
     @Test(arguments: [0, 1, 2])
     func unversionedStorePreservesValuesAndRelationships(version: Int) throws {
-        let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        let directory = try persistentTestDirectory(fileManager: .default)
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
-        defer {
-            try? FileManager.default.removeItem(at: directory)
-        }
         let url = directory.appendingPathComponent("Incomes.sqlite")
         let repeatID = UUID()
         let identifier = try seedUnversionedStore(at: url, version: version, repeatID: repeatID)
@@ -44,11 +41,8 @@ struct SchemaMigrationTests {
 
     @Test
     func extensionDoesNotCreateMissingStore() throws {
-        let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        let directory = try persistentTestDirectory(fileManager: .default)
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
-        defer {
-            try? FileManager.default.removeItem(at: directory)
-        }
         let url = directory.appendingPathComponent("Incomes.sqlite")
         #expect(throws: CocoaError.self) {
             try ModelContainerFactory.readOnly(at: url)
@@ -60,11 +54,8 @@ struct SchemaMigrationTests {
 
     @Test
     func deletingSharedTagPreservesItemsAfterReopening() throws {
-        let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        let directory = try persistentTestDirectory(fileManager: .default)
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
-        defer {
-            try? FileManager.default.removeItem(at: directory)
-        }
         let url = directory.appendingPathComponent("Incomes.sqlite")
         _ = try seedUnversionedStore(at: url, version: prioritySchemaVersion, repeatID: UUID())
         try deleteSharedTag(at: url)
