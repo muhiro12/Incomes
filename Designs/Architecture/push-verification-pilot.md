@@ -134,6 +134,14 @@ and receipts are local and are not installed by cloning the repository.
 
 ## Limits and Current Readiness
 
+The shared `git-publication-review` skill now owns adopted rg/Betterleaks setup,
+version preflight and passive outgoing-history scanning. Those tools must be
+installed and checked on each host. This version-1 receipt checker still accepts
+Gitleaks only; a Betterleaks summary is not a compatible report and must not be
+relabeled. Deliberate receipt-adapter work and full application evidence remain
+necessary before activating the pilot hook. Tool installation and synthetic
+scanner fixtures do not establish that readiness.
+
 Matching OIDs, reports, and hashes detects missing evidence, scope confusion,
 and changed outputs. It does not prove execution authenticity: the same OS
 user can forge evidence or alter the checker. Neither a clean scanner report
