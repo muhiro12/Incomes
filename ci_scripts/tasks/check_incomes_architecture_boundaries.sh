@@ -55,11 +55,11 @@ source_import_pattern=$(
 )
 
 source_import_matches=$(
-  rg \
+  ci_task_rg \
     --line-number \
     "^(@preconcurrency )?import (${source_import_pattern})$" \
     "$library_sources" \
-    -g '*.swift' || true
+    -g '*.swift'
 )
 
 if [[ -n "$source_import_matches" ]]; then
@@ -73,10 +73,10 @@ package_reference_pattern=$(
 )
 
 package_reference_matches=$(
-  rg \
+  ci_task_rg \
     --line-number \
     "(${package_reference_pattern})" \
-    "$package_manifest" || true
+    "$package_manifest"
 )
 
 if [[ -n "$package_reference_matches" ]]; then

@@ -254,6 +254,16 @@ Markdown follows the [markdownlint rules](https://github.com/DavidAnson/markdown
 
 Helper scripts may write disposable cache data under `.build/ci/shared/`.
 
+The rules receipt accepts the complete `bash ci_scripts/tasks/check_repository_rules.sh`
+execution, including a source-bound SwiftLint record with its actual artifact,
+version, binary hash, configuration, and full tracked Swift file scope. SwiftLint
+is selected only from the configured project's registered package artifacts;
+other repositories' global DerivedData are not fallback inputs. An explicit
+`CI_SWIFTLINT_BIN` must match an artifact in those configured package roots.
+Missing resolution or tool mismatches are incomplete verification, not a reason
+to install another linter. Boundary searches likewise distinguish no matches
+from failed or unavailable searches.
+
 ## Release operations
 
 Incomes 6.x uses [Apogee release tools](Tools/Release/README.md) in a separate

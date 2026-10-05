@@ -31,3 +31,24 @@ ci_task_enter_repository() {
 ci_task_should_skip_environment_check() {
   [[ "${CI_SKIP_ENV_CHECK:-0}" == "1" || "${CI_SKIP_ENV_CHECK:-}" == "true" ]]
 }
+
+# Return captured matches for both rg's match and no-match statuses. Any search
+# failure exits the caller (including a command substitution) as incomplete.
+ci_task_rg() {
+  local output
+  local status
+  if ! command -v rg >/dev/null 2>&1; then
+    echo "Repository search incomplete: rg is missing from PATH." >&2
+    exit 2
+  fi
+  if output=$(rg "$@"); then
+    status=0
+  else
+    status=$?
+  fi
+  if [[ $status -gt 1 ]]; then
+    echo "Repository search incomplete: rg exited $status." >&2
+    exit 2
+  fi
+  printf '%s' "$output"
+}

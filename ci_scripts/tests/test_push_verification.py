@@ -27,6 +27,8 @@ class PushVerificationTests(unittest.TestCase):
         self.git("init", "-q")
         self.git("config", "user.name", "Fixture")
         self.git("config", "user.email", "fixture@example.invalid")
+        self.write(".swiftlint.yml", "strict: true\n")
+        self.write("Incomes.xcodeproj/project.pbxproj", "Synthetic project fixture\n")
         self.write("Sources/value.swift", "let value = 1\n")
         self.commit("Initial")
         self.base = self.git("rev-parse", "HEAD")
@@ -94,6 +96,23 @@ class PushVerificationTests(unittest.TestCase):
                   "tests": {"executed": 2, "failed": 0, "skipped": 0},
                   "artifacts": [{"path": "output.log", "sha256": hashlib.sha256(log.read_bytes()).hexdigest()}],
                   "evidence_errors": []}
+        if kind == "lint":
+            binary = "/fixture/artifacts/swiftlintplugins/SwiftLintBinary/SwiftLintBinary.artifactbundle/macos/swiftlint"
+            files = [f for f in self.git("ls-tree", "-r", "--name-only", oid).splitlines() if f.endswith(".swift")]
+            def source_hash(path):
+                return hashlib.sha256(subprocess.check_output(["git", "show", oid + ":" + path], cwd=self.root)).hexdigest()
+            proof = {"schema_version": 1, "mode": "lint", "exit_code": 0, "source_head": oid,
+                     "binary": binary, "version": "0.65.1", "package_version": "0.65.1",
+                     "package_remote": "https://github.com/SimplyDanny/SwiftLintPlugins",
+                     "package_revision": "a" * 40, "project_sha256": source_hash("Incomes.xcodeproj/project.pbxproj"),
+                     "config_sha256": source_hash(".swiftlint.yml"), "files": files,
+                     "argv": [binary, "lint", "--quiet", "--no-cache", "--strict", *files]}
+            proof.update({key: "a" * 64 for key in ("binary_sha256", "package_manifest_sha256",
+                                                  "workspace_state_sha256", "artifact_checksum")})
+            log.write_text("SwiftLint execution: " + json.dumps(proof) + "\nRepository rules check passed.\n")
+            result["producer"] = "ci-verify-and-summarize"
+            result["verification"]["argv"] = ["bash", "ci_scripts/tasks/check_repository_rules.sh"]
+            result["artifacts"][0]["sha256"] = hashlib.sha256(log.read_bytes()).hexdigest()
         if kind in {"build", "tests"}:
             scheme = "Incomes" if kind == "build" else "IncomesLibrary"
             result["verification"]["argv"] = ["xcrun", "xcodebuild", "-scheme", scheme,
@@ -187,6 +206,36 @@ class PushVerificationTests(unittest.TestCase):
         q = self.run_check()
         self.assertEqual(q.returncode, 0, q.stdout + q.stderr)
         self.assertIn("not independently proved", q.stdout)
+
+    def test_scanner_success_cannot_replace_lint_execution(self):
+        checks = self.receipt["quality"][self.tip]["checks"]
+        old = checks["lint"]["evidence"]
+        checks["lint"]["evidence"] = self.receipt["publication"]["mechanical"]["scans"][0]["evidence"]
+        checks["diagnostics"]["evidence"].remove(old)
+        checks["diagnostics"]["evidence"].append(checks["lint"]["evidence"])
+        self.assert_rejected("repository rules execution")
+
+    def test_lint_source_tool_scope_and_execution_mismatch_reject(self):
+        path = self.store / self.receipt["quality"][self.tip]["checks"]["lint"]["evidence"]
+        original = json.loads(path.read_text())
+        output = path.parent / "output.log"
+        original_output = output.read_text()
+        proof = json.loads(original_output.splitlines()[0].removeprefix("SwiftLint execution: "))
+        for key, value in (("source_head", self.base), ("binary_sha256", "missing"),
+                           ("version", "0.65.2"), ("project_sha256", "a" * 64),
+                           ("config_sha256", "a" * 64), ("files", []), ("mode", "format"),
+                           ("argv", [proof["binary"], "version"]), ("exit_code", 2)):
+            with self.subTest(key=key):
+                changed = dict(proof); changed[key] = value
+                output.write_text("SwiftLint execution: " + json.dumps(changed) + "\nRepository rules check passed.\n")
+                record = copy.deepcopy(original)
+                record["artifacts"][0]["sha256"] = hashlib.sha256(output.read_bytes()).hexdigest()
+                path.write_text(json.dumps(record))
+                self.assert_rejected("SwiftLint execution")
+        output.write_text("Repository rules check passed.\n")
+        original["artifacts"][0]["sha256"] = hashlib.sha256(output.read_bytes()).hexdigest()
+        path.write_text(json.dumps(original))
+        self.assert_rejected("completed SwiftLint execution")
 
     def test_missing_receipt_rejects(self):
         self.receipt_path.unlink()

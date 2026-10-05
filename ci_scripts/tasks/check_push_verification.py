@@ -186,6 +186,42 @@ def native_quality_record(store: Path, relative: str, record: dict, kind: str) -
                 "Required native test bundles, issues or counts are unresolved.")
 
 
+def lint_quality_record(store: Path, relative: str, record: dict) -> None:
+    require(record.get("producer") == "ci-verify-and-summarize"
+            and record["verification"]["argv"] == ["bash", "ci_scripts/tasks/check_repository_rules.sh"],
+            "Complete repository rules execution is required for lint evidence.")
+    directory = Path(relative).parent
+    require(any(a["path"] == "output.log" for a in record["artifacts"]), "Lint output is missing.")
+    lines = private_file(store, str(directory / "output.log")).read_text(encoding="utf-8").splitlines()
+    proofs = [json.loads(line.removeprefix("SwiftLint execution: ")) for line in lines
+              if line.startswith("SwiftLint execution: ")]
+    require(len(proofs) == 1 and lines.count("Repository rules check passed.") == 1,
+            "Lint lacks one completed SwiftLint execution and repository rule result.")
+    proof = proofs[0]
+    head = record["source"]["before"]["head"]
+    def file_hash(path):
+        result = subprocess.run(["git", "show", head + ":" + path], capture_output=True, env=git_environment())
+        require(result.returncode == 0, "A lint input is missing from its source commit.")
+        return digest(result.stdout)
+    files = git("ls-tree", "-r", "--name-only", head, "--").splitlines()
+    files = [path for path in files if path.endswith(".swift")]
+    binary = proof.get("binary", "")
+    require(proof.get("schema_version") == 1 and proof.get("mode") == "lint"
+            and proof.get("exit_code") == 0 and proof.get("source_head") == head
+            and proof.get("project_sha256") == file_hash("Incomes.xcodeproj/project.pbxproj")
+            and proof.get("config_sha256") == file_hash(".swiftlint.yml")
+            and proof.get("files") == files and bool(files)
+            and proof.get("argv") == [binary, "lint", "--quiet", "--no-cache", "--strict", *files]
+            and binary.endswith("/artifacts/swiftlintplugins/SwiftLintBinary/SwiftLintBinary.artifactbundle/macos/swiftlint")
+            and proof.get("package_remote") == "https://github.com/SimplyDanny/SwiftLintPlugins"
+            and proof.get("version") == proof.get("package_version")
+            and bool(re.fullmatch(r"\d+\.\d+\.\d+", proof.get("version", "")))
+            and all(re.fullmatch(r"[0-9a-f]{64}", proof.get(key, "")) for key in
+                    ("binary_sha256", "package_manifest_sha256", "workspace_state_sha256", "artifact_checksum"))
+            and bool(re.fullmatch(r"[0-9a-f]{40}", proof.get("package_revision", ""))),
+            "SwiftLint execution, actual binary/version, or source inputs do not match lint evidence.")
+
+
 def input_reuse_allowed(before: str, after: str) -> bool:
     # These prose-only paths are not build/test/lint inputs in the Incomes pilot.
     # Keep resources, generated docs, project files, scripts, and configuration out.
@@ -341,6 +377,8 @@ def check(remote_name: str, remote_location: str, lines: str) -> list[str]:
             source_matches(record, target, tree, entry["status"] == "reused")
             if kind in {"build", "tests"}:
                 native_quality_record(store, entry["evidence"], record, kind)
+            else:
+                lint_quality_record(store, entry["evidence"], record)
             require(record.get("environment") == target_record["environment"],
                     "Check environments differ; reassess evidence reuse.")
             if kind == "tests":

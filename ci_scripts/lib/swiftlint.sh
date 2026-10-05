@@ -69,10 +69,6 @@ ci_swiftlint_local_home_directory() {
   printf '%s\n' "$shared_directory/home"
 }
 
-ci_swiftlint_global_derived_data_directory() {
-  printf '%s\n' "${CI_XCODE_GLOBAL_DERIVED_DATA_DIR:-$HOME/Library/Developer/Xcode/DerivedData}"
-}
-
 ci_swiftlint_prepare_directories() {
   local repository_root=$1
   local shared_directory
@@ -111,59 +107,10 @@ ci_swiftlint_prepare_directories() {
 
 ci_swiftlint_find_binary() {
   local repository_root=$1
-  local source_packages_directory
-  local derived_data_directory
-  local global_derived_data_directory
-  local search_root
-  local candidate
-
-  if [[ -n "${CI_SWIFTLINT_BIN:-}" && -x "${CI_SWIFTLINT_BIN:-}" ]]; then
-    printf '%s\n' "$CI_SWIFTLINT_BIN"
-    return 0
-  fi
-
-  source_packages_directory=$(ci_swiftlint_source_packages_directory "$repository_root")
-  derived_data_directory=$(ci_swiftlint_derived_data_directory "$repository_root")
-  global_derived_data_directory=$(ci_swiftlint_global_derived_data_directory)
-
-  for search_root in \
-    "$source_packages_directory" \
-    "$derived_data_directory/SourcePackages"
-  do
-    if [[ ! -d "$search_root/artifacts" ]]; then
-      continue
-    fi
-
-    candidate=$(
-      find \
-        "$search_root/artifacts" \
-        -path '*/SwiftLintBinary.artifactbundle/macos/swiftlint' \
-        -type f \
-        -print 2>/dev/null | LC_ALL=C sort | head -n 1
-    )
-
-    if [[ -n "$candidate" ]]; then
-      printf '%s\n' "$candidate"
-      return 0
-    fi
-  done
-
-  if [[ -d "$global_derived_data_directory" ]]; then
-    candidate=$(
-      find \
-        "$global_derived_data_directory" \
-        -path '*/SourcePackages/artifacts/*/SwiftLintBinary.artifactbundle/macos/swiftlint' \
-        -type f \
-        -print 2>/dev/null | LC_ALL=C sort | head -n 1
-    )
-
-    if [[ -n "$candidate" ]]; then
-      printf '%s\n' "$candidate"
-      return 0
-    fi
-  fi
-
-  return 1
+  python3 "$repository_root/ci_scripts/lib/swiftlint_evidence.py" select \
+    "$repository_root" \
+    "$(ci_swiftlint_source_packages_directory "$repository_root")" \
+    "$(ci_swiftlint_derived_data_directory "$repository_root")/SourcePackages"
 }
 
 ci_swiftlint_resolve_binary() {
@@ -178,10 +125,16 @@ ci_swiftlint_resolve_binary() {
   local resolve_output
   local resolve_status
   local candidate
+  local selection_status
 
   if candidate=$(ci_swiftlint_find_binary "$repository_root"); then
     printf '%s\n' "$candidate"
     return 0
+  else
+    selection_status=$?
+    if [[ $selection_status -ne 1 ]]; then
+      return "$selection_status"
+    fi
   fi
 
   ci_swiftlint_prepare_directories "$repository_root"
@@ -238,7 +191,6 @@ ci_swiftlint_run() {
   local empty_message
   local start_message
   local finish_message
-  local swiftlint_binary
   local -a swift_files=()
 
   case "$mode" in
@@ -270,16 +222,13 @@ ci_swiftlint_run() {
     return 0
   fi
 
-  swiftlint_binary=$(ci_swiftlint_resolve_binary "$repository_root")
+  ci_swiftlint_resolve_binary "$repository_root" >/dev/null
 
   echo "$start_message"
-  case "$mode" in
-    format)
-      "$swiftlint_binary" lint --quiet --no-cache --fix --format "${swift_files[@]}"
-      ;;
-    lint)
-      "$swiftlint_binary" lint --quiet --no-cache --strict "${swift_files[@]}"
-      ;;
-  esac
+  python3 "$repository_root/ci_scripts/lib/swiftlint_evidence.py" run \
+    "$repository_root" \
+    "$(ci_swiftlint_source_packages_directory "$repository_root")" \
+    "$(ci_swiftlint_derived_data_directory "$repository_root")/SourcePackages" \
+    "$mode" "${swift_files[@]}"
   echo "$finish_message"
 }

@@ -64,7 +64,9 @@ extract_resolved_pin_block() {
   ' "$package_resolved"
 }
 
-if rg -q '\.package\(\s*path:\s*"[^"]*MHPlatform' "$package_manifest"; then
+search_matches=$(ci_task_rg '\.package\(\s*path:\s*"[^"]*MHPlatform' "$package_manifest")
+
+if [[ -n "$search_matches" ]]; then
   record_failure "IncomesLibrary/Package.swift must not use a local path dependency for MHPlatform."
 fi
 
@@ -85,16 +87,21 @@ else
   fi
 fi
 
-if rg -q 'name:\s*"MHPlatform"' "$package_manifest"; then
+search_matches=$(ci_task_rg 'name:\s*"MHPlatform"' "$package_manifest")
+
+if [[ -n "$search_matches" ]]; then
   record_failure "IncomesLibrary must not depend on the umbrella MHPlatform product."
 fi
 
-if ! rg -q 'name:\s*"MHPlatformCore"' "$package_manifest"; then
+search_matches=$(ci_task_rg 'name:\s*"MHPlatformCore"' "$package_manifest")
+
+if [[ -z "$search_matches" ]]; then
   record_failure "IncomesLibrary must depend on the MHPlatformCore product."
 fi
 
 for module_name in "${core_safe_modules[@]}"; do
-  if rg -q "name:\\s*\"$module_name\"" "$package_manifest"; then
+  search_matches=$(ci_task_rg "name:\\s*\"$module_name\"" "$package_manifest")
+  if [[ -n "$search_matches" ]]; then
     record_failure "IncomesLibrary must not declare direct MHPlatform core-safe module dependency $module_name."
   fi
 done
@@ -108,7 +115,9 @@ else
   fi
 fi
 
-if rg -q --fixed-strings 'XCLocalSwiftPackageReference "MHPlatform"' "$project_file"; then
+search_matches=$(ci_task_rg --fixed-strings 'XCLocalSwiftPackageReference "MHPlatform"' "$project_file")
+
+if [[ -n "$search_matches" ]]; then
   record_failure "Incomes.xcodeproj must not use a local MHPlatform package reference."
 fi
 
@@ -149,13 +158,13 @@ for target_name in Watch Widgets; do
 done
 
 umbrella_import_matches=$(
-  rg \
+  ci_task_rg \
     --line-number \
     '^(@preconcurrency )?import MHPlatform$' \
     IncomesLibrary \
     Watch \
     Widgets \
-    -g '*.swift' || true
+    -g '*.swift'
 )
 
 if [[ -n "$umbrella_import_matches" ]]; then
@@ -164,11 +173,11 @@ $umbrella_import_matches"
 fi
 
 direct_core_module_imports=$(
-  rg \
+  ci_task_rg \
     --line-number \
     '^(@preconcurrency )?import (MHDeepLinking|MHLogging|MHNotificationPayloads|MHNotificationPlans|MHRouteExecution|MHPersistenceMaintenance|MHPreferences)$' \
     IncomesLibrary/Sources \
-    -g '*.swift' || true
+    -g '*.swift'
 )
 
 if [[ -n "$direct_core_module_imports" ]]; then
@@ -177,7 +186,7 @@ $direct_core_module_imports"
 fi
 
 legacy_runtime_core_references=$(
-  rg \
+  ci_task_rg \
     --line-number \
     'MHAppRuntimeCore' \
     Incomes \
@@ -187,8 +196,7 @@ legacy_runtime_core_references=$(
     README.md \
     Designs \
     -g '*.swift' \
-    -g '*.md' \
-    || true
+    -g '*.md'
 )
 
 if [[ -n "$legacy_runtime_core_references" ]]; then
@@ -197,10 +205,10 @@ $legacy_runtime_core_references"
 fi
 
 legacy_pinning_language=$(
-  rg \
+  ci_task_rg \
     --line-number \
     'exact tag|exact revision' \
-    "${documentation_files[@]}" || true
+    "${documentation_files[@]}"
 )
 
 if [[ -n "$legacy_pinning_language" ]]; then
