@@ -20,6 +20,7 @@ private extension NarrowListItemAccessibilityHeader {
             dateText
             Spacer(minLength: horizontalSpacing)
             balanceTextView
+                .fixedSize(horizontal: true, vertical: false)
         }
     }
 
@@ -39,7 +40,8 @@ private extension NarrowListItemAccessibilityHeader {
     var balanceTextView: some View {
         Text(balanceText)
             .font(.headline)
-            .lineLimit(1)
+            .monospacedDigit()
+            .fixedSize(horizontal: false, vertical: true)
             .foregroundStyle(isBalanceNegative ? Color.red : Color.primary)
     }
 }

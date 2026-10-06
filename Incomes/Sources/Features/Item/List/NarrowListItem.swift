@@ -16,7 +16,11 @@ struct NarrowListItem: View {
         if dynamicTypeSize.isAccessibilitySize {
             NarrowListItemAccessibilityLayout()
         } else {
-            NarrowListItemStandardLayout()
+            ViewThatFits(in: .horizontal) {
+                NarrowListItemStandardLayout()
+                NarrowListItemCompactLayout()
+                NarrowListItemAccessibilityLayout()
+            }
         }
     }
 }

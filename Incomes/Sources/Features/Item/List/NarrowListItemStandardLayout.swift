@@ -14,9 +14,8 @@ struct NarrowListItemStandardLayout: View {
             Text(item.localDate, format: .dateTime.month().day())
                 .font(.subheadline)
                 .lineLimit(1)
-                .minimumScaleFactor(IncomesTextScaling.minimumScaleFactor)
-                .truncationMode(.head)
-                .frame(width: Constants.dateColumnWidth, alignment: .leading)
+                .fixedSize(horizontal: true, vertical: false)
+                .frame(minWidth: Constants.dateColumnWidth, alignment: .leading)
             Divider()
             Spacer()
             VStack(alignment: .trailing, spacing: .zero) {
@@ -24,15 +23,17 @@ struct NarrowListItemStandardLayout: View {
                 Text(item.netIncome.asCurrency)
                     .font(.footnote)
                     .lineLimit(1)
-                    .minimumScaleFactor(IncomesTextScaling.minimumScaleFactor)
+                    .fixedSize(horizontal: true, vertical: false)
+                    .monospacedDigit()
                     .foregroundStyle(.secondary)
             }
             Spacer()
             Divider()
             Text(item.balance.asCurrency)
                 .lineLimit(1)
-                .minimumScaleFactor(IncomesTextScaling.minimumScaleFactor)
-                .frame(width: Constants.balanceColumnWidth, alignment: .trailing)
+                .fixedSize(horizontal: true, vertical: false)
+                .monospacedDigit()
+                .frame(minWidth: Constants.balanceColumnWidth, alignment: .trailing)
                 .foregroundStyle(item.balance < .zero ? Color.red : Color.primary)
         }
     }

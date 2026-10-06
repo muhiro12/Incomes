@@ -9,7 +9,10 @@ struct ListItemButtonLabel: View {
     var body: some View {
         NavigationRowLabel {
             if horizontalSizeClass == .regular, !dynamicTypeSize.isAccessibilitySize {
-                WideListItem()
+                ViewThatFits(in: .horizontal) {
+                    WideListItem()
+                    NarrowListItem()
+                }
             } else {
                 NarrowListItem()
             }

@@ -33,6 +33,8 @@ struct NarrowListItemAccessibilityLayout: View {
             Text(item.netIncome.asCurrency)
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
+                .monospacedDigit()
+                .fixedSize(horizontal: false, vertical: true)
         }
         .padding(.vertical, Constants.verticalSpacing)
     }
