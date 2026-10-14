@@ -3,7 +3,6 @@ import SwiftUI
 struct TagSummaryRowVerticalLayout: View {
     private enum Constants {
         static let verticalSpacing: CGFloat = 6
-        static let horizontalSpacing: CGFloat = 8
     }
 
     let displayName: String
@@ -20,12 +19,12 @@ struct TagSummaryRowVerticalLayout: View {
                 itemCount: itemCount,
                 hasDeficit: hasDeficit
             )
-            HStack(alignment: .center, spacing: Constants.horizontalSpacing) {
-                TagSummaryRowAmounts(
-                    incomeText: incomeText,
-                    outgoText: outgoText,
-                    alignment: .leading
-                )
+            TagSummaryRowAmounts(
+                incomeText: incomeText,
+                outgoText: outgoText,
+                alignment: .leading
+            )
+            if netIncomePresentation == .positive {
                 PositiveNetIncomeIndicator(presentation: netIncomePresentation)
             }
         }
