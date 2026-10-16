@@ -94,6 +94,10 @@ Models.
 
 ## Architecture records
 
+- [Product and design principles](Designs/Overviews/incomes-product-principles.md)
+  explain the budget-planning purpose and durable model tradeoffs
+  ([日本語](Designs/Overviews/incomes-product-principles.ja.md)).
+
 - `IncomesLibrary` is the app's behavioral source of truth. It owns the product
   rules that should remain correct regardless of whether the user reaches them
   through iOS, iPadOS, watchOS, widgets, App Intents, or Shortcuts.
