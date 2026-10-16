@@ -50,6 +50,13 @@ public enum ItemUpdateOperations {
             item: item,
             scope: scope
         )
+        try ItemBalanceProjectionPlanner.validateUpdateBalances(
+            context: context,
+            item: item,
+            affectedItems: affectedItems,
+            values: values,
+            scope: scope
+        )
         let snapshot = ItemUpdateSnapshot(items: affectedItems)
 
         try updateItems(

@@ -43,8 +43,13 @@ public enum ItemDeletionOperations {
             )
         }
 
-        let tagsToCleanup = ItemMutationSupport.cleanupCandidateTags(from: items)
         let deletedIDs = Set(items.map(\.persistentModelID))
+        try ItemBalanceProjectionPlanner.validateReplacementBalances(
+            context: context,
+            removedItemIDs: deletedIDs,
+            values: []
+        )
+        let tagsToCleanup = ItemMutationSupport.cleanupCandidateTags(from: items)
         let deletedDates = items.map(\.localDate)
         let datesByLedger = Dictionary(grouping: items, by: \.ledgerIdentifier).mapValues { members in
             members.map(\.localDate).min()

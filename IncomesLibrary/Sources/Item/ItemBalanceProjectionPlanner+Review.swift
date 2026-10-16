@@ -44,14 +44,22 @@ extension ItemBalanceProjectionPlanner {
         removedItemIDs: Set<PersistentIdentifier>,
         newRows: [ProjectedRow]
     ) throws {
-        let existingRows = try context.fetch(
-            .allLedgerItems(order: .forward)
-        )
-        .filter { item in
-            !removedItemIDs.contains(item.persistentModelID)
+        guard !newRows.isEmpty || !removedItemIDs.isEmpty else {
+            return
         }
-        .map(projectedRow(item:))
-        let groups = Dictionary(grouping: existingRows + newRows, by: \.ledgerIdentifier)
+        let removedItems = try context.fetch(
+            FetchDescriptor<Item>(predicate: ItemPredicate.idsAre(Array(removedItemIDs)).value)
+        )
+        let affectedOwners = Set(newRows.map(\.ledgerIdentifier)).union(removedItems.map(\.ledgerIdentifier))
+        let existingItems = try affectedOwners.flatMap { owner in
+            try context.fetch(.items(.all, order: .forward, ledgerIdentifier: owner))
+        }
+        let unchangedRows = try existingItems
+            .filter { item in
+                !removedItemIDs.contains(item.persistentModelID)
+            }
+            .map(projectedRow(item:))
+        let groups = Dictionary(grouping: unchangedRows + newRows, by: \.ledgerIdentifier)
         for rows in groups.values {
             _ = try balancedRows(rows)
         }

@@ -48,7 +48,6 @@ public extension ItemImportOperations {
         let changedDates = createdItems.map(\.localDate) + removedDates
         // Recovery must not inherit a stale stored balance from a matched predecessor.
         let identifiers = Set(createdItems.map(\.ledgerIdentifier)).union(removedOwners)
-            .union(plan.ledgerChanges.map(\.id))
         for identifier in identifiers {
             try BalanceCalculator.calculate(
                 in: context,

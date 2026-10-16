@@ -131,6 +131,27 @@ enum ItemBalanceProjectionPlanner {
         )
     }
 
+    /// Refuses an update whose resulting balances could not be stored exactly.
+    static func validateUpdateBalances(
+        context: ModelContext,
+        item: Item,
+        affectedItems: [Item],
+        values: ItemStoredValues,
+        scope: ItemMutationScope
+    ) throws {
+        let updates = plannedUpdates(item: item, affectedItems: affectedItems, values: values, scope: scope)
+        try validateBalances(
+            context: context,
+            removedItemIDs: Set(affectedItems.map(\.persistentModelID)),
+            newRows: updates.map { update in
+                try projectedRow(
+                    values: update.values,
+                    tieBreaker: String(describing: update.itemID)
+                )
+            }
+        )
+    }
+
     /// Refuses creating `values` when a resulting running balance could not be stored exactly.
     static func validateCreationBalances(
         context: ModelContext,
