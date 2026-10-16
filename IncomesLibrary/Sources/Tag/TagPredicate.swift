@@ -92,12 +92,10 @@ public extension FetchDescriptor where T == Tag {
     ///   - order: Sort order (default: forward).
     static func tags(
         _ predicate: TagPredicate,
-        order: SortOrder = .forward,
-        ledgerIdentifier: LedgerIdentifier = .default
+        order: SortOrder = .forward
     ) -> FetchDescriptor {
         // Tag is shared vocabulary. Scope money and membership through Item queries.
-        _ = ledgerIdentifier
-        return .init(
+        .init(
             predicate: predicate.value,
             sortBy: [
                 .init(\.name, order: order),

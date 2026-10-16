@@ -8,9 +8,6 @@
 import SwiftUI
 
 struct SettingsNavigationView: View {
-    @Environment(\.ledgerIdentifier)
-    private var ledgerIdentifier
-
     @Binding private var incomingDestination: SettingsNavigationDestination?
 
     @State private var path: [SettingsNavigationDestination] = []
@@ -20,8 +17,7 @@ struct SettingsNavigationView: View {
     var body: some View {
         NavigationStack(path: $path) {
             SettingsListView(
-                navigateToRoute: navigateToRoute,
-                ledgerIdentifier: ledgerIdentifier
+                navigateToRoute: navigateToRoute
             )
             .navigationDestination(for: SettingsNavigationDestination.self) { destination in
                 destinationView(destination)

@@ -20,10 +20,10 @@ struct DuplicateTagListView: View {
     init(selection: Binding<Tag.ID?> = .constant(nil),
          ledgerIdentifier: LedgerIdentifier = .default) {
         self.ledgerIdentifier = ledgerIdentifier
-        _yearTags = .init(.tags(.typeIs(.year), ledgerIdentifier: ledgerIdentifier))
-        _yearMonthTags = .init(.tags(.typeIs(.yearMonth), ledgerIdentifier: ledgerIdentifier))
-        _contentTags = .init(.tags(.typeIs(.content), ledgerIdentifier: ledgerIdentifier))
-        _categoryTags = .init(.tags(.typeIs(.category), ledgerIdentifier: ledgerIdentifier))
+        _yearTags = .init(.tags(.typeIs(.year)))
+        _yearMonthTags = .init(.tags(.typeIs(.yearMonth)))
+        _contentTags = .init(.tags(.typeIs(.content)))
+        _categoryTags = .init(.tags(.typeIs(.category)))
         _selectedTagID = selection
     }
 }

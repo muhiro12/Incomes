@@ -106,11 +106,12 @@ extension MainNavigationOperationsRouteTests {
 
     @Test
     func execute_returns_year_summary_destination_for_year_summary_route() throws {
-        let yearTag = try Tag.create(
+        let date = shiftedDate("2026-02-01T00:00:00Z")
+        let item = try createItem(
             context: context,
-            name: "2026",
-            type: .year
+            input: .init(date: date, content: "Saved", income: .zero, outgo: .zero, category: "")
         )
+        let yearTag = try #require(item.year)
         let outcome = try MainNavigationOperations.execute(
             route: .yearSummary(2_026),
             context: context
@@ -229,11 +230,12 @@ extension MainNavigationOperationsRouteTests {
 
     @Test
     func execute_resolves_year_destination() throws {
-        let yearTag = try Tag.create(
+        let date = shiftedDate("2026-02-01T00:00:00Z")
+        let item = try createItem(
             context: context,
-            name: "2026",
-            type: .year
+            input: .init(date: date, content: "Saved", income: .zero, outgo: .zero, category: "")
         )
+        let yearTag = try #require(item.year)
         let outcome = try MainNavigationOperations.execute(
             route: .year(2_026),
             context: context
@@ -258,16 +260,13 @@ extension MainNavigationOperationsRouteTests {
 
     @Test
     func execute_resolves_month_destination() throws {
-        let yearTag = try Tag.create(
+        let date = shiftedDate("2026-02-01T00:00:00Z")
+        let item = try createItem(
             context: context,
-            name: "2026",
-            type: .year
+            input: .init(date: date, content: "Saved", income: .zero, outgo: .zero, category: "")
         )
-        let yearMonthTag = try Tag.create(
-            context: context,
-            name: "202602",
-            type: .yearMonth
-        )
+        let yearTag = try #require(item.year)
+        let yearMonthTag = try #require(item.tags?.first { $0.type == .yearMonth })
         let outcome = try MainNavigationOperations.execute(
             route: .month(year: 2_026, month: 2),
             context: context
@@ -293,17 +292,13 @@ extension MainNavigationOperationsRouteTests {
 
     @Test
     func execute_resolves_home_destination_from_loader_state() throws {
-        let now = Date.now
-        let yearTag = try Tag.create(
+        let date = Date.now
+        let item = try createItem(
             context: context,
-            name: now.stringValueWithoutLocale(.yyyy),
-            type: .year
+            input: .init(date: date, content: "Saved", income: .zero, outgo: .zero, category: "")
         )
-        let yearMonthTag = try Tag.create(
-            context: context,
-            name: now.stringValueWithoutLocale(.yyyyMM),
-            type: .yearMonth
-        )
+        let yearTag = try #require(item.year)
+        let yearMonthTag = try #require(item.tags?.first { $0.type == .yearMonth })
         let outcome = try MainNavigationOperations.execute(
             route: .home,
             context: context

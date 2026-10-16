@@ -181,7 +181,7 @@ struct MainNavigationView: View {
         router: MainNavigationRouter? = nil
     ) {
         self.accountMenu = accountMenu
-        _queriedYearTags = .init(.tags(.typeIs(.year), order: .reverse, ledgerIdentifier: ledgerIdentifier))
+        _queriedYearTags = .init(.tags(.typeIs(.year), order: .reverse))
         _router = .init(initialValue: router ?? .init(ledgerIdentifier: ledgerIdentifier))
     }
 }

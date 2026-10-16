@@ -41,14 +41,12 @@ struct HomeYearSection: View {
         yearName: String,
         navigateToRoute: @escaping (IncomesRoute) -> Void = { _ in
             // no-op
-        },
-        ledgerIdentifier: LedgerIdentifier = .default
+        }
     ) {
         _queriedYearMonthTags = Query(
             .tags(
                 .nameStartsWith(yearName, type: .yearMonth),
-                order: .reverse,
-                ledgerIdentifier: ledgerIdentifier
+                order: .reverse
             )
         )
         self.navigateToRoute = navigateToRoute

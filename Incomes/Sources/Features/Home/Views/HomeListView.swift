@@ -10,9 +10,6 @@ import SwiftData
 import SwiftUI
 
 struct HomeListView {
-    @Environment(\.ledgerIdentifier)
-    private var ledgerIdentifier
-
     @Environment(Tag.self)
     private var yearTag
 
@@ -35,8 +32,7 @@ extension HomeListView: View {
         List {
             HomeYearSection(
                 yearName: yearTag.name,
-                navigateToRoute: navigateToRoute,
-                ledgerIdentifier: ledgerIdentifier
+                navigateToRoute: navigateToRoute
             )
             if !isSubscribeOn {
                 AdvertisementSection(.compact)

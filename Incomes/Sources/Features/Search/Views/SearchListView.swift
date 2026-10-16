@@ -34,8 +34,8 @@ struct SearchListView: View {
         ledgerIdentifier: LedgerIdentifier = .default
     ) {
         _items = .init(.items(.all, ledgerIdentifier: ledgerIdentifier))
-        _contents = .init(.tags(.typeIs(.content), ledgerIdentifier: ledgerIdentifier))
-        _categories = .init(.tags(.typeIs(.category), ledgerIdentifier: ledgerIdentifier))
+        _contents = .init(.tags(.typeIs(.content)))
+        _categories = .init(.tags(.typeIs(.category)))
         _predicate = selection
         _searchText = searchText
         _appliesInitialSearchText = appliesInitialSearchText

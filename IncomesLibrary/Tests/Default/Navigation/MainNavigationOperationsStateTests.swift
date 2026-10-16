@@ -33,6 +33,17 @@ struct MainNavigationOperationsStateTests {
             type: .yearMonth
         )
 
+        _ = try createItem(
+            context: context,
+            input: .init(
+                date: date,
+                content: "Saved",
+                income: .zero,
+                outgo: .zero,
+                category: ""
+            )
+        )
+
         let state = try MainNavigationOperations.loadState(
             context: context,
             date: date

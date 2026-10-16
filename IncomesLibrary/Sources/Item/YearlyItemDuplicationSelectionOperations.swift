@@ -32,7 +32,7 @@ public enum YearlyItemDuplicationSelectionOperations {
         ledgerIdentifier: LedgerIdentifier = .default
     ) throws -> [Int] {
         let yearTags = try context.fetch(
-            .tags(.typeIs(.year), order: .reverse, ledgerIdentifier: ledgerIdentifier)
+            .tags(.typeIs(.year), order: .reverse)
         )
         return availableSourceYears(
             from: yearTags,
@@ -88,7 +88,7 @@ public enum YearlyItemDuplicationSelectionOperations {
         ledgerIdentifier: LedgerIdentifier = .default
     ) throws {
         let yearTags = try context.fetch(
-            .tags(.typeIs(.year), order: .reverse, ledgerIdentifier: ledgerIdentifier)
+            .tags(.typeIs(.year), order: .reverse)
         )
         alignSelection(
             context: context,
@@ -156,7 +156,7 @@ public enum YearlyItemDuplicationSelectionOperations {
         ledgerIdentifier: LedgerIdentifier = .default
     ) throws -> YearlyItemDuplicationSuggestion? {
         let yearTags = try context.fetch(
-            .tags(.typeIs(.year), order: .reverse, ledgerIdentifier: ledgerIdentifier)
+            .tags(.typeIs(.year), order: .reverse)
         )
         return suggestion(
             context: context,

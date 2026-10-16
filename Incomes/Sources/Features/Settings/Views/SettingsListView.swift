@@ -16,7 +16,6 @@ struct SettingsListView {
     private var scenePhase
 
     @Query private var yearTags: [Tag]
-    private let ledgerIdentifier: LedgerIdentifier
 
     @AppStorage(\.isSubscribeOn)
     private var isSubscribeOn: Bool
@@ -36,12 +35,10 @@ struct SettingsListView {
     init(
         navigateToRoute: @escaping (IncomesRoute) -> Void = { _ in
             // no-op
-        },
-        ledgerIdentifier: LedgerIdentifier = .default
+        }
     ) {
         self.navigateToRoute = navigateToRoute
-        self.ledgerIdentifier = ledgerIdentifier
-        _yearTags = .init(.tags(.typeIs(.year), ledgerIdentifier: ledgerIdentifier))
+        _yearTags = .init(.tags(.typeIs(.year)))
     }
 }
 
@@ -102,7 +99,7 @@ extension SettingsListView: View {
                         try LedgerMutationAccess.requireEditing(owners)
                         try await DataMaintenanceOperations.resetAllData(context: context)
                         Haptic.success.impact()
-                        model.loadStatus(context: context, ledgerIdentifier: ledgerIdentifier)
+                        model.loadStatus(context: context)
                         model.dismissDestructiveAction()
                         dataMaintenanceLogger.notice("delete_all.completed")
                     } catch {
@@ -141,7 +138,7 @@ extension SettingsListView: View {
                     )
                     try DataMaintenanceOperations.deleteDebugData(context: context)
                     Haptic.success.impact()
-                    model.loadStatus(context: context, ledgerIdentifier: ledgerIdentifier)
+                    model.loadStatus(context: context)
                     model.dismissDestructiveAction()
                     dataMaintenanceLogger.notice("debug_data.delete_completed")
                 } catch {
@@ -193,7 +190,7 @@ private extension SettingsListView {
     func loadDeferredSettingsState() async {
         await Task.yield()
 
-        model.loadStatus(context: context, ledgerIdentifier: ledgerIdentifier)
+        model.loadStatus(context: context)
     }
 }
 

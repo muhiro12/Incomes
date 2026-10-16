@@ -90,10 +90,9 @@ public enum TagMutationOperations {
     /// Deletes every unused tag in the store and returns the deleted tag count.
     @discardableResult
     public static func deleteAllOrphanTags(
-        context: ModelContext,
-        ledgerIdentifier: LedgerIdentifier = .default
+        context: ModelContext
     ) throws -> Int {
-        let orphanTags = try TagQueryOperations.orphanTags(context: context, ledgerIdentifier: ledgerIdentifier)
+        let orphanTags = try TagQueryOperations.orphanTags(context: context)
         var deletedCount = 0
         for tag in orphanTags where delete(tag: tag) {
             deletedCount += 1

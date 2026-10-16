@@ -21,12 +21,12 @@ struct SuggestionButtonGroup: View {
     private let type: TagType
 
     init(input: Binding<String>, type: TagType, ledgerIdentifier: LedgerIdentifier = .default) {
-        _categoryTags = .init(.tags(.typeIs(.category), ledgerIdentifier: ledgerIdentifier))
+        _categoryTags = .init(.tags(.typeIs(.category)))
         _items = .init(.items(.all, ledgerIdentifier: ledgerIdentifier))
         _input = input
         self.type = type
         _suggestions = Query(
-            .tags(.nameContains(input.wrappedValue, type: type), ledgerIdentifier: ledgerIdentifier)
+            .tags(.nameContains(input.wrappedValue, type: type))
         )
     }
 }

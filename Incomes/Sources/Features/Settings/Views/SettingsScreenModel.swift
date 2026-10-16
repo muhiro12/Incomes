@@ -43,11 +43,10 @@ final class SettingsScreenModel {
     }
 
     func loadStatus(
-        context: ModelContext,
-        ledgerIdentifier: LedgerIdentifier = .default
+        context: ModelContext
     ) {
         do {
-            let status = try SettingsActionCoordinator.loadStatus(context: context, ledgerIdentifier: ledgerIdentifier)
+            let status = try SettingsActionCoordinator.loadStatus(context: context)
             hasDuplicateTags = status.hasDuplicateTags
             hasOrphanTags = status.hasOrphanTags
             hasDebugData = status.hasDebugData

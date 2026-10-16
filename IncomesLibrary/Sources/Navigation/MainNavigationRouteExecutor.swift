@@ -128,7 +128,6 @@ private extension MainNavigationRouteExecutor {
                 query: query,
                 predicate: try resolveSearchPredicate(
                     context: context,
-                    ledgerIdentifier: ledgerIdentifier,
                     query: query
                 )
             )
@@ -195,7 +194,6 @@ private extension MainNavigationRouteExecutor {
 
     static func resolveSearchPredicate(
         context: ModelContext,
-        ledgerIdentifier: LedgerIdentifier,
         query: String?
     ) throws -> ItemPredicate? {
         guard let query = query?.trimmingCharacters(in: .whitespacesAndNewlines),
@@ -203,7 +201,7 @@ private extension MainNavigationRouteExecutor {
             return nil
         }
 
-        let contentTags = try context.fetch(.tags(.typeIs(.content), ledgerIdentifier: ledgerIdentifier))
+        let contentTags = try context.fetch(.tags(.typeIs(.content)))
         let matchingTags = TagQueryOperations.matchingDisplayNameTags(
             in: contentTags,
             query: query

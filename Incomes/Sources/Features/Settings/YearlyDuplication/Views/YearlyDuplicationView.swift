@@ -148,7 +148,7 @@ struct YearlyDuplicationView: View {
 
     init(ledgerIdentifier: LedgerIdentifier = .default) {
         self.ledgerIdentifier = ledgerIdentifier
-        _yearTags = .init(.tags(.typeIs(.year), order: .reverse, ledgerIdentifier: ledgerIdentifier))
+        _yearTags = .init(.tags(.typeIs(.year), order: .reverse))
     }
 }
 

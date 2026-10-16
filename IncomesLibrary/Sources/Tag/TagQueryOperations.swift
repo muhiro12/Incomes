@@ -32,16 +32,20 @@ public enum TagQueryOperations {
         }
     }
 
-    /// Finds a tag by name and type.
+    /// Finds shared vocabulary, or a representative linked to Items in the requested book.
     public static func getByName(
         context: ModelContext,
         name: String,
         type: TagType,
-        ledgerIdentifier: LedgerIdentifier = .default
+        ledgerIdentifier: LedgerIdentifier? = nil
     ) throws -> Tag? {
-        try context.fetchFirst(
-            .tags(.nameIs(name, type: type), ledgerIdentifier: ledgerIdentifier)
-        )
+        let tags = try context.fetch(.tags(.nameIs(name, type: type)))
+        guard let ledgerIdentifier else {
+            return tags.first
+        }
+        return tags.first { tag in
+            !items(for: tag, ledgerIdentifier: ledgerIdentifier).isEmpty
+        }
     }
 
     /// Returns one representative tag for each user-facing tag type.
@@ -77,39 +81,33 @@ public enum TagQueryOperations {
     }
 
     /// True when duplicate tags exist in the store.
-    public static func hasDuplicates(context: ModelContext, ledgerIdentifier: LedgerIdentifier = .default)
-    throws -> Bool {
+    public static func hasDuplicates(context: ModelContext) throws -> Bool {
         try TagType.classificationCases.contains { type in
             try !duplicateTags(
                 context: context,
-                type: type,
-                ledgerIdentifier: ledgerIdentifier
+                type: type
             ).isEmpty
         }
     }
 
     /// True when unused tags exist in the store.
-    public static func hasOrphanTags(context: ModelContext, ledgerIdentifier: LedgerIdentifier = .default)
-    throws -> Bool {
+    public static func hasOrphanTags(context: ModelContext) throws -> Bool {
         try TagType.classificationCases.contains { type in
             try !orphanTags(
                 context: context,
-                type: type,
-                ledgerIdentifier: ledgerIdentifier
+                type: type
             ).isEmpty
         }
     }
 
     /// Returns one representative per duplicate tag group in the store.
     public static func duplicateTags(
-        context: ModelContext,
-        ledgerIdentifier: LedgerIdentifier = .default
+        context: ModelContext
     ) throws -> [Tag] {
         try TagType.classificationCases.flatMap { type in
             try duplicateTags(
                 context: context,
-                type: type,
-                ledgerIdentifier: ledgerIdentifier
+                type: type
             )
         }
     }
@@ -117,25 +115,22 @@ public enum TagQueryOperations {
     /// Returns one representative per duplicate tag group for a specific type.
     public static func duplicateTags(
         context: ModelContext,
-        type: TagType,
-        ledgerIdentifier: LedgerIdentifier = .default
+        type: TagType
     ) throws -> [Tag] {
         try findDuplicates(
             context: context,
-            tags: context.fetch(.tags(.typeIs(type), ledgerIdentifier: ledgerIdentifier))
+            tags: context.fetch(.tags(.typeIs(type)))
         )
     }
 
     /// Returns every unused tag in the store.
     public static func orphanTags(
-        context: ModelContext,
-        ledgerIdentifier: LedgerIdentifier = .default
+        context: ModelContext
     ) throws -> [Tag] {
         try TagType.classificationCases.flatMap { type in
             try orphanTags(
                 context: context,
-                type: type,
-                ledgerIdentifier: ledgerIdentifier
+                type: type
             )
         }
     }
@@ -143,8 +138,7 @@ public enum TagQueryOperations {
     /// Returns every unused tag of `type`.
     public static func orphanTags(
         context: ModelContext,
-        type: TagType,
-        ledgerIdentifier _: LedgerIdentifier = .default
+        type: TagType
     ) throws -> [Tag] {
         try context.fetch(FetchDescriptor<Tag>(predicate: TagPredicate.typeIs(type).value)).filter { tag in
             isOrphan(tag: tag)

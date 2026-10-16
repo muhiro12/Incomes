@@ -26,11 +26,11 @@ struct OrphanTagListView: View {
         ledgerIdentifier: LedgerIdentifier = .default
     ) {
         self.ledgerIdentifier = ledgerIdentifier
-        _yearTags = .init(.tags(.typeIs(.year), ledgerIdentifier: ledgerIdentifier))
-        _yearMonthTags = .init(.tags(.typeIs(.yearMonth), ledgerIdentifier: ledgerIdentifier))
-        _contentTags = .init(.tags(.typeIs(.content), ledgerIdentifier: ledgerIdentifier))
-        _categoryTags = .init(.tags(.typeIs(.category), ledgerIdentifier: ledgerIdentifier))
-        _debugTags = .init(.tags(.typeIs(.debug), ledgerIdentifier: ledgerIdentifier))
+        _yearTags = .init(.tags(.typeIs(.year)))
+        _yearMonthTags = .init(.tags(.typeIs(.yearMonth)))
+        _contentTags = .init(.tags(.typeIs(.content)))
+        _categoryTags = .init(.tags(.typeIs(.category)))
+        _debugTags = .init(.tags(.typeIs(.debug)))
         _selectedTagID = selection
         self.onCleanupAll = onCleanupAll
     }
@@ -140,7 +140,7 @@ private extension OrphanTagListView {
     func cleanupAllOrphanTags() {
         do {
             try LedgerMutationAccess.requireEditing([ledgerIdentifier])
-            try TagMutationOperations.deleteAllOrphanTags(context: context, ledgerIdentifier: ledgerIdentifier)
+            try TagMutationOperations.deleteAllOrphanTags(context: context)
             selectedTagID = nil
             onCleanupAll()
             Haptic.success.impact()

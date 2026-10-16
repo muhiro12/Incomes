@@ -66,6 +66,17 @@ struct MainNavigationRestorationTests {
     func restored_routes_resolve_missing_entities_without_a_stale_selection() throws {
         let yearTag = try Tag.create(context: context, name: "2002", type: .year)
 
+        _ = try createItem(
+            context: context,
+            input: .init(
+                date: shiftedDate("2002-05-01T00:00:00Z"),
+                content: "Saved",
+                income: .zero,
+                outgo: .zero,
+                category: ""
+            )
+        )
+
         let missingMonth = try MainNavigationOperations.execute(
             route: .month(year: 2_002, month: 4),
             context: context
