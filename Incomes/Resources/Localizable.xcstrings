@@ -5982,6 +5982,40 @@
         }
       }
     },
+    "Finish the current edit before renaming a category." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finish the current edit before renaming a category."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "カテゴリー名を変更する前に、現在の編集を完了してください。"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finaliza la edición actual antes de cambiar el nombre de una categoría."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terminez la modification en cours avant de renommer une catégorie."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "重命名类别前，请先完成当前编辑。"
+          }
+        }
+      }
+    },
     "Future" : {
       "localizations" : {
         "en" : {

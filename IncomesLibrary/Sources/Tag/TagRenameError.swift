@@ -6,4 +6,5 @@ public enum TagRenameError: Error, Equatable {
     case uncategorizedSource
     case invalidTarget
     case duplicateTargetName
+    case pendingChanges
 }

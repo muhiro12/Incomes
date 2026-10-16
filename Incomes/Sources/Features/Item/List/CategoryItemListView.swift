@@ -22,6 +22,7 @@ struct CategoryItemListView {
     private var isSubscribeOn
 
     @State private var isRenameSheetPresented = false
+    @State private var renamedTag: Tag?
 }
 
 extension CategoryItemListView: View {
@@ -41,8 +42,8 @@ extension CategoryItemListView: View {
             }
         }
         .listStyle(.grouped)
-        .navigationTitle(tag.displayName)
-        .tagEntityIdentifier(tag)
+        .navigationTitle(currentTag.displayName)
+        .tagEntityIdentifier(currentTag)
         .task(id: items.count) {
             guard !items.isEmpty else {
                 return
@@ -50,8 +51,10 @@ extension CategoryItemListView: View {
             tipController.donateDidViewItemList()
         }
         .sheet(isPresented: $isRenameSheetPresented) {
-            CategoryRenameSheet(initialName: tag.displayName)
-                .incomesSheetPresentation()
+            CategoryRenameSheet(initialName: currentTag.displayName) { renamed in
+                renamedTag = renamed
+            }
+            .incomesSheetPresentation()
         }
         .toolbar {
             if canRenameCategory {
@@ -67,20 +70,28 @@ extension CategoryItemListView: View {
         .toolbar {
             CreateItemToolbarContent()
         }
+        .environment(currentTag)
+        .onChange(of: tag.persistentModelID) {
+            renamedTag = nil
+        }
     }
 }
 
 private extension CategoryItemListView {
+    var currentTag: Tag {
+        renamedTag ?? tag
+    }
+
     var canRenameCategory: Bool {
-        TagRenameOperations.canRenameCategory(tag)
+        TagRenameOperations.canRenameCategory(currentTag)
     }
 
     var items: [Item] {
-        TagQueryOperations.items(for: tag, ledgerIdentifier: ledgerIdentifier)
+        TagQueryOperations.items(for: currentTag, ledgerIdentifier: ledgerIdentifier)
     }
 
     var yearStrings: [String] {
-        TagQueryOperations.yearStrings(for: tag, ledgerIdentifier: ledgerIdentifier)
+        TagQueryOperations.yearStrings(for: currentTag, ledgerIdentifier: ledgerIdentifier)
     }
 }
 

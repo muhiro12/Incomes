@@ -63,13 +63,14 @@ public enum TagRenameOperations {
         )
     }
 
-    /// Renames a used category tag without mutating item rows.
+    /// Renames within one book and returns the category used by its affected Items.
+    @discardableResult
     public static func renameCategory(
         context: ModelContext,
         tag: Tag,
         to newName: String,
         ledgerIdentifier: LedgerIdentifier = .default
-    ) throws {
+    ) throws -> Tag {
         let preview = try previewCategoryRename(
             context: context,
             tag: tag,
@@ -83,7 +84,7 @@ public enum TagRenameOperations {
             throw TagRenameError.invalidTarget
         }
         guard preview.isUnchanged == false else {
-            return
+            return tag
         }
 
         let members = TagQueryOperations.items(for: tag)
@@ -94,11 +95,43 @@ public enum TagRenameOperations {
         )
         if existingTarget == nil, members.allSatisfy({ $0.ledgerIdentifier == ledgerIdentifier }) {
             tag.rename(storedName: normalizedTargetName)
-            return
+            return tag
         }
         let target = try Tag.create(context: context, name: normalizedTargetName, type: .category)
         for item in TagQueryOperations.items(for: tag, ledgerIdentifier: ledgerIdentifier) {
             item.modify(tags: (item.tags ?? []).filter { $0.id != tag.id } + [target])
+        }
+        return target
+    }
+
+    /// Saves a rename from a clean context before exposing its permanent category identity.
+    @discardableResult
+    public static func renameCategoryAndSave(
+        context: ModelContext,
+        tag: Tag,
+        to newName: String,
+        ledgerIdentifier: LedgerIdentifier = .default
+    ) throws -> Tag {
+        guard !context.hasChanges else {
+            throw TagRenameError.pendingChanges
+        }
+        guard context.container.configurations.allSatisfy(\.allowsSave) else {
+            throw CocoaError(.fileWriteNoPermission)
+        }
+        let autosaveEnabled = context.autosaveEnabled
+        context.autosaveEnabled = false
+        defer {
+            context.autosaveEnabled = autosaveEnabled
+        }
+        do {
+            let result = try renameCategory(
+                context: context, tag: tag, to: newName, ledgerIdentifier: ledgerIdentifier
+            )
+            try context.save()
+            return result
+        } catch {
+            context.rollback()
+            throw error
         }
     }
 }

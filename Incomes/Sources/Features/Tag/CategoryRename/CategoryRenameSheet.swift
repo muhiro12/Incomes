@@ -15,8 +15,10 @@ struct CategoryRenameSheet: View {
 
     @State private var draftName: String
     @State private var errorMessage: String?
+    let didRename: (Tag) -> Void
 
-    init(initialName: String) {
+    init(initialName: String, didRename: @escaping (Tag) -> Void) {
+        self.didRename = didRename
         _draftName = .init(
             initialValue: initialName
         )
@@ -108,12 +110,13 @@ private extension CategoryRenameSheet {
             }
 
             try LedgerMutationAccess.requireEditing([ledgerIdentifier])
-            try TagRenameOperations.renameCategory(
+            let renamed = try TagRenameOperations.renameCategoryAndSave(
                 context: context,
                 tag: tag,
                 to: normalizedTargetName,
                 ledgerIdentifier: ledgerIdentifier
             )
+            didRename(renamed)
             dismiss()
         } catch let error as TagRenameError {
             errorMessage = error.renameErrorMessage
@@ -133,6 +136,8 @@ extension TagRenameError {
             return String(localized: "Enter a valid category name.")
         case .duplicateTargetName:
             return String(localized: "A category with this name already exists.")
+        case .pendingChanges:
+            return String(localized: "Finish the current edit before renaming a category.")
         }
     }
 }

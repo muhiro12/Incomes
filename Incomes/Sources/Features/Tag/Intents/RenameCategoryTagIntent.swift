@@ -16,11 +16,11 @@ struct RenameCategoryTagIntent: AppIntent {
     func perform() throws -> some ReturnsValue<TagEntity> {
         let model = try tag.model(in: modelContainer.mainContext)
         try LedgerMutationAccess.requireEditing([.default])
-        try TagRenameOperations.renameCategory(
+        let renamed = try TagRenameOperations.renameCategoryAndSave(
             context: modelContainer.mainContext,
             tag: model,
             to: newName
         )
-        return .result(value: try TagEntity.make(from: model))
+        return .result(value: try TagEntity.make(from: renamed))
     }
 }

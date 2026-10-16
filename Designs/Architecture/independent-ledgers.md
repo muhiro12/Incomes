@@ -31,6 +31,9 @@ longer-lived judgment behind that scope.
   book persists. The initial slice does not expose book deletion or archiving.
 - Year, month, content, and category Tags remain shared vocabulary. Financial
   reads and category renames scope the related Items to the selected book.
+  Period navigation resolves a representative Tag used by that book's Items,
+  including when duplicate physical Tags exist. A scoped category rename returns
+  its saved destination Tag so the screen and intent keep the correct selection.
 - Drafts, inference inputs, recurrence, duplication, and balance reviews capture
   their original book. A selection change must not redirect a pending save.
 
