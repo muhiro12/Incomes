@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct ItemFormNavigationView {
+    @Environment(\.ledgerIdentifier)
+    private var ledgerIdentifier
+
     let mode: ItemFormView.Mode
     let draft: ItemFormDraft?
     let onCreate: (() -> Void)?
@@ -29,7 +32,8 @@ extension ItemFormNavigationView: View {
             ItemFormView(
                 mode: mode,
                 draft: draft,
-                onCreate: onCreate
+                onCreate: onCreate,
+                ledgerIdentifier: ledgerIdentifier
             )
         }
     }

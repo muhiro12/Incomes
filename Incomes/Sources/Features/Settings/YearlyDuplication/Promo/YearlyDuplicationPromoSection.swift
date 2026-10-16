@@ -12,6 +12,9 @@ import SwiftUI
 struct YearlyDuplicationPromoSection: View {
     @Environment(IncomesTipController.self)
     private var tipController
+    @Environment(\.ledgerIdentifier)
+    private var ledgerIdentifier
+
     @Environment(\.modelContext)
     private var context
     @Environment(\.mhDesignMetrics)
@@ -152,7 +155,8 @@ private extension YearlyDuplicationPromoSection {
         }
 
         if let result = YearlyDuplicationPromoOperations.state(
-            context: context
+            context: context,
+            ledgerIdentifier: ledgerIdentifier
         ) {
             guard generation == promoLoadGeneration, !Task.isCancelled else {
                 return

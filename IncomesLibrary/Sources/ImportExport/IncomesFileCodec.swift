@@ -12,21 +12,40 @@ enum IncomesFileCodec {
     static let format = "com.muhiro12.incomes.data"
     /// Largest file accepted for import: 32 MiB.
     static let maximumByteCount = 33_554_432
-    /// Version every export writes; it must follow the current storage schema.
-    static let currentSchemaVersion = IncomesSchemaV2.versionIdentifier
+    // File ownership changed without changing the persisted SwiftData model shape.
+    // swiftlint:disable:next no_magic_numbers
+    static let currentSchemaVersion = Schema.Version(3, 0, 0)
     /// Oldest schema that ever wrote a file.
     static let firstSchemaVersion = IncomesSchemaV2.versionIdentifier
     /// Versions that have a frozen payload reader.
-    static let readableSchemaVersions = [IncomesSchemaV2.versionIdentifier]
+    static let readableSchemaVersions = [
+        IncomesSchemaV2.versionIdentifier, currentSchemaVersion
+    ]
 
     /// Encodes items with sorted keys, so the same items always produce the same bytes.
     static func encode(
         items: [IncomesFileItem],
         currencyCode: String,
-        exportedAt: Date
+        exportedAt: Date,
+        ledgers: [IncomesFileLedger] = []
     ) throws -> Data {
-        let file = IncomesFileV2(
+        let metadataIDs = Set(ledgers.map(\.id))
+        guard Set(items.map(\.ledgerIdentifier)).subtracting([.default]).isSubset(of: metadataIDs),
+              !metadataIDs.contains(.default), !metadataIDs.contains(.conflicting),
+              items.allSatisfy({ !$0.ledgerIdentifier.rawValue.isEmpty && $0.ledgerIdentifier != .conflicting }),
+              ledgers.allSatisfy({ ledger in
+                !ledger.id.rawValue.isEmpty
+                    && !ledger.name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+              })
+        else {
+            throw LedgerError.invalidIdentifier
+        }
+        guard Set(ledgers.map(\.id)).count == ledgers.count else {
+            throw LedgerError.duplicateIdentifier
+        }
+        let file = IncomesFileV3(
             items: IncomesFileItem.sortedByValue(items),
+            ledgers: ledgers,
             currencyCode: currencyCode,
             exportedAt: exportedAt
         )
@@ -45,11 +64,13 @@ enum IncomesFileCodec {
             throw ItemImportError.fileTooLarge
         }
         guard let header = try? JSONDecoder().decode(Header.self, from: data),
-              header.format == format else {
+              header.format == format
+        else {
             throw ItemImportError.unrecognizedFormat
         }
         guard let versionText = header.schemaVersion,
-              let version = IncomesFileValueCoding.version(from: versionText) else {
+              let version = IncomesFileValueCoding.version(from: versionText)
+        else {
             throw ItemImportError.malformedFile
         }
         guard version <= currentSchemaVersion else {
@@ -58,6 +79,8 @@ enum IncomesFileCodec {
         switch version {
         case IncomesSchemaV2.versionIdentifier:
             return try IncomesFileV2.contents(from: data)
+        case currentSchemaVersion:
+            return try IncomesFileV3.contents(from: data)
         default:
             throw ItemImportError.unsupportedSchemaVersion(versionText)
         }

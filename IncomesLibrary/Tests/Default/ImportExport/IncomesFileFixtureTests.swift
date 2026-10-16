@@ -31,14 +31,16 @@ struct IncomesFileFixtureTests {
     }
 
     @Test
-    func current_writer_reproduces_the_fixture_bytes() throws {
+    func frozen_version_2_writer_reproduces_the_fixture_bytes() throws {
         let data = try fixtureData()
         let contents = try ItemImportOperations.read(data: data)
-        let rewritten = try ItemExportOperations.incomesFileData(
-            fileItems: contents.items,
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes]
+        let rewritten = try encoder.encode(IncomesFileV2(
+            items: contents.items,
             currencyCode: contents.currencyCode ?? "",
             exportedAt: contents.exportedAt
-        )
+        ))
         #expect(rewritten == data)
     }
 }

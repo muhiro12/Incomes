@@ -29,9 +29,11 @@ extension RecalculateItemButton: View {
             } else {
                 Task {
                     do {
+                        try LedgerMutationAccess.requireEditing([item.ledgerIdentifier])
                         try ItemBalanceOperations.recalculate(
                             context: context,
-                            date: item.utcDate
+                            date: item.utcDate,
+                            ledgerIdentifier: item.ledgerIdentifier
                         )
                         Haptic.success.impact()
                     } catch {
@@ -40,6 +42,7 @@ extension RecalculateItemButton: View {
                 }
             }
         }
+        .ledgerWriteAccess(owner: item.ledgerIdentifier)
     }
 }
 

@@ -20,6 +20,7 @@ public struct ItemBalanceProjectionReview: Equatable, Sendable {
     /// Values are normalized so that equivalent text entry, such as a different
     /// digit grouping, does not invalidate an otherwise unchanged review.
     public struct Draft: Equatable, Sendable {
+        public let ledgerIdentifier: LedgerIdentifier
         /// Local calendar date of the reviewed draft.
         public let date: Date
         /// Item description of the reviewed draft.
@@ -40,7 +41,8 @@ public struct ItemBalanceProjectionReview: Equatable, Sendable {
             income: Decimal,
             outgo: Decimal,
             category: String,
-            priority: Int
+            priority: Int,
+            ledgerIdentifier: LedgerIdentifier = .default
         ) {
             self.date = date
             self.content = content
@@ -48,11 +50,13 @@ public struct ItemBalanceProjectionReview: Equatable, Sendable {
             self.outgo = outgo
             self.category = category
             self.priority = priority
+            self.ledgerIdentifier = ledgerIdentifier
         }
     }
 
     /// Identity and financially relevant values of one stored record.
     public struct RecordSignature: Equatable, Sendable {
+        public let ledgerIdentifier: LedgerIdentifier
         /// Stable identity of the record.
         public let itemID: PersistentIdentifier
         /// Repeat series the record belongs to.
@@ -79,7 +83,8 @@ public struct ItemBalanceProjectionReview: Equatable, Sendable {
             category: String,
             income: Decimal,
             outgo: Decimal,
-            priority: Int
+            priority: Int,
+            ledgerIdentifier: LedgerIdentifier = .default
         ) {
             self.itemID = itemID
             self.repeatID = repeatID
@@ -89,6 +94,7 @@ public struct ItemBalanceProjectionReview: Equatable, Sendable {
             self.income = income
             self.outgo = outgo
             self.priority = priority
+            self.ledgerIdentifier = ledgerIdentifier
         }
     }
 
@@ -99,6 +105,7 @@ public struct ItemBalanceProjectionReview: Equatable, Sendable {
     /// records, so a change to any record the projection depends on is visible
     /// here even when it cancels out in the projected totals.
     public struct Baseline: Equatable, Sendable {
+        public let ledgerIdentifier: LedgerIdentifier
         /// Running balance immediately before the reviewed horizon.
         public let startingBalance: Decimal
         /// Records including predecessors, in a stable order.
@@ -110,11 +117,13 @@ public struct ItemBalanceProjectionReview: Equatable, Sendable {
         public init(
             startingBalance: Decimal,
             records: [RecordSignature],
-            affectedRecords: [RecordSignature]
+            affectedRecords: [RecordSignature],
+            ledgerIdentifier: LedgerIdentifier = .default
         ) {
             self.startingBalance = startingBalance
             self.records = records
             self.affectedRecords = affectedRecords
+            self.ledgerIdentifier = ledgerIdentifier
         }
     }
 
@@ -129,7 +138,7 @@ public struct ItemBalanceProjectionReview: Equatable, Sendable {
 
     /// Repeat scope the review applies, or `nil` when the review covers a creation.
     public var scope: ItemMutationScope? {
-        guard case let .update(_, scope) = target else {
+        guard case .update(_, let scope) = target else {
             return nil
         }
         return scope
@@ -172,7 +181,8 @@ extension ItemBalanceProjectionReview.Draft {
             income: storedValues.income,
             outgo: storedValues.outgo,
             category: storedValues.category,
-            priority: storedValues.priority
+            priority: storedValues.priority,
+            ledgerIdentifier: storedValues.ledgerIdentifier
         )
     }
 }

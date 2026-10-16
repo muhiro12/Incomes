@@ -7,7 +7,8 @@ enum YearlyDuplicationCoordinator {
         context: ModelContext,
         sourceYear: Int,
         targetYear: Int,
-        logger: MHLogger
+        logger: MHLogger,
+        ledgerIdentifier: LedgerIdentifier = .default
     ) throws -> YearlyItemDuplicationPlan {
         let metadata = IncomesLogging.metadata(
             ("source_year", String(sourceYear)),
@@ -21,7 +22,8 @@ enum YearlyDuplicationCoordinator {
             let plan = try YearlyItemDuplicationPlanOperations.plan(
                 context: context,
                 sourceYear: sourceYear,
-                targetYear: targetYear
+                targetYear: targetYear,
+                ledgerIdentifier: ledgerIdentifier
             )
             logger.notice(
                 "yearly_duplication.preview_completed",
@@ -143,6 +145,7 @@ private extension YearlyDuplicationCoordinator {
         return try await MHMutationWorkflow.runThrowing(
             name: "duplicateYearlyItems",
             operation: {
+                try LedgerMutationAccess.requireEditing(Set(plan.entries.map(\.sourceItem.ledgerIdentifier)))
                 guard let result = try YearlyItemDuplicationApplyOperations.applyWithOutcome(
                     groupID: group.id,
                     in: plan,

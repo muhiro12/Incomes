@@ -2,6 +2,9 @@ import SwiftData
 import SwiftUI
 
 struct MainNavigationSheetPresenter: View {
+    @Environment(\.ledgerIdentifier)
+    private var ledgerIdentifier
+
     let route: MainNavigationSheetRoute
     let itemDetailID: PersistentIdentifier?
     @Binding var settingsDestination: SettingsNavigationDestination?
@@ -18,7 +21,7 @@ struct MainNavigationSheetPresenter: View {
             .incomesSheetPresentation()
         case .yearlyDuplication:
             NavigationStack {
-                YearlyDuplicationView()
+                YearlyDuplicationView(ledgerIdentifier: ledgerIdentifier)
             }
             .incomesSheetPresentation()
         case .itemDetail:

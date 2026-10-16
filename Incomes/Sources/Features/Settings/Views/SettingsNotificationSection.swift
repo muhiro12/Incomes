@@ -40,6 +40,7 @@ extension SettingsNotificationSection {
         } header: {
             Text("Push notification settings")
         } footer: {
+            Text("Notifications use the default account.")
             SettingsNotificationAuthorizationFooter(
                 authorizationPresentation: authorizationPresentation
             )

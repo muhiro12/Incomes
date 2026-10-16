@@ -24,6 +24,11 @@ enum DataImportCoordinator {
         )
         logger.notice("data_import.apply_requested", metadata: metadata)
         do {
+            let identifiers = ItemImportOperations.mutatedLedgerIdentifiers(
+                difference: request.difference,
+                policy: request.policy
+            )
+            try LedgerMutationAccess.requireEditing(identifiers)
             // Keep typed validation errors intact so the screen can refresh a stale review.
             let mutation = try ItemImportOperations.applyAndSaveWithOutcome(
                 contents: request.contents,

@@ -14,18 +14,36 @@ struct SearchResultView: View {
 
     @Query private var items: [Item]
 
+    @Environment(\.ledgerBalances)
+    private var ledgerBalances
+    private let predicate: ItemPredicate
+
     let refineSearch: (() -> Void)?
 
+    private var matchingItems: [Item] {
+        guard case let .balanceIsBetween(minimum, maximum) = predicate else {
+            return items
+        }
+        return items.filter { item in
+            guard let value = ledgerBalances[item.persistentModelID] else {
+                return false
+            }
+            return minimum <= value && value <= maximum
+        }
+    }
+
     private var sections: [SearchResultOperations.Section] {
-        SearchResultOperations.sections(for: items)
+        SearchResultOperations.sections(for: matchingItems)
     }
 
     init(
         predicate: ItemPredicate,
-        refineSearch: (() -> Void)? = nil
+        refineSearch: (() -> Void)? = nil,
+        ledgerIdentifier: LedgerIdentifier = .default
     ) {
+        self.predicate = predicate
         self.refineSearch = refineSearch
-        _items = Query(.items(predicate))
+        _items = Query(.items(predicate.requiresDerivedBalance ? .all : predicate, ledgerIdentifier: ledgerIdentifier))
     }
 }
 
@@ -41,7 +59,7 @@ extension SearchResultView {
         )
         .navigationTitle("Results")
         .toolbar {
-            ItemCountStatusToolbarItem(count: items.count)
+            ItemCountStatusToolbarItem(count: matchingItems.count)
         }
         .toolbar {
             CreateItemToolbarContent()

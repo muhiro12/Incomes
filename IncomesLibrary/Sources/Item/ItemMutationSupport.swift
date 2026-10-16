@@ -30,12 +30,13 @@ enum ItemMutationSupport {
                     .repeatIDAndDateIsAfter(
                         repeatID: item.repeatID,
                         date: item.localDate
-                    )
+                    ),
+                    ledgerIdentifier: item.ledgerIdentifier
                 )
             )
         case .allItems:
             return try context.fetch(
-                .items(.repeatIDIs(item.repeatID))
+                .items(.repeatIDIs(item.repeatID), ledgerIdentifier: item.ledgerIdentifier)
             )
         }
     }
@@ -46,7 +47,7 @@ enum ItemMutationSupport {
                 switch tag.type {
                 case .year, .yearMonth, .content, .category:
                     return true
-                case .debug, .none:
+                case .debug, .ledger, .none:
                     return false
                 }
             }

@@ -1,4 +1,5 @@
 import Foundation
+import SwiftData
 
 /// Reads Incomes files, compares them with the store, and applies reviewed imports.
 public enum ItemImportOperations {
@@ -45,5 +46,21 @@ public extension ItemImportOperations {
                 calendar.shiftedDate(componentsFrom: date, in: .utc)
             }
         )
+    }
+}
+
+public extension ItemImportOperations {
+    /// Owners actually changed by the reviewed policy, excluding records kept as-is.
+    static func mutatedLedgerIdentifiers(
+        difference: ItemImportDifference,
+        policy: ItemImportPolicy
+    ) -> Set<LedgerIdentifier> {
+        let plan = ItemImportPlan(difference: difference, policy: policy)
+        let removedOwners = (difference.changeGroups.flatMap(\.storeItems) + difference.storeOnlyItems)
+            .filter { plan.removedItemIDs.contains($0.id) }
+            .map(\.item.ledgerIdentifier)
+        return Set(plan.insertedItems.map(\.ledgerIdentifier))
+            .union(removedOwners)
+            .union(plan.ledgerChanges.map(\.id))
     }
 }

@@ -56,6 +56,9 @@ public enum YearlyItemDuplicationApplyOperations {
         plan: YearlyItemDuplicationPlan,
         context: ModelContext
     ) throws -> MutationResult<YearlyItemDuplicationResult> {
+        for identifier in Set(plan.entries.map(\.sourceItem.ledgerIdentifier)) {
+            try LedgerOperations.requireAvailable(identifier, context: context)
+        }
         // Refuse before inserting so an unsupported balance leaves no partial duplicates.
         try validateBalances(plan: plan, context: context)
         let createdItems = try createItems(
@@ -99,7 +102,8 @@ private extension YearlyItemDuplicationApplyOperations {
             income: group.averageIncome,
             outgo: group.averageOutgo,
             category: entry.sourceItem.category?.name ?? "",
-            priority: 0
+            priority: 0,
+            ledgerIdentifier: entry.sourceItem.ledgerIdentifier
         )
     }
 

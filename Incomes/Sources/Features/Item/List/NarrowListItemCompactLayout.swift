@@ -1,3 +1,4 @@
+import SwiftData
 import SwiftUI
 
 struct NarrowListItemCompactLayout: View {
@@ -6,6 +7,9 @@ struct NarrowListItemCompactLayout: View {
         static let titleLineLimit = 2
     }
 
+    @Environment(\.ledgerBalances)
+    private var ledgerBalances
+
     @Environment(Item.self)
     private var item
 
@@ -13,8 +17,9 @@ struct NarrowListItemCompactLayout: View {
         VStack(alignment: .leading, spacing: Constants.spacing) {
             NarrowListItemAccessibilityHeader(
                 date: item.localDate,
-                balanceText: item.balance.asCurrency,
-                isBalanceNegative: item.balance < .zero,
+                balanceText: (ledgerBalances[item.persistentModelID]?.asCurrency
+                                ?? ItemSummaryOperations.unavailableAmountText),
+                isBalanceNegative: (ledgerBalances[item.persistentModelID] ?? .zero) < .zero,
                 horizontalSpacing: Constants.spacing
             )
             HStack(alignment: .firstTextBaseline, spacing: Constants.spacing) {

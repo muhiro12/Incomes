@@ -19,9 +19,7 @@ public enum TagQueryOperations {
         context: ModelContext,
         persistentID: PersistentIdentifier
     ) throws -> Tag? {
-        guard let tag = try context.fetchFirst(
-            .tags(.idIs(persistentID))
-        ) else {
+        guard let tag = try context.fetchFirst(.tags(.idIs(persistentID))) else {
             return nil
         }
         return tag
@@ -38,10 +36,11 @@ public enum TagQueryOperations {
     public static func getByName(
         context: ModelContext,
         name: String,
-        type: TagType
+        type: TagType,
+        ledgerIdentifier: LedgerIdentifier = .default
     ) throws -> Tag? {
         try context.fetchFirst(
-            .tags(.nameIs(name, type: type))
+            .tags(.nameIs(name, type: type), ledgerIdentifier: ledgerIdentifier)
         )
     }
 
@@ -67,7 +66,7 @@ public enum TagQueryOperations {
         tags: [Tag]
     ) -> [Tag] {
         Dictionary(grouping: tags) { tag in
-            tag.typeID + tag.name
+            tag.typeID + "|" + tag.name
         }
         .compactMap { _, values -> Tag? in
             guard values.count > 1 else {
@@ -78,33 +77,39 @@ public enum TagQueryOperations {
     }
 
     /// True when duplicate tags exist in the store.
-    public static func hasDuplicates(context: ModelContext) throws -> Bool {
-        try TagType.allCases.contains { type in
+    public static func hasDuplicates(context: ModelContext, ledgerIdentifier: LedgerIdentifier = .default)
+    throws -> Bool {
+        try TagType.classificationCases.contains { type in
             try !duplicateTags(
                 context: context,
-                type: type
+                type: type,
+                ledgerIdentifier: ledgerIdentifier
             ).isEmpty
         }
     }
 
     /// True when unused tags exist in the store.
-    public static func hasOrphanTags(context: ModelContext) throws -> Bool {
-        try TagType.allCases.contains { type in
+    public static func hasOrphanTags(context: ModelContext, ledgerIdentifier: LedgerIdentifier = .default)
+    throws -> Bool {
+        try TagType.classificationCases.contains { type in
             try !orphanTags(
                 context: context,
-                type: type
+                type: type,
+                ledgerIdentifier: ledgerIdentifier
             ).isEmpty
         }
     }
 
     /// Returns one representative per duplicate tag group in the store.
     public static func duplicateTags(
-        context: ModelContext
+        context: ModelContext,
+        ledgerIdentifier: LedgerIdentifier = .default
     ) throws -> [Tag] {
-        try TagType.allCases.flatMap { type in
+        try TagType.classificationCases.flatMap { type in
             try duplicateTags(
                 context: context,
-                type: type
+                type: type,
+                ledgerIdentifier: ledgerIdentifier
             )
         }
     }
@@ -112,22 +117,25 @@ public enum TagQueryOperations {
     /// Returns one representative per duplicate tag group for a specific type.
     public static func duplicateTags(
         context: ModelContext,
-        type: TagType
+        type: TagType,
+        ledgerIdentifier: LedgerIdentifier = .default
     ) throws -> [Tag] {
         try findDuplicates(
             context: context,
-            tags: context.fetch(.tags(.typeIs(type)))
+            tags: context.fetch(.tags(.typeIs(type), ledgerIdentifier: ledgerIdentifier))
         )
     }
 
     /// Returns every unused tag in the store.
     public static func orphanTags(
-        context: ModelContext
+        context: ModelContext,
+        ledgerIdentifier: LedgerIdentifier = .default
     ) throws -> [Tag] {
-        try TagType.allCases.flatMap { type in
+        try TagType.classificationCases.flatMap { type in
             try orphanTags(
                 context: context,
-                type: type
+                type: type,
+                ledgerIdentifier: ledgerIdentifier
             )
         }
     }
@@ -135,9 +143,10 @@ public enum TagQueryOperations {
     /// Returns every unused tag of `type`.
     public static func orphanTags(
         context: ModelContext,
-        type: TagType
+        type: TagType,
+        ledgerIdentifier _: LedgerIdentifier = .default
     ) throws -> [Tag] {
-        try context.fetch(.tags(.typeIs(type))).filter { tag in
+        try context.fetch(FetchDescriptor<Tag>(predicate: TagPredicate.typeIs(type).value)).filter { tag in
             isOrphan(tag: tag)
         }
     }
@@ -149,17 +158,22 @@ public enum TagQueryOperations {
 
     /// Returns every item matching the semantic meaning of `tag`.
     public static func items(
-        for tag: Tag
+        for tag: Tag,
+        ledgerIdentifier: LedgerIdentifier? = nil
     ) -> [Item] {
-        matchingItems(for: tag).sorted()
+        matchingItems(for: tag).filter { item in
+            ledgerIdentifier == nil || item.ledgerIdentifier == ledgerIdentifier
+        }
+        .sorted()
     }
 
     /// Returns items for a given tag and year string.
     public static func items(
         for tag: Tag,
-        yearString: String
+        yearString: String,
+        ledgerIdentifier: LedgerIdentifier? = nil
     ) -> [Item] {
-        items(for: tag)
+        items(for: tag, ledgerIdentifier: ledgerIdentifier)
             .filter { item in
                 item.localDate.stringValueWithoutLocale(.yyyy) == yearString
             }
@@ -167,10 +181,11 @@ public enum TagQueryOperations {
 
     /// Returns unique year strings for the tag items in descending order.
     public static func yearStrings(
-        for tag: Tag
+        for tag: Tag,
+        ledgerIdentifier: LedgerIdentifier? = nil
     ) -> [String] {
         Set(
-            items(for: tag).map { item in
+            items(for: tag, ledgerIdentifier: ledgerIdentifier).map { item in
                 item.localDate.stringValueWithoutLocale(.yyyy)
             }
         )
@@ -200,7 +215,7 @@ public enum TagQueryOperations {
             return tag.name.dateValueWithoutLocale(.yyyy)
         case .yearMonth:
             return tag.name.dateValueWithoutLocale(.yyyyMM)
-        case .content, .category, .debug, .none:
+        case .content, .category, .debug, .ledger, .none:
             return nil
         }
     }
@@ -211,7 +226,8 @@ public enum TagQueryOperations {
         in tags: [Tag]
     ) -> Bool {
         tags.contains { candidate in
-            candidate.name == tag.name && candidate.typeID == tag.typeID
+            candidate.name == tag.name
+                && candidate.typeID == tag.typeID
         }
     }
 
@@ -230,6 +246,8 @@ public enum TagQueryOperations {
              .content,
              .debug:
             return directItems(for: tag)
+        case .ledger:
+            return []
         case .category:
             return categoryMatchingItems(for: tag)
         }
@@ -303,7 +321,8 @@ private extension TagQueryOperations {
 
         guard CategoryNameSupport.isOthersLike(tag.name),
               let context = tag.modelContext,
-              let items = try? context.fetch(.items(.all)) else {
+              let items = try? context.fetch(.allLedgerItems())
+        else {
             return directItems
         }
 

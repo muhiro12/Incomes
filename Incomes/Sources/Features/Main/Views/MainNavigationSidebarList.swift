@@ -1,6 +1,13 @@
+import MHPlatform
 import SwiftUI
 
 struct MainNavigationSidebarList<Footer: View>: View {
+    @Environment(\.ledgerIdentifier)
+    private var ledgerIdentifier
+
+    @AppStorage(\.isSubscribeOn)
+    private var isSubscribeOn
+
     let yearTags: [Tag]
     let yearTagSelection: Binding<Tag.ID?>
     let onNavigate: (IncomesRoute) -> Void
@@ -16,6 +23,7 @@ struct MainNavigationSidebarList<Footer: View>: View {
                     onDelete: onDeleteYearTag
                 )
                 .environment(yearTag)
+                .deleteDisabled(!LedgerAccessOperations.canEdit(ledgerIdentifier, isPremium: isSubscribeOn))
             }
             .onDelete(perform: onDeleteYearTags)
 

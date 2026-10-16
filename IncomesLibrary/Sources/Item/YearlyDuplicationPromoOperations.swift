@@ -52,12 +52,14 @@ public enum YearlyDuplicationPromoOperations {
     /// Returns the first suggested yearly duplication promo state.
     public static func state(
         context: ModelContext,
-        currentYear: Int = YearlyItemDuplicationSelectionOperations.currentYear()
+        currentYear: Int = YearlyItemDuplicationSelectionOperations.currentYear(),
+        ledgerIdentifier: LedgerIdentifier = .default
     ) -> State? {
         state(
             context: context,
             currentYear: currentYear,
-            minimumGroupCount: Constants.minimumGroupCount
+            minimumGroupCount: Constants.minimumGroupCount,
+            ledgerIdentifier: ledgerIdentifier
         )
     }
 
@@ -65,7 +67,8 @@ public enum YearlyDuplicationPromoOperations {
     public static func state(
         context: ModelContext,
         currentYear: Int,
-        minimumGroupCount: Int
+        minimumGroupCount: Int,
+        ledgerIdentifier: LedgerIdentifier = .default
     ) -> State? {
         let targetYears = YearlyItemDuplicationSelectionOperations.targetYears(
             currentYear: currentYear
@@ -74,7 +77,8 @@ public enum YearlyDuplicationPromoOperations {
             let suggestion = try? YearlyItemDuplicationSelectionOperations.suggestion(
                 context: context,
                 targetYears: targetYears,
-                minimumGroupCount: minimumGroupCount
+                minimumGroupCount: minimumGroupCount,
+                ledgerIdentifier: ledgerIdentifier
             ),
             let proposal = suggestion.plan.groups.first
         else {

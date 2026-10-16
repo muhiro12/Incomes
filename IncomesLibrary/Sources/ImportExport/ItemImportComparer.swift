@@ -109,11 +109,14 @@ private extension ItemImportComparer {
     }
 
     static func groupID(for item: IncomesFileItem) -> ItemImportChangeGroupKey {
-        .init(date: item.date, content: item.content)
+        .init(date: item.date, content: item.content, ledgerIdentifier: item.ledgerIdentifier)
     }
 
     static func sortedGroupIDs(_ ids: Set<ItemImportChangeGroupKey>) -> [ItemImportChangeGroupKey] {
         ids.sorted { left, right in
+            if left.ledgerIdentifier != right.ledgerIdentifier {
+                return left.ledgerIdentifier.rawValue < right.ledgerIdentifier.rawValue
+            }
             if left.date != right.date {
                 return left.date < right.date
             }

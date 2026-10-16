@@ -19,6 +19,7 @@ public enum ItemCreationOperations {
         repeatMonthSelections: Set<RepeatMonthSelection>
     ) throws -> MutationResult<Item> {
         try input.validate()
+        try LedgerOperations.requireAvailable(input.ledgerIdentifier, context: context)
         let values = ItemStoredValues(formInput: input)
         let item = try createItem(
             context: context,
@@ -26,7 +27,7 @@ public enum ItemCreationOperations {
             repeatMonthSelections: repeatMonthSelections
         )
         let createdItems = try context.fetch(
-            .items(.repeatIDIs(item.repeatID))
+            .items(.repeatIDIs(item.repeatID), ledgerIdentifier: item.ledgerIdentifier)
         )
         let createdIDs = Set(createdItems.map(\.persistentModelID))
         return .init(
@@ -70,6 +71,7 @@ public enum ItemCreationOperations {
         repeatCount: Int
     ) throws -> MutationResult<Item> {
         try input.validate()
+        try LedgerOperations.requireAvailable(input.ledgerIdentifier, context: context)
         let values = ItemStoredValues(formInput: input)
         let item = try createItem(
             context: context,
@@ -77,7 +79,7 @@ public enum ItemCreationOperations {
             repeatCount: repeatCount
         )
         let createdItems = try context.fetch(
-            .items(.repeatIDIs(item.repeatID))
+            .items(.repeatIDIs(item.repeatID), ledgerIdentifier: item.ledgerIdentifier)
         )
         let createdIDs = Set(createdItems.map(\.persistentModelID))
         return .init(

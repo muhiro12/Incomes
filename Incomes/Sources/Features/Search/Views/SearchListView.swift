@@ -15,12 +15,9 @@ struct SearchListView: View {
     @Environment(\.mhDesignMetrics)
     private var designMetrics
 
-    @Query(.items(.all))
-    private var items: [Item]
-    @Query(.tags(.typeIs(.content)))
-    private var contents: [Tag]
-    @Query(.tags(.typeIs(.category)))
-    private var categories: [Tag]
+    @Query private var items: [Item]
+    @Query private var contents: [Tag]
+    @Query private var categories: [Tag]
 
     @Binding private var predicate: ItemPredicate?
     @Binding private var searchText: String
@@ -33,8 +30,12 @@ struct SearchListView: View {
     init(
         selection: Binding<ItemPredicate?>,
         searchText: Binding<String>,
-        appliesInitialSearchText: Binding<Bool> = .constant(false)
+        appliesInitialSearchText: Binding<Bool> = .constant(false),
+        ledgerIdentifier: LedgerIdentifier = .default
     ) {
+        _items = .init(.items(.all, ledgerIdentifier: ledgerIdentifier))
+        _contents = .init(.tags(.typeIs(.content), ledgerIdentifier: ledgerIdentifier))
+        _categories = .init(.tags(.typeIs(.category), ledgerIdentifier: ledgerIdentifier))
         _predicate = selection
         _searchText = searchText
         _appliesInitialSearchText = appliesInitialSearchText

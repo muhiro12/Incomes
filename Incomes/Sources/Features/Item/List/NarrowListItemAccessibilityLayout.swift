@@ -8,6 +8,9 @@ struct NarrowListItemAccessibilityLayout: View {
         static let titleLineLimit = 2
     }
 
+    @Environment(\.ledgerBalances)
+    private var ledgerBalances
+
     @Environment(Item.self)
     private var item
 
@@ -15,8 +18,9 @@ struct NarrowListItemAccessibilityLayout: View {
         VStack(alignment: .leading, spacing: Constants.verticalSpacing) {
             NarrowListItemAccessibilityHeader(
                 date: item.localDate,
-                balanceText: item.balance.asCurrency,
-                isBalanceNegative: item.balance < .zero,
+                balanceText: (ledgerBalances[item.persistentModelID]?.asCurrency
+                                ?? ItemSummaryOperations.unavailableAmountText),
+                isBalanceNegative: (ledgerBalances[item.persistentModelID] ?? .zero) < .zero,
                 horizontalSpacing: Constants.horizontalSpacing
             )
             HStack(alignment: .top, spacing: Constants.horizontalSpacing) {

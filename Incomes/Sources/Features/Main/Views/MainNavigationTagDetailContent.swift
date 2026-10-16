@@ -9,9 +9,9 @@ struct MainNavigationTagDetailContent {
 
     private let selectedTagID: Tag.ID
 
-    init(selectedTagID: Tag.ID) {
+    init(selectedTagID: Tag.ID, ledgerIdentifier: LedgerIdentifier = .default) {
         self.selectedTagID = selectedTagID
-        _tags = .init(.tags(.idIs(selectedTagID)))
+        _tags = .init(.tags(.idIs(selectedTagID), ledgerIdentifier: ledgerIdentifier))
     }
 }
 

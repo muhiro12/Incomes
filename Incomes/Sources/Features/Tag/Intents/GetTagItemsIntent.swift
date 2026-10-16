@@ -12,7 +12,7 @@ struct GetTagItemsIntent: AppIntent {
     @MainActor
     func perform() throws -> some ReturnsValue<[ItemEntity]> {
         let model = try tag.model(in: modelContainer.mainContext)
-        let items = TagQueryOperations.items(for: model)
+        let items = TagQueryOperations.items(for: model, ledgerIdentifier: .default)
         return .result(
             value: try ItemEntity.make(from: items)
         )

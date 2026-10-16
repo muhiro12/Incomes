@@ -4,6 +4,7 @@ import SwiftData
 extension ItemBalanceProjectionPlanner {
     /// Inputs describing one proposed mutation to review.
     struct ReviewRequest {
+        let ledgerIdentifier: LedgerIdentifier
         let target: ItemBalanceProjectionReview.Target
         let draft: ItemBalanceProjectionReview.Draft
         let changedRows: [ProjectedRow]
@@ -17,7 +18,7 @@ extension ItemBalanceProjectionPlanner {
         request: ReviewRequest
     ) throws -> ItemBalanceProjectionReview {
         let existingItems = try context.fetch(
-            .items(.all, order: .forward)
+            .items(.all, order: .forward, ledgerIdentifier: request.ledgerIdentifier)
         )
         let plan = try projectionPlan(
             existingItems: existingItems,
@@ -28,7 +29,8 @@ extension ItemBalanceProjectionPlanner {
             draft: request.draft,
             baseline: baseline(
                 plan: plan,
-                affectedItems: request.affectedItems
+                affectedItems: request.affectedItems,
+                ledgerIdentifier: request.ledgerIdentifier
             ),
             comparison: try comparison(from: plan)
         )
@@ -43,13 +45,16 @@ extension ItemBalanceProjectionPlanner {
         newRows: [ProjectedRow]
     ) throws {
         let existingRows = try context.fetch(
-            .items(.all, order: .forward)
+            .allLedgerItems(order: .forward)
         )
         .filter { item in
             !removedItemIDs.contains(item.persistentModelID)
         }
         .map(projectedRow(item:))
-        _ = try balancedRows(existingRows + newRows)
+        let groups = Dictionary(grouping: existingRows + newRows, by: \.ledgerIdentifier)
+        for rows in groups.values {
+            _ = try balancedRows(rows)
+        }
     }
 }
 
@@ -117,7 +122,8 @@ private extension ItemBalanceProjectionPlanner {
 
     static func baseline(
         plan: ProjectionPlan,
-        affectedItems: [Item]
+        affectedItems: [Item],
+        ledgerIdentifier: LedgerIdentifier
     ) -> ItemBalanceProjectionReview.Baseline {
         .init(
             startingBalance: startingBalance(
@@ -125,7 +131,8 @@ private extension ItemBalanceProjectionPlanner {
                 dateRange: plan.projectionDateRange
             ) ?? .zero,
             records: recordSignatures(from: plan.existingItems),
-            affectedRecords: recordSignatures(from: affectedItems)
+            affectedRecords: recordSignatures(from: affectedItems),
+            ledgerIdentifier: ledgerIdentifier
         )
     }
 
@@ -141,7 +148,8 @@ private extension ItemBalanceProjectionPlanner {
                 category: item.category?.name ?? "",
                 income: item.income,
                 outgo: item.outgo,
-                priority: item.priority
+                priority: item.priority,
+                ledgerIdentifier: item.ledgerIdentifier
             )
         }
         .sorted { left, right in
@@ -169,14 +177,16 @@ private extension ItemBalanceProjectionPlanner {
         _ rows: [ProjectedRow]
     ) throws -> [BalancedProjectedRow] {
         let orderedRows = sortedRows(rows)
-        let balances = try BalanceCalculator.calculateBalances(
-            startingFrom: .zero,
-            inputs: orderedRows.map { row in
-                .init(netIncome: row.netIncome)
+        var balances: [LedgerIdentifier: Decimal] = [:]
+        return try orderedRows.map { row in
+            let previousBalance = balances[row.ledgerIdentifier] ?? .zero
+            guard let balance = ExactAmountArithmetic.sum(previousBalance, row.netIncome),
+                  AmountPrecision.isExactlyStorable(balance)
+            else {
+                throw ItemAmountError.balanceOutOfRange
             }
-        )
-        return zip(orderedRows, balances).map { row, balance in
-            .init(
+            balances[row.ledgerIdentifier] = balance
+            return .init(
                 row: row,
                 balance: balance
             )
@@ -251,6 +261,7 @@ private extension ItemBalanceProjectionPlanner {
 
     static func projectedRow(item: Item) throws -> ProjectedRow {
         .init(
+            ledgerIdentifier: item.ledgerIdentifier,
             itemID: item.persistentModelID,
             utcDate: item.utcDate,
             localDate: item.localDate,

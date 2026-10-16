@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct SettingsDataManagementSection: View {
+    var canDeleteAll = true
     let duplicateYearItems: () -> Void
     let deleteAllItems: () -> Void
 
@@ -20,6 +21,7 @@ struct SettingsDataManagementSection: View {
             Button(role: .destructive, action: deleteAllItems) {
                 Text("Delete all")
             }
+            .disabled(!canDeleteAll)
         } header: {
             Text("Manage items")
         }

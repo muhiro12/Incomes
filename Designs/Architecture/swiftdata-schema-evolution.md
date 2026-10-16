@@ -41,9 +41,14 @@ Tag duplicate resolution remains explicit domain behavior; a UUID or a local
 fetch-before-insert cannot guarantee distributed uniqueness.
 
 `balance` and the classification tags are deliberately persisted derived data.
-Operations maintain them. This maintenance change does not redefine financial
-truth, recalculate historical balances, or merge categories. No new index is
+Operations maintain them; income and outgo remain authoritative. Repairing the
+balance cache must not change financial records or merge categories. No new index is
 introduced without a measured query need and a migration test.
+
+Independent books use dedicated Tag type identifiers and relationships, without
+adding stored attributes or models. Derived balances are read from owner-scoped
+amounts, independently of the stored cache. See
+[Independent ledgers](independent-ledgers.md) for identity and compatibility limits.
 
 `PersistentIdentifier` is a store-local reference used by existing routes.
 Tests compare its encoded representation and resolve it in a reopened context.
@@ -91,9 +96,10 @@ For a future storage change:
    own verification with older clients.
 5. Verify extension-first startup and host migration, then verify cloud import
    and export on signed devices before release.
-6. Add the matching Incomes file version described in
-   [Data import and export](data-import-export.md): freeze the previous
-   payload, add a forward conversion, and commit a fixture for the new version.
+6. Review the Incomes file contract described in
+   [Data import and export](data-import-export.md). If the change affects portable
+   financial meaning, freeze the previous payload, add a forward conversion,
+   and commit a fixture for the new file version.
 
 ## Relocation failures
 

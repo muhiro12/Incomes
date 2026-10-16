@@ -10,7 +10,8 @@ enum ItemFormSaveDecision {
     ) throws -> Bool {
         try ItemQueryOperations.repeatItemsCount(
             context: context,
-            repeatID: item.repeatID
+            repeatID: item.repeatID,
+            ledgerIdentifier: item.ledgerIdentifier
         ) > 1
     }
 }

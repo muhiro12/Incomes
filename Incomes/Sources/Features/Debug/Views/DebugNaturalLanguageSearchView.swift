@@ -3,6 +3,9 @@ import SwiftData
 import SwiftUI
 
 struct DebugNaturalLanguageSearchView: View {
+    @Environment(\.ledgerIdentifier)
+    private var ledgerIdentifier
+
     @Environment(\.locale)
     private var locale
     @Environment(\.calendar)
@@ -96,7 +99,7 @@ private extension DebugNaturalLanguageSearchView {
         case .interpreted(_, let conditions):
             DebugSearchConditionsSection(conditions: conditions)
             if searchState.hasConfirmedConditions {
-                DebugNaturalLanguageSearchResultSections(conditions: conditions)
+                DebugNaturalLanguageSearchResultSections(conditions: conditions, ledgerIdentifier: ledgerIdentifier)
                     .id(conditions)
             } else {
                 Section {

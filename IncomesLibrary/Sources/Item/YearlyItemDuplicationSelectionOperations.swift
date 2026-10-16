@@ -28,11 +28,27 @@ public enum YearlyItemDuplicationSelectionOperations {
     /// Returns source years extracted from persisted year tags, or `currentYear` when none exist.
     public static func availableSourceYears(
         context: ModelContext,
-        currentYear: Int = Self.currentYear()
+        currentYear: Int = Self.currentYear(),
+        ledgerIdentifier: LedgerIdentifier = .default
     ) throws -> [Int] {
-        let yearTags = try context.fetch(.tags(.typeIs(.year), order: .reverse))
+        let yearTags = try context.fetch(
+            .tags(.typeIs(.year), order: .reverse, ledgerIdentifier: ledgerIdentifier)
+        )
         return availableSourceYears(
             from: yearTags,
+            ledgerIdentifier: ledgerIdentifier,
+            currentYear: currentYear
+        )
+    }
+
+    /// Returns years with ordinary items owned by `ledgerIdentifier`, or `currentYear` when none exist.
+    public static func availableSourceYears(
+        from yearTags: [Tag],
+        ledgerIdentifier: LedgerIdentifier,
+        currentYear: Int = Self.currentYear()
+    ) -> [Int] {
+        availableSourceYears(
+            from: scopedYearTags(yearTags, ledgerIdentifier: ledgerIdentifier),
             currentYear: currentYear
         )
     }
@@ -68,9 +84,12 @@ public enum YearlyItemDuplicationSelectionOperations {
         currentYear: Int = Self.currentYear(),
         targetYearRange: Int = 10,
         minimumGroupCount: Int = 3,
-        options: YearlyItemDuplicationOptions = .init()
+        options: YearlyItemDuplicationOptions = .init(),
+        ledgerIdentifier: LedgerIdentifier = .default
     ) throws {
-        let yearTags = try context.fetch(.tags(.typeIs(.year), order: .reverse))
+        let yearTags = try context.fetch(
+            .tags(.typeIs(.year), order: .reverse, ledgerIdentifier: ledgerIdentifier)
+        )
         alignSelection(
             context: context,
             yearTags: yearTags,
@@ -80,7 +99,8 @@ public enum YearlyItemDuplicationSelectionOperations {
             currentYear: currentYear,
             targetYearRange: targetYearRange,
             minimumGroupCount: minimumGroupCount,
-            options: options
+            options: options,
+            ledgerIdentifier: ledgerIdentifier
         )
     }
 
@@ -94,10 +114,11 @@ public enum YearlyItemDuplicationSelectionOperations {
         currentYear: Int = Self.currentYear(),
         targetYearRange: Int = 10,
         minimumGroupCount: Int = 3,
-        options: YearlyItemDuplicationOptions = .init()
+        options: YearlyItemDuplicationOptions = .init(),
+        ledgerIdentifier: LedgerIdentifier = .default
     ) {
         let sourceYears = availableSourceYears(
-            from: yearTags,
+            from: scopedYearTags(yearTags, ledgerIdentifier: ledgerIdentifier),
             currentYear: currentYear
         )
         let targetYears = targetYears(
@@ -111,14 +132,17 @@ public enum YearlyItemDuplicationSelectionOperations {
             yearTags: yearTags,
             targetYears: targetYears,
             minimumGroupCount: minimumGroupCount,
-            options: options
+            options: options,
+            ledgerIdentifier: ledgerIdentifier
         )
         let suggestedSourceYear = suggestion?.sourceYear ?? defaultSourceYear
         let suggestedTargetYear = suggestion?.targetYear ?? defaultTargetYear
-        sourceYear = preserveCurrentSelection && sourceYears.contains(sourceYear)
+        sourceYear =
+            preserveCurrentSelection && sourceYears.contains(sourceYear)
             ? sourceYear
             : suggestedSourceYear
-        targetYear = preserveCurrentSelection && targetYears.contains(targetYear)
+        targetYear =
+            preserveCurrentSelection && targetYears.contains(targetYear)
             ? targetYear
             : suggestedTargetYear
     }
@@ -128,15 +152,19 @@ public enum YearlyItemDuplicationSelectionOperations {
         context: ModelContext,
         targetYears: [Int],
         minimumGroupCount: Int,
-        options: YearlyItemDuplicationOptions = .init()
+        options: YearlyItemDuplicationOptions = .init(),
+        ledgerIdentifier: LedgerIdentifier = .default
     ) throws -> YearlyItemDuplicationSuggestion? {
-        let yearTags = try context.fetch(.tags(.typeIs(.year), order: .reverse))
+        let yearTags = try context.fetch(
+            .tags(.typeIs(.year), order: .reverse, ledgerIdentifier: ledgerIdentifier)
+        )
         return suggestion(
             context: context,
             yearTags: yearTags,
             targetYears: targetYears,
             minimumGroupCount: minimumGroupCount,
-            options: options
+            options: options,
+            ledgerIdentifier: ledgerIdentifier
         )
     }
 
@@ -146,15 +174,19 @@ public enum YearlyItemDuplicationSelectionOperations {
         yearTags: [Tag],
         targetYears: [Int],
         minimumGroupCount: Int,
-        options: YearlyItemDuplicationOptions = .init()
+        options: YearlyItemDuplicationOptions = .init(),
+        ledgerIdentifier: LedgerIdentifier = .default
     ) -> YearlyItemDuplicationSuggestion? {
-        let sourceYears = availableSourceYears(from: yearTags)
+        let sourceYears = availableSourceYears(
+            from: scopedYearTags(yearTags, ledgerIdentifier: ledgerIdentifier)
+        )
         return suggestion(
             context: context,
             sourceYears: sourceYears,
             targetYears: targetYears,
             minimumGroupCount: minimumGroupCount,
-            options: options
+            options: options,
+            ledgerIdentifier: ledgerIdentifier
         )
     }
 
@@ -164,7 +196,8 @@ public enum YearlyItemDuplicationSelectionOperations {
         sourceYears: [Int],
         targetYears: [Int],
         minimumGroupCount: Int,
-        options: YearlyItemDuplicationOptions = .init()
+        options: YearlyItemDuplicationOptions = .init(),
+        ledgerIdentifier: LedgerIdentifier = .default
     ) -> YearlyItemDuplicationSuggestion? {
         guard !sourceYears.isEmpty, !targetYears.isEmpty else {
             return nil
@@ -178,8 +211,9 @@ public enum YearlyItemDuplicationSelectionOperations {
                 context: context,
                 sourceYear: year,
                 targetYear: candidateTargetYear,
-                options: options
-            ), plan.groups.count >= minimumGroupCount {
+                options: options,
+                ledgerIdentifier: ledgerIdentifier
+            ), !plan.entries.isEmpty, plan.groups.count >= minimumGroupCount {
                 return .init(
                     sourceYear: year,
                     targetYear: candidateTargetYear,
@@ -187,22 +221,29 @@ public enum YearlyItemDuplicationSelectionOperations {
                 )
             }
         }
-        let fallbackSourceYear = sourceYears.first ?? Self.currentYear()
-        let fallbackTargetYear = targetYears.contains(fallbackSourceYear + 1)
-            ? fallbackSourceYear + 1
-            : targetYears.first ?? fallbackSourceYear + 1
-        if let plan = try? YearlyItemDuplicationPlanOperations.plan(
-            context: context,
-            sourceYear: fallbackSourceYear,
-            targetYear: fallbackTargetYear,
-            options: options
-        ) {
-            return .init(
-                sourceYear: fallbackSourceYear,
-                targetYear: fallbackTargetYear,
-                plan: plan
-            )
+        for sourceYear in sourceYears {
+            let targetYear =
+                targetYears.contains(sourceYear + 1)
+                ? sourceYear + 1
+                : targetYears.first ?? sourceYear + 1
+            if let plan = try? YearlyItemDuplicationPlanOperations.plan(
+                context: context,
+                sourceYear: sourceYear,
+                targetYear: targetYear,
+                options: options,
+                ledgerIdentifier: ledgerIdentifier
+            ), !plan.entries.isEmpty {
+                return .init(sourceYear: sourceYear, targetYear: targetYear, plan: plan)
+            }
         }
         return nil
+    }
+}
+
+private extension YearlyItemDuplicationSelectionOperations {
+    static func scopedYearTags(_ tags: [Tag], ledgerIdentifier: LedgerIdentifier) -> [Tag] {
+        tags.filter { tag in
+            !TagQueryOperations.items(for: tag, ledgerIdentifier: ledgerIdentifier).isEmpty
+        }
     }
 }

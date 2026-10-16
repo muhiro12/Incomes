@@ -66,7 +66,7 @@ extension IncomesFileV2 {
     }
 }
 
-private extension IncomesFileV2 {
+extension IncomesFileV2 {
     static func invalidItemError(for error: DecodingError) -> ItemImportError? {
         let codingPath: [any CodingKey]
         switch error {
@@ -110,7 +110,7 @@ private extension IncomesFileV2 {
     }
 }
 
-private extension IncomesFileV2.Item {
+extension IncomesFileV2.Item {
     init(fileItem: IncomesFileItem) {
         self.init(
             date: IncomesFileValueCoding.dayString(from: fileItem.date),

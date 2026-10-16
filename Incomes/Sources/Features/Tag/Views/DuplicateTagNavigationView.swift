@@ -2,6 +2,9 @@ import SwiftData
 import SwiftUI
 
 struct DuplicateTagNavigationView: View {
+    @Environment(\.ledgerIdentifier)
+    private var ledgerIdentifier
+
     @Environment(\.modelContext)
     private var context
     @Environment(\.horizontalSizeClass)
@@ -13,7 +16,8 @@ struct DuplicateTagNavigationView: View {
     var body: some View {
         NavigationSplitView(preferredCompactColumn: preferredCompactColumnBinding) {
             DuplicateTagListView(
-                selection: selectedTagIDBinding
+                selection: selectedTagIDBinding,
+                ledgerIdentifier: ledgerIdentifier
             )
         } detail: {
             if let selectedTag {

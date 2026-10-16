@@ -8,6 +8,7 @@ enum ItemBalanceProjectionPlanner {
     typealias MonthlyBalanceComparison = ItemBalanceProjectionOperations.MonthlyBalanceComparison
 
     struct ProjectedRow {
+        let ledgerIdentifier: LedgerIdentifier
         let itemID: PersistentIdentifier?
         let utcDate: Date
         let localDate: Date
@@ -74,6 +75,7 @@ enum ItemBalanceProjectionPlanner {
         return try review(
             context: context,
             request: .init(
+                ledgerIdentifier: input.ledgerIdentifier,
                 target: .create(repeatMonthSelections: repeatMonthSelections),
                 draft: .init(storedValues: values),
                 changedRows: changedRows,
@@ -91,6 +93,9 @@ enum ItemBalanceProjectionPlanner {
         scope: ItemMutationScope
     ) throws -> ItemBalanceProjectionReview {
         try input.validate()
+        guard input.ledgerIdentifier == item.ledgerIdentifier else {
+            throw ItemBalanceProjectionReviewError.targetChanged
+        }
         let values = ItemStoredValues(formInput: input)
         let affectedItems = try ItemMutationSupport.itemsForMutationScope(
             context: context,
@@ -112,6 +117,7 @@ enum ItemBalanceProjectionPlanner {
         return try review(
             context: context,
             request: .init(
+                ledgerIdentifier: item.ledgerIdentifier,
                 target: .update(
                     itemID: item.persistentModelID,
                     scope: scope
@@ -243,6 +249,7 @@ private extension ItemBalanceProjectionPlanner {
     ) throws -> ProjectedRow {
         let utcDate = normalizedUTCDate(for: values.date)
         return .init(
+            ledgerIdentifier: values.ledgerIdentifier,
             itemID: nil,
             utcDate: utcDate,
             localDate: Calendar.current.shiftedDate(

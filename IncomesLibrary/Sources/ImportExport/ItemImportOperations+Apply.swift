@@ -30,17 +30,15 @@ public extension ItemImportOperations {
             removedItemIDs: plan.removedItemIDs,
             values: plan.insertedItems.map(\.storedValues)
         )
-        let removedItems = try context.fetch(.items(.all)).filter { item in
+        let removedItems = try context.fetch(FetchDescriptor<Item>.allLedgerItems()).filter { item in
             plan.removedItemIDs.contains(item.persistentModelID)
         }
-        // Insert first so tags shared with new items are never treated as unused.
-        let createdItems = try plan.insertedItems.map { item in
-            try Item.create(
-                context: context,
-                values: item.storedValues,
-                repeatID: item.repeatID
-            )
+        for change in plan.ledgerChanges {
+            try LedgerOperations.importMetadata(change.incoming, context: context)
         }
+        // Insert first so tags shared with new items are never treated as unused.
+        let createdItems = try insertItems(plan.insertedItems, context: context)
+        let removedOwners = Set(removedItems.map(\.ledgerIdentifier))
         let removedDates = removedItems.map(\.localDate)
         let tagsToCleanup = ItemMutationSupport.cleanupCandidateTags(from: removedItems)
         removedItems.forEach { item in
@@ -48,9 +46,15 @@ public extension ItemImportOperations {
         }
         TagMutationOperations.deleteUnused(tags: tagsToCleanup)
         let changedDates = createdItems.map(\.localDate) + removedDates
-        if !changedDates.isEmpty {
-            // Recovery must not inherit a stale stored balance from a matched predecessor.
-            try BalanceCalculator.calculate(in: context, after: .distantPast)
+        // Recovery must not inherit a stale stored balance from a matched predecessor.
+        let identifiers = Set(createdItems.map(\.ledgerIdentifier)).union(removedOwners)
+            .union(plan.ledgerChanges.map(\.id))
+        for identifier in identifiers {
+            try BalanceCalculator.calculate(
+                in: context,
+                after: .distantPast,
+                ledgerIdentifier: identifier
+            )
         }
         return .init(
             value: plan.result,
@@ -60,8 +64,21 @@ public extension ItemImportOperations {
                     deleted: plan.removedItemIDs
                 ),
                 affectedDateRange: ItemMutationSupport.dateRange(from: changedDates),
-                followUpHints: changedDates.isEmpty ? [] : ItemMutationSupport.followUpHints
+                followUpHints: changedDates.isEmpty && plan.ledgerChanges.isEmpty
+                    ? [] : ItemMutationSupport.followUpHints
             )
         )
+    }
+}
+
+private extension ItemImportOperations {
+    static func insertItems(_ values: [IncomesFileItem], context: ModelContext) throws -> [Item] {
+        try values.map { item in
+            try Item.create(
+                context: context,
+                values: item.storedValues,
+                repeatID: item.repeatID
+            )
+        }
     }
 }

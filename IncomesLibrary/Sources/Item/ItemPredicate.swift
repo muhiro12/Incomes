@@ -71,19 +71,19 @@ public enum ItemPredicate {
 
         // MARK: - ID
 
-        case .idIs(let id):
+        case let .idIs(id):
             return #Predicate { item in
                 item.persistentModelID == id
             }
 
-        case .idsAre(let ids):
+        case let .idsAre(ids):
             return #Predicate { item in
                 ids.contains(item.persistentModelID)
             }
 
         // MARK: - Tag
 
-        case .tagIs(let tag):
+        case let .tagIs(tag):
             guard let tagType = tag.type else {
                 return .false
             }
@@ -118,13 +118,14 @@ public enum ItemPredicate {
                 return #Predicate { item in
                     itemIDs.contains(item.id)
                 }
-            case .debug:
+            case .debug, .ledger:
                 assertionFailure("Not Supported")
                 return .false
             }
         case let .tagAndYear(tag, yearString):
             guard let tagType = tag.type,
-                  let date = yearString.dateValueWithoutLocale(.yyyy) else {
+                  let date = yearString.dateValueWithoutLocale(.yyyy)
+            else {
                 return .false
             }
             let shiftedDate = Calendar.utc.shiftedDate(componentsFrom: date, in: .current)
@@ -139,41 +140,42 @@ public enum ItemPredicate {
             case .year,
                  .yearMonth,
                  .category,
-                 .debug:
+                 .debug,
+                 .ledger:
                 return Self.tagIs(tag).value
             }
 
         // MARK: - Date
 
-        case .dateIsBefore(let date):
+        case let .dateIsBefore(date):
             let start = Date.distantPast
             let shiftedDate = Calendar.utc.shiftedDate(componentsFrom: date, in: .current)
             let end = Calendar.utc.startOfDay(for: shiftedDate) - 1
             return #Predicate { item in
                 start <= item.date && item.date <= end
             }
-        case .dateIsAfter(let date):
+        case let .dateIsAfter(date):
             let shiftedDate = Calendar.utc.shiftedDate(componentsFrom: date, in: .current)
             let start = Calendar.utc.startOfDay(for: shiftedDate)
             let end = Date.distantFuture
             return #Predicate { item in
                 start <= item.date && item.date <= end
             }
-        case .dateIsSameYearAs(let date):
+        case let .dateIsSameYearAs(date):
             let shiftedDate = Calendar.utc.shiftedDate(componentsFrom: date, in: .current)
             let start = Calendar.utc.startOfYear(for: shiftedDate)
             let end = Calendar.utc.endOfYear(for: shiftedDate)
             return #Predicate { item in
                 start <= item.date && item.date <= end
             }
-        case .dateIsSameMonthAs(let date):
+        case let .dateIsSameMonthAs(date):
             let shiftedDate = Calendar.utc.shiftedDate(componentsFrom: date, in: .current)
             let start = Calendar.utc.startOfMonth(for: shiftedDate)
             let end = Calendar.utc.endOfMonth(for: shiftedDate)
             return #Predicate { item in
                 start <= item.date && item.date <= end
             }
-        case .dateIsSameDayAs(let date):
+        case let .dateIsSameDayAs(date):
             let shiftedDate = Calendar.utc.shiftedDate(componentsFrom: date, in: .current)
             let start = Calendar.utc.startOfDay(for: shiftedDate)
             let end = Calendar.utc.endOfDay(for: shiftedDate)
@@ -183,7 +185,7 @@ public enum ItemPredicate {
 
         // MARK: - Content
 
-        case .contentContains(let string):
+        case let .contentContains(string):
             return #Predicate { item in
                 item.content.contains(string)
             }
@@ -227,12 +229,12 @@ public enum ItemPredicate {
 
         // MARK: - Conditions
 
-        case .matchesSearchConditions(let conditions):
+        case let .matchesSearchConditions(conditions):
             return Self.searchConditionsPredicate(conditions)
 
         // MARK: - RepeatID
 
-        case .repeatIDIs(let repeatID):
+        case let .repeatIDIs(repeatID):
             return #Predicate { item in
                 item.repeatID == repeatID
             }
@@ -287,9 +289,36 @@ public extension FetchDescriptor where T == Item {
     /// - Parameters:
     ///   - predicate: A preset predicate.
     ///   - order: Sort order (default: reverse).
-    static func items(_ predicate: ItemPredicate, order: SortOrder = .reverse) -> FetchDescriptor {
-        .init(
-            predicate: predicate.value,
+    static func items(
+        _ predicate: ItemPredicate,
+        order: SortOrder = .reverse,
+        ledgerIdentifier: LedgerIdentifier = .default
+    ) -> FetchDescriptor {
+        let base = predicate.value
+        let typeID = LedgerTagStorage.typeID(for: ledgerIdentifier)
+        let prefix = LedgerTagStorage.typePrefix
+        let reserved = TagType.ledger.rawValue
+        let scope: Predicate<Item>
+        if ledgerIdentifier == .default {
+            scope = #Predicate { item in
+                !(item.tags?.contains { tag in
+                    tag.typeID.starts(with: prefix) || tag.typeID == reserved
+                } ?? false)
+            }
+        } else {
+            scope = #Predicate { item in
+                (item.tags?.contains { tag in
+                    tag.typeID == typeID
+                } ?? false)
+                && !(item.tags?.contains { tag in
+                    (tag.typeID.starts(with: prefix) || tag.typeID == reserved) && tag.typeID != typeID
+                } ?? false)
+            }
+        }
+        return .init(
+            predicate: #Predicate { item in
+                scope.evaluate(item) && base.evaluate(item)
+            },
             sortBy: [
                 .init(\.date, order: order),
                 .init(\.priority, order: order == .forward ? .reverse : .forward),
@@ -297,5 +326,25 @@ public extension FetchDescriptor where T == Item {
                 .init(\.persistentModelID, order: order)
             ]
         )
+    }
+
+    /// Explicit cross-ledger inventory for backup, recovery, and global data reset.
+    static func allLedgerItems(order: SortOrder = .reverse) -> FetchDescriptor {
+        .init(sortBy: [
+            .init(\.date, order: order),
+            .init(\.priority, order: order == .forward ? .reverse : .forward),
+            .init(\.content, order: order),
+            .init(\.persistentModelID, order: order)
+        ])
+    }
+}
+
+public extension ItemPredicate {
+    /// Balance range searches need an authoritative owner-scoped snapshot after fetching.
+    var requiresDerivedBalance: Bool {
+        if case .balanceIsBetween = self {
+            return true
+        }
+        return false
     }
 }

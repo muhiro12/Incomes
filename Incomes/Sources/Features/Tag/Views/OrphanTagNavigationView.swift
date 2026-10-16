@@ -2,6 +2,9 @@ import SwiftData
 import SwiftUI
 
 struct OrphanTagNavigationView: View {
+    @Environment(\.ledgerIdentifier)
+    private var ledgerIdentifier
+
     @Environment(\.modelContext)
     private var context
     @Environment(\.horizontalSizeClass)
@@ -14,7 +17,8 @@ struct OrphanTagNavigationView: View {
         NavigationSplitView(preferredCompactColumn: preferredCompactColumnBinding) {
             OrphanTagListView(
                 selection: selectedTagIDBinding,
-                onCleanupAll: clearSelection
+                onCleanupAll: clearSelection,
+                ledgerIdentifier: ledgerIdentifier
             )
         } detail: {
             if let selectedTag {

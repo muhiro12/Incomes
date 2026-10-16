@@ -15,8 +15,8 @@ struct SettingsListView {
     @Environment(\.scenePhase)
     private var scenePhase
 
-    @Query(.tags(.typeIs(.year)))
-    private var yearTags: [Tag]
+    @Query private var yearTags: [Tag]
+    private let ledgerIdentifier: LedgerIdentifier
 
     @AppStorage(\.isSubscribeOn)
     private var isSubscribeOn: Bool
@@ -36,9 +36,12 @@ struct SettingsListView {
     init(
         navigateToRoute: @escaping (IncomesRoute) -> Void = { _ in
             // no-op
-        }
+        },
+        ledgerIdentifier: LedgerIdentifier = .default
     ) {
         self.navigateToRoute = navigateToRoute
+        self.ledgerIdentifier = ledgerIdentifier
+        _yearTags = .init(.tags(.typeIs(.year), ledgerIdentifier: ledgerIdentifier))
     }
 }
 
@@ -95,9 +98,11 @@ extension SettingsListView: View {
                 Task {
                     dataMaintenanceLogger.notice("delete_all.requested")
                     do {
+                        let owners = Set(try LedgerOperations.accounts(context: context).map(\.id))
+                        try LedgerMutationAccess.requireEditing(owners)
                         try await DataMaintenanceOperations.resetAllData(context: context)
                         Haptic.success.impact()
-                        model.loadStatus(context: context)
+                        model.loadStatus(context: context, ledgerIdentifier: ledgerIdentifier)
                         model.dismissDestructiveAction()
                         dataMaintenanceLogger.notice("delete_all.completed")
                     } catch {
@@ -136,7 +141,7 @@ extension SettingsListView: View {
                     )
                     try DataMaintenanceOperations.deleteDebugData(context: context)
                     Haptic.success.impact()
-                    model.loadStatus(context: context)
+                    model.loadStatus(context: context, ledgerIdentifier: ledgerIdentifier)
                     model.dismissDestructiveAction()
                     dataMaintenanceLogger.notice("debug_data.delete_completed")
                 } catch {
@@ -177,18 +182,26 @@ extension SettingsListView: View {
 }
 
 private extension SettingsListView {
+    var canDeleteAllAccounts: Bool {
+        guard let accounts = try? LedgerOperations.accounts(context: context) else {
+            return false
+        }
+        return accounts.allSatisfy { LedgerAccessOperations.canEdit($0.id, isPremium: isSubscribeOn) }
+    }
+
     @MainActor
     func loadDeferredSettingsState() async {
         await Task.yield()
 
-        model.loadStatus(context: context)
+        model.loadStatus(context: context, ledgerIdentifier: ledgerIdentifier)
     }
 }
 
 private extension SettingsListView {
     var appVersionText: String? {
         guard let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String,
-              let build = Bundle.main.infoDictionary?["CFBundleVersion"] as? String else {
+              let build = Bundle.main.infoDictionary?["CFBundleVersion"] as? String
+        else {
             return nil
         }
         return "\(version) (\(build))"
@@ -247,6 +260,7 @@ private extension SettingsListView {
         model: SettingsScreenModel
     ) -> some View {
         SettingsDataManagementSection(
+            canDeleteAll: canDeleteAllAccounts,
             duplicateYearItems: duplicateYearItems,
             deleteAllItems: deleteAllItemsAction(model: model)
         )

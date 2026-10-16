@@ -19,6 +19,7 @@ enum ItemCreateCoordinator {
                 ("content_present", IncomesLogging.presence(input.content))
             )
         ) {
+            try LedgerMutationAccess.requireEditing([input.ledgerIdentifier])
             let result = try ItemCreationOperations.createAndSaveWithOutcome(
                 context: context,
                 input: input,
@@ -50,6 +51,7 @@ enum ItemCreateCoordinator {
                 ("content_present", IncomesLogging.presence(input.content))
             )
         ) {
+            try LedgerMutationAccess.requireEditing([input.ledgerIdentifier])
             let result = try createResult(
                 context: context,
                 input: input,

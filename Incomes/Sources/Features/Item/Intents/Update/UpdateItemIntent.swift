@@ -58,7 +58,7 @@ struct UpdateItemIntent: AppIntent {
             scope: scope.scope,
             context: context,
             item: model,
-            formInputData: formInput,
+            formInputData: formInput.assigning(to: model.ledgerIdentifier),
             dependencies: mutationDependencies
         )
         return .result(value: try ItemEntity.make(from: model))

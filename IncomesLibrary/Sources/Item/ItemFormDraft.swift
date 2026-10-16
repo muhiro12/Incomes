@@ -4,6 +4,8 @@ import Foundation
 public struct ItemFormDraft: Identifiable, Hashable, Sendable {
     /// Stable presentation identifier.
     public let id: UUID
+    /// Destination account bound when the draft is produced.
+    public let ledgerIdentifier: LedgerIdentifier
     /// Source group identifier for grouped draft flows.
     public let groupID: UUID
     /// Initial form date.
@@ -33,9 +35,11 @@ public struct ItemFormDraft: Identifiable, Hashable, Sendable {
         category: String,
         repeatMonthSelections: Set<RepeatMonthSelection>,
         id: UUID = UUID(),
-        priorityText: String = "0"
+        priorityText: String = "0",
+        ledgerIdentifier: LedgerIdentifier = .default
     ) {
         self.id = id
+        self.ledgerIdentifier = ledgerIdentifier
         self.groupID = groupID
         self.date = date
         self.content = content

@@ -10,6 +10,8 @@ import SwiftData
 import SwiftUI
 
 struct TagItemListSection {
+    @Environment(\.ledgerIdentifier)
+    private var ledgerIdentifier
     @Environment(Tag.self)
     private var tag
     @Environment(\.modelContext)
@@ -93,7 +95,8 @@ private extension TagItemListSection {
     var items: [Item] {
         TagQueryOperations.items(
             for: tag,
-            yearString: yearString
+            yearString: yearString,
+            ledgerIdentifier: ledgerIdentifier
         )
     }
 

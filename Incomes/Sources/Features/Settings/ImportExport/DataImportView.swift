@@ -12,12 +12,25 @@ struct DataImportView: View {
     @Environment(\.locale)
     private var locale
 
+    @AppStorage(\.isSubscribeOn)
+    private var isSubscribeOn
+
     @AppStorage(\.currencyCode, default: "")
     private var currencyCode: String
 
     @State private var model: DataImportModel = .init()
     @State private var isChoosingFile = false
     @State private var isConfirmingReplace = false
+
+    private var importAccountNames: [LedgerIdentifier: String] {
+        let accounts = (try? LedgerOperations.accounts(context: context)) ?? []
+        var names = Dictionary(uniqueKeysWithValues: accounts.map { ($0.id, $0.name) })
+        for account in model.contents?.ledgers ?? [] { names[account.id] = account.name }
+        for identifier in model.contents?.selectionLedgerIdentifiers ?? [] where names[identifier] == nil {
+            names[identifier] = String(localized: "Unavailable Account")
+        }
+        return names
+    }
 
     var body: some View {
         @Bindable var model = model
@@ -40,6 +53,7 @@ struct DataImportView: View {
                 }
             }
         }
+        .environment(\.importAccountNames, importAccountNames)
         .disabled(model.isApplying)
         .navigationTitle("Import data")
         .fileImporter(
@@ -67,7 +81,9 @@ struct DataImportView: View {
                 // The dialog dismisses automatically.
             }
         } message: {
-            Text("Items not in the file are removed. This cannot be undone unless you exported your data first.")
+            Text(
+                "Items not in the file are removed. This cannot be undone unless you exported your data first."
+            )
         }
         .alert(
             "Import failed",
@@ -120,10 +136,7 @@ private extension DataImportView {
     ) -> some View {
         @Bindable var model = model
 
-        DataImportFileSection(
-            contents: contents,
-            overview: ItemImportOperations.overview(contents: contents)
-        )
+        fileSection(contents)
         if let result = model.result {
             DataImportResultSection(result: result) {
                 model.reset()
@@ -137,6 +150,7 @@ private extension DataImportView {
                 }
             }
         } else {
+            accountChangesSection(difference: difference, model: model)
             if model.isCloudSyncEnabled {
                 DataImportCloudWarningSection()
             }
@@ -163,9 +177,42 @@ private extension DataImportView {
                         ? difference.storeOnlyItems.count
                         : nil,
                     isReplacing: !model.isDirectImport && model.policyChoice == .replace,
-                    isApplying: model.isApplying
+                    isApplying: model.isApplying,
+                    canApply: canApply(difference: difference)
                 ) {
                     confirm()
+                }
+            }
+        }
+    }
+
+    func canApply(difference: ItemImportDifference) -> Bool {
+        let identifiers = ItemImportOperations.mutatedLedgerIdentifiers(difference: difference, policy: model.policy)
+        return identifiers.allSatisfy { identifier in
+            LedgerAccessOperations.canEdit(identifier, isPremium: isSubscribeOn)
+        }
+    }
+
+    func fileSection(_ contents: IncomesFileContents) -> some View {
+        DataImportFileSection(contents: contents, overview: ItemImportOperations.overview(contents: contents))
+    }
+
+    @ViewBuilder
+    func accountChangesSection(difference: ItemImportDifference, model: DataImportModel) -> some View {
+        @Bindable var model = model
+        if !difference.ledgerChanges.isEmpty {
+            Section("Accounts") {
+                ForEach(difference.ledgerChanges) { change in
+                    LabeledContent(change.incoming.name) {
+                        Text(change.current == nil ? "New account" : "Account names differ")
+                    }
+                }
+                if model.policyChoice == .merge,
+                   difference.ledgerChanges.contains(where: { $0.current != nil }) {
+                    Toggle(
+                        "Use account names from file",
+                        isOn: $model.decisions.useFileAccountNames
+                    )
                 }
             }
         }

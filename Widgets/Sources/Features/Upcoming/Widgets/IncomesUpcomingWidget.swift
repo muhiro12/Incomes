@@ -148,7 +148,7 @@ extension IncomesUpcomingWidget: Widget {
                 .widgetURL(entry.deepLinkURL)
         }
         .configurationDisplayName("Upcoming Item")
-        .description("Shows the next or previous item")
+        .description("Default Account: Shows the next or previous item")
         .supportedFamilies([.systemSmall, .systemMedium])
     }
 }

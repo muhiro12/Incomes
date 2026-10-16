@@ -30,7 +30,11 @@ public enum TagPredicate {
     var value: Predicate<Tag> {
         switch self {
         case .all:
-            return .true
+            let prefix = LedgerTagStorage.typePrefix
+            let reserved = TagType.ledger.rawValue
+            return #Predicate { tag in
+                !tag.typeID.starts(with: prefix) && tag.typeID != reserved
+            }
         case .matchingNone:
             return .false
         case .idIs(let id):
@@ -44,6 +48,13 @@ public enum TagPredicate {
                 tag.name == name && tag.typeID == typeID
             }
         case .typeIs(let type):
+            if type == .ledger {
+                let prefix = LedgerTagStorage.typePrefix
+                let reserved = TagType.ledger.rawValue
+                return #Predicate { tag in
+                    tag.typeID.starts(with: prefix) || tag.typeID == reserved
+                }
+            }
             let id = type.rawValue
             return #Predicate { tag in
                 tag.typeID == id
@@ -61,11 +72,9 @@ public enum TagPredicate {
             let katakana = variants.katakana
             return #Predicate { tag in
                 tag.typeID == typeID
-                    && (
-                        tag.name.localizedStandardContains(raw)
+                    && (tag.name.localizedStandardContains(raw)
                             || tag.name.localizedStandardContains(hiragana)
-                            || tag.name.localizedStandardContains(katakana)
-                    )
+                            || tag.name.localizedStandardContains(katakana))
             }
         case let .nameStartsWith(name, type):
             let id = type.rawValue
@@ -81,8 +90,14 @@ public extension FetchDescriptor where T == Tag {
     /// - Parameters:
     ///   - predicate: A preset predicate.
     ///   - order: Sort order (default: forward).
-    static func tags(_ predicate: TagPredicate, order: SortOrder = .forward) -> FetchDescriptor {
-        .init(
+    static func tags(
+        _ predicate: TagPredicate,
+        order: SortOrder = .forward,
+        ledgerIdentifier: LedgerIdentifier = .default
+    ) -> FetchDescriptor {
+        // Tag is shared vocabulary. Scope money and membership through Item queries.
+        _ = ledgerIdentifier
+        return .init(
             predicate: predicate.value,
             sortBy: [
                 .init(\.name, order: order),

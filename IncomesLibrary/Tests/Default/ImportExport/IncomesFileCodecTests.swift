@@ -9,7 +9,7 @@ struct IncomesFileCodecTests {
         let data = try encode(items)
         let contents = try ItemImportOperations.read(data: data)
         #expect(contents.items == IncomesFileItem.sortedByValue(items))
-        #expect(contents.schemaVersion == "2.0.0")
+        #expect(contents.schemaVersion == "3.0.0")
         #expect(contents.currencyCode == "JPY")
         #expect(contents.exportedAt == exportedAt)
     }
@@ -25,9 +25,13 @@ struct IncomesFileCodecTests {
     @Test
     func file_uses_the_documented_shape_and_text_amounts() throws {
         let object = try jsonObject(encode(makeItems()))
-        #expect(Set(object.keys) == ["exportedAt", "format", "items", "schemaVersion", "selection", "settings"])
+        #expect(
+            Set(object.keys) == [
+                "exportedAt", "format", "items", "schemaVersion", "selection", "settings", "ledgers"
+            ]
+        )
         #expect(object["format"] as? String == "com.muhiro12.incomes.data")
-        #expect(object["schemaVersion"] as? String == "2.0.0")
+        #expect(object["schemaVersion"] as? String == "3.0.0")
         #expect(object["exportedAt"] as? String == "2026-09-29T03:04:05Z")
         let selection = try #require(object["selection"] as? [String: Any])
         #expect((selection["filters"] as? [Any])?.isEmpty == true)
@@ -55,7 +59,6 @@ struct IncomesFileCodecTests {
     func unknown_keys_are_ignored_and_optional_values_may_be_absent() throws {
         let data = try modified { object in
             object["futureSection"] = ["value": 1]
-            object["selection"] = nil
             var items = object["items"] as? [[String: Any]] ?? []
             items[0]["futureField"] = "ignored"
             items[0]["balance"] = nil
@@ -63,9 +66,11 @@ struct IncomesFileCodecTests {
         }
         let contents = try ItemImportOperations.read(data: data)
         #expect(contents.items.count == 4)
-        #expect(contents.items.contains { item in
-            item.content == "Salary" && item.balance == nil
-        })
+        #expect(
+            contents.items.contains { item in
+                item.content == "Salary" && item.balance == nil
+            }
+        )
     }
 
     @Test(arguments: ["dateRange", "category", "unknownKind"])
@@ -79,8 +84,8 @@ struct IncomesFileCodecTests {
     }
 
     @Test(arguments: [
-        ("3.0.0", ItemImportError.newerSchemaVersion("3.0.0")),
-        ("2.1.0", ItemImportError.newerSchemaVersion("2.1.0")),
+        ("4.0.0", ItemImportError.newerSchemaVersion("4.0.0")),
+        ("2.1.0", ItemImportError.unsupportedSchemaVersion("2.1.0")),
         ("1.0.0", ItemImportError.unsupportedSchemaVersion("1.0.0")),
         ("2.0", ItemImportError.malformedFile),
         ("2.0.0.0", ItemImportError.malformedFile),
@@ -104,7 +109,9 @@ struct IncomesFileCodecTests {
         let otherFormat = try modified { object in
             object["format"] = "com.example.other"
         }
-        let inputs = [Data(), Data("not json".utf8), Data("[]".utf8), valid.prefix(valid.count / 2), otherFormat]
+        let inputs = [
+            Data(), Data("not json".utf8), Data("[]".utf8), valid.prefix(valid.count / 2), otherFormat
+        ]
         for input in inputs {
             #expect(throws: ItemImportError.unrecognizedFormat) {
                 try ItemImportOperations.read(data: Data(input))
@@ -209,9 +216,11 @@ struct IncomesFileCodecTests {
             object["items"] = items
         }
         let contents = try ItemImportOperations.read(data: data)
-        let salary = try #require(contents.items.first { item in
-            item.content == "Salary"
-        })
+        let salary = try #require(
+            contents.items.first { item in
+                item.content == "Salary"
+            }
+        )
         #expect(salary.income == Decimal(string: text, locale: .init(identifier: "en_US_POSIX")))
     }
 

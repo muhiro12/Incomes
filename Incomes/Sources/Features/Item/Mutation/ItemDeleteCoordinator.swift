@@ -78,7 +78,8 @@ private extension ItemDeleteCoordinator {
         _ = try await MHMutationWorkflow.runThrowing(
             name: deleteWorkflowName(for: items),
             operation: {
-                try ItemDeletionOperations.deleteWithOutcome(
+                try LedgerMutationAccess.requireEditing(Set(items.map(\.ledgerIdentifier)))
+                return try ItemDeletionOperations.deleteWithOutcome(
                     context: context,
                     items: items
                 )

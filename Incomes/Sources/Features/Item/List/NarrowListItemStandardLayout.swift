@@ -1,3 +1,4 @@
+import SwiftData
 import SwiftUI
 
 struct NarrowListItemStandardLayout: View {
@@ -5,6 +6,9 @@ struct NarrowListItemStandardLayout: View {
         static let balanceColumnWidth: CGFloat = 80
         static let dateColumnWidth: CGFloat = 64
     }
+
+    @Environment(\.ledgerBalances)
+    private var ledgerBalances
 
     @Environment(Item.self)
     private var item
@@ -29,12 +33,12 @@ struct NarrowListItemStandardLayout: View {
             }
             Spacer()
             Divider()
-            Text(item.balance.asCurrency)
+            Text((ledgerBalances[item.persistentModelID]?.asCurrency ?? ItemSummaryOperations.unavailableAmountText))
                 .lineLimit(1)
                 .fixedSize(horizontal: true, vertical: false)
                 .monospacedDigit()
                 .frame(minWidth: Constants.balanceColumnWidth, alignment: .trailing)
-                .foregroundStyle(item.balance < .zero ? Color.red : Color.primary)
+                .foregroundStyle((ledgerBalances[item.persistentModelID] ?? .zero) < .zero ? Color.red : Color.primary)
         }
     }
 }

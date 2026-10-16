@@ -18,6 +18,8 @@ public struct ItemFormInput: Equatable {
         case invalidPriority
     }
 
+    /// Account captured with the draft; changing the current selection cannot redirect it.
+    public let ledgerIdentifier: LedgerIdentifier
     /// Selected local date for the item.
     public let date: Date
     /// Item description text.
@@ -65,7 +67,8 @@ public struct ItemFormInput: Equatable {
         incomeText: String,
         outgoText: String,
         category: String,
-        priorityText: String
+        priorityText: String,
+        ledgerIdentifier: LedgerIdentifier = .default
     ) {
         self.date = date
         self.content = content
@@ -73,6 +76,7 @@ public struct ItemFormInput: Equatable {
         self.outgoText = outgoText
         self.category = category
         self.priorityText = priorityText
+        self.ledgerIdentifier = ledgerIdentifier
     }
 
     /// Creates an item form input snapshot from typed amount and priority values.
@@ -83,7 +87,8 @@ public struct ItemFormInput: Equatable {
         outgo: Decimal,
         category: String,
         priority: Int = 0,
-        locale: Locale = .current
+        locale: Locale = .current,
+        ledgerIdentifier: LedgerIdentifier = .default
     ) {
         self.init(
             date: date,
@@ -91,7 +96,8 @@ public struct ItemFormInput: Equatable {
             incomeText: income.groupedDecimalText(locale: locale),
             outgoText: outgo.groupedDecimalText(locale: locale),
             category: category,
-            priorityText: "\(priority)"
+            priorityText: "\(priority)",
+            ledgerIdentifier: ledgerIdentifier
         )
     }
 
@@ -103,7 +109,8 @@ public struct ItemFormInput: Equatable {
             incomeText: draft.incomeText,
             outgoText: draft.outgoText,
             category: draft.category,
-            priorityText: draft.priorityText.isEmpty ? "0" : draft.priorityText
+            priorityText: draft.priorityText.isEmpty ? "0" : draft.priorityText,
+            ledgerIdentifier: draft.ledgerIdentifier
         )
     }
 
@@ -127,7 +134,8 @@ public struct ItemFormInput: Equatable {
             category: CategoryNameSupport.displayName(
                 forStoredName: item.category?.name
             ),
-            priorityText: "\(item.priority)"
+            priorityText: "\(item.priority)",
+            ledgerIdentifier: item.ledgerIdentifier
         )
     }
 
@@ -179,7 +187,7 @@ public struct ItemFormInput: Equatable {
                     forStoredName: tag.name
                 )
             )
-        case .debug, .none:
+        case .debug, .ledger, .none:
             return self
         }
     }
@@ -193,7 +201,8 @@ private extension ItemFormInput {
             incomeText: incomeText,
             outgoText: outgoText,
             category: category,
-            priorityText: priorityText
+            priorityText: priorityText,
+            ledgerIdentifier: ledgerIdentifier
         )
     }
 
@@ -204,7 +213,8 @@ private extension ItemFormInput {
             incomeText: incomeText,
             outgoText: outgoText,
             category: category,
-            priorityText: priorityText
+            priorityText: priorityText,
+            ledgerIdentifier: ledgerIdentifier
         )
     }
 
@@ -215,7 +225,23 @@ private extension ItemFormInput {
             incomeText: incomeText,
             outgoText: outgoText,
             category: category,
-            priorityText: priorityText
+            priorityText: priorityText,
+            ledgerIdentifier: ledgerIdentifier
+        )
+    }
+}
+
+public extension ItemFormInput {
+    /// Captures ownership when an adapter resolves an explicit item identity.
+    func assigning(to identifier: LedgerIdentifier) -> Self {
+        .init(
+            date: date,
+            content: content,
+            incomeText: incomeText,
+            outgoText: outgoText,
+            category: category,
+            priorityText: priorityText,
+            ledgerIdentifier: identifier
         )
     }
 }

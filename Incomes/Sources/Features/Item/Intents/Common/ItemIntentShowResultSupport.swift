@@ -48,6 +48,11 @@ enum ItemIntentShowResultSupport {
         ) {
             IntentItemListSection(items)
                 .modelContainer(modelContainer)
+                .environment(
+                    \.ledgerBalances,
+                    (try? LedgerBalanceOperations.snapshot(context: modelContainer.mainContext))?.balances
+                        ?? [:]
+                )
         }
     }
 
@@ -70,6 +75,11 @@ enum ItemIntentShowResultSupport {
         ) {
             IntentChartSectionGroup(.items(.idsAre(items.map(\.id))))
                 .modelContainer(modelContainer)
+                .environment(
+                    \.ledgerBalances,
+                    (try? LedgerBalanceOperations.snapshot(context: modelContainer.mainContext))?.balances
+                        ?? [:]
+                )
         }
     }
 

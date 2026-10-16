@@ -16,6 +16,9 @@ struct WideListItem: View {
         static let outgoColumnWidth: CGFloat = 80
     }
 
+    @Environment(\.ledgerBalances)
+    private var ledgerBalances
+
     @Environment(Item.self)
     private var item
 
@@ -45,12 +48,12 @@ struct WideListItem: View {
             .monospacedDigit()
             .foregroundStyle(.secondary)
             Divider()
-            Text(item.balance.asCurrency)
+            Text((ledgerBalances[item.persistentModelID]?.asCurrency ?? ItemSummaryOperations.unavailableAmountText))
                 .lineLimit(1)
                 .fixedSize(horizontal: true, vertical: false)
                 .monospacedDigit()
                 .frame(minWidth: Constants.balanceColumnWidth, alignment: .trailing)
-                .foregroundStyle(item.balance < .zero ? Color.red : Color.primary)
+                .foregroundStyle((ledgerBalances[item.persistentModelID] ?? .zero) < .zero ? Color.red : Color.primary)
         }
     }
 }

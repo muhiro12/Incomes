@@ -6,10 +6,14 @@ struct DataImportConfirmSection: View {
     let keptCount: Int?
     let isReplacing: Bool
     let isApplying: Bool
+    var canApply = true
     let confirm: () -> Void
 
     var body: some View {
         Section {
+            if plannedResult.changedLedgerCount > .zero {
+                LabeledContent("Accounts to update") { Text(plannedResult.changedLedgerCount, format: .number) }
+            }
             LabeledContent("Items to add") {
                 Text(plannedResult.addedCount, format: .number)
             }
@@ -33,9 +37,11 @@ struct DataImportConfirmSection: View {
                     }
                 }
             }
-            .disabled(isApplying || isEmpty)
+            .disabled(isApplying || isEmpty || !canApply)
         } header: {
             Text("Summary")
+        } footer: {
+            if !canApply { Text(LedgerError.premiumRequired.localizedDescription) }
         }
     }
 }
@@ -43,5 +49,6 @@ struct DataImportConfirmSection: View {
 private extension DataImportConfirmSection {
     var isEmpty: Bool {
         plannedResult.addedCount == .zero && plannedResult.removedCount == .zero
+            && plannedResult.changedLedgerCount == .zero
     }
 }

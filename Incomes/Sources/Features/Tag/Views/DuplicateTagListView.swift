@@ -5,21 +5,25 @@ struct DuplicateTagListView: View {
     @Environment(\.modelContext)
     private var context
 
-    @Query(.tags(.typeIs(.year)))
-    private var yearTags: [Tag]
-    @Query(.tags(.typeIs(.yearMonth)))
-    private var yearMonthTags: [Tag]
-    @Query(.tags(.typeIs(.content)))
-    private var contentTags: [Tag]
-    @Query(.tags(.typeIs(.category)))
-    private var categoryTags: [Tag]
+    @Query private var yearTags: [Tag]
+    @Query private var yearMonthTags: [Tag]
+    @Query private var contentTags: [Tag]
+    @Query private var categoryTags: [Tag]
 
     @Binding private var selectedTagID: Tag.ID?
 
     @State private var isResolveDialogPresented = false
     @State private var selectedTags = [Tag]()
 
-    init(selection: Binding<Tag.ID?> = .constant(nil)) {
+    private let ledgerIdentifier: LedgerIdentifier
+
+    init(selection: Binding<Tag.ID?> = .constant(nil),
+         ledgerIdentifier: LedgerIdentifier = .default) {
+        self.ledgerIdentifier = ledgerIdentifier
+        _yearTags = .init(.tags(.typeIs(.year), ledgerIdentifier: ledgerIdentifier))
+        _yearMonthTags = .init(.tags(.typeIs(.yearMonth), ledgerIdentifier: ledgerIdentifier))
+        _contentTags = .init(.tags(.typeIs(.content), ledgerIdentifier: ledgerIdentifier))
+        _categoryTags = .init(.tags(.typeIs(.category), ledgerIdentifier: ledgerIdentifier))
         _selectedTagID = selection
     }
 }
@@ -132,6 +136,7 @@ private extension DuplicateTagListView {
 
     func resolveSelectedTags() {
         do {
+            try LedgerMutationAccess.requireEditing([ledgerIdentifier])
             try TagMutationOperations.resolveDuplicates(
                 context: context,
                 tags: selectedTags

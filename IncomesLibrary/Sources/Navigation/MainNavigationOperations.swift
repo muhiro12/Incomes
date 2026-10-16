@@ -60,22 +60,26 @@ public enum MainNavigationOperations {
     /// Returns the default year and year-month selections that match `date`.
     public static func loadState(
         context: ModelContext,
-        date: Date = .now
+        date: Date = .now,
+        ledgerIdentifier: LedgerIdentifier = .default
     ) throws -> MainNavigationState {
         try MainNavigationStateLoader.load(
             context: context,
-            date: date
+            date: date,
+            ledgerIdentifier: ledgerIdentifier
         )
     }
 
     /// Resolves `route` into the destination or modal state for main navigation.
     public static func execute(
         route: IncomesRoute,
-        context: ModelContext
+        context: ModelContext,
+        ledgerIdentifier: LedgerIdentifier = .default
     ) throws -> MainNavigationRouteOutcome {
         try MainNavigationRouteExecutor.execute(
             route: route,
-            context: context
+            context: context,
+            ledgerIdentifier: ledgerIdentifier
         )
     }
 }

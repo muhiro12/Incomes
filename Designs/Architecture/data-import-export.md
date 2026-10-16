@@ -1,5 +1,10 @@
 # Data import and export
 
+The ownership-aware file format is 3.0.0. Legacy 2.0.0 files remain readable
+and always describe the default book. File versions are independent of the
+SwiftData schema: adding book ownership to the file does not add stored model
+attributes.
+
 ## Purpose
 
 Export and import move a person's financial records in and out of Incomes as
@@ -30,7 +35,8 @@ The store contains `Item` and `Tag` records. Year, year-month, and content tags
 are derived from item fields, so the file omits them. A category tag carries
 meaning, so each item records its category name. The file contains:
 
-- Every item's date, content, income, outgo, category, priority, and repeat ID.
+- Every item's date, content, income, outgo, category, priority, repeat ID, and account ID.
+- Additional-book names and portable identities, including empty books.
 - The item's running balance, for readers only.
 - Settings that describe the records, currently the currency code.
 
@@ -58,14 +64,17 @@ bytes loaded even if the file size changes after selection.
       "content": "Rent",
       "date": "2026-03-08",
       "income": "0",
+      "ledgerID": "default",
       "outgo": "80000",
       "priority": 0,
       "repeatID": "3F2504E0-4F89-41D3-9A0C-0305E82C3301"
     }
   ],
-  "schemaVersion": "2.0.0",
+  "ledgers": [],
+  "schemaVersion": "3.0.0",
   "selection": {
-    "filters": []
+    "filters": [],
+    "ledgerIDs": ["default"]
   },
   "settings": {
     "currencyCode": "JPY"
@@ -88,8 +97,8 @@ bytes loaded even if the file size changes after selection.
 The file can grow along two axes without breaking older readers.
 
 Sections describe which kinds of data the file contains. `items` is required
-and `settings` is optional. Planned sections include category attributes,
-notification settings, and ledgers.
+and `settings` is optional. Planned sections include category attributes
+and notification settings. V3 requires the account metadata section `ledgers`.
 
 - A section or field that a reader can ignore without changing the meaning of
   the remaining data may be added within the same schema version. Readers
@@ -97,9 +106,16 @@ notification settings, and ledgers.
 - Data whose omission would change meaning, such as ledger ownership, requires
   a new schema version.
 
-`selection.filters` describes which records the file covers. An empty list
-means all records, which is the only selection written today. Planned filter
-kinds are a date range, categories, and a ledger.
+`selection.ledgerIDs` explicitly lists covered owners in V3. An empty
+`selection.filters` list means all Items within those owners. Replacing this
+selection cannot erase another owner. The current full export includes the
+default book even when it is empty. Planned filter kinds include a date range
+and categories. V2 files retain their original optional selection shape and
+resolve only to the default account.
+
+V3 refuses duplicate book IDs. Additional-book names are metadata, not identity;
+same-name books stay distinct. Merge retains existing names unless explicitly
+changed in review. See [Independent ledgers](independent-ledgers.md).
 
 - Filters are must-understand. A reader rejects a file containing a filter kind
   it does not know, instead of mistaking a partial file for a complete one.
@@ -110,19 +126,17 @@ kinds are a date range, categories, and a ledger.
 
 ## Versioning
 
-The file format follows the SwiftData schema history in
-[SwiftData schema evolution](swiftdata-schema-evolution.md).
+File versions describe portable financial meaning independently of the
+[SwiftData storage history](swiftdata-schema-evolution.md).
 
-- `schemaVersion` records the `versionIdentifier` of the schema that wrote the
-  file. Export always writes the current schema version.
-- Each schema version that can appear in a file has a frozen payload type, like
-  each frozen `IncomesSchemaVn`. A payload type is never edited after release.
-- Import converts an older payload forward into the current representation.
-  It rejects a newer version and asks the person to update Incomes.
-- Adding a storage schema version requires adding the matching file version.
-  A test compares the current file version with the last schema in
-  `IncomesSchemaMigrationPlan`, and a committed fixture for each file version
-  must keep decoding.
+- Export writes the latest file version. Ownership-aware V3 is required even
+  though its Items and Tags retain storage schema V2.
+- Each file version has a frozen payload type and a committed decoding fixture.
+  A released payload must not be edited in place.
+- Import converts supported older payloads into the current representation and
+  rejects newer versions. It never infers an additional owner for a V2 Item.
+- A stored-model change requires reviewing the file contract; a version increase
+  is necessary when omitting the new data would change its financial meaning.
 
 The first file version is `2.0.0`. Files were never written for earlier schemas.
 

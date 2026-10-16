@@ -80,15 +80,19 @@ struct MonthlySummarySection: View {
 
     init(
         date: Date,
-        currentItemsDescriptor: FetchDescriptor<Item>? = nil
+        currentItemsDescriptor: FetchDescriptor<Item>? = nil,
+        ledgerIdentifier: LedgerIdentifier = .default
     ) {
         self.date = date
-        _currentItems = .init(currentItemsDescriptor ?? .items(.dateIsSameMonthAs(date)))
+        _currentItems = .init(
+            currentItemsDescriptor ?? .items(.dateIsSameMonthAs(date), ledgerIdentifier: ledgerIdentifier)
+        )
         _previousItems = .init(
             .items(
                 .dateIsSameMonthAs(
                     MonthlySummaryOperations.previousMonthDate(from: date)
-                )
+                ),
+                ledgerIdentifier: ledgerIdentifier
             )
         )
     }
@@ -125,7 +129,8 @@ private extension MonthlySummarySection {
 
     func generateInitialSummaryFromToolbar() {
         guard generatedSummary == nil,
-              !isGenerating else {
+              !isGenerating
+        else {
             return
         }
         Task {
@@ -179,13 +184,15 @@ private extension MonthlySummarySection {
             )
             guard !Task.isCancelled,
                   activeRequestID == requestID,
-                  expectedGenerationInput == generationInput else {
+                  expectedGenerationInput == generationInput
+            else {
                 return
             }
             generatedSummary = summary
         } catch {
             guard !Task.isCancelled,
-                  activeRequestID == requestID else {
+                  activeRequestID == requestID
+            else {
                 return
             }
             if presentsErrors {

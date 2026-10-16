@@ -9,6 +9,9 @@ import SwiftUI
 import TipKit
 
 struct HomeMonthRowButton: View {
+    @Environment(\.ledgerIdentifier)
+    private var ledgerIdentifier
+
     @Environment(Tag.self)
     private var tag
     @Environment(IncomesTipController.self)
@@ -49,6 +52,7 @@ struct HomeMonthRowButton: View {
             } label: {
                 Label("Delete", systemImage: "trash")
             }
+            .ledgerWriteAccess(owner: ledgerIdentifier)
         }
         .popoverTip(showsTip ? monthListTip : nil, arrowEdge: .top)
     }
@@ -60,7 +64,10 @@ private extension HomeMonthRowButton {
     }
 
     var monthURL: URL? {
-        MainNavigationOperations.preferredURL(for: monthRoute)
+        guard ledgerIdentifier == .default else {
+            return nil
+        }
+        return MainNavigationOperations.preferredURL(for: monthRoute)
     }
 
     func openMonth() {

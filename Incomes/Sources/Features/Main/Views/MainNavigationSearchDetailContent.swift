@@ -10,7 +10,8 @@ struct MainNavigationSearchDetailContent: View {
         if let predicate {
             SearchResultView(
                 predicate: predicate,
-                refineSearch: refineSearch
+                refineSearch: refineSearch,
+                ledgerIdentifier: router.ledgerIdentifier
             )
         } else {
             MainNavigationSearchResultsContent()

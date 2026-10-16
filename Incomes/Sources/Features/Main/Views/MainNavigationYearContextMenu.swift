@@ -1,6 +1,9 @@
 import SwiftUI
 
 struct MainNavigationYearContextMenu: View {
+    @Environment(\.ledgerIdentifier)
+    private var ledgerIdentifier
+
     @Environment(Tag.self)
     private var yearTag
 
@@ -32,6 +35,7 @@ struct MainNavigationYearContextMenu: View {
         } label: {
             Label("Delete", systemImage: "trash")
         }
+        .ledgerWriteAccess(owner: ledgerIdentifier)
     }
 }
 
@@ -41,7 +45,10 @@ private extension MainNavigationYearContextMenu {
     }
 
     var yearURL: URL? {
-        MainNavigationOperations.preferredURL(
+        guard ledgerIdentifier == .default else {
+            return nil
+        }
+        return MainNavigationOperations.preferredURL(
             for: MainNavigationOperations.route(forYearTag: yearTag)
         )
     }

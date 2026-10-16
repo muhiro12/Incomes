@@ -3,6 +3,7 @@ import SwiftData
 
 @Observable
 final class ItemFormModel {
+    private(set) var ledgerIdentifier: LedgerIdentifier
     var date: Date = .now
     var content: String = ""
     var priority: String = "0"
@@ -15,7 +16,8 @@ final class ItemFormModel {
     private let hasDraft: Bool
     private var hasAppliedInitialContext = false
 
-    init(draft: ItemFormDraft? = nil) {
+    init(draft: ItemFormDraft? = nil, ledgerIdentifier: LedgerIdentifier = .default) {
+        self.ledgerIdentifier = ledgerIdentifier
         hasDraft = draft != nil
 
         guard let draft else {
@@ -45,7 +47,8 @@ extension ItemFormModel {
             incomeText: income,
             outgoText: outgo,
             category: category,
-            priorityText: priority
+            priorityText: priority,
+            ledgerIdentifier: ledgerIdentifier
         )
     }
 
@@ -108,6 +111,7 @@ extension ItemFormModel {
     }
 
     func apply(_ formInput: ItemFormInput) {
+        ledgerIdentifier = formInput.ledgerIdentifier
         date = formInput.date
         content = formInput.content
         updateIncomeText(formInput.incomeText)

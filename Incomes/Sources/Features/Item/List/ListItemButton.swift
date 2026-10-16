@@ -4,6 +4,9 @@ import SwiftUI
 import TipKit
 
 struct ListItemButton: View {
+    @Environment(\.ledgerBalances)
+    private var ledgerBalances
+
     @Environment(Item.self)
     private var item
     @Environment(\.modelContext)
@@ -102,9 +105,17 @@ struct ListItemButton: View {
 }
 
 private extension ListItemButton {
+    var balanceAccessibilityText: String {
+        ledgerBalances[item.persistentModelID]?.currencyText(locale: locale)
+            ?? ItemSummaryOperations.unavailableAmountText
+    }
+
     var accessibilityValue: Text {
-        Text(verbatim: accessibilityValueParts
-                .formatted(.list(type: .and).locale(locale)))
+        Text(
+            verbatim:
+                accessibilityValueParts
+                .formatted(.list(type: .and).locale(locale))
+        )
     }
 
     var accessibilityValueParts: [String] {
@@ -126,7 +137,8 @@ private extension ListItemButton {
                 locale: locale
             ),
             String(
-                localized: "Balance: \(item.balance.currencyText(locale: locale))",
+                localized:
+                    "Balance: \(balanceAccessibilityText)",
                 locale: locale
             )
         ]

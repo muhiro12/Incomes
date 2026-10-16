@@ -8,6 +8,9 @@ struct MainNavigationSearchContent: View {
         static let headerTopPadding: CGFloat = 8
     }
 
+    @Environment(\.ledgerIdentifier)
+    private var ledgerIdentifier
+
     @Environment(\.horizontalSizeClass)
     private var horizontalSizeClass
 
@@ -21,7 +24,8 @@ struct MainNavigationSearchContent: View {
         SearchListView(
             selection: $searchPredicateSelection,
             searchText: $searchText,
-            appliesInitialSearchText: $appliesInitialSearchText
+            appliesInitialSearchText: $appliesInitialSearchText,
+            ledgerIdentifier: ledgerIdentifier
         )
         .safeAreaInset(edge: .top, spacing: .zero) {
             if horizontalSizeClass == .compact {

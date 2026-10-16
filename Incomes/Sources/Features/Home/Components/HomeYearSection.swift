@@ -10,6 +10,12 @@ import SwiftData
 import SwiftUI
 
 struct HomeYearSection: View {
+    @Environment(\.ledgerIdentifier)
+    private var ledgerIdentifier
+
+    @AppStorage(\.isSubscribeOn)
+    private var isSubscribeOn
+
     @Environment(\.modelContext)
     private var context
     @Environment(NotificationService.self)
@@ -17,7 +23,13 @@ struct HomeYearSection: View {
     @Environment(MHLoggingBootstrap.self)
     private var logging
 
-    @Query private var yearMonthTags: [Tag]
+    @Query private var queriedYearMonthTags: [Tag]
+
+    private var yearMonthTags: [Tag] {
+        queriedYearMonthTags.filter { tag in
+            !TagQueryOperations.items(for: tag, ledgerIdentifier: ledgerIdentifier).isEmpty
+        }
+    }
 
     @State private var isDialogPresented = false
     @State private var deletionDisplayName: String?
@@ -29,12 +41,14 @@ struct HomeYearSection: View {
         yearName: String,
         navigateToRoute: @escaping (IncomesRoute) -> Void = { _ in
             // no-op
-        }
+        },
+        ledgerIdentifier: LedgerIdentifier = .default
     ) {
-        _yearMonthTags = Query(
+        _queriedYearMonthTags = Query(
             .tags(
                 .nameStartsWith(yearName, type: .yearMonth),
-                order: .reverse
+                order: .reverse,
+                ledgerIdentifier: ledgerIdentifier
             )
         )
         self.navigateToRoute = navigateToRoute
@@ -53,12 +67,14 @@ extension HomeYearSection {
                     requestDelete: requestMonthDeletion
                 )
                 .environment(tag)
+                .deleteDisabled(!LedgerAccessOperations.canEdit(ledgerIdentifier, isPremium: isSubscribeOn))
             }
             .onDelete { indices in
                 requestDeletion(
                     items: TagMutationOperations.resolveItemsForDeletion(
                         from: yearMonthTags,
-                        indices: indices
+                        indices: indices,
+                        ledgerIdentifier: ledgerIdentifier
                     ),
                     allowsEmptySelection: true
                 )
@@ -110,7 +126,7 @@ extension HomeYearSection {
 private extension HomeYearSection {
     func requestMonthDeletion(for tag: Tag) {
         requestDeletion(
-            items: tag.items ?? [],
+            items: TagQueryOperations.items(for: tag, ledgerIdentifier: ledgerIdentifier),
             displayName: tag.displayName
         )
     }
@@ -122,7 +138,7 @@ private extension HomeYearSection {
     ) {
         Haptic.warning.impact()
         deletionDisplayName = displayName
-        willDeleteItems = items
+        willDeleteItems = items.filter { $0.ledgerIdentifier == ledgerIdentifier }
         isDialogPresented = allowsEmptySelection || !items.isEmpty
     }
 

@@ -5,29 +5,32 @@ struct OrphanTagListView: View {
     @Environment(\.modelContext)
     private var context
 
-    @Query(.tags(.typeIs(.year)))
-    private var yearTags: [Tag]
-    @Query(.tags(.typeIs(.yearMonth)))
-    private var yearMonthTags: [Tag]
-    @Query(.tags(.typeIs(.content)))
-    private var contentTags: [Tag]
-    @Query(.tags(.typeIs(.category)))
-    private var categoryTags: [Tag]
-    @Query(.tags(.typeIs(.debug)))
-    private var debugTags: [Tag]
+    @Query private var yearTags: [Tag]
+    @Query private var yearMonthTags: [Tag]
+    @Query private var contentTags: [Tag]
+    @Query private var categoryTags: [Tag]
+    @Query private var debugTags: [Tag]
 
     @Binding private var selectedTagID: Tag.ID?
 
     @State private var isCleanupDialogPresented = false
 
+    private let ledgerIdentifier: LedgerIdentifier
     private let onCleanupAll: () -> Void
 
     init(
         selection: Binding<Tag.ID?> = .constant(nil),
         onCleanupAll: @escaping () -> Void = {
             // no-op
-        }
+        },
+        ledgerIdentifier: LedgerIdentifier = .default
     ) {
+        self.ledgerIdentifier = ledgerIdentifier
+        _yearTags = .init(.tags(.typeIs(.year), ledgerIdentifier: ledgerIdentifier))
+        _yearMonthTags = .init(.tags(.typeIs(.yearMonth), ledgerIdentifier: ledgerIdentifier))
+        _contentTags = .init(.tags(.typeIs(.content), ledgerIdentifier: ledgerIdentifier))
+        _categoryTags = .init(.tags(.typeIs(.category), ledgerIdentifier: ledgerIdentifier))
+        _debugTags = .init(.tags(.typeIs(.debug), ledgerIdentifier: ledgerIdentifier))
         _selectedTagID = selection
         self.onCleanupAll = onCleanupAll
     }
@@ -104,6 +107,7 @@ extension OrphanTagListView {
             ToolbarItem {
                 if hasAnyOrphanTags {
                     Button("Cleanup All", role: .destructive, action: presentCleanupDialog)
+                        .ledgerWriteAccess(owner: ledgerIdentifier)
                 }
             }
             ToolbarItem {
@@ -135,7 +139,8 @@ private extension OrphanTagListView {
 
     func cleanupAllOrphanTags() {
         do {
-            try TagMutationOperations.deleteAllOrphanTags(context: context)
+            try LedgerMutationAccess.requireEditing([ledgerIdentifier])
+            try TagMutationOperations.deleteAllOrphanTags(context: context, ledgerIdentifier: ledgerIdentifier)
             selectedTagID = nil
             onCleanupAll()
             Haptic.success.impact()

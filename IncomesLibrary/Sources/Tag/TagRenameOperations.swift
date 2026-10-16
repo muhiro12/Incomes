@@ -13,14 +13,17 @@ public enum TagRenameOperations {
     public static func previewCategoryRename(
         context: ModelContext,
         tag: Tag,
-        to newName: String
+        to newName: String,
+        ledgerIdentifier: LedgerIdentifier = .default
     ) throws -> TagRenamePreview {
         try validateCategoryRenameSource(tag)
 
-        let affectedItemCount = TagQueryOperations.items(for: tag).count
-        guard let normalizedTargetName = normalizedCategoryRenameTarget(
-            newName
-        ) else {
+        let affectedItemCount = TagQueryOperations.items(for: tag, ledgerIdentifier: ledgerIdentifier).count
+        guard
+            let normalizedTargetName = normalizedCategoryRenameTarget(
+                newName
+            )
+        else {
             return .init(
                 normalizedTargetName: nil,
                 affectedItemCount: affectedItemCount,
@@ -39,9 +42,11 @@ public enum TagRenameOperations {
         if let existingTag = try TagQueryOperations.getByName(
             context: context,
             name: normalizedTargetName,
-            type: .category
+            type: .category,
+            ledgerIdentifier: ledgerIdentifier
         ),
-        existingTag.id != tag.id {
+        existingTag.id != tag.id,
+        !TagQueryOperations.items(for: existingTag, ledgerIdentifier: ledgerIdentifier).isEmpty {
             return .init(
                 normalizedTargetName: normalizedTargetName,
                 affectedItemCount: affectedItemCount,
@@ -62,12 +67,14 @@ public enum TagRenameOperations {
     public static func renameCategory(
         context: ModelContext,
         tag: Tag,
-        to newName: String
+        to newName: String,
+        ledgerIdentifier: LedgerIdentifier = .default
     ) throws {
         let preview = try previewCategoryRename(
             context: context,
             tag: tag,
-            to: newName
+            to: newName,
+            ledgerIdentifier: ledgerIdentifier
         )
         if let validationError = preview.validationError {
             throw validationError
@@ -79,9 +86,20 @@ public enum TagRenameOperations {
             return
         }
 
-        tag.rename(
-            storedName: normalizedTargetName
+        let members = TagQueryOperations.items(for: tag)
+        let existingTarget = try TagQueryOperations.getByName(
+            context: context,
+            name: normalizedTargetName,
+            type: .category
         )
+        if existingTarget == nil, members.allSatisfy({ $0.ledgerIdentifier == ledgerIdentifier }) {
+            tag.rename(storedName: normalizedTargetName)
+            return
+        }
+        let target = try Tag.create(context: context, name: normalizedTargetName, type: .category)
+        for item in TagQueryOperations.items(for: tag, ledgerIdentifier: ledgerIdentifier) {
+            item.modify(tags: (item.tags ?? []).filter { $0.id != tag.id } + [target])
+        }
     }
 }
 

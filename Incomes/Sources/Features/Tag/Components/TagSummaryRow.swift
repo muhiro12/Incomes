@@ -9,23 +9,44 @@ import SwiftData
 import SwiftUI
 
 struct TagSummaryRow: View {
+    @Environment(\.ledgerIdentifier)
+    private var ledgerIdentifier
+
+    @Environment(\.ledgerBalances)
+    private var ledgerBalances
+
     @Environment(Tag.self)
     private var tag
     @Environment(\.locale)
     private var locale
 
+    private var summary: ItemSummaryOperations.MonthlyTotals {
+        get throws {
+            try ItemSummaryOperations.totals(
+                for: TagQueryOperations.items(for: tag, ledgerIdentifier: ledgerIdentifier)
+            )
+        }
+    }
+
+    private var hasDeficit: Bool {
+        TagQueryOperations.items(for: tag, ledgerIdentifier: ledgerIdentifier).contains { item in
+            (ledgerBalances[item.persistentModelID] ?? .zero) < .zero
+        }
+    }
+
     var body: some View {
-        let itemCount = (tag.items ?? []).count
+        let itemCount = TagQueryOperations.items(for: tag, ledgerIdentifier: ledgerIdentifier).count
         let netIncomePresentation = ItemSummaryOperations.netIncomePresentation(
-            for: (try? tag.netIncome) ?? .zero
+            for: (try? summary.netIncome) ?? .zero
         )
 
         TagSummaryRowContent(
             displayName: tag.displayName,
             itemCount: itemCount,
-            incomeText: (try? tag.income)?.asCurrency ?? ItemSummaryOperations.unavailableAmountText,
-            outgoText: (try? tag.outgo)?.asMinusCurrency ?? ItemSummaryOperations.unavailableAmountText,
-            hasDeficit: tag.hasDeficit,
+            incomeText: (try? summary.totalIncome)?.asCurrency ?? ItemSummaryOperations.unavailableAmountText,
+            outgoText: (try? summary.totalOutgo)?.asMinusCurrency
+                ?? ItemSummaryOperations.unavailableAmountText,
+            hasDeficit: hasDeficit,
             netIncomePresentation: netIncomePresentation
         )
         .accessibilityElement(children: .ignore)
@@ -38,7 +59,7 @@ private extension TagSummaryRow {
     var netIncomeAccessibilityText: String {
         let netIncome: Decimal
         do {
-            netIncome = try tag.netIncome
+            netIncome = try summary.netIncome
         } catch {
             return ErrorMessageOperations.message(from: error)
         }
@@ -53,8 +74,10 @@ private extension TagSummaryRow {
     }
 
     func accessibilityValue(itemCount: Int) -> Text {
-        Text(verbatim: accessibilityValueParts(itemCount: itemCount)
-                .formatted(.list(type: .and).locale(locale)))
+        Text(
+            verbatim: accessibilityValueParts(itemCount: itemCount)
+                .formatted(.list(type: .and).locale(locale))
+        )
     }
 
     func accessibilityValueParts(itemCount: Int) -> [String] {
@@ -65,8 +88,8 @@ private extension TagSummaryRow {
         let income: Decimal
         let outgo: Decimal
         do {
-            income = try tag.income
-            outgo = try tag.outgo
+            income = try summary.totalIncome
+            outgo = try summary.totalOutgo
         } catch {
             return [itemCountText, ErrorMessageOperations.message(from: error)]
         }
@@ -82,7 +105,7 @@ private extension TagSummaryRow {
             )
         ]
 
-        if tag.hasDeficit {
+        if hasDeficit {
             parts.append(
                 String(
                     localized: "Contains deficit items",

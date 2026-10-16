@@ -132,7 +132,7 @@ extension IncomesMonthNetIncomeWidget: Widget {
                 .widgetURL(entry.deepLinkURL)
         }
         .configurationDisplayName("Incomes Net Income")
-        .description("This month's net income")
+        .description("Default Account: This month's net income")
         .supportedFamilies([.systemSmall, .systemMedium])
     }
 }

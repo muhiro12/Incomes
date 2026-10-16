@@ -2,7 +2,7 @@ import SwiftData
 import SwiftUI
 
 struct DataExportView: View {
-    @Query(.items(.all))
+    @Query(.allLedgerItems())
     private var items: [Item]
 
     var body: some View {

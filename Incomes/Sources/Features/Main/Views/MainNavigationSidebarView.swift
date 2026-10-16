@@ -119,7 +119,8 @@ private extension MainNavigationSidebarView {
         yearDeletionModel.prepare(
             from: yearTags,
             indices: indices,
-            logger: yearDeletionLogger
+            logger: yearDeletionLogger,
+            ledgerIdentifier: router.ledgerIdentifier
         )
         sidebarLogger.debug(
             "year_deletion.requested",
@@ -136,7 +137,8 @@ private extension MainNavigationSidebarView {
         yearDeletionModel.prepare(
             from: [yearTag],
             indices: IndexSet(integer: .zero),
-            logger: yearDeletionLogger
+            logger: yearDeletionLogger,
+            ledgerIdentifier: router.ledgerIdentifier
         )
         sidebarLogger.debug(
             "year_deletion.context_menu_prepared",

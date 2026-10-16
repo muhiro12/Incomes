@@ -32,9 +32,9 @@ struct DebugNaturalLanguageSearchResultSections: View {
         }
     }
 
-    init(conditions: ItemSearchConditions) {
+    init(conditions: ItemSearchConditions, ledgerIdentifier: LedgerIdentifier) {
         _fetchedItems = Query(
-            NaturalLanguageSearchOperations.resultDescriptor(for: conditions)
+            NaturalLanguageSearchOperations.resultDescriptor(for: conditions, ledgerIdentifier: ledgerIdentifier)
         )
     }
 }

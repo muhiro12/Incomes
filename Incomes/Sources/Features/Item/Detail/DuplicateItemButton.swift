@@ -9,6 +9,9 @@ import SwiftData
 import SwiftUI
 
 struct DuplicateItemButton {
+    @Environment(Item.self)
+    private var item
+
     @State private var isDuplicateSheetPresented = false
 
     private let action: (() -> Void)?
@@ -33,6 +36,7 @@ extension DuplicateItemButton: View {
                 Image(systemName: "document.on.document")
             }
         }
+        .ledgerWriteAccess(owner: item.ledgerIdentifier)
         .accessibilityLabel(Text("Duplicate Item"))
         .accessibilityHint(Text("Opens a new item form copied from this item."))
         .sheet(isPresented: $isDuplicateSheetPresented) {

@@ -12,6 +12,7 @@ struct DuplicateTagSectionHeader: View {
             Text(title)
             Spacer()
             Button("Resolve All", role: .destructive, action: presentResolveAllDialog)
+                .ledgerWriteAccess()
                 .font(.caption)
                 .textCase(nil)
         }

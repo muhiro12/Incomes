@@ -21,11 +21,16 @@ struct MainNavigationView: View {
     private var notificationService
     @Environment(IncomesTipController.self)
     private var tipController
-    @Environment(IncomesRouteInbox.self)
-    private var routeInbox
 
-    @Query(.tags(.typeIs(.year), order: .reverse))
-    private var yearTags: [Tag]
+    private let accountMenu: LedgerSelectionMenu?
+
+    @Query private var queriedYearTags: [Tag]
+
+    private var yearTags: [Tag] {
+        queriedYearTags.filter { tag in
+            !TagQueryOperations.items(for: tag, ledgerIdentifier: router.ledgerIdentifier).isEmpty
+        }
+    }
 
     // Scene storage lives as long as the scene session, so a closed window
     // starts again from today's month while a relaunched scene keeps its place.
@@ -86,8 +91,9 @@ struct MainNavigationView: View {
             ) { route in
                 enqueueNavigation(to: route)
             }
-            .navigationTitle("Incomes")
+            .navigationTitle(accountMenu?.selectedName ?? "Incomes")
             .toolbar {
+                ToolbarItem(placement: .topBarLeading) { accountMenu }
                 MainNavigationSidebarToolbarContent(
                     isCompact: horizontalSizeClass == .compact,
                     openSearch: {
@@ -138,12 +144,6 @@ struct MainNavigationView: View {
                 OrphanTagNavigationView()
             }
         }
-        .mhRouteHandler(routeInbox) { route in
-            try router.handleIncomingRoute(
-                route,
-                context: context
-            )
-        }
         .onChange(of: yearTags) {
             tipController.refreshHasAnyItems(!yearTags.isEmpty)
             if let yearTagID = router.yearTagID,
@@ -173,6 +173,16 @@ struct MainNavigationView: View {
         .environment(router)
         .environment(settingsCoordinator)
         .environment(yearDeletionModel)
+    }
+
+    init(
+        ledgerIdentifier: LedgerIdentifier = .default,
+        accountMenu: LedgerSelectionMenu? = nil,
+        router: MainNavigationRouter? = nil
+    ) {
+        self.accountMenu = accountMenu
+        _queriedYearTags = .init(.tags(.typeIs(.year), order: .reverse, ledgerIdentifier: ledgerIdentifier))
+        _router = .init(initialValue: router ?? .init(ledgerIdentifier: ledgerIdentifier))
     }
 }
 

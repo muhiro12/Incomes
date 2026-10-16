@@ -44,6 +44,7 @@ extension DeleteItemButton: View {
                 Image(systemName: "trash")
             }
         }
+        .ledgerWriteAccess(owner: item.ledgerIdentifier)
         .accessibilityLabel(Text("Delete Item"))
         .accessibilityHint(Text("Asks for confirmation before deleting this item."))
         .confirmationDialog(

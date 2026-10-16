@@ -9,6 +9,9 @@ import SwiftData
 import SwiftUI
 
 struct EditItemButton {
+    @Environment(Item.self)
+    private var item
+
     @State private var isEditSheetPresented = false
 
     private let action: (() -> Void)?
@@ -33,6 +36,7 @@ extension EditItemButton: View {
                 Image(systemName: "pencil")
             }
         }
+        .ledgerWriteAccess(owner: item.ledgerIdentifier)
         .accessibilityLabel(Text("Edit Item"))
         .accessibilityHint(Text("Opens the item form for editing."))
         .sheet(isPresented: $isEditSheetPresented) {

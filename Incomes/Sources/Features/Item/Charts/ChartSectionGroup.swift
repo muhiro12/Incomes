@@ -15,14 +15,17 @@ struct ChartSectionGroup {
 
     private let descriptor: FetchDescriptor<Item>
     private let yearScopedDate: Date?
+    private let ledgerIdentifier: LedgerIdentifier
 
     init(_ descriptor: FetchDescriptor<Item>) {
         self.descriptor = descriptor
         self.yearScopedDate = nil
+        self.ledgerIdentifier = .default
     }
 
-    init(yearScopedTo date: Date) {
-        self.descriptor = .items(.dateIsSameYearAs(date))
+    init(yearScopedTo date: Date, ledgerIdentifier: LedgerIdentifier = .default) {
+        self.descriptor = .items(.dateIsSameYearAs(date), ledgerIdentifier: ledgerIdentifier)
+        self.ledgerIdentifier = ledgerIdentifier
         self.yearScopedDate = date
     }
 }
@@ -35,7 +38,7 @@ extension ChartSectionGroup: View {
             AdvertisementSection(.media)
         }
         if let date = yearScopedDate {
-            CategoryChartSection(yearScopedTo: date)
+            CategoryChartSection(yearScopedTo: date, ledgerIdentifier: ledgerIdentifier)
         } else {
             CategoryChartSection(descriptor)
         }

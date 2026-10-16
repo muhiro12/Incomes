@@ -33,8 +33,8 @@ struct YearlyDuplicationView: View {
     @Environment(\.mhDesignMetrics)
     private var designMetrics
 
-    @Query(.tags(.typeIs(.year), order: .reverse))
-    private var yearTags: [Tag]
+    @Query private var yearTags: [Tag]
+    private let ledgerIdentifier: LedgerIdentifier
 
     @State private var sourceYear = Constants.initialSourceYear
     @State private var targetYear = Constants.initialTargetYear
@@ -145,6 +145,11 @@ struct YearlyDuplicationView: View {
             Text(resultMessage ?? "")
         }
     }
+
+    init(ledgerIdentifier: LedgerIdentifier = .default) {
+        self.ledgerIdentifier = ledgerIdentifier
+        _yearTags = .init(.tags(.typeIs(.year), order: .reverse, ledgerIdentifier: ledgerIdentifier))
+    }
 }
 
 private extension YearlyDuplicationView {
@@ -155,6 +160,7 @@ private extension YearlyDuplicationView {
     var sourceYears: [Int] {
         YearlyItemDuplicationSelectionOperations.availableSourceYears(
             from: yearTags,
+            ledgerIdentifier: ledgerIdentifier,
             currentYear: currentYear
         )
     }
@@ -204,7 +210,8 @@ private extension YearlyDuplicationView {
                 context: context,
                 sourceYear: sourceYear,
                 targetYear: targetYear,
-                logger: yearlyDuplicationLogger
+                logger: yearlyDuplicationLogger,
+                ledgerIdentifier: ledgerIdentifier
             )
 
             guard generation == planLoadGeneration, !Task.isCancelled else {
@@ -232,13 +239,15 @@ private extension YearlyDuplicationView {
             return
         }
         do {
-            guard let result = try await YearlyDuplicationCoordinator.apply(
-                group: group,
-                in: plan,
-                context: context,
-                refreshNotificationSchedule: refreshNotificationSchedule,
-                logger: yearlyDuplicationLogger
-            ) else {
+            guard
+                let result = try await YearlyDuplicationCoordinator.apply(
+                    group: group,
+                    in: plan,
+                    context: context,
+                    refreshNotificationSchedule: refreshNotificationSchedule,
+                    logger: yearlyDuplicationLogger
+                )
+            else {
                 return
             }
             resultMessage = String(localized: "Created \(result.createdCount) items.")
@@ -258,10 +267,12 @@ private extension YearlyDuplicationView {
         guard let plan else {
             return
         }
-        guard let draft = YearlyDuplicationCoordinator.createDraft(
-            for: group,
-            in: plan
-        ) else {
+        guard
+            let draft = YearlyDuplicationCoordinator.createDraft(
+                for: group,
+                in: plan
+            )
+        else {
             return
         }
         route = .itemForm(draft)
@@ -277,7 +288,8 @@ private extension YearlyDuplicationView {
                 targetYear: &alignedTargetYear,
                 preserveCurrentSelection: preserveCurrentSelection,
                 currentYear: currentYear,
-                minimumGroupCount: Constants.minimumGroupCount
+                minimumGroupCount: Constants.minimumGroupCount,
+                ledgerIdentifier: ledgerIdentifier
             )
             sourceYear = alignedSourceYear
             targetYear = alignedTargetYear

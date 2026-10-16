@@ -1,7 +1,8 @@
 # Data import and export
 
-Settings > Manage items > Export data writes every saved item to one Incomes
-file. Settings > Manage items > Import data reads such a file and, after a
+Settings > Manage items > Export data writes all saved Items and additional
+account names to one Incomes file, including empty accounts. Settings > Manage
+items > Import data reads such a file and, after a
 review, restores or merges its items. The file is the only portable format:
 it restores data without iCloud and can be kept outside the device.
 
@@ -11,7 +12,8 @@ The architecture, versioning rules, and extension rules are described in
 ## Export
 
 The screen shows the number of items and the period they cover. Export is
-disabled when there are no items. Records are captured when Export is pressed;
+disabled only when there are neither Items nor additional accounts. Records are
+captured when Export is pressed;
 later changes do not modify that file, and exporting never changes items, tags,
 balances, or notifications. The file is written only to a destination chosen in
 the system exporter; cancelling saves nothing.
@@ -35,16 +37,24 @@ whole file before showing anything, then compares it with the saved items.
     excluded one by one. Saved and file items that share a day and description
     but differ are shown together, and the person keeps the current items,
     uses the file's items, or keeps both.
-  - Replace makes the saved items equal to the file after a confirmation.
-    Items equal on both sides stay in place.
-- The summary shows how many items are added, removed, unchanged, and kept.
+  - Replace makes the Items in the accounts covered by the file equal to its
+    contents after confirmation. Other accounts are preserved. Items equal on
+    both sides stay in place.
+- The summary shows how many Items are added, removed, unchanged, and kept,
+  together with account names that will be created or changed. Merge keeps an
+  existing account name unless the person explicitly selects the file's name.
 - When the file's currency differs from the current setting, the person can
   adopt it. The option is on by default only for an empty store.
 - With iCloud sync on, a warning explains that the import also changes other
   devices, and that changes not yet received from them may duplicate or
   reappear.
 
-When import adds or removes items, all balances are recalculated. If saved items
+Export, viewing, and account selection remain available after Premium expires.
+Importing changes to additional accounts requires Premium; importing a legacy
+file into the default account remains available under ordinary app rules.
+
+When import adds or removes Items, affected account balances are recalculated.
+If saved items
 have changed while the person
 is reviewing, the import stops and the review is shown again. A failed import
 leaves the saved items unchanged.
@@ -72,11 +82,12 @@ The file is UTF-8 JSON with sorted keys, and its type
 | Key | Meaning |
 | --- | --- |
 | `format` | Always `com.muhiro12.incomes.data`. |
-| `schemaVersion` | Storage schema that wrote the file, such as `2.0.0`. |
+| `schemaVersion` | Portable file version, currently `3.0.0`. |
 | `exportedAt` | ISO 8601 UTC time of the export. |
-| `selection` | Covered records; `{"filters": []}` means every record. |
+| `selection` | Covered account IDs and any additional record filters. |
 | `settings.currencyCode` | Currency setting at export time, when set. |
-| `items` | Items in chronological order. |
+| `ledgers` | Additional account identities and names, including empty accounts. |
+| `items` | Items with their owning account IDs, in deterministic order. |
 
 Each item has these keys:
 
@@ -93,3 +104,8 @@ Each item has these keys:
 Derived year, month, and description tags are represented by their underlying
 fields. Debug tags, unused tags, identifiers local to the store, subscription
 and iCloud settings, and diagnostics are not written.
+
+Legacy `2.0.0` files remain readable and refer only to the default account.
+Account names can change and need not be unique; portable identities keep
+same-name accounts separate during export and restoration. The file version
+can change without adding fields to the SwiftData store.

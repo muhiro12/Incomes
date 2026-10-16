@@ -15,6 +15,7 @@ struct RenameCategoryTagIntent: AppIntent {
     @MainActor
     func perform() throws -> some ReturnsValue<TagEntity> {
         let model = try tag.model(in: modelContainer.mainContext)
+        try LedgerMutationAccess.requireEditing([.default])
         try TagRenameOperations.renameCategory(
             context: modelContainer.mainContext,
             tag: model,

@@ -14,6 +14,9 @@ public struct IncomesFileItem: Equatable, Sendable {
         case balance
     }
 
+    /// Stable owner; old files resolve only to the original default account.
+    public let ledgerIdentifier: LedgerIdentifier
+
     /// Stored calendar day at UTC midnight, matching `Item.utcDate`.
     public let date: Date
     /// Item description.
@@ -30,6 +33,28 @@ public struct IncomesFileItem: Equatable, Sendable {
     public let repeatID: UUID
     /// Running balance written for readers; import always recalculates it.
     public let balance: Decimal?
+
+    public init(
+        date: Date,
+        content: String,
+        income: Decimal,
+        outgo: Decimal,
+        category: String,
+        priority: Int,
+        repeatID: UUID,
+        balance: Decimal?,
+        ledgerIdentifier: LedgerIdentifier = .default
+    ) {
+        self.date = date
+        self.content = content
+        self.income = income
+        self.outgo = outgo
+        self.category = category
+        self.priority = priority
+        self.repeatID = repeatID
+        self.balance = balance
+        self.ledgerIdentifier = ledgerIdentifier
+    }
 }
 
 public extension IncomesFileItem {
@@ -48,11 +73,12 @@ extension IncomesFileItem {
             income: income,
             outgo: outgo,
             category: category,
-            priority: priority
+            priority: priority,
+            ledgerIdentifier: ledgerIdentifier
         )
     }
 
-    init(item: Item) {
+    init(item: Item, derivedBalance: Decimal? = nil) {
         self.init(
             date: item.utcDate,
             content: item.content,
@@ -61,7 +87,8 @@ extension IncomesFileItem {
             category: item.category?.name ?? "",
             priority: item.priority,
             repeatID: item.repeatID,
-            balance: item.balance
+            balance: derivedBalance,
+            ledgerIdentifier: item.ledgerIdentifier
         )
     }
 
@@ -73,6 +100,9 @@ extension IncomesFileItem {
     }
 
     func isOrderedByValue(before other: Self) -> Bool {
+        if ledgerIdentifier != other.ledgerIdentifier {
+            return ledgerIdentifier.rawValue < other.ledgerIdentifier.rawValue
+        }
         if date != other.date {
             return date < other.date
         }
@@ -95,5 +125,19 @@ extension IncomesFileItem {
             return repeatID.uuidString < other.repeatID.uuidString
         }
         return (balance ?? .zero) < (other.balance ?? .zero)
+    }
+
+    func assigning(to identifier: LedgerIdentifier) -> Self {
+        .init(
+            date: date,
+            content: content,
+            income: income,
+            outgo: outgo,
+            category: category,
+            priority: priority,
+            repeatID: repeatID,
+            balance: balance,
+            ledgerIdentifier: identifier
+        )
     }
 }

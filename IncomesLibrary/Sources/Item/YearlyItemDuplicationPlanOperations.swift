@@ -38,7 +38,8 @@ public enum YearlyItemDuplicationPlanOperations {
             outgoText: YearlyItemDuplicationSupport.decimalString(from: group.averageOutgo),
             category: group.category,
             repeatMonthSelections: YearlyItemDuplicationSupport.repeatMonthSelections(from: entries),
-            priorityText: ""
+            priorityText: "",
+            ledgerIdentifier: entries.first?.sourceItem.ledgerIdentifier ?? .default
         )
     }
 
@@ -47,13 +48,15 @@ public enum YearlyItemDuplicationPlanOperations {
         context: ModelContext,
         sourceYear: Int,
         targetYear: Int,
-        options: YearlyItemDuplicationOptions = .init()
+        options: YearlyItemDuplicationOptions = .init(),
+        ledgerIdentifier: LedgerIdentifier = .default
     ) throws -> YearlyItemDuplicationPlan {
         let input = try planInput(
             context: context,
             sourceYear: sourceYear,
             targetYear: targetYear,
-            options: options
+            options: options,
+            ledgerIdentifier: ledgerIdentifier
         )
         var builder = PlanBuilder(input: input, options: options)
         try builder.addRepeatGroups()
@@ -172,16 +175,18 @@ private extension YearlyItemDuplicationPlanOperations {
         context: ModelContext,
         sourceYear: Int,
         targetYear: Int,
-        options: YearlyItemDuplicationOptions
+        options: YearlyItemDuplicationOptions,
+        ledgerIdentifier: LedgerIdentifier
     ) throws -> PlanInput {
         let sourceYearDate = try YearlyItemDuplicationSupport.yearStartDate(year: sourceYear)
         let targetYearDate = try YearlyItemDuplicationSupport.yearStartDate(year: targetYear)
 
         let sourceItems = try context.fetch(
-            .items(.dateIsSameYearAs(sourceYearDate))
+            .items(.dateIsSameYearAs(sourceYearDate), ledgerIdentifier: ledgerIdentifier)
         )
+        let ordinarySourceItems = sourceItems
         let targetItems = try context.fetch(
-            .items(.dateIsSameYearAs(targetYearDate))
+            .items(.dateIsSameYearAs(targetYearDate), ledgerIdentifier: ledgerIdentifier)
         )
 
         let existingKeys = Set(
@@ -192,7 +197,7 @@ private extension YearlyItemDuplicationPlanOperations {
 
         return .init(
             yearShift: targetYear - sourceYear,
-            sourceItems: sourceItems,
+            sourceItems: ordinarySourceItems,
             existingKeys: existingKeys,
             minimumRepeatItemCount: max(1, options.minimumRepeatItemCount)
         )

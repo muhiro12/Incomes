@@ -4,8 +4,12 @@ import SwiftUI
 
 /// Captures every item, writes an Incomes file, and lets the person choose where to save it.
 struct DataExportButton: View {
-    @Query(.items(.all))
+    @Query(.allLedgerItems())
     private var items: [Item]
+    @Query(.tags(.typeIs(.ledger)))
+    private var accountTags: [Tag]
+    @Environment(\.modelContext)
+    private var context
     @AppStorage(\.currencyCode, default: "")
     private var currencyCode: String
     @Environment(\.locale)
@@ -34,7 +38,7 @@ struct DataExportButton: View {
                 }
             }
         }
-        .disabled(items.isEmpty || isPreparing || isExporting)
+        .disabled((items.isEmpty && accountTags.isEmpty) || isPreparing || isExporting)
         .fileExporter(
             isPresented: $isExporting,
             document: document,
@@ -89,6 +93,14 @@ private extension DataExportButton {
 
     func prepareExport() {
         let fileItems = ItemExportOperations.fileItems(items: items)
+        let fileLedgers: [IncomesFileLedger]
+        do {
+            fileLedgers = try ItemExportOperations.fileLedgers(context: context)
+        } catch {
+            exportErrorMessage = error.localizedDescription
+            hasExportError = true
+            return
+        }
         let code = currencyCode.isEmpty ? (locale.currency?.identifier ?? "") : currencyCode
         logger.notice(
             "data_export.requested",
@@ -102,7 +114,8 @@ private extension DataExportButton {
                 Result {
                     try ItemExportOperations.incomesFileData(
                         fileItems: fileItems,
-                        currencyCode: code
+                        currencyCode: code,
+                        ledgers: fileLedgers
                     )
                 }
             }.value

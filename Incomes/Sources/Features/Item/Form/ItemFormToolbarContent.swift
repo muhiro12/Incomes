@@ -1,6 +1,9 @@
 import SwiftUI
 
 struct ItemFormToolbarContent: ToolbarContent {
+    @Environment(\.ledgerIdentifier)
+    private var ledgerIdentifier
+
     let mode: ItemFormView.Mode
     let isValid: Bool
     let primaryActionAccessibilityHint: LocalizedStringKey
@@ -31,12 +34,12 @@ struct ItemFormToolbarContent: ToolbarContent {
         }
         if focusedField == .content {
             ToolbarItem(placement: .keyboard) {
-                SuggestionButtonGroup(input: $content, type: .content)
+                SuggestionButtonGroup(input: $content, type: .content, ledgerIdentifier: ledgerIdentifier)
             }
         }
         if focusedField == .category {
             ToolbarItem(placement: .keyboard) {
-                SuggestionButtonGroup(input: $category, type: .category)
+                SuggestionButtonGroup(input: $category, type: .category, ledgerIdentifier: ledgerIdentifier)
             }
         }
         if #available(iOS 26.0, *) {

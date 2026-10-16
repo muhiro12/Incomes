@@ -3,6 +3,12 @@ import SwiftData
 
 /// Deterministic comparison of a file with the store items inside the file's selection.
 public struct ItemImportDifference: Equatable, Sendable {
+    /// Account metadata included in the same review and stale-review validation as records.
+    public struct LedgerChange: Equatable, Identifiable, Sendable {
+        public let id: LedgerIdentifier
+        public let current: IncomesFileLedger?
+        public let incoming: IncomesFileLedger
+    }
     /// A store item captured for review, with its store-local identifier.
     public struct StoreItem: Equatable, Sendable {
         /// Identifier valid only within this store and session.
@@ -33,17 +39,36 @@ public struct ItemImportDifference: Equatable, Sendable {
     public let storeItemCount: Int
     /// Complete review snapshot, including matched identities and recurrence.
     let reviewedStoreItems: [StoreItem]
+    public let ledgerChanges: [LedgerChange]
+
+    init(
+        matchedCount: Int,
+        changeGroups: [ChangeGroup],
+        additions: [IncomesFileItem],
+        storeOnlyItems: [StoreItem],
+        storeItemCount: Int,
+        reviewedStoreItems: [StoreItem],
+        ledgerChanges: [LedgerChange] = []
+    ) {
+        self.matchedCount = matchedCount
+        self.changeGroups = changeGroups
+        self.additions = additions
+        self.storeOnlyItems = storeOnlyItems
+        self.storeItemCount = storeItemCount
+        self.reviewedStoreItems = reviewedStoreItems
+        self.ledgerChanges = ledgerChanges
+    }
 }
 
 public extension ItemImportDifference {
     /// True when the compared store scope holds no items.
     var isStoreEmpty: Bool {
-        storeItemCount == .zero
+        storeItemCount == .zero && ledgerChanges.allSatisfy { $0.current == nil }
     }
 
     /// True when the file and the store hold equal records.
     var isIdentical: Bool {
-        changeGroups.isEmpty && additions.isEmpty && storeOnlyItems.isEmpty
+        changeGroups.isEmpty && additions.isEmpty && storeOnlyItems.isEmpty && ledgerChanges.isEmpty
     }
 
     /// File items that differ from the store.

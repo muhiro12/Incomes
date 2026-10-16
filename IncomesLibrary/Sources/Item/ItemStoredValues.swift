@@ -2,6 +2,8 @@ import Foundation
 
 /// Stored item values after form-level normalization has already been applied.
 public struct ItemStoredValues {
+    /// Financial owner captured when the draft is created.
+    public let ledgerIdentifier: LedgerIdentifier
     /// Local calendar date selected for the item.
     public let date: Date
     /// User-entered item description.
@@ -22,7 +24,8 @@ public struct ItemStoredValues {
         income: Decimal,
         outgo: Decimal,
         category: String,
-        priority: Int
+        priority: Int,
+        ledgerIdentifier: LedgerIdentifier = .default
     ) {
         self.date = date
         self.content = content
@@ -30,19 +33,21 @@ public struct ItemStoredValues {
         self.outgo = outgo
         self.category = category
         self.priority = priority
+        self.ledgerIdentifier = ledgerIdentifier
     }
 }
 
 public extension ItemStoredValues {
     /// Creates stored values from validated form input.
-    init(formInput: ItemFormInput) {
+    init(formInput: ItemFormInput, ledgerIdentifier: LedgerIdentifier? = nil) {
         self.init(
             date: formInput.date,
             content: formInput.content,
             income: formInput.income,
             outgo: formInput.outgo,
             category: formInput.storedCategory,
-            priority: formInput.priority
+            priority: formInput.priority,
+            ledgerIdentifier: ledgerIdentifier ?? formInput.ledgerIdentifier
         )
     }
 
@@ -54,7 +59,8 @@ public extension ItemStoredValues {
             income: income,
             outgo: outgo,
             category: category,
-            priority: priority
+            priority: priority,
+            ledgerIdentifier: ledgerIdentifier
         )
     }
 }

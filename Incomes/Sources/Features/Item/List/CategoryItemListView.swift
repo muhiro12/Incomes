@@ -10,6 +10,9 @@ import SwiftData
 import SwiftUI
 
 struct CategoryItemListView {
+    @Environment(\.ledgerIdentifier)
+    private var ledgerIdentifier
+
     @Environment(Tag.self)
     private var tag
     @Environment(IncomesTipController.self)
@@ -56,6 +59,7 @@ extension CategoryItemListView: View {
                     Button("Rename", systemImage: "pencil") {
                         isRenameSheetPresented = true
                     }
+                    .ledgerWriteAccess(owner: ledgerIdentifier)
                 }
             }
             ItemCountStatusToolbarItem(count: items.count)
@@ -72,11 +76,11 @@ private extension CategoryItemListView {
     }
 
     var items: [Item] {
-        TagQueryOperations.items(for: tag)
+        TagQueryOperations.items(for: tag, ledgerIdentifier: ledgerIdentifier)
     }
 
     var yearStrings: [String] {
-        TagQueryOperations.yearStrings(for: tag)
+        TagQueryOperations.yearStrings(for: tag, ledgerIdentifier: ledgerIdentifier)
     }
 }
 

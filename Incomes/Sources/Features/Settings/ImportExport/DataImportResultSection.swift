@@ -12,6 +12,11 @@ struct DataImportResultSection: View {
             LabeledContent("Removed items") {
                 Text(result.removedCount, format: .number)
             }
+            if result.changedLedgerCount > 0 {
+                LabeledContent("Updated accounts") {
+                    Text(result.changedLedgerCount, format: .number)
+                }
+            }
             Button("Import another file", action: chooseAnotherFile)
         } header: {
             Text("Import complete")

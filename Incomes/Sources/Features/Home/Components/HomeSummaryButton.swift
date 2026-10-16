@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct HomeSummaryButton: View {
+    @Environment(\.ledgerIdentifier)
+    private var ledgerIdentifier
+
     @Environment(Tag.self)
     private var yearTag
 
@@ -55,6 +58,9 @@ private extension HomeSummaryButton {
     }
 
     var yearSummaryURL: URL? {
-        MainNavigationOperations.preferredURL(for: yearSummaryRoute)
+        guard ledgerIdentifier == .default else {
+            return nil
+        }
+        return MainNavigationOperations.preferredURL(for: yearSummaryRoute)
     }
 }

@@ -46,12 +46,17 @@ public enum ItemDeletionOperations {
         let tagsToCleanup = ItemMutationSupport.cleanupCandidateTags(from: items)
         let deletedIDs = Set(items.map(\.persistentModelID))
         let deletedDates = items.map(\.localDate)
+        let datesByLedger = Dictionary(grouping: items, by: \.ledgerIdentifier).mapValues { members in
+            members.map(\.localDate).min()
+        }
         for item in items {
             item.modelContext?.delete(item)
         }
         TagMutationOperations.deleteUnused(tags: tagsToCleanup)
-        if let startDate = deletedDates.min() {
-            try BalanceCalculator.calculate(in: context, after: startDate)
+        for (identifier, startDate) in datesByLedger {
+            if let startDate {
+                try BalanceCalculator.calculate(in: context, after: startDate, ledgerIdentifier: identifier)
+            }
         }
         return .init(
             changedIDs: .init(

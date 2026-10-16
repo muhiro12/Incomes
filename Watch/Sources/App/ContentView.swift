@@ -72,6 +72,7 @@ private extension ContentView {
         model: WatchHomeScreenModel
     ) -> some View {
         List {
+            Text("Default Account").font(.caption).foregroundStyle(.secondary)
             upcomingSection(model: model)
             syncStatusSection(model: model)
             browseSection()

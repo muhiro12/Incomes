@@ -1,6 +1,9 @@
 import SwiftUI
 
 struct OrphanTagView: View {
+    @Environment(\.ledgerIdentifier)
+    private var ledgerIdentifier
+
     @Environment(Tag.self)
     private var tag
 
@@ -33,6 +36,14 @@ struct OrphanTagView: View {
             isPresented: $isDeleteDialogPresented
         ) {
             Button(role: .destructive) {
+                guard
+                    LedgerAccessOperations.canEdit(
+                        ledgerIdentifier,
+                        isPremium: LedgerMutationAccess.isPremium
+                    )
+                else {
+                    return
+                }
                 if TagMutationOperations.delete(tag: tag) {
                     onDelete()
                     Haptic.success.impact()
@@ -58,6 +69,7 @@ struct OrphanTagView: View {
                 } label: {
                     Text("Delete")
                 }
+                .ledgerWriteAccess(owner: ledgerIdentifier)
             }
             ToolbarItem {
                 CloseButton()
@@ -82,6 +94,8 @@ private extension OrphanTagView {
             "Category"
         case .debug:
             "Debug"
+        case .ledger:
+            "Account"
         }
     }
 }

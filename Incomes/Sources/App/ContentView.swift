@@ -26,7 +26,7 @@ struct ContentView {
 
 extension ContentView: View {
     var body: some View {
-        MainNavigationView()
+        LedgerWorkspaceView()
             .alert(
                 "Invalid Link",
                 isPresented: invalidDeepLinkAlertBinding,

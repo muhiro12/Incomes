@@ -32,12 +32,20 @@ struct ItemFormView: View {
     @Environment(\.mhDesignMetrics)
     var designMetrics
 
+    @AppStorage(\.isSubscribeOn)
+    var isSubscribeOn
+
     @AppStorage(\.isDebugOn)
     var isDebugOn
 
     @FocusState var focusedField: ItemFormFocusedField?
     @State private var model: ItemFormModel
     @State private var presentation: ItemFormPresentationModel = .init()
+
+    var canSubmit: Bool {
+        model.isValid && !presentation.isSubmitting
+            && LedgerAccessOperations.canEdit(model.ledgerIdentifier, isPremium: isSubscribeOn)
+    }
 
     let mode: Mode
     let onCreate: (() -> Void)?
@@ -47,11 +55,12 @@ struct ItemFormView: View {
     init(
         mode: Mode,
         draft: ItemFormDraft? = nil,
-        onCreate: (() -> Void)? = nil
+        onCreate: (() -> Void)? = nil,
+        ledgerIdentifier: LedgerIdentifier = .default
     ) {
         self.mode = mode
         self.onCreate = onCreate
-        _model = State(initialValue: .init(draft: draft))
+        _model = State(initialValue: .init(draft: draft, ledgerIdentifier: ledgerIdentifier))
     }
 }
 
@@ -96,7 +105,7 @@ extension ItemFormView {
         .toolbar {
             ItemFormToolbarContent(
                 mode: mode,
-                isValid: model.isValid && !presentation.isSubmitting,
+                isValid: canSubmit,
                 primaryActionAccessibilityHint: primaryActionAccessibilityHint,
                 focusedField: focusedField,
                 content: $model.content,

@@ -152,6 +152,7 @@ enum ItemFormSaveCoordinator {
         scope: ItemMutationScope,
         review: ItemBalanceProjectionReview?
     ) throws -> MutationOutcome {
+        try LedgerMutationAccess.requireEditing([item.ledgerIdentifier])
         guard let review else {
             return try ItemUpdateOperations.updateWithOutcome(
                 context: context,

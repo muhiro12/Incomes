@@ -26,6 +26,7 @@ struct DataImportItemRow: View {
 private extension DataImportItemRow {
     var details: some View {
         VStack(alignment: .leading) {
+            DataImportAccountLabel(identifier: item.ledgerIdentifier)
             if let source {
                 Text(source)
                     .font(.caption.weight(.semibold))

@@ -293,6 +293,13 @@ owns migration, widgets open the shared store without saving or migrating, and
 Watch applies phone snapshots to an isolated in-memory container. The schema
 and factory implementation remain in `IncomesLibrary`.
 
+## Independent books
+
+[Independent ledgers](independent-ledgers.md) defines the current Tag identity,
+scoped reads, Premium boundary, and pre-release compatibility limits. Durable
+product rationale lives in the
+[product principles](../Overviews/incomes-product-principles.md).
+
 ## Current Hotspots and Minimal Refactor Plans
 
 1. App runtime integration should use the package-owned shells, and the

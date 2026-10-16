@@ -9,6 +9,9 @@ import SwiftData
 import SwiftUI
 
 struct YearChartsView: View {
+    @Environment(\.ledgerIdentifier)
+    private var ledgerIdentifier
+
     @Environment(Tag.self)
     private var tag
     @Environment(\.modelContext)
@@ -20,14 +23,15 @@ struct YearChartsView: View {
 
     var body: some View {
         List {
-            ChartSectionGroup(yearScopedTo: date)
+            ChartSectionGroup(yearScopedTo: date, ledgerIdentifier: ledgerIdentifier)
         }
         .listStyle(.grouped)
         .navigationTitle(Text(date, format: .dateTime.year()))
         .toolbar {
             if let count = try? ItemQueryOperations.yearItemsCount(
                 context: context,
-                date: date
+                date: date,
+                ledgerIdentifier: ledgerIdentifier
             ) {
                 ItemCountStatusToolbarItem(count: count)
             }

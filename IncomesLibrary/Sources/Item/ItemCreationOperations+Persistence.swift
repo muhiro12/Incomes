@@ -1,3 +1,4 @@
+import Foundation
 import SwiftData
 
 public extension ItemCreationOperations {
@@ -65,6 +66,9 @@ private extension ItemCreationOperations {
     ) throws -> MutationResult<Item> {
         guard !context.hasChanges else {
             throw ItemCreationError.pendingChanges
+        }
+        guard context.container.configurations.allSatisfy(\.allowsSave) else {
+            throw CocoaError(.fileWriteNoPermission)
         }
         let autosaveEnabled = context.autosaveEnabled
         context.autosaveEnabled = false

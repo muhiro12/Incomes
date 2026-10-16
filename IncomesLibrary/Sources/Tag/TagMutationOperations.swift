@@ -5,7 +5,7 @@ import SwiftData
 public enum TagMutationOperations {
     /// Merges `tags` into the first tag, reattaching item relationships.
     public static func mergeDuplicates(tags: [Tag]) {
-        guard let parent = tags.first else {
+        guard tags.allSatisfy({ $0.type != .ledger }), let parent = tags.first else {
             return
         }
         let children = tags.filter { tag in
@@ -43,9 +43,9 @@ public enum TagMutationOperations {
         context: ModelContext,
         tags: [Tag]
     ) throws {
-        for tag in tags {
+        for tag in tags where tag.type != .ledger {
             let duplicates = try context.fetch(
-                .tags(.isSameWith(tag))
+                FetchDescriptor<Tag>(predicate: TagPredicate.isSameWith(tag).value)
             )
             mergeDuplicates(
                 tags: duplicates
@@ -69,7 +69,7 @@ public enum TagMutationOperations {
     /// Deletes a single unused tag.
     @discardableResult
     public static func delete(tag: Tag) -> Bool {
-        guard TagQueryOperations.isOrphan(tag: tag) else {
+        guard tag.type != .ledger, TagQueryOperations.isOrphan(tag: tag) else {
             return false
         }
         tag.modelContext?.delete(tag)
@@ -89,8 +89,11 @@ public enum TagMutationOperations {
 
     /// Deletes every unused tag in the store and returns the deleted tag count.
     @discardableResult
-    public static func deleteAllOrphanTags(context: ModelContext) throws -> Int {
-        let orphanTags = try TagQueryOperations.orphanTags(context: context)
+    public static func deleteAllOrphanTags(
+        context: ModelContext,
+        ledgerIdentifier: LedgerIdentifier = .default
+    ) throws -> Int {
+        let orphanTags = try TagQueryOperations.orphanTags(context: context, ledgerIdentifier: ledgerIdentifier)
         var deletedCount = 0
         for tag in orphanTags where delete(tag: tag) {
             deletedCount += 1
@@ -122,13 +125,14 @@ public enum TagMutationOperations {
     /// Resolves items for deletion based on selected tag indices.
     public static func resolveItemsForDeletion(
         from tags: [Tag],
-        indices: IndexSet
+        indices: IndexSet,
+        ledgerIdentifier: LedgerIdentifier = .default
     ) -> [Item] {
         indices.flatMap { index -> [Item] in
             guard tags.indices.contains(index) else {
                 return []
             }
-            return TagQueryOperations.matchingItems(for: tags[index])
+            return TagQueryOperations.items(for: tags[index], ledgerIdentifier: ledgerIdentifier)
         }
     }
 }

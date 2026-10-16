@@ -1,7 +1,11 @@
 import Foundation
+import MHPlatform
 import SwiftUI
 
 struct YearlyDuplicationProposalsSection: View {
+    @AppStorage(\.isSubscribeOn)
+    private var isSubscribeOn
+
     let plan: YearlyItemDuplicationPlan
     let createdGroupIDs: Set<UUID>
     let inlineSpacing: CGFloat
@@ -24,7 +28,7 @@ struct YearlyDuplicationProposalsSection: View {
                     YearlyDuplicationProposalRow(
                         group: group,
                         isCreated: isCreated,
-                        isActionDisabled: isCreated || entries.isEmpty,
+                        isActionDisabled: isCreated || entries.isEmpty || !canEdit(entries: entries),
                         inlineSpacing: inlineSpacing,
                         verticalPadding: verticalPadding,
                         summaryText: summaryText(group),
@@ -38,5 +42,9 @@ struct YearlyDuplicationProposalsSection: View {
                 }
             }
         }
+    }
+
+    private func canEdit(entries: [YearlyItemDuplicationEntry]) -> Bool {
+        entries.allSatisfy { LedgerAccessOperations.canEdit($0.sourceItem.ledgerIdentifier, isPremium: isSubscribeOn) }
     }
 }

@@ -73,10 +73,12 @@ public enum NaturalLanguageSearchOperations {
     /// Requested limits are bounded to `1...resultLimit`.
     public static func resultDescriptor(
         for conditions: ItemSearchConditions,
-        limit: Int = resultLimit
+        limit: Int = resultLimit,
+        ledgerIdentifier: LedgerIdentifier = .default
     ) -> FetchDescriptor<Item> {
         var descriptor = FetchDescriptor.items(
-            .matchesSearchConditions(conditions)
+            .matchesSearchConditions(conditions),
+            ledgerIdentifier: ledgerIdentifier
         )
         descriptor.fetchLimit = boundedLimit(limit) + 1
         return descriptor
@@ -97,13 +99,15 @@ public enum NaturalLanguageSearchOperations {
     public static func results(
         context: ModelContext,
         conditions: ItemSearchConditions,
-        limit: Int = resultLimit
+        limit: Int = resultLimit,
+        ledgerIdentifier: LedgerIdentifier = .default
     ) throws -> Results {
         results(
             from: try context.fetch(
                 resultDescriptor(
                     for: conditions,
-                    limit: limit
+                    limit: limit,
+                    ledgerIdentifier: ledgerIdentifier
                 )
             ),
             limit: limit

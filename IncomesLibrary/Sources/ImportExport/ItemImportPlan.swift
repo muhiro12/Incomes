@@ -5,6 +5,7 @@ struct ItemImportPlan {
     let insertedItems: [IncomesFileItem]
     let removedItemIDs: Set<PersistentIdentifier>
     let result: ItemImportResult
+    let ledgerChanges: [ItemImportDifference.LedgerChange]
 }
 
 extension ItemImportPlan {
@@ -14,8 +15,10 @@ extension ItemImportPlan {
     ) {
         var insertedItems = [IncomesFileItem]()
         var removedItems = [ItemImportDifference.StoreItem]()
+        let ledgerChanges: [ItemImportDifference.LedgerChange]
         switch policy {
         case .replace:
+            ledgerChanges = difference.ledgerChanges
             insertedItems = difference.additions
             removedItems = difference.storeOnlyItems
             for group in difference.changeGroups {
@@ -23,6 +26,9 @@ extension ItemImportPlan {
                 removedItems += group.storeItems
             }
         case .merge(let decisions):
+            ledgerChanges = difference.ledgerChanges.filter { change in
+                change.current == nil || decisions.useFileAccountNames
+            }
             insertedItems = difference.additions.enumerated().compactMap { index, item in
                 decisions.excludedAdditionIndices.contains(index) ? nil : item
             }
@@ -44,8 +50,10 @@ extension ItemImportPlan {
             result: .init(
                 addedCount: insertedItems.count,
                 removedCount: removedItems.count,
-                unchangedCount: difference.matchedCount
-            )
+                unchangedCount: difference.matchedCount,
+                changedLedgerCount: ledgerChanges.count
+            ),
+            ledgerChanges: ledgerChanges
         )
     }
 }

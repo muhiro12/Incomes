@@ -11,6 +11,8 @@ import SwiftUI
 @MainActor
 @Observable
 final class MainNavigationRouter {
+    let ledgerIdentifier: LedgerIdentifier
+
     var preferredCompactColumn: NavigationSplitViewColumn = .sidebar
     var yearTagID: Tag.ID?
     var selectedTag: Tag?
@@ -24,6 +26,10 @@ final class MainNavigationRouter {
     var itemDetailID: PersistentIdentifier?
 
     @ObservationIgnored private var hasAppliedIncomingRoute = false
+
+    init(ledgerIdentifier: LedgerIdentifier = .default) {
+        self.ledgerIdentifier = ledgerIdentifier
+    }
 
     /// Selects today's year and month, then the selection the scene restored.
     /// An incoming route from a link, widget, notification, or intent always
@@ -39,7 +45,8 @@ final class MainNavigationRouter {
         guard let restoredRoute,
               case let .destination(yearTagID, selectedTag) = try MainNavigationOperations.execute(
                 route: restoredRoute,
-                context: context
+                context: context,
+                ledgerIdentifier: ledgerIdentifier
               ),
               let yearTagID else {
             // A deleted year keeps today's default instead of an empty selection.
@@ -51,7 +58,7 @@ final class MainNavigationRouter {
     }
 
     func loadState(context: ModelContext) throws {
-        let state = try MainNavigationOperations.loadState(context: context)
+        let state = try MainNavigationOperations.loadState(context: context, ledgerIdentifier: ledgerIdentifier)
         yearTagID = state.yearTag?.persistentModelID
         selectedTag = state.yearMonthTag
         if state.yearTag == nil {
@@ -151,7 +158,8 @@ private extension MainNavigationRouter {
     ) throws {
         let outcome = try MainNavigationOperations.execute(
             route: route,
-            context: context
+            context: context,
+            ledgerIdentifier: ledgerIdentifier
         )
         switch outcome {
         case let .destination(yearTagID, selectedTag):

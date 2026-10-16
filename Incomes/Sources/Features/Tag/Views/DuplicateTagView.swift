@@ -7,6 +7,9 @@ struct DuplicateTagView: View {
         static let regularVisibleColumnCount = 2
     }
 
+    @Environment(\.ledgerIdentifier)
+    private var ledgerIdentifier
+
     @Environment(\.horizontalSizeClass)
     private var horizontalSizeClass
     @Query private var tags: [Tag]
@@ -16,7 +19,9 @@ struct DuplicateTagView: View {
     @State private var selectedTag: Tag?
 
     init(_ tag: Tag) {
-        _tags = Query(.tags(.isSameWith(tag)))
+        let name = tag.name
+        let type = tag.typeID
+        _tags = Query(filter: #Predicate<Tag> { $0.name == name && $0.typeID == type })
     }
 }
 
@@ -26,7 +31,9 @@ extension DuplicateTagView {
             LazyHStack(spacing: .zero) {
                 ForEach(tags) { tag in
                     HStack(spacing: .zero) {
-                        DuplicateTagColumn(items: tag.items ?? []) {
+                        DuplicateTagColumn(
+                            items: TagQueryOperations.items(for: tag, ledgerIdentifier: ledgerIdentifier)
+                        ) {
                             presentDeleteDialog(for: tag)
                         }
 
@@ -51,6 +58,14 @@ extension DuplicateTagView {
             isPresented: $isMergeDialogPresented
         ) {
             Button(role: .destructive) {
+                guard
+                    tags.allSatisfy({ _ in
+                        LedgerAccessOperations.canEdit(
+                            ledgerIdentifier,
+                            isPremium: LedgerMutationAccess.isPremium
+                        )
+                    })
+                else { return }
                 TagMutationOperations.mergeDuplicates(tags: tags)
             } label: {
                 Text("Merge")
@@ -71,6 +86,12 @@ extension DuplicateTagView {
                 guard let selectedTag else {
                     return
                 }
+                guard
+                    LedgerAccessOperations.canEdit(
+                        ledgerIdentifier,
+                        isPremium: LedgerMutationAccess.isPremium
+                    )
+                else { return }
                 TagMutationOperations.delete(tag: selectedTag)
                 self.selectedTag = nil
                 Haptic.success.impact()
@@ -91,6 +112,7 @@ extension DuplicateTagView {
                     isMergeDialogPresented = true
                 }
                 .disabled(!canMergeTags)
+                .ledgerWriteAccess()
             }
             ToolbarItem {
                 CloseButton()

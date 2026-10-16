@@ -5,6 +5,7 @@ import Foundation
 /// The repeat ID is excluded because every edit assigns a new one, and the
 /// balance is excluded because it is derived.
 struct ItemImportMatchKey: Hashable {
+    let ledgerIdentifier: LedgerIdentifier
     let date: Date
     let content: String
     let income: Decimal
@@ -16,6 +17,7 @@ struct ItemImportMatchKey: Hashable {
 extension ItemImportMatchKey {
     init(_ item: IncomesFileItem) {
         self.init(
+            ledgerIdentifier: item.ledgerIdentifier,
             date: item.date,
             content: item.content,
             income: item.income,

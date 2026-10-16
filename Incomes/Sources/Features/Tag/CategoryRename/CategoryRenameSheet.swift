@@ -3,6 +3,9 @@ import SwiftData
 import SwiftUI
 
 struct CategoryRenameSheet: View {
+    @Environment(\.ledgerIdentifier)
+    private var ledgerIdentifier
+
     @Environment(\.dismiss)
     private var dismiss
     @Environment(\.modelContext)
@@ -65,7 +68,8 @@ private extension CategoryRenameSheet {
                 try TagRenameOperations.previewCategoryRename(
                     context: context,
                     tag: tag,
-                    to: draftName
+                    to: draftName,
+                    ledgerIdentifier: ledgerIdentifier
                 )
             )
         } catch let error as TagRenameError {
@@ -103,10 +107,12 @@ private extension CategoryRenameSheet {
                 return
             }
 
+            try LedgerMutationAccess.requireEditing([ledgerIdentifier])
             try TagRenameOperations.renameCategory(
                 context: context,
                 tag: tag,
-                to: normalizedTargetName
+                to: normalizedTargetName,
+                ledgerIdentifier: ledgerIdentifier
             )
             dismiss()
         } catch let error as TagRenameError {

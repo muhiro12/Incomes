@@ -1,13 +1,16 @@
 import SwiftUI
 
 struct SearchTagFilterRow: View {
+    @Environment(\.ledgerIdentifier)
+    private var ledgerIdentifier
+
     @Environment(Tag.self)
     private var tag
 
     let applyFilter: (Tag) -> Void
 
     var body: some View {
-        let itemCount = (tag.items ?? []).count
+        let itemCount = TagQueryOperations.items(for: tag, ledgerIdentifier: ledgerIdentifier).count
 
         Button {
             applyFilter(tag)

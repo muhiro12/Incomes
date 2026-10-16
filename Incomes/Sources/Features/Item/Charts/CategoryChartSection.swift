@@ -51,10 +51,11 @@ struct CategoryChartSection: View {
 
     init(
         yearScopedTo date: Date,
-        allowsExpansion: Bool = true
+        allowsExpansion: Bool = true,
+        ledgerIdentifier: LedgerIdentifier = .default
     ) {
         // Fetch year scope; apply non-zero filters in-memory
-        _items = .init(.items(.dateIsSameYearAs(date)))
+        _items = .init(.items(.dateIsSameYearAs(date), ledgerIdentifier: ledgerIdentifier))
         self.allowsExpansion = allowsExpansion
     }
 }

@@ -37,6 +37,10 @@ public enum ItemUpdateOperations {
         scope: ItemMutationScope
     ) throws -> MutationOutcome {
         try input.validate()
+        guard input.ledgerIdentifier == item.ledgerIdentifier else {
+            throw LedgerError.invalidIdentifier
+        }
+        try LedgerOperations.requireAvailable(item.ledgerIdentifier, context: context)
         let values = ItemStoredValues(formInput: input)
         // Refuse inexact arithmetic before changing live records or derived tags.
         _ = try BalanceCalculator.netIncome(income: values.income, outgo: values.outgo)
@@ -100,7 +104,9 @@ public enum ItemUpdateOperations {
             to: values.date
         )
         let repeatID = UUID()
-        let items = try context.fetch(descriptor)
+        let items = try context.fetch(descriptor).filter { candidate in
+            candidate.ledgerIdentifier == item.ledgerIdentifier
+        }
         let recalcDate = try updateRepeatingItems(
             items: items,
             dateShift: dateShift,
@@ -109,7 +115,8 @@ public enum ItemUpdateOperations {
         )
         try BalanceCalculator.calculate(
             in: context,
-            after: recalcDate ?? values.date
+            after: recalcDate ?? values.date,
+            ledgerIdentifier: item.ledgerIdentifier
         )
     }
 }
@@ -172,7 +179,7 @@ private extension ItemUpdateOperations {
             repeatID: .init()
         )
         let recalcDate = min(originalDate, item.localDate)
-        try BalanceCalculator.calculate(in: context, after: recalcDate)
+        try BalanceCalculator.calculate(in: context, after: recalcDate, ledgerIdentifier: item.ledgerIdentifier)
     }
 
     static func updateAllItems(
@@ -184,7 +191,7 @@ private extension ItemUpdateOperations {
             context: context,
             item: item,
             values: values,
-            descriptor: .items(.repeatIDIs(item.repeatID))
+            descriptor: .items(.repeatIDIs(item.repeatID), ledgerIdentifier: item.ledgerIdentifier)
         )
     }
 
@@ -201,7 +208,8 @@ private extension ItemUpdateOperations {
                 .repeatIDAndDateIsAfter(
                     repeatID: item.repeatID,
                     date: item.localDate
-                )
+                ),
+                ledgerIdentifier: item.ledgerIdentifier
             )
         )
     }

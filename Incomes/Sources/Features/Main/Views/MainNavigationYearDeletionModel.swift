@@ -11,7 +11,8 @@ final class MainNavigationYearDeletionModel {
     func prepare(
         from yearTags: [Tag],
         indices: IndexSet,
-        logger: MHLogger
+        logger: MHLogger,
+        ledgerIdentifier: LedgerIdentifier = .default
     ) {
         tagsToDelete = TagMutationOperations.resolveTagsForDeletion(
             from: yearTags,
@@ -19,7 +20,8 @@ final class MainNavigationYearDeletionModel {
         )
         itemsToDelete = TagMutationOperations.resolveItemsForDeletion(
             from: yearTags,
-            indices: indices
+            indices: indices,
+            ledgerIdentifier: ledgerIdentifier
         )
         isDialogPresented = !tagsToDelete.isEmpty
         logger.debug(

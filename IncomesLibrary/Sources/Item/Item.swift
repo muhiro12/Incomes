@@ -36,7 +36,7 @@ extension IncomesSchemaV2 {
         /// Derived tags currently attached to the item.
         /// SwiftData represents to-many relationships as optionals before faulting.
         @Relationship(inverse: \Tag.items)
-        public private(set) var tags: [Tag]? // swiftlint:disable:this discouraged_optional_collection
+        public private(set) var tags: [Tag]?  // swiftlint:disable:this discouraged_optional_collection
 
         private init() {
             // no-op
@@ -48,6 +48,9 @@ extension IncomesSchemaV2 {
             values: ItemStoredValues,
             repeatID: UUID
         ) throws -> Item {
+            let ownershipTags: [Tag] = values.ledgerIdentifier == .default ? [] : [
+                try LedgerOperations.metadataForMutation(values.ledgerIdentifier, context: context)
+            ]
             let item = Item()
             context.insert(item)
 
@@ -86,6 +89,7 @@ extension IncomesSchemaV2 {
                 )
             ]
 
+            item.tags = (item.tags ?? []) + ownershipTags
             return item
         }
 
@@ -110,6 +114,7 @@ extension IncomesSchemaV2 {
                 return
             }
 
+            let ownershipTags = (tags ?? []).filter { $0.type == .ledger }
             self.tags = [
                 try .create(
                     context: context,
@@ -131,7 +136,7 @@ extension IncomesSchemaV2 {
                     name: values.category,
                     type: .category
                 )
-            ]
+            ] + ownershipTags
         }
 
         /// Updates the computed balance field.
@@ -147,6 +152,20 @@ extension IncomesSchemaV2 {
 }
 
 public extension Item {
+    /// Financial book identified by its dedicated Tag; no ownership Tag is the original book.
+    var ledgerIdentifier: LedgerIdentifier {
+        let metadata = (tags ?? []).filter { $0.type == .ledger }
+        guard !metadata.isEmpty else {
+            return .default
+        }
+        let identifiers = Set(metadata.compactMap(LedgerTagStorage.identifier(for:)))
+        guard identifiers.count == 1, identifiers.count == Set(metadata.map(\.typeID)).count,
+              let identifier = identifiers.first else {
+            return .conflicting
+        }
+        return identifier
+    }
+
     /// UTC date persisted in the store.
     var utcDate: Date {
         date
@@ -243,6 +262,11 @@ public extension Item {
                 type: .category
             )
         ]
+
+        if values.ledgerIdentifier != .default,
+           let metadata = try? LedgerOperations.metadataForMutation(values.ledgerIdentifier, context: context) {
+            item.tags = (item.tags ?? []) + [metadata]
+        }
 
         return item
     }

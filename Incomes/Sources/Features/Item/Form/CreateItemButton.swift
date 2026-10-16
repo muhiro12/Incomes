@@ -30,6 +30,7 @@ struct CreateItemButton {
 extension CreateItemButton: View {
     var body: some View {
         styledCreateButton
+            .ledgerWriteAccess()
             .popoverTip(createItemTip)
             .accessibilityLabel(Text("Create Item"))
             .accessibilityHint(Text("Opens the item form."))

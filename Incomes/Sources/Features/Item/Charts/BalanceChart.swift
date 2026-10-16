@@ -1,7 +1,11 @@
 import Charts
+import SwiftData
 import SwiftUI
 
 struct BalanceChart: View {
+    @Environment(\.ledgerBalances)
+    private var ledgerBalances
+
     @Environment(\.locale)
     private var locale
 
@@ -19,21 +23,7 @@ struct BalanceChart: View {
                 )
 
             ForEach(items) { item in
-                AreaMark(
-                    x: .value("Date", item.localDate),
-                    y: .value("Amount", item.balance),
-                    stacking: .unstacked
-                )
-                .foregroundStyle(.tint)
-                .interpolationMethod(.linear)
-                .opacity(TimelineChartMetrics.areaMarkOpacity)
-                LineMark(
-                    x: .value("Date", item.localDate),
-                    y: .value("Amount", item.balance)
-                )
-                .foregroundStyle(.tint)
-                .interpolationMethod(.linear)
-                .lineStyle(.init(lineWidth: TimelineChartMetrics.lineMarkWidth))
+                balanceMarks(for: item)
             }
         }
         .chartXAxis {
@@ -63,12 +53,13 @@ struct BalanceChart: View {
 private extension BalanceChart {
     var accessibilityValue: Text {
         guard let latestItem,
+              let latestBalance = ledgerBalances[latestItem.persistentModelID],
               let highestBalance,
               let lowestBalance else {
             return Text("No items")
         }
         return Text(verbatim: accessibilityValueParts(
-            latestBalance: latestItem.balance,
+            latestBalance: latestBalance,
             highestBalance: highestBalance,
             lowestBalance: lowestBalance
         )
@@ -82,11 +73,39 @@ private extension BalanceChart {
     }
 
     var highestBalance: Decimal? {
-        items.map(\.balance).max()
+        items.compactMap { ledgerBalances[$0.persistentModelID] }.max()
     }
 
     var lowestBalance: Decimal? {
-        items.map(\.balance).min()
+        items.compactMap { ledgerBalances[$0.persistentModelID] }.min()
+    }
+
+    @ChartContentBuilder
+    func balanceMarks(for item: Item) -> some ChartContent {
+        if let balance = ledgerBalances[item.persistentModelID] {
+            if items.count == 1 {
+                PointMark(
+                    x: .value("Date", item.localDate),
+                    y: .value("Amount", balance)
+                )
+                .foregroundStyle(.tint)
+            }
+            AreaMark(
+                x: .value("Date", item.localDate),
+                y: .value("Amount", balance),
+                stacking: .unstacked
+            )
+            .foregroundStyle(.tint)
+            .interpolationMethod(.linear)
+            .opacity(TimelineChartMetrics.areaMarkOpacity)
+            LineMark(
+                x: .value("Date", item.localDate),
+                y: .value("Amount", balance)
+            )
+            .foregroundStyle(.tint)
+            .interpolationMethod(.linear)
+            .lineStyle(.init(lineWidth: TimelineChartMetrics.lineMarkWidth))
+        }
     }
 
     func accessibilityValueParts(

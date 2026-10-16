@@ -112,15 +112,23 @@ that a persistence design is safe or a release is approved.
 
 ## Sources of truth
 
-- [Architecture guide](../Architecture/ARCHITECTURE_GUIDE.md): technical boundaries.
-- [Product vocabulary](../Architecture/product-vocabulary.md): user-facing terms.
-- [Current overview](incomes-current-overview.md): implemented feature inventory.
-- [#371](https://github.com/muhiro12/Incomes/issues/371): release scope and roadmap.
-- [#379](https://github.com/muhiro12/Incomes/issues/379): model evolution invariants.
-- [#382](https://github.com/muhiro12/Incomes/issues/382): ledger decisions,
+- [Architecture guide](../Architecture/ARCHITECTURE_GUIDE.md):
+  technical boundaries.
+- [Product vocabulary](../Architecture/product-vocabulary.md):
+  user-facing terms.
+- [Current overview](incomes-current-overview.md):
+  implemented feature inventory.
+- [#371](https://github.com/muhiro12/Incomes/issues/371):
+  release scope and roadmap.
+- [#379](https://github.com/muhiro12/Incomes/issues/379):
+  model evolution invariants.
+- [#382](https://github.com/muhiro12/Incomes/issues/382):
+  ledger decisions,
   comparison probes, and adoption conditions.
-- [#383](https://github.com/muhiro12/Incomes/issues/383): implementation evidence.
-- [#403](https://github.com/muhiro12/Incomes/issues/403): provenance of these principles.
+- [#383](https://github.com/muhiro12/Incomes/issues/383):
+  implementation evidence.
+- [#403](https://github.com/muhiro12/Incomes/issues/403):
+  provenance of these principles.
 
 The dated discussion above supplies context; those owning documents and Issues
 remain authoritative for current contracts and release decisions.

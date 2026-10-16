@@ -10,6 +10,9 @@ import SwiftData
 import SwiftUI
 
 struct YearMonthItemListView {
+    @Environment(\.ledgerIdentifier)
+    private var ledgerIdentifier
+
     @Environment(Tag.self)
     private var tag
     @Environment(IncomesTipController.self)
@@ -30,14 +33,14 @@ extension YearMonthItemListView: View {
             List {
                 ForEach(currentYearStrings, id: \.self) { yearString in
                     ItemListSection(
-                        .items(.tagAndYear(tag: tag, yearString: yearString)),
+                        .items(.tagAndYear(tag: tag, yearString: yearString), ledgerIdentifier: ledgerIdentifier),
                         showsItemDetailTip: yearString == firstYearString
                     )
                     if !isSubscribeOn {
                         AdvertisementSection(.media)
                     }
                     ChartSectionGroup(
-                        .items(.tagAndYear(tag: tag, yearString: yearString))
+                        .items(.tagAndYear(tag: tag, yearString: yearString), ledgerIdentifier: ledgerIdentifier)
                     )
                 }
             }
@@ -47,7 +50,8 @@ extension YearMonthItemListView: View {
                 if #available(iOS 26.0, *) {
                     MonthlySummarySection(
                         date: monthDate,
-                        currentItemsDescriptor: summaryItemsDescriptor
+                        currentItemsDescriptor: summaryItemsDescriptor,
+                        ledgerIdentifier: ledgerIdentifier
                     )
                 }
             }
@@ -71,7 +75,7 @@ extension YearMonthItemListView: View {
 
 private extension YearMonthItemListView {
     var items: [Item] {
-        tag.items ?? []
+        TagQueryOperations.items(for: tag, ledgerIdentifier: ledgerIdentifier)
     }
 
     var monthDate: Date? {
@@ -79,14 +83,14 @@ private extension YearMonthItemListView {
     }
 
     var yearStrings: [String] {
-        TagQueryOperations.yearStrings(for: tag)
+        TagQueryOperations.yearStrings(for: tag, ledgerIdentifier: ledgerIdentifier)
     }
 
     var summaryItemsDescriptor: FetchDescriptor<Item>? {
         guard let yearString = yearStrings.first else {
             return nil
         }
-        return .items(.tagAndYear(tag: tag, yearString: yearString))
+        return .items(.tagAndYear(tag: tag, yearString: yearString), ledgerIdentifier: ledgerIdentifier)
     }
 }
 

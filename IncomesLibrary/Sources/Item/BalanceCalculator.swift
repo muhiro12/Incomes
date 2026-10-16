@@ -16,36 +16,39 @@ enum BalanceCalculator {
 
     /// Recalculates balances starting from the earliest date covered by `items`.
     static func calculate(in context: ModelContext, for items: [Item]) throws {
-        if let date = items.map(\.localDate).min() {
-            try calculate(in: context, after: date)
-        } else {
-            try calculate(in: context, after: .distantPast)
+        let candidates = try items.isEmpty ? context.fetch(.allLedgerItems()) : items
+        let groups = Dictionary(grouping: candidates, by: \.ledgerIdentifier)
+        for (identifier, members) in groups {
+            if let date = members.map(\.localDate).min() {
+                try calculate(in: context, after: date, ledgerIdentifier: identifier)
+            }
         }
     }
 
     /// Recalculates balances for all items on or after `date`.
-    static func calculate(in context: ModelContext, after date: Date) throws {
-        let allItems = try context.fetch(.items(.all, order: .forward))
-
-        guard let separatorIndex = allItems.firstIndex(where: { item in
-            item.localDate >= date
-        }) else {
-            return
-        }
-
-        let previousBalance = allItems.prefix(upTo: separatorIndex).last?.balance ?? 0
-
-        let targetList = allItems.suffix(from: separatorIndex)
+    static func calculate(
+        in context: ModelContext,
+        after _: Date,
+        ledgerIdentifier: LedgerIdentifier = .default
+    ) throws {
+        let targetList =
+            try context.fetch(
+                .items(.all, order: .forward, ledgerIdentifier: ledgerIdentifier)
+            )
+            .sorted(by: >)
         let balances = try calculateBalances(
-            startingFrom: previousBalance,
+            startingFrom: .zero,
             inputs: try targetList.map { item in
                 .init(netIncome: try netIncome(income: item.income, outgo: item.outgo))
             }
         )
 
-        zip(targetList, balances).forEach { item, balance in
-            item.modify(balance: balance)
-        }
+        zip(targetList, balances)
+            .forEach { item, balance in
+                if item.balance != balance {
+                    item.modify(balance: balance)
+                }
+            }
     }
 
     static func calculateBalances(
@@ -55,7 +58,8 @@ enum BalanceCalculator {
         try inputs.reduce(into: [Decimal]()) { result, input in
             let lastBalance = result.last ?? previousBalance
             guard let balance = ExactAmountArithmetic.sum(lastBalance, input.netIncome),
-                  AmountPrecision.isExactlyStorable(balance) else {
+                  AmountPrecision.isExactlyStorable(balance)
+            else {
                 throw ItemAmountError.balanceOutOfRange
             }
             result.append(balance)

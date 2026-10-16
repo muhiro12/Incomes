@@ -4,7 +4,8 @@ import SwiftData
 enum MainNavigationRouteExecutor {
     static func execute(
         route: IncomesRoute,
-        context: ModelContext
+        context: ModelContext,
+        ledgerIdentifier: LedgerIdentifier
     ) throws -> MainNavigationRouteOutcome {
         switch route {
         case .home,
@@ -15,14 +16,14 @@ enum MainNavigationRouteExecutor {
              .yearlyDuplication,
              .duplicateTags,
              .orphanTags:
-            return try executeStaticRoute(route, context: context)
+            return try executeStaticRoute(route, context: context, ledgerIdentifier: ledgerIdentifier)
         case .yearSummary,
              .year,
              .month:
-            return try executeDateRoute(route, context: context)
+            return try executeDateRoute(route, context: context, ledgerIdentifier: ledgerIdentifier)
         case .item,
              .search:
-            return try executeEntityRoute(route, context: context)
+            return try executeEntityRoute(route, context: context, ledgerIdentifier: ledgerIdentifier)
         }
     }
 }
@@ -30,11 +31,12 @@ enum MainNavigationRouteExecutor {
 private extension MainNavigationRouteExecutor {
     static func executeStaticRoute(
         _ route: IncomesRoute,
-        context: ModelContext
+        context: ModelContext,
+        ledgerIdentifier: LedgerIdentifier
     ) throws -> MainNavigationRouteOutcome {
         switch route {
         case .home:
-            return try fallbackHomeDestination(context: context)
+            return try fallbackHomeDestination(context: context, ledgerIdentifier: ledgerIdentifier)
         case .settings:
             return .settings
         case .settingsSubscription:
@@ -51,23 +53,26 @@ private extension MainNavigationRouteExecutor {
             return .orphanTags
         default:
             assertionFailure()
-            return try fallbackHomeDestination(context: context)
+            return try fallbackHomeDestination(context: context, ledgerIdentifier: ledgerIdentifier)
         }
     }
 
     static func executeDateRoute(
         _ route: IncomesRoute,
-        context: ModelContext
+        context: ModelContext,
+        ledgerIdentifier: LedgerIdentifier
     ) throws -> MainNavigationRouteOutcome {
         switch route {
         case .yearSummary(let year):
             return .destination(
                 yearTagID: try resolveYearTagID(
                     context: context,
+                    ledgerIdentifier: ledgerIdentifier,
                     year: year
                 ),
                 selectedTag: try resolveYearTag(
                     context: context,
+                    ledgerIdentifier: ledgerIdentifier,
                     year: year
                 )
             )
@@ -75,6 +80,7 @@ private extension MainNavigationRouteExecutor {
             return .destination(
                 yearTagID: try resolveYearTagID(
                     context: context,
+                    ledgerIdentifier: ledgerIdentifier,
                     year: year
                 ),
                 selectedTag: nil
@@ -82,10 +88,12 @@ private extension MainNavigationRouteExecutor {
         case let .month(year, month):
             let yearTagID = try resolveYearTagID(
                 context: context,
+                ledgerIdentifier: ledgerIdentifier,
                 year: year
             )
             let yearMonthTag = try resolveYearMonthTag(
                 context: context,
+                ledgerIdentifier: ledgerIdentifier,
                 year: year,
                 month: month
             )
@@ -95,23 +103,24 @@ private extension MainNavigationRouteExecutor {
             )
         default:
             assertionFailure()
-            return try fallbackHomeDestination(context: context)
+            return try fallbackHomeDestination(context: context, ledgerIdentifier: ledgerIdentifier)
         }
     }
 
     static func executeEntityRoute(
         _ route: IncomesRoute,
-        context: ModelContext
+        context: ModelContext,
+        ledgerIdentifier: LedgerIdentifier
     ) throws -> MainNavigationRouteOutcome {
         switch route {
         case .item(let itemID):
             guard let persistentID = try? PersistentIdentifierCoder.decode(itemID) else {
-                return try fallbackHomeDestination(context: context)
+                return try fallbackHomeDestination(context: context, ledgerIdentifier: ledgerIdentifier)
             }
             guard try context.fetchFirst(
-                .items(.idIs(persistentID))
+                .items(.idIs(persistentID), ledgerIdentifier: ledgerIdentifier)
             ) != nil else {
-                return try fallbackHomeDestination(context: context)
+                return try fallbackHomeDestination(context: context, ledgerIdentifier: ledgerIdentifier)
             }
             return .itemDetail(itemID: persistentID)
         case .search(let query):
@@ -119,19 +128,21 @@ private extension MainNavigationRouteExecutor {
                 query: query,
                 predicate: try resolveSearchPredicate(
                     context: context,
+                    ledgerIdentifier: ledgerIdentifier,
                     query: query
                 )
             )
         default:
             assertionFailure()
-            return try fallbackHomeDestination(context: context)
+            return try fallbackHomeDestination(context: context, ledgerIdentifier: ledgerIdentifier)
         }
     }
 
     static func fallbackHomeDestination(
-        context: ModelContext
+        context: ModelContext,
+        ledgerIdentifier: LedgerIdentifier
     ) throws -> MainNavigationRouteOutcome {
-        let state = try MainNavigationStateLoader.load(context: context)
+        let state = try MainNavigationStateLoader.load(context: context, ledgerIdentifier: ledgerIdentifier)
         return .destination(
             yearTagID: state.yearTag?.persistentModelID,
             selectedTag: state.yearMonthTag
@@ -140,19 +151,22 @@ private extension MainNavigationRouteExecutor {
 
     static func resolveYearTagID(
         context: ModelContext,
+        ledgerIdentifier: LedgerIdentifier,
         year: Int
     ) throws -> Tag.ID? {
         let yearTagName = String(format: "%04d", year)
         let yearTag = try TagQueryOperations.getByName(
             context: context,
             name: yearTagName,
-            type: .year
+            type: .year,
+            ledgerIdentifier: ledgerIdentifier
         )
         return yearTag?.persistentModelID
     }
 
     static func resolveYearMonthTag(
         context: ModelContext,
+        ledgerIdentifier: LedgerIdentifier,
         year: Int,
         month: Int
     ) throws -> Tag? {
@@ -160,24 +174,28 @@ private extension MainNavigationRouteExecutor {
         return try TagQueryOperations.getByName(
             context: context,
             name: yearMonthTagName,
-            type: .yearMonth
+            type: .yearMonth,
+            ledgerIdentifier: ledgerIdentifier
         )
     }
 
     static func resolveYearTag(
         context: ModelContext,
+        ledgerIdentifier: LedgerIdentifier,
         year: Int
     ) throws -> Tag? {
         let yearTagName = String(format: "%04d", year)
         return try TagQueryOperations.getByName(
             context: context,
             name: yearTagName,
-            type: .year
+            type: .year,
+            ledgerIdentifier: ledgerIdentifier
         )
     }
 
     static func resolveSearchPredicate(
         context: ModelContext,
+        ledgerIdentifier: LedgerIdentifier,
         query: String?
     ) throws -> ItemPredicate? {
         guard let query = query?.trimmingCharacters(in: .whitespacesAndNewlines),
@@ -185,7 +203,7 @@ private extension MainNavigationRouteExecutor {
             return nil
         }
 
-        let contentTags = try context.fetch(.tags(.typeIs(.content)))
+        let contentTags = try context.fetch(.tags(.typeIs(.content), ledgerIdentifier: ledgerIdentifier))
         let matchingTags = TagQueryOperations.matchingDisplayNameTags(
             in: contentTags,
             query: query

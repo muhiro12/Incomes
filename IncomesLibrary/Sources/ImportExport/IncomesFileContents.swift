@@ -10,4 +10,24 @@ public struct IncomesFileContents: Equatable, Sendable {
     public let currencyCode: String?
     /// Items in value order.
     public let items: [IncomesFileItem]
+    /// Includes empty accounts; independent of the Item collection.
+    public let ledgers: [IncomesFileLedger]
+    /// Replace is restricted to these explicit account identities.
+    public let selectionLedgerIdentifiers: Set<LedgerIdentifier>
+
+    public init(
+        schemaVersion: String,
+        exportedAt: Date,
+        currencyCode: String?,
+        items: [IncomesFileItem],
+        ledgers: [IncomesFileLedger] = [],
+        selectionLedgerIdentifiers: Set<LedgerIdentifier> = [.default]
+    ) {
+        self.schemaVersion = schemaVersion
+        self.exportedAt = exportedAt
+        self.currencyCode = currencyCode
+        self.items = items
+        self.ledgers = ledgers
+        self.selectionLedgerIdentifiers = selectionLedgerIdentifiers
+    }
 }

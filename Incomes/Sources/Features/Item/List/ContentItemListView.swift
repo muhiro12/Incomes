@@ -10,6 +10,9 @@ import SwiftData
 import SwiftUI
 
 struct ContentItemListView {
+    @Environment(\.ledgerIdentifier)
+    private var ledgerIdentifier
+
     @Environment(Tag.self)
     private var tag
     @Environment(IncomesTipController.self)
@@ -27,7 +30,7 @@ extension ContentItemListView: View {
         List {
             ForEach(currentYearStrings, id: \.self) { yearString in
                 ItemListSection(
-                    .items(.tagAndYear(tag: tag, yearString: yearString)),
+                    .items(.tagAndYear(tag: tag, yearString: yearString), ledgerIdentifier: ledgerIdentifier),
                     title: .init(
                         yearString
                             .dateValueWithoutLocale(.yyyy)?
@@ -60,11 +63,11 @@ extension ContentItemListView: View {
 
 private extension ContentItemListView {
     var items: [Item] {
-        tag.items ?? []
+        TagQueryOperations.items(for: tag, ledgerIdentifier: ledgerIdentifier)
     }
 
     var yearStrings: [String] {
-        TagQueryOperations.yearStrings(for: tag)
+        TagQueryOperations.yearStrings(for: tag, ledgerIdentifier: ledgerIdentifier)
     }
 }
 

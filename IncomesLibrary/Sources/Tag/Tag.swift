@@ -24,20 +24,40 @@ extension IncomesSchemaV2 {
 
         /// Items that currently reference this tag.
         /// SwiftData represents to-many relationships as optionals before faulting.
-        public private(set) var items: [Item]? // swiftlint:disable:this discouraged_optional_collection
+        public private(set) var items: [Item]?  // swiftlint:disable:this discouraged_optional_collection
 
         private init() {
             // no-op
         }
 
         /// Creates or returns an existing tag with the given `name` and `type`.
-        public static func create(context: ModelContext, name: String, type: TagType) throws -> Tag {
-            let tag = try context.fetchFirst(
-                .tags(.nameIs(name, type: type))
-            ) ?? .init()
+        public static func create(
+            context: ModelContext,
+            name: String,
+            type: TagType
+        ) throws -> Tag {
+            guard type != .ledger else {
+                throw LedgerError.protectedMetadata
+            }
+            let tag =
+                try context.fetchFirst(
+                    FetchDescriptor<Tag>(predicate: TagPredicate.nameIs(name, type: type).value)
+                ) ?? .init()
             context.insert(tag)
             tag.name = name
             tag.typeID = type.rawValue
+            return tag
+        }
+
+        static func createLedger(
+            context: ModelContext,
+            identifier: LedgerIdentifier,
+            name: String
+        ) -> Tag {
+            let tag = Tag()
+            context.insert(tag)
+            tag.typeID = LedgerTagStorage.typeID(for: identifier)
+            tag.name = name
             return tag
         }
 
@@ -51,7 +71,7 @@ extension IncomesSchemaV2 {
 public extension Tag {
     /// The strongly-typed tag kind, derived from `typeID`.
     var type: TagType? {
-        TagType(rawValue: typeID)
+        typeID.hasPrefix(LedgerTagStorage.typePrefix) ? .ledger : TagType(rawValue: typeID)
     }
 
     /// A localized or user-friendly name for the tag.
@@ -66,7 +86,9 @@ public extension Tag {
     /// - Throws: `ItemAmountError.totalOutOfRange` when the total is not exact.
     var income: Decimal {
         get throws {
-            try ExactAmountArithmetic.checkedTotal((items ?? []).map(\.income))
+            try ExactAmountArithmetic.checkedTotal(
+                (items ?? []).map(\.income)
+            )
         }
     }
 
@@ -74,7 +96,9 @@ public extension Tag {
     /// - Throws: `ItemAmountError.totalOutOfRange` when the total is not exact.
     var outgo: Decimal {
         get throws {
-            try ExactAmountArithmetic.checkedTotal((items ?? []).map(\.outgo))
+            try ExactAmountArithmetic.checkedTotal(
+                (items ?? []).map(\.outgo)
+            )
         }
     }
 
@@ -113,7 +137,11 @@ extension Tag: Hashable {
 
 public extension Tag {
     /// Testing helper: creates a tag without checking duplicates.
-    static func createIgnoringDuplicates(context: ModelContext, name: String, type: TagType) -> Tag {
+    static func createIgnoringDuplicates(
+        context: ModelContext,
+        name: String,
+        type: TagType
+    ) -> Tag {
         let tag = Tag()
         context.insert(tag)
         tag.name = name

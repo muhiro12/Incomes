@@ -73,7 +73,8 @@ public struct ItemFormInferenceUpdate {
             incomeText: incomeText,
             outgoText: outgoText,
             category: category,
-            priorityText: currentInput.priorityText
+            priorityText: currentInput.priorityText,
+            ledgerIdentifier: currentInput.ledgerIdentifier
         )
     }
 }
