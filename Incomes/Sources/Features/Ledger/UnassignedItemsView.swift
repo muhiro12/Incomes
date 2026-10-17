@@ -4,6 +4,8 @@ import SwiftUI
 
 /// The same review handles delayed legacy records and a lost ownership relationship.
 struct UnassignedItemsView: View {
+    @Environment(\.dynamicTypeSize)
+    private var dynamicTypeSize
     @Environment(\.modelContext)
     private var context
     @Environment(NotificationService.self)
@@ -120,11 +122,21 @@ struct UnassignedItemsView: View {
     private func itemRow(_ item: Item) -> some View {
         VStack(alignment: .leading) {
             Text(item.content)
-            HStack {
-                Text(item.localDate, format: .dateTime.year().month().day())
-                Spacer()
-                Text(item.income.asCurrency)
-                Text(item.outgo.asMinusCurrency)
+            Group {
+                if dynamicTypeSize.isAccessibilitySize {
+                    VStack(alignment: .leading) {
+                        Text(item.localDate, format: .dateTime.year().month().day())
+                        Text(item.income.asCurrency)
+                        Text(item.outgo.asMinusCurrency)
+                    }
+                } else {
+                    HStack {
+                        Text(item.localDate, format: .dateTime.year().month().day())
+                        Spacer()
+                        Text(item.income.asCurrency)
+                        Text(item.outgo.asMinusCurrency)
+                    }
+                }
             }
             .font(.caption)
             .foregroundStyle(.secondary)
