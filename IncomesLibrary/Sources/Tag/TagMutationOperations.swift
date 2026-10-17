@@ -8,7 +8,7 @@ public enum TagMutationOperations {
         guard let parent = tags.first else {
             return
         }
-        if tags.contains(where: { $0.type == .ledger }),
+        if tags.contains(where: { $0.type?.isLedgerOwnership == true }),
            !tags.allSatisfy({ $0.type == .ledger && $0.name == parent.name }) {
             return
         }
@@ -71,7 +71,7 @@ public enum TagMutationOperations {
         context: ModelContext
     ) throws -> Int {
         let duplicateTags = try TagQueryOperations.duplicateTags(context: context)
-            .filter { $0.type != .ledger }
+            .filter { $0.type?.isLedgerOwnership != true }
         try resolveDuplicates(
             context: context,
             tags: duplicateTags
@@ -82,7 +82,7 @@ public enum TagMutationOperations {
     /// Deletes a single unused tag.
     @discardableResult
     public static func delete(tag: Tag) -> Bool {
-        guard tag.type != .ledger, TagQueryOperations.isOrphan(tag: tag) else {
+        guard tag.type?.isLedgerOwnership != true, TagQueryOperations.isOrphan(tag: tag) else {
             return false
         }
         tag.modelContext?.delete(tag)

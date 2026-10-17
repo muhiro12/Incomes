@@ -169,7 +169,7 @@ private extension SchemaMigrationTests {
         let resolvedItem = context.model(for: decodedIdentifier) as? Item
         #expect(resolvedItem?.content == item.content)
         #expect(item.utcDate == historicalDate)
-        let matchingItems = try context.fetch(.items(.dateIsSameDayAs(item.localDate)))
+        let matchingItems = try context.fetch(.items(.dateIsSameDayAs(item.localDate), ledgerIdentifier: .unassigned))
         #expect(matchingItems.count == 1)
         let matchingItem = try #require(matchingItems.first)
         #expect(try PersistentIdentifierCoder.encode(matchingItem.persistentModelID) == identifier)

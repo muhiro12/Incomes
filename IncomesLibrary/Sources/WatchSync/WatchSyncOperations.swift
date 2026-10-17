@@ -12,6 +12,7 @@ public enum WatchSyncOperations {
         baseDate: Date,
         monthOffsets: [Int] = ItemsRequest.recentMonthOffsets
     ) throws -> [ItemWire] {
+        try LedgerOperations.requireCompleteOwnership(context: context)
         var wires = [ItemWire]()
         for monthOffset in monthOffsets {
             guard let monthDate = Calendar.current.date(

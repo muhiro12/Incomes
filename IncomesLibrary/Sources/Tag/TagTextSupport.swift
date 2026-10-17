@@ -20,7 +20,7 @@ enum TagTextSupport {
                 forStoredName: name,
                 othersDisplayName: categoryOthersDisplayName
             )
-        case .debug, .ledger:
+        case .debug, .ledger, .defaultLedger:
             name
         case .none:
             name

@@ -29,10 +29,17 @@ enum IncomesFileCodec {
         exportedAt: Date,
         ledgers: [IncomesFileLedger] = []
     ) throws -> Data {
+        guard !items.contains(where: { $0.ledgerIdentifier == .unassigned }) else {
+            throw LedgerError.missingOwnership
+        }
         let metadataIDs = Set(ledgers.map(\.id))
         guard Set(items.map(\.ledgerIdentifier)).subtracting([.default]).isSubset(of: metadataIDs),
               !metadataIDs.contains(.default), !metadataIDs.contains(.conflicting),
-              items.allSatisfy({ !$0.ledgerIdentifier.rawValue.isEmpty && $0.ledgerIdentifier != .conflicting }),
+              !metadataIDs.contains(.unassigned),
+              items.allSatisfy({ item in
+                !item.ledgerIdentifier.rawValue.isEmpty
+                    && item.ledgerIdentifier != .conflicting && item.ledgerIdentifier != .unassigned
+              }),
               ledgers.allSatisfy({ ledger in
                 !ledger.id.rawValue.isEmpty
                     && !ledger.name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty

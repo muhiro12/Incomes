@@ -56,10 +56,6 @@ struct IncomesApp: App {
                 startupLogger: startupLogger
             )
         )
-        Self.recordCurrentAppVersion(
-            preferenceStore: preferenceStore,
-            startupLogger: startupLogger
-        )
         IncomesShortcuts.updateAppShortcutParameters()
     }
 }
@@ -93,24 +89,5 @@ private extension IncomesApp {
                 }
             )
         }
-    }
-
-    static func recordCurrentAppVersion(
-        preferenceStore: MHPreferenceStore,
-        startupLogger: MHLogger
-    ) {
-        guard let currentAppVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String else {
-            return
-        }
-        preferenceStore.set(
-            currentAppVersion,
-            for: \.lastLaunchedAppVersion
-        )
-        startupLogger.notice(
-            "app_version.recorded",
-            metadata: IncomesLogging.metadata(
-                ("app_version", currentAppVersion)
-            )
-        )
     }
 }

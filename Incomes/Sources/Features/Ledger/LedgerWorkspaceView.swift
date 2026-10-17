@@ -40,6 +40,16 @@ struct LedgerWorkspaceView: View {
         let identifier = LedgerIdentifier(rawValue: selectedIdentifier)
         let result = loadLedgers()
         VStack(spacing: .zero) {
+            if items.contains(where: { $0.ledgerIdentifier == .unassigned }), identifier != .unassigned {
+                Button {
+                    selectedIdentifier = LedgerIdentifier.unassigned.rawValue
+                } label: {
+                    Label("Review Unassigned Items", systemImage: "exclamationmark.triangle")
+                        .font(.callout)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                }
+            }
             if router.ledgerIdentifier == identifier {
                 bookContent(identifier: identifier, result: result)
             } else {
@@ -84,16 +94,24 @@ struct LedgerWorkspaceView: View {
     private func bookContent(identifier: LedgerIdentifier, result: Result<[LedgerRecord], Error>) -> some View {
         switch result {
         case .success(let ledgers):
-            LedgerContentView(
-                ledgerIdentifier: identifier,
-                issue: ledgers.first { $0.id == identifier }?.issue,
-                ledgerMenu: LedgerSelectionMenu(
-                    ledgers: ledgers,
-                    selectedIdentifier: $selectedIdentifier,
-                    manage: presentManagement
-                ),
-                router: router
+            let menu = LedgerSelectionMenu(
+                ledgers: ledgers,
+                selectedIdentifier: $selectedIdentifier,
+                manage: presentManagement
             )
+            Group {
+                if identifier == .unassigned {
+                    UnassignedItemsView(ledgers: ledgers, ledgerMenu: menu)
+                } else {
+                    LedgerContentView(
+                        ledgerIdentifier: identifier,
+                        issue: ledgers.first { $0.id == identifier }?.issue,
+                        ownershipIssue: LedgerOperations.ownershipIssue(in: items),
+                        ledgerMenu: menu,
+                        router: router
+                    )
+                }
+            }
             .id(identifier)
             .sheet(isPresented: $isManagementPresented) {
                 LedgerManagementView(selectedIdentifier: $selectedIdentifier)

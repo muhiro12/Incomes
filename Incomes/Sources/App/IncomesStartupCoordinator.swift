@@ -63,6 +63,10 @@ private extension IncomesStartupCoordinator {
                 isICloudEnabled: isICloudEnabled
             )
             startupLogger.notice("model_container.created")
+            try LedgerOperations.prepareDefaultLedger(
+                context: modelContainer.mainContext,
+                lastLaunchedAppVersion: preferenceStore.string(for: \.lastLaunchedAppVersion) ?? ""
+            )
             #if DEBUG
             try IncomesUISmokeLaunchSupport.prepareIfNeeded(
                 modelContainer: modelContainer,
@@ -75,6 +79,7 @@ private extension IncomesStartupCoordinator {
                 logging: logging
             )
             registerDependencies(platformEnvironment)
+            recordCurrentAppVersion()
             startupLogger.notice("startup.ready")
             return .ready(platformEnvironment)
         } catch {
@@ -85,6 +90,17 @@ private extension IncomesStartupCoordinator {
             )
             return .recoveryRequired(failurePhase)
         }
+    }
+
+    func recordCurrentAppVersion() {
+        guard let currentAppVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String else {
+            return
+        }
+        preferenceStore.set(currentAppVersion, for: \.lastLaunchedAppVersion)
+        startupLogger.notice(
+            "app_version.recorded",
+            metadata: IncomesLogging.metadata(("app_version", currentAppVersion))
+        )
     }
 
     func registerDependencies(_ platformEnvironment: IncomesPlatformEnvironment) {

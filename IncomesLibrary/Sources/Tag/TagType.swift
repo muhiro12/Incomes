@@ -14,9 +14,15 @@ public enum TagType: String, CaseIterable, Sendable {
     case category = "a7a130f4"
     case debug = "d3b6f0c1"
     case ledger = "4c93e218"
+    case defaultLedger = "91e6b720"
 
     /// Classification lookup and orphan cleanup exclude ledger metadata.
     static var classificationCases: [Self] {
         [.year, .yearMonth, .content, .category, .debug]
+    }
+
+    /// Ownership kinds are protected from classification maintenance.
+    public var isLedgerOwnership: Bool {
+        self == .ledger || self == .defaultLedger
     }
 }

@@ -124,7 +124,8 @@ public enum ItemSummaryOperations {
         context: ModelContext,
         date: Date
     ) throws -> MonthlyTotals {
-        try SummaryCalculator.monthlyTotals(
+        try LedgerOperations.requireCompleteOwnership(context: context)
+        return try SummaryCalculator.monthlyTotals(
             context: context,
             date: date
         )
@@ -135,7 +136,8 @@ public enum ItemSummaryOperations {
         context: ModelContext,
         date: Date
     ) throws -> [CategoryComparison] {
-        try SummaryCalculator.categoryComparison(
+        try LedgerOperations.requireCompleteOwnership(context: context)
+        return try SummaryCalculator.categoryComparison(
             context: context,
             date: date
         )

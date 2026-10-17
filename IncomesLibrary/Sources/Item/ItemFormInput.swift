@@ -187,7 +187,7 @@ public struct ItemFormInput: Equatable {
                     forStoredName: tag.name
                 )
             )
-        case .debug, .ledger, .none:
+        case .debug, .ledger, .defaultLedger, .none:
             return self
         }
     }

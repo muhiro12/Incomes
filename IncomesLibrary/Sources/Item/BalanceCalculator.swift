@@ -19,6 +19,9 @@ enum BalanceCalculator {
         let candidates = try items.isEmpty ? context.fetch(.allLedgerItems()) : items
         let groups = Dictionary(grouping: candidates, by: \.ledgerIdentifier)
         for (identifier, members) in groups {
+            guard identifier != .unassigned, identifier != .conflicting else {
+                continue
+            }
             if let date = members.map(\.localDate).min() {
                 try calculate(in: context, after: date, ledgerIdentifier: identifier)
             }

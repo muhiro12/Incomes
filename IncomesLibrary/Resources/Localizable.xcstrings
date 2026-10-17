@@ -886,6 +886,40 @@
         }
       }
     },
+    "Some items have no ledger assignment. Review them before relying on ledger balances." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Some items have no ledger assignment. Review them before relying on ledger balances."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "帳簿への所属が不明な明細があります。残高を利用する前に確認してください。"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Algunos movimientos no tienen un libro asignado. Revísalos antes de confiar en los saldos."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Certaines écritures ne sont attribuées à aucun registre. Vérifiez-les avant de vous fier aux soldes."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "部分记录未归属任何帐簿。请先检查，再使用帐簿余额。"
+          }
+        }
+      }
+    },
     "System" : {
       "localizations" : {
         "en" : {
@@ -1018,6 +1052,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "已确认的项目不再可用。未保存任何内容。"
+          }
+        }
+      }
+    },
+    "The selected items changed. Review their ledger assignments again." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The selected items changed. Review their ledger assignments again."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "選択した明細に変更がありました。帳簿への所属をもう一度確認してください。"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Los movimientos seleccionados han cambiado. Revisa de nuevo los libros asignados."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les écritures sélectionnées ont changé. Vérifiez à nouveau leur attribution."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "所选记录已发生更改。请重新检查其帐簿归属。"
           }
         }
       }
@@ -1426,6 +1494,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "无法补全项目详细信息。"
+          }
+        }
+      }
+    },
+    "Unassigned Items" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unassigned Items"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "所属不明の明細"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Movimientos sin libro"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Écritures sans registre"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "未归属的记录"
           }
         }
       }

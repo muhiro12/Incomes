@@ -264,6 +264,40 @@
         }
       }
     },
+    "%lld selected items will be assigned to %@." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld selected items will be assigned to %2$@."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "選択した%1$lld件の明細を「%2$@」に割り当てます。"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se asignarán %1$lld movimientos seleccionados a %2$@."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les %1$lld écritures sélectionnées seront attribuées à %2$@."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "将把所选的%1$lld条记录分配到%2$@。"
+          }
+        }
+      }
+    },
     "(%lld)" : {
       "shouldTranslate" : false
     },
@@ -1491,6 +1525,108 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "删除此项目前要求确认。"
+          }
+        }
+      }
+    },
+    "Assign" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Assign"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "割り当てる"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Asignar"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Attribuer"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "分配"
+          }
+        }
+      }
+    },
+    "Assign Selected Items" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Assign Selected Items"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "選択した明細を割り当てる"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Asignar movimientos seleccionados"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Attribuer les écritures sélectionnées"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "分配所选记录"
+          }
+        }
+      }
+    },
+    "Assign to Ledger" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Assign to Ledger"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "割り当て先の帳簿"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Libro de destino"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Registre de destination"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "分配到帐簿"
           }
         }
       }
@@ -8976,6 +9112,40 @@
         }
       }
     },
+    "No Unassigned Items" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No Unassigned Items"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "所属不明の明細はありません"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No hay movimientos sin libro"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucune écriture sans registre"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "没有未归属的记录"
+          }
+        }
+      }
+    },
     "No Years Yet" : {
       "localizations" : {
         "en" : {
@@ -12342,6 +12512,40 @@
         }
       }
     },
+    "Review Unassigned Items" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Review Unassigned Items"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "所属不明の明細を確認"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Revisar movimientos sin libro"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vérifier les écritures sans registre"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "检查未归属的记录"
+          }
+        }
+      }
+    },
     "Review orphan tags" : {
       "localizations" : {
         "en" : {
@@ -12984,6 +13188,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "按这些条件搜索"
+          }
+        }
+      }
+    },
+    "Select All" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select All"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "すべて選択"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seleccionar todo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tout sélectionner"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "全选"
           }
         }
       }
@@ -15096,6 +15334,40 @@
         }
       }
     },
+    "These items have no ledger assignment. They may have arrived from an earlier version, or their assignment may have been removed. Wait for sync, then assign only items whose destination you recognize. Ledger balances are unavailable until all items have an assignment." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "These items have no ledger assignment. They may have arrived from an earlier version, or their assignment may have been removed. Wait for sync, then assign only items whose destination you recognize. Ledger balances are unavailable until all items have an assignment."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "これらの明細は帳簿への所属が不明です。旧バージョンから届いた明細や、所属情報が失われた明細の可能性があります。同期を待ってから、所属先が分かる明細だけを帳簿に割り当ててください。すべての明細の所属が決まるまで、帳簿の残高は表示されません。"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Estos movimientos no tienen un libro asignado. Pueden proceder de una versión anterior o haber perdido su asignación. Espera a que se sincronicen los datos y asigna solo aquellos cuyo destino conozcas. Los saldos no estarán disponibles hasta que todos los movimientos tengan un libro asignado."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ces écritures ne sont attribuées à aucun registre. Elles peuvent provenir d’une ancienne version ou avoir perdu leur attribution. Attendez la synchronisation, puis attribuez uniquement les écritures dont vous connaissez le registre. Les soldes seront indisponibles tant que des écritures restent sans registre."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这些记录未归属任何帐簿。它们可能来自旧版本，也可能丢失了归属信息。请等待同步后，仅分配您能确认归属的记录。在所有记录都有归属之前，将无法显示帐簿余额。"
+          }
+        }
+      }
+    },
     "These numbers weren't used as search conditions: %@" : {
       "localizations" : {
         "en" : {
@@ -15884,6 +16156,40 @@
     "URL" : {
       "shouldTranslate" : false
     },
+    "Unable to Assign Items" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unable to Assign Items"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "明細を割り当てられません"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se pueden asignar los movimientos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Attribution des écritures impossible"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法分配记录"
+          }
+        }
+      }
+    },
     "Unable to Load Debug Items" : {
       "localizations" : {
         "en" : {
@@ -15948,6 +16254,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "无法整理标签"
+          }
+        }
+      }
+    },
+    "Unassigned Items" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unassigned Items"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "所属不明の明細"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Movimientos sin libro"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Écritures sans registre"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "未归属的记录"
           }
         }
       }

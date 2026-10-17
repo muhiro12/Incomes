@@ -87,6 +87,7 @@ struct IncomesFileV3: Codable {
               Set(file.ledgers.map(\.id)).count == file.ledgers.count,
               selectedIdentifiers.subtracting([.default]) == Set(file.ledgers.map(\.id)),
               !selectedIdentifiers.contains(.conflicting),
+              !selectedIdentifiers.contains(.unassigned),
               file.ledgers.allSatisfy({ ledger in
                 selectedIdentifiers.contains(ledger.id)
                     && !ledger.name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty

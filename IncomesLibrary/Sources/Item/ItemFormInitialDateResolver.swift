@@ -20,7 +20,7 @@ enum ItemFormInitialDateResolver {
             return yearDate(for: tag, currentDate: currentDate, calendar: calendar)
         case .yearMonth:
             return yearMonthDate(for: tag, currentDate: currentDate, calendar: calendar)
-        case .content, .category, .debug, .ledger, .none:
+        case .content, .category, .debug, .ledger, .defaultLedger, .none:
             return currentDate
         }
     }

@@ -31,8 +31,9 @@ public enum TagPredicate {
         switch self {
         case .all:
             let reserved = TagType.ledger.rawValue
+            let standard = TagType.defaultLedger.rawValue
             return #Predicate { tag in
-                tag.typeID != reserved
+                tag.typeID != reserved && tag.typeID != standard
             }
         case .matchingNone:
             return .false

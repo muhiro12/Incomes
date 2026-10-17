@@ -10,6 +10,8 @@ public enum LedgerError: LocalizedError, Equatable, Sendable {
     case protectedMetadata
     case pendingChanges
     case conflictingOwnership
+    case missingOwnership
+    case ownershipChanged
     case premiumRequired
 
     public var errorDescription: String? {
@@ -40,6 +42,13 @@ public enum LedgerError: LocalizedError, Equatable, Sendable {
             String(localized: "Finish the current edit before changing ledgers.", bundle: .module)
         case .conflictingOwnership:
             String(localized: "An item belongs to conflicting ledgers. Its balance is unavailable.", bundle: .module)
+        case .missingOwnership:
+            String(
+                localized: "Some items have no ledger assignment. Review them before relying on ledger balances.",
+                bundle: .module
+            )
+        case .ownershipChanged:
+            String(localized: "The selected items changed. Review their ledger assignments again.", bundle: .module)
         case .premiumRequired:
             String(
                 localized:

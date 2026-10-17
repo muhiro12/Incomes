@@ -82,7 +82,7 @@ public enum TagQueryOperations {
 
     /// True when duplicate tags exist in the store.
     public static func hasDuplicates(context: ModelContext) throws -> Bool {
-        try TagType.allCases.contains { type in
+        try TagType.allCases.filter { $0 != .defaultLedger }.contains { type in
             try !duplicateTags(
                 context: context,
                 type: type
@@ -104,7 +104,7 @@ public enum TagQueryOperations {
     public static func duplicateTags(
         context: ModelContext
     ) throws -> [Tag] {
-        try TagType.allCases.flatMap { type in
+        try TagType.allCases.filter { $0 != .defaultLedger }.flatMap { type in
             try duplicateTags(
                 context: context,
                 type: type
@@ -209,7 +209,7 @@ public enum TagQueryOperations {
             return tag.name.dateValueWithoutLocale(.yyyy)
         case .yearMonth:
             return tag.name.dateValueWithoutLocale(.yyyyMM)
-        case .content, .category, .debug, .ledger, .none:
+        case .content, .category, .debug, .ledger, .defaultLedger, .none:
             return nil
         }
     }
@@ -239,7 +239,8 @@ public enum TagQueryOperations {
              .yearMonth,
              .content,
              .debug,
-             .ledger:
+             .ledger,
+             .defaultLedger:
             return directItems(for: tag)
         case .category:
             return categoryMatchingItems(for: tag)

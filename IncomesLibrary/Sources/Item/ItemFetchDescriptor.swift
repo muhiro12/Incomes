@@ -18,9 +18,18 @@ public struct ItemFetchDescriptor {
     ) -> Self {
         let base = predicate.value
         let reserved = TagType.ledger.rawValue
+        let standard = TagType.defaultLedger.rawValue
         let isDefault = ledgerIdentifier == .default
+        let isUnassigned = ledgerIdentifier == .unassigned
         let scope = #Predicate<Item> { item in
-            (item.tags?.contains { tag in tag.typeID == reserved } ?? false) != isDefault
+            if isDefault {
+                (item.tags?.contains { tag in tag.typeID == standard } ?? false)
+                    && !(item.tags?.contains { tag in tag.typeID == reserved } ?? false)
+            } else if isUnassigned {
+                !(item.tags?.contains { tag in tag.typeID == standard || tag.typeID == reserved } ?? false)
+            } else {
+                item.tags?.contains { tag in tag.typeID == reserved } ?? false
+            }
         }
         return .init(
             candidateDescriptor: .init(

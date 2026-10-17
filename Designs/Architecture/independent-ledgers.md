@@ -17,15 +17,20 @@ longer-lived judgment behind that scope.
 
 ## Identity and ownership
 
-- The default book has no dedicated ownership Tag. Existing records need no
-  ownership migration and retain their stored model shape.
+- The default book uses a dedicated `TagType.defaultLedger` Tag. Its `typeID`
+  is one fixed kind identifier and its `name` is plain text. No stored field or
+  model is added. The default role maps to the existing `.default` selection
+  and file reference, independently of a particular Tag's native identity.
+  Separately created default Tags describe this same role, including during sync;
+  they do not create independent standard books or require distributed uniqueness.
 - An additional ledger is one Tag. `typeID` stores the single raw value of
   `TagType.ledger`, just as other Tag kinds do. `name` stores only its editable
   name. Neither field embeds an identifier or a structured payload.
 - The Tag's native persistent identifier distinguishes ledgers within a store.
   Selection and drafts capture that identifier, so a rename preserves ownership
   and does not redirect an outstanding edit to a newly created same-name ledger.
-- Items belong to an additional book through that Tag relationship. More than
+- Items belong to a book through an ownership Tag relationship. No ownership
+  Tag means **unassigned**, never implicit default ownership. More than
   one distinct book identity is a conflict, never an instruction to sum or
   duplicate the Item. Scoped queries exclude conflicting memberships.
 - Queries filter ordinary date, amount, and kind conditions in SwiftData, then
@@ -59,6 +64,16 @@ Read paths do not trust a saved `Item.balance` written by an older global
 calculator. Derived-cache repair is separate from reading and cannot insert
 financial records.
 
+Unassigned or conflicting ownership can affect any book. The app shows the issue,
+offers an unassigned-item review, and withholds complete ledger balances until
+ownership is resolved. Monthly widget summaries, Watch snapshot refresh, balance
+projections, and generated monthly narratives also refuse incomplete ownership.
+Cache repair does not assign Items. The review assigns only selected unassigned
+Items to an explicit destination and preserves their IDs, amounts, dates, and
+repeat identity. It rechecks selection and destination and validates the resulting
+balances before mutation, then saves relationships and balances together. Premium
+is required for an additional-book destination, not the default book.
+
 The app selects books per window. Existing unqualified month/year routes,
 Widgets, Watch snapshots, and ordinary Shortcut creation retain the default
 book. An explicit Item route resolves the Item's current book. The companion
@@ -88,11 +103,35 @@ account or a separate login. See [product vocabulary](product-vocabulary.md).
 
 ## Compatibility and operational scope
 
-The initial implementation deliberately retains the small no-Tag default
-representation. The 5.12 writer rebuilds Item Tags without unknown book Tags.
-An old-client edit can therefore remove additional-book membership and make the
-Item look like a default-book Item. A remaining empty book Tag cannot identify
-its former members. Recomputing balances cannot recover that lost relationship.
+The 5.12 writer rebuilds Item Tags without ownership Tags. An old-client edit can
+therefore remove either standard or additional membership. The new reader detects
+the resulting unassigned Item instead of silently including it in the default
+book. Detection cannot identify the former owner or prevent an old offline writer.
+A remaining empty book Tag cannot identify its former members.
+
+At host startup, the existing `lastLaunchedAppVersion` preference selects a local
+legacy upgrade. If the previous version is older than 6.0 (or absent), and the
+store contains no additional-book metadata, existing
+unassigned Items receive a standard Tag in one save. Financial values and model
+identities remain unchanged. Startup records the current app version only after
+successful preparation. A failed startup keeps the previous version available
+for retry. No additional migration flag or stored schema version is introduced:
+the persisted V2 shape is shared by 5.12 and 6.0 and cannot distinguish them.
+
+Additional-book metadata takes precedence over the version preference, including
+after a downgrade. A standard Tag arriving from another device does not prevent
+a legacy single-book upgrade. A standard Tag is also created for an empty dataset.
+Later untagged arrivals, current-version launches with missing metadata, and mixed
+datasets stay unassigned for review; startup and balance repair do not guess their
+destination. Sync can temporarily deliver an Item before its ownership relation;
+the notice asks the user to wait before assigning it. The save rechecks that every
+selected Item is still unassigned.
+
+This is a deliberately bounded migration, not proof of every device's history.
+An absent/old local version plus absent local additional-book metadata cannot
+establish that no other device has ever created additional books. The legacy path prefers
+the standard book in that irregular case. It never deletes financial records.
+Real cloud delivery and multi-device convergence remain separate release checks.
 
 Ledger management explains that earlier versions combine all ledgers and can
 remove an Item's assignment when editing. The first additional-ledger creation
@@ -105,10 +144,10 @@ mixed-version warning when a file contains additional ledgers.
 The notice is an operational prerequisite, not proof of device versions and not
 a technical write barrier. It cannot prevent an offline old writer or recover
 a lost relationship. Mixed-version editing is not a data-preservation guarantee.
-The current no-Tag default cannot distinguish a former additional-ledger Item
-from an original default-ledger Item after the relation is gone. Explicit
-default Tags and missing-membership handling remain a separate release decision;
-their absence must not be reported as a verified old-writer safeguard.
+Explicit standard Tags make subsequent missing ownership detectable; they do not
+recover the lost relationship. Incomes files retain their existing explicit
+default reference and restore it through a standard Tag. Unassigned Items cannot
+be silently exported as default Items; resolve their ownership before file export.
 
 The existing remote update request can reduce exposure after 6.0 is publicly
 available, but its UI alert does not gate every write entry point. A stronger

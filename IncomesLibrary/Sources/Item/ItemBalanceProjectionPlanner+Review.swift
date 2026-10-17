@@ -17,6 +17,7 @@ extension ItemBalanceProjectionPlanner {
         context: ModelContext,
         request: ReviewRequest
     ) throws -> ItemBalanceProjectionReview {
+        try LedgerOperations.requireCompleteOwnership(context: context)
         let existingItems = try context.fetch(
             .items(.all, order: .forward, ledgerIdentifier: request.ledgerIdentifier)
         )

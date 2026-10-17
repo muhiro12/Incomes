@@ -16,6 +16,7 @@ enum MonthlySummaryNarrativeContextLoader {
         currencyCode: String,
         categoryComparisonLimit: Int = defaultCategoryComparisonLimit
     ) throws -> MonthlySummaryOperations.Context {
+        try LedgerOperations.requireCompleteOwnership(context: context)
         let currentYearMonth = try yearMonth(from: date)
         let previousDate = MonthlySummaryDateSupport.previousMonthDate(from: date)
         let previousYearMonth = try yearMonth(from: previousDate)

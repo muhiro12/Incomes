@@ -2,9 +2,12 @@ import CryptoKit
 import Foundation
 import SwiftData
 
-/// Ledger identity is the Tag's own store-local identity, not its kind or name.
+/// Additional books use native Tag identity; standard Tags share the reserved default role.
 enum LedgerTagStorage {
     static func identifier(for tag: Tag) -> LedgerIdentifier? {
+        if tag.type == .defaultLedger {
+            return .default
+        }
         guard tag.type == .ledger,
               let value = try? PersistentIdentifierCoder.encode(tag.persistentModelID) else {
             return nil
@@ -14,7 +17,7 @@ enum LedgerTagStorage {
 
     /// Stable within the source store without exposing its persistent-ID payload in a file.
     static func fileReference(for identifier: LedgerIdentifier) -> LedgerIdentifier {
-        guard identifier != .default, identifier != .conflicting else {
+        guard identifier != .default, identifier != .conflicting, identifier != .unassigned else {
             return identifier
         }
         let input = Data(("Incomes ledger file reference v1|" + identifier.rawValue).utf8)

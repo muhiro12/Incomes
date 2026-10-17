@@ -66,11 +66,12 @@ struct LedgerOperationsTests {
     }
 
     @Test
-    func theOriginalBookNeedsNoOwnershipTag() throws {
+    func theOriginalBookUsesAnExplicitOwnershipTag() throws {
         let context = ModelContext(try ModelContainerFactory.inMemory())
         let item = try createItem(context: context, owner: .default, income: 100)
         #expect(item.ledgerIdentifier == .default)
         #expect((item.tags ?? []).allSatisfy { $0.type != .ledger })
+        #expect((item.tags ?? []).filter { $0.type == .defaultLedger }.count == 1)
         #expect(try context.fetchCount(.items(.all)) == 1)
         #expect(try context.fetchCount(.tags(.typeIs(.ledger))) == 0)
     }

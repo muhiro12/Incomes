@@ -7,6 +7,7 @@ struct LedgerContentView: View {
     private var isSubscribeOn
     @LedgerItemQuery private var items: [Item]
     let issue: LedgerError?
+    let ownershipIssue: LedgerError?
     let ledgerMenu: LedgerSelectionMenu
     let router: MainNavigationRouter
     let ledgerIdentifier: LedgerIdentifier
@@ -33,17 +34,24 @@ struct LedgerContentView: View {
     }
 
     private var balanceResult: Result<LedgerBalanceSnapshot, Error> {
-        Result { try LedgerBalanceOperations.snapshot(items: items, ledgerIdentifier: ledgerIdentifier) }
+        Result {
+            if let ownershipIssue {
+                throw ownershipIssue
+            }
+            return try LedgerBalanceOperations.snapshot(items: items, ledgerIdentifier: ledgerIdentifier)
+        }
     }
 
     init(
         ledgerIdentifier: LedgerIdentifier,
         issue: LedgerError?,
+        ownershipIssue: LedgerError?,
         ledgerMenu: LedgerSelectionMenu,
         router: MainNavigationRouter
     ) {
         self.ledgerIdentifier = ledgerIdentifier
         self.issue = issue
+        self.ownershipIssue = ownershipIssue
         self.ledgerMenu = ledgerMenu
         self.router = router
         _items = .init(.items(.all, ledgerIdentifier: ledgerIdentifier))

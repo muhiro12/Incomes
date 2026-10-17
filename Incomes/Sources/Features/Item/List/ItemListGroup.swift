@@ -24,7 +24,7 @@ extension ItemListGroup: View {
             ContentItemListView()
         case .category:
             CategoryItemListView()
-        case .debug, .ledger:
+        case .debug, .ledger, .defaultLedger:
             EmptyView()
         case .none:
             EmptyView()

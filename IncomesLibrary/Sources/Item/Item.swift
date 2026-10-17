@@ -58,9 +58,9 @@ extension IncomesSchemaV2 {
             repeatID: UUID,
             ledgerTag: Tag?
         ) throws -> Item {
-            let ownershipTags: [Tag] = values.ledgerIdentifier == .default ? [] : [
-                try ledgerTag ?? LedgerOperations.metadataForMutation(values.ledgerIdentifier, context: context)
-            ]
+            let ownershipTag = try ledgerTag ?? LedgerOperations.ownershipTag(
+                values.ledgerIdentifier, context: context
+            )
             let item = Item()
             context.insert(item)
 
@@ -99,7 +99,7 @@ extension IncomesSchemaV2 {
                 )
             ]
 
-            item.tags = (item.tags ?? []) + ownershipTags
+            item.tags = (item.tags ?? []) + [ownershipTag]
             return item
         }
 
@@ -124,7 +124,7 @@ extension IncomesSchemaV2 {
                 return
             }
 
-            let ownershipTags = (tags ?? []).filter { $0.type == .ledger }
+            let ownershipTags = (tags ?? []).filter { $0.type?.isLedgerOwnership == true }
             self.tags = [
                 try .create(
                     context: context,
@@ -162,14 +162,14 @@ extension IncomesSchemaV2 {
 }
 
 public extension Item {
-    /// Financial book identified by its dedicated Tag; no ownership Tag is the original book.
+    /// Missing ownership stays unassigned; it never implicitly becomes the standard book.
     var ledgerIdentifier: LedgerIdentifier {
-        let metadata = (tags ?? []).filter { $0.type == .ledger }
+        let metadata = (tags ?? []).filter { $0.type?.isLedgerOwnership == true }
         guard !metadata.isEmpty else {
-            return .default
+            return .unassigned
         }
-        let identifiers = Set(metadata.compactMap(LedgerTagStorage.identifier(for:)))
-        guard identifiers.count == 1, identifiers.count == Set(metadata.map(\.persistentModelID)).count,
+        let identifiers = metadata.compactMap(LedgerTagStorage.identifier(for:))
+        guard identifiers.count == metadata.count, Set(identifiers).count == 1,
               let identifier = identifiers.first else {
             return .conflicting
         }
@@ -273,8 +273,7 @@ public extension Item {
             )
         ]
 
-        if values.ledgerIdentifier != .default,
-           let metadata = try? LedgerOperations.metadataForMutation(values.ledgerIdentifier, context: context) {
+        if let metadata = try? LedgerOperations.ownershipTag(values.ledgerIdentifier, context: context) {
             item.tags = (item.tags ?? []) + [metadata]
         }
 

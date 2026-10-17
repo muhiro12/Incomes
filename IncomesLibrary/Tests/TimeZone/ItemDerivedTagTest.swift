@@ -34,7 +34,8 @@ struct ItemDerivedTagTest {
         )
 
         let tags = try #require(item.tags)
-        #expect(tags.count == 4)
+        #expect(tags.filter { $0.type?.isLedgerOwnership != true }.count == 4)
+        #expect(tags.filter { $0.type == .defaultLedger }.count == 1)
         #expect(tags.contains { tag in
             tag.name == "2025" && tag.type == .year
         })

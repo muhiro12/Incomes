@@ -3,17 +3,19 @@ import SwiftData
 
 /// Manages independent books through dedicated Tags without extending the stored model.
 public enum LedgerOperations {
-    /// A ledger Tag keeps its native model identity through edits and renames.
+    /// Resolves native additional-book identity or the standard-book role.
     public static func identifier(for tag: Tag) -> LedgerIdentifier? {
         LedgerTagStorage.identifier(for: tag)
     }
 
-    /// Includes empty ledgers and surfaces conflicting Item membership.
+    /// Includes empty ledgers and surfaces unassigned or conflicting Item membership.
     public static func ledgers(context: ModelContext) throws -> [LedgerRecord] {
         let tags = try context.fetch(.tags(.typeIs(.ledger)))
         var identifiers = Set(tags.compactMap(LedgerTagStorage.identifier(for:)))
-        if try context.fetch(.allLedgerItems()).contains(where: { $0.ledgerIdentifier == .conflicting }) {
-            identifiers.insert(.conflicting)
+        let items = try context.fetch(.allLedgerItems())
+        for identifier in [LedgerIdentifier.unassigned, .conflicting]
+        where items.contains(where: { $0.ledgerIdentifier == identifier }) {
+            identifiers.insert(identifier)
         }
         identifiers.insert(.default)
         return identifiers.map { record(identifier: $0, tags: tags) }
@@ -88,7 +90,8 @@ public enum LedgerOperations {
 extension LedgerOperations {
     @discardableResult
     static func importMetadata(_ value: IncomesFileLedger, context: ModelContext) throws -> Tag {
-        guard value.id != .default, value.id != .conflicting, !value.id.rawValue.isEmpty else {
+        guard value.id != .default, value.id != .conflicting, value.id != .unassigned,
+              !value.id.rawValue.isEmpty else {
             throw LedgerError.invalidIdentifier
         }
         let name = try validatedName(value.name)
@@ -123,6 +126,14 @@ extension LedgerOperations {
         return metadata
     }
 
+    static func ownershipTag(_ identifier: LedgerIdentifier, context: ModelContext) throws -> Tag {
+        if identifier == .default {
+            return try Tag.defaultLedger(context: context)
+        }
+        try requireAvailable(identifier, context: context)
+        return try metadataForMutation(identifier, context: context)
+    }
+
     static func requireCleanContext(_ context: ModelContext) throws {
         guard !context.hasChanges else {
             throw LedgerError.pendingChanges
@@ -135,6 +146,13 @@ extension LedgerOperations {
     static func record(identifier: LedgerIdentifier, tags: [Tag]) -> LedgerRecord {
         if identifier == .default {
             return .init(id: identifier, name: String(localized: "Default Ledger", bundle: .module))
+        }
+        if identifier == .unassigned {
+            return .init(
+                id: identifier,
+                name: String(localized: "Unassigned Items", bundle: .module),
+                issue: .missingOwnership
+            )
         }
         if identifier == .conflicting {
             return .init(

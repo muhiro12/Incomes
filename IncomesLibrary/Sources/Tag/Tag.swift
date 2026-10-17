@@ -36,7 +36,7 @@ extension IncomesSchemaV2 {
             name: String,
             type: TagType
         ) throws -> Tag {
-            guard type != .ledger else {
+            guard !type.isLedgerOwnership else {
                 throw LedgerError.protectedMetadata
             }
             let tag =
@@ -57,6 +57,18 @@ extension IncomesSchemaV2 {
             context.insert(tag)
             tag.typeID = TagType.ledger.rawValue
             tag.name = name
+            return tag
+        }
+
+        /// The kind identifies the standard book even if devices create separate Tags.
+        static func defaultLedger(context: ModelContext) throws -> Tag {
+            if let tag = try context.fetchFirst(.tags(.typeIs(.defaultLedger))) {
+                return tag
+            }
+            let tag = Tag()
+            context.insert(tag)
+            tag.typeID = TagType.defaultLedger.rawValue
+            tag.name = "Default Ledger"
             return tag
         }
 

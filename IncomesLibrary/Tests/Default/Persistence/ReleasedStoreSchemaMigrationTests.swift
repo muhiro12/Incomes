@@ -33,6 +33,16 @@ struct ReleasedStoreSchemaMigrationTests {
         }
     }
 
+    @Test("Released 5.12 records receive standard ownership once and retain native identity")
+    func released_store_receives_explicit_default_ownership_once() throws {
+        try withFixtureStore { url in
+            let identifiers = try migrateDefaultOwnership(at: url)
+            try verifyDefaultOwnership(at: url, identifiers: identifiers)
+            try dropAndRestoreDefaultMembership(at: url)
+            try verifyDefaultOwnership(at: url, identifiers: identifiers)
+        }
+    }
+
     @Test("A corrupt store fails to open and is left untouched")
     func corrupt_store_fails_without_reset() throws {
         try withFixtureStore { url in
@@ -54,6 +64,50 @@ struct ReleasedStoreSchemaMigrationTests {
 }
 
 private extension ReleasedStoreSchemaMigrationTests {
+    func migrateDefaultOwnership(at url: URL) throws -> Set<String> {
+        try autoreleasepool {
+            let container = try ModelContainerFactory.make(configuration: .init(url: url, cloudKitDatabase: .none))
+            let context = container.mainContext
+            let items = try context.fetch(.allLedgerItems())
+            let before = items.map { IncomesFileItem(item: $0) }
+            let identifiers = try Set(items.map { try PersistentIdentifierCoder.encode($0.id) })
+            #expect(items.allSatisfy { $0.ledgerIdentifier == .unassigned })
+            try LedgerOperations.prepareDefaultLedger(context: context, lastLaunchedAppVersion: "5.12")
+            #expect(items.allSatisfy { $0.ledgerIdentifier == .default })
+            #expect(items.map { IncomesFileItem(item: $0).assigning(to: .unassigned) } == before)
+            let actual = try Set(context.fetch(.items(.all)).map { try PersistentIdentifierCoder.encode($0.id) })
+            #expect(actual == identifiers)
+            #expect(!context.hasChanges)
+            return identifiers
+        }
+    }
+
+    func verifyDefaultOwnership(at url: URL, identifiers: Set<String>) throws {
+        try autoreleasepool {
+            let context = ModelContext(try ModelContainerFactory.readOnly(at: url))
+            let actual = try Set(context.fetch(.items(.all)).map { try PersistentIdentifierCoder.encode($0.id) })
+            #expect(actual == identifiers)
+            let standard = try #require(try context.fetch(.items(.all)).first)
+            #expect(throws: CocoaError(.fileWriteNoPermission)) {
+                try LedgerOperations.assignUnassignedItems(itemIDs: [standard.id], to: .default, context: context)
+            }
+            #expect(!context.hasChanges)
+        }
+    }
+
+    func dropAndRestoreDefaultMembership(at url: URL) throws {
+        try autoreleasepool {
+            let container = try ModelContainerFactory.make(configuration: .init(url: url, cloudKitDatabase: .none))
+            let context = container.mainContext
+            let item = try #require(try context.fetch(.items(.all)).first)
+            item.modify(tags: (item.tags ?? []).filter { $0.type?.isLedgerOwnership != true })
+            try context.save()
+            try LedgerOperations.prepareDefaultLedger(context: context, lastLaunchedAppVersion: "6.0")
+            #expect(item.ledgerIdentifier == .unassigned)
+            try LedgerOperations.assignUnassignedItems(itemIDs: [item.id], to: .default, context: context)
+        }
+    }
+
     func withFixtureStore(_ body: (URL) throws -> Void) throws {
         let fileManager: FileManager = .default
         let directory = try persistentTestDirectory(fileManager: fileManager)

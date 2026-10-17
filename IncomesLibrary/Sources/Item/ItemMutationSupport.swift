@@ -72,7 +72,7 @@ enum ItemMutationSupport {
                 switch tag.type {
                 case .year, .yearMonth, .content, .category:
                     return true
-                case .debug, .ledger, .none:
+                case .debug, .ledger, .defaultLedger, .none:
                     return false
                 }
             }

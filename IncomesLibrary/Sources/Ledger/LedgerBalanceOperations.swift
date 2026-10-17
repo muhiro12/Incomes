@@ -8,7 +8,8 @@ public enum LedgerBalanceOperations {
         context: ModelContext,
         ledgerIdentifier: LedgerIdentifier = .default
     ) throws -> LedgerBalanceSnapshot {
-        try snapshot(
+        try LedgerOperations.requireCompleteOwnership(context: context)
+        return try snapshot(
             items: context.fetch(.items(.all, order: .forward, ledgerIdentifier: ledgerIdentifier)),
             ledgerIdentifier: ledgerIdentifier
         )
@@ -19,6 +20,12 @@ public enum LedgerBalanceOperations {
         items: [Item],
         ledgerIdentifier: LedgerIdentifier = .default
     ) throws -> LedgerBalanceSnapshot {
+        if let issue = LedgerOperations.ownershipIssue(in: items) {
+            throw issue
+        }
+        guard ledgerIdentifier != .unassigned, ledgerIdentifier != .conflicting else {
+            throw LedgerError.unavailable
+        }
         let orderedItems = items.filter { item in
             item.ledgerIdentifier == ledgerIdentifier
         }

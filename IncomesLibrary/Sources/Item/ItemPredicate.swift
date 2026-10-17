@@ -118,7 +118,7 @@ public enum ItemPredicate {
                 return #Predicate { item in
                     itemIDs.contains(item.id)
                 }
-            case .debug, .ledger:
+            case .debug, .ledger, .defaultLedger:
                 assertionFailure("Not Supported")
                 return .false
             }
@@ -141,7 +141,8 @@ public enum ItemPredicate {
                  .yearMonth,
                  .category,
                  .debug,
-                 .ledger:
+                 .ledger,
+                 .defaultLedger:
                 return Self.tagIs(tag).value
             }
 

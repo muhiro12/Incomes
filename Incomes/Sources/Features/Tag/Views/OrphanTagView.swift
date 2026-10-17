@@ -94,7 +94,7 @@ private extension OrphanTagView {
             "Category"
         case .debug:
             "Debug"
-        case .ledger:
+        case .ledger, .defaultLedger:
             "Ledger"
         }
     }

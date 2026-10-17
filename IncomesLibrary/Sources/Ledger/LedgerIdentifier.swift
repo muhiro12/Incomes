@@ -2,11 +2,12 @@ import Foundation
 
 /// A ledger reference within a store or an import file; imports resolve their own references.
 public struct LedgerIdentifier: RawRepresentable, Codable, Hashable, Sendable, Identifiable {
-    /// The original book, represented by the absence of a dedicated ownership Tag.
+    /// The original book, identified by the default-ledger Tag kind.
     public static let `default`: Self = .init(rawValue: "default")
+    public static let unassigned: Self = .init(rawValue: "unassigned")
     static let conflicting: Self = .init(rawValue: "conflicting")
 
-    /// Encoded Tag identity, or a file-scoped reference awaiting import resolution.
+    /// Encoded Tag identity, a reserved selection, or a file reference awaiting import resolution.
     public let rawValue: String
 
     /// Identity used by value-based selection controls.
