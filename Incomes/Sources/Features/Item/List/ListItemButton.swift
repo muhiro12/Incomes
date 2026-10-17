@@ -20,6 +20,7 @@ struct ListItemButton: View {
     @Environment(\.locale)
     private var locale
 
+    @State private var deletionErrorMessage: String?
     @State private var detailPresentationDetent = PresentationDetent.medium
     @State private var isDeletePresented = false
     @State private var route: ListItemRoute?
@@ -73,6 +74,7 @@ struct ListItemButton: View {
                 detailPresentationDetent: $detailPresentationDetent
             )
         }
+        .itemDeletionErrorAlert($deletionErrorMessage)
         .confirmationDialog(
             Text("Delete \(item.content)"),
             isPresented: $isDeletePresented
@@ -87,7 +89,7 @@ struct ListItemButton: View {
                             logger: itemMutationLogger
                         )
                     } catch {
-                        assertionFailure(error.localizedDescription)
+                        deletionErrorMessage = ErrorMessageOperations.message(from: error)
                     }
                 }
             } label: {

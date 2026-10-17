@@ -31,6 +31,7 @@ struct HomeYearSection: View {
         }
     }
 
+    @State private var deletionErrorMessage: String?
     @State private var isDialogPresented = false
     @State private var deletionDisplayName: String?
     @State private var willDeleteItems: [Item] = []
@@ -78,6 +79,7 @@ extension HomeYearSection {
                 )
             }
         }
+        .itemDeletionErrorAlert($deletionErrorMessage)
         .confirmationDialog(
             deletionDialogTitle,
             isPresented: Binding(
@@ -94,17 +96,18 @@ extension HomeYearSection {
             )
         ) {
             Button(role: .destructive) {
+                let itemsToDelete = willDeleteItems
                 Task { @MainActor in
                     do {
                         try await ItemDeleteCoordinator.delete(
                             context: context,
-                            items: willDeleteItems,
+                            items: itemsToDelete,
                             notificationService: notificationService,
                             logger: itemMutationLogger
                         )
                         clearDeletionRequest()
                     } catch {
-                        assertionFailure(error.localizedDescription)
+                        deletionErrorMessage = ErrorMessageOperations.message(from: error)
                     }
                 }
             } label: {

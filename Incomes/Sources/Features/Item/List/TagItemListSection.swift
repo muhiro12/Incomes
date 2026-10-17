@@ -21,6 +21,7 @@ struct TagItemListSection {
     @Environment(MHLoggingBootstrap.self)
     private var logging
 
+    @State private var deletionErrorMessage: String?
     @State private var isDialogPresented = false
     @State private var willDeleteItems: [Item] = []
 
@@ -60,6 +61,7 @@ extension TagItemListSection: View {
         } header: {
             Text(yearString.dateValueWithoutLocale(.yyyy)?.stringValue(.yyyy) ?? "")
         }
+        .itemDeletionErrorAlert($deletionErrorMessage)
         .confirmationDialog(
             Text("Delete"),
             isPresented: $isDialogPresented
@@ -74,7 +76,7 @@ extension TagItemListSection: View {
                             logger: itemMutationLogger
                         )
                     } catch {
-                        assertionFailure(error.localizedDescription)
+                        deletionErrorMessage = ErrorMessageOperations.message(from: error)
                     }
                 }
             } label: {

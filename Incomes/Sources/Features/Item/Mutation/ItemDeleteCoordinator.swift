@@ -79,7 +79,7 @@ private extension ItemDeleteCoordinator {
             name: deleteWorkflowName(for: items),
             operation: {
                 try LedgerMutationAccess.requireEditing(Set(items.map(\.ledgerIdentifier)))
-                return try ItemDeletionOperations.deleteWithOutcome(
+                return try ItemDeletionOperations.deleteAndSaveWithOutcome(
                     context: context,
                     items: items
                 )

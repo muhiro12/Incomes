@@ -19,6 +19,7 @@ struct DeleteItemButton {
     @Environment(MHLoggingBootstrap.self)
     private var logging
 
+    @State private var deletionErrorMessage: String?
     @State private var isDialogPresented = false
 
     private let action: (() -> Void)?
@@ -47,6 +48,7 @@ extension DeleteItemButton: View {
         .ledgerWriteAccess(owner: item.ledgerIdentifier)
         .accessibilityLabel(Text("Delete Item"))
         .accessibilityHint(Text("Asks for confirmation before deleting this item."))
+        .itemDeletionErrorAlert($deletionErrorMessage)
         .confirmationDialog(
             Text("Delete \(item.content)"),
             isPresented: $isDialogPresented
@@ -61,7 +63,7 @@ extension DeleteItemButton: View {
                             logger: itemMutationLogger
                         )
                     } catch {
-                        assertionFailure(error.localizedDescription)
+                        deletionErrorMessage = ErrorMessageOperations.message(from: error)
                     }
                 }
             } label: {

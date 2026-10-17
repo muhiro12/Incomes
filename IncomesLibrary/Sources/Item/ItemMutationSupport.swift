@@ -8,6 +8,31 @@ enum ItemMutationSupport {
         .refreshWatchSnapshot
     ]
 
+    static func performAndSave(
+        context: ModelContext,
+        operation: () throws -> MutationOutcome
+    ) throws -> MutationOutcome {
+        guard !context.hasChanges else {
+            throw ItemMutationError.pendingChanges
+        }
+        guard context.container.configurations.allSatisfy(\.allowsSave) else {
+            throw CocoaError(.fileWriteNoPermission)
+        }
+        let autosaveEnabled = context.autosaveEnabled
+        context.autosaveEnabled = false
+        defer {
+            context.autosaveEnabled = autosaveEnabled
+        }
+        do {
+            let outcome = try operation()
+            try context.save()
+            return outcome
+        } catch {
+            context.rollback()
+            throw error
+        }
+    }
+
     static func dateRange(from dates: [Date]) -> ClosedRange<Date>? {
         guard let minDate = dates.min(),
               let maxDate = dates.max() else {

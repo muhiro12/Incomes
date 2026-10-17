@@ -15,6 +15,7 @@ struct MainNavigationSidebarView: View {
     @Environment(MainNavigationYearDeletionModel.self)
     private var yearDeletionModel
 
+    @State private var deletionErrorMessage: String?
     let yearTags: [Tag]
     let selectedYearTag: Tag?
     let yearTagSelection: Binding<Tag.ID?>
@@ -40,6 +41,7 @@ struct MainNavigationSidebarView: View {
                 }
             }
         }
+        .itemDeletionErrorAlert($deletionErrorMessage)
         .confirmationDialog(
             deletionDialogTitle,
             isPresented: Binding(
@@ -109,7 +111,7 @@ private extension MainNavigationSidebarView {
                     router.selectYearTagID(nil)
                 }
             } catch {
-                assertionFailure(error.localizedDescription)
+                deletionErrorMessage = ErrorMessageOperations.message(from: error)
             }
         }
     }

@@ -154,14 +154,14 @@ enum ItemFormSaveCoordinator {
     ) throws -> MutationOutcome {
         try LedgerMutationAccess.requireEditing([item.ledgerIdentifier])
         guard let review else {
-            return try ItemUpdateOperations.updateWithOutcome(
+            return try ItemUpdateOperations.updateAndSaveWithOutcome(
                 context: context,
                 item: item,
                 input: formInputData,
                 scope: scope
             )
         }
-        return try ItemUpdateOperations.updateWithOutcome(
+        return try ItemUpdateOperations.updateAndSaveWithOutcome(
             context: context,
             item: item,
             input: formInputData,

@@ -19,6 +19,7 @@ struct ItemListSection {
 
     @Query private var items: [Item]
 
+    @State private var deletionErrorMessage: String?
     @State private var isDialogPresented = false
     @State private var willDeleteItems: [Item] = []
 
@@ -61,6 +62,7 @@ extension ItemListSection: View {
                 Text(title)
             }
         }
+        .itemDeletionErrorAlert($deletionErrorMessage)
         .confirmationDialog(
             Text("Delete"),
             isPresented: $isDialogPresented
@@ -75,7 +77,7 @@ extension ItemListSection: View {
                             logger: itemMutationLogger
                         )
                     } catch {
-                        assertionFailure(error.localizedDescription)
+                        deletionErrorMessage = ErrorMessageOperations.message(from: error)
                     }
                 }
             } label: {
