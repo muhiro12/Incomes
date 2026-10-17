@@ -58,7 +58,7 @@ The existing backup feature captures book identities, names, and empty books
 in file version 3.0.0. It remains available without Premium and is not an
 activation prerequisite. Legacy V2 files resolve only to the default book.
 
-## Compatibility limits before release
+## Compatibility and operational scope
 
 The initial implementation deliberately retains the small no-Tag default
 representation. The 5.12 writer rebuilds Item Tags without unknown book Tags.
@@ -66,13 +66,18 @@ An old-client edit can therefore remove additional-book membership and make the
 Item look like a default-book Item. A remaining empty book Tag cannot identify
 its former members. Recomputing balances cannot recover that lost relationship.
 
-Updating every device before using additional books reduces exposure; the
-current update alert does not block offline writers or every system surface.
-The implementation is not mixed-version CloudKit qualification or release
-clearance. Before release, settle whether operational constraints are enough,
-whether the default book needs explicit Tags and missing-membership handling,
-or whether another ownership representation is required. Do not describe the
-current Tag-only design as proven safe with old writers. Preserve the probe
-history in #382 and the cloud follow-ups in
+The initial operational policy is advisory-first: account management asks users
+to update every device and explains that editing in an earlier version may move
+entries into the default account. This reduces exposure but cannot prevent an
+offline old writer or restore a lost relationship. Mixed-version editing is not
+a supported data-preservation guarantee.
+
+Keep the no-Tag default representation for this slice. Mandatory updates,
+explicit default-book Tags, and another ownership representation are possible
+follow-ups when a concrete failure justifies their implementation and ongoing
+cost. They are not prerequisites for implementing the first slice. In particular,
+detecting a missing Tag would not identify the Item's former account by itself.
+Backup remains optional. Preserve the probe history in #382 and the cloud
+follow-ups in
 [#377](https://github.com/muhiro12/Incomes/issues/377) and
 [#378](https://github.com/muhiro12/Incomes/issues/378).

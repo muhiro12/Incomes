@@ -47,7 +47,7 @@ struct LedgerManagementView: View {
             Text("Accounts keep planned income, outgo, and balances separate.")
             Text("All accounts use the same iCloud account.")
             Text("Update Incomes on every device before using additional accounts.")
-            Text("Earlier versions cannot separate them.")
+            Text("Editing in an earlier version may move entries to the default account.")
         }
     }
 

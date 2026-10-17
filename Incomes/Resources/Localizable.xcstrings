@@ -5098,36 +5098,36 @@
         }
       }
     },
-    "Earlier versions cannot separate them." : {
+    "Editing in an earlier version may move entries to the default account." : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Earlier versions cannot separate them."
+            "value" : "Editing in an earlier version may move entries to the default account."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Las versiones anteriores no pueden mantenerlas separadas."
+            "value" : "Editar en una versión anterior puede mover las entradas a la cuenta predeterminada."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Les versions antérieures ne peuvent pas les séparer."
+            "value" : "Modifier des entrées dans une version antérieure peut les déplacer vers le compte par défaut."
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "以前のバージョンでは口座を分けて扱えません。"
+            "value" : "以前のバージョンで編集すると、項目が標準口座に移る可能性があります。"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "旧版本无法区分这些账户。"
+            "value" : "在旧版本中编辑可能会将条目移至默认账户。"
           }
         }
       }
