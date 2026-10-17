@@ -10,9 +10,9 @@ public struct IncomesFileContents: Equatable, Sendable {
     public let currencyCode: String?
     /// Items in value order.
     public let items: [IncomesFileItem]
-    /// Includes empty accounts; independent of the Item collection.
+    /// Includes empty ledgers; independent of the Item collection.
     public let ledgers: [IncomesFileLedger]
-    /// Replace is restricted to these explicit account identities.
+    /// Replace is restricted to these explicit ledger identities.
     public let selectionLedgerIdentifiers: Set<LedgerIdentifier>
 
     public init(

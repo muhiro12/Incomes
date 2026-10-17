@@ -6,7 +6,7 @@ public struct ItemImportResult: Equatable, Sendable {
     public let removedCount: Int
     /// Items equal on both sides and left in place.
     public let unchangedCount: Int
-    /// Account names created or explicitly replaced from the reviewed file.
+    /// Ledger names created or explicitly replaced from the reviewed file.
     public let changedLedgerCount: Int
 
     public init(addedCount: Int, removedCount: Int, unchangedCount: Int, changedLedgerCount: Int = 0) {

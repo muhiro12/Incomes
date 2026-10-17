@@ -16,7 +16,8 @@ public extension ItemExportOperations {
             balances.merge(snapshot?.balances ?? [:]) { current, _ in current }
         }
         return IncomesFileItem.sortedByValue(items.map { item in
-            .init(item: item, derivedBalance: balances[item.persistentModelID])
+            IncomesFileItem(item: item, derivedBalance: balances[item.persistentModelID])
+                .assigning(to: LedgerTagStorage.fileReference(for: item.ledgerIdentifier))
         })
     }
 
@@ -35,13 +36,13 @@ public extension ItemExportOperations {
         )
     }
 
-    /// Captures additional-book names and portable identities, including empty books.
+    /// Captures names and file references for all additional ledgers, including empty ones.
     static func fileLedgers(context: ModelContext) throws -> [IncomesFileLedger] {
         let values = try context.fetch(.tags(.typeIs(.ledger))).map { tag -> IncomesFileLedger in
             guard let identifier = LedgerTagStorage.identifier(for: tag) else {
                 throw LedgerError.invalidIdentifier
             }
-            return .init(id: identifier, name: tag.name)
+            return .init(id: LedgerTagStorage.fileReference(for: identifier), name: tag.name)
         }
         guard Set(values.map(\.id)).count == values.count else {
             throw LedgerError.duplicateIdentifier

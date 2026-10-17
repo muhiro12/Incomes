@@ -12,7 +12,7 @@ struct DataImportConfirmSection: View {
     var body: some View {
         Section {
             if plannedResult.changedLedgerCount > .zero {
-                LabeledContent("Accounts to update") { Text(plannedResult.changedLedgerCount, format: .number) }
+                LabeledContent("Ledgers to update") { Text(plannedResult.changedLedgerCount, format: .number) }
             }
             LabeledContent("Items to add") {
                 Text(plannedResult.addedCount, format: .number)

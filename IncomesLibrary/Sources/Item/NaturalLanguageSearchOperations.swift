@@ -75,8 +75,8 @@ public enum NaturalLanguageSearchOperations {
         for conditions: ItemSearchConditions,
         limit: Int = resultLimit,
         ledgerIdentifier: LedgerIdentifier = .default
-    ) -> FetchDescriptor<Item> {
-        var descriptor = FetchDescriptor.items(
+    ) -> ItemFetchDescriptor {
+        var descriptor = ItemFetchDescriptor.items(
             .matchesSearchConditions(conditions),
             ledgerIdentifier: ledgerIdentifier
         )

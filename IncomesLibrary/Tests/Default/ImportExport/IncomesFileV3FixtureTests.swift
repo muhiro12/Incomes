@@ -4,7 +4,7 @@ import Testing
 
 struct IncomesFileV3FixtureTests {
     @Test
-    func ownershipFixtureKeepsEmptyAccounts() throws {
+    func ownershipFixtureKeepsEmptyLedgers() throws {
         let contents = try ItemImportOperations.read(data: fixtureData())
         #expect(contents.schemaVersion == "3.0.0")
         #expect(contents.items.count == 6)

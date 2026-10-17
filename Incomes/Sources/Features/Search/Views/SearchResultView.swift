@@ -12,7 +12,7 @@ struct SearchResultView: View {
     @Environment(IncomesTipController.self)
     private var tipController
 
-    @Query private var items: [Item]
+    @LedgerItemQuery private var items: [Item]
 
     @Environment(\.ledgerBalances)
     private var ledgerBalances
@@ -43,7 +43,10 @@ struct SearchResultView: View {
     ) {
         self.predicate = predicate
         self.refineSearch = refineSearch
-        _items = Query(.items(predicate.requiresDerivedBalance ? .all : predicate, ledgerIdentifier: ledgerIdentifier))
+        _items = LedgerItemQuery(.items(
+            predicate.requiresDerivedBalance ? .all : predicate,
+            ledgerIdentifier: ledgerIdentifier
+        ))
     }
 }
 

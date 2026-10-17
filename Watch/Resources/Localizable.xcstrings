@@ -205,36 +205,36 @@
         }
       }
     },
-    "Default Account" : {
+    "Default Ledger" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Default Account"
+            "value" : "Default Ledger"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "デフォルト口座"
+            "value" : "標準帳簿"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Cuenta predeterminada"
+            "value" : "Libro predeterminado"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Compte par défaut"
+            "value" : "Registre par défaut"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "默认账户"
+            "value" : "默认账簿"
           }
         }
       }

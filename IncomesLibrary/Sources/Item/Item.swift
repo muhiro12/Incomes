@@ -48,8 +48,18 @@ extension IncomesSchemaV2 {
             values: ItemStoredValues,
             repeatID: UUID
         ) throws -> Item {
+            try create(context: context, values: values, repeatID: repeatID, ledgerTag: nil)
+        }
+
+        /// Import supplies the actual destination Tag, including a newly inserted one.
+        static func create(
+            context: ModelContext,
+            values: ItemStoredValues,
+            repeatID: UUID,
+            ledgerTag: Tag?
+        ) throws -> Item {
             let ownershipTags: [Tag] = values.ledgerIdentifier == .default ? [] : [
-                try LedgerOperations.metadataForMutation(values.ledgerIdentifier, context: context)
+                try ledgerTag ?? LedgerOperations.metadataForMutation(values.ledgerIdentifier, context: context)
             ]
             let item = Item()
             context.insert(item)
@@ -159,7 +169,7 @@ public extension Item {
             return .default
         }
         let identifiers = Set(metadata.compactMap(LedgerTagStorage.identifier(for:)))
-        guard identifiers.count == 1, identifiers.count == Set(metadata.map(\.typeID)).count,
+        guard identifiers.count == 1, identifiers.count == Set(metadata.map(\.persistentModelID)).count,
               let identifier = identifiers.first else {
             return .conflicting
         }

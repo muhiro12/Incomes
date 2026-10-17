@@ -9,6 +9,8 @@ struct DuplicateTagView: View {
 
     @Environment(\.ledgerIdentifier)
     private var ledgerIdentifier
+    @Environment(\.modelContext)
+    private var context
 
     @Environment(\.horizontalSizeClass)
     private var horizontalSizeClass
@@ -17,6 +19,7 @@ struct DuplicateTagView: View {
     @State private var isMergeDialogPresented = false
     @State private var isDeleteDialogPresented = false
     @State private var selectedTag: Tag?
+    @State private var errorMessage: String?
 
     init(_ tag: Tag) {
         let name = tag.name
@@ -32,7 +35,10 @@ extension DuplicateTagView {
                 ForEach(tags) { tag in
                     HStack(spacing: .zero) {
                         DuplicateTagColumn(
-                            items: TagQueryOperations.items(for: tag, ledgerIdentifier: ledgerIdentifier)
+                            items: TagQueryOperations.items(
+                                for: tag, ledgerIdentifier: tag.type == .ledger ? nil : ledgerIdentifier
+                            ),
+                            canDelete: tag.type != .ledger
                         ) {
                             presentDeleteDialog(for: tag)
                         }
@@ -58,15 +64,12 @@ extension DuplicateTagView {
             isPresented: $isMergeDialogPresented
         ) {
             Button(role: .destructive) {
-                guard
-                    tags.allSatisfy({ _ in
-                        LedgerAccessOperations.canEdit(
-                            ledgerIdentifier,
-                            isPremium: LedgerMutationAccess.isPremium
-                        )
-                    })
-                else { return }
-                TagMutationOperations.mergeDuplicates(tags: tags)
+                do {
+                    try LedgerMutationAccess.requireEditing(mutationOwners)
+                    try TagMutationOperations.resolveDuplicatesAndSave(context: context, tags: tags)
+                } catch {
+                    errorMessage = error.localizedDescription
+                }
             } label: {
                 Text("Merge")
             }
@@ -76,7 +79,7 @@ extension DuplicateTagView {
                 Text("Cancel")
             }
         } message: {
-            Text("Are you sure you want to merge these tags? This action cannot be undone.")
+            Text(mergeDialogMessage)
         }
         .confirmationDialog(
             Text("Delete"),
@@ -120,12 +123,38 @@ extension DuplicateTagView {
             ItemCountStatusToolbarItem(count: tags.count)
         }
         .navigationTitle(tags.first?.displayName ?? "")
+        .alert("Unable to Organize Tags", isPresented: .init(
+            get: { errorMessage != nil },
+            set: { if !$0 { errorMessage = nil } }
+        )) {
+            Button("OK", role: .cancel) {
+                errorMessage = nil
+            }
+        } message: {
+            Text(errorMessage ?? "")
+        }
     }
 }
 
 private extension DuplicateTagView {
+    var mergeDialogMessage: LocalizedStringKey {
+        if tags.contains(where: { $0.type == .ledger }) {
+            return """
+            Merging duplicate ledger tags combines their items and balances into one ledger. \
+            This cannot be undone.
+            """
+        }
+        return "Are you sure you want to merge these tags? This action cannot be undone."
+    }
+
     var canMergeTags: Bool {
-        tags.count > 1
+        tags.count > 1 && mutationOwners.allSatisfy { identifier in
+            LedgerAccessOperations.canEdit(identifier, isPremium: LedgerMutationAccess.isPremium)
+        }
+    }
+
+    var mutationOwners: Set<LedgerIdentifier> {
+        Set(tags.compactMap { LedgerOperations.identifier(for: $0) }).union([ledgerIdentifier])
     }
 
     var visibleColumnCount: Int {

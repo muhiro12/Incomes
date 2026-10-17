@@ -13,11 +13,11 @@ struct ChartSectionGroup {
     @AppStorage(\.isSubscribeOn)
     private var isSubscribeOn
 
-    private let descriptor: FetchDescriptor<Item>
+    private let descriptor: ItemFetchDescriptor
     private let yearScopedDate: Date?
     private let ledgerIdentifier: LedgerIdentifier
 
-    init(_ descriptor: FetchDescriptor<Item>) {
+    init(_ descriptor: ItemFetchDescriptor) {
         self.descriptor = descriptor
         self.yearScopedDate = nil
         self.ledgerIdentifier = .default

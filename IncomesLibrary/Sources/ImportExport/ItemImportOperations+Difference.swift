@@ -7,6 +7,7 @@ public extension ItemImportOperations {
         contents: IncomesFileContents,
         context: ModelContext
     ) throws -> ItemImportDifference {
+        let contents = try resolvingLedgers(in: contents, context: context)
         let items = try context.fetch(FetchDescriptor<Item>.allLedgerItems()).filter { item in
             contents.selectionLedgerIdentifiers.contains(item.ledgerIdentifier)
         }
@@ -20,7 +21,7 @@ public extension ItemImportOperations {
             }
         )
         let changes = try contents.ledgers.compactMap { incoming -> ItemImportDifference.LedgerChange? in
-            let existing = try LedgerOperations.account(incoming.id, context: context)
+            let existing = try LedgerOperations.ledger(incoming.id, context: context)
             if existing.issue == .duplicateIdentifier {
                 throw LedgerError.duplicateIdentifier
             }

@@ -19,16 +19,31 @@ longer-lived judgment behind that scope.
 
 - The default book has no dedicated ownership Tag. Existing records need no
   ownership migration and retain their stored model shape.
-- An additional book is one Tag. Its name is the editable display name; its
-  `typeID` is `ledger:` followed by a generated UUID. That convention uses the
-  existing stored fields and is a new domain contract, even without a schema
-  change.
+- An additional ledger is one Tag. `typeID` stores the single raw value of
+  `TagType.ledger`, just as other Tag kinds do. `name` stores only its editable
+  name. Neither field embeds an identifier or a structured payload.
+- The Tag's native persistent identifier distinguishes ledgers within a store.
+  Selection and drafts capture that identifier, so a rename preserves ownership
+  and does not redirect an outstanding edit to a newly created same-name ledger.
 - Items belong to an additional book through that Tag relationship. More than
   one distinct book identity is a conflict, never an instruction to sum or
-  duplicate the Item. Scoped predicates exclude conflicting memberships.
-- Same-name books have distinct identities. Rename changes the name in place.
-  Ordinary duplicate merging and orphan cleanup exclude book Tags, so an empty
-  book persists. The initial slice does not expose book deletion or archiving.
+  duplicate the Item. Scoped queries exclude conflicting memberships.
+- Queries filter ordinary date, amount, and kind conditions in SwiftData, then
+  check the current Tag graph for exact ownership before applying result limits.
+  On iOS 18, nested Tag-ID predicates can return Items from another ledger;
+  those query results must not decide ledger membership. `ItemFetchDescriptor`
+  owns that filtering contract. The app's small `LedgerItemQuery` wrapper keeps
+  `@Query` observation and filters the current live models without copying them
+  into presentation state.
+- Normal creation and rename reject another ledger with the same name. If sync
+  or another writer nevertheless creates duplicate Tags, their native identities
+  keep their Items and balances separate. The existing duplicate-tag workflow
+  lists them and merges them only after an explicit user action and confirmation.
+  Existing classification-maintenance shortcuts do not merge ledger Tags.
+  That explicit merge combines the selected ledgers' Items and recalculates their balances
+  in the same save boundary; an error rolls it back. Orphan cleanup still excludes
+  ledger Tags, so an empty ledger persists. Ledger deletion and archiving are not
+  exposed in this slice.
 - Year, month, content, and category Tags remain shared vocabulary. Financial
   reads and category renames scope the related Items to the selected book.
   Period navigation resolves a representative Tag used by that book's Items,
@@ -57,6 +72,19 @@ in financial models.
 The existing backup feature captures book identities, names, and empty books
 in file version 3.0.0. It remains available without Premium and is not an
 activation prerequisite. Legacy V2 files resolve only to the default book.
+File references are opaque digests of the source Tag identity; the file never
+contains a SwiftData persistent identifier or its store payload. The digest stays
+stable through a source-store rename, but is not a portable model identifier.
+Import resolves references against the destination before comparison. An
+existing local identity or its matching file reference wins;
+otherwise a unique matching name is compared in the normal import review. New
+ledgers get new destination Tags. Ambiguous names refuse import rather than
+guessing or combining distinct ledgers. Export again after resolving duplicate
+names when an older file can no longer be mapped unambiguously.
+
+The feature is called **Ledger** in English and code, and **帳簿** in Japanese.
+It groups planned income, outgo, and balances; it does not imply a connected bank
+account or a separate login. See [product vocabulary](product-vocabulary.md).
 
 ## Compatibility and operational scope
 
@@ -66,18 +94,29 @@ An old-client edit can therefore remove additional-book membership and make the
 Item look like a default-book Item. A remaining empty book Tag cannot identify
 its former members. Recomputing balances cannot recover that lost relationship.
 
-The initial operational policy is advisory-first: account management asks users
-to update every device and explains that editing in an earlier version may move
-entries into the default account. This reduces exposure but cannot prevent an
-offline old writer or restore a lost relationship. Mixed-version editing is not
-a supported data-preservation guarantee.
+Ledger management explains that earlier versions combine all ledgers and can
+remove an Item's assignment when editing. The first additional-ledger creation
+shows the warning again and asks the user to confirm that every device runs
+Incomes 6.0 or later. If a device cannot be updated, the notice directs the user
+to continue with the default ledger only. This uses existing ledger inventory,
+not another persisted acknowledgement flag. Import review also shows the
+mixed-version warning when a file contains additional ledgers.
 
-Keep the no-Tag default representation for this slice. Mandatory updates,
-explicit default-book Tags, and another ownership representation are possible
-follow-ups when a concrete failure justifies their implementation and ongoing
-cost. They are not prerequisites for implementing the first slice. In particular,
-detecting a missing Tag would not identify the Item's former account by itself.
-Backup remains optional. Preserve the probe history in #382 and the cloud
-follow-ups in
+The notice is an operational prerequisite, not proof of device versions and not
+a technical write barrier. It cannot prevent an offline old writer or recover
+a lost relationship. Mixed-version editing is not a data-preservation guarantee.
+The current no-Tag default cannot distinguish a former additional-ledger Item
+from an original default-ledger Item after the relation is gone. Explicit
+default Tags and missing-membership handling remain a separate release decision;
+their absence must not be reported as a verified old-writer safeguard.
+
+The existing remote update request can reduce exposure after 6.0 is publicly
+available, but its UI alert does not gate every write entry point. A stronger
+shared mechanism is tracked in
+[MHPlatform #15](https://github.com/muhiro12/MHPlatform/issues/15); new code cannot
+retrofit enforcement into the distributed 5.12 binary. No required-version
+configuration or production CloudKit setting changes as part of this work.
+Backup remains optional and is recovery assistance rather than prevention.
+Preserve the probe history in #382 and the cloud follow-ups in
 [#377](https://github.com/muhiro12/Incomes/issues/377) and
 [#378](https://github.com/muhiro12/Incomes/issues/378).

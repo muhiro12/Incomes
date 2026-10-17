@@ -27,7 +27,7 @@ extension ItemImportPlan {
             }
         case .merge(let decisions):
             ledgerChanges = difference.ledgerChanges.filter { change in
-                change.current == nil || decisions.useFileAccountNames
+                change.current == nil || decisions.useFileLedgerNames
             }
             insertedItems = difference.additions.enumerated().compactMap { index, item in
                 decisions.excludedAdditionIndices.contains(index) ? nil : item

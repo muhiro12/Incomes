@@ -2,7 +2,7 @@ import SwiftData
 import SwiftUI
 
 struct WatchItemListView: View {
-    @Query(.items(.all))
+    @Query(.defaultLedgerItems(.all))
     private var allItems: [Item]
 
     var body: some View {

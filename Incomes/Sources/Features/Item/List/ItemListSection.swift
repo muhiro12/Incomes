@@ -17,7 +17,7 @@ struct ItemListSection {
     @Environment(MHLoggingBootstrap.self)
     private var logging
 
-    @Query private var items: [Item]
+    @LedgerItemQuery private var items: [Item]
 
     @State private var deletionErrorMessage: String?
     @State private var isDialogPresented = false
@@ -27,11 +27,11 @@ struct ItemListSection {
     private let showsItemDetailTip: Bool
 
     init(
-        _ descriptor: FetchDescriptor<Item>,
+        _ descriptor: ItemFetchDescriptor,
         title: LocalizedStringKey? = nil,
         showsItemDetailTip: Bool = false
     ) {
-        self._items = Query(descriptor)
+        self._items = LedgerItemQuery(descriptor)
         self.title = title
         self.showsItemDetailTip = showsItemDetailTip
     }

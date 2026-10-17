@@ -5,7 +5,11 @@ import SwiftData
 public enum TagMutationOperations {
     /// Merges `tags` into the first tag, reattaching item relationships.
     public static func mergeDuplicates(tags: [Tag]) {
-        guard tags.allSatisfy({ $0.type != .ledger }), let parent = tags.first else {
+        guard let parent = tags.first else {
+            return
+        }
+        if tags.contains(where: { $0.type == .ledger }),
+           !tags.allSatisfy({ $0.type == .ledger && $0.name == parent.name }) {
             return
         }
         let children = tags.filter { tag in
@@ -34,7 +38,11 @@ public enum TagMutationOperations {
             item.modify(tags: tags)
         }
         children.forEach { child in
-            delete(tag: child)
+            if child.type == .ledger {
+                child.modelContext?.delete(child)
+            } else {
+                delete(tag: child)
+            }
         }
     }
 
@@ -43,7 +51,10 @@ public enum TagMutationOperations {
         context: ModelContext,
         tags: [Tag]
     ) throws {
-        for tag in tags where tag.type != .ledger {
+        let representatives = Dictionary(grouping: tags) { tag in
+            tag.typeID + "|" + tag.name
+        }.values.compactMap(\.first)
+        for tag in representatives {
             let duplicates = try context.fetch(
                 FetchDescriptor<Tag>(predicate: TagPredicate.isSameWith(tag).value)
             )
@@ -53,12 +64,14 @@ public enum TagMutationOperations {
         }
     }
 
-    /// Resolves every duplicate tag group in the store and returns the resolved group count.
+    /// Resolves duplicate classification groups; ledger groups require explicit selection.
+    /// Returns the resolved classification group count.
     @discardableResult
     public static func resolveAllDuplicates(
         context: ModelContext
     ) throws -> Int {
         let duplicateTags = try TagQueryOperations.duplicateTags(context: context)
+            .filter { $0.type != .ledger }
         try resolveDuplicates(
             context: context,
             tags: duplicateTags

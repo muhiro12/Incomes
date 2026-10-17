@@ -40,7 +40,7 @@ extension SettingsNotificationSection {
         } header: {
             Text("Push notification settings")
         } footer: {
-            Text("Notifications use the default account.")
+            Text("Notifications use the default ledger.")
             SettingsNotificationAuthorizationFooter(
                 authorizationPresentation: authorizationPresentation
             )

@@ -1,23 +1,24 @@
+import CryptoKit
 import Foundation
 import SwiftData
 
-/// The existing type field carries portable identity; the name stays freely editable.
+/// Ledger identity is the Tag's own store-local identity, not its kind or name.
 enum LedgerTagStorage {
-    static let typePrefix = "ledger:"
-
-    static func typeID(for identifier: LedgerIdentifier) -> String {
-        typePrefix + identifier.rawValue
-    }
-
     static func identifier(for tag: Tag) -> LedgerIdentifier? {
-        guard tag.typeID.hasPrefix(typePrefix) else {
-            return nil
-        }
-        let value = String(tag.typeID.dropFirst(typePrefix.count))
-        guard !value.isEmpty, value != LedgerIdentifier.default.rawValue,
-              value != LedgerIdentifier.conflicting.rawValue else {
+        guard tag.type == .ledger,
+              let value = try? PersistentIdentifierCoder.encode(tag.persistentModelID) else {
             return nil
         }
         return .init(rawValue: value)
+    }
+
+    /// Stable within the source store without exposing its persistent-ID payload in a file.
+    static func fileReference(for identifier: LedgerIdentifier) -> LedgerIdentifier {
+        guard identifier != .default, identifier != .conflicting else {
+            return identifier
+        }
+        let input = Data(("Incomes ledger file reference v1|" + identifier.rawValue).utf8)
+        let digest = SHA256.hash(data: input).map { String(format: "%02x", $0) }.joined()
+        return .init(rawValue: "ledger-" + digest)
     }
 }

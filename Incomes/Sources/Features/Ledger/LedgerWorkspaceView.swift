@@ -22,19 +22,23 @@ struct LedgerWorkspaceView: View {
 
     private var maintenanceFingerprint: String {
         let rows = items.map { item in
-            [
+            let tagIDs = (item.tags ?? [])
+                .map { "\($0.persistentModelID)|\($0.typeID)" }
+                .sorted()
+                .joined(separator: ",")
+            return [
                 String(describing: item.persistentModelID), item.utcDate.description, item.content,
                 item.income.description, item.outgo.description, item.balance.description,
-                (item.tags ?? []).map(\.typeID).sorted().joined(separator: ","), String(item.priority),
+                tagIDs, String(item.priority),
                 item.repeatID.uuidString
             ].joined(separator: "|")
         }
-        return (rows + metadata.map { "\($0.typeID)|\($0.name)" }).joined(separator: ";")
+        return (rows + metadata.map { "\($0.persistentModelID)|\($0.typeID)|\($0.name)" }).joined(separator: ";")
     }
 
     var body: some View {
         let identifier = LedgerIdentifier(rawValue: selectedIdentifier)
-        let result = loadAccounts()
+        let result = loadLedgers()
         VStack(spacing: .zero) {
             if router.ledgerIdentifier == identifier {
                 bookContent(identifier: identifier, result: result)
@@ -79,12 +83,12 @@ struct LedgerWorkspaceView: View {
     @ViewBuilder
     private func bookContent(identifier: LedgerIdentifier, result: Result<[LedgerRecord], Error>) -> some View {
         switch result {
-        case .success(let accounts):
+        case .success(let ledgers):
             LedgerContentView(
                 ledgerIdentifier: identifier,
-                issue: accounts.first { $0.id == identifier }?.issue,
-                accountMenu: LedgerSelectionMenu(
-                    accounts: accounts,
+                issue: ledgers.first { $0.id == identifier }?.issue,
+                ledgerMenu: LedgerSelectionMenu(
+                    ledgers: ledgers,
                     selectedIdentifier: $selectedIdentifier,
                     manage: presentManagement
                 ),
@@ -97,7 +101,7 @@ struct LedgerWorkspaceView: View {
 
         case .failure(let error):
             ContentUnavailableView(
-                "Accounts Unavailable",
+                "Ledgers Unavailable",
                 systemImage: "exclamationmark.triangle",
                 description: Text(error.localizedDescription)
             )
@@ -121,17 +125,17 @@ struct LedgerWorkspaceView: View {
         }
     }
 
-    private func loadAccounts() -> Result<[LedgerRecord], Error> {
+    private func loadLedgers() -> Result<[LedgerRecord], Error> {
         // Live queries invalidate this inventory when synced records or metadata change.
         _ = metadata.map(\.name)
         _ = items.map(\.ledgerIdentifier)
         return Result {
-            var accounts = try LedgerOperations.accounts(context: context)
+            var ledgers = try LedgerOperations.ledgers(context: context)
             let selected = LedgerIdentifier(rawValue: selectedIdentifier)
-            if !accounts.contains(where: { $0.id == selected }) {
-                accounts.append(try LedgerOperations.account(selected, context: context))
+            if !ledgers.contains(where: { $0.id == selected }) {
+                ledgers.append(try LedgerOperations.ledger(selected, context: context))
             }
-            return accounts
+            return ledgers
         }
     }
 }

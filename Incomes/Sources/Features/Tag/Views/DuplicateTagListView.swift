@@ -9,11 +9,13 @@ struct DuplicateTagListView: View {
     @Query private var yearMonthTags: [Tag]
     @Query private var contentTags: [Tag]
     @Query private var categoryTags: [Tag]
+    @Query private var ledgerTags: [Tag]
 
     @Binding private var selectedTagID: Tag.ID?
 
     @State private var isResolveDialogPresented = false
     @State private var selectedTags = [Tag]()
+    @State private var errorMessage: String?
 
     private let ledgerIdentifier: LedgerIdentifier
 
@@ -24,6 +26,7 @@ struct DuplicateTagListView: View {
         _yearMonthTags = .init(.tags(.typeIs(.yearMonth)))
         _contentTags = .init(.tags(.typeIs(.content)))
         _categoryTags = .init(.tags(.typeIs(.category)))
+        _ledgerTags = .init(.tags(.typeIs(.ledger)))
         _selectedTagID = selection
     }
 }
@@ -34,36 +37,14 @@ extension DuplicateTagListView {
         let yearMonthDuplicateTags = duplicateTags(from: yearMonthTags)
         let contentDuplicateTags = duplicateTags(from: contentTags)
         let categoryDuplicateTags = duplicateTags(from: categoryTags)
+        let ledgerDuplicateTags = duplicateTags(from: ledgerTags)
 
         List(selection: $selectedTagID) {
-            DuplicateTagSection(
-                title: "Year",
-                duplicates: yearDuplicateTags,
-                selectedTagID: $selectedTagID,
-                selectedTags: $selectedTags,
-                isResolveDialogPresented: $isResolveDialogPresented
-            )
-            DuplicateTagSection(
-                title: "YearMonth",
-                duplicates: yearMonthDuplicateTags,
-                selectedTagID: $selectedTagID,
-                selectedTags: $selectedTags,
-                isResolveDialogPresented: $isResolveDialogPresented
-            )
-            DuplicateTagSection(
-                title: "Content",
-                duplicates: contentDuplicateTags,
-                selectedTagID: $selectedTagID,
-                selectedTags: $selectedTags,
-                isResolveDialogPresented: $isResolveDialogPresented
-            )
-            DuplicateTagSection(
-                title: "Category",
-                duplicates: categoryDuplicateTags,
-                selectedTagID: $selectedTagID,
-                selectedTags: $selectedTags,
-                isResolveDialogPresented: $isResolveDialogPresented
-            )
+            duplicateSection("Ledger", tags: ledgerDuplicateTags)
+            duplicateSection("Year", tags: yearDuplicateTags)
+            duplicateSection("YearMonth", tags: yearMonthDuplicateTags)
+            duplicateSection("Content", tags: contentDuplicateTags)
+            duplicateSection("Category", tags: categoryDuplicateTags)
         }
         .overlay {
             if !hasAnyDuplicateTags(
@@ -71,7 +52,8 @@ extension DuplicateTagListView {
                     yearDuplicateTags,
                     yearMonthDuplicateTags,
                     contentDuplicateTags,
-                    categoryDuplicateTags
+                    categoryDuplicateTags,
+                    ledgerDuplicateTags
                 ]
             ) {
                 ContentUnavailableView(
@@ -95,6 +77,16 @@ extension DuplicateTagListView {
             Text(resolveDialogMessage)
         }
         .navigationTitle("Duplicate Tags")
+        .alert("Unable to Organize Tags", isPresented: .init(
+            get: { errorMessage != nil },
+            set: { if !$0 { errorMessage = nil } }
+        )) {
+            Button("OK", role: .cancel) {
+                errorMessage = nil
+            }
+        } message: {
+            Text(errorMessage ?? "")
+        }
         .toolbar {
             ToolbarItem {
                 CloseButton()
@@ -109,9 +101,25 @@ private extension DuplicateTagListView {
     }
 
     var resolveDialogMessage: LocalizedStringKey {
-        selectedTags.count > 1
+        if selectedTags.contains(where: { $0.type == .ledger }) {
+            return """
+            Merging duplicate ledger tags combines their items and balances into one ledger. \
+            This cannot be undone.
+            """
+        }
+        return selectedTags.count > 1
             ? "Are you sure you want to resolve all duplicate tags? This action cannot be undone."
             : "Are you sure you want to resolve this duplicate tag? This action cannot be undone."
+    }
+
+    func duplicateSection(_ title: LocalizedStringKey, tags: [Tag]) -> some View {
+        DuplicateTagSection(
+            title: title,
+            duplicates: tags,
+            selectedTagID: $selectedTagID,
+            selectedTags: $selectedTags,
+            isResolveDialogPresented: $isResolveDialogPresented
+        )
     }
 
     func hasAnyDuplicateTags(
@@ -136,13 +144,16 @@ private extension DuplicateTagListView {
 
     func resolveSelectedTags() {
         do {
-            try LedgerMutationAccess.requireEditing([ledgerIdentifier])
-            try TagMutationOperations.resolveDuplicates(
+            let owners = Set(selectedTags.compactMap { tag -> LedgerIdentifier? in
+                LedgerOperations.identifier(for: tag)
+            }).union([ledgerIdentifier])
+            try LedgerMutationAccess.requireEditing(owners)
+            try TagMutationOperations.resolveDuplicatesAndSave(
                 context: context,
                 tags: selectedTags
             )
         } catch {
-            assertionFailure(error.localizedDescription)
+            errorMessage = error.localizedDescription
         }
     }
 }

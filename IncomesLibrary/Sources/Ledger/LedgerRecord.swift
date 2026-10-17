@@ -6,7 +6,7 @@ public struct LedgerRecord: Identifiable, Equatable, Sendable {
     public let name: String
     public let issue: LedgerError?
 
-    /// Missing or conflicting metadata never becomes the original account.
+    /// Missing or conflicting metadata never becomes the original ledger.
     public var isAvailable: Bool {
         issue == nil
     }

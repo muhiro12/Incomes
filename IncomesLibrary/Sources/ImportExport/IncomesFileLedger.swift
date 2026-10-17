@@ -1,6 +1,6 @@
 import Foundation
 
-/// Portable account metadata. Unknown forecast JSON is preserved without interpreting it.
+/// File-scoped ledger references and names, resolved against the destination on import.
 public struct IncomesFileLedger: Codable, Equatable, Sendable, Identifiable {
     public let id: LedgerIdentifier
     public let name: String

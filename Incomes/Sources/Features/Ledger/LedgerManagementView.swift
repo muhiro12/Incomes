@@ -17,50 +17,69 @@ struct LedgerManagementView: View {
     @Binding var selectedIdentifier: String
     @State private var newName = ""
     @State private var errorMessage: String?
+    @State private var isCompatibilityNoticePresented = false
 
     var body: some View {
         NavigationStack {
             Form {
                 introductionSection
-                accountsSection
+                ledgersSection
                 creationSection
             }
-            .navigationTitle("Manage Accounts")
+            .navigationTitle("Manage Ledgers")
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Done") { dismiss() }
                 }
             }
             .alert(
-                "Account Unavailable",
+                "Ledger Unavailable",
                 isPresented: .init(get: { errorMessage != nil }, set: { if !$0 { errorMessage = nil } })
             ) {
                 Button("OK") { errorMessage = nil }
             } message: {
                 Text(errorMessage ?? "")
             }
+            .alert("Update Every Device", isPresented: $isCompatibilityNoticePresented) {
+                Button("All Devices Are Updated", action: createLedger)
+                Button("Cancel", role: .cancel) {
+                    // Keep the draft name when the notice is cancelled.
+                }
+            } message: {
+                compatibilityNotice
+            }
         }
+    }
+
+    private var compatibilityNotice: Text {
+        Text(
+            """
+            Before creating an additional ledger, update Incomes to 6.0 or later on every device. \
+            Earlier versions combine all ledgers and can remove an item's ledger assignment when editing. \
+            If a device cannot be updated, keep using only the default ledger.
+            """
+        )
     }
 
     private var introductionSection: some View {
         Section {
-            Text("Accounts keep planned income, outgo, and balances separate.")
-            Text("All accounts use the same iCloud account.")
-            Text("Update Incomes on every device before using additional accounts.")
-            Text("Editing in an earlier version may move entries to the default account.")
+            Text("Ledgers keep planned income, outgo, and balances separate.")
+            Text("All ledgers use the same iCloud account.")
+            Text("Update every device to Incomes 6.0 or later before using additional ledgers.")
+            Text("Earlier versions combine all ledgers and can remove an item's ledger assignment when editing.")
         }
     }
 
-    private var accountsSection: some View {
-        Section("Accounts") {
-            ForEach(accounts) { account in
-                if account.id == .default || !account.isAvailable {
-                    accountLabel(account)
+    private var ledgersSection: some View {
+        Section("Ledgers") {
+            ForEach(ledgers) { ledger in
+                if ledger.id == .default || !ledger.isAvailable {
+                    ledgerLabel(ledger)
                 } else {
                     NavigationLink {
-                        LedgerSettingsView(identifier: account.id)
+                        LedgerSettingsView(identifier: ledger.id)
                     } label: {
-                        accountLabel(account)
+                        ledgerLabel(ledger)
                     }
                 }
             }
@@ -69,42 +88,55 @@ struct LedgerManagementView: View {
 
     private var creationSection: some View {
         Section {
-            TextField("Account Name", text: $newName)
-            Button("Create Account", systemImage: "plus", action: createAccount)
+            TextField("Ledger Name", text: $newName)
+            Button("Create Ledger", systemImage: "plus", action: prepareCreation)
                 .disabled(newName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
                 .disabled(!isSubscribeOn)
         } footer: {
             VStack(alignment: .leading) {
-                Text("Premium enables creating and editing additional accounts.")
-                Text("After Premium ends, existing accounts remain available to view, switch, and export.")
+                Text("Premium enables creating and editing additional ledgers.")
+                Text("After Premium ends, existing ledgers remain available to view, switch, and export.")
             }
         }
     }
 
-    private var accounts: [LedgerRecord] {
+    private var ledgers: [LedgerRecord] {
         _ = metadata.map(\.name)
         _ = items.map(\.ledgerIdentifier)
-        return (try? LedgerOperations.accounts(context: context)) ?? []
+        return (try? LedgerOperations.ledgers(context: context)) ?? []
     }
 
-    private func accountLabel(_ account: LedgerRecord) -> some View {
+    private func ledgerLabel(_ ledger: LedgerRecord) -> some View {
         VStack(alignment: .leading) {
             Text(LedgerSelectionTitle.title(
-                identifier: account.id,
-                name: account.name,
-                names: Dictionary(uniqueKeysWithValues: accounts.map { ($0.id, $0.name) })
+                identifier: ledger.id,
+                name: ledger.name,
+                names: Dictionary(uniqueKeysWithValues: ledgers.map { ($0.id, $0.name) })
             ))
-            if let issue = account.issue {
+            if let issue = ledger.issue {
                 Text(issue.localizedDescription).foregroundStyle(.red)
             }
         }
     }
 
-    private func createAccount() {
+    private func prepareCreation() {
         do {
             try LedgerMutationAccess.requireCreation()
-            let account = try LedgerOperations.create(context: context, name: newName)
-            selectedIdentifier = account.id.rawValue
+            if ledgers.contains(where: { $0.id != .default }) {
+                createLedger()
+            } else {
+                isCompatibilityNoticePresented = true
+            }
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+    }
+
+    private func createLedger() {
+        do {
+            try LedgerMutationAccess.requireCreation()
+            let ledger = try LedgerOperations.create(context: context, name: newName)
+            selectedIdentifier = ledger.id.rawValue
             newName = ""
         } catch {
             errorMessage = error.localizedDescription

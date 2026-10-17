@@ -51,12 +51,11 @@ extension IncomesSchemaV2 {
 
         static func createLedger(
             context: ModelContext,
-            identifier: LedgerIdentifier,
             name: String
         ) -> Tag {
             let tag = Tag()
             context.insert(tag)
-            tag.typeID = LedgerTagStorage.typeID(for: identifier)
+            tag.typeID = TagType.ledger.rawValue
             tag.name = name
             return tag
         }
@@ -71,7 +70,7 @@ extension IncomesSchemaV2 {
 public extension Tag {
     /// The strongly-typed tag kind, derived from `typeID`.
     var type: TagType? {
-        typeID.hasPrefix(LedgerTagStorage.typePrefix) ? .ledger : TagType(rawValue: typeID)
+        TagType(rawValue: typeID)
     }
 
     /// A localized or user-friendly name for the tag.

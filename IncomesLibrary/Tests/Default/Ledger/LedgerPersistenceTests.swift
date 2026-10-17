@@ -20,15 +20,15 @@ struct LedgerPersistenceTests {
             )
             let context = ModelContext(container)
             owner = try LedgerOperations.create(context: context, name: "Same").id
-            empty = try LedgerOperations.create(context: context, name: "Same").id
+            empty = try LedgerOperations.create(context: context, name: "Empty").id
             _ = try makeItem(context: context, owner: .default, income: 10)
             _ = try makeItem(context: context, owner: owner, income: 20)
             try context.save()
             try LedgerOperations.rename(owner, to: "Renamed", context: context)
         }
         let reopened = ModelContext(try ModelContainerFactory.readOnly(at: url))
-        #expect(try LedgerOperations.account(owner, context: reopened).name == "Renamed")
-        #expect(try LedgerOperations.account(empty, context: reopened).name == "Same")
+        #expect(try LedgerOperations.ledger(owner, context: reopened).name == "Renamed")
+        #expect(try LedgerOperations.ledger(empty, context: reopened).name == "Empty")
         #expect(try reopened.fetchCount(.items(.all)) == 1)
         #expect(try reopened.fetchCount(.items(.all, ledgerIdentifier: owner)) == 1)
         #expect(

@@ -12,11 +12,13 @@ struct LedgerIntegrationTests {
     }
 
     @Test
-    func fourBookBackupKeepsEmptyBooksAndPhysicalIdentity() throws {
+    func fourBookBackupRemapsStoreIDsAndKeepsEmptyBooksAndRepeatImportStable() throws {
         let fixture = try makeBackupFixture()
         let contents = fixture.contents
         let empty = fixture.empty
-        #expect(contents.selectionLedgerIdentifiers == fixture.identifiers)
+        #expect(contents.selectionLedgerIdentifiers.count == fixture.identifiers.count)
+        #expect(contents.selectionLedgerIdentifiers.intersection(fixture.identifiers) == [.default])
+        #expect(Set(contents.ledgers.map(\.id)).union([.default]) == contents.selectionLedgerIdentifiers)
         let container = try ModelContainerFactory.inMemory()
         let reviewContext = ModelContext(container)
         let difference = try ItemImportOperations.difference(contents: contents, context: reviewContext)
@@ -30,10 +32,14 @@ struct LedgerIntegrationTests {
         let rows = try restored.fetch(.allLedgerItems())
         let physicalIDs = Set(rows.map(\.persistentModelID))
         #expect(rows.count == 6)
-        #expect(try LedgerOperations.accounts(context: restored).count == 4)
+        #expect(try LedgerOperations.ledgers(context: restored).count == 4)
+        let restoredEmpty = try #require(
+            try LedgerOperations.ledgers(context: restored).first { $0.name == empty.name }
+        )
+        #expect(restoredEmpty.id != empty.id)
         #expect(
-            try LedgerBalanceOperations.snapshot(context: restored, ledgerIdentifier: empty.id).latestBalance
-                == .zero
+            try LedgerBalanceOperations.snapshot(context: restored, ledgerIdentifier: restoredEmpty.id)
+                .latestBalance == .zero
         )
         let repeated = try ItemImportOperations.difference(contents: contents, context: restored)
         #expect(repeated.isIdentical)
@@ -51,22 +57,22 @@ struct LedgerIntegrationTests {
     @Test
     func replacingOneBookDoesNotRemoveTheOtherBooks() throws {
         let context = ModelContext(try ModelContainerFactory.inMemory())
-        let account = try LedgerOperations.create(context: context, name: "Other")
+        let ledger = try LedgerOperations.create(context: context, name: "Other")
         let standard = try item(context: context)
-        _ = try item(context: context, owner: account.id)
+        _ = try item(context: context, owner: ledger.id)
         try context.save()
         let contents = IncomesFileContents(
             schemaVersion: "3.0.0",
             exportedAt: .now,
             currencyCode: nil,
             items: [],
-            ledgers: [.init(id: account.id, name: account.name)],
-            selectionLedgerIdentifiers: [account.id]
+            ledgers: [.init(id: ledger.id, name: ledger.name)],
+            selectionLedgerIdentifiers: [ledger.id]
         )
         let difference = try ItemImportOperations.difference(contents: contents, context: context)
         #expect(
             ItemImportOperations.mutatedLedgerIdentifiers(difference: difference, policy: .replace) == [
-                account.id
+                ledger.id
             ]
         )
         #expect(
@@ -80,7 +86,7 @@ struct LedgerIntegrationTests {
             context: context
         )
         try context.save()
-        #expect(try context.fetchCount(.items(.all, ledgerIdentifier: account.id)) == 0)
+        #expect(try context.fetchCount(.items(.all, ledgerIdentifier: ledger.id)) == 0)
         #expect(try context.fetch(.items(.all)).map(\.persistentModelID) == [standard.persistentModelID])
     }
 
@@ -106,15 +112,15 @@ struct LedgerIntegrationTests {
         )
         #expect(try context.fetchCount(.items(.all)) == 0)
         #expect(try context.fetch(.allLedgerItems()).map(\.persistentModelID) == [retained.persistentModelID])
-        #expect(try LedgerOperations.account(incoming.id, context: context).isAvailable)
+        #expect(try LedgerOperations.ledgers(context: context).contains { $0.name == incoming.name && $0.isAvailable })
     }
 
     @Test
     func aMetadataOnlyMergeRequiresAnExplicitChoiceToReplaceNames() throws {
         let context = ModelContext(try ModelContainerFactory.inMemory())
-        let account = try LedgerOperations.create(context: context, name: "Original")
+        let ledger = try LedgerOperations.create(context: context, name: "Original")
         let incoming = IncomesFileLedger(
-            id: account.id,
+            id: ledger.id,
             name: "From File"
         )
         let contents = IncomesFileContents(
@@ -123,15 +129,15 @@ struct LedgerIntegrationTests {
             currencyCode: nil,
             items: [],
             ledgers: [incoming],
-            selectionLedgerIdentifiers: [account.id]
+            selectionLedgerIdentifiers: [ledger.id]
         )
         let difference = try ItemImportOperations.difference(contents: contents, context: context)
         let keep = ItemImportPolicy.merge(.init())
-        let useFile = ItemImportPolicy.merge(.init(useFileAccountNames: true))
+        let useFile = ItemImportPolicy.merge(.init(useFileLedgerNames: true))
         #expect(ItemImportOperations.mutatedLedgerIdentifiers(difference: difference, policy: keep).isEmpty)
         #expect(
             ItemImportOperations.mutatedLedgerIdentifiers(difference: difference, policy: useFile) == [
-                account.id
+                ledger.id
             ]
         )
         _ = try ItemImportOperations.applyWithOutcome(
@@ -141,7 +147,7 @@ struct LedgerIntegrationTests {
             context: context
         )
         try context.save()
-        #expect(try LedgerOperations.account(account.id, context: context).name == "Original")
+        #expect(try LedgerOperations.ledger(ledger.id, context: context).name == "Original")
         _ = try ItemImportOperations.applyWithOutcome(
             contents: contents,
             reviewed: difference,
@@ -150,16 +156,16 @@ struct LedgerIntegrationTests {
         )
         try context.save()
         #expect(
-            try LedgerOperations.account(account.id, context: context).name == incoming.name
+            try LedgerOperations.ledger(ledger.id, context: context).name == incoming.name
         )
     }
 
     @Test
     func duplicationAndExternalItemLinksStayWithTheirOwner() throws {
         let context = ModelContext(try ModelContainerFactory.inMemory())
-        let account = try LedgerOperations.create(context: context, name: "Other")
+        let ledger = try LedgerOperations.create(context: context, name: "Other")
         let series = UUID()
-        for owner in [LedgerIdentifier.default, account.id] {
+        for owner in [LedgerIdentifier.default, ledger.id] {
             for month in 1...3 { _ = try item(context: context, owner: owner, month: month, series: series) }
         }
         try context.save()
@@ -167,18 +173,18 @@ struct LedgerIntegrationTests {
             context: context,
             sourceYear: 2_025,
             targetYear: 2_026,
-            ledgerIdentifier: account.id
+            ledgerIdentifier: ledger.id
         )
         #expect(plan.entries.count == 3)
-        #expect(plan.entries.allSatisfy { $0.sourceItem.ledgerIdentifier == account.id })
+        #expect(plan.entries.allSatisfy { $0.sourceItem.ledgerIdentifier == ledger.id })
         let group = try #require(plan.groups.first)
         #expect(
-            YearlyItemDuplicationPlanOperations.draft(for: group.id, in: plan)?.ledgerIdentifier == account.id
+            YearlyItemDuplicationPlanOperations.draft(for: group.id, in: plan)?.ledgerIdentifier == ledger.id
         )
         _ = try YearlyItemDuplicationApplyOperations.apply(plan: plan, context: context)
         try context.save()
         #expect(try context.fetchCount(.items(.all)) == 3)
-        #expect(try context.fetchCount(.items(.all, ledgerIdentifier: account.id)) == 6)
+        #expect(try context.fetchCount(.items(.all, ledgerIdentifier: ledger.id)) == 6)
         let sourceItem = try #require(plan.entries.first?.sourceItem)
         #expect(
             MainNavigationOperations.ledgerIdentifier(forExternalRoute: .item("invalid"), context: context)
@@ -187,7 +193,7 @@ struct LedgerIntegrationTests {
         let encoded = try PersistentIdentifierCoder.encode(sourceItem.persistentModelID)
         #expect(
             MainNavigationOperations.ledgerIdentifier(forExternalRoute: .item(encoded), context: context)
-                == account.id
+                == ledger.id
         )
         #expect(
             MainNavigationOperations.ledgerIdentifier(
@@ -213,9 +219,9 @@ struct LedgerIntegrationTests {
 
     private func makeBackupFixture() throws -> BackupFixture {
         let source = ModelContext(try ModelContainerFactory.inMemory())
-        let first = try LedgerOperations.create(context: source, name: "Same")
-        let second = try LedgerOperations.create(context: source, name: "Same")
-        let empty = try LedgerOperations.create(context: source, name: "Same")
+        let first = try LedgerOperations.create(context: source, name: "Personal")
+        let second = try LedgerOperations.create(context: source, name: "Business")
+        let empty = try LedgerOperations.create(context: source, name: "Savings")
         let series = UUID()
         for owner in [LedgerIdentifier.default, first.id, second.id] {
             for month in 1...2 {

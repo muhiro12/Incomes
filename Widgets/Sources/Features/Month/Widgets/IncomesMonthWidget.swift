@@ -202,7 +202,7 @@ extension IncomesMonthWidget: Widget {
                 .widgetURL(entry.deepLinkURL)
         }
         .configurationDisplayName("Incomes")
-        .description("Default Account: This month's items and balance")
+        .description("Default Ledger: This month's items and balance")
         .supportedFamilies([.systemSmall, .systemMedium])
     }
 }

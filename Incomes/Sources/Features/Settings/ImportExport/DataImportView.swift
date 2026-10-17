@@ -22,13 +22,10 @@ struct DataImportView: View {
     @State private var isChoosingFile = false
     @State private var isConfirmingReplace = false
 
-    private var importAccountNames: [LedgerIdentifier: String] {
-        let accounts = (try? LedgerOperations.accounts(context: context)) ?? []
-        var names = Dictionary(uniqueKeysWithValues: accounts.map { ($0.id, $0.name) })
-        for account in model.contents?.ledgers ?? [] { names[account.id] = account.name }
-        for identifier in model.contents?.selectionLedgerIdentifiers ?? [] where names[identifier] == nil {
-            names[identifier] = String(localized: "Unavailable Account")
-        }
+    private var importLedgerNames: [LedgerIdentifier: String] {
+        let ledgers = (try? LedgerOperations.ledgers(context: context)) ?? []
+        var names = Dictionary(uniqueKeysWithValues: ledgers.map { ($0.id, $0.name) })
+        for change in model.difference?.ledgerChanges ?? [] { names[change.id] = change.incoming.name }
         return names
     }
 
@@ -53,7 +50,7 @@ struct DataImportView: View {
                 }
             }
         }
-        .environment(\.importAccountNames, importAccountNames)
+        .environment(\.importLedgerNames, importLedgerNames)
         .disabled(model.isApplying)
         .navigationTitle("Import data")
         .fileImporter(
@@ -108,6 +105,13 @@ struct DataImportView: View {
 }
 
 private extension DataImportView {
+    var compatibilityWarningSection: some View {
+        Section {
+            Text("Update every device to Incomes 6.0 or later before using additional ledgers.")
+            Text("Earlier versions combine all ledgers and can remove an item's ledger assignment when editing.")
+        }
+    }
+
     var logger: MHLogger {
         IncomesLogging.logger(
             logging: logging,
@@ -150,7 +154,10 @@ private extension DataImportView {
                 }
             }
         } else {
-            accountChangesSection(difference: difference, model: model)
+            ledgerChangesSection(difference: difference, model: model)
+            if !contents.ledgers.isEmpty {
+                compatibilityWarningSection
+            }
             if model.isCloudSyncEnabled {
                 DataImportCloudWarningSection()
             }
@@ -170,18 +177,23 @@ private extension DataImportView {
                     adoptsFileCurrency: $model.adoptsFileCurrency
                 )
             }
-            if let plannedResult = model.plannedResult {
-                DataImportConfirmSection(
-                    plannedResult: plannedResult,
-                    keptCount: !model.isDirectImport && model.policyChoice == .merge
-                        ? difference.storeOnlyItems.count
-                        : nil,
-                    isReplacing: !model.isDirectImport && model.policyChoice == .replace,
-                    isApplying: model.isApplying,
-                    canApply: canApply(difference: difference)
-                ) {
-                    confirm()
-                }
+            confirmSection(difference: difference, model: model)
+        }
+    }
+
+    @ViewBuilder
+    func confirmSection(difference: ItemImportDifference, model: DataImportModel) -> some View {
+        if let plannedResult = model.plannedResult {
+            DataImportConfirmSection(
+                plannedResult: plannedResult,
+                keptCount: !model.isDirectImport && model.policyChoice == .merge
+                    ? difference.storeOnlyItems.count
+                    : nil,
+                isReplacing: !model.isDirectImport && model.policyChoice == .replace,
+                isApplying: model.isApplying,
+                canApply: canApply(difference: difference)
+            ) {
+                confirm()
             }
         }
     }
@@ -198,20 +210,20 @@ private extension DataImportView {
     }
 
     @ViewBuilder
-    func accountChangesSection(difference: ItemImportDifference, model: DataImportModel) -> some View {
+    func ledgerChangesSection(difference: ItemImportDifference, model: DataImportModel) -> some View {
         @Bindable var model = model
         if !difference.ledgerChanges.isEmpty {
-            Section("Accounts") {
+            Section("Ledgers") {
                 ForEach(difference.ledgerChanges) { change in
                     LabeledContent(change.incoming.name) {
-                        Text(change.current == nil ? "New account" : "Account names differ")
+                        Text(change.current == nil ? "New ledger" : "Ledger names differ")
                     }
                 }
                 if model.policyChoice == .merge,
                    difference.ledgerChanges.contains(where: { $0.current != nil }) {
                     Toggle(
-                        "Use account names from file",
-                        isOn: $model.decisions.useFileAccountNames
+                        "Use ledger names from file",
+                        isOn: $model.decisions.useFileLedgerNames
                     )
                 }
             }

@@ -22,7 +22,7 @@ struct MainNavigationView: View {
     @Environment(IncomesTipController.self)
     private var tipController
 
-    private let accountMenu: LedgerSelectionMenu?
+    private let ledgerMenu: LedgerSelectionMenu?
 
     @Query private var queriedYearTags: [Tag]
 
@@ -91,9 +91,9 @@ struct MainNavigationView: View {
             ) { route in
                 enqueueNavigation(to: route)
             }
-            .navigationTitle(accountMenu?.selectedName ?? "Incomes")
+            .navigationTitle(ledgerMenu?.selectedName ?? "Incomes")
             .toolbar {
-                ToolbarItem(placement: .topBarLeading) { accountMenu }
+                ToolbarItem(placement: .topBarLeading) { ledgerMenu }
                 MainNavigationSidebarToolbarContent(
                     isCompact: horizontalSizeClass == .compact,
                     openSearch: {
@@ -177,10 +177,10 @@ struct MainNavigationView: View {
 
     init(
         ledgerIdentifier: LedgerIdentifier = .default,
-        accountMenu: LedgerSelectionMenu? = nil,
+        ledgerMenu: LedgerSelectionMenu? = nil,
         router: MainNavigationRouter? = nil
     ) {
-        self.accountMenu = accountMenu
+        self.ledgerMenu = ledgerMenu
         _queriedYearTags = .init(.tags(.typeIs(.year), order: .reverse))
         _router = .init(initialValue: router ?? .init(ledgerIdentifier: ledgerIdentifier))
     }

@@ -33,11 +33,12 @@ public extension ItemImportOperations {
         let removedItems = try context.fetch(FetchDescriptor<Item>.allLedgerItems()).filter { item in
             plan.removedItemIDs.contains(item.persistentModelID)
         }
+        var ledgerTags: [LedgerIdentifier: Tag] = [:]
         for change in plan.ledgerChanges {
-            try LedgerOperations.importMetadata(change.incoming, context: context)
+            ledgerTags[change.id] = try LedgerOperations.importMetadata(change.incoming, context: context)
         }
         // Insert first so tags shared with new items are never treated as unused.
-        let createdItems = try insertItems(plan.insertedItems, context: context)
+        let createdItems = try insertItems(plan.insertedItems, ledgerTags: ledgerTags, context: context)
         let removedOwners = Set(removedItems.map(\.ledgerIdentifier))
         let removedDates = removedItems.map(\.localDate)
         let tagsToCleanup = ItemMutationSupport.cleanupCandidateTags(from: removedItems)
@@ -71,12 +72,17 @@ public extension ItemImportOperations {
 }
 
 private extension ItemImportOperations {
-    static func insertItems(_ values: [IncomesFileItem], context: ModelContext) throws -> [Item] {
+    static func insertItems(
+        _ values: [IncomesFileItem],
+        ledgerTags: [LedgerIdentifier: Tag],
+        context: ModelContext
+    ) throws -> [Item] {
         try values.map { item in
             try Item.create(
                 context: context,
                 values: item.storedValues,
-                repeatID: item.repeatID
+                repeatID: item.repeatID,
+                ledgerTag: ledgerTags[item.ledgerIdentifier]
             )
         }
     }

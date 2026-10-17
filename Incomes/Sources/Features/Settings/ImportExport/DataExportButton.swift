@@ -7,7 +7,7 @@ struct DataExportButton: View {
     @Query(.allLedgerItems())
     private var items: [Item]
     @Query(.tags(.typeIs(.ledger)))
-    private var accountTags: [Tag]
+    private var ledgerTags: [Tag]
     @Environment(\.modelContext)
     private var context
     @AppStorage(\.currencyCode, default: "")
@@ -38,7 +38,7 @@ struct DataExportButton: View {
                 }
             }
         }
-        .disabled((items.isEmpty && accountTags.isEmpty) || isPreparing || isExporting)
+        .disabled((items.isEmpty && ledgerTags.isEmpty) || isPreparing || isExporting)
         .fileExporter(
             isPresented: $isExporting,
             document: document,

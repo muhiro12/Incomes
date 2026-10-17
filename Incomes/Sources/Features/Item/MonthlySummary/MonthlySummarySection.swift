@@ -23,9 +23,9 @@ struct MonthlySummarySection: View {
     @AppStorage(\.isDebugOn)
     private var isDebugOn
 
-    @Query private var currentItems: [Item]
+    @LedgerItemQuery private var currentItems: [Item]
 
-    @Query private var previousItems: [Item]
+    @LedgerItemQuery private var previousItems: [Item]
 
     @State private var generatedSummary: String?
     @State private var isGenerating = false
@@ -80,7 +80,7 @@ struct MonthlySummarySection: View {
 
     init(
         date: Date,
-        currentItemsDescriptor: FetchDescriptor<Item>? = nil,
+        currentItemsDescriptor: ItemFetchDescriptor? = nil,
         ledgerIdentifier: LedgerIdentifier = .default
     ) {
         self.date = date

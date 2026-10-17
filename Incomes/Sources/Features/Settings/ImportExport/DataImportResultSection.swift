@@ -13,7 +13,7 @@ struct DataImportResultSection: View {
                 Text(result.removedCount, format: .number)
             }
             if result.changedLedgerCount > 0 {
-                LabeledContent("Updated accounts") {
+                LabeledContent("Updated ledgers") {
                     Text(result.changedLedgerCount, format: .number)
                 }
             }

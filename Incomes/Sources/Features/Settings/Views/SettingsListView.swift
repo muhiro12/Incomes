@@ -46,7 +46,7 @@ extension SettingsListView: View {
     var body: some View {
         @Bindable var model = model
 
-        // Sections follow the user's tasks: account, display, reminders, item
+        // Sections follow the user's tasks: ledger, display, reminders, item
         // data, conditional maintenance, about, and the Debug and Shortcuts links.
         List {
             SettingsSubscriptionSection(
@@ -95,7 +95,7 @@ extension SettingsListView: View {
                 Task {
                     dataMaintenanceLogger.notice("delete_all.requested")
                     do {
-                        let owners = Set(try LedgerOperations.accounts(context: context).map(\.id))
+                        let owners = Set(try LedgerOperations.ledgers(context: context).map(\.id))
                         try LedgerMutationAccess.requireEditing(owners)
                         try await DataMaintenanceOperations.resetAllData(context: context)
                         Haptic.success.impact()
@@ -179,11 +179,11 @@ extension SettingsListView: View {
 }
 
 private extension SettingsListView {
-    var canDeleteAllAccounts: Bool {
-        guard let accounts = try? LedgerOperations.accounts(context: context) else {
+    var canDeleteAllLedgers: Bool {
+        guard let ledgers = try? LedgerOperations.ledgers(context: context) else {
             return false
         }
-        return accounts.allSatisfy { LedgerAccessOperations.canEdit($0.id, isPremium: isSubscribeOn) }
+        return ledgers.allSatisfy { LedgerAccessOperations.canEdit($0.id, isPremium: isSubscribeOn) }
     }
 
     @MainActor
@@ -257,7 +257,7 @@ private extension SettingsListView {
         model: SettingsScreenModel
     ) -> some View {
         SettingsDataManagementSection(
-            canDeleteAll: canDeleteAllAccounts,
+            canDeleteAll: canDeleteAllLedgers,
             duplicateYearItems: duplicateYearItems,
             deleteAllItems: deleteAllItemsAction(model: model)
         )

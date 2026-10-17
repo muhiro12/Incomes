@@ -304,312 +304,6 @@
         }
       }
     },
-    "Account" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Account"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cuenta"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Compte"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "口座"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "账户"
-          }
-        }
-      }
-    },
-    "Account Name" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Account Name"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nombre de la cuenta"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nom du compte"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "口座名"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "账户名称"
-          }
-        }
-      }
-    },
-    "Account Settings" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Account Settings"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ajustes de la cuenta"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Réglages du compte"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "口座設定"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "账户设置"
-          }
-        }
-      }
-    },
-    "Account Unavailable" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Account Unavailable"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cuenta no disponible"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Compte indisponible"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "口座を利用できません"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "账户不可用"
-          }
-        }
-      }
-    },
-    "Account names differ" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Account names differ"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Los nombres de cuenta son diferentes"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Les noms de compte diffèrent"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "口座名が異なります"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "账户名称不同"
-          }
-        }
-      }
-    },
-    "Accounts" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Accounts"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cuentas"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Comptes"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "口座"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "账户"
-          }
-        }
-      }
-    },
-    "Accounts Unavailable" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Accounts Unavailable"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cuentas no disponibles"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Comptes indisponibles"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "口座を読み込めません"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "账户不可用"
-          }
-        }
-      }
-    },
-    "Accounts keep planned income, outgo, and balances separate." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Accounts keep planned income, outgo, and balances separate."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Las cuentas mantienen separados los ingresos, gastos y saldos previstos."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Les comptes séparent les revenus, dépenses et soldes prévus."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "予定の収入・支出・残高を口座ごとに分けて管理します。"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "各账户独立管理计划收入、支出和余额。"
-          }
-        }
-      }
-    },
-    "Accounts to update" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Accounts to update"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cuentas que se actualizarán"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Comptes à mettre à jour"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "更新する口座"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "将更新的账户"
-          }
-        }
-      }
-    },
     "Add Sample Data" : {
       "localizations" : {
         "en" : {
@@ -1018,36 +712,36 @@
         }
       }
     },
-    "After Premium ends, existing accounts remain available to view, switch, and export." : {
+    "After Premium ends, existing ledgers remain available to view, switch, and export." : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "After Premium ends, existing accounts remain available to view, switch, and export."
+            "value" : "After Premium ends, existing ledgers remain available to view, switch, and export."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Cuando finaliza Premium, puedes seguir consultando, seleccionando y exportando las cuentas existentes."
+            "value" : "Cuando finaliza Premium, puedes seguir consultando, seleccionando y exportando los libros existentes."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "À la fin de Premium, les comptes existants restent consultables, sélectionnables et exportables."
+            "value" : "À la fin de Premium, les registres existants restent consultables, sélectionnables et exportables."
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Premium終了後も、既存口座の閲覧・切り替え・書き出しは利用できます。"
+            "value" : "Premium終了後も、既存帳簿の閲覧・切り替え・書き出しは利用できます。"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Premium 到期后，仍可查看、切换和导出现有账户。"
+            "value" : "Premium 到期后，仍可查看、切换和导出现有账簿。"
           }
         }
       }
@@ -1082,6 +776,41 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "所有"
+          }
+        }
+      }
+    },
+    "All Devices Are Updated" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "All Devices Are Updated"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "He actualizado todos mis dispositivos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tous mes appareils sont à jour"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "すべての端末を更新しました"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "所有设备均已更新"
           }
         }
       }
@@ -1154,36 +883,36 @@
         }
       }
     },
-    "All accounts use the same iCloud account." : {
+    "All ledgers use the same iCloud account." : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "All accounts use the same iCloud account."
+            "value" : "All ledgers use the same iCloud account."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Todas las cuentas usan la misma cuenta de iCloud."
+            "value" : "Todos los libros usan la misma cuenta de iCloud."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tous les comptes utilisent le même compte iCloud."
+            "value" : "Tous les registres utilisent le même compte iCloud."
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "すべての口座で同じiCloudアカウントを使用します。"
+            "value" : "すべての帳簿で同じiCloudアカウントを使用します。"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "所有账户使用同一个 iCloud 账户。"
+            "value" : "所有账簿使用同一个 iCloud 账户。"
           }
         }
       }
@@ -2238,6 +1967,41 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "变为负数"
+          }
+        }
+      }
+    },
+    "Before creating an additional ledger, update Incomes to 6.0 or later on every device. Earlier versions combine all ledgers and can remove an item's ledger assignment when editing. If a device cannot be updated, keep using only the default ledger." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Before creating an additional ledger, update Incomes to 6.0 or later on every device. Earlier versions combine all ledgers and can remove an item's ledger assignment when editing. If a device cannot be updated, keep using only the default ledger."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Antes de crear un libro adicional, actualiza Incomes a la versión 6.0 o posterior en todos tus dispositivos. Las versiones anteriores mezclan todos los libros y, al editar, pueden eliminar la asignación de un elemento a su libro. Si algún dispositivo no se puede actualizar, usa solo el libro predeterminado."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Avant de créer un registre supplémentaire, mettez Incomes à jour vers la version 6.0 ou ultérieure sur tous vos appareils. Les versions antérieures regroupent tous les registres et peuvent supprimer l’affectation d’un élément à son registre lors d’une modification. Si un appareil ne peut pas être mis à jour, utilisez uniquement le registre par défaut."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "追加の帳簿を作成する前に、すべての端末のIncomesを6.0以降へ更新してください。以前のバージョンでは帳簿が区別されず、編集すると項目の所属帳簿が失われることがあります。更新できない端末がある場合は、標準帳簿だけを使用してください。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "创建额外账簿前，请在所有设备上将 Incomes 更新至 6.0 或更高版本。旧版本无法区分账簿，编辑时可能导致项目的所属账簿信息丢失。如果有设备无法更新，请仅使用默认账簿。"
           }
         }
       }
@@ -3466,40 +3230,6 @@
         }
       }
     },
-    "Create Account" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Create Account"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Crear cuenta"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Créer un compte"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "口座を作成"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "创建账户"
-          }
-        }
-      }
-    },
     "Create Item" : {
       "localizations" : {
         "en" : {
@@ -3530,6 +3260,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "创建项目"
+          }
+        }
+      }
+    },
+    "Create Ledger" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Create Ledger"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Crear libro"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Créer un registre"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "帳簿を作成"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "创建账簿"
           }
         }
       }
@@ -4282,36 +4046,36 @@
         }
       }
     },
-    "Default Account" : {
+    "Default Ledger" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Default Account"
+            "value" : "Default Ledger"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Cuenta predeterminada"
+            "value" : "Libro predeterminado"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Compte par défaut"
+            "value" : "Registre par défaut"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "デフォルト口座"
+            "value" : "標準帳簿"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "默认账户"
+            "value" : "默认账簿"
           }
         }
       }
@@ -5098,36 +4862,36 @@
         }
       }
     },
-    "Editing in an earlier version may move entries to the default account." : {
+    "Earlier versions combine all ledgers and can remove an item's ledger assignment when editing." : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Editing in an earlier version may move entries to the default account."
+            "value" : "Earlier versions combine all ledgers and can remove an item's ledger assignment when editing."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Editar en una versión anterior puede mover las entradas a la cuenta predeterminada."
+            "value" : "Las versiones anteriores mezclan todos los libros y, al editar, pueden eliminar la asignación de un elemento a su libro."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Modifier des entrées dans une version antérieure peut les déplacer vers le compte par défaut."
+            "value" : "Les versions antérieures regroupent tous les registres et peuvent supprimer l’affectation d’un élément à son registre lors d’une modification."
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "以前のバージョンで編集すると、項目が標準口座に移る可能性があります。"
+            "value" : "以前のバージョンでは帳簿が区別されず、編集すると項目の所属帳簿が失われることがあります。"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "在旧版本中编辑可能会将条目移至默认账户。"
+            "value" : "旧版本无法区分账簿，编辑时可能导致项目的所属账簿信息丢失。"
           }
         }
       }
@@ -5990,12 +5754,6 @@
             "value" : "Finish the current edit before renaming a category."
           }
         },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "カテゴリー名を変更する前に、現在の編集を完了してください。"
-          }
-        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6006,6 +5764,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Terminez la modification en cours avant de renommer une catégorie."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "カテゴリー名を変更する前に、現在の編集を完了してください。"
           }
         },
         "zh-Hans" : {
@@ -7716,6 +7480,312 @@
         }
       }
     },
+    "Ledger" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ledger"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Libro"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Registre"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "帳簿"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "账簿"
+          }
+        }
+      }
+    },
+    "Ledger Name" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ledger Name"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nombre del libro"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nom du registre"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "帳簿名"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "账簿名称"
+          }
+        }
+      }
+    },
+    "Ledger Settings" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ledger Settings"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajustes del libro"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Réglages du registre"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "帳簿設定"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "账簿设置"
+          }
+        }
+      }
+    },
+    "Ledger Unavailable" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ledger Unavailable"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Libro no disponible"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Registre indisponible"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "帳簿を利用できません"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "账簿不可用"
+          }
+        }
+      }
+    },
+    "Ledger names differ" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ledger names differ"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Los nombres de libro son diferentes"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les noms de registre diffèrent"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "帳簿名が異なります"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "账簿名称不同"
+          }
+        }
+      }
+    },
+    "Ledgers" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ledgers"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Libros"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Registres"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "帳簿"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "账簿"
+          }
+        }
+      }
+    },
+    "Ledgers Unavailable" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ledgers Unavailable"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Libros no disponibles"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Registres indisponibles"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "帳簿を読み込めません"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "账簿不可用"
+          }
+        }
+      }
+    },
+    "Ledgers keep planned income, outgo, and balances separate." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ledgers keep planned income, outgo, and balances separate."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Las libros mantienen separados los ingresos, gastos y saldos previstos."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les registres séparent les revenus, dépenses et soldes prévus."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "予定の収入・支出・残高を帳簿ごとに分けて管理します。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "各账簿独立管理计划收入、支出和余额。"
+          }
+        }
+      }
+    },
+    "Ledgers to update" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ledgers to update"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Libros que se actualizarán"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Registres à mettre à jour"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "更新する帳簿"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "将更新的账簿"
+          }
+        }
+      }
+    },
     "License" : {
       "localizations" : {
         "en" : {
@@ -7886,36 +7956,36 @@
         }
       }
     },
-    "Manage Accounts" : {
+    "Manage Ledgers" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Manage Accounts"
+            "value" : "Manage Ledgers"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Gestionar cuentas"
+            "value" : "Gestionar libros"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Gérer les comptes"
+            "value" : "Gérer les registres"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "口座の管理"
+            "value" : "帳簿の管理"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "管理账户"
+            "value" : "管理账簿"
           }
         }
       }
@@ -8086,6 +8156,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "合并"
+          }
+        }
+      }
+    },
+    "Merging duplicate ledger tags combines their items and balances into one ledger. This cannot be undone." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Merging duplicate ledger tags combines their items and balances into one ledger. This cannot be undone."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Al fusionar las etiquetas de libros duplicados, sus elementos y saldos se combinan en un solo libro. Esta acción no se puede deshacer."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La fusion des étiquettes de registres en double regroupe leurs éléments et leurs soldes dans un seul registre. Cette action est irréversible."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "重複した帳簿タグを統合すると、項目と残高がひとつの帳簿にまとまります。この操作は取り消せません。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "合并重复的账簿标签后，其项目和余额将归入同一账簿。此操作无法撤销。"
           }
         }
       }
@@ -8532,36 +8636,36 @@
         }
       }
     },
-    "New account" : {
+    "New ledger" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "New account"
+            "value" : "New ledger"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Cuenta nueva"
+            "value" : "Libro nuevo"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Nouveau compte"
+            "value" : "Nouveau registre"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "新しい口座"
+            "value" : "新しい帳簿"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "新账户"
+            "value" : "新账簿"
           }
         }
       }
@@ -9314,36 +9418,36 @@
         }
       }
     },
-    "Notifications use the default account." : {
+    "Notifications use the default ledger." : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Notifications use the default account."
+            "value" : "Notifications use the default ledger."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Las notificaciones corresponden a la cuenta predeterminada."
+            "value" : "Las notificaciones corresponden a el libro predeterminado."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Les notifications concernent le compte par défaut."
+            "value" : "Les notifications concernent le registre par défaut."
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "通知はデフォルト口座の項目を対象にします。"
+            "value" : "通知は標準帳簿の項目を対象にします。"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "通知仅针对默认账户。"
+            "value" : "通知仅针对默认账簿。"
           }
         }
       }
@@ -10674,36 +10778,36 @@
         }
       }
     },
-    "Premium enables creating and editing additional accounts." : {
+    "Premium enables creating and editing additional ledgers." : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Premium enables creating and editing additional accounts."
+            "value" : "Premium enables creating and editing additional ledgers."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Premium permite crear y editar cuentas adicionales."
+            "value" : "Premium permite crear y editar libros adicionales."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Premium permet de créer et de modifier des comptes supplémentaires."
+            "value" : "Premium permet de créer et de modifier des registres supplémentaires."
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "追加口座の作成・編集にはPremiumが必要です。"
+            "value" : "追加帳簿の作成・編集にはPremiumが必要です。"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Premium 支持创建和编辑额外账户。"
+            "value" : "Premium 支持创建和编辑额外账簿。"
           }
         }
       }
@@ -11286,36 +11390,36 @@
         }
       }
     },
-    "Read Only: Premium is required to edit this account." : {
+    "Read Only: Premium is required to edit this ledger." : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Read Only: Premium is required to edit this account."
+            "value" : "Read Only: Premium is required to edit this ledger."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Solo lectura: se necesita Premium para editar esta cuenta."
+            "value" : "Solo lectura: se necesita Premium para editar este libro."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Lecture seule : Premium est nécessaire pour modifier ce compte."
+            "value" : "Lecture seule : Premium est nécessaire pour modifier ce registre."
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "閲覧専用：この口座の編集にはPremiumが必要です。"
+            "value" : "閲覧専用：この帳簿の編集にはPremiumが必要です。"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "只读：编辑此账户需要 Premium。"
+            "value" : "只读：编辑此账簿需要 Premium。"
           }
         }
       }
@@ -13904,36 +14008,36 @@
         }
       }
     },
-    "Switch Account" : {
+    "Switch Ledger" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Switch Account"
+            "value" : "Switch Ledger"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Cambiar de cuenta"
+            "value" : "Cambiar de libro"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Changer de compte"
+            "value" : "Changer de registre"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "口座の切り替え"
+            "value" : "帳簿の切り替え"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "切换账户"
+            "value" : "切换账簿"
           }
         }
       }
@@ -15814,36 +15918,70 @@
         }
       }
     },
-    "Unavailable Account" : {
+    "Unable to Organize Tags" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Unavailable Account"
+            "value" : "Unable to Organize Tags"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Cuenta no disponible"
+            "value" : "No se pueden organizar las etiquetas"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Compte indisponible"
+            "value" : "Impossible d’organiser les étiquettes"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "利用できない口座"
+            "value" : "タグを整理できません"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "账户不可用"
+            "value" : "无法整理标签"
+          }
+        }
+      }
+    },
+    "Unavailable Ledger" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unavailable Ledger"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Libro no disponible"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Registre indisponible"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "利用できない帳簿"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "账簿不可用"
           }
         }
       }
@@ -15882,36 +16020,37 @@
         }
       }
     },
-    "Update Incomes on every device before using additional accounts." : {
+    "Update Every Device" : {
+      "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Update Incomes on every device before using additional accounts."
+            "value" : "Update Every Device"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Actualiza Incomes en todos tus dispositivos antes de usar cuentas adicionales."
+            "value" : "Actualiza todos tus dispositivos"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Mettez Incomes à jour sur tous vos appareils avant d’utiliser des comptes supplémentaires."
+            "value" : "Mettez à jour tous vos appareils"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "追加口座を使う前に、すべての端末のIncomesを更新してください。"
+            "value" : "すべての端末を更新"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "使用额外账户前，请在所有设备上更新 Incomes。"
+            "value" : "更新所有设备"
           }
         }
       }
@@ -15950,36 +16089,70 @@
         }
       }
     },
-    "Updated accounts" : {
+    "Update every device to Incomes 6.0 or later before using additional ledgers." : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Updated accounts"
+            "value" : "Update every device to Incomes 6.0 or later before using additional ledgers."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Cuentas actualizadas"
+            "value" : "Antes de usar libros adicionales, actualiza Incomes a la versión 6.0 o posterior en todos tus dispositivos."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Comptes mis à jour"
+            "value" : "Avant d’utiliser des registres supplémentaires, mettez Incomes à jour vers la version 6.0 ou ultérieure sur tous vos appareils."
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "更新された口座"
+            "value" : "追加の帳簿を使う前に、すべての端末のIncomesを6.0以降へ更新してください。"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "已更新的账户"
+            "value" : "使用额外账簿前，请在所有设备上将 Incomes 更新至 6.0 或更高版本。"
+          }
+        }
+      }
+    },
+    "Updated ledgers" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Updated ledgers"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Libros actualizados"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Registres mis à jour"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "更新された帳簿"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已更新的账簿"
           }
         }
       }
@@ -16052,40 +16225,6 @@
         }
       }
     },
-    "Use account names from file" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Use account names from file"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Usar nombres de cuenta del archivo"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Utiliser les noms de compte du fichier"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ファイルの口座名を使用"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "使用文件中的账户名称"
-          }
-        }
-      }
-    },
     "Use file" : {
       "localizations" : {
         "en" : {
@@ -16116,6 +16255,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "使用文件"
+          }
+        }
+      }
+    },
+    "Use ledger names from file" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use ledger names from file"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usar nombres de libro del archivo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Utiliser les noms de registre du fichier"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ファイルの帳簿名を使用"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "使用文件中的账簿名称"
           }
         }
       }

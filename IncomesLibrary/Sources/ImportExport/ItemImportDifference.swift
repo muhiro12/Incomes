@@ -3,7 +3,7 @@ import SwiftData
 
 /// Deterministic comparison of a file with the store items inside the file's selection.
 public struct ItemImportDifference: Equatable, Sendable {
-    /// Account metadata included in the same review and stale-review validation as records.
+    /// Ledger metadata included in the same review and stale-review validation as records.
     public struct LedgerChange: Equatable, Identifiable, Sendable {
         public let id: LedgerIdentifier
         public let current: IncomesFileLedger?

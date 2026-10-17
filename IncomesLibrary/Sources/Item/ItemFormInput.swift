@@ -18,7 +18,7 @@ public struct ItemFormInput: Equatable {
         case invalidPriority
     }
 
-    /// Account captured with the draft; changing the current selection cannot redirect it.
+    /// Ledger captured with the draft; changing the current selection cannot redirect it.
     public let ledgerIdentifier: LedgerIdentifier
     /// Selected local date for the item.
     public let date: Date

@@ -14,7 +14,7 @@ precision, not for novelty.
 
 | English | Japanese | Meaning |
 | --- | --- | --- |
-| Account | 口座 | One person's independent book, distinct from their iCloud/login account |
+| Ledger | 帳簿 | One person's independent income, outgo, and balance plan; not a bank or login account |
 | Item | 項目 | One dated record with income, outgo, content, and category |
 | Income | 収入 | Money received by an item or period |
 | Outgo | 支出 | Money spent by an item or period |

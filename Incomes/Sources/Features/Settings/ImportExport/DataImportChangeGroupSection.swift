@@ -23,7 +23,7 @@ struct DataImportChangeGroupSection: View {
             }
         } header: {
             Text(verbatim: headerText)
-            DataImportAccountLabel(identifier: group.id.ledgerIdentifier)
+            DataImportLedgerLabel(identifier: group.id.ledgerIdentifier)
         }
     }
 }

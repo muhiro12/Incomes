@@ -15,7 +15,7 @@ struct SearchListView: View {
     @Environment(\.mhDesignMetrics)
     private var designMetrics
 
-    @Query private var items: [Item]
+    @LedgerItemQuery private var items: [Item]
     @Query private var contents: [Tag]
     @Query private var categories: [Tag]
 

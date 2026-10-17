@@ -285,47 +285,12 @@ private extension ItemPredicate {
 }
 
 public extension FetchDescriptor where T == Item {
-    /// Convenience factory for a `FetchDescriptor<Item>` using an `ItemPredicate`.
-    /// - Parameters:
-    ///   - predicate: A preset predicate.
-    ///   - order: Sort order (default: reverse).
-    static func items(
+    /// Native query for companion surfaces that intentionally show only the default ledger.
+    static func defaultLedgerItems(
         _ predicate: ItemPredicate,
-        order: SortOrder = .reverse,
-        ledgerIdentifier: LedgerIdentifier = .default
+        order: SortOrder = .reverse
     ) -> FetchDescriptor {
-        let base = predicate.value
-        let typeID = LedgerTagStorage.typeID(for: ledgerIdentifier)
-        let prefix = LedgerTagStorage.typePrefix
-        let reserved = TagType.ledger.rawValue
-        let scope: Predicate<Item>
-        if ledgerIdentifier == .default {
-            scope = #Predicate { item in
-                !(item.tags?.contains { tag in
-                    tag.typeID.starts(with: prefix) || tag.typeID == reserved
-                } ?? false)
-            }
-        } else {
-            scope = #Predicate { item in
-                (item.tags?.contains { tag in
-                    tag.typeID == typeID
-                } ?? false)
-                && !(item.tags?.contains { tag in
-                    (tag.typeID.starts(with: prefix) || tag.typeID == reserved) && tag.typeID != typeID
-                } ?? false)
-            }
-        }
-        return .init(
-            predicate: #Predicate { item in
-                scope.evaluate(item) && base.evaluate(item)
-            },
-            sortBy: [
-                .init(\.date, order: order),
-                .init(\.priority, order: order == .forward ? .reverse : .forward),
-                .init(\.content, order: order),
-                .init(\.persistentModelID, order: order)
-            ]
-        )
+        ItemFetchDescriptor.items(predicate, order: order).candidateDescriptor
     }
 
     /// Explicit cross-ledger inventory for backup, recovery, and global data reset.

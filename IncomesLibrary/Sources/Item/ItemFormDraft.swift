@@ -4,7 +4,7 @@ import Foundation
 public struct ItemFormDraft: Identifiable, Hashable, Sendable {
     /// Stable presentation identifier.
     public let id: UUID
-    /// Destination account bound when the draft is produced.
+    /// Destination ledger bound when the draft is produced.
     public let ledgerIdentifier: LedgerIdentifier
     /// Source group identifier for grouped draft flows.
     public let groupID: UUID

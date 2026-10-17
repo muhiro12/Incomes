@@ -1,23 +1,23 @@
 import SwiftUI
 
 struct LedgerSelectionMenu: View {
-    let accounts: [LedgerRecord]
+    let ledgers: [LedgerRecord]
     @Binding var selectedIdentifier: String
     let manage: () -> Void
 
     var selectedName: String {
-        accounts.first { $0.id.rawValue == selectedIdentifier }?.name
-            ?? String(localized: "Unavailable Account")
+        ledgers.first { $0.id.rawValue == selectedIdentifier }?.name
+            ?? String(localized: "Unavailable Ledger")
     }
 
     var body: some View {
         Menu {
-            Picker("Account", selection: $selectedIdentifier) {
-                ForEach(accounts) { account in
-                    Text(selectionTitle(account)).tag(account.id.rawValue)
+            Picker("Ledger", selection: $selectedIdentifier) {
+                ForEach(ledgers) { ledger in
+                    Text(selectionTitle(ledger)).tag(ledger.id.rawValue)
                 }
             }
-            Button("Manage Accounts", systemImage: "slider.horizontal.3", action: manage)
+            Button("Manage Ledgers", systemImage: "slider.horizontal.3", action: manage)
         } label: {
             Label(
                 selectedName,
@@ -26,14 +26,14 @@ struct LedgerSelectionMenu: View {
             .labelStyle(.titleAndIcon)
             .lineLimit(1)
         }
-        .accessibilityLabel(Text(verbatim: String(localized: "Switch Account") + ": " + selectedName))
+        .accessibilityLabel(Text(verbatim: String(localized: "Switch Ledger") + ": " + selectedName))
     }
 
-    private func selectionTitle(_ account: LedgerRecord) -> String {
+    private func selectionTitle(_ ledger: LedgerRecord) -> String {
         LedgerSelectionTitle.title(
-            identifier: account.id,
-            name: account.name,
-            names: Dictionary(uniqueKeysWithValues: accounts.map { ($0.id, $0.name) })
+            identifier: ledger.id,
+            name: ledger.name,
+            names: Dictionary(uniqueKeysWithValues: ledgers.map { ($0.id, $0.name) })
         )
     }
 }

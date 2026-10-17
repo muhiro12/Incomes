@@ -9,7 +9,7 @@ import SwiftData
 import SwiftUI
 
 struct IncomeAndOutgoChartSection: View {
-    @Query private var items: [Item]
+    @LedgerItemQuery private var items: [Item]
 
     private let allowsExpansion: Bool
 
@@ -34,10 +34,10 @@ struct IncomeAndOutgoChartSection: View {
     }
 
     init(
-        _ descriptor: FetchDescriptor<Item>,
+        _ descriptor: ItemFetchDescriptor,
         allowsExpansion: Bool = true
     ) {
-        _items = Query(descriptor)
+        _items = LedgerItemQuery(descriptor)
         self.allowsExpansion = allowsExpansion
     }
 }

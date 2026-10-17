@@ -82,7 +82,7 @@ public enum TagQueryOperations {
 
     /// True when duplicate tags exist in the store.
     public static func hasDuplicates(context: ModelContext) throws -> Bool {
-        try TagType.classificationCases.contains { type in
+        try TagType.allCases.contains { type in
             try !duplicateTags(
                 context: context,
                 type: type
@@ -104,7 +104,7 @@ public enum TagQueryOperations {
     public static func duplicateTags(
         context: ModelContext
     ) throws -> [Tag] {
-        try TagType.classificationCases.flatMap { type in
+        try TagType.allCases.flatMap { type in
             try duplicateTags(
                 context: context,
                 type: type
@@ -238,10 +238,9 @@ public enum TagQueryOperations {
         case .year,
              .yearMonth,
              .content,
-             .debug:
+             .debug,
+             .ledger:
             return directItems(for: tag)
-        case .ledger:
-            return []
         case .category:
             return categoryMatchingItems(for: tag)
         }

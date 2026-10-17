@@ -75,10 +75,10 @@ struct LedgerMutationIsolationTests {
         _ = try ItemImportOperations.applyAndSaveWithOutcome(
             contents: contents,
             reviewed: difference,
-            policy: .merge(.init(useFileAccountNames: true)),
+            policy: .merge(.init(useFileLedgerNames: true)),
             context: context
         )
-        #expect(try LedgerOperations.account(other, context: context).name == "Renamed")
+        #expect(try LedgerOperations.ledger(other, context: context).name == "Renamed")
         #expect(try context.fetchCount(.items(.all, ledgerIdentifier: other)) == 2)
     }
 

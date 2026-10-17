@@ -36,7 +36,7 @@ struct ItemMutationPersistenceTests {
             let owner = try saveDeletion(at: url, autosaveEnabled: autosaveEnabled)
             let reader = ModelContext(try container(at: url))
             #expect(try reader.fetchCount(.items(.all, ledgerIdentifier: owner)) == 0)
-            #expect(try LedgerOperations.account(owner, context: reader).name == "Additional")
+            #expect(try LedgerOperations.ledger(owner, context: reader).name == "Additional")
             try verifyBalances(reader, owner: .default, expected: 90)
         }
     }

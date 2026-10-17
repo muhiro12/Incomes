@@ -9,9 +9,9 @@ import SwiftData
 import SwiftUI
 
 struct IntentChartSectionGroup {
-    private let descriptor: FetchDescriptor<Item>
+    private let descriptor: ItemFetchDescriptor
 
-    init(_ descriptor: FetchDescriptor<Item>) {
+    init(_ descriptor: ItemFetchDescriptor) {
         self.descriptor = descriptor
     }
 }

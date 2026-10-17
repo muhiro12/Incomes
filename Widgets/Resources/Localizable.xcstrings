@@ -103,104 +103,104 @@
         }
       }
     },
-    "Default Account: Shows the next or previous item" : {
+    "Default Ledger: Shows the next or previous item" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Default Account: Shows the next or previous item"
+            "value" : "Default Ledger: Shows the next or previous item"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "デフォルト口座：次または前の項目"
+            "value" : "標準帳簿：次または前の項目"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Cuenta predeterminada: muestra el elemento siguiente o anterior"
+            "value" : "Libro predeterminado: muestra el elemento siguiente o anterior"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Compte par défaut : affiche l’élément suivant ou précédent"
+            "value" : "Registre par défaut : affiche l’élément suivant ou précédent"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "默认账户：显示下一个或上一个项目"
+            "value" : "默认账簿：显示下一个或上一个项目"
           }
         }
       }
     },
-    "Default Account: This month's items and balance" : {
+    "Default Ledger: This month's items and balance" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Default Account: This month's items and balance"
+            "value" : "Default Ledger: This month's items and balance"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "デフォルト口座：今月の項目と残高"
+            "value" : "標準帳簿：今月の項目と残高"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Cuenta predeterminada: elementos y saldo de este mes"
+            "value" : "Libro predeterminado: elementos y saldo de este mes"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Compte par défaut : éléments et solde du mois"
+            "value" : "Registre par défaut : éléments et solde du mois"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "默认账户：本月项目和余额"
+            "value" : "默认账簿：本月项目和余额"
           }
         }
       }
     },
-    "Default Account: This month's net income" : {
+    "Default Ledger: This month's net income" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Default Account: This month's net income"
+            "value" : "Default Ledger: This month's net income"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "デフォルト口座：今月の純収入"
+            "value" : "標準帳簿：今月の純収入"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Cuenta predeterminada: ingresos netos de este mes"
+            "value" : "Libro predeterminado: ingresos netos de este mes"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Compte par défaut : revenu net du mois"
+            "value" : "Registre par défaut : revenu net du mois"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "默认账户：本月净收入"
+            "value" : "默认账簿：本月净收入"
           }
         }
       }

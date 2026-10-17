@@ -35,10 +35,17 @@ The store contains `Item` and `Tag` records. Year, year-month, and content tags
 are derived from item fields, so the file omits them. A category tag carries
 meaning, so each item records its category name. The file contains:
 
-- Every item's date, content, income, outgo, category, priority, repeat ID, and account ID.
-- Additional-book names and portable identities, including empty books.
+- Every item's date, content, income, outgo, category, priority, repeat ID, and ledger reference.
+- Additional-ledger names and file references, including empty ledgers.
 - The item's running balance, for readers only.
 - Settings that describe the records, currently the currency code.
+
+Ledger references are opaque digests derived from native Tag identities. They
+remain stable across a rename in the source store without exposing the encoded
+SwiftData identifier or store payload. Import first recognizes an existing local
+reference; otherwise it compares a uniquely named destination ledger. Ambiguous
+names stop the import for explicit user resolution. A newly restored ledger gets
+a new native destination Tag identity.
 
 The file never contains `PersistentIdentifier` values, debug tags, subscription
 or iCloud state, logs, or device information.
@@ -98,7 +105,7 @@ The file can grow along two axes without breaking older readers.
 
 Sections describe which kinds of data the file contains. `items` is required
 and `settings` is optional. Planned sections include category attributes
-and notification settings. V3 requires the account metadata section `ledgers`.
+and notification settings. V3 requires the ledger metadata section `ledgers`.
 
 - A section or field that a reader can ignore without changing the meaning of
   the remaining data may be added within the same schema version. Readers
@@ -111,7 +118,7 @@ and notification settings. V3 requires the account metadata section `ledgers`.
 selection cannot erase another owner. The current full export includes the
 default book even when it is empty. Planned filter kinds include a date range
 and categories. V2 files retain their original optional selection shape and
-resolve only to the default account.
+resolve only to the default ledger.
 
 V3 refuses duplicate book IDs. Additional-book names are metadata, not identity;
 same-name books stay distinct. Merge retains existing names unless explicitly

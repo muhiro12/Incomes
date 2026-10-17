@@ -2,7 +2,7 @@ import SwiftData
 import SwiftUI
 
 struct DebugNaturalLanguageSearchResultSections: View {
-    @Query private var fetchedItems: [Item]
+    @LedgerItemQuery private var fetchedItems: [Item]
 
     var body: some View {
         let results = NaturalLanguageSearchOperations.results(from: fetchedItems)
@@ -33,7 +33,7 @@ struct DebugNaturalLanguageSearchResultSections: View {
     }
 
     init(conditions: ItemSearchConditions, ledgerIdentifier: LedgerIdentifier) {
-        _fetchedItems = Query(
+        _fetchedItems = LedgerItemQuery(
             NaturalLanguageSearchOperations.resultDescriptor(for: conditions, ledgerIdentifier: ledgerIdentifier)
         )
     }

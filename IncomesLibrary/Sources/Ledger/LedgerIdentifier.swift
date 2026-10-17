@@ -1,12 +1,12 @@
 import Foundation
 
-/// Portable identity for one person's independent financial book, not a login account.
+/// A ledger reference within a store or an import file; imports resolve their own references.
 public struct LedgerIdentifier: RawRepresentable, Codable, Hashable, Sendable, Identifiable {
     /// The original book, represented by the absence of a dedicated ownership Tag.
     public static let `default`: Self = .init(rawValue: "default")
     static let conflicting: Self = .init(rawValue: "conflicting")
 
-    /// Stable storage and wire value, independent of the displayed name.
+    /// Encoded Tag identity, or a file-scoped reference awaiting import resolution.
     public let rawValue: String
 
     /// Identity used by value-based selection controls.
@@ -19,7 +19,7 @@ public struct LedgerIdentifier: RawRepresentable, Codable, Hashable, Sendable, I
         self.rawValue = rawValue
     }
 
-    /// Creates a new identity without a device-local incremental counter.
+    /// Creates a file-scoped reference without claiming a destination store identity.
     public init() {
         rawValue = UUID().uuidString
     }

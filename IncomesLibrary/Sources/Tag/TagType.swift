@@ -13,9 +13,9 @@ public enum TagType: String, CaseIterable, Sendable {
     case content = "e2d390d9"
     case category = "a7a130f4"
     case debug = "d3b6f0c1"
-    case ledger = "ledger"
+    case ledger = "4c93e218"
 
-    /// Maintenance and classification lookup never implicitly include account metadata.
+    /// Classification lookup and orphan cleanup exclude ledger metadata.
     static var classificationCases: [Self] {
         [.year, .yearMonth, .content, .category, .debug]
     }

@@ -14,8 +14,8 @@ struct LedgerSettingsView: View {
 
     var body: some View {
         Form {
-            Section("Account Name") {
-                TextField("Account Name", text: $name)
+            Section("Ledger Name") {
+                TextField("Ledger Name", text: $name)
                     .ledgerWriteAccess(owner: identifier)
                 Button("Rename") {
                     do {
@@ -30,12 +30,12 @@ struct LedgerSettingsView: View {
                 )
             }
         }
-        .navigationTitle("Account Settings")
+        .navigationTitle("Ledger Settings")
         .task {
-            name = (try? LedgerOperations.account(identifier, context: context).name) ?? ""
+            name = (try? LedgerOperations.ledger(identifier, context: context).name) ?? ""
         }
         .alert(
-            "Account Unavailable",
+            "Ledger Unavailable",
             isPresented: .init(get: { errorMessage != nil }, set: { if !$0 { errorMessage = nil } })
         ) {
             Button("OK") { errorMessage = nil }

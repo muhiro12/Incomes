@@ -60,7 +60,7 @@ struct LedgerExternalChangePersistenceTests {
             try verifyRead(context, change: change, owner: owners.additional)
             let currentCache = try cache(context)
             #expect(currentCache == saved)
-            #expect(try LedgerOperations.account(owners.empty, context: context).name == "Empty")
+            #expect(try LedgerOperations.ledger(owners.empty, context: context).name == "Empty")
             try ItemBalanceOperations.reconcileAndSave(context: context)
             #expect(!context.hasChanges)
             let repeatedCache = try cache(context)

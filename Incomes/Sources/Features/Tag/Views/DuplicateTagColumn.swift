@@ -2,6 +2,7 @@ import SwiftUI
 
 struct DuplicateTagColumn: View {
     let items: [Item]
+    var canDelete = true
     let delete: () -> Void
 
     var body: some View {
@@ -14,6 +15,7 @@ struct DuplicateTagColumn: View {
             } header: {
                 DuplicateTagColumnHeader(
                     itemCount: items.count,
+                    canDelete: canDelete,
                     delete: delete
                 )
             }

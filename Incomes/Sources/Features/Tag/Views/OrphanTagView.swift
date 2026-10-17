@@ -95,7 +95,7 @@ private extension OrphanTagView {
         case .debug:
             "Debug"
         case .ledger:
-            "Account"
+            "Ledger"
         }
     }
 }

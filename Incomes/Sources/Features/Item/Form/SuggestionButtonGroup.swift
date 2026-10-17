@@ -15,7 +15,7 @@ struct SuggestionButtonGroup: View {
 
     @Query private var suggestions: [Tag]
     @Query private var categoryTags: [Tag]
-    @Query private var items: [Item]
+    @LedgerItemQuery private var items: [Item]
 
     @Binding private var input: String
     private let type: TagType

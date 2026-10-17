@@ -1,8 +1,8 @@
 import SwiftUI
 
 /// Identifies the affected book even when names and financial values match.
-struct DataImportAccountLabel: View {
-    @Environment(\.importAccountNames)
+struct DataImportLedgerLabel: View {
+    @Environment(\.importLedgerNames)
     private var names
 
     let identifier: LedgerIdentifier
@@ -10,7 +10,7 @@ struct DataImportAccountLabel: View {
     private var title: String {
         let fallback =
             identifier == .default
-            ? String(localized: "Default Account") : String(localized: "Unavailable Account")
+            ? String(localized: "Default Ledger") : String(localized: "Unavailable Ledger")
         let name = names[identifier] ?? fallback
         return LedgerSelectionTitle.title(identifier: identifier, name: name, names: names)
     }

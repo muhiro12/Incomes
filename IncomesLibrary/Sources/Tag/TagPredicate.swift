@@ -30,10 +30,9 @@ public enum TagPredicate {
     var value: Predicate<Tag> {
         switch self {
         case .all:
-            let prefix = LedgerTagStorage.typePrefix
             let reserved = TagType.ledger.rawValue
             return #Predicate { tag in
-                !tag.typeID.starts(with: prefix) && tag.typeID != reserved
+                tag.typeID != reserved
             }
         case .matchingNone:
             return .false
@@ -48,13 +47,6 @@ public enum TagPredicate {
                 tag.name == name && tag.typeID == typeID
             }
         case .typeIs(let type):
-            if type == .ledger {
-                let prefix = LedgerTagStorage.typePrefix
-                let reserved = TagType.ledger.rawValue
-                return #Predicate { tag in
-                    tag.typeID.starts(with: prefix) || tag.typeID == reserved
-                }
-            }
             let id = type.rawValue
             return #Predicate { tag in
                 tag.typeID == id

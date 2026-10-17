@@ -140,7 +140,7 @@ private extension ItemQueryOperations {
         date: Date,
         ledgerIdentifier: LedgerIdentifier
     ) throws -> Item? {
-        let descriptor = FetchDescriptor.items(
+        let descriptor = ItemFetchDescriptor.items(
             .dateIsAfter(date),
             order: .forward,
             ledgerIdentifier: ledgerIdentifier
@@ -153,7 +153,7 @@ private extension ItemQueryOperations {
         date: Date,
         ledgerIdentifier: LedgerIdentifier
     ) throws -> Item? {
-        let descriptor = FetchDescriptor.items(.dateIsBefore(date), ledgerIdentifier: ledgerIdentifier)
+        let descriptor = ItemFetchDescriptor.items(.dateIsBefore(date), ledgerIdentifier: ledgerIdentifier)
         return try context.fetchFirst(descriptor)
     }
 }

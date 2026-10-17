@@ -171,6 +171,40 @@
         }
       }
     },
+    "A ledger with this name already exists. Choose a different name." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A ledger with this name already exists. Choose a different name."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ya existe un libro con este nombre. Elige otro nombre."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un registre porte déjà ce nom. Choisissez un autre nom."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "同じ名前の帳簿があります。別の名前を入力してください。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已存在同名账簿，请选择其他名称。"
+          }
+        }
+      }
+    },
     "A newer version of Incomes created this file. Update Incomes and try again." : {
       "localizations" : {
         "en" : {
@@ -205,105 +239,36 @@
         }
       }
     },
-    "Account" : {
-      "extractionState" : "stale",
+    "An item belongs to conflicting ledgers. Its balance is unavailable." : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Account"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "口座"
+            "value" : "An item belongs to conflicting ledgers. Its balance is unavailable."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Cuenta"
+            "value" : "Un elemento pertenece a libros en conflicto. Su saldo no está disponible."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Compte"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "账户"
-          }
-        }
-      }
-    },
-    "Account information cannot be changed through ordinary tag maintenance." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Account information cannot be changed through ordinary tag maintenance."
+            "value" : "Un élément appartient à des registres en conflit. Son solde est indisponible."
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "通常のタグ整理では口座情報を変更できません。"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "La información de la cuenta no se puede cambiar mediante el mantenimiento normal de etiquetas."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Les opérations courantes sur les étiquettes ne peuvent pas modifier les informations du compte."
+            "value" : "複数の帳簿に所属する項目があります。残高を表示できません。"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "常规标签维护无法更改账户信息。"
-          }
-        }
-      }
-    },
-    "An item belongs to conflicting accounts. Its balance is unavailable." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "An item belongs to conflicting accounts. Its balance is unavailable."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "複数の口座に所属する項目があります。残高を表示できません。"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Un elemento pertenece a cuentas en conflicto. Su saldo no está disponible."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Un élément appartient à des comptes en conflit. Son solde est indisponible."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "某个项目属于存在冲突的账户，无法显示其余额。"
+            "value" : "某个项目属于存在冲突的账簿，无法显示其余额。"
           }
         }
       }
@@ -342,172 +307,206 @@
         }
       }
     },
-    "Conflicting Account" : {
+    "Conflicting Ledger" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Conflicting Account"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "競合している口座"
+            "value" : "Conflicting Ledger"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Cuenta en conflicto"
+            "value" : "Libro en conflicto"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Compte en conflit"
+            "value" : "Registre en conflit"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "競合している帳簿"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "账户冲突"
+            "value" : "账簿冲突"
           }
         }
       }
     },
-    "Conflicting account information was found. Your records have not been reassigned." : {
+    "Conflicting ledger information was found. Your records have not been reassigned." : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Conflicting account information was found. Your records have not been reassigned."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "口座情報の競合が見つかりました。項目の所属口座は変更していません。"
+            "value" : "Conflicting ledger information was found. Your records have not been reassigned."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Se ha encontrado información de cuenta en conflicto. Tus registros no se han reasignado."
+            "value" : "Se ha encontrado información de libro en conflicto. Tus registros no se han reasignado."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Des informations de compte en conflit ont été détectées. Vos données n’ont pas été réaffectées."
+            "value" : "Des informations de registre en conflit ont été détectées. Vos données n’ont pas été réaffectées."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "帳簿情報の競合が見つかりました。項目の所属帳簿は変更していません。"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "发现账户信息冲突。您的记录未被重新分配。"
+            "value" : "发现账簿信息冲突。您的记录未被重新分配。"
           }
         }
       }
     },
-    "Default Account" : {
+    "Default Ledger" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Default Account"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "デフォルト口座"
+            "value" : "Default Ledger"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Cuenta predeterminada"
+            "value" : "Libro predeterminado"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Compte par défaut"
+            "value" : "Registre par défaut"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "標準帳簿"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "默认账户"
+            "value" : "默认账簿"
           }
         }
       }
     },
-    "Enter an account name." : {
+    "Enter a ledger name." : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Enter an account name."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "口座名を入力してください。"
+            "value" : "Enter a ledger name."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Introduce un nombre de cuenta."
+            "value" : "Introduce un nombre de libro."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Saisissez un nom de compte."
+            "value" : "Saisissez un nom de registre."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "帳簿名を入力してください。"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "请输入账户名称。"
+            "value" : "请输入账簿名称。"
           }
         }
       }
     },
-    "Finish the current edit before changing accounts." : {
+    "Finish the current edit before changing ledgers." : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Finish the current edit before changing accounts."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "現在の編集を完了してから口座を変更してください。"
+            "value" : "Finish the current edit before changing ledgers."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Finaliza la edición actual antes de cambiar de cuenta."
+            "value" : "Finaliza la edición actual antes de cambiar de libro."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Terminez la modification en cours avant de changer de compte."
+            "value" : "Terminez la modification en cours avant de changer de registre."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "現在の編集を完了してから帳簿を変更してください。"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "切换账户前，请先完成当前编辑。"
+            "value" : "切换账簿前，请先完成当前编辑。"
+          }
+        }
+      }
+    },
+    "Finish the current edit before organizing tags." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finish the current edit before organizing tags."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finaliza la edición actual antes de organizar las etiquetas."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terminez la modification en cours avant d’organiser les étiquettes."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "現在の編集を完了してからタグを整理してください。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请先完成当前编辑，再整理标签。"
           }
         }
       }
@@ -610,6 +609,75 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "文件中第 %lld 个项目包含无效的值。"
+          }
+        }
+      }
+    },
+    "Ledger" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ledger"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Libro"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Registre"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "帳簿"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "账簿"
+          }
+        }
+      }
+    },
+    "Ledger information cannot be changed through ordinary tag maintenance." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ledger information cannot be changed through ordinary tag maintenance."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La información del libro no se puede cambiar mediante el mantenimiento normal de etiquetas."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les opérations courantes sur les étiquettes ne peuvent pas modifier les informations du registre."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "通常のタグ整理では帳簿情報を変更できません。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "常规标签维护无法更改账簿信息。"
           }
         }
       }
@@ -784,36 +852,36 @@
         }
       }
     },
-    "Premium is required to change additional accounts. You can still view, select, and export them." : {
+    "Premium is required to change additional ledgers. You can still view, select, and export them." : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Premium is required to change additional accounts. You can still view, select, and export them."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "追加口座の変更にはPremiumが必要です。閲覧・切り替え・書き出しは引き続き利用できます。"
+            "value" : "Premium is required to change additional ledgers. You can still view, select, and export them."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Se necesita Premium para modificar cuentas adicionales. Puedes seguir consultándolas, seleccionándolas y exportándolas."
+            "value" : "Se necesita Premium para modificar libros adicionales. Puedes seguir consultándolas, seleccionándolas y exportándolas."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Premium est nécessaire pour modifier les comptes supplémentaires. Vous pouvez toujours les consulter, les sélectionner et les exporter."
+            "value" : "Premium est nécessaire pour modifier les registres supplémentaires. Vous pouvez toujours les consulter, les sélectionner et les exporter."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "追加帳簿の変更にはPremiumが必要です。閲覧・切り替え・書き出しは引き続き利用できます。"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "更改额外账户需要 Premium。您仍可查看、选择和导出这些账户。"
+            "value" : "更改额外账簿需要 Premium。您仍可查看、选择和导出这些账簿。"
           }
         }
       }
@@ -1056,74 +1124,6 @@
         }
       }
     },
-    "This account identifier is invalid." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "This account identifier is invalid."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "この口座の識別子は無効です。"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "El identificador de esta cuenta no es válido."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "L’identifiant de ce compte n’est pas valide."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "此账户的标识符无效。"
-          }
-        }
-      }
-    },
-    "This account's information is unavailable. Wait for sync or restore its backup." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "This account's information is unavailable. Wait for sync or restore its backup."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "この口座の情報を利用できません。同期を待つか、バックアップを復元してください。"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "La información de esta cuenta no está disponible. Espera a que se sincronice o restaura su copia de seguridad."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Les informations de ce compte sont indisponibles. Attendez la synchronisation ou restaurez sa sauvegarde."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "此账户的信息不可用。请等待同步或从备份恢复。"
-          }
-        }
-      }
-    },
     "This entry changed after the last balance preview. Preview the balance again." : {
       "localizations" : {
         "en" : {
@@ -1260,6 +1260,74 @@
         }
       }
     },
+    "This ledger identifier is invalid." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This ledger identifier is invalid."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El identificador de este libro no es válido."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L’identifiant de ce registre n’est pas valide."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "この帳簿の識別子は無効です。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此账簿的标识符无效。"
+          }
+        }
+      }
+    },
+    "This ledger's information is unavailable. Wait for sync or restore its backup." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This ledger's information is unavailable. Wait for sync or restore its backup."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La información de este libro no está disponible. Espera a que se sincronice o restaura su copia de seguridad."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les informations de ce registre sont indisponibles. Attendez la synchronisation ou restaurez sa sauvegarde."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "この帳簿の情報を利用できません。同期を待つか、バックアップを復元してください。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此账簿的信息不可用。请等待同步或从备份恢复。"
+          }
+        }
+      }
+    },
     "This version of the file is not supported." : {
       "localizations" : {
         "en" : {
@@ -1362,36 +1430,36 @@
         }
       }
     },
-    "Unavailable Account" : {
+    "Unavailable Ledger" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Unavailable Account"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "利用できない口座"
+            "value" : "Unavailable Ledger"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Cuenta no disponible"
+            "value" : "Libro no disponible"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Compte indisponible"
+            "value" : "Registre indisponible"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "利用できない帳簿"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "账户不可用"
+            "value" : "账簿不可用"
           }
         }
       }
@@ -1464,40 +1532,6 @@
         }
       }
     },
-    "Your other changes are still unsaved. Finish saving them before changing entries." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Your other changes are still unsaved. Finish saving them before changing entries."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tus otros cambios aún no se han guardado. Termina de guardarlos antes de modificar las entradas."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Vos autres modifications ne sont pas encore enregistrées. Enregistrez-les avant de modifier les entrées."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ほかの変更がまだ保存されていません。保存を完了してから項目を変更してください。"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "其他更改尚未保存。请先保存这些更改，再修改条目。"
-          }
-        }
-      }
-    },
     "Your other changes are still unsaved. Finish saving them before adding an entry." : {
       "localizations" : {
         "en" : {
@@ -1528,6 +1562,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "其他更改尚未保存。请先保存这些更改，再添加条目。"
+          }
+        }
+      }
+    },
+    "Your other changes are still unsaved. Finish saving them before changing entries." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your other changes are still unsaved. Finish saving them before changing entries."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tus otros cambios aún no se han guardado. Termina de guardarlos antes de modificar las entradas."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vos autres modifications ne sont pas encore enregistrées. Enregistrez-les avant de modifier les entrées."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ほかの変更がまだ保存されていません。保存を完了してから項目を変更してください。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "其他更改尚未保存。请先保存这些更改，再修改条目。"
           }
         }
       }

@@ -50,7 +50,7 @@ public enum UpcomingPaymentOperations {
         }
 
         let calendar = Calendar.current
-        var descriptor = FetchDescriptor.items(
+        var descriptor = ItemFetchDescriptor.items(
             .outgoIsGreaterThanOrEqualTo(amount: settings.thresholdAmount, onOrAfter: now),
             order: .forward
         )

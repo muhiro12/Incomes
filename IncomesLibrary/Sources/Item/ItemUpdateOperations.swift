@@ -103,7 +103,7 @@ public enum ItemUpdateOperations {
         context: ModelContext,
         item: Item,
         values: ItemStoredValues,
-        descriptor: FetchDescriptor<Item>
+        descriptor: ItemFetchDescriptor
     ) throws {
         let dateShift = Calendar.current.dateComponents(
             [.year, .month, .day],

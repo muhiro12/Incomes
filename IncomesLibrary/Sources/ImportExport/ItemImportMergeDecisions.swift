@@ -14,18 +14,18 @@ public struct ItemImportMergeDecisions: Equatable, Sendable {
     public var resolutions: [ItemImportChangeGroupKey: Resolution]
     /// Positions in `ItemImportDifference.additions` that must not be added.
     public var excludedAdditionIndices: Set<Int>
-    /// Existing account names stay unchanged unless the review explicitly selects the file.
-    public var useFileAccountNames: Bool
+    /// Existing ledger names stay unchanged unless the review explicitly selects the file.
+    public var useFileLedgerNames: Bool
 
     /// Creates decisions that keep current items and add every addition by default.
     public init(
         resolutions: [ItemImportChangeGroupKey: Resolution] = [:],
         excludedAdditionIndices: Set<Int> = [],
-        useFileAccountNames: Bool = false
+        useFileLedgerNames: Bool = false
     ) {
         self.resolutions = resolutions
         self.excludedAdditionIndices = excludedAdditionIndices
-        self.useFileAccountNames = useFileAccountNames
+        self.useFileLedgerNames = useFileLedgerNames
     }
 }
 

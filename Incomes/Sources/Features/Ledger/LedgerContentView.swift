@@ -5,9 +5,9 @@ import SwiftUI
 struct LedgerContentView: View {
     @AppStorage(\.isSubscribeOn)
     private var isSubscribeOn
-    @Query private var items: [Item]
+    @LedgerItemQuery private var items: [Item]
     let issue: LedgerError?
-    let accountMenu: LedgerSelectionMenu
+    let ledgerMenu: LedgerSelectionMenu
     let router: MainNavigationRouter
     let ledgerIdentifier: LedgerIdentifier
 
@@ -16,7 +16,7 @@ struct LedgerContentView: View {
         VStack(spacing: .zero) {
             MainNavigationView(
                 ledgerIdentifier: ledgerIdentifier,
-                accountMenu: accountMenu,
+                ledgerMenu: ledgerMenu,
                 router: router
             )
             if case .failure(let error) = result {
@@ -24,7 +24,7 @@ struct LedgerContentView: View {
             } else if let issue {
                 Text(issue.localizedDescription).font(.footnote).padding()
             } else if !LedgerAccessOperations.canEdit(ledgerIdentifier, isPremium: isSubscribeOn) {
-                Text("Read Only: Premium is required to edit this account.").font(.footnote).padding()
+                Text("Read Only: Premium is required to edit this ledger.").font(.footnote).padding()
             }
         }
         .environment(\.ledgerIdentifier, ledgerIdentifier)
@@ -39,12 +39,12 @@ struct LedgerContentView: View {
     init(
         ledgerIdentifier: LedgerIdentifier,
         issue: LedgerError?,
-        accountMenu: LedgerSelectionMenu,
+        ledgerMenu: LedgerSelectionMenu,
         router: MainNavigationRouter
     ) {
         self.ledgerIdentifier = ledgerIdentifier
         self.issue = issue
-        self.accountMenu = accountMenu
+        self.ledgerMenu = ledgerMenu
         self.router = router
         _items = .init(.items(.all, ledgerIdentifier: ledgerIdentifier))
     }

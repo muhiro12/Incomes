@@ -18,7 +18,7 @@ struct ContentView {
     @Environment(\.scenePhase)
     private var scenePhase
 
-    @Query(.items(.dateIsAfter(Date.now), order: .forward))
+    @Query(.defaultLedgerItems(.dateIsAfter(Date.now), order: .forward))
     private var upcomingCandidates: [Item]
     @State private var phoneSyncClient = PhoneSyncClient.shared
     @State private var model: WatchHomeScreenModel = .init()
@@ -72,7 +72,7 @@ private extension ContentView {
         model: WatchHomeScreenModel
     ) -> some View {
         List {
-            Text("Default Account").font(.caption).foregroundStyle(.secondary)
+            Text("Default Ledger").font(.caption).foregroundStyle(.secondary)
             upcomingSection(model: model)
             syncStatusSection(model: model)
             browseSection()

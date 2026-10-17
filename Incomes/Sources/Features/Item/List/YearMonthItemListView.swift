@@ -86,7 +86,7 @@ private extension YearMonthItemListView {
         TagQueryOperations.yearStrings(for: tag, ledgerIdentifier: ledgerIdentifier)
     }
 
-    var summaryItemsDescriptor: FetchDescriptor<Item>? {
+    var summaryItemsDescriptor: ItemFetchDescriptor? {
         guard let yearString = yearStrings.first else {
             return nil
         }

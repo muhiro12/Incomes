@@ -3,8 +3,13 @@ import SwiftData
 
 /// Manages independent books through dedicated Tags without extending the stored model.
 public enum LedgerOperations {
-    /// Includes empty books and keeps duplicate identities visible as conflicts.
-    public static func accounts(context: ModelContext) throws -> [LedgerRecord] {
+    /// A ledger Tag keeps its native model identity through edits and renames.
+    public static func identifier(for tag: Tag) -> LedgerIdentifier? {
+        LedgerTagStorage.identifier(for: tag)
+    }
+
+    /// Includes empty ledgers and surfaces conflicting Item membership.
+    public static func ledgers(context: ModelContext) throws -> [LedgerRecord] {
         let tags = try context.fetch(.tags(.typeIs(.ledger)))
         var identifiers = Set(tags.compactMap(LedgerTagStorage.identifier(for:)))
         if try context.fetch(.allLedgerItems()).contains(where: { $0.ledgerIdentifier == .conflicting }) {
@@ -20,8 +25,8 @@ public enum LedgerOperations {
             }
     }
 
-    /// Resolves portable identity without matching an editable name.
-    public static func account(_ identifier: LedgerIdentifier, context: ModelContext) throws -> LedgerRecord {
+    /// Resolves the Tag's store-local identity without matching an editable name.
+    public static func ledger(_ identifier: LedgerIdentifier, context: ModelContext) throws -> LedgerRecord {
         record(identifier: identifier, tags: try context.fetch(.tags(.typeIs(.ledger))))
     }
 
@@ -29,15 +34,20 @@ public enum LedgerOperations {
     public static func create(context: ModelContext, name: String) throws -> LedgerRecord {
         try requireCleanContext(context)
         let name = try validatedName(name)
-        let identifier = LedgerIdentifier()
+        guard try context.fetch(.tags(.nameIs(name, type: .ledger))).isEmpty else {
+            throw LedgerError.duplicateName
+        }
         let autosaveEnabled = context.autosaveEnabled
         context.autosaveEnabled = false
         defer {
             context.autosaveEnabled = autosaveEnabled
         }
         do {
-            _ = Tag.createLedger(context: context, identifier: identifier, name: name)
+            let tag = Tag.createLedger(context: context, name: name)
             try context.save()
+            guard let identifier = LedgerTagStorage.identifier(for: tag) else {
+                throw LedgerError.invalidIdentifier
+            }
             return .init(id: identifier, name: name)
         } catch {
             context.rollback()
@@ -50,6 +60,9 @@ public enum LedgerOperations {
         try requireCleanContext(context)
         let name = try validatedName(name)
         let metadata = try metadataForMutation(identifier, context: context)
+        guard try context.fetch(.tags(.nameIs(name, type: .ledger))).allSatisfy({ $0.id == metadata.id }) else {
+            throw LedgerError.duplicateName
+        }
         let autosaveEnabled = context.autosaveEnabled
         context.autosaveEnabled = false
         defer {
@@ -66,14 +79,15 @@ public enum LedgerOperations {
 
     /// Entitlement remains adapter-owned; missing or conflicting books refuse mutation.
     public static func requireAvailable(_ identifier: LedgerIdentifier, context: ModelContext) throws {
-        if let issue = try account(identifier, context: context).issue {
+        if let issue = try ledger(identifier, context: context).issue {
             throw issue
         }
     }
 }
 
 extension LedgerOperations {
-    static func importMetadata(_ value: IncomesFileLedger, context: ModelContext) throws {
+    @discardableResult
+    static func importMetadata(_ value: IncomesFileLedger, context: ModelContext) throws -> Tag {
         guard value.id != .default, value.id != .conflicting, !value.id.rawValue.isEmpty else {
             throw LedgerError.invalidIdentifier
         }
@@ -87,9 +101,9 @@ extension LedgerOperations {
         }
         if let metadata = matches.first {
             metadata.rename(storedName: name)
-        } else {
-            _ = Tag.createLedger(context: context, identifier: value.id, name: name)
+            return metadata
         }
+        return Tag.createLedger(context: context, name: name)
     }
 
     static func metadataForMutation(_ identifier: LedgerIdentifier, context: ModelContext) throws -> Tag {
@@ -120,12 +134,12 @@ extension LedgerOperations {
 
     static func record(identifier: LedgerIdentifier, tags: [Tag]) -> LedgerRecord {
         if identifier == .default {
-            return .init(id: identifier, name: String(localized: "Default Account", bundle: .module))
+            return .init(id: identifier, name: String(localized: "Default Ledger", bundle: .module))
         }
         if identifier == .conflicting {
             return .init(
                 id: identifier,
-                name: String(localized: "Conflicting Account", bundle: .module),
+                name: String(localized: "Conflicting Ledger", bundle: .module),
                 issue: .conflictingOwnership
             )
         }
@@ -133,14 +147,14 @@ extension LedgerOperations {
         guard matches.count <= 1 else {
             return .init(
                 id: identifier,
-                name: String(localized: "Conflicting Account", bundle: .module),
+                name: String(localized: "Conflicting Ledger", bundle: .module),
                 issue: .duplicateIdentifier
             )
         }
         guard let metadata = matches.first else {
             return .init(
                 id: identifier,
-                name: String(localized: "Unavailable Account", bundle: .module),
+                name: String(localized: "Unavailable Ledger", bundle: .module),
                 issue: .unavailable
             )
         }
