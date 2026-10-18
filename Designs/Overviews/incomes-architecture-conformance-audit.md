@@ -2,6 +2,10 @@
 
 Current as of June 22, 2026.
 
+Project-file references were updated on October 18, 2026 for the
+[JSON format migration](../Architecture/xcode-project-format.md). The architecture
+audit date remains June 22, 2026.
+
 ## Purpose
 
 This note records whether the current repository still follows the accepted
@@ -50,7 +54,7 @@ contract and watch UI state handling.
   - `Incomes/Sources/App/IncomesLibrary.swift`
   - `Watch/Sources/App/IncomesLibrary.swift`
   - `Widgets/Sources/App/IncomesLibrary.swift`
-  - `Incomes.xcodeproj/project.pbxproj`
+  - `Incomes.xcodeproj/project.xcproj`
 
 ### Tests remain library-centered
 
@@ -60,7 +64,7 @@ contract and watch UI state handling.
 - Representative files:
   - `IncomesLibrary/Package.swift`
   - `IncomesLibrary/Tests/IncomesLibrary.xctestplan`
-  - `Incomes.xcodeproj/project.pbxproj`
+  - `Incomes.xcodeproj/project.xcproj`
 
 ## Accepted Adaptations
 

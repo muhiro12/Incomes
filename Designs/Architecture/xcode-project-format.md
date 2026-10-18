@@ -26,10 +26,15 @@ identified these dependencies on the legacy file or its property-list syntax:
 | `ci_scripts/tests/test_push_verification.py` | Retain historical receipts and test JSON configuration hashes. |
 | `Designs/Overviews/incomes-architecture-conformance-audit.md` | Update current configuration references after conversion. |
 
-Bundle-level references in shared schemes, Periphery, SwiftLint resolution, and
-Xcode Cloud continue to address `Incomes.xcodeproj`. No new CI workflow is needed.
+Bundle-level references in shared schemes, SwiftLint resolution, and Xcode Cloud
+continue to address `Incomes.xcodeproj`. No new CI workflow is needed.
 The Xcode Cloud manifest, shared schemes, entitlements, and package resolution
 must remain unchanged by conversion.
+
+The optional `.periphery.yml` also addresses the bundle. Periphery was not
+installed for this qualification, and that existing configuration names the
+absent `IncomesTests` target. Its scan and external parser compatibility remain
+unqualified; it is not part of the documented repository-rule entrypoint.
 
 The repository adapter uses Foundation's native JSON5 reader because Xcode's
 JSON includes trailing commas. `plutil` remains the legacy-format reader. Missing,
@@ -60,6 +65,52 @@ Xcode can regenerate internal object identifiers and normalize configuration.
 Xcode Cloud must be checked on an authorized pushed candidate. A local build or
 archive-configuration inspection does not prove a successful cloud archive,
 upload, or distribution.
+
+## Local qualification on October 18, 2026
+
+The source baseline was `8a2ebce7`. Commit `63c5b1b2` adds the compatibility
+adapters; `ef81ac3c` contains only the project-format conversion. Reverting
+`ef81ac3c` restores the original configuration. A reverse-patch dry run passed.
+
+The selected local toolchains were Xcode 27.2 (`27B5038j`) and Xcode 27.1
+(`27A9275`). Xcode 27 is Apple's documented compatibility floor; Xcode 27.0 was
+not installed for this run, so the directly verified floor is Xcode 27.1.
+
+- Native inspection compared 21 before/after views covering targets, package
+  requirements and product owners, folder references, all build phases and
+  their source/resource/framework memberships, embedding destinations, and
+  project/target settings in both Debug and Release. Navigator object IDs and
+  framework/product listing order were normalized within their owners. No
+  unresolved semantic differences remained; build-phase order was preserved.
+- The Xcode-native settings integration reported identical values for all
+  1,712 settings across Incomes, Widgets, and Watch at the original destination.
+- Shared schemes and the Xcode Cloud manifest are byte-identical to their
+  pre-conversion versions. App source, entitlements, deployment targets,
+  persistence code, and tracked package resolution were not changed.
+- Xcode 27.2 built Incomes, Widgets, and Watch successfully. The IncomesLibrary
+  test plan passed all 1,609 tests, with zero failures, skips, or unrun tests.
+- All 45 verification-adapter tests passed, including legacy compatibility,
+  JSON5 parsing, configuration ambiguity, invalid package boundaries, and
+  source-commit hash binding. The complete repository-rule check passed before
+  and after conversion, including SwiftLint 0.65.1 over 890 tracked Swift files.
+- Xcode 27.1 discovered all four schemes, three product targets, and both build
+  configurations from the converted project with package updates disabled. An
+  Incomes Simulator build, including its Watch and Widgets dependencies,
+  succeeded with signing disabled for compilation only. The JSON5 verification
+  adapter also passed under this toolchain.
+- Both toolchains evaluated the Incomes archive configuration as Release for
+  their iOS device SDKs, with `SKIP_INSTALL=NO` and the original entitlements
+  path. This inspects archive settings without creating or signing an archive.
+
+The separate Xcode 27.1 build initially stopped before compilation because the
+existing LicenseList plugin expects a `SourcePackages` directory beside its
+build tree. A build-local link to the same resolved package cache restored that
+layout; no package source or project configuration was changed to fix it.
+
+The original Xcode scheme and destination were restored. This is local
+qualification; the formal signed archive and the existing Xcode Cloud path
+remain unrun until an authorized candidate is available. The release-toolchain
+choice is unchanged, and Issue #400 remains open for that evidence.
 
 ## References
 
