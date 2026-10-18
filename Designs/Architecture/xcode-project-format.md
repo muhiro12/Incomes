@@ -41,10 +41,19 @@ Periphery itself was not installed for this qualification, so its scan and
 external parser compatibility remain unqualified. It is not part of the
 documented repository-rule entrypoint.
 
-The repository adapter uses Foundation's native JSON5 reader because Xcode's
-JSON includes trailing commas. `plutil` remains the legacy-format reader. Missing,
-malformed, or ambiguous configurations fail verification. No Python parsing
-dependency or project generator is added.
+The repository adapter normalizes both formats with Apple's `plutil` before
+using Python's strict JSON reader. Probes confirmed the actual converter output,
+comments, trailing commas, escaped strings, and URL preservation in the selected
+environment. Missing, malformed, ambiguous, or mismatched configurations fail
+verification. No Python parsing dependency, Swift compiler invocation, global
+module-cache write, or project generator is needed.
+
+Package checks resolve declared products and their actual Frameworks links to
+the canonical package in both formats. A same-named product from another
+package or a declaration without a link cannot satisfy the Incomes dependency.
+Legacy package and target references are followed from the project root;
+unattached objects cannot satisfy dependency checks. Watch and Widgets cannot
+bypass the umbrella boundary through a direct framework reference.
 
 ## Conversion and rollback
 
@@ -86,8 +95,10 @@ not installed for this run, so the directly verified floor is Xcode 27.1.
   requirements and product owners, folder references, all build phases and
   their source/resource/framework memberships, embedding destinations, and
   project/target settings in both Debug and Release. Navigator object IDs and
-  framework/product listing order were normalized within their owners. No
-  unresolved semantic differences remained; build-phase order was preserved.
+  framework/product listing order were normalized within their owners. These
+  comparisons establish matching configuration values and memberships, with
+  build-phase order preserved. They do not establish identical framework input
+  order; the converter's ordering changes are recorded below.
 - The Xcode-native settings integration reported identical values for all
   1,712 settings across Incomes, Widgets, and Watch at the original destination.
 - Shared schemes and the Xcode Cloud manifest are byte-identical to their
@@ -113,15 +124,47 @@ existing LicenseList plugin expects a `SourcePackages` directory beside its
 build tree. A build-local link to the same resolved package cache restored that
 layout; no package source or project configuration was changed to fix it.
 
+An additional native round trip confirmed these Frameworks input-order changes:
+
+- Incomes: `MHPlatform, IncomesLibrary, MHDesign` became
+  `IncomesLibrary, MHDesign, MHPlatform`.
+- Widgets: `SwiftUI, IncomesLibrary, MHDesign, WidgetKit` became
+  `IncomesLibrary, MHDesign, SwiftUI, WidgetKit`.
+- Watch: `IncomesLibrary, MHPreferences, MHPreferencesUI, MHDesign` became
+  `IncomesLibrary, MHDesign, MHPreferences, MHPreferencesUI`.
+
+Apple's schema encoder also sorts package-product declarations. The membership
+comparison therefore must not be interpreted as proof of original linker input
+order. The converter output is retained, and the successful builds and library
+tests above are the observed application evidence for that configuration.
+
+Subsequent checker refinement separately covers missing Frameworks edges,
+incorrect product owners, unattached legacy objects, and adapter framework
+bypasses. Both the original legacy configuration and the converted JSON pass
+the strengthened checks. The earlier failed `plutil` probe did not establish
+format incompatibility: rereading the unchanged JSON succeeded. Replacing the
+Swift-based reader also removes its reproducible global compiler-cache access
+failure during ordinary restricted execution.
+All 51 tooling tests and the full repository-rule entrypoint passed in that
+restricted context, including SwiftLint over the same 890 tracked Swift files.
+
 The original Xcode scheme and destination were restored. The Incomes-specific
 configuration work and local qualification are complete. Formal signed archive
 and Xcode Cloud execution are deferred, and the release-toolchain choice is
 unchanged. Issue #400 remains open while the implementation is unpublished;
 the deferred release checks are not a current completion gate.
 
+The earlier app build and library-test results are migration-run observations,
+not a publication receipt for subsequent tooling commits. Prepare current-source
+evidence through the [push verification pilot](push-verification-pilot.md) before
+any separately authorized push. Shared verification-skill modernization remains
+separate; Incomes currently uses its repository-owned evidence adapter and
+matcher, while other adopters may delegate to the shared helpers.
+
 ## References
 
 - [Apple project-format conversion and compatibility](https://developer.apple.com/documentation/xcode/updating-your-xcode-project-configuration-file-format)
 - [Apple project-format library](https://github.com/apple/xcode-project-format)
+- [Apple package-product encoding](https://github.com/apple/xcode-project-format/blob/main/Sources/Library/Schema/Target/Target.swift)
 - [Periphery configuration definition](https://github.com/peripheryapp/periphery/blob/master/Sources/Configuration/Configuration.swift)
 - [Periphery scheme selection](https://github.com/peripheryapp/periphery/blob/master/Sources/Frontend/Commands/ScanCommand.swift)
