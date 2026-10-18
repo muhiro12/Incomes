@@ -25,7 +25,7 @@ enum IncomesUISmokeLaunchSupport {
             )
         )
 
-        try SampleDataOperations.seed(
+        try SampleDataOperations.seedAndSave(
             context: context,
             profile: .standard,
             ifEmptyOnly: true

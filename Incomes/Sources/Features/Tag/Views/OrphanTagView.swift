@@ -1,6 +1,9 @@
+import SwiftData
 import SwiftUI
 
 struct OrphanTagView: View {
+    @Environment(\.modelContext)
+    private var context
     @Environment(\.ledgerIdentifier)
     private var ledgerIdentifier
 
@@ -8,6 +11,7 @@ struct OrphanTagView: View {
     private var tag
 
     @State private var isDeleteDialogPresented = false
+    @State private var errorMessage: String?
 
     let onDelete: () -> Void
 
@@ -36,19 +40,16 @@ struct OrphanTagView: View {
             isPresented: $isDeleteDialogPresented
         ) {
             Button(role: .destructive) {
-                guard
-                    LedgerAccessOperations.canEdit(
-                        ledgerIdentifier,
-                        isPremium: LedgerMutationAccess.isPremium
-                    )
-                else {
-                    return
-                }
-                if TagMutationOperations.delete(tag: tag) {
-                    onDelete()
-                    Haptic.success.impact()
-                } else {
-                    Haptic.warning.impact()
+                do {
+                    try LedgerMutationAccess.requireEditing([ledgerIdentifier])
+                    if try TagMutationOperations.deleteAndSave(context: context, tag: tag) {
+                        onDelete()
+                        Haptic.success.impact()
+                    } else {
+                        Haptic.warning.impact()
+                    }
+                } catch {
+                    errorMessage = ErrorMessageOperations.message(from: error)
                 }
             } label: {
                 Text("Delete")
@@ -62,6 +63,20 @@ struct OrphanTagView: View {
             Text("Are you sure you want to delete this orphan tag? This action cannot be undone.")
         }
         .navigationTitle(tag.displayName)
+        .alert("Unable to Organize Tags", isPresented: .init(
+            get: { errorMessage != nil },
+            set: { isPresented in
+                if !isPresented {
+                    errorMessage = nil
+                }
+            }
+        )) {
+            Button("OK", role: .cancel) {
+                errorMessage = nil
+            }
+        } message: {
+            Text(errorMessage ?? "")
+        }
         .toolbar {
             ToolbarItem {
                 Button(role: .destructive) {

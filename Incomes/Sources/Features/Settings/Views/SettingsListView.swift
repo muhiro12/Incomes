@@ -29,6 +29,7 @@ struct SettingsListView {
     private var isDebugOn: Bool
 
     @State private var model: SettingsScreenModel = .init()
+    @State private var errorMessage: String?
 
     private let navigateToRoute: (IncomesRoute) -> Void
 
@@ -79,6 +80,20 @@ extension SettingsListView: View {
         }
         .scrollDismissesKeyboard(.interactively)
         .navigationTitle("Settings")
+        .alert("Error", isPresented: .init(
+            get: { errorMessage != nil },
+            set: { isPresented in
+                if !isPresented {
+                    errorMessage = nil
+                }
+            }
+        )) {
+            Button("OK", role: .cancel) {
+                errorMessage = nil
+            }
+        } message: {
+            Text(errorMessage ?? "")
+        }
         .toolbar {
             ToolbarItem {
                 CloseButton()
@@ -107,7 +122,7 @@ extension SettingsListView: View {
                             "delete_all.failed",
                             metadata: IncomesLogging.errorMetadata(error)
                         )
-                        assertionFailure(error.localizedDescription)
+                        errorMessage = ErrorMessageOperations.message(from: error)
                     }
                 }
             } label: {
@@ -136,7 +151,7 @@ extension SettingsListView: View {
                             ("has_debug_data", IncomesLogging.bool(model.hasDebugData))
                         )
                     )
-                    try DataMaintenanceOperations.deleteDebugData(context: context)
+                    try DataMaintenanceOperations.deleteDebugDataAndSave(context: context)
                     Haptic.success.impact()
                     model.loadStatus(context: context)
                     model.dismissDestructiveAction()
@@ -146,7 +161,7 @@ extension SettingsListView: View {
                         "debug_data.delete_failed",
                         metadata: IncomesLogging.errorMetadata(error)
                     )
-                    assertionFailure(error.localizedDescription)
+                    errorMessage = ErrorMessageOperations.message(from: error)
                 }
             } label: {
                 Text("Delete")

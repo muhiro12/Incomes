@@ -53,6 +53,25 @@ public enum SampleDataOperations {
         )
     }
 
+    /// Saves a sample profile atomically before a Debug or preview surface reports success.
+    public static func seedAndSave(
+        context: ModelContext,
+        profile: Profile,
+        baseDate: Date = .now,
+        locale: Locale = .current,
+        ifEmptyOnly: Bool = false
+    ) throws {
+        try ItemMutationSupport.performAndSave(context: context) {
+            try seed(
+                context: context,
+                profile: profile,
+                baseDate: baseDate,
+                locale: locale,
+                ifEmptyOnly: ifEmptyOnly
+            )
+        }
+    }
+
     /// Returns whether sample data exists.
     public static func hasDebugData(context: ModelContext) throws -> Bool {
         try ItemSampleDataSeeder.hasDebugData(context: context)

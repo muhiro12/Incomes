@@ -8,29 +8,47 @@ enum ItemMutationSupport {
         .refreshWatchSnapshot
     ]
 
-    static func performAndSave(
+    static func performAndSave<Value>(
         context: ModelContext,
-        operation: () throws -> MutationOutcome
-    ) throws -> MutationOutcome {
+        pendingChangesError: any Error = ItemMutationError.pendingChanges,
+        operation: () throws -> Value
+    ) throws -> Value {
         guard !context.hasChanges else {
-            throw ItemMutationError.pendingChanges
+            throw pendingChangesError
         }
         guard context.container.configurations.allSatisfy(\.allowsSave) else {
             throw CocoaError(.fileWriteNoPermission)
         }
-        let autosaveEnabled = context.autosaveEnabled
-        context.autosaveEnabled = false
-        defer {
-            context.autosaveEnabled = autosaveEnabled
+        return try MutationPersistenceSupport.commit(context: context, operation: operation)
+    }
+
+    static func performAndSaveCreatedItems<Value>(
+        context: ModelContext,
+        pendingChangesError: any Error = ItemMutationError.pendingChanges,
+        operation: () throws -> MutationResult<Value>
+    ) throws -> MutationResult<Value> {
+        let (mutation, createdItems) = try performAndSave(
+            context: context,
+            pendingChangesError: pendingChangesError
+        ) {
+            let mutation = try operation()
+            let createdItems = context.insertedModelsArray.compactMap { model in
+                model as? Item
+            }
+            return (mutation, createdItems)
         }
-        do {
-            let outcome = try operation()
-            try context.save()
-            return outcome
-        } catch {
-            context.rollback()
-            throw error
-        }
+        return .init(
+            value: mutation.value,
+            outcome: .init(
+                changedIDs: .init(
+                    created: Set(createdItems.map(\.persistentModelID)),
+                    updated: mutation.outcome.changedIDs.updated,
+                    deleted: mutation.outcome.changedIDs.deleted
+                ),
+                affectedDateRange: mutation.outcome.affectedDateRange,
+                followUpHints: mutation.outcome.followUpHints
+            )
+        )
     }
 
     static func dateRange(from dates: [Date]) -> ClosedRange<Date>? {

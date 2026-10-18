@@ -89,15 +89,17 @@ extension DuplicateTagView {
                 guard let selectedTag else {
                     return
                 }
-                guard
-                    LedgerAccessOperations.canEdit(
-                        ledgerIdentifier,
-                        isPremium: LedgerMutationAccess.isPremium
-                    )
-                else { return }
-                TagMutationOperations.delete(tag: selectedTag)
-                self.selectedTag = nil
-                Haptic.success.impact()
+                do {
+                    try LedgerMutationAccess.requireEditing([ledgerIdentifier])
+                    if try TagMutationOperations.deleteAndSave(context: context, tag: selectedTag) {
+                        self.selectedTag = nil
+                        Haptic.success.impact()
+                    } else {
+                        Haptic.warning.impact()
+                    }
+                } catch {
+                    errorMessage = ErrorMessageOperations.message(from: error)
+                }
             } label: {
                 Text("Delete")
             }

@@ -4,20 +4,9 @@ import SwiftData
 public extension TagMutationOperations {
     /// Resolves only the groups explicitly selected by the user, then saves their balances.
     static func resolveDuplicatesAndSave(context: ModelContext, tags: [Tag]) throws {
-        guard !context.hasChanges else {
-            throw TagMutationError.pendingChanges
-        }
-        guard context.container.configurations.allSatisfy(\.allowsSave) else {
-            throw CocoaError(.fileWriteNoPermission)
-        }
-        try validateLedgerMerges(context: context, tags: tags)
-        let autosaveEnabled = context.autosaveEnabled
-        context.autosaveEnabled = false
-        defer {
-            context.autosaveEnabled = autosaveEnabled
-        }
-        let ledgerNames = Set(tags.filter { $0.type == .ledger }.map(\.name))
-        do {
+        try performAndSave(context: context) {
+            try validateLedgerMerges(context: context, tags: tags)
+            let ledgerNames = Set(tags.filter { $0.type == .ledger }.map(\.name))
             try resolveDuplicates(context: context, tags: tags)
             let affectedItems = try context.fetch(.tags(.typeIs(.ledger)))
                 .filter { ledgerNames.contains($0.name) }
@@ -25,15 +14,44 @@ public extension TagMutationOperations {
             if !affectedItems.isEmpty {
                 try BalanceCalculator.calculate(in: context, for: affectedItems)
             }
-            try context.save()
-        } catch {
-            context.rollback()
-            throw error
+        }
+    }
+
+    /// Deletes an unused classification tag and saves before reporting its removal.
+    /// The tag must belong to the clean calling context; ledger metadata is protected.
+    @discardableResult
+    static func deleteAndSave(context: ModelContext, tag: Tag) throws -> Bool {
+        guard tag.modelContext === context,
+              tag.type?.isLedgerOwnership != true,
+              TagQueryOperations.isOrphan(tag: tag) else {
+            return false
+        }
+        return try performAndSave(context: context) {
+            delete(tag: tag)
+        }
+    }
+
+    /// Saves all unused classification-tag removals in one clean context.
+    /// Failure restores the tags; pending unrelated edits are left untouched.
+    @discardableResult
+    static func deleteAllOrphanTagsAndSave(context: ModelContext) throws -> Int {
+        try performAndSave(context: context) {
+            try deleteAllOrphanTags(context: context)
         }
     }
 }
 
 private extension TagMutationOperations {
+    static func performAndSave<Value>(context: ModelContext, operation: () throws -> Value) throws -> Value {
+        guard !context.hasChanges else {
+            throw TagMutationError.pendingChanges
+        }
+        guard context.container.configurations.allSatisfy(\.allowsSave) else {
+            throw CocoaError(.fileWriteNoPermission)
+        }
+        return try MutationPersistenceSupport.commit(context: context, operation: operation)
+    }
+
     static func validateLedgerMerges(context: ModelContext, tags: [Tag]) throws {
         for name in Set(tags.filter { $0.type == .ledger }.map(\.name)) {
             let duplicates = try context.fetch(.tags(.nameIs(name, type: .ledger)))

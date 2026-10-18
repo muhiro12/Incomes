@@ -23,6 +23,7 @@ struct DebugListView {
     private var isDebugOn
 
     @State private var isDialogPresented = false
+    @State private var errorMessage: String?
 
     private let navigateToRoute: (DebugRoute) -> Void
 
@@ -51,6 +52,20 @@ extension DebugListView: View {
             AdvertisementSection(.media)
             AdvertisementSection(.compact)
             ShortcutsLinkSection()
+        }
+        .alert("Error", isPresented: .init(
+            get: { errorMessage != nil },
+            set: { isPresented in
+                if !isPresented {
+                    errorMessage = nil
+                }
+            }
+        )) {
+            Button("OK", role: .cancel) {
+                errorMessage = nil
+            }
+        } message: {
+            Text(errorMessage ?? "")
         }
         .confirmationDialog(
             Text("Add Sample Data"),
@@ -162,9 +177,9 @@ private extension DebugListView {
 
     func prepareSampleData(_ profile: SampleDataOperations.Profile) {
         do {
-            try SampleDataOperations.seed(context: context, profile: profile)
+            try SampleDataOperations.seedAndSave(context: context, profile: profile)
         } catch {
-            assertionFailure(error.localizedDescription)
+            errorMessage = ErrorMessageOperations.message(from: error)
         }
     }
 

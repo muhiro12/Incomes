@@ -64,38 +64,10 @@ private extension ItemCreationOperations {
         context: ModelContext,
         operation: () throws -> MutationResult<Item>
     ) throws -> MutationResult<Item> {
-        guard !context.hasChanges else {
-            throw ItemCreationError.pendingChanges
-        }
-        guard context.container.configurations.allSatisfy(\.allowsSave) else {
-            throw CocoaError(.fileWriteNoPermission)
-        }
-        let autosaveEnabled = context.autosaveEnabled
-        context.autosaveEnabled = false
-        defer {
-            context.autosaveEnabled = autosaveEnabled
-        }
-        do {
-            let mutation = try operation()
-            let createdItems = context.insertedModelsArray.compactMap { model in
-                model as? Item
-            }
-            try context.save()
-            return .init(
-                value: mutation.value,
-                outcome: .init(
-                    changedIDs: .init(
-                        created: Set(createdItems.map(\.persistentModelID)),
-                        updated: mutation.outcome.changedIDs.updated,
-                        deleted: mutation.outcome.changedIDs.deleted
-                    ),
-                    affectedDateRange: mutation.outcome.affectedDateRange,
-                    followUpHints: mutation.outcome.followUpHints
-                )
-            )
-        } catch {
-            context.rollback()
-            throw error
-        }
+        try ItemMutationSupport.performAndSaveCreatedItems(
+            context: context,
+            pendingChangesError: ItemCreationError.pendingChanges,
+            operation: operation
+        )
     }
 }

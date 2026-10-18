@@ -146,7 +146,7 @@ private extension YearlyDuplicationCoordinator {
             name: "duplicateYearlyItems",
             operation: {
                 try LedgerMutationAccess.requireEditing(Set(plan.entries.map(\.sourceItem.ledgerIdentifier)))
-                guard let result = try YearlyItemDuplicationApplyOperations.applyWithOutcome(
+                guard let result = try YearlyItemDuplicationApplyOperations.applyAndSaveWithOutcome(
                     groupID: group.id,
                     in: plan,
                     context: context

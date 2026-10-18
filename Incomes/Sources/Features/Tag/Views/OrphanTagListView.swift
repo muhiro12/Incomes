@@ -14,6 +14,7 @@ struct OrphanTagListView: View {
     @Binding private var selectedTagID: Tag.ID?
 
     @State private var isCleanupDialogPresented = false
+    @State private var errorMessage: String?
 
     private let ledgerIdentifier: LedgerIdentifier
     private let onCleanupAll: () -> Void
@@ -103,6 +104,20 @@ extension OrphanTagListView {
             Text("Are you sure you want to delete all orphan tags? This action cannot be undone.")
         }
         .navigationTitle("Orphan Tags")
+        .alert("Unable to Organize Tags", isPresented: .init(
+            get: { errorMessage != nil },
+            set: { isPresented in
+                if !isPresented {
+                    errorMessage = nil
+                }
+            }
+        )) {
+            Button("OK", role: .cancel) {
+                errorMessage = nil
+            }
+        } message: {
+            Text(errorMessage ?? "")
+        }
         .toolbar {
             ToolbarItem {
                 if hasAnyOrphanTags {
@@ -140,12 +155,12 @@ private extension OrphanTagListView {
     func cleanupAllOrphanTags() {
         do {
             try LedgerMutationAccess.requireEditing([ledgerIdentifier])
-            try TagMutationOperations.deleteAllOrphanTags(context: context)
+            try TagMutationOperations.deleteAllOrphanTagsAndSave(context: context)
             selectedTagID = nil
             onCleanupAll()
             Haptic.success.impact()
         } catch {
-            assertionFailure(error.localizedDescription)
+            errorMessage = ErrorMessageOperations.message(from: error)
         }
     }
 }

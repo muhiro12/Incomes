@@ -30,6 +30,7 @@ struct YearlyDuplicationAutomationTests {
     @Test
     func apply_returns_created_and_plan_counts() throws {
         try createRepeatItems()
+        try context.save()
 
         let result = try YearlyDuplicationAutomationOperations.apply(
             context: context,

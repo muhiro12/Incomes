@@ -31,7 +31,7 @@ extension IncomesSampleData {
         let logging = MainActor.assumeIsolated {
             IncomesLogging.makeBootstrap()
         }
-        try SampleDataOperations.seed(
+        try SampleDataOperations.seedAndSave(
             context: modelContainer.mainContext,
             profile: profile
         )

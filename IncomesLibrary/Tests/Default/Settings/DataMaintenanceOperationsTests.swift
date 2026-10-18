@@ -47,6 +47,7 @@ struct DataMaintenanceOperationsTests {
             repeatCount: 1
         )
 
+        try context.save()
         try await DataMaintenanceOperations.resetAllData(context: context)
 
         #expect(try context.fetchCount(.items(.all)) == 0)

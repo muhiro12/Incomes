@@ -26,7 +26,7 @@ extension WatchPreview {
                 ProgressView()
                     .task {
                         do {
-                            try SampleDataOperations.seed(
+                            try SampleDataOperations.seedAndSave(
                                 context: previewModelContainer.mainContext,
                                 profile: .minimal,
                                 ifEmptyOnly: true

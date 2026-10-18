@@ -74,10 +74,10 @@ public enum YearlyDuplicationAutomationOperations {
             targetYear: targetYear,
             options: options
         )
-        let result = try YearlyItemDuplicationApplyOperations.apply(
+        let result = try YearlyItemDuplicationApplyOperations.applyAndSaveWithOutcome(
             plan: plan,
             context: context
-        )
+        ).value
         return .init(
             createdCount: result.createdCount,
             groupCount: plan.groups.count,

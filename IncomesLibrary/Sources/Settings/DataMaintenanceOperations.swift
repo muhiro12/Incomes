@@ -13,7 +13,7 @@ public enum DataMaintenanceOperations {
         }
 
         func deleteAllData() throws {
-            try DataMaintenanceOperations.deleteAllData(context: context)
+            try DataMaintenanceOperations.deleteAllDataAndSave(context: context)
         }
     }
 
@@ -21,6 +21,14 @@ public enum DataMaintenanceOperations {
     public static func deleteAllData(context: ModelContext) throws {
         try ItemDeletionOperations.deleteAll(context: context)
         try TagMutationOperations.deleteAll(context: context)
+    }
+
+    /// Deletes all items and tags in one save from a clean calling context.
+    /// Failures roll back the deletion; unrelated pending edits are refused untouched.
+    public static func deleteAllDataAndSave(context: ModelContext) throws {
+        try ItemMutationSupport.performAndSave(context: context) {
+            try deleteAllData(context: context)
+        }
     }
 
     /// Deletes all stored data through the shared reset orchestration flow.
@@ -43,5 +51,12 @@ public enum DataMaintenanceOperations {
     /// Deletes tutorial/debug sample data from the store.
     public static func deleteDebugData(context: ModelContext) throws {
         try SampleDataOperations.deleteDebugData(context: context)
+    }
+
+    /// Saves sample-data removal before callers report success or refresh other surfaces.
+    public static func deleteDebugDataAndSave(context: ModelContext) throws {
+        try ItemMutationSupport.performAndSave(context: context) {
+            try deleteDebugData(context: context)
+        }
     }
 }
