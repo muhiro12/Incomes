@@ -13,6 +13,7 @@ import tempfile
 import unittest
 
 REPOSITORY = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(REPOSITORY / "ci_scripts/lib"))
 spec = importlib.util.spec_from_file_location("swiftlint_evidence", REPOSITORY / "ci_scripts/lib/swiftlint_evidence.py")
 adapter = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(adapter)
@@ -82,6 +83,16 @@ class SwiftLintEvidenceTests(unittest.TestCase):
         self.binary.write_text(f"#!{sys.executable}\nprint('0.65.2')\n")
         with self.assertRaisesRegex(ValueError, "actual SwiftLint binary version"):
             adapter.select(self.root, [self.cache])
+
+    def test_json_project_binds_the_actual_configuration_file(self):
+        legacy = self.root / "Incomes.xcodeproj/project.pbxproj"
+        legacy.unlink()
+        project = self.root / "Incomes.xcodeproj/project.xcproj"
+        project.write_text(json.dumps({"packages": [{"kind": "remote", "repository": adapter.REMOTE,
+            "version": {"up-to-next-major-version": "0.0.0"}}], "targets": []}))
+        selected = adapter.select(self.root, [self.cache])
+        self.assertEqual(selected["project_sha256"], adapter.sha256(project))
+        self.assertEqual(selected["version"], "0.65.1")
 
     def test_wrong_package_or_project_requirement_is_incomplete(self):
         self.state["object"]["dependencies"][0]["packageRef"]["location"] = "https://example.invalid/Other"

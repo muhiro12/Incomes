@@ -101,10 +101,13 @@ class PushVerificationTests(unittest.TestCase):
             files = [f for f in self.git("ls-tree", "-r", "--name-only", oid).splitlines() if f.endswith(".swift")]
             def source_hash(path):
                 return hashlib.sha256(subprocess.check_output(["git", "show", oid + ":" + path], cwd=self.root)).hexdigest()
+            tracked = self.git("ls-tree", "-r", "--name-only", oid).splitlines()
+            project_path = next(path for path in ("Incomes.xcodeproj/project.pbxproj", "Incomes.xcodeproj/project.xcproj")
+                                if path in tracked)
             proof = {"schema_version": 1, "mode": "lint", "exit_code": 0, "source_head": oid,
                      "binary": binary, "version": "0.65.1", "package_version": "0.65.1",
                      "package_remote": "https://github.com/SimplyDanny/SwiftLintPlugins",
-                     "package_revision": "a" * 40, "project_sha256": source_hash("Incomes.xcodeproj/project.pbxproj"),
+                     "package_revision": "a" * 40, "project_sha256": source_hash(project_path),
                      "config_sha256": source_hash(".swiftlint.yml"), "files": files,
                      "argv": [binary, "lint", "--quiet", "--no-cache", "--strict", *files]}
             proof.update({key: "a" * 64 for key in ("binary_sha256", "package_manifest_sha256",
@@ -206,6 +209,33 @@ class PushVerificationTests(unittest.TestCase):
         q = self.run_check()
         self.assertEqual(q.returncode, 0, q.stdout + q.stderr)
         self.assertIn("not independently proved", q.stdout)
+
+    def test_json_project_receipt_binds_committed_configuration(self):
+        self.git("mv", "Incomes.xcodeproj/project.pbxproj", "Incomes.xcodeproj/project.xcproj")
+        self.commit("Convert synthetic project")
+        self.tip = self.git("rev-parse", "HEAD")
+        self.update = self.tuple(self.tip, "refs/heads/main", self.base)
+        self.receipt = self.make_receipt([self.update])
+        self.save()
+        result = self.run_check()
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        path = self.store / self.receipt["quality"][self.tip]["checks"]["lint"]["evidence"]
+        record = json.loads(path.read_text())
+        output = path.parent / "output.log"
+        proof = json.loads(output.read_text().splitlines()[0].removeprefix("SwiftLint execution: "))
+        proof["project_sha256"] = "a" * 64
+        output.write_text("SwiftLint execution: " + json.dumps(proof) + "\nRepository rules check passed.\n")
+        record["artifacts"][0]["sha256"] = hashlib.sha256(output.read_bytes()).hexdigest()
+        path.write_text(json.dumps(record))
+        self.assert_rejected("source inputs do not match")
+
+    def test_receipt_with_both_project_formats_is_rejected(self):
+        self.write("Incomes.xcodeproj/project.xcproj", "Synthetic JSON project fixture\n")
+        self.commit("Add ambiguous synthetic project")
+        self.tip = self.git("rev-parse", "HEAD")
+        self.update = self.tuple(self.tip, "refs/heads/main", self.base)
+        self.receipt = self.make_receipt([self.update])
+        self.assert_rejected("one source-bound project configuration")
 
     def test_scanner_success_cannot_replace_lint_execution(self):
         checks = self.receipt["quality"][self.tip]["checks"]

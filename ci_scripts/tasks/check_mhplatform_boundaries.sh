@@ -12,7 +12,6 @@ expected_mhplatform_remote="https://github.com/muhiro12/MHPlatform"
 expected_mhplatform_minimum_version="1.14.0"
 package_manifest="IncomesLibrary/Package.swift"
 package_resolved="IncomesLibrary/Package.resolved"
-project_file="Incomes.xcodeproj/project.pbxproj"
 documentation_files=(
   README.md
   Designs/Architecture/shared-service-design.md
@@ -32,16 +31,6 @@ failures=()
 
 record_failure() {
   failures+=("$1")
-}
-
-extract_project_block() {
-  local block_name=$1
-
-  awk -v block_name="$block_name" '
-    index($0, "/* " block_name " */ = {") && $0 ~ /\{$/ { capture = 1 }
-    capture { print }
-    capture && $0 == "\t\t};" { exit }
-  ' "$project_file"
 }
 
 extract_manifest_dependency_block() {
@@ -115,47 +104,10 @@ else
   fi
 fi
 
-search_matches=$(ci_task_rg --fixed-strings 'XCLocalSwiftPackageReference "MHPlatform"' "$project_file")
-
-if [[ -n "$search_matches" ]]; then
-  record_failure "Incomes.xcodeproj must not use a local MHPlatform package reference."
+if ! python3 "$repository_root/ci_scripts/lib/project_configuration.py" mhplatform \
+  "$repository_root" "$expected_mhplatform_minimum_version"; then
+  record_failure "Incomes.xcodeproj does not preserve the MHPlatform package and target boundaries."
 fi
-
-mhplatform_reference_block=$(extract_project_block 'XCRemoteSwiftPackageReference "MHPlatform"')
-if [[ -z "$mhplatform_reference_block" ]]; then
-  record_failure "Incomes.xcodeproj must define an MHPlatform remote package reference."
-else
-  if ! grep -q --fixed-strings "repositoryURL = \"$expected_mhplatform_remote\";" <<<"$mhplatform_reference_block"; then
-    record_failure "Incomes.xcodeproj must reference the canonical MHPlatform remote."
-  fi
-
-  if ! grep -q --fixed-strings 'kind = upToNextMajorVersion;' <<<"$mhplatform_reference_block"; then
-    record_failure "Incomes.xcodeproj must use an MHPlatform 1.x semver requirement."
-  fi
-
-  if ! grep -q --fixed-strings "minimumVersion = $expected_mhplatform_minimum_version;" <<<"$mhplatform_reference_block"; then
-    record_failure "Incomes.xcodeproj must set the MHPlatform minimum version to $expected_mhplatform_minimum_version."
-  fi
-
-  if grep -q --fixed-strings 'kind = branch;' <<<"$mhplatform_reference_block" || \
-    grep -q --fixed-strings 'branch = ' <<<"$mhplatform_reference_block" || \
-    grep -q --fixed-strings 'kind = revision;' <<<"$mhplatform_reference_block" || \
-    grep -q --fixed-strings 'revision = ' <<<"$mhplatform_reference_block"; then
-    record_failure "Incomes.xcodeproj must not track MHPlatform by branch or exact revision."
-  fi
-fi
-
-incomes_target_block=$(extract_project_block 'Incomes')
-if [[ -z "$incomes_target_block" ]] || ! grep -q --fixed-strings 'MHPlatform' <<<"$incomes_target_block"; then
-  record_failure "Incomes must remain the MHPlatform umbrella adopter."
-fi
-
-for target_name in Watch Widgets; do
-  target_block=$(extract_project_block "$target_name")
-  if [[ -n "$target_block" ]] && grep -q --fixed-strings 'MHPlatform' <<<"$target_block"; then
-    record_failure "$target_name must not depend on the umbrella MHPlatform product."
-  fi
-done
 
 umbrella_import_matches=$(
   ci_task_rg \

@@ -64,19 +64,16 @@ ensure_command() {
 }
 
 check_swiftlint_environment() {
-  local project_file="Incomes.xcodeproj/project.pbxproj"
-
   ensure_command "xcodebuild" "Install Xcode and ensure xcodebuild is available from the command line."
+  ensure_command "python3" "Install Python 3 to run the repository verification adapters."
 
-  if [[ ! -f "$project_file" ]]; then
-    record_failure "Missing file: $project_file"
-    record_next_step "Restore $project_file so the repository-managed SwiftLint package can be resolved."
+  if ! command -v python3 >/dev/null 2>&1; then
     return 0
   fi
 
-  if ! grep -q --fixed-strings "https://github.com/SimplyDanny/SwiftLintPlugins" "$project_file"; then
-    record_failure "Incomes.xcodeproj is missing the SwiftLintPlugins package dependency."
-    record_next_step "Add https://github.com/SimplyDanny/SwiftLintPlugins to Incomes.xcodeproj."
+  if ! python3 "$repository_root/ci_scripts/lib/project_configuration.py" swiftlint "$repository_root"; then
+    record_failure "Incomes.xcodeproj has no readable, unambiguous SwiftLintPlugins dependency."
+    record_next_step "Restore one supported project configuration with the canonical SwiftLintPlugins dependency."
   fi
 }
 

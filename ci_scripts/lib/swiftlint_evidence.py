@@ -10,6 +10,8 @@ import re
 import subprocess
 import sys
 
+from project_configuration import load_project, remote_package
+
 REMOTE = "https://github.com/SimplyDanny/SwiftLintPlugins"
 MARKER = "SwiftLint execution: "
 
@@ -25,18 +27,11 @@ def version_tuple(value: str) -> tuple[int, ...]:
 
 
 def select(repository: Path, roots: list[Path]) -> dict | None:
-    project = repository / "Incomes.xcodeproj/project.pbxproj"
-    parsed = subprocess.run(["plutil", "-convert", "json", "-o", "-", str(project)],
-                            check=True, capture_output=True, text=True)
-    objects = json.loads(parsed.stdout)["objects"]
-    references = [v for v in objects.values() if v.get("isa") == "XCRemoteSwiftPackageReference"
-                  and v.get("repositoryURL", "").removesuffix(".git") == REMOTE]
-    if len(references) != 1:
-        raise ValueError("The project must declare one canonical SwiftLintPlugins dependency.")
-    requirement = references[0]["requirement"]
-    if requirement.get("kind") != "upToNextMajorVersion":
+    project, configuration = load_project(repository)
+    requirement = remote_package(configuration, REMOTE).get("version", {})
+    if set(requirement) != {"up-to-next-major-version"}:
         raise ValueError("Review the adapter for the project's SwiftLint version requirement.")
-    minimum = version_tuple(requirement["minimumVersion"])
+    minimum = version_tuple(requirement["up-to-next-major-version"])
     override = os.environ.get("CI_SWIFTLINT_BIN")
     for root in roots:
         root = root.resolve()

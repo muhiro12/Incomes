@@ -173,6 +173,9 @@ reflect your release channel.
 
 ## Build and Test
 
+See [Xcode project format](Designs/Architecture/xcode-project-format.md) for
+configuration compatibility, conversion qualification, and rollback.
+
 Use Xcode and the active Xcode-native integration for Apple build, test, run,
 Simulator, runtime logs, Preview rendering, screenshots, and live UI inspection.
 Xcode Cloud owns formal CI builds, tests, and archives.

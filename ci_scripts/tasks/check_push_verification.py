@@ -203,12 +203,15 @@ def lint_quality_record(store: Path, relative: str, record: dict) -> None:
         result = subprocess.run(["git", "show", head + ":" + path], capture_output=True, env=git_environment())
         require(result.returncode == 0, "A lint input is missing from its source commit.")
         return digest(result.stdout)
-    files = git("ls-tree", "-r", "--name-only", head, "--").splitlines()
-    files = [path for path in files if path.endswith(".swift")]
+    tracked = git("ls-tree", "-r", "--name-only", head, "--").splitlines()
+    projects = [path for path in ("Incomes.xcodeproj/project.pbxproj", "Incomes.xcodeproj/project.xcproj")
+                if path in tracked]
+    require(len(projects) == 1, "Lint requires one source-bound project configuration.")
+    files = [path for path in tracked if path.endswith(".swift")]
     binary = proof.get("binary", "")
     require(proof.get("schema_version") == 1 and proof.get("mode") == "lint"
             and proof.get("exit_code") == 0 and proof.get("source_head") == head
-            and proof.get("project_sha256") == file_hash("Incomes.xcodeproj/project.pbxproj")
+            and proof.get("project_sha256") == file_hash(projects[0])
             and proof.get("config_sha256") == file_hash(".swiftlint.yml")
             and proof.get("files") == files and bool(files)
             and proof.get("argv") == [binary, "lint", "--quiet", "--no-cache", "--strict", *files]

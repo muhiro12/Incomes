@@ -8,6 +8,9 @@
 # Finder
 .DS_Store
 
+# Python
+__pycache__/
+
 # Xcode - User files
 xcuserdata/
 
