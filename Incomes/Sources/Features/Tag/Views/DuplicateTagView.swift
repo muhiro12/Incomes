@@ -20,6 +20,7 @@ struct DuplicateTagView: View {
     @State private var isDeleteDialogPresented = false
     @State private var selectedTag: Tag?
     @State private var errorMessage: String?
+    @State private var isMutating = false
 
     init(_ tag: Tag) {
         let name = tag.name
@@ -64,11 +65,9 @@ extension DuplicateTagView {
             isPresented: $isMergeDialogPresented
         ) {
             Button(role: .destructive) {
-                do {
+                IncomesMutationWorkflow.performDataMutation(errorMessage: $errorMessage, isProcessing: $isMutating) {
                     try LedgerMutationAccess.requireEditing(mutationOwners)
                     try TagMutationOperations.resolveDuplicatesAndSave(context: context, tags: tags)
-                } catch {
-                    errorMessage = error.localizedDescription
                 }
             } label: {
                 Text("Merge")
@@ -89,7 +88,7 @@ extension DuplicateTagView {
                 guard let selectedTag else {
                     return
                 }
-                do {
+                IncomesMutationWorkflow.performDataMutation(errorMessage: $errorMessage, isProcessing: $isMutating) {
                     try LedgerMutationAccess.requireEditing([ledgerIdentifier])
                     if try TagMutationOperations.deleteAndSave(context: context, tag: selectedTag) {
                         self.selectedTag = nil
@@ -97,8 +96,6 @@ extension DuplicateTagView {
                     } else {
                         Haptic.warning.impact()
                     }
-                } catch {
-                    errorMessage = ErrorMessageOperations.message(from: error)
                 }
             } label: {
                 Text("Delete")

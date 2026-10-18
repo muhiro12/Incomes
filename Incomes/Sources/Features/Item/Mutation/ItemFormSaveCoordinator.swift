@@ -65,6 +65,7 @@ enum ItemFormSaveCoordinator {
         )
 
         do {
+            try await IncomesMutationWorkflow.checkUpdateRequirement()
             _ = try await MHMutationWorkflow.runThrowing(
                 name: mutationName(for: scope),
                 operation: {

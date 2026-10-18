@@ -11,6 +11,7 @@ struct LedgerSettingsView: View {
     let identifier: LedgerIdentifier
     @State private var name = ""
     @State private var errorMessage: String?
+    @State private var isMutating = false
 
     var body: some View {
         Form {
@@ -18,11 +19,13 @@ struct LedgerSettingsView: View {
                 TextField("Ledger Name", text: $name)
                     .ledgerWriteAccess(owner: identifier)
                 Button("Rename") {
-                    do {
+                    let newName = name
+                    IncomesMutationWorkflow.performDataMutation(
+                        errorMessage: $errorMessage,
+                        isProcessing: $isMutating
+                    ) {
                         try LedgerMutationAccess.requireEditing([identifier])
-                        try LedgerOperations.rename(identifier, to: name, context: context)
-                    } catch {
-                        errorMessage = error.localizedDescription
+                        try LedgerOperations.rename(identifier, to: newName, context: context)
                     }
                 }
                 .disabled(

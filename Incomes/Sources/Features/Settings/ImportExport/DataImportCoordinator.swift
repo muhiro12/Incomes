@@ -24,6 +24,7 @@ enum DataImportCoordinator {
         )
         logger.notice("data_import.apply_requested", metadata: metadata)
         do {
+            try await IncomesMutationWorkflow.checkUpdateRequirement()
             let identifiers = ItemImportOperations.mutatedLedgerIdentifiers(
                 difference: request.difference,
                 policy: request.policy

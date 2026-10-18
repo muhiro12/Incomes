@@ -13,7 +13,7 @@ struct RecalculateBalancesIntent: AppIntent {
     @Dependency private var logging: MHLoggingBootstrap
 
     @MainActor
-    func perform() throws -> some IntentResult {
+    func perform() async throws -> some IntentResult {
         let logger = IncomesIntentLoggingSupport.appIntentLogger(
             logging: logging,
             source: #fileID
@@ -25,6 +25,7 @@ struct RecalculateBalancesIntent: AppIntent {
             )
         )
         do {
+            try await IncomesMutationWorkflow.checkUpdateRequirement()
             try LedgerMutationAccess.requireEditing([.default])
             try ItemBalanceOperations.recalculateAndSave(
                 context: modelContainer.mainContext,

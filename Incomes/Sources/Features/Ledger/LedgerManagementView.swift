@@ -18,6 +18,7 @@ struct LedgerManagementView: View {
     @State private var newName = ""
     @State private var errorMessage: String?
     @State private var isCompatibilityNoticePresented = false
+    @State private var isCreating = false
 
     var body: some View {
         NavigationStack {
@@ -89,9 +90,11 @@ struct LedgerManagementView: View {
     private var creationSection: some View {
         Section {
             TextField("Ledger Name", text: $newName)
+                .disabled(isCreating)
             Button("Create Ledger", systemImage: "plus", action: prepareCreation)
                 .disabled(newName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
                 .disabled(!isSubscribeOn)
+                .disabled(isCreating)
         } footer: {
             VStack(alignment: .leading) {
                 Text("Premium enables creating and editing additional ledgers.")
@@ -133,13 +136,12 @@ struct LedgerManagementView: View {
     }
 
     private func createLedger() {
-        do {
+        let name = newName
+        IncomesMutationWorkflow.performDataMutation(errorMessage: $errorMessage, isProcessing: $isCreating) {
             try LedgerMutationAccess.requireCreation()
-            let ledger = try LedgerOperations.create(context: context, name: newName)
+            let ledger = try LedgerOperations.create(context: context, name: name)
             selectedIdentifier = ledger.id.rawValue
             newName = ""
-        } catch {
-            errorMessage = error.localizedDescription
         }
     }
 }

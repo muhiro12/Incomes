@@ -31,6 +31,7 @@ extension RecalculateItemButton: View {
             } else {
                 Task {
                     do {
+                        try await IncomesMutationWorkflow.checkUpdateRequirement()
                         try LedgerMutationAccess.requireEditing([item.ledgerIdentifier])
                         try ItemBalanceOperations.recalculateAndSave(
                             context: context,

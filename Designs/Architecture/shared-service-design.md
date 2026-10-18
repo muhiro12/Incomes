@@ -62,8 +62,18 @@ and widgets.
   `MHAdsConsentStorage` descriptors before cleanup; the library stays independent
   of the advertising SDK.
 - `MHAppVersionComparison.numericStringsRequireUpdate` preserves the legacy
-  remote-configuration and ledger-migration version ordering. Scheduled update
-  enforcement remains a separate rollout requiring an independent policy URL.
+  remote-configuration and ledger-migration version ordering.
+- `RemoteUpdateOperations` shares scheduled update evidence between UI and
+  mutation entry points. It delegates storage, preparation, and operation checks
+  to `MHRemoteUpdateController`. Invalid scheduled setup stays unavailable and
+  blocks writes; an undecided endpoint explicitly retains legacy behavior.
+- `IncomesMutationWorkflow` checks configured update requirements before phone
+  UI and App Intent mutations and their success effects. Startup migration,
+  automatic CloudKit delivery, preferences, and the Watch's local mirror remain
+  separate. Read/export routes do not require write permission.
+- The scheduled endpoint is intentionally unset in
+  `IncomesRemoteUpdateConfiguration`. A live rollout still requires a separately
+  operated URL and a valid published policy; the legacy endpoint remains intact.
 
 ## MHDesign Adoption
 

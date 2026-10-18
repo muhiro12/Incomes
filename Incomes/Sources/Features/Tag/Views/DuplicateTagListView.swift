@@ -16,6 +16,7 @@ struct DuplicateTagListView: View {
     @State private var isResolveDialogPresented = false
     @State private var selectedTags = [Tag]()
     @State private var errorMessage: String?
+    @State private var isMutating = false
 
     private let ledgerIdentifier: LedgerIdentifier
 
@@ -143,17 +144,16 @@ private extension DuplicateTagListView {
     }
 
     func resolveSelectedTags() {
-        do {
-            let owners = Set(selectedTags.compactMap { tag -> LedgerIdentifier? in
+        let tags = selectedTags
+        IncomesMutationWorkflow.performDataMutation(errorMessage: $errorMessage, isProcessing: $isMutating) {
+            let owners = Set(tags.compactMap { tag -> LedgerIdentifier? in
                 LedgerOperations.identifier(for: tag)
             }).union([ledgerIdentifier])
             try LedgerMutationAccess.requireEditing(owners)
             try TagMutationOperations.resolveDuplicatesAndSave(
                 context: context,
-                tags: selectedTags
+                tags: tags
             )
-        } catch {
-            errorMessage = error.localizedDescription
         }
     }
 }

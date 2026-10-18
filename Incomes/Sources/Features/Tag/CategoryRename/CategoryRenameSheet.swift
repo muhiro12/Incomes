@@ -15,6 +15,8 @@ struct CategoryRenameSheet: View {
 
     @State private var draftName: String
     @State private var errorMessage: String?
+    @State private var isSaving = false
+    @State private var saveTask: Task<Void, Never>?
     let didRename: (Tag) -> Void
 
     init(initialName: String, didRename: @escaping (Tag) -> Void) {
@@ -40,6 +42,9 @@ extension CategoryRenameSheet {
                 },
                 save: save
             )
+        }
+        .onDisappear {
+            saveTask?.cancel()
         }
         .alert(
             "Error",
@@ -90,6 +95,20 @@ private extension CategoryRenameSheet {
     func save(
         _ previewResult: Result<TagRenamePreview, TagRenameError>
     ) {
+        guard isSaving == false else {
+            return
+        }
+        isSaving = true
+        saveTask = Task {
+            defer {
+                isSaving = false
+                saveTask = nil
+            }
+            await saveCategory(previewResult)
+        }
+    }
+
+    func saveCategory(_ previewResult: Result<TagRenamePreview, TagRenameError>) async {
         do {
             let preview = try previewResult.get()
             guard let normalizedTargetName = preview.normalizedTargetName else {
@@ -109,6 +128,7 @@ private extension CategoryRenameSheet {
                 return
             }
 
+            try await IncomesMutationWorkflow.checkUpdateRequirement()
             try LedgerMutationAccess.requireEditing([ledgerIdentifier])
             let renamed = try TagRenameOperations.renameCategoryAndSave(
                 context: context,
@@ -120,6 +140,8 @@ private extension CategoryRenameSheet {
             dismiss()
         } catch let error as TagRenameError {
             errorMessage = error.renameErrorMessage
+        } catch is CancellationError {
+            return
         } catch {
             errorMessage = error.localizedDescription
         }

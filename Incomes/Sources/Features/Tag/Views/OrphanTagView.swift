@@ -12,6 +12,7 @@ struct OrphanTagView: View {
 
     @State private var isDeleteDialogPresented = false
     @State private var errorMessage: String?
+    @State private var isMutating = false
 
     let onDelete: () -> Void
 
@@ -40,7 +41,7 @@ struct OrphanTagView: View {
             isPresented: $isDeleteDialogPresented
         ) {
             Button(role: .destructive) {
-                do {
+                IncomesMutationWorkflow.performDataMutation(errorMessage: $errorMessage, isProcessing: $isMutating) {
                     try LedgerMutationAccess.requireEditing([ledgerIdentifier])
                     if try TagMutationOperations.deleteAndSave(context: context, tag: tag) {
                         onDelete()
@@ -48,8 +49,6 @@ struct OrphanTagView: View {
                     } else {
                         Haptic.warning.impact()
                     }
-                } catch {
-                    errorMessage = ErrorMessageOperations.message(from: error)
                 }
             } label: {
                 Text("Delete")

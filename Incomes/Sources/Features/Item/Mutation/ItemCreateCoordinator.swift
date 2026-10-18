@@ -132,7 +132,8 @@ private extension ItemCreateCoordinator {
         dependencies: ItemMutationWorkflowDependencies,
         operation: @escaping @MainActor () throws -> MutationResult<PersistentIdentifier>
     ) async throws -> PersistentIdentifier {
-        try await MHMutationWorkflow.runThrowing(
+        try await IncomesMutationWorkflow.checkUpdateRequirement()
+        return try await MHMutationWorkflow.runThrowing(
             name: ItemMutationWorkflowName.create,
             operation: operation,
             adapter: ItemMutationAdapterFactory.makeForSave(

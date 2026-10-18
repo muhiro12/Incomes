@@ -27,6 +27,16 @@ struct ContentView {
 extension ContentView: View {
     var body: some View {
         LedgerWorkspaceView()
+            .safeAreaInset(edge: .top) {
+                if remoteConfigurationService.scheduledUpdates.isEnabled {
+                    RemoteUpdateStatusView(
+                        decision: remoteConfigurationService.scheduledUpdates.decision,
+                        isLoading: remoteConfigurationService.isLoading,
+                        retry: retryUpdateCheck,
+                        openStore: openAppStore
+                    )
+                }
+            }
             .alert(
                 "Invalid Link",
                 isPresented: invalidDeepLinkAlertBinding,
@@ -40,11 +50,7 @@ extension ContentView: View {
             }
             .alert("Update Required", isPresented: isUpdateRequiredBinding) {
                 Button("Open App Store") {
-                    if let appStoreURL = URL(
-                        string: "https://apps.apple.com/jp/app/incomes/id1584472982"
-                    ) {
-                        UIApplication.shared.open(appStoreURL)
-                    }
+                    openAppStore()
                 }
             } message: {
                 Text("Please update Incomes to the latest version to continue using it.")
@@ -78,12 +84,25 @@ private extension ContentView {
     var isUpdateRequiredBinding: Binding<Bool> {
         .init(
             get: {
-                remoteConfigurationService.isUpdateRequired()
+                !remoteConfigurationService.scheduledUpdates.isEnabled
+                    && remoteConfigurationService.isUpdateRequired()
             },
             set: { _ in
                 // Keep the alert driven by the latest remote configuration.
             }
         )
+    }
+
+    func retryUpdateCheck() {
+        Task {
+            try? await remoteConfigurationService.load()
+        }
+    }
+
+    func openAppStore() {
+        if let appStoreURL = IncomesRemoteUpdateConfiguration.appStoreURL {
+            UIApplication.shared.open(appStoreURL)
+        }
     }
 
     @MainActor

@@ -75,6 +75,7 @@ private extension ItemDeleteCoordinator {
         notificationService: NotificationService,
         logger: MHLogger
     ) async throws {
+        try await IncomesMutationWorkflow.checkUpdateRequirement()
         _ = try await MHMutationWorkflow.runThrowing(
             name: deleteWorkflowName(for: items),
             operation: {

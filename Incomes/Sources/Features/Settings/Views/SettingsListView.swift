@@ -30,6 +30,7 @@ struct SettingsListView {
 
     @State private var model: SettingsScreenModel = .init()
     @State private var errorMessage: String?
+    @State private var isMutating = false
 
     private let navigateToRoute: (IncomesRoute) -> Void
 
@@ -110,6 +111,7 @@ extension SettingsListView: View {
                 Task {
                     dataMaintenanceLogger.notice("delete_all.requested")
                     do {
+                        try await IncomesMutationWorkflow.checkUpdateRequirement()
                         let owners = Set(try LedgerOperations.ledgers(context: context).map(\.id))
                         try LedgerMutationAccess.requireEditing(owners)
                         try await DataMaintenanceOperations.resetAllData(context: context)
@@ -144,24 +146,26 @@ extension SettingsListView: View {
             )
         ) {
             Button(role: .destructive) {
-                do {
+                IncomesMutationWorkflow.performDataMutation(errorMessage: $errorMessage, isProcessing: $isMutating) {
                     dataMaintenanceLogger.notice(
                         "debug_data.delete_confirmed",
                         metadata: IncomesLogging.metadata(
                             ("has_debug_data", IncomesLogging.bool(model.hasDebugData))
                         )
                     )
-                    try DataMaintenanceOperations.deleteDebugDataAndSave(context: context)
+                    do {
+                        try DataMaintenanceOperations.deleteDebugDataAndSave(context: context)
+                    } catch {
+                        dataMaintenanceLogger.error(
+                            "debug_data.delete_failed",
+                            metadata: IncomesLogging.errorMetadata(error)
+                        )
+                        throw error
+                    }
                     Haptic.success.impact()
                     model.loadStatus(context: context)
                     model.dismissDestructiveAction()
                     dataMaintenanceLogger.notice("debug_data.delete_completed")
-                } catch {
-                    dataMaintenanceLogger.error(
-                        "debug_data.delete_failed",
-                        metadata: IncomesLogging.errorMetadata(error)
-                    )
-                    errorMessage = ErrorMessageOperations.message(from: error)
                 }
             } label: {
                 Text("Delete")

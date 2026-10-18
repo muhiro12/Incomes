@@ -139,6 +139,7 @@ private extension YearlyDuplicationCoordinator {
         refreshNotificationSchedule: @escaping IncomesMutationWorkflow.NotificationScheduleRefresher,
         logger: MHLogger
     ) async throws -> YearlyItemDuplicationResult {
+        try await IncomesMutationWorkflow.checkUpdateRequirement()
         let adapter = IncomesMutationWorkflow.followUpHintAdapter(
             refreshNotificationSchedule: refreshNotificationSchedule
         )

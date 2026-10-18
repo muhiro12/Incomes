@@ -10,10 +10,11 @@ struct ResolveDuplicateTagsIntent: AppIntent {
     @Dependency private var logging: MHLoggingBootstrap
 
     @MainActor
-    func perform() throws -> some ReturnsValue<Int> {
+    func perform() async throws -> some ReturnsValue<Int> {
         let logger = intentLogger
         logger.notice("resolve_duplicate_tags.requested")
         do {
+            try await IncomesMutationWorkflow.checkUpdateRequirement()
             let context = modelContainer.mainContext
             // Existing maintenance shortcuts must not combine independent ledgers.
             let duplicates = try TagQueryOperations.duplicateTags(context: context)

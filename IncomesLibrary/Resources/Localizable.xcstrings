@@ -852,6 +852,40 @@
         }
       }
     },
+    "Please update Incomes to continue editing your data." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Please update Incomes to continue editing your data."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Actualiza Incomes para seguir editando tus datos."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mettez Incomes à jour pour continuer à modifier vos données."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "データの編集を続けるには、Incomesをアップデートしてください。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请更新 Incomes 以继续编辑数据。"
+          }
+        }
+      }
+    },
     "Premium is required to change additional ledgers. You can still view, select, and export them." : {
       "localizations" : {
         "en" : {
@@ -1562,6 +1596,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "账簿不可用"
+          }
+        }
+      }
+    },
+    "Update requirements could not be verified. Connect to the internet and try again." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Update requirements could not be verified. Connect to the internet and try again."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se pudo comprobar si es necesario actualizar. Conéctate a internet e inténtalo de nuevo."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossible de vérifier si une mise à jour est nécessaire. Connectez-vous à Internet et réessayez."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アップデートの要否を確認できませんでした。インターネットに接続して、もう一度お試しください。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法确认是否需要更新。请连接互联网后重试。"
           }
         }
       }

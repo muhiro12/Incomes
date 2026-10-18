@@ -44,6 +44,8 @@ living in the app targets.
   Settings when the SDK requires them. Startup cleanup retains consent keys.
 - All UI surfaces use only `MHDesign` from MHUI 2.4 or later, alongside native
   SwiftUI containers.
+- Scheduled update checks and phone UI/App Intent write gates are implemented
+  but remain inactive until an independently operated policy URL is selected.
 
 ## Current End-User Features
 

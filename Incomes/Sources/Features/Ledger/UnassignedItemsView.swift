@@ -144,19 +144,20 @@ struct UnassignedItemsView: View {
     }
 
     private func assign() {
-        do {
+        let itemIDs = selectedItemIDs
+        let destination = destination
+        IncomesMutationWorkflow.performDataMutation(
+            errorMessage: $errorMessage,
+            isProcessing: $isAssigning
+        ) {
             try LedgerMutationAccess.requireEditing([destination])
-            try LedgerOperations.assignUnassignedItems(itemIDs: selectedItemIDs, to: destination, context: context)
+            try LedgerOperations.assignUnassignedItems(itemIDs: itemIDs, to: destination, context: context)
             selectedItemIDs = []
-            isAssigning = true
             Task {
                 await IncomesMutationWorkflow.refreshNotificationSchedule(notificationService: notificationService)
                 IncomesWidgetReloader.reloadAllWidgets()
                 PhoneWatchBridge.shared.requestSnapshotRefresh()
-                isAssigning = false
             }
-        } catch {
-            errorMessage = error.localizedDescription
         }
     }
 }

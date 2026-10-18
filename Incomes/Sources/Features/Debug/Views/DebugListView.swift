@@ -24,6 +24,7 @@ struct DebugListView {
 
     @State private var isDialogPresented = false
     @State private var errorMessage: String?
+    @State private var isMutating = false
 
     private let navigateToRoute: (DebugRoute) -> Void
 
@@ -176,10 +177,8 @@ private extension DebugListView {
     }
 
     func prepareSampleData(_ profile: SampleDataOperations.Profile) {
-        do {
+        IncomesMutationWorkflow.performDataMutation(errorMessage: $errorMessage, isProcessing: $isMutating) {
             try SampleDataOperations.seedAndSave(context: context, profile: profile)
-        } catch {
-            errorMessage = ErrorMessageOperations.message(from: error)
         }
     }
 

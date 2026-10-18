@@ -10,10 +10,11 @@ struct DeleteOrphanTagsIntent: AppIntent {
     @Dependency private var logging: MHLoggingBootstrap
 
     @MainActor
-    func perform() throws -> some ReturnsValue<Int> {
+    func perform() async throws -> some ReturnsValue<Int> {
         let logger = intentLogger
         logger.notice("delete_orphan_tags.requested")
         do {
+            try await IncomesMutationWorkflow.checkUpdateRequirement()
             let deletedCount = try TagMutationOperations.deleteAllOrphanTagsAndSave(
                 context: modelContainer.mainContext
             )

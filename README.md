@@ -142,9 +142,8 @@ Models.
   SDK's current consent keys. AdMob Privacy & messaging configuration remains
   publisher-owned; local verification does not confirm live account setup.
 - Legacy remote configuration keeps its numeric string comparison and fetch
-  recovery behavior through `MHAppVersionComparison`. Scheduled policy and
-  operation enforcement require a separately chosen deployment endpoint and
-  rollout policy.
+  recovery behavior through `MHAppVersionComparison` until the separately
+  operated scheduled-policy endpoint is configured.
 
 ## Requirements
 
@@ -178,9 +177,35 @@ Follow these steps to run a local build:
 
 ### Remote configuration
 
-The app downloads `.config.json` from the `main` branch on GitHub at launch.
+While scheduled enforcement is inactive, the app downloads `.config.json` from
+the `main` branch on GitHub at launch.
 Update the file or host your own endpoint when shipping a fork so update prompts
 reflect your release channel.
+
+Scheduled update enforcement is wired but inactive while
+`IncomesRemoteUpdateConfiguration.policyURLString` is `nil`. Choose an independently
+operated HTTPS endpoint before setting that value; no placeholder endpoint or
+live policy is shipped by this integration. Keep the legacy `.config.json`
+compatible with already-distributed apps.
+
+The configured path uses MHPlatform's standard App Store controller with the
+Incomes Store ID, `jp` storefront, 30-day maximum document validity, 24-hour
+publication evidence, and source-scoped Application Support storage. It calls
+`prepare()` at startup and foreground entry. Deploy and verify a valid policy
+before enabling the endpoint; missing or expired evidence blocks protected
+writes, and a broken configuration never falls back to legacy permission.
+The first mutation also prepares retained evidence when no UI lifecycle has run,
+so a background App Intent can use still-valid cached permission offline.
+
+Phone UI and App Intents check immediately before user-requested item, ledger,
+and tag mutations, balance recalculation, import, yearly duplication, and data
+maintenance. Rejection skips the mutation and success effects. Browsing, export,
+retry, and the Store route remain available. Startup data migration, automatic
+CloudKit delivery, and the Watch's local mirror are outside this user-operation
+gate. Existing binaries are not retroactively protected.
+
+Use the package's [scheduled policy contract](https://github.com/muhiro12/MHPlatform/blob/1.17.0/Designs/Architecture/remote-update.md)
+for deployment, revision changes, postponement, and explicit cancellation.
 
 ## Build and Test
 

@@ -21,7 +21,7 @@ struct ApplyYearlyDuplicationIntent: AppIntent {
     @Dependency private var logging: MHLoggingBootstrap
 
     @MainActor
-    func perform() throws -> some ReturnsValue<Int> {
+    func perform() async throws -> some ReturnsValue<Int> {
         let logger = intentLogger
         let metadata = YearlyDuplicationIntentSupport.requestMetadata(
             sourceYear: sourceYear,
@@ -35,6 +35,7 @@ struct ApplyYearlyDuplicationIntent: AppIntent {
             metadata: metadata
         )
         do {
+            try await IncomesMutationWorkflow.checkUpdateRequirement()
             let result = try YearlyDuplicationAutomationOperations.apply(
                 context: modelContainer.mainContext,
                 sourceYear: sourceYear,

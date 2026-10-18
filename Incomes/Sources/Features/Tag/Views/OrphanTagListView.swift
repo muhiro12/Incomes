@@ -15,6 +15,7 @@ struct OrphanTagListView: View {
 
     @State private var isCleanupDialogPresented = false
     @State private var errorMessage: String?
+    @State private var isMutating = false
 
     private let ledgerIdentifier: LedgerIdentifier
     private let onCleanupAll: () -> Void
@@ -153,14 +154,12 @@ private extension OrphanTagListView {
     }
 
     func cleanupAllOrphanTags() {
-        do {
+        IncomesMutationWorkflow.performDataMutation(errorMessage: $errorMessage, isProcessing: $isMutating) {
             try LedgerMutationAccess.requireEditing([ledgerIdentifier])
             try TagMutationOperations.deleteAllOrphanTagsAndSave(context: context)
             selectedTagID = nil
             onCleanupAll()
             Haptic.success.impact()
-        } catch {
-            errorMessage = ErrorMessageOperations.message(from: error)
         }
     }
 }

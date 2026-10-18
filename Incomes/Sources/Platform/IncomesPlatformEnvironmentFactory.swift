@@ -38,7 +38,8 @@ enum IncomesPlatformEnvironmentFactory {
                 logging: logging,
                 category: IncomesLogging.Category.remoteConfiguration,
                 source: #fileID
-            )
+            ),
+            scheduledUpdates: platformMode == .preview ? .init() : IncomesRemoteUpdateConfiguration.operations
         )
         let tipController = makeTipController(for: platformMode)
         let reviewFlow = IncomesReviewSupport.flow(

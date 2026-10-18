@@ -13,7 +13,8 @@ struct RenameCategoryTagIntent: AppIntent {
     @Dependency private var modelContainer: ModelContainer
 
     @MainActor
-    func perform() throws -> some ReturnsValue<TagEntity> {
+    func perform() async throws -> some ReturnsValue<TagEntity> {
+        try await IncomesMutationWorkflow.checkUpdateRequirement()
         let model = try tag.model(in: modelContainer.mainContext)
         try LedgerMutationAccess.requireEditing([.default])
         let renamed = try TagRenameOperations.renameCategoryAndSave(
