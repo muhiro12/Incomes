@@ -31,10 +31,15 @@ continue to address `Incomes.xcodeproj`. No new CI workflow is needed.
 The Xcode Cloud manifest, shared schemes, entitlements, and package resolution
 must remain unchanged by conversion.
 
-The optional `.periphery.yml` also addresses the bundle. Periphery was not
-installed for this qualification, and that existing configuration names the
-absent `IncomesTests` target. Its scan and external parser compatibility remain
-unqualified; it is not part of the documented repository-rule entrypoint.
+The optional `.periphery.yml` also addresses the bundle and selects the Incomes
+scheme. Its obsolete `targets` option, including the absent `IncomesTests`
+target, was removed. Periphery's supported `schemes` option selects the built
+targets; the Incomes scheme includes the Watch and Widgets dependencies. Existing
+index exclusions are preserved. The YAML keys and selected scheme were checked
+against the upstream configuration definition and the actual Xcode project.
+Periphery itself was not installed for this qualification, so its scan and
+external parser compatibility remain unqualified. It is not part of the
+documented repository-rule entrypoint.
 
 The repository adapter uses Foundation's native JSON5 reader because Xcode's
 JSON includes trailing commas. `plutil` remains the legacy-format reader. Missing,
@@ -62,9 +67,10 @@ adapter commit: it supports either format and rejects both being present.
 Do not use reverse conversion as an exact restoration of the original file;
 Xcode can regenerate internal object identifiers and normalize configuration.
 
-Xcode Cloud must be checked on an authorized pushed candidate. A local build or
+Formal archive and Xcode Cloud execution are deferred release qualification and
+do not block the local project-format migration. A local build or
 archive-configuration inspection does not prove a successful cloud archive,
-upload, or distribution.
+upload, or distribution. Any later cloud check requires an authorized candidate.
 
 ## Local qualification on October 18, 2026
 
@@ -107,12 +113,15 @@ existing LicenseList plugin expects a `SourcePackages` directory beside its
 build tree. A build-local link to the same resolved package cache restored that
 layout; no package source or project configuration was changed to fix it.
 
-The original Xcode scheme and destination were restored. This is local
-qualification; the formal signed archive and the existing Xcode Cloud path
-remain unrun until an authorized candidate is available. The release-toolchain
-choice is unchanged, and Issue #400 remains open for that evidence.
+The original Xcode scheme and destination were restored. The Incomes-specific
+configuration work and local qualification are complete. Formal signed archive
+and Xcode Cloud execution are deferred, and the release-toolchain choice is
+unchanged. Issue #400 remains open while the implementation is unpublished;
+the deferred release checks are not a current completion gate.
 
 ## References
 
 - [Apple project-format conversion and compatibility](https://developer.apple.com/documentation/xcode/updating-your-xcode-project-configuration-file-format)
 - [Apple project-format library](https://github.com/apple/xcode-project-format)
+- [Periphery configuration definition](https://github.com/peripheryapp/periphery/blob/master/Sources/Configuration/Configuration.swift)
+- [Periphery scheme selection](https://github.com/peripheryapp/periphery/blob/master/Sources/Frontend/Commands/ScanCommand.swift)
