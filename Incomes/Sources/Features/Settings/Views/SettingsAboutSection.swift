@@ -3,10 +3,12 @@ import SwiftUI
 struct SettingsAboutSection: View {
     let showTipsAgain: () -> Void
     let openLicense: () -> Void
+    let onError: (String) -> Void
     let versionText: String?
 
     var body: some View {
         Section {
+            AdsPrivacyOptionsButton(onError: onError)
             Button("Show tips again", action: showTipsAgain)
             SettingsNavigationRowButton(
                 title: "License",

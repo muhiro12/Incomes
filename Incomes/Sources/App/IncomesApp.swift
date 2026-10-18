@@ -6,6 +6,7 @@
 //
 
 import AppIntents
+import MHAppRuntimeAds
 import MHPlatform
 import SwiftData
 import SwiftUI
@@ -32,7 +33,9 @@ struct IncomesApp: App {
 
     @MainActor
     init() {
-        let preferenceLifecycleOutcome = IncomesPreferenceLifecycle.runSynchronously()
+        let preferenceLifecycleOutcome = IncomesPreferenceLifecycle.runSynchronously(
+            preserving: MHAdsConsentStorage.currentDescriptors()
+        )
         IncomesAppGroupUserDefaultsCleanup.removeUnknownKeys()
 
         let preferenceStore = MHPreferenceStore()

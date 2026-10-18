@@ -37,4 +37,16 @@ struct RemoteConfigurationOperationsTests {
             requiredVersion: "1.02"
         ) == false)
     }
+
+    @Test
+    func isUpdateRequired_preservesUnequalComponentOrdering() {
+        #expect(RemoteConfigurationOperations.isUpdateRequired(
+            currentVersion: "1",
+            requiredVersion: "1.0"
+        ))
+        #expect(RemoteConfigurationOperations.isUpdateRequired(
+            currentVersion: "1.0",
+            requiredVersion: "1"
+        ) == false)
+    }
 }

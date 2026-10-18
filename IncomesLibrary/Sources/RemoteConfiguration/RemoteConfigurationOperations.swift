@@ -1,4 +1,4 @@
-import Foundation
+import MHPlatformCore
 
 /// Domain operations for remote configuration decisions.
 public enum RemoteConfigurationOperations {
@@ -7,9 +7,9 @@ public enum RemoteConfigurationOperations {
         currentVersion: String,
         requiredVersion: String
     ) -> Bool {
-        VersionComparator.isUpdateRequired(
-            current: currentVersion,
-            required: requiredVersion
+        MHAppVersionComparison.numericStringsRequireUpdate(
+            currentVersion: currentVersion,
+            minimumVersion: requiredVersion
         )
     }
 }

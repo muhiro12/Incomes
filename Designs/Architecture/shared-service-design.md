@@ -44,22 +44,31 @@ and widgets.
 - `Incomes` is the intentional `MHPlatform` umbrella adopter.
 - `IncomesLibrary` adopts `MHPlatformCore` and must not depend on the
   full `MHPlatform` umbrella.
-- `Watch` intentionally stays on the narrower `MHPreferences` product.
+- `Watch` intentionally stays on the narrower `MHPreferences` and
+  `MHPreferencesUI` products.
 - `Widgets` intentionally stay off direct MHPlatform package adoption.
 - This repository intentionally uses the MHPlatform 1.x semver range
-  `1.14.0..<2.0.0` to retain verified purchase identifiers independently of
-  product metadata and use layout-based native ads.
+  `1.17.0..<2.0.0` for consent-managed ads, retained verified purchase
+  identifiers, and shared remote-version comparison.
 - Native ad placements choose `MHNativeAdLayout.compact` or `.media`. The ad
   view takes the proposed row width and its natural height; the app owns the
   surrounding list section, padding, and any frame constraints.
-- App and Watch startup run `IncomesPreferenceLifecycle.registry`
-  synchronously before preference consumers. Its cleanup allowlist covers every
+- Native ad placements use `canDisplayAds` so consent eligibility also controls
+  reserved space. Settings offers SDK privacy options when required.
+- App and Watch startup run `IncomesPreferenceLifecycle.runSynchronously`
+  before preference consumers. Its cleanup allowlist covers every
   app-owned standard-domain key, including both log snapshot slots, plus the
-  exact keys StoreKit writes to that domain.
+  exact keys StoreKit writes to that domain. The app supplies current
+  `MHAdsConsentStorage` descriptors before cleanup; the library stays independent
+  of the advertising SDK.
+- `MHAppVersionComparison.numericStringsRequireUpdate` preserves the legacy
+  remote-configuration and ledger-migration version ordering. Scheduled update
+  enforcement remains a separate rollout requiring an independent policy URL.
 
 ## MHDesign Adoption
 
-- `Incomes`, `Watch`, and `Widgets` adopt the `MHDesign` product from MHUI.
+- `Incomes`, `Watch`, and `Widgets` adopt only the `MHDesign` product from
+  MHUI 2.4 or later.
 - The app keeps native SwiftUI containers and its existing presentation styles.
   Package updates do not opt the app into the full MHUI theme or chrome.
 - Every surface reads `MHDesignMetrics.standard`, the shared eight-point

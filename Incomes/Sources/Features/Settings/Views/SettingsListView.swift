@@ -225,6 +225,9 @@ private extension SettingsListView {
             openLicense: {
                 navigateToRoute(.settingsLicense)
             },
+            onError: { message in
+                errorMessage = message
+            },
             versionText: appVersionText
         )
     }

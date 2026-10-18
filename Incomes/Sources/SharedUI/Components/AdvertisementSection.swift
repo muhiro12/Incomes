@@ -24,7 +24,7 @@ struct AdvertisementSection {
 
 extension AdvertisementSection: View {
     var body: some View {
-        if appRuntime.adsAvailability == .available {
+        if appRuntime.canDisplayAds {
             Section {
                 appRuntime.nativeAdView(layout: layout)
                     .padding(designMetrics.spacing.inline)

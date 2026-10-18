@@ -10,16 +10,24 @@ public enum IncomesPreferenceLifecycle {
     )
 
     /// Complete current storage allowlist and migration-state slot for app startup.
-    public static let registry = MHPreferenceRegistry(
-        descriptors: currentDescriptors(),
-        migrationStateDescriptor: migrationStateDescriptor
-    )
+    public static let registry = makeRegistry()
+
+    /// Adds platform-owned storage to the startup allowlist without importing its SDKs.
+    public static func makeRegistry(
+        preserving additionalDescriptors: [MHRawStorageDescriptor] = []
+    ) -> MHPreferenceRegistry {
+        .init(
+            descriptors: currentDescriptors() + additionalDescriptors,
+            migrationStateDescriptor: migrationStateDescriptor
+        )
+    }
 
     /// Runs the preference lifecycle synchronously before app-owned preference access begins.
     public static func runSynchronously(
-        standardDomainName: String? = Bundle.main.bundleIdentifier
+        standardDomainName: String? = Bundle.main.bundleIdentifier,
+        preserving additionalDescriptors: [MHRawStorageDescriptor] = []
     ) -> MHPreferenceLifecycleOutcome {
-        registry.runSynchronously(
+        makeRegistry(preserving: additionalDescriptors).runSynchronously(
             standardDomainName: standardDomainName
         )
     }

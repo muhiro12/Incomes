@@ -35,10 +35,15 @@ living in the app targets.
 
 - `Incomes` intentionally adopts the full `MHPlatform` umbrella.
 - `IncomesLibrary` intentionally adopts `MHPlatformCore`.
-- `Watch` intentionally stays on the narrower `MHPreferences` product.
+- `Watch` intentionally stays on the narrower `MHPreferences` and
+  `MHPreferencesUI` products.
 - `Widgets` intentionally stay off direct MHPlatform package adoption.
 - This repository intentionally tracks MHPlatform with the 1.x semver range
-  `1.14.0..<2.0.0`.
+  `1.17.0..<2.0.0`.
+- The app uses consent-managed advertising and offers privacy options in
+  Settings when the SDK requires them. Startup cleanup retains consent keys.
+- All UI surfaces use only `MHDesign` from MHUI 2.4 or later, alongside native
+  SwiftUI containers.
 
 ## Current End-User Features
 

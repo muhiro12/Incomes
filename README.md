@@ -130,10 +130,21 @@ Models.
   uses package-owned runtime surfaces plus route, mutation, and review shells.
 - `IncomesLibrary` intentionally adopts `MHPlatformCore` as the shared-library
   umbrella for core-safe platform helpers.
-- `Watch` intentionally stays on the narrower `MHPreferences` product.
+- `Watch` intentionally stays on the narrower `MHPreferences` and
+  `MHPreferencesUI` products.
 - `Widgets` intentionally stay off direct MHPlatform package adoption.
 - This repository intentionally tracks MHPlatform with the 1.x semver range
-  `1.14.0..<2.0.0`.
+  `1.17.0..<2.0.0`.
+- App, watch, and widget UI use only the `MHDesign` product from MHUI 2.4 or
+  later; the `MHUI` product is not linked.
+- The app opts into MHPlatform's consent-managed ads and exposes privacy
+  options in Settings when required by the SDK. Startup cleanup preserves the
+  SDK's current consent keys. AdMob Privacy & messaging configuration remains
+  publisher-owned; local verification does not confirm live account setup.
+- Legacy remote configuration keeps its numeric string comparison and fetch
+  recovery behavior through `MHAppVersionComparison`. Scheduled policy and
+  operation enforcement require a separately chosen deployment endpoint and
+  rollout policy.
 
 ## Requirements
 

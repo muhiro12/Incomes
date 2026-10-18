@@ -1,4 +1,5 @@
 import Foundation
+import MHPlatformCore
 import SwiftData
 
 public extension LedgerOperations {
@@ -12,7 +13,10 @@ public extension LedgerOperations {
         try requireCleanContext(context)
         let hasAdditionalLedgers = try !context.fetch(.tags(.typeIs(.ledger))).isEmpty
         let isLegacyLaunch = lastLaunchedAppVersion.isEmpty
-            || VersionComparator.isUpdateRequired(current: lastLaunchedAppVersion, required: "6.0")
+            || MHAppVersionComparison.numericStringsRequireUpdate(
+                currentVersion: lastLaunchedAppVersion,
+                minimumVersion: "6.0"
+            )
         let legacyItems = try isLegacyLaunch && !hasAdditionalLedgers
             ? context.fetch(.allLedgerItems()).filter { $0.ledgerIdentifier == .unassigned } : []
         return try ItemMutationSupport.performAndSave(context: context) {

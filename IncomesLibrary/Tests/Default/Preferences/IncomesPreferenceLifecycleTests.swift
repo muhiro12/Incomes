@@ -41,6 +41,36 @@ struct IncomesPreferenceLifecycleTests {
 
         #expect(appOwnedStorageKeys.subtracting(allowlistedStorageKeys).isEmpty)
     }
+
+    @Test
+    func registry_preservesExternalConsentAndAppPreferencesDuringCleanup() throws {
+        let suiteName = "IncomesPreferenceLifecycleTests.consent.\(UUID().uuidString)"
+        let userDefaults = try makeUserDefaults(suiteName: suiteName)
+        defer {
+            userDefaults.removePersistentDomain(forName: suiteName)
+        }
+
+        let consentKey = "IABTCF_TCString"
+        let currencyKey = IncomesUserDefaultsKeys.Standard.currencyCode.rawValue
+        userDefaults.set("stored-consent", forKey: consentKey)
+        userDefaults.set("JPY", forKey: currencyKey)
+        userDefaults.set("obsolete", forKey: "unknown-key")
+
+        let registry = IncomesPreferenceLifecycle.makeRegistry(
+            preserving: [
+                .init(storageKey: consentKey, defaultSelection: .standard)
+            ]
+        )
+        let report = MHUserDefaultsCleanupService.removeUnknownKeys(
+            from: userDefaults,
+            domainName: suiteName,
+            knownDescriptors: registry.descriptors
+        )
+
+        #expect(userDefaults.string(forKey: consentKey) == "stored-consent")
+        #expect(userDefaults.string(forKey: currencyKey) == "JPY")
+        #expect(report.removedStorageKeys == ["unknown-key"])
+    }
 }
 
 private extension IncomesPreferenceLifecycleTests {

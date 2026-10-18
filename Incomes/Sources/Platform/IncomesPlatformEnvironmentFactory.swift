@@ -73,7 +73,8 @@ enum IncomesPlatformEnvironmentFactory {
                 IncomesMonetizationConfiguration.subscriptionProductID
             ],
             nativeAdUnitID: nativeAdUnitID(for: platformMode),
-            showsLicenses: true
+            showsLicenses: true,
+            adsConsent: .init()
         )
     }
 
