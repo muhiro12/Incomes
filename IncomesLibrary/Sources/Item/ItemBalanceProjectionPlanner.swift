@@ -14,7 +14,9 @@ enum ItemBalanceProjectionPlanner {
         let localDate: Date
         let content: String
         let priority: Int
-        let netIncome: Decimal
+        let income: Decimal
+        let outgo: Decimal
+        let storedBalance: Decimal?
         let tieBreaker: String
     }
 
@@ -66,8 +68,8 @@ enum ItemBalanceProjectionPlanner {
             values: values,
             repeatMonthSelections: repeatMonthSelections
         )
-        let changedRows = try plannedValues.enumerated().map { index, values in
-            try projectedRow(
+        let changedRows = plannedValues.enumerated().map { index, values in
+            projectedRow(
                 values: values,
                 tieBreaker: "projection.create.\(index)"
             )
@@ -108,8 +110,8 @@ enum ItemBalanceProjectionPlanner {
             values: values,
             scope: scope
         )
-        let changedRows = try updates.map { update in
-            try projectedRow(
+        let changedRows = updates.map { update in
+            projectedRow(
                 values: update.values,
                 tieBreaker: String(describing: update.itemID)
             )
@@ -144,7 +146,7 @@ enum ItemBalanceProjectionPlanner {
             context: context,
             removedItemIDs: Set(affectedItems.map(\.persistentModelID)),
             newRows: updates.map { update in
-                try projectedRow(
+                projectedRow(
                     values: update.values,
                     tieBreaker: String(describing: update.itemID)
                 )
@@ -175,7 +177,7 @@ enum ItemBalanceProjectionPlanner {
             context: context,
             removedItemIDs: removedItemIDs,
             newRows: values.enumerated().map { index, values in
-                try projectedRow(
+                projectedRow(
                     values: values,
                     tieBreaker: "projection.planned.\(index)"
                 )
@@ -267,7 +269,7 @@ private extension ItemBalanceProjectionPlanner {
     static func projectedRow(
         values: ItemStoredValues,
         tieBreaker: String
-    ) throws -> ProjectedRow {
+    ) -> ProjectedRow {
         let utcDate = normalizedUTCDate(for: values.date)
         return .init(
             ledgerIdentifier: values.ledgerIdentifier,
@@ -279,7 +281,9 @@ private extension ItemBalanceProjectionPlanner {
             ),
             content: values.content,
             priority: values.priority,
-            netIncome: try BalanceCalculator.netIncome(income: values.income, outgo: values.outgo),
+            income: values.income,
+            outgo: values.outgo,
+            storedBalance: nil,
             tieBreaker: tieBreaker
         )
     }

@@ -1,9 +1,9 @@
 import Foundation
 import SwiftData
 
-/// Reads independent financial balances from authoritative amounts and ordering.
+/// Reads each book's saved running balances without rewriting its history.
 public enum LedgerBalanceOperations {
-    /// Fetches and derives balances for exactly one owner.
+    /// Fetches saved balances for exactly one owner.
     public static func snapshot(
         context: ModelContext,
         ledgerIdentifier: LedgerIdentifier = .default
@@ -15,7 +15,7 @@ public enum LedgerBalanceOperations {
         )
     }
 
-    /// Fetches and derives balances for exactly one owner.
+    /// Reads saved balances for exactly one owner without recalculating them.
     public static func snapshot(
         items: [Item],
         ledgerIdentifier: LedgerIdentifier = .default
@@ -30,12 +30,7 @@ public enum LedgerBalanceOperations {
             item.ledgerIdentifier == ledgerIdentifier
         }
         .sorted(by: >)
-        let values = try BalanceCalculator.calculateBalances(
-            startingFrom: .zero,
-            inputs: try orderedItems.map { item in
-                .init(netIncome: try BalanceCalculator.netIncome(income: item.income, outgo: item.outgo))
-            }
-        )
+        let values = orderedItems.map(\.balance)
         return .init(
             ledgerIdentifier: ledgerIdentifier,
             balances: Dictionary(uniqueKeysWithValues: zip(orderedItems.map(\.persistentModelID), values)),
@@ -44,14 +39,12 @@ public enum LedgerBalanceOperations {
         )
     }
 
-    /// Derives this item’s balance from authoritative amounts in its entire book.
+    /// Reads this item's saved balance after validating its book's ownership.
     public static func balance(for item: Item) throws -> Decimal {
-        guard let context = item.modelContext,
-              let result = try snapshot(context: context, ledgerIdentifier: item.ledgerIdentifier)
-                .balances[item.persistentModelID]
-        else {
+        guard let context = item.modelContext else {
             throw LedgerError.unavailable
         }
-        return result
+        try LedgerOperations.requireCompleteOwnership(context: context)
+        return item.balance
     }
 }

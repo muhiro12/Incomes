@@ -186,7 +186,9 @@ private extension LedgerMutationIsolationTests {
         _ = try makeItem(context: context, owner: other, income: 1, day: secondDay)
         try context.save()
         #expect(throws: ItemAmountError.balanceOutOfRange) {
-            try LedgerBalanceOperations.snapshot(context: context, ledgerIdentifier: other)
+            try ItemBalanceOperations.recalculate(
+                context: context, date: shiftedDate("2025-01-01T12:00:00Z"), ledgerIdentifier: other
+            )
         }
         return other
     }
@@ -200,7 +202,7 @@ private extension LedgerMutationIsolationTests {
         repeatID: UUID = UUID()
     ) throws -> Item {
         let date = try #require(Calendar.current.date(from: .init(year: sourceYear, month: 1, day: day)))
-        return try Item.create(
+        let item = try Item.create(
             context: context,
             values: .init(
                 date: date,
@@ -213,5 +215,7 @@ private extension LedgerMutationIsolationTests {
             ),
             repeatID: repeatID
         )
+        item.modify(balance: income - outgo)
+        return item
     }
 }

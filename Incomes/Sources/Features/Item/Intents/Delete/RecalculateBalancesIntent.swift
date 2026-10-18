@@ -25,7 +25,8 @@ struct RecalculateBalancesIntent: AppIntent {
             )
         )
         do {
-            try ItemBalanceOperations.recalculate(
+            try LedgerMutationAccess.requireEditing([.default])
+            try ItemBalanceOperations.recalculateAndSave(
                 context: modelContainer.mainContext,
                 date: date
             )

@@ -78,7 +78,7 @@ extension IncomesFileItem {
         )
     }
 
-    init(item: Item, derivedBalance: Decimal? = nil) {
+    init(item: Item, balance: Decimal? = nil) {
         self.init(
             date: item.utcDate,
             content: item.content,
@@ -87,7 +87,7 @@ extension IncomesFileItem {
             category: item.category?.name ?? "",
             priority: item.priority,
             repeatID: item.repeatID,
-            balance: derivedBalance,
+            balance: balance,
             ledgerIdentifier: item.ledgerIdentifier
         )
     }

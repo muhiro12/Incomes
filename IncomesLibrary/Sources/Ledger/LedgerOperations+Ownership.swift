@@ -64,19 +64,19 @@ public extension LedgerOperations {
         guard !items.isEmpty else {
             return .init(changedIDs: .init(), affectedDateRange: nil, followUpHints: [])
         }
-        let combined = try (context.fetch(.items(.all, ledgerIdentifier: identifier)) + items).sorted(by: >)
-        _ = try BalanceCalculator.calculateBalances(
-            startingFrom: .zero,
-            inputs: try combined.map { item in
-                .init(netIncome: try BalanceCalculator.netIncome(income: item.income, outgo: item.outgo))
-            }
+        try ItemBalanceProjectionPlanner.validateAssignmentBalances(
+            context: context,
+            items: items,
+            ledgerIdentifier: identifier
         )
         return try ItemMutationSupport.performAndSave(context: context) {
             let tag = try ownershipTag(identifier, context: context)
             for item in items {
                 item.modify(tags: (item.tags ?? []) + [tag])
             }
-            try BalanceCalculator.calculate(in: context, after: .distantPast, ledgerIdentifier: identifier)
+            if let date = items.map(\.localDate).min() {
+                try BalanceCalculator.calculate(in: context, after: date, ledgerIdentifier: identifier)
+            }
             return .init(
                 changedIDs: .init(updated: itemIDs),
                 affectedDateRange: ItemMutationSupport.dateRange(from: items.map(\.localDate)),

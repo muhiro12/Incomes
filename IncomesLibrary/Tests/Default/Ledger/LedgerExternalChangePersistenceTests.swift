@@ -14,28 +14,17 @@ struct LedgerExternalChangePersistenceTests {
         var expected: (standard: Decimal, additional: Decimal) {
             switch self {
             case .insert:
-                (57, 103)
+                (10_157, 20_223)
             case .update:
-                (70, 100)
+                (10_170, 20_220)
             case .delete:
-                (40, 0)
+                (10_140, 20_120)
             }
         }
     }
 
-    private static let standardIncome: Decimal = 10
-    private static let retainedIncome: Decimal = 40
-    private static let additionalIncome: Decimal = 90
-    private static let insertedStandardIncome: Decimal = 7
-    private static let insertedAdditionalIncome: Decimal = 13
-    private static let updatedStandardIncome: Decimal = 30
-    private static let updatedAdditionalIncome: Decimal = 100
-    private static let incorrectBalance: Decimal = 999
-
     @Test(arguments: Change.allCases)
-    func external_changes_reopen_with_independent_balances_and_idempotent_cache_repair(
-        change: Change
-    ) throws {
+    func separate_writer_commits_scoped_balances_and_reopening_never_repairs_history(change: Change) throws {
         let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
         defer { try? FileManager.default.removeItem(at: directory) }
@@ -49,132 +38,153 @@ struct LedgerExternalChangePersistenceTests {
         let saved = try autoreleasepool {
             let context = ModelContext(try container(at: url))
             try verifyRead(context, change: change, owner: owners.additional)
-            let before = try archive(context)
-            try ItemBalanceOperations.reconcileAndSave(context: context)
-            #expect(!context.hasChanges)
-            #expect(try archive(context) == before)
-            return try cache(context)
+            return try balances(context)
         }
         try autoreleasepool {
             let context = ModelContext(try container(at: url))
-            try verifyRead(context, change: change, owner: owners.additional)
-            let currentCache = try cache(context)
-            #expect(currentCache == saved)
+            for _ in 0..<3 {
+                try verifyRead(context, change: change, owner: owners.additional)
+            }
+            #expect(try balances(context) == saved)
             #expect(try LedgerOperations.ledger(owners.empty, context: context).name == "Empty")
-            try ItemBalanceOperations.reconcileAndSave(context: context)
             #expect(!context.hasChanges)
-            let repeatedCache = try cache(context)
-            #expect(repeatedCache == saved)
-            try verifyCache(context, owner: .default)
-            try verifyCache(context, owner: owners.additional)
         }
     }
 }
 
 private extension LedgerExternalChangePersistenceTests {
-    func seed(at url: URL) throws -> (
-        additional: LedgerIdentifier, empty: LedgerIdentifier
-    ) {
+    enum Fixture {
+        static let standardOffset: Decimal = 10_000
+        static let additionalOffset: Decimal = 20_000
+        static let anchorIncome: Decimal = 100
+        static let standardIncome: Decimal = 10
+        static let additionalIncome: Decimal = 90
+        static let standardTailIncome: Decimal = 40
+        static let additionalTailIncome: Decimal = 20
+        static let standardInsertedIncome: Decimal = 7
+        static let additionalInsertedIncome: Decimal = 13
+        static let standardUpdatedIncome: Decimal = 30
+        static let additionalUpdatedIncome: Decimal = 100
+        static let anchorDay = 1
+        static let targetDay = 2
+        static let insertedDay = 3
+        static let tailDay = 4
+    }
+
+    func seed(at url: URL) throws -> (additional: LedgerIdentifier, empty: LedgerIdentifier) {
         let context = ModelContext(try container(at: url))
         let owner = try LedgerOperations.create(context: context, name: "Additional").id
         let empty = try LedgerOperations.create(context: context, name: "Empty").id
-        _ = try makeItem(context, owner: .default, content: "Target", income: Self.standardIncome)
-        _ = try makeItem(context, owner: .default, content: "Keep", income: Self.retainedIncome)
-        _ = try makeItem(context, owner: owner, content: "Target", income: Self.additionalIncome)
+        let books = [(LedgerIdentifier.default, Fixture.standardOffset), (owner, Fixture.additionalOffset)]
+        for (identifier, offset) in books {
+            let anchor = try makeItem(
+                context, owner: identifier, day: Fixture.anchorDay, content: "Anchor", income: Fixture.anchorIncome
+            )
+            let target = try makeItem(
+                context,
+                owner: identifier,
+                day: Fixture.targetDay,
+                content: "Target",
+                income: identifier == .default ? Fixture.standardIncome : Fixture.additionalIncome
+            )
+            let tail = try makeItem(
+                context,
+                owner: identifier,
+                day: Fixture.tailDay,
+                content: "Tail",
+                income: identifier == .default ? Fixture.standardTailIncome : Fixture.additionalTailIncome
+            )
+            anchor.modify(balance: offset + Fixture.anchorIncome)
+            target.modify(balance: offset + Fixture.anchorIncome + target.income)
+            tail.modify(balance: target.balance + tail.income)
+        }
         try context.save()
         return (owner, empty)
     }
 
     func apply(_ change: Change, at url: URL, owner: LedgerIdentifier) throws {
         let context = ModelContext(try container(at: url))
-        let standard = try #require(try context.fetch(.items(.all)).first { $0.content == "Target" })
-        let additional = try #require(try context.fetch(.items(.all, ledgerIdentifier: owner)).first)
-        switch change {
-        case .insert:
-            _ = try makeItem(context, owner: .default, content: "Inserted", income: Self.insertedStandardIncome)
-            _ = try makeItem(context, owner: owner, content: "Inserted", income: Self.insertedAdditionalIncome)
-        case .update:
-            try modify(standard, income: Self.updatedStandardIncome)
-            try modify(additional, income: Self.updatedAdditionalIncome)
-        case .delete:
-            context.delete(standard)
-            context.delete(additional)
+        for identifier in [LedgerIdentifier.default, owner] {
+            let target = try #require(try context.fetch(.items(.all, ledgerIdentifier: identifier)).first { item in
+                item.content == "Target"
+            })
+            switch change {
+            case .insert:
+                _ = try ItemCreationOperations.createAndSaveWithOutcome(
+                    context: context,
+                    input: input(
+                        owner: identifier,
+                        day: Fixture.insertedDay,
+                        content: "Inserted",
+                        income: identifier == .default
+                            ? Fixture.standardInsertedIncome : Fixture.additionalInsertedIncome
+                    ),
+                    repeatMonthSelections: []
+                )
+            case .update:
+                _ = try ItemUpdateOperations.updateAndSaveWithOutcome(
+                    context: context,
+                    item: target,
+                    input: input(
+                        owner: identifier,
+                        day: Fixture.targetDay,
+                        content: "Target",
+                        income: identifier == .default ? Fixture.standardUpdatedIncome : Fixture.additionalUpdatedIncome
+                    ),
+                    scope: .thisItem
+                )
+            case .delete:
+                _ = try ItemDeletionOperations.deleteAndSaveWithOutcome(context: context, item: target)
+            }
+            #expect(!context.hasChanges)
         }
-        for item in try context.fetch(.allLedgerItems()) {
-            item.modify(balance: Self.incorrectBalance)
-        }
-        try context.save()
     }
 
-    func modify(_ item: Item, income: Decimal) throws {
-        try item.modify(
-            values: .init(
-                date: item.localDate,
-                content: item.content,
-                income: income,
-                outgo: 0,
-                category: "Shared",
-                priority: 0,
-                ledgerIdentifier: item.ledgerIdentifier
-            ),
-            repeatID: item.repeatID
-        )
-    }
-
-    func verifyRead(
-        _ context: ModelContext,
-        change: Change,
-        owner: LedgerIdentifier
-    ) throws {
-        #expect(
-            try LedgerBalanceOperations.snapshot(context: context).latestBalance
-                == change.expected.standard
-        )
+    func verifyRead(_ context: ModelContext, change: Change, owner: LedgerIdentifier) throws {
+        #expect(try LedgerBalanceOperations.snapshot(context: context).latestBalance == change.expected.standard)
         #expect(
             try LedgerBalanceOperations.snapshot(context: context, ledgerIdentifier: owner).latestBalance
                 == change.expected.additional
         )
+        for (identifier, balance) in [
+            (LedgerIdentifier.default, Fixture.standardOffset + Fixture.anchorIncome),
+            (owner, Fixture.additionalOffset + Fixture.anchorIncome)
+        ] {
+            let anchor = try #require(try context.fetch(.items(.all, ledgerIdentifier: identifier)).first { item in
+                item.content == "Anchor"
+            })
+            #expect(anchor.income == 100)
+            #expect(anchor.balance == balance)
+        }
         #expect(!context.hasChanges)
     }
 
-    func verifyCache(_ context: ModelContext, owner: LedgerIdentifier) throws {
-        let snapshot = try LedgerBalanceOperations.snapshot(context: context, ledgerIdentifier: owner)
-        for item in try context.fetch(.items(.all, ledgerIdentifier: owner)) {
-            #expect(item.balance == snapshot.balances[item.id])
-        }
+    func input(owner: LedgerIdentifier, day: Int, content: String, income: Decimal) -> ItemFormInput {
+        .init(
+            date: shiftedDate("2000-01-0\(day)T12:00:00Z"),
+            content: content,
+            income: income,
+            outgo: 0,
+            category: "Shared",
+            priority: 0,
+            ledgerIdentifier: owner
+        )
     }
 
     func makeItem(
-        _ context: ModelContext,
-        owner: LedgerIdentifier,
-        content: String,
-        income: Decimal
+        _ context: ModelContext, owner: LedgerIdentifier, day: Int, content: String, income: Decimal
     ) throws -> Item {
         try Item.create(
             context: context,
-            values: .init(
-                date: shiftedDate("2000-01-01T12:00:00Z"),
-                content: content,
-                income: income,
-                outgo: 0,
-                category: "Shared",
-                priority: 0,
-                ledgerIdentifier: owner
-            ),
+            values: .init(formInput: input(owner: owner, day: day, content: content, income: income)),
             repeatID: UUID()
         )
     }
 
-    func archive(_ context: ModelContext) throws -> [IncomesFileItem] {
-        try ItemExportOperations.fileItems(items: context.fetch(.allLedgerItems()))
-    }
-
-    func cache(_ context: ModelContext) throws -> [String: Decimal] {
-        try Dictionary(
-            uniqueKeysWithValues: context.fetch(.allLedgerItems()).map { item in
-                (try PersistentIdentifierCoder.encode(item.id), item.balance)
-            }
-        )
+    func balances(_ context: ModelContext) throws -> [String: Decimal] {
+        try Dictionary(uniqueKeysWithValues: context.fetch(.allLedgerItems()).map { item in
+            (try PersistentIdentifierCoder.encode(item.id), item.balance)
+        })
     }
 
     func container(at url: URL) throws -> ModelContainer {

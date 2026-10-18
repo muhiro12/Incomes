@@ -22,6 +22,11 @@ does not justify ambiguous ownership, silently lost data, or incorrect totals.
 
 Items own financial facts: dates, descriptions, income, and outgo. A stored
 `Item.balance` is a derived result, rather than another authoritative amount.
+It is also the established baseline for later calculations. Incomes mirrors
+real-world money and records; it cannot reconstruct every historical adjustment.
+Changing a record updates balances from that day onward, using the preceding
+saved balance. Reading or syncing data must not silently rebuild earlier history
+and change a current balance that already matches reality.
 Tags support classification, search, grouping, and technical indexes. User
 categories coexist with system-managed year, month, and content tags; Tag has
 never meant only an arbitrary user label.

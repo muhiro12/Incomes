@@ -41,13 +41,16 @@ Tag duplicate resolution remains explicit domain behavior; a UUID or a local
 fetch-before-insert cannot guarantee distributed uniqueness.
 
 `balance` and the classification tags are deliberately persisted derived data.
-Operations maintain them; income and outgo remain authoritative. Repairing the
-balance cache must not change financial records or merge categories. No new index is
+Operations maintain them; income and outgo describe recorded cash flow. Saved
+balances before a changed date remain the established starting point for future
+calculations. Rebuilding history can change today's balance even when it matches
+the user's real money, so reads and sync receipt do not automatically repair it.
+Explicit recalculation must not change income/outgo or merge categories. No new index is
 introduced without a measured query need and a migration test.
 
 Independent books use dedicated Tag type identifiers and relationships, without
-adding stored attributes or models. Derived balances are read from owner-scoped
-amounts, independently of the stored cache. See
+adding stored attributes or models. Balance reads use owner-scoped saved values;
+mutations recalculate only the affected book from its earliest changed day. See
 [Independent ledgers](independent-ledgers.md) for identity and compatibility limits.
 
 `PersistentIdentifier` is a store-local reference used by existing routes.

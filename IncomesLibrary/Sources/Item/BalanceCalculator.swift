@@ -16,8 +16,7 @@ enum BalanceCalculator {
 
     /// Recalculates balances starting from the earliest date covered by `items`.
     static func calculate(in context: ModelContext, for items: [Item]) throws {
-        let candidates = try items.isEmpty ? context.fetch(.allLedgerItems()) : items
-        let groups = Dictionary(grouping: candidates, by: \.ledgerIdentifier)
+        let groups = Dictionary(grouping: items, by: \.ledgerIdentifier)
         for (identifier, members) in groups {
             guard identifier != .unassigned, identifier != .conflicting else {
                 continue
@@ -31,16 +30,23 @@ enum BalanceCalculator {
     /// Recalculates balances for all items on or after `date`.
     static func calculate(
         in context: ModelContext,
-        after _: Date,
+        after date: Date,
         ledgerIdentifier: LedgerIdentifier = .default
     ) throws {
-        let targetList =
+        let orderedItems =
             try context.fetch(
                 .items(.all, order: .forward, ledgerIdentifier: ledgerIdentifier)
             )
             .sorted(by: >)
+        let startDate = Calendar.current.startOfDay(for: date)
+        guard let firstIndex = orderedItems.firstIndex(where: { $0.localDate >= startDate }) else {
+            return
+        }
+        // Earlier saved balances are the user's existing baseline, not repair candidates.
+        let previousBalance = orderedItems.prefix(upTo: firstIndex).last?.balance ?? .zero
+        let targetList = orderedItems.suffix(from: firstIndex)
         let balances = try calculateBalances(
-            startingFrom: .zero,
+            startingFrom: previousBalance,
             inputs: try targetList.map { item in
                 .init(netIncome: try netIncome(income: item.income, outgo: item.outgo))
             }

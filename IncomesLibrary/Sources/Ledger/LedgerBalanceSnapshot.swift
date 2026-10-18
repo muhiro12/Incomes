@@ -1,7 +1,7 @@
 import Foundation
 import SwiftData
 
-/// Derived balances that never use the legacy global Item.balance as financial truth.
+/// A read-only view of saved running balances scoped to one book.
 public struct LedgerBalanceSnapshot: Sendable {
     public let ledgerIdentifier: LedgerIdentifier
     public let balances: [PersistentIdentifier: Decimal]

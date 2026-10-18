@@ -21,7 +21,7 @@ extension ItemBalanceProjectionPlanner {
         let existingItems = try context.fetch(
             .items(.all, order: .forward, ledgerIdentifier: request.ledgerIdentifier)
         )
-        let plan = try projectionPlan(
+        let plan = projectionPlan(
             existingItems: existingItems,
             request: request
         )
@@ -55,15 +55,45 @@ extension ItemBalanceProjectionPlanner {
         let existingItems = try affectedOwners.flatMap { owner in
             try context.fetch(.items(.all, order: .forward, ledgerIdentifier: owner))
         }
-        let unchangedRows = try existingItems
+        let unchangedRows = existingItems
             .filter { item in
                 !removedItemIDs.contains(item.persistentModelID)
             }
             .map(projectedRow(item:))
         let groups = Dictionary(grouping: unchangedRows + newRows, by: \.ledgerIdentifier)
-        for rows in groups.values {
-            _ = try balancedRows(rows)
+        for (owner, rows) in groups {
+            let dates = newRows.filter { $0.ledgerIdentifier == owner }.map(\.localDate)
+                + removedItems.filter { $0.ledgerIdentifier == owner }.map(\.localDate)
+            if let date = dates.min() {
+                _ = try balancedRows(rows, recalculatingFrom: date)
+            }
         }
+    }
+
+    /// Checks only the destination while keeping the selected records' existing tie order.
+    static func validateAssignmentBalances(
+        context: ModelContext,
+        items: [Item],
+        ledgerIdentifier: LedgerIdentifier
+    ) throws {
+        try validateBalances(
+            context: context,
+            removedItemIDs: [],
+            newRows: items.map { item in
+                .init(
+                    ledgerIdentifier: ledgerIdentifier,
+                    itemID: item.persistentModelID,
+                    utcDate: item.utcDate,
+                    localDate: item.localDate,
+                    content: item.content,
+                    priority: item.priority,
+                    income: item.income,
+                    outgo: item.outgo,
+                    storedBalance: item.balance,
+                    tieBreaker: String(describing: item.persistentModelID)
+                )
+            }
+        )
     }
 }
 
@@ -81,10 +111,8 @@ private extension ItemBalanceProjectionPlanner {
     static func projectionPlan(
         existingItems: [Item],
         request: ReviewRequest
-    ) throws -> ProjectionPlan {
-        let existingRows = try existingItems.map { item in
-            try projectedRow(item: item)
-        }
+    ) -> ProjectionPlan {
+        let existingRows = existingItems.map(projectedRow(item:))
         let unchangedRows = existingRows.filter { row in
             guard let itemID = row.itemID else {
                 return true
@@ -95,7 +123,9 @@ private extension ItemBalanceProjectionPlanner {
         let affectedDateRange = dateRange(from: request.affectedDates)
         return .init(
             existingItems: existingItems,
-            balancedExistingRows: try balancedRows(existingRows),
+            balancedExistingRows: sortedRows(existingRows).map { row in
+                .init(row: row, balance: row.storedBalance ?? .zero)
+            },
             projectedRows: projectedRows,
             affectedDateRange: affectedDateRange,
             projectionDateRange: projectedDateRange(
@@ -183,13 +213,20 @@ private extension ItemBalanceProjectionPlanner {
     }
 
     static func balancedRows(
-        _ rows: [ProjectedRow]
+        _ rows: [ProjectedRow],
+        recalculatingFrom date: Date
     ) throws -> [BalancedProjectedRow] {
         let orderedRows = sortedRows(rows)
+        let startDate = Calendar.current.startOfDay(for: date)
         var balances: [LedgerIdentifier: Decimal] = [:]
         return try orderedRows.map { row in
+            if row.localDate < startDate, let balance = row.storedBalance {
+                balances[row.ledgerIdentifier] = balance
+                return .init(row: row, balance: balance)
+            }
             let previousBalance = balances[row.ledgerIdentifier] ?? .zero
-            guard let balance = ExactAmountArithmetic.sum(previousBalance, row.netIncome),
+            let netIncome = try BalanceCalculator.netIncome(income: row.income, outgo: row.outgo)
+            guard let balance = ExactAmountArithmetic.sum(previousBalance, netIncome),
                   AmountPrecision.isExactlyStorable(balance)
             else {
                 throw ItemAmountError.balanceOutOfRange
@@ -209,7 +246,7 @@ private extension ItemBalanceProjectionPlanner {
         changedItemCount: Int
     ) throws -> Projection {
         projection(
-            balancedRows: try balancedRows(rows),
+            balancedRows: try balancedRows(rows, recalculatingFrom: affectedDateRange?.lowerBound ?? .distantPast),
             dateRange: dateRange,
             affectedDateRange: affectedDateRange,
             changedItemCount: changedItemCount
@@ -268,7 +305,7 @@ private extension ItemBalanceProjectionPlanner {
         return min(startingBalance, minimumRowBalance)
     }
 
-    static func projectedRow(item: Item) throws -> ProjectedRow {
+    static func projectedRow(item: Item) -> ProjectedRow {
         .init(
             ledgerIdentifier: item.ledgerIdentifier,
             itemID: item.persistentModelID,
@@ -276,7 +313,9 @@ private extension ItemBalanceProjectionPlanner {
             localDate: item.localDate,
             content: item.content,
             priority: item.priority,
-            netIncome: try BalanceCalculator.netIncome(income: item.income, outgo: item.outgo),
+            income: item.income,
+            outgo: item.outgo,
+            storedBalance: item.balance,
             tieBreaker: String(describing: item.persistentModelID)
         )
     }

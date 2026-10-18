@@ -39,20 +39,22 @@ public extension ItemImportOperations {
         }
         // Insert first so tags shared with new items are never treated as unused.
         let createdItems = try insertItems(plan.insertedItems, ledgerTags: ledgerTags, context: context)
-        let removedOwners = Set(removedItems.map(\.ledgerIdentifier))
         let removedDates = removedItems.map(\.localDate)
+        let affectedDates = Dictionary(grouping: removedItems + createdItems, by: \.ledgerIdentifier)
+            .mapValues { $0.map(\.localDate) }
         let tagsToCleanup = ItemMutationSupport.cleanupCandidateTags(from: removedItems)
         removedItems.forEach { item in
             context.delete(item)
         }
         TagMutationOperations.deleteUnused(tags: tagsToCleanup)
         let changedDates = createdItems.map(\.localDate) + removedDates
-        // Recovery must not inherit a stale stored balance from a matched predecessor.
-        let identifiers = Set(createdItems.map(\.ledgerIdentifier)).union(removedOwners)
-        for identifier in identifiers {
+        for (identifier, dates) in affectedDates {
+            guard let date = dates.min() else {
+                continue
+            }
             try BalanceCalculator.calculate(
                 in: context,
-                after: .distantPast,
+                after: date,
                 ledgerIdentifier: identifier
             )
         }

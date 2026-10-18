@@ -14,6 +14,8 @@ struct RecalculateItemButton {
     @Environment(\.modelContext)
     private var context
 
+    @State private var errorMessage: String?
+
     private let action: (() -> Void)?
 
     init(action: (() -> Void)? = nil) {
@@ -30,19 +32,33 @@ extension RecalculateItemButton: View {
                 Task {
                     do {
                         try LedgerMutationAccess.requireEditing([item.ledgerIdentifier])
-                        try ItemBalanceOperations.recalculate(
+                        try ItemBalanceOperations.recalculateAndSave(
                             context: context,
-                            date: item.utcDate,
+                            date: item.localDate,
                             ledgerIdentifier: item.ledgerIdentifier
                         )
                         Haptic.success.impact()
                     } catch {
-                        assertionFailure(error.localizedDescription)
+                        errorMessage = ErrorMessageOperations.message(from: error)
                     }
                 }
             }
         }
         .ledgerWriteAccess(owner: item.ledgerIdentifier)
+        .alert("Error", isPresented: .init(
+            get: { errorMessage != nil },
+            set: { isPresented in
+                if !isPresented {
+                    errorMessage = nil
+                }
+            }
+        )) {
+            Button("OK", role: .cancel) {
+                errorMessage = nil
+            }
+        } message: {
+            Text(errorMessage ?? "")
+        }
     }
 }
 

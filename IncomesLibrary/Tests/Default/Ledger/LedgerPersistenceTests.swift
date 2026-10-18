@@ -39,7 +39,7 @@ struct LedgerPersistenceTests {
     }
 
     @Test
-    func externallySavedAmountsAreDerivedIndependentlyOfTheStoredBalanceCache() throws {
+    func externallySavedBalancesAreReadWithoutReconstructingHistory() throws {
         let container = try ModelContainerFactory.inMemory()
         let initial = ModelContext(container)
         let other = try LedgerOperations.create(context: initial, name: "Other")
@@ -62,7 +62,7 @@ struct LedgerPersistenceTests {
         item.modify(balance: 999)
         try external.save()
         let reader = ModelContext(container)
-        #expect(try LedgerBalanceOperations.snapshot(context: reader).latestBalance == 30)
+        #expect(try LedgerBalanceOperations.snapshot(context: reader).latestBalance == 999)
         #expect(
             try LedgerBalanceOperations.snapshot(context: reader, ledgerIdentifier: other.id).latestBalance
                 == 90
@@ -71,7 +71,7 @@ struct LedgerPersistenceTests {
     }
 
     private func makeItem(context: ModelContext, owner: LedgerIdentifier, income: Decimal) throws -> Item {
-        try Item.create(
+        let item = try Item.create(
             context: context,
             values: .init(
                 date: .now,
@@ -84,5 +84,7 @@ struct LedgerPersistenceTests {
             ),
             repeatID: UUID()
         )
+        item.modify(balance: income)
+        return item
     }
 }

@@ -101,8 +101,8 @@ public struct ItemBalanceProjectionReview: Equatable, Sendable {
     /// Stored records a projection was reviewed against.
     ///
     /// `records` covers every record used to calculate the projection, and
-    /// `startingBalance` carries the running balance produced by all earlier
-    /// records, so a change to any record the projection depends on is visible
+    /// `startingBalance` carries the saved balance immediately before the horizon,
+    /// so a change to any record the projection depends on is visible
     /// here even when it cancels out in the projected totals.
     public struct Baseline: Equatable, Sendable {
         public let ledgerIdentifier: LedgerIdentifier

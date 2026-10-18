@@ -4,19 +4,8 @@ import SwiftData
 public extension ItemExportOperations {
     /// Captures every item's file values without changing models, balances, or tags.
     static func fileItems(items: [Item]) -> [IncomesFileItem] {
-        let grouped = Dictionary(grouping: items, by: \.ledgerIdentifier)
-        var balances: [PersistentIdentifier: Decimal] = [:]
-        for (identifier, ownedItems) in grouped {
-            let snapshot: LedgerBalanceSnapshot?
-            if let context = ownedItems.first?.modelContext {
-                snapshot = try? LedgerBalanceOperations.snapshot(context: context, ledgerIdentifier: identifier)
-            } else {
-                snapshot = try? LedgerBalanceOperations.snapshot(items: ownedItems, ledgerIdentifier: identifier)
-            }
-            balances.merge(snapshot?.balances ?? [:]) { current, _ in current }
-        }
-        return IncomesFileItem.sortedByValue(items.map { item in
-            IncomesFileItem(item: item, derivedBalance: balances[item.persistentModelID])
+        IncomesFileItem.sortedByValue(items.map { item in
+            IncomesFileItem(item: item, balance: item.balance)
                 .assigning(to: LedgerTagStorage.fileReference(for: item.ledgerIdentifier))
         })
     }

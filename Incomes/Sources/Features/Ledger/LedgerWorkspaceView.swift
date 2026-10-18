@@ -1,4 +1,3 @@
-import CoreData
 import MHPlatform
 import SwiftData
 import SwiftUI
@@ -16,25 +15,8 @@ struct LedgerWorkspaceView: View {
     private var items: [Item]
     @SceneStorage("LedgerWorkspace.selectedIdentifier")
     private var selectedIdentifier = "default"
-    @State private var maintenanceError: String?
     @State private var isManagementPresented = false
     @State private var router: MainNavigationRouter = .init()
-
-    private var maintenanceFingerprint: String {
-        let rows = items.map { item in
-            let tagIDs = (item.tags ?? [])
-                .map { "\($0.persistentModelID)|\($0.typeID)" }
-                .sorted()
-                .joined(separator: ",")
-            return [
-                String(describing: item.persistentModelID), item.utcDate.description, item.content,
-                item.income.description, item.outgo.description, item.balance.description,
-                tagIDs, String(item.priority),
-                item.repeatID.uuidString
-            ].joined(separator: "|")
-        }
-        return (rows + metadata.map { "\($0.persistentModelID)|\($0.typeID)|\($0.name)" }).joined(separator: ";")
-    }
 
     var body: some View {
         let identifier = LedgerIdentifier(rawValue: selectedIdentifier)
@@ -55,18 +37,6 @@ struct LedgerWorkspaceView: View {
             } else {
                 ProgressView()
             }
-            if let maintenanceError {
-                Text(maintenanceError).font(.footnote).foregroundStyle(.red).padding()
-            }
-        }
-        .task(id: maintenanceFingerprint) {
-            repairSavedBalances()
-        }
-        .onReceive(
-            NotificationCenter.default.publisher(for: .NSPersistentStoreRemoteChange)
-                .receive(on: RunLoop.main)
-        ) { _ in
-            repairSavedBalances()
         }
         .task(id: selectedIdentifier) {
             guard !Task.isCancelled else {
@@ -128,19 +98,6 @@ struct LedgerWorkspaceView: View {
 
     private func presentManagement() {
         isManagementPresented = true
-    }
-
-    @MainActor
-    private func repairSavedBalances() {
-        guard !context.hasChanges else {
-            return
-        }
-        do {
-            try ItemBalanceOperations.reconcileAndSave(context: context)
-            maintenanceError = nil
-        } catch {
-            maintenanceError = error.localizedDescription
-        }
     }
 
     private func loadLedgers() -> Result<[LedgerRecord], Error> {

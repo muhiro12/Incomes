@@ -218,7 +218,7 @@ struct ItemImportApplyTests {
     }
 
     @Test
-    func import_recalculates_matched_predecessors_before_new_items() throws {
+    func import_preserves_matched_predecessors_as_the_saved_baseline() throws {
         let context = testContext
         let salary = try createItem(context: context, day: "2026-03-08", content: "Salary", income: 100)
         salary.modify(balance: 1)
@@ -233,7 +233,7 @@ struct ItemImportApplyTests {
             policy: .merge(.init()),
             context: context
         )
-        #expect(fetchItems(context).sorted(by: >).map(\.balance) == [100, 90])
+        #expect(fetchItems(context).sorted(by: >).map(\.balance) == [1, -9])
     }
 }
 

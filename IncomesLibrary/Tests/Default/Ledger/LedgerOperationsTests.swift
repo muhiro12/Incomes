@@ -146,7 +146,7 @@ struct LedgerOperationsTests {
     }
 
     @Test
-    func scopedBalancesIgnoreOldGlobalWriterValuesBeforeAnyRepair() throws {
+    func savedBalancesRemainTheBaselineUntilExplicitRecalculation() throws {
         let context = ModelContext(try ModelContainerFactory.inMemory())
         let ledger = try LedgerOperations.create(context: context, name: "Other")
         let standard = try createItem(context: context, owner: .default, income: 100)
@@ -154,15 +154,15 @@ struct LedgerOperationsTests {
         standard.modify(balance: 900)
         other.modify(balance: 999)
         try context.save()
-        #expect(try LedgerBalanceOperations.snapshot(context: context).latestBalance == 100)
+        #expect(try LedgerBalanceOperations.snapshot(context: context).latestBalance == 900)
         #expect(
             try LedgerBalanceOperations.snapshot(context: context, ledgerIdentifier: ledger.id).latestBalance
-                == 500
+                == 999
         )
         #expect(standard.balance == 900 && other.balance == 999)
-        try ItemBalanceOperations.reconcileAndSave(context: context)
-        #expect(standard.balance == 100 && other.balance == 500)
-        try ItemBalanceOperations.reconcileAndSave(context: context)
+        try ItemBalanceOperations.recalculateAndSave(context: context, date: standard.localDate)
+        #expect(standard.balance == 100 && other.balance == 999)
+        try ItemBalanceOperations.recalculateAndSave(context: context, date: standard.localDate)
         #expect(!context.hasChanges)
     }
 
@@ -202,7 +202,7 @@ private extension LedgerOperationsTests {
         income: Decimal,
         repeatID: UUID = UUID()
     ) throws -> Item {
-        try Item.create(
+        let item = try Item.create(
             context: context,
             values: .init(
                 date: .now,
@@ -215,5 +215,7 @@ private extension LedgerOperationsTests {
             ),
             repeatID: repeatID
         )
+        try BalanceCalculator.calculate(in: context, for: [item])
+        return item
     }
 }

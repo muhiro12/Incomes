@@ -75,7 +75,6 @@ struct LedgerOwnershipTests {
         removeOwnership(late)
         try context.save()
         try LedgerOperations.prepareDefaultLedger(context: context, lastLaunchedAppVersion: "6.0")
-        try ItemBalanceOperations.reconcileAndSave(context: context)
         #expect(standard.ledgerIdentifier == .default)
         #expect(late.ledgerIdentifier == .unassigned)
         #expect(try context.fetch(.items(.all)).map(\.id) == [standard.id])
@@ -230,11 +229,13 @@ struct LedgerOwnershipTests {
     }
 
     private func makeItem(_ context: ModelContext, income: Decimal) throws -> Item {
-        try Item.create(
+        let item = try Item.create(
             context: context,
             values: .init(date: .now, content: "Existing", income: income, outgo: 0, category: "Work", priority: 0),
             repeatID: UUID()
         )
+        item.modify(balance: income)
+        return item
     }
 
     private func removeOwnership(_ item: Item) {

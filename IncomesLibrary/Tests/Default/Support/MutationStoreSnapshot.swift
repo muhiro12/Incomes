@@ -23,7 +23,7 @@ struct MutationStoreSnapshot: Equatable {
             (
                 try PersistentIdentifierCoder.encode(item.id),
                 ItemState(
-                    value: .init(item: item, derivedBalance: item.balance),
+                    value: .init(item: item, balance: item.balance),
                     tagIDs: try Set((item.tags ?? []).map { try PersistentIdentifierCoder.encode($0.id) })
                 )
             )

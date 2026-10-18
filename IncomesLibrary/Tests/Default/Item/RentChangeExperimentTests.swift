@@ -90,6 +90,7 @@ struct RentChangeExperimentTests {
             values: .init(formInput: input(target: november, outgo: 90_000)),
             repeatID: november.repeatID
         )
+        try ItemBalanceOperations.recalculate(context: context, date: november.localDate)
         let before = try snapshots()
         let target = try rent(in: 10)
         let futureItems = try context.fetch(

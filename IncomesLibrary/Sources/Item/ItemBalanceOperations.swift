@@ -3,22 +3,15 @@ import SwiftData
 
 /// Domain operations for item balance maintenance.
 public enum ItemBalanceOperations {
-    /// Repairs derived stored balances without inserting or changing financial records.
-    public static func reconcileAndSave(context: ModelContext) throws {
-        try LedgerOperations.requireCleanContext(context)
-        let autosaveEnabled = context.autosaveEnabled
-        context.autosaveEnabled = false
-        defer {
-            context.autosaveEnabled = autosaveEnabled
-        }
-        do {
-            try BalanceCalculator.calculate(in: context, for: [])
-            if context.hasChanges {
-                try context.save()
-            }
-        } catch {
-            context.rollback()
-            throw error
+    /// Saves an explicitly requested recalculation from one date in one book.
+    /// Earlier balances and unrelated pending edits remain untouched.
+    public static func recalculateAndSave(
+        context: ModelContext,
+        date: Date,
+        ledgerIdentifier: LedgerIdentifier = .default
+    ) throws {
+        try ItemMutationSupport.performAndSave(context: context) {
+            try recalculate(context: context, date: date, ledgerIdentifier: ledgerIdentifier)
         }
     }
 

@@ -59,16 +59,33 @@ longer-lived judgment behind that scope.
 
 ## Calculations and surfaces
 
-Balances are derived from each book's ordered authoritative income and outgo.
-Read paths do not trust a saved `Item.balance` written by an older global
-calculator. Derived-cache repair is separate from reading and cannot insert
-financial records.
+Read paths display each book's saved `Item.balance`. A mutation recalculates only
+from its earliest changed calendar day, using the last saved balance before that
+day as its starting point. Moving a record includes both its old and new dates;
+other books and earlier balances remain untouched. Projection reviews and amount
+validation use the same baseline and range as the subsequent mutation. Empty
+mutation inputs do not request a full recalculation.
+
+Incomes plans future cash flow against an established balance. It is a copy of
+real-world records, not a reason to reconstruct all historical finances. An
+earlier saved balance can reflect adjustments that are no longer reconstructable
+from the recorded income and outgo. Opening a view, launching the app, or receiving
+an external-store notification must not overwrite that baseline.
+
+External writers save their scoped balance updates with their mutations. Readers
+observe the resulting saved values without a second balance writer or save loop.
+The current schema has no record modification timestamp or preserved deletion
+values, so receipt time cannot establish the correct financial baseline. A local
+before-image journal and automatic conflict resolution are outside this change.
+Concurrent or old-client edits can still leave inconsistent saved balances;
+the existing explicit recalculation action updates the chosen book from a chosen
+date. This policy does not claim multi-device conflict convergence.
 
 Unassigned or conflicting ownership can affect any book. The app shows the issue,
 offers an unassigned-item review, and withholds complete ledger balances until
 ownership is resolved. Monthly widget summaries, Watch snapshot refresh, balance
 projections, and generated monthly narratives also refuse incomplete ownership.
-Cache repair does not assign Items. The review assigns only selected unassigned
+Recalculation does not assign Items. The review assigns only selected unassigned
 Items to an explicit destination and preserves their IDs, amounts, dates, and
 repeat identity. It rechecks selection and destination and validates the resulting
 balances before mutation, then saves relationships and balances together. Premium
@@ -122,7 +139,7 @@ Additional-book metadata takes precedence over the version preference, including
 after a downgrade. A standard Tag arriving from another device does not prevent
 a legacy single-book upgrade. A standard Tag is also created for an empty dataset.
 Later untagged arrivals, current-version launches with missing metadata, and mixed
-datasets stay unassigned for review; startup and balance repair do not guess their
+datasets stay unassigned for review; startup and balance recalculation do not guess their
 destination. Sync can temporarily deliver an Item before its ownership relation;
 the notice asks the user to wait before assigning it. The save rechecks that every
 selected Item is still unassigned.
