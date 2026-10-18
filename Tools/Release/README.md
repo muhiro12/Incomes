@@ -1,13 +1,13 @@
 # Incomes release tools
 
 This macOS SwiftPM package uses Apogee's command plugin for the Incomes 6.x
-release cycle. It pins Apogee **1.3.0** at
-`e72fee32a7f3a4ea288e1ed1b69798deee7bfe92`; commit `Package.resolved` with any
+release cycle. It pins Apogee **1.4.0** at
+`805ea2c7c274bc7d4147efc560b72b9484e893c7`; commit `Package.resolved` with any
 deliberate dependency update. No app target links Apogee.
 
 Apogee publishes three-component semantic version tags, so the Git tag, the
 `Package.swift` requirement, and the `Package.resolved` version all read
-`1.3.0`. Check the resolved revision as well as the version when updating.
+`1.4.0`. Check the resolved revision as well as the version when updating.
 
 Use the selected Xcode 27 RC (27A266a), followed by stable Xcode 27, for both
 development and release verification. Run these commands from the repository
@@ -24,6 +24,10 @@ swift package --package-path Tools/Release plugin \
 
 The package has no app or wrapper executable. SwiftPM builds the pinned Apogee
 command plugin and its executable when the plugin runs.
+
+For screenshot operations, add `--progress` to show preparation and upload
+stages on standard error while keeping standard output as the final JSON
+result. The flag is optional and does not change the dry-run or apply boundary.
 
 ## Local metadata
 
@@ -156,7 +160,7 @@ Successful metadata validation does not authorize review submission or release.
    `release-status`; confirm publication separately.
 
 No operation runs automatically from an app build or Git push in this package.
-Use Apogee's [adoption guide](https://github.com/muhiro12/Apogee/blob/1.3.0/docs/adoption.md)
+Use Apogee's [adoption guide](https://github.com/muhiro12/Apogee/blob/1.4.0/docs/adoption.md)
 for command boundaries and failure recovery. After dependency updates, verify
 the published tag and resolved revision, run local metadata validation, and
 check release status and a fresh metadata dry run before the next write.
