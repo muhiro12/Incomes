@@ -24,8 +24,10 @@ class SwiftLintEvidenceTests(unittest.TestCase):
         self.temporary = tempfile.TemporaryDirectory()
         self.root = Path(self.temporary.name).resolve()
         (self.root / "Incomes.xcodeproj").mkdir()
-        project = {"objects": {"fixture": {"isa": "XCRemoteSwiftPackageReference", "repositoryURL": adapter.REMOTE,
-                   "requirement": {"kind": "upToNextMajorVersion", "minimumVersion": "0.0.0"}}}}
+        project = {"rootObject": "root", "objects": {
+            "root": {"isa": "PBXProject", "packageReferences": ["fixture"], "targets": []},
+            "fixture": {"isa": "XCRemoteSwiftPackageReference", "repositoryURL": adapter.REMOTE,
+                        "requirement": {"kind": "upToNextMajorVersion", "minimumVersion": "0.0.0"}}}}
         (self.root / "Incomes.xcodeproj/project.pbxproj").write_bytes(plistlib.dumps(project))
         (self.root / ".swiftlint.yml").write_text("strict: true\n")
         (self.root / "Value.swift").write_text("let value = 1\n")

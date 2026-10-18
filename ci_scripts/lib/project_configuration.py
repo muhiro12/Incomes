@@ -11,53 +11,119 @@ PROJECT_FILES = ("project.pbxproj", "project.xcproj")
 SWIFTLINT_REMOTE = "https://github.com/SimplyDanny/SwiftLintPlugins"
 MHPLATFORM_REMOTE = "https://github.com/muhiro12/MHPlatform"
 
-# Xcode writes trailing commas. Foundation accepts its JSON5 syntax without
-# introducing a Python dependency or changing strings with a text substitution.
-JSON5_READER = """
-import Foundation
-do {
-    let data = FileHandle.standardInput.readDataToEndOfFile()
-    let object = try JSONSerialization.jsonObject(with: data, options: [.json5Allowed])
-    FileHandle.standardOutput.write(try JSONSerialization.data(withJSONObject: object))
-} catch {
-    FileHandle.standardError.write(Data("Invalid JSON project configuration.\\n".utf8))
-    exit(2)
-}
-"""
-
-
 def load_project(repository: Path) -> tuple[Path, dict]:
     candidates = [repository / "Incomes.xcodeproj" / name for name in PROJECT_FILES]
     candidates = [path for path in candidates if path.is_file()]
     if len(candidates) != 1:
         raise ValueError("Incomes.xcodeproj must contain exactly one supported project configuration.")
     project = candidates[0]
-    if project.suffix == ".xcproj":
-        parsed = subprocess.run(["xcrun", "swift", "-e", JSON5_READER], input=project.read_bytes(),
-                                check=True, capture_output=True)
-        configuration = json.loads(parsed.stdout)
-        if not isinstance(configuration.get("packages"), list) or not isinstance(configuration.get("targets"), list):
-            raise ValueError("The JSON project must declare packages and targets.")
-        return project, configuration
-
     parsed = subprocess.run(["plutil", "-convert", "json", "-o", "-", str(project)],
                             check=True, capture_output=True)
-    objects = json.loads(parsed.stdout)["objects"]
-    packages = []
-    targets = []
-    for value in objects.values():
+    return project, summarize_project(json.loads(parsed.stdout), legacy=project.suffix == ".pbxproj")
+
+
+def package_name(package: dict) -> str:
+    location = package.get("repository", package.get("path", ""))
+    return package.get("name", Path(location.rstrip("/")).stem)
+
+
+def summarize_project(document: dict, *, legacy: bool = False) -> dict:
+    """Keep declared products, their package owners, and actual Frameworks edges."""
+    if not isinstance(document, dict):
+        raise ValueError("The project configuration must be an object.")
+    if not legacy:
+        if "objects" in document:
+            raise ValueError("A JSON project cannot use the legacy object model.")
+        packages, targets = document["packages"], document["targets"]
+        if not isinstance(packages, list) or not isinstance(targets, list):
+            raise ValueError("The JSON project must declare packages and targets.")
+
+        def product_for(member):
+            package = None
+            if "package" in member:
+                matches = [value for value in packages if package_name(value) == member["package"]]
+                if len(matches) != 1:
+                    raise ValueError("The product must reference one declared package.")
+                package = matches[0]
+            return {"name": member["product-name"], "package": package}
+
+        def framework_files(files, name):
+            found = set()
+            for file in files:
+                path = Path(file.get("path", ""))
+                for membership in file.get("target-membership", []):
+                    phase = membership.get("build-phase") if isinstance(membership, dict) else membership
+                    if phase == f"{name}/frameworks" or (phase == name and path.suffix == ".framework"):
+                        found.add(path.stem)
+                found.update(framework_files(file.get("children", []), name))
+            return found
+
+        result = []
+        for target in targets:
+            members = target.get("package-product-members", [])
+            phases = [value.get("kind") if isinstance(value, dict) else value
+                      for value in target.get("build-phases", [])]
+            frameworks = []
+            for member in members:
+                phase = member.get("build-phase", {})
+                phase = phase.get("build-phase") if isinstance(phase, dict) else phase
+                if phase == "frameworks" and "frameworks" in phases:
+                    frameworks.append(product_for(member))
+            result.append({"name": target["name"], "members": [product_for(member) for member in members],
+                           "frameworks": frameworks,
+                           "files": framework_files(document.get("files", []), target["name"])})
+        return {"packages": packages, "targets": result}
+
+    objects = document["objects"]
+
+    def object_for(identifier, kind):
+        value = objects[identifier]
+        if value.get("isa") != kind:
+            raise ValueError(f"Invalid {kind} reference.")
+        return value
+
+    root = object_for(document["rootObject"], "PBXProject")
+    references = root.get("packageReferences", [])
+
+    def package_for(identifier):
+        if identifier not in references:
+            raise ValueError("The product must reference a project-owned package.")
+        value = objects[identifier]
         if value.get("isa") == "XCRemoteSwiftPackageReference":
             requirement = value["requirement"]
             version = ({"up-to-next-major-version": requirement["minimumVersion"]}
                        if requirement.get("kind") == "upToNextMajorVersion" else {"unsupported": requirement})
-            packages.append({"kind": "remote", "repository": value["repositoryURL"], "version": version})
-        elif value.get("isa") == "XCLocalSwiftPackageReference":
-            packages.append({"kind": "local", "path": value["relativePath"]})
-        elif value.get("isa") == "PBXNativeTarget":
-            products = [{"product-name": objects[identifier]["productName"]}
-                        for identifier in value.get("packageProductDependencies", [])]
-            targets.append({"name": value["name"], "package-product-members": products})
-    return project, {"packages": packages, "targets": targets}
+            return {"kind": "remote", "repository": value["repositoryURL"], "version": version}
+        if value.get("isa") == "XCLocalSwiftPackageReference":
+            return {"kind": "local", "path": value["relativePath"]}
+        raise ValueError("Invalid project package reference.")
+
+    def product_for(identifier):
+        value = object_for(identifier, "XCSwiftPackageProductDependency")
+        return {"name": value["productName"],
+                "package": package_for(value["package"]) if "package" in value else None}
+
+    targets = []
+    for identifier in root["targets"]:
+        target = objects[identifier]
+        if target.get("isa") != "PBXNativeTarget":
+            continue
+        frameworks, files = [], set()
+        for phase_id in target.get("buildPhases", []):
+            phase = objects[phase_id]
+            if phase.get("isa") != "PBXFrameworksBuildPhase":
+                continue
+            for file_id in phase.get("files", []):
+                build_file = object_for(file_id, "PBXBuildFile")
+                if "productRef" in build_file:
+                    frameworks.append(product_for(build_file["productRef"]))
+                elif "fileRef" in build_file:
+                    file = object_for(build_file["fileRef"], "PBXFileReference")
+                    files.add(Path(file.get("path", file.get("name", ""))).stem)
+        targets.append({"name": target["name"],
+                        "members": [product_for(value) for value in target.get("packageProductDependencies", [])],
+                        "frameworks": frameworks, "files": files})
+    return {"packages": [package_for(value) for value in references], "targets": targets}
 
 
 def remote_package(configuration: dict, remote: str) -> dict:
@@ -79,8 +145,13 @@ def check_mhplatform(configuration: dict, minimum: str) -> None:
         targets = [value for value in configuration["targets"] if value.get("name") == name]
         if len(targets) != 1:
             raise ValueError(f"Incomes.xcodeproj must declare one {name} target.")
-        products = [value["product-name"] for value in targets[0].get("package-product-members", [])]
-        if ("MHPlatform" in products) != (name == "Incomes"):
+        target = targets[0]
+        if name == "Incomes":
+            for edge in ("members", "frameworks"):
+                products = [value for value in target[edge] if value["name"] == "MHPlatform"]
+                if len(products) != 1 or products[0]["package"] != reference:
+                    raise ValueError("Incomes must declare and link the canonical MHPlatform product in Frameworks.")
+        elif "MHPlatform" in ({value["name"] for value in target["members"] + target["frameworks"]} | target["files"]):
             raise ValueError("Incomes must be the only target adopting the MHPlatform umbrella product.")
 
 
