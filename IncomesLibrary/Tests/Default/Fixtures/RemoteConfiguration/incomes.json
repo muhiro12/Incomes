@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "bundleIdentifier": "com.muhiro12.Incomes",
+  "features": {
+    "remoteUpdate": {
+      "revision": 1,
+      "requirement": {
+        "minimumVersion": "5.0",
+        "effectiveAt": "2026-10-19T00:00:00Z"
+      }
+    }
+  }
+}

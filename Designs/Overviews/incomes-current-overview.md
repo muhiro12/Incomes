@@ -39,15 +39,14 @@ living in the app targets.
   `MHPreferencesUI` products.
 - `Widgets` intentionally stay off direct MHPlatform package adoption.
 - This repository intentionally tracks MHPlatform with the 1.x semver range
-  `1.17.0..<2.0.0`.
+  `1.18.0..<2.0.0`.
 - The app uses consent-managed advertising and offers privacy options in
   Settings when the SDK requires them. Startup cleanup retains consent keys.
 - All UI surfaces use only `MHDesign` from MHUI 2.4 or later, alongside native
   SwiftUI containers.
-- Scheduled update checks and phone UI/App Intent write gates are implemented
-  but remain inactive. MHAppConfig is the selected configuration repository;
-  deployment awaits static-policy support in
-  [MHPlatform #16](https://github.com/muhiro12/MHPlatform/issues/16).
+- Update checks and phone UI/App Intent write gates consume MHAppConfig's shared
+  `incomes/app.json` document through MHPlatform 1.18. The static update feature
+  needs no publisher renewal; the initial minimum remains `5.0`.
 
 ## Current End-User Features
 
@@ -199,11 +198,17 @@ living in the app targets.
 
 ### 11. Remote configuration and update gating
 
-- Fetch `.config.json` from the GitHub `main` branch at launch and on each
-  foreground activation.
-- Compare the required version with the installed app version.
-- Present a blocking update-required alert when the remote minimum version is
-  above the installed version.
+- Fetch MHAppConfig's shared configuration at startup and foreground entry,
+  validating app identity and selecting `features.remoteUpdate`.
+- Apply the version, activation, revision, retained-evidence, and App Store
+  publication checks before phone user-requested data mutations and App Intents.
+- Show update-required or unavailable guidance with retry and Store routes.
+  Reading and export remain available when writes are blocked.
+- Reuse policy evidence offline for up to 30 days after a validated fetch,
+  independently of the 24-hour publication observation. Unchanged policy needs
+  no periodic publisher update. The app explicitly retains the `jp` reference.
+- Keep the legacy `.config.json` for already-distributed clients; this app
+  integration uses the new endpoint and wire format.
 
 ### 12. Shortcuts, Siri, and App Intents
 
@@ -376,7 +381,7 @@ Current shared business entry points and shared snapshot builders include:
 - `WidgetEntryOperations`
 - `ErrorMessageOperations`
 - `SampleDataOperations`
-- `RemoteConfigurationOperations`
+- `RemoteUpdateOperations`
 - `ItemsRequest`
 - `WatchSyncReply`
 - `WatchSyncOperations` recent snapshot building and snapshot apply

@@ -16,7 +16,7 @@ public final class RemoteUpdateOperations {
     private let configurationError: (any Error)?
     private var hasPrepared = false
 
-    /// Keeps existing app behavior while the deployment endpoint is undecided.
+    /// Disables networking and update enforcement for previews and isolated environments.
     public init() {
         isEnabled = false
         controller = nil
@@ -30,7 +30,7 @@ public final class RemoteUpdateOperations {
         configurationError = nil
     }
 
-    /// Keeps a failed scheduled configuration blocking instead of falling back to legacy mode.
+    /// Keeps a failed configuration blocking instead of implicitly allowing mutations.
     public init(configurationError: any Error) {
         isEnabled = true
         controller = nil

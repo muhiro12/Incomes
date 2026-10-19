@@ -68,8 +68,8 @@ Models.
 
 - Open the StoreKit 2 paywall to manage premium subscriptions, automatically
   toggle iCloud sync, and start Google Mobile Ads placements.
-- Fetch `.config.json` from GitHub at launch to learn about required versions or
-  feature flags, and prompt users to update when needed.
+- Fetch shared app configuration from MHAppConfig at startup and foreground
+  entry, and check update requirements before phone data mutations.
 
 ### App Intents and shortcuts
 
@@ -134,18 +134,19 @@ Models.
   `MHPreferencesUI` products.
 - `Widgets` intentionally stay off direct MHPlatform package adoption.
 - This repository intentionally tracks MHPlatform with the 1.x semver range
-  `1.17.0..<2.0.0`.
+  `1.18.0..<2.0.0`.
 - App, watch, and widget UI use only the `MHDesign` product from MHUI 2.4 or
   later; the `MHUI` product is not linked.
 - The app opts into MHPlatform's consent-managed ads and exposes privacy
   options in Settings when required by the SDK. Startup cleanup preserves the
   SDK's current consent keys. AdMob Privacy & messaging configuration remains
   publisher-owned; local verification does not confirm live account setup.
-- Legacy remote configuration keeps its numeric string comparison and fetch
-  recovery behavior through `MHAppVersionComparison`. The selected configuration
-  repository is [MHAppConfig](https://github.com/muhiro12/MHAppConfig); scheduled
-  rollout awaits static-policy support in
-  [MHPlatform #16](https://github.com/muhiro12/MHPlatform/issues/16).
+- The standard update controller uses `MHRemoteConfig` through the existing
+  umbrellas to fetch and validate the shared MHAppConfig document. Update policy
+  owns only `features.remoteUpdate`; no publisher renewal job is needed.
+- Ledger migration retains its existing numeric-string comparison through
+  `MHAppVersionComparison`; adopting typed remote-update versions does not
+  change migration ordering.
 
 ## Requirements
 
@@ -179,33 +180,26 @@ Follow these steps to run a local build:
 
 ### Remote configuration
 
-While scheduled enforcement is inactive, the app downloads `.config.json` from
-the `main` branch on GitHub at launch.
-Update the file or host your own endpoint when shipping a fork so update prompts
-reflect your release channel.
+The app fetches the shared
+[MHAppConfig document](https://github.com/muhiro12/MHAppConfig/blob/main/incomes/app.json)
+through its HTTPS Raw URL in `IncomesRemoteUpdateConfiguration`. The common
+envelope validates the app identity and selects `features.remoteUpdate`.
+The initial policy preserves the existing minimum version of `5.0`.
 
-Scheduled update enforcement is wired but inactive while
-`IncomesRemoteUpdateConfiguration.policyURLString` is `nil`.
-[MHAppConfig](https://github.com/muhiro12/MHAppConfig) is the selected independent
-configuration repository. Its `incomes/app.json` records the app identity, Store
-ID, storefront, and existing minimum version; it is not a scheduled-policy
-document and must not be used as the controller endpoint.
+An unchanged static policy requires no publisher expiry, scheduled workflow,
+or periodic commit. Edit the update feature and increase its revision only when
+the release decision changes. The standard controller uses the Incomes Store ID
+and an explicit `jp` publication reference to preserve the previous selection;
+MHPlatform 1.18 otherwise omits the country and uses Apple's service default.
 
-Deployment awaits [MHPlatform #16](https://github.com/muhiro12/MHPlatform/issues/16)
-so an unchanged static policy does not require periodic publisher renewal. No
-renewal workflow, placeholder endpoint, or live scheduled policy is shipped by
-this integration. After the supported policy is published and verified, configure
-its HTTPS Raw URL and verify the adopting app. Keep the legacy `.config.json`
-compatible with already-distributed apps.
-
-The configured path uses MHPlatform's standard App Store controller with the
-Incomes Store ID, `jp` storefront, 30-day maximum document validity, 24-hour
-publication evidence, and source-scoped Application Support storage. It calls
-`prepare()` at startup and foreground entry. Deploy and verify a valid policy
-before enabling the endpoint; missing or expired evidence blocks protected
-writes, and a broken configuration never falls back to legacy permission.
-The first mutation also prepares retained evidence when no UI lifecycle has run,
-so a background App Intent can use still-valid cached permission offline.
+`prepare()` runs at startup and foreground entry. Only a validated network fetch
+renews policy evidence, with up to 30 days of offline reuse. App Store publication
+evidence has its separate 24-hour lifetime. Storage is source-scoped in
+Application Support. Missing, incompatible, or expired evidence blocks protected
+writes, and invalid setup never falls back to the old endpoint. The first mutation
+also prepares retained evidence when no UI lifecycle has run, so a background
+App Intent can use still-valid cached permission offline. Previews and isolated
+environments disable fetching and update enforcement.
 
 Phone UI and App Intents check immediately before user-requested item, ledger,
 and tag mutations, balance recalculation, import, yearly duplication, and data
@@ -214,8 +208,13 @@ retry, and the Store route remain available. Startup data migration, automatic
 CloudKit delivery, and the Watch's local mirror are outside this user-operation
 gate. Existing binaries are not retroactively protected.
 
-Use the package's [scheduled policy contract](https://github.com/muhiro12/MHPlatform/blob/1.17.0/Designs/Architecture/remote-update.md)
-for deployment, revision changes, postponement, and explicit cancellation.
+The old `.config.json` remains compatible with already-distributed app versions.
+It is not fetched by this integration and must not be replaced with the new wire
+format. Forks must configure their own endpoint, Store ID, and app identity.
+
+Use the package's [configuration and update contract](https://github.com/muhiro12/MHPlatform/blob/1.18.0/Designs/Architecture/remote-update.md)
+for deployment, revision changes, postponement, explicit cancellation, and the
+intentional API/wire/cache transition from 1.17.0.
 
 ## Build and Test
 

@@ -10914,40 +10914,6 @@
         }
       }
     },
-    "Please update Incomes to the latest version to continue using it." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Please update Incomes to the latest version to continue using it."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Actualiza Incomes a la última versión para seguir usándolo."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Veuillez mettre à jour Incomes vers la dernière version pour continuer à l'utiliser."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "引き続きIncomesを使用するには、最新バージョンにアップデートしてください。"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "请更新到最新版本以继续使用Incomes。"
-          }
-        }
-      }
-    },
     "Positive net income" : {
       "localizations" : {
         "en" : {

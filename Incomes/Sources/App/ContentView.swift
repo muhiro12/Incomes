@@ -48,13 +48,6 @@ extension ContentView: View {
             } message: { invalidURL in
                 Text("Incomes could not open \(invalidURL.absoluteString)")
             }
-            .alert("Update Required", isPresented: isUpdateRequiredBinding) {
-                Button("Open App Store") {
-                    openAppStore()
-                }
-            } message: {
-                Text("Please update Incomes to the latest version to continue using it.")
-            }
             .task {
                 #if DEBUG
                 isDebugOn = true
@@ -77,18 +70,6 @@ private extension ContentView {
                 if !isPresented {
                     routePipeline.clearLastParseFailure()
                 }
-            }
-        )
-    }
-
-    var isUpdateRequiredBinding: Binding<Bool> {
-        .init(
-            get: {
-                !remoteConfigurationService.scheduledUpdates.isEnabled
-                    && remoteConfigurationService.isUpdateRequired()
-            },
-            set: { _ in
-                // Keep the alert driven by the latest remote configuration.
             }
         )
     }

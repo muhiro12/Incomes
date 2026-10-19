@@ -14,7 +14,7 @@ struct RemoteUpdateOperationsTests {
     }
 
     @Test
-    func unconfiguredEndpointPreservesLegacyMutations() async throws {
+    func disabledEnvironmentPermitsLocalMutationsWithoutPreparation() async throws {
         let operations = RemoteUpdateOperations()
         var mutationCount = 0
         let preparation = try await operations.prepare()
@@ -27,7 +27,7 @@ struct RemoteUpdateOperationsTests {
     }
 
     @Test
-    func invalidScheduledConfigurationNeverFallsBackToLegacy() async {
+    func invalidConfigurationKeepsMutationGateClosed() async {
         let operations = RemoteUpdateOperations(configurationError: TestError.invalidConfiguration)
         await #expect(throws: TestError.invalidConfiguration) {
             try await operations.prepare()
@@ -123,6 +123,47 @@ struct RemoteUpdateOperationsTests {
     }
 
     @Test
+    func unchangedOnlinePolicyNeedsNoPublisherRenewalAfterThirtyDays() async throws {
+        let fixture = try makeFixture()
+        try await fixture.operations.prepare()
+        fixture.clock.advance(by: 31 * 86_400)
+        var didMutate = false
+        try await fixture.operations.performMutation {
+            didMutate = true
+        }
+        #expect(didMutate)
+        #expect(fixture.operations.decision == .notRequired)
+        #expect(await fixture.provider.fetchCount == 2)
+    }
+
+    @Test
+    func reusingAnOldResponseCannotRenewMutationPermission() async throws {
+        let fixture = try makeFixture()
+        let originalObservation = fixture.clock.now()
+        try await fixture.operations.prepare()
+        await fixture.provider.reuseObservation(from: originalObservation)
+        fixture.clock.advance(by: FixtureValues.validity + 1)
+        await expectBlocked(fixture.operations, error: .policyUnavailable)
+        #expect(fixture.operations.decision == .unavailable)
+        #expect(await fixture.provider.fetchCount == 2)
+    }
+
+    @Test
+    func initialAppConfigurationPreservesTheExistingMinimumVersion() throws {
+        let url = try #require(Bundle.module.url(
+            forResource: "incomes",
+            withExtension: "json",
+            subdirectory: "Fixtures/RemoteConfiguration"
+        ))
+        let schedule = try MHRemoteUpdateSchedule.decode(Data(contentsOf: url))
+        #expect(schedule.bundleIdentifier == "com.muhiro12.Incomes")
+        #expect(schedule.revision == 1)
+        #expect(schedule.requirement?.minimumVersion == MHAppVersion("5.0"))
+        #expect(schedule.requirement?.effectiveAt == ISO8601DateFormatter().date(from: "2026-10-19T00:00:00Z"))
+        #expect(schedule.requirement?.endsAt == nil)
+    }
+
+    @Test
     func cancellationSkipsMutationAndSuccessEffects() async {
         let operations = RemoteUpdateOperations()
         var didMutate = false
@@ -181,21 +222,26 @@ private extension RemoteUpdateOperationsTests {
         let schedule: MHRemoteUpdateSchedule
         private(set) var fetchCount = 0
         private var isOffline = false
+        private var reusedObservation: Date?
 
         init(schedule: MHRemoteUpdateSchedule) {
             self.schedule = schedule
         }
 
-        func fetch() throws -> MHRemoteUpdateSchedule {
+        func fetch(observedAt date: Date) throws -> MHRemoteConfigResponse<MHRemoteUpdateSchedule> {
             fetchCount += 1
             if isOffline {
                 throw TestError.offline
             }
-            return schedule
+            return .init(value: schedule, fetchedAt: reusedObservation ?? date)
         }
 
         func goOffline() {
             isOffline = true
+        }
+
+        func reuseObservation(from date: Date) {
+            reusedObservation = date
         }
     }
 
@@ -221,20 +267,18 @@ private extension RemoteUpdateOperationsTests {
         let provider = Provider(schedule: try .init(
             bundleIdentifier: "test.incomes.remote-update",
             revision: 1,
-            issuedAt: clock.now(),
-            validUntil: clock.now().addingTimeInterval(FixtureValues.validity),
             requirement: requirement
         ))
         let controller = try MHRemoteUpdateController(
             bundleIdentifier: "test.incomes.remote-update",
             storefront: "jp",
-            maximumValidity: FixtureValues.validity,
+            policyLifetime: FixtureValues.validity,
             publicationLifetime: FixtureValues.validity,
             store: store,
             currentVersion: { "6.0" },
             now: clock.now,
             fetchSchedule: {
-                try await provider.fetch()
+                try await provider.fetch(observedAt: clock.now())
             },
             publicVersion: {
                 publishedVersion.flatMap(MHAppVersion.init)

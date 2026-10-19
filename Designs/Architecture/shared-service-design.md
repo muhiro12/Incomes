@@ -48,8 +48,8 @@ and widgets.
   `MHPreferencesUI` products.
 - `Widgets` intentionally stay off direct MHPlatform package adoption.
 - This repository intentionally uses the MHPlatform 1.x semver range
-  `1.17.0..<2.0.0` for consent-managed ads, retained verified purchase
-  identifiers, and shared remote-version comparison.
+  `1.18.0..<2.0.0` for consent-managed ads, retained verified purchase
+  identifiers, and shared configuration and update processing.
 - Native ad placements choose `MHNativeAdLayout.compact` or `.media`. The ad
   view takes the proposed row width and its natural height; the app owns the
   surrounding list section, padding, and any frame constraints.
@@ -61,23 +61,24 @@ and widgets.
   exact keys StoreKit writes to that domain. The app supplies current
   `MHAdsConsentStorage` descriptors before cleanup; the library stays independent
   of the advertising SDK.
-- `MHAppVersionComparison.numericStringsRequireUpdate` preserves the legacy
-  remote-configuration and ledger-migration version ordering.
+- `MHAppVersionComparison.numericStringsRequireUpdate` preserves the existing
+  ledger-migration version ordering independently of typed remote-update policy.
 - `RemoteUpdateOperations` shares scheduled update evidence between UI and
   mutation entry points. It delegates storage, preparation, and operation checks
-  to `MHRemoteUpdateController`. Invalid scheduled setup stays unavailable and
-  blocks writes; an undecided endpoint explicitly retains legacy behavior.
+  to `MHRemoteUpdateController`, whose standard configuration lookup uses
+  `MHRemoteConfig`. Invalid setup stays unavailable and blocks writes;
+  preview environments explicitly disable fetching and enforcement.
 - `IncomesMutationWorkflow` checks configured update requirements before phone
   UI and App Intent mutations and their success effects. Startup migration,
   automatic CloudKit delivery, preferences, and the Watch's local mirror remain
   separate. Read/export routes do not require write permission.
-- The scheduled endpoint is intentionally unset in
-  `IncomesRemoteUpdateConfiguration`. MHAppConfig is the selected configuration
-  repository; static-policy support in
-  [MHPlatform #16](https://github.com/muhiro12/MHPlatform/issues/16) is a rollout
-  prerequisite. The app record there is not a deployable policy. A live rollout
-  requires a supported, verified policy before enabling its HTTPS endpoint;
-  the legacy endpoint remains intact.
+- `IncomesRemoteUpdateConfiguration` selects MHAppConfig's `incomes/app.json`
+  HTTPS Raw endpoint and explicitly retains the `jp` publication reference.
+  `features.remoteUpdate` carries the update decision in the common envelope.
+  No publisher renewal is needed; accepted fetch evidence has a 30-day offline
+  lifetime, separate from 24-hour publication evidence. Restoring or reusing a
+  response never manufactures new freshness. The legacy endpoint remains for
+  already-distributed apps, and this client has no legacy-fetch fallback.
 
 ## MHDesign Adoption
 
@@ -115,7 +116,7 @@ operations and shared wire contracts:
 - `WidgetEntryOperations`
 - `WatchSyncOperations`
 - `SampleDataOperations`
-- `RemoteConfigurationOperations`
+- `RemoteUpdateOperations`
 - `UpcomingPaymentOperations`
 - `MonthlySummaryOperations` context, prompt, language, and fallback handling
 - `ItemFormInferenceOperations`

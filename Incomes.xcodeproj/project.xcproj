@@ -23,7 +23,7 @@
       "kind": "remote",
       "repository": "https://github.com/muhiro12/MHPlatform",
       "version": {
-        "up-to-next-major-version": "1.17.0",
+        "up-to-next-major-version": "1.18.0",
       },
     }, {
       "kind": "remote",
