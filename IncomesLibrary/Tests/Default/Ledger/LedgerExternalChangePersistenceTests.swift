@@ -25,9 +25,7 @@ struct LedgerExternalChangePersistenceTests {
 
     @Test(arguments: Change.allCases)
     func separate_writer_commits_scoped_balances_and_reopening_never_repairs_history(change: Change) throws {
-        let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
-        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
-        defer { try? FileManager.default.removeItem(at: directory) }
+        let directory = try persistentTestDirectory(fileManager: .default)
         let url = directory.appendingPathComponent("Incomes.sqlite")
         let owners = try autoreleasepool {
             try seed(at: url)

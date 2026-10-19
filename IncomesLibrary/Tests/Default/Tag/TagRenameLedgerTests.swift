@@ -10,11 +10,7 @@ struct TagRenameLedgerTests {
 
     @Test(arguments: [false, true])
     func aSharedCategoryRenameReturnsTheSavedDestination(autosaveEnabled: Bool) throws {
-        let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
-        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
-        defer {
-            try? FileManager.default.removeItem(at: directory)
-        }
+        let directory = try persistentTestDirectory(fileManager: .default)
         let url = directory.appendingPathComponent("test.store")
         let container = try ModelContainerFactory.make(
             configuration: .init(url: url, cloudKitDatabase: .none)

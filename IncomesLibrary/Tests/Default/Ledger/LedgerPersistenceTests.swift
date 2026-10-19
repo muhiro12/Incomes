@@ -8,9 +8,7 @@ import Testing
 struct LedgerPersistenceTests {
     @Test
     func reopenedReadOnlyStoreKeepsRenamedAndEmptyBooksWithoutAnOwnershipColumn() throws {
-        let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
-        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
-        defer { try? FileManager.default.removeItem(at: directory) }
+        let directory = try persistentTestDirectory(fileManager: .default)
         let url = directory.appendingPathComponent("test.store")
         let owner: LedgerIdentifier
         let empty: LedgerIdentifier

@@ -264,9 +264,7 @@ private extension ItemMutationPersistenceTests {
     }
 
     func withStore(_ body: (URL) throws -> Void) throws {
-        let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
-        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
-        defer { try? FileManager.default.removeItem(at: directory) }
+        let directory = try persistentTestDirectory(fileManager: .default)
         try autoreleasepool {
             try body(directory.appendingPathComponent("Incomes.sqlite"))
         }
